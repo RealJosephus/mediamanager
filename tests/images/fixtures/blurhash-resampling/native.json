@@ -1,0 +1,477 @@
+{
+  "actualExecution": true,
+  "results": [
+    {
+      "name": "cover.png",
+      "input": "D:/mediamanager/tests/library/fixtures/book-photo-global/cover.png",
+      "inputSha256": "f56b8c908ee572720fdfc3f6550be78a9fce29d850b9a38d945b08bf56a5c7af",
+      "original": {
+        "Width": 240,
+        "Height": 360
+      },
+      "scale": 0.35555556,
+      "supported": {
+        "Width": 240,
+        "Height": 360
+      },
+      "decoded": {
+        "Width": 240,
+        "Height": 360,
+        "RowBytes": 960,
+        "path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\blurhash-pixels-native-3\\pixels\\cover.png.decoded.rgba",
+        "bytes": 345600,
+        "sha256": "f3e3fb46665651b227dae4618e1a3726dbd913f4ec056cd4253c7ecbe166c206"
+      },
+      "scaled": {
+        "Width": 85,
+        "Height": 128,
+        "RowBytes": 340,
+        "path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\blurhash-pixels-native-3\\pixels\\cover.png.scaled.rgba",
+        "bytes": 43520,
+        "sha256": "9eb7a0ecb1b24fcea1b8244c0d88b6a7d1f73939890267481c07adf6237f6c4a"
+      },
+      "components": {
+        "xc": 4,
+        "yc": 5
+      },
+      "direct": "d0HenH~q-j~q_3oexGj^nNv*e@NJ~DRlw}6|W,S5SwEg",
+      "core": "d0HenH~q-j~q_3oexGj^nNv*e@NJ~DRlw}6|W,S5SwEg"
+    },
+    {
+      "name": "large.png",
+      "input": "D:/mediamanager/tests/images/fixtures/processor/large.png",
+      "inputSha256": "b49ee9b701533148ae845834d0793f6fa11791ca92871617ece302735bbe450e",
+      "original": {
+        "Width": 256,
+        "Height": 192
+      },
+      "scale": 0.5,
+      "supported": {
+        "Width": 256,
+        "Height": 192
+      },
+      "decoded": {
+        "Width": 256,
+        "Height": 192,
+        "RowBytes": 1024,
+        "path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\blurhash-pixels-native-3\\pixels\\large.png.decoded.rgba",
+        "bytes": 196608,
+        "sha256": "145be83ba945246c6fd1f4175256d0fcbcec328c08ffb81a2c46ae5b1982581c"
+      },
+      "scaled": {
+        "Width": 128,
+        "Height": 96,
+        "RowBytes": 512,
+        "path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\blurhash-pixels-native-3\\pixels\\large.png.scaled.rgba",
+        "bytes": 49152,
+        "sha256": "f62eb063443a18b2d1fda2d0aaeddb454d9f8a48c0dbb9c91efdd163590096c2"
+      },
+      "components": {
+        "xc": 5,
+        "yc": 4
+      },
+      "direct": "V0HV9w^,WX^,a$~qaLbEWAfQfQVuWXVta$~qjFbEWBfQ",
+      "core": "V0HV9w^,WX^,a$~qaLbEWAfQfQVuWXVta$~qjFbEWBfQ"
+    },
+    {
+      "name": "wide.png",
+      "input": "D:/mediamanager/tests/images/fixtures/processor/wide.png",
+      "inputSha256": "c8f1c42f2ea5da52244f5da98472b280832e20d8e7b0e5fe9e4cebc51590469e",
+      "original": {
+        "Width": 512,
+        "Height": 64
+      },
+      "scale": 0.25,
+      "supported": {
+        "Width": 512,
+        "Height": 64
+      },
+      "decoded": {
+        "Width": 512,
+        "Height": 64,
+        "RowBytes": 2048,
+        "path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\blurhash-pixels-native-3\\pixels\\wide.png.decoded.rgba",
+        "bytes": 131072,
+        "sha256": "10d2975a8d699f05cfa0c5dd4050bcda35c7b6d1f9e2916b46a945533136722f"
+      },
+      "scaled": {
+        "Width": 128,
+        "Height": 16,
+        "RowBytes": 512,
+        "path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\blurhash-pixels-native-3\\pixels\\wide.png.scaled.rgba",
+        "bytes": 8192,
+        "sha256": "ba802d05bd0c80e1009994ddce0d1b3750a51352b9c692dcf880cefbdf14479a"
+      },
+      "components": {
+        "xc": 9,
+        "yc": 2
+      },
+      "direct": "H5HLrHt7fQt6jYt7fQs;n,~qn*fQo2jrjFfQjFfQ",
+      "core": "H5HLrHt7fQt6jYt7fQs;n,~qn*fQo2jrjFfQjFfQ"
+    },
+    {
+      "name": "large.webp",
+      "input": "D:/mediamanager/tests/images/fixtures/processor/large.webp",
+      "inputSha256": "16473b85d90c7303613c7aa5ad93be608f206f72a3c40468ebd1b2bcca14cdaa",
+      "original": {
+        "Width": 256,
+        "Height": 192
+      },
+      "scale": 0.5,
+      "supported": {
+        "Width": 128,
+        "Height": 96
+      },
+      "decoded": {
+        "Width": 128,
+        "Height": 96,
+        "RowBytes": 512,
+        "path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\blurhash-pixels-native-3\\pixels\\large.webp.decoded.rgba",
+        "bytes": 49152,
+        "sha256": "adde4040791726d7c033c8c9fb541991f53494c8f5f699ce400fc87a10b7496f"
+      },
+      "scaled": {
+        "Width": 64,
+        "Height": 48,
+        "RowBytes": 256,
+        "path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\blurhash-pixels-native-3\\pixels\\large.webp.scaled.rgba",
+        "bytes": 12288,
+        "sha256": "a2fd5047f2939625785fa67b4ad18066a86cadcdc0601ede08714d55878d00dd"
+      },
+      "components": {
+        "xc": 5,
+        "yc": 4
+      },
+      "direct": "V1G\u002BXR^,o0^\u002BkB~qf8n%aebFj]R*jZV?oJ~pawjYaeba",
+      "core": "V1G\u002BXR^,o0^\u002BkB~qf8n%aebFj]R*jZV?oJ~pawjYaeba"
+    },
+    {
+      "name": "wide.webp",
+      "input": "D:/mediamanager/tests/images/fixtures/processor/wide.webp",
+      "inputSha256": "4089ca7dbda7873c387457baa0bac8f56166dacf9899c8962efa8234b0d7daa7",
+      "original": {
+        "Width": 512,
+        "Height": 64
+      },
+      "scale": 0.25,
+      "supported": {
+        "Width": 128,
+        "Height": 16
+      },
+      "decoded": {
+        "Width": 128,
+        "Height": 16,
+        "RowBytes": 512,
+        "path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\blurhash-pixels-native-3\\pixels\\wide.webp.decoded.rgba",
+        "bytes": 8192,
+        "sha256": "dd808a7bd4e44c732a446b9b335309a9ca8f144189372afae78b27c712d2f102"
+      },
+      "scaled": {
+        "Width": 32,
+        "Height": 4,
+        "RowBytes": 128,
+        "path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\blurhash-pixels-native-3\\pixels\\wide.webp.scaled.rgba",
+        "bytes": 512,
+        "sha256": "2053c3794ddc8e6baa64e7b30cde04b23962eda2c1818448f0f7e4729e1c3bb0"
+      },
+      "components": {
+        "xc": 9,
+        "yc": 2
+      },
+      "direct": "HKF~dSxaa|%1$4XTa|t8Na~qs;fQxHFtOXfQX8bE",
+      "core": "HKF~dSxaa|%1$4XTa|t8Na~qs;fQxHFtOXfQX8bE"
+    },
+    {
+      "name": "large.jpg",
+      "input": "D:/mediamanager/tests/images/fixtures/processor/large.jpg",
+      "inputSha256": "836cd5dc667004fdd62546b348533c581a92d235902b39e1d27ab2b38bd774f7",
+      "original": {
+        "Width": 256,
+        "Height": 192
+      },
+      "scale": 0.5,
+      "supported": {
+        "Width": 128,
+        "Height": 96
+      },
+      "decoded": {
+        "Width": 128,
+        "Height": 96,
+        "RowBytes": 512,
+        "path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\blurhash-pixels-native-3\\pixels\\large.jpg.decoded.rgba",
+        "bytes": 49152,
+        "sha256": "095e8aa7f63241fa585e637d9de8cff418682f804c2f261b4b57405844bdb264"
+      },
+      "scaled": {
+        "Width": 64,
+        "Height": 48,
+        "RowBytes": 256,
+        "path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\blurhash-pixels-native-3\\pixels\\large.jpg.scaled.rgba",
+        "bytes": 12288,
+        "sha256": "77da4ac44270b02e5c696f8adb93188387052a293dfbe3545600b68e89279bae"
+      },
+      "components": {
+        "xc": 5,
+        "yc": 4
+      },
+      "direct": "V1Gu?z^,jv^*j?~qjKWFaxjbX3aJj?rYoI~qnifirtjJ",
+      "core": "V1Gu?z^,jv^*j?~qjKWFaxjbX3aJj?rYoI~qnifirtjJ"
+    },
+    {
+      "name": "wide.jpg",
+      "input": "D:/mediamanager/tests/images/fixtures/processor/wide.jpg",
+      "inputSha256": "dbbfdc198a408f7629a87810895c264c377dc1d30d3a6bcba0b344021fefd9bd",
+      "original": {
+        "Width": 512,
+        "Height": 64
+      },
+      "scale": 0.25,
+      "supported": {
+        "Width": 128,
+        "Height": 16
+      },
+      "decoded": {
+        "Width": 128,
+        "Height": 16,
+        "RowBytes": 512,
+        "path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\blurhash-pixels-native-3\\pixels\\wide.jpg.decoded.rgba",
+        "bytes": 8192,
+        "sha256": "826eec185f367395968004f1ad6b36180f1590c7e6c48e6418bf8adebb42a983"
+      },
+      "scaled": {
+        "Width": 32,
+        "Height": 4,
+        "RowBytes": 128,
+        "path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\blurhash-pixels-native-3\\pixels\\wide.jpg.scaled.rgba",
+        "bytes": 512,
+        "sha256": "0a5a026f9eb2b30333270e6cdb4d1e6c7c84d703a79e858861ad99b08172c4a5"
+      },
+      "components": {
+        "xc": 9,
+        "yc": 2
+      },
+      "direct": "HKF~dTxafQ%1#-bvfQt7Nb~qs;fQxGFvOYfQX9bF",
+      "core": "HKF~dTxafQ%1#-bvfQt7Nb~qs;fQxGFvOYfQX9bF"
+    },
+    {
+      "name": "coordinates-129x131.png",
+      "input": "D:/mediamanager-validation/20261016-full-scan-stage/preparation/blurhash-pixels-native-2/inputs/coordinates-129x131.png",
+      "inputSha256": "75558cad793213ca7d6a1e9dd47e0e149253cfac281c9d5be152dd45c51f71ab",
+      "original": {
+        "Width": 129,
+        "Height": 131
+      },
+      "scale": 0.97709924,
+      "supported": {
+        "Width": 129,
+        "Height": 131
+      },
+      "decoded": {
+        "Width": 129,
+        "Height": 131,
+        "RowBytes": 516,
+        "path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\blurhash-pixels-native-3\\pixels\\coordinates-129x131.png.decoded.rgba",
+        "bytes": 67596,
+        "sha256": "973150f6a0f97c952bc6b4bcbcafe50b1e13c5799de4b81fdcf9b24ac1a32a23"
+      },
+      "scaled": {
+        "Width": 126,
+        "Height": 128,
+        "RowBytes": 504,
+        "path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\blurhash-pixels-native-3\\pixels\\coordinates-129x131.png.scaled.rgba",
+        "bytes": 64512,
+        "sha256": "638944d131ecd303ca5a25e8453c0fb83540e6fb5dbc3966d19e063b7a1b1565"
+      },
+      "components": {
+        "xc": 4,
+        "yc": 5
+      },
+      "direct": "dE8qRg2ZwyShhqa#fPf7gcfQfQfQj0a}fPfQf*fPfRfQ",
+      "core": "dE8qRg2ZwyShhqa#fPf7gcfQfQfQj0a}fPfQf*fPfRfQ"
+    },
+    {
+      "name": "coordinates-257x193.png",
+      "input": "D:/mediamanager-validation/20261016-full-scan-stage/preparation/blurhash-pixels-native-2/inputs/coordinates-257x193.png",
+      "inputSha256": "bfacdfcf41d6189ac92976b03626d2dafbbec81e6aac3bee1b9fff5fc20501db",
+      "original": {
+        "Width": 257,
+        "Height": 193
+      },
+      "scale": 0.49805447,
+      "supported": {
+        "Width": 257,
+        "Height": 193
+      },
+      "decoded": {
+        "Width": 257,
+        "Height": 193,
+        "RowBytes": 1028,
+        "path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\blurhash-pixels-native-3\\pixels\\coordinates-257x193.png.decoded.rgba",
+        "bytes": 198404,
+        "sha256": "54b20347161d75f2140f989d34276b9b81617c61652ea7e9f646295605bd246b"
+      },
+      "scaled": {
+        "Width": 128,
+        "Height": 96,
+        "RowBytes": 512,
+        "path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\blurhash-pixels-native-3\\pixels\\coordinates-257x193.png.scaled.rgba",
+        "bytes": 49152,
+        "sha256": "4ca942b5ea73efe8c1d787008a297bd6bcc1844e16c61e73f55055d8f3bc818f"
+      },
+      "components": {
+        "xc": 5,
+        "yc": 4
+      },
+      "direct": "V%HdI72Y$5Sgo1iPazfQf7fQg0fQfQfQfQjIa|fQfQfQ",
+      "core": "V%HdI72Y$5Sgo1iPazfQf7fQg0fQfQfQfQjIa|fQfQfQ"
+    },
+    {
+      "name": "coordinates-411x129.png",
+      "input": "D:/mediamanager-validation/20261016-full-scan-stage/preparation/blurhash-pixels-native-2/inputs/coordinates-411x129.png",
+      "inputSha256": "35c32112c09fe7311e318561496e8f5215e5ada8cd3105569c35b74e939d858c",
+      "original": {
+        "Width": 411,
+        "Height": 129
+      },
+      "scale": 0.31143552,
+      "supported": {
+        "Width": 411,
+        "Height": 129
+      },
+      "decoded": {
+        "Width": 411,
+        "Height": 129,
+        "RowBytes": 1644,
+        "path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\blurhash-pixels-native-3\\pixels\\coordinates-411x129.png.decoded.rgba",
+        "bytes": 212076,
+        "sha256": "c904b9479431bc9e9eac48b3df4b7a9e7b334abf042b7bae5fd9d62ab7c72d74"
+      },
+      "scaled": {
+        "Width": 128,
+        "Height": 40,
+        "RowBytes": 512,
+        "path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\blurhash-pixels-native-3\\pixels\\coordinates-411x129.png.scaled.rgba",
+        "bytes": 20480,
+        "sha256": "97d0b6d7e9fab1572683a862ddff81a1081651d287f14bba3447709c811cf5c5"
+      },
+      "components": {
+        "xc": 8,
+        "yc": 3
+      },
+      "direct": "PdFN4tOD2DOD]8J,N[$Pm@a{a{a|jta{a|jtf$fQfQfQfQfQfPfP",
+      "core": "PdFN4tOD2DOD]8J,N[$Pm@a{a{a|jta{a|jtf$fQfQfQfQfQfPfP"
+    }
+  ],
+  "assemblies": [
+    {
+      "FullName": "System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Private.CoreLib.dll",
+      "sha256": "1125acc8106c43fc8bad2d203c4c4485df6182d292846c2fff415c1040c54678"
+    },
+    {
+      "FullName": "Oracle, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\blurhash-pixels-native-3\\bin\\Release\\net10.0\\Oracle.dll",
+      "sha256": "e79b4808ed77c832579843d4d1c3060a6ca9acd48bc643c2728b82aec36183ae"
+    },
+    {
+      "FullName": "System.Runtime, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Runtime.dll",
+      "sha256": "76be53624f64b23d0249dfa0bbe85390086de7c44bfd490642ea86c6faaf44af"
+    },
+    {
+      "FullName": "System.Collections, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Collections.dll",
+      "sha256": "df6f2037eabee28100184e92f7536427ba2f086c1110629804d466b124bc4d54"
+    },
+    {
+      "FullName": "SkiaSharp, Version=3.119.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756",
+      "path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\blurhash-pixels-native-3\\bin\\Release\\net10.0\\SkiaSharp.dll",
+      "sha256": "aaaaa18c68ba1f3a3408b00dff28b11d5705198e17ba9d3aa59222bfd35407c8"
+    },
+    {
+      "FullName": "System.Text.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Text.Json.dll",
+      "sha256": "fa99f413be21ed5f484a09093fe5f0beba7de3062cf9cc9f847dbf8108dba55a"
+    },
+    {
+      "FullName": "BlurHashSharp, Version=1.3.4.0, Culture=neutral, PublicKeyToken=null",
+      "path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\blurhash-pixels-native-3\\bin\\Release\\net10.0\\BlurHashSharp.dll",
+      "sha256": "a49914606d6785f13c82481ff6fea946c39a82188b31f38046fa872ae11ad292"
+    },
+    {
+      "FullName": "BlurHashSharp.SkiaSharp, Version=1.3.4.0, Culture=neutral, PublicKeyToken=null",
+      "path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\blurhash-pixels-native-3\\bin\\Release\\net10.0\\BlurHashSharp.SkiaSharp.dll",
+      "sha256": "934aa821abf5c8808ad184b814cd9e99e19bbdae85a689a5769f6c2ca506ef7f"
+    },
+    {
+      "FullName": "System.Linq, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Linq.dll",
+      "sha256": "284d38945b6e92e847129bd28af458b19818d0f2181f79882888ab2003f4c519"
+    },
+    {
+      "FullName": "System.Console, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Console.dll",
+      "sha256": "3b85daf02a3d9ed99b84bb1c639fe8b1ced46d8d157fa56f525f6b8c5be43b3e"
+    },
+    {
+      "FullName": "System.Threading, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Threading.dll",
+      "sha256": "6c32ed1bf8067e4169e8feddd15e6489b89d19d1c7aae1520a551b57745d0a60"
+    },
+    {
+      "FullName": "System.Memory, Version=10.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Memory.dll",
+      "sha256": "f8f9d38efd6b0de30954d6bf1f353e9617bfb36d3d245c013a3b12be9f6bd88a"
+    },
+    {
+      "FullName": "System.Text.Encoding.Extensions, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Text.Encoding.Extensions.dll",
+      "sha256": "8f51b9535db64fe027a40d6076200b1a6b0889bf05f62bb8e68c3eb083c7f113"
+    },
+    {
+      "FullName": "System.Text.Encodings.Web, Version=10.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Text.Encodings.Web.dll",
+      "sha256": "d20431f20d992e71a4e82e5f25c822474e2f4097d8527972d3d78ea1f26e47c3"
+    },
+    {
+      "FullName": "System.Numerics.Vectors, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Numerics.Vectors.dll",
+      "sha256": "a9a980ee33ed0c798a5e1960c4557521f465ac9e0987dfd2c3049d53b1f2fa5a"
+    },
+    {
+      "FullName": "System.Collections.Concurrent, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Collections.Concurrent.dll",
+      "sha256": "082f4bc0da1141eb65111b6da633d75624adfb7bb067d7ee90c5622c8b30885b"
+    },
+    {
+      "FullName": "System.Private.Uri, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Private.Uri.dll",
+      "sha256": "b15c84d2120e1ec9612c66ba59bc3d7e67d841e2bce7b7d0478cb212537539b4"
+    },
+    {
+      "FullName": "System.Reflection.Emit.Lightweight, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Reflection.Emit.Lightweight.dll",
+      "sha256": "d2724a2b7b46146877ec1f6e400c49ea05f84bdd31f3bba52ae139ee68a4f779"
+    },
+    {
+      "FullName": "System.Reflection.Primitives, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Reflection.Primitives.dll",
+      "sha256": "c2bbd885d03da5e880667c228ac1f56a5f3a72ea37d43f010ada000adc33da28"
+    },
+    {
+      "FullName": "System.Runtime.InteropServices, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Runtime.InteropServices.dll",
+      "sha256": "e5eb1679f3579c9141e2bb9dbdce62624a623f38d299805cc1de07bacd21841f"
+    },
+    {
+      "FullName": "System.Runtime.Intrinsics, Version=10.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Runtime.Intrinsics.dll",
+      "sha256": "b07694ec91f3a200acf0f8b37c6ce5fcf05126a9198ae156d839fa5ca8439dc5"
+    },
+    {
+      "FullName": "System.Security.Cryptography, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Security.Cryptography.dll",
+      "sha256": "e0a839a540e47343b53a936b32d91599a3470005228d50fd0b896f8bbdcc65b0"
+    }
+  ]
+}

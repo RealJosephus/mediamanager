@@ -1,6 +1,18 @@
 import { createCanvas, ImageData } from '@napi-rs/canvas';
 import { roundEven } from './options.js';
 
+export function resizeNearestPixels(data, width, height, targetWidth, targetHeight) {
+  const result = Buffer.alloc(targetWidth * targetHeight * 4);
+  for (let y = 0; y < targetHeight; y++) for (let x = 0; x < targetWidth; x++) {
+    // Sample the pixel center; an exact source-edge tie selects its lower pixel.
+    const sourceY = Math.max(0, Math.min(height - 1, Math.ceil((2 * y + 1) * height / (2 * targetHeight)) - 1));
+    const sourceX = Math.max(0, Math.min(width - 1, Math.ceil((2 * x + 1) * width / (2 * targetWidth)) - 1));
+    const source = (sourceY * width + sourceX) * 4;
+    data.copy(result, (y * targetWidth + x) * 4, source, source + 4);
+  }
+  return result;
+}
+
 function surface(data, width, height) {
   const canvas = createCanvas(width, height);
   canvas.getContext('2d').putImageData(new ImageData(new Uint8ClampedArray(data), width, height), 0, 0);
