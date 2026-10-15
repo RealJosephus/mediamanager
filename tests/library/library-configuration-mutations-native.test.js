@@ -21,7 +21,8 @@ import { MetadataImageAssets } from '../../src/metadata/image-assets.js';
 import { StorageRegistry, VirtualFileSystem, IdentityAccessMap } from '../../src/storage/index.js';
 import { MemoryStorageAdapter } from '../../src/storage/testing/memory-adapter.js';
 
-const fixture = new URL('./fixtures/library-configuration-mutations/', import.meta.url), type = 'MediaBrowser.Controller.Entities.CollectionFolder';
+const provenanceUrl = new URL('./fixtures/library-configuration-mutations/provenance.json', import.meta.url);
+const fixture = new URL('.', provenanceUrl), type = 'MediaBrowser.Controller.Entities.CollectionFolder';
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const read = async name => JSON.parse(await fs.readFile(new URL(name, fixture)));
 const normalize = (value, state) => typeof value === 'string' ? (() => {

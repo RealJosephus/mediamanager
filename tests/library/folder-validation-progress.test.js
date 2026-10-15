@@ -5,7 +5,8 @@ import { readFile } from 'node:fs/promises';
 import { parseLosslessJson } from '../../src/core/json.js';
 import { assertDirectoryValidation } from './directory-validation-fixture.js';
 
-const root = new URL('./fixtures/folder-validation-progress/', import.meta.url);
+const provenanceUrl = new URL('./fixtures/folder-validation-progress/provenance.json', import.meta.url);
+const root = new URL('.', provenanceUrl);
 const repository = new URL('../../', import.meta.url);
 const read = async url => parseLosslessJson(await readFile(url, 'utf8'));
 const [input, native, provenance, record] = await Promise.all(['input.json', 'native.json', 'provenance.json', 'record.json']

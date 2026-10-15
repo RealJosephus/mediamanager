@@ -32,12 +32,14 @@
     {
       "path": "D:/jellyfin/MediaBrowser.Controller/Entities/Folder.cs",
       "bytes": 83390,
-      "sha256": "d5f227d462ce3c2df0d5a45d912778427f87321fc9d6e13d863ec28bb639e0c1"
+      "sha256": "d5f227d462ce3c2df0d5a45d912778427f87321fc9d6e13d863ec28bb639e0c1",
+      "required": true
     },
     {
       "path": "D:/jellyfin/Emby.Server.Implementations/Library/LibraryManager.cs",
       "bytes": 157087,
-      "sha256": "4729de97560262702a44c5829bf93bbc5deec379e9b3018b231aaa6d65643c44"
+      "sha256": "4729de97560262702a44c5829bf93bbc5deec379e9b3018b231aaa6d65643c44",
+      "required": true
     }
   ]
 }

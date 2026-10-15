@@ -3,13 +3,17 @@ import { readFile } from 'node:fs/promises';
 import { dependencyClosure, describeFile, filesIn, sha256 } from './inventory.js';
 import { repositoryRoot, validationPath } from './paths.js';
 
+const isDigest = value => typeof value === 'string' && /^[a-f0-9]{64}$/iu.test(value);
+
 export async function captureInputIdentity({ selected, dependencies, preflight, environment = process.env }) {
   const targets = new Map();
-  const add = (filename, reason, required = true) => {
+  const add = (filename, reason, required = true, expectedDigests = [], invalidDigest = false) => {
     const absolute = path.resolve(repositoryRoot, filename);
-    if (!targets.has(absolute)) targets.set(absolute, { reasons: new Set(), required: false });
+    if (!targets.has(absolute)) targets.set(absolute, { reasons: new Set(), required: false, expectedDigests: new Set() });
     targets.get(absolute).reasons.add(reason);
     targets.get(absolute).required ||= required;
+    targets.get(absolute).invalidDigest ||= invalidDigest;
+    for (const digest of expectedDigests) targets.get(absolute).expectedDigests.add(digest);
   };
   const inspectedManifests = new Set();
   const inspectedDirectories = new Set();
@@ -28,25 +32,37 @@ export async function captureInputIdentity({ selected, dependencies, preflight, 
     try { content = JSON.parse(await readFile(filename, 'utf8')); }
     catch (error) { if (error.code === 'ENOENT' || error instanceof SyntaxError) return; throw error; }
     const references = new Map();
+    const reference = (target, descriptor) => {
+      const previous = references.get(target), expectedDigests = new Set(previous?.expectedDigests ?? []);
+      if (descriptor.required) for (const digest of descriptor.expectedDigests ?? []) expectedDigests.add(digest.toLowerCase());
+      references.set(target, { ...descriptor, required: descriptor.required || previous?.required === true,
+        siblingDirectory: descriptor.siblingDirectory || previous?.siblingDirectory === true,
+        invalidDigest: descriptor.invalidDigest || previous?.invalidDigest === true, expectedDigests });
+    };
     function visit(value, key, owner) {
       if (typeof value === 'string') {
         const logical = value.replaceAll('\\', '/');
+        const declaredDigests = ['path', 'filename', 'root'].includes(key) && owner
+          ? ['sha256', 'entriesSha256'].filter(name => Object.hasOwn(owner, name)).map(name => owner[name]) : [];
+        const requiredPin = owner?.required === true && declaredDigests.length > 0;
+        const hashBound = declaredDigests.some(isDigest);
+        const invalidDigest = requiredPin && !declaredDigests.every(isDigest);
         if (/^\.agent-docs\/(?:evidence|baselines|oracle|reference-instance)(?:\/|$)/u.test(logical)
           && !logical.split('/').includes('..') && !/[\r\n]/u.test(logical)) {
           const target = validationPath(logical, repositoryRoot, environment);
-          references.set(target, { logical, siblingDirectory: true });
+          reference(target, { logical, siblingDirectory: true, required: owner?.required === true,
+            expectedDigests: declaredDigests.filter(isDigest), invalidDigest });
         } else {
-          const hashBound = ['path', 'filename', 'root'].includes(key)
-            && /^[a-f0-9]{64}$/iu.test(owner?.sha256 || owner?.entriesSha256 || '');
           const sourcePath = ['sourceInstance', 'sourceDatabase', 'sourceRoot', 'initialDatabase', 'manifestPath'].includes(key);
           const target = validationPath(value, repositoryRoot, environment);
           const local = path.relative(repositoryRoot, target).replaceAll('\\', '/');
           const workspaceInput = /^(?:\.agent-temp|\.tools|\.test-output)(?:\/|$)/u.test(local);
           const initializedRoot = key === 'root' && owner?.initializedFromEmpty === true;
           const absolute = path.isAbsolute(value) || /^[A-Za-z]:[\\/]/u.test(value);
-          if (!/[\r\n]/u.test(value) && ((hashBound && (absolute || workspaceInput)) || (workspaceInput && (sourcePath || initializedRoot)))) {
+          if (!/[\r\n]/u.test(value) && (((hashBound || requiredPin) && (absolute || workspaceInput)) || (workspaceInput && (sourcePath || initializedRoot)))) {
             // Explicit hash-bound/source descriptors are inputs; ordinary DTO Path values are business data.
-            references.set(target, { logical: value, siblingDirectory: false });
+            reference(target, { logical: value, siblingDirectory: false, required: owner?.required === true,
+              expectedDigests: declaredDigests.filter(isDigest), invalidDigest });
           }
         }
       } else if (value && typeof value === 'object') {
@@ -54,10 +70,11 @@ export async function captureInputIdentity({ selected, dependencies, preflight, 
       }
     }
     visit(content);
-    for (const [target, { logical, siblingDirectory }] of [...references].sort(([left], [right]) => left.localeCompare(right))) {
-      add(target, `${reason}:manifest-reference:${logical}`, false);
+    for (const [target, { logical, siblingDirectory, required, expectedDigests, invalidDigest }] of [...references].sort(([left], [right]) => left.localeCompare(right))) {
+      add(target, `${reason}:manifest-reference:${logical}`, required, expectedDigests, invalidDigest);
       const description = await describeFile(target, { recursive: false });
-      // Provenance paths can be metadata rather than reads; bind their state without claiming they are mandatory.
+      // Historical provenance paths remain descriptive unless a consumer
+      // explicitly declares the hash-bound input required for execution.
       if (siblingDirectory && (description.kind === 'file' || path.extname(target))) {
         add(path.dirname(target), `${reason}:manifest-reference-directory`, false);
         await bindDirectoryManifests(path.dirname(target), reason);
@@ -118,17 +135,21 @@ export async function captureInputIdentity({ selected, dependencies, preflight, 
   add(process.execPath, 'runtime:node');
   add(path.join(repositoryRoot, 'node_modules'), 'runtime:node-modules');
   const entries = [];
-  for (const [filename, { reasons, required }] of [...targets].sort(([left], [right]) => left.localeCompare(right))) {
-    entries.push({ reasons: [...reasons].sort(), required, ...await describeFile(filename,
-      {workspaceLinks:filename===path.join(repositoryRoot,'node_modules')}) });
+  for (const [filename, { reasons, required, expectedDigests, invalidDigest }] of [...targets].sort(([left], [right]) => left.localeCompare(right))) {
+    const description = await describeFile(filename, {workspaceLinks:filename===path.join(repositoryRoot,'node_modules')});
+    const expected = [...expectedDigests].sort();
+    entries.push({ reasons: [...reasons].sort(), required, ...description,
+      ...(invalidDigest ? { invalidExpectedDigest: true } : {}),
+      ...(expected.length || invalidDigest ? { expectedDigests: expected,
+        expectedDigestMatched: !invalidDigest && expected.every(digest => digest === (description.sha256 ?? description.entriesSha256)) } : {}) });
   }
   const services = preflight.services.filter(service => !service.filename).map(service => ({ ...service }));
   const tools = preflight.tools.map(({ name, executable, available, version, errorCode }) => ({
     name, executable, available, version, ...(errorCode ? { errorCode } : {}),
   }));
   const identity = { entries, services, tools, preflightReady: preflight.ready,
-    ready: entries.filter(entry => entry.required).every(entry => entry.available) && preflight.ready };
-  return { schemaVersion: 1, scope: 'Selected tests and their transitive local src/test/tool imports: imported local data files, declared/local fixture inputs, fixture siblings, transitive JSON provenance/hash-bound/source descriptors, configured native/runtime dependencies, Node modules and tool executables; service availability/version. Ordinary DTO paths are not interpreted as dependencies. Dynamic reads outside these inputs require separate evidence.',
+    ready: entries.filter(entry => entry.required).every(entry => entry.available && entry.expectedDigestMatched !== false) && preflight.ready };
+  return { schemaVersion: 1, scope: 'Selected tests and their transitive local src/test/tool imports: imported local data files, declared/local fixture inputs, fixture siblings, transitive JSON provenance/hash-bound/source descriptors, configured native/runtime dependencies, Node modules and tool executables; service availability/version. Explicit required descriptors must exist and match every declared digest before execution. Ordinary DTO paths are not interpreted as dependencies. Dynamic reads outside these inputs require separate evidence.',
     ...identity, entriesSha256: sha256(JSON.stringify(identity)) };
 }
 
