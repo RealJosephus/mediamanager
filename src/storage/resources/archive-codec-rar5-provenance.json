@@ -1,0 +1,396 @@
+{
+  "component": "libarchive 3.8.10 RAR5 independent selected-entry stream patch",
+  "source": {
+    "url": "https://github.com/libarchive/libarchive/releases/download/v3.8.10/libarchive-3.8.10.tar.gz",
+    "member": "libarchive-3.8.10/libarchive/archive_read_support_format_rar5.c",
+    "originalSourceSha256": "0a21cc37ef7ae0f83bbffdac1b08414380787ddf1cddae7b8539985e4b28e3ab",
+    "license": "BSD-2-Clause; original copyright, conditions and disclaimer are retained in archive-codec-rar5.c. Overall codec component notices are recorded separately."
+  },
+  "files": [
+    {
+      "filename": "archive-codec-rar5.c",
+      "bytes": 130247,
+      "sha256": "accd665e38fd253c4b6b89ee0fb686c2eb117daac9bfeab4d7ae97b62db7010d"
+    },
+    {
+      "filename": "archive-codec-rar5.patch",
+      "bytes": 3881,
+      "sha256": "0c46ee71f8b1b8b7036ed2e16e43cb8bab7810b477e569d91c6c467a483b05ca"
+    }
+  ],
+  "requiredInputs": [
+    {
+      "filename": "D:/mediamanager-validation/20261016-book-stage/results/rar5-codec-build-2/before-pins.json",
+      "available": true,
+      "kind": "file",
+      "bytes": 27071,
+      "sha256": "faa293e08e4f5e0d293b4ee4b2333116233f6c16e691ddb90343243ef7b5c108",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-book-stage/results/rar5-codec-build-2/build-record.json",
+      "available": true,
+      "kind": "file",
+      "bytes": 4478,
+      "sha256": "32949eacb2080db470532345405534e9442f98f50ed098ee3a238719e165f0b4",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-book-stage/results/rar5-codec-build-2/compile.command.json",
+      "available": true,
+      "kind": "file",
+      "bytes": 1037,
+      "sha256": "1d2997e44f57bc272225ae13fcec00613243174862980d87ce2bf94b52421344",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-book-stage/results/rar5-codec-build-2/compile.stdout.txt",
+      "available": true,
+      "kind": "file",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-book-stage/results/rar5-codec-build-2/compile.stderr.txt",
+      "available": true,
+      "kind": "file",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-book-stage/results/rar5-codec-build-2/replace-object.command.json",
+      "available": true,
+      "kind": "file",
+      "bytes": 462,
+      "sha256": "e9bcca47c568f2b1642d4e792c443c9a39684c92955e0e82b88cf81cc8d05ff2",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-book-stage/results/rar5-codec-build-2/patch.stdout.txt",
+      "available": true,
+      "kind": "file",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-book-stage/results/rar5-codec-build-2/patch.stderr.txt",
+      "available": true,
+      "kind": "file",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-book-stage/results/rar5-codec-build-2/archive/libarchive-3.8.10.tar.gz",
+      "available": true,
+      "kind": "file",
+      "bytes": 9301407,
+      "sha256": "a1bffbe5152cfe869751179e7b16648c87c461cb8c46eee75062efbe164cc57c",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-book-stage/results/rar5-codec-build-2/archive/original-rar5.c",
+      "available": true,
+      "kind": "file",
+      "bytes": 129492,
+      "sha256": "0a21cc37ef7ae0f83bbffdac1b08414380787ddf1cddae7b8539985e4b28e3ab",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-book-stage/results/rar5-codec-build-2/source/libarchive/archive_read_support_format_rar5.c",
+      "available": true,
+      "kind": "file",
+      "bytes": 130247,
+      "sha256": "accd665e38fd253c4b6b89ee0fb686c2eb117daac9bfeab4d7ae97b62db7010d",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-book-stage/results/rar5-codec-build-2/lib/libarchive.a",
+      "available": true,
+      "kind": "file",
+      "bytes": 1046854,
+      "sha256": "e0e065774699bd06771c8e77c3e38c6501d45139b0c47add41784ec50109b051",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-book-stage/results/rar5-codec-build-2/lib/archive_read_support_format_rar5.c.o",
+      "available": true,
+      "kind": "file",
+      "bytes": 33072,
+      "sha256": "c3fb7f45c36cacc4134d340ce4d4d20651696bf0f22992955a1d0304b1d03ffc",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-book-stage/results/rar5-independent-prototype-1/before-pins.json",
+      "available": true,
+      "kind": "file",
+      "bytes": 38305,
+      "sha256": "95d876c9b39fdd5c8c11190ed31cd292a69428440cd1ebf50e6ecdfdee90533a",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-book-stage/results/rar5-independent-prototype-1/build-record.json",
+      "available": true,
+      "kind": "file",
+      "bytes": 9380,
+      "sha256": "db1da7ec96b5f197cf65ce90ec6d3de65906a542542a563a1a2cb38b9b89eeef",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-book-stage/results/rar5-independent-prototype-1/source/archive_read_support_format_rar5.c",
+      "available": true,
+      "kind": "file",
+      "bytes": 130678,
+      "sha256": "83e4fce8dedb1b93baace01a41e64c094c745ce00fbafebcfcd45bb6e287d454",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-book-stage/results/rar5-independent-prototype-1/bridge.c",
+      "available": true,
+      "kind": "file",
+      "bytes": 4403,
+      "sha256": "e7e85f6930f6c23d8fb43b461dba04d5912ba8c2b91dc6b91f75b294a0c59aef",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-book-stage/results/rar5-independent-prototype-1/execution-2/record.json",
+      "available": true,
+      "kind": "file",
+      "bytes": 6097,
+      "sha256": "987fb4d66f74b16162bf2e2965690ad4b915bbdad2dd0aeb7548c7c01e68055c",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-book-stage/results/rar5-independent-prototype-1/execution-2/before-pins.json",
+      "available": true,
+      "kind": "file",
+      "bytes": 3569,
+      "sha256": "03beaecb3e29cc1e44bc206a263544e0ebb7e667fac540bf7809d8a1ba90c257",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-book-stage/results/rar5-independent-prototype-1/execution-2/solid-independent-unchecked.bin",
+      "available": true,
+      "kind": "file",
+      "bytes": 40372,
+      "sha256": "2d740e46716a0ba5ae82c1528f513db3fef9f5b817a5670679b2ab9af02973cc",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-book-stage/results/book-comic-native-6/native.json",
+      "available": true,
+      "kind": "file",
+      "bytes": 126630,
+      "sha256": "b166a93ad4eade88a32bf9cfea86814f22d6cf37bfd05e106c94c50febe08da4",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-book-stage/results/book-comic-native-6/record.json",
+      "available": true,
+      "kind": "file",
+      "bytes": 4510,
+      "sha256": "8d3d36eb1951191619d295aa08bb002b5075cb013c61263a08e78c999056ac16",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-book-stage\\results\\book-comic-native-6\\state\\cover-cases\\cover-upstream-Rar5-solid-rar\\selected-cover.bin",
+      "available": true,
+      "kind": "file",
+      "bytes": 40372,
+      "sha256": "2d740e46716a0ba5ae82c1528f513db3fef9f5b817a5670679b2ab9af02973cc",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-book-stage/results/book-comic-native-5/native.json",
+      "available": true,
+      "kind": "file",
+      "bytes": 656401,
+      "sha256": "ffa89ef25b8f3db8823f0bbd07c654497fb05a9e4c90e3e1a5b1d16b5b49c7a4",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-book-stage/results/book-comic-native-5/record.json",
+      "available": true,
+      "kind": "file",
+      "bytes": 4465,
+      "sha256": "d19d35490625116664d84db30d1cb1c0ad6a82c6a46d56ae31baa43444562a41",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-book-stage/results/comic-image-consumer-native-1/native.json",
+      "available": true,
+      "kind": "file",
+      "bytes": 41741,
+      "sha256": "836fc12d2f2e1ac24fd4bdcca9b78f0de98f588c1c224db071cc25a4619955e2",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-book-stage/results/comic-image-consumer-native-1/record.json",
+      "available": true,
+      "kind": "file",
+      "bytes": 4529,
+      "sha256": "d00f425bea3285a1a02e348f7f62569ebf8b65bd38cffed1a0c22792178b3d35",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-book-stage\\results\\comic-image-consumer-native-1\\state\\Rar5.solid.rar-internal\\metadata\\library\\ac\\ac810000000000000000000000000001\\poster.jpg",
+      "available": true,
+      "kind": "file",
+      "bytes": 40372,
+      "sha256": "2d740e46716a0ba5ae82c1528f513db3fef9f5b817a5670679b2ab9af02973cc",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-book-stage\\results\\comic-image-consumer-native-1\\state\\Rar5.solid.rar-local\\poster.jpg",
+      "available": true,
+      "kind": "file",
+      "bytes": 40372,
+      "sha256": "2d740e46716a0ba5ae82c1528f513db3fef9f5b817a5670679b2ab9af02973cc",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-book-stage/results/comic-rar-source-review-1/report.json",
+      "available": true,
+      "kind": "file",
+      "bytes": 12437,
+      "sha256": "715dbb0c9446edd550525be3173513b030742e1910a66d73b4299ec1ec134f6d",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-book-stage/results/comic-rar-source-review-1/1-RarArchiveEntry.Async.cs",
+      "available": true,
+      "kind": "file",
+      "bytes": 1243,
+      "sha256": "201ac0a6ed100ea78b9a4ff027c1eacb676745a3040d8dd1f3ea55e4f3d1e33e",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-book-stage/results/comic-rar-source-review-1/3-RarArchive.cs",
+      "available": true,
+      "kind": "file",
+      "bytes": 3482,
+      "sha256": "10232e517157a224e346d9e97312c447d6a506544edb8a91a920e40eb149b3cc",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-book-stage/inputs/comic-upstream-1/Rar5.solid.rar",
+      "available": true,
+      "kind": "file",
+      "bytes": 60046,
+      "sha256": "3043d68c5a81f46adcbb5393632d243944ead44eb383a677ac82e68afdde27cf",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-book-stage/inputs/comic-upstream-1/Rar5.rar",
+      "available": true,
+      "kind": "file",
+      "bytes": 60066,
+      "sha256": "3319de3e8a91a58d08d8a83f48ebae7e6b022c542b4a58775bab64f4063988a9",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/MediaBrowser.Providers/Books/ComicImageProvider.cs",
+      "available": true,
+      "kind": "file",
+      "bytes": 5794,
+      "sha256": "1bd032fe8eed1a7a2105202cb688b5243d872acd856087f0123d19a776a0c524",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Providers/Books/ComicImageProvider.cs",
+      "available": true,
+      "kind": "file",
+      "bytes": 5794,
+      "sha256": "1bd032fe8eed1a7a2105202cb688b5243d872acd856087f0123d19a776a0c524",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 506368,
+      "sha256": "474c7c638fe93cc61f1a588849fb93c81a2927388f6f4cf19953b3a76e9deb26",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/final-build-receipt.json",
+      "available": true,
+      "kind": "file",
+      "bytes": 14246,
+      "sha256": "44711dacc1c4e65d2f36202267423d3212c3577c41383696643ff04ebe8c49d2",
+      "required": true
+    }
+  ],
+  "option": {
+    "module": "rar5",
+    "name": "independent-entry",
+    "enabledBy": "archive-codec.c mm_create for fresh Book archive readers",
+    "behavior": [
+      "Directory enumeration and skipped entries consume their compressed payload without decompressing previous solid history.",
+      "The selected entry initializes a zero dictionary, distance cache, previous length and solid offset.",
+      "Payload CRC/BLAKE wrappers are absent, matching the actual async RarArchiveEntry.OpenEntryStreamAsync caller. Header/block parsing checks remain enabled."
+    ],
+    "scope": "Fresh native ComicImageProvider first selected-entry async stream. This does not claim the behavior of sync CRC-wrapped readers or multiple sequential streams sharing the same native Unpack instance."
+  },
+  "actualNative": {
+    "record": "D:/mediamanager-validation/20261016-book-stage/results/book-comic-native-6/native.json",
+    "selectedKey": "jpg\\test.jpg",
+    "bytes": 40372,
+    "sha256": "2d740e46716a0ba5ae82c1528f513db3fef9f5b817a5670679b2ab9af02973cc"
+  },
+  "actualConsumer": {
+    "record": "D:/mediamanager-validation/20261016-book-stage/results/comic-image-consumer-native-1/native.json",
+    "modes": [
+      {
+        "name": "Rar5.solid.rar-internal",
+        "selectedSha256": "2d740e46716a0ba5ae82c1528f513db3fef9f5b817a5670679b2ab9af02973cc",
+        "refresh": {
+          "update": 5,
+          "Failures": 0,
+          "ErrorMessage": null
+        },
+        "images": [
+          {
+            "Width": 0,
+            "Height": 0,
+            "BlurHash": ""
+          }
+        ],
+        "storedSha256": [
+          "2d740e46716a0ba5ae82c1528f513db3fef9f5b817a5670679b2ab9af02973cc"
+        ]
+      },
+      {
+        "name": "Rar5.solid.rar-local",
+        "selectedSha256": "2d740e46716a0ba5ae82c1528f513db3fef9f5b817a5670679b2ab9af02973cc",
+        "refresh": {
+          "update": 5,
+          "Failures": 0,
+          "ErrorMessage": null
+        },
+        "images": [
+          {
+            "Width": 0,
+            "Height": 0,
+            "BlurHash": ""
+          }
+        ],
+        "storedSha256": [
+          "2d740e46716a0ba5ae82c1528f513db3fef9f5b817a5670679b2ab9af02973cc"
+        ]
+      }
+    ],
+    "scope": "Actual ItemImageProvider -> ProviderManager stream SaveImage -> ImageSaver -> LibraryManager.UpdateImagesAsync -> ImageProcessor/Skia -> ItemPersistenceService SQLite image persistence. Controlled unrelated host services; no hosted HTTP/full metadata service claim."
+  },
+  "prototype": {
+    "record": "D:/mediamanager-validation/20261016-book-stage/results/rar5-independent-prototype-1/execution-2/record.json",
+    "observed": "Exact native 40372-byte Buffer.equals; control with payload CRC enabled fails CRC32; baseline yields the different correctly reconstructed JPEG; catalog independent mode initializes no unpack dictionary."
+  },
+  "build": {
+    "record": "D:/mediamanager-validation/20261016-book-stage/results/rar5-codec-build-2/build-record.json",
+    "role": "Patched RAR5 base library. Final joint RAR4/RAR5 payload and complete runtime/library source-license closure are recorded separately."
+  }
+}

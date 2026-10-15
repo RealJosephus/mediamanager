@@ -1,0 +1,102 @@
+{
+  "readerResults": [
+    {
+      "name": "initial-clr-whitespace",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": null,
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": [
+          {
+            "Name": "A.\u0085B.",
+            "type": "Author",
+            "Role": null,
+            "ProviderIds": {}
+          },
+          {
+            "Name": "C. \uFEFFD.",
+            "type": "Author",
+            "Role": null,
+            "ProviderIds": {}
+          }
+        ]
+      },
+      "error": null,
+      "logs": []
+    },
+    {
+      "name": "long-encoding-declaration",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "\u20ACuro",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": null,
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "logs": []
+    }
+  ],
+  "providerResults": [],
+  "epubResults": [],
+  "archiveResults": [],
+  "assemblies": [
+    {
+      "name": "MediaBrowser.Providers",
+      "sha256": "4aa9ca407da2bb0db21ef0a7da5bdef162260fd9c5873f06cfb239780ccc4e3e"
+    },
+    {
+      "name": "MediaBrowser.Controller",
+      "sha256": "e4f1e201e43c9e22fd07cbd0ed2c52c427b0bdaa2dfe0ed5e5ab7ee604b537cf"
+    },
+    {
+      "name": "Emby.Server.Implementations",
+      "sha256": "9c732ba80d1b1980c36d2d64780da28d64c0a8d503bf044c89bc35285eab219e"
+    }
+  ],
+  "assetFiles": [
+    {
+      "path": "initial-clr-whitespace.opf",
+      "sha256": "8a2b58663dab57466ac1183159a70bc88bf9d27e258a6901f99b9ce064af3da6"
+    },
+    {
+      "path": "long-encoding-declaration.opf",
+      "sha256": "d63ffc81a3c21a78587ab14798f0d783ab0e25726668a93eab4d1aee47b56071"
+    }
+  ],
+  "inputSha256": "8f22772f7106c7b7273d549b66bdcea179bc309159f40997a7569c45c4f9780a",
+  "localUtcOffset": "08:00:00",
+  "localTimeZone": "Taipei Standard Time",
+  "scope": "Actual OPF reader/provider, EPUB metadata/cover and .NET ZipArchive over bound physical XML/ZIP files; actual ManagedFileSystem lookup/mtime; controlled logger and IApplicationPaths temp only. No generic metadata host, SQL, HTTP or release acceptance."
+}

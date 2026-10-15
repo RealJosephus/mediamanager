@@ -37,6 +37,10 @@ import { loadEncodingConfiguration, serverFriendlyName } from './configuration.j
 import { createBuiltinExternalUrlPlugin } from './metadata/external-url-providers.js';
 import { createPhotoMetadataPlugin } from './metadata/photo-provider.js';
 import { createPhotoAlbumImagePlugin } from './metadata/photo-album-provider.js';
+import { createBookOpfPlugin } from './metadata/book-opf-provider.js';
+import { createBookEpubPlugin } from './metadata/book-epub-provider.js';
+import { createBookComicPlugin } from './metadata/book-comic-provider.js';
+import { BookArchiveService } from './storage/archive-reader.js';
 import { SyncPlayService } from './syncplay/service.js';
 import { UserViewService } from './library/user-view-service.js';
 import { initializeLibraryRoot } from './library/root-initialization.js';
@@ -114,6 +118,9 @@ export async function createRuntime({ database, configuration, serverId, serverN
   const spoolStateRoot = dataPath ?? metadataPath;
   const spoolRoot = spoolStateRoot && path.join(spoolStateRoot, 'metadata-spool');
   fileSystem.spoolRoot = spoolRoot;
+  const bookArchives = new BookArchiveService({ vfs, identityMap,
+    spoolPath: programDataPath && path.join(programDataPath, 'cache', 'book-archives') });
+  rollback.push(() => bookArchives.close());
   const initializeStorageRoots = async () => {
     await initializeLibraryRoot({ fileSystem, store, programDataPath, dataPath, metadataPath, configuration });
     if (!spoolRoot) return;
@@ -233,6 +240,10 @@ export async function createRuntime({ database, configuration, serverId, serverN
     registry.register(createPhotoAlbumImagePlugin({ store, fileSystem, vfs, identityMap, metadataIdentityMap,
       metadataPath, tempPath: programDataPath && path.join(programDataPath, 'cache', 'temp'), images: metadataImages,
       configuration, expandPath: library.options.expandPath, logger }));
+    registry.register(createBookComicPlugin({ fileSystem, openArchive: bookArchives.openArchive, logger,
+      culture: () => configuration.UICulture || 'en-US' }));
+    registry.register(createBookEpubPlugin({ openArchive: bookArchives.openArchive, logger }));
+    registry.register(createBookOpfPlugin({ fileSystem, logger }));
     library.options.externalUrlRegistry = registry;
     loadContext = createMetadataContextLoader({ fileSystem, store, library, linkedChildren, spoolRoot, vfs, identityMap, metadataIdentityMap, configuration, contextExtensions: () => plugins.entries('context'),
       metadataConfiguration: metadataOptions.metadataConfiguration ?? metadataSettings.metadata, ignoreRule, externalData, logger });
@@ -252,7 +263,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
       itemCreation, refresh: (reference, options) => metadata.refresh(reference, options), logger, now: metadataNow });
     metadata = new MetadataRefreshHost({ registry, loadContext, store, linkedChildren, vfs, logger, userData, probe, externalData,
       images: metadataImages, updates: metadataUpdates, seriesLifecycle, now: metadataNow });
-    rollback.push(() => metadata.close());
+    rollback.push(async () => { await bookArchives.close(); await metadata.close(); });
     Object.assign(metadata, { saver });
   }
   library.itemCreation = itemCreation;
@@ -436,7 +447,8 @@ export async function createRuntime({ database, configuration, serverId, serverN
         attempt(() => folderScanner?.close()),
         attempt(() => playlists?.close()),
         attempt(() => metadataEditor.close()),
-        attempt(() => itemUpdates.close())
+        attempt(() => itemUpdates.close()),
+        attempt(() => bookArchives.close())
       ]);
       await attempt(() => application.drainRequests());
       await attempt(() => libraryTaskScheduler?.close());

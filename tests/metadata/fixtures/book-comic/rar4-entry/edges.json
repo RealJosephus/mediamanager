@@ -1,0 +1,109 @@
+{
+  "scope": "Actual ComicImageProvider default and cancellation; actual SharpCompress explicit password controls; wrongsalt changes only the selected real RAR4 salt and checksum in a NEW input.",
+  "observations": [
+    {
+      "name": "native-default-null",
+      "path": "D:\\mediamanager-validation\\20261016-book-stage\\results\\comic-rar-edge-native-3/state\\original.cbr",
+      "sourceSha256": "52c0d575e01750ae643c65866b5e06e67773a0aed5edea6b2b04e7de14a784a2",
+      "hasImage": true,
+      "errorType": null,
+      "bytes": 40372,
+      "sha256": "774733f04eeaff4327aca9198ccfde3f0d76954799c0c4055db802f98ec73d86",
+      "outputPath": "D:\\mediamanager-validation\\20261016-book-stage\\results\\comic-rar-edge-native-3/state\\native-default-null.bin",
+      "logs": [],
+      "sourceUnlocked": true
+    },
+    {
+      "name": "native-explicit-empty",
+      "path": "D:/mediamanager-validation/20261016-book-stage/inputs/comic-upstream-1\\Rar.encrypted_filesOnly.rar",
+      "sourceSha256": "52c0d575e01750ae643c65866b5e06e67773a0aed5edea6b2b04e7de14a784a2",
+      "hasImage": true,
+      "errorType": null,
+      "bytes": 40372,
+      "sha256": "774733f04eeaff4327aca9198ccfde3f0d76954799c0c4055db802f98ec73d86",
+      "outputPath": "D:\\mediamanager-validation\\20261016-book-stage\\results\\comic-rar-edge-native-3/state\\native-explicit-empty.bin",
+      "logs": [],
+      "sourceUnlocked": true
+    },
+    {
+      "name": "native-explicit-wrong",
+      "path": "D:/mediamanager-validation/20261016-book-stage/inputs/comic-upstream-1\\Rar.encrypted_filesOnly.rar",
+      "sourceSha256": "52c0d575e01750ae643c65866b5e06e67773a0aed5edea6b2b04e7de14a784a2",
+      "hasImage": null,
+      "errorType": "ArchiveOperationException",
+      "bytes": null,
+      "sha256": null,
+      "outputPath": null,
+      "logs": [],
+      "sourceUnlocked": true
+    },
+    {
+      "name": "wrong-salt-native-default",
+      "path": "D:\\mediamanager-validation\\20261016-book-stage\\results\\comic-rar-edge-native-3/state\\wrong-salt.cbr",
+      "sourceSha256": "e8b4aad0e544a578dc6765450aceea4f1fa9c06b2c483d9bfd53cee227af48aa",
+      "hasImage": false,
+      "errorType": null,
+      "bytes": null,
+      "sha256": null,
+      "outputPath": null,
+      "logs": [
+        {
+          "level": "Error",
+          "error": "ArgumentOutOfRangeException"
+        }
+      ],
+      "sourceUnlocked": true
+    },
+    {
+      "name": "native-pre-cancelled",
+      "path": "D:\\mediamanager-validation\\20261016-book-stage\\results\\comic-rar-edge-native-3/state\\original.cbr",
+      "sourceSha256": "52c0d575e01750ae643c65866b5e06e67773a0aed5edea6b2b04e7de14a784a2",
+      "hasImage": false,
+      "errorType": null,
+      "bytes": null,
+      "sha256": null,
+      "outputPath": null,
+      "logs": [
+        {
+          "level": "Error",
+          "error": "OperationCanceledException"
+        }
+      ],
+      "sourceUnlocked": true
+    },
+    {
+      "name": "native-cancel-after-1ms",
+      "path": "D:\\mediamanager-validation\\20261016-book-stage\\results\\comic-rar-edge-native-3/state\\original.cbr",
+      "sourceSha256": "52c0d575e01750ae643c65866b5e06e67773a0aed5edea6b2b04e7de14a784a2",
+      "hasImage": false,
+      "errorType": null,
+      "bytes": null,
+      "sha256": null,
+      "outputPath": null,
+      "logs": [
+        {
+          "level": "Error",
+          "error": "OperationCanceledException"
+        }
+      ],
+      "sourceUnlocked": true
+    },
+    {
+      "name": "no-salt-native-default",
+      "path": "D:\\mediamanager-validation\\20261016-book-stage\\results\\comic-rar-edge-native-3/state\\no-salt.cbr",
+      "sourceSha256": "3bc259b18fc3aa9aad9d9e9aa4c5697871210bbe577d3a5b73a1db3f93a724e7",
+      "hasImage": false,
+      "errorType": null,
+      "bytes": null,
+      "sha256": null,
+      "outputPath": null,
+      "logs": [
+        {
+          "level": "Error",
+          "error": "IndexOutOfRangeException"
+        }
+      ],
+      "sourceUnlocked": true
+    }
+  ]
+}

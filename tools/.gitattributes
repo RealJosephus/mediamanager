@@ -1,0 +1,3 @@
+archive-codec* -text
+build-archive-codec.mjs -text
+README-archive-codec.md -text

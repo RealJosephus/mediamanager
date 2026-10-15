@@ -1,0 +1,111 @@
+{
+  "scope": "Actual XmlDocument.Load(Stream) and OpfReader resource-bound observations. Returned metadata is projected only to UTF-16 length and UTF-8 SHA256. No elapsed-time or CLR representation requirement.",
+  "results": [
+    {
+      "name": "expanded-9-million",
+      "error": null,
+      "length": 9000000,
+      "sha": "d8b8b13cb51877020b218ad0d813e9ee60e7849cb9f77ffef8b51bc7d2d766a0",
+      "message": null
+    },
+    {
+      "name": "expanded-10-million",
+      "error": "XmlException",
+      "length": null,
+      "sha": null,
+      "message": "The input document has exceeded a limit set by MaxCharactersFromEntities."
+    },
+    {
+      "name": "single-entity-10000000",
+      "error": null,
+      "length": 10000000,
+      "sha": "0c9a42b3d065a64063eca67e98c932fa2e9a077bc7973a421a964a11304c998c",
+      "message": null
+    },
+    {
+      "name": "single-entity-10000001",
+      "error": "XmlException",
+      "length": null,
+      "sha": null,
+      "message": "The input document has exceeded a limit set by MaxCharactersFromEntities."
+    },
+    {
+      "name": "literal-10000001",
+      "error": null,
+      "length": 10000001,
+      "sha": "2e8e5f67e2a2730993c520c05afa628c42faa861cfe912d30967d62bdc7c357f",
+      "message": null
+    },
+    {
+      "name": "entity-depth-300",
+      "error": null,
+      "length": 4,
+      "sha": "c54e3625467b4fdecbd75968fc2fa16fff1e6ad1359e37d32604cadcc8947d5e",
+      "message": null
+    },
+    {
+      "name": "entity-depth-2048",
+      "error": null,
+      "length": 4,
+      "sha": "c54e3625467b4fdecbd75968fc2fa16fff1e6ad1359e37d32604cadcc8947d5e",
+      "message": null
+    },
+    {
+      "name": "entity-self-cycle",
+      "error": "XmlException",
+      "length": null,
+      "sha": null,
+      "message": "General entity \u0027a\u0027 references itself. Line 1, position 35."
+    },
+    {
+      "name": "entity-mutual-cycle",
+      "error": "XmlException",
+      "length": null,
+      "sha": null,
+      "message": "General entity \u0027a\u0027 references itself. Line 1, position 52."
+    }
+  ],
+  "assembly": {
+    "name": "MediaBrowser.Providers",
+    "sha256": "4aa9ca407da2bb0db21ef0a7da5bdef162260fd9c5873f06cfb239780ccc4e3e"
+  },
+  "assetFiles": [
+    {
+      "path": "entity-depth-2048.opf",
+      "sha256": "923cb361f967e9f5bcceb5f52f14e0afaadaddee0c235e121ca00024ef084f99"
+    },
+    {
+      "path": "entity-depth-300.opf",
+      "sha256": "4438f0d191669ddfe48368cf45c8bcf5c1fd88b47cd8d19063066f479ffe6540"
+    },
+    {
+      "path": "entity-mutual-cycle.opf",
+      "sha256": "5a057acbc24247675a588379d99f0d712b3f9177fc488b9edfb31a4713417510"
+    },
+    {
+      "path": "entity-self-cycle.opf",
+      "sha256": "731c6ec85ab6de2355a8bff718becd1f76abd09a9741ad7ea97dffab983bd200"
+    },
+    {
+      "path": "expanded-10-million.opf",
+      "sha256": "ba8dd09344b4d274a801dbdfef07ed10b2044e35c55bd9b54fac50ef4f03882b"
+    },
+    {
+      "path": "expanded-9-million.opf",
+      "sha256": "e0d680d1e11a5ec44156d1812776e66c87cf8a30bb2cc8df035eb0446c20b64f"
+    },
+    {
+      "path": "literal-10000001.opf",
+      "sha256": "04bf704a32da5f5a9a4d23b911bac65a0d942d0335b87ed1490bb144677a463d"
+    },
+    {
+      "path": "single-entity-10000000.opf",
+      "sha256": "242b3154bf8cb2e2506950321edc937673e619182e7b55544e673661bb32fb33"
+    },
+    {
+      "path": "single-entity-10000001.opf",
+      "sha256": "3da260740ad58ad2b03ff724a25b83b2f725f3013ca78c047b94a886659e9662"
+    }
+  ],
+  "inputSha256": "2e8f740e31114ee725b521beab4db58837ca1a45e685b38cf63a1015113f1bc4"
+}

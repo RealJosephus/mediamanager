@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-15T19:40:00.496Z",
+  "project": "D:\\mediamanager\\.agent-temp\\book-opf-resource-native\\Oracle.csproj",
+  "dotnet": {
+    "filename": "D:\\mediamanager\\.tools\\dotnet\\dotnet.exe",
+    "available": true,
+    "kind": "file",
+    "bytes": 167208,
+    "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6"
+  },
+  "node": "v24.16.0",
+  "timezone": "Asia/Taipei",
+  "jellyfinDll": {
+    "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll",
+    "available": true,
+    "kind": "file",
+    "bytes": 506368,
+    "sha256": "474c7c638fe93cc61f1a588849fb93c81a2927388f6f4cf19953b3a76e9deb26"
+  },
+  "sourceFiles": [
+    {
+      "filename": "D:\\mediamanager\\.agent-temp\\book-opf-resource-native\\Oracle.csproj",
+      "available": true,
+      "kind": "file",
+      "bytes": 403,
+      "sha256": "3f2610631c594ffd08dcc82f03d3509abc1c9c9541f159519800df046fc770ee"
+    },
+    {
+      "filename": "D:\\mediamanager\\tests\\Directory.Build.props",
+      "available": true,
+      "kind": "file",
+      "bytes": 780,
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    },
+    {
+      "filename": "D:\\mediamanager\\.agent-temp\\book-opf-resource-native\\Program.cs",
+      "available": true,
+      "kind": "file",
+      "bytes": 1838,
+      "sha256": "ddb172c5af0a5a300ce5be04b1c69374634bcc9b7b1da0f3f50b8276b46de53e"
+    }
+  ],
+  "sourceFilesSha256": "68a73a4983abbe0e42ba43ee2310445d5d7a32580431315cb27e9ab93efc4665",
+  "build": {
+    "args": [
+      "build",
+      "D:\\mediamanager-validation\\20261016-book-stage\\results\\opf-resource-native-1\\project\\Oracle.csproj",
+      "-c",
+      "Release",
+      "--nologo",
+      "-v",
+      "minimal",
+      "-p:BaseOutputPath=D:\\mediamanager-validation\\20261016-book-stage\\results\\opf-resource-native-1\\bin\\",
+      "-p:BaseIntermediateOutputPath=D:\\mediamanager-validation\\20261016-book-stage\\results\\opf-resource-native-1\\obj\\"
+    ],
+    "status": 0,
+    "signal": null
+  },
+  "process": {
+    "args": [
+      "D:\\mediamanager-validation\\20261016-book-stage\\results\\opf-resource-native-1\\bin\\Release\\net10.0\\Oracle.dll",
+      "D:/mediamanager-validation/20261016-book-stage/inputs/opf-resource-1/input.json",
+      "D:/mediamanager-validation/20261016-book-stage/inputs/opf-resource-1/assets",
+      "D:\\mediamanager-validation\\20261016-book-stage\\results\\opf-resource-native-1/native.json"
+    ],
+    "status": 0,
+    "signal": null
+  },
+  "outputs": [
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-book-stage\\results\\opf-resource-native-1\\build.stderr.txt",
+      "available": true,
+      "kind": "file",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-book-stage\\results\\opf-resource-native-1\\build.stdout.txt",
+      "available": true,
+      "kind": "file",
+      "bytes": 376,
+      "sha256": "c650d01551225a5c8c4f6640e88d2933429f3a54397dcb89f28276b633bb011c"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-book-stage\\results\\opf-resource-native-1\\native.json",
+      "available": true,
+      "kind": "file",
+      "bytes": 3648,
+      "sha256": "dd775df5642800c15472a76a2232417a53e220f3a85c8c45ad18e0c9f06743c1"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-book-stage\\results\\opf-resource-native-1\\stderr.txt",
+      "available": true,
+      "kind": "file",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-book-stage\\results\\opf-resource-native-1\\stdout.txt",
+      "available": true,
+      "kind": "file",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "oracleAssembly": {
+    "filename": "D:\\mediamanager-validation\\20261016-book-stage\\results\\opf-resource-native-1\\bin\\Release\\net10.0\\Oracle.dll",
+    "available": true,
+    "kind": "file",
+    "bytes": 13312,
+    "sha256": "8be1374ec63808fe62d70a39084dd2f58c456792c69ae4806586257c14193b83"
+  },
+  "passed": true
+}

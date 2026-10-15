@@ -1,0 +1,85 @@
+{
+  "scope": "Actual bounded XmlDocument/OpfReader consumer behavior; gzip only stores exact native raw input bytes compactly.",
+  "files": [
+    {
+      "filename": "assets/entity-depth-2048.opf.gz",
+      "bytes": 10608,
+      "sha256": "7701dcce7968605f5b8c377e0d280eafcdd43050e6a0268479bae7f89f2f6a4c"
+    },
+    {
+      "filename": "assets/entity-depth-300.opf.gz",
+      "bytes": 1506,
+      "sha256": "6886415e00056aae935dbdb8c90914f8fc5a6c18cccdacee06a66d1f0e264a35"
+    },
+    {
+      "filename": "assets/entity-mutual-cycle.opf.gz",
+      "bytes": 136,
+      "sha256": "fe99447bd8a779ad1df3a0912074d3b44f25852f645169db3c68e80945f1e797"
+    },
+    {
+      "filename": "assets/entity-self-cycle.opf.gz",
+      "bytes": 126,
+      "sha256": "37e0b6754a4a272eb3fad626e30abac4a0cfb5740116896765b65e61ddc6a1cb"
+    },
+    {
+      "filename": "assets/expanded-10-million.opf.gz",
+      "bytes": 184,
+      "sha256": "c9f6d0dc57590e7bb6feb216761a680d72e5c99f423378ee7f7cb1514d1a2a15"
+    },
+    {
+      "filename": "assets/expanded-9-million.opf.gz",
+      "bytes": 184,
+      "sha256": "ed21eed15287bddba74983ea53c981679dc4f3ce2709834a7f69cf46b78f01ec"
+    },
+    {
+      "filename": "assets/literal-10000001.opf.gz",
+      "bytes": 9832,
+      "sha256": "92f6a5bebcbc8f505d95a6ff4eef2109473b7dcae2b08a6ac410dac36b4349a3"
+    },
+    {
+      "filename": "assets/single-entity-10000000.opf.gz",
+      "bytes": 9873,
+      "sha256": "6119d3137e72cff1b9023ad204975051f57b9ef8d6cd5e9d9072902e50a4393d"
+    },
+    {
+      "filename": "assets/single-entity-10000001.opf.gz",
+      "bytes": 9873,
+      "sha256": "3a544d87a38b2b3ce0e3e893a53672ffb03d73e1ccac478aef394f79ceed047b"
+    },
+    {
+      "filename": "create-assets.mjs",
+      "bytes": 1495,
+      "sha256": "3fb3a004120fc2b585b2ffcb2b76e5060c7b4e291147873db4c4617b6520b5a5"
+    },
+    {
+      "filename": "input.json",
+      "bytes": 820,
+      "sha256": "2e8f740e31114ee725b521beab4db58837ca1a45e685b38cf63a1015113f1bc4"
+    },
+    {
+      "filename": "native.json",
+      "bytes": 3648,
+      "sha256": "dd775df5642800c15472a76a2232417a53e220f3a85c8c45ad18e0c9f06743c1"
+    },
+    {
+      "filename": "Oracle.csproj",
+      "bytes": 403,
+      "sha256": "3f2610631c594ffd08dcc82f03d3509abc1c9c9541f159519800df046fc770ee"
+    },
+    {
+      "filename": "Program.cs",
+      "bytes": 1838,
+      "sha256": "ddb172c5af0a5a300ce5be04b1c69374634bcc9b7b1da0f3f50b8276b46de53e"
+    },
+    {
+      "filename": "README.md",
+      "bytes": 1029,
+      "sha256": "979a4fb7eab9f38a1ecd31b31009e24bc75ff33679943e9d4663bc8106ac3d4a"
+    },
+    {
+      "filename": "record.json",
+      "bytes": 4332,
+      "sha256": "850965c0ddb865788e712a0add0892053430f40ff9e084bfe2173c8871364bf5"
+    }
+  ]
+}

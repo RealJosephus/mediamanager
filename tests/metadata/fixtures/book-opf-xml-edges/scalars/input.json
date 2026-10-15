@@ -1,0 +1,15 @@
+{
+  "readers": [
+    {
+      "name": "initial-clr-whitespace",
+      "file": "initial-clr-whitespace.opf"
+    },
+    {
+      "name": "long-encoding-declaration",
+      "file": "long-encoding-declaration.opf"
+    }
+  ],
+  "opf": [],
+  "epubs": [],
+  "archives": []
+}

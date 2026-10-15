@@ -1,0 +1,316 @@
+{
+  "scope": "Additional actual newDLL native component evidence, separate from the retained44covers: normal/nonencryptedselectedbadCRC/nativeRAR4solid; empty/default/wrongpassword, changedSalt, cancellation; source-confirmed noSalt rawpacked stream. All newactualinputs and records are bound; no expected bytes used to produce oracle output.",
+  "caseCounts": {
+    "crcSolid": 3,
+    "edges": 7,
+    "crypto": 3
+  },
+  "requiredInputs": [
+    {
+      "path": "D:/mediamanager/tests/metadata/fixtures/book-comic/rar4-entry/native.json",
+      "bytes": 5468,
+      "sha256": "9cd61ae16dd2754df677275be5c1c0a0ff7203952bc82287d2df6dde5407172c",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-book-stage/results/comic-rar4-crc-solid-native-1/native.json",
+      "bytes": 5468,
+      "sha256": "9cd61ae16dd2754df677275be5c1c0a0ff7203952bc82287d2df6dde5407172c",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-book-stage/results/comic-rar4-crc-solid-native-1/record.json",
+      "bytes": 4532,
+      "sha256": "6641934237f29ef0aec846aab3180e4c2fa148d24fd0e8d0a58d2a3e23797f3e",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-book-stage/results/comic-rar4-crc-solid-native-1/project/Program.cs",
+      "bytes": 2012,
+      "sha256": "f799774ad3d5aecfbfe21a6e7e9c496d156df99910af5b2aacb6e2890871d6ac",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-book-stage/results/comic-rar4-crc-solid-native-1/project/Oracle.csproj",
+      "bytes": 403,
+      "sha256": "3f2610631c594ffd08dcc82f03d3509abc1c9c9541f159519800df046fc770ee",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-book-stage/results/comic-rar4-crc-solid-native-1/stdout.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-book-stage/results/comic-rar4-crc-solid-native-1/stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "path": "D:\\mediamanager-validation\\20261016-book-stage\\results\\comic-rar4-crc-solid-native-1\\bin\\Release\\net10.0\\Oracle.dll",
+      "bytes": 17920,
+      "sha256": "7e7d6c42d0f3c229edac47ce9ebd39956b80524fa0f5198ccc6460f7524eae3f",
+      "required": true
+    },
+    {
+      "path": "D:\\mediamanager\\.tools\\dotnet\\dotnet.exe",
+      "bytes": 167208,
+      "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll",
+      "bytes": 506368,
+      "sha256": "474c7c638fe93cc61f1a588849fb93c81a2927388f6f4cf19953b3a76e9deb26",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/tests/metadata/fixtures/book-comic/rar4-entry/edges.json",
+      "bytes": 4106,
+      "sha256": "03ea563eb5363322e2081d6280a62c277e56969f570af15ccc151847cda4c6f3",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-book-stage/results/comic-rar-edge-native-3/native.json",
+      "bytes": 4106,
+      "sha256": "03ea563eb5363322e2081d6280a62c277e56969f570af15ccc151847cda4c6f3",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-book-stage/results/comic-rar-edge-native-3/record.json",
+      "bytes": 4436,
+      "sha256": "6c632d25cd44ff40e5002082771174476f639f5edc4c6452e00185cd191f18c9",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-book-stage/results/comic-rar-edge-native-3/project/Program.cs",
+      "bytes": 5136,
+      "sha256": "ce2349e29cd9fe39c913e9f4ddf27eabd241f221c4221c60a2235095ab3084b1",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-book-stage/results/comic-rar-edge-native-3/project/Oracle.csproj",
+      "bytes": 403,
+      "sha256": "3f2610631c594ffd08dcc82f03d3509abc1c9c9541f159519800df046fc770ee",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-book-stage/results/comic-rar-edge-native-3/stdout.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-book-stage/results/comic-rar-edge-native-3/stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "path": "D:\\mediamanager-validation\\20261016-book-stage\\results\\comic-rar-edge-native-3\\bin\\Release\\net10.0\\Oracle.dll",
+      "bytes": 19968,
+      "sha256": "59b74265efe32048d594bf4471452c13e675fce7fc7169196768feb711d000bb",
+      "required": true
+    },
+    {
+      "path": "D:\\mediamanager\\.tools\\dotnet\\dotnet.exe",
+      "bytes": 167208,
+      "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll",
+      "bytes": 506368,
+      "sha256": "474c7c638fe93cc61f1a588849fb93c81a2927388f6f4cf19953b3a76e9deb26",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/tests/metadata/fixtures/book-comic/rar4-entry/crypto.json",
+      "bytes": 1984,
+      "sha256": "79af413f6d645abef6e385bd44b40397b7d2c299bbf86b2beced1bf42ce7eb6c",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-book-stage/results/comic-rar-crypto-native-3/native.json",
+      "bytes": 1984,
+      "sha256": "79af413f6d645abef6e385bd44b40397b7d2c299bbf86b2beced1bf42ce7eb6c",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-book-stage/results/comic-rar-crypto-native-3/record.json",
+      "bytes": 4503,
+      "sha256": "1309dc01f885d1172521939c002e37ff016b49e6bda3759a4445c07fea58d96d",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-book-stage/results/comic-rar-crypto-native-3/project/Program.cs",
+      "bytes": 2116,
+      "sha256": "7fa8ca2cb25e44749e6bc7912ab39396b7d9130ac4f52af50a74b5ed76c396ec",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-book-stage/results/comic-rar-crypto-native-3/project/Oracle.csproj",
+      "bytes": 347,
+      "sha256": "4db5126e2e6abdcecc549f3972480172274996ce5bef06b5ba2411178c3170c6",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-book-stage/results/comic-rar-crypto-native-3/stdout.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-book-stage/results/comic-rar-crypto-native-3/stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "path": "D:\\mediamanager-validation\\20261016-book-stage\\results\\comic-rar-crypto-native-3\\bin\\Release\\net10.0\\Oracle.dll",
+      "bytes": 15360,
+      "sha256": "8d95dd3ebc19049dddcce807a4403c0ddf8ec1c805dce1ceae9b5966938775db",
+      "required": true
+    },
+    {
+      "path": "D:\\mediamanager\\.tools\\dotnet\\dotnet.exe",
+      "bytes": 167208,
+      "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll",
+      "bytes": 506368,
+      "sha256": "474c7c638fe93cc61f1a588849fb93c81a2927388f6f4cf19953b3a76e9deb26",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-book-stage/inputs/comic-rar4-crc-solid-1\\normal.cbr",
+      "bytes": 60029,
+      "sha256": "60db161de57dc59aa12e0c45b1b70d78904da3d104e74748972ac38643f12802",
+      "required": true
+    },
+    {
+      "path": "D:\\mediamanager-validation\\20261016-book-stage\\results\\comic-rar4-crc-solid-native-1/state\\normal-selected.bin",
+      "bytes": 40372,
+      "sha256": "b251c7501fb0f55dd4a92feabe0a6f5733bc40a02679498155fae9b30138fc53",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-book-stage/inputs/comic-rar4-crc-solid-1\\bad-crc.cbr",
+      "bytes": 60029,
+      "sha256": "38bea564b5855a1487c977b01f977b3a3abbdb61ff9cb90296737e3677f9298d",
+      "required": true
+    },
+    {
+      "path": "D:\\mediamanager-validation\\20261016-book-stage\\results\\comic-rar4-crc-solid-native-1/state\\bad-crc-selected.bin",
+      "bytes": 40372,
+      "sha256": "b251c7501fb0f55dd4a92feabe0a6f5733bc40a02679498155fae9b30138fc53",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-book-stage/inputs/comic-rar4-crc-solid-1\\solid.cbr",
+      "bytes": 60001,
+      "sha256": "e7e62f24f22f195d21437be09667c8956837d99ba48d7270090251a8e32babc5",
+      "required": true
+    },
+    {
+      "path": "D:\\mediamanager-validation\\20261016-book-stage\\results\\comic-rar-edge-native-3/state\\original.cbr",
+      "bytes": 60069,
+      "sha256": "52c0d575e01750ae643c65866b5e06e67773a0aed5edea6b2b04e7de14a784a2",
+      "required": true
+    },
+    {
+      "path": "D:\\mediamanager-validation\\20261016-book-stage\\results\\comic-rar-edge-native-3/state\\native-default-null.bin",
+      "bytes": 40372,
+      "sha256": "774733f04eeaff4327aca9198ccfde3f0d76954799c0c4055db802f98ec73d86",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-book-stage/inputs/comic-upstream-1\\Rar.encrypted_filesOnly.rar",
+      "bytes": 60069,
+      "sha256": "52c0d575e01750ae643c65866b5e06e67773a0aed5edea6b2b04e7de14a784a2",
+      "required": true
+    },
+    {
+      "path": "D:\\mediamanager-validation\\20261016-book-stage\\results\\comic-rar-edge-native-3/state\\native-explicit-empty.bin",
+      "bytes": 40372,
+      "sha256": "774733f04eeaff4327aca9198ccfde3f0d76954799c0c4055db802f98ec73d86",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-book-stage/inputs/comic-upstream-1\\Rar.encrypted_filesOnly.rar",
+      "bytes": 60069,
+      "sha256": "52c0d575e01750ae643c65866b5e06e67773a0aed5edea6b2b04e7de14a784a2",
+      "required": true
+    },
+    {
+      "path": "D:\\mediamanager-validation\\20261016-book-stage\\results\\comic-rar-edge-native-3/state\\wrong-salt.cbr",
+      "bytes": 60069,
+      "sha256": "e8b4aad0e544a578dc6765450aceea4f1fa9c06b2c483d9bfd53cee227af48aa",
+      "required": true
+    },
+    {
+      "path": "D:\\mediamanager-validation\\20261016-book-stage\\results\\comic-rar-edge-native-3/state\\original.cbr",
+      "bytes": 60069,
+      "sha256": "52c0d575e01750ae643c65866b5e06e67773a0aed5edea6b2b04e7de14a784a2",
+      "required": true
+    },
+    {
+      "path": "D:\\mediamanager-validation\\20261016-book-stage\\results\\comic-rar-edge-native-3/state\\original.cbr",
+      "bytes": 60069,
+      "sha256": "52c0d575e01750ae643c65866b5e06e67773a0aed5edea6b2b04e7de14a784a2",
+      "required": true
+    },
+    {
+      "path": "D:\\mediamanager-validation\\20261016-book-stage\\results\\comic-rar-edge-native-3/state\\no-salt.cbr",
+      "bytes": 60061,
+      "sha256": "3bc259b18fc3aa9aad9d9e9aa4c5697871210bbe577d3a5b73a1db3f93a724e7",
+      "required": true
+    },
+    {
+      "path": "D:\\mediamanager-validation\\20261016-book-stage\\results\\comic-rar-crypto-native-3/decrypted-packed\\0.decrypted-packed.bin",
+      "bytes": 18032,
+      "sha256": "08e2fbe241cd77bc8333d8a2b527b03dbaa899e78625bd1bfbad424b00179fcf",
+      "required": true
+    },
+    {
+      "path": "D:\\mediamanager-validation\\20261016-book-stage\\results\\comic-rar-crypto-native-3/decrypted-packed\\1.decrypted-packed.bin",
+      "bytes": 38976,
+      "sha256": "259487718925d9169c6cbbcbb26bf9216b26001a5953a8421f243a997d0d4d36",
+      "required": true
+    },
+    {
+      "path": "D:\\mediamanager-validation\\20261016-book-stage\\results\\comic-rar-crypto-native-3/decrypted-packed\\2.decrypted-packed.bin",
+      "bytes": 2736,
+      "sha256": "d9ca516cf652475113e2aacbc5f433208fd0b47eb7f281c89682a20303e52738",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-book-stage/inputs/comic-rar4-crc-solid-1/manifest.json",
+      "bytes": 1388,
+      "sha256": "e78601ee8a9cae22079ea190c7ecde2faa3a2c09414cd949e7b26480927e40bd",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/src/storage/resources/archive-codec-rar4.provenance.json",
+      "bytes": 17163,
+      "sha256": "037ab3dfbf73e4eabafa05cc7ef4901e995a86a05cfd505cc9a9fd930c7f2be8",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/src/storage/resources/archive-codec-rar5-provenance.json",
+      "bytes": 15968,
+      "sha256": "12d0a6211f3847ae149f03002ed0ca6cd1cbe5f44ff2360118796d583f160cb9",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/tests/metadata/fixtures/book-comic/image-consumer/provenance.json",
+      "bytes": 38906,
+      "sha256": "82196988e9afb7e588a9e380f265fac206714fac5a8f924f8bb7f1e45d20347e",
+      "required": true
+    }
+  ]
+}

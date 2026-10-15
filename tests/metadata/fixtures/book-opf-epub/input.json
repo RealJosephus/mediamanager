@@ -1,0 +1,604 @@
+{
+  "readers": [
+    {
+      "name": "rich",
+      "file": "reader/rich.opf"
+    },
+    {
+      "name": "empty",
+      "file": "reader/empty.opf"
+    },
+    {
+      "name": "wrong-namespace",
+      "file": "reader/wrong-namespace.opf"
+    },
+    {
+      "name": "alternate-prefix",
+      "file": "reader/alternate-prefix.opf"
+    },
+    {
+      "name": "last-main-first-sort",
+      "file": "reader/last-main-first-sort.opf"
+    },
+    {
+      "name": "empty-main-fallback",
+      "file": "reader/empty-main-fallback.opf"
+    },
+    {
+      "name": "creator-roles",
+      "file": "reader/creator-roles.opf"
+    },
+    {
+      "name": "first-whitespace",
+      "file": "reader/first-whitespace.opf"
+    },
+    {
+      "name": "ids-case-duplicate",
+      "file": "reader/ids-case-duplicate.opf"
+    },
+    {
+      "name": "numbers-0",
+      "file": "reader/numbers-0.opf"
+    },
+    {
+      "name": "numbers-1",
+      "file": "reader/numbers-1.opf"
+    },
+    {
+      "name": "numbers-2",
+      "file": "reader/numbers-2.opf"
+    },
+    {
+      "name": "numbers-3",
+      "file": "reader/numbers-3.opf"
+    },
+    {
+      "name": "numbers-4",
+      "file": "reader/numbers-4.opf"
+    },
+    {
+      "name": "numbers-5",
+      "file": "reader/numbers-5.opf"
+    },
+    {
+      "name": "numbers-6",
+      "file": "reader/numbers-6.opf"
+    },
+    {
+      "name": "numbers-7",
+      "file": "reader/numbers-7.opf"
+    },
+    {
+      "name": "numbers-8",
+      "file": "reader/numbers-8.opf"
+    },
+    {
+      "name": "numbers-9",
+      "file": "reader/numbers-9.opf"
+    },
+    {
+      "name": "numbers-10",
+      "file": "reader/numbers-10.opf"
+    },
+    {
+      "name": "numbers-11",
+      "file": "reader/numbers-11.opf"
+    },
+    {
+      "name": "numbers-12",
+      "file": "reader/numbers-12.opf"
+    },
+    {
+      "name": "numbers-13",
+      "file": "reader/numbers-13.opf"
+    },
+    {
+      "name": "date-0",
+      "file": "reader/date-0.opf"
+    },
+    {
+      "name": "date-1",
+      "file": "reader/date-1.opf"
+    },
+    {
+      "name": "date-2",
+      "file": "reader/date-2.opf"
+    },
+    {
+      "name": "date-3",
+      "file": "reader/date-3.opf"
+    },
+    {
+      "name": "date-4",
+      "file": "reader/date-4.opf"
+    },
+    {
+      "name": "date-5",
+      "file": "reader/date-5.opf"
+    },
+    {
+      "name": "date-6",
+      "file": "reader/date-6.opf"
+    },
+    {
+      "name": "date-7",
+      "file": "reader/date-7.opf"
+    },
+    {
+      "name": "date-8",
+      "file": "reader/date-8.opf"
+    },
+    {
+      "name": "refinement-apostrophe",
+      "file": "reader/refinement-apostrophe.opf"
+    },
+    {
+      "name": "malformed",
+      "file": "reader/malformed.opf"
+    },
+    {
+      "name": "internal-dtd",
+      "file": "reader/internal-dtd.opf"
+    },
+    {
+      "name": "external-dtd",
+      "file": "reader/external-dtd.opf"
+    },
+    {
+      "name": "invalid-character",
+      "file": "reader/invalid-character.opf"
+    },
+    {
+      "name": "utf8-bom",
+      "file": "reader/utf8-bom.opf"
+    },
+    {
+      "name": "utf16le-bom",
+      "file": "reader/utf16le-bom.opf"
+    },
+    {
+      "name": "utf16be-bom",
+      "file": "reader/utf16be-bom.opf"
+    },
+    {
+      "name": "utf16le-no-bom",
+      "file": "reader/utf16le-no-bom.opf"
+    },
+    {
+      "name": "latin1-declaration",
+      "file": "reader/latin1-declaration.opf"
+    },
+    {
+      "name": "cp1252-declaration",
+      "file": "reader/cp1252-declaration.opf"
+    },
+    {
+      "name": "invalid-utf8",
+      "file": "reader/invalid-utf8.opf"
+    },
+    {
+      "name": "cancelled-valid",
+      "file": "reader/cancelled-valid.opf",
+      "cancelled": true
+    },
+    {
+      "name": "cancelled-malformed",
+      "file": "reader/cancelled-malformed.opf",
+      "cancelled": true
+    },
+    {
+      "name": "unknown-entity",
+      "file": "reader/unknown-entity.opf"
+    },
+    {
+      "name": "external-entity",
+      "file": "reader/external-entity.opf"
+    },
+    {
+      "name": "cdata-comments",
+      "file": "reader/cdata-comments.opf"
+    },
+    {
+      "name": "numeric-references",
+      "file": "reader/numeric-references.opf"
+    },
+    {
+      "name": "unbound-prefix",
+      "file": "reader/unbound-prefix.opf"
+    },
+    {
+      "name": "attribute-whitespace",
+      "file": "reader/attribute-whitespace.opf"
+    },
+    {
+      "name": "utf32le-bom",
+      "file": "reader/utf32le-bom.opf"
+    },
+    {
+      "name": "utf32be-bom",
+      "file": "reader/utf32be-bom.opf"
+    },
+    {
+      "name": "utf16be-no-bom",
+      "file": "reader/utf16be-no-bom.opf"
+    },
+    {
+      "name": "bom-declaration-conflict",
+      "file": "reader/bom-declaration-conflict.opf"
+    },
+    {
+      "name": "reference-null",
+      "file": "reader/reference-null.opf"
+    },
+    {
+      "name": "reference-control",
+      "file": "reader/reference-control.opf"
+    },
+    {
+      "name": "reference-noncharacter",
+      "file": "reader/reference-noncharacter.opf"
+    },
+    {
+      "name": "reference-surrogate",
+      "file": "reader/reference-surrogate.opf"
+    },
+    {
+      "name": "reference-too-large",
+      "file": "reader/reference-too-large.opf"
+    },
+    {
+      "name": "utf32be-explicit",
+      "file": "reader/utf32be-explicit.opf"
+    },
+    {
+      "name": "xml-space-preserve",
+      "file": "reader/xml-space-preserve.opf"
+    },
+    {
+      "name": "xml-space-cdata",
+      "file": "reader/xml-space-cdata.opf"
+    },
+    {
+      "name": "external-entity-attribute",
+      "file": "reader/external-entity-attribute.opf"
+    },
+    {
+      "name": "literal-crlf",
+      "file": "reader/literal-crlf.opf"
+    },
+    {
+      "name": "literal-cr",
+      "file": "reader/literal-cr.opf"
+    },
+    {
+      "name": "nested-entity",
+      "file": "reader/nested-entity.opf"
+    }
+  ],
+  "opf": [
+    {
+      "name": "specific-first",
+      "path": "opf/specific-first/book.epub",
+      "cancelled": false,
+      "locked": false,
+      "deltaTicks": 1
+    },
+    {
+      "name": "content-second",
+      "path": "opf/content-second/book.epub",
+      "cancelled": false,
+      "locked": false,
+      "deltaTicks": 1
+    },
+    {
+      "name": "metadata-last",
+      "path": "opf/metadata-last/book.epub",
+      "cancelled": false,
+      "locked": false,
+      "deltaTicks": 1
+    },
+    {
+      "name": "directory-specific",
+      "path": "opf/directory-specific/Volume",
+      "cancelled": false,
+      "locked": false,
+      "deltaTicks": 1
+    },
+    {
+      "name": "missing-all",
+      "path": "opf/missing-all/book.epub",
+      "cancelled": false,
+      "locked": false,
+      "deltaTicks": 1
+    },
+    {
+      "name": "missing-parent-source",
+      "path": "opf/missing-parent-source/book.epub",
+      "cancelled": false,
+      "locked": false,
+      "deltaTicks": 1
+    },
+    {
+      "name": "malformed-specific",
+      "path": "opf/malformed-specific/book.epub",
+      "cancelled": false,
+      "locked": false,
+      "deltaTicks": 1
+    },
+    {
+      "name": "cancelled-existing",
+      "path": "opf/cancelled-existing/book.epub",
+      "cancelled": true,
+      "locked": false,
+      "deltaTicks": 1
+    },
+    {
+      "name": "cancelled-missing",
+      "path": "opf/cancelled-missing/book.epub",
+      "cancelled": true,
+      "locked": false,
+      "deltaTicks": 1
+    },
+    {
+      "name": "locked-selected",
+      "path": "opf/locked-selected/book.epub",
+      "cancelled": false,
+      "locked": true,
+      "deltaTicks": 1
+    },
+    {
+      "name": "mtime--1",
+      "path": "opf/mtime--1/book.epub",
+      "cancelled": false,
+      "locked": false,
+      "deltaTicks": -1
+    },
+    {
+      "name": "mtime-0",
+      "path": "opf/mtime-0/book.epub",
+      "cancelled": false,
+      "locked": false,
+      "deltaTicks": 0
+    },
+    {
+      "name": "mtime-1",
+      "path": "opf/mtime-1/book.epub",
+      "cancelled": false,
+      "locked": false,
+      "deltaTicks": 1
+    }
+  ],
+  "epubs": [
+    {
+      "name": "standard-slashes",
+      "path": "epub/standard-slashes.epub",
+      "cancelled": false
+    },
+    {
+      "name": "back-container-slash-cover",
+      "path": "epub/back-container-slash-cover.epub",
+      "cancelled": false
+    },
+    {
+      "name": "back-container-back-cover",
+      "path": "epub/back-container-back-cover.epub",
+      "cancelled": false
+    },
+    {
+      "name": "all-backslashes",
+      "path": "epub/all-backslashes.epub",
+      "cancelled": false
+    },
+    {
+      "name": "root-opf",
+      "path": "epub/root-opf.epub",
+      "cancelled": false
+    },
+    {
+      "name": "missing-container",
+      "path": "epub/missing-container.epub",
+      "cancelled": false
+    },
+    {
+      "name": "wrong-container-namespace",
+      "path": "epub/wrong-container-namespace.epub",
+      "cancelled": false
+    },
+    {
+      "name": "first-rootfile-missing",
+      "path": "epub/first-rootfile-missing.epub",
+      "cancelled": false
+    },
+    {
+      "name": "missing-opf",
+      "path": "epub/missing-opf.epub",
+      "cancelled": false
+    },
+    {
+      "name": "empty-root-path",
+      "path": "epub/empty-root-path.epub",
+      "cancelled": false
+    },
+    {
+      "name": "malformed-container",
+      "path": "epub/malformed-container.epub",
+      "cancelled": false
+    },
+    {
+      "name": "malformed-opf",
+      "path": "epub/malformed-opf.epub",
+      "cancelled": false
+    },
+    {
+      "name": "corrupt-zip",
+      "path": "epub/corrupt-zip.epub",
+      "cancelled": false
+    },
+    {
+      "name": "wrong-extension",
+      "path": "epub/wrong-extension.zip",
+      "cancelled": false
+    },
+    {
+      "name": "upper-extension",
+      "path": "epub/upper-extension.EPUB",
+      "cancelled": false
+    },
+    {
+      "name": "directory",
+      "path": "epub/directory.epub",
+      "cancelled": false
+    },
+    {
+      "name": "cancelled-valid",
+      "path": "epub/cancelled-valid.epub",
+      "cancelled": true
+    },
+    {
+      "name": "cancelled-missing-container",
+      "path": "epub/cancelled-missing-container.epub",
+      "cancelled": true
+    },
+    {
+      "name": "cancelled-malformed-opf",
+      "path": "epub/cancelled-malformed-opf.epub",
+      "cancelled": true
+    },
+    {
+      "name": "duplicate-container",
+      "path": "epub/duplicate-container.epub",
+      "cancelled": false
+    },
+    {
+      "name": "cover-tokens",
+      "path": "epub/cover-tokens.epub",
+      "cancelled": false
+    },
+    {
+      "name": "cover-literal-star",
+      "path": "epub/cover-literal-star.epub",
+      "cancelled": false
+    },
+    {
+      "name": "cover-id-cover-real-mime",
+      "path": "epub/cover-id-cover-real-mime.epub",
+      "cancelled": false
+    },
+    {
+      "name": "cover-id-cover-wild-mime",
+      "path": "epub/cover-id-cover-wild-mime.epub",
+      "cancelled": false
+    },
+    {
+      "name": "cover-meta-id",
+      "path": "epub/cover-meta-id.epub",
+      "cancelled": false
+    },
+    {
+      "name": "cover-webp-mime",
+      "path": "epub/cover-webp-mime.epub",
+      "cancelled": false
+    },
+    {
+      "name": "cover-plain-mime",
+      "path": "epub/cover-plain-mime.epub",
+      "cancelled": false
+    },
+    {
+      "name": "cover-unknown-mime",
+      "path": "epub/cover-unknown-mime.epub",
+      "cancelled": false
+    },
+    {
+      "name": "cover-first-invalid",
+      "path": "epub/cover-first-invalid.epub",
+      "cancelled": false
+    },
+    {
+      "name": "cover-apostrophe",
+      "path": "epub/cover-apostrophe.epub",
+      "cancelled": false
+    },
+    {
+      "name": "cover-href-dot",
+      "path": "epub/cover-href-dot.epub",
+      "cancelled": false
+    },
+    {
+      "name": "cover-href-percent",
+      "path": "epub/cover-href-percent.epub",
+      "cancelled": false
+    },
+    {
+      "name": "cover-format-gif",
+      "path": "epub/cover-format-gif.epub",
+      "cancelled": false
+    },
+    {
+      "name": "cover-format-bmp",
+      "path": "epub/cover-format-bmp.epub",
+      "cancelled": false
+    },
+    {
+      "name": "cover-format-jpeg",
+      "path": "epub/cover-format-jpeg.epub",
+      "cancelled": false
+    },
+    {
+      "name": "cover-format-png-parameters",
+      "path": "epub/cover-format-png-parameters.epub",
+      "cancelled": false
+    },
+    {
+      "name": "nested-opf-directory",
+      "path": "epub/nested-opf-directory.epub",
+      "cancelled": false
+    },
+    {
+      "name": "rich-with-cover",
+      "path": "epub/rich-with-cover.epub",
+      "cancelled": false
+    }
+  ],
+  "archives": [
+    {
+      "name": "non-utf8-byte",
+      "file": "archive/non-utf8-byte.zip",
+      "queries": [
+        "�.opf",
+        "é.opf"
+      ]
+    },
+    {
+      "name": "non-utf8-valid-utf8",
+      "file": "archive/non-utf8-valid-utf8.zip",
+      "queries": [
+        "é.opf",
+        "├⌐.opf"
+      ]
+    },
+    {
+      "name": "unicode-path-extra",
+      "file": "archive/unicode-path-extra.zip",
+      "queries": [
+        "old.opf",
+        "new.opf"
+      ]
+    },
+    {
+      "name": "duplicate-reversed-central",
+      "file": "archive/duplicate-reversed-central.zip",
+      "queries": [
+        "same.opf"
+      ]
+    },
+    {
+      "name": "local-central-name-mismatch",
+      "file": "archive/local-central-name-mismatch.zip",
+      "queries": [
+        "central.opf",
+        "local.opf"
+      ]
+    }
+  ]
+}

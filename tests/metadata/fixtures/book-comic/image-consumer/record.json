@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-15T19:40:27.448Z",
+  "project": "D:\\mediamanager-validation\\20261016-book-stage\\inputs\\comic-image-consumer-oracle-1\\Oracle.csproj",
+  "dotnet": {
+    "filename": "D:\\mediamanager\\.tools\\dotnet\\dotnet.exe",
+    "available": true,
+    "kind": "file",
+    "bytes": 167208,
+    "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6"
+  },
+  "node": "v24.16.0",
+  "timezone": "Asia/Taipei",
+  "jellyfinDll": {
+    "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll",
+    "available": true,
+    "kind": "file",
+    "bytes": 506368,
+    "sha256": "474c7c638fe93cc61f1a588849fb93c81a2927388f6f4cf19953b3a76e9deb26"
+  },
+  "sourceFiles": [
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-book-stage\\inputs\\comic-image-consumer-oracle-1\\Oracle.csproj",
+      "available": true,
+      "kind": "file",
+      "bytes": 687,
+      "sha256": "651e03adabe309c836a9b04c1e73b3e8b9019b358abd78b63300e6d65b2150fb"
+    },
+    {
+      "filename": "D:\\mediamanager\\tests\\Directory.Build.props",
+      "available": true,
+      "kind": "file",
+      "bytes": 780,
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-book-stage\\inputs\\comic-image-consumer-oracle-1\\Program.cs",
+      "available": true,
+      "kind": "file",
+      "bytes": 10160,
+      "sha256": "409fd2d0468b85d1d8f817f9cca97fa81556389c38419d4a0f7b1d224ec48f7a"
+    }
+  ],
+  "sourceFilesSha256": "a238196e5909de27d564a9e8c18e4b2ff9bd09ffba62014aee0e9575ede5933e",
+  "build": {
+    "args": [
+      "build",
+      "D:\\mediamanager-validation\\20261016-book-stage\\results\\comic-image-consumer-native-1\\project\\Oracle.csproj",
+      "-c",
+      "Release",
+      "--nologo",
+      "-v",
+      "minimal",
+      "-p:BaseOutputPath=D:\\mediamanager-validation\\20261016-book-stage\\results\\comic-image-consumer-native-1\\bin\\",
+      "-p:BaseIntermediateOutputPath=D:\\mediamanager-validation\\20261016-book-stage\\results\\comic-image-consumer-native-1\\obj\\"
+    ],
+    "status": 0,
+    "signal": null
+  },
+  "process": {
+    "args": [
+      "D:\\mediamanager-validation\\20261016-book-stage\\results\\comic-image-consumer-native-1\\bin\\Release\\net10.0\\Oracle.dll",
+      "D:\\mediamanager-validation\\20261016-book-stage\\results\\comic-image-consumer-native-1/state",
+      "D:/mediamanager-validation/20261016-book-stage/inputs/comic-upstream-1",
+      "D:\\mediamanager-validation\\20261016-book-stage\\results\\comic-image-consumer-native-1/native.json"
+    ],
+    "status": 0,
+    "signal": null
+  },
+  "outputs": [
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-book-stage\\results\\comic-image-consumer-native-1\\build.stderr.txt",
+      "available": true,
+      "kind": "file",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-book-stage\\results\\comic-image-consumer-native-1\\build.stdout.txt",
+      "available": true,
+      "kind": "file",
+      "bytes": 392,
+      "sha256": "da2939ec262c8e6da824b3411cc050d4466136dc57740b4ea31c36a75edc22d5"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-book-stage\\results\\comic-image-consumer-native-1\\native.json",
+      "available": true,
+      "kind": "file",
+      "bytes": 41741,
+      "sha256": "836fc12d2f2e1ac24fd4bdcca9b78f0de98f588c1c224db071cc25a4619955e2"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-book-stage\\results\\comic-image-consumer-native-1\\stderr.txt",
+      "available": true,
+      "kind": "file",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-book-stage\\results\\comic-image-consumer-native-1\\stdout.txt",
+      "available": true,
+      "kind": "file",
+      "bytes": 13,
+      "sha256": "393bab7fa38f3421806e4942676bb181aee9b07ba87103cf13ebfeab1562fa8b"
+    }
+  ],
+  "oracleAssembly": {
+    "filename": "D:\\mediamanager-validation\\20261016-book-stage\\results\\comic-image-consumer-native-1\\bin\\Release\\net10.0\\Oracle.dll",
+    "available": true,
+    "kind": "file",
+    "bytes": 44544,
+    "sha256": "ce7957f7b6bdbe9904850af10007c4da1a90f77d7c3382deb6ee18f013c63425"
+  },
+  "passed": true
+}

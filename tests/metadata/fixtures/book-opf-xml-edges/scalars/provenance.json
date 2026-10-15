@@ -1,0 +1,50 @@
+{
+  "scope": "Two actual native OpfReader observations for CLR initials whitespace and complete encoding declarations.",
+  "files": [
+    {
+      "filename": "assets/initial-clr-whitespace.opf",
+      "bytes": 140,
+      "sha256": "8a2b58663dab57466ac1183159a70bc88bf9d27e258a6901f99b9ce064af3da6"
+    },
+    {
+      "filename": "assets/long-encoding-declaration.opf",
+      "bytes": 5170,
+      "sha256": "d63ffc81a3c21a78587ab14798f0d783ab0e25726668a93eab4d1aee47b56071"
+    },
+    {
+      "filename": "create-assets.mjs",
+      "bytes": 880,
+      "sha256": "38d67c17131399a0d16a53732c94c0241e12339c53b56d0b5f311ec49a33c9ea"
+    },
+    {
+      "filename": "input.json",
+      "bytes": 266,
+      "sha256": "8f22772f7106c7b7273d549b66bdcea179bc309159f40997a7569c45c4f9780a"
+    },
+    {
+      "filename": "native.json",
+      "bytes": 3073,
+      "sha256": "7e0093358a5409705ba196b4035622f11023040572178ed6cd15518ee92c826c"
+    },
+    {
+      "filename": "Oracle.csproj",
+      "bytes": 403,
+      "sha256": "3f2610631c594ffd08dcc82f03d3509abc1c9c9541f159519800df046fc770ee"
+    },
+    {
+      "filename": "Program.cs",
+      "bytes": 8325,
+      "sha256": "00fbcaabae9f4255ff956070d0273974b5bf30657f3d517dd984a8c9fa184cac"
+    },
+    {
+      "filename": "README.md",
+      "bytes": 414,
+      "sha256": "6e34c4f820a0cfe29d4ad549aae2f2fe4c42b12a9d988538b57f154720ce8258"
+    },
+    {
+      "filename": "record.json",
+      "bytes": 4344,
+      "sha256": "bf3adca09b944466d3b4c4129a39c55cb68e6e2b134e164a8c1e1cc5efe23623"
+    }
+  ]
+}
