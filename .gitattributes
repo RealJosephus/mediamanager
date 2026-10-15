@@ -3,6 +3,18 @@ tests/metadata/fixtures/nfo-scalar-provider/README.md text eol=lf
 tests/metadata/fixtures/nfo-userdata-persistence/README.md text eol=lf
 tests/library/fixtures/library-task-scheduler/README.md text eol=lf
 tests/metadata/fixtures/book-lifecycle/README.md text eol=lf
+tests/metadata/fixtures/custom-image-lifecycle/README.md text eol=lf
+tests/metadata/fixtures/photo-provider/README.md text eol=lf
+tests/metadata/fixtures/photo-provider/create-assets.mjs text eol=lf
+tests/metadata/fixtures/photo-album-cover/README.md text eol=lf
+tests/metadata/fixtures/photo-runtime/README.md text eol=lf
+tests/library/fixtures/photo-dto/README.md text eol=lf
+tests/http/fixtures/mime-types/README.md text eol=lf
+tests/metadata/fixtures/photo-album-cover/native.json whitespace=cr-at-eol
+tests/metadata/fixtures/photo-album-cover-paths/native.json whitespace=cr-at-eol
+tests/metadata/fixtures/photo-album-cover-paths/README.md text eol=lf
+src/metadata/resources/photo-tags-license.txt -text
+src/metadata/resources/photo-tags-notice.txt -text
 tests/http/fixtures/shows-api/native.json whitespace=cr-at-eol
 tests/http/fixtures/quick-connect/native.json whitespace=cr-at-eol
 tests/http/fixtures/branding/Oracle.csproj -text

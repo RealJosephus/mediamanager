@@ -346,7 +346,7 @@ export class MetadataRefreshHost {
     const collectionFolderUpdate = options[validateCollectionLocations]
       ? await refreshCollectionFolderLocations(loaded) : ItemUpdateType.None;
     // Native MetadataResult starts with null People: null leaves stored credits.
-    const metadata = { Item: null, People: null, Images: cloneNativeItemValue(loaded.context.images) };
+    const metadata = { Item: null, People: null, Images: loaded.context.images };
     let imageChanged = false, imagesFailed = false;
     try {
       if (options.RemoveOldMetadata && options.ReplaceAllImages) imageChanged = await this.images.removeForRefresh(loaded, metadata.Images, signal);
@@ -388,7 +388,6 @@ export class MetadataRefreshHost {
     if (firstRefresh) {
       await saveMetadataItem(this.updates, loaded, metadata, ItemUpdateType.MetadataImport, { signal });
       initialItem.DateLastSaved = item.DateLastSaved;
-      loaded.context = { ...loaded.context, images: metadata.Images };
     }
     let selected = this.registry.discover({ ...loaded, kind: 'local' });
     let remote = this.registry.discover({ ...loaded, kind: 'remote' });
@@ -447,6 +446,7 @@ export class MetadataRefreshHost {
           const previousLoaded = loaded;
           loaded = applyLiveSeriesParent(await this.loadContext(reference), options[liveSeriesParent]);
           ownership.contexts.add(loaded);
+          loaded.context = { ...loaded.context, images: metadata.Images };
           item = metadata.Item = loaded.item;
           const previousSnapshot = snapshotFields(previousLoaded.snapshot), currentSnapshot = snapshotFields(loaded.snapshot);
           // Keep hook mutations when the probe did not write those columns.
