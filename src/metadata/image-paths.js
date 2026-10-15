@@ -1,10 +1,10 @@
 import { imagePathApi } from './image-assets.js';
 import { ordinalIgnoreCaseKey } from '../storage/ordinal-comparer.js';
 import { nativeContainingFolderPath } from '../library/native-path.js';
+import { mimeToExtension } from '../http/mime-types.js';
 
 export const imageTypes = ['Primary', 'Art', 'Backdrop', 'Banner', 'Logo', 'Thumb', 'Disc', 'Box', 'Screenshot', 'Menu', 'Chapter', 'BoxRear', 'Profile'];
 export const multipleImages = type => ['Backdrop', 'Screenshot'].includes(type);
-export const imageExtension = mime => ({ 'image/jpeg': '.jpg', 'image/jpg': '.jpg', 'image/png': '.png', 'image/webp': '.webp', 'image/gif': '.gif', 'image/bmp': '.bmp', 'image/tiff': '.tiff', 'image/svg+xml': '.svg', 'image/x-icon': '.ico', 'image/avif': '.avif' })[mime.toLowerCase()];
 export function internalImagePath(item, metadataPath) {
   if (!metadataPath) throw Object.assign(new Error('Image storage requires the instance metadata path.'), { code: 'metadata-context-required' });
   const api = imagePathApi(metadataPath), id = item.Id.replaceAll('-', '').toLowerCase();
@@ -14,7 +14,7 @@ export const containingImageFolder = item => item.Type === 'Playlist' ? nativeCo
   : item.IsFolder || ['Person', 'Genre', 'MusicGenre', 'Studio', 'Year', 'MusicArtist'].includes(item.Type)
     || ['Dvd', 'BluRay'].includes(item.VideoType) && !item.IsPlaceHolder ? item.Path : imagePathApi(item.Path).dirname(item.Path);
 export function imageSavePaths(item, type, index, mimeType, { saveLocally, metadataPath, series, images = [], configuration = {}, extraImagePaths }) {
-  const api = imagePathApi(item.Path || metadataPath), extension = imageExtension(mimeType);
+  const api = imagePathApi(item.Path || metadataPath), extension = mimeToExtension(mimeType);
   if (!extension) throw new TypeError(`Unable to determine image file extension from mime type ${mimeType}`);
   const folder = item.Path && containingImageFolder(item), legacy = configuration.ImageSavingConvention === 'Legacy' || (configuration.ImageSavingConvention ?? 0) === 0;
   const mixed = name => api.join(api.dirname(item.Path), api.basename(item.Path, api.extname(item.Path)) + '-' + (type === 'Primary' ? 'poster' : name) + extension);
