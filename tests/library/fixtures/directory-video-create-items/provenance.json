@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-10-07T05:20:58.339Z",
+  "fixtureFiles": [
+    {
+      "path": "tests/library/fixtures/directory-video-create-items/input.json",
+      "sha256": "526e6b200e70f650dab47d095f9d82ad936caa4bfc3979e0728aa96d8ec839c0"
+    },
+    {
+      "path": "tests/library/fixtures/directory-video-create-items/Program.cs",
+      "sha256": "dad14ae7233b77ff1699a4e75bc0f84b21e3a21c0c1787097933ee93d0725c11"
+    },
+    {
+      "path": "tests/library/fixtures/directory-video-create-items/Oracle.csproj",
+      "sha256": "cbe1a514da582cbf55a443ee14c93f731f84816d10e7672fb713045ac5d78efe"
+    },
+    {
+      "path": "tests/library/fixtures/directory-video-create-items/native.json",
+      "sha256": "2a83405602a1cf8f1fc8d63841821fbc5f190d4f0af0cc493c5ceb3e49bb672a"
+    },
+    {
+      "path": "tests/Directory.Build.props",
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    }
+  ],
+  "scope": "Actual frozen LibraryManager.ResolvePaths/ResolvePath, MovieResolver/VideoListResolver/ResolverHelper and FolderResolver with Core/Dot ignore rules, real nested filesystem and distinct fixed directory/file dates. Actual ManagedFileSystem omits directory timestamps; Folder DateCreated is asserted inside the native resolve UTC window and projected as $UTC_RESOLVE, while DateModified remains minimum. Files retain exact dates unless configured to use resolve UTC; dynamic resolve times are asserted in the actual UTC window before normalization. Includes provider path attributes and inherited locks. Records complete resolved-item and multi/single/fallback dispatch, unchanged EF row/Data/link/file/cache/event projections. Only MovieResolver and FolderResolver are registered. Includes controlled non-null then cleared Movie/Folder live fields and externally stale stored columns/Data followed by complete SaveItems upsert. Also includes repeated CreateItems, wrong-type alternate independent deletion before cancellation, null-array exception priority, non-Library original events, null parent, physical AggregateFolder parent chains, and complete created-item GetItemById projections after success or failure. After the unchanged complete resolved-item projection, actual LibraryManager.CreateItems and ItemPersistenceService/EF save the complete resolved family; native alternate creation/coercion and raw sibling stack detection are exercised. Every EF mapped BaseItems scalar column is captured with its CLR value, in addition to unchanged original row and complete Data projections; links, full AncestorIds and BaseItemProviders reflect these actual saves, including real before-insert failures for the first entity and later alternate, a link insert failure after all entity inserts, and request cancellation before SQL, and only newly saved Folder creation UTC is normalized after an actual window assertion. Owned part and extra refresh, recursive children and MetadataService are not run; providers, collection membership, media-source/external dispatch and known ancestor namespace are controls. No full resolver list, ValidateChildren/MetadataService, disc/network/concurrent-cache/migration or release acceptance.",
+  "assemblies": [
+    {
+      "name": "MediaBrowser.Controller",
+      "sha256": "051c588a8e85a3a7cdde8dc3d9a1112217fd7e973a86fe2ff90cf765bedb75a8"
+    },
+    {
+      "name": "Emby.Server.Implementations",
+      "sha256": "8d369435646570958505c58b9cb17da169855dabc105d0e933524361e9b7b1c8"
+    },
+    {
+      "name": "Jellyfin.Server.Implementations",
+      "sha256": "4da187af02503e82135eb192351d01490484e8ebc8c653d849f7e2900a177672"
+    }
+  ],
+  "reference": {
+    "head": "208c278b75abd897aefa1e1175126eac5e4dbfaa",
+    "contentDigest": "e28a983db179b720c3b16d7416ee4112894a3115c4be6fe43c61c52e0d9a8313"
+  },
+  "capture": {
+    "record": "D:/mediamanager-validation/20261005/results/directory-video-create-items-mediaurl-oracle-20261007/record.json",
+    "sourceFilesSha256": "113f508af93a37e33a4377fa9c4414bc37b5f7cba236a07ec53059bd72b0ad1c"
+  },
+  "candidateVerified": true,
+  "candidateComparison": "All 60 actual Movie/Video/Folder creation scenes pass complete SQLite/PostgreSQL comparison in 121 tests. The first 52 scenes passed strict 5559/5559 in stage 92ad6e1; successive 56/58/60 native results retain every prior field with lossless Int64 guards. Added Movie/Folder upserts compare all 72 scalar columns, complete Data and all original projections for non-null, clear and externally stale columns/unknown Data. Typed MediaUrl preserves Name, null entries and missing URL, while undeclared input properties are omitted. Recorded red/fix: 2 pass/10 fail, then 4 pass/8 fail (program audio DB enum), then 8 pass/4 fail (typed MediaUrl), then 12/12 passed. Four adjacent files passed 267/267. Strict run records remain outside this sealed pack. No full generic metadata mapper, global live cache, ValidateChildren, full scan or release acceptance."
+}

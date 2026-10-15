@@ -1,0 +1,19 @@
+{
+  "name": "@mediamanager/webdav",
+  "version": "0.1.0",
+  "type": "module",
+  "license": "GPL-2.0-only",
+  "exports": {
+    ".": "./index.js",
+    "./*": "./*"
+  },
+  "mediamanager": {
+    "id": "webdav",
+    "name": "WebDAV",
+    "entry": "index.js"
+  },
+  "dependencies": {
+    "@mediamanager/plugin-sdk": "0.1.0",
+    "fast-xml-parser": "^5.11.1"
+  }
+}

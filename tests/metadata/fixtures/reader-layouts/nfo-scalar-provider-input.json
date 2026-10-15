@@ -1,0 +1,1124 @@
+[
+  {
+    "name": "movie dispatches id set aspect and ignores music fields--crlf",
+    "type": "Movie",
+    "text": "<movie>\r\n<title> Movie </title>\r\n<id TMDB=\"101\" TVDB=\"tv-any\" IMDB=\"tt1234567\">tt7654321</id>\r\n<set tmdbcolid=\"202\">\r\n<name>Collection</name>\r\n</set>\r\n<artist>Ignored</artist>\r\n<album>Ignored</album>\r\n<aspectratio> 2.39:1 </aspectratio>\r\n<displayorder>Ignored</displayorder>\r\n</movie>"
+  },
+  {
+    "name": "movie dispatches id set aspect and ignores music fields--lf",
+    "type": "Movie",
+    "text": "<movie>\n<title> Movie </title>\n<id TMDB=\"101\" TVDB=\"tv-any\" IMDB=\"tt1234567\">tt7654321</id>\n<set tmdbcolid=\"202\">\n<name>Collection</name>\n</set>\n<artist>Ignored</artist>\n<album>Ignored</album>\n<aspectratio> 2.39:1 </aspectratio>\n<displayorder>Ignored</displayorder>\n</movie>"
+  },
+  {
+    "name": "movie dispatches id set aspect and ignores music fields--bom-lf",
+    "type": "Movie",
+    "text": "﻿<movie>\n<title> Movie </title>\n<id TMDB=\"101\" TVDB=\"tv-any\" IMDB=\"tt1234567\">tt7654321</id>\n<set tmdbcolid=\"202\">\n<name>Collection</name>\n</set>\n<artist>Ignored</artist>\n<album>Ignored</album>\n<aspectratio> 2.39:1 </aspectratio>\n<displayorder>Ignored</displayorder>\n</movie>"
+  },
+  {
+    "name": "video dispatches movie id but not movie collection--crlf",
+    "type": "Video",
+    "text": "<video>\r\n<id TMDB=\"303\" TVDB=\"tv-video\">tt2345678</id>\r\n<set tmdbcolid=\"404\">Ignored collection</set>\r\n<artist>Ignored</artist>\r\n<album>Ignored</album>\r\n<aspectratio> 16:9 </aspectratio>\r\n</video>"
+  },
+  {
+    "name": "video dispatches movie id but not movie collection--lf",
+    "type": "Video",
+    "text": "<video>\n<id TMDB=\"303\" TVDB=\"tv-video\">tt2345678</id>\n<set tmdbcolid=\"404\">Ignored collection</set>\n<artist>Ignored</artist>\n<album>Ignored</album>\n<aspectratio> 16:9 </aspectratio>\n</video>"
+  },
+  {
+    "name": "video dispatches movie id but not movie collection--bom-lf",
+    "type": "Video",
+    "text": "﻿<video>\n<id TMDB=\"303\" TVDB=\"tv-video\">tt2345678</id>\n<set tmdbcolid=\"404\">Ignored collection</set>\n<artist>Ignored</artist>\n<album>Ignored</album>\n<aspectratio> 16:9 </aspectratio>\n</video>"
+  },
+  {
+    "name": "music video appends artists and overwrites album--crlf",
+    "type": "MusicVideo",
+    "text": "<musicvideo>\r\n<artist> First </artist>\r\n<artist/>\r\n<artist>Second</artist>\r\n<artist>first</artist>\r\n<album>Old</album>\r\n<album> New </album>\r\n<id IMDB=\"tt3456789\"/>\r\n<aspectratio>4:3</aspectratio>\r\n</musicvideo>"
+  },
+  {
+    "name": "music video appends artists and overwrites album--lf",
+    "type": "MusicVideo",
+    "text": "<musicvideo>\n<artist> First </artist>\n<artist/>\n<artist>Second</artist>\n<artist>first</artist>\n<album>Old</album>\n<album> New </album>\n<id IMDB=\"tt3456789\"/>\n<aspectratio>4:3</aspectratio>\n</musicvideo>"
+  },
+  {
+    "name": "music video appends artists and overwrites album--bom-lf",
+    "type": "MusicVideo",
+    "text": "﻿<musicvideo>\n<artist> First </artist>\n<artist/>\n<artist>Second</artist>\n<artist>first</artist>\n<album>Old</album>\n<album> New </album>\n<id IMDB=\"tt3456789\"/>\n<aspectratio>4:3</aspectratio>\n</musicvideo>"
+  },
+  {
+    "name": "series dispatches television fields and skips named season--crlf",
+    "type": "Series",
+    "text": "<tvshow>\r\n<id TMDB=\"505\" TVDB=\"series-any\">tt4567890</id>\r\n<airs_time> 21:30 </airs_time>\r\n<airs_dayofweek>Monday,Tuesday</airs_dayofweek>\r\n<status>Returning Series</status>\r\n<displayorder> dvd </displayorder>\r\n<namedseason number=\"2\">Ignored</namedseason>\r\n<aspectratio>Ignored</aspectratio>\r\n</tvshow>"
+  },
+  {
+    "name": "series dispatches television fields and skips named season--lf",
+    "type": "Series",
+    "text": "<tvshow>\n<id TMDB=\"505\" TVDB=\"series-any\">tt4567890</id>\n<airs_time> 21:30 </airs_time>\n<airs_dayofweek>Monday,Tuesday</airs_dayofweek>\n<status>Returning Series</status>\n<displayorder> dvd </displayorder>\n<namedseason number=\"2\">Ignored</namedseason>\n<aspectratio>Ignored</aspectratio>\n</tvshow>"
+  },
+  {
+    "name": "series dispatches television fields and skips named season--bom-lf",
+    "type": "Series",
+    "text": "﻿<tvshow>\n<id TMDB=\"505\" TVDB=\"series-any\">tt4567890</id>\n<airs_time> 21:30 </airs_time>\n<airs_dayofweek>Monday,Tuesday</airs_dayofweek>\n<status>Returning Series</status>\n<displayorder> dvd </displayorder>\n<namedseason number=\"2\">Ignored</namedseason>\n<aspectratio>Ignored</aspectratio>\n</tvshow>"
+  },
+  {
+    "name": "season dispatches name and integer only--crlf",
+    "type": "Season",
+    "text": "<season>\r\n<seasonname> Season Two </seasonname>\r\n<seasonnumber> +2 </seasonnumber>\r\n<showtitle>Ignored</showtitle>\r\n<id TMDB=\"606\">tt5678901</id>\r\n<aspectratio>Ignored</aspectratio>\r\n</season>"
+  },
+  {
+    "name": "season dispatches name and integer only--lf",
+    "type": "Season",
+    "text": "<season>\n<seasonname> Season Two </seasonname>\n<seasonnumber> +2 </seasonnumber>\n<showtitle>Ignored</showtitle>\n<id TMDB=\"606\">tt5678901</id>\n<aspectratio>Ignored</aspectratio>\n</season>"
+  },
+  {
+    "name": "season dispatches name and integer only--bom-lf",
+    "type": "Season",
+    "text": "﻿<season>\n<seasonname> Season Two </seasonname>\n<seasonnumber> +2 </seasonnumber>\n<showtitle>Ignored</showtitle>\n<id TMDB=\"606\">tt5678901</id>\n<aspectratio>Ignored</aspectratio>\n</season>"
+  },
+  {
+    "name": "series season selects matching raw named season only--crlf",
+    "type": "SeriesSeason",
+    "indexNumber": 2,
+    "initialName": "Initial",
+    "text": "<tvshow>\r\n<title>Ignored</title>\r\n<namedseason number=\"1\">Wrong</namedseason>\r\n<namedseason number=\"+2\">  Matching Raw  </namedseason>\r\n<namedseason number=\"bad\">Bad</namedseason>\r\n<tmdbid>707</tmdbid>\r\n</tvshow>"
+  },
+  {
+    "name": "series season selects matching raw named season only--lf",
+    "type": "SeriesSeason",
+    "indexNumber": 2,
+    "initialName": "Initial",
+    "text": "<tvshow>\n<title>Ignored</title>\n<namedseason number=\"1\">Wrong</namedseason>\n<namedseason number=\"+2\">  Matching Raw  </namedseason>\n<namedseason number=\"bad\">Bad</namedseason>\n<tmdbid>707</tmdbid>\n</tvshow>"
+  },
+  {
+    "name": "series season selects matching raw named season only--bom-lf",
+    "type": "SeriesSeason",
+    "indexNumber": 2,
+    "initialName": "Initial",
+    "text": "﻿<tvshow>\n<title>Ignored</title>\n<namedseason number=\"1\">Wrong</namedseason>\n<namedseason number=\"+2\">  Matching Raw  </namedseason>\n<namedseason number=\"bad\">Bad</namedseason>\n<tmdbid>707</tmdbid>\n</tvshow>"
+  },
+  {
+    "name": "episode dispatches numbering and show title--crlf",
+    "type": "Episode",
+    "text": "<episodedetails>\r\n<season> 3 </season>\r\n<episode>4</episode>\r\n<episodenumberend>5</episodenumberend>\r\n<airsbefore_episode>6</airsbefore_episode>\r\n<displayepisode>7</displayepisode>\r\n<airsafter_season>8</airsafter_season>\r\n<displayafterseason>9</displayafterseason>\r\n<airsbefore_season>10</airsbefore_season>\r\n<displayseason>11</displayseason>\r\n<showtitle> Show </showtitle>\r\n<id TMDB=\"808\">tt6789012</id>\r\n<aspectratio>1.85:1</aspectratio>\r\n</episodedetails>"
+  },
+  {
+    "name": "episode dispatches numbering and show title--lf",
+    "type": "Episode",
+    "text": "<episodedetails>\n<season> 3 </season>\n<episode>4</episode>\n<episodenumberend>5</episodenumberend>\n<airsbefore_episode>6</airsbefore_episode>\n<displayepisode>7</displayepisode>\n<airsafter_season>8</airsafter_season>\n<displayafterseason>9</displayafterseason>\n<airsbefore_season>10</airsbefore_season>\n<displayseason>11</displayseason>\n<showtitle> Show </showtitle>\n<id TMDB=\"808\">tt6789012</id>\n<aspectratio>1.85:1</aspectratio>\n</episodedetails>"
+  },
+  {
+    "name": "episode dispatches numbering and show title--bom-lf",
+    "type": "Episode",
+    "text": "﻿<episodedetails>\n<season> 3 </season>\n<episode>4</episode>\n<episodenumberend>5</episodenumberend>\n<airsbefore_episode>6</airsbefore_episode>\n<displayepisode>7</displayepisode>\n<airsafter_season>8</airsafter_season>\n<displayafterseason>9</displayafterseason>\n<airsbefore_season>10</airsbefore_season>\n<displayseason>11</displayseason>\n<showtitle> Show </showtitle>\n<id TMDB=\"808\">tt6789012</id>\n<aspectratio>1.85:1</aspectratio>\n</episodedetails>"
+  },
+  {
+    "name": "music album uses generic scalar parser--crlf",
+    "type": "MusicAlbum",
+    "text": "<album>\r\n<title> Album title </title>\r\n<artist>Ignored</artist>\r\n<album>Ignored</album>\r\n<displayorder>Ignored</displayorder>\r\n<aspectratio>Ignored</aspectratio>\r\n<musicbrainzalbumid>12345678-1234-1234-1234-1234567890ab</musicbrainzalbumid>\r\n</album>"
+  },
+  {
+    "name": "music album uses generic scalar parser--lf",
+    "type": "MusicAlbum",
+    "text": "<album>\n<title> Album title </title>\n<artist>Ignored</artist>\n<album>Ignored</album>\n<displayorder>Ignored</displayorder>\n<aspectratio>Ignored</aspectratio>\n<musicbrainzalbumid>12345678-1234-1234-1234-1234567890ab</musicbrainzalbumid>\n</album>"
+  },
+  {
+    "name": "music album uses generic scalar parser--bom-lf",
+    "type": "MusicAlbum",
+    "text": "﻿<album>\n<title> Album title </title>\n<artist>Ignored</artist>\n<album>Ignored</album>\n<displayorder>Ignored</displayorder>\n<aspectratio>Ignored</aspectratio>\n<musicbrainzalbumid>12345678-1234-1234-1234-1234567890ab</musicbrainzalbumid>\n</album>"
+  },
+  {
+    "name": "music artist uses generic scalar parser--crlf",
+    "type": "MusicArtist",
+    "text": "<artist>\r\n<name> Artist name </name>\r\n<biography> Bio </biography>\r\n<artist>Ignored</artist>\r\n<album>Ignored</album>\r\n<musicbrainzartistid>abcdefab-cdef-abcd-efab-cdefabcdefab</musicbrainzartistid>\r\n</artist>"
+  },
+  {
+    "name": "music artist uses generic scalar parser--lf",
+    "type": "MusicArtist",
+    "text": "<artist>\n<name> Artist name </name>\n<biography> Bio </biography>\n<artist>Ignored</artist>\n<album>Ignored</album>\n<musicbrainzartistid>abcdefab-cdef-abcd-efab-cdefabcdefab</musicbrainzartistid>\n</artist>"
+  },
+  {
+    "name": "music artist uses generic scalar parser--bom-lf",
+    "type": "MusicArtist",
+    "text": "﻿<artist>\n<name> Artist name </name>\n<biography> Bio </biography>\n<artist>Ignored</artist>\n<album>Ignored</album>\n<musicbrainzartistid>abcdefab-cdef-abcd-efab-cdefabcdefab</musicbrainzartistid>\n</artist>"
+  },
+  {
+    "name": "normalized scalars use CLR whitespace trimming--crlf",
+    "type": "Movie",
+    "text": "<movie>\r\n<title>CLR title</title>\r\n<originaltitle> Original </originaltitle>\r\n<sorttitle> Forced </sorttitle>\r\n<sortname> Sort </sortname>\r\n<plot>　Overview　</plot>\r\n<language> en </language>\r\n<countrycode> US </countrycode>\r\n<tagline> tag </tagline>\r\n<mpaa> PG </mpaa>\r\n<customrating> custom </customrating>\r\n</movie>"
+  },
+  {
+    "name": "normalized scalars use CLR whitespace trimming--lf",
+    "type": "Movie",
+    "text": "<movie>\n<title>CLR title</title>\n<originaltitle> Original </originaltitle>\n<sorttitle> Forced </sorttitle>\n<sortname> Sort </sortname>\n<plot>　Overview　</plot>\n<language> en </language>\n<countrycode> US </countrycode>\n<tagline> tag </tagline>\n<mpaa> PG </mpaa>\n<customrating> custom </customrating>\n</movie>"
+  },
+  {
+    "name": "normalized scalars use CLR whitespace trimming--bom-lf",
+    "type": "Movie",
+    "text": "﻿<movie>\n<title>CLR title</title>\n<originaltitle> Original </originaltitle>\n<sorttitle> Forced </sorttitle>\n<sortname> Sort </sortname>\n<plot>　Overview　</plot>\n<language> en </language>\n<countrycode> US </countrycode>\n<tagline> tag </tagline>\n<mpaa> PG </mpaa>\n<customrating> custom </customrating>\n</movie>"
+  },
+  {
+    "name": "empty nil and repeated scalars overwrite prior values--crlf",
+    "type": "Movie",
+    "initialName": "Initial",
+    "initialOverview": "Initial overview",
+    "text": "<movie xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n<title>First</title>\r\n<title/>\r\n<plot>First plot</plot>\r\n<plot xsi:nil=\"true\"/>\r\n<sortname>First sort</sortname>\r\n<sortname>   </sortname>\r\n<language>en</language>\r\n<language/>\r\n</movie>"
+  },
+  {
+    "name": "empty nil and repeated scalars overwrite prior values--lf",
+    "type": "Movie",
+    "initialName": "Initial",
+    "initialOverview": "Initial overview",
+    "text": "<movie xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n<title>First</title>\n<title/>\n<plot>First plot</plot>\n<plot xsi:nil=\"true\"/>\n<sortname>First sort</sortname>\n<sortname>   </sortname>\n<language>en</language>\n<language/>\n</movie>"
+  },
+  {
+    "name": "empty nil and repeated scalars overwrite prior values--bom-lf",
+    "type": "Movie",
+    "initialName": "Initial",
+    "initialOverview": "Initial overview",
+    "text": "﻿<movie xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n<title>First</title>\n<title/>\n<plot>First plot</plot>\n<plot xsi:nil=\"true\"/>\n<sortname>First sort</sortname>\n<sortname>   </sortname>\n<language>en</language>\n<language/>\n</movie>"
+  },
+  {
+    "name": "lock fields parse whitespace casing numerics and preserve on empty--crlf",
+    "type": "Movie",
+    "text": "<movie>\r\n<lockedfields> Genres |name|9|bogus| Cast |-1|2147483648</lockedfields>\r\n<lockedfields>   </lockedfields>\r\n<lockdata>TRUE</lockdata>\r\n<lockdata> true </lockdata>\r\n</movie>"
+  },
+  {
+    "name": "lock fields parse whitespace casing numerics and preserve on empty--lf",
+    "type": "Movie",
+    "text": "<movie>\n<lockedfields> Genres |name|9|bogus| Cast |-1|2147483648</lockedfields>\n<lockedfields>   </lockedfields>\n<lockdata>TRUE</lockdata>\n<lockdata> true </lockdata>\n</movie>"
+  },
+  {
+    "name": "lock fields parse whitespace casing numerics and preserve on empty--bom-lf",
+    "type": "Movie",
+    "text": "﻿<movie>\n<lockedfields> Genres |name|9|bogus| Cast |-1|2147483648</lockedfields>\n<lockedfields>   </lockedfields>\n<lockdata>TRUE</lockdata>\n<lockdata> true </lockdata>\n</movie>"
+  },
+  {
+    "name": "collections trim split deduplicate and preserve order--crlf",
+    "type": "Movie",
+    "text": "<movie>\r\n<studio> Studio A </studio>\r\n<studio>studio a</studio>\r\n<studio>Studio B</studio>\r\n<genre> Drama / comedy / /DRAMA</genre>\r\n<genre>Thriller</genre>\r\n<style> Style A </style>\r\n<tag>style a</tag>\r\n<tag>Tag B</tag>\r\n<country> US / / CA /GB</country>\r\n</movie>"
+  },
+  {
+    "name": "collections trim split deduplicate and preserve order--lf",
+    "type": "Movie",
+    "text": "<movie>\n<studio> Studio A </studio>\n<studio>studio a</studio>\n<studio>Studio B</studio>\n<genre> Drama / comedy / /DRAMA</genre>\n<genre>Thriller</genre>\n<style> Style A </style>\n<tag>style a</tag>\n<tag>Tag B</tag>\n<country> US / / CA /GB</country>\n</movie>"
+  },
+  {
+    "name": "collections trim split deduplicate and preserve order--bom-lf",
+    "type": "Movie",
+    "text": "﻿<movie>\n<studio> Studio A </studio>\n<studio>studio a</studio>\n<studio>Studio B</studio>\n<genre> Drama / comedy / /DRAMA</genre>\n<genre>Thriller</genre>\n<style> Style A </style>\n<tag>style a</tag>\n<tag>Tag B</tag>\n<country> US / / CA /GB</country>\n</movie>"
+  },
+  {
+    "name": "integer scalar boundaries preserve last valid value--crlf",
+    "type": "Movie",
+    "text": "<movie>\r\n<runtime>+12 minutes</runtime>\r\n<runtime>13\tminutes</runtime>\r\n<runtime>2147483648</runtime>\r\n<year>1851</year>\r\n<year>1850</year>\r\n<year>-1</year>\r\n</movie>"
+  },
+  {
+    "name": "integer scalar boundaries preserve last valid value--lf",
+    "type": "Movie",
+    "text": "<movie>\n<runtime>+12 minutes</runtime>\n<runtime>13\tminutes</runtime>\n<runtime>2147483648</runtime>\n<year>1851</year>\n<year>1850</year>\n<year>-1</year>\n</movie>"
+  },
+  {
+    "name": "integer scalar boundaries preserve last valid value--bom-lf",
+    "type": "Movie",
+    "text": "﻿<movie>\n<runtime>+12 minutes</runtime>\n<runtime>13\tminutes</runtime>\n<runtime>2147483648</runtime>\n<year>1851</year>\n<year>1850</year>\n<year>-1</year>\n</movie>"
+  },
+  {
+    "name": "rating grammars and bounds preserve last valid value--crlf",
+    "type": "Movie",
+    "text": "<movie>\r\n<criticrating>1,234.5</criticrating>\r\n<criticrating>bad</criticrating>\r\n<rating>.5</rating>\r\n<rating>1e2</rating>\r\n<communityrating>10</communityrating>\r\n<communityrating>11</communityrating>\r\n<communityrating>-1</communityrating>\r\n</movie>"
+  },
+  {
+    "name": "rating grammars and bounds preserve last valid value--lf",
+    "type": "Movie",
+    "text": "<movie>\n<criticrating>1,234.5</criticrating>\n<criticrating>bad</criticrating>\n<rating>.5</rating>\n<rating>1e2</rating>\n<communityrating>10</communityrating>\n<communityrating>11</communityrating>\n<communityrating>-1</communityrating>\n</movie>"
+  },
+  {
+    "name": "rating grammars and bounds preserve last valid value--bom-lf",
+    "type": "Movie",
+    "text": "﻿<movie>\n<criticrating>1,234.5</criticrating>\n<criticrating>bad</criticrating>\n<rating>.5</rating>\n<rating>1e2</rating>\n<communityrating>10</communityrating>\n<communityrating>11</communityrating>\n<communityrating>-1</communityrating>\n</movie>"
+  },
+  {
+    "name": "director writer and credits delimiter rules--crlf",
+    "type": "Movie",
+    "text": "<movie>\r\n<director> One, Jr., Two </director>\r\n<director>Three|Four;Five</director>\r\n<writer> Writer One, Writer Two </writer>\r\n<writer>Writer Three;Writer Four</writer>\r\n<credits> Credit One / / Credit Two </credits>\r\n</movie>"
+  },
+  {
+    "name": "director writer and credits delimiter rules--lf",
+    "type": "Movie",
+    "text": "<movie>\n<director> One, Jr., Two </director>\n<director>Three|Four;Five</director>\n<writer> Writer One, Writer Two </writer>\n<writer>Writer Three;Writer Four</writer>\n<credits> Credit One / / Credit Two </credits>\n</movie>"
+  },
+  {
+    "name": "director writer and credits delimiter rules--bom-lf",
+    "type": "Movie",
+    "text": "﻿<movie>\n<director> One, Jr., Two </director>\n<director>Three|Four;Five</director>\n<writer> Writer One, Writer Two </writer>\n<writer>Writer Three;Writer Four</writer>\n<credits> Credit One / / Credit Two </credits>\n</movie>"
+  },
+  {
+    "name": "actors accept the complete PersonKind enum and unknown fallback--crlf",
+    "type": "Movie",
+    "text": "<movie>\r\n<actor>\r\n<name>Arranger Person</name>\r\n<type>arranger</type>\r\n<role>Arrangement</role>\r\n<order>4</order>\r\n<thumb> https://example.test/a.jpg </thumb>\r\n</actor>\r\n<actor>\r\n<Name>Narrator Person</Name>\r\n<Type>NARRATOR</Type>\r\n</actor>\r\n<actor>\r\n<name>Invalid Person</name>\r\n<type>NotAType</type>\r\n</actor>\r\n<actor>\r\n<name>Default Person</name>\r\n</actor>\r\n<actor>\r\n<name>   </name>\r\n<type>Editor</type>\r\n</actor>\r\n</movie>"
+  },
+  {
+    "name": "actors accept the complete PersonKind enum and unknown fallback--lf",
+    "type": "Movie",
+    "text": "<movie>\n<actor>\n<name>Arranger Person</name>\n<type>arranger</type>\n<role>Arrangement</role>\n<order>4</order>\n<thumb> https://example.test/a.jpg </thumb>\n</actor>\n<actor>\n<Name>Narrator Person</Name>\n<Type>NARRATOR</Type>\n</actor>\n<actor>\n<name>Invalid Person</name>\n<type>NotAType</type>\n</actor>\n<actor>\n<name>Default Person</name>\n</actor>\n<actor>\n<name>   </name>\n<type>Editor</type>\n</actor>\n</movie>"
+  },
+  {
+    "name": "actors accept the complete PersonKind enum and unknown fallback--bom-lf",
+    "type": "Movie",
+    "text": "﻿<movie>\n<actor>\n<name>Arranger Person</name>\n<type>arranger</type>\n<role>Arrangement</role>\n<order>4</order>\n<thumb> https://example.test/a.jpg </thumb>\n</actor>\n<actor>\n<Name>Narrator Person</Name>\n<Type>NARRATOR</Type>\n</actor>\n<actor>\n<name>Invalid Person</name>\n<type>NotAType</type>\n</actor>\n<actor>\n<name>Default Person</name>\n</actor>\n<actor>\n<name>   </name>\n<type>Editor</type>\n</actor>\n</movie>"
+  },
+  {
+    "name": "actor type accepts defined numeric PersonKind--crlf",
+    "type": "Movie",
+    "text": "<movie>\r\n<actor>\r\n<name>Numeric Arranger</name>\r\n<type>9</type>\r\n</actor>\r\n</movie>"
+  },
+  {
+    "name": "actor type accepts defined numeric PersonKind--lf",
+    "type": "Movie",
+    "text": "<movie>\n<actor>\n<name>Numeric Arranger</name>\n<type>9</type>\n</actor>\n</movie>"
+  },
+  {
+    "name": "actor type accepts defined numeric PersonKind--bom-lf",
+    "type": "Movie",
+    "text": "﻿<movie>\n<actor>\n<name>Numeric Arranger</name>\n<type>9</type>\n</actor>\n</movie>"
+  },
+  {
+    "name": "actor type preserves undefined positive numeric PersonKind--crlf",
+    "type": "Movie",
+    "text": "<movie>\r\n<actor>\r\n<name>Numeric Twenty Seven</name>\r\n<type>27</type>\r\n</actor>\r\n</movie>"
+  },
+  {
+    "name": "actor type preserves undefined positive numeric PersonKind--lf",
+    "type": "Movie",
+    "text": "<movie>\n<actor>\n<name>Numeric Twenty Seven</name>\n<type>27</type>\n</actor>\n</movie>"
+  },
+  {
+    "name": "actor type preserves undefined positive numeric PersonKind--bom-lf",
+    "type": "Movie",
+    "text": "﻿<movie>\n<actor>\n<name>Numeric Twenty Seven</name>\n<type>27</type>\n</actor>\n</movie>"
+  },
+  {
+    "name": "actor type preserves undefined negative numeric PersonKind--crlf",
+    "type": "Movie",
+    "text": "<movie>\r\n<actor>\r\n<name>Numeric Minus One</name>\r\n<type>-1</type>\r\n</actor>\r\n</movie>"
+  },
+  {
+    "name": "actor type preserves undefined negative numeric PersonKind--lf",
+    "type": "Movie",
+    "text": "<movie>\n<actor>\n<name>Numeric Minus One</name>\n<type>-1</type>\n</actor>\n</movie>"
+  },
+  {
+    "name": "actor type preserves undefined negative numeric PersonKind--bom-lf",
+    "type": "Movie",
+    "text": "﻿<movie>\n<actor>\n<name>Numeric Minus One</name>\n<type>-1</type>\n</actor>\n</movie>"
+  },
+  {
+    "name": "actor type combines comma separated named PersonKinds--crlf",
+    "type": "Movie",
+    "text": "<movie>\r\n<actor>\r\n<name>Named Composite</name>\r\n<type> Actor, Director </type>\r\n</actor>\r\n</movie>"
+  },
+  {
+    "name": "actor type combines comma separated named PersonKinds--lf",
+    "type": "Movie",
+    "text": "<movie>\n<actor>\n<name>Named Composite</name>\n<type> Actor, Director </type>\n</actor>\n</movie>"
+  },
+  {
+    "name": "actor type combines comma separated named PersonKinds--bom-lf",
+    "type": "Movie",
+    "text": "﻿<movie>\n<actor>\n<name>Named Composite</name>\n<type> Actor, Director </type>\n</actor>\n</movie>"
+  },
+  {
+    "name": "actor type locks named numeric comma composite behavior--crlf",
+    "type": "Movie",
+    "text": "<movie>\r\n<actor>\r\n<name>Named Numeric Composite</name>\r\n<type>Actor, 8</type>\r\n</actor>\r\n</movie>"
+  },
+  {
+    "name": "actor type locks named numeric comma composite behavior--lf",
+    "type": "Movie",
+    "text": "<movie>\n<actor>\n<name>Named Numeric Composite</name>\n<type>Actor, 8</type>\n</actor>\n</movie>"
+  },
+  {
+    "name": "actor type locks named numeric comma composite behavior--bom-lf",
+    "type": "Movie",
+    "text": "﻿<movie>\n<actor>\n<name>Named Numeric Composite</name>\n<type>Actor, 8</type>\n</actor>\n</movie>"
+  },
+  {
+    "name": "actor type locks numeric comma composite behavior--crlf",
+    "type": "Movie",
+    "text": "<movie>\r\n<actor>\r\n<name>Numeric Composite</name>\r\n<type>1, 2</type>\r\n</actor>\r\n</movie>"
+  },
+  {
+    "name": "actor type locks numeric comma composite behavior--lf",
+    "type": "Movie",
+    "text": "<movie>\n<actor>\n<name>Numeric Composite</name>\n<type>1, 2</type>\n</actor>\n</movie>"
+  },
+  {
+    "name": "actor type locks numeric comma composite behavior--bom-lf",
+    "type": "Movie",
+    "text": "﻿<movie>\n<actor>\n<name>Numeric Composite</name>\n<type>1, 2</type>\n</actor>\n</movie>"
+  },
+  {
+    "name": "actor type invalid comma composite resets to unknown--crlf",
+    "type": "Movie",
+    "text": "<movie>\r\n<actor>\r\n<name>Invalid Composite</name>\r\n<type>Actor, NotAType</type>\r\n</actor>\r\n</movie>"
+  },
+  {
+    "name": "actor type invalid comma composite resets to unknown--lf",
+    "type": "Movie",
+    "text": "<movie>\n<actor>\n<name>Invalid Composite</name>\n<type>Actor, NotAType</type>\n</actor>\n</movie>"
+  },
+  {
+    "name": "actor type invalid comma composite resets to unknown--bom-lf",
+    "type": "Movie",
+    "text": "﻿<movie>\n<actor>\n<name>Invalid Composite</name>\n<type>Actor, NotAType</type>\n</actor>\n</movie>"
+  },
+  {
+    "name": "actor type accepts maximum Int32 numeric PersonKind--crlf",
+    "type": "Movie",
+    "text": "<movie>\r\n<actor>\r\n<name>Maximum Int32</name>\r\n<type>2147483647</type>\r\n</actor>\r\n</movie>"
+  },
+  {
+    "name": "actor type accepts maximum Int32 numeric PersonKind--lf",
+    "type": "Movie",
+    "text": "<movie>\n<actor>\n<name>Maximum Int32</name>\n<type>2147483647</type>\n</actor>\n</movie>"
+  },
+  {
+    "name": "actor type accepts maximum Int32 numeric PersonKind--bom-lf",
+    "type": "Movie",
+    "text": "﻿<movie>\n<actor>\n<name>Maximum Int32</name>\n<type>2147483647</type>\n</actor>\n</movie>"
+  },
+  {
+    "name": "actor type accepts minimum Int32 numeric PersonKind--crlf",
+    "type": "Movie",
+    "text": "<movie>\r\n<actor>\r\n<name>Minimum Int32</name>\r\n<type>-2147483648</type>\r\n</actor>\r\n</movie>"
+  },
+  {
+    "name": "actor type accepts minimum Int32 numeric PersonKind--lf",
+    "type": "Movie",
+    "text": "<movie>\n<actor>\n<name>Minimum Int32</name>\n<type>-2147483648</type>\n</actor>\n</movie>"
+  },
+  {
+    "name": "actor type accepts minimum Int32 numeric PersonKind--bom-lf",
+    "type": "Movie",
+    "text": "﻿<movie>\n<actor>\n<name>Minimum Int32</name>\n<type>-2147483648</type>\n</actor>\n</movie>"
+  },
+  {
+    "name": "actor type positive Int32 overflow resets to unknown--crlf",
+    "type": "Movie",
+    "text": "<movie>\r\n<actor>\r\n<name>Positive Overflow</name>\r\n<type>2147483648</type>\r\n</actor>\r\n</movie>"
+  },
+  {
+    "name": "actor type positive Int32 overflow resets to unknown--lf",
+    "type": "Movie",
+    "text": "<movie>\n<actor>\n<name>Positive Overflow</name>\n<type>2147483648</type>\n</actor>\n</movie>"
+  },
+  {
+    "name": "actor type positive Int32 overflow resets to unknown--bom-lf",
+    "type": "Movie",
+    "text": "﻿<movie>\n<actor>\n<name>Positive Overflow</name>\n<type>2147483648</type>\n</actor>\n</movie>"
+  },
+  {
+    "name": "actor type negative Int32 overflow resets to unknown--crlf",
+    "type": "Movie",
+    "text": "<movie>\r\n<actor>\r\n<name>Negative Overflow</name>\r\n<type>-2147483649</type>\r\n</actor>\r\n</movie>"
+  },
+  {
+    "name": "actor type negative Int32 overflow resets to unknown--lf",
+    "type": "Movie",
+    "text": "<movie>\n<actor>\n<name>Negative Overflow</name>\n<type>-2147483649</type>\n</actor>\n</movie>"
+  },
+  {
+    "name": "actor type negative Int32 overflow resets to unknown--bom-lf",
+    "type": "Movie",
+    "text": "﻿<movie>\n<actor>\n<name>Negative Overflow</name>\n<type>-2147483649</type>\n</actor>\n</movie>"
+  },
+  {
+    "name": "trailers convert both youtube plugin forms and deduplicate--crlf",
+    "type": "Movie",
+    "text": "<movie>\r\n<trailer>plugin://plugin.video.youtube/?action=play_video&amp;videoid=abc123</trailer>\r\n<trailer>PLUGIN://PLUGIN.VIDEO.YOUTUBE/PLAY/?VIDEO_ID=def456</trailer>\r\n<trailer>plugin://plugin.video.youtube/play/?video_id=abc123</trailer>\r\n<trailer>https://example.test/trailer</trailer>\r\n</movie>"
+  },
+  {
+    "name": "trailers convert both youtube plugin forms and deduplicate--lf",
+    "type": "Movie",
+    "text": "<movie>\n<trailer>plugin://plugin.video.youtube/?action=play_video&amp;videoid=abc123</trailer>\n<trailer>PLUGIN://PLUGIN.VIDEO.YOUTUBE/PLAY/?VIDEO_ID=def456</trailer>\n<trailer>plugin://plugin.video.youtube/play/?video_id=abc123</trailer>\n<trailer>https://example.test/trailer</trailer>\n</movie>"
+  },
+  {
+    "name": "trailers convert both youtube plugin forms and deduplicate--bom-lf",
+    "type": "Movie",
+    "text": "﻿<movie>\n<trailer>plugin://plugin.video.youtube/?action=play_video&amp;videoid=abc123</trailer>\n<trailer>PLUGIN://PLUGIN.VIDEO.YOUTUBE/PLAY/?VIDEO_ID=def456</trailer>\n<trailer>plugin://plugin.video.youtube/play/?video_id=abc123</trailer>\n<trailer>https://example.test/trailer</trailer>\n</movie>"
+  },
+  {
+    "name": "series enum numerics aliases invalids and empty air days--crlf",
+    "type": "Series",
+    "text": "<tvshow>\r\n<airs_dayofweek>Daily</airs_dayofweek>\r\n<airs_dayofweek> 6 </airs_dayofweek>\r\n<airs_dayofweek>invalid</airs_dayofweek>\r\n<status>Cancelled</status>\r\n<status> 2 </status>\r\n<status>invalid</status>\r\n<airs_time>   </airs_time>\r\n</tvshow>"
+  },
+  {
+    "name": "series enum numerics aliases invalids and empty air days--lf",
+    "type": "Series",
+    "text": "<tvshow>\n<airs_dayofweek>Daily</airs_dayofweek>\n<airs_dayofweek> 6 </airs_dayofweek>\n<airs_dayofweek>invalid</airs_dayofweek>\n<status>Cancelled</status>\n<status> 2 </status>\n<status>invalid</status>\n<airs_time>   </airs_time>\n</tvshow>"
+  },
+  {
+    "name": "series enum numerics aliases invalids and empty air days--bom-lf",
+    "type": "Series",
+    "text": "﻿<tvshow>\n<airs_dayofweek>Daily</airs_dayofweek>\n<airs_dayofweek> 6 </airs_dayofweek>\n<airs_dayofweek>invalid</airs_dayofweek>\n<status>Cancelled</status>\n<status> 2 </status>\n<status>invalid</status>\n<airs_time>   </airs_time>\n</tvshow>"
+  },
+  {
+    "name": "xml element names stay case sensitive except configured provider nodes--crlf",
+    "type": "Movie",
+    "text": "<movie>\r\n<TITLE>Ignored</TITLE>\r\n<Title>Also ignored</Title>\r\n<title>Kept</title>\r\n<TMDBID>901</TMDBID>\r\n<ImDb_Id>tt7890123</ImDb_Id>\r\n<UNIQUEID type=\"Tmdb\">902</UNIQUEID>\r\n</movie>"
+  },
+  {
+    "name": "xml element names stay case sensitive except configured provider nodes--lf",
+    "type": "Movie",
+    "text": "<movie>\n<TITLE>Ignored</TITLE>\n<Title>Also ignored</Title>\n<title>Kept</title>\n<TMDBID>901</TMDBID>\n<ImDb_Id>tt7890123</ImDb_Id>\n<UNIQUEID type=\"Tmdb\">902</UNIQUEID>\n</movie>"
+  },
+  {
+    "name": "xml element names stay case sensitive except configured provider nodes--bom-lf",
+    "type": "Movie",
+    "text": "﻿<movie>\n<TITLE>Ignored</TITLE>\n<Title>Also ignored</Title>\n<title>Kept</title>\n<TMDBID>901</TMDBID>\n<ImDb_Id>tt7890123</ImDb_Id>\n<UNIQUEID type=\"Tmdb\">902</UNIQUEID>\n</movie>"
+  },
+  {
+    "name": "release date aliases overwrite premiere and derive first year--crlf",
+    "type": "Movie",
+    "text": "<movie>\r\n<aired>2020-01-02</aired>\r\n<formed>2021-02-03</formed>\r\n<premiered>2022-03-04</premiered>\r\n<releasedate>2023-04-05</releasedate>\r\n</movie>"
+  },
+  {
+    "name": "release date aliases overwrite premiere and derive first year--lf",
+    "type": "Movie",
+    "text": "<movie>\n<aired>2020-01-02</aired>\n<formed>2021-02-03</formed>\n<premiered>2022-03-04</premiered>\n<releasedate>2023-04-05</releasedate>\n</movie>"
+  },
+  {
+    "name": "release date aliases overwrite premiere and derive first year--bom-lf",
+    "type": "Movie",
+    "text": "﻿<movie>\n<aired>2020-01-02</aired>\n<formed>2021-02-03</formed>\n<premiered>2022-03-04</premiered>\n<releasedate>2023-04-05</releasedate>\n</movie>"
+  },
+  {
+    "name": "explicit year prevents premiere year derivation--crlf",
+    "type": "Movie",
+    "text": "<movie>\r\n<year>1999</year>\r\n<premiered>2024-05-06</premiered>\r\n<year>1850</year>\r\n</movie>"
+  },
+  {
+    "name": "explicit year prevents premiere year derivation--lf",
+    "type": "Movie",
+    "text": "<movie>\n<year>1999</year>\n<premiered>2024-05-06</premiered>\n<year>1850</year>\n</movie>"
+  },
+  {
+    "name": "explicit year prevents premiere year derivation--bom-lf",
+    "type": "Movie",
+    "text": "﻿<movie>\n<year>1999</year>\n<premiered>2024-05-06</premiered>\n<year>1850</year>\n</movie>"
+  },
+  {
+    "name": "custom release format adjusts positive offset across previous year--crlf",
+    "type": "Movie",
+    "releaseDateFormat": "yyyy-MM-dd'T'HH:mm:ssK",
+    "text": "<movie>\r\n<premiered>2024-01-01T00:30:00+14:00</premiered>\r\n</movie>"
+  },
+  {
+    "name": "custom release format adjusts positive offset across previous year--lf",
+    "type": "Movie",
+    "releaseDateFormat": "yyyy-MM-dd'T'HH:mm:ssK",
+    "text": "<movie>\n<premiered>2024-01-01T00:30:00+14:00</premiered>\n</movie>"
+  },
+  {
+    "name": "custom release format adjusts positive offset across previous year--bom-lf",
+    "type": "Movie",
+    "releaseDateFormat": "yyyy-MM-dd'T'HH:mm:ssK",
+    "text": "﻿<movie>\n<premiered>2024-01-01T00:30:00+14:00</premiered>\n</movie>"
+  },
+  {
+    "name": "custom release format adjusts negative offset across next year--crlf",
+    "type": "Series",
+    "releaseDateFormat": "yyyy-MM-dd'T'HH:mm:ssK",
+    "text": "<tvshow>\r\n<formed>2024-12-31T23:30:00-14:00</formed>\r\n<enddate>2025-01-01T00:15:00+14:00</enddate>\r\n</tvshow>"
+  },
+  {
+    "name": "custom release format adjusts negative offset across next year--lf",
+    "type": "Series",
+    "releaseDateFormat": "yyyy-MM-dd'T'HH:mm:ssK",
+    "text": "<tvshow>\n<formed>2024-12-31T23:30:00-14:00</formed>\n<enddate>2025-01-01T00:15:00+14:00</enddate>\n</tvshow>"
+  },
+  {
+    "name": "custom release format adjusts negative offset across next year--bom-lf",
+    "type": "Series",
+    "releaseDateFormat": "yyyy-MM-dd'T'HH:mm:ssK",
+    "text": "﻿<tvshow>\n<formed>2024-12-31T23:30:00-14:00</formed>\n<enddate>2025-01-01T00:15:00+14:00</enddate>\n</tvshow>"
+  },
+  {
+    "name": "invalid exact date keeps prior valid premiere and year--crlf",
+    "type": "Movie",
+    "text": "<movie>\r\n<premiered>2020-02-29</premiered>\r\n<releasedate>2021-02-29</releasedate>\r\n<aired>not-a-date</aired>\r\n</movie>"
+  },
+  {
+    "name": "invalid exact date keeps prior valid premiere and year--lf",
+    "type": "Movie",
+    "text": "<movie>\n<premiered>2020-02-29</premiered>\n<releasedate>2021-02-29</releasedate>\n<aired>not-a-date</aired>\n</movie>"
+  },
+  {
+    "name": "invalid exact date keeps prior valid premiere and year--bom-lf",
+    "type": "Movie",
+    "text": "﻿<movie>\n<premiered>2020-02-29</premiered>\n<releasedate>2021-02-29</releasedate>\n<aired>not-a-date</aired>\n</movie>"
+  },
+  {
+    "name": "end date never derives production year--crlf",
+    "type": "Series",
+    "text": "<tvshow>\r\n<enddate>2030-12-31</enddate>\r\n</tvshow>"
+  },
+  {
+    "name": "end date never derives production year--lf",
+    "type": "Series",
+    "text": "<tvshow>\n<enddate>2030-12-31</enddate>\n</tvshow>"
+  },
+  {
+    "name": "end date never derives production year--bom-lf",
+    "type": "Series",
+    "text": "﻿<tvshow>\n<enddate>2030-12-31</enddate>\n</tvshow>"
+  },
+  {
+    "name": "dateadded accepts invariant date time and invalid preserves prior--crlf",
+    "type": "Movie",
+    "text": "<movie>\r\n<dateadded>2019-08-06 09:01:18</dateadded>\r\n<dateadded>not-a-date</dateadded>\r\n</movie>"
+  },
+  {
+    "name": "dateadded accepts invariant date time and invalid preserves prior--lf",
+    "type": "Movie",
+    "text": "<movie>\n<dateadded>2019-08-06 09:01:18</dateadded>\n<dateadded>not-a-date</dateadded>\n</movie>"
+  },
+  {
+    "name": "dateadded accepts invariant date time and invalid preserves prior--bom-lf",
+    "type": "Movie",
+    "text": "﻿<movie>\n<dateadded>2019-08-06 09:01:18</dateadded>\n<dateadded>not-a-date</dateadded>\n</movie>"
+  },
+  {
+    "name": "dateadded adjusts explicit timezone offsets--crlf",
+    "type": "Movie",
+    "text": "<movie>\r\n<dateadded>2024-01-01T00:30:00+14:00</dateadded>\r\n<dateadded>2024-12-31T23:30:00-14:00</dateadded>\r\n</movie>"
+  },
+  {
+    "name": "dateadded adjusts explicit timezone offsets--lf",
+    "type": "Movie",
+    "text": "<movie>\n<dateadded>2024-01-01T00:30:00+14:00</dateadded>\n<dateadded>2024-12-31T23:30:00-14:00</dateadded>\n</movie>"
+  },
+  {
+    "name": "dateadded adjusts explicit timezone offsets--bom-lf",
+    "type": "Movie",
+    "text": "﻿<movie>\n<dateadded>2024-01-01T00:30:00+14:00</dateadded>\n<dateadded>2024-12-31T23:30:00-14:00</dateadded>\n</movie>"
+  },
+  {
+    "name": "dateadded trims CLR whitespace and accepts month names--crlf",
+    "type": "Movie",
+    "text": "<movie>\r\n<dateadded>January 2, 2024 03:04:05Z</dateadded>\r\n</movie>"
+  },
+  {
+    "name": "dateadded trims CLR whitespace and accepts month names--lf",
+    "type": "Movie",
+    "text": "<movie>\n<dateadded>January 2, 2024 03:04:05Z</dateadded>\n</movie>"
+  },
+  {
+    "name": "dateadded trims CLR whitespace and accepts month names--bom-lf",
+    "type": "Movie",
+    "text": "﻿<movie>\n<dateadded>January 2, 2024 03:04:05Z</dateadded>\n</movie>"
+  },
+  {
+    "name": "dateadded preserves seven fractional digits--crlf",
+    "type": "Movie",
+    "text": "<movie>\r\n<dateadded>2024-02-03T04:05:06.1234567Z</dateadded>\r\n</movie>"
+  },
+  {
+    "name": "dateadded preserves seven fractional digits--lf",
+    "type": "Movie",
+    "text": "<movie>\n<dateadded>2024-02-03T04:05:06.1234567Z</dateadded>\n</movie>"
+  },
+  {
+    "name": "dateadded preserves seven fractional digits--bom-lf",
+    "type": "Movie",
+    "text": "﻿<movie>\n<dateadded>2024-02-03T04:05:06.1234567Z</dateadded>\n</movie>"
+  },
+  {
+    "name": "dateadded preserves a single 100ns tick--crlf",
+    "type": "Movie",
+    "text": "<movie>\r\n<dateadded>2024-02-03T04:05:06.0000001Z</dateadded>\r\n</movie>"
+  },
+  {
+    "name": "dateadded preserves a single 100ns tick--lf",
+    "type": "Movie",
+    "text": "<movie>\n<dateadded>2024-02-03T04:05:06.0000001Z</dateadded>\n</movie>"
+  },
+  {
+    "name": "dateadded preserves a single 100ns tick--bom-lf",
+    "type": "Movie",
+    "text": "﻿<movie>\n<dateadded>2024-02-03T04:05:06.0000001Z</dateadded>\n</movie>"
+  },
+  {
+    "name": "dateadded preserves fractional ticks while adjusting offset--crlf",
+    "type": "Movie",
+    "text": "<movie>\r\n<dateadded>2024-01-01T00:30:00.7654321+14:00</dateadded>\r\n</movie>"
+  },
+  {
+    "name": "dateadded preserves fractional ticks while adjusting offset--lf",
+    "type": "Movie",
+    "text": "<movie>\n<dateadded>2024-01-01T00:30:00.7654321+14:00</dateadded>\n</movie>"
+  },
+  {
+    "name": "dateadded preserves fractional ticks while adjusting offset--bom-lf",
+    "type": "Movie",
+    "text": "﻿<movie>\n<dateadded>2024-01-01T00:30:00.7654321+14:00</dateadded>\n</movie>"
+  },
+  {
+    "name": "dateadded canonicalizes no fraction to seven zero digits--crlf",
+    "type": "Movie",
+    "text": "<movie>\r\n<dateadded>2024-02-03T04:05:06Z</dateadded>\r\n</movie>"
+  },
+  {
+    "name": "dateadded canonicalizes no fraction to seven zero digits--lf",
+    "type": "Movie",
+    "text": "<movie>\n<dateadded>2024-02-03T04:05:06Z</dateadded>\n</movie>"
+  },
+  {
+    "name": "dateadded canonicalizes no fraction to seven zero digits--bom-lf",
+    "type": "Movie",
+    "text": "﻿<movie>\n<dateadded>2024-02-03T04:05:06Z</dateadded>\n</movie>"
+  },
+  {
+    "name": "direct provider nodes aliases and configured mappings--crlf",
+    "type": "Movie",
+    "text": "<movie>\r\n<imdbid> tt1234567 </imdbid>\r\n<tmdbid>101</tmdbid>\r\n<tvdbid>tv-any</tvdbid>\r\n<collectionnumber>202</collectionnumber>\r\n<tmdbcolid>203</tmdbcolid>\r\n<tmdbcol>204</tmdbcol>\r\n<imdb_id>tt2345678</imdb_id>\r\n<custommappedid> custom-value </custommappedid>\r\n</movie>"
+  },
+  {
+    "name": "direct provider nodes aliases and configured mappings--lf",
+    "type": "Movie",
+    "text": "<movie>\n<imdbid> tt1234567 </imdbid>\n<tmdbid>101</tmdbid>\n<tvdbid>tv-any</tvdbid>\n<collectionnumber>202</collectionnumber>\n<tmdbcolid>203</tmdbcolid>\n<tmdbcol>204</tmdbcol>\n<imdb_id>tt2345678</imdb_id>\n<custommappedid> custom-value </custommappedid>\n</movie>"
+  },
+  {
+    "name": "direct provider nodes aliases and configured mappings--bom-lf",
+    "type": "Movie",
+    "text": "﻿<movie>\n<imdbid> tt1234567 </imdbid>\n<tmdbid>101</tmdbid>\n<tvdbid>tv-any</tvdbid>\n<collectionnumber>202</collectionnumber>\n<tmdbcolid>203</tmdbcolid>\n<tmdbcol>204</tmdbcol>\n<imdb_id>tt2345678</imdb_id>\n<custommappedid> custom-value </custommappedid>\n</movie>"
+  },
+  {
+    "name": "provider node lookup is case insensitive and invalid overwrite is rejected--crlf",
+    "type": "Movie",
+    "initialProviderIds": {
+      "Tmdb": "77",
+      "Imdb": "tt7654321"
+    },
+    "text": "<movie>\r\n<TMDBID>88</TMDBID>\r\n<tmdbid>0</tmdbid>\r\n<TmDbId>2147483648</TmDbId>\r\n<IMDBID>tt8765432</IMDBID>\r\n<imdbid>wrong</imdbid>\r\n<TVDBID>  anything  </TVDBID>\r\n</movie>"
+  },
+  {
+    "name": "provider node lookup is case insensitive and invalid overwrite is rejected--lf",
+    "type": "Movie",
+    "initialProviderIds": {
+      "Tmdb": "77",
+      "Imdb": "tt7654321"
+    },
+    "text": "<movie>\n<TMDBID>88</TMDBID>\n<tmdbid>0</tmdbid>\n<TmDbId>2147483648</TmDbId>\n<IMDBID>tt8765432</IMDBID>\n<imdbid>wrong</imdbid>\n<TVDBID>  anything  </TVDBID>\n</movie>"
+  },
+  {
+    "name": "provider node lookup is case insensitive and invalid overwrite is rejected--bom-lf",
+    "type": "Movie",
+    "initialProviderIds": {
+      "Tmdb": "77",
+      "Imdb": "tt7654321"
+    },
+    "text": "﻿<movie>\n<TMDBID>88</TMDBID>\n<tmdbid>0</tmdbid>\n<TmDbId>2147483648</TmDbId>\n<IMDBID>tt8765432</IMDBID>\n<imdbid>wrong</imdbid>\n<TVDBID>  anything  </TVDBID>\n</movie>"
+  },
+  {
+    "name": "uniqueid maps configured types and preserves custom key casing--crlf",
+    "type": "Movie",
+    "text": "<movie>\r\n<uniqueid type=\"TMDBID\"> 301 </uniqueid>\r\n<uniqueid type=\"imdb_id\"> tt3456789 </uniqueid>\r\n<uniqueid type=\"Custom Source\"> first </uniqueid>\r\n<uniqueid type=\"custom source\"> second </uniqueid>\r\n</movie>"
+  },
+  {
+    "name": "uniqueid maps configured types and preserves custom key casing--lf",
+    "type": "Movie",
+    "text": "<movie>\n<uniqueid type=\"TMDBID\"> 301 </uniqueid>\n<uniqueid type=\"imdb_id\"> tt3456789 </uniqueid>\n<uniqueid type=\"Custom Source\"> first </uniqueid>\n<uniqueid type=\"custom source\"> second </uniqueid>\n</movie>"
+  },
+  {
+    "name": "uniqueid maps configured types and preserves custom key casing--bom-lf",
+    "type": "Movie",
+    "text": "﻿<movie>\n<uniqueid type=\"TMDBID\"> 301 </uniqueid>\n<uniqueid type=\"imdb_id\"> tt3456789 </uniqueid>\n<uniqueid type=\"Custom Source\"> first </uniqueid>\n<uniqueid type=\"custom source\"> second </uniqueid>\n</movie>"
+  },
+  {
+    "name": "uniqueid ignores empty missing and forbidden provider names--crlf",
+    "type": "Movie",
+    "text": "<movie>\r\n<uniqueid type=\"Tmdb\"/>\r\n<uniqueid type=\"Tmdb\">\r\n</uniqueid>\r\n<uniqueid>value</uniqueid>\r\n<uniqueid type=\"Bad=Name\">value</uniqueid>\r\n<uniqueid type=\"   \">value</uniqueid>\r\n<uniqueid type=\"Custom\">   </uniqueid>\r\n</movie>"
+  },
+  {
+    "name": "uniqueid ignores empty missing and forbidden provider names--lf",
+    "type": "Movie",
+    "text": "<movie>\n<uniqueid type=\"Tmdb\"/>\n<uniqueid type=\"Tmdb\">\n</uniqueid>\n<uniqueid>value</uniqueid>\n<uniqueid type=\"Bad=Name\">value</uniqueid>\n<uniqueid type=\"   \">value</uniqueid>\n<uniqueid type=\"Custom\">   </uniqueid>\n</movie>"
+  },
+  {
+    "name": "uniqueid ignores empty missing and forbidden provider names--bom-lf",
+    "type": "Movie",
+    "text": "﻿<movie>\n<uniqueid type=\"Tmdb\"/>\n<uniqueid type=\"Tmdb\">\n</uniqueid>\n<uniqueid>value</uniqueid>\n<uniqueid type=\"Bad=Name\">value</uniqueid>\n<uniqueid type=\"   \">value</uniqueid>\n<uniqueid type=\"Custom\">   </uniqueid>\n</movie>"
+  },
+  {
+    "name": "provider numeric and imdb validators enforce native ranges--crlf",
+    "type": "Movie",
+    "text": "<movie>\r\n<uniqueid type=\"Tmdb\">+1</uniqueid>\r\n<uniqueid type=\"Tmdb\">01</uniqueid>\r\n<uniqueid type=\"TmdbCollection\">2147483647</uniqueid>\r\n<uniqueid type=\"TmdbCollection\">2147483648</uniqueid>\r\n<uniqueid type=\"AudioDbArtist\">42</uniqueid>\r\n<uniqueid type=\"AudioDbAlbum\">-2</uniqueid>\r\n<uniqueid type=\"Imdb\">NM0000123</uniqueid>\r\n<uniqueid type=\"Imdb\">tt</uniqueid>\r\n</movie>"
+  },
+  {
+    "name": "provider numeric and imdb validators enforce native ranges--lf",
+    "type": "Movie",
+    "text": "<movie>\n<uniqueid type=\"Tmdb\">+1</uniqueid>\n<uniqueid type=\"Tmdb\">01</uniqueid>\n<uniqueid type=\"TmdbCollection\">2147483647</uniqueid>\n<uniqueid type=\"TmdbCollection\">2147483648</uniqueid>\n<uniqueid type=\"AudioDbArtist\">42</uniqueid>\n<uniqueid type=\"AudioDbAlbum\">-2</uniqueid>\n<uniqueid type=\"Imdb\">NM0000123</uniqueid>\n<uniqueid type=\"Imdb\">tt</uniqueid>\n</movie>"
+  },
+  {
+    "name": "provider numeric and imdb validators enforce native ranges--bom-lf",
+    "type": "Movie",
+    "text": "﻿<movie>\n<uniqueid type=\"Tmdb\">+1</uniqueid>\n<uniqueid type=\"Tmdb\">01</uniqueid>\n<uniqueid type=\"TmdbCollection\">2147483647</uniqueid>\n<uniqueid type=\"TmdbCollection\">2147483648</uniqueid>\n<uniqueid type=\"AudioDbArtist\">42</uniqueid>\n<uniqueid type=\"AudioDbAlbum\">-2</uniqueid>\n<uniqueid type=\"Imdb\">NM0000123</uniqueid>\n<uniqueid type=\"Imdb\">tt</uniqueid>\n</movie>"
+  },
+  {
+    "name": "musicbrainz validators accept guid forms and reject arbitrary text--crlf",
+    "type": "MusicAlbum",
+    "text": "<album>\r\n<musicbrainzalbumid>{12345678-1234-1234-1234-1234567890ab}</musicbrainzalbumid>\r\n<uniqueid type=\"MusicBrainzArtist\">123456781234123412341234567890ab</uniqueid>\r\n<uniqueid type=\"MusicBrainzRecording\">(abcdefab-cdef-abcd-efab-cdefabcdefab)</uniqueid>\r\n<uniqueid type=\"MusicBrainzTrack\">not-a-guid</uniqueid>\r\n</album>"
+  },
+  {
+    "name": "musicbrainz validators accept guid forms and reject arbitrary text--lf",
+    "type": "MusicAlbum",
+    "text": "<album>\n<musicbrainzalbumid>{12345678-1234-1234-1234-1234567890ab}</musicbrainzalbumid>\n<uniqueid type=\"MusicBrainzArtist\">123456781234123412341234567890ab</uniqueid>\n<uniqueid type=\"MusicBrainzRecording\">(abcdefab-cdef-abcd-efab-cdefabcdefab)</uniqueid>\n<uniqueid type=\"MusicBrainzTrack\">not-a-guid</uniqueid>\n</album>"
+  },
+  {
+    "name": "musicbrainz validators accept guid forms and reject arbitrary text--bom-lf",
+    "type": "MusicAlbum",
+    "text": "﻿<album>\n<musicbrainzalbumid>{12345678-1234-1234-1234-1234567890ab}</musicbrainzalbumid>\n<uniqueid type=\"MusicBrainzArtist\">123456781234123412341234567890ab</uniqueid>\n<uniqueid type=\"MusicBrainzRecording\">(abcdefab-cdef-abcd-efab-cdefabcdefab)</uniqueid>\n<uniqueid type=\"MusicBrainzTrack\">not-a-guid</uniqueid>\n</album>"
+  },
+  {
+    "name": "movie id attributes precede content and validate independently--crlf",
+    "type": "Movie",
+    "text": "<movie>\r\n<id TMDB=\"401\" TVDB=\"tv-401\">tt4012345</id>\r\n<id TMDB=\"bad\" TVDB=\"tv-402\" IMDB=\"bad\">tt4023456</id>\r\n<id> tt4034567</id>\r\n<id>tt4045678</id>\r\n</movie>"
+  },
+  {
+    "name": "movie id attributes precede content and validate independently--lf",
+    "type": "Movie",
+    "text": "<movie>\n<id TMDB=\"401\" TVDB=\"tv-401\">tt4012345</id>\n<id TMDB=\"bad\" TVDB=\"tv-402\" IMDB=\"bad\">tt4023456</id>\n<id> tt4034567</id>\n<id>tt4045678</id>\n</movie>"
+  },
+  {
+    "name": "movie id attributes precede content and validate independently--bom-lf",
+    "type": "Movie",
+    "text": "﻿<movie>\n<id TMDB=\"401\" TVDB=\"tv-401\">tt4012345</id>\n<id TMDB=\"bad\" TVDB=\"tv-402\" IMDB=\"bad\">tt4023456</id>\n<id> tt4034567</id>\n<id>tt4045678</id>\n</movie>"
+  },
+  {
+    "name": "movie id attribute names and content prefix are case sensitive--crlf",
+    "type": "Movie",
+    "text": "<movie>\r\n<id tmdb=\"501\" tvdb=\"tv-501\" imdb=\"tt5012345\">TT5023456</id>\r\n<id>tt5034567 </id>\r\n</movie>"
+  },
+  {
+    "name": "movie id attribute names and content prefix are case sensitive--lf",
+    "type": "Movie",
+    "text": "<movie>\n<id tmdb=\"501\" tvdb=\"tv-501\" imdb=\"tt5012345\">TT5023456</id>\n<id>tt5034567 </id>\n</movie>"
+  },
+  {
+    "name": "movie id attribute names and content prefix are case sensitive--bom-lf",
+    "type": "Movie",
+    "text": "﻿<movie>\n<id tmdb=\"501\" tvdb=\"tv-501\" imdb=\"tt5012345\">TT5023456</id>\n<id>tt5034567 </id>\n</movie>"
+  },
+  {
+    "name": "movie trailing urls extract imdb and movie tmdb only--crlf",
+    "type": "Movie",
+    "text": "<movie>\r\n<title>Body</title>\r\n</movie>\nhttps://www.imdb.com/title/tt123456789\nhttps://www.themoviedb.org/movie/30287-slug\nhttps://www.themoviedb.org/tv/1668-show\nhttps://www.thetvdb.com/?tab=series&id=121361"
+  },
+  {
+    "name": "movie trailing urls extract imdb and movie tmdb only--lf",
+    "type": "Movie",
+    "text": "<movie>\n<title>Body</title>\n</movie>\nhttps://www.imdb.com/title/tt123456789\nhttps://www.themoviedb.org/movie/30287-slug\nhttps://www.themoviedb.org/tv/1668-show\nhttps://www.thetvdb.com/?tab=series&id=121361"
+  },
+  {
+    "name": "movie trailing urls extract imdb and movie tmdb only--bom-lf",
+    "type": "Movie",
+    "text": "﻿<movie>\n<title>Body</title>\n</movie>\nhttps://www.imdb.com/title/tt123456789\nhttps://www.themoviedb.org/movie/30287-slug\nhttps://www.themoviedb.org/tv/1668-show\nhttps://www.thetvdb.com/?tab=series&id=121361"
+  },
+  {
+    "name": "series trailing urls extract imdb series tmdb and tvdb--crlf",
+    "type": "Series",
+    "text": "<tvshow>\r\n<title>Body</title>\r\n</tvshow>\ntext tt2345678 more\nthemoviedb.org/tv/1668-show\nthetvdb.com/?tab=series&id=121361\nthemoviedb.org/movie/30287"
+  },
+  {
+    "name": "series trailing urls extract imdb series tmdb and tvdb--lf",
+    "type": "Series",
+    "text": "<tvshow>\n<title>Body</title>\n</tvshow>\ntext tt2345678 more\nthemoviedb.org/tv/1668-show\nthetvdb.com/?tab=series&id=121361\nthemoviedb.org/movie/30287"
+  },
+  {
+    "name": "series trailing urls extract imdb series tmdb and tvdb--bom-lf",
+    "type": "Series",
+    "text": "﻿<tvshow>\n<title>Body</title>\n</tvshow>\ntext tt2345678 more\nthemoviedb.org/tv/1668-show\nthetvdb.com/?tab=series&id=121361\nthemoviedb.org/movie/30287"
+  },
+  {
+    "name": "video music video and series season trailing urls only extract imdb--crlf",
+    "type": "Video",
+    "text": "<video>\r\n<title>Body</title>\r\n</video>\ntt3456789\nthemoviedb.org/movie/30287\nthemoviedb.org/tv/1668\nthetvdb.com/?tab=series&id=121361"
+  },
+  {
+    "name": "video music video and series season trailing urls only extract imdb--lf",
+    "type": "Video",
+    "text": "<video>\n<title>Body</title>\n</video>\ntt3456789\nthemoviedb.org/movie/30287\nthemoviedb.org/tv/1668\nthetvdb.com/?tab=series&id=121361"
+  },
+  {
+    "name": "video music video and series season trailing urls only extract imdb--bom-lf",
+    "type": "Video",
+    "text": "﻿<video>\n<title>Body</title>\n</video>\ntt3456789\nthemoviedb.org/movie/30287\nthemoviedb.org/tv/1668\nthetvdb.com/?tab=series&id=121361"
+  },
+  {
+    "name": "provider url scanning is ordinal and resumes after short imdb ids--crlf",
+    "type": "Series",
+    "text": "TT1234567 THEMovieDB.org/tv/999 thetvdb.com/?tab=series&amp;id=888 tt123456Xtt7654321 themoviedb.org/tv/x1668 thetvdb.com/?tab=series&id=x121361"
+  },
+  {
+    "name": "provider url scanning is ordinal and resumes after short imdb ids--lf",
+    "type": "Series",
+    "text": "TT1234567 THEMovieDB.org/tv/999 thetvdb.com/?tab=series&amp;id=888 tt123456Xtt7654321 themoviedb.org/tv/x1668 thetvdb.com/?tab=series&id=x121361"
+  },
+  {
+    "name": "provider url scanning is ordinal and resumes after short imdb ids--bom-lf",
+    "type": "Series",
+    "text": "﻿TT1234567 THEMovieDB.org/tv/999 thetvdb.com/?tab=series&amp;id=888 tt123456Xtt7654321 themoviedb.org/tv/x1668 thetvdb.com/?tab=series&id=x121361"
+  },
+  {
+    "name": "custom external id availability controls direct node recognition--crlf",
+    "type": "Movie",
+    "externalIds": [
+      "Imdb",
+      "PluginKey"
+    ],
+    "text": "<movie>\r\n<tmdbid>601</tmdbid>\r\n<pluginKeyId> plugin-value </pluginKeyId>\r\n<uniqueid type=\"PluginKeyId\">unique-value</uniqueid>\r\n<uniqueid type=\"Tmdb\">602</uniqueid>\r\n</movie>"
+  },
+  {
+    "name": "custom external id availability controls direct node recognition--lf",
+    "type": "Movie",
+    "externalIds": [
+      "Imdb",
+      "PluginKey"
+    ],
+    "text": "<movie>\n<tmdbid>601</tmdbid>\n<pluginKeyId> plugin-value </pluginKeyId>\n<uniqueid type=\"PluginKeyId\">unique-value</uniqueid>\n<uniqueid type=\"Tmdb\">602</uniqueid>\n</movie>"
+  },
+  {
+    "name": "custom external id availability controls direct node recognition--bom-lf",
+    "type": "Movie",
+    "externalIds": [
+      "Imdb",
+      "PluginKey"
+    ],
+    "text": "﻿<movie>\n<tmdbid>601</tmdbid>\n<pluginKeyId> plugin-value </pluginKeyId>\n<uniqueid type=\"PluginKeyId\">unique-value</uniqueid>\n<uniqueid type=\"Tmdb\">602</uniqueid>\n</movie>"
+  },
+  {
+    "name": "pre-cancelled movie scalar throws before first node--crlf",
+    "type": "Movie",
+    "preCanceled": true,
+    "initialName": "Initial",
+    "text": "<movie>\r\n<title>Changed</title>\r\n</movie>"
+  },
+  {
+    "name": "pre-cancelled movie scalar throws before first node--lf",
+    "type": "Movie",
+    "preCanceled": true,
+    "initialName": "Initial",
+    "text": "<movie>\n<title>Changed</title>\n</movie>"
+  },
+  {
+    "name": "pre-cancelled movie scalar throws before first node--bom-lf",
+    "type": "Movie",
+    "preCanceled": true,
+    "initialName": "Initial",
+    "text": "﻿<movie>\n<title>Changed</title>\n</movie>"
+  },
+  {
+    "name": "pre-cancelled movie empty root completes--crlf",
+    "type": "Movie",
+    "preCanceled": true,
+    "initialName": "Initial",
+    "text": "<movie/>"
+  },
+  {
+    "name": "pre-cancelled movie empty root completes--lf",
+    "type": "Movie",
+    "preCanceled": true,
+    "initialName": "Initial",
+    "text": "<movie/>"
+  },
+  {
+    "name": "pre-cancelled movie empty root completes--bom-lf",
+    "type": "Movie",
+    "preCanceled": true,
+    "initialName": "Initial",
+    "text": "﻿<movie/>"
+  },
+  {
+    "name": "pre-cancelled movie url only commits providers and completes--crlf",
+    "type": "Movie",
+    "preCanceled": true,
+    "text": "tt4567890 themoviedb.org/movie/701"
+  },
+  {
+    "name": "pre-cancelled movie url only commits providers and completes--lf",
+    "type": "Movie",
+    "preCanceled": true,
+    "text": "tt4567890 themoviedb.org/movie/701"
+  },
+  {
+    "name": "pre-cancelled movie url only commits providers and completes--bom-lf",
+    "type": "Movie",
+    "preCanceled": true,
+    "text": "﻿tt4567890 themoviedb.org/movie/701"
+  },
+  {
+    "name": "pre-cancelled movie trailing urls commit before cancellation--crlf",
+    "type": "Movie",
+    "preCanceled": true,
+    "initialName": "Initial",
+    "text": "<movie>\r\n<title>Changed</title>\r\n</movie>\ntt5678901 themoviedb.org/movie/702"
+  },
+  {
+    "name": "pre-cancelled movie trailing urls commit before cancellation--lf",
+    "type": "Movie",
+    "preCanceled": true,
+    "initialName": "Initial",
+    "text": "<movie>\n<title>Changed</title>\n</movie>\ntt5678901 themoviedb.org/movie/702"
+  },
+  {
+    "name": "pre-cancelled movie trailing urls commit before cancellation--bom-lf",
+    "type": "Movie",
+    "preCanceled": true,
+    "initialName": "Initial",
+    "text": "﻿<movie>\n<title>Changed</title>\n</movie>\ntt5678901 themoviedb.org/movie/702"
+  },
+  {
+    "name": "pre-cancelled strict season empty root completes--crlf",
+    "type": "Season",
+    "preCanceled": true,
+    "initialName": "Initial",
+    "text": "<season/>"
+  },
+  {
+    "name": "pre-cancelled strict season empty root completes--lf",
+    "type": "Season",
+    "preCanceled": true,
+    "initialName": "Initial",
+    "text": "<season/>"
+  },
+  {
+    "name": "pre-cancelled strict season empty root completes--bom-lf",
+    "type": "Season",
+    "preCanceled": true,
+    "initialName": "Initial",
+    "text": "﻿<season/>"
+  },
+  {
+    "name": "pre-cancelled strict season scalar throws before first node--crlf",
+    "type": "Season",
+    "preCanceled": true,
+    "initialName": "Initial",
+    "text": "<season>\r\n<seasonname>Changed</seasonname>\r\n</season>"
+  },
+  {
+    "name": "pre-cancelled strict season scalar throws before first node--lf",
+    "type": "Season",
+    "preCanceled": true,
+    "initialName": "Initial",
+    "text": "<season>\n<seasonname>Changed</seasonname>\n</season>"
+  },
+  {
+    "name": "pre-cancelled strict season scalar throws before first node--bom-lf",
+    "type": "Season",
+    "preCanceled": true,
+    "initialName": "Initial",
+    "text": "﻿<season>\n<seasonname>Changed</seasonname>\n</season>"
+  },
+  {
+    "name": "movie malformed id content preserves start-tag providers--crlf",
+    "type": "Movie",
+    "text": "<movie>\r\n<title>Before</title>\r\n<id TMDB=\"801\" TVDB=\"tv-801\">tt8012345"
+  },
+  {
+    "name": "movie malformed id content preserves start-tag providers--lf",
+    "type": "Movie",
+    "text": "<movie>\n<title>Before</title>\n<id TMDB=\"801\" TVDB=\"tv-801\">tt8012345"
+  },
+  {
+    "name": "movie malformed id content preserves start-tag providers--bom-lf",
+    "type": "Movie",
+    "text": "﻿<movie>\n<title>Before</title>\n<id TMDB=\"801\" TVDB=\"tv-801\">tt8012345"
+  },
+  {
+    "name": "strict album malformed tail exposes committed scalar and provider prefix--crlf",
+    "type": "MusicAlbum",
+    "text": "<album>\r\n<title>Before</title>\r\n<musicbrainzalbumid>12345678-1234-1234-1234-1234567890ab</musicbrainzalbumid>\r\n<plot>unfinished"
+  },
+  {
+    "name": "strict album malformed tail exposes committed scalar and provider prefix--lf",
+    "type": "MusicAlbum",
+    "text": "<album>\n<title>Before</title>\n<musicbrainzalbumid>12345678-1234-1234-1234-1234567890ab</musicbrainzalbumid>\n<plot>unfinished"
+  },
+  {
+    "name": "strict album malformed tail exposes committed scalar and provider prefix--bom-lf",
+    "type": "MusicAlbum",
+    "text": "﻿<album>\n<title>Before</title>\n<musicbrainzalbumid>12345678-1234-1234-1234-1234567890ab</musicbrainzalbumid>\n<plot>unfinished"
+  },
+  {
+    "name": "pre-cancelled movie paired empty root observes cancellation--crlf",
+    "type": "Movie",
+    "preCanceled": true,
+    "text": "<movie>\r\n</movie>"
+  },
+  {
+    "name": "pre-cancelled movie paired empty root observes cancellation--lf",
+    "type": "Movie",
+    "preCanceled": true,
+    "text": "<movie>\n</movie>"
+  },
+  {
+    "name": "pre-cancelled movie paired empty root observes cancellation--bom-lf",
+    "type": "Movie",
+    "preCanceled": true,
+    "text": "﻿<movie>\n</movie>"
+  },
+  {
+    "name": "pre-cancelled strict season direct text observes cancellation--crlf",
+    "type": "Season",
+    "preCanceled": true,
+    "text": "<season>direct text</season>"
+  },
+  {
+    "name": "pre-cancelled strict season direct text observes cancellation--lf",
+    "type": "Season",
+    "preCanceled": true,
+    "text": "<season>direct text</season>"
+  },
+  {
+    "name": "pre-cancelled strict season direct text observes cancellation--bom-lf",
+    "type": "Season",
+    "preCanceled": true,
+    "text": "﻿<season>direct text</season>"
+  },
+  {
+    "name": "pre-cancelled strict malformed setup fails before cancellation--crlf",
+    "type": "Season",
+    "preCanceled": true,
+    "text": "<season"
+  },
+  {
+    "name": "pre-cancelled strict malformed setup fails before cancellation--lf",
+    "type": "Season",
+    "preCanceled": true,
+    "text": "<season"
+  },
+  {
+    "name": "pre-cancelled strict malformed setup fails before cancellation--bom-lf",
+    "type": "Season",
+    "preCanceled": true,
+    "text": "﻿<season"
+  },
+  {
+    "name": "pre-cancelled movie no-closing malformed setup is treated as url only--crlf",
+    "type": "Movie",
+    "preCanceled": true,
+    "text": "<movie"
+  },
+  {
+    "name": "pre-cancelled movie no-closing malformed setup is treated as url only--lf",
+    "type": "Movie",
+    "preCanceled": true,
+    "text": "<movie"
+  },
+  {
+    "name": "pre-cancelled movie no-closing malformed setup is treated as url only--bom-lf",
+    "type": "Movie",
+    "preCanceled": true,
+    "text": "﻿<movie"
+  }
+]

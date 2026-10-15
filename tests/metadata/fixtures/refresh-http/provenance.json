@@ -1,0 +1,16 @@
+{
+  "recordedAt": "2026-09-26T14:33:11.080Z",
+  "reference": "Current D:/jellyfin source, built and run from isolated copy on 127.0.0.1:18341",
+  "baselineDigest": "e28a983db179b720c3b16d7416ee4112894a3115c4be6fe43c61c52e0d9a8313",
+  "controller": "Jellyfin.Api/Controllers/ItemRefreshController.cs",
+  "sourceSha256": "4974fafee8669adb43f850714a0a8c9b7943b354db787a1a191a7d8d9010dd8a",
+  "cases": 13,
+  "scope": "Native query binding, elevation controller policy, safe None queue acknowledgement and missing-item response; actual provider refresh is tested separately.",
+  "normalization": [
+    "traceId"
+  ],
+  "artifacts": {
+    "input.json": "2c38d175cdae82fa08fe38e29ada255074dd280f2a3ed1227b04e48996564948",
+    "reference.json": "48fab0f91e3aafb7bf3b8afcd0e4186b793545c7843cdd1509992cb0cb23b696"
+  }
+}

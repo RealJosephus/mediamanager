@@ -1,0 +1,205 @@
+{
+  "inputSha256": "5f9ce74920857bb866ac15ae155cf2337991ccfd127ddc7985d10a74482f8d4d",
+  "nativeSha256": "20c222e311d70a32af34dcc1b82fee9f6c60fc418d6c3fc1e362b4392e86fdb9",
+  "sources": [
+    {
+      "path": "src/Jellyfin.Extensions/Json/Converters/JsonGuidConverter.cs",
+      "sha256": "b98afab0bf25be642aca0ca017d23049c2fb7dceb14ac565039a54473749580e"
+    },
+    {
+      "path": "src/Jellyfin.Extensions/Json/Converters/JsonNullableGuidConverter.cs",
+      "sha256": "451af180eb3b093bc326e633d453f835ae22c10da4bc3fb954018b9af547c2cd"
+    },
+    {
+      "path": "src/Jellyfin.Extensions/Json/JsonDefaults.cs",
+      "sha256": "c0ab4cfad71ceade367d061f5a4ee04d001018155378713cd076df292bf3c815"
+    }
+  ],
+  "buildSource": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source",
+  "oracleSources": [
+    {
+      "name": "Oracle.csproj",
+      "sha256": "e18cfdb73181a255a84415ccb7dcd82227c10174edf518194c951f34cfc80266"
+    },
+    {
+      "name": "Directory.Build.props",
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    },
+    {
+      "name": "Program.cs",
+      "sha256": "1dac0321a317f30d55917667097826b4ba7596fc063a6891aaddf254d7b28f9c"
+    }
+  ],
+  "oracleAssembly": {
+    "filename": "D:\\mediamanager-validation\\20261014-release-collection-source-json-guid-draft-1\\native-guid-contract\\bin\\Release\\net10.0\\Oracle.dll",
+    "available": true,
+    "kind": "file",
+    "bytes": 17920,
+    "sha256": "965c69a5b5ecc03be1ee89fc251874164f249cfe8c3d011c406906cf6ce2713f"
+  },
+  "dotnet": {
+    "filename": "D:\\mediamanager\\.tools\\dotnet\\dotnet.exe",
+    "available": true,
+    "kind": "file",
+    "bytes": 167208,
+    "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6"
+  },
+  "jellyfinDll": {
+    "filename": "D:/mediamanager-validation/20261005/jellyfin-baseline/source/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll",
+    "available": true,
+    "kind": "file",
+    "bytes": 506368,
+    "sha256": "a43fa24c44677e579fcec79d637789b9f36633d02e5434e76a0e03fa13027767"
+  },
+  "build": {
+    "args": [
+      "build",
+      "D:\\mediamanager-validation\\20261014-release-collection-source-json-guid-draft-1\\native-guid-contract\\project\\Oracle.csproj",
+      "-c",
+      "Release",
+      "--nologo",
+      "-v",
+      "minimal",
+      "-p:BaseOutputPath=D:\\mediamanager-validation\\20261014-release-collection-source-json-guid-draft-1\\native-guid-contract\\bin\\",
+      "-p:BaseIntermediateOutputPath=D:\\mediamanager-validation\\20261014-release-collection-source-json-guid-draft-1\\native-guid-contract\\obj\\"
+    ],
+    "status": 0,
+    "signal": null
+  },
+  "process": {
+    "args": [
+      "D:\\mediamanager-validation\\20261014-release-collection-source-json-guid-draft-1\\native-guid-contract\\bin\\Release\\net10.0\\Oracle.dll",
+      "D:\\mediamanager-validation\\20261014-release-collection-source-json-guid-draft-1\\native-guid-contract/case",
+      "D:\\mediamanager\\.agent-temp\\collection-source-json-guid-draft\\bundle\\tests\\users\\fixtures\\guid-contract\\input.json",
+      "D:\\mediamanager-validation\\20261014-release-collection-source-json-guid-draft-1\\native-guid-contract/native.json"
+    ],
+    "status": 0,
+    "signal": null
+  },
+  "rawRecording": {
+    "filename": "D:\\mediamanager-validation\\20261014-release-collection-source-json-guid-draft-1\\native-guid-contract\\native.json",
+    "available": true,
+    "kind": "file",
+    "bytes": 36836,
+    "sha256": "20c222e311d70a32af34dcc1b82fee9f6c60fc418d6c3fc1e362b4392e86fdb9"
+  },
+  "assemblies": [
+    {
+      "name": "Jellyfin.Extensions",
+      "filename": "D:\\mediamanager-validation\\20261014-release-collection-source-json-guid-draft-1\\native-guid-contract\\bin\\Release\\net10.0\\Jellyfin.Extensions.dll",
+      "sha256": "db952e3013a6949ad22db9ac3379be2efdf441c139ddc6919e86f8c2abbc7207"
+    },
+    {
+      "name": "Oracle",
+      "filename": "D:\\mediamanager-validation\\20261014-release-collection-source-json-guid-draft-1\\native-guid-contract\\bin\\Release\\net10.0\\Oracle.dll",
+      "sha256": "965c69a5b5ecc03be1ee89fc251874164f249cfe8c3d011c406906cf6ce2713f"
+    },
+    {
+      "name": "System.Collections",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Collections.dll",
+      "sha256": "df6f2037eabee28100184e92f7536427ba2f086c1110629804d466b124bc4d54"
+    },
+    {
+      "name": "System.Collections.Concurrent",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Collections.Concurrent.dll",
+      "sha256": "082f4bc0da1141eb65111b6da633d75624adfb7bb067d7ee90c5622c8b30885b"
+    },
+    {
+      "name": "System.Console",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Console.dll",
+      "sha256": "3b85daf02a3d9ed99b84bb1c639fe8b1ced46d8d157fa56f525f6b8c5be43b3e"
+    },
+    {
+      "name": "System.Linq",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Linq.dll",
+      "sha256": "284d38945b6e92e847129bd28af458b19818d0f2181f79882888ab2003f4c519"
+    },
+    {
+      "name": "System.Memory",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Memory.dll",
+      "sha256": "f8f9d38efd6b0de30954d6bf1f353e9617bfb36d3d245c013a3b12be9f6bd88a"
+    },
+    {
+      "name": "System.Numerics.Vectors",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Numerics.Vectors.dll",
+      "sha256": "a9a980ee33ed0c798a5e1960c4557521f465ac9e0987dfd2c3049d53b1f2fa5a"
+    },
+    {
+      "name": "System.Private.CoreLib",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Private.CoreLib.dll",
+      "sha256": "1125acc8106c43fc8bad2d203c4c4485df6182d292846c2fff415c1040c54678"
+    },
+    {
+      "name": "System.Private.Uri",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Private.Uri.dll",
+      "sha256": "b15c84d2120e1ec9612c66ba59bc3d7e67d841e2bce7b7d0478cb212537539b4"
+    },
+    {
+      "name": "System.Reflection.Emit.ILGeneration",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Reflection.Emit.ILGeneration.dll",
+      "sha256": "6b42ddd05b0ca1c7342d73ea9f401fe588044215d65c67b756deb780f0894a26"
+    },
+    {
+      "name": "System.Reflection.Emit.Lightweight",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Reflection.Emit.Lightweight.dll",
+      "sha256": "d2724a2b7b46146877ec1f6e400c49ea05f84bdd31f3bba52ae139ee68a4f779"
+    },
+    {
+      "name": "System.Reflection.Primitives",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Reflection.Primitives.dll",
+      "sha256": "c2bbd885d03da5e880667c228ac1f56a5f3a72ea37d43f010ada000adc33da28"
+    },
+    {
+      "name": "System.Runtime",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Runtime.dll",
+      "sha256": "76be53624f64b23d0249dfa0bbe85390086de7c44bfd490642ea86c6faaf44af"
+    },
+    {
+      "name": "System.Runtime.InteropServices",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Runtime.InteropServices.dll",
+      "sha256": "e5eb1679f3579c9141e2bb9dbdce62624a623f38d299805cc1de07bacd21841f"
+    },
+    {
+      "name": "System.Runtime.Loader",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Runtime.Loader.dll",
+      "sha256": "9b9b2a4f0358d9146e76178ddb87d019be380c78baa7dac853493d45df089f03"
+    },
+    {
+      "name": "System.Security.Cryptography",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Security.Cryptography.dll",
+      "sha256": "e0a839a540e47343b53a936b32d91599a3470005228d50fd0b896f8bbdcc65b0"
+    },
+    {
+      "name": "System.Text.Encoding.Extensions",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Text.Encoding.Extensions.dll",
+      "sha256": "8f51b9535db64fe027a40d6076200b1a6b0889bf05f62bb8e68c3eb083c7f113"
+    },
+    {
+      "name": "System.Text.Encodings.Web",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Text.Encodings.Web.dll",
+      "sha256": "d20431f20d992e71a4e82e5f25c822474e2f4097d8527972d3d78ea1f26e47c3"
+    },
+    {
+      "name": "System.Text.Json",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Text.Json.dll",
+      "sha256": "fa99f413be21ed5f484a09093fe5f0beba7de3062cf9cc9f847dbf8108dba55a"
+    },
+    {
+      "name": "System.Threading",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Threading.dll",
+      "sha256": "6c32ed1bf8067e4169e8feddd15e6489b89d19d1c7aae1520a551b57745d0a60"
+    }
+  ],
+  "matchingLibraryAssemblies": [
+    {
+      "name": "Jellyfin.Extensions",
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Jellyfin.Extensions.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 37888,
+      "sha256": "db952e3013a6949ad22db9ac3379be2efdf441c139ddc6919e86f8c2abbc7207"
+    }
+  ],
+  "completeBuildInputClosure": false,
+  "phaseAcceptance": false
+}

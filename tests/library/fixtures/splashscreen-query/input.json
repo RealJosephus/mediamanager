@@ -1,0 +1,2633 @@
+[
+  {
+    "Name": "empty",
+    "Items": []
+  },
+  {
+    "Name": "type-rating-version-and-first-image",
+    "Items": [
+      {
+        "Number": 1,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": "z-first.png"
+          },
+          {
+            "Type": 0,
+            "Path": "a-later.png"
+          },
+          {
+            "Type": 5,
+            "Path": "thumb.png"
+          },
+          {
+            "Type": 2,
+            "Path": "back.png"
+          }
+        ]
+      },
+      {
+        "Number": 2,
+        "Kind": "Series",
+        "Rating": 13,
+        "Images": [
+          {
+            "Type": 0,
+            "Path": "series.png"
+          },
+          {
+            "Type": 2,
+            "Path": "series-back.png"
+          }
+        ]
+      },
+      {
+        "Number": 3,
+        "Kind": "Movie",
+        "Rating": 13,
+        "SubRating": 1,
+        "Images": [
+          {
+            "Type": 0,
+            "Path": "sub-excluded.png"
+          }
+        ]
+      },
+      {
+        "Number": 4,
+        "Kind": "Movie",
+        "Rating": 14,
+        "Images": [
+          {
+            "Type": 0,
+            "Path": "rating-excluded.png"
+          }
+        ]
+      },
+      {
+        "Number": 5,
+        "Kind": "Movie",
+        "Rating": 12,
+        "SubRating": 99,
+        "Images": [
+          {
+            "Type": 0,
+            "Path": "low-score.png"
+          }
+        ]
+      },
+      {
+        "Number": 6,
+        "Kind": "Audio",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": "audio-excluded.png"
+          }
+        ]
+      },
+      {
+        "Number": 7,
+        "Kind": "Movie",
+        "Owner": 1,
+        "Images": [
+          {
+            "Type": 0,
+            "Path": "owned-excluded.png"
+          }
+        ]
+      },
+      {
+        "Number": 8,
+        "Kind": "Movie",
+        "Primary": 1,
+        "Images": [
+          {
+            "Type": 0,
+            "Path": "alternate-excluded.png"
+          }
+        ]
+      },
+      {
+        "Number": 9,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "not-selected-later.png"
+          }
+        ]
+      },
+      {
+        "Number": 10,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": " "
+          }
+        ]
+      },
+      {
+        "Number": 11,
+        "Kind": "Series",
+        "Images": [
+          {
+            "Type": 1,
+            "Path": "art-excluded.png"
+          }
+        ]
+      },
+      {
+        "Number": 12,
+        "Kind": "Movie",
+        "PresentationKey": "shared",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": "same-key-first.png"
+          }
+        ]
+      },
+      {
+        "Number": 13,
+        "Kind": "Movie",
+        "PresentationKey": "shared",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": "same-key-second.png"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "Name": "manual-member-rating",
+    "Items": [
+      {
+        "Number": 1,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": "hidden-manual.png"
+          }
+        ]
+      },
+      {
+        "Number": 2,
+        "Kind": "Movie",
+        "Rating": 14
+      },
+      {
+        "Number": 3,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": "visible-manual.png"
+          }
+        ]
+      },
+      {
+        "Number": 4,
+        "Kind": "Movie",
+        "Rating": 12
+      },
+      {
+        "Number": 5,
+        "Kind": "Series",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": "visible-shortcut.png"
+          }
+        ]
+      },
+      {
+        "Number": 6,
+        "Kind": "Series",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": "mixed-visible.png"
+          }
+        ]
+      }
+    ],
+    "Links": [
+      {
+        "Parent": 1,
+        "Child": 2,
+        "Type": 0
+      },
+      {
+        "Parent": 3,
+        "Child": 4,
+        "Type": 0
+      },
+      {
+        "Parent": 5,
+        "Child": 2,
+        "Type": 1
+      },
+      {
+        "Parent": 6,
+        "Child": 2,
+        "Type": 0
+      },
+      {
+        "Parent": 6,
+        "Child": 4,
+        "Type": 0
+      }
+    ]
+  },
+  {
+    "Name": "fallback-after-empty-thumbs",
+    "Items": [
+      {
+        "Number": 1,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": "poster.png"
+          },
+          {
+            "Type": 5,
+            "Path": ""
+          },
+          {
+            "Type": 5,
+            "Path": "later-thumb.png"
+          },
+          {
+            "Type": 2,
+            "Path": "fallback.png"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "Name": "whitespace-thumb-prevents-fallback",
+    "Items": [
+      {
+        "Number": 1,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": "poster.png"
+          },
+          {
+            "Type": 5,
+            "Path": " "
+          },
+          {
+            "Type": 2,
+            "Path": "unused.png"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "Name": "first-id-empty-thumb-requires-fallback",
+    "ReverseImageIds": false,
+    "Items": [
+      {
+        "Number": 1,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": "poster.png"
+          },
+          {
+            "Type": 5,
+            "Path": ""
+          },
+          {
+            "Type": 5,
+            "Path": "ignored-later-thumb.png"
+          },
+          {
+            "Type": 2,
+            "Path": "fallback.png"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "Name": "first-id-empty-after-item-limit",
+    "ReverseImageIds": false,
+    "Items": [
+      {
+        "Number": 1,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "ignored-later-0.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 2,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "ignored-later-1.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 3,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "ignored-later-2.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 4,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "ignored-later-3.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 5,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "ignored-later-4.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 6,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "ignored-later-5.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 7,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "ignored-later-6.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 8,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "ignored-later-7.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 9,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "ignored-later-8.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 10,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "ignored-later-9.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 11,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "ignored-later-10.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 12,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "ignored-later-11.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 13,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "ignored-later-12.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 14,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "ignored-later-13.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 15,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "ignored-later-14.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 16,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "ignored-later-15.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 17,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "ignored-later-16.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 18,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "ignored-later-17.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 19,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "ignored-later-18.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 20,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "ignored-later-19.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 21,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "ignored-later-20.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 22,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "ignored-later-21.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 23,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "ignored-later-22.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 24,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "ignored-later-23.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 25,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "ignored-later-24.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 26,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "ignored-later-25.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 27,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "ignored-later-26.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 28,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "ignored-later-27.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 29,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "ignored-later-28.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 30,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "ignored-later-29.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 31,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "ignored-later-30.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 32,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "ignored-later-31.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 33,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "ignored-later-32.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 34,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "ignored-later-33.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 35,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "ignored-later-34.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 36,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "ignored-later-35.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 37,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "ignored-later-36.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 38,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "ignored-later-37.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 39,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "ignored-later-38.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 40,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "ignored-later-39.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 41,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "ignored-later-40.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "Name": "limit-before-filtering-empty-paths",
+    "Items": [
+      {
+        "Number": 1,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "unused-0.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 2,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "unused-1.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 3,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "unused-2.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 4,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "unused-3.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 5,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "unused-4.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 6,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "unused-5.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 7,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "unused-6.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 8,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "unused-7.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 9,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "unused-8.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 10,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "unused-9.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 11,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "unused-10.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 12,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "unused-11.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 13,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "unused-12.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 14,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "unused-13.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 15,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "unused-14.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 16,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "unused-15.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 17,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "unused-16.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 18,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "unused-17.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 19,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "unused-18.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 20,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "unused-19.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 21,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "unused-20.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 22,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "unused-21.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 23,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "unused-22.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 24,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "unused-23.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 25,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "unused-24.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 26,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "unused-25.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 27,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "unused-26.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 28,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "unused-27.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 29,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "unused-28.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 30,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "unused-29.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 31,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "unused-30.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 32,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "unused-31.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 33,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "unused-32.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 34,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "unused-33.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 35,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "unused-34.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 36,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "unused-35.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 37,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "unused-36.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 38,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "unused-37.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 39,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "unused-38.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 40,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "unused-39.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      },
+      {
+        "Number": 41,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": ""
+          },
+          {
+            "Type": 0,
+            "Path": "unused-40.png"
+          },
+          {
+            "Type": 2,
+            "Path": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "Name": "random-bounded-selection",
+    "Items": [
+      {
+        "Number": 1,
+        "Kind": "Series",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": "poster-0.png"
+          },
+          {
+            "Type": 5,
+            "Path": "thumb-0.png"
+          },
+          {
+            "Type": 2,
+            "Path": "back-0.png"
+          }
+        ]
+      },
+      {
+        "Number": 2,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": "poster-1.png"
+          },
+          {
+            "Type": 5,
+            "Path": "thumb-1.png"
+          },
+          {
+            "Type": 2,
+            "Path": "back-1.png"
+          }
+        ]
+      },
+      {
+        "Number": 3,
+        "Kind": "Series",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": "poster-2.png"
+          },
+          {
+            "Type": 5,
+            "Path": "thumb-2.png"
+          },
+          {
+            "Type": 2,
+            "Path": "back-2.png"
+          }
+        ]
+      },
+      {
+        "Number": 4,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": "poster-3.png"
+          },
+          {
+            "Type": 5,
+            "Path": "thumb-3.png"
+          },
+          {
+            "Type": 2,
+            "Path": "back-3.png"
+          }
+        ]
+      },
+      {
+        "Number": 5,
+        "Kind": "Series",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": "poster-4.png"
+          },
+          {
+            "Type": 5,
+            "Path": "thumb-4.png"
+          },
+          {
+            "Type": 2,
+            "Path": "back-4.png"
+          }
+        ]
+      },
+      {
+        "Number": 6,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": "poster-5.png"
+          },
+          {
+            "Type": 5,
+            "Path": "thumb-5.png"
+          },
+          {
+            "Type": 2,
+            "Path": "back-5.png"
+          }
+        ]
+      },
+      {
+        "Number": 7,
+        "Kind": "Series",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": "poster-6.png"
+          },
+          {
+            "Type": 5,
+            "Path": "thumb-6.png"
+          },
+          {
+            "Type": 2,
+            "Path": "back-6.png"
+          }
+        ]
+      },
+      {
+        "Number": 8,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": "poster-7.png"
+          },
+          {
+            "Type": 5,
+            "Path": "thumb-7.png"
+          },
+          {
+            "Type": 2,
+            "Path": "back-7.png"
+          }
+        ]
+      },
+      {
+        "Number": 9,
+        "Kind": "Series",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": "poster-8.png"
+          },
+          {
+            "Type": 5,
+            "Path": "thumb-8.png"
+          },
+          {
+            "Type": 2,
+            "Path": "back-8.png"
+          }
+        ]
+      },
+      {
+        "Number": 10,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": "poster-9.png"
+          },
+          {
+            "Type": 5,
+            "Path": "thumb-9.png"
+          },
+          {
+            "Type": 2,
+            "Path": "back-9.png"
+          }
+        ]
+      },
+      {
+        "Number": 11,
+        "Kind": "Series",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": "poster-10.png"
+          },
+          {
+            "Type": 5,
+            "Path": "thumb-10.png"
+          },
+          {
+            "Type": 2,
+            "Path": "back-10.png"
+          }
+        ]
+      },
+      {
+        "Number": 12,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": "poster-11.png"
+          },
+          {
+            "Type": 5,
+            "Path": "thumb-11.png"
+          },
+          {
+            "Type": 2,
+            "Path": "back-11.png"
+          }
+        ]
+      },
+      {
+        "Number": 13,
+        "Kind": "Series",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": "poster-12.png"
+          },
+          {
+            "Type": 5,
+            "Path": "thumb-12.png"
+          },
+          {
+            "Type": 2,
+            "Path": "back-12.png"
+          }
+        ]
+      },
+      {
+        "Number": 14,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": "poster-13.png"
+          },
+          {
+            "Type": 5,
+            "Path": "thumb-13.png"
+          },
+          {
+            "Type": 2,
+            "Path": "back-13.png"
+          }
+        ]
+      },
+      {
+        "Number": 15,
+        "Kind": "Series",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": "poster-14.png"
+          },
+          {
+            "Type": 5,
+            "Path": "thumb-14.png"
+          },
+          {
+            "Type": 2,
+            "Path": "back-14.png"
+          }
+        ]
+      },
+      {
+        "Number": 16,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": "poster-15.png"
+          },
+          {
+            "Type": 5,
+            "Path": "thumb-15.png"
+          },
+          {
+            "Type": 2,
+            "Path": "back-15.png"
+          }
+        ]
+      },
+      {
+        "Number": 17,
+        "Kind": "Series",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": "poster-16.png"
+          },
+          {
+            "Type": 5,
+            "Path": "thumb-16.png"
+          },
+          {
+            "Type": 2,
+            "Path": "back-16.png"
+          }
+        ]
+      },
+      {
+        "Number": 18,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": "poster-17.png"
+          },
+          {
+            "Type": 5,
+            "Path": "thumb-17.png"
+          },
+          {
+            "Type": 2,
+            "Path": "back-17.png"
+          }
+        ]
+      },
+      {
+        "Number": 19,
+        "Kind": "Series",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": "poster-18.png"
+          },
+          {
+            "Type": 5,
+            "Path": "thumb-18.png"
+          },
+          {
+            "Type": 2,
+            "Path": "back-18.png"
+          }
+        ]
+      },
+      {
+        "Number": 20,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": "poster-19.png"
+          },
+          {
+            "Type": 5,
+            "Path": "thumb-19.png"
+          },
+          {
+            "Type": 2,
+            "Path": "back-19.png"
+          }
+        ]
+      },
+      {
+        "Number": 21,
+        "Kind": "Series",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": "poster-20.png"
+          },
+          {
+            "Type": 5,
+            "Path": "thumb-20.png"
+          },
+          {
+            "Type": 2,
+            "Path": "back-20.png"
+          }
+        ]
+      },
+      {
+        "Number": 22,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": "poster-21.png"
+          },
+          {
+            "Type": 5,
+            "Path": "thumb-21.png"
+          },
+          {
+            "Type": 2,
+            "Path": "back-21.png"
+          }
+        ]
+      },
+      {
+        "Number": 23,
+        "Kind": "Series",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": "poster-22.png"
+          },
+          {
+            "Type": 5,
+            "Path": "thumb-22.png"
+          },
+          {
+            "Type": 2,
+            "Path": "back-22.png"
+          }
+        ]
+      },
+      {
+        "Number": 24,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": "poster-23.png"
+          },
+          {
+            "Type": 5,
+            "Path": "thumb-23.png"
+          },
+          {
+            "Type": 2,
+            "Path": "back-23.png"
+          }
+        ]
+      },
+      {
+        "Number": 25,
+        "Kind": "Series",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": "poster-24.png"
+          },
+          {
+            "Type": 5,
+            "Path": "thumb-24.png"
+          },
+          {
+            "Type": 2,
+            "Path": "back-24.png"
+          }
+        ]
+      },
+      {
+        "Number": 26,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": "poster-25.png"
+          },
+          {
+            "Type": 5,
+            "Path": "thumb-25.png"
+          },
+          {
+            "Type": 2,
+            "Path": "back-25.png"
+          }
+        ]
+      },
+      {
+        "Number": 27,
+        "Kind": "Series",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": "poster-26.png"
+          },
+          {
+            "Type": 5,
+            "Path": "thumb-26.png"
+          },
+          {
+            "Type": 2,
+            "Path": "back-26.png"
+          }
+        ]
+      },
+      {
+        "Number": 28,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": "poster-27.png"
+          },
+          {
+            "Type": 5,
+            "Path": "thumb-27.png"
+          },
+          {
+            "Type": 2,
+            "Path": "back-27.png"
+          }
+        ]
+      },
+      {
+        "Number": 29,
+        "Kind": "Series",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": "poster-28.png"
+          },
+          {
+            "Type": 5,
+            "Path": "thumb-28.png"
+          },
+          {
+            "Type": 2,
+            "Path": "back-28.png"
+          }
+        ]
+      },
+      {
+        "Number": 30,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": "poster-29.png"
+          },
+          {
+            "Type": 5,
+            "Path": "thumb-29.png"
+          },
+          {
+            "Type": 2,
+            "Path": "back-29.png"
+          }
+        ]
+      },
+      {
+        "Number": 31,
+        "Kind": "Series",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": "poster-30.png"
+          },
+          {
+            "Type": 5,
+            "Path": "thumb-30.png"
+          },
+          {
+            "Type": 2,
+            "Path": "back-30.png"
+          }
+        ]
+      },
+      {
+        "Number": 32,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": "poster-31.png"
+          },
+          {
+            "Type": 5,
+            "Path": "thumb-31.png"
+          },
+          {
+            "Type": 2,
+            "Path": "back-31.png"
+          }
+        ]
+      },
+      {
+        "Number": 33,
+        "Kind": "Series",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": "poster-32.png"
+          },
+          {
+            "Type": 5,
+            "Path": "thumb-32.png"
+          },
+          {
+            "Type": 2,
+            "Path": "back-32.png"
+          }
+        ]
+      },
+      {
+        "Number": 34,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": "poster-33.png"
+          },
+          {
+            "Type": 5,
+            "Path": "thumb-33.png"
+          },
+          {
+            "Type": 2,
+            "Path": "back-33.png"
+          }
+        ]
+      },
+      {
+        "Number": 35,
+        "Kind": "Series",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": "poster-34.png"
+          },
+          {
+            "Type": 5,
+            "Path": "thumb-34.png"
+          },
+          {
+            "Type": 2,
+            "Path": "back-34.png"
+          }
+        ]
+      },
+      {
+        "Number": 36,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": "poster-35.png"
+          },
+          {
+            "Type": 5,
+            "Path": "thumb-35.png"
+          },
+          {
+            "Type": 2,
+            "Path": "back-35.png"
+          }
+        ]
+      },
+      {
+        "Number": 37,
+        "Kind": "Series",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": "poster-36.png"
+          },
+          {
+            "Type": 5,
+            "Path": "thumb-36.png"
+          },
+          {
+            "Type": 2,
+            "Path": "back-36.png"
+          }
+        ]
+      },
+      {
+        "Number": 38,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": "poster-37.png"
+          },
+          {
+            "Type": 5,
+            "Path": "thumb-37.png"
+          },
+          {
+            "Type": 2,
+            "Path": "back-37.png"
+          }
+        ]
+      },
+      {
+        "Number": 39,
+        "Kind": "Series",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": "poster-38.png"
+          },
+          {
+            "Type": 5,
+            "Path": "thumb-38.png"
+          },
+          {
+            "Type": 2,
+            "Path": "back-38.png"
+          }
+        ]
+      },
+      {
+        "Number": 40,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": "poster-39.png"
+          },
+          {
+            "Type": 5,
+            "Path": "thumb-39.png"
+          },
+          {
+            "Type": 2,
+            "Path": "back-39.png"
+          }
+        ]
+      },
+      {
+        "Number": 41,
+        "Kind": "Series",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": "poster-40.png"
+          },
+          {
+            "Type": 5,
+            "Path": "thumb-40.png"
+          },
+          {
+            "Type": 2,
+            "Path": "back-40.png"
+          }
+        ]
+      },
+      {
+        "Number": 42,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": "poster-41.png"
+          },
+          {
+            "Type": 5,
+            "Path": "thumb-41.png"
+          },
+          {
+            "Type": 2,
+            "Path": "back-41.png"
+          }
+        ]
+      },
+      {
+        "Number": 43,
+        "Kind": "Series",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": "poster-42.png"
+          },
+          {
+            "Type": 5,
+            "Path": "thumb-42.png"
+          },
+          {
+            "Type": 2,
+            "Path": "back-42.png"
+          }
+        ]
+      },
+      {
+        "Number": 44,
+        "Kind": "Movie",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": "poster-43.png"
+          },
+          {
+            "Type": 5,
+            "Path": "thumb-43.png"
+          },
+          {
+            "Type": 2,
+            "Path": "back-43.png"
+          }
+        ]
+      },
+      {
+        "Number": 45,
+        "Kind": "Series",
+        "Images": [
+          {
+            "Type": 0,
+            "Path": "poster-44.png"
+          },
+          {
+            "Type": 5,
+            "Path": "thumb-44.png"
+          },
+          {
+            "Type": 2,
+            "Path": "back-44.png"
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-10-07T00:34:39.988Z",
+  "fixtureFiles": [
+    {
+      "path": "tests/metadata/fixtures/owned-extra-discovery/input.json",
+      "sha256": "4a9a4fa8368f2865b6197ee62fcbe213b92f8b74c422c6c239a47a5bdee9c3fc"
+    },
+    {
+      "path": "tests/metadata/fixtures/owned-extra-discovery/Program.cs",
+      "sha256": "c98b4f425e71d0852ad18f71f0dbaf187b6166d8631ad6edb2e4b39bced530ea"
+    },
+    {
+      "path": "tests/metadata/fixtures/owned-extra-discovery/Oracle.csproj",
+      "sha256": "cbe1a514da582cbf55a443ee14c93f731f84816d10e7672fb713045ac5d78efe"
+    },
+    {
+      "path": "tests/metadata/fixtures/owned-extra-discovery/native.json",
+      "sha256": "606c21775d0c69249859eb094602cc29c0d75a8ce51b82a3590541090f9afa8f"
+    },
+    {
+      "path": "tests/Directory.Build.props",
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    }
+  ],
+  "assemblies": [
+    {
+      "name": "MediaBrowser.Controller",
+      "sha256": "051c588a8e85a3a7cdde8dc3d9a1112217fd7e973a86fe2ff90cf765bedb75a8"
+    },
+    {
+      "name": "Emby.Server.Implementations",
+      "sha256": "8d369435646570958505c58b9cb17da169855dabc105d0e933524361e9b7b1c8"
+    },
+    {
+      "name": "Jellyfin.Server.Implementations",
+      "sha256": "4da187af02503e82135eb192351d01490484e8ebc8c653d849f7e2900a177672"
+    }
+  ],
+  "scope": "Actual frozen BaseItem.RefreshMetadata/RefreshExtras, LibraryManager.FindExtras/ExtraResolver for ordinary files and Series/Season/MusicArtist/MusicAlbum directory owners, ordinary video/audio resolution, and DeleteItem with ItemPersistenceService/EF SQLite over actual files. Records discovery, name locks/correction, stable/full dispatch, owned assignment, missing extra deletion, cancellation, selected columns, complete stored Data, provider dispatch, cache and events. The single-item provider performs no save: newly discovered extras remain live entities with no DB row or Added event. Collection membership, savers, media-source list and external-file dispatch are controls. No candidate implementation, complete scanner, network/provider saves, generic deletion or release acceptance.",
+  "reference": {
+    "head": "208c278b75abd897aefa1e1175126eac5e4dbfaa",
+    "contentDigest": "e28a983db179b720c3b16d7416ee4112894a3115c4be6fe43c61c52e0d9a8313"
+  },
+  "capture": {
+    "record": "D:/mediamanager-validation/20261005/results/owned-extra-directory-oracle-20261007-2/record.json",
+    "sourceFilesSha256": "83677baec86d399ee3c5800dea948532e80031ccc2983fd1351ec4d7f0c2bc0f"
+  },
+  "candidateVerified": true,
+  "candidateComparison": "All 17 actual native samples fully compared on real SQLite/PostgreSQL, including Series/Season/MusicArtist/MusicAlbum directory owners, with selected columns, complete Data, exact file hashes, dispatch, events, failures and cancellation. Media uses Memory VFS and controlled creation time; instance file deletion is real. Cached path spellings are retained. Read-only D3 previews are separate from the native mutation trace. Repository fixture reproduces its synchronous controlled provider scheduling without serializing production owned tasks. Additional host tests cover ordinary file/directory first saves, live owner, competing rows/owners, transactional owner baselines, D3, weak listings and Audio deletion. Scoped evidence does not prove complete MetadataService/scalar mapper, .ignore/disc/network, generic deletion, full scanning or release acceptance."
+}

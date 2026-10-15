@@ -1,0 +1,302 @@
+[
+  {
+    "name": "valid-unknown-node",
+    "mode": "save-item",
+    "nfoText": "<movie><extension attr=\"literal\">keep</extension><title>Old</title></movie>",
+    "people": []
+  },
+  {
+    "name": "truncated-before-unknown",
+    "mode": "save-item",
+    "nfoText": "<movie><broken",
+    "people": []
+  },
+  {
+    "name": "complete-unknown-before-truncated",
+    "mode": "save-item",
+    "nfoText": "<movie><extension attr=\"literal\">keep</extension><broken",
+    "people": []
+  },
+  {
+    "name": "unknown-start-before-eof",
+    "mode": "save-item",
+    "nfoText": "<movie><extension attr=\"literal\">keep",
+    "people": []
+  },
+  {
+    "name": "nested-unknown-before-eof",
+    "mode": "save-item",
+    "nfoText": "<movie><extension attr=\"literal\">prefix<child>value</child>suffix",
+    "people": []
+  },
+  {
+    "name": "known-before-truncated-unknown",
+    "mode": "save-item",
+    "nfoText": "<movie><title>Old</title><extension>keep",
+    "people": []
+  },
+  {
+    "name": "unknown-before-truncated-known",
+    "mode": "save-item",
+    "nfoText": "<movie><extension>keep</extension><title>Old",
+    "people": []
+  },
+  {
+    "name": "unknown-before-root-mismatch",
+    "mode": "save-item",
+    "nfoText": "<movie><extension>keep</extension></wrong>",
+    "people": []
+  },
+  {
+    "name": "unknown-with-mismatched-child",
+    "mode": "save-item",
+    "nfoText": "<movie><extension>prefix<child>value</wrong></movie>",
+    "people": []
+  },
+  {
+    "name": "unknown-with-incomplete-entity",
+    "mode": "save-item",
+    "nfoText": "<movie><extension>prefix &amp",
+    "people": []
+  },
+  {
+    "name": "complete-cdata-before-truncated",
+    "mode": "save-item",
+    "nfoText": "<movie><extension><![CDATA[<keep>&literal]]></extension><broken",
+    "people": []
+  },
+  {
+    "name": "truncated-cdata",
+    "mode": "save-item",
+    "nfoText": "<movie><extension><![CDATA[<keep>&literal",
+    "people": []
+  },
+  {
+    "name": "unknown-namespace-before-truncated",
+    "mode": "save-item",
+    "nfoText": "<movie xmlns:x=\"urn:control\"><x:extension x:attr=\"literal\">keep</x:extension><broken",
+    "people": []
+  },
+  {
+    "name": "unknown-after-second-root",
+    "mode": "save-item",
+    "nfoText": "<movie><extension>keep</extension></movie><second/>",
+    "people": []
+  },
+  {
+    "name": "prohibited-dtd",
+    "mode": "save-item",
+    "nfoText": "<!DOCTYPE movie [<!ENTITY control \"literal\">]><movie><extension>&control;</extension></movie>",
+    "people": []
+  },
+  {
+    "name": "unknown-invalid-control",
+    "mode": "save-item",
+    "nfoText": "<movie><extension>prefix\u0001suffix</extension></movie",
+    "people": []
+  },
+  {
+    "name": "unknown-newline-and-comment",
+    "mode": "save-item",
+    "nfoText": "<movie><extension>first\n<!-- discarded -->second<![CDATA[&third]]></extension><broken",
+    "people": []
+  },
+  {
+    "name": "unbound-element-prefix",
+    "mode": "save-item",
+    "nfoText": "<movie><x:extension>keep</x:extension></movie>",
+    "people": []
+  },
+  {
+    "name": "unbound-attribute-prefix",
+    "mode": "save-item",
+    "nfoText": "<movie><extension x:attr=\"keep\"/></movie>",
+    "people": []
+  },
+  {
+    "name": "wrong-xml-namespace",
+    "mode": "save-item",
+    "nfoText": "<movie xmlns:xml=\"urn:wrong\"><extension>keep</extension></movie>",
+    "people": []
+  },
+  {
+    "name": "multiple-name-colons",
+    "mode": "save-item",
+    "nfoText": "<movie xmlns:x=\"urn:x\"><x:y:z>keep</x:y:z></movie>",
+    "people": []
+  },
+  {
+    "name": "unused-root-namespace",
+    "mode": "save-item",
+    "nfoText": "<movie xmlns:x=\"urn:unused\"><extension>keep</extension><broken",
+    "people": []
+  },
+  {
+    "name": "default-root-namespace",
+    "mode": "save-item",
+    "nfoText": "<movie xmlns=\"urn:control\"><extension>keep</extension><broken",
+    "people": []
+  },
+  {
+    "name": "explicit-unknown-namespace",
+    "mode": "save-item",
+    "nfoText": "<movie><extension xmlns:x=\"urn:unused\">keep</extension><broken",
+    "people": []
+  },
+  {
+    "name": "namespace-only-attribute",
+    "mode": "save-item",
+    "nfoText": "<movie xmlns:x=\"urn:control\"><extension x:attr=\"keep\">value</extension><broken",
+    "people": []
+  },
+  {
+    "name": "qualified-nested-namespace",
+    "mode": "save-item",
+    "nfoText": "<movie xmlns:x=\"urn:control\"><extension><x:child>value</x:child></extension><broken",
+    "people": []
+  },
+  {
+    "name": "comment-before-root",
+    "mode": "save-item",
+    "nfoText": "<!-- ignored --><movie><extension>keep</extension></movie>",
+    "people": []
+  },
+  {
+    "name": "incomplete-comment-before-root",
+    "mode": "save-item",
+    "nfoText": "<!-- ignored",
+    "people": []
+  },
+  {
+    "name": "xml-instruction-after-root",
+    "mode": "save-item",
+    "nfoText": "<movie><extension>keep</extension></movie><?xml version=\"1.0\"?>",
+    "people": []
+  },
+  {
+    "name": "unicode-space-before-root",
+    "mode": "save-item",
+    "nfoText": " <movie><extension>keep</extension></movie>",
+    "people": []
+  },
+  {
+    "name": "numeric-entity-before-root",
+    "mode": "save-item",
+    "nfoText": "&#32;<movie><extension>keep</extension></movie>",
+    "people": []
+  },
+  {
+    "name": "entity-in-unknown-text",
+    "mode": "save-item",
+    "nfoText": "<movie><extension>prefix &missing; suffix</extension></movie>",
+    "people": []
+  },
+  {
+    "name": "invalid-numeric-entity",
+    "mode": "save-item",
+    "nfoText": "<movie><extension>prefix &#x1; suffix</extension></movie>",
+    "people": []
+  },
+  {
+    "name": "invalid-zero-entity",
+    "mode": "save-item",
+    "nfoText": "<movie><extension>prefix &#0; suffix</extension></movie>",
+    "people": []
+  },
+  {
+    "name": "invalid-surrogate-entity",
+    "mode": "save-item",
+    "nfoText": "<movie><extension>prefix &#xD800; suffix</extension></movie>",
+    "people": []
+  },
+  {
+    "name": "numeric-carriage-return",
+    "mode": "save-item",
+    "nfoText": "<movie><extension>prefix &#xD; suffix</extension><broken",
+    "people": []
+  },
+  {
+    "name": "incomplete-entity-in-attribute",
+    "mode": "save-item",
+    "nfoText": "<movie><extension attr=\"prefix &amp\"/></movie>",
+    "people": []
+  },
+  {
+    "name": "unknown-entity-in-attribute",
+    "mode": "save-item",
+    "nfoText": "<movie><extension attr=\"prefix &missing;\"/></movie>",
+    "people": []
+  },
+  {
+    "name": "attribute-literal-newline",
+    "mode": "save-item",
+    "nfoText": "<movie><extension attr=\"first\nsecond\">keep</extension><broken",
+    "people": []
+  },
+  {
+    "name": "attribute-literal-tab",
+    "mode": "save-item",
+    "nfoText": "<movie><extension attr=\"first\tsecond\">keep</extension><broken",
+    "people": []
+  },
+  {
+    "name": "attribute-numeric-newline",
+    "mode": "save-item",
+    "nfoText": "<movie><extension attr=\"first&#10;second\">keep</extension><broken",
+    "people": []
+  },
+  {
+    "name": "duplicate-attribute",
+    "mode": "save-item",
+    "nfoText": "<movie><extension attr=\"first\" attr=\"second\">keep</extension></movie>",
+    "people": []
+  },
+  {
+    "name": "partial-attribute",
+    "mode": "save-item",
+    "nfoText": "<movie><extension attr=\"incomplete",
+    "people": []
+  },
+  {
+    "name": "partial-end-tag",
+    "mode": "save-item",
+    "nfoText": "<movie><extension>keep</extension",
+    "people": []
+  },
+  {
+    "name": "eof-after-empty-element",
+    "mode": "save-item",
+    "nfoText": "<movie><extension attr=\"literal\"/>",
+    "people": []
+  },
+  {
+    "name": "multiple-complete-unknown-before-error",
+    "mode": "save-item",
+    "nfoText": "<movie><extension>first</extension><second>value</second><broken",
+    "people": []
+  },
+  {
+    "name": "known-tag-uppercase",
+    "mode": "save-item",
+    "nfoText": "<movie><TITLE>Old</TITLE><extension>keep</extension><broken",
+    "people": []
+  },
+  {
+    "name": "unicode-unknown-name",
+    "mode": "save-item",
+    "nfoText": "<movie><資料>保留</資料><broken",
+    "people": []
+  },
+  {
+    "name": "wrong-original-root",
+    "mode": "save-item",
+    "nfoText": "<tvshow><extension>keep</extension></tvshow>",
+    "people": []
+  },
+  {
+    "name": "text-after-closed-root",
+    "mode": "save-item",
+    "nfoText": "<movie><extension>keep</extension></movie>trailing",
+    "people": []
+  }
+]

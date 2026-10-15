@@ -1,0 +1,170 @@
+[
+  {
+    "Name": "empty"
+  },
+  {
+    "Name": "posters without landscape",
+    "Posters": [
+      [
+        "poster.png"
+      ]
+    ]
+  },
+  {
+    "Name": "thumb preferred to backdrop",
+    "Posters": [
+      [
+        "poster.png"
+      ]
+    ],
+    "Thumbs": [
+      [
+        "thumb.png"
+      ]
+    ],
+    "Backdrops": [
+      [
+        "backdrop.png"
+      ]
+    ]
+  },
+  {
+    "Name": "backdrop fallback",
+    "Posters": [
+      [
+        "poster.png"
+      ]
+    ],
+    "Backdrops": [
+      [
+        "backdrop.png"
+      ]
+    ]
+  },
+  {
+    "Name": "first image only and empty paths",
+    "Posters": [
+      [
+        null,
+        "later.png"
+      ],
+      [
+        "",
+        "later.png"
+      ],
+      [
+        " "
+      ],
+      [
+        "a.png"
+      ],
+      [
+        "a.png"
+      ]
+    ],
+    "Thumbs": [
+      [
+        "",
+        "later.png"
+      ]
+    ],
+    "Backdrops": [
+      [
+        null,
+        "later.png"
+      ],
+      [
+        "fallback.png"
+      ],
+      [
+        " "
+      ]
+    ]
+  },
+  {
+    "Name": "whitespace thumb prevents fallback",
+    "Thumbs": [
+      [
+        " "
+      ]
+    ],
+    "Backdrops": [
+      [
+        "backdrop.png"
+      ]
+    ]
+  },
+  {
+    "Name": "image array order preserved",
+    "Posters": [
+      [
+        "z.png",
+        "a.png"
+      ],
+      [
+        "a.png"
+      ]
+    ],
+    "Thumbs": [
+      [
+        "2.png"
+      ],
+      [
+        "1.png"
+      ]
+    ]
+  },
+  {
+    "Name": "cancelled task still queries and encodes",
+    "CancelInitial": true,
+    "Posters": [
+      [
+        "poster.png"
+      ]
+    ],
+    "Backdrops": [
+      [
+        "backdrop.png"
+      ]
+    ]
+  },
+  {
+    "Name": "cancelled empty task",
+    "CancelInitial": true
+  },
+  {
+    "Name": "progress observer never invoked",
+    "FailProgress": true
+  },
+  {
+    "Name": "primary selection failure",
+    "FailQuery": "Primary"
+  },
+  {
+    "Name": "thumb selection failure",
+    "Posters": [
+      [
+        "poster.png"
+      ]
+    ],
+    "FailQuery": "Thumb"
+  },
+  {
+    "Name": "fallback selection failure",
+    "FailQuery": "Backdrop"
+  },
+  {
+    "Name": "encoder failure",
+    "Posters": [
+      [
+        "poster.png"
+      ]
+    ],
+    "Thumbs": [
+      [
+        "thumb.png"
+      ]
+    ],
+    "FailEncoder": true
+  }
+]

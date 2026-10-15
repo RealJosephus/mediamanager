@@ -1,0 +1,911 @@
+{
+  "schemaVersion": 1,
+  "userId": "5c6b5f77-bea9-4a9a-98aa-fae5909892b7",
+  "rootId": "80100000-0000-0000-0000-000000000201",
+  "items": [
+    {
+      "key": "aggregate",
+      "id": "f27caa37-e514-2225-cced-ed48f6553502",
+      "type": "AggregateFolder",
+      "name": "root",
+      "sortName": "root",
+      "parentId": null,
+      "topParentId": null,
+      "ancestorIds": []
+    },
+    {
+      "key": "userRoot",
+      "id": "e9d5075a-555c-1cbc-394e-ec4cef295274",
+      "type": "UserRootFolder",
+      "name": "Media Folders",
+      "sortName": "media folders",
+      "parentId": null,
+      "topParentId": null,
+      "ancestorIds": [],
+      "pathKind": "userRoot",
+      "data": {
+        "IsRoot": true,
+        "PhysicalLocationsList": []
+      }
+    },
+    {
+      "key": "physicalA",
+      "id": "80100000-0000-0000-0000-000000000100",
+      "type": "Folder",
+      "name": "Physical A",
+      "sortName": "physical a",
+      "parentId": "f27caa37-e514-2225-cced-ed48f6553502",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "physicalA"
+    },
+    {
+      "key": "physicalB",
+      "id": "80100000-0000-0000-0000-000000000150",
+      "type": "Folder",
+      "name": "Physical B",
+      "sortName": "physical b",
+      "parentId": "f27caa37-e514-2225-cced-ed48f6553502",
+      "topParentId": "80100000-0000-0000-0000-000000000150",
+      "ancestorIds": [
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "physicalB"
+    },
+    {
+      "key": "collections",
+      "id": "80100000-0000-0000-0000-000000000200",
+      "type": "Folder",
+      "name": "Collections Physical",
+      "sortName": "collections physical",
+      "parentId": "f27caa37-e514-2225-cced-ed48f6553502",
+      "topParentId": "80100000-0000-0000-0000-000000000200",
+      "ancestorIds": [
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "collections"
+    },
+    {
+      "key": "libraryA",
+      "id": "80100000-0000-0000-0000-000000000101",
+      "type": "CollectionFolder",
+      "name": "Library A",
+      "sortName": "library a",
+      "parentId": "e9d5075a-555c-1cbc-394e-ec4cef295274",
+      "topParentId": "80100000-0000-0000-0000-000000000101",
+      "ancestorIds": [
+        "e9d5075a-555c-1cbc-394e-ec4cef295274"
+      ],
+      "pathKind": "libraryA",
+      "data": {
+        "CollectionType": "movies",
+        "PhysicalFolderIds": [
+          "80100000-0000-0000-0000-000000000100"
+        ],
+        "PhysicalLocationsList": []
+      }
+    },
+    {
+      "key": "libraryB",
+      "id": "80100000-0000-0000-0000-000000000151",
+      "type": "CollectionFolder",
+      "name": "Library B",
+      "sortName": "library b",
+      "parentId": "e9d5075a-555c-1cbc-394e-ec4cef295274",
+      "topParentId": "80100000-0000-0000-0000-000000000151",
+      "ancestorIds": [
+        "e9d5075a-555c-1cbc-394e-ec4cef295274"
+      ],
+      "pathKind": "libraryB",
+      "data": {
+        "CollectionType": "movies",
+        "PhysicalFolderIds": [
+          "80100000-0000-0000-0000-000000000150"
+        ],
+        "PhysicalLocationsList": []
+      }
+    },
+    {
+      "key": "collectionLibrary",
+      "id": "80100000-0000-0000-0000-000000000201",
+      "type": "CollectionFolder",
+      "name": "Collection Library",
+      "sortName": "collection library",
+      "parentId": "e9d5075a-555c-1cbc-394e-ec4cef295274",
+      "topParentId": "80100000-0000-0000-0000-000000000201",
+      "ancestorIds": [
+        "e9d5075a-555c-1cbc-394e-ec4cef295274"
+      ],
+      "pathKind": "collectionLibrary",
+      "data": {
+        "CollectionType": "boxsets",
+        "PhysicalFolderIds": [
+          "80100000-0000-0000-0000-000000000200"
+        ],
+        "PhysicalLocationsList": []
+      }
+    },
+    {
+      "key": "view-movielatest",
+      "id": "80100000-0000-0000-0000-000000008800",
+      "type": "UserView",
+      "name": "View movielatest",
+      "sortName": "view movielatest",
+      "parentId": "80100000-0000-0000-0000-000000000100",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "data": {
+        "ViewType": 109,
+        "DisplayParentId": "80100000-0000-0000-0000-000000000100"
+      }
+    },
+    {
+      "key": "movielatest-alpha",
+      "id": "80100000-0000-0000-0000-000000008801",
+      "type": "Movie",
+      "name": "searchprobe alpha",
+      "sortName": "searchprobe alpha",
+      "cleanName": "searchprobe alpha",
+      "parentId": "80100000-0000-0000-0000-000000008800",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000008800",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "dateCreated": "2026-01-01 00:00:00",
+      "mediaType": "Video"
+    },
+    {
+      "key": "movielatest-beta",
+      "id": "80100000-0000-0000-0000-000000008802",
+      "type": "Movie",
+      "name": "searchprobe beta",
+      "sortName": "searchprobe beta",
+      "cleanName": "searchprobe beta",
+      "parentId": "80100000-0000-0000-0000-000000008800",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000008800",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "dateCreated": "2026-09-01 00:00:00",
+      "mediaType": "Video"
+    },
+    {
+      "key": "movielatest-audio",
+      "id": "80100000-0000-0000-0000-000000008803",
+      "type": "Audio",
+      "name": "searchprobe audio",
+      "sortName": "searchprobe audio",
+      "cleanName": "searchprobe audio",
+      "parentId": "80100000-0000-0000-0000-000000008800",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000008800",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "dateCreated": "2026-05-01 00:00:00",
+      "mediaType": "Audio"
+    },
+    {
+      "key": "movielatest-explicit",
+      "id": "80100000-0000-0000-0000-000000008804",
+      "type": "Audio",
+      "name": "plain explicit",
+      "sortName": "plain explicit",
+      "cleanName": "plain explicit",
+      "parentId": "80100000-0000-0000-0000-000000008800",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000008800",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "dateCreated": "2026-07-01 00:00:00",
+      "mediaType": "Audio"
+    },
+    {
+      "key": "view-moviemovies",
+      "id": "80100000-0000-0000-0000-000000008810",
+      "type": "UserView",
+      "name": "View moviemovies",
+      "sortName": "view moviemovies",
+      "parentId": "80100000-0000-0000-0000-000000000100",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "data": {
+        "ViewType": 111,
+        "DisplayParentId": "80100000-0000-0000-0000-000000000100"
+      }
+    },
+    {
+      "key": "moviemovies-alpha",
+      "id": "80100000-0000-0000-0000-000000008811",
+      "type": "Movie",
+      "name": "searchprobe alpha",
+      "sortName": "searchprobe alpha",
+      "cleanName": "searchprobe alpha",
+      "parentId": "80100000-0000-0000-0000-000000008810",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000008810",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "dateCreated": "2026-01-01 00:00:00",
+      "mediaType": "Video"
+    },
+    {
+      "key": "moviemovies-beta",
+      "id": "80100000-0000-0000-0000-000000008812",
+      "type": "Movie",
+      "name": "searchprobe beta",
+      "sortName": "searchprobe beta",
+      "cleanName": "searchprobe beta",
+      "parentId": "80100000-0000-0000-0000-000000008810",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000008810",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "dateCreated": "2026-09-01 00:00:00",
+      "mediaType": "Video"
+    },
+    {
+      "key": "moviemovies-audio",
+      "id": "80100000-0000-0000-0000-000000008813",
+      "type": "Audio",
+      "name": "searchprobe audio",
+      "sortName": "searchprobe audio",
+      "cleanName": "searchprobe audio",
+      "parentId": "80100000-0000-0000-0000-000000008810",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000008810",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "dateCreated": "2026-05-01 00:00:00",
+      "mediaType": "Audio"
+    },
+    {
+      "key": "moviemovies-explicit",
+      "id": "80100000-0000-0000-0000-000000008814",
+      "type": "Audio",
+      "name": "plain explicit",
+      "sortName": "plain explicit",
+      "cleanName": "plain explicit",
+      "parentId": "80100000-0000-0000-0000-000000008810",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000008810",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "dateCreated": "2026-07-01 00:00:00",
+      "mediaType": "Audio"
+    },
+    {
+      "key": "view-moviecollection",
+      "id": "80100000-0000-0000-0000-000000008820",
+      "type": "UserView",
+      "name": "View moviecollection",
+      "sortName": "view moviecollection",
+      "parentId": "80100000-0000-0000-0000-000000000100",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "data": {
+        "ViewType": 112,
+        "DisplayParentId": "80100000-0000-0000-0000-000000000100"
+      }
+    },
+    {
+      "key": "moviecollection-alpha",
+      "id": "80100000-0000-0000-0000-000000008821",
+      "type": "Movie",
+      "name": "searchprobe alpha",
+      "sortName": "searchprobe alpha",
+      "cleanName": "searchprobe alpha",
+      "parentId": "80100000-0000-0000-0000-000000008820",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000008820",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "dateCreated": "2026-01-01 00:00:00",
+      "mediaType": "Video"
+    },
+    {
+      "key": "moviecollection-beta",
+      "id": "80100000-0000-0000-0000-000000008822",
+      "type": "Movie",
+      "name": "searchprobe beta",
+      "sortName": "searchprobe beta",
+      "cleanName": "searchprobe beta",
+      "parentId": "80100000-0000-0000-0000-000000008820",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000008820",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "dateCreated": "2026-09-01 00:00:00",
+      "mediaType": "Video"
+    },
+    {
+      "key": "moviecollection-audio",
+      "id": "80100000-0000-0000-0000-000000008823",
+      "type": "Audio",
+      "name": "searchprobe audio",
+      "sortName": "searchprobe audio",
+      "cleanName": "searchprobe audio",
+      "parentId": "80100000-0000-0000-0000-000000008820",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000008820",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "dateCreated": "2026-05-01 00:00:00",
+      "mediaType": "Audio"
+    },
+    {
+      "key": "moviecollection-explicit",
+      "id": "80100000-0000-0000-0000-000000008824",
+      "type": "Audio",
+      "name": "plain explicit",
+      "sortName": "plain explicit",
+      "cleanName": "plain explicit",
+      "parentId": "80100000-0000-0000-0000-000000008820",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000008820",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "dateCreated": "2026-07-01 00:00:00",
+      "mediaType": "Audio"
+    }
+  ],
+  "links": [],
+  "itemValues": [],
+  "itemValueLinks": [],
+  "cases": [
+    {
+      "name": "movielatest-user-provider-hit",
+      "parentKey": "view-movielatest",
+      "query": "SearchTerm=searchprobe&Limit=2&SortBy=Name&SortOrder=Descending",
+      "sortKey": "SearchProvider",
+      "sortConfig": "getter-bypass",
+      "mode": "user-view-search",
+      "empty": false,
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "endpoints": [
+        "items"
+      ],
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "movielatest-user-explicit-union",
+      "parentKey": "view-movielatest",
+      "query": "SearchTerm=searchprobe&Limit=2&SortBy=Name&SortOrder=Descending",
+      "sortKey": "SearchProvider",
+      "sortConfig": "getter-bypass",
+      "mode": "user-view-search",
+      "empty": false,
+      "scope": [
+        "movielatest-explicit"
+      ],
+      "omitIds": false,
+      "omitSortBy": true,
+      "recursive": false,
+      "endpoints": [
+        "items"
+      ],
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "movielatest-apiKey-provider-hit",
+      "parentKey": "view-movielatest",
+      "query": "SearchTerm=searchprobe&Limit=2&SortBy=Name&SortOrder=Descending",
+      "sortKey": "SearchProvider",
+      "sortConfig": "getter-bypass",
+      "mode": "user-view-search",
+      "empty": false,
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "endpoints": [
+        "items"
+      ],
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "auth": "apiKey"
+    },
+    {
+      "name": "movielatest-apiKey-explicit-union",
+      "parentKey": "view-movielatest",
+      "query": "SearchTerm=searchprobe&Limit=2&SortBy=Name&SortOrder=Descending",
+      "sortKey": "SearchProvider",
+      "sortConfig": "getter-bypass",
+      "mode": "user-view-search",
+      "empty": false,
+      "scope": [
+        "movielatest-explicit"
+      ],
+      "omitIds": false,
+      "omitSortBy": true,
+      "recursive": false,
+      "endpoints": [
+        "items"
+      ],
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "auth": "apiKey"
+    },
+    {
+      "name": "movielatest-user-nohit",
+      "parentKey": "view-movielatest",
+      "query": "SearchTerm=absentprobe&Limit=2&SortBy=Name&SortOrder=Descending",
+      "sortKey": "SearchProvider",
+      "sortConfig": "getter-nohit",
+      "mode": "user-view-search",
+      "empty": false,
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "endpoints": [
+        "items"
+      ],
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "movielatest-apiKey-nohit",
+      "parentKey": "view-movielatest",
+      "query": "SearchTerm=absentprobe&Limit=2&SortBy=Name&SortOrder=Descending",
+      "sortKey": "SearchProvider",
+      "sortConfig": "getter-nohit",
+      "mode": "user-view-search",
+      "empty": false,
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "endpoints": [
+        "items"
+      ],
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "auth": "apiKey"
+    },
+    {
+      "name": "moviemovies-user-provider-hit",
+      "parentKey": "view-moviemovies",
+      "query": "SearchTerm=searchprobe&Limit=2&SortBy=Name&SortOrder=Descending",
+      "sortKey": "SearchProvider",
+      "sortConfig": "getter-bypass",
+      "mode": "user-view-search",
+      "empty": false,
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "endpoints": [
+        "items"
+      ],
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "moviemovies-user-explicit-union",
+      "parentKey": "view-moviemovies",
+      "query": "SearchTerm=searchprobe&Limit=2&SortBy=Name&SortOrder=Descending",
+      "sortKey": "SearchProvider",
+      "sortConfig": "getter-bypass",
+      "mode": "user-view-search",
+      "empty": false,
+      "scope": [
+        "moviemovies-explicit"
+      ],
+      "omitIds": false,
+      "omitSortBy": true,
+      "recursive": false,
+      "endpoints": [
+        "items"
+      ],
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "moviemovies-apiKey-provider-hit",
+      "parentKey": "view-moviemovies",
+      "query": "SearchTerm=searchprobe&Limit=2&SortBy=Name&SortOrder=Descending",
+      "sortKey": "SearchProvider",
+      "sortConfig": "getter-bypass",
+      "mode": "user-view-search",
+      "empty": false,
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "endpoints": [
+        "items"
+      ],
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "auth": "apiKey"
+    },
+    {
+      "name": "moviemovies-apiKey-explicit-union",
+      "parentKey": "view-moviemovies",
+      "query": "SearchTerm=searchprobe&Limit=2&SortBy=Name&SortOrder=Descending",
+      "sortKey": "SearchProvider",
+      "sortConfig": "getter-bypass",
+      "mode": "user-view-search",
+      "empty": false,
+      "scope": [
+        "moviemovies-explicit"
+      ],
+      "omitIds": false,
+      "omitSortBy": true,
+      "recursive": false,
+      "endpoints": [
+        "items"
+      ],
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "auth": "apiKey"
+    },
+    {
+      "name": "moviemovies-user-nohit",
+      "parentKey": "view-moviemovies",
+      "query": "SearchTerm=absentprobe&Limit=2&SortBy=Name&SortOrder=Descending",
+      "sortKey": "SearchProvider",
+      "sortConfig": "getter-nohit",
+      "mode": "user-view-search",
+      "empty": false,
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "endpoints": [
+        "items"
+      ],
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "moviemovies-apiKey-nohit",
+      "parentKey": "view-moviemovies",
+      "query": "SearchTerm=absentprobe&Limit=2&SortBy=Name&SortOrder=Descending",
+      "sortKey": "SearchProvider",
+      "sortConfig": "getter-nohit",
+      "mode": "user-view-search",
+      "empty": false,
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "endpoints": [
+        "items"
+      ],
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "auth": "apiKey"
+    },
+    {
+      "name": "moviecollection-user-provider-hit",
+      "parentKey": "view-moviecollection",
+      "query": "SearchTerm=searchprobe&Limit=2&SortBy=Name&SortOrder=Descending",
+      "sortKey": "SearchProvider",
+      "sortConfig": "getter-bypass",
+      "mode": "user-view-search",
+      "empty": false,
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "endpoints": [
+        "items"
+      ],
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "moviecollection-user-explicit-union",
+      "parentKey": "view-moviecollection",
+      "query": "SearchTerm=searchprobe&Limit=2&SortBy=Name&SortOrder=Descending",
+      "sortKey": "SearchProvider",
+      "sortConfig": "getter-bypass",
+      "mode": "user-view-search",
+      "empty": false,
+      "scope": [
+        "moviecollection-explicit"
+      ],
+      "omitIds": false,
+      "omitSortBy": true,
+      "recursive": false,
+      "endpoints": [
+        "items"
+      ],
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "moviecollection-apiKey-provider-hit",
+      "parentKey": "view-moviecollection",
+      "query": "SearchTerm=searchprobe&Limit=2&SortBy=Name&SortOrder=Descending",
+      "sortKey": "SearchProvider",
+      "sortConfig": "getter-bypass",
+      "mode": "user-view-search",
+      "empty": false,
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "endpoints": [
+        "items"
+      ],
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "auth": "apiKey"
+    },
+    {
+      "name": "moviecollection-apiKey-explicit-union",
+      "parentKey": "view-moviecollection",
+      "query": "SearchTerm=searchprobe&Limit=2&SortBy=Name&SortOrder=Descending",
+      "sortKey": "SearchProvider",
+      "sortConfig": "getter-bypass",
+      "mode": "user-view-search",
+      "empty": false,
+      "scope": [
+        "moviecollection-explicit"
+      ],
+      "omitIds": false,
+      "omitSortBy": true,
+      "recursive": false,
+      "endpoints": [
+        "items"
+      ],
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "auth": "apiKey"
+    },
+    {
+      "name": "moviecollection-user-nohit",
+      "parentKey": "view-moviecollection",
+      "query": "SearchTerm=absentprobe&Limit=2&SortBy=Name&SortOrder=Descending",
+      "sortKey": "SearchProvider",
+      "sortConfig": "getter-nohit",
+      "mode": "user-view-search",
+      "empty": false,
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "endpoints": [
+        "items"
+      ],
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "moviecollection-apiKey-nohit",
+      "parentKey": "view-moviecollection",
+      "query": "SearchTerm=absentprobe&Limit=2&SortBy=Name&SortOrder=Descending",
+      "sortKey": "SearchProvider",
+      "sortConfig": "getter-nohit",
+      "mode": "user-view-search",
+      "empty": false,
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "endpoints": [
+        "items"
+      ],
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "auth": "apiKey"
+    }
+  ],
+  "userData": []
+}

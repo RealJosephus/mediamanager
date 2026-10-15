@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-04T10:17:13.734Z",
+  "candidateVerified": false,
+  "files": {
+    "native": {
+      "path": "tests/metadata/fixtures/editor-lifecycle/native.json",
+      "sha256": "b168c17ec8d320161aec5b946577286c4627fe85ef55c2d5cfc09d4fff583b72"
+    },
+    "input": {
+      "path": "tests/metadata/fixtures/editor-lifecycle/input.json",
+      "sha256": "6ecdfe51dd3abce0f57ad51574356814faa5ba5a2c5e3ee66232b2ab04dc7a84"
+    },
+    "oracle": {
+      "path": "tests/metadata/fixtures/editor-lifecycle/Program.cs",
+      "sha256": "cce915e172302de41022385a070d22e09d2946700e7fb2ae61d133ae04d2b89c"
+    },
+    "project": {
+      "path": "tests/metadata/fixtures/editor-lifecycle/Oracle.csproj",
+      "sha256": "cbe1a514da582cbf55a443ee14c93f731f84816d10e7672fb713045ac5d78efe"
+    },
+    "buildProperties": {
+      "path": "tests/Directory.Build.props",
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    }
+  },
+  "sourceFilesSha256": "7f44a6497f85486391d9c4143eac3ae4f34017b401f703606cbc82358b1188d6",
+  "nativeRecordSha256": "387381dd8fc02071847af2bddc071b25fee29492765a7e6c32977ae699a37589",
+  "runtime": {
+    "timezone": "Asia/Taipei",
+    "dotnet": {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\dotnet.exe",
+      "available": true,
+      "kind": "file",
+      "bytes": 167208,
+      "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6"
+    },
+    "jellyfinDll": {
+      "filename": "D:/mediamanager/.test-output/reference-20261003/jellyfin-baseline/source/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 506368,
+      "sha256": "29c34541350089dc0522c4309ecd617e78fd402774681f32491d089803939c03"
+    }
+  }
+}

@@ -1,0 +1,739 @@
+{
+  "actualFrozenInternalFolderRefresh": true,
+  "results": [
+    {
+      "name": "AggregateFolder-before-default-false",
+      "exception": null,
+      "result": {
+        "changed": false,
+        "state": {
+          "Name": "default",
+          "Path": "$STATE/root",
+          "refreshFlag": false,
+          "cacheCleared": true,
+          "locations": [],
+          "physicalIds": null
+        }
+      }
+    },
+    {
+      "name": "AggregateFolder-before-default-true",
+      "exception": null,
+      "result": {
+        "changed": true,
+        "state": {
+          "Name": "default",
+          "Path": "$STATE/root",
+          "refreshFlag": false,
+          "cacheCleared": true,
+          "locations": [],
+          "physicalIds": null
+        }
+      }
+    },
+    {
+      "name": "AggregateFolder-before-DEFAULT-false",
+      "exception": null,
+      "result": {
+        "changed": false,
+        "state": {
+          "Name": "DEFAULT",
+          "Path": "$STATE/root",
+          "refreshFlag": false,
+          "cacheCleared": true,
+          "locations": [],
+          "physicalIds": null
+        }
+      }
+    },
+    {
+      "name": "AggregateFolder-before-DEFAULT-true",
+      "exception": null,
+      "result": {
+        "changed": true,
+        "state": {
+          "Name": "DEFAULT",
+          "Path": "$STATE/root",
+          "refreshFlag": false,
+          "cacheCleared": true,
+          "locations": [],
+          "physicalIds": null
+        }
+      }
+    },
+    {
+      "name": "AggregateFolder-before-Named-false",
+      "exception": null,
+      "result": {
+        "changed": false,
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root",
+          "refreshFlag": false,
+          "cacheCleared": true,
+          "locations": [],
+          "physicalIds": null
+        }
+      }
+    },
+    {
+      "name": "AggregateFolder-before-Named-true",
+      "exception": null,
+      "result": {
+        "changed": true,
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root",
+          "refreshFlag": false,
+          "cacheCleared": true,
+          "locations": [],
+          "physicalIds": null
+        }
+      }
+    },
+    {
+      "name": "AggregateFolder-before-empty-false",
+      "exception": null,
+      "result": {
+        "changed": true,
+        "state": {
+          "Name": "root",
+          "Path": "$STATE/root",
+          "refreshFlag": false,
+          "cacheCleared": true,
+          "locations": [],
+          "physicalIds": null
+        }
+      }
+    },
+    {
+      "name": "AggregateFolder-before-empty-true",
+      "exception": null,
+      "result": {
+        "changed": true,
+        "state": {
+          "Name": "root",
+          "Path": "$STATE/root",
+          "refreshFlag": false,
+          "cacheCleared": true,
+          "locations": [],
+          "physicalIds": null
+        }
+      }
+    },
+    {
+      "name": "AggregateFolder-requires-empty",
+      "exception": null,
+      "result": {
+        "requiresRefresh": true,
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root",
+          "refreshFlag": true,
+          "cacheCleared": true,
+          "locations": [],
+          "physicalIds": null
+        },
+        "changedAfter": true,
+        "after": {
+          "Name": "Named",
+          "Path": "$STATE/root",
+          "refreshFlag": false,
+          "cacheCleared": true,
+          "locations": [],
+          "physicalIds": null
+        }
+      }
+    },
+    {
+      "name": "AggregateFolder-requires-matched-resolve",
+      "exception": null,
+      "result": {
+        "requiresRefresh": false,
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root",
+          "refreshFlag": false,
+          "cacheCleared": true,
+          "locations": [
+            "$STATE\\root"
+          ],
+          "physicalIds": null
+        },
+        "changedAfter": false,
+        "after": {
+          "Name": "Named",
+          "Path": "$STATE/root",
+          "refreshFlag": false,
+          "cacheCleared": true,
+          "locations": [
+            "$STATE\\root"
+          ],
+          "physicalIds": null
+        }
+      }
+    },
+    {
+      "name": "AggregateFolder-requires-flag",
+      "exception": null,
+      "result": {
+        "requiresRefresh": true,
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root",
+          "refreshFlag": true,
+          "cacheCleared": false,
+          "locations": [],
+          "physicalIds": null
+        },
+        "changedAfter": true,
+        "after": {
+          "Name": "Named",
+          "Path": "$STATE/root",
+          "refreshFlag": false,
+          "cacheCleared": true,
+          "locations": [],
+          "physicalIds": null
+        }
+      }
+    },
+    {
+      "name": "AggregateFolder-requires-new-directories",
+      "exception": null,
+      "result": {
+        "requiresRefresh": true,
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root",
+          "refreshFlag": true,
+          "cacheCleared": true,
+          "locations": [],
+          "physicalIds": null
+        },
+        "changedAfter": true,
+        "after": {
+          "Name": "Named",
+          "Path": "$STATE/root",
+          "refreshFlag": false,
+          "cacheCleared": true,
+          "locations": [],
+          "physicalIds": null
+        }
+      }
+    },
+    {
+      "name": "AggregateFolder-requires-old-location",
+      "exception": null,
+      "result": {
+        "requiresRefresh": true,
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root",
+          "refreshFlag": true,
+          "cacheCleared": true,
+          "locations": [
+            "$STATE/old"
+          ],
+          "physicalIds": null
+        },
+        "changedAfter": true,
+        "after": {
+          "Name": "Named",
+          "Path": "$STATE/root",
+          "refreshFlag": false,
+          "cacheCleared": true,
+          "locations": [
+            "$STATE/old"
+          ],
+          "physicalIds": null
+        }
+      }
+    },
+    {
+      "name": "UserRootFolder-before-default-none",
+      "exception": null,
+      "result": {
+        "changed": true,
+        "state": {
+          "Name": "Media Folders",
+          "Path": "$STATE/root/default",
+          "refreshFlag": null,
+          "cacheCleared": true,
+          "locations": null,
+          "physicalIds": null
+        }
+      }
+    },
+    {
+      "name": "UserRootFolder-before-DEFAULT-none",
+      "exception": null,
+      "result": {
+        "changed": true,
+        "state": {
+          "Name": "Media Folders",
+          "Path": "$STATE/root/default",
+          "refreshFlag": null,
+          "cacheCleared": true,
+          "locations": null,
+          "physicalIds": null
+        }
+      }
+    },
+    {
+      "name": "UserRootFolder-before-Named-none",
+      "exception": null,
+      "result": {
+        "changed": false,
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root/default",
+          "refreshFlag": null,
+          "cacheCleared": true,
+          "locations": null,
+          "physicalIds": null
+        }
+      }
+    },
+    {
+      "name": "UserRootFolder-before-empty-none",
+      "exception": null,
+      "result": {
+        "changed": true,
+        "state": {
+          "Name": "Media Folders",
+          "Path": "$STATE/root/default",
+          "refreshFlag": null,
+          "cacheCleared": true,
+          "locations": null,
+          "physicalIds": null
+        }
+      }
+    },
+    {
+      "name": "UserRootFolder-requires-empty",
+      "exception": null,
+      "result": {
+        "requiresRefresh": false,
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root/default",
+          "refreshFlag": null,
+          "cacheCleared": false,
+          "locations": null,
+          "physicalIds": null
+        },
+        "changedAfter": false,
+        "after": {
+          "Name": "Named",
+          "Path": "$STATE/root/default",
+          "refreshFlag": null,
+          "cacheCleared": true,
+          "locations": null,
+          "physicalIds": null
+        }
+      }
+    },
+    {
+      "name": "CollectionFolder-before-default-false",
+      "exception": null,
+      "result": {
+        "changed": false,
+        "state": {
+          "Name": "default",
+          "Path": "$STATE/root/default/library",
+          "refreshFlag": false,
+          "cacheCleared": null,
+          "locations": [],
+          "physicalIds": []
+        }
+      }
+    },
+    {
+      "name": "CollectionFolder-before-default-true",
+      "exception": null,
+      "result": {
+        "changed": true,
+        "state": {
+          "Name": "default",
+          "Path": "$STATE/root/default/library",
+          "refreshFlag": false,
+          "cacheCleared": null,
+          "locations": [],
+          "physicalIds": []
+        }
+      }
+    },
+    {
+      "name": "CollectionFolder-before-DEFAULT-false",
+      "exception": null,
+      "result": {
+        "changed": false,
+        "state": {
+          "Name": "DEFAULT",
+          "Path": "$STATE/root/default/library",
+          "refreshFlag": false,
+          "cacheCleared": null,
+          "locations": [],
+          "physicalIds": []
+        }
+      }
+    },
+    {
+      "name": "CollectionFolder-before-DEFAULT-true",
+      "exception": null,
+      "result": {
+        "changed": true,
+        "state": {
+          "Name": "DEFAULT",
+          "Path": "$STATE/root/default/library",
+          "refreshFlag": false,
+          "cacheCleared": null,
+          "locations": [],
+          "physicalIds": []
+        }
+      }
+    },
+    {
+      "name": "CollectionFolder-before-Named-false",
+      "exception": null,
+      "result": {
+        "changed": false,
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root/default/library",
+          "refreshFlag": false,
+          "cacheCleared": null,
+          "locations": [],
+          "physicalIds": []
+        }
+      }
+    },
+    {
+      "name": "CollectionFolder-before-Named-true",
+      "exception": null,
+      "result": {
+        "changed": true,
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root/default/library",
+          "refreshFlag": false,
+          "cacheCleared": null,
+          "locations": [],
+          "physicalIds": []
+        }
+      }
+    },
+    {
+      "name": "CollectionFolder-before-empty-false",
+      "exception": null,
+      "result": {
+        "changed": true,
+        "state": {
+          "Name": "library",
+          "Path": "$STATE/root/default/library",
+          "refreshFlag": false,
+          "cacheCleared": null,
+          "locations": [],
+          "physicalIds": []
+        }
+      }
+    },
+    {
+      "name": "CollectionFolder-before-empty-true",
+      "exception": null,
+      "result": {
+        "changed": true,
+        "state": {
+          "Name": "library",
+          "Path": "$STATE/root/default/library",
+          "refreshFlag": false,
+          "cacheCleared": null,
+          "locations": [],
+          "physicalIds": []
+        }
+      }
+    },
+    {
+      "name": "CollectionFolder-requires-empty",
+      "exception": null,
+      "result": {
+        "requiresRefresh": true,
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root/default/library",
+          "refreshFlag": true,
+          "cacheCleared": null,
+          "locations": [],
+          "physicalIds": []
+        },
+        "changedAfter": true,
+        "after": {
+          "Name": "Named",
+          "Path": "$STATE/root/default/library",
+          "refreshFlag": false,
+          "cacheCleared": null,
+          "locations": [],
+          "physicalIds": []
+        }
+      }
+    },
+    {
+      "name": "CollectionFolder-requires-matched-resolve",
+      "exception": null,
+      "result": {
+        "requiresRefresh": false,
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root/default/library",
+          "refreshFlag": false,
+          "cacheCleared": null,
+          "locations": [
+            "$STATE\\root\\default\\library"
+          ],
+          "physicalIds": []
+        },
+        "changedAfter": false,
+        "after": {
+          "Name": "Named",
+          "Path": "$STATE/root/default/library",
+          "refreshFlag": false,
+          "cacheCleared": null,
+          "locations": [
+            "$STATE\\root\\default\\library"
+          ],
+          "physicalIds": []
+        }
+      }
+    },
+    {
+      "name": "CollectionFolder-requires-flag",
+      "exception": null,
+      "result": {
+        "requiresRefresh": true,
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root/default/library",
+          "refreshFlag": true,
+          "cacheCleared": null,
+          "locations": [],
+          "physicalIds": []
+        },
+        "changedAfter": true,
+        "after": {
+          "Name": "Named",
+          "Path": "$STATE/root/default/library",
+          "refreshFlag": false,
+          "cacheCleared": null,
+          "locations": [],
+          "physicalIds": []
+        }
+      }
+    },
+    {
+      "name": "CollectionFolder-requires-new-directories",
+      "exception": null,
+      "result": {
+        "requiresRefresh": true,
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root/default/library",
+          "refreshFlag": true,
+          "cacheCleared": null,
+          "locations": [],
+          "physicalIds": []
+        },
+        "changedAfter": true,
+        "after": {
+          "Name": "Named",
+          "Path": "$STATE/root/default/library",
+          "refreshFlag": false,
+          "cacheCleared": null,
+          "locations": [],
+          "physicalIds": []
+        }
+      }
+    },
+    {
+      "name": "CollectionFolder-requires-old-location",
+      "exception": null,
+      "result": {
+        "requiresRefresh": true,
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root/default/library",
+          "refreshFlag": true,
+          "cacheCleared": null,
+          "locations": [
+            "$STATE/old"
+          ],
+          "physicalIds": []
+        },
+        "changedAfter": true,
+        "after": {
+          "Name": "Named",
+          "Path": "$STATE/root/default/library",
+          "refreshFlag": false,
+          "cacheCleared": null,
+          "locations": [
+            "$STATE/old"
+          ],
+          "physicalIds": []
+        }
+      }
+    },
+    {
+      "name": "PlaylistsFolder-before-default-none",
+      "exception": null,
+      "result": {
+        "changed": false,
+        "state": {
+          "Name": "default",
+          "Path": "$STATE/root/default/library",
+          "refreshFlag": null,
+          "cacheCleared": null,
+          "locations": null,
+          "physicalIds": null
+        }
+      }
+    },
+    {
+      "name": "PlaylistsFolder-before-DEFAULT-none",
+      "exception": null,
+      "result": {
+        "changed": false,
+        "state": {
+          "Name": "DEFAULT",
+          "Path": "$STATE/root/default/library",
+          "refreshFlag": null,
+          "cacheCleared": null,
+          "locations": null,
+          "physicalIds": null
+        }
+      }
+    },
+    {
+      "name": "PlaylistsFolder-before-Named-none",
+      "exception": null,
+      "result": {
+        "changed": false,
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root/default/library",
+          "refreshFlag": null,
+          "cacheCleared": null,
+          "locations": null,
+          "physicalIds": null
+        }
+      }
+    },
+    {
+      "name": "PlaylistsFolder-before-empty-none",
+      "exception": null,
+      "result": {
+        "changed": true,
+        "state": {
+          "Name": "library",
+          "Path": "$STATE/root/default/library",
+          "refreshFlag": null,
+          "cacheCleared": null,
+          "locations": null,
+          "physicalIds": null
+        }
+      }
+    },
+    {
+      "name": "PlaylistsFolder-requires-empty",
+      "exception": null,
+      "result": {
+        "requiresRefresh": false,
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root/default/library",
+          "refreshFlag": null,
+          "cacheCleared": null,
+          "locations": null,
+          "physicalIds": null
+        },
+        "changedAfter": false,
+        "after": {
+          "Name": "Named",
+          "Path": "$STATE/root/default/library",
+          "refreshFlag": null,
+          "cacheCleared": null,
+          "locations": null,
+          "physicalIds": null
+        }
+      }
+    },
+    {
+      "name": "CollectionFolder-requires-stale-physical-id",
+      "exception": null,
+      "result": {
+        "requiresRefresh": true,
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root/default/library",
+          "refreshFlag": false,
+          "cacheCleared": null,
+          "locations": [
+            "$STATE\\root\\default\\library"
+          ],
+          "physicalIds": [
+            "97c00000-0000-0000-0000-000000000099"
+          ]
+        },
+        "changedAfter": false,
+        "after": {
+          "Name": "Named",
+          "Path": "$STATE/root/default/library",
+          "refreshFlag": false,
+          "cacheCleared": null,
+          "locations": [
+            "$STATE\\root\\default\\library"
+          ],
+          "physicalIds": [
+            "97c00000-0000-0000-0000-000000000099"
+          ]
+        }
+      }
+    }
+  ],
+  "assemblies": [
+    {
+      "name": "MediaBrowser.Controller",
+      "path": "D:\\mediamanager\\.test-output\\validation\\internal-folder-refresh-oracle-20261005-3\\bin\\Release\\net10.0\\MediaBrowser.Controller.dll",
+      "sha256": "56a527307ef93f810fdadec33ba8380cc8416d38cb1cfea92297b0f65288808e"
+    },
+    {
+      "name": "MediaBrowser.Providers",
+      "path": "D:\\mediamanager\\.test-output\\validation\\internal-folder-refresh-oracle-20261005-3\\bin\\Release\\net10.0\\MediaBrowser.Providers.dll",
+      "sha256": "0255068ec9ff524c916c99aebd4553290141bb7b87e17da3a80c007b3b6fb129"
+    },
+    {
+      "name": "Jellyfin.Server.Implementations",
+      "path": "D:\\mediamanager\\.test-output\\validation\\internal-folder-refresh-oracle-20261005-3\\bin\\Release\\net10.0\\Jellyfin.Server.Implementations.dll",
+      "sha256": "b91a6797f81f8563b8896c3da3e5cd4e9d11c61eb084578bf7b81108c3c3e2e6"
+    },
+    {
+      "name": "Emby.Server.Implementations",
+      "path": "D:\\mediamanager\\.test-output\\validation\\internal-folder-refresh-oracle-20261005-3\\bin\\Release\\net10.0\\Emby.Server.Implementations.dll",
+      "sha256": "ccff8514100a65508b65882d5881463fe4ff73ea07eb4d2b2d98e234d7b4ac99"
+    },
+    {
+      "name": "jellyfin",
+      "path": "D:\\mediamanager\\.test-output\\validation\\internal-folder-refresh-oracle-20261005-3\\bin\\Release\\net10.0\\jellyfin.dll",
+      "sha256": "29c34541350089dc0522c4309ecd617e78fd402774681f32491d089803939c03"
+    },
+    {
+      "name": "Jellyfin.Database.Implementations",
+      "path": "D:\\mediamanager\\.test-output\\validation\\internal-folder-refresh-oracle-20261005-3\\bin\\Release\\net10.0\\Jellyfin.Database.Implementations.dll",
+      "sha256": "21648ea8e6eec045789c66c199b30c68b1b00f6e15918ac66347c19244b5670b"
+    },
+    {
+      "name": "Jellyfin.Database.Providers.Sqlite",
+      "path": "D:\\mediamanager\\.test-output\\validation\\internal-folder-refresh-oracle-20261005-3\\bin\\Release\\net10.0\\Jellyfin.Database.Providers.Sqlite.dll",
+      "sha256": "eefedf49a1c6c62c7eab9b4347c0bca377c3e059ec61ef26a08148de7bba94bb"
+    }
+  ],
+  "scope": "Actual four internal folder Before/Requires hooks, ManagedFileSystem directories, FileData and NormalizeRootPathList, with initial real EF SaveItems. Configuration paths, parent/collection/library options, empty physical root children, FindByPath and path protocol are controls. NormalizeRootPathList runs on an unconstructed manager with only filesystem/logger fields initialized. Cache IDs and refresh flags are explicitly warmed; only hook results, Name/Path, cache/flag and physical location/ID arrays are projected. MetadataService, full ValidateChildren, network, stored-state comparison and complete library acceptance excluded."
+,"schemaVersion":1,"candidateVerified":false,"inputSha256":"d99b18d0471dc0ae0387dabf263fc8ef4dbcef8cbad48949cd4ffd2a986634b9","sourceFilesSha256":"1e70579f22a6cc5bf4c5db013d859f6b6b7106b2fb6969c5dc144a42bfbfd020"}

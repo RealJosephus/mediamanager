@@ -1,0 +1,226 @@
+[
+  {
+    "name": "audio-cold-db",
+    "managed": true,
+    "directory": true,
+    "owned": true,
+    "closureType": "Audio",
+    "warm": false,
+    "secondSource": false
+  },
+  {
+    "name": "audio-cold-source",
+    "managed": true,
+    "directory": true,
+    "owned": true,
+    "closureType": "Audio",
+    "warm": false,
+    "secondSource": true
+  },
+  {
+    "name": "audio-warm-db",
+    "managed": true,
+    "directory": true,
+    "owned": true,
+    "closureType": "Audio",
+    "warm": true,
+    "secondSource": false
+  },
+  {
+    "name": "audio-warm-source",
+    "managed": true,
+    "directory": true,
+    "owned": true,
+    "closureType": "Audio",
+    "warm": true,
+    "secondSource": true
+  },
+  {
+    "name": "video-cold-db",
+    "managed": true,
+    "directory": true,
+    "owned": true,
+    "closureType": "Video",
+    "warm": false,
+    "secondSource": false
+  },
+  {
+    "name": "video-cold-source",
+    "managed": true,
+    "directory": true,
+    "owned": true,
+    "closureType": "Video",
+    "warm": false,
+    "secondSource": true
+  },
+  {
+    "name": "video-warm-db",
+    "managed": true,
+    "directory": true,
+    "owned": true,
+    "closureType": "Video",
+    "warm": true,
+    "secondSource": false
+  },
+  {
+    "name": "video-warm-source",
+    "managed": true,
+    "directory": true,
+    "owned": true,
+    "closureType": "Video",
+    "warm": true,
+    "secondSource": true
+  },
+  {
+    "name": "folder-cold-db",
+    "managed": true,
+    "directory": true,
+    "owned": true,
+    "closureType": "Folder",
+    "warm": false,
+    "secondSource": false
+  },
+  {
+    "name": "folder-cold-source",
+    "managed": true,
+    "directory": true,
+    "owned": true,
+    "closureType": "Folder",
+    "warm": false,
+    "secondSource": true
+  },
+  {
+    "name": "folder-warm-db",
+    "managed": true,
+    "directory": true,
+    "owned": true,
+    "closureType": "Folder",
+    "warm": true,
+    "secondSource": false
+  },
+  {
+    "name": "folder-warm-source",
+    "managed": true,
+    "directory": true,
+    "owned": true,
+    "closureType": "Folder",
+    "warm": true,
+    "secondSource": true
+  },
+  {
+    "name": "musicartist-cold-db",
+    "managed": true,
+    "directory": true,
+    "owned": true,
+    "closureType": "MusicArtist",
+    "warm": false,
+    "secondSource": false
+  },
+  {
+    "name": "musicartist-cold-source",
+    "managed": true,
+    "directory": true,
+    "owned": true,
+    "closureType": "MusicArtist",
+    "warm": false,
+    "secondSource": true
+  },
+  {
+    "name": "musicartist-warm-db",
+    "managed": true,
+    "directory": true,
+    "owned": true,
+    "closureType": "MusicArtist",
+    "warm": true,
+    "secondSource": false
+  },
+  {
+    "name": "musicartist-warm-source",
+    "managed": true,
+    "directory": true,
+    "owned": true,
+    "closureType": "MusicArtist",
+    "warm": true,
+    "secondSource": true
+  },
+  {
+    "name": "created-audio-warm-db",
+    "managed": true,
+    "directory": true,
+    "owned": true,
+    "closureType": "Audio",
+    "warm": true,
+    "secondSource": false,
+    "created": true
+  },
+  {
+    "name": "created-audio-warm-source",
+    "managed": true,
+    "directory": true,
+    "owned": true,
+    "closureType": "Audio",
+    "warm": true,
+    "secondSource": true,
+    "created": true
+  },
+  {
+    "name": "created-video-warm-db",
+    "managed": true,
+    "directory": true,
+    "owned": true,
+    "closureType": "Video",
+    "warm": true,
+    "secondSource": false,
+    "created": true
+  },
+  {
+    "name": "created-video-warm-source",
+    "managed": true,
+    "directory": true,
+    "owned": true,
+    "closureType": "Video",
+    "warm": true,
+    "secondSource": true,
+    "created": true
+  },
+  {
+    "name": "created-folder-warm-db",
+    "managed": true,
+    "directory": true,
+    "owned": true,
+    "closureType": "Folder",
+    "warm": true,
+    "secondSource": false,
+    "created": true
+  },
+  {
+    "name": "created-folder-warm-source",
+    "managed": true,
+    "directory": true,
+    "owned": true,
+    "closureType": "Folder",
+    "warm": true,
+    "secondSource": true,
+    "created": true
+  },
+  {
+    "name": "created-musicartist-warm-db",
+    "managed": true,
+    "directory": true,
+    "owned": true,
+    "closureType": "MusicArtist",
+    "warm": true,
+    "secondSource": false,
+    "created": true
+  },
+  {
+    "name": "created-musicartist-warm-source",
+    "managed": true,
+    "directory": true,
+    "owned": true,
+    "closureType": "MusicArtist",
+    "warm": true,
+    "secondSource": true,
+    "created": true
+  }
+]

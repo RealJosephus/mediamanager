@@ -1,0 +1,962 @@
+{
+  "schemaVersion": 1,
+  "rootId": "72000000-0000-0000-0000-000000000000",
+  "userId": "5c6b5f77-bea9-4a9a-98aa-fae5909892b7",
+  "items": [
+    {
+      "key": "root",
+      "id": "72000000-0000-0000-0000-000000000000",
+      "type": "Folder",
+      "name": "Person Filter Oracle Root"
+    },
+    {
+      "key": "alicePerson",
+      "id": "72000000-0000-0000-0000-000000000001",
+      "type": "Person",
+      "name": "Alice",
+      "parentId": "72000000-0000-0000-0000-000000000000"
+    },
+    {
+      "key": "bobPerson",
+      "id": "72000000-0000-0000-0000-000000000002",
+      "type": "Person",
+      "name": "Bob",
+      "parentId": "72000000-0000-0000-0000-000000000000"
+    },
+    {
+      "key": "unicodePerson",
+      "id": "72000000-0000-0000-0000-000000000003",
+      "type": "Person",
+      "name": "张 三",
+      "parentId": "72000000-0000-0000-0000-000000000000"
+    },
+    {
+      "key": "aliceNonPersonSelector",
+      "id": "72000000-0000-0000-0000-000000000004",
+      "type": "Movie",
+      "name": "Alice",
+      "parentId": "72000000-0000-0000-0000-000000000000"
+    },
+    {
+      "key": "aliceActor",
+      "id": "72000000-0000-0000-0000-000000000101",
+      "type": "Movie",
+      "name": "Movie Alice Actor",
+      "parentId": "72000000-0000-0000-0000-000000000000"
+    },
+    {
+      "key": "aliceDirector",
+      "id": "72000000-0000-0000-0000-000000000102",
+      "type": "Movie",
+      "name": "Movie Alice Director",
+      "parentId": "72000000-0000-0000-0000-000000000000"
+    },
+    {
+      "key": "bobDirector",
+      "id": "72000000-0000-0000-0000-000000000103",
+      "type": "Movie",
+      "name": "Movie Bob Director",
+      "parentId": "72000000-0000-0000-0000-000000000000"
+    },
+    {
+      "key": "aliceBob",
+      "id": "72000000-0000-0000-0000-000000000104",
+      "type": "Movie",
+      "name": "Movie Alice and Bob",
+      "parentId": "72000000-0000-0000-0000-000000000000"
+    },
+    {
+      "key": "lowercaseAlice",
+      "id": "72000000-0000-0000-0000-000000000105",
+      "type": "Movie",
+      "name": "Movie Lowercase Alice",
+      "parentId": "72000000-0000-0000-0000-000000000000"
+    },
+    {
+      "key": "unicodeCredit",
+      "id": "72000000-0000-0000-0000-000000000106",
+      "type": "Movie",
+      "name": "Movie Unicode Person",
+      "parentId": "72000000-0000-0000-0000-000000000000"
+    },
+    {
+      "key": "orphanCarol",
+      "id": "72000000-0000-0000-0000-000000000107",
+      "type": "Movie",
+      "name": "Movie Orphan Carol",
+      "parentId": "72000000-0000-0000-0000-000000000000"
+    },
+    {
+      "key": "compositeType",
+      "id": "72000000-0000-0000-0000-000000000108",
+      "type": "Movie",
+      "name": "Movie Composite Type",
+      "parentId": "72000000-0000-0000-0000-000000000000"
+    },
+    {
+      "key": "numericType",
+      "id": "72000000-0000-0000-0000-000000000109",
+      "type": "Movie",
+      "name": "Movie Numeric Type",
+      "parentId": "72000000-0000-0000-0000-000000000000"
+    },
+    {
+      "key": "noCredit",
+      "id": "72000000-0000-0000-0000-000000000110",
+      "type": "Movie",
+      "name": "Movie No Credit",
+      "parentId": "72000000-0000-0000-0000-000000000000"
+    },
+    {
+      "key": "aliceWriter",
+      "id": "72000000-0000-0000-0000-000000000111",
+      "type": "Movie",
+      "name": "Movie Alice Writer",
+      "parentId": "72000000-0000-0000-0000-000000000000"
+    },
+    {
+      "key": "nullType",
+      "id": "72000000-0000-0000-0000-000000000112",
+      "type": "Movie",
+      "name": "Movie Null Person Type",
+      "parentId": "72000000-0000-0000-0000-000000000000"
+    },
+    {
+      "key": "ancestorRoot",
+      "id": "72000000-0000-0000-0000-000000000200",
+      "type": "Folder",
+      "name": "Ancestor Root",
+      "parentId": "72000000-0000-0000-0000-000000000000"
+    },
+    {
+      "key": "ancestorInner",
+      "id": "72000000-0000-0000-0000-000000000201",
+      "type": "Folder",
+      "name": "Ancestor Inner",
+      "parentId": "72000000-0000-0000-0000-000000000200"
+    },
+    {
+      "key": "ancestorChild",
+      "id": "72000000-0000-0000-0000-000000000202",
+      "type": "Movie",
+      "name": "Ancestor Child",
+      "parentId": "72000000-0000-0000-0000-000000000201"
+    },
+    {
+      "key": "linkedParent",
+      "id": "72000000-0000-0000-0000-000000000210",
+      "type": "BoxSet",
+      "name": "Linked Parent",
+      "parentId": "72000000-0000-0000-0000-000000000000"
+    },
+    {
+      "key": "linkedChild",
+      "id": "72000000-0000-0000-0000-000000000211",
+      "type": "Movie",
+      "name": "Linked Child",
+      "parentId": "72000000-0000-0000-0000-000000000000"
+    },
+    {
+      "key": "versionPrimary",
+      "id": "72000000-0000-0000-0000-000000000220",
+      "type": "Movie",
+      "name": "Version Primary",
+      "parentId": "72000000-0000-0000-0000-000000000000",
+      "presentationUniqueKey": "person-filter-version"
+    },
+    {
+      "key": "versionAlternate",
+      "id": "72000000-0000-0000-0000-000000000221",
+      "type": "Movie",
+      "name": "Version Alternate",
+      "parentId": "72000000-0000-0000-0000-000000000000",
+      "primaryVersionId": "72000000-0000-0000-0000-000000000220",
+      "presentationUniqueKey": "person-filter-version"
+    },
+    {
+      "key": "ownedMovie",
+      "id": "72000000-0000-0000-0000-000000000230",
+      "type": "Movie",
+      "name": "Owned Movie",
+      "parentId": "72000000-0000-0000-0000-000000000000",
+      "ownerId": "72000000-0000-0000-0000-000000000101"
+    },
+    {
+      "key": "groupFirst",
+      "id": "72000000-0000-0000-0000-000000000240",
+      "type": "Movie",
+      "name": "Movie Group A",
+      "parentId": "72000000-0000-0000-0000-000000000000",
+      "presentationUniqueKey": "person-filter-group"
+    },
+    {
+      "key": "groupSecond",
+      "id": "72000000-0000-0000-0000-000000000241",
+      "type": "Movie",
+      "name": "Movie Group B",
+      "parentId": "72000000-0000-0000-0000-000000000000",
+      "presentationUniqueKey": "person-filter-group"
+    },
+    {
+      "key": "sortFolder",
+      "id": "72000000-0000-0000-0000-000000000300",
+      "type": "Folder",
+      "name": "Person SortName Folder",
+      "parentId": "72000000-0000-0000-0000-000000000000"
+    },
+    {
+      "key": "sortThe2",
+      "id": "72000000-0000-0000-0000-000000000301",
+      "type": "Person",
+      "name": "The 2",
+      "sortName": "The 2",
+      "parentId": "72000000-0000-0000-0000-000000000300"
+    },
+    {
+      "key": "sortA2",
+      "id": "72000000-0000-0000-0000-000000000302",
+      "type": "Person",
+      "name": "A-2",
+        "cleanName": "a-2",
+      "sortName": "A-2",
+      "parentId": "72000000-0000-0000-0000-000000000300"
+    },
+    {
+      "key": "sortEmile",
+      "id": "72000000-0000-0000-0000-000000000303",
+      "type": "Person",
+      "name": "Émile",
+        "cleanName": "émile",
+      "sortName": "Émile",
+      "parentId": "72000000-0000-0000-0000-000000000300"
+    },
+    {
+      "key": "sortChinese",
+      "id": "72000000-0000-0000-0000-000000000304",
+      "type": "Person",
+      "name": "中文",
+      "sortName": "中文",
+      "parentId": "72000000-0000-0000-0000-000000000300"
+    },
+    {
+      "key": "sortMath2",
+      "id": "72000000-0000-0000-0000-000000000305",
+      "type": "Person",
+      "name": "𝟚",
+      "sortName": "𝟚",
+      "parentId": "72000000-0000-0000-0000-000000000300"
+    },
+    {
+      "key": "sortTail",
+      "id": "72000000-0000-0000-0000-000000000306",
+      "type": "Person",
+      "name": "  B  ",
+        "cleanName": "  b  ",
+      "sortName": "B  ",
+      "parentId": "72000000-0000-0000-0000-000000000300"
+    }
+  ],
+  "people": [
+    {
+      "key": "aliceActorPersonRow",
+      "id": "72000000-0000-0000-0000-000000000901",
+      "name": "Alice",
+      "personType": "Actor"
+    },
+    {
+      "key": "aliceDirectorPersonRow",
+      "id": "72000000-0000-0000-0000-000000000902",
+      "name": "Alice",
+      "personType": "Director"
+    },
+    {
+      "key": "bobDirectorPersonRow",
+      "id": "72000000-0000-0000-0000-000000000903",
+      "name": "Bob",
+      "personType": "Director"
+    },
+    {
+      "key": "lowercaseAlicePersonRow",
+      "id": "72000000-0000-0000-0000-000000000904",
+      "name": "alice",
+      "personType": "Actor"
+    },
+    {
+      "key": "unicodePersonRow",
+      "id": "72000000-0000-0000-0000-000000000905",
+      "name": "张 三",
+      "personType": "Actor"
+    },
+    {
+      "key": "carolPersonRow",
+      "id": "72000000-0000-0000-0000-000000000906",
+      "name": "Carol",
+      "personType": "Actor"
+    },
+    {
+      "key": "aliceCompositePersonRow",
+      "id": "72000000-0000-0000-0000-000000000907",
+      "name": "Alice",
+      "personType": "Actor, Director"
+    },
+    {
+      "key": "aliceNumericPersonRow",
+      "id": "72000000-0000-0000-0000-000000000908",
+      "name": "Alice",
+      "personType": "1"
+    },
+    {
+      "key": "aliceWriterPersonRow",
+      "id": "72000000-0000-0000-0000-000000000909",
+      "name": "Alice",
+      "personType": "Writer"
+    },
+    {
+      "key": "aliceNullPersonRow",
+      "id": "72000000-0000-0000-0000-000000000910",
+      "name": "Alice",
+      "personType": null
+    }
+  ],
+  "peopleLinks": [
+    {
+      "itemKey": "aliceActor",
+      "personKey": "aliceActorPersonRow",
+      "role": ""
+    },
+    {
+      "itemKey": "aliceDirector",
+      "personKey": "aliceDirectorPersonRow",
+      "role": ""
+    },
+    {
+      "itemKey": "bobDirector",
+      "personKey": "bobDirectorPersonRow",
+      "role": ""
+    },
+    {
+      "itemKey": "aliceBob",
+      "personKey": "aliceActorPersonRow",
+      "role": "lead"
+    },
+    {
+      "itemKey": "aliceBob",
+      "personKey": "bobDirectorPersonRow",
+      "role": "director"
+    },
+    {
+      "itemKey": "lowercaseAlice",
+      "personKey": "lowercaseAlicePersonRow",
+      "role": ""
+    },
+    {
+      "itemKey": "unicodeCredit",
+      "personKey": "unicodePersonRow",
+      "role": ""
+    },
+    {
+      "itemKey": "orphanCarol",
+      "personKey": "carolPersonRow",
+      "role": ""
+    },
+    {
+      "itemKey": "compositeType",
+      "personKey": "aliceCompositePersonRow",
+      "role": ""
+    },
+    {
+      "itemKey": "numericType",
+      "personKey": "aliceNumericPersonRow",
+      "role": ""
+    },
+    {
+      "itemKey": "aliceWriter",
+      "personKey": "aliceWriterPersonRow",
+      "role": ""
+    },
+    {
+      "itemKey": "nullType",
+      "personKey": "aliceNullPersonRow",
+      "role": ""
+    },
+    {
+      "itemKey": "ancestorChild",
+      "personKey": "aliceActorPersonRow",
+      "role": ""
+    },
+    {
+      "itemKey": "linkedChild",
+      "personKey": "aliceActorPersonRow",
+      "role": ""
+    },
+    {
+      "itemKey": "versionAlternate",
+      "personKey": "aliceActorPersonRow",
+      "role": ""
+    },
+    {
+      "itemKey": "ownedMovie",
+      "personKey": "aliceActorPersonRow",
+      "role": ""
+    },
+    {
+      "itemKey": "groupFirst",
+      "personKey": "aliceActorPersonRow",
+      "role": ""
+    },
+    {
+      "itemKey": "groupSecond",
+      "personKey": "aliceActorPersonRow",
+      "role": ""
+    }
+  ],
+  "links": [
+    {
+      "parentId": "72000000-0000-0000-0000-000000000210",
+      "sortOrder": 0,
+      "childId": "72000000-0000-0000-0000-000000000211",
+      "childType": 0
+    }
+  ],
+  "cases": [
+    {
+      "name": "person-exact-name",
+      "query": "Person=Alice",
+      "scope": [
+        "aliceActor",
+        "bobDirector",
+        "noCredit"
+      ]
+    },
+    {
+      "name": "person-query-key-case-insensitive",
+      "query": "pErSoN=Alice",
+      "scope": [
+        "aliceActor",
+        "bobDirector"
+      ]
+    },
+    {
+      "name": "person-value-case-sensitive",
+      "query": "Person=alice",
+      "scope": [
+        "aliceActor",
+        "lowercaseAlice"
+      ]
+    },
+    {
+      "name": "person-unicode-and-space",
+      "query": "Person=%E5%BC%A0%20%E4%B8%89",
+      "scope": [
+        "unicodeCredit",
+        "aliceActor"
+      ]
+    },
+    {
+      "name": "person-empty-no-filter",
+      "query": "Person=",
+      "scope": [
+        "aliceActor",
+        "noCredit"
+      ]
+    },
+    {
+      "name": "person-whitespace-no-filter",
+      "query": "Person=%20%20",
+      "scope": [
+        "aliceActor",
+        "noCredit"
+      ]
+    },
+    {
+      "name": "person-repeated-first-value",
+      "query": "Person=Alice&Person=Bob",
+      "scope": [
+        "aliceActor",
+        "bobDirector",
+        "aliceBob"
+      ]
+    },
+    {
+      "name": "person-repeated-first-empty",
+      "query": "Person=&Person=Alice",
+      "scope": [
+        "aliceActor",
+        "noCredit"
+      ]
+    },
+    {
+      "name": "person-id-name-bridge",
+      "query": "PersonIds=72000000-0000-0000-0000-000000000001",
+      "scope": [
+        "aliceActor",
+        "aliceDirector",
+        "bobDirector"
+      ]
+    },
+    {
+      "name": "person-id-is-not-people-id",
+      "query": "PersonIds=72000000-0000-0000-0000-000000000901",
+      "scope": [
+        "aliceActor"
+      ]
+    },
+    {
+      "name": "person-id-non-person-same-name-bridge",
+      "query": "PersonIds=72000000-0000-0000-0000-000000000004",
+      "scope": [
+        "aliceActor",
+        "aliceDirector"
+      ]
+    },
+    {
+      "name": "person-id-missing-selector-matches-nothing",
+      "query": "PersonIds=72000000-0000-0000-0000-000000000099",
+      "scope": [
+        "aliceActor",
+        "noCredit"
+      ]
+    },
+    {
+      "name": "person-ids-single-comma-or",
+      "query": "PersonIds=72000000-0000-0000-0000-000000000001,72000000-0000-0000-0000-000000000002",
+      "scope": [
+        "aliceActor",
+        "bobDirector",
+        "noCredit"
+      ]
+    },
+    {
+      "name": "person-ids-invalid-only-drops-filter",
+      "query": "PersonIds=not-a-guid",
+      "scope": [
+        "aliceActor",
+        "noCredit"
+      ]
+    },
+    {
+      "name": "person-ids-single-invalid-and-valid",
+      "query": "PersonIds=not-a-guid,72000000-0000-0000-0000-000000000001",
+      "scope": [
+        "aliceActor",
+        "bobDirector"
+      ]
+    },
+    {
+      "name": "person-ids-repeated-values",
+      "query": "PersonIds=72000000-0000-0000-0000-000000000001&PersonIds=72000000-0000-0000-0000-000000000002",
+      "scope": [
+        "aliceActor",
+        "bobDirector",
+        "noCredit"
+      ]
+    },
+    {
+      "name": "person-ids-repeated-occurrence-with-comma",
+      "query": "PersonIds=72000000-0000-0000-0000-000000000001,72000000-0000-0000-0000-000000000002&PersonIds=72000000-0000-0000-0000-000000000002",
+      "scope": [
+        "aliceActor",
+        "bobDirector",
+        "noCredit"
+      ]
+    },
+    {
+      "name": "person-ids-empty-drops-filter",
+      "query": "PersonIds=",
+      "scope": [
+        "aliceActor",
+        "noCredit"
+      ]
+    },
+    {
+      "name": "person-ids-whitespace-drops-filter",
+      "query": "PersonIds=%20%20",
+      "scope": [
+        "aliceActor",
+        "noCredit"
+      ]
+    },
+    {
+      "name": "person-ids-query-key-case-insensitive",
+      "query": "pErSoNiDs=72000000-0000-0000-0000-000000000001",
+      "scope": [
+        "aliceActor",
+        "bobDirector"
+      ]
+    },
+    {
+      "name": "person-ids-p-format",
+      "query": "PersonIds=%2872000000-0000-0000-0000-000000000001%29",
+      "scope": [
+        "aliceActor",
+        "bobDirector"
+      ]
+    },
+    {
+      "name": "person-ids-p-format-invalid-neighbor-drops-filter",
+      "query": "PersonIds=%2872000000-0000-0000-0000-000000000001%5D",
+      "scope": [
+        "aliceActor",
+        "noCredit"
+      ]
+    },
+    {
+      "name": "person-ids-x-format",
+      "query": "PersonIds=%7B0x72000000%2C0x0000%2C0x0000%2C%7B0x00%2C0x00%2C0x00%2C0x00%2C0x00%2C0x00%2C0x00%2C0x01%7D%7D",
+      "scope": [
+        "aliceActor",
+        "bobDirector"
+      ]
+    },
+    {
+      "name": "person-ids-x-format-repeated-occurrence",
+      "query": "PersonIds=%7B0x72000000%2C0x0000%2C0x0000%2C%7B0x00%2C0x00%2C0x00%2C0x00%2C0x00%2C0x00%2C0x00%2C0x01%7D%7D&PersonIds=72000000-0000-0000-0000-000000000002",
+      "scope": [
+        "aliceActor",
+        "bobDirector",
+        "noCredit"
+      ]
+    },
+    {
+      "name": "person-ids-x-format-invalid-neighbor-drops-filter",
+      "query": "PersonIds=%7B0x72000000%2C0x0000%2C0x0000%2C%7B0x00%2C0x00%2C0x00%2C0x00%2C0x00%2C0x00%2C0x00%2C0xGG%7D%7D",
+      "scope": [
+        "aliceActor",
+        "noCredit"
+      ]
+    },
+    {
+      "name": "person-types-alone-no-sql-predicate",
+      "query": "PersonTypes=Actor",
+      "scope": [
+        "aliceActor",
+        "noCredit"
+      ]
+    },
+    {
+      "name": "person-with-actor-type",
+      "query": "Person=Alice&PersonTypes=Actor",
+      "scope": [
+        "aliceActor",
+        "aliceDirector",
+        "aliceBob"
+      ]
+    },
+    {
+      "name": "person-with-director-type",
+      "query": "Person=Alice&PersonTypes=Director",
+      "scope": [
+        "aliceActor",
+        "aliceDirector",
+        "aliceBob"
+      ]
+    },
+    {
+      "name": "person-type-value-case-sensitive",
+      "query": "Person=Alice&PersonTypes=actor",
+      "scope": [
+        "aliceActor",
+        "lowercaseAlice"
+      ]
+    },
+    {
+      "name": "person-with-arbitrary-numeric-type",
+      "query": "Person=Alice&PersonTypes=1",
+      "scope": [
+        "numericType",
+        "aliceActor"
+      ]
+    },
+    {
+      "name": "person-types-single-comma-union",
+      "query": "Person=Alice&PersonTypes=Actor,Director",
+      "scope": [
+        "aliceActor",
+        "aliceDirector",
+        "aliceWriter"
+      ]
+    },
+    {
+      "name": "person-types-repeated-values",
+      "query": "Person=Alice&PersonTypes=Actor&PersonTypes=Director",
+      "scope": [
+        "aliceActor",
+        "aliceDirector",
+        "aliceWriter"
+      ]
+    },
+    {
+      "name": "person-types-repeated-comma-is-literal",
+      "query": "Person=Alice&PersonTypes=Actor%2C%20Director&PersonTypes=Writer",
+      "scope": [
+        "compositeType",
+        "aliceWriter",
+        "aliceActor"
+      ]
+    },
+    {
+      "name": "person-types-empty-does-not-restrict",
+      "query": "Person=Alice&PersonTypes=",
+      "scope": [
+        "aliceActor",
+        "aliceDirector"
+      ]
+    },
+    {
+      "name": "person-types-whitespace-restricts-empty-string",
+      "query": "Person=Alice&PersonTypes=%20%20",
+      "scope": [
+        "aliceActor",
+        "nullType"
+      ]
+    },
+    {
+      "name": "person-types-query-key-case-insensitive",
+      "query": "Person=Alice&pErSoNtYpEs=Actor",
+      "scope": [
+        "aliceActor",
+        "aliceDirector"
+      ]
+    },
+    {
+      "name": "person-ids-with-type",
+      "query": "PersonIds=72000000-0000-0000-0000-000000000001&PersonTypes=Director",
+      "scope": [
+        "aliceActor",
+        "aliceDirector",
+        "aliceBob"
+      ]
+    },
+    {
+      "name": "person-and-person-id-use-independent-and",
+      "query": "Person=Alice&PersonIds=72000000-0000-0000-0000-000000000002",
+      "scope": [
+        "aliceActor",
+        "bobDirector",
+        "aliceBob"
+      ]
+    },
+    {
+      "name": "person-and-person-id-types-apply-to-both",
+      "query": "Person=Alice&PersonIds=72000000-0000-0000-0000-000000000002&PersonTypes=Actor",
+      "scope": [
+        "aliceBob"
+      ]
+    },
+    {
+      "name": "person-filter-does-not-propagate-to-ancestors",
+      "query": "Person=Alice",
+      "scope": [
+        "ancestorRoot",
+        "ancestorInner",
+        "ancestorChild"
+      ]
+    },
+    {
+      "name": "person-filter-does-not-propagate-to-linked-parent",
+      "query": "Person=Alice",
+      "scope": [
+        "linkedParent",
+        "linkedChild"
+      ]
+    },
+    {
+      "name": "person-filter-does-not-expand-alternate-to-primary",
+      "query": "Person=Alice",
+      "scope": [
+        "versionPrimary",
+        "versionAlternate"
+      ]
+    },
+    {
+      "name": "person-filter-does-not-include-owned-item",
+      "query": "Person=Alice",
+      "scope": [
+        "ownedMovie"
+      ]
+    },
+    {
+      "name": "user-person-presentation-grouping",
+      "query": "Person=Alice",
+      "scope": [
+        "groupFirst",
+        "groupSecond"
+      ]
+    },
+    {
+      "name": "user-group-count-before-page",
+      "query": "Person=Alice&Limit=1&EnableTotalRecordCount=true",
+      "scope": [
+        "groupFirst",
+        "groupSecond",
+        "aliceActor"
+      ]
+    },
+    {
+      "name": "api-key-person-does-not-group-modern",
+      "query": "Person=Alice",
+      "scope": [
+        "groupFirst",
+        "groupSecond"
+      ],
+      "auth": "apiKey",
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "api-key-person-modern-with-user-id",
+      "query": "UserId=5c6b5f77-bea9-4a9a-98aa-fae5909892b7&Person=Alice",
+      "scope": [
+        "groupFirst",
+        "groupSecond"
+      ],
+      "auth": "apiKey",
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "api-key-person-legacy-route",
+      "query": "Person=Alice",
+      "scope": [
+        "groupFirst",
+        "groupSecond"
+      ],
+      "auth": "apiKey",
+      "endpoints": [
+        "legacy"
+      ]
+    },
+    {
+      "name": "person-sortname-repository-full",
+      "query": "IncludeItemTypes=Person",
+      "scope": ["sortThe2", "sortA2", "sortEmile", "sortChinese", "sortMath2", "sortTail"],
+      "fields": "SortName",
+      "assertOrder": true
+    },
+    {
+      "name": "person-sortname-repository-page",
+      "query": "IncludeItemTypes=Person&StartIndex=1&Limit=3&EnableTotalRecordCount=true",
+      "scope": ["sortThe2", "sortA2", "sortEmile", "sortChinese", "sortMath2", "sortTail"],
+      "fields": "SortName",
+      "assertOrder": true
+    },
+    {
+      "name": "person-sortname-memory-full",
+      "query": "IncludeItemTypes=Person",
+      "scope": [],
+      "parentKey": "sortFolder",
+      "omitIds": true,
+      "recursive": false,
+      "fields": "SortName",
+      "assertOrder": true
+    },
+    {
+      "name": "person-sortname-memory-page",
+      "query": "IncludeItemTypes=Person&StartIndex=1&Limit=3&EnableTotalRecordCount=true",
+      "scope": [],
+      "parentKey": "sortFolder",
+      "omitIds": true,
+      "recursive": false,
+      "fields": "SortName",
+      "assertOrder": true
+    },
+    {
+      "name": "person-sortname-repository-descending",
+      "query": "IncludeItemTypes=Person&SortOrder=Descending",
+      "scope": ["sortThe2", "sortA2", "sortEmile", "sortChinese", "sortMath2", "sortTail"],
+      "fields": "SortName",
+      "assertOrder": true
+    },
+    {
+      "name": "person-sortname-memory-descending",
+      "query": "IncludeItemTypes=Person&SortOrder=Descending",
+      "scope": [],
+      "parentKey": "sortFolder",
+      "omitIds": true,
+      "recursive": false,
+      "fields": "SortName",
+      "assertOrder": true
+    },
+    {
+      "name": "person-sortname-repository-name",
+      "query": "IncludeItemTypes=Person",
+      "scope": ["sortThe2", "sortA2", "sortEmile", "sortChinese", "sortMath2", "sortTail"],
+      "sortBy": "Name",
+      "fields": "SortName",
+      "assertOrder": true
+    },
+    {
+      "name": "person-sortname-memory-name",
+      "query": "IncludeItemTypes=Person",
+      "scope": [],
+      "parentKey": "sortFolder",
+      "omitIds": true,
+      "recursive": false,
+      "sortBy": "Name",
+      "fields": "SortName",
+      "assertOrder": true
+    },
+    {
+      "name": "person-sortname-repository-no-order",
+      "query": "IncludeItemTypes=Person",
+      "scope": ["sortThe2", "sortA2", "sortEmile", "sortChinese", "sortMath2", "sortTail"],
+      "omitSortBy": true,
+      "fields": "SortName",
+      "assertOrder": true
+    },
+    {
+      "name": "person-sortname-repository-no-order-page",
+      "query": "IncludeItemTypes=Person&StartIndex=1&Limit=3&EnableTotalRecordCount=true",
+      "scope": ["sortThe2", "sortA2", "sortEmile", "sortChinese", "sortMath2", "sortTail"],
+      "omitSortBy": true,
+      "fields": "SortName",
+      "assertOrder": true
+    },
+    {
+      "name": "person-sortname-repository-excess-directions",
+      "query": "IncludeItemTypes=Person&SortOrder=Ascending,Descending",
+      "scope": ["sortThe2", "sortA2", "sortEmile", "sortChinese", "sortMath2", "sortTail"],
+      "expectedStatus": 400,
+      "expectedRuntimeError": "Too many sort directions.",
+      "fields": "SortName",
+      "assertOrder": true
+    },
+    {
+      "name": "person-sortname-memory-excess-directions",
+      "query": "IncludeItemTypes=Person&SortOrder=Ascending,Descending",
+      "scope": [],
+      "parentKey": "sortFolder",
+      "omitIds": true,
+      "recursive": false,
+      "expectedStatus": 400,
+      "expectedRuntimeError": "Too many sort directions.",
+      "fields": "SortName",
+      "assertOrder": true
+    },
+    {
+      "name": "person-sortname-memory-no-order",
+      "query": "IncludeItemTypes=Person",
+      "scope": [],
+      "parentKey": "sortFolder",
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "fields": "SortName",
+      "assertOrder": true
+    },
+    {
+      "name": "person-sortname-memory-no-order-page",
+      "query": "IncludeItemTypes=Person&StartIndex=1&Limit=3&EnableTotalRecordCount=true",
+      "scope": [],
+      "parentKey": "sortFolder",
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "fields": "SortName",
+      "assertOrder": true
+    }
+  ]
+}
+

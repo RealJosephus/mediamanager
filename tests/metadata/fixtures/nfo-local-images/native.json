@@ -1,0 +1,4760 @@
+{
+  "schemaVersion": 1,
+  "candidateVerified": false,
+  "frozenJellyfinHead": "208c278b75abd897aefa1e1175126eac5e4dbfaa",
+  "inputSha256": "23c075b07a2700dafff6c001b831d1ea7d2cdbcaa127a24a557dddbe647f9fa9",
+  "environment": {
+    "os": "Microsoft Windows NT 10.0.26300.0",
+    "isWindows": true,
+    "culture": "zh-CN",
+    "uiCulture": "zh-CN"
+  },
+  "boundary": "Actual MovieNfoParser plus BaseNfoProvider/BaseVideoNfoProvider runtime result creation with ManagedFileSystem and DirectoryService over per-scene temporary files. The declared Windows matrix covers local path and UNC classification, System.Uri file forms with raw literal DirectoryService lookups, and remote authority, opaque, malformed-percent, ASCII display and component-specific IRI rendering. A delegating directory-service probe records literal paths and deterministically injects the declared failure/cancellation scenes.",
+  "uncovered": [
+    "non-Windows System.Uri and filesystem behavior",
+    "reachable UNC share contents, reparse points, ACL races and path-length policy",
+    "filesystem mutation races after parser acceptance",
+    "XML grammar, encoding, NLS and URI normalization cases outside the declared input matrix",
+    "non-Movie parsers and downstream image persistence"
+  ],
+  "results": [
+    {
+      "name": "existing absolute Windows path adds a primary local image",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 53,
+        "normalizedSha256": "f71cad8484888abc708de2e8612dd44e60317d5152c995bd11469e1c417b561c",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003E$ROOT\\present image.jpg\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [
+        {
+          "path": "$ROOT\\present image.jpg",
+          "outcome": "file"
+        }
+      ],
+      "remoteImages": [],
+      "localImages": [
+        {
+          "path": "$ROOT\\present image.jpg",
+          "name": "present image.jpg",
+          "exists": true,
+          "isDirectory": false,
+          "type": "Primary"
+        }
+      ]
+    },
+    {
+      "name": "missing absolute Windows path is ignored",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 53,
+        "normalizedSha256": "807bc79929874effa1542c047a6dd2f31aae5525360fb560b7f32b6fb22ed60d",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003E$ROOT\\missing image.jpg\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [
+        {
+          "path": "$ROOT\\missing image.jpg",
+          "outcome": "missing-or-directory"
+        }
+      ],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "absolute Windows directory path is ignored",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 49,
+        "normalizedSha256": "12fe24e5d69f0d4c0818108d69525baadfd872c2b0cd41eaa91c9853f052e56d",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003E$ROOT\\directory.jpg\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [
+        {
+          "path": "$ROOT\\directory.jpg",
+          "outcome": "missing-or-directory"
+        }
+      ],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "existing absolute file URI is passed literally to the Windows filesystem",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 59,
+        "normalizedSha256": "b73940e6533e3d3c244fc5c0f2b51ac38df268f9bee5a6f5fcebdc35ef7b5515",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003E$ROOT_URI/present%20image.jpg\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [
+        {
+          "path": "$ROOT_URI/present%20image.jpg",
+          "outcome": "missing-or-directory"
+        }
+      ],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "missing absolute file URI is ignored",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 59,
+        "normalizedSha256": "f983ffb5fbe5475c717a89e0b4d36702c8183b6fdf50cec0a54d996a56bf18f6",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003E$ROOT_URI/missing%20image.jpg\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [
+        {
+          "path": "$ROOT_URI/missing%20image.jpg",
+          "outcome": "missing-or-directory"
+        }
+      ],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "relative image path is rejected without a filesystem lookup",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 49,
+        "normalizedSha256": "b67a47f29bbde34e483a26a4ae08b02ba57c3e0cd7ec96682a3c933f93be3084",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Erelative/poster.jpg\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "POSIX rooted path is not an absolute URI on Windows",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 55,
+        "normalizedSha256": "81413021393e95b59ce54e9ea4c2638e17d0c975a4ebfacd23e58b52b5f39b29",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003E/nfo-local-posix-root.jpg\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "drive-relative Windows path is invalid without a filesystem lookup",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 42,
+        "normalizedSha256": "c80eb1a41866ba5920747c4ddc93c73d31fdc6afacaf225d95e24f10b877d6ec",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003EC:poster.jpg\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "forward-slash UNC path is local and keeps its literal lookup",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 55,
+        "normalizedSha256": "383f07e73dd21ed550b079596f1e27339302be0f2e1498877e0f972aa192a955",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003E//server/share/poster.jpg\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [
+        {
+          "path": "//server/share/poster.jpg",
+          "outcome": "missing-or-directory"
+        }
+      ],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "invalid absolute URI is rejected without a filesystem lookup",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 45,
+        "normalizedSha256": "9fd9a59d8342bc1a3144ec5e4b192f0fa03eb0b312fe2113e52b4c3ebeb84c68",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttp://[invalid\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "remote absolute URI is normalized and accepted",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 85,
+        "normalizedSha256": "52f6eb45007a97868839aff5aa4b948931e2588bbe466280fd5dc8d25e28dcd1",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003EHTTPS://Example.TEST:443/a/../poster%20one.jpg?x=1#frag\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "https://example.test/poster one.jpg?x=1#frag",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "remote encoded brackets stay escaped",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 63,
+        "normalizedSha256": "e17fbe3ee26900dc1a1ed8943ecf9903c7ff3fc2c7adfc1e67d6c778e5941893",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttps://example.test/a%5Bb%5D.jpg\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "https://example.test/a%5Bb%5D.jpg",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "remote encoded percent stays escaped",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 62,
+        "normalizedSha256": "ad182fc2531c1b06368ab2ea3763aa6df91119686591cf3b1c42473dcc10edec",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttps://example.test/rate%25.jpg\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "https://example.test/rate%25.jpg",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "remote encoded space becomes a literal space",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 67,
+        "normalizedSha256": "1b812635af96c1dc4dbfeee37fd7c5e97f0200e90dc7b59e8859961e2620d761",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttps://example.test/poster%20one.jpg\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "https://example.test/poster one.jpg",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "remote raw space remains a literal space",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 65,
+        "normalizedSha256": "35d24339f1b1809e1457600f3641d034c2ba039827de58b3d83aa940bbbee1e8",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttps://example.test/poster one.jpg\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "https://example.test/poster one.jpg",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "remote Unicode path stays decoded",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 64,
+        "normalizedSha256": "f83dc94a88d0ff9dbf424e42f74d9a3b3e1ea866100f71f730156d85be62e9f1",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttps://example.test/\u5716\u50CF-\u0130.jpg\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "https://example.test/\u5716\u50CF-\u0130.jpg",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "remote escaped slash and hash stay escaped",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 64,
+        "normalizedSha256": "9d1442692977faaa02aa121e50a295a911761591a3e72709e6ac0cf8d83575f3",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttps://example.test/a%2Fb%23c.jpg\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "https://example.test/a%2Fb%23c.jpg",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "remote escaped ASCII unreserved characters decode",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 71,
+        "normalizedSha256": "89873d4eb0571f0eb31f885b332ef6ab3c0e6373ada9d3091bed866ac70a157a",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttps://example.test/a%41%7E%2D%2E%5F.jpg\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "https://example.test/aA~-._.jpg",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "remote escaped ASCII reserved characters stay escaped",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 90,
+        "normalizedSha256": "6765dbbc17d54e4f03c04913c38dbefa568a858c154675028cfe2c595135532c",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttps://example.test/%3A%40%21%24%26%27%28%29%2A%2B%2C%3B%3D\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "https://example.test/%3A%40%21%24%26%27%28%29%2A%2B%2C%3B%3D",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "remote escaped null stays escaped",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 60,
+        "normalizedSha256": "d5573edfaac9a253e29daf2743a5819f89fec60bcd4e0e547fe497cb46f3b7e1",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttps://example.test/a%00b.jpg\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "https://example.test/a%00b.jpg",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "remote lowercase escaped slash preserves escape casing",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 60,
+        "normalizedSha256": "f5959ace6fab5279061fe3a300b641db3ede0162920c81f5be2be471e7ee9ee7",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttps://example.test/a%2fb.jpg\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "https://example.test/a%2fb.jpg",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "remote query escapes stay encoded",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 169,
+        "normalizedSha256": "baa78f783e3d2e0fad48d78d19560f75fc42b27ff379676994d9a912e0048438",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttps://example.test/query.jpg?brackets=%5Bvalue%5D\u0026amp;percent=%25\u0026amp;space=%20\u0026amp;unicode=%E5%9C%96%E5%83%8F\u0026amp;slash=%2F\u0026amp;hash=%23\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "https://example.test/query.jpg?brackets=%5Bvalue%5D\u0026percent=%25\u0026space= \u0026unicode=\u5716\u50CF\u0026slash=%2F\u0026hash=%23",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "remote Unicode host uses its U-label",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 62,
+        "normalizedSha256": "95e15e8094b40c94709a81b13e5c54cd19eb8eef124657812fb5bfb341c10a82",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttps://\u4F8B\u5B50.\u6D4B\u8BD5/\u6D77\u5831.jpg\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "https://\u4F8B\u5B50.\u6D4B\u8BD5/\u6D77\u5831.jpg",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "hierarchical URI preserves an explicit empty query delimiter",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 56,
+        "normalizedSha256": "8d831c6694c1ffd8023ac97bd66c510c9a1e720d589c95b742344af4fa38a9bc",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttps://example.test/path?\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "https://example.test/path?",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "hierarchical URI preserves an explicit empty fragment delimiter",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 56,
+        "normalizedSha256": "7166460d4e176c64e95d350da34dc730b28f1051886d9fbb9fc85867f5c11700",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttps://example.test/path#\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "https://example.test/path#",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "hierarchical URI preserves explicit empty query and fragment delimiters",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 57,
+        "normalizedSha256": "d6d7ed26b27c77407afdd768b1c95446349c7cb111dd6abbc83b5b4fc9e55308",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttps://example.test/path?#\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "https://example.test/path?#",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "hierarchical userinfo displays unreserved and UTF8 while retaining space and at escapes",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 93,
+        "normalizedSha256": "d1edf993184efa6e96b32534af0c0eb133dc9c29038af1b460ffac621640ab6b",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttps://u%41%E5%9C%96:p%7E%E5%83%8F%20%40@example.test/path.jpg\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "https://uA\u5716:p~\u50CF %40@example.test/path.jpg",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "hierarchical userinfo preserves an explicit empty password delimiter",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 58,
+        "normalizedSha256": "e203cb5a8ac93993179f1aac572c3989f555d093252ef8f69d398376f726a7a1",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttps://user:@example.test/a\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "https://user:@example.test/a",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "hierarchical authority preserves explicit empty userinfo",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 53,
+        "normalizedSha256": "2a7782246cdd6fc3e67d7cbd96da592bcaf6ef8887ab98c797e04c09d8297c57",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttps://@example.test/a\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "https://@example.test/a",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "hierarchical authority preserves explicit empty username and password",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 54,
+        "normalizedSha256": "fe17b48416705262d064a7ae606f1b3af8ce6ef8f32484b9e018879d8aef342e",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttps://:@example.test/a\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "https://:@example.test/a",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "mailto opaque path uses URI display escaping",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 72,
+        "normalizedSha256": "d4a630ef0ed10cd4c17ae25c3b54e0394eefbf0f81efa41329533b34df85f1e9",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Emailto:user%41%E5%9C%96%20%40@example.test\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "mailto:userA\u5716 %40@example.test",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "urn opaque path uses URI display escaping",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 61,
+        "normalizedSha256": "d6092653ee8d42980894bf72b9f3833a49b5731cce5a2db2fee3922f7e60e17b",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Eurn:example:a%41%E5%9C%96%20%2F\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "urn:example:aA\u5716 %2F",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "IPv6 authority removes the default HTTPS port",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 74,
+        "normalizedSha256": "5c558de5c6b71f41670f3b3e36e0582b4846d7547553f1aad370966099b6982d",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003EHTTPS://[2001:0DB8:0:0:0:0:0:1]:443/path.jpg\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "https://[2001:db8::1]/path.jpg",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "IPv6 authority retains a nondefault HTTPS port",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 75,
+        "normalizedSha256": "c10ea6aa323f8840a21da3deac94dc5c586330f95052d4bbcc0cfa9f7cbedefe",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttps://[2001:0DB8:0:0:0:0:0:1]:8443/path.jpg\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "https://[2001:db8::1]:8443/path.jpg",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "non HTTP absolute URI is still a remote image",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 75,
+        "normalizedSha256": "5164a4b88889172824301f2eda56abb8bfba118e8bfd0b803cc8af384055be22",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb aspect=\u0022banner\u0022\u003Eftp://example.test/banner.jpg\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "ftp://example.test/banner.jpg",
+          "type": "Banner"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "remote duplicates keep the first image of a type",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 106,
+        "normalizedSha256": "42bf21ccc7b7178df6f1b1b86b0626371bda4eecb05c29d0617069948ee93ccb",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttps://example.test/first.jpg\u003C/thumb\u003E\u003Cthumb\u003Ehttps://example.test/second.jpg\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "https://example.test/first.jpg",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "local duplicates keep the first image and skip the second lookup",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 90,
+        "normalizedSha256": "a671b6a4512699f1d08f238e987aec30b75237cd9d4f72c62f9563fd914621b1",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003E$ROOT\\present image.jpg\u003C/thumb\u003E\u003Cthumb\u003E$ROOT\\second image.jpg\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [
+        {
+          "path": "$ROOT\\present image.jpg",
+          "outcome": "file"
+        }
+      ],
+      "remoteImages": [],
+      "localImages": [
+        {
+          "path": "$ROOT\\present image.jpg",
+          "name": "present image.jpg",
+          "exists": true,
+          "isDirectory": false,
+          "type": "Primary"
+        }
+      ]
+    },
+    {
+      "name": "missing local does not block a later existing image of the same type",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 90,
+        "normalizedSha256": "ead485b805692f7fd2892ea0f091045b9eaba26aa789e5472d66eb0f5ba1baad",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003E$ROOT\\missing image.jpg\u003C/thumb\u003E\u003Cthumb\u003E$ROOT\\second image.jpg\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [
+        {
+          "path": "$ROOT\\missing image.jpg",
+          "outcome": "missing-or-directory"
+        },
+        {
+          "path": "$ROOT\\second image.jpg",
+          "outcome": "file"
+        }
+      ],
+      "remoteImages": [],
+      "localImages": [
+        {
+          "path": "$ROOT\\second image.jpg",
+          "name": "second image.jpg",
+          "exists": true,
+          "isDirectory": false,
+          "type": "Primary"
+        }
+      ]
+    },
+    {
+      "name": "directory local does not block a later existing image of the same type",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 86,
+        "normalizedSha256": "4b0533a1bba6dbd4b4cb06cf1b4a684250bff2f51822eed00206613fc15c050a",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003E$ROOT\\directory.jpg\u003C/thumb\u003E\u003Cthumb\u003E$ROOT\\second image.jpg\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [
+        {
+          "path": "$ROOT\\directory.jpg",
+          "outcome": "missing-or-directory"
+        },
+        {
+          "path": "$ROOT\\second image.jpg",
+          "outcome": "file"
+        }
+      ],
+      "remoteImages": [],
+      "localImages": [
+        {
+          "path": "$ROOT\\second image.jpg",
+          "name": "second image.jpg",
+          "exists": true,
+          "isDirectory": false,
+          "type": "Primary"
+        }
+      ]
+    },
+    {
+      "name": "local and remote images of the same type are independent",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 99,
+        "normalizedSha256": "8139b69ff1332c7461a0c7a819e3fe8fe853fa09712a60aa706a348ca4c242d9",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003E$ROOT\\present image.jpg\u003C/thumb\u003E\u003Cthumb\u003Ehttps://example.test/remote.jpg\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [
+        {
+          "path": "$ROOT\\present image.jpg",
+          "outcome": "file"
+        }
+      ],
+      "remoteImages": [
+        {
+          "url": "https://example.test/remote.jpg",
+          "type": "Primary"
+        }
+      ],
+      "localImages": [
+        {
+          "path": "$ROOT\\present image.jpg",
+          "name": "present image.jpg",
+          "exists": true,
+          "isDirectory": false,
+          "type": "Primary"
+        }
+      ]
+    },
+    {
+      "name": "remote then local images of the same type are independent",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 99,
+        "normalizedSha256": "a527689865afcd7afc4da00e8638c824ee51be2f72a99f48db59437bbf5678dc",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttps://example.test/remote.jpg\u003C/thumb\u003E\u003Cthumb\u003E$ROOT\\present image.jpg\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [
+        {
+          "path": "$ROOT\\present image.jpg",
+          "outcome": "file"
+        }
+      ],
+      "remoteImages": [
+        {
+          "url": "https://example.test/remote.jpg",
+          "type": "Primary"
+        }
+      ],
+      "localImages": [
+        {
+          "path": "$ROOT\\present image.jpg",
+          "name": "present image.jpg",
+          "exists": true,
+          "isDirectory": false,
+          "type": "Primary"
+        }
+      ]
+    },
+    {
+      "name": "preexisting local primary blocks new local but not remote primary",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 99,
+        "normalizedSha256": "8139b69ff1332c7461a0c7a819e3fe8fe853fa09712a60aa706a348ca4c242d9",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003E$ROOT\\present image.jpg\u003C/thumb\u003E\u003Cthumb\u003Ehttps://example.test/remote.jpg\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "https://example.test/remote.jpg",
+          "type": "Primary"
+        }
+      ],
+      "localImages": [
+        {
+          "path": "$ROOT\\preexisting image.jpg",
+          "name": "preexisting image.jpg",
+          "exists": true,
+          "isDirectory": false,
+          "type": "Primary"
+        }
+      ]
+    },
+    {
+      "name": "preexisting remote primary blocks new remote but not local primary",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 96,
+        "normalizedSha256": "3fd8dbcf9c992b5df4d091d541dcee38b837e0fd8411a48d625d74c7f6538c59",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttps://example.test/new.jpg\u003C/thumb\u003E\u003Cthumb\u003E$ROOT\\present image.jpg\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [
+        {
+          "path": "$ROOT\\present image.jpg",
+          "outcome": "file"
+        }
+      ],
+      "remoteImages": [
+        {
+          "url": "https://preexisting.test/primary.jpg",
+          "type": "Primary"
+        }
+      ],
+      "localImages": [
+        {
+          "path": "$ROOT\\present image.jpg",
+          "name": "present image.jpg",
+          "exists": true,
+          "isDirectory": false,
+          "type": "Primary"
+        }
+      ]
+    },
+    {
+      "name": "fanart existing local backdrop blocks local descendant lookup",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 135,
+        "normalizedSha256": "34e93ae8ff4a9945d613b2406204ad38c8b1aae4671f4d6abca38a991fa02934",
+        "normalized": "\u003Cmovie\u003E\u003Cfanart\u003E\u003Cwrapper\u003E\u003Cthumb\u003E$ROOT\\present image.jpg\u003C/thumb\u003E\u003C/wrapper\u003E\u003C/fanart\u003E\u003Cthumb\u003Ehttps://example.test/poster.jpg\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "https://example.test/poster.jpg",
+          "type": "Primary"
+        }
+      ],
+      "localImages": [
+        {
+          "path": "$ROOT\\preexisting image.jpg",
+          "name": "preexisting image.jpg",
+          "exists": true,
+          "isDirectory": false,
+          "type": "Backdrop"
+        }
+      ]
+    },
+    {
+      "name": "fanart local descendant defaults to backdrop",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 89,
+        "normalizedSha256": "f283d141a73ea2401526a4b52ac62b3f4eb2c2665e805b33f319d207cf039c00",
+        "normalized": "\u003Cmovie\u003E\u003Cfanart\u003E\u003Cwrapper\u003E\u003Cthumb\u003E$ROOT\\present image.jpg\u003C/thumb\u003E\u003C/wrapper\u003E\u003C/fanart\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [
+        {
+          "path": "$ROOT\\present image.jpg",
+          "outcome": "file"
+        }
+      ],
+      "remoteImages": [],
+      "localImages": [
+        {
+          "path": "$ROOT\\present image.jpg",
+          "name": "present image.jpg",
+          "exists": true,
+          "isDirectory": false,
+          "type": "Backdrop"
+        }
+      ]
+    },
+    {
+      "name": "fanart remote descendant and flat thumb use independent types",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 126,
+        "normalizedSha256": "24394bdb9308bc4a12ba0154fc670d57dbbab84a2299ab474e00f0ff57f163ee",
+        "normalized": "\u003Cmovie\u003E\u003Cfanart\u003E\u003Cthumb\u003Ehttps://example.test/backdrop.jpg\u003C/thumb\u003E\u003C/fanart\u003E\u003Cthumb\u003Ehttps://example.test/poster.jpg\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "https://example.test/backdrop.jpg",
+          "type": "Backdrop"
+        },
+        {
+          "url": "https://example.test/poster.jpg",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "fanart explicit landscape preserves thumb type",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 89,
+        "normalizedSha256": "96d61f31350bb540e5c086daa4147ff334bb998b45133ca130a825f507d80b66",
+        "normalized": "\u003Cmovie\u003E\u003Cfanart\u003E\u003Cthumb aspect=\u0022landscape\u0022\u003E$ROOT\\present image.jpg\u003C/thumb\u003E\u003C/fanart\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [
+        {
+          "path": "$ROOT\\present image.jpg",
+          "outcome": "file"
+        }
+      ],
+      "remoteImages": [],
+      "localImages": [
+        {
+          "path": "$ROOT\\present image.jpg",
+          "name": "present image.jpg",
+          "exists": true,
+          "isDirectory": false,
+          "type": "Thumb"
+        }
+      ]
+    },
+    {
+      "name": "dotted aspect skips a local lookup and does not block primary",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 113,
+        "normalizedSha256": "410aace0373e650e33eacb583ceaada047c80f6cdf66c32af15fb8bd911b15f2",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb aspect=\u0022season.poster\u0022\u003E$ROOT\\present image.jpg\u003C/thumb\u003E\u003Cthumb\u003E$ROOT\\second image.jpg\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [
+        {
+          "path": "$ROOT\\second image.jpg",
+          "outcome": "file"
+        }
+      ],
+      "remoteImages": [],
+      "localImages": [
+        {
+          "path": "$ROOT\\second image.jpg",
+          "name": "second image.jpg",
+          "exists": true,
+          "isDirectory": false,
+          "type": "Primary"
+        }
+      ]
+    },
+    {
+      "name": "all seven local image types accept only their first existing file",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 782,
+        "normalizedSha256": "fd334e5cdcee9a484d51a3e122db7fcfbc127e04f0c6bbc92cb6f7ca2836122d",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb aspect=\u0022poster\u0022\u003E$ROOT\\present image.jpg\u003C/thumb\u003E\u003Cthumb aspect=\u0022poster\u0022\u003E$ROOT\\second image.jpg\u003C/thumb\u003E\u003Cthumb aspect=\u0022banner\u0022\u003E$ROOT\\present image.jpg\u003C/thumb\u003E\u003Cthumb aspect=\u0022banner\u0022\u003E$ROOT\\second image.jpg\u003C/thumb\u003E\u003Cthumb aspect=\u0022clearlogo\u0022\u003E$ROOT\\present image.jpg\u003C/thumb\u003E\u003Cthumb aspect=\u0022clearlogo\u0022\u003E$ROOT\\second image.jpg\u003C/thumb\u003E\u003Cthumb aspect=\u0022discart\u0022\u003E$ROOT\\present image.jpg\u003C/thumb\u003E\u003Cthumb aspect=\u0022discart\u0022\u003E$ROOT\\second image.jpg\u003C/thumb\u003E\u003Cthumb aspect=\u0022landscape\u0022\u003E$ROOT\\present image.jpg\u003C/thumb\u003E\u003Cthumb aspect=\u0022landscape\u0022\u003E$ROOT\\second image.jpg\u003C/thumb\u003E\u003Cthumb aspect=\u0022clearart\u0022\u003E$ROOT\\present image.jpg\u003C/thumb\u003E\u003Cthumb aspect=\u0022clearart\u0022\u003E$ROOT\\second image.jpg\u003C/thumb\u003E\u003Cthumb aspect=\u0022fanart\u0022\u003E$ROOT\\present image.jpg\u003C/thumb\u003E\u003Cthumb aspect=\u0022fanart\u0022\u003E$ROOT\\second image.jpg\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [
+        {
+          "path": "$ROOT\\present image.jpg",
+          "outcome": "file"
+        },
+        {
+          "path": "$ROOT\\present image.jpg",
+          "outcome": "file"
+        },
+        {
+          "path": "$ROOT\\present image.jpg",
+          "outcome": "file"
+        },
+        {
+          "path": "$ROOT\\present image.jpg",
+          "outcome": "file"
+        },
+        {
+          "path": "$ROOT\\present image.jpg",
+          "outcome": "file"
+        },
+        {
+          "path": "$ROOT\\present image.jpg",
+          "outcome": "file"
+        },
+        {
+          "path": "$ROOT\\present image.jpg",
+          "outcome": "file"
+        }
+      ],
+      "remoteImages": [],
+      "localImages": [
+        {
+          "path": "$ROOT\\present image.jpg",
+          "name": "present image.jpg",
+          "exists": true,
+          "isDirectory": false,
+          "type": "Primary"
+        },
+        {
+          "path": "$ROOT\\present image.jpg",
+          "name": "present image.jpg",
+          "exists": true,
+          "isDirectory": false,
+          "type": "Banner"
+        },
+        {
+          "path": "$ROOT\\present image.jpg",
+          "name": "present image.jpg",
+          "exists": true,
+          "isDirectory": false,
+          "type": "Logo"
+        },
+        {
+          "path": "$ROOT\\present image.jpg",
+          "name": "present image.jpg",
+          "exists": true,
+          "isDirectory": false,
+          "type": "Disc"
+        },
+        {
+          "path": "$ROOT\\present image.jpg",
+          "name": "present image.jpg",
+          "exists": true,
+          "isDirectory": false,
+          "type": "Thumb"
+        },
+        {
+          "path": "$ROOT\\present image.jpg",
+          "name": "present image.jpg",
+          "exists": true,
+          "isDirectory": false,
+          "type": "Art"
+        },
+        {
+          "path": "$ROOT\\present image.jpg",
+          "name": "present image.jpg",
+          "exists": true,
+          "isDirectory": false,
+          "type": "Backdrop"
+        }
+      ]
+    },
+    {
+      "name": "same local file can fill different image types",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 123,
+        "normalizedSha256": "0d4677888766e313d2388be9c0cf86ab0b0e6f204d11dd8d51b3b0eb77e9c130",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb aspect=\u0022poster\u0022\u003E$ROOT\\present image.jpg\u003C/thumb\u003E\u003Cthumb aspect=\u0022banner\u0022\u003E$ROOT\\present image.jpg\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [
+        {
+          "path": "$ROOT\\present image.jpg",
+          "outcome": "file"
+        },
+        {
+          "path": "$ROOT\\present image.jpg",
+          "outcome": "file"
+        }
+      ],
+      "remoteImages": [],
+      "localImages": [
+        {
+          "path": "$ROOT\\present image.jpg",
+          "name": "present image.jpg",
+          "exists": true,
+          "isDirectory": false,
+          "type": "Primary"
+        },
+        {
+          "path": "$ROOT\\present image.jpg",
+          "name": "present image.jpg",
+          "exists": true,
+          "isDirectory": false,
+          "type": "Banner"
+        }
+      ]
+    },
+    {
+      "name": "aspect matching is ordinal and case sensitive",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 122,
+        "normalizedSha256": "a97fc796764224f748d9f37276dfe4815ac1a54a64f0e7e233b30e5a94a98e5d",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb aspect=\u0022FanArt\u0022\u003E$ROOT\\present image.jpg\u003C/thumb\u003E\u003Cthumb aspect=\u0022fanart\u0022\u003E$ROOT\\second image.jpg\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [
+        {
+          "path": "$ROOT\\present image.jpg",
+          "outcome": "file"
+        },
+        {
+          "path": "$ROOT\\second image.jpg",
+          "outcome": "file"
+        }
+      ],
+      "remoteImages": [],
+      "localImages": [
+        {
+          "path": "$ROOT\\present image.jpg",
+          "name": "present image.jpg",
+          "exists": true,
+          "isDirectory": false,
+          "type": "Primary"
+        },
+        {
+          "path": "$ROOT\\second image.jpg",
+          "name": "second image.jpg",
+          "exists": true,
+          "isDirectory": false,
+          "type": "Backdrop"
+        }
+      ]
+    },
+    {
+      "name": "unicode Windows file path is accepted without culture folding",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 56,
+        "normalizedSha256": "88373eece7a8e520500afd342b53724517d1f8c46d04c87d983ab1d0f5da33e2",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003E$ROOT\\\u5716\u50CF-\u0130-\u4E2D\u6587.jpg\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [
+        {
+          "path": "$ROOT\\\u5716\u50CF-\u0130-\u4E2D\u6587.jpg",
+          "outcome": "file"
+        }
+      ],
+      "remoteImages": [],
+      "localImages": [
+        {
+          "path": "$ROOT\\\u5716\u50CF-\u0130-\u4E2D\u6587.jpg",
+          "name": "\u5716\u50CF-\u0130-\u4E2D\u6587.jpg",
+          "exists": true,
+          "isDirectory": false,
+          "type": "Primary"
+        }
+      ]
+    },
+    {
+      "name": "malformed immediate sibling prevents local image commit and lookup",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 60,
+        "normalizedSha256": "a3eb012b26d74e6d2e3cc23eb9587313587dc82d1927b4b1e3773d906a73359d",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003E$ROOT\\present image.jpg\u003C/thumb\u003E\u003Cbroken\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "later malformed XML preserves an earlier local image",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 76,
+        "normalizedSha256": "b5ac065ddbce3eb801b429244be3a09bd58f3a8031ce684d187b23194328d663",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003E$ROOT\\present image.jpg\u003C/thumb\u003E\u003Ctitle\u003ECommitted\u003C/title\u003E\u003Cbroken"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [
+        {
+          "path": "$ROOT\\present image.jpg",
+          "outcome": "file"
+        }
+      ],
+      "remoteImages": [],
+      "localImages": [
+        {
+          "path": "$ROOT\\present image.jpg",
+          "name": "present image.jpg",
+          "exists": true,
+          "isDirectory": false,
+          "type": "Primary"
+        }
+      ]
+    },
+    {
+      "name": "second local filesystem failure preserves the first local prefix",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 122,
+        "normalizedSha256": "008410f5922748db475a17ed36d81281fee70a77a7884fd73c0c88f34f620375",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb aspect=\u0022poster\u0022\u003E$ROOT\\present image.jpg\u003C/thumb\u003E\u003Cthumb aspect=\u0022banner\u0022\u003E$ROOT\\second image.jpg\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": "IOException",
+      "hasMetadata": false,
+      "item": {
+        "Name": null
+      },
+      "lookups": [
+        {
+          "path": "$ROOT\\present image.jpg",
+          "outcome": "file"
+        },
+        {
+          "path": "$ROOT\\second image.jpg",
+          "outcome": "IOException"
+        }
+      ],
+      "remoteImages": [],
+      "localImages": [
+        {
+          "path": "$ROOT\\present image.jpg",
+          "name": "present image.jpg",
+          "exists": true,
+          "isDirectory": false,
+          "type": "Primary"
+        }
+      ]
+    },
+    {
+      "name": "pre-cancellation prevents the first image lookup",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 53,
+        "normalizedSha256": "f71cad8484888abc708de2e8612dd44e60317d5152c995bd11469e1c417b561c",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003E$ROOT\\present image.jpg\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": "OperationCanceledException",
+      "hasMetadata": false,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "cancellation after a local lookup preserves that image prefix",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 132,
+        "normalizedSha256": "1c8b613985ffaa98dabd64ea239269061e24047e6b54faf9b95cd5aa102138f9",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003E$ROOT\\present image.jpg\u003C/thumb\u003E\u003Ctitle\u003ENot reached\u003C/title\u003E\u003Cthumb aspect=\u0022banner\u0022\u003E$ROOT\\second image.jpg\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": "OperationCanceledException",
+      "hasMetadata": false,
+      "item": {
+        "Name": null
+      },
+      "lookups": [
+        {
+          "path": "$ROOT\\present image.jpg",
+          "outcome": "file"
+        }
+      ],
+      "remoteImages": [],
+      "localImages": [
+        {
+          "path": "$ROOT\\present image.jpg",
+          "name": "present image.jpg",
+          "exists": true,
+          "isDirectory": false,
+          "type": "Primary"
+        }
+      ]
+    },
+    {
+      "name": "runtime provider starts fresh image collections despite caller images",
+      "providerRuntime": true,
+      "raw": {
+        "normalizedBytes": 104,
+        "normalizedSha256": "b4a9000766c0c8d38d2556707ad294ad33696db9891357a9c1e227980d869b02",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003E$ROOT\\present image.jpg\u003C/thumb\u003E\u003Cthumb\u003Ehttps://example.test/new-primary.jpg\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [
+        {
+          "path": "$ROOT\\movie.nfo",
+          "outcome": "file"
+        },
+        {
+          "path": "$ROOT\\present image.jpg",
+          "outcome": "file"
+        }
+      ],
+      "remoteImages": [
+        {
+          "url": "https://example.test/new-primary.jpg",
+          "type": "Primary"
+        }
+      ],
+      "localImages": [
+        {
+          "path": "$ROOT\\present image.jpg",
+          "name": "present image.jpg",
+          "exists": true,
+          "isDirectory": false,
+          "type": "Primary"
+        }
+      ]
+    },
+    {
+      "name": "edge-000",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 38,
+        "normalizedSha256": "7ff5b43214790907303ac9ffc38b3025e1d6714a4503fb6e30ef10d9ffe17908",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttp:foo\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "edge-001",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 39,
+        "normalizedSha256": "c0c97f25eb79b7c616a368764294d7815c012acac61e9df3606ee86ba590964c",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttp:/foo\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "edge-002",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 41,
+        "normalizedSha256": "4493475602f06670b6f751a6e7148ed3586b007ea182406a0de4e6a8936ab37b",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttp:///foo\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "edge-003",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 49,
+        "normalizedSha256": "d488931a7f1e14727ff47e7c9ad92e8b9256b10804df567c8242c2c079007430",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttps:example.com/a\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "edge-004",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 48,
+        "normalizedSha256": "603bd98e4a23ab3aab12b89bdf03d4bca109e190bf8b457a3bc4689cedd739df",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttps:/example.com\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "edge-005",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 37,
+        "normalizedSha256": "a56eebc22d34088adf02f63405e08f722960ebd3aec039316c9b37f992795c86",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Eftp:foo\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "edge-006",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 36,
+        "normalizedSha256": "6bef13b17ebedccfc5628e2517d466e909fe07332e0ea3019fb4b93c7b6bb318",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ews:foo\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "edge-007",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 38,
+        "normalizedSha256": "558e381125b8b3b41883f2ce44a13499bc646c1c8926b858b0d80d570b0938e8",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Efile:foo\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "edge-008",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 40,
+        "normalizedSha256": "7a92b107ae35707757bf84bad5ead06c0065ae29138bd1d13b28a79733f84e31",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ecustom:foo\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "custom:foo",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "edge-009",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 41,
+        "normalizedSha256": "c5a9ec248eb675f600e648dc45adf1da48ebfe7bb242e85d700cfd6692076426",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ecustom:/foo\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "custom:/foo",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "edge-010",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 46,
+        "normalizedSha256": "1ddd0db2d5406bf3b0a9781c8ba1284edc85d860f4e2ae4a90eb1c152575d0d3",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Eurn:example:test\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "urn:example:test",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "edge-011",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 53,
+        "normalizedSha256": "7a40f22a6f8dac3d0f1e9eae4de8f8831a0f0d82b707607cd2ca91ed73a767df",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Emailto:user@example.com\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "mailto:user@example.com",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "edge-012",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 48,
+        "normalizedSha256": "fd2c79997a67f492392e35b0e9aecb5eb5e780f5c3c5e1798e03c1eb68659288",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Edata:text/plain,hi\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "data:text/plain,hi",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "edge-013",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 49,
+        "normalizedSha256": "d9a2d8996ba641d5247269665af4e2206c23ffeda918b3596bb51ab6f0d1ebcc",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttp:\\example.com\\a\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "edge-014",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 50,
+        "normalizedSha256": "72e49d9ab7e8aa723dcc8be7e0f5b42d20e350a3f2baa12295ec79d0a38e50d9",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttp:\\\\example.com\\a\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "edge-015",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 50,
+        "normalizedSha256": "127ee71006e1b076d59a49e53aaaed8accec54bc5a361252f987abb32e2b1154",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttp://example.com\\a\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "edge-016",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 52,
+        "normalizedSha256": "ef4a5965fc301b0a2da5603f26b90d14ff2dd76351505063aab73bb7d31601bb",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttp://example.com/a\\b\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "http://example.com/a/b",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "edge-017",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 49,
+        "normalizedSha256": "9128cdb369d17fcbd856badd09cf31d74863d265da08bcdc3c38c9a65bb1d897",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Eftp:\\\\example.com\\a\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "edge-018",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 52,
+        "normalizedSha256": "4d11d1999350304e073edda486d2c0a8a56431eba9fe57204b87068fae4541fc",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ecustom:\\\\example.com\\a\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "edge-019",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 32,
+        "normalizedSha256": "1dfa9be4119386c032ec438499e965bcb2b31ddc1ad7d077682c39bbe513e85f",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003E//\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "edge-020",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 33,
+        "normalizedSha256": "61529038c248a68ed42a76d79a5ce76431ca708614489810378fcc3c09b4311f",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003E///\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "edge-021",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 34,
+        "normalizedSha256": "f190a2ebfe91d2ae37d59cb3b3f9f4648bee265170eac40c381286027b5c8876",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003E////\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "edge-022",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 33,
+        "normalizedSha256": "a918be37dc0225ca117828751eaf9449bd44e26a46b02f4f1c7bee41c3456f75",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003E//?\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "edge-023",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 34,
+        "normalizedSha256": "312b3e055b67239a3a619ccda369f484913bdc9381fc48a0fd1f39c87106f3ca",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003E//?/\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "edge-024",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 40,
+        "normalizedSha256": "e43c0fedcd04555cc026c15eccd87540b32cfb7eb7ee6c274ef54f825b1c72b1",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003E//./C:/foo\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "edge-025",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 32,
+        "normalizedSha256": "010d92d936df600411b2f41b33cec2243f1813592ab206140520ebd2f8f14a78",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003E\\\\\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "edge-026",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 33,
+        "normalizedSha256": "261b52819f6d567f48750ec87b8f41716a3a50e43f420faf9b8da6c9e932667d",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003E\\\\\\\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "edge-027",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 34,
+        "normalizedSha256": "6da87b572f4eee3bfb7c8f8e1a057c006889a3da98e178a5efbc28efe4d3bf7d",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003E\\\\\\\\\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "edge-028",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 34,
+        "normalizedSha256": "f7d0441b0a0774932a76e40f2bce909854299a2f88ddc5149c32432ea2657129",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003E\\\\?\\\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "edge-029",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 40,
+        "normalizedSha256": "a1e94a10e197123a9bbb803387874c7eee4baa92659daf90d3fee767510cf15f",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003E\\\\?\\C:\\foo\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "edge-030",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 34,
+        "normalizedSha256": "c77b7cc8033f9e17f3be6e25a4b1e551327b236bfde782b5eaccc1b90e64a224",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003E\\\\.\\\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "edge-031",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 40,
+        "normalizedSha256": "6b4cd64dedfb2afa7dc93506c68f32fc0b7e7fbe149d763d4fec0c22086e3dce",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003E\\\\.\\C:\\foo\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "edge-032",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 38,
+        "normalizedSha256": "2f6125d410e3f2eb1a76f6739497d72439244cd7d69a01a43fe764f7fb714369",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003E//server\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [
+        {
+          "path": "//server",
+          "outcome": "missing-or-directory"
+        }
+      ],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "edge-033",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 44,
+        "normalizedSha256": "fab0021777fbb3c7a4ca86647066a9d78a88773bbd284c6edd0a7a83bfb6a31b",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003E//server/share\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [
+        {
+          "path": "//server/share",
+          "outcome": "missing-or-directory"
+        }
+      ],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "edge-034",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 46,
+        "normalizedSha256": "debe2cc85bdf74643389cd7c1cef6f53c5ce31f826094c792c89a7d9bbfd7e53",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003E////server/share\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [
+        {
+          "path": "////server/share",
+          "outcome": "missing-or-directory"
+        }
+      ],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "edge-035",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 38,
+        "normalizedSha256": "93b5287c7b07fabf4198ba93ad636d5b661904955e0e148187f2c1d158a386e6",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003E\\\\server\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [
+        {
+          "path": "\\\\server",
+          "outcome": "missing-or-directory"
+        }
+      ],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "edge-036",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 44,
+        "normalizedSha256": "b7cd17c65de166efc8a732631891a01f9b7c3cd88ac0c550a69c497aa0114ffa",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003E\\\\server\\share\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [
+        {
+          "path": "\\\\server\\share",
+          "outcome": "missing-or-directory"
+        }
+      ],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "edge-037",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 46,
+        "normalizedSha256": "1a17bdcbeb4bf7ff6ce75556949bb5790eed28f48bf434ba165cb2460047c562",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003E\\\\\\\\server\\share\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [
+        {
+          "path": "\\\\\\\\server\\share",
+          "outcome": "missing-or-directory"
+        }
+      ],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "edge-038",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 32,
+        "normalizedSha256": "782cb5f80c72a36a2799eaf713539e9cd9eb2c9b95af4e88b9b7e08399b230cb",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003EC:\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "edge-039",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 35,
+        "normalizedSha256": "cad6d4fd07ebcc34de538ff541105aae623ee1797bb4bce781b14fa96e029acf",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003EC:foo\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "edge-040",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 33,
+        "normalizedSha256": "291362f9edb3ff0297cdef16543c85400f562b54b8affe59c9677010cd2c1245",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003EC:\\\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [
+        {
+          "path": "C:\\",
+          "outcome": "missing-or-directory"
+        }
+      ],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "edge-041",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 36,
+        "normalizedSha256": "33dd7c07336f24bb4c9b06da9c90088cbc76c8735422f320849bd42d5db204f0",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003EC:\\foo\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [
+        {
+          "path": "C:\\foo",
+          "outcome": "missing-or-directory"
+        }
+      ],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "edge-042",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 50,
+        "normalizedSha256": "06e213adaf9eda5b5420dbf1951dc63f9a66fcc5f2e39b2d51de4b41d4effbce",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttp://example.com/%\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "http://example.com/%25",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "edge-043",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 51,
+        "normalizedSha256": "6dc95ba856bf5d6c4324737194c4f3998855085e27316f88db95d243dec20e06",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttp://example.com/%2\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "http://example.com/%252",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "edge-044",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 52,
+        "normalizedSha256": "6c9ee2b6a08c53afb1783123153190e9c5ac1bbf6e3b7bd47f3aada5699f740f",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttp://example.com/%zz\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "http://example.com/%25zz",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "edge-045",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 52,
+        "normalizedSha256": "568b98db9647e750ca13b5b891c924fbb54898c06fda8df8a34174c8ae0ac369",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttp://example.com/%2G\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "http://example.com/%252G",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "edge-046",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 43,
+        "normalizedSha256": "9a9fbd87fde1cafba343ef3fdb72a7a51bf3f908e7797f5f82e64072e8ff79cc",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ecustom:foo%zz\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "custom:foo%25zz",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "edge-047",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 55,
+        "normalizedSha256": "e28f271aeeff1f939126d9602f2a265e2b5e9477ad726e2e131f17ca71467478",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttp://u%zz@example.com/a\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "http://u%zz@example.com/a",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "edge-048",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 56,
+        "normalizedSha256": "a829b4129629ab126e068553259e50024bea30b456c019cddfd420047afbf6ac",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttp://example.com/a?x=%zz\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "http://example.com/a?x=%25zz",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "edge-049",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 54,
+        "normalizedSha256": "3301f2bdd67e5f60893750714e2d85f5f6e826eeafe76fed5e0d8dc510ba64ce",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttp://example.com/a#%zz\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "http://example.com/a#%25zz",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "edge-050",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 56,
+        "normalizedSha256": "21696dede65459f244bbdd131c91378e3d28080bd223bf696378c0b2224859de",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttps://example.com/%C2%80\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "https://example.com/%C2%80",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "edge-051",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 56,
+        "normalizedSha256": "d568a61bd97f150e81cb49536411cd4f7749b084ca5497ca5bbb439f7c0fee62",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttps://example.com/%C2%9F\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "https://example.com/%C2%9F",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "edge-052",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 59,
+        "normalizedSha256": "9803e4fd214e2b987083d34e1a83dfa518cae13d4f0907d9fe6741dfbf677b03",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttps://example.com/%EE%80%80\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "https://example.com/%EE%80%80",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "edge-053",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 59,
+        "normalizedSha256": "48a9af2c811408fb16de753262a4657390422d946f8050a092e36dc2ea8e53e7",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttps://example.com/%EF%B7%90\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "https://example.com/%EF%B7%90",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "edge-054",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 59,
+        "normalizedSha256": "6075456d6b84fa6b49bbc6b20972696ead99752460604a16ecd741dfe3225e61",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttps://example.com/%EF%BF%BE\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "https://example.com/%EF%BF%BE",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "edge-055",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 59,
+        "normalizedSha256": "2c98c1039d59ad8cfe68745cf080417f725520a8478c92d8284ae103c7c42ee5",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttps://example.com/%EF%BF%BF\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "https://example.com/%EF%BF%BF",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "edge-056",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 62,
+        "normalizedSha256": "b82d3177d047e6d9080dd22bcdbf64de1e68f7b60441b909cfa517995e43ae2f",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttps://example.com/%F0%9F%BF%BE\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "https://example.com/%F0%9F%BF%BE",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "edge-057",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 59,
+        "normalizedSha256": "aaec23cba0d9d90f413d4f7c36cd6832221069985f093152f4ce509b7020b75a",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttps://example.com/%ED%A0%80\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "https://example.com/%ED%A0%80",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "edge-058",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 56,
+        "normalizedSha256": "2a2ada679df77068ca285c646ca959cec23d1e1a44f4a13fbbdb20fd31933092",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttps://example.com/%C0%AF\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "https://example.com/%C0%AF",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "edge-059",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 53,
+        "normalizedSha256": "e468c68d3d772a7b385cd33e8e2d5edfec034b07fd1fda016d13d7119c0953fc",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttps://example.com/%80\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "https://example.com/%80",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "edge-060",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 56,
+        "normalizedSha256": "118e7d0239e0651271833e6076c1847e3ab0e05cc0b83e553291627fe8ac47c7",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttps://example.com/%E2%82\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "https://example.com/%E2%82",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "edge-061",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 59,
+        "normalizedSha256": "51cc34ffe723dd68d7ace3888b5b4c9c55ca9bcc762809f03b6becb5408da302",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttps://example.com/%EF%BF%BD\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "https://example.com/%EF%BF%BD",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "edge-062",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 59,
+        "normalizedSha256": "d2604f899a0c98dcccd0adf0d6320138d9d788fc08bdb548ac54d3d85888b67c",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttps://example.com/%E2%80%A8\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "https://example.com/\u2028",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "edge-063",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 59,
+        "normalizedSha256": "a0f318f0e00d369bf8ef674adf23b631dd16aabb3de5ceba8643fcc95111429f",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttps://example.com/%E2%80%AE\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "https://example.com/\u202E",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "edge-064",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 52,
+        "normalizedSha256": "afba79c75b0ff3d24b5da525afb4fe07d0371e9faffc2a1a11310b72d1f4e602",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttp://example.com/{a}\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "http://example.com/{a}",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "edge-065",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 54,
+        "normalizedSha256": "8514573872d15e12287d2baf4bf2c905ce94d98dad2e6ab25b0c028236461977",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttp://example.com/a%7Bb\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "http://example.com/a{b",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "edge-066",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 51,
+        "normalizedSha256": "bc34ed607e487bae7dffb53992e504aa380b8688f9b8149f5aef7e17399c3502",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttp://example.com/^a\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "http://example.com/^a",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "edge-067",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 54,
+        "normalizedSha256": "ca28af1d8e223eb2f03def59f9ca32fcc8e993e6032bf46db6b39f670276eec0",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttp://example.com/a%5Eb\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "http://example.com/a^b",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "edge-068",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 51,
+        "normalizedSha256": "dae579cf24e36ad8d68e44bfbb4d5dfcab85e4d8191b878996d32c5890b16ee2",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttp://example.com/\u0060a\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "http://example.com/\u0060a",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "edge-069",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 54,
+        "normalizedSha256": "4b1cb0432e44c843dfa6ba79fd65e5837fb5e135899007ff5212c19001961a6a",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttp://example.com/a%60b\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "http://example.com/a\u0060b",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "edge-070",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 62,
+        "normalizedSha256": "5090b06e2f10ec2f0dd0d3b71e1b07251e1f1580ba4fc66fcbcf770a20c58d5f",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttp://example.com/\u0026quot;a\u0026quot;\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "http://example.com/\u0022a\u0022",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "edge-071",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 54,
+        "normalizedSha256": "23eb75cbbc2cdc3cc358910ca2fa1cfd1d53fea32ac70ff2e8c975bf2df93882",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttp://example.com/a%22b\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "http://example.com/a\u0022b",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "edge-072",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 58,
+        "normalizedSha256": "4caeaed26e223742a40a808159bca3c2f571ab187ccc031faf1c6668ef4688fc",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttp://example.com/\u0026lt;a\u0026gt;\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "http://example.com/\u003Ca\u003E",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "edge-073",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 57,
+        "normalizedSha256": "69e012695234ae471ab7f2dc1e2d73105e12acef6242852665d104a52ab58465",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttp://example.com/a%3Cb%3E\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "http://example.com/a\u003Cb\u003E",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "opaque URI normalizes a bare percent escape",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 41,
+        "normalizedSha256": "18f12c2d6a8abcea8aa259b4a825162890442cf11bed4650b7c938f435d62f0a",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ecustom:foo%\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "custom:foo%25",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "opaque URI normalizes a short percent escape",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 42,
+        "normalizedSha256": "ac26481983eb3d56869cea82f7a578c9e1077210d4fe2ddf23e1efc5080239ac",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ecustom:foo%2\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "custom:foo%252",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "opaque URI normalizes a nonhex percent escape",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 43,
+        "normalizedSha256": "0bf8129d5d96b6d46b4f7ce8a815d5775a434318cd1e0b629c51d4b4f321c91b",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ecustom:foo%2G\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "custom:foo%252G",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "userinfo preserves a bare percent escape",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 53,
+        "normalizedSha256": "a205b24b4cb5f9c18a511ed8e1701572ae5fc54d8e73750ba4a819d3390c10e7",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttp://u%@example.com/a\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "http://u%@example.com/a",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "userinfo preserves a short percent escape",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 54,
+        "normalizedSha256": "7a2d4b3ae71cb4c95622583807491afe49964bdbd2409c2a933847f644a541af",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttp://u%2@example.com/a\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "http://u%2@example.com/a",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "userinfo preserves a nonhex percent escape",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 55,
+        "normalizedSha256": "e43a3fc05d4faeb1ab771d6d83fe0f2168ee383df6f11045963bba52a8f4fd43",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttp://u%2G@example.com/a\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "http://u%2G@example.com/a",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "query normalizes a bare percent escape",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 54,
+        "normalizedSha256": "acf048d682d971cebb07f232b3dd50522053be72ebe46d26073d820484b5ddbb",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttp://example.com/a?x=%\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "http://example.com/a?x=%25",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "query normalizes a short percent escape",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 55,
+        "normalizedSha256": "adbe87b18f012aa6237600fb1f16e7dedbcf9c376e4f1a72f2aa001e91b306a6",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttp://example.com/a?x=%2\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "http://example.com/a?x=%252",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "query normalizes a nonhex percent escape",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 56,
+        "normalizedSha256": "01c33f15bebe003b040d09a4170124a892cc32297764c027f43f8b0357ee1d94",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttp://example.com/a?x=%2G\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "http://example.com/a?x=%252G",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "fragment normalizes a bare percent escape",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 52,
+        "normalizedSha256": "f1e9f895b4ee8c1591dc3a1de3ddb8c4f84bae7f9c2b6da7ed32ab9397a3bea7",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttp://example.com/a#%\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "http://example.com/a#%25",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "fragment normalizes a short percent escape",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 53,
+        "normalizedSha256": "a39688939bf58cbaef4a378ce9e124d8f43a83399bbc5b4fd6a5ddf16fca5308",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttp://example.com/a#%2\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "http://example.com/a#%252",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "fragment normalizes a nonhex percent escape",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 54,
+        "normalizedSha256": "898769b3024292c9d9cda6922868217b7201374a9f2bb69b5eba6737873267ed",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttp://example.com/a#%2G\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "http://example.com/a#%252G",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "opaque URI applies the ASCII display escape matrix",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 82,
+        "normalizedSha256": "c1ae64b7047450aa126f17bb5d80fbbb01951e5dbae91069c0b4482c321145df",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ecustom:%41%7E%20%22%3C%3E%5E%60%7B%7C%7D%25%40%2F%23\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "custom:A~ \u0022\u003C\u003E^\u0060{|}%25%40%2F%23",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "query applies the ASCII display escape matrix",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 98,
+        "normalizedSha256": "a74155fa9104f3cfd030de73f879c30a0c6f135f362f629dd145579a47c215b5",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttp://example.com/a?x=%41%7E%20%22%3C%3E%5E%60%7B%7C%7D%25%40%2F%23\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "http://example.com/a?x=A~ \u0022\u003C\u003E^\u0060{|}%25%40%2F%23",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "fragment applies the ASCII display escape matrix",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 96,
+        "normalizedSha256": "40f8e77735a48ed2c021778744344223b5cc79e4e51478912b2cb8b52cdfa029",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttp://example.com/a#%41%7E%20%22%3C%3E%5E%60%7B%7C%7D%25%40%2F%23\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "http://example.com/a#A~ \u0022\u003C\u003E^\u0060{|}%25%40%2F%23",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "userinfo applies its ASCII display escape matrix",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 105,
+        "normalizedSha256": "2b3f469ca06f6aa74ff1cd73b053f462416e82af0ea943a5960f56361297d2de",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttp://u%41%7E%20%22%3C%3E%5E%60%7B%7C%7D%25%40:p%41%7E%20%40@example.com/a\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "http://uA~ \u0022\u003C\u003E^\u0060{|}%25%40:pA~ %40@example.com/a",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "opaque URI applies its IRI code point matrix",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 89,
+        "normalizedSha256": "71a79ebc2cf5a749f2d4c8999e95c8440b8b02440e11838eda340a4bf7500a7f",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ecustom:%E2%80%A8-%EE%80%80-%EF%BF%BE-%EF%BF%BD-%F0%90%80%80\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "custom:\u2028-%EE%80%80-%EF%BF%BE-%EF%BF%BD-\uD800\uDC00",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "query applies its IRI code point matrix",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 105,
+        "normalizedSha256": "21cbd9513f403a5fe69997b5e8fbeb6b62364400d37ab5996a33a6b45945e0ef",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttp://example.com/a?x=%E2%80%A8-%EE%80%80-%EF%BF%BE-%EF%BF%BD-%F0%90%80%80\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "http://example.com/a?x=\u2028-\uE000-%EF%BF%BE-%EF%BF%BD-\uD800\uDC00",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "fragment applies its IRI code point matrix",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 103,
+        "normalizedSha256": "d94ec6cdc1760d453a904c5f39a4988c1c9e1df6707eaaf70f3b03e4506fb1f7",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttp://example.com/a#%E2%80%A8-%EE%80%80-%EF%BF%BE-%EF%BF%BD-%F0%90%80%80\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "http://example.com/a#\u2028-%EE%80%80-%EF%BF%BE-%EF%BF%BD-\uD800\uDC00",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "userinfo applies its IRI code point matrix",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 104,
+        "normalizedSha256": "ccf0a22c0d57c70a77ba397a4e01e95bb4c0115a41edb6f49599763fd6100663",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttp://u%E2%80%A8-%EE%80%80-%EF%BF%BE-%EF%BF%BD-%F0%90%80%80@example.com/a\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "http://u\u2028-%EE%80%80-%EF%BF%BE-%EF%BF%BD-\uD800\uDC00@example.com/a",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "userinfo standalone encoded space stays escaped",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 55,
+        "normalizedSha256": "d24feb0300b74bde54125cf2467d9a230bfc18248a8e65e0b360b1cecd565dca",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttp://u%20@example.com/a\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "http://u%20@example.com/a",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "userinfo ASCII run before encoded space stays component specific",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 58,
+        "normalizedSha256": "735115857a5b4c8d4eaa6dc6165a3cd2fa4c58c3374ba81d3ae68a3452793775",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttp://u%41%20@example.com/a\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "http://uA @example.com/a",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "userinfo Unicode run before encoded space uses stateful display decoding",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 64,
+        "normalizedSha256": "2801cec45a35591fa44b6f80fd9d89a4ab1255fb080086bf629a1a5c692a2c08",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttp://u%E5%9C%96%20@example.com/a\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "http://u\u5716 @example.com/a",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "userinfo encoded space before Unicode uses stateful display decoding",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 64,
+        "normalizedSha256": "aa6a97aeb6b89ce76dd44e845ecddd7c4baf18f4cc534e045e32378ace8bfa24",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttp://u%20%E5%9C%96@example.com/a\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "http://u \u5716@example.com/a",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "userinfo Unicode run retains an encoded at delimiter",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 64,
+        "normalizedSha256": "eb9afe95bc0c700f85bf67051e507cc496ec826eeeb0b72e5522c43d8d66bec4",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttp://u%E5%9C%96%40@example.com/a\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "http://u\u5716%40@example.com/a",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "userinfo malformed percent before Unicode keeps component state",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 64,
+        "normalizedSha256": "90d81812dc4c9026b014d8201284c63a605644007bff60d3b8e35a95e9606380",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttp://u%zz%E5%9C%96@example.com/a\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "http://u%zz\u5716@example.com/a",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "opaque URI preserves and displays raw ASCII display characters",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 59,
+        "normalizedSha256": "dc44da6ed0ea2c35dd14b90f6dda556bc980e3c01af4a11ad33aa2ba1149278b",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ecustom:A~ \u0026quot;\u0026lt;\u0026gt;^\u0060{|}\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "custom:A~ \u0022\u003C\u003E^\u0060{|}",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "query preserves and displays raw ASCII display characters",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 77,
+        "normalizedSha256": "2e4c258b3b382ffcffe1452508558d48c84662af060b0bf00f8fc14ef6e83b3e",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttp://example.com/a?x=A~%20\u0026quot;\u0026lt;\u0026gt;^\u0060{|}\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "http://example.com/a?x=A~ \u0022\u003C\u003E^\u0060{|}",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "fragment preserves and displays raw ASCII display characters",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 75,
+        "normalizedSha256": "0d6e7954bf97ebeab461c53644647a6327a1024689dfe0c95ae6e4a916e1d22b",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttp://example.com/a#A~%20\u0026quot;\u0026lt;\u0026gt;^\u0060{|}\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "http://example.com/a#A~ \u0022\u003C\u003E^\u0060{|}",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "userinfo standalone encoded quote stays escaped",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 55,
+        "normalizedSha256": "96deef4f06f12c99c99aaef1d96c88647f3b04983e37a51a3b13d947adb50e4c",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttp://u%22@example.com/a\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "http://u%22@example.com/a",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "userinfo display escape before unreserved escape shares run state",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 58,
+        "normalizedSha256": "dab74779566747d6f6a671e549f2d7cbdb65c2557072e9f59b1817689a6c3280",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttp://u%22%41@example.com/a\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "http://u\u0022A@example.com/a",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "userinfo raw separator resets percent run state",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 59,
+        "normalizedSha256": "4a0fa52dfabc485bc255f5c6cca58cb3b2014502a384e146055159ed6cfda6f1",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttp://u%20x%41@example.com/a\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "http://u xA@example.com/a",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "userinfo display and reserved escapes without an anchor stay escaped",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 58,
+        "normalizedSha256": "a99ef964b43a3a80c6a79a5388052f69c5c48c1c84cefb3a020b462a11016289",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttp://u%20%40@example.com/a\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "http://u%20%40@example.com/a",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "userinfo password standalone encoded space stays escaped",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 60,
+        "normalizedSha256": "d410936d14bffb1df3a8c92d3f44d832b5097f5b6078a5a90311e7e8270773a8",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttp://user:p%20@example.com/a\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "http://user:p%20@example.com/a",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "userinfo raw unreserved text does not anchor an encoded space",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 56,
+        "normalizedSha256": "c3d7b8573df77069f60e30b12523572fec22ae5783f53b732cbfd23a942ce533",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Ehttp://u%20x@example.com/a\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [
+        {
+          "url": "http://u%20x@example.com/a",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "file URI drive path without slashes is local and keeps its literal lookup",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 39,
+        "normalizedSha256": "db0fcf676701ed558035ceeb228c104a64b09926fa34652006de25b58e14b5ee",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Efile:C:/x\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": "IOException",
+      "hasMetadata": false,
+      "item": {
+        "Name": null
+      },
+      "lookups": [
+        {
+          "path": "file:C:/x",
+          "outcome": "IOException"
+        }
+      ],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "file URI drive path with one slash is local and keeps its literal lookup",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 40,
+        "normalizedSha256": "8c3438b6a5754eb4d4d567339a6b04df872a678d8d3a78f53ac70de19d34e7ed",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Efile:/C:/x\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": "IOException",
+      "hasMetadata": false,
+      "item": {
+        "Name": null
+      },
+      "lookups": [
+        {
+          "path": "file:/C:/x",
+          "outcome": "IOException"
+        }
+      ],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "file URI drive path with three slashes is local and keeps its literal lookup",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 42,
+        "normalizedSha256": "67390fc2d96f06e02851768cae77d369b3190b5b5437c26d661801bfa37072ed",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Efile:///C:/x\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": "IOException",
+      "hasMetadata": false,
+      "item": {
+        "Name": null
+      },
+      "lookups": [
+        {
+          "path": "file:///C:/x",
+          "outcome": "IOException"
+        }
+      ],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "file URI drive authority form is local and keeps its literal lookup",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 41,
+        "normalizedSha256": "e7e1efd1ad0eac6e662395434714e6ac0cdc302b574d695eff3ab1ed32e4631d",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Efile://C:/x\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": "IOException",
+      "hasMetadata": false,
+      "item": {
+        "Name": null
+      },
+      "lookups": [
+        {
+          "path": "file://C:/x",
+          "outcome": "IOException"
+        }
+      ],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "file URI drive backslash path is local and keeps its literal lookup",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 39,
+        "normalizedSha256": "7342905c15231ffef03e34a5813450ea03fea7c91a7723eb9674725cfa818810",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Efile:C:\\x\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": "IOException",
+      "hasMetadata": false,
+      "item": {
+        "Name": null
+      },
+      "lookups": [
+        {
+          "path": "file:C:\\x",
+          "outcome": "IOException"
+        }
+      ],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "file URI rooted drive backslash path is local and keeps its literal lookup",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 40,
+        "normalizedSha256": "d907bee72c14fb5d8fb2f8e3db5b0bdaae04f0bf6667e14f966f1062b8a41963",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Efile:\\C:\\x\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": "IOException",
+      "hasMetadata": false,
+      "item": {
+        "Name": null
+      },
+      "lookups": [
+        {
+          "path": "file:\\C:\\x",
+          "outcome": "IOException"
+        }
+      ],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "file URI backslash UNC is local and keeps its literal lookup",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 51,
+        "normalizedSha256": "cff35b3f0b529c3864046015db2215b6b20f8ccde25eef24dbff760a566a974a",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Efile:\\\\server\\share\\x\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": "IOException",
+      "hasMetadata": false,
+      "item": {
+        "Name": null
+      },
+      "lookups": [
+        {
+          "path": "file:\\\\server\\share\\x",
+          "outcome": "IOException"
+        }
+      ],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "file URI authority UNC is local and keeps its literal lookup",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 51,
+        "normalizedSha256": "1d91ddcbd5155350e4b2f796793181fab6dcf37ad2266dfb5ea4d786cc27ccd0",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Efile://server/share/x\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": "IOException",
+      "hasMetadata": false,
+      "item": {
+        "Name": null
+      },
+      "lookups": [
+        {
+          "path": "file://server/share/x",
+          "outcome": "IOException"
+        }
+      ],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "file URI four-slash UNC is local and keeps its literal lookup",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 53,
+        "normalizedSha256": "53e6a3ffcb474d74548c5029f56e40c47476575cb70fd7d46851a47e1d774089",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Efile:////server/share/x\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": "IOException",
+      "hasMetadata": false,
+      "item": {
+        "Name": null
+      },
+      "lookups": [
+        {
+          "path": "file:////server/share/x",
+          "outcome": "IOException"
+        }
+      ],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "empty file URI authority is local and keeps its literal lookup",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 37,
+        "normalizedSha256": "f5b8ab096d3109f37e73fb826781566e5ff22a227f31840716a8cd31fd25933e",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Efile://\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": "IOException",
+      "hasMetadata": false,
+      "item": {
+        "Name": null
+      },
+      "lookups": [
+        {
+          "path": "file://",
+          "outcome": "IOException"
+        }
+      ],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "empty file URI path is local and keeps its literal lookup",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 38,
+        "normalizedSha256": "ce7d700c5f8c89b2e48b2b29b464a7d799a4e6f39b5a4f2f5d2de2a561b5b5fd",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Efile:///\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": "IOException",
+      "hasMetadata": false,
+      "item": {
+        "Name": null
+      },
+      "lookups": [
+        {
+          "path": "file:///",
+          "outcome": "IOException"
+        }
+      ],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "empty file URI path with query is local and keeps its literal lookup",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 40,
+        "normalizedSha256": "f1835cd9a061ed0c3380fd2b589a3f217a3e13944a8492c2ec360b59b0f81b65",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Efile:///?q\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": "IOException",
+      "hasMetadata": false,
+      "item": {
+        "Name": null
+      },
+      "lookups": [
+        {
+          "path": "file:///?q",
+          "outcome": "IOException"
+        }
+      ],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "file URI drive path with query and fragment keeps its literal lookup",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 46,
+        "normalizedSha256": "dd25c80e329e7beb996e704585cb286d0af38d29054a1e48a1a6bd5a01eb449a",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Efile:///C:/x?q#f\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": "IOException",
+      "hasMetadata": false,
+      "item": {
+        "Name": null
+      },
+      "lookups": [
+        {
+          "path": "file:///C:/x?q#f",
+          "outcome": "IOException"
+        }
+      ],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "file URI single-slash server path is invalid without lookup",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 50,
+        "normalizedSha256": "1e23b49acb5f9bebc16b7c5ed93de0c0939f49adc992dfdc50f32582783fda2a",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Efile:/server/share/x\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "file URI drive-relative path is invalid without lookup",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 49,
+        "normalizedSha256": "854ca3592683f89ac6d8d70423e19750ab5d0c67df9028b7dd56abd6c05dacae",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Efile:C:relative.jpg\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "uppercase file URI drive form is local and keeps its literal lookup",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 39,
+        "normalizedSha256": "402ef10c91c219a3fe0f9fb14af127fa31ed5444aee468841a2bd5d5009ef347",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003EFILE:C:/x\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": "IOException",
+      "hasMetadata": false,
+      "item": {
+        "Name": null
+      },
+      "lookups": [
+        {
+          "path": "FILE:C:/x",
+          "outcome": "IOException"
+        }
+      ],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "file URI localhost drive form is local and keeps its literal lookup",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 51,
+        "normalizedSha256": "3f7d3fd450b5da60f6e71d9f45cdf2dc477b54a1bf0895153e301230ce28ba60",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Efile://localhost/C:/x\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": "IOException",
+      "hasMetadata": false,
+      "item": {
+        "Name": null
+      },
+      "lookups": [
+        {
+          "path": "file://localhost/C:/x",
+          "outcome": "IOException"
+        }
+      ],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "file URI mixed authority backslashes follow native classification",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 51,
+        "normalizedSha256": "9b534920e8f175c7283c10a0fdd48f5a5f68a26f779de1eae5506d4661c2c2d8",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Efile://server\\share\\x\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": "IOException",
+      "hasMetadata": false,
+      "item": {
+        "Name": null
+      },
+      "lookups": [
+        {
+          "path": "file://server\\share\\x",
+          "outcome": "IOException"
+        }
+      ],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "file URI slash-backslash UNC follows native classification",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 51,
+        "normalizedSha256": "8dd66bc7941f2e8ff9c903c2c9c3db50d09dcf80a1188e86e8f874e656af3024",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Efile:/\\server\\share\\x\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": "IOException",
+      "hasMetadata": false,
+      "item": {
+        "Name": null
+      },
+      "lookups": [
+        {
+          "path": "file:/\\server\\share\\x",
+          "outcome": "IOException"
+        }
+      ],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "file URI drive path with query keeps its literal lookup",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 41,
+        "normalizedSha256": "7a430244f10cc82cfd16b66bd4b735c6150952c70c89cf565d635fd9bef71342",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Efile:C:/x?q\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": "IOException",
+      "hasMetadata": false,
+      "item": {
+        "Name": null
+      },
+      "lookups": [
+        {
+          "path": "file:C:/x?q",
+          "outcome": "IOException"
+        }
+      ],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "file URI drive path with fragment keeps its literal lookup",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 41,
+        "normalizedSha256": "b16e64fc18aed5043099c2a8cfaf62c03d2aff498817a9353d2374b2eda3edaa",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Efile:C:/x#f\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": "IOException",
+      "hasMetadata": false,
+      "item": {
+        "Name": null
+      },
+      "lookups": [
+        {
+          "path": "file:C:/x#f",
+          "outcome": "IOException"
+        }
+      ],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "file URI backslash UNC with query and fragment keeps its literal lookup",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 55,
+        "normalizedSha256": "86ad99eaaf70ce92ca38fbd272bc4d980a24f6cf4e0b8858b7fd4201bf36345d",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Efile:\\\\server\\share\\x?q#f\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": "IOException",
+      "hasMetadata": false,
+      "item": {
+        "Name": null
+      },
+      "lookups": [
+        {
+          "path": "file:\\\\server\\share\\x?q#f",
+          "outcome": "IOException"
+        }
+      ],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "file URI authority UNC with query and fragment keeps its literal lookup",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 55,
+        "normalizedSha256": "234cd04f27f96178a7eb8d6992b7fdf309c5cd22a7df4718f57a7d3af4696d1f",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Efile://server/share/x?q#f\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": "IOException",
+      "hasMetadata": false,
+      "item": {
+        "Name": null
+      },
+      "lookups": [
+        {
+          "path": "file://server/share/x?q#f",
+          "outcome": "IOException"
+        }
+      ],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "file scheme without a path is invalid without lookup",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 35,
+        "normalizedSha256": "3f4434e92d663a0b51a93ea3e8d8da6d7e77c960db8f822dea3d09e0a29bd17c",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Efile:\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "file scheme with only a query is invalid without lookup",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 37,
+        "normalizedSha256": "7b9bef6ce6a0bd970357c5b3c45aff715be5a14bcb071e9026f5c1a891fee65b",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Efile:?q\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "file scheme with only a fragment is invalid without lookup",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 37,
+        "normalizedSha256": "251a6e7cd8b9fd3620043b12b62d7b2f38e2d7d315cf096643508d05154364eb",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Efile:#f\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "file URI drive designator without a separator follows native classification",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 37,
+        "normalizedSha256": "816f7eeb456aaadf143d2eaa97aba3fa5fd32a3cd726f34fe0061b6d9e84479d",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Efile:C:\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "file URI slash drive designator without a separator follows native classification",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 38,
+        "normalizedSha256": "370f6570a3d2107d0ef04f3275df46d641a3e88dcb7748d67b560a107c7b8feb",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Efile:/C:\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "file URI authority drive designator without a separator follows native classification",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 39,
+        "normalizedSha256": "a4ffb123b3bdec376238c1979587bc46de273afbe010e1e55c2dfd4826c654ca",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Efile://C:\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "file URI single forward root follows native classification",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 36,
+        "normalizedSha256": "2323022dd5c176ed0c64e8cdfab6e8be465e4016f6064313d5f127cbb793b088",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Efile:/\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "file URI single backslash root follows native classification",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 36,
+        "normalizedSha256": "97eefc25cf15210e1d21a0c68422f3508ad660286db8e015d4a40c17901b6073",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Efile:\\\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "file URI single backslash server path follows native classification",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 48,
+        "normalizedSha256": "5962d8d3b8c6de0b6013572044561c4229a37c1c01e892a4fddaa1319284e581",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Efile:\\server\\share\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "file URI empty backslash authority follows native classification",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 37,
+        "normalizedSha256": "801617b9d2c718cf0e25964bf2737b5c850d8ca4bfe0d9230a911349bbd3e457",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Efile:\\\\\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": "IOException",
+      "hasMetadata": false,
+      "item": {
+        "Name": null
+      },
+      "lookups": [
+        {
+          "path": "file:\\\\",
+          "outcome": "IOException"
+        }
+      ],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "file URI empty four-slash path follows native classification",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 39,
+        "normalizedSha256": "0f3f073518b5ebba1bed720ad7b1bfad6d88f5b50aea658f166ef1084aac8859",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Efile:////\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": "IOException",
+      "hasMetadata": false,
+      "item": {
+        "Name": null
+      },
+      "lookups": [
+        {
+          "path": "file:////",
+          "outcome": "IOException"
+        }
+      ],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "file URI empty mixed-slash authority follows native classification",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 37,
+        "normalizedSha256": "199844b08008dc5469d71170a74e8f3c7ecab3c77c324c31bf047f9f0a4249bb",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Efile:/\\\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": "IOException",
+      "hasMetadata": false,
+      "item": {
+        "Name": null
+      },
+      "lookups": [
+        {
+          "path": "file:/\\",
+          "outcome": "IOException"
+        }
+      ],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "empty file URI authority with query and fragment keeps its literal lookup",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 41,
+        "normalizedSha256": "cd4de213ba06516518c6008de6d44a56344d061f4afed947cb94b6cec28a81df",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Efile://?q#f\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": "IOException",
+      "hasMetadata": false,
+      "item": {
+        "Name": null
+      },
+      "lookups": [
+        {
+          "path": "file://?q#f",
+          "outcome": "IOException"
+        }
+      ],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "file URI percent-encoded drive letter follows native classification",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 41,
+        "normalizedSha256": "4453b8180b617a37deb5667fafd2e3bd82244e162af405c917775d9f6249d6b4",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Efile:%43:/x\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "file URI legacy drive separator follows native classification",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 39,
+        "normalizedSha256": "4d792c439fc300ed20bcc675c18148f4567bde14512c05aff5f5927ec05a6012",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Efile:C|/x\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": "IOException",
+      "hasMetadata": false,
+      "item": {
+        "Name": null
+      },
+      "lookups": [
+        {
+          "path": "file:C|/x",
+          "outcome": "IOException"
+        }
+      ],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "file URI rooted legacy drive separator follows native classification",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 42,
+        "normalizedSha256": "af938b86e13c12f20b639ad53ed932a77bdf16b4f6e299f7c49e5a9d137413e3",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Efile:///C|/x\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": "IOException",
+      "hasMetadata": false,
+      "item": {
+        "Name": null
+      },
+      "lookups": [
+        {
+          "path": "file:///C|/x",
+          "outcome": "IOException"
+        }
+      ],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "file URI authority host without share keeps its literal lookup",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 43,
+        "normalizedSha256": "10cbe94f8ae77718341f341981601a10c507837244d3a2ca85d46c43827b8704",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Efile://server\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": "IOException",
+      "hasMetadata": false,
+      "item": {
+        "Name": null
+      },
+      "lookups": [
+        {
+          "path": "file://server",
+          "outcome": "IOException"
+        }
+      ],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "file URI backslash host without share keeps its literal lookup",
+      "providerRuntime": false,
+      "raw": {
+        "normalizedBytes": 43,
+        "normalizedSha256": "43b86b7a447bec9854fec2a489bbdaf3d7ef72a717af5d1a0f84302d4a9ab619",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Efile:\\\\server\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": "IOException",
+      "hasMetadata": false,
+      "item": {
+        "Name": null
+      },
+      "lookups": [
+        {
+          "path": "file:\\\\server",
+          "outcome": "IOException"
+        }
+      ],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "runtime provider preserves a file URI lookup failure",
+      "providerRuntime": true,
+      "raw": {
+        "normalizedBytes": 39,
+        "normalizedSha256": "db0fcf676701ed558035ceeb228c104a64b09926fa34652006de25b58e14b5ee",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Efile:C:/x\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": false,
+      "item": {
+        "Name": null
+      },
+      "lookups": [
+        {
+          "path": "$ROOT\\movie.nfo",
+          "outcome": "file"
+        },
+        {
+          "path": "file:C:/x",
+          "outcome": "IOException"
+        }
+      ],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "runtime provider rejects a relative file URI without an image lookup",
+      "providerRuntime": true,
+      "raw": {
+        "normalizedBytes": 38,
+        "normalizedSha256": "558e381125b8b3b41883f2ce44a13499bc646c1c8926b858b0d80d570b0938e8",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Efile:foo\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [
+        {
+          "path": "$ROOT\\movie.nfo",
+          "outcome": "file"
+        }
+      ],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "runtime provider file URI failure retains an earlier local image prefix",
+      "providerRuntime": true,
+      "raw": {
+        "normalizedBytes": 96,
+        "normalizedSha256": "026a158c3d33d5926d21964fdfab341251cf20535500f99c1b77cfdc642573fe",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003E$ROOT\\present image.jpg\u003C/thumb\u003E\u003Cthumb aspect=\u0022clearlogo\u0022\u003Efile:C:/x\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": false,
+      "item": {
+        "Name": null
+      },
+      "lookups": [
+        {
+          "path": "$ROOT\\movie.nfo",
+          "outcome": "file"
+        },
+        {
+          "path": "$ROOT\\present image.jpg",
+          "outcome": "file"
+        },
+        {
+          "path": "file:C:/x",
+          "outcome": "IOException"
+        }
+      ],
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "mapped runtime treats a literal file URI as a missing native path",
+      "providerRuntime": true,
+      "raw": {
+        "normalizedBytes": 49,
+        "normalizedSha256": "57fd8c507ecf759d5f3e01b594a2cc898ffb25a59d0e045829ce2df59df90ee4",
+        "normalized": "\u003Cmovie\u003E\u003Cthumb\u003Efile:C:/missing.jpg\u003C/thumb\u003E\u003C/movie\u003E"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null
+      },
+      "lookups": [
+        {
+          "path": "$ROOT\\movie.nfo",
+          "outcome": "file"
+        },
+        {
+          "path": "file:C:/missing.jpg",
+          "outcome": "missing-or-directory"
+        }
+      ],
+      "remoteImages": [],
+      "localImages": []
+    }
+  ]
+}

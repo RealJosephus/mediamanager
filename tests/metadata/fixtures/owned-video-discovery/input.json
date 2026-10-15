@@ -1,0 +1,186 @@
+[
+  {
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": true,
+    "files": [
+      "part 2025.mkv"
+    ],
+    "name": "create-coerced-part"
+  },
+  {
+    "expectedType": "Video",
+    "resolverType": "Video",
+    "parseName": false,
+    "mixed": true,
+    "files": [
+      "part 2025.mkv"
+    ],
+    "name": "create-same-type-part"
+  },
+  {
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": true,
+    "files": [
+      "part 2025.mkv"
+    ],
+    "name": "create-typed-alternate",
+    "isAlternate": true
+  },
+  {
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": false,
+    "mixed": true,
+    "files": [
+      "part 2025.mkv"
+    ],
+    "name": "create-coerced-alternate",
+    "isAlternate": true
+  },
+  {
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": true,
+    "files": [
+      "part 2025.mkv"
+    ],
+    "name": "create-after-cancellation",
+    "cancelled": true,
+    "expectException": "OperationCanceledException"
+  },
+  {
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": true,
+    "files": [
+      "part 2025.mkv"
+    ],
+    "name": "alternate-after-cancellation",
+    "isAlternate": true,
+    "cancelled": true,
+    "expectException": "OperationCanceledException"
+  },
+  {
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": true,
+    "files": [
+      "part 2025.mkv"
+    ],
+    "name": "wrong-type-alternate",
+    "isAlternate": true,
+    "wrongType": true
+  },
+  {
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": true,
+    "files": [
+      "part 2025.mkv"
+    ],
+    "name": "create-part-fails",
+    "newFailure": "insert"
+  },
+  {
+    "expectedType": "Video",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": true,
+    "files": [
+      "part 2025.mkv"
+    ],
+    "name": "missing-part",
+    "existingType": true,
+    "missing": true
+  },
+  {
+    "expectedType": "Video",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": true,
+    "files": [
+      "part 2025.mkv"
+    ],
+    "name": "missing-part-after-cancellation",
+    "existingType": true,
+    "missing": true,
+    "cancelled": true,
+    "expectException": "OperationCanceledException"
+  },
+  {
+    "expectedType": "Video",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": true,
+    "files": [
+      "part 2025.mkv"
+    ],
+    "name": "missing-part-delete-fails",
+    "existingType": true,
+    "missing": true,
+    "newFailure": "delete"
+  },
+  {
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": true,
+    "files": [
+      "part 2025.mkv"
+    ],
+    "name": "missing-alternate",
+    "existingType": true,
+    "isAlternate": true,
+    "missing": true
+  },
+  {
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": true,
+    "files": [
+      "part 2025.mkv"
+    ],
+    "name": "duplicate-part-paths",
+    "versions": [
+      "part 2025.mkv",
+      "part 2025.mkv"
+    ]
+  },
+  {
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": true,
+    "files": [
+      "part 2025.mkv"
+    ],
+    "name": "duplicate-alternate-paths",
+    "versions": [
+      "part 2025.mkv",
+      "part 2025.mkv"
+    ],
+    "isAlternate": true
+  },
+  {
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": true,
+    "files": [
+      "part 2025.mkv"
+    ],
+    "name": "cancelled-part-create-fails",
+    "cancelled": true,
+    "newFailure": "insert",
+    "expectException": "OperationCanceledException"
+  }
+]

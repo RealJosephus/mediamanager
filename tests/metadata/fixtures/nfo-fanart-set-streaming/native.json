@@ -1,0 +1,699 @@
+{
+  "schemaVersion": 1,
+  "candidateVerified": false,
+  "frozenJellyfinHead": "208c278b75abd897aefa1e1175126eac5e4dbfaa",
+  "inputSha256": "bb4eb117c3fa55dec73381047f69ccfb578e52340bd5329b2a699f7490756aa0",
+  "boundary": "Actual MovieNfoParser over exact UTF-8 temporary file bytes. This independently isolates flat thumb look-ahead, fanart ReadSubtree/ReadToDescendant behavior, Movie set ReadInnerXml/reparse behavior, and malformed or truncated partial commits.",
+  "uncovered": [
+    "local image filesystem success and failure behavior",
+    "all URI schemes and System.Uri normalization cases",
+    "every XML 1.0 grammar production and encoding combination",
+    "non-Movie parser types, Episode multi-block parsing and user-data persistence",
+    "all NFO scalar, date and external-id provider combinations"
+  ],
+  "results": [
+    {
+      "name": "flat thumb commits at root end",
+      "raw": {
+        "bytes": 80,
+        "sha256": "7ab9eae91329a4b0fe928b780ea52a85c61b280bddf57e362b81d1ab0b162711",
+        "base64": "PG1vdmllPjx0aHVtYiBhc3BlY3Q9InBvc3RlciI\u002BaHR0cHM6Ly9leGFtcGxlLnRlc3QvZmxhdC1yb290LmpwZzwvdGh1bWI\u002BPC9tb3ZpZT4="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null,
+        "collectionName": null,
+        "providers": {}
+      },
+      "remoteImages": [
+        {
+          "url": "https://example.test/flat-root.jpg",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "flat thumb waits for immediate malformed sibling token",
+      "raw": {
+        "bytes": 87,
+        "sha256": "dbd078f1a1149cb8ae1d36bfb4176e32d5a644e0d7289b57348729b6bcba6e10",
+        "base64": "PG1vdmllPjx0aHVtYiBhc3BlY3Q9InBvc3RlciI\u002BaHR0cHM6Ly9leGFtcGxlLnRlc3QvZmxhdC13YWl0LmpwZzwvdGh1bWI\u002BPGJyb2tlbjwvbW92aWU\u002B"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null,
+        "collectionName": null,
+        "providers": {}
+      },
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "flat thumb commits before later scalar truncation",
+      "raw": {
+        "bytes": 98,
+        "sha256": "8e6a91e47ece2a7aef9a7aafc44b7e0912cd3951663bd373e1a5a85cb0b647a6",
+        "base64": "PG1vdmllPjx0aHVtYiBhc3BlY3Q9InBvc3RlciI\u002BaHR0cHM6Ly9leGFtcGxlLnRlc3QvZmxhdC1wcmVmaXguanBnPC90aHVtYj48cGxvdD5UYWlsPC9wbG90Pjxicm9rZW4="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null,
+        "collectionName": null,
+        "providers": {}
+      },
+      "remoteImages": [
+        {
+          "url": "https://example.test/flat-prefix.jpg",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "flat thumb nested content does not commit",
+      "raw": {
+        "bytes": 83,
+        "sha256": "49d58e0ee0b106a1ea46868324e7cd275839851a729a317782fac0a5acc168f0",
+        "base64": "PG1vdmllPjx0aHVtYiBhc3BlY3Q9InBvc3RlciI\u002BaHR0cHM6Ly9leGFtcGxlLnRlc3QvPGlubmVyLz5mbGF0LmpwZzwvdGh1bWI\u002BPC9tb3ZpZT4="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null,
+        "collectionName": null,
+        "providers": {}
+      },
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "flat dotted aspect does not block later valid thumb",
+      "raw": {
+        "bytes": 149,
+        "sha256": "0920e274a40da0d18d6d90906f688849656204b9d1d44b4cf57f15d1f18f5b3f",
+        "base64": "PG1vdmllPjx0aHVtYiBhc3BlY3Q9InNlYXNvbi5wb3N0ZXIiPmh0dHBzOi8vZXhhbXBsZS50ZXN0L3NraXBwZWQuanBnPC90aHVtYj48dGh1bWIgYXNwZWN0PSJwb3N0ZXIiPmh0dHBzOi8vZXhhbXBsZS50ZXN0L2FjY2VwdGVkLmpwZzwvdGh1bWI\u002BPC9tb3ZpZT4="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null,
+        "collectionName": null,
+        "providers": {}
+      },
+      "remoteImages": [
+        {
+          "url": "https://example.test/accepted.jpg",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "flat duplicate remote image type keeps first",
+      "raw": {
+        "bytes": 138,
+        "sha256": "af2d2b197420ecc92f06606bc4c335d972894bd2363b340dd7355c5e19e644f9",
+        "base64": "PG1vdmllPjx0aHVtYiBhc3BlY3Q9InBvc3RlciI\u002BaHR0cHM6Ly9leGFtcGxlLnRlc3QvZmlyc3QuanBnPC90aHVtYj48dGh1bWIgYXNwZWN0PSJwb3N0ZXIiPmh0dHBzOi8vZXhhbXBsZS50ZXN0L3NlY29uZC5qcGc8L3RodW1iPjwvbW92aWU\u002B"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null,
+        "collectionName": null,
+        "providers": {}
+      },
+      "remoteImages": [
+        {
+          "url": "https://example.test/first.jpg",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "empty fanart advances to following flat thumb",
+      "raw": {
+        "bytes": 91,
+        "sha256": "56a12625d40eb9589b8c2adc308aafc1d3492c469adb8de182fa36f60e49e356",
+        "base64": "PG1vdmllPjxmYW5hcnQvPjx0aHVtYiBhc3BlY3Q9InBvc3RlciI\u002BaHR0cHM6Ly9leGFtcGxlLnRlc3QvYWZ0ZXItZW1wdHkuanBnPC90aHVtYj48L21vdmllPg=="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null,
+        "collectionName": null,
+        "providers": {}
+      },
+      "remoteImages": [
+        {
+          "url": "https://example.test/after-empty.jpg",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "fanart without thumb is skipped before following title",
+      "raw": {
+        "bytes": 85,
+        "sha256": "cea2e0b9649626559cd8feda9b3410019e769ee1fc9086a4e4c3abb6e7dacc37",
+        "base64": "PG1vdmllPjxmYW5hcnQ\u002BPHVua25vd24\u002BSWdub3JlZDwvdW5rbm93bj48L2ZhbmFydD48dGl0bGU\u002BQWZ0ZXIgRmFuYXJ0PC90aXRsZT48L21vdmllPg=="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": "After Fanart",
+        "collectionName": null,
+        "providers": {}
+      },
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "fanart direct thumb commits as backdrop",
+      "raw": {
+        "bytes": 80,
+        "sha256": "8922edbb2027571dda567ed474394b646b9c614ce215c06ba808c2fbae1b921c",
+        "base64": "PG1vdmllPjxmYW5hcnQ\u002BPHRodW1iPmh0dHBzOi8vZXhhbXBsZS50ZXN0L2JhY2tkcm9wLmpwZzwvdGh1bWI\u002BPC9mYW5hcnQ\u002BPC9tb3ZpZT4="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null,
+        "collectionName": null,
+        "providers": {}
+      },
+      "remoteImages": [
+        {
+          "url": "https://example.test/backdrop.jpg",
+          "type": "Backdrop"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "fanart considers only first thumb",
+      "raw": {
+        "bytes": 162,
+        "sha256": "8a7d690d33b377fb8f29f8bc9c907db0de79ee2631a021534e56b08dd2f19446",
+        "base64": "PG1vdmllPjxmYW5hcnQ\u002BPHRodW1iPmh0dHBzOi8vZXhhbXBsZS50ZXN0L2ZpcnN0LWJhY2tkcm9wLmpwZzwvdGh1bWI\u002BPHRodW1iIGFzcGVjdD0ibGFuZHNjYXBlIj5odHRwczovL2V4YW1wbGUudGVzdC9pZ25vcmVkLWxhbmRzY2FwZS5qcGc8L3RodW1iPjwvZmFuYXJ0PjwvbW92aWU\u002B"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null,
+        "collectionName": null,
+        "providers": {}
+      },
+      "remoteImages": [
+        {
+          "url": "https://example.test/first-backdrop.jpg",
+          "type": "Backdrop"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "fanart finds nested descendant thumb",
+      "raw": {
+        "bytes": 106,
+        "sha256": "f7ce6c10c97a8e5b1ce7f1f1bc2ad5e81d1f9f25371eafc3761033a8260690ab",
+        "base64": "PG1vdmllPjxmYW5hcnQ\u002BPHdyYXBwZXI\u002BPHRodW1iPmh0dHBzOi8vZXhhbXBsZS50ZXN0L25lc3RlZC1iYWNrZHJvcC5qcGc8L3RodW1iPjwvd3JhcHBlcj48L2ZhbmFydD48L21vdmllPg=="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null,
+        "collectionName": null,
+        "providers": {}
+      },
+      "remoteImages": [
+        {
+          "url": "https://example.test/nested-backdrop.jpg",
+          "type": "Backdrop"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "fanart uppercase Thumb is ignored",
+      "raw": {
+        "bytes": 150,
+        "sha256": "84cc7593403897a756e4f28bb8fdaffef344f75713b236e10274a3b5495740ee",
+        "base64": "PG1vdmllPjxmYW5hcnQ\u002BPFRodW1iPmh0dHBzOi8vZXhhbXBsZS50ZXN0L2lnbm9yZWQtY2FzZS5qcGc8L1RodW1iPjwvZmFuYXJ0Pjx0aHVtYiBhc3BlY3Q9InBvc3RlciI\u002BaHR0cHM6Ly9leGFtcGxlLnRlc3QvYWZ0ZXItY2FzZS5qcGc8L3RodW1iPjwvbW92aWU\u002B"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null,
+        "collectionName": null,
+        "providers": {}
+      },
+      "remoteImages": [
+        {
+          "url": "https://example.test/after-case.jpg",
+          "type": "Primary"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "fanart explicit landscape thumb preserves type",
+      "raw": {
+        "bytes": 100,
+        "sha256": "3878d542a353d8c3910f030535035c9cca8f69877d831ab19ebd9be9137b72cd",
+        "base64": "PG1vdmllPjxmYW5hcnQ\u002BPHRodW1iIGFzcGVjdD0ibGFuZHNjYXBlIj5odHRwczovL2V4YW1wbGUudGVzdC9sYW5kc2NhcGUuanBnPC90aHVtYj48L2ZhbmFydD48L21vdmllPg=="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null,
+        "collectionName": null,
+        "providers": {}
+      },
+      "remoteImages": [
+        {
+          "url": "https://example.test/landscape.jpg",
+          "type": "Thumb"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "fanart dotted first thumb prevents later candidate",
+      "raw": {
+        "bytes": 158,
+        "sha256": "7a74ef84c3c5574c1b2ad5e4e664fe42fa4b189b0d976abd1b753c8853a98efc",
+        "base64": "PG1vdmllPjxmYW5hcnQ\u002BPHRodW1iIGFzcGVjdD0ibW92aWUucG9zdGVyIj5odHRwczovL2V4YW1wbGUudGVzdC9za2lwcGVkLWZpcnN0LmpwZzwvdGh1bWI\u002BPHRodW1iPmh0dHBzOi8vZXhhbXBsZS50ZXN0L25vdC12aXNpdGVkLmpwZzwvdGh1bWI\u002BPC9mYW5hcnQ\u002BPC9tb3ZpZT4="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null,
+        "collectionName": null,
+        "providers": {}
+      },
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "fanart thumb waits for malformed immediate token",
+      "raw": {
+        "bytes": 92,
+        "sha256": "ac59ea360ca34eed1fec29d6becf644d69f283a1df1e1af84c8e97c38e5d9eb4",
+        "base64": "PG1vdmllPjxmYW5hcnQ\u002BPHRodW1iPmh0dHBzOi8vZXhhbXBsZS50ZXN0L25vdC1jb21taXR0ZWQuanBnPC90aHVtYj48YnJva2VuPC9mYW5hcnQ\u002BPC9tb3ZpZT4="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null,
+        "collectionName": null,
+        "providers": {}
+      },
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "fanart thumb commits before later subtree mismatch",
+      "raw": {
+        "bytes": 112,
+        "sha256": "e2725633f9e32d65dbef39f61fe864751ed9f2225cc1b22d54dbd6a5b9360434",
+        "base64": "PG1vdmllPjxmYW5hcnQ\u002BPHRodW1iPmh0dHBzOi8vZXhhbXBsZS50ZXN0L2NvbW1pdHRlZC1iZWZvcmUtbWlzbWF0Y2guanBnPC90aHVtYj48dW5rbm93bj48L2JhZD48L2ZhbmFydD48L21vdmllPg=="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null,
+        "collectionName": null,
+        "providers": {}
+      },
+      "remoteImages": [
+        {
+          "url": "https://example.test/committed-before-mismatch.jpg",
+          "type": "Backdrop"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "fanart thumb commits before malformed root sibling",
+      "raw": {
+        "bytes": 107,
+        "sha256": "02d6b105323af6d9ec43f7f646eaf0b1e043ac8b232a8dbdec27fcc8fedec70a",
+        "base64": "PG1vdmllPjxmYW5hcnQ\u002BPHRodW1iPmh0dHBzOi8vZXhhbXBsZS50ZXN0L2NvbW1pdHRlZC1iZWZvcmUtcm9vdC1lcnJvci5qcGc8L3RodW1iPjwvZmFuYXJ0Pjxicm9rZW4\u002BPC9tb3ZpZT4="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null,
+        "collectionName": null,
+        "providers": {}
+      },
+      "remoteImages": [
+        {
+          "url": "https://example.test/committed-before-root-error.jpg",
+          "type": "Backdrop"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "fanart completed thumb at truncated eof waits",
+      "raw": {
+        "bytes": 63,
+        "sha256": "c56be14916022c0967fb437d762313556ba87f57a9db5da2f2214fe1f15b5753",
+        "base64": "PG1vdmllPjxmYW5hcnQ\u002BPHRodW1iPmh0dHBzOi8vZXhhbXBsZS50ZXN0L2VvZi13YWl0LmpwZzwvdGh1bWI\u002B"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null,
+        "collectionName": null,
+        "providers": {}
+      },
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "fanart malformed subtree before thumb retains no image",
+      "raw": {
+        "bytes": 92,
+        "sha256": "7e0f643af63d77062d21468c0bc922366accaee6a176d52c7f14f32d7455030d",
+        "base64": "PG1vdmllPjxmYW5hcnQ\u002BPHVua25vd24\u002BPC9iYWQ\u002BPHRodW1iPmh0dHBzOi8vZXhhbXBsZS50ZXN0L25ldmVyLmpwZzwvdGh1bWI\u002BPC9mYW5hcnQ\u002BPC9tb3ZpZT4="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null,
+        "collectionName": null,
+        "providers": {}
+      },
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "fanart nested thumb waits for malformed next token",
+      "raw": {
+        "bytes": 109,
+        "sha256": "727207d1456d27ef3bd64d2681ea4c7c9e59ccd9c815c8c6543180c4d30cfd98",
+        "base64": "PG1vdmllPjxmYW5hcnQ\u002BPHdyYXBwZXI\u002BPHRodW1iPmh0dHBzOi8vZXhhbXBsZS50ZXN0L25lc3RlZC13YWl0LmpwZzwvdGh1bWI\u002BPGJyb2tlbjwvd3JhcHBlcj48L2ZhbmFydD48L21vdmllPg=="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null,
+        "collectionName": null,
+        "providers": {}
+      },
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "fanart thumb nested content does not commit",
+      "raw": {
+        "bytes": 83,
+        "sha256": "a568705f5cb181909983544ccdf8884e440275ac140936b07a93a588433dc7b8",
+        "base64": "PG1vdmllPjxmYW5hcnQ\u002BPHRodW1iPmh0dHBzOi8vZXhhbXBsZS50ZXN0Lzxpbm5lci8\u002BYmFkLmpwZzwvdGh1bWI\u002BPC9mYW5hcnQ\u002BPC9tb3ZpZT4="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null,
+        "collectionName": null,
+        "providers": {}
+      },
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "fanart comment before thumb still commits",
+      "raw": {
+        "bytes": 97,
+        "sha256": "c950e9a509920aa3362d70074cbfeeed38edb2d3f6d3456a6f9d72fce58da80a",
+        "base64": "PG1vdmllPjxmYW5hcnQ\u002BPCEtLSBpZ25vcmVkIC0tPjx0aHVtYj5odHRwczovL2V4YW1wbGUudGVzdC9jb21tZW50ZWQuanBnPC90aHVtYj48L2ZhbmFydD48L21vdmllPg=="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null,
+        "collectionName": null,
+        "providers": {}
+      },
+      "remoteImages": [
+        {
+          "url": "https://example.test/commented.jpg",
+          "type": "Backdrop"
+        }
+      ],
+      "localImages": []
+    },
+    {
+      "name": "set direct text commits",
+      "raw": {
+        "bytes": 43,
+        "sha256": "2f8a6f75fb99e5ec489f6c41e1ae26bd1113df60095a8a5b4453b500da8a4acd",
+        "base64": "PG1vdmllPjxzZXQ\u002BRGlyZWN0IENvbGxlY3Rpb248L3NldD48L21vdmllPg=="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null,
+        "collectionName": "Direct Collection",
+        "providers": {}
+      },
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "set name child commits",
+      "raw": {
+        "bytes": 55,
+        "sha256": "b62defae7be3bed96e09c7bb58509b07ea800376870ca85db11597e2d08c9d55",
+        "base64": "PG1vdmllPjxzZXQ\u002BPG5hbWU\u002BTmFtZWQgQ29sbGVjdGlvbjwvbmFtZT48L3NldD48L21vdmllPg=="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null,
+        "collectionName": "Named Collection",
+        "providers": {}
+      },
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "set attribute commits while truncated inner name does not",
+      "raw": {
+        "bytes": 74,
+        "sha256": "5b5f17150e4f0a6d92c5cdbb3a11bd435161c3744cda57a6ef7c607b53bcfc0b",
+        "base64": "PG1vdmllPjxzZXQgdG1kYmNvbGlkPSI0MDEiPjxuYW1lPlRydW5jYXRlZCBDb2xsZWN0aW9uPC9iYWQ\u002BPC9zZXQ\u002BPC9tb3ZpZT4="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null,
+        "collectionName": "Initial Collection",
+        "providers": {
+          "TmdbCollection": "401"
+        }
+      },
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "set nested name content leaves initial name but commits attribute",
+      "raw": {
+        "bytes": 72,
+        "sha256": "cfd7824fbdd2471e01a524c4e43417b75488e0195973e792fc857921d3c6dc78",
+        "base64": "PG1vdmllPjxzZXQgdG1kYmNvbGlkPSI0MDIiPjxuYW1lPk91dGVyPGlubmVyLz5UYWlsPC9uYW1lPjwvc2V0PjwvbW92aWU\u002B"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null,
+        "collectionName": "Initial Collection",
+        "providers": {
+          "TmdbCollection": "402"
+        }
+      },
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "set first name persists before later nested name error",
+      "raw": {
+        "bytes": 95,
+        "sha256": "d91e0c03a88efb8141d9181266849c6ccc152a88fc4b3e978f110f0e42088d83",
+        "base64": "PG1vdmllPjxzZXQ\u002BPG5hbWU\u002BRmlyc3QgQ29sbGVjdGlvbjwvbmFtZT48dW5rbm93bi8\u002BPG5hbWU\u002BT3V0ZXI8aW5uZXIvPlRhaWw8L25hbWU\u002BPC9zZXQ\u002BPC9tb3ZpZT4="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null,
+        "collectionName": "First Collection",
+        "providers": {}
+      },
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "set inherited prefixed child follows committed name",
+      "raw": {
+        "bytes": 84,
+        "sha256": "a83f1874a523e0558662f64cdb381b0c869fa43af9b76e2089e3955d986ccd9f",
+        "base64": "PG1vdmllPjxzZXQgeG1sbnM6cD0idXJuOnRlc3QiPjxuYW1lPldhaXRpbmcgQ29sbGVjdGlvbjwvbmFtZT48cDpiYWQvPjwvc2V0PjwvbW92aWU\u002B"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null,
+        "collectionName": "Waiting Collection",
+        "providers": {}
+      },
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "set name persists across spacer and inherited prefixed child",
+      "raw": {
+        "bytes": 93,
+        "sha256": "3518f38762d92f68d9e3e04723061c76634ebdcaf6724a57445e5355da3ec8d7",
+        "base64": "PG1vdmllPjxzZXQgeG1sbnM6cD0idXJuOnRlc3QiPjxuYW1lPlByZWZpeCBDb2xsZWN0aW9uPC9uYW1lPjx1bmtub3duLz48cDpiYWQvPjwvc2V0PjwvbW92aWU\u002B"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null,
+        "collectionName": "Prefix Collection",
+        "providers": {}
+      },
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "set direct text short circuits later nested error",
+      "raw": {
+        "bytes": 69,
+        "sha256": "12e5a648ddcd52b98b7c8f406fe495739f7dd66273f8b8f51684655eaf1c6ac9",
+        "base64": "PG1vdmllPjxzZXQ\u002BRGlyZWN0IFByZWZpeDxuYW1lPk91dGVyPGlubmVyLz5UYWlsPC9uYW1lPjwvc2V0PjwvbW92aWU\u002B"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null,
+        "collectionName": "Direct Prefix",
+        "providers": {}
+      },
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "set cdata is skipped before following name",
+      "raw": {
+        "bytes": 75,
+        "sha256": "bd2f5ab18710b534d93247fd042c146a14945c4bab9a6591edaf5b04301764b3",
+        "base64": "PG1vdmllPjxzZXQ\u002BPCFbQ0RBVEFbSWdub3JlZCBDRGF0YV1dPjxuYW1lPkFmdGVyIENEYXRhPC9uYW1lPjwvc2V0PjwvbW92aWU\u002B"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null,
+        "collectionName": "After CData",
+        "providers": {}
+      },
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "set later name overwrites first name",
+      "raw": {
+        "bytes": 85,
+        "sha256": "ae8f5edc9850ac7e657bc225a47a246b22de1f9aa736c7f25a59fa222f0cad97",
+        "base64": "PG1vdmllPjxzZXQ\u002BPG5hbWU\u002BRmlyc3QgQ29sbGVjdGlvbjwvbmFtZT48bmFtZT5TZWNvbmQgQ29sbGVjdGlvbjwvbmFtZT48L3NldD48L21vdmllPg=="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null,
+        "collectionName": "Second Collection",
+        "providers": {}
+      },
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "set name waits for malformed immediate root token",
+      "raw": {
+        "bytes": 80,
+        "sha256": "949ae25b7ba0f9a6cc75778379b74d801bbd5e88526b2605e874a666e3295a7a",
+        "base64": "PG1vdmllPjxzZXQgdG1kYmNvbGlkPSI0MDMiPjxuYW1lPldhaXRpbmcgQ29sbGVjdGlvbjwvbmFtZT48L3NldD48YnJva2VuPC9tb3ZpZT4="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null,
+        "collectionName": "Initial Collection",
+        "providers": {
+          "TmdbCollection": "403"
+        }
+      },
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "set name commits before later sibling mismatch",
+      "raw": {
+        "bytes": 84,
+        "sha256": "eea271dc91bd07123c079877b7fb9ffbbb7dcb4cdec6a30dbc65a2b9101743f1",
+        "base64": "PG1vdmllPjxzZXQ\u002BPG5hbWU\u002BQ29tbWl0dGVkIENvbGxlY3Rpb248L25hbWU\u002BPC9zZXQ\u002BPHBsb3Q\u002BVGFpbDwvcGxvdD48YnJva2VuPjwvbW92aWU\u002B"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null,
+        "collectionName": "Committed Collection",
+        "providers": {}
+      },
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "set completed at truncated movie eof",
+      "raw": {
+        "bytes": 45,
+        "sha256": "b4a0b9151447d889762baebfdae791afdafcc2300d4cb5bf97edfe5c2d3b57a6",
+        "base64": "PG1vdmllPjxzZXQ\u002BPG5hbWU\u002BRW9mIENvbGxlY3Rpb248L25hbWU\u002BPC9zZXQ\u002B"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null,
+        "collectionName": "Initial Collection",
+        "providers": {}
+      },
+      "remoteImages": [],
+      "localImages": []
+    },
+    {
+      "name": "set skips unknown subtree before name",
+      "raw": {
+        "bytes": 79,
+        "sha256": "207d72838ad9eefdef9f3717c70d2e01c8b8898b9a028204f1e9beeb8ebb0d62",
+        "base64": "PG1vdmllPjxzZXQ\u002BPHVua25vd24\u002BPGlubmVyLz48L3Vua25vd24\u002BPG5hbWU\u002BQWZ0ZXIgVW5rbm93bjwvbmFtZT48L3NldD48L21vdmllPg=="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "Name": null,
+        "collectionName": "After Unknown",
+        "providers": {}
+      },
+      "remoteImages": [],
+      "localImages": []
+    }
+  ]
+}

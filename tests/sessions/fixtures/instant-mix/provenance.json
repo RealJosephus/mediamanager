@@ -1,0 +1,115 @@
+{
+  "nativeSha256": "0bb5ec50551f3002ce2c3ba632514d0609d5013f8b2944628e59a3f15637df68",
+  "sourceBindings": [
+    {
+      "path": "Emby.Server.Implementations/Library/MusicManager.cs",
+      "sha256": "f4ea1a79740bfdba3cb9c38e5cdda1ab70feedd378045842542a47092b2e7c33",
+      "size": 4537,
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "Emby.Server.Implementations/Session/SessionManager.cs",
+      "sha256": "f594460c3a31d6831d7e7fb763c4c10af646cfa4c79f519ac1decb1a607f4292",
+      "size": 85139,
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/UserView.cs",
+      "sha256": "45b09db8b50fd347d57ad30a52c761c65d4e64cae961941f31484dee86db858b",
+      "size": 5990,
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/UserViewBuilder.cs",
+      "sha256": "006c551a073cff64101f181a1d34c2c2840ac8e8bc412ce126f6a3c36f069794",
+      "size": 32703,
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/InternalItemsQuery.cs",
+      "sha256": "d3002a8af3e88fba82a46a1541620518968677425694978c3e967e325106e964",
+      "size": 20315,
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/Folder.cs",
+      "sha256": "d5f227d462ce3c2df0d5a45d912778427f87321fc9d6e13d863ec28bb639e0c1",
+      "size": 83390,
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/AudioBook.cs",
+      "sha256": "1dc3ad019d579d60fac4b91d80040ebfa09dd266266057e6f4e0a656faec443c",
+      "size": 1468,
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "Jellyfin.Api/Controllers/InstantMixController.cs",
+      "sha256": "7e829e7a2610f83ce6ad50c65ebe13e5575a0440157e216879bd90fc16819430",
+      "size": 20528,
+      "designatedSourceMatchesOracleBuildCopy": true
+    }
+  ],
+  "oracleSources": [
+    {
+      "name": "Oracle.csproj",
+      "sha256": "56e42cc99a5305248cb523db75850ab8bce9868f3a283101fa0a208332829234"
+    },
+    {
+      "name": "Directory.Build.props",
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    },
+    {
+      "name": "Program.cs",
+      "sha256": "e77aeeed7382ea5b54e1609ffb703cfbfc5cc04704048620771fe65224c972df"
+    }
+  ],
+  "oracleAssembly": {
+    "filename": "D:\\mediamanager-validation\\20261012-instant-mix-v4\\native\\bin\\Release\\net10.0\\Oracle.dll",
+    "available": true,
+    "kind": "file",
+    "bytes": 32768,
+    "sha256": "818c86d9772ed0cfeb2fd46aba97be5827ec3acb400bc739c92147b6398a34e7"
+  },
+  "jellyfinDll": {
+    "filename": "D:/mediamanager-validation/20261005/jellyfin-baseline/source/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll",
+    "available": true,
+    "kind": "file",
+    "bytes": 506368,
+    "sha256": "a43fa24c44677e579fcec79d637789b9f36633d02e5434e76a0e03fa13027767"
+  },
+  "dotnet": {
+    "filename": "D:\\mediamanager\\.tools\\dotnet\\dotnet.exe",
+    "available": true,
+    "kind": "file",
+    "bytes": 167208,
+    "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6"
+  },
+  "process": {
+    "args": [
+      "D:\\mediamanager-validation\\20261012-instant-mix-v4\\native\\bin\\Release\\net10.0\\Oracle.dll",
+      "D:\\mediamanager-validation\\20261012-instant-mix-v4\\native/native.json"
+    ],
+    "status": 0,
+    "signal": null
+  },
+  "build": {
+    "args": [
+      "build",
+      "D:\\mediamanager-validation\\20261012-instant-mix-v4\\native\\project\\Oracle.csproj",
+      "-c",
+      "Release",
+      "--nologo",
+      "-v",
+      "minimal",
+      "-p:BaseOutputPath=D:\\mediamanager-validation\\20261012-instant-mix-v4\\native\\bin\\",
+      "-p:BaseIntermediateOutputPath=D:\\mediamanager-validation\\20261012-instant-mix-v4\\native\\obj\\"
+    ],
+    "status": 0,
+    "signal": null
+  },
+  "evidence": "D:/mediamanager-validation/20261012-instant-mix-v4",
+  "cases": 66,
+  "completeBuildInputClosure": false,
+  "phaseAcceptance": false
+}

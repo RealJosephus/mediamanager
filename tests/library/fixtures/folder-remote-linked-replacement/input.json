@@ -1,0 +1,42 @@
+[
+  {
+    "name": "two-version-primary-removal",
+    "initialFiles": [
+      "Film/Film - 2160p.mkv",
+      "Film/Film - 1080p.mkv"
+    ],
+    "stages": [
+      {
+        "remove": ["Film/Film - 2160p.mkv"]
+      }
+    ]
+  },
+  {
+    "name": "three-version-primary-removal",
+    "initialFiles": [
+      "Film/Film - 2160p.mkv",
+      "Film/Film - 1080p.mkv",
+      "Film/Film - 720p.mkv"
+    ],
+    "stages": [
+      {
+        "remove": ["Film/Film - 2160p.mkv"]
+      }
+    ]
+  },
+  {
+    "name": "exact-primary-demotion-then-removal",
+    "initialFiles": [
+      "Film/Film - 2160p.mkv",
+      "Film/Film - 1080p.mkv"
+    ],
+    "stages": [
+      {
+        "add": ["Film/Film.mkv"]
+      },
+      {
+        "remove": ["Film/Film.mkv"]
+      }
+    ]
+  }
+]

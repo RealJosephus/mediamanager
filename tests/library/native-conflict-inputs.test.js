@@ -1,0 +1,59 @@
+import assert from 'node:assert/strict';
+import path from 'node:path';
+import test from 'node:test';
+import { assertNativeConflictOutput, nativeConflictBinding, nativeConflictRecording,
+  verifyNativeConflictRecording, verifyNativeConflictSourceBindings } from './native-conflict-inputs.js';
+
+test('conflict input closure binds two independent native discovery and HTTP runs per type', async () => {
+  for (const kind of ['artist', 'studio']) {
+    const loaded = await verifyNativeConflictRecording(kind);
+    assert.equal(loaded.reference.records.length, 4);
+    assert.equal(loaded.recording.currentPhysicalTables.length, 33);
+    assert.equal(loaded.recording.repetitions.length, 2);
+  }
+});
+
+test('conflict input gates reject changed audits, identities, source, recordings and preparation', async () => {
+  const mutations = [
+    value => { value.schemaVersion++; },
+    value => { value.completeBuildInputClosure = true; },
+    value => { value.releaseAcceptance = true; },
+    value => { value.runtimeDirectory.entriesSha256 = '0'.repeat(64); },
+    value => { value.independentNativeAudit.sha256 = '0'.repeat(64); },
+    value => { value.recordings[0].repetitions[1].entriesSha256 = '0'.repeat(64); },
+    value => { value.recordings[0].currentPhysicalTables[0] = 'InjectedTable'; },
+    value => { value.recordings[0].logicalRoot = '.agent-docs/evidence/artist-conflicts-native-v1'; },
+    value => { value.recordings[0].expectedCases.reverse(); },
+    value => { value.recordings[0].originalRecorder.sha256 = '0'.repeat(64); },
+    value => { value.recordings[0].artifacts[1].sha256 = '0'.repeat(64); },
+    value => { value.recordings[0].artifacts[0].path = '../record-native.mjs'; },
+    value => { value.recordings[0].nativeMeasuredIdentities.Shadow.Id = '00000000-0000-0000-0000-000000000000'; },
+    value => { value.recordings[0].preparation.inputs[0].path = 'old-bootstrap.json'; },
+    value => { value.recordings[0].libraryManagerSource.sha256 = '0'.repeat(64); },
+  ];
+  for (const mutate of mutations) {
+    const changed = structuredClone(nativeConflictBinding);
+    mutate(changed);
+    await assert.rejects(verifyNativeConflictSourceBindings(changed));
+  }
+});
+
+test('conflict input selection rejects absent and duplicate native types', () => {
+  assert.throws(() => nativeConflictRecording('foreign'));
+  const changed = structuredClone(nativeConflictBinding);
+  changed.recordings.push(changed.recordings[0]);
+  assert.throws(() => nativeConflictRecording('artist', changed));
+});
+
+test('conflict output isolation protects both recordings, audits, source and executable trees', () => {
+  const output = path.resolve('.test-output/native-conflict-results');
+  assert.doesNotThrow(() => assertNativeConflictOutput(output));
+  const protectedPaths = [nativeConflictBinding.runtimeDirectory.filename, nativeConflictBinding.sdkDirectory.filename,
+    path.dirname(nativeConflictBinding.reference.sourceDatabase.filename),
+    path.dirname(nativeConflictBinding.independentNativeAudit.filename),
+    ...nativeConflictBinding.recordings.flatMap(recording => recording.repetitions.map(entry => entry.filename))];
+  for (const filename of protectedPaths) {
+    assert.throws(() => assertNativeConflictOutput(filename), /outside reference/u);
+    assert.throws(() => assertNativeConflictOutput(path.join(filename, 'output')), /outside reference/u);
+  }
+});

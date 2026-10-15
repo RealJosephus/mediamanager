@@ -1,0 +1,277 @@
+[
+  {
+    "name": "empty",
+    "names": []
+  },
+  {
+    "name": "new names",
+    "names": [
+      "Rock",
+      "Jazz"
+    ]
+  },
+  {
+    "name": "existing custom identity",
+    "names": [
+      "Rock",
+      "Jazz"
+    ],
+    "existing": [
+      "Rock"
+    ]
+  },
+  {
+    "name": "new case collision",
+    "names": [
+      "Rock",
+      "rock"
+    ]
+  },
+  {
+    "name": "existing case collision",
+    "names": [
+      "Rock",
+      "rock"
+    ],
+    "existing": [
+      "Rock"
+    ]
+  },
+  {
+    "name": "existing duplicate spelling",
+    "names": [
+      "Rock"
+    ],
+    "existing": [
+      "ROCK",
+      "Rock"
+    ]
+  },
+  {
+    "name": "lookup failure continues",
+    "names": [
+      "Rock",
+      "Jazz",
+      "Pop"
+    ],
+    "failLookup": [
+      "Jazz"
+    ]
+  },
+  {
+    "name": "refresh failure continues",
+    "names": [
+      "Rock",
+      "Jazz"
+    ],
+    "failRefresh": [
+      "Rock"
+    ]
+  },
+  {
+    "name": "initial cancellation creates first",
+    "names": [
+      "Rock",
+      "Jazz"
+    ],
+    "cancelInitial": true
+  },
+  {
+    "name": "cancelled existing performs cleanup",
+    "names": [
+      "Rock"
+    ],
+    "existing": [
+      "Rock"
+    ],
+    "cancelInitial": true,
+    "dead": true
+  },
+  {
+    "name": "later refresh cancellation",
+    "names": [
+      "Rock",
+      "Jazz",
+      "Pop"
+    ],
+    "cancelRefresh": "Jazz",
+    "dead": true
+  },
+  {
+    "name": "lookup cancellation",
+    "names": [
+      "Rock",
+      "Jazz",
+      "Pop"
+    ],
+    "cancelLookup": "Jazz",
+    "dead": true
+  },
+  {
+    "name": "empty spelling",
+    "names": [
+      "",
+      "Rock"
+    ]
+  },
+  {
+    "name": "source kinds and grouping",
+    "names": [
+      "Rock"
+    ],
+    "sourceKinds": true
+  },
+  {
+    "name": "dead and locked names",
+    "names": [],
+    "dead": true,
+    "locked": true
+  },
+  {
+    "name": "global unmapped value keeps dead name",
+    "names": [],
+    "dead": true,
+    "unmapped": true
+  },
+  {
+    "name": "dead null path fails after creation",
+    "names": [
+      "Rock"
+    ],
+    "dead": true,
+    "deadNullPath": true
+  },
+  {
+    "name": "late external failure",
+    "names": [],
+    "dead": true,
+    "failExternal": true
+  },
+  {
+    "name": "database failure",
+    "names": [],
+    "dead": true,
+    "failDatabase": true
+  },
+  {
+    "name": "null initial name fails before loop",
+    "names": [
+      "Rock"
+    ],
+    "nullInitialName": true
+  },
+  {
+    "name": "unicode names and existing case folding",
+    "names": [
+      "Épopée",
+      "épopée",
+      "中文",
+      "Σ",
+      "σ",
+      "ς"
+    ],
+    "existing": [
+      "ÉPOPÉE",
+      "Σ"
+    ]
+  },
+  {
+    "name": "cleaned names collide at lookup identity",
+    "names": [
+      "A:B",
+      "A?B"
+    ]
+  },
+  {
+    "name": "empty names reuse initial spelling",
+    "names": [
+      "",
+      "Rock"
+    ],
+    "existing": [
+      ""
+    ]
+  },
+  {
+    "name": "all names exist and cancellation leaves no refresh",
+    "names": [
+      "Rock",
+      "Jazz"
+    ],
+    "existing": [
+      "Rock",
+      "Jazz"
+    ],
+    "cancelInitial": true
+  },
+  {
+    "name": "empty cancelled task still deletes dead names",
+    "names": [],
+    "dead": true,
+    "cancelInitial": true
+  },
+  {
+    "name": "refresh failure still prunes dead names",
+    "names": [
+      "Rock"
+    ],
+    "dead": true,
+    "failRefresh": [
+      "Rock"
+    ]
+  },
+  {
+    "name": "lookup failure still prunes dead names",
+    "names": [
+      "Rock"
+    ],
+    "dead": true,
+    "failLookup": [
+      "Rock"
+    ]
+  },
+  {
+    "name": "initial identity reused by lookup skips refresh",
+    "names": [
+      "Rock"
+    ],
+    "initialLookup": "Rock",
+    "initialName": "Curated Rock"
+  },
+  {
+    "name": "owned initial identity excluded from snapshots",
+    "names": [
+      "Rock"
+    ],
+    "initialLookup": "Rock",
+    "initialName": "Curated Rock",
+    "initialOwner": true
+  },
+  {
+    "name": "alternate initial identity excluded from snapshots",
+    "names": [
+      "Rock"
+    ],
+    "initialLookup": "Rock",
+    "initialName": "Curated Rock",
+    "initialAlternate": true
+  },
+  {
+    "name": "excluded initial identity observes refresh cancellation",
+    "names": [
+      "Rock"
+    ],
+    "initialLookup": "Rock",
+    "initialName": "Curated Rock",
+    "initialOwner": true,
+    "cancelInitial": true
+  },
+  {
+    "name": "empty lookup reuses renamed initial identity",
+    "names": [
+      ""
+    ],
+    "initialLookup": "",
+    "initialName": "Curated empty name"
+  }
+]

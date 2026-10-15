@@ -1,0 +1,509 @@
+{
+  "jellyfin": {
+    "repository": "D:/jellyfin",
+    "commit": "208c278b75abd897aefa1e1175126eac5e4dbfaa",
+    "checkout": {
+      "head": "208c278b75abd897aefa1e1175126eac5e4dbfaa",
+      "localModifications": true,
+      "sourceBytesFromCommit": false
+    },
+    "sources": [
+      {
+        "path": "Jellyfin.Api/Controllers/TvShowsController.cs",
+        "sha256": "434f3a0a4006785e242ae37f8b9880513e21f559e40c8efd5aa194dab7e40d70",
+        "bytes": 18395
+      },
+      {
+        "path": "Jellyfin.Api/Helpers/RequestHelpers.cs",
+        "sha256": "213a922281289ea49aacd9b45a9302beeb4995160f66a8d575e7432b58d6e5e6",
+        "bytes": 6857
+      },
+      {
+        "path": "Jellyfin.Api/Middleware/ExceptionMiddleware.cs",
+        "sha256": "1c48cc816bf2899acbfeff9f30e9ce687c8ba689bff78e5cf1d8925d011a78b4",
+        "bytes": 5245
+      },
+      {
+        "path": "Emby.Server.Implementations/TV/TVSeriesManager.cs",
+        "sha256": "2115ae462259099b7fb4b7be0f98bce68132125a8d062b3874143fd55a016ef0",
+        "bytes": 13888
+      },
+      {
+        "path": "Jellyfin.Server.Implementations/Item/NextUpService.cs",
+        "sha256": "4d7658595b0db38ef96828c41078ecbf97987883df02ed7382590174927f6035",
+        "bytes": 15509
+      },
+      {
+        "path": "MediaBrowser.Model/Querying/NextUpQuery.cs",
+        "sha256": "8375497bff45ac5ea1b38884c39ec7983a29913e3f947a54a81de147c38c131d",
+        "bytes": 2006
+      },
+      {
+        "path": "MediaBrowser.Controller/Persistence/NextUpEpisodeBatchResult.cs",
+        "sha256": "e82b561450c02d7edad84c1b746ae261730f92a06bc3a9806a3f46a9312339ae",
+        "bytes": 1283
+      },
+      {
+        "path": "MediaBrowser.Controller/Entities/UserItemData.cs",
+        "sha256": "d2bc72683cd94f673f33658a2ef0dffcd629df2b6049a89680a8fd1ee5ba8010",
+        "bytes": 3624
+      },
+      {
+        "path": "MediaBrowser.Controller/Entities/TV/Series.cs",
+        "sha256": "46d1748fd41a051fbcd4be50ef24b1814b7402265bdb37a735ced8c0235e460f",
+        "bytes": 20088
+      },
+      {
+        "path": "MediaBrowser.Controller/Entities/TV/Season.cs",
+        "sha256": "3d49550fc03cfd556999e04a63bb4f692fbb574a37e946ab0b200fc9cc19ec04",
+        "bytes": 9041
+      },
+      {
+        "path": "MediaBrowser.Controller/Entities/TV/Episode.cs",
+        "sha256": "9944d6d777c8309ceedc66b2ded3d1de29cbd8a514b1bfa7d9698e04bda33a96",
+        "bytes": 12020
+      },
+      {
+        "path": "MediaBrowser.Controller/Entities/UserViewBuilder.cs",
+        "sha256": "006c551a073cff64101f181a1d34c2c2840ac8e8bc412ce126f6a3c36f069794",
+        "bytes": 32703
+      },
+      {
+        "path": "Jellyfin.Api/Extensions/DtoExtensions.cs",
+        "sha256": "836aa69bd5b9569f4c3dbf140b29243f172cd348861759027bbc447bbf7c8290",
+        "bytes": 2869
+      },
+      {
+        "path": "Emby.Server.Implementations/Library/LibraryManager.cs",
+        "sha256": "4729de97560262702a44c5829bf93bbc5deec379e9b3018b231aaa6d65643c44",
+        "bytes": 157087
+      },
+      {
+        "path": "Emby.Server.Implementations/Sorting/SortNameComparer.cs",
+        "sha256": "efca65798f0f9d0801c3f13fd72b862bdd3132de95a1071c298f9db6c3f2fce7",
+        "bytes": 989
+      },
+      {
+        "path": "Emby.Server.Implementations/Sorting/AiredEpisodeOrderComparer.cs",
+        "sha256": "6056d8c47ae445aa87d6e59b7af4e783cb4269c3c4478df46eb5405b8a291587",
+        "bytes": 4731
+      },
+      {
+        "path": "Jellyfin.Server.Implementations/Item/BaseItemRepository.cs",
+        "sha256": "05c7bab92d023931d165d462a244701980d0c2b7c1f12fb9129f2e55a5487798",
+        "bytes": 9940
+      },
+      {
+        "path": "Jellyfin.Server.Implementations/Item/BaseItemRepository.QueryBuilding.cs",
+        "sha256": "b4c3ddd5a657ac4d9308131bfb5bf490df11d5f56c3df50d0a1b6645d282bdb2",
+        "bytes": 31527
+      },
+      {
+        "path": "Jellyfin.Server.Implementations/Item/BaseItemRepository.TranslateQuery.cs",
+        "sha256": "0b2d4aba6f4d73c224315c1a0abd82b3c65ba2a42683381e1e73c00b01019c06",
+        "bytes": 58978
+      },
+      {
+        "path": "MediaBrowser.Controller/Entities/InternalItemsQuery.cs",
+        "sha256": "d3002a8af3e88fba82a46a1541620518968677425694978c3e967e325106e964",
+        "bytes": 20315
+      },
+      {
+        "path": "src/Jellyfin.Database/Jellyfin.Database.Implementations/Entities/BaseItemEntity.cs",
+        "sha256": "783e015c61921cec5243d28bcf3a7734c25ab927bc717ed0e437577e9806638f",
+        "bytes": 5806
+      },
+      {
+        "path": "src/Jellyfin.Database/Jellyfin.Database.Implementations/JellyfinDbContext.cs",
+        "sha256": "4c5878bef65e68dbf4215a622f893fe0e98290740cc398b84a331a81b5fe9c41",
+        "bytes": 12022
+      },
+      {
+        "path": "Emby.Server.Implementations/Data/ItemTypeLookup.cs",
+        "sha256": "0e0d8322b53251df4556bd7c8b209505efcf5235ad7e767fa361f81704088aa4",
+        "bytes": 3138
+      },
+      {
+        "path": "Jellyfin.Api/Controllers/LibraryController.cs",
+        "sha256": "bfd0dbebee1e344c1f5a9077cd3d95a99d425db3ea3c4c233d9937f6bdd30753",
+        "bytes": 43414
+      },
+      {
+        "path": "Jellyfin.Api/ModelBinders/CommaDelimitedCollectionModelBinder.cs",
+        "sha256": "64e906ad9d1c3c3f2c360ccf4bb5a28e6e1bea34578ee8429fb1959ab021c5eb",
+        "bytes": 3151
+      },
+      {
+        "path": "Emby.Server.Implementations/Library/SimilarItems/SeriesSimilarItemsProvider.cs",
+        "sha256": "80263839c5379d6b6cbc993a98f84c33dc15892c65bcec40239b4fcc54f7726b",
+        "bytes": 1875
+      },
+      {
+        "path": "Emby.Server.Implementations/Library/SimilarItems/MusicArtistSimilarItemsProvider.cs",
+        "sha256": "f8051a4b2be943e29ca21ec5bee0077660502876e4d347dd7ccfe846ee865425",
+        "bytes": 1972
+      },
+      {
+        "path": "Emby.Server.Implementations/Library/SimilarItems/MusicAlbumSimilarItemsProvider.cs",
+        "sha256": "df7c66ade384704d3266c1559b6b18aff0ec857ef0682c33900a352739294e14",
+        "bytes": 1965
+      },
+      {
+        "path": "Emby.Server.Implementations/Library/SimilarItems/AudioSimilarItemsProvider.cs",
+        "sha256": "dd395cc3d156463b9fa7c5f7a277a86a61d2fa360bf0a93b591e97e954a760a4",
+        "bytes": 1935
+      },
+      {
+        "path": "Emby.Server.Implementations/Library/SimilarItems/SimilarItemsManager.cs",
+        "sha256": "19956f09afdd685444695341c3bc7dc5d1093c2004560727f323da32efd910e3",
+        "bytes": 29570
+      },
+      {
+        "path": "Emby.Server.Implementations/Library/SimilarItems/SimilarItemsAccessFilter.cs",
+        "sha256": "4f8cc2794ca36c4dbb2aba4bfd87439431f5ab9970ae7112961fe03be4c79881",
+        "bytes": 1541
+      },
+      {
+        "path": "MediaBrowser.Controller/Library/SimilarItemsQuery.cs",
+        "sha256": "211eb8ea4e81637ecac95792d8759fb00ebe4b1bfbe5027f5f224af3a4825d6a",
+        "bytes": 980
+      },
+      {
+        "path": "MediaBrowser.Controller/Library/ILocalSimilarItemsProvider.cs",
+        "sha256": "d05904a6d35bf2af1a951b5afcfb05e014f0523864b19fb87f2494ca552b847c",
+        "bytes": 2599
+      },
+      {
+        "path": "MediaBrowser.Controller/Library/IRemoteSimilarItemsProvider.cs",
+        "sha256": "a8d3b9ea87aad44a60a524c60f0232095a7c3c4a8fc2dfec5c1b7aa3975d21da",
+        "bytes": 2719
+      },
+      {
+        "path": "MediaBrowser.Controller/Entities/BaseItem.cs",
+        "sha256": "9dc7b96a93c9fbe874cdcededdca395b5aa2df6070f5cfc9c8959539dcd76469",
+        "bytes": 105800
+      },
+      {
+        "path": "MediaBrowser.Controller/LiveTv/LiveTvProgram.cs",
+        "sha256": "48f6333cfb57716701e39e7f48f2989aa4d6ba944f4adbb3247808d602eec094",
+        "bytes": 8014
+      },
+      {
+        "path": "Jellyfin.Server.Implementations/Item/BaseItemRepository.Querying.cs",
+        "sha256": "c34fe8a47769180d7e0792d16fc535c83f76d66189a56af13c5071b4bfa2c013",
+        "bytes": 27043
+      },
+      {
+        "path": "MediaBrowser.Controller/Library/SimilarItemReference.cs",
+        "sha256": "e2763a5a2f38086397e1a10784e8d65569d86ed0618c7053e845afbaaea982ec",
+        "bytes": 618
+      },
+      {
+        "path": "MediaBrowser.Model/Configuration/TypeOptions.cs",
+        "sha256": "abdbd27e598a434411570b8d771e1e879c726d1daf8ebcbcbdf02000a722ccd3",
+        "bytes": 10609
+      },
+      {
+        "path": "MediaBrowser.Model/Configuration/LibraryOptions.cs",
+        "sha256": "3ff1fb33e789316703201d46285ba9509fe67085484ed809e788566a42d5cb36",
+        "bytes": 4985
+      },
+      {
+        "path": "MediaBrowser.Model/Extensions/LibraryOptionsExtension.cs",
+        "sha256": "177f43bc48e32b48aa86c7b1db9c8b940894c52f30643c50b027525b53cfda05",
+        "bytes": 970
+      },
+      {
+        "path": "MediaBrowser.Providers/Plugins/Tmdb/TV/TmdbSeriesSimilarProvider.cs",
+        "sha256": "f9afddc9644beaa599cb61ba9f3fdb1a9f68c3287e548c00b6b4d7f3f0bf8904",
+        "bytes": 3206
+      },
+      {
+        "path": "MediaBrowser.Providers/Plugins/Tmdb/TmdbClientManager.cs",
+        "sha256": "7c1bbbdb0cca00e0331b484eb93fd7435a322130719666d2091b145a434e6a2a",
+        "bytes": 38667
+      },
+      {
+        "path": "MediaBrowser.Providers/Plugins/Tmdb/TmdbUtils.cs",
+        "sha256": "569eb57dd2dfbf5dd9ce3863d50a792122559ab0d87f7c42473ffe72903233e4",
+        "bytes": 21623
+      },
+      {
+        "path": "MediaBrowser.Providers/Plugins/Tmdb/Configuration/PluginConfiguration.cs",
+        "sha256": "622ecc35a4c8d33c2014a5da9416ef7603cff698b1aa5df9ae94385898f9b2c7",
+        "bytes": 5816
+      },
+      {
+        "path": "MediaBrowser.Providers/Plugins/Tmdb/Plugin.cs",
+        "sha256": "da36d9138a0eac51111d15b2349e02f205c1e777440c88f0a3de88adbd43b048",
+        "bytes": 2109
+      },
+      {
+        "path": "src/Jellyfin.Extensions/Json/JsonDefaults.cs",
+        "sha256": "c0ab4cfad71ceade367d061f5a4ee04d001018155378713cd076df292bf3c815",
+        "bytes": 3675
+      },
+      {
+        "path": "src/Jellyfin.Extensions/Json/Converters/JsonDateTimeConverter.cs",
+        "sha256": "683124924193a063631d4956df963b5c383b7202ac5a8581a28a1c8637083fe3",
+        "bytes": 1077
+      }
+    ]
+  },
+  "boundary": "Actual pinned TvShowsController and shared LibraryController Similar route/action methods, RequestHelpers claim/user selection, native Series/Season selectors, Episode.IsMissingEpisode, UserViewBuilder adjacency, controller paging/error results, actual TVSeriesManager next-up selection, Series/MusicArtist/MusicAlbum/Audio local similar providers, TmdbSeriesSimilarProvider over controlled TMDbLib transport, and SimilarItemsManager provider configuration/order/scoring, remaining-limit queries, exception/cancellation boundaries, remote 20/500 batching, provider-ID resolution and real file cache behavior including exact numeric-string decimal-to-Single midpoint ordering, invalid-string and quoted Single-overflow fallback, and bit-exact Single scoring, with native comparers, actual ASP.NET comma collection and DateTime model binders, actual ExceptionMiddleware, and concrete LibraryManager empty-parent/UserView-parent/Guid.Empty, BaseItemRepository, SimilarItemsManager access filtering, and NextUpService probes over EF Core SQLite. Controlled controller-side repository/manager result arrays, user lookup, DTO projection, local provider results and remote local-library lookup entities are explicit seams. ASP.NET authorization filters, concrete DtoService internals, live external services and deterministic Random shuffle order remain outside this oracle; no public-network call is made. Named or non-finite cache-score rejection is a stricter candidate fail-closed policy and is not asserted as native parity.",
+  "input": {
+    "filename": "tests/http/fixtures/shows-api/input.json",
+    "bytes": 8079,
+    "sha256": "8639828af0a1e33a33f51618764c4891653f1be477e492168d99954f16065f0b"
+  },
+  "native": {
+    "filename": "D:\\mediamanager-validation\\20261015-node-plugins-acceptance\\shows-native-2\\native.json",
+    "bytes": 160783,
+    "sha256": "03599c1ac3a8967cf153158b7110d0e1cd34613727b4936faea5539e871d0373"
+  },
+  "fixture": {
+    "filename": "tests/http/fixtures/shows-api/native.json",
+    "bytes": 160783,
+    "sha256": "03599c1ac3a8967cf153158b7110d0e1cd34613727b4936faea5539e871d0373"
+  },
+  "record": {
+    "filename": "D:\\mediamanager-validation\\20261015-node-plugins-acceptance\\shows-native-2\\record.json",
+    "bytes": 4153,
+    "sha256": "077b92dca3de730de545d65e39859fc4dfe692f603de73b354a35e8e3b6a28ba"
+  },
+  "repeat": {
+    "filename": "D:\\mediamanager-validation\\20261015-node-plugins-acceptance\\shows-native-3\\native.json",
+    "bytes": 160783,
+    "sha256": "325d98f42439de2fd5a85c7400487b44b0a158f70abb41f28776ba08ef0a685b"
+  },
+  "recordings": [
+    {
+      "schemaVersion": 1,
+      "recordedAt": "2026-10-15T01:37:06.238Z",
+      "project": "D:\\mediamanager\\tests\\http\\fixtures\\shows-api\\Oracle.csproj",
+      "dotnet": {
+        "filename": "D:\\mediamanager\\.tools\\dotnet\\dotnet.exe",
+        "available": true,
+        "kind": "file",
+        "bytes": 167208,
+        "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6"
+      },
+      "node": "v24.16.0",
+      "timezone": "Asia/Taipei",
+      "jellyfinDll": {
+        "filename": "D:/mediamanager-validation/20261005/jellyfin-baseline/source/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll",
+        "available": true,
+        "kind": "file",
+        "bytes": 506368,
+        "sha256": "a43fa24c44677e579fcec79d637789b9f36633d02e5434e76a0e03fa13027767"
+      },
+      "sourceFiles": [
+        {
+          "filename": "D:\\mediamanager\\tests\\http\\fixtures\\shows-api\\Oracle.csproj",
+          "available": true,
+          "kind": "file",
+          "bytes": 601,
+          "sha256": "0b9d3e600bbf152d421f8a0ca199b075aa18811d2141e3f44f42533440e3320c"
+        },
+        {
+          "filename": "D:\\mediamanager\\tests\\Directory.Build.props",
+          "available": true,
+          "kind": "file",
+          "bytes": 780,
+          "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+        },
+        {
+          "filename": "D:\\mediamanager\\tests\\http\\fixtures\\shows-api\\Program.cs",
+          "available": true,
+          "kind": "file",
+          "bytes": 114550,
+          "sha256": "90487d11f53fa20ebc02be1015d6e4173a05f8220428402bb0ad82fd87d0480e"
+        }
+      ],
+      "sourceFilesSha256": "3b6b93c73bad747943f195179c0fbde3981f3f539831aba62e19b418057bc5d6",
+      "build": {
+        "args": [
+          "build",
+          "D:\\mediamanager-validation\\20261015-node-plugins-acceptance\\shows-native-2\\project\\Oracle.csproj",
+          "-c",
+          "Release",
+          "--nologo",
+          "-v",
+          "minimal",
+          "-p:BaseOutputPath=D:\\mediamanager-validation\\20261015-node-plugins-acceptance\\shows-native-2\\bin\\",
+          "-p:BaseIntermediateOutputPath=D:\\mediamanager-validation\\20261015-node-plugins-acceptance\\shows-native-2\\obj\\"
+        ],
+        "status": 0,
+        "signal": null
+      },
+      "process": {
+        "args": [
+          "D:\\mediamanager-validation\\20261015-node-plugins-acceptance\\shows-native-2\\bin\\Release\\net10.0\\Oracle.dll",
+          "tests/http/fixtures/shows-api/input.json",
+          "D:\\mediamanager-validation\\20261015-node-plugins-acceptance\\shows-native-2/native.json"
+        ],
+        "status": 0,
+        "signal": null
+      },
+      "outputs": [
+        {
+          "filename": "D:\\mediamanager-validation\\20261015-node-plugins-acceptance\\shows-native-2\\build.stderr.txt",
+          "available": true,
+          "kind": "file",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "filename": "D:\\mediamanager-validation\\20261015-node-plugins-acceptance\\shows-native-2\\build.stdout.txt",
+          "available": true,
+          "kind": "file",
+          "bytes": 372,
+          "sha256": "5f76dc20f4f481fbc7f39c9537effc97589f581b019a9a2ca8c34549ca4dba48"
+        },
+        {
+          "filename": "D:\\mediamanager-validation\\20261015-node-plugins-acceptance\\shows-native-2\\native.json",
+          "available": true,
+          "kind": "file",
+          "bytes": 160783,
+          "sha256": "03599c1ac3a8967cf153158b7110d0e1cd34613727b4936faea5539e871d0373"
+        },
+        {
+          "filename": "D:\\mediamanager-validation\\20261015-node-plugins-acceptance\\shows-native-2\\stderr.txt",
+          "available": true,
+          "kind": "file",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "filename": "D:\\mediamanager-validation\\20261015-node-plugins-acceptance\\shows-native-2\\stdout.txt",
+          "available": true,
+          "kind": "file",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "oracleAssembly": {
+        "filename": "D:\\mediamanager-validation\\20261015-node-plugins-acceptance\\shows-native-2\\bin\\Release\\net10.0\\Oracle.dll",
+        "available": true,
+        "kind": "file",
+        "bytes": 243200,
+        "sha256": "aa9ad09a372b76e24a4c4e8407bb0f93254f265b9b0ab6751bd25d31e879f28b"
+      },
+      "passed": true
+    },
+    {
+      "schemaVersion": 1,
+      "recordedAt": "2026-10-15T01:37:30.723Z",
+      "project": "D:\\mediamanager\\tests\\http\\fixtures\\shows-api\\Oracle.csproj",
+      "dotnet": {
+        "filename": "D:\\mediamanager\\.tools\\dotnet\\dotnet.exe",
+        "available": true,
+        "kind": "file",
+        "bytes": 167208,
+        "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6"
+      },
+      "node": "v24.16.0",
+      "timezone": "Asia/Taipei",
+      "jellyfinDll": {
+        "filename": "D:/mediamanager-validation/20261005/jellyfin-baseline/source/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll",
+        "available": true,
+        "kind": "file",
+        "bytes": 506368,
+        "sha256": "a43fa24c44677e579fcec79d637789b9f36633d02e5434e76a0e03fa13027767"
+      },
+      "sourceFiles": [
+        {
+          "filename": "D:\\mediamanager\\tests\\http\\fixtures\\shows-api\\Oracle.csproj",
+          "available": true,
+          "kind": "file",
+          "bytes": 601,
+          "sha256": "0b9d3e600bbf152d421f8a0ca199b075aa18811d2141e3f44f42533440e3320c"
+        },
+        {
+          "filename": "D:\\mediamanager\\tests\\Directory.Build.props",
+          "available": true,
+          "kind": "file",
+          "bytes": 780,
+          "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+        },
+        {
+          "filename": "D:\\mediamanager\\tests\\http\\fixtures\\shows-api\\Program.cs",
+          "available": true,
+          "kind": "file",
+          "bytes": 114550,
+          "sha256": "90487d11f53fa20ebc02be1015d6e4173a05f8220428402bb0ad82fd87d0480e"
+        }
+      ],
+      "sourceFilesSha256": "3b6b93c73bad747943f195179c0fbde3981f3f539831aba62e19b418057bc5d6",
+      "build": {
+        "args": [
+          "build",
+          "D:\\mediamanager-validation\\20261015-node-plugins-acceptance\\shows-native-3\\project\\Oracle.csproj",
+          "-c",
+          "Release",
+          "--nologo",
+          "-v",
+          "minimal",
+          "-p:BaseOutputPath=D:\\mediamanager-validation\\20261015-node-plugins-acceptance\\shows-native-3\\bin\\",
+          "-p:BaseIntermediateOutputPath=D:\\mediamanager-validation\\20261015-node-plugins-acceptance\\shows-native-3\\obj\\"
+        ],
+        "status": 0,
+        "signal": null
+      },
+      "process": {
+        "args": [
+          "D:\\mediamanager-validation\\20261015-node-plugins-acceptance\\shows-native-3\\bin\\Release\\net10.0\\Oracle.dll",
+          "tests/http/fixtures/shows-api/input.json",
+          "D:\\mediamanager-validation\\20261015-node-plugins-acceptance\\shows-native-3/native.json"
+        ],
+        "status": 0,
+        "signal": null
+      },
+      "outputs": [
+        {
+          "filename": "D:\\mediamanager-validation\\20261015-node-plugins-acceptance\\shows-native-3\\build.stderr.txt",
+          "available": true,
+          "kind": "file",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "filename": "D:\\mediamanager-validation\\20261015-node-plugins-acceptance\\shows-native-3\\build.stdout.txt",
+          "available": true,
+          "kind": "file",
+          "bytes": 372,
+          "sha256": "d4ebc37074b313b6ba4a90d929e31a1a6325a45a0e5ca650d66dd7c85b0168e9"
+        },
+        {
+          "filename": "D:\\mediamanager-validation\\20261015-node-plugins-acceptance\\shows-native-3\\native.json",
+          "available": true,
+          "kind": "file",
+          "bytes": 160783,
+          "sha256": "325d98f42439de2fd5a85c7400487b44b0a158f70abb41f28776ba08ef0a685b"
+        },
+        {
+          "filename": "D:\\mediamanager-validation\\20261015-node-plugins-acceptance\\shows-native-3\\stderr.txt",
+          "available": true,
+          "kind": "file",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "filename": "D:\\mediamanager-validation\\20261015-node-plugins-acceptance\\shows-native-3\\stdout.txt",
+          "available": true,
+          "kind": "file",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "oracleAssembly": {
+        "filename": "D:\\mediamanager-validation\\20261015-node-plugins-acceptance\\shows-native-3\\bin\\Release\\net10.0\\Oracle.dll",
+        "available": true,
+        "kind": "file",
+        "bytes": 243200,
+        "sha256": "662d5bcca8543b5ddc669d47b321685c3f7f4687e651a240ba0e03bdad6e1a27"
+      },
+      "passed": true
+    }
+  ]
+}

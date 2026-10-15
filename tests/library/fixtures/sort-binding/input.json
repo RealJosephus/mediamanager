@@ -1,0 +1,4621 @@
+{
+  "schemaVersion": 1,
+  "userId": "5c6b5f77-bea9-4a9a-98aa-fae5909892b7",
+  "rootId": "80100000-0000-0000-0000-000000000201",
+  "items": [
+    {
+      "key": "aggregate",
+      "id": "f27caa37-e514-2225-cced-ed48f6553502",
+      "type": "AggregateFolder",
+      "name": "root",
+      "sortName": "root",
+      "parentId": null,
+      "topParentId": null,
+      "ancestorIds": []
+    },
+    {
+      "key": "userRoot",
+      "id": "e9d5075a-555c-1cbc-394e-ec4cef295274",
+      "type": "UserRootFolder",
+      "name": "Media Folders",
+      "sortName": "media folders",
+      "parentId": null,
+      "topParentId": null,
+      "ancestorIds": [],
+      "pathKind": "userRoot",
+      "data": {
+        "IsRoot": true,
+        "PhysicalLocationsList": []
+      }
+    },
+    {
+      "key": "physicalA",
+      "id": "80100000-0000-0000-0000-000000000100",
+      "type": "Folder",
+      "name": "Physical A",
+      "sortName": "physical a",
+      "parentId": "f27caa37-e514-2225-cced-ed48f6553502",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "physicalA"
+    },
+    {
+      "key": "physicalB",
+      "id": "80100000-0000-0000-0000-000000000150",
+      "type": "Folder",
+      "name": "Physical B",
+      "sortName": "physical b",
+      "parentId": "f27caa37-e514-2225-cced-ed48f6553502",
+      "topParentId": "80100000-0000-0000-0000-000000000150",
+      "ancestorIds": [
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "physicalB"
+    },
+    {
+      "key": "collections",
+      "id": "80100000-0000-0000-0000-000000000200",
+      "type": "Folder",
+      "name": "Collections Physical",
+      "sortName": "collections physical",
+      "parentId": "f27caa37-e514-2225-cced-ed48f6553502",
+      "topParentId": "80100000-0000-0000-0000-000000000200",
+      "ancestorIds": [
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "collections"
+    },
+    {
+      "key": "libraryA",
+      "id": "80100000-0000-0000-0000-000000000101",
+      "type": "CollectionFolder",
+      "name": "Library A",
+      "sortName": "library a",
+      "parentId": "e9d5075a-555c-1cbc-394e-ec4cef295274",
+      "topParentId": "80100000-0000-0000-0000-000000000101",
+      "ancestorIds": [
+        "e9d5075a-555c-1cbc-394e-ec4cef295274"
+      ],
+      "pathKind": "libraryA",
+      "data": {
+        "CollectionType": "movies",
+        "PhysicalFolderIds": [
+          "80100000-0000-0000-0000-000000000100"
+        ],
+        "PhysicalLocationsList": []
+      }
+    },
+    {
+      "key": "libraryB",
+      "id": "80100000-0000-0000-0000-000000000151",
+      "type": "CollectionFolder",
+      "name": "Library B",
+      "sortName": "library b",
+      "parentId": "e9d5075a-555c-1cbc-394e-ec4cef295274",
+      "topParentId": "80100000-0000-0000-0000-000000000151",
+      "ancestorIds": [
+        "e9d5075a-555c-1cbc-394e-ec4cef295274"
+      ],
+      "pathKind": "libraryB",
+      "data": {
+        "CollectionType": "movies",
+        "PhysicalFolderIds": [
+          "80100000-0000-0000-0000-000000000150"
+        ],
+        "PhysicalLocationsList": []
+      }
+    },
+    {
+      "key": "collectionLibrary",
+      "id": "80100000-0000-0000-0000-000000000201",
+      "type": "CollectionFolder",
+      "name": "Collection Library",
+      "sortName": "collection library",
+      "parentId": "e9d5075a-555c-1cbc-394e-ec4cef295274",
+      "topParentId": "80100000-0000-0000-0000-000000000201",
+      "ancestorIds": [
+        "e9d5075a-555c-1cbc-394e-ec4cef295274"
+      ],
+      "pathKind": "collectionLibrary",
+      "data": {
+        "CollectionType": "boxsets",
+        "PhysicalFolderIds": [
+          "80100000-0000-0000-0000-000000000200"
+        ],
+        "PhysicalLocationsList": []
+      }
+    },
+    {
+      "key": "actualSeriesA",
+      "id": "80100000-0000-0000-0000-000000003000",
+      "type": "Series",
+      "name": "Displayed Z",
+      "sortName": "a actual series",
+      "parentId": "80100000-0000-0000-0000-000000000100",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "data": {},
+      "preferredMetadataCountryCode": "US",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "actualSeriesZ",
+      "id": "80100000-0000-0000-0000-000000003001",
+      "type": "Series",
+      "name": "Displayed A",
+      "sortName": "z actual series",
+      "parentId": "80100000-0000-0000-0000-000000000100",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "data": {},
+      "preferredMetadataCountryCode": "US",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "sortBoxSet",
+      "id": "80100000-0000-0000-0000-000000003002",
+      "type": "BoxSet",
+      "name": "Sort BoxSet",
+      "sortName": "sort boxset",
+      "parentId": "80100000-0000-0000-0000-000000000100",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "external",
+      "data": {
+        "DisplayOrder": "SortName"
+      },
+      "preferredMetadataCountryCode": "US",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "sortBoxSetItem0",
+      "id": "80100000-0000-0000-0000-000000003003",
+      "type": "Movie",
+      "name": "z movie",
+      "sortName": "g z movie",
+      "parentId": "80100000-0000-0000-0000-000000003002",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "data": {},
+      "mediaType": "Video",
+      "dateCreated": "2020-01-01T00:00:00.0000000",
+      "premiereDate": null,
+      "productionYear": 2001,
+      "runTimeTicks": null,
+      "communityRating": null,
+      "criticRating": null,
+      "indexNumber": 2,
+      "parentIndexNumber": 2,
+      "album": null,
+      "artists": null,
+      "albumArtists": null,
+      "studios": [
+        "Studio 10"
+      ],
+      "officialRating": "PG",
+      "inheritedParentalRatingValue": 10,
+      "preferredMetadataCountryCode": "US",
+      "startDate": "2024-01-01 00:00:00",
+      "totalBitrate": 0,
+      "dateLastMediaAdded": "2025-01-01 00:00:00",
+      "seriesName": null,
+      "seriesId": null,
+      "seriesPresentationUniqueKey": null,
+      "presentationUniqueKey": null,
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000003002",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "sortBoxSetItem1",
+      "id": "80100000-0000-0000-0000-000000003005",
+      "type": "Audio",
+      "name": "a audio",
+      "sortName": "e a audio",
+      "parentId": "80100000-0000-0000-0000-000000003002",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "data": {},
+      "mediaType": "Audio",
+      "dateCreated": "2021-01-01T00:00:00.0000001",
+      "premiereDate": "2001-01-01T00:00:00.0000000",
+      "productionYear": null,
+      "runTimeTicks": "1000000000",
+      "communityRating": 1.5,
+      "criticRating": 20,
+      "indexNumber": 1,
+      "parentIndexNumber": 1,
+      "album": "Z",
+      "artists": [
+        "z artist",
+        "a second"
+      ],
+      "albumArtists": [
+        "z album artist",
+        "a second"
+      ],
+      "studios": [
+        "Studio 2"
+      ],
+      "officialRating": "R",
+      "inheritedParentalRatingValue": 18,
+      "preferredMetadataCountryCode": "US",
+      "startDate": "2024-01-01 00:00:00",
+      "totalBitrate": 0,
+      "dateLastMediaAdded": null,
+      "seriesName": null,
+      "seriesId": null,
+      "seriesPresentationUniqueKey": null,
+      "presentationUniqueKey": null,
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000003002",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "sortBoxSetItem2",
+      "id": "80100000-0000-0000-0000-000000003011",
+      "type": "Movie",
+      "name": "m movie",
+      "sortName": "a m movie",
+      "parentId": "80100000-0000-0000-0000-000000003002",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "data": {},
+      "mediaType": "Video",
+      "dateCreated": "2022-01-01T00:00:00.0000000",
+      "premiereDate": "2002-01-01T00:00:00.0000000",
+      "productionYear": null,
+      "runTimeTicks": "2000000000",
+      "communityRating": 3,
+      "criticRating": 40,
+      "indexNumber": null,
+      "parentIndexNumber": null,
+      "album": null,
+      "artists": null,
+      "albumArtists": null,
+      "studios": [],
+      "officialRating": "PG-13",
+      "inheritedParentalRatingValue": 13,
+      "preferredMetadataCountryCode": "US",
+      "startDate": "2024-01-01 00:00:00",
+      "totalBitrate": 0,
+      "dateLastMediaAdded": null,
+      "seriesName": null,
+      "seriesId": null,
+      "seriesPresentationUniqueKey": null,
+      "presentationUniqueKey": null,
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000003002",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "sortBoxSetItem3",
+      "id": "80100000-0000-0000-0000-000000003012",
+      "type": "Audio",
+      "name": "x audio",
+      "sortName": "b x audio",
+      "parentId": "80100000-0000-0000-0000-000000003002",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "data": {},
+      "mediaType": "Audio",
+      "dateCreated": "2020-01-01T00:00:00.0000001",
+      "premiereDate": null,
+      "productionYear": 2001,
+      "runTimeTicks": null,
+      "communityRating": null,
+      "criticRating": null,
+      "indexNumber": 3,
+      "parentIndexNumber": 1,
+      "album": "a",
+      "artists": [
+        "A artist"
+      ],
+      "albumArtists": [
+        "A album artist"
+      ],
+      "studios": [
+        "studio 20"
+      ],
+      "officialRating": "Unknown",
+      "inheritedParentalRatingValue": 10,
+      "preferredMetadataCountryCode": "US",
+      "startDate": "2024-01-01 00:00:00",
+      "totalBitrate": 0,
+      "dateLastMediaAdded": null,
+      "seriesName": null,
+      "seriesId": null,
+      "seriesPresentationUniqueKey": null,
+      "presentationUniqueKey": null,
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000003002",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "sortBoxSetItem4",
+      "id": "80100000-0000-0000-0000-000000003016",
+      "type": "Episode",
+      "name": "b episode",
+      "sortName": "f b episode",
+      "parentId": "80100000-0000-0000-0000-000000003002",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "data": {},
+      "mediaType": "Video",
+      "dateCreated": "2021-01-01T00:00:00.0000000",
+      "premiereDate": "2000-01-01T00:00:00.0000000",
+      "productionYear": null,
+      "runTimeTicks": "0",
+      "communityRating": 0,
+      "criticRating": 0,
+      "indexNumber": 2,
+      "parentIndexNumber": 1,
+      "album": null,
+      "artists": null,
+      "albumArtists": null,
+      "studios": [
+        "Studio 2"
+      ],
+      "officialRating": null,
+      "inheritedParentalRatingValue": 10,
+      "preferredMetadataCountryCode": "US",
+      "startDate": "2024-01-03 00:00:00",
+      "totalBitrate": 2,
+      "dateLastMediaAdded": null,
+      "seriesName": "Displayed Z",
+      "seriesId": "80100000-0000-0000-0000-000000003000",
+      "seriesPresentationUniqueKey": "80100000000000000000000000003000",
+      "presentationUniqueKey": null,
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000003002",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "sortBoxSetItem5",
+      "id": "80100000-0000-0000-0000-000000003017",
+      "type": "Episode",
+      "name": "c special",
+      "sortName": "c c special",
+      "parentId": "80100000-0000-0000-0000-000000003002",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "data": {
+        "AirsBeforeSeasonNumber": 1,
+        "AirsBeforeEpisodeNumber": 2
+      },
+      "mediaType": "Video",
+      "dateCreated": "2022-01-01T00:00:00.0000001",
+      "premiereDate": "2001-01-01T00:00:00.0000000",
+      "productionYear": null,
+      "runTimeTicks": "1000000000",
+      "communityRating": 1.5,
+      "criticRating": 20,
+      "indexNumber": 7,
+      "parentIndexNumber": 0,
+      "album": null,
+      "artists": null,
+      "albumArtists": null,
+      "studios": [],
+      "officialRating": null,
+      "inheritedParentalRatingValue": 10,
+      "preferredMetadataCountryCode": "US",
+      "startDate": "2024-01-03 00:00:00",
+      "totalBitrate": 2,
+      "dateLastMediaAdded": null,
+      "seriesName": "Displayed A",
+      "seriesId": "80100000-0000-0000-0000-000000003001",
+      "seriesPresentationUniqueKey": "80100000000000000000000000003001",
+      "presentationUniqueKey": null,
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000003002",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "sortBoxSetItem6",
+      "id": "80100000-0000-0000-0000-000000003018",
+      "type": "Episode",
+      "name": "d special",
+      "sortName": "d d special",
+      "parentId": "80100000-0000-0000-0000-000000003002",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "data": {
+        "AirsAfterSeasonNumber": 1
+      },
+      "mediaType": "Video",
+      "dateCreated": "2020-01-01T00:00:00.0000000",
+      "premiereDate": null,
+      "productionYear": 2001,
+      "runTimeTicks": null,
+      "communityRating": null,
+      "criticRating": null,
+      "indexNumber": 1,
+      "parentIndexNumber": 0,
+      "album": null,
+      "artists": null,
+      "albumArtists": null,
+      "studios": [
+        "Studio 10"
+      ],
+      "officialRating": null,
+      "inheritedParentalRatingValue": 10,
+      "preferredMetadataCountryCode": "US",
+      "startDate": "2024-01-03 00:00:00",
+      "totalBitrate": 2,
+      "dateLastMediaAdded": null,
+      "seriesName": "Displayed Z",
+      "seriesId": "80100000-0000-0000-0000-000000003000",
+      "seriesPresentationUniqueKey": "80100000000000000000000000003000",
+      "presentationUniqueKey": null,
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000003002",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "sortBoxSetItem7",
+      "id": "80100000-0000-0000-0000-000000003019",
+      "type": "Folder",
+      "name": "n folder",
+      "sortName": "h n folder",
+      "parentId": "80100000-0000-0000-0000-000000003002",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "data": {},
+      "mediaType": "Unknown",
+      "dateCreated": "2021-01-01T00:00:00.0000001",
+      "premiereDate": "2003-01-01T00:00:00.0000000",
+      "productionYear": null,
+      "runTimeTicks": "3000000000",
+      "communityRating": 4.5,
+      "criticRating": 60,
+      "indexNumber": null,
+      "parentIndexNumber": null,
+      "album": null,
+      "artists": null,
+      "albumArtists": null,
+      "studios": [
+        "Studio 3"
+      ],
+      "officialRating": null,
+      "inheritedParentalRatingValue": 10,
+      "preferredMetadataCountryCode": "US",
+      "startDate": "2024-01-02 00:00:00",
+      "totalBitrate": 1,
+      "dateLastMediaAdded": "0001-01-01 00:00:00",
+      "seriesName": null,
+      "seriesId": null,
+      "seriesPresentationUniqueKey": null,
+      "presentationUniqueKey": null,
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000003002",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "sortBoxSetItem8",
+      "id": "80100000-0000-0000-0000-000000003021",
+      "type": "Folder",
+      "name": "o folder",
+      "sortName": "i o folder",
+      "parentId": "80100000-0000-0000-0000-000000003002",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "data": {},
+      "mediaType": "Unknown",
+      "dateCreated": "2022-01-01T00:00:00.0000000",
+      "premiereDate": "2000-01-01T00:00:00.0000000",
+      "productionYear": null,
+      "runTimeTicks": "0",
+      "communityRating": 0,
+      "criticRating": 0,
+      "indexNumber": null,
+      "parentIndexNumber": null,
+      "album": null,
+      "artists": null,
+      "albumArtists": null,
+      "studios": [],
+      "officialRating": null,
+      "inheritedParentalRatingValue": 10,
+      "preferredMetadataCountryCode": "US",
+      "startDate": "2024-01-02 00:00:00",
+      "totalBitrate": 1,
+      "dateLastMediaAdded": null,
+      "seriesName": null,
+      "seriesId": null,
+      "seriesPresentationUniqueKey": null,
+      "presentationUniqueKey": null,
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000003002",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "sortBoxSetItem9",
+      "id": "80100000-0000-0000-0000-000000003022",
+      "type": "Audio",
+      "name": "p empty artists",
+      "sortName": "j p audio",
+      "parentId": "80100000-0000-0000-0000-000000003002",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "data": {},
+      "mediaType": "Audio",
+      "dateCreated": "2020-01-01T00:00:00.0000001",
+      "premiereDate": null,
+      "productionYear": 2001,
+      "runTimeTicks": null,
+      "communityRating": null,
+      "criticRating": null,
+      "indexNumber": null,
+      "parentIndexNumber": null,
+      "album": null,
+      "artists": [],
+      "albumArtists": [],
+      "studios": [
+        "Studio 1"
+      ],
+      "officialRating": null,
+      "inheritedParentalRatingValue": 10,
+      "preferredMetadataCountryCode": "US",
+      "startDate": "2024-01-02 00:00:00",
+      "totalBitrate": 1,
+      "dateLastMediaAdded": null,
+      "seriesName": null,
+      "seriesId": null,
+      "seriesPresentationUniqueKey": null,
+      "presentationUniqueKey": null,
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000003002",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "sortBoxSetItem10",
+      "id": "80100000-0000-0000-0000-000000003024",
+      "type": "MusicAlbum",
+      "name": "q album",
+      "sortName": "k q album",
+      "parentId": "80100000-0000-0000-0000-000000003002",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "data": {},
+      "mediaType": "Unknown",
+      "dateCreated": "2021-01-01T00:00:00.0000000",
+      "premiereDate": "2002-01-01T00:00:00.0000000",
+      "productionYear": null,
+      "runTimeTicks": "2000000000",
+      "communityRating": 3,
+      "criticRating": 40,
+      "indexNumber": null,
+      "parentIndexNumber": null,
+      "album": null,
+      "artists": [
+        "A music album artist"
+      ],
+      "albumArtists": [
+        "B music album artist"
+      ],
+      "studios": [
+        "Studio 12"
+      ],
+      "officialRating": null,
+      "inheritedParentalRatingValue": 10,
+      "preferredMetadataCountryCode": "US",
+      "startDate": "2024-01-01 00:00:00",
+      "totalBitrate": 0,
+      "dateLastMediaAdded": "2024-01-01 00:00:00",
+      "seriesName": null,
+      "seriesId": null,
+      "seriesPresentationUniqueKey": null,
+      "presentationUniqueKey": null,
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000003002",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "sortBoxSetItem11",
+      "id": "80100000-0000-0000-0000-000000003028",
+      "type": "Series",
+      "name": "r series",
+      "sortName": "l r series",
+      "parentId": "80100000-0000-0000-0000-000000003002",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "data": {},
+      "mediaType": "Unknown",
+      "dateCreated": "2022-01-01T00:00:00.0000001",
+      "premiereDate": "2003-01-01T00:00:00.0000000",
+      "productionYear": null,
+      "runTimeTicks": "3000000000",
+      "communityRating": 4.5,
+      "criticRating": 60,
+      "indexNumber": null,
+      "parentIndexNumber": null,
+      "album": null,
+      "artists": null,
+      "albumArtists": null,
+      "studios": [],
+      "officialRating": null,
+      "inheritedParentalRatingValue": 10,
+      "preferredMetadataCountryCode": "US",
+      "startDate": "2024-01-02 00:00:00",
+      "totalBitrate": 1,
+      "dateLastMediaAdded": null,
+      "seriesName": null,
+      "seriesId": null,
+      "seriesPresentationUniqueKey": null,
+      "presentationUniqueKey": "80100000000000000000000000003001",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000003002",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "sortBoxSetItem12",
+      "id": "80100000-0000-0000-0000-000000003029",
+      "type": "Season",
+      "name": "s season",
+      "sortName": "m s season",
+      "parentId": "80100000-0000-0000-0000-000000003002",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "data": {},
+      "mediaType": "Unknown",
+      "dateCreated": "2020-01-01T00:00:00.0000000",
+      "premiereDate": null,
+      "productionYear": 2001,
+      "runTimeTicks": null,
+      "communityRating": null,
+      "criticRating": null,
+      "indexNumber": null,
+      "parentIndexNumber": null,
+      "album": null,
+      "artists": null,
+      "albumArtists": null,
+      "studios": [
+        "Studio 4"
+      ],
+      "officialRating": null,
+      "inheritedParentalRatingValue": 10,
+      "preferredMetadataCountryCode": "US",
+      "startDate": "2024-01-02 00:00:00",
+      "totalBitrate": 1,
+      "dateLastMediaAdded": null,
+      "seriesName": "Displayed A",
+      "seriesId": "80100000-0000-0000-0000-000000003001",
+      "seriesPresentationUniqueKey": "80100000000000000000000000003001",
+      "presentationUniqueKey": null,
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000003002",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "sortBoxSetItem13",
+      "id": "80100000-0000-0000-0000-000000003031",
+      "type": "Person",
+      "name": "t person",
+      "sortName": "n t person",
+      "parentId": "80100000-0000-0000-0000-000000003002",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "data": {},
+      "mediaType": "Unknown",
+      "dateCreated": "2021-01-01T00:00:00.0000001",
+      "premiereDate": "2001-01-01T00:00:00.0000000",
+      "productionYear": null,
+      "runTimeTicks": "1000000000",
+      "communityRating": 1.5,
+      "criticRating": 20,
+      "indexNumber": null,
+      "parentIndexNumber": null,
+      "album": null,
+      "artists": null,
+      "albumArtists": null,
+      "studios": [],
+      "officialRating": null,
+      "inheritedParentalRatingValue": 10,
+      "preferredMetadataCountryCode": "US",
+      "startDate": "2024-01-02 00:00:00",
+      "totalBitrate": 1,
+      "dateLastMediaAdded": null,
+      "seriesName": null,
+      "seriesId": null,
+      "seriesPresentationUniqueKey": null,
+      "presentationUniqueKey": null,
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000003002",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "sortFolder",
+      "id": "80100000-0000-0000-0000-000000003032",
+      "type": "Folder",
+      "name": "Sort Folder",
+      "sortName": "sort folder",
+      "parentId": "80100000-0000-0000-0000-000000000100",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "data": {},
+      "preferredMetadataCountryCode": "US",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "sortFolderItem0",
+      "id": "80100000-0000-0000-0000-000000003033",
+      "type": "Movie",
+      "name": "z movie",
+      "sortName": "g z movie",
+      "parentId": "80100000-0000-0000-0000-000000003032",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "data": {},
+      "mediaType": "Video",
+      "dateCreated": "2020-01-01T00:00:00.0000000",
+      "premiereDate": null,
+      "productionYear": 2001,
+      "runTimeTicks": null,
+      "communityRating": null,
+      "criticRating": null,
+      "indexNumber": 2,
+      "parentIndexNumber": 2,
+      "album": null,
+      "artists": null,
+      "albumArtists": null,
+      "studios": [
+        "Studio 10"
+      ],
+      "officialRating": "PG",
+      "inheritedParentalRatingValue": 10,
+      "preferredMetadataCountryCode": "US",
+      "startDate": "2024-01-01 00:00:00",
+      "totalBitrate": 0,
+      "dateLastMediaAdded": "2025-01-01 00:00:00",
+      "seriesName": null,
+      "seriesId": null,
+      "seriesPresentationUniqueKey": null,
+      "presentationUniqueKey": null,
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000003032",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "sortFolderItem1",
+      "id": "80100000-0000-0000-0000-000000003034",
+      "type": "Audio",
+      "name": "a audio",
+      "sortName": "e a audio",
+      "parentId": "80100000-0000-0000-0000-000000003032",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "data": {},
+      "mediaType": "Audio",
+      "dateCreated": "2021-01-01T00:00:00.0000001",
+      "premiereDate": "2001-01-01T00:00:00.0000000",
+      "productionYear": null,
+      "runTimeTicks": "1000000000",
+      "communityRating": 1.5,
+      "criticRating": 20,
+      "indexNumber": 1,
+      "parentIndexNumber": 1,
+      "album": "Z",
+      "artists": [
+        "z artist",
+        "a second"
+      ],
+      "albumArtists": [
+        "z album artist",
+        "a second"
+      ],
+      "studios": [
+        "Studio 2"
+      ],
+      "officialRating": "R",
+      "inheritedParentalRatingValue": 18,
+      "preferredMetadataCountryCode": "US",
+      "startDate": "2024-01-01 00:00:00",
+      "totalBitrate": 0,
+      "dateLastMediaAdded": null,
+      "seriesName": null,
+      "seriesId": null,
+      "seriesPresentationUniqueKey": null,
+      "presentationUniqueKey": null,
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000003032",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "sortFolderItem2",
+      "id": "80100000-0000-0000-0000-000000003035",
+      "type": "Movie",
+      "name": "m movie",
+      "sortName": "a m movie",
+      "parentId": "80100000-0000-0000-0000-000000003032",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "data": {},
+      "mediaType": "Video",
+      "dateCreated": "2022-01-01T00:00:00.0000000",
+      "premiereDate": "2002-01-01T00:00:00.0000000",
+      "productionYear": null,
+      "runTimeTicks": "2000000000",
+      "communityRating": 3,
+      "criticRating": 40,
+      "indexNumber": null,
+      "parentIndexNumber": null,
+      "album": null,
+      "artists": null,
+      "albumArtists": null,
+      "studios": [],
+      "officialRating": "PG-13",
+      "inheritedParentalRatingValue": 13,
+      "preferredMetadataCountryCode": "US",
+      "startDate": "2024-01-01 00:00:00",
+      "totalBitrate": 0,
+      "dateLastMediaAdded": null,
+      "seriesName": null,
+      "seriesId": null,
+      "seriesPresentationUniqueKey": null,
+      "presentationUniqueKey": null,
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000003032",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "sortFolderItem3",
+      "id": "80100000-0000-0000-0000-000000003036",
+      "type": "Audio",
+      "name": "x audio",
+      "sortName": "b x audio",
+      "parentId": "80100000-0000-0000-0000-000000003032",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "data": {},
+      "mediaType": "Audio",
+      "dateCreated": "2020-01-01T00:00:00.0000001",
+      "premiereDate": null,
+      "productionYear": 2001,
+      "runTimeTicks": null,
+      "communityRating": null,
+      "criticRating": null,
+      "indexNumber": 3,
+      "parentIndexNumber": 1,
+      "album": "a",
+      "artists": [
+        "A artist"
+      ],
+      "albumArtists": [
+        "A album artist"
+      ],
+      "studios": [
+        "studio 20"
+      ],
+      "officialRating": "Unknown",
+      "inheritedParentalRatingValue": 10,
+      "preferredMetadataCountryCode": "US",
+      "startDate": "2024-01-01 00:00:00",
+      "totalBitrate": 0,
+      "dateLastMediaAdded": null,
+      "seriesName": null,
+      "seriesId": null,
+      "seriesPresentationUniqueKey": null,
+      "presentationUniqueKey": null,
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000003032",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "sortFolderItem4",
+      "id": "80100000-0000-0000-0000-000000003037",
+      "type": "Episode",
+      "name": "b episode",
+      "sortName": "f b episode",
+      "parentId": "80100000-0000-0000-0000-000000003032",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "data": {},
+      "mediaType": "Video",
+      "dateCreated": "2021-01-01T00:00:00.0000000",
+      "premiereDate": "2000-01-01T00:00:00.0000000",
+      "productionYear": null,
+      "runTimeTicks": "0",
+      "communityRating": 0,
+      "criticRating": 0,
+      "indexNumber": 2,
+      "parentIndexNumber": 1,
+      "album": null,
+      "artists": null,
+      "albumArtists": null,
+      "studios": [
+        "Studio 2"
+      ],
+      "officialRating": null,
+      "inheritedParentalRatingValue": 10,
+      "preferredMetadataCountryCode": "US",
+      "startDate": "2024-01-03 00:00:00",
+      "totalBitrate": 2,
+      "dateLastMediaAdded": null,
+      "seriesName": "Displayed Z",
+      "seriesId": "80100000-0000-0000-0000-000000003000",
+      "seriesPresentationUniqueKey": "80100000000000000000000000003000",
+      "presentationUniqueKey": null,
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000003032",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "sortFolderItem5",
+      "id": "80100000-0000-0000-0000-000000003038",
+      "type": "Episode",
+      "name": "c special",
+      "sortName": "c c special",
+      "parentId": "80100000-0000-0000-0000-000000003032",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "data": {
+        "AirsBeforeSeasonNumber": 1,
+        "AirsBeforeEpisodeNumber": 2
+      },
+      "mediaType": "Video",
+      "dateCreated": "2022-01-01T00:00:00.0000001",
+      "premiereDate": "2001-01-01T00:00:00.0000000",
+      "productionYear": null,
+      "runTimeTicks": "1000000000",
+      "communityRating": 1.5,
+      "criticRating": 20,
+      "indexNumber": 7,
+      "parentIndexNumber": 0,
+      "album": null,
+      "artists": null,
+      "albumArtists": null,
+      "studios": [],
+      "officialRating": null,
+      "inheritedParentalRatingValue": 10,
+      "preferredMetadataCountryCode": "US",
+      "startDate": "2024-01-03 00:00:00",
+      "totalBitrate": 2,
+      "dateLastMediaAdded": null,
+      "seriesName": "Displayed A",
+      "seriesId": "80100000-0000-0000-0000-000000003001",
+      "seriesPresentationUniqueKey": "80100000000000000000000000003001",
+      "presentationUniqueKey": null,
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000003032",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "sortFolderItem6",
+      "id": "80100000-0000-0000-0000-000000003039",
+      "type": "Episode",
+      "name": "d special",
+      "sortName": "d d special",
+      "parentId": "80100000-0000-0000-0000-000000003032",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "data": {
+        "AirsAfterSeasonNumber": 1
+      },
+      "mediaType": "Video",
+      "dateCreated": "2020-01-01T00:00:00.0000000",
+      "premiereDate": null,
+      "productionYear": 2001,
+      "runTimeTicks": null,
+      "communityRating": null,
+      "criticRating": null,
+      "indexNumber": 1,
+      "parentIndexNumber": 0,
+      "album": null,
+      "artists": null,
+      "albumArtists": null,
+      "studios": [
+        "Studio 10"
+      ],
+      "officialRating": null,
+      "inheritedParentalRatingValue": 10,
+      "preferredMetadataCountryCode": "US",
+      "startDate": "2024-01-03 00:00:00",
+      "totalBitrate": 2,
+      "dateLastMediaAdded": null,
+      "seriesName": "Displayed Z",
+      "seriesId": "80100000-0000-0000-0000-000000003000",
+      "seriesPresentationUniqueKey": "80100000000000000000000000003000",
+      "presentationUniqueKey": null,
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000003032",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "sortFolderItem7",
+      "id": "80100000-0000-0000-0000-000000003040",
+      "type": "Folder",
+      "name": "n folder",
+      "sortName": "h n folder",
+      "parentId": "80100000-0000-0000-0000-000000003032",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "data": {},
+      "mediaType": "Unknown",
+      "dateCreated": "2021-01-01T00:00:00.0000001",
+      "premiereDate": "2003-01-01T00:00:00.0000000",
+      "productionYear": null,
+      "runTimeTicks": "3000000000",
+      "communityRating": 4.5,
+      "criticRating": 60,
+      "indexNumber": null,
+      "parentIndexNumber": null,
+      "album": null,
+      "artists": null,
+      "albumArtists": null,
+      "studios": [
+        "Studio 3"
+      ],
+      "officialRating": null,
+      "inheritedParentalRatingValue": 10,
+      "preferredMetadataCountryCode": "US",
+      "startDate": "2024-01-02 00:00:00",
+      "totalBitrate": 1,
+      "dateLastMediaAdded": "0001-01-01 00:00:00",
+      "seriesName": null,
+      "seriesId": null,
+      "seriesPresentationUniqueKey": null,
+      "presentationUniqueKey": null,
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000003032",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "sortFolderItem8",
+      "id": "80100000-0000-0000-0000-000000003041",
+      "type": "Folder",
+      "name": "o folder",
+      "sortName": "i o folder",
+      "parentId": "80100000-0000-0000-0000-000000003032",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "data": {},
+      "mediaType": "Unknown",
+      "dateCreated": "2022-01-01T00:00:00.0000000",
+      "premiereDate": "2000-01-01T00:00:00.0000000",
+      "productionYear": null,
+      "runTimeTicks": "0",
+      "communityRating": 0,
+      "criticRating": 0,
+      "indexNumber": null,
+      "parentIndexNumber": null,
+      "album": null,
+      "artists": null,
+      "albumArtists": null,
+      "studios": [],
+      "officialRating": null,
+      "inheritedParentalRatingValue": 10,
+      "preferredMetadataCountryCode": "US",
+      "startDate": "2024-01-02 00:00:00",
+      "totalBitrate": 1,
+      "dateLastMediaAdded": null,
+      "seriesName": null,
+      "seriesId": null,
+      "seriesPresentationUniqueKey": null,
+      "presentationUniqueKey": null,
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000003032",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "sortFolderItem9",
+      "id": "80100000-0000-0000-0000-000000003042",
+      "type": "Audio",
+      "name": "p empty artists",
+      "sortName": "j p audio",
+      "parentId": "80100000-0000-0000-0000-000000003032",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "data": {},
+      "mediaType": "Audio",
+      "dateCreated": "2020-01-01T00:00:00.0000001",
+      "premiereDate": null,
+      "productionYear": 2001,
+      "runTimeTicks": null,
+      "communityRating": null,
+      "criticRating": null,
+      "indexNumber": null,
+      "parentIndexNumber": null,
+      "album": null,
+      "artists": [],
+      "albumArtists": [],
+      "studios": [
+        "Studio 1"
+      ],
+      "officialRating": null,
+      "inheritedParentalRatingValue": 10,
+      "preferredMetadataCountryCode": "US",
+      "startDate": "2024-01-02 00:00:00",
+      "totalBitrate": 1,
+      "dateLastMediaAdded": null,
+      "seriesName": null,
+      "seriesId": null,
+      "seriesPresentationUniqueKey": null,
+      "presentationUniqueKey": null,
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000003032",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "sortFolderItem10",
+      "id": "80100000-0000-0000-0000-000000003043",
+      "type": "MusicAlbum",
+      "name": "q album",
+      "sortName": "k q album",
+      "parentId": "80100000-0000-0000-0000-000000003032",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "data": {},
+      "mediaType": "Unknown",
+      "dateCreated": "2021-01-01T00:00:00.0000000",
+      "premiereDate": "2002-01-01T00:00:00.0000000",
+      "productionYear": null,
+      "runTimeTicks": "2000000000",
+      "communityRating": 3,
+      "criticRating": 40,
+      "indexNumber": null,
+      "parentIndexNumber": null,
+      "album": null,
+      "artists": [
+        "A music album artist"
+      ],
+      "albumArtists": [
+        "B music album artist"
+      ],
+      "studios": [
+        "Studio 12"
+      ],
+      "officialRating": null,
+      "inheritedParentalRatingValue": 10,
+      "preferredMetadataCountryCode": "US",
+      "startDate": "2024-01-01 00:00:00",
+      "totalBitrate": 0,
+      "dateLastMediaAdded": "2024-01-01 00:00:00",
+      "seriesName": null,
+      "seriesId": null,
+      "seriesPresentationUniqueKey": null,
+      "presentationUniqueKey": null,
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000003032",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "sortFolderItem11",
+      "id": "80100000-0000-0000-0000-000000003044",
+      "type": "Series",
+      "name": "r series",
+      "sortName": "l r series",
+      "parentId": "80100000-0000-0000-0000-000000003032",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "data": {},
+      "mediaType": "Unknown",
+      "dateCreated": "2022-01-01T00:00:00.0000001",
+      "premiereDate": "2003-01-01T00:00:00.0000000",
+      "productionYear": null,
+      "runTimeTicks": "3000000000",
+      "communityRating": 4.5,
+      "criticRating": 60,
+      "indexNumber": null,
+      "parentIndexNumber": null,
+      "album": null,
+      "artists": null,
+      "albumArtists": null,
+      "studios": [],
+      "officialRating": null,
+      "inheritedParentalRatingValue": 10,
+      "preferredMetadataCountryCode": "US",
+      "startDate": "2024-01-02 00:00:00",
+      "totalBitrate": 1,
+      "dateLastMediaAdded": null,
+      "seriesName": null,
+      "seriesId": null,
+      "seriesPresentationUniqueKey": null,
+      "presentationUniqueKey": "80100000000000000000000000003001",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000003032",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "sortFolderItem12",
+      "id": "80100000-0000-0000-0000-000000003045",
+      "type": "Season",
+      "name": "s season",
+      "sortName": "m s season",
+      "parentId": "80100000-0000-0000-0000-000000003032",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "data": {},
+      "mediaType": "Unknown",
+      "dateCreated": "2020-01-01T00:00:00.0000000",
+      "premiereDate": null,
+      "productionYear": 2001,
+      "runTimeTicks": null,
+      "communityRating": null,
+      "criticRating": null,
+      "indexNumber": null,
+      "parentIndexNumber": null,
+      "album": null,
+      "artists": null,
+      "albumArtists": null,
+      "studios": [
+        "Studio 4"
+      ],
+      "officialRating": null,
+      "inheritedParentalRatingValue": 10,
+      "preferredMetadataCountryCode": "US",
+      "startDate": "2024-01-02 00:00:00",
+      "totalBitrate": 1,
+      "dateLastMediaAdded": null,
+      "seriesName": "Displayed A",
+      "seriesId": "80100000-0000-0000-0000-000000003001",
+      "seriesPresentationUniqueKey": "80100000000000000000000000003001",
+      "presentationUniqueKey": null,
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000003032",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "sortFolderItem13",
+      "id": "80100000-0000-0000-0000-000000003046",
+      "type": "Person",
+      "name": "t person",
+      "sortName": "n t person",
+      "parentId": "80100000-0000-0000-0000-000000003032",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "data": {},
+      "mediaType": "Unknown",
+      "dateCreated": "2021-01-01T00:00:00.0000001",
+      "premiereDate": "2001-01-01T00:00:00.0000000",
+      "productionYear": null,
+      "runTimeTicks": "1000000000",
+      "communityRating": 1.5,
+      "criticRating": 20,
+      "indexNumber": null,
+      "parentIndexNumber": null,
+      "album": null,
+      "artists": null,
+      "albumArtists": null,
+      "studios": [],
+      "officialRating": null,
+      "inheritedParentalRatingValue": 10,
+      "preferredMetadataCountryCode": "US",
+      "startDate": "2024-01-02 00:00:00",
+      "totalBitrate": 1,
+      "dateLastMediaAdded": null,
+      "seriesName": null,
+      "seriesId": null,
+      "seriesPresentationUniqueKey": null,
+      "presentationUniqueKey": null,
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000003032",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    }
+  ],
+  "links": [],
+  "itemValues": [
+    {
+      "key": "value0",
+      "id": "80100000-0000-0000-0000-000000003004",
+      "type": 3,
+      "value": "Studio 10",
+      "cleanValue": "studio 10"
+    },
+    {
+      "key": "value1",
+      "id": "80100000-0000-0000-0000-000000003006",
+      "type": 0,
+      "value": "z artist",
+      "cleanValue": "z artist"
+    },
+    {
+      "key": "value2",
+      "id": "80100000-0000-0000-0000-000000003007",
+      "type": 0,
+      "value": "a second",
+      "cleanValue": "a second"
+    },
+    {
+      "key": "value3",
+      "id": "80100000-0000-0000-0000-000000003008",
+      "type": 1,
+      "value": "z album artist",
+      "cleanValue": "z album artist"
+    },
+    {
+      "key": "value4",
+      "id": "80100000-0000-0000-0000-000000003009",
+      "type": 1,
+      "value": "a second",
+      "cleanValue": "a second"
+    },
+    {
+      "key": "value5",
+      "id": "80100000-0000-0000-0000-000000003010",
+      "type": 3,
+      "value": "Studio 2",
+      "cleanValue": "studio 2"
+    },
+    {
+      "key": "value6",
+      "id": "80100000-0000-0000-0000-000000003013",
+      "type": 0,
+      "value": "A artist",
+      "cleanValue": "a artist"
+    },
+    {
+      "key": "value7",
+      "id": "80100000-0000-0000-0000-000000003014",
+      "type": 1,
+      "value": "A album artist",
+      "cleanValue": "a album artist"
+    },
+    {
+      "key": "value8",
+      "id": "80100000-0000-0000-0000-000000003015",
+      "type": 3,
+      "value": "studio 20",
+      "cleanValue": "studio 20"
+    },
+    {
+      "key": "value9",
+      "id": "80100000-0000-0000-0000-000000003020",
+      "type": 3,
+      "value": "Studio 3",
+      "cleanValue": "studio 3"
+    },
+    {
+      "key": "value10",
+      "id": "80100000-0000-0000-0000-000000003023",
+      "type": 3,
+      "value": "Studio 1",
+      "cleanValue": "studio 1"
+    },
+    {
+      "key": "value11",
+      "id": "80100000-0000-0000-0000-000000003025",
+      "type": 0,
+      "value": "A music album artist",
+      "cleanValue": "a music album artist"
+    },
+    {
+      "key": "value12",
+      "id": "80100000-0000-0000-0000-000000003026",
+      "type": 1,
+      "value": "B music album artist",
+      "cleanValue": "b music album artist"
+    },
+    {
+      "key": "value13",
+      "id": "80100000-0000-0000-0000-000000003027",
+      "type": 3,
+      "value": "Studio 12",
+      "cleanValue": "studio 12"
+    },
+    {
+      "key": "value14",
+      "id": "80100000-0000-0000-0000-000000003030",
+      "type": 3,
+      "value": "Studio 4",
+      "cleanValue": "studio 4"
+    }
+  ],
+  "itemValueLinks": [
+    {
+      "itemKey": "sortBoxSetItem0",
+      "valueKey": "value0"
+    },
+    {
+      "itemKey": "sortBoxSetItem1",
+      "valueKey": "value1"
+    },
+    {
+      "itemKey": "sortBoxSetItem1",
+      "valueKey": "value2"
+    },
+    {
+      "itemKey": "sortBoxSetItem1",
+      "valueKey": "value3"
+    },
+    {
+      "itemKey": "sortBoxSetItem1",
+      "valueKey": "value4"
+    },
+    {
+      "itemKey": "sortBoxSetItem1",
+      "valueKey": "value5"
+    },
+    {
+      "itemKey": "sortBoxSetItem3",
+      "valueKey": "value6"
+    },
+    {
+      "itemKey": "sortBoxSetItem3",
+      "valueKey": "value7"
+    },
+    {
+      "itemKey": "sortBoxSetItem3",
+      "valueKey": "value8"
+    },
+    {
+      "itemKey": "sortBoxSetItem4",
+      "valueKey": "value5"
+    },
+    {
+      "itemKey": "sortBoxSetItem6",
+      "valueKey": "value0"
+    },
+    {
+      "itemKey": "sortBoxSetItem7",
+      "valueKey": "value9"
+    },
+    {
+      "itemKey": "sortBoxSetItem9",
+      "valueKey": "value10"
+    },
+    {
+      "itemKey": "sortBoxSetItem10",
+      "valueKey": "value11"
+    },
+    {
+      "itemKey": "sortBoxSetItem10",
+      "valueKey": "value12"
+    },
+    {
+      "itemKey": "sortBoxSetItem10",
+      "valueKey": "value13"
+    },
+    {
+      "itemKey": "sortBoxSetItem12",
+      "valueKey": "value14"
+    },
+    {
+      "itemKey": "sortFolderItem0",
+      "valueKey": "value0"
+    },
+    {
+      "itemKey": "sortFolderItem1",
+      "valueKey": "value1"
+    },
+    {
+      "itemKey": "sortFolderItem1",
+      "valueKey": "value2"
+    },
+    {
+      "itemKey": "sortFolderItem1",
+      "valueKey": "value3"
+    },
+    {
+      "itemKey": "sortFolderItem1",
+      "valueKey": "value4"
+    },
+    {
+      "itemKey": "sortFolderItem1",
+      "valueKey": "value5"
+    },
+    {
+      "itemKey": "sortFolderItem3",
+      "valueKey": "value6"
+    },
+    {
+      "itemKey": "sortFolderItem3",
+      "valueKey": "value7"
+    },
+    {
+      "itemKey": "sortFolderItem3",
+      "valueKey": "value8"
+    },
+    {
+      "itemKey": "sortFolderItem4",
+      "valueKey": "value5"
+    },
+    {
+      "itemKey": "sortFolderItem6",
+      "valueKey": "value0"
+    },
+    {
+      "itemKey": "sortFolderItem7",
+      "valueKey": "value9"
+    },
+    {
+      "itemKey": "sortFolderItem9",
+      "valueKey": "value10"
+    },
+    {
+      "itemKey": "sortFolderItem10",
+      "valueKey": "value11"
+    },
+    {
+      "itemKey": "sortFolderItem10",
+      "valueKey": "value12"
+    },
+    {
+      "itemKey": "sortFolderItem10",
+      "valueKey": "value13"
+    },
+    {
+      "itemKey": "sortFolderItem12",
+      "valueKey": "value14"
+    }
+  ],
+  "cases": [
+    {
+      "name": "memory-numeric-0-Default",
+      "bindingLabel": "numeric-0-Default",
+      "mode": "memory",
+      "parentKey": "sortFolder",
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "query": "SortBy=0,Name&SortOrder=Ascending,Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "memory-numeric-1-AiredEpisodeOrder",
+      "bindingLabel": "numeric-1-AiredEpisodeOrder",
+      "mode": "memory",
+      "parentKey": "sortFolder",
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "query": "SortBy=1,Name&SortOrder=Ascending,Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "memory-numeric-2-Album",
+      "bindingLabel": "numeric-2-Album",
+      "mode": "memory",
+      "parentKey": "sortFolder",
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "query": "SortBy=2,Name&SortOrder=Ascending,Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "memory-numeric-3-AlbumArtist",
+      "bindingLabel": "numeric-3-AlbumArtist",
+      "mode": "memory",
+      "parentKey": "sortFolder",
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "query": "SortBy=3,Name&SortOrder=Ascending,Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "memory-numeric-4-Artist",
+      "bindingLabel": "numeric-4-Artist",
+      "mode": "memory",
+      "parentKey": "sortFolder",
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "query": "SortBy=4,Name&SortOrder=Ascending,Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "memory-numeric-5-DateCreated",
+      "bindingLabel": "numeric-5-DateCreated",
+      "mode": "memory",
+      "parentKey": "sortFolder",
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "query": "SortBy=5,Name&SortOrder=Ascending,Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "memory-numeric-6-OfficialRating",
+      "bindingLabel": "numeric-6-OfficialRating",
+      "mode": "memory",
+      "parentKey": "sortFolder",
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "query": "SortBy=6,Name&SortOrder=Ascending,Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "memory-numeric-7-DatePlayed",
+      "bindingLabel": "numeric-7-DatePlayed",
+      "mode": "memory",
+      "parentKey": "sortFolder",
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "query": "SortBy=7,Name&SortOrder=Ascending,Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "memory-numeric-8-PremiereDate",
+      "bindingLabel": "numeric-8-PremiereDate",
+      "mode": "memory",
+      "parentKey": "sortFolder",
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "query": "SortBy=8,Name&SortOrder=Ascending,Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "memory-numeric-9-StartDate",
+      "bindingLabel": "numeric-9-StartDate",
+      "mode": "memory",
+      "parentKey": "sortFolder",
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "query": "SortBy=9,Name&SortOrder=Ascending,Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "memory-numeric-10-SortName",
+      "bindingLabel": "numeric-10-SortName",
+      "mode": "memory",
+      "parentKey": "sortFolder",
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "query": "SortBy=10,Name&SortOrder=Ascending,Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "memory-numeric-11-Name",
+      "bindingLabel": "numeric-11-Name",
+      "mode": "memory",
+      "parentKey": "sortFolder",
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "query": "SortBy=11,Name&SortOrder=Ascending,Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "memory-numeric-12-Random",
+      "bindingLabel": "numeric-12-Random",
+      "mode": "memory",
+      "parentKey": "sortFolder",
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "query": "SortBy=12,Name&SortOrder=Ascending,Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "memory-numeric-13-Runtime",
+      "bindingLabel": "numeric-13-Runtime",
+      "mode": "memory",
+      "parentKey": "sortFolder",
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "query": "SortBy=13,Name&SortOrder=Ascending,Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "memory-numeric-14-CommunityRating",
+      "bindingLabel": "numeric-14-CommunityRating",
+      "mode": "memory",
+      "parentKey": "sortFolder",
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "query": "SortBy=14,Name&SortOrder=Ascending,Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "memory-numeric-15-ProductionYear",
+      "bindingLabel": "numeric-15-ProductionYear",
+      "mode": "memory",
+      "parentKey": "sortFolder",
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "query": "SortBy=15,Name&SortOrder=Ascending,Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "memory-numeric-16-PlayCount",
+      "bindingLabel": "numeric-16-PlayCount",
+      "mode": "memory",
+      "parentKey": "sortFolder",
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "query": "SortBy=16,Name&SortOrder=Ascending,Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "memory-numeric-17-CriticRating",
+      "bindingLabel": "numeric-17-CriticRating",
+      "mode": "memory",
+      "parentKey": "sortFolder",
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "query": "SortBy=17,Name&SortOrder=Ascending,Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "memory-numeric-18-IsFolder",
+      "bindingLabel": "numeric-18-IsFolder",
+      "mode": "memory",
+      "parentKey": "sortFolder",
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "query": "SortBy=18,Name&SortOrder=Ascending,Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "memory-numeric-19-IsUnplayed",
+      "bindingLabel": "numeric-19-IsUnplayed",
+      "mode": "memory",
+      "parentKey": "sortFolder",
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "query": "SortBy=19,Name&SortOrder=Ascending,Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "memory-numeric-20-IsPlayed",
+      "bindingLabel": "numeric-20-IsPlayed",
+      "mode": "memory",
+      "parentKey": "sortFolder",
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "query": "SortBy=20,Name&SortOrder=Ascending,Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "memory-numeric-21-SeriesSortName",
+      "bindingLabel": "numeric-21-SeriesSortName",
+      "mode": "memory",
+      "parentKey": "sortFolder",
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "query": "SortBy=21,Name&SortOrder=Ascending,Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "memory-numeric-22-VideoBitRate",
+      "bindingLabel": "numeric-22-VideoBitRate",
+      "mode": "memory",
+      "parentKey": "sortFolder",
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "query": "SortBy=22,Name&SortOrder=Ascending,Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "memory-numeric-23-AirTime",
+      "bindingLabel": "numeric-23-AirTime",
+      "mode": "memory",
+      "parentKey": "sortFolder",
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "query": "SortBy=23,Name&SortOrder=Ascending,Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "memory-numeric-24-Studio",
+      "bindingLabel": "numeric-24-Studio",
+      "mode": "memory",
+      "parentKey": "sortFolder",
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "query": "SortBy=24,Name&SortOrder=Ascending,Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "memory-numeric-25-IsFavoriteOrLiked",
+      "bindingLabel": "numeric-25-IsFavoriteOrLiked",
+      "mode": "memory",
+      "parentKey": "sortFolder",
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "query": "SortBy=25,Name&SortOrder=Ascending,Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "memory-numeric-26-DateLastContentAdded",
+      "bindingLabel": "numeric-26-DateLastContentAdded",
+      "mode": "memory",
+      "parentKey": "sortFolder",
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "query": "SortBy=26,Name&SortOrder=Ascending,Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "memory-numeric-27-SeriesDatePlayed",
+      "bindingLabel": "numeric-27-SeriesDatePlayed",
+      "mode": "memory",
+      "parentKey": "sortFolder",
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "query": "SortBy=27,Name&SortOrder=Ascending,Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "memory-numeric-28-ParentIndexNumber",
+      "bindingLabel": "numeric-28-ParentIndexNumber",
+      "mode": "memory",
+      "parentKey": "sortFolder",
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "query": "SortBy=28,Name&SortOrder=Ascending,Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "memory-numeric-29-IndexNumber",
+      "bindingLabel": "numeric-29-IndexNumber",
+      "mode": "memory",
+      "parentKey": "sortFolder",
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "query": "SortBy=29,Name&SortOrder=Ascending,Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "memory-control-name",
+      "bindingLabel": "control-name",
+      "mode": "memory",
+      "parentKey": "sortFolder",
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "query": "SortBy=Name&SortOrder=Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "memory-empty-by",
+      "bindingLabel": "empty-by",
+      "mode": "memory",
+      "parentKey": "sortFolder",
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "query": "SortBy=",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "memory-comma-only",
+      "bindingLabel": "comma-only",
+      "mode": "memory",
+      "parentKey": "sortFolder",
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "query": "SortBy=,,",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "memory-missing-by-orders",
+      "bindingLabel": "missing-by-orders",
+      "mode": "memory",
+      "parentKey": "sortFolder",
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "query": "SortOrder=Descending,Ascending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "memory-empty-by-orders",
+      "bindingLabel": "empty-by-orders",
+      "mode": "memory",
+      "parentKey": "sortFolder",
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "query": "SortBy=&SortOrder=Descending,Ascending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "memory-undefined-30",
+      "bindingLabel": "undefined-30",
+      "mode": "memory",
+      "parentKey": "sortFolder",
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "query": "SortBy=30",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "memory-negative-key",
+      "bindingLabel": "negative-key",
+      "mode": "memory",
+      "parentKey": "sortFolder",
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "query": "SortBy=-1",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "memory-max-key",
+      "bindingLabel": "max-key",
+      "mode": "memory",
+      "parentKey": "sortFolder",
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "query": "SortBy=2147483647",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "memory-min-key",
+      "bindingLabel": "min-key",
+      "mode": "memory",
+      "parentKey": "sortFolder",
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "query": "SortBy=-2147483648",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "memory-overflow-key",
+      "bindingLabel": "overflow-key",
+      "mode": "memory",
+      "parentKey": "sortFolder",
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "query": "SortBy=2147483648",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "memory-hex-key",
+      "bindingLabel": "hex-key",
+      "mode": "memory",
+      "parentKey": "sortFolder",
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "query": "SortBy=0xB",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "memory-float-key",
+      "bindingLabel": "float-key",
+      "mode": "memory",
+      "parentKey": "sortFolder",
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "query": "SortBy=11.0",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "memory-plus-key",
+      "bindingLabel": "plus-key",
+      "mode": "memory",
+      "parentKey": "sortFolder",
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "query": "SortBy=%2B11",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "memory-zero-pad-key",
+      "bindingLabel": "zero-pad-key",
+      "mode": "memory",
+      "parentKey": "sortFolder",
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "query": "SortBy=0011",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "memory-unknown-key",
+      "bindingLabel": "unknown-key",
+      "mode": "memory",
+      "parentKey": "sortFolder",
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "query": "SortBy=NoSuchSort",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "memory-lowercase-key",
+      "bindingLabel": "lowercase-key",
+      "mode": "memory",
+      "parentKey": "sortFolder",
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "query": "SortBy=nAmE",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "memory-trim-key",
+      "bindingLabel": "trim-key",
+      "mode": "memory",
+      "parentKey": "sortFolder",
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "query": "SortBy=%20Name%20",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "memory-invalid-then-name",
+      "bindingLabel": "invalid-then-name",
+      "mode": "memory",
+      "parentKey": "sortFolder",
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "query": "SortBy=NoSuchSort,Name&SortOrder=Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "memory-name-then-invalid",
+      "bindingLabel": "name-then-invalid",
+      "mode": "memory",
+      "parentKey": "sortFolder",
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "query": "SortBy=Name,NoSuchSort&SortOrder=Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "memory-too-many-directions",
+      "bindingLabel": "too-many-directions",
+      "mode": "memory",
+      "parentKey": "sortFolder",
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "query": "SortBy=Name&SortOrder=Ascending,Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "memory-numeric-order-0",
+      "bindingLabel": "numeric-order-0",
+      "mode": "memory",
+      "parentKey": "sortFolder",
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "query": "SortBy=Name&SortOrder=0",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "memory-numeric-order-1",
+      "bindingLabel": "numeric-order-1",
+      "mode": "memory",
+      "parentKey": "sortFolder",
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "query": "SortBy=Name&SortOrder=1",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "memory-numeric-order-2",
+      "bindingLabel": "numeric-order-2",
+      "mode": "memory",
+      "parentKey": "sortFolder",
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "query": "SortBy=Name&SortOrder=2",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "memory-negative-order",
+      "bindingLabel": "negative-order",
+      "mode": "memory",
+      "parentKey": "sortFolder",
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "query": "SortBy=Name&SortOrder=-1",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "memory-overflow-order",
+      "bindingLabel": "overflow-order",
+      "mode": "memory",
+      "parentKey": "sortFolder",
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "query": "SortBy=Name&SortOrder=2147483648",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "memory-unknown-order",
+      "bindingLabel": "unknown-order",
+      "mode": "memory",
+      "parentKey": "sortFolder",
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "query": "SortBy=Name&SortOrder=NoSuchDirection",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "memory-invalid-then-desc-order",
+      "bindingLabel": "invalid-then-desc-order",
+      "mode": "memory",
+      "parentKey": "sortFolder",
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "query": "SortBy=Name&SortOrder=NoSuchDirection,Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "memory-trim-order",
+      "bindingLabel": "trim-order",
+      "mode": "memory",
+      "parentKey": "sortFolder",
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "query": "SortBy=Name&SortOrder=%20Descending%20",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "memory-repeat-separate",
+      "bindingLabel": "repeat-separate",
+      "mode": "memory",
+      "parentKey": "sortFolder",
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "query": "SortBy=Name&SortBy=SortName&SortOrder=Descending&SortOrder=Ascending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "memory-repeat-comma-key",
+      "bindingLabel": "repeat-comma-key",
+      "mode": "memory",
+      "parentKey": "sortFolder",
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "query": "SortBy=Name,SortName&SortBy=ProductionYear&SortOrder=Descending&SortOrder=Ascending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "memory-repeat-comma-order",
+      "bindingLabel": "repeat-comma-order",
+      "mode": "memory",
+      "parentKey": "sortFolder",
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "query": "SortBy=Name&SortBy=SortName&SortOrder=Ascending,Descending&SortOrder=Ascending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "memory-repeat-bad-key",
+      "bindingLabel": "repeat-bad-key",
+      "mode": "memory",
+      "parentKey": "sortFolder",
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "query": "SortBy=NoSuchSort&SortBy=Name&SortOrder=Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "memory-repeat-empty-key",
+      "bindingLabel": "repeat-empty-key",
+      "mode": "memory",
+      "parentKey": "sortFolder",
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "query": "SortBy=&SortBy=Name&SortOrder=Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "memory-repeat-numeric-comma",
+      "bindingLabel": "repeat-numeric-comma",
+      "mode": "memory",
+      "parentKey": "sortFolder",
+      "scope": [],
+      "omitIds": true,
+      "omitSortBy": true,
+      "recursive": false,
+      "query": "SortBy=4,8&SortBy=Name&SortOrder=Ascending&SortOrder=Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "repository-numeric-0-Default",
+      "bindingLabel": "numeric-0-Default",
+      "mode": "repository",
+      "parentKey": "sortFolder",
+      "scope": [
+        "sortFolderItem0",
+        "sortFolderItem1",
+        "sortFolderItem2",
+        "sortFolderItem3",
+        "sortFolderItem4",
+        "sortFolderItem5",
+        "sortFolderItem6",
+        "sortFolderItem7",
+        "sortFolderItem8",
+        "sortFolderItem9",
+        "sortFolderItem10",
+        "sortFolderItem11",
+        "sortFolderItem12",
+        "sortFolderItem13"
+      ],
+      "omitIds": false,
+      "omitSortBy": true,
+      "recursive": true,
+      "query": "SortBy=0,Name&SortOrder=Ascending,Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "repository-numeric-1-AiredEpisodeOrder",
+      "bindingLabel": "numeric-1-AiredEpisodeOrder",
+      "mode": "repository",
+      "parentKey": "sortFolder",
+      "scope": [
+        "sortFolderItem0",
+        "sortFolderItem1",
+        "sortFolderItem2",
+        "sortFolderItem3",
+        "sortFolderItem4",
+        "sortFolderItem5",
+        "sortFolderItem6",
+        "sortFolderItem7",
+        "sortFolderItem8",
+        "sortFolderItem9",
+        "sortFolderItem10",
+        "sortFolderItem11",
+        "sortFolderItem12",
+        "sortFolderItem13"
+      ],
+      "omitIds": false,
+      "omitSortBy": true,
+      "recursive": true,
+      "query": "SortBy=1,Name&SortOrder=Ascending,Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "repository-numeric-2-Album",
+      "bindingLabel": "numeric-2-Album",
+      "mode": "repository",
+      "parentKey": "sortFolder",
+      "scope": [
+        "sortFolderItem0",
+        "sortFolderItem1",
+        "sortFolderItem2",
+        "sortFolderItem3",
+        "sortFolderItem4",
+        "sortFolderItem5",
+        "sortFolderItem6",
+        "sortFolderItem7",
+        "sortFolderItem8",
+        "sortFolderItem9",
+        "sortFolderItem10",
+        "sortFolderItem11",
+        "sortFolderItem12",
+        "sortFolderItem13"
+      ],
+      "omitIds": false,
+      "omitSortBy": true,
+      "recursive": true,
+      "query": "SortBy=2,Name&SortOrder=Ascending,Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "repository-numeric-3-AlbumArtist",
+      "bindingLabel": "numeric-3-AlbumArtist",
+      "mode": "repository",
+      "parentKey": "sortFolder",
+      "scope": [
+        "sortFolderItem0",
+        "sortFolderItem1",
+        "sortFolderItem2",
+        "sortFolderItem3",
+        "sortFolderItem4",
+        "sortFolderItem5",
+        "sortFolderItem6",
+        "sortFolderItem7",
+        "sortFolderItem8",
+        "sortFolderItem9",
+        "sortFolderItem10",
+        "sortFolderItem11",
+        "sortFolderItem12",
+        "sortFolderItem13"
+      ],
+      "omitIds": false,
+      "omitSortBy": true,
+      "recursive": true,
+      "query": "SortBy=3,Name&SortOrder=Ascending,Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "repository-numeric-4-Artist",
+      "bindingLabel": "numeric-4-Artist",
+      "mode": "repository",
+      "parentKey": "sortFolder",
+      "scope": [
+        "sortFolderItem0",
+        "sortFolderItem1",
+        "sortFolderItem2",
+        "sortFolderItem3",
+        "sortFolderItem4",
+        "sortFolderItem5",
+        "sortFolderItem6",
+        "sortFolderItem7",
+        "sortFolderItem8",
+        "sortFolderItem9",
+        "sortFolderItem10",
+        "sortFolderItem11",
+        "sortFolderItem12",
+        "sortFolderItem13"
+      ],
+      "omitIds": false,
+      "omitSortBy": true,
+      "recursive": true,
+      "query": "SortBy=4,Name&SortOrder=Ascending,Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "repository-numeric-5-DateCreated",
+      "bindingLabel": "numeric-5-DateCreated",
+      "mode": "repository",
+      "parentKey": "sortFolder",
+      "scope": [
+        "sortFolderItem0",
+        "sortFolderItem1",
+        "sortFolderItem2",
+        "sortFolderItem3",
+        "sortFolderItem4",
+        "sortFolderItem5",
+        "sortFolderItem6",
+        "sortFolderItem7",
+        "sortFolderItem8",
+        "sortFolderItem9",
+        "sortFolderItem10",
+        "sortFolderItem11",
+        "sortFolderItem12",
+        "sortFolderItem13"
+      ],
+      "omitIds": false,
+      "omitSortBy": true,
+      "recursive": true,
+      "query": "SortBy=5,Name&SortOrder=Ascending,Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "repository-numeric-6-OfficialRating",
+      "bindingLabel": "numeric-6-OfficialRating",
+      "mode": "repository",
+      "parentKey": "sortFolder",
+      "scope": [
+        "sortFolderItem0",
+        "sortFolderItem1",
+        "sortFolderItem2",
+        "sortFolderItem3",
+        "sortFolderItem4",
+        "sortFolderItem5",
+        "sortFolderItem6",
+        "sortFolderItem7",
+        "sortFolderItem8",
+        "sortFolderItem9",
+        "sortFolderItem10",
+        "sortFolderItem11",
+        "sortFolderItem12",
+        "sortFolderItem13"
+      ],
+      "omitIds": false,
+      "omitSortBy": true,
+      "recursive": true,
+      "query": "SortBy=6,Name&SortOrder=Ascending,Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "repository-numeric-7-DatePlayed",
+      "bindingLabel": "numeric-7-DatePlayed",
+      "mode": "repository",
+      "parentKey": "sortFolder",
+      "scope": [
+        "sortFolderItem0",
+        "sortFolderItem1",
+        "sortFolderItem2",
+        "sortFolderItem3",
+        "sortFolderItem4",
+        "sortFolderItem5",
+        "sortFolderItem6",
+        "sortFolderItem7",
+        "sortFolderItem8",
+        "sortFolderItem9",
+        "sortFolderItem10",
+        "sortFolderItem11",
+        "sortFolderItem12",
+        "sortFolderItem13"
+      ],
+      "omitIds": false,
+      "omitSortBy": true,
+      "recursive": true,
+      "query": "SortBy=7,Name&SortOrder=Ascending,Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "repository-numeric-8-PremiereDate",
+      "bindingLabel": "numeric-8-PremiereDate",
+      "mode": "repository",
+      "parentKey": "sortFolder",
+      "scope": [
+        "sortFolderItem0",
+        "sortFolderItem1",
+        "sortFolderItem2",
+        "sortFolderItem3",
+        "sortFolderItem4",
+        "sortFolderItem5",
+        "sortFolderItem6",
+        "sortFolderItem7",
+        "sortFolderItem8",
+        "sortFolderItem9",
+        "sortFolderItem10",
+        "sortFolderItem11",
+        "sortFolderItem12",
+        "sortFolderItem13"
+      ],
+      "omitIds": false,
+      "omitSortBy": true,
+      "recursive": true,
+      "query": "SortBy=8,Name&SortOrder=Ascending,Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "repository-numeric-9-StartDate",
+      "bindingLabel": "numeric-9-StartDate",
+      "mode": "repository",
+      "parentKey": "sortFolder",
+      "scope": [
+        "sortFolderItem0",
+        "sortFolderItem1",
+        "sortFolderItem2",
+        "sortFolderItem3",
+        "sortFolderItem4",
+        "sortFolderItem5",
+        "sortFolderItem6",
+        "sortFolderItem7",
+        "sortFolderItem8",
+        "sortFolderItem9",
+        "sortFolderItem10",
+        "sortFolderItem11",
+        "sortFolderItem12",
+        "sortFolderItem13"
+      ],
+      "omitIds": false,
+      "omitSortBy": true,
+      "recursive": true,
+      "query": "SortBy=9,Name&SortOrder=Ascending,Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "repository-numeric-10-SortName",
+      "bindingLabel": "numeric-10-SortName",
+      "mode": "repository",
+      "parentKey": "sortFolder",
+      "scope": [
+        "sortFolderItem0",
+        "sortFolderItem1",
+        "sortFolderItem2",
+        "sortFolderItem3",
+        "sortFolderItem4",
+        "sortFolderItem5",
+        "sortFolderItem6",
+        "sortFolderItem7",
+        "sortFolderItem8",
+        "sortFolderItem9",
+        "sortFolderItem10",
+        "sortFolderItem11",
+        "sortFolderItem12",
+        "sortFolderItem13"
+      ],
+      "omitIds": false,
+      "omitSortBy": true,
+      "recursive": true,
+      "query": "SortBy=10,Name&SortOrder=Ascending,Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "repository-numeric-11-Name",
+      "bindingLabel": "numeric-11-Name",
+      "mode": "repository",
+      "parentKey": "sortFolder",
+      "scope": [
+        "sortFolderItem0",
+        "sortFolderItem1",
+        "sortFolderItem2",
+        "sortFolderItem3",
+        "sortFolderItem4",
+        "sortFolderItem5",
+        "sortFolderItem6",
+        "sortFolderItem7",
+        "sortFolderItem8",
+        "sortFolderItem9",
+        "sortFolderItem10",
+        "sortFolderItem11",
+        "sortFolderItem12",
+        "sortFolderItem13"
+      ],
+      "omitIds": false,
+      "omitSortBy": true,
+      "recursive": true,
+      "query": "SortBy=11,Name&SortOrder=Ascending,Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "repository-numeric-12-Random",
+      "bindingLabel": "numeric-12-Random",
+      "mode": "repository",
+      "parentKey": "sortFolder",
+      "scope": [
+        "sortFolderItem0",
+        "sortFolderItem1",
+        "sortFolderItem2",
+        "sortFolderItem3",
+        "sortFolderItem4",
+        "sortFolderItem5",
+        "sortFolderItem6",
+        "sortFolderItem7",
+        "sortFolderItem8",
+        "sortFolderItem9",
+        "sortFolderItem10",
+        "sortFolderItem11",
+        "sortFolderItem12",
+        "sortFolderItem13"
+      ],
+      "omitIds": false,
+      "omitSortBy": true,
+      "recursive": true,
+      "query": "SortBy=12,Name&SortOrder=Ascending,Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "repository-numeric-13-Runtime",
+      "bindingLabel": "numeric-13-Runtime",
+      "mode": "repository",
+      "parentKey": "sortFolder",
+      "scope": [
+        "sortFolderItem0",
+        "sortFolderItem1",
+        "sortFolderItem2",
+        "sortFolderItem3",
+        "sortFolderItem4",
+        "sortFolderItem5",
+        "sortFolderItem6",
+        "sortFolderItem7",
+        "sortFolderItem8",
+        "sortFolderItem9",
+        "sortFolderItem10",
+        "sortFolderItem11",
+        "sortFolderItem12",
+        "sortFolderItem13"
+      ],
+      "omitIds": false,
+      "omitSortBy": true,
+      "recursive": true,
+      "query": "SortBy=13,Name&SortOrder=Ascending,Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "repository-numeric-14-CommunityRating",
+      "bindingLabel": "numeric-14-CommunityRating",
+      "mode": "repository",
+      "parentKey": "sortFolder",
+      "scope": [
+        "sortFolderItem0",
+        "sortFolderItem1",
+        "sortFolderItem2",
+        "sortFolderItem3",
+        "sortFolderItem4",
+        "sortFolderItem5",
+        "sortFolderItem6",
+        "sortFolderItem7",
+        "sortFolderItem8",
+        "sortFolderItem9",
+        "sortFolderItem10",
+        "sortFolderItem11",
+        "sortFolderItem12",
+        "sortFolderItem13"
+      ],
+      "omitIds": false,
+      "omitSortBy": true,
+      "recursive": true,
+      "query": "SortBy=14,Name&SortOrder=Ascending,Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "repository-numeric-15-ProductionYear",
+      "bindingLabel": "numeric-15-ProductionYear",
+      "mode": "repository",
+      "parentKey": "sortFolder",
+      "scope": [
+        "sortFolderItem0",
+        "sortFolderItem1",
+        "sortFolderItem2",
+        "sortFolderItem3",
+        "sortFolderItem4",
+        "sortFolderItem5",
+        "sortFolderItem6",
+        "sortFolderItem7",
+        "sortFolderItem8",
+        "sortFolderItem9",
+        "sortFolderItem10",
+        "sortFolderItem11",
+        "sortFolderItem12",
+        "sortFolderItem13"
+      ],
+      "omitIds": false,
+      "omitSortBy": true,
+      "recursive": true,
+      "query": "SortBy=15,Name&SortOrder=Ascending,Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "repository-numeric-16-PlayCount",
+      "bindingLabel": "numeric-16-PlayCount",
+      "mode": "repository",
+      "parentKey": "sortFolder",
+      "scope": [
+        "sortFolderItem0",
+        "sortFolderItem1",
+        "sortFolderItem2",
+        "sortFolderItem3",
+        "sortFolderItem4",
+        "sortFolderItem5",
+        "sortFolderItem6",
+        "sortFolderItem7",
+        "sortFolderItem8",
+        "sortFolderItem9",
+        "sortFolderItem10",
+        "sortFolderItem11",
+        "sortFolderItem12",
+        "sortFolderItem13"
+      ],
+      "omitIds": false,
+      "omitSortBy": true,
+      "recursive": true,
+      "query": "SortBy=16,Name&SortOrder=Ascending,Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "repository-numeric-17-CriticRating",
+      "bindingLabel": "numeric-17-CriticRating",
+      "mode": "repository",
+      "parentKey": "sortFolder",
+      "scope": [
+        "sortFolderItem0",
+        "sortFolderItem1",
+        "sortFolderItem2",
+        "sortFolderItem3",
+        "sortFolderItem4",
+        "sortFolderItem5",
+        "sortFolderItem6",
+        "sortFolderItem7",
+        "sortFolderItem8",
+        "sortFolderItem9",
+        "sortFolderItem10",
+        "sortFolderItem11",
+        "sortFolderItem12",
+        "sortFolderItem13"
+      ],
+      "omitIds": false,
+      "omitSortBy": true,
+      "recursive": true,
+      "query": "SortBy=17,Name&SortOrder=Ascending,Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "repository-numeric-18-IsFolder",
+      "bindingLabel": "numeric-18-IsFolder",
+      "mode": "repository",
+      "parentKey": "sortFolder",
+      "scope": [
+        "sortFolderItem0",
+        "sortFolderItem1",
+        "sortFolderItem2",
+        "sortFolderItem3",
+        "sortFolderItem4",
+        "sortFolderItem5",
+        "sortFolderItem6",
+        "sortFolderItem7",
+        "sortFolderItem8",
+        "sortFolderItem9",
+        "sortFolderItem10",
+        "sortFolderItem11",
+        "sortFolderItem12",
+        "sortFolderItem13"
+      ],
+      "omitIds": false,
+      "omitSortBy": true,
+      "recursive": true,
+      "query": "SortBy=18,Name&SortOrder=Ascending,Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "repository-numeric-19-IsUnplayed",
+      "bindingLabel": "numeric-19-IsUnplayed",
+      "mode": "repository",
+      "parentKey": "sortFolder",
+      "scope": [
+        "sortFolderItem0",
+        "sortFolderItem1",
+        "sortFolderItem2",
+        "sortFolderItem3",
+        "sortFolderItem4",
+        "sortFolderItem5",
+        "sortFolderItem6",
+        "sortFolderItem7",
+        "sortFolderItem8",
+        "sortFolderItem9",
+        "sortFolderItem10",
+        "sortFolderItem11",
+        "sortFolderItem12",
+        "sortFolderItem13"
+      ],
+      "omitIds": false,
+      "omitSortBy": true,
+      "recursive": true,
+      "query": "SortBy=19,Name&SortOrder=Ascending,Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "repository-numeric-20-IsPlayed",
+      "bindingLabel": "numeric-20-IsPlayed",
+      "mode": "repository",
+      "parentKey": "sortFolder",
+      "scope": [
+        "sortFolderItem0",
+        "sortFolderItem1",
+        "sortFolderItem2",
+        "sortFolderItem3",
+        "sortFolderItem4",
+        "sortFolderItem5",
+        "sortFolderItem6",
+        "sortFolderItem7",
+        "sortFolderItem8",
+        "sortFolderItem9",
+        "sortFolderItem10",
+        "sortFolderItem11",
+        "sortFolderItem12",
+        "sortFolderItem13"
+      ],
+      "omitIds": false,
+      "omitSortBy": true,
+      "recursive": true,
+      "query": "SortBy=20,Name&SortOrder=Ascending,Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "repository-numeric-21-SeriesSortName",
+      "bindingLabel": "numeric-21-SeriesSortName",
+      "mode": "repository",
+      "parentKey": "sortFolder",
+      "scope": [
+        "sortFolderItem0",
+        "sortFolderItem1",
+        "sortFolderItem2",
+        "sortFolderItem3",
+        "sortFolderItem4",
+        "sortFolderItem5",
+        "sortFolderItem6",
+        "sortFolderItem7",
+        "sortFolderItem8",
+        "sortFolderItem9",
+        "sortFolderItem10",
+        "sortFolderItem11",
+        "sortFolderItem12",
+        "sortFolderItem13"
+      ],
+      "omitIds": false,
+      "omitSortBy": true,
+      "recursive": true,
+      "query": "SortBy=21,Name&SortOrder=Ascending,Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "repository-numeric-22-VideoBitRate",
+      "bindingLabel": "numeric-22-VideoBitRate",
+      "mode": "repository",
+      "parentKey": "sortFolder",
+      "scope": [
+        "sortFolderItem0",
+        "sortFolderItem1",
+        "sortFolderItem2",
+        "sortFolderItem3",
+        "sortFolderItem4",
+        "sortFolderItem5",
+        "sortFolderItem6",
+        "sortFolderItem7",
+        "sortFolderItem8",
+        "sortFolderItem9",
+        "sortFolderItem10",
+        "sortFolderItem11",
+        "sortFolderItem12",
+        "sortFolderItem13"
+      ],
+      "omitIds": false,
+      "omitSortBy": true,
+      "recursive": true,
+      "query": "SortBy=22,Name&SortOrder=Ascending,Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "repository-numeric-23-AirTime",
+      "bindingLabel": "numeric-23-AirTime",
+      "mode": "repository",
+      "parentKey": "sortFolder",
+      "scope": [
+        "sortFolderItem0",
+        "sortFolderItem1",
+        "sortFolderItem2",
+        "sortFolderItem3",
+        "sortFolderItem4",
+        "sortFolderItem5",
+        "sortFolderItem6",
+        "sortFolderItem7",
+        "sortFolderItem8",
+        "sortFolderItem9",
+        "sortFolderItem10",
+        "sortFolderItem11",
+        "sortFolderItem12",
+        "sortFolderItem13"
+      ],
+      "omitIds": false,
+      "omitSortBy": true,
+      "recursive": true,
+      "query": "SortBy=23,Name&SortOrder=Ascending,Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "repository-numeric-24-Studio",
+      "bindingLabel": "numeric-24-Studio",
+      "mode": "repository",
+      "parentKey": "sortFolder",
+      "scope": [
+        "sortFolderItem0",
+        "sortFolderItem1",
+        "sortFolderItem2",
+        "sortFolderItem3",
+        "sortFolderItem4",
+        "sortFolderItem5",
+        "sortFolderItem6",
+        "sortFolderItem7",
+        "sortFolderItem8",
+        "sortFolderItem9",
+        "sortFolderItem10",
+        "sortFolderItem11",
+        "sortFolderItem12",
+        "sortFolderItem13"
+      ],
+      "omitIds": false,
+      "omitSortBy": true,
+      "recursive": true,
+      "query": "SortBy=24,Name&SortOrder=Ascending,Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "repository-numeric-25-IsFavoriteOrLiked",
+      "bindingLabel": "numeric-25-IsFavoriteOrLiked",
+      "mode": "repository",
+      "parentKey": "sortFolder",
+      "scope": [
+        "sortFolderItem0",
+        "sortFolderItem1",
+        "sortFolderItem2",
+        "sortFolderItem3",
+        "sortFolderItem4",
+        "sortFolderItem5",
+        "sortFolderItem6",
+        "sortFolderItem7",
+        "sortFolderItem8",
+        "sortFolderItem9",
+        "sortFolderItem10",
+        "sortFolderItem11",
+        "sortFolderItem12",
+        "sortFolderItem13"
+      ],
+      "omitIds": false,
+      "omitSortBy": true,
+      "recursive": true,
+      "query": "SortBy=25,Name&SortOrder=Ascending,Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "repository-numeric-26-DateLastContentAdded",
+      "bindingLabel": "numeric-26-DateLastContentAdded",
+      "mode": "repository",
+      "parentKey": "sortFolder",
+      "scope": [
+        "sortFolderItem0",
+        "sortFolderItem1",
+        "sortFolderItem2",
+        "sortFolderItem3",
+        "sortFolderItem4",
+        "sortFolderItem5",
+        "sortFolderItem6",
+        "sortFolderItem7",
+        "sortFolderItem8",
+        "sortFolderItem9",
+        "sortFolderItem10",
+        "sortFolderItem11",
+        "sortFolderItem12",
+        "sortFolderItem13"
+      ],
+      "omitIds": false,
+      "omitSortBy": true,
+      "recursive": true,
+      "query": "SortBy=26,Name&SortOrder=Ascending,Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "repository-numeric-27-SeriesDatePlayed",
+      "bindingLabel": "numeric-27-SeriesDatePlayed",
+      "mode": "repository",
+      "parentKey": "sortFolder",
+      "scope": [
+        "sortFolderItem0",
+        "sortFolderItem1",
+        "sortFolderItem2",
+        "sortFolderItem3",
+        "sortFolderItem4",
+        "sortFolderItem5",
+        "sortFolderItem6",
+        "sortFolderItem7",
+        "sortFolderItem8",
+        "sortFolderItem9",
+        "sortFolderItem10",
+        "sortFolderItem11",
+        "sortFolderItem12",
+        "sortFolderItem13"
+      ],
+      "omitIds": false,
+      "omitSortBy": true,
+      "recursive": true,
+      "query": "SortBy=27,Name&SortOrder=Ascending,Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "repository-numeric-28-ParentIndexNumber",
+      "bindingLabel": "numeric-28-ParentIndexNumber",
+      "mode": "repository",
+      "parentKey": "sortFolder",
+      "scope": [
+        "sortFolderItem0",
+        "sortFolderItem1",
+        "sortFolderItem2",
+        "sortFolderItem3",
+        "sortFolderItem4",
+        "sortFolderItem5",
+        "sortFolderItem6",
+        "sortFolderItem7",
+        "sortFolderItem8",
+        "sortFolderItem9",
+        "sortFolderItem10",
+        "sortFolderItem11",
+        "sortFolderItem12",
+        "sortFolderItem13"
+      ],
+      "omitIds": false,
+      "omitSortBy": true,
+      "recursive": true,
+      "query": "SortBy=28,Name&SortOrder=Ascending,Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "repository-numeric-29-IndexNumber",
+      "bindingLabel": "numeric-29-IndexNumber",
+      "mode": "repository",
+      "parentKey": "sortFolder",
+      "scope": [
+        "sortFolderItem0",
+        "sortFolderItem1",
+        "sortFolderItem2",
+        "sortFolderItem3",
+        "sortFolderItem4",
+        "sortFolderItem5",
+        "sortFolderItem6",
+        "sortFolderItem7",
+        "sortFolderItem8",
+        "sortFolderItem9",
+        "sortFolderItem10",
+        "sortFolderItem11",
+        "sortFolderItem12",
+        "sortFolderItem13"
+      ],
+      "omitIds": false,
+      "omitSortBy": true,
+      "recursive": true,
+      "query": "SortBy=29,Name&SortOrder=Ascending,Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "repository-control-name",
+      "bindingLabel": "control-name",
+      "mode": "repository",
+      "parentKey": "sortFolder",
+      "scope": [
+        "sortFolderItem0",
+        "sortFolderItem1",
+        "sortFolderItem2",
+        "sortFolderItem3",
+        "sortFolderItem4",
+        "sortFolderItem5",
+        "sortFolderItem6",
+        "sortFolderItem7",
+        "sortFolderItem8",
+        "sortFolderItem9",
+        "sortFolderItem10",
+        "sortFolderItem11",
+        "sortFolderItem12",
+        "sortFolderItem13"
+      ],
+      "omitIds": false,
+      "omitSortBy": true,
+      "recursive": true,
+      "query": "SortBy=Name&SortOrder=Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "repository-empty-by",
+      "bindingLabel": "empty-by",
+      "mode": "repository",
+      "parentKey": "sortFolder",
+      "scope": [
+        "sortFolderItem0",
+        "sortFolderItem1",
+        "sortFolderItem2",
+        "sortFolderItem3",
+        "sortFolderItem4",
+        "sortFolderItem5",
+        "sortFolderItem6",
+        "sortFolderItem7",
+        "sortFolderItem8",
+        "sortFolderItem9",
+        "sortFolderItem10",
+        "sortFolderItem11",
+        "sortFolderItem12",
+        "sortFolderItem13"
+      ],
+      "omitIds": false,
+      "omitSortBy": true,
+      "recursive": true,
+      "query": "SortBy=",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "repository-comma-only",
+      "bindingLabel": "comma-only",
+      "mode": "repository",
+      "parentKey": "sortFolder",
+      "scope": [
+        "sortFolderItem0",
+        "sortFolderItem1",
+        "sortFolderItem2",
+        "sortFolderItem3",
+        "sortFolderItem4",
+        "sortFolderItem5",
+        "sortFolderItem6",
+        "sortFolderItem7",
+        "sortFolderItem8",
+        "sortFolderItem9",
+        "sortFolderItem10",
+        "sortFolderItem11",
+        "sortFolderItem12",
+        "sortFolderItem13"
+      ],
+      "omitIds": false,
+      "omitSortBy": true,
+      "recursive": true,
+      "query": "SortBy=,,",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "repository-missing-by-orders",
+      "bindingLabel": "missing-by-orders",
+      "mode": "repository",
+      "parentKey": "sortFolder",
+      "scope": [
+        "sortFolderItem0",
+        "sortFolderItem1",
+        "sortFolderItem2",
+        "sortFolderItem3",
+        "sortFolderItem4",
+        "sortFolderItem5",
+        "sortFolderItem6",
+        "sortFolderItem7",
+        "sortFolderItem8",
+        "sortFolderItem9",
+        "sortFolderItem10",
+        "sortFolderItem11",
+        "sortFolderItem12",
+        "sortFolderItem13"
+      ],
+      "omitIds": false,
+      "omitSortBy": true,
+      "recursive": true,
+      "query": "SortOrder=Descending,Ascending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "repository-empty-by-orders",
+      "bindingLabel": "empty-by-orders",
+      "mode": "repository",
+      "parentKey": "sortFolder",
+      "scope": [
+        "sortFolderItem0",
+        "sortFolderItem1",
+        "sortFolderItem2",
+        "sortFolderItem3",
+        "sortFolderItem4",
+        "sortFolderItem5",
+        "sortFolderItem6",
+        "sortFolderItem7",
+        "sortFolderItem8",
+        "sortFolderItem9",
+        "sortFolderItem10",
+        "sortFolderItem11",
+        "sortFolderItem12",
+        "sortFolderItem13"
+      ],
+      "omitIds": false,
+      "omitSortBy": true,
+      "recursive": true,
+      "query": "SortBy=&SortOrder=Descending,Ascending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "repository-undefined-30",
+      "bindingLabel": "undefined-30",
+      "mode": "repository",
+      "parentKey": "sortFolder",
+      "scope": [
+        "sortFolderItem0",
+        "sortFolderItem1",
+        "sortFolderItem2",
+        "sortFolderItem3",
+        "sortFolderItem4",
+        "sortFolderItem5",
+        "sortFolderItem6",
+        "sortFolderItem7",
+        "sortFolderItem8",
+        "sortFolderItem9",
+        "sortFolderItem10",
+        "sortFolderItem11",
+        "sortFolderItem12",
+        "sortFolderItem13"
+      ],
+      "omitIds": false,
+      "omitSortBy": true,
+      "recursive": true,
+      "query": "SortBy=30",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "repository-negative-key",
+      "bindingLabel": "negative-key",
+      "mode": "repository",
+      "parentKey": "sortFolder",
+      "scope": [
+        "sortFolderItem0",
+        "sortFolderItem1",
+        "sortFolderItem2",
+        "sortFolderItem3",
+        "sortFolderItem4",
+        "sortFolderItem5",
+        "sortFolderItem6",
+        "sortFolderItem7",
+        "sortFolderItem8",
+        "sortFolderItem9",
+        "sortFolderItem10",
+        "sortFolderItem11",
+        "sortFolderItem12",
+        "sortFolderItem13"
+      ],
+      "omitIds": false,
+      "omitSortBy": true,
+      "recursive": true,
+      "query": "SortBy=-1",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "repository-max-key",
+      "bindingLabel": "max-key",
+      "mode": "repository",
+      "parentKey": "sortFolder",
+      "scope": [
+        "sortFolderItem0",
+        "sortFolderItem1",
+        "sortFolderItem2",
+        "sortFolderItem3",
+        "sortFolderItem4",
+        "sortFolderItem5",
+        "sortFolderItem6",
+        "sortFolderItem7",
+        "sortFolderItem8",
+        "sortFolderItem9",
+        "sortFolderItem10",
+        "sortFolderItem11",
+        "sortFolderItem12",
+        "sortFolderItem13"
+      ],
+      "omitIds": false,
+      "omitSortBy": true,
+      "recursive": true,
+      "query": "SortBy=2147483647",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "repository-min-key",
+      "bindingLabel": "min-key",
+      "mode": "repository",
+      "parentKey": "sortFolder",
+      "scope": [
+        "sortFolderItem0",
+        "sortFolderItem1",
+        "sortFolderItem2",
+        "sortFolderItem3",
+        "sortFolderItem4",
+        "sortFolderItem5",
+        "sortFolderItem6",
+        "sortFolderItem7",
+        "sortFolderItem8",
+        "sortFolderItem9",
+        "sortFolderItem10",
+        "sortFolderItem11",
+        "sortFolderItem12",
+        "sortFolderItem13"
+      ],
+      "omitIds": false,
+      "omitSortBy": true,
+      "recursive": true,
+      "query": "SortBy=-2147483648",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "repository-overflow-key",
+      "bindingLabel": "overflow-key",
+      "mode": "repository",
+      "parentKey": "sortFolder",
+      "scope": [
+        "sortFolderItem0",
+        "sortFolderItem1",
+        "sortFolderItem2",
+        "sortFolderItem3",
+        "sortFolderItem4",
+        "sortFolderItem5",
+        "sortFolderItem6",
+        "sortFolderItem7",
+        "sortFolderItem8",
+        "sortFolderItem9",
+        "sortFolderItem10",
+        "sortFolderItem11",
+        "sortFolderItem12",
+        "sortFolderItem13"
+      ],
+      "omitIds": false,
+      "omitSortBy": true,
+      "recursive": true,
+      "query": "SortBy=2147483648",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "repository-hex-key",
+      "bindingLabel": "hex-key",
+      "mode": "repository",
+      "parentKey": "sortFolder",
+      "scope": [
+        "sortFolderItem0",
+        "sortFolderItem1",
+        "sortFolderItem2",
+        "sortFolderItem3",
+        "sortFolderItem4",
+        "sortFolderItem5",
+        "sortFolderItem6",
+        "sortFolderItem7",
+        "sortFolderItem8",
+        "sortFolderItem9",
+        "sortFolderItem10",
+        "sortFolderItem11",
+        "sortFolderItem12",
+        "sortFolderItem13"
+      ],
+      "omitIds": false,
+      "omitSortBy": true,
+      "recursive": true,
+      "query": "SortBy=0xB",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "repository-float-key",
+      "bindingLabel": "float-key",
+      "mode": "repository",
+      "parentKey": "sortFolder",
+      "scope": [
+        "sortFolderItem0",
+        "sortFolderItem1",
+        "sortFolderItem2",
+        "sortFolderItem3",
+        "sortFolderItem4",
+        "sortFolderItem5",
+        "sortFolderItem6",
+        "sortFolderItem7",
+        "sortFolderItem8",
+        "sortFolderItem9",
+        "sortFolderItem10",
+        "sortFolderItem11",
+        "sortFolderItem12",
+        "sortFolderItem13"
+      ],
+      "omitIds": false,
+      "omitSortBy": true,
+      "recursive": true,
+      "query": "SortBy=11.0",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "repository-plus-key",
+      "bindingLabel": "plus-key",
+      "mode": "repository",
+      "parentKey": "sortFolder",
+      "scope": [
+        "sortFolderItem0",
+        "sortFolderItem1",
+        "sortFolderItem2",
+        "sortFolderItem3",
+        "sortFolderItem4",
+        "sortFolderItem5",
+        "sortFolderItem6",
+        "sortFolderItem7",
+        "sortFolderItem8",
+        "sortFolderItem9",
+        "sortFolderItem10",
+        "sortFolderItem11",
+        "sortFolderItem12",
+        "sortFolderItem13"
+      ],
+      "omitIds": false,
+      "omitSortBy": true,
+      "recursive": true,
+      "query": "SortBy=%2B11",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "repository-zero-pad-key",
+      "bindingLabel": "zero-pad-key",
+      "mode": "repository",
+      "parentKey": "sortFolder",
+      "scope": [
+        "sortFolderItem0",
+        "sortFolderItem1",
+        "sortFolderItem2",
+        "sortFolderItem3",
+        "sortFolderItem4",
+        "sortFolderItem5",
+        "sortFolderItem6",
+        "sortFolderItem7",
+        "sortFolderItem8",
+        "sortFolderItem9",
+        "sortFolderItem10",
+        "sortFolderItem11",
+        "sortFolderItem12",
+        "sortFolderItem13"
+      ],
+      "omitIds": false,
+      "omitSortBy": true,
+      "recursive": true,
+      "query": "SortBy=0011",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "repository-unknown-key",
+      "bindingLabel": "unknown-key",
+      "mode": "repository",
+      "parentKey": "sortFolder",
+      "scope": [
+        "sortFolderItem0",
+        "sortFolderItem1",
+        "sortFolderItem2",
+        "sortFolderItem3",
+        "sortFolderItem4",
+        "sortFolderItem5",
+        "sortFolderItem6",
+        "sortFolderItem7",
+        "sortFolderItem8",
+        "sortFolderItem9",
+        "sortFolderItem10",
+        "sortFolderItem11",
+        "sortFolderItem12",
+        "sortFolderItem13"
+      ],
+      "omitIds": false,
+      "omitSortBy": true,
+      "recursive": true,
+      "query": "SortBy=NoSuchSort",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "repository-lowercase-key",
+      "bindingLabel": "lowercase-key",
+      "mode": "repository",
+      "parentKey": "sortFolder",
+      "scope": [
+        "sortFolderItem0",
+        "sortFolderItem1",
+        "sortFolderItem2",
+        "sortFolderItem3",
+        "sortFolderItem4",
+        "sortFolderItem5",
+        "sortFolderItem6",
+        "sortFolderItem7",
+        "sortFolderItem8",
+        "sortFolderItem9",
+        "sortFolderItem10",
+        "sortFolderItem11",
+        "sortFolderItem12",
+        "sortFolderItem13"
+      ],
+      "omitIds": false,
+      "omitSortBy": true,
+      "recursive": true,
+      "query": "SortBy=nAmE",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "repository-trim-key",
+      "bindingLabel": "trim-key",
+      "mode": "repository",
+      "parentKey": "sortFolder",
+      "scope": [
+        "sortFolderItem0",
+        "sortFolderItem1",
+        "sortFolderItem2",
+        "sortFolderItem3",
+        "sortFolderItem4",
+        "sortFolderItem5",
+        "sortFolderItem6",
+        "sortFolderItem7",
+        "sortFolderItem8",
+        "sortFolderItem9",
+        "sortFolderItem10",
+        "sortFolderItem11",
+        "sortFolderItem12",
+        "sortFolderItem13"
+      ],
+      "omitIds": false,
+      "omitSortBy": true,
+      "recursive": true,
+      "query": "SortBy=%20Name%20",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "repository-invalid-then-name",
+      "bindingLabel": "invalid-then-name",
+      "mode": "repository",
+      "parentKey": "sortFolder",
+      "scope": [
+        "sortFolderItem0",
+        "sortFolderItem1",
+        "sortFolderItem2",
+        "sortFolderItem3",
+        "sortFolderItem4",
+        "sortFolderItem5",
+        "sortFolderItem6",
+        "sortFolderItem7",
+        "sortFolderItem8",
+        "sortFolderItem9",
+        "sortFolderItem10",
+        "sortFolderItem11",
+        "sortFolderItem12",
+        "sortFolderItem13"
+      ],
+      "omitIds": false,
+      "omitSortBy": true,
+      "recursive": true,
+      "query": "SortBy=NoSuchSort,Name&SortOrder=Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "repository-name-then-invalid",
+      "bindingLabel": "name-then-invalid",
+      "mode": "repository",
+      "parentKey": "sortFolder",
+      "scope": [
+        "sortFolderItem0",
+        "sortFolderItem1",
+        "sortFolderItem2",
+        "sortFolderItem3",
+        "sortFolderItem4",
+        "sortFolderItem5",
+        "sortFolderItem6",
+        "sortFolderItem7",
+        "sortFolderItem8",
+        "sortFolderItem9",
+        "sortFolderItem10",
+        "sortFolderItem11",
+        "sortFolderItem12",
+        "sortFolderItem13"
+      ],
+      "omitIds": false,
+      "omitSortBy": true,
+      "recursive": true,
+      "query": "SortBy=Name,NoSuchSort&SortOrder=Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "repository-too-many-directions",
+      "bindingLabel": "too-many-directions",
+      "mode": "repository",
+      "parentKey": "sortFolder",
+      "scope": [
+        "sortFolderItem0",
+        "sortFolderItem1",
+        "sortFolderItem2",
+        "sortFolderItem3",
+        "sortFolderItem4",
+        "sortFolderItem5",
+        "sortFolderItem6",
+        "sortFolderItem7",
+        "sortFolderItem8",
+        "sortFolderItem9",
+        "sortFolderItem10",
+        "sortFolderItem11",
+        "sortFolderItem12",
+        "sortFolderItem13"
+      ],
+      "omitIds": false,
+      "omitSortBy": true,
+      "recursive": true,
+      "query": "SortBy=Name&SortOrder=Ascending,Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "repository-numeric-order-0",
+      "bindingLabel": "numeric-order-0",
+      "mode": "repository",
+      "parentKey": "sortFolder",
+      "scope": [
+        "sortFolderItem0",
+        "sortFolderItem1",
+        "sortFolderItem2",
+        "sortFolderItem3",
+        "sortFolderItem4",
+        "sortFolderItem5",
+        "sortFolderItem6",
+        "sortFolderItem7",
+        "sortFolderItem8",
+        "sortFolderItem9",
+        "sortFolderItem10",
+        "sortFolderItem11",
+        "sortFolderItem12",
+        "sortFolderItem13"
+      ],
+      "omitIds": false,
+      "omitSortBy": true,
+      "recursive": true,
+      "query": "SortBy=Name&SortOrder=0",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "repository-numeric-order-1",
+      "bindingLabel": "numeric-order-1",
+      "mode": "repository",
+      "parentKey": "sortFolder",
+      "scope": [
+        "sortFolderItem0",
+        "sortFolderItem1",
+        "sortFolderItem2",
+        "sortFolderItem3",
+        "sortFolderItem4",
+        "sortFolderItem5",
+        "sortFolderItem6",
+        "sortFolderItem7",
+        "sortFolderItem8",
+        "sortFolderItem9",
+        "sortFolderItem10",
+        "sortFolderItem11",
+        "sortFolderItem12",
+        "sortFolderItem13"
+      ],
+      "omitIds": false,
+      "omitSortBy": true,
+      "recursive": true,
+      "query": "SortBy=Name&SortOrder=1",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "repository-numeric-order-2",
+      "bindingLabel": "numeric-order-2",
+      "mode": "repository",
+      "parentKey": "sortFolder",
+      "scope": [
+        "sortFolderItem0",
+        "sortFolderItem1",
+        "sortFolderItem2",
+        "sortFolderItem3",
+        "sortFolderItem4",
+        "sortFolderItem5",
+        "sortFolderItem6",
+        "sortFolderItem7",
+        "sortFolderItem8",
+        "sortFolderItem9",
+        "sortFolderItem10",
+        "sortFolderItem11",
+        "sortFolderItem12",
+        "sortFolderItem13"
+      ],
+      "omitIds": false,
+      "omitSortBy": true,
+      "recursive": true,
+      "query": "SortBy=Name&SortOrder=2",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "repository-negative-order",
+      "bindingLabel": "negative-order",
+      "mode": "repository",
+      "parentKey": "sortFolder",
+      "scope": [
+        "sortFolderItem0",
+        "sortFolderItem1",
+        "sortFolderItem2",
+        "sortFolderItem3",
+        "sortFolderItem4",
+        "sortFolderItem5",
+        "sortFolderItem6",
+        "sortFolderItem7",
+        "sortFolderItem8",
+        "sortFolderItem9",
+        "sortFolderItem10",
+        "sortFolderItem11",
+        "sortFolderItem12",
+        "sortFolderItem13"
+      ],
+      "omitIds": false,
+      "omitSortBy": true,
+      "recursive": true,
+      "query": "SortBy=Name&SortOrder=-1",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "repository-overflow-order",
+      "bindingLabel": "overflow-order",
+      "mode": "repository",
+      "parentKey": "sortFolder",
+      "scope": [
+        "sortFolderItem0",
+        "sortFolderItem1",
+        "sortFolderItem2",
+        "sortFolderItem3",
+        "sortFolderItem4",
+        "sortFolderItem5",
+        "sortFolderItem6",
+        "sortFolderItem7",
+        "sortFolderItem8",
+        "sortFolderItem9",
+        "sortFolderItem10",
+        "sortFolderItem11",
+        "sortFolderItem12",
+        "sortFolderItem13"
+      ],
+      "omitIds": false,
+      "omitSortBy": true,
+      "recursive": true,
+      "query": "SortBy=Name&SortOrder=2147483648",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "repository-unknown-order",
+      "bindingLabel": "unknown-order",
+      "mode": "repository",
+      "parentKey": "sortFolder",
+      "scope": [
+        "sortFolderItem0",
+        "sortFolderItem1",
+        "sortFolderItem2",
+        "sortFolderItem3",
+        "sortFolderItem4",
+        "sortFolderItem5",
+        "sortFolderItem6",
+        "sortFolderItem7",
+        "sortFolderItem8",
+        "sortFolderItem9",
+        "sortFolderItem10",
+        "sortFolderItem11",
+        "sortFolderItem12",
+        "sortFolderItem13"
+      ],
+      "omitIds": false,
+      "omitSortBy": true,
+      "recursive": true,
+      "query": "SortBy=Name&SortOrder=NoSuchDirection",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "repository-invalid-then-desc-order",
+      "bindingLabel": "invalid-then-desc-order",
+      "mode": "repository",
+      "parentKey": "sortFolder",
+      "scope": [
+        "sortFolderItem0",
+        "sortFolderItem1",
+        "sortFolderItem2",
+        "sortFolderItem3",
+        "sortFolderItem4",
+        "sortFolderItem5",
+        "sortFolderItem6",
+        "sortFolderItem7",
+        "sortFolderItem8",
+        "sortFolderItem9",
+        "sortFolderItem10",
+        "sortFolderItem11",
+        "sortFolderItem12",
+        "sortFolderItem13"
+      ],
+      "omitIds": false,
+      "omitSortBy": true,
+      "recursive": true,
+      "query": "SortBy=Name&SortOrder=NoSuchDirection,Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "repository-trim-order",
+      "bindingLabel": "trim-order",
+      "mode": "repository",
+      "parentKey": "sortFolder",
+      "scope": [
+        "sortFolderItem0",
+        "sortFolderItem1",
+        "sortFolderItem2",
+        "sortFolderItem3",
+        "sortFolderItem4",
+        "sortFolderItem5",
+        "sortFolderItem6",
+        "sortFolderItem7",
+        "sortFolderItem8",
+        "sortFolderItem9",
+        "sortFolderItem10",
+        "sortFolderItem11",
+        "sortFolderItem12",
+        "sortFolderItem13"
+      ],
+      "omitIds": false,
+      "omitSortBy": true,
+      "recursive": true,
+      "query": "SortBy=Name&SortOrder=%20Descending%20",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "repository-repeat-separate",
+      "bindingLabel": "repeat-separate",
+      "mode": "repository",
+      "parentKey": "sortFolder",
+      "scope": [
+        "sortFolderItem0",
+        "sortFolderItem1",
+        "sortFolderItem2",
+        "sortFolderItem3",
+        "sortFolderItem4",
+        "sortFolderItem5",
+        "sortFolderItem6",
+        "sortFolderItem7",
+        "sortFolderItem8",
+        "sortFolderItem9",
+        "sortFolderItem10",
+        "sortFolderItem11",
+        "sortFolderItem12",
+        "sortFolderItem13"
+      ],
+      "omitIds": false,
+      "omitSortBy": true,
+      "recursive": true,
+      "query": "SortBy=Name&SortBy=SortName&SortOrder=Descending&SortOrder=Ascending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "repository-repeat-comma-key",
+      "bindingLabel": "repeat-comma-key",
+      "mode": "repository",
+      "parentKey": "sortFolder",
+      "scope": [
+        "sortFolderItem0",
+        "sortFolderItem1",
+        "sortFolderItem2",
+        "sortFolderItem3",
+        "sortFolderItem4",
+        "sortFolderItem5",
+        "sortFolderItem6",
+        "sortFolderItem7",
+        "sortFolderItem8",
+        "sortFolderItem9",
+        "sortFolderItem10",
+        "sortFolderItem11",
+        "sortFolderItem12",
+        "sortFolderItem13"
+      ],
+      "omitIds": false,
+      "omitSortBy": true,
+      "recursive": true,
+      "query": "SortBy=Name,SortName&SortBy=ProductionYear&SortOrder=Descending&SortOrder=Ascending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "repository-repeat-comma-order",
+      "bindingLabel": "repeat-comma-order",
+      "mode": "repository",
+      "parentKey": "sortFolder",
+      "scope": [
+        "sortFolderItem0",
+        "sortFolderItem1",
+        "sortFolderItem2",
+        "sortFolderItem3",
+        "sortFolderItem4",
+        "sortFolderItem5",
+        "sortFolderItem6",
+        "sortFolderItem7",
+        "sortFolderItem8",
+        "sortFolderItem9",
+        "sortFolderItem10",
+        "sortFolderItem11",
+        "sortFolderItem12",
+        "sortFolderItem13"
+      ],
+      "omitIds": false,
+      "omitSortBy": true,
+      "recursive": true,
+      "query": "SortBy=Name&SortBy=SortName&SortOrder=Ascending,Descending&SortOrder=Ascending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "repository-repeat-bad-key",
+      "bindingLabel": "repeat-bad-key",
+      "mode": "repository",
+      "parentKey": "sortFolder",
+      "scope": [
+        "sortFolderItem0",
+        "sortFolderItem1",
+        "sortFolderItem2",
+        "sortFolderItem3",
+        "sortFolderItem4",
+        "sortFolderItem5",
+        "sortFolderItem6",
+        "sortFolderItem7",
+        "sortFolderItem8",
+        "sortFolderItem9",
+        "sortFolderItem10",
+        "sortFolderItem11",
+        "sortFolderItem12",
+        "sortFolderItem13"
+      ],
+      "omitIds": false,
+      "omitSortBy": true,
+      "recursive": true,
+      "query": "SortBy=NoSuchSort&SortBy=Name&SortOrder=Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "repository-repeat-empty-key",
+      "bindingLabel": "repeat-empty-key",
+      "mode": "repository",
+      "parentKey": "sortFolder",
+      "scope": [
+        "sortFolderItem0",
+        "sortFolderItem1",
+        "sortFolderItem2",
+        "sortFolderItem3",
+        "sortFolderItem4",
+        "sortFolderItem5",
+        "sortFolderItem6",
+        "sortFolderItem7",
+        "sortFolderItem8",
+        "sortFolderItem9",
+        "sortFolderItem10",
+        "sortFolderItem11",
+        "sortFolderItem12",
+        "sortFolderItem13"
+      ],
+      "omitIds": false,
+      "omitSortBy": true,
+      "recursive": true,
+      "query": "SortBy=&SortBy=Name&SortOrder=Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "repository-repeat-numeric-comma",
+      "bindingLabel": "repeat-numeric-comma",
+      "mode": "repository",
+      "parentKey": "sortFolder",
+      "scope": [
+        "sortFolderItem0",
+        "sortFolderItem1",
+        "sortFolderItem2",
+        "sortFolderItem3",
+        "sortFolderItem4",
+        "sortFolderItem5",
+        "sortFolderItem6",
+        "sortFolderItem7",
+        "sortFolderItem8",
+        "sortFolderItem9",
+        "sortFolderItem10",
+        "sortFolderItem11",
+        "sortFolderItem12",
+        "sortFolderItem13"
+      ],
+      "omitIds": false,
+      "omitSortBy": true,
+      "recursive": true,
+      "query": "SortBy=4,8&SortBy=Name&SortOrder=Ascending&SortOrder=Descending",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    }
+  ],
+  "userData": [
+    {
+      "itemKey": "sortFolderItem0",
+      "played": true,
+      "playCount": 0,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "likes": null,
+      "lastPlayedDate": null
+    },
+    {
+      "itemKey": "sortFolderItem1",
+      "played": false,
+      "playCount": 1,
+      "positionTicks": "0",
+      "isFavorite": true,
+      "likes": null,
+      "lastPlayedDate": "2024-01-01T00:00:00.0000001"
+    },
+    {
+      "itemKey": "sortFolderItem3",
+      "played": false,
+      "playCount": 3,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "likes": false,
+      "lastPlayedDate": null
+    },
+    {
+      "itemKey": "sortFolderItem4",
+      "played": true,
+      "playCount": 0,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "likes": true,
+      "lastPlayedDate": "2024-01-01T00:00:00.0000001"
+    },
+    {
+      "itemKey": "sortFolderItem5",
+      "played": false,
+      "playCount": 1,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "likes": null,
+      "lastPlayedDate": "2024-01-01T00:00:00.0000002"
+    },
+    {
+      "itemKey": "sortFolderItem6",
+      "played": true,
+      "playCount": 2,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "likes": null,
+      "lastPlayedDate": null
+    },
+    {
+      "itemKey": "sortFolderItem7",
+      "played": false,
+      "playCount": 3,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "likes": null,
+      "lastPlayedDate": "2024-01-01T00:00:00.0000001"
+    },
+    {
+      "itemKey": "sortFolderItem8",
+      "played": true,
+      "playCount": 0,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "likes": null,
+      "lastPlayedDate": "2024-01-01T00:00:00.0000002"
+    },
+    {
+      "itemKey": "sortFolderItem9",
+      "played": false,
+      "playCount": 1,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "likes": null,
+      "lastPlayedDate": null
+    },
+    {
+      "itemKey": "sortFolderItem10",
+      "played": true,
+      "playCount": 2,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "likes": null,
+      "lastPlayedDate": "2024-01-01T00:00:00.0000001"
+    },
+    {
+      "itemKey": "sortFolderItem11",
+      "played": false,
+      "playCount": 3,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "likes": null,
+      "lastPlayedDate": "2024-01-01T00:00:00.0000002"
+    },
+    {
+      "itemKey": "sortFolderItem12",
+      "played": true,
+      "playCount": 0,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "likes": null,
+      "lastPlayedDate": null
+    },
+    {
+      "itemKey": "sortFolderItem13",
+      "played": false,
+      "playCount": 1,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "likes": null,
+      "lastPlayedDate": "2024-01-01T00:00:00.0000001"
+    }
+  ]
+}

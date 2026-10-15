@@ -1,0 +1,11 @@
+{
+  "claims": ["owner", "other"],
+  "permissionPolicies": [
+    "none",
+    "content",
+    "admin",
+    "collection",
+    "folder",
+    "wrong-folder"
+  ]
+}

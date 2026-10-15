@@ -1,0 +1,97 @@
+{
+  "rawReading": "D:\\mediamanager-validation\\20261015-node-plugins-acceptance\\password-reset-native-2\\oracle\\read-files.json",
+  "readingSha256": "3eea70eb0e1bca9fe1df040ead9bf1e2d7fd0eea0d556154a7af6cb9c342536d",
+  "manifest": "D:\\mediamanager-validation\\20261015-node-plugins-acceptance\\password-reset-native-2\\manifest.json",
+  "manifestSha256": "3fd01696ee7defe248bdba87ed798b2e63c18545b6518c544ce0e93c833b557f",
+  "record": "D:\\mediamanager-validation\\20261015-node-plugins-acceptance\\password-reset-native-2\\oracle\\record.json",
+  "build": {
+    "args": [
+      "build",
+      "D:\\mediamanager-validation\\20261015-node-plugins-acceptance\\password-reset-native-2\\oracle\\project\\Oracle.csproj",
+      "-c",
+      "Release",
+      "--nologo",
+      "-v",
+      "minimal",
+      "-p:BaseOutputPath=D:\\mediamanager-validation\\20261015-node-plugins-acceptance\\password-reset-native-2\\oracle\\bin\\",
+      "-p:BaseIntermediateOutputPath=D:\\mediamanager-validation\\20261015-node-plugins-acceptance\\password-reset-native-2\\oracle\\obj\\"
+    ],
+    "status": 0,
+    "signal": null
+  },
+  "process": {
+    "args": [
+      "D:\\mediamanager-validation\\20261015-node-plugins-acceptance\\password-reset-native-2\\oracle\\bin\\Release\\net10.0\\Oracle.dll",
+      "read-files",
+      "D:\\mediamanager-validation\\20261015-node-plugins-acceptance\\password-reset-native-2\\manifest.json",
+      "D:\\mediamanager-validation\\20261015-node-plugins-acceptance\\password-reset-native-2\\oracle/read-files.json"
+    ],
+    "status": 0,
+    "signal": null
+  },
+  "oracleSources": [
+    {
+      "filename": "Oracle.csproj",
+      "sha256": "59f75232990bda35c1de7deef2bcefb75a611a8d1f3d73065c61457828bcb380"
+    },
+    {
+      "filename": "Directory.Build.props",
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    },
+    {
+      "filename": "Program.cs",
+      "sha256": "54a79af23c5e3db089908799dcccdffa40f1b1fc41004b5f9c88b09623646438"
+    }
+  ],
+  "sources": [
+    {
+      "filename": "D:\\mediamanager-validation\\20261015-node-plugins-acceptance\\strict-full-1-assets\\password-reset\\local.json",
+      "sha256": "ee6042a8e49d40f0d2ba1f6714d9ecdd9e2916129b7d118a4f669fb44a71c775"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261015-node-plugins-acceptance\\strict-full-1-assets\\password-reset\\anonymous-local.json",
+      "sha256": "85f9c94793c64d63058cb7ab926fe84f17bc18569deec9623118459d87e22786"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261015-node-plugins-acceptance\\strict-full-1-assets\\password-reset\\case-name.json",
+      "sha256": "eb9c66ae79745103e908f7090b7e7b095069cbac2386760d3aa05d7d8b76b3ce"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261015-node-plugins-acceptance\\strict-full-1-assets\\password-reset\\unicode-name.json",
+      "sha256": "65dadb47bee47b830bf268b55db0317777099e4d33462b97ee58466dbb90b6d4"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261015-node-plugins-acceptance\\strict-full-1-assets\\password-reset\\unknown-reset-provider.json",
+      "sha256": "53a3e342b92751a78eae1217009917e3b0db7e814f2b6dfdbed700dca4e41c81"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261015-node-plugins-acceptance\\strict-full-1-assets\\password-reset\\with-schedules.json",
+      "sha256": "f6ef5443f03e0501c54516f451597d4159fa702bc4c534cac377b740e94bb452"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261015-node-plugins-acceptance\\strict-full-1-assets\\password-reset\\save-user-failure.json",
+      "sha256": "6da1c89408f579ae3317ea1fbe259e521df74d636175b031bce3c51768edaf3b"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261015-node-plugins-acceptance\\strict-full-1-assets\\password-reset\\generated-pin-flow.json",
+      "sha256": "bd9aa1aedb87c5d2dbb6d7dea14c16fb0c24642438bad8e738721d250c75f4b7"
+    }
+  ],
+  "producerSources": [
+    {
+      "filename": "src/users/password-reset-service.js",
+      "sha256": "ba6ab009ef227ad67475d7f014a9ae65546de5468674d01b39d46d0a65d9cc20"
+    },
+    {
+      "filename": "src/users/native.js",
+      "sha256": "b6c2f97107544de63244a044f71159e484daa54ca7f9df5697eab23363811e2c"
+    },
+    {
+      "filename": "src/core/identity.js",
+      "sha256": "164a18389f9ade5268ecc2cd209558ecacbcbd2d708ef5728e8195e666b9df37"
+    }
+  ],
+  "actualDefaultProviderReader": true,
+  "cases": 8,
+  "phaseAcceptance": false
+}

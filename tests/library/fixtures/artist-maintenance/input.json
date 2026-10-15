@@ -1,0 +1,299 @@
+[
+  {
+    "Name": "empty"
+  },
+  {
+    "Name": "empty-cancel",
+    "CancelInitial": true
+  },
+  {
+    "Name": "fresh",
+    "Names": [
+      "Rock"
+    ]
+  },
+  {
+    "Name": "ordered",
+    "Names": [
+      "Jazz",
+      "Rock",
+      "Alt"
+    ]
+  },
+  {
+    "Name": "case-collision",
+    "Names": [
+      "Rock",
+      "rock"
+    ]
+  },
+  {
+    "Name": "accent-collision",
+    "Names": [
+      "Rock",
+      "Röck"
+    ]
+  },
+  {
+    "Name": "empty-name",
+    "Names": [
+      ""
+    ]
+  },
+  {
+    "Name": "unicode",
+    "Names": [
+      "東京",
+      "ｶﾞ",
+      "𐐀"
+    ]
+  },
+  {
+    "Name": "source-kinds",
+    "SourceKinds": true
+  },
+  {
+    "Name": "existing",
+    "Names": [
+      "Rock"
+    ],
+    "Existing": [
+      "Rock"
+    ]
+  },
+  {
+    "Name": "existing-never",
+    "Names": [
+      "Rock"
+    ],
+    "Existing": [
+      "Rock"
+    ],
+    "NeverRefreshed": true
+  },
+  {
+    "Name": "clean-preference",
+    "Names": [
+      "ROCK!!!"
+    ],
+    "Existing": [
+      "Rock"
+    ]
+  },
+  {
+    "Name": "physical-preference",
+    "Names": [
+      "Rock"
+    ],
+    "Existing": [
+      "Rock"
+    ],
+    "Physical": true
+  },
+  {
+    "Name": "physical-never",
+    "Names": [
+      "Rock"
+    ],
+    "Existing": [
+      "Rock"
+    ],
+    "Physical": true,
+    "NeverRefreshed": true
+  },
+  {
+    "Name": "physical-tie",
+    "Names": [
+      "Rock"
+    ],
+    "Existing": [
+      "Rock"
+    ],
+    "Physical": true,
+    "PhysicalTwin": true
+  },
+  {
+    "Name": "named-tie",
+    "Names": [
+      "Rock"
+    ],
+    "Existing": [
+      "Rock",
+      "Röck",
+      "ROCK"
+    ]
+  },
+  {
+    "Name": "renamed-id",
+    "Names": [
+      "Rock"
+    ],
+    "InitialLookup": "Rock",
+    "InitialName": "Jazz"
+  },
+  {
+    "Name": "owned-selector",
+    "Names": [
+      "Rock"
+    ],
+    "InitialLookup": "Rock",
+    "InitialName": "Rock",
+    "InitialOwner": true
+  },
+  {
+    "Name": "alternate-selector",
+    "Names": [
+      "Rock"
+    ],
+    "InitialLookup": "Rock",
+    "InitialName": "Rock",
+    "InitialAlternate": true
+  },
+  {
+    "Name": "null-initial-name",
+    "Names": [
+      "Rock"
+    ],
+    "NullInitialName": true
+  },
+  {
+    "Name": "sweep",
+    "Names": [
+      "Rock"
+    ],
+    "Dead": true,
+    "Locked": true
+  },
+  {
+    "Name": "unmapped-not-live",
+    "Dead": true,
+    "Unmapped": true,
+    "Locked": true
+  },
+  {
+    "Name": "physical-not-dead",
+    "Dead": true,
+    "Physical": true
+  },
+  {
+    "Name": "lookup-failure",
+    "Names": [
+      "Jazz",
+      "Rock"
+    ],
+    "FailLookup": [
+      "Jazz"
+    ],
+    "Dead": true
+  },
+  {
+    "Name": "refresh-failure",
+    "Names": [
+      "Jazz",
+      "Rock"
+    ],
+    "FailRefresh": [
+      "Jazz"
+    ],
+    "Dead": true
+  },
+  {
+    "Name": "lookup-null",
+    "Names": [
+      "Rock"
+    ],
+    "NullLookup": "Rock",
+    "Dead": true
+  },
+  {
+    "Name": "lookup-cancel",
+    "Names": [
+      "Jazz",
+      "Rock"
+    ],
+    "CancelLookup": "Jazz",
+    "Dead": true
+  },
+  {
+    "Name": "refresh-cancel",
+    "Names": [
+      "Jazz",
+      "Rock"
+    ],
+    "CancelRefresh": "Jazz",
+    "Dead": true
+  },
+  {
+    "Name": "already-cancelled-fresh",
+    "Names": [
+      "Rock"
+    ],
+    "CancelInitial": true,
+    "Dead": true
+  },
+  {
+    "Name": "already-cancelled-existing",
+    "Names": [
+      "Rock"
+    ],
+    "Existing": [
+      "Rock"
+    ],
+    "CancelInitial": true,
+    "Dead": true
+  },
+  {
+    "Name": "already-cancelled-never",
+    "Names": [
+      "Rock"
+    ],
+    "Existing": [
+      "Rock"
+    ],
+    "NeverRefreshed": true,
+    "CancelInitial": true,
+    "Dead": true
+  },
+  {
+    "Name": "dead-null-path",
+    "Dead": true,
+    "DeadNullPath": true
+  },
+  {
+    "Name": "external-failure",
+    "Dead": true,
+    "FailExternal": true
+  },
+  {
+    "Name": "database-failure",
+    "Dead": true,
+    "FailDatabase": true
+  },
+  {
+    "Name": "physical-tie-separate",
+    "Names": [
+      "Rock"
+    ],
+    "Existing": [
+      "Rock"
+    ],
+    "Physical": true,
+    "PhysicalTwin": true,
+    "NeverRefreshed": true,
+    "SeparateSeeds": true
+  },
+  {
+    "Name": "named-tie-reverse",
+    "Names": [
+      "Rock"
+    ],
+    "Existing": [
+      "Rock",
+      "Röck",
+      "ROCK"
+    ],
+    "NeverRefreshed": true,
+    "SeparateSeeds": true,
+    "ReverseSeeds": true
+  }
+]

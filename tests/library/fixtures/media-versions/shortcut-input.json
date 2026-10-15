@@ -1,0 +1,78 @@
+{
+  "cases": [
+    {
+      "name": "shortcut-https",
+      "items": [
+        {
+          "Type": "Movie",
+          "Id": "C0000000-0000-0000-0000-000000000001",
+          "Name": "Remote Shortcut",
+          "ForcedSortName": "Remote Shortcut",
+          "Path": "Z:\\Library\\Shortcuts\\Remote Shortcut.strm",
+          "VideoType": "VideoFile",
+          "IsShortcut": true,
+          "ShortcutPath": "https://example.invalid/video.mkv",
+          "MediaStreams": [
+            {
+              "Type": "Video",
+              "Index": 0,
+              "Width": 1920
+            }
+          ]
+        }
+      ],
+      "links": [],
+      "query": "C0000000-0000-0000-0000-000000000001"
+    },
+    {
+      "name": "shortcut-local-target",
+      "items": [
+        {
+          "Type": "Movie",
+          "Id": "C0000000-0000-0000-0000-000000000002",
+          "Name": "Local Shortcut",
+          "ForcedSortName": "Local Shortcut",
+          "Path": "Z:\\Library\\Shortcuts\\Local Shortcut.strm",
+          "VideoType": "VideoFile",
+          "IsShortcut": true,
+          "ShortcutPath": "Z:\\Secrets\\do-not-expose.mkv",
+          "MediaStreams": [
+            {
+              "Type": "Video",
+              "Index": 0,
+              "Width": 1280
+            }
+          ]
+        }
+      ],
+      "links": [],
+      "query": "C0000000-0000-0000-0000-000000000002"
+    },
+    {
+      "name": "shortcut-http-m3u8",
+      "items": [
+        {
+          "Type": "Movie",
+          "Id": "C0000000-0000-0000-0000-000000000003",
+          "Name": "Playlist Shortcut",
+          "ForcedSortName": "Playlist Shortcut",
+          "Path": "Z:\\Library\\Shortcuts\\Playlist Shortcut.strm",
+          "VideoType": "VideoFile",
+          "IsShortcut": true,
+          "ShortcutPath": "http://example.invalid/live.m3u8",
+          "MediaStreams": [
+            {
+              "Type": "Video",
+              "Index": 0,
+              "Width": 640
+            }
+          ]
+        }
+      ],
+      "links": [],
+      "query": "C0000000-0000-0000-0000-000000000003"
+    }
+  ],
+  "prefixes": [],
+  "folders": []
+}

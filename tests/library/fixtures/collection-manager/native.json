@@ -1,0 +1,4331 @@
+{
+  "inputSha256": "65370ad3df113b42d9cea1c38968c0ee5c052f83d0e97d3d2442dc461f7b14f8",
+  "actualCollectionManager": true,
+  "actualBoxSet": true,
+  "realDirectories": true,
+  "libraryProviderPersistenceControlled": true,
+  "results": [
+    {
+      "key": "create-empty",
+      "failed": false,
+      "exception": null,
+      "foundFolder": null,
+      "calls": [
+        {
+          "action": "begin",
+          "value": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-empty\\program\\data\\collections\\Alpha [boxset]"
+        },
+        {
+          "action": "create",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "name": "Alpha",
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-empty\\program\\data\\collections\\Alpha [boxset]",
+            "parentId": "969d0000000000000000000000000002",
+            "isLocked": false,
+            "providerIds": {},
+            "officialRating": null,
+            "links": []
+          }
+        },
+        {
+          "action": "queue",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "options": {
+              "MetadataRefreshMode": "Default",
+              "ImageRefreshMode": "Default",
+              "IsAutomated": true,
+              "ForceSave": false
+            },
+            "priority": "High"
+          }
+        },
+        {
+          "action": "created-event",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "name": "Alpha",
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-empty\\program\\data\\collections\\Alpha [boxset]",
+            "parentId": "969d0000000000000000000000000002",
+            "isLocked": false,
+            "providerIds": {},
+            "officialRating": null,
+            "links": []
+          }
+        },
+        {
+          "action": "complete",
+          "value": {
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-empty\\program\\data\\collections\\Alpha [boxset]",
+            "refresh": false
+          }
+        }
+      ],
+      "pathQueries": [],
+      "collection": {
+        "id": "969d0000000000000000000000000100",
+        "name": "Alpha",
+        "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-empty\\program\\data\\collections\\Alpha [boxset]",
+        "parentId": "969d0000000000000000000000000002",
+        "isLocked": false,
+        "providerIds": {},
+        "officialRating": null,
+        "links": []
+      },
+      "timestamps": {
+        "created": "2026-10-13T09:59:14.5213047Z",
+        "modified": "2026-10-13T09:59:14.5213047Z"
+      },
+      "directories": [
+        "data",
+        "data\\collections",
+        "data\\collections\\Alpha [boxset]"
+      ]
+    },
+    {
+      "key": "create-members",
+      "failed": false,
+      "exception": null,
+      "foundFolder": null,
+      "calls": [
+        {
+          "action": "begin",
+          "value": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-members\\program\\data\\collections\\Alpha [boxset]"
+        },
+        {
+          "action": "create",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "name": "Alpha",
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-members\\program\\data\\collections\\Alpha [boxset]",
+            "parentId": "969d0000000000000000000000000002",
+            "isLocked": true,
+            "providerIds": {
+              "Tmdb": "73",
+              "Other": "kept"
+            },
+            "officialRating": null,
+            "links": []
+          }
+        },
+        {
+          "action": "save",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "name": "Alpha",
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-members\\program\\data\\collections\\Alpha [boxset]",
+            "parentId": "969d0000000000000000000000000002",
+            "isLocked": true,
+            "providerIds": {
+              "Tmdb": "73",
+              "Other": "kept"
+            },
+            "officialRating": "PG",
+            "links": [
+              {
+                "itemId": "969d0000000000000000000000000010",
+                "type": 0,
+                "path": null,
+                "libraryItemId": null
+              },
+              {
+                "itemId": "969d0000000000000000000000000011",
+                "type": 0,
+                "path": null,
+                "libraryItemId": null
+              }
+            ]
+          }
+        },
+        {
+          "action": "queue",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "options": {
+              "MetadataRefreshMode": "FullRefresh",
+              "ImageRefreshMode": "Default",
+              "IsAutomated": true,
+              "ForceSave": true
+            },
+            "priority": "High"
+          }
+        },
+        {
+          "action": "created-event",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "name": "Alpha",
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-members\\program\\data\\collections\\Alpha [boxset]",
+            "parentId": "969d0000000000000000000000000002",
+            "isLocked": true,
+            "providerIds": {
+              "Tmdb": "73",
+              "Other": "kept"
+            },
+            "officialRating": "PG",
+            "links": [
+              {
+                "itemId": "969d0000000000000000000000000010",
+                "type": 0,
+                "path": null,
+                "libraryItemId": null
+              },
+              {
+                "itemId": "969d0000000000000000000000000011",
+                "type": 0,
+                "path": null,
+                "libraryItemId": null
+              }
+            ]
+          }
+        },
+        {
+          "action": "complete",
+          "value": {
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-members\\program\\data\\collections\\Alpha [boxset]",
+            "refresh": false
+          }
+        }
+      ],
+      "pathQueries": [],
+      "collection": {
+        "id": "969d0000000000000000000000000100",
+        "name": "Alpha",
+        "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-members\\program\\data\\collections\\Alpha [boxset]",
+        "parentId": "969d0000000000000000000000000002",
+        "isLocked": true,
+        "providerIds": {
+          "Tmdb": "73",
+          "Other": "kept"
+        },
+        "officialRating": "PG",
+        "links": [
+          {
+            "itemId": "969d0000000000000000000000000010",
+            "type": 0,
+            "path": null,
+            "libraryItemId": null
+          },
+          {
+            "itemId": "969d0000000000000000000000000011",
+            "type": 0,
+            "path": null,
+            "libraryItemId": null
+          }
+        ]
+      },
+      "timestamps": {
+        "created": "2026-10-13T09:59:14.5665372Z",
+        "modified": "2026-10-13T09:59:14.5665372Z"
+      },
+      "directories": [
+        "data",
+        "data\\collections",
+        "data\\collections\\Alpha [boxset]"
+      ]
+    },
+    {
+      "key": "create-duplicates",
+      "failed": false,
+      "exception": null,
+      "foundFolder": null,
+      "calls": [
+        {
+          "action": "begin",
+          "value": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-duplicates\\program\\data\\collections\\Collection [boxset]"
+        },
+        {
+          "action": "create",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "name": "Collection",
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-duplicates\\program\\data\\collections\\Collection [boxset]",
+            "parentId": "969d0000000000000000000000000002",
+            "isLocked": false,
+            "providerIds": {},
+            "officialRating": null,
+            "links": []
+          }
+        },
+        {
+          "action": "save",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "name": "Collection",
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-duplicates\\program\\data\\collections\\Collection [boxset]",
+            "parentId": "969d0000000000000000000000000002",
+            "isLocked": false,
+            "providerIds": {},
+            "officialRating": "PG",
+            "links": [
+              {
+                "itemId": "969d0000000000000000000000000010",
+                "type": 0,
+                "path": null,
+                "libraryItemId": null
+              },
+              {
+                "itemId": "969d0000000000000000000000000010",
+                "type": 0,
+                "path": null,
+                "libraryItemId": null
+              },
+              {
+                "itemId": "969d0000000000000000000000000011",
+                "type": 0,
+                "path": null,
+                "libraryItemId": null
+              }
+            ]
+          }
+        },
+        {
+          "action": "queue",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "options": {
+              "MetadataRefreshMode": "FullRefresh",
+              "ImageRefreshMode": "Default",
+              "IsAutomated": true,
+              "ForceSave": true
+            },
+            "priority": "High"
+          }
+        },
+        {
+          "action": "created-event",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "name": "Collection",
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-duplicates\\program\\data\\collections\\Collection [boxset]",
+            "parentId": "969d0000000000000000000000000002",
+            "isLocked": false,
+            "providerIds": {},
+            "officialRating": "PG",
+            "links": [
+              {
+                "itemId": "969d0000000000000000000000000010",
+                "type": 0,
+                "path": null,
+                "libraryItemId": null
+              },
+              {
+                "itemId": "969d0000000000000000000000000010",
+                "type": 0,
+                "path": null,
+                "libraryItemId": null
+              },
+              {
+                "itemId": "969d0000000000000000000000000011",
+                "type": 0,
+                "path": null,
+                "libraryItemId": null
+              }
+            ]
+          }
+        },
+        {
+          "action": "complete",
+          "value": {
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-duplicates\\program\\data\\collections\\Collection [boxset]",
+            "refresh": false
+          }
+        }
+      ],
+      "pathQueries": [],
+      "collection": {
+        "id": "969d0000000000000000000000000100",
+        "name": "Collection",
+        "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-duplicates\\program\\data\\collections\\Collection [boxset]",
+        "parentId": "969d0000000000000000000000000002",
+        "isLocked": false,
+        "providerIds": {},
+        "officialRating": "PG",
+        "links": [
+          {
+            "itemId": "969d0000000000000000000000000010",
+            "type": 0,
+            "path": null,
+            "libraryItemId": null
+          },
+          {
+            "itemId": "969d0000000000000000000000000010",
+            "type": 0,
+            "path": null,
+            "libraryItemId": null
+          },
+          {
+            "itemId": "969d0000000000000000000000000011",
+            "type": 0,
+            "path": null,
+            "libraryItemId": null
+          }
+        ]
+      },
+      "timestamps": {
+        "created": "2026-10-13T09:59:14.5938225Z",
+        "modified": "2026-10-13T09:59:14.5938225Z"
+      },
+      "directories": [
+        "data",
+        "data\\collections",
+        "data\\collections\\Collection [boxset]"
+      ]
+    },
+    {
+      "key": "create-clean-name",
+      "failed": false,
+      "exception": null,
+      "foundFolder": null,
+      "calls": [
+        {
+          "action": "begin",
+          "value": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-clean-name\\program\\data\\collections\\\u96C6\u5408    \u4E2D\u6587  [boxset]"
+        },
+        {
+          "action": "create",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "name": "\u96C6\u5408:/? \u4E2D\u6587 ",
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-clean-name\\program\\data\\collections\\\u96C6\u5408    \u4E2D\u6587  [boxset]",
+            "parentId": "969d0000000000000000000000000002",
+            "isLocked": false,
+            "providerIds": {},
+            "officialRating": null,
+            "links": []
+          }
+        },
+        {
+          "action": "queue",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "options": {
+              "MetadataRefreshMode": "Default",
+              "ImageRefreshMode": "Default",
+              "IsAutomated": true,
+              "ForceSave": false
+            },
+            "priority": "High"
+          }
+        },
+        {
+          "action": "created-event",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "name": "\u96C6\u5408:/? \u4E2D\u6587 ",
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-clean-name\\program\\data\\collections\\\u96C6\u5408    \u4E2D\u6587  [boxset]",
+            "parentId": "969d0000000000000000000000000002",
+            "isLocked": false,
+            "providerIds": {},
+            "officialRating": null,
+            "links": []
+          }
+        },
+        {
+          "action": "complete",
+          "value": {
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-clean-name\\program\\data\\collections\\\u96C6\u5408    \u4E2D\u6587  [boxset]",
+            "refresh": false
+          }
+        }
+      ],
+      "pathQueries": [],
+      "collection": {
+        "id": "969d0000000000000000000000000100",
+        "name": "\u96C6\u5408:/? \u4E2D\u6587 ",
+        "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-clean-name\\program\\data\\collections\\\u96C6\u5408    \u4E2D\u6587  [boxset]",
+        "parentId": "969d0000000000000000000000000002",
+        "isLocked": false,
+        "providerIds": {},
+        "officialRating": null,
+        "links": []
+      },
+      "timestamps": {
+        "created": "2026-10-13T09:59:14.5978355Z",
+        "modified": "2026-10-13T09:59:14.5978355Z"
+      },
+      "directories": [
+        "data",
+        "data\\collections",
+        "data\\collections\\\u96C6\u5408    \u4E2D\u6587  [boxset]"
+      ]
+    },
+    {
+      "key": "create-empty-name",
+      "failed": false,
+      "exception": null,
+      "foundFolder": null,
+      "calls": [
+        {
+          "action": "begin",
+          "value": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-empty-name\\program\\data\\collections\\ [boxset]"
+        },
+        {
+          "action": "create",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "name": "",
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-empty-name\\program\\data\\collections\\ [boxset]",
+            "parentId": "969d0000000000000000000000000002",
+            "isLocked": false,
+            "providerIds": {},
+            "officialRating": null,
+            "links": []
+          }
+        },
+        {
+          "action": "queue",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "options": {
+              "MetadataRefreshMode": "Default",
+              "ImageRefreshMode": "Default",
+              "IsAutomated": true,
+              "ForceSave": false
+            },
+            "priority": "High"
+          }
+        },
+        {
+          "action": "created-event",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "name": "",
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-empty-name\\program\\data\\collections\\ [boxset]",
+            "parentId": "969d0000000000000000000000000002",
+            "isLocked": false,
+            "providerIds": {},
+            "officialRating": null,
+            "links": []
+          }
+        },
+        {
+          "action": "complete",
+          "value": {
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-empty-name\\program\\data\\collections\\ [boxset]",
+            "refresh": false
+          }
+        }
+      ],
+      "pathQueries": [],
+      "collection": {
+        "id": "969d0000000000000000000000000100",
+        "name": "",
+        "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-empty-name\\program\\data\\collections\\ [boxset]",
+        "parentId": "969d0000000000000000000000000002",
+        "isLocked": false,
+        "providerIds": {},
+        "officialRating": null,
+        "links": []
+      },
+      "timestamps": {
+        "created": "2026-10-13T09:59:14.5998359Z",
+        "modified": "2026-10-13T09:59:14.5998359Z"
+      },
+      "directories": [
+        "data",
+        "data\\collections",
+        "data\\collections\\ [boxset]"
+      ]
+    },
+    {
+      "key": "create-null-name",
+      "failed": true,
+      "exception": "NullReferenceException",
+      "foundFolder": null,
+      "calls": [],
+      "pathQueries": [],
+      "collection": null,
+      "timestamps": null,
+      "directories": [
+        "data",
+        "data\\collections"
+      ]
+    },
+    {
+      "key": "create-ignored-parent",
+      "failed": false,
+      "exception": null,
+      "foundFolder": null,
+      "calls": [
+        {
+          "action": "begin",
+          "value": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-ignored-parent\\program\\data\\collections\\Collection [boxset]"
+        },
+        {
+          "action": "create",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "name": "Collection",
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-ignored-parent\\program\\data\\collections\\Collection [boxset]",
+            "parentId": "969d0000000000000000000000000002",
+            "isLocked": false,
+            "providerIds": {},
+            "officialRating": null,
+            "links": []
+          }
+        },
+        {
+          "action": "save",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "name": "Collection",
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-ignored-parent\\program\\data\\collections\\Collection [boxset]",
+            "parentId": "969d0000000000000000000000000002",
+            "isLocked": false,
+            "providerIds": {},
+            "officialRating": "PG",
+            "links": [
+              {
+                "itemId": "969d0000000000000000000000000011",
+                "type": 0,
+                "path": null,
+                "libraryItemId": null
+              }
+            ]
+          }
+        },
+        {
+          "action": "queue",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "options": {
+              "MetadataRefreshMode": "FullRefresh",
+              "ImageRefreshMode": "Default",
+              "IsAutomated": true,
+              "ForceSave": true
+            },
+            "priority": "High"
+          }
+        },
+        {
+          "action": "created-event",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "name": "Collection",
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-ignored-parent\\program\\data\\collections\\Collection [boxset]",
+            "parentId": "969d0000000000000000000000000002",
+            "isLocked": false,
+            "providerIds": {},
+            "officialRating": "PG",
+            "links": [
+              {
+                "itemId": "969d0000000000000000000000000011",
+                "type": 0,
+                "path": null,
+                "libraryItemId": null
+              }
+            ]
+          }
+        },
+        {
+          "action": "complete",
+          "value": {
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-ignored-parent\\program\\data\\collections\\Collection [boxset]",
+            "refresh": false
+          }
+        }
+      ],
+      "pathQueries": [],
+      "collection": {
+        "id": "969d0000000000000000000000000100",
+        "name": "Collection",
+        "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-ignored-parent\\program\\data\\collections\\Collection [boxset]",
+        "parentId": "969d0000000000000000000000000002",
+        "isLocked": false,
+        "providerIds": {},
+        "officialRating": "PG",
+        "links": [
+          {
+            "itemId": "969d0000000000000000000000000011",
+            "type": 0,
+            "path": null,
+            "libraryItemId": null
+          }
+        ]
+      },
+      "timestamps": {
+        "created": "2026-10-13T09:59:14.6078356Z",
+        "modified": "2026-10-13T09:59:14.6078356Z"
+      },
+      "directories": [
+        "data",
+        "data\\collections",
+        "data\\collections\\Collection [boxset]"
+      ]
+    },
+    {
+      "key": "create-ensure-folder",
+      "failed": false,
+      "exception": null,
+      "foundFolder": null,
+      "calls": [
+        {
+          "action": "library-add",
+          "value": {
+            "name": "Collections",
+            "type": "boxsets",
+            "options": {
+              "PathInfos": [
+                {
+                  "Path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-ensure-folder\\program\\data\\collections"
+                }
+              ],
+              "EnableRealtimeMonitor": false,
+              "SaveLocalMetadata": true
+            },
+            "refresh": true
+          }
+        },
+        {
+          "action": "root-invalidate",
+          "value": null
+        },
+        {
+          "action": "begin",
+          "value": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-ensure-folder\\program\\data\\collections\\Collection [boxset]"
+        },
+        {
+          "action": "create",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "name": "Collection",
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-ensure-folder\\program\\data\\collections\\Collection [boxset]",
+            "parentId": "969d0000000000000000000000000002",
+            "isLocked": false,
+            "providerIds": {},
+            "officialRating": null,
+            "links": []
+          }
+        },
+        {
+          "action": "queue",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "options": {
+              "MetadataRefreshMode": "Default",
+              "ImageRefreshMode": "Default",
+              "IsAutomated": true,
+              "ForceSave": false
+            },
+            "priority": "High"
+          }
+        },
+        {
+          "action": "created-event",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "name": "Collection",
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-ensure-folder\\program\\data\\collections\\Collection [boxset]",
+            "parentId": "969d0000000000000000000000000002",
+            "isLocked": false,
+            "providerIds": {},
+            "officialRating": null,
+            "links": []
+          }
+        },
+        {
+          "action": "complete",
+          "value": {
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-ensure-folder\\program\\data\\collections\\Collection [boxset]",
+            "refresh": false
+          }
+        }
+      ],
+      "pathQueries": [],
+      "collection": {
+        "id": "969d0000000000000000000000000100",
+        "name": "Collection",
+        "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-ensure-folder\\program\\data\\collections\\Collection [boxset]",
+        "parentId": "969d0000000000000000000000000002",
+        "isLocked": false,
+        "providerIds": {},
+        "officialRating": null,
+        "links": []
+      },
+      "timestamps": {
+        "created": "2026-10-13T09:59:14.6108345Z",
+        "modified": "2026-10-13T09:59:14.6108345Z"
+      },
+      "directories": [
+        "data",
+        "data\\collections",
+        "data\\collections\\Collection [boxset]"
+      ]
+    },
+    {
+      "key": "create-no-resolved-folder",
+      "failed": true,
+      "exception": "InvalidOperationException",
+      "foundFolder": null,
+      "calls": [
+        {
+          "action": "library-add",
+          "value": {
+            "name": "Collections",
+            "type": "boxsets",
+            "options": {
+              "PathInfos": [
+                {
+                  "Path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-no-resolved-folder\\program\\data\\collections"
+                }
+              ],
+              "EnableRealtimeMonitor": false,
+              "SaveLocalMetadata": true
+            },
+            "refresh": true
+          }
+        },
+        {
+          "action": "root-invalidate",
+          "value": null
+        }
+      ],
+      "pathQueries": [],
+      "collection": null,
+      "timestamps": null,
+      "directories": [
+        "data",
+        "data\\collections"
+      ]
+    },
+    {
+      "key": "create-fail-begin",
+      "failed": true,
+      "exception": "IOException",
+      "foundFolder": null,
+      "calls": [
+        {
+          "action": "begin",
+          "value": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-fail-begin\\program\\data\\collections\\Collection [boxset]"
+        }
+      ],
+      "pathQueries": [],
+      "collection": null,
+      "timestamps": null,
+      "directories": [
+        "data",
+        "data\\collections"
+      ]
+    },
+    {
+      "key": "create-fail-create",
+      "failed": true,
+      "exception": "IOException",
+      "foundFolder": null,
+      "calls": [
+        {
+          "action": "begin",
+          "value": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-fail-create\\program\\data\\collections\\Collection [boxset]"
+        },
+        {
+          "action": "create",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "name": "Collection",
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-fail-create\\program\\data\\collections\\Collection [boxset]",
+            "parentId": "969d0000000000000000000000000002",
+            "isLocked": false,
+            "providerIds": {},
+            "officialRating": null,
+            "links": []
+          }
+        },
+        {
+          "action": "complete",
+          "value": {
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-fail-create\\program\\data\\collections\\Collection [boxset]",
+            "refresh": false
+          }
+        }
+      ],
+      "pathQueries": [],
+      "collection": {
+        "id": "969d0000000000000000000000000100",
+        "name": "Collection",
+        "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-fail-create\\program\\data\\collections\\Collection [boxset]",
+        "parentId": "969d0000000000000000000000000002",
+        "isLocked": false,
+        "providerIds": {},
+        "officialRating": null,
+        "links": []
+      },
+      "timestamps": {
+        "created": "2026-10-13T09:59:14.6178336Z",
+        "modified": "2026-10-13T09:59:14.6178336Z"
+      },
+      "directories": [
+        "data",
+        "data\\collections",
+        "data\\collections\\Collection [boxset]"
+      ]
+    },
+    {
+      "key": "create-fail-save",
+      "failed": true,
+      "exception": "IOException",
+      "foundFolder": null,
+      "calls": [
+        {
+          "action": "begin",
+          "value": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-fail-save\\program\\data\\collections\\Collection [boxset]"
+        },
+        {
+          "action": "create",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "name": "Collection",
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-fail-save\\program\\data\\collections\\Collection [boxset]",
+            "parentId": "969d0000000000000000000000000002",
+            "isLocked": false,
+            "providerIds": {},
+            "officialRating": null,
+            "links": []
+          }
+        },
+        {
+          "action": "save",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "name": "Collection",
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-fail-save\\program\\data\\collections\\Collection [boxset]",
+            "parentId": "969d0000000000000000000000000002",
+            "isLocked": false,
+            "providerIds": {},
+            "officialRating": "R",
+            "links": [
+              {
+                "itemId": "969d0000000000000000000000000010",
+                "type": 0,
+                "path": null,
+                "libraryItemId": null
+              }
+            ]
+          }
+        },
+        {
+          "action": "complete",
+          "value": {
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-fail-save\\program\\data\\collections\\Collection [boxset]",
+            "refresh": false
+          }
+        }
+      ],
+      "pathQueries": [],
+      "collection": {
+        "id": "969d0000000000000000000000000100",
+        "name": "Collection",
+        "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-fail-save\\program\\data\\collections\\Collection [boxset]",
+        "parentId": "969d0000000000000000000000000002",
+        "isLocked": false,
+        "providerIds": {},
+        "officialRating": "R",
+        "links": [
+          {
+            "itemId": "969d0000000000000000000000000010",
+            "type": 0,
+            "path": null,
+            "libraryItemId": null
+          }
+        ]
+      },
+      "timestamps": {
+        "created": "2026-10-13T09:59:14.6200302Z",
+        "modified": "2026-10-13T09:59:14.6200302Z"
+      },
+      "directories": [
+        "data",
+        "data\\collections",
+        "data\\collections\\Collection [boxset]"
+      ]
+    },
+    {
+      "key": "create-fail-queue",
+      "failed": true,
+      "exception": "IOException",
+      "foundFolder": null,
+      "calls": [
+        {
+          "action": "begin",
+          "value": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-fail-queue\\program\\data\\collections\\Collection [boxset]"
+        },
+        {
+          "action": "create",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "name": "Collection",
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-fail-queue\\program\\data\\collections\\Collection [boxset]",
+            "parentId": "969d0000000000000000000000000002",
+            "isLocked": false,
+            "providerIds": {},
+            "officialRating": null,
+            "links": []
+          }
+        },
+        {
+          "action": "queue",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "options": {
+              "MetadataRefreshMode": "Default",
+              "ImageRefreshMode": "Default",
+              "IsAutomated": true,
+              "ForceSave": false
+            },
+            "priority": "High"
+          }
+        },
+        {
+          "action": "complete",
+          "value": {
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-fail-queue\\program\\data\\collections\\Collection [boxset]",
+            "refresh": false
+          }
+        }
+      ],
+      "pathQueries": [],
+      "collection": {
+        "id": "969d0000000000000000000000000100",
+        "name": "Collection",
+        "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-fail-queue\\program\\data\\collections\\Collection [boxset]",
+        "parentId": "969d0000000000000000000000000002",
+        "isLocked": false,
+        "providerIds": {},
+        "officialRating": null,
+        "links": []
+      },
+      "timestamps": {
+        "created": "2026-10-13T09:59:14.6223040Z",
+        "modified": "2026-10-13T09:59:14.6223040Z"
+      },
+      "directories": [
+        "data",
+        "data\\collections",
+        "data\\collections\\Collection [boxset]"
+      ]
+    },
+    {
+      "key": "create-fail-created-event",
+      "failed": true,
+      "exception": "IOException",
+      "foundFolder": null,
+      "calls": [
+        {
+          "action": "begin",
+          "value": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-fail-created-event\\program\\data\\collections\\Collection [boxset]"
+        },
+        {
+          "action": "create",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "name": "Collection",
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-fail-created-event\\program\\data\\collections\\Collection [boxset]",
+            "parentId": "969d0000000000000000000000000002",
+            "isLocked": false,
+            "providerIds": {},
+            "officialRating": null,
+            "links": []
+          }
+        },
+        {
+          "action": "queue",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "options": {
+              "MetadataRefreshMode": "Default",
+              "ImageRefreshMode": "Default",
+              "IsAutomated": true,
+              "ForceSave": false
+            },
+            "priority": "High"
+          }
+        },
+        {
+          "action": "created-event",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "name": "Collection",
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-fail-created-event\\program\\data\\collections\\Collection [boxset]",
+            "parentId": "969d0000000000000000000000000002",
+            "isLocked": false,
+            "providerIds": {},
+            "officialRating": null,
+            "links": []
+          }
+        },
+        {
+          "action": "complete",
+          "value": {
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-fail-created-event\\program\\data\\collections\\Collection [boxset]",
+            "refresh": false
+          }
+        }
+      ],
+      "pathQueries": [],
+      "collection": {
+        "id": "969d0000000000000000000000000100",
+        "name": "Collection",
+        "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-fail-created-event\\program\\data\\collections\\Collection [boxset]",
+        "parentId": "969d0000000000000000000000000002",
+        "isLocked": false,
+        "providerIds": {},
+        "officialRating": null,
+        "links": []
+      },
+      "timestamps": {
+        "created": "2026-10-13T09:59:14.6253048Z",
+        "modified": "2026-10-13T09:59:14.6253048Z"
+      },
+      "directories": [
+        "data",
+        "data\\collections",
+        "data\\collections\\Collection [boxset]"
+      ]
+    },
+    {
+      "key": "create-fail-complete",
+      "failed": true,
+      "exception": "IOException",
+      "foundFolder": null,
+      "calls": [
+        {
+          "action": "begin",
+          "value": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-fail-complete\\program\\data\\collections\\Collection [boxset]"
+        },
+        {
+          "action": "create",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "name": "Collection",
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-fail-complete\\program\\data\\collections\\Collection [boxset]",
+            "parentId": "969d0000000000000000000000000002",
+            "isLocked": false,
+            "providerIds": {},
+            "officialRating": null,
+            "links": []
+          }
+        },
+        {
+          "action": "queue",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "options": {
+              "MetadataRefreshMode": "Default",
+              "ImageRefreshMode": "Default",
+              "IsAutomated": true,
+              "ForceSave": false
+            },
+            "priority": "High"
+          }
+        },
+        {
+          "action": "created-event",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "name": "Collection",
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-fail-complete\\program\\data\\collections\\Collection [boxset]",
+            "parentId": "969d0000000000000000000000000002",
+            "isLocked": false,
+            "providerIds": {},
+            "officialRating": null,
+            "links": []
+          }
+        },
+        {
+          "action": "complete",
+          "value": {
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-fail-complete\\program\\data\\collections\\Collection [boxset]",
+            "refresh": false
+          }
+        }
+      ],
+      "pathQueries": [],
+      "collection": {
+        "id": "969d0000000000000000000000000100",
+        "name": "Collection",
+        "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-fail-complete\\program\\data\\collections\\Collection [boxset]",
+        "parentId": "969d0000000000000000000000000002",
+        "isLocked": false,
+        "providerIds": {},
+        "officialRating": null,
+        "links": []
+      },
+      "timestamps": {
+        "created": "2026-10-13T09:59:14.6273054Z",
+        "modified": "2026-10-13T09:59:14.6273054Z"
+      },
+      "directories": [
+        "data",
+        "data\\collections",
+        "data\\collections\\Collection [boxset]"
+      ]
+    },
+    {
+      "key": "create-fail-library-add",
+      "failed": true,
+      "exception": "IOException",
+      "foundFolder": null,
+      "calls": [
+        {
+          "action": "library-add",
+          "value": {
+            "name": "Collections",
+            "type": "boxsets",
+            "options": {
+              "PathInfos": [
+                {
+                  "Path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-fail-library-add\\program\\data\\collections"
+                }
+              ],
+              "EnableRealtimeMonitor": false,
+              "SaveLocalMetadata": true
+            },
+            "refresh": true
+          }
+        }
+      ],
+      "pathQueries": [],
+      "collection": null,
+      "timestamps": null,
+      "directories": [
+        "data",
+        "data\\collections"
+      ]
+    },
+    {
+      "key": "create-missing-member",
+      "failed": true,
+      "exception": "ArgumentException",
+      "foundFolder": null,
+      "calls": [
+        {
+          "action": "begin",
+          "value": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-missing-member\\program\\data\\collections\\Collection [boxset]"
+        },
+        {
+          "action": "create",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "name": "Collection",
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-missing-member\\program\\data\\collections\\Collection [boxset]",
+            "parentId": "969d0000000000000000000000000002",
+            "isLocked": false,
+            "providerIds": {},
+            "officialRating": null,
+            "links": []
+          }
+        },
+        {
+          "action": "complete",
+          "value": {
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-missing-member\\program\\data\\collections\\Collection [boxset]",
+            "refresh": false
+          }
+        }
+      ],
+      "pathQueries": [],
+      "collection": {
+        "id": "969d0000000000000000000000000100",
+        "name": "Collection",
+        "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-missing-member\\program\\data\\collections\\Collection [boxset]",
+        "parentId": "969d0000000000000000000000000002",
+        "isLocked": false,
+        "providerIds": {},
+        "officialRating": null,
+        "links": []
+      },
+      "timestamps": {
+        "created": "2026-10-13T09:59:14.6311920Z",
+        "modified": "2026-10-13T09:59:14.6311920Z"
+      },
+      "directories": [
+        "data",
+        "data\\collections",
+        "data\\collections\\Collection [boxset]"
+      ]
+    },
+    {
+      "key": "add-new",
+      "failed": false,
+      "exception": null,
+      "foundFolder": null,
+      "calls": [
+        {
+          "action": "save",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "name": "Existing",
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\add-new\\program\\data\\collections\\Existing [boxset]",
+            "parentId": "969d0000000000000000000000000002",
+            "isLocked": false,
+            "providerIds": {},
+            "officialRating": "PG",
+            "links": [
+              {
+                "itemId": "969d0000000000000000000000000010",
+                "type": 0,
+                "path": null,
+                "libraryItemId": null
+              },
+              {
+                "itemId": "969d0000000000000000000000000011",
+                "type": 0,
+                "path": null,
+                "libraryItemId": null
+              }
+            ]
+          }
+        },
+        {
+          "action": "queue",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "options": {
+              "MetadataRefreshMode": "Default",
+              "ImageRefreshMode": "Default",
+              "IsAutomated": true,
+              "ForceSave": true
+            },
+            "priority": "High"
+          }
+        },
+        {
+          "action": "added-event",
+          "value": [
+            "969d0000000000000000000000000010",
+            "969d0000000000000000000000000011"
+          ]
+        }
+      ],
+      "pathQueries": [],
+      "collection": {
+        "id": "969d0000000000000000000000000100",
+        "name": "Existing",
+        "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\add-new\\program\\data\\collections\\Existing [boxset]",
+        "parentId": "969d0000000000000000000000000002",
+        "isLocked": false,
+        "providerIds": {},
+        "officialRating": "PG",
+        "links": [
+          {
+            "itemId": "969d0000000000000000000000000010",
+            "type": 0,
+            "path": null,
+            "libraryItemId": null
+          },
+          {
+            "itemId": "969d0000000000000000000000000011",
+            "type": 0,
+            "path": null,
+            "libraryItemId": null
+          }
+        ]
+      },
+      "timestamps": {
+        "created": "0001-01-01T00:00:00.0000000",
+        "modified": "0001-01-01T00:00:00.0000000"
+      },
+      "directories": [
+        "data",
+        "data\\collections"
+      ]
+    },
+    {
+      "key": "add-duplicate-request",
+      "failed": false,
+      "exception": null,
+      "foundFolder": null,
+      "calls": [
+        {
+          "action": "save",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "name": "Existing",
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\add-duplicate-request\\program\\data\\collections\\Existing [boxset]",
+            "parentId": "969d0000000000000000000000000002",
+            "isLocked": false,
+            "providerIds": {},
+            "officialRating": "R",
+            "links": [
+              {
+                "itemId": "969d0000000000000000000000000010",
+                "type": 0,
+                "path": null,
+                "libraryItemId": null
+              },
+              {
+                "itemId": "969d0000000000000000000000000010",
+                "type": 0,
+                "path": null,
+                "libraryItemId": null
+              }
+            ]
+          }
+        },
+        {
+          "action": "queue",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "options": {
+              "MetadataRefreshMode": "Default",
+              "ImageRefreshMode": "Default",
+              "IsAutomated": true,
+              "ForceSave": true
+            },
+            "priority": "High"
+          }
+        },
+        {
+          "action": "added-event",
+          "value": [
+            "969d0000000000000000000000000010",
+            "969d0000000000000000000000000010"
+          ]
+        }
+      ],
+      "pathQueries": [],
+      "collection": {
+        "id": "969d0000000000000000000000000100",
+        "name": "Existing",
+        "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\add-duplicate-request\\program\\data\\collections\\Existing [boxset]",
+        "parentId": "969d0000000000000000000000000002",
+        "isLocked": false,
+        "providerIds": {},
+        "officialRating": "R",
+        "links": [
+          {
+            "itemId": "969d0000000000000000000000000010",
+            "type": 0,
+            "path": null,
+            "libraryItemId": null
+          },
+          {
+            "itemId": "969d0000000000000000000000000010",
+            "type": 0,
+            "path": null,
+            "libraryItemId": null
+          }
+        ]
+      },
+      "timestamps": {
+        "created": "0001-01-01T00:00:00.0000000",
+        "modified": "0001-01-01T00:00:00.0000000"
+      },
+      "directories": [
+        "data",
+        "data\\collections"
+      ]
+    },
+    {
+      "key": "add-existing-duplicate",
+      "failed": false,
+      "exception": null,
+      "foundFolder": null,
+      "calls": [
+        {
+          "action": "save",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "name": "Existing",
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\add-existing-duplicate\\program\\data\\collections\\Existing [boxset]",
+            "parentId": "969d0000000000000000000000000002",
+            "isLocked": false,
+            "providerIds": {},
+            "officialRating": "PG",
+            "links": [
+              {
+                "itemId": "969d0000000000000000000000000010",
+                "type": 0,
+                "path": null,
+                "libraryItemId": null
+              },
+              {
+                "itemId": "969d0000000000000000000000000011",
+                "type": 0,
+                "path": null,
+                "libraryItemId": null
+              },
+              {
+                "itemId": "969d0000000000000000000000000011",
+                "type": 0,
+                "path": null,
+                "libraryItemId": null
+              }
+            ]
+          }
+        },
+        {
+          "action": "queue",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "options": {
+              "MetadataRefreshMode": "Default",
+              "ImageRefreshMode": "Default",
+              "IsAutomated": true,
+              "ForceSave": true
+            },
+            "priority": "High"
+          }
+        },
+        {
+          "action": "added-event",
+          "value": [
+            "969d0000000000000000000000000011",
+            "969d0000000000000000000000000011"
+          ]
+        }
+      ],
+      "pathQueries": [],
+      "collection": {
+        "id": "969d0000000000000000000000000100",
+        "name": "Existing",
+        "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\add-existing-duplicate\\program\\data\\collections\\Existing [boxset]",
+        "parentId": "969d0000000000000000000000000002",
+        "isLocked": false,
+        "providerIds": {},
+        "officialRating": "PG",
+        "links": [
+          {
+            "itemId": "969d0000000000000000000000000010",
+            "type": 0,
+            "path": null,
+            "libraryItemId": null
+          },
+          {
+            "itemId": "969d0000000000000000000000000011",
+            "type": 0,
+            "path": null,
+            "libraryItemId": null
+          },
+          {
+            "itemId": "969d0000000000000000000000000011",
+            "type": 0,
+            "path": null,
+            "libraryItemId": null
+          }
+        ]
+      },
+      "timestamps": {
+        "created": "0001-01-01T00:00:00.0000000",
+        "modified": "0001-01-01T00:00:00.0000000"
+      },
+      "directories": [
+        "data",
+        "data\\collections"
+      ]
+    },
+    {
+      "key": "add-all-existing",
+      "failed": false,
+      "exception": null,
+      "foundFolder": null,
+      "calls": [],
+      "pathQueries": [],
+      "collection": {
+        "id": "969d0000000000000000000000000100",
+        "name": "Existing",
+        "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\add-all-existing\\program\\data\\collections\\Existing [boxset]",
+        "parentId": "969d0000000000000000000000000002",
+        "isLocked": false,
+        "providerIds": {},
+        "officialRating": "R",
+        "links": [
+          {
+            "itemId": "969d0000000000000000000000000010",
+            "type": 0,
+            "path": null,
+            "libraryItemId": null
+          }
+        ]
+      },
+      "timestamps": {
+        "created": "0001-01-01T00:00:00.0000000",
+        "modified": "0001-01-01T00:00:00.0000000"
+      },
+      "directories": [
+        "data",
+        "data\\collections"
+      ]
+    },
+    {
+      "key": "add-missing-prefix",
+      "failed": true,
+      "exception": "ArgumentException",
+      "foundFolder": null,
+      "calls": [],
+      "pathQueries": [],
+      "collection": {
+        "id": "969d0000000000000000000000000100",
+        "name": "Existing",
+        "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\add-missing-prefix\\program\\data\\collections\\Existing [boxset]",
+        "parentId": "969d0000000000000000000000000002",
+        "isLocked": false,
+        "providerIds": {},
+        "officialRating": "R",
+        "links": []
+      },
+      "timestamps": {
+        "created": "0001-01-01T00:00:00.0000000",
+        "modified": "0001-01-01T00:00:00.0000000"
+      },
+      "directories": [
+        "data",
+        "data\\collections"
+      ]
+    },
+    {
+      "key": "add-missing-collection",
+      "failed": true,
+      "exception": "ArgumentException",
+      "foundFolder": null,
+      "calls": [],
+      "pathQueries": [],
+      "collection": {
+        "id": "969d0000000000000000000000000100",
+        "name": "Existing",
+        "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\add-missing-collection\\program\\data\\collections\\Existing [boxset]",
+        "parentId": "969d0000000000000000000000000002",
+        "isLocked": false,
+        "providerIds": {},
+        "officialRating": "R",
+        "links": []
+      },
+      "timestamps": {
+        "created": "0001-01-01T00:00:00.0000000",
+        "modified": "0001-01-01T00:00:00.0000000"
+      },
+      "directories": [
+        "data",
+        "data\\collections"
+      ]
+    },
+    {
+      "key": "add-empty",
+      "failed": false,
+      "exception": null,
+      "foundFolder": null,
+      "calls": [],
+      "pathQueries": [],
+      "collection": {
+        "id": "969d0000000000000000000000000100",
+        "name": "Existing",
+        "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\add-empty\\program\\data\\collections\\Existing [boxset]",
+        "parentId": "969d0000000000000000000000000002",
+        "isLocked": false,
+        "providerIds": {},
+        "officialRating": "R",
+        "links": []
+      },
+      "timestamps": {
+        "created": "0001-01-01T00:00:00.0000000",
+        "modified": "0001-01-01T00:00:00.0000000"
+      },
+      "directories": [
+        "data",
+        "data\\collections"
+      ]
+    },
+    {
+      "key": "add-unknown-rating",
+      "failed": false,
+      "exception": null,
+      "foundFolder": null,
+      "calls": [
+        {
+          "action": "save",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "name": "Existing",
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\add-unknown-rating\\program\\data\\collections\\Existing [boxset]",
+            "parentId": "969d0000000000000000000000000002",
+            "isLocked": false,
+            "providerIds": {},
+            "officialRating": "unknown",
+            "links": [
+              {
+                "itemId": "969d0000000000000000000000000012",
+                "type": 0,
+                "path": null,
+                "libraryItemId": null
+              }
+            ]
+          }
+        },
+        {
+          "action": "queue",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "options": {
+              "MetadataRefreshMode": "Default",
+              "ImageRefreshMode": "Default",
+              "IsAutomated": true,
+              "ForceSave": true
+            },
+            "priority": "High"
+          }
+        },
+        {
+          "action": "added-event",
+          "value": [
+            "969d0000000000000000000000000012"
+          ]
+        }
+      ],
+      "pathQueries": [],
+      "collection": {
+        "id": "969d0000000000000000000000000100",
+        "name": "Existing",
+        "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\add-unknown-rating\\program\\data\\collections\\Existing [boxset]",
+        "parentId": "969d0000000000000000000000000002",
+        "isLocked": false,
+        "providerIds": {},
+        "officialRating": "unknown",
+        "links": [
+          {
+            "itemId": "969d0000000000000000000000000012",
+            "type": 0,
+            "path": null,
+            "libraryItemId": null
+          }
+        ]
+      },
+      "timestamps": {
+        "created": "0001-01-01T00:00:00.0000000",
+        "modified": "0001-01-01T00:00:00.0000000"
+      },
+      "directories": [
+        "data",
+        "data\\collections"
+      ]
+    },
+    {
+      "key": "add-first-case-rating",
+      "failed": false,
+      "exception": null,
+      "foundFolder": null,
+      "calls": [
+        {
+          "action": "save",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "name": "Existing",
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\add-first-case-rating\\program\\data\\collections\\Existing [boxset]",
+            "parentId": "969d0000000000000000000000000002",
+            "isLocked": false,
+            "providerIds": {},
+            "officialRating": "pg",
+            "links": [
+              {
+                "itemId": "969d0000000000000000000000000013",
+                "type": 0,
+                "path": null,
+                "libraryItemId": null
+              },
+              {
+                "itemId": "969d0000000000000000000000000011",
+                "type": 0,
+                "path": null,
+                "libraryItemId": null
+              }
+            ]
+          }
+        },
+        {
+          "action": "queue",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "options": {
+              "MetadataRefreshMode": "Default",
+              "ImageRefreshMode": "Default",
+              "IsAutomated": true,
+              "ForceSave": true
+            },
+            "priority": "High"
+          }
+        },
+        {
+          "action": "added-event",
+          "value": [
+            "969d0000000000000000000000000011"
+          ]
+        }
+      ],
+      "pathQueries": [],
+      "collection": {
+        "id": "969d0000000000000000000000000100",
+        "name": "Existing",
+        "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\add-first-case-rating\\program\\data\\collections\\Existing [boxset]",
+        "parentId": "969d0000000000000000000000000002",
+        "isLocked": false,
+        "providerIds": {},
+        "officialRating": "pg",
+        "links": [
+          {
+            "itemId": "969d0000000000000000000000000013",
+            "type": 0,
+            "path": null,
+            "libraryItemId": null
+          },
+          {
+            "itemId": "969d0000000000000000000000000011",
+            "type": 0,
+            "path": null,
+            "libraryItemId": null
+          }
+        ]
+      },
+      "timestamps": {
+        "created": "0001-01-01T00:00:00.0000000",
+        "modified": "0001-01-01T00:00:00.0000000"
+      },
+      "directories": [
+        "data",
+        "data\\collections"
+      ]
+    },
+    {
+      "key": "add-null-links",
+      "failed": true,
+      "exception": "NullReferenceException",
+      "foundFolder": null,
+      "calls": [],
+      "pathQueries": [],
+      "collection": null,
+      "timestamps": {
+        "created": "0001-01-01T00:00:00.0000000",
+        "modified": "0001-01-01T00:00:00.0000000"
+      },
+      "directories": [
+        "data",
+        "data\\collections"
+      ]
+    },
+    {
+      "key": "add-dead-link",
+      "failed": false,
+      "exception": null,
+      "foundFolder": null,
+      "calls": [
+        {
+          "action": "save",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "name": "Existing",
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\add-dead-link\\program\\data\\collections\\Existing [boxset]",
+            "parentId": "969d0000000000000000000000000002",
+            "isLocked": false,
+            "providerIds": {},
+            "officialRating": "R",
+            "links": [
+              {
+                "itemId": "00000000000000000000000000000000",
+                "type": 0,
+                "path": null,
+                "libraryItemId": null
+              },
+              {
+                "itemId": "969d0000000000000000000000000010",
+                "type": 0,
+                "path": null,
+                "libraryItemId": null
+              }
+            ]
+          }
+        },
+        {
+          "action": "queue",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "options": {
+              "MetadataRefreshMode": "Default",
+              "ImageRefreshMode": "Default",
+              "IsAutomated": true,
+              "ForceSave": true
+            },
+            "priority": "High"
+          }
+        },
+        {
+          "action": "added-event",
+          "value": [
+            "969d0000000000000000000000000010"
+          ]
+        }
+      ],
+      "pathQueries": [],
+      "collection": {
+        "id": "969d0000000000000000000000000100",
+        "name": "Existing",
+        "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\add-dead-link\\program\\data\\collections\\Existing [boxset]",
+        "parentId": "969d0000000000000000000000000002",
+        "isLocked": false,
+        "providerIds": {},
+        "officialRating": "R",
+        "links": [
+          {
+            "itemId": "00000000000000000000000000000000",
+            "type": 0,
+            "path": null,
+            "libraryItemId": null
+          },
+          {
+            "itemId": "969d0000000000000000000000000010",
+            "type": 0,
+            "path": null,
+            "libraryItemId": null
+          }
+        ]
+      },
+      "timestamps": {
+        "created": "0001-01-01T00:00:00.0000000",
+        "modified": "0001-01-01T00:00:00.0000000"
+      },
+      "directories": [
+        "data",
+        "data\\collections"
+      ]
+    },
+    {
+      "key": "add-empty-id-link",
+      "failed": false,
+      "exception": null,
+      "foundFolder": null,
+      "calls": [
+        {
+          "action": "save",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "name": "Existing",
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\add-empty-id-link\\program\\data\\collections\\Existing [boxset]",
+            "parentId": "969d0000000000000000000000000002",
+            "isLocked": false,
+            "providerIds": {},
+            "officialRating": "R",
+            "links": [
+              {
+                "itemId": "00000000000000000000000000000000",
+                "type": 0,
+                "path": null,
+                "libraryItemId": null
+              },
+              {
+                "itemId": "969d0000000000000000000000000010",
+                "type": 0,
+                "path": null,
+                "libraryItemId": null
+              }
+            ]
+          }
+        },
+        {
+          "action": "queue",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "options": {
+              "MetadataRefreshMode": "Default",
+              "ImageRefreshMode": "Default",
+              "IsAutomated": true,
+              "ForceSave": true
+            },
+            "priority": "High"
+          }
+        },
+        {
+          "action": "added-event",
+          "value": [
+            "969d0000000000000000000000000010"
+          ]
+        }
+      ],
+      "pathQueries": [],
+      "collection": {
+        "id": "969d0000000000000000000000000100",
+        "name": "Existing",
+        "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\add-empty-id-link\\program\\data\\collections\\Existing [boxset]",
+        "parentId": "969d0000000000000000000000000002",
+        "isLocked": false,
+        "providerIds": {},
+        "officialRating": "R",
+        "links": [
+          {
+            "itemId": "00000000000000000000000000000000",
+            "type": 0,
+            "path": null,
+            "libraryItemId": null
+          },
+          {
+            "itemId": "969d0000000000000000000000000010",
+            "type": 0,
+            "path": null,
+            "libraryItemId": null
+          }
+        ]
+      },
+      "timestamps": {
+        "created": "0001-01-01T00:00:00.0000000",
+        "modified": "0001-01-01T00:00:00.0000000"
+      },
+      "directories": [
+        "data",
+        "data\\collections"
+      ]
+    },
+    {
+      "key": "add-fallback-path",
+      "failed": false,
+      "exception": null,
+      "foundFolder": null,
+      "calls": [
+        {
+          "action": "save",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "name": "Existing",
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\add-fallback-path\\program\\data\\collections\\Existing [boxset]",
+            "parentId": "969d0000000000000000000000000002",
+            "isLocked": false,
+            "providerIds": {},
+            "officialRating": "PG",
+            "links": [
+              {
+                "itemId": "969d0000000000000000000000000010",
+                "type": 0,
+                "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\add-fallback-path\\program/movie.mkv",
+                "libraryItemId": null
+              },
+              {
+                "itemId": "969d0000000000000000000000000010",
+                "type": 0,
+                "path": null,
+                "libraryItemId": null
+              },
+              {
+                "itemId": "969d0000000000000000000000000011",
+                "type": 0,
+                "path": null,
+                "libraryItemId": null
+              }
+            ]
+          }
+        },
+        {
+          "action": "queue",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "options": {
+              "MetadataRefreshMode": "Default",
+              "ImageRefreshMode": "Default",
+              "IsAutomated": true,
+              "ForceSave": true
+            },
+            "priority": "High"
+          }
+        },
+        {
+          "action": "added-event",
+          "value": [
+            "969d0000000000000000000000000011"
+          ]
+        }
+      ],
+      "pathQueries": [
+        {
+          "Path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\add-fallback-path\\program/movie.mkv",
+          "IncludeOwnedItems": false,
+          "IncludeAlternateVersions": false,
+          "Limit": 1,
+          "order": [
+            {
+              "name": "DateCreated",
+              "direction": "Descending"
+            }
+          ]
+        }
+      ],
+      "collection": {
+        "id": "969d0000000000000000000000000100",
+        "name": "Existing",
+        "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\add-fallback-path\\program\\data\\collections\\Existing [boxset]",
+        "parentId": "969d0000000000000000000000000002",
+        "isLocked": false,
+        "providerIds": {},
+        "officialRating": "PG",
+        "links": [
+          {
+            "itemId": "969d0000000000000000000000000010",
+            "type": 0,
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\add-fallback-path\\program/movie.mkv",
+            "libraryItemId": null
+          },
+          {
+            "itemId": "969d0000000000000000000000000010",
+            "type": 0,
+            "path": null,
+            "libraryItemId": null
+          },
+          {
+            "itemId": "969d0000000000000000000000000011",
+            "type": 0,
+            "path": null,
+            "libraryItemId": null
+          }
+        ]
+      },
+      "timestamps": {
+        "created": "0001-01-01T00:00:00.0000000",
+        "modified": "0001-01-01T00:00:00.0000000"
+      },
+      "directories": [
+        "data",
+        "data\\collections"
+      ]
+    },
+    {
+      "key": "add-fallback-library-id",
+      "failed": false,
+      "exception": null,
+      "foundFolder": null,
+      "calls": [
+        {
+          "action": "save",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "name": "Existing",
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\add-fallback-library-id\\program\\data\\collections\\Existing [boxset]",
+            "parentId": "969d0000000000000000000000000002",
+            "isLocked": false,
+            "providerIds": {},
+            "officialRating": "PG",
+            "links": [
+              {
+                "itemId": "969d0000000000000000000000000011",
+                "type": 0,
+                "path": null,
+                "libraryItemId": "969d0000000000000000000000000011"
+              },
+              {
+                "itemId": "969d0000000000000000000000000010",
+                "type": 0,
+                "path": null,
+                "libraryItemId": null
+              }
+            ]
+          }
+        },
+        {
+          "action": "queue",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "options": {
+              "MetadataRefreshMode": "Default",
+              "ImageRefreshMode": "Default",
+              "IsAutomated": true,
+              "ForceSave": true
+            },
+            "priority": "High"
+          }
+        },
+        {
+          "action": "added-event",
+          "value": [
+            "969d0000000000000000000000000010"
+          ]
+        }
+      ],
+      "pathQueries": [],
+      "collection": {
+        "id": "969d0000000000000000000000000100",
+        "name": "Existing",
+        "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\add-fallback-library-id\\program\\data\\collections\\Existing [boxset]",
+        "parentId": "969d0000000000000000000000000002",
+        "isLocked": false,
+        "providerIds": {},
+        "officialRating": "PG",
+        "links": [
+          {
+            "itemId": "969d0000000000000000000000000011",
+            "type": 0,
+            "path": null,
+            "libraryItemId": "969d0000000000000000000000000011"
+          },
+          {
+            "itemId": "969d0000000000000000000000000010",
+            "type": 0,
+            "path": null,
+            "libraryItemId": null
+          }
+        ]
+      },
+      "timestamps": {
+        "created": "0001-01-01T00:00:00.0000000",
+        "modified": "0001-01-01T00:00:00.0000000"
+      },
+      "directories": [
+        "data",
+        "data\\collections"
+      ]
+    },
+    {
+      "key": "add-fail-save",
+      "failed": true,
+      "exception": "IOException",
+      "foundFolder": null,
+      "calls": [
+        {
+          "action": "save",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "name": "Existing",
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\add-fail-save\\program\\data\\collections\\Existing [boxset]",
+            "parentId": "969d0000000000000000000000000002",
+            "isLocked": false,
+            "providerIds": {},
+            "officialRating": "PG",
+            "links": [
+              {
+                "itemId": "969d0000000000000000000000000010",
+                "type": 0,
+                "path": null,
+                "libraryItemId": null
+              },
+              {
+                "itemId": "969d0000000000000000000000000011",
+                "type": 0,
+                "path": null,
+                "libraryItemId": null
+              }
+            ]
+          }
+        }
+      ],
+      "pathQueries": [],
+      "collection": {
+        "id": "969d0000000000000000000000000100",
+        "name": "Existing",
+        "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\add-fail-save\\program\\data\\collections\\Existing [boxset]",
+        "parentId": "969d0000000000000000000000000002",
+        "isLocked": false,
+        "providerIds": {},
+        "officialRating": "PG",
+        "links": [
+          {
+            "itemId": "969d0000000000000000000000000010",
+            "type": 0,
+            "path": null,
+            "libraryItemId": null
+          },
+          {
+            "itemId": "969d0000000000000000000000000011",
+            "type": 0,
+            "path": null,
+            "libraryItemId": null
+          }
+        ]
+      },
+      "timestamps": {
+        "created": "0001-01-01T00:00:00.0000000",
+        "modified": "0001-01-01T00:00:00.0000000"
+      },
+      "directories": [
+        "data",
+        "data\\collections"
+      ]
+    },
+    {
+      "key": "add-fail-queue",
+      "failed": true,
+      "exception": "IOException",
+      "foundFolder": null,
+      "calls": [
+        {
+          "action": "save",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "name": "Existing",
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\add-fail-queue\\program\\data\\collections\\Existing [boxset]",
+            "parentId": "969d0000000000000000000000000002",
+            "isLocked": false,
+            "providerIds": {},
+            "officialRating": "PG",
+            "links": [
+              {
+                "itemId": "969d0000000000000000000000000010",
+                "type": 0,
+                "path": null,
+                "libraryItemId": null
+              },
+              {
+                "itemId": "969d0000000000000000000000000011",
+                "type": 0,
+                "path": null,
+                "libraryItemId": null
+              }
+            ]
+          }
+        },
+        {
+          "action": "queue",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "options": {
+              "MetadataRefreshMode": "Default",
+              "ImageRefreshMode": "Default",
+              "IsAutomated": true,
+              "ForceSave": true
+            },
+            "priority": "High"
+          }
+        }
+      ],
+      "pathQueries": [],
+      "collection": {
+        "id": "969d0000000000000000000000000100",
+        "name": "Existing",
+        "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\add-fail-queue\\program\\data\\collections\\Existing [boxset]",
+        "parentId": "969d0000000000000000000000000002",
+        "isLocked": false,
+        "providerIds": {},
+        "officialRating": "PG",
+        "links": [
+          {
+            "itemId": "969d0000000000000000000000000010",
+            "type": 0,
+            "path": null,
+            "libraryItemId": null
+          },
+          {
+            "itemId": "969d0000000000000000000000000011",
+            "type": 0,
+            "path": null,
+            "libraryItemId": null
+          }
+        ]
+      },
+      "timestamps": {
+        "created": "0001-01-01T00:00:00.0000000",
+        "modified": "0001-01-01T00:00:00.0000000"
+      },
+      "directories": [
+        "data",
+        "data\\collections"
+      ]
+    },
+    {
+      "key": "add-fail-added-event",
+      "failed": true,
+      "exception": "IOException",
+      "foundFolder": null,
+      "calls": [
+        {
+          "action": "save",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "name": "Existing",
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\add-fail-added-event\\program\\data\\collections\\Existing [boxset]",
+            "parentId": "969d0000000000000000000000000002",
+            "isLocked": false,
+            "providerIds": {},
+            "officialRating": "PG",
+            "links": [
+              {
+                "itemId": "969d0000000000000000000000000010",
+                "type": 0,
+                "path": null,
+                "libraryItemId": null
+              },
+              {
+                "itemId": "969d0000000000000000000000000011",
+                "type": 0,
+                "path": null,
+                "libraryItemId": null
+              }
+            ]
+          }
+        },
+        {
+          "action": "queue",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "options": {
+              "MetadataRefreshMode": "Default",
+              "ImageRefreshMode": "Default",
+              "IsAutomated": true,
+              "ForceSave": true
+            },
+            "priority": "High"
+          }
+        },
+        {
+          "action": "added-event",
+          "value": [
+            "969d0000000000000000000000000010",
+            "969d0000000000000000000000000011"
+          ]
+        }
+      ],
+      "pathQueries": [],
+      "collection": {
+        "id": "969d0000000000000000000000000100",
+        "name": "Existing",
+        "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\add-fail-added-event\\program\\data\\collections\\Existing [boxset]",
+        "parentId": "969d0000000000000000000000000002",
+        "isLocked": false,
+        "providerIds": {},
+        "officialRating": "PG",
+        "links": [
+          {
+            "itemId": "969d0000000000000000000000000010",
+            "type": 0,
+            "path": null,
+            "libraryItemId": null
+          },
+          {
+            "itemId": "969d0000000000000000000000000011",
+            "type": 0,
+            "path": null,
+            "libraryItemId": null
+          }
+        ]
+      },
+      "timestamps": {
+        "created": "0001-01-01T00:00:00.0000000",
+        "modified": "0001-01-01T00:00:00.0000000"
+      },
+      "directories": [
+        "data",
+        "data\\collections"
+      ]
+    },
+    {
+      "key": "remove-first-duplicate",
+      "failed": false,
+      "exception": null,
+      "foundFolder": null,
+      "calls": [
+        {
+          "action": "save",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "name": "Existing",
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\remove-first-duplicate\\program\\data\\collections\\Existing [boxset]",
+            "parentId": "969d0000000000000000000000000002",
+            "isLocked": false,
+            "providerIds": {},
+            "officialRating": "R",
+            "links": [
+              {
+                "itemId": "969d0000000000000000000000000010",
+                "type": 0,
+                "path": null,
+                "libraryItemId": null
+              },
+              {
+                "itemId": "969d0000000000000000000000000011",
+                "type": 0,
+                "path": null,
+                "libraryItemId": null
+              }
+            ]
+          }
+        },
+        {
+          "action": "queue",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "options": {
+              "MetadataRefreshMode": "Default",
+              "ImageRefreshMode": "Default",
+              "IsAutomated": true,
+              "ForceSave": true
+            },
+            "priority": "High"
+          }
+        },
+        {
+          "action": "removed-event",
+          "value": [
+            "969d0000000000000000000000000010"
+          ]
+        }
+      ],
+      "pathQueries": [],
+      "collection": {
+        "id": "969d0000000000000000000000000100",
+        "name": "Existing",
+        "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\remove-first-duplicate\\program\\data\\collections\\Existing [boxset]",
+        "parentId": "969d0000000000000000000000000002",
+        "isLocked": false,
+        "providerIds": {},
+        "officialRating": "R",
+        "links": [
+          {
+            "itemId": "969d0000000000000000000000000010",
+            "type": 0,
+            "path": null,
+            "libraryItemId": null
+          },
+          {
+            "itemId": "969d0000000000000000000000000011",
+            "type": 0,
+            "path": null,
+            "libraryItemId": null
+          }
+        ]
+      },
+      "timestamps": {
+        "created": "0001-01-01T00:00:00.0000000",
+        "modified": "0001-01-01T00:00:00.0000000"
+      },
+      "directories": [
+        "data",
+        "data\\collections"
+      ]
+    },
+    {
+      "key": "remove-duplicate-request",
+      "failed": false,
+      "exception": null,
+      "foundFolder": null,
+      "calls": [
+        {
+          "action": "save",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "name": "Existing",
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\remove-duplicate-request\\program\\data\\collections\\Existing [boxset]",
+            "parentId": "969d0000000000000000000000000002",
+            "isLocked": false,
+            "providerIds": {},
+            "officialRating": "R",
+            "links": [
+              {
+                "itemId": "969d0000000000000000000000000010",
+                "type": 0,
+                "path": null,
+                "libraryItemId": null
+              },
+              {
+                "itemId": "969d0000000000000000000000000011",
+                "type": 0,
+                "path": null,
+                "libraryItemId": null
+              }
+            ]
+          }
+        },
+        {
+          "action": "queue",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "options": {
+              "MetadataRefreshMode": "Default",
+              "ImageRefreshMode": "Default",
+              "IsAutomated": true,
+              "ForceSave": true
+            },
+            "priority": "High"
+          }
+        },
+        {
+          "action": "removed-event",
+          "value": [
+            "969d0000000000000000000000000010",
+            "969d0000000000000000000000000010"
+          ]
+        }
+      ],
+      "pathQueries": [],
+      "collection": {
+        "id": "969d0000000000000000000000000100",
+        "name": "Existing",
+        "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\remove-duplicate-request\\program\\data\\collections\\Existing [boxset]",
+        "parentId": "969d0000000000000000000000000002",
+        "isLocked": false,
+        "providerIds": {},
+        "officialRating": "R",
+        "links": [
+          {
+            "itemId": "969d0000000000000000000000000010",
+            "type": 0,
+            "path": null,
+            "libraryItemId": null
+          },
+          {
+            "itemId": "969d0000000000000000000000000011",
+            "type": 0,
+            "path": null,
+            "libraryItemId": null
+          }
+        ]
+      },
+      "timestamps": {
+        "created": "0001-01-01T00:00:00.0000000",
+        "modified": "0001-01-01T00:00:00.0000000"
+      },
+      "directories": [
+        "data",
+        "data\\collections"
+      ]
+    },
+    {
+      "key": "remove-missing-item",
+      "failed": false,
+      "exception": null,
+      "foundFolder": null,
+      "calls": [
+        {
+          "action": "save",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "name": "Existing",
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\remove-missing-item\\program\\data\\collections\\Existing [boxset]",
+            "parentId": "969d0000000000000000000000000002",
+            "isLocked": false,
+            "providerIds": {},
+            "officialRating": "R",
+            "links": [
+              {
+                "itemId": "969d0000000000000000000000000010",
+                "type": 0,
+                "path": null,
+                "libraryItemId": null
+              }
+            ]
+          }
+        },
+        {
+          "action": "queue",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "options": {
+              "MetadataRefreshMode": "Default",
+              "ImageRefreshMode": "Default",
+              "IsAutomated": true,
+              "ForceSave": true
+            },
+            "priority": "High"
+          }
+        },
+        {
+          "action": "removed-event",
+          "value": []
+        }
+      ],
+      "pathQueries": [],
+      "collection": {
+        "id": "969d0000000000000000000000000100",
+        "name": "Existing",
+        "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\remove-missing-item\\program\\data\\collections\\Existing [boxset]",
+        "parentId": "969d0000000000000000000000000002",
+        "isLocked": false,
+        "providerIds": {},
+        "officialRating": "R",
+        "links": [
+          {
+            "itemId": "969d0000000000000000000000000010",
+            "type": 0,
+            "path": null,
+            "libraryItemId": null
+          }
+        ]
+      },
+      "timestamps": {
+        "created": "0001-01-01T00:00:00.0000000",
+        "modified": "0001-01-01T00:00:00.0000000"
+      },
+      "directories": [
+        "data",
+        "data\\collections"
+      ]
+    },
+    {
+      "key": "remove-missing-link",
+      "failed": false,
+      "exception": null,
+      "foundFolder": null,
+      "calls": [
+        {
+          "action": "save",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "name": "Existing",
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\remove-missing-link\\program\\data\\collections\\Existing [boxset]",
+            "parentId": "969d0000000000000000000000000002",
+            "isLocked": false,
+            "providerIds": {},
+            "officialRating": "R",
+            "links": [
+              {
+                "itemId": "969d0000000000000000000000000010",
+                "type": 0,
+                "path": null,
+                "libraryItemId": null
+              }
+            ]
+          }
+        },
+        {
+          "action": "queue",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "options": {
+              "MetadataRefreshMode": "Default",
+              "ImageRefreshMode": "Default",
+              "IsAutomated": true,
+              "ForceSave": true
+            },
+            "priority": "High"
+          }
+        },
+        {
+          "action": "removed-event",
+          "value": []
+        }
+      ],
+      "pathQueries": [],
+      "collection": {
+        "id": "969d0000000000000000000000000100",
+        "name": "Existing",
+        "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\remove-missing-link\\program\\data\\collections\\Existing [boxset]",
+        "parentId": "969d0000000000000000000000000002",
+        "isLocked": false,
+        "providerIds": {},
+        "officialRating": "R",
+        "links": [
+          {
+            "itemId": "969d0000000000000000000000000010",
+            "type": 0,
+            "path": null,
+            "libraryItemId": null
+          }
+        ]
+      },
+      "timestamps": {
+        "created": "0001-01-01T00:00:00.0000000",
+        "modified": "0001-01-01T00:00:00.0000000"
+      },
+      "directories": [
+        "data",
+        "data\\collections"
+      ]
+    },
+    {
+      "key": "remove-empty",
+      "failed": false,
+      "exception": null,
+      "foundFolder": null,
+      "calls": [
+        {
+          "action": "save",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "name": "Existing",
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\remove-empty\\program\\data\\collections\\Existing [boxset]",
+            "parentId": "969d0000000000000000000000000002",
+            "isLocked": false,
+            "providerIds": {},
+            "officialRating": "R",
+            "links": [
+              {
+                "itemId": "969d0000000000000000000000000010",
+                "type": 0,
+                "path": null,
+                "libraryItemId": null
+              }
+            ]
+          }
+        },
+        {
+          "action": "queue",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "options": {
+              "MetadataRefreshMode": "Default",
+              "ImageRefreshMode": "Default",
+              "IsAutomated": true,
+              "ForceSave": true
+            },
+            "priority": "High"
+          }
+        },
+        {
+          "action": "removed-event",
+          "value": []
+        }
+      ],
+      "pathQueries": [],
+      "collection": {
+        "id": "969d0000000000000000000000000100",
+        "name": "Existing",
+        "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\remove-empty\\program\\data\\collections\\Existing [boxset]",
+        "parentId": "969d0000000000000000000000000002",
+        "isLocked": false,
+        "providerIds": {},
+        "officialRating": "R",
+        "links": [
+          {
+            "itemId": "969d0000000000000000000000000010",
+            "type": 0,
+            "path": null,
+            "libraryItemId": null
+          }
+        ]
+      },
+      "timestamps": {
+        "created": "0001-01-01T00:00:00.0000000",
+        "modified": "0001-01-01T00:00:00.0000000"
+      },
+      "directories": [
+        "data",
+        "data\\collections"
+      ]
+    },
+    {
+      "key": "remove-null-links",
+      "failed": true,
+      "exception": "ArgumentNullException",
+      "foundFolder": null,
+      "calls": [],
+      "pathQueries": [],
+      "collection": null,
+      "timestamps": {
+        "created": "0001-01-01T00:00:00.0000000",
+        "modified": "0001-01-01T00:00:00.0000000"
+      },
+      "directories": [
+        "data",
+        "data\\collections"
+      ]
+    },
+    {
+      "key": "remove-missing-collection",
+      "failed": true,
+      "exception": "ArgumentException",
+      "foundFolder": null,
+      "calls": [],
+      "pathQueries": [],
+      "collection": {
+        "id": "969d0000000000000000000000000100",
+        "name": "Existing",
+        "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\remove-missing-collection\\program\\data\\collections\\Existing [boxset]",
+        "parentId": "969d0000000000000000000000000002",
+        "isLocked": false,
+        "providerIds": {},
+        "officialRating": "R",
+        "links": []
+      },
+      "timestamps": {
+        "created": "0001-01-01T00:00:00.0000000",
+        "modified": "0001-01-01T00:00:00.0000000"
+      },
+      "directories": [
+        "data",
+        "data\\collections"
+      ]
+    },
+    {
+      "key": "remove-fail-save",
+      "failed": true,
+      "exception": "IOException",
+      "foundFolder": null,
+      "calls": [
+        {
+          "action": "save",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "name": "Existing",
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\remove-fail-save\\program\\data\\collections\\Existing [boxset]",
+            "parentId": "969d0000000000000000000000000002",
+            "isLocked": false,
+            "providerIds": {},
+            "officialRating": "R",
+            "links": [
+              {
+                "itemId": "969d0000000000000000000000000011",
+                "type": 0,
+                "path": null,
+                "libraryItemId": null
+              }
+            ]
+          }
+        }
+      ],
+      "pathQueries": [],
+      "collection": {
+        "id": "969d0000000000000000000000000100",
+        "name": "Existing",
+        "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\remove-fail-save\\program\\data\\collections\\Existing [boxset]",
+        "parentId": "969d0000000000000000000000000002",
+        "isLocked": false,
+        "providerIds": {},
+        "officialRating": "R",
+        "links": [
+          {
+            "itemId": "969d0000000000000000000000000011",
+            "type": 0,
+            "path": null,
+            "libraryItemId": null
+          }
+        ]
+      },
+      "timestamps": {
+        "created": "0001-01-01T00:00:00.0000000",
+        "modified": "0001-01-01T00:00:00.0000000"
+      },
+      "directories": [
+        "data",
+        "data\\collections"
+      ]
+    },
+    {
+      "key": "remove-fail-queue",
+      "failed": true,
+      "exception": "IOException",
+      "foundFolder": null,
+      "calls": [
+        {
+          "action": "save",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "name": "Existing",
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\remove-fail-queue\\program\\data\\collections\\Existing [boxset]",
+            "parentId": "969d0000000000000000000000000002",
+            "isLocked": false,
+            "providerIds": {},
+            "officialRating": "R",
+            "links": [
+              {
+                "itemId": "969d0000000000000000000000000011",
+                "type": 0,
+                "path": null,
+                "libraryItemId": null
+              }
+            ]
+          }
+        },
+        {
+          "action": "queue",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "options": {
+              "MetadataRefreshMode": "Default",
+              "ImageRefreshMode": "Default",
+              "IsAutomated": true,
+              "ForceSave": true
+            },
+            "priority": "High"
+          }
+        }
+      ],
+      "pathQueries": [],
+      "collection": {
+        "id": "969d0000000000000000000000000100",
+        "name": "Existing",
+        "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\remove-fail-queue\\program\\data\\collections\\Existing [boxset]",
+        "parentId": "969d0000000000000000000000000002",
+        "isLocked": false,
+        "providerIds": {},
+        "officialRating": "R",
+        "links": [
+          {
+            "itemId": "969d0000000000000000000000000011",
+            "type": 0,
+            "path": null,
+            "libraryItemId": null
+          }
+        ]
+      },
+      "timestamps": {
+        "created": "0001-01-01T00:00:00.0000000",
+        "modified": "0001-01-01T00:00:00.0000000"
+      },
+      "directories": [
+        "data",
+        "data\\collections"
+      ]
+    },
+    {
+      "key": "remove-fail-removed-event",
+      "failed": true,
+      "exception": "IOException",
+      "foundFolder": null,
+      "calls": [
+        {
+          "action": "save",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "name": "Existing",
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\remove-fail-removed-event\\program\\data\\collections\\Existing [boxset]",
+            "parentId": "969d0000000000000000000000000002",
+            "isLocked": false,
+            "providerIds": {},
+            "officialRating": "R",
+            "links": [
+              {
+                "itemId": "969d0000000000000000000000000011",
+                "type": 0,
+                "path": null,
+                "libraryItemId": null
+              }
+            ]
+          }
+        },
+        {
+          "action": "queue",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "options": {
+              "MetadataRefreshMode": "Default",
+              "ImageRefreshMode": "Default",
+              "IsAutomated": true,
+              "ForceSave": true
+            },
+            "priority": "High"
+          }
+        },
+        {
+          "action": "removed-event",
+          "value": [
+            "969d0000000000000000000000000010"
+          ]
+        }
+      ],
+      "pathQueries": [],
+      "collection": {
+        "id": "969d0000000000000000000000000100",
+        "name": "Existing",
+        "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\remove-fail-removed-event\\program\\data\\collections\\Existing [boxset]",
+        "parentId": "969d0000000000000000000000000002",
+        "isLocked": false,
+        "providerIds": {},
+        "officialRating": "R",
+        "links": [
+          {
+            "itemId": "969d0000000000000000000000000011",
+            "type": 0,
+            "path": null,
+            "libraryItemId": null
+          }
+        ]
+      },
+      "timestamps": {
+        "created": "0001-01-01T00:00:00.0000000",
+        "modified": "0001-01-01T00:00:00.0000000"
+      },
+      "directories": [
+        "data",
+        "data\\collections"
+      ]
+    },
+    {
+      "key": "ensure-existing",
+      "failed": false,
+      "exception": null,
+      "foundFolder": true,
+      "calls": [],
+      "pathQueries": [],
+      "collection": null,
+      "timestamps": null,
+      "directories": [
+        "data",
+        "data\\collections"
+      ]
+    },
+    {
+      "key": "ensure-ancestor",
+      "failed": false,
+      "exception": null,
+      "foundFolder": true,
+      "calls": [],
+      "pathQueries": [],
+      "collection": null,
+      "timestamps": null,
+      "directories": [
+        "data"
+      ]
+    },
+    {
+      "key": "ensure-absent-no-create",
+      "failed": false,
+      "exception": null,
+      "foundFolder": false,
+      "calls": [],
+      "pathQueries": [],
+      "collection": null,
+      "timestamps": null,
+      "directories": []
+    },
+    {
+      "key": "ensure-created",
+      "failed": false,
+      "exception": null,
+      "foundFolder": true,
+      "calls": [
+        {
+          "action": "library-add",
+          "value": {
+            "name": "\u670D\u52A1\u5668\u5408\u96C6",
+            "type": "boxsets",
+            "options": {
+              "PathInfos": [
+                {
+                  "Path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\ensure-created\\program\\data\\collections"
+                }
+              ],
+              "EnableRealtimeMonitor": false,
+              "SaveLocalMetadata": true
+            },
+            "refresh": true
+          }
+        },
+        {
+          "action": "root-invalidate",
+          "value": null
+        }
+      ],
+      "pathQueries": [],
+      "collection": null,
+      "timestamps": null,
+      "directories": [
+        "data",
+        "data\\collections"
+      ]
+    },
+    {
+      "key": "ensure-created-unresolved",
+      "failed": false,
+      "exception": null,
+      "foundFolder": false,
+      "calls": [
+        {
+          "action": "library-add",
+          "value": {
+            "name": "Collections",
+            "type": "boxsets",
+            "options": {
+              "PathInfos": [
+                {
+                  "Path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\ensure-created-unresolved\\program\\data\\collections"
+                }
+              ],
+              "EnableRealtimeMonitor": false,
+              "SaveLocalMetadata": true
+            },
+            "refresh": true
+          }
+        },
+        {
+          "action": "root-invalidate",
+          "value": null
+        }
+      ],
+      "pathQueries": [],
+      "collection": null,
+      "timestamps": null,
+      "directories": [
+        "data",
+        "data\\collections"
+      ]
+    },
+    {
+      "key": "ensure-descendant-not-root",
+      "failed": false,
+      "exception": null,
+      "foundFolder": false,
+      "calls": [],
+      "pathQueries": [],
+      "collection": null,
+      "timestamps": null,
+      "directories": [
+        "data",
+        "data\\collections",
+        "data\\collections\\child"
+      ]
+    },
+    {
+      "key": "create-directory-blocked",
+      "failed": true,
+      "exception": "IOException",
+      "foundFolder": null,
+      "calls": [
+        {
+          "action": "begin",
+          "value": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-directory-blocked\\program\\data\\collections\\Blocked [boxset]"
+        },
+        {
+          "action": "complete",
+          "value": {
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-directory-blocked\\program\\data\\collections\\Blocked [boxset]",
+            "refresh": false
+          }
+        }
+      ],
+      "pathQueries": [],
+      "collection": null,
+      "timestamps": null,
+      "directories": [
+        "data",
+        "data\\collections"
+      ]
+    },
+    {
+      "key": "add-locked-rating",
+      "failed": false,
+      "exception": null,
+      "foundFolder": null,
+      "calls": [
+        {
+          "action": "save",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "name": "Existing",
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\add-locked-rating\\program\\data\\collections\\Existing [boxset]",
+            "parentId": "969d0000000000000000000000000002",
+            "isLocked": true,
+            "providerIds": {},
+            "officialRating": "PG",
+            "links": [
+              {
+                "itemId": "969d0000000000000000000000000011",
+                "type": 0,
+                "path": null,
+                "libraryItemId": null
+              }
+            ]
+          }
+        },
+        {
+          "action": "queue",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "options": {
+              "MetadataRefreshMode": "Default",
+              "ImageRefreshMode": "Default",
+              "IsAutomated": true,
+              "ForceSave": true
+            },
+            "priority": "High"
+          }
+        },
+        {
+          "action": "added-event",
+          "value": [
+            "969d0000000000000000000000000011"
+          ]
+        }
+      ],
+      "pathQueries": [],
+      "collection": {
+        "id": "969d0000000000000000000000000100",
+        "name": "Existing",
+        "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\add-locked-rating\\program\\data\\collections\\Existing [boxset]",
+        "parentId": "969d0000000000000000000000000002",
+        "isLocked": true,
+        "providerIds": {},
+        "officialRating": "PG",
+        "links": [
+          {
+            "itemId": "969d0000000000000000000000000011",
+            "type": 0,
+            "path": null,
+            "libraryItemId": null
+          }
+        ]
+      },
+      "timestamps": {
+        "created": "0001-01-01T00:00:00.0000000",
+        "modified": "0001-01-01T00:00:00.0000000"
+      },
+      "directories": [
+        "data",
+        "data\\collections"
+      ]
+    },
+    {
+      "key": "add-no-valid-rating",
+      "failed": false,
+      "exception": null,
+      "foundFolder": null,
+      "calls": [
+        {
+          "action": "save",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "name": "Existing",
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\add-no-valid-rating\\program\\data\\collections\\Existing [boxset]",
+            "parentId": "969d0000000000000000000000000002",
+            "isLocked": false,
+            "providerIds": {},
+            "officialRating": "Curated",
+            "links": [
+              {
+                "itemId": "969d0000000000000000000000000010",
+                "type": 0,
+                "path": null,
+                "libraryItemId": null
+              },
+              {
+                "itemId": "969d0000000000000000000000000011",
+                "type": 0,
+                "path": null,
+                "libraryItemId": null
+              }
+            ]
+          }
+        },
+        {
+          "action": "queue",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "options": {
+              "MetadataRefreshMode": "Default",
+              "ImageRefreshMode": "Default",
+              "IsAutomated": true,
+              "ForceSave": true
+            },
+            "priority": "High"
+          }
+        },
+        {
+          "action": "added-event",
+          "value": [
+            "969d0000000000000000000000000010",
+            "969d0000000000000000000000000011"
+          ]
+        }
+      ],
+      "pathQueries": [],
+      "collection": {
+        "id": "969d0000000000000000000000000100",
+        "name": "Existing",
+        "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\add-no-valid-rating\\program\\data\\collections\\Existing [boxset]",
+        "parentId": "969d0000000000000000000000000002",
+        "isLocked": false,
+        "providerIds": {},
+        "officialRating": "Curated",
+        "links": [
+          {
+            "itemId": "969d0000000000000000000000000010",
+            "type": 0,
+            "path": null,
+            "libraryItemId": null
+          },
+          {
+            "itemId": "969d0000000000000000000000000011",
+            "type": 0,
+            "path": null,
+            "libraryItemId": null
+          }
+        ]
+      },
+      "timestamps": {
+        "created": "0001-01-01T00:00:00.0000000",
+        "modified": "0001-01-01T00:00:00.0000000"
+      },
+      "directories": [
+        "data",
+        "data\\collections"
+      ]
+    },
+    {
+      "key": "add-space-rating",
+      "failed": false,
+      "exception": null,
+      "foundFolder": null,
+      "calls": [
+        {
+          "action": "save",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "name": "Existing",
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\add-space-rating\\program\\data\\collections\\Existing [boxset]",
+            "parentId": "969d0000000000000000000000000002",
+            "isLocked": false,
+            "providerIds": {},
+            "officialRating": " ",
+            "links": [
+              {
+                "itemId": "969d0000000000000000000000000010",
+                "type": 0,
+                "path": null,
+                "libraryItemId": null
+              }
+            ]
+          }
+        },
+        {
+          "action": "queue",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "options": {
+              "MetadataRefreshMode": "Default",
+              "ImageRefreshMode": "Default",
+              "IsAutomated": true,
+              "ForceSave": true
+            },
+            "priority": "High"
+          }
+        },
+        {
+          "action": "added-event",
+          "value": [
+            "969d0000000000000000000000000010"
+          ]
+        }
+      ],
+      "pathQueries": [],
+      "collection": {
+        "id": "969d0000000000000000000000000100",
+        "name": "Existing",
+        "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\add-space-rating\\program\\data\\collections\\Existing [boxset]",
+        "parentId": "969d0000000000000000000000000002",
+        "isLocked": false,
+        "providerIds": {},
+        "officialRating": " ",
+        "links": [
+          {
+            "itemId": "969d0000000000000000000000000010",
+            "type": 0,
+            "path": null,
+            "libraryItemId": null
+          }
+        ]
+      },
+      "timestamps": {
+        "created": "0001-01-01T00:00:00.0000000",
+        "modified": "0001-01-01T00:00:00.0000000"
+      },
+      "directories": [
+        "data",
+        "data\\collections"
+      ]
+    },
+    {
+      "key": "add-tied-rating",
+      "failed": false,
+      "exception": null,
+      "foundFolder": null,
+      "calls": [
+        {
+          "action": "save",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "name": "Existing",
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\add-tied-rating\\program\\data\\collections\\Existing [boxset]",
+            "parentId": "969d0000000000000000000000000002",
+            "isLocked": false,
+            "providerIds": {},
+            "officialRating": "B",
+            "links": [
+              {
+                "itemId": "969d0000000000000000000000000011",
+                "type": 0,
+                "path": null,
+                "libraryItemId": null
+              },
+              {
+                "itemId": "969d0000000000000000000000000010",
+                "type": 0,
+                "path": null,
+                "libraryItemId": null
+              }
+            ]
+          }
+        },
+        {
+          "action": "queue",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "options": {
+              "MetadataRefreshMode": "Default",
+              "ImageRefreshMode": "Default",
+              "IsAutomated": true,
+              "ForceSave": true
+            },
+            "priority": "High"
+          }
+        },
+        {
+          "action": "added-event",
+          "value": [
+            "969d0000000000000000000000000011",
+            "969d0000000000000000000000000010"
+          ]
+        }
+      ],
+      "pathQueries": [],
+      "collection": {
+        "id": "969d0000000000000000000000000100",
+        "name": "Existing",
+        "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\add-tied-rating\\program\\data\\collections\\Existing [boxset]",
+        "parentId": "969d0000000000000000000000000002",
+        "isLocked": false,
+        "providerIds": {},
+        "officialRating": "B",
+        "links": [
+          {
+            "itemId": "969d0000000000000000000000000011",
+            "type": 0,
+            "path": null,
+            "libraryItemId": null
+          },
+          {
+            "itemId": "969d0000000000000000000000000010",
+            "type": 0,
+            "path": null,
+            "libraryItemId": null
+          }
+        ]
+      },
+      "timestamps": {
+        "created": "0001-01-01T00:00:00.0000000",
+        "modified": "0001-01-01T00:00:00.0000000"
+      },
+      "directories": [
+        "data",
+        "data\\collections"
+      ]
+    },
+    {
+      "key": "add-null-subscore",
+      "failed": false,
+      "exception": null,
+      "foundFolder": null,
+      "calls": [
+        {
+          "action": "save",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "name": "Existing",
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\add-null-subscore\\program\\data\\collections\\Existing [boxset]",
+            "parentId": "969d0000000000000000000000000002",
+            "isLocked": false,
+            "providerIds": {},
+            "officialRating": "B",
+            "links": [
+              {
+                "itemId": "969d0000000000000000000000000010",
+                "type": 0,
+                "path": null,
+                "libraryItemId": null
+              },
+              {
+                "itemId": "969d0000000000000000000000000011",
+                "type": 0,
+                "path": null,
+                "libraryItemId": null
+              }
+            ]
+          }
+        },
+        {
+          "action": "queue",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "options": {
+              "MetadataRefreshMode": "Default",
+              "ImageRefreshMode": "Default",
+              "IsAutomated": true,
+              "ForceSave": true
+            },
+            "priority": "High"
+          }
+        },
+        {
+          "action": "added-event",
+          "value": [
+            "969d0000000000000000000000000010",
+            "969d0000000000000000000000000011"
+          ]
+        }
+      ],
+      "pathQueries": [],
+      "collection": {
+        "id": "969d0000000000000000000000000100",
+        "name": "Existing",
+        "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\add-null-subscore\\program\\data\\collections\\Existing [boxset]",
+        "parentId": "969d0000000000000000000000000002",
+        "isLocked": false,
+        "providerIds": {},
+        "officialRating": "B",
+        "links": [
+          {
+            "itemId": "969d0000000000000000000000000010",
+            "type": 0,
+            "path": null,
+            "libraryItemId": null
+          },
+          {
+            "itemId": "969d0000000000000000000000000011",
+            "type": 0,
+            "path": null,
+            "libraryItemId": null
+          }
+        ]
+      },
+      "timestamps": {
+        "created": "0001-01-01T00:00:00.0000000",
+        "modified": "0001-01-01T00:00:00.0000000"
+      },
+      "directories": [
+        "data",
+        "data\\collections"
+      ]
+    },
+    {
+      "key": "add-fallback-relative",
+      "failed": false,
+      "exception": null,
+      "foundFolder": null,
+      "calls": [
+        {
+          "action": "save",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "name": "Existing",
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\add-fallback-relative\\program\\data\\collections\\Existing [boxset]",
+            "parentId": "969d0000000000000000000000000002",
+            "isLocked": false,
+            "providerIds": {},
+            "officialRating": "PG",
+            "links": [
+              {
+                "itemId": "00000000000000000000000000000000",
+                "type": 0,
+                "path": "../../movie.mkv",
+                "libraryItemId": null
+              },
+              {
+                "itemId": "969d0000000000000000000000000011",
+                "type": 0,
+                "path": null,
+                "libraryItemId": null
+              }
+            ]
+          }
+        },
+        {
+          "action": "queue",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "options": {
+              "MetadataRefreshMode": "Default",
+              "ImageRefreshMode": "Default",
+              "IsAutomated": true,
+              "ForceSave": true
+            },
+            "priority": "High"
+          }
+        },
+        {
+          "action": "added-event",
+          "value": [
+            "969d0000000000000000000000000011"
+          ]
+        }
+      ],
+      "pathQueries": [
+        {
+          "Path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\add-fallback-relative\\program\\data\\movie.mkv",
+          "IncludeOwnedItems": false,
+          "IncludeAlternateVersions": false,
+          "Limit": 1,
+          "order": [
+            {
+              "name": "DateCreated",
+              "direction": "Descending"
+            }
+          ]
+        }
+      ],
+      "collection": {
+        "id": "969d0000000000000000000000000100",
+        "name": "Existing",
+        "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\add-fallback-relative\\program\\data\\collections\\Existing [boxset]",
+        "parentId": "969d0000000000000000000000000002",
+        "isLocked": false,
+        "providerIds": {},
+        "officialRating": "PG",
+        "links": [
+          {
+            "itemId": "00000000000000000000000000000000",
+            "type": 0,
+            "path": "../../movie.mkv",
+            "libraryItemId": null
+          },
+          {
+            "itemId": "969d0000000000000000000000000011",
+            "type": 0,
+            "path": null,
+            "libraryItemId": null
+          }
+        ]
+      },
+      "timestamps": {
+        "created": "0001-01-01T00:00:00.0000000",
+        "modified": "0001-01-01T00:00:00.0000000"
+      },
+      "directories": [
+        "data",
+        "data\\collections"
+      ]
+    },
+    {
+      "key": "add-fallback-backslash",
+      "failed": false,
+      "exception": null,
+      "foundFolder": null,
+      "calls": [
+        {
+          "action": "save",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "name": "Existing",
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\add-fallback-backslash\\program\\data\\collections\\Existing [boxset]",
+            "parentId": "969d0000000000000000000000000002",
+            "isLocked": false,
+            "providerIds": {},
+            "officialRating": "G",
+            "links": [
+              {
+                "itemId": "969d0000000000000000000000000010",
+                "type": 0,
+                "path": "\\movie.mkv",
+                "libraryItemId": null
+              },
+              {
+                "itemId": "969d0000000000000000000000000011",
+                "type": 0,
+                "path": null,
+                "libraryItemId": null
+              }
+            ]
+          }
+        },
+        {
+          "action": "queue",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "options": {
+              "MetadataRefreshMode": "Default",
+              "ImageRefreshMode": "Default",
+              "IsAutomated": true,
+              "ForceSave": true
+            },
+            "priority": "High"
+          }
+        },
+        {
+          "action": "added-event",
+          "value": [
+            "969d0000000000000000000000000011"
+          ]
+        }
+      ],
+      "pathQueries": [
+        {
+          "Path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\add-fallback-backslash\\program\\data\\collections\\Existing [boxset]\\movie.mkv",
+          "IncludeOwnedItems": false,
+          "IncludeAlternateVersions": false,
+          "Limit": 1,
+          "order": [
+            {
+              "name": "DateCreated",
+              "direction": "Descending"
+            }
+          ]
+        }
+      ],
+      "collection": {
+        "id": "969d0000000000000000000000000100",
+        "name": "Existing",
+        "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\add-fallback-backslash\\program\\data\\collections\\Existing [boxset]",
+        "parentId": "969d0000000000000000000000000002",
+        "isLocked": false,
+        "providerIds": {},
+        "officialRating": "G",
+        "links": [
+          {
+            "itemId": "969d0000000000000000000000000010",
+            "type": 0,
+            "path": "\\movie.mkv",
+            "libraryItemId": null
+          },
+          {
+            "itemId": "969d0000000000000000000000000011",
+            "type": 0,
+            "path": null,
+            "libraryItemId": null
+          }
+        ]
+      },
+      "timestamps": {
+        "created": "0001-01-01T00:00:00.0000000",
+        "modified": "0001-01-01T00:00:00.0000000"
+      },
+      "directories": [
+        "data",
+        "data\\collections"
+      ]
+    },
+    {
+      "key": "add-empty-guid-fallback-skipped",
+      "failed": false,
+      "exception": null,
+      "foundFolder": null,
+      "calls": [
+        {
+          "action": "save",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "name": "Existing",
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\add-empty-guid-fallback-skipped\\program\\data\\collections\\Existing [boxset]",
+            "parentId": "969d0000000000000000000000000002",
+            "isLocked": false,
+            "providerIds": {},
+            "officialRating": "PG",
+            "links": [
+              {
+                "itemId": "00000000000000000000000000000000",
+                "type": 0,
+                "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\add-empty-guid-fallback-skipped\\program/movie.mkv",
+                "libraryItemId": null
+              },
+              {
+                "itemId": "969d0000000000000000000000000011",
+                "type": 0,
+                "path": null,
+                "libraryItemId": null
+              }
+            ]
+          }
+        },
+        {
+          "action": "queue",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "options": {
+              "MetadataRefreshMode": "Default",
+              "ImageRefreshMode": "Default",
+              "IsAutomated": true,
+              "ForceSave": true
+            },
+            "priority": "High"
+          }
+        },
+        {
+          "action": "added-event",
+          "value": [
+            "969d0000000000000000000000000011"
+          ]
+        }
+      ],
+      "pathQueries": [],
+      "collection": {
+        "id": "969d0000000000000000000000000100",
+        "name": "Existing",
+        "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\add-empty-guid-fallback-skipped\\program\\data\\collections\\Existing [boxset]",
+        "parentId": "969d0000000000000000000000000002",
+        "isLocked": false,
+        "providerIds": {},
+        "officialRating": "PG",
+        "links": [
+          {
+            "itemId": "00000000000000000000000000000000",
+            "type": 0,
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\add-empty-guid-fallback-skipped\\program/movie.mkv",
+            "libraryItemId": null
+          },
+          {
+            "itemId": "969d0000000000000000000000000011",
+            "type": 0,
+            "path": null,
+            "libraryItemId": null
+          }
+        ]
+      },
+      "timestamps": {
+        "created": "0001-01-01T00:00:00.0000000",
+        "modified": "0001-01-01T00:00:00.0000000"
+      },
+      "directories": [
+        "data",
+        "data\\collections"
+      ]
+    },
+    {
+      "key": "remove-empty-guid",
+      "failed": false,
+      "exception": null,
+      "foundFolder": null,
+      "calls": [
+        {
+          "action": "save",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "name": "Existing",
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\remove-empty-guid\\program\\data\\collections\\Existing [boxset]",
+            "parentId": "969d0000000000000000000000000002",
+            "isLocked": false,
+            "providerIds": {},
+            "officialRating": "R",
+            "links": [
+              {
+                "itemId": "969d0000000000000000000000000010",
+                "type": 0,
+                "path": null,
+                "libraryItemId": null
+              }
+            ]
+          }
+        },
+        {
+          "action": "queue",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "options": {
+              "MetadataRefreshMode": "Default",
+              "ImageRefreshMode": "Default",
+              "IsAutomated": true,
+              "ForceSave": true
+            },
+            "priority": "High"
+          }
+        },
+        {
+          "action": "removed-event",
+          "value": []
+        }
+      ],
+      "pathQueries": [],
+      "collection": {
+        "id": "969d0000000000000000000000000100",
+        "name": "Existing",
+        "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\remove-empty-guid\\program\\data\\collections\\Existing [boxset]",
+        "parentId": "969d0000000000000000000000000002",
+        "isLocked": false,
+        "providerIds": {},
+        "officialRating": "R",
+        "links": [
+          {
+            "itemId": "969d0000000000000000000000000010",
+            "type": 0,
+            "path": null,
+            "libraryItemId": null
+          }
+        ]
+      },
+      "timestamps": {
+        "created": "0001-01-01T00:00:00.0000000",
+        "modified": "0001-01-01T00:00:00.0000000"
+      },
+      "directories": [
+        "data",
+        "data\\collections"
+      ]
+    },
+    {
+      "key": "add-fallback-newest-default",
+      "failed": false,
+      "exception": null,
+      "foundFolder": null,
+      "calls": [
+        {
+          "action": "save",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "name": "Existing",
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\add-fallback-newest-default\\program\\data\\collections\\Existing [boxset]",
+            "parentId": "969d0000000000000000000000000002",
+            "isLocked": false,
+            "providerIds": {},
+            "officialRating": "PG",
+            "links": [
+              {
+                "itemId": "969d0000000000000000000000000011",
+                "type": 0,
+                "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\add-fallback-newest-default\\program\\movie.mkv",
+                "libraryItemId": null
+              },
+              {
+                "itemId": "969d0000000000000000000000000014",
+                "type": 0,
+                "path": null,
+                "libraryItemId": null
+              }
+            ]
+          }
+        },
+        {
+          "action": "queue",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "options": {
+              "MetadataRefreshMode": "Default",
+              "ImageRefreshMode": "Default",
+              "IsAutomated": true,
+              "ForceSave": true
+            },
+            "priority": "High"
+          }
+        },
+        {
+          "action": "added-event",
+          "value": [
+            "969d0000000000000000000000000014"
+          ]
+        }
+      ],
+      "pathQueries": [
+        {
+          "Path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\add-fallback-newest-default\\program\\movie.mkv",
+          "IncludeOwnedItems": false,
+          "IncludeAlternateVersions": false,
+          "Limit": 1,
+          "order": [
+            {
+              "name": "DateCreated",
+              "direction": "Descending"
+            }
+          ]
+        }
+      ],
+      "collection": {
+        "id": "969d0000000000000000000000000100",
+        "name": "Existing",
+        "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\add-fallback-newest-default\\program\\data\\collections\\Existing [boxset]",
+        "parentId": "969d0000000000000000000000000002",
+        "isLocked": false,
+        "providerIds": {},
+        "officialRating": "PG",
+        "links": [
+          {
+            "itemId": "969d0000000000000000000000000011",
+            "type": 0,
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\add-fallback-newest-default\\program\\movie.mkv",
+            "libraryItemId": null
+          },
+          {
+            "itemId": "969d0000000000000000000000000014",
+            "type": 0,
+            "path": null,
+            "libraryItemId": null
+          }
+        ]
+      },
+      "timestamps": {
+        "created": "0001-01-01T00:00:00.0000000",
+        "modified": "0001-01-01T00:00:00.0000000"
+      },
+      "directories": [
+        "data",
+        "data\\collections"
+      ]
+    },
+    {
+      "key": "add-fallback-owned-only",
+      "failed": false,
+      "exception": null,
+      "foundFolder": null,
+      "calls": [
+        {
+          "action": "save",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "name": "Existing",
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\add-fallback-owned-only\\program\\data\\collections\\Existing [boxset]",
+            "parentId": "969d0000000000000000000000000002",
+            "isLocked": false,
+            "providerIds": {},
+            "officialRating": "unknown",
+            "links": [
+              {
+                "itemId": "00000000000000000000000000000000",
+                "type": 0,
+                "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\add-fallback-owned-only\\program\\movie.mkv",
+                "libraryItemId": null
+              },
+              {
+                "itemId": "969d0000000000000000000000000014",
+                "type": 0,
+                "path": null,
+                "libraryItemId": null
+              }
+            ]
+          }
+        },
+        {
+          "action": "queue",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "options": {
+              "MetadataRefreshMode": "Default",
+              "ImageRefreshMode": "Default",
+              "IsAutomated": true,
+              "ForceSave": true
+            },
+            "priority": "High"
+          }
+        },
+        {
+          "action": "added-event",
+          "value": [
+            "969d0000000000000000000000000014"
+          ]
+        }
+      ],
+      "pathQueries": [
+        {
+          "Path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\add-fallback-owned-only\\program\\movie.mkv",
+          "IncludeOwnedItems": false,
+          "IncludeAlternateVersions": false,
+          "Limit": 1,
+          "order": [
+            {
+              "name": "DateCreated",
+              "direction": "Descending"
+            }
+          ]
+        }
+      ],
+      "collection": {
+        "id": "969d0000000000000000000000000100",
+        "name": "Existing",
+        "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\add-fallback-owned-only\\program\\data\\collections\\Existing [boxset]",
+        "parentId": "969d0000000000000000000000000002",
+        "isLocked": false,
+        "providerIds": {},
+        "officialRating": "unknown",
+        "links": [
+          {
+            "itemId": "00000000000000000000000000000000",
+            "type": 0,
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\add-fallback-owned-only\\program\\movie.mkv",
+            "libraryItemId": null
+          },
+          {
+            "itemId": "969d0000000000000000000000000014",
+            "type": 0,
+            "path": null,
+            "libraryItemId": null
+          }
+        ]
+      },
+      "timestamps": {
+        "created": "0001-01-01T00:00:00.0000000",
+        "modified": "0001-01-01T00:00:00.0000000"
+      },
+      "directories": [
+        "data",
+        "data\\collections"
+      ]
+    },
+    {
+      "key": "add-fallback-alternate-only",
+      "failed": false,
+      "exception": null,
+      "foundFolder": null,
+      "calls": [
+        {
+          "action": "save",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "name": "Existing",
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\add-fallback-alternate-only\\program\\data\\collections\\Existing [boxset]",
+            "parentId": "969d0000000000000000000000000002",
+            "isLocked": false,
+            "providerIds": {},
+            "officialRating": "unknown",
+            "links": [
+              {
+                "itemId": "00000000000000000000000000000000",
+                "type": 0,
+                "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\add-fallback-alternate-only\\program\\movie.mkv",
+                "libraryItemId": null
+              },
+              {
+                "itemId": "969d0000000000000000000000000014",
+                "type": 0,
+                "path": null,
+                "libraryItemId": null
+              }
+            ]
+          }
+        },
+        {
+          "action": "queue",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "options": {
+              "MetadataRefreshMode": "Default",
+              "ImageRefreshMode": "Default",
+              "IsAutomated": true,
+              "ForceSave": true
+            },
+            "priority": "High"
+          }
+        },
+        {
+          "action": "added-event",
+          "value": [
+            "969d0000000000000000000000000014"
+          ]
+        }
+      ],
+      "pathQueries": [
+        {
+          "Path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\add-fallback-alternate-only\\program\\movie.mkv",
+          "IncludeOwnedItems": false,
+          "IncludeAlternateVersions": false,
+          "Limit": 1,
+          "order": [
+            {
+              "name": "DateCreated",
+              "direction": "Descending"
+            }
+          ]
+        }
+      ],
+      "collection": {
+        "id": "969d0000000000000000000000000100",
+        "name": "Existing",
+        "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\add-fallback-alternate-only\\program\\data\\collections\\Existing [boxset]",
+        "parentId": "969d0000000000000000000000000002",
+        "isLocked": false,
+        "providerIds": {},
+        "officialRating": "unknown",
+        "links": [
+          {
+            "itemId": "00000000000000000000000000000000",
+            "type": 0,
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\add-fallback-alternate-only\\program\\movie.mkv",
+            "libraryItemId": null
+          },
+          {
+            "itemId": "969d0000000000000000000000000014",
+            "type": 0,
+            "path": null,
+            "libraryItemId": null
+          }
+        ]
+      },
+      "timestamps": {
+        "created": "0001-01-01T00:00:00.0000000",
+        "modified": "0001-01-01T00:00:00.0000000"
+      },
+      "directories": [
+        "data",
+        "data\\collections"
+      ]
+    },
+    {
+      "key": "create-null-provider-ids",
+      "failed": false,
+      "exception": null,
+      "foundFolder": null,
+      "calls": [
+        {
+          "action": "begin",
+          "value": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-null-provider-ids\\program\\data\\collections\\Collection [boxset]"
+        },
+        {
+          "action": "create",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "name": "Collection",
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-null-provider-ids\\program\\data\\collections\\Collection [boxset]",
+            "parentId": "969d0000000000000000000000000002",
+            "isLocked": false,
+            "providerIds": null,
+            "officialRating": null,
+            "links": []
+          }
+        },
+        {
+          "action": "queue",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "options": {
+              "MetadataRefreshMode": "Default",
+              "ImageRefreshMode": "Default",
+              "IsAutomated": true,
+              "ForceSave": false
+            },
+            "priority": "High"
+          }
+        },
+        {
+          "action": "created-event",
+          "value": {
+            "id": "969d0000000000000000000000000100",
+            "name": "Collection",
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-null-provider-ids\\program\\data\\collections\\Collection [boxset]",
+            "parentId": "969d0000000000000000000000000002",
+            "isLocked": false,
+            "providerIds": null,
+            "officialRating": null,
+            "links": []
+          }
+        },
+        {
+          "action": "complete",
+          "value": {
+            "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-null-provider-ids\\program\\data\\collections\\Collection [boxset]",
+            "refresh": false
+          }
+        }
+      ],
+      "pathQueries": [],
+      "collection": {
+        "id": "969d0000000000000000000000000100",
+        "name": "Collection",
+        "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\states\\create-null-provider-ids\\program\\data\\collections\\Collection [boxset]",
+        "parentId": "969d0000000000000000000000000002",
+        "isLocked": false,
+        "providerIds": null,
+        "officialRating": null,
+        "links": []
+      },
+      "timestamps": {
+        "created": "2026-10-13T09:59:14.8238628Z",
+        "modified": "2026-10-13T09:59:14.8238628Z"
+      },
+      "directories": [
+        "data",
+        "data\\collections",
+        "data\\collections\\Collection [boxset]"
+      ]
+    },
+    {
+      "key": "ensure-by-name-folder-type",
+      "failed": false,
+      "exception": null,
+      "foundFolder": true,
+      "calls": [],
+      "pathQueries": [],
+      "collection": null,
+      "timestamps": null,
+      "directories": [
+        "data"
+      ]
+    }
+  ],
+  "assemblies": [
+    {
+      "name": "Emby.Server.Implementations",
+      "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\bin\\Release\\net10.0\\Emby.Server.Implementations.dll",
+      "sha256": "8d369435646570958505c58b9cb17da169855dabc105d0e933524361e9b7b1c8"
+    },
+    {
+      "name": "MediaBrowser.Controller",
+      "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\bin\\Release\\net10.0\\MediaBrowser.Controller.dll",
+      "sha256": "051c588a8e85a3a7cdde8dc3d9a1112217fd7e973a86fe2ff90cf765bedb75a8"
+    },
+    {
+      "name": "System.Private.CoreLib",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Private.CoreLib.dll",
+      "sha256": "1125acc8106c43fc8bad2d203c4c4485df6182d292846c2fff415c1040c54678"
+    }
+  ]
+}

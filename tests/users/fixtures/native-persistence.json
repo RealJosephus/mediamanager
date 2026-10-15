@@ -1,0 +1,394 @@
+{
+  "legacyHashUnchanged": true,
+  "currentHashMethod": "PBKDF2",
+  "users": [
+    {
+      "Name": "NativeLockout",
+      "RowVersion": "3",
+      "InvalidLoginAttemptCount": 3,
+      "Permissions": [
+        {
+          "Kind": 0,
+          "RowVersion": "1",
+          "Value": false
+        },
+        {
+          "Kind": 2,
+          "RowVersion": "1",
+          "Value": true
+        },
+        {
+          "Kind": 1,
+          "RowVersion": "1",
+          "Value": true
+        },
+        {
+          "Kind": 15,
+          "RowVersion": "1",
+          "Value": true
+        },
+        {
+          "Kind": 14,
+          "RowVersion": "1",
+          "Value": true
+        },
+        {
+          "Kind": 16,
+          "RowVersion": "1",
+          "Value": true
+        },
+        {
+          "Kind": 10,
+          "RowVersion": "1",
+          "Value": false
+        },
+        {
+          "Kind": 11,
+          "RowVersion": "1",
+          "Value": true
+        },
+        {
+          "Kind": 13,
+          "RowVersion": "1",
+          "Value": true
+        },
+        {
+          "Kind": 7,
+          "RowVersion": "1",
+          "Value": true
+        },
+        {
+          "Kind": 19,
+          "RowVersion": "1",
+          "Value": true
+        },
+        {
+          "Kind": 17,
+          "RowVersion": "1",
+          "Value": true
+        },
+        {
+          "Kind": 4,
+          "RowVersion": "1",
+          "Value": true
+        },
+        {
+          "Kind": 12,
+          "RowVersion": "1",
+          "Value": true
+        },
+        {
+          "Kind": 8,
+          "RowVersion": "1",
+          "Value": true
+        },
+        {
+          "Kind": 6,
+          "RowVersion": "1",
+          "Value": true
+        },
+        {
+          "Kind": 5,
+          "RowVersion": "1",
+          "Value": false
+        },
+        {
+          "Kind": 3,
+          "RowVersion": "1",
+          "Value": true
+        },
+        {
+          "Kind": 9,
+          "RowVersion": "1",
+          "Value": true
+        },
+        {
+          "Kind": 20,
+          "RowVersion": "1",
+          "Value": false
+        },
+        {
+          "Kind": 18,
+          "RowVersion": "1",
+          "Value": false
+        },
+        {
+          "Kind": 21,
+          "RowVersion": "1",
+          "Value": false
+        },
+        {
+          "Kind": 22,
+          "RowVersion": "1",
+          "Value": false
+        },
+        {
+          "Kind": 23,
+          "RowVersion": "2",
+          "Value": true
+        }
+      ],
+      "Preferences": [
+        {
+          "Kind": 0,
+          "RowVersion": "1",
+          "Value": ""
+        },
+        {
+          "Kind": 1,
+          "RowVersion": "1",
+          "Value": ""
+        },
+        {
+          "Kind": 2,
+          "RowVersion": "1",
+          "Value": ""
+        },
+        {
+          "Kind": 3,
+          "RowVersion": "1",
+          "Value": ""
+        },
+        {
+          "Kind": 4,
+          "RowVersion": "1",
+          "Value": ""
+        },
+        {
+          "Kind": 5,
+          "RowVersion": "1",
+          "Value": ""
+        },
+        {
+          "Kind": 6,
+          "RowVersion": "1",
+          "Value": ""
+        },
+        {
+          "Kind": 7,
+          "RowVersion": "1",
+          "Value": ""
+        },
+        {
+          "Kind": 8,
+          "RowVersion": "1",
+          "Value": ""
+        },
+        {
+          "Kind": 9,
+          "RowVersion": "1",
+          "Value": ""
+        },
+        {
+          "Kind": 10,
+          "RowVersion": "1",
+          "Value": ""
+        },
+        {
+          "Kind": 11,
+          "RowVersion": "1",
+          "Value": ""
+        },
+        {
+          "Kind": 12,
+          "RowVersion": "1",
+          "Value": ""
+        }
+      ]
+    },
+    {
+      "Name": "NativeDefaults",
+      "RowVersion": "1",
+      "InvalidLoginAttemptCount": 0,
+      "Permissions": [
+        {
+          "Kind": 0,
+          "RowVersion": "0",
+          "Value": false
+        },
+        {
+          "Kind": 2,
+          "RowVersion": "0",
+          "Value": false
+        },
+        {
+          "Kind": 1,
+          "RowVersion": "0",
+          "Value": true
+        },
+        {
+          "Kind": 15,
+          "RowVersion": "0",
+          "Value": true
+        },
+        {
+          "Kind": 14,
+          "RowVersion": "0",
+          "Value": true
+        },
+        {
+          "Kind": 16,
+          "RowVersion": "0",
+          "Value": true
+        },
+        {
+          "Kind": 10,
+          "RowVersion": "0",
+          "Value": false
+        },
+        {
+          "Kind": 11,
+          "RowVersion": "0",
+          "Value": true
+        },
+        {
+          "Kind": 13,
+          "RowVersion": "0",
+          "Value": true
+        },
+        {
+          "Kind": 7,
+          "RowVersion": "0",
+          "Value": true
+        },
+        {
+          "Kind": 19,
+          "RowVersion": "0",
+          "Value": true
+        },
+        {
+          "Kind": 17,
+          "RowVersion": "0",
+          "Value": true
+        },
+        {
+          "Kind": 4,
+          "RowVersion": "0",
+          "Value": true
+        },
+        {
+          "Kind": 12,
+          "RowVersion": "0",
+          "Value": true
+        },
+        {
+          "Kind": 8,
+          "RowVersion": "0",
+          "Value": true
+        },
+        {
+          "Kind": 6,
+          "RowVersion": "0",
+          "Value": true
+        },
+        {
+          "Kind": 5,
+          "RowVersion": "0",
+          "Value": false
+        },
+        {
+          "Kind": 3,
+          "RowVersion": "0",
+          "Value": true
+        },
+        {
+          "Kind": 9,
+          "RowVersion": "0",
+          "Value": true
+        },
+        {
+          "Kind": 20,
+          "RowVersion": "0",
+          "Value": false
+        },
+        {
+          "Kind": 18,
+          "RowVersion": "0",
+          "Value": false
+        },
+        {
+          "Kind": 21,
+          "RowVersion": "0",
+          "Value": false
+        },
+        {
+          "Kind": 22,
+          "RowVersion": "0",
+          "Value": false
+        },
+        {
+          "Kind": 23,
+          "RowVersion": "0",
+          "Value": false
+        }
+      ],
+      "Preferences": [
+        {
+          "Kind": 0,
+          "RowVersion": "0",
+          "Value": ""
+        },
+        {
+          "Kind": 1,
+          "RowVersion": "0",
+          "Value": ""
+        },
+        {
+          "Kind": 2,
+          "RowVersion": "0",
+          "Value": ""
+        },
+        {
+          "Kind": 3,
+          "RowVersion": "0",
+          "Value": ""
+        },
+        {
+          "Kind": 4,
+          "RowVersion": "0",
+          "Value": ""
+        },
+        {
+          "Kind": 5,
+          "RowVersion": "0",
+          "Value": ""
+        },
+        {
+          "Kind": 6,
+          "RowVersion": "0",
+          "Value": ""
+        },
+        {
+          "Kind": 7,
+          "RowVersion": "0",
+          "Value": ""
+        },
+        {
+          "Kind": 8,
+          "RowVersion": "0",
+          "Value": ""
+        },
+        {
+          "Kind": 9,
+          "RowVersion": "0",
+          "Value": ""
+        },
+        {
+          "Kind": 10,
+          "RowVersion": "0",
+          "Value": ""
+        },
+        {
+          "Kind": 11,
+          "RowVersion": "0",
+          "Value": ""
+        },
+        {
+          "Kind": 12,
+          "RowVersion": "0",
+          "Value": ""
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+[
+  {
+    "name": "none",
+    "query": "",
+    "id": "22222222222222222222222222222222"
+  },
+  {
+    "name": "none-lowercase",
+    "query": "?metadataRefreshMode=none",
+    "id": "22222222222222222222222222222222"
+  },
+  {
+    "name": "invalid-mode",
+    "query": "?metadataRefreshMode=banana",
+    "id": "22222222222222222222222222222222"
+  },
+  {
+    "name": "undefined-mode",
+    "query": "?metadataRefreshMode=17",
+    "id": "22222222222222222222222222222222"
+  },
+  {
+    "name": "negative-mode",
+    "query": "?metadataRefreshMode=-1",
+    "id": "22222222222222222222222222222222"
+  },
+  {
+    "name": "empty-mode",
+    "query": "?metadataRefreshMode=",
+    "id": "22222222222222222222222222222222"
+  },
+  {
+    "name": "mode-combined",
+    "query": "?metadataRefreshMode=None,None",
+    "id": "22222222222222222222222222222222"
+  },
+  {
+    "name": "image-invalid",
+    "query": "?imageRefreshMode=bad",
+    "id": "22222222222222222222222222222222"
+  },
+  {
+    "name": "replace-invalid",
+    "query": "?replaceAllMetadata=bad",
+    "id": "22222222222222222222222222222222"
+  },
+  {
+    "name": "replace-empty",
+    "query": "?replaceAllMetadata=",
+    "id": "22222222222222222222222222222222"
+  },
+  {
+    "name": "trickplay-invalid",
+    "query": "?regenerateTrickplay=bad",
+    "id": "22222222222222222222222222222222"
+  },
+  {
+    "name": "missing",
+    "query": "",
+    "id": "11111111111111111111111111111112"
+  },
+  {
+    "name": "bad-id",
+    "query": "",
+    "id": "bad-id"
+  }
+]

@@ -1,0 +1,108 @@
+[
+  {
+    "mode": "batch",
+    "saved": {
+      "included": [
+        "3.jpg",
+        "7.jpg",
+        "5.jpg",
+        "9.jpg"
+      ],
+      "direct": [
+        "3.jpg",
+        "7.jpg",
+        "5.jpg",
+        "9.jpg"
+      ],
+      "trailers": [
+        2,
+        4,
+        5
+      ],
+      "directTrailers": [
+        2,
+        4,
+        5
+      ]
+    },
+    "updated": {
+      "included": [
+        "3.jpg",
+        "7.jpg",
+        "9.jpg",
+        "5.jpg"
+      ],
+      "direct": [
+        "3.jpg",
+        "7.jpg",
+        "9.jpg",
+        "5.jpg"
+      ],
+      "trailers": [
+        2,
+        4,
+        5,
+        3
+      ],
+      "directTrailers": [
+        2,
+        4,
+        5,
+        3
+      ]
+    }
+  },
+  {
+    "mode": "individual",
+    "saved": {
+      "included": [
+        "7.jpg",
+        "3.jpg",
+        "9.jpg",
+        "5.jpg"
+      ],
+      "direct": [
+        "7.jpg",
+        "3.jpg",
+        "9.jpg",
+        "5.jpg"
+      ],
+      "trailers": [
+        5,
+        2,
+        4
+      ],
+      "directTrailers": [
+        5,
+        2,
+        4
+      ]
+    },
+    "updated": {
+      "included": [
+        "9.jpg",
+        "7.jpg",
+        "3.jpg",
+        "5.jpg"
+      ],
+      "direct": [
+        "9.jpg",
+        "7.jpg",
+        "3.jpg",
+        "5.jpg"
+      ],
+      "trailers": [
+        5,
+        2,
+        4,
+        3
+      ],
+      "directTrailers": [
+        5,
+        2,
+        4,
+        3
+      ]
+    }
+  }
+]

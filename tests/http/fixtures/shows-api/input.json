@@ -1,0 +1,280 @@
+[
+  {
+    "name": "upcoming builds the native episode query and counts the paged list",
+    "endpoint": "upcoming",
+    "startIndex": 1,
+    "limit": 2,
+    "parentId": "91000000-0000-0000-0000-000000000099",
+    "fields": ["SortName", "ParentId"],
+    "enableImages": false,
+    "imageTypeLimit": 1,
+    "enableImageTypes": ["Primary", "Backdrop"],
+    "enableUserData": false,
+    "controlledItems": ["special", "two", "missing"]
+  },
+  {
+    "name": "series episodes hide missing episodes for the default user",
+    "endpoint": "episodes"
+  },
+  {
+    "name": "series episodes include missing episodes from user preference",
+    "endpoint": "episodes",
+    "displayMissing": true
+  },
+  {
+    "name": "series episodes include missing episodes for an api key without a user",
+    "endpoint": "episodes",
+    "apiKey": true
+  },
+  {
+    "name": "season number chooses the matching native season",
+    "endpoint": "episodes",
+    "season": 1
+  },
+  {
+    "name": "season id ignores the route series id",
+    "endpoint": "episodes",
+    "series": "missingSeries",
+    "seasonId": "season2"
+  },
+  {
+    "name": "isMissing is a post-selection filter",
+    "endpoint": "episodes",
+    "displayMissing": true,
+    "isMissing": true
+  },
+  {
+    "name": "isMissing false uses location rather than the repository virtual flag",
+    "endpoint": "episodes",
+    "displayMissing": true,
+    "isMissing": false
+  },
+  {
+    "name": "alternate start then adjacency then paging preserves native order",
+    "endpoint": "episodes",
+    "displayMissing": true,
+    "startItemId": "alternate",
+    "adjacentTo": "special",
+    "startIndex": 0,
+    "limit": 2
+  },
+  {
+    "name": "non-random sortBy is ignored",
+    "endpoint": "episodes",
+    "sortBy": "PremiereDate"
+  },
+  {
+    "name": "missing series returns the native message",
+    "endpoint": "episodes",
+    "series": "missingSeries"
+  },
+  {
+    "name": "missing season returns the dashed native id message",
+    "endpoint": "episodes",
+    "seasonId": "missingSeason"
+  },
+  {
+    "name": "upcoming Guid.Empty remains unscoped at the controller boundary",
+    "endpoint": "upcoming",
+    "parentId": "00000000-0000-0000-0000-000000000000",
+    "controlledItems": ["one"]
+  },
+  {
+    "name": "upcoming preserves a persisted series parent for LibraryManager translation",
+    "endpoint": "upcoming",
+    "parentId": "series",
+    "controlledItems": ["one"]
+  },
+  {
+    "name": "upcoming preserves a persisted nonfolder parent for LibraryManager translation",
+    "endpoint": "upcoming",
+    "parentId": "two",
+    "controlledItems": ["two"]
+  },
+  {
+    "name": "upcoming preserves negative StartIndex and Limit on the repository query",
+    "endpoint": "upcoming",
+    "startIndex": -1,
+    "limit": -1,
+    "controlledItems": ["one", "two"]
+  },
+  {
+    "name": "next up binds every controller option and preserves negative paging",
+    "endpoint": "nextup",
+    "startIndex": -1,
+    "limit": -1,
+    "seriesId": "series",
+    "parentId": "season1",
+    "fields": ["SortName", "ParentId"],
+    "enableImages": false,
+    "imageTypeLimit": 1,
+    "enableImageTypes": ["Primary", "Backdrop"],
+    "enableUserData": false,
+    "nextUpDateCutoff": "2026-10-06T00:00:00Z",
+    "enableTotalRecordCount": false,
+    "enableResumable": false,
+    "enableRewatching": true,
+    "controlledItems": ["one", "two"],
+    "controlledTotal": 7
+  },
+  {
+    "name": "next up applies controller defaults",
+    "endpoint": "nextup",
+    "controlledItems": ["two"]
+  },
+  {
+    "name": "next up controller preserves requested start over an empty manager result",
+    "endpoint": "nextup",
+    "startIndex": -2,
+    "controlledManagerStartIndex": 0,
+    "controlledItems": []
+  },
+  {
+    "name": "next up returns not found for an unresolved user",
+    "endpoint": "nextup",
+    "claimUser": "missingUser",
+    "user": "missingUser",
+    "controlledItems": ["two"]
+  },
+  {
+    "name": "seasons hide missing rows for the default user",
+    "endpoint": "seasons",
+    "fields": ["SortName", "ParentId"],
+    "enableImages": false,
+    "enableUserData": false
+  },
+  {
+    "name": "seasons respect missing filter when the user displays missing episodes",
+    "endpoint": "seasons",
+    "displayMissing": true,
+    "isMissing": true
+  },
+  {
+    "name": "seasons are userless for an api key",
+    "endpoint": "seasons",
+    "apiKey": true
+  },
+  {
+    "name": "seasons select the special season",
+    "endpoint": "seasons",
+    "isSpecialSeason": true
+  },
+  {
+    "name": "season adjacency follows native filtered sort order",
+    "endpoint": "seasons",
+    "adjacentTo": "season1"
+  },
+  {
+    "name": "user seasons group duplicate presentation keys",
+    "endpoint": "seasons",
+    "series": "duplicateSeries"
+  },
+  {
+    "name": "userless seasons retain duplicate presentation keys",
+    "endpoint": "seasons",
+    "series": "duplicateSeries",
+    "apiKey": true
+  },
+  {
+    "name": "missing series seasons returns an empty not found",
+    "endpoint": "seasons",
+    "series": "missingSeries"
+  },
+  {
+    "name": "missing series seasons precedes dto construction",
+    "endpoint": "seasons",
+    "series": "missingSeries",
+    "fields": ["ChannelInfo"]
+  },
+  {
+    "name": "similar series applies action defaults before manager projection",
+    "endpoint": "similar",
+    "controlledItems": ["duplicateSeries"]
+  },
+  {
+    "name": "similar binds manager options including negative limit",
+    "endpoint": "similar",
+    "limit": -1,
+    "fields": ["SortName", "ParentId"],
+    "excludeArtistIds": ["91000000-0000-0000-0000-000000000091", "91000000000000000000000000000092"],
+    "controlledItems": ["duplicateSeries", "emptySeries"]
+  },
+  {
+    "name": "similar is userless for an api key",
+    "endpoint": "similar",
+    "apiKey": true,
+    "controlledItems": ["duplicateSeries"]
+  },
+  {
+    "name": "similar Guid.Empty chooses the user root",
+    "endpoint": "similar",
+    "item": "00000000-0000-0000-0000-000000000000",
+    "controlledItems": ["duplicateSeries"]
+  },
+  {
+    "name": "similar Guid.Empty chooses the aggregate root without a user",
+    "endpoint": "similar",
+    "apiKey": true,
+    "item": "00000000-0000-0000-0000-000000000000",
+    "controlledItems": ["duplicateSeries"]
+  },
+  {
+    "name": "similar missing item returns not found before dto or manager",
+    "endpoint": "similar",
+    "item": "missingSeries",
+    "fields": ["ChannelInfo"],
+    "controlledItems": ["duplicateSeries"]
+  },
+  {
+    "name": "similar Episode returns empty before dto or manager",
+    "endpoint": "similar",
+    "item": "one",
+    "fields": ["ChannelInfo"],
+    "controlledItems": ["duplicateSeries"]
+  },
+  {
+    "name": "similar IItemByName returns empty before dto or manager",
+    "endpoint": "similar",
+    "item": "genre",
+    "fields": ["ChannelInfo"],
+    "controlledItems": ["duplicateSeries"]
+  },
+  {
+    "name": "similar MusicArtist is not an IItemByName early return",
+    "endpoint": "similar",
+    "item": "musicArtist",
+    "fields": ["SortName"],
+    "excludeArtistIds": ["91000000-0000-0000-0000-000000000091", "91000000000000000000000000000092"],
+    "controlledItems": ["duplicateSeries"]
+  },
+  {
+    "name": "similar MusicAlbum reaches the shared manager",
+    "endpoint": "similar",
+    "item": "musicAlbum",
+    "fields": ["SortName"],
+    "excludeArtistIds": ["91000000-0000-0000-0000-000000000091"],
+    "controlledItems": ["duplicateSeries"]
+  },
+  {
+    "name": "similar Audio reaches the shared manager",
+    "endpoint": "similar",
+    "item": "audio",
+    "limit": 7,
+    "excludeArtistIds": ["91000000000000000000000000000092"],
+    "controlledItems": ["duplicateSeries"]
+  },
+  {
+    "name": "similar administrator may request an unresolved user as userless",
+    "endpoint": "similar",
+    "administrator": true,
+    "user": "missingUser",
+    "controlledItems": ["duplicateSeries"]
+  },
+  {
+    "name": "similar cross-user rejection precedes user item dto and manager",
+    "endpoint": "similar",
+    "user": "missingUser",
+    "fields": ["ChannelInfo"],
+    "controlledItems": ["duplicateSeries"]
+  }
+]

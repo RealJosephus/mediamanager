@@ -1,0 +1,4333 @@
+{
+  "inputSha256": "7cc0992ec20727a57bdf77388206b4de9aec183787c0d1482f2deda0bead5ff9",
+  "actualControllers": true,
+  "actualNamedConfiguration": true,
+  "actualXmlSerializer": true,
+  "actualBase64Stream": true,
+  "realFiles": true,
+  "processorControlled": true,
+  "authenticationControlled": true,
+  "assemblies": [
+    {
+      "name": "Jellyfin.Api",
+      "sha256": "d5952a67decf6279096c3ad02df59f63e8f486373b0b63a785b47ac3f9060777"
+    },
+    {
+      "name": "MediaBrowser.Model",
+      "sha256": "7b2c1b16721cf7747b572e4de3761de635fad4bd12bec346983545bee73fd92c"
+    },
+    {
+      "name": "Emby.Server.Implementations",
+      "sha256": "8d369435646570958505c58b9cb17da169855dabc105d0e933524361e9b7b1c8"
+    }
+  ],
+  "imageMimes": [
+    {
+      "mimeType": "image/aces",
+      "extension": ".exr"
+    },
+    {
+      "mimeType": "image/apng",
+      "extension": ".apng"
+    },
+    {
+      "mimeType": "image/avci",
+      "extension": ".avci"
+    },
+    {
+      "mimeType": "image/avcs",
+      "extension": ".avcs"
+    },
+    {
+      "mimeType": "image/avif",
+      "extension": ".avif"
+    },
+    {
+      "mimeType": "image/bmp",
+      "extension": ".bmp"
+    },
+    {
+      "mimeType": "image/cgm",
+      "extension": ".cgm"
+    },
+    {
+      "mimeType": "image/dicom-rle",
+      "extension": ".drle"
+    },
+    {
+      "mimeType": "image/dpx",
+      "extension": ".dpx"
+    },
+    {
+      "mimeType": "image/emf",
+      "extension": ".emf"
+    },
+    {
+      "mimeType": "image/fits",
+      "extension": ".fits"
+    },
+    {
+      "mimeType": "image/g3fax",
+      "extension": ".g3"
+    },
+    {
+      "mimeType": "image/gif",
+      "extension": ".gif"
+    },
+    {
+      "mimeType": "image/heic",
+      "extension": ".heic"
+    },
+    {
+      "mimeType": "image/heic-sequence",
+      "extension": ".heics"
+    },
+    {
+      "mimeType": "image/heif",
+      "extension": ".heif"
+    },
+    {
+      "mimeType": "image/heif-sequence",
+      "extension": ".heifs"
+    },
+    {
+      "mimeType": "image/hej2k",
+      "extension": ".hej2"
+    },
+    {
+      "mimeType": "image/hsj2",
+      "extension": ".hsj2"
+    },
+    {
+      "mimeType": "image/ief",
+      "extension": ".ief"
+    },
+    {
+      "mimeType": "image/jls",
+      "extension": ".jls"
+    },
+    {
+      "mimeType": "image/jp2",
+      "extension": ".jp2"
+    },
+    {
+      "mimeType": "image/jpeg",
+      "extension": ".jpg"
+    },
+    {
+      "mimeType": "image/jpg",
+      "extension": ".jpg"
+    },
+    {
+      "mimeType": "image/jph",
+      "extension": ".jph"
+    },
+    {
+      "mimeType": "image/jphc",
+      "extension": ".jhc"
+    },
+    {
+      "mimeType": "image/jpm",
+      "extension": ".jpgm"
+    },
+    {
+      "mimeType": "image/jpx",
+      "extension": ".jpf"
+    },
+    {
+      "mimeType": "image/jxr",
+      "extension": ".jxr"
+    },
+    {
+      "mimeType": "image/jxra",
+      "extension": ".jxra"
+    },
+    {
+      "mimeType": "image/jxrs",
+      "extension": ".jxrs"
+    },
+    {
+      "mimeType": "image/jxs",
+      "extension": ".jxs"
+    },
+    {
+      "mimeType": "image/jxsc",
+      "extension": ".jxsc"
+    },
+    {
+      "mimeType": "image/jxsi",
+      "extension": ".jxsi"
+    },
+    {
+      "mimeType": "image/jxss",
+      "extension": ".jxss"
+    },
+    {
+      "mimeType": "image/ktx",
+      "extension": ".ktx"
+    },
+    {
+      "mimeType": "image/ktx2",
+      "extension": ".ktx2"
+    },
+    {
+      "mimeType": "image/png",
+      "extension": ".png"
+    },
+    {
+      "mimeType": "image/prs.btif",
+      "extension": ".btf"
+    },
+    {
+      "mimeType": "image/prs.pti",
+      "extension": ".pti"
+    },
+    {
+      "mimeType": "image/sgi",
+      "extension": ".sgi"
+    },
+    {
+      "mimeType": "image/svg\u002Bxml",
+      "extension": ".svg"
+    },
+    {
+      "mimeType": "image/t38",
+      "extension": ".t38"
+    },
+    {
+      "mimeType": "image/tiff",
+      "extension": ".tiff"
+    },
+    {
+      "mimeType": "image/tiff-fx",
+      "extension": ".tfx"
+    },
+    {
+      "mimeType": "image/vnd.adobe.photoshop",
+      "extension": ".psd"
+    },
+    {
+      "mimeType": "image/vnd.airzip.accelerator.azv",
+      "extension": ".azv"
+    },
+    {
+      "mimeType": "image/vnd.dece.graphic",
+      "extension": ".uvg"
+    },
+    {
+      "mimeType": "image/vnd.djvu",
+      "extension": ".djv"
+    },
+    {
+      "mimeType": "image/vnd.dwg",
+      "extension": ".dwg"
+    },
+    {
+      "mimeType": "image/vnd.dxf",
+      "extension": ".dxf"
+    },
+    {
+      "mimeType": "image/vnd.fastbidsheet",
+      "extension": ".fbs"
+    },
+    {
+      "mimeType": "image/vnd.fpx",
+      "extension": ".fpx"
+    },
+    {
+      "mimeType": "image/vnd.fst",
+      "extension": ".fst"
+    },
+    {
+      "mimeType": "image/vnd.fujixerox.edmics-mmr",
+      "extension": ".mmr"
+    },
+    {
+      "mimeType": "image/vnd.fujixerox.edmics-rlc",
+      "extension": ".rlc"
+    },
+    {
+      "mimeType": "image/vnd.microsoft.icon",
+      "extension": ".ico"
+    },
+    {
+      "mimeType": "image/vnd.ms-dds",
+      "extension": ".dds"
+    },
+    {
+      "mimeType": "image/vnd.ms-modi",
+      "extension": ".mdi"
+    },
+    {
+      "mimeType": "image/vnd.ms-photo",
+      "extension": ".wdp"
+    },
+    {
+      "mimeType": "image/vnd.net-fpx",
+      "extension": ".npx"
+    },
+    {
+      "mimeType": "image/vnd.pco.b16",
+      "extension": ".b16"
+    },
+    {
+      "mimeType": "image/vnd.tencent.tap",
+      "extension": ".tap"
+    },
+    {
+      "mimeType": "image/vnd.valve.source.texture",
+      "extension": ".vtf"
+    },
+    {
+      "mimeType": "image/vnd.wap.wbmp",
+      "extension": ".wbmp"
+    },
+    {
+      "mimeType": "image/vnd.xiff",
+      "extension": ".xif"
+    },
+    {
+      "mimeType": "image/vnd.zbrush.pcx",
+      "extension": ".pcx"
+    },
+    {
+      "mimeType": "image/webp",
+      "extension": ".webp"
+    },
+    {
+      "mimeType": "image/wmf",
+      "extension": ".wmf"
+    },
+    {
+      "mimeType": "image/x-3ds",
+      "extension": ".3ds"
+    },
+    {
+      "mimeType": "image/x-cmu-raster",
+      "extension": ".ras"
+    },
+    {
+      "mimeType": "image/x-cmx",
+      "extension": ".cmx"
+    },
+    {
+      "mimeType": "image/x-freehand",
+      "extension": ".fh"
+    },
+    {
+      "mimeType": "image/x-icon",
+      "extension": ".ico"
+    },
+    {
+      "mimeType": "image/x-jng",
+      "extension": ".jng"
+    },
+    {
+      "mimeType": "image/x-mrsid-image",
+      "extension": ".sid"
+    },
+    {
+      "mimeType": "image/x-pict",
+      "extension": ".pct"
+    },
+    {
+      "mimeType": "image/x-png",
+      "extension": ".png"
+    },
+    {
+      "mimeType": "image/x-portable-anymap",
+      "extension": ".pnm"
+    },
+    {
+      "mimeType": "image/x-portable-bitmap",
+      "extension": ".pbm"
+    },
+    {
+      "mimeType": "image/x-portable-graymap",
+      "extension": ".pgm"
+    },
+    {
+      "mimeType": "image/x-portable-pixmap",
+      "extension": ".ppm"
+    },
+    {
+      "mimeType": "image/x-rgb",
+      "extension": ".rgb"
+    },
+    {
+      "mimeType": "image/x-tga",
+      "extension": ".tga"
+    },
+    {
+      "mimeType": "image/x-xbitmap",
+      "extension": ".xbm"
+    },
+    {
+      "mimeType": "image/x-xpixmap",
+      "extension": ".xpm"
+    },
+    {
+      "mimeType": "image/x-xwindowdump",
+      "extension": ".xwd"
+    }
+  ],
+  "mimeSamples": [
+    {
+      "contentType": null,
+      "accepted": false,
+      "extension": null
+    },
+    {
+      "contentType": "",
+      "accepted": false,
+      "extension": null
+    },
+    {
+      "contentType": "image/png",
+      "accepted": true,
+      "extension": ".png"
+    },
+    {
+      "contentType": "IMAGE/PNG",
+      "accepted": true,
+      "extension": ".png"
+    },
+    {
+      "contentType": " image/png ",
+      "accepted": true,
+      "extension": ".png"
+    },
+    {
+      "contentType": "image/png; charset=utf-8",
+      "accepted": true,
+      "extension": ".png"
+    },
+    {
+      "contentType": "image/png; invalid",
+      "accepted": true,
+      "extension": ".png"
+    },
+    {
+      "contentType": "image/png; charset=\u0022utf-8\u0022",
+      "accepted": true,
+      "extension": ".png"
+    },
+    {
+      "contentType": "image/png;;",
+      "accepted": false,
+      "extension": null
+    },
+    {
+      "contentType": "image/png, image/jpeg",
+      "accepted": false,
+      "extension": null
+    },
+    {
+      "contentType": "image/not-real",
+      "accepted": false,
+      "extension": null
+    },
+    {
+      "contentType": "application/png",
+      "accepted": false,
+      "extension": null
+    },
+    {
+      "contentType": "image/jpeg",
+      "accepted": true,
+      "extension": ".jpg"
+    },
+    {
+      "contentType": "image/jpg",
+      "accepted": true,
+      "extension": ".jpg"
+    },
+    {
+      "contentType": "image/x-png",
+      "accepted": true,
+      "extension": ".png"
+    },
+    {
+      "contentType": "image/x-icon",
+      "accepted": true,
+      "extension": ".ico"
+    },
+    {
+      "contentType": "image/x-3ds",
+      "accepted": true,
+      "extension": ".3ds"
+    },
+    {
+      "contentType": "image/apng",
+      "accepted": true,
+      "extension": ".apng"
+    },
+    {
+      "contentType": "image/avci",
+      "accepted": true,
+      "extension": ".avci"
+    },
+    {
+      "contentType": "image/avcs",
+      "accepted": true,
+      "extension": ".avcs"
+    },
+    {
+      "contentType": "image/avif",
+      "accepted": true,
+      "extension": ".avif"
+    },
+    {
+      "contentType": "image/vnd.airzip.accelerator.azv",
+      "accepted": true,
+      "extension": ".azv"
+    },
+    {
+      "contentType": "image/vnd.pco.b16",
+      "accepted": true,
+      "extension": ".b16"
+    },
+    {
+      "contentType": "image/bmp",
+      "accepted": true,
+      "extension": ".bmp"
+    },
+    {
+      "contentType": "image/prs.btif",
+      "accepted": true,
+      "extension": ".btf"
+    },
+    {
+      "contentType": "image/cgm",
+      "accepted": true,
+      "extension": ".cgm"
+    },
+    {
+      "contentType": "image/x-cmx",
+      "accepted": true,
+      "extension": ".cmx"
+    },
+    {
+      "contentType": "image/vnd.ms-dds",
+      "accepted": true,
+      "extension": ".dds"
+    },
+    {
+      "contentType": "image/vnd.djvu",
+      "accepted": true,
+      "extension": ".djv"
+    },
+    {
+      "contentType": "image/dpx",
+      "accepted": true,
+      "extension": ".dpx"
+    },
+    {
+      "contentType": "image/dicom-rle",
+      "accepted": true,
+      "extension": ".drle"
+    },
+    {
+      "contentType": "image/vnd.dwg",
+      "accepted": true,
+      "extension": ".dwg"
+    },
+    {
+      "contentType": "image/vnd.dxf",
+      "accepted": true,
+      "extension": ".dxf"
+    },
+    {
+      "contentType": "image/emf",
+      "accepted": true,
+      "extension": ".emf"
+    },
+    {
+      "contentType": "image/aces",
+      "accepted": true,
+      "extension": ".exr"
+    },
+    {
+      "contentType": "image/vnd.fastbidsheet",
+      "accepted": true,
+      "extension": ".fbs"
+    },
+    {
+      "contentType": "image/x-freehand",
+      "accepted": true,
+      "extension": ".fh"
+    },
+    {
+      "contentType": "image/fits",
+      "accepted": true,
+      "extension": ".fits"
+    },
+    {
+      "contentType": "image/vnd.fpx",
+      "accepted": true,
+      "extension": ".fpx"
+    },
+    {
+      "contentType": "image/vnd.fst",
+      "accepted": true,
+      "extension": ".fst"
+    },
+    {
+      "contentType": "image/g3fax",
+      "accepted": true,
+      "extension": ".g3"
+    },
+    {
+      "contentType": "image/gif",
+      "accepted": true,
+      "extension": ".gif"
+    },
+    {
+      "contentType": "image/heic",
+      "accepted": true,
+      "extension": ".heic"
+    },
+    {
+      "contentType": "image/heic-sequence",
+      "accepted": true,
+      "extension": ".heics"
+    },
+    {
+      "contentType": "image/heif",
+      "accepted": true,
+      "extension": ".heif"
+    },
+    {
+      "contentType": "image/heif-sequence",
+      "accepted": true,
+      "extension": ".heifs"
+    },
+    {
+      "contentType": "image/hej2k",
+      "accepted": true,
+      "extension": ".hej2"
+    },
+    {
+      "contentType": "image/hsj2",
+      "accepted": true,
+      "extension": ".hsj2"
+    },
+    {
+      "contentType": "image/vnd.microsoft.icon",
+      "accepted": true,
+      "extension": ".ico"
+    },
+    {
+      "contentType": "image/ief",
+      "accepted": true,
+      "extension": ".ief"
+    },
+    {
+      "contentType": "image/jphc",
+      "accepted": true,
+      "extension": ".jhc"
+    },
+    {
+      "contentType": "image/jls",
+      "accepted": true,
+      "extension": ".jls"
+    },
+    {
+      "contentType": "image/x-jng",
+      "accepted": true,
+      "extension": ".jng"
+    },
+    {
+      "contentType": "image/jp2",
+      "accepted": true,
+      "extension": ".jp2"
+    },
+    {
+      "contentType": "image/jpeg",
+      "accepted": true,
+      "extension": ".jpg"
+    },
+    {
+      "contentType": "image/jpx",
+      "accepted": true,
+      "extension": ".jpf"
+    },
+    {
+      "contentType": "image/jpm",
+      "accepted": true,
+      "extension": ".jpgm"
+    },
+    {
+      "contentType": "image/jph",
+      "accepted": true,
+      "extension": ".jph"
+    },
+    {
+      "contentType": "image/jxr",
+      "accepted": true,
+      "extension": ".jxr"
+    },
+    {
+      "contentType": "image/jxra",
+      "accepted": true,
+      "extension": ".jxra"
+    },
+    {
+      "contentType": "image/jxrs",
+      "accepted": true,
+      "extension": ".jxrs"
+    },
+    {
+      "contentType": "image/jxs",
+      "accepted": true,
+      "extension": ".jxs"
+    },
+    {
+      "contentType": "image/jxsc",
+      "accepted": true,
+      "extension": ".jxsc"
+    },
+    {
+      "contentType": "image/jxsi",
+      "accepted": true,
+      "extension": ".jxsi"
+    },
+    {
+      "contentType": "image/jxss",
+      "accepted": true,
+      "extension": ".jxss"
+    },
+    {
+      "contentType": "image/ktx",
+      "accepted": true,
+      "extension": ".ktx"
+    },
+    {
+      "contentType": "image/ktx2",
+      "accepted": true,
+      "extension": ".ktx2"
+    },
+    {
+      "contentType": "image/vnd.ms-modi",
+      "accepted": true,
+      "extension": ".mdi"
+    },
+    {
+      "contentType": "image/vnd.fujixerox.edmics-mmr",
+      "accepted": true,
+      "extension": ".mmr"
+    },
+    {
+      "contentType": "image/vnd.net-fpx",
+      "accepted": true,
+      "extension": ".npx"
+    },
+    {
+      "contentType": "image/x-portable-bitmap",
+      "accepted": true,
+      "extension": ".pbm"
+    },
+    {
+      "contentType": "image/x-pict",
+      "accepted": true,
+      "extension": ".pct"
+    },
+    {
+      "contentType": "image/vnd.zbrush.pcx",
+      "accepted": true,
+      "extension": ".pcx"
+    },
+    {
+      "contentType": "image/x-portable-graymap",
+      "accepted": true,
+      "extension": ".pgm"
+    },
+    {
+      "contentType": "image/png",
+      "accepted": true,
+      "extension": ".png"
+    },
+    {
+      "contentType": "image/x-portable-anymap",
+      "accepted": true,
+      "extension": ".pnm"
+    },
+    {
+      "contentType": "image/x-portable-pixmap",
+      "accepted": true,
+      "extension": ".ppm"
+    },
+    {
+      "contentType": "image/vnd.adobe.photoshop",
+      "accepted": true,
+      "extension": ".psd"
+    },
+    {
+      "contentType": "image/prs.pti",
+      "accepted": true,
+      "extension": ".pti"
+    },
+    {
+      "contentType": "image/x-cmu-raster",
+      "accepted": true,
+      "extension": ".ras"
+    },
+    {
+      "contentType": "image/x-rgb",
+      "accepted": true,
+      "extension": ".rgb"
+    },
+    {
+      "contentType": "image/vnd.fujixerox.edmics-rlc",
+      "accepted": true,
+      "extension": ".rlc"
+    },
+    {
+      "contentType": "image/sgi",
+      "accepted": true,
+      "extension": ".sgi"
+    },
+    {
+      "contentType": "image/x-mrsid-image",
+      "accepted": true,
+      "extension": ".sid"
+    },
+    {
+      "contentType": "image/svg\u002Bxml",
+      "accepted": true,
+      "extension": ".svg"
+    },
+    {
+      "contentType": "image/t38",
+      "accepted": true,
+      "extension": ".t38"
+    },
+    {
+      "contentType": "image/vnd.tencent.tap",
+      "accepted": true,
+      "extension": ".tap"
+    },
+    {
+      "contentType": "image/tiff-fx",
+      "accepted": true,
+      "extension": ".tfx"
+    },
+    {
+      "contentType": "image/x-tga",
+      "accepted": true,
+      "extension": ".tga"
+    },
+    {
+      "contentType": "image/tiff",
+      "accepted": true,
+      "extension": ".tiff"
+    },
+    {
+      "contentType": "image/vnd.dece.graphic",
+      "accepted": true,
+      "extension": ".uvg"
+    },
+    {
+      "contentType": "image/vnd.valve.source.texture",
+      "accepted": true,
+      "extension": ".vtf"
+    },
+    {
+      "contentType": "image/vnd.wap.wbmp",
+      "accepted": true,
+      "extension": ".wbmp"
+    },
+    {
+      "contentType": "image/vnd.ms-photo",
+      "accepted": true,
+      "extension": ".wdp"
+    },
+    {
+      "contentType": "image/webp",
+      "accepted": true,
+      "extension": ".webp"
+    },
+    {
+      "contentType": "image/wmf",
+      "accepted": true,
+      "extension": ".wmf"
+    },
+    {
+      "contentType": "image/x-xbitmap",
+      "accepted": true,
+      "extension": ".xbm"
+    },
+    {
+      "contentType": "image/vnd.xiff",
+      "accepted": true,
+      "extension": ".xif"
+    },
+    {
+      "contentType": "image/x-xpixmap",
+      "accepted": true,
+      "extension": ".xpm"
+    },
+    {
+      "contentType": "image/x-xwindowdump",
+      "accepted": true,
+      "extension": ".xwd"
+    }
+  ],
+  "transforms": [
+    {
+      "name": "empty",
+      "bytes": "",
+      "failure": null
+    },
+    {
+      "name": "one-character",
+      "bytes": "",
+      "failure": null
+    },
+    {
+      "name": "partial-tail",
+      "bytes": "YWJj",
+      "failure": null
+    },
+    {
+      "name": "split-quantum",
+      "bytes": "YQ==",
+      "failure": null
+    },
+    {
+      "name": "whitespace-split",
+      "bytes": "YQ==",
+      "failure": null
+    },
+    {
+      "name": "invalid-after-prefix",
+      "bytes": "YWJj",
+      "failure": "NotSupportedException"
+    },
+    {
+      "name": "invalid-in-same-block",
+      "bytes": "",
+      "failure": "NotSupportedException"
+    },
+    {
+      "name": "padding-across-blocks",
+      "bytes": "YWI=",
+      "failure": null
+    },
+    {
+      "name": "padding-in-one-block",
+      "bytes": "",
+      "failure": "NotSupportedException"
+    },
+    {
+      "name": "nonzero-pad-bits",
+      "bytes": "",
+      "failure": "NotSupportedException"
+    },
+    {
+      "name": "one-invalid-trailing-character",
+      "bytes": "YWJj",
+      "failure": null
+    },
+    {
+      "name": "incomplete-invalid-tail",
+      "bytes": "YWJj",
+      "failure": null
+    },
+    {
+      "name": "padding-tail",
+      "bytes": "YQ==",
+      "failure": null
+    },
+    {
+      "name": "spaces-between-quanta",
+      "bytes": "YWJjZGVm",
+      "failure": null
+    },
+    {
+      "name": "valid-split",
+      "bytes": "YWJjZGVm",
+      "failure": null
+    }
+  ],
+  "results": [
+    {
+      "name": "configuration-defaults",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json; charset=utf-8"
+      },
+      "body": "eyJTcGxhc2hzY3JlZW5FbmFibGVkIjpmYWxzZX0=",
+      "jsonBody": {
+        "SplashscreenEnabled": false
+      },
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": null
+      },
+      "disk": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": null
+      },
+      "calls": [],
+      "files": []
+    },
+    {
+      "name": "configuration-strings",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json; charset=utf-8"
+      },
+      "body": "eyJMb2dpbkRpc2NsYWltZXIiOiJcdTAwM0NiXHUwMDNFVW5pY29kZSBjYWZcdTAwRTkgXHU0RTJEXHU2NTg3XHUwMDNDL2JcdTAwM0UiLCJDdXN0b21Dc3MiOiJodG1sIHsgY29sb3I6IHJlZDsgfSIsIlNwbGFzaHNjcmVlbkVuYWJsZWQiOnRydWV9",
+      "jsonBody": {
+        "LoginDisclaimer": "\u003Cb\u003EUnicode caf\u00E9 \u4E2D\u6587\u003C/b\u003E",
+        "CustomCss": "html { color: red; }",
+        "SplashscreenEnabled": true
+      },
+      "live": {
+        "LoginDisclaimer": "\u003Cb\u003EUnicode caf\u00E9 \u4E2D\u6587\u003C/b\u003E",
+        "CustomCss": "html { color: red; }",
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\configuration-strings\\data\\custom.png"
+      },
+      "disk": {
+        "LoginDisclaimer": "\u003Cb\u003EUnicode caf\u00E9 \u4E2D\u6587\u003C/b\u003E",
+        "CustomCss": "html { color: red; }",
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\configuration-strings\\data\\custom.png"
+      },
+      "calls": [],
+      "files": []
+    },
+    {
+      "name": "configuration-empty-strings",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json; charset=utf-8"
+      },
+      "body": "eyJMb2dpbkRpc2NsYWltZXIiOiIiLCJDdXN0b21Dc3MiOiIiLCJTcGxhc2hzY3JlZW5FbmFibGVkIjpmYWxzZX0=",
+      "jsonBody": {
+        "LoginDisclaimer": "",
+        "CustomCss": "",
+        "SplashscreenEnabled": false
+      },
+      "live": {
+        "LoginDisclaimer": "",
+        "CustomCss": "",
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": null
+      },
+      "disk": {
+        "LoginDisclaimer": "",
+        "CustomCss": "",
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": null
+      },
+      "calls": [],
+      "files": []
+    },
+    {
+      "name": "configuration-camel",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json; profile=\u0022CamelCase\u0022; charset=utf-8"
+      },
+      "body": "eyJjdXN0b21Dc3MiOiJib2R5e30iLCJzcGxhc2hzY3JlZW5FbmFibGVkIjpmYWxzZX0=",
+      "jsonBody": {
+        "customCss": "body{}",
+        "splashscreenEnabled": false
+      },
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": "body{}",
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": null
+      },
+      "disk": {
+        "LoginDisclaimer": null,
+        "CustomCss": "body{}",
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": null
+      },
+      "calls": [],
+      "files": []
+    },
+    {
+      "name": "css-default",
+      "status": 200,
+      "headers": {
+        "content-type": "text/css; charset=utf-8"
+      },
+      "body": "aHRtbCB7IGNvbG9yOiByZWQ7IH0=",
+      "jsonBody": null,
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": "html { color: red; }",
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": null
+      },
+      "disk": {
+        "LoginDisclaimer": null,
+        "CustomCss": "html { color: red; }",
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": null
+      },
+      "calls": [],
+      "files": []
+    },
+    {
+      "name": "css-css",
+      "status": 200,
+      "headers": {
+        "content-type": "text/css; charset=utf-8"
+      },
+      "body": "aHRtbCB7IGNvbG9yOiByZWQ7IH0=",
+      "jsonBody": null,
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": "html { color: red; }",
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": null
+      },
+      "disk": {
+        "LoginDisclaimer": null,
+        "CustomCss": "html { color: red; }",
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": null
+      },
+      "calls": [],
+      "files": []
+    },
+    {
+      "name": "css-wildcard",
+      "status": 200,
+      "headers": {
+        "content-type": "text/css; charset=utf-8"
+      },
+      "body": "aHRtbCB7IGNvbG9yOiByZWQ7IH0=",
+      "jsonBody": null,
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": "html { color: red; }",
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": null
+      },
+      "disk": {
+        "LoginDisclaimer": null,
+        "CustomCss": "html { color: red; }",
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": null
+      },
+      "calls": [],
+      "files": []
+    },
+    {
+      "name": "css-plain",
+      "status": 200,
+      "headers": {
+        "content-type": "text/css; charset=utf-8"
+      },
+      "body": "aHRtbCB7IGNvbG9yOiByZWQ7IH0=",
+      "jsonBody": null,
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": "html { color: red; }",
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": null
+      },
+      "disk": {
+        "LoginDisclaimer": null,
+        "CustomCss": "html { color: red; }",
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": null
+      },
+      "calls": [],
+      "files": []
+    },
+    {
+      "name": "css-alias-empty",
+      "status": 200,
+      "headers": {
+        "content-type": "text/css; charset=utf-8",
+        "content-length": "0"
+      },
+      "body": "",
+      "jsonBody": null,
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": null
+      },
+      "disk": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": null
+      },
+      "calls": [],
+      "files": []
+    },
+    {
+      "name": "css-null",
+      "status": 200,
+      "headers": {
+        "content-type": "text/css; charset=utf-8",
+        "content-length": "0"
+      },
+      "body": "",
+      "jsonBody": null,
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": null
+      },
+      "disk": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": null
+      },
+      "calls": [],
+      "files": []
+    },
+    {
+      "name": "load-directory-config",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json; charset=utf-8"
+      },
+      "body": "eyJTcGxhc2hzY3JlZW5FbmFibGVkIjpmYWxzZX0=",
+      "jsonBody": {
+        "SplashscreenEnabled": false
+      },
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": null
+      },
+      "disk": null,
+      "calls": [],
+      "files": []
+    },
+    {
+      "name": "named-anonymous",
+      "status": 401,
+      "headers": {
+        "content-length": "0"
+      },
+      "body": "",
+      "jsonBody": null,
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": null
+      },
+      "disk": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": null
+      },
+      "calls": [],
+      "files": []
+    },
+    {
+      "name": "named-user",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json; charset=utf-8"
+      },
+      "body": "eyJTcGxhc2hzY3JlZW5FbmFibGVkIjp0cnVlLCJTcGxhc2hzY3JlZW5Mb2NhdGlvbiI6IkQ6XFxtZWRpYW1hbmFnZXItdmFsaWRhdGlvblxcMjAyNjEwMTMtcmVsZWFzZS1icmFuZGluZy1uYXRpdmUtNlxcY2FzZXNcXG5hbWVkLXVzZXJcXGRhdGFcXGN1c3RvbS5wbmcifQ==",
+      "jsonBody": {
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\named-user\\data\\custom.png"
+      },
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\named-user\\data\\custom.png"
+      },
+      "disk": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\named-user\\data\\custom.png"
+      },
+      "calls": [],
+      "files": []
+    },
+    {
+      "name": "update-normal",
+      "status": 204,
+      "headers": {},
+      "body": "",
+      "jsonBody": null,
+      "live": {
+        "LoginDisclaimer": "New",
+        "CustomCss": "html{}",
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\update-normal\\data\\custom.png"
+      },
+      "disk": {
+        "LoginDisclaimer": "New",
+        "CustomCss": "html{}",
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\update-normal\\data\\custom.png"
+      },
+      "calls": [
+        {
+          "phase": "configuration-updating",
+          "options": {
+            "LoginDisclaimer": "New",
+            "CustomCss": "html{}",
+            "SplashscreenEnabled": false,
+            "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\update-normal\\data\\custom.png"
+          }
+        },
+        {
+          "phase": "configuration-updated",
+          "options": {
+            "LoginDisclaimer": "New",
+            "CustomCss": "html{}",
+            "SplashscreenEnabled": false,
+            "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\update-normal\\data\\custom.png"
+          }
+        }
+      ],
+      "files": []
+    },
+    {
+      "name": "update-defaults",
+      "status": 204,
+      "headers": {},
+      "body": "",
+      "jsonBody": null,
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\update-defaults\\data\\custom.png"
+      },
+      "disk": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\update-defaults\\data\\custom.png"
+      },
+      "calls": [
+        {
+          "phase": "configuration-updating",
+          "options": {
+            "LoginDisclaimer": null,
+            "CustomCss": null,
+            "SplashscreenEnabled": false,
+            "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\update-defaults\\data\\custom.png"
+          }
+        },
+        {
+          "phase": "configuration-updated",
+          "options": {
+            "LoginDisclaimer": null,
+            "CustomCss": null,
+            "SplashscreenEnabled": false,
+            "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\update-defaults\\data\\custom.png"
+          }
+        }
+      ],
+      "files": []
+    },
+    {
+      "name": "update-case-duplicates",
+      "status": 204,
+      "headers": {},
+      "body": "",
+      "jsonBody": null,
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": "last",
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\update-case-duplicates\\data\\custom.png"
+      },
+      "disk": {
+        "LoginDisclaimer": null,
+        "CustomCss": "last",
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\update-case-duplicates\\data\\custom.png"
+      },
+      "calls": [
+        {
+          "phase": "configuration-updating",
+          "options": {
+            "LoginDisclaimer": null,
+            "CustomCss": "last",
+            "SplashscreenEnabled": true,
+            "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\update-case-duplicates\\data\\custom.png"
+          }
+        },
+        {
+          "phase": "configuration-updated",
+          "options": {
+            "LoginDisclaimer": null,
+            "CustomCss": "last",
+            "SplashscreenEnabled": true,
+            "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\update-case-duplicates\\data\\custom.png"
+          }
+        }
+      ],
+      "files": []
+    },
+    {
+      "name": "update-numeric-string",
+      "status": 204,
+      "headers": {},
+      "body": "",
+      "jsonBody": null,
+      "live": {
+        "LoginDisclaimer": "17",
+        "CustomCss": "false",
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\update-numeric-string\\data\\custom.png"
+      },
+      "disk": {
+        "LoginDisclaimer": "17",
+        "CustomCss": "false",
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\update-numeric-string\\data\\custom.png"
+      },
+      "calls": [
+        {
+          "phase": "configuration-updating",
+          "options": {
+            "LoginDisclaimer": "17",
+            "CustomCss": "false",
+            "SplashscreenEnabled": false,
+            "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\update-numeric-string\\data\\custom.png"
+          }
+        },
+        {
+          "phase": "configuration-updated",
+          "options": {
+            "LoginDisclaimer": "17",
+            "CustomCss": "false",
+            "SplashscreenEnabled": false,
+            "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\update-numeric-string\\data\\custom.png"
+          }
+        }
+      ],
+      "files": []
+    },
+    {
+      "name": "update-boolean-null",
+      "status": 400,
+      "headers": {
+        "content-type": "application/json; charset=utf-8"
+      },
+      "body": "eyJ0eXBlIjoiaHR0cHM6Ly90b29scy5pZXRmLm9yZy9odG1sL3JmYzkxMTAjc2VjdGlvbi0xNS41LjEiLCJ0aXRsZSI6Ik9uZSBvciBtb3JlIHZhbGlkYXRpb24gZXJyb3JzIG9jY3VycmVkLiIsInN0YXR1cyI6NDAwLCJlcnJvcnMiOnsiY29uZmlndXJhdGlvbiI6WyJUaGUgY29uZmlndXJhdGlvbiBmaWVsZCBpcyByZXF1aXJlZC4iXSwiJC5TcGxhc2hzY3JlZW5FbmFibGVkIjpbIlRoZSBKU09OIHZhbHVlIGNvdWxkIG5vdCBiZSBjb252ZXJ0ZWQgdG8gU3lzdGVtLkJvb2xlYW4uIFBhdGg6ICQuU3BsYXNoc2NyZWVuRW5hYmxlZCB8IExpbmVOdW1iZXI6IDAgfCBCeXRlUG9zaXRpb25JbkxpbmU6IDI3LiJdfSwidHJhY2VJZCI6IjBITlA4TEJBMVI5NTE6MDAwMDAwMTIifQ==",
+      "jsonBody": {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "errors": {
+          "configuration": [
+            "The configuration field is required."
+          ],
+          "$.SplashscreenEnabled": [
+            "The JSON value could not be converted to System.Boolean. Path: $.SplashscreenEnabled | LineNumber: 0 | BytePositionInLine: 27."
+          ]
+        },
+        "traceId": "0HNP8LBA1R951:00000012"
+      },
+      "live": {
+        "LoginDisclaimer": "Old disclaimer",
+        "CustomCss": "Old CSS",
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\update-boolean-null\\data\\custom.png"
+      },
+      "disk": {
+        "LoginDisclaimer": "Old disclaimer",
+        "CustomCss": "Old CSS",
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\update-boolean-null\\data\\custom.png"
+      },
+      "calls": [],
+      "files": []
+    },
+    {
+      "name": "update-boolean-string",
+      "status": 400,
+      "headers": {
+        "content-type": "application/json; charset=utf-8"
+      },
+      "body": "eyJ0eXBlIjoiaHR0cHM6Ly90b29scy5pZXRmLm9yZy9odG1sL3JmYzkxMTAjc2VjdGlvbi0xNS41LjEiLCJ0aXRsZSI6Ik9uZSBvciBtb3JlIHZhbGlkYXRpb24gZXJyb3JzIG9jY3VycmVkLiIsInN0YXR1cyI6NDAwLCJlcnJvcnMiOnsiY29uZmlndXJhdGlvbiI6WyJUaGUgY29uZmlndXJhdGlvbiBmaWVsZCBpcyByZXF1aXJlZC4iXSwiJC5TcGxhc2hzY3JlZW5FbmFibGVkIjpbIlRoZSBKU09OIHZhbHVlIGNvdWxkIG5vdCBiZSBjb252ZXJ0ZWQgdG8gU3lzdGVtLkJvb2xlYW4uIFBhdGg6ICQuU3BsYXNoc2NyZWVuRW5hYmxlZCB8IExpbmVOdW1iZXI6IDAgfCBCeXRlUG9zaXRpb25JbkxpbmU6IDI5LiJdfSwidHJhY2VJZCI6IjBITlA4TEJBMVI5NTE6MDAwMDAwMTMifQ==",
+      "jsonBody": {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "errors": {
+          "configuration": [
+            "The configuration field is required."
+          ],
+          "$.SplashscreenEnabled": [
+            "The JSON value could not be converted to System.Boolean. Path: $.SplashscreenEnabled | LineNumber: 0 | BytePositionInLine: 29."
+          ]
+        },
+        "traceId": "0HNP8LBA1R951:00000013"
+      },
+      "live": {
+        "LoginDisclaimer": "Old disclaimer",
+        "CustomCss": "Old CSS",
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\update-boolean-string\\data\\custom.png"
+      },
+      "disk": {
+        "LoginDisclaimer": "Old disclaimer",
+        "CustomCss": "Old CSS",
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\update-boolean-string\\data\\custom.png"
+      },
+      "calls": [],
+      "files": []
+    },
+    {
+      "name": "update-bad-earlier-duplicate",
+      "status": 400,
+      "headers": {
+        "content-type": "application/json; charset=utf-8"
+      },
+      "body": "eyJ0eXBlIjoiaHR0cHM6Ly90b29scy5pZXRmLm9yZy9odG1sL3JmYzkxMTAjc2VjdGlvbi0xNS41LjEiLCJ0aXRsZSI6Ik9uZSBvciBtb3JlIHZhbGlkYXRpb24gZXJyb3JzIG9jY3VycmVkLiIsInN0YXR1cyI6NDAwLCJlcnJvcnMiOnsiY29uZmlndXJhdGlvbiI6WyJUaGUgY29uZmlndXJhdGlvbiBmaWVsZCBpcyByZXF1aXJlZC4iXSwiJC5TcGxhc2hzY3JlZW5FbmFibGVkIjpbIlRoZSBKU09OIHZhbHVlIGNvdWxkIG5vdCBiZSBjb252ZXJ0ZWQgdG8gU3lzdGVtLkJvb2xlYW4uIFBhdGg6ICQuU3BsYXNoc2NyZWVuRW5hYmxlZCB8IExpbmVOdW1iZXI6IDAgfCBCeXRlUG9zaXRpb25JbkxpbmU6IDI0LiJdfSwidHJhY2VJZCI6IjBITlA4TEJBMVI5NTE6MDAwMDAwMTQifQ==",
+      "jsonBody": {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "errors": {
+          "configuration": [
+            "The configuration field is required."
+          ],
+          "$.SplashscreenEnabled": [
+            "The JSON value could not be converted to System.Boolean. Path: $.SplashscreenEnabled | LineNumber: 0 | BytePositionInLine: 24."
+          ]
+        },
+        "traceId": "0HNP8LBA1R951:00000014"
+      },
+      "live": {
+        "LoginDisclaimer": "Old disclaimer",
+        "CustomCss": "Old CSS",
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\update-bad-earlier-duplicate\\data\\custom.png"
+      },
+      "disk": {
+        "LoginDisclaimer": "Old disclaimer",
+        "CustomCss": "Old CSS",
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\update-bad-earlier-duplicate\\data\\custom.png"
+      },
+      "calls": [],
+      "files": []
+    },
+    {
+      "name": "update-string-object",
+      "status": 400,
+      "headers": {
+        "content-type": "application/json; charset=utf-8"
+      },
+      "body": "eyJ0eXBlIjoiaHR0cHM6Ly90b29scy5pZXRmLm9yZy9odG1sL3JmYzkxMTAjc2VjdGlvbi0xNS41LjEiLCJ0aXRsZSI6Ik9uZSBvciBtb3JlIHZhbGlkYXRpb24gZXJyb3JzIG9jY3VycmVkLiIsInN0YXR1cyI6NDAwLCJlcnJvcnMiOnsiY29uZmlndXJhdGlvbiI6WyJUaGUgY29uZmlndXJhdGlvbiBmaWVsZCBpcyByZXF1aXJlZC4iXSwiJC5Mb2dpbkRpc2NsYWltZXIiOlsiVGhlIGNvbnZlcnRlciBcdTAwMjdKZWxseWZpbi5FeHRlbnNpb25zLkpzb24uQ29udmVydGVycy5Kc29uU3RyaW5nQ29udmVydGVyXHUwMDI3IHJlYWQgdG9vIG11Y2ggb3Igbm90IGVub3VnaC4gUGF0aDogJC5Mb2dpbkRpc2NsYWltZXIgfCBMaW5lTnVtYmVyOiAwIHwgQnl0ZVBvc2l0aW9uSW5MaW5lOiAyMC4iXX0sInRyYWNlSWQiOiIwSE5QOExCQTFSOTUxOjAwMDAwMDE1In0=",
+      "jsonBody": {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "errors": {
+          "configuration": [
+            "The configuration field is required."
+          ],
+          "$.LoginDisclaimer": [
+            "The converter \u0027Jellyfin.Extensions.Json.Converters.JsonStringConverter\u0027 read too much or not enough. Path: $.LoginDisclaimer | LineNumber: 0 | BytePositionInLine: 20."
+          ]
+        },
+        "traceId": "0HNP8LBA1R951:00000015"
+      },
+      "live": {
+        "LoginDisclaimer": "Old disclaimer",
+        "CustomCss": "Old CSS",
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\update-string-object\\data\\custom.png"
+      },
+      "disk": {
+        "LoginDisclaimer": "Old disclaimer",
+        "CustomCss": "Old CSS",
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\update-string-object\\data\\custom.png"
+      },
+      "calls": [],
+      "files": []
+    },
+    {
+      "name": "update-root-null",
+      "status": 400,
+      "headers": {
+        "content-type": "application/json; charset=utf-8"
+      },
+      "body": "eyJ0eXBlIjoiaHR0cHM6Ly90b29scy5pZXRmLm9yZy9odG1sL3JmYzkxMTAjc2VjdGlvbi0xNS41LjEiLCJ0aXRsZSI6Ik9uZSBvciBtb3JlIHZhbGlkYXRpb24gZXJyb3JzIG9jY3VycmVkLiIsInN0YXR1cyI6NDAwLCJlcnJvcnMiOnsiIjpbIkEgbm9uLWVtcHR5IHJlcXVlc3QgYm9keSBpcyByZXF1aXJlZC4iXSwiY29uZmlndXJhdGlvbiI6WyJUaGUgY29uZmlndXJhdGlvbiBmaWVsZCBpcyByZXF1aXJlZC4iXX0sInRyYWNlSWQiOiIwSE5QOExCQTFSOTUxOjAwMDAwMDE2In0=",
+      "jsonBody": {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "errors": {
+          "": [
+            "A non-empty request body is required."
+          ],
+          "configuration": [
+            "The configuration field is required."
+          ]
+        },
+        "traceId": "0HNP8LBA1R951:00000016"
+      },
+      "live": {
+        "LoginDisclaimer": "Old disclaimer",
+        "CustomCss": "Old CSS",
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\update-root-null\\data\\custom.png"
+      },
+      "disk": {
+        "LoginDisclaimer": "Old disclaimer",
+        "CustomCss": "Old CSS",
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\update-root-null\\data\\custom.png"
+      },
+      "calls": [],
+      "files": []
+    },
+    {
+      "name": "update-empty-body",
+      "status": 400,
+      "headers": {
+        "content-type": "application/json; charset=utf-8"
+      },
+      "body": "eyJ0eXBlIjoiaHR0cHM6Ly90b29scy5pZXRmLm9yZy9odG1sL3JmYzkxMTAjc2VjdGlvbi0xNS41LjEiLCJ0aXRsZSI6Ik9uZSBvciBtb3JlIHZhbGlkYXRpb24gZXJyb3JzIG9jY3VycmVkLiIsInN0YXR1cyI6NDAwLCJlcnJvcnMiOnsiIjpbIkEgbm9uLWVtcHR5IHJlcXVlc3QgYm9keSBpcyByZXF1aXJlZC4iXSwiY29uZmlndXJhdGlvbiI6WyJUaGUgY29uZmlndXJhdGlvbiBmaWVsZCBpcyByZXF1aXJlZC4iXX0sInRyYWNlSWQiOiIwSE5QOExCQTFSOTUxOjAwMDAwMDE3In0=",
+      "jsonBody": {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "errors": {
+          "": [
+            "A non-empty request body is required."
+          ],
+          "configuration": [
+            "The configuration field is required."
+          ]
+        },
+        "traceId": "0HNP8LBA1R951:00000017"
+      },
+      "live": {
+        "LoginDisclaimer": "Old disclaimer",
+        "CustomCss": "Old CSS",
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\update-empty-body\\data\\custom.png"
+      },
+      "disk": {
+        "LoginDisclaimer": "Old disclaimer",
+        "CustomCss": "Old CSS",
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\update-empty-body\\data\\custom.png"
+      },
+      "calls": [],
+      "files": []
+    },
+    {
+      "name": "update-malformed",
+      "status": 400,
+      "headers": {
+        "content-type": "application/json; charset=utf-8"
+      },
+      "body": "eyJ0eXBlIjoiaHR0cHM6Ly90b29scy5pZXRmLm9yZy9odG1sL3JmYzkxMTAjc2VjdGlvbi0xNS41LjEiLCJ0aXRsZSI6Ik9uZSBvciBtb3JlIHZhbGlkYXRpb24gZXJyb3JzIG9jY3VycmVkLiIsInN0YXR1cyI6NDAwLCJlcnJvcnMiOnsiJCI6WyJFeHBlY3RlZCBkZXB0aCB0byBiZSB6ZXJvIGF0IHRoZSBlbmQgb2YgdGhlIEpTT04gcGF5bG9hZC4gVGhlcmUgaXMgYW4gb3BlbiBKU09OIG9iamVjdCBvciBhcnJheSB0aGF0IHNob3VsZCBiZSBjbG9zZWQuIFBhdGg6ICQgfCBMaW5lTnVtYmVyOiAwIHwgQnl0ZVBvc2l0aW9uSW5MaW5lOiAxLiJdLCJjb25maWd1cmF0aW9uIjpbIlRoZSBjb25maWd1cmF0aW9uIGZpZWxkIGlzIHJlcXVpcmVkLiJdfSwidHJhY2VJZCI6IjBITlA4TEJBMVI5NTE6MDAwMDAwMTgifQ==",
+      "jsonBody": {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "errors": {
+          "$": [
+            "Expected depth to be zero at the end of the JSON payload. There is an open JSON object or array that should be closed. Path: $ | LineNumber: 0 | BytePositionInLine: 1."
+          ],
+          "configuration": [
+            "The configuration field is required."
+          ]
+        },
+        "traceId": "0HNP8LBA1R951:00000018"
+      },
+      "live": {
+        "LoginDisclaimer": "Old disclaimer",
+        "CustomCss": "Old CSS",
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\update-malformed\\data\\custom.png"
+      },
+      "disk": {
+        "LoginDisclaimer": "Old disclaimer",
+        "CustomCss": "Old CSS",
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\update-malformed\\data\\custom.png"
+      },
+      "calls": [],
+      "files": []
+    },
+    {
+      "name": "update-malformed-open-array",
+      "status": 400,
+      "headers": {
+        "content-type": "application/json; charset=utf-8"
+      },
+      "body": "eyJ0eXBlIjoiaHR0cHM6Ly90b29scy5pZXRmLm9yZy9odG1sL3JmYzkxMTAjc2VjdGlvbi0xNS41LjEiLCJ0aXRsZSI6Ik9uZSBvciBtb3JlIHZhbGlkYXRpb24gZXJyb3JzIG9jY3VycmVkLiIsInN0YXR1cyI6NDAwLCJlcnJvcnMiOnsiJCI6WyJUaGUgSlNPTiB2YWx1ZSBjb3VsZCBub3QgYmUgY29udmVydGVkIHRvIE1lZGlhQnJvd3Nlci5Nb2RlbC5CcmFuZGluZy5CcmFuZGluZ09wdGlvbnNEdG8uIFBhdGg6ICQgfCBMaW5lTnVtYmVyOiAwIHwgQnl0ZVBvc2l0aW9uSW5MaW5lOiAxLiJdLCJjb25maWd1cmF0aW9uIjpbIlRoZSBjb25maWd1cmF0aW9uIGZpZWxkIGlzIHJlcXVpcmVkLiJdfSwidHJhY2VJZCI6IjBITlA4TEJBMVI5NTE6MDAwMDAwMTkifQ==",
+      "jsonBody": {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "errors": {
+          "$": [
+            "The JSON value could not be converted to MediaBrowser.Model.Branding.BrandingOptionsDto. Path: $ | LineNumber: 0 | BytePositionInLine: 1."
+          ],
+          "configuration": [
+            "The configuration field is required."
+          ]
+        },
+        "traceId": "0HNP8LBA1R951:00000019"
+      },
+      "live": {
+        "LoginDisclaimer": "Old disclaimer",
+        "CustomCss": "Old CSS",
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\update-malformed-open-array\\data\\custom.png"
+      },
+      "disk": {
+        "LoginDisclaimer": "Old disclaimer",
+        "CustomCss": "Old CSS",
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\update-malformed-open-array\\data\\custom.png"
+      },
+      "calls": [],
+      "files": []
+    },
+    {
+      "name": "update-malformed-open-object-whitespace",
+      "status": 400,
+      "headers": {
+        "content-type": "application/json; charset=utf-8"
+      },
+      "body": "eyJ0eXBlIjoiaHR0cHM6Ly90b29scy5pZXRmLm9yZy9odG1sL3JmYzkxMTAjc2VjdGlvbi0xNS41LjEiLCJ0aXRsZSI6Ik9uZSBvciBtb3JlIHZhbGlkYXRpb24gZXJyb3JzIG9jY3VycmVkLiIsInN0YXR1cyI6NDAwLCJlcnJvcnMiOnsiJCI6WyJFeHBlY3RlZCBkZXB0aCB0byBiZSB6ZXJvIGF0IHRoZSBlbmQgb2YgdGhlIEpTT04gcGF5bG9hZC4gVGhlcmUgaXMgYW4gb3BlbiBKU09OIG9iamVjdCBvciBhcnJheSB0aGF0IHNob3VsZCBiZSBjbG9zZWQuIFBhdGg6ICQgfCBMaW5lTnVtYmVyOiAxIHwgQnl0ZVBvc2l0aW9uSW5MaW5lOiAxLiJdLCJjb25maWd1cmF0aW9uIjpbIlRoZSBjb25maWd1cmF0aW9uIGZpZWxkIGlzIHJlcXVpcmVkLiJdfSwidHJhY2VJZCI6IjBITlA4TEJBMVI5NTE6MDAwMDAwMUEifQ==",
+      "jsonBody": {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "errors": {
+          "$": [
+            "Expected depth to be zero at the end of the JSON payload. There is an open JSON object or array that should be closed. Path: $ | LineNumber: 1 | BytePositionInLine: 1."
+          ],
+          "configuration": [
+            "The configuration field is required."
+          ]
+        },
+        "traceId": "0HNP8LBA1R951:0000001A"
+      },
+      "live": {
+        "LoginDisclaimer": "Old disclaimer",
+        "CustomCss": "Old CSS",
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\update-malformed-open-object-whitespace\\data\\custom.png"
+      },
+      "disk": {
+        "LoginDisclaimer": "Old disclaimer",
+        "CustomCss": "Old CSS",
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\update-malformed-open-object-whitespace\\data\\custom.png"
+      },
+      "calls": [],
+      "files": []
+    },
+    {
+      "name": "update-user",
+      "status": 403,
+      "headers": {
+        "content-length": "0"
+      },
+      "body": "",
+      "jsonBody": null,
+      "live": {
+        "LoginDisclaimer": "Old disclaimer",
+        "CustomCss": "Old CSS",
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\update-user\\data\\custom.png"
+      },
+      "disk": {
+        "LoginDisclaimer": "Old disclaimer",
+        "CustomCss": "Old CSS",
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\update-user\\data\\custom.png"
+      },
+      "calls": [],
+      "files": []
+    },
+    {
+      "name": "update-anonymous",
+      "status": 401,
+      "headers": {
+        "content-length": "0"
+      },
+      "body": "",
+      "jsonBody": null,
+      "live": {
+        "LoginDisclaimer": "Old disclaimer",
+        "CustomCss": "Old CSS",
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\update-anonymous\\data\\custom.png"
+      },
+      "disk": {
+        "LoginDisclaimer": "Old disclaimer",
+        "CustomCss": "Old CSS",
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\update-anonymous\\data\\custom.png"
+      },
+      "calls": [],
+      "files": []
+    },
+    {
+      "name": "update-read-only-configuration",
+      "status": 500,
+      "headers": {
+        "content-type": "text/plain"
+      },
+      "body": "RXJyb3IgcHJvY2Vzc2luZyByZXF1ZXN0Lg==",
+      "jsonBody": null,
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": "Changed live",
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\update-read-only-configuration\\data\\custom.png"
+      },
+      "disk": {
+        "LoginDisclaimer": "Old disclaimer",
+        "CustomCss": "Old CSS",
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\update-read-only-configuration\\data\\custom.png"
+      },
+      "calls": [
+        {
+          "phase": "configuration-updating",
+          "options": {
+            "LoginDisclaimer": null,
+            "CustomCss": "Changed live",
+            "SplashscreenEnabled": false,
+            "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\update-read-only-configuration\\data\\custom.png"
+          }
+        }
+      ],
+      "files": []
+    },
+    {
+      "name": "update-unsupported-body",
+      "status": 415,
+      "headers": {
+        "content-type": "application/json; charset=utf-8"
+      },
+      "body": "eyJ0eXBlIjoiaHR0cHM6Ly90b29scy5pZXRmLm9yZy9odG1sL3JmYzkxMTAjc2VjdGlvbi0xNS41LjE2IiwidGl0bGUiOiJVbnN1cHBvcnRlZCBNZWRpYSBUeXBlIiwic3RhdHVzIjo0MTUsInRyYWNlSWQiOiIwSE5QOExCQTFSOTUxOjAwMDAwMDFFIn0=",
+      "jsonBody": {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.16",
+        "title": "Unsupported Media Type",
+        "status": 415,
+        "traceId": "0HNP8LBA1R951:0000001E"
+      },
+      "live": {
+        "LoginDisclaimer": "Old disclaimer",
+        "CustomCss": "Old CSS",
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\update-unsupported-body\\data\\custom.png"
+      },
+      "disk": {
+        "LoginDisclaimer": "Old disclaimer",
+        "CustomCss": "Old CSS",
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\update-unsupported-body\\data\\custom.png"
+      },
+      "calls": [],
+      "files": []
+    },
+    {
+      "name": "splash-disabled-anonymous",
+      "status": 404,
+      "headers": {
+        "content-type": "application/json; charset=utf-8"
+      },
+      "body": "eyJ0eXBlIjoiaHR0cHM6Ly90b29scy5pZXRmLm9yZy9odG1sL3JmYzkxMTAjc2VjdGlvbi0xNS41LjUiLCJ0aXRsZSI6Ik5vdCBGb3VuZCIsInN0YXR1cyI6NDA0LCJ0cmFjZUlkIjoiMEhOUDhMQkExUjk1MTowMDAwMDAxRiJ9",
+      "jsonBody": {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.5",
+        "title": "Not Found",
+        "status": 404,
+        "traceId": "0HNP8LBA1R951:0000001F"
+      },
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": null
+      },
+      "disk": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": null
+      },
+      "calls": [],
+      "files": [
+        {
+          "name": "splashscreen.png",
+          "bytes": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+        }
+      ]
+    },
+    {
+      "name": "splash-disabled-user",
+      "status": 404,
+      "headers": {
+        "content-type": "application/json; charset=utf-8"
+      },
+      "body": "eyJ0eXBlIjoiaHR0cHM6Ly90b29scy5pZXRmLm9yZy9odG1sL3JmYzkxMTAjc2VjdGlvbi0xNS41LjUiLCJ0aXRsZSI6Ik5vdCBGb3VuZCIsInN0YXR1cyI6NDA0LCJ0cmFjZUlkIjoiMEhOUDhMQkExUjk1MTowMDAwMDAyMCJ9",
+      "jsonBody": {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.5",
+        "title": "Not Found",
+        "status": 404,
+        "traceId": "0HNP8LBA1R951:00000020"
+      },
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": null
+      },
+      "disk": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": null
+      },
+      "calls": [],
+      "files": [
+        {
+          "name": "splashscreen.png",
+          "bytes": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+        }
+      ]
+    },
+    {
+      "name": "splash-disabled-admin",
+      "status": 200,
+      "headers": {
+        "content-type": "image/png",
+        "content-length": "30",
+        "cache-control": "public",
+        "last-modified": "Sun, 02 Jun 2024 12:34:56 GMT",
+        "vary": "Accept",
+        "content-disposition": "attachment"
+      },
+      "body": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz",
+      "jsonBody": null,
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": null
+      },
+      "disk": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": null
+      },
+      "calls": [
+        {
+          "phase": "image",
+          "path": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\splash-disabled-admin\\data\\splashscreen.png",
+          "dateModified": "0001-01-01T00:00:00",
+          "Quality": 90,
+          "Width": null,
+          "Height": null,
+          "MaxWidth": null,
+          "MaxHeight": null,
+          "FillWidth": null,
+          "FillHeight": null,
+          "Blur": null,
+          "BackgroundColor": null,
+          "ForegroundLayer": null,
+          "formats": [
+            "Jpg",
+            "Png"
+          ]
+        }
+      ],
+      "files": [
+        {
+          "name": "splashscreen.png",
+          "bytes": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+        }
+      ]
+    },
+    {
+      "name": "splash-enabled-missing",
+      "status": 404,
+      "headers": {
+        "content-type": "application/json; charset=utf-8"
+      },
+      "body": "eyJ0eXBlIjoiaHR0cHM6Ly90b29scy5pZXRmLm9yZy9odG1sL3JmYzkxMTAjc2VjdGlvbi0xNS41LjUiLCJ0aXRsZSI6Ik5vdCBGb3VuZCIsInN0YXR1cyI6NDA0LCJ0cmFjZUlkIjoiMEhOUDhMQkExUjk1MTowMDAwMDAyMiJ9",
+      "jsonBody": {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.5",
+        "title": "Not Found",
+        "status": 404,
+        "traceId": "0HNP8LBA1R951:00000022"
+      },
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": null
+      },
+      "disk": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": null
+      },
+      "calls": [],
+      "files": []
+    },
+    {
+      "name": "splash-enabled-generated",
+      "status": 200,
+      "headers": {
+        "content-type": "image/png",
+        "content-length": "30",
+        "cache-control": "public",
+        "last-modified": "Sun, 02 Jun 2024 12:34:56 GMT",
+        "vary": "Accept",
+        "content-disposition": "attachment"
+      },
+      "body": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz",
+      "jsonBody": null,
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": null
+      },
+      "disk": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": null
+      },
+      "calls": [
+        {
+          "phase": "image",
+          "path": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\splash-enabled-generated\\data\\splashscreen.png",
+          "dateModified": "0001-01-01T00:00:00",
+          "Quality": 90,
+          "Width": null,
+          "Height": null,
+          "MaxWidth": null,
+          "MaxHeight": null,
+          "FillWidth": null,
+          "FillHeight": null,
+          "Blur": null,
+          "BackgroundColor": null,
+          "ForegroundLayer": null,
+          "formats": [
+            "Jpg",
+            "Png"
+          ]
+        }
+      ],
+      "files": [
+        {
+          "name": "splashscreen.png",
+          "bytes": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+        }
+      ]
+    },
+    {
+      "name": "splash-custom",
+      "status": 200,
+      "headers": {
+        "content-type": "image/png",
+        "content-length": "30",
+        "cache-control": "public",
+        "last-modified": "Sun, 02 Jun 2024 12:34:56 GMT",
+        "vary": "Accept",
+        "content-disposition": "attachment"
+      },
+      "body": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz",
+      "jsonBody": null,
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\splash-custom\\data\\custom.png"
+      },
+      "disk": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\splash-custom\\data\\custom.png"
+      },
+      "calls": [
+        {
+          "phase": "image",
+          "path": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\splash-custom\\data\\custom.png",
+          "dateModified": "0001-01-01T00:00:00",
+          "Quality": 90,
+          "Width": null,
+          "Height": null,
+          "MaxWidth": null,
+          "MaxHeight": null,
+          "FillWidth": null,
+          "FillHeight": null,
+          "Blur": null,
+          "BackgroundColor": null,
+          "ForegroundLayer": null,
+          "formats": [
+            "Jpg",
+            "Png"
+          ]
+        }
+      ],
+      "files": [
+        {
+          "name": "custom.png",
+          "bytes": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+        },
+        {
+          "name": "splashscreen.png",
+          "bytes": "RmFsbGJhY2s="
+        }
+      ]
+    },
+    {
+      "name": "splash-missing-custom",
+      "status": 200,
+      "headers": {
+        "content-type": "image/png",
+        "content-length": "30",
+        "cache-control": "public",
+        "last-modified": "Sun, 02 Jun 2024 12:34:56 GMT",
+        "vary": "Accept",
+        "content-disposition": "attachment"
+      },
+      "body": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz",
+      "jsonBody": null,
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\splash-missing-custom\\data\\missing.png"
+      },
+      "disk": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\splash-missing-custom\\data\\missing.png"
+      },
+      "calls": [
+        {
+          "phase": "image",
+          "path": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\splash-missing-custom\\data\\splashscreen.png",
+          "dateModified": "0001-01-01T00:00:00",
+          "Quality": 90,
+          "Width": null,
+          "Height": null,
+          "MaxWidth": null,
+          "MaxHeight": null,
+          "FillWidth": null,
+          "FillHeight": null,
+          "Blur": null,
+          "BackgroundColor": null,
+          "ForegroundLayer": null,
+          "formats": [
+            "Jpg",
+            "Png"
+          ]
+        }
+      ],
+      "files": [
+        {
+          "name": "splashscreen.png",
+          "bytes": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+        }
+      ]
+    },
+    {
+      "name": "splash-whitespace-custom",
+      "status": 200,
+      "headers": {
+        "content-type": "image/png",
+        "content-length": "30",
+        "cache-control": "public",
+        "last-modified": "Sun, 02 Jun 2024 12:34:56 GMT",
+        "vary": "Accept",
+        "content-disposition": "attachment"
+      },
+      "body": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz",
+      "jsonBody": null,
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": " "
+      },
+      "disk": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": " "
+      },
+      "calls": [
+        {
+          "phase": "image",
+          "path": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\splash-whitespace-custom\\data\\splashscreen.png",
+          "dateModified": "0001-01-01T00:00:00",
+          "Quality": 90,
+          "Width": null,
+          "Height": null,
+          "MaxWidth": null,
+          "MaxHeight": null,
+          "FillWidth": null,
+          "FillHeight": null,
+          "Blur": null,
+          "BackgroundColor": null,
+          "ForegroundLayer": null,
+          "formats": [
+            "Jpg",
+            "Png"
+          ]
+        }
+      ],
+      "files": [
+        {
+          "name": "splashscreen.png",
+          "bytes": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+        }
+      ]
+    },
+    {
+      "name": "splash-tag",
+      "status": 200,
+      "headers": {
+        "content-type": "image/png",
+        "content-length": "30",
+        "etag": "\u0022provided\u0022",
+        "cache-control": "public, max-age=31536000, immutable",
+        "last-modified": "Sun, 02 Jun 2024 12:34:56 GMT",
+        "vary": "Accept",
+        "content-disposition": "attachment"
+      },
+      "body": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz",
+      "jsonBody": null,
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": null
+      },
+      "disk": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": null
+      },
+      "calls": [
+        {
+          "phase": "image",
+          "path": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\splash-tag\\data\\splashscreen.png",
+          "dateModified": "0001-01-01T00:00:00",
+          "Quality": 90,
+          "Width": null,
+          "Height": null,
+          "MaxWidth": null,
+          "MaxHeight": null,
+          "FillWidth": null,
+          "FillHeight": null,
+          "Blur": null,
+          "BackgroundColor": null,
+          "ForegroundLayer": null,
+          "formats": [
+            "Jpg",
+            "Png"
+          ]
+        }
+      ],
+      "files": [
+        {
+          "name": "splashscreen.png",
+          "bytes": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+        }
+      ]
+    },
+    {
+      "name": "splash-conditional-tag",
+      "status": 304,
+      "headers": {
+        "content-type": "image/png",
+        "etag": "\u0022provided\u0022",
+        "cache-control": "public, max-age=31536000, immutable",
+        "last-modified": "Mon, 01 Jan 0001 00:00:00 GMT",
+        "vary": "Accept",
+        "content-disposition": "attachment"
+      },
+      "body": "",
+      "jsonBody": null,
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": null
+      },
+      "disk": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": null
+      },
+      "calls": [
+        {
+          "phase": "image",
+          "path": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\splash-conditional-tag\\data\\splashscreen.png",
+          "dateModified": "0001-01-01T00:00:00",
+          "Quality": 90,
+          "Width": null,
+          "Height": null,
+          "MaxWidth": null,
+          "MaxHeight": null,
+          "FillWidth": null,
+          "FillHeight": null,
+          "Blur": null,
+          "BackgroundColor": null,
+          "ForegroundLayer": null,
+          "formats": [
+            "Jpg",
+            "Png",
+            "Gif"
+          ]
+        }
+      ],
+      "files": [
+        {
+          "name": "splashscreen.png",
+          "bytes": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+        }
+      ]
+    },
+    {
+      "name": "splash-conditional-date",
+      "status": 304,
+      "headers": {
+        "content-type": "image/png",
+        "cache-control": "public",
+        "last-modified": "Mon, 01 Jan 0001 00:00:00 GMT",
+        "vary": "Accept",
+        "content-disposition": "attachment"
+      },
+      "body": "",
+      "jsonBody": null,
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": null
+      },
+      "disk": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": null
+      },
+      "calls": [
+        {
+          "phase": "image",
+          "path": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\splash-conditional-date\\data\\splashscreen.png",
+          "dateModified": "0001-01-01T00:00:00",
+          "Quality": 90,
+          "Width": null,
+          "Height": null,
+          "MaxWidth": null,
+          "MaxHeight": null,
+          "FillWidth": null,
+          "FillHeight": null,
+          "Blur": null,
+          "BackgroundColor": null,
+          "ForegroundLayer": null,
+          "formats": [
+            "Jpg",
+            "Png",
+            "Gif"
+          ]
+        }
+      ],
+      "files": [
+        {
+          "name": "splashscreen.png",
+          "bytes": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+        }
+      ]
+    },
+    {
+      "name": "splash-conditional-failed",
+      "status": 412,
+      "headers": {
+        "content-type": "image/png",
+        "content-length": "0",
+        "cache-control": "public",
+        "last-modified": "Sun, 02 Jun 2024 12:34:56 GMT",
+        "vary": "Accept",
+        "content-disposition": "attachment"
+      },
+      "body": "",
+      "jsonBody": null,
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": null
+      },
+      "disk": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": null
+      },
+      "calls": [
+        {
+          "phase": "image",
+          "path": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\splash-conditional-failed\\data\\splashscreen.png",
+          "dateModified": "0001-01-01T00:00:00",
+          "Quality": 90,
+          "Width": null,
+          "Height": null,
+          "MaxWidth": null,
+          "MaxHeight": null,
+          "FillWidth": null,
+          "FillHeight": null,
+          "Blur": null,
+          "BackgroundColor": null,
+          "ForegroundLayer": null,
+          "formats": [
+            "Jpg",
+            "Png",
+            "Gif"
+          ]
+        }
+      ],
+      "files": [
+        {
+          "name": "splashscreen.png",
+          "bytes": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+        }
+      ]
+    },
+    {
+      "name": "splash-no-cache",
+      "status": 200,
+      "headers": {
+        "content-type": "image/png",
+        "content-length": "30",
+        "cache-control": "no-store, must-revalidate, no-cache",
+        "pragma": "no-cache, no-store, must-revalidate",
+        "last-modified": "Sun, 02 Jun 2024 12:34:56 GMT",
+        "vary": "Accept",
+        "content-disposition": "attachment"
+      },
+      "body": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz",
+      "jsonBody": null,
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": null
+      },
+      "disk": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": null
+      },
+      "calls": [
+        {
+          "phase": "image",
+          "path": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\splash-no-cache\\data\\splashscreen.png",
+          "dateModified": "0001-01-01T00:00:00",
+          "Quality": 90,
+          "Width": null,
+          "Height": null,
+          "MaxWidth": null,
+          "MaxHeight": null,
+          "FillWidth": null,
+          "FillHeight": null,
+          "Blur": null,
+          "BackgroundColor": null,
+          "ForegroundLayer": null,
+          "formats": [
+            "Jpg",
+            "Png",
+            "Gif"
+          ]
+        }
+      ],
+      "files": [
+        {
+          "name": "splashscreen.png",
+          "bytes": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+        }
+      ]
+    },
+    {
+      "name": "splash-webp-accept",
+      "status": 200,
+      "headers": {
+        "content-type": "image/png",
+        "content-length": "30",
+        "cache-control": "public",
+        "last-modified": "Sun, 02 Jun 2024 12:34:56 GMT",
+        "vary": "Accept",
+        "content-disposition": "attachment"
+      },
+      "body": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz",
+      "jsonBody": null,
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": null
+      },
+      "disk": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": null
+      },
+      "calls": [
+        {
+          "phase": "image",
+          "path": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\splash-webp-accept\\data\\splashscreen.png",
+          "dateModified": "0001-01-01T00:00:00",
+          "Quality": 90,
+          "Width": null,
+          "Height": null,
+          "MaxWidth": null,
+          "MaxHeight": null,
+          "FillWidth": null,
+          "FillHeight": null,
+          "Blur": null,
+          "BackgroundColor": null,
+          "ForegroundLayer": null,
+          "formats": [
+            "Webp",
+            "Jpg",
+            "Png"
+          ]
+        }
+      ],
+      "files": [
+        {
+          "name": "splashscreen.png",
+          "bytes": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+        }
+      ]
+    },
+    {
+      "name": "splash-webp-query",
+      "status": 200,
+      "headers": {
+        "content-type": "image/png",
+        "content-length": "30",
+        "cache-control": "public",
+        "last-modified": "Sun, 02 Jun 2024 12:34:56 GMT",
+        "vary": "Accept",
+        "content-disposition": "attachment"
+      },
+      "body": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz",
+      "jsonBody": null,
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": null
+      },
+      "disk": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": null
+      },
+      "calls": [
+        {
+          "phase": "image",
+          "path": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\splash-webp-query\\data\\splashscreen.png",
+          "dateModified": "0001-01-01T00:00:00",
+          "Quality": 90,
+          "Width": null,
+          "Height": null,
+          "MaxWidth": null,
+          "MaxHeight": null,
+          "FillWidth": null,
+          "FillHeight": null,
+          "Blur": null,
+          "BackgroundColor": null,
+          "ForegroundLayer": null,
+          "formats": [
+            "Webp",
+            "Jpg",
+            "Png",
+            "Gif"
+          ]
+        }
+      ],
+      "files": [
+        {
+          "name": "splashscreen.png",
+          "bytes": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+        }
+      ]
+    },
+    {
+      "name": "splash-format",
+      "status": 200,
+      "headers": {
+        "content-type": "image/png",
+        "content-length": "30",
+        "cache-control": "public",
+        "last-modified": "Sun, 02 Jun 2024 12:34:56 GMT",
+        "vary": "Accept",
+        "content-disposition": "attachment"
+      },
+      "body": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz",
+      "jsonBody": null,
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": null
+      },
+      "disk": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": null
+      },
+      "calls": [
+        {
+          "phase": "image",
+          "path": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\splash-format\\data\\splashscreen.png",
+          "dateModified": "0001-01-01T00:00:00",
+          "Quality": 90,
+          "Width": null,
+          "Height": null,
+          "MaxWidth": null,
+          "MaxHeight": null,
+          "FillWidth": null,
+          "FillHeight": null,
+          "Blur": null,
+          "BackgroundColor": null,
+          "ForegroundLayer": null,
+          "formats": [
+            "Jpg"
+          ]
+        }
+      ],
+      "files": [
+        {
+          "name": "splashscreen.png",
+          "bytes": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+        }
+      ]
+    },
+    {
+      "name": "splash-invalid-format",
+      "status": 200,
+      "headers": {
+        "content-type": "image/png",
+        "content-length": "30",
+        "cache-control": "public",
+        "last-modified": "Sun, 02 Jun 2024 12:34:56 GMT",
+        "vary": "Accept",
+        "content-disposition": "attachment"
+      },
+      "body": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz",
+      "jsonBody": null,
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": null
+      },
+      "disk": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": null
+      },
+      "calls": [
+        {
+          "phase": "image",
+          "path": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\splash-invalid-format\\data\\splashscreen.png",
+          "dateModified": "0001-01-01T00:00:00",
+          "Quality": 90,
+          "Width": null,
+          "Height": null,
+          "MaxWidth": null,
+          "MaxHeight": null,
+          "FillWidth": null,
+          "FillHeight": null,
+          "Blur": null,
+          "BackgroundColor": null,
+          "ForegroundLayer": null,
+          "formats": [
+            "Jpg",
+            "Png",
+            "Gif"
+          ]
+        }
+      ],
+      "files": [
+        {
+          "name": "splashscreen.png",
+          "bytes": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+        }
+      ]
+    },
+    {
+      "name": "splash-numeric-format",
+      "status": 200,
+      "headers": {
+        "content-type": "image/png",
+        "content-length": "30",
+        "cache-control": "public",
+        "last-modified": "Sun, 02 Jun 2024 12:34:56 GMT",
+        "vary": "Accept",
+        "content-disposition": "attachment"
+      },
+      "body": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz",
+      "jsonBody": null,
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": null
+      },
+      "disk": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": null
+      },
+      "calls": [
+        {
+          "phase": "image",
+          "path": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\splash-numeric-format\\data\\splashscreen.png",
+          "dateModified": "0001-01-01T00:00:00",
+          "Quality": 90,
+          "Width": null,
+          "Height": null,
+          "MaxWidth": null,
+          "MaxHeight": null,
+          "FillWidth": null,
+          "FillHeight": null,
+          "Blur": null,
+          "BackgroundColor": null,
+          "ForegroundLayer": null,
+          "formats": [
+            "99"
+          ]
+        }
+      ],
+      "files": [
+        {
+          "name": "splashscreen.png",
+          "bytes": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+        }
+      ]
+    },
+    {
+      "name": "splash-empty-tag",
+      "status": 200,
+      "headers": {
+        "content-type": "image/png",
+        "content-length": "30",
+        "cache-control": "public",
+        "last-modified": "Sun, 02 Jun 2024 12:34:56 GMT",
+        "vary": "Accept",
+        "content-disposition": "attachment"
+      },
+      "body": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz",
+      "jsonBody": null,
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": null
+      },
+      "disk": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": null
+      },
+      "calls": [
+        {
+          "phase": "image",
+          "path": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\splash-empty-tag\\data\\splashscreen.png",
+          "dateModified": "0001-01-01T00:00:00",
+          "Quality": 90,
+          "Width": null,
+          "Height": null,
+          "MaxWidth": null,
+          "MaxHeight": null,
+          "FillWidth": null,
+          "FillHeight": null,
+          "Blur": null,
+          "BackgroundColor": null,
+          "ForegroundLayer": null,
+          "formats": [
+            "Jpg",
+            "Png",
+            "Gif"
+          ]
+        }
+      ],
+      "files": [
+        {
+          "name": "splashscreen.png",
+          "bytes": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+        }
+      ]
+    },
+    {
+      "name": "upload-valid",
+      "status": 204,
+      "headers": {},
+      "body": "",
+      "jsonBody": null,
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-valid\\data\\splashscreen-upload.png"
+      },
+      "disk": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-valid\\data\\splashscreen-upload.png"
+      },
+      "calls": [
+        {
+          "phase": "configuration-updating",
+          "options": {
+            "LoginDisclaimer": null,
+            "CustomCss": null,
+            "SplashscreenEnabled": false,
+            "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-valid\\data\\splashscreen-upload.png"
+          }
+        },
+        {
+          "phase": "configuration-updated",
+          "options": {
+            "LoginDisclaimer": null,
+            "CustomCss": null,
+            "SplashscreenEnabled": false,
+            "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-valid\\data\\splashscreen-upload.png"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "splashscreen-upload.png",
+          "bytes": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+        },
+        {
+          "name": "splashscreen.png",
+          "bytes": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+        }
+      ]
+    },
+    {
+      "name": "upload-empty",
+      "status": 204,
+      "headers": {},
+      "body": "",
+      "jsonBody": null,
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-empty\\data\\splashscreen-upload.png"
+      },
+      "disk": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-empty\\data\\splashscreen-upload.png"
+      },
+      "calls": [
+        {
+          "phase": "configuration-updating",
+          "options": {
+            "LoginDisclaimer": null,
+            "CustomCss": null,
+            "SplashscreenEnabled": false,
+            "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-empty\\data\\splashscreen-upload.png"
+          }
+        },
+        {
+          "phase": "configuration-updated",
+          "options": {
+            "LoginDisclaimer": null,
+            "CustomCss": null,
+            "SplashscreenEnabled": false,
+            "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-empty\\data\\splashscreen-upload.png"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "splashscreen-upload.png",
+          "bytes": ""
+        },
+        {
+          "name": "splashscreen.png",
+          "bytes": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+        }
+      ]
+    },
+    {
+      "name": "upload-whitespace",
+      "status": 204,
+      "headers": {},
+      "body": "",
+      "jsonBody": null,
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-whitespace\\data\\splashscreen-upload.png"
+      },
+      "disk": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-whitespace\\data\\splashscreen-upload.png"
+      },
+      "calls": [
+        {
+          "phase": "configuration-updating",
+          "options": {
+            "LoginDisclaimer": null,
+            "CustomCss": null,
+            "SplashscreenEnabled": false,
+            "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-whitespace\\data\\splashscreen-upload.png"
+          }
+        },
+        {
+          "phase": "configuration-updated",
+          "options": {
+            "LoginDisclaimer": null,
+            "CustomCss": null,
+            "SplashscreenEnabled": false,
+            "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-whitespace\\data\\splashscreen-upload.png"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "splashscreen-upload.png",
+          "bytes": "YQ=="
+        },
+        {
+          "name": "splashscreen.png",
+          "bytes": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+        }
+      ]
+    },
+    {
+      "name": "upload-trailing-one",
+      "status": 204,
+      "headers": {},
+      "body": "",
+      "jsonBody": null,
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-trailing-one\\data\\splashscreen-upload.png"
+      },
+      "disk": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-trailing-one\\data\\splashscreen-upload.png"
+      },
+      "calls": [
+        {
+          "phase": "configuration-updating",
+          "options": {
+            "LoginDisclaimer": null,
+            "CustomCss": null,
+            "SplashscreenEnabled": false,
+            "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-trailing-one\\data\\splashscreen-upload.png"
+          }
+        },
+        {
+          "phase": "configuration-updated",
+          "options": {
+            "LoginDisclaimer": null,
+            "CustomCss": null,
+            "SplashscreenEnabled": false,
+            "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-trailing-one\\data\\splashscreen-upload.png"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "splashscreen-upload.png",
+          "bytes": "YQ=="
+        },
+        {
+          "name": "splashscreen.png",
+          "bytes": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+        }
+      ]
+    },
+    {
+      "name": "upload-trailing-two",
+      "status": 204,
+      "headers": {},
+      "body": "",
+      "jsonBody": null,
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-trailing-two\\data\\splashscreen-upload.png"
+      },
+      "disk": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-trailing-two\\data\\splashscreen-upload.png"
+      },
+      "calls": [
+        {
+          "phase": "configuration-updating",
+          "options": {
+            "LoginDisclaimer": null,
+            "CustomCss": null,
+            "SplashscreenEnabled": false,
+            "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-trailing-two\\data\\splashscreen-upload.png"
+          }
+        },
+        {
+          "phase": "configuration-updated",
+          "options": {
+            "LoginDisclaimer": null,
+            "CustomCss": null,
+            "SplashscreenEnabled": false,
+            "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-trailing-two\\data\\splashscreen-upload.png"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "splashscreen-upload.png",
+          "bytes": "YQ=="
+        },
+        {
+          "name": "splashscreen.png",
+          "bytes": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+        }
+      ]
+    },
+    {
+      "name": "upload-trailing-three",
+      "status": 204,
+      "headers": {},
+      "body": "",
+      "jsonBody": null,
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-trailing-three\\data\\splashscreen-upload.png"
+      },
+      "disk": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-trailing-three\\data\\splashscreen-upload.png"
+      },
+      "calls": [
+        {
+          "phase": "configuration-updating",
+          "options": {
+            "LoginDisclaimer": null,
+            "CustomCss": null,
+            "SplashscreenEnabled": false,
+            "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-trailing-three\\data\\splashscreen-upload.png"
+          }
+        },
+        {
+          "phase": "configuration-updated",
+          "options": {
+            "LoginDisclaimer": null,
+            "CustomCss": null,
+            "SplashscreenEnabled": false,
+            "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-trailing-three\\data\\splashscreen-upload.png"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "splashscreen-upload.png",
+          "bytes": "YQ=="
+        },
+        {
+          "name": "splashscreen.png",
+          "bytes": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+        }
+      ]
+    },
+    {
+      "name": "upload-unpadded-two",
+      "status": 204,
+      "headers": {},
+      "body": "",
+      "jsonBody": null,
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-unpadded-two\\data\\splashscreen-upload.png"
+      },
+      "disk": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-unpadded-two\\data\\splashscreen-upload.png"
+      },
+      "calls": [
+        {
+          "phase": "configuration-updating",
+          "options": {
+            "LoginDisclaimer": null,
+            "CustomCss": null,
+            "SplashscreenEnabled": false,
+            "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-unpadded-two\\data\\splashscreen-upload.png"
+          }
+        },
+        {
+          "phase": "configuration-updated",
+          "options": {
+            "LoginDisclaimer": null,
+            "CustomCss": null,
+            "SplashscreenEnabled": false,
+            "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-unpadded-two\\data\\splashscreen-upload.png"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "splashscreen-upload.png",
+          "bytes": ""
+        },
+        {
+          "name": "splashscreen.png",
+          "bytes": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+        }
+      ]
+    },
+    {
+      "name": "upload-unpadded-three",
+      "status": 204,
+      "headers": {},
+      "body": "",
+      "jsonBody": null,
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-unpadded-three\\data\\splashscreen-upload.png"
+      },
+      "disk": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-unpadded-three\\data\\splashscreen-upload.png"
+      },
+      "calls": [
+        {
+          "phase": "configuration-updating",
+          "options": {
+            "LoginDisclaimer": null,
+            "CustomCss": null,
+            "SplashscreenEnabled": false,
+            "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-unpadded-three\\data\\splashscreen-upload.png"
+          }
+        },
+        {
+          "phase": "configuration-updated",
+          "options": {
+            "LoginDisclaimer": null,
+            "CustomCss": null,
+            "SplashscreenEnabled": false,
+            "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-unpadded-three\\data\\splashscreen-upload.png"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "splashscreen-upload.png",
+          "bytes": ""
+        },
+        {
+          "name": "splashscreen.png",
+          "bytes": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+        }
+      ]
+    },
+    {
+      "name": "upload-invalid",
+      "status": 500,
+      "headers": {
+        "content-type": "text/plain"
+      },
+      "body": "RXJyb3IgcHJvY2Vzc2luZyByZXF1ZXN0Lg==",
+      "jsonBody": null,
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-invalid\\data\\splashscreen-upload.png"
+      },
+      "disk": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-invalid\\data\\splashscreen-upload.png"
+      },
+      "calls": [
+        {
+          "phase": "configuration-updating",
+          "options": {
+            "LoginDisclaimer": null,
+            "CustomCss": null,
+            "SplashscreenEnabled": false,
+            "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-invalid\\data\\splashscreen-upload.png"
+          }
+        },
+        {
+          "phase": "configuration-updated",
+          "options": {
+            "LoginDisclaimer": null,
+            "CustomCss": null,
+            "SplashscreenEnabled": false,
+            "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-invalid\\data\\splashscreen-upload.png"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "splashscreen-upload.png",
+          "bytes": ""
+        },
+        {
+          "name": "splashscreen.png",
+          "bytes": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+        }
+      ]
+    },
+    {
+      "name": "upload-valid-prefix-invalid",
+      "status": 500,
+      "headers": {
+        "content-type": "text/plain"
+      },
+      "body": "RXJyb3IgcHJvY2Vzc2luZyByZXF1ZXN0Lg==",
+      "jsonBody": null,
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-valid-prefix-invalid\\data\\splashscreen-upload.png"
+      },
+      "disk": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-valid-prefix-invalid\\data\\splashscreen-upload.png"
+      },
+      "calls": [
+        {
+          "phase": "configuration-updating",
+          "options": {
+            "LoginDisclaimer": null,
+            "CustomCss": null,
+            "SplashscreenEnabled": false,
+            "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-valid-prefix-invalid\\data\\splashscreen-upload.png"
+          }
+        },
+        {
+          "phase": "configuration-updated",
+          "options": {
+            "LoginDisclaimer": null,
+            "CustomCss": null,
+            "SplashscreenEnabled": false,
+            "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-valid-prefix-invalid\\data\\splashscreen-upload.png"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "splashscreen-upload.png",
+          "bytes": ""
+        },
+        {
+          "name": "splashscreen.png",
+          "bytes": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+        }
+      ]
+    },
+    {
+      "name": "upload-extra-padding",
+      "status": 204,
+      "headers": {},
+      "body": "",
+      "jsonBody": null,
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-extra-padding\\data\\splashscreen-upload.png"
+      },
+      "disk": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-extra-padding\\data\\splashscreen-upload.png"
+      },
+      "calls": [
+        {
+          "phase": "configuration-updating",
+          "options": {
+            "LoginDisclaimer": null,
+            "CustomCss": null,
+            "SplashscreenEnabled": false,
+            "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-extra-padding\\data\\splashscreen-upload.png"
+          }
+        },
+        {
+          "phase": "configuration-updated",
+          "options": {
+            "LoginDisclaimer": null,
+            "CustomCss": null,
+            "SplashscreenEnabled": false,
+            "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-extra-padding\\data\\splashscreen-upload.png"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "splashscreen-upload.png",
+          "bytes": "YQ=="
+        },
+        {
+          "name": "splashscreen.png",
+          "bytes": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+        }
+      ]
+    },
+    {
+      "name": "upload-middle-padding",
+      "status": 500,
+      "headers": {
+        "content-type": "text/plain"
+      },
+      "body": "RXJyb3IgcHJvY2Vzc2luZyByZXF1ZXN0Lg==",
+      "jsonBody": null,
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-middle-padding\\data\\splashscreen-upload.png"
+      },
+      "disk": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-middle-padding\\data\\splashscreen-upload.png"
+      },
+      "calls": [
+        {
+          "phase": "configuration-updating",
+          "options": {
+            "LoginDisclaimer": null,
+            "CustomCss": null,
+            "SplashscreenEnabled": false,
+            "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-middle-padding\\data\\splashscreen-upload.png"
+          }
+        },
+        {
+          "phase": "configuration-updated",
+          "options": {
+            "LoginDisclaimer": null,
+            "CustomCss": null,
+            "SplashscreenEnabled": false,
+            "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-middle-padding\\data\\splashscreen-upload.png"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "splashscreen-upload.png",
+          "bytes": ""
+        },
+        {
+          "name": "splashscreen.png",
+          "bytes": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+        }
+      ]
+    },
+    {
+      "name": "upload-two-padded-groups",
+      "status": 500,
+      "headers": {
+        "content-type": "text/plain"
+      },
+      "body": "RXJyb3IgcHJvY2Vzc2luZyByZXF1ZXN0Lg==",
+      "jsonBody": null,
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-two-padded-groups\\data\\splashscreen-upload.png"
+      },
+      "disk": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-two-padded-groups\\data\\splashscreen-upload.png"
+      },
+      "calls": [
+        {
+          "phase": "configuration-updating",
+          "options": {
+            "LoginDisclaimer": null,
+            "CustomCss": null,
+            "SplashscreenEnabled": false,
+            "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-two-padded-groups\\data\\splashscreen-upload.png"
+          }
+        },
+        {
+          "phase": "configuration-updated",
+          "options": {
+            "LoginDisclaimer": null,
+            "CustomCss": null,
+            "SplashscreenEnabled": false,
+            "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-two-padded-groups\\data\\splashscreen-upload.png"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "splashscreen-upload.png",
+          "bytes": ""
+        },
+        {
+          "name": "splashscreen.png",
+          "bytes": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+        }
+      ]
+    },
+    {
+      "name": "upload-pad-bits",
+      "status": 500,
+      "headers": {
+        "content-type": "text/plain"
+      },
+      "body": "RXJyb3IgcHJvY2Vzc2luZyByZXF1ZXN0Lg==",
+      "jsonBody": null,
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-pad-bits\\data\\splashscreen-upload.png"
+      },
+      "disk": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-pad-bits\\data\\splashscreen-upload.png"
+      },
+      "calls": [
+        {
+          "phase": "configuration-updating",
+          "options": {
+            "LoginDisclaimer": null,
+            "CustomCss": null,
+            "SplashscreenEnabled": false,
+            "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-pad-bits\\data\\splashscreen-upload.png"
+          }
+        },
+        {
+          "phase": "configuration-updated",
+          "options": {
+            "LoginDisclaimer": null,
+            "CustomCss": null,
+            "SplashscreenEnabled": false,
+            "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-pad-bits\\data\\splashscreen-upload.png"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "splashscreen-upload.png",
+          "bytes": ""
+        },
+        {
+          "name": "splashscreen.png",
+          "bytes": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+        }
+      ]
+    },
+    {
+      "name": "upload-unicode-whitespace",
+      "status": 500,
+      "headers": {
+        "content-type": "text/plain"
+      },
+      "body": "RXJyb3IgcHJvY2Vzc2luZyByZXF1ZXN0Lg==",
+      "jsonBody": null,
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-unicode-whitespace\\data\\splashscreen-upload.png"
+      },
+      "disk": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-unicode-whitespace\\data\\splashscreen-upload.png"
+      },
+      "calls": [
+        {
+          "phase": "configuration-updating",
+          "options": {
+            "LoginDisclaimer": null,
+            "CustomCss": null,
+            "SplashscreenEnabled": false,
+            "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-unicode-whitespace\\data\\splashscreen-upload.png"
+          }
+        },
+        {
+          "phase": "configuration-updated",
+          "options": {
+            "LoginDisclaimer": null,
+            "CustomCss": null,
+            "SplashscreenEnabled": false,
+            "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-unicode-whitespace\\data\\splashscreen-upload.png"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "splashscreen-upload.png",
+          "bytes": ""
+        },
+        {
+          "name": "splashscreen.png",
+          "bytes": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+        }
+      ]
+    },
+    {
+      "name": "upload-body-is-json-string",
+      "status": 500,
+      "headers": {
+        "content-type": "text/plain"
+      },
+      "body": "RXJyb3IgcHJvY2Vzc2luZyByZXF1ZXN0Lg==",
+      "jsonBody": null,
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-body-is-json-string\\data\\splashscreen-upload.png"
+      },
+      "disk": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-body-is-json-string\\data\\splashscreen-upload.png"
+      },
+      "calls": [
+        {
+          "phase": "configuration-updating",
+          "options": {
+            "LoginDisclaimer": null,
+            "CustomCss": null,
+            "SplashscreenEnabled": false,
+            "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-body-is-json-string\\data\\splashscreen-upload.png"
+          }
+        },
+        {
+          "phase": "configuration-updated",
+          "options": {
+            "LoginDisclaimer": null,
+            "CustomCss": null,
+            "SplashscreenEnabled": false,
+            "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-body-is-json-string\\data\\splashscreen-upload.png"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "splashscreen-upload.png",
+          "bytes": ""
+        },
+        {
+          "name": "splashscreen.png",
+          "bytes": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+        }
+      ]
+    },
+    {
+      "name": "upload-user",
+      "status": 403,
+      "headers": {
+        "content-length": "0"
+      },
+      "body": "",
+      "jsonBody": null,
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": null
+      },
+      "disk": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": null
+      },
+      "calls": [],
+      "files": [
+        {
+          "name": "splashscreen-upload.png",
+          "bytes": "RXhpc3RpbmcgY3VzdG9tIGltYWdl"
+        },
+        {
+          "name": "splashscreen.png",
+          "bytes": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+        }
+      ]
+    },
+    {
+      "name": "upload-anonymous",
+      "status": 401,
+      "headers": {
+        "content-length": "0"
+      },
+      "body": "",
+      "jsonBody": null,
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": null
+      },
+      "disk": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": null
+      },
+      "calls": [],
+      "files": [
+        {
+          "name": "splashscreen-upload.png",
+          "bytes": "RXhpc3RpbmcgY3VzdG9tIGltYWdl"
+        },
+        {
+          "name": "splashscreen.png",
+          "bytes": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+        }
+      ]
+    },
+    {
+      "name": "upload-wrong-content-type",
+      "status": 400,
+      "headers": {
+        "content-type": "application/json; charset=utf-8"
+      },
+      "body": "IkluY29ycmVjdCBDb250ZW50VHlwZS4i",
+      "jsonBody": "Incorrect ContentType.",
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": null
+      },
+      "disk": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": null
+      },
+      "calls": [],
+      "files": [
+        {
+          "name": "splashscreen-upload.png",
+          "bytes": "RXhpc3RpbmcgY3VzdG9tIGltYWdl"
+        },
+        {
+          "name": "splashscreen.png",
+          "bytes": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+        }
+      ]
+    },
+    {
+      "name": "upload-missing-content-type",
+      "status": 400,
+      "headers": {
+        "content-type": "application/json; charset=utf-8"
+      },
+      "body": "IkluY29ycmVjdCBDb250ZW50VHlwZS4i",
+      "jsonBody": "Incorrect ContentType.",
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": null
+      },
+      "disk": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": null
+      },
+      "calls": [],
+      "files": [
+        {
+          "name": "splashscreen-upload.png",
+          "bytes": "RXhpc3RpbmcgY3VzdG9tIGltYWdl"
+        },
+        {
+          "name": "splashscreen.png",
+          "bytes": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+        }
+      ]
+    },
+    {
+      "name": "upload-missing-data",
+      "status": 404,
+      "headers": {
+        "content-type": "text/plain"
+      },
+      "body": "RXJyb3IgcHJvY2Vzc2luZyByZXF1ZXN0Lg==",
+      "jsonBody": null,
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-missing-data\\data\\splashscreen-upload.png"
+      },
+      "disk": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-missing-data\\data\\splashscreen-upload.png"
+      },
+      "calls": [
+        {
+          "phase": "configuration-updating",
+          "options": {
+            "LoginDisclaimer": null,
+            "CustomCss": null,
+            "SplashscreenEnabled": false,
+            "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-missing-data\\data\\splashscreen-upload.png"
+          }
+        },
+        {
+          "phase": "configuration-updated",
+          "options": {
+            "LoginDisclaimer": null,
+            "CustomCss": null,
+            "SplashscreenEnabled": false,
+            "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-missing-data\\data\\splashscreen-upload.png"
+          }
+        }
+      ],
+      "files": []
+    },
+    {
+      "name": "upload-directory-output",
+      "status": 500,
+      "headers": {
+        "content-type": "text/plain"
+      },
+      "body": "RXJyb3IgcHJvY2Vzc2luZyByZXF1ZXN0Lg==",
+      "jsonBody": null,
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-directory-output\\data\\splashscreen-upload.png"
+      },
+      "disk": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-directory-output\\data\\splashscreen-upload.png"
+      },
+      "calls": [
+        {
+          "phase": "configuration-updating",
+          "options": {
+            "LoginDisclaimer": null,
+            "CustomCss": null,
+            "SplashscreenEnabled": false,
+            "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-directory-output\\data\\splashscreen-upload.png"
+          }
+        },
+        {
+          "phase": "configuration-updated",
+          "options": {
+            "LoginDisclaimer": null,
+            "CustomCss": null,
+            "SplashscreenEnabled": false,
+            "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-directory-output\\data\\splashscreen-upload.png"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "splashscreen.png",
+          "bytes": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+        }
+      ]
+    },
+    {
+      "name": "upload-read-only-output",
+      "status": 500,
+      "headers": {
+        "content-type": "text/plain"
+      },
+      "body": "RXJyb3IgcHJvY2Vzc2luZyByZXF1ZXN0Lg==",
+      "jsonBody": null,
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-read-only-output\\data\\splashscreen-upload.png"
+      },
+      "disk": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-read-only-output\\data\\splashscreen-upload.png"
+      },
+      "calls": [
+        {
+          "phase": "configuration-updating",
+          "options": {
+            "LoginDisclaimer": null,
+            "CustomCss": null,
+            "SplashscreenEnabled": false,
+            "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-read-only-output\\data\\splashscreen-upload.png"
+          }
+        },
+        {
+          "phase": "configuration-updated",
+          "options": {
+            "LoginDisclaimer": null,
+            "CustomCss": null,
+            "SplashscreenEnabled": false,
+            "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-read-only-output\\data\\splashscreen-upload.png"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "splashscreen-upload.png",
+          "bytes": "RXhpc3RpbmcgY3VzdG9tIGltYWdl"
+        },
+        {
+          "name": "splashscreen.png",
+          "bytes": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+        }
+      ]
+    },
+    {
+      "name": "upload-read-only-configuration",
+      "status": 500,
+      "headers": {
+        "content-type": "text/plain"
+      },
+      "body": "RXJyb3IgcHJvY2Vzc2luZyByZXF1ZXN0Lg==",
+      "jsonBody": null,
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-read-only-configuration\\data\\splashscreen-upload.png"
+      },
+      "disk": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": null
+      },
+      "calls": [
+        {
+          "phase": "configuration-updating",
+          "options": {
+            "LoginDisclaimer": null,
+            "CustomCss": null,
+            "SplashscreenEnabled": false,
+            "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-read-only-configuration\\data\\splashscreen-upload.png"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "splashscreen-upload.png",
+          "bytes": "RXhpc3RpbmcgY3VzdG9tIGltYWdl"
+        },
+        {
+          "name": "splashscreen.png",
+          "bytes": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+        }
+      ]
+    },
+    {
+      "name": "upload-jpeg-keeps-png",
+      "status": 204,
+      "headers": {},
+      "body": "",
+      "jsonBody": null,
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-jpeg-keeps-png\\data\\splashscreen-upload.jpg"
+      },
+      "disk": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-jpeg-keeps-png\\data\\splashscreen-upload.jpg"
+      },
+      "calls": [
+        {
+          "phase": "configuration-updating",
+          "options": {
+            "LoginDisclaimer": null,
+            "CustomCss": null,
+            "SplashscreenEnabled": false,
+            "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-jpeg-keeps-png\\data\\splashscreen-upload.jpg"
+          }
+        },
+        {
+          "phase": "configuration-updated",
+          "options": {
+            "LoginDisclaimer": null,
+            "CustomCss": null,
+            "SplashscreenEnabled": false,
+            "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\upload-jpeg-keeps-png\\data\\splashscreen-upload.jpg"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "splashscreen-upload.jpg",
+          "bytes": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+        },
+        {
+          "name": "splashscreen-upload.png",
+          "bytes": "RXhpc3RpbmcgY3VzdG9tIGltYWdl"
+        },
+        {
+          "name": "splashscreen.png",
+          "bytes": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+        }
+      ]
+    },
+    {
+      "name": "delete-custom",
+      "status": 204,
+      "headers": {},
+      "body": "",
+      "jsonBody": null,
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": null
+      },
+      "disk": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": null
+      },
+      "calls": [
+        {
+          "phase": "configuration-updating",
+          "options": {
+            "LoginDisclaimer": null,
+            "CustomCss": null,
+            "SplashscreenEnabled": true,
+            "SplashscreenLocation": null
+          }
+        },
+        {
+          "phase": "configuration-updated",
+          "options": {
+            "LoginDisclaimer": null,
+            "CustomCss": null,
+            "SplashscreenEnabled": true,
+            "SplashscreenLocation": null
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "splashscreen.png",
+          "bytes": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+        }
+      ]
+    },
+    {
+      "name": "delete-missing",
+      "status": 204,
+      "headers": {},
+      "body": "",
+      "jsonBody": null,
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\delete-missing\\data\\custom.png"
+      },
+      "disk": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\delete-missing\\data\\custom.png"
+      },
+      "calls": [],
+      "files": []
+    },
+    {
+      "name": "delete-no-location",
+      "status": 204,
+      "headers": {},
+      "body": "",
+      "jsonBody": null,
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": null
+      },
+      "disk": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": null
+      },
+      "calls": [],
+      "files": [
+        {
+          "name": "splashscreen.png",
+          "bytes": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+        }
+      ]
+    },
+    {
+      "name": "delete-directory",
+      "status": 204,
+      "headers": {},
+      "body": "",
+      "jsonBody": null,
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\delete-directory\\data\\custom.png"
+      },
+      "disk": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\delete-directory\\data\\custom.png"
+      },
+      "calls": [],
+      "files": []
+    },
+    {
+      "name": "delete-read-only-file",
+      "status": 500,
+      "headers": {
+        "content-type": "text/plain"
+      },
+      "body": "RXJyb3IgcHJvY2Vzc2luZyByZXF1ZXN0Lg==",
+      "jsonBody": null,
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\delete-read-only-file\\data\\custom.png"
+      },
+      "disk": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\delete-read-only-file\\data\\custom.png"
+      },
+      "calls": [],
+      "files": [
+        {
+          "name": "custom.png",
+          "bytes": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+        }
+      ]
+    },
+    {
+      "name": "delete-read-only-configuration",
+      "status": 500,
+      "headers": {
+        "content-type": "text/plain"
+      },
+      "body": "RXJyb3IgcHJvY2Vzc2luZyByZXF1ZXN0Lg==",
+      "jsonBody": null,
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": null
+      },
+      "disk": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\delete-read-only-configuration\\data\\custom.png"
+      },
+      "calls": [
+        {
+          "phase": "configuration-updating",
+          "options": {
+            "LoginDisclaimer": null,
+            "CustomCss": null,
+            "SplashscreenEnabled": true,
+            "SplashscreenLocation": null
+          }
+        }
+      ],
+      "files": []
+    },
+    {
+      "name": "delete-user",
+      "status": 403,
+      "headers": {
+        "content-length": "0"
+      },
+      "body": "",
+      "jsonBody": null,
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\delete-user\\data\\custom.png"
+      },
+      "disk": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\delete-user\\data\\custom.png"
+      },
+      "calls": [],
+      "files": []
+    },
+    {
+      "name": "delete-anonymous",
+      "status": 401,
+      "headers": {
+        "content-length": "0"
+      },
+      "body": "",
+      "jsonBody": null,
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\delete-anonymous\\data\\custom.png"
+      },
+      "disk": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\cases\\delete-anonymous\\data\\custom.png"
+      },
+      "calls": [],
+      "files": []
+    },
+    {
+      "name": "load-empty",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json; charset=utf-8"
+      },
+      "body": "eyJTcGxhc2hzY3JlZW5FbmFibGVkIjpmYWxzZX0=",
+      "jsonBody": {
+        "SplashscreenEnabled": false
+      },
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": null
+      },
+      "disk": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": null
+      },
+      "calls": [],
+      "files": []
+    },
+    {
+      "name": "load-unknown",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json; charset=utf-8"
+      },
+      "body": "eyJDdXN0b21Dc3MiOiJib2R5e30iLCJTcGxhc2hzY3JlZW5FbmFibGVkIjpmYWxzZX0=",
+      "jsonBody": {
+        "CustomCss": "body{}",
+        "SplashscreenEnabled": false
+      },
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": "body{}",
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": null
+      },
+      "disk": {
+        "LoginDisclaimer": null,
+        "CustomCss": "body{}",
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": null
+      },
+      "calls": [],
+      "files": []
+    },
+    {
+      "name": "load-invalid-boolean",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json; charset=utf-8"
+      },
+      "body": "eyJTcGxhc2hzY3JlZW5FbmFibGVkIjpmYWxzZX0=",
+      "jsonBody": {
+        "SplashscreenEnabled": false
+      },
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": null
+      },
+      "disk": null,
+      "calls": [],
+      "files": []
+    },
+    {
+      "name": "load-nil-and-empty",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json; charset=utf-8"
+      },
+      "body": "eyJMb2dpbkRpc2NsYWltZXIiOiIiLCJDdXN0b21Dc3MiOiIiLCJTcGxhc2hzY3JlZW5FbmFibGVkIjpmYWxzZX0=",
+      "jsonBody": {
+        "LoginDisclaimer": "",
+        "CustomCss": "",
+        "SplashscreenEnabled": false
+      },
+      "live": {
+        "LoginDisclaimer": "",
+        "CustomCss": "",
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": null
+      },
+      "disk": {
+        "LoginDisclaimer": "",
+        "CustomCss": "",
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": null
+      },
+      "calls": [],
+      "files": []
+    },
+    {
+      "name": "load-malformed",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json; charset=utf-8"
+      },
+      "body": "eyJTcGxhc2hzY3JlZW5FbmFibGVkIjpmYWxzZX0=",
+      "jsonBody": {
+        "SplashscreenEnabled": false
+      },
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": null
+      },
+      "disk": null,
+      "calls": [],
+      "files": []
+    },
+    {
+      "name": "load-wrong-root",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json; charset=utf-8"
+      },
+      "body": "eyJTcGxhc2hzY3JlZW5FbmFibGVkIjpmYWxzZX0=",
+      "jsonBody": {
+        "SplashscreenEnabled": false
+      },
+      "live": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": null
+      },
+      "disk": null,
+      "calls": [],
+      "files": []
+    }
+  ]
+}

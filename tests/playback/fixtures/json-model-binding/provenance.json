@@ -1,0 +1,167 @@
+{
+  "fixturesFrozenAt": "2026-09-26T14:33:15.833Z",
+  "reference": "D:/jellyfin current workspace including local modifications",
+  "baselineHead": "208c278b75abd897aefa1e1175126eac5e4dbfaa",
+  "baselineManifestSha256": "e535dee136312640baebc08a524102d9b4bddaf91d66570b690001276c9962ef",
+  "files": [
+    {
+      "fixture": "input.json",
+      "recordedArtifact": ".agent-docs/evidence/runtime-integration-20260926/binding/input.json",
+      "sha256": "cf06cb64170370a1ecd5fe1001592fc1fc8ad6463192da385771adedceb793ad"
+    },
+    {
+      "fixture": "output.json",
+      "recordedArtifact": ".agent-docs/evidence/runtime-integration-20260926/binding/output.json",
+      "sha256": "2ce41efa063281ade8daf88b22879e85301820b098a93f3100323da462b47c95"
+    },
+    {
+      "fixture": "schema.json",
+      "recordedArtifact": ".agent-docs/evidence/runtime-integration-20260926/binding/schema.json",
+      "sha256": "7b10c158c3e154474691b05bc2fdabb5beb00a19c962f44d8f6cc000fe747c7c"
+    },
+    {
+      "fixture": "Oracle.cs",
+      "recordedArtifact": ".agent-docs/evidence/runtime-integration-20260926/binding/Program.cs",
+      "sha256": "9b82de65989bc820a7e5cd37a449a94f8df9f4b61e2cd9db35d165ca421cea10"
+    },
+    {
+      "fixture": "Oracle.csproj",
+      "recordedArtifact": ".agent-docs/evidence/runtime-integration-20260926/binding/Oracle.csproj",
+      "sha256": "d846fc2230789f80a5947d5f29513b80b6290163ebd2fc653502e27e4a10d5c1",
+      "priorSha256": "662959116996f674bf34f67ad536b340ea71cad5f912d744011a2459993ac860",
+      "replayedProject": ".test-output/validation/oracle-rebind-20261003/json-model-binding/project/Oracle.csproj"
+    },
+    {
+      "fixture": "http-input.json",
+      "recordedArtifact": ".agent-docs/evidence/runtime-integration-20260926/binding/http-input.json",
+      "sha256": "c138ad31e3a923f53439c3d7ffe37aefc1bea93e0b8ce2051335d4a5b3bb856b"
+    },
+    {
+      "fixture": "http-output.json",
+      "recordedArtifact": ".agent-docs/evidence/runtime-integration-20260926/binding/reference-http.json",
+      "sha256": "b75e0faa9e4834d76fa031717837bd0563872e608c0ddb9f128e8e05bc3667a6"
+    }
+  ],
+  "assemblies": [
+    {
+      "name": "Jellyfin.Api.dll",
+      "sha256": "8e1f9aeef644d8924be306d804880cf52804a947b52a5991406d8928fe4999d2"
+    },
+    {
+      "name": "Jellyfin.Extensions.dll",
+      "sha256": "857e4a37f69c65f1b66cd281fe735a75caf3ae76ae878726eaf20130755cabde"
+    },
+    {
+      "name": "MediaBrowser.Model.dll",
+      "sha256": "991b3ca08b544ea91feff5c05d8dbb1d8b6ca3392f90753073cc09e353395946"
+    },
+    {
+      "name": "Jellyfin.Data.dll",
+      "sha256": "8a4364a16982ff1497aba328f736886f423f9a0f81f91bbdab76199bb2d98751"
+    },
+    {
+      "name": "Oracle.dll",
+      "sha256": "75fc2ef03439f3b8345fb201eaaeff94be91a087c5b7aa483dcf659901e47fc5"
+    }
+  ],
+  "source": [
+    {
+      "path": "Jellyfin.Api/Models/MediaInfoDtos/PlaybackInfoDto.cs",
+      "currentAndFrozenSha256": "246edf2022b1c6cc1a096b4ae9af8a7e20243120f835584b193c327bbbfd855a"
+    },
+    {
+      "path": "MediaBrowser.Model/Dlna/DeviceProfile.cs",
+      "currentAndFrozenSha256": "237fa054f34f8e734b91f849161caed1fa053b394fb7e7d6e90a01cd5ae28d99"
+    },
+    {
+      "path": "src/Jellyfin.Extensions/Json/JsonDefaults.cs",
+      "currentAndFrozenSha256": "c0ab4cfad71ceade367d061f5a4ee04d001018155378713cd076df292bf3c815"
+    },
+    {
+      "path": "src/Jellyfin.Extensions/Json/Converters/JsonStringConverter.cs",
+      "currentAndFrozenSha256": "edb420cc9982b22ad19509e5ef45729b644a6e83b044b673c0fd9ce2d65d3de9"
+    },
+    {
+      "path": "src/Jellyfin.Extensions/Json/Converters/JsonNullableStructConverter.cs",
+      "currentAndFrozenSha256": "c3545807889bebef41f2688cc1db206a1a17c1f7a98466b3c291c09a72ee3aff"
+    },
+    {
+      "path": "src/Jellyfin.Extensions/Json/Converters/JsonNullableGuidConverter.cs",
+      "currentAndFrozenSha256": "451af180eb3b093bc326e633d453f835ae22c10da4bc3fb954018b9af547c2cd"
+    }
+  ],
+  "dotnetSdk": "10.0.401",
+  "node": "v24.16.0",
+  "pureDeserialization": {
+    "cases": 163,
+    "call": "JsonSerializer.Deserialize<PlaybackInfoDto>(json, new JsonSerializerOptions(JsonDefaults.Options) { PropertyNameCaseInsensitive = true })",
+    "output": "Serialized with JsonDefaults.Options; null object properties are omitted; Guid.Empty serializes as explicit null.",
+    "errorFields": [
+      "exception type name",
+      "Message",
+      "Path",
+      "LineNumber",
+      "BytePositionInLine"
+    ],
+    "integerHandling": "Original JSON fixture bytes retained; Node loads expected output losslessly.",
+    "excludes": [
+      "ASP.NET MVC required-field validation",
+      "HTTP query binding",
+      "syntax-error matrix outside the recorded inputs"
+    ]
+  },
+  "http": {
+    "cases": 104,
+    "origin": "Isolated actual Jellyfin process on 127.0.0.1:18341",
+    "preparation": ".agent-docs/evidence/runtime-integration-20260926/binding/prepare-reference.mjs",
+    "recorder": "tests/playback/binding-scenario.js",
+    "normalizations": [
+      "traceId",
+      "PlaySessionId",
+      "exact isolated synthetic subtitle path"
+    ],
+    "permittedDifferences": {
+      "cases": [
+        "nullable-empty",
+        "query-empty-body-bitrate",
+        "profile-null"
+      ],
+      "field": "MediaSources[0].SupportsTranscoding",
+      "native": true,
+      "candidate": false
+    },
+    "rawCompatibilityMustRemainFalse": true
+  },
+  "replay": {
+    "recordedAt": "2026-10-03T13:48:25.680Z",
+    "scope": "Pure PlaybackInfoDto deserialization and reflected schema only. Historical HTTP recording was not rerun.",
+    "priorProvenanceSha256": "c9e9eedce8f641a1bd538eff57d3890d55a2757af07c38219bf8624a323cd6e5",
+    "comparisons": [
+      {
+        "fixture": "output.json",
+        "trackedSha256": "2ce41efa063281ade8daf88b22879e85301820b098a93f3100323da462b47c95",
+        "rawSha256": "2ce41efa063281ade8daf88b22879e85301820b098a93f3100323da462b47c95",
+        "jsonFieldsEqual": true,
+        "normalization": "Whitespace only; every JSON field value and array order compared.",
+        "rawPath": ".test-output/validation/oracle-rebind-20261003/json-model-binding/output.json",
+        "recordSha256": "b0ac18081a3408efeb5427735716e5fbcfefa61b132d4cbdab4e5859a5dc15fc"
+      },
+      {
+        "fixture": "schema.json",
+        "trackedSha256": "7b10c158c3e154474691b05bc2fdabb5beb00a19c962f44d8f6cc000fe747c7c",
+        "rawSha256": "7b10c158c3e154474691b05bc2fdabb5beb00a19c962f44d8f6cc000fe747c7c",
+        "jsonFieldsEqual": true,
+        "normalization": "Whitespace only; every JSON field value and array order compared.",
+        "rawPath": ".test-output/validation/oracle-rebind-20261003/json-model-schema/schema.json",
+        "recordSha256": "0a3b3d635ab65d453734ae89413004c200274b1d09f6e1994469f2059ea70b56"
+      }
+    ],
+    "commonBuildProperties": {
+      "path": "tests/Directory.Build.props",
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    },
+    "unchangedTrackedResults": true,
+    "projectReexecuted": true
+  },
+  "postgresEnvironment": "MEDIAMANAGER_TEST_POSTGRES"
+}

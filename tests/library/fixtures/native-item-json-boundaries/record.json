@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "scope": "Pinned JsonDefaults boundary closeout: DateTime validity/kind/serialization, enum numeric lexical/comma handling, quoted integer lexical handling, and double serialization.",
+  "caseCount": 23,
+  "runtime": "10.0.12",
+  "timezone": "Taipei Standard Time",
+  "dotnet": {
+    "filename": "D:\\mediamanager\\.tools\\dotnet\\dotnet.exe",
+    "version": "10.0.401",
+    "sha256": "21A46F1E5235CF4E844B9DE5429F0E198B9C97A41F0503A66442F1D639CA3EE6"
+  },
+  "pinnedAssemblies": [
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\results\\native-item-full27-typed-saveitems-oracle-r4-20261007\\bin\\Release\\net10.0\\Jellyfin.Extensions.dll",
+      "bytes": 37888,
+      "sha256": "DB952E3013A6949AD22DB9AC3379BE2EFDF441C139DDC6919E86F8C2ABBC7207"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\results\\native-item-full27-typed-saveitems-oracle-r4-20261007\\bin\\Release\\net10.0\\MediaBrowser.Model.dll",
+      "bytes": 489472,
+      "sha256": "7B2C1B16721CF7747B572E4DE3761DE635FAD4BD12BEC346983545BEE73FD92C"
+    }
+  ],
+  "build": {
+    "exitCode": 0,
+    "warnings": 1,
+    "errors": 0,
+    "warning": "MSB3246 from the intentionally broad pinned-DLL reference glob encountering a native PE without managed metadata; Oracle.dll built successfully."
+  },
+  "run": {
+    "firstAttemptExitCode": -532462766,
+    "firstAttemptRecord": "attempt-1.txt",
+    "finalExitCode": 0
+  },
+  "artifacts": [
+    { "path": "project/Oracle.csproj", "bytes": 554, "sha256": "DA74F4379BB99743F3EAC06F27D8B674E8D7877829EA971625344302503B2661" },
+    { "path": "project/Program.cs", "bytes": 3438, "sha256": "4AE1985CC792BA009D27105C0F073D93FDDAA8BDDF44751289028B6BB23D68AF" },
+    { "path": "input.json", "bytes": 1874, "sha256": "A908DC6A65FF82B4B6239767DF39F43F9B067A7A9A43D37F53A08F993A0A2730" },
+    { "path": "native.json", "bytes": 11492, "sha256": "2D59212DD109CAB6903690A40C567578E04141423999C09F7F7A627AF123D0C6" },
+    { "path": "attempt-1.txt", "bytes": 608, "sha256": "48FD9A1A832AE7EABD69A4F724002D4C35E870FF221ABE550180EADD93E17FC0" },
+    { "path": "bin/Release/net10.0/Oracle.dll", "bytes": 22016, "sha256": "90792BF8B19FC6723F311F8E08D4108A1AAAEF15A816A723C96D0A0F98AB325F" }
+  ]
+}

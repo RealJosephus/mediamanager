@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-10-07T11:00:06.1418238Z",
+  "fixtureFiles": [
+    {
+      "path": "tests/library/fixtures/native-item-json-boundaries/input.json",
+      "bytes": 1874,
+      "sha256": "a908dc6a65ff82b4b6239767df39f43f9b067a7a9a43d37f53a08f993a0a2730"
+    },
+    {
+      "path": "tests/library/fixtures/native-item-json-boundaries/Program.cs",
+      "bytes": 3438,
+      "sha256": "4ae1985cc792ba009d27105c0f073d93fddaa8bddf44751289028b6bb23d68af"
+    },
+    {
+      "path": "tests/library/fixtures/native-item-json-boundaries/Oracle.csproj",
+      "bytes": 554,
+      "sha256": "da74f4379bb99743f3eac06f27d8b674e8d7877829ea971625344302503b2661"
+    },
+    {
+      "path": "tests/library/fixtures/native-item-json-boundaries/native.json",
+      "bytes": 11492,
+      "sha256": "2d59212dd109cab6903690a40c567578e04141423999c09f7f7a627af123d0c6"
+    },
+    {
+      "path": "tests/library/fixtures/native-item-json-boundaries/record.json",
+      "bytes": 2249,
+      "sha256": "82a7aba9d6c9347ebb1b7db1680d01087570ae6ffc662683816833346bf6ec06"
+    },
+    {
+      "path": "tests/library/fixtures/native-item-json-boundaries/input-r2.json",
+      "bytes": 2810,
+      "sha256": "8544b06bfb3a46d0b83a3821049f66e58351837428d77e7feca6635f9905ac19"
+    },
+    {
+      "path": "tests/library/fixtures/native-item-json-boundaries/native-r2.json",
+      "bytes": 16496,
+      "sha256": "b5b69e894167ca3b462766fe2cf633547cbebb91d92c948435168ddcc140fb8d"
+    },
+    {
+      "path": "tests/library/fixtures/native-item-json-boundaries/record-r2.json",
+      "bytes": 1252,
+      "sha256": "72b7b108f002b92a3b95c92a59241d6ce6cd57ad84e83b670c27c5a67c2da565"
+    },
+    {
+      "path": "tests/library/fixtures/native-item-json-boundaries/input-r3.json",
+      "bytes": 94,
+      "sha256": "2d2beda92a6eac8b8390e139f3ca87e07a83faa50dd11558536056f5338c3724"
+    },
+    {
+      "path": "tests/library/fixtures/native-item-json-boundaries/native-r3.json",
+      "bytes": 609,
+      "sha256": "15a1b6a0acabec61b98c1f0fac50c04d8c9b74aa0421a95945483351e25ee395"
+    },
+    {
+      "path": "tests/library/fixtures/native-item-json-boundaries/record-r3.json",
+      "bytes": 1451,
+      "sha256": "70641a9e707956405a11f7e78add37148344a63aabfea1bb2dbda27b0c220719"
+    },
+    {
+      "path": "tests/library/fixtures/native-item-json-boundaries/input-r4.json",
+      "bytes": 901,
+      "sha256": "b6ddf3d7d06afb35bacd1d5b729a516764b6d674ce75a14c2db6bae1396f4887"
+    },
+    {
+      "path": "tests/library/fixtures/native-item-json-boundaries/native-r4.json",
+      "bytes": 5495,
+      "sha256": "fc3953414e007808a1ef3baf3c3e1c725ed8031925b6393a02db0b703c0f6438"
+    },
+    {
+      "path": "tests/library/fixtures/native-item-json-boundaries/record-r4.json",
+      "bytes": 2532,
+      "sha256": "119ffa6ebfa5d2d28ad8ba6fd6c55448d12eff3182da929e11fd7e0bc3327a2e"
+    }
+  ],
+  "scope": "Pinned JsonDefaults boundary oracle: original 23 cases, additive r2 capture containing those 23 unchanged plus 11 DateTime-kind/double-threshold cases, separate r3 nonnullable VideoType null-token case, and independent r4 nine-case duplicate-property capture. It covers DateTime calendar validity, Kind and converter output, enum numeric lexical/comma-name/null behavior, quoted Int32/Int64 lexical behavior, IEEE-754 double output spelling, and ordered validation of every known property occurrence with valid last-wins. JavaScript errors are not projected as CLR exception identities; candidate comparisons map only the native top-level JsonException to the constructor-fallback family, then compare semantic successful values and exact reserialized scalar bytes. This fixture does not expand the full-27 persistence oracle or claim release acceptance.",
+  "capture": {
+    "record": "D:/mediamanager-validation/20261005/results/native-item-json-boundaries-source-20261007/record.json",
+    "recordSha256": "82a7aba9d6c9347ebb1b7db1680d01087570ae6ffc662683816833346bf6ec06",
+    "r2Record": "D:/mediamanager-validation/20261005/results/native-item-json-boundaries-source-20261007/record-r2.json",
+    "r2RecordSha256": "72b7b108f002b92a3b95c92a59241d6ce6cd57ad84e83b670c27c5a67c2da565",
+    "r3Record": "D:/mediamanager-validation/20261005/results/native-item-json-boundaries-source-20261007/record-r3.json",
+    "r3RecordSha256": "70641a9e707956405a11f7e78add37148344a63aabfea1bb2dbda27b0c220719",
+    "r4Record": "D:/mediamanager-validation/20261005/results/native-item-json-duplicate-properties-source-20261007/record.json",
+    "r4RecordSha256": "119ffa6ebfa5d2d28ad8ba6fd6c55448d12eff3182da929e11fd7e0bc3327a2e"
+  },
+  "sources": {
+    "src/Jellyfin.Extensions/Json/JsonDefaults.cs": "c0ab4cfad71ceade367d061f5a4ee04d001018155378713cd076df292bf3c815",
+    "src/Jellyfin.Extensions/Json/Converters/JsonDateTimeConverter.cs": "683124924193a063631d4956df963b5c383b7202ac5a8581a28a1c8637083fe3",
+    "src/Jellyfin.Extensions/Json/Converters/JsonFlagEnumConverter.cs": "b984d81c5d841b0b36fa0bfafb7874f2625e66b297ebe8a49c4464bb30693bf8",
+    "src/Jellyfin.Extensions/Json/Converters/JsonDefaultStringEnumConverter.cs": "e2d6bac00dd82e1b8b06e108bce16019dba74c7c93ee61fee6afc0f380e7a59c"
+  },
+  "runtime": {
+    "dotnet": "10.0.12",
+    "timezone": "Taipei Standard Time",
+    "dotnetExecutableSha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6",
+    "jellyfinExtensionsSha256": "db952e3013a6949ad22db9ac3379be2efdf441c139ddc6919e86f8c2abbc7207",
+    "mediaBrowserModelSha256": "7b2c1b16721cf7747b572e4de3761de635fad4bd12bec346983545bee73fd92c"
+  },
+  "candidateVerified": true,
+  "r4CandidateVerified": true,
+  "r4CandidateComparison": "The controlled expanded comparison on 2026-10-07 registered 13 focused tests: 12 passed and the sole failure was this r4 verification flag still being false. It traversed all four actual captures (23 + 34 + 1 + 9 = 67 executions), matching the native fallback family, every successful semantic projection and exact reserialized scalar bytes. Native root/nested duplicate, escaped-name, read-only/unknown controls and the 163-case actual HTTP JSON model-binding comparison also passed. The retained pre-promotion TAP is D:/mediamanager-validation/20261005/results/native-full27-duplicates-expanded-initial-20261007.tap with SHA-256 61c91ff9e64fb35de67bbb8c55311cd30c707433cf925dcbfb8a63c213be4c63. This gate verifies only the recorded boundary scope and does not claim strict full-profile or release acceptance.",
+  "candidateComparison": "A controlled expanded-fixture run on 2026-10-07 registered 4 focused tests: 3 passed and the sole failure was this provenance flag still being false. The candidate traversed the original 23-case pair, all 34 r2 cases and the separate r3 null-enum case; it matched the native constructor-fallback family, semantic successful values and exact reserialized scalar JSON bytes. DateTime Kind copy/overlay and immutable repository-frame checks also passed. The retained pre-promotion TAP is D:/mediamanager-validation/20261005/results/native-item-json-boundaries-candidate-expanded-initial-20261007/test.tap with SHA-256 a8d366a72beb97d9588acc164fe19650ed80e775ad8a91ce43c1cee979237195. This verifies this boundary scope only, not PostgreSQL, the full-27 persistence suite or final release acceptance."
+}

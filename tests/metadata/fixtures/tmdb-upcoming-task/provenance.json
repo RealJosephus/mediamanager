@@ -1,0 +1,17 @@
+{
+  "jellyfinCommit": "208c278b75abd897aefa1e1175126eac5e4dbfaa",
+  "jellyfinTaskSource": "MediaBrowser.Providers/Plugins/Tmdb/TV/TmdbUpcomingEpisodesTask.cs",
+  "jellyfinTaskSourceSha256": "34dfe0041b4be1aa72c112683d54330110c60de82ed9a1fdb59ea2629eef8f00",
+  "nativeSha256": "5634de6cf37451ae6a8fb05e3a577825cabf6a87cea3bfc9504b998d11b4c2de",
+  "recordedNativeSha256": "eb391bca737d03e76c68bf78c78c98d7691bedff2b60cb5692a007f68c1c8141",
+  "oracleFiles": {
+    "Oracle.cs": "2ada98de11a9cfadbfd731531a37585d12f72e2659120af17887eac74228487b",
+    "Oracle.csproj": "56e42cc99a5305248cb523db75850ab8bce9868f3a283101fa0a208332829234",
+    "README.md": "0bafd9369cfe27fb610975e459431f483460d900e9e4e0278a8ef2891e7f716e"
+  },
+  "sourceFilesSha256": "83faee8715be57b744b9d3873d71ee77e233da540107fe0ac7e6ac37f785e42f",
+  "mediaBrowserProvidersAssemblySha256": "1afa73573e3bda071db199cf76b4a3e1ca62381eef3a0d3311bca56cb68f2423",
+  "oracleAssemblySha256": "e9f76fb8cfac87fa9414db37e8b1b63b6b02f6f90e1aae25df790ca281c09ede",
+  "oracleRecord": "D:/mediamanager-validation/20261005/results/tmdb-upcoming-task-oracle-20261008-v2/record.json",
+  "phaseAcceptance": false
+}

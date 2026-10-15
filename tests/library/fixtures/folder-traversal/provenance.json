@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-10-07T17:47:06.171Z",
+  "scope": "Actual frozen Folder.ValidateChildrenInternal with real EF SQLite, warm CreateItems and the real library scheduler under explicit sequential fanout. Preserves all 66 prior physical/version cases and adds root accessibility/cancellation/collections/BoxSet controls, parent-cycle rejection, recursive new/existing physical subfolders, child saver cancellation, nested enumeration failure and recursive deletion failure. Complete 72 columns, typed Data, ordinary images/relationships, files, manager cache, saver/repository/events and synchronous refresh-start/complete order. Provider refresh and image processor controls are explicit; asynchronous progress callbacks, full child MetadataService, linked-reference savers, populated UserData reattachment, arbitrary special resolvers, actual network/decoder/Web/migration/full scan and release acceptance remain outside scope.",
+  "fixtureFiles": [
+    {
+      "path": "tests/library/fixtures/folder-traversal/input.json",
+      "sha256": "05b0393fd132c6985d3c340f41236b8d74f5cb5bff5d75ab10bf39de3eed9446"
+    },
+    {
+      "path": "tests/library/fixtures/folder-traversal/Program.cs",
+      "sha256": "ed3654460e36e344e2b27d4f3de707d60c9becd222bc7e17aa5b892a67f0e053"
+    },
+    {
+      "path": "tests/library/fixtures/folder-traversal/Oracle.csproj",
+      "sha256": "cbe1a514da582cbf55a443ee14c93f731f84816d10e7672fb713045ac5d78efe"
+    },
+    {
+      "path": "tests/library/fixtures/folder-traversal/native.json",
+      "sha256": "f87f326d2adcf249eacb919e10c0ca845240aef9ce130467a75e7b2dbc67159b"
+    }
+  ],
+  "assemblies": [
+    {
+      "name": "MediaBrowser.Controller",
+      "sha256": "051c588a8e85a3a7cdde8dc3d9a1112217fd7e973a86fe2ff90cf765bedb75a8"
+    },
+    {
+      "name": "Emby.Server.Implementations",
+      "sha256": "8d369435646570958505c58b9cb17da169855dabc105d0e933524361e9b7b1c8"
+    },
+    {
+      "name": "Jellyfin.Server.Implementations",
+      "sha256": "4da187af02503e82135eb192351d01490484e8ebc8c653d849f7e2900a177672"
+    }
+  ],
+  "reference": {
+    "head": "208c278b75abd897aefa1e1175126eac5e4dbfaa",
+    "contentDigest": "e28a983db179b720c3b16d7416ee4112894a3115c4be6fe43c61c52e0d9a8313"
+  },
+  "capture": {
+    "record": "D:/mediamanager-validation/20261005/results/folder-traversal-provider-oracle-20261008/record.json",
+    "sourceFilesSha256": "10669039577c96946f1cb03214f424f35cd7ededf028bc1153b37467a25c9120"
+  },
+  "original66ResultsUnchanged": true,
+  "candidateVerified": false
+}

@@ -1,0 +1,735 @@
+[
+  {
+    "id": "control-at",
+    "patterns": [
+      "foo\\c@"
+    ],
+    "paths": [
+      "F:/foo\u0000",
+      "F:/fooa",
+      "F:/foo@"
+    ]
+  },
+  {
+    "id": "control-open",
+    "patterns": [
+      "foo\\c["
+    ],
+    "paths": [
+      "F:/foo\u001b",
+      "F:/fooa",
+      "F:/foo["
+    ]
+  },
+  {
+    "id": "control-backslash",
+    "patterns": [
+      "foo\\c\\"
+    ],
+    "paths": [
+      "F:/foo\u001c",
+      "F:/fooa",
+      "F:/foo\\"
+    ]
+  },
+  {
+    "id": "control-close",
+    "patterns": [
+      "foo\\c]"
+    ],
+    "paths": [
+      "F:/foo\u001d",
+      "F:/fooa",
+      "F:/foo]"
+    ]
+  },
+  {
+    "id": "control-caret",
+    "patterns": [
+      "foo\\c^"
+    ],
+    "paths": [
+      "F:/foo\u001e",
+      "F:/fooa",
+      "F:/foo^"
+    ]
+  },
+  {
+    "id": "control-underscore",
+    "patterns": [
+      "foo\\c_"
+    ],
+    "paths": [
+      "F:/foo\u001f",
+      "F:/fooa",
+      "F:/foo_"
+    ]
+  },
+  {
+    "id": "named-number-angle",
+    "patterns": [
+      "foo(a)\\k<2>"
+    ],
+    "paths": [
+      "F:/fooaa",
+      "F:/fooab",
+      "F:/fooAA",
+      "F:/xx",
+      "F:/other"
+    ]
+  },
+  {
+    "id": "named-number-quote",
+    "patterns": [
+      "foo(a)\\k'2'"
+    ],
+    "paths": [
+      "F:/fooaa",
+      "F:/fooab",
+      "F:/fooAA",
+      "F:/xx",
+      "F:/other"
+    ]
+  },
+  {
+    "id": "named-zero",
+    "patterns": [
+      "foo\\k<0>"
+    ],
+    "paths": [
+      "F:/fooaa",
+      "F:/fooab",
+      "F:/fooAA",
+      "F:/xx",
+      "F:/other"
+    ]
+  },
+  {
+    "id": "named-undefined",
+    "patterns": [
+      "foo\\k<9>"
+    ],
+    "paths": [
+      "F:/fooaa",
+      "F:/fooab",
+      "F:/fooAA",
+      "F:/xx",
+      "F:/other"
+    ]
+  },
+  {
+    "id": "initial-rightbracket-capture",
+    "patterns": [
+      "[](a)]\\3"
+    ],
+    "paths": [
+      "F:/fooaa",
+      "F:/fooab",
+      "F:/fooAA",
+      "F:/xx",
+      "F:/other"
+    ]
+  },
+  {
+    "id": "nested-subtraction-capture",
+    "patterns": [
+      "[a-z-[aeiou]](x)\\3"
+    ],
+    "paths": [
+      "F:/fooaa",
+      "F:/fooab",
+      "F:/fooAA",
+      "F:/xx",
+      "F:/other"
+    ]
+  },
+  {
+    "id": "optional-capture",
+    "patterns": [
+      "(a){0,1}\\2"
+    ],
+    "paths": [
+      "F:/",
+      "F:/a",
+      "F:/aa",
+      "F:/aaa",
+      "F:/b"
+    ]
+  },
+  {
+    "id": "empty-participating-capture",
+    "patterns": [
+      "(a{0})\\2"
+    ],
+    "paths": [
+      "F:/",
+      "F:/a",
+      "F:/aa",
+      "F:/b",
+      "F:/猫"
+    ]
+  },
+  {
+    "id": "forward-number",
+    "patterns": [
+      "\\2(a)"
+    ],
+    "paths": [
+      "F:/a",
+      "F:/aa",
+      "F:/aaa",
+      "F:/b",
+      "F:/"
+    ]
+  },
+  {
+    "id": "forward-named-number",
+    "patterns": [
+      "\\k<2>(a)"
+    ],
+    "paths": [
+      "F:/a",
+      "F:/aa",
+      "F:/aaa",
+      "F:/b",
+      "F:/"
+    ]
+  },
+  {
+    "id": "retained-repeated-capture",
+    "patterns": [
+      "(a(b){0,1}){2}\\3"
+    ],
+    "paths": [
+      "F:/aa",
+      "F:/aba",
+      "F:/abab",
+      "F:/ababb",
+      "F:/aab"
+    ]
+  },
+  {
+    "id": "alternative-unmatched-reference",
+    "patterns": [
+      "(a)|(b)\\2"
+    ],
+    "paths": [
+      "F:/a",
+      "F:/b",
+      "F:/bb",
+      "F:/ab",
+      "F:/bbb"
+    ]
+  },
+  {
+    "id": "reference-branch",
+    "patterns": [
+      "(a|b)\\2"
+    ],
+    "paths": [
+      "F:/aa",
+      "F:/bb",
+      "F:/ab",
+      "F:/ba",
+      "F:/"
+    ]
+  },
+  {
+    "id": "reference-repeat",
+    "patterns": [
+      "(a|b){1,2}\\2"
+    ],
+    "paths": [
+      "F:/aa",
+      "F:/bb",
+      "F:/abb",
+      "F:/aba",
+      "F:/aaa"
+    ]
+  },
+  {
+    "id": "reference-bracket-class",
+    "patterns": [
+      "[](a)](b)\\2"
+    ],
+    "paths": [
+      "F:/abb",
+      "F:/]bb",
+      "F:/(bb",
+      "F:/)bb",
+      "F:/aba"
+    ]
+  },
+  {
+    "id": "reference-boundary",
+    "patterns": [
+      "\\b(a)\\2\\b"
+    ],
+    "paths": [
+      "F:/aa",
+      "F:/aaa",
+      "F:/猫aa猫",
+      "F:/ aa ",
+      "F:/AA"
+    ]
+  },
+  {
+    "id": "reference-case",
+    "patterns": [
+      "(I)\\2"
+    ],
+    "paths": [
+      "F:/II",
+      "F:/Ii",
+      "F:/ii",
+      "F:/İİ",
+      "F:/ıı"
+    ]
+  },
+  {
+    "id": "reference-leading-zero",
+    "patterns": [
+      "(a)\\k<02>"
+    ],
+    "paths": [
+      "F:/aa",
+      "F:/AA",
+      "F:/ab",
+      "F:/a",
+      "F:/"
+    ]
+  },
+  {
+    "id": "reference-subtracted-class",
+    "patterns": [
+      "([a-z-[aeiou]])\\2"
+    ],
+    "paths": [
+      "F:/bb",
+      "F:/zz",
+      "F:/aa",
+      "F:/Bb",
+      "F:/bc"
+    ]
+  },
+  {
+    "id": "control-df",
+    "patterns": [
+      "foo\\cß"
+    ],
+    "paths": [
+      "F:/foo\u0000",
+      "F:/foo\u0013",
+      "F:/foo\t",
+      "F:/foo\u001a",
+      "F:/foo\u001f",
+      "F:/fooa",
+      "F:/other"
+    ]
+  },
+  {
+    "id": "class-control-df",
+    "patterns": [
+      "foo[\\cß]"
+    ],
+    "paths": [
+      "F:/foo\u0000",
+      "F:/foo\u0013",
+      "F:/foo\t",
+      "F:/foo\u001a",
+      "F:/foo\u001f",
+      "F:/fooa",
+      "F:/other"
+    ]
+  },
+  {
+    "id": "control-17f",
+    "patterns": [
+      "foo\\cſ"
+    ],
+    "paths": [
+      "F:/foo\u0000",
+      "F:/foo\u0013",
+      "F:/foo\t",
+      "F:/foo\u001a",
+      "F:/foo\u001f",
+      "F:/fooa",
+      "F:/other"
+    ]
+  },
+  {
+    "id": "class-control-17f",
+    "patterns": [
+      "foo[\\cſ]"
+    ],
+    "paths": [
+      "F:/foo\u0000",
+      "F:/foo\u0013",
+      "F:/foo\t",
+      "F:/foo\u001a",
+      "F:/foo\u001f",
+      "F:/fooa",
+      "F:/other"
+    ]
+  },
+  {
+    "id": "control-131",
+    "patterns": [
+      "foo\\cı"
+    ],
+    "paths": [
+      "F:/foo\u0000",
+      "F:/foo\u0013",
+      "F:/foo\t",
+      "F:/foo\u001a",
+      "F:/foo\u001f",
+      "F:/fooa",
+      "F:/other"
+    ]
+  },
+  {
+    "id": "class-control-131",
+    "patterns": [
+      "foo[\\cı]"
+    ],
+    "paths": [
+      "F:/foo\u0000",
+      "F:/foo\u0013",
+      "F:/foo\t",
+      "F:/foo\u001a",
+      "F:/foo\u001f",
+      "F:/fooa",
+      "F:/other"
+    ]
+  },
+  {
+    "id": "control-130",
+    "patterns": [
+      "foo\\cİ"
+    ],
+    "paths": [
+      "F:/foo\u0000",
+      "F:/foo\u0013",
+      "F:/foo\t",
+      "F:/foo\u001a",
+      "F:/foo\u001f",
+      "F:/fooa",
+      "F:/other"
+    ]
+  },
+  {
+    "id": "class-control-130",
+    "patterns": [
+      "foo[\\cİ]"
+    ],
+    "paths": [
+      "F:/foo\u0000",
+      "F:/foo\u0013",
+      "F:/foo\t",
+      "F:/foo\u001a",
+      "F:/foo\u001f",
+      "F:/fooa",
+      "F:/other"
+    ]
+  },
+  {
+    "id": "control-212a",
+    "patterns": [
+      "foo\\cK"
+    ],
+    "paths": [
+      "F:/foo\u0000",
+      "F:/foo\u0013",
+      "F:/foo\t",
+      "F:/foo\u001a",
+      "F:/foo\u001f",
+      "F:/fooa",
+      "F:/other"
+    ]
+  },
+  {
+    "id": "class-control-212a",
+    "patterns": [
+      "foo[\\cK]"
+    ],
+    "paths": [
+      "F:/foo\u0000",
+      "F:/foo\u0013",
+      "F:/foo\t",
+      "F:/foo\u001a",
+      "F:/foo\u001f",
+      "F:/fooa",
+      "F:/other"
+    ]
+  },
+  {
+    "id": "control-e9",
+    "patterns": [
+      "foo\\cé"
+    ],
+    "paths": [
+      "F:/foo\u0000",
+      "F:/foo\u0013",
+      "F:/foo\t",
+      "F:/foo\u001a",
+      "F:/foo\u001f",
+      "F:/fooa",
+      "F:/other"
+    ]
+  },
+  {
+    "id": "class-control-e9",
+    "patterns": [
+      "foo[\\cé]"
+    ],
+    "paths": [
+      "F:/foo\u0000",
+      "F:/foo\u0013",
+      "F:/foo\t",
+      "F:/foo\u001a",
+      "F:/foo\u001f",
+      "F:/fooa",
+      "F:/other"
+    ]
+  },
+  {
+    "id": "control-b5",
+    "patterns": [
+      "foo\\cµ"
+    ],
+    "paths": [
+      "F:/foo\u0000",
+      "F:/foo\u0013",
+      "F:/foo\t",
+      "F:/foo\u001a",
+      "F:/foo\u001f",
+      "F:/fooa",
+      "F:/other"
+    ]
+  },
+  {
+    "id": "class-control-b5",
+    "patterns": [
+      "foo[\\cµ]"
+    ],
+    "paths": [
+      "F:/foo\u0000",
+      "F:/foo\u0013",
+      "F:/foo\t",
+      "F:/foo\u001a",
+      "F:/foo\u001f",
+      "F:/fooa",
+      "F:/other"
+    ]
+  },
+  {
+    "id": "control-40",
+    "patterns": [
+      "foo\\c@"
+    ],
+    "paths": [
+      "F:/foo\u0000",
+      "F:/foo\u0013",
+      "F:/foo\t",
+      "F:/foo\u001a",
+      "F:/foo\u001f",
+      "F:/fooa",
+      "F:/other"
+    ]
+  },
+  {
+    "id": "class-control-40",
+    "patterns": [
+      "foo[\\c@]"
+    ],
+    "paths": [
+      "F:/foo\u0000",
+      "F:/foo\u0013",
+      "F:/foo\t",
+      "F:/foo\u001a",
+      "F:/foo\u001f",
+      "F:/fooa",
+      "F:/other"
+    ]
+  },
+  {
+    "id": "control-5a",
+    "patterns": [
+      "foo\\cZ"
+    ],
+    "paths": [
+      "F:/foo\u0000",
+      "F:/foo\u0013",
+      "F:/foo\t",
+      "F:/foo\u001a",
+      "F:/foo\u001f",
+      "F:/fooa",
+      "F:/other"
+    ]
+  },
+  {
+    "id": "class-control-5a",
+    "patterns": [
+      "foo[\\cZ]"
+    ],
+    "paths": [
+      "F:/foo\u0000",
+      "F:/foo\u0013",
+      "F:/foo\t",
+      "F:/foo\u001a",
+      "F:/foo\u001f",
+      "F:/fooa",
+      "F:/other"
+    ]
+  },
+  {
+    "id": "control-7a",
+    "patterns": [
+      "foo\\cz"
+    ],
+    "paths": [
+      "F:/foo\u0000",
+      "F:/foo\u0013",
+      "F:/foo\t",
+      "F:/foo\u001a",
+      "F:/foo\u001f",
+      "F:/fooa",
+      "F:/other"
+    ]
+  },
+  {
+    "id": "class-control-7a",
+    "patterns": [
+      "foo[\\cz]"
+    ],
+    "paths": [
+      "F:/foo\u0000",
+      "F:/foo\u0013",
+      "F:/foo\t",
+      "F:/foo\u001a",
+      "F:/foo\u001f",
+      "F:/fooa",
+      "F:/other"
+    ]
+  },
+  {
+    "id": "control-5f",
+    "patterns": [
+      "foo\\c_"
+    ],
+    "paths": [
+      "F:/foo\u0000",
+      "F:/foo\u0013",
+      "F:/foo\t",
+      "F:/foo\u001a",
+      "F:/foo\u001f",
+      "F:/fooa",
+      "F:/other"
+    ]
+  },
+  {
+    "id": "class-control-5f",
+    "patterns": [
+      "foo[\\c_]"
+    ],
+    "paths": [
+      "F:/foo\u0000",
+      "F:/foo\u0013",
+      "F:/foo\t",
+      "F:/foo\u001a",
+      "F:/foo\u001f",
+      "F:/fooa",
+      "F:/other"
+    ]
+  },
+  {
+    "id": "control-60",
+    "patterns": [
+      "foo\\c`"
+    ],
+    "paths": [
+      "F:/foo\u0000",
+      "F:/foo\u0013",
+      "F:/foo\t",
+      "F:/foo\u001a",
+      "F:/foo\u001f",
+      "F:/fooa",
+      "F:/other"
+    ]
+  },
+  {
+    "id": "class-control-60",
+    "patterns": [
+      "foo[\\c`]"
+    ],
+    "paths": [
+      "F:/foo\u0000",
+      "F:/foo\u0013",
+      "F:/foo\t",
+      "F:/foo\u001a",
+      "F:/foo\u001f",
+      "F:/fooa",
+      "F:/other"
+    ]
+  },
+  {
+    "id": "control-61",
+    "patterns": [
+      "foo\\ca"
+    ],
+    "paths": [
+      "F:/foo\u0000",
+      "F:/foo\u0013",
+      "F:/foo\t",
+      "F:/foo\u001a",
+      "F:/foo\u001f",
+      "F:/fooa",
+      "F:/other"
+    ]
+  },
+  {
+    "id": "class-control-61",
+    "patterns": [
+      "foo[\\ca]"
+    ],
+    "paths": [
+      "F:/foo\u0000",
+      "F:/foo\u0013",
+      "F:/foo\t",
+      "F:/foo\u001a",
+      "F:/foo\u001f",
+      "F:/fooa",
+      "F:/other"
+    ]
+  },
+  {
+    "id": "control-41",
+    "patterns": [
+      "foo\\cA"
+    ],
+    "paths": [
+      "F:/foo\u0000",
+      "F:/foo\u0013",
+      "F:/foo\t",
+      "F:/foo\u001a",
+      "F:/foo\u001f",
+      "F:/fooa",
+      "F:/other"
+    ]
+  },
+  {
+    "id": "class-control-41",
+    "patterns": [
+      "foo[\\cA]"
+    ],
+    "paths": [
+      "F:/foo\u0000",
+      "F:/foo\u0013",
+      "F:/foo\t",
+      "F:/foo\u001a",
+      "F:/foo\u001f",
+      "F:/fooa",
+      "F:/other"
+    ]
+  }
+]

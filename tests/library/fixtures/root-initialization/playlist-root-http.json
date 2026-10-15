@@ -1,0 +1,83 @@
+{
+  "phaseAcceptance": false,
+  "scope": "One mechanically retained native unscoped root Items response from the existing 24-request cold-start control; this is not a new native run.",
+  "source": {
+    "path": ".agent-docs/evidence/root-plugin-startup-native-v2/native-missing/native-http.json",
+    "bytes": 62232,
+    "sha256": "2065e8384cc7d74b33613400c06503e7057af899a1bb95c629185b4511d8926f",
+    "summaryPath": ".agent-docs/evidence/root-plugin-startup-native-v2/native-missing/summary.json",
+    "summaryBytes": 899,
+    "summarySha256": "0ef712c0eccd61ab23a252717cbbb2f0a060fcda4cafc7f54cd6e1b941d7b40b",
+    "dllSha256": "31236d2a520e52ab2130742515a552980b0edbde4cfe8da124c0a0cd87c9046c"
+  },
+  "record": {
+    "name": "all-unscopedPlain",
+    "query": "",
+    "scope": [],
+    "endpoint": "items",
+    "route": "/Items?Recursive=false&Fields=SortName&EnableImages=false&EnableUserData=false&",
+    "response": {
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "bodyText": "{\"Items\":[{\"Name\":\"Collection Library\",\"ServerId\":\"416cfae20a6b4e638e02a01114c7c4b5\",\"Id\":\"80100000000000000000000000000201\",\"SortName\":\"collection library\",\"ChannelId\":null,\"IsFolder\":true,\"Type\":\"CollectionFolder\",\"CollectionType\":\"boxsets\",\"ImageBlurHashes\":{},\"LocationType\":\"FileSystem\",\"MediaType\":\"Unknown\"},{\"Name\":\"Library A\",\"ServerId\":\"416cfae20a6b4e638e02a01114c7c4b5\",\"Id\":\"80100000000000000000000000000101\",\"SortName\":\"library\",\"ChannelId\":null,\"IsFolder\":true,\"Type\":\"CollectionFolder\",\"CollectionType\":\"movies\",\"ImageBlurHashes\":{},\"LocationType\":\"FileSystem\",\"MediaType\":\"Unknown\"},{\"Name\":\"Library B\",\"ServerId\":\"416cfae20a6b4e638e02a01114c7c4b5\",\"Id\":\"80100000000000000000000000000151\",\"SortName\":\"library b\",\"ChannelId\":null,\"IsFolder\":true,\"Type\":\"CollectionFolder\",\"CollectionType\":\"movies\",\"ImageBlurHashes\":{},\"LocationType\":\"FileSystem\",\"MediaType\":\"Unknown\"},{\"Name\":\"Playlists\",\"ServerId\":\"416cfae20a6b4e638e02a01114c7c4b5\",\"Id\":\"1071671e7bffa0532e930debee501d2e\",\"SortName\":\"playlists\",\"ChannelId\":null,\"IsFolder\":true,\"Type\":\"ManualPlaylistsFolder\",\"CollectionType\":\"playlists\",\"ImageBlurHashes\":{},\"LocationType\":\"FileSystem\",\"MediaType\":\"Unknown\"}],\"TotalRecordCount\":4,\"StartIndex\":0}",
+      "bodyJson": {
+        "Items": [
+          {
+            "Name": "Collection Library",
+            "ServerId": "416cfae20a6b4e638e02a01114c7c4b5",
+            "Id": "80100000000000000000000000000201",
+            "SortName": "collection library",
+            "ChannelId": null,
+            "IsFolder": true,
+            "Type": "CollectionFolder",
+            "CollectionType": "boxsets",
+            "ImageBlurHashes": {},
+            "LocationType": "FileSystem",
+            "MediaType": "Unknown"
+          },
+          {
+            "Name": "Library A",
+            "ServerId": "416cfae20a6b4e638e02a01114c7c4b5",
+            "Id": "80100000000000000000000000000101",
+            "SortName": "library",
+            "ChannelId": null,
+            "IsFolder": true,
+            "Type": "CollectionFolder",
+            "CollectionType": "movies",
+            "ImageBlurHashes": {},
+            "LocationType": "FileSystem",
+            "MediaType": "Unknown"
+          },
+          {
+            "Name": "Library B",
+            "ServerId": "416cfae20a6b4e638e02a01114c7c4b5",
+            "Id": "80100000000000000000000000000151",
+            "SortName": "library b",
+            "ChannelId": null,
+            "IsFolder": true,
+            "Type": "CollectionFolder",
+            "CollectionType": "movies",
+            "ImageBlurHashes": {},
+            "LocationType": "FileSystem",
+            "MediaType": "Unknown"
+          },
+          {
+            "Name": "Playlists",
+            "ServerId": "416cfae20a6b4e638e02a01114c7c4b5",
+            "Id": "1071671e7bffa0532e930debee501d2e",
+            "SortName": "playlists",
+            "ChannelId": null,
+            "IsFolder": true,
+            "Type": "ManualPlaylistsFolder",
+            "CollectionType": "playlists",
+            "ImageBlurHashes": {},
+            "LocationType": "FileSystem",
+            "MediaType": "Unknown"
+          }
+        ],
+        "TotalRecordCount": 4,
+        "StartIndex": 0
+      }
+    }
+  }
+}

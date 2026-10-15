@@ -1,0 +1,374 @@
+{
+  "results": [
+    {
+      "name": "three nodes commit independently and publish cache before each event",
+      "exception": null,
+      "events": [
+        {
+          "reason": "Import",
+          "keys": [
+            "501",
+            "20000000-0000-0000-0000-000000000001"
+          ],
+          "data": {
+            "Key": "20000000-0000-0000-0000-000000000001",
+            "Played": true,
+            "PlayCount": 0,
+            "lastPlayedDate": null
+          },
+          "itemRows": [
+            {
+              "CustomDataKey": "20000000-0000-0000-0000-000000000001",
+              "Played": true,
+              "PlayCount": 0,
+              "lastPlayedDate": null
+            },
+            {
+              "CustomDataKey": "501",
+              "Played": true,
+              "PlayCount": 0,
+              "lastPlayedDate": null
+            }
+          ]
+        },
+        {
+          "reason": "Import",
+          "keys": [
+            "501",
+            "20000000-0000-0000-0000-000000000001"
+          ],
+          "data": {
+            "Key": "20000000-0000-0000-0000-000000000001",
+            "Played": true,
+            "PlayCount": 2,
+            "lastPlayedDate": null
+          },
+          "itemRows": [
+            {
+              "CustomDataKey": "20000000-0000-0000-0000-000000000001",
+              "Played": true,
+              "PlayCount": 2,
+              "lastPlayedDate": null
+            },
+            {
+              "CustomDataKey": "501",
+              "Played": true,
+              "PlayCount": 2,
+              "lastPlayedDate": null
+            }
+          ]
+        },
+        {
+          "reason": "Import",
+          "keys": [
+            "501",
+            "20000000-0000-0000-0000-000000000001"
+          ],
+          "data": {
+            "Key": "20000000-0000-0000-0000-000000000001",
+            "Played": true,
+            "PlayCount": 2,
+            "lastPlayedDate": "2025-01-02T03:04:05.0000000Z"
+          },
+          "itemRows": [
+            {
+              "CustomDataKey": "20000000-0000-0000-0000-000000000001",
+              "Played": true,
+              "PlayCount": 2,
+              "lastPlayedDate": "2025-01-02T03:04:05.0000000Z"
+            },
+            {
+              "CustomDataKey": "501",
+              "Played": true,
+              "PlayCount": 2,
+              "lastPlayedDate": "2025-01-02T03:04:05.0000000Z"
+            }
+          ]
+        }
+      ],
+      "rows": [
+        {
+          "CustomDataKey": "20000000-0000-0000-0000-000000000001",
+          "Played": true,
+          "PlayCount": 2,
+          "lastPlayedDate": "2025-01-02T03:04:05.0000000Z"
+        },
+        {
+          "CustomDataKey": "501",
+          "Played": true,
+          "PlayCount": 2,
+          "lastPlayedDate": "2025-01-02T03:04:05.0000000Z"
+        }
+      ],
+      "itemRows": [
+        {
+          "CustomDataKey": "20000000-0000-0000-0000-000000000001",
+          "Played": true,
+          "PlayCount": 2,
+          "lastPlayedDate": "2025-01-02T03:04:05.0000000Z"
+        },
+        {
+          "CustomDataKey": "501",
+          "Played": true,
+          "PlayCount": 2,
+          "lastPlayedDate": "2025-01-02T03:04:05.0000000Z"
+        }
+      ],
+      "direct": {
+        "Key": "501",
+        "Played": true,
+        "PlayCount": 2,
+        "lastPlayedDate": "2025-01-02T03:04:05.0000000Z"
+      },
+      "cached": {
+        "Key": "20000000-0000-0000-0000-000000000001",
+        "Played": true,
+        "PlayCount": 2,
+        "lastPlayedDate": "2025-01-02T03:04:05.0000000Z"
+      },
+      "rehydrateFailureInjected": false,
+      "cancellationRequested": false
+    },
+    {
+      "name": "cancellation raised by first event stops before the second node",
+      "exception": "OperationCanceledException",
+      "events": [
+        {
+          "reason": "Import",
+          "keys": [
+            "20000000-0000-0000-0000-000000000001"
+          ],
+          "data": {
+            "Key": "20000000-0000-0000-0000-000000000001",
+            "Played": true,
+            "PlayCount": 0,
+            "lastPlayedDate": null
+          },
+          "itemRows": [
+            {
+              "CustomDataKey": "20000000-0000-0000-0000-000000000001",
+              "Played": true,
+              "PlayCount": 0,
+              "lastPlayedDate": null
+            }
+          ]
+        }
+      ],
+      "rows": [
+        {
+          "CustomDataKey": "20000000-0000-0000-0000-000000000001",
+          "Played": true,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        }
+      ],
+      "itemRows": [
+        {
+          "CustomDataKey": "20000000-0000-0000-0000-000000000001",
+          "Played": true,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        }
+      ],
+      "direct": {
+        "Key": "20000000-0000-0000-0000-000000000001",
+        "Played": true,
+        "PlayCount": 0,
+        "lastPlayedDate": null
+      },
+      "cached": {
+        "Key": "20000000-0000-0000-0000-000000000001",
+        "Played": true,
+        "PlayCount": 0,
+        "lastPlayedDate": null
+      },
+      "rehydrateFailureInjected": false,
+      "cancellationRequested": true
+    },
+    {
+      "name": "second node SQL failure preserves the first commit and event",
+      "exception": "DbUpdateException",
+      "events": [
+        {
+          "reason": "Import",
+          "keys": [
+            "20000000-0000-0000-0000-000000000001"
+          ],
+          "data": {
+            "Key": "20000000-0000-0000-0000-000000000001",
+            "Played": true,
+            "PlayCount": 0,
+            "lastPlayedDate": null
+          },
+          "itemRows": [
+            {
+              "CustomDataKey": "20000000-0000-0000-0000-000000000001",
+              "Played": true,
+              "PlayCount": 0,
+              "lastPlayedDate": null
+            }
+          ]
+        }
+      ],
+      "rows": [
+        {
+          "CustomDataKey": "20000000-0000-0000-0000-000000000001",
+          "Played": true,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        }
+      ],
+      "itemRows": [
+        {
+          "CustomDataKey": "20000000-0000-0000-0000-000000000001",
+          "Played": true,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        }
+      ],
+      "direct": {
+        "Key": "20000000-0000-0000-0000-000000000001",
+        "Played": true,
+        "PlayCount": 0,
+        "lastPlayedDate": null
+      },
+      "cached": {
+        "Key": "20000000-0000-0000-0000-000000000001",
+        "Played": true,
+        "PlayCount": 0,
+        "lastPlayedDate": null
+      },
+      "rehydrateFailureInjected": false,
+      "cancellationRequested": false
+    },
+    {
+      "name": "second key SQL failure rolls back the whole first node",
+      "exception": "DbUpdateException",
+      "events": [],
+      "rows": [],
+      "itemRows": [],
+      "direct": {
+        "Key": "502",
+        "Played": false,
+        "PlayCount": 0,
+        "lastPlayedDate": null
+      },
+      "cached": {
+        "Key": "502",
+        "Played": false,
+        "PlayCount": 0,
+        "lastPlayedDate": null
+      },
+      "rehydrateFailureInjected": false,
+      "cancellationRequested": false
+    },
+    {
+      "name": "event failure propagates after database cache and item publication",
+      "exception": "IOException",
+      "events": [
+        {
+          "reason": "Import",
+          "keys": [
+            "20000000-0000-0000-0000-000000000001"
+          ],
+          "data": {
+            "Key": "20000000-0000-0000-0000-000000000001",
+            "Played": true,
+            "PlayCount": 0,
+            "lastPlayedDate": null
+          },
+          "itemRows": [
+            {
+              "CustomDataKey": "20000000-0000-0000-0000-000000000001",
+              "Played": true,
+              "PlayCount": 0,
+              "lastPlayedDate": null
+            }
+          ]
+        }
+      ],
+      "rows": [
+        {
+          "CustomDataKey": "20000000-0000-0000-0000-000000000001",
+          "Played": true,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        }
+      ],
+      "itemRows": [
+        {
+          "CustomDataKey": "20000000-0000-0000-0000-000000000001",
+          "Played": true,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        }
+      ],
+      "direct": {
+        "Key": "20000000-0000-0000-0000-000000000001",
+        "Played": true,
+        "PlayCount": 0,
+        "lastPlayedDate": null
+      },
+      "cached": {
+        "Key": "20000000-0000-0000-0000-000000000001",
+        "Played": true,
+        "PlayCount": 0,
+        "lastPlayedDate": null
+      },
+      "rehydrateFailureInjected": false,
+      "cancellationRequested": false
+    },
+    {
+      "name": "pre-cancelled parse performs no user data work",
+      "exception": "OperationCanceledException",
+      "events": [],
+      "rows": [],
+      "itemRows": [],
+      "direct": {
+        "Key": "20000000-0000-0000-0000-000000000001",
+        "Played": false,
+        "PlayCount": 0,
+        "lastPlayedDate": null
+      },
+      "cached": {
+        "Key": "20000000-0000-0000-0000-000000000001",
+        "Played": false,
+        "PlayCount": 0,
+        "lastPlayedDate": null
+      },
+      "rehydrateFailureInjected": false,
+      "cancellationRequested": true
+    },
+    {
+      "name": "rehydrate SELECT failure preserves the commit and private cache without item publication or event",
+      "exception": "IOException",
+      "events": [],
+      "rows": [
+        {
+          "CustomDataKey": "20000000-0000-0000-0000-000000000001",
+          "Played": true,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        }
+      ],
+      "itemRows": [],
+      "direct": {
+        "Key": "20000000-0000-0000-0000-000000000001",
+        "Played": false,
+        "PlayCount": 0,
+        "lastPlayedDate": null
+      },
+      "cached": {
+        "Key": "20000000-0000-0000-0000-000000000001",
+        "Played": true,
+        "PlayCount": 0,
+        "lastPlayedDate": null
+      },
+      "rehydrateFailureInjected": true,
+      "cancellationRequested": false
+    }
+  ],
+  "candidateVerified": false,
+  "inputSha256": "c9a88e4e56b4fc4e4dfb7316e20be04000d53c61e3e2c585f4b20e821a080b2a",
+  "boundary": "Actual frozen MovieNfoParser, UserDataManager, EF SQLite transactions, per-save cache publication, BaseItem.UserData rehydration and synchronous UserDataSaved events. Cancellation is induced by the first committed event; SQL failures are real SQLite trigger failures. Controlled IConfigurationManager/IUserManager/IProviderManager/IDirectoryService only; no provider host, HTTP or filesystem abstraction."
+}

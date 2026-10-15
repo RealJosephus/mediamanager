@@ -1,0 +1,835 @@
+{
+  "schemaVersion": 1,
+  "candidateVerified": false,
+  "boundary": "Actual pinned MovieSimilarItemsProvider with concrete BaseItemRepository and EF Core SQLite; controlled ConfigureUserAccess sets TopParentIds only. Actual LiveTvProgramSimilarItemsProvider query capture and actual TmdbMovieSimilarProvider over controlled TMDbLib transport, with no public-network call. Provider-level results, not HTTP, complete user policy, random ordering or full-library acceptance.",
+  "inputSha256": "755b9b4e2917f28e5567941eb970fa50de91b558e98278c6d1728d90d8983cc1",
+  "results": [
+    {
+      "name": "all-weight-dimensions-and-native-ties",
+      "ids": [
+        "14000000-0000-0000-0000-000000000002",
+        "14000000-0000-0000-0000-000000000003",
+        "14000000-0000-0000-0000-000000000004",
+        "14000000-0000-0000-0000-000000000008",
+        "14000000-0000-0000-0000-000000000110",
+        "14000000-0000-0000-0000-000000000005",
+        "14000000-0000-0000-0000-000000000006",
+        "14000000-0000-0000-0000-000000000010",
+        "14000000-0000-0000-0000-000000000011",
+        "14000000-0000-0000-0000-000000000016",
+        "14000000-0000-0000-0000-000000000017",
+        "14000000-0000-0000-0000-000000000018",
+        "14000000-0000-0000-0000-000000000019",
+        "14000000-0000-0000-0000-000000000022"
+      ],
+      "items": [
+        "director",
+        "actor-two-roles",
+        "genre-tag-studio",
+        "duplicate-clean-value",
+        "trailer-source",
+        "actor",
+        "guest-star",
+        "trailer",
+        "non-movie-program",
+        "primary-representative",
+        "upper-presentation-key",
+        "lower-presentation-key",
+        "null-key-first",
+        "different-top-alternate"
+      ]
+    },
+    {
+      "name": "external-content-disabled",
+      "ids": [
+        "14000000-0000-0000-0000-000000000002",
+        "14000000-0000-0000-0000-000000000003",
+        "14000000-0000-0000-0000-000000000004",
+        "14000000-0000-0000-0000-000000000008",
+        "14000000-0000-0000-0000-000000000005",
+        "14000000-0000-0000-0000-000000000006",
+        "14000000-0000-0000-0000-000000000016",
+        "14000000-0000-0000-0000-000000000017",
+        "14000000-0000-0000-0000-000000000018",
+        "14000000-0000-0000-0000-000000000019",
+        "14000000-0000-0000-0000-000000000022"
+      ],
+      "items": [
+        "director",
+        "actor-two-roles",
+        "genre-tag-studio",
+        "duplicate-clean-value",
+        "actor",
+        "guest-star",
+        "primary-representative",
+        "upper-presentation-key",
+        "lower-presentation-key",
+        "null-key-first",
+        "different-top-alternate"
+      ]
+    },
+    {
+      "name": "played-and-top-parent-access",
+      "ids": [
+        "14000000-0000-0000-0000-000000000003",
+        "14000000-0000-0000-0000-000000000004",
+        "14000000-0000-0000-0000-000000000008",
+        "14000000-0000-0000-0000-000000000110",
+        "14000000-0000-0000-0000-000000000005",
+        "14000000-0000-0000-0000-000000000006",
+        "14000000-0000-0000-0000-000000000016",
+        "14000000-0000-0000-0000-000000000017",
+        "14000000-0000-0000-0000-000000000018",
+        "14000000-0000-0000-0000-000000000019",
+        "14000000-0000-0000-0000-000000000010",
+        "14000000-0000-0000-0000-000000000011"
+      ],
+      "items": [
+        "actor-two-roles",
+        "genre-tag-studio",
+        "duplicate-clean-value",
+        "trailer-source",
+        "actor",
+        "guest-star",
+        "primary-representative",
+        "upper-presentation-key",
+        "lower-presentation-key",
+        "null-key-first",
+        "trailer",
+        "non-movie-program"
+      ]
+    },
+    {
+      "name": "played-alternate-propagates-to-siblings",
+      "ids": [
+        "14000000-0000-0000-0000-000000000003",
+        "14000000-0000-0000-0000-000000000004",
+        "14000000-0000-0000-0000-000000000008",
+        "14000000-0000-0000-0000-000000000110",
+        "14000000-0000-0000-0000-000000000005",
+        "14000000-0000-0000-0000-000000000006",
+        "14000000-0000-0000-0000-000000000010",
+        "14000000-0000-0000-0000-000000000011",
+        "14000000-0000-0000-0000-000000000016",
+        "14000000-0000-0000-0000-000000000017",
+        "14000000-0000-0000-0000-000000000018",
+        "14000000-0000-0000-0000-000000000019"
+      ],
+      "items": [
+        "actor-two-roles",
+        "genre-tag-studio",
+        "duplicate-clean-value",
+        "trailer-source",
+        "actor",
+        "guest-star",
+        "trailer",
+        "non-movie-program",
+        "primary-representative",
+        "upper-presentation-key",
+        "lower-presentation-key",
+        "null-key-first"
+      ]
+    },
+    {
+      "name": "shortlist-before-access-no-refill",
+      "ids": [],
+      "items": []
+    },
+    {
+      "name": "shortlist-widened-by-limit",
+      "ids": [
+        "14000000-0000-0000-0000-000000000104",
+        "14000000-0000-0000-0000-000000000105"
+      ],
+      "items": [
+        "shortlist-visible-lower",
+        "shortlist-visible-last"
+      ]
+    },
+    {
+      "name": "exclusion-after-shortlist-no-refill",
+      "ids": [],
+      "items": []
+    },
+    {
+      "name": "trailer-uses-weighted-movie-provider",
+      "ids": [
+        "14000000-0000-0000-0000-000000000001",
+        "14000000-0000-0000-0000-000000000004",
+        "14000000-0000-0000-0000-000000000008",
+        "14000000-0000-0000-0000-000000000010",
+        "14000000-0000-0000-0000-000000000011",
+        "14000000-0000-0000-0000-000000000016",
+        "14000000-0000-0000-0000-000000000017",
+        "14000000-0000-0000-0000-000000000018",
+        "14000000-0000-0000-0000-000000000019",
+        "14000000-0000-0000-0000-000000000022"
+      ],
+      "items": [
+        "source",
+        "genre-tag-studio",
+        "duplicate-clean-value",
+        "trailer",
+        "non-movie-program",
+        "primary-representative",
+        "upper-presentation-key",
+        "lower-presentation-key",
+        "null-key-first",
+        "different-top-alternate"
+      ]
+    },
+    {
+      "name": "no-source-dimensions",
+      "ids": [],
+      "items": []
+    },
+    {
+      "name": "default-limit",
+      "ids": [
+        "14000000-0000-0000-0000-000000000002",
+        "14000000-0000-0000-0000-000000000003",
+        "14000000-0000-0000-0000-000000000004",
+        "14000000-0000-0000-0000-000000000008",
+        "14000000-0000-0000-0000-000000000110",
+        "14000000-0000-0000-0000-000000000005",
+        "14000000-0000-0000-0000-000000000006",
+        "14000000-0000-0000-0000-000000000010",
+        "14000000-0000-0000-0000-000000000011",
+        "14000000-0000-0000-0000-000000000016",
+        "14000000-0000-0000-0000-000000000017",
+        "14000000-0000-0000-0000-000000000018",
+        "14000000-0000-0000-0000-000000000019",
+        "14000000-0000-0000-0000-000000000022"
+      ],
+      "items": [
+        "director",
+        "actor-two-roles",
+        "genre-tag-studio",
+        "duplicate-clean-value",
+        "trailer-source",
+        "actor",
+        "guest-star",
+        "trailer",
+        "non-movie-program",
+        "primary-representative",
+        "upper-presentation-key",
+        "lower-presentation-key",
+        "null-key-first",
+        "different-top-alternate"
+      ]
+    },
+    {
+      "name": "zero-limit",
+      "ids": [],
+      "items": []
+    },
+    {
+      "name": "userless-candidates-throw-before-access",
+      "error": "ArgumentNullException",
+      "parameter": "user"
+    },
+    {
+      "name": "native-key-insertion-order-before-shortlist",
+      "ids": [
+        "14000000-0000-0000-0000-000000000201"
+      ],
+      "items": [
+        "first-id-later-key"
+      ]
+    },
+    {
+      "name": "native-key-scores-then-access-order",
+      "ids": [
+        "14000000-0000-0000-0000-000000000201",
+        "14000000-0000-0000-0000-000000000202",
+        "14000000-0000-0000-0000-000000000203",
+        "14000000-0000-0000-0000-000000000204",
+        "14000000-0000-0000-0000-000000000205",
+        "14000000-0000-0000-0000-000000000206"
+      ],
+      "items": [
+        "first-id-later-key",
+        "second-id-later-key",
+        "third-id-later-key",
+        "first-native-key-first",
+        "first-native-key-second",
+        "first-native-key-third"
+      ]
+    }
+  ],
+  "liveTv": [
+    {
+      "name": "movie-takes-precedence",
+      "includeItemTypes": [
+        "Movie",
+        "Trailer",
+        "LiveTvProgram"
+      ],
+      "genres": [
+        "Drama"
+      ],
+      "tags": [
+        "Epic"
+      ],
+      "requestedLimit": 7,
+      "preparedLimit": 11,
+      "EnableGroupByMetadataKey": true,
+      "EnableTotalRecordCount": false,
+      "order": [
+        {
+          "key": "Random",
+          "direction": "Ascending"
+        }
+      ],
+      "IsMovie": null,
+      "IsPlayed": null
+    },
+    {
+      "name": "movie-without-external-content",
+      "includeItemTypes": [
+        "Movie"
+      ],
+      "genres": [
+        "Drama"
+      ],
+      "tags": [
+        "Epic"
+      ],
+      "requestedLimit": 7,
+      "preparedLimit": 11,
+      "EnableGroupByMetadataKey": true,
+      "EnableTotalRecordCount": false,
+      "order": [
+        {
+          "key": "Random",
+          "direction": "Ascending"
+        }
+      ],
+      "IsMovie": null,
+      "IsPlayed": null
+    },
+    {
+      "name": "series-program",
+      "includeItemTypes": [
+        "Series"
+      ],
+      "genres": [
+        "Drama"
+      ],
+      "tags": [
+        "Epic"
+      ],
+      "requestedLimit": 7,
+      "preparedLimit": 7,
+      "EnableGroupByMetadataKey": false,
+      "EnableTotalRecordCount": true,
+      "order": [
+        {
+          "key": "Random",
+          "direction": "Ascending"
+        }
+      ],
+      "IsMovie": null,
+      "IsPlayed": null
+    },
+    {
+      "name": "other-program",
+      "includeItemTypes": [
+        "Program"
+      ],
+      "genres": [
+        "Drama"
+      ],
+      "tags": [
+        "Epic"
+      ],
+      "requestedLimit": 7,
+      "preparedLimit": 7,
+      "EnableGroupByMetadataKey": false,
+      "EnableTotalRecordCount": true,
+      "order": [
+        {
+          "key": "Random",
+          "direction": "Ascending"
+        }
+      ],
+      "IsMovie": null,
+      "IsPlayed": null
+    }
+  ],
+  "tmdbMovie": {
+    "cacheMilliseconds": 172800000,
+    "cases": [
+      {
+        "name": "valid-pages",
+        "value": " \u002B17 ",
+        "mode": "success",
+        "references": [
+          {
+            "ProviderName": "Tmdb",
+            "ProviderId": "31",
+            "Score": null
+          },
+          {
+            "ProviderName": "Tmdb",
+            "ProviderId": "32",
+            "Score": null
+          },
+          {
+            "ProviderName": "Tmdb",
+            "ProviderId": "33",
+            "Score": null
+          }
+        ],
+        "requests": [
+          "http://tmdb.invalid/3/configuration?api_key=oracle-key",
+          "http://tmdb.invalid/3/movie/17/recommendations?language=null%2Cen\u0026page=1\u0026api_key=oracle-key",
+          "http://tmdb.invalid/3/movie/17/recommendations?language=null%2Cen\u0026page=2\u0026api_key=oracle-key"
+        ]
+      },
+      {
+        "name": "Int32-overflow",
+        "value": "2147483648",
+        "mode": "success",
+        "references": [],
+        "requests": []
+      },
+      {
+        "name": "missing-id",
+        "value": "",
+        "mode": "success",
+        "references": [],
+        "requests": []
+      },
+      {
+        "name": "empty-page-stop",
+        "value": "17",
+        "mode": "empty",
+        "references": [],
+        "requests": [
+          "http://tmdb.invalid/3/movie/17/recommendations?language=null%2Cen\u0026page=1\u0026api_key=oracle-key"
+        ]
+      },
+      {
+        "name": "transport-failure",
+        "value": "17",
+        "mode": "failure",
+        "references": [],
+        "requests": [
+          "http://tmdb.invalid/3/movie/17/recommendations?language=null%2Cen\u0026page=1\u0026api_key=oracle-key"
+        ]
+      }
+    ]
+  },
+  "assemblies": [
+    {
+      "path": "D:/mediamanager-validation/20261009/results/movie-similar-v10/bin/Release/net10.0/Emby.Server.Implementations.dll",
+      "sha256": "6a29143fe5e6867f8e91b697680dce602aa422cf250786db1298911499369d62",
+      "bytes": 1673728
+    },
+    {
+      "path": "D:/mediamanager-validation/20261009/results/movie-similar-v10/bin/Release/net10.0/Jellyfin.Data.dll",
+      "sha256": "41fd9652716089f35699796c27245ccb2e2db4219d6ab3d50098360b750d7933",
+      "bytes": 18432
+    },
+    {
+      "path": "D:/mediamanager-validation/20261009/results/movie-similar-v10/bin/Release/net10.0/Jellyfin.Database.Implementations.dll",
+      "sha256": "5f4cf0ff15958cea5887fdec9183be392f29332a8776c29594dd75e0c5f1a252",
+      "bytes": 249344
+    },
+    {
+      "path": "D:/mediamanager-validation/20261009/results/movie-similar-v10/bin/Release/net10.0/Jellyfin.Database.Providers.Sqlite.dll",
+      "sha256": "5fdd279de253d939ea5e872b24469d8a5cb9182bb34bb68c70588aa3bf388398",
+      "bytes": 1109504
+    },
+    {
+      "path": "D:/mediamanager-validation/20261009/results/movie-similar-v10/bin/Release/net10.0/Jellyfin.Extensions.dll",
+      "sha256": "297b53cfd1858ca01e5cf273f9eb454252f0c88515550a2438ac031c08ced4c4",
+      "bytes": 37888
+    },
+    {
+      "path": "D:/mediamanager-validation/20261009/results/movie-similar-v10/bin/Release/net10.0/Jellyfin.Server.Implementations.dll",
+      "sha256": "cd726ddeda5fd389b23bbcbcce978912cd4a74003a99970b33323061649a9bfd",
+      "bytes": 664064
+    },
+    {
+      "path": "D:/mediamanager-validation/20261009/results/movie-similar-v10/bin/Release/net10.0/MediaBrowser.Common.dll",
+      "sha256": "e4d591d12d542c422108532297d747b42e1a7a85ecb9cfa818cc7dfabe681730",
+      "bytes": 48640
+    },
+    {
+      "path": "D:/mediamanager-validation/20261009/results/movie-similar-v10/bin/Release/net10.0/MediaBrowser.Controller.dll",
+      "sha256": "a9a051747d55565befc425dd194779e2ae53c57f8740212dc929dd706b888306",
+      "bytes": 652800
+    },
+    {
+      "path": "D:/mediamanager-validation/20261009/results/movie-similar-v10/bin/Release/net10.0/MediaBrowser.Model.dll",
+      "sha256": "ce02ccae99cbc678e79d00bad2f8cf08db2128eddcd988a0962844b449da1baf",
+      "bytes": 489472
+    },
+    {
+      "path": "D:/mediamanager-validation/20261009/results/movie-similar-v10/bin/Release/net10.0/MediaBrowser.Providers.dll",
+      "sha256": "be90abd0dfa246d4ea142c543586f86416747058d06329f950164ee02845ecaf",
+      "bytes": 1030656
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.AspNetCore.Http.Abstractions.dll",
+      "sha256": "1fae7aa024a039a404141ec7846a016e271fd9b8bc53960cb1b17a33ffbc1a89",
+      "bytes": 325416
+    },
+    {
+      "path": "D:/mediamanager-validation/20261009/results/movie-similar-v10/bin/Release/net10.0/Microsoft.Data.Sqlite.dll",
+      "sha256": "4abd9c2a61e580eb853e93ca8953a3cef2c05714ae28d2d1859d4dbc5e5700bc",
+      "bytes": 177504
+    },
+    {
+      "path": "D:/mediamanager-validation/20261009/results/movie-similar-v10/bin/Release/net10.0/Microsoft.EntityFrameworkCore.dll",
+      "sha256": "9cf183abffc9d6920e8366b75af8388bc502febaaa0e3d9fe41a4906a68d3065",
+      "bytes": 2829112
+    },
+    {
+      "path": "D:/mediamanager-validation/20261009/results/movie-similar-v10/bin/Release/net10.0/Microsoft.EntityFrameworkCore.Abstractions.dll",
+      "sha256": "6c6401703d480f3fb49ca47ea746c46557779c7ac4406e29f8a8956b151877d2",
+      "bytes": 34616
+    },
+    {
+      "path": "D:/mediamanager-validation/20261009/results/movie-similar-v10/bin/Release/net10.0/Microsoft.EntityFrameworkCore.Relational.dll",
+      "sha256": "301f57f6e6a919b139307ed0b0820e74cedb1ccace5cb234470f35ff4600d7c4",
+      "bytes": 2194784
+    },
+    {
+      "path": "D:/mediamanager-validation/20261009/results/movie-similar-v10/bin/Release/net10.0/Microsoft.EntityFrameworkCore.Sqlite.dll",
+      "sha256": "6c1737c1f1ba7b32c2a39d838b8ab5f5dbcc1639ca2fdf1aa6699d01444e0210",
+      "bytes": 311648
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.Extensions.Caching.Abstractions.dll",
+      "sha256": "d6c5e46c7c43834235abbbcb9767756f8e210f0fcc4b92137c57a2aa83b81b2e",
+      "bytes": 75560
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.Extensions.Caching.Memory.dll",
+      "sha256": "50df53585dac029895a6d50a32212424aafbae87b9cc20ac0af5338677492983",
+      "bytes": 100136
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.Extensions.Configuration.Abstractions.dll",
+      "sha256": "63a89b1becd68c2f5051df9c042b46bdf41fba72393bb1ef29b52b701b155c31",
+      "bytes": 46888
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.Extensions.DependencyInjection.dll",
+      "sha256": "6424c0b19a1cef1977db79eee164dcaeb3cba6abdaa583d6f5ff6413f7f7244a",
+      "bytes": 227152
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.Extensions.DependencyInjection.Abstractions.dll",
+      "sha256": "0e2feec8beaa131967d1f0d70684500183227d1ef58c617b8fadb793c3387e93",
+      "bytes": 141096
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.Extensions.Logging.dll",
+      "sha256": "afd93f320e217561e674f8c6d44ce1f0846d6ae2f26c0263f6b662476d4b570c",
+      "bytes": 100176
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.Extensions.Logging.Abstractions.dll",
+      "sha256": "90c41d68d297e54c4def3cfd38eb620513a744ab01131840ea3e2634cf973be3",
+      "bytes": 153424
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.Extensions.Options.dll",
+      "sha256": "02a3cad0e05023f129c0717ba99d171ac524bf5f7c955863e17e3f7441107567",
+      "bytes": 141096
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.Extensions.Primitives.dll",
+      "sha256": "5b40af41b1b354f88e64e5b04619f70aaefe693ff377ac0bb9bc7f70c4018cc1",
+      "bytes": 83752
+    },
+    {
+      "path": "D:/mediamanager-validation/20261009/results/movie-similar-v10/bin/Release/net10.0/Newtonsoft.Json.dll",
+      "sha256": "a28c251dfe36d881e9e2462e171441b8b0ec156fe3f452602c9149b1b9efe05b",
+      "bytes": 723368
+    },
+    {
+      "path": "D:/mediamanager-validation/20261009/results/movie-similar-v10/bin/Release/net10.0/Oracle.dll",
+      "sha256": "676eb363560b947e94b475900f606016329fb04a321a68c5c780c56bd7e5d731",
+      "bytes": 51712
+    },
+    {
+      "path": "D:/mediamanager-validation/20261009/results/movie-similar-v10/bin/Release/net10.0/Polly.dll",
+      "sha256": "cecb78ee944fd7cd1889c21602cc905df8f72af06a3798fb0fd75d96d436891e",
+      "bytes": 288160
+    },
+    {
+      "path": "D:/mediamanager-validation/20261009/results/movie-similar-v10/bin/Release/net10.0/SQLitePCLRaw.batteries_v2.dll",
+      "sha256": "815ce410c9eab531dd219318e3ba16c5e38e83d361cfbbdbb4bbca222c497b0b",
+      "bytes": 5120
+    },
+    {
+      "path": "D:/mediamanager-validation/20261009/results/movie-similar-v10/bin/Release/net10.0/SQLitePCLRaw.core.dll",
+      "sha256": "af340ac9eb9195795660d7fc1114f486b6ab63998f33176e2f24c8e0acb9aa84",
+      "bytes": 51200
+    },
+    {
+      "path": "D:/mediamanager-validation/20261009/results/movie-similar-v10/bin/Release/net10.0/SQLitePCLRaw.provider.e_sqlite3.dll",
+      "sha256": "df996bcae63c2cabcfe8d4b9c5110eb39a2a4706178b07d875665391c6eb3995",
+      "bytes": 36864
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Collections.dll",
+      "sha256": "df6f2037eabee28100184e92f7536427ba2f086c1110629804d466b124bc4d54",
+      "bytes": 296744
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Collections.Concurrent.dll",
+      "sha256": "082f4bc0da1141eb65111b6da633d75624adfb7bb067d7ee90c5622c8b30885b",
+      "bytes": 231248
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Collections.Immutable.dll",
+      "sha256": "b527dd7b2beb82c22aa39787298cbeb33f3eac9eb9b83a0f0271353421db28db",
+      "bytes": 976680
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.ComponentModel.dll",
+      "sha256": "e3b6f75864ee944898540937c1f300e04f44a1b2729516f0bbf948589a8b14b2",
+      "bytes": 30544
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.ComponentModel.Annotations.dll",
+      "sha256": "e3be2d35d81e6475c64110cfc099895b71df22c8b46a18c2d7c76a913b8ba903",
+      "bytes": 198480
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.ComponentModel.Primitives.dll",
+      "sha256": "1e2451184c287409ea25acde3c90f25950bf34d16458a6e52a94ca4292434f62",
+      "bytes": 79656
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.ComponentModel.TypeConverter.dll",
+      "sha256": "10dae312a6697718f8ce3dfcdb17d6ae4b74687c765d74d50de8a8e69e08f5e7",
+      "bytes": 767784
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Console.dll",
+      "sha256": "3b85daf02a3d9ed99b84bb1c639fe8b1ced46d8d157fa56f525f6b8c5be43b3e",
+      "bytes": 169808
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Data.Common.dll",
+      "sha256": "66bdd62047ee460e2ce2c33d15dd1173ac97997b2745864a905179594f821acc",
+      "bytes": 2770728
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Diagnostics.DiagnosticSource.dll",
+      "sha256": "6267c1bd1bdf2bdd4b5748b885b0adcda10f18697adfea8488a19a009ad44fdb",
+      "bytes": 501544
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Diagnostics.Process.dll",
+      "sha256": "51a57fbe918f8b68930c090792b718fc0850ea12da869d50b97a3796af29a740",
+      "bytes": 329552
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Diagnostics.TraceSource.dll",
+      "sha256": "8445c7f1bbaae6cffde60e2c9a8753faaa5100255fbe31d0a1927d9d9bb7f194",
+      "bytes": 141096
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Diagnostics.Tracing.dll",
+      "sha256": "9563d5eec35f94d13a5e62eaa9535dbe0e9ea474f055da132fb8af46b0b01263",
+      "bytes": 16208
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Linq.dll",
+      "sha256": "284d38945b6e92e847129bd28af458b19818d0f2181f79882888ab2003f4c519",
+      "bytes": 698192
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Linq.Expressions.dll",
+      "sha256": "8830f4a6a6982f53cfbb54f992858ee36b4994a6ff6e6078c39627e77bef282f",
+      "bytes": 3639080
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Linq.Queryable.dll",
+      "sha256": "b3b3a9c1b87a51dacd46a3f9ec392c5d05e449152d44d6bd495df0994350e2fa",
+      "bytes": 182056
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Memory.dll",
+      "sha256": "f8f9d38efd6b0de30954d6bf1f353e9617bfb36d3d245c013a3b12be9f6bd88a",
+      "bytes": 161576
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Net.Http.dll",
+      "sha256": "b98ed0cb80dd54c33fc049f33af5448710752155bbd5cc8cbcd932e01f066801",
+      "bytes": 1746768
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Net.NetworkInformation.dll",
+      "sha256": "7e8791833eb2d0aea77b119fed3cab8bf501f6a553155cc1c4e5b1c02f65593b",
+      "bytes": 157520
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Net.Primitives.dll",
+      "sha256": "4dbb41a178ef013a898327152eccd146228dd2eb83859b9bb36078333b41f0f1",
+      "bytes": 210728
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Numerics.Vectors.dll",
+      "sha256": "a9a980ee33ed0c798a5e1960c4557521f465ac9e0987dfd2c3049d53b1f2fa5a",
+      "bytes": 15656
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.ObjectModel.dll",
+      "sha256": "2179bb19f335b4fcacd0994ad2ccfdac6840deff09c7889debfe9dbb5b88a3e6",
+      "bytes": 79656
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Private.CoreLib.dll",
+      "sha256": "1125acc8106c43fc8bad2d203c4c4485df6182d292846c2fff415c1040c54678",
+      "bytes": 16033576
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Private.Uri.dll",
+      "sha256": "b15c84d2120e1ec9612c66ba59bc3d7e67d841e2bce7b7d0478cb212537539b4",
+      "bytes": 255824
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Private.Xml.dll",
+      "sha256": "d71e72a7a9de324352edd281a46466b51bd0bdd2831b1573f8d3bae8bd2dd4a6",
+      "bytes": 7788328
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Reflection.DispatchProxy.dll",
+      "sha256": "bf93a361c0bba8497889c9f7713add5968ba39394f9e6bda27e86294c6c43560",
+      "bytes": 75600
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Reflection.Emit.dll",
+      "sha256": "09059981bbeea0fdc5df589be5d7e3937d57e22bec4d78ceb492c587926fc238",
+      "bytes": 309032
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Reflection.Emit.ILGeneration.dll",
+      "sha256": "6b42ddd05b0ca1c7342d73ea9f401fe588044215d65c67b756deb780f0894a26",
+      "bytes": 15656
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Reflection.Emit.Lightweight.dll",
+      "sha256": "d2724a2b7b46146877ec1f6e400c49ea05f84bdd31f3bba52ae139ee68a4f779",
+      "bytes": 15656
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Reflection.Primitives.dll",
+      "sha256": "c2bbd885d03da5e880667c228ac1f56a5f3a72ea37d43f010ada000adc33da28",
+      "bytes": 15656
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Runtime.dll",
+      "sha256": "76be53624f64b23d0249dfa0bbe85390086de7c44bfd490642ea86c6faaf44af",
+      "bytes": 44840
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Runtime.InteropServices.dll",
+      "sha256": "e5eb1679f3579c9141e2bb9dbdce62624a623f38d299805cc1de07bacd21841f",
+      "bytes": 112464
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Runtime.Intrinsics.dll",
+      "sha256": "b07694ec91f3a200acf0f8b37c6ce5fcf05126a9198ae156d839fa5ca8439dc5",
+      "bytes": 17192
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Runtime.Loader.dll",
+      "sha256": "9b9b2a4f0358d9146e76178ddb87d019be380c78baa7dac853493d45df089f03",
+      "bytes": 15656
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Runtime.Numerics.dll",
+      "sha256": "8ac94fb810c092a9297a903762e79a75ae07d7229d0721540c391f86d3d5d220",
+      "bytes": 354128
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Runtime.Serialization.Formatters.dll",
+      "sha256": "5e8e957c6b7a63132555ede5bcf5fe6a59934c83300e28074ec6e9845ecdd17f",
+      "bytes": 124712
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Runtime.Serialization.Primitives.dll",
+      "sha256": "f96093940e64d8eead98c86de9773d3c9d12c2b033bc6b1312ac88398303fdf3",
+      "bytes": 38696
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Security.Cryptography.dll",
+      "sha256": "e0a839a540e47343b53a936b32d91599a3470005228d50fd0b896f8bbdcc65b0",
+      "bytes": 2549544
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Text.Encoding.Extensions.dll",
+      "sha256": "8f51b9535db64fe027a40d6076200b1a6b0889bf05f62bb8e68c3eb083c7f113",
+      "bytes": 15656
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Text.Encodings.Web.dll",
+      "sha256": "d20431f20d992e71a4e82e5f25c822474e2f4097d8527972d3d78ea1f26e47c3",
+      "bytes": 124752
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Text.Json.dll",
+      "sha256": "fa99f413be21ed5f484a09093fe5f0beba7de3062cf9cc9f847dbf8108dba55a",
+      "bytes": 1890128
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Text.RegularExpressions.dll",
+      "sha256": "060bcc88a688e687ff1404b83b5fb5cf17e19ec57f33d5b8a48ab494da83c134",
+      "bytes": 1034064
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Threading.dll",
+      "sha256": "6c32ed1bf8067e4169e8feddd15e6489b89d19d1c7aae1520a551b57745d0a60",
+      "bytes": 83792
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Threading.Channels.dll",
+      "sha256": "afc5deb3c32b3f64bced2025d0b01b316d41b691ebc6ccb1a2ec445ad4c15e39",
+      "bytes": 157480
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Threading.Thread.dll",
+      "sha256": "ce71949bb1ea67b686e799128582015ebf8758f1107e59e43f342ece3f662930",
+      "bytes": 15696
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Threading.ThreadPool.dll",
+      "sha256": "58fbc6c4b9c72087152fd0f0670a527098c00b0c19ba8d0979d3ca5ce07c6936",
+      "bytes": 15656
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Transactions.Local.dll",
+      "sha256": "8d0283a311a16333ffb6f966d9765e4d8b866777ad99291a93b30db349a15bc4",
+      "bytes": 640808
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Xml.ReaderWriter.dll",
+      "sha256": "8e48fed4d12bcffff01e8059caafb564697275797d2f5ec6823fdd82b87fe938",
+      "bytes": 21840
+    },
+    {
+      "path": "D:/mediamanager-validation/20261009/results/movie-similar-v10/bin/Release/net10.0/TMDbLib.dll",
+      "sha256": "30af00d4ab894b91c50e36b78ee11c3d5e34fb1a6c32540405b8b4008d10c794",
+      "bytes": 401920
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/netstandard.dll",
+      "sha256": "3dc81dbc9dacd28261632c94410859eda24c2db50cd6c14309cbb2a434b50c57",
+      "bytes": 100648
+    }
+  ],
+  "nativeSqlite": {
+    "path": "D:/mediamanager-validation/20261009/results/movie-similar-v10/bin/Release/net10.0/e_sqlite3.dll",
+    "sha256": "b7385d722c83fb52142a00477a726723745916d22a555711ee89834c1111fb2e"
+  }
+}

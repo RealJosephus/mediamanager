@@ -1,0 +1,110 @@
+{
+  "generator": "tools/compat/generate-sort-name-data.mjs",
+  "unicodeVersion": "10.0.0",
+  "sources": [
+    {
+      "name": "han",
+      "url": "https://raw.githubusercontent.com/unicode-org/icu/release-60-1/icu4c/source/data/translit/Hani_Latn.txt",
+      "sha256": "2eefc9cb06377613e40d24988ad22d516954c81d201b62decabc86d22927d5a9"
+    },
+    {
+      "name": "spacing",
+      "url": "https://raw.githubusercontent.com/unicode-org/icu/release-60-1/icu4c/source/data/translit/Han_Spacedhan.txt",
+      "sha256": "6acc2dce9db52b375cb99b61160d2372c7f7cdbb5d1fe75aa0bbe8f97242753a"
+    },
+    {
+      "name": "latin",
+      "url": "https://raw.githubusercontent.com/unicode-org/icu/release-60-1/icu4c/source/data/translit/Latin_ASCII.txt",
+      "sha256": "0b7e87e8ebd0413fdf57610af452002170a469d0838e35c0c121007748092e70"
+    },
+    {
+      "name": "cyrillic",
+      "url": "https://raw.githubusercontent.com/unicode-org/icu/release-60-1/icu4c/source/data/translit/Cyrl_Latn.txt",
+      "sha256": "45bd7b902dae7b82b62ab3a1ad298dd24998a991fb6f8b7ad201585cd9545676"
+    },
+    {
+      "name": "arabic",
+      "url": "https://raw.githubusercontent.com/unicode-org/icu/release-60-1/icu4c/source/data/translit/Arab_Latn.txt",
+      "sha256": "8b52ef70b1769aca028fcbea83b376f6c7e23849a6b29958619ccc899871ee08"
+    },
+    {
+      "name": "armenian",
+      "url": "https://raw.githubusercontent.com/unicode-org/icu/release-60-1/icu4c/source/data/translit/Latn_Armn.txt",
+      "sha256": "05528ac0bd0cbb5bdfc19001a31bd170405cc88c62613339da812ec36cfa455a"
+    },
+    {
+      "name": "georgian",
+      "url": "https://raw.githubusercontent.com/unicode-org/icu/release-60-1/icu4c/source/data/translit/Geor_Latn.txt",
+      "sha256": "cf4a6d5d8d614b94d4742cb7572948cd828a7734d718b4a3474a0ba794b41d89"
+    },
+    {
+      "name": "thaana",
+      "url": "https://raw.githubusercontent.com/unicode-org/icu/release-60-1/icu4c/source/data/translit/Latn_Thaa.txt",
+      "sha256": "0284486937b04c419e42614a85694268bce8feb9760b99d27780875ac600da01"
+    },
+    {
+      "name": "hebrew",
+      "url": "https://raw.githubusercontent.com/unicode-org/icu/release-60-1/icu4c/source/data/translit/Hebr_Latn.txt",
+      "sha256": "fb5742477e054484c141842ea9e37de1899da58ebf82546065beb291bc04c293"
+    },
+    {
+      "name": "greek",
+      "url": "https://raw.githubusercontent.com/unicode-org/icu/release-60-1/icu4c/source/data/translit/Grek_Latn.txt",
+      "sha256": "00615bb992d248f5d8bf025f6ffda9adda1331fab071ce23d9ec371ddef56959"
+    },
+    {
+      "name": "kana",
+      "url": "https://raw.githubusercontent.com/unicode-org/icu/release-60-1/icu4c/source/data/translit/Latn_Kana.txt",
+      "sha256": "5a24c9590ed2e459ee95f13bf9e5640b28e0e24cfc31db434a49a79e31a808e8"
+    },
+    {
+      "name": "hiragana",
+      "url": "https://raw.githubusercontent.com/unicode-org/icu/release-60-1/icu4c/source/data/translit/Hira_Kana.txt",
+      "sha256": "f1cbcb97c12f7000915d2f4b9b6fc4c7dd6ba6aa56b86f58737b9642d3edd57b"
+    },
+    {
+      "name": "hiraganaFilter",
+      "url": "https://raw.githubusercontent.com/unicode-org/icu/release-60-1/icu4c/source/data/translit/Hira_Latn.txt",
+      "sha256": "1ca4f134f7b495bde9630413399460bae318d1d004d05e4dfc6969ed3736c065"
+    },
+    {
+      "name": "hangul",
+      "url": "https://raw.githubusercontent.com/unicode-org/icu/release-60-1/icu4c/source/data/translit/Latin_ConjoiningJamo.txt",
+      "sha256": "e1ed17a5fefd0d7ff9041e169f23dd24636fcb51dba26e3e194ff475e89493e0"
+    },
+    {
+      "name": "hangulFilter",
+      "url": "https://raw.githubusercontent.com/unicode-org/icu/release-60-1/icu4c/source/data/translit/Hang_Latn.txt",
+      "sha256": "8a24899eb8857140705f5d3ba8617d9e2962ea2e80dbce8c33204fcb04a2a522"
+    },
+    {
+      "name": "scriptRuns",
+      "url": "https://raw.githubusercontent.com/unicode-org/icu/release-60-1/icu4j/main/classes/translit/src/com/ibm/icu/text/AnyTransliterator.java",
+      "sha256": "6a3c1b1764f05330011b73347e382a8508be623f6feb6d6fb0deed986ebcd44c"
+    },
+    {
+      "name": "characters",
+      "url": "https://raw.githubusercontent.com/unicode-org/icu/release-60-1/icu4c/source/data/unidata/UnicodeData.txt",
+      "sha256": "52423e4d7492167b62f518f68d54db88930abbbff7f11edfcaec8f726498cab1"
+    },
+    {
+      "name": "scripts",
+      "url": "https://raw.githubusercontent.com/unicode-org/unicodetools/main/unicodetools/data/ucd/10.0.0-Update/Scripts.txt",
+      "sha256": "d02e24e4c516e9090b6bc9c2d2c8f4c89510b6ed8c5e859d0a861b0dc5cf372d"
+    },
+    {
+      "name": "properties",
+      "url": "https://raw.githubusercontent.com/unicode-org/unicodetools/main/unicodetools/data/ucd/10.0.0-Update/PropList.txt",
+      "sha256": "58dbf8fedbd5bf67a3bd5c10eda2f2acf2eae59df5f77884a6f158e98f75cf8c"
+    },
+    {
+      "name": "license",
+      "url": "https://raw.githubusercontent.com/unicode-org/icu/release-60-1/icu4c/LICENSE",
+      "sha256": "24c771ce37201a3ab604852e47d10d21595d0493269dd6c8a5e567e998e18c00"
+    }
+  ],
+  "limitations": [
+    "Static mappings are not a complete rule interpreter.",
+    "Context rules are implemented and tested in transliteration.js."
+  ]
+}

@@ -1,0 +1,2951 @@
+{
+  "compatible": true,
+  "differences": [],
+  "platform": "win32",
+  "nodeTimezone": "Asia/Taipei",
+  "referenceTimezone": "Taipei Standard Time",
+  "baseline": {
+    "manifestPath": "D:/mediamanager-validation/20261011/results/jellyfin-designated-workspace-controlled-v2/manifest.json",
+    "manifestSha256": "3299791acef852bd33b5c521a32dbc1d1fcd0741e38a80d6351b87bd4324ae6d",
+    "verified": {
+      "source": "D:\\jellyfin",
+      "head": "208c278b75abd897aefa1e1175126eac5e4dbfaa",
+      "verifiedFiles": 2620,
+      "contentUnchanged": true,
+      "statusUnchanged": true,
+      "fileDiscoveryUnchanged": true,
+      "contentDigest": "e28a983db179b720c3b16d7416ee4112894a3115c4be6fe43c61c52e0d9a8313"
+    },
+    "runtimeEntriesSha256": "91cbe0423d1255936c89b01135e6db133cb27efa5debb9214380e4df4cf79dfe"
+  },
+  "seedSha256": "9988817df037029a4d3c53e4ca801bb6a7d4e813a4462ee1b4d0ce5a4196a725",
+  "initializedInstance": "D:/mediamanager-validation/20261012-r23-native-initialized/instance",
+  "instanceBinding": {
+    "serverId": "794547a5825a45afa006b47d18011c82",
+    "originIdentityDigest": "4fc3bad437034ab4bd25b96537f62656e455c34c68e3e17bc806638f8b9109bd"
+  },
+  "nativeReference": [
+    {
+      "name": "date-295",
+      "input": "1990-07-01T12:00:00+00:00",
+      "source": "{\"LastPlayedDate\":\"1990-07-01T12:00:00+00:00\",\"PlayCount\":7}",
+      "response": {
+        "status": 200,
+        "contentType": "application/json; charset=utf-8",
+        "language": "en-US",
+        "body": {
+          "PlaybackPositionTicks": 0,
+          "PlayCount": 7,
+          "IsFavorite": false,
+          "LastPlayedDate": "1990-07-01T12:00:00.0000000Z",
+          "Played": false,
+          "Key": "22222222-2222-2222-2222-222222222222",
+          "ItemId": "22222222222222222222222222222222"
+        },
+        "rawText": "{\"PlaybackPositionTicks\":0,\"PlayCount\":7,\"IsFavorite\":false,\"LastPlayedDate\":\"1990-07-01T12:00:00.0000000Z\",\"Played\":false,\"Key\":\"22222222-2222-2222-2222-222222222222\",\"ItemId\":\"22222222222222222222222222222222\"}"
+      },
+      "state": {
+        "status": 200,
+        "contentType": "application/json; charset=utf-8",
+        "language": "en-US",
+        "body": {
+          "PlaybackPositionTicks": 0,
+          "PlayCount": 7,
+          "IsFavorite": false,
+          "LastPlayedDate": "1990-07-01T12:00:00.0000000Z",
+          "Played": false,
+          "Key": "22222222-2222-2222-2222-222222222222",
+          "ItemId": "22222222222222222222222222222222"
+        },
+        "rawText": "{\"PlaybackPositionTicks\":0,\"PlayCount\":7,\"IsFavorite\":false,\"LastPlayedDate\":\"1990-07-01T12:00:00.0000000Z\",\"Played\":false,\"Key\":\"22222222-2222-2222-2222-222222222222\",\"ItemId\":\"22222222222222222222222222222222\"}"
+      }
+    },
+    {
+      "name": "date-296",
+      "input": "1900-01-01T12:00:00",
+      "source": "{\"LastPlayedDate\":\"1900-01-01T12:00:00\",\"PlayCount\":7}",
+      "response": {
+        "status": 200,
+        "contentType": "application/json; charset=utf-8",
+        "language": "en-US",
+        "body": {
+          "PlaybackPositionTicks": 0,
+          "PlayCount": 7,
+          "IsFavorite": false,
+          "LastPlayedDate": "1900-01-01T04:00:00.0000000Z",
+          "Played": false,
+          "Key": "22222222-2222-2222-2222-222222222222",
+          "ItemId": "22222222222222222222222222222222"
+        },
+        "rawText": "{\"PlaybackPositionTicks\":0,\"PlayCount\":7,\"IsFavorite\":false,\"LastPlayedDate\":\"1900-01-01T04:00:00.0000000Z\",\"Played\":false,\"Key\":\"22222222-2222-2222-2222-222222222222\",\"ItemId\":\"22222222222222222222222222222222\"}"
+      },
+      "state": {
+        "status": 200,
+        "contentType": "application/json; charset=utf-8",
+        "language": "en-US",
+        "body": {
+          "PlaybackPositionTicks": 0,
+          "PlayCount": 7,
+          "IsFavorite": false,
+          "LastPlayedDate": "1900-01-01T04:00:00.0000000Z",
+          "Played": false,
+          "Key": "22222222-2222-2222-2222-222222222222",
+          "ItemId": "22222222222222222222222222222222"
+        },
+        "rawText": "{\"PlaybackPositionTicks\":0,\"PlayCount\":7,\"IsFavorite\":false,\"LastPlayedDate\":\"1900-01-01T04:00:00.0000000Z\",\"Played\":false,\"Key\":\"22222222-2222-2222-2222-222222222222\",\"ItemId\":\"22222222222222222222222222222222\"}"
+      }
+    }
+  ],
+  "candidate": [
+    {
+      "name": "date-295",
+      "input": "1990-07-01T12:00:00+00:00",
+      "source": "{\"LastPlayedDate\":\"1990-07-01T12:00:00+00:00\",\"PlayCount\":7}",
+      "response": {
+        "status": 200,
+        "contentType": "application/json; charset=utf-8",
+        "language": "en-US",
+        "body": {
+          "PlaybackPositionTicks": 0,
+          "PlayCount": 7,
+          "IsFavorite": false,
+          "LastPlayedDate": "1990-07-01T12:00:00.0000000Z",
+          "Played": false,
+          "Key": "22222222-2222-2222-2222-222222222222",
+          "ItemId": "22222222222222222222222222222222"
+        },
+        "rawText": "{\"PlaybackPositionTicks\":0,\"PlayCount\":7,\"IsFavorite\":false,\"LastPlayedDate\":\"1990-07-01T12:00:00.0000000Z\",\"Played\":false,\"Key\":\"22222222-2222-2222-2222-222222222222\",\"ItemId\":\"22222222222222222222222222222222\"}"
+      },
+      "state": {
+        "status": 200,
+        "contentType": "application/json; charset=utf-8",
+        "language": "en-US",
+        "body": {
+          "PlaybackPositionTicks": 0,
+          "PlayCount": 7,
+          "IsFavorite": false,
+          "LastPlayedDate": "1990-07-01T12:00:00.0000000Z",
+          "Played": false,
+          "Key": "22222222-2222-2222-2222-222222222222",
+          "ItemId": "22222222222222222222222222222222"
+        },
+        "rawText": "{\"PlaybackPositionTicks\":0,\"PlayCount\":7,\"IsFavorite\":false,\"LastPlayedDate\":\"1990-07-01T12:00:00.0000000Z\",\"Played\":false,\"Key\":\"22222222-2222-2222-2222-222222222222\",\"ItemId\":\"22222222222222222222222222222222\"}"
+      },
+      "postgres": [
+        {
+          "ItemId": "22222222-2222-2222-2222-222222222222",
+          "UserId": "5C6B5F77-BEA9-4A9A-98AA-FAE5909892B7",
+          "CustomDataKey": "22222222-2222-2222-2222-222222222222",
+          "AudioStreamIndex": null,
+          "IsFavorite": false,
+          "LastPlayedDate": "1990-07-01 12:00:00",
+          "Likes": null,
+          "PlayCount": 7,
+          "PlaybackPositionTicks": {
+            "$integer": "0"
+          },
+          "Played": false,
+          "Rating": null,
+          "RetentionDate": null,
+          "SubtitleStreamIndex": null
+        }
+      ],
+      "sqlite": [
+        {
+          "ItemId": "22222222-2222-2222-2222-222222222222",
+          "UserId": "5C6B5F77-BEA9-4A9A-98AA-FAE5909892B7",
+          "CustomDataKey": "22222222-2222-2222-2222-222222222222",
+          "AudioStreamIndex": null,
+          "IsFavorite": false,
+          "LastPlayedDate": "1990-07-01 12:00:00",
+          "Likes": null,
+          "PlayCount": 7,
+          "PlaybackPositionTicks": {
+            "$integer": "0"
+          },
+          "Played": false,
+          "Rating": null,
+          "RetentionDate": null,
+          "SubtitleStreamIndex": null
+        }
+      ],
+      "exported": "D:\\mediamanager-validation\\20261012-r23-date-roundtrip\\date-295.sqlite",
+      "exportReport": {
+        "tables": [
+          {
+            "name": "AccessSchedules",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "ActivityLogs",
+            "rows": 2,
+            "sha256": "6938f486cdde498365f17eaf55be2e7bc90103323169443920d02432e6868a42"
+          },
+          {
+            "name": "AncestorIds",
+            "rows": 6,
+            "sha256": "b6f4e5b9d71178f49d0e15cdbd149f3240f7bdef302958b14f4e3db32384038f"
+          },
+          {
+            "name": "ApiKeys",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "AttachmentStreamInfos",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "BaseItemImageInfos",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "BaseItemMetadataFields",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "BaseItemProviders",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "BaseItemTrailerTypes",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "BaseItems",
+            "rows": 6,
+            "sha256": "5203c6d3fc40411c9aaf500fd337b80399d08000b8eabc0843c0d58466267318"
+          },
+          {
+            "name": "Chapters",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "CustomItemDisplayPreferences",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "DeviceOptions",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "Devices",
+            "rows": 2,
+            "sha256": "d2ba8af633e2c4a9c28a2e5590f3a5254f492fb287b6aa7a78f022e2a5f1b8d1"
+          },
+          {
+            "name": "DisplayPreferences",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "HomeSection",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "ImageInfos",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "ItemDisplayPreferences",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "ItemValues",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "ItemValuesMap",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "KeyframeData",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "LinkedChildren",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "MediaSegments",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "MediaStreamInfos",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "PeopleBaseItemMap",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "Peoples",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "Permissions",
+            "rows": 48,
+            "sha256": "05a1db3594f9059c79e2925841195070eb9d6f2f2b290bc422fe122eee2a6921"
+          },
+          {
+            "name": "Preferences",
+            "rows": 26,
+            "sha256": "8f3964a193c943e39ac2fc88fc86925bd15c77ae609678d10ff8e8aa5623ee9d"
+          },
+          {
+            "name": "TrickplayInfos",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "UserData",
+            "rows": 1,
+            "sha256": "92186a077f5f896c67701f62f2326d10969393185b178b9954cb0071a0f05982"
+          },
+          {
+            "name": "Users",
+            "rows": 2,
+            "sha256": "a9c1ad23c7bff628b15df5f5e36e0d6e80998f957c34084b2e7d4ce7a4e6cf01"
+          }
+        ],
+        "nativeSchemaFingerprint": "24690f1f413cc531c8ed385851cd0e3f392af7ec470860ee3d0348d285133725",
+        "migrationHistory": [
+          {
+            "MigrationId": "20200514181226_AddActivityLog",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20200613202153_AddUsers",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20200728005145_AddDisplayPreferences",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20200905220533_FixDisplayPreferencesIndex",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20201004171403_AddMaxActiveSessions",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20201204223655_AddCustomDisplayPreferences",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20210320181425_AddIndexesAndCollations",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20210407110544_NullableCustomPrefValue",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20210814002109_AddDevices",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20221022080052_AddIndexActivityLogsDateCreated",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20230526173516_RemoveEasyPassword",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20230626233818_AddTrickplayInfos",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20230923170422_UserCastReceiver",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20240729140605_AddMediaSegments",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20240928082930_MarkSegmentProviderIdNonNullable",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20241020103111_LibraryDbMigration",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20241111131257_AddedCustomDataKey",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20241111135439_AddedCustomDataKeyKey",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20241112152323_FixAncestorIdConfig",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20241112232041_FixMediaStreams",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20241112234144_FixMediaStreams2",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20241113133548_EnforceUniqueItemValue",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20250202021306_FixedCollation",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20250204092455_MakeStartEndDateNullable",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20250214031148_ChannelIdGuid",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20250326065026_AddInheritedParentalRatingSubValue",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20250327101120_AddKeyframeData",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20250327171413_AddHdr10PlusFlag",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20250331182844_FixAttachmentMigration",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20250401142247_FixAncestors",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20250405075612_FixItemValuesIndices",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20250420000000_CreateNetworkConfiguration",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420010000_MigrateNetworkConfiguration",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420020000_MigrateMusicBrainzTimeout",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420030000_MigrateEncodingOptions",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420040000_RenameEnableGroupingIntoCollections",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420050000_DisableTranscodingThrottling",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420060000_CreateUserLoggingConfigFile",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420070000_MigrateActivityLogDb",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420080000_RemoveDuplicateExtras",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420090000_AddDefaultPluginRepository",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420100000_MigrateUserDb",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420110000_ReaddDefaultPluginRepository",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420120000_MigrateDisplayPreferencesDb",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420130000_RemoveDownloadImagesInAdvance",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420140000_MigrateAuthenticationDb",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420150000_FixPlaylistOwner",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420160000_AddDefaultCastReceivers",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420170000_UpdateDefaultPluginRepository",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420180000_FixAudioData",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420193000_MigrateLibraryDbCompatibilityCheck",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420200000_MigrateLibraryDb",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420210000_MoveExtractedFiles",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420230000_MoveTrickplayFiles",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420230000_RefreshInternalDateModified",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250421000000_MigrateKeyframeData",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250609115616_DetachUserDataInsteadOfDelete",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20250618010000_MigrateLibraryUserData",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250620180000_FixDates",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250622170802_BaseItemImageInfoDateModifiedNullable",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20250714044826_ResetJournalMode",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20250730215000_ReseedFolderFlag",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250913211637_AddProperParentChildRelationBaseItemWithCascade",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20250925203415_ExtendPeopleMapKey",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20251009200000_CleanMusicArtist",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260113102337_AddLinkedChildrenTable",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260113120000_MigrateLinkedChildren",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260113203012_ChangeOwnerIdToGuid",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260113230000_CleanupOrphanedExtras",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260113233000_AddForeignKeyToOwnerId",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260113233500_DropExtraIdsColumn",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260115120000_FixIncorrectOwnerIdRelationships",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260116114245_AddLatestItemsDateCreatedIndexes",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260118182305_AddIndicesToImageInfo",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260130232147_AddBaseItemNameIndex",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260206200000_FixLibrarySubtitleDownloadLanguages",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260206224832_IndexOptimizations",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260215201634_ChangePrimaryVersionIdToGuid",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260308123920_AddTypeCleanNameIndex",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260504075755_AddPartialIndexForItemCounts",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260508120000_MergeDuplicateMusicArtists",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260508130000_MergeDuplicatePeople",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260522092303_AddNormalizedUsername",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260522092304_UpdateNormalizedUsername",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260524120336_AddUniqueNormalizedUsernameIndex",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260525010000_CleanupOrphanedExternalData",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260531160000_DisableLegacyAuthorization",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260610120000_RefreshCleanNamesAndValues",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260722120000_RefreshForcedSortNames",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260723111547_AllowDuplicatePlaylistChildren",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260724185102_AddPrimaryVersionIdIndex",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260728170000_AddPeopleNameLowerIndex",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260728182152_AddPeopleItemMapCoveringIndex",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260729120000_RestorePlaylistChildrenFromMetadata",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260812050902_AddMediaStreamFilterIndex",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260815063607_RemoveOrphanedUserPermissionsAndPreferences",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260821120000_RecomputeSeriesPresentationKey",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260825200000_ConsolidateLocalizedUserViews",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260831100000_EnableLocalSimilarityProviders",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260908120000_RepairAlternateVersionLinks",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260910120000_MigrateRatingLevels",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260911120000_StripEmbeddedLinkedChildren",
+            "ProductVersion": "13.0.0.0"
+          }
+        ],
+        "sqliteSequence": [
+          {
+            "name": "ActivityLogs",
+            "seq": {
+              "$integer": "5"
+            }
+          },
+          {
+            "name": "CustomItemDisplayPreferences",
+            "seq": {
+              "$integer": "0"
+            }
+          },
+          {
+            "name": "Devices",
+            "seq": {
+              "$integer": "3"
+            }
+          },
+          {
+            "name": "ImageInfos",
+            "seq": {
+              "$integer": "0"
+            }
+          },
+          {
+            "name": "Permissions",
+            "seq": {
+              "$integer": "72"
+            }
+          },
+          {
+            "name": "Preferences",
+            "seq": {
+              "$integer": "39"
+            }
+          }
+        ],
+        "verified": true,
+        "pathProjection": {
+          "auditedPaths": 5,
+          "rewrittenPaths": 0
+        },
+        "portableMountContract": {
+          "mounts": [
+            {
+              "mountId": "core-flow",
+              "identityRoot": "Z:\\CoreFlow",
+              "accessRoot": "/coreflow",
+              "pathStyle": "windows",
+              "caseSensitive": false,
+              "returnPolicy": "required"
+            },
+            {
+              "mountId": "user-data-root",
+              "identityRoot": "Z:\\UserDataBinding",
+              "accessRoot": "/userdata",
+              "pathStyle": "windows",
+              "caseSensitive": false,
+              "returnPolicy": "required"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "date-296",
+      "input": "1900-01-01T12:00:00",
+      "source": "{\"LastPlayedDate\":\"1900-01-01T12:00:00\",\"PlayCount\":7}",
+      "response": {
+        "status": 200,
+        "contentType": "application/json; charset=utf-8",
+        "language": "en-US",
+        "body": {
+          "PlaybackPositionTicks": 0,
+          "PlayCount": 7,
+          "IsFavorite": false,
+          "LastPlayedDate": "1900-01-01T04:00:00.0000000Z",
+          "Played": false,
+          "Key": "22222222-2222-2222-2222-222222222222",
+          "ItemId": "22222222222222222222222222222222"
+        },
+        "rawText": "{\"PlaybackPositionTicks\":0,\"PlayCount\":7,\"IsFavorite\":false,\"LastPlayedDate\":\"1900-01-01T04:00:00.0000000Z\",\"Played\":false,\"Key\":\"22222222-2222-2222-2222-222222222222\",\"ItemId\":\"22222222222222222222222222222222\"}"
+      },
+      "state": {
+        "status": 200,
+        "contentType": "application/json; charset=utf-8",
+        "language": "en-US",
+        "body": {
+          "PlaybackPositionTicks": 0,
+          "PlayCount": 7,
+          "IsFavorite": false,
+          "LastPlayedDate": "1900-01-01T04:00:00.0000000Z",
+          "Played": false,
+          "Key": "22222222-2222-2222-2222-222222222222",
+          "ItemId": "22222222222222222222222222222222"
+        },
+        "rawText": "{\"PlaybackPositionTicks\":0,\"PlayCount\":7,\"IsFavorite\":false,\"LastPlayedDate\":\"1900-01-01T04:00:00.0000000Z\",\"Played\":false,\"Key\":\"22222222-2222-2222-2222-222222222222\",\"ItemId\":\"22222222222222222222222222222222\"}"
+      },
+      "postgres": [
+        {
+          "ItemId": "22222222-2222-2222-2222-222222222222",
+          "UserId": "5C6B5F77-BEA9-4A9A-98AA-FAE5909892B7",
+          "CustomDataKey": "22222222-2222-2222-2222-222222222222",
+          "AudioStreamIndex": null,
+          "IsFavorite": false,
+          "LastPlayedDate": "1900-01-01 04:00:00",
+          "Likes": null,
+          "PlayCount": 7,
+          "PlaybackPositionTicks": {
+            "$integer": "0"
+          },
+          "Played": false,
+          "Rating": null,
+          "RetentionDate": null,
+          "SubtitleStreamIndex": null
+        }
+      ],
+      "sqlite": [
+        {
+          "ItemId": "22222222-2222-2222-2222-222222222222",
+          "UserId": "5C6B5F77-BEA9-4A9A-98AA-FAE5909892B7",
+          "CustomDataKey": "22222222-2222-2222-2222-222222222222",
+          "AudioStreamIndex": null,
+          "IsFavorite": false,
+          "LastPlayedDate": "1900-01-01 04:00:00",
+          "Likes": null,
+          "PlayCount": 7,
+          "PlaybackPositionTicks": {
+            "$integer": "0"
+          },
+          "Played": false,
+          "Rating": null,
+          "RetentionDate": null,
+          "SubtitleStreamIndex": null
+        }
+      ],
+      "exported": "D:\\mediamanager-validation\\20261012-r23-date-roundtrip\\date-296.sqlite",
+      "exportReport": {
+        "tables": [
+          {
+            "name": "AccessSchedules",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "ActivityLogs",
+            "rows": 2,
+            "sha256": "6938f486cdde498365f17eaf55be2e7bc90103323169443920d02432e6868a42"
+          },
+          {
+            "name": "AncestorIds",
+            "rows": 6,
+            "sha256": "b6f4e5b9d71178f49d0e15cdbd149f3240f7bdef302958b14f4e3db32384038f"
+          },
+          {
+            "name": "ApiKeys",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "AttachmentStreamInfos",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "BaseItemImageInfos",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "BaseItemMetadataFields",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "BaseItemProviders",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "BaseItemTrailerTypes",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "BaseItems",
+            "rows": 6,
+            "sha256": "5203c6d3fc40411c9aaf500fd337b80399d08000b8eabc0843c0d58466267318"
+          },
+          {
+            "name": "Chapters",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "CustomItemDisplayPreferences",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "DeviceOptions",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "Devices",
+            "rows": 2,
+            "sha256": "d2ba8af633e2c4a9c28a2e5590f3a5254f492fb287b6aa7a78f022e2a5f1b8d1"
+          },
+          {
+            "name": "DisplayPreferences",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "HomeSection",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "ImageInfos",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "ItemDisplayPreferences",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "ItemValues",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "ItemValuesMap",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "KeyframeData",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "LinkedChildren",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "MediaSegments",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "MediaStreamInfos",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "PeopleBaseItemMap",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "Peoples",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "Permissions",
+            "rows": 48,
+            "sha256": "05a1db3594f9059c79e2925841195070eb9d6f2f2b290bc422fe122eee2a6921"
+          },
+          {
+            "name": "Preferences",
+            "rows": 26,
+            "sha256": "8f3964a193c943e39ac2fc88fc86925bd15c77ae609678d10ff8e8aa5623ee9d"
+          },
+          {
+            "name": "TrickplayInfos",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "UserData",
+            "rows": 1,
+            "sha256": "7813bb841abf314c8593666d07a2e0c60d90685b4277883b7f7fe3178a99cfdc"
+          },
+          {
+            "name": "Users",
+            "rows": 2,
+            "sha256": "a9c1ad23c7bff628b15df5f5e36e0d6e80998f957c34084b2e7d4ce7a4e6cf01"
+          }
+        ],
+        "nativeSchemaFingerprint": "24690f1f413cc531c8ed385851cd0e3f392af7ec470860ee3d0348d285133725",
+        "migrationHistory": [
+          {
+            "MigrationId": "20200514181226_AddActivityLog",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20200613202153_AddUsers",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20200728005145_AddDisplayPreferences",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20200905220533_FixDisplayPreferencesIndex",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20201004171403_AddMaxActiveSessions",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20201204223655_AddCustomDisplayPreferences",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20210320181425_AddIndexesAndCollations",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20210407110544_NullableCustomPrefValue",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20210814002109_AddDevices",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20221022080052_AddIndexActivityLogsDateCreated",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20230526173516_RemoveEasyPassword",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20230626233818_AddTrickplayInfos",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20230923170422_UserCastReceiver",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20240729140605_AddMediaSegments",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20240928082930_MarkSegmentProviderIdNonNullable",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20241020103111_LibraryDbMigration",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20241111131257_AddedCustomDataKey",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20241111135439_AddedCustomDataKeyKey",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20241112152323_FixAncestorIdConfig",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20241112232041_FixMediaStreams",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20241112234144_FixMediaStreams2",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20241113133548_EnforceUniqueItemValue",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20250202021306_FixedCollation",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20250204092455_MakeStartEndDateNullable",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20250214031148_ChannelIdGuid",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20250326065026_AddInheritedParentalRatingSubValue",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20250327101120_AddKeyframeData",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20250327171413_AddHdr10PlusFlag",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20250331182844_FixAttachmentMigration",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20250401142247_FixAncestors",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20250405075612_FixItemValuesIndices",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20250420000000_CreateNetworkConfiguration",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420010000_MigrateNetworkConfiguration",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420020000_MigrateMusicBrainzTimeout",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420030000_MigrateEncodingOptions",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420040000_RenameEnableGroupingIntoCollections",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420050000_DisableTranscodingThrottling",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420060000_CreateUserLoggingConfigFile",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420070000_MigrateActivityLogDb",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420080000_RemoveDuplicateExtras",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420090000_AddDefaultPluginRepository",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420100000_MigrateUserDb",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420110000_ReaddDefaultPluginRepository",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420120000_MigrateDisplayPreferencesDb",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420130000_RemoveDownloadImagesInAdvance",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420140000_MigrateAuthenticationDb",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420150000_FixPlaylistOwner",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420160000_AddDefaultCastReceivers",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420170000_UpdateDefaultPluginRepository",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420180000_FixAudioData",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420193000_MigrateLibraryDbCompatibilityCheck",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420200000_MigrateLibraryDb",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420210000_MoveExtractedFiles",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420230000_MoveTrickplayFiles",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420230000_RefreshInternalDateModified",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250421000000_MigrateKeyframeData",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250609115616_DetachUserDataInsteadOfDelete",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20250618010000_MigrateLibraryUserData",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250620180000_FixDates",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250622170802_BaseItemImageInfoDateModifiedNullable",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20250714044826_ResetJournalMode",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20250730215000_ReseedFolderFlag",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250913211637_AddProperParentChildRelationBaseItemWithCascade",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20250925203415_ExtendPeopleMapKey",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20251009200000_CleanMusicArtist",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260113102337_AddLinkedChildrenTable",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260113120000_MigrateLinkedChildren",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260113203012_ChangeOwnerIdToGuid",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260113230000_CleanupOrphanedExtras",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260113233000_AddForeignKeyToOwnerId",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260113233500_DropExtraIdsColumn",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260115120000_FixIncorrectOwnerIdRelationships",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260116114245_AddLatestItemsDateCreatedIndexes",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260118182305_AddIndicesToImageInfo",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260130232147_AddBaseItemNameIndex",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260206200000_FixLibrarySubtitleDownloadLanguages",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260206224832_IndexOptimizations",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260215201634_ChangePrimaryVersionIdToGuid",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260308123920_AddTypeCleanNameIndex",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260504075755_AddPartialIndexForItemCounts",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260508120000_MergeDuplicateMusicArtists",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260508130000_MergeDuplicatePeople",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260522092303_AddNormalizedUsername",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260522092304_UpdateNormalizedUsername",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260524120336_AddUniqueNormalizedUsernameIndex",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260525010000_CleanupOrphanedExternalData",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260531160000_DisableLegacyAuthorization",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260610120000_RefreshCleanNamesAndValues",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260722120000_RefreshForcedSortNames",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260723111547_AllowDuplicatePlaylistChildren",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260724185102_AddPrimaryVersionIdIndex",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260728170000_AddPeopleNameLowerIndex",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260728182152_AddPeopleItemMapCoveringIndex",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260729120000_RestorePlaylistChildrenFromMetadata",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260812050902_AddMediaStreamFilterIndex",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260815063607_RemoveOrphanedUserPermissionsAndPreferences",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260821120000_RecomputeSeriesPresentationKey",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260825200000_ConsolidateLocalizedUserViews",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260831100000_EnableLocalSimilarityProviders",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260908120000_RepairAlternateVersionLinks",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260910120000_MigrateRatingLevels",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260911120000_StripEmbeddedLinkedChildren",
+            "ProductVersion": "13.0.0.0"
+          }
+        ],
+        "sqliteSequence": [
+          {
+            "name": "ActivityLogs",
+            "seq": {
+              "$integer": "5"
+            }
+          },
+          {
+            "name": "CustomItemDisplayPreferences",
+            "seq": {
+              "$integer": "0"
+            }
+          },
+          {
+            "name": "Devices",
+            "seq": {
+              "$integer": "3"
+            }
+          },
+          {
+            "name": "ImageInfos",
+            "seq": {
+              "$integer": "0"
+            }
+          },
+          {
+            "name": "Permissions",
+            "seq": {
+              "$integer": "72"
+            }
+          },
+          {
+            "name": "Preferences",
+            "seq": {
+              "$integer": "39"
+            }
+          }
+        ],
+        "verified": true,
+        "pathProjection": {
+          "auditedPaths": 5,
+          "rewrittenPaths": 0
+        },
+        "portableMountContract": {
+          "mounts": [
+            {
+              "mountId": "core-flow",
+              "identityRoot": "Z:\\CoreFlow",
+              "accessRoot": "/coreflow",
+              "pathStyle": "windows",
+              "caseSensitive": false,
+              "returnPolicy": "required"
+            },
+            {
+              "mountId": "user-data-root",
+              "identityRoot": "Z:\\UserDataBinding",
+              "accessRoot": "/userdata",
+              "pathStyle": "windows",
+              "caseSensitive": false,
+              "returnPolicy": "required"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "takeovers": [
+    {
+      "name": "date-295",
+      "observations": {
+        "before": {
+          "status": 200,
+          "contentType": "application/json; charset=utf-8",
+          "language": "en-US",
+          "body": {
+            "PlaybackPositionTicks": 0,
+            "PlayCount": 7,
+            "IsFavorite": false,
+            "LastPlayedDate": "1990-07-01T12:00:00.0000000Z",
+            "Played": false,
+            "Key": "22222222-2222-2222-2222-222222222222",
+            "ItemId": "22222222222222222222222222222222"
+          },
+          "rawText": "{\"PlaybackPositionTicks\":0,\"PlayCount\":7,\"IsFavorite\":false,\"LastPlayedDate\":\"1990-07-01T12:00:00.0000000Z\",\"Played\":false,\"Key\":\"22222222-2222-2222-2222-222222222222\",\"ItemId\":\"22222222222222222222222222222222\"}"
+        },
+        "source": "{\"LastPlayedDate\":\"1990-07-01T12:00:00+00:00\",\"PlayCount\":42,\"IsFavorite\":true}",
+        "response": {
+          "status": 200,
+          "contentType": "application/json; charset=utf-8",
+          "language": "en-US",
+          "body": {
+            "PlaybackPositionTicks": 0,
+            "PlayCount": 42,
+            "IsFavorite": true,
+            "LastPlayedDate": "1990-07-01T12:00:00.0000000Z",
+            "Played": false,
+            "Key": "22222222-2222-2222-2222-222222222222",
+            "ItemId": "22222222222222222222222222222222"
+          },
+          "rawText": "{\"PlaybackPositionTicks\":0,\"PlayCount\":42,\"IsFavorite\":true,\"LastPlayedDate\":\"1990-07-01T12:00:00.0000000Z\",\"Played\":false,\"Key\":\"22222222-2222-2222-2222-222222222222\",\"ItemId\":\"22222222222222222222222222222222\"}"
+        },
+        "after": {
+          "status": 200,
+          "contentType": "application/json; charset=utf-8",
+          "language": "en-US",
+          "body": {
+            "PlaybackPositionTicks": 0,
+            "PlayCount": 42,
+            "IsFavorite": true,
+            "LastPlayedDate": "1990-07-01T12:00:00.0000000Z",
+            "Played": false,
+            "Key": "22222222-2222-2222-2222-222222222222",
+            "ItemId": "22222222222222222222222222222222"
+          },
+          "rawText": "{\"PlaybackPositionTicks\":0,\"PlayCount\":42,\"IsFavorite\":true,\"LastPlayedDate\":\"1990-07-01T12:00:00.0000000Z\",\"Played\":false,\"Key\":\"22222222-2222-2222-2222-222222222222\",\"ItemId\":\"22222222222222222222222222222222\"}"
+        }
+      },
+      "nativeRows": [
+        {
+          "ItemId": "22222222-2222-2222-2222-222222222222",
+          "UserId": "5C6B5F77-BEA9-4A9A-98AA-FAE5909892B7",
+          "CustomDataKey": "22222222-2222-2222-2222-222222222222",
+          "AudioStreamIndex": null,
+          "IsFavorite": true,
+          "LastPlayedDate": "1990-07-01 12:00:00",
+          "Likes": null,
+          "PlayCount": 42,
+          "PlaybackPositionTicks": {
+            "$integer": "0"
+          },
+          "Played": false,
+          "Rating": null,
+          "RetentionDate": null,
+          "SubtitleStreamIndex": null
+        }
+      ],
+      "postgresRows": [
+        {
+          "ItemId": "22222222-2222-2222-2222-222222222222",
+          "UserId": "5C6B5F77-BEA9-4A9A-98AA-FAE5909892B7",
+          "CustomDataKey": "22222222-2222-2222-2222-222222222222",
+          "AudioStreamIndex": null,
+          "IsFavorite": true,
+          "LastPlayedDate": "1990-07-01 12:00:00",
+          "Likes": null,
+          "PlayCount": 42,
+          "PlaybackPositionTicks": {
+            "$integer": "0"
+          },
+          "Played": false,
+          "Rating": null,
+          "RetentionDate": null,
+          "SubtitleStreamIndex": null
+        }
+      ],
+      "transfer": {
+        "tables": [
+          {
+            "name": "AccessSchedules",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "ActivityLogs",
+            "rows": 4,
+            "sha256": "dea446bd522cdec07da2831a94705f981c50dd176d2610305fc748287799837b"
+          },
+          {
+            "name": "AncestorIds",
+            "rows": 6,
+            "sha256": "b6f4e5b9d71178f49d0e15cdbd149f3240f7bdef302958b14f4e3db32384038f"
+          },
+          {
+            "name": "ApiKeys",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "AttachmentStreamInfos",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "BaseItemImageInfos",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "BaseItemMetadataFields",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "BaseItemProviders",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "BaseItemTrailerTypes",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "BaseItems",
+            "rows": 6,
+            "sha256": "5203c6d3fc40411c9aaf500fd337b80399d08000b8eabc0843c0d58466267318"
+          },
+          {
+            "name": "Chapters",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "CustomItemDisplayPreferences",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "DeviceOptions",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "Devices",
+            "rows": 2,
+            "sha256": "994e64e1443720a0fdf5b62df12b892ec260daed3687d5740635c8ec4fd6c821"
+          },
+          {
+            "name": "DisplayPreferences",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "HomeSection",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "ImageInfos",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "ItemDisplayPreferences",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "ItemValues",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "ItemValuesMap",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "KeyframeData",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "LinkedChildren",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "MediaSegments",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "MediaStreamInfos",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "PeopleBaseItemMap",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "Peoples",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "Permissions",
+            "rows": 48,
+            "sha256": "05a1db3594f9059c79e2925841195070eb9d6f2f2b290bc422fe122eee2a6921"
+          },
+          {
+            "name": "Preferences",
+            "rows": 26,
+            "sha256": "8f3964a193c943e39ac2fc88fc86925bd15c77ae609678d10ff8e8aa5623ee9d"
+          },
+          {
+            "name": "TrickplayInfos",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "UserData",
+            "rows": 1,
+            "sha256": "a6f49879e1a9863e9e6c89551e6633299662cc70dcf310ed580d3f9de73999c0"
+          },
+          {
+            "name": "Users",
+            "rows": 2,
+            "sha256": "5d0bb1b999759912ba17990f8da63113726ea342e294a09ef76cee1c9fcc233c"
+          }
+        ],
+        "nativeSchemaFingerprint": "24690f1f413cc531c8ed385851cd0e3f392af7ec470860ee3d0348d285133725",
+        "migrationHistory": [
+          {
+            "MigrationId": "20200514181226_AddActivityLog",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20200613202153_AddUsers",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20200728005145_AddDisplayPreferences",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20200905220533_FixDisplayPreferencesIndex",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20201004171403_AddMaxActiveSessions",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20201204223655_AddCustomDisplayPreferences",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20210320181425_AddIndexesAndCollations",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20210407110544_NullableCustomPrefValue",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20210814002109_AddDevices",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20221022080052_AddIndexActivityLogsDateCreated",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20230526173516_RemoveEasyPassword",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20230626233818_AddTrickplayInfos",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20230923170422_UserCastReceiver",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20240729140605_AddMediaSegments",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20240928082930_MarkSegmentProviderIdNonNullable",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20241020103111_LibraryDbMigration",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20241111131257_AddedCustomDataKey",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20241111135439_AddedCustomDataKeyKey",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20241112152323_FixAncestorIdConfig",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20241112232041_FixMediaStreams",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20241112234144_FixMediaStreams2",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20241113133548_EnforceUniqueItemValue",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20250202021306_FixedCollation",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20250204092455_MakeStartEndDateNullable",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20250214031148_ChannelIdGuid",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20250326065026_AddInheritedParentalRatingSubValue",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20250327101120_AddKeyframeData",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20250327171413_AddHdr10PlusFlag",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20250331182844_FixAttachmentMigration",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20250401142247_FixAncestors",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20250405075612_FixItemValuesIndices",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20250420000000_CreateNetworkConfiguration",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420010000_MigrateNetworkConfiguration",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420020000_MigrateMusicBrainzTimeout",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420030000_MigrateEncodingOptions",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420040000_RenameEnableGroupingIntoCollections",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420050000_DisableTranscodingThrottling",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420060000_CreateUserLoggingConfigFile",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420070000_MigrateActivityLogDb",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420080000_RemoveDuplicateExtras",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420090000_AddDefaultPluginRepository",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420100000_MigrateUserDb",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420110000_ReaddDefaultPluginRepository",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420120000_MigrateDisplayPreferencesDb",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420130000_RemoveDownloadImagesInAdvance",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420140000_MigrateAuthenticationDb",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420150000_FixPlaylistOwner",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420160000_AddDefaultCastReceivers",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420170000_UpdateDefaultPluginRepository",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420180000_FixAudioData",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420193000_MigrateLibraryDbCompatibilityCheck",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420200000_MigrateLibraryDb",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420210000_MoveExtractedFiles",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420230000_MoveTrickplayFiles",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420230000_RefreshInternalDateModified",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250421000000_MigrateKeyframeData",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250609115616_DetachUserDataInsteadOfDelete",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20250618010000_MigrateLibraryUserData",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250620180000_FixDates",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250622170802_BaseItemImageInfoDateModifiedNullable",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20250714044826_ResetJournalMode",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20250730215000_ReseedFolderFlag",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250913211637_AddProperParentChildRelationBaseItemWithCascade",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20250925203415_ExtendPeopleMapKey",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20251009200000_CleanMusicArtist",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260113102337_AddLinkedChildrenTable",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260113120000_MigrateLinkedChildren",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260113203012_ChangeOwnerIdToGuid",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260113230000_CleanupOrphanedExtras",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260113233000_AddForeignKeyToOwnerId",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260113233500_DropExtraIdsColumn",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260115120000_FixIncorrectOwnerIdRelationships",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260116114245_AddLatestItemsDateCreatedIndexes",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260118182305_AddIndicesToImageInfo",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260130232147_AddBaseItemNameIndex",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260206200000_FixLibrarySubtitleDownloadLanguages",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260206224832_IndexOptimizations",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260215201634_ChangePrimaryVersionIdToGuid",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260308123920_AddTypeCleanNameIndex",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260504075755_AddPartialIndexForItemCounts",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260508120000_MergeDuplicateMusicArtists",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260508130000_MergeDuplicatePeople",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260522092303_AddNormalizedUsername",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260522092304_UpdateNormalizedUsername",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260524120336_AddUniqueNormalizedUsernameIndex",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260525010000_CleanupOrphanedExternalData",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260531160000_DisableLegacyAuthorization",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260610120000_RefreshCleanNamesAndValues",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260722120000_RefreshForcedSortNames",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260723111547_AllowDuplicatePlaylistChildren",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260724185102_AddPrimaryVersionIdIndex",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260728170000_AddPeopleNameLowerIndex",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260728182152_AddPeopleItemMapCoveringIndex",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260729120000_RestorePlaylistChildrenFromMetadata",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260812050902_AddMediaStreamFilterIndex",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260815063607_RemoveOrphanedUserPermissionsAndPreferences",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260821120000_RecomputeSeriesPresentationKey",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260825200000_ConsolidateLocalizedUserViews",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260831100000_EnableLocalSimilarityProviders",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260908120000_RepairAlternateVersionLinks",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260910120000_MigrateRatingLevels",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260911120000_StripEmbeddedLinkedChildren",
+            "ProductVersion": "13.0.0.0"
+          }
+        ],
+        "sqliteSequence": [
+          {
+            "name": "ActivityLogs",
+            "seq": {
+              "$integer": "7"
+            }
+          },
+          {
+            "name": "CustomItemDisplayPreferences",
+            "seq": {
+              "$integer": "0"
+            }
+          },
+          {
+            "name": "Devices",
+            "seq": {
+              "$integer": "4"
+            }
+          },
+          {
+            "name": "ImageInfos",
+            "seq": {
+              "$integer": "0"
+            }
+          },
+          {
+            "name": "Permissions",
+            "seq": {
+              "$integer": "72"
+            }
+          },
+          {
+            "name": "Preferences",
+            "seq": {
+              "$integer": "39"
+            }
+          }
+        ],
+        "verified": true
+      }
+    },
+    {
+      "name": "date-296",
+      "observations": {
+        "before": {
+          "status": 200,
+          "contentType": "application/json; charset=utf-8",
+          "language": "en-US",
+          "body": {
+            "PlaybackPositionTicks": 0,
+            "PlayCount": 7,
+            "IsFavorite": false,
+            "LastPlayedDate": "1900-01-01T04:00:00.0000000Z",
+            "Played": false,
+            "Key": "22222222-2222-2222-2222-222222222222",
+            "ItemId": "22222222222222222222222222222222"
+          },
+          "rawText": "{\"PlaybackPositionTicks\":0,\"PlayCount\":7,\"IsFavorite\":false,\"LastPlayedDate\":\"1900-01-01T04:00:00.0000000Z\",\"Played\":false,\"Key\":\"22222222-2222-2222-2222-222222222222\",\"ItemId\":\"22222222222222222222222222222222\"}"
+        },
+        "source": "{\"LastPlayedDate\":\"1900-01-01T12:00:00\",\"PlayCount\":42,\"IsFavorite\":true}",
+        "response": {
+          "status": 200,
+          "contentType": "application/json; charset=utf-8",
+          "language": "en-US",
+          "body": {
+            "PlaybackPositionTicks": 0,
+            "PlayCount": 42,
+            "IsFavorite": true,
+            "LastPlayedDate": "1900-01-01T04:00:00.0000000Z",
+            "Played": false,
+            "Key": "22222222-2222-2222-2222-222222222222",
+            "ItemId": "22222222222222222222222222222222"
+          },
+          "rawText": "{\"PlaybackPositionTicks\":0,\"PlayCount\":42,\"IsFavorite\":true,\"LastPlayedDate\":\"1900-01-01T04:00:00.0000000Z\",\"Played\":false,\"Key\":\"22222222-2222-2222-2222-222222222222\",\"ItemId\":\"22222222222222222222222222222222\"}"
+        },
+        "after": {
+          "status": 200,
+          "contentType": "application/json; charset=utf-8",
+          "language": "en-US",
+          "body": {
+            "PlaybackPositionTicks": 0,
+            "PlayCount": 42,
+            "IsFavorite": true,
+            "LastPlayedDate": "1900-01-01T04:00:00.0000000Z",
+            "Played": false,
+            "Key": "22222222-2222-2222-2222-222222222222",
+            "ItemId": "22222222222222222222222222222222"
+          },
+          "rawText": "{\"PlaybackPositionTicks\":0,\"PlayCount\":42,\"IsFavorite\":true,\"LastPlayedDate\":\"1900-01-01T04:00:00.0000000Z\",\"Played\":false,\"Key\":\"22222222-2222-2222-2222-222222222222\",\"ItemId\":\"22222222222222222222222222222222\"}"
+        }
+      },
+      "nativeRows": [
+        {
+          "ItemId": "22222222-2222-2222-2222-222222222222",
+          "UserId": "5C6B5F77-BEA9-4A9A-98AA-FAE5909892B7",
+          "CustomDataKey": "22222222-2222-2222-2222-222222222222",
+          "AudioStreamIndex": null,
+          "IsFavorite": true,
+          "LastPlayedDate": "1900-01-01 04:00:00",
+          "Likes": null,
+          "PlayCount": 42,
+          "PlaybackPositionTicks": {
+            "$integer": "0"
+          },
+          "Played": false,
+          "Rating": null,
+          "RetentionDate": null,
+          "SubtitleStreamIndex": null
+        }
+      ],
+      "postgresRows": [
+        {
+          "ItemId": "22222222-2222-2222-2222-222222222222",
+          "UserId": "5C6B5F77-BEA9-4A9A-98AA-FAE5909892B7",
+          "CustomDataKey": "22222222-2222-2222-2222-222222222222",
+          "AudioStreamIndex": null,
+          "IsFavorite": true,
+          "LastPlayedDate": "1900-01-01 04:00:00",
+          "Likes": null,
+          "PlayCount": 42,
+          "PlaybackPositionTicks": {
+            "$integer": "0"
+          },
+          "Played": false,
+          "Rating": null,
+          "RetentionDate": null,
+          "SubtitleStreamIndex": null
+        }
+      ],
+      "transfer": {
+        "tables": [
+          {
+            "name": "AccessSchedules",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "ActivityLogs",
+            "rows": 4,
+            "sha256": "2a5f7743cd21a9b11f6fed08ea320b27f1eca69c75b0ad01a43f0f1786f3f78e"
+          },
+          {
+            "name": "AncestorIds",
+            "rows": 6,
+            "sha256": "b6f4e5b9d71178f49d0e15cdbd149f3240f7bdef302958b14f4e3db32384038f"
+          },
+          {
+            "name": "ApiKeys",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "AttachmentStreamInfos",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "BaseItemImageInfos",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "BaseItemMetadataFields",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "BaseItemProviders",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "BaseItemTrailerTypes",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "BaseItems",
+            "rows": 6,
+            "sha256": "5203c6d3fc40411c9aaf500fd337b80399d08000b8eabc0843c0d58466267318"
+          },
+          {
+            "name": "Chapters",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "CustomItemDisplayPreferences",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "DeviceOptions",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "Devices",
+            "rows": 2,
+            "sha256": "808a5f275602993a64f433bb6109227810778560b7991623e739965935094073"
+          },
+          {
+            "name": "DisplayPreferences",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "HomeSection",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "ImageInfos",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "ItemDisplayPreferences",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "ItemValues",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "ItemValuesMap",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "KeyframeData",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "LinkedChildren",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "MediaSegments",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "MediaStreamInfos",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "PeopleBaseItemMap",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "Peoples",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "Permissions",
+            "rows": 48,
+            "sha256": "05a1db3594f9059c79e2925841195070eb9d6f2f2b290bc422fe122eee2a6921"
+          },
+          {
+            "name": "Preferences",
+            "rows": 26,
+            "sha256": "8f3964a193c943e39ac2fc88fc86925bd15c77ae609678d10ff8e8aa5623ee9d"
+          },
+          {
+            "name": "TrickplayInfos",
+            "rows": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "name": "UserData",
+            "rows": 1,
+            "sha256": "daddb3581b74f20086d20356b754aeb6f65d08e6c1915cb6eca12e929e4e2fb1"
+          },
+          {
+            "name": "Users",
+            "rows": 2,
+            "sha256": "aa91d33c77149f6aa8524ebce268f7b486d4f97998615436d4b9a77e86d975de"
+          }
+        ],
+        "nativeSchemaFingerprint": "24690f1f413cc531c8ed385851cd0e3f392af7ec470860ee3d0348d285133725",
+        "migrationHistory": [
+          {
+            "MigrationId": "20200514181226_AddActivityLog",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20200613202153_AddUsers",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20200728005145_AddDisplayPreferences",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20200905220533_FixDisplayPreferencesIndex",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20201004171403_AddMaxActiveSessions",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20201204223655_AddCustomDisplayPreferences",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20210320181425_AddIndexesAndCollations",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20210407110544_NullableCustomPrefValue",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20210814002109_AddDevices",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20221022080052_AddIndexActivityLogsDateCreated",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20230526173516_RemoveEasyPassword",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20230626233818_AddTrickplayInfos",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20230923170422_UserCastReceiver",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20240729140605_AddMediaSegments",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20240928082930_MarkSegmentProviderIdNonNullable",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20241020103111_LibraryDbMigration",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20241111131257_AddedCustomDataKey",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20241111135439_AddedCustomDataKeyKey",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20241112152323_FixAncestorIdConfig",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20241112232041_FixMediaStreams",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20241112234144_FixMediaStreams2",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20241113133548_EnforceUniqueItemValue",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20250202021306_FixedCollation",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20250204092455_MakeStartEndDateNullable",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20250214031148_ChannelIdGuid",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20250326065026_AddInheritedParentalRatingSubValue",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20250327101120_AddKeyframeData",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20250327171413_AddHdr10PlusFlag",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20250331182844_FixAttachmentMigration",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20250401142247_FixAncestors",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20250405075612_FixItemValuesIndices",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20250420000000_CreateNetworkConfiguration",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420010000_MigrateNetworkConfiguration",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420020000_MigrateMusicBrainzTimeout",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420030000_MigrateEncodingOptions",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420040000_RenameEnableGroupingIntoCollections",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420050000_DisableTranscodingThrottling",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420060000_CreateUserLoggingConfigFile",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420070000_MigrateActivityLogDb",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420080000_RemoveDuplicateExtras",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420090000_AddDefaultPluginRepository",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420100000_MigrateUserDb",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420110000_ReaddDefaultPluginRepository",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420120000_MigrateDisplayPreferencesDb",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420130000_RemoveDownloadImagesInAdvance",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420140000_MigrateAuthenticationDb",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420150000_FixPlaylistOwner",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420160000_AddDefaultCastReceivers",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420170000_UpdateDefaultPluginRepository",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420180000_FixAudioData",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420193000_MigrateLibraryDbCompatibilityCheck",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420200000_MigrateLibraryDb",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420210000_MoveExtractedFiles",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420230000_MoveTrickplayFiles",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250420230000_RefreshInternalDateModified",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250421000000_MigrateKeyframeData",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250609115616_DetachUserDataInsteadOfDelete",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20250618010000_MigrateLibraryUserData",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250620180000_FixDates",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250622170802_BaseItemImageInfoDateModifiedNullable",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20250714044826_ResetJournalMode",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20250730215000_ReseedFolderFlag",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20250913211637_AddProperParentChildRelationBaseItemWithCascade",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20250925203415_ExtendPeopleMapKey",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20251009200000_CleanMusicArtist",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260113102337_AddLinkedChildrenTable",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260113120000_MigrateLinkedChildren",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260113203012_ChangeOwnerIdToGuid",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260113230000_CleanupOrphanedExtras",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260113233000_AddForeignKeyToOwnerId",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260113233500_DropExtraIdsColumn",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260115120000_FixIncorrectOwnerIdRelationships",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260116114245_AddLatestItemsDateCreatedIndexes",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260118182305_AddIndicesToImageInfo",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260130232147_AddBaseItemNameIndex",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260206200000_FixLibrarySubtitleDownloadLanguages",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260206224832_IndexOptimizations",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260215201634_ChangePrimaryVersionIdToGuid",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260308123920_AddTypeCleanNameIndex",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260504075755_AddPartialIndexForItemCounts",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260508120000_MergeDuplicateMusicArtists",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260508130000_MergeDuplicatePeople",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260522092303_AddNormalizedUsername",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260522092304_UpdateNormalizedUsername",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260524120336_AddUniqueNormalizedUsernameIndex",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260525010000_CleanupOrphanedExternalData",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260531160000_DisableLegacyAuthorization",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260610120000_RefreshCleanNamesAndValues",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260722120000_RefreshForcedSortNames",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260723111547_AllowDuplicatePlaylistChildren",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260724185102_AddPrimaryVersionIdIndex",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260728170000_AddPeopleNameLowerIndex",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260728182152_AddPeopleItemMapCoveringIndex",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260729120000_RestorePlaylistChildrenFromMetadata",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260812050902_AddMediaStreamFilterIndex",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260815063607_RemoveOrphanedUserPermissionsAndPreferences",
+            "ProductVersion": "10.0.11"
+          },
+          {
+            "MigrationId": "20260821120000_RecomputeSeriesPresentationKey",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260825200000_ConsolidateLocalizedUserViews",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260831100000_EnableLocalSimilarityProviders",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260908120000_RepairAlternateVersionLinks",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260910120000_MigrateRatingLevels",
+            "ProductVersion": "13.0.0.0"
+          },
+          {
+            "MigrationId": "20260911120000_StripEmbeddedLinkedChildren",
+            "ProductVersion": "13.0.0.0"
+          }
+        ],
+        "sqliteSequence": [
+          {
+            "name": "ActivityLogs",
+            "seq": {
+              "$integer": "7"
+            }
+          },
+          {
+            "name": "CustomItemDisplayPreferences",
+            "seq": {
+              "$integer": "0"
+            }
+          },
+          {
+            "name": "Devices",
+            "seq": {
+              "$integer": "4"
+            }
+          },
+          {
+            "name": "ImageInfos",
+            "seq": {
+              "$integer": "0"
+            }
+          },
+          {
+            "name": "Permissions",
+            "seq": {
+              "$integer": "72"
+            }
+          },
+          {
+            "name": "Preferences",
+            "seq": {
+              "$integer": "39"
+            }
+          }
+        ],
+        "verified": true
+      }
+    }
+  ],
+  "processes": [
+    {
+      "label": "reference",
+      "pid": 20940,
+      "port": 56422,
+      "exitCode": 0,
+      "signalCode": null,
+      "stopped": true
+    },
+    {
+      "label": "date-295-native-takeover",
+      "pid": 27744,
+      "port": 58678,
+      "exitCode": 0,
+      "signalCode": null,
+      "stopped": true
+    },
+    {
+      "label": "date-296-native-takeover",
+      "pid": 27192,
+      "port": 61344,
+      "exitCode": 0,
+      "signalCode": null,
+      "stopped": true
+    }
+  ],
+  "cleanup": {
+    "postgresSchemas": [],
+    "nativeStopped": true
+  },
+  "phaseAcceptance": false,
+  "historicalShanghaiHttpVerified": false,
+  "linuxVerified": false,
+  "limitations": [
+    "Current real Windows/Taipei HTTP only; no global timezone changes.",
+    "Shanghai date-296 remains independently open; Linux runtime is unavailable on this host.",
+    "Synthetic fixture paths; this is the UserData chain, not full media/client acceptance."
+  ]
+}

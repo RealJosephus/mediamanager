@@ -1,0 +1,93 @@
+{
+  "nativeSha256": "76197a4a81654e96af5f5a2e6caed06e7f719720cd7fce49f42882ffea58b23a",
+  "inputSha256": "e72547c122c48d708bfb0dfe63cf8e8c246709f91a3bb1eeae0ce3d3cb666a17",
+  "sources": [
+    {
+      "path": "src/Jellyfin.Drawing.Skia/SplashscreenBuilder.cs",
+      "sha256": "de2f83bc756e226bb69c729a6e79059095883f00b716989555b9bc1f12e258cf",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "src/Jellyfin.Drawing.Skia/SkiaEncoder.cs",
+      "sha256": "8c3c61b8be155b57460374c2bb7c7fba3cdddf8d3db4c75e4f8f9e113c4c83bc",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "src/Jellyfin.Drawing.Skia/SkiaHelper.cs",
+      "sha256": "04fab405c909ed6a4e4525607ab976afc57348dcd3a84649dda1513ac9af5362",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "src/Jellyfin.Drawing.Skia/StripCollageBuilder.cs",
+      "sha256": "1478548f7646c5f437d9b3a7fd8e96e3d30d7743b60b9b1a02469d3f2f45b840",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Drawing/IImageEncoder.cs",
+      "sha256": "537a05ae93cf7914a8cceed22cc621514db91cfaba8708fe610968ac437f856f",
+      "designatedSourceMatchesOracleBuildCopy": true
+    }
+  ],
+  "oracleSources": [
+    {
+      "name": "Oracle.csproj",
+      "sha256": "7250b2274de52722bf84b4cd39c8455e3b55c6ae31497b9cb2ccc01bd4e81069"
+    },
+    {
+      "name": "Directory.Build.props",
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    },
+    {
+      "name": "Program.cs",
+      "sha256": "fcd435a07cd7967afbbfaab11c51b40532d959de586c5e53fa103943259a378b"
+    }
+  ],
+  "oracleAssembly": {
+    "filename": "D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6\\native\\bin\\Release\\net10.0\\Oracle.dll",
+    "available": true,
+    "kind": "file",
+    "bytes": 35328,
+    "sha256": "cc26b2d2654a737797d266496d32442b45953474678d2956d198236819cf114a"
+  },
+  "jellyfinDll": {
+    "filename": "D:/mediamanager-validation/20261005/jellyfin-baseline/source/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll",
+    "available": true,
+    "kind": "file",
+    "bytes": 506368,
+    "sha256": "a43fa24c44677e579fcec79d637789b9f36633d02e5434e76a0e03fa13027767"
+  },
+  "dotnet": {
+    "filename": "D:\\mediamanager\\.tools\\dotnet\\dotnet.exe",
+    "available": true,
+    "kind": "file",
+    "bytes": 167208,
+    "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6"
+  },
+  "build": {
+    "args": [
+      "build",
+      "D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6\\native\\project\\Oracle.csproj",
+      "-c",
+      "Release",
+      "--nologo",
+      "-v",
+      "minimal",
+      "-p:BaseOutputPath=D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6\\native\\bin\\",
+      "-p:BaseIntermediateOutputPath=D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6\\native\\obj\\"
+    ],
+    "status": 0,
+    "signal": null
+  },
+  "process": {
+    "args": [
+      "D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6\\native\\bin\\Release\\net10.0\\Oracle.dll",
+      "D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6",
+      "D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6/input.json",
+      "D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6\\native/native.json"
+    ],
+    "status": 0,
+    "signal": null
+  },
+  "completeBuildInputClosure": false,
+  "phaseAcceptance": false
+}

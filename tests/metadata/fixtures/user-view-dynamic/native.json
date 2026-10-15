@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 1,
+  "sourceBindings": [
+    {
+      "path": ".agent-docs/evidence/user-view-dynamic-native-v2/Program.cs",
+      "sha256": "9379dc9d499a746e794f342969c4321c6d7e5d80875da645c5711fb708cc2c2a",
+      "bytes": 5332
+    },
+    {
+      "path": ".agent-docs/evidence/user-view-dynamic-native-v2/Oracle.csproj",
+      "sha256": "f5aceeed752306180d41685b345fbab2f4faf42aa817aa3f8407882ea78a52e3",
+      "bytes": 394
+    },
+    {
+      "path": ".agent-docs/evidence/user-view-dynamic-native-v2/stdout.txt",
+      "sha256": "183f791dae21aa7df07959c2e19870a55ca753c280f01379d50563ed17a6f6ff",
+      "bytes": 645
+    },
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/Emby.Server.Implementations/Images/BaseDynamicImageProvider.cs",
+      "sha256": "5ae8c13987a0f86202ed4c501f2d07a5a37a69a625d8eb1ad24c7e80327b4da7",
+      "bytes": 11108
+    },
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/Emby.Server.Implementations/Images/DynamicImageProvider.cs",
+      "sha256": "6482437c4781991e9bedca5350dd7ea00884d7fd71c00b416b49d7ceef9726d1",
+      "bytes": 4551
+    },
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/Emby.Server.Implementations/IO/ManagedFileSystem.cs",
+      "sha256": "280ea08cf13065d8cd3790edf551b28ddfc9f352f4758d4fe0e62a55dbe0b14e",
+      "bytes": 27461
+    },
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/MediaBrowser.Controller/Entities/Folder.cs",
+      "sha256": "d5f227d462ce3c2df0d5a45d912778427f87321fc9d6e13d863ec28bb639e0c1",
+      "bytes": 83390
+    },
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/Jellyfin.Server/bin/Release/net10.0/Emby.Server.Implementations.dll",
+      "sha256": "c63a43b6d4dc0c82f59b1d5a1c71788738f3629fdf60e01993de606b83559b1a",
+      "bytes": 1673728
+    }
+  ],
+  "verified": {
+    "nativeProcessExit": 0,
+    "actualFrozenDynamicProvider": true,
+    "actualManagedFileSystem": true,
+    "controlledSourceQuery": true,
+    "controlledCollageProcessor": true
+  },
+  "output": [
+    {
+      "name": "missing-managed-primary",
+      "changed": true,
+      "date": "0001-01-01T00:00:00",
+      "QueryCount": 0
+    },
+    {
+      "name": "missing-min-managed-primary",
+      "changed": false,
+      "date": "0001-01-01T00:00:00",
+      "QueryCount": 0
+    },
+    {
+      "name": "cancelled-empty-query",
+      "updateType": 1,
+      "QueryCount": 1,
+      "collageCalls": 0,
+      "saveCalls": 0
+    },
+    {
+      "name": "cancelled-failing-query",
+      "error": "InvalidOperationException",
+      "Message": "Controlled actual query failure",
+      "QueryCount": 2,
+      "collageCalls": 0,
+      "saveCalls": 0
+    },
+    {
+      "name": "cancelled-local-source",
+      "error": "TaskCanceledException",
+      "QueryCount": 3,
+      "collageCalls": 1,
+      "saveCalls": 1
+    }
+  ],
+  "limitations": "Controlled UserView overrides only GetItemsInternal and internal path. Collage processor and SaveImage are interface proxies. Query errors and cancellation ordering are observed in the actual frozen provider; real collage pixels, real SaveImage persistence and complete host/native refresh cancellation or races are not verified."
+}

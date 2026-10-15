@@ -1,0 +1,850 @@
+{
+  "source": "Frozen Jellyfin BaseItem.GetSortName, default ServerConfiguration, ICU4N 60.1.0-alpha.356",
+  "oracleSha256": "742fbcf9e999a97fba47b11e1e900b9701d109dec86042288646453b5e0cd41e",
+  "cases": [
+    {
+      "input": "Hello!",
+      "expected": "hello!"
+    },
+    {
+      "input": "Hello！",
+      "expected": "hello"
+    },
+    {
+      "input": "A,B",
+      "expected": "ab"
+    },
+    {
+      "input": "A，B",
+      "expected": "ab"
+    },
+    {
+      "input": "A!B",
+      "expected": "a!b"
+    },
+    {
+      "input": "A！B",
+      "expected": "ab"
+    },
+    {
+      "input": "A？B",
+      "expected": "ab"
+    },
+    {
+      "input": "A；B",
+      "expected": "ab"
+    },
+    {
+      "input": "A：B",
+      "expected": "ab"
+    },
+    {
+      "input": "A。B",
+      "expected": "ab"
+    },
+    {
+      "input": "A、B",
+      "expected": "ab"
+    },
+    {
+      "input": "A·B",
+      "expected": "ab"
+    },
+    {
+      "input": "A…B",
+      "expected": "ab"
+    },
+    {
+      "input": "A—B",
+      "expected": "ab"
+    },
+    {
+      "input": "A–B",
+      "expected": "ab"
+    },
+    {
+      "input": "A“B”",
+      "expected": "ab"
+    },
+    {
+      "input": "A「B」",
+      "expected": "ab"
+    },
+    {
+      "input": "A《B》",
+      "expected": "a<<b>>"
+    },
+    {
+      "input": "中文，東京！",
+      "expected": "zhong wen dong jing"
+    },
+    {
+      "input": "中文,東京!",
+      "expected": "zhong wen dong jing"
+    },
+    {
+      "input": "中文!東京",
+      "expected": "zhong wen dong jing"
+    },
+    {
+      "input": "中文東京",
+      "expected": "zhong wen dong jing"
+    },
+    {
+      "input": "中!文",
+      "expected": "zhong wen"
+    },
+    {
+      "input": "中！文",
+      "expected": "zhong wen"
+    },
+    {
+      "input": "中—文",
+      "expected": "zhongwen"
+    },
+    {
+      "input": "中…文",
+      "expected": "zhongwen"
+    },
+    {
+      "input": "A中B",
+      "expected": "a zhongb"
+    },
+    {
+      "input": "中,A",
+      "expected": "zhonga"
+    },
+    {
+      "input": "中，A",
+      "expected": "zhonga"
+    },
+    {
+      "input": "Hello! 中",
+      "expected": "hello zhong"
+    },
+    {
+      "input": "é!中",
+      "expected": "e zhong"
+    },
+    {
+      "input": "é!",
+      "expected": "e!"
+    },
+    {
+      "input": "©",
+      "expected": "c"
+    },
+    {
+      "input": "A©B",
+      "expected": "acb"
+    },
+    {
+      "input": "™",
+      "expected": "™"
+    },
+    {
+      "input": "®",
+      "expected": "r"
+    },
+    {
+      "input": "℠",
+      "expected": "℠"
+    },
+    {
+      "input": "中©文",
+      "expected": "zhongcwen"
+    },
+    {
+      "input": "￢",
+      "expected": "¬"
+    },
+    {
+      "input": "￠",
+      "expected": "¢"
+    },
+    {
+      "input": "￡",
+      "expected": "£"
+    },
+    {
+      "input": "￥",
+      "expected": "¥"
+    },
+    {
+      "input": "￦",
+      "expected": "₩"
+    },
+    {
+      "input": "＄",
+      "expected": "$"
+    },
+    {
+      "input": "＃",
+      "expected": ""
+    },
+    {
+      "input": "＋",
+      "expected": "+"
+    },
+    {
+      "input": "＄中",
+      "expected": "$zhong"
+    },
+    {
+      "input": "€",
+      "expected": "€"
+    },
+    {
+      "input": "±",
+      "expected": "±"
+    },
+    {
+      "input": "×",
+      "expected": ""
+    },
+    {
+      "input": "÷",
+      "expected": ""
+    },
+    {
+      "input": "←",
+      "expected": "←"
+    },
+    {
+      "input": "♥",
+      "expected": "♥"
+    },
+    {
+      "input": "👩🏽‍💻",
+      "expected": "👩🏽‍💻"
+    },
+    {
+      "input": "中文👩東京",
+      "expected": "zhong wen👩dong jing"
+    },
+    {
+      "input": "１",
+      "expected": "0000000001"
+    },
+    {
+      "input": "２",
+      "expected": "0000000002"
+    },
+    {
+      "input": "𝟚",
+      "expected": "𝟚"
+    },
+    {
+      "input": "2𝟚3",
+      "expected": "0000000002𝟚0000000003"
+    },
+    {
+      "input": "中１２",
+      "expected": "zhong0000000012"
+    },
+    {
+      "input": "中文（東京）",
+      "expected": "zhong wen dong jing"
+    },
+    {
+      "input": "中文[東京]",
+      "expected": "zhong wen dong jing"
+    },
+    {
+      "input": "中文/東京",
+      "expected": "zhong wendong jing"
+    },
+    {
+      "input": "中文_東京",
+      "expected": "zhong wendong jing"
+    },
+    {
+      "input": "中文+東京",
+      "expected": "zhong wen dong jing"
+    },
+    {
+      "input": "中文＋東京",
+      "expected": "zhong wen+dong jing"
+    },
+    {
+      "input": "é!a",
+      "expected": "e!a"
+    },
+    {
+      "input": "e!a",
+      "expected": "e!a"
+    },
+    {
+      "input": "中！",
+      "expected": "zhong"
+    },
+    {
+      "input": "！中",
+      "expected": " zhong"
+    },
+    {
+      "input": "中，",
+      "expected": "zhong"
+    },
+    {
+      "input": "，中",
+      "expected": " zhong"
+    },
+    {
+      "input": "中＿文",
+      "expected": "zhongwen"
+    },
+    {
+      "input": "😀，😀",
+      "expected": "😀😀"
+    },
+    {
+      "input": "Alpha 中文",
+      "expected": "alpha zhong wen"
+    },
+    {
+      "input": "東京",
+      "expected": "dong jing"
+    },
+    {
+      "input": "中文。東京",
+      "expected": "zhong wendong jing"
+    },
+    {
+      "input": "中文、東京",
+      "expected": "zhong wen dong jing"
+    },
+    {
+      "input": "中𠀀文",
+      "expected": "zhong he wen"
+    },
+    {
+      "input": "𠀀",
+      "expected": "he"
+    },
+    {
+      "input": "𠮷",
+      "expected": "𠮷"
+    },
+    {
+      "input": "张国荣",
+      "expected": "zhang guo rong"
+    },
+    {
+      "input": "藏文",
+      "expected": "zang wen"
+    },
+    {
+      "input": "重庆",
+      "expected": "chong qing"
+    },
+    {
+      "input": "重慶",
+      "expected": "zhong qing"
+    },
+    {
+      "input": "沈阳",
+      "expected": "shen yang"
+    },
+    {
+      "input": "秘鲁",
+      "expected": "bi lu"
+    },
+    {
+      "input": "语言",
+      "expected": "yu yan"
+    },
+    {
+      "input": "日本語",
+      "expected": "ri ben yu"
+    },
+    {
+      "input": "中ｰ",
+      "expected": "zhong ー"
+    },
+    {
+      "input": "中ﾞ",
+      "expected": "zhong"
+    },
+    {
+      "input": "中￨",
+      "expected": "zhong│"
+    },
+    {
+      "input": "中́文",
+      "expected": "zhong wen"
+    },
+    {
+      "input": "中߽文",
+      "expected": "zhong߽wen"
+    },
+    {
+      "input": "中゙文",
+      "expected": "zhong wen"
+    },
+    {
+      "input": "㈠中",
+      "expected": "yi zhong"
+    },
+    {
+      "input": "中㋀",
+      "expected": "zhong1yue"
+    },
+    {
+      "input": "中㍿",
+      "expected": "zhong zhu shi hui she"
+    },
+    {
+      "input": "ｶﾞ",
+      "expected": "ga"
+    },
+    {
+      "input": "ｶﾟ",
+      "expected": "ka"
+    },
+    {
+      "input": "ﾊﾟ",
+      "expected": "pa"
+    },
+    {
+      "input": "ｿﾞ",
+      "expected": "zo"
+    },
+    {
+      "input": "ｳﾞ",
+      "expected": "vu"
+    },
+    {
+      "input": "ガ",
+      "expected": "ga"
+    },
+    {
+      "input": "ガ",
+      "expected": "ga"
+    },
+    {
+      "input": "ガ̴",
+      "expected": "ga"
+    },
+    {
+      "input": "ｶﾞ̴",
+      "expected": "ga"
+    },
+    {
+      "input": "ガカ",
+      "expected": "gaka"
+    },
+    {
+      "input": "きャ",
+      "expected": "kya"
+    },
+    {
+      "input": "キゃ",
+      "expected": "ki~ya"
+    },
+    {
+      "input": "キャ",
+      "expected": "kya"
+    },
+    {
+      "input": "キャヽ",
+      "expected": "kyakya"
+    },
+    {
+      "input": "シヽ",
+      "expected": "shihi"
+    },
+    {
+      "input": "シヾ",
+      "expected": "shiji"
+    },
+    {
+      "input": "ヅヾ",
+      "expected": "dzudzu"
+    },
+    {
+      "input": "ヂヾ",
+      "expected": "djiji"
+    },
+    {
+      "input": "ヤヽ",
+      "expected": "yaa"
+    },
+    {
+      "input": "ャヽ",
+      "expected": "~yaa"
+    },
+    {
+      "input": "ヽ",
+      "expected": ""
+    },
+    {
+      "input": "ぱ",
+      "expected": "ha"
+    },
+    {
+      "input": "ぱ",
+      "expected": "pa"
+    },
+    {
+      "input": "ぱヽ",
+      "expected": "ha"
+    },
+    {
+      "input": "ッぱ",
+      "expected": "pha"
+    },
+    {
+      "input": "ッわ゙",
+      "expected": "wva"
+    },
+    {
+      "input": "ッん",
+      "expected": "~tsun"
+    },
+    {
+      "input": "っカ",
+      "expected": "kka"
+    },
+    {
+      "input": "っガ",
+      "expected": "~tsuga"
+    },
+    {
+      "input": "ｯﾔ",
+      "expected": "yya"
+    },
+    {
+      "input": "っち",
+      "expected": "tchi"
+    },
+    {
+      "input": "ヴァ",
+      "expected": "vu~a"
+    },
+    {
+      "input": "ｳﾞｧ",
+      "expected": "vu~a"
+    },
+    {
+      "input": "カタカナ",
+      "expected": "katakana"
+    },
+    {
+      "input": "ひらがな",
+      "expected": "hiragana"
+    },
+    {
+      "input": "ゝ゛",
+      "expected": "゛"
+    },
+    {
+      "input": "ヽ゛",
+      "expected": ""
+    },
+    {
+      "input": "ギャ",
+      "expected": "gya"
+    },
+    {
+      "input": "Καλημέρα",
+      "expected": "kalemera"
+    },
+    {
+      "input": "Γειά",
+      "expected": "geia"
+    },
+    {
+      "input": "αυ",
+      "expected": "au"
+    },
+    {
+      "input": "ηυ",
+      "expected": "ey"
+    },
+    {
+      "input": "αἁ",
+      "expected": "haa"
+    },
+    {
+      "input": "αβ̔",
+      "expected": "abh"
+    },
+    {
+      "input": "γγ",
+      "expected": "ng"
+    },
+    {
+      "input": "ϓ",
+      "expected": "y"
+    },
+    {
+      "input": "ϔ",
+      "expected": "y"
+    },
+    {
+      "input": "ᾃ",
+      "expected": "hai"
+    },
+    {
+      "input": "Ῥόδος",
+      "expected": "rhodos"
+    },
+    {
+      "input": "Привет",
+      "expected": "privet"
+    },
+    {
+      "input": "щука",
+      "expected": "suka"
+    },
+    {
+      "input": "Москва",
+      "expected": "moskva"
+    },
+    {
+      "input": "й",
+      "expected": "i"
+    },
+    {
+      "input": "Й",
+      "expected": "j"
+    },
+    {
+      "input": "العربية",
+      "expected": "alʿrbyt"
+    },
+    {
+      "input": "أَلْف",
+      "expected": "aalf"
+    },
+    {
+      "input": "بَاب",
+      "expected": "bab"
+    },
+    {
+      "input": "لغة عربية",
+      "expected": "lght ʿrbyt"
+    },
+    {
+      "input": "Հայերեն",
+      "expected": "hayeren"
+    },
+    {
+      "input": "և",
+      "expected": "ev"
+    },
+    {
+      "input": "ქართული",
+      "expected": "kartuli"
+    },
+    {
+      "input": "ދިވެހި",
+      "expected": "divehi"
+    },
+    {
+      "input": "עברית",
+      "expected": "bryt"
+    },
+    {
+      "input": "שלום",
+      "expected": "slwm"
+    },
+    {
+      "input": "﬩",
+      "expected": "+"
+    },
+    {
+      "input": "﬩中",
+      "expected": "+zhong"
+    },
+    {
+      "input": "ְ中",
+      "expected": "e zhong"
+    },
+    {
+      "input": "中ּ中",
+      "expected": "zhong zhong"
+    },
+    {
+      "input": "가나다",
+      "expected": "ganada"
+    },
+    {
+      "input": "서울",
+      "expected": "seoul"
+    },
+    {
+      "input": "갂",
+      "expected": "gakk"
+    },
+    {
+      "input": "한글",
+      "expected": "hangeul"
+    },
+    {
+      "input": "ㅀ",
+      "expected": "ㅀ"
+    },
+    {
+      "input": "ㅄ",
+      "expected": "ㅄ"
+    },
+    {
+      "input": "㈝",
+      "expected": "㈝"
+    },
+    {
+      "input": "㉾",
+      "expected": "㉾"
+    },
+    {
+      "input": "각",
+      "expected": "gag"
+    },
+    {
+      "input": "ܐܒ",
+      "expected": "ܐܒ"
+    },
+    {
+      "input": "မြန်မာ",
+      "expected": "မြနမာ"
+    },
+    {
+      "input": "Crème brûlée",
+      "expected": "creme brulee"
+    },
+    {
+      "input": "The Movie-12",
+      "expected": "movie0000000012"
+    },
+    {
+      "input": "﻿中文",
+      "expected": "﻿zhong wen"
+    },
+    {
+      "input": "中文\u0000東京",
+      "expected": "zhong wen\u0000dong jing"
+    },
+    {
+      "input": "中文  東京",
+      "expected": "zhong wen  dong jing"
+    },
+    {
+      "input": "𐗉",
+      "expected": "𐗉"
+    },
+    {
+      "input": "𐗤",
+      "expected": "𐗤"
+    },
+    {
+      "input": "𑎃",
+      "expected": "𑎃"
+    },
+    {
+      "input": "𑎅",
+      "expected": "𑎅"
+    },
+    {
+      "input": "𑎎",
+      "expected": "𑎎"
+    },
+    {
+      "input": "𑎑",
+      "expected": "𑎑"
+    },
+    {
+      "input": "𑏅",
+      "expected": "𑏅"
+    },
+    {
+      "input": "𑏇",
+      "expected": "𑏇"
+    },
+    {
+      "input": "𑏈",
+      "expected": "𑏈"
+    },
+    {
+      "input": "𑤸",
+      "expected": "𑤸"
+    },
+    {
+      "input": "𖄡",
+      "expected": "𖄡"
+    },
+    {
+      "input": "𖄢",
+      "expected": "𖄢"
+    },
+    {
+      "input": "𖄣",
+      "expected": "𖄣"
+    },
+    {
+      "input": "𖄤",
+      "expected": "𖄤"
+    },
+    {
+      "input": "𖄥",
+      "expected": "𖄥"
+    },
+    {
+      "input": "𖄦",
+      "expected": "𖄦"
+    },
+    {
+      "input": "𖄧",
+      "expected": "𖄧"
+    },
+    {
+      "input": "𖄨",
+      "expected": "𖄨"
+    },
+    {
+      "input": "𖵨",
+      "expected": "𖵨"
+    },
+    {
+      "input": "𖵩",
+      "expected": "𖵩"
+    },
+    {
+      "input": "𖵪",
+      "expected": "𖵪"
+    }
+  ],
+  "knownDifferences": [
+    {
+      "input": "हिन्दी",
+      "native": "hindi",
+      "candidate": "hindii"
+    },
+    {
+      "input": "தமிழ்",
+      "native": "tamil",
+      "candidate": "tmilll"
+    },
+    {
+      "input": "ภาษาไทย",
+      "native": "phasa thiy",
+      "candidate": "phaasaaaithy"
+    },
+    {
+      "input": "ㄇ",
+      "native": "m1",
+      "candidate": "m"
+    },
+    {
+      "input": "क",
+      "native": "ka",
+      "candidate": "k"
+    },
+    {
+      "input": "ँ",
+      "native": "m",
+      "candidate": "n"
+    }
+  ]
+}

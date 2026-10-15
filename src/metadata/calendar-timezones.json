@@ -1,0 +1,220 @@
+{
+  "platform": "Microsoft Windows 10.0.26300",
+  "timeZones": [
+    {
+      "id": "Dateline Standard Time",
+      "ianaId": "Etc/GMT\u002B12",
+      "offsetMinutes": -720
+    },
+    {
+      "id": "UTC-11",
+      "ianaId": "Etc/GMT\u002B11",
+      "offsetMinutes": -660
+    },
+    {
+      "id": "Hawaiian Standard Time",
+      "ianaId": "Pacific/Honolulu",
+      "offsetMinutes": -600
+    },
+    {
+      "id": "Marquesas Standard Time",
+      "ianaId": "Pacific/Marquesas",
+      "offsetMinutes": -570
+    },
+    {
+      "id": "UTC-09",
+      "ianaId": "Etc/GMT\u002B9",
+      "offsetMinutes": -540
+    },
+    {
+      "id": "UTC-08",
+      "ianaId": "Etc/GMT\u002B8",
+      "offsetMinutes": -480
+    },
+    {
+      "id": "US Mountain Standard Time",
+      "ianaId": "America/Phoenix",
+      "offsetMinutes": -420
+    },
+    {
+      "id": "Central America Standard Time",
+      "ianaId": "America/Guatemala",
+      "offsetMinutes": -360
+    },
+    {
+      "id": "Canada Central Standard Time",
+      "ianaId": "America/Regina",
+      "offsetMinutes": -360
+    },
+    {
+      "id": "SA Pacific Standard Time",
+      "ianaId": "America/Bogota",
+      "offsetMinutes": -300
+    },
+    {
+      "id": "SA Western Standard Time",
+      "ianaId": "America/La_Paz",
+      "offsetMinutes": -240
+    },
+    {
+      "id": "SA Eastern Standard Time",
+      "ianaId": "America/Cayenne",
+      "offsetMinutes": -180
+    },
+    {
+      "id": "UTC-02",
+      "ianaId": "Etc/GMT\u002B2",
+      "offsetMinutes": -120
+    },
+    {
+      "id": "Cape Verde Standard Time",
+      "ianaId": "Atlantic/Cape_Verde",
+      "offsetMinutes": -60
+    },
+    {
+      "id": "UTC",
+      "ianaId": "Etc/UTC",
+      "offsetMinutes": 0
+    },
+    {
+      "id": "Greenwich Standard Time",
+      "ianaId": "Atlantic/Reykjavik",
+      "offsetMinutes": 0
+    },
+    {
+      "id": "W. Central Africa Standard Time",
+      "ianaId": "Africa/Lagos",
+      "offsetMinutes": 60
+    },
+    {
+      "id": "South Africa Standard Time",
+      "ianaId": "Africa/Johannesburg",
+      "offsetMinutes": 120
+    },
+    {
+      "id": "E. Africa Standard Time",
+      "ianaId": "Africa/Nairobi",
+      "offsetMinutes": 180
+    },
+    {
+      "id": "Arab Standard Time",
+      "ianaId": "Asia/Riyadh",
+      "offsetMinutes": 180
+    },
+    {
+      "id": "Georgian Standard Time",
+      "ianaId": "Asia/Tbilisi",
+      "offsetMinutes": 240
+    },
+    {
+      "id": "Arabian Standard Time",
+      "ianaId": "Asia/Dubai",
+      "offsetMinutes": 240
+    },
+    {
+      "id": "Afghanistan Standard Time",
+      "ianaId": "Asia/Kabul",
+      "offsetMinutes": 270
+    },
+    {
+      "id": "West Asia Standard Time",
+      "ianaId": "Asia/Tashkent",
+      "offsetMinutes": 300
+    },
+    {
+      "id": "Sri Lanka Standard Time",
+      "ianaId": "Asia/Colombo",
+      "offsetMinutes": 330
+    },
+    {
+      "id": "India Standard Time",
+      "ianaId": "Asia/Calcutta",
+      "offsetMinutes": 330
+    },
+    {
+      "id": "Nepal Standard Time",
+      "ianaId": "Asia/Katmandu",
+      "offsetMinutes": 345
+    },
+    {
+      "id": "Central Asia Standard Time",
+      "ianaId": "Asia/Almaty",
+      "offsetMinutes": 360
+    },
+    {
+      "id": "Myanmar Standard Time",
+      "ianaId": "Asia/Rangoon",
+      "offsetMinutes": 390
+    },
+    {
+      "id": "SE Asia Standard Time",
+      "ianaId": "Asia/Bangkok",
+      "offsetMinutes": 420
+    },
+    {
+      "id": "China Standard Time",
+      "ianaId": "Asia/Shanghai",
+      "offsetMinutes": 480
+    },
+    {
+      "id": "Taipei Standard Time",
+      "ianaId": "Asia/Taipei",
+      "offsetMinutes": 480
+    },
+    {
+      "id": "Singapore Standard Time",
+      "ianaId": "Asia/Singapore",
+      "offsetMinutes": 480
+    },
+    {
+      "id": "Aus Central W. Standard Time",
+      "ianaId": "Australia/Eucla",
+      "offsetMinutes": 525
+    },
+    {
+      "id": "Tokyo Standard Time",
+      "ianaId": "Asia/Tokyo",
+      "offsetMinutes": 540
+    },
+    {
+      "id": "Korea Standard Time",
+      "ianaId": "Asia/Seoul",
+      "offsetMinutes": 540
+    },
+    {
+      "id": "AUS Central Standard Time",
+      "ianaId": "Australia/Darwin",
+      "offsetMinutes": 570
+    },
+    {
+      "id": "West Pacific Standard Time",
+      "ianaId": "Pacific/Port_Moresby",
+      "offsetMinutes": 600
+    },
+    {
+      "id": "E. Australia Standard Time",
+      "ianaId": "Australia/Brisbane",
+      "offsetMinutes": 600
+    },
+    {
+      "id": "Central Pacific Standard Time",
+      "ianaId": "Pacific/Guadalcanal",
+      "offsetMinutes": 660
+    },
+    {
+      "id": "UTC\u002B12",
+      "ianaId": "Etc/GMT-12",
+      "offsetMinutes": 720
+    },
+    {
+      "id": "UTC\u002B13",
+      "ianaId": "Etc/GMT-13",
+      "offsetMinutes": 780
+    },
+    {
+      "id": "Line Islands Standard Time",
+      "ianaId": "Pacific/Kiritimati",
+      "offsetMinutes": 840
+    }
+  ]
+}

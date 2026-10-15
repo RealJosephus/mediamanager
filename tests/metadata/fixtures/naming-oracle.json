@@ -1,0 +1,152 @@
+[
+  {
+    "Input": "Example.Movie.2020.1080p.mkv",
+    "Name": "Example.Movie",
+    "Year": 2020
+  },
+  {
+    "Input": "Movie (1999)",
+    "Name": "Movie",
+    "Year": 1999
+  },
+  {
+    "Input": "2001 A Space Odyssey (1968)",
+    "Name": "2001 A Space Odyssey",
+    "Year": 1968
+  },
+  {
+    "Input": "Movie.2020.2024.720p",
+    "Name": "Movie.2020",
+    "Year": 2024
+  },
+  {
+    "Input": "Movie 2024-01-02",
+    "Name": "Movie 2024-01-02",
+    "Year": null
+  },
+  {
+    "Input": "Movie_20241",
+    "Name": "Movie_20241",
+    "Year": null
+  },
+  {
+    "Input": "Movie 1080p BluRay",
+    "Name": "Movie",
+    "Year": null
+  },
+  {
+    "Input": "[Group] Example [tag]",
+    "Name": "Example",
+    "Year": null
+  },
+  {
+    "Input": "[Group] Example 4k - extra",
+    "Name": "Example",
+    "Year": null
+  },
+  {
+    "Input": "Movie - 2",
+    "Name": "Movie",
+    "Year": null
+  },
+  {
+    "Input": "Movie E01-E03",
+    "Name": "Movie",
+    "Year": null
+  },
+  {
+    "Input": "Movie-trailer",
+    "Name": "Movie",
+    "Year": null
+  },
+  {
+    "Input": "Movie_sample",
+    "Name": "Movie",
+    "Year": null
+  },
+  {
+    "Input": "A Film - behindthescenes",
+    "Name": "A Film - behindthescenes",
+    "Year": null
+  },
+  {
+    "Input": "\u4E2D\u6587\u7535\u5F71 (2020)",
+    "Name": "\u4E2D\u6587\u7535\u5F71",
+    "Year": 2020
+  },
+  {
+    "Input": "\u7535\u5F71E01-E03",
+    "Name": "\u7535\u5F71E01-E03",
+    "Year": null
+  },
+  {
+    "Input": "\u7535\u5F71 E01-E03",
+    "Name": "\u7535\u5F71",
+    "Year": null
+  },
+  {
+    "Input": "Film 1899",
+    "Name": "Film 1899",
+    "Year": null
+  },
+  {
+    "Input": "Film 2099",
+    "Name": "Film",
+    "Year": 2099
+  },
+  {
+    "Input": "Film 2100",
+    "Name": "Film 2100",
+    "Year": null
+  },
+  {
+    "Input": " Example  ",
+    "Name": " Example  ",
+    "Year": null
+  },
+  {
+    "Input": "",
+    "Name": "",
+    "Year": null
+  },
+  {
+    "Input": "Movie (2020) - 1080p",
+    "Name": "Movie",
+    "Year": 2020
+  },
+  {
+    "Input": "Movie 2020 01 02",
+    "Name": "Movie 2020 01 02",
+    "Year": null
+  },
+  {
+    "Input": "[A].mkv",
+    "Name": "[A].mkv",
+    "Year": null
+  },
+  {
+    "Input": "Series E01~E03",
+    "Name": "Series",
+    "Year": null
+  },
+  {
+    "Input": "The Movie (2024) [imdbid-tt001]",
+    "Name": "The Movie",
+    "Year": 2024
+  },
+  {
+    "Input": null,
+    "Name": null,
+    "Year": null
+  },
+  {
+    "Input": "\u0130stanbul 1080p",
+    "Name": "\u0130stanbul",
+    "Year": null
+  },
+  {
+    "Input": "Kelvin \u212A 4k",
+    "Name": "Kelvin \u212A",
+    "Year": null
+  }
+]

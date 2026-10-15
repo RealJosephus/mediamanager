@@ -1,0 +1,365 @@
+[
+  {
+    "Name": "empty"
+  },
+  {
+    "Name": "empty cancelled",
+    "CancelInitial": true
+  },
+  {
+    "Name": "non collections cancelled",
+    "CancelInitial": true,
+    "Items": [
+      {
+        "Name": "Library 0",
+        "Kind": "Folder"
+      },
+      {
+        "Name": "Library 1",
+        "Kind": "UserView"
+      },
+      {
+        "Name": "Library 2",
+        "Kind": "Movie"
+      }
+    ]
+  },
+  {
+    "Name": "one missing",
+    "Items": [
+      {
+        "Name": "Library 0",
+        "Kind": "CollectionFolder"
+      }
+    ]
+  },
+  {
+    "Name": "one primary",
+    "Items": [
+      {
+        "Name": "Library 0",
+        "Kind": "CollectionFolder",
+        "Images": [
+          "Primary"
+        ]
+      }
+    ]
+  },
+  {
+    "Name": "primary empty path",
+    "Items": [
+      {
+        "Name": "Library 0",
+        "Kind": "CollectionFolder",
+        "Images": [
+          "Primary"
+        ],
+        "EmptyImagePath": true
+      }
+    ]
+  },
+  {
+    "Name": "primary null path",
+    "Items": [
+      {
+        "Name": "Library 0",
+        "Kind": "CollectionFolder",
+        "Images": [
+          "Primary"
+        ],
+        "NullImagePath": true
+      }
+    ]
+  },
+  {
+    "Name": "primary outside scope",
+    "Items": [
+      {
+        "Name": "Library 0",
+        "Kind": "CollectionFolder",
+        "Images": [
+          "Primary"
+        ],
+        "OutsideImagePath": true
+      }
+    ]
+  },
+  {
+    "Name": "only backdrop",
+    "Items": [
+      {
+        "Name": "Library 0",
+        "Kind": "CollectionFolder",
+        "Images": [
+          "Backdrop"
+        ]
+      }
+    ]
+  },
+  {
+    "Name": "only thumb",
+    "Items": [
+      {
+        "Name": "Library 0",
+        "Kind": "CollectionFolder",
+        "Images": [
+          "Thumb"
+        ]
+      }
+    ]
+  },
+  {
+    "Name": "mixed types",
+    "Items": [
+      {
+        "Name": "Library 0",
+        "Kind": "Folder"
+      },
+      {
+        "Name": "Library 1",
+        "Kind": "CollectionFolder"
+      },
+      {
+        "Name": "Library 2",
+        "Kind": "UserView"
+      },
+      {
+        "Name": "Library 3",
+        "Kind": "CollectionFolder",
+        "Images": [
+          "Primary"
+        ]
+      },
+      {
+        "Name": "Library 4",
+        "Kind": "Movie"
+      },
+      {
+        "Name": "Library 5",
+        "Kind": "CollectionFolder"
+      }
+    ]
+  },
+  {
+    "Name": "missing nullable names",
+    "Items": [
+      {
+        "Name": null,
+        "Kind": "CollectionFolder"
+      },
+      {
+        "Name": "",
+        "Kind": "CollectionFolder"
+      },
+      {
+        "Name": "東京",
+        "Kind": "CollectionFolder"
+      }
+    ]
+  },
+  {
+    "Name": "duplicate identities",
+    "Items": [
+      {
+        "Name": "Library 0",
+        "Kind": "CollectionFolder"
+      },
+      {
+        "Name": "Library 1",
+        "Kind": "CollectionFolder",
+        "SameIdentity": true
+      }
+    ]
+  },
+  {
+    "Name": "three missing",
+    "Items": [
+      {
+        "Name": "Library 0",
+        "Kind": "CollectionFolder"
+      },
+      {
+        "Name": "Library 1",
+        "Kind": "CollectionFolder"
+      },
+      {
+        "Name": "Library 2",
+        "Kind": "CollectionFolder"
+      }
+    ]
+  },
+  {
+    "Name": "already cancelled missing",
+    "CancelInitial": true,
+    "Items": [
+      {
+        "Name": "Library 0",
+        "Kind": "CollectionFolder"
+      }
+    ]
+  },
+  {
+    "Name": "already cancelled primary",
+    "CancelInitial": true,
+    "Items": [
+      {
+        "Name": "Library 0",
+        "Kind": "CollectionFolder",
+        "Images": [
+          "Primary"
+        ]
+      }
+    ]
+  },
+  {
+    "Name": "refresh cancellation first",
+    "CancelRefresh": "Library 0",
+    "Items": [
+      {
+        "Name": "Library 0",
+        "Kind": "CollectionFolder"
+      },
+      {
+        "Name": "Library 1",
+        "Kind": "CollectionFolder"
+      },
+      {
+        "Name": "Library 2",
+        "Kind": "CollectionFolder"
+      }
+    ]
+  },
+  {
+    "Name": "refresh cancellation second",
+    "CancelRefresh": "Library 1",
+    "Items": [
+      {
+        "Name": "Library 0",
+        "Kind": "CollectionFolder",
+        "Images": [
+          "Primary"
+        ]
+      },
+      {
+        "Name": "Library 1",
+        "Kind": "CollectionFolder"
+      },
+      {
+        "Name": "Library 2",
+        "Kind": "CollectionFolder"
+      }
+    ]
+  },
+  {
+    "Name": "ordinary refresh first",
+    "FailRefresh": "Library 0",
+    "Items": [
+      {
+        "Name": "Library 0",
+        "Kind": "CollectionFolder"
+      },
+      {
+        "Name": "Library 1",
+        "Kind": "CollectionFolder"
+      },
+      {
+        "Name": "Library 2",
+        "Kind": "CollectionFolder"
+      }
+    ]
+  },
+  {
+    "Name": "ordinary refresh second",
+    "FailRefresh": "Library 1",
+    "Items": [
+      {
+        "Name": "Library 0",
+        "Kind": "CollectionFolder"
+      },
+      {
+        "Name": "Library 1",
+        "Kind": "CollectionFolder"
+      },
+      {
+        "Name": "Library 2",
+        "Kind": "CollectionFolder"
+      }
+    ]
+  },
+  {
+    "Name": "root read failure",
+    "FailRoot": true,
+    "Items": [
+      {
+        "Name": "Library 0",
+        "Kind": "CollectionFolder"
+      }
+    ]
+  },
+  {
+    "Name": "add library after snapshot",
+    "AddChild": true,
+    "Items": [
+      {
+        "Name": "Library 0",
+        "Kind": "CollectionFolder"
+      }
+    ]
+  },
+  {
+    "Name": "remove later library after snapshot",
+    "RemoveSibling": true,
+    "Items": [
+      {
+        "Name": "Library 0",
+        "Kind": "CollectionFolder"
+      },
+      {
+        "Name": "Library 1",
+        "Kind": "CollectionFolder"
+      }
+    ]
+  },
+  {
+    "Name": "change later library image",
+    "AddSiblingImage": true,
+    "Items": [
+      {
+        "Name": "Library 0",
+        "Kind": "CollectionFolder"
+      },
+      {
+        "Name": "Library 1",
+        "Kind": "CollectionFolder"
+      }
+    ]
+  },
+  {
+    "Name": "change later library name",
+    "RenameSibling": true,
+    "Items": [
+      {
+        "Name": "Library 0",
+        "Kind": "CollectionFolder"
+      },
+      {
+        "Name": "Library 1",
+        "Kind": "CollectionFolder"
+      }
+    ]
+  },
+  {
+    "Name": "progress failure",
+    "FailProgress": true,
+    "Items": [
+      {
+        "Name": "Library 0",
+        "Kind": "CollectionFolder"
+      },
+      {
+        "Name": "Library 1",
+        "Kind": "CollectionFolder"
+      }
+    ]
+  }
+]

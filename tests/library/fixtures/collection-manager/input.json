@@ -1,0 +1,2032 @@
+[
+  {
+    "items": [
+      {
+        "id": 10,
+        "name": "One",
+        "rating": "R"
+      },
+      {
+        "id": 11,
+        "name": "Two",
+        "rating": "PG"
+      },
+      {
+        "id": 12,
+        "name": "Three",
+        "rating": "unknown"
+      },
+      {
+        "id": 13,
+        "name": "Four",
+        "rating": "pg"
+      }
+    ],
+    "key": "create-empty",
+    "operation": "create",
+    "name": "Alpha"
+  },
+  {
+    "items": [
+      {
+        "id": 10,
+        "name": "One",
+        "rating": "R"
+      },
+      {
+        "id": 11,
+        "name": "Two",
+        "rating": "PG"
+      },
+      {
+        "id": 12,
+        "name": "Three",
+        "rating": "unknown"
+      },
+      {
+        "id": 13,
+        "name": "Four",
+        "rating": "pg"
+      }
+    ],
+    "key": "create-members",
+    "operation": "create",
+    "name": "Alpha",
+    "ids": [
+      10,
+      11
+    ],
+    "isLocked": true,
+    "providerIds": {
+      "Tmdb": "73",
+      "Other": "kept"
+    }
+  },
+  {
+    "items": [
+      {
+        "id": 10,
+        "name": "One",
+        "rating": "R"
+      },
+      {
+        "id": 11,
+        "name": "Two",
+        "rating": "PG"
+      },
+      {
+        "id": 12,
+        "name": "Three",
+        "rating": "unknown"
+      },
+      {
+        "id": 13,
+        "name": "Four",
+        "rating": "pg"
+      }
+    ],
+    "key": "create-duplicates",
+    "operation": "create",
+    "ids": [
+      10,
+      10,
+      11
+    ]
+  },
+  {
+    "items": [
+      {
+        "id": 10,
+        "name": "One",
+        "rating": "R"
+      },
+      {
+        "id": 11,
+        "name": "Two",
+        "rating": "PG"
+      },
+      {
+        "id": 12,
+        "name": "Three",
+        "rating": "unknown"
+      },
+      {
+        "id": 13,
+        "name": "Four",
+        "rating": "pg"
+      }
+    ],
+    "key": "create-clean-name",
+    "operation": "create",
+    "name": "集合:/? 中文 "
+  },
+  {
+    "items": [
+      {
+        "id": 10,
+        "name": "One",
+        "rating": "R"
+      },
+      {
+        "id": 11,
+        "name": "Two",
+        "rating": "PG"
+      },
+      {
+        "id": 12,
+        "name": "Three",
+        "rating": "unknown"
+      },
+      {
+        "id": 13,
+        "name": "Four",
+        "rating": "pg"
+      }
+    ],
+    "key": "create-empty-name",
+    "operation": "create",
+    "name": ""
+  },
+  {
+    "items": [
+      {
+        "id": 10,
+        "name": "One",
+        "rating": "R"
+      },
+      {
+        "id": 11,
+        "name": "Two",
+        "rating": "PG"
+      },
+      {
+        "id": 12,
+        "name": "Three",
+        "rating": "unknown"
+      },
+      {
+        "id": 13,
+        "name": "Four",
+        "rating": "pg"
+      }
+    ],
+    "key": "create-null-name",
+    "operation": "create",
+    "name": null
+  },
+  {
+    "items": [
+      {
+        "id": 10,
+        "name": "One",
+        "rating": "R"
+      },
+      {
+        "id": 11,
+        "name": "Two",
+        "rating": "PG"
+      },
+      {
+        "id": 12,
+        "name": "Three",
+        "rating": "unknown"
+      },
+      {
+        "id": 13,
+        "name": "Four",
+        "rating": "pg"
+      }
+    ],
+    "key": "create-ignored-parent",
+    "operation": "create",
+    "ids": [
+      11
+    ]
+  },
+  {
+    "items": [
+      {
+        "id": 10,
+        "name": "One",
+        "rating": "R"
+      },
+      {
+        "id": 11,
+        "name": "Two",
+        "rating": "PG"
+      },
+      {
+        "id": 12,
+        "name": "Three",
+        "rating": "unknown"
+      },
+      {
+        "id": 13,
+        "name": "Four",
+        "rating": "pg"
+      }
+    ],
+    "key": "create-ensure-folder",
+    "operation": "create",
+    "existingFolder": false
+  },
+  {
+    "items": [
+      {
+        "id": 10,
+        "name": "One",
+        "rating": "R"
+      },
+      {
+        "id": 11,
+        "name": "Two",
+        "rating": "PG"
+      },
+      {
+        "id": 12,
+        "name": "Three",
+        "rating": "unknown"
+      },
+      {
+        "id": 13,
+        "name": "Four",
+        "rating": "pg"
+      }
+    ],
+    "key": "create-no-resolved-folder",
+    "operation": "create",
+    "existingFolder": false,
+    "resolveCreatedFolder": false
+  },
+  {
+    "items": [
+      {
+        "id": 10,
+        "name": "One",
+        "rating": "R"
+      },
+      {
+        "id": 11,
+        "name": "Two",
+        "rating": "PG"
+      },
+      {
+        "id": 12,
+        "name": "Three",
+        "rating": "unknown"
+      },
+      {
+        "id": 13,
+        "name": "Four",
+        "rating": "pg"
+      }
+    ],
+    "key": "create-fail-begin",
+    "operation": "create",
+    "ids": [],
+    "failure": "begin",
+    "existingFolder": true
+  },
+  {
+    "items": [
+      {
+        "id": 10,
+        "name": "One",
+        "rating": "R"
+      },
+      {
+        "id": 11,
+        "name": "Two",
+        "rating": "PG"
+      },
+      {
+        "id": 12,
+        "name": "Three",
+        "rating": "unknown"
+      },
+      {
+        "id": 13,
+        "name": "Four",
+        "rating": "pg"
+      }
+    ],
+    "key": "create-fail-create",
+    "operation": "create",
+    "ids": [],
+    "failure": "create",
+    "existingFolder": true
+  },
+  {
+    "items": [
+      {
+        "id": 10,
+        "name": "One",
+        "rating": "R"
+      },
+      {
+        "id": 11,
+        "name": "Two",
+        "rating": "PG"
+      },
+      {
+        "id": 12,
+        "name": "Three",
+        "rating": "unknown"
+      },
+      {
+        "id": 13,
+        "name": "Four",
+        "rating": "pg"
+      }
+    ],
+    "key": "create-fail-save",
+    "operation": "create",
+    "ids": [
+      10
+    ],
+    "failure": "save",
+    "existingFolder": true
+  },
+  {
+    "items": [
+      {
+        "id": 10,
+        "name": "One",
+        "rating": "R"
+      },
+      {
+        "id": 11,
+        "name": "Two",
+        "rating": "PG"
+      },
+      {
+        "id": 12,
+        "name": "Three",
+        "rating": "unknown"
+      },
+      {
+        "id": 13,
+        "name": "Four",
+        "rating": "pg"
+      }
+    ],
+    "key": "create-fail-queue",
+    "operation": "create",
+    "ids": [],
+    "failure": "queue",
+    "existingFolder": true
+  },
+  {
+    "items": [
+      {
+        "id": 10,
+        "name": "One",
+        "rating": "R"
+      },
+      {
+        "id": 11,
+        "name": "Two",
+        "rating": "PG"
+      },
+      {
+        "id": 12,
+        "name": "Three",
+        "rating": "unknown"
+      },
+      {
+        "id": 13,
+        "name": "Four",
+        "rating": "pg"
+      }
+    ],
+    "key": "create-fail-created-event",
+    "operation": "create",
+    "ids": [],
+    "failure": "created-event",
+    "existingFolder": true
+  },
+  {
+    "items": [
+      {
+        "id": 10,
+        "name": "One",
+        "rating": "R"
+      },
+      {
+        "id": 11,
+        "name": "Two",
+        "rating": "PG"
+      },
+      {
+        "id": 12,
+        "name": "Three",
+        "rating": "unknown"
+      },
+      {
+        "id": 13,
+        "name": "Four",
+        "rating": "pg"
+      }
+    ],
+    "key": "create-fail-complete",
+    "operation": "create",
+    "ids": [],
+    "failure": "complete",
+    "existingFolder": true
+  },
+  {
+    "items": [
+      {
+        "id": 10,
+        "name": "One",
+        "rating": "R"
+      },
+      {
+        "id": 11,
+        "name": "Two",
+        "rating": "PG"
+      },
+      {
+        "id": 12,
+        "name": "Three",
+        "rating": "unknown"
+      },
+      {
+        "id": 13,
+        "name": "Four",
+        "rating": "pg"
+      }
+    ],
+    "key": "create-fail-library-add",
+    "operation": "create",
+    "ids": [],
+    "failure": "library-add",
+    "existingFolder": false
+  },
+  {
+    "items": [
+      {
+        "id": 10,
+        "name": "One",
+        "rating": "R"
+      },
+      {
+        "id": 11,
+        "name": "Two",
+        "rating": "PG"
+      },
+      {
+        "id": 12,
+        "name": "Three",
+        "rating": "unknown"
+      },
+      {
+        "id": 13,
+        "name": "Four",
+        "rating": "pg"
+      }
+    ],
+    "key": "create-missing-member",
+    "operation": "create",
+    "ids": [
+      10,
+      99
+    ]
+  },
+  {
+    "items": [
+      {
+        "id": 10,
+        "name": "One",
+        "rating": "R"
+      },
+      {
+        "id": 11,
+        "name": "Two",
+        "rating": "PG"
+      },
+      {
+        "id": 12,
+        "name": "Three",
+        "rating": "unknown"
+      },
+      {
+        "id": 13,
+        "name": "Four",
+        "rating": "pg"
+      }
+    ],
+    "key": "add-new",
+    "operation": "add",
+    "ids": [
+      10,
+      11
+    ]
+  },
+  {
+    "items": [
+      {
+        "id": 10,
+        "name": "One",
+        "rating": "R"
+      },
+      {
+        "id": 11,
+        "name": "Two",
+        "rating": "PG"
+      },
+      {
+        "id": 12,
+        "name": "Three",
+        "rating": "unknown"
+      },
+      {
+        "id": 13,
+        "name": "Four",
+        "rating": "pg"
+      }
+    ],
+    "key": "add-duplicate-request",
+    "operation": "add",
+    "ids": [
+      10,
+      10
+    ]
+  },
+  {
+    "items": [
+      {
+        "id": 10,
+        "name": "One",
+        "rating": "R"
+      },
+      {
+        "id": 11,
+        "name": "Two",
+        "rating": "PG"
+      },
+      {
+        "id": 12,
+        "name": "Three",
+        "rating": "unknown"
+      },
+      {
+        "id": 13,
+        "name": "Four",
+        "rating": "pg"
+      }
+    ],
+    "key": "add-existing-duplicate",
+    "operation": "add",
+    "links": [
+      {
+        "id": 10
+      }
+    ],
+    "ids": [
+      10,
+      11,
+      11
+    ]
+  },
+  {
+    "items": [
+      {
+        "id": 10,
+        "name": "One",
+        "rating": "R"
+      },
+      {
+        "id": 11,
+        "name": "Two",
+        "rating": "PG"
+      },
+      {
+        "id": 12,
+        "name": "Three",
+        "rating": "unknown"
+      },
+      {
+        "id": 13,
+        "name": "Four",
+        "rating": "pg"
+      }
+    ],
+    "key": "add-all-existing",
+    "operation": "add",
+    "links": [
+      {
+        "id": 10
+      }
+    ],
+    "ids": [
+      10,
+      10
+    ]
+  },
+  {
+    "items": [
+      {
+        "id": 10,
+        "name": "One",
+        "rating": "R"
+      },
+      {
+        "id": 11,
+        "name": "Two",
+        "rating": "PG"
+      },
+      {
+        "id": 12,
+        "name": "Three",
+        "rating": "unknown"
+      },
+      {
+        "id": 13,
+        "name": "Four",
+        "rating": "pg"
+      }
+    ],
+    "key": "add-missing-prefix",
+    "operation": "add",
+    "ids": [
+      10,
+      99,
+      11
+    ]
+  },
+  {
+    "items": [
+      {
+        "id": 10,
+        "name": "One",
+        "rating": "R"
+      },
+      {
+        "id": 11,
+        "name": "Two",
+        "rating": "PG"
+      },
+      {
+        "id": 12,
+        "name": "Three",
+        "rating": "unknown"
+      },
+      {
+        "id": 13,
+        "name": "Four",
+        "rating": "pg"
+      }
+    ],
+    "key": "add-missing-collection",
+    "operation": "add",
+    "collectionId": 99,
+    "ids": [
+      10
+    ]
+  },
+  {
+    "items": [
+      {
+        "id": 10,
+        "name": "One",
+        "rating": "R"
+      },
+      {
+        "id": 11,
+        "name": "Two",
+        "rating": "PG"
+      },
+      {
+        "id": 12,
+        "name": "Three",
+        "rating": "unknown"
+      },
+      {
+        "id": 13,
+        "name": "Four",
+        "rating": "pg"
+      }
+    ],
+    "key": "add-empty",
+    "operation": "add",
+    "ids": []
+  },
+  {
+    "items": [
+      {
+        "id": 10,
+        "name": "One",
+        "rating": "R"
+      },
+      {
+        "id": 11,
+        "name": "Two",
+        "rating": "PG"
+      },
+      {
+        "id": 12,
+        "name": "Three",
+        "rating": "unknown"
+      },
+      {
+        "id": 13,
+        "name": "Four",
+        "rating": "pg"
+      }
+    ],
+    "key": "add-unknown-rating",
+    "operation": "add",
+    "officialRating": "Curated",
+    "ids": [
+      12
+    ]
+  },
+  {
+    "items": [
+      {
+        "id": 10,
+        "name": "One",
+        "rating": "R"
+      },
+      {
+        "id": 11,
+        "name": "Two",
+        "rating": "PG"
+      },
+      {
+        "id": 12,
+        "name": "Three",
+        "rating": "unknown"
+      },
+      {
+        "id": 13,
+        "name": "Four",
+        "rating": "pg"
+      }
+    ],
+    "key": "add-first-case-rating",
+    "operation": "add",
+    "links": [
+      {
+        "id": 13
+      }
+    ],
+    "ids": [
+      11
+    ]
+  },
+  {
+    "items": [
+      {
+        "id": 10,
+        "name": "One",
+        "rating": "R"
+      },
+      {
+        "id": 11,
+        "name": "Two",
+        "rating": "PG"
+      },
+      {
+        "id": 12,
+        "name": "Three",
+        "rating": "unknown"
+      },
+      {
+        "id": 13,
+        "name": "Four",
+        "rating": "pg"
+      }
+    ],
+    "key": "add-null-links",
+    "operation": "add",
+    "links": null,
+    "ids": [
+      10
+    ]
+  },
+  {
+    "items": [
+      {
+        "id": 10,
+        "name": "One",
+        "rating": "R"
+      },
+      {
+        "id": 11,
+        "name": "Two",
+        "rating": "PG"
+      },
+      {
+        "id": 12,
+        "name": "Three",
+        "rating": "unknown"
+      },
+      {
+        "id": 13,
+        "name": "Four",
+        "rating": "pg"
+      }
+    ],
+    "key": "add-dead-link",
+    "operation": "add",
+    "links": [
+      {
+        "id": 99
+      }
+    ],
+    "ids": [
+      10
+    ]
+  },
+  {
+    "items": [
+      {
+        "id": 10,
+        "name": "One",
+        "rating": "R"
+      },
+      {
+        "id": 11,
+        "name": "Two",
+        "rating": "PG"
+      },
+      {
+        "id": 12,
+        "name": "Three",
+        "rating": "unknown"
+      },
+      {
+        "id": 13,
+        "name": "Four",
+        "rating": "pg"
+      }
+    ],
+    "key": "add-empty-id-link",
+    "operation": "add",
+    "links": [
+      {
+        "id": 0
+      }
+    ],
+    "ids": [
+      10
+    ]
+  },
+  {
+    "items": [
+      {
+        "id": 10,
+        "name": "One",
+        "rating": "R"
+      },
+      {
+        "id": 11,
+        "name": "Two",
+        "rating": "PG"
+      },
+      {
+        "id": 12,
+        "name": "Three",
+        "rating": "unknown"
+      },
+      {
+        "id": 13,
+        "name": "Four",
+        "rating": "pg"
+      }
+    ],
+    "key": "add-fallback-path",
+    "operation": "add",
+    "links": [
+      {
+        "id": 99,
+        "path": "{program}/movie.mkv"
+      },
+      {
+        "id": 10
+      }
+    ],
+    "ids": [
+      11
+    ]
+  },
+  {
+    "items": [
+      {
+        "id": 10,
+        "name": "One",
+        "rating": "R"
+      },
+      {
+        "id": 11,
+        "name": "Two",
+        "rating": "PG"
+      },
+      {
+        "id": 12,
+        "name": "Three",
+        "rating": "unknown"
+      },
+      {
+        "id": 13,
+        "name": "Four",
+        "rating": "pg"
+      }
+    ],
+    "key": "add-fallback-library-id",
+    "operation": "add",
+    "links": [
+      {
+        "libraryItemId": 11
+      }
+    ],
+    "ids": [
+      10
+    ]
+  },
+  {
+    "items": [
+      {
+        "id": 10,
+        "name": "One",
+        "rating": "R"
+      },
+      {
+        "id": 11,
+        "name": "Two",
+        "rating": "PG"
+      },
+      {
+        "id": 12,
+        "name": "Three",
+        "rating": "unknown"
+      },
+      {
+        "id": 13,
+        "name": "Four",
+        "rating": "pg"
+      }
+    ],
+    "key": "add-fail-save",
+    "operation": "add",
+    "ids": [
+      10,
+      11
+    ],
+    "failure": "save"
+  },
+  {
+    "items": [
+      {
+        "id": 10,
+        "name": "One",
+        "rating": "R"
+      },
+      {
+        "id": 11,
+        "name": "Two",
+        "rating": "PG"
+      },
+      {
+        "id": 12,
+        "name": "Three",
+        "rating": "unknown"
+      },
+      {
+        "id": 13,
+        "name": "Four",
+        "rating": "pg"
+      }
+    ],
+    "key": "add-fail-queue",
+    "operation": "add",
+    "ids": [
+      10,
+      11
+    ],
+    "failure": "queue"
+  },
+  {
+    "items": [
+      {
+        "id": 10,
+        "name": "One",
+        "rating": "R"
+      },
+      {
+        "id": 11,
+        "name": "Two",
+        "rating": "PG"
+      },
+      {
+        "id": 12,
+        "name": "Three",
+        "rating": "unknown"
+      },
+      {
+        "id": 13,
+        "name": "Four",
+        "rating": "pg"
+      }
+    ],
+    "key": "add-fail-added-event",
+    "operation": "add",
+    "ids": [
+      10,
+      11
+    ],
+    "failure": "added-event"
+  },
+  {
+    "items": [
+      {
+        "id": 10,
+        "name": "One",
+        "rating": "R"
+      },
+      {
+        "id": 11,
+        "name": "Two",
+        "rating": "PG"
+      },
+      {
+        "id": 12,
+        "name": "Three",
+        "rating": "unknown"
+      },
+      {
+        "id": 13,
+        "name": "Four",
+        "rating": "pg"
+      }
+    ],
+    "key": "remove-first-duplicate",
+    "operation": "remove",
+    "links": [
+      {
+        "id": 10
+      },
+      {
+        "id": 10
+      },
+      {
+        "id": 11
+      }
+    ],
+    "ids": [
+      10
+    ]
+  },
+  {
+    "items": [
+      {
+        "id": 10,
+        "name": "One",
+        "rating": "R"
+      },
+      {
+        "id": 11,
+        "name": "Two",
+        "rating": "PG"
+      },
+      {
+        "id": 12,
+        "name": "Three",
+        "rating": "unknown"
+      },
+      {
+        "id": 13,
+        "name": "Four",
+        "rating": "pg"
+      }
+    ],
+    "key": "remove-duplicate-request",
+    "operation": "remove",
+    "links": [
+      {
+        "id": 10
+      },
+      {
+        "id": 10
+      },
+      {
+        "id": 11
+      }
+    ],
+    "ids": [
+      10,
+      10
+    ]
+  },
+  {
+    "items": [
+      {
+        "id": 10,
+        "name": "One",
+        "rating": "R"
+      },
+      {
+        "id": 11,
+        "name": "Two",
+        "rating": "PG"
+      },
+      {
+        "id": 12,
+        "name": "Three",
+        "rating": "unknown"
+      },
+      {
+        "id": 13,
+        "name": "Four",
+        "rating": "pg"
+      }
+    ],
+    "key": "remove-missing-item",
+    "operation": "remove",
+    "links": [
+      {
+        "id": 99
+      },
+      {
+        "id": 10
+      }
+    ],
+    "ids": [
+      99
+    ]
+  },
+  {
+    "items": [
+      {
+        "id": 10,
+        "name": "One",
+        "rating": "R"
+      },
+      {
+        "id": 11,
+        "name": "Two",
+        "rating": "PG"
+      },
+      {
+        "id": 12,
+        "name": "Three",
+        "rating": "unknown"
+      },
+      {
+        "id": 13,
+        "name": "Four",
+        "rating": "pg"
+      }
+    ],
+    "key": "remove-missing-link",
+    "operation": "remove",
+    "links": [
+      {
+        "id": 10
+      }
+    ],
+    "ids": [
+      11
+    ]
+  },
+  {
+    "items": [
+      {
+        "id": 10,
+        "name": "One",
+        "rating": "R"
+      },
+      {
+        "id": 11,
+        "name": "Two",
+        "rating": "PG"
+      },
+      {
+        "id": 12,
+        "name": "Three",
+        "rating": "unknown"
+      },
+      {
+        "id": 13,
+        "name": "Four",
+        "rating": "pg"
+      }
+    ],
+    "key": "remove-empty",
+    "operation": "remove",
+    "links": [
+      {
+        "id": 10
+      }
+    ],
+    "ids": []
+  },
+  {
+    "items": [
+      {
+        "id": 10,
+        "name": "One",
+        "rating": "R"
+      },
+      {
+        "id": 11,
+        "name": "Two",
+        "rating": "PG"
+      },
+      {
+        "id": 12,
+        "name": "Three",
+        "rating": "unknown"
+      },
+      {
+        "id": 13,
+        "name": "Four",
+        "rating": "pg"
+      }
+    ],
+    "key": "remove-null-links",
+    "operation": "remove",
+    "links": null,
+    "ids": [
+      10
+    ]
+  },
+  {
+    "items": [
+      {
+        "id": 10,
+        "name": "One",
+        "rating": "R"
+      },
+      {
+        "id": 11,
+        "name": "Two",
+        "rating": "PG"
+      },
+      {
+        "id": 12,
+        "name": "Three",
+        "rating": "unknown"
+      },
+      {
+        "id": 13,
+        "name": "Four",
+        "rating": "pg"
+      }
+    ],
+    "key": "remove-missing-collection",
+    "operation": "remove",
+    "collectionId": 99,
+    "ids": [
+      10
+    ]
+  },
+  {
+    "items": [
+      {
+        "id": 10,
+        "name": "One",
+        "rating": "R"
+      },
+      {
+        "id": 11,
+        "name": "Two",
+        "rating": "PG"
+      },
+      {
+        "id": 12,
+        "name": "Three",
+        "rating": "unknown"
+      },
+      {
+        "id": 13,
+        "name": "Four",
+        "rating": "pg"
+      }
+    ],
+    "key": "remove-fail-save",
+    "operation": "remove",
+    "links": [
+      {
+        "id": 10
+      },
+      {
+        "id": 11
+      }
+    ],
+    "ids": [
+      10
+    ],
+    "failure": "save"
+  },
+  {
+    "items": [
+      {
+        "id": 10,
+        "name": "One",
+        "rating": "R"
+      },
+      {
+        "id": 11,
+        "name": "Two",
+        "rating": "PG"
+      },
+      {
+        "id": 12,
+        "name": "Three",
+        "rating": "unknown"
+      },
+      {
+        "id": 13,
+        "name": "Four",
+        "rating": "pg"
+      }
+    ],
+    "key": "remove-fail-queue",
+    "operation": "remove",
+    "links": [
+      {
+        "id": 10
+      },
+      {
+        "id": 11
+      }
+    ],
+    "ids": [
+      10
+    ],
+    "failure": "queue"
+  },
+  {
+    "items": [
+      {
+        "id": 10,
+        "name": "One",
+        "rating": "R"
+      },
+      {
+        "id": 11,
+        "name": "Two",
+        "rating": "PG"
+      },
+      {
+        "id": 12,
+        "name": "Three",
+        "rating": "unknown"
+      },
+      {
+        "id": 13,
+        "name": "Four",
+        "rating": "pg"
+      }
+    ],
+    "key": "remove-fail-removed-event",
+    "operation": "remove",
+    "links": [
+      {
+        "id": 10
+      },
+      {
+        "id": 11
+      }
+    ],
+    "ids": [
+      10
+    ],
+    "failure": "removed-event"
+  },
+  {
+    "items": [
+      {
+        "id": 10,
+        "name": "One",
+        "rating": "R"
+      },
+      {
+        "id": 11,
+        "name": "Two",
+        "rating": "PG"
+      },
+      {
+        "id": 12,
+        "name": "Three",
+        "rating": "unknown"
+      },
+      {
+        "id": 13,
+        "name": "Four",
+        "rating": "pg"
+      }
+    ],
+    "key": "ensure-existing",
+    "operation": "ensure",
+    "createIfNeeded": true
+  },
+  {
+    "items": [
+      {
+        "id": 10,
+        "name": "One",
+        "rating": "R"
+      },
+      {
+        "id": 11,
+        "name": "Two",
+        "rating": "PG"
+      },
+      {
+        "id": 12,
+        "name": "Three",
+        "rating": "unknown"
+      },
+      {
+        "id": 13,
+        "name": "Four",
+        "rating": "pg"
+      }
+    ],
+    "key": "ensure-ancestor",
+    "operation": "ensure",
+    "createIfNeeded": true,
+    "parentPath": "{data}"
+  },
+  {
+    "items": [
+      {
+        "id": 10,
+        "name": "One",
+        "rating": "R"
+      },
+      {
+        "id": 11,
+        "name": "Two",
+        "rating": "PG"
+      },
+      {
+        "id": 12,
+        "name": "Three",
+        "rating": "unknown"
+      },
+      {
+        "id": 13,
+        "name": "Four",
+        "rating": "pg"
+      }
+    ],
+    "key": "ensure-absent-no-create",
+    "operation": "ensure",
+    "existingFolder": false,
+    "createIfNeeded": false
+  },
+  {
+    "items": [
+      {
+        "id": 10,
+        "name": "One",
+        "rating": "R"
+      },
+      {
+        "id": 11,
+        "name": "Two",
+        "rating": "PG"
+      },
+      {
+        "id": 12,
+        "name": "Three",
+        "rating": "unknown"
+      },
+      {
+        "id": 13,
+        "name": "Four",
+        "rating": "pg"
+      }
+    ],
+    "key": "ensure-created",
+    "operation": "ensure",
+    "existingFolder": false,
+    "createIfNeeded": true,
+    "serverName": "服务器合集"
+  },
+  {
+    "items": [
+      {
+        "id": 10,
+        "name": "One",
+        "rating": "R"
+      },
+      {
+        "id": 11,
+        "name": "Two",
+        "rating": "PG"
+      },
+      {
+        "id": 12,
+        "name": "Three",
+        "rating": "unknown"
+      },
+      {
+        "id": 13,
+        "name": "Four",
+        "rating": "pg"
+      }
+    ],
+    "key": "ensure-created-unresolved",
+    "operation": "ensure",
+    "existingFolder": false,
+    "createIfNeeded": true,
+    "resolveCreatedFolder": false
+  },
+  {
+    "key": "ensure-descendant-not-root",
+    "operation": "ensure",
+    "parentPath": "{collections}/child",
+    "createIfNeeded": false,
+    "items": [
+      {
+        "id": 10,
+        "name": "One",
+        "rating": "R"
+      },
+      {
+        "id": 11,
+        "name": "Two",
+        "rating": "PG"
+      },
+      {
+        "id": 12,
+        "name": "Three",
+        "rating": "unknown"
+      },
+      {
+        "id": 13,
+        "name": "Four",
+        "rating": "pg"
+      }
+    ]
+  },
+  {
+    "key": "create-directory-blocked",
+    "operation": "create",
+    "name": "Blocked",
+    "blockedDirectory": "Blocked",
+    "items": [
+      {
+        "id": 10,
+        "name": "One",
+        "rating": "R"
+      },
+      {
+        "id": 11,
+        "name": "Two",
+        "rating": "PG"
+      },
+      {
+        "id": 12,
+        "name": "Three",
+        "rating": "unknown"
+      },
+      {
+        "id": 13,
+        "name": "Four",
+        "rating": "pg"
+      }
+    ]
+  },
+  {
+    "key": "add-locked-rating",
+    "operation": "add",
+    "isLocked": true,
+    "lockedFields": [
+      "OfficialRating"
+    ],
+    "ids": [
+      11
+    ],
+    "items": [
+      {
+        "id": 10,
+        "name": "One",
+        "rating": "R"
+      },
+      {
+        "id": 11,
+        "name": "Two",
+        "rating": "PG"
+      },
+      {
+        "id": 12,
+        "name": "Three",
+        "rating": "unknown"
+      },
+      {
+        "id": 13,
+        "name": "Four",
+        "rating": "pg"
+      }
+    ]
+  },
+  {
+    "key": "add-no-valid-rating",
+    "operation": "add",
+    "ids": [
+      10,
+      11
+    ],
+    "officialRating": "Curated",
+    "items": [
+      {
+        "id": 10,
+        "name": "One",
+        "rating": null
+      },
+      {
+        "id": 11,
+        "name": "Two",
+        "rating": ""
+      }
+    ]
+  },
+  {
+    "key": "add-space-rating",
+    "operation": "add",
+    "ids": [
+      10
+    ],
+    "officialRating": "Curated",
+    "items": [
+      {
+        "id": 10,
+        "name": "One",
+        "rating": " "
+      }
+    ]
+  },
+  {
+    "key": "add-tied-rating",
+    "operation": "add",
+    "ids": [
+      11,
+      10
+    ],
+    "items": [
+      {
+        "id": 10,
+        "name": "One",
+        "rating": "A"
+      },
+      {
+        "id": 11,
+        "name": "Two",
+        "rating": "B"
+      }
+    ],
+    "ratingScores": {
+      "A": {
+        "score": 5,
+        "subScore": 0
+      },
+      "B": {
+        "score": 5,
+        "subScore": 0
+      }
+    }
+  },
+  {
+    "key": "add-null-subscore",
+    "operation": "add",
+    "ids": [
+      10,
+      11
+    ],
+    "items": [
+      {
+        "id": 10,
+        "name": "One",
+        "rating": "A"
+      },
+      {
+        "id": 11,
+        "name": "Two",
+        "rating": "B"
+      }
+    ],
+    "ratingScores": {
+      "A": {
+        "score": 5,
+        "subScore": 0
+      },
+      "B": {
+        "score": 5,
+        "subScore": null
+      }
+    }
+  },
+  {
+    "key": "add-fallback-relative",
+    "operation": "add",
+    "links": [
+      {
+        "id": 99,
+        "path": "../../movie.mkv"
+      }
+    ],
+    "ids": [
+      11
+    ],
+    "items": [
+      {
+        "id": 10,
+        "name": "One",
+        "rating": "R",
+        "path": "{program}\\movie.mkv"
+      },
+      {
+        "id": 11,
+        "name": "Two",
+        "rating": "PG"
+      },
+      {
+        "id": 12,
+        "name": "Three",
+        "rating": "unknown"
+      },
+      {
+        "id": 13,
+        "name": "Four",
+        "rating": "pg"
+      }
+    ]
+  },
+  {
+    "key": "add-fallback-backslash",
+    "operation": "add",
+    "links": [
+      {
+        "id": 99,
+        "path": "\\movie.mkv"
+      }
+    ],
+    "ids": [
+      11
+    ],
+    "items": [
+      {
+        "id": 10,
+        "name": "One",
+        "rating": "G",
+        "path": "{collections}\\Existing [boxset]\\movie.mkv"
+      },
+      {
+        "id": 11,
+        "name": "Two",
+        "rating": "PG"
+      }
+    ]
+  },
+  {
+    "key": "add-empty-guid-fallback-skipped",
+    "operation": "add",
+    "links": [
+      {
+        "id": 0,
+        "path": "{program}/movie.mkv"
+      }
+    ],
+    "ids": [
+      11
+    ],
+    "items": [
+      {
+        "id": 10,
+        "name": "One",
+        "rating": "R"
+      },
+      {
+        "id": 11,
+        "name": "Two",
+        "rating": "PG"
+      },
+      {
+        "id": 12,
+        "name": "Three",
+        "rating": "unknown"
+      },
+      {
+        "id": 13,
+        "name": "Four",
+        "rating": "pg"
+      }
+    ]
+  },
+  {
+    "key": "remove-empty-guid",
+    "operation": "remove",
+    "links": [
+      {
+        "id": 0
+      },
+      {
+        "id": 10
+      }
+    ],
+    "ids": [
+      0
+    ],
+    "items": [
+      {
+        "id": 10,
+        "name": "One",
+        "rating": "R"
+      },
+      {
+        "id": 11,
+        "name": "Two",
+        "rating": "PG"
+      },
+      {
+        "id": 12,
+        "name": "Three",
+        "rating": "unknown"
+      },
+      {
+        "id": 13,
+        "name": "Four",
+        "rating": "pg"
+      }
+    ]
+  },
+  {
+    "key": "add-fallback-newest-default",
+    "operation": "add",
+    "links": [
+      {
+        "id": 99,
+        "path": "{program}\\movie.mkv"
+      }
+    ],
+    "ids": [
+      14
+    ],
+    "items": [
+      {
+        "id": 10,
+        "name": "Old",
+        "rating": "G",
+        "created": "2020-01-01T00:00:00Z",
+        "path": "{program}\\movie.mkv"
+      },
+      {
+        "id": 11,
+        "name": "New",
+        "rating": "PG",
+        "created": "2021-01-01T00:00:00Z",
+        "path": "{program}\\movie.mkv"
+      },
+      {
+        "id": 12,
+        "name": "Owned",
+        "rating": "R",
+        "created": "2025-01-01T00:00:00Z",
+        "ownerId": 10,
+        "path": "{program}\\movie.mkv"
+      },
+      {
+        "id": 13,
+        "name": "Alternate",
+        "rating": "R",
+        "created": "2026-01-01T00:00:00Z",
+        "primaryVersionId": 10,
+        "path": "{program}\\movie.mkv"
+      },
+      {
+        "id": 14,
+        "name": "Added",
+        "rating": "unknown",
+        "path": "{program}\\added.mkv"
+      }
+    ]
+  },
+  {
+    "key": "add-fallback-owned-only",
+    "operation": "add",
+    "links": [
+      {
+        "id": 99,
+        "path": "{program}\\movie.mkv"
+      }
+    ],
+    "ids": [
+      14
+    ],
+    "items": [
+      {
+        "id": 12,
+        "name": "Owned",
+        "rating": "R",
+        "created": "2025-01-01T00:00:00Z",
+        "ownerId": 10,
+        "path": "{program}\\movie.mkv"
+      },
+      {
+        "id": 14,
+        "name": "Added",
+        "rating": "unknown",
+        "path": "{program}\\added.mkv"
+      }
+    ]
+  },
+  {
+    "key": "add-fallback-alternate-only",
+    "operation": "add",
+    "links": [
+      {
+        "id": 99,
+        "path": "{program}\\movie.mkv"
+      }
+    ],
+    "ids": [
+      14
+    ],
+    "items": [
+      {
+        "id": 10,
+        "name": "Old",
+        "rating": "G",
+        "created": "2020-01-01T00:00:00Z",
+        "path": "{program}\\primary.mkv"
+      },
+      {
+        "id": 13,
+        "name": "Alternate",
+        "rating": "R",
+        "created": "2026-01-01T00:00:00Z",
+        "primaryVersionId": 10,
+        "path": "{program}\\movie.mkv"
+      },
+      {
+        "id": 14,
+        "name": "Added",
+        "rating": "unknown",
+        "path": "{program}\\added.mkv"
+      }
+    ]
+  },
+  {
+    "key": "create-null-provider-ids",
+    "operation": "create",
+    "providerIds": null,
+    "items": [
+      {
+        "id": 10,
+        "name": "One",
+        "rating": "R"
+      },
+      {
+        "id": 11,
+        "name": "Two",
+        "rating": "PG"
+      },
+      {
+        "id": 12,
+        "name": "Three",
+        "rating": "unknown"
+      },
+      {
+        "id": 13,
+        "name": "Four",
+        "rating": "pg"
+      }
+    ]
+  },
+  {
+    "key": "ensure-by-name-folder-type",
+    "operation": "ensure",
+    "createIfNeeded": false,
+    "parentType": "MusicArtist",
+    "parentPath": "{data}",
+    "items": [
+      {
+        "id": 10,
+        "name": "One",
+        "rating": "R"
+      },
+      {
+        "id": 11,
+        "name": "Two",
+        "rating": "PG"
+      },
+      {
+        "id": 12,
+        "name": "Three",
+        "rating": "unknown"
+      },
+      {
+        "id": 13,
+        "name": "Four",
+        "rating": "pg"
+      }
+    ]
+  }
+]

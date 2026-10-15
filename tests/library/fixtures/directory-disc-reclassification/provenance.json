@@ -1,0 +1,195 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-10-08T03:50:46.687Z",
+  "scope": "Actual protected Folder.ValidateChildrenInternal after genuine frozen warm multi-disc CreateItems setup. The original nine DVD/Blu-ray same-identity cases, three strong three-to-two primary-loss cases and one two-to-Folder immediate control remain nonrecursive. Five appended two-to-Folder cases invoke recursive validation and record the immediate outer replacement, nested direct-disc creation, final UserData identity keys, outer/nested creation failures and cancellation after the outer Added event. Real EF SQLite captures all 72 BaseItems columns, typed Data, provider rows, UserData, links, files, calls, events, parent cache and before/live/cached state. Provider savers and explicit failures are controlled; source media, resolver and persistence are real. Excludes complete MetadataService, network storage, Web, candidate execution, and release acceptance.",
+  "fixtureFiles": [
+    {
+      "path": "tests/library/fixtures/directory-disc-reclassification/input.json",
+      "sha256": "6a2d2628963f449c7956543e7b54af7632adddec1cff16c7c0528e6812a0c64c"
+    },
+    {
+      "path": "tests/library/fixtures/directory-disc-reclassification/Program.cs",
+      "sha256": "65f225533273bb2c952fb8144ba946199b8f9eb25f39b33893fb13d49d0342cd"
+    },
+    {
+      "path": "tests/library/fixtures/directory-disc-reclassification/Oracle.csproj",
+      "sha256": "cbe1a514da582cbf55a443ee14c93f731f84816d10e7672fb713045ac5d78efe"
+    },
+    {
+      "path": "tests/library/fixtures/directory-disc-reclassification/native.json",
+      "sha256": "77983ae799fc754358af19f240c2dbf4a400d4561c7411a4eff2167b4cbdf411"
+    },
+    {
+      "path": "tests/Directory.Build.props",
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    }
+  ],
+  "assemblies": [
+    {
+      "name": "MediaBrowser.Controller",
+      "sha256": "a9a051747d55565befc425dd194779e2ae53c57f8740212dc929dd706b888306"
+    },
+    {
+      "name": "Emby.Server.Implementations",
+      "sha256": "6a29143fe5e6867f8e91b697680dce602aa422cf250786db1298911499369d62"
+    },
+    {
+      "name": "Jellyfin.Server.Implementations",
+      "sha256": "cd726ddeda5fd389b23bbcbcce978912cd4a74003a99970b33323061649a9bfd"
+    }
+  ],
+  "reference": {
+    "head": "208c278b75abd897aefa1e1175126eac5e4dbfaa",
+    "contentDigest": "e28a983db179b720c3b16d7416ee4112894a3115c4be6fe43c61c52e0d9a8313",
+    "checkoutPath": "D:/mediamanager-validation/20261008/jellyfin-pinned-208c278/source",
+    "checkoutStatusPorcelain": "",
+    "sourceSealMethod": "SHA-256 of raw bytes from git show HEAD:{path}",
+    "files": [
+      {
+        "path": "MediaBrowser.Controller/Entities/Folder.cs",
+        "sha256": "7f3caa6b32b267736ac5a62eb2d147baa76a14870619f172668513657b575920"
+      },
+      {
+        "path": "MediaBrowser.Controller/Entities/BaseItem.cs",
+        "sha256": "9dc7b96a93c9fbe874cdcededdca395b5aa2df6070f5cfc9c8959539dcd76469"
+      },
+      {
+        "path": "MediaBrowser.Controller/Entities/Video.cs",
+        "sha256": "03df015992ee4e95e175c499b36a7b21d9facc4f391cfd89235ad652d2eb0b11"
+      },
+      {
+        "path": "Emby.Server.Implementations/Library/LibraryManager.cs",
+        "sha256": "ba2d43d6a9061b999d2595015c46a329c86cbf5bdeaa632eef04c433c1bc1d5d"
+      },
+      {
+        "path": "Emby.Server.Implementations/Library/Resolvers/Movies/MovieResolver.cs",
+        "sha256": "0a74d2079340fcfc85c9d72839112d42dbafe4285b286ceab137c0092c3f6e15"
+      },
+      {
+        "path": "Emby.Server.Implementations/Library/Resolvers/BaseVideoResolver.cs",
+        "sha256": "bd67ff9d8f91d38923ddb07a7d99a49947a73a8d2a3a844f7bc9c101b43c2dc1"
+      },
+      {
+        "path": "Emby.Naming/Video/StackResolver.cs",
+        "sha256": "cf7031594406d71878f821f39903352e0081616925e7049392696e0575a249c6"
+      },
+      {
+        "path": "Emby.Naming/Video/FileStackRule.cs",
+        "sha256": "378893e93b2c262242fa79c55fbba60335db72117d1ac62103064a34b4a44ed5"
+      },
+      {
+        "path": "Emby.Naming/Common/NamingOptions.cs",
+        "sha256": "4fc386ee2a335da97314845fcac71d2ffa534fbc37d772d44ae30e2dd4b07c02"
+      },
+      {
+        "path": "Jellyfin.Server.Implementations/Item/ItemPersistenceService.cs",
+        "sha256": "df64ede4e72fca107cb86127e44b4c81321b3cf560ea3b7f0eccf4462f148d14"
+      },
+      {
+        "path": "MediaBrowser.Controller/LibraryTaskScheduler/LimitedConcurrencyLibraryScheduler.cs",
+        "sha256": "6f12fba06b37eafd31b1f50e02b9c01e0c2459771e8246c11a0fe7c1cfc46ba8"
+      }
+    ]
+  },
+  "runtime": {
+    "timezone": "Asia/Taipei",
+    "node": "v24.16.0",
+    "dotnet": {
+      "path": "D:/mediamanager/.tools/dotnet/dotnet.exe",
+      "bytes": 167208,
+      "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6"
+    },
+    "jellyfinDll": {
+      "path": "D:/mediamanager-validation/20261008/jellyfin-pinned-208c278/source/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll",
+      "bytes": 514560,
+      "sha256": "14a821378e554f3a1476610b02ef7ad3795fbb4050872413180ee423bd612d01",
+      "buildCommand": "D:/mediamanager/.tools/dotnet/dotnet.exe build Jellyfin.Server/Jellyfin.Server.csproj -c Release --nologo -v minimal",
+      "buildWarnings": 0,
+      "buildErrors": 0
+    }
+  },
+  "record": {
+    "path": "D:/mediamanager-validation/20261008/jellyfin-pinned-208c278/results/directory-disc-reclassification-oracle-v19-clean-pinned/record.json",
+    "sha256": "026446af11ce399ec7aea41c58100e46109acbfd19b903f2227c399ff7e94493",
+    "sourceFilesSha256": "8a32eb8f380d5da42e981cd7295a1cbd20f606162992233bd245e72d3940fe05",
+    "oracleAssemblySha256": "be5f2085221e9f9fb438917c49316754f0e66db6674b61c66eb322d6e7aa6b2b",
+    "rawNativeSha256": "7e971e343fd2c7d2743a772400fc9f2dc208024bce92de148bfe5952bcd88366",
+    "portableNativeSha256": "77983ae799fc754358af19f240c2dbf4a400d4561c7411a4eff2167b4cbdf411",
+    "previous11ResultsProjectionSha256": "bc1c6bef17d34a7ea54bd9ae87320cc4132fe26a828e46689d29643179a0d5c4",
+    "previous13ResultsSha256": "9c734fb1350281f005b39073f3640df8407fbabd120bf2ed8357aa1b453bf1ee",
+    "portableNormalization": "CRLF to LF with the original final LF retained",
+    "buildStatus": 0,
+    "processStatus": 0,
+    "failedPredecessors": [
+      "D:/mediamanager-validation/20261005/results/directory-disc-reclassification-oracle-20261008-v1/record.json",
+      "D:/mediamanager-validation/20261005/results/directory-disc-reclassification-oracle-20261008-v2/record.json",
+      "D:/mediamanager-validation/20261008/results/directory-disc-reclassification-oracle-v10/record.json",
+      "D:/mediamanager-validation/20261008/results/directory-disc-reclassification-oracle-v11/record.json",
+      "D:/mediamanager-validation/20261008/results/directory-disc-reclassification-oracle-v14/record.json",
+      "D:/mediamanager-validation/20261008/results/directory-disc-reclassification-oracle-v15/record.json"
+    ],
+    "supersededSuccessfulRecords": [
+      "D:/mediamanager-validation/20261005/results/directory-disc-reclassification-oracle-20261008-v3/record.json",
+      "D:/mediamanager-validation/20261005/results/directory-disc-reclassification-oracle-20261008-v4/record.json",
+      "D:/mediamanager-validation/20261005/results/directory-disc-reclassification-oracle-20261008-v5/record.json",
+      "D:/mediamanager-validation/20261005/results/directory-disc-reclassification-oracle-20261008-v6/record.json",
+      "D:/mediamanager-validation/20261005/results/directory-disc-reclassification-oracle-20261008-v9/record.json",
+      "D:/mediamanager-validation/20261008/results/directory-disc-reclassification-oracle-v12/record.json",
+      "D:/mediamanager-validation/20261008/results/directory-disc-reclassification-oracle-v13/record.json",
+      "D:/mediamanager-validation/20261008/results/directory-disc-reclassification-oracle-v16/record.json",
+      "D:/mediamanager-validation/20261008/results/directory-disc-reclassification-oracle-v17/record.json",
+      "D:/mediamanager-validation/20261008/results/directory-disc-reclassification-oracle-v18/record.json",
+      "D:/mediamanager-validation/20261008/jellyfin-pinned-208c278/results/directory-disc-reclassification-oracle-v18/record.json"
+    ]
+  },
+  "command": "$env:MEDIAMANAGER_DOTNET='D:\\mediamanager\\.tools\\dotnet\\dotnet.exe'; $env:MEDIAMANAGER_DOTNET_ROOT='D:\\mediamanager\\.tools\\dotnet'; $env:MEDIAMANAGER_JELLYFIN_DLL='D:\\mediamanager-validation\\20261008\\jellyfin-pinned-208c278\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\jellyfin.dll'; node tools/validation/oracle.js tests/library/fixtures/directory-disc-reclassification/Oracle.csproj D:\\mediamanager-validation\\20261008\\jellyfin-pinned-208c278\\results\\directory-disc-reclassification-oracle-v19-clean-pinned tests/library/fixtures/directory-disc-reclassification/input.json '{output}\\native.json' '{output}\\state'",
+  "candidateVerified": true,
+  "candidateComparison": {
+    "parityScenarios": [
+      "dvd-secondary-remove",
+      "dvd-secondary-add",
+      "bluray-secondary-remove",
+      "dvd-nonpadded-order-remove",
+      "dvd-qualified-stray-remove",
+      "dvd-secondary-saver-failure",
+      "dvd-secondary-repository-save-failure",
+      "dvd-secondary-cancel-from-saver",
+      "dvd-secondary-event-failure"
+    ],
+    "promotionScenarios": [
+      "dvd-primary-remove-three-to-two-control",
+      "dvd-primary-remove-three-to-two-migration",
+      "bluray-primary-remove-three-to-two"
+    ],
+    "folderScenarios": [
+      "dvd-two-to-folder-recursive",
+      "dvd-two-to-folder-recursive-shared-user-data",
+      "dvd-two-to-folder-outer-create-failure",
+      "dvd-two-to-folder-nested-create-failure",
+      "dvd-two-to-folder-cancel-after-outer-added"
+    ],
+    "commands": [
+      {
+        "command": "$env:MEDIAMANAGER_TEST_POSTGRES='postgresql://validation@127.0.0.1:15439/postgres'; node --test tests/library/directory-disc-reclassification.test.js",
+        "result": "19 passed, 0 failed, 0 skipped"
+      },
+      {
+        "command": "$env:MEDIAMANAGER_TEST_POSTGRES='postgresql://validation@127.0.0.1:15439/postgres'; node --test --test-name-pattern=\"directory disc\" tests/library/directory-item-scan.test.js",
+        "result": "84 passed, 0 failed, 0 skipped; same-ID, three-to-two and recursive two-to-Folder lifecycles plus all fail-closed boundaries run on both stores"
+      },
+      {
+        "command": "$env:MEDIAMANAGER_TEST_POSTGRES='postgresql://validation@127.0.0.1:15439/postgres'; node --test tests/library/directory-disc-reclassification.test.js tests/library/directory-item-resolver.test.js tests/library/directory-multi-disc-stack.test.js tests/library/video-file-resolver.test.js tests/library/directory-item-scan.test.js tests/library/resolved-item-scan.test.js",
+        "result": "476 passed, 0 failed, 0 skipped"
+      },
+      {
+        "command": "$env:MEDIAMANAGER_TEST_POSTGRES='postgresql://validation@127.0.0.1:15439/postgres'; node --test tests/library/folder-scan-linked-references.test.js tests/library/folder-user-data-reattachment.test.js tests/library/directory-video-delete-items.test.js tests/library/item-deletion-service.test.js tests/library/owned-part-scan.test.js tests/library/owned-extra-scan.test.js tests/library/folder-version-reconciliation.test.js tests/library/video-version-discovery.test.js tests/library/video-version-relations.test.js tests/library/video-extras-resolver.test.js",
+        "result": "594 passed, 0 failed, 0 skipped"
+      },
+      {
+        "command": "npm run check",
+        "result": "passed"
+      }
+    ],
+    "summary": "The original thirteen actual results remain byte-identical after removing the newly added recursive identity-key observation field. Nine same-identity and three strong three-to-two scenarios retain strict candidate parity. Five recursive two-to-Folder recordings establish native delete/Removed/outer save/Added/nested save/Added behavior, isolated outer and nested creation failures, cancellation after outer Added, fresh metadata, direct-disc parentage and the no-post-recursion-reattach UserData boundary. Fifteen unsafe two-to-Folder shapes and ten unsafe promotion shapes fail closed before side effects on real SQLite and PostgreSQL."
+  }
+}

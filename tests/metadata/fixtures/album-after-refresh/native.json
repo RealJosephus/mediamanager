@@ -1,0 +1,2468 @@
+{
+  "results": [
+    {
+      "name": "after-empty-preserves-credits",
+      "updateType": null,
+      "exception": null,
+      "Artists": [],
+      "AlbumArtists": [],
+      "calls": [],
+      "credits": [
+        {
+          "Name": "Old Credit",
+          "Type": "Actor",
+          "Role": "Original Role",
+          "ListOrder": 0,
+          "SortOrder": null
+        }
+      ]
+    },
+    {
+      "name": "after-artist-only",
+      "updateType": null,
+      "exception": null,
+      "Artists": [
+        "Song Artist"
+      ],
+      "AlbumArtists": [],
+      "calls": [
+        {
+          "action": "people",
+          "people": [
+            {
+              "Name": "Song Artist",
+              "Type": "Artist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            }
+          ]
+        }
+      ],
+      "credits": [
+        {
+          "Name": "Song Artist",
+          "Type": "Artist",
+          "Role": "",
+          "ListOrder": 0,
+          "SortOrder": null
+        }
+      ]
+    },
+    {
+      "name": "after-album-artist-only",
+      "updateType": null,
+      "exception": null,
+      "Artists": [],
+      "AlbumArtists": [
+        "Album Artist"
+      ],
+      "calls": [
+        {
+          "action": "people",
+          "people": [
+            {
+              "Name": "Album Artist",
+              "Type": "AlbumArtist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            }
+          ]
+        }
+      ],
+      "credits": [
+        {
+          "Name": "Album Artist",
+          "Type": "AlbumArtist",
+          "Role": "",
+          "ListOrder": 0,
+          "SortOrder": null
+        }
+      ]
+    },
+    {
+      "name": "after-two-kinds-same-name",
+      "updateType": null,
+      "exception": null,
+      "Artists": [
+        "Shared"
+      ],
+      "AlbumArtists": [
+        "Shared"
+      ],
+      "calls": [
+        {
+          "action": "people",
+          "people": [
+            {
+              "Name": "Shared",
+              "Type": "AlbumArtist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "Shared",
+              "Type": "Artist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            }
+          ]
+        }
+      ],
+      "credits": [
+        {
+          "Name": "Shared",
+          "Type": "AlbumArtist",
+          "Role": "",
+          "ListOrder": 0,
+          "SortOrder": null
+        },
+        {
+          "Name": "Shared",
+          "Type": "Artist",
+          "Role": "",
+          "ListOrder": 1,
+          "SortOrder": null
+        }
+      ]
+    },
+    {
+      "name": "after-album-artists-before-artists",
+      "updateType": null,
+      "exception": null,
+      "Artists": [
+        "Zulu",
+        "Alpha"
+      ],
+      "AlbumArtists": [
+        "Second",
+        "First"
+      ],
+      "calls": [
+        {
+          "action": "people",
+          "people": [
+            {
+              "Name": "Second",
+              "Type": "AlbumArtist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "First",
+              "Type": "AlbumArtist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "Zulu",
+              "Type": "Artist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "Alpha",
+              "Type": "Artist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            }
+          ]
+        }
+      ],
+      "credits": [
+        {
+          "Name": "Second",
+          "Type": "AlbumArtist",
+          "Role": "",
+          "ListOrder": 0,
+          "SortOrder": null
+        },
+        {
+          "Name": "First",
+          "Type": "AlbumArtist",
+          "Role": "",
+          "ListOrder": 1,
+          "SortOrder": null
+        },
+        {
+          "Name": "Zulu",
+          "Type": "Artist",
+          "Role": "",
+          "ListOrder": 2,
+          "SortOrder": null
+        },
+        {
+          "Name": "Alpha",
+          "Type": "Artist",
+          "Role": "",
+          "ListOrder": 3,
+          "SortOrder": null
+        }
+      ]
+    },
+    {
+      "name": "after-case-duplicates-first-spelling",
+      "updateType": null,
+      "exception": null,
+      "Artists": [
+        " A ",
+        "a",
+        "A",
+        "B"
+      ],
+      "AlbumArtists": [
+        " b ",
+        "B",
+        "a"
+      ],
+      "calls": [
+        {
+          "action": "people",
+          "people": [
+            {
+              "Name": "b",
+              "Type": "AlbumArtist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "a",
+              "Type": "AlbumArtist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "A",
+              "Type": "Artist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "B",
+              "Type": "Artist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            }
+          ]
+        }
+      ],
+      "credits": [
+        {
+          "Name": "b",
+          "Type": "AlbumArtist",
+          "Role": "",
+          "ListOrder": 0,
+          "SortOrder": null
+        },
+        {
+          "Name": "a",
+          "Type": "AlbumArtist",
+          "Role": "",
+          "ListOrder": 1,
+          "SortOrder": null
+        },
+        {
+          "Name": "A",
+          "Type": "Artist",
+          "Role": "",
+          "ListOrder": 2,
+          "SortOrder": null
+        },
+        {
+          "Name": "B",
+          "Type": "Artist",
+          "Role": "",
+          "ListOrder": 3,
+          "SortOrder": null
+        }
+      ]
+    },
+    {
+      "name": "after-blank-members-clear-credits",
+      "updateType": null,
+      "exception": null,
+      "Artists": [
+        "",
+        " ",
+        "\t",
+        "\r\n"
+      ],
+      "AlbumArtists": [
+        "\u00A0",
+        "\u2003",
+        null
+      ],
+      "calls": [
+        {
+          "action": "people",
+          "people": []
+        }
+      ],
+      "credits": []
+    },
+    {
+      "name": "after-blank-album-only-clears-credits",
+      "updateType": null,
+      "exception": null,
+      "Artists": [],
+      "AlbumArtists": [
+        " "
+      ],
+      "calls": [
+        {
+          "action": "people",
+          "people": []
+        }
+      ],
+      "credits": []
+    },
+    {
+      "name": "after-null-member-only-clears-credits",
+      "updateType": null,
+      "exception": null,
+      "Artists": [
+        null
+      ],
+      "AlbumArtists": [],
+      "calls": [
+        {
+          "action": "people",
+          "people": []
+        }
+      ],
+      "credits": []
+    },
+    {
+      "name": "after-clr-whitespace",
+      "updateType": null,
+      "exception": null,
+      "Artists": [
+        "\u0085 Trimmed \u3000",
+        "\u2007 Artist\u202F",
+        "\uFEFFVisible"
+      ],
+      "AlbumArtists": [
+        "\u00A0 Album \u2003"
+      ],
+      "calls": [
+        {
+          "action": "people",
+          "people": [
+            {
+              "Name": "Album",
+              "Type": "AlbumArtist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "Trimmed",
+              "Type": "Artist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "Artist",
+              "Type": "Artist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "\uFEFFVisible",
+              "Type": "Artist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            }
+          ]
+        }
+      ],
+      "credits": [
+        {
+          "Name": "Album",
+          "Type": "AlbumArtist",
+          "Role": "",
+          "ListOrder": 0,
+          "SortOrder": null
+        },
+        {
+          "Name": "Trimmed",
+          "Type": "Artist",
+          "Role": "",
+          "ListOrder": 1,
+          "SortOrder": null
+        },
+        {
+          "Name": "Artist",
+          "Type": "Artist",
+          "Role": "",
+          "ListOrder": 2,
+          "SortOrder": null
+        },
+        {
+          "Name": "\uFEFFVisible",
+          "Type": "Artist",
+          "Role": "",
+          "ListOrder": 3,
+          "SortOrder": null
+        }
+      ]
+    },
+    {
+      "name": "after-zero-width-retained",
+      "updateType": null,
+      "exception": null,
+      "Artists": [
+        "\u200B"
+      ],
+      "AlbumArtists": [
+        "\uFEFF"
+      ],
+      "calls": [
+        {
+          "action": "people",
+          "people": [
+            {
+              "Name": "\uFEFF",
+              "Type": "AlbumArtist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "\u200B",
+              "Type": "Artist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            }
+          ]
+        }
+      ],
+      "credits": [
+        {
+          "Name": "\uFEFF",
+          "Type": "AlbumArtist",
+          "Role": "",
+          "ListOrder": 0,
+          "SortOrder": null
+        },
+        {
+          "Name": "\u200B",
+          "Type": "Artist",
+          "Role": "",
+          "ListOrder": 1,
+          "SortOrder": null
+        }
+      ]
+    },
+    {
+      "name": "after-unicode-distinct",
+      "updateType": null,
+      "exception": null,
+      "Artists": [
+        "Stra\u00DFe",
+        "STRASSE",
+        "\u03A3",
+        "\u03C3",
+        "\u03C2",
+        "\u0130",
+        "i",
+        "\u0131"
+      ],
+      "AlbumArtists": [
+        "\uD835\uDD18nicode",
+        "\u4E2D\u6587"
+      ],
+      "calls": [
+        {
+          "action": "people",
+          "people": [
+            {
+              "Name": "\uD835\uDD18nicode",
+              "Type": "AlbumArtist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "\u4E2D\u6587",
+              "Type": "AlbumArtist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "Stra\u00DFe",
+              "Type": "Artist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "STRASSE",
+              "Type": "Artist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "\u03A3",
+              "Type": "Artist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "\u0130",
+              "Type": "Artist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "i",
+              "Type": "Artist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "\u0131",
+              "Type": "Artist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            }
+          ]
+        }
+      ],
+      "credits": [
+        {
+          "Name": "\uD835\uDD18nicode",
+          "Type": "AlbumArtist",
+          "Role": "",
+          "ListOrder": 0,
+          "SortOrder": null
+        },
+        {
+          "Name": "\u4E2D\u6587",
+          "Type": "AlbumArtist",
+          "Role": "",
+          "ListOrder": 1,
+          "SortOrder": null
+        },
+        {
+          "Name": "Stra\u00DFe",
+          "Type": "Artist",
+          "Role": "",
+          "ListOrder": 2,
+          "SortOrder": null
+        },
+        {
+          "Name": "STRASSE",
+          "Type": "Artist",
+          "Role": "",
+          "ListOrder": 3,
+          "SortOrder": null
+        },
+        {
+          "Name": "\u03A3",
+          "Type": "Artist",
+          "Role": "",
+          "ListOrder": 4,
+          "SortOrder": null
+        },
+        {
+          "Name": "\u0130",
+          "Type": "Artist",
+          "Role": "",
+          "ListOrder": 5,
+          "SortOrder": null
+        },
+        {
+          "Name": "i",
+          "Type": "Artist",
+          "Role": "",
+          "ListOrder": 6,
+          "SortOrder": null
+        },
+        {
+          "Name": "\u0131",
+          "Type": "Artist",
+          "Role": "",
+          "ListOrder": 7,
+          "SortOrder": null
+        }
+      ]
+    },
+    {
+      "name": "after-punctuation-retained",
+      "updateType": null,
+      "exception": null,
+      "Artists": [
+        "A/B",
+        "A:B",
+        "A_B",
+        "A.B"
+      ],
+      "AlbumArtists": [
+        "A, B",
+        "A \u0026 B"
+      ],
+      "calls": [
+        {
+          "action": "people",
+          "people": [
+            {
+              "Name": "A, B",
+              "Type": "AlbumArtist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "A \u0026 B",
+              "Type": "AlbumArtist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "A/B",
+              "Type": "Artist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "A:B",
+              "Type": "Artist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "A_B",
+              "Type": "Artist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "A.B",
+              "Type": "Artist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            }
+          ]
+        }
+      ],
+      "credits": [
+        {
+          "Name": "A, B",
+          "Type": "AlbumArtist",
+          "Role": "",
+          "ListOrder": 0,
+          "SortOrder": null
+        },
+        {
+          "Name": "A \u0026 B",
+          "Type": "AlbumArtist",
+          "Role": "",
+          "ListOrder": 1,
+          "SortOrder": null
+        },
+        {
+          "Name": "A/B",
+          "Type": "Artist",
+          "Role": "",
+          "ListOrder": 2,
+          "SortOrder": null
+        },
+        {
+          "Name": "A:B",
+          "Type": "Artist",
+          "Role": "",
+          "ListOrder": 3,
+          "SortOrder": null
+        },
+        {
+          "Name": "A_B",
+          "Type": "Artist",
+          "Role": "",
+          "ListOrder": 4,
+          "SortOrder": null
+        },
+        {
+          "Name": "A.B",
+          "Type": "Artist",
+          "Role": "",
+          "ListOrder": 5,
+          "SortOrder": null
+        }
+      ]
+    },
+    {
+      "name": "after-internal-whitespace-retained",
+      "updateType": null,
+      "exception": null,
+      "Artists": [
+        "A  B",
+        "A B",
+        "A\tB"
+      ],
+      "AlbumArtists": [
+        "A\nB"
+      ],
+      "calls": [
+        {
+          "action": "people",
+          "people": [
+            {
+              "Name": "A\nB",
+              "Type": "AlbumArtist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "A  B",
+              "Type": "Artist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "A B",
+              "Type": "Artist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "A\tB",
+              "Type": "Artist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            }
+          ]
+        }
+      ],
+      "credits": [
+        {
+          "Name": "A\nB",
+          "Type": "AlbumArtist",
+          "Role": "",
+          "ListOrder": 0,
+          "SortOrder": null
+        },
+        {
+          "Name": "A  B",
+          "Type": "Artist",
+          "Role": "",
+          "ListOrder": 1,
+          "SortOrder": null
+        },
+        {
+          "Name": "A B",
+          "Type": "Artist",
+          "Role": "",
+          "ListOrder": 2,
+          "SortOrder": null
+        },
+        {
+          "Name": "A\tB",
+          "Type": "Artist",
+          "Role": "",
+          "ListOrder": 3,
+          "SortOrder": null
+        }
+      ]
+    },
+    {
+      "name": "after-duplicates-across-kinds",
+      "updateType": null,
+      "exception": null,
+      "Artists": [
+        " First ",
+        "first",
+        "SECOND"
+      ],
+      "AlbumArtists": [
+        "FIRST",
+        "Second",
+        "second"
+      ],
+      "calls": [
+        {
+          "action": "people",
+          "people": [
+            {
+              "Name": "FIRST",
+              "Type": "AlbumArtist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "Second",
+              "Type": "AlbumArtist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "First",
+              "Type": "Artist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "SECOND",
+              "Type": "Artist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            }
+          ]
+        }
+      ],
+      "credits": [
+        {
+          "Name": "FIRST",
+          "Type": "AlbumArtist",
+          "Role": "",
+          "ListOrder": 0,
+          "SortOrder": null
+        },
+        {
+          "Name": "Second",
+          "Type": "AlbumArtist",
+          "Role": "",
+          "ListOrder": 1,
+          "SortOrder": null
+        },
+        {
+          "Name": "First",
+          "Type": "Artist",
+          "Role": "",
+          "ListOrder": 2,
+          "SortOrder": null
+        },
+        {
+          "Name": "SECOND",
+          "Type": "Artist",
+          "Role": "",
+          "ListOrder": 3,
+          "SortOrder": null
+        }
+      ]
+    },
+    {
+      "name": "after-artist-order",
+      "updateType": null,
+      "exception": null,
+      "Artists": [
+        "Third",
+        "First",
+        "Second",
+        "third"
+      ],
+      "AlbumArtists": [],
+      "calls": [
+        {
+          "action": "people",
+          "people": [
+            {
+              "Name": "Third",
+              "Type": "Artist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "First",
+              "Type": "Artist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "Second",
+              "Type": "Artist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            }
+          ]
+        }
+      ],
+      "credits": [
+        {
+          "Name": "Third",
+          "Type": "Artist",
+          "Role": "",
+          "ListOrder": 0,
+          "SortOrder": null
+        },
+        {
+          "Name": "First",
+          "Type": "Artist",
+          "Role": "",
+          "ListOrder": 1,
+          "SortOrder": null
+        },
+        {
+          "Name": "Second",
+          "Type": "Artist",
+          "Role": "",
+          "ListOrder": 2,
+          "SortOrder": null
+        }
+      ]
+    },
+    {
+      "name": "after-locked-album",
+      "updateType": null,
+      "exception": null,
+      "Artists": [
+        "New Artist"
+      ],
+      "AlbumArtists": [
+        "New Album Artist"
+      ],
+      "calls": [
+        {
+          "action": "people",
+          "people": [
+            {
+              "Name": "New Album Artist",
+              "Type": "AlbumArtist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "New Artist",
+              "Type": "Artist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            }
+          ]
+        }
+      ],
+      "credits": [
+        {
+          "Name": "New Album Artist",
+          "Type": "AlbumArtist",
+          "Role": "",
+          "ListOrder": 0,
+          "SortOrder": null
+        },
+        {
+          "Name": "New Artist",
+          "Type": "Artist",
+          "Role": "",
+          "ListOrder": 1,
+          "SortOrder": null
+        }
+      ]
+    },
+    {
+      "name": "after-empty-with-lock",
+      "updateType": null,
+      "exception": null,
+      "Artists": [],
+      "AlbumArtists": [],
+      "calls": [],
+      "credits": [
+        {
+          "Name": "Old Credit",
+          "Type": "Actor",
+          "Role": "Original Role",
+          "ListOrder": 0,
+          "SortOrder": null
+        }
+      ]
+    },
+    {
+      "name": "none-empty-preserves-credits",
+      "updateType": 1,
+      "exception": null,
+      "Artists": [],
+      "AlbumArtists": [],
+      "calls": [],
+      "credits": [
+        {
+          "Name": "Old Credit",
+          "Type": "Actor",
+          "Role": "Original Role",
+          "ListOrder": 0,
+          "SortOrder": null
+        }
+      ]
+    },
+    {
+      "name": "none-artist-only",
+      "updateType": 1,
+      "exception": null,
+      "Artists": [
+        "Song Artist"
+      ],
+      "AlbumArtists": [],
+      "calls": [
+        {
+          "action": "people",
+          "people": [
+            {
+              "Name": "Song Artist",
+              "Type": "Artist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            }
+          ]
+        }
+      ],
+      "credits": [
+        {
+          "Name": "Song Artist",
+          "Type": "Artist",
+          "Role": "",
+          "ListOrder": 0,
+          "SortOrder": null
+        }
+      ]
+    },
+    {
+      "name": "none-album-artist-only",
+      "updateType": 1,
+      "exception": null,
+      "Artists": [],
+      "AlbumArtists": [
+        "Album Artist"
+      ],
+      "calls": [
+        {
+          "action": "people",
+          "people": [
+            {
+              "Name": "Album Artist",
+              "Type": "AlbumArtist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            }
+          ]
+        }
+      ],
+      "credits": [
+        {
+          "Name": "Album Artist",
+          "Type": "AlbumArtist",
+          "Role": "",
+          "ListOrder": 0,
+          "SortOrder": null
+        }
+      ]
+    },
+    {
+      "name": "none-two-kinds-same-name",
+      "updateType": 1,
+      "exception": null,
+      "Artists": [
+        "Shared"
+      ],
+      "AlbumArtists": [
+        "Shared"
+      ],
+      "calls": [
+        {
+          "action": "people",
+          "people": [
+            {
+              "Name": "Shared",
+              "Type": "AlbumArtist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "Shared",
+              "Type": "Artist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            }
+          ]
+        }
+      ],
+      "credits": [
+        {
+          "Name": "Shared",
+          "Type": "AlbumArtist",
+          "Role": "",
+          "ListOrder": 0,
+          "SortOrder": null
+        },
+        {
+          "Name": "Shared",
+          "Type": "Artist",
+          "Role": "",
+          "ListOrder": 1,
+          "SortOrder": null
+        }
+      ]
+    },
+    {
+      "name": "none-album-artists-before-artists",
+      "updateType": 1,
+      "exception": null,
+      "Artists": [
+        "Zulu",
+        "Alpha"
+      ],
+      "AlbumArtists": [
+        "Second",
+        "First"
+      ],
+      "calls": [
+        {
+          "action": "people",
+          "people": [
+            {
+              "Name": "Second",
+              "Type": "AlbumArtist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "First",
+              "Type": "AlbumArtist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "Zulu",
+              "Type": "Artist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "Alpha",
+              "Type": "Artist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            }
+          ]
+        }
+      ],
+      "credits": [
+        {
+          "Name": "Second",
+          "Type": "AlbumArtist",
+          "Role": "",
+          "ListOrder": 0,
+          "SortOrder": null
+        },
+        {
+          "Name": "First",
+          "Type": "AlbumArtist",
+          "Role": "",
+          "ListOrder": 1,
+          "SortOrder": null
+        },
+        {
+          "Name": "Zulu",
+          "Type": "Artist",
+          "Role": "",
+          "ListOrder": 2,
+          "SortOrder": null
+        },
+        {
+          "Name": "Alpha",
+          "Type": "Artist",
+          "Role": "",
+          "ListOrder": 3,
+          "SortOrder": null
+        }
+      ]
+    },
+    {
+      "name": "none-case-duplicates-first-spelling",
+      "updateType": 1,
+      "exception": null,
+      "Artists": [
+        " A ",
+        "a",
+        "A",
+        "B"
+      ],
+      "AlbumArtists": [
+        " b ",
+        "B",
+        "a"
+      ],
+      "calls": [
+        {
+          "action": "people",
+          "people": [
+            {
+              "Name": "b",
+              "Type": "AlbumArtist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "a",
+              "Type": "AlbumArtist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "A",
+              "Type": "Artist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "B",
+              "Type": "Artist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            }
+          ]
+        }
+      ],
+      "credits": [
+        {
+          "Name": "b",
+          "Type": "AlbumArtist",
+          "Role": "",
+          "ListOrder": 0,
+          "SortOrder": null
+        },
+        {
+          "Name": "a",
+          "Type": "AlbumArtist",
+          "Role": "",
+          "ListOrder": 1,
+          "SortOrder": null
+        },
+        {
+          "Name": "A",
+          "Type": "Artist",
+          "Role": "",
+          "ListOrder": 2,
+          "SortOrder": null
+        },
+        {
+          "Name": "B",
+          "Type": "Artist",
+          "Role": "",
+          "ListOrder": 3,
+          "SortOrder": null
+        }
+      ]
+    },
+    {
+      "name": "none-blank-members-clear-credits",
+      "updateType": 1,
+      "exception": null,
+      "Artists": [
+        "",
+        " ",
+        "\t",
+        "\r\n"
+      ],
+      "AlbumArtists": [
+        "\u00A0",
+        "\u2003",
+        null
+      ],
+      "calls": [
+        {
+          "action": "people",
+          "people": []
+        }
+      ],
+      "credits": []
+    },
+    {
+      "name": "none-blank-album-only-clears-credits",
+      "updateType": 1,
+      "exception": null,
+      "Artists": [],
+      "AlbumArtists": [
+        " "
+      ],
+      "calls": [
+        {
+          "action": "people",
+          "people": []
+        }
+      ],
+      "credits": []
+    },
+    {
+      "name": "none-null-member-only-clears-credits",
+      "updateType": 1,
+      "exception": null,
+      "Artists": [
+        null
+      ],
+      "AlbumArtists": [],
+      "calls": [
+        {
+          "action": "people",
+          "people": []
+        }
+      ],
+      "credits": []
+    },
+    {
+      "name": "none-clr-whitespace",
+      "updateType": 1,
+      "exception": null,
+      "Artists": [
+        "\u0085 Trimmed \u3000",
+        "\u2007 Artist\u202F",
+        "\uFEFFVisible"
+      ],
+      "AlbumArtists": [
+        "\u00A0 Album \u2003"
+      ],
+      "calls": [
+        {
+          "action": "people",
+          "people": [
+            {
+              "Name": "Album",
+              "Type": "AlbumArtist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "Trimmed",
+              "Type": "Artist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "Artist",
+              "Type": "Artist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "\uFEFFVisible",
+              "Type": "Artist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            }
+          ]
+        }
+      ],
+      "credits": [
+        {
+          "Name": "Album",
+          "Type": "AlbumArtist",
+          "Role": "",
+          "ListOrder": 0,
+          "SortOrder": null
+        },
+        {
+          "Name": "Trimmed",
+          "Type": "Artist",
+          "Role": "",
+          "ListOrder": 1,
+          "SortOrder": null
+        },
+        {
+          "Name": "Artist",
+          "Type": "Artist",
+          "Role": "",
+          "ListOrder": 2,
+          "SortOrder": null
+        },
+        {
+          "Name": "\uFEFFVisible",
+          "Type": "Artist",
+          "Role": "",
+          "ListOrder": 3,
+          "SortOrder": null
+        }
+      ]
+    },
+    {
+      "name": "none-zero-width-retained",
+      "updateType": 1,
+      "exception": null,
+      "Artists": [
+        "\u200B"
+      ],
+      "AlbumArtists": [
+        "\uFEFF"
+      ],
+      "calls": [
+        {
+          "action": "people",
+          "people": [
+            {
+              "Name": "\uFEFF",
+              "Type": "AlbumArtist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "\u200B",
+              "Type": "Artist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            }
+          ]
+        }
+      ],
+      "credits": [
+        {
+          "Name": "\uFEFF",
+          "Type": "AlbumArtist",
+          "Role": "",
+          "ListOrder": 0,
+          "SortOrder": null
+        },
+        {
+          "Name": "\u200B",
+          "Type": "Artist",
+          "Role": "",
+          "ListOrder": 1,
+          "SortOrder": null
+        }
+      ]
+    },
+    {
+      "name": "none-unicode-distinct",
+      "updateType": 1,
+      "exception": null,
+      "Artists": [
+        "Stra\u00DFe",
+        "STRASSE",
+        "\u03A3",
+        "\u03C3",
+        "\u03C2",
+        "\u0130",
+        "i",
+        "\u0131"
+      ],
+      "AlbumArtists": [
+        "\uD835\uDD18nicode",
+        "\u4E2D\u6587"
+      ],
+      "calls": [
+        {
+          "action": "people",
+          "people": [
+            {
+              "Name": "\uD835\uDD18nicode",
+              "Type": "AlbumArtist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "\u4E2D\u6587",
+              "Type": "AlbumArtist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "Stra\u00DFe",
+              "Type": "Artist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "STRASSE",
+              "Type": "Artist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "\u03A3",
+              "Type": "Artist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "\u0130",
+              "Type": "Artist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "i",
+              "Type": "Artist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "\u0131",
+              "Type": "Artist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            }
+          ]
+        }
+      ],
+      "credits": [
+        {
+          "Name": "\uD835\uDD18nicode",
+          "Type": "AlbumArtist",
+          "Role": "",
+          "ListOrder": 0,
+          "SortOrder": null
+        },
+        {
+          "Name": "\u4E2D\u6587",
+          "Type": "AlbumArtist",
+          "Role": "",
+          "ListOrder": 1,
+          "SortOrder": null
+        },
+        {
+          "Name": "Stra\u00DFe",
+          "Type": "Artist",
+          "Role": "",
+          "ListOrder": 2,
+          "SortOrder": null
+        },
+        {
+          "Name": "STRASSE",
+          "Type": "Artist",
+          "Role": "",
+          "ListOrder": 3,
+          "SortOrder": null
+        },
+        {
+          "Name": "\u03A3",
+          "Type": "Artist",
+          "Role": "",
+          "ListOrder": 4,
+          "SortOrder": null
+        },
+        {
+          "Name": "\u0130",
+          "Type": "Artist",
+          "Role": "",
+          "ListOrder": 5,
+          "SortOrder": null
+        },
+        {
+          "Name": "i",
+          "Type": "Artist",
+          "Role": "",
+          "ListOrder": 6,
+          "SortOrder": null
+        },
+        {
+          "Name": "\u0131",
+          "Type": "Artist",
+          "Role": "",
+          "ListOrder": 7,
+          "SortOrder": null
+        }
+      ]
+    },
+    {
+      "name": "none-punctuation-retained",
+      "updateType": 1,
+      "exception": null,
+      "Artists": [
+        "A/B",
+        "A:B",
+        "A_B",
+        "A.B"
+      ],
+      "AlbumArtists": [
+        "A, B",
+        "A \u0026 B"
+      ],
+      "calls": [
+        {
+          "action": "people",
+          "people": [
+            {
+              "Name": "A, B",
+              "Type": "AlbumArtist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "A \u0026 B",
+              "Type": "AlbumArtist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "A/B",
+              "Type": "Artist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "A:B",
+              "Type": "Artist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "A_B",
+              "Type": "Artist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "A.B",
+              "Type": "Artist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            }
+          ]
+        }
+      ],
+      "credits": [
+        {
+          "Name": "A, B",
+          "Type": "AlbumArtist",
+          "Role": "",
+          "ListOrder": 0,
+          "SortOrder": null
+        },
+        {
+          "Name": "A \u0026 B",
+          "Type": "AlbumArtist",
+          "Role": "",
+          "ListOrder": 1,
+          "SortOrder": null
+        },
+        {
+          "Name": "A/B",
+          "Type": "Artist",
+          "Role": "",
+          "ListOrder": 2,
+          "SortOrder": null
+        },
+        {
+          "Name": "A:B",
+          "Type": "Artist",
+          "Role": "",
+          "ListOrder": 3,
+          "SortOrder": null
+        },
+        {
+          "Name": "A_B",
+          "Type": "Artist",
+          "Role": "",
+          "ListOrder": 4,
+          "SortOrder": null
+        },
+        {
+          "Name": "A.B",
+          "Type": "Artist",
+          "Role": "",
+          "ListOrder": 5,
+          "SortOrder": null
+        }
+      ]
+    },
+    {
+      "name": "none-internal-whitespace-retained",
+      "updateType": 1,
+      "exception": null,
+      "Artists": [
+        "A  B",
+        "A B",
+        "A\tB"
+      ],
+      "AlbumArtists": [
+        "A\nB"
+      ],
+      "calls": [
+        {
+          "action": "people",
+          "people": [
+            {
+              "Name": "A\nB",
+              "Type": "AlbumArtist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "A  B",
+              "Type": "Artist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "A B",
+              "Type": "Artist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "A\tB",
+              "Type": "Artist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            }
+          ]
+        }
+      ],
+      "credits": [
+        {
+          "Name": "A\nB",
+          "Type": "AlbumArtist",
+          "Role": "",
+          "ListOrder": 0,
+          "SortOrder": null
+        },
+        {
+          "Name": "A  B",
+          "Type": "Artist",
+          "Role": "",
+          "ListOrder": 1,
+          "SortOrder": null
+        },
+        {
+          "Name": "A B",
+          "Type": "Artist",
+          "Role": "",
+          "ListOrder": 2,
+          "SortOrder": null
+        },
+        {
+          "Name": "A\tB",
+          "Type": "Artist",
+          "Role": "",
+          "ListOrder": 3,
+          "SortOrder": null
+        }
+      ]
+    },
+    {
+      "name": "none-duplicates-across-kinds",
+      "updateType": 1,
+      "exception": null,
+      "Artists": [
+        " First ",
+        "first",
+        "SECOND"
+      ],
+      "AlbumArtists": [
+        "FIRST",
+        "Second",
+        "second"
+      ],
+      "calls": [
+        {
+          "action": "people",
+          "people": [
+            {
+              "Name": "FIRST",
+              "Type": "AlbumArtist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "Second",
+              "Type": "AlbumArtist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "First",
+              "Type": "Artist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "SECOND",
+              "Type": "Artist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            }
+          ]
+        }
+      ],
+      "credits": [
+        {
+          "Name": "FIRST",
+          "Type": "AlbumArtist",
+          "Role": "",
+          "ListOrder": 0,
+          "SortOrder": null
+        },
+        {
+          "Name": "Second",
+          "Type": "AlbumArtist",
+          "Role": "",
+          "ListOrder": 1,
+          "SortOrder": null
+        },
+        {
+          "Name": "First",
+          "Type": "Artist",
+          "Role": "",
+          "ListOrder": 2,
+          "SortOrder": null
+        },
+        {
+          "Name": "SECOND",
+          "Type": "Artist",
+          "Role": "",
+          "ListOrder": 3,
+          "SortOrder": null
+        }
+      ]
+    },
+    {
+      "name": "none-artist-order",
+      "updateType": 1,
+      "exception": null,
+      "Artists": [
+        "Third",
+        "First",
+        "Second",
+        "third"
+      ],
+      "AlbumArtists": [],
+      "calls": [
+        {
+          "action": "people",
+          "people": [
+            {
+              "Name": "Third",
+              "Type": "Artist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "First",
+              "Type": "Artist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "Second",
+              "Type": "Artist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            }
+          ]
+        }
+      ],
+      "credits": [
+        {
+          "Name": "Third",
+          "Type": "Artist",
+          "Role": "",
+          "ListOrder": 0,
+          "SortOrder": null
+        },
+        {
+          "Name": "First",
+          "Type": "Artist",
+          "Role": "",
+          "ListOrder": 1,
+          "SortOrder": null
+        },
+        {
+          "Name": "Second",
+          "Type": "Artist",
+          "Role": "",
+          "ListOrder": 2,
+          "SortOrder": null
+        }
+      ]
+    },
+    {
+      "name": "none-locked-album",
+      "updateType": 1,
+      "exception": null,
+      "Artists": [
+        "New Artist"
+      ],
+      "AlbumArtists": [
+        "New Album Artist"
+      ],
+      "calls": [
+        {
+          "action": "people",
+          "people": [
+            {
+              "Name": "New Album Artist",
+              "Type": "AlbumArtist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "New Artist",
+              "Type": "Artist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            }
+          ]
+        }
+      ],
+      "credits": [
+        {
+          "Name": "New Album Artist",
+          "Type": "AlbumArtist",
+          "Role": "",
+          "ListOrder": 0,
+          "SortOrder": null
+        },
+        {
+          "Name": "New Artist",
+          "Type": "Artist",
+          "Role": "",
+          "ListOrder": 1,
+          "SortOrder": null
+        }
+      ]
+    },
+    {
+      "name": "none-empty-with-lock",
+      "updateType": 1,
+      "exception": null,
+      "Artists": [],
+      "AlbumArtists": [],
+      "calls": [],
+      "credits": [
+        {
+          "Name": "Old Credit",
+          "Type": "Actor",
+          "Role": "Original Role",
+          "ListOrder": 0,
+          "SortOrder": null
+        }
+      ]
+    },
+    {
+      "name": "after-cancelled-still-updates-people",
+      "updateType": null,
+      "exception": null,
+      "Artists": [
+        "Artist"
+      ],
+      "AlbumArtists": [],
+      "calls": [
+        {
+          "action": "people",
+          "people": [
+            {
+              "Name": "Artist",
+              "Type": "Artist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            }
+          ]
+        }
+      ],
+      "credits": [
+        {
+          "Name": "Artist",
+          "Type": "Artist",
+          "Role": "",
+          "ListOrder": 0,
+          "SortOrder": null
+        }
+      ]
+    },
+    {
+      "name": "after-people-failure",
+      "updateType": null,
+      "exception": "IOException",
+      "Artists": [
+        "New Artist"
+      ],
+      "AlbumArtists": [
+        "New Album Artist"
+      ],
+      "calls": [
+        {
+          "action": "people",
+          "people": [
+            {
+              "Name": "New Album Artist",
+              "Type": "AlbumArtist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "New Artist",
+              "Type": "Artist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            }
+          ]
+        }
+      ],
+      "credits": [
+        {
+          "Name": "Old Credit",
+          "Type": "Actor",
+          "Role": "Original Role",
+          "ListOrder": 0,
+          "SortOrder": null
+        }
+      ]
+    },
+    {
+      "name": "after-person-failure",
+      "updateType": null,
+      "exception": "IOException",
+      "Artists": [
+        "New Artist"
+      ],
+      "AlbumArtists": [
+        "New Album Artist"
+      ],
+      "calls": [
+        {
+          "action": "people",
+          "people": [
+            {
+              "Name": "New Album Artist",
+              "Type": "AlbumArtist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "New Artist",
+              "Type": "Artist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            }
+          ]
+        }
+      ],
+      "credits": [
+        {
+          "Name": "New Album Artist",
+          "Type": "AlbumArtist",
+          "Role": "",
+          "ListOrder": 0,
+          "SortOrder": null
+        },
+        {
+          "Name": "New Artist",
+          "Type": "Artist",
+          "Role": "",
+          "ListOrder": 1,
+          "SortOrder": null
+        }
+      ]
+    },
+    {
+      "name": "none-people-failure",
+      "updateType": null,
+      "exception": "IOException",
+      "Artists": [
+        "New Artist"
+      ],
+      "AlbumArtists": [
+        "New Album Artist"
+      ],
+      "calls": [
+        {
+          "action": "people",
+          "people": [
+            {
+              "Name": "New Album Artist",
+              "Type": "AlbumArtist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "New Artist",
+              "Type": "Artist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            }
+          ]
+        }
+      ],
+      "credits": [
+        {
+          "Name": "Old Credit",
+          "Type": "Actor",
+          "Role": "Original Role",
+          "ListOrder": 0,
+          "SortOrder": null
+        }
+      ]
+    },
+    {
+      "name": "none-person-failure",
+      "updateType": null,
+      "exception": "IOException",
+      "Artists": [
+        "New Artist"
+      ],
+      "AlbumArtists": [
+        "New Album Artist"
+      ],
+      "calls": [
+        {
+          "action": "people",
+          "people": [
+            {
+              "Name": "New Album Artist",
+              "Type": "AlbumArtist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "New Artist",
+              "Type": "Artist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            }
+          ]
+        }
+      ],
+      "credits": [
+        {
+          "Name": "New Album Artist",
+          "Type": "AlbumArtist",
+          "Role": "",
+          "ListOrder": 0,
+          "SortOrder": null
+        },
+        {
+          "Name": "New Artist",
+          "Type": "Artist",
+          "Role": "",
+          "ListOrder": 1,
+          "SortOrder": null
+        }
+      ]
+    },
+    {
+      "name": "none-force-save-before-people",
+      "updateType": 11,
+      "exception": null,
+      "Artists": [
+        "Artist"
+      ],
+      "AlbumArtists": [
+        "Album Artist"
+      ],
+      "calls": [
+        {
+          "action": "item",
+          "reason": 11
+        },
+        {
+          "action": "people",
+          "people": [
+            {
+              "Name": "Album Artist",
+              "Type": "AlbumArtist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "Artist",
+              "Type": "Artist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            }
+          ]
+        }
+      ],
+      "credits": [
+        {
+          "Name": "Album Artist",
+          "Type": "AlbumArtist",
+          "Role": "",
+          "ListOrder": 0,
+          "SortOrder": null
+        },
+        {
+          "Name": "Artist",
+          "Type": "Artist",
+          "Role": "",
+          "ListOrder": 1,
+          "SortOrder": null
+        }
+      ]
+    },
+    {
+      "name": "none-item-save-failure-skips-after",
+      "updateType": null,
+      "exception": "IOException",
+      "Artists": [
+        "Artist"
+      ],
+      "AlbumArtists": [
+        "Album Artist"
+      ],
+      "calls": [
+        {
+          "action": "item",
+          "reason": 11
+        }
+      ],
+      "credits": [
+        {
+          "Name": "Old Credit",
+          "Type": "Actor",
+          "Role": "Original Role",
+          "ListOrder": 0,
+          "SortOrder": null
+        }
+      ]
+    },
+    {
+      "name": "none-people-failure-retains-item-save",
+      "updateType": null,
+      "exception": "IOException",
+      "Artists": [
+        "Artist"
+      ],
+      "AlbumArtists": [
+        "Album Artist"
+      ],
+      "calls": [
+        {
+          "action": "item",
+          "reason": 11
+        },
+        {
+          "action": "people",
+          "people": [
+            {
+              "Name": "Album Artist",
+              "Type": "AlbumArtist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "Artist",
+              "Type": "Artist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            }
+          ]
+        }
+      ],
+      "credits": [
+        {
+          "Name": "Old Credit",
+          "Type": "Actor",
+          "Role": "Original Role",
+          "ListOrder": 0,
+          "SortOrder": null
+        }
+      ]
+    },
+    {
+      "name": "after-null-album-artists",
+      "updateType": null,
+      "exception": "ArgumentNullException",
+      "Artists": [],
+      "AlbumArtists": null,
+      "calls": [],
+      "credits": [
+        {
+          "Name": "Old Credit",
+          "Type": "Actor",
+          "Role": "Original Role",
+          "ListOrder": 0,
+          "SortOrder": null
+        }
+      ]
+    },
+    {
+      "name": "after-null-artists-empty-album-artists",
+      "updateType": null,
+      "exception": "ArgumentNullException",
+      "Artists": null,
+      "AlbumArtists": [],
+      "calls": [],
+      "credits": [
+        {
+          "Name": "Old Credit",
+          "Type": "Actor",
+          "Role": "Original Role",
+          "ListOrder": 0,
+          "SortOrder": null
+        }
+      ]
+    },
+    {
+      "name": "after-null-artists-nonempty-album-artists",
+      "updateType": null,
+      "exception": "NullReferenceException",
+      "Artists": null,
+      "AlbumArtists": [
+        "Album Artist"
+      ],
+      "calls": [],
+      "credits": [
+        {
+          "Name": "Old Credit",
+          "Type": "Actor",
+          "Role": "Original Role",
+          "ListOrder": 0,
+          "SortOrder": null
+        }
+      ]
+    },
+    {
+      "name": "after-both-null-lists",
+      "updateType": null,
+      "exception": "ArgumentNullException",
+      "Artists": null,
+      "AlbumArtists": null,
+      "calls": [],
+      "credits": [
+        {
+          "Name": "Old Credit",
+          "Type": "Actor",
+          "Role": "Original Role",
+          "ListOrder": 0,
+          "SortOrder": null
+        }
+      ]
+    },
+    {
+      "name": "none-cancellation-after-item-save-does-not-skip-people",
+      "updateType": 11,
+      "exception": null,
+      "Artists": [
+        "Artist"
+      ],
+      "AlbumArtists": [
+        "Album Artist"
+      ],
+      "calls": [
+        {
+          "action": "item",
+          "reason": 11
+        },
+        {
+          "action": "people",
+          "people": [
+            {
+              "Name": "Album Artist",
+              "Type": "AlbumArtist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            },
+            {
+              "Name": "Artist",
+              "Type": "Artist",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            }
+          ]
+        }
+      ],
+      "credits": [
+        {
+          "Name": "Album Artist",
+          "Type": "AlbumArtist",
+          "Role": "",
+          "ListOrder": 0,
+          "SortOrder": null
+        },
+        {
+          "Name": "Artist",
+          "Type": "Artist",
+          "Role": "",
+          "ListOrder": 1,
+          "SortOrder": null
+        }
+      ]
+    }
+  ],
+  "candidateVerified": false,
+  "inputSha256": "2bc879d1a265d19c24923161eee602f7a842778bc55c2c4d8e4b96a945944a0d",
+  "boundary": "Actual AlbumMetadataService After hook and None refresh, native MusicAlbum/PeopleHelper and PeopleRepository.UpdatePeople with real EF SQLite. Empty providers/children and metadata item-save callbacks are controls. Library.UpdatePeople delegates to the actual repository, with explicit pre-repository or post-credit failure. SavePeopleMetadataAsync, person creation and NFO/file/image operations are excluded."
+}

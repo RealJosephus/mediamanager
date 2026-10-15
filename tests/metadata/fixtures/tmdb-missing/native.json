@@ -1,0 +1,443 @@
+{
+  "inputSha256": "66bb218f57ed1629e9c61744d8a52d36f78f44dc35d7c58b9820276b657c3217",
+  "results": [
+    {
+      "name": "global-off",
+      "hasChanged": true,
+      "collectionFolders": [
+        "f2222222-2222-2222-2222-000000000004"
+      ],
+      "activeImportExcluded": false,
+      "updateType": 2,
+      "removed": [
+        "f2222222-2222-2222-2222-000000000008"
+      ],
+      "deleteOptions": [
+        {
+          "DeleteFileLocation": false,
+          "notifyParentItem": false
+        }
+      ],
+      "childrenInvalidated": true
+    },
+    {
+      "name": "global-off-cancelled-token-still-cleans",
+      "hasChanged": true,
+      "collectionFolders": [
+        "f2222222-2222-2222-2222-000000000004"
+      ],
+      "activeImportExcluded": false,
+      "updateType": 2,
+      "removed": [
+        "f2222222-2222-2222-2222-000000000008"
+      ],
+      "deleteOptions": [
+        {
+          "DeleteFileLocation": false,
+          "notifyParentItem": false
+        }
+      ],
+      "childrenInvalidated": true
+    },
+    {
+      "name": "missing-disabled-library",
+      "hasChanged": true,
+      "collectionFolders": [
+        "f2222222-2222-2222-2222-000000000004"
+      ],
+      "activeImportExcluded": false,
+      "updateType": 2,
+      "removed": [
+        "f2222222-2222-2222-2222-000000000008"
+      ],
+      "deleteOptions": [
+        {
+          "DeleteFileLocation": false,
+          "notifyParentItem": false
+        }
+      ],
+      "childrenInvalidated": true
+    },
+    {
+      "name": "unaired-disabled-library",
+      "hasChanged": true,
+      "collectionFolders": [
+        "f2222222-2222-2222-2222-000000000004"
+      ],
+      "activeImportExcluded": false,
+      "updateType": 2,
+      "removed": [
+        "f2222222-2222-2222-2222-000000000008"
+      ],
+      "deleteOptions": [
+        {
+          "DeleteFileLocation": false,
+          "notifyParentItem": false
+        }
+      ],
+      "childrenInvalidated": true
+    },
+    {
+      "name": "query-ancestor-is-not-membership",
+      "hasChanged": true,
+      "collectionFolders": [
+        "f2222222-2222-2222-2222-000000000004"
+      ],
+      "activeImportExcluded": false,
+      "updateType": 2,
+      "removed": [
+        "f2222222-2222-2222-2222-000000000008"
+      ],
+      "deleteOptions": [
+        {
+          "DeleteFileLocation": false,
+          "notifyParentItem": false
+        }
+      ],
+      "childrenInvalidated": true
+    },
+    {
+      "name": "top-parent-is-not-membership",
+      "hasChanged": true,
+      "collectionFolders": [
+        "f2222222-2222-2222-2222-000000000004"
+      ],
+      "activeImportExcluded": false,
+      "updateType": 2,
+      "removed": [
+        "f2222222-2222-2222-2222-000000000008"
+      ],
+      "deleteOptions": [
+        {
+          "DeleteFileLocation": false,
+          "notifyParentItem": false
+        }
+      ],
+      "childrenInvalidated": true
+    },
+    {
+      "name": "physical-cache-id-is-not-membership",
+      "hasChanged": true,
+      "collectionFolders": [
+        "f2222222-2222-2222-2222-000000000004"
+      ],
+      "activeImportExcluded": false,
+      "updateType": 2,
+      "removed": [
+        "f2222222-2222-2222-2222-000000000008"
+      ],
+      "deleteOptions": [
+        {
+          "DeleteFileLocation": false,
+          "notifyParentItem": false
+        }
+      ],
+      "childrenInvalidated": true
+    },
+    {
+      "name": "entity-parent-is-not-user-root-library-membership",
+      "hasChanged": true,
+      "collectionFolders": [],
+      "activeImportExcluded": false,
+      "updateType": 2,
+      "removed": [
+        "f2222222-2222-2222-2222-000000000008"
+      ],
+      "deleteOptions": [
+        {
+          "DeleteFileLocation": false,
+          "notifyParentItem": false
+        }
+      ],
+      "childrenInvalidated": true
+    },
+    {
+      "name": "query-ancestor-episode-is-not-child",
+      "hasChanged": true,
+      "collectionFolders": [
+        "f2222222-2222-2222-2222-000000000004"
+      ],
+      "activeImportExcluded": false,
+      "updateType": 2,
+      "removed": [
+        "f2222222-2222-2222-2222-000000000008"
+      ],
+      "deleteOptions": [
+        {
+          "DeleteFileLocation": false,
+          "notifyParentItem": false
+        }
+      ],
+      "childrenInvalidated": true
+    },
+    {
+      "name": "top-level-direct-link-is-a-child",
+      "hasChanged": true,
+      "collectionFolders": [
+        "f2222222-2222-2222-2222-000000000004"
+      ],
+      "activeImportExcluded": false,
+      "updateType": 2,
+      "removed": [
+        "f2222222-2222-2222-2222-000000000008",
+        "f2222222-2222-2222-2222-000000000010"
+      ],
+      "deleteOptions": [
+        {
+          "DeleteFileLocation": false,
+          "notifyParentItem": false
+        },
+        {
+          "DeleteFileLocation": false,
+          "notifyParentItem": false
+        }
+      ],
+      "childrenInvalidated": true
+    },
+    {
+      "name": "duplicate-physical-and-linked-id",
+      "hasChanged": true,
+      "collectionFolders": [
+        "f2222222-2222-2222-2222-000000000004"
+      ],
+      "activeImportExcluded": false,
+      "updateType": 2,
+      "removed": [
+        "f2222222-2222-2222-2222-000000000008"
+      ],
+      "deleteOptions": [
+        {
+          "DeleteFileLocation": false,
+          "notifyParentItem": false
+        }
+      ],
+      "childrenInvalidated": true
+    },
+    {
+      "name": "season-link-does-not-expand",
+      "hasChanged": true,
+      "collectionFolders": [
+        "f2222222-2222-2222-2222-000000000004"
+      ],
+      "activeImportExcluded": false,
+      "updateType": 2,
+      "removed": [
+        "f2222222-2222-2222-2222-000000000008"
+      ],
+      "deleteOptions": [
+        {
+          "DeleteFileLocation": false,
+          "notifyParentItem": false
+        }
+      ],
+      "childrenInvalidated": true
+    },
+    {
+      "name": "linked-folder-does-not-expand",
+      "hasChanged": true,
+      "collectionFolders": [
+        "f2222222-2222-2222-2222-000000000004"
+      ],
+      "activeImportExcluded": false,
+      "updateType": 2,
+      "removed": [
+        "f2222222-2222-2222-2222-000000000008"
+      ],
+      "deleteOptions": [
+        {
+          "DeleteFileLocation": false,
+          "notifyParentItem": false
+        }
+      ],
+      "childrenInvalidated": true
+    },
+    {
+      "name": "non-folder-child-does-not-expand",
+      "hasChanged": true,
+      "collectionFolders": [
+        "f2222222-2222-2222-2222-000000000004"
+      ],
+      "activeImportExcluded": false,
+      "updateType": 1,
+      "removed": [],
+      "deleteOptions": [],
+      "childrenInvalidated": false
+    },
+    {
+      "name": "physical-episode-is-retained",
+      "hasChanged": true,
+      "collectionFolders": [
+        "f2222222-2222-2222-2222-000000000004"
+      ],
+      "activeImportExcluded": false,
+      "updateType": 1,
+      "removed": [],
+      "deleteOptions": [],
+      "childrenInvalidated": false
+    },
+    {
+      "name": "foreign-provider-is-retained",
+      "hasChanged": true,
+      "collectionFolders": [
+        "f2222222-2222-2222-2222-000000000004"
+      ],
+      "activeImportExcluded": false,
+      "updateType": 1,
+      "removed": [],
+      "deleteOptions": [],
+      "childrenInvalidated": false
+    },
+    {
+      "name": "empty-provider-id-is-retained",
+      "hasChanged": true,
+      "collectionFolders": [
+        "f2222222-2222-2222-2222-000000000004"
+      ],
+      "activeImportExcluded": false,
+      "updateType": 1,
+      "removed": [],
+      "deleteOptions": [],
+      "childrenInvalidated": false
+    },
+    {
+      "name": "real-library-opt-in",
+      "hasChanged": true,
+      "collectionFolders": [
+        "f2222222-2222-2222-2222-000000000004"
+      ],
+      "activeImportExcluded": true,
+      "updateType": null,
+      "removed": [],
+      "deleteOptions": [],
+      "childrenInvalidated": false
+    },
+    {
+      "name": "uppercase-library-opt-in",
+      "hasChanged": true,
+      "collectionFolders": [
+        "f2222222-2222-2222-2222-000000000004"
+      ],
+      "activeImportExcluded": true,
+      "updateType": null,
+      "removed": [],
+      "deleteOptions": [],
+      "childrenInvalidated": false
+    },
+    {
+      "name": "hyphenated-library-id-is-not-opt-in",
+      "hasChanged": true,
+      "collectionFolders": [
+        "f2222222-2222-2222-2222-000000000004"
+      ],
+      "activeImportExcluded": false,
+      "updateType": 2,
+      "removed": [
+        "f2222222-2222-2222-2222-000000000008"
+      ],
+      "deleteOptions": [
+        {
+          "DeleteFileLocation": false,
+          "notifyParentItem": false
+        }
+      ],
+      "childrenInvalidated": true
+    },
+    {
+      "name": "global-off-ignores-library-opt-in",
+      "hasChanged": true,
+      "collectionFolders": [
+        "f2222222-2222-2222-2222-000000000004"
+      ],
+      "activeImportExcluded": false,
+      "updateType": 2,
+      "removed": [
+        "f2222222-2222-2222-2222-000000000008"
+      ],
+      "deleteOptions": [
+        {
+          "DeleteFileLocation": false,
+          "notifyParentItem": false
+        }
+      ],
+      "childrenInvalidated": true
+    },
+    {
+      "name": "series-without-tmdb-is-not-changed",
+      "hasChanged": false,
+      "collectionFolders": [
+        "f2222222-2222-2222-2222-000000000004"
+      ],
+      "activeImportExcluded": false,
+      "updateType": 2,
+      "removed": [
+        "f2222222-2222-2222-2222-000000000008"
+      ],
+      "deleteOptions": [
+        {
+          "DeleteFileLocation": false,
+          "notifyParentItem": false
+        }
+      ],
+      "childrenInvalidated": true
+    }
+  ],
+  "monitors": [
+    {
+      "name": "global-off",
+      "hasChanged": true
+    },
+    {
+      "name": "missing-without-library",
+      "hasChanged": true
+    },
+    {
+      "name": "unaired-without-library",
+      "hasChanged": true
+    },
+    {
+      "name": "both-on",
+      "hasChanged": true
+    },
+    {
+      "name": "enabled-library",
+      "hasChanged": true
+    },
+    {
+      "name": "plugin-absent",
+      "hasChanged": false
+    },
+    {
+      "name": "season-is-not-series",
+      "hasChanged": false
+    },
+    {
+      "name": "empty-provider-id",
+      "hasChanged": false
+    }
+  ],
+  "runtime": ".NET 10.0.12",
+  "assemblies": [
+    {
+      "name": "MediaBrowser.Providers",
+      "path": "D:\\mediamanager\\.agent-temp\\tmdb-missing\\recorded-v6\\oracle\\MediaBrowser.Providers.dll",
+      "sha256": "ba138e7822fb224fd9e5bc56a14e9725063870e438da8cbf13c9c7ccec646605"
+    },
+    {
+      "name": "Emby.Server.Implementations",
+      "path": "D:\\mediamanager\\.agent-temp\\tmdb-missing\\recorded-v6\\oracle\\Emby.Server.Implementations.dll",
+      "sha256": "c518bc18c0f70168405721f5f89ab6ba4c4ceeb704552e146c2f9e366bf31c9d"
+    },
+    {
+      "name": "MediaBrowser.Controller",
+      "path": "D:\\mediamanager\\.agent-temp\\tmdb-missing\\recorded-v6\\oracle\\MediaBrowser.Controller.dll",
+      "sha256": "a8939bae7bda1a470d7d9ec420d84b9647e74a9b308a669f81a1d72ce8a6a98f"
+    },
+    {
+      "name": "System.Private.CoreLib",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Private.CoreLib.dll",
+      "sha256": "1125acc8106c43fc8bad2d203c4c4485df6182d292846c2fff415c1040c54678"
+    }
+  ],
+  "sourceBoundary": "Actual TmdbMissingEpisodeProvider.HasChanged/FetchAsync/PruneAllVirtualEpisodes, Folder.GetRecursiveChildren and LibraryManager.GetCollectionFolders run unmodified. Controlled entity lookup supplies independently declared cached Children and direct links; DeleteItem records requests without SQL, files or events. Active imports are excluded. Persisted query-only AncestorIds and TopParentId cannot alter these entity methods.",
+  "phaseAcceptance": false
+}

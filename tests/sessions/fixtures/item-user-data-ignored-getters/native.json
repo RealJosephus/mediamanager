@@ -1,0 +1,1723 @@
+{
+  "actualFrozenItemUserDataIgnoredGetters": true,
+  "results": [
+    {
+      "name": "type-Folder-runtime-aliases-false",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Folder",
+      "requiresJson": true,
+      "storedDataIsNull": false,
+      "hydrationData": "{\u0022UserDataKeys\u0022:[\u0022serialized-fake-key\u0022,\u0022serialized-second-key\u0022],\u0022ProviderIds\u0022:{\u0022Imdb\u0022:\u0022serialized-imdb\u0022,\u0022Tmdb\u0022:\u0022serialized-tmdb\u0022,\u0022Tvdb\u0022:\u0022serialized-tvdb\u0022,\u0022MusicBrainzAlbum\u0022:\u0022serialized-album\u0022},\u0022Series\u0022:{\u0022Id\u0022:\u002200000000-0000-0000-0000-000000000099\u0022,\u0022ProviderIds\u0022:{\u0022Custom\u0022:\u0022serialized-series\u0022}},\u0022AlbumArtist\u0022:\u0022serialized-album-artist\u0022,\u0022Name\u0022:\u0022serialized-name\u0022,\u0022RemoteTrailers\u0022:[]}",
+      "keys": [
+        "97800000-0000-0000-0000-000000000001"
+      ],
+      "columns": {
+        "Genres": "",
+        "Studios": "",
+        "Tags": "",
+        "ProductionLocations": "",
+        "Artists": null,
+        "AlbumArtists": null,
+        "Name": "Folder",
+        "Album": null
+      },
+      "hydratedLists": {
+        "Genres": [],
+        "Studios": [
+          ""
+        ],
+        "Tags": [],
+        "ProductionLocations": [],
+        "Artists": null,
+        "AlbumArtists": null
+      },
+      "trailers": []
+    },
+    {
+      "name": "type-Folder-runtime-aliases-true",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Folder",
+      "requiresJson": true,
+      "storedDataIsNull": false,
+      "hydrationData": "{\u0022UserDataKeys\u0022:[\u0022serialized-fake-key\u0022,\u0022serialized-second-key\u0022],\u0022ProviderIds\u0022:{\u0022Imdb\u0022:\u0022serialized-imdb\u0022,\u0022Tmdb\u0022:\u0022serialized-tmdb\u0022,\u0022Tvdb\u0022:\u0022serialized-tvdb\u0022,\u0022MusicBrainzAlbum\u0022:\u0022serialized-album\u0022},\u0022Series\u0022:{\u0022Id\u0022:\u002200000000-0000-0000-0000-000000000099\u0022,\u0022ProviderIds\u0022:{\u0022Custom\u0022:\u0022serialized-series\u0022}},\u0022AlbumArtist\u0022:\u0022serialized-album-artist\u0022,\u0022Name\u0022:\u0022serialized-name\u0022,\u0022RemoteTrailers\u0022:[]}",
+      "keys": [
+        "97800000-0000-0000-0000-000000000001"
+      ],
+      "columns": {
+        "Genres": null,
+        "Studios": null,
+        "Tags": null,
+        "ProductionLocations": null,
+        "Artists": null,
+        "AlbumArtists": null,
+        "Name": "Folder",
+        "Album": null
+      },
+      "hydratedLists": {
+        "Genres": [],
+        "Studios": [],
+        "Tags": [],
+        "ProductionLocations": [],
+        "Artists": null,
+        "AlbumArtists": null
+      },
+      "trailers": []
+    },
+    {
+      "name": "type-AggregateFolder-runtime-aliases-false",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.AggregateFolder",
+      "requiresJson": true,
+      "storedDataIsNull": false,
+      "hydrationData": "{\u0022UserDataKeys\u0022:[\u0022serialized-fake-key\u0022,\u0022serialized-second-key\u0022],\u0022ProviderIds\u0022:{\u0022Imdb\u0022:\u0022serialized-imdb\u0022,\u0022Tmdb\u0022:\u0022serialized-tmdb\u0022,\u0022Tvdb\u0022:\u0022serialized-tvdb\u0022,\u0022MusicBrainzAlbum\u0022:\u0022serialized-album\u0022},\u0022Series\u0022:{\u0022Id\u0022:\u002200000000-0000-0000-0000-000000000099\u0022,\u0022ProviderIds\u0022:{\u0022Custom\u0022:\u0022serialized-series\u0022}},\u0022AlbumArtist\u0022:\u0022serialized-album-artist\u0022,\u0022Name\u0022:\u0022serialized-name\u0022,\u0022RemoteTrailers\u0022:[]}",
+      "keys": [
+        "97800000-0000-0000-0000-000000000001"
+      ],
+      "columns": {
+        "Genres": "",
+        "Studios": "",
+        "Tags": "",
+        "ProductionLocations": "",
+        "Artists": null,
+        "AlbumArtists": null,
+        "Name": "AggregateFolder",
+        "Album": null
+      },
+      "hydratedLists": {
+        "Genres": [],
+        "Studios": [
+          ""
+        ],
+        "Tags": [],
+        "ProductionLocations": [],
+        "Artists": null,
+        "AlbumArtists": null
+      },
+      "trailers": []
+    },
+    {
+      "name": "type-AggregateFolder-runtime-aliases-true",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.AggregateFolder",
+      "requiresJson": true,
+      "storedDataIsNull": false,
+      "hydrationData": "{\u0022UserDataKeys\u0022:[\u0022serialized-fake-key\u0022,\u0022serialized-second-key\u0022],\u0022ProviderIds\u0022:{\u0022Imdb\u0022:\u0022serialized-imdb\u0022,\u0022Tmdb\u0022:\u0022serialized-tmdb\u0022,\u0022Tvdb\u0022:\u0022serialized-tvdb\u0022,\u0022MusicBrainzAlbum\u0022:\u0022serialized-album\u0022},\u0022Series\u0022:{\u0022Id\u0022:\u002200000000-0000-0000-0000-000000000099\u0022,\u0022ProviderIds\u0022:{\u0022Custom\u0022:\u0022serialized-series\u0022}},\u0022AlbumArtist\u0022:\u0022serialized-album-artist\u0022,\u0022Name\u0022:\u0022serialized-name\u0022,\u0022RemoteTrailers\u0022:[]}",
+      "keys": [
+        "97800000-0000-0000-0000-000000000001"
+      ],
+      "columns": {
+        "Genres": null,
+        "Studios": null,
+        "Tags": null,
+        "ProductionLocations": null,
+        "Artists": null,
+        "AlbumArtists": null,
+        "Name": "AggregateFolder",
+        "Album": null
+      },
+      "hydratedLists": {
+        "Genres": [],
+        "Studios": [],
+        "Tags": [],
+        "ProductionLocations": [],
+        "Artists": null,
+        "AlbumArtists": null
+      },
+      "trailers": []
+    },
+    {
+      "name": "type-UserRootFolder-runtime-aliases-false",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.UserRootFolder",
+      "requiresJson": true,
+      "storedDataIsNull": false,
+      "hydrationData": "{\u0022UserDataKeys\u0022:[\u0022serialized-fake-key\u0022,\u0022serialized-second-key\u0022],\u0022ProviderIds\u0022:{\u0022Imdb\u0022:\u0022serialized-imdb\u0022,\u0022Tmdb\u0022:\u0022serialized-tmdb\u0022,\u0022Tvdb\u0022:\u0022serialized-tvdb\u0022,\u0022MusicBrainzAlbum\u0022:\u0022serialized-album\u0022},\u0022Series\u0022:{\u0022Id\u0022:\u002200000000-0000-0000-0000-000000000099\u0022,\u0022ProviderIds\u0022:{\u0022Custom\u0022:\u0022serialized-series\u0022}},\u0022AlbumArtist\u0022:\u0022serialized-album-artist\u0022,\u0022Name\u0022:\u0022serialized-name\u0022,\u0022RemoteTrailers\u0022:[]}",
+      "keys": [
+        "97800000-0000-0000-0000-000000000001"
+      ],
+      "columns": {
+        "Genres": "",
+        "Studios": "",
+        "Tags": "",
+        "ProductionLocations": "",
+        "Artists": null,
+        "AlbumArtists": null,
+        "Name": "UserRootFolder",
+        "Album": null
+      },
+      "hydratedLists": {
+        "Genres": [],
+        "Studios": [
+          ""
+        ],
+        "Tags": [],
+        "ProductionLocations": [],
+        "Artists": null,
+        "AlbumArtists": null
+      },
+      "trailers": []
+    },
+    {
+      "name": "type-UserRootFolder-runtime-aliases-true",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.UserRootFolder",
+      "requiresJson": true,
+      "storedDataIsNull": false,
+      "hydrationData": "{\u0022UserDataKeys\u0022:[\u0022serialized-fake-key\u0022,\u0022serialized-second-key\u0022],\u0022ProviderIds\u0022:{\u0022Imdb\u0022:\u0022serialized-imdb\u0022,\u0022Tmdb\u0022:\u0022serialized-tmdb\u0022,\u0022Tvdb\u0022:\u0022serialized-tvdb\u0022,\u0022MusicBrainzAlbum\u0022:\u0022serialized-album\u0022},\u0022Series\u0022:{\u0022Id\u0022:\u002200000000-0000-0000-0000-000000000099\u0022,\u0022ProviderIds\u0022:{\u0022Custom\u0022:\u0022serialized-series\u0022}},\u0022AlbumArtist\u0022:\u0022serialized-album-artist\u0022,\u0022Name\u0022:\u0022serialized-name\u0022,\u0022RemoteTrailers\u0022:[]}",
+      "keys": [
+        "97800000-0000-0000-0000-000000000001"
+      ],
+      "columns": {
+        "Genres": null,
+        "Studios": null,
+        "Tags": null,
+        "ProductionLocations": null,
+        "Artists": null,
+        "AlbumArtists": null,
+        "Name": "UserRootFolder",
+        "Album": null
+      },
+      "hydratedLists": {
+        "Genres": [],
+        "Studios": [],
+        "Tags": [],
+        "ProductionLocations": [],
+        "Artists": null,
+        "AlbumArtists": null
+      },
+      "trailers": []
+    },
+    {
+      "name": "type-CollectionFolder-runtime-aliases-false",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.CollectionFolder",
+      "requiresJson": true,
+      "storedDataIsNull": false,
+      "hydrationData": "{\u0022UserDataKeys\u0022:[\u0022serialized-fake-key\u0022,\u0022serialized-second-key\u0022],\u0022ProviderIds\u0022:{\u0022Imdb\u0022:\u0022serialized-imdb\u0022,\u0022Tmdb\u0022:\u0022serialized-tmdb\u0022,\u0022Tvdb\u0022:\u0022serialized-tvdb\u0022,\u0022MusicBrainzAlbum\u0022:\u0022serialized-album\u0022},\u0022Series\u0022:{\u0022Id\u0022:\u002200000000-0000-0000-0000-000000000099\u0022,\u0022ProviderIds\u0022:{\u0022Custom\u0022:\u0022serialized-series\u0022}},\u0022AlbumArtist\u0022:\u0022serialized-album-artist\u0022,\u0022Name\u0022:\u0022serialized-name\u0022,\u0022RemoteTrailers\u0022:[]}",
+      "keys": [
+        "97800000-0000-0000-0000-000000000001"
+      ],
+      "columns": {
+        "Genres": "",
+        "Studios": "",
+        "Tags": "",
+        "ProductionLocations": "",
+        "Artists": null,
+        "AlbumArtists": null,
+        "Name": "CollectionFolder",
+        "Album": null
+      },
+      "hydratedLists": {
+        "Genres": [],
+        "Studios": [
+          ""
+        ],
+        "Tags": [],
+        "ProductionLocations": [],
+        "Artists": null,
+        "AlbumArtists": null
+      },
+      "trailers": []
+    },
+    {
+      "name": "type-CollectionFolder-runtime-aliases-true",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.CollectionFolder",
+      "requiresJson": true,
+      "storedDataIsNull": false,
+      "hydrationData": "{\u0022UserDataKeys\u0022:[\u0022serialized-fake-key\u0022,\u0022serialized-second-key\u0022],\u0022ProviderIds\u0022:{\u0022Imdb\u0022:\u0022serialized-imdb\u0022,\u0022Tmdb\u0022:\u0022serialized-tmdb\u0022,\u0022Tvdb\u0022:\u0022serialized-tvdb\u0022,\u0022MusicBrainzAlbum\u0022:\u0022serialized-album\u0022},\u0022Series\u0022:{\u0022Id\u0022:\u002200000000-0000-0000-0000-000000000099\u0022,\u0022ProviderIds\u0022:{\u0022Custom\u0022:\u0022serialized-series\u0022}},\u0022AlbumArtist\u0022:\u0022serialized-album-artist\u0022,\u0022Name\u0022:\u0022serialized-name\u0022,\u0022RemoteTrailers\u0022:[]}",
+      "keys": [
+        "97800000-0000-0000-0000-000000000001"
+      ],
+      "columns": {
+        "Genres": null,
+        "Studios": null,
+        "Tags": null,
+        "ProductionLocations": null,
+        "Artists": null,
+        "AlbumArtists": null,
+        "Name": "CollectionFolder",
+        "Album": null
+      },
+      "hydratedLists": {
+        "Genres": [],
+        "Studios": [],
+        "Tags": [],
+        "ProductionLocations": [],
+        "Artists": null,
+        "AlbumArtists": null
+      },
+      "trailers": []
+    },
+    {
+      "name": "type-UserView-runtime-aliases-false",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.UserView",
+      "requiresJson": true,
+      "storedDataIsNull": false,
+      "hydrationData": "{\u0022UserDataKeys\u0022:[\u0022serialized-fake-key\u0022,\u0022serialized-second-key\u0022],\u0022ProviderIds\u0022:{\u0022Imdb\u0022:\u0022serialized-imdb\u0022,\u0022Tmdb\u0022:\u0022serialized-tmdb\u0022,\u0022Tvdb\u0022:\u0022serialized-tvdb\u0022,\u0022MusicBrainzAlbum\u0022:\u0022serialized-album\u0022},\u0022Series\u0022:{\u0022Id\u0022:\u002200000000-0000-0000-0000-000000000099\u0022,\u0022ProviderIds\u0022:{\u0022Custom\u0022:\u0022serialized-series\u0022}},\u0022AlbumArtist\u0022:\u0022serialized-album-artist\u0022,\u0022Name\u0022:\u0022serialized-name\u0022,\u0022RemoteTrailers\u0022:[]}",
+      "keys": [
+        "97800000-0000-0000-0000-000000000001"
+      ],
+      "columns": {
+        "Genres": "",
+        "Studios": "",
+        "Tags": "",
+        "ProductionLocations": "",
+        "Artists": null,
+        "AlbumArtists": null,
+        "Name": "UserView",
+        "Album": null
+      },
+      "hydratedLists": {
+        "Genres": [],
+        "Studios": [
+          ""
+        ],
+        "Tags": [],
+        "ProductionLocations": [],
+        "Artists": null,
+        "AlbumArtists": null
+      },
+      "trailers": []
+    },
+    {
+      "name": "type-UserView-runtime-aliases-true",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.UserView",
+      "requiresJson": true,
+      "storedDataIsNull": false,
+      "hydrationData": "{\u0022UserDataKeys\u0022:[\u0022serialized-fake-key\u0022,\u0022serialized-second-key\u0022],\u0022ProviderIds\u0022:{\u0022Imdb\u0022:\u0022serialized-imdb\u0022,\u0022Tmdb\u0022:\u0022serialized-tmdb\u0022,\u0022Tvdb\u0022:\u0022serialized-tvdb\u0022,\u0022MusicBrainzAlbum\u0022:\u0022serialized-album\u0022},\u0022Series\u0022:{\u0022Id\u0022:\u002200000000-0000-0000-0000-000000000099\u0022,\u0022ProviderIds\u0022:{\u0022Custom\u0022:\u0022serialized-series\u0022}},\u0022AlbumArtist\u0022:\u0022serialized-album-artist\u0022,\u0022Name\u0022:\u0022serialized-name\u0022,\u0022RemoteTrailers\u0022:[]}",
+      "keys": [
+        "97800000-0000-0000-0000-000000000001"
+      ],
+      "columns": {
+        "Genres": null,
+        "Studios": null,
+        "Tags": null,
+        "ProductionLocations": null,
+        "Artists": null,
+        "AlbumArtists": null,
+        "Name": "UserView",
+        "Album": null
+      },
+      "hydratedLists": {
+        "Genres": [],
+        "Studios": [],
+        "Tags": [],
+        "ProductionLocations": [],
+        "Artists": null,
+        "AlbumArtists": null
+      },
+      "trailers": []
+    },
+    {
+      "name": "type-PlaylistsFolder-runtime-aliases-false",
+      "exception": null,
+      "nativeType": "Emby.Server.Implementations.Playlists.PlaylistsFolder",
+      "requiresJson": false,
+      "storedDataIsNull": true,
+      "hydrationData": "{\u0022UserDataKeys\u0022:[\u0022serialized-fake-key\u0022,\u0022serialized-second-key\u0022],\u0022ProviderIds\u0022:{\u0022Imdb\u0022:\u0022serialized-imdb\u0022,\u0022Tmdb\u0022:\u0022serialized-tmdb\u0022,\u0022Tvdb\u0022:\u0022serialized-tvdb\u0022,\u0022MusicBrainzAlbum\u0022:\u0022serialized-album\u0022},\u0022Series\u0022:{\u0022Id\u0022:\u002200000000-0000-0000-0000-000000000099\u0022,\u0022ProviderIds\u0022:{\u0022Custom\u0022:\u0022serialized-series\u0022}},\u0022AlbumArtist\u0022:\u0022serialized-album-artist\u0022,\u0022Name\u0022:\u0022serialized-name\u0022,\u0022RemoteTrailers\u0022:[]}",
+      "keys": [
+        "97800000-0000-0000-0000-000000000001"
+      ],
+      "columns": {
+        "Genres": "",
+        "Studios": "",
+        "Tags": "",
+        "ProductionLocations": "",
+        "Artists": null,
+        "AlbumArtists": null,
+        "Name": "PlaylistsFolder",
+        "Album": null
+      },
+      "hydratedLists": {
+        "Genres": [],
+        "Studios": [
+          ""
+        ],
+        "Tags": [],
+        "ProductionLocations": [],
+        "Artists": null,
+        "AlbumArtists": null
+      },
+      "trailers": []
+    },
+    {
+      "name": "type-PlaylistsFolder-runtime-aliases-true",
+      "exception": null,
+      "nativeType": "Emby.Server.Implementations.Playlists.PlaylistsFolder",
+      "requiresJson": false,
+      "storedDataIsNull": true,
+      "hydrationData": "{\u0022UserDataKeys\u0022:[\u0022serialized-fake-key\u0022,\u0022serialized-second-key\u0022],\u0022ProviderIds\u0022:{\u0022Imdb\u0022:\u0022serialized-imdb\u0022,\u0022Tmdb\u0022:\u0022serialized-tmdb\u0022,\u0022Tvdb\u0022:\u0022serialized-tvdb\u0022,\u0022MusicBrainzAlbum\u0022:\u0022serialized-album\u0022},\u0022Series\u0022:{\u0022Id\u0022:\u002200000000-0000-0000-0000-000000000099\u0022,\u0022ProviderIds\u0022:{\u0022Custom\u0022:\u0022serialized-series\u0022}},\u0022AlbumArtist\u0022:\u0022serialized-album-artist\u0022,\u0022Name\u0022:\u0022serialized-name\u0022,\u0022RemoteTrailers\u0022:[]}",
+      "keys": [
+        "97800000-0000-0000-0000-000000000001"
+      ],
+      "columns": {
+        "Genres": null,
+        "Studios": null,
+        "Tags": null,
+        "ProductionLocations": null,
+        "Artists": null,
+        "AlbumArtists": null,
+        "Name": "PlaylistsFolder",
+        "Album": null
+      },
+      "hydratedLists": {
+        "Genres": [],
+        "Studios": [],
+        "Tags": [],
+        "ProductionLocations": [],
+        "Artists": null,
+        "AlbumArtists": null
+      },
+      "trailers": []
+    },
+    {
+      "name": "type-Playlist-runtime-aliases-false",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Playlists.Playlist",
+      "requiresJson": true,
+      "storedDataIsNull": false,
+      "hydrationData": "{\u0022UserDataKeys\u0022:[\u0022serialized-fake-key\u0022,\u0022serialized-second-key\u0022],\u0022ProviderIds\u0022:{\u0022Imdb\u0022:\u0022serialized-imdb\u0022,\u0022Tmdb\u0022:\u0022serialized-tmdb\u0022,\u0022Tvdb\u0022:\u0022serialized-tvdb\u0022,\u0022MusicBrainzAlbum\u0022:\u0022serialized-album\u0022},\u0022Series\u0022:{\u0022Id\u0022:\u002200000000-0000-0000-0000-000000000099\u0022,\u0022ProviderIds\u0022:{\u0022Custom\u0022:\u0022serialized-series\u0022}},\u0022AlbumArtist\u0022:\u0022serialized-album-artist\u0022,\u0022Name\u0022:\u0022serialized-name\u0022,\u0022RemoteTrailers\u0022:[]}",
+      "keys": [
+        "97800000-0000-0000-0000-000000000001"
+      ],
+      "columns": {
+        "Genres": "",
+        "Studios": "",
+        "Tags": "",
+        "ProductionLocations": "",
+        "Artists": null,
+        "AlbumArtists": null,
+        "Name": "Playlist",
+        "Album": null
+      },
+      "hydratedLists": {
+        "Genres": [],
+        "Studios": [
+          ""
+        ],
+        "Tags": [],
+        "ProductionLocations": [],
+        "Artists": null,
+        "AlbumArtists": null
+      },
+      "trailers": []
+    },
+    {
+      "name": "type-Playlist-runtime-aliases-true",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Playlists.Playlist",
+      "requiresJson": true,
+      "storedDataIsNull": false,
+      "hydrationData": "{\u0022UserDataKeys\u0022:[\u0022serialized-fake-key\u0022,\u0022serialized-second-key\u0022],\u0022ProviderIds\u0022:{\u0022Imdb\u0022:\u0022serialized-imdb\u0022,\u0022Tmdb\u0022:\u0022serialized-tmdb\u0022,\u0022Tvdb\u0022:\u0022serialized-tvdb\u0022,\u0022MusicBrainzAlbum\u0022:\u0022serialized-album\u0022},\u0022Series\u0022:{\u0022Id\u0022:\u002200000000-0000-0000-0000-000000000099\u0022,\u0022ProviderIds\u0022:{\u0022Custom\u0022:\u0022serialized-series\u0022}},\u0022AlbumArtist\u0022:\u0022serialized-album-artist\u0022,\u0022Name\u0022:\u0022serialized-name\u0022,\u0022RemoteTrailers\u0022:[]}",
+      "keys": [
+        "97800000-0000-0000-0000-000000000001"
+      ],
+      "columns": {
+        "Genres": null,
+        "Studios": null,
+        "Tags": null,
+        "ProductionLocations": null,
+        "Artists": null,
+        "AlbumArtists": null,
+        "Name": "Playlist",
+        "Album": null
+      },
+      "hydratedLists": {
+        "Genres": [],
+        "Studios": [],
+        "Tags": [],
+        "ProductionLocations": [],
+        "Artists": null,
+        "AlbumArtists": null
+      },
+      "trailers": []
+    },
+    {
+      "name": "type-Movie-runtime-aliases-false",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Movies.Movie",
+      "requiresJson": true,
+      "storedDataIsNull": false,
+      "hydrationData": "{\u0022UserDataKeys\u0022:[\u0022serialized-fake-key\u0022,\u0022serialized-second-key\u0022],\u0022ProviderIds\u0022:{\u0022Imdb\u0022:\u0022serialized-imdb\u0022,\u0022Tmdb\u0022:\u0022serialized-tmdb\u0022,\u0022Tvdb\u0022:\u0022serialized-tvdb\u0022,\u0022MusicBrainzAlbum\u0022:\u0022serialized-album\u0022},\u0022Series\u0022:{\u0022Id\u0022:\u002200000000-0000-0000-0000-000000000099\u0022,\u0022ProviderIds\u0022:{\u0022Custom\u0022:\u0022serialized-series\u0022}},\u0022AlbumArtist\u0022:\u0022serialized-album-artist\u0022,\u0022Name\u0022:\u0022serialized-name\u0022,\u0022RemoteTrailers\u0022:[]}",
+      "keys": [
+        "97800000-0000-0000-0000-000000000001"
+      ],
+      "columns": {
+        "Genres": "",
+        "Studios": "",
+        "Tags": "",
+        "ProductionLocations": "",
+        "Artists": null,
+        "AlbumArtists": null,
+        "Name": "Movie",
+        "Album": null
+      },
+      "hydratedLists": {
+        "Genres": [],
+        "Studios": [
+          ""
+        ],
+        "Tags": [],
+        "ProductionLocations": [],
+        "Artists": null,
+        "AlbumArtists": null
+      },
+      "trailers": []
+    },
+    {
+      "name": "type-Movie-runtime-aliases-true",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Movies.Movie",
+      "requiresJson": true,
+      "storedDataIsNull": false,
+      "hydrationData": "{\u0022UserDataKeys\u0022:[\u0022serialized-fake-key\u0022,\u0022serialized-second-key\u0022],\u0022ProviderIds\u0022:{\u0022Imdb\u0022:\u0022serialized-imdb\u0022,\u0022Tmdb\u0022:\u0022serialized-tmdb\u0022,\u0022Tvdb\u0022:\u0022serialized-tvdb\u0022,\u0022MusicBrainzAlbum\u0022:\u0022serialized-album\u0022},\u0022Series\u0022:{\u0022Id\u0022:\u002200000000-0000-0000-0000-000000000099\u0022,\u0022ProviderIds\u0022:{\u0022Custom\u0022:\u0022serialized-series\u0022}},\u0022AlbumArtist\u0022:\u0022serialized-album-artist\u0022,\u0022Name\u0022:\u0022serialized-name\u0022,\u0022RemoteTrailers\u0022:[]}",
+      "keys": [
+        "97800000-0000-0000-0000-000000000001"
+      ],
+      "columns": {
+        "Genres": null,
+        "Studios": null,
+        "Tags": null,
+        "ProductionLocations": null,
+        "Artists": null,
+        "AlbumArtists": null,
+        "Name": "Movie",
+        "Album": null
+      },
+      "hydratedLists": {
+        "Genres": [],
+        "Studios": [],
+        "Tags": [],
+        "ProductionLocations": [],
+        "Artists": null,
+        "AlbumArtists": null
+      },
+      "trailers": []
+    },
+    {
+      "name": "type-Video-runtime-aliases-false",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Video",
+      "requiresJson": true,
+      "storedDataIsNull": false,
+      "hydrationData": "{\u0022UserDataKeys\u0022:[\u0022serialized-fake-key\u0022,\u0022serialized-second-key\u0022],\u0022ProviderIds\u0022:{\u0022Imdb\u0022:\u0022serialized-imdb\u0022,\u0022Tmdb\u0022:\u0022serialized-tmdb\u0022,\u0022Tvdb\u0022:\u0022serialized-tvdb\u0022,\u0022MusicBrainzAlbum\u0022:\u0022serialized-album\u0022},\u0022Series\u0022:{\u0022Id\u0022:\u002200000000-0000-0000-0000-000000000099\u0022,\u0022ProviderIds\u0022:{\u0022Custom\u0022:\u0022serialized-series\u0022}},\u0022AlbumArtist\u0022:\u0022serialized-album-artist\u0022,\u0022Name\u0022:\u0022serialized-name\u0022,\u0022RemoteTrailers\u0022:[]}",
+      "keys": [
+        "97800000-0000-0000-0000-000000000001"
+      ],
+      "columns": {
+        "Genres": "",
+        "Studios": "",
+        "Tags": "",
+        "ProductionLocations": "",
+        "Artists": null,
+        "AlbumArtists": null,
+        "Name": "Video",
+        "Album": null
+      },
+      "hydratedLists": {
+        "Genres": [],
+        "Studios": [
+          ""
+        ],
+        "Tags": [],
+        "ProductionLocations": [],
+        "Artists": null,
+        "AlbumArtists": null
+      },
+      "trailers": []
+    },
+    {
+      "name": "type-Video-runtime-aliases-true",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Video",
+      "requiresJson": true,
+      "storedDataIsNull": false,
+      "hydrationData": "{\u0022UserDataKeys\u0022:[\u0022serialized-fake-key\u0022,\u0022serialized-second-key\u0022],\u0022ProviderIds\u0022:{\u0022Imdb\u0022:\u0022serialized-imdb\u0022,\u0022Tmdb\u0022:\u0022serialized-tmdb\u0022,\u0022Tvdb\u0022:\u0022serialized-tvdb\u0022,\u0022MusicBrainzAlbum\u0022:\u0022serialized-album\u0022},\u0022Series\u0022:{\u0022Id\u0022:\u002200000000-0000-0000-0000-000000000099\u0022,\u0022ProviderIds\u0022:{\u0022Custom\u0022:\u0022serialized-series\u0022}},\u0022AlbumArtist\u0022:\u0022serialized-album-artist\u0022,\u0022Name\u0022:\u0022serialized-name\u0022,\u0022RemoteTrailers\u0022:[]}",
+      "keys": [
+        "97800000-0000-0000-0000-000000000001"
+      ],
+      "columns": {
+        "Genres": null,
+        "Studios": null,
+        "Tags": null,
+        "ProductionLocations": null,
+        "Artists": null,
+        "AlbumArtists": null,
+        "Name": "Video",
+        "Album": null
+      },
+      "hydratedLists": {
+        "Genres": [],
+        "Studios": [],
+        "Tags": [],
+        "ProductionLocations": [],
+        "Artists": null,
+        "AlbumArtists": null
+      },
+      "trailers": []
+    },
+    {
+      "name": "type-Episode-runtime-aliases-false",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.TV.Episode",
+      "requiresJson": true,
+      "storedDataIsNull": false,
+      "hydrationData": "{\u0022UserDataKeys\u0022:[\u0022serialized-fake-key\u0022,\u0022serialized-second-key\u0022],\u0022ProviderIds\u0022:{\u0022Imdb\u0022:\u0022serialized-imdb\u0022,\u0022Tmdb\u0022:\u0022serialized-tmdb\u0022,\u0022Tvdb\u0022:\u0022serialized-tvdb\u0022,\u0022MusicBrainzAlbum\u0022:\u0022serialized-album\u0022},\u0022Series\u0022:{\u0022Id\u0022:\u002200000000-0000-0000-0000-000000000099\u0022,\u0022ProviderIds\u0022:{\u0022Custom\u0022:\u0022serialized-series\u0022}},\u0022AlbumArtist\u0022:\u0022serialized-album-artist\u0022,\u0022Name\u0022:\u0022serialized-name\u0022,\u0022RemoteTrailers\u0022:[]}",
+      "keys": [
+        "97800000-0000-0000-0000-000000000001"
+      ],
+      "columns": {
+        "Genres": "",
+        "Studios": "",
+        "Tags": "",
+        "ProductionLocations": "",
+        "Artists": null,
+        "AlbumArtists": null,
+        "Name": "Episode",
+        "Album": null
+      },
+      "hydratedLists": {
+        "Genres": [],
+        "Studios": [
+          ""
+        ],
+        "Tags": [],
+        "ProductionLocations": [],
+        "Artists": null,
+        "AlbumArtists": null
+      },
+      "trailers": []
+    },
+    {
+      "name": "type-Episode-runtime-aliases-true",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.TV.Episode",
+      "requiresJson": true,
+      "storedDataIsNull": false,
+      "hydrationData": "{\u0022UserDataKeys\u0022:[\u0022serialized-fake-key\u0022,\u0022serialized-second-key\u0022],\u0022ProviderIds\u0022:{\u0022Imdb\u0022:\u0022serialized-imdb\u0022,\u0022Tmdb\u0022:\u0022serialized-tmdb\u0022,\u0022Tvdb\u0022:\u0022serialized-tvdb\u0022,\u0022MusicBrainzAlbum\u0022:\u0022serialized-album\u0022},\u0022Series\u0022:{\u0022Id\u0022:\u002200000000-0000-0000-0000-000000000099\u0022,\u0022ProviderIds\u0022:{\u0022Custom\u0022:\u0022serialized-series\u0022}},\u0022AlbumArtist\u0022:\u0022serialized-album-artist\u0022,\u0022Name\u0022:\u0022serialized-name\u0022,\u0022RemoteTrailers\u0022:[]}",
+      "keys": [
+        "97800000-0000-0000-0000-000000000001"
+      ],
+      "columns": {
+        "Genres": null,
+        "Studios": null,
+        "Tags": null,
+        "ProductionLocations": null,
+        "Artists": null,
+        "AlbumArtists": null,
+        "Name": "Episode",
+        "Album": null
+      },
+      "hydratedLists": {
+        "Genres": [],
+        "Studios": [],
+        "Tags": [],
+        "ProductionLocations": [],
+        "Artists": null,
+        "AlbumArtists": null
+      },
+      "trailers": []
+    },
+    {
+      "name": "type-Series-runtime-aliases-false",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.TV.Series",
+      "requiresJson": true,
+      "storedDataIsNull": false,
+      "hydrationData": "{\u0022UserDataKeys\u0022:[\u0022serialized-fake-key\u0022,\u0022serialized-second-key\u0022],\u0022ProviderIds\u0022:{\u0022Imdb\u0022:\u0022serialized-imdb\u0022,\u0022Tmdb\u0022:\u0022serialized-tmdb\u0022,\u0022Tvdb\u0022:\u0022serialized-tvdb\u0022,\u0022MusicBrainzAlbum\u0022:\u0022serialized-album\u0022},\u0022Series\u0022:{\u0022Id\u0022:\u002200000000-0000-0000-0000-000000000099\u0022,\u0022ProviderIds\u0022:{\u0022Custom\u0022:\u0022serialized-series\u0022}},\u0022AlbumArtist\u0022:\u0022serialized-album-artist\u0022,\u0022Name\u0022:\u0022serialized-name\u0022,\u0022RemoteTrailers\u0022:[]}",
+      "keys": [
+        "97800000-0000-0000-0000-000000000001"
+      ],
+      "columns": {
+        "Genres": "",
+        "Studios": "",
+        "Tags": "",
+        "ProductionLocations": "",
+        "Artists": null,
+        "AlbumArtists": null,
+        "Name": "Series",
+        "Album": null
+      },
+      "hydratedLists": {
+        "Genres": [],
+        "Studios": [
+          ""
+        ],
+        "Tags": [],
+        "ProductionLocations": [],
+        "Artists": null,
+        "AlbumArtists": null
+      },
+      "trailers": []
+    },
+    {
+      "name": "type-Series-runtime-aliases-true",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.TV.Series",
+      "requiresJson": true,
+      "storedDataIsNull": false,
+      "hydrationData": "{\u0022UserDataKeys\u0022:[\u0022serialized-fake-key\u0022,\u0022serialized-second-key\u0022],\u0022ProviderIds\u0022:{\u0022Imdb\u0022:\u0022serialized-imdb\u0022,\u0022Tmdb\u0022:\u0022serialized-tmdb\u0022,\u0022Tvdb\u0022:\u0022serialized-tvdb\u0022,\u0022MusicBrainzAlbum\u0022:\u0022serialized-album\u0022},\u0022Series\u0022:{\u0022Id\u0022:\u002200000000-0000-0000-0000-000000000099\u0022,\u0022ProviderIds\u0022:{\u0022Custom\u0022:\u0022serialized-series\u0022}},\u0022AlbumArtist\u0022:\u0022serialized-album-artist\u0022,\u0022Name\u0022:\u0022serialized-name\u0022,\u0022RemoteTrailers\u0022:[]}",
+      "keys": [
+        "97800000-0000-0000-0000-000000000001"
+      ],
+      "columns": {
+        "Genres": null,
+        "Studios": null,
+        "Tags": null,
+        "ProductionLocations": null,
+        "Artists": null,
+        "AlbumArtists": null,
+        "Name": "Series",
+        "Album": null
+      },
+      "hydratedLists": {
+        "Genres": [],
+        "Studios": [],
+        "Tags": [],
+        "ProductionLocations": [],
+        "Artists": null,
+        "AlbumArtists": null
+      },
+      "trailers": []
+    },
+    {
+      "name": "type-Season-runtime-aliases-false",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.TV.Season",
+      "requiresJson": false,
+      "storedDataIsNull": true,
+      "hydrationData": "{\u0022UserDataKeys\u0022:[\u0022serialized-fake-key\u0022,\u0022serialized-second-key\u0022],\u0022ProviderIds\u0022:{\u0022Imdb\u0022:\u0022serialized-imdb\u0022,\u0022Tmdb\u0022:\u0022serialized-tmdb\u0022,\u0022Tvdb\u0022:\u0022serialized-tvdb\u0022,\u0022MusicBrainzAlbum\u0022:\u0022serialized-album\u0022},\u0022Series\u0022:{\u0022Id\u0022:\u002200000000-0000-0000-0000-000000000099\u0022,\u0022ProviderIds\u0022:{\u0022Custom\u0022:\u0022serialized-series\u0022}},\u0022AlbumArtist\u0022:\u0022serialized-album-artist\u0022,\u0022Name\u0022:\u0022serialized-name\u0022,\u0022RemoteTrailers\u0022:[]}",
+      "keys": [
+        "97800000-0000-0000-0000-000000000001"
+      ],
+      "columns": {
+        "Genres": "",
+        "Studios": "",
+        "Tags": "",
+        "ProductionLocations": "",
+        "Artists": null,
+        "AlbumArtists": null,
+        "Name": "Season",
+        "Album": null
+      },
+      "hydratedLists": {
+        "Genres": [],
+        "Studios": [
+          ""
+        ],
+        "Tags": [],
+        "ProductionLocations": [],
+        "Artists": null,
+        "AlbumArtists": null
+      },
+      "trailers": []
+    },
+    {
+      "name": "type-Season-runtime-aliases-true",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.TV.Season",
+      "requiresJson": false,
+      "storedDataIsNull": true,
+      "hydrationData": "{\u0022UserDataKeys\u0022:[\u0022serialized-fake-key\u0022,\u0022serialized-second-key\u0022],\u0022ProviderIds\u0022:{\u0022Imdb\u0022:\u0022serialized-imdb\u0022,\u0022Tmdb\u0022:\u0022serialized-tmdb\u0022,\u0022Tvdb\u0022:\u0022serialized-tvdb\u0022,\u0022MusicBrainzAlbum\u0022:\u0022serialized-album\u0022},\u0022Series\u0022:{\u0022Id\u0022:\u002200000000-0000-0000-0000-000000000099\u0022,\u0022ProviderIds\u0022:{\u0022Custom\u0022:\u0022serialized-series\u0022}},\u0022AlbumArtist\u0022:\u0022serialized-album-artist\u0022,\u0022Name\u0022:\u0022serialized-name\u0022,\u0022RemoteTrailers\u0022:[]}",
+      "keys": [
+        "97800000-0000-0000-0000-000000000001"
+      ],
+      "columns": {
+        "Genres": null,
+        "Studios": null,
+        "Tags": null,
+        "ProductionLocations": null,
+        "Artists": null,
+        "AlbumArtists": null,
+        "Name": "Season",
+        "Album": null
+      },
+      "hydratedLists": {
+        "Genres": [],
+        "Studios": [],
+        "Tags": [],
+        "ProductionLocations": [],
+        "Artists": null,
+        "AlbumArtists": null
+      },
+      "trailers": []
+    },
+    {
+      "name": "type-BoxSet-runtime-aliases-false",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Movies.BoxSet",
+      "requiresJson": true,
+      "storedDataIsNull": false,
+      "hydrationData": "{\u0022UserDataKeys\u0022:[\u0022serialized-fake-key\u0022,\u0022serialized-second-key\u0022],\u0022ProviderIds\u0022:{\u0022Imdb\u0022:\u0022serialized-imdb\u0022,\u0022Tmdb\u0022:\u0022serialized-tmdb\u0022,\u0022Tvdb\u0022:\u0022serialized-tvdb\u0022,\u0022MusicBrainzAlbum\u0022:\u0022serialized-album\u0022},\u0022Series\u0022:{\u0022Id\u0022:\u002200000000-0000-0000-0000-000000000099\u0022,\u0022ProviderIds\u0022:{\u0022Custom\u0022:\u0022serialized-series\u0022}},\u0022AlbumArtist\u0022:\u0022serialized-album-artist\u0022,\u0022Name\u0022:\u0022serialized-name\u0022,\u0022RemoteTrailers\u0022:[]}",
+      "keys": [
+        "97800000-0000-0000-0000-000000000001"
+      ],
+      "columns": {
+        "Genres": "",
+        "Studios": "",
+        "Tags": "",
+        "ProductionLocations": "",
+        "Artists": null,
+        "AlbumArtists": null,
+        "Name": "BoxSet",
+        "Album": null
+      },
+      "hydratedLists": {
+        "Genres": [],
+        "Studios": [
+          ""
+        ],
+        "Tags": [],
+        "ProductionLocations": [],
+        "Artists": null,
+        "AlbumArtists": null
+      },
+      "trailers": []
+    },
+    {
+      "name": "type-BoxSet-runtime-aliases-true",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Movies.BoxSet",
+      "requiresJson": true,
+      "storedDataIsNull": false,
+      "hydrationData": "{\u0022UserDataKeys\u0022:[\u0022serialized-fake-key\u0022,\u0022serialized-second-key\u0022],\u0022ProviderIds\u0022:{\u0022Imdb\u0022:\u0022serialized-imdb\u0022,\u0022Tmdb\u0022:\u0022serialized-tmdb\u0022,\u0022Tvdb\u0022:\u0022serialized-tvdb\u0022,\u0022MusicBrainzAlbum\u0022:\u0022serialized-album\u0022},\u0022Series\u0022:{\u0022Id\u0022:\u002200000000-0000-0000-0000-000000000099\u0022,\u0022ProviderIds\u0022:{\u0022Custom\u0022:\u0022serialized-series\u0022}},\u0022AlbumArtist\u0022:\u0022serialized-album-artist\u0022,\u0022Name\u0022:\u0022serialized-name\u0022,\u0022RemoteTrailers\u0022:[]}",
+      "keys": [
+        "97800000-0000-0000-0000-000000000001"
+      ],
+      "columns": {
+        "Genres": null,
+        "Studios": null,
+        "Tags": null,
+        "ProductionLocations": null,
+        "Artists": null,
+        "AlbumArtists": null,
+        "Name": "BoxSet",
+        "Album": null
+      },
+      "hydratedLists": {
+        "Genres": [],
+        "Studios": [],
+        "Tags": [],
+        "ProductionLocations": [],
+        "Artists": null,
+        "AlbumArtists": null
+      },
+      "trailers": []
+    },
+    {
+      "name": "type-Audio-runtime-aliases-false",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "requiresJson": true,
+      "storedDataIsNull": false,
+      "hydrationData": "{\u0022UserDataKeys\u0022:[\u0022serialized-fake-key\u0022,\u0022serialized-second-key\u0022],\u0022ProviderIds\u0022:{\u0022Imdb\u0022:\u0022serialized-imdb\u0022,\u0022Tmdb\u0022:\u0022serialized-tmdb\u0022,\u0022Tvdb\u0022:\u0022serialized-tvdb\u0022,\u0022MusicBrainzAlbum\u0022:\u0022serialized-album\u0022},\u0022Series\u0022:{\u0022Id\u0022:\u002200000000-0000-0000-0000-000000000099\u0022,\u0022ProviderIds\u0022:{\u0022Custom\u0022:\u0022serialized-series\u0022}},\u0022AlbumArtist\u0022:\u0022serialized-album-artist\u0022,\u0022Name\u0022:\u0022serialized-name\u0022,\u0022RemoteTrailers\u0022:[]}",
+      "keys": [
+        "Audio",
+        "97800000-0000-0000-0000-000000000001"
+      ],
+      "columns": {
+        "Genres": "",
+        "Studios": "",
+        "Tags": "",
+        "ProductionLocations": "",
+        "Artists": "",
+        "AlbumArtists": "",
+        "Name": "Audio",
+        "Album": null
+      },
+      "hydratedLists": {
+        "Genres": [],
+        "Studios": [
+          ""
+        ],
+        "Tags": [],
+        "ProductionLocations": [],
+        "Artists": [],
+        "AlbumArtists": []
+      },
+      "trailers": []
+    },
+    {
+      "name": "type-Audio-runtime-aliases-true",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "requiresJson": true,
+      "storedDataIsNull": false,
+      "hydrationData": "{\u0022UserDataKeys\u0022:[\u0022serialized-fake-key\u0022,\u0022serialized-second-key\u0022],\u0022ProviderIds\u0022:{\u0022Imdb\u0022:\u0022serialized-imdb\u0022,\u0022Tmdb\u0022:\u0022serialized-tmdb\u0022,\u0022Tvdb\u0022:\u0022serialized-tvdb\u0022,\u0022MusicBrainzAlbum\u0022:\u0022serialized-album\u0022},\u0022Series\u0022:{\u0022Id\u0022:\u002200000000-0000-0000-0000-000000000099\u0022,\u0022ProviderIds\u0022:{\u0022Custom\u0022:\u0022serialized-series\u0022}},\u0022AlbumArtist\u0022:\u0022serialized-album-artist\u0022,\u0022Name\u0022:\u0022serialized-name\u0022,\u0022RemoteTrailers\u0022:[]}",
+      "keys": [
+        "Audio",
+        "97800000-0000-0000-0000-000000000001"
+      ],
+      "columns": {
+        "Genres": null,
+        "Studios": null,
+        "Tags": null,
+        "ProductionLocations": null,
+        "Artists": null,
+        "AlbumArtists": null,
+        "Name": "Audio",
+        "Album": null
+      },
+      "hydratedLists": {
+        "Genres": [],
+        "Studios": [],
+        "Tags": [],
+        "ProductionLocations": [],
+        "Artists": [],
+        "AlbumArtists": []
+      },
+      "trailers": []
+    },
+    {
+      "name": "type-AudioBook-runtime-aliases-false",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.AudioBook",
+      "requiresJson": false,
+      "storedDataIsNull": true,
+      "hydrationData": "{\u0022UserDataKeys\u0022:[\u0022serialized-fake-key\u0022,\u0022serialized-second-key\u0022],\u0022ProviderIds\u0022:{\u0022Imdb\u0022:\u0022serialized-imdb\u0022,\u0022Tmdb\u0022:\u0022serialized-tmdb\u0022,\u0022Tvdb\u0022:\u0022serialized-tvdb\u0022,\u0022MusicBrainzAlbum\u0022:\u0022serialized-album\u0022},\u0022Series\u0022:{\u0022Id\u0022:\u002200000000-0000-0000-0000-000000000099\u0022,\u0022ProviderIds\u0022:{\u0022Custom\u0022:\u0022serialized-series\u0022}},\u0022AlbumArtist\u0022:\u0022serialized-album-artist\u0022,\u0022Name\u0022:\u0022serialized-name\u0022,\u0022RemoteTrailers\u0022:[]}",
+      "keys": [
+        "AudioBook",
+        "97800000-0000-0000-0000-000000000001"
+      ],
+      "columns": {
+        "Genres": "",
+        "Studios": "",
+        "Tags": "",
+        "ProductionLocations": "",
+        "Artists": "",
+        "AlbumArtists": "",
+        "Name": "AudioBook",
+        "Album": null
+      },
+      "hydratedLists": {
+        "Genres": [],
+        "Studios": [
+          ""
+        ],
+        "Tags": [],
+        "ProductionLocations": [],
+        "Artists": [],
+        "AlbumArtists": []
+      },
+      "trailers": []
+    },
+    {
+      "name": "type-AudioBook-runtime-aliases-true",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.AudioBook",
+      "requiresJson": false,
+      "storedDataIsNull": true,
+      "hydrationData": "{\u0022UserDataKeys\u0022:[\u0022serialized-fake-key\u0022,\u0022serialized-second-key\u0022],\u0022ProviderIds\u0022:{\u0022Imdb\u0022:\u0022serialized-imdb\u0022,\u0022Tmdb\u0022:\u0022serialized-tmdb\u0022,\u0022Tvdb\u0022:\u0022serialized-tvdb\u0022,\u0022MusicBrainzAlbum\u0022:\u0022serialized-album\u0022},\u0022Series\u0022:{\u0022Id\u0022:\u002200000000-0000-0000-0000-000000000099\u0022,\u0022ProviderIds\u0022:{\u0022Custom\u0022:\u0022serialized-series\u0022}},\u0022AlbumArtist\u0022:\u0022serialized-album-artist\u0022,\u0022Name\u0022:\u0022serialized-name\u0022,\u0022RemoteTrailers\u0022:[]}",
+      "keys": [
+        "AudioBook",
+        "97800000-0000-0000-0000-000000000001"
+      ],
+      "columns": {
+        "Genres": null,
+        "Studios": null,
+        "Tags": null,
+        "ProductionLocations": null,
+        "Artists": null,
+        "AlbumArtists": null,
+        "Name": "AudioBook",
+        "Album": null
+      },
+      "hydratedLists": {
+        "Genres": [],
+        "Studios": [],
+        "Tags": [],
+        "ProductionLocations": [],
+        "Artists": [],
+        "AlbumArtists": []
+      },
+      "trailers": []
+    },
+    {
+      "name": "type-MusicVideo-runtime-aliases-false",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.MusicVideo",
+      "requiresJson": true,
+      "storedDataIsNull": false,
+      "hydrationData": "{\u0022UserDataKeys\u0022:[\u0022serialized-fake-key\u0022,\u0022serialized-second-key\u0022],\u0022ProviderIds\u0022:{\u0022Imdb\u0022:\u0022serialized-imdb\u0022,\u0022Tmdb\u0022:\u0022serialized-tmdb\u0022,\u0022Tvdb\u0022:\u0022serialized-tvdb\u0022,\u0022MusicBrainzAlbum\u0022:\u0022serialized-album\u0022},\u0022Series\u0022:{\u0022Id\u0022:\u002200000000-0000-0000-0000-000000000099\u0022,\u0022ProviderIds\u0022:{\u0022Custom\u0022:\u0022serialized-series\u0022}},\u0022AlbumArtist\u0022:\u0022serialized-album-artist\u0022,\u0022Name\u0022:\u0022serialized-name\u0022,\u0022RemoteTrailers\u0022:[]}",
+      "keys": [
+        "97800000-0000-0000-0000-000000000001"
+      ],
+      "columns": {
+        "Genres": "",
+        "Studios": "",
+        "Tags": "",
+        "ProductionLocations": "",
+        "Artists": "",
+        "AlbumArtists": null,
+        "Name": "MusicVideo",
+        "Album": null
+      },
+      "hydratedLists": {
+        "Genres": [],
+        "Studios": [
+          ""
+        ],
+        "Tags": [],
+        "ProductionLocations": [],
+        "Artists": [],
+        "AlbumArtists": null
+      },
+      "trailers": []
+    },
+    {
+      "name": "type-MusicVideo-runtime-aliases-true",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.MusicVideo",
+      "requiresJson": true,
+      "storedDataIsNull": false,
+      "hydrationData": "{\u0022UserDataKeys\u0022:[\u0022serialized-fake-key\u0022,\u0022serialized-second-key\u0022],\u0022ProviderIds\u0022:{\u0022Imdb\u0022:\u0022serialized-imdb\u0022,\u0022Tmdb\u0022:\u0022serialized-tmdb\u0022,\u0022Tvdb\u0022:\u0022serialized-tvdb\u0022,\u0022MusicBrainzAlbum\u0022:\u0022serialized-album\u0022},\u0022Series\u0022:{\u0022Id\u0022:\u002200000000-0000-0000-0000-000000000099\u0022,\u0022ProviderIds\u0022:{\u0022Custom\u0022:\u0022serialized-series\u0022}},\u0022AlbumArtist\u0022:\u0022serialized-album-artist\u0022,\u0022Name\u0022:\u0022serialized-name\u0022,\u0022RemoteTrailers\u0022:[]}",
+      "keys": [
+        "97800000-0000-0000-0000-000000000001"
+      ],
+      "columns": {
+        "Genres": null,
+        "Studios": null,
+        "Tags": null,
+        "ProductionLocations": null,
+        "Artists": null,
+        "AlbumArtists": null,
+        "Name": "MusicVideo",
+        "Album": null
+      },
+      "hydratedLists": {
+        "Genres": [],
+        "Studios": [],
+        "Tags": [],
+        "ProductionLocations": [],
+        "Artists": [],
+        "AlbumArtists": null
+      },
+      "trailers": []
+    },
+    {
+      "name": "type-Trailer-runtime-aliases-false",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Trailer",
+      "requiresJson": true,
+      "storedDataIsNull": false,
+      "hydrationData": "{\u0022UserDataKeys\u0022:[\u0022serialized-fake-key\u0022,\u0022serialized-second-key\u0022],\u0022ProviderIds\u0022:{\u0022Imdb\u0022:\u0022serialized-imdb\u0022,\u0022Tmdb\u0022:\u0022serialized-tmdb\u0022,\u0022Tvdb\u0022:\u0022serialized-tvdb\u0022,\u0022MusicBrainzAlbum\u0022:\u0022serialized-album\u0022},\u0022Series\u0022:{\u0022Id\u0022:\u002200000000-0000-0000-0000-000000000099\u0022,\u0022ProviderIds\u0022:{\u0022Custom\u0022:\u0022serialized-series\u0022}},\u0022AlbumArtist\u0022:\u0022serialized-album-artist\u0022,\u0022Name\u0022:\u0022serialized-name\u0022,\u0022RemoteTrailers\u0022:[]}",
+      "keys": [
+        "97800000-0000-0000-0000-000000000001"
+      ],
+      "columns": {
+        "Genres": "",
+        "Studios": "",
+        "Tags": "",
+        "ProductionLocations": "",
+        "Artists": null,
+        "AlbumArtists": null,
+        "Name": "Trailer",
+        "Album": null
+      },
+      "hydratedLists": {
+        "Genres": [],
+        "Studios": [
+          ""
+        ],
+        "Tags": [],
+        "ProductionLocations": [],
+        "Artists": null,
+        "AlbumArtists": null
+      },
+      "trailers": []
+    },
+    {
+      "name": "type-Trailer-runtime-aliases-true",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Trailer",
+      "requiresJson": true,
+      "storedDataIsNull": false,
+      "hydrationData": "{\u0022UserDataKeys\u0022:[\u0022serialized-fake-key\u0022,\u0022serialized-second-key\u0022],\u0022ProviderIds\u0022:{\u0022Imdb\u0022:\u0022serialized-imdb\u0022,\u0022Tmdb\u0022:\u0022serialized-tmdb\u0022,\u0022Tvdb\u0022:\u0022serialized-tvdb\u0022,\u0022MusicBrainzAlbum\u0022:\u0022serialized-album\u0022},\u0022Series\u0022:{\u0022Id\u0022:\u002200000000-0000-0000-0000-000000000099\u0022,\u0022ProviderIds\u0022:{\u0022Custom\u0022:\u0022serialized-series\u0022}},\u0022AlbumArtist\u0022:\u0022serialized-album-artist\u0022,\u0022Name\u0022:\u0022serialized-name\u0022,\u0022RemoteTrailers\u0022:[]}",
+      "keys": [
+        "97800000-0000-0000-0000-000000000001"
+      ],
+      "columns": {
+        "Genres": null,
+        "Studios": null,
+        "Tags": null,
+        "ProductionLocations": null,
+        "Artists": null,
+        "AlbumArtists": null,
+        "Name": "Trailer",
+        "Album": null
+      },
+      "hydratedLists": {
+        "Genres": [],
+        "Studios": [],
+        "Tags": [],
+        "ProductionLocations": [],
+        "Artists": null,
+        "AlbumArtists": null
+      },
+      "trailers": []
+    },
+    {
+      "name": "type-MusicAlbum-runtime-aliases-false",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.MusicAlbum",
+      "requiresJson": false,
+      "storedDataIsNull": true,
+      "hydrationData": "{\u0022UserDataKeys\u0022:[\u0022serialized-fake-key\u0022,\u0022serialized-second-key\u0022],\u0022ProviderIds\u0022:{\u0022Imdb\u0022:\u0022serialized-imdb\u0022,\u0022Tmdb\u0022:\u0022serialized-tmdb\u0022,\u0022Tvdb\u0022:\u0022serialized-tvdb\u0022,\u0022MusicBrainzAlbum\u0022:\u0022serialized-album\u0022},\u0022Series\u0022:{\u0022Id\u0022:\u002200000000-0000-0000-0000-000000000099\u0022,\u0022ProviderIds\u0022:{\u0022Custom\u0022:\u0022serialized-series\u0022}},\u0022AlbumArtist\u0022:\u0022serialized-album-artist\u0022,\u0022Name\u0022:\u0022serialized-name\u0022,\u0022RemoteTrailers\u0022:[]}",
+      "keys": [
+        "97800000-0000-0000-0000-000000000001"
+      ],
+      "columns": {
+        "Genres": "",
+        "Studios": "",
+        "Tags": "",
+        "ProductionLocations": "",
+        "Artists": "",
+        "AlbumArtists": "",
+        "Name": "MusicAlbum",
+        "Album": null
+      },
+      "hydratedLists": {
+        "Genres": [],
+        "Studios": [
+          ""
+        ],
+        "Tags": [],
+        "ProductionLocations": [],
+        "Artists": [],
+        "AlbumArtists": []
+      },
+      "trailers": []
+    },
+    {
+      "name": "type-MusicAlbum-runtime-aliases-true",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.MusicAlbum",
+      "requiresJson": false,
+      "storedDataIsNull": true,
+      "hydrationData": "{\u0022UserDataKeys\u0022:[\u0022serialized-fake-key\u0022,\u0022serialized-second-key\u0022],\u0022ProviderIds\u0022:{\u0022Imdb\u0022:\u0022serialized-imdb\u0022,\u0022Tmdb\u0022:\u0022serialized-tmdb\u0022,\u0022Tvdb\u0022:\u0022serialized-tvdb\u0022,\u0022MusicBrainzAlbum\u0022:\u0022serialized-album\u0022},\u0022Series\u0022:{\u0022Id\u0022:\u002200000000-0000-0000-0000-000000000099\u0022,\u0022ProviderIds\u0022:{\u0022Custom\u0022:\u0022serialized-series\u0022}},\u0022AlbumArtist\u0022:\u0022serialized-album-artist\u0022,\u0022Name\u0022:\u0022serialized-name\u0022,\u0022RemoteTrailers\u0022:[]}",
+      "keys": [
+        "97800000-0000-0000-0000-000000000001"
+      ],
+      "columns": {
+        "Genres": null,
+        "Studios": null,
+        "Tags": null,
+        "ProductionLocations": null,
+        "Artists": null,
+        "AlbumArtists": null,
+        "Name": "MusicAlbum",
+        "Album": null
+      },
+      "hydratedLists": {
+        "Genres": [],
+        "Studios": [],
+        "Tags": [],
+        "ProductionLocations": [],
+        "Artists": [],
+        "AlbumArtists": []
+      },
+      "trailers": []
+    },
+    {
+      "name": "type-MusicArtist-runtime-aliases-false",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.MusicArtist",
+      "requiresJson": false,
+      "storedDataIsNull": true,
+      "hydrationData": "{\u0022UserDataKeys\u0022:[\u0022serialized-fake-key\u0022,\u0022serialized-second-key\u0022],\u0022ProviderIds\u0022:{\u0022Imdb\u0022:\u0022serialized-imdb\u0022,\u0022Tmdb\u0022:\u0022serialized-tmdb\u0022,\u0022Tvdb\u0022:\u0022serialized-tvdb\u0022,\u0022MusicBrainzAlbum\u0022:\u0022serialized-album\u0022},\u0022Series\u0022:{\u0022Id\u0022:\u002200000000-0000-0000-0000-000000000099\u0022,\u0022ProviderIds\u0022:{\u0022Custom\u0022:\u0022serialized-series\u0022}},\u0022AlbumArtist\u0022:\u0022serialized-album-artist\u0022,\u0022Name\u0022:\u0022serialized-name\u0022,\u0022RemoteTrailers\u0022:[]}",
+      "keys": [
+        "Artist-MusicArtist",
+        "97800000-0000-0000-0000-000000000001"
+      ],
+      "columns": {
+        "Genres": "",
+        "Studios": "",
+        "Tags": "",
+        "ProductionLocations": "",
+        "Artists": null,
+        "AlbumArtists": null,
+        "Name": "MusicArtist",
+        "Album": null
+      },
+      "hydratedLists": {
+        "Genres": [],
+        "Studios": [
+          ""
+        ],
+        "Tags": [],
+        "ProductionLocations": [],
+        "Artists": null,
+        "AlbumArtists": null
+      },
+      "trailers": []
+    },
+    {
+      "name": "type-MusicArtist-runtime-aliases-true",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.MusicArtist",
+      "requiresJson": false,
+      "storedDataIsNull": true,
+      "hydrationData": "{\u0022UserDataKeys\u0022:[\u0022serialized-fake-key\u0022,\u0022serialized-second-key\u0022],\u0022ProviderIds\u0022:{\u0022Imdb\u0022:\u0022serialized-imdb\u0022,\u0022Tmdb\u0022:\u0022serialized-tmdb\u0022,\u0022Tvdb\u0022:\u0022serialized-tvdb\u0022,\u0022MusicBrainzAlbum\u0022:\u0022serialized-album\u0022},\u0022Series\u0022:{\u0022Id\u0022:\u002200000000-0000-0000-0000-000000000099\u0022,\u0022ProviderIds\u0022:{\u0022Custom\u0022:\u0022serialized-series\u0022}},\u0022AlbumArtist\u0022:\u0022serialized-album-artist\u0022,\u0022Name\u0022:\u0022serialized-name\u0022,\u0022RemoteTrailers\u0022:[]}",
+      "keys": [
+        "Artist-MusicArtist",
+        "97800000-0000-0000-0000-000000000001"
+      ],
+      "columns": {
+        "Genres": null,
+        "Studios": null,
+        "Tags": null,
+        "ProductionLocations": null,
+        "Artists": null,
+        "AlbumArtists": null,
+        "Name": "MusicArtist",
+        "Album": null
+      },
+      "hydratedLists": {
+        "Genres": [],
+        "Studios": [],
+        "Tags": [],
+        "ProductionLocations": [],
+        "Artists": null,
+        "AlbumArtists": null
+      },
+      "trailers": []
+    },
+    {
+      "name": "type-Person-runtime-aliases-false",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Person",
+      "requiresJson": false,
+      "storedDataIsNull": true,
+      "hydrationData": "{\u0022UserDataKeys\u0022:[\u0022serialized-fake-key\u0022,\u0022serialized-second-key\u0022],\u0022ProviderIds\u0022:{\u0022Imdb\u0022:\u0022serialized-imdb\u0022,\u0022Tmdb\u0022:\u0022serialized-tmdb\u0022,\u0022Tvdb\u0022:\u0022serialized-tvdb\u0022,\u0022MusicBrainzAlbum\u0022:\u0022serialized-album\u0022},\u0022Series\u0022:{\u0022Id\u0022:\u002200000000-0000-0000-0000-000000000099\u0022,\u0022ProviderIds\u0022:{\u0022Custom\u0022:\u0022serialized-series\u0022}},\u0022AlbumArtist\u0022:\u0022serialized-album-artist\u0022,\u0022Name\u0022:\u0022serialized-name\u0022,\u0022RemoteTrailers\u0022:[]}",
+      "keys": [
+        "Person-Person",
+        "97800000-0000-0000-0000-000000000001"
+      ],
+      "columns": {
+        "Genres": "",
+        "Studios": "",
+        "Tags": "",
+        "ProductionLocations": "",
+        "Artists": null,
+        "AlbumArtists": null,
+        "Name": "Person",
+        "Album": null
+      },
+      "hydratedLists": {
+        "Genres": [],
+        "Studios": [
+          ""
+        ],
+        "Tags": [],
+        "ProductionLocations": [],
+        "Artists": null,
+        "AlbumArtists": null
+      },
+      "trailers": []
+    },
+    {
+      "name": "type-Person-runtime-aliases-true",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Person",
+      "requiresJson": false,
+      "storedDataIsNull": true,
+      "hydrationData": "{\u0022UserDataKeys\u0022:[\u0022serialized-fake-key\u0022,\u0022serialized-second-key\u0022],\u0022ProviderIds\u0022:{\u0022Imdb\u0022:\u0022serialized-imdb\u0022,\u0022Tmdb\u0022:\u0022serialized-tmdb\u0022,\u0022Tvdb\u0022:\u0022serialized-tvdb\u0022,\u0022MusicBrainzAlbum\u0022:\u0022serialized-album\u0022},\u0022Series\u0022:{\u0022Id\u0022:\u002200000000-0000-0000-0000-000000000099\u0022,\u0022ProviderIds\u0022:{\u0022Custom\u0022:\u0022serialized-series\u0022}},\u0022AlbumArtist\u0022:\u0022serialized-album-artist\u0022,\u0022Name\u0022:\u0022serialized-name\u0022,\u0022RemoteTrailers\u0022:[]}",
+      "keys": [
+        "Person-Person",
+        "97800000-0000-0000-0000-000000000001"
+      ],
+      "columns": {
+        "Genres": null,
+        "Studios": null,
+        "Tags": null,
+        "ProductionLocations": null,
+        "Artists": null,
+        "AlbumArtists": null,
+        "Name": "Person",
+        "Album": null
+      },
+      "hydratedLists": {
+        "Genres": [],
+        "Studios": [],
+        "Tags": [],
+        "ProductionLocations": [],
+        "Artists": null,
+        "AlbumArtists": null
+      },
+      "trailers": []
+    },
+    {
+      "name": "type-Genre-runtime-aliases-false",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Genre",
+      "requiresJson": false,
+      "storedDataIsNull": true,
+      "hydrationData": "{\u0022UserDataKeys\u0022:[\u0022serialized-fake-key\u0022,\u0022serialized-second-key\u0022],\u0022ProviderIds\u0022:{\u0022Imdb\u0022:\u0022serialized-imdb\u0022,\u0022Tmdb\u0022:\u0022serialized-tmdb\u0022,\u0022Tvdb\u0022:\u0022serialized-tvdb\u0022,\u0022MusicBrainzAlbum\u0022:\u0022serialized-album\u0022},\u0022Series\u0022:{\u0022Id\u0022:\u002200000000-0000-0000-0000-000000000099\u0022,\u0022ProviderIds\u0022:{\u0022Custom\u0022:\u0022serialized-series\u0022}},\u0022AlbumArtist\u0022:\u0022serialized-album-artist\u0022,\u0022Name\u0022:\u0022serialized-name\u0022,\u0022RemoteTrailers\u0022:[]}",
+      "keys": [
+        "Genre-Genre",
+        "97800000-0000-0000-0000-000000000001"
+      ],
+      "columns": {
+        "Genres": "",
+        "Studios": "",
+        "Tags": "",
+        "ProductionLocations": "",
+        "Artists": null,
+        "AlbumArtists": null,
+        "Name": "Genre",
+        "Album": null
+      },
+      "hydratedLists": {
+        "Genres": [],
+        "Studios": [
+          ""
+        ],
+        "Tags": [],
+        "ProductionLocations": [],
+        "Artists": null,
+        "AlbumArtists": null
+      },
+      "trailers": []
+    },
+    {
+      "name": "type-Genre-runtime-aliases-true",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Genre",
+      "requiresJson": false,
+      "storedDataIsNull": true,
+      "hydrationData": "{\u0022UserDataKeys\u0022:[\u0022serialized-fake-key\u0022,\u0022serialized-second-key\u0022],\u0022ProviderIds\u0022:{\u0022Imdb\u0022:\u0022serialized-imdb\u0022,\u0022Tmdb\u0022:\u0022serialized-tmdb\u0022,\u0022Tvdb\u0022:\u0022serialized-tvdb\u0022,\u0022MusicBrainzAlbum\u0022:\u0022serialized-album\u0022},\u0022Series\u0022:{\u0022Id\u0022:\u002200000000-0000-0000-0000-000000000099\u0022,\u0022ProviderIds\u0022:{\u0022Custom\u0022:\u0022serialized-series\u0022}},\u0022AlbumArtist\u0022:\u0022serialized-album-artist\u0022,\u0022Name\u0022:\u0022serialized-name\u0022,\u0022RemoteTrailers\u0022:[]}",
+      "keys": [
+        "Genre-Genre",
+        "97800000-0000-0000-0000-000000000001"
+      ],
+      "columns": {
+        "Genres": null,
+        "Studios": null,
+        "Tags": null,
+        "ProductionLocations": null,
+        "Artists": null,
+        "AlbumArtists": null,
+        "Name": "Genre",
+        "Album": null
+      },
+      "hydratedLists": {
+        "Genres": [],
+        "Studios": [],
+        "Tags": [],
+        "ProductionLocations": [],
+        "Artists": null,
+        "AlbumArtists": null
+      },
+      "trailers": []
+    },
+    {
+      "name": "type-MusicGenre-runtime-aliases-false",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.MusicGenre",
+      "requiresJson": false,
+      "storedDataIsNull": true,
+      "hydrationData": "{\u0022UserDataKeys\u0022:[\u0022serialized-fake-key\u0022,\u0022serialized-second-key\u0022],\u0022ProviderIds\u0022:{\u0022Imdb\u0022:\u0022serialized-imdb\u0022,\u0022Tmdb\u0022:\u0022serialized-tmdb\u0022,\u0022Tvdb\u0022:\u0022serialized-tvdb\u0022,\u0022MusicBrainzAlbum\u0022:\u0022serialized-album\u0022},\u0022Series\u0022:{\u0022Id\u0022:\u002200000000-0000-0000-0000-000000000099\u0022,\u0022ProviderIds\u0022:{\u0022Custom\u0022:\u0022serialized-series\u0022}},\u0022AlbumArtist\u0022:\u0022serialized-album-artist\u0022,\u0022Name\u0022:\u0022serialized-name\u0022,\u0022RemoteTrailers\u0022:[]}",
+      "keys": [
+        "MusicGenre-MusicGenre",
+        "97800000-0000-0000-0000-000000000001"
+      ],
+      "columns": {
+        "Genres": "",
+        "Studios": "",
+        "Tags": "",
+        "ProductionLocations": "",
+        "Artists": null,
+        "AlbumArtists": null,
+        "Name": "MusicGenre",
+        "Album": null
+      },
+      "hydratedLists": {
+        "Genres": [],
+        "Studios": [
+          ""
+        ],
+        "Tags": [],
+        "ProductionLocations": [],
+        "Artists": null,
+        "AlbumArtists": null
+      },
+      "trailers": []
+    },
+    {
+      "name": "type-MusicGenre-runtime-aliases-true",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.MusicGenre",
+      "requiresJson": false,
+      "storedDataIsNull": true,
+      "hydrationData": "{\u0022UserDataKeys\u0022:[\u0022serialized-fake-key\u0022,\u0022serialized-second-key\u0022],\u0022ProviderIds\u0022:{\u0022Imdb\u0022:\u0022serialized-imdb\u0022,\u0022Tmdb\u0022:\u0022serialized-tmdb\u0022,\u0022Tvdb\u0022:\u0022serialized-tvdb\u0022,\u0022MusicBrainzAlbum\u0022:\u0022serialized-album\u0022},\u0022Series\u0022:{\u0022Id\u0022:\u002200000000-0000-0000-0000-000000000099\u0022,\u0022ProviderIds\u0022:{\u0022Custom\u0022:\u0022serialized-series\u0022}},\u0022AlbumArtist\u0022:\u0022serialized-album-artist\u0022,\u0022Name\u0022:\u0022serialized-name\u0022,\u0022RemoteTrailers\u0022:[]}",
+      "keys": [
+        "MusicGenre-MusicGenre",
+        "97800000-0000-0000-0000-000000000001"
+      ],
+      "columns": {
+        "Genres": null,
+        "Studios": null,
+        "Tags": null,
+        "ProductionLocations": null,
+        "Artists": null,
+        "AlbumArtists": null,
+        "Name": "MusicGenre",
+        "Album": null
+      },
+      "hydratedLists": {
+        "Genres": [],
+        "Studios": [],
+        "Tags": [],
+        "ProductionLocations": [],
+        "Artists": null,
+        "AlbumArtists": null
+      },
+      "trailers": []
+    },
+    {
+      "name": "type-Studio-runtime-aliases-false",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Studio",
+      "requiresJson": false,
+      "storedDataIsNull": true,
+      "hydrationData": "{\u0022UserDataKeys\u0022:[\u0022serialized-fake-key\u0022,\u0022serialized-second-key\u0022],\u0022ProviderIds\u0022:{\u0022Imdb\u0022:\u0022serialized-imdb\u0022,\u0022Tmdb\u0022:\u0022serialized-tmdb\u0022,\u0022Tvdb\u0022:\u0022serialized-tvdb\u0022,\u0022MusicBrainzAlbum\u0022:\u0022serialized-album\u0022},\u0022Series\u0022:{\u0022Id\u0022:\u002200000000-0000-0000-0000-000000000099\u0022,\u0022ProviderIds\u0022:{\u0022Custom\u0022:\u0022serialized-series\u0022}},\u0022AlbumArtist\u0022:\u0022serialized-album-artist\u0022,\u0022Name\u0022:\u0022serialized-name\u0022,\u0022RemoteTrailers\u0022:[]}",
+      "keys": [
+        "Studio-Studio",
+        "97800000-0000-0000-0000-000000000001"
+      ],
+      "columns": {
+        "Genres": "",
+        "Studios": "",
+        "Tags": "",
+        "ProductionLocations": "",
+        "Artists": null,
+        "AlbumArtists": null,
+        "Name": "Studio",
+        "Album": null
+      },
+      "hydratedLists": {
+        "Genres": [],
+        "Studios": [
+          ""
+        ],
+        "Tags": [],
+        "ProductionLocations": [],
+        "Artists": null,
+        "AlbumArtists": null
+      },
+      "trailers": []
+    },
+    {
+      "name": "type-Studio-runtime-aliases-true",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Studio",
+      "requiresJson": false,
+      "storedDataIsNull": true,
+      "hydrationData": "{\u0022UserDataKeys\u0022:[\u0022serialized-fake-key\u0022,\u0022serialized-second-key\u0022],\u0022ProviderIds\u0022:{\u0022Imdb\u0022:\u0022serialized-imdb\u0022,\u0022Tmdb\u0022:\u0022serialized-tmdb\u0022,\u0022Tvdb\u0022:\u0022serialized-tvdb\u0022,\u0022MusicBrainzAlbum\u0022:\u0022serialized-album\u0022},\u0022Series\u0022:{\u0022Id\u0022:\u002200000000-0000-0000-0000-000000000099\u0022,\u0022ProviderIds\u0022:{\u0022Custom\u0022:\u0022serialized-series\u0022}},\u0022AlbumArtist\u0022:\u0022serialized-album-artist\u0022,\u0022Name\u0022:\u0022serialized-name\u0022,\u0022RemoteTrailers\u0022:[]}",
+      "keys": [
+        "Studio-Studio",
+        "97800000-0000-0000-0000-000000000001"
+      ],
+      "columns": {
+        "Genres": null,
+        "Studios": null,
+        "Tags": null,
+        "ProductionLocations": null,
+        "Artists": null,
+        "AlbumArtists": null,
+        "Name": "Studio",
+        "Album": null
+      },
+      "hydratedLists": {
+        "Genres": [],
+        "Studios": [],
+        "Tags": [],
+        "ProductionLocations": [],
+        "Artists": null,
+        "AlbumArtists": null
+      },
+      "trailers": []
+    },
+    {
+      "name": "type-Year-runtime-aliases-false",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Year",
+      "requiresJson": false,
+      "storedDataIsNull": true,
+      "hydrationData": "{\u0022UserDataKeys\u0022:[\u0022serialized-fake-key\u0022,\u0022serialized-second-key\u0022],\u0022ProviderIds\u0022:{\u0022Imdb\u0022:\u0022serialized-imdb\u0022,\u0022Tmdb\u0022:\u0022serialized-tmdb\u0022,\u0022Tvdb\u0022:\u0022serialized-tvdb\u0022,\u0022MusicBrainzAlbum\u0022:\u0022serialized-album\u0022},\u0022Series\u0022:{\u0022Id\u0022:\u002200000000-0000-0000-0000-000000000099\u0022,\u0022ProviderIds\u0022:{\u0022Custom\u0022:\u0022serialized-series\u0022}},\u0022AlbumArtist\u0022:\u0022serialized-album-artist\u0022,\u0022Name\u0022:\u0022serialized-name\u0022,\u0022RemoteTrailers\u0022:[]}",
+      "keys": [
+        "Year-Year",
+        "97800000-0000-0000-0000-000000000001"
+      ],
+      "columns": {
+        "Genres": "",
+        "Studios": "",
+        "Tags": "",
+        "ProductionLocations": "",
+        "Artists": null,
+        "AlbumArtists": null,
+        "Name": "Year",
+        "Album": null
+      },
+      "hydratedLists": {
+        "Genres": [],
+        "Studios": [
+          ""
+        ],
+        "Tags": [],
+        "ProductionLocations": [],
+        "Artists": null,
+        "AlbumArtists": null
+      },
+      "trailers": []
+    },
+    {
+      "name": "type-Year-runtime-aliases-true",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Year",
+      "requiresJson": false,
+      "storedDataIsNull": true,
+      "hydrationData": "{\u0022UserDataKeys\u0022:[\u0022serialized-fake-key\u0022,\u0022serialized-second-key\u0022],\u0022ProviderIds\u0022:{\u0022Imdb\u0022:\u0022serialized-imdb\u0022,\u0022Tmdb\u0022:\u0022serialized-tmdb\u0022,\u0022Tvdb\u0022:\u0022serialized-tvdb\u0022,\u0022MusicBrainzAlbum\u0022:\u0022serialized-album\u0022},\u0022Series\u0022:{\u0022Id\u0022:\u002200000000-0000-0000-0000-000000000099\u0022,\u0022ProviderIds\u0022:{\u0022Custom\u0022:\u0022serialized-series\u0022}},\u0022AlbumArtist\u0022:\u0022serialized-album-artist\u0022,\u0022Name\u0022:\u0022serialized-name\u0022,\u0022RemoteTrailers\u0022:[]}",
+      "keys": [
+        "Year-Year",
+        "97800000-0000-0000-0000-000000000001"
+      ],
+      "columns": {
+        "Genres": null,
+        "Studios": null,
+        "Tags": null,
+        "ProductionLocations": null,
+        "Artists": null,
+        "AlbumArtists": null,
+        "Name": "Year",
+        "Album": null
+      },
+      "hydratedLists": {
+        "Genres": [],
+        "Studios": [],
+        "Tags": [],
+        "ProductionLocations": [],
+        "Artists": null,
+        "AlbumArtists": null
+      },
+      "trailers": []
+    },
+    {
+      "name": "type-Photo-runtime-aliases-false",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Photo",
+      "requiresJson": true,
+      "storedDataIsNull": false,
+      "hydrationData": "{\u0022UserDataKeys\u0022:[\u0022serialized-fake-key\u0022,\u0022serialized-second-key\u0022],\u0022ProviderIds\u0022:{\u0022Imdb\u0022:\u0022serialized-imdb\u0022,\u0022Tmdb\u0022:\u0022serialized-tmdb\u0022,\u0022Tvdb\u0022:\u0022serialized-tvdb\u0022,\u0022MusicBrainzAlbum\u0022:\u0022serialized-album\u0022},\u0022Series\u0022:{\u0022Id\u0022:\u002200000000-0000-0000-0000-000000000099\u0022,\u0022ProviderIds\u0022:{\u0022Custom\u0022:\u0022serialized-series\u0022}},\u0022AlbumArtist\u0022:\u0022serialized-album-artist\u0022,\u0022Name\u0022:\u0022serialized-name\u0022,\u0022RemoteTrailers\u0022:[]}",
+      "keys": [
+        "97800000-0000-0000-0000-000000000001"
+      ],
+      "columns": {
+        "Genres": "",
+        "Studios": "",
+        "Tags": "",
+        "ProductionLocations": "",
+        "Artists": null,
+        "AlbumArtists": null,
+        "Name": "Photo",
+        "Album": null
+      },
+      "hydratedLists": {
+        "Genres": [],
+        "Studios": [
+          ""
+        ],
+        "Tags": [],
+        "ProductionLocations": [],
+        "Artists": null,
+        "AlbumArtists": null
+      },
+      "trailers": []
+    },
+    {
+      "name": "type-Photo-runtime-aliases-true",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Photo",
+      "requiresJson": true,
+      "storedDataIsNull": false,
+      "hydrationData": "{\u0022UserDataKeys\u0022:[\u0022serialized-fake-key\u0022,\u0022serialized-second-key\u0022],\u0022ProviderIds\u0022:{\u0022Imdb\u0022:\u0022serialized-imdb\u0022,\u0022Tmdb\u0022:\u0022serialized-tmdb\u0022,\u0022Tvdb\u0022:\u0022serialized-tvdb\u0022,\u0022MusicBrainzAlbum\u0022:\u0022serialized-album\u0022},\u0022Series\u0022:{\u0022Id\u0022:\u002200000000-0000-0000-0000-000000000099\u0022,\u0022ProviderIds\u0022:{\u0022Custom\u0022:\u0022serialized-series\u0022}},\u0022AlbumArtist\u0022:\u0022serialized-album-artist\u0022,\u0022Name\u0022:\u0022serialized-name\u0022,\u0022RemoteTrailers\u0022:[]}",
+      "keys": [
+        "97800000-0000-0000-0000-000000000001"
+      ],
+      "columns": {
+        "Genres": null,
+        "Studios": null,
+        "Tags": null,
+        "ProductionLocations": null,
+        "Artists": null,
+        "AlbumArtists": null,
+        "Name": "Photo",
+        "Album": null
+      },
+      "hydratedLists": {
+        "Genres": [],
+        "Studios": [],
+        "Tags": [],
+        "ProductionLocations": [],
+        "Artists": null,
+        "AlbumArtists": null
+      },
+      "trailers": []
+    },
+    {
+      "name": "type-PhotoAlbum-runtime-aliases-false",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.PhotoAlbum",
+      "requiresJson": false,
+      "storedDataIsNull": true,
+      "hydrationData": "{\u0022UserDataKeys\u0022:[\u0022serialized-fake-key\u0022,\u0022serialized-second-key\u0022],\u0022ProviderIds\u0022:{\u0022Imdb\u0022:\u0022serialized-imdb\u0022,\u0022Tmdb\u0022:\u0022serialized-tmdb\u0022,\u0022Tvdb\u0022:\u0022serialized-tvdb\u0022,\u0022MusicBrainzAlbum\u0022:\u0022serialized-album\u0022},\u0022Series\u0022:{\u0022Id\u0022:\u002200000000-0000-0000-0000-000000000099\u0022,\u0022ProviderIds\u0022:{\u0022Custom\u0022:\u0022serialized-series\u0022}},\u0022AlbumArtist\u0022:\u0022serialized-album-artist\u0022,\u0022Name\u0022:\u0022serialized-name\u0022,\u0022RemoteTrailers\u0022:[]}",
+      "keys": [
+        "97800000-0000-0000-0000-000000000001"
+      ],
+      "columns": {
+        "Genres": "",
+        "Studios": "",
+        "Tags": "",
+        "ProductionLocations": "",
+        "Artists": null,
+        "AlbumArtists": null,
+        "Name": "PhotoAlbum",
+        "Album": null
+      },
+      "hydratedLists": {
+        "Genres": [],
+        "Studios": [
+          ""
+        ],
+        "Tags": [],
+        "ProductionLocations": [],
+        "Artists": null,
+        "AlbumArtists": null
+      },
+      "trailers": []
+    },
+    {
+      "name": "type-PhotoAlbum-runtime-aliases-true",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.PhotoAlbum",
+      "requiresJson": false,
+      "storedDataIsNull": true,
+      "hydrationData": "{\u0022UserDataKeys\u0022:[\u0022serialized-fake-key\u0022,\u0022serialized-second-key\u0022],\u0022ProviderIds\u0022:{\u0022Imdb\u0022:\u0022serialized-imdb\u0022,\u0022Tmdb\u0022:\u0022serialized-tmdb\u0022,\u0022Tvdb\u0022:\u0022serialized-tvdb\u0022,\u0022MusicBrainzAlbum\u0022:\u0022serialized-album\u0022},\u0022Series\u0022:{\u0022Id\u0022:\u002200000000-0000-0000-0000-000000000099\u0022,\u0022ProviderIds\u0022:{\u0022Custom\u0022:\u0022serialized-series\u0022}},\u0022AlbumArtist\u0022:\u0022serialized-album-artist\u0022,\u0022Name\u0022:\u0022serialized-name\u0022,\u0022RemoteTrailers\u0022:[]}",
+      "keys": [
+        "97800000-0000-0000-0000-000000000001"
+      ],
+      "columns": {
+        "Genres": null,
+        "Studios": null,
+        "Tags": null,
+        "ProductionLocations": null,
+        "Artists": null,
+        "AlbumArtists": null,
+        "Name": "PhotoAlbum",
+        "Album": null
+      },
+      "hydratedLists": {
+        "Genres": [],
+        "Studios": [],
+        "Tags": [],
+        "ProductionLocations": [],
+        "Artists": null,
+        "AlbumArtists": null
+      },
+      "trailers": []
+    },
+    {
+      "name": "type-Book-runtime-aliases-false",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Book",
+      "requiresJson": false,
+      "storedDataIsNull": true,
+      "hydrationData": "{\u0022UserDataKeys\u0022:[\u0022serialized-fake-key\u0022,\u0022serialized-second-key\u0022],\u0022ProviderIds\u0022:{\u0022Imdb\u0022:\u0022serialized-imdb\u0022,\u0022Tmdb\u0022:\u0022serialized-tmdb\u0022,\u0022Tvdb\u0022:\u0022serialized-tvdb\u0022,\u0022MusicBrainzAlbum\u0022:\u0022serialized-album\u0022},\u0022Series\u0022:{\u0022Id\u0022:\u002200000000-0000-0000-0000-000000000099\u0022,\u0022ProviderIds\u0022:{\u0022Custom\u0022:\u0022serialized-series\u0022}},\u0022AlbumArtist\u0022:\u0022serialized-album-artist\u0022,\u0022Name\u0022:\u0022serialized-name\u0022,\u0022RemoteTrailers\u0022:[]}",
+      "keys": [
+        "97800000-0000-0000-0000-000000000001"
+      ],
+      "columns": {
+        "Genres": "",
+        "Studios": "",
+        "Tags": "",
+        "ProductionLocations": "",
+        "Artists": null,
+        "AlbumArtists": null,
+        "Name": "Book",
+        "Album": null
+      },
+      "hydratedLists": {
+        "Genres": [],
+        "Studios": [
+          ""
+        ],
+        "Tags": [],
+        "ProductionLocations": [],
+        "Artists": null,
+        "AlbumArtists": null
+      },
+      "trailers": []
+    },
+    {
+      "name": "type-Book-runtime-aliases-true",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Book",
+      "requiresJson": false,
+      "storedDataIsNull": true,
+      "hydrationData": "{\u0022UserDataKeys\u0022:[\u0022serialized-fake-key\u0022,\u0022serialized-second-key\u0022],\u0022ProviderIds\u0022:{\u0022Imdb\u0022:\u0022serialized-imdb\u0022,\u0022Tmdb\u0022:\u0022serialized-tmdb\u0022,\u0022Tvdb\u0022:\u0022serialized-tvdb\u0022,\u0022MusicBrainzAlbum\u0022:\u0022serialized-album\u0022},\u0022Series\u0022:{\u0022Id\u0022:\u002200000000-0000-0000-0000-000000000099\u0022,\u0022ProviderIds\u0022:{\u0022Custom\u0022:\u0022serialized-series\u0022}},\u0022AlbumArtist\u0022:\u0022serialized-album-artist\u0022,\u0022Name\u0022:\u0022serialized-name\u0022,\u0022RemoteTrailers\u0022:[]}",
+      "keys": [
+        "97800000-0000-0000-0000-000000000001"
+      ],
+      "columns": {
+        "Genres": null,
+        "Studios": null,
+        "Tags": null,
+        "ProductionLocations": null,
+        "Artists": null,
+        "AlbumArtists": null,
+        "Name": "Book",
+        "Album": null
+      },
+      "hydratedLists": {
+        "Genres": [],
+        "Studios": [],
+        "Tags": [],
+        "ProductionLocations": [],
+        "Artists": null,
+        "AlbumArtists": null
+      },
+      "trailers": []
+    }
+  ],
+  "assemblies": [
+    {
+      "name": "MediaBrowser.Controller",
+      "path": "D:\\mediamanager\\.test-output\\validation\\item-user-data-ignored-getters-oracle-20261005-2\\bin\\Release\\net10.0\\MediaBrowser.Controller.dll",
+      "sha256": "56a527307ef93f810fdadec33ba8380cc8416d38cb1cfea92297b0f65288808e"
+    },
+    {
+      "name": "Jellyfin.Server.Implementations",
+      "path": "D:\\mediamanager\\.test-output\\validation\\item-user-data-ignored-getters-oracle-20261005-2\\bin\\Release\\net10.0\\Jellyfin.Server.Implementations.dll",
+      "sha256": "b91a6797f81f8563b8896c3da3e5cd4e9d11c61eb084578bf7b81108c3c3e2e6"
+    },
+    {
+      "name": "Emby.Server.Implementations",
+      "path": "D:\\mediamanager\\.test-output\\validation\\item-user-data-ignored-getters-oracle-20261005-2\\bin\\Release\\net10.0\\Emby.Server.Implementations.dll",
+      "sha256": "ccff8514100a65508b65882d5881463fe4ff73ea07eb4d2b2d98e234d7b4ac99"
+    },
+    {
+      "name": "Jellyfin.Database.Implementations",
+      "path": "D:\\mediamanager\\.test-output\\validation\\item-user-data-ignored-getters-oracle-20261005-2\\bin\\Release\\net10.0\\Jellyfin.Database.Implementations.dll",
+      "sha256": "21648ea8e6eec045789c66c199b30c68b1b00f6e15918ac66347c19244b5670b"
+    },
+    {
+      "name": "Jellyfin.Database.Providers.Sqlite",
+      "path": "D:\\mediamanager\\.test-output\\validation\\item-user-data-ignored-getters-oracle-20261005-2\\bin\\Release\\net10.0\\Jellyfin.Database.Providers.Sqlite.dll",
+      "sha256": "eefedf49a1c6c62c7eab9b4347c0bca377c3e059ec61ef26a08148de7bba94bb"
+    }
+  ],
+  "scope": "Actual EF materialized SQL columns, BaseItemMapper.DeserializeBaseItem and concrete GetUserDataKeys for twenty-seven types with poisoned JSON runtime aliases and retained or NULL SQL lists. Parent/collection/options/recording/path controls remain explicit. Captures exact keys, six lists and trailers only; excludes reattachment SQL, full JSON/scalar and complete-library acceptance."
+,"schemaVersion":1,"candidateVerified":false,"inputSha256":"8918f9862fd7794b49ea4b0e0b5b643d279c98039ae929bbba04784f2353af3b","sourceFilesSha256":"675ee692a6afa1b14037f3d9fdd37872d589146eba74154f6ce00b15060f94ca"}

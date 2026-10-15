@@ -1,0 +1,223 @@
+[
+  {
+    "name": "new-remote-primary",
+    "people": [
+      {
+        "Name": "First",
+        "Type": "Actor",
+        "ImageUrl": "https://isolated.invalid/ok"
+      }
+    ]
+  },
+  {
+    "name": "new-missing-primary-removed",
+    "people": [
+      {
+        "Name": "First",
+        "Type": "Actor",
+        "ImageUrl": "https://isolated.invalid/404"
+      }
+    ]
+  },
+  {
+    "name": "new-retryable-primary-retained",
+    "people": [
+      {
+        "Name": "First",
+        "Type": "Actor",
+        "ImageUrl": "https://isolated.invalid/500"
+      }
+    ]
+  },
+  {
+    "name": "new-image-io-retained",
+    "people": [
+      {
+        "Name": "First",
+        "Type": "Actor",
+        "ImageUrl": "https://isolated.invalid/io"
+      }
+    ]
+  },
+  {
+    "name": "new-fallback-primary",
+    "people": [
+      {
+        "Name": "First",
+        "Type": "Actor",
+        "ImageUrl": "https://isolated.invalid/404|https://isolated.invalid/ok"
+      }
+    ]
+  },
+  {
+    "name": "new-local-image-dimension-failure",
+    "dimensionFailure": true,
+    "people": [
+      {
+        "Name": "First",
+        "Type": "Actor",
+        "ImageUrl": "https://isolated.invalid/ok"
+      }
+    ]
+  },
+  {
+    "name": "new-local-image-blur-failure",
+    "blurFailure": true,
+    "people": [
+      {
+        "Name": "First",
+        "Type": "Actor",
+        "ImageUrl": "https://isolated.invalid/ok"
+      }
+    ]
+  },
+  {
+    "name": "image-update-save-io-continues-final-save",
+    "failure": "person",
+    "failureAt": 2,
+    "people": [
+      {
+        "Name": "First",
+        "Type": "Actor",
+        "ImageUrl": "https://isolated.invalid/ok"
+      }
+    ]
+  },
+  {
+    "name": "final-save-io-retains-local-image",
+    "failure": "person",
+    "failureAt": 3,
+    "people": [
+      {
+        "Name": "First",
+        "Type": "Actor",
+        "ImageUrl": "https://isolated.invalid/ok"
+      }
+    ],
+    "expectException": "IOException"
+  },
+  {
+    "name": "final-save-io-retains-retryable-stub",
+    "failure": "person",
+    "failureAt": 2,
+    "people": [
+      {
+        "Name": "First",
+        "Type": "Actor",
+        "ImageUrl": "https://isolated.invalid/500"
+      }
+    ],
+    "expectException": "IOException"
+  },
+  {
+    "name": "new-image-first-insert-failure",
+    "imageFailureAt": 1,
+    "people": [
+      {
+        "Name": "First",
+        "Type": "Actor",
+        "ImageUrl": "https://isolated.invalid/ok"
+      }
+    ],
+    "expectException": "DbUpdateException"
+  },
+  {
+    "name": "new-image-second-insert-failure",
+    "imageFailureAt": 2,
+    "people": [
+      {
+        "Name": "First",
+        "Type": "Actor",
+        "ImageUrl": "https://isolated.invalid/ok"
+      }
+    ],
+    "expectException": "DbUpdateException"
+  },
+  {
+    "name": "save-item-then-person-local-image",
+    "mode": "save-item",
+    "people": [
+      {
+        "Name": "First",
+        "Type": "Actor",
+        "ImageUrl": "https://isolated.invalid/ok"
+      }
+    ]
+  },
+  {
+    "name": "save-item-people-failure-retains-native-nfo",
+    "mode": "save-item",
+    "failure": "person",
+    "failureAt": 3,
+    "people": [
+      {
+        "Name": "First",
+        "Type": "Actor",
+        "ImageUrl": "https://isolated.invalid/ok"
+      }
+    ],
+    "expectException": "IOException"
+  },
+  {
+    "name": "save-item-nfo-directory-error-does-not-stop-people",
+    "mode": "save-item",
+    "nfoBlock": true,
+    "people": [
+      {
+        "Name": "First",
+        "Type": "Actor",
+        "ImageUrl": "https://isolated.invalid/ok"
+      }
+    ]
+  },
+  {
+    "name": "save-item-parent-failure-retains-native-nfo",
+    "mode": "save-item",
+    "failure": "parent",
+    "people": [
+      {
+        "Name": "First",
+        "Type": "Actor",
+        "ImageUrl": "https://isolated.invalid/ok"
+      }
+    ],
+    "expectException": "IOException"
+  },
+  {
+    "name": "save-item-credits-failure-retains-native-nfo",
+    "mode": "save-item",
+    "failure": "credits",
+    "people": [
+      {
+        "Name": "First",
+        "Type": "Actor",
+        "ImageUrl": "https://isolated.invalid/ok"
+      }
+    ],
+    "expectException": "IOException"
+  },
+  {
+    "name": "save-item-malformed-native-nfo-rewritten",
+    "mode": "save-item",
+    "nfoText": "<movie><broken",
+    "people": [
+      {
+        "Name": "First",
+        "Type": "Actor",
+        "ImageUrl": "https://isolated.invalid/ok"
+      }
+    ]
+  },
+  {
+    "name": "save-item-custom-native-nfo-retained",
+    "mode": "save-item",
+    "nfoText": "<movie><extension attr=\"literal\">keep</extension><title>Old title</title></movie>",
+    "people": [
+      {
+        "Name": "First",
+        "Type": "Actor",
+        "ImageUrl": "https://isolated.invalid/ok"
+      }
+    ]
+  }
+]

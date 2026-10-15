@@ -1,0 +1,160 @@
+{
+  "names": [
+    "Saga (2024)",
+    "  Leading Space (2023)",
+    "Trailing Space   ",
+    "Unadorned Title",
+    "(2022)"
+  ],
+  "resolvers": [
+    {
+      "name": "multiple-single-top-year",
+      "mode": "multiple",
+      "parentName": "Saga (2024)",
+      "parentTop": true,
+      "collectionType": "books",
+      "entries": [{ "kind": "file", "path": "narration.m4b" }]
+    },
+    {
+      "name": "multiple-single-nested-year",
+      "mode": "multiple",
+      "parentName": "Saga (2024)",
+      "parentTop": false,
+      "collectionType": "books",
+      "entries": [{ "kind": "file", "path": "narration.m4b" }]
+    },
+    {
+      "name": "multiple-single-cue",
+      "mode": "multiple",
+      "parentName": "Cue Book",
+      "parentTop": true,
+      "collectionType": "books",
+      "entries": [{ "kind": "file", "path": "book.cue" }]
+    },
+    {
+      "name": "multiple-single-stream",
+      "mode": "multiple",
+      "parentName": "Stream Book",
+      "parentTop": true,
+      "collectionType": "books",
+      "entries": [{ "kind": "file", "path": "book.strm" }]
+    },
+    {
+      "name": "multiple-with-ebook-extra",
+      "mode": "multiple",
+      "parentName": "Mixed Book",
+      "parentTop": true,
+      "collectionType": "books",
+      "entries": [
+        { "kind": "file", "path": "book.m4b" },
+        { "kind": "file", "path": "book.epub" }
+      ]
+    },
+    {
+      "name": "multiple-two-audio",
+      "mode": "multiple",
+      "parentName": "Two Audio",
+      "parentTop": true,
+      "collectionType": "books",
+      "entries": [
+        { "kind": "file", "path": "first.m4b" },
+        { "kind": "file", "path": "second.mp3" }
+      ]
+    },
+    {
+      "name": "file-m4b",
+      "mode": "file",
+      "parentName": "Books",
+      "parentTop": true,
+      "collectionType": "books",
+      "target": "Narration.m4b",
+      "entries": [{ "kind": "file", "path": "Narration.m4b" }]
+    },
+    {
+      "name": "file-stream",
+      "mode": "file",
+      "parentName": "Books",
+      "parentTop": true,
+      "collectionType": "books",
+      "target": "Remote.strm",
+      "entries": [{ "kind": "file", "path": "Remote.strm" }]
+    },
+    {
+      "name": "file-cue",
+      "mode": "file",
+      "parentName": "Books",
+      "parentTop": true,
+      "collectionType": "books",
+      "target": "Only.cue",
+      "entries": [{ "kind": "file", "path": "Only.cue" }]
+    },
+    {
+      "name": "file-video-overlap",
+      "mode": "file",
+      "parentName": "Books",
+      "parentTop": true,
+      "collectionType": "books",
+      "target": "Spoken.3gp",
+      "entries": [{ "kind": "file", "path": "Spoken.3gp" }]
+    },
+    {
+      "name": "file-wrong-collection",
+      "mode": "file",
+      "parentName": "Movies",
+      "parentTop": true,
+      "collectionType": "movies",
+      "target": "Narration.m4b",
+      "entries": [{ "kind": "file", "path": "Narration.m4b" }]
+    },
+    {
+      "name": "directory-single-year",
+      "mode": "directory",
+      "parentName": "Books",
+      "parentTop": true,
+      "collectionType": "books",
+      "target": "Story (2021)",
+      "entries": [
+        { "kind": "directory", "path": "Story (2021)" },
+        { "kind": "file", "path": "Story (2021)/chapter01.m4b" }
+      ]
+    },
+    {
+      "name": "directory-single-cue",
+      "mode": "directory",
+      "parentName": "Books",
+      "parentTop": true,
+      "collectionType": "books",
+      "target": "Cue Story",
+      "entries": [
+        { "kind": "directory", "path": "Cue Story" },
+        { "kind": "file", "path": "Cue Story/book.cue" }
+      ]
+    },
+    {
+      "name": "directory-two-audio",
+      "mode": "directory",
+      "parentName": "Books",
+      "parentTop": true,
+      "collectionType": "books",
+      "target": "Two Chapters",
+      "entries": [
+        { "kind": "directory", "path": "Two Chapters" },
+        { "kind": "file", "path": "Two Chapters/ch01.m4b" },
+        { "kind": "file", "path": "Two Chapters/ch02.m4b" }
+      ]
+    },
+    {
+      "name": "directory-single-with-subdirectory",
+      "mode": "directory",
+      "parentName": "Books",
+      "parentTop": true,
+      "collectionType": "books",
+      "target": "Nested Control",
+      "entries": [
+        { "kind": "directory", "path": "Nested Control" },
+        { "kind": "file", "path": "Nested Control/book.m4b" },
+        { "kind": "directory", "path": "Nested Control/extras" }
+      ]
+    }
+  ]
+}

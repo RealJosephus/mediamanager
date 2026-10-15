@@ -1,0 +1,301 @@
+[
+  {
+    "name": "AggregateFolder-before-default-false",
+    "type": "AggregateFolder",
+    "itemName": "default",
+    "path": "$STATE/root",
+    "mode": "before",
+    "flag": false
+  },
+  {
+    "name": "AggregateFolder-before-default-true",
+    "type": "AggregateFolder",
+    "itemName": "default",
+    "path": "$STATE/root",
+    "mode": "before",
+    "flag": true
+  },
+  {
+    "name": "AggregateFolder-before-DEFAULT-false",
+    "type": "AggregateFolder",
+    "itemName": "DEFAULT",
+    "path": "$STATE/root",
+    "mode": "before",
+    "flag": false
+  },
+  {
+    "name": "AggregateFolder-before-DEFAULT-true",
+    "type": "AggregateFolder",
+    "itemName": "DEFAULT",
+    "path": "$STATE/root",
+    "mode": "before",
+    "flag": true
+  },
+  {
+    "name": "AggregateFolder-before-Named-false",
+    "type": "AggregateFolder",
+    "itemName": "Named",
+    "path": "$STATE/root",
+    "mode": "before",
+    "flag": false
+  },
+  {
+    "name": "AggregateFolder-before-Named-true",
+    "type": "AggregateFolder",
+    "itemName": "Named",
+    "path": "$STATE/root",
+    "mode": "before",
+    "flag": true
+  },
+  {
+    "name": "AggregateFolder-before-empty-false",
+    "type": "AggregateFolder",
+    "itemName": "",
+    "path": "$STATE/root",
+    "mode": "before",
+    "flag": false
+  },
+  {
+    "name": "AggregateFolder-before-empty-true",
+    "type": "AggregateFolder",
+    "itemName": "",
+    "path": "$STATE/root",
+    "mode": "before",
+    "flag": true
+  },
+  {
+    "name": "AggregateFolder-requires-empty",
+    "type": "AggregateFolder",
+    "itemName": "Named",
+    "path": "$STATE/root",
+    "mode": "requires"
+  },
+  {
+    "name": "AggregateFolder-requires-matched-resolve",
+    "type": "AggregateFolder",
+    "itemName": "Named",
+    "path": "$STATE/root",
+    "mode": "requires",
+    "useResolvedLocations": true
+  },
+  {
+    "name": "AggregateFolder-requires-flag",
+    "type": "AggregateFolder",
+    "itemName": "Named",
+    "path": "$STATE/root",
+    "mode": "requires",
+    "flag": true
+  },
+  {
+    "name": "AggregateFolder-requires-new-directories",
+    "type": "AggregateFolder",
+    "itemName": "Named",
+    "path": "$STATE/root",
+    "mode": "requires",
+    "directories": [
+      "default",
+      "default/library",
+      "default/library/Child"
+    ],
+    "locations": []
+  },
+  {
+    "name": "AggregateFolder-requires-old-location",
+    "type": "AggregateFolder",
+    "itemName": "Named",
+    "path": "$STATE/root",
+    "mode": "requires",
+    "locations": [
+      "$STATE/old"
+    ]
+  },
+  {
+    "name": "UserRootFolder-before-default-none",
+    "type": "UserRootFolder",
+    "itemName": "default",
+    "path": "$STATE/root/default",
+    "mode": "before"
+  },
+  {
+    "name": "UserRootFolder-before-DEFAULT-none",
+    "type": "UserRootFolder",
+    "itemName": "DEFAULT",
+    "path": "$STATE/root/default",
+    "mode": "before"
+  },
+  {
+    "name": "UserRootFolder-before-Named-none",
+    "type": "UserRootFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default",
+    "mode": "before"
+  },
+  {
+    "name": "UserRootFolder-before-empty-none",
+    "type": "UserRootFolder",
+    "itemName": "",
+    "path": "$STATE/root/default",
+    "mode": "before"
+  },
+  {
+    "name": "UserRootFolder-requires-empty",
+    "type": "UserRootFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default",
+    "mode": "requires"
+  },
+  {
+    "name": "CollectionFolder-before-default-false",
+    "type": "CollectionFolder",
+    "itemName": "default",
+    "path": "$STATE/root/default/library",
+    "mode": "before",
+    "flag": false
+  },
+  {
+    "name": "CollectionFolder-before-default-true",
+    "type": "CollectionFolder",
+    "itemName": "default",
+    "path": "$STATE/root/default/library",
+    "mode": "before",
+    "flag": true
+  },
+  {
+    "name": "CollectionFolder-before-DEFAULT-false",
+    "type": "CollectionFolder",
+    "itemName": "DEFAULT",
+    "path": "$STATE/root/default/library",
+    "mode": "before",
+    "flag": false
+  },
+  {
+    "name": "CollectionFolder-before-DEFAULT-true",
+    "type": "CollectionFolder",
+    "itemName": "DEFAULT",
+    "path": "$STATE/root/default/library",
+    "mode": "before",
+    "flag": true
+  },
+  {
+    "name": "CollectionFolder-before-Named-false",
+    "type": "CollectionFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "before",
+    "flag": false
+  },
+  {
+    "name": "CollectionFolder-before-Named-true",
+    "type": "CollectionFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "before",
+    "flag": true
+  },
+  {
+    "name": "CollectionFolder-before-empty-false",
+    "type": "CollectionFolder",
+    "itemName": "",
+    "path": "$STATE/root/default/library",
+    "mode": "before",
+    "flag": false
+  },
+  {
+    "name": "CollectionFolder-before-empty-true",
+    "type": "CollectionFolder",
+    "itemName": "",
+    "path": "$STATE/root/default/library",
+    "mode": "before",
+    "flag": true
+  },
+  {
+    "name": "CollectionFolder-requires-empty",
+    "type": "CollectionFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "requires"
+  },
+  {
+    "name": "CollectionFolder-requires-matched-resolve",
+    "type": "CollectionFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "requires",
+    "useResolvedLocations": true
+  },
+  {
+    "name": "CollectionFolder-requires-flag",
+    "type": "CollectionFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "requires",
+    "flag": true
+  },
+  {
+    "name": "CollectionFolder-requires-new-directories",
+    "type": "CollectionFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "requires",
+    "directories": [
+      "Child"
+    ],
+    "locations": []
+  },
+  {
+    "name": "CollectionFolder-requires-old-location",
+    "type": "CollectionFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "requires",
+    "locations": [
+      "$STATE/old"
+    ]
+  },
+  {
+    "name": "PlaylistsFolder-before-default-none",
+    "type": "PlaylistsFolder",
+    "itemName": "default",
+    "path": "$STATE/root/default/library",
+    "mode": "before"
+  },
+  {
+    "name": "PlaylistsFolder-before-DEFAULT-none",
+    "type": "PlaylistsFolder",
+    "itemName": "DEFAULT",
+    "path": "$STATE/root/default/library",
+    "mode": "before"
+  },
+  {
+    "name": "PlaylistsFolder-before-Named-none",
+    "type": "PlaylistsFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "before"
+  },
+  {
+    "name": "PlaylistsFolder-before-empty-none",
+    "type": "PlaylistsFolder",
+    "itemName": "",
+    "path": "$STATE/root/default/library",
+    "mode": "before"
+  },
+  {
+    "name": "PlaylistsFolder-requires-empty",
+    "type": "PlaylistsFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "requires"
+  },
+  {
+    "name": "CollectionFolder-requires-stale-physical-id",
+    "type": "CollectionFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "requires",
+    "useResolvedLocations": true,
+    "physicalIds": [
+      "97c00000-0000-0000-0000-000000000099"
+    ]
+  }
+]

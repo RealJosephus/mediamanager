@@ -1,0 +1,90 @@
+{
+  "records": {
+    "playbackInfo": {
+      "status": 200,
+      "source": {
+        "Id": "22222222222222222222222222222222",
+        "SupportsDirectPlay": true,
+        "DefaultSubtitleStreamIndex": 3,
+        "subtitle": {
+          "Codec": "dvdsub",
+          "Language": "eng",
+          "TimeBase": "1/1000",
+          "Title": "VobSub MKS HTTP oracle",
+          "VideoRange": "Unknown",
+          "VideoRangeType": "Unknown",
+          "AudioSpatialFormat": "None",
+          "LocalizedUndefined": "Undefined",
+          "LocalizedDefault": "Default",
+          "LocalizedForced": "Forced",
+          "LocalizedExternal": "External",
+          "LocalizedHearingImpaired": "Hearing Impaired",
+          "LocalizedLanguage": "English",
+          "DisplayTitle": "VobSub MKS HTTP oracle - English - Default - DVDSUB",
+          "IsInterlaced": false,
+          "IsDefault": true,
+          "IsForced": false,
+          "IsHearingImpaired": false,
+          "IsOriginal": false,
+          "Height": 480,
+          "Width": 720,
+          "Type": "Subtitle",
+          "Index": 3,
+          "Score": 112211,
+          "IsExternal": false,
+          "DeliveryMethod": "External",
+          "DeliveryUrl": "/Videos/22222222-2222-2222-2222-222222222222/22222222222222222222222222222222/Subtitles/3/0/Stream.vobsub?ApiKey=<token>",
+          "IsExternalUrl": false,
+          "IsTextSubtitleStream": false,
+          "SupportsExternalStream": true
+        }
+      }
+    },
+    "advertised-vobsub": {
+      "url": "http://127.0.0.1:18496/Videos/22222222-2222-2222-2222-222222222222/22222222222222222222222222222222/Subtitles/3/0/Stream.vobsub?ApiKey=<token>",
+      "status": 400,
+      "headers": {
+        "content-language": "en-US",
+        "content-type": "text/plain",
+        "date": "Sun, 27 Sep 2026 15:05:33 GMT",
+        "server": "Kestrel",
+        "transfer-encoding": "chunked",
+        "x-response-time-ms": "273.4325"
+      },
+      "bytes": 25,
+      "sha256": "7417a6afbda132fd6848761607e6e8a1f28d5e56552e56c915199680400a352f",
+      "bodyUtf8": "Error processing request.",
+      "probe": {
+        "exitCode": 1,
+        "stdout": "{\r\n\r\n}\r\n",
+        "stderr": "D:\\mediamanager\\.agent-docs\\evidence\\continuation-20260927\\vobsub-mks-http-v2\\advertised-vobsub.bin: Invalid data found when processing input\r\n"
+      }
+    },
+    "manual-mks": {
+      "url": "http://127.0.0.1:18496/Videos/22222222-2222-2222-2222-222222222222/22222222222222222222222222222222/Subtitles/3/0/Stream.mks?ApiKey=<token>",
+      "status": 200,
+      "headers": {
+        "content-language": "en-US",
+        "content-length": "2913",
+        "content-type": "video/x-matroska",
+        "date": "Sun, 27 Sep 2026 15:05:33 GMT",
+        "server": "Kestrel",
+        "x-response-time-ms": "25.5144"
+      },
+      "bytes": 2913,
+      "sha256": "857b36ceec74163a431f2173a48e5780088d19ca4587f6842cdbb42d15ce9ef0",
+      "probe": {
+        "exitCode": 0,
+        "stdout": "{\r\n    \"packets\": [\r\n        {\r\n            \"codec_type\": \"subtitle\",\r\n            \"stream_index\": 0,\r\n            \"pts\": 0,\r\n            \"pts_time\": \"0.000000\",\r\n            \"dts\": 0,\r\n            \"dts_time\": \"0.000000\",\r\n            \"size\": \"2238\",\r\n            \"pos\": \"643\",\r\n            \"flags\": \"K__\",\r\n            \"data_hash\": \"SHA256:3aee89ab628900f6bce3de4014dc36d7dfb8ccaa635d3d3fe7955492e2b5fc68\"\r\n        }\r\n    ],\r\n    \"streams\": [\r\n        {\r\n            \"index\": 0,\r\n            \"codec_name\": \"dvd_subtitle\",\r\n            \"codec_long_name\": \"DVD subtitles\",\r\n            \"codec_type\": \"subtitle\",\r\n            \"codec_tag_string\": \"[0][0][0][0]\",\r\n            \"codec_tag\": \"0x0000\",\r\n            \"width\": 720,\r\n            \"height\": 480,\r\n            \"r_frame_rate\": \"0/0\",\r\n            \"avg_frame_rate\": \"0/0\",\r\n            \"time_base\": \"1/1000\",\r\n            \"start_pts\": 0,\r\n            \"start_time\": \"0.000000\",\r\n            \"nb_read_packets\": \"1\",\r\n            \"extradata_size\": 167,\r\n            \"extradata_hash\": \"SHA256:22643d454f386e3870a18b2b57b30c4bdb104a5b734f5f23a26daee0ea38681e\",\r\n            \"disposition\": {\r\n                \"default\": 1,\r\n                \"dub\": 0,\r\n                \"original\": 0,\r\n                \"comment\": 0,\r\n                \"lyrics\": 0,\r\n                \"karaoke\": 0,\r\n                \"forced\": 0,\r\n                \"hearing_impaired\": 0,\r\n                \"visual_impaired\": 0,\r\n                \"clean_effects\": 0,\r\n                \"attached_pic\": 0,\r\n                \"timed_thumbnails\": 0,\r\n                \"non_diegetic\": 0,\r\n                \"captions\": 0,\r\n                \"descriptions\": 0,\r\n                \"metadata\": 0,\r\n                \"dependent\": 0,\r\n                \"still_image\": 0,\r\n                \"multilayer\": 0\r\n            },\r\n            \"tags\": {\r\n                \"language\": \"eng\",\r\n                \"DURATION\": \"00:00:00.000000000\"\r\n            }\r\n        }\r\n    ]\r\n}\r\n",
+        "stderr": ""
+      }
+    }
+  },
+  "proxyRequests": [
+    {
+      "method": "GET",
+      "url": "/d/Z%3A/VobSub/source.mkv",
+      "range": "bytes=0-"
+    }
+  ]
+}

@@ -1,0 +1,216 @@
+[
+  {
+    "Name": "empty-retains-existing",
+    "Existing": true
+  },
+  {
+    "Name": "poster-only-retains-existing",
+    "Existing": true,
+    "Posters": [
+      "portrait.png"
+    ]
+  },
+  {
+    "Name": "backdrop-only-retains-existing",
+    "Existing": true,
+    "Backdrops": [
+      "landscape.png"
+    ]
+  },
+  {
+    "Name": "same-input-portrait-png",
+    "Posters": [
+      "portrait.png"
+    ],
+    "Backdrops": [
+      "portrait.png"
+    ]
+  },
+  {
+    "Name": "same-input-landscape-png",
+    "Posters": [
+      "landscape.png"
+    ],
+    "Backdrops": [
+      "landscape.png"
+    ]
+  },
+  {
+    "Name": "same-input-small-png",
+    "Posters": [
+      "small.png"
+    ],
+    "Backdrops": [
+      "small.png"
+    ]
+  },
+  {
+    "Name": "same-input-large-png",
+    "Posters": [
+      "large.png"
+    ],
+    "Backdrops": [
+      "large.png"
+    ]
+  },
+  {
+    "Name": "same-input-alpha-png",
+    "Posters": [
+      "alpha.png"
+    ],
+    "Backdrops": [
+      "alpha.png"
+    ]
+  },
+  {
+    "Name": "same-input-portrait-jpg",
+    "Posters": [
+      "portrait.jpg"
+    ],
+    "Backdrops": [
+      "portrait.jpg"
+    ]
+  },
+  {
+    "Name": "same-input-portrait-webp",
+    "Posters": [
+      "portrait.webp"
+    ],
+    "Backdrops": [
+      "portrait.webp"
+    ]
+  },
+  {
+    "Name": "same-input-content-dat",
+    "Posters": [
+      "content.dat"
+    ],
+    "Backdrops": [
+      "content.dat"
+    ]
+  },
+  {
+    "Name": "same-input-alpha-dat",
+    "Posters": [
+      "alpha.dat"
+    ],
+    "Backdrops": [
+      "alpha.dat"
+    ]
+  },
+  {
+    "Name": "invalid-then-valid",
+    "Posters": [
+      "missing.png",
+      "broken.png",
+      "portrait.png"
+    ],
+    "Backdrops": [
+      "missing.png",
+      "empty.png",
+      "portrait.png"
+    ]
+  },
+  {
+    "Name": "missing-posters",
+    "Existing": true,
+    "Posters": [
+      "missing.png"
+    ],
+    "Backdrops": [
+      "portrait.png"
+    ]
+  },
+  {
+    "Name": "broken-landscapes",
+    "Existing": true,
+    "Posters": [
+      "portrait.png"
+    ],
+    "Backdrops": [
+      "broken.png"
+    ]
+  },
+  {
+    "Name": "directory-first",
+    "Posters": [
+      "directory.png",
+      "portrait.png"
+    ],
+    "Backdrops": [
+      "portrait.png"
+    ]
+  },
+  {
+    "Name": "missing-output-directory",
+    "MissingDataDirectory": true,
+    "Posters": [
+      "portrait.png"
+    ],
+    "Backdrops": [
+      "portrait.png"
+    ]
+  },
+  {
+    "Name": "random-mixed-composition",
+    "Posters": [
+      "portrait.png",
+      "landscape.png"
+    ],
+    "Backdrops": [
+      "small.png",
+      "landscape.png"
+    ],
+    "Repeat": true
+  },
+  {
+    "Name": "gif-reports-frame-count",
+    "Existing": true,
+    "Posters": [
+      "static.gif"
+    ],
+    "Backdrops": [
+      "portrait.png"
+    ]
+  },
+  {
+    "Name": "svg-is-not-a-bitmap",
+    "Existing": true,
+    "Posters": [
+      "vector.svg"
+    ],
+    "Backdrops": [
+      "portrait.png"
+    ]
+  },
+  {
+    "Name": "zero-tile-width",
+    "Posters": [
+      "tall.png"
+    ],
+    "Backdrops": [
+      "tall.png"
+    ]
+  },
+  {
+    "Name": "output-is-directory",
+    "DirectoryOutput": true,
+    "Posters": [
+      "portrait.png"
+    ],
+    "Backdrops": [
+      "portrait.png"
+    ]
+  },
+  {
+    "Name": "output-is-read-only",
+    "Existing": true,
+    "ReadOnlyOutput": true,
+    "Posters": [
+      "portrait.png"
+    ],
+    "Backdrops": [
+      "portrait.png"
+    ]
+  }
+]

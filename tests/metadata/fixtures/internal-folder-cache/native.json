@@ -1,0 +1,699 @@
+{
+  "actualFrozenInternalFolderCache": true,
+  "results": [
+    {
+      "name": "AggregateFolder-before",
+      "exception": null,
+      "result": {
+        "warm": [
+          {
+            "Id": "97c00000-0000-0000-0000-000000000010",
+            "Name": "Old child"
+          }
+        ],
+        "observations": [
+          {
+            "operation": "before",
+            "changed": false,
+            "state": {
+              "Name": "Named",
+              "Path": "$STATE/root/default/library",
+              "refreshFlag": false,
+              "cacheCleared": true,
+              "locations": [],
+              "physicalIds": null
+            }
+          }
+        ],
+        "children": [
+          {
+            "Id": "97c00000-0000-0000-0000-000000000010",
+            "Name": "Old child"
+          }
+        ],
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root/default/library",
+          "refreshFlag": false,
+          "cacheCleared": true,
+          "locations": [],
+          "physicalIds": null
+        }
+      }
+    },
+    {
+      "name": "AggregateFolder-requires",
+      "exception": null,
+      "result": {
+        "warm": [
+          {
+            "Id": "97c00000-0000-0000-0000-000000000010",
+            "Name": "Old child"
+          }
+        ],
+        "observations": [
+          {
+            "operation": "requires",
+            "changed": true,
+            "state": {
+              "Name": "Named",
+              "Path": "$STATE/root/default/library",
+              "refreshFlag": true,
+              "cacheCleared": true,
+              "locations": [],
+              "physicalIds": null
+            }
+          }
+        ],
+        "children": [
+          {
+            "Id": "97c00000-0000-0000-0000-000000000010",
+            "Name": "Old child"
+          }
+        ],
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root/default/library",
+          "refreshFlag": true,
+          "cacheCleared": true,
+          "locations": [],
+          "physicalIds": null
+        }
+      }
+    },
+    {
+      "name": "AggregateFolder-release",
+      "exception": null,
+      "result": {
+        "warm": [
+          {
+            "Id": "97c00000-0000-0000-0000-000000000010",
+            "Name": "Old child"
+          }
+        ],
+        "observations": [
+          {
+            "operation": "release",
+            "changed": null,
+            "state": {
+              "Name": "Named",
+              "Path": "$STATE/root/default/library",
+              "refreshFlag": false,
+              "cacheCleared": false,
+              "locations": [],
+              "physicalIds": null
+            }
+          }
+        ],
+        "children": [
+          {
+            "Id": "97c00000-0000-0000-0000-000000000010",
+            "Name": "Changed child"
+          }
+        ],
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root/default/library",
+          "refreshFlag": false,
+          "cacheCleared": false,
+          "locations": [],
+          "physicalIds": null
+        }
+      }
+    },
+    {
+      "name": "AggregateFolder-setter",
+      "exception": null,
+      "result": {
+        "warm": [
+          {
+            "Id": "97c00000-0000-0000-0000-000000000010",
+            "Name": "Old child"
+          }
+        ],
+        "observations": [
+          {
+            "operation": "setter",
+            "changed": null,
+            "state": {
+              "Name": "Named",
+              "Path": "$STATE/root/default/library",
+              "refreshFlag": false,
+              "cacheCleared": true,
+              "locations": [],
+              "physicalIds": null
+            }
+          }
+        ],
+        "children": [
+          {
+            "Id": "97c00000-0000-0000-0000-000000000010",
+            "Name": "Changed child"
+          },
+          {
+            "Id": "97c00000-0000-0000-0000-000000000011",
+            "Name": "New child"
+          }
+        ],
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root/default/library",
+          "refreshFlag": false,
+          "cacheCleared": false,
+          "locations": [],
+          "physicalIds": null
+        }
+      }
+    },
+    {
+      "name": "AggregateFolder-before-release",
+      "exception": null,
+      "result": {
+        "warm": [
+          {
+            "Id": "97c00000-0000-0000-0000-000000000010",
+            "Name": "Old child"
+          }
+        ],
+        "observations": [
+          {
+            "operation": "before",
+            "changed": false,
+            "state": {
+              "Name": "Named",
+              "Path": "$STATE/root/default/library",
+              "refreshFlag": false,
+              "cacheCleared": true,
+              "locations": [],
+              "physicalIds": null
+            }
+          },
+          {
+            "operation": "release",
+            "changed": null,
+            "state": {
+              "Name": "Named",
+              "Path": "$STATE/root/default/library",
+              "refreshFlag": false,
+              "cacheCleared": true,
+              "locations": [],
+              "physicalIds": null
+            }
+          }
+        ],
+        "children": [
+          {
+            "Id": "97c00000-0000-0000-0000-000000000010",
+            "Name": "Changed child"
+          },
+          {
+            "Id": "97c00000-0000-0000-0000-000000000011",
+            "Name": "New child"
+          }
+        ],
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root/default/library",
+          "refreshFlag": false,
+          "cacheCleared": false,
+          "locations": [],
+          "physicalIds": null
+        }
+      }
+    },
+    {
+      "name": "AggregateFolder-before-setter",
+      "exception": null,
+      "result": {
+        "warm": [
+          {
+            "Id": "97c00000-0000-0000-0000-000000000010",
+            "Name": "Old child"
+          }
+        ],
+        "observations": [
+          {
+            "operation": "before",
+            "changed": false,
+            "state": {
+              "Name": "Named",
+              "Path": "$STATE/root/default/library",
+              "refreshFlag": false,
+              "cacheCleared": true,
+              "locations": [],
+              "physicalIds": null
+            }
+          },
+          {
+            "operation": "setter",
+            "changed": null,
+            "state": {
+              "Name": "Named",
+              "Path": "$STATE/root/default/library",
+              "refreshFlag": false,
+              "cacheCleared": true,
+              "locations": [],
+              "physicalIds": null
+            }
+          }
+        ],
+        "children": [
+          {
+            "Id": "97c00000-0000-0000-0000-000000000010",
+            "Name": "Changed child"
+          },
+          {
+            "Id": "97c00000-0000-0000-0000-000000000011",
+            "Name": "New child"
+          }
+        ],
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root/default/library",
+          "refreshFlag": false,
+          "cacheCleared": false,
+          "locations": [],
+          "physicalIds": null
+        }
+      }
+    },
+    {
+      "name": "AggregateFolder-requires-release",
+      "exception": null,
+      "result": {
+        "warm": [
+          {
+            "Id": "97c00000-0000-0000-0000-000000000010",
+            "Name": "Old child"
+          }
+        ],
+        "observations": [
+          {
+            "operation": "requires",
+            "changed": true,
+            "state": {
+              "Name": "Named",
+              "Path": "$STATE/root/default/library",
+              "refreshFlag": true,
+              "cacheCleared": true,
+              "locations": [],
+              "physicalIds": null
+            }
+          },
+          {
+            "operation": "release",
+            "changed": null,
+            "state": {
+              "Name": "Named",
+              "Path": "$STATE/root/default/library",
+              "refreshFlag": true,
+              "cacheCleared": true,
+              "locations": [],
+              "physicalIds": null
+            }
+          }
+        ],
+        "children": [
+          {
+            "Id": "97c00000-0000-0000-0000-000000000010",
+            "Name": "Changed child"
+          },
+          {
+            "Id": "97c00000-0000-0000-0000-000000000011",
+            "Name": "New child"
+          }
+        ],
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root/default/library",
+          "refreshFlag": true,
+          "cacheCleared": false,
+          "locations": [],
+          "physicalIds": null
+        }
+      }
+    },
+    {
+      "name": "UserRootFolder-before",
+      "exception": null,
+      "result": {
+        "warm": [
+          {
+            "Id": "97c00000-0000-0000-0000-000000000010",
+            "Name": "Old child"
+          }
+        ],
+        "observations": [
+          {
+            "operation": "before",
+            "changed": false,
+            "state": {
+              "Name": "Named",
+              "Path": "$STATE/root/default/library",
+              "refreshFlag": null,
+              "cacheCleared": true,
+              "locations": null,
+              "physicalIds": null
+            }
+          }
+        ],
+        "children": [
+          {
+            "Id": "97c00000-0000-0000-0000-000000000010",
+            "Name": "Old child"
+          }
+        ],
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root/default/library",
+          "refreshFlag": null,
+          "cacheCleared": true,
+          "locations": null,
+          "physicalIds": null
+        }
+      }
+    },
+    {
+      "name": "UserRootFolder-requires",
+      "exception": null,
+      "result": {
+        "warm": [
+          {
+            "Id": "97c00000-0000-0000-0000-000000000010",
+            "Name": "Old child"
+          }
+        ],
+        "observations": [
+          {
+            "operation": "requires",
+            "changed": false,
+            "state": {
+              "Name": "Named",
+              "Path": "$STATE/root/default/library",
+              "refreshFlag": null,
+              "cacheCleared": false,
+              "locations": null,
+              "physicalIds": null
+            }
+          }
+        ],
+        "children": [
+          {
+            "Id": "97c00000-0000-0000-0000-000000000010",
+            "Name": "Old child"
+          }
+        ],
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root/default/library",
+          "refreshFlag": null,
+          "cacheCleared": false,
+          "locations": null,
+          "physicalIds": null
+        }
+      }
+    },
+    {
+      "name": "UserRootFolder-release",
+      "exception": null,
+      "result": {
+        "warm": [
+          {
+            "Id": "97c00000-0000-0000-0000-000000000010",
+            "Name": "Old child"
+          }
+        ],
+        "observations": [
+          {
+            "operation": "release",
+            "changed": null,
+            "state": {
+              "Name": "Named",
+              "Path": "$STATE/root/default/library",
+              "refreshFlag": null,
+              "cacheCleared": false,
+              "locations": null,
+              "physicalIds": null
+            }
+          }
+        ],
+        "children": [
+          {
+            "Id": "97c00000-0000-0000-0000-000000000010",
+            "Name": "Changed child"
+          }
+        ],
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root/default/library",
+          "refreshFlag": null,
+          "cacheCleared": false,
+          "locations": null,
+          "physicalIds": null
+        }
+      }
+    },
+    {
+      "name": "UserRootFolder-setter",
+      "exception": null,
+      "result": {
+        "warm": [
+          {
+            "Id": "97c00000-0000-0000-0000-000000000010",
+            "Name": "Old child"
+          }
+        ],
+        "observations": [
+          {
+            "operation": "setter",
+            "changed": null,
+            "state": {
+              "Name": "Named",
+              "Path": "$STATE/root/default/library",
+              "refreshFlag": null,
+              "cacheCleared": false,
+              "locations": null,
+              "physicalIds": null
+            }
+          }
+        ],
+        "children": [
+          {
+            "Id": "97c00000-0000-0000-0000-000000000010",
+            "Name": "Changed child"
+          }
+        ],
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root/default/library",
+          "refreshFlag": null,
+          "cacheCleared": false,
+          "locations": null,
+          "physicalIds": null
+        }
+      }
+    },
+    {
+      "name": "UserRootFolder-before-release",
+      "exception": null,
+      "result": {
+        "warm": [
+          {
+            "Id": "97c00000-0000-0000-0000-000000000010",
+            "Name": "Old child"
+          }
+        ],
+        "observations": [
+          {
+            "operation": "before",
+            "changed": false,
+            "state": {
+              "Name": "Named",
+              "Path": "$STATE/root/default/library",
+              "refreshFlag": null,
+              "cacheCleared": true,
+              "locations": null,
+              "physicalIds": null
+            }
+          },
+          {
+            "operation": "release",
+            "changed": null,
+            "state": {
+              "Name": "Named",
+              "Path": "$STATE/root/default/library",
+              "refreshFlag": null,
+              "cacheCleared": true,
+              "locations": null,
+              "physicalIds": null
+            }
+          }
+        ],
+        "children": [
+          {
+            "Id": "97c00000-0000-0000-0000-000000000010",
+            "Name": "Changed child"
+          },
+          {
+            "Id": "97c00000-0000-0000-0000-000000000011",
+            "Name": "New child"
+          }
+        ],
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root/default/library",
+          "refreshFlag": null,
+          "cacheCleared": false,
+          "locations": null,
+          "physicalIds": null
+        }
+      }
+    },
+    {
+      "name": "UserRootFolder-before-setter",
+      "exception": null,
+      "result": {
+        "warm": [
+          {
+            "Id": "97c00000-0000-0000-0000-000000000010",
+            "Name": "Old child"
+          }
+        ],
+        "observations": [
+          {
+            "operation": "before",
+            "changed": false,
+            "state": {
+              "Name": "Named",
+              "Path": "$STATE/root/default/library",
+              "refreshFlag": null,
+              "cacheCleared": true,
+              "locations": null,
+              "physicalIds": null
+            }
+          },
+          {
+            "operation": "setter",
+            "changed": null,
+            "state": {
+              "Name": "Named",
+              "Path": "$STATE/root/default/library",
+              "refreshFlag": null,
+              "cacheCleared": true,
+              "locations": null,
+              "physicalIds": null
+            }
+          }
+        ],
+        "children": [
+          {
+            "Id": "97c00000-0000-0000-0000-000000000010",
+            "Name": "Changed child"
+          },
+          {
+            "Id": "97c00000-0000-0000-0000-000000000011",
+            "Name": "New child"
+          }
+        ],
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root/default/library",
+          "refreshFlag": null,
+          "cacheCleared": false,
+          "locations": null,
+          "physicalIds": null
+        }
+      }
+    },
+    {
+      "name": "UserRootFolder-requires-release",
+      "exception": null,
+      "result": {
+        "warm": [
+          {
+            "Id": "97c00000-0000-0000-0000-000000000010",
+            "Name": "Old child"
+          }
+        ],
+        "observations": [
+          {
+            "operation": "requires",
+            "changed": false,
+            "state": {
+              "Name": "Named",
+              "Path": "$STATE/root/default/library",
+              "refreshFlag": null,
+              "cacheCleared": false,
+              "locations": null,
+              "physicalIds": null
+            }
+          },
+          {
+            "operation": "release",
+            "changed": null,
+            "state": {
+              "Name": "Named",
+              "Path": "$STATE/root/default/library",
+              "refreshFlag": null,
+              "cacheCleared": false,
+              "locations": null,
+              "physicalIds": null
+            }
+          }
+        ],
+        "children": [
+          {
+            "Id": "97c00000-0000-0000-0000-000000000010",
+            "Name": "Changed child"
+          }
+        ],
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root/default/library",
+          "refreshFlag": null,
+          "cacheCleared": false,
+          "locations": null,
+          "physicalIds": null
+        }
+      }
+    }
+  ],
+  "assemblies": [
+    {
+      "name": "MediaBrowser.Controller",
+      "path": "D:\\mediamanager\\.test-output\\validation\\internal-folder-cache-oracle-20261005-2\\bin\\Release\\net10.0\\MediaBrowser.Controller.dll",
+      "sha256": "56a527307ef93f810fdadec33ba8380cc8416d38cb1cfea92297b0f65288808e"
+    },
+    {
+      "name": "MediaBrowser.Providers",
+      "path": "D:\\mediamanager\\.test-output\\validation\\internal-folder-cache-oracle-20261005-2\\bin\\Release\\net10.0\\MediaBrowser.Providers.dll",
+      "sha256": "0255068ec9ff524c916c99aebd4553290141bb7b87e17da3a80c007b3b6fb129"
+    },
+    {
+      "name": "Jellyfin.Server.Implementations",
+      "path": "D:\\mediamanager\\.test-output\\validation\\internal-folder-cache-oracle-20261005-2\\bin\\Release\\net10.0\\Jellyfin.Server.Implementations.dll",
+      "sha256": "b91a6797f81f8563b8896c3da3e5cd4e9d11c61eb084578bf7b81108c3c3e2e6"
+    },
+    {
+      "name": "Emby.Server.Implementations",
+      "path": "D:\\mediamanager\\.test-output\\validation\\internal-folder-cache-oracle-20261005-2\\bin\\Release\\net10.0\\Emby.Server.Implementations.dll",
+      "sha256": "ccff8514100a65508b65882d5881463fe4ff73ea07eb4d2b2d98e234d7b4ac99"
+    },
+    {
+      "name": "jellyfin",
+      "path": "D:\\mediamanager\\.test-output\\validation\\internal-folder-cache-oracle-20261005-2\\bin\\Release\\net10.0\\jellyfin.dll",
+      "sha256": "29c34541350089dc0522c4309ecd617e78fd402774681f32491d089803939c03"
+    },
+    {
+      "name": "Jellyfin.Database.Implementations",
+      "path": "D:\\mediamanager\\.test-output\\validation\\internal-folder-cache-oracle-20261005-2\\bin\\Release\\net10.0\\Jellyfin.Database.Implementations.dll",
+      "sha256": "21648ea8e6eec045789c66c199b30c68b1b00f6e15918ac66347c19244b5670b"
+    },
+    {
+      "name": "Jellyfin.Database.Providers.Sqlite",
+      "path": "D:\\mediamanager\\.test-output\\validation\\internal-folder-cache-oracle-20261005-2\\bin\\Release\\net10.0\\Jellyfin.Database.Providers.Sqlite.dll",
+      "sha256": "eefedf49a1c6c62c7eab9b4347c0bca377c3e059ec61ef26a08148de7bba94bb"
+    }
+  ],
+  "scope": "Actual AggregateFolder/UserRootFolder Children, real EF seed/save/query/hydration, Before/Requires, Children setter and ReleaseCachedChildren. Library GetItemById delegates to actual repository. Isolated directories/configuration, parent/collection/options and NormalizeRootPathList controls as declared in source. Warmed children are read through the actual getter before a changed/new child save. Captures actual child/ID cache effects, excludes full ValidateChildren and runtime monitor/library acceptance."
+,"schemaVersion":1,"candidateVerified":false,"inputSha256":"e17b62fd383ee42685662c70a2095f47b67786288e69aa10e5d460b47b6667db","sourceFilesSha256":"0302adbd1ef66f3d2c30518fe0605c5c8098d59784e03fdac722c355070c9ad7"}

@@ -1,0 +1,5 @@
+{
+  "cases": [
+    { "id": "enum-null-videotype", "kind": "enum", "valueJson": "null" }
+  ]
+}

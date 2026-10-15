@@ -1,0 +1,2360 @@
+[
+  {
+    "name": "type-Folder-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Folder"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": null
+  },
+  {
+    "name": "type-Folder-null-sql-lists-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Folder"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": null,
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-Folder-poison",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Folder"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}"
+  },
+  {
+    "name": "type-Folder-poison-sql-lists-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Folder"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}",
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-AggregateFolder-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "AggregateFolder"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": null
+  },
+  {
+    "name": "type-AggregateFolder-null-sql-lists-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "AggregateFolder"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": null,
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-AggregateFolder-poison",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "AggregateFolder"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}"
+  },
+  {
+    "name": "type-AggregateFolder-poison-sql-lists-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "AggregateFolder"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}",
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-UserRootFolder-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "UserRootFolder"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": null
+  },
+  {
+    "name": "type-UserRootFolder-null-sql-lists-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "UserRootFolder"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": null,
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-UserRootFolder-poison",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "UserRootFolder"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}"
+  },
+  {
+    "name": "type-UserRootFolder-poison-sql-lists-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "UserRootFolder"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}",
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-CollectionFolder-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "CollectionFolder"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": null
+  },
+  {
+    "name": "type-CollectionFolder-null-sql-lists-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "CollectionFolder"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": null,
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-CollectionFolder-poison",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "CollectionFolder"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}"
+  },
+  {
+    "name": "type-CollectionFolder-poison-sql-lists-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "CollectionFolder"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}",
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-UserView-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "UserView"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": null
+  },
+  {
+    "name": "type-UserView-null-sql-lists-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "UserView"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": null,
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-UserView-poison",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "UserView"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}"
+  },
+  {
+    "name": "type-UserView-poison-sql-lists-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "UserView"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}",
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-PlaylistsFolder-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "PlaylistsFolder"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": null
+  },
+  {
+    "name": "type-PlaylistsFolder-null-sql-lists-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "PlaylistsFolder"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": null,
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-PlaylistsFolder-poison",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "PlaylistsFolder"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}"
+  },
+  {
+    "name": "type-PlaylistsFolder-poison-sql-lists-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "PlaylistsFolder"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}",
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-Playlist-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Playlist"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": null
+  },
+  {
+    "name": "type-Playlist-null-sql-lists-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Playlist"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": null,
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-Playlist-poison",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Playlist"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}"
+  },
+  {
+    "name": "type-Playlist-poison-sql-lists-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Playlist"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}",
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-Movie-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Movie"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": null
+  },
+  {
+    "name": "type-Movie-null-sql-lists-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Movie"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": null,
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-Movie-poison",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Movie"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}"
+  },
+  {
+    "name": "type-Movie-poison-sql-lists-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Movie"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}",
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-Video-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Video"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": null
+  },
+  {
+    "name": "type-Video-null-sql-lists-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Video"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": null,
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-Video-poison",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Video"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}"
+  },
+  {
+    "name": "type-Video-poison-sql-lists-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Video"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}",
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-Episode-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Episode"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": null
+  },
+  {
+    "name": "type-Episode-null-sql-lists-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Episode"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": null,
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-Episode-poison",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Episode"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}"
+  },
+  {
+    "name": "type-Episode-poison-sql-lists-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Episode"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}",
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-Series-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Series"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": null
+  },
+  {
+    "name": "type-Series-null-sql-lists-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Series"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": null,
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-Series-poison",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Series"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}"
+  },
+  {
+    "name": "type-Series-poison-sql-lists-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Series"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}",
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-Season-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Season"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": null
+  },
+  {
+    "name": "type-Season-null-sql-lists-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Season"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": null,
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-Season-poison",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Season"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}"
+  },
+  {
+    "name": "type-Season-poison-sql-lists-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Season"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}",
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-BoxSet-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "BoxSet"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": null
+  },
+  {
+    "name": "type-BoxSet-null-sql-lists-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "BoxSet"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": null,
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-BoxSet-poison",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "BoxSet"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}"
+  },
+  {
+    "name": "type-BoxSet-poison-sql-lists-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "BoxSet"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}",
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-Audio-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Audio"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": null
+  },
+  {
+    "name": "type-Audio-null-sql-lists-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Audio"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": null,
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-Audio-poison",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Audio"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}"
+  },
+  {
+    "name": "type-Audio-poison-sql-lists-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Audio"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}",
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-AudioBook-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "AudioBook"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": null
+  },
+  {
+    "name": "type-AudioBook-null-sql-lists-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "AudioBook"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": null,
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-AudioBook-poison",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "AudioBook"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}"
+  },
+  {
+    "name": "type-AudioBook-poison-sql-lists-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "AudioBook"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}",
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-MusicVideo-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "MusicVideo"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": null
+  },
+  {
+    "name": "type-MusicVideo-null-sql-lists-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "MusicVideo"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": null,
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-MusicVideo-poison",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "MusicVideo"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}"
+  },
+  {
+    "name": "type-MusicVideo-poison-sql-lists-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "MusicVideo"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}",
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-Trailer-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Trailer"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": null
+  },
+  {
+    "name": "type-Trailer-null-sql-lists-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Trailer"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": null,
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-Trailer-poison",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Trailer"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}"
+  },
+  {
+    "name": "type-Trailer-poison-sql-lists-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Trailer"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}",
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-MusicAlbum-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "MusicAlbum"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": null
+  },
+  {
+    "name": "type-MusicAlbum-null-sql-lists-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "MusicAlbum"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": null,
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-MusicAlbum-poison",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "MusicAlbum"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}"
+  },
+  {
+    "name": "type-MusicAlbum-poison-sql-lists-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "MusicAlbum"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}",
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-MusicArtist-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "MusicArtist"
+    },
+    "parents": [
+      {
+        "id": "97800000-0000-0000-0000-000000000002",
+        "type": "Folder"
+      }
+    ],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      },
+      {
+        "id": "97800000-0000-0000-0000-000000000002"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": null
+  },
+  {
+    "name": "type-MusicArtist-null-sql-lists-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "MusicArtist"
+    },
+    "parents": [
+      {
+        "id": "97800000-0000-0000-0000-000000000002",
+        "type": "Folder"
+      }
+    ],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      },
+      {
+        "id": "97800000-0000-0000-0000-000000000002"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": null,
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-MusicArtist-poison",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "MusicArtist"
+    },
+    "parents": [
+      {
+        "id": "97800000-0000-0000-0000-000000000002",
+        "type": "Folder"
+      }
+    ],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      },
+      {
+        "id": "97800000-0000-0000-0000-000000000002"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}"
+  },
+  {
+    "name": "type-MusicArtist-poison-sql-lists-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "MusicArtist"
+    },
+    "parents": [
+      {
+        "id": "97800000-0000-0000-0000-000000000002",
+        "type": "Folder"
+      }
+    ],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      },
+      {
+        "id": "97800000-0000-0000-0000-000000000002"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}",
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-Person-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Person"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": null
+  },
+  {
+    "name": "type-Person-null-sql-lists-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Person"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": null,
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-Person-poison",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Person"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}"
+  },
+  {
+    "name": "type-Person-poison-sql-lists-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Person"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}",
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-Genre-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Genre"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": null
+  },
+  {
+    "name": "type-Genre-null-sql-lists-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Genre"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": null,
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-Genre-poison",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Genre"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}"
+  },
+  {
+    "name": "type-Genre-poison-sql-lists-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Genre"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}",
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-MusicGenre-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "MusicGenre"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": null
+  },
+  {
+    "name": "type-MusicGenre-null-sql-lists-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "MusicGenre"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": null,
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-MusicGenre-poison",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "MusicGenre"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}"
+  },
+  {
+    "name": "type-MusicGenre-poison-sql-lists-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "MusicGenre"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}",
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-Studio-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Studio"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": null
+  },
+  {
+    "name": "type-Studio-null-sql-lists-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Studio"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": null,
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-Studio-poison",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Studio"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}"
+  },
+  {
+    "name": "type-Studio-poison-sql-lists-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Studio"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}",
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-Year-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Year"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": null
+  },
+  {
+    "name": "type-Year-null-sql-lists-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Year"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": null,
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-Year-poison",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Year"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}"
+  },
+  {
+    "name": "type-Year-poison-sql-lists-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Year"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}",
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-Photo-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Photo"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": null
+  },
+  {
+    "name": "type-Photo-null-sql-lists-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Photo"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": null,
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-Photo-poison",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Photo"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}"
+  },
+  {
+    "name": "type-Photo-poison-sql-lists-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Photo"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}",
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-PhotoAlbum-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "PhotoAlbum"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": null
+  },
+  {
+    "name": "type-PhotoAlbum-null-sql-lists-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "PhotoAlbum"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": null,
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-PhotoAlbum-poison",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "PhotoAlbum"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}"
+  },
+  {
+    "name": "type-PhotoAlbum-poison-sql-lists-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "PhotoAlbum"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}",
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-Book-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Book"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": null
+  },
+  {
+    "name": "type-Book-null-sql-lists-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Book"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": null,
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-Book-poison",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Book"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}"
+  },
+  {
+    "name": "type-Book-poison-sql-lists-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Book"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}",
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-PlaylistsFolder-malformed",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "PlaylistsFolder"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "bad{"
+  },
+  {
+    "name": "type-PlaylistsFolder-malformed-sql-lists-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "PlaylistsFolder"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "bad{",
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-Season-malformed",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Season"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "bad{"
+  },
+  {
+    "name": "type-Season-malformed-sql-lists-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Season"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "bad{",
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-AudioBook-malformed",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "AudioBook"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "bad{"
+  },
+  {
+    "name": "type-AudioBook-malformed-sql-lists-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "AudioBook"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "bad{",
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-MusicAlbum-malformed",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "MusicAlbum"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "bad{"
+  },
+  {
+    "name": "type-MusicAlbum-malformed-sql-lists-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "MusicAlbum"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "bad{",
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-MusicArtist-malformed",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "MusicArtist"
+    },
+    "parents": [
+      {
+        "id": "97800000-0000-0000-0000-000000000002",
+        "type": "Folder"
+      }
+    ],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      },
+      {
+        "id": "97800000-0000-0000-0000-000000000002"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "bad{"
+  },
+  {
+    "name": "type-MusicArtist-malformed-sql-lists-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "MusicArtist"
+    },
+    "parents": [
+      {
+        "id": "97800000-0000-0000-0000-000000000002",
+        "type": "Folder"
+      }
+    ],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      },
+      {
+        "id": "97800000-0000-0000-0000-000000000002"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "bad{",
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-Person-malformed",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Person"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "bad{"
+  },
+  {
+    "name": "type-Person-malformed-sql-lists-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Person"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "bad{",
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-Genre-malformed",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Genre"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "bad{"
+  },
+  {
+    "name": "type-Genre-malformed-sql-lists-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Genre"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "bad{",
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-MusicGenre-malformed",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "MusicGenre"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "bad{"
+  },
+  {
+    "name": "type-MusicGenre-malformed-sql-lists-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "MusicGenre"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "bad{",
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-Studio-malformed",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Studio"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "bad{"
+  },
+  {
+    "name": "type-Studio-malformed-sql-lists-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Studio"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "bad{",
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-Year-malformed",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Year"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "bad{"
+  },
+  {
+    "name": "type-Year-malformed-sql-lists-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Year"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "bad{",
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-PhotoAlbum-malformed",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "PhotoAlbum"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "bad{"
+  },
+  {
+    "name": "type-PhotoAlbum-malformed-sql-lists-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "PhotoAlbum"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "bad{",
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-Book-malformed",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Book"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "bad{"
+  },
+  {
+    "name": "type-Book-malformed-sql-lists-null",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Book"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "bad{",
+    "sqlListsNull": true
+  }
+]

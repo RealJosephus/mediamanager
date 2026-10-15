@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-10-07T21:03:34.3782807Z",
+  "scope": "Actual protected nonrecursive Folder.ValidateChildrenInternal with real warm CreateItems, EF SQLite, a persisted ChildType=3 remote linked alternate and a manual incoming BoxSet link. Covers two- and three-version old-primary removal plus exact-primary demotion followed by removal. Compact BaseItems, LinkedChildren and operation-order evidence is frozen. Network, saver file contents, recursion, Web, migrations, native PostgreSQL and release acceptance are excluded.",
+  "fixtureFiles": [
+    {
+      "path": "tests/library/fixtures/folder-remote-linked-replacement/input.json",
+      "sha256": "769b9813509ab0affc1f6ff46c263aa57133006b0c2694ff1a312c3c42ede26f"
+    },
+    {
+      "path": "tests/library/fixtures/folder-remote-linked-replacement/Program.cs",
+      "sha256": "c8cba1980a0d63c0a7850545ac97d0cddb1816f8e68880dde19b9ead5a49e026"
+    },
+    {
+      "path": "tests/library/fixtures/folder-remote-linked-replacement/Oracle.csproj",
+      "sha256": "0b9d3e600bbf152d421f8a0ca199b075aa18811d2141e3f44f42533440e3320c"
+    },
+    {
+      "path": "tests/library/fixtures/folder-remote-linked-replacement/native.json",
+      "sha256": "d3662da45adc9606cb15b18985a8aa091703b3e5b64d4ae0eea06b7406e45222"
+    },
+    {
+      "path": "tests/Directory.Build.props",
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    }
+  ],
+  "assemblies": [
+    {
+      "name": "MediaBrowser.Controller",
+      "sha256": "051c588a8e85a3a7cdde8dc3d9a1112217fd7e973a86fe2ff90cf765bedb75a8"
+    },
+    {
+      "name": "Emby.Server.Implementations",
+      "sha256": "8d369435646570958505c58b9cb17da169855dabc105d0e933524361e9b7b1c8"
+    },
+    {
+      "name": "Jellyfin.Server.Implementations",
+      "sha256": "4da187af02503e82135eb192351d01490484e8ebc8c653d849f7e2900a177672"
+    }
+  ],
+  "reference": {
+    "head": "208c278b75abd897aefa1e1175126eac5e4dbfaa",
+    "files": [
+      {
+        "path": "MediaBrowser.Controller/Entities/Folder.cs",
+        "sha256": "d5f227d462ce3c2df0d5a45d912778427f87321fc9d6e13d863ec28bb639e0c1"
+      },
+      {
+        "path": "Emby.Server.Implementations/Library/LibraryManager.cs",
+        "sha256": "4729de97560262702a44c5829bf93bbc5deec379e9b3018b231aaa6d65643c44"
+      },
+      {
+        "path": "Jellyfin.Server.Implementations/Item/ItemPersistenceService.cs",
+        "sha256": "df64ede4e72fca107cb86127e44b4c81321b3cf560ea3b7f0eccf4462f148d14"
+      }
+    ]
+  },
+  "capture": {
+    "dotnet": "D:/mediamanager/.tools/dotnet/dotnet.exe",
+    "dotnetSha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6",
+    "jellyfinDllDirectory": "D:/mediamanager-validation/20261005/jellyfin-baseline/source/Jellyfin.Server/bin/Release/net10.0",
+    "state": "D:/mediamanager-validation/20261005/results/folder-remote-linked-replacement-state-20261008",
+    "oracleAssemblySha256": "71fd899fd626665866765dface5ff0f65b4c73e437764d082042efd6e7ab6748",
+    "buildWarnings": 0,
+    "buildErrors": 0
+  },
+  "candidateVerified": true,
+  "candidateComparison": "The sealed semantic candidate test passed 7/7 on real SQLite and PostgreSQL: both primary-removal shapes classify the HTTP linked alternate as missing, the two-version branch succeeds, the three-version branch preserves its native FK failure prefix, exact-primary demotion loses ChildType=3, and the later exact-primary removal preserves its native failed prefix. This is a narrow differential fixture; phaseAcceptance remains false."
+}

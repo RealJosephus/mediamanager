@@ -1,0 +1,607 @@
+[
+  {
+    "type": "AggregateFolder",
+    "itemName": "Named",
+    "path": "$STATE/root",
+    "mode": "resolve",
+    "setLocations": false,
+    "name": "AggregateFolder-shortcut-utf8-false",
+    "encoding": "utf8",
+    "stateDirectories": [
+      "media/音樂😀"
+    ],
+    "files": {
+      "one.mblink": "$STATE/media/音樂😀"
+    }
+  },
+  {
+    "type": "AggregateFolder",
+    "itemName": "Named",
+    "path": "$STATE/root",
+    "mode": "resolve",
+    "setLocations": true,
+    "name": "AggregateFolder-shortcut-utf8-true",
+    "encoding": "utf8",
+    "stateDirectories": [
+      "media/音樂😀"
+    ],
+    "files": {
+      "one.mblink": "$STATE/media/音樂😀"
+    }
+  },
+  {
+    "type": "AggregateFolder",
+    "itemName": "Named",
+    "path": "$STATE/root",
+    "mode": "resolve",
+    "setLocations": false,
+    "name": "AggregateFolder-shortcut-utf8-bom-false",
+    "encoding": "utf8-bom",
+    "stateDirectories": [
+      "media/音樂😀"
+    ],
+    "files": {
+      "one.mblink": "$STATE/media/音樂😀"
+    }
+  },
+  {
+    "type": "AggregateFolder",
+    "itemName": "Named",
+    "path": "$STATE/root",
+    "mode": "resolve",
+    "setLocations": true,
+    "name": "AggregateFolder-shortcut-utf8-bom-true",
+    "encoding": "utf8-bom",
+    "stateDirectories": [
+      "media/音樂😀"
+    ],
+    "files": {
+      "one.mblink": "$STATE/media/音樂😀"
+    }
+  },
+  {
+    "type": "AggregateFolder",
+    "itemName": "Named",
+    "path": "$STATE/root",
+    "mode": "resolve",
+    "setLocations": false,
+    "name": "AggregateFolder-shortcut-utf16-le-false",
+    "encoding": "utf16-le",
+    "stateDirectories": [
+      "media/音樂😀"
+    ],
+    "files": {
+      "one.mblink": "$STATE/media/音樂😀"
+    }
+  },
+  {
+    "type": "AggregateFolder",
+    "itemName": "Named",
+    "path": "$STATE/root",
+    "mode": "resolve",
+    "setLocations": true,
+    "name": "AggregateFolder-shortcut-utf16-le-true",
+    "encoding": "utf16-le",
+    "stateDirectories": [
+      "media/音樂😀"
+    ],
+    "files": {
+      "one.mblink": "$STATE/media/音樂😀"
+    }
+  },
+  {
+    "type": "AggregateFolder",
+    "itemName": "Named",
+    "path": "$STATE/root",
+    "mode": "resolve",
+    "setLocations": false,
+    "name": "AggregateFolder-shortcut-utf16-be-false",
+    "encoding": "utf16-be",
+    "stateDirectories": [
+      "media/音樂😀"
+    ],
+    "files": {
+      "one.mblink": "$STATE/media/音樂😀"
+    }
+  },
+  {
+    "type": "AggregateFolder",
+    "itemName": "Named",
+    "path": "$STATE/root",
+    "mode": "resolve",
+    "setLocations": true,
+    "name": "AggregateFolder-shortcut-utf16-be-true",
+    "encoding": "utf16-be",
+    "stateDirectories": [
+      "media/音樂😀"
+    ],
+    "files": {
+      "one.mblink": "$STATE/media/音樂😀"
+    }
+  },
+  {
+    "type": "AggregateFolder",
+    "itemName": "Named",
+    "path": "$STATE/root",
+    "mode": "resolve",
+    "setLocations": false,
+    "name": "AggregateFolder-shortcut-utf32-le-false",
+    "encoding": "utf32-le",
+    "stateDirectories": [
+      "media/音樂😀"
+    ],
+    "files": {
+      "one.mblink": "$STATE/media/音樂😀"
+    }
+  },
+  {
+    "type": "AggregateFolder",
+    "itemName": "Named",
+    "path": "$STATE/root",
+    "mode": "resolve",
+    "setLocations": true,
+    "name": "AggregateFolder-shortcut-utf32-le-true",
+    "encoding": "utf32-le",
+    "stateDirectories": [
+      "media/音樂😀"
+    ],
+    "files": {
+      "one.mblink": "$STATE/media/音樂😀"
+    }
+  },
+  {
+    "type": "AggregateFolder",
+    "itemName": "Named",
+    "path": "$STATE/root",
+    "mode": "resolve",
+    "setLocations": false,
+    "name": "AggregateFolder-shortcut-utf32-be-false",
+    "encoding": "utf32-be",
+    "stateDirectories": [
+      "media/音樂😀"
+    ],
+    "files": {
+      "one.mblink": "$STATE/media/音樂😀"
+    }
+  },
+  {
+    "type": "AggregateFolder",
+    "itemName": "Named",
+    "path": "$STATE/root",
+    "mode": "resolve",
+    "setLocations": true,
+    "name": "AggregateFolder-shortcut-utf32-be-true",
+    "encoding": "utf32-be",
+    "stateDirectories": [
+      "media/音樂😀"
+    ],
+    "files": {
+      "one.mblink": "$STATE/media/音樂😀"
+    }
+  },
+  {
+    "type": "AggregateFolder",
+    "itemName": "Named",
+    "path": "$STATE/root",
+    "mode": "resolve",
+    "setLocations": false,
+    "name": "AggregateFolder-null-locations-resolve-false",
+    "flag": false,
+    "locationsNull": true
+  },
+  {
+    "type": "AggregateFolder",
+    "itemName": "Named",
+    "path": "$STATE/root",
+    "mode": "resolve",
+    "setLocations": false,
+    "name": "AggregateFolder-null-locations-resolve-true",
+    "flag": true,
+    "locationsNull": true
+  },
+  {
+    "type": "AggregateFolder",
+    "itemName": "Named",
+    "path": "$STATE/root",
+    "mode": "requires",
+    "setLocations": false,
+    "name": "AggregateFolder-null-locations-requires-false",
+    "flag": false,
+    "locationsNull": true
+  },
+  {
+    "type": "AggregateFolder",
+    "itemName": "Named",
+    "path": "$STATE/root",
+    "mode": "requires",
+    "setLocations": false,
+    "name": "AggregateFolder-null-locations-requires-true",
+    "flag": true,
+    "locationsNull": true
+  },
+  {
+    "type": "AggregateFolder",
+    "itemName": "Named",
+    "path": "$STATE/root",
+    "mode": "before",
+    "setLocations": false,
+    "name": "AggregateFolder-null-locations-before-false",
+    "flag": false,
+    "locationsNull": true
+  },
+  {
+    "type": "AggregateFolder",
+    "itemName": "Named",
+    "path": "$STATE/root",
+    "mode": "before",
+    "setLocations": false,
+    "name": "AggregateFolder-null-locations-before-true",
+    "flag": true,
+    "locationsNull": true
+  },
+  {
+    "type": "AggregateFolder",
+    "itemName": "Named",
+    "path": "$STATE/root",
+    "mode": "resolve",
+    "setLocations": false,
+    "name": "AggregateFolder-path-null",
+    "overridePath": null,
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "type": "AggregateFolder",
+    "itemName": "Named",
+    "path": "$STATE/root",
+    "mode": "resolve",
+    "setLocations": false,
+    "name": "AggregateFolder-path-empty",
+    "overridePath": "",
+    "expectException": "ArgumentException"
+  },
+  {
+    "type": "AggregateFolder",
+    "itemName": "Named",
+    "path": "$STATE/root",
+    "mode": "resolve",
+    "setLocations": false,
+    "name": "AggregateFolder-path-nul-character",
+    "overridePath": "$STATE/root\u0000",
+    "expectException": "ArgumentException"
+  },
+  {
+    "type": "AggregateFolder",
+    "itemName": "Named",
+    "path": "$STATE/root",
+    "mode": "resolve",
+    "setLocations": false,
+    "name": "AggregateFolder-missing-root",
+    "overridePath": "$STATE/missing-root"
+  },
+  {
+    "type": "AggregateFolder",
+    "itemName": "Named",
+    "path": "$STATE/root",
+    "mode": "resolve",
+    "setLocations": false,
+    "name": "AggregateFolder-file-root",
+    "files": {
+      "ordinary.txt": "file"
+    },
+    "overridePath": "$STATE/root/ordinary.txt",
+    "expectException": "IOException"
+  },
+  {
+    "type": "CollectionFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "resolve",
+    "setLocations": false,
+    "name": "CollectionFolder-shortcut-utf8-false",
+    "encoding": "utf8",
+    "stateDirectories": [
+      "media/音樂😀"
+    ],
+    "files": {
+      "one.mblink": "$STATE/media/音樂😀"
+    }
+  },
+  {
+    "type": "CollectionFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "resolve",
+    "setLocations": true,
+    "name": "CollectionFolder-shortcut-utf8-true",
+    "encoding": "utf8",
+    "stateDirectories": [
+      "media/音樂😀"
+    ],
+    "files": {
+      "one.mblink": "$STATE/media/音樂😀"
+    }
+  },
+  {
+    "type": "CollectionFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "resolve",
+    "setLocations": false,
+    "name": "CollectionFolder-shortcut-utf8-bom-false",
+    "encoding": "utf8-bom",
+    "stateDirectories": [
+      "media/音樂😀"
+    ],
+    "files": {
+      "one.mblink": "$STATE/media/音樂😀"
+    }
+  },
+  {
+    "type": "CollectionFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "resolve",
+    "setLocations": true,
+    "name": "CollectionFolder-shortcut-utf8-bom-true",
+    "encoding": "utf8-bom",
+    "stateDirectories": [
+      "media/音樂😀"
+    ],
+    "files": {
+      "one.mblink": "$STATE/media/音樂😀"
+    }
+  },
+  {
+    "type": "CollectionFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "resolve",
+    "setLocations": false,
+    "name": "CollectionFolder-shortcut-utf16-le-false",
+    "encoding": "utf16-le",
+    "stateDirectories": [
+      "media/音樂😀"
+    ],
+    "files": {
+      "one.mblink": "$STATE/media/音樂😀"
+    }
+  },
+  {
+    "type": "CollectionFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "resolve",
+    "setLocations": true,
+    "name": "CollectionFolder-shortcut-utf16-le-true",
+    "encoding": "utf16-le",
+    "stateDirectories": [
+      "media/音樂😀"
+    ],
+    "files": {
+      "one.mblink": "$STATE/media/音樂😀"
+    }
+  },
+  {
+    "type": "CollectionFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "resolve",
+    "setLocations": false,
+    "name": "CollectionFolder-shortcut-utf16-be-false",
+    "encoding": "utf16-be",
+    "stateDirectories": [
+      "media/音樂😀"
+    ],
+    "files": {
+      "one.mblink": "$STATE/media/音樂😀"
+    }
+  },
+  {
+    "type": "CollectionFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "resolve",
+    "setLocations": true,
+    "name": "CollectionFolder-shortcut-utf16-be-true",
+    "encoding": "utf16-be",
+    "stateDirectories": [
+      "media/音樂😀"
+    ],
+    "files": {
+      "one.mblink": "$STATE/media/音樂😀"
+    }
+  },
+  {
+    "type": "CollectionFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "resolve",
+    "setLocations": false,
+    "name": "CollectionFolder-shortcut-utf32-le-false",
+    "encoding": "utf32-le",
+    "stateDirectories": [
+      "media/音樂😀"
+    ],
+    "files": {
+      "one.mblink": "$STATE/media/音樂😀"
+    }
+  },
+  {
+    "type": "CollectionFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "resolve",
+    "setLocations": true,
+    "name": "CollectionFolder-shortcut-utf32-le-true",
+    "encoding": "utf32-le",
+    "stateDirectories": [
+      "media/音樂😀"
+    ],
+    "files": {
+      "one.mblink": "$STATE/media/音樂😀"
+    }
+  },
+  {
+    "type": "CollectionFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "resolve",
+    "setLocations": false,
+    "name": "CollectionFolder-shortcut-utf32-be-false",
+    "encoding": "utf32-be",
+    "stateDirectories": [
+      "media/音樂😀"
+    ],
+    "files": {
+      "one.mblink": "$STATE/media/音樂😀"
+    }
+  },
+  {
+    "type": "CollectionFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "resolve",
+    "setLocations": true,
+    "name": "CollectionFolder-shortcut-utf32-be-true",
+    "encoding": "utf32-be",
+    "stateDirectories": [
+      "media/音樂😀"
+    ],
+    "files": {
+      "one.mblink": "$STATE/media/音樂😀"
+    }
+  },
+  {
+    "type": "CollectionFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "resolve",
+    "setLocations": false,
+    "name": "CollectionFolder-null-locations-resolve-false",
+    "flag": false,
+    "locationsNull": true
+  },
+  {
+    "type": "CollectionFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "resolve",
+    "setLocations": false,
+    "name": "CollectionFolder-null-locations-resolve-true",
+    "flag": true,
+    "locationsNull": true
+  },
+  {
+    "type": "CollectionFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "requires",
+    "setLocations": false,
+    "name": "CollectionFolder-null-locations-requires-false",
+    "flag": false,
+    "locationsNull": true
+  },
+  {
+    "type": "CollectionFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "requires",
+    "setLocations": false,
+    "name": "CollectionFolder-null-locations-requires-true",
+    "flag": true,
+    "locationsNull": true
+  },
+  {
+    "type": "CollectionFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "before",
+    "setLocations": false,
+    "name": "CollectionFolder-null-locations-before-false",
+    "flag": false,
+    "locationsNull": true
+  },
+  {
+    "type": "CollectionFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "before",
+    "setLocations": false,
+    "name": "CollectionFolder-null-locations-before-true",
+    "flag": true,
+    "locationsNull": true
+  },
+  {
+    "type": "CollectionFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "resolve",
+    "setLocations": false,
+    "name": "CollectionFolder-path-null",
+    "overridePath": null,
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "type": "CollectionFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "resolve",
+    "setLocations": false,
+    "name": "CollectionFolder-path-empty",
+    "overridePath": "",
+    "expectException": "ArgumentException"
+  },
+  {
+    "type": "CollectionFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "resolve",
+    "setLocations": false,
+    "name": "CollectionFolder-path-nul-character",
+    "overridePath": "$STATE/root\u0000",
+    "expectException": "ArgumentException"
+  },
+  {
+    "type": "CollectionFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "resolve",
+    "setLocations": false,
+    "name": "CollectionFolder-missing-root",
+    "overridePath": "$STATE/missing-root"
+  },
+  {
+    "type": "CollectionFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "resolve",
+    "setLocations": false,
+    "name": "CollectionFolder-file-root",
+    "files": {
+      "ordinary.txt": "file"
+    },
+    "overridePath": "$STATE/root/default/library/ordinary.txt",
+    "expectException": "IOException"
+  },
+  {
+    "name": "CollectionFolder-null-physical-ids-false",
+    "type": "CollectionFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "requires",
+    "useResolvedLocations": true,
+    "flag": false,
+    "physicalIdsNull": true,
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "CollectionFolder-null-physical-ids-true",
+    "type": "CollectionFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "requires",
+    "useResolvedLocations": true,
+    "flag": true,
+    "physicalIdsNull": true
+  }
+]

@@ -1,0 +1,278 @@
+[
+  {
+    "name": "normalized scalars use CLR whitespace trimming",
+    "mode": "sync",
+    "paths": ["/item/Name"]
+  },
+  {
+    "name": "normalized scalars use CLR whitespace trimming",
+    "mode": "async",
+    "paths": ["/item/Name"]
+  },
+  {
+    "name": "lock fields parse whitespace casing numerics and preserve on empty",
+    "mode": "sync",
+    "paths": ["/item/lockedFields/0", "/item/lockedFields/1", "/item/lockedFields/2", "/item/lockedFields/3", "/item/lockedFields/4"]
+  },
+  {
+    "name": "lock fields parse whitespace casing numerics and preserve on empty",
+    "mode": "async",
+    "paths": ["/item/lockedFields/0", "/item/lockedFields/1", "/item/lockedFields/2", "/item/lockedFields/3", "/item/lockedFields/4"]
+  },
+  {
+    "name": "collections trim split deduplicate and preserve order",
+    "mode": "sync",
+    "paths": ["/item/productionLocations/2"]
+  },
+  {
+    "name": "collections trim split deduplicate and preserve order",
+    "mode": "async",
+    "paths": ["/item/productionLocations/2"]
+  },
+  {
+    "name": "actors accept the complete PersonKind enum and unknown fallback",
+    "mode": "sync",
+    "paths": ["/people/0/Type", "/people/1/Type"]
+  },
+  {
+    "name": "actors accept the complete PersonKind enum and unknown fallback",
+    "mode": "async",
+    "paths": ["/people/0/Type", "/people/1/Type"]
+  },
+  {
+    "name": "trailers convert both youtube plugin forms and deduplicate",
+    "mode": "sync",
+    "paths": ["/item/trailers/2"]
+  },
+  {
+    "name": "trailers convert both youtube plugin forms and deduplicate",
+    "mode": "async",
+    "paths": ["/item/trailers/2"]
+  },
+  {
+    "name": "dateadded trims CLR whitespace and accepts month names",
+    "mode": "sync",
+    "paths": ["/item/dateCreated"]
+  },
+  {
+    "name": "dateadded trims CLR whitespace and accepts month names",
+    "mode": "async",
+    "paths": ["/item/dateCreated"]
+  },
+  {
+    "name": "pre-cancelled movie empty root completes",
+    "mode": "sync",
+    "paths": ["/exception", "/hasMetadata"]
+  },
+  {
+    "name": "pre-cancelled movie empty root completes",
+    "mode": "async",
+    "paths": ["/exception", "/hasMetadata"]
+  },
+  {
+    "name": "pre-cancelled movie url only commits providers and completes",
+    "mode": "sync",
+    "paths": ["/exception", "/hasMetadata", "/item/providers/Imdb", "/item/providers/Tmdb"]
+  },
+  {
+    "name": "pre-cancelled movie url only commits providers and completes",
+    "mode": "async",
+    "paths": ["/exception", "/hasMetadata", "/item/providers/Imdb", "/item/providers/Tmdb"]
+  },
+  {
+    "name": "pre-cancelled movie trailing urls commit before cancellation",
+    "mode": "sync",
+    "paths": ["/item/providers/Imdb", "/item/providers/Tmdb"]
+  },
+  {
+    "name": "pre-cancelled movie trailing urls commit before cancellation",
+    "mode": "async",
+    "paths": ["/item/providers/Imdb", "/item/providers/Tmdb"]
+  },
+  {
+    "name": "pre-cancelled strict season empty root completes",
+    "mode": "sync",
+    "paths": ["/exception", "/hasMetadata"]
+  },
+  {
+    "name": "pre-cancelled strict season empty root completes",
+    "mode": "async",
+    "paths": ["/exception", "/hasMetadata"]
+  },
+  {
+    "name": "pre-cancelled strict malformed setup fails before cancellation",
+    "mode": "sync",
+    "paths": ["/exception"]
+  },
+  {
+    "name": "pre-cancelled strict malformed setup fails before cancellation",
+    "mode": "async",
+    "paths": ["/exception"]
+  },
+  {
+    "name": "pre-cancelled movie no-closing malformed setup is treated as url only",
+    "mode": "sync",
+    "paths": ["/exception", "/hasMetadata"]
+  },
+  {
+    "name": "pre-cancelled movie no-closing malformed setup is treated as url only",
+    "mode": "async",
+    "paths": ["/exception", "/hasMetadata"]
+  },
+  {
+    "capture": "personkind-date-precision-follow-up",
+    "name": "actor type accepts defined numeric PersonKind",
+    "mode": "sync",
+    "paths": ["/people/0/Type"]
+  },
+  {
+    "capture": "personkind-date-precision-follow-up",
+    "name": "actor type accepts defined numeric PersonKind",
+    "mode": "async",
+    "paths": ["/people/0/Type"]
+  },
+  {
+    "capture": "personkind-date-precision-follow-up",
+    "name": "actor type preserves undefined positive numeric PersonKind",
+    "mode": "sync",
+    "paths": ["/people/0/Type"]
+  },
+  {
+    "capture": "personkind-date-precision-follow-up",
+    "name": "actor type preserves undefined positive numeric PersonKind",
+    "mode": "async",
+    "paths": ["/people/0/Type"]
+  },
+  {
+    "capture": "personkind-date-precision-follow-up",
+    "name": "actor type preserves undefined negative numeric PersonKind",
+    "mode": "sync",
+    "paths": ["/people/0/Type"]
+  },
+  {
+    "capture": "personkind-date-precision-follow-up",
+    "name": "actor type preserves undefined negative numeric PersonKind",
+    "mode": "async",
+    "paths": ["/people/0/Type"]
+  },
+  {
+    "capture": "personkind-date-precision-follow-up",
+    "name": "actor type combines comma separated named PersonKinds",
+    "mode": "sync",
+    "paths": ["/people/0/Type"]
+  },
+  {
+    "capture": "personkind-date-precision-follow-up",
+    "name": "actor type combines comma separated named PersonKinds",
+    "mode": "async",
+    "paths": ["/people/0/Type"]
+  },
+  {
+    "capture": "personkind-date-precision-follow-up",
+    "name": "actor type accepts maximum Int32 numeric PersonKind",
+    "mode": "sync",
+    "paths": ["/people/0/Type"]
+  },
+  {
+    "capture": "personkind-date-precision-follow-up",
+    "name": "actor type accepts maximum Int32 numeric PersonKind",
+    "mode": "async",
+    "paths": ["/people/0/Type"]
+  },
+  {
+    "capture": "personkind-date-precision-follow-up",
+    "name": "actor type accepts minimum Int32 numeric PersonKind",
+    "mode": "sync",
+    "paths": ["/people/0/Type"]
+  },
+  {
+    "capture": "personkind-date-precision-follow-up",
+    "name": "actor type accepts minimum Int32 numeric PersonKind",
+    "mode": "async",
+    "paths": ["/people/0/Type"]
+  },
+  {
+    "capture": "personkind-date-precision-follow-up",
+    "name": "dateadded accepts invariant date time and invalid preserves prior",
+    "mode": "sync",
+    "paths": ["/item/dateCreated"]
+  },
+  {
+    "capture": "personkind-date-precision-follow-up",
+    "name": "dateadded accepts invariant date time and invalid preserves prior",
+    "mode": "async",
+    "paths": ["/item/dateCreated"]
+  },
+  {
+    "capture": "personkind-date-precision-follow-up",
+    "name": "dateadded adjusts explicit timezone offsets",
+    "mode": "sync",
+    "paths": ["/item/dateCreated"]
+  },
+  {
+    "capture": "personkind-date-precision-follow-up",
+    "name": "dateadded adjusts explicit timezone offsets",
+    "mode": "async",
+    "paths": ["/item/dateCreated"]
+  },
+  {
+    "capture": "personkind-date-precision-follow-up",
+    "name": "dateadded trims CLR whitespace and accepts month names",
+    "mode": "sync",
+    "paths": ["/item/dateCreated"]
+  },
+  {
+    "capture": "personkind-date-precision-follow-up",
+    "name": "dateadded trims CLR whitespace and accepts month names",
+    "mode": "async",
+    "paths": ["/item/dateCreated"]
+  },
+  {
+    "capture": "personkind-date-precision-follow-up",
+    "name": "dateadded preserves seven fractional digits",
+    "mode": "sync",
+    "paths": ["/item/dateCreated"]
+  },
+  {
+    "capture": "personkind-date-precision-follow-up",
+    "name": "dateadded preserves seven fractional digits",
+    "mode": "async",
+    "paths": ["/item/dateCreated"]
+  },
+  {
+    "capture": "personkind-date-precision-follow-up",
+    "name": "dateadded preserves a single 100ns tick",
+    "mode": "sync",
+    "paths": ["/item/dateCreated"]
+  },
+  {
+    "capture": "personkind-date-precision-follow-up",
+    "name": "dateadded preserves a single 100ns tick",
+    "mode": "async",
+    "paths": ["/item/dateCreated"]
+  },
+  {
+    "capture": "personkind-date-precision-follow-up",
+    "name": "dateadded preserves fractional ticks while adjusting offset",
+    "mode": "sync",
+    "paths": ["/item/dateCreated"]
+  },
+  {
+    "capture": "personkind-date-precision-follow-up",
+    "name": "dateadded preserves fractional ticks while adjusting offset",
+    "mode": "async",
+    "paths": ["/item/dateCreated"]
+  },
+  {
+    "capture": "personkind-date-precision-follow-up",
+    "name": "dateadded canonicalizes no fraction to seven zero digits",
+    "mode": "sync",
+    "paths": ["/item/dateCreated"]
+  },
+  {
+    "capture": "personkind-date-precision-follow-up",
+    "name": "dateadded canonicalizes no fraction to seven zero digits",
+    "mode": "async",
+    "paths": ["/item/dateCreated"]
+  }
+]

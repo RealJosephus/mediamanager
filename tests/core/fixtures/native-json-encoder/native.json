@@ -1,0 +1,96 @@
+{
+  "actualFrozenJsonDefaultsEncoder": true,
+  "inputSha256": "62168003d798f6a5fd0065ff548272604a7d04d9498baa33fc37adfc67549b50",
+  "results": [
+    {
+      "name": "ascii-all",
+      "profile": "Default",
+      "body": "{\"UserId\":\"\\u0000\\u0001\\u0002\\u0003\\u0004\\u0005\\u0006\\u0007\\b\\t\\n\\u000B\\f\\r\\u000E\\u000F\\u0010\\u0011\\u0012\\u0013\\u0014\\u0015\\u0016\\u0017\\u0018\\u0019\\u001A\\u001B\\u001C\\u001D\\u001E\\u001F !\\u0022#$%\\u0026\\u0027()*\\u002B,-./0123456789:;\\u003C=\\u003E?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\\\]^_\\u0060abcdefghijklmnopqrstuvwxyz{|}~\\u007F\",\"Values\":[\"\\u0000\\u0001\\u0002\\u0003\\u0004\\u0005\\u0006\\u0007\\b\\t\\n\\u000B\\f\\r\\u000E\\u000F\\u0010\\u0011\\u0012\\u0013\\u0014\\u0015\\u0016\\u0017\\u0018\\u0019\\u001A\\u001B\\u001C\\u001D\\u001E\\u001F !\\u0022#$%\\u0026\\u0027()*\\u002B,-./0123456789:;\\u003C=\\u003E?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\\\]^_\\u0060abcdefghijklmnopqrstuvwxyz{|}~\\u007F\",null],\"Dictionary\":{\"\\u0000\\u0001\\u0002\\u0003\\u0004\\u0005\\u0006\\u0007\\b\\t\\n\\u000B\\f\\r\\u000E\\u000F\\u0010\\u0011\\u0012\\u0013\\u0014\\u0015\\u0016\\u0017\\u0018\\u0019\\u001A\\u001B\\u001C\\u001D\\u001E\\u001F !\\u0022#$%\\u0026\\u0027()*\\u002B,-./0123456789:;\\u003C=\\u003E?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\\\]^_\\u0060abcdefghijklmnopqrstuvwxyz{|}~\\u007F\":\"\\u0000\\u0001\\u0002\\u0003\\u0004\\u0005\\u0006\\u0007\\b\\t\\n\\u000B\\f\\r\\u000E\\u000F\\u0010\\u0011\\u0012\\u0013\\u0014\\u0015\\u0016\\u0017\\u0018\\u0019\\u001A\\u001B\\u001C\\u001D\\u001E\\u001F !\\u0022#$%\\u0026\\u0027()*\\u002B,-./0123456789:;\\u003C=\\u003E?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\\\]^_\\u0060abcdefghijklmnopqrstuvwxyz{|}~\\u007F\",\"Null\":null},\"Ticks\":9223372036854775807}"
+    },
+    {
+      "name": "ascii-all",
+      "profile": "PascalCase",
+      "body": "{\"UserId\":\"\\u0000\\u0001\\u0002\\u0003\\u0004\\u0005\\u0006\\u0007\\b\\t\\n\\u000B\\f\\r\\u000E\\u000F\\u0010\\u0011\\u0012\\u0013\\u0014\\u0015\\u0016\\u0017\\u0018\\u0019\\u001A\\u001B\\u001C\\u001D\\u001E\\u001F !\\u0022#$%\\u0026\\u0027()*\\u002B,-./0123456789:;\\u003C=\\u003E?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\\\]^_\\u0060abcdefghijklmnopqrstuvwxyz{|}~\\u007F\",\"Values\":[\"\\u0000\\u0001\\u0002\\u0003\\u0004\\u0005\\u0006\\u0007\\b\\t\\n\\u000B\\f\\r\\u000E\\u000F\\u0010\\u0011\\u0012\\u0013\\u0014\\u0015\\u0016\\u0017\\u0018\\u0019\\u001A\\u001B\\u001C\\u001D\\u001E\\u001F !\\u0022#$%\\u0026\\u0027()*\\u002B,-./0123456789:;\\u003C=\\u003E?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\\\]^_\\u0060abcdefghijklmnopqrstuvwxyz{|}~\\u007F\",null],\"Dictionary\":{\"\\u0000\\u0001\\u0002\\u0003\\u0004\\u0005\\u0006\\u0007\\b\\t\\n\\u000B\\f\\r\\u000E\\u000F\\u0010\\u0011\\u0012\\u0013\\u0014\\u0015\\u0016\\u0017\\u0018\\u0019\\u001A\\u001B\\u001C\\u001D\\u001E\\u001F !\\u0022#$%\\u0026\\u0027()*\\u002B,-./0123456789:;\\u003C=\\u003E?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\\\]^_\\u0060abcdefghijklmnopqrstuvwxyz{|}~\\u007F\":\"\\u0000\\u0001\\u0002\\u0003\\u0004\\u0005\\u0006\\u0007\\b\\t\\n\\u000B\\f\\r\\u000E\\u000F\\u0010\\u0011\\u0012\\u0013\\u0014\\u0015\\u0016\\u0017\\u0018\\u0019\\u001A\\u001B\\u001C\\u001D\\u001E\\u001F !\\u0022#$%\\u0026\\u0027()*\\u002B,-./0123456789:;\\u003C=\\u003E?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\\\]^_\\u0060abcdefghijklmnopqrstuvwxyz{|}~\\u007F\",\"Null\":null},\"Ticks\":9223372036854775807}"
+    },
+    {
+      "name": "ascii-all",
+      "profile": "CamelCase",
+      "body": "{\"userId\":\"\\u0000\\u0001\\u0002\\u0003\\u0004\\u0005\\u0006\\u0007\\b\\t\\n\\u000B\\f\\r\\u000E\\u000F\\u0010\\u0011\\u0012\\u0013\\u0014\\u0015\\u0016\\u0017\\u0018\\u0019\\u001A\\u001B\\u001C\\u001D\\u001E\\u001F !\\u0022#$%\\u0026\\u0027()*\\u002B,-./0123456789:;\\u003C=\\u003E?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\\\]^_\\u0060abcdefghijklmnopqrstuvwxyz{|}~\\u007F\",\"values\":[\"\\u0000\\u0001\\u0002\\u0003\\u0004\\u0005\\u0006\\u0007\\b\\t\\n\\u000B\\f\\r\\u000E\\u000F\\u0010\\u0011\\u0012\\u0013\\u0014\\u0015\\u0016\\u0017\\u0018\\u0019\\u001A\\u001B\\u001C\\u001D\\u001E\\u001F !\\u0022#$%\\u0026\\u0027()*\\u002B,-./0123456789:;\\u003C=\\u003E?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\\\]^_\\u0060abcdefghijklmnopqrstuvwxyz{|}~\\u007F\",null],\"dictionary\":{\"\\u0000\\u0001\\u0002\\u0003\\u0004\\u0005\\u0006\\u0007\\b\\t\\n\\u000B\\f\\r\\u000E\\u000F\\u0010\\u0011\\u0012\\u0013\\u0014\\u0015\\u0016\\u0017\\u0018\\u0019\\u001A\\u001B\\u001C\\u001D\\u001E\\u001F !\\u0022#$%\\u0026\\u0027()*\\u002B,-./0123456789:;\\u003C=\\u003E?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\\\]^_\\u0060abcdefghijklmnopqrstuvwxyz{|}~\\u007F\":\"\\u0000\\u0001\\u0002\\u0003\\u0004\\u0005\\u0006\\u0007\\b\\t\\n\\u000B\\f\\r\\u000E\\u000F\\u0010\\u0011\\u0012\\u0013\\u0014\\u0015\\u0016\\u0017\\u0018\\u0019\\u001A\\u001B\\u001C\\u001D\\u001E\\u001F !\\u0022#$%\\u0026\\u0027()*\\u002B,-./0123456789:;\\u003C=\\u003E?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\\\]^_\\u0060abcdefghijklmnopqrstuvwxyz{|}~\\u007F\",\"Null\":null},\"ticks\":9223372036854775807}"
+    },
+    {
+      "name": "unicode-and-html",
+      "profile": "Default",
+      "body": "{\"UserId\":\"\\u4E2D\\u6587\\u003C\\u003E\\u0026\\u0022\\u0027\\u0060\\u002B\\uD83D\\uDE00\\u2028\\u2029\\uFEFF\",\"Values\":[\"\\u4E2D\\u6587\\u003C\\u003E\\u0026\\u0022\\u0027\\u0060\\u002B\\uD83D\\uDE00\\u2028\\u2029\\uFEFF\",null],\"Dictionary\":{\"\\u4E2D\\u6587\\u003C\\u003E\\u0026\\u0022\\u0027\\u0060\\u002B\\uD83D\\uDE00\\u2028\\u2029\\uFEFF\":\"\\u4E2D\\u6587\\u003C\\u003E\\u0026\\u0022\\u0027\\u0060\\u002B\\uD83D\\uDE00\\u2028\\u2029\\uFEFF\",\"Null\":null},\"Ticks\":9223372036854775807}"
+    },
+    {
+      "name": "unicode-and-html",
+      "profile": "PascalCase",
+      "body": "{\"UserId\":\"\\u4E2D\\u6587\\u003C\\u003E\\u0026\\u0022\\u0027\\u0060\\u002B\\uD83D\\uDE00\\u2028\\u2029\\uFEFF\",\"Values\":[\"\\u4E2D\\u6587\\u003C\\u003E\\u0026\\u0022\\u0027\\u0060\\u002B\\uD83D\\uDE00\\u2028\\u2029\\uFEFF\",null],\"Dictionary\":{\"\\u4E2D\\u6587\\u003C\\u003E\\u0026\\u0022\\u0027\\u0060\\u002B\\uD83D\\uDE00\\u2028\\u2029\\uFEFF\":\"\\u4E2D\\u6587\\u003C\\u003E\\u0026\\u0022\\u0027\\u0060\\u002B\\uD83D\\uDE00\\u2028\\u2029\\uFEFF\",\"Null\":null},\"Ticks\":9223372036854775807}"
+    },
+    {
+      "name": "unicode-and-html",
+      "profile": "CamelCase",
+      "body": "{\"userId\":\"\\u4E2D\\u6587\\u003C\\u003E\\u0026\\u0022\\u0027\\u0060\\u002B\\uD83D\\uDE00\\u2028\\u2029\\uFEFF\",\"values\":[\"\\u4E2D\\u6587\\u003C\\u003E\\u0026\\u0022\\u0027\\u0060\\u002B\\uD83D\\uDE00\\u2028\\u2029\\uFEFF\",null],\"dictionary\":{\"\\u4E2D\\u6587\\u003C\\u003E\\u0026\\u0022\\u0027\\u0060\\u002B\\uD83D\\uDE00\\u2028\\u2029\\uFEFF\":\"\\u4E2D\\u6587\\u003C\\u003E\\u0026\\u0022\\u0027\\u0060\\u002B\\uD83D\\uDE00\\u2028\\u2029\\uFEFF\",\"Null\":null},\"ticks\":9223372036854775807}"
+    },
+    {
+      "name": "unpaired-surrogates",
+      "profile": "Default",
+      "body": "{\"UserId\":\"\\uFFFDA\\uFFFD\\uFFFD\\uD800\\uDC00\\uFFFD\",\"Values\":[\"\\uFFFDA\\uFFFD\\uFFFD\\uD800\\uDC00\\uFFFD\",null],\"Dictionary\":{\"\\uFFFDA\\uFFFD\\uFFFD\\uD800\\uDC00\\uFFFD\":\"\\uFFFDA\\uFFFD\\uFFFD\\uD800\\uDC00\\uFFFD\",\"Null\":null},\"Ticks\":9223372036854775807}"
+    },
+    {
+      "name": "unpaired-surrogates",
+      "profile": "PascalCase",
+      "body": "{\"UserId\":\"\\uFFFDA\\uFFFD\\uFFFD\\uD800\\uDC00\\uFFFD\",\"Values\":[\"\\uFFFDA\\uFFFD\\uFFFD\\uD800\\uDC00\\uFFFD\",null],\"Dictionary\":{\"\\uFFFDA\\uFFFD\\uFFFD\\uD800\\uDC00\\uFFFD\":\"\\uFFFDA\\uFFFD\\uFFFD\\uD800\\uDC00\\uFFFD\",\"Null\":null},\"Ticks\":9223372036854775807}"
+    },
+    {
+      "name": "unpaired-surrogates",
+      "profile": "CamelCase",
+      "body": "{\"userId\":\"\\uFFFDA\\uFFFD\\uFFFD\\uD800\\uDC00\\uFFFD\",\"values\":[\"\\uFFFDA\\uFFFD\\uFFFD\\uD800\\uDC00\\uFFFD\",null],\"dictionary\":{\"\\uFFFDA\\uFFFD\\uFFFD\\uD800\\uDC00\\uFFFD\":\"\\uFFFDA\\uFFFD\\uFFFD\\uD800\\uDC00\\uFFFD\",\"Null\":null},\"ticks\":9223372036854775807}"
+    },
+    {
+      "name": "escape-looking-literal",
+      "profile": "Default",
+      "body": "{\"UserId\":\"\\\\u002B\\\\ud800\\\\n\\\\\\\\\",\"Values\":[\"\\\\u002B\\\\ud800\\\\n\\\\\\\\\",null],\"Dictionary\":{\"\\\\u002B\\\\ud800\\\\n\\\\\\\\\":\"\\\\u002B\\\\ud800\\\\n\\\\\\\\\",\"Null\":null},\"Ticks\":9223372036854775807}"
+    },
+    {
+      "name": "escape-looking-literal",
+      "profile": "PascalCase",
+      "body": "{\"UserId\":\"\\\\u002B\\\\ud800\\\\n\\\\\\\\\",\"Values\":[\"\\\\u002B\\\\ud800\\\\n\\\\\\\\\",null],\"Dictionary\":{\"\\\\u002B\\\\ud800\\\\n\\\\\\\\\":\"\\\\u002B\\\\ud800\\\\n\\\\\\\\\",\"Null\":null},\"Ticks\":9223372036854775807}"
+    },
+    {
+      "name": "escape-looking-literal",
+      "profile": "CamelCase",
+      "body": "{\"userId\":\"\\\\u002B\\\\ud800\\\\n\\\\\\\\\",\"values\":[\"\\\\u002B\\\\ud800\\\\n\\\\\\\\\",null],\"dictionary\":{\"\\\\u002B\\\\ud800\\\\n\\\\\\\\\":\"\\\\u002B\\\\ud800\\\\n\\\\\\\\\",\"Null\":null},\"ticks\":9223372036854775807}"
+    },
+    {
+      "name": "offset-and-base64",
+      "profile": "Default",
+      "body": "{\"UserId\":\"2026-10-10T12:00:00\\u002B08:00 / q\\u002B==\",\"Values\":[\"2026-10-10T12:00:00\\u002B08:00 / q\\u002B==\",null],\"Dictionary\":{\"2026-10-10T12:00:00\\u002B08:00 / q\\u002B==\":\"2026-10-10T12:00:00\\u002B08:00 / q\\u002B==\",\"Null\":null},\"Ticks\":9223372036854775807}"
+    },
+    {
+      "name": "offset-and-base64",
+      "profile": "PascalCase",
+      "body": "{\"UserId\":\"2026-10-10T12:00:00\\u002B08:00 / q\\u002B==\",\"Values\":[\"2026-10-10T12:00:00\\u002B08:00 / q\\u002B==\",null],\"Dictionary\":{\"2026-10-10T12:00:00\\u002B08:00 / q\\u002B==\":\"2026-10-10T12:00:00\\u002B08:00 / q\\u002B==\",\"Null\":null},\"Ticks\":9223372036854775807}"
+    },
+    {
+      "name": "offset-and-base64",
+      "profile": "CamelCase",
+      "body": "{\"userId\":\"2026-10-10T12:00:00\\u002B08:00 / q\\u002B==\",\"values\":[\"2026-10-10T12:00:00\\u002B08:00 / q\\u002B==\",null],\"dictionary\":{\"2026-10-10T12:00:00\\u002B08:00 / q\\u002B==\":\"2026-10-10T12:00:00\\u002B08:00 / q\\u002B==\",\"Null\":null},\"ticks\":9223372036854775807}"
+    },
+    {
+      "name": "empty",
+      "profile": "Default",
+      "body": "{\"UserId\":\"\",\"Values\":[\"\",null],\"Dictionary\":{\"\":\"\",\"Null\":null},\"Ticks\":9223372036854775807}"
+    },
+    {
+      "name": "empty",
+      "profile": "PascalCase",
+      "body": "{\"UserId\":\"\",\"Values\":[\"\",null],\"Dictionary\":{\"\":\"\",\"Null\":null},\"Ticks\":9223372036854775807}"
+    },
+    {
+      "name": "empty",
+      "profile": "CamelCase",
+      "body": "{\"userId\":\"\",\"values\":[\"\",null],\"dictionary\":{\"\":\"\",\"Null\":null},\"ticks\":9223372036854775807}"
+    }
+  ]
+}

@@ -1,0 +1,436 @@
+[
+  {
+    "name": "playlist-xml-only",
+    "expectedType": "Playlist",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "ownerPath": "Managed",
+    "ignoreFiles": [],
+    "files": [
+      "Managed/playlist.xml"
+    ]
+  },
+  {
+    "name": "playlist-full-xml-only",
+    "expectedType": "Playlist",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "ownerPath": "Managed",
+    "ignoreFiles": [],
+    "files": [
+      "Managed/playlist.xml"
+    ],
+    "fullRefresh": true
+  },
+  {
+    "name": "playlist-new-trailer",
+    "expectedType": "Playlist",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "ownerPath": "Managed",
+    "ignoreFiles": [],
+    "files": [
+      "Managed/trailer.mkv",
+      "Managed/playlist.xml"
+    ]
+  },
+  {
+    "name": "playlist-new-audio",
+    "expectedType": "Playlist",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "ownerPath": "Managed",
+    "ignoreFiles": [],
+    "files": [
+      "Managed/theme.mp3",
+      "Managed/playlist.xml"
+    ]
+  },
+  {
+    "name": "playlist-nested-extras",
+    "expectedType": "Playlist",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "ownerPath": "Managed",
+    "ignoreFiles": [],
+    "files": [
+      "Managed/extras/some.mkv",
+      "Managed/extras/other.mkv",
+      "Managed/playlist.xml"
+    ]
+  },
+  {
+    "name": "playlist-stable-trailer",
+    "expectedType": "Playlist",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "ownerPath": "Managed",
+    "ignoreFiles": [],
+    "files": [
+      "Managed/trailer.mkv",
+      "Managed/playlist.xml"
+    ],
+    "existingType": true,
+    "oldName": "Trailer"
+  },
+  {
+    "name": "playlist-rename-trailer",
+    "expectedType": "Playlist",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "ownerPath": "Managed",
+    "ignoreFiles": [],
+    "files": [
+      "Managed/trailer.mkv",
+      "Managed/playlist.xml"
+    ],
+    "existingType": true,
+    "oldName": "Provider title"
+  },
+  {
+    "name": "playlist-locked-trailer",
+    "expectedType": "Playlist",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "ownerPath": "Managed",
+    "ignoreFiles": [],
+    "files": [
+      "Managed/trailer.mkv",
+      "Managed/playlist.xml"
+    ],
+    "existingType": true,
+    "oldName": "Provider title",
+    "lockedName": true
+  },
+  {
+    "name": "playlist-missing-trailer",
+    "expectedType": "Playlist",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "ownerPath": "Managed",
+    "ignoreFiles": [],
+    "files": [
+      "Managed/trailer.mkv",
+      "Managed/playlist.xml"
+    ],
+    "existingType": true,
+    "missing": true
+  },
+  {
+    "name": "playlist-cancelled-new",
+    "expectedType": "Playlist",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "ownerPath": "Managed",
+    "ignoreFiles": [],
+    "files": [
+      "Managed/trailer.mkv",
+      "Managed/playlist.xml"
+    ],
+    "cancelled": true,
+    "expectException": "OperationCanceledException"
+  },
+  {
+    "name": "playlist-cancelled-missing",
+    "expectedType": "Playlist",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "ownerPath": "Managed",
+    "ignoreFiles": [],
+    "files": [
+      "Managed/trailer.mkv",
+      "Managed/playlist.xml"
+    ],
+    "existingType": true,
+    "missing": true,
+    "cancelled": true,
+    "expectException": "OperationCanceledException"
+  },
+  {
+    "name": "playlist-empty-ignore",
+    "expectedType": "Playlist",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "ownerPath": "Managed",
+    "ignoreFiles": [
+      {
+        "path": "data/playlists/Managed/.ignore",
+        "text": ""
+      }
+    ],
+    "files": [
+      "Managed/trailer.mkv",
+      "Managed/playlist.xml"
+    ]
+  },
+  {
+    "name": "playlist-ancestor-ignore",
+    "expectedType": "Playlist",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "ownerPath": "Managed",
+    "ignoreFiles": [
+      {
+        "path": "data/.ignore",
+        "text": "*.mkv"
+      }
+    ],
+    "files": [
+      "Managed/trailer.mkv",
+      "Managed/playlist.xml"
+    ]
+  },
+  {
+    "name": "playlist-nearest-override",
+    "expectedType": "Playlist",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "ownerPath": "Managed",
+    "ignoreFiles": [
+      {
+        "path": "data/.ignore",
+        "text": "*.mkv"
+      },
+      {
+        "path": "data/playlists/Managed/.ignore",
+        "text": "!*.mkv",
+        "encoding": "utf16le"
+      }
+    ],
+    "files": [
+      "Managed/trailer.mkv",
+      "Managed/playlist.xml"
+    ]
+  },
+  {
+    "name": "boxset-xml-only",
+    "expectedType": "BoxSet",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "ownerPath": "Managed",
+    "ignoreFiles": [],
+    "files": [
+      "Managed/collection.xml"
+    ]
+  },
+  {
+    "name": "boxset-full-xml-only",
+    "expectedType": "BoxSet",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "ownerPath": "Managed",
+    "ignoreFiles": [],
+    "files": [
+      "Managed/collection.xml"
+    ],
+    "fullRefresh": true
+  },
+  {
+    "name": "boxset-new-trailer",
+    "expectedType": "BoxSet",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "ownerPath": "Managed",
+    "ignoreFiles": [],
+    "files": [
+      "Managed/trailer.mkv",
+      "Managed/collection.xml"
+    ]
+  },
+  {
+    "name": "boxset-new-audio",
+    "expectedType": "BoxSet",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "ownerPath": "Managed",
+    "ignoreFiles": [],
+    "files": [
+      "Managed/theme.mp3",
+      "Managed/collection.xml"
+    ]
+  },
+  {
+    "name": "boxset-nested-extras",
+    "expectedType": "BoxSet",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "ownerPath": "Managed",
+    "ignoreFiles": [],
+    "files": [
+      "Managed/extras/some.mkv",
+      "Managed/extras/other.mkv",
+      "Managed/collection.xml"
+    ]
+  },
+  {
+    "name": "boxset-stable-trailer",
+    "expectedType": "BoxSet",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "ownerPath": "Managed",
+    "ignoreFiles": [],
+    "files": [
+      "Managed/trailer.mkv",
+      "Managed/collection.xml"
+    ],
+    "existingType": true,
+    "oldName": "Trailer"
+  },
+  {
+    "name": "boxset-rename-trailer",
+    "expectedType": "BoxSet",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "ownerPath": "Managed",
+    "ignoreFiles": [],
+    "files": [
+      "Managed/trailer.mkv",
+      "Managed/collection.xml"
+    ],
+    "existingType": true,
+    "oldName": "Provider title"
+  },
+  {
+    "name": "boxset-locked-trailer",
+    "expectedType": "BoxSet",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "ownerPath": "Managed",
+    "ignoreFiles": [],
+    "files": [
+      "Managed/trailer.mkv",
+      "Managed/collection.xml"
+    ],
+    "existingType": true,
+    "oldName": "Provider title",
+    "lockedName": true
+  },
+  {
+    "name": "boxset-missing-trailer",
+    "expectedType": "BoxSet",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "ownerPath": "Managed",
+    "ignoreFiles": [],
+    "files": [
+      "Managed/trailer.mkv",
+      "Managed/collection.xml"
+    ],
+    "existingType": true,
+    "missing": true
+  },
+  {
+    "name": "boxset-cancelled-new",
+    "expectedType": "BoxSet",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "ownerPath": "Managed",
+    "ignoreFiles": [],
+    "files": [
+      "Managed/trailer.mkv",
+      "Managed/collection.xml"
+    ],
+    "cancelled": true,
+    "expectException": "OperationCanceledException"
+  },
+  {
+    "name": "boxset-cancelled-missing",
+    "expectedType": "BoxSet",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "ownerPath": "Managed",
+    "ignoreFiles": [],
+    "files": [
+      "Managed/trailer.mkv",
+      "Managed/collection.xml"
+    ],
+    "existingType": true,
+    "missing": true,
+    "cancelled": true,
+    "expectException": "OperationCanceledException"
+  },
+  {
+    "name": "boxset-empty-ignore",
+    "expectedType": "BoxSet",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "ownerPath": "Managed",
+    "ignoreFiles": [
+      {
+        "path": "data/collections/Managed/.ignore",
+        "text": ""
+      }
+    ],
+    "files": [
+      "Managed/trailer.mkv",
+      "Managed/collection.xml"
+    ]
+  },
+  {
+    "name": "boxset-ancestor-ignore",
+    "expectedType": "BoxSet",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "ownerPath": "Managed",
+    "ignoreFiles": [
+      {
+        "path": "data/.ignore",
+        "text": "*.mkv"
+      }
+    ],
+    "files": [
+      "Managed/trailer.mkv",
+      "Managed/collection.xml"
+    ]
+  },
+  {
+    "name": "boxset-nearest-override",
+    "expectedType": "BoxSet",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "ownerPath": "Managed",
+    "ignoreFiles": [
+      {
+        "path": "data/.ignore",
+        "text": "*.mkv"
+      },
+      {
+        "path": "data/collections/Managed/.ignore",
+        "text": "!*.mkv",
+        "encoding": "utf16le"
+      }
+    ],
+    "files": [
+      "Managed/trailer.mkv",
+      "Managed/collection.xml"
+    ]
+  }
+]

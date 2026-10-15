@@ -1,0 +1,270 @@
+[
+  {
+    "name": "movies numeric Disc directories record zero-padded path order",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "collectionType": "movies",
+    "entries": ["The Film"],
+    "files": [
+      "The Film/The Film Disc 02/video_ts.ifo",
+      "The Film/The Film Disc 01/video_ts.ifo",
+      "The Film/The Film Disc 10/video_ts.ifo"
+    ],
+    "directories": ["The Film"],
+    "ignoreFiles": []
+  },
+  {
+    "name": "movies nonpadded directory parts record 1 10 2 path order",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "collectionType": "movies",
+    "entries": ["Ordinal"],
+    "files": [
+      "Ordinal/Ordinal Disc 2/video_ts.ifo",
+      "Ordinal/Ordinal Disc 10/video_ts.ifo",
+      "Ordinal/Ordinal Disc 1/video_ts.ifo"
+    ],
+    "directories": ["Ordinal"],
+    "ignoreFiles": []
+  },
+  {
+    "name": "movies current-culture punctuation order selects the native primary disc",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "collectionType": "movies",
+    "entries": ["CultureOrder"],
+    "files": [
+      "CultureOrder/Film-Disc 2/video_ts.ifo",
+      "CultureOrder/Film_Disc 1/video_ts.ifo"
+    ],
+    "directories": ["CultureOrder"],
+    "ignoreFiles": []
+  },
+  {
+    "name": "movies alphabetic CD directories",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "collectionType": "movies",
+    "entries": ["Concert"],
+    "files": [
+      "Concert/Concert CD B/video_ts.ifo",
+      "Concert/Concert CD A/video_ts.ifo"
+    ],
+    "directories": ["Concert"],
+    "ignoreFiles": []
+  },
+  {
+    "name": "movies DVD token directories",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "collectionType": "movies",
+    "entries": ["Feature"],
+    "files": [
+      "Feature/Feature DVD 2/video_ts.ifo",
+      "Feature/Feature DVD 1/video_ts.ifo"
+    ],
+    "directories": ["Feature"],
+    "ignoreFiles": []
+  },
+  {
+    "name": "movies disk token directories",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "collectionType": "movies",
+    "entries": ["Archive"],
+    "files": [
+      "Archive/Archive disk 2/video_ts.ifo",
+      "Archive/Archive disk 1/video_ts.ifo"
+    ],
+    "directories": ["Archive"],
+    "ignoreFiles": []
+  },
+  {
+    "name": "movies directory stack accepts an extension-like suffix",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "collectionType": "movies",
+    "entries": ["Suffix"],
+    "files": [
+      "Suffix/Suffix Disc 2.cut/video_ts.ifo",
+      "Suffix/Suffix Disc 1.cut/video_ts.ifo"
+    ],
+    "directories": ["Suffix"],
+    "ignoreFiles": []
+  },
+  {
+    "name": "movies nested VIDEO_TS VOB directories",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "collectionType": "movies",
+    "entries": ["Nested"],
+    "files": [
+      "Nested/Nested Disc 2/VIDEO_TS/VTS_01_1.VOB",
+      "Nested/Nested Disc 1/VIDEO_TS/VTS_01_1.VOB"
+    ],
+    "directories": ["Nested"],
+    "ignoreFiles": []
+  },
+  {
+    "name": "movies BluRay directory stack",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "collectionType": "movies",
+    "entries": ["Blue"],
+    "files": [
+      "Blue/Blue Disc 2/BDMV/index.bdmv",
+      "Blue/Blue Disc 1/BDMV/index.bdmv"
+    ],
+    "directories": ["Blue"],
+    "ignoreFiles": []
+  },
+  {
+    "name": "musicvideos directory stack preserves concrete type",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "collectionType": "musicvideos",
+    "entries": ["Live"],
+    "files": [
+      "Live/Live Disc 2/video_ts.ifo",
+      "Live/Live Disc 1/video_ts.ifo"
+    ],
+    "directories": ["Live"],
+    "ignoreFiles": []
+  },
+  {
+    "name": "homevideos directory stack preserves concrete type",
+    "operation": "resolvepaths",
+    "expectedType": "Video",
+    "resolverType": "Video",
+    "collectionType": "homevideos",
+    "entries": ["Home"],
+    "files": [
+      "Home/Home Disc 2/video_ts.ifo",
+      "Home/Home Disc 1/video_ts.ifo"
+    ],
+    "directories": ["Home"],
+    "ignoreFiles": []
+  },
+  {
+    "name": "mismatched Disc and CD tokens fall back",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "collectionType": "movies",
+    "entries": ["Mismatch"],
+    "files": [
+      "Mismatch/Mismatch Disc 1/video_ts.ifo",
+      "Mismatch/Mismatch CD 2/video_ts.ifo"
+    ],
+    "directories": ["Mismatch"],
+    "ignoreFiles": []
+  },
+  {
+    "name": "mixed numeric and alphabetic parts fall back",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "collectionType": "movies",
+    "entries": ["Kinds"],
+    "files": [
+      "Kinds/Kinds Disc 1/video_ts.ifo",
+      "Kinds/Kinds Disc A/video_ts.ifo"
+    ],
+    "directories": ["Kinds"],
+    "ignoreFiles": []
+  },
+  {
+    "name": "mixed DVD and BluRay parts fall back",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "collectionType": "movies",
+    "entries": ["Formats"],
+    "files": [
+      "Formats/Formats Disc 1/video_ts.ifo",
+      "Formats/Formats Disc 2/BDMV/index.bdmv"
+    ],
+    "directories": ["Formats"],
+    "ignoreFiles": []
+  },
+  {
+    "name": "single qualifying nested disc falls back",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "collectionType": "movies",
+    "entries": ["Single"],
+    "files": ["Single/Single Disc 1/video_ts.ifo"],
+    "directories": ["Single"],
+    "ignoreFiles": []
+  },
+  {
+    "name": "unrelated qualifying directory names fall back",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "collectionType": "movies",
+    "entries": ["Unrelated"],
+    "files": [
+      "Unrelated/First Disc 1/video_ts.ifo",
+      "Unrelated/Second Disc 2/video_ts.ifo"
+    ],
+    "directories": ["Unrelated"],
+    "ignoreFiles": []
+  },
+  {
+    "name": "unqualified sibling directory is ignored",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "collectionType": "movies",
+    "entries": ["Qualified"],
+    "files": [
+      "Qualified/Qualified Disc 2/video_ts.ifo",
+      "Qualified/Qualified Disc 1/video_ts.ifo",
+      "Qualified/Artwork/poster.txt"
+    ],
+    "directories": ["Qualified"],
+    "ignoreFiles": []
+  },
+  {
+    "name": "one valid stack plus a qualifying stray includes every qualified path",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "collectionType": "movies",
+    "entries": ["Loose"],
+    "files": [
+      "Loose/Loose Disc 2/video_ts.ifo",
+      "Loose/Loose Disc 1/video_ts.ifo",
+      "Loose/Other Disc 1/video_ts.ifo"
+    ],
+    "directories": ["Loose"],
+    "ignoreFiles": []
+  },
+  {
+    "name": "direct video mixed with directory stack falls back",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "collectionType": "movies",
+    "entries": ["Mixed"],
+    "files": [
+      "Mixed/Mixed.mkv",
+      "Mixed/Mixed Disc 1/video_ts.ifo",
+      "Mixed/Mixed Disc 2/video_ts.ifo"
+    ],
+    "directories": ["Mixed"],
+    "ignoreFiles": []
+  }
+]

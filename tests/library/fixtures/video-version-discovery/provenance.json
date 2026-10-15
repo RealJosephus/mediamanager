@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-10-06T20:45:41.258Z",
+  "fixtureFiles": [
+    {
+      "path": "tests/library/fixtures/video-version-discovery/input.json",
+      "sha256": "b8a3241953012ca0bc5402a2205456383711459f22377bba1733938b0531ee82"
+    },
+    {
+      "path": "tests/library/fixtures/video-version-discovery/Program.cs",
+      "sha256": "649b7522f9fbf56f3eb43f762fdb24613c332bac050c164c046859b785028e48"
+    },
+    {
+      "path": "tests/library/fixtures/video-version-discovery/Oracle.csproj",
+      "sha256": "cbe1a514da582cbf55a443ee14c93f731f84816d10e7672fb713045ac5d78efe"
+    },
+    {
+      "path": "tests/library/fixtures/video-version-discovery/native.json",
+      "sha256": "6fff218db90f41f757a7f6bf55989a4b3ea841a1f89345e2080e95b0cd1cb824"
+    },
+    {
+      "path": "tests/Directory.Build.props",
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    }
+  ],
+  "assemblies": [
+    {
+      "name": "MediaBrowser.Controller",
+      "sha256": "051c588a8e85a3a7cdde8dc3d9a1112217fd7e973a86fe2ff90cf765bedb75a8"
+    },
+    {
+      "name": "Emby.Server.Implementations",
+      "sha256": "8d369435646570958505c58b9cb17da169855dabc105d0e933524361e9b7b1c8"
+    },
+    {
+      "name": "Jellyfin.Server.Implementations",
+      "sha256": "4da187af02503e82135eb192351d01490484e8ebc8c653d849f7e2900a177672"
+    }
+  ],
+  "scope": "Actual frozen LibraryManager.ResolveAlternateVersion/ResolverHelper/GenericVideoResolver, UpdateItemAsync/stack discovery, ForgetDroppedLocalAlternateVersions and DeleteItemsUnsafeFast over real ItemPersistenceService/EF SQLite and files. Records coercion defaults, batch creations, independent deletion, cache/event/cancellation/SQL boundaries, selected columns and complete stored Data. Collection membership, metadata saver, media-source list and external-file dispatch are controls. No complete scanner, providers/network, generic user deletion or release acceptance.",
+  "reference": {
+    "head": "208c278b75abd897aefa1e1175126eac5e4dbfaa",
+    "contentDigest": "e28a983db179b720c3b16d7416ee4112894a3115c4be6fe43c61c52e0d9a8313"
+  },
+  "capture": {
+    "record": "D:/mediamanager-validation/20261005/results/video-version-discovery-oracle-20261007-5/record.json",
+    "sourceFilesSha256": "0f0d4076e8dcea8e4f23119c3db6790d53ae027a3f2b4fcbf6068cfa89290e3a"
+  },
+  "candidateVerified": true,
+  "candidateComparison": "All 23 native recordings through ordinary single-file resolution and repository batches on real SQLite/PostgreSQL, plus production default resolver/recursive update, D3 preflight, deleted-link baseline and probe/image producer regressions. Candidate media files use Memory VFS and controlled creation time; instance-state files and cleanup are real. Does not verify a complete production resolver list, scanner, generic deletion, complete scalar mapping or release acceptance."
+}

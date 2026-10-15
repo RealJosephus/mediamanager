@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-10-07T17:22:23.716Z",
+  "scope": "Actual protected nonrecursive Folder.ValidateChildrenInternal with genuine frozen warm CreateItems and EF SQLite. The original 40 physical-child scenarios are preserved; ordinary Movie/MusicVideo local-version replacement, demotion, alternate removal, repository-update and deletion/create faults, saver cancellation and image commit-before-row failure are added. Three-file replacement records the frozen DbUpdateException caused by repeated promotion through persisted old links; two-file replacement separately records successful deletion and real deletion failure. Complete 72 columns, typed Data, image and ordinary relationships, before/live/cached lookups, files and saver/repository/cache/event order, with checked UTC/GUID normalization. Provider savers, image processing, collection membership, media sources and namespace are controlled. Excludes linked-reference savers, populated user-data key reattachment, recursive validation, complete MetadataService, network, decoder, Web, migration and release acceptance.",
+  "fixtureFiles": [
+    {
+      "path": "tests/library/fixtures/folder-version-reconciliation/input.json",
+      "sha256": "ba5dd2c37d20f5db31556265f07bffbd5bd2c7bd9b56e4f5e56346c2e96011cf"
+    },
+    {
+      "path": "tests/library/fixtures/folder-version-reconciliation/Program.cs",
+      "sha256": "d513b2fc876daf73fea265c76e5de124835344bc8ade7c88db20b611c02c6df3"
+    },
+    {
+      "path": "tests/library/fixtures/folder-version-reconciliation/Oracle.csproj",
+      "sha256": "cbe1a514da582cbf55a443ee14c93f731f84816d10e7672fb713045ac5d78efe"
+    },
+    {
+      "path": "tests/library/fixtures/folder-version-reconciliation/native.json",
+      "sha256": "e2817de8ed9c37b365598db0778f6f932d6583255d5fc22d4cae51fcdfcfc97c"
+    },
+    {
+      "path": "tests/Directory.Build.props",
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    }
+  ],
+  "assemblies": [
+    {
+      "name": "MediaBrowser.Controller",
+      "sha256": "051c588a8e85a3a7cdde8dc3d9a1112217fd7e973a86fe2ff90cf765bedb75a8"
+    },
+    {
+      "name": "Emby.Server.Implementations",
+      "sha256": "8d369435646570958505c58b9cb17da169855dabc105d0e933524361e9b7b1c8"
+    },
+    {
+      "name": "Jellyfin.Server.Implementations",
+      "sha256": "4da187af02503e82135eb192351d01490484e8ebc8c653d849f7e2900a177672"
+    }
+  ],
+  "reference": {
+    "head": "208c278b75abd897aefa1e1175126eac5e4dbfaa",
+    "contentDigest": "e28a983db179b720c3b16d7416ee4112894a3115c4be6fe43c61c52e0d9a8313",
+    "files": [
+      {
+        "path": "MediaBrowser.Controller/Entities/Folder.cs",
+        "sha256": "d5f227d462ce3c2df0d5a45d912778427f87321fc9d6e13d863ec28bb639e0c1"
+      },
+      {
+        "path": "MediaBrowser.Controller/Entities/BaseItem.cs",
+        "sha256": "9dc7b96a93c9fbe874cdcededdca395b5aa2df6070f5cfc9c8959539dcd76469"
+      },
+      {
+        "path": "MediaBrowser.Controller/Entities/Video.cs",
+        "sha256": "03df015992ee4e95e175c499b36a7b21d9facc4f391cfd89235ad652d2eb0b11"
+      },
+      {
+        "path": "Emby.Server.Implementations/Library/LibraryManager.cs",
+        "sha256": "4729de97560262702a44c5829bf93bbc5deec379e9b3018b231aaa6d65643c44"
+      },
+      {
+        "path": "Jellyfin.Server.Implementations/Item/BaseItemRepository.TranslateQuery.cs",
+        "sha256": "0b2d4aba6f4d73c224315c1a0abd82b3c65ba2a42683381e1e73c00b01019c06"
+      },
+      {
+        "path": "Jellyfin.Server.Implementations/Item/ItemPersistenceService.cs",
+        "sha256": "df64ede4e72fca107cb86127e44b4c81321b3cf560ea3b7f0eccf4462f148d14"
+      }
+    ]
+  },
+  "capture": {
+    "record": "D:/mediamanager-validation/20261005/results/folder-version-reconciliation-boundaries-oracle-20261008/record.json",
+    "sourceFilesSha256": "dea12ea7d56f8fa0db19c1402c8d4d028d33ec7fbdffa77479fa06157d5687f0",
+    "source": "D:/mediamanager-validation/20261005/results/folder-version-reconciliation-boundaries-source-20261008",
+    "jellyfinDllSha256": "a43fa24c44677e579fcec79d637789b9f36633d02e5434e76a0e03fa13027767",
+    "oracleAssemblySha256": "1e9979a57bb79bc4d56173f5e5ff8b8f7b55408d57f5eb9c1eb516395e07cf9a",
+    "buildWarnings": 0,
+    "buildErrors": 0
+  },
+  "original40ResultsUnchanged": true,
+  "original52ResultsUnchanged": true,
+  "candidateVerified": true,
+  "candidateComparison": "The 66 genuine frozen video-child reconciliation scenarios passed on real SQLite and PostgreSQL, with raw seals, full 72 columns, typed Data, images, relationships, files, before/live/cache state and lifecycle order. This is a strict selected subset with phaseAcceptance=false; linked-reference savers, populated user-data reattachment, recursion, full scan and release acceptance remain unverified. Evidence: D:/mediamanager-validation/20261005/results/folder-version-reconciliation-differential-promotion-audit-20261008.json; TAP SHA-256: cd4f5c075861be197df7a1a95dcc8324dbdcf9e741abc3831372992a464f16de."
+}

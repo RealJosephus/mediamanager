@@ -1,0 +1,522 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-10-08T09:59:40.035Z",
+  "fixtureFiles": [
+    {
+      "path": "tests/library/fixtures/general-leaf-deletion/input.json",
+      "sha256": "7a513c22559280505c34bba83d2ec9cb65fa63384a26fb0965c459233e651a47"
+    },
+    {
+      "path": "tests/library/fixtures/general-leaf-deletion/Program.cs",
+      "sha256": "e475de7eefbcb3c4d8f5d37af5915c60fcffc3318c83e229770645d81e87d053"
+    },
+    {
+      "path": "tests/library/fixtures/general-leaf-deletion/Oracle.csproj",
+      "sha256": "cbe1a514da582cbf55a443ee14c93f731f84816d10e7672fb713045ac5d78efe"
+    },
+    {
+      "path": "tests/library/fixtures/general-leaf-deletion/native.json",
+      "sha256": "38caffa868b30c3ef42dfcd91342e0804be476d651570270ed9252323801b030"
+    },
+    {
+      "path": "tests/library/fixtures/general-leaf-deletion/candidate-differences.json",
+      "sha256": "673d9645d08bcbeead018c990567b69d98aa9ae04aae5a27a01f563c9dfa3108"
+    },
+    {
+      "path": "tests/library/fixtures/general-leaf-deletion/README.md",
+      "sha256": "55af63aca513a2c8faa30c483b9e6654b925e3de6089e7084b36bbaf94e02625"
+    },
+    {
+      "path": "tests/Directory.Build.props",
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    }
+  ],
+  "sourceFiles": [
+    {
+      "path": "Emby.Server.Implementations/Library/LibraryManager.cs",
+      "sha256": "ba2d43d6a9061b999d2595015c46a329c86cbf5bdeaa632eef04c433c1bc1d5d"
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/BaseItem.cs",
+      "sha256": "9dc7b96a93c9fbe874cdcededdca395b5aa2df6070f5cfc9c8959539dcd76469"
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/Audio/Audio.cs",
+      "sha256": "fe19004e9d6d59d59fc1750952db7b95a29fd6d9de1398680deacae8dbd383ea"
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/Book.cs",
+      "sha256": "b081cbb2b7fb794d6b3d348e10c547803f4c18a58c79153f3ca3a3f10f552a0b"
+    },
+    {
+      "path": "Jellyfin.Server.Implementations/Item/ItemPersistenceService.cs",
+      "sha256": "df64ede4e72fca107cb86127e44b4c81321b3cf560ea3b7f0eccf4462f148d14"
+    },
+    {
+      "path": "Emby.Server.Implementations/Library/ExternalDataManager.cs",
+      "sha256": "9645e24af7dab72bced234455ed708e347853c8c4f692ee728a01d9f9554c478"
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/AudioBook.cs",
+      "sha256": "1dc3ad019d579d60fac4b91d80040ebfa09dd266266057e6f4e0a656faec443c"
+    },
+    {
+      "path": "Emby.Server.Implementations/IO/ManagedFileSystem.cs",
+      "sha256": "280ea08cf13065d8cd3790edf551b28ddfc9f352f4758d4fe0e62a55dbe0b14e"
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/Video.cs",
+      "sha256": "03df015992ee4e95e175c499b36a7b21d9facc4f391cfd89235ad652d2eb0b11"
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/Movies/Movie.cs",
+      "sha256": "2208ffddb928e6407c4a3b6c71d5e9c0851882d62ad2fd1e10b4f814c391ac43"
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/MusicVideo.cs",
+      "sha256": "fa9a519208acd409ddf3e84b08d6e322ad594097710cce7c77465019e85943cd"
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/TV/Episode.cs",
+      "sha256": "9944d6d777c8309ceedc66b2ded3d1de29cbd8a514b1bfa7d9698e04bda33a96"
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/Trailer.cs",
+      "sha256": "9135c6caaa9b42030f35c4eab8bb7f7592dd3a125827f6b72d7ae32ec78ec18e"
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/Folder.cs",
+      "sha256": "7f3caa6b32b267736ac5a62eb2d147baa76a14870619f172668513657b575920"
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/TV/Series.cs",
+      "sha256": "46d1748fd41a051fbcd4be50ef24b1814b7402265bdb37a735ced8c0235e460f"
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/TV/Season.cs",
+      "sha256": "3d49550fc03cfd556999e04a63bb4f692fbb574a37e946ab0b200fc9cc19ec04"
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/Movies/BoxSet.cs",
+      "sha256": "c7777732f29cf43b7470ece2b17eda5d67f6e43f4bbd9f4192bafd5891738df6"
+    },
+    {
+      "path": "MediaBrowser.Controller/LiveTv/LiveTvProgram.cs",
+      "sha256": "48f6333cfb57716701e39e7f48f2989aa4d6ba944f4adbb3247808d602eec094"
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/Audio/MusicAlbum.cs",
+      "sha256": "785f3b62683ffb29f79badce2e678c03da67a5156cae889e0d766cdad454de00"
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/Photo.cs",
+      "sha256": "6d2581b1e8db05771e22b804b58c119fc5972287878dac459ca66260c74e7654"
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/PhotoAlbum.cs",
+      "sha256": "5fb0ec1808b39e9dfa2d510d12f6313df860fcb1061ef593c6a093f859720895"
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/Person.cs",
+      "sha256": "964033d4f43f7c7885c300207e36ecb70e36140ce41b61b3f1cc1111344f750b"
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/Genre.cs",
+      "sha256": "254d23ea47309a638a92f5be367860c5e1a5cc5db395b7017d2cfb82d290c99f"
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/Audio/MusicGenre.cs",
+      "sha256": "8901cc5615e772e8accbd9f5a2c22009faa144cecc9a38b0e68d51d7ef9e7b83"
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/Studio.cs",
+      "sha256": "e7ca8a9bbe8b9e869565f0eb2e1324f3852d7dd59d12764a56dfc7d616a85145"
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/Year.cs",
+      "sha256": "9f575e9fd4f68a7523fa80c98fcd84db258ab6f6cca3d1fa36344f4349eef45b"
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/Audio/MusicArtist.cs",
+      "sha256": "18e77575002cd30efed46ffb870209100c15ed34c76254712746f6817c0f3ffa"
+    },
+    {
+      "path": "Emby.Server.Implementations/Collections/CollectionManager.cs",
+      "sha256": "32ed12ef23ccedcb7893f429661db5576e2016e78e9922d73626d193119a36c8"
+    }
+  ],
+  "sourceHashMode": "raw git blob bytes from the clean pinned commit",
+  "sourceAnchors": [
+    {
+      "path": "Emby.Server.Implementations/Library/LibraryManager.cs",
+      "lines": "421-624",
+      "contract": "channel provider handling, Video-only version logic, internal cleanup, required source, parent detach, external cleanup, persistence, cache and Removed ordering"
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/BaseItem.cs",
+      "lines": "2598-2620",
+      "contract": "base exact Path plus mixed-folder local-sidecar delete paths inherited unchanged by Audio and Book"
+    },
+    {
+      "path": "Jellyfin.Server.Implementations/Item/ItemPersistenceService.cs",
+      "lines": "51-141",
+      "contract": "ParentId and OwnerId closure expansion and transactional relational cleanup"
+    },
+    {
+      "path": "Emby.Server.Implementations/Library/ExternalDataManager.cs",
+      "lines": "64-82",
+      "contract": "external provider enumeration and failure isolation"
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/Video.cs",
+      "lines": "727-742",
+      "role": "Non-mixed containing-directory and mixed BaseItem source plan"
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/TV/Episode.cs",
+      "lines": "288-298",
+      "role": "Exact Episode Path source plan, with sidecars only when mixed"
+    },
+    {
+      "path": "Emby.Server.Implementations/Library/LibraryManager.cs",
+      "lines": "347-359",
+      "role": "Default deletion owner then physical parent"
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/Folder.cs",
+      "lines": "1627-1667",
+      "role": "Recursive physical-child selection used by container deletion"
+    },
+    {
+      "path": "Emby.Server.Implementations/Library/LibraryManager.cs",
+      "lines": "582, 684-712",
+      "contract": "internal by-name source deletion is unconditional and recognizes the Genre, MusicArtist, MusicGenre, Person, Studio and Year application roots"
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/Person.cs",
+      "lines": "94-123",
+      "role": "Person instance path below PeoplePath"
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/Genre.cs",
+      "lines": "79-93",
+      "role": "Genre instance path below GenrePath"
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/Audio/MusicGenre.cs",
+      "lines": "76-90",
+      "role": "MusicGenre instance path below MusicGenrePath"
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/Studio.cs",
+      "lines": "74-88",
+      "role": "Studio instance path below StudioPath"
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/Year.cs",
+      "lines": "81-95",
+      "role": "Year instance path below YearPath"
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/Audio/MusicArtist.cs",
+      "lines": "27-30, 174-183",
+      "role": "empty ParentId distinguishes by-name artists and their instance path is below ArtistsPath"
+    },
+    {
+      "path": "Emby.Server.Implementations/Collections/CollectionManager.cs",
+      "lines": "121-129, 158-191",
+      "contract": "managed collections root is DataPath/collections and each BoxSet owns one child directory"
+    }
+  ],
+  "scope": "Actual pinned LibraryManager.DeleteItem for Audio, AudioBook, Book, LiveTvProgram and Photo file leaves; Movie, MusicVideo, Video, Episode and Trailer file videos; Series, Season, BoxSet, MusicAlbum and PhotoAlbum directories; internal Person, Genre, MusicGenre, Studio, Year and by-name MusicArtist directories; and physical MusicArtist directories, including DB-only and requested source deletion, managed BoxSet state, Series, MusicAlbum, PhotoAlbum and physical MusicArtist child closure, containing-directory and exact-file mixed source deletion, missing files, shortcut and virtual shapes, channel provider suppression/errors, all 21 mixed-folder sidecar extensions, ordinal-ignore-case filename prefixes, empty stems, nonrecursive enumeration, optional I/O failure and complete/partial enumeration failures, owned/parent persistence closure, non-video PrimaryVersionId storage, persisted/live drift, non-cancellable API, and source/external/SQL failure prefixes.",
+  "assemblies": [
+    {
+      "name": "MediaBrowser.Controller",
+      "bytes": 652800,
+      "sha256": "a9a051747d55565befc425dd194779e2ae53c57f8740212dc929dd706b888306"
+    },
+    {
+      "name": "Emby.Server.Implementations",
+      "bytes": 1673728,
+      "sha256": "6a29143fe5e6867f8e91b697680dce602aa422cf250786db1298911499369d62"
+    },
+    {
+      "name": "Jellyfin.Server.Implementations",
+      "bytes": 664064,
+      "sha256": "cd726ddeda5fd389b23bbcbcce978912cd4a74003a99970b33323061649a9bfd"
+    }
+  ],
+  "reference": {
+    "head": "208c278b75abd897aefa1e1175126eac5e4dbfaa",
+    "clean": true,
+    "sourceContentDigest": "1f0a32123e929472b704f6b48e7bd189273c2fabe70b2ae781180bbbc50e9fcb"
+  },
+  "runtime": {
+    "timezone": "Asia/Taipei",
+    "node": "v24.16.0",
+    "dotnet": {
+      "path": "D:/mediamanager/.tools/dotnet/dotnet.exe",
+      "bytes": 167208,
+      "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6"
+    },
+    "jellyfinDll": {
+      "path": "D:/mediamanager-validation/20261008/jellyfin-pinned-208c278/source/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll",
+      "bytes": 514560,
+      "sha256": "14a821378e554f3a1476610b02ef7ad3795fbb4050872413180ee423bd612d01"
+    }
+  },
+  "record": {
+    "path": "D:/mediamanager-validation/20261008/results/general-owned-leaf-deletion-oracle-v1/record.json",
+    "sha256": "a1f876d6c07440eea750beb0015accf7881ce0f9047bf7424db75ea2f3df5627",
+    "sourceFilesSha256": "25079fbb48f87ca6dcaff691bb805543521911dcd07d4baf9ec22576c03f99a1",
+    "oracleAssemblyBytes": 54272,
+    "oracleAssemblySha256": "56f977570c9dd18ef445b5771068c3770ea978006702cd8f224c8e7d05581e15",
+    "rawNativeBytes": 235363,
+    "rawNativeSha256": "4c8d37de7b9132c07f02ed743e14961c9ba93674d5f45c901ffc3ad8b6590a9a",
+    "portableNativeBytes": 227589,
+    "portableNativeSha256": "38caffa868b30c3ef42dfcd91342e0804be476d651570270ed9252323801b030",
+    "portableNormalization": "CRLF to LF with the original final LF retained",
+    "buildStatus": 0,
+    "processStatus": 0
+  },
+  "replay": {
+    "path": "D:/mediamanager-validation/20261008/results/general-owned-leaf-deletion-oracle-v2/record.json",
+    "sha256": "bae10d5d50bb79e6f402f76681b459a139c4ea428ae662bbe27ba3e86c5d4d90",
+    "sourceFilesSha256": "25079fbb48f87ca6dcaff691bb805543521911dcd07d4baf9ec22576c03f99a1",
+    "oracleAssemblyBytes": 54272,
+    "oracleAssemblySha256": "775462e289e2f76a4ce85feeb15a08eef9120cdfb01292ac1ea5a774528bcee7",
+    "rawNativeBytes": 235363,
+    "rawNativeSha256": "4c8d37de7b9132c07f02ed743e14961c9ba93674d5f45c901ffc3ad8b6590a9a",
+    "portableNativeBytes": 227589,
+    "portableNativeSha256": "38caffa868b30c3ef42dfcd91342e0804be476d651570270ed9252323801b030",
+    "portableNormalization": "CRLF to LF with the original final LF retained",
+    "buildStatus": 0,
+    "processStatus": 0,
+    "byteExact": true
+  },
+  "command": "node tools/validation/oracle.js tests/library/fixtures/general-leaf-deletion/Oracle.csproj D:/mediamanager-validation/20261008/results/general-owned-leaf-deletion-oracle-v1 tests/library/fixtures/general-leaf-deletion/input.json {output}/native.json {output}/state",
+  "candidateVerified": true,
+  "candidateComparison": "All 105 actual scenes match production on SQLite and real PostgreSQL, including ordinary owned Audio, AudioBook and Book targets with explicit or default owner parents and requested source deletion; pinned Audio OwnerId and malformed non-folder ParentId persistence-only closures; a stored non-Video PrimaryVersionId that does not create a video-version lifecycle; and mutable live Audio IsVirtualItem state that leaves the persisted source identity unchanged. DB-only and requested source deletion covers Series, Season, BoxSet, LiveTvProgram, MusicAlbum, Photo and PhotoAlbum; recursive Series, MusicAlbum and PhotoAlbum cleanup; six internal by-name item types; and physical MusicArtist DB-only, requested source and child cleanup. Source deletion covers mapped container directories, exact LiveTvProgram/Photo files, mixed Photo sidecars, managed BoxSet state, missing sources and source/external/SQL failure prefixes. Existing source-capable scenes retain the exact Episode Path versus other non-mixed Video containing directories, mixed-folder sidecars, Unicode prefixes and optional/enumeration failure prefixes. Candidate internal-path containment is deliberately stricter than native by requiring an instance path strictly below its exact type root; managed BoxSet state similarly requires a child below DataPath/collections. Candidate adapter controls verify readonly/root ID bindings, complete weak listings, optional permission/protocol failures, overlays, ID-only aliases, persisted/live source drift, and withheld Episode/Trailer directory discs. The two closure scenes remove descendant rows and warm cache entries without descendant file cleanup or Removed events; they do not establish a complete owned-extra or version-family lifecycle.",
+  "workspaceComparison": [
+    {
+      "path": "Emby.Server.Implementations/Library/LibraryManager.cs",
+      "nativeBlobSha256": "ba2d43d6a9061b999d2595015c46a329c86cbf5bdeaa632eef04c433c1bc1d5d",
+      "normalizedWorkspaceSha256": "4729de97560262702a44c5829bf93bbc5deec379e9b3018b231aaa6d65643c44",
+      "normalizedWorkspaceEquivalent": false,
+      "deletionImplementationEquivalent": true,
+      "difference": "One added LogDebug line in ResolvePaths, outside DeleteItem and its dependency chain."
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/BaseItem.cs",
+      "nativeBlobSha256": "9dc7b96a93c9fbe874cdcededdca395b5aa2df6070f5cfc9c8959539dcd76469",
+      "normalizedWorkspaceSha256": "9dc7b96a93c9fbe874cdcededdca395b5aa2df6070f5cfc9c8959539dcd76469",
+      "normalizedWorkspaceEquivalent": true,
+      "deletionImplementationEquivalent": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/Audio/Audio.cs",
+      "nativeBlobSha256": "fe19004e9d6d59d59fc1750952db7b95a29fd6d9de1398680deacae8dbd383ea",
+      "normalizedWorkspaceSha256": "fe19004e9d6d59d59fc1750952db7b95a29fd6d9de1398680deacae8dbd383ea",
+      "normalizedWorkspaceEquivalent": true,
+      "deletionImplementationEquivalent": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/Book.cs",
+      "nativeBlobSha256": "b081cbb2b7fb794d6b3d348e10c547803f4c18a58c79153f3ca3a3f10f552a0b",
+      "normalizedWorkspaceSha256": "b081cbb2b7fb794d6b3d348e10c547803f4c18a58c79153f3ca3a3f10f552a0b",
+      "normalizedWorkspaceEquivalent": true,
+      "deletionImplementationEquivalent": true
+    },
+    {
+      "path": "Jellyfin.Server.Implementations/Item/ItemPersistenceService.cs",
+      "nativeBlobSha256": "df64ede4e72fca107cb86127e44b4c81321b3cf560ea3b7f0eccf4462f148d14",
+      "normalizedWorkspaceSha256": "df64ede4e72fca107cb86127e44b4c81321b3cf560ea3b7f0eccf4462f148d14",
+      "normalizedWorkspaceEquivalent": true,
+      "deletionImplementationEquivalent": true
+    },
+    {
+      "path": "Emby.Server.Implementations/Library/ExternalDataManager.cs",
+      "nativeBlobSha256": "9645e24af7dab72bced234455ed708e347853c8c4f692ee728a01d9f9554c478",
+      "normalizedWorkspaceSha256": "9645e24af7dab72bced234455ed708e347853c8c4f692ee728a01d9f9554c478",
+      "normalizedWorkspaceEquivalent": true,
+      "deletionImplementationEquivalent": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/AudioBook.cs",
+      "nativeBlobSha256": "1dc3ad019d579d60fac4b91d80040ebfa09dd266266057e6f4e0a656faec443c",
+      "normalizedWorkspaceSha256": "1dc3ad019d579d60fac4b91d80040ebfa09dd266266057e6f4e0a656faec443c",
+      "normalizedWorkspaceEquivalent": true,
+      "deletionImplementationEquivalent": true
+    },
+    {
+      "path": "Emby.Server.Implementations/IO/ManagedFileSystem.cs",
+      "nativeBlobSha256": "280ea08cf13065d8cd3790edf551b28ddfc9f352f4758d4fe0e62a55dbe0b14e",
+      "normalizedWorkspaceSha256": "280ea08cf13065d8cd3790edf551b28ddfc9f352f4758d4fe0e62a55dbe0b14e",
+      "normalizedWorkspaceEquivalent": true,
+      "deletionImplementationEquivalent": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/Video.cs",
+      "nativeBlobSha256": "03df015992ee4e95e175c499b36a7b21d9facc4f391cfd89235ad652d2eb0b11",
+      "normalizedWorkspaceSha256": "03df015992ee4e95e175c499b36a7b21d9facc4f391cfd89235ad652d2eb0b11",
+      "normalizedWorkspaceEquivalent": true,
+      "deletionImplementationEquivalent": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/Movies/Movie.cs",
+      "nativeBlobSha256": "2208ffddb928e6407c4a3b6c71d5e9c0851882d62ad2fd1e10b4f814c391ac43",
+      "normalizedWorkspaceSha256": "2208ffddb928e6407c4a3b6c71d5e9c0851882d62ad2fd1e10b4f814c391ac43",
+      "normalizedWorkspaceEquivalent": true,
+      "deletionImplementationEquivalent": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/MusicVideo.cs",
+      "nativeBlobSha256": "fa9a519208acd409ddf3e84b08d6e322ad594097710cce7c77465019e85943cd",
+      "normalizedWorkspaceSha256": "fa9a519208acd409ddf3e84b08d6e322ad594097710cce7c77465019e85943cd",
+      "normalizedWorkspaceEquivalent": true,
+      "deletionImplementationEquivalent": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/TV/Episode.cs",
+      "nativeBlobSha256": "9944d6d777c8309ceedc66b2ded3d1de29cbd8a514b1bfa7d9698e04bda33a96",
+      "normalizedWorkspaceSha256": "9944d6d777c8309ceedc66b2ded3d1de29cbd8a514b1bfa7d9698e04bda33a96",
+      "normalizedWorkspaceEquivalent": true,
+      "deletionImplementationEquivalent": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/Trailer.cs",
+      "nativeBlobSha256": "9135c6caaa9b42030f35c4eab8bb7f7592dd3a125827f6b72d7ae32ec78ec18e",
+      "normalizedWorkspaceSha256": "9135c6caaa9b42030f35c4eab8bb7f7592dd3a125827f6b72d7ae32ec78ec18e",
+      "normalizedWorkspaceEquivalent": true,
+      "deletionImplementationEquivalent": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/Folder.cs",
+      "nativeBlobSha256": "7f3caa6b32b267736ac5a62eb2d147baa76a14870619f172668513657b575920",
+      "normalizedWorkspaceSha256": "d5f227d462ce3c2df0d5a45d912778427f87321fc9d6e13d863ec28bb639e0c1",
+      "normalizedWorkspaceEquivalent": false,
+      "deletionImplementationEquivalent": true,
+      "difference": "Workspace-only directory validation and scan-progress logging do not change GetRecursiveChildren used by deletion."
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/TV/Series.cs",
+      "nativeBlobSha256": "46d1748fd41a051fbcd4be50ef24b1814b7402265bdb37a735ced8c0235e460f",
+      "normalizedWorkspaceSha256": "46d1748fd41a051fbcd4be50ef24b1814b7402265bdb37a735ced8c0235e460f",
+      "normalizedWorkspaceEquivalent": true,
+      "deletionImplementationEquivalent": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/TV/Season.cs",
+      "nativeBlobSha256": "3d49550fc03cfd556999e04a63bb4f692fbb574a37e946ab0b200fc9cc19ec04",
+      "normalizedWorkspaceSha256": "3d49550fc03cfd556999e04a63bb4f692fbb574a37e946ab0b200fc9cc19ec04",
+      "normalizedWorkspaceEquivalent": true,
+      "deletionImplementationEquivalent": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/Movies/BoxSet.cs",
+      "nativeBlobSha256": "c7777732f29cf43b7470ece2b17eda5d67f6e43f4bbd9f4192bafd5891738df6",
+      "normalizedWorkspaceSha256": "c7777732f29cf43b7470ece2b17eda5d67f6e43f4bbd9f4192bafd5891738df6",
+      "normalizedWorkspaceEquivalent": true,
+      "deletionImplementationEquivalent": true
+    },
+    {
+      "path": "MediaBrowser.Controller/LiveTv/LiveTvProgram.cs",
+      "nativeBlobSha256": "48f6333cfb57716701e39e7f48f2989aa4d6ba944f4adbb3247808d602eec094",
+      "normalizedWorkspaceSha256": "48f6333cfb57716701e39e7f48f2989aa4d6ba944f4adbb3247808d602eec094",
+      "normalizedWorkspaceEquivalent": true,
+      "deletionImplementationEquivalent": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/Audio/MusicAlbum.cs",
+      "nativeBlobSha256": "785f3b62683ffb29f79badce2e678c03da67a5156cae889e0d766cdad454de00",
+      "normalizedWorkspaceSha256": "785f3b62683ffb29f79badce2e678c03da67a5156cae889e0d766cdad454de00",
+      "normalizedWorkspaceEquivalent": true,
+      "deletionImplementationEquivalent": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/Photo.cs",
+      "nativeBlobSha256": "6d2581b1e8db05771e22b804b58c119fc5972287878dac459ca66260c74e7654",
+      "normalizedWorkspaceSha256": "6d2581b1e8db05771e22b804b58c119fc5972287878dac459ca66260c74e7654",
+      "normalizedWorkspaceEquivalent": true,
+      "deletionImplementationEquivalent": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/PhotoAlbum.cs",
+      "nativeBlobSha256": "5fb0ec1808b39e9dfa2d510d12f6313df860fcb1061ef593c6a093f859720895",
+      "normalizedWorkspaceSha256": "5fb0ec1808b39e9dfa2d510d12f6313df860fcb1061ef593c6a093f859720895",
+      "normalizedWorkspaceEquivalent": true,
+      "deletionImplementationEquivalent": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/Person.cs",
+      "nativeBlobSha256": "964033d4f43f7c7885c300207e36ecb70e36140ce41b61b3f1cc1111344f750b",
+      "normalizedWorkspaceSha256": "964033d4f43f7c7885c300207e36ecb70e36140ce41b61b3f1cc1111344f750b",
+      "normalizedWorkspaceEquivalent": true,
+      "deletionImplementationEquivalent": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/Genre.cs",
+      "nativeBlobSha256": "254d23ea47309a638a92f5be367860c5e1a5cc5db395b7017d2cfb82d290c99f",
+      "normalizedWorkspaceSha256": "254d23ea47309a638a92f5be367860c5e1a5cc5db395b7017d2cfb82d290c99f",
+      "normalizedWorkspaceEquivalent": true,
+      "deletionImplementationEquivalent": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/Audio/MusicGenre.cs",
+      "nativeBlobSha256": "8901cc5615e772e8accbd9f5a2c22009faa144cecc9a38b0e68d51d7ef9e7b83",
+      "normalizedWorkspaceSha256": "8901cc5615e772e8accbd9f5a2c22009faa144cecc9a38b0e68d51d7ef9e7b83",
+      "normalizedWorkspaceEquivalent": true,
+      "deletionImplementationEquivalent": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/Studio.cs",
+      "nativeBlobSha256": "e7ca8a9bbe8b9e869565f0eb2e1324f3852d7dd59d12764a56dfc7d616a85145",
+      "normalizedWorkspaceSha256": "e7ca8a9bbe8b9e869565f0eb2e1324f3852d7dd59d12764a56dfc7d616a85145",
+      "normalizedWorkspaceEquivalent": true,
+      "deletionImplementationEquivalent": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/Year.cs",
+      "nativeBlobSha256": "9f575e9fd4f68a7523fa80c98fcd84db258ab6f6cca3d1fa36344f4349eef45b",
+      "normalizedWorkspaceSha256": "9f575e9fd4f68a7523fa80c98fcd84db258ab6f6cca3d1fa36344f4349eef45b",
+      "normalizedWorkspaceEquivalent": true,
+      "deletionImplementationEquivalent": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/Audio/MusicArtist.cs",
+      "nativeBlobSha256": "18e77575002cd30efed46ffb870209100c15ed34c76254712746f6817c0f3ffa",
+      "normalizedWorkspaceSha256": "18e77575002cd30efed46ffb870209100c15ed34c76254712746f6817c0f3ffa",
+      "normalizedWorkspaceEquivalent": true,
+      "deletionImplementationEquivalent": true
+    },
+    {
+      "path": "Emby.Server.Implementations/Collections/CollectionManager.cs",
+      "nativeBlobSha256": "32ed12ef23ccedcb7893f429661db5576e2016e78e9922d73626d193119a36c8",
+      "normalizedWorkspaceSha256": "32ed12ef23ccedcb7893f429661db5576e2016e78e9922d73626d193119a36c8",
+      "normalizedWorkspaceEquivalent": true,
+      "deletionImplementationEquivalent": true
+    }
+  ],
+  "validation": {
+    "path": "D:/mediamanager-validation/20261008/results/general-leaf-deletion-complete-focused-strict-v1/result.json",
+    "sha256": "de5c97b1bec9b220016e14fb32a3cf4a06847fc93b768466b0ae26de0ce74561",
+    "outcome": "passed",
+    "counts": {
+      "tests": 682,
+      "suites": 0,
+      "pass": 682,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "selected": 6,
+    "notSelected": 367,
+    "candidateEntriesSha256": "0ffc22c455ba3cb4f3494b7ff8ed88bf7a21a53289e059105e75439718632531",
+    "inputEntriesSha256": "9f12225b7a992ca9e8c662562c3b4ba03bf10b443c5fd1c8b60acee4e77fff0c",
+    "registrationComplete": true,
+    "candidateUnchanged": true,
+    "inputUnchanged": true,
+    "phaseAcceptance": false
+  }
+}

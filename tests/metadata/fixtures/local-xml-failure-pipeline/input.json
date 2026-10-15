@@ -1,0 +1,9 @@
+{
+  "faults": [
+    "links",
+    "people",
+    "xml",
+    "xml-control",
+    "none"
+  ]
+}

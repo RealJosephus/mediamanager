@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-06T17:25:38.833Z",
+  "frozenJellyfin": {
+    "commit": "208c278b75abd897aefa1e1175126eac5e4dbfaa",
+    "workspaceContentDigest": "e28a983db179b720c3b16d7416ee4112894a3115c4be6fe43c61c52e0d9a8313"
+  },
+  "fixtureFiles": [
+    {
+      "path": "tests/metadata/fixtures/owned-item-lifecycle/input.json",
+      "sha256": "d81aff862e3902583f7a4b3e5417f094aea25041de38f2673f82396735d66ad5"
+    },
+    {
+      "path": "tests/metadata/fixtures/owned-item-lifecycle/Program.cs",
+      "sha256": "60409bc03cc43460d97e3ed9297e2498b2d55b607a0639dde6fb88073cba9b03"
+    },
+    {
+      "path": "tests/metadata/fixtures/owned-item-lifecycle/Oracle.csproj",
+      "sha256": "56e42cc99a5305248cb523db75850ab8bce9868f3a283101fa0a208332829234"
+    },
+    {
+      "path": "tests/metadata/fixtures/owned-item-lifecycle/native.json",
+      "sha256": "2bab7b33e67b8b68469042f4d48c3c503bd878a7a1d96a09875e3083cc3321f4"
+    },
+    {
+      "path": "tests/Directory.Build.props",
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    }
+  ],
+  "sourceFiles": [
+    {
+      "path": "MediaBrowser.Controller/Entities/BaseItem.cs",
+      "sha256": "9dc7b96a93c9fbe874cdcededdca395b5aa2df6070f5cfc9c8959539dcd76469"
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/Video.cs",
+      "sha256": "03df015992ee4e95e175c499b36a7b21d9facc4f391cfd89235ad652d2eb0b11"
+    },
+    {
+      "path": "MediaBrowser.Controller/Providers/MetadataRefreshOptions.cs",
+      "sha256": "a3c8c714480d398e284f730d88bbedccdc27f123f9bdf3a704d61ad98e5b7f10"
+    },
+    {
+      "path": "Emby.Server.Implementations/Library/LibraryManager.cs",
+      "sha256": "4729de97560262702a44c5829bf93bbc5deec379e9b3018b231aaa6d65643c44"
+    }
+  ],
+  "assemblies": [
+    {
+      "name": "MediaBrowser.Controller",
+      "sha256": "051c588a8e85a3a7cdde8dc3d9a1112217fd7e973a86fe2ff90cf765bedb75a8"
+    }
+  ],
+  "recording": {
+    "passed": true,
+    "sourceFilesSha256": "a9d92167f17d1f2b48f95629358e2625c29e7b6c7529094ca29c4dac386db75d",
+    "originalNativeSha256": "bfcd4202a35a9c53d20527a2c331c4023ef815f0e5ef5555588be48ab4e8e415",
+    "portableNativeLineEndings": "LF"
+  },
+  "scope": "Actual frozen BaseItem.RefreshMetadata and Video.RefreshedOwnedItems dispatch, native date/title inheritance, mixed-version imports, PrimaryVersionId repair, link/count rules, missing path cleanup and owned-error boundary. Existing typed cached entities, FindExtras results/rename, path identity/existence, provider refresh, repository/image/link/delete effects are controls. No native resolution, SQL, external provider/probe/image execution or full library acceptance."
+}

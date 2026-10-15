@@ -1,0 +1,330 @@
+{
+  "actualFrozenAudioBookResolution": true,
+  "inputSha256": "3c87e1d01f37df63071a752b6cd89039ac7542605f7c04a18a9cf58bc9c7c24f",
+  "names": [
+    {
+      "source": "Saga (2024)",
+      "Name": "Saga",
+      "Year": 2024
+    },
+    {
+      "source": "  Leading Space (2023)",
+      "Name": "  Leading Space",
+      "Year": 2023
+    },
+    {
+      "source": "Trailing Space   ",
+      "Name": "Trailing Space",
+      "Year": null
+    },
+    {
+      "source": "Unadorned Title",
+      "Name": "Unadorned Title",
+      "Year": null
+    },
+    {
+      "source": "(2022)",
+      "Name": "(2022)",
+      "Year": null
+    }
+  ],
+  "results": [
+    {
+      "name": "multiple-single-top-year",
+      "mode": "multiple",
+      "collectionType": "books",
+      "parentTop": true,
+      "priority": 5,
+      "resolved": {
+        "items": [
+          {
+            "type": "MediaBrowser.Controller.Entities.AudioBook",
+            "Name": "Saga",
+            "path": "$MEDIA/narration.m4b",
+            "parentId": "96000000-0000-0000-0000-000000000003",
+            "IsFolder": false,
+            "mediaType": "Audio",
+            "IsInMixedFolder": true,
+            "ProductionYear": 2024,
+            "IsShortcut": false,
+            "artists": [],
+            "albumArtists": []
+          }
+        ],
+        "extraFiles": []
+      }
+    },
+    {
+      "name": "multiple-single-nested-year",
+      "mode": "multiple",
+      "collectionType": "books",
+      "parentTop": false,
+      "priority": 5,
+      "resolved": {
+        "items": [
+          {
+            "type": "MediaBrowser.Controller.Entities.AudioBook",
+            "Name": "Saga",
+            "path": "$MEDIA/narration.m4b",
+            "parentId": "96000000-0000-0000-0000-000000000003",
+            "IsFolder": false,
+            "mediaType": "Audio",
+            "IsInMixedFolder": false,
+            "ProductionYear": 2024,
+            "IsShortcut": false,
+            "artists": [],
+            "albumArtists": []
+          }
+        ],
+        "extraFiles": []
+      }
+    },
+    {
+      "name": "multiple-single-cue",
+      "mode": "multiple",
+      "collectionType": "books",
+      "parentTop": true,
+      "priority": 5,
+      "resolved": {
+        "items": [
+          {
+            "type": "MediaBrowser.Controller.Entities.AudioBook",
+            "Name": "Cue Book",
+            "path": "$MEDIA/book.cue",
+            "parentId": "96000000-0000-0000-0000-000000000003",
+            "IsFolder": false,
+            "mediaType": "Audio",
+            "IsInMixedFolder": true,
+            "ProductionYear": null,
+            "IsShortcut": false,
+            "artists": [],
+            "albumArtists": []
+          }
+        ],
+        "extraFiles": []
+      }
+    },
+    {
+      "name": "multiple-single-stream",
+      "mode": "multiple",
+      "collectionType": "books",
+      "parentTop": true,
+      "priority": 5,
+      "resolved": {
+        "items": [
+          {
+            "type": "MediaBrowser.Controller.Entities.AudioBook",
+            "Name": "Stream Book",
+            "path": "$MEDIA/book.strm",
+            "parentId": "96000000-0000-0000-0000-000000000003",
+            "IsFolder": false,
+            "mediaType": "Audio",
+            "IsInMixedFolder": true,
+            "ProductionYear": null,
+            "IsShortcut": false,
+            "artists": [],
+            "albumArtists": []
+          }
+        ],
+        "extraFiles": []
+      }
+    },
+    {
+      "name": "multiple-with-ebook-extra",
+      "mode": "multiple",
+      "collectionType": "books",
+      "parentTop": true,
+      "priority": 5,
+      "resolved": {
+        "items": [
+          {
+            "type": "MediaBrowser.Controller.Entities.AudioBook",
+            "Name": "Mixed Book",
+            "path": "$MEDIA/book.m4b",
+            "parentId": "96000000-0000-0000-0000-000000000003",
+            "IsFolder": false,
+            "mediaType": "Audio",
+            "IsInMixedFolder": true,
+            "ProductionYear": null,
+            "IsShortcut": false,
+            "artists": [],
+            "albumArtists": []
+          }
+        ],
+        "extraFiles": [
+          "$MEDIA/book.epub"
+        ]
+      }
+    },
+    {
+      "name": "multiple-two-audio",
+      "mode": "multiple",
+      "collectionType": "books",
+      "parentTop": true,
+      "priority": 5,
+      "resolved": {
+        "items": [],
+        "extraFiles": []
+      }
+    },
+    {
+      "name": "file-m4b",
+      "mode": "file",
+      "collectionType": "books",
+      "parentTop": true,
+      "priority": 5,
+      "resolved": {
+        "type": "MediaBrowser.Controller.Entities.AudioBook",
+        "Name": "Narration",
+        "path": "$MEDIA/Narration.m4b",
+        "parentId": "96000000-0000-0000-0000-000000000003",
+        "IsFolder": false,
+        "mediaType": "Audio",
+        "IsInMixedFolder": true,
+        "ProductionYear": null,
+        "IsShortcut": false,
+        "artists": [],
+        "albumArtists": []
+      }
+    },
+    {
+      "name": "file-stream",
+      "mode": "file",
+      "collectionType": "books",
+      "parentTop": true,
+      "priority": 5,
+      "resolved": {
+        "type": "MediaBrowser.Controller.Entities.AudioBook",
+        "Name": "Remote",
+        "path": "$MEDIA/Remote.strm",
+        "parentId": "96000000-0000-0000-0000-000000000003",
+        "IsFolder": false,
+        "mediaType": "Audio",
+        "IsInMixedFolder": true,
+        "ProductionYear": null,
+        "IsShortcut": true,
+        "artists": [],
+        "albumArtists": []
+      }
+    },
+    {
+      "name": "file-cue",
+      "mode": "file",
+      "collectionType": "books",
+      "parentTop": true,
+      "priority": 5,
+      "resolved": null
+    },
+    {
+      "name": "file-video-overlap",
+      "mode": "file",
+      "collectionType": "books",
+      "parentTop": true,
+      "priority": 5,
+      "resolved": {
+        "type": "MediaBrowser.Controller.Entities.AudioBook",
+        "Name": "Spoken",
+        "path": "$MEDIA/Spoken.3gp",
+        "parentId": "96000000-0000-0000-0000-000000000003",
+        "IsFolder": false,
+        "mediaType": "Audio",
+        "IsInMixedFolder": true,
+        "ProductionYear": null,
+        "IsShortcut": false,
+        "artists": [],
+        "albumArtists": []
+      }
+    },
+    {
+      "name": "file-wrong-collection",
+      "mode": "file",
+      "collectionType": "movies",
+      "parentTop": true,
+      "priority": 5,
+      "resolved": null
+    },
+    {
+      "name": "directory-single-year",
+      "mode": "directory",
+      "collectionType": "books",
+      "parentTop": true,
+      "priority": 5,
+      "resolved": {
+        "type": "MediaBrowser.Controller.Entities.AudioBook",
+        "Name": "Story (2021)",
+        "path": "$MEDIA/Story (2021)/chapter01.m4b",
+        "parentId": "96000000-0000-0000-0000-000000000003",
+        "IsFolder": false,
+        "mediaType": "Audio",
+        "IsInMixedFolder": false,
+        "ProductionYear": 2021,
+        "IsShortcut": false,
+        "artists": [],
+        "albumArtists": []
+      }
+    },
+    {
+      "name": "directory-single-cue",
+      "mode": "directory",
+      "collectionType": "books",
+      "parentTop": true,
+      "priority": 5,
+      "resolved": {
+        "type": "MediaBrowser.Controller.Entities.AudioBook",
+        "Name": "Cue Story",
+        "path": "$MEDIA/Cue Story/book.cue",
+        "parentId": "96000000-0000-0000-0000-000000000003",
+        "IsFolder": false,
+        "mediaType": "Audio",
+        "IsInMixedFolder": false,
+        "ProductionYear": null,
+        "IsShortcut": false,
+        "artists": [],
+        "albumArtists": []
+      }
+    },
+    {
+      "name": "directory-two-audio",
+      "mode": "directory",
+      "collectionType": "books",
+      "parentTop": true,
+      "priority": 5,
+      "resolved": null
+    },
+    {
+      "name": "directory-single-with-subdirectory",
+      "mode": "directory",
+      "collectionType": "books",
+      "parentTop": true,
+      "priority": 5,
+      "resolved": {
+        "type": "MediaBrowser.Controller.Entities.AudioBook",
+        "Name": "Nested Control",
+        "path": "$MEDIA/Nested Control/book.m4b",
+        "parentId": "96000000-0000-0000-0000-000000000003",
+        "IsFolder": false,
+        "mediaType": "Audio",
+        "IsInMixedFolder": false,
+        "ProductionYear": null,
+        "IsShortcut": false,
+        "artists": [],
+        "albumArtists": []
+      }
+    }
+  ],
+  "assemblies": [
+    {
+      "name": "MediaBrowser.Controller",
+      "sha256": "a9a051747d55565befc425dd194779e2ae53c57f8740212dc929dd706b888306"
+    },
+    {
+      "name": "Emby.Server.Implementations",
+      "sha256": "6a29143fe5e6867f8e91b697680dce602aa422cf250786db1298911499369d62"
+    },
+    {
+      "name": "Emby.Naming",
+      "sha256": "1926203dc3a4a599b92852683d9b5c20b084665888772eb331f1d945f9ec06bf"
+    }
+  ],
+  "scope": "Actual frozen AudioBookNameParser, AudioResolver, AudioBookListResolver, ResolverHelper, ManagedFileSystem and DirectoryService over real files. Covers resolver priority, books collection gating, multi versus single dispatch, top-parent mixed state, supported/cue/stream/video-overlap extensions, year parsing, single-file directory collapse, multiple-audio rejection and explicit multi extras. LibraryManager IDs, parent lookup and file timestamps are controls. No Folder.ValidateChildren, CreateItems, recursive scan, database persistence, metadata providers, playlist parsing, faults, concurrency, HTTP, migration or release acceptance."
+}

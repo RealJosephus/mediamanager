@@ -1,0 +1,762 @@
+{
+  "children": [
+    {
+      "type": "Audio",
+      "path": "$STATE/media/Song A#.mp3",
+      "name": "Café & <one>",
+      "album": "Album & <A>",
+      "albumArtists": [
+        "Album Artist & <AA>",
+        "ignored"
+      ],
+      "artists": [
+        "Track Artist & <TA>",
+        "ignored"
+      ],
+      "ticks": "1234567000"
+    },
+    {
+      "type": "Audio",
+      "path": "$STATE/media/Second.mp3",
+      "name": "Second",
+      "album": "",
+      "albumArtists": [],
+      "artists": [],
+      "ticks": null
+    },
+    {
+      "type": "Movie",
+      "path": "$STATE/media/Film.mkv",
+      "name": "Video",
+      "album": "Video Album",
+      "ticks": "-12345678"
+    },
+    {
+      "type": "MusicVideo",
+      "path": "$STATE/media/Music.mkv",
+      "name": "Music",
+      "album": "MV Album",
+      "artists": [
+        "Singer"
+      ],
+      "ticks": "1"
+    },
+    {
+      "type": "Audio",
+      "path": "$STATE/media/Blank.mp3",
+      "name": null,
+      "album": null,
+      "albumArtists": [],
+      "artists": [],
+      "ticks": "-1"
+    },
+    {
+      "type": "Audio",
+      "path": "$STATE/media/Large.mp3",
+      "name": "Long",
+      "album": "",
+      "albumArtists": [],
+      "artists": [],
+      "ticks": "9223372036854775807"
+    },
+    {
+      "type": "Audio",
+      "path": "$STATE/media/Escapes %20+é.mp3",
+      "name": "A\r\nB\t\"<>&",
+      "album": "New\nline",
+      "albumArtists": [
+        "A\tB"
+      ],
+      "artists": [
+        "C\rD"
+      ],
+      "ticks": "0"
+    },
+    {
+      "type": "Audio",
+      "path": "$STATE/media/NullAlbum.mp3",
+      "name": "Null album",
+      "album": null,
+      "albumArtists": [
+        "Artist"
+      ],
+      "artists": [],
+      "ticks": null
+    },
+    {
+      "type": "Audio",
+      "path": "$STATE/media/NullArtists.mp3",
+      "name": "Null lists",
+      "album": "",
+      "albumArtists": null,
+      "artists": null,
+      "ticks": null
+    },
+    {
+      "type": "Audio",
+      "path": null,
+      "name": "No path",
+      "album": "",
+      "albumArtists": [],
+      "artists": [],
+      "ticks": null
+    },
+    {
+      "type": "Audio",
+      "path": "relative.mp3",
+      "name": "Relative path",
+      "album": "",
+      "albumArtists": [],
+      "artists": [],
+      "ticks": null
+    },
+    {
+      "type": "Audio",
+      "path": "$STATE/media/control.mp3",
+      "name": "Bad\u0001value",
+      "album": "",
+      "albumArtists": [],
+      "artists": [],
+      "ticks": null
+    },
+    {
+      "type": "AudioBook",
+      "path": "$STATE/media/Book.m4b",
+      "name": "Book",
+      "album": "Book Album",
+      "albumArtists": [
+        "Reader"
+      ],
+      "artists": [
+        "Author"
+      ],
+      "ticks": "21474836480000"
+    },
+    {
+      "type": "Audio",
+      "path": "https://example.test/song%20one.mp3?x=1#y",
+      "name": "Remote",
+      "album": "",
+      "albumArtists": [],
+      "artists": [],
+      "ticks": null
+    }
+  ],
+  "writes": [
+    {
+      "name": "m3u-ordered-duplicates-missing",
+      "extension": ".m3u",
+      "links": [
+        1,
+        2,
+        1,
+        99,
+        3,
+        4,
+        13,
+        14
+      ]
+    },
+    {
+      "name": "m3u8-ordered-duplicates-missing",
+      "extension": ".m3u8",
+      "links": [
+        1,
+        2,
+        1,
+        99,
+        3,
+        4,
+        13,
+        14
+      ]
+    },
+    {
+      "name": "pls-ordered-duplicates-missing",
+      "extension": ".pls",
+      "links": [
+        1,
+        2,
+        1,
+        99,
+        3,
+        4,
+        13,
+        14
+      ]
+    },
+    {
+      "name": "wpl-ordered-duplicates-missing",
+      "extension": ".wpl",
+      "links": [
+        1,
+        2,
+        1,
+        99,
+        3,
+        4,
+        13,
+        14
+      ]
+    },
+    {
+      "name": "zpl-ordered-duplicates-missing",
+      "extension": ".zpl",
+      "links": [
+        1,
+        2,
+        1,
+        99,
+        3,
+        4,
+        13,
+        14
+      ]
+    },
+    {
+      "name": "m3u-empty",
+      "extension": ".m3u",
+      "links": []
+    },
+    {
+      "name": "m3u8-empty",
+      "extension": ".m3u8",
+      "links": []
+    },
+    {
+      "name": "pls-empty",
+      "extension": ".pls",
+      "links": []
+    },
+    {
+      "name": "wpl-empty",
+      "extension": ".wpl",
+      "links": []
+    },
+    {
+      "name": "zpl-empty",
+      "extension": ".zpl",
+      "links": []
+    },
+    {
+      "name": "m3u-empty-title-negative-and-overflow",
+      "extension": ".m3u",
+      "links": [
+        5,
+        6
+      ]
+    },
+    {
+      "name": "m3u8-empty-title-negative-and-overflow",
+      "extension": ".m3u8",
+      "links": [
+        5,
+        6
+      ]
+    },
+    {
+      "name": "pls-empty-title-negative-and-overflow",
+      "extension": ".pls",
+      "links": [
+        5,
+        6
+      ]
+    },
+    {
+      "name": "wpl-empty-title-negative-and-overflow",
+      "extension": ".wpl",
+      "links": [
+        5,
+        6
+      ]
+    },
+    {
+      "name": "zpl-empty-title-negative-and-overflow",
+      "extension": ".zpl",
+      "links": [
+        5,
+        6
+      ]
+    },
+    {
+      "name": "m3u-escapes",
+      "extension": ".M3U",
+      "links": [
+        7
+      ]
+    },
+    {
+      "name": "m3u8-escapes",
+      "extension": ".M3U8",
+      "links": [
+        7
+      ]
+    },
+    {
+      "name": "pls-escapes",
+      "extension": ".PLS",
+      "links": [
+        7
+      ]
+    },
+    {
+      "name": "wpl-escapes",
+      "extension": ".WPL",
+      "links": [
+        7
+      ]
+    },
+    {
+      "name": "zpl-escapes",
+      "extension": ".ZPL",
+      "links": [
+        7
+      ]
+    },
+    {
+      "name": "wpl-null-album",
+      "extension": ".wpl",
+      "links": [
+        8
+      ]
+    },
+    {
+      "name": "zpl-null-album",
+      "extension": ".zpl",
+      "links": [
+        8
+      ]
+    },
+    {
+      "name": "m3u-null-album",
+      "extension": ".m3u",
+      "links": [
+        8
+      ]
+    },
+    {
+      "name": "pls-null-album",
+      "extension": ".pls",
+      "links": [
+        8
+      ]
+    },
+    {
+      "name": "wpl-null-artists",
+      "extension": ".wpl",
+      "links": [
+        9
+      ]
+    },
+    {
+      "name": "m3u-null-artists",
+      "extension": ".m3u",
+      "links": [
+        9
+      ]
+    },
+    {
+      "name": "pls-null-artists",
+      "extension": ".pls",
+      "links": [
+        9
+      ]
+    },
+    {
+      "name": "m3u-path-error-10",
+      "extension": ".m3u",
+      "links": [
+        10
+      ]
+    },
+    {
+      "name": "m3u-path-error-11",
+      "extension": ".m3u",
+      "links": [
+        11
+      ]
+    },
+    {
+      "name": "m3u-path-error-12",
+      "extension": ".m3u",
+      "links": [
+        12
+      ]
+    },
+    {
+      "name": "wpl-invalid-xml-character",
+      "extension": ".wpl",
+      "links": [
+        12
+      ]
+    },
+    {
+      "name": "unsupported-no-write",
+      "extension": ".txt",
+      "links": [
+        1
+      ]
+    },
+    {
+      "name": "unsupported-null-links",
+      "extension": ".json",
+      "links": null
+    },
+    {
+      "name": "m3u-null-links",
+      "extension": ".m3u",
+      "links": null
+    }
+  ],
+  "pathCases": [
+    {
+      "name": "same-directory",
+      "playlistPath": "Z:\\Lists\\mix.m3u",
+      "itemPath": "Z:\\Lists\\song.mp3"
+    },
+    {
+      "name": "sibling",
+      "playlistPath": "Z:\\Lists\\mix.m3u",
+      "itemPath": "Z:\\Media\\song.mp3"
+    },
+    {
+      "name": "drive-case",
+      "playlistPath": "Z:\\Lists\\mix.m3u",
+      "itemPath": "z:\\lists\\SONG.mp3"
+    },
+    {
+      "name": "folder-case",
+      "playlistPath": "Z:\\Lists\\mix.m3u",
+      "itemPath": "Z:\\lists\\song.mp3"
+    },
+    {
+      "name": "other-drive",
+      "playlistPath": "Z:\\Lists\\mix.m3u",
+      "itemPath": "Y:\\Media\\song.mp3"
+    },
+    {
+      "name": "unc-same",
+      "playlistPath": "\\\\server\\share\\Lists\\mix.m3u",
+      "itemPath": "\\\\server\\share\\media\\song.mp3"
+    },
+    {
+      "name": "unc-host",
+      "playlistPath": "\\\\server\\share\\Lists\\mix.m3u",
+      "itemPath": "\\\\other\\share\\media\\song.mp3"
+    },
+    {
+      "name": "unc-share",
+      "playlistPath": "\\\\server\\share\\Lists\\mix.m3u",
+      "itemPath": "\\\\server\\other\\media\\song.mp3"
+    },
+    {
+      "name": "file-uri",
+      "playlistPath": "Z:\\Lists\\mix.m3u",
+      "itemPath": "file:///Z:/Media/song%20one.mp3#fragment"
+    },
+    {
+      "name": "literal-percent",
+      "playlistPath": "Z:\\Lists\\mix.m3u",
+      "itemPath": "Z:\\Media\\song%20one+é#.mp3"
+    },
+    {
+      "name": "unicode-normalization",
+      "playlistPath": "Z:\\Café\\mix.m3u",
+      "itemPath": "Z:\\Café\\song.mp3"
+    },
+    {
+      "name": "posix",
+      "playlistPath": "/opt/lists/mix.m3u",
+      "itemPath": "/opt/media/song.mp3"
+    },
+    {
+      "name": "posix-case",
+      "playlistPath": "/opt/lists/mix.m3u",
+      "itemPath": "/opt/Lists/song.mp3"
+    },
+    {
+      "name": "same-path",
+      "playlistPath": "Z:\\Lists\\mix.m3u",
+      "itemPath": "Z:\\Lists\\"
+    },
+    {
+      "name": "dot-segments",
+      "playlistPath": "Z:\\Lists\\mix.m3u",
+      "itemPath": "Z:\\Lists\\one\\..\\song.mp3"
+    },
+    {
+      "name": "slash-spelling",
+      "playlistPath": "Z:/Lists/mix.m3u",
+      "itemPath": "Z:/Media/song.mp3"
+    },
+    {
+      "name": "remote-scheme",
+      "playlistPath": "Z:\\Lists\\mix.m3u",
+      "itemPath": "https://example.test/song%20one.mp3"
+    },
+    {
+      "name": "relative-error",
+      "playlistPath": "Z:\\Lists\\mix.m3u",
+      "itemPath": "song.mp3"
+    },
+    {
+      "name": "empty-error",
+      "playlistPath": "Z:\\Lists\\mix.m3u",
+      "itemPath": ""
+    },
+    {
+      "name": "null-error",
+      "playlistPath": "Z:\\Lists\\mix.m3u",
+      "itemPath": null
+    },
+    {
+      "name": "no-folder",
+      "playlistPath": "mix.m3u",
+      "itemPath": "Z:\\Media\\song.mp3"
+    },
+    {
+      "name": "null-playlist",
+      "playlistPath": null,
+      "itemPath": "Z:\\Media\\song.mp3"
+    },
+    {
+      "name": "http-relative",
+      "playlistPath": "https://example.test/lists/mix.m3u",
+      "itemPath": "https://example.test/media/song%20one.mp3?x=1#f"
+    },
+    {
+      "name": "http-host",
+      "playlistPath": "https://example.test/lists/mix.m3u",
+      "itemPath": "https://other.test/media/song%20one.mp3"
+    },
+    {
+      "name": "http-case",
+      "playlistPath": "https://example.test/Lists/mix.m3u",
+      "itemPath": "https://example.test/lists/song.mp3"
+    },
+    {
+      "name": "file-uri-percent",
+      "playlistPath": "Z:\\Lists\\mix.m3u",
+      "itemPath": "file:///Z:/Media/song%2520.mp3"
+    },
+    {
+      "name": "colon-relative",
+      "playlistPath": "Z:\\Lists\\mix.m3u",
+      "itemPath": "urn:track:1"
+    },
+    {
+      "name": "posix-literal-backslash",
+      "playlistPath": "/opt/lists/mix.m3u",
+      "itemPath": "/opt/media/one\\two.mp3"
+    },
+    {
+      "name": "percent-invalid-sequence",
+      "playlistPath": "Z:\\Lists\\mix.m3u",
+      "itemPath": "Z:\\Media\\bad%FF%20ok.mp3"
+    },
+    {
+      "name": "percent-invalid-text",
+      "playlistPath": "Z:\\Lists\\mix.m3u",
+      "itemPath": "Z:\\Media\\bad%ZZ%20ok.mp3"
+    },
+    {
+      "name": "encoded-separator",
+      "playlistPath": "Z:\\Lists\\mix.m3u",
+      "itemPath": "Z:\\Media\\some%2Fpath.mp3"
+    },
+    {
+      "name": "literal-question",
+      "playlistPath": "Z:\\Lists\\mix.m3u",
+      "itemPath": "Z:\\Media\\some?path.mp3"
+    },
+    {
+      "name": "percent-dot-segment",
+      "playlistPath": "Z:\\Lists\\mix.m3u",
+      "itemPath": "Z:\\Media\\%2E%2E\\song.mp3"
+    },
+    {
+      "name": "device-path",
+      "playlistPath": "Z:\\Lists\\mix.m3u",
+      "itemPath": "\\\\?\\Z:\\Media\\song.mp3"
+    },
+    {
+      "name": "nonbmp-path",
+      "playlistPath": "Z:\\Lists\\mix.m3u",
+      "itemPath": "Z:\\Media\\𐐨🎵.mp3"
+    },
+    {
+      "name": "implicit-percent-2F",
+      "playlistPath": "Z:\\Lists\\mix.m3u",
+      "itemPath": "Z:\\Media\\some%2Fpath.mp3"
+    },
+    {
+      "name": "file-uri-percent-2F",
+      "playlistPath": "Z:\\Lists\\mix.m3u",
+      "itemPath": "file:///Z:/Media/some%2Fpath.mp3"
+    },
+    {
+      "name": "implicit-percent-5C",
+      "playlistPath": "Z:\\Lists\\mix.m3u",
+      "itemPath": "Z:\\Media\\some%5Cpath.mp3"
+    },
+    {
+      "name": "file-uri-percent-5C",
+      "playlistPath": "Z:\\Lists\\mix.m3u",
+      "itemPath": "file:///Z:/Media/some%5Cpath.mp3"
+    },
+    {
+      "name": "implicit-percent-3F",
+      "playlistPath": "Z:\\Lists\\mix.m3u",
+      "itemPath": "Z:\\Media\\some%3Fpath.mp3"
+    },
+    {
+      "name": "file-uri-percent-3F",
+      "playlistPath": "Z:\\Lists\\mix.m3u",
+      "itemPath": "file:///Z:/Media/some%3Fpath.mp3"
+    },
+    {
+      "name": "implicit-percent-23",
+      "playlistPath": "Z:\\Lists\\mix.m3u",
+      "itemPath": "Z:\\Media\\some%23path.mp3"
+    },
+    {
+      "name": "file-uri-percent-23",
+      "playlistPath": "Z:\\Lists\\mix.m3u",
+      "itemPath": "file:///Z:/Media/some%23path.mp3"
+    },
+    {
+      "name": "implicit-percent-25",
+      "playlistPath": "Z:\\Lists\\mix.m3u",
+      "itemPath": "Z:\\Media\\some%25path.mp3"
+    },
+    {
+      "name": "file-uri-percent-25",
+      "playlistPath": "Z:\\Lists\\mix.m3u",
+      "itemPath": "file:///Z:/Media/some%25path.mp3"
+    },
+    {
+      "name": "implicit-percent-3A",
+      "playlistPath": "Z:\\Lists\\mix.m3u",
+      "itemPath": "Z:\\Media\\some%3Apath.mp3"
+    },
+    {
+      "name": "file-uri-percent-3A",
+      "playlistPath": "Z:\\Lists\\mix.m3u",
+      "itemPath": "file:///Z:/Media/some%3Apath.mp3"
+    },
+    {
+      "name": "implicit-percent-2B",
+      "playlistPath": "Z:\\Lists\\mix.m3u",
+      "itemPath": "Z:\\Media\\some%2Bpath.mp3"
+    },
+    {
+      "name": "file-uri-percent-2B",
+      "playlistPath": "Z:\\Lists\\mix.m3u",
+      "itemPath": "file:///Z:/Media/some%2Bpath.mp3"
+    },
+    {
+      "name": "implicit-percent-7C",
+      "playlistPath": "Z:\\Lists\\mix.m3u",
+      "itemPath": "Z:\\Media\\some%7Cpath.mp3"
+    },
+    {
+      "name": "file-uri-percent-7C",
+      "playlistPath": "Z:\\Lists\\mix.m3u",
+      "itemPath": "file:///Z:/Media/some%7Cpath.mp3"
+    }
+  ],
+  "operations": [
+    {
+      "name": "add",
+      "operation": "add",
+      "ids": [
+        2
+      ],
+      "position": 1
+    },
+    {
+      "name": "remove-all-duplicates",
+      "operation": "remove",
+      "entryIds": [
+        1
+      ]
+    },
+    {
+      "name": "move",
+      "operation": "move",
+      "entryId": 2,
+      "newIndex": 0
+    },
+    {
+      "name": "update-replaces-in-three-writes",
+      "operation": "update",
+      "ids": [
+        2,
+        2
+      ],
+      "nameValue": "Updated"
+    },
+    {
+      "name": "update-empty-in-two-writes",
+      "operation": "update",
+      "ids": [],
+      "nameValue": "Empty"
+    },
+    {
+      "name": "update-metadata",
+      "operation": "update",
+      "nameValue": "New title"
+    },
+    {
+      "name": "add-file-failure-after-repository",
+      "operation": "add",
+      "ids": [
+        2
+      ],
+      "missingParent": true
+    },
+    {
+      "name": "add-repository-failure-before-file",
+      "operation": "add",
+      "ids": [
+        2
+      ],
+      "repositoryFailure": true
+    },
+    {
+      "name": "update-first-file-failure",
+      "operation": "update",
+      "ids": [
+        2
+      ],
+      "missingParent": true
+    },
+    {
+      "name": "add-no-additions",
+      "operation": "add",
+      "ids": [
+        99
+      ]
+    },
+    {
+      "name": "update-second-file-failure",
+      "operation": "update",
+      "ids": [
+        2,
+        2
+      ],
+      "nameValue": "Updated",
+      "fileReadOnlyOnRepository": 2
+    },
+    {
+      "name": "update-third-file-failure",
+      "operation": "update",
+      "ids": [
+        2,
+        2
+      ],
+      "nameValue": "Updated",
+      "fileReadOnlyOnRepository": 3
+    }
+  ]
+}

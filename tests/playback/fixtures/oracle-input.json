@@ -1,0 +1,1643 @@
+{
+  "profiles": [
+    {
+      "name": "basic",
+      "mediaType": "Video",
+      "source": {
+        "Id": "22222222222222222222222222222222",
+        "Path": "/isolated/movie.mkv",
+        "Protocol": "File",
+        "Container": "mkv",
+        "Bitrate": 4000000,
+        "SupportsDirectPlay": true,
+        "SupportsDirectStream": true,
+        "SupportsTranscoding": false,
+        "DefaultAudioStreamIndex": 1,
+        "MediaStreams": [
+          {
+            "Type": "Video",
+            "Index": 0,
+            "Codec": "h264",
+            "Width": 1920,
+            "Height": 1080,
+            "Profile": "High",
+            "Level": 41,
+            "BitDepth": 8,
+            "RealFrameRate": 24
+          },
+          {
+            "Type": "Audio",
+            "Index": 1,
+            "Codec": "aac",
+            "Channels": 2,
+            "SampleRate": 48000,
+            "BitRate": 128000,
+            "IsDefault": true
+          }
+        ],
+        "MediaAttachments": []
+      },
+      "profile": {
+        "DirectPlayProfiles": [
+          {
+            "Type": "Video",
+            "Container": "mkv,mp4",
+            "VideoCodec": "h264",
+            "AudioCodec": "aac"
+          }
+        ]
+      },
+      "options": {}
+    },
+    {
+      "name": "no profiles",
+      "mediaType": "Video",
+      "source": {
+        "Id": "22222222222222222222222222222222",
+        "Path": "/isolated/movie.mkv",
+        "Protocol": "File",
+        "Container": "mkv",
+        "Bitrate": 4000000,
+        "SupportsDirectPlay": true,
+        "SupportsDirectStream": true,
+        "SupportsTranscoding": false,
+        "DefaultAudioStreamIndex": 1,
+        "MediaStreams": [
+          {
+            "Type": "Video",
+            "Index": 0,
+            "Codec": "h264",
+            "Width": 1920,
+            "Height": 1080,
+            "Profile": "High",
+            "Level": 41,
+            "BitDepth": 8,
+            "RealFrameRate": 24
+          },
+          {
+            "Type": "Audio",
+            "Index": 1,
+            "Codec": "aac",
+            "Channels": 2,
+            "SampleRate": 48000,
+            "BitRate": 128000,
+            "IsDefault": true
+          }
+        ],
+        "MediaAttachments": []
+      },
+      "profile": {
+        "DirectPlayProfiles": []
+      },
+      "options": {}
+    },
+    {
+      "name": "unknown bitrate",
+      "mediaType": "Video",
+      "source": {
+        "Id": "22222222222222222222222222222222",
+        "Path": "/isolated/movie.mkv",
+        "Protocol": "File",
+        "Container": "mkv",
+        "SupportsDirectPlay": true,
+        "SupportsDirectStream": true,
+        "SupportsTranscoding": false,
+        "DefaultAudioStreamIndex": 1,
+        "MediaStreams": [
+          {
+            "Type": "Video",
+            "Index": 0,
+            "Codec": "h264",
+            "Width": 1920,
+            "Height": 1080,
+            "Profile": "High",
+            "Level": 41,
+            "BitDepth": 8,
+            "RealFrameRate": 24
+          },
+          {
+            "Type": "Audio",
+            "Index": 1,
+            "Codec": "aac",
+            "Channels": 2,
+            "SampleRate": 48000,
+            "BitRate": 128000,
+            "IsDefault": true
+          }
+        ],
+        "MediaAttachments": []
+      },
+      "profile": {
+        "DirectPlayProfiles": [
+          {
+            "Type": "Video",
+            "Container": "mkv,mp4",
+            "VideoCodec": "h264",
+            "AudioCodec": "aac"
+          }
+        ]
+      },
+      "options": {}
+    },
+    {
+      "name": "limited bitrate",
+      "mediaType": "Video",
+      "source": {
+        "Id": "22222222222222222222222222222222",
+        "Path": "/isolated/movie.mkv",
+        "Protocol": "File",
+        "Container": "mkv",
+        "Bitrate": 4000000,
+        "SupportsDirectPlay": true,
+        "SupportsDirectStream": true,
+        "SupportsTranscoding": false,
+        "DefaultAudioStreamIndex": 1,
+        "MediaStreams": [
+          {
+            "Type": "Video",
+            "Index": 0,
+            "Codec": "h264",
+            "Width": 1920,
+            "Height": 1080,
+            "Profile": "High",
+            "Level": 41,
+            "BitDepth": 8,
+            "RealFrameRate": 24
+          },
+          {
+            "Type": "Audio",
+            "Index": 1,
+            "Codec": "aac",
+            "Channels": 2,
+            "SampleRate": 48000,
+            "BitRate": 128000,
+            "IsDefault": true
+          }
+        ],
+        "MediaAttachments": []
+      },
+      "profile": {
+        "DirectPlayProfiles": [
+          {
+            "Type": "Video",
+            "Container": "mkv,mp4",
+            "VideoCodec": "h264",
+            "AudioCodec": "aac"
+          }
+        ]
+      },
+      "options": {
+        "MaxStreamingBitrate": 100000
+      }
+    },
+    {
+      "name": "direct disabled",
+      "mediaType": "Video",
+      "source": {
+        "Id": "22222222222222222222222222222222",
+        "Path": "/isolated/movie.mkv",
+        "Protocol": "File",
+        "Container": "mkv",
+        "Bitrate": 4000000,
+        "SupportsDirectPlay": true,
+        "SupportsDirectStream": true,
+        "SupportsTranscoding": false,
+        "DefaultAudioStreamIndex": 1,
+        "MediaStreams": [
+          {
+            "Type": "Video",
+            "Index": 0,
+            "Codec": "h264",
+            "Width": 1920,
+            "Height": 1080,
+            "Profile": "High",
+            "Level": 41,
+            "BitDepth": 8,
+            "RealFrameRate": 24
+          },
+          {
+            "Type": "Audio",
+            "Index": 1,
+            "Codec": "aac",
+            "Channels": 2,
+            "SampleRate": 48000,
+            "BitRate": 128000,
+            "IsDefault": true
+          }
+        ],
+        "MediaAttachments": []
+      },
+      "profile": {
+        "DirectPlayProfiles": [
+          {
+            "Type": "Video",
+            "Container": "mkv,mp4",
+            "VideoCodec": "h264",
+            "AudioCodec": "aac"
+          }
+        ]
+      },
+      "options": {
+        "EnableDirectPlay": false
+      }
+    },
+    {
+      "name": "container mismatch",
+      "mediaType": "Video",
+      "source": {
+        "Id": "22222222222222222222222222222222",
+        "Path": "/isolated/movie.mkv",
+        "Protocol": "File",
+        "Container": "avi",
+        "Bitrate": 4000000,
+        "SupportsDirectPlay": true,
+        "SupportsDirectStream": true,
+        "SupportsTranscoding": false,
+        "DefaultAudioStreamIndex": 1,
+        "MediaStreams": [
+          {
+            "Type": "Video",
+            "Index": 0,
+            "Codec": "h264",
+            "Width": 1920,
+            "Height": 1080,
+            "Profile": "High",
+            "Level": 41,
+            "BitDepth": 8,
+            "RealFrameRate": 24
+          },
+          {
+            "Type": "Audio",
+            "Index": 1,
+            "Codec": "aac",
+            "Channels": 2,
+            "SampleRate": 48000,
+            "BitRate": 128000,
+            "IsDefault": true
+          }
+        ],
+        "MediaAttachments": []
+      },
+      "profile": {
+        "DirectPlayProfiles": [
+          {
+            "Type": "Video",
+            "Container": "mkv,mp4",
+            "VideoCodec": "h264",
+            "AudioCodec": "aac"
+          }
+        ]
+      },
+      "options": {}
+    },
+    {
+      "name": "video mismatch",
+      "mediaType": "Video",
+      "source": {
+        "Id": "22222222222222222222222222222222",
+        "Path": "/isolated/movie.mkv",
+        "Protocol": "File",
+        "Container": "mkv",
+        "Bitrate": 4000000,
+        "SupportsDirectPlay": true,
+        "SupportsDirectStream": true,
+        "SupportsTranscoding": false,
+        "DefaultAudioStreamIndex": 1,
+        "MediaStreams": [
+          {
+            "Type": "Video",
+            "Index": 0,
+            "Codec": "hevc",
+            "Width": 1920,
+            "Height": 1080,
+            "Profile": "High",
+            "Level": 41,
+            "BitDepth": 8,
+            "RealFrameRate": 24
+          },
+          {
+            "Type": "Audio",
+            "Index": 1,
+            "Codec": "aac",
+            "Channels": 2,
+            "SampleRate": 48000,
+            "BitRate": 128000,
+            "IsDefault": true
+          }
+        ],
+        "MediaAttachments": []
+      },
+      "profile": {
+        "DirectPlayProfiles": [
+          {
+            "Type": "Video",
+            "Container": "mkv,mp4",
+            "VideoCodec": "h264",
+            "AudioCodec": "aac"
+          }
+        ]
+      },
+      "options": {}
+    },
+    {
+      "name": "audio mismatch",
+      "mediaType": "Video",
+      "source": {
+        "Id": "22222222222222222222222222222222",
+        "Path": "/isolated/movie.mkv",
+        "Protocol": "File",
+        "Container": "mkv",
+        "Bitrate": 4000000,
+        "SupportsDirectPlay": true,
+        "SupportsDirectStream": true,
+        "SupportsTranscoding": false,
+        "DefaultAudioStreamIndex": 1,
+        "MediaStreams": [
+          {
+            "Type": "Video",
+            "Index": 0,
+            "Codec": "h264",
+            "Width": 1920,
+            "Height": 1080,
+            "Profile": "High",
+            "Level": 41,
+            "BitDepth": 8,
+            "RealFrameRate": 24
+          },
+          {
+            "Type": "Audio",
+            "Index": 1,
+            "Codec": "dts",
+            "Channels": 2,
+            "SampleRate": 48000,
+            "BitRate": 128000,
+            "IsDefault": true
+          }
+        ],
+        "MediaAttachments": []
+      },
+      "profile": {
+        "DirectPlayProfiles": [
+          {
+            "Type": "Video",
+            "Container": "mkv,mp4",
+            "VideoCodec": "h264",
+            "AudioCodec": "aac"
+          }
+        ]
+      },
+      "options": {}
+    },
+    {
+      "name": "external audio",
+      "mediaType": "Video",
+      "source": {
+        "Id": "22222222222222222222222222222222",
+        "Path": "/isolated/movie.mkv",
+        "Protocol": "File",
+        "Container": "mkv",
+        "Bitrate": 4000000,
+        "SupportsDirectPlay": true,
+        "SupportsDirectStream": true,
+        "SupportsTranscoding": false,
+        "DefaultAudioStreamIndex": 1,
+        "MediaStreams": [
+          {
+            "Type": "Video",
+            "Index": 0,
+            "Codec": "h264",
+            "Width": 1920,
+            "Height": 1080,
+            "Profile": "High",
+            "Level": 41,
+            "BitDepth": 8,
+            "RealFrameRate": 24
+          },
+          {
+            "Type": "Audio",
+            "Index": 1,
+            "Codec": "aac",
+            "Channels": 2,
+            "SampleRate": 48000,
+            "BitRate": 128000,
+            "IsDefault": true,
+            "IsExternal": true
+          }
+        ],
+        "MediaAttachments": []
+      },
+      "profile": {
+        "DirectPlayProfiles": [
+          {
+            "Type": "Video",
+            "Container": "mkv,mp4",
+            "VideoCodec": "h264",
+            "AudioCodec": "aac"
+          }
+        ]
+      },
+      "options": {}
+    },
+    {
+      "name": "dvd",
+      "mediaType": "Video",
+      "source": {
+        "Id": "22222222222222222222222222222222",
+        "Path": "/isolated/movie.mkv",
+        "Protocol": "File",
+        "Container": "mkv",
+        "Bitrate": 4000000,
+        "SupportsDirectPlay": true,
+        "SupportsDirectStream": true,
+        "SupportsTranscoding": false,
+        "DefaultAudioStreamIndex": 1,
+        "MediaStreams": [
+          {
+            "Type": "Video",
+            "Index": 0,
+            "Codec": "h264",
+            "Width": 1920,
+            "Height": 1080,
+            "Profile": "High",
+            "Level": 41,
+            "BitDepth": 8,
+            "RealFrameRate": 24
+          },
+          {
+            "Type": "Audio",
+            "Index": 1,
+            "Codec": "aac",
+            "Channels": 2,
+            "SampleRate": 48000,
+            "BitRate": 128000,
+            "IsDefault": true
+          }
+        ],
+        "MediaAttachments": [],
+        "VideoType": "Dvd"
+      },
+      "profile": {
+        "DirectPlayProfiles": [
+          {
+            "Type": "Video",
+            "Container": "mkv,mp4",
+            "VideoCodec": "h264",
+            "AudioCodec": "aac"
+          }
+        ]
+      },
+      "options": {}
+    },
+    {
+      "name": "manifest",
+      "mediaType": "Video",
+      "source": {
+        "Id": "22222222222222222222222222222222",
+        "Path": "/isolated/movie.mkv",
+        "Protocol": "File",
+        "Container": "hls",
+        "Bitrate": 4000000,
+        "SupportsDirectPlay": true,
+        "SupportsDirectStream": true,
+        "SupportsTranscoding": false,
+        "DefaultAudioStreamIndex": 1,
+        "MediaStreams": [
+          {
+            "Type": "Video",
+            "Index": 0,
+            "Codec": "h264",
+            "Width": 1920,
+            "Height": 1080,
+            "Profile": "High",
+            "Level": 41,
+            "BitDepth": 8,
+            "RealFrameRate": 24
+          },
+          {
+            "Type": "Audio",
+            "Index": 1,
+            "Codec": "aac",
+            "Channels": 2,
+            "SampleRate": 48000,
+            "BitRate": 128000,
+            "IsDefault": true
+          }
+        ],
+        "MediaAttachments": []
+      },
+      "profile": {
+        "DirectPlayProfiles": [
+          {
+            "Type": "Video",
+            "Container": "mkv,mp4",
+            "VideoCodec": "h264",
+            "AudioCodec": "aac"
+          }
+        ]
+      },
+      "options": {}
+    },
+    {
+      "name": "Width",
+      "mediaType": "Video",
+      "source": {
+        "Id": "22222222222222222222222222222222",
+        "Path": "/isolated/movie.mkv",
+        "Protocol": "File",
+        "Container": "mkv",
+        "Bitrate": 4000000,
+        "SupportsDirectPlay": true,
+        "SupportsDirectStream": true,
+        "SupportsTranscoding": false,
+        "DefaultAudioStreamIndex": 1,
+        "MediaStreams": [
+          {
+            "Type": "Video",
+            "Index": 0,
+            "Codec": "h264",
+            "Width": 1920,
+            "Height": 1080,
+            "Profile": "High",
+            "Level": 41,
+            "BitDepth": 8,
+            "RealFrameRate": 24
+          },
+          {
+            "Type": "Audio",
+            "Index": 1,
+            "Codec": "aac",
+            "Channels": 2,
+            "SampleRate": 48000,
+            "BitRate": 128000,
+            "IsDefault": true
+          }
+        ],
+        "MediaAttachments": []
+      },
+      "profile": {
+        "DirectPlayProfiles": [
+          {
+            "Type": "Video",
+            "Container": "mkv,mp4",
+            "VideoCodec": "h264",
+            "AudioCodec": "aac"
+          }
+        ],
+        "CodecProfiles": [
+          {
+            "Type": "Video",
+            "Conditions": [
+              {
+                "Property": "Width",
+                "Condition": "LessThanEqual",
+                "Value": "1280",
+                "IsRequired": true
+              }
+            ]
+          }
+        ]
+      },
+      "options": {}
+    },
+    {
+      "name": "Height",
+      "mediaType": "Video",
+      "source": {
+        "Id": "22222222222222222222222222222222",
+        "Path": "/isolated/movie.mkv",
+        "Protocol": "File",
+        "Container": "mkv",
+        "Bitrate": 4000000,
+        "SupportsDirectPlay": true,
+        "SupportsDirectStream": true,
+        "SupportsTranscoding": false,
+        "DefaultAudioStreamIndex": 1,
+        "MediaStreams": [
+          {
+            "Type": "Video",
+            "Index": 0,
+            "Codec": "h264",
+            "Width": 1920,
+            "Height": 1080,
+            "Profile": "High",
+            "Level": 41,
+            "BitDepth": 8,
+            "RealFrameRate": 24
+          },
+          {
+            "Type": "Audio",
+            "Index": 1,
+            "Codec": "aac",
+            "Channels": 2,
+            "SampleRate": 48000,
+            "BitRate": 128000,
+            "IsDefault": true
+          }
+        ],
+        "MediaAttachments": []
+      },
+      "profile": {
+        "DirectPlayProfiles": [
+          {
+            "Type": "Video",
+            "Container": "mkv,mp4",
+            "VideoCodec": "h264",
+            "AudioCodec": "aac"
+          }
+        ],
+        "CodecProfiles": [
+          {
+            "Type": "Video",
+            "Conditions": [
+              {
+                "Property": "Height",
+                "Condition": "LessThanEqual",
+                "Value": "720",
+                "IsRequired": true
+              }
+            ]
+          }
+        ]
+      },
+      "options": {}
+    },
+    {
+      "name": "VideoLevel",
+      "mediaType": "Video",
+      "source": {
+        "Id": "22222222222222222222222222222222",
+        "Path": "/isolated/movie.mkv",
+        "Protocol": "File",
+        "Container": "mkv",
+        "Bitrate": 4000000,
+        "SupportsDirectPlay": true,
+        "SupportsDirectStream": true,
+        "SupportsTranscoding": false,
+        "DefaultAudioStreamIndex": 1,
+        "MediaStreams": [
+          {
+            "Type": "Video",
+            "Index": 0,
+            "Codec": "h264",
+            "Width": 1920,
+            "Height": 1080,
+            "Profile": "High",
+            "Level": 41,
+            "BitDepth": 8,
+            "RealFrameRate": 24
+          },
+          {
+            "Type": "Audio",
+            "Index": 1,
+            "Codec": "aac",
+            "Channels": 2,
+            "SampleRate": 48000,
+            "BitRate": 128000,
+            "IsDefault": true
+          }
+        ],
+        "MediaAttachments": []
+      },
+      "profile": {
+        "DirectPlayProfiles": [
+          {
+            "Type": "Video",
+            "Container": "mkv,mp4",
+            "VideoCodec": "h264",
+            "AudioCodec": "aac"
+          }
+        ],
+        "CodecProfiles": [
+          {
+            "Type": "Video",
+            "Conditions": [
+              {
+                "Property": "VideoLevel",
+                "Condition": "LessThanEqual",
+                "Value": "40",
+                "IsRequired": true
+              }
+            ]
+          }
+        ]
+      },
+      "options": {}
+    },
+    {
+      "name": "VideoBitDepth",
+      "mediaType": "Video",
+      "source": {
+        "Id": "22222222222222222222222222222222",
+        "Path": "/isolated/movie.mkv",
+        "Protocol": "File",
+        "Container": "mkv",
+        "Bitrate": 4000000,
+        "SupportsDirectPlay": true,
+        "SupportsDirectStream": true,
+        "SupportsTranscoding": false,
+        "DefaultAudioStreamIndex": 1,
+        "MediaStreams": [
+          {
+            "Type": "Video",
+            "Index": 0,
+            "Codec": "h264",
+            "Width": 1920,
+            "Height": 1080,
+            "Profile": "High",
+            "Level": 41,
+            "BitDepth": 8,
+            "RealFrameRate": 24
+          },
+          {
+            "Type": "Audio",
+            "Index": 1,
+            "Codec": "aac",
+            "Channels": 2,
+            "SampleRate": 48000,
+            "BitRate": 128000,
+            "IsDefault": true
+          }
+        ],
+        "MediaAttachments": []
+      },
+      "profile": {
+        "DirectPlayProfiles": [
+          {
+            "Type": "Video",
+            "Container": "mkv,mp4",
+            "VideoCodec": "h264",
+            "AudioCodec": "aac"
+          }
+        ],
+        "CodecProfiles": [
+          {
+            "Type": "Video",
+            "Conditions": [
+              {
+                "Property": "VideoBitDepth",
+                "Condition": "LessThanEqual",
+                "Value": "7",
+                "IsRequired": true
+              }
+            ]
+          }
+        ]
+      },
+      "options": {}
+    },
+    {
+      "name": "VideoFramerate",
+      "mediaType": "Video",
+      "source": {
+        "Id": "22222222222222222222222222222222",
+        "Path": "/isolated/movie.mkv",
+        "Protocol": "File",
+        "Container": "mkv",
+        "Bitrate": 4000000,
+        "SupportsDirectPlay": true,
+        "SupportsDirectStream": true,
+        "SupportsTranscoding": false,
+        "DefaultAudioStreamIndex": 1,
+        "MediaStreams": [
+          {
+            "Type": "Video",
+            "Index": 0,
+            "Codec": "h264",
+            "Width": 1920,
+            "Height": 1080,
+            "Profile": "High",
+            "Level": 41,
+            "BitDepth": 8,
+            "RealFrameRate": 24
+          },
+          {
+            "Type": "Audio",
+            "Index": 1,
+            "Codec": "aac",
+            "Channels": 2,
+            "SampleRate": 48000,
+            "BitRate": 128000,
+            "IsDefault": true
+          }
+        ],
+        "MediaAttachments": []
+      },
+      "profile": {
+        "DirectPlayProfiles": [
+          {
+            "Type": "Video",
+            "Container": "mkv,mp4",
+            "VideoCodec": "h264",
+            "AudioCodec": "aac"
+          }
+        ],
+        "CodecProfiles": [
+          {
+            "Type": "Video",
+            "Conditions": [
+              {
+                "Property": "VideoFramerate",
+                "Condition": "LessThanEqual",
+                "Value": "23",
+                "IsRequired": true
+              }
+            ]
+          }
+        ]
+      },
+      "options": {}
+    },
+    {
+      "name": "AudioChannels",
+      "mediaType": "Video",
+      "source": {
+        "Id": "22222222222222222222222222222222",
+        "Path": "/isolated/movie.mkv",
+        "Protocol": "File",
+        "Container": "mkv",
+        "Bitrate": 4000000,
+        "SupportsDirectPlay": true,
+        "SupportsDirectStream": true,
+        "SupportsTranscoding": false,
+        "DefaultAudioStreamIndex": 1,
+        "MediaStreams": [
+          {
+            "Type": "Video",
+            "Index": 0,
+            "Codec": "h264",
+            "Width": 1920,
+            "Height": 1080,
+            "Profile": "High",
+            "Level": 41,
+            "BitDepth": 8,
+            "RealFrameRate": 24
+          },
+          {
+            "Type": "Audio",
+            "Index": 1,
+            "Codec": "aac",
+            "Channels": 2,
+            "SampleRate": 48000,
+            "BitRate": 128000,
+            "IsDefault": true
+          }
+        ],
+        "MediaAttachments": []
+      },
+      "profile": {
+        "DirectPlayProfiles": [
+          {
+            "Type": "Video",
+            "Container": "mkv,mp4",
+            "VideoCodec": "h264",
+            "AudioCodec": "aac"
+          }
+        ],
+        "CodecProfiles": [
+          {
+            "Type": "VideoAudio",
+            "Conditions": [
+              {
+                "Property": "AudioChannels",
+                "Condition": "LessThanEqual",
+                "Value": "1",
+                "IsRequired": true
+              }
+            ]
+          }
+        ]
+      },
+      "options": {}
+    },
+    {
+      "name": "AudioSampleRate",
+      "mediaType": "Video",
+      "source": {
+        "Id": "22222222222222222222222222222222",
+        "Path": "/isolated/movie.mkv",
+        "Protocol": "File",
+        "Container": "mkv",
+        "Bitrate": 4000000,
+        "SupportsDirectPlay": true,
+        "SupportsDirectStream": true,
+        "SupportsTranscoding": false,
+        "DefaultAudioStreamIndex": 1,
+        "MediaStreams": [
+          {
+            "Type": "Video",
+            "Index": 0,
+            "Codec": "h264",
+            "Width": 1920,
+            "Height": 1080,
+            "Profile": "High",
+            "Level": 41,
+            "BitDepth": 8,
+            "RealFrameRate": 24
+          },
+          {
+            "Type": "Audio",
+            "Index": 1,
+            "Codec": "aac",
+            "Channels": 2,
+            "SampleRate": 48000,
+            "BitRate": 128000,
+            "IsDefault": true
+          }
+        ],
+        "MediaAttachments": []
+      },
+      "profile": {
+        "DirectPlayProfiles": [
+          {
+            "Type": "Video",
+            "Container": "mkv,mp4",
+            "VideoCodec": "h264",
+            "AudioCodec": "aac"
+          }
+        ],
+        "CodecProfiles": [
+          {
+            "Type": "VideoAudio",
+            "Conditions": [
+              {
+                "Property": "AudioSampleRate",
+                "Condition": "LessThanEqual",
+                "Value": "44100",
+                "IsRequired": true
+              }
+            ]
+          }
+        ]
+      },
+      "options": {}
+    },
+    {
+      "name": "profile name",
+      "mediaType": "Video",
+      "source": {
+        "Id": "22222222222222222222222222222222",
+        "Path": "/isolated/movie.mkv",
+        "Protocol": "File",
+        "Container": "mkv",
+        "Bitrate": 4000000,
+        "SupportsDirectPlay": true,
+        "SupportsDirectStream": true,
+        "SupportsTranscoding": false,
+        "DefaultAudioStreamIndex": 1,
+        "MediaStreams": [
+          {
+            "Type": "Video",
+            "Index": 0,
+            "Codec": "h264",
+            "Width": 1920,
+            "Height": 1080,
+            "Profile": "High",
+            "Level": 41,
+            "BitDepth": 8,
+            "RealFrameRate": 24
+          },
+          {
+            "Type": "Audio",
+            "Index": 1,
+            "Codec": "aac",
+            "Channels": 2,
+            "SampleRate": 48000,
+            "BitRate": 128000,
+            "IsDefault": true
+          }
+        ],
+        "MediaAttachments": []
+      },
+      "profile": {
+        "DirectPlayProfiles": [
+          {
+            "Type": "Video",
+            "Container": "mkv,mp4",
+            "VideoCodec": "h264",
+            "AudioCodec": "aac"
+          }
+        ],
+        "CodecProfiles": [
+          {
+            "Type": "Video",
+            "Conditions": [
+              {
+                "Property": "VideoProfile",
+                "Condition": "EqualsAny",
+                "Value": "Main|Baseline"
+              }
+            ]
+          }
+        ]
+      },
+      "options": {}
+    },
+    {
+      "name": "missing required",
+      "mediaType": "Video",
+      "source": {
+        "Id": "22222222222222222222222222222222",
+        "Path": "/isolated/movie.mkv",
+        "Protocol": "File",
+        "Container": "mkv",
+        "Bitrate": 4000000,
+        "SupportsDirectPlay": true,
+        "SupportsDirectStream": true,
+        "SupportsTranscoding": false,
+        "DefaultAudioStreamIndex": 1,
+        "MediaStreams": [
+          {
+            "Type": "Video",
+            "Index": 0,
+            "Codec": "h264",
+            "Width": 1920,
+            "Height": 1080,
+            "Profile": "High",
+            "Level": 41,
+            "BitDepth": 8,
+            "RealFrameRate": 24
+          },
+          {
+            "Type": "Audio",
+            "Index": 1,
+            "Codec": "aac",
+            "Channels": 2,
+            "SampleRate": 48000,
+            "BitRate": 128000,
+            "IsDefault": true
+          }
+        ],
+        "MediaAttachments": []
+      },
+      "profile": {
+        "DirectPlayProfiles": [
+          {
+            "Type": "Video",
+            "Container": "mkv,mp4",
+            "VideoCodec": "h264",
+            "AudioCodec": "aac"
+          }
+        ],
+        "CodecProfiles": [
+          {
+            "Type": "Video",
+            "Conditions": [
+              {
+                "Property": "RefFrames",
+                "Condition": "LessThanEqual",
+                "Value": "4",
+                "IsRequired": true
+              }
+            ]
+          }
+        ]
+      },
+      "options": {}
+    },
+    {
+      "name": "missing optional",
+      "mediaType": "Video",
+      "source": {
+        "Id": "22222222222222222222222222222222",
+        "Path": "/isolated/movie.mkv",
+        "Protocol": "File",
+        "Container": "mkv",
+        "Bitrate": 4000000,
+        "SupportsDirectPlay": true,
+        "SupportsDirectStream": true,
+        "SupportsTranscoding": false,
+        "DefaultAudioStreamIndex": 1,
+        "MediaStreams": [
+          {
+            "Type": "Video",
+            "Index": 0,
+            "Codec": "h264",
+            "Width": 1920,
+            "Height": 1080,
+            "Profile": "High",
+            "Level": 41,
+            "BitDepth": 8,
+            "RealFrameRate": 24
+          },
+          {
+            "Type": "Audio",
+            "Index": 1,
+            "Codec": "aac",
+            "Channels": 2,
+            "SampleRate": 48000,
+            "BitRate": 128000,
+            "IsDefault": true
+          }
+        ],
+        "MediaAttachments": []
+      },
+      "profile": {
+        "DirectPlayProfiles": [
+          {
+            "Type": "Video",
+            "Container": "mkv,mp4",
+            "VideoCodec": "h264",
+            "AudioCodec": "aac"
+          }
+        ],
+        "CodecProfiles": [
+          {
+            "Type": "Video",
+            "Conditions": [
+              {
+                "Property": "RefFrames",
+                "Condition": "LessThanEqual",
+                "Value": "4",
+                "IsRequired": false
+              }
+            ]
+          }
+        ]
+      },
+      "options": {}
+    },
+    {
+      "name": "external subtitle Embed",
+      "mediaType": "Video",
+      "source": {
+        "Id": "22222222222222222222222222222222",
+        "Path": "/isolated/movie.mkv",
+        "Protocol": "File",
+        "Container": "mkv",
+        "Bitrate": 4000000,
+        "SupportsDirectPlay": true,
+        "SupportsDirectStream": true,
+        "SupportsTranscoding": false,
+        "DefaultAudioStreamIndex": 1,
+        "MediaStreams": [
+          {
+            "Type": "Video",
+            "Index": 0,
+            "Codec": "h264",
+            "Width": 1920,
+            "Height": 1080,
+            "Profile": "High",
+            "Level": 41,
+            "BitDepth": 8,
+            "RealFrameRate": 24
+          },
+          {
+            "Type": "Audio",
+            "Index": 1,
+            "Codec": "aac",
+            "Channels": 2,
+            "SampleRate": 48000,
+            "BitRate": 128000,
+            "IsDefault": true
+          },
+          {
+            "Type": "Subtitle",
+            "Index": 2,
+            "Codec": "srt",
+            "IsExternal": true,
+            "Path": "/isolated/sub.srt"
+          }
+        ],
+        "MediaAttachments": [],
+        "DefaultSubtitleStreamIndex": 2
+      },
+      "profile": {
+        "DirectPlayProfiles": [
+          {
+            "Type": "Video",
+            "Container": "mkv,mp4",
+            "VideoCodec": "h264",
+            "AudioCodec": "aac"
+          }
+        ],
+        "SubtitleProfiles": [
+          {
+            "Format": "srt",
+            "Method": "Embed"
+          }
+        ]
+      },
+      "options": {}
+    },
+    {
+      "name": "external subtitle External",
+      "mediaType": "Video",
+      "source": {
+        "Id": "22222222222222222222222222222222",
+        "Path": "/isolated/movie.mkv",
+        "Protocol": "File",
+        "Container": "mkv",
+        "Bitrate": 4000000,
+        "SupportsDirectPlay": true,
+        "SupportsDirectStream": true,
+        "SupportsTranscoding": false,
+        "DefaultAudioStreamIndex": 1,
+        "MediaStreams": [
+          {
+            "Type": "Video",
+            "Index": 0,
+            "Codec": "h264",
+            "Width": 1920,
+            "Height": 1080,
+            "Profile": "High",
+            "Level": 41,
+            "BitDepth": 8,
+            "RealFrameRate": 24
+          },
+          {
+            "Type": "Audio",
+            "Index": 1,
+            "Codec": "aac",
+            "Channels": 2,
+            "SampleRate": 48000,
+            "BitRate": 128000,
+            "IsDefault": true
+          },
+          {
+            "Type": "Subtitle",
+            "Index": 2,
+            "Codec": "srt",
+            "IsExternal": true,
+            "Path": "/isolated/sub.srt"
+          }
+        ],
+        "MediaAttachments": [],
+        "DefaultSubtitleStreamIndex": 2
+      },
+      "profile": {
+        "DirectPlayProfiles": [
+          {
+            "Type": "Video",
+            "Container": "mkv,mp4",
+            "VideoCodec": "h264",
+            "AudioCodec": "aac"
+          }
+        ],
+        "SubtitleProfiles": [
+          {
+            "Format": "srt",
+            "Method": "External"
+          }
+        ]
+      },
+      "options": {}
+    },
+    {
+      "name": "embedded subtitle Embed",
+      "mediaType": "Video",
+      "source": {
+        "Id": "22222222222222222222222222222222",
+        "Path": "/isolated/movie.mkv",
+        "Protocol": "File",
+        "Container": "mkv",
+        "Bitrate": 4000000,
+        "SupportsDirectPlay": true,
+        "SupportsDirectStream": true,
+        "SupportsTranscoding": false,
+        "DefaultAudioStreamIndex": 1,
+        "MediaStreams": [
+          {
+            "Type": "Video",
+            "Index": 0,
+            "Codec": "h264",
+            "Width": 1920,
+            "Height": 1080,
+            "Profile": "High",
+            "Level": 41,
+            "BitDepth": 8,
+            "RealFrameRate": 24
+          },
+          {
+            "Type": "Audio",
+            "Index": 1,
+            "Codec": "aac",
+            "Channels": 2,
+            "SampleRate": 48000,
+            "BitRate": 128000,
+            "IsDefault": true
+          },
+          {
+            "Type": "Subtitle",
+            "Index": 2,
+            "Codec": "srt",
+            "IsExternal": false,
+            "Path": null
+          }
+        ],
+        "MediaAttachments": [],
+        "DefaultSubtitleStreamIndex": 2
+      },
+      "profile": {
+        "DirectPlayProfiles": [
+          {
+            "Type": "Video",
+            "Container": "mkv,mp4",
+            "VideoCodec": "h264",
+            "AudioCodec": "aac"
+          }
+        ],
+        "SubtitleProfiles": [
+          {
+            "Format": "srt",
+            "Method": "Embed"
+          }
+        ]
+      },
+      "options": {}
+    },
+    {
+      "name": "embedded subtitle External",
+      "mediaType": "Video",
+      "source": {
+        "Id": "22222222222222222222222222222222",
+        "Path": "/isolated/movie.mkv",
+        "Protocol": "File",
+        "Container": "mkv",
+        "Bitrate": 4000000,
+        "SupportsDirectPlay": true,
+        "SupportsDirectStream": true,
+        "SupportsTranscoding": false,
+        "DefaultAudioStreamIndex": 1,
+        "MediaStreams": [
+          {
+            "Type": "Video",
+            "Index": 0,
+            "Codec": "h264",
+            "Width": 1920,
+            "Height": 1080,
+            "Profile": "High",
+            "Level": 41,
+            "BitDepth": 8,
+            "RealFrameRate": 24
+          },
+          {
+            "Type": "Audio",
+            "Index": 1,
+            "Codec": "aac",
+            "Channels": 2,
+            "SampleRate": 48000,
+            "BitRate": 128000,
+            "IsDefault": true
+          },
+          {
+            "Type": "Subtitle",
+            "Index": 2,
+            "Codec": "srt",
+            "IsExternal": false,
+            "Path": null
+          }
+        ],
+        "MediaAttachments": [],
+        "DefaultSubtitleStreamIndex": 2
+      },
+      "profile": {
+        "DirectPlayProfiles": [
+          {
+            "Type": "Video",
+            "Container": "mkv,mp4",
+            "VideoCodec": "h264",
+            "AudioCodec": "aac"
+          }
+        ],
+        "SubtitleProfiles": [
+          {
+            "Format": "srt",
+            "Method": "External"
+          }
+        ]
+      },
+      "options": {}
+    },
+    {
+      "name": "audio mp3",
+      "mediaType": "Audio",
+      "source": {
+        "Id": "22222222222222222222222222222222",
+        "Path": "/isolated/movie.mkv",
+        "Protocol": "File",
+        "Container": "mp3",
+        "Bitrate": 4000000,
+        "SupportsDirectPlay": true,
+        "SupportsDirectStream": true,
+        "SupportsTranscoding": false,
+        "DefaultAudioStreamIndex": 0,
+        "MediaStreams": [
+          {
+            "Type": "Audio",
+            "Index": 0,
+            "Codec": "mp3",
+            "Channels": 2,
+            "SampleRate": 44100
+          }
+        ],
+        "MediaAttachments": []
+      },
+      "profile": {
+        "DirectPlayProfiles": [
+          {
+            "Type": "Audio",
+            "Container": "mp3",
+            "AudioCodec": "mp3"
+          }
+        ]
+      },
+      "options": {}
+    },
+    {
+      "name": "audio flac",
+      "mediaType": "Audio",
+      "source": {
+        "Id": "22222222222222222222222222222222",
+        "Path": "/isolated/movie.mkv",
+        "Protocol": "File",
+        "Container": "flac",
+        "Bitrate": 4000000,
+        "SupportsDirectPlay": true,
+        "SupportsDirectStream": true,
+        "SupportsTranscoding": false,
+        "DefaultAudioStreamIndex": 0,
+        "MediaStreams": [
+          {
+            "Type": "Audio",
+            "Index": 0,
+            "Codec": "flac",
+            "Channels": 2,
+            "SampleRate": 44100
+          }
+        ],
+        "MediaAttachments": []
+      },
+      "profile": {
+        "DirectPlayProfiles": [
+          {
+            "Type": "Audio",
+            "Container": "mp3",
+            "AudioCodec": "mp3"
+          }
+        ]
+      },
+      "options": {}
+    }
+  ],
+  "subtitles": [
+    {
+      "name": "vtt-0-true",
+      "text": "1\n00:00:01,000 --> 00:00:03,500\n中文 & <i>one</i>\nsecond line\n\n2\n00:00:04,000 --> 00:00:05,000\nTwo\n\n3\n00:00:08,000 --> 00:00:09,000\nThree\n",
+      "inputFormat": "srt",
+      "outputFormat": "vtt",
+      "start": 0,
+      "end": 50000000,
+      "copy": true
+    },
+    {
+      "name": "vtt-0-false",
+      "text": "1\n00:00:01,000 --> 00:00:03,500\n中文 & <i>one</i>\nsecond line\n\n2\n00:00:04,000 --> 00:00:05,000\nTwo\n\n3\n00:00:08,000 --> 00:00:09,000\nThree\n",
+      "inputFormat": "srt",
+      "outputFormat": "vtt",
+      "start": 0,
+      "end": 50000000,
+      "copy": false
+    },
+    {
+      "name": "vtt-20000000-true",
+      "text": "1\n00:00:01,000 --> 00:00:03,500\n中文 & <i>one</i>\nsecond line\n\n2\n00:00:04,000 --> 00:00:05,000\nTwo\n\n3\n00:00:08,000 --> 00:00:09,000\nThree\n",
+      "inputFormat": "srt",
+      "outputFormat": "vtt",
+      "start": 20000000,
+      "end": 50000000,
+      "copy": true
+    },
+    {
+      "name": "vtt-20000000-false",
+      "text": "1\n00:00:01,000 --> 00:00:03,500\n中文 & <i>one</i>\nsecond line\n\n2\n00:00:04,000 --> 00:00:05,000\nTwo\n\n3\n00:00:08,000 --> 00:00:09,000\nThree\n",
+      "inputFormat": "srt",
+      "outputFormat": "vtt",
+      "start": 20000000,
+      "end": 50000000,
+      "copy": false
+    },
+    {
+      "name": "vtt-35000000-true",
+      "text": "1\n00:00:01,000 --> 00:00:03,500\n中文 & <i>one</i>\nsecond line\n\n2\n00:00:04,000 --> 00:00:05,000\nTwo\n\n3\n00:00:08,000 --> 00:00:09,000\nThree\n",
+      "inputFormat": "srt",
+      "outputFormat": "vtt",
+      "start": 35000000,
+      "end": 50000000,
+      "copy": true
+    },
+    {
+      "name": "vtt-35000000-false",
+      "text": "1\n00:00:01,000 --> 00:00:03,500\n中文 & <i>one</i>\nsecond line\n\n2\n00:00:04,000 --> 00:00:05,000\nTwo\n\n3\n00:00:08,000 --> 00:00:09,000\nThree\n",
+      "inputFormat": "srt",
+      "outputFormat": "vtt",
+      "start": 35000000,
+      "end": 50000000,
+      "copy": false
+    },
+    {
+      "name": "vtt-50000000-true",
+      "text": "1\n00:00:01,000 --> 00:00:03,500\n中文 & <i>one</i>\nsecond line\n\n2\n00:00:04,000 --> 00:00:05,000\nTwo\n\n3\n00:00:08,000 --> 00:00:09,000\nThree\n",
+      "inputFormat": "srt",
+      "outputFormat": "vtt",
+      "start": 50000000,
+      "end": 50000000,
+      "copy": true
+    },
+    {
+      "name": "vtt-50000000-false",
+      "text": "1\n00:00:01,000 --> 00:00:03,500\n中文 & <i>one</i>\nsecond line\n\n2\n00:00:04,000 --> 00:00:05,000\nTwo\n\n3\n00:00:08,000 --> 00:00:09,000\nThree\n",
+      "inputFormat": "srt",
+      "outputFormat": "vtt",
+      "start": 50000000,
+      "end": 50000000,
+      "copy": false
+    },
+    {
+      "name": "json-0-true",
+      "text": "1\n00:00:01,000 --> 00:00:03,500\n中文 & <i>one</i>\nsecond line\n\n2\n00:00:04,000 --> 00:00:05,000\nTwo\n\n3\n00:00:08,000 --> 00:00:09,000\nThree\n",
+      "inputFormat": "srt",
+      "outputFormat": "json",
+      "start": 0,
+      "end": 50000000,
+      "copy": true
+    },
+    {
+      "name": "json-0-false",
+      "text": "1\n00:00:01,000 --> 00:00:03,500\n中文 & <i>one</i>\nsecond line\n\n2\n00:00:04,000 --> 00:00:05,000\nTwo\n\n3\n00:00:08,000 --> 00:00:09,000\nThree\n",
+      "inputFormat": "srt",
+      "outputFormat": "json",
+      "start": 0,
+      "end": 50000000,
+      "copy": false
+    },
+    {
+      "name": "json-20000000-true",
+      "text": "1\n00:00:01,000 --> 00:00:03,500\n中文 & <i>one</i>\nsecond line\n\n2\n00:00:04,000 --> 00:00:05,000\nTwo\n\n3\n00:00:08,000 --> 00:00:09,000\nThree\n",
+      "inputFormat": "srt",
+      "outputFormat": "json",
+      "start": 20000000,
+      "end": 50000000,
+      "copy": true
+    },
+    {
+      "name": "json-20000000-false",
+      "text": "1\n00:00:01,000 --> 00:00:03,500\n中文 & <i>one</i>\nsecond line\n\n2\n00:00:04,000 --> 00:00:05,000\nTwo\n\n3\n00:00:08,000 --> 00:00:09,000\nThree\n",
+      "inputFormat": "srt",
+      "outputFormat": "json",
+      "start": 20000000,
+      "end": 50000000,
+      "copy": false
+    },
+    {
+      "name": "json-35000000-true",
+      "text": "1\n00:00:01,000 --> 00:00:03,500\n中文 & <i>one</i>\nsecond line\n\n2\n00:00:04,000 --> 00:00:05,000\nTwo\n\n3\n00:00:08,000 --> 00:00:09,000\nThree\n",
+      "inputFormat": "srt",
+      "outputFormat": "json",
+      "start": 35000000,
+      "end": 50000000,
+      "copy": true
+    },
+    {
+      "name": "json-35000000-false",
+      "text": "1\n00:00:01,000 --> 00:00:03,500\n中文 & <i>one</i>\nsecond line\n\n2\n00:00:04,000 --> 00:00:05,000\nTwo\n\n3\n00:00:08,000 --> 00:00:09,000\nThree\n",
+      "inputFormat": "srt",
+      "outputFormat": "json",
+      "start": 35000000,
+      "end": 50000000,
+      "copy": false
+    },
+    {
+      "name": "json-50000000-true",
+      "text": "1\n00:00:01,000 --> 00:00:03,500\n中文 & <i>one</i>\nsecond line\n\n2\n00:00:04,000 --> 00:00:05,000\nTwo\n\n3\n00:00:08,000 --> 00:00:09,000\nThree\n",
+      "inputFormat": "srt",
+      "outputFormat": "json",
+      "start": 50000000,
+      "end": 50000000,
+      "copy": true
+    },
+    {
+      "name": "json-50000000-false",
+      "text": "1\n00:00:01,000 --> 00:00:03,500\n中文 & <i>one</i>\nsecond line\n\n2\n00:00:04,000 --> 00:00:05,000\nTwo\n\n3\n00:00:08,000 --> 00:00:09,000\nThree\n",
+      "inputFormat": "srt",
+      "outputFormat": "json",
+      "start": 50000000,
+      "end": 50000000,
+      "copy": false
+    }
+  ],
+  "extensions": [
+    "mkv",
+    "mp4",
+    "wav",
+    "srt",
+    "vtt",
+    "webvtt",
+    "json",
+    "ass",
+    "ssa",
+    "sup",
+    "ttml",
+    "mp3",
+    "flac"
+  ]
+}

@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-07T22:52:16.981Z",
+  "candidateVerified": false,
+  "files": {
+    "native": {
+      "path": "tests/metadata/fixtures/nfo-userdata-persistence/native.json",
+      "sha256": "c3fd8538959cc92ef6f8d9e3de4b91cd3009d92458660f3e59d305ea31eb997a"
+    },
+    "input": {
+      "path": "tests/metadata/fixtures/nfo-userdata-persistence/input.json",
+      "sha256": "c9a88e4e56b4fc4e4dfb7316e20be04000d53c61e3e2c585f4b20e821a080b2a"
+    },
+    "oracle": {
+      "path": "tests/metadata/fixtures/nfo-userdata-persistence/Program.cs",
+      "sha256": "880860a4361e762902b3f83e3b012cd21cae2b33517ed7918af21fdf77af2118"
+    },
+    "project": {
+      "path": "tests/metadata/fixtures/nfo-userdata-persistence/Oracle.csproj",
+      "sha256": "cbe1a514da582cbf55a443ee14c93f731f84816d10e7672fb713045ac5d78efe"
+    },
+    "readme": {
+      "path": "tests/metadata/fixtures/nfo-userdata-persistence/README.md",
+      "sha256": "d2f491fe5d1fed483e3c2efcc5e8e59150dab9e7ddab6bbdf4ada7415a6acc21"
+    },
+    "buildProperties": {
+      "path": "tests/Directory.Build.props",
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    }
+  },
+  "jellyfin": {
+    "root": "D:/jellyfin",
+    "head": "208c278b75abd897aefa1e1175126eac5e4dbfaa",
+    "relevantSourceWorktreeClean": true,
+    "sources": {
+      "MediaBrowser.XbmcMetadata/Parsers/BaseNfoParser.cs": "f50fd3439d423330b0bc1c40ab5b413a2c2b3811a14a0955ecd9fbb63b32c152",
+      "MediaBrowser.XbmcMetadata/Parsers/MovieNfoParser.cs": "a48429be9a2e059be6dbde858cb9c423cbe594ba81f24bca661ab541c5778663",
+      "Emby.Server.Implementations/Library/UserDataManager.cs": "476e1e7e2643b1fb1104efb8e21363a07280e608783561f6302d6317871e496b",
+      "src/Jellyfin.Database/Jellyfin.Database.Implementations/ModelConfiguration/UserDataConfiguration.cs": "86e7fce958eab4bbc6836bc6b9e531c5250c18c328ce631d1657377660e78d95"
+    }
+  },
+  "runtime": {
+    "timezone": "Asia/Taipei",
+    "node": "v24.16.0",
+    "dotnet": {
+      "path": "D:/mediamanager/.tools/dotnet/dotnet.exe",
+      "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6"
+    },
+    "jellyfinDll": {
+      "path": "D:/mediamanager-validation/20261005/jellyfin-baseline/source/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll",
+      "bytes": 506368,
+      "sha256": "a43fa24c44677e579fcec79d637789b9f36633d02e5434e76a0e03fa13027767"
+    },
+    "assemblies": {
+      "MediaBrowser.XbmcMetadata.dll": {
+        "bytes": 84992,
+        "sha256": "82ddd82082f44faf43284258609ba4efce9a94759d24e0f7161ebf5c7d18558e"
+      },
+      "Emby.Server.Implementations.dll": {
+        "bytes": 1673728,
+        "sha256": "8d369435646570958505c58b9cb17da169855dabc105d0e933524361e9b7b1c8"
+      },
+      "Jellyfin.Database.Implementations.dll": {
+        "bytes": 249344,
+        "sha256": "5ffd9a90affb635962267da294a36a4cd6972da5f38083b51ecfb4fba4c31ee6"
+      },
+      "MediaBrowser.Controller.dll": {
+        "bytes": 655872,
+        "sha256": "051c588a8e85a3a7cdde8dc3d9a1112217fd7e973a86fe2ff90cf765bedb75a8"
+      }
+    }
+  },
+  "record": {
+    "path": "D:/mediamanager-validation/20261005/results/nfo-userdata-persistence-20261008-v4-sealed/record.json",
+    "sha256": "d1982d119ece9ebcd97ea90e55656b503f7de565a6000c3020c1b00e714e1057",
+    "sourceFilesSha256": "45c7ed112b819952982ef1b480a411564ded8603f3bd65687bad5251c85ef72d",
+    "oracleAssemblySha256": "87446406da5bf0b7fabc95eafab98f8feb418bb0a3a1bc870b296dc91641bd2a",
+    "rawNativeSha256": "676f006a761b2ec6faf6c7dbf8c8a0738f9003419e2803a670cfdfe39053e2e7",
+    "portableNativeSha256": "c3fd8538959cc92ef6f8d9e3de4b91cd3009d92458660f3e59d305ea31eb997a",
+    "portableNormalization": "CRLF to LF with the original final LF retained",
+    "buildStatus": 0,
+    "processStatus": 0
+  },
+  "command": "node tools/validation/oracle.js tests/metadata/fixtures/nfo-userdata-persistence/Oracle.csproj D:/mediamanager-validation/20261005/results/nfo-userdata-persistence-20261008-v4-sealed tests/metadata/fixtures/nfo-userdata-persistence/input.json {output}/native.json {output}/state"
+}

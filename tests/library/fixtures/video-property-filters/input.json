@@ -1,0 +1,1078 @@
+{
+  "schemaVersion": 1,
+  "description": "Deterministic frozen-Jellyfin HTTP oracle input for public Items Is3D and VideoTypes filters.",
+  "userId": "5c6b5f77-bea9-4a9a-98aa-fae5909892b7",
+  "rootId": "71000000-0000-0000-0000-000000000000",
+  "items": [
+    {
+      "key": "root",
+      "id": "71000000-0000-0000-0000-000000000000",
+      "type": "Folder",
+      "name": "Video Filter Oracle Root"
+    },
+    {
+      "key": "videoFile",
+      "id": "71000000-0000-0000-0000-000000000101",
+      "type": "Movie",
+      "name": "Video A File",
+      "parentId": "71000000-0000-0000-0000-000000000000",
+      "data": {
+        "VideoType": "VideoFile"
+      }
+    },
+    {
+      "key": "iso",
+      "id": "71000000-0000-0000-0000-000000000102",
+      "type": "Movie",
+      "name": "Video B Iso",
+      "parentId": "71000000-0000-0000-0000-000000000000",
+      "data": {
+        "VideoType": "Iso"
+      }
+    },
+    {
+      "key": "dvd",
+      "id": "71000000-0000-0000-0000-000000000103",
+      "type": "Movie",
+      "name": "Video C DVD",
+      "parentId": "71000000-0000-0000-0000-000000000000",
+      "data": {
+        "VideoType": "Dvd"
+      }
+    },
+    {
+      "key": "bluRay",
+      "id": "71000000-0000-0000-0000-000000000104",
+      "type": "Movie",
+      "name": "Video D BluRay",
+      "parentId": "71000000-0000-0000-0000-000000000000",
+      "data": {
+        "VideoType": "BluRay"
+      }
+    },
+    {
+      "key": "isoTypeDvd",
+      "id": "71000000-0000-0000-0000-000000000105",
+      "type": "Movie",
+      "name": "Video E IsoType DVD",
+      "parentId": "71000000-0000-0000-0000-000000000000",
+      "data": {
+        "IsoType": "Dvd"
+      }
+    },
+    {
+      "key": "isoTypeBluRay",
+      "id": "71000000-0000-0000-0000-000000000106",
+      "type": "Movie",
+      "name": "Video F IsoType BluRay",
+      "parentId": "71000000-0000-0000-0000-000000000000",
+      "data": {
+        "IsoType": "BluRay"
+      }
+    },
+    {
+      "key": "noVideoType",
+      "id": "71000000-0000-0000-0000-000000000107",
+      "type": "Movie",
+      "name": "Video G No Video Type",
+      "parentId": "71000000-0000-0000-0000-000000000000",
+      "data": {
+        "Title": "No marker"
+      }
+    },
+    {
+      "key": "nullVideoType",
+      "id": "71000000-0000-0000-0000-000000000108",
+      "type": "Movie",
+      "name": "Video H Null Video Type",
+      "parentId": "71000000-0000-0000-0000-000000000000",
+      "data": {
+        "VideoType": null
+      }
+    },
+    {
+      "key": "lowercaseDvd",
+      "id": "71000000-0000-0000-0000-000000000109",
+      "type": "Movie",
+      "name": "Video I Lowercase DVD",
+      "parentId": "71000000-0000-0000-0000-000000000000",
+      "data": {
+        "VideoType": "dvd"
+      }
+    },
+    {
+      "key": "numeric4",
+      "id": "71000000-0000-0000-0000-000000000110",
+      "type": "Movie",
+      "name": "Video J Numeric Four",
+      "parentId": "71000000-0000-0000-0000-000000000000",
+      "data": {
+        "VideoType": "4"
+      }
+    },
+    {
+      "key": "negative1",
+      "id": "71000000-0000-0000-0000-000000000111",
+      "type": "Movie",
+      "name": "Video K Negative One",
+      "parentId": "71000000-0000-0000-0000-000000000000",
+      "data": {
+        "VideoType": "-1"
+      }
+    },
+    {
+      "key": "threeD",
+      "id": "71000000-0000-0000-0000-000000000112",
+      "type": "Movie",
+      "name": "Video L 3D",
+      "parentId": "71000000-0000-0000-0000-000000000000",
+      "data": {
+        "VideoType": "VideoFile",
+        "Video3DFormat": "HalfSideBySide"
+      }
+    },
+    {
+      "key": "threeDNull",
+      "id": "71000000-0000-0000-0000-000000000113",
+      "type": "Movie",
+      "name": "Video M Null 3D",
+      "parentId": "71000000-0000-0000-0000-000000000000",
+      "data": {
+        "VideoType": "VideoFile",
+        "Video3DFormat": null
+      }
+    },
+    {
+      "key": "notThreeD",
+      "id": "71000000-0000-0000-0000-000000000114",
+      "type": "Movie",
+      "name": "Video N Not 3D",
+      "parentId": "71000000-0000-0000-0000-000000000000",
+      "data": {
+        "VideoType": "VideoFile"
+      }
+    },
+    {
+      "key": "lowercase3dKey",
+      "id": "71000000-0000-0000-0000-000000000115",
+      "type": "Movie",
+      "name": "Video O Lowercase 3D Key",
+      "parentId": "71000000-0000-0000-0000-000000000000",
+      "data": {
+        "VideoType": "VideoFile",
+        "video3DFormat": "HalfSideBySide"
+      }
+    },
+    {
+      "key": "spacedDvd",
+      "id": "71000000-0000-0000-0000-000000000116",
+      "type": "Movie",
+      "name": "Video O1 Spaced DVD JSON",
+      "parentId": "71000000-0000-0000-0000-000000000000",
+      "dataText": "{ \"VideoType\" : \"Dvd\" }"
+    },
+    {
+      "key": "nestedDvd",
+      "id": "71000000-0000-0000-0000-000000000117",
+      "type": "Movie",
+      "name": "Video O2 Nested DVD",
+      "parentId": "71000000-0000-0000-0000-000000000000",
+      "dataText": "{\"x\":{\"VideoType\":\"Dvd\"}}"
+    },
+    {
+      "key": "lowercaseVideoTypeKey",
+      "id": "71000000-0000-0000-0000-000000000118",
+      "type": "Movie",
+      "name": "Video O3 Lowercase VideoType Key",
+      "parentId": "71000000-0000-0000-0000-000000000000",
+      "dataText": "{\"videoType\":\"Dvd\"}"
+    },
+    {
+      "key": "nested3d",
+      "id": "71000000-0000-0000-0000-000000000119",
+      "type": "Movie",
+      "name": "Video O4 Nested 3D Key",
+      "parentId": "71000000-0000-0000-0000-000000000000",
+      "dataText": "{\"x\":{\"Video3DFormat\":null}}"
+    },
+    {
+      "key": "stringText3d",
+      "id": "71000000-0000-0000-0000-000000000120",
+      "type": "Movie",
+      "name": "Video O5 String Text 3D",
+      "parentId": "71000000-0000-0000-0000-000000000000",
+      "dataText": "{\"note\":\"Video3DFormat\"}"
+    },
+    {
+      "key": "numericIntMin",
+      "id": "71000000-0000-0000-0000-000000000121",
+      "type": "Movie",
+      "name": "Video O6 Numeric Int32 Min",
+      "parentId": "71000000-0000-0000-0000-000000000000",
+      "data": {
+        "VideoType": "-2147483648"
+      }
+    },
+    {
+      "key": "numericVideoTypeNumber",
+      "id": "71000000-0000-0000-0000-000000000122",
+      "type": "Movie",
+      "name": "Video O7 Numeric JSON VideoType",
+      "parentId": "71000000-0000-0000-0000-000000000000",
+      "dataText": "{\"VideoType\":2}"
+    },
+    {
+      "key": "ancestorRoot",
+      "id": "71000000-0000-0000-0000-000000000200",
+      "type": "Folder",
+      "name": "Video P Ancestor Root",
+      "parentId": "71000000-0000-0000-0000-000000000000"
+    },
+    {
+      "key": "ancestorChild",
+      "id": "71000000-0000-0000-0000-000000000201",
+      "type": "Folder",
+      "name": "Video P Ancestor Child",
+      "parentId": "71000000-0000-0000-0000-000000000200"
+    },
+    {
+      "key": "ancestorMedia",
+      "id": "71000000-0000-0000-0000-000000000202",
+      "type": "Movie",
+      "name": "Video P Ancestor Media",
+      "parentId": "71000000-0000-0000-0000-000000000201",
+      "data": {
+        "VideoType": "Dvd",
+        "Video3DFormat": "MVC"
+      }
+    },
+    {
+      "key": "linkedBox",
+      "id": "71000000-0000-0000-0000-000000000300",
+      "type": "BoxSet",
+      "name": "Video Q Linked Box",
+      "parentId": "71000000-0000-0000-0000-000000000000"
+    },
+    {
+      "key": "linkedMedia",
+      "id": "71000000-0000-0000-0000-000000000301",
+      "type": "Movie",
+      "name": "Video Q Linked Media",
+      "parentId": "71000000-0000-0000-0000-000000000000",
+      "data": {
+        "VideoType": "BluRay",
+        "Video3DFormat": "MVC"
+      }
+    },
+    {
+      "key": "linkedAltTypeBox",
+      "id": "71000000-0000-0000-0000-000000000310",
+      "type": "BoxSet",
+      "name": "Video R Alternate Link Type Box",
+      "parentId": "71000000-0000-0000-0000-000000000000"
+    },
+    {
+      "key": "linkedAltTypeMedia",
+      "id": "71000000-0000-0000-0000-000000000311",
+      "type": "Movie",
+      "name": "Video R Alternate Link Type Media",
+      "parentId": "71000000-0000-0000-0000-000000000000",
+      "data": {
+        "VideoType": "Iso"
+      }
+    },
+    {
+      "key": "linkedGrandparent",
+      "id": "71000000-0000-0000-0000-000000000320",
+      "type": "BoxSet",
+      "name": "Video S Linked Grandparent",
+      "parentId": "71000000-0000-0000-0000-000000000000"
+    },
+    {
+      "key": "linkedFolder",
+      "id": "71000000-0000-0000-0000-000000000321",
+      "type": "Folder",
+      "name": "Video S Linked Folder",
+      "parentId": "71000000-0000-0000-0000-000000000000"
+    },
+    {
+      "key": "linkedGrandchild",
+      "id": "71000000-0000-0000-0000-000000000322",
+      "type": "Movie",
+      "name": "Video S Linked Grandchild",
+      "parentId": "71000000-0000-0000-0000-000000000321",
+      "data": {
+        "VideoType": "Dvd",
+        "Video3DFormat": "MVC"
+      }
+    },
+    {
+      "key": "linkedOuterFolder",
+      "id": "71000000-0000-0000-0000-000000000330",
+      "type": "Folder",
+      "name": "Video S1 Linked Parent Ancestor",
+      "parentId": "71000000-0000-0000-0000-000000000000"
+    },
+    {
+      "key": "linkedInnerBox",
+      "id": "71000000-0000-0000-0000-000000000331",
+      "type": "BoxSet",
+      "name": "Video S1 Linked Inner Box",
+      "parentId": "71000000-0000-0000-0000-000000000330"
+    },
+    {
+      "key": "splitDescendantFolder",
+      "id": "71000000-0000-0000-0000-000000000340",
+      "type": "Folder",
+      "name": "Video S2 Split Descendant Folder",
+      "parentId": "71000000-0000-0000-0000-000000000000"
+    },
+    {
+      "key": "splitDescendant3d",
+      "id": "71000000-0000-0000-0000-000000000341",
+      "type": "Movie",
+      "name": "Video S2 Split Descendant 3D",
+      "parentId": "71000000-0000-0000-0000-000000000340",
+      "data": {
+        "VideoType": "VideoFile",
+        "Video3DFormat": "MVC"
+      }
+    },
+    {
+      "key": "splitDescendantDvd",
+      "id": "71000000-0000-0000-0000-000000000342",
+      "type": "Movie",
+      "name": "Video S2 Split Descendant DVD",
+      "parentId": "71000000-0000-0000-0000-000000000340",
+      "data": {
+        "VideoType": "Dvd"
+      }
+    },
+    {
+      "key": "versionPrimary",
+      "id": "71000000-0000-0000-0000-000000000400",
+      "type": "Movie",
+      "name": "Video T Version Primary",
+      "parentId": "71000000-0000-0000-0000-000000000000",
+      "data": {
+        "Title": "Primary marker only"
+      }
+    },
+    {
+      "key": "versionAlternate",
+      "id": "71000000-0000-0000-0000-000000000401",
+      "type": "Movie",
+      "name": "Video T Version Alternate",
+      "parentId": "71000000-0000-0000-0000-000000000000",
+      "primaryVersionId": "71000000-0000-0000-0000-000000000400",
+      "data": {
+        "VideoType": "Dvd",
+        "Video3DFormat": "MVC"
+      }
+    },
+    {
+      "key": "ownedVideo",
+      "id": "71000000-0000-0000-0000-000000000410",
+      "type": "Movie",
+      "name": "Video U Owned",
+      "parentId": "71000000-0000-0000-0000-000000000000",
+      "ownerId": "71000000-0000-0000-0000-000000000101",
+      "data": {
+        "VideoType": "Iso",
+        "Video3DFormat": "MVC"
+      }
+    },
+    {
+      "key": "ownedNotThreeD",
+      "id": "71000000-0000-0000-0000-000000000411",
+      "type": "Movie",
+      "name": "Video U Owned Not 3D",
+      "parentId": "71000000-0000-0000-0000-000000000000",
+      "ownerId": "71000000-0000-0000-0000-000000000101",
+      "data": {
+        "VideoType": "Iso"
+      }
+    },
+    {
+      "key": "versionFalsePrimary",
+      "id": "71000000-0000-0000-0000-000000000420",
+      "type": "Movie",
+      "name": "Video U1 False Version Primary",
+      "parentId": "71000000-0000-0000-0000-000000000000",
+      "data": {
+        "VideoType": "Dvd"
+      }
+    },
+    {
+      "key": "versionFalseAlternate",
+      "id": "71000000-0000-0000-0000-000000000421",
+      "type": "Movie",
+      "name": "Video U1 False Version Alternate",
+      "parentId": "71000000-0000-0000-0000-000000000000",
+      "primaryVersionId": "71000000-0000-0000-0000-000000000420",
+      "data": {
+        "VideoType": "Dvd"
+      }
+    },
+    {
+      "key": "groupFirst",
+      "id": "71000000-0000-0000-0000-000000000500",
+      "type": "Movie",
+      "name": "Video V Group First",
+      "parentId": "71000000-0000-0000-0000-000000000000",
+      "presentationUniqueKey": "video-filter-shared-group",
+      "data": {
+        "VideoType": "Dvd",
+        "Video3DFormat": "MVC"
+      }
+    },
+    {
+      "key": "groupSecond",
+      "id": "71000000-0000-0000-0000-000000000501",
+      "type": "Movie",
+      "name": "Video V Group Second",
+      "parentId": "71000000-0000-0000-0000-000000000000",
+      "presentationUniqueKey": "video-filter-shared-group",
+      "data": {
+        "VideoType": "Dvd",
+        "Video3DFormat": "MVC"
+      }
+    }
+  ],
+  "links": [
+    {
+      "parentId": "71000000-0000-0000-0000-000000000300",
+      "childId": "71000000-0000-0000-0000-000000000301",
+      "sortOrder": 0,
+      "childType": 0
+    },
+    {
+      "parentId": "71000000-0000-0000-0000-000000000310",
+      "childId": "71000000-0000-0000-0000-000000000311",
+      "sortOrder": 0,
+      "childType": 1
+    },
+    {
+      "parentId": "71000000-0000-0000-0000-000000000320",
+      "childId": "71000000-0000-0000-0000-000000000321",
+      "sortOrder": 0,
+      "childType": 0
+    },
+    {
+      "parentId": "71000000-0000-0000-0000-000000000331",
+      "childId": "71000000-0000-0000-0000-000000000301",
+      "sortOrder": 0,
+      "childType": 0
+    }
+  ],
+  "cases": [
+    {
+      "name": "is3d-true-key-presence",
+      "scope": [
+        "threeD",
+        "threeDNull",
+        "notThreeD",
+        "lowercase3dKey"
+      ],
+      "query": "Is3D=true"
+    },
+    {
+      "name": "is3d-false-key-absence",
+      "scope": [
+        "threeD",
+        "threeDNull",
+        "notThreeD",
+        "lowercase3dKey"
+      ],
+      "query": "Is3D=false"
+    },
+    {
+      "name": "is3d-and-video-type-intersect",
+      "scope": [
+        "videoFile",
+        "threeD",
+        "dvd"
+      ],
+      "query": "Is3D=true&VideoTypes=VideoFile"
+    },
+    {
+      "name": "is3d-nested-key-substring-matches",
+      "scope": [
+        "nested3d"
+      ],
+      "query": "Is3D=true"
+    },
+    {
+      "name": "is3d-string-value-substring-matches",
+      "scope": [
+        "stringText3d"
+      ],
+      "query": "Is3D=true"
+    },
+    {
+      "name": "binding-is3d-case-insensitive",
+      "scope": [
+        "threeD",
+        "notThreeD"
+      ],
+      "query": "is3d=TrUe"
+    },
+    {
+      "name": "binding-is3d-empty",
+      "scope": [
+        "threeD",
+        "notThreeD"
+      ],
+      "query": "Is3D="
+    },
+    {
+      "name": "binding-is3d-whitespace",
+      "scope": [
+        "threeD",
+        "notThreeD"
+      ],
+      "query": "Is3D=%20%20"
+    },
+    {
+      "name": "binding-is3d-invalid",
+      "scope": [
+        "notThreeD"
+      ],
+      "query": "Is3D=1"
+    },
+    {
+      "name": "binding-is3d-repeated-first-empty",
+      "scope": [
+        "threeD",
+        "notThreeD"
+      ],
+      "query": "Is3D=&Is3D=true"
+    },
+    {
+      "name": "binding-is3d-repeated-first-false",
+      "scope": [
+        "threeD",
+        "notThreeD"
+      ],
+      "query": "Is3D=false&Is3D=true"
+    },
+    {
+      "name": "binding-is3d-repeated-first-invalid",
+      "scope": [
+        "threeD",
+        "notThreeD"
+      ],
+      "query": "Is3D=1&Is3D=true"
+    },
+    {
+      "name": "binding-is3d-mixed-case-repeated-key",
+      "scope": [
+        "threeD",
+        "notThreeD"
+      ],
+      "query": "Is3D=true&is3d=false"
+    },
+    {
+      "name": "video-type-single-name",
+      "scope": [
+        "videoFile",
+        "iso",
+        "dvd",
+        "bluRay"
+      ],
+      "query": "VideoTypes=Dvd"
+    },
+    {
+      "name": "video-type-name-case-insensitive",
+      "scope": [
+        "dvd",
+        "bluRay"
+      ],
+      "query": "videoTypes=bLuRaY"
+    },
+    {
+      "name": "video-type-single-comma-union",
+      "scope": [
+        "videoFile",
+        "iso",
+        "dvd",
+        "bluRay"
+      ],
+      "query": "VideoTypes=VideoFile,Dvd"
+    },
+    {
+      "name": "video-type-isotype-also-matches",
+      "scope": [
+        "dvd",
+        "isoTypeDvd",
+        "isoTypeBluRay"
+      ],
+      "query": "VideoTypes=Dvd"
+    },
+    {
+      "name": "video-type-null-value-does-not-match",
+      "scope": [
+        "nullVideoType"
+      ],
+      "query": "VideoTypes=VideoFile"
+    },
+    {
+      "name": "video-type-data-value-is-case-sensitive",
+      "scope": [
+        "lowercaseDvd"
+      ],
+      "query": "VideoTypes=Dvd"
+    },
+    {
+      "name": "video-type-spaced-json-does-not-match",
+      "scope": [
+        "spacedDvd"
+      ],
+      "query": "VideoTypes=Dvd"
+    },
+    {
+      "name": "video-type-nested-substring-matches",
+      "scope": [
+        "nestedDvd"
+      ],
+      "query": "VideoTypes=Dvd"
+    },
+    {
+      "name": "video-type-data-key-is-case-sensitive",
+      "scope": [
+        "lowercaseVideoTypeKey"
+      ],
+      "query": "VideoTypes=Dvd"
+    },
+    {
+      "name": "video-type-json-number-does-not-match-name",
+      "scope": [
+        "numericVideoTypeNumber"
+      ],
+      "query": "VideoTypes=2"
+    },
+    {
+      "name": "binding-video-types-empty",
+      "scope": [
+        "videoFile",
+        "dvd"
+      ],
+      "query": "VideoTypes="
+    },
+    {
+      "name": "binding-video-types-comma-empty",
+      "scope": [
+        "videoFile",
+        "dvd"
+      ],
+      "query": "VideoTypes=,"
+    },
+    {
+      "name": "binding-video-types-whitespace",
+      "scope": [
+        "videoFile",
+        "dvd"
+      ],
+      "query": "VideoTypes=%20%20"
+    },
+    {
+      "name": "binding-video-types-invalid-only",
+      "scope": [
+        "videoFile",
+        "dvd"
+      ],
+      "query": "VideoTypes=NotAType"
+    },
+    {
+      "name": "binding-video-types-single-invalid-and-valid",
+      "scope": [
+        "videoFile",
+        "dvd"
+      ],
+      "query": "VideoTypes=NotAType,Dvd"
+    },
+    {
+      "name": "binding-video-types-repeated-values",
+      "scope": [
+        "videoFile",
+        "dvd",
+        "bluRay"
+      ],
+      "query": "VideoTypes=VideoFile&VideoTypes=Dvd"
+    },
+    {
+      "name": "binding-video-types-repeated-first-has-comma",
+      "scope": [
+        "videoFile",
+        "dvd",
+        "bluRay"
+      ],
+      "query": "VideoTypes=VideoFile,Dvd&VideoTypes=BluRay"
+    },
+    {
+      "name": "binding-video-types-repeated-second-has-comma",
+      "scope": [
+        "videoFile",
+        "dvd",
+        "bluRay"
+      ],
+      "query": "VideoTypes=VideoFile&VideoTypes=Dvd,BluRay"
+    },
+    {
+      "name": "binding-video-types-repeated-invalid-and-valid",
+      "scope": [
+        "videoFile",
+        "dvd"
+      ],
+      "query": "VideoTypes=NotAType&VideoTypes=Dvd"
+    },
+    {
+      "name": "binding-video-types-numeric-zero",
+      "scope": [
+        "videoFile",
+        "iso"
+      ],
+      "query": "VideoTypes=0"
+    },
+    {
+      "name": "binding-video-types-numeric-one",
+      "scope": [
+        "videoFile",
+        "iso"
+      ],
+      "query": "VideoTypes=1"
+    },
+    {
+      "name": "binding-video-types-numeric-two",
+      "scope": [
+        "dvd",
+        "bluRay"
+      ],
+      "query": "VideoTypes=2"
+    },
+    {
+      "name": "binding-video-types-numeric-three",
+      "scope": [
+        "dvd",
+        "bluRay"
+      ],
+      "query": "VideoTypes=3"
+    },
+    {
+      "name": "binding-video-types-numeric-undefined-four",
+      "scope": [
+        "numeric4",
+        "videoFile"
+      ],
+      "query": "VideoTypes=4"
+    },
+    {
+      "name": "binding-video-types-numeric-negative-one",
+      "scope": [
+        "negative1",
+        "videoFile"
+      ],
+      "query": "VideoTypes=-1"
+    },
+    {
+      "name": "binding-video-types-numeric-int32-max",
+      "scope": [
+        "notThreeD"
+      ],
+      "query": "VideoTypes=2147483647"
+    },
+    {
+      "name": "binding-video-types-numeric-int32-overflow",
+      "scope": [
+        "notThreeD"
+      ],
+      "query": "VideoTypes=2147483648"
+    },
+    {
+      "name": "binding-video-types-numeric-negative-overflow",
+      "scope": [
+        "notThreeD"
+      ],
+      "query": "VideoTypes=-2147483649"
+    },
+    {
+      "name": "binding-video-types-hex",
+      "scope": [
+        "dvd"
+      ],
+      "query": "VideoTypes=0x2"
+    },
+    {
+      "name": "binding-video-types-hash-hex",
+      "scope": [
+        "dvd"
+      ],
+      "query": "VideoTypes=%232"
+    },
+    {
+      "name": "binding-video-types-decimal-int32-min",
+      "scope": [
+        "numericIntMin"
+      ],
+      "query": "VideoTypes=-2147483648"
+    },
+    {
+      "name": "binding-video-types-hex-int32-sign-bit",
+      "scope": [
+        "numericIntMin"
+      ],
+      "query": "VideoTypes=0x80000000"
+    },
+    {
+      "name": "binding-video-types-hex-uint32-max",
+      "scope": [
+        "negative1"
+      ],
+      "query": "VideoTypes=0xFFFFFFFF"
+    },
+    {
+      "name": "binding-video-types-hex-uint32-overflow",
+      "scope": [
+        "videoFile"
+      ],
+      "query": "VideoTypes=0x100000000"
+    },
+    {
+      "name": "binding-video-types-negative-signed-hex",
+      "scope": [
+        "videoFile"
+      ],
+      "query": "VideoTypes=-0x1"
+    },
+    {
+      "name": "binding-video-types-positive-signed-hex",
+      "scope": [
+        "dvd"
+      ],
+      "query": "VideoTypes=%2B0x2"
+    },
+    {
+      "name": "ancestor-video-type-transitive",
+      "scope": [
+        "ancestorRoot",
+        "ancestorChild"
+      ],
+      "query": "VideoTypes=Dvd"
+    },
+    {
+      "name": "ancestor-is3d-transitive",
+      "scope": [
+        "ancestorRoot",
+        "ancestorChild"
+      ],
+      "query": "Is3D=true"
+    },
+    {
+      "name": "ancestor-is3d-false-excludes-folders",
+      "scope": [
+        "ancestorRoot",
+        "ancestorChild"
+      ],
+      "query": "Is3D=false"
+    },
+    {
+      "name": "linked-media-video-type-one-hop",
+      "scope": [
+        "linkedBox"
+      ],
+      "query": "VideoTypes=BluRay"
+    },
+    {
+      "name": "linked-media-is3d-one-hop",
+      "scope": [
+        "linkedBox"
+      ],
+      "query": "Is3D=true"
+    },
+    {
+      "name": "linked-childtype-one-still-matches",
+      "scope": [
+        "linkedAltTypeBox"
+      ],
+      "query": "VideoTypes=Iso"
+    },
+    {
+      "name": "linked-folder-matches-own-descendant",
+      "scope": [
+        "linkedFolder"
+      ],
+      "query": "VideoTypes=Dvd"
+    },
+    {
+      "name": "linked-grandparent-does-not-chain-video-type",
+      "scope": [
+        "linkedGrandparent"
+      ],
+      "query": "VideoTypes=Dvd"
+    },
+    {
+      "name": "linked-grandparent-does-not-chain-is3d",
+      "scope": [
+        "linkedGrandparent"
+      ],
+      "query": "Is3D=true"
+    },
+    {
+      "name": "linked-inner-box-matches-direct-child",
+      "scope": [
+        "linkedInnerBox"
+      ],
+      "query": "VideoTypes=BluRay"
+    },
+    {
+      "name": "linked-match-does-not-propagate-to-ordinary-ancestor",
+      "scope": [
+        "linkedOuterFolder"
+      ],
+      "query": "VideoTypes=BluRay"
+    },
+    {
+      "name": "linked-is3d-does-not-propagate-to-ordinary-ancestor",
+      "scope": [
+        "linkedOuterFolder"
+      ],
+      "query": "Is3D=true"
+    },
+    {
+      "name": "folder-can-satisfy-filters-with-different-descendants",
+      "scope": [
+        "splitDescendantFolder"
+      ],
+      "query": "Is3D=true&VideoTypes=Dvd"
+    },
+    {
+      "name": "version-primary-does-not-expand-video-type",
+      "scope": [
+        "versionPrimary"
+      ],
+      "query": "VideoTypes=Dvd"
+    },
+    {
+      "name": "version-alternate-matches-video-type",
+      "scope": [
+        "versionAlternate"
+      ],
+      "query": "VideoTypes=Dvd"
+    },
+    {
+      "name": "version-primary-does-not-expand-is3d",
+      "scope": [
+        "versionPrimary"
+      ],
+      "query": "Is3D=true"
+    },
+    {
+      "name": "version-alternate-matches-is3d",
+      "scope": [
+        "versionAlternate"
+      ],
+      "query": "Is3D=true"
+    },
+    {
+      "name": "video-type-filter-includes-owned-item",
+      "scope": [
+        "ownedVideo"
+      ],
+      "query": "VideoTypes=Iso"
+    },
+    {
+      "name": "is3d-filter-includes-owned-item",
+      "scope": [
+        "ownedVideo"
+      ],
+      "query": "Is3D=true"
+    },
+    {
+      "name": "is3d-false-includes-owned-item",
+      "scope": [
+        "ownedNotThreeD"
+      ],
+      "query": "Is3D=false"
+    },
+    {
+      "name": "invalid-video-type-does-not-enable-owned-items",
+      "scope": [
+        "ownedNotThreeD"
+      ],
+      "query": "VideoTypes=NotAType"
+    },
+    {
+      "name": "is3d-false-includes-alternate-row",
+      "scope": [
+        "versionFalseAlternate"
+      ],
+      "query": "Is3D=false"
+    },
+    {
+      "name": "empty-is3d-does-not-enable-alternate-row",
+      "scope": [
+        "versionFalseAlternate"
+      ],
+      "query": "Is3D="
+    },
+    {
+      "name": "invalid-video-type-does-not-enable-alternate-row",
+      "scope": [
+        "versionAlternate"
+      ],
+      "query": "VideoTypes=NotAType"
+    },
+    {
+      "name": "user-video-type-presentation-grouping",
+      "scope": [
+        "groupFirst",
+        "groupSecond"
+      ],
+      "query": "VideoTypes=Dvd"
+    },
+    {
+      "name": "api-key-video-type-does-not-group-modern",
+      "scope": [
+        "groupFirst",
+        "groupSecond"
+      ],
+      "query": "VideoTypes=Dvd",
+      "auth": "apiKey",
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "api-key-video-type-legacy-route",
+      "scope": [
+        "groupFirst",
+        "groupSecond"
+      ],
+      "query": "VideoTypes=Dvd",
+      "auth": "apiKey",
+      "endpoints": [
+        "legacy"
+      ]
+    },
+    {
+      "name": "user-is3d-presentation-grouping",
+      "scope": [
+        "groupFirst",
+        "groupSecond"
+      ],
+      "query": "Is3D=true"
+    },
+    {
+      "name": "api-key-is3d-does-not-group-modern",
+      "scope": [
+        "groupFirst",
+        "groupSecond"
+      ],
+      "query": "Is3D=true",
+      "auth": "apiKey",
+      "endpoints": [
+        "items"
+      ]
+    }
+  ]
+}

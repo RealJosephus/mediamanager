@@ -1,0 +1,730 @@
+{
+  "ab": {},
+  "af": {
+    "Default": "Standaard",
+    "External": "Ekstern",
+    "Undefined": "Ongedefineerd",
+    "Forced": "Geforseerd",
+    "HearingImpaired": "gehoorgestremd"
+  },
+  "ar": {
+    "Default": "الافتراضي",
+    "External": "خارجي",
+    "Original": "فريد",
+    "Undefined": "غير محدد",
+    "Forced": "إجباري",
+    "HearingImpaired": "لضعاف السمع"
+  },
+  "ar_SA": {},
+  "as": {
+    "Default": "ডিফল্ট",
+    "External": "বাহ্যিক",
+    "Forced": "বলপূর্বক",
+    "HearingImpaired": "শ্ৰবণ অক্ষম"
+  },
+  "az": {},
+  "be": {
+    "Default": "Прадвызначана",
+    "External": "Знешні",
+    "Undefined": "Нявызначана",
+    "Forced": "Прымусова",
+    "HearingImpaired": "Са слабым слыхам"
+  },
+  "bg-BG": {
+    "Default": "По подразбиране",
+    "External": "Външен",
+    "Original": "Оригинал",
+    "Undefined": "Неопределено",
+    "Forced": "Принудително",
+    "HearingImpaired": "Увреден слух"
+  },
+  "bn": {
+    "Default": "ডিফল্ট",
+    "External": "বাহ্যিক",
+    "Undefined": "অসঙ্গায়িত",
+    "Forced": "জোরকরে",
+    "HearingImpaired": "শ্রবণ প্রতিবন্ধী"
+  },
+  "br": {
+    "Default": "Dre ziouer",
+    "External": "Diavaez",
+    "Original": "Orin",
+    "Undefined": "Dianav",
+    "Forced": "Rediet",
+    "HearingImpaired": "Tud fall o C'hleved"
+  },
+  "bs": {
+    "Default": "Zadano",
+    "External": "Vanjsko",
+    "Undefined": "Nedefinirano",
+    "Forced": "Prisilno",
+    "HearingImpaired": "Oštećen sluh"
+  },
+  "ca": {
+    "Default": "Per defecte",
+    "External": "Extern",
+    "Original": "Original",
+    "Undefined": "Indefinit",
+    "Forced": "Forçat",
+    "HearingImpaired": "Discapacitat auditiva"
+  },
+  "chr": {
+    "Default": "Dinadi",
+    "External": "Amohdi",
+    "Forced": "Ganedi",
+    "HearingImpaired": "Anitsunidi talunidisgisgi"
+  },
+  "cs": {
+    "Default": "Výchozí",
+    "External": "Externí",
+    "Original": "Originál",
+    "Undefined": "Nedefinované",
+    "Forced": "Vynucené",
+    "HearingImpaired": "Sluchově postižení"
+  },
+  "cy": {
+    "Default": "Diofyn",
+    "External": "Allanol",
+    "Undefined": "Heb ddiffiniad",
+    "Forced": "Orfodi",
+    "HearingImpaired": "Nam ar y clyw"
+  },
+  "da": {
+    "Default": "Standard",
+    "External": "Ekstern",
+    "Original": "Original",
+    "Undefined": "Udefineret",
+    "Forced": "Tvunget",
+    "HearingImpaired": "Hørehæmmet"
+  },
+  "de": {
+    "Default": "Standard",
+    "External": "Extern",
+    "Original": "Original",
+    "Undefined": "Undefiniert",
+    "Forced": "Erzwungen",
+    "HearingImpaired": "Hörgeschädigt"
+  },
+  "el": {
+    "Default": "Προεπιλογή",
+    "External": "Εξωτερικό",
+    "Original": "Πρωτότυπο",
+    "Undefined": "Απροσδιόριστο",
+    "Forced": "Εξαναγκασμένο",
+    "HearingImpaired": "Με προβλήματα ακοής"
+  },
+  "en-GB": {
+    "Default": "Default",
+    "External": "External",
+    "Original": "Original",
+    "Undefined": "Undefined",
+    "Forced": "Forced",
+    "HearingImpaired": "Hearing Impaired"
+  },
+  "en-US": {
+    "Default": "Default",
+    "External": "External",
+    "Original": "Original",
+    "Undefined": "Undefined",
+    "Forced": "Forced",
+    "HearingImpaired": "Hearing Impaired"
+  },
+  "eo": {
+    "Default": "Defaŭlte",
+    "External": "Ekstera",
+    "Original": "Originala",
+    "Undefined": "Nedifinita",
+    "Forced": "Forcita",
+    "HearingImpaired": "Surda"
+  },
+  "es-AR": {
+    "Default": "Predeterminado",
+    "External": "Externo",
+    "Original": "Original",
+    "Undefined": "Indefinido",
+    "Forced": "Forzado",
+    "HearingImpaired": "Discapacidad Auditiva"
+  },
+  "es-MX": {
+    "Default": "Predeterminado",
+    "External": "Externo",
+    "Original": "Original",
+    "Undefined": "Sin definir",
+    "Forced": "Forzado",
+    "HearingImpaired": "Discapacidad Auditiva"
+  },
+  "es": {
+    "Default": "Predeterminado",
+    "External": "Externo",
+    "Original": "Original",
+    "Undefined": "Indefinido",
+    "Forced": "Forzado",
+    "HearingImpaired": "Discapacidad Auditiva"
+  },
+  "es_419": {
+    "Default": "Por defecto",
+    "External": "Externo",
+    "Original": "Original",
+    "Undefined": "Sin definir",
+    "Forced": "Forzado",
+    "HearingImpaired": "Discapacidad auditiva"
+  },
+  "es_DO": {
+    "Default": "Predeterminado",
+    "External": "Externo",
+    "Undefined": "Sin definir",
+    "Forced": "Forzado",
+    "HearingImpaired": "Discapacidad auditiva"
+  },
+  "et": {
+    "Default": "Vaikimisi",
+    "External": "Väline",
+    "Original": "Algne",
+    "Undefined": "Määratlemata",
+    "Forced": "Sunnitud",
+    "HearingImpaired": "Kuulmispuudega"
+  },
+  "eu": {
+    "Default": "Lehenetsia",
+    "External": "Kanpokoa",
+    "Original": "Jatorrizkoa",
+    "Undefined": "Ezezaguna",
+    "Forced": "Behartuta",
+    "HearingImpaired": "Entzumen urritasuna"
+  },
+  "fa": {
+    "Default": "پیشفرض",
+    "External": "خارجی",
+    "Undefined": "تعریف نشده",
+    "Forced": "اجباری",
+    "HearingImpaired": "مشکل شنوایی"
+  },
+  "fi": {
+    "Default": "Oletus",
+    "External": "Ulkoinen",
+    "Original": "Alkuperäinen",
+    "Undefined": "Määrittelemätön",
+    "Forced": "Pakotettu",
+    "HearingImpaired": "Kuulorajoitteinen"
+  },
+  "fil": {
+    "Default": "Default",
+    "External": "External",
+    "Undefined": "Hindi tiyak",
+    "Forced": "Sapilitan",
+    "HearingImpaired": "Bingi"
+  },
+  "fo": {
+    "Default": "Forsett",
+    "External": "Ytri",
+    "Original": "Upprunalig(t/ur)",
+    "Undefined": "Óskilmarkað",
+    "Forced": "Kravt",
+    "HearingImpaired": "Hoyrnarveik"
+  },
+  "fr-CA": {
+    "Default": "Par défaut",
+    "External": "Externe",
+    "Original": "Original",
+    "Undefined": "Indéfini",
+    "Forced": "Forcé",
+    "HearingImpaired": "Malentendants"
+  },
+  "fr": {
+    "Default": "Par défaut",
+    "External": "Externe",
+    "Original": "Original",
+    "Undefined": "Non défini",
+    "Forced": "Forcé",
+    "HearingImpaired": "Malentendants"
+  },
+  "ga": {
+    "Default": "Réamhshocrú",
+    "External": "Seachtrach",
+    "Original": "Bunaidh",
+    "Undefined": "Neamhshainithe",
+    "Forced": "Éigean",
+    "HearingImpaired": "Lag éisteachta"
+  },
+  "gl": {
+    "Default": "Por defecto",
+    "External": "Externo",
+    "Original": "Orixinal",
+    "Undefined": "Sen definir",
+    "Forced": "Forzado",
+    "HearingImpaired": "Problemas de audición"
+  },
+  "gsw": {
+    "Default": "Standard",
+    "External": "Extern",
+    "Undefined": "Undefiniert",
+    "Forced": "Erzwungen",
+    "HearingImpaired": "Hörgschädigti"
+  },
+  "he": {
+    "Default": "ברירת מחדל",
+    "External": "חיצוני",
+    "Original": "מקור",
+    "Undefined": "לא מוגדר",
+    "Forced": "כפוי",
+    "HearingImpaired": "לקוי שמיעה"
+  },
+  "he_IL": {
+    "Default": "בררת מחדל",
+    "External": "חיצונית",
+    "Original": "מקורי",
+    "Undefined": "לא מוגדר",
+    "Forced": "בכוח",
+    "HearingImpaired": "ללקויי שמיעה"
+  },
+  "hi": {
+    "Default": "प्राथमिक",
+    "External": "बाहरी",
+    "Original": "असली",
+    "Undefined": "अनिर्धारित",
+    "Forced": "बलपूर्वक",
+    "HearingImpaired": "मूक बधिर"
+  },
+  "hr": {
+    "Default": "Zadano",
+    "External": "Eksterni",
+    "Original": "Original",
+    "Undefined": "Nedefinirano",
+    "Forced": "Forsirani",
+    "HearingImpaired": "Oštećen sluh"
+  },
+  "ht": {
+    "Default": "Defo",
+    "External": "Extèn",
+    "Original": "Original",
+    "Forced": "Fòse"
+  },
+  "hu": {
+    "Default": "Alapértelmezett",
+    "External": "Külső",
+    "Original": "Eredeti",
+    "Undefined": "Meghatározatlan",
+    "Forced": "Kényszerített",
+    "HearingImpaired": "Hallássérült"
+  },
+  "hy": {
+    "Default": "Լռելյայն",
+    "External": "Արտաքին",
+    "Forced": "Ստիպուած"
+  },
+  "id": {
+    "Default": "Bawaan",
+    "External": "Luar",
+    "Original": "Asli",
+    "Undefined": "Tidak terdefinisi",
+    "Forced": "Dipaksa",
+    "HearingImpaired": "Gangguan Pendengaran"
+  },
+  "is": {
+    "Default": "Sjálfgefið",
+    "External": "Útvær",
+    "Original": "Upprunaleg",
+    "Undefined": "Óskilgreint",
+    "Forced": "Þvingað",
+    "HearingImpaired": "Heyrnarskertur"
+  },
+  "it": {
+    "Default": "Predefinito",
+    "External": "Esterno",
+    "Original": "Originale",
+    "Undefined": "Non specificato",
+    "Forced": "Forzato",
+    "HearingImpaired": "Non udenti"
+  },
+  "ja": {
+    "Default": "デフォルト",
+    "External": "外部",
+    "Original": "オリジナル",
+    "Undefined": "未定義",
+    "Forced": "強制",
+    "HearingImpaired": "聴覚障害の方"
+  },
+  "jbo": {},
+  "ka": {
+    "Default": "ნაგულისხმევი",
+    "External": "გარე",
+    "Original": "ორიგინალი",
+    "Undefined": "განუსაზღვრელი",
+    "Forced": "იძულებითი",
+    "HearingImpaired": "სმენადაქვეითებული"
+  },
+  "kab": {
+    "Default": "Lexṣas",
+    "External": "Azɣaray"
+  },
+  "kk": {
+    "Default": "Ädepkı",
+    "External": "Syrtqy",
+    "Undefined": "Anyqtalmağan",
+    "Forced": "Mäjbürlı",
+    "HearingImpaired": "Есту қабілеті нашарға"
+  },
+  "km": {
+    "Default": "លំនាំដើម",
+    "External": "ខាងក្រៅ",
+    "Undefined": "មិនបានកំណត់",
+    "Forced": "បង្ខំ",
+    "HearingImpaired": "ខ្សោយការស្តាប់"
+  },
+  "kn": {
+    "Default": "ಪೂರ್ವನಿಯೋಜಿತ",
+    "External": "ಹೊರಗಿನ",
+    "Undefined": "ವ್ಯಾಖ್ಯಾನಿಸಲಾಗಿಲ್ಲ",
+    "Forced": "ಬಲವಂತವಾಗಿ",
+    "HearingImpaired": "ಮೂಗ"
+  },
+  "ko": {
+    "Default": "기본 설정",
+    "External": "외부",
+    "Original": "원본",
+    "Undefined": "일치하지 않음",
+    "Forced": "강제하기",
+    "HearingImpaired": "청각 장애"
+  },
+  "kw": {
+    "Default": "Defowt",
+    "External": "A-ves",
+    "Undefined": "Anstyrys",
+    "Forced": "Konstrynys",
+    "HearingImpaired": "Klewans Aperys"
+  },
+  "ky": {},
+  "lb": {
+    "Default": "Standard",
+    "External": "Extern",
+    "Original": "Original",
+    "Undefined": "Net definéiert",
+    "Forced": "Forcéiert",
+    "HearingImpaired": "Daaf"
+  },
+  "lt-LT": {
+    "Default": "Numatytasis",
+    "External": "Išorinis",
+    "Original": "Originalus",
+    "Undefined": "Neapibrėžtas",
+    "Forced": "Priverstinis",
+    "HearingImpaired": "Su klausos sutrikimais"
+  },
+  "lv": {
+    "Default": "Noklusējuma",
+    "External": "Ārējais",
+    "Original": "Oriģināls",
+    "Undefined": "Nenoteikts",
+    "Forced": "Piespiedu",
+    "HearingImpaired": "Ar dzirdes traucējumiem"
+  },
+  "lzh": {},
+  "mi": {
+    "Default": "Taunoa",
+    "External": "Waho",
+    "Forced": "Kaha"
+  },
+  "mk": {
+    "Default": "Зададено",
+    "External": "Надворешен",
+    "Undefined": "Недефинирано",
+    "Forced": "Принудно",
+    "HearingImpaired": "Оштетен слух"
+  },
+  "ml": {
+    "Default": "സ്ഥിരസ്ഥിതി",
+    "External": "പുറമേയുള്ള",
+    "Original": "ഓറിജിനൽ",
+    "Undefined": "നിർവചിച്ചിട്ടില്ല",
+    "Forced": "നിർബന്ധിതമായി",
+    "HearingImpaired": "കേൾവി തകരാറുകൾ"
+  },
+  "mn": {
+    "Default": "Анхдагч",
+    "External": "Гадны",
+    "Undefined": "Танисангүй",
+    "Forced": "Хүчээр",
+    "HearingImpaired": "Сонсголын бэрхшээлтэй"
+  },
+  "mr": {
+    "Default": "डीफॉल्ट",
+    "External": "बाहेरचा",
+    "Undefined": "अव्याख्यात",
+    "Forced": "सक्ती केली आहे",
+    "HearingImpaired": "कर्णबधीर"
+  },
+  "ms": {
+    "Default": "Default",
+    "External": "Luaran",
+    "Undefined": "Tidak ditentukan",
+    "Forced": "Dipaksa",
+    "HearingImpaired": "Lemah Pendengaran"
+  },
+  "mt": {
+    "Default": "Standard",
+    "External": "Estern",
+    "Undefined": "Bla Definizzjoni",
+    "Forced": "Sfurzat",
+    "HearingImpaired": "Nuqqas ta' Smigħ"
+  },
+  "my": {
+    "Default": "ပုံသေ",
+    "External": "ပြင်ပ",
+    "Undefined": "သတ်မှတ်မထားသော",
+    "Forced": "အတင်းအကြပ်",
+    "HearingImpaired": "အကြားအာရုံ ချို့တဲ့သူ"
+  },
+  "nb": {
+    "Default": "Standard",
+    "External": "Ekstern",
+    "Undefined": "Udefinert",
+    "Forced": "Tvunget",
+    "HearingImpaired": "Hørselshemmet"
+  },
+  "ne": {
+    "Default": "पूर्वनिर्धारित",
+    "External": "बाह्य",
+    "Undefined": "अपरिभाषित",
+    "Forced": "जबरजस्ती",
+    "HearingImpaired": "सुन्न नसक्ने"
+  },
+  "nl": {
+    "Default": "Standaard",
+    "External": "Extern",
+    "Original": "Oorspronkelijk",
+    "Undefined": "Niet gedefinieerd",
+    "Forced": "Geforceerd",
+    "HearingImpaired": "Slechthorenden"
+  },
+  "nn": {
+    "Default": "Standard",
+    "External": "Ekstern",
+    "Undefined": "Udefinert",
+    "Forced": "Tvungen",
+    "HearingImpaired": "Nedsett høyrsel"
+  },
+  "oc": {
+    "Default": "Defaut",
+    "External": "Extèrn",
+    "Forced": "Forçat",
+    "HearingImpaired": "Amb de deficiéncias auditivas"
+  },
+  "or": {
+    "External": "ବହିଃସ୍ଥ"
+  },
+  "pa": {
+    "Default": "ਡਿਫੌਲਟ",
+    "External": "ਬਾਹਰੀ",
+    "Undefined": "ਪਰਿਭਾਸ਼ਤ",
+    "Forced": "ਮਜਬੂਰ",
+    "HearingImpaired": "ਸੁਨਣ ਵਿਚ ਕਮਜ਼ੋਰ"
+  },
+  "pl": {
+    "Default": "Domyślne",
+    "External": "Zewnętrzny",
+    "Original": "Oryginalny",
+    "Undefined": "Nieustalony",
+    "Forced": "Wymuszony",
+    "HearingImpaired": "Niedosłyszący"
+  },
+  "pr": {
+    "Default": "Normal-like",
+    "External": "Outboard",
+    "Undefined": "Uncharted",
+    "Forced": "Pressed",
+    "HearingImpaired": "Hard o' Hearing"
+  },
+  "pt-BR": {
+    "Default": "Padrão",
+    "External": "Externo",
+    "Original": "Original",
+    "Undefined": "Indefinido",
+    "Forced": "Forçado",
+    "HearingImpaired": "Deficiência Auditiva"
+  },
+  "pt-PT": {
+    "Default": "Predefinição",
+    "External": "Externo",
+    "Original": "Original",
+    "Undefined": "Indefinido",
+    "Forced": "Forçado",
+    "HearingImpaired": "Deficiência auditiva"
+  },
+  "pt": {
+    "Default": "Predefinição",
+    "External": "Externo",
+    "Original": "Original",
+    "Undefined": "Indefinido",
+    "Forced": "Forçado",
+    "HearingImpaired": "Deficiência auditiva"
+  },
+  "ro": {
+    "Default": "Implicit",
+    "External": "Extern",
+    "Original": "Original",
+    "Undefined": "Nedefinit",
+    "Forced": "Forțat",
+    "HearingImpaired": "Ascultare Impară"
+  },
+  "ru": {
+    "Default": "По умолчанию",
+    "External": "Внешние",
+    "Original": "Оригинальный",
+    "Undefined": "Не определено",
+    "Forced": "Принудительно",
+    "HearingImpaired": "Для слабослышащих"
+  },
+  "si": {
+    "Default": "පෙරනිමි",
+    "External": "බාහිර",
+    "Forced": "නියමිත"
+  },
+  "sk": {
+    "Default": "Predvolené",
+    "External": "Externé",
+    "Original": "Originál",
+    "Undefined": "Nedefinované",
+    "Forced": "Vynútené",
+    "HearingImpaired": "Sluchovo postihnutí"
+  },
+  "sl-SI": {
+    "Default": "Privzeto",
+    "External": "Zunanji",
+    "Original": "Original",
+    "Undefined": "Nedoločen",
+    "Forced": "Prisilno",
+    "HearingImpaired": "Oslabljen sluh"
+  },
+  "sn": {
+    "Default": "Zvakasarudzwa Kare",
+    "External": "Zvekunze",
+    "Forced": "Zvekumanikidzira"
+  },
+  "sq": {
+    "Default": "Parazgjedhur",
+    "External": "Jashtem",
+    "Original": "Origjinal",
+    "Undefined": "I papërcaktuar",
+    "Forced": "I detyruar",
+    "HearingImpaired": "Dëgjimi i dëmtuar"
+  },
+  "sr": {
+    "Default": "Подразумевано",
+    "External": "Спољно",
+    "Original": "Изворно",
+    "Undefined": "Недефинисано",
+    "Forced": "Принудно",
+    "HearingImpaired": "ослабљен слух"
+  },
+  "sv": {
+    "Default": "Standard",
+    "External": "Extern",
+    "Original": "Original",
+    "Undefined": "Odefinierad",
+    "Forced": "Tvingad",
+    "HearingImpaired": "Hörselskadad"
+  },
+  "sw": {},
+  "ta": {
+    "Default": "இயல்புநிலை",
+    "External": "வெளி",
+    "Original": "அசல்",
+    "Undefined": "வரையறுக்கப்படாத",
+    "Forced": "கட்டாயப்படுத்தப்பட்டது",
+    "HearingImpaired": "செவித்திறன் குறைபாடுடையவர்"
+  },
+  "te": {
+    "Default": "డిఫాల్ట్",
+    "External": "బాహ్య",
+    "Forced": "బలవంతంగా",
+    "HearingImpaired": "వినికిడి లోపం"
+  },
+  "th": {
+    "Default": "ค่าเริ่มต้น",
+    "External": "ภายนอก",
+    "Original": "ต้นฉบับ",
+    "Undefined": "ไม่ได้กำหนด",
+    "Forced": "บังคับใช้",
+    "HearingImpaired": "บกพร่องทางการได้ยิน"
+  },
+  "tr": {
+    "Default": "Varsayılan",
+    "External": "Harici",
+    "Original": "Orijinal",
+    "Undefined": "Tanımlanmadı",
+    "Forced": "Zorla",
+    "HearingImpaired": "Duyma Engelli"
+  },
+  "ug": {
+    "Default": "سۈكۈتتىكى",
+    "External": "سىرتقى",
+    "Undefined": "بېكىتىلمىگەن",
+    "Forced": "ئەڭ"
+  },
+  "uk": {
+    "Default": "За замовчуванням",
+    "External": "Зовнішній",
+    "Original": "Оригінал",
+    "Undefined": "Не визначено",
+    "Forced": "Форсовані",
+    "HearingImpaired": "З порушеннями слуху"
+  },
+  "ur": {
+    "Default": "ڈیفالٹ",
+    "External": "بیرونی"
+  },
+  "ur_PK": {
+    "Default": "طے شدہ",
+    "External": "بیرونی",
+    "Original": "اصل",
+    "Undefined": "غير وضاحتى",
+    "Forced": "جَبری",
+    "HearingImpaired": "قوت سماعت سے محروم"
+  },
+  "uz": {
+    "Default": "Joriy",
+    "External": "Tashqi",
+    "Original": "Original",
+    "Undefined": "Belgilanmagan",
+    "Forced": "Majburiy",
+    "HearingImpaired": "Yaxshi eshitmaydiganlar uchun"
+  },
+  "vi": {
+    "Default": "Mặc Định",
+    "External": "Bên ngoài",
+    "Original": "Gốc",
+    "Undefined": "Không Xác Định",
+    "Forced": "Bắt Buộc",
+    "HearingImpaired": "Khiếm Thính"
+  },
+  "zh-CN": {
+    "Default": "Default",
+    "External": "External",
+    "Original": "Original",
+    "Undefined": "Undefined",
+    "Forced": "Forced",
+    "HearingImpaired": "Hearing Impaired"
+  },
+  "zh-HK": {
+    "Default": "初始",
+    "External": "外部",
+    "Original": "原始",
+    "Undefined": "未定義",
+    "Forced": "強制",
+    "HearingImpaired": "聽力障礙"
+  },
+  "zh-TW": {
+    "Default": "預設",
+    "External": "外部",
+    "Original": "原作",
+    "Undefined": "未定義",
+    "Forced": "強制",
+    "HearingImpaired": "聽力障礙"
+  },
+  "zu": {
+    "Default": "Okumisiwe",
+    "External": "Kwezifungo",
+    "Undefined": "Akuchaziwe",
+    "Forced": "Kuphoqiwe"
+  }
+}

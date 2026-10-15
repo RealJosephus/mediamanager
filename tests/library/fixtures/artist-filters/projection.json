@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "projectionLogic": {
+    "spec": {
+      "id": "artist-filter-native-v2-contract-projection",
+      "version": 2,
+      "main": "Attach the exact source path and SHA-256; copy frozenJellyfin, fixtureInputSha256, endpoints, and cases.",
+      "sideEffects": "Project the ordered unknown-credit, bom-credit, request-order, and bom-order contracts with their exact source paths and SHA-256 values.",
+      "caseTransform": "Remove only discoveryOnly from every case and preserve every other JSON field and array order verbatim."
+    },
+    "sha256": "504b094cfeb213c20f93da9a5748df190be92617ae00f41ba51b88512bb7a337"
+  },
+  "authoritativeContract": {
+    "path": ".agent-docs/evidence/byname-filter-inputs/artist-filter-restoration-v1/native-contract.json",
+    "sha256": "4524cf2679db6a5afb1e760fdb476b51c9eaa47efd0976d4bfef17eb17dca534"
+  },
+  "sideContracts": [
+    {
+      "key": "unknown-credit",
+      "path": ".agent-docs/evidence/byname-filter-inputs/artist-filter-restoration-unknown-v1/native-contract.json",
+      "sha256": "22744351ae1df33a0b61acb89300166c874cf8c16fb0437c5a18de85002991cf"
+    },
+    {
+      "key": "bom-credit",
+      "path": ".agent-docs/evidence/byname-filter-inputs/artist-filter-restoration-bom-credit-v1/native-contract.json",
+      "sha256": "8f80493768951f6c80b8f998d98f78912a731dc9a8a5d5e55bc423048765726d"
+    },
+    {
+      "key": "request-order",
+      "path": ".agent-docs/evidence/byname-filter-inputs/artist-filter-restoration-request-order-v1/native-contract.json",
+      "sha256": "9fd62fca516ddb3f313ca98f10586a48b59697d4dee6d18c73684662eecf05ef"
+    },
+    {
+      "key": "bom-order",
+      "path": ".agent-docs/evidence/byname-filter-inputs/artist-filter-restoration-bom-order-v1/native-contract.json",
+      "sha256": "71c44ea61a12bde8d917bb094feb8cc28a5ff7008bd35bae5495e22d7fd7a1a1"
+    }
+  ],
+  "fixtureInput": {
+    "path": "tests/library/fixtures/artist-filters/input.json",
+    "sha256": "58d83e46df39d227718985db4533ae78957bb620b1051c4aa317dae1eaf2794d"
+  },
+  "trackedFixture": {
+    "path": "tests/library/fixtures/artist-filters/native.json",
+    "sha256": "f9a1d65ddfd919f51ac868e95b01603c5f014ca6fd05861486734459b313b11b"
+  },
+  "integrityTest": {
+    "path": "tests/library/artist-filter-native-fixture.test.js",
+    "sha256": "60b4fc34cd11e6b3233079b8dd1fa575c0470ba078de2356fdcca28cb7f91e56"
+  },
+  "projector": {
+    "path": "tools/compat/project-artist-filter-fixture.js",
+    "sha256": "6b4b5b7d6ad6743164657b8908fe72f5ffb91c4c990fd685aac48a892b634a6e"
+  }
+}

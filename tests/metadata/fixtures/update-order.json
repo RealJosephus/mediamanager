@@ -1,0 +1,284 @@
+[
+  {
+    "reason": 1,
+    "mode": "file",
+    "phases": [
+      "saver",
+      "persist",
+      "event"
+    ],
+    "error": null,
+    "eventCalls": 1,
+    "savedAfterStart": true,
+    "saverBeforePersist": true,
+    "eventMatchesPersist": true
+  },
+  {
+    "reason": 1,
+    "mode": "http",
+    "phases": [
+      "persist",
+      "event"
+    ],
+    "error": null,
+    "eventCalls": 1,
+    "savedAfterStart": true,
+    "saverBeforePersist": true,
+    "eventMatchesPersist": true
+  },
+  {
+    "reason": 1,
+    "mode": "channel",
+    "phases": [
+      "saver",
+      "persist"
+    ],
+    "error": null,
+    "eventCalls": 0,
+    "savedAfterStart": true,
+    "saverBeforePersist": true,
+    "eventMatchesPersist": true
+  },
+  {
+    "reason": 1,
+    "mode": "event-throws",
+    "phases": [
+      "saver",
+      "persist",
+      "event"
+    ],
+    "error": null,
+    "eventCalls": 1,
+    "savedAfterStart": true,
+    "saverBeforePersist": true,
+    "eventMatchesPersist": true
+  },
+  {
+    "reason": 2,
+    "mode": "file",
+    "phases": [
+      "saver",
+      "persist",
+      "event"
+    ],
+    "error": null,
+    "eventCalls": 1,
+    "savedAfterStart": true,
+    "saverBeforePersist": true,
+    "eventMatchesPersist": true
+  },
+  {
+    "reason": 2,
+    "mode": "http",
+    "phases": [
+      "persist",
+      "event"
+    ],
+    "error": null,
+    "eventCalls": 1,
+    "savedAfterStart": true,
+    "saverBeforePersist": true,
+    "eventMatchesPersist": true
+  },
+  {
+    "reason": 2,
+    "mode": "channel",
+    "phases": [
+      "saver",
+      "persist"
+    ],
+    "error": null,
+    "eventCalls": 0,
+    "savedAfterStart": true,
+    "saverBeforePersist": true,
+    "eventMatchesPersist": true
+  },
+  {
+    "reason": 2,
+    "mode": "event-throws",
+    "phases": [
+      "saver",
+      "persist",
+      "event"
+    ],
+    "error": null,
+    "eventCalls": 1,
+    "savedAfterStart": true,
+    "saverBeforePersist": true,
+    "eventMatchesPersist": true
+  },
+  {
+    "reason": 4,
+    "mode": "file",
+    "phases": [
+      "saver",
+      "images",
+      "persist",
+      "event"
+    ],
+    "error": null,
+    "eventCalls": 1,
+    "savedAfterStart": true,
+    "saverBeforePersist": true,
+    "eventMatchesPersist": true
+  },
+  {
+    "reason": 4,
+    "mode": "http",
+    "phases": [
+      "images",
+      "persist",
+      "event"
+    ],
+    "error": null,
+    "eventCalls": 1,
+    "savedAfterStart": true,
+    "saverBeforePersist": true,
+    "eventMatchesPersist": true
+  },
+  {
+    "reason": 4,
+    "mode": "channel",
+    "phases": [
+      "saver",
+      "images",
+      "persist"
+    ],
+    "error": null,
+    "eventCalls": 0,
+    "savedAfterStart": true,
+    "saverBeforePersist": true,
+    "eventMatchesPersist": true
+  },
+  {
+    "reason": 4,
+    "mode": "event-throws",
+    "phases": [
+      "saver",
+      "images",
+      "persist",
+      "event"
+    ],
+    "error": null,
+    "eventCalls": 1,
+    "savedAfterStart": true,
+    "saverBeforePersist": true,
+    "eventMatchesPersist": true
+  },
+  {
+    "reason": 8,
+    "mode": "file",
+    "phases": [
+      "saver",
+      "images",
+      "persist",
+      "event"
+    ],
+    "error": null,
+    "eventCalls": 1,
+    "savedAfterStart": true,
+    "saverBeforePersist": true,
+    "eventMatchesPersist": true
+  },
+  {
+    "reason": 8,
+    "mode": "http",
+    "phases": [
+      "images",
+      "persist",
+      "event"
+    ],
+    "error": null,
+    "eventCalls": 1,
+    "savedAfterStart": true,
+    "saverBeforePersist": true,
+    "eventMatchesPersist": true
+  },
+  {
+    "reason": 8,
+    "mode": "channel",
+    "phases": [
+      "saver",
+      "images",
+      "persist"
+    ],
+    "error": null,
+    "eventCalls": 0,
+    "savedAfterStart": true,
+    "saverBeforePersist": true,
+    "eventMatchesPersist": true
+  },
+  {
+    "reason": 8,
+    "mode": "event-throws",
+    "phases": [
+      "saver",
+      "images",
+      "persist",
+      "event"
+    ],
+    "error": null,
+    "eventCalls": 1,
+    "savedAfterStart": true,
+    "saverBeforePersist": true,
+    "eventMatchesPersist": true
+  },
+  {
+    "reason": 16,
+    "mode": "file",
+    "phases": [
+      "saver",
+      "images",
+      "persist",
+      "event"
+    ],
+    "error": null,
+    "eventCalls": 1,
+    "savedAfterStart": true,
+    "saverBeforePersist": true,
+    "eventMatchesPersist": true
+  },
+  {
+    "reason": 16,
+    "mode": "http",
+    "phases": [
+      "images",
+      "persist",
+      "event"
+    ],
+    "error": null,
+    "eventCalls": 1,
+    "savedAfterStart": true,
+    "saverBeforePersist": true,
+    "eventMatchesPersist": true
+  },
+  {
+    "reason": 16,
+    "mode": "channel",
+    "phases": [
+      "saver",
+      "images",
+      "persist"
+    ],
+    "error": null,
+    "eventCalls": 0,
+    "savedAfterStart": true,
+    "saverBeforePersist": true,
+    "eventMatchesPersist": true
+  },
+  {
+    "reason": 16,
+    "mode": "event-throws",
+    "phases": [
+      "saver",
+      "images",
+      "persist",
+      "event"
+    ],
+    "error": null,
+    "eventCalls": 1,
+    "savedAfterStart": true,
+    "saverBeforePersist": true,
+    "eventMatchesPersist": true
+  }
+]

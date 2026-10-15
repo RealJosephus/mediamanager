@@ -1,0 +1,148 @@
+[
+  {
+    "name": "AggregateFolder-before",
+    "type": "AggregateFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "cache",
+    "operations": [
+      "before"
+    ]
+  },
+  {
+    "name": "AggregateFolder-requires",
+    "type": "AggregateFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "cache",
+    "operations": [
+      "requires"
+    ]
+  },
+  {
+    "name": "AggregateFolder-release",
+    "type": "AggregateFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "cache",
+    "operations": [
+      "release"
+    ]
+  },
+  {
+    "name": "AggregateFolder-setter",
+    "type": "AggregateFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "cache",
+    "operations": [
+      "setter"
+    ]
+  },
+  {
+    "name": "AggregateFolder-before-release",
+    "type": "AggregateFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "cache",
+    "operations": [
+      "before",
+      "release"
+    ]
+  },
+  {
+    "name": "AggregateFolder-before-setter",
+    "type": "AggregateFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "cache",
+    "operations": [
+      "before",
+      "setter"
+    ]
+  },
+  {
+    "name": "AggregateFolder-requires-release",
+    "type": "AggregateFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "cache",
+    "operations": [
+      "requires",
+      "release"
+    ]
+  },
+  {
+    "name": "UserRootFolder-before",
+    "type": "UserRootFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "cache",
+    "operations": [
+      "before"
+    ]
+  },
+  {
+    "name": "UserRootFolder-requires",
+    "type": "UserRootFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "cache",
+    "operations": [
+      "requires"
+    ]
+  },
+  {
+    "name": "UserRootFolder-release",
+    "type": "UserRootFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "cache",
+    "operations": [
+      "release"
+    ]
+  },
+  {
+    "name": "UserRootFolder-setter",
+    "type": "UserRootFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "cache",
+    "operations": [
+      "setter"
+    ]
+  },
+  {
+    "name": "UserRootFolder-before-release",
+    "type": "UserRootFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "cache",
+    "operations": [
+      "before",
+      "release"
+    ]
+  },
+  {
+    "name": "UserRootFolder-before-setter",
+    "type": "UserRootFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "cache",
+    "operations": [
+      "before",
+      "setter"
+    ]
+  },
+  {
+    "name": "UserRootFolder-requires-release",
+    "type": "UserRootFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "cache",
+    "operations": [
+      "requires",
+      "release"
+    ]
+  }
+]

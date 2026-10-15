@@ -1,0 +1,607 @@
+{
+  "actualFrozenVideoStackResolution": true,
+  "results": [
+    {
+      "name": "numeric-basic",
+      "stacks": [
+        {
+          "Name": "Film",
+          "IsDirectoryStack": false,
+          "Files": [
+            "Z:\\Media\\A\\Film\\Film cd1.mkv",
+            "Z:\\Media\\A\\Film\\Film cd2.mkv"
+          ]
+        }
+      ],
+      "resolvedFiles": [
+        {
+          "Path": "Z:\\Media\\A\\Film\\Film cd2.mkv",
+          "Name": "Film",
+          "Year": null,
+          "ExtraType": null,
+          "FileNameWithoutExtension": "Film cd2"
+        },
+        {
+          "Path": "Z:\\Media\\A\\Film\\Film cd1.mkv",
+          "Name": "Film",
+          "Year": null,
+          "ExtraType": null,
+          "FileNameWithoutExtension": "Film cd1"
+        }
+      ],
+      "items": [
+        {
+          "nativeType": "MediaBrowser.Controller.Entities.Movies.Movie",
+          "Name": "Film",
+          "Path": "Z:\\Media\\A\\Film\\Film cd1.mkv",
+          "ProductionYear": null,
+          "IsInMixedFolder": false,
+          "AdditionalParts": [
+            "Z:\\Media\\A\\Film\\Film cd2.mkv"
+          ],
+          "LocalAlternateVersions": [],
+          "VideoType": "VideoFile"
+        }
+      ],
+      "extraFiles": []
+    },
+    {
+      "name": "numeric-ordinal-path-order",
+      "stacks": [
+        {
+          "Name": "Film",
+          "IsDirectoryStack": false,
+          "Files": [
+            "Z:\\Media\\A\\Film\\Film cd1.mkv",
+            "Z:\\Media\\A\\Film\\Film cd10.mkv",
+            "Z:\\Media\\A\\Film\\Film cd2.mkv"
+          ]
+        }
+      ],
+      "resolvedFiles": [
+        {
+          "Path": "Z:\\Media\\A\\Film\\Film cd2.mkv",
+          "Name": "Film",
+          "Year": null,
+          "ExtraType": null,
+          "FileNameWithoutExtension": "Film cd2"
+        },
+        {
+          "Path": "Z:\\Media\\A\\Film\\Film cd10.mkv",
+          "Name": "Film cd10",
+          "Year": null,
+          "ExtraType": null,
+          "FileNameWithoutExtension": "Film cd10"
+        },
+        {
+          "Path": "Z:\\Media\\A\\Film\\Film cd1.mkv",
+          "Name": "Film",
+          "Year": null,
+          "ExtraType": null,
+          "FileNameWithoutExtension": "Film cd1"
+        }
+      ],
+      "items": [
+        {
+          "nativeType": "MediaBrowser.Controller.Entities.Movies.Movie",
+          "Name": "Film",
+          "Path": "Z:\\Media\\A\\Film\\Film cd1.mkv",
+          "ProductionYear": null,
+          "IsInMixedFolder": false,
+          "AdditionalParts": [
+            "Z:\\Media\\A\\Film\\Film cd10.mkv",
+            "Z:\\Media\\A\\Film\\Film cd2.mkv"
+          ],
+          "LocalAlternateVersions": [],
+          "VideoType": "VideoFile"
+        }
+      ],
+      "extraFiles": []
+    },
+    {
+      "name": "alphabetic-parts",
+      "stacks": [
+        {
+          "Name": "Film",
+          "IsDirectoryStack": false,
+          "Files": [
+            "Z:\\Media\\A\\Film\\Film disc a.mkv",
+            "Z:\\Media\\A\\Film\\Film disc b.mkv"
+          ]
+        }
+      ],
+      "resolvedFiles": [
+        {
+          "Path": "Z:\\Media\\A\\Film\\Film disc b.mkv",
+          "Name": "Film disc b",
+          "Year": null,
+          "ExtraType": null,
+          "FileNameWithoutExtension": "Film disc b"
+        },
+        {
+          "Path": "Z:\\Media\\A\\Film\\Film disc a.mkv",
+          "Name": "Film disc a",
+          "Year": null,
+          "ExtraType": null,
+          "FileNameWithoutExtension": "Film disc a"
+        }
+      ],
+      "items": [
+        {
+          "nativeType": "MediaBrowser.Controller.Entities.Movies.Movie",
+          "Name": "Film",
+          "Path": "Z:\\Media\\A\\Film\\Film disc a.mkv",
+          "ProductionYear": null,
+          "IsInMixedFolder": false,
+          "AdditionalParts": [
+            "Z:\\Media\\A\\Film\\Film disc b.mkv"
+          ],
+          "LocalAlternateVersions": [],
+          "VideoType": "VideoFile"
+        }
+      ],
+      "extraFiles": []
+    },
+    {
+      "name": "parts-need-not-start-at-one",
+      "stacks": [
+        {
+          "Name": "Film",
+          "IsDirectoryStack": false,
+          "Files": [
+            "Z:\\Media\\A\\Film\\Film part2.mkv",
+            "Z:\\Media\\A\\Film\\Film part3.mkv"
+          ]
+        }
+      ],
+      "resolvedFiles": [
+        {
+          "Path": "Z:\\Media\\A\\Film\\Film part3.mkv",
+          "Name": "Film part3",
+          "Year": null,
+          "ExtraType": null,
+          "FileNameWithoutExtension": "Film part3"
+        },
+        {
+          "Path": "Z:\\Media\\A\\Film\\Film part2.mkv",
+          "Name": "Film part2",
+          "Year": null,
+          "ExtraType": null,
+          "FileNameWithoutExtension": "Film part2"
+        }
+      ],
+      "items": [
+        {
+          "nativeType": "MediaBrowser.Controller.Entities.Movies.Movie",
+          "Name": "Film",
+          "Path": "Z:\\Media\\A\\Film\\Film part2.mkv",
+          "ProductionYear": null,
+          "IsInMixedFolder": false,
+          "AdditionalParts": [
+            "Z:\\Media\\A\\Film\\Film part3.mkv"
+          ],
+          "LocalAlternateVersions": [],
+          "VideoType": "VideoFile"
+        }
+      ],
+      "extraFiles": []
+    },
+    {
+      "name": "mixed-part-tokens-do-not-stack",
+      "stacks": [],
+      "resolvedFiles": [
+        {
+          "Path": "Z:\\Media\\A\\Film\\Film cd1.mkv",
+          "Name": "Film",
+          "Year": null,
+          "ExtraType": null,
+          "FileNameWithoutExtension": "Film cd1"
+        },
+        {
+          "Path": "Z:\\Media\\A\\Film\\Film part2.mkv",
+          "Name": "Film part2",
+          "Year": null,
+          "ExtraType": null,
+          "FileNameWithoutExtension": "Film part2"
+        }
+      ],
+      "items": [
+        {
+          "nativeType": "MediaBrowser.Controller.Entities.Movies.Movie",
+          "Name": "Film",
+          "Path": "Z:\\Media\\A\\Film\\Film cd1.mkv",
+          "ProductionYear": null,
+          "IsInMixedFolder": true,
+          "AdditionalParts": [],
+          "LocalAlternateVersions": [],
+          "VideoType": "VideoFile"
+        },
+        {
+          "nativeType": "MediaBrowser.Controller.Entities.Movies.Movie",
+          "Name": "Film part2",
+          "Path": "Z:\\Media\\A\\Film\\Film part2.mkv",
+          "ProductionYear": null,
+          "IsInMixedFolder": true,
+          "AdditionalParts": [],
+          "LocalAlternateVersions": [],
+          "VideoType": "VideoFile"
+        }
+      ],
+      "extraFiles": []
+    },
+    {
+      "name": "mixed-numeric-alpha-do-not-stack",
+      "stacks": [],
+      "resolvedFiles": [
+        {
+          "Path": "Z:\\Media\\A\\Film\\Film disk1.mkv",
+          "Name": "Film disk1",
+          "Year": null,
+          "ExtraType": null,
+          "FileNameWithoutExtension": "Film disk1"
+        },
+        {
+          "Path": "Z:\\Media\\A\\Film\\Film diskb.mkv",
+          "Name": "Film diskb",
+          "Year": null,
+          "ExtraType": null,
+          "FileNameWithoutExtension": "Film diskb"
+        }
+      ],
+      "items": [
+        {
+          "nativeType": "MediaBrowser.Controller.Entities.Movies.Movie",
+          "Name": "Film disk1",
+          "Path": "Z:\\Media\\A\\Film\\Film disk1.mkv",
+          "ProductionYear": null,
+          "IsInMixedFolder": true,
+          "AdditionalParts": [],
+          "LocalAlternateVersions": [],
+          "VideoType": "VideoFile"
+        },
+        {
+          "nativeType": "MediaBrowser.Controller.Entities.Movies.Movie",
+          "Name": "Film diskb",
+          "Path": "Z:\\Media\\A\\Film\\Film diskb.mkv",
+          "ProductionYear": null,
+          "IsInMixedFolder": true,
+          "AdditionalParts": [],
+          "LocalAlternateVersions": [],
+          "VideoType": "VideoFile"
+        }
+      ],
+      "extraFiles": []
+    },
+    {
+      "name": "case-distinct-stack-names",
+      "stacks": [],
+      "resolvedFiles": [
+        {
+          "Path": "Z:\\Media\\A\\Film\\Film cd1.mkv",
+          "Name": "Film",
+          "Year": null,
+          "ExtraType": null,
+          "FileNameWithoutExtension": "Film cd1"
+        },
+        {
+          "Path": "Z:\\Media\\A\\Film\\film cd2.mkv",
+          "Name": "film",
+          "Year": null,
+          "ExtraType": null,
+          "FileNameWithoutExtension": "film cd2"
+        }
+      ],
+      "items": [
+        {
+          "nativeType": "MediaBrowser.Controller.Entities.Movies.Movie",
+          "Name": "Film",
+          "Path": "Z:\\Media\\A\\Film\\Film cd1.mkv",
+          "ProductionYear": null,
+          "IsInMixedFolder": true,
+          "AdditionalParts": [],
+          "LocalAlternateVersions": [],
+          "VideoType": "VideoFile"
+        },
+        {
+          "nativeType": "MediaBrowser.Controller.Entities.Movies.Movie",
+          "Name": "film",
+          "Path": "Z:\\Media\\A\\Film\\film cd2.mkv",
+          "ProductionYear": null,
+          "IsInMixedFolder": true,
+          "AdditionalParts": [],
+          "LocalAlternateVersions": [],
+          "VideoType": "VideoFile"
+        }
+      ],
+      "extraFiles": []
+    },
+    {
+      "name": "stack-with-trailer",
+      "stacks": [
+        {
+          "Name": "Film",
+          "IsDirectoryStack": false,
+          "Files": [
+            "Z:\\Media\\A\\Film\\Film cd1.mkv",
+            "Z:\\Media\\A\\Film\\Film cd2.mkv"
+          ]
+        }
+      ],
+      "resolvedFiles": [
+        {
+          "Path": "Z:\\Media\\A\\Film\\Film cd2.mkv",
+          "Name": "Film",
+          "Year": null,
+          "ExtraType": null,
+          "FileNameWithoutExtension": "Film cd2"
+        },
+        {
+          "Path": "Z:\\Media\\A\\Film\\Film-trailer.mkv",
+          "Name": "Film",
+          "Year": null,
+          "ExtraType": "Trailer",
+          "FileNameWithoutExtension": "Film-trailer"
+        },
+        {
+          "Path": "Z:\\Media\\A\\Film\\Film cd1.mkv",
+          "Name": "Film",
+          "Year": null,
+          "ExtraType": null,
+          "FileNameWithoutExtension": "Film cd1"
+        }
+      ],
+      "items": [
+        {
+          "nativeType": "MediaBrowser.Controller.Entities.Movies.Movie",
+          "Name": "Film",
+          "Path": "Z:\\Media\\A\\Film\\Film cd1.mkv",
+          "ProductionYear": null,
+          "IsInMixedFolder": true,
+          "AdditionalParts": [
+            "Z:\\Media\\A\\Film\\Film cd2.mkv"
+          ],
+          "LocalAlternateVersions": [],
+          "VideoType": "VideoFile"
+        }
+      ],
+      "extraFiles": [
+        "Z:\\Media\\A\\Film\\Film-trailer.mkv"
+      ]
+    },
+    {
+      "name": "stack-preferred-over-ordinary-version",
+      "stacks": [
+        {
+          "Name": "Film",
+          "IsDirectoryStack": false,
+          "Files": [
+            "Z:\\Media\\A\\Film\\Film cd1.mkv",
+            "Z:\\Media\\A\\Film\\Film cd2.mkv"
+          ]
+        }
+      ],
+      "resolvedFiles": [
+        {
+          "Path": "Z:\\Media\\A\\Film\\Film - 1080p.mkv",
+          "Name": "Film -",
+          "Year": null,
+          "ExtraType": null,
+          "FileNameWithoutExtension": "Film - 1080p"
+        },
+        {
+          "Path": "Z:\\Media\\A\\Film\\Film cd2.mkv",
+          "Name": "Film",
+          "Year": null,
+          "ExtraType": null,
+          "FileNameWithoutExtension": "Film cd2"
+        },
+        {
+          "Path": "Z:\\Media\\A\\Film\\Film cd1.mkv",
+          "Name": "Film",
+          "Year": null,
+          "ExtraType": null,
+          "FileNameWithoutExtension": "Film cd1"
+        }
+      ],
+      "items": [
+        {
+          "nativeType": "MediaBrowser.Controller.Entities.Movies.Movie",
+          "Name": "Film",
+          "Path": "Z:\\Media\\A\\Film\\Film cd1.mkv",
+          "ProductionYear": null,
+          "IsInMixedFolder": true,
+          "AdditionalParts": [
+            "Z:\\Media\\A\\Film\\Film cd2.mkv"
+          ],
+          "LocalAlternateVersions": [],
+          "VideoType": "VideoFile"
+        },
+        {
+          "nativeType": "MediaBrowser.Controller.Entities.Movies.Movie",
+          "Name": "Film -",
+          "Path": "Z:\\Media\\A\\Film\\Film - 1080p.mkv",
+          "ProductionYear": null,
+          "IsInMixedFolder": true,
+          "AdditionalParts": [],
+          "LocalAlternateVersions": [],
+          "VideoType": "VideoFile"
+        }
+      ],
+      "extraFiles": []
+    },
+    {
+      "name": "two-stacked-versions",
+      "stacks": [
+        {
+          "Name": "Film - Director",
+          "IsDirectoryStack": false,
+          "Files": [
+            "Z:\\Media\\A\\Film\\Film - Director cd1.mkv",
+            "Z:\\Media\\A\\Film\\Film - Director cd2.mkv"
+          ]
+        },
+        {
+          "Name": "Film - Theatrical",
+          "IsDirectoryStack": false,
+          "Files": [
+            "Z:\\Media\\A\\Film\\Film - Theatrical cd1.mkv",
+            "Z:\\Media\\A\\Film\\Film - Theatrical cd2.mkv"
+          ]
+        }
+      ],
+      "resolvedFiles": [
+        {
+          "Path": "Z:\\Media\\A\\Film\\Film - Theatrical cd2.mkv",
+          "Name": "Film - Theatrical",
+          "Year": null,
+          "ExtraType": null,
+          "FileNameWithoutExtension": "Film - Theatrical cd2"
+        },
+        {
+          "Path": "Z:\\Media\\A\\Film\\Film - Director cd1.mkv",
+          "Name": "Film - Director",
+          "Year": null,
+          "ExtraType": null,
+          "FileNameWithoutExtension": "Film - Director cd1"
+        },
+        {
+          "Path": "Z:\\Media\\A\\Film\\Film - Theatrical cd1.mkv",
+          "Name": "Film - Theatrical",
+          "Year": null,
+          "ExtraType": null,
+          "FileNameWithoutExtension": "Film - Theatrical cd1"
+        },
+        {
+          "Path": "Z:\\Media\\A\\Film\\Film - Director cd2.mkv",
+          "Name": "Film - Director",
+          "Year": null,
+          "ExtraType": null,
+          "FileNameWithoutExtension": "Film - Director cd2"
+        }
+      ],
+      "items": [
+        {
+          "nativeType": "MediaBrowser.Controller.Entities.Movies.Movie",
+          "Name": "Film",
+          "Path": "Z:\\Media\\A\\Film\\Film - Director cd1.mkv",
+          "ProductionYear": null,
+          "IsInMixedFolder": false,
+          "AdditionalParts": [
+            "Z:\\Media\\A\\Film\\Film - Director cd2.mkv"
+          ],
+          "LocalAlternateVersions": [
+            "Z:\\Media\\A\\Film\\Film - Theatrical cd1.mkv"
+          ],
+          "VideoType": "VideoFile"
+        }
+      ],
+      "extraFiles": []
+    },
+    {
+      "name": "stack-shaped-featurette",
+      "stacks": [
+        {
+          "Name": "Film-featurette",
+          "IsDirectoryStack": false,
+          "Files": [
+            "Z:\\Media\\A\\Film\\Film-featurette cd1.mkv",
+            "Z:\\Media\\A\\Film\\Film-featurette cd2.mkv"
+          ]
+        }
+      ],
+      "resolvedFiles": [
+        {
+          "Path": "Z:\\Media\\A\\Film\\Film-featurette cd2.mkv",
+          "Name": "Film",
+          "Year": null,
+          "ExtraType": null,
+          "FileNameWithoutExtension": "Film-featurette cd2"
+        },
+        {
+          "Path": "Z:\\Media\\A\\Film\\Film-featurette cd1.mkv",
+          "Name": "Film",
+          "Year": null,
+          "ExtraType": null,
+          "FileNameWithoutExtension": "Film-featurette cd1"
+        }
+      ],
+      "items": [
+        {
+          "nativeType": "MediaBrowser.Controller.Entities.Movies.Movie",
+          "Name": "Film",
+          "Path": "Z:\\Media\\A\\Film\\Film-featurette cd1.mkv",
+          "ProductionYear": null,
+          "IsInMixedFolder": false,
+          "AdditionalParts": [
+            "Z:\\Media\\A\\Film\\Film-featurette cd2.mkv"
+          ],
+          "LocalAlternateVersions": [],
+          "VideoType": "VideoFile"
+        }
+      ],
+      "extraFiles": []
+    },
+    {
+      "name": "home-video-stack",
+      "stacks": [
+        {
+          "Name": "Holiday",
+          "IsDirectoryStack": false,
+          "Files": [
+            "Z:\\Media\\A\\Family\\Holiday pt1.mp4",
+            "Z:\\Media\\A\\Family\\Holiday pt2.mp4"
+          ]
+        }
+      ],
+      "resolvedFiles": [
+        {
+          "Path": "Z:\\Media\\A\\Family\\Holiday pt2.mp4",
+          "Name": "Holiday pt2",
+          "Year": null,
+          "ExtraType": null,
+          "FileNameWithoutExtension": "Holiday pt2"
+        },
+        {
+          "Path": "Z:\\Media\\A\\Family\\Holiday pt1.mp4",
+          "Name": "Holiday pt1",
+          "Year": null,
+          "ExtraType": null,
+          "FileNameWithoutExtension": "Holiday pt1"
+        }
+      ],
+      "items": [
+        {
+          "nativeType": "MediaBrowser.Controller.Entities.Video",
+          "Name": "Holiday pt1",
+          "Path": "Z:\\Media\\A\\Family\\Holiday pt1.mp4",
+          "ProductionYear": null,
+          "IsInMixedFolder": false,
+          "AdditionalParts": [
+            "Z:\\Media\\A\\Family\\Holiday pt2.mp4"
+          ],
+          "LocalAlternateVersions": [],
+          "VideoType": "VideoFile"
+        }
+      ],
+      "extraFiles": []
+    }
+  ],
+  "assemblies": [
+    {
+      "name": "MediaBrowser.Controller",
+      "path": "D:\\mediamanager-validation\\20261005\\results\\video-stacks-oracle-20261007-4\\bin\\Release\\net10.0\\MediaBrowser.Controller.dll",
+      "sha256": "051c588a8e85a3a7cdde8dc3d9a1112217fd7e973a86fe2ff90cf765bedb75a8"
+    },
+    {
+      "name": "Emby.Server.Implementations",
+      "path": "D:\\mediamanager-validation\\20261005\\results\\video-stacks-oracle-20261007-4\\bin\\Release\\net10.0\\Emby.Server.Implementations.dll",
+      "sha256": "8d369435646570958505c58b9cb17da169855dabc105d0e933524361e9b7b1c8"
+    },
+    {
+      "name": "Emby.Naming",
+      "path": "D:\\mediamanager-validation\\20261005\\results\\video-stacks-oracle-20261007-4\\bin\\Release\\net10.0\\Emby.Naming.dll",
+      "sha256": "55085cf14d1e58a7a1e99e0ffc37bde0545bbe85f7f09995388a6e465cca3a45"
+    }
+  ],
+  "scope": "Actual frozen MovieResolver.ResolveMultiple, VideoListResolver, StackResolver, VideoResolver and initial item values for file stacks and stack/alternate interaction under a real three-Folder parent chain. Parent lookup, file metadata and empty directory service are controls. Directory stacks, native scanner, owned-part refresh/persistence, deletion and complete library acceptance are outside this oracle."
+}

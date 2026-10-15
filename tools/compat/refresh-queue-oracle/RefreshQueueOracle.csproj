@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <Reference Include="MediaBrowser.Controller"><HintPath>$(JellyfinAssemblyDirectory)/MediaBrowser.Controller.dll</HintPath></Reference>
+    <Reference Include="MediaBrowser.Model"><HintPath>$(JellyfinAssemblyDirectory)/MediaBrowser.Model.dll</HintPath></Reference>
+    <Reference Include="MediaBrowser.Common"><HintPath>$(JellyfinAssemblyDirectory)/MediaBrowser.Common.dll</HintPath></Reference>
+    <Reference Include="MediaBrowser.Providers"><HintPath>$(JellyfinAssemblyDirectory)/MediaBrowser.Providers.dll</HintPath></Reference>
+    <Reference Include="Jellyfin.Data"><HintPath>$(JellyfinAssemblyDirectory)/Jellyfin.Data.dll</HintPath></Reference>
+    <None Include="$(JellyfinAssemblyDirectory)/*.dll" Link="%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+  <Target Name="RequireReferenceAssemblies" BeforeTargets="ResolveReferences">
+    <Error Condition="!Exists('$(JellyfinAssemblyDirectory)/MediaBrowser.Providers.dll')" Text="Set JellyfinAssemblyDirectory to the isolated, baseline-verified native build." />
+  </Target>
+</Project>

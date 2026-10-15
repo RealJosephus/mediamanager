@@ -1,0 +1,1490 @@
+[
+  {
+    "directories": [
+      "{views}/Library",
+      "{media}/A",
+      "{media}/B",
+      "{media}/C"
+    ],
+    "files": {
+      "{views}/Library/movies.collection": "",
+      "{views}/Library/A.mblink": "{media}\\A"
+    },
+    "name": "Library",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\A"
+        }
+      ]
+    },
+    "key": "add-new-path",
+    "operation": "add",
+    "mediaPath": {
+      "Path": "{media}\\B"
+    }
+  },
+  {
+    "directories": [
+      "{views}/Library",
+      "{media}/A",
+      "{media}/B",
+      "{media}/C"
+    ],
+    "files": {
+      "{views}/Library/movies.collection": "",
+      "{views}/Library/A.mblink": "{media}\\A"
+    },
+    "name": "Library",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\A"
+        }
+      ]
+    },
+    "key": "add-duplicate-keeps-new-info",
+    "operation": "add",
+    "mediaPath": {
+      "Path": "{media}\\A"
+    }
+  },
+  {
+    "directories": [
+      "{views}/Library",
+      "{media}/A",
+      "{media}/B",
+      "{media}/C"
+    ],
+    "files": {
+      "{views}/Library/movies.collection": "",
+      "{views}/Library/A.mblink": "{media}\\A",
+      "{views}/Library/B.mblink": "prior",
+      "{views}/Library/B1.mblink": "prior1"
+    },
+    "name": "Library",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\A"
+        }
+      ]
+    },
+    "key": "add-shortcut-collision-appends-one",
+    "operation": "add",
+    "mediaPath": {
+      "Path": "{media}\\B"
+    }
+  },
+  {
+    "directories": [
+      "{views}/Library",
+      "{media}/A",
+      "{media}/B",
+      "{media}/C",
+      "{media}/Movies.Library"
+    ],
+    "files": {
+      "{views}/Library/movies.collection": "",
+      "{views}/Library/A.mblink": "{media}\\A"
+    },
+    "name": "Library",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\A"
+        }
+      ]
+    },
+    "key": "add-extension-directory-uses-stem",
+    "operation": "add",
+    "mediaPath": {
+      "Path": "{media}\\Movies.Library"
+    }
+  },
+  {
+    "directories": [
+      "{views}/Library",
+      "{media}/A",
+      "{media}/B",
+      "{media}/C",
+      "{data}/collections"
+    ],
+    "files": {
+      "{views}/Library/movies.collection": "",
+      "{views}/Library/A.mblink": "{media}\\A"
+    },
+    "name": "Library",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\A"
+        }
+      ]
+    },
+    "key": "add-app-data-placeholder",
+    "operation": "add",
+    "mediaPath": {
+      "Path": "{data}\\collections"
+    }
+  },
+  {
+    "directories": [
+      "{views}/Library",
+      "{media}/A",
+      "{media}/B",
+      "{media}/C"
+    ],
+    "files": {
+      "{views}/Library/movies.collection": "",
+      "{views}/Library/A.mblink": "{media}\\A"
+    },
+    "name": "Library",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\A"
+        }
+      ]
+    },
+    "key": "add-content-types-cleanup",
+    "operation": "add",
+    "mediaPath": {
+      "Path": "{media}\\B"
+    },
+    "contentTypes": [
+      {
+        "Name": "",
+        "Value": "blank"
+      },
+      {
+        "Name": "{media}\\B",
+        "Value": "movies"
+      },
+      {
+        "Name": "{media}\\B\\Child",
+        "Value": "books"
+      },
+      {
+        "Name": "{media}",
+        "Value": "music"
+      },
+      {
+        "Name": "{media}\\Bsuffix",
+        "Value": "photos"
+      }
+    ]
+  },
+  {
+    "directories": [
+      "{views}/Library",
+      "{media}/A",
+      "{media}/B",
+      "{media}/C"
+    ],
+    "files": {
+      "{views}/Library/movies.collection": "",
+      "{views}/Library/A.mblink": "{media}\\A"
+    },
+    "name": "Library",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\A"
+        }
+      ]
+    },
+    "key": "add-config-save-failure-prefix",
+    "operation": "add",
+    "mediaPath": {
+      "Path": "{media}\\B"
+    },
+    "contentTypes": [
+      {
+        "Name": "{media}\\B",
+        "Value": "movies"
+      }
+    ],
+    "failure": "configuration-save"
+  },
+  {
+    "directories": [
+      "{views}/Library",
+      "{media}/A",
+      "{media}/B",
+      "{media}/C"
+    ],
+    "files": {
+      "{views}/Library/movies.collection": "",
+      "{views}/Library/A.mblink": "{media}\\A"
+    },
+    "name": "Library",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\A"
+        }
+      ]
+    },
+    "key": "add-null-content-types-prefix",
+    "operation": "add",
+    "mediaPath": {
+      "Path": "{media}\\B"
+    },
+    "contentTypes": null
+  },
+  {
+    "directories": [
+      "{views}/Library",
+      "{media}/A",
+      "{media}/B",
+      "{media}/C"
+    ],
+    "files": {
+      "{views}/Library/movies.collection": "",
+      "{views}/Library/A.mblink": "{media}\\A"
+    },
+    "name": "Library",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\A"
+        }
+      ]
+    },
+    "key": "add-null-content-type-entry-prefix",
+    "operation": "add",
+    "mediaPath": {
+      "Path": "{media}\\B"
+    },
+    "contentTypes": [
+      null
+    ]
+  },
+  {
+    "directories": [
+      "{views}/Library",
+      "{media}/A",
+      "{media}/B",
+      "{media}/C"
+    ],
+    "files": {
+      "{views}/Library/movies.collection": "",
+      "{views}/Library/A.mblink": "{media}\\A"
+    },
+    "name": "Library",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\A"
+        }
+      ]
+    },
+    "key": "add-shortcut-failure",
+    "operation": "add",
+    "mediaPath": {
+      "Path": "{media}\\B"
+    },
+    "failShortcut": 1
+  },
+  {
+    "directories": [
+      "{views}/Library",
+      "{media}/A",
+      "{media}/B",
+      "{media}/C"
+    ],
+    "files": {
+      "{views}/Library/movies.collection": "",
+      "{views}/Library/A.mblink": "{media}\\A"
+    },
+    "name": "Library",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\A"
+        }
+      ]
+    },
+    "key": "add-invalidation-failure-prefix",
+    "operation": "add",
+    "mediaPath": {
+      "Path": "{media}\\B"
+    },
+    "failure": "invalidate"
+  },
+  {
+    "directories": [
+      "{views}/Library",
+      "{media}/A",
+      "{media}/B",
+      "{media}/C"
+    ],
+    "files": {
+      "{views}/Library/movies.collection": "",
+      "{views}/Library/A.mblink": "{media}\\A"
+    },
+    "name": "Library",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\A"
+        }
+      ]
+    },
+    "key": "add-options-event-failure-prefix",
+    "operation": "add",
+    "mediaPath": {
+      "Path": "{media}\\B"
+    },
+    "failure": "options-updated"
+  },
+  {
+    "directories": [
+      "{views}/Library",
+      "{media}/A",
+      "{media}/B",
+      "{media}/C"
+    ],
+    "files": {
+      "{views}/Library/movies.collection": "",
+      "{views}/Library/A.mblink": "{media}\\A"
+    },
+    "name": "Library",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\A"
+        }
+      ]
+    },
+    "key": "add-null-path-array-prefix",
+    "operation": "add",
+    "mediaPath": {
+      "Path": "{media}\\B"
+    },
+    "livePathInfos": null
+  },
+  {
+    "directories": [
+      "{views}/Library",
+      "{media}/A",
+      "{media}/B",
+      "{media}/C"
+    ],
+    "files": {
+      "{views}/Library/movies.collection": "",
+      "{views}/Library/A.mblink": "{media}\\A",
+      "{views}/Library/C.mblink": "{media}\\C"
+    },
+    "name": "Library",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\A"
+        }
+      ]
+    },
+    "key": "add-null-path-entry-count-mismatch",
+    "operation": "add",
+    "mediaPath": {
+      "Path": "{media}\\B"
+    },
+    "livePathInfos": [
+      null
+    ]
+  },
+  {
+    "directories": [
+      "{views}/Library",
+      "{media}/A",
+      "{media}/B",
+      "{media}/C"
+    ],
+    "files": {
+      "{views}/Library/movies.collection": "",
+      "{views}/Library/A.mblink": "{media}\\A"
+    },
+    "name": "Library",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\A"
+        }
+      ]
+    },
+    "key": "add-options-is-directory-failure",
+    "operation": "add",
+    "mediaPath": {
+      "Path": "{media}\\B"
+    },
+    "optionsDirectory": true
+  },
+  {
+    "directories": [
+      "{views}/Library",
+      "{media}/A",
+      "{media}/B",
+      "{media}/C"
+    ],
+    "files": {
+      "{views}/Library/movies.collection": "",
+      "{views}/Library/A.mblink": "{media}\\A"
+    },
+    "name": "Library",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\A"
+        }
+      ]
+    },
+    "key": "add-null-info",
+    "operation": "add",
+    "mediaPath": null
+  },
+  {
+    "directories": [
+      "{views}/Library",
+      "{media}/A",
+      "{media}/B",
+      "{media}/C"
+    ],
+    "files": {
+      "{views}/Library/movies.collection": "",
+      "{views}/Library/A.mblink": "{media}\\A"
+    },
+    "name": "Library",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\A"
+        }
+      ]
+    },
+    "key": "add-empty-path",
+    "operation": "add",
+    "mediaPath": {
+      "Path": ""
+    }
+  },
+  {
+    "directories": [
+      "{views}/Library",
+      "{media}/A",
+      "{media}/B",
+      "{media}/C"
+    ],
+    "files": {
+      "{views}/Library/movies.collection": "",
+      "{views}/Library/A.mblink": "{media}\\A"
+    },
+    "name": "Library",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\A"
+        }
+      ]
+    },
+    "key": "add-whitespace-path",
+    "operation": "add",
+    "mediaPath": {
+      "Path": " \t  "
+    }
+  },
+  {
+    "directories": [
+      "{views}/Library",
+      "{media}/A",
+      "{media}/B",
+      "{media}/C"
+    ],
+    "files": {
+      "{views}/Library/movies.collection": "",
+      "{views}/Library/A.mblink": "{media}\\A"
+    },
+    "name": "Library",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\A"
+        }
+      ]
+    },
+    "key": "add-absent-media",
+    "operation": "add",
+    "mediaPath": {
+      "Path": "{media}\\Absent"
+    }
+  },
+  {
+    "directories": [
+      "{views}/Library",
+      "{media}/A",
+      "{media}/B",
+      "{media}/C"
+    ],
+    "files": {
+      "{views}/Library/movies.collection": "",
+      "{views}/Library/A.mblink": "{media}\\A"
+    },
+    "name": "Absent",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\A"
+        }
+      ]
+    },
+    "key": "add-absent-library",
+    "operation": "add",
+    "mediaPath": {
+      "Path": "{media}\\B"
+    }
+  },
+  {
+    "directories": [
+      "{views}/Library",
+      "{media}/A",
+      "{media}/B",
+      "{media}/C"
+    ],
+    "files": {
+      "{views}/Library/movies.collection": "",
+      "{views}/Library/A.mblink": "{media}\\A"
+    },
+    "name": "Library",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\A"
+        }
+      ]
+    },
+    "key": "update-ignores-supplied-path",
+    "operation": "update",
+    "mediaPath": {
+      "Path": "{media}\\Absent"
+    }
+  },
+  {
+    "directories": [
+      "{views}/Library",
+      "{media}/A",
+      "{media}/B",
+      "{media}/C"
+    ],
+    "files": {
+      "{views}/Library/movies.collection": "",
+      "{views}/Library/A.mblink": "{media}\\A"
+    },
+    "name": "Library",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\A"
+        }
+      ]
+    },
+    "key": "update-ignores-null-path",
+    "operation": "update",
+    "mediaPath": {
+      "Path": null
+    }
+  },
+  {
+    "directories": [
+      "{views}/Library",
+      "{media}/A",
+      "{media}/B",
+      "{media}/C"
+    ],
+    "files": {
+      "{views}/Library/movies.collection": "",
+      "{views}/Library/A.mblink": "{media}\\A"
+    },
+    "name": "Library",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\A"
+        }
+      ]
+    },
+    "key": "update-null-info",
+    "operation": "update",
+    "mediaPath": null
+  },
+  {
+    "directories": [
+      "{views}/Library",
+      "{media}/A",
+      "{media}/B",
+      "{media}/C"
+    ],
+    "files": {
+      "{views}/Library/movies.collection": "",
+      "{views}/Library/A.mblink": "{media}\\A"
+    },
+    "name": "Library",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\C"
+        }
+      ]
+    },
+    "key": "update-same-count-does-not-replace-stale-info",
+    "operation": "update",
+    "mediaPath": {
+      "Path": "ignored"
+    }
+  },
+  {
+    "directories": [
+      "{views}/Library",
+      "{media}/A",
+      "{media}/B",
+      "{media}/C"
+    ],
+    "files": {
+      "{views}/Library/movies.collection": "",
+      "{views}/Library/A.mblink": "{media}\\A",
+      "{views}/Library/B.mblink": "{media}\\B"
+    },
+    "name": "Library",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\C"
+        }
+      ]
+    },
+    "key": "update-count-mismatch-adds-never-prunes",
+    "operation": "update",
+    "mediaPath": {
+      "Path": "ignored"
+    }
+  },
+  {
+    "directories": [
+      "{views}/Library",
+      "{media}/A",
+      "{media}/B",
+      "{media}/C"
+    ],
+    "files": {
+      "{views}/Library/movies.collection": ""
+    },
+    "name": "Library",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\A"
+        }
+      ]
+    },
+    "key": "update-empty-locations-keeps-old-info",
+    "operation": "update",
+    "mediaPath": {
+      "Path": "ignored"
+    }
+  },
+  {
+    "directories": [
+      "{views}/Library",
+      "{media}/A",
+      "{media}/B",
+      "{media}/C"
+    ],
+    "files": {
+      "{views}/Library/movies.collection": ""
+    },
+    "name": "Library",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\A"
+        }
+      ]
+    },
+    "key": "update-null-array-no-locations-saves-default-clone",
+    "operation": "update",
+    "mediaPath": {
+      "Path": "ignored"
+    },
+    "livePathInfos": null
+  },
+  {
+    "directories": [
+      "{views}/Library",
+      "{media}/A",
+      "{media}/B",
+      "{media}/C"
+    ],
+    "files": {
+      "{views}/Library/movies.collection": "",
+      "{views}/Library/A.mblink": "{media}\\A"
+    },
+    "name": "Library",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\A"
+        }
+      ]
+    },
+    "key": "update-null-array-with-location-fails",
+    "operation": "update",
+    "mediaPath": {
+      "Path": "ignored"
+    },
+    "livePathInfos": null
+  },
+  {
+    "directories": [
+      "{views}/Library",
+      "{media}/A",
+      "{media}/B",
+      "{media}/C"
+    ],
+    "files": {
+      "{views}/Library/movies.collection": "",
+      "{views}/Library/A.mblink": "{media}\\A"
+    },
+    "name": "Library",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\A"
+        }
+      ]
+    },
+    "key": "update-options-is-directory-failure",
+    "operation": "update",
+    "mediaPath": {
+      "Path": "ignored"
+    },
+    "optionsDirectory": true
+  },
+  {
+    "directories": [
+      "{views}/Library",
+      "{media}/A",
+      "{media}/B",
+      "{media}/C"
+    ],
+    "files": {
+      "{views}/Library/movies.collection": "",
+      "{views}/Library/A.mblink": "{media}\\A"
+    },
+    "name": "Library",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\A"
+        }
+      ]
+    },
+    "key": "update-options-event-failure-prefix",
+    "operation": "update",
+    "mediaPath": {
+      "Path": "ignored"
+    },
+    "failure": "options-updated"
+  },
+  {
+    "directories": [
+      "{views}/Library",
+      "{media}/A",
+      "{media}/B",
+      "{media}/C"
+    ],
+    "files": {
+      "{views}/Library/movies.collection": "",
+      "{views}/Library/A.mblink": "{media}\\A"
+    },
+    "name": "Absent",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\A"
+        }
+      ]
+    },
+    "key": "update-absent-library",
+    "operation": "update",
+    "mediaPath": {
+      "Path": "ignored"
+    }
+  },
+  {
+    "directories": [
+      "{views}/Library",
+      "{media}/A",
+      "{media}/B",
+      "{media}/C"
+    ],
+    "files": {
+      "{views}/Library/movies.collection": "",
+      "{views}/Library/A.mblink": "{media}\\A"
+    },
+    "name": "Library",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\A"
+        }
+      ]
+    },
+    "key": "remove-exact-path",
+    "operation": "removePath",
+    "path": "{media}\\A"
+  },
+  {
+    "directories": [
+      "{views}/Library",
+      "{media}/A",
+      "{media}/B",
+      "{media}/C"
+    ],
+    "files": {
+      "{views}/Library/movies.collection": "",
+      "{views}/Library/A.mblink": "{media}\\A"
+    },
+    "name": "Library",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\A"
+        }
+      ]
+    },
+    "key": "remove-case-different-shortcut-only",
+    "operation": "removePath",
+    "path": "{media}\\a"
+  },
+  {
+    "directories": [
+      "{views}/Library",
+      "{media}/A",
+      "{media}/B",
+      "{media}/C"
+    ],
+    "files": {
+      "{views}/Library/movies.collection": "",
+      "{views}/Library/A.mblink": "{media}\\A",
+      "{views}/Library/A1.mblink": "{media}\\A"
+    },
+    "name": "Library",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\A"
+        },
+        {
+          "Path": "{media}\\A"
+        },
+        {
+          "Path": "{media}\\a"
+        }
+      ]
+    },
+    "key": "remove-all-exact-infos-first-shortcut-only",
+    "operation": "removePath",
+    "path": "{media}\\A"
+  },
+  {
+    "directories": [
+      "{views}/Library",
+      "{media}/A",
+      "{media}/B",
+      "{media}/C",
+      "{views}/Library/Nested"
+    ],
+    "files": {
+      "{views}/Library/movies.collection": "",
+      "{views}/Library/A.mblink": "{media}\\A",
+      "{views}/Library/Nested/B.mblink": "{media}\\B"
+    },
+    "name": "Library",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\A"
+        },
+        {
+          "Path": "{media}\\B"
+        }
+      ]
+    },
+    "key": "remove-recursive-shortcut",
+    "operation": "removePath",
+    "path": "{media}\\B"
+  },
+  {
+    "directories": [
+      "{views}/Library",
+      "{media}/A",
+      "{media}/B",
+      "{media}/C"
+    ],
+    "files": {
+      "{views}/Library/movies.collection": "",
+      "{views}/Library/A.mblink": "{media}\\A"
+    },
+    "name": "Library",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\A"
+        }
+      ]
+    },
+    "key": "remove-unknown-path-still-saves",
+    "operation": "removePath",
+    "path": "{media}\\C"
+  },
+  {
+    "directories": [
+      "{views}/Library",
+      "{media}/A",
+      "{media}/B",
+      "{media}/C"
+    ],
+    "files": {
+      "{views}/Library/movies.collection": "",
+      "{views}/Library/A.mblink": "{media}\\A"
+    },
+    "name": "Library",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\A"
+        }
+      ]
+    },
+    "key": "remove-whitespace-path-still-saves",
+    "operation": "removePath",
+    "path": " \t "
+  },
+  {
+    "directories": [
+      "{views}/Library",
+      "{media}/A",
+      "{media}/B",
+      "{media}/C"
+    ],
+    "files": {
+      "{views}/Library/movies.collection": "",
+      "{views}/Library/A.mblink": "{media}\\A"
+    },
+    "name": "Library",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\A"
+        }
+      ]
+    },
+    "key": "remove-null-path",
+    "operation": "removePath",
+    "path": null
+  },
+  {
+    "directories": [
+      "{views}/Library",
+      "{media}/A",
+      "{media}/B",
+      "{media}/C"
+    ],
+    "files": {
+      "{views}/Library/movies.collection": "",
+      "{views}/Library/A.mblink": "{media}\\A"
+    },
+    "name": "Library",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\A"
+        }
+      ]
+    },
+    "key": "remove-empty-path",
+    "operation": "removePath",
+    "path": ""
+  },
+  {
+    "directories": [
+      "{views}/Library",
+      "{media}/A",
+      "{media}/B",
+      "{media}/C"
+    ],
+    "files": {
+      "{views}/Library/movies.collection": "",
+      "{views}/Library/A.mblink": "{media}\\A"
+    },
+    "name": "Library",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\A"
+        }
+      ]
+    },
+    "key": "remove-null-array-after-shortcut",
+    "operation": "removePath",
+    "path": "{media}\\A",
+    "livePathInfos": null
+  },
+  {
+    "directories": [
+      "{views}/Library",
+      "{media}/A",
+      "{media}/B",
+      "{media}/C"
+    ],
+    "files": {
+      "{views}/Library/movies.collection": "",
+      "{views}/Library/A.mblink": "{media}\\A"
+    },
+    "name": "Library",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\A"
+        }
+      ]
+    },
+    "key": "remove-null-entry-after-shortcut",
+    "operation": "removePath",
+    "path": "{media}\\A",
+    "livePathInfos": [
+      null
+    ]
+  },
+  {
+    "directories": [
+      "{views}/Library",
+      "{media}/A",
+      "{media}/B",
+      "{media}/C"
+    ],
+    "files": {
+      "{views}/Library/movies.collection": "",
+      "{views}/Library/A.mblink": "{media}\\A"
+    },
+    "name": "Library",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\A"
+        }
+      ]
+    },
+    "key": "remove-invalidation-failure-prefix",
+    "operation": "removePath",
+    "path": "{media}\\A",
+    "failure": "invalidate"
+  },
+  {
+    "directories": [
+      "{views}/Library",
+      "{media}/A",
+      "{media}/B",
+      "{media}/C"
+    ],
+    "files": {
+      "{views}/Library/movies.collection": "",
+      "{views}/Library/A.mblink": "{media}\\A"
+    },
+    "name": "Library",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\A"
+        }
+      ]
+    },
+    "key": "remove-read-failure-before-save",
+    "operation": "removePath",
+    "path": "{media}\\A",
+    "failure": "resolve-shortcut"
+  },
+  {
+    "directories": [
+      "{views}/Library",
+      "{media}/A",
+      "{media}/B",
+      "{media}/C"
+    ],
+    "files": {
+      "{views}/Library/movies.collection": "",
+      "{views}/Library/A.mblink": "{media}\\A"
+    },
+    "name": "Library",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\A"
+        }
+      ]
+    },
+    "key": "remove-event-failure-prefix",
+    "operation": "removePath",
+    "path": "{media}\\A",
+    "failure": "options-updated"
+  },
+  {
+    "directories": [
+      "{views}/Library",
+      "{media}/A",
+      "{media}/B",
+      "{media}/C"
+    ],
+    "files": {
+      "{views}/Library/movies.collection": "",
+      "{views}/Library/A.mblink": "{media}\\A"
+    },
+    "name": "Library",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\A"
+        }
+      ]
+    },
+    "key": "remove-options-is-directory-prefix",
+    "operation": "removePath",
+    "path": "{media}\\A",
+    "optionsDirectory": true
+  },
+  {
+    "directories": [
+      "{views}/Library",
+      "{media}/A",
+      "{media}/B",
+      "{media}/C"
+    ],
+    "files": {
+      "{views}/Library/movies.collection": "",
+      "{views}/Library/A.mblink": "{media}\\A"
+    },
+    "name": "Library",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\A"
+        }
+      ]
+    },
+    "key": "remove-library-no-refresh-keeps-captured-root",
+    "operation": "removeLibrary"
+  },
+  {
+    "directories": [
+      "{views}/Library",
+      "{media}/A",
+      "{media}/B",
+      "{media}/C"
+    ],
+    "files": {
+      "{views}/Library/movies.collection": "",
+      "{views}/Library/A.mblink": "{media}\\A"
+    },
+    "name": "Library",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\A"
+        }
+      ]
+    },
+    "key": "remove-library-refresh-reconciles-root",
+    "operation": "removeLibrary",
+    "refreshLibrary": true
+  },
+  {
+    "directories": [
+      "{views}/Library",
+      "{media}/A",
+      "{media}/B",
+      "{media}/C"
+    ],
+    "files": {
+      "{views}/Library/movies.collection": "",
+      "{views}/Library/A.mblink": "{media}\\A"
+    },
+    "name": "Library",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\A"
+        }
+      ]
+    },
+    "key": "remove-library-active-scan-drops-queue",
+    "operation": "removeLibrary",
+    "refreshLibrary": true,
+    "scanRunning": true
+  },
+  {
+    "directories": [
+      "{views}/Library",
+      "{media}/A",
+      "{media}/B",
+      "{media}/C"
+    ],
+    "files": {
+      "{views}/Library/movies.collection": "",
+      "{views}/Library/A.mblink": "{media}\\A"
+    },
+    "name": null,
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\A"
+        }
+      ]
+    },
+    "key": "remove-library-null-name",
+    "operation": "removeLibrary"
+  },
+  {
+    "directories": [
+      "{views}/Library",
+      "{media}/A",
+      "{media}/B",
+      "{media}/C"
+    ],
+    "files": {
+      "{views}/Library/movies.collection": "",
+      "{views}/Library/A.mblink": "{media}\\A"
+    },
+    "name": " \t  ",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\A"
+        }
+      ]
+    },
+    "key": "remove-library-whitespace-name",
+    "operation": "removeLibrary"
+  },
+  {
+    "directories": [
+      "{views}/Library",
+      "{media}/A",
+      "{media}/B",
+      "{media}/C"
+    ],
+    "files": {
+      "{views}/Library/movies.collection": "",
+      "{views}/Library/A.mblink": "{media}\\A"
+    },
+    "name": "Absent",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\A"
+        }
+      ]
+    },
+    "key": "remove-library-absent-name",
+    "operation": "removeLibrary"
+  },
+  {
+    "directories": [
+      "{views}/Library",
+      "{media}/A",
+      "{media}/B",
+      "{media}/C"
+    ],
+    "files": {
+      "{views}/Library/movies.collection": "",
+      "{views}/Library/A.mblink": "{media}\\A"
+    },
+    "name": "Library",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\A"
+        }
+      ]
+    },
+    "key": "remove-library-monitor-stop-failure",
+    "operation": "removeLibrary",
+    "failure": "monitor-stop"
+  },
+  {
+    "directories": [
+      "{views}/Library",
+      "{media}/A",
+      "{media}/B",
+      "{media}/C"
+    ],
+    "files": {
+      "{views}/Library/movies.collection": "",
+      "{views}/Library/A.mblink": "{media}\\A"
+    },
+    "name": "Library",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\A"
+        }
+      ]
+    },
+    "key": "remove-library-monitor-start-failure",
+    "operation": "removeLibrary",
+    "failure": "monitor-start"
+  },
+  {
+    "directories": [
+      "{views}/Library",
+      "{media}/A",
+      "{media}/B",
+      "{media}/C"
+    ],
+    "files": {
+      "{views}/Library/movies.collection": "",
+      "{views}/Library/A.mblink": "{media}\\A"
+    },
+    "name": "Library",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\A"
+        }
+      ]
+    },
+    "key": "remove-library-invalidation-failure",
+    "operation": "removeLibrary",
+    "failure": "invalidate"
+  },
+  {
+    "directories": [
+      "{views}/Library",
+      "{media}/A",
+      "{media}/B",
+      "{media}/C"
+    ],
+    "files": {
+      "{views}/Library/movies.collection": "",
+      "{views}/Library/A.mblink": "{media}\\A"
+    },
+    "name": "Library",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\A"
+        }
+      ]
+    },
+    "key": "remove-library-validation-replaces-invalidation",
+    "operation": "removeLibrary",
+    "refreshLibrary": true,
+    "failure": "validate-aggregate",
+    "failInvalidate": true
+  },
+  {
+    "directories": [
+      "{views}/Library",
+      "{media}/A",
+      "{media}/B",
+      "{media}/C"
+    ],
+    "files": {
+      "{views}/Library/movies.collection": "",
+      "{views}/Library/A.mblink": "{media}\\A"
+    },
+    "name": "Library",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\A"
+        }
+      ]
+    },
+    "key": "remove-library-refresh-aggregate-failure",
+    "operation": "removeLibrary",
+    "refreshLibrary": true,
+    "failure": "refresh-aggregate"
+  },
+  {
+    "directories": [
+      "{views}/Library",
+      "{media}/A",
+      "{media}/B",
+      "{media}/C"
+    ],
+    "files": {
+      "{views}/Library/movies.collection": "",
+      "{views}/Library/A.mblink": "{media}\\A"
+    },
+    "name": "Library",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\A"
+        }
+      ]
+    },
+    "key": "remove-library-user-root-validation-failure",
+    "operation": "removeLibrary",
+    "refreshLibrary": true,
+    "failure": "validate-user-root"
+  },
+  {
+    "directories": [
+      "{views}/Library",
+      "{media}/A",
+      "{media}/B",
+      "{media}/C"
+    ],
+    "files": {
+      "{views}/Library/movies.collection": "",
+      "{views}/Library/A.mblink": "{media}\\A"
+    },
+    "name": "Library",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\A"
+        }
+      ]
+    },
+    "key": "add-actual-locked-options-file-prefix",
+    "operation": "add",
+    "mediaPath": {
+      "Path": "{media}\\B"
+    },
+    "lockOptions": true
+  },
+  {
+    "directories": [
+      "{views}/Library",
+      "{media}/A",
+      "{media}/B",
+      "{media}/C"
+    ],
+    "files": {
+      "{views}/Library/locked.bin": "Original locked bytes"
+    },
+    "name": "Library",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\A"
+        }
+      ]
+    },
+    "key": "remove-library-actual-locked-file-finally",
+    "operation": "removeLibrary",
+    "lockDelete": true,
+    "deleteOnlyLocked": true
+  }
+]

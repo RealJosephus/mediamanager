@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType><TargetFramework>net10.0</TargetFramework><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <JellyfinRuntime>D:/mediamanager-validation/20261010/results/playlist-items-v4/bin/Release/net10.0</JellyfinRuntime>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Program.cs" />
+    <Reference Include="$(JellyfinRuntime)/*.dll" Exclude="$(JellyfinRuntime)/Oracle.dll;$(JellyfinRuntime)/e_sqlite3.dll" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,642 @@
+[
+  {
+    "name": "AggregateFolder-empty-false",
+    "type": "AggregateFolder",
+    "itemName": "Named",
+    "path": "$STATE/root",
+    "mode": "resolve",
+    "setLocations": false
+  },
+  {
+    "name": "AggregateFolder-empty-true",
+    "type": "AggregateFolder",
+    "itemName": "Named",
+    "path": "$STATE/root",
+    "mode": "resolve",
+    "setLocations": true
+  },
+  {
+    "name": "AggregateFolder-plain-tree-false",
+    "type": "AggregateFolder",
+    "itemName": "Named",
+    "path": "$STATE/root",
+    "mode": "resolve",
+    "setLocations": false,
+    "directories": [
+      "one/deeper/deepest",
+      "two"
+    ],
+    "files": {
+      "root.txt": "root",
+      "one/inside.txt": "inside",
+      "one/deeper/deepest/leaf.txt": "leaf"
+    }
+  },
+  {
+    "name": "AggregateFolder-plain-tree-true",
+    "type": "AggregateFolder",
+    "itemName": "Named",
+    "path": "$STATE/root",
+    "mode": "resolve",
+    "setLocations": true,
+    "directories": [
+      "one/deeper/deepest",
+      "two"
+    ],
+    "files": {
+      "root.txt": "root",
+      "one/inside.txt": "inside",
+      "one/deeper/deepest/leaf.txt": "leaf"
+    }
+  },
+  {
+    "name": "AggregateFolder-link-local-false",
+    "type": "AggregateFolder",
+    "itemName": "Named",
+    "path": "$STATE/root",
+    "mode": "resolve",
+    "setLocations": false,
+    "stateDirectories": [
+      "media"
+    ],
+    "files": {
+      "one.mblink": "$STATE/media"
+    }
+  },
+  {
+    "name": "AggregateFolder-link-local-true",
+    "type": "AggregateFolder",
+    "itemName": "Named",
+    "path": "$STATE/root",
+    "mode": "resolve",
+    "setLocations": true,
+    "stateDirectories": [
+      "media"
+    ],
+    "files": {
+      "one.mblink": "$STATE/media"
+    }
+  },
+  {
+    "name": "AggregateFolder-link-virtual-false",
+    "type": "AggregateFolder",
+    "itemName": "Named",
+    "path": "$STATE/root",
+    "mode": "resolve",
+    "setLocations": false,
+    "stateDirectories": [
+      "data/media"
+    ],
+    "files": {
+      "one.mblink": "%AppDataPath%/media"
+    }
+  },
+  {
+    "name": "AggregateFolder-link-virtual-true",
+    "type": "AggregateFolder",
+    "itemName": "Named",
+    "path": "$STATE/root",
+    "mode": "resolve",
+    "setLocations": true,
+    "stateDirectories": [
+      "data/media"
+    ],
+    "files": {
+      "one.mblink": "%AppDataPath%/media"
+    }
+  },
+  {
+    "name": "AggregateFolder-link-empty-false",
+    "type": "AggregateFolder",
+    "itemName": "Named",
+    "path": "$STATE/root",
+    "mode": "resolve",
+    "setLocations": false,
+    "files": {
+      "one.mblink": ""
+    }
+  },
+  {
+    "name": "AggregateFolder-link-empty-true",
+    "type": "AggregateFolder",
+    "itemName": "Named",
+    "path": "$STATE/root",
+    "mode": "resolve",
+    "setLocations": true,
+    "files": {
+      "one.mblink": ""
+    }
+  },
+  {
+    "name": "AggregateFolder-link-missing-false",
+    "type": "AggregateFolder",
+    "itemName": "Named",
+    "path": "$STATE/root",
+    "mode": "resolve",
+    "setLocations": false,
+    "files": {
+      "one.mblink": "$STATE/absent"
+    }
+  },
+  {
+    "name": "AggregateFolder-link-missing-true",
+    "type": "AggregateFolder",
+    "itemName": "Named",
+    "path": "$STATE/root",
+    "mode": "resolve",
+    "setLocations": true,
+    "files": {
+      "one.mblink": "$STATE/absent"
+    }
+  },
+  {
+    "name": "AggregateFolder-link-nested-targets-false",
+    "type": "AggregateFolder",
+    "itemName": "Named",
+    "path": "$STATE/root",
+    "mode": "resolve",
+    "setLocations": false,
+    "stateDirectories": [
+      "media/nested"
+    ],
+    "files": {
+      "parent.mblink": "$STATE/media",
+      "child.mblink": "$STATE/media/nested"
+    }
+  },
+  {
+    "name": "AggregateFolder-link-nested-targets-true",
+    "type": "AggregateFolder",
+    "itemName": "Named",
+    "path": "$STATE/root",
+    "mode": "resolve",
+    "setLocations": true,
+    "stateDirectories": [
+      "media/nested"
+    ],
+    "files": {
+      "parent.mblink": "$STATE/media",
+      "child.mblink": "$STATE/media/nested"
+    }
+  },
+  {
+    "name": "AggregateFolder-link-duplicate-target-false",
+    "type": "AggregateFolder",
+    "itemName": "Named",
+    "path": "$STATE/root",
+    "mode": "resolve",
+    "setLocations": false,
+    "stateDirectories": [
+      "media"
+    ],
+    "files": {
+      "one.mblink": "$STATE/media",
+      "two.MBLINK": "$STATE/media/"
+    }
+  },
+  {
+    "name": "AggregateFolder-link-duplicate-target-true",
+    "type": "AggregateFolder",
+    "itemName": "Named",
+    "path": "$STATE/root",
+    "mode": "resolve",
+    "setLocations": true,
+    "stateDirectories": [
+      "media"
+    ],
+    "files": {
+      "one.mblink": "$STATE/media",
+      "two.MBLINK": "$STATE/media/"
+    }
+  },
+  {
+    "name": "AggregateFolder-link-case-target-false",
+    "type": "AggregateFolder",
+    "itemName": "Named",
+    "path": "$STATE/root",
+    "mode": "resolve",
+    "setLocations": false,
+    "stateDirectories": [
+      "media"
+    ],
+    "files": {
+      "one.mblink": "$STATE/media",
+      "two.mblink": "$STATE/MEDIA"
+    }
+  },
+  {
+    "name": "AggregateFolder-link-case-target-true",
+    "type": "AggregateFolder",
+    "itemName": "Named",
+    "path": "$STATE/root",
+    "mode": "resolve",
+    "setLocations": true,
+    "stateDirectories": [
+      "media"
+    ],
+    "files": {
+      "one.mblink": "$STATE/media",
+      "two.mblink": "$STATE/MEDIA"
+    }
+  },
+  {
+    "name": "AggregateFolder-link-depth-false",
+    "type": "AggregateFolder",
+    "itemName": "Named",
+    "path": "$STATE/root",
+    "mode": "resolve",
+    "setLocations": false,
+    "stateDirectories": [
+      "media"
+    ],
+    "files": {
+      "one/deeper/target.mblink": "$STATE/media",
+      "one/deeper/deepest/ignored.mblink": "$STATE/absent"
+    }
+  },
+  {
+    "name": "AggregateFolder-link-depth-true",
+    "type": "AggregateFolder",
+    "itemName": "Named",
+    "path": "$STATE/root",
+    "mode": "resolve",
+    "setLocations": true,
+    "stateDirectories": [
+      "media"
+    ],
+    "files": {
+      "one/deeper/target.mblink": "$STATE/media",
+      "one/deeper/deepest/ignored.mblink": "$STATE/absent"
+    }
+  },
+  {
+    "name": "AggregateFolder-link-newline-false",
+    "type": "AggregateFolder",
+    "itemName": "Named",
+    "path": "$STATE/root",
+    "mode": "resolve",
+    "setLocations": false,
+    "stateDirectories": [
+      "media"
+    ],
+    "files": {
+      "one.mblink": "$STATE/media\n"
+    }
+  },
+  {
+    "name": "AggregateFolder-link-newline-true",
+    "type": "AggregateFolder",
+    "itemName": "Named",
+    "path": "$STATE/root",
+    "mode": "resolve",
+    "setLocations": true,
+    "stateDirectories": [
+      "media"
+    ],
+    "files": {
+      "one.mblink": "$STATE/media\n"
+    }
+  },
+  {
+    "name": "AggregateFolder-link-url-false",
+    "type": "AggregateFolder",
+    "itemName": "Named",
+    "path": "$STATE/root",
+    "mode": "resolve",
+    "setLocations": false,
+    "files": {
+      "one.mblink": "https://invalid.example/media"
+    }
+  },
+  {
+    "name": "AggregateFolder-link-url-true",
+    "type": "AggregateFolder",
+    "itemName": "Named",
+    "path": "$STATE/root",
+    "mode": "resolve",
+    "setLocations": true,
+    "files": {
+      "one.mblink": "https://invalid.example/media"
+    }
+  },
+  {
+    "name": "CollectionFolder-empty-false",
+    "type": "CollectionFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "resolve",
+    "setLocations": false
+  },
+  {
+    "name": "CollectionFolder-empty-true",
+    "type": "CollectionFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "resolve",
+    "setLocations": true
+  },
+  {
+    "name": "CollectionFolder-plain-tree-false",
+    "type": "CollectionFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "resolve",
+    "setLocations": false,
+    "directories": [
+      "one/deeper/deepest",
+      "two"
+    ],
+    "files": {
+      "root.txt": "root",
+      "one/inside.txt": "inside",
+      "one/deeper/deepest/leaf.txt": "leaf"
+    }
+  },
+  {
+    "name": "CollectionFolder-plain-tree-true",
+    "type": "CollectionFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "resolve",
+    "setLocations": true,
+    "directories": [
+      "one/deeper/deepest",
+      "two"
+    ],
+    "files": {
+      "root.txt": "root",
+      "one/inside.txt": "inside",
+      "one/deeper/deepest/leaf.txt": "leaf"
+    }
+  },
+  {
+    "name": "CollectionFolder-link-local-false",
+    "type": "CollectionFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "resolve",
+    "setLocations": false,
+    "stateDirectories": [
+      "media"
+    ],
+    "files": {
+      "one.mblink": "$STATE/media"
+    }
+  },
+  {
+    "name": "CollectionFolder-link-local-true",
+    "type": "CollectionFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "resolve",
+    "setLocations": true,
+    "stateDirectories": [
+      "media"
+    ],
+    "files": {
+      "one.mblink": "$STATE/media"
+    }
+  },
+  {
+    "name": "CollectionFolder-link-virtual-false",
+    "type": "CollectionFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "resolve",
+    "setLocations": false,
+    "stateDirectories": [
+      "data/media"
+    ],
+    "files": {
+      "one.mblink": "%AppDataPath%/media"
+    }
+  },
+  {
+    "name": "CollectionFolder-link-virtual-true",
+    "type": "CollectionFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "resolve",
+    "setLocations": true,
+    "stateDirectories": [
+      "data/media"
+    ],
+    "files": {
+      "one.mblink": "%AppDataPath%/media"
+    }
+  },
+  {
+    "name": "CollectionFolder-link-empty-false",
+    "type": "CollectionFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "resolve",
+    "setLocations": false,
+    "files": {
+      "one.mblink": ""
+    }
+  },
+  {
+    "name": "CollectionFolder-link-empty-true",
+    "type": "CollectionFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "resolve",
+    "setLocations": true,
+    "files": {
+      "one.mblink": ""
+    }
+  },
+  {
+    "name": "CollectionFolder-link-missing-false",
+    "type": "CollectionFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "resolve",
+    "setLocations": false,
+    "files": {
+      "one.mblink": "$STATE/absent"
+    }
+  },
+  {
+    "name": "CollectionFolder-link-missing-true",
+    "type": "CollectionFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "resolve",
+    "setLocations": true,
+    "files": {
+      "one.mblink": "$STATE/absent"
+    }
+  },
+  {
+    "name": "CollectionFolder-link-nested-targets-false",
+    "type": "CollectionFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "resolve",
+    "setLocations": false,
+    "stateDirectories": [
+      "media/nested"
+    ],
+    "files": {
+      "parent.mblink": "$STATE/media",
+      "child.mblink": "$STATE/media/nested"
+    }
+  },
+  {
+    "name": "CollectionFolder-link-nested-targets-true",
+    "type": "CollectionFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "resolve",
+    "setLocations": true,
+    "stateDirectories": [
+      "media/nested"
+    ],
+    "files": {
+      "parent.mblink": "$STATE/media",
+      "child.mblink": "$STATE/media/nested"
+    }
+  },
+  {
+    "name": "CollectionFolder-link-duplicate-target-false",
+    "type": "CollectionFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "resolve",
+    "setLocations": false,
+    "stateDirectories": [
+      "media"
+    ],
+    "files": {
+      "one.mblink": "$STATE/media",
+      "two.MBLINK": "$STATE/media/"
+    }
+  },
+  {
+    "name": "CollectionFolder-link-duplicate-target-true",
+    "type": "CollectionFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "resolve",
+    "setLocations": true,
+    "stateDirectories": [
+      "media"
+    ],
+    "files": {
+      "one.mblink": "$STATE/media",
+      "two.MBLINK": "$STATE/media/"
+    }
+  },
+  {
+    "name": "CollectionFolder-link-case-target-false",
+    "type": "CollectionFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "resolve",
+    "setLocations": false,
+    "stateDirectories": [
+      "media"
+    ],
+    "files": {
+      "one.mblink": "$STATE/media",
+      "two.mblink": "$STATE/MEDIA"
+    }
+  },
+  {
+    "name": "CollectionFolder-link-case-target-true",
+    "type": "CollectionFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "resolve",
+    "setLocations": true,
+    "stateDirectories": [
+      "media"
+    ],
+    "files": {
+      "one.mblink": "$STATE/media",
+      "two.mblink": "$STATE/MEDIA"
+    }
+  },
+  {
+    "name": "CollectionFolder-link-depth-false",
+    "type": "CollectionFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "resolve",
+    "setLocations": false,
+    "stateDirectories": [
+      "media"
+    ],
+    "files": {
+      "one/deeper/target.mblink": "$STATE/media",
+      "one/deeper/deepest/ignored.mblink": "$STATE/absent"
+    }
+  },
+  {
+    "name": "CollectionFolder-link-depth-true",
+    "type": "CollectionFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "resolve",
+    "setLocations": true,
+    "stateDirectories": [
+      "media"
+    ],
+    "files": {
+      "one/deeper/target.mblink": "$STATE/media",
+      "one/deeper/deepest/ignored.mblink": "$STATE/absent"
+    }
+  },
+  {
+    "name": "CollectionFolder-link-newline-false",
+    "type": "CollectionFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "resolve",
+    "setLocations": false,
+    "stateDirectories": [
+      "media"
+    ],
+    "files": {
+      "one.mblink": "$STATE/media\n"
+    }
+  },
+  {
+    "name": "CollectionFolder-link-newline-true",
+    "type": "CollectionFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "resolve",
+    "setLocations": true,
+    "stateDirectories": [
+      "media"
+    ],
+    "files": {
+      "one.mblink": "$STATE/media\n"
+    }
+  },
+  {
+    "name": "CollectionFolder-link-url-false",
+    "type": "CollectionFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "resolve",
+    "setLocations": false,
+    "files": {
+      "one.mblink": "https://invalid.example/media"
+    }
+  },
+  {
+    "name": "CollectionFolder-link-url-true",
+    "type": "CollectionFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "resolve",
+    "setLocations": true,
+    "files": {
+      "one.mblink": "https://invalid.example/media"
+    }
+  }
+]

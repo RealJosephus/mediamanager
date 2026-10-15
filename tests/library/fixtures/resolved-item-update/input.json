@@ -1,0 +1,3065 @@
+[
+  {
+    "name": "Folder-unchanged",
+    "current": {
+      "Type": "Folder",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      }
+    },
+    "resolved": {
+      "Type": "Folder",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {}
+    }
+  },
+  {
+    "name": "Folder-mixed",
+    "current": {
+      "Type": "Folder",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      }
+    },
+    "resolved": {
+      "Type": "Folder",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": true,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {}
+    }
+  },
+  {
+    "name": "Audio-unchanged",
+    "current": {
+      "Type": "Audio",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      }
+    },
+    "resolved": {
+      "Type": "Audio",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {}
+    }
+  },
+  {
+    "name": "Audio-mixed",
+    "current": {
+      "Type": "Audio",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      }
+    },
+    "resolved": {
+      "Type": "Audio",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": true,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {}
+    }
+  },
+  {
+    "name": "MusicAlbum-unchanged",
+    "current": {
+      "Type": "MusicAlbum",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      }
+    },
+    "resolved": {
+      "Type": "MusicAlbum",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {}
+    }
+  },
+  {
+    "name": "MusicAlbum-mixed",
+    "current": {
+      "Type": "MusicAlbum",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      }
+    },
+    "resolved": {
+      "Type": "MusicAlbum",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": true,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {}
+    }
+  },
+  {
+    "name": "Series-unchanged",
+    "current": {
+      "Type": "Series",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      }
+    },
+    "resolved": {
+      "Type": "Series",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {}
+    }
+  },
+  {
+    "name": "Series-mixed",
+    "current": {
+      "Type": "Series",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      }
+    },
+    "resolved": {
+      "Type": "Series",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": true,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {}
+    }
+  },
+  {
+    "name": "Season-unchanged",
+    "current": {
+      "Type": "Season",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      }
+    },
+    "resolved": {
+      "Type": "Season",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {}
+    }
+  },
+  {
+    "name": "Season-mixed",
+    "current": {
+      "Type": "Season",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      }
+    },
+    "resolved": {
+      "Type": "Season",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": true,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {}
+    }
+  },
+  {
+    "name": "Video-unchanged",
+    "current": {
+      "Type": "Video",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": []
+    },
+    "resolved": {
+      "Type": "Video",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": []
+    }
+  },
+  {
+    "name": "Video-mixed",
+    "current": {
+      "Type": "Video",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": []
+    },
+    "resolved": {
+      "Type": "Video",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": true,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": []
+    }
+  },
+  {
+    "name": "Movie-unchanged",
+    "current": {
+      "Type": "Movie",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": []
+    },
+    "resolved": {
+      "Type": "Movie",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": []
+    }
+  },
+  {
+    "name": "Movie-mixed",
+    "current": {
+      "Type": "Movie",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": []
+    },
+    "resolved": {
+      "Type": "Movie",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": true,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": []
+    }
+  },
+  {
+    "name": "Episode-unchanged",
+    "current": {
+      "Type": "Episode",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": []
+    },
+    "resolved": {
+      "Type": "Episode",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": []
+    }
+  },
+  {
+    "name": "Episode-mixed",
+    "current": {
+      "Type": "Episode",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": []
+    },
+    "resolved": {
+      "Type": "Episode",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": true,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": []
+    }
+  },
+  {
+    "name": "MusicVideo-unchanged",
+    "current": {
+      "Type": "MusicVideo",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": []
+    },
+    "resolved": {
+      "Type": "MusicVideo",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": []
+    }
+  },
+  {
+    "name": "MusicVideo-mixed",
+    "current": {
+      "Type": "MusicVideo",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": []
+    },
+    "resolved": {
+      "Type": "MusicVideo",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": true,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": []
+    }
+  },
+  {
+    "name": "Trailer-unchanged",
+    "current": {
+      "Type": "Trailer",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": []
+    },
+    "resolved": {
+      "Type": "Trailer",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": []
+    }
+  },
+  {
+    "name": "Trailer-mixed",
+    "current": {
+      "Type": "Trailer",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": []
+    },
+    "resolved": {
+      "Type": "Trailer",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": true,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": []
+    }
+  },
+  {
+    "name": "Video-parts-added",
+    "current": {
+      "Type": "Video",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": []
+    },
+    "resolved": {
+      "Type": "Video",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "VideoFile",
+      "AdditionalParts": [
+        "Z:\\part2.mkv",
+        "Z:\\part3.mkv"
+      ],
+      "LocalAlternateVersions": []
+    }
+  },
+  {
+    "name": "Video-parts-case",
+    "current": {
+      "Type": "Video",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "VideoFile",
+      "AdditionalParts": [
+        "Z:\\part2.mkv"
+      ],
+      "LocalAlternateVersions": []
+    },
+    "resolved": {
+      "Type": "Video",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "VideoFile",
+      "AdditionalParts": [
+        "z:\\part2.mkv"
+      ],
+      "LocalAlternateVersions": []
+    }
+  },
+  {
+    "name": "Video-parts-order",
+    "current": {
+      "Type": "Video",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "VideoFile",
+      "AdditionalParts": [
+        "A",
+        "B"
+      ],
+      "LocalAlternateVersions": []
+    },
+    "resolved": {
+      "Type": "Video",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "VideoFile",
+      "AdditionalParts": [
+        "B",
+        "A"
+      ],
+      "LocalAlternateVersions": []
+    }
+  },
+  {
+    "name": "Video-parts-clear",
+    "current": {
+      "Type": "Video",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "VideoFile",
+      "AdditionalParts": [
+        "A"
+      ],
+      "LocalAlternateVersions": []
+    },
+    "resolved": {
+      "Type": "Video",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": []
+    }
+  },
+  {
+    "name": "Video-alternates-added",
+    "current": {
+      "Type": "Video",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": []
+    },
+    "resolved": {
+      "Type": "Video",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": [
+        "Z:\\alternate.mkv"
+      ]
+    }
+  },
+  {
+    "name": "Video-alternates-case",
+    "current": {
+      "Type": "Video",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": [
+        "B",
+        "A"
+      ]
+    },
+    "resolved": {
+      "Type": "Video",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": [
+        "b",
+        "A"
+      ]
+    }
+  },
+  {
+    "name": "Video-alternates-order",
+    "current": {
+      "Type": "Video",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": [
+        "A",
+        "B"
+      ]
+    },
+    "resolved": {
+      "Type": "Video",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": [
+        "B",
+        "A"
+      ]
+    }
+  },
+  {
+    "name": "Video-alternates-clear",
+    "current": {
+      "Type": "Video",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": [
+        "A"
+      ]
+    },
+    "resolved": {
+      "Type": "Video",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": []
+    }
+  },
+  {
+    "name": "Video-combined",
+    "current": {
+      "Type": "Video",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": []
+    },
+    "resolved": {
+      "Type": "Video",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": true,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "Iso",
+      "AdditionalParts": [
+        "P"
+      ],
+      "LocalAlternateVersions": [
+        "V"
+      ]
+    }
+  },
+  {
+    "name": "Movie-parts-added",
+    "current": {
+      "Type": "Movie",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": []
+    },
+    "resolved": {
+      "Type": "Movie",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "VideoFile",
+      "AdditionalParts": [
+        "Z:\\part2.mkv",
+        "Z:\\part3.mkv"
+      ],
+      "LocalAlternateVersions": []
+    }
+  },
+  {
+    "name": "Movie-parts-case",
+    "current": {
+      "Type": "Movie",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "VideoFile",
+      "AdditionalParts": [
+        "Z:\\part2.mkv"
+      ],
+      "LocalAlternateVersions": []
+    },
+    "resolved": {
+      "Type": "Movie",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "VideoFile",
+      "AdditionalParts": [
+        "z:\\part2.mkv"
+      ],
+      "LocalAlternateVersions": []
+    }
+  },
+  {
+    "name": "Movie-parts-order",
+    "current": {
+      "Type": "Movie",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "VideoFile",
+      "AdditionalParts": [
+        "A",
+        "B"
+      ],
+      "LocalAlternateVersions": []
+    },
+    "resolved": {
+      "Type": "Movie",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "VideoFile",
+      "AdditionalParts": [
+        "B",
+        "A"
+      ],
+      "LocalAlternateVersions": []
+    }
+  },
+  {
+    "name": "Movie-parts-clear",
+    "current": {
+      "Type": "Movie",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "VideoFile",
+      "AdditionalParts": [
+        "A"
+      ],
+      "LocalAlternateVersions": []
+    },
+    "resolved": {
+      "Type": "Movie",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": []
+    }
+  },
+  {
+    "name": "Movie-alternates-added",
+    "current": {
+      "Type": "Movie",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": []
+    },
+    "resolved": {
+      "Type": "Movie",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": [
+        "Z:\\alternate.mkv"
+      ]
+    }
+  },
+  {
+    "name": "Movie-alternates-case",
+    "current": {
+      "Type": "Movie",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": [
+        "B",
+        "A"
+      ]
+    },
+    "resolved": {
+      "Type": "Movie",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": [
+        "b",
+        "A"
+      ]
+    }
+  },
+  {
+    "name": "Movie-alternates-order",
+    "current": {
+      "Type": "Movie",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": [
+        "A",
+        "B"
+      ]
+    },
+    "resolved": {
+      "Type": "Movie",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": [
+        "B",
+        "A"
+      ]
+    }
+  },
+  {
+    "name": "Movie-alternates-clear",
+    "current": {
+      "Type": "Movie",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": [
+        "A"
+      ]
+    },
+    "resolved": {
+      "Type": "Movie",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": []
+    }
+  },
+  {
+    "name": "Movie-combined",
+    "current": {
+      "Type": "Movie",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": []
+    },
+    "resolved": {
+      "Type": "Movie",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": true,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "Iso",
+      "AdditionalParts": [
+        "P"
+      ],
+      "LocalAlternateVersions": [
+        "V"
+      ]
+    }
+  },
+  {
+    "name": "Episode-parts-added",
+    "current": {
+      "Type": "Episode",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": []
+    },
+    "resolved": {
+      "Type": "Episode",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "VideoFile",
+      "AdditionalParts": [
+        "Z:\\part2.mkv",
+        "Z:\\part3.mkv"
+      ],
+      "LocalAlternateVersions": []
+    }
+  },
+  {
+    "name": "Episode-parts-case",
+    "current": {
+      "Type": "Episode",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "VideoFile",
+      "AdditionalParts": [
+        "Z:\\part2.mkv"
+      ],
+      "LocalAlternateVersions": []
+    },
+    "resolved": {
+      "Type": "Episode",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "VideoFile",
+      "AdditionalParts": [
+        "z:\\part2.mkv"
+      ],
+      "LocalAlternateVersions": []
+    }
+  },
+  {
+    "name": "Episode-parts-order",
+    "current": {
+      "Type": "Episode",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "VideoFile",
+      "AdditionalParts": [
+        "A",
+        "B"
+      ],
+      "LocalAlternateVersions": []
+    },
+    "resolved": {
+      "Type": "Episode",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "VideoFile",
+      "AdditionalParts": [
+        "B",
+        "A"
+      ],
+      "LocalAlternateVersions": []
+    }
+  },
+  {
+    "name": "Episode-parts-clear",
+    "current": {
+      "Type": "Episode",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "VideoFile",
+      "AdditionalParts": [
+        "A"
+      ],
+      "LocalAlternateVersions": []
+    },
+    "resolved": {
+      "Type": "Episode",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": []
+    }
+  },
+  {
+    "name": "Episode-alternates-added",
+    "current": {
+      "Type": "Episode",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": []
+    },
+    "resolved": {
+      "Type": "Episode",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": [
+        "Z:\\alternate.mkv"
+      ]
+    }
+  },
+  {
+    "name": "Episode-alternates-case",
+    "current": {
+      "Type": "Episode",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": [
+        "B",
+        "A"
+      ]
+    },
+    "resolved": {
+      "Type": "Episode",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": [
+        "b",
+        "A"
+      ]
+    }
+  },
+  {
+    "name": "Episode-alternates-order",
+    "current": {
+      "Type": "Episode",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": [
+        "A",
+        "B"
+      ]
+    },
+    "resolved": {
+      "Type": "Episode",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": [
+        "B",
+        "A"
+      ]
+    }
+  },
+  {
+    "name": "Episode-alternates-clear",
+    "current": {
+      "Type": "Episode",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": [
+        "A"
+      ]
+    },
+    "resolved": {
+      "Type": "Episode",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": []
+    }
+  },
+  {
+    "name": "Episode-combined",
+    "current": {
+      "Type": "Episode",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": []
+    },
+    "resolved": {
+      "Type": "Episode",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": true,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "Iso",
+      "AdditionalParts": [
+        "P"
+      ],
+      "LocalAlternateVersions": [
+        "V"
+      ]
+    }
+  },
+  {
+    "name": "MusicVideo-parts-added",
+    "current": {
+      "Type": "MusicVideo",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": []
+    },
+    "resolved": {
+      "Type": "MusicVideo",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "VideoFile",
+      "AdditionalParts": [
+        "Z:\\part2.mkv",
+        "Z:\\part3.mkv"
+      ],
+      "LocalAlternateVersions": []
+    }
+  },
+  {
+    "name": "MusicVideo-parts-case",
+    "current": {
+      "Type": "MusicVideo",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "VideoFile",
+      "AdditionalParts": [
+        "Z:\\part2.mkv"
+      ],
+      "LocalAlternateVersions": []
+    },
+    "resolved": {
+      "Type": "MusicVideo",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "VideoFile",
+      "AdditionalParts": [
+        "z:\\part2.mkv"
+      ],
+      "LocalAlternateVersions": []
+    }
+  },
+  {
+    "name": "MusicVideo-parts-order",
+    "current": {
+      "Type": "MusicVideo",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "VideoFile",
+      "AdditionalParts": [
+        "A",
+        "B"
+      ],
+      "LocalAlternateVersions": []
+    },
+    "resolved": {
+      "Type": "MusicVideo",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "VideoFile",
+      "AdditionalParts": [
+        "B",
+        "A"
+      ],
+      "LocalAlternateVersions": []
+    }
+  },
+  {
+    "name": "MusicVideo-parts-clear",
+    "current": {
+      "Type": "MusicVideo",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "VideoFile",
+      "AdditionalParts": [
+        "A"
+      ],
+      "LocalAlternateVersions": []
+    },
+    "resolved": {
+      "Type": "MusicVideo",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": []
+    }
+  },
+  {
+    "name": "MusicVideo-alternates-added",
+    "current": {
+      "Type": "MusicVideo",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": []
+    },
+    "resolved": {
+      "Type": "MusicVideo",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": [
+        "Z:\\alternate.mkv"
+      ]
+    }
+  },
+  {
+    "name": "MusicVideo-alternates-case",
+    "current": {
+      "Type": "MusicVideo",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": [
+        "B",
+        "A"
+      ]
+    },
+    "resolved": {
+      "Type": "MusicVideo",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": [
+        "b",
+        "A"
+      ]
+    }
+  },
+  {
+    "name": "MusicVideo-alternates-order",
+    "current": {
+      "Type": "MusicVideo",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": [
+        "A",
+        "B"
+      ]
+    },
+    "resolved": {
+      "Type": "MusicVideo",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": [
+        "B",
+        "A"
+      ]
+    }
+  },
+  {
+    "name": "MusicVideo-alternates-clear",
+    "current": {
+      "Type": "MusicVideo",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": [
+        "A"
+      ]
+    },
+    "resolved": {
+      "Type": "MusicVideo",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": []
+    }
+  },
+  {
+    "name": "MusicVideo-combined",
+    "current": {
+      "Type": "MusicVideo",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": []
+    },
+    "resolved": {
+      "Type": "MusicVideo",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": true,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "Iso",
+      "AdditionalParts": [
+        "P"
+      ],
+      "LocalAlternateVersions": [
+        "V"
+      ]
+    }
+  },
+  {
+    "name": "Trailer-parts-added",
+    "current": {
+      "Type": "Trailer",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": []
+    },
+    "resolved": {
+      "Type": "Trailer",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "VideoFile",
+      "AdditionalParts": [
+        "Z:\\part2.mkv",
+        "Z:\\part3.mkv"
+      ],
+      "LocalAlternateVersions": []
+    }
+  },
+  {
+    "name": "Trailer-parts-case",
+    "current": {
+      "Type": "Trailer",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "VideoFile",
+      "AdditionalParts": [
+        "Z:\\part2.mkv"
+      ],
+      "LocalAlternateVersions": []
+    },
+    "resolved": {
+      "Type": "Trailer",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "VideoFile",
+      "AdditionalParts": [
+        "z:\\part2.mkv"
+      ],
+      "LocalAlternateVersions": []
+    }
+  },
+  {
+    "name": "Trailer-parts-order",
+    "current": {
+      "Type": "Trailer",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "VideoFile",
+      "AdditionalParts": [
+        "A",
+        "B"
+      ],
+      "LocalAlternateVersions": []
+    },
+    "resolved": {
+      "Type": "Trailer",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "VideoFile",
+      "AdditionalParts": [
+        "B",
+        "A"
+      ],
+      "LocalAlternateVersions": []
+    }
+  },
+  {
+    "name": "Trailer-parts-clear",
+    "current": {
+      "Type": "Trailer",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "VideoFile",
+      "AdditionalParts": [
+        "A"
+      ],
+      "LocalAlternateVersions": []
+    },
+    "resolved": {
+      "Type": "Trailer",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": []
+    }
+  },
+  {
+    "name": "Trailer-alternates-added",
+    "current": {
+      "Type": "Trailer",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": []
+    },
+    "resolved": {
+      "Type": "Trailer",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": [
+        "Z:\\alternate.mkv"
+      ]
+    }
+  },
+  {
+    "name": "Trailer-alternates-case",
+    "current": {
+      "Type": "Trailer",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": [
+        "B",
+        "A"
+      ]
+    },
+    "resolved": {
+      "Type": "Trailer",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": [
+        "b",
+        "A"
+      ]
+    }
+  },
+  {
+    "name": "Trailer-alternates-order",
+    "current": {
+      "Type": "Trailer",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": [
+        "A",
+        "B"
+      ]
+    },
+    "resolved": {
+      "Type": "Trailer",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": [
+        "B",
+        "A"
+      ]
+    }
+  },
+  {
+    "name": "Trailer-alternates-clear",
+    "current": {
+      "Type": "Trailer",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": [
+        "A"
+      ]
+    },
+    "resolved": {
+      "Type": "Trailer",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": []
+    }
+  },
+  {
+    "name": "Trailer-combined",
+    "current": {
+      "Type": "Trailer",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": []
+    },
+    "resolved": {
+      "Type": "Trailer",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": true,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "Iso",
+      "AdditionalParts": [
+        "P"
+      ],
+      "LocalAlternateVersions": [
+        "V"
+      ]
+    }
+  },
+  {
+    "name": "AdditionalParts-null-empty",
+    "current": {
+      "Type": "Movie",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "VideoFile",
+      "AdditionalParts": null,
+      "LocalAlternateVersions": []
+    },
+    "resolved": {
+      "Type": "Movie",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": true,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": []
+    }
+  },
+  {
+    "name": "AdditionalParts-empty-null",
+    "current": {
+      "Type": "Movie",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": []
+    },
+    "resolved": {
+      "Type": "Movie",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": true,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "VideoFile",
+      "AdditionalParts": null,
+      "LocalAlternateVersions": []
+    }
+  },
+  {
+    "name": "AdditionalParts-null-null",
+    "current": {
+      "Type": "Movie",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "VideoFile",
+      "AdditionalParts": null,
+      "LocalAlternateVersions": []
+    },
+    "resolved": {
+      "Type": "Movie",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": true,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "VideoFile",
+      "AdditionalParts": null,
+      "LocalAlternateVersions": []
+    }
+  },
+  {
+    "name": "AdditionalParts-null-value",
+    "current": {
+      "Type": "Movie",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "VideoFile",
+      "AdditionalParts": null,
+      "LocalAlternateVersions": []
+    },
+    "resolved": {
+      "Type": "Movie",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": true,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "VideoFile",
+      "AdditionalParts": [
+        "P"
+      ],
+      "LocalAlternateVersions": []
+    }
+  },
+  {
+    "name": "AdditionalParts-value-null",
+    "current": {
+      "Type": "Movie",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "VideoFile",
+      "AdditionalParts": [
+        "P"
+      ],
+      "LocalAlternateVersions": []
+    },
+    "resolved": {
+      "Type": "Movie",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": true,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "VideoFile",
+      "AdditionalParts": null,
+      "LocalAlternateVersions": []
+    }
+  },
+  {
+    "name": "AdditionalParts-null-element",
+    "current": {
+      "Type": "Movie",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "VideoFile",
+      "AdditionalParts": [
+        null
+      ],
+      "LocalAlternateVersions": []
+    },
+    "resolved": {
+      "Type": "Movie",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": true,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "VideoFile",
+      "AdditionalParts": [
+        ""
+      ],
+      "LocalAlternateVersions": []
+    }
+  },
+  {
+    "name": "AdditionalParts-same-null-element",
+    "current": {
+      "Type": "Movie",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "VideoFile",
+      "AdditionalParts": [
+        null
+      ],
+      "LocalAlternateVersions": []
+    },
+    "resolved": {
+      "Type": "Movie",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": true,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "VideoFile",
+      "AdditionalParts": [
+        null
+      ],
+      "LocalAlternateVersions": []
+    }
+  },
+  {
+    "name": "LocalAlternateVersions-null-empty",
+    "current": {
+      "Type": "Movie",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": null
+    },
+    "resolved": {
+      "Type": "Movie",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": true,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": []
+    }
+  },
+  {
+    "name": "LocalAlternateVersions-empty-null",
+    "current": {
+      "Type": "Movie",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": []
+    },
+    "resolved": {
+      "Type": "Movie",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": true,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": null
+    }
+  },
+  {
+    "name": "LocalAlternateVersions-null-null",
+    "current": {
+      "Type": "Movie",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": null
+    },
+    "resolved": {
+      "Type": "Movie",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": true,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": null
+    }
+  },
+  {
+    "name": "LocalAlternateVersions-null-value",
+    "current": {
+      "Type": "Movie",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": null
+    },
+    "resolved": {
+      "Type": "Movie",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": true,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": [
+        "P"
+      ]
+    }
+  },
+  {
+    "name": "LocalAlternateVersions-value-null",
+    "current": {
+      "Type": "Movie",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": [
+        "P"
+      ]
+    },
+    "resolved": {
+      "Type": "Movie",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": true,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": null
+    }
+  },
+  {
+    "name": "LocalAlternateVersions-null-element",
+    "current": {
+      "Type": "Movie",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": [
+        null
+      ]
+    },
+    "resolved": {
+      "Type": "Movie",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": true,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": [
+        ""
+      ]
+    }
+  },
+  {
+    "name": "LocalAlternateVersions-same-null-element",
+    "current": {
+      "Type": "Movie",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": [
+        null
+      ]
+    },
+    "resolved": {
+      "Type": "Movie",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": true,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": [
+        null
+      ]
+    }
+  },
+  {
+    "name": "video-with-non-video-resolution",
+    "current": {
+      "Type": "Movie",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "BluRay",
+      "AdditionalParts": [
+        "P"
+      ],
+      "LocalAlternateVersions": [
+        "V"
+      ]
+    },
+    "resolved": {
+      "Type": "Folder",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": true,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {}
+    }
+  },
+  {
+    "name": "non-video-with-video-resolution",
+    "current": {
+      "Type": "Folder",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      }
+    },
+    "resolved": {
+      "Type": "Video",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": true,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "VideoFile",
+      "AdditionalParts": [
+        "P"
+      ],
+      "LocalAlternateVersions": []
+    }
+  },
+  {
+    "name": "video-type-VideoFile",
+    "current": {
+      "Type": "Movie",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "BluRay",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": []
+    },
+    "resolved": {
+      "Type": "Movie",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "VideoFile",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": []
+    }
+  },
+  {
+    "name": "video-type-Iso",
+    "current": {
+      "Type": "Movie",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "BluRay",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": []
+    },
+    "resolved": {
+      "Type": "Movie",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "Iso",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": []
+    }
+  },
+  {
+    "name": "video-type-Dvd",
+    "current": {
+      "Type": "Movie",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "BluRay",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": []
+    },
+    "resolved": {
+      "Type": "Movie",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "Dvd",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": []
+    }
+  },
+  {
+    "name": "video-type-BluRay",
+    "current": {
+      "Type": "Movie",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "BluRay",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": []
+    },
+    "resolved": {
+      "Type": "Movie",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": "BluRay",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": []
+    }
+  },
+  {
+    "name": "video-type-7",
+    "current": {
+      "Type": "Movie",
+      "Name": "Curated title",
+      "Path": "Z:\\Library\\Original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9223372036854775807,
+      "IndexNumber": 17,
+      "Overview": "Keep metadata",
+      "ProviderIds": {
+        "Tmdb": "12",
+        "Plugin": "untouched"
+      },
+      "VideoType": "BluRay",
+      "AdditionalParts": [],
+      "LocalAlternateVersions": []
+    },
+    "resolved": {
+      "Type": "Movie",
+      "Name": "Resolved name",
+      "Path": "z:\\library\\original.mkv",
+      "IsInMixedFolder": false,
+      "ProductionYear": 2026,
+      "RunTimeTicks": 1,
+      "IndexNumber": 3,
+      "Overview": "Resolved description",
+      "ProviderIds": {},
+      "VideoType": 7,
+      "AdditionalParts": [],
+      "LocalAlternateVersions": []
+    }
+  }
+]

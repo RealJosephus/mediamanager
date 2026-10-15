@@ -1,0 +1,53 @@
+{
+  "capturedAt": "2026-10-09T04:33:20.171Z",
+  "scope": "Fresh SQLite contexts against the pinned native EF model: four images and three trailer types, batch versus individual SaveChanges; cold Include and direct relation query; image type update and later trailer append. This records native relation order, not candidate or release acceptance.",
+  "fixtureFiles": [
+    {
+      "path": "tests/library/fixtures/native-relation-order/Program.cs",
+      "sha256": "2c7045b4cd3f2e9e741004ba3c5c11f78a15cf5f7167fd90f22d995999e04762"
+    },
+    {
+      "path": "tests/library/fixtures/native-relation-order/Oracle.csproj",
+      "sha256": "0b9d3e600bbf152d421f8a0ca199b075aa18811d2141e3f44f42533440e3320c"
+    },
+    {
+      "path": "tests/library/fixtures/native-relation-order/native.json",
+      "sha256": "a4f1244f4783cb2b48ddab77d9ad29dd11cf327770a380ae1bc105cd923e2ebc"
+    },
+    {
+      "path": "tests/Directory.Build.props",
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    }
+  ],
+  "assemblies": [
+    {
+      "path": "Jellyfin.Database.Implementations.dll",
+      "sha256": "5ffd9a90affb635962267da294a36a4cd6972da5f38083b51ecfb4fba4c31ee6"
+    },
+    {
+      "path": "Jellyfin.Database.Providers.Sqlite.dll",
+      "sha256": "c3be3a64502dae5f458c4ed71a0a81b7b03c8d25ae7681fc90e849eccdcae3a9"
+    },
+    {
+      "path": "Microsoft.EntityFrameworkCore.dll",
+      "sha256": "9cf183abffc9d6920e8366b75af8388bc502febaaa0e3d9fe41a4906a68d3065"
+    },
+    {
+      "path": "Microsoft.EntityFrameworkCore.Relational.dll",
+      "sha256": "301f57f6e6a919b139307ed0b0820e74cedb1ccace5cb234470f35ff4600d7c4"
+    },
+    {
+      "path": "Microsoft.EntityFrameworkCore.Sqlite.dll",
+      "sha256": "6c1737c1f1ba7b32c2a39d838b8ab5f5dbcc1639ca2fdf1aa6699d01444e0210"
+    },
+    {
+      "path": "Microsoft.Data.Sqlite.dll",
+      "sha256": "4abd9c2a61e580eb853e93ca8953a3cef2c05714ae28d2d1859d4dbc5e5700bc"
+    },
+    {
+      "path": "runtimes/win-x64/native/e_sqlite3.dll",
+      "sha256": "b7385d722c83fb52142a00477a726723745916d22a555711ee89834c1111fb2e"
+    }
+  ],
+  "sourceOutput": "D:/mediamanager-validation/20261009/results/native-relation-order-probe-v2.json"
+}

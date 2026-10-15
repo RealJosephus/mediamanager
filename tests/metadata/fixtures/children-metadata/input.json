@@ -1,0 +1,1874 @@
+[
+  {
+    "name": "ordinary folder does not aggregate metadata",
+    "item": {
+      "type": "Folder",
+      "Id": "87000000-0000-0000-0000-000000000002",
+      "Name": "Folder",
+      "Genres": [
+        "Keep"
+      ],
+      "Studios": [],
+      "ProviderIds": {},
+      "RunTimeTicks": 9
+    },
+    "children": [
+      {
+        "type": "Audio",
+        "Id": "87000000-0000-0000-0000-000000000001",
+        "Name": "Audio",
+        "Genres": [
+          "Change"
+        ],
+        "Studios": [],
+        "ProviderIds": {},
+        "RunTimeTicks": 80
+      }
+    ],
+    "full": true,
+    "currentUpdateType": 1
+  },
+  {
+    "name": "series updates date during None",
+    "item": {
+      "type": "Series",
+      "Id": "87000000-0000-0000-0000-000000000006",
+      "Name": "Series",
+      "Genres": [],
+      "Studios": [],
+      "ProviderIds": {},
+      "DateLastMediaAdded": "0001-01-01T00:00:00.0000000Z"
+    },
+    "children": [
+      {
+        "type": "Season",
+        "Id": "87000000-0000-0000-0000-000000000003",
+        "Name": "Season",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {},
+        "DateCreated": "2026-09-01T00:00:00Z"
+      },
+      {
+        "type": "Episode",
+        "Id": "87000000-0000-0000-0000-000000000004",
+        "Name": "Episode",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {},
+        "DateCreated": "2026-02-01T00:00:00Z"
+      },
+      {
+        "type": "Episode",
+        "Id": "87000000-0000-0000-0000-000000000005",
+        "Name": "Episode",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {},
+        "DateCreated": "2026-03-01T00:00:00Z",
+        "IsVirtualItem": true
+      }
+    ],
+    "full": false,
+    "currentUpdateType": 1
+  },
+  {
+    "name": "locked series date ignores item lock",
+    "item": {
+      "type": "Series",
+      "Id": "87000000-0000-0000-0000-000000000008",
+      "Name": "Series",
+      "Genres": [],
+      "Studios": [],
+      "ProviderIds": {},
+      "IsLocked": true,
+      "DateLastMediaAdded": "2025-01-01T00:00:00Z"
+    },
+    "children": [
+      {
+        "type": "Episode",
+        "Id": "87000000-0000-0000-0000-000000000007",
+        "Name": "Episode",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {},
+        "DateCreated": "2026-02-01T00:00:00.1234567Z"
+      }
+    ],
+    "full": false,
+    "currentUpdateType": 1
+  },
+  {
+    "name": "series empty children clears old date to MinValue",
+    "item": {
+      "type": "Series",
+      "Id": "87000000-0000-0000-0000-000000000009",
+      "Name": "Series",
+      "Genres": [],
+      "Studios": [],
+      "ProviderIds": {},
+      "DateLastMediaAdded": "2025-01-01T00:00:00Z"
+    },
+    "children": [],
+    "full": false,
+    "currentUpdateType": 1
+  },
+  {
+    "name": "series null last media date with no children is imported",
+    "item": {
+      "type": "Series",
+      "Id": "87000000-0000-0000-0000-000000000010",
+      "Name": "Series",
+      "Genres": [],
+      "Studios": [],
+      "ProviderIds": {},
+      "DateLastMediaAdded": null
+    },
+    "children": [],
+    "full": false,
+    "currentUpdateType": 1
+  },
+  {
+    "name": "series hydrated MinValue with no children remains unchanged",
+    "item": {
+      "type": "Series",
+      "Id": "87000000-0000-0000-0000-000000000011",
+      "Name": "Series",
+      "Genres": [],
+      "Studios": [],
+      "ProviderIds": {},
+      "DateLastMediaAdded": "0001-01-01T00:00:00.0000000Z"
+    },
+    "children": [],
+    "full": false,
+    "currentUpdateType": 1
+  },
+  {
+    "name": "series only virtual items are excluded from added date",
+    "item": {
+      "type": "Series",
+      "Id": "87000000-0000-0000-0000-000000000013",
+      "Name": "Series",
+      "Genres": [],
+      "Studios": [],
+      "ProviderIds": {},
+      "DateLastMediaAdded": "0001-01-01T00:00:00.0000000Z"
+    },
+    "children": [
+      {
+        "type": "Episode",
+        "Id": "87000000-0000-0000-0000-000000000012",
+        "Name": "Episode",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {},
+        "DateCreated": "2026-01-01T00:00:00Z",
+        "IsVirtualItem": true
+      }
+    ],
+    "full": true,
+    "currentUpdateType": 1
+  },
+  {
+    "name": "series minimum creation date remains minimum",
+    "item": {
+      "type": "Series",
+      "Id": "87000000-0000-0000-0000-000000000015",
+      "Name": "Series",
+      "Genres": [],
+      "Studios": [],
+      "ProviderIds": {},
+      "DateLastMediaAdded": "0001-01-01T00:00:00.0000000Z"
+    },
+    "children": [
+      {
+        "type": "Episode",
+        "Id": "87000000-0000-0000-0000-000000000014",
+        "Name": "Episode",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {},
+        "DateCreated": "0001-01-01T00:00:00.0000000Z"
+      }
+    ],
+    "full": true,
+    "currentUpdateType": 1
+  },
+  {
+    "name": "album None does not aggregate",
+    "item": {
+      "type": "MusicAlbum",
+      "Id": "87000000-0000-0000-0000-000000000017",
+      "Name": "Keep",
+      "Genres": [],
+      "Studios": [],
+      "ProviderIds": {},
+      "RunTimeTicks": 9
+    },
+    "children": [
+      {
+        "type": "Audio",
+        "Id": "87000000-0000-0000-0000-000000000016",
+        "Name": "Audio",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {},
+        "Album": "Change",
+        "RunTimeTicks": 80
+      }
+    ],
+    "full": false,
+    "currentUpdateType": 1
+  },
+  {
+    "name": "album image update enables aggregation",
+    "item": {
+      "type": "MusicAlbum",
+      "Id": "87000000-0000-0000-0000-000000000019",
+      "Name": "Keep",
+      "Genres": [],
+      "Studios": [],
+      "ProviderIds": {},
+      "RunTimeTicks": 9
+    },
+    "children": [
+      {
+        "type": "Audio",
+        "Id": "87000000-0000-0000-0000-000000000018",
+        "Name": "Audio",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {},
+        "Album": "Change",
+        "RunTimeTicks": 80
+      }
+    ],
+    "full": false,
+    "currentUpdateType": 5
+  },
+  {
+    "name": "album empty children sets zero ticks and clears lists",
+    "item": {
+      "type": "MusicAlbum",
+      "Id": "87000000-0000-0000-0000-000000000020",
+      "Name": "MusicAlbum",
+      "Genres": [
+        "Old"
+      ],
+      "Studios": [
+        "Old"
+      ],
+      "ProviderIds": {},
+      "Artists": [
+        "Old"
+      ],
+      "AlbumArtists": [
+        "Old"
+      ]
+    },
+    "children": [],
+    "full": true,
+    "currentUpdateType": 1
+  },
+  {
+    "name": "artist cumulative runtime includes virtual leaves and excludes folders",
+    "item": {
+      "type": "MusicArtist",
+      "Id": "87000000-0000-0000-0000-000000000024",
+      "Name": "MusicArtist",
+      "Genres": [],
+      "Studios": [],
+      "ProviderIds": {}
+    },
+    "children": [
+      {
+        "type": "Audio",
+        "Id": "87000000-0000-0000-0000-000000000021",
+        "Name": "Audio",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {},
+        "RunTimeTicks": 90,
+        "IsVirtualItem": true
+      },
+      {
+        "type": "Folder",
+        "Id": "87000000-0000-0000-0000-000000000022",
+        "Name": "Folder",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {},
+        "RunTimeTicks": 200
+      },
+      {
+        "type": "Audio",
+        "Id": "87000000-0000-0000-0000-000000000023",
+        "Name": "Audio",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {},
+        "RunTimeTicks": null
+      }
+    ],
+    "full": true,
+    "currentUpdateType": 1
+  },
+  {
+    "name": "album runtime wraps native unchecked Int64",
+    "item": {
+      "type": "MusicAlbum",
+      "Id": "87000000-0000-0000-0000-000000000027",
+      "Name": "MusicAlbum",
+      "Genres": [],
+      "Studios": [],
+      "ProviderIds": {}
+    },
+    "children": [
+      {
+        "type": "Audio",
+        "Id": "87000000-0000-0000-0000-000000000025",
+        "Name": "Audio",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {},
+        "RunTimeTicks": 9223372036854775807
+      },
+      {
+        "type": "Audio",
+        "Id": "87000000-0000-0000-0000-000000000026",
+        "Name": "Audio",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {},
+        "RunTimeTicks": 3
+      }
+    ],
+    "full": true,
+    "currentUpdateType": 1
+  },
+  {
+    "name": "locked album still updates runtime without user metadata",
+    "item": {
+      "type": "MusicAlbum",
+      "Id": "87000000-0000-0000-0000-000000000029",
+      "Name": "Keep",
+      "Genres": [
+        "Old"
+      ],
+      "Studios": [],
+      "ProviderIds": {
+        "MusicBrainzAlbum": "old"
+      },
+      "IsLocked": true,
+      "Artists": [
+        "Old"
+      ]
+    },
+    "children": [
+      {
+        "type": "Audio",
+        "Id": "87000000-0000-0000-0000-000000000028",
+        "Name": "Audio",
+        "Genres": [
+          "New"
+        ],
+        "Studios": [],
+        "ProviderIds": {
+          "MusicBrainzAlbum": "new"
+        },
+        "Album": "Change",
+        "RunTimeTicks": 11,
+        "Artists": [
+          "New"
+        ]
+      }
+    ],
+    "full": true,
+    "currentUpdateType": 1
+  },
+  {
+    "name": "Runtime field lock does not block cumulative ticks",
+    "item": {
+      "type": "MusicAlbum",
+      "Id": "87000000-0000-0000-0000-000000000031",
+      "Name": "MusicAlbum",
+      "Genres": [],
+      "Studios": [],
+      "ProviderIds": {},
+      "LockedFields": [
+        "Runtime"
+      ],
+      "RunTimeTicks": 3
+    },
+    "children": [
+      {
+        "type": "Audio",
+        "Id": "87000000-0000-0000-0000-000000000030",
+        "Name": "Audio",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {},
+        "RunTimeTicks": 11
+      }
+    ],
+    "full": true,
+    "currentUpdateType": 1
+  },
+  {
+    "name": "album takes first nonempty name rather than most frequent",
+    "item": {
+      "type": "MusicAlbum",
+      "Id": "87000000-0000-0000-0000-000000000036",
+      "Name": "MusicAlbum",
+      "Genres": [],
+      "Studios": [],
+      "ProviderIds": {}
+    },
+    "children": [
+      {
+        "type": "Audio",
+        "Id": "87000000-0000-0000-0000-000000000032",
+        "Name": "Audio",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {},
+        "Album": ""
+      },
+      {
+        "type": "Audio",
+        "Id": "87000000-0000-0000-0000-000000000033",
+        "Name": "Audio",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {},
+        "Album": "First"
+      },
+      {
+        "type": "Audio",
+        "Id": "87000000-0000-0000-0000-000000000034",
+        "Name": "Audio",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {},
+        "Album": "Frequent"
+      },
+      {
+        "type": "Audio",
+        "Id": "87000000-0000-0000-0000-000000000035",
+        "Name": "Audio",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {},
+        "Album": "Frequent"
+      }
+    ],
+    "full": true,
+    "currentUpdateType": 1
+  },
+  {
+    "name": "album whitespace name counts as nonempty",
+    "item": {
+      "type": "MusicAlbum",
+      "Id": "87000000-0000-0000-0000-000000000039",
+      "Name": "MusicAlbum",
+      "Genres": [],
+      "Studios": [],
+      "ProviderIds": {}
+    },
+    "children": [
+      {
+        "type": "Audio",
+        "Id": "87000000-0000-0000-0000-000000000037",
+        "Name": "Audio",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {},
+        "Album": "  "
+      },
+      {
+        "type": "Audio",
+        "Id": "87000000-0000-0000-0000-000000000038",
+        "Name": "Audio",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {},
+        "Album": "Later"
+      }
+    ],
+    "full": true,
+    "currentUpdateType": 1
+  },
+  {
+    "name": "Name field lock preserves album name",
+    "item": {
+      "type": "MusicAlbum",
+      "Id": "87000000-0000-0000-0000-000000000041",
+      "Name": "Keep",
+      "Genres": [],
+      "Studios": [],
+      "ProviderIds": {},
+      "LockedFields": [
+        "Name"
+      ]
+    },
+    "children": [
+      {
+        "type": "Audio",
+        "Id": "87000000-0000-0000-0000-000000000040",
+        "Name": "Audio",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {},
+        "Album": "Change"
+      }
+    ],
+    "full": true,
+    "currentUpdateType": 1
+  },
+  {
+    "name": "artists frequency combines ordinal ignore case and preserves first spelling",
+    "item": {
+      "type": "MusicAlbum",
+      "Id": "87000000-0000-0000-0000-000000000044",
+      "Name": "MusicAlbum",
+      "Genres": [],
+      "Studios": [],
+      "ProviderIds": {}
+    },
+    "children": [
+      {
+        "type": "Audio",
+        "Id": "87000000-0000-0000-0000-000000000042",
+        "Name": "Audio",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {},
+        "Artists": [
+          "Beta",
+          "alpha",
+          ""
+        ],
+        "AlbumArtists": [
+          "B",
+          "A"
+        ]
+      },
+      {
+        "type": "Audio",
+        "Id": "87000000-0000-0000-0000-000000000043",
+        "Name": "Audio",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {},
+        "Artists": [
+          "ALPHA",
+          "Gamma",
+          "ALPHA"
+        ],
+        "AlbumArtists": [
+          "a",
+          "C"
+        ]
+      }
+    ],
+    "full": true,
+    "currentUpdateType": 1
+  },
+  {
+    "name": "artists equal counts preserve encounter order",
+    "item": {
+      "type": "MusicAlbum",
+      "Id": "87000000-0000-0000-0000-000000000046",
+      "Name": "MusicAlbum",
+      "Genres": [],
+      "Studios": [],
+      "ProviderIds": {},
+      "Artists": [
+        "alpha",
+        "Beta"
+      ]
+    },
+    "children": [
+      {
+        "type": "Audio",
+        "Id": "87000000-0000-0000-0000-000000000045",
+        "Name": "Audio",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {},
+        "Artists": [
+          "Beta",
+          "alpha"
+        ]
+      }
+    ],
+    "full": true,
+    "currentUpdateType": 1
+  },
+  {
+    "name": "artists case-only sequence is an edit",
+    "item": {
+      "type": "MusicAlbum",
+      "Id": "87000000-0000-0000-0000-000000000048",
+      "Name": "MusicAlbum",
+      "Genres": [],
+      "Studios": [],
+      "ProviderIds": {},
+      "Artists": [
+        "alpha"
+      ]
+    },
+    "children": [
+      {
+        "type": "Audio",
+        "Id": "87000000-0000-0000-0000-000000000047",
+        "Name": "Audio",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {},
+        "Artists": [
+          "ALPHA"
+        ]
+      }
+    ],
+    "full": true,
+    "currentUpdateType": 1
+  },
+  {
+    "name": "invalid provider value is rejected while aggregation reports an edit",
+    "item": {
+      "type": "MusicAlbum",
+      "Id": "87000000-0000-0000-0000-000000000052",
+      "Name": "MusicAlbum",
+      "Genres": [],
+      "Studios": [],
+      "ProviderIds": {
+        "MusicBrainzAlbum": "old"
+      }
+    },
+    "children": [
+      {
+        "type": "Audio",
+        "Id": "87000000-0000-0000-0000-000000000049",
+        "Name": "Audio",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {
+          "MusicBrainzAlbum": "ABC"
+        }
+      },
+      {
+        "type": "Audio",
+        "Id": "87000000-0000-0000-0000-000000000050",
+        "Name": "Audio",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {
+          "MusicBrainzAlbum": "abc"
+        }
+      },
+      {
+        "type": "Audio",
+        "Id": "87000000-0000-0000-0000-000000000051",
+        "Name": "Audio",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {
+          "MusicBrainzAlbum": "abc"
+        }
+      }
+    ],
+    "full": true,
+    "currentUpdateType": 1
+  },
+  {
+    "name": "provider null majority keeps previous ID",
+    "item": {
+      "type": "MusicAlbum",
+      "Id": "87000000-0000-0000-0000-000000000056",
+      "Name": "MusicAlbum",
+      "Genres": [],
+      "Studios": [],
+      "ProviderIds": {
+        "MusicBrainzAlbum": "old"
+      }
+    },
+    "children": [
+      {
+        "type": "Audio",
+        "Id": "87000000-0000-0000-0000-000000000053",
+        "Name": "Audio",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {}
+      },
+      {
+        "type": "Audio",
+        "Id": "87000000-0000-0000-0000-000000000054",
+        "Name": "Audio",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {}
+      },
+      {
+        "type": "Audio",
+        "Id": "87000000-0000-0000-0000-000000000055",
+        "Name": "Audio",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {
+          "MusicBrainzAlbum": "new"
+        }
+      }
+    ],
+    "full": true,
+    "currentUpdateType": 1
+  },
+  {
+    "name": "provider empty majority keeps previous ID",
+    "item": {
+      "type": "MusicAlbum",
+      "Id": "87000000-0000-0000-0000-000000000060",
+      "Name": "MusicAlbum",
+      "Genres": [],
+      "Studios": [],
+      "ProviderIds": {
+        "MusicBrainzAlbum": "old"
+      }
+    },
+    "children": [
+      {
+        "type": "Audio",
+        "Id": "87000000-0000-0000-0000-000000000057",
+        "Name": "Audio",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {
+          "MusicBrainzAlbum": ""
+        }
+      },
+      {
+        "type": "Audio",
+        "Id": "87000000-0000-0000-0000-000000000058",
+        "Name": "Audio",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {
+          "MusicBrainzAlbum": ""
+        }
+      },
+      {
+        "type": "Audio",
+        "Id": "87000000-0000-0000-0000-000000000059",
+        "Name": "Audio",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {
+          "MusicBrainzAlbum": "new"
+        }
+      }
+    ],
+    "full": true,
+    "currentUpdateType": 1
+  },
+  {
+    "name": "provider case-only value preserves existing spelling",
+    "item": {
+      "type": "MusicAlbum",
+      "Id": "87000000-0000-0000-0000-000000000062",
+      "Name": "MusicAlbum",
+      "Genres": [],
+      "Studios": [],
+      "ProviderIds": {
+        "MusicBrainzAlbum": "ABC"
+      }
+    },
+    "children": [
+      {
+        "type": "Audio",
+        "Id": "87000000-0000-0000-0000-000000000061",
+        "Name": "Audio",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {
+          "MusicBrainzAlbum": "abc"
+        }
+      }
+    ],
+    "full": true,
+    "currentUpdateType": 1
+  },
+  {
+    "name": "all three invalid album provider IDs are rejected while reporting an edit",
+    "item": {
+      "type": "MusicAlbum",
+      "Id": "87000000-0000-0000-0000-000000000064",
+      "Name": "MusicAlbum",
+      "Genres": [],
+      "Studios": [],
+      "ProviderIds": {}
+    },
+    "children": [
+      {
+        "type": "Audio",
+        "Id": "87000000-0000-0000-0000-000000000063",
+        "Name": "Audio",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {
+          "MusicBrainzAlbum": "album",
+          "MusicBrainzReleaseGroup": "group",
+          "MusicBrainzAlbumArtist": "artist"
+        }
+      }
+    ],
+    "full": true,
+    "currentUpdateType": 1
+  },
+  {
+    "name": "valid provider values group ordinal and retain the most frequent spelling",
+    "item": {
+      "type": "MusicAlbum",
+      "Id": "87000000-0000-0000-0000-000000000068",
+      "Name": "MusicAlbum",
+      "Genres": [],
+      "Studios": [],
+      "ProviderIds": {
+        "MusicBrainzAlbum": "ABCD0000-1234-1234-1234-123456789012"
+      }
+    },
+    "children": [
+      {
+        "type": "Audio",
+        "Id": "87000000-0000-0000-0000-000000000065",
+        "Name": "Audio",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {
+          "MusicBrainzAlbum": "ABCDEF00-1234-1234-1234-123456789012"
+        }
+      },
+      {
+        "type": "Audio",
+        "Id": "87000000-0000-0000-0000-000000000066",
+        "Name": "Audio",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {
+          "MusicBrainzAlbum": "abcdef00-1234-1234-1234-123456789012"
+        }
+      },
+      {
+        "type": "Audio",
+        "Id": "87000000-0000-0000-0000-000000000067",
+        "Name": "Audio",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {
+          "MusicBrainzAlbum": "abcdef00-1234-1234-1234-123456789012"
+        }
+      }
+    ],
+    "full": true,
+    "currentUpdateType": 1
+  },
+  {
+    "name": "valid provider ties retain first encounter",
+    "item": {
+      "type": "MusicAlbum",
+      "Id": "87000000-0000-0000-0000-000000000071",
+      "Name": "MusicAlbum",
+      "Genres": [],
+      "Studios": [],
+      "ProviderIds": {}
+    },
+    "children": [
+      {
+        "type": "Audio",
+        "Id": "87000000-0000-0000-0000-000000000069",
+        "Name": "Audio",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {
+          "MusicBrainzAlbum": "ABCDEF00-1234-1234-1234-123456789012"
+        }
+      },
+      {
+        "type": "Audio",
+        "Id": "87000000-0000-0000-0000-000000000070",
+        "Name": "Audio",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {
+          "MusicBrainzAlbum": "ABCD0000-1234-1234-1234-123456789012"
+        }
+      }
+    ],
+    "full": true,
+    "currentUpdateType": 1
+  },
+  {
+    "name": "null and empty provider values share one absent group",
+    "item": {
+      "type": "MusicAlbum",
+      "Id": "87000000-0000-0000-0000-000000000076",
+      "Name": "MusicAlbum",
+      "Genres": [],
+      "Studios": [],
+      "ProviderIds": {
+        "MusicBrainzAlbum": "ABCD0000-1234-1234-1234-123456789012"
+      }
+    },
+    "children": [
+      {
+        "type": "Audio",
+        "Id": "87000000-0000-0000-0000-000000000072",
+        "Name": "Audio",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {
+          "MusicBrainzAlbum": ""
+        }
+      },
+      {
+        "type": "Audio",
+        "Id": "87000000-0000-0000-0000-000000000073",
+        "Name": "Audio",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {}
+      },
+      {
+        "type": "Audio",
+        "Id": "87000000-0000-0000-0000-000000000074",
+        "Name": "Audio",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {
+          "MusicBrainzAlbum": "ABCDEF00-1234-1234-1234-123456789012"
+        }
+      },
+      {
+        "type": "Audio",
+        "Id": "87000000-0000-0000-0000-000000000075",
+        "Name": "Audio",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {
+          "MusicBrainzAlbum": "ABCDEF00-1234-1234-1234-123456789012"
+        }
+      }
+    ],
+    "full": true,
+    "currentUpdateType": 1
+  },
+  {
+    "name": "all three valid album provider IDs are taken from songs",
+    "item": {
+      "type": "MusicAlbum",
+      "Id": "87000000-0000-0000-0000-000000000078",
+      "Name": "MusicAlbum",
+      "Genres": [],
+      "Studios": [],
+      "ProviderIds": {}
+    },
+    "children": [
+      {
+        "type": "Audio",
+        "Id": "87000000-0000-0000-0000-000000000077",
+        "Name": "Audio",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {
+          "MusicBrainzAlbum": "ABCDEF00-1234-1234-1234-123456789012",
+          "MusicBrainzReleaseGroup": "ABCD0000-1234-1234-1234-123456789012",
+          "MusicBrainzAlbumArtist": "ABCDEF00-1234-1234-1234-123456789012"
+        }
+      }
+    ],
+    "full": true,
+    "currentUpdateType": 1
+  },
+  {
+    "name": "whitespace provider choice throws after earlier child fields have changed",
+    "item": {
+      "type": "MusicAlbum",
+      "Id": "87000000-0000-0000-0000-000000000080",
+      "Name": "MusicAlbum",
+      "Genres": [],
+      "Studios": [],
+      "ProviderIds": {}
+    },
+    "children": [
+      {
+        "type": "Audio",
+        "Id": "87000000-0000-0000-0000-000000000079",
+        "Name": "Audio",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {
+          "MusicBrainzAlbum": "  "
+        },
+        "Album": "Before failure",
+        "Artists": [
+          "Before failure"
+        ]
+      }
+    ],
+    "full": true,
+    "currentUpdateType": 1,
+    "expectException": "ArgumentException"
+  },
+  {
+    "name": "premiere takes minimum real date and its year",
+    "item": {
+      "type": "MusicAlbum",
+      "Id": "87000000-0000-0000-0000-000000000083",
+      "Name": "MusicAlbum",
+      "Genres": [],
+      "Studios": [],
+      "ProviderIds": {},
+      "ProductionYear": 2000
+    },
+    "children": [
+      {
+        "type": "Audio",
+        "Id": "87000000-0000-0000-0000-000000000081",
+        "Name": "Audio",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {},
+        "PremiereDate": "2020-02-01T00:00:00Z",
+        "ProductionYear": 1900
+      },
+      {
+        "type": "Audio",
+        "Id": "87000000-0000-0000-0000-000000000082",
+        "Name": "Audio",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {},
+        "PremiereDate": "2018-03-01T00:00:00.0000001Z"
+      }
+    ],
+    "full": true,
+    "currentUpdateType": 1
+  },
+  {
+    "name": "all missing premiere dates take minimum positive production year",
+    "item": {
+      "type": "MusicAlbum",
+      "Id": "87000000-0000-0000-0000-000000000086",
+      "Name": "MusicAlbum",
+      "Genres": [],
+      "Studios": [],
+      "ProviderIds": {},
+      "PremiereDate": "2000-01-01T00:00:00Z"
+    },
+    "children": [
+      {
+        "type": "Audio",
+        "Id": "87000000-0000-0000-0000-000000000084",
+        "Name": "Audio",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {},
+        "ProductionYear": 2011
+      },
+      {
+        "type": "Audio",
+        "Id": "87000000-0000-0000-0000-000000000085",
+        "Name": "Audio",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {},
+        "ProductionYear": 2009
+      }
+    ],
+    "full": true,
+    "currentUpdateType": 1
+  },
+  {
+    "name": "a missing production year suppresses year fallback",
+    "item": {
+      "type": "MusicAlbum",
+      "Id": "87000000-0000-0000-0000-000000000089",
+      "Name": "MusicAlbum",
+      "Genres": [],
+      "Studios": [],
+      "ProviderIds": {},
+      "ProductionYear": 1999
+    },
+    "children": [
+      {
+        "type": "Audio",
+        "Id": "87000000-0000-0000-0000-000000000087",
+        "Name": "Audio",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {},
+        "ProductionYear": 2011
+      },
+      {
+        "type": "Audio",
+        "Id": "87000000-0000-0000-0000-000000000088",
+        "Name": "Audio",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {}
+      }
+    ],
+    "full": true,
+    "currentUpdateType": 1
+  },
+  {
+    "name": "MinValue premiere blocks date adoption and invokes year fallback",
+    "item": {
+      "type": "MusicAlbum",
+      "Id": "87000000-0000-0000-0000-000000000092",
+      "Name": "MusicAlbum",
+      "Genres": [],
+      "Studios": [],
+      "ProviderIds": {},
+      "PremiereDate": "2000-01-01T00:00:00Z"
+    },
+    "children": [
+      {
+        "type": "Audio",
+        "Id": "87000000-0000-0000-0000-000000000090",
+        "Name": "Audio",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {},
+        "PremiereDate": "0001-01-01T00:00:00.0000000Z",
+        "ProductionYear": 2011
+      },
+      {
+        "type": "Audio",
+        "Id": "87000000-0000-0000-0000-000000000091",
+        "Name": "Audio",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {},
+        "PremiereDate": "2020-01-01T00:00:00Z",
+        "ProductionYear": 2012
+      }
+    ],
+    "full": true,
+    "currentUpdateType": 1
+  },
+  {
+    "name": "MaxValue premiere invokes year fallback",
+    "item": {
+      "type": "MusicAlbum",
+      "Id": "87000000-0000-0000-0000-000000000094",
+      "Name": "MusicAlbum",
+      "Genres": [],
+      "Studios": [],
+      "ProviderIds": {}
+    },
+    "children": [
+      {
+        "type": "Audio",
+        "Id": "87000000-0000-0000-0000-000000000093",
+        "Name": "Audio",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {},
+        "PremiereDate": "9999-12-31T23:59:59.9999999Z",
+        "ProductionYear": 2011
+      }
+    ],
+    "full": true,
+    "currentUpdateType": 1
+  },
+  {
+    "name": "empty premiere children preserve old date and year",
+    "item": {
+      "type": "Season",
+      "Id": "87000000-0000-0000-0000-000000000095",
+      "Name": "Season",
+      "Genres": [],
+      "Studios": [],
+      "ProviderIds": {},
+      "PremiereDate": "2000-01-01T00:00:00Z",
+      "ProductionYear": 2000
+    },
+    "children": [],
+    "full": true,
+    "currentUpdateType": 1
+  },
+  {
+    "name": "genres and studios use first ordinal-ignorecase distinct spelling",
+    "item": {
+      "type": "MusicAlbum",
+      "Id": "87000000-0000-0000-0000-000000000098",
+      "Name": "MusicAlbum",
+      "Genres": [],
+      "Studios": [],
+      "ProviderIds": {}
+    },
+    "children": [
+      {
+        "type": "Audio",
+        "Id": "87000000-0000-0000-0000-000000000096",
+        "Name": "Audio",
+        "Genres": [
+          "Zeta",
+          "Alpha",
+          "ALPHA"
+        ],
+        "Studios": [
+          "B",
+          "A"
+        ],
+        "ProviderIds": {}
+      },
+      {
+        "type": "Audio",
+        "Id": "87000000-0000-0000-0000-000000000097",
+        "Name": "Audio",
+        "Genres": [
+          "zeta",
+          "Beta"
+        ],
+        "Studios": [
+          "a",
+          "C"
+        ],
+        "ProviderIds": {}
+      }
+    ],
+    "full": true,
+    "currentUpdateType": 1
+  },
+  {
+    "name": "equal genre and studio sets reorder without edit",
+    "item": {
+      "type": "BoxSet",
+      "Id": "87000000-0000-0000-0000-000000000100",
+      "Name": "BoxSet",
+      "Genres": [
+        "Beta",
+        "alpha"
+      ],
+      "Studios": [
+        "B",
+        "A"
+      ],
+      "ProviderIds": {}
+    },
+    "children": [
+      {
+        "type": "Movie",
+        "Id": "87000000-0000-0000-0000-000000000099",
+        "Name": "Movie",
+        "Genres": [
+          "ALPHA",
+          "Beta"
+        ],
+        "Studios": [
+          "a",
+          "B"
+        ],
+        "ProviderIds": {}
+      }
+    ],
+    "full": true,
+    "currentUpdateType": 1
+  },
+  {
+    "name": "genre and studio field locks preserve old lists",
+    "item": {
+      "type": "BoxSet",
+      "Id": "87000000-0000-0000-0000-000000000102",
+      "Name": "BoxSet",
+      "Genres": [
+        "Keep"
+      ],
+      "Studios": [
+        "Keep"
+      ],
+      "ProviderIds": {},
+      "LockedFields": [
+        "Genres",
+        "Studios"
+      ]
+    },
+    "children": [
+      {
+        "type": "Movie",
+        "Id": "87000000-0000-0000-0000-000000000101",
+        "Name": "Movie",
+        "Genres": [
+          "Change"
+        ],
+        "Studios": [
+          "Change"
+        ],
+        "ProviderIds": {}
+      }
+    ],
+    "full": true,
+    "currentUpdateType": 1
+  },
+  {
+    "name": "Unicode list comparison retains ordinal distinctions",
+    "item": {
+      "type": "BoxSet",
+      "Id": "87000000-0000-0000-0000-000000000104",
+      "Name": "BoxSet",
+      "Genres": [
+        "ss",
+        "ß",
+        "é",
+        "e",
+        "A"
+      ],
+      "Studios": [
+        "A-B",
+        "A B"
+      ],
+      "ProviderIds": {}
+    },
+    "children": [
+      {
+        "type": "Movie",
+        "Id": "87000000-0000-0000-0000-000000000103",
+        "Name": "Movie",
+        "Genres": [
+          "a",
+          "e",
+          "É",
+          "ß",
+          "SS"
+        ],
+        "Studios": [
+          "A B",
+          "A-B"
+        ],
+        "ProviderIds": {}
+      }
+    ],
+    "full": true,
+    "currentUpdateType": 1
+  },
+  {
+    "name": "by-name artist full aggregates runtime and genres",
+    "item": {
+      "type": "MusicArtist",
+      "Id": "87000000-0000-0000-0000-000000000107",
+      "Name": "MusicArtist",
+      "Genres": [],
+      "Studios": [],
+      "ProviderIds": {}
+    },
+    "children": [
+      {
+        "type": "Audio",
+        "Id": "87000000-0000-0000-0000-000000000105",
+        "Name": "Audio",
+        "Genres": [
+          "Rock"
+        ],
+        "Studios": [],
+        "ProviderIds": {},
+        "RunTimeTicks": 8
+      },
+      {
+        "type": "MusicVideo",
+        "Id": "87000000-0000-0000-0000-000000000106",
+        "Name": "MusicVideo",
+        "Genres": [
+          "rock",
+          "Pop"
+        ],
+        "Studios": [],
+        "ProviderIds": {},
+        "RunTimeTicks": 20
+      }
+    ],
+    "full": true,
+    "currentUpdateType": 1
+  },
+  {
+    "name": "physical artist full aggregates runtime and genres",
+    "item": {
+      "type": "MusicArtist",
+      "Id": "87000000-0000-0000-0000-000000000109",
+      "Name": "MusicArtist",
+      "Genres": [],
+      "Studios": [],
+      "ProviderIds": {},
+      "ParentId": "87000000-0000-0000-0000-000000099999"
+    },
+    "children": [
+      {
+        "type": "Audio",
+        "Id": "87000000-0000-0000-0000-000000000108",
+        "Name": "Audio",
+        "Genres": [
+          "Jazz"
+        ],
+        "Studios": [],
+        "ProviderIds": {},
+        "RunTimeTicks": 12
+      }
+    ],
+    "full": true,
+    "currentUpdateType": 1
+  },
+  {
+    "name": "artist None does not aggregate",
+    "item": {
+      "type": "MusicArtist",
+      "Id": "87000000-0000-0000-0000-000000000111",
+      "Name": "MusicArtist",
+      "Genres": [
+        "Keep"
+      ],
+      "Studios": [],
+      "ProviderIds": {},
+      "RunTimeTicks": 99
+    },
+    "children": [
+      {
+        "type": "Audio",
+        "Id": "87000000-0000-0000-0000-000000000110",
+        "Name": "Audio",
+        "Genres": [
+          "Change"
+        ],
+        "Studios": [],
+        "ProviderIds": {},
+        "RunTimeTicks": 8
+      }
+    ],
+    "full": false,
+    "currentUpdateType": 1
+  },
+  {
+    "name": "locked artist updates runtime but keeps genres",
+    "item": {
+      "type": "MusicArtist",
+      "Id": "87000000-0000-0000-0000-000000000113",
+      "Name": "MusicArtist",
+      "Genres": [
+        "Keep"
+      ],
+      "Studios": [],
+      "ProviderIds": {},
+      "IsLocked": true
+    },
+    "children": [
+      {
+        "type": "Audio",
+        "Id": "87000000-0000-0000-0000-000000000112",
+        "Name": "Audio",
+        "Genres": [
+          "Change"
+        ],
+        "Studios": [],
+        "ProviderIds": {},
+        "RunTimeTicks": 8
+      }
+    ],
+    "full": true,
+    "currentUpdateType": 1
+  },
+  {
+    "name": "virtual season with no episodes becomes virtual",
+    "item": {
+      "type": "Season",
+      "Id": "87000000-0000-0000-0000-000000000114",
+      "Name": "Season",
+      "Genres": [],
+      "Studios": [],
+      "ProviderIds": {},
+      "IsVirtualItem": false
+    },
+    "children": [],
+    "full": true,
+    "currentUpdateType": 1
+  },
+  {
+    "name": "virtual season with remote episode becomes nonvirtual",
+    "item": {
+      "type": "Season",
+      "Id": "87000000-0000-0000-0000-000000000116",
+      "Name": "Season",
+      "Genres": [],
+      "Studios": [],
+      "ProviderIds": {},
+      "IsVirtualItem": true
+    },
+    "children": [
+      {
+        "type": "Episode",
+        "Id": "87000000-0000-0000-0000-000000000115",
+        "Name": "Episode",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {},
+        "Path": "https://example.invalid/video.mkv",
+        "IsVirtualItem": true
+      }
+    ],
+    "full": true,
+    "currentUpdateType": 1
+  },
+  {
+    "name": "virtual season with only virtual locations becomes virtual even when locked",
+    "item": {
+      "type": "Season",
+      "Id": "87000000-0000-0000-0000-000000000118",
+      "Name": "Season",
+      "Genres": [],
+      "Studios": [],
+      "ProviderIds": {},
+      "IsLocked": true,
+      "IsVirtualItem": false
+    },
+    "children": [
+      {
+        "type": "Episode",
+        "Id": "87000000-0000-0000-0000-000000000117",
+        "Name": "Episode",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {},
+        "IsVirtualItem": false
+      }
+    ],
+    "full": true,
+    "currentUpdateType": 1
+  },
+  {
+    "name": "physical season never becomes virtual",
+    "item": {
+      "type": "Season",
+      "Id": "87000000-0000-0000-0000-000000000120",
+      "Name": "Season",
+      "Genres": [],
+      "Studios": [],
+      "ProviderIds": {},
+      "Path": "Z:\\ChildrenMetadata\\Season 1",
+      "IsVirtualItem": true
+    },
+    "children": [
+      {
+        "type": "Episode",
+        "Id": "87000000-0000-0000-0000-000000000119",
+        "Name": "Episode",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {},
+        "IsVirtualItem": true
+      }
+    ],
+    "full": true,
+    "currentUpdateType": 1
+  },
+  {
+    "name": "season None leaves virtual state unchanged",
+    "item": {
+      "type": "Season",
+      "Id": "87000000-0000-0000-0000-000000000121",
+      "Name": "Season",
+      "Genres": [],
+      "Studios": [],
+      "ProviderIds": {},
+      "IsVirtualItem": false
+    },
+    "children": [],
+    "full": false,
+    "currentUpdateType": 1
+  },
+  {
+    "name": "season image-only change updates virtual state",
+    "item": {
+      "type": "Season",
+      "Id": "87000000-0000-0000-0000-000000000122",
+      "Name": "Season",
+      "Genres": [],
+      "Studios": [],
+      "ProviderIds": {},
+      "IsVirtualItem": false
+    },
+    "children": [],
+    "full": false,
+    "currentUpdateType": 5
+  },
+  {
+    "name": "boxset selects lowest rating score",
+    "item": {
+      "type": "BoxSet",
+      "Id": "87000000-0000-0000-0000-000000000126",
+      "Name": "BoxSet",
+      "Genres": [],
+      "Studios": [],
+      "ProviderIds": {},
+      "OfficialRating": "R"
+    },
+    "children": [
+      {
+        "type": "Movie",
+        "Id": "87000000-0000-0000-0000-000000000123",
+        "Name": "Movie",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {},
+        "OfficialRating": "PG-13"
+      },
+      {
+        "type": "Movie",
+        "Id": "87000000-0000-0000-0000-000000000124",
+        "Name": "Movie",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {},
+        "OfficialRating": "G"
+      },
+      {
+        "type": "Movie",
+        "Id": "87000000-0000-0000-0000-000000000125",
+        "Name": "Movie",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {},
+        "OfficialRating": "Unrecognized"
+      }
+    ],
+    "full": true,
+    "currentUpdateType": 1
+  },
+  {
+    "name": "boxset equal rating score keeps input order",
+    "item": {
+      "type": "BoxSet",
+      "Id": "87000000-0000-0000-0000-000000000129",
+      "Name": "BoxSet",
+      "Genres": [],
+      "Studios": [],
+      "ProviderIds": {}
+    },
+    "children": [
+      {
+        "type": "Movie",
+        "Id": "87000000-0000-0000-0000-000000000127",
+        "Name": "Movie",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {},
+        "OfficialRating": "Rated PG"
+      },
+      {
+        "type": "Movie",
+        "Id": "87000000-0000-0000-0000-000000000128",
+        "Name": "Movie",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {},
+        "OfficialRating": "PG"
+      }
+    ],
+    "full": true,
+    "currentUpdateType": 1
+  },
+  {
+    "name": "boxset unrecognized ratings preserve first candidate",
+    "item": {
+      "type": "BoxSet",
+      "Id": "87000000-0000-0000-0000-000000000132",
+      "Name": "BoxSet",
+      "Genres": [],
+      "Studios": [],
+      "ProviderIds": {},
+      "OfficialRating": "R"
+    },
+    "children": [
+      {
+        "type": "Movie",
+        "Id": "87000000-0000-0000-0000-000000000130",
+        "Name": "Movie",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {},
+        "OfficialRating": "First unknown"
+      },
+      {
+        "type": "Movie",
+        "Id": "87000000-0000-0000-0000-000000000131",
+        "Name": "Movie",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {},
+        "OfficialRating": "Second unknown"
+      }
+    ],
+    "full": true,
+    "currentUpdateType": 1
+  },
+  {
+    "name": "boxset no nonempty ratings preserves prior rating",
+    "item": {
+      "type": "BoxSet",
+      "Id": "87000000-0000-0000-0000-000000000135",
+      "Name": "BoxSet",
+      "Genres": [],
+      "Studios": [],
+      "ProviderIds": {},
+      "OfficialRating": "R"
+    },
+    "children": [
+      {
+        "type": "Movie",
+        "Id": "87000000-0000-0000-0000-000000000133",
+        "Name": "Movie",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {},
+        "OfficialRating": ""
+      },
+      {
+        "type": "Movie",
+        "Id": "87000000-0000-0000-0000-000000000134",
+        "Name": "Movie",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {}
+      }
+    ],
+    "full": true,
+    "currentUpdateType": 1
+  },
+  {
+    "name": "boxset rating field lock preserves prior rating",
+    "item": {
+      "type": "BoxSet",
+      "Id": "87000000-0000-0000-0000-000000000137",
+      "Name": "BoxSet",
+      "Genres": [],
+      "Studios": [],
+      "ProviderIds": {},
+      "OfficialRating": "R",
+      "LockedFields": [
+        "OfficialRating"
+      ]
+    },
+    "children": [
+      {
+        "type": "Movie",
+        "Id": "87000000-0000-0000-0000-000000000136",
+        "Name": "Movie",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {},
+        "OfficialRating": "G"
+      }
+    ],
+    "full": true,
+    "currentUpdateType": 1
+  },
+  {
+    "name": "boxset rating case-only change is not an edit",
+    "item": {
+      "type": "BoxSet",
+      "Id": "87000000-0000-0000-0000-000000000139",
+      "Name": "BoxSet",
+      "Genres": [],
+      "Studios": [],
+      "ProviderIds": {},
+      "OfficialRating": "PG"
+    },
+    "children": [
+      {
+        "type": "Movie",
+        "Id": "87000000-0000-0000-0000-000000000138",
+        "Name": "Movie",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {},
+        "OfficialRating": "pg"
+      }
+    ],
+    "full": true,
+    "currentUpdateType": 1
+  },
+  {
+    "name": "boxset localized rating uses native subscore",
+    "item": {
+      "type": "BoxSet",
+      "Id": "87000000-0000-0000-0000-000000000142",
+      "Name": "BoxSet",
+      "Genres": [],
+      "Studios": [],
+      "ProviderIds": {}
+    },
+    "children": [
+      {
+        "type": "Movie",
+        "Id": "87000000-0000-0000-0000-000000000140",
+        "Name": "Movie",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {},
+        "OfficialRating": "TV-14"
+      },
+      {
+        "type": "Movie",
+        "Id": "87000000-0000-0000-0000-000000000141",
+        "Name": "Movie",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {},
+        "OfficialRating": "PG-13"
+      }
+    ],
+    "full": true,
+    "currentUpdateType": 1,
+    "country": "US"
+  },
+  {
+    "name": "boxset explicit numeric rating may outrank unknown threshold",
+    "item": {
+      "type": "BoxSet",
+      "Id": "87000000-0000-0000-0000-000000000146",
+      "Name": "BoxSet",
+      "Genres": [],
+      "Studios": [],
+      "ProviderIds": {}
+    },
+    "children": [
+      {
+        "type": "Movie",
+        "Id": "87000000-0000-0000-0000-000000000143",
+        "Name": "Movie",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {},
+        "OfficialRating": "2000"
+      },
+      {
+        "type": "Movie",
+        "Id": "87000000-0000-0000-0000-000000000144",
+        "Name": "Movie",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {},
+        "OfficialRating": "Unknown"
+      },
+      {
+        "type": "Movie",
+        "Id": "87000000-0000-0000-0000-000000000145",
+        "Name": "Movie",
+        "Genres": [],
+        "Studios": [],
+        "ProviderIds": {},
+        "OfficialRating": "1001"
+      }
+    ],
+    "full": true,
+    "currentUpdateType": 1
+  }
+]

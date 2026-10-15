@@ -1,0 +1,374 @@
+{
+  "actualFrozenInternalPhysicalFolders": true,
+  "results": [
+    {
+      "name": "root-direct",
+      "exception": null,
+      "parameterName": null,
+      "result": {
+        "ids": [
+          "97d10000-0000-0000-0000-000000000002"
+        ],
+        "names": [
+          "Folder 2"
+        ],
+        "findCalls": []
+      }
+    },
+    {
+      "name": "empty-locations",
+      "exception": null,
+      "parameterName": null,
+      "result": {
+        "ids": [],
+        "names": [],
+        "findCalls": []
+      }
+    },
+    {
+      "name": "exclude-own-path",
+      "exception": null,
+      "parameterName": null,
+      "result": {
+        "ids": [],
+        "names": [],
+        "findCalls": []
+      }
+    },
+    {
+      "name": "root-path-case",
+      "exception": null,
+      "parameterName": null,
+      "result": {
+        "ids": [
+          "97d10000-0000-0000-0000-000000000002"
+        ],
+        "names": [
+          "Folder 2"
+        ],
+        "findCalls": []
+      }
+    },
+    {
+      "name": "root-path-trailing",
+      "exception": null,
+      "parameterName": null,
+      "result": {
+        "ids": [
+          "97d10000-0000-0000-0000-000000000002"
+        ],
+        "names": [
+          "Folder 2"
+        ],
+        "findCalls": []
+      }
+    },
+    {
+      "name": "root-path-slash",
+      "exception": null,
+      "parameterName": null,
+      "result": {
+        "ids": [],
+        "names": [],
+        "findCalls": [
+          {
+            "path": "Z:/Media",
+            "isFolder": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "root-path-nested",
+      "exception": null,
+      "parameterName": null,
+      "result": {
+        "ids": [],
+        "names": [],
+        "findCalls": [
+          {
+            "path": "Z:\\Media\\Child",
+            "isFolder": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "root-path-missing",
+      "exception": null,
+      "parameterName": null,
+      "result": {
+        "ids": [],
+        "names": [],
+        "findCalls": [
+          {
+            "path": "Z:\\Missing",
+            "isFolder": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "root-duplicate-order",
+      "exception": null,
+      "parameterName": null,
+      "result": {
+        "ids": [
+          "97d10000-0000-0000-0000-000000000003",
+          "97d10000-0000-0000-0000-000000000002"
+        ],
+        "names": [
+          "Folder 3",
+          "Folder 2"
+        ],
+        "findCalls": []
+      }
+    },
+    {
+      "name": "fallback-plain",
+      "exception": null,
+      "parameterName": null,
+      "result": {
+        "ids": [
+          "97d10000-0000-0000-0000-000000000002"
+        ],
+        "names": [
+          "Folder 2"
+        ],
+        "findCalls": [
+          {
+            "path": "Z:\\Media",
+            "isFolder": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "fallback-newest",
+      "exception": null,
+      "parameterName": null,
+      "result": {
+        "ids": [
+          "97d10000-0000-0000-0000-000000000003"
+        ],
+        "names": [
+          "Folder 3"
+        ],
+        "findCalls": [
+          {
+            "path": "Z:\\Media",
+            "isFolder": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "fallback-case",
+      "exception": null,
+      "parameterName": null,
+      "result": {
+        "ids": [],
+        "names": [],
+        "findCalls": [
+          {
+            "path": "z:\\media",
+            "isFolder": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "fallback-trailing",
+      "exception": null,
+      "parameterName": null,
+      "result": {
+        "ids": [],
+        "names": [],
+        "findCalls": [
+          {
+            "path": "Z:\\Media\\",
+            "isFolder": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "fallback-slash",
+      "exception": null,
+      "parameterName": null,
+      "result": {
+        "ids": [],
+        "names": [],
+        "findCalls": [
+          {
+            "path": "Z:/Media",
+            "isFolder": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "fallback-file-is-not-folder",
+      "exception": null,
+      "parameterName": null,
+      "result": {
+        "ids": [],
+        "names": [],
+        "findCalls": [
+          {
+            "path": "Z:\\Media",
+            "isFolder": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "fallback-owned",
+      "exception": null,
+      "parameterName": null,
+      "result": {
+        "ids": [
+          "97d10000-0000-0000-0000-000000000002"
+        ],
+        "names": [
+          "Folder 2"
+        ],
+        "findCalls": [
+          {
+            "path": "Z:\\Media",
+            "isFolder": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "fallback-extra-owned",
+      "exception": null,
+      "parameterName": null,
+      "result": {
+        "ids": [
+          "97d10000-0000-0000-0000-000000000003"
+        ],
+        "names": [
+          "Folder 3"
+        ],
+        "findCalls": [
+          {
+            "path": "Z:\\Media",
+            "isFolder": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "cached-file-is-not-folder",
+      "exception": null,
+      "parameterName": null,
+      "result": {
+        "ids": [],
+        "names": [],
+        "findCalls": []
+      }
+    },
+    {
+      "name": "invalid-location-null",
+      "exception": "ArgumentNullException",
+      "parameterName": "path",
+      "result": {
+        "findCalls": [
+          {
+            "path": null,
+            "isFolder": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "invalid-location-empty",
+      "exception": "ArgumentException",
+      "parameterName": "path",
+      "result": {
+        "findCalls": [
+          {
+            "path": "",
+            "isFolder": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "null-location-list",
+      "exception": "ArgumentNullException",
+      "parameterName": "source",
+      "result": {
+        "findCalls": []
+      }
+    },
+    {
+      "name": "cached-ids-order",
+      "exception": null,
+      "parameterName": null,
+      "result": {
+        "ids": [
+          "97d10000-0000-0000-0000-000000000003",
+          "97d10000-0000-0000-0000-000000000002",
+          "97d10000-0000-0000-0000-000000000003"
+        ],
+        "names": [
+          "Folder 3",
+          "Folder 2",
+          "Folder 3"
+        ],
+        "findCalls": []
+      }
+    },
+    {
+      "name": "cached-missing-id",
+      "exception": null,
+      "parameterName": null,
+      "result": {
+        "ids": [
+          "97d10000-0000-0000-0000-000000000002"
+        ],
+        "names": [
+          "Folder 2"
+        ],
+        "findCalls": []
+      }
+    },
+    {
+      "name": "cached-null-ids",
+      "exception": "ArgumentNullException",
+      "parameterName": "source",
+      "result": {
+        "findCalls": []
+      }
+    },
+    {
+      "name": "cached-empty-guid",
+      "exception": "ArgumentException",
+      "parameterName": "id",
+      "result": {
+        "findCalls": []
+      }
+    }
+  ],
+  "assemblies": [
+    {
+      "name": "MediaBrowser.Controller",
+      "path": "D:\\mediamanager\\.test-output\\validation\\internal-folder-physical-folders-oracle-20261005-4\\bin\\Release\\net10.0\\MediaBrowser.Controller.dll",
+      "sha256": "56a527307ef93f810fdadec33ba8380cc8416d38cb1cfea92297b0f65288808e"
+    },
+    {
+      "name": "Emby.Server.Implementations",
+      "path": "D:\\mediamanager\\.test-output\\validation\\internal-folder-physical-folders-oracle-20261005-4\\bin\\Release\\net10.0\\Emby.Server.Implementations.dll",
+      "sha256": "ccff8514100a65508b65882d5881463fe4ff73ea07eb4d2b2d98e234d7b4ac99"
+    },
+    {
+      "name": "Jellyfin.Server.Implementations",
+      "path": "D:\\mediamanager\\.test-output\\validation\\internal-folder-physical-folders-oracle-20261005-4\\bin\\Release\\net10.0\\Jellyfin.Server.Implementations.dll",
+      "sha256": "b91a6797f81f8563b8896c3da3e5cd4e9d11c61eb084578bf7b81108c3c3e2e6"
+    }
+  ],
+  "scope": "Actual CollectionFolder GetPhysicalFolders, ManagedFileSystem.AreEqual and LibraryManager FindByPath/GetItemById with actual repository/mapper/EF SQLite. Physical-root Children array and configuration are controlled. Captures selected IDs/names and FindByPath argument order, including raw path spellings, newest-row fallback, ownership/alternate filters, cache-ID lookup and declared NULL errors. No filesystem resolver, options XML, ValidateChildren, manager refresh cache mutation or full-library acceptance."
+,"schemaVersion":1,"candidateVerified":false,"inputSha256":"5b901f54c91ae663f317aaf9147fc1beb3aa927e2326e537bdcafbb7ddd2f4c4","sourceFilesSha256":"477d964225e97237dcec1bbcc7f0df12469a6d7b688c771d322a6694b9bd024e"}

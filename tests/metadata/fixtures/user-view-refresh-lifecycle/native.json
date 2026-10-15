@@ -1,0 +1,736 @@
+{
+  "actualFrozenProviderManager": true,
+  "actualFrozenUserView": true,
+  "actualFrozenUserViewMetadataService": true,
+  "processId": 2132,
+  "runtime": ".NET 10.0.12",
+  "results": [
+    {
+      "name": "duplicate-id-while-running",
+      "calls": 3,
+      "peakConcurrentServices": 1,
+      "pendingBeforeRelease": 2,
+      "pendingAfterDrain": 0,
+      "disposal": null,
+      "events": [
+        {
+          "kind": "clear-ignore"
+        },
+        {
+          "kind": "service-start",
+          "Name": "A",
+          "call": 1,
+          "IsCancellationRequested": false
+        },
+        {
+          "kind": "service-success",
+          "Name": "A",
+          "call": 1
+        },
+        {
+          "kind": "service-finish",
+          "Name": "A",
+          "call": 1
+        },
+        {
+          "kind": "service-start",
+          "Name": "A",
+          "call": 2,
+          "IsCancellationRequested": false
+        },
+        {
+          "kind": "service-success",
+          "Name": "A",
+          "call": 2
+        },
+        {
+          "kind": "service-finish",
+          "Name": "A",
+          "call": 2
+        },
+        {
+          "kind": "service-start",
+          "Name": "A",
+          "call": 3,
+          "IsCancellationRequested": false
+        },
+        {
+          "kind": "service-success",
+          "Name": "A",
+          "call": 3
+        },
+        {
+          "kind": "service-finish",
+          "Name": "A",
+          "call": 3
+        },
+        {
+          "kind": "clear-ignore"
+        }
+      ],
+      "a": {
+        "Id": "99500000-0000-0000-0000-000000000001",
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00",
+        "PresentationUniqueKey": null
+      },
+      "b": {
+        "Id": "99500000-0000-0000-0000-000000000002",
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00",
+        "PresentationUniqueKey": null
+      }
+    },
+    {
+      "name": "failure-then-next-item",
+      "calls": 2,
+      "peakConcurrentServices": 1,
+      "pendingBeforeRelease": 1,
+      "pendingAfterDrain": 0,
+      "disposal": null,
+      "events": [
+        {
+          "kind": "clear-ignore"
+        },
+        {
+          "kind": "service-start",
+          "Name": "A",
+          "call": 1,
+          "IsCancellationRequested": false
+        },
+        {
+          "kind": "service-finish",
+          "Name": "A",
+          "call": 1
+        },
+        {
+          "kind": "logged-error",
+          "type": "System.InvalidOperationException",
+          "Message": "Controlled service failure",
+          "text": "Error refreshing item"
+        },
+        {
+          "kind": "service-start",
+          "Name": "B",
+          "call": 2,
+          "IsCancellationRequested": false
+        },
+        {
+          "kind": "service-success",
+          "Name": "B",
+          "call": 2
+        },
+        {
+          "kind": "service-finish",
+          "Name": "B",
+          "call": 2
+        },
+        {
+          "kind": "clear-ignore"
+        }
+      ],
+      "a": {
+        "Id": "99500000-0000-0000-0000-000000000001",
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00",
+        "PresentationUniqueKey": null
+      },
+      "b": {
+        "Id": "99500000-0000-0000-0000-000000000002",
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00",
+        "PresentationUniqueKey": null
+      }
+    },
+    {
+      "name": "provider-own-cancellation-then-next-item",
+      "calls": 2,
+      "peakConcurrentServices": 1,
+      "pendingBeforeRelease": 1,
+      "pendingAfterDrain": 0,
+      "disposal": null,
+      "events": [
+        {
+          "kind": "clear-ignore"
+        },
+        {
+          "kind": "service-start",
+          "Name": "A",
+          "call": 1,
+          "IsCancellationRequested": false
+        },
+        {
+          "kind": "service-finish",
+          "Name": "A",
+          "call": 1
+        },
+        {
+          "kind": "logged-error",
+          "type": "System.OperationCanceledException",
+          "Message": "Controlled provider cancellation",
+          "text": "Error refreshing item"
+        },
+        {
+          "kind": "service-start",
+          "Name": "B",
+          "call": 2,
+          "IsCancellationRequested": false
+        },
+        {
+          "kind": "service-success",
+          "Name": "B",
+          "call": 2
+        },
+        {
+          "kind": "service-finish",
+          "Name": "B",
+          "call": 2
+        },
+        {
+          "kind": "clear-ignore"
+        }
+      ],
+      "a": {
+        "Id": "99500000-0000-0000-0000-000000000001",
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00",
+        "PresentationUniqueKey": null
+      },
+      "b": {
+        "Id": "99500000-0000-0000-0000-000000000002",
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00",
+        "PresentationUniqueKey": null
+      }
+    },
+    {
+      "name": "dispose-cancels-without-wait-and-ignores-new-queue",
+      "calls": 1,
+      "peakConcurrentServices": 1,
+      "pendingBeforeRelease": 1,
+      "pendingAfterDrain": 1,
+      "disposal": {
+        "finishedAtDisposeReturn": false,
+        "cancellationObserved": true,
+        "pendingBeforeAfterClose": 1,
+        "pendingAfterQueueAfterDispose": 1
+      },
+      "events": [
+        {
+          "kind": "clear-ignore"
+        },
+        {
+          "kind": "service-start",
+          "Name": "A",
+          "call": 1,
+          "IsCancellationRequested": false
+        },
+        {
+          "kind": "token-cancelled",
+          "Name": "A"
+        },
+        {
+          "kind": "dispose-returned"
+        },
+        {
+          "kind": "service-finish",
+          "Name": "A",
+          "call": 1
+        }
+      ],
+      "a": {
+        "Id": "99500000-0000-0000-0000-000000000001",
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00",
+        "PresentationUniqueKey": null
+      },
+      "b": {
+        "Id": "99500000-0000-0000-0000-000000000002",
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00",
+        "PresentationUniqueKey": null
+      }
+    },
+    {
+      "name": "actual-metadata-first-refresh-none",
+      "updateType": 11,
+      "error": null,
+      "events": [
+        {
+          "kind": "repository-save-attempt",
+          "reason": "MetadataImport",
+          "IsCancellationRequested": false,
+          "item": {
+            "Id": "99500000-0000-0000-0000-000000000004",
+            "DateLastRefreshed": "0001-01-01T00:00:00",
+            "DateLastSaved": "0001-01-01T00:00:00",
+            "PresentationUniqueKey": "99500000000000000000000000000004"
+          }
+        },
+        {
+          "kind": "custom-fetch",
+          "item": {
+            "Id": "99500000-0000-0000-0000-000000000004",
+            "DateLastRefreshed": "0001-01-01T00:00:00",
+            "DateLastSaved": "0001-01-01T00:00:00",
+            "PresentationUniqueKey": "99500000000000000000000000000004"
+          }
+        },
+        {
+          "kind": "repository-save-attempt",
+          "reason": "None, MetadataImport, MetadataDownload",
+          "IsCancellationRequested": false,
+          "item": {
+            "Id": "99500000-0000-0000-0000-000000000004",
+            "DateLastRefreshed": "2026-10-03T07:40:55.3892326Z",
+            "DateLastSaved": "0001-01-01T00:00:00",
+            "PresentationUniqueKey": "99500000000000000000000000000004"
+          }
+        },
+        {
+          "kind": "reattach"
+        }
+      ],
+      "item": {
+        "Id": "99500000-0000-0000-0000-000000000004",
+        "DateLastRefreshed": "2026-10-03T07:40:55.3892326Z",
+        "DateLastSaved": "0001-01-01T00:00:00",
+        "PresentationUniqueKey": "99500000000000000000000000000004"
+      }
+    },
+    {
+      "name": "actual-metadata-first-refresh-error",
+      "updateType": 11,
+      "error": null,
+      "events": [
+        {
+          "kind": "repository-save-attempt",
+          "reason": "MetadataImport",
+          "IsCancellationRequested": false,
+          "item": {
+            "Id": "99500000-0000-0000-0000-000000000004",
+            "DateLastRefreshed": "0001-01-01T00:00:00",
+            "DateLastSaved": "0001-01-01T00:00:00",
+            "PresentationUniqueKey": "99500000000000000000000000000004"
+          }
+        },
+        {
+          "kind": "custom-fetch",
+          "item": {
+            "Id": "99500000-0000-0000-0000-000000000004",
+            "DateLastRefreshed": "0001-01-01T00:00:00",
+            "DateLastSaved": "0001-01-01T00:00:00",
+            "PresentationUniqueKey": "99500000000000000000000000000004"
+          }
+        },
+        {
+          "kind": "logged-error",
+          "type": "System.InvalidOperationException",
+          "Message": "Controlled custom failure",
+          "text": "Error in Controlled native lifecycle provider for Refresh"
+        },
+        {
+          "kind": "repository-save-attempt",
+          "reason": "None, MetadataImport, MetadataDownload",
+          "IsCancellationRequested": false,
+          "item": {
+            "Id": "99500000-0000-0000-0000-000000000004",
+            "DateLastRefreshed": "0001-01-01T00:00:00",
+            "DateLastSaved": "0001-01-01T00:00:00",
+            "PresentationUniqueKey": "99500000000000000000000000000004"
+          }
+        },
+        {
+          "kind": "reattach"
+        }
+      ],
+      "item": {
+        "Id": "99500000-0000-0000-0000-000000000004",
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00",
+        "PresentationUniqueKey": "99500000000000000000000000000004"
+      }
+    },
+    {
+      "name": "actual-metadata-first-refresh-cancel",
+      "updateType": null,
+      "error": {
+        "type": "System.OperationCanceledException",
+        "Message": "Controlled custom cancellation"
+      },
+      "events": [
+        {
+          "kind": "repository-save-attempt",
+          "reason": "MetadataImport",
+          "IsCancellationRequested": false,
+          "item": {
+            "Id": "99500000-0000-0000-0000-000000000004",
+            "DateLastRefreshed": "0001-01-01T00:00:00",
+            "DateLastSaved": "0001-01-01T00:00:00",
+            "PresentationUniqueKey": "99500000000000000000000000000004"
+          }
+        },
+        {
+          "kind": "custom-fetch",
+          "item": {
+            "Id": "99500000-0000-0000-0000-000000000004",
+            "DateLastRefreshed": "0001-01-01T00:00:00",
+            "DateLastSaved": "0001-01-01T00:00:00",
+            "PresentationUniqueKey": "99500000000000000000000000000004"
+          }
+        }
+      ],
+      "item": {
+        "Id": "99500000-0000-0000-0000-000000000004",
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00",
+        "PresentationUniqueKey": "99500000000000000000000000000004"
+      }
+    },
+    {
+      "name": "actual-metadata-queue-all-custom-fail",
+      "customCalls": 3,
+      "pendingBeforeRelease": 2,
+      "pendingAfterDrain": 0,
+      "events": [
+        {
+          "kind": "clear-ignore"
+        },
+        {
+          "kind": "repository-save-attempt",
+          "reason": "MetadataImport",
+          "IsCancellationRequested": false,
+          "item": {
+            "Id": "99500000-0000-0000-0000-000000000005",
+            "DateLastRefreshed": "0001-01-01T00:00:00",
+            "DateLastSaved": "0001-01-01T00:00:00",
+            "PresentationUniqueKey": "99500000000000000000000000000005"
+          }
+        },
+        {
+          "kind": "custom-fetch-start",
+          "call": 1,
+          "item": {
+            "Id": "99500000-0000-0000-0000-000000000005",
+            "DateLastRefreshed": "0001-01-01T00:00:00",
+            "DateLastSaved": "0001-01-01T00:00:00",
+            "PresentationUniqueKey": "99500000000000000000000000000005"
+          },
+          "IsCancellationRequested": false
+        },
+        {
+          "kind": "logged-error",
+          "type": "System.InvalidOperationException",
+          "Message": "Controlled queued custom failure",
+          "text": "Error in Controlled queued lifecycle provider for Queued real metadata"
+        },
+        {
+          "kind": "repository-save-attempt",
+          "reason": "None, MetadataImport, MetadataDownload",
+          "IsCancellationRequested": false,
+          "item": {
+            "Id": "99500000-0000-0000-0000-000000000005",
+            "DateLastRefreshed": "0001-01-01T00:00:00",
+            "DateLastSaved": "0001-01-01T00:00:00",
+            "PresentationUniqueKey": "99500000000000000000000000000005"
+          }
+        },
+        {
+          "kind": "reattach"
+        },
+        {
+          "kind": "repository-save-attempt",
+          "reason": "MetadataImport",
+          "IsCancellationRequested": false,
+          "item": {
+            "Id": "99500000-0000-0000-0000-000000000005",
+            "DateLastRefreshed": "0001-01-01T00:00:00",
+            "DateLastSaved": "0001-01-01T00:00:00",
+            "PresentationUniqueKey": "99500000000000000000000000000005"
+          }
+        },
+        {
+          "kind": "custom-fetch-start",
+          "call": 2,
+          "item": {
+            "Id": "99500000-0000-0000-0000-000000000005",
+            "DateLastRefreshed": "0001-01-01T00:00:00",
+            "DateLastSaved": "0001-01-01T00:00:00",
+            "PresentationUniqueKey": "99500000000000000000000000000005"
+          },
+          "IsCancellationRequested": false
+        },
+        {
+          "kind": "logged-error",
+          "type": "System.InvalidOperationException",
+          "Message": "Controlled queued custom failure",
+          "text": "Error in Controlled queued lifecycle provider for Queued real metadata"
+        },
+        {
+          "kind": "repository-save-attempt",
+          "reason": "None, MetadataDownload",
+          "IsCancellationRequested": false,
+          "item": {
+            "Id": "99500000-0000-0000-0000-000000000005",
+            "DateLastRefreshed": "0001-01-01T00:00:00",
+            "DateLastSaved": "0001-01-01T00:00:00",
+            "PresentationUniqueKey": "99500000000000000000000000000005"
+          }
+        },
+        {
+          "kind": "reattach"
+        },
+        {
+          "kind": "repository-save-attempt",
+          "reason": "MetadataImport",
+          "IsCancellationRequested": false,
+          "item": {
+            "Id": "99500000-0000-0000-0000-000000000005",
+            "DateLastRefreshed": "0001-01-01T00:00:00",
+            "DateLastSaved": "0001-01-01T00:00:00",
+            "PresentationUniqueKey": "99500000000000000000000000000005"
+          }
+        },
+        {
+          "kind": "custom-fetch-start",
+          "call": 3,
+          "item": {
+            "Id": "99500000-0000-0000-0000-000000000005",
+            "DateLastRefreshed": "0001-01-01T00:00:00",
+            "DateLastSaved": "0001-01-01T00:00:00",
+            "PresentationUniqueKey": "99500000000000000000000000000005"
+          },
+          "IsCancellationRequested": false
+        },
+        {
+          "kind": "logged-error",
+          "type": "System.InvalidOperationException",
+          "Message": "Controlled queued custom failure",
+          "text": "Error in Controlled queued lifecycle provider for Queued real metadata"
+        },
+        {
+          "kind": "repository-save-attempt",
+          "reason": "None, MetadataDownload",
+          "IsCancellationRequested": false,
+          "item": {
+            "Id": "99500000-0000-0000-0000-000000000005",
+            "DateLastRefreshed": "0001-01-01T00:00:00",
+            "DateLastSaved": "0001-01-01T00:00:00",
+            "PresentationUniqueKey": "99500000000000000000000000000005"
+          }
+        },
+        {
+          "kind": "reattach"
+        },
+        {
+          "kind": "clear-ignore"
+        }
+      ],
+      "item": {
+        "Id": "99500000-0000-0000-0000-000000000005",
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00",
+        "PresentationUniqueKey": "99500000000000000000000000000005"
+      }
+    },
+    {
+      "name": "actual-metadata-queue-first-cancel-then-success",
+      "customCalls": 2,
+      "pendingBeforeRelease": 2,
+      "pendingAfterDrain": 0,
+      "events": [
+        {
+          "kind": "clear-ignore"
+        },
+        {
+          "kind": "repository-save-attempt",
+          "reason": "MetadataImport",
+          "IsCancellationRequested": false,
+          "item": {
+            "Id": "99500000-0000-0000-0000-000000000005",
+            "DateLastRefreshed": "0001-01-01T00:00:00",
+            "DateLastSaved": "0001-01-01T00:00:00",
+            "PresentationUniqueKey": "99500000000000000000000000000005"
+          }
+        },
+        {
+          "kind": "custom-fetch-start",
+          "call": 1,
+          "item": {
+            "Id": "99500000-0000-0000-0000-000000000005",
+            "DateLastRefreshed": "0001-01-01T00:00:00",
+            "DateLastSaved": "0001-01-01T00:00:00",
+            "PresentationUniqueKey": "99500000000000000000000000000005"
+          },
+          "IsCancellationRequested": false
+        },
+        {
+          "kind": "logged-error",
+          "type": "System.OperationCanceledException",
+          "Message": "Controlled queued custom cancellation",
+          "text": "Error refreshing item"
+        },
+        {
+          "kind": "repository-save-attempt",
+          "reason": "MetadataImport",
+          "IsCancellationRequested": false,
+          "item": {
+            "Id": "99500000-0000-0000-0000-000000000005",
+            "DateLastRefreshed": "0001-01-01T00:00:00",
+            "DateLastSaved": "0001-01-01T00:00:00",
+            "PresentationUniqueKey": "99500000000000000000000000000005"
+          }
+        },
+        {
+          "kind": "custom-fetch-start",
+          "call": 2,
+          "item": {
+            "Id": "99500000-0000-0000-0000-000000000005",
+            "DateLastRefreshed": "0001-01-01T00:00:00",
+            "DateLastSaved": "0001-01-01T00:00:00",
+            "PresentationUniqueKey": "99500000000000000000000000000005"
+          },
+          "IsCancellationRequested": false
+        },
+        {
+          "kind": "custom-fetch-success",
+          "call": 2
+        },
+        {
+          "kind": "repository-save-attempt",
+          "reason": "None, MetadataDownload",
+          "IsCancellationRequested": false,
+          "item": {
+            "Id": "99500000-0000-0000-0000-000000000005",
+            "DateLastRefreshed": "2026-10-03T07:40:55.3999547Z",
+            "DateLastSaved": "0001-01-01T00:00:00",
+            "PresentationUniqueKey": "99500000000000000000000000000005"
+          }
+        },
+        {
+          "kind": "reattach"
+        },
+        {
+          "kind": "repository-save-attempt",
+          "reason": "None, MetadataDownload",
+          "IsCancellationRequested": false,
+          "item": {
+            "Id": "99500000-0000-0000-0000-000000000005",
+            "DateLastRefreshed": "2026-10-03T07:40:55.400398Z",
+            "DateLastSaved": "0001-01-01T00:00:00",
+            "PresentationUniqueKey": "99500000000000000000000000000005"
+          }
+        },
+        {
+          "kind": "clear-ignore"
+        }
+      ],
+      "item": {
+        "Id": "99500000-0000-0000-0000-000000000005",
+        "DateLastRefreshed": "2026-10-03T07:40:55.400398Z",
+        "DateLastSaved": "0001-01-01T00:00:00",
+        "PresentationUniqueKey": "99500000000000000000000000000005"
+      }
+    },
+    {
+      "name": "actual-metadata-queue-first-success-already-queued",
+      "customCalls": 1,
+      "pendingBeforeRelease": 2,
+      "pendingAfterDrain": 0,
+      "events": [
+        {
+          "kind": "clear-ignore"
+        },
+        {
+          "kind": "repository-save-attempt",
+          "reason": "MetadataImport",
+          "IsCancellationRequested": false,
+          "item": {
+            "Id": "99500000-0000-0000-0000-000000000005",
+            "DateLastRefreshed": "0001-01-01T00:00:00",
+            "DateLastSaved": "0001-01-01T00:00:00",
+            "PresentationUniqueKey": "99500000000000000000000000000005"
+          }
+        },
+        {
+          "kind": "custom-fetch-start",
+          "call": 1,
+          "item": {
+            "Id": "99500000-0000-0000-0000-000000000005",
+            "DateLastRefreshed": "0001-01-01T00:00:00",
+            "DateLastSaved": "0001-01-01T00:00:00",
+            "PresentationUniqueKey": "99500000000000000000000000000005"
+          },
+          "IsCancellationRequested": false
+        },
+        {
+          "kind": "custom-fetch-success",
+          "call": 1
+        },
+        {
+          "kind": "repository-save-attempt",
+          "reason": "None, MetadataImport, MetadataDownload",
+          "IsCancellationRequested": false,
+          "item": {
+            "Id": "99500000-0000-0000-0000-000000000005",
+            "DateLastRefreshed": "2026-10-03T07:40:55.4154484Z",
+            "DateLastSaved": "0001-01-01T00:00:00",
+            "PresentationUniqueKey": "99500000000000000000000000000005"
+          }
+        },
+        {
+          "kind": "reattach"
+        },
+        {
+          "kind": "repository-save-attempt",
+          "reason": "None, MetadataDownload",
+          "IsCancellationRequested": false,
+          "item": {
+            "Id": "99500000-0000-0000-0000-000000000005",
+            "DateLastRefreshed": "2026-10-03T07:40:55.4154976Z",
+            "DateLastSaved": "0001-01-01T00:00:00",
+            "PresentationUniqueKey": "99500000000000000000000000000005"
+          }
+        },
+        {
+          "kind": "repository-save-attempt",
+          "reason": "None, MetadataDownload",
+          "IsCancellationRequested": false,
+          "item": {
+            "Id": "99500000-0000-0000-0000-000000000005",
+            "DateLastRefreshed": "2026-10-03T07:40:55.4155096Z",
+            "DateLastSaved": "0001-01-01T00:00:00",
+            "PresentationUniqueKey": "99500000000000000000000000000005"
+          }
+        },
+        {
+          "kind": "clear-ignore"
+        }
+      ],
+      "item": {
+        "Id": "99500000-0000-0000-0000-000000000005",
+        "DateLastRefreshed": "2026-10-03T07:40:55.4155096Z",
+        "DateLastSaved": "0001-01-01T00:00:00",
+        "PresentationUniqueKey": "99500000000000000000000000000005"
+      }
+    }
+  ],
+  "assemblies": [
+    {
+      "name": "MediaBrowser.Providers",
+      "path": "D:\\mediamanager\\.agent-docs\\evidence\\user-view-refresh-lifecycle-native-v3\\bin\\Debug\\net10.0\\MediaBrowser.Providers.dll",
+      "sha256": "7c996d97b210dba488b82f9d3e86a148e3fb52a7edb37e52db13e440d8d09191"
+    },
+    {
+      "name": "MediaBrowser.Controller",
+      "path": "D:\\mediamanager\\.agent-docs\\evidence\\user-view-refresh-lifecycle-native-v3\\bin\\Debug\\net10.0\\MediaBrowser.Controller.dll",
+      "sha256": "0b7bd01db6605bb54658d07e8b7d5d70615a7f741cfdd6615b0cfa628f0d1644"
+    },
+    {
+      "name": "System.Private.CoreLib",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Private.CoreLib.dll",
+      "sha256": "1125acc8106c43fc8bad2d203c4c4485df6182d292846c2fff415c1040c54678"
+    }
+  ],
+  "scope": "Real frozen DLL queue and metadata orchestration with explicitly controlled IMetadataService/custom provider/library persistence dependencies. No database, HTTP host, filesystem or port. Repository-save-attempt means dependency invocation only, not successful actual SQL or DateLastSaved mutation. Does not prove complete refresh/cancellation/race phase acceptance."
+}

@@ -1,0 +1,2523 @@
+{
+  "format": 1,
+  "frozenJellyfin": true,
+  "raw": {
+    "actualFrozenPlaylistGetter": true,
+    "actualFrozenManagedFileSystem": true,
+    "actualFrozenVisibility": true,
+    "Windows": true,
+    "runtime": ".NET 10.0.12",
+    "os": "Microsoft Windows 10.0.26300",
+    "processId": 5588,
+    "directorySeparator": "\\",
+    "alternateSeparator": "/",
+    "results": [
+      {
+        "name": "equal-root",
+        "programDataPath": "D:\\private-playlist-oracle",
+        "dataPath": "D:\\private-playlist-oracle\\data",
+        "path": "D:\\private-playlist-oracle\\data",
+        "Id": "a9700000-0000-0000-0000-000000000003",
+        "ParentId": "a9700000-0000-0000-0000-000000000001",
+        "OpenAccess": false,
+        "OwnerUserId": "a9700000-0000-0000-0000-000000000004",
+        "shares": [],
+        "userId": "a9700000-0000-0000-0000-000000000002",
+        "contains": false,
+        "containsError": null,
+        "isSharedItem": false,
+        "isVisible": true,
+        "isVisibleStandalone": true,
+        "libraryCalls": [
+          "GetItemById",
+          "GetItemById",
+          "GetItemById",
+          "GetItemById",
+          "GetItemById",
+          "GetCollectionFolders"
+        ]
+      },
+      {
+        "name": "equal-root-trailing",
+        "programDataPath": "D:\\private-playlist-oracle",
+        "dataPath": "D:\\private-playlist-oracle\\data",
+        "path": "D:\\private-playlist-oracle\\data\\",
+        "Id": "a9700000-0000-0000-0000-000000000003",
+        "ParentId": "a9700000-0000-0000-0000-000000000001",
+        "OpenAccess": false,
+        "OwnerUserId": "a9700000-0000-0000-0000-000000000004",
+        "shares": [],
+        "userId": "a9700000-0000-0000-0000-000000000002",
+        "contains": true,
+        "containsError": null,
+        "isSharedItem": true,
+        "isVisible": false,
+        "isVisibleStandalone": false,
+        "libraryCalls": []
+      },
+      {
+        "name": "direct-child",
+        "programDataPath": "D:\\private-playlist-oracle",
+        "dataPath": "D:\\private-playlist-oracle\\data",
+        "path": "D:\\private-playlist-oracle\\data\\private.m3u",
+        "Id": "a9700000-0000-0000-0000-000000000003",
+        "ParentId": "a9700000-0000-0000-0000-000000000001",
+        "OpenAccess": false,
+        "OwnerUserId": "a9700000-0000-0000-0000-000000000004",
+        "shares": [],
+        "userId": "a9700000-0000-0000-0000-000000000002",
+        "contains": true,
+        "containsError": null,
+        "isSharedItem": true,
+        "isVisible": false,
+        "isVisibleStandalone": false,
+        "libraryCalls": []
+      },
+      {
+        "name": "nested-child",
+        "programDataPath": "D:\\private-playlist-oracle",
+        "dataPath": "D:\\private-playlist-oracle\\data",
+        "path": "D:\\private-playlist-oracle\\data\\playlists\\private.m3u",
+        "Id": "a9700000-0000-0000-0000-000000000003",
+        "ParentId": "a9700000-0000-0000-0000-000000000001",
+        "OpenAccess": false,
+        "OwnerUserId": "a9700000-0000-0000-0000-000000000004",
+        "shares": [],
+        "userId": "a9700000-0000-0000-0000-000000000002",
+        "contains": true,
+        "containsError": null,
+        "isSharedItem": true,
+        "isVisible": false,
+        "isVisibleStandalone": false,
+        "libraryCalls": []
+      },
+      {
+        "name": "dot-child",
+        "programDataPath": "D:\\private-playlist-oracle",
+        "dataPath": "D:\\private-playlist-oracle\\data",
+        "path": "D:\\private-playlist-oracle\\data\\.\\private.m3u",
+        "Id": "a9700000-0000-0000-0000-000000000003",
+        "ParentId": "a9700000-0000-0000-0000-000000000001",
+        "OpenAccess": false,
+        "OwnerUserId": "a9700000-0000-0000-0000-000000000004",
+        "shares": [],
+        "userId": "a9700000-0000-0000-0000-000000000002",
+        "contains": true,
+        "containsError": null,
+        "isSharedItem": true,
+        "isVisible": false,
+        "isVisibleStandalone": false,
+        "libraryCalls": []
+      },
+      {
+        "name": "dot-escape",
+        "programDataPath": "D:\\private-playlist-oracle",
+        "dataPath": "D:\\private-playlist-oracle\\data",
+        "path": "D:\\private-playlist-oracle\\data\\..\\outside.m3u",
+        "Id": "a9700000-0000-0000-0000-000000000003",
+        "ParentId": "a9700000-0000-0000-0000-000000000001",
+        "OpenAccess": false,
+        "OwnerUserId": "a9700000-0000-0000-0000-000000000004",
+        "shares": [],
+        "userId": "a9700000-0000-0000-0000-000000000002",
+        "contains": true,
+        "containsError": null,
+        "isSharedItem": true,
+        "isVisible": false,
+        "isVisibleStandalone": false,
+        "libraryCalls": []
+      },
+      {
+        "name": "double-dot-escape",
+        "programDataPath": "D:\\private-playlist-oracle",
+        "dataPath": "D:\\private-playlist-oracle\\data",
+        "path": "D:\\private-playlist-oracle\\data\\playlists\\..\\..\\outside.m3u",
+        "Id": "a9700000-0000-0000-0000-000000000003",
+        "ParentId": "a9700000-0000-0000-0000-000000000001",
+        "OpenAccess": false,
+        "OwnerUserId": "a9700000-0000-0000-0000-000000000004",
+        "shares": [],
+        "userId": "a9700000-0000-0000-0000-000000000002",
+        "contains": true,
+        "containsError": null,
+        "isSharedItem": true,
+        "isVisible": false,
+        "isVisibleStandalone": false,
+        "libraryCalls": []
+      },
+      {
+        "name": "normalized-enter",
+        "programDataPath": "D:\\private-playlist-oracle",
+        "dataPath": "D:\\private-playlist-oracle\\data",
+        "path": "D:\\private-playlist-oracle\\other\\..\\data\\private.m3u",
+        "Id": "a9700000-0000-0000-0000-000000000003",
+        "ParentId": "a9700000-0000-0000-0000-000000000001",
+        "OpenAccess": false,
+        "OwnerUserId": "a9700000-0000-0000-0000-000000000004",
+        "shares": [],
+        "userId": "a9700000-0000-0000-0000-000000000002",
+        "contains": false,
+        "containsError": null,
+        "isSharedItem": false,
+        "isVisible": true,
+        "isVisibleStandalone": true,
+        "libraryCalls": [
+          "GetItemById",
+          "GetItemById",
+          "GetItemById",
+          "GetItemById",
+          "GetItemById",
+          "GetCollectionFolders"
+        ]
+      },
+      {
+        "name": "case-only",
+        "programDataPath": "D:\\private-playlist-oracle",
+        "dataPath": "D:\\private-playlist-oracle\\data",
+        "path": "d:\\PRIVATE-PLAYLIST-ORACLE\\DATA\\private.m3u",
+        "Id": "a9700000-0000-0000-0000-000000000003",
+        "ParentId": "a9700000-0000-0000-0000-000000000001",
+        "OpenAccess": false,
+        "OwnerUserId": "a9700000-0000-0000-0000-000000000004",
+        "shares": [],
+        "userId": "a9700000-0000-0000-0000-000000000002",
+        "contains": true,
+        "containsError": null,
+        "isSharedItem": true,
+        "isVisible": false,
+        "isVisibleStandalone": false,
+        "libraryCalls": []
+      },
+      {
+        "name": "boundary-alternate-separator",
+        "programDataPath": "D:\\private-playlist-oracle",
+        "dataPath": "D:\\private-playlist-oracle\\data",
+        "path": "D:\\private-playlist-oracle\\data/private.m3u",
+        "Id": "a9700000-0000-0000-0000-000000000003",
+        "ParentId": "a9700000-0000-0000-0000-000000000001",
+        "OpenAccess": false,
+        "OwnerUserId": "a9700000-0000-0000-0000-000000000004",
+        "shares": [],
+        "userId": "a9700000-0000-0000-0000-000000000002",
+        "contains": true,
+        "containsError": null,
+        "isSharedItem": true,
+        "isVisible": false,
+        "isVisibleStandalone": false,
+        "libraryCalls": []
+      },
+      {
+        "name": "prefix-alternate-separators",
+        "programDataPath": "D:\\private-playlist-oracle",
+        "dataPath": "D:\\private-playlist-oracle\\data",
+        "path": "D:/private-playlist-oracle/data/private.m3u",
+        "Id": "a9700000-0000-0000-0000-000000000003",
+        "ParentId": "a9700000-0000-0000-0000-000000000001",
+        "OpenAccess": false,
+        "OwnerUserId": "a9700000-0000-0000-0000-000000000004",
+        "shares": [],
+        "userId": "a9700000-0000-0000-0000-000000000002",
+        "contains": false,
+        "containsError": null,
+        "isSharedItem": false,
+        "isVisible": true,
+        "isVisibleStandalone": true,
+        "libraryCalls": [
+          "GetItemById",
+          "GetItemById",
+          "GetItemById",
+          "GetItemById",
+          "GetItemById",
+          "GetCollectionFolders"
+        ]
+      },
+      {
+        "name": "one-prefix-alternate-separator",
+        "programDataPath": "D:\\private-playlist-oracle",
+        "dataPath": "D:\\private-playlist-oracle\\data",
+        "path": "D:\\private-playlist-oracle/data\\private.m3u",
+        "Id": "a9700000-0000-0000-0000-000000000003",
+        "ParentId": "a9700000-0000-0000-0000-000000000001",
+        "OpenAccess": false,
+        "OwnerUserId": "a9700000-0000-0000-0000-000000000004",
+        "shares": [],
+        "userId": "a9700000-0000-0000-0000-000000000002",
+        "contains": false,
+        "containsError": null,
+        "isSharedItem": false,
+        "isVisible": true,
+        "isVisibleStandalone": true,
+        "libraryCalls": [
+          "GetItemById",
+          "GetItemById",
+          "GetItemById",
+          "GetItemById",
+          "GetItemById",
+          "GetCollectionFolders"
+        ]
+      },
+      {
+        "name": "prefix-lookalike",
+        "programDataPath": "D:\\private-playlist-oracle",
+        "dataPath": "D:\\private-playlist-oracle\\data",
+        "path": "D:\\private-playlist-oracle\\datax\\private.m3u",
+        "Id": "a9700000-0000-0000-0000-000000000003",
+        "ParentId": "a9700000-0000-0000-0000-000000000001",
+        "OpenAccess": false,
+        "OwnerUserId": "a9700000-0000-0000-0000-000000000004",
+        "shares": [],
+        "userId": "a9700000-0000-0000-0000-000000000002",
+        "contains": false,
+        "containsError": null,
+        "isSharedItem": false,
+        "isVisible": true,
+        "isVisibleStandalone": true,
+        "libraryCalls": [
+          "GetItemById",
+          "GetItemById",
+          "GetItemById",
+          "GetItemById",
+          "GetItemById",
+          "GetCollectionFolders"
+        ]
+      },
+      {
+        "name": "unrelated",
+        "programDataPath": "D:\\private-playlist-oracle",
+        "dataPath": "D:\\private-playlist-oracle\\data",
+        "path": "Q:\\external-library\\private.m3u",
+        "Id": "a9700000-0000-0000-0000-000000000003",
+        "ParentId": "a9700000-0000-0000-0000-000000000001",
+        "OpenAccess": false,
+        "OwnerUserId": "a9700000-0000-0000-0000-000000000004",
+        "shares": [],
+        "userId": "a9700000-0000-0000-0000-000000000002",
+        "contains": false,
+        "containsError": null,
+        "isSharedItem": false,
+        "isVisible": true,
+        "isVisibleStandalone": true,
+        "libraryCalls": [
+          "GetItemById",
+          "GetItemById",
+          "GetItemById",
+          "GetItemById",
+          "GetItemById",
+          "GetCollectionFolders"
+        ]
+      },
+      {
+        "name": "null-path",
+        "programDataPath": "D:\\private-playlist-oracle",
+        "dataPath": "D:\\private-playlist-oracle\\data",
+        "path": null,
+        "Id": "a9700000-0000-0000-0000-000000000003",
+        "ParentId": "a9700000-0000-0000-0000-000000000001",
+        "OpenAccess": false,
+        "OwnerUserId": "a9700000-0000-0000-0000-000000000004",
+        "shares": [],
+        "userId": "a9700000-0000-0000-0000-000000000002",
+        "contains": null,
+        "containsError": {
+          "type": "ArgumentNullException",
+          "Message": "Value cannot be null. (Parameter 'path')"
+        },
+        "isSharedItem": false,
+        "isVisible": true,
+        "isVisibleStandalone": true,
+        "libraryCalls": [
+          "GetItemById",
+          "GetItemById",
+          "GetItemById",
+          "GetItemById",
+          "GetItemById",
+          "GetCollectionFolders"
+        ]
+      },
+      {
+        "name": "empty-path",
+        "programDataPath": "D:\\private-playlist-oracle",
+        "dataPath": "D:\\private-playlist-oracle\\data",
+        "path": "",
+        "Id": "a9700000-0000-0000-0000-000000000003",
+        "ParentId": "a9700000-0000-0000-0000-000000000001",
+        "OpenAccess": false,
+        "OwnerUserId": "a9700000-0000-0000-0000-000000000004",
+        "shares": [],
+        "userId": "a9700000-0000-0000-0000-000000000002",
+        "contains": null,
+        "containsError": {
+          "type": "ArgumentException",
+          "Message": "The value cannot be an empty string. (Parameter 'path')"
+        },
+        "isSharedItem": false,
+        "isVisible": true,
+        "isVisibleStandalone": true,
+        "libraryCalls": [
+          "GetItemById",
+          "GetItemById",
+          "GetItemById",
+          "GetItemById",
+          "GetItemById",
+          "GetCollectionFolders"
+        ]
+      }
+    ],
+    "subpathControls": [
+      {
+        "name": "parent-trailing-separator",
+        "parent": "D:\\private-playlist-oracle\\data\\",
+        "value": "D:\\private-playlist-oracle\\data\\private",
+        "actual": true,
+        "trimmedParent": "D:\\private-playlist-oracle\\data",
+        "Windows": true
+      },
+      {
+        "name": "parent-two-trailing-separators",
+        "parent": "D:\\private-playlist-oracle\\data\\\\",
+        "value": "D:\\private-playlist-oracle\\data\\private",
+        "actual": true,
+        "trimmedParent": "D:\\private-playlist-oracle\\data\\",
+        "Windows": true
+      },
+      {
+        "name": "parent-dot-not-normalized",
+        "parent": "D:\\private-playlist-oracle\\data\\.",
+        "value": "D:\\private-playlist-oracle\\data\\private",
+        "actual": false,
+        "trimmedParent": "D:\\private-playlist-oracle\\data\\.",
+        "Windows": true
+      },
+      {
+        "name": "drive-root-equal",
+        "parent": "D:\\",
+        "value": "D:\\",
+        "actual": false,
+        "trimmedParent": "D:\\",
+        "Windows": true
+      },
+      {
+        "name": "drive-root-child",
+        "parent": "D:\\",
+        "value": "D:\\child",
+        "actual": true,
+        "trimmedParent": "D:\\",
+        "Windows": true
+      },
+      {
+        "name": "root-forward-prefix",
+        "parent": "D:/private-playlist-oracle/data",
+        "value": "D:/private-playlist-oracle/data/child",
+        "actual": true,
+        "trimmedParent": "D:/private-playlist-oracle/data",
+        "Windows": true
+      },
+      {
+        "name": "unix-looking-case-on-windows",
+        "parent": "/Media/Data",
+        "value": "/media/data/child",
+        "actual": true,
+        "trimmedParent": "/Media/Data",
+        "Windows": true
+      }
+    ],
+    "assemblies": [
+      {
+        "name": "Emby.Server.Implementations",
+        "path": "D:\\mediamanager\\.agent-docs\\evidence\\playlist-path-native-v1\\bin\\Release\\net10.0\\Emby.Server.Implementations.dll",
+        "sha256": "c63a43b6d4dc0c82f59b1d5a1c71788738f3629fdf60e01993de606b83559b1a"
+      },
+      {
+        "name": "Jellyfin.Data",
+        "path": "D:\\mediamanager\\.agent-docs\\evidence\\playlist-path-native-v1\\bin\\Release\\net10.0\\Jellyfin.Data.dll",
+        "sha256": "8a4364a16982ff1497aba328f736886f423f9a0f81f91bbdab76199bb2d98751"
+      },
+      {
+        "name": "Jellyfin.Database.Implementations",
+        "path": "D:\\mediamanager\\.agent-docs\\evidence\\playlist-path-native-v1\\bin\\Release\\net10.0\\Jellyfin.Database.Implementations.dll",
+        "sha256": "987e24d22a0f54a0eb2c459f9073fc6721bcbed98763da7e23e85e19e3e62ed1"
+      },
+      {
+        "name": "Jellyfin.Extensions",
+        "path": "D:\\mediamanager\\.agent-docs\\evidence\\playlist-path-native-v1\\bin\\Release\\net10.0\\Jellyfin.Extensions.dll",
+        "sha256": "857e4a37f69c65f1b66cd281fe735a75caf3ae76ae878726eaf20130755cabde"
+      },
+      {
+        "name": "MediaBrowser.Common",
+        "path": "D:\\mediamanager\\.agent-docs\\evidence\\playlist-path-native-v1\\bin\\Release\\net10.0\\MediaBrowser.Common.dll",
+        "sha256": "c26f4b04b829d85aa2d97401235d245923e5702ffa6021a90a1e27c49399ae87"
+      },
+      {
+        "name": "MediaBrowser.Controller",
+        "path": "D:\\mediamanager\\.agent-docs\\evidence\\playlist-path-native-v1\\bin\\Release\\net10.0\\MediaBrowser.Controller.dll",
+        "sha256": "0b7bd01db6605bb54658d07e8b7d5d70615a7f741cfdd6615b0cfa628f0d1644"
+      },
+      {
+        "name": "MediaBrowser.Model",
+        "path": "D:\\mediamanager\\.agent-docs\\evidence\\playlist-path-native-v1\\bin\\Release\\net10.0\\MediaBrowser.Model.dll",
+        "sha256": "991b3ca08b544ea91feff5c05d8dbb1d8b6ca3392f90753073cc09e353395946"
+      },
+      {
+        "name": "Microsoft.Extensions.Logging.Abstractions",
+        "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Logging.Abstractions.dll",
+        "sha256": "90c41d68d297e54c4def3cfd38eb620513a744ab01131840ea3e2634cf973be3"
+      },
+      {
+        "name": "Oracle",
+        "path": "D:\\mediamanager\\.agent-docs\\evidence\\playlist-path-native-v1\\bin\\Release\\net10.0\\Oracle.dll",
+        "sha256": "d3784b8257644c754df382a82f0ce7cec7e343a68fc78d13421c32a237c94b38"
+      },
+      {
+        "name": "System.Collections",
+        "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Collections.dll",
+        "sha256": "df6f2037eabee28100184e92f7536427ba2f086c1110629804d466b124bc4d54"
+      },
+      {
+        "name": "System.Console",
+        "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Console.dll",
+        "sha256": "3b85daf02a3d9ed99b84bb1c639fe8b1ced46d8d157fa56f525f6b8c5be43b3e"
+      },
+      {
+        "name": "System.Linq",
+        "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Linq.dll",
+        "sha256": "284d38945b6e92e847129bd28af458b19818d0f2181f79882888ab2003f4c519"
+      },
+      {
+        "name": "System.Memory",
+        "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Memory.dll",
+        "sha256": "f8f9d38efd6b0de30954d6bf1f353e9617bfb36d3d245c013a3b12be9f6bd88a"
+      },
+      {
+        "name": "System.Private.CoreLib",
+        "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Private.CoreLib.dll",
+        "sha256": "1125acc8106c43fc8bad2d203c4c4485df6182d292846c2fff415c1040c54678"
+      },
+      {
+        "name": "System.Reflection.DispatchProxy",
+        "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Reflection.DispatchProxy.dll",
+        "sha256": "bf93a361c0bba8497889c9f7713add5968ba39394f9e6bda27e86294c6c43560"
+      },
+      {
+        "name": "System.Reflection.Emit",
+        "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Reflection.Emit.dll",
+        "sha256": "09059981bbeea0fdc5df589be5d7e3937d57e22bec4d78ceb492c587926fc238"
+      },
+      {
+        "name": "System.Reflection.Emit.ILGeneration",
+        "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Reflection.Emit.ILGeneration.dll",
+        "sha256": "6b42ddd05b0ca1c7342d73ea9f401fe588044215d65c67b756deb780f0894a26"
+      },
+      {
+        "name": "System.Reflection.Primitives",
+        "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Reflection.Primitives.dll",
+        "sha256": "c2bbd885d03da5e880667c228ac1f56a5f3a72ea37d43f010ada000adc33da28"
+      },
+      {
+        "name": "System.Runtime",
+        "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Runtime.dll",
+        "sha256": "76be53624f64b23d0249dfa0bbe85390086de7c44bfd490642ea86c6faaf44af"
+      },
+      {
+        "name": "System.Runtime.InteropServices",
+        "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Runtime.InteropServices.dll",
+        "sha256": "e5eb1679f3579c9141e2bb9dbdce62624a623f38d299805cc1de07bacd21841f"
+      },
+      {
+        "name": "System.Runtime.Loader",
+        "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Runtime.Loader.dll",
+        "sha256": "9b9b2a4f0358d9146e76178ddb87d019be380c78baa7dac853493d45df089f03"
+      },
+      {
+        "name": "System.Text.Json",
+        "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Text.Json.dll",
+        "sha256": "fa99f413be21ed5f484a09093fe5f0beba7de3062cf9cc9f847dbf8108dba55a"
+      },
+      {
+        "name": "System.Threading",
+        "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Threading.dll",
+        "sha256": "6c32ed1bf8067e4169e8feddd15e6489b89d19d1c7aae1520a551b57745d0a60"
+      }
+    ],
+    "phaseAcceptance": false,
+    "sourceBoundary": "Unmodified frozen ManagedFileSystem.ContainsSubPath and Playlist.IsSharedItem (private actual getter reflected), IsVisible and IsVisibleStandalone on real Windows. Actual ManagedFileSystem constructed with NullLogger and controlled application paths. DispatchProxy controls only configuration and entity lookup/empty collection membership; private Playlists have real Folder parent, no ownership/shares/open access, unconstrained user parental policy. No path, shared or visibility result is mocked. No DB, host, port or filesystem writes by oracle."
+  },
+  "sourceBindings": [
+    {
+      "path": ".agent-docs/evidence/playlist-path-native-v1/stdout.txt",
+      "bytes": 21076,
+      "sha256": "bf47d3fa697ae88592b4ef93cb60714e20be6694a345295801a405a7d462b3f0"
+    },
+    {
+      "path": ".agent-docs/evidence/playlist-path-native-v1/exit.json",
+      "bytes": 110,
+      "sha256": "4625932a4b2b28877f6f6f38bd0e0a073980c2140f687f0ba586740eb8375fee"
+    },
+    {
+      "path": ".agent-docs/evidence/playlist-path-native-v1/summary.json",
+      "bytes": 48921,
+      "sha256": "f9b8a37dd1c4cd76a26204ecdacb42a53f05abe8310db6bb562f2305f87424bb"
+    },
+    {
+      "path": ".agent-docs/evidence/playlist-path-native-v1/candidate-initial.json",
+      "bytes": 8890,
+      "sha256": "67042ec3c035b5210eef42ff82bf9962ce40305e29261aac5672ed4cacdf78bf"
+    },
+    {
+      "path": ".agent-docs/evidence/playlist-path-native-v1/resource-processes.json",
+      "bytes": 242,
+      "sha256": "ec6ae37548a120e31689788e595e94f34faf510a2b6049ecf8c06c369fb8b7a0"
+    },
+    {
+      "path": ".agent-docs/evidence/playlist-path-native-v1/clr-provenance.json",
+      "bytes": 1704,
+      "sha256": "338373cfd8f5839f5a59d288f96c69d0ca6a34f0e29b0a25bf8549764e665b4a"
+    },
+    {
+      "path": ".agent-docs/evidence/playlist-path-root-native-v1/stdout.txt",
+      "bytes": 3729,
+      "sha256": "15755a3e7fbe5b37008e59a417a272e401f1f7fc71cf2650181f7fa0d1d847a2"
+    },
+    {
+      "path": ".agent-docs/evidence/playlist-path-root-native-v1/exit.json",
+      "bytes": 45,
+      "sha256": "ff6bd351fe4fe724fc193add7f57f1f2ce6dc0b07562a89331e225b2113c0fb3"
+    },
+    {
+      "path": ".agent-docs/evidence/playlist-path-root-native-v1/resource-processes.json",
+      "bytes": 243,
+      "sha256": "78b64514c277736f538267416776a2d52777b5a40c083b74a37e1432b97447b2"
+    },
+    {
+      "path": ".agent-docs/evidence/playlist-path-native-v1/Program.cs",
+      "bytes": 7346,
+      "sha256": "ce5475d3f852e5d19598d2a9411e879bfcffd9663602c68b1154683b65999e21"
+    },
+    {
+      "path": ".agent-docs/evidence/playlist-path-native-v1/Oracle.csproj",
+      "bytes": 394,
+      "sha256": "f5aceeed752306180d41685b345fbab2f4faf42aa817aa3f8407882ea78a52e3"
+    },
+    {
+      "path": ".agent-docs/evidence/playlist-path-root-native-v1/Program.cs",
+      "bytes": 1377,
+      "sha256": "4ec7d58caad63c0e042240df1f7a007ba30446e92dc0851bee3f24426e776072"
+    },
+    {
+      "path": ".agent-docs/evidence/playlist-path-root-native-v1/Oracle.csproj",
+      "bytes": 211,
+      "sha256": "38e201f047792df530db8c7d157c2b6b19d1ed2e4134dba5da5c59e97d3b0da2"
+    },
+    {
+      "path": ".agent-docs/evidence/playlist-path-native-v1/clr-source/PathInternal.Windows.cs",
+      "bytes": 18415,
+      "sha256": "1473848f007e73e49e19a3d3c2d615673a0a3d971528227ff6d1afbb5da26986"
+    },
+    {
+      "path": ".agent-docs/evidence/playlist-path-native-v1/clr-source/PathInternal.Unix.cs",
+      "bytes": 3664,
+      "sha256": "ba2f043c73c6f3cbe70d6c10f85e5861caf4994bf9fe6b3b36081ef185353e60"
+    },
+    {
+      "path": ".agent-docs/evidence/playlist-path-native-v1/clr-source/PathInternal.cs",
+      "bytes": 10340,
+      "sha256": "393dcabedd70ca6973c0aa73f6097e42c4ffcbedd9dd29e3925851254466e8cd"
+    }
+  ],
+  "nativeSourceBindings": [
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/Emby.Server.Implementations/IO/ManagedFileSystem.cs",
+      "bytes": 27461,
+      "sha256": "280ea08cf13065d8cd3790edf551b28ddfc9f352f4758d4fe0e62a55dbe0b14e"
+    },
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/MediaBrowser.Controller/Playlists/Playlist.cs",
+      "bytes": 8672,
+      "sha256": "3d7488cbfa751ccba0e2debc7d9a34e4dc390a9f4ed7b8031c60750a76774d97"
+    },
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/MediaBrowser.Controller/Entities/BaseItem.cs",
+      "bytes": 105800,
+      "sha256": "9dc7b96a93c9fbe874cdcededdca395b5aa2df6070f5cfc9c8959539dcd76469"
+    },
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/MediaBrowser.Controller/Entities/Folder.cs",
+      "bytes": 83390,
+      "sha256": "d5f227d462ce3c2df0d5a45d912778427f87321fc9d6e13d863ec28bb639e0c1"
+    }
+  ],
+  "nativeAssemblyBindings": [
+    {
+      "path": "D:\\mediamanager\\.agent-docs\\evidence\\playlist-path-native-v1\\bin\\Release\\net10.0\\Emby.Server.Implementations.dll",
+      "bytes": 1673728,
+      "sha256": "c63a43b6d4dc0c82f59b1d5a1c71788738f3629fdf60e01993de606b83559b1a",
+      "name": "Emby.Server.Implementations"
+    },
+    {
+      "path": "D:\\mediamanager\\.agent-docs\\evidence\\playlist-path-native-v1\\bin\\Release\\net10.0\\Jellyfin.Data.dll",
+      "bytes": 18432,
+      "sha256": "8a4364a16982ff1497aba328f736886f423f9a0f81f91bbdab76199bb2d98751",
+      "name": "Jellyfin.Data"
+    },
+    {
+      "path": "D:\\mediamanager\\.agent-docs\\evidence\\playlist-path-native-v1\\bin\\Release\\net10.0\\Jellyfin.Database.Implementations.dll",
+      "bytes": 249344,
+      "sha256": "987e24d22a0f54a0eb2c459f9073fc6721bcbed98763da7e23e85e19e3e62ed1",
+      "name": "Jellyfin.Database.Implementations"
+    },
+    {
+      "path": "D:\\mediamanager\\.agent-docs\\evidence\\playlist-path-native-v1\\bin\\Release\\net10.0\\Jellyfin.Extensions.dll",
+      "bytes": 37888,
+      "sha256": "857e4a37f69c65f1b66cd281fe735a75caf3ae76ae878726eaf20130755cabde",
+      "name": "Jellyfin.Extensions"
+    },
+    {
+      "path": "D:\\mediamanager\\.agent-docs\\evidence\\playlist-path-native-v1\\bin\\Release\\net10.0\\MediaBrowser.Common.dll",
+      "bytes": 48640,
+      "sha256": "c26f4b04b829d85aa2d97401235d245923e5702ffa6021a90a1e27c49399ae87",
+      "name": "MediaBrowser.Common"
+    },
+    {
+      "path": "D:\\mediamanager\\.agent-docs\\evidence\\playlist-path-native-v1\\bin\\Release\\net10.0\\MediaBrowser.Controller.dll",
+      "bytes": 655872,
+      "sha256": "0b7bd01db6605bb54658d07e8b7d5d70615a7f741cfdd6615b0cfa628f0d1644",
+      "name": "MediaBrowser.Controller"
+    },
+    {
+      "path": "D:\\mediamanager\\.agent-docs\\evidence\\playlist-path-native-v1\\bin\\Release\\net10.0\\MediaBrowser.Model.dll",
+      "bytes": 489472,
+      "sha256": "991b3ca08b544ea91feff5c05d8dbb1d8b6ca3392f90753073cc09e353395946",
+      "name": "MediaBrowser.Model"
+    },
+    {
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Logging.Abstractions.dll",
+      "bytes": 153424,
+      "sha256": "90c41d68d297e54c4def3cfd38eb620513a744ab01131840ea3e2634cf973be3",
+      "name": "Microsoft.Extensions.Logging.Abstractions"
+    },
+    {
+      "path": "D:\\mediamanager\\.agent-docs\\evidence\\playlist-path-native-v1\\bin\\Release\\net10.0\\Oracle.dll",
+      "bytes": 29696,
+      "sha256": "d3784b8257644c754df382a82f0ce7cec7e343a68fc78d13421c32a237c94b38",
+      "name": "Oracle"
+    },
+    {
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Collections.dll",
+      "bytes": 296744,
+      "sha256": "df6f2037eabee28100184e92f7536427ba2f086c1110629804d466b124bc4d54",
+      "name": "System.Collections"
+    },
+    {
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Console.dll",
+      "bytes": 169808,
+      "sha256": "3b85daf02a3d9ed99b84bb1c639fe8b1ced46d8d157fa56f525f6b8c5be43b3e",
+      "name": "System.Console"
+    },
+    {
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Linq.dll",
+      "bytes": 698192,
+      "sha256": "284d38945b6e92e847129bd28af458b19818d0f2181f79882888ab2003f4c519",
+      "name": "System.Linq"
+    },
+    {
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Memory.dll",
+      "bytes": 161576,
+      "sha256": "f8f9d38efd6b0de30954d6bf1f353e9617bfb36d3d245c013a3b12be9f6bd88a",
+      "name": "System.Memory"
+    },
+    {
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Private.CoreLib.dll",
+      "bytes": 16033576,
+      "sha256": "1125acc8106c43fc8bad2d203c4c4485df6182d292846c2fff415c1040c54678",
+      "name": "System.Private.CoreLib"
+    },
+    {
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Reflection.DispatchProxy.dll",
+      "bytes": 75600,
+      "sha256": "bf93a361c0bba8497889c9f7713add5968ba39394f9e6bda27e86294c6c43560",
+      "name": "System.Reflection.DispatchProxy"
+    },
+    {
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Reflection.Emit.dll",
+      "bytes": 309032,
+      "sha256": "09059981bbeea0fdc5df589be5d7e3937d57e22bec4d78ceb492c587926fc238",
+      "name": "System.Reflection.Emit"
+    },
+    {
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Reflection.Emit.ILGeneration.dll",
+      "bytes": 15656,
+      "sha256": "6b42ddd05b0ca1c7342d73ea9f401fe588044215d65c67b756deb780f0894a26",
+      "name": "System.Reflection.Emit.ILGeneration"
+    },
+    {
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Reflection.Primitives.dll",
+      "bytes": 15656,
+      "sha256": "c2bbd885d03da5e880667c228ac1f56a5f3a72ea37d43f010ada000adc33da28",
+      "name": "System.Reflection.Primitives"
+    },
+    {
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Runtime.dll",
+      "bytes": 44840,
+      "sha256": "76be53624f64b23d0249dfa0bbe85390086de7c44bfd490642ea86c6faaf44af",
+      "name": "System.Runtime"
+    },
+    {
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Runtime.InteropServices.dll",
+      "bytes": 112464,
+      "sha256": "e5eb1679f3579c9141e2bb9dbdce62624a623f38d299805cc1de07bacd21841f",
+      "name": "System.Runtime.InteropServices"
+    },
+    {
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Runtime.Loader.dll",
+      "bytes": 15656,
+      "sha256": "9b9b2a4f0358d9146e76178ddb87d019be380c78baa7dac853493d45df089f03",
+      "name": "System.Runtime.Loader"
+    },
+    {
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Text.Json.dll",
+      "bytes": 1890128,
+      "sha256": "fa99f413be21ed5f484a09093fe5f0beba7de3062cf9cc9f847dbf8108dba55a",
+      "name": "System.Text.Json"
+    },
+    {
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Threading.dll",
+      "bytes": 83792,
+      "sha256": "6c32ed1bf8067e4169e8feddd15e6489b89d19d1c7aae1520a551b57745d0a60",
+      "name": "System.Threading"
+    }
+  ],
+  "oracleSourceSha256": "ce5475d3f852e5d19598d2a9411e879bfcffd9663602c68b1154683b65999e21",
+  "rawOutputSha256": "bf47d3fa697ae88592b4ef93cb60714e20be6694a345295801a405a7d462b3f0",
+  "initial": {
+    "comparisons": [
+      {
+        "name": "equal-root",
+        "path": "D:\\private-playlist-oracle\\data",
+        "dataPath": "D:\\private-playlist-oracle\\data",
+        "expected": {
+          "isSharedItem": false,
+          "isVisible": true,
+          "isVisibleStandalone": true
+        },
+        "actual": {
+          "isSharedItem": true,
+          "isVisible": false,
+          "isVisibleStandalone": false
+        },
+        "matched": false
+      },
+      {
+        "name": "equal-root-trailing",
+        "path": "D:\\private-playlist-oracle\\data\\",
+        "dataPath": "D:\\private-playlist-oracle\\data",
+        "expected": {
+          "isSharedItem": true,
+          "isVisible": false,
+          "isVisibleStandalone": false
+        },
+        "actual": {
+          "isSharedItem": true,
+          "isVisible": false,
+          "isVisibleStandalone": false
+        },
+        "matched": true
+      },
+      {
+        "name": "direct-child",
+        "path": "D:\\private-playlist-oracle\\data\\private.m3u",
+        "dataPath": "D:\\private-playlist-oracle\\data",
+        "expected": {
+          "isSharedItem": true,
+          "isVisible": false,
+          "isVisibleStandalone": false
+        },
+        "actual": {
+          "isSharedItem": true,
+          "isVisible": false,
+          "isVisibleStandalone": false
+        },
+        "matched": true
+      },
+      {
+        "name": "nested-child",
+        "path": "D:\\private-playlist-oracle\\data\\playlists\\private.m3u",
+        "dataPath": "D:\\private-playlist-oracle\\data",
+        "expected": {
+          "isSharedItem": true,
+          "isVisible": false,
+          "isVisibleStandalone": false
+        },
+        "actual": {
+          "isSharedItem": true,
+          "isVisible": false,
+          "isVisibleStandalone": false
+        },
+        "matched": true
+      },
+      {
+        "name": "dot-child",
+        "path": "D:\\private-playlist-oracle\\data\\.\\private.m3u",
+        "dataPath": "D:\\private-playlist-oracle\\data",
+        "expected": {
+          "isSharedItem": true,
+          "isVisible": false,
+          "isVisibleStandalone": false
+        },
+        "actual": {
+          "isSharedItem": true,
+          "isVisible": false,
+          "isVisibleStandalone": false
+        },
+        "matched": true
+      },
+      {
+        "name": "dot-escape",
+        "path": "D:\\private-playlist-oracle\\data\\..\\outside.m3u",
+        "dataPath": "D:\\private-playlist-oracle\\data",
+        "expected": {
+          "isSharedItem": true,
+          "isVisible": false,
+          "isVisibleStandalone": false
+        },
+        "actual": {
+          "isSharedItem": false,
+          "isVisible": true,
+          "isVisibleStandalone": true
+        },
+        "matched": false
+      },
+      {
+        "name": "double-dot-escape",
+        "path": "D:\\private-playlist-oracle\\data\\playlists\\..\\..\\outside.m3u",
+        "dataPath": "D:\\private-playlist-oracle\\data",
+        "expected": {
+          "isSharedItem": true,
+          "isVisible": false,
+          "isVisibleStandalone": false
+        },
+        "actual": {
+          "isSharedItem": false,
+          "isVisible": true,
+          "isVisibleStandalone": true
+        },
+        "matched": false
+      },
+      {
+        "name": "normalized-enter",
+        "path": "D:\\private-playlist-oracle\\other\\..\\data\\private.m3u",
+        "dataPath": "D:\\private-playlist-oracle\\data",
+        "expected": {
+          "isSharedItem": false,
+          "isVisible": true,
+          "isVisibleStandalone": true
+        },
+        "actual": {
+          "isSharedItem": true,
+          "isVisible": false,
+          "isVisibleStandalone": false
+        },
+        "matched": false
+      },
+      {
+        "name": "case-only",
+        "path": "d:\\PRIVATE-PLAYLIST-ORACLE\\DATA\\private.m3u",
+        "dataPath": "D:\\private-playlist-oracle\\data",
+        "expected": {
+          "isSharedItem": true,
+          "isVisible": false,
+          "isVisibleStandalone": false
+        },
+        "actual": {
+          "isSharedItem": true,
+          "isVisible": false,
+          "isVisibleStandalone": false
+        },
+        "matched": true
+      },
+      {
+        "name": "boundary-alternate-separator",
+        "path": "D:\\private-playlist-oracle\\data/private.m3u",
+        "dataPath": "D:\\private-playlist-oracle\\data",
+        "expected": {
+          "isSharedItem": true,
+          "isVisible": false,
+          "isVisibleStandalone": false
+        },
+        "actual": {
+          "isSharedItem": true,
+          "isVisible": false,
+          "isVisibleStandalone": false
+        },
+        "matched": true
+      },
+      {
+        "name": "prefix-alternate-separators",
+        "path": "D:/private-playlist-oracle/data/private.m3u",
+        "dataPath": "D:\\private-playlist-oracle\\data",
+        "expected": {
+          "isSharedItem": false,
+          "isVisible": true,
+          "isVisibleStandalone": true
+        },
+        "actual": {
+          "isSharedItem": true,
+          "isVisible": false,
+          "isVisibleStandalone": false
+        },
+        "matched": false
+      },
+      {
+        "name": "one-prefix-alternate-separator",
+        "path": "D:\\private-playlist-oracle/data\\private.m3u",
+        "dataPath": "D:\\private-playlist-oracle\\data",
+        "expected": {
+          "isSharedItem": false,
+          "isVisible": true,
+          "isVisibleStandalone": true
+        },
+        "actual": {
+          "isSharedItem": true,
+          "isVisible": false,
+          "isVisibleStandalone": false
+        },
+        "matched": false
+      },
+      {
+        "name": "prefix-lookalike",
+        "path": "D:\\private-playlist-oracle\\datax\\private.m3u",
+        "dataPath": "D:\\private-playlist-oracle\\data",
+        "expected": {
+          "isSharedItem": false,
+          "isVisible": true,
+          "isVisibleStandalone": true
+        },
+        "actual": {
+          "isSharedItem": false,
+          "isVisible": true,
+          "isVisibleStandalone": true
+        },
+        "matched": true
+      },
+      {
+        "name": "unrelated",
+        "path": "Q:\\external-library\\private.m3u",
+        "dataPath": "D:\\private-playlist-oracle\\data",
+        "expected": {
+          "isSharedItem": false,
+          "isVisible": true,
+          "isVisibleStandalone": true
+        },
+        "actual": {
+          "isSharedItem": false,
+          "isVisible": true,
+          "isVisibleStandalone": true
+        },
+        "matched": true
+      },
+      {
+        "name": "null-path",
+        "path": null,
+        "dataPath": "D:\\private-playlist-oracle\\data",
+        "expected": {
+          "isSharedItem": false,
+          "isVisible": true,
+          "isVisibleStandalone": true
+        },
+        "actual": {
+          "isSharedItem": false,
+          "isVisible": true,
+          "isVisibleStandalone": true
+        },
+        "matched": true
+      },
+      {
+        "name": "empty-path",
+        "path": "",
+        "dataPath": "D:\\private-playlist-oracle\\data",
+        "expected": {
+          "isSharedItem": false,
+          "isVisible": true,
+          "isVisibleStandalone": true
+        },
+        "actual": {
+          "isSharedItem": false,
+          "isVisible": true,
+          "isVisibleStandalone": true
+        },
+        "matched": true
+      }
+    ],
+    "containsComparisons": [
+      {
+        "name": "parent-trailing-separator",
+        "parent": "D:\\private-playlist-oracle\\data\\",
+        "value": "D:\\private-playlist-oracle\\data\\private",
+        "actual": true,
+        "trimmedParent": "D:\\private-playlist-oracle\\data",
+        "Windows": true,
+        "candidate": true,
+        "matched": true
+      },
+      {
+        "name": "parent-two-trailing-separators",
+        "parent": "D:\\private-playlist-oracle\\data\\\\",
+        "value": "D:\\private-playlist-oracle\\data\\private",
+        "actual": true,
+        "trimmedParent": "D:\\private-playlist-oracle\\data\\",
+        "Windows": true,
+        "candidate": true,
+        "matched": true
+      },
+      {
+        "name": "parent-dot-not-normalized",
+        "parent": "D:\\private-playlist-oracle\\data\\.",
+        "value": "D:\\private-playlist-oracle\\data\\private",
+        "actual": false,
+        "trimmedParent": "D:\\private-playlist-oracle\\data\\.",
+        "Windows": true,
+        "candidate": true,
+        "matched": false
+      },
+      {
+        "name": "drive-root-equal",
+        "parent": "D:\\",
+        "value": "D:\\",
+        "actual": false,
+        "trimmedParent": "D:\\",
+        "Windows": true,
+        "candidate": true,
+        "matched": false
+      },
+      {
+        "name": "drive-root-child",
+        "parent": "D:\\",
+        "value": "D:\\child",
+        "actual": true,
+        "trimmedParent": "D:\\",
+        "Windows": true,
+        "candidate": true,
+        "matched": true
+      },
+      {
+        "name": "root-forward-prefix",
+        "parent": "D:/private-playlist-oracle/data",
+        "value": "D:/private-playlist-oracle/data/child",
+        "actual": true,
+        "trimmedParent": "D:/private-playlist-oracle/data",
+        "Windows": true,
+        "candidate": true,
+        "matched": true
+      },
+      {
+        "name": "unix-looking-case-on-windows",
+        "parent": "/Media/Data",
+        "value": "/media/data/child",
+        "actual": true,
+        "trimmedParent": "/Media/Data",
+        "Windows": true,
+        "candidate": false,
+        "matched": false
+      }
+    ],
+    "candidateSourceBindings": [
+      {
+        "path": "src/compat/differential.js",
+        "bytes": 1783,
+        "sha256": "fc4dd3f31a69037d622ad72ff0a82dc6f553d55349ca3a17bd352b449ab9e44d"
+      },
+      {
+        "path": "src/configuration.js",
+        "bytes": 7228,
+        "sha256": "6605f07fc3712c7e34d8df9fb07d9efbcd9ecb158a477e89835b000949e3bb08"
+      },
+      {
+        "path": "src/core/authorization.js",
+        "bytes": 2715,
+        "sha256": "eeb083b1c0af85ebbbbb044951944b08df2db7a21eee4d7048557d84d3772054"
+      },
+      {
+        "path": "src/core/composite-format.js",
+        "bytes": 1778,
+        "sha256": "bce3ac3282cc372a0bb1c71ef7044f8c7e510a0e4fc157d13b18fe500dcfd103"
+      },
+      {
+        "path": "src/core/i18n.js",
+        "bytes": 9883,
+        "sha256": "01640c0db08202597a26c320d1dc22ceddb75bbae2b187dac87fd8016c397182"
+      },
+      {
+        "path": "src/core/identity.js",
+        "bytes": 1723,
+        "sha256": "4b00ed5e8530ec8ebeeb6aaab5d72bc023a69563013edbd224b0d248ceea309b"
+      },
+      {
+        "path": "src/core/json.js",
+        "bytes": 4775,
+        "sha256": "e6af46731e656f3a7d17cc8553c22a148aedb768d8ff02514a8aa34f90c22e4e"
+      },
+      {
+        "path": "src/core/localization-data.js",
+        "bytes": 8758,
+        "sha256": "f84d18add85d8b0a5c6403df6013f13a32e852d26c40298523968d24d2870566"
+      },
+      {
+        "path": "src/core/native-sort.js",
+        "bytes": 3450,
+        "sha256": "82804d2c572e7436e2c4753a2e5258f94d8de14fe5838fcf4456da29bd9e5b07"
+      },
+      {
+        "path": "src/core/password.js",
+        "bytes": 4794,
+        "sha256": "ea90cdafdaa4053a9e6861c1fdbf94fa7f724afcd2e114616578fc7b63c57c25"
+      },
+      {
+        "path": "src/core/resources/countries.json",
+        "bytes": 21406,
+        "sha256": "5847c8458cd8b2b26eaa2deb837132b5240d9c4f0aaa422f00a2cd6b1fb48449"
+      },
+      {
+        "path": "src/core/resources/en-US.json",
+        "bytes": 7203,
+        "sha256": "a18528c69b57601d9aac0c97d8bdab83952381067a10fccd09a6bcf1a5996c3c"
+      },
+      {
+        "path": "src/core/resources/invariant-char-upper.json",
+        "bytes": 21138,
+        "sha256": "cce25a93a83adc7a13231ddf4ad31305b678372f015238f8d09906e59fad555a"
+      },
+      {
+        "path": "src/core/resources/invariant-lower.json",
+        "bytes": 28634,
+        "sha256": "25712502611047a82b25e4234a5c061c53c1d23044ad48108241a13f1455f5af"
+      },
+      {
+        "path": "src/core/resources/iso6392.txt",
+        "bytes": 15918,
+        "sha256": "64988b05e5bc577614a23fa589f8e0eab6a0e7706ff6ffe495cb845cf67af060"
+      },
+      {
+        "path": "src/core/resources/native-sort-license.txt",
+        "bytes": 1094,
+        "sha256": "18647d26bc4c4d892a5fd29de1264d10906b3124cafa98313300ff300441c7f0"
+      },
+      {
+        "path": "src/core/resources/native-sort-provenance.json",
+        "bytes": 1393,
+        "sha256": "8b8910cbed06cbaea65ecf4da18b3ec1e5a5703c3bc37d77c2ff0382d9bfc907"
+      },
+      {
+        "path": "src/core/resources/ratings/0-prefer.json",
+        "bytes": 782,
+        "sha256": "d8f6455d5d7b8a975fa1ca11d4a6e9214cc6171d841171b9fbebc9ee3f075c04"
+      },
+      {
+        "path": "src/core/resources/ratings/ar.json",
+        "bytes": 902,
+        "sha256": "d07a61ca326c45e9ced4dd391498a9e822c0d6f5ead73ac41a76d74771da5885"
+      },
+      {
+        "path": "src/core/resources/ratings/au.json",
+        "bytes": 1589,
+        "sha256": "b318e6b7eb492f1f303c56fc91ce0405cd4484ec46859245e5266e11918e7800"
+      },
+      {
+        "path": "src/core/resources/ratings/be.json",
+        "bytes": 1247,
+        "sha256": "5d2e04aeb611eabf8acf02a82c033d7cfd4c1dfea6e45bbbee47f974c2cc619a"
+      },
+      {
+        "path": "src/core/resources/ratings/bg.json",
+        "bytes": 734,
+        "sha256": "7dd13604f0b104ca5160e38e3cfa1af324ba3032c61078cd45740d2407d9d33a"
+      },
+      {
+        "path": "src/core/resources/ratings/br.json",
+        "bytes": 1276,
+        "sha256": "f1ea964c888e8bca4a436bee0e1bb1682a931f1cfddd652cda41ed7dac7ae7cf"
+      },
+      {
+        "path": "src/core/resources/ratings/ca.json",
+        "bytes": 2242,
+        "sha256": "f93ecde7ba2d5eacc1d00a422ef3c3a00c0747bb8211bc27ec032cb21b6e751e"
+      },
+      {
+        "path": "src/core/resources/ratings/cl.json",
+        "bytes": 910,
+        "sha256": "8bc7b013127198df4e840cbb09ba4e32b5e987dc2d8d1a5816cb7c6273dc4c26"
+      },
+      {
+        "path": "src/core/resources/ratings/co.json",
+        "bytes": 1231,
+        "sha256": "a9286011f3252598e8cff9c4b9845c68626830aef650611d5e0f6f2200a996a2"
+      },
+      {
+        "path": "src/core/resources/ratings/cz.json",
+        "bytes": 736,
+        "sha256": "f8edfd606961e0052d77ad53eb3ebf9add43743b7b010941cd49ecc2472bd71c"
+      },
+      {
+        "path": "src/core/resources/ratings/de.json",
+        "bytes": 1021,
+        "sha256": "f4c732b9fbe9db65668bbe7f53589802c78d0e4dafbd816ea9f5ad33ef32bd54"
+      },
+      {
+        "path": "src/core/resources/ratings/dk.json",
+        "bytes": 1062,
+        "sha256": "35246cb644c83db8f0a70693fa00ad02a47cc75a45d20f1b3da9b509bac26608"
+      },
+      {
+        "path": "src/core/resources/ratings/es.json",
+        "bytes": 2163,
+        "sha256": "7baa875664bd9503ff272d1bed5830c3313080823e04baeacad6339cffbf4ba1"
+      },
+      {
+        "path": "src/core/resources/ratings/fi.json",
+        "bytes": 1122,
+        "sha256": "73e03faa77d2e3b1db3786ab010f4e75b749c98a8e0f512caf838d62fbb05d4b"
+      },
+      {
+        "path": "src/core/resources/ratings/fr.json",
+        "bytes": 1593,
+        "sha256": "37df20761c7d743ebbb22f541a3f04208a3cbc4a1812503d11515ffccca42c61"
+      },
+      {
+        "path": "src/core/resources/ratings/gb.json",
+        "bytes": 2237,
+        "sha256": "92f53b84ae6930f3647c6f9ce6c73a21d430215030d3ff07e355622fe6bb3228"
+      },
+      {
+        "path": "src/core/resources/ratings/gr.json",
+        "bytes": 1319,
+        "sha256": "14cae1c8dac4d16cd41ed3f09c41f8da6c78271214b54c266a589937a05bc75c"
+      },
+      {
+        "path": "src/core/resources/ratings/hu.json",
+        "bytes": 900,
+        "sha256": "e335b8fdfcaa241859910433cc5be49bf9e325b1b314575085fd25fbff4bf25d"
+      },
+      {
+        "path": "src/core/resources/ratings/id.json",
+        "bytes": 737,
+        "sha256": "9da4241572776b52527071633e7dea320f0e3639091103511f042a464ffe04d2"
+      },
+      {
+        "path": "src/core/resources/ratings/ie.json",
+        "bytes": 1224,
+        "sha256": "62a23452b864c96aa60d6bdbf2a44ffcb2f830e6716d23480492ac8dcd2d892f"
+      },
+      {
+        "path": "src/core/resources/ratings/in.json",
+        "bytes": 1235,
+        "sha256": "3fe3e850b896f895486bb4a9a41681aa38452c18ccf35508eb0e60dab4af43f0"
+      },
+      {
+        "path": "src/core/resources/ratings/it.json",
+        "bytes": 1367,
+        "sha256": "09a3d85b0c2ce37930e5424f85b8e8b15d40d2c6d003d7cd72442df0cf4af380"
+      },
+      {
+        "path": "src/core/resources/ratings/jp.json",
+        "bytes": 1404,
+        "sha256": "640b19c35b8295521169ccb20e41e10df32eed1418afeb972585a0f427e85695"
+      },
+      {
+        "path": "src/core/resources/ratings/kr.json",
+        "bytes": 918,
+        "sha256": "8a2308ad7af174df642a3f60314905534f160e3893ec2929d517843e279acde2"
+      },
+      {
+        "path": "src/core/resources/ratings/kz.json",
+        "bytes": 908,
+        "sha256": "c4fdc56e65878be2eccede3a96e2de4bc9832b445fe2b12208f41017fa0ea9a4"
+      },
+      {
+        "path": "src/core/resources/ratings/lt.json",
+        "bytes": 902,
+        "sha256": "25802293c3ee45a2d3e415bcd8ecd9cbb4187d32565f16e5d61ef95b12dd98da"
+      },
+      {
+        "path": "src/core/resources/ratings/mx.json",
+        "bytes": 903,
+        "sha256": "0b43e1dc04b2f504c0368e660433e65c86da8159f0c97dac0c02c7e7cd26b252"
+      },
+      {
+        "path": "src/core/resources/ratings/nl.json",
+        "bytes": 1226,
+        "sha256": "51ba74e5ee68cdbba1b3da28eba4c98bed9cff49986fb4893baaf9bac2467e0d"
+      },
+      {
+        "path": "src/core/resources/ratings/no.json",
+        "bytes": 1621,
+        "sha256": "65289df6329bef4f9147325ff1bf3ee7c21b720fb76e35a555402852c74b6bc8"
+      },
+      {
+        "path": "src/core/resources/ratings/nz.json",
+        "bytes": 1743,
+        "sha256": "0a00a3ae7af6b3d1a3abd212ff36cd32f7503daf68a04858d37952d88b6ce770"
+      },
+      {
+        "path": "src/core/resources/ratings/ph.json",
+        "bytes": 1047,
+        "sha256": "1b50a9e5cd236aebaa6aa3395d8d0e98ef1abca533e6bf2615de044f9e17e220"
+      },
+      {
+        "path": "src/core/resources/ratings/pl.json",
+        "bytes": 1000,
+        "sha256": "44f0603f2b5f186eea08d3e550819ebb3833eb5cefbb06c42cd1f73257b41b31"
+      },
+      {
+        "path": "src/core/resources/ratings/pt.json",
+        "bytes": 1402,
+        "sha256": "c4430d29241beabc8a5d0fafebb9821adb4aea370abed5bb54a335b5b7cfb3e7"
+      },
+      {
+        "path": "src/core/resources/ratings/ro.json",
+        "bytes": 1110,
+        "sha256": "6178d7393436aeb24ad838cebf5fbe03c2c5d0ba79249741e140c1f044d3c170"
+      },
+      {
+        "path": "src/core/resources/ratings/ru.json",
+        "bytes": 1084,
+        "sha256": "17f78f9a28eb84af609fe750062f0ab38a41980d0cb64db3e0fd175de6d46f01"
+      },
+      {
+        "path": "src/core/resources/ratings/se.json",
+        "bytes": 1544,
+        "sha256": "c4df48f45c66ce5e0ddcfbe6ecd315878ac0e012dd2910f44150776cf2c4d4a2"
+      },
+      {
+        "path": "src/core/resources/ratings/sg.json",
+        "bytes": 1064,
+        "sha256": "f46393de1722a930ec9e888bb2f7b68b9c487b4836f135e015bb504d7b8d2f27"
+      },
+      {
+        "path": "src/core/resources/ratings/sk.json",
+        "bytes": 900,
+        "sha256": "b9d79771fda7b092c5e5f1350c939d60e82aaa3268990903e8f65d72b4ed92de"
+      },
+      {
+        "path": "src/core/resources/ratings/th.json",
+        "bytes": 1071,
+        "sha256": "6be7b52ed1e873c0f222c9eeeed9277d2d0bdc3b65abead666723d2c4e050ccc"
+      },
+      {
+        "path": "src/core/resources/ratings/tr.json",
+        "bytes": 1546,
+        "sha256": "42865f43a6ca12e2b1b3a304abd99afe4930e4c43364011a53c27ccb62a3d3fb"
+      },
+      {
+        "path": "src/core/resources/ratings/tw.json",
+        "bytes": 899,
+        "sha256": "7c48fd6bcd93d7f39464b0b2dc06dcbd4c0188906d0ad1072c859c4883a89340"
+      },
+      {
+        "path": "src/core/resources/ratings/ua.json",
+        "bytes": 737,
+        "sha256": "bf9f267dfabc290c2bb8555ebe577ac8df9720932e5b2ba1b09850296d8e2fd9"
+      },
+      {
+        "path": "src/core/resources/ratings/uk.json",
+        "bytes": 2237,
+        "sha256": "92f53b84ae6930f3647c6f9ce6c73a21d430215030d3ff07e355622fe6bb3228"
+      },
+      {
+        "path": "src/core/resources/ratings/us.json",
+        "bytes": 2346,
+        "sha256": "feb3a1edc841543fb123a7594421b47b5b624c9cb7a449a15697afdc1712da38"
+      },
+      {
+        "path": "src/core/resources/ratings/za.json",
+        "bytes": 1244,
+        "sha256": "808d0cf2803c70790d8b033f430d2853c0f65eb80bdb272efb8a32fa4790af3e"
+      },
+      {
+        "path": "src/core/resources/zh-CN.json",
+        "bytes": 7203,
+        "sha256": "a18528c69b57601d9aac0c97d8bdab83952381067a10fccd09a6bcf1a5996c3c"
+      },
+      {
+        "path": "src/database/domain-store.js",
+        "bytes": 5705,
+        "sha256": "e1ba2c1959c732ea0b05377a9e815e1abd14771214a60a1ba18240180c29bf74"
+      },
+      {
+        "path": "src/database/model.js",
+        "bytes": 3071,
+        "sha256": "4a86f898cdc81cabfaeb31ee850e558914e13ce5754a9243d619bc8fbcae121e"
+      },
+      {
+        "path": "src/database/native-model.json",
+        "bytes": 126505,
+        "sha256": "942796bb521d2adb04951cd184ffad4988664ea7f6371e2c378b1c207903dbe6"
+      },
+      {
+        "path": "src/database/postgres.js",
+        "bytes": 14147,
+        "sha256": "3078c113712f96b030f9fb28892214d3c1211e952187b9f7c75940021709b906"
+      },
+      {
+        "path": "src/database/sqlite.js",
+        "bytes": 15320,
+        "sha256": "9f637766235e05ddcca0c08929421e43b5324e47b87b74ff397592abc9478775"
+      },
+      {
+        "path": "src/database/values.js",
+        "bytes": 3300,
+        "sha256": "8aefd6234800c2ff20158ea0a5c1974b17a412c184d32d766f56d8303675bfee"
+      },
+      {
+        "path": "src/http/application.js",
+        "bytes": 7565,
+        "sha256": "fee3a6fd921a46a1e65d8c5d455c87fc41810e4b48b413e1d96008c8aeb8ba1a"
+      },
+      {
+        "path": "src/http/binary-result.js",
+        "bytes": 4982,
+        "sha256": "a857e86764544555e77ac0a42e11b711e6c6547aa4b6733af530e314083b3d66"
+      },
+      {
+        "path": "src/http/binding.js",
+        "bytes": 4629,
+        "sha256": "d7a65b34ec426876ab8a3f412e383aac547d8c573a3f654b2334001048f943f6"
+      },
+      {
+        "path": "src/http/client-capabilities-binding.js",
+        "bytes": 3331,
+        "sha256": "0cb55ea3b98581dd93a7201e9449cc9975733001fc4168882550d0bb32d93ff7"
+      },
+      {
+        "path": "src/http/date-binding.js",
+        "bytes": 10839,
+        "sha256": "33224e51295e424cfe0175bba9cfbdce6f042bfee3a3473f86f7e749b9c6ffcd"
+      },
+      {
+        "path": "src/http/device-binding.js",
+        "bytes": 1882,
+        "sha256": "0ed985d6b210ccd1730e02416925139eb48e74b8066acc04fa37276c484e6c9d"
+      },
+      {
+        "path": "src/http/image-routes.js",
+        "bytes": 4071,
+        "sha256": "c3d6abbcea9db66129c54ae4029a4f204ea392acb0e6ab3426a5f257edc83355"
+      },
+      {
+        "path": "src/http/json-date-time.js",
+        "bytes": 3311,
+        "sha256": "697b751a949020c3e23812de114ca898dd901a087018e53325381f39aaad2ea5"
+      },
+      {
+        "path": "src/http/json-model-binding.js",
+        "bytes": 9412,
+        "sha256": "ab4779e0099b8639b214c919ce80ff78f77bbe107d26f1644963822df70adfb4"
+      },
+      {
+        "path": "src/http/legacy-playback-binding.js",
+        "bytes": 3137,
+        "sha256": "a82f35eb61ff52c745b372de50581decb64d82055b1c71834766546c59141fea"
+      },
+      {
+        "path": "src/http/metadata-routes.js",
+        "bytes": 4454,
+        "sha256": "b8b2eb7c22023f018cd8e8d1cf49ab115bc5931150b97835c9f85b39bc5374f1"
+      },
+      {
+        "path": "src/http/playback-binding.js",
+        "bytes": 751,
+        "sha256": "4931d71fbf76fc194da23aef8c2ff73bcedfe91d9e23730110433acf80e92517"
+      },
+      {
+        "path": "src/http/playback-routes.js",
+        "bytes": 10633,
+        "sha256": "d42bf51322899207864efb36956ac8d56e7f3f913424f621c601c88994998366"
+      },
+      {
+        "path": "src/http/resources/playback-body-schema.json",
+        "bytes": 9825,
+        "sha256": "7b10c158c3e154474691b05bc2fdabb5beb00a19c962f44d8f6cc000fe747c7c"
+      },
+      {
+        "path": "src/http/routes.js",
+        "bytes": 15961,
+        "sha256": "0344c852a7619ebc8b99238063bd7bdb8780d06562d7049d1a14b46a66ebaa4c"
+      },
+      {
+        "path": "src/http/session-command-binding.js",
+        "bytes": 2956,
+        "sha256": "b0b22fd1b51c27f0d35ba7d70eceaaf4d561b18fa4f28cd4e14d66b903932981"
+      },
+      {
+        "path": "src/http/session-control-routes.js",
+        "bytes": 7553,
+        "sha256": "d96ddc22ff1ba6a4b86e3901d5d1135ac7ee0ac6033720aa9fa4c00081b18402"
+      },
+      {
+        "path": "src/http/session-management-binding.js",
+        "bytes": 1705,
+        "sha256": "a2c70c964b652ec16a1cafb2fa3301c5d51d4e2805feeaf25e3dc40cf36a1401"
+      },
+      {
+        "path": "src/http/syncplay-binding.js",
+        "bytes": 4071,
+        "sha256": "1266fee4cdb9e11b9da5f92aa21562e5b668c58776ca9d2e193630c57c08f4b9"
+      },
+      {
+        "path": "src/http/syncplay-routes.js",
+        "bytes": 2682,
+        "sha256": "f659178190b5c55b508b9cadaf5675c865a8a0fd12600bcde18c5e1bea061225"
+      },
+      {
+        "path": "src/http/user-binding.js",
+        "bytes": 10093,
+        "sha256": "26bc26011c51ef386e540332a2c950542a5bbbfebaa92307a2844e828368ed12"
+      },
+      {
+        "path": "src/http/user-data-binding.js",
+        "bytes": 1667,
+        "sha256": "cb55fbb638b72ee6840d7c67831238b12e6e290e75aee4ffa617dd9bed23baa1"
+      },
+      {
+        "path": "src/http/user-view-binding.js",
+        "bytes": 1350,
+        "sha256": "fe3facac0eda00897acc158827766cb5c27ccc945baa7f84ca1388c12f16b90f"
+      },
+      {
+        "path": "src/http/websocket.js",
+        "bytes": 9736,
+        "sha256": "e10220b33a9faca4d629214bec9d5c872ed19251588dcb8288cbc54941a76979"
+      },
+      {
+        "path": "src/images/BlurHashSharp.LICENSE",
+        "bytes": 1065,
+        "sha256": "5dc74fd61053965e3a41eff83ea6fe47217bf175abb2da512a24855b13d2c48c"
+      },
+      {
+        "path": "src/images/blurhash.js",
+        "bytes": 3038,
+        "sha256": "09bb8612d7654d60ea1f48c8d7aa3457811b042645da594aba14bac700e54b9f"
+      },
+      {
+        "path": "src/images/options.js",
+        "bytes": 3179,
+        "sha256": "a84c4a465269e8e958c7789ec50a3b7b8675c058b580bc17c8983bd88d825a4c"
+      },
+      {
+        "path": "src/images/processor.js",
+        "bytes": 8658,
+        "sha256": "74b737a52db4b899084770b3d021d02ef80befbc13379153d9e1807e53b7a3b0"
+      },
+      {
+        "path": "src/images/renderer.js",
+        "bytes": 11240,
+        "sha256": "7e729113bc7741987c3b5e59cfd6a890715ef7a182a9fa443d728e865c72ff95"
+      },
+      {
+        "path": "src/images/service.js",
+        "bytes": 17709,
+        "sha256": "9bd035f55c50588a177f6b8948828383210f9dac4a0cd26466eb356ed8887ce7"
+      },
+      {
+        "path": "src/library/boxset-collapse.js",
+        "bytes": 9484,
+        "sha256": "4d888d94e6e64d0a858161c3c052bde8b2271683e51ec8baa47f1c8ac5c36936"
+      },
+      {
+        "path": "src/library/boxset-state.js",
+        "bytes": 2258,
+        "sha256": "95d20c2f93aab606fcb0e55a1a5f5220f4e907ca6e0eb42ae910d2e5324e55b8"
+      },
+      {
+        "path": "src/library/child-counts.js",
+        "bytes": 6696,
+        "sha256": "567b02fd546d5b229925b145568038310a92ab6eb236784ba842739c04dbf4ce"
+      },
+      {
+        "path": "src/library/collection-membership.js",
+        "bytes": 3793,
+        "sha256": "7964bb39e467c0a1b20b45b04e377d922d29aa4d59c07c7d3ae8b4d5351493b8"
+      },
+      {
+        "path": "src/library/directory-item-resolver.js",
+        "bytes": 21500,
+        "sha256": "e401df63ba049c875b754912a50972c2e4216891d156ce2aeb22168033635439"
+      },
+      {
+        "path": "src/library/dto.js",
+        "bytes": 29242,
+        "sha256": "6d552904778f78998bfc5e512d4dc03963e91e76fd7746df731253badae815d3"
+      },
+      {
+        "path": "src/library/external-data.js",
+        "bytes": 1159,
+        "sha256": "77c6b6cd5a133ae5971c18e3ce1af5fa981c1bb9d5511dd1ebb481f10a17a07f"
+      },
+      {
+        "path": "src/library/external-urls.js",
+        "bytes": 2679,
+        "sha256": "fb4e01598a8df52e8741c99ff9d6b2114f0a65d382153bc53aef9a5f368e040c"
+      },
+      {
+        "path": "src/library/folder-scan-service.js",
+        "bytes": 50901,
+        "sha256": "36b5fdbcdaba72dc76a377b48125b8667328da29a94bec87d400775ca216b87c"
+      },
+      {
+        "path": "src/library/identity.js",
+        "bytes": 6699,
+        "sha256": "5dd9296ea31a79dfda3fac76bf31dbd19c6126af3239f6b2db8c076deeb5ae1e"
+      },
+      {
+        "path": "src/library/index.js",
+        "bytes": 686,
+        "sha256": "911b149d4eec55f3a34ad4e091ca2ad69136a8b2df544bc0ad08514088d771c7"
+      },
+      {
+        "path": "src/library/items-dispatch.js",
+        "bytes": 4157,
+        "sha256": "b8358b45e6e039038cf7a8807d00ef5028dc58c00ac70bac56634bfd43b5c86a"
+      },
+      {
+        "path": "src/library/library-scan-service.js",
+        "bytes": 4074,
+        "sha256": "f94c2fa57f4fb86a88a4fdf4c8c9550a9db9cc2c41109e60129001f84ed3c3e3"
+      },
+      {
+        "path": "src/library/library-service.js",
+        "bytes": 61344,
+        "sha256": "9c5d2ab62e669b364272977f26a619abeddca14105f4c70525409064ba9177a8"
+      },
+      {
+        "path": "src/library/media-streams.js",
+        "bytes": 14132,
+        "sha256": "5e8aefacec168a4508b0c796bf7079e13075bf459a3b851143a7ab3161220761"
+      },
+      {
+        "path": "src/library/media-versions.js",
+        "bytes": 6374,
+        "sha256": "aa6f372607687f2bf752b2ab72f7dd8704631f29305dc5b2d508e95f5643f3fe"
+      },
+      {
+        "path": "src/library/memory-sort.js",
+        "bytes": 7895,
+        "sha256": "417c6ffe527b7f55895b5b6124d54565ea64ac337c6d8b528bb183dd840eec92"
+      },
+      {
+        "path": "src/library/metadata-context.js",
+        "bytes": 12111,
+        "sha256": "b15ff720b31afa27f477131723e0b162f9bd0063c4a7dc9644243d700570fc88"
+      },
+      {
+        "path": "src/library/native-path.js",
+        "bytes": 1838,
+        "sha256": "2de36182bb03289b07fba7ab6712b5c96dfda1d0b76ab4c7aa90c0c4281ad9f3"
+      },
+      {
+        "path": "src/library/next-up.js",
+        "bytes": 11900,
+        "sha256": "ef2e286426e1fbb5728a78bf28802085a8ab20eea851f3ff29d4e7c90fc52baa"
+      },
+      {
+        "path": "src/library/options.js",
+        "bytes": 9140,
+        "sha256": "b772ed25e7f0f43c3be01adf3eca3e1a890e5d8878044020a8569e7c60ba6275"
+      },
+      {
+        "path": "src/library/parental-rating.js",
+        "bytes": 3306,
+        "sha256": "b625e23ff5259c5e5a64850ed2db54a9185654ffefe4fa2c7c8c102a389167a4"
+      },
+      {
+        "path": "src/library/path-substitution.js",
+        "bytes": 1718,
+        "sha256": "236d41a094e74f3c89f552f33547556d1d876705675a04d3ef6a428b573a93de"
+      },
+      {
+        "path": "src/library/permissions.js",
+        "bytes": 12502,
+        "sha256": "fb7e40cd571f9f9044fe5aa3abfe641b30a1d448a88f43ef95c96aad67c959de"
+      },
+      {
+        "path": "src/library/probe-service.js",
+        "bytes": 17644,
+        "sha256": "85b54f906e82bd4f55d4bf3613705b1770e03bd5d6c780c3d901da7c57309dcf"
+      },
+      {
+        "path": "src/library/query.js",
+        "bytes": 57094,
+        "sha256": "ff60e10d9353afed5c3c9f01a79b658fabd77bd49d04c5734d46aafea36bdde1"
+      },
+      {
+        "path": "src/library/records.js",
+        "bytes": 8482,
+        "sha256": "71bdbb4574f40003acde042324c87a0c07fcd807dda5391ffa02dd0954cf448a"
+      },
+      {
+        "path": "src/library/resolution-ignore.js",
+        "bytes": 5351,
+        "sha256": "119181aaf5e7996081869b451d0ae64f8ef3af8ba55dbc68f6d14742b50848b3"
+      },
+      {
+        "path": "src/library/resources/README.md",
+        "bytes": 2243,
+        "sha256": "ed7dbf015e8ee128fd860cf225d3330499e6f5c2b53a85450d8b349a702b04b7"
+      },
+      {
+        "path": "src/library/resources/iso6392.txt",
+        "bytes": 15918,
+        "sha256": "64988b05e5bc577614a23fa589f8e0eab6a0e7706ff6ffe495cb845cf67af060"
+      },
+      {
+        "path": "src/library/resources/provenance.json",
+        "bytes": 20045,
+        "sha256": "e403d22dd2c4063f11dc6d45cb54e7df7a52d151d06dcb98444257dd04a7ce91"
+      },
+      {
+        "path": "src/library/resources/sort-name-data.json",
+        "bytes": 291273,
+        "sha256": "2723575a60a2f3700e8c9cdd72736255d8d1a3f4f4e79d8b94783404617708b3"
+      },
+      {
+        "path": "src/library/resources/sort-name-sources.json",
+        "bytes": 5134,
+        "sha256": "7c4f52065bfccc33336d6f6d63a6c5002b8ed60235dadfe49de75e641b8a1601"
+      },
+      {
+        "path": "src/library/resources/sort-name-unicode-license.txt",
+        "bytes": 1761,
+        "sha256": "4986dd9ddc602f7081fefa4365e359e91a9bb9efa162ce56e6d35f4b59488347"
+      },
+      {
+        "path": "src/library/resources/stream-phrases.json",
+        "bytes": 19888,
+        "sha256": "5993e3cfd71fe30a4c63bdfc834f68f34bc079e10709cd189abc6eea08e41ddd"
+      },
+      {
+        "path": "src/library/resources/user-view-labels-provenance.json",
+        "bytes": 18632,
+        "sha256": "990a54add0d45a502b354a2aa6b6c215956363bac44c52442c50c1760a3b3b64"
+      },
+      {
+        "path": "src/library/resources/user-view-labels.json",
+        "bytes": 44485,
+        "sha256": "837d964019eadf2e6c88d84f5faabd678282b95ac76b9fb726a0e9c0819223e2"
+      },
+      {
+        "path": "src/library/scan-context.js",
+        "bytes": 6904,
+        "sha256": "4b46c77562e2e4ba354debe664ff7e4bcf6325b056f274567a732743ea927710"
+      },
+      {
+        "path": "src/library/search-provider.js",
+        "bytes": 6461,
+        "sha256": "32b8ee19d1dacd6c9b40ead25c0da3b21a05e4719778ff5de8eae6dc3ce018fd"
+      },
+      {
+        "path": "src/library/series-reference.js",
+        "bytes": 1976,
+        "sha256": "50ce562b8eac988bcc2ce6cf1c04bfdc12856a7845359521615ae7ad7bc8b8d2"
+      },
+      {
+        "path": "src/library/transliteration.js",
+        "bytes": 13092,
+        "sha256": "5b391ffeece8bf951057fb55dfa06f0c364562bcd66f1c6415e08a2d86ef225e"
+      },
+      {
+        "path": "src/library/user-view-filter.js",
+        "bytes": 7351,
+        "sha256": "f765259844cbb9f8efdc38f0908e52210924538fc2a04345e2f27312618341df"
+      },
+      {
+        "path": "src/library/user-view-labels.js",
+        "bytes": 872,
+        "sha256": "0dc9bb24b40caa1e5dea95ff7ed83aafdf2180008d4568e29004f51e6fc70be9"
+      },
+      {
+        "path": "src/library/user-view-query.js",
+        "bytes": 6113,
+        "sha256": "c163033f7ada928ba426d5ef1911b5df96367cafa4b11ffae755db816ce5a8a8"
+      },
+      {
+        "path": "src/library/user-view-relations.js",
+        "bytes": 4119,
+        "sha256": "7f23820c89f499fe5790959c6e16580d67575153a9b429251c702b686bb5bc44"
+      },
+      {
+        "path": "src/library/user-view-service.js",
+        "bytes": 15324,
+        "sha256": "df6e92ff37d7bc5ae42f403769719da31dce3a43129a449c5577f3887ccf643a"
+      },
+      {
+        "path": "src/library/video-file-resolver.js",
+        "bytes": 10891,
+        "sha256": "73f219b81e1d77aa8502d4d457ec58121580ab91fd85849dc96bf611ff3de500"
+      },
+      {
+        "path": "src/main.js",
+        "bytes": 3540,
+        "sha256": "fcc23c7d37d881185e05927ed96057079a94d61faeeee3fbeb183b36f24c1aea"
+      },
+      {
+        "path": "src/metadata/configuration-loader.js",
+        "bytes": 2739,
+        "sha256": "61709969a6f2a4d045f11dd748baefea51886e0053aba4aff72dacb3abd6c716"
+      },
+      {
+        "path": "src/metadata/external-url-providers.js",
+        "bytes": 2709,
+        "sha256": "2b065516ee67efea29866603918726fc827103ffa09149cb411a2248eaf08193"
+      },
+      {
+        "path": "src/metadata/image-assets.js",
+        "bytes": 7626,
+        "sha256": "0f86113928ffc74784d2f648f540f7784f790f4de2266d7dc9fb7bec8b4385f2"
+      },
+      {
+        "path": "src/metadata/image-paths.js",
+        "bytes": 4867,
+        "sha256": "ddb92ebfb185c64c506c6a3a77ce2d7ae501232bd0d838127809e6f9072aec38"
+      },
+      {
+        "path": "src/metadata/images.js",
+        "bytes": 23827,
+        "sha256": "7dab5661fdaedaf765f2aaaccf48202323570305f77cd00b1cd86ff56b6d6abe"
+      },
+      {
+        "path": "src/metadata/index.js",
+        "bytes": 1209,
+        "sha256": "a7e0dd05774d0f793845f26af8bcfe7dc16e91e4090378e381cc6bcf6d15e82b"
+      },
+      {
+        "path": "src/metadata/local-images.js",
+        "bytes": 5920,
+        "sha256": "8dfef80fb61916863110a2edeff138a1296a8b0234d0bbc1f8cb950a58481920"
+      },
+      {
+        "path": "src/metadata/localization.js",
+        "bytes": 1417,
+        "sha256": "b8ef3f6c6dea7c857923c57f0abeed62877eee2d940c3dd6f2219cf6064488a2"
+      },
+      {
+        "path": "src/metadata/merge.js",
+        "bytes": 6230,
+        "sha256": "22d40b152daf7bb2a56eb57e91bedc061873685fd9b468af8768d546463bca43"
+      },
+      {
+        "path": "src/metadata/naming-patterns.json",
+        "bytes": 1495,
+        "sha256": "fadb7b845f39865dc40b89f66e2546f6ad8323f73b68d2a47ad2d0fda3b85926"
+      },
+      {
+        "path": "src/metadata/naming.js",
+        "bytes": 1124,
+        "sha256": "292ca28c74bbee7e283e4eb677aeac6242c9e8051ceb5c976a6f94f359458982"
+      },
+      {
+        "path": "src/metadata/nfo/configuration.js",
+        "bytes": 304,
+        "sha256": "1ccf5dcc2ea12026180819eb4923e28a10bcbd1056e396437382ba7e8d7abb91"
+      },
+      {
+        "path": "src/metadata/nfo/date-format.js",
+        "bytes": 14838,
+        "sha256": "d2cbb144be88e6572126817a1b26a1d1baf5a58d2b3b70dc63e5566e5b0dbe11"
+      },
+      {
+        "path": "src/metadata/nfo/parser.js",
+        "bytes": 13822,
+        "sha256": "b0b8429bd6ae9a9ec31dcbc05d1d6faa4a70d8057d67a06789e428054364353a"
+      },
+      {
+        "path": "src/metadata/nfo/paths.js",
+        "bytes": 1937,
+        "sha256": "f5ab7431d40df0ce52b507a01326506e721b95e74df662add0cffcccc2b2f415"
+      },
+      {
+        "path": "src/metadata/nfo/plugin.js",
+        "bytes": 6407,
+        "sha256": "dd1bc0e37580771f8ab4458c4c0e7b056ef6b5b1d1cad24743b71f2ca83631dd"
+      },
+      {
+        "path": "src/metadata/nfo/saver.js",
+        "bytes": 12857,
+        "sha256": "675bc122251c024aa51383722e24a71e2df26d38cc9f6fb85f064c7de8563ef1"
+      },
+      {
+        "path": "src/metadata/nfo/user-data-import.js",
+        "bytes": 1258,
+        "sha256": "163dc0d7fed751bfba530c83a1cd87c0472eb01138af6604650b61e00e15a511"
+      },
+      {
+        "path": "src/metadata/nfo/xml.js",
+        "bytes": 4069,
+        "sha256": "9253b8a184aab72d604837f1be8a58486c2c2738aaa9abbf3e41aa29f4f7a7a6"
+      },
+      {
+        "path": "src/metadata/people.js",
+        "bytes": 1357,
+        "sha256": "2096999c92fb6df9634c5572f1ec4ee8c7a4180770141856b738e251ef4fdd1d"
+      },
+      {
+        "path": "src/metadata/persistence.js",
+        "bytes": 11164,
+        "sha256": "1d2a385292c9c81a3655cf91ca7ccf80bec77c2a27e9e4df7cb5186faf19e2f8"
+      },
+      {
+        "path": "src/metadata/provider-ids.js",
+        "bytes": 1927,
+        "sha256": "4742a5f202470f86176a873b0572b50ad46cfef69077d7d43fee2e8997bcba8a"
+      },
+      {
+        "path": "src/metadata/provider-refresh-service.js",
+        "bytes": 1663,
+        "sha256": "969b103587a1b4fba99e87d0519aac66617aee86f9a3fa8dbaa9b2bf14359f13"
+      },
+      {
+        "path": "src/metadata/refresh-host.js",
+        "bytes": 16832,
+        "sha256": "30068bf8ef6bd4a072784ad09fc18c8e2c4ca9f15321012d9ae078fe5e1cda3a"
+      },
+      {
+        "path": "src/metadata/registry.js",
+        "bytes": 3752,
+        "sha256": "b8585648651956e80740504e7c2c7903d30c6094db730f5eb08a317f334966e2"
+      },
+      {
+        "path": "src/metadata/save-host.js",
+        "bytes": 3405,
+        "sha256": "0ee80c8a4634ac8c3dd7ebd55c83636e7cabc9e326b885836f6bd9c644886b19"
+      },
+      {
+        "path": "src/metadata/save-manager.js",
+        "bytes": 2305,
+        "sha256": "af85cb2738f085c72d6dba1af6c526ddd6120c6806f11d8e176b4d88af62fc14"
+      },
+      {
+        "path": "src/metadata/television.js",
+        "bytes": 1767,
+        "sha256": "cad77abe188d7ac82371c905103186c0ffd58ab5a4a4efc3ed3cdd71e2440d98"
+      },
+      {
+        "path": "src/metadata/tmdb/client.js",
+        "bytes": 9918,
+        "sha256": "b9cd94bdf3a864dd72aad831e0c939d576b1f7e9018bb27652f718aa1cd8396f"
+      },
+      {
+        "path": "src/metadata/tmdb/collections.js",
+        "bytes": 2009,
+        "sha256": "2db43b926d156bb4d26ec2bcadebe1c64b6d6e1b8ba452738abe8a09ced441a7"
+      },
+      {
+        "path": "src/metadata/tmdb/configuration.js",
+        "bytes": 1239,
+        "sha256": "55d598111763f2fda85397d69e3720d4f92707b1ebd0be2127648e9aecc59ee9"
+      },
+      {
+        "path": "src/metadata/tmdb/default-key.js",
+        "bytes": 150,
+        "sha256": "b55f67852739d51e328b01cc730f406838f223582b6ae0a0eedb9ba6df897449"
+      },
+      {
+        "path": "src/metadata/tmdb/external.js",
+        "bytes": 2536,
+        "sha256": "a0ab0676f708c9e0919bf395278f713f7ae1844fb58c265597687e40965e21f2"
+      },
+      {
+        "path": "src/metadata/tmdb/images.js",
+        "bytes": 2462,
+        "sha256": "40033543a88fa452dcbce0ecbe50ceccaec6102ff6ef9a005849c925200b10ad"
+      },
+      {
+        "path": "src/metadata/tmdb/missing-episodes.js",
+        "bytes": 4306,
+        "sha256": "f83c438db59f0422b34f4e31c5f268c6d6d766b003a6a0603d4b89e09aa4220d"
+      },
+      {
+        "path": "src/metadata/tmdb/plugin.js",
+        "bytes": 10138,
+        "sha256": "95c023700fe234d12704fe3dd29c34947bca0123501258b54dd4b485c8abad50"
+      },
+      {
+        "path": "src/metadata/tmdb/television.js",
+        "bytes": 10922,
+        "sha256": "971bb72c972d7901d222c9f4aa0123e819d1f7ee9b513b417f2b71e95e589b60"
+      },
+      {
+        "path": "src/metadata/tmdb/utils.js",
+        "bytes": 4194,
+        "sha256": "5735069c9a3ac83cb9d19c4809f308f4f602e5d2468680159ac9a9560172e123"
+      },
+      {
+        "path": "src/metadata/update-host.js",
+        "bytes": 2459,
+        "sha256": "73f7158185e707af352b07bd766862d0d9e4309dcee50c5ce694e21fe362cefb"
+      },
+      {
+        "path": "src/metadata/user-view-dynamic-image-provider.js",
+        "bytes": 4977,
+        "sha256": "9856590a9524781096f0447f7e392ab6c43e802c8ef6476bb74e52852c6e82f6"
+      },
+      {
+        "path": "src/metadata/whitespace.js",
+        "bytes": 606,
+        "sha256": "697f236e6298c81d906296abb0530e0b9001d433394e37cf226e959603c2de9f"
+      },
+      {
+        "path": "src/migration/database-transfer.js",
+        "bytes": 7424,
+        "sha256": "4e732870b63327d88945ce3ef5ccff750d4aa50c03aee8bda9b483a9cb447891"
+      },
+      {
+        "path": "src/migration/media-access.js",
+        "bytes": 19074,
+        "sha256": "068fba47c6b195d39933b6032d007449f897dada55828ffe85c93b4e8c338375"
+      },
+      {
+        "path": "src/migration/remote-assets.js",
+        "bytes": 9300,
+        "sha256": "e0a3ab1c7e08fb88bff7a2e993edbe40d2250379af44c3ca6c959e0a6fe8a9f6"
+      },
+      {
+        "path": "src/migration/state-package.js",
+        "bytes": 14454,
+        "sha256": "cf749cc80da8c6889527adc830fd81da33637f7d698b7099eb9f507d08ac8bf3"
+      },
+      {
+        "path": "src/playback/extraction.js",
+        "bytes": 12576,
+        "sha256": "8281ffa1a4f90594e652b9bab0ce09da8cb1b29e66f124bd6d69fbd91d8f2880"
+      },
+      {
+        "path": "src/playback/hls.js",
+        "bytes": 45280,
+        "sha256": "f3915190a3f1a566c491034b4813ece738d7462cce92cf3c6b27faf909b0426b"
+      },
+      {
+        "path": "src/playback/matroska-keyframes.js",
+        "bytes": 23794,
+        "sha256": "2a895d914b193fcb9007ddbb4035c14ff26aa94b8a9557796e54f3ae52451c0e"
+      },
+      {
+        "path": "src/playback/profile.js",
+        "bytes": 32234,
+        "sha256": "bd9b906535d5dff015dca6a4bed38677a1a043c3eba189aa9a937ab160b33636"
+      },
+      {
+        "path": "src/playback/remote-static.js",
+        "bytes": 5784,
+        "sha256": "cb9fb1e172376aae37de4128400a4d2d85ad7583292c2f17842a2b22a308e02c"
+      },
+      {
+        "path": "src/playback/remux.js",
+        "bytes": 15604,
+        "sha256": "bddc2327f3e6b38667e8149f79766696cb6e6315b4387dbfbf60614941e15398"
+      },
+      {
+        "path": "src/playback/service.js",
+        "bytes": 19296,
+        "sha256": "8f22e55485e9fdbd42a4f100a9a0ceabb16594cdc435ca47754fb63d629640dd"
+      },
+      {
+        "path": "src/playback/subtitles.js",
+        "bytes": 10369,
+        "sha256": "7ba3801a454920a7eaac0c030228c7701050067f06171f5615cb4a4e96001887"
+      },
+      {
+        "path": "src/runtime.js",
+        "bytes": 9162,
+        "sha256": "06fd52d437db1703a1450c066532b3d769c5818a435386bd2fc62df554280df5"
+      },
+      {
+        "path": "src/sessions/binding.js",
+        "bytes": 5556,
+        "sha256": "245560dd35a54d3fcc23d0dc25d30c5db385830267506024d9b930272090f9fc"
+      },
+      {
+        "path": "src/sessions/index.js",
+        "bytes": 580,
+        "sha256": "62ab07d7d66b48d56622cd2046df2dff3ee56144e8e14ba4e678b0146a0fea96"
+      },
+      {
+        "path": "src/sessions/library-changed-notifier.js",
+        "bytes": 6010,
+        "sha256": "499a856b98c25e8670657d9629371da19c9b7ebc349668513990a76336a37242"
+      },
+      {
+        "path": "src/sessions/refresh-progress-notifier.js",
+        "bytes": 5180,
+        "sha256": "7e9d58e830a2e727baf7c4c32c9f007d890f4acc2240d54f2e921067bf6d276c"
+      },
+      {
+        "path": "src/sessions/resources/diacritics.json",
+        "bytes": 3867,
+        "sha256": "7ee4709491814a69aab9bfd7c28adf2450a8bc3fbdc3d5d34e7a17ec9871d7f5"
+      },
+      {
+        "path": "src/sessions/service.js",
+        "bytes": 42289,
+        "sha256": "9c3b71c886d36ca1982e10e637a3fc2be91a5f0399771e10918f38c94683cfa4"
+      },
+      {
+        "path": "src/sessions/user-data-notifier.js",
+        "bytes": 4660,
+        "sha256": "ccbd70d01fb4cb31600ab30e212f83fd2cf0004b44977be21bb63c53dafb080a"
+      },
+      {
+        "path": "src/sessions/user-data.js",
+        "bytes": 22567,
+        "sha256": "73f3d34e681cfbf6aa15ba2753d2447bbb2b7aad21d6e5d7132dcd1011a587e3"
+      },
+      {
+        "path": "src/storage-bootstrap.js",
+        "bytes": 2922,
+        "sha256": "3a4b61b6c1a71151fe4305454144bfa3591aa650b88d00bf6e2d226d4cb24a95"
+      },
+      {
+        "path": "src/storage/alist.js",
+        "bytes": 20410,
+        "sha256": "13c6b7b57a4cbba9a2d1dc020688107d29bf59a762a5bd1cb8487e7000700f98"
+      },
+      {
+        "path": "src/storage/errors.js",
+        "bytes": 1175,
+        "sha256": "2db8e5e1ba2fe93d49ff7de94fea667586d6d477299348b31bc7b07477e2be14"
+      },
+      {
+        "path": "src/storage/external-streams.js",
+        "bytes": 7114,
+        "sha256": "2d6684240af6c5ad226d8cf5ac0e6dc3da7ee85c9c45258f91f73a027e2d8656"
+      },
+      {
+        "path": "src/storage/ffprobe.js",
+        "bytes": 5110,
+        "sha256": "48f3dda63806d4255afc1c8056fd8eb7aeb457762b71f52294a0de84563dbb08"
+      },
+      {
+        "path": "src/storage/identity-mapping.js",
+        "bytes": 4411,
+        "sha256": "893db30d9534348c297215189e2bae9879bcdd1afe414e7b57b899ed1ba60d9d"
+      },
+      {
+        "path": "src/storage/index.js",
+        "bytes": 622,
+        "sha256": "c20b6fd17d8980228264f9711559fdca2fff415c4d82e9d11cb2df5c755a223a"
+      },
+      {
+        "path": "src/storage/ordinal-comparer.js",
+        "bytes": 573,
+        "sha256": "da6d2877bef004dbc2922a01f67195c069d54e2445cdbebeb54a6f071d6cc6f5"
+      },
+      {
+        "path": "src/storage/paths.js",
+        "bytes": 1297,
+        "sha256": "dd9f5ec0fe1353284dad2eafebe7fb25356c380f18f69baea77d030e91dc6764"
+      },
+      {
+        "path": "src/storage/probe-bridge.js",
+        "bytes": 8203,
+        "sha256": "0e075d1405741f120d6144234e3bfcaa3d267d1a1c85aef5e65bca32b9880773"
+      },
+      {
+        "path": "src/storage/probe-lifecycle.js",
+        "bytes": 3174,
+        "sha256": "fb2059eba850b994504771d86dd1a4632eb373f208674b76c6497003cbdc61ce"
+      },
+      {
+        "path": "src/storage/probe-metadata.js",
+        "bytes": 11665,
+        "sha256": "5dc1887daf296aba1a4e89cef92e56b21df8342451bc7f87489e0fed81b7798d"
+      },
+      {
+        "path": "src/storage/probe-normalizer.js",
+        "bytes": 12341,
+        "sha256": "cd8044c10a9cce3fcfbc72455dc43edeb351f13645b3a1e07fb56d62cdbe0577"
+      },
+      {
+        "path": "src/storage/probe-tags.js",
+        "bytes": 12248,
+        "sha256": "edc3e91934a2248c7c598dc795ff7bb29023bcd459b84372cc28c685aeaee6df"
+      },
+      {
+        "path": "src/storage/range.js",
+        "bytes": 2476,
+        "sha256": "ae429278468ba048f00a42fdd4ff84350c84f8671544f8604e5533c445facac6"
+      },
+      {
+        "path": "src/storage/registry.js",
+        "bytes": 2622,
+        "sha256": "e8aaec11f43a97049d1b1461eccba6e0ee9df34b7cdd0e3602c46a3c78e05372"
+      },
+      {
+        "path": "src/storage/resources/ordinal-ignore-case.json",
+        "bytes": 29585,
+        "sha256": "10943c406461631136ab8afee86ec6c9cc9cd91c18a6212f300ff03561fe99ad"
+      },
+      {
+        "path": "src/storage/testing/memory-adapter.js",
+        "bytes": 7735,
+        "sha256": "5b2dce6c29667dd71f522b4bae03dd347a15b3492407f2d7a83d2ea45470e099"
+      },
+      {
+        "path": "src/storage/vfs.js",
+        "bytes": 6891,
+        "sha256": "fc6b37bdfbcd7cbb9aa0bf7720eb2e6445b64df3a13c2089dda7486954bf9ebf"
+      },
+      {
+        "path": "src/syncplay/group.js",
+        "bytes": 16231,
+        "sha256": "7ef8d66f551df84df8b1f4b10310acc257fa88f2aae25a172d2534888e03f765"
+      },
+      {
+        "path": "src/syncplay/queue.js",
+        "bytes": 5154,
+        "sha256": "b71eddec4979684ec0426611be11beab66b2fc9639407d49e6c808b70c16e331"
+      },
+      {
+        "path": "src/syncplay/service.js",
+        "bytes": 5925,
+        "sha256": "b2f46bf09ee0b5f32346f6e35b215d9b7670a0636de565c71933c0c2d2d6263e"
+      },
+      {
+        "path": "src/syncplay/time.js",
+        "bytes": 1297,
+        "sha256": "c73576905ea08814afb7fee300008dc1aa49c23696af50c1882b7cd914e06b1a"
+      },
+      {
+        "path": "src/users/authentication-service.js",
+        "bytes": 9896,
+        "sha256": "b5e25c859bed078dc18004b0176e8730e8a534659b5d2626057af1db4cd80f55"
+      },
+      {
+        "path": "src/users/device-service.js",
+        "bytes": 4343,
+        "sha256": "75ed867e2b0cb75eb6df0a109abc8a7a17c909ecb80809c55e896f08c6a10623"
+      },
+      {
+        "path": "src/users/index.js",
+        "bytes": 407,
+        "sha256": "cca116fb5c7a4e4dc4072f72d548971e5167861c4d3924ad12ed869f389482ec"
+      },
+      {
+        "path": "src/users/native.js",
+        "bytes": 9046,
+        "sha256": "6800e87ed8bbe0e1aa7e36e7a026704fd62d203ca206596421fb1a2037a1b862"
+      },
+      {
+        "path": "src/users/network.js",
+        "bytes": 3006,
+        "sha256": "980668d34dba8f1922b0f349a435cc63d7da8775524bba1bd1bf5dc76acc9a7b"
+      },
+      {
+        "path": "src/users/resources/invariant-upper.json",
+        "bytes": 28938,
+        "sha256": "1747d0ebab890833c2a2d98c5c1689b5506086ae477522d838dfa3cfe22d31d3"
+      },
+      {
+        "path": "src/users/user-service.js",
+        "bytes": 20657,
+        "sha256": "857e955f7bdb967fa9d1d46bc355f31c532c9bbcf7b856b88f73da2a8a091031"
+      }
+    ],
+    "sourceStable": true,
+    "differences": 6,
+    "containsDifferences": 3
+  },
+  "supplementalRoots": {
+    "Windows": true,
+    "runtime": ".NET 10.0.12",
+    "processId": 13204,
+    "results": [
+      {
+        "input": "D:\\",
+        "trimmed": "D:\\",
+        "root": "D:\\",
+        "rootLength": 3
+      },
+      {
+        "input": "D:\\\\",
+        "trimmed": "D:\\",
+        "root": "D:\\",
+        "rootLength": 3
+      },
+      {
+        "input": "D:/",
+        "trimmed": "D:/",
+        "root": "D:\\",
+        "rootLength": 3
+      },
+      {
+        "input": "D://",
+        "trimmed": "D:/",
+        "root": "D:\\",
+        "rootLength": 3
+      },
+      {
+        "input": "D:",
+        "trimmed": "D:",
+        "root": "D:",
+        "rootLength": 2
+      },
+      {
+        "input": "\\",
+        "trimmed": "\\",
+        "root": "\\",
+        "rootLength": 1
+      },
+      {
+        "input": "\\\\",
+        "trimmed": "\\\\",
+        "root": "\\\\",
+        "rootLength": 2
+      },
+      {
+        "input": "/",
+        "trimmed": "/",
+        "root": "\\",
+        "rootLength": 1
+      },
+      {
+        "input": "//",
+        "trimmed": "//",
+        "root": "\\\\",
+        "rootLength": 2
+      },
+      {
+        "input": "\\\\server\\share",
+        "trimmed": "\\\\server\\share",
+        "root": "\\\\server\\share",
+        "rootLength": 14
+      },
+      {
+        "input": "\\\\server\\share\\",
+        "trimmed": "\\\\server\\share",
+        "root": "\\\\server\\share",
+        "rootLength": 14
+      },
+      {
+        "input": "\\\\server\\share\\\\",
+        "trimmed": "\\\\server\\share\\",
+        "root": "\\\\server\\share",
+        "rootLength": 14
+      },
+      {
+        "input": "\\\\server\\share\\child\\",
+        "trimmed": "\\\\server\\share\\child",
+        "root": "\\\\server\\share",
+        "rootLength": 14
+      },
+      {
+        "input": "\\\\server\\",
+        "trimmed": "\\\\server\\",
+        "root": "\\\\server\\",
+        "rootLength": 9
+      },
+      {
+        "input": "\\\\server",
+        "trimmed": "\\\\server",
+        "root": "\\\\server",
+        "rootLength": 8
+      },
+      {
+        "input": "\\\\?\\D:\\",
+        "trimmed": "\\\\?\\D:\\",
+        "root": "\\\\?\\D:\\",
+        "rootLength": 7
+      },
+      {
+        "input": "\\\\?\\D:\\\\",
+        "trimmed": "\\\\?\\D:\\",
+        "root": "\\\\?\\D:\\",
+        "rootLength": 7
+      },
+      {
+        "input": "\\\\.\\D:\\",
+        "trimmed": "\\\\.\\D:\\",
+        "root": "\\\\.\\D:\\",
+        "rootLength": 7
+      },
+      {
+        "input": "\\??\\D:\\",
+        "trimmed": "\\??\\D:\\",
+        "root": "\\??\\D:\\",
+        "rootLength": 7
+      },
+      {
+        "input": "\\\\?\\UNC\\server\\share\\",
+        "trimmed": "\\\\?\\UNC\\server\\share",
+        "root": "\\\\?\\UNC\\server\\share",
+        "rootLength": 20
+      },
+      {
+        "input": "\\\\?\\Volume{0123}\\",
+        "trimmed": "\\\\?\\Volume{0123}\\",
+        "root": "\\\\?\\Volume{0123}\\",
+        "rootLength": 17
+      },
+      {
+        "input": "relative\\",
+        "trimmed": "relative",
+        "root": "",
+        "rootLength": 0
+      },
+      {
+        "input": "relative/",
+        "trimmed": "relative",
+        "root": "",
+        "rootLength": 0
+      },
+      {
+        "input": ".\\",
+        "trimmed": ".",
+        "root": "",
+        "rootLength": 0
+      },
+      {
+        "input": "..\\",
+        "trimmed": "..",
+        "root": "",
+        "rootLength": 0
+      }
+    ],
+    "corelib": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Private.CoreLib.dll",
+    "corelibSha256": "1125acc8106c43fc8bad2d203c4c4485df6182d292846c2fff415c1040c54678",
+    "phaseAcceptance": false,
+    "boundary": "Actual Windows runtime Path.TrimEndingDirectorySeparator/GetPathRoot string methods; no Jellyfin entity or HTTP/DB/host invoked. Supplemental helper root syntax only, original23 Playlist rows unchanged."
+  },
+  "clrProvenance": {
+    "schemaVersion": 1,
+    "license": "MIT",
+    "licenseFile": "src/core/resources/native-sort-license.txt",
+    "oracleRuntimeCommit": "95017c711e6afc1085133d440e42b4bd78155701",
+    "sourceVersion": "dotnet/runtime v10.0.0",
+    "oracleRuntime": "Microsoft.NETCore.App 10.0.12 on Windows",
+    "implementation": "src/library/native-path.js#nativeContainsSubPath",
+    "scope": "ManagedFileSystem.ContainsSubPath raw prefix, host separators and case rule; PathInternal GetRootLength/IsDevice/IsDeviceUNC/TrimEndingDirectorySeparator. Published v10.0.0 source is pinned separately from actual 10.0.12 runtime commit; the runtime commit URL returned 404, so no exact runtime/source-commit identity is claimed. Actual Windows Playlist and root controls are separately bound; non-Windows branch is source-derived and not a native non-Windows run.",
+    "sources": [
+      {
+        "name": "PathInternal.Windows.cs",
+        "url": "https://raw.githubusercontent.com/dotnet/runtime/v10.0.0/src/libraries/Common/src/System/IO/PathInternal.Windows.cs",
+        "bytes": 18415,
+        "sha256": "1473848f007e73e49e19a3d3c2d615673a0a3d971528227ff6d1afbb5da26986"
+      },
+      {
+        "name": "PathInternal.Unix.cs",
+        "url": "https://raw.githubusercontent.com/dotnet/runtime/v10.0.0/src/libraries/Common/src/System/IO/PathInternal.Unix.cs",
+        "bytes": 3664,
+        "sha256": "ba2f043c73c6f3cbe70d6c10f85e5861caf4994bf9fe6b3b36081ef185353e60"
+      },
+      {
+        "name": "PathInternal.cs",
+        "url": "https://raw.githubusercontent.com/dotnet/runtime/v10.0.0/src/libraries/Common/src/System/IO/PathInternal.cs",
+        "bytes": 10340,
+        "sha256": "393dcabedd70ca6973c0aa73f6097e42c4ffcbedd9dd29e3925851254466e8cd"
+      }
+    ]
+  },
+  "audit": {
+    "actualWindowsRuntime": true,
+    "processExit": 0,
+    "caseCount": 23,
+    "rootControlCount": 25,
+    "processesReclaimed": true,
+    "phaseAcceptance": false
+  },
+  "scope": "Unmodified frozen ManagedFileSystem.ContainsSubPath and Playlist.IsSharedItem (private actual getter reflected), IsVisible and IsVisibleStandalone on real Windows. Actual ManagedFileSystem constructed with NullLogger and controlled application paths. DispatchProxy controls only configuration and entity lookup/empty collection membership; private Playlists have real Folder parent, no ownership/shares/open access, unconstrained user parental policy. No path, shared or visibility result is mocked. No DB, host, port or filesystem writes by oracle.",
+  "limitations": "Twenty-three actual Windows getter/Contains/visibility cases with controlled dependencies, plus twenty-five supplemental runtime root-trimming observations. Published CLR source tag and observed runtime commit are separately bound. No actual non-Windows native run, database, HTTP/host or cancellation proof. Original 18 UserView/8 redirected search HTTP fixture scopes are unchanged."
+}

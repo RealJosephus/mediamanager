@@ -1,0 +1,1060 @@
+[
+  {
+    "mode": "ValidationOnly",
+    "flag": "none",
+    "change": "none",
+    "selected": [],
+    "checks": [
+      "local",
+      "remote",
+      "probe"
+    ]
+  },
+  {
+    "mode": "ValidationOnly",
+    "flag": "none",
+    "change": "local",
+    "selected": [
+      "local"
+    ],
+    "checks": [
+      "local",
+      "remote",
+      "probe"
+    ]
+  },
+  {
+    "mode": "ValidationOnly",
+    "flag": "none",
+    "change": "remote",
+    "selected": [
+      "local",
+      "probe"
+    ],
+    "checks": [
+      "local",
+      "remote",
+      "probe"
+    ]
+  },
+  {
+    "mode": "ValidationOnly",
+    "flag": "none",
+    "change": "probe",
+    "selected": [
+      "local",
+      "probe"
+    ],
+    "checks": [
+      "local",
+      "remote",
+      "probe"
+    ]
+  },
+  {
+    "mode": "ValidationOnly",
+    "flag": "none",
+    "change": "local,probe",
+    "selected": [
+      "local",
+      "probe"
+    ],
+    "checks": [
+      "local",
+      "remote",
+      "probe"
+    ]
+  },
+  {
+    "mode": "ValidationOnly",
+    "flag": "none",
+    "change": "failure",
+    "selected": [],
+    "checks": [
+      "local",
+      "remote",
+      "probe"
+    ]
+  },
+  {
+    "mode": "ValidationOnly",
+    "flag": "first",
+    "change": "none",
+    "selected": [],
+    "checks": [
+      "local",
+      "remote",
+      "probe"
+    ]
+  },
+  {
+    "mode": "ValidationOnly",
+    "flag": "first",
+    "change": "local",
+    "selected": [
+      "local"
+    ],
+    "checks": [
+      "local",
+      "remote",
+      "probe"
+    ]
+  },
+  {
+    "mode": "ValidationOnly",
+    "flag": "first",
+    "change": "remote",
+    "selected": [
+      "local",
+      "probe"
+    ],
+    "checks": [
+      "local",
+      "remote",
+      "probe"
+    ]
+  },
+  {
+    "mode": "ValidationOnly",
+    "flag": "first",
+    "change": "probe",
+    "selected": [
+      "local",
+      "probe"
+    ],
+    "checks": [
+      "local",
+      "remote",
+      "probe"
+    ]
+  },
+  {
+    "mode": "ValidationOnly",
+    "flag": "first",
+    "change": "local,probe",
+    "selected": [
+      "local",
+      "probe"
+    ],
+    "checks": [
+      "local",
+      "remote",
+      "probe"
+    ]
+  },
+  {
+    "mode": "ValidationOnly",
+    "flag": "first",
+    "change": "failure",
+    "selected": [],
+    "checks": [
+      "local",
+      "remote",
+      "probe"
+    ]
+  },
+  {
+    "mode": "ValidationOnly",
+    "flag": "requires",
+    "change": "none",
+    "selected": [],
+    "checks": [
+      "local",
+      "remote",
+      "probe"
+    ]
+  },
+  {
+    "mode": "ValidationOnly",
+    "flag": "requires",
+    "change": "local",
+    "selected": [
+      "local"
+    ],
+    "checks": [
+      "local",
+      "remote",
+      "probe"
+    ]
+  },
+  {
+    "mode": "ValidationOnly",
+    "flag": "requires",
+    "change": "remote",
+    "selected": [
+      "local",
+      "probe"
+    ],
+    "checks": [
+      "local",
+      "remote",
+      "probe"
+    ]
+  },
+  {
+    "mode": "ValidationOnly",
+    "flag": "requires",
+    "change": "probe",
+    "selected": [
+      "local",
+      "probe"
+    ],
+    "checks": [
+      "local",
+      "remote",
+      "probe"
+    ]
+  },
+  {
+    "mode": "ValidationOnly",
+    "flag": "requires",
+    "change": "local,probe",
+    "selected": [
+      "local",
+      "probe"
+    ],
+    "checks": [
+      "local",
+      "remote",
+      "probe"
+    ]
+  },
+  {
+    "mode": "ValidationOnly",
+    "flag": "requires",
+    "change": "failure",
+    "selected": [],
+    "checks": [
+      "local",
+      "remote",
+      "probe"
+    ]
+  },
+  {
+    "mode": "ValidationOnly",
+    "flag": "replace",
+    "change": "none",
+    "selected": [
+      "local",
+      "remote",
+      "probe"
+    ],
+    "checks": []
+  },
+  {
+    "mode": "ValidationOnly",
+    "flag": "replace",
+    "change": "local",
+    "selected": [
+      "local",
+      "remote",
+      "probe"
+    ],
+    "checks": []
+  },
+  {
+    "mode": "ValidationOnly",
+    "flag": "replace",
+    "change": "remote",
+    "selected": [
+      "local",
+      "remote",
+      "probe"
+    ],
+    "checks": []
+  },
+  {
+    "mode": "ValidationOnly",
+    "flag": "replace",
+    "change": "probe",
+    "selected": [
+      "local",
+      "remote",
+      "probe"
+    ],
+    "checks": []
+  },
+  {
+    "mode": "ValidationOnly",
+    "flag": "replace",
+    "change": "local,probe",
+    "selected": [
+      "local",
+      "remote",
+      "probe"
+    ],
+    "checks": []
+  },
+  {
+    "mode": "ValidationOnly",
+    "flag": "replace",
+    "change": "failure",
+    "selected": [
+      "local",
+      "remote",
+      "probe"
+    ],
+    "checks": []
+  },
+  {
+    "mode": "ValidationOnly",
+    "flag": "force",
+    "change": "none",
+    "selected": [],
+    "checks": [
+      "local",
+      "remote",
+      "probe"
+    ]
+  },
+  {
+    "mode": "ValidationOnly",
+    "flag": "force",
+    "change": "local",
+    "selected": [
+      "local"
+    ],
+    "checks": [
+      "local",
+      "remote",
+      "probe"
+    ]
+  },
+  {
+    "mode": "ValidationOnly",
+    "flag": "force",
+    "change": "remote",
+    "selected": [
+      "local",
+      "probe"
+    ],
+    "checks": [
+      "local",
+      "remote",
+      "probe"
+    ]
+  },
+  {
+    "mode": "ValidationOnly",
+    "flag": "force",
+    "change": "probe",
+    "selected": [
+      "local",
+      "probe"
+    ],
+    "checks": [
+      "local",
+      "remote",
+      "probe"
+    ]
+  },
+  {
+    "mode": "ValidationOnly",
+    "flag": "force",
+    "change": "local,probe",
+    "selected": [
+      "local",
+      "probe"
+    ],
+    "checks": [
+      "local",
+      "remote",
+      "probe"
+    ]
+  },
+  {
+    "mode": "ValidationOnly",
+    "flag": "force",
+    "change": "failure",
+    "selected": [],
+    "checks": [
+      "local",
+      "remote",
+      "probe"
+    ]
+  },
+  {
+    "mode": "Default",
+    "flag": "none",
+    "change": "none",
+    "selected": [],
+    "checks": [
+      "local",
+      "remote",
+      "probe"
+    ]
+  },
+  {
+    "mode": "Default",
+    "flag": "none",
+    "change": "local",
+    "selected": [
+      "local"
+    ],
+    "checks": [
+      "local",
+      "remote",
+      "probe"
+    ]
+  },
+  {
+    "mode": "Default",
+    "flag": "none",
+    "change": "remote",
+    "selected": [
+      "local",
+      "remote",
+      "probe"
+    ],
+    "checks": [
+      "local",
+      "remote",
+      "probe"
+    ]
+  },
+  {
+    "mode": "Default",
+    "flag": "none",
+    "change": "probe",
+    "selected": [
+      "local",
+      "probe"
+    ],
+    "checks": [
+      "local",
+      "remote",
+      "probe"
+    ]
+  },
+  {
+    "mode": "Default",
+    "flag": "none",
+    "change": "local,probe",
+    "selected": [
+      "local",
+      "probe"
+    ],
+    "checks": [
+      "local",
+      "remote",
+      "probe"
+    ]
+  },
+  {
+    "mode": "Default",
+    "flag": "none",
+    "change": "failure",
+    "selected": [],
+    "checks": [
+      "local",
+      "remote",
+      "probe"
+    ]
+  },
+  {
+    "mode": "Default",
+    "flag": "first",
+    "change": "none",
+    "selected": [
+      "local",
+      "remote",
+      "probe"
+    ],
+    "checks": []
+  },
+  {
+    "mode": "Default",
+    "flag": "first",
+    "change": "local",
+    "selected": [
+      "local",
+      "remote",
+      "probe"
+    ],
+    "checks": []
+  },
+  {
+    "mode": "Default",
+    "flag": "first",
+    "change": "remote",
+    "selected": [
+      "local",
+      "remote",
+      "probe"
+    ],
+    "checks": []
+  },
+  {
+    "mode": "Default",
+    "flag": "first",
+    "change": "probe",
+    "selected": [
+      "local",
+      "remote",
+      "probe"
+    ],
+    "checks": []
+  },
+  {
+    "mode": "Default",
+    "flag": "first",
+    "change": "local,probe",
+    "selected": [
+      "local",
+      "remote",
+      "probe"
+    ],
+    "checks": []
+  },
+  {
+    "mode": "Default",
+    "flag": "first",
+    "change": "failure",
+    "selected": [
+      "local",
+      "remote",
+      "probe"
+    ],
+    "checks": []
+  },
+  {
+    "mode": "Default",
+    "flag": "requires",
+    "change": "none",
+    "selected": [
+      "local",
+      "remote",
+      "probe"
+    ],
+    "checks": []
+  },
+  {
+    "mode": "Default",
+    "flag": "requires",
+    "change": "local",
+    "selected": [
+      "local",
+      "remote",
+      "probe"
+    ],
+    "checks": []
+  },
+  {
+    "mode": "Default",
+    "flag": "requires",
+    "change": "remote",
+    "selected": [
+      "local",
+      "remote",
+      "probe"
+    ],
+    "checks": []
+  },
+  {
+    "mode": "Default",
+    "flag": "requires",
+    "change": "probe",
+    "selected": [
+      "local",
+      "remote",
+      "probe"
+    ],
+    "checks": []
+  },
+  {
+    "mode": "Default",
+    "flag": "requires",
+    "change": "local,probe",
+    "selected": [
+      "local",
+      "remote",
+      "probe"
+    ],
+    "checks": []
+  },
+  {
+    "mode": "Default",
+    "flag": "requires",
+    "change": "failure",
+    "selected": [
+      "local",
+      "remote",
+      "probe"
+    ],
+    "checks": []
+  },
+  {
+    "mode": "Default",
+    "flag": "replace",
+    "change": "none",
+    "selected": [
+      "local",
+      "remote",
+      "probe"
+    ],
+    "checks": []
+  },
+  {
+    "mode": "Default",
+    "flag": "replace",
+    "change": "local",
+    "selected": [
+      "local",
+      "remote",
+      "probe"
+    ],
+    "checks": []
+  },
+  {
+    "mode": "Default",
+    "flag": "replace",
+    "change": "remote",
+    "selected": [
+      "local",
+      "remote",
+      "probe"
+    ],
+    "checks": []
+  },
+  {
+    "mode": "Default",
+    "flag": "replace",
+    "change": "probe",
+    "selected": [
+      "local",
+      "remote",
+      "probe"
+    ],
+    "checks": []
+  },
+  {
+    "mode": "Default",
+    "flag": "replace",
+    "change": "local,probe",
+    "selected": [
+      "local",
+      "remote",
+      "probe"
+    ],
+    "checks": []
+  },
+  {
+    "mode": "Default",
+    "flag": "replace",
+    "change": "failure",
+    "selected": [
+      "local",
+      "remote",
+      "probe"
+    ],
+    "checks": []
+  },
+  {
+    "mode": "Default",
+    "flag": "force",
+    "change": "none",
+    "selected": [],
+    "checks": [
+      "local",
+      "remote",
+      "probe"
+    ]
+  },
+  {
+    "mode": "Default",
+    "flag": "force",
+    "change": "local",
+    "selected": [
+      "local"
+    ],
+    "checks": [
+      "local",
+      "remote",
+      "probe"
+    ]
+  },
+  {
+    "mode": "Default",
+    "flag": "force",
+    "change": "remote",
+    "selected": [
+      "local",
+      "remote",
+      "probe"
+    ],
+    "checks": [
+      "local",
+      "remote",
+      "probe"
+    ]
+  },
+  {
+    "mode": "Default",
+    "flag": "force",
+    "change": "probe",
+    "selected": [
+      "local",
+      "probe"
+    ],
+    "checks": [
+      "local",
+      "remote",
+      "probe"
+    ]
+  },
+  {
+    "mode": "Default",
+    "flag": "force",
+    "change": "local,probe",
+    "selected": [
+      "local",
+      "probe"
+    ],
+    "checks": [
+      "local",
+      "remote",
+      "probe"
+    ]
+  },
+  {
+    "mode": "Default",
+    "flag": "force",
+    "change": "failure",
+    "selected": [],
+    "checks": [
+      "local",
+      "remote",
+      "probe"
+    ]
+  },
+  {
+    "mode": "FullRefresh",
+    "flag": "none",
+    "change": "none",
+    "selected": [
+      "local",
+      "remote",
+      "probe"
+    ],
+    "checks": []
+  },
+  {
+    "mode": "FullRefresh",
+    "flag": "none",
+    "change": "local",
+    "selected": [
+      "local",
+      "remote",
+      "probe"
+    ],
+    "checks": []
+  },
+  {
+    "mode": "FullRefresh",
+    "flag": "none",
+    "change": "remote",
+    "selected": [
+      "local",
+      "remote",
+      "probe"
+    ],
+    "checks": []
+  },
+  {
+    "mode": "FullRefresh",
+    "flag": "none",
+    "change": "probe",
+    "selected": [
+      "local",
+      "remote",
+      "probe"
+    ],
+    "checks": []
+  },
+  {
+    "mode": "FullRefresh",
+    "flag": "none",
+    "change": "local,probe",
+    "selected": [
+      "local",
+      "remote",
+      "probe"
+    ],
+    "checks": []
+  },
+  {
+    "mode": "FullRefresh",
+    "flag": "none",
+    "change": "failure",
+    "selected": [
+      "local",
+      "remote",
+      "probe"
+    ],
+    "checks": []
+  },
+  {
+    "mode": "FullRefresh",
+    "flag": "first",
+    "change": "none",
+    "selected": [
+      "local",
+      "remote",
+      "probe"
+    ],
+    "checks": []
+  },
+  {
+    "mode": "FullRefresh",
+    "flag": "first",
+    "change": "local",
+    "selected": [
+      "local",
+      "remote",
+      "probe"
+    ],
+    "checks": []
+  },
+  {
+    "mode": "FullRefresh",
+    "flag": "first",
+    "change": "remote",
+    "selected": [
+      "local",
+      "remote",
+      "probe"
+    ],
+    "checks": []
+  },
+  {
+    "mode": "FullRefresh",
+    "flag": "first",
+    "change": "probe",
+    "selected": [
+      "local",
+      "remote",
+      "probe"
+    ],
+    "checks": []
+  },
+  {
+    "mode": "FullRefresh",
+    "flag": "first",
+    "change": "local,probe",
+    "selected": [
+      "local",
+      "remote",
+      "probe"
+    ],
+    "checks": []
+  },
+  {
+    "mode": "FullRefresh",
+    "flag": "first",
+    "change": "failure",
+    "selected": [
+      "local",
+      "remote",
+      "probe"
+    ],
+    "checks": []
+  },
+  {
+    "mode": "FullRefresh",
+    "flag": "requires",
+    "change": "none",
+    "selected": [
+      "local",
+      "remote",
+      "probe"
+    ],
+    "checks": []
+  },
+  {
+    "mode": "FullRefresh",
+    "flag": "requires",
+    "change": "local",
+    "selected": [
+      "local",
+      "remote",
+      "probe"
+    ],
+    "checks": []
+  },
+  {
+    "mode": "FullRefresh",
+    "flag": "requires",
+    "change": "remote",
+    "selected": [
+      "local",
+      "remote",
+      "probe"
+    ],
+    "checks": []
+  },
+  {
+    "mode": "FullRefresh",
+    "flag": "requires",
+    "change": "probe",
+    "selected": [
+      "local",
+      "remote",
+      "probe"
+    ],
+    "checks": []
+  },
+  {
+    "mode": "FullRefresh",
+    "flag": "requires",
+    "change": "local,probe",
+    "selected": [
+      "local",
+      "remote",
+      "probe"
+    ],
+    "checks": []
+  },
+  {
+    "mode": "FullRefresh",
+    "flag": "requires",
+    "change": "failure",
+    "selected": [
+      "local",
+      "remote",
+      "probe"
+    ],
+    "checks": []
+  },
+  {
+    "mode": "FullRefresh",
+    "flag": "replace",
+    "change": "none",
+    "selected": [
+      "local",
+      "remote",
+      "probe"
+    ],
+    "checks": []
+  },
+  {
+    "mode": "FullRefresh",
+    "flag": "replace",
+    "change": "local",
+    "selected": [
+      "local",
+      "remote",
+      "probe"
+    ],
+    "checks": []
+  },
+  {
+    "mode": "FullRefresh",
+    "flag": "replace",
+    "change": "remote",
+    "selected": [
+      "local",
+      "remote",
+      "probe"
+    ],
+    "checks": []
+  },
+  {
+    "mode": "FullRefresh",
+    "flag": "replace",
+    "change": "probe",
+    "selected": [
+      "local",
+      "remote",
+      "probe"
+    ],
+    "checks": []
+  },
+  {
+    "mode": "FullRefresh",
+    "flag": "replace",
+    "change": "local,probe",
+    "selected": [
+      "local",
+      "remote",
+      "probe"
+    ],
+    "checks": []
+  },
+  {
+    "mode": "FullRefresh",
+    "flag": "replace",
+    "change": "failure",
+    "selected": [
+      "local",
+      "remote",
+      "probe"
+    ],
+    "checks": []
+  },
+  {
+    "mode": "FullRefresh",
+    "flag": "force",
+    "change": "none",
+    "selected": [
+      "local",
+      "remote",
+      "probe"
+    ],
+    "checks": []
+  },
+  {
+    "mode": "FullRefresh",
+    "flag": "force",
+    "change": "local",
+    "selected": [
+      "local",
+      "remote",
+      "probe"
+    ],
+    "checks": []
+  },
+  {
+    "mode": "FullRefresh",
+    "flag": "force",
+    "change": "remote",
+    "selected": [
+      "local",
+      "remote",
+      "probe"
+    ],
+    "checks": []
+  },
+  {
+    "mode": "FullRefresh",
+    "flag": "force",
+    "change": "probe",
+    "selected": [
+      "local",
+      "remote",
+      "probe"
+    ],
+    "checks": []
+  },
+  {
+    "mode": "FullRefresh",
+    "flag": "force",
+    "change": "local,probe",
+    "selected": [
+      "local",
+      "remote",
+      "probe"
+    ],
+    "checks": []
+  },
+  {
+    "mode": "FullRefresh",
+    "flag": "force",
+    "change": "failure",
+    "selected": [
+      "local",
+      "remote",
+      "probe"
+    ],
+    "checks": []
+  }
+]

@@ -1,0 +1,89 @@
+{
+  "recordedAt": "2026-10-10T17:19:43.011Z",
+  "candidateVerified": false,
+  "completeBuildInputClosure": false,
+  "releaseAcceptance": false,
+  "scope": "DIAGNOSTIC designated captured runtime v2: actual LibraryManager/ItemPersistenceService and EF SQLite/file/cache/event lifecycle, with 16 persistence-only second deletion cases plus 8 created-and-registered variants. Application paths, path reversal, collection-folder resolver, external cleanup provider and selected native static collaborators are explicit controls. Complete native build-input closure, authentication, HTTP, metadata provider/refresh, scanner, POSIX, clients, exchange and release acceptance are not claimed.",
+  "files": {
+    "input.json": {
+      "filename": "input.json",
+      "sha256": "6ee0d085ff78b1fd4a20d83fe30055c2bd0623014ef4c5c46c8a2cf435e2b3b2"
+    },
+    "Program.cs": {
+      "filename": "Program.cs",
+      "sha256": "b31ca07a0184762eb2c4f990fc784bc5ad336c3762132c8bd5ca1d296d47134d"
+    },
+    "Oracle.csproj": {
+      "filename": "Oracle.csproj",
+      "sha256": "d75e3738335deb069f70f8ddabc039cfa692be29cf4d8e945534b3e59c5af517"
+    },
+    "README.md": {
+      "filename": "README.md",
+      "sha256": "ccca6c059fb086ea20d9cbca21f50068ced5d90d7199c2d4ff8cfbe77dc2efcf"
+    },
+    "native.json": {
+      "filename": "native.json",
+      "sha256": "93b30e100baa44c776fde419f216e772ee8a40aa0ae367a6097b3dca8a7ef65e"
+    },
+    "rawRecording": {
+      "filename": "D:/mediamanager-validation/20261011/results/formal-warm-core-v1/native.raw.json",
+      "sha256": "332dfdbe05cf254a5501df0bfe3dee900e08f1ea539140c9d63f1ae85e664b1e"
+    }
+  },
+  "counts": {
+    "cases": 24,
+    "observations": null
+  },
+  "assemblies": [
+    {
+      "name": "MediaBrowser.Controller",
+      "sha256": "96e58e4c256e7230a17333b2d93d3fe2f6e80b7b9d990300d02b490f52dcb23a"
+    },
+    {
+      "name": "Emby.Server.Implementations",
+      "sha256": "5c45d4fbb29ff9708edb50f0dc99f7dffbf01fbbf06c7ca2614e2a5f7aaff102"
+    },
+    {
+      "name": "Jellyfin.Server.Implementations",
+      "sha256": "13ab5e48bb761fb0414dcb12754c8f180b76156b0a4f701f7be498407f252ee3"
+    }
+  ],
+  "jellyfin": {
+    "assemblyDirectory": "D:/mediamanager-validation/20261010/results/jellyfin-designated-workspace-capture-v2/source/Jellyfin.Server/bin/Release/net10.0",
+    "sourceCapture": {
+      "filename": "D:/mediamanager-validation/20261010/results/jellyfin-designated-workspace-capture-v2/manifest.json",
+      "sha256": "a278db96281767142568596a447f942e69134f05de6d26a56cbc6026db1ecbad"
+    },
+    "boundBuildAudit": {
+      "filename": "D:/mediamanager-validation/20261010/results/jellyfin-designated-workspace-capture-v2/source-build-startup-audit.json",
+      "sha256": "52ab357ea8c6c0e4fc043f8ae00b4a8aff39f73e37ccf990dad38ee33ea66aaf"
+    }
+  },
+  "runtime": {
+    "dotnet": {
+      "filename": "D:/mediamanager/.tools/dotnet/dotnet.exe",
+      "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6"
+    },
+    "oracleAssembly": {
+      "filename": "D:/mediamanager-validation/20261011/results/formal-warm-core-v1/bin/Oracle.dll",
+      "sha256": "a679616f6c1419a494c4e7cf2e55f78bdf6a9d40937f006a9fffb1c18085b34d"
+    }
+  },
+  "repeat": {
+    "filename": "D:/mediamanager-validation/20261011/results/formal-warm-core-v2/native.raw.json",
+    "sha256": "332dfdbe05cf254a5501df0bfe3dee900e08f1ea539140c9d63f1ae85e664b1e",
+    "byteEqual": true,
+    "projectionEqual": true,
+    "normalization": "None; native driver state-root projection only.",
+    "runtime": {
+      "dotnet": {
+        "filename": "D:/mediamanager/.tools/dotnet/dotnet.exe",
+        "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6"
+      },
+      "oracleAssembly": {
+        "filename": "D:/mediamanager-validation/20261011/results/formal-warm-core-v2/bin/Oracle.dll",
+        "sha256": "a679616f6c1419a494c4e7cf2e55f78bdf6a9d40937f006a9fffb1c18085b34d"
+      }
+    }
+  }
+}

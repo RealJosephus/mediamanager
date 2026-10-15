@@ -1,0 +1,661 @@
+{
+  "actualFrozenItemDataPolicy": true,
+  "results": [
+    {
+      "name": "type-Folder-null",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Folder",
+      "requiresJson": true,
+      "storedDataIsNull": false,
+      "hydrationData": null,
+      "trailers": []
+    },
+    {
+      "name": "type-Folder-poison",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Folder",
+      "requiresJson": true,
+      "storedDataIsNull": false,
+      "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}",
+      "trailers": [
+        "https://invalid.example/poison"
+      ]
+    },
+    {
+      "name": "type-AggregateFolder-null",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.AggregateFolder",
+      "requiresJson": true,
+      "storedDataIsNull": false,
+      "hydrationData": null,
+      "trailers": []
+    },
+    {
+      "name": "type-AggregateFolder-poison",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.AggregateFolder",
+      "requiresJson": true,
+      "storedDataIsNull": false,
+      "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}",
+      "trailers": [
+        "https://invalid.example/poison"
+      ]
+    },
+    {
+      "name": "type-UserRootFolder-null",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.UserRootFolder",
+      "requiresJson": true,
+      "storedDataIsNull": false,
+      "hydrationData": null,
+      "trailers": []
+    },
+    {
+      "name": "type-UserRootFolder-poison",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.UserRootFolder",
+      "requiresJson": true,
+      "storedDataIsNull": false,
+      "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}",
+      "trailers": [
+        "https://invalid.example/poison"
+      ]
+    },
+    {
+      "name": "type-CollectionFolder-null",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.CollectionFolder",
+      "requiresJson": true,
+      "storedDataIsNull": false,
+      "hydrationData": null,
+      "trailers": []
+    },
+    {
+      "name": "type-CollectionFolder-poison",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.CollectionFolder",
+      "requiresJson": true,
+      "storedDataIsNull": false,
+      "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}",
+      "trailers": [
+        "https://invalid.example/poison"
+      ]
+    },
+    {
+      "name": "type-UserView-null",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.UserView",
+      "requiresJson": true,
+      "storedDataIsNull": false,
+      "hydrationData": null,
+      "trailers": []
+    },
+    {
+      "name": "type-UserView-poison",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.UserView",
+      "requiresJson": true,
+      "storedDataIsNull": false,
+      "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}",
+      "trailers": [
+        "https://invalid.example/poison"
+      ]
+    },
+    {
+      "name": "type-PlaylistsFolder-null",
+      "exception": null,
+      "nativeType": "Emby.Server.Implementations.Playlists.PlaylistsFolder",
+      "requiresJson": false,
+      "storedDataIsNull": true,
+      "hydrationData": null,
+      "trailers": []
+    },
+    {
+      "name": "type-PlaylistsFolder-poison",
+      "exception": null,
+      "nativeType": "Emby.Server.Implementations.Playlists.PlaylistsFolder",
+      "requiresJson": false,
+      "storedDataIsNull": true,
+      "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}",
+      "trailers": []
+    },
+    {
+      "name": "type-Playlist-null",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Playlists.Playlist",
+      "requiresJson": true,
+      "storedDataIsNull": false,
+      "hydrationData": null,
+      "trailers": []
+    },
+    {
+      "name": "type-Playlist-poison",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Playlists.Playlist",
+      "requiresJson": true,
+      "storedDataIsNull": false,
+      "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}",
+      "trailers": [
+        "https://invalid.example/poison"
+      ]
+    },
+    {
+      "name": "type-Movie-null",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Movies.Movie",
+      "requiresJson": true,
+      "storedDataIsNull": false,
+      "hydrationData": null,
+      "trailers": []
+    },
+    {
+      "name": "type-Movie-poison",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Movies.Movie",
+      "requiresJson": true,
+      "storedDataIsNull": false,
+      "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}",
+      "trailers": [
+        "https://invalid.example/poison"
+      ]
+    },
+    {
+      "name": "type-Video-null",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Video",
+      "requiresJson": true,
+      "storedDataIsNull": false,
+      "hydrationData": null,
+      "trailers": []
+    },
+    {
+      "name": "type-Video-poison",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Video",
+      "requiresJson": true,
+      "storedDataIsNull": false,
+      "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}",
+      "trailers": [
+        "https://invalid.example/poison"
+      ]
+    },
+    {
+      "name": "type-Episode-null",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.TV.Episode",
+      "requiresJson": true,
+      "storedDataIsNull": false,
+      "hydrationData": null,
+      "trailers": []
+    },
+    {
+      "name": "type-Episode-poison",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.TV.Episode",
+      "requiresJson": true,
+      "storedDataIsNull": false,
+      "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}",
+      "trailers": [
+        "https://invalid.example/poison"
+      ]
+    },
+    {
+      "name": "type-Series-null",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.TV.Series",
+      "requiresJson": true,
+      "storedDataIsNull": false,
+      "hydrationData": null,
+      "trailers": []
+    },
+    {
+      "name": "type-Series-poison",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.TV.Series",
+      "requiresJson": true,
+      "storedDataIsNull": false,
+      "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}",
+      "trailers": [
+        "https://invalid.example/poison"
+      ]
+    },
+    {
+      "name": "type-Season-null",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.TV.Season",
+      "requiresJson": false,
+      "storedDataIsNull": true,
+      "hydrationData": null,
+      "trailers": []
+    },
+    {
+      "name": "type-Season-poison",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.TV.Season",
+      "requiresJson": false,
+      "storedDataIsNull": true,
+      "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}",
+      "trailers": []
+    },
+    {
+      "name": "type-BoxSet-null",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Movies.BoxSet",
+      "requiresJson": true,
+      "storedDataIsNull": false,
+      "hydrationData": null,
+      "trailers": []
+    },
+    {
+      "name": "type-BoxSet-poison",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Movies.BoxSet",
+      "requiresJson": true,
+      "storedDataIsNull": false,
+      "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}",
+      "trailers": [
+        "https://invalid.example/poison"
+      ]
+    },
+    {
+      "name": "type-Audio-null",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "requiresJson": true,
+      "storedDataIsNull": false,
+      "hydrationData": null,
+      "trailers": []
+    },
+    {
+      "name": "type-Audio-poison",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "requiresJson": true,
+      "storedDataIsNull": false,
+      "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}",
+      "trailers": [
+        "https://invalid.example/poison"
+      ]
+    },
+    {
+      "name": "type-AudioBook-null",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.AudioBook",
+      "requiresJson": false,
+      "storedDataIsNull": true,
+      "hydrationData": null,
+      "trailers": []
+    },
+    {
+      "name": "type-AudioBook-poison",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.AudioBook",
+      "requiresJson": false,
+      "storedDataIsNull": true,
+      "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}",
+      "trailers": []
+    },
+    {
+      "name": "type-MusicVideo-null",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.MusicVideo",
+      "requiresJson": true,
+      "storedDataIsNull": false,
+      "hydrationData": null,
+      "trailers": []
+    },
+    {
+      "name": "type-MusicVideo-poison",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.MusicVideo",
+      "requiresJson": true,
+      "storedDataIsNull": false,
+      "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}",
+      "trailers": [
+        "https://invalid.example/poison"
+      ]
+    },
+    {
+      "name": "type-Trailer-null",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Trailer",
+      "requiresJson": true,
+      "storedDataIsNull": false,
+      "hydrationData": null,
+      "trailers": []
+    },
+    {
+      "name": "type-Trailer-poison",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Trailer",
+      "requiresJson": true,
+      "storedDataIsNull": false,
+      "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}",
+      "trailers": [
+        "https://invalid.example/poison"
+      ]
+    },
+    {
+      "name": "type-MusicAlbum-null",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.MusicAlbum",
+      "requiresJson": false,
+      "storedDataIsNull": true,
+      "hydrationData": null,
+      "trailers": []
+    },
+    {
+      "name": "type-MusicAlbum-poison",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.MusicAlbum",
+      "requiresJson": false,
+      "storedDataIsNull": true,
+      "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}",
+      "trailers": []
+    },
+    {
+      "name": "type-MusicArtist-null",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.MusicArtist",
+      "requiresJson": false,
+      "storedDataIsNull": true,
+      "hydrationData": null,
+      "trailers": []
+    },
+    {
+      "name": "type-MusicArtist-poison",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.MusicArtist",
+      "requiresJson": false,
+      "storedDataIsNull": true,
+      "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}",
+      "trailers": []
+    },
+    {
+      "name": "type-Person-null",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Person",
+      "requiresJson": false,
+      "storedDataIsNull": true,
+      "hydrationData": null,
+      "trailers": []
+    },
+    {
+      "name": "type-Person-poison",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Person",
+      "requiresJson": false,
+      "storedDataIsNull": true,
+      "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}",
+      "trailers": []
+    },
+    {
+      "name": "type-Genre-null",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Genre",
+      "requiresJson": false,
+      "storedDataIsNull": true,
+      "hydrationData": null,
+      "trailers": []
+    },
+    {
+      "name": "type-Genre-poison",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Genre",
+      "requiresJson": false,
+      "storedDataIsNull": true,
+      "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}",
+      "trailers": []
+    },
+    {
+      "name": "type-MusicGenre-null",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.MusicGenre",
+      "requiresJson": false,
+      "storedDataIsNull": true,
+      "hydrationData": null,
+      "trailers": []
+    },
+    {
+      "name": "type-MusicGenre-poison",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.MusicGenre",
+      "requiresJson": false,
+      "storedDataIsNull": true,
+      "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}",
+      "trailers": []
+    },
+    {
+      "name": "type-Studio-null",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Studio",
+      "requiresJson": false,
+      "storedDataIsNull": true,
+      "hydrationData": null,
+      "trailers": []
+    },
+    {
+      "name": "type-Studio-poison",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Studio",
+      "requiresJson": false,
+      "storedDataIsNull": true,
+      "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}",
+      "trailers": []
+    },
+    {
+      "name": "type-Year-null",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Year",
+      "requiresJson": false,
+      "storedDataIsNull": true,
+      "hydrationData": null,
+      "trailers": []
+    },
+    {
+      "name": "type-Year-poison",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Year",
+      "requiresJson": false,
+      "storedDataIsNull": true,
+      "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}",
+      "trailers": []
+    },
+    {
+      "name": "type-Photo-null",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Photo",
+      "requiresJson": true,
+      "storedDataIsNull": false,
+      "hydrationData": null,
+      "trailers": []
+    },
+    {
+      "name": "type-Photo-poison",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Photo",
+      "requiresJson": true,
+      "storedDataIsNull": false,
+      "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}",
+      "trailers": [
+        "https://invalid.example/poison"
+      ]
+    },
+    {
+      "name": "type-PhotoAlbum-null",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.PhotoAlbum",
+      "requiresJson": false,
+      "storedDataIsNull": true,
+      "hydrationData": null,
+      "trailers": []
+    },
+    {
+      "name": "type-PhotoAlbum-poison",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.PhotoAlbum",
+      "requiresJson": false,
+      "storedDataIsNull": true,
+      "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}",
+      "trailers": []
+    },
+    {
+      "name": "type-Book-null",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Book",
+      "requiresJson": false,
+      "storedDataIsNull": true,
+      "hydrationData": null,
+      "trailers": []
+    },
+    {
+      "name": "type-Book-poison",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Book",
+      "requiresJson": false,
+      "storedDataIsNull": true,
+      "hydrationData": "{\"RemoteTrailers\":[{\"Url\":\"https://invalid.example/poison\",\"Name\":\"Poison\"}]}",
+      "trailers": []
+    },
+    {
+      "name": "type-PlaylistsFolder-malformed",
+      "exception": null,
+      "nativeType": "Emby.Server.Implementations.Playlists.PlaylistsFolder",
+      "requiresJson": false,
+      "storedDataIsNull": true,
+      "hydrationData": "bad{",
+      "trailers": []
+    },
+    {
+      "name": "type-Season-malformed",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.TV.Season",
+      "requiresJson": false,
+      "storedDataIsNull": true,
+      "hydrationData": "bad{",
+      "trailers": []
+    },
+    {
+      "name": "type-AudioBook-malformed",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.AudioBook",
+      "requiresJson": false,
+      "storedDataIsNull": true,
+      "hydrationData": "bad{",
+      "trailers": []
+    },
+    {
+      "name": "type-MusicAlbum-malformed",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.MusicAlbum",
+      "requiresJson": false,
+      "storedDataIsNull": true,
+      "hydrationData": "bad{",
+      "trailers": []
+    },
+    {
+      "name": "type-MusicArtist-malformed",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.MusicArtist",
+      "requiresJson": false,
+      "storedDataIsNull": true,
+      "hydrationData": "bad{",
+      "trailers": []
+    },
+    {
+      "name": "type-Person-malformed",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Person",
+      "requiresJson": false,
+      "storedDataIsNull": true,
+      "hydrationData": "bad{",
+      "trailers": []
+    },
+    {
+      "name": "type-Genre-malformed",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Genre",
+      "requiresJson": false,
+      "storedDataIsNull": true,
+      "hydrationData": "bad{",
+      "trailers": []
+    },
+    {
+      "name": "type-MusicGenre-malformed",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.MusicGenre",
+      "requiresJson": false,
+      "storedDataIsNull": true,
+      "hydrationData": "bad{",
+      "trailers": []
+    },
+    {
+      "name": "type-Studio-malformed",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Studio",
+      "requiresJson": false,
+      "storedDataIsNull": true,
+      "hydrationData": "bad{",
+      "trailers": []
+    },
+    {
+      "name": "type-Year-malformed",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Year",
+      "requiresJson": false,
+      "storedDataIsNull": true,
+      "hydrationData": "bad{",
+      "trailers": []
+    },
+    {
+      "name": "type-PhotoAlbum-malformed",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.PhotoAlbum",
+      "requiresJson": false,
+      "storedDataIsNull": true,
+      "hydrationData": "bad{",
+      "trailers": []
+    },
+    {
+      "name": "type-Book-malformed",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Book",
+      "requiresJson": false,
+      "storedDataIsNull": true,
+      "hydrationData": "bad{",
+      "trailers": []
+    }
+  ],
+  "assemblies": [
+    {
+      "name": "MediaBrowser.Controller",
+      "path": "D:\\mediamanager\\.test-output\\validation\\item-data-policy-oracle-20261005-1\\bin\\Release\\net10.0\\MediaBrowser.Controller.dll",
+      "sha256": "56a527307ef93f810fdadec33ba8380cc8416d38cb1cfea92297b0f65288808e"
+    },
+    {
+      "name": "Jellyfin.Server.Implementations",
+      "path": "D:\\mediamanager\\.test-output\\validation\\item-data-policy-oracle-20261005-1\\bin\\Release\\net10.0\\Jellyfin.Server.Implementations.dll",
+      "sha256": "b91a6797f81f8563b8896c3da3e5cd4e9d11c61eb084578bf7b81108c3c3e2e6"
+    },
+    {
+      "name": "Emby.Server.Implementations",
+      "path": "D:\\mediamanager\\.test-output\\validation\\item-data-policy-oracle-20261005-1\\bin\\Release\\net10.0\\Emby.Server.Implementations.dll",
+      "sha256": "ccff8514100a65508b65882d5881463fe4ff73ea07eb4d2b2d98e234d7b4ac99"
+    },
+    {
+      "name": "Jellyfin.Database.Implementations",
+      "path": "D:\\mediamanager\\.test-output\\validation\\item-data-policy-oracle-20261005-1\\bin\\Release\\net10.0\\Jellyfin.Database.Implementations.dll",
+      "sha256": "21648ea8e6eec045789c66c199b30c68b1b00f6e15918ac66347c19244b5670b"
+    },
+    {
+      "name": "Jellyfin.Database.Providers.Sqlite",
+      "path": "D:\\mediamanager\\.test-output\\validation\\item-data-policy-oracle-20261005-1\\bin\\Release\\net10.0\\Jellyfin.Database.Providers.Sqlite.dll",
+      "sha256": "eefedf49a1c6c62c7eab9b4347c0bca377c3e059ec61ef26a08148de7bba94bb"
+    }
+  ],
+  "scope": "Actual SaveItems/EF SQLite, TypeRequiresDeserialization and DeserializeBaseItem for 27 core types. Hydration Data is explicitly replaced in memory with null, a valid poison payload or malformed text after the real save. Physical Artist parent, collection lookup, library options, recordings and path expansion remain controls. Only exact Data nullness, class policy, native type and hydrated RemoteTrailers URLs are projected; other JSON bytes, fields and tables are excluded.",
+  "schemaVersion": 1,
+  "candidateVerified": false,
+  "inputSha256": "6ee56d00b2013492c38d144c40be722d0137e4832d77a93454a6043b7a15e041",
+  "sourceFilesSha256": "1804d2f7a5c4b80ec6d9e655f738bcd3dce5494a6170274d45a1e4c6f5e3b29e"
+}

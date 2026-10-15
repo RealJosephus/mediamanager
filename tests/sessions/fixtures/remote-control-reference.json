@@ -1,0 +1,327 @@
+{
+  "records": [
+    {
+      "name": "capabilities",
+      "status": 204,
+      "body": ""
+    },
+    {
+      "name": "remote-before-socket",
+      "body": [
+        {
+          "Id": "c7761dd693ad3a5ab2511173f4147ed6",
+          "SupportsRemoteControl": false
+        }
+      ]
+    },
+    {
+      "name": "force-keepalive",
+      "body": {
+        "MessageId": "ee6ba80c54af4146be3bb03bac9aabcb",
+        "Data": 60,
+        "MessageType": "ForceKeepAlive"
+      }
+    },
+    {
+      "name": "keepalive",
+      "body": {
+        "MessageId": "18b8ea45eb344cf584d8353e050fc15c",
+        "MessageType": "KeepAlive"
+      }
+    },
+    {
+      "name": "remote-with-socket",
+      "body": [
+        {
+          "Id": "c7761dd693ad3a5ab2511173f4147ed6",
+          "SupportsRemoteControl": true
+        }
+      ]
+    },
+    {
+      "name": "pause",
+      "status": 204,
+      "body": ""
+    },
+    {
+      "name": "pause-wire",
+      "body": {
+        "MessageId": "e4a9823ffd2649a3bcf668348ba9acb9",
+        "Data": {
+          "Command": "Pause",
+          "ControllingUserId": "5c6b5f77bea94a9a98aafae5909892b7"
+        },
+        "MessageType": "Playstate"
+      }
+    },
+    {
+      "name": "seek",
+      "status": 204,
+      "body": ""
+    },
+    {
+      "name": "seek-wire",
+      "body": {
+        "MessageId": "8d1c5ccbfc854864a003e24a70b03aad",
+        "Data": {
+          "Command": "Seek",
+          "SeekPositionTicks": 9007199254740993,
+          "ControllingUserId": "5c6b5f77bea94a9a98aafae5909892b7"
+        },
+        "MessageType": "Playstate"
+      }
+    },
+    {
+      "name": "command",
+      "status": 204,
+      "body": ""
+    },
+    {
+      "name": "command-wire",
+      "body": {
+        "MessageId": "4ac36c6aae244ceb8a362b5a5d418a94",
+        "Data": {
+          "Name": "VolumeUp",
+          "ControllingUserId": "5c6b5f77bea94a9a98aafae5909892b7",
+          "Arguments": {}
+        },
+        "MessageType": "GeneralCommand"
+      }
+    },
+    {
+      "name": "system",
+      "status": 204,
+      "body": ""
+    },
+    {
+      "name": "system-wire",
+      "body": {
+        "MessageId": "e297d76f31f848c796348f2819f51a38",
+        "Data": {
+          "Name": "ToggleFullscreen",
+          "ControllingUserId": "5c6b5f77bea94a9a98aafae5909892b7",
+          "Arguments": {}
+        },
+        "MessageType": "GeneralCommand"
+      }
+    },
+    {
+      "name": "full-command",
+      "status": 204,
+      "body": ""
+    },
+    {
+      "name": "full-command-wire",
+      "body": {
+        "MessageId": "eeb626c5a51b4420ab36bca39ca94d5e",
+        "Data": {
+          "Name": "SetVolume",
+          "ControllingUserId": "5c6b5f77bea94a9a98aafae5909892b7",
+          "Arguments": {
+            "Volume": "37"
+          }
+        },
+        "MessageType": "GeneralCommand"
+      }
+    },
+    {
+      "name": "message",
+      "status": 204,
+      "body": ""
+    },
+    {
+      "name": "message-wire",
+      "body": {
+        "MessageId": "a8b4b118ac4d4f54944cc7f0913242c1",
+        "Data": {
+          "Name": "DisplayMessage",
+          "ControllingUserId": "00000000000000000000000000000000",
+          "Arguments": {
+            "Header": "Message from Server",
+            "Text": "中文 message",
+            "TimeoutMs": "9007199254740993"
+          }
+        },
+        "MessageType": "GeneralCommand"
+      }
+    },
+    {
+      "name": "browse",
+      "status": 204,
+      "body": ""
+    },
+    {
+      "name": "browse-wire",
+      "body": {
+        "MessageId": "3b1e096e3cb44d9991203b820b661ba8",
+        "Data": {
+          "Name": "DisplayContent",
+          "ControllingUserId": "00000000000000000000000000000000",
+          "Arguments": {
+            "ItemId": "22222222222222222222222222222222",
+            "ItemName": "Movie",
+            "ItemType": "Movie"
+          }
+        },
+        "MessageType": "GeneralCommand"
+      }
+    },
+    {
+      "name": "play",
+      "status": 204,
+      "body": ""
+    },
+    {
+      "name": "play-wire",
+      "body": {
+        "MessageId": "67c9c41219c34a1b815335e4e92055ea",
+        "Data": {
+          "ItemIds": [
+            "22222222222222222222222222222222"
+          ],
+          "StartPositionTicks": 9007199254740993,
+          "PlayCommand": "PlayNow",
+          "ControllingUserId": "5c6b5f77bea94a9a98aafae5909892b7",
+          "SubtitleStreamIndex": 3,
+          "AudioStreamIndex": 2,
+          "MediaSourceId": "source",
+          "StartIndex": 0
+        },
+        "MessageType": "Play"
+      }
+    },
+    {
+      "name": "play-missing",
+      "status": 204,
+      "body": ""
+    },
+    {
+      "name": "play-missing-wire",
+      "body": {
+        "MessageId": "921a4d3b023b4b17a6fc7ffbbc21629f",
+        "Data": {
+          "ItemIds": [],
+          "PlayCommand": "PlayNext",
+          "ControllingUserId": "5c6b5f77bea94a9a98aafae5909892b7"
+        },
+        "MessageType": "Play"
+      }
+    },
+    {
+      "name": "invalid-playstate",
+      "status": 400,
+      "body": {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "errors": {
+          "command": [
+            "The value '999' is invalid."
+          ]
+        },
+        "traceId": "00-881b09db264e99a92ba0b95fcc84369c-9bcd655122824c88-00"
+      }
+    },
+    {
+      "name": "invalid-ticks",
+      "status": 400,
+      "body": {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "errors": {
+          "seekPositionTicks": [
+            "The value '9223372036854775808' is not valid."
+          ]
+        },
+        "traceId": "00-1b179307b2333a75e8db968d32fd816d-2f50aeb2c604f3e1-00"
+      }
+    },
+    {
+      "name": "missing-session",
+      "status": 404,
+      "body": "Error processing request."
+    },
+    {
+      "name": "missing-message",
+      "status": 400,
+      "body": {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "errors": {
+          "Text": [
+            "The Text field is required."
+          ]
+        },
+        "traceId": "00-0d4ba66145132434026f5023bf8e2679-089db28b8d6ea998-00"
+      }
+    },
+    {
+      "name": "capabilities-event",
+      "status": 204,
+      "body": ""
+    },
+    {
+      "name": "sessions-event",
+      "body": {
+        "MessageType": "Sessions",
+        "Data": [
+          {
+            "Id": "267c011574177028a94266bb0c3eb3e3",
+            "SupportsRemoteControl": false,
+            "SupportedCommands": []
+          },
+          {
+            "Id": "c7761dd693ad3a5ab2511173f4147ed6",
+            "SupportsRemoteControl": true,
+            "SupportedCommands": [
+              "SetVolume"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "latest-socket",
+      "status": 204,
+      "body": ""
+    },
+    {
+      "name": "latest-socket-wire",
+      "body": {
+        "MessageId": "cad957e39f35447799b895f496cd00c9",
+        "Data": {
+          "Command": "Unpause",
+          "ControllingUserId": "5c6b5f77bea94a9a98aafae5909892b7"
+        },
+        "MessageType": "Playstate"
+      }
+    },
+    {
+      "name": "remaining-socket",
+      "status": 204,
+      "body": ""
+    },
+    {
+      "name": "remaining-socket-wire",
+      "body": {
+        "MessageId": "9ada7fceb7f042aab823cfc9951f9f0c",
+        "Data": {
+          "Command": "Stop",
+          "ControllingUserId": "5c6b5f77bea94a9a98aafae5909892b7"
+        },
+        "MessageType": "Playstate"
+      }
+    },
+    {
+      "name": "ended-after-final-socket",
+      "body": 0
+    }
+  ],
+  "identities": {
+    "controllerId": "267c011574177028a94266bb0c3eb3e3",
+    "playerId": "c7761dd693ad3a5ab2511173f4147ed6",
+    "userId": "5c6b5f77bea94a9a98aafae5909892b7"
+  }
+}

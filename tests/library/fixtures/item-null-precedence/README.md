@@ -1,0 +1,7 @@
+# Native item save null precedence
+
+Eighty-one controls run the actual mapper preview separately from LibraryManager.CreateItems and EF SaveItems. Audio covers all 63 nonempty null combinations of six lists, plus 12 inherited parent/root/collection tag controls. Six AudioBook/MusicAlbum cases check the inherited AlbumArtists getter and competing tag/genre failures. Every subject identity is checked against the actual native GetNewItemId. Parent/owner lookup, user-root child array, library options and path reversal remain controlled.
+
+Complete saving obtains UserDataKeys before inherited tags and mapper columns. Thus null AlbumArtists on these three types fails with ArgumentNullException(source) before tag failures; otherwise null inherited Tags fails with ArgumentNullException(collection) before null Genres reaches the mapper. Mapper preview remains independently observable. ProductionLocations alone being null succeeds. These controls preserve candidateVerified=false and do not establish full JSON bytes, other types or complete library acceptance.
+
+The candidate compares mapper errors/columns and SQLite/real PostgreSQL metadata saves, checking every recorded relation and unchanged tables on failure. Actual resolver/scanner checks cover 69 subject-list controls. The 12 inherited-null controls are excluded from scanner replay because the native recorder supplies live parent/collection objects, while SQL hydration replaces their nullable stored lists with constructor defaults. Neither replay claims full ValidateChildren or native transaction traces.

@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-10T08:15:00.000Z",
+  "candidateVerified": false,
+  "jellyfin": {
+    "commit": "208c278b75abd897aefa1e1175126eac5e4dbfaa",
+    "sha256": "14a821378e554f3a1476610b02ef7ad3795fbb4050872413180ee423bd612d01"
+  },
+  "playlistsNet": {
+    "version": "1.4.1",
+    "commit": "10a2a55eea67b6cca866022107686bdac9b19fba"
+  },
+  "utfUnknown": {
+    "version": "2.7.0"
+  },
+  "files": {
+    "input": {
+      "filename": "input.json",
+      "sha256": "652ab5733575ee5d26246e697b585f4e87ac0ad2018062e6ef1e10119242ca29"
+    },
+    "native": {
+      "filename": "native.json",
+      "sha256": "db1e5662bdee47c58d889ff81130de0f5caf26106e00b7293f4a5beaf94ada63"
+    },
+    "oracle": {
+      "filename": "Program.cs",
+      "sha256": "7637fb626f26c65cb2c719be15c30c803a7d7341a955943a0f188f292f177f86"
+    },
+    "project": {
+      "filename": "Oracle.csproj",
+      "sha256": "0b9d3e600bbf152d421f8a0ca199b075aa18811d2141e3f44f42533440e3320c"
+    },
+    "rawRecording": {
+      "filename": "D:\\mediamanager-validation\\20261010\\results\\playlist-items-v4\\native.raw.json",
+      "sha256": "ef7ec4572db21fda8afb3b5f03251aed47bdfd7500f2b8f518393b8af074b9d7"
+    }
+  },
+  "counts": {
+    "providerCases": 36,
+    "mergeCases": 15
+  },
+  "repeat": {
+    "previousRawSha256": "b050d957d690fd3afcb583fc6528a0eafdb87efacb9e385fe334888962b9134a",
+    "projectionEqual": true
+  },
+  "boundary": "Actual pinned PlaylistItemsProvider, PlaylistsNET/UTF.Unknown, ManagedFileSystem and DirectoryService over real neutral files. UserRootFolder.Children and FindByPath results are controlled, not a native repository query. Actual PlaylistMetadataService.MergeData and BaseItemMapper.Map full 72-column projection; no native SaveItems or refresh lifecycle in this oracle. Cancelled-token provider calls, encoding detection and written input bytes are retained. This is not full LibraryManager, provider/write/network/HTTP/WS/SQLite exchange or release acceptance."
+}

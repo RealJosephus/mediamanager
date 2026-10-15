@@ -1,0 +1,63 @@
+{
+  "recordedAt": "2026-10-11T16:49:07.406Z",
+  "platform": "win32",
+  "originalOraclesUnchanged": true,
+  "scope": "Actual reader fields, error family, partial commits and cancellation. No writer replacement or cross-service roundtrip acceptance.",
+  "candidateVerified": false,
+  "productionReplacement": false,
+  "records": [
+    {
+      "kind": "local-xml-provider",
+      "filename": "D:\\mediamanager-validation\\20261012-r23-xml-readers\\local-xml-provider\\record.json",
+      "sha256": "ecd53094fd9909a68f211cf23adeb0b52e19110afd93f1c985b3de3c89ac74d9"
+    },
+    {
+      "kind": "nfo-scalar-provider",
+      "filename": "D:\\mediamanager-validation\\20261012-r23-xml-readers\\nfo-scalar-provider\\record.json",
+      "sha256": "c21987efd3e9d6bc24b48b256b3b8d36f2fa5f2fed2a7f6f59a8d10f350644f7"
+    },
+    {
+      "kind": "nfo-episode-blocks",
+      "filename": "D:\\mediamanager-validation\\20261012-r23-xml-readers\\nfo-episode-blocks\\record.json",
+      "sha256": "0d7e3ae8fd7836b2c943577811f48168947402ed9160294cf197bbc69609ca05"
+    }
+  ],
+  "files": [
+    {
+      "filename": "local-xml-provider-input.json",
+      "sha256": "8867ace407217ae713c6926d47c0fea0211109cbc829a97f2ce3b62c74704027"
+    },
+    {
+      "filename": "local-xml-provider-native.json",
+      "sha256": "aef3708cbd79d39893d5c183fd1f91b1ab3b078d337612bcae300c7c084e0670"
+    },
+    {
+      "filename": "local-xml-provider-comparison.json",
+      "sha256": "2df267f3746d1aaa59722a020b33489ff65c0b91c84be61a8582f93b8de7bf97"
+    },
+    {
+      "filename": "nfo-scalar-provider-input.json",
+      "sha256": "6a5ccce49edf4d599466dff4a8f63e4b07ac63134ee2ddf2beeab22401c2f932"
+    },
+    {
+      "filename": "nfo-scalar-provider-native.json",
+      "sha256": "2ec768a325453b742935802610fd5c6d183709827d6021d07257d45c389ebb02"
+    },
+    {
+      "filename": "nfo-scalar-provider-comparison.json",
+      "sha256": "68e1c92300632087a26cd51c25e4c95f7beadf64d87f87e03a08c6582ac48ad1"
+    },
+    {
+      "filename": "nfo-episode-blocks-input.json",
+      "sha256": "0c9c903f83a151d1c2c24f5f971e89f43c12333a7e440a9c9fda5749eed53668"
+    },
+    {
+      "filename": "nfo-episode-blocks-native.json",
+      "sha256": "30676de24a77601a9ad493f4d376842e6416fe273a4c0b5d1c1b3ff9e0c2ac50"
+    },
+    {
+      "filename": "nfo-episode-blocks-comparison.json",
+      "sha256": "76ae6e540f2832643d8eb462b8f4aa6748266600f4a61b77771e066a9357ddad"
+    }
+  ]
+}

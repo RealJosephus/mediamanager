@@ -1,0 +1,30 @@
+{
+  "recordedAt": "2026-10-03T13:47:58.796Z",
+  "platform": "win32",
+  "timeZone": "Asia/Taipei",
+  "dotnet": "D:\\mediamanager\\.tools\\dotnet\\dotnet.exe",
+  "sdkVersion": "10.0.401",
+  "assemblyDirectory": "D:\\mediamanager\\.agent-temp\\reference\\jellyfin-20261003\\source\\Jellyfin.Server\\bin\\Release\\net10.0",
+  "assemblies": {
+    "MediaBrowser.Providers.dll": "ba138e7822fb224fd9e5bc56a14e9725063870e438da8cbf13c9c7ccec646605",
+    "MediaBrowser.Controller.dll": "a8939bae7bda1a470d7d9ec420d84b9647e74a9b308a669f81a1d72ce8a6a98f",
+    "MediaBrowser.Model.dll": "5c81667394bb661075cffb58c071655651e407fd1ceb1fe0f7f426430c780737",
+    "MediaBrowser.Common.dll": "19ccce79888a1f77bd71fbd376cf6e1a1844c9911f6f155d54dc268e06e6c826",
+    "Jellyfin.Data.dll": "7174618af15c6cfdcc799b5fd8fd2817d1e891c7dd0b0e34acb7f782917c4cc8"
+  },
+  "baselineManifest": "D:\\mediamanager\\.agent-temp\\reference\\jellyfin-20261003\\manifest.json",
+  "baselineManifestSha256": "779885e632e0d6614ca883191d883d6a11e1d02e6e8b2f849370469e227e57eb",
+  "baselineHead": "208c278b75abd897aefa1e1175126eac5e4dbfaa",
+  "sourceAggregateSha256": "e28a983db179b720c3b16d7416ee4112894a3115c4be6fe43c61c52e0d9a8313",
+  "verifiedBaseline": {
+    "source": "D:\\jellyfin",
+    "head": "208c278b75abd897aefa1e1175126eac5e4dbfaa",
+    "verifiedFiles": 2620,
+    "contentUnchanged": true,
+    "statusUnchanged": true,
+    "fileDiscoveryUnchanged": true,
+    "contentDigest": "e28a983db179b720c3b16d7416ee4112894a3115c4be6fe43c61c52e0d9a8313"
+  },
+  "nativeSha256": "94e751da7b03881a3f5d1fbba9545d3940352380ce924ecfd1621cf93d0c3e0f",
+  "scope": "Actual ProviderManager queue and BaseItem dispatch, controlled dependency service, no native SQL or HTTP server."
+}

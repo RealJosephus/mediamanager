@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-10-07T01:19:19.139Z",
+  "fixtureFiles": [
+    {
+      "path": "tests/metadata/fixtures/owned-video-ignore/input.json",
+      "sha256": "7215a4e415f048a58a7a6c6de919c51b47b1f33d575a417b58018d2d170ebafb"
+    },
+    {
+      "path": "tests/metadata/fixtures/owned-video-ignore/Program.cs",
+      "sha256": "111ec8f5710e3f59b837dee2a14630b91704772a1a7c8f3cb68eff20ad4d00e2"
+    },
+    {
+      "path": "tests/metadata/fixtures/owned-video-ignore/Oracle.csproj",
+      "sha256": "cbe1a514da582cbf55a443ee14c93f731f84816d10e7672fb713045ac5d78efe"
+    },
+    {
+      "path": "tests/metadata/fixtures/owned-video-ignore/native.json",
+      "sha256": "f1eb50e76ce22361a4362a7dbf08cce30563d1147b156c79210222f1e85b2beb"
+    },
+    {
+      "path": "tests/Directory.Build.props",
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    }
+  ],
+  "scope": "Actual frozen ordinary video resolution with registered CoreResolutionIgnoreRule and DotIgnoreIgnoreRule, real files and ItemPersistenceService/EF SQLite. Version cases execute ResolveAlternateVersion and UpdateItemAsync; owned cases execute the RefreshMetadata/RefreshedOwnedItems wrapper, CreateItem and independent deletion. Records all original row/Data/file/cache/event projections, ignore-before-resolution, lookup bypass and wrong-type deletion order. Single-item provider saves, collection membership, saver/media-source/external file dispatch and ancestor namespace are controls. No complete resolver/scanner, MetadataService, network/symlink/concurrent cache or release acceptance.",
+  "assemblies": [
+    {
+      "name": "MediaBrowser.Controller",
+      "sha256": "051c588a8e85a3a7cdde8dc3d9a1112217fd7e973a86fe2ff90cf765bedb75a8"
+    },
+    {
+      "name": "Emby.Server.Implementations",
+      "sha256": "8d369435646570958505c58b9cb17da169855dabc105d0e933524361e9b7b1c8"
+    },
+    {
+      "name": "Jellyfin.Server.Implementations",
+      "sha256": "4da187af02503e82135eb192351d01490484e8ebc8c653d849f7e2900a177672"
+    }
+  ],
+  "reference": {
+    "head": "208c278b75abd897aefa1e1175126eac5e4dbfaa",
+    "contentDigest": "e28a983db179b720c3b16d7416ee4112894a3115c4be6fe43c61c52e0d9a8313"
+  },
+  "capture": {
+    "record": "D:/mediamanager-validation/20261005/results/owned-video-ignore-oracle-20261007/record.json",
+    "sourceFilesSha256": "dec5cea19992cbfabfd0f294c1d8863dfddec94b53e5e0728403f7bfc6587ca0"
+  },
+  "candidateVerified": true,
+  "candidateComparison": "All 50 actual native cases across these two fixtures compared in full on real SQLite and PostgreSQL: selected rows, complete Data, paths/IDs/Int64, files/hashes, calls, cache and events. Direct final affected run: 202/202 passed, including production preview-cache isolation, unmapped-ancestor rejection and ID-only access with a different storage filename. Saver/provider/collection/media-source/external dispatch and known ancestor namespace remain scoped controls. Strict adjacent validation is recorded separately; no complete resolver/MetadataService/scanner/network or release acceptance."
+}

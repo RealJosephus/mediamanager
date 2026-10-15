@@ -1,0 +1,75 @@
+[
+  {
+    "name": "equal-high",
+    "beforeRelease": [
+      "item-0"
+    ],
+    "order": [
+      "item-0",
+      "item-1",
+      "item-8",
+      "item-7",
+      "item-6",
+      "item-5",
+      "item-4",
+      "item-3",
+      "item-2"
+    ],
+    "failures": [],
+    "maximumConcurrency": 1,
+    "refreshEvents": 0
+  },
+  {
+    "name": "mixed-priorities",
+    "beforeRelease": [
+      "item-0"
+    ],
+    "order": [
+      "item-0",
+      "item-2",
+      "item-6",
+      "item-9",
+      "item-12",
+      "item-4",
+      "item-8",
+      "item-1",
+      "item-10",
+      "item-5",
+      "item-11",
+      "item-3",
+      "item-7"
+    ],
+    "failures": [],
+    "maximumConcurrency": 1,
+    "refreshEvents": 0
+  },
+  {
+    "name": "provider-cancellation",
+    "beforeRelease": [
+      "item-0"
+    ],
+    "order": [
+      "item-0",
+      "item-1",
+      "item-3",
+      "item-2"
+    ],
+    "failures": [
+      "item-1"
+    ],
+    "maximumConcurrency": 1,
+    "refreshEvents": 0
+  },
+  {
+    "name": "shutdown",
+    "beforeRelease": [
+      "item-0"
+    ],
+    "order": [
+      "item-0"
+    ],
+    "failures": [],
+    "maximumConcurrency": 1,
+    "refreshEvents": 0
+  }
+]

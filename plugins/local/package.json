@@ -1,0 +1,8 @@
+{
+  "name": "@mediamanager/local",
+  "version": "0.1.0",
+  "type": "module",
+  "license": "GPL-2.0-only",
+  "mediamanager": { "id": "local", "name": "Local files", "entry": "index.js" },
+  "dependencies": { "@mediamanager/plugin-sdk": "0.1.0" }
+}

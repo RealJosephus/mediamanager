@@ -1,0 +1,5 @@
+# Native scan context edge cases
+
+Forty-three controls use the same actual frozen LibraryManager getter calls and live parent, user-root children and options-cache controls as the adjacent native-scan-context recorder. They cover case-sensitive configured enum names, numeric and comma-combined values, numeric and case-insensitive CollectionFolder entity values, malformed first matches, NULL override arrays/entries, path short-circuiting, Movie.ContainingFolderPath, intermediate parent fallback and the PlaylistsFolder ICollectionFolder implementation. CollectionFolder entity definitions are deserialized into the actual typed enum before getters run; this does not claim full Data JSON mapping.
+
+The candidate compares only the recorded IDs, country marker, configured/inherited/effective type and exceptions, both with live entities and after SQLite/real PostgreSQL hydration. Neither this recording nor its candidate replay proves options XML, all mapper fields, native SQL/resolvers, ValidateChildren, monitors or release acceptance. The original oracle remains candidateVerified=false.

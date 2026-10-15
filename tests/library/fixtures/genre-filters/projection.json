@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "projectionLogic": {
+    "spec": {
+      "id": "genre-filter-native-v1-contract-projection",
+      "version": 1,
+      "topLevel": "Drop only kind and mode; add frozenJellyfin, the exact source path, and its SHA-256; preserve schemaVersion, fixtureInputSha256, endpoints, setup, and cases.",
+      "cases": "Preserve every case, response item, JSON field, and array order verbatim. The authoritative contract excludes all runtime-native ids.",
+      "authority": "The v1 projection is created only from the pinned main native contract and has no predecessor fixture."
+    },
+    "sha256": "fe1597660e4c4a1718438514aa88de7da4aa2015defb92d44b7b64e5f91ee2d0"
+  },
+  "authoritativeContract": {
+    "path": ".agent-docs/evidence/byname-filter-inputs/genre-filter-restoration-v1/native-contract.json",
+    "sha256": "c8e322622ccaee0a5535d77309ab924305be27cfbdbda26cf6979d54e2b3c743"
+  },
+  "fixtureInput": {
+    "path": "tests/library/fixtures/genre-filters/input.json",
+    "sha256": "51cc6013f00701de61a3e696890e9d04da2d0df3b21a17791d729c845297fea5"
+  },
+  "trackedFixture": {
+    "path": "tests/library/fixtures/genre-filters/native.json",
+    "sha256": "dd30b687b4ac5238306a74c7f914550173ccaeab7eb854ef3d54a13ac748b5ff"
+  },
+  "integrityTest": {
+    "path": "tests/library/genre-filter-native-fixture.test.js",
+    "sha256": "4ac1f187b9b83560b4c137e5756d3113db84f0ea18ac223c81d3cc6915fe7bd9"
+  },
+  "projector": {
+    "path": "tools/compat/project-genre-filter-fixture.js",
+    "sha256": "893f713217c55436d8fb875b314e80c05df220bd67ed6ae83e33de0c079f7988"
+  }
+}

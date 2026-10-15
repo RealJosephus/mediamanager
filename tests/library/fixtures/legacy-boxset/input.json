@@ -1,0 +1,4077 @@
+{
+  "schemaVersion": 1,
+  "userId": "5c6b5f77-bea9-4a9a-98aa-fae5909892b7",
+  "rootId": "80100000-0000-0000-0000-000000000201",
+  "items": [
+    {
+      "key": "aggregate",
+      "id": "f27caa37-e514-2225-cced-ed48f6553502",
+      "type": "AggregateFolder",
+      "name": "root",
+      "sortName": "root",
+      "parentId": null,
+      "topParentId": null,
+      "ancestorIds": []
+    },
+    {
+      "key": "userRoot",
+      "id": "e9d5075a-555c-1cbc-394e-ec4cef295274",
+      "type": "UserRootFolder",
+      "name": "Media Folders",
+      "sortName": "media folders",
+      "parentId": null,
+      "topParentId": null,
+      "ancestorIds": [],
+      "pathKind": "userRoot",
+      "data": {
+        "IsRoot": true,
+        "PhysicalLocationsList": []
+      }
+    },
+    {
+      "key": "physicalA",
+      "id": "80100000-0000-0000-0000-000000000100",
+      "type": "Folder",
+      "name": "Physical A",
+      "sortName": "physical a",
+      "parentId": "f27caa37-e514-2225-cced-ed48f6553502",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "physicalA"
+    },
+    {
+      "key": "physicalB",
+      "id": "80100000-0000-0000-0000-000000000150",
+      "type": "Folder",
+      "name": "Physical B",
+      "sortName": "physical b",
+      "parentId": "f27caa37-e514-2225-cced-ed48f6553502",
+      "topParentId": "80100000-0000-0000-0000-000000000150",
+      "ancestorIds": [
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "physicalB"
+    },
+    {
+      "key": "collections",
+      "id": "80100000-0000-0000-0000-000000000200",
+      "type": "Folder",
+      "name": "Collections Physical",
+      "sortName": "collections physical",
+      "parentId": "f27caa37-e514-2225-cced-ed48f6553502",
+      "topParentId": "80100000-0000-0000-0000-000000000200",
+      "ancestorIds": [
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "collections"
+    },
+    {
+      "key": "libraryA",
+      "id": "80100000-0000-0000-0000-000000000101",
+      "type": "CollectionFolder",
+      "name": "Library A",
+      "sortName": "library a",
+      "parentId": "e9d5075a-555c-1cbc-394e-ec4cef295274",
+      "topParentId": "80100000-0000-0000-0000-000000000101",
+      "ancestorIds": [
+        "e9d5075a-555c-1cbc-394e-ec4cef295274"
+      ],
+      "pathKind": "libraryA",
+      "data": {
+        "CollectionType": "movies",
+        "PhysicalFolderIds": [
+          "80100000-0000-0000-0000-000000000100"
+        ],
+        "PhysicalLocationsList": []
+      }
+    },
+    {
+      "key": "libraryB",
+      "id": "80100000-0000-0000-0000-000000000151",
+      "type": "CollectionFolder",
+      "name": "Library B",
+      "sortName": "library b",
+      "parentId": "e9d5075a-555c-1cbc-394e-ec4cef295274",
+      "topParentId": "80100000-0000-0000-0000-000000000151",
+      "ancestorIds": [
+        "e9d5075a-555c-1cbc-394e-ec4cef295274"
+      ],
+      "pathKind": "libraryB",
+      "data": {
+        "CollectionType": "movies",
+        "PhysicalFolderIds": [
+          "80100000-0000-0000-0000-000000000150"
+        ],
+        "PhysicalLocationsList": []
+      }
+    },
+    {
+      "key": "collectionLibrary",
+      "id": "80100000-0000-0000-0000-000000000201",
+      "type": "CollectionFolder",
+      "name": "Collection Library",
+      "sortName": "collection library",
+      "parentId": "e9d5075a-555c-1cbc-394e-ec4cef295274",
+      "topParentId": "80100000-0000-0000-0000-000000000201",
+      "ancestorIds": [
+        "e9d5075a-555c-1cbc-394e-ec4cef295274"
+      ],
+      "pathKind": "collectionLibrary",
+      "data": {
+        "CollectionType": "boxsets",
+        "PhysicalFolderIds": [
+          "80100000-0000-0000-0000-000000000200"
+        ],
+        "PhysicalLocationsList": []
+      }
+    },
+    {
+      "key": "legacyDefault",
+      "id": "80100000-0000-0000-0000-000000000300",
+      "type": "BoxSet",
+      "name": "legacyDefault",
+      "sortName": "legacydefault",
+      "parentId": "80100000-0000-0000-0000-000000000100",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "external",
+      "data": {},
+      "tagsText": "permit"
+    },
+    {
+      "key": "legacyDefaultLate",
+      "id": "80100000-0000-0000-0000-000000000301",
+      "type": "Movie",
+      "name": "Zulu legacyDefault",
+      "sortName": "zulu legacydefault",
+      "parentId": "80100000-0000-0000-0000-000000000300",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000300",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "premiereDate": "2023-01-02 00:00:00",
+      "productionYear": 2023,
+      "officialRating": "R",
+      "inheritedParentalRatingValue": 21,
+      "tagsText": "block"
+    },
+    {
+      "key": "legacyDefaultEarly",
+      "id": "80100000-0000-0000-0000-000000000302",
+      "type": "Movie",
+      "name": "Alpha legacyDefault",
+      "sortName": "alpha legacydefault",
+      "parentId": "80100000-0000-0000-0000-000000000300",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000300",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "premiereDate": "2001-01-02 00:00:00",
+      "productionYear": 2001,
+      "officialRating": "PG",
+      "inheritedParentalRatingValue": 6,
+      "tagsText": "permit"
+    },
+    {
+      "key": "legacyDefaultNoDate",
+      "id": "80100000-0000-0000-0000-000000000303",
+      "type": "Movie",
+      "name": "Beta legacyDefault",
+      "sortName": "beta legacydefault",
+      "parentId": "80100000-0000-0000-0000-000000000300",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000300",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "premiereDate": null,
+      "productionYear": null,
+      "officialRating": null,
+      "inheritedParentalRatingValue": null,
+      "tagsText": "permit"
+    },
+    {
+      "key": "legacySortName",
+      "id": "80100000-0000-0000-0000-000000000304",
+      "type": "BoxSet",
+      "name": "legacySortName",
+      "sortName": "legacysortname",
+      "parentId": "80100000-0000-0000-0000-000000000100",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "external",
+      "data": {
+        "DisplayOrder": "SortName"
+      },
+      "tagsText": "permit"
+    },
+    {
+      "key": "legacySortNameLate",
+      "id": "80100000-0000-0000-0000-000000000305",
+      "type": "Movie",
+      "name": "Zulu legacySortName",
+      "sortName": "zulu legacysortname",
+      "parentId": "80100000-0000-0000-0000-000000000304",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000304",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "premiereDate": "2023-01-02 00:00:00",
+      "productionYear": 2023,
+      "officialRating": "R",
+      "inheritedParentalRatingValue": 21,
+      "tagsText": "block"
+    },
+    {
+      "key": "legacySortNameEarly",
+      "id": "80100000-0000-0000-0000-000000000306",
+      "type": "Movie",
+      "name": "Alpha legacySortName",
+      "sortName": "alpha legacysortname",
+      "parentId": "80100000-0000-0000-0000-000000000304",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000304",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "premiereDate": "2001-01-02 00:00:00",
+      "productionYear": 2001,
+      "officialRating": "PG",
+      "inheritedParentalRatingValue": 6,
+      "tagsText": "permit"
+    },
+    {
+      "key": "legacySortNameNoDate",
+      "id": "80100000-0000-0000-0000-000000000307",
+      "type": "Movie",
+      "name": "Beta legacySortName",
+      "sortName": "beta legacysortname",
+      "parentId": "80100000-0000-0000-0000-000000000304",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000304",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "premiereDate": null,
+      "productionYear": null,
+      "officialRating": null,
+      "inheritedParentalRatingValue": null,
+      "tagsText": "permit"
+    },
+    {
+      "key": "legacyDefaultOrder",
+      "id": "80100000-0000-0000-0000-000000000308",
+      "type": "BoxSet",
+      "name": "legacyDefaultOrder",
+      "sortName": "legacydefaultorder",
+      "parentId": "80100000-0000-0000-0000-000000000100",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "external",
+      "data": {
+        "DisplayOrder": "Default"
+      },
+      "tagsText": "permit"
+    },
+    {
+      "key": "legacyDefaultOrderLate",
+      "id": "80100000-0000-0000-0000-000000000309",
+      "type": "Movie",
+      "name": "Zulu legacyDefaultOrder",
+      "sortName": "zulu legacydefaultorder",
+      "parentId": "80100000-0000-0000-0000-000000000308",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000308",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "premiereDate": "2023-01-02 00:00:00",
+      "productionYear": 2023,
+      "officialRating": "R",
+      "inheritedParentalRatingValue": 21,
+      "tagsText": "block"
+    },
+    {
+      "key": "legacyDefaultOrderEarly",
+      "id": "80100000-0000-0000-0000-000000000310",
+      "type": "Movie",
+      "name": "Alpha legacyDefaultOrder",
+      "sortName": "alpha legacydefaultorder",
+      "parentId": "80100000-0000-0000-0000-000000000308",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000308",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "premiereDate": "2001-01-02 00:00:00",
+      "productionYear": 2001,
+      "officialRating": "PG",
+      "inheritedParentalRatingValue": 6,
+      "tagsText": "permit"
+    },
+    {
+      "key": "legacyDefaultOrderNoDate",
+      "id": "80100000-0000-0000-0000-000000000311",
+      "type": "Movie",
+      "name": "Beta legacyDefaultOrder",
+      "sortName": "beta legacydefaultorder",
+      "parentId": "80100000-0000-0000-0000-000000000308",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000308",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "premiereDate": null,
+      "productionYear": null,
+      "officialRating": null,
+      "inheritedParentalRatingValue": null,
+      "tagsText": "permit"
+    },
+    {
+      "key": "legacyWrongCase",
+      "id": "80100000-0000-0000-0000-000000000312",
+      "type": "BoxSet",
+      "name": "legacyWrongCase",
+      "sortName": "legacywrongcase",
+      "parentId": "80100000-0000-0000-0000-000000000100",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "external",
+      "data": {
+        "DisplayOrder": "sortname"
+      },
+      "tagsText": "permit"
+    },
+    {
+      "key": "legacyWrongCaseLate",
+      "id": "80100000-0000-0000-0000-000000000313",
+      "type": "Movie",
+      "name": "Zulu legacyWrongCase",
+      "sortName": "zulu legacywrongcase",
+      "parentId": "80100000-0000-0000-0000-000000000312",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000312",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "premiereDate": "2023-01-02 00:00:00",
+      "productionYear": 2023,
+      "officialRating": "R",
+      "inheritedParentalRatingValue": 21,
+      "tagsText": "block"
+    },
+    {
+      "key": "legacyWrongCaseEarly",
+      "id": "80100000-0000-0000-0000-000000000314",
+      "type": "Movie",
+      "name": "Alpha legacyWrongCase",
+      "sortName": "alpha legacywrongcase",
+      "parentId": "80100000-0000-0000-0000-000000000312",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000312",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "premiereDate": "2001-01-02 00:00:00",
+      "productionYear": 2001,
+      "officialRating": "PG",
+      "inheritedParentalRatingValue": 6,
+      "tagsText": "permit"
+    },
+    {
+      "key": "legacyWrongCaseNoDate",
+      "id": "80100000-0000-0000-0000-000000000315",
+      "type": "Movie",
+      "name": "Beta legacyWrongCase",
+      "sortName": "beta legacywrongcase",
+      "parentId": "80100000-0000-0000-0000-000000000312",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000312",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "premiereDate": null,
+      "productionYear": null,
+      "officialRating": null,
+      "inheritedParentalRatingValue": null,
+      "tagsText": "permit"
+    },
+    {
+      "key": "legacyNumericSort",
+      "id": "80100000-0000-0000-0000-000000000316",
+      "type": "BoxSet",
+      "name": "legacyNumericSort",
+      "sortName": "legacynumericsort",
+      "parentId": "80100000-0000-0000-0000-000000000100",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "external",
+      "data": {
+        "DisplayOrder": "10"
+      },
+      "tagsText": "permit"
+    },
+    {
+      "key": "legacyNumericSortLate",
+      "id": "80100000-0000-0000-0000-000000000317",
+      "type": "Movie",
+      "name": "Zulu legacyNumericSort",
+      "sortName": "zulu legacynumericsort",
+      "parentId": "80100000-0000-0000-0000-000000000316",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000316",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "premiereDate": "2023-01-02 00:00:00",
+      "productionYear": 2023,
+      "officialRating": "R",
+      "inheritedParentalRatingValue": 21,
+      "tagsText": "block"
+    },
+    {
+      "key": "legacyNumericSortEarly",
+      "id": "80100000-0000-0000-0000-000000000318",
+      "type": "Movie",
+      "name": "Alpha legacyNumericSort",
+      "sortName": "alpha legacynumericsort",
+      "parentId": "80100000-0000-0000-0000-000000000316",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000316",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "premiereDate": "2001-01-02 00:00:00",
+      "productionYear": 2001,
+      "officialRating": "PG",
+      "inheritedParentalRatingValue": 6,
+      "tagsText": "permit"
+    },
+    {
+      "key": "legacyNumericSortNoDate",
+      "id": "80100000-0000-0000-0000-000000000319",
+      "type": "Movie",
+      "name": "Beta legacyNumericSort",
+      "sortName": "beta legacynumericsort",
+      "parentId": "80100000-0000-0000-0000-000000000316",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000316",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "premiereDate": null,
+      "productionYear": null,
+      "officialRating": null,
+      "inheritedParentalRatingValue": null,
+      "tagsText": "permit"
+    },
+    {
+      "key": "legacySibling",
+      "id": "80100000-0000-0000-0000-000000000320",
+      "type": "BoxSet",
+      "name": "legacySibling",
+      "sortName": "legacysibling",
+      "parentId": "80100000-0000-0000-0000-000000000100",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "dataSibling",
+      "data": {},
+      "tagsText": "permit"
+    },
+    {
+      "key": "legacySiblingLate",
+      "id": "80100000-0000-0000-0000-000000000321",
+      "type": "Movie",
+      "name": "Zulu legacySibling",
+      "sortName": "zulu legacysibling",
+      "parentId": "80100000-0000-0000-0000-000000000320",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000320",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "premiereDate": "2023-01-02 00:00:00",
+      "productionYear": 2023,
+      "officialRating": "R",
+      "inheritedParentalRatingValue": 21,
+      "tagsText": "block"
+    },
+    {
+      "key": "legacySiblingEarly",
+      "id": "80100000-0000-0000-0000-000000000322",
+      "type": "Movie",
+      "name": "Alpha legacySibling",
+      "sortName": "alpha legacysibling",
+      "parentId": "80100000-0000-0000-0000-000000000320",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000320",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "premiereDate": "2001-01-02 00:00:00",
+      "productionYear": 2001,
+      "officialRating": "PG",
+      "inheritedParentalRatingValue": 6,
+      "tagsText": "permit"
+    },
+    {
+      "key": "legacySiblingNoDate",
+      "id": "80100000-0000-0000-0000-000000000323",
+      "type": "Movie",
+      "name": "Beta legacySibling",
+      "sortName": "beta legacysibling",
+      "parentId": "80100000-0000-0000-0000-000000000320",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000320",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "premiereDate": null,
+      "productionYear": null,
+      "officialRating": null,
+      "inheritedParentalRatingValue": null,
+      "tagsText": "permit"
+    },
+    {
+      "key": "dataExact",
+      "id": "80100000-0000-0000-0000-000000000324",
+      "type": "BoxSet",
+      "name": "dataExact",
+      "sortName": "dataexact",
+      "parentId": "80100000-0000-0000-0000-000000000100",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "dataExact",
+      "data": {},
+      "tagsText": "permit"
+    },
+    {
+      "key": "dataExactLate",
+      "id": "80100000-0000-0000-0000-000000000325",
+      "type": "Movie",
+      "name": "Zulu dataExact",
+      "sortName": "zulu dataexact",
+      "parentId": "80100000-0000-0000-0000-000000000324",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000324",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "premiereDate": "2023-01-02 00:00:00",
+      "productionYear": 2023,
+      "officialRating": "R",
+      "inheritedParentalRatingValue": 21,
+      "tagsText": "block"
+    },
+    {
+      "key": "dataExactEarly",
+      "id": "80100000-0000-0000-0000-000000000326",
+      "type": "Movie",
+      "name": "Alpha dataExact",
+      "sortName": "alpha dataexact",
+      "parentId": "80100000-0000-0000-0000-000000000324",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000324",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "premiereDate": "2001-01-02 00:00:00",
+      "productionYear": 2001,
+      "officialRating": "PG",
+      "inheritedParentalRatingValue": 6,
+      "tagsText": "permit"
+    },
+    {
+      "key": "dataExactNoDate",
+      "id": "80100000-0000-0000-0000-000000000327",
+      "type": "Movie",
+      "name": "Beta dataExact",
+      "sortName": "beta dataexact",
+      "parentId": "80100000-0000-0000-0000-000000000324",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000324",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "premiereDate": null,
+      "productionYear": null,
+      "officialRating": null,
+      "inheritedParentalRatingValue": null,
+      "tagsText": "permit"
+    },
+    {
+      "key": "dataTrailing",
+      "id": "80100000-0000-0000-0000-000000000328",
+      "type": "BoxSet",
+      "name": "dataTrailing",
+      "sortName": "datatrailing",
+      "parentId": "80100000-0000-0000-0000-000000000100",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "dataTrailing",
+      "data": {},
+      "tagsText": "permit"
+    },
+    {
+      "key": "dataTrailingLate",
+      "id": "80100000-0000-0000-0000-000000000329",
+      "type": "Movie",
+      "name": "Zulu dataTrailing",
+      "sortName": "zulu datatrailing",
+      "parentId": "80100000-0000-0000-0000-000000000328",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000328",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "premiereDate": "2023-01-02 00:00:00",
+      "productionYear": 2023,
+      "officialRating": "R",
+      "inheritedParentalRatingValue": 21,
+      "tagsText": "block"
+    },
+    {
+      "key": "dataTrailingEarly",
+      "id": "80100000-0000-0000-0000-000000000330",
+      "type": "Movie",
+      "name": "Alpha dataTrailing",
+      "sortName": "alpha datatrailing",
+      "parentId": "80100000-0000-0000-0000-000000000328",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000328",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "premiereDate": "2001-01-02 00:00:00",
+      "productionYear": 2001,
+      "officialRating": "PG",
+      "inheritedParentalRatingValue": 6,
+      "tagsText": "permit"
+    },
+    {
+      "key": "dataTrailingNoDate",
+      "id": "80100000-0000-0000-0000-000000000331",
+      "type": "Movie",
+      "name": "Beta dataTrailing",
+      "sortName": "beta datatrailing",
+      "parentId": "80100000-0000-0000-0000-000000000328",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000328",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "premiereDate": null,
+      "productionYear": null,
+      "officialRating": null,
+      "inheritedParentalRatingValue": null,
+      "tagsText": "permit"
+    },
+    {
+      "key": "dataEscape",
+      "id": "80100000-0000-0000-0000-000000000332",
+      "type": "BoxSet",
+      "name": "dataEscape",
+      "sortName": "dataescape",
+      "parentId": "80100000-0000-0000-0000-000000000100",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "dataEscape",
+      "data": {},
+      "tagsText": "permit"
+    },
+    {
+      "key": "dataEscapeLate",
+      "id": "80100000-0000-0000-0000-000000000333",
+      "type": "Movie",
+      "name": "Zulu dataEscape",
+      "sortName": "zulu dataescape",
+      "parentId": "80100000-0000-0000-0000-000000000332",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000332",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "premiereDate": "2023-01-02 00:00:00",
+      "productionYear": 2023,
+      "officialRating": "R",
+      "inheritedParentalRatingValue": 21,
+      "tagsText": "block"
+    },
+    {
+      "key": "dataEscapeEarly",
+      "id": "80100000-0000-0000-0000-000000000334",
+      "type": "Movie",
+      "name": "Alpha dataEscape",
+      "sortName": "alpha dataescape",
+      "parentId": "80100000-0000-0000-0000-000000000332",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000332",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "premiereDate": "2001-01-02 00:00:00",
+      "productionYear": 2001,
+      "officialRating": "PG",
+      "inheritedParentalRatingValue": 6,
+      "tagsText": "permit"
+    },
+    {
+      "key": "dataEscapeNoDate",
+      "id": "80100000-0000-0000-0000-000000000335",
+      "type": "Movie",
+      "name": "Beta dataEscape",
+      "sortName": "beta dataescape",
+      "parentId": "80100000-0000-0000-0000-000000000332",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000332",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "premiereDate": null,
+      "productionYear": null,
+      "officialRating": null,
+      "inheritedParentalRatingValue": null,
+      "tagsText": "permit"
+    },
+    {
+      "key": "dataUpper",
+      "id": "80100000-0000-0000-0000-000000000336",
+      "type": "BoxSet",
+      "name": "dataUpper",
+      "sortName": "dataupper",
+      "parentId": "80100000-0000-0000-0000-000000000100",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "dataUpper",
+      "data": {},
+      "tagsText": "permit"
+    },
+    {
+      "key": "dataUpperLate",
+      "id": "80100000-0000-0000-0000-000000000337",
+      "type": "Movie",
+      "name": "Zulu dataUpper",
+      "sortName": "zulu dataupper",
+      "parentId": "80100000-0000-0000-0000-000000000336",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000336",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "premiereDate": "2023-01-02 00:00:00",
+      "productionYear": 2023,
+      "officialRating": "R",
+      "inheritedParentalRatingValue": 21,
+      "tagsText": "block"
+    },
+    {
+      "key": "dataUpperEarly",
+      "id": "80100000-0000-0000-0000-000000000338",
+      "type": "Movie",
+      "name": "Alpha dataUpper",
+      "sortName": "alpha dataupper",
+      "parentId": "80100000-0000-0000-0000-000000000336",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000336",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "premiereDate": "2001-01-02 00:00:00",
+      "productionYear": 2001,
+      "officialRating": "PG",
+      "inheritedParentalRatingValue": 6,
+      "tagsText": "permit"
+    },
+    {
+      "key": "dataUpperNoDate",
+      "id": "80100000-0000-0000-0000-000000000339",
+      "type": "Movie",
+      "name": "Beta dataUpper",
+      "sortName": "beta dataupper",
+      "parentId": "80100000-0000-0000-0000-000000000336",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000336",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "premiereDate": null,
+      "productionYear": null,
+      "officialRating": null,
+      "inheritedParentalRatingValue": null,
+      "tagsText": "permit"
+    },
+    {
+      "key": "modernEmpty",
+      "id": "80100000-0000-0000-0000-000000000340",
+      "type": "BoxSet",
+      "name": "modernEmpty",
+      "sortName": "modernempty",
+      "parentId": "80100000-0000-0000-0000-000000000100",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "boxset",
+      "data": {},
+      "tagsText": "permit"
+    },
+    {
+      "key": "modernEmptyLate",
+      "id": "80100000-0000-0000-0000-000000000341",
+      "type": "Movie",
+      "name": "Zulu modernEmpty",
+      "sortName": "zulu modernempty",
+      "parentId": "80100000-0000-0000-0000-000000000340",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000340",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "premiereDate": "2023-01-02 00:00:00",
+      "productionYear": 2023,
+      "officialRating": "R",
+      "inheritedParentalRatingValue": 21,
+      "tagsText": "block"
+    },
+    {
+      "key": "modernEmptyEarly",
+      "id": "80100000-0000-0000-0000-000000000342",
+      "type": "Movie",
+      "name": "Alpha modernEmpty",
+      "sortName": "alpha modernempty",
+      "parentId": "80100000-0000-0000-0000-000000000340",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000340",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "premiereDate": "2001-01-02 00:00:00",
+      "productionYear": 2001,
+      "officialRating": "PG",
+      "inheritedParentalRatingValue": 6,
+      "tagsText": "permit"
+    },
+    {
+      "key": "modernEmptyNoDate",
+      "id": "80100000-0000-0000-0000-000000000343",
+      "type": "Movie",
+      "name": "Beta modernEmpty",
+      "sortName": "beta modernempty",
+      "parentId": "80100000-0000-0000-0000-000000000340",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000340",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "premiereDate": null,
+      "productionYear": null,
+      "officialRating": null,
+      "inheritedParentalRatingValue": null,
+      "tagsText": "permit"
+    },
+    {
+      "key": "modernNoPath",
+      "id": "80100000-0000-0000-0000-000000000344",
+      "type": "BoxSet",
+      "name": "modernNoPath",
+      "sortName": "modernnopath",
+      "parentId": "80100000-0000-0000-0000-000000000100",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "noPath",
+      "data": {},
+      "tagsText": "permit"
+    },
+    {
+      "key": "modernNoPathLate",
+      "id": "80100000-0000-0000-0000-000000000345",
+      "type": "Movie",
+      "name": "Zulu modernNoPath",
+      "sortName": "zulu modernnopath",
+      "parentId": "80100000-0000-0000-0000-000000000344",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000344",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "premiereDate": "2023-01-02 00:00:00",
+      "productionYear": 2023,
+      "officialRating": "R",
+      "inheritedParentalRatingValue": 21,
+      "tagsText": "block"
+    },
+    {
+      "key": "modernNoPathEarly",
+      "id": "80100000-0000-0000-0000-000000000346",
+      "type": "Movie",
+      "name": "Alpha modernNoPath",
+      "sortName": "alpha modernnopath",
+      "parentId": "80100000-0000-0000-0000-000000000344",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000344",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "premiereDate": "2001-01-02 00:00:00",
+      "productionYear": 2001,
+      "officialRating": "PG",
+      "inheritedParentalRatingValue": 6,
+      "tagsText": "permit"
+    },
+    {
+      "key": "modernNoPathNoDate",
+      "id": "80100000-0000-0000-0000-000000000347",
+      "type": "Movie",
+      "name": "Beta modernNoPath",
+      "sortName": "beta modernnopath",
+      "parentId": "80100000-0000-0000-0000-000000000344",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000344",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "premiereDate": null,
+      "productionYear": null,
+      "officialRating": null,
+      "inheritedParentalRatingValue": null,
+      "tagsText": "permit"
+    },
+    {
+      "key": "modernExternalLinked",
+      "id": "80100000-0000-0000-0000-000000000348",
+      "type": "BoxSet",
+      "name": "modernExternalLinked",
+      "sortName": "modernexternallinked",
+      "parentId": "80100000-0000-0000-0000-000000000100",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "external",
+      "data": {},
+      "tagsText": "permit"
+    },
+    {
+      "key": "modernExternalLinkedLate",
+      "id": "80100000-0000-0000-0000-000000000349",
+      "type": "Movie",
+      "name": "Zulu modernExternalLinked",
+      "sortName": "zulu modernexternallinked",
+      "parentId": "80100000-0000-0000-0000-000000000348",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000348",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "premiereDate": "2023-01-02 00:00:00",
+      "productionYear": 2023,
+      "officialRating": "R",
+      "inheritedParentalRatingValue": 21,
+      "tagsText": "block"
+    },
+    {
+      "key": "modernExternalLinkedEarly",
+      "id": "80100000-0000-0000-0000-000000000350",
+      "type": "Movie",
+      "name": "Alpha modernExternalLinked",
+      "sortName": "alpha modernexternallinked",
+      "parentId": "80100000-0000-0000-0000-000000000348",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000348",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "premiereDate": "2001-01-02 00:00:00",
+      "productionYear": 2001,
+      "officialRating": "PG",
+      "inheritedParentalRatingValue": 6,
+      "tagsText": "permit"
+    },
+    {
+      "key": "modernExternalLinkedNoDate",
+      "id": "80100000-0000-0000-0000-000000000351",
+      "type": "Movie",
+      "name": "Beta modernExternalLinked",
+      "sortName": "beta modernexternallinked",
+      "parentId": "80100000-0000-0000-0000-000000000348",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000348",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "premiereDate": null,
+      "productionYear": null,
+      "officialRating": null,
+      "inheritedParentalRatingValue": null,
+      "tagsText": "permit"
+    },
+    {
+      "key": "legacyRated",
+      "id": "80100000-0000-0000-0000-000000000352",
+      "type": "BoxSet",
+      "name": "legacyRated",
+      "sortName": "legacyrated",
+      "parentId": "80100000-0000-0000-0000-000000000100",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "external",
+      "data": {},
+      "tagsText": "permit",
+      "officialRating": "R",
+      "inheritedParentalRatingValue": 21
+    },
+    {
+      "key": "legacyRatedLate",
+      "id": "80100000-0000-0000-0000-000000000353",
+      "type": "Movie",
+      "name": "Zulu legacyRated",
+      "sortName": "zulu legacyrated",
+      "parentId": "80100000-0000-0000-0000-000000000352",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000352",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "premiereDate": "2023-01-02 00:00:00",
+      "productionYear": 2023,
+      "officialRating": "R",
+      "inheritedParentalRatingValue": 21,
+      "tagsText": "block"
+    },
+    {
+      "key": "legacyRatedEarly",
+      "id": "80100000-0000-0000-0000-000000000354",
+      "type": "Movie",
+      "name": "Alpha legacyRated",
+      "sortName": "alpha legacyrated",
+      "parentId": "80100000-0000-0000-0000-000000000352",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000352",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "premiereDate": "2001-01-02 00:00:00",
+      "productionYear": 2001,
+      "officialRating": "PG",
+      "inheritedParentalRatingValue": 6,
+      "tagsText": "permit"
+    },
+    {
+      "key": "legacyRatedNoDate",
+      "id": "80100000-0000-0000-0000-000000000355",
+      "type": "Movie",
+      "name": "Beta legacyRated",
+      "sortName": "beta legacyrated",
+      "parentId": "80100000-0000-0000-0000-000000000352",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000352",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "premiereDate": null,
+      "productionYear": null,
+      "officialRating": null,
+      "inheritedParentalRatingValue": null,
+      "tagsText": "permit"
+    },
+    {
+      "key": "legacyTagged",
+      "id": "80100000-0000-0000-0000-000000000356",
+      "type": "BoxSet",
+      "name": "legacyTagged",
+      "sortName": "legacytagged",
+      "parentId": "80100000-0000-0000-0000-000000000100",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "external",
+      "data": {},
+      "tagsText": "block"
+    },
+    {
+      "key": "legacyTaggedLate",
+      "id": "80100000-0000-0000-0000-000000000357",
+      "type": "Movie",
+      "name": "Zulu legacyTagged",
+      "sortName": "zulu legacytagged",
+      "parentId": "80100000-0000-0000-0000-000000000356",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000356",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "premiereDate": "2023-01-02 00:00:00",
+      "productionYear": 2023,
+      "officialRating": "R",
+      "inheritedParentalRatingValue": 21,
+      "tagsText": "block"
+    },
+    {
+      "key": "legacyTaggedEarly",
+      "id": "80100000-0000-0000-0000-000000000358",
+      "type": "Movie",
+      "name": "Alpha legacyTagged",
+      "sortName": "alpha legacytagged",
+      "parentId": "80100000-0000-0000-0000-000000000356",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000356",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "premiereDate": "2001-01-02 00:00:00",
+      "productionYear": 2001,
+      "officialRating": "PG",
+      "inheritedParentalRatingValue": 6,
+      "tagsText": "permit"
+    },
+    {
+      "key": "legacyTaggedNoDate",
+      "id": "80100000-0000-0000-0000-000000000359",
+      "type": "Movie",
+      "name": "Beta legacyTagged",
+      "sortName": "beta legacytagged",
+      "parentId": "80100000-0000-0000-0000-000000000356",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000356",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "premiereDate": null,
+      "productionYear": null,
+      "officialRating": null,
+      "inheritedParentalRatingValue": null,
+      "tagsText": "permit"
+    },
+    {
+      "key": "legacyNested",
+      "id": "80100000-0000-0000-0000-000000000360",
+      "type": "Folder",
+      "name": "Nested folder",
+      "sortName": "nested folder",
+      "parentId": "80100000-0000-0000-0000-000000000300",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000300",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child"
+    },
+    {
+      "key": "legacyNestedMovie",
+      "id": "80100000-0000-0000-0000-000000000361",
+      "type": "Movie",
+      "name": "Gamma nested",
+      "sortName": "gamma nested",
+      "parentId": "80100000-0000-0000-0000-000000000360",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000360",
+        "80100000-0000-0000-0000-000000000300",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "premiereDate": "1990-01-02 00:00:00",
+      "productionYear": 1990,
+      "officialRating": "PG",
+      "inheritedParentalRatingValue": 6,
+      "tagsText": "permit"
+    },
+    {
+      "key": "linkedEarlyB",
+      "id": "80100000-0000-0000-0000-000000000362",
+      "type": "Movie",
+      "name": "Alpha linked B",
+      "sortName": "alpha linked b",
+      "parentId": "80100000-0000-0000-0000-000000000150",
+      "topParentId": "80100000-0000-0000-0000-000000000150",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000150",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "premiereDate": "1999-01-02 00:00:00",
+      "productionYear": 1999,
+      "officialRating": "PG",
+      "inheritedParentalRatingValue": 6,
+      "tagsText": "permit"
+    },
+    {
+      "key": "linkedLateB",
+      "id": "80100000-0000-0000-0000-000000000363",
+      "type": "Movie",
+      "name": "Zulu linked B",
+      "sortName": "zulu linked b",
+      "parentId": "80100000-0000-0000-0000-000000000150",
+      "topParentId": "80100000-0000-0000-0000-000000000150",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000150",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "premiereDate": "2024-01-02 00:00:00",
+      "productionYear": 2024,
+      "officialRating": "R",
+      "inheritedParentalRatingValue": 21,
+      "tagsText": "block"
+    }
+  ],
+  "links": [
+    {
+      "parentId": "80100000-0000-0000-0000-000000000348",
+      "childId": "80100000-0000-0000-0000-000000000363",
+      "sortOrder": 0,
+      "childType": 0
+    },
+    {
+      "parentId": "80100000-0000-0000-0000-000000000348",
+      "childId": "80100000-0000-0000-0000-000000000362",
+      "sortOrder": 1,
+      "childType": 2
+    }
+  ],
+  "itemValues": [],
+  "itemValueLinks": [],
+  "cases": [
+    {
+      "name": "legacyDefault-memory-default",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyDefault",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "legacyDefault-repository-default",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyDefault",
+      "recursive": true,
+      "omitIds": true,
+      "omitSortBy": false,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "legacyDefault-userless-memory",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyDefault",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "auth": "apiKey",
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "legacySortName-memory-default",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacySortName",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "legacySortName-repository-default",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacySortName",
+      "recursive": true,
+      "omitIds": true,
+      "omitSortBy": false,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "legacySortName-userless-memory",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacySortName",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "auth": "apiKey",
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "legacyDefaultOrder-memory-default",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyDefaultOrder",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "legacyDefaultOrder-repository-default",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyDefaultOrder",
+      "recursive": true,
+      "omitIds": true,
+      "omitSortBy": false,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "legacyDefaultOrder-userless-memory",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyDefaultOrder",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "auth": "apiKey",
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "legacyWrongCase-memory-default",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyWrongCase",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "legacyWrongCase-repository-default",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyWrongCase",
+      "recursive": true,
+      "omitIds": true,
+      "omitSortBy": false,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "legacyWrongCase-userless-memory",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyWrongCase",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "auth": "apiKey",
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "legacyNumericSort-memory-default",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyNumericSort",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "legacyNumericSort-repository-default",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyNumericSort",
+      "recursive": true,
+      "omitIds": true,
+      "omitSortBy": false,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "legacyNumericSort-userless-memory",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyNumericSort",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "auth": "apiKey",
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "legacySibling-memory-default",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacySibling",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "legacySibling-repository-default",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacySibling",
+      "recursive": true,
+      "omitIds": true,
+      "omitSortBy": false,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "legacySibling-userless-memory",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacySibling",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "auth": "apiKey",
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "dataExact-memory-default",
+      "query": "",
+      "scope": [],
+      "parentKey": "dataExact",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "dataExact-repository-default",
+      "query": "",
+      "scope": [],
+      "parentKey": "dataExact",
+      "recursive": true,
+      "omitIds": true,
+      "omitSortBy": false,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "dataExact-userless-memory",
+      "query": "",
+      "scope": [],
+      "parentKey": "dataExact",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "auth": "apiKey",
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "dataTrailing-memory-default",
+      "query": "",
+      "scope": [],
+      "parentKey": "dataTrailing",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "dataTrailing-repository-default",
+      "query": "",
+      "scope": [],
+      "parentKey": "dataTrailing",
+      "recursive": true,
+      "omitIds": true,
+      "omitSortBy": false,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "dataTrailing-userless-memory",
+      "query": "",
+      "scope": [],
+      "parentKey": "dataTrailing",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "auth": "apiKey",
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "dataEscape-memory-default",
+      "query": "",
+      "scope": [],
+      "parentKey": "dataEscape",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "dataEscape-repository-default",
+      "query": "",
+      "scope": [],
+      "parentKey": "dataEscape",
+      "recursive": true,
+      "omitIds": true,
+      "omitSortBy": false,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "dataEscape-userless-memory",
+      "query": "",
+      "scope": [],
+      "parentKey": "dataEscape",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "auth": "apiKey",
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "dataUpper-memory-default",
+      "query": "",
+      "scope": [],
+      "parentKey": "dataUpper",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "dataUpper-repository-default",
+      "query": "",
+      "scope": [],
+      "parentKey": "dataUpper",
+      "recursive": true,
+      "omitIds": true,
+      "omitSortBy": false,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "dataUpper-userless-memory",
+      "query": "",
+      "scope": [],
+      "parentKey": "dataUpper",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "auth": "apiKey",
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "modernEmpty-memory-default",
+      "query": "",
+      "scope": [],
+      "parentKey": "modernEmpty",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "modernEmpty-repository-default",
+      "query": "",
+      "scope": [],
+      "parentKey": "modernEmpty",
+      "recursive": true,
+      "omitIds": true,
+      "omitSortBy": false,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "modernEmpty-userless-memory",
+      "query": "",
+      "scope": [],
+      "parentKey": "modernEmpty",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "auth": "apiKey",
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "modernNoPath-memory-default",
+      "query": "",
+      "scope": [],
+      "parentKey": "modernNoPath",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "modernNoPath-repository-default",
+      "query": "",
+      "scope": [],
+      "parentKey": "modernNoPath",
+      "recursive": true,
+      "omitIds": true,
+      "omitSortBy": false,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "modernNoPath-userless-memory",
+      "query": "",
+      "scope": [],
+      "parentKey": "modernNoPath",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "auth": "apiKey",
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "modernExternalLinked-memory-default",
+      "query": "",
+      "scope": [],
+      "parentKey": "modernExternalLinked",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "modernExternalLinked-repository-default",
+      "query": "",
+      "scope": [],
+      "parentKey": "modernExternalLinked",
+      "recursive": true,
+      "omitIds": true,
+      "omitSortBy": false,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "modernExternalLinked-userless-memory",
+      "query": "",
+      "scope": [],
+      "parentKey": "modernExternalLinked",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "auth": "apiKey",
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "legacyRated-memory-default",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyRated",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "legacyRated-repository-default",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyRated",
+      "recursive": true,
+      "omitIds": true,
+      "omitSortBy": false,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "legacyRated-userless-memory",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyRated",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "auth": "apiKey",
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "legacyTagged-memory-default",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyTagged",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "legacyTagged-repository-default",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyTagged",
+      "recursive": true,
+      "omitIds": true,
+      "omitSortBy": false,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "legacyTagged-userless-memory",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyTagged",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "auth": "apiKey",
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "legacy-memory-name-descending",
+      "query": "SortOrder=Descending",
+      "scope": [],
+      "parentKey": "legacyDefault",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": false,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "legacy-memory-request-default",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyDefault",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": false,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "sortBy": "Default"
+    },
+    {
+      "name": "legacy-memory-page",
+      "query": "StartIndex=1&Limit=1",
+      "scope": [],
+      "parentKey": "legacyDefault",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "legacy-memory-limit-zero",
+      "query": "Limit=0",
+      "scope": [],
+      "parentKey": "legacyDefault",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "legacy-memory-no-total",
+      "query": "StartIndex=1&Limit=1&EnableTotalRecordCount=false",
+      "scope": [],
+      "parentKey": "legacyDefault",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "legacy-memory-no-total-zero",
+      "query": "Limit=0&EnableTotalRecordCount=false",
+      "scope": [],
+      "parentKey": "legacyDefault",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "legacy-repository-premiere-descending",
+      "query": "SortOrder=Descending",
+      "scope": [],
+      "parentKey": "legacyDefault",
+      "recursive": true,
+      "omitIds": true,
+      "omitSortBy": false,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "sortBy": "PremiereDate"
+    },
+    {
+      "name": "legacy-repository-no-total",
+      "query": "StartIndex=1&Limit=1&EnableTotalRecordCount=false",
+      "scope": [],
+      "parentKey": "legacyDefault",
+      "recursive": true,
+      "omitIds": true,
+      "omitSortBy": false,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "legacy-ids-request-order",
+      "query": "",
+      "scope": [
+        "legacyDefaultNoDate",
+        "legacyDefaultLate",
+        "legacyDefaultEarly"
+      ],
+      "parentKey": "legacyDefault",
+      "recursive": false,
+      "omitIds": false,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "legacy-ids-explicit-sort",
+      "query": "SortOrder=Descending",
+      "scope": [
+        "legacyDefaultNoDate",
+        "legacyDefaultLate",
+        "legacyDefaultEarly"
+      ],
+      "parentKey": "legacyDefault",
+      "recursive": false,
+      "omitIds": false,
+      "omitSortBy": false,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "legacy-root-boxsets",
+      "query": "IncludeItemTypes=BoxSet",
+      "scope": [],
+      "recursive": true,
+      "omitIds": true,
+      "omitSortBy": false,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "omitParentId": true
+    },
+    {
+      "name": "legacy-ids-root-boxsets",
+      "query": "IncludeItemTypes=BoxSet",
+      "scope": [
+        "legacyDefault",
+        "legacySortName",
+        "legacyDefaultOrder",
+        "legacyWrongCase",
+        "legacyNumericSort",
+        "legacySibling",
+        "dataExact",
+        "dataTrailing",
+        "dataEscape",
+        "dataUpper",
+        "modernEmpty",
+        "modernNoPath",
+        "modernExternalLinked",
+        "legacyRated",
+        "legacyTagged"
+      ],
+      "recursive": true,
+      "omitIds": false,
+      "omitSortBy": false,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "omitParentId": true
+    },
+    {
+      "name": "modern-linked-explicit-user-memory",
+      "query": "UserId=5c6b5f77-bea9-4a9a-98aa-fae5909892b7",
+      "scope": [],
+      "parentKey": "modernExternalLinked",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "auth": "apiKey",
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "modern-linked-explicit-user-repository",
+      "query": "UserId=5c6b5f77-bea9-4a9a-98aa-fae5909892b7",
+      "scope": [],
+      "parentKey": "modernExternalLinked",
+      "recursive": true,
+      "omitIds": true,
+      "omitSortBy": false,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "auth": "apiKey",
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "legacyDefault-detail",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyDefault",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "detailKey": "legacyDefault",
+      "endpoints": [
+        "detail"
+      ]
+    },
+    {
+      "name": "legacySortName-detail",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyDefault",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "detailKey": "legacySortName",
+      "endpoints": [
+        "detail"
+      ]
+    },
+    {
+      "name": "legacyDefaultOrder-detail",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyDefault",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "detailKey": "legacyDefaultOrder",
+      "endpoints": [
+        "detail"
+      ]
+    },
+    {
+      "name": "legacyWrongCase-detail",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyDefault",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "detailKey": "legacyWrongCase",
+      "endpoints": [
+        "detail"
+      ]
+    },
+    {
+      "name": "legacyNumericSort-detail",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyDefault",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "detailKey": "legacyNumericSort",
+      "endpoints": [
+        "detail"
+      ]
+    },
+    {
+      "name": "legacySibling-detail",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyDefault",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "detailKey": "legacySibling",
+      "endpoints": [
+        "detail"
+      ]
+    },
+    {
+      "name": "dataExact-detail",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyDefault",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "detailKey": "dataExact",
+      "endpoints": [
+        "detail"
+      ]
+    },
+    {
+      "name": "dataTrailing-detail",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyDefault",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "detailKey": "dataTrailing",
+      "endpoints": [
+        "detail"
+      ]
+    },
+    {
+      "name": "dataEscape-detail",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyDefault",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "detailKey": "dataEscape",
+      "endpoints": [
+        "detail"
+      ]
+    },
+    {
+      "name": "dataUpper-detail",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyDefault",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "detailKey": "dataUpper",
+      "endpoints": [
+        "detail"
+      ]
+    },
+    {
+      "name": "modernEmpty-detail",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyDefault",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "detailKey": "modernEmpty",
+      "endpoints": [
+        "detail"
+      ]
+    },
+    {
+      "name": "modernNoPath-detail",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyDefault",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "detailKey": "modernNoPath",
+      "endpoints": [
+        "detail"
+      ]
+    },
+    {
+      "name": "modernExternalLinked-detail",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyDefault",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "detailKey": "modernExternalLinked",
+      "endpoints": [
+        "detail"
+      ]
+    },
+    {
+      "name": "legacyRated-detail",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyDefault",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "detailKey": "legacyRated",
+      "endpoints": [
+        "detail"
+      ]
+    },
+    {
+      "name": "legacyTagged-detail",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyDefault",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "detailKey": "legacyTagged",
+      "endpoints": [
+        "detail"
+      ]
+    },
+    {
+      "name": "legacyDefaultEarly-detail",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyDefault",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "detailKey": "legacyDefaultEarly",
+      "endpoints": [
+        "detail"
+      ]
+    },
+    {
+      "name": "legacyDefaultLate-detail",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyDefault",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "detailKey": "legacyDefaultLate",
+      "endpoints": [
+        "detail"
+      ]
+    },
+    {
+      "name": "legacyNestedMovie-detail",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyDefault",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "detailKey": "legacyNestedMovie",
+      "endpoints": [
+        "detail"
+      ]
+    },
+    {
+      "name": "library-a-legacy-memory",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyDefault",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": false,
+        "EnabledFolders": [
+          "80100000-0000-0000-0000-000000000101"
+        ],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "library-a-legacy-repository",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyDefault",
+      "recursive": true,
+      "omitIds": true,
+      "omitSortBy": false,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": false,
+        "EnabledFolders": [
+          "80100000-0000-0000-0000-000000000101"
+        ],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "library-a-root-boxsets",
+      "query": "IncludeItemTypes=BoxSet",
+      "scope": [],
+      "recursive": true,
+      "omitIds": true,
+      "omitSortBy": false,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": false,
+        "EnabledFolders": [
+          "80100000-0000-0000-0000-000000000101"
+        ],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "omitParentId": true
+    },
+    {
+      "name": "library-a-legacyDefault-detail",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyDefault",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": false,
+        "EnabledFolders": [
+          "80100000-0000-0000-0000-000000000101"
+        ],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "detailKey": "legacyDefault",
+      "endpoints": [
+        "detail"
+      ]
+    },
+    {
+      "name": "library-a-legacyDefaultEarly-detail",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyDefault",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": false,
+        "EnabledFolders": [
+          "80100000-0000-0000-0000-000000000101"
+        ],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "detailKey": "legacyDefaultEarly",
+      "endpoints": [
+        "detail"
+      ]
+    },
+    {
+      "name": "library-b-legacy-memory",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyDefault",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": false,
+        "EnabledFolders": [
+          "80100000-0000-0000-0000-000000000151"
+        ],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "library-b-legacy-repository",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyDefault",
+      "recursive": true,
+      "omitIds": true,
+      "omitSortBy": false,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": false,
+        "EnabledFolders": [
+          "80100000-0000-0000-0000-000000000151"
+        ],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "library-b-root-boxsets",
+      "query": "IncludeItemTypes=BoxSet",
+      "scope": [],
+      "recursive": true,
+      "omitIds": true,
+      "omitSortBy": false,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": false,
+        "EnabledFolders": [
+          "80100000-0000-0000-0000-000000000151"
+        ],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "omitParentId": true
+    },
+    {
+      "name": "library-b-legacyDefault-detail",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyDefault",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": false,
+        "EnabledFolders": [
+          "80100000-0000-0000-0000-000000000151"
+        ],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "detailKey": "legacyDefault",
+      "endpoints": [
+        "detail"
+      ]
+    },
+    {
+      "name": "library-b-legacyDefaultEarly-detail",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyDefault",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": false,
+        "EnabledFolders": [
+          "80100000-0000-0000-0000-000000000151"
+        ],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "detailKey": "legacyDefaultEarly",
+      "endpoints": [
+        "detail"
+      ]
+    },
+    {
+      "name": "no-libraries-legacy-memory",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyDefault",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": false,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "no-libraries-legacy-repository",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyDefault",
+      "recursive": true,
+      "omitIds": true,
+      "omitSortBy": false,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": false,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "no-libraries-root-boxsets",
+      "query": "IncludeItemTypes=BoxSet",
+      "scope": [],
+      "recursive": true,
+      "omitIds": true,
+      "omitSortBy": false,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": false,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "omitParentId": true
+    },
+    {
+      "name": "no-libraries-legacyDefault-detail",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyDefault",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": false,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "detailKey": "legacyDefault",
+      "endpoints": [
+        "detail"
+      ]
+    },
+    {
+      "name": "no-libraries-legacyDefaultEarly-detail",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyDefault",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": false,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "detailKey": "legacyDefaultEarly",
+      "endpoints": [
+        "detail"
+      ]
+    },
+    {
+      "name": "max-ten-legacy-memory",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyDefault",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": 10,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "max-ten-legacy-repository",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyDefault",
+      "recursive": true,
+      "omitIds": true,
+      "omitSortBy": false,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": 10,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "max-ten-root-boxsets",
+      "query": "IncludeItemTypes=BoxSet",
+      "scope": [],
+      "recursive": true,
+      "omitIds": true,
+      "omitSortBy": false,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": 10,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "omitParentId": true
+    },
+    {
+      "name": "max-ten-legacyDefault-detail",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyDefault",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": 10,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "detailKey": "legacyDefault",
+      "endpoints": [
+        "detail"
+      ]
+    },
+    {
+      "name": "max-ten-legacyDefaultEarly-detail",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyDefault",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": 10,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "detailKey": "legacyDefaultEarly",
+      "endpoints": [
+        "detail"
+      ]
+    },
+    {
+      "name": "blocked-legacy-memory",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyDefault",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [
+          "block"
+        ],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "blocked-legacy-repository",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyDefault",
+      "recursive": true,
+      "omitIds": true,
+      "omitSortBy": false,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [
+          "block"
+        ],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "blocked-root-boxsets",
+      "query": "IncludeItemTypes=BoxSet",
+      "scope": [],
+      "recursive": true,
+      "omitIds": true,
+      "omitSortBy": false,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [
+          "block"
+        ],
+        "AllowedTags": []
+      },
+      "omitParentId": true
+    },
+    {
+      "name": "blocked-legacyDefault-detail",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyDefault",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [
+          "block"
+        ],
+        "AllowedTags": []
+      },
+      "detailKey": "legacyDefault",
+      "endpoints": [
+        "detail"
+      ]
+    },
+    {
+      "name": "blocked-legacyDefaultEarly-detail",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyDefault",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [
+          "block"
+        ],
+        "AllowedTags": []
+      },
+      "detailKey": "legacyDefaultEarly",
+      "endpoints": [
+        "detail"
+      ]
+    },
+    {
+      "name": "allowed-legacy-memory",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyDefault",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": [
+          "permit"
+        ]
+      }
+    },
+    {
+      "name": "allowed-legacy-repository",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyDefault",
+      "recursive": true,
+      "omitIds": true,
+      "omitSortBy": false,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": [
+          "permit"
+        ]
+      }
+    },
+    {
+      "name": "allowed-root-boxsets",
+      "query": "IncludeItemTypes=BoxSet",
+      "scope": [],
+      "recursive": true,
+      "omitIds": true,
+      "omitSortBy": false,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": [
+          "permit"
+        ]
+      },
+      "omitParentId": true
+    },
+    {
+      "name": "allowed-legacyDefault-detail",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyDefault",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": [
+          "permit"
+        ]
+      },
+      "detailKey": "legacyDefault",
+      "endpoints": [
+        "detail"
+      ]
+    },
+    {
+      "name": "allowed-legacyDefaultEarly-detail",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyDefault",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": [
+          "permit"
+        ]
+      },
+      "detailKey": "legacyDefaultEarly",
+      "endpoints": [
+        "detail"
+      ]
+    },
+    {
+      "name": "unrated-movie-legacy-memory",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyDefault",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [
+          "Movie"
+        ],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "unrated-movie-legacy-repository",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyDefault",
+      "recursive": true,
+      "omitIds": true,
+      "omitSortBy": false,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [
+          "Movie"
+        ],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "unrated-movie-root-boxsets",
+      "query": "IncludeItemTypes=BoxSet",
+      "scope": [],
+      "recursive": true,
+      "omitIds": true,
+      "omitSortBy": false,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [
+          "Movie"
+        ],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "omitParentId": true
+    },
+    {
+      "name": "unrated-movie-legacyDefault-detail",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyDefault",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [
+          "Movie"
+        ],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "detailKey": "legacyDefault",
+      "endpoints": [
+        "detail"
+      ]
+    },
+    {
+      "name": "unrated-movie-legacyDefaultEarly-detail",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyDefault",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [
+          "Movie"
+        ],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "detailKey": "legacyDefaultEarly",
+      "endpoints": [
+        "detail"
+      ]
+    },
+    {
+      "name": "max-ten-legacyRated-memory",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyRated",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": 10,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "max-ten-legacyRated-api-target-repository",
+      "query": "UserId=5c6b5f77-bea9-4a9a-98aa-fae5909892b7",
+      "scope": [],
+      "parentKey": "legacyRated",
+      "recursive": true,
+      "omitIds": true,
+      "omitSortBy": false,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": 10,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "auth": "apiKey",
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "max-ten-legacyRated-detail",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyRated",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": 10,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "detailKey": "legacyRated",
+      "endpoints": [
+        "detail"
+      ]
+    },
+    {
+      "name": "max-ten-legacyRatedEarly-detail",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyRated",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": 10,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "detailKey": "legacyRatedEarly",
+      "endpoints": [
+        "detail"
+      ]
+    },
+    {
+      "name": "blocked-legacyTagged-memory",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyTagged",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [
+          "block"
+        ],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "blocked-legacyTagged-api-target-repository",
+      "query": "UserId=5c6b5f77-bea9-4a9a-98aa-fae5909892b7",
+      "scope": [],
+      "parentKey": "legacyTagged",
+      "recursive": true,
+      "omitIds": true,
+      "omitSortBy": false,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [
+          "block"
+        ],
+        "AllowedTags": []
+      },
+      "auth": "apiKey",
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "blocked-legacyTagged-detail",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyTagged",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [
+          "block"
+        ],
+        "AllowedTags": []
+      },
+      "detailKey": "legacyTagged",
+      "endpoints": [
+        "detail"
+      ]
+    },
+    {
+      "name": "blocked-legacyTaggedEarly-detail",
+      "query": "",
+      "scope": [],
+      "parentKey": "legacyTagged",
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [
+          "block"
+        ],
+        "AllowedTags": []
+      },
+      "detailKey": "legacyTaggedEarly",
+      "endpoints": [
+        "detail"
+      ]
+    }
+  ]
+}

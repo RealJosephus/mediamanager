@@ -1,0 +1,36 @@
+[
+  { "name": "empty movie", "type": "Movie", "json": "{}" },
+  { "name": "empty episode", "type": "Episode", "json": "{}" },
+  { "name": "empty series", "type": "Series", "json": "{}" },
+  { "name": "empty album", "type": "MusicAlbum", "json": "{}" },
+  { "name": "full movie", "type": "Movie", "json": "{\"Name\":\" New title \",\"ForcedSortName\":\"Sort\",\"OriginalTitle\":\" \",\"OriginalLanguage\":\"zh\",\"CriticRating\":\"9.123456789\",\"CommunityRating\":8.123456789,\"IndexNumber\":\"4\",\"ParentIndexNumber\":2,\"Overview\":\"Edited\",\"Genres\":[\"Drama\",\"DRAMA\",\" drama \"],\"Studios\":[{\"Name\":\"Studio\"},{\"Name\":\"STUDIO\"}],\"Taglines\":[\"first\",\"second\"],\"DateCreated\":\"2024-01-02T03:04:05.1234567\",\"PremiereDate\":\"2024-02-03T03:04:05.1234567Z\",\"ProductionYear\":2024,\"OfficialRating\":\" \",\"CustomRating\":\"PG\",\"Tags\":[\" Tag \",\"tag\",\"\"],\"ProductionLocations\":[\"US\",\"us\"],\"PreferredMetadataLanguage\":\"zh\",\"PreferredMetadataCountryCode\":\"CN\",\"LockData\":true,\"LockedFields\":[\"Name\",\"Tags\"],\"ProviderIds\":{\"tmdb\":\" 12 \",\"Imdb\":\"invalid\",\"Other\":\" value \",\"bad=key\":\"x\"},\"Video3DFormat\":\"HalfSideBySide\",\"AspectRatio\":\"16:9\",\"RunTimeTicks\":10,\"People\":[{\"Name\":\" Actor \",\"Type\":\"Actor\",\"Role\":\" Lead \",\"SortOrder\":5}]}" },
+  { "name": "explicit null preserves arrays", "type": "Movie", "json": "{\"Name\":\"Null arrays\",\"Genres\":null,\"Tags\":null,\"Studios\":null,\"People\":null,\"ProviderIds\":null,\"LockedFields\":null,\"LockData\":null,\"Taglines\":null}" },
+  { "name": "empty arrays clear", "type": "Movie", "json": "{\"Name\":\"Clear\",\"Genres\":[],\"Tags\":[],\"Studios\":[],\"People\":[],\"ProviderIds\":{},\"LockedFields\":[],\"Taglines\":[]}" },
+  { "name": "offset date relabels local wall time", "type": "Movie", "json": "{\"Name\":\"Date\",\"DateCreated\":\"2024-01-02T03:04:05.1234567-05:00\",\"EndDate\":\"2025-03-04\"}" },
+  { "name": "series runtime and status", "type": "Series", "json": "{\"Name\":\"Series\",\"RunTimeTicks\":\"9007199254740995\",\"Status\":\"ended\",\"AirDays\":[\"Monday\",\"Friday\"],\"AirTime\":\"21:00\",\"DisplayOrder\":\"DVD\"}" },
+  { "name": "series status ignores parser aliases", "type": "Series", "json": "{\"Name\":\"Series\",\"Status\":\"returning\"}" },
+  { "name": "episode special placement", "type": "Episode", "json": "{\"Name\":\"Special\",\"SeriesName\":\"Custom series\",\"AirsAfterSeasonNumber\":1,\"AirsBeforeSeasonNumber\":2,\"AirsBeforeEpisodeNumber\":3,\"IndexNumberEnd\":10,\"IndexNumber\":4,\"RunTimeTicks\":12}" },
+  { "name": "music video artists", "type": "MusicVideo", "json": "{\"Name\":\"Music video\",\"Album\":\"Album\",\"ArtistItems\":[{\"Name\":\" Artist \"},{\"Name\":\"ARTIST\"}],\"AlbumArtists\":[{\"Name\":\"Ignored\"}]}" },
+  { "name": "audio artists", "type": "Audio", "json": "{\"Name\":\"Track\",\"Album\":\"Album\",\"ArtistItems\":[{\"Name\":\" Artist \"},{\"Name\":\"ARTIST\"}],\"AlbumArtists\":[{\"Name\":\" Album artist \"},{\"Name\":\"ALBUM ARTIST\"}],\"Artists\":[\"Ignored DTO list\"]}" },
+  { "name": "numeric string title converter", "type": "Movie", "json": "{\"name\":123,\"Name\":false,\"OriginalTitle\":3.0}" },
+  { "name": "duplicate bad integer", "type": "Movie", "json": "{\"IndexNumber\":\"bad\",\"IndexNumber\":2}" },
+  { "name": "fractional integer", "type": "Movie", "json": "{\"IndexNumber\":2.0}" },
+  { "name": "bad boolean", "type": "Movie", "json": "{\"LockData\":\"true\"}" },
+  { "name": "bad enum", "type": "Movie", "json": "{\"LockedFields\":[\"Missing\"]}" },
+  { "name": "bad unrelated guid", "type": "Movie", "json": "{\"Id\":\"bad\"}" },
+  { "name": "bad unrelated enum dictionary", "type": "Movie", "json": "{\"ImageTags\":{\"Missing\":\"tag\"}}" },
+  { "name": "nullable list elements", "type": "Movie", "json": "{\"Name\":\"Nullable lists\",\"Genres\":[null,null,\"Drama\"],\"Studios\":[{\"Name\":null},{\"Name\":\"Studio\"}],\"ProductionLocations\":[null,\"US\",null]}" },
+  { "name": "original language name normalizes", "type": "Movie", "json": "{\"Name\":\"Language\",\"OriginalLanguage\":\"French\"}" },
+  { "name": "series cascades and recursive locks", "type": "Series", "json": "{\"Name\":\"Renamed\",\"OfficialRating\":\"PG\",\"CustomRating\":\"G\",\"Tags\":[\"KEEP\",\"new\"],\"DisplayOrder\":\"aired\"}", "children": [
+    { "name": "Season", "type": "Season", "tags": ["Old", "keep", "child"], "lockedFields": ["OfficialRating"], "children": [
+      { "name": "Episode", "type": "Episode", "tags": ["Old", "keep"], "lockedFields": ["Tags"] }
+    ] },
+    { "name": "Direct episode", "type": "Episode", "tags": ["Old"], "locked": true }
+  ] },
+  { "name": "season cascades", "type": "Season", "json": "{\"Name\":\"Renamed season\",\"OfficialRating\":\"PG\",\"CustomRating\":\"G\",\"Tags\":[\"KEEP\",\"new\"],\"LockData\":true}", "children": [
+    { "name": "Episode", "type": "Episode", "tags": ["Old", "keep"], "lockedFields": ["OfficialRating"] }
+  ] },
+  { "name": "album cascades", "type": "MusicAlbum", "json": "{\"Name\":\"Renamed album\",\"OfficialRating\":\"PG\",\"CustomRating\":\"G\",\"Tags\":[\"new\"],\"LockData\":true}", "children": [
+    { "name": "Track", "type": "Audio", "tags": ["Old", "keep"] }
+  ] }
+]

@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <Reference Include="MediaBrowser.Controller"><HintPath>$(JellyfinAssemblyDirectory)/MediaBrowser.Controller.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="MediaBrowser.Model"><HintPath>$(JellyfinAssemblyDirectory)/MediaBrowser.Model.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="MediaBrowser.Common"><HintPath>$(JellyfinAssemblyDirectory)/MediaBrowser.Common.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="Jellyfin.Data"><HintPath>$(JellyfinAssemblyDirectory)/Jellyfin.Data.dll</HintPath><Private>false</Private></Reference>
+  </ItemGroup>
+  <Target Name="RequireReferenceAssemblies" BeforeTargets="ResolveReferences">
+    <Error Condition="!Exists('$(JellyfinAssemblyDirectory)/MediaBrowser.Controller.dll')" Text="Set JellyfinAssemblyDirectory to the isolated, baseline-verified native build." />
+  </Target>
+</Project>

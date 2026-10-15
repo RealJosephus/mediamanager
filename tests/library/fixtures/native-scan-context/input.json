@@ -1,0 +1,967 @@
+[
+  {
+    "item": {
+      "type": "Folder",
+      "id": "97910000-0000-0000-0000-000000000001",
+      "Path": "Z:\\Media"
+    },
+    "parents": [
+      {
+        "type": "AggregateFolder",
+        "id": "97910000-0000-0000-0000-000000000002",
+        "Path": "Z:\\Root"
+      }
+    ],
+    "collections": [],
+    "name": "no-collection"
+  },
+  {
+    "item": {
+      "type": "Folder",
+      "id": "97910000-0000-0000-0000-000000000001",
+      "Path": "Z:\\Media"
+    },
+    "parents": [
+      {
+        "type": "AggregateFolder",
+        "id": "97910000-0000-0000-0000-000000000002",
+        "Path": "Z:\\Root"
+      }
+    ],
+    "collections": [
+      {
+        "type": "CollectionFolder",
+        "id": "97910000-0000-0000-0000-000000000020",
+        "Path": "Z:\\Views\\A",
+        "PhysicalLocationsList": [
+          "Z:\\Media"
+        ],
+        "CollectionType": "movies",
+        "country": "AA"
+      }
+    ],
+    "name": "one-collection"
+  },
+  {
+    "item": {
+      "type": "Folder",
+      "id": "97910000-0000-0000-0000-000000000001",
+      "Path": "Z:\\Media"
+    },
+    "parents": [
+      {
+        "type": "AggregateFolder",
+        "id": "97910000-0000-0000-0000-000000000002",
+        "Path": "Z:\\Root"
+      }
+    ],
+    "collections": [
+      {
+        "type": "CollectionFolder",
+        "id": "97910000-0000-0000-0000-000000000020",
+        "Path": "Z:\\Views\\A",
+        "PhysicalLocationsList": [
+          "Z:\\Media"
+        ],
+        "CollectionType": "movies",
+        "country": "AA"
+      },
+      {
+        "type": "CollectionFolder",
+        "id": "97910000-0000-0000-0000-000000000010",
+        "Path": "Z:\\Views\\B",
+        "PhysicalLocationsList": [
+          "Z:\\Media"
+        ],
+        "CollectionType": "music",
+        "country": "BB"
+      }
+    ],
+    "name": "first-high-id-movies"
+  },
+  {
+    "item": {
+      "type": "Folder",
+      "id": "97910000-0000-0000-0000-000000000001",
+      "Path": "Z:\\Media"
+    },
+    "parents": [
+      {
+        "type": "AggregateFolder",
+        "id": "97910000-0000-0000-0000-000000000002",
+        "Path": "Z:\\Root"
+      }
+    ],
+    "collections": [
+      {
+        "type": "CollectionFolder",
+        "id": "97910000-0000-0000-0000-000000000010",
+        "Path": "Z:\\Views\\B",
+        "PhysicalLocationsList": [
+          "Z:\\Media"
+        ],
+        "CollectionType": "music",
+        "country": "BB"
+      },
+      {
+        "type": "CollectionFolder",
+        "id": "97910000-0000-0000-0000-000000000020",
+        "Path": "Z:\\Views\\A",
+        "PhysicalLocationsList": [
+          "Z:\\Media"
+        ],
+        "CollectionType": "movies",
+        "country": "AA"
+      }
+    ],
+    "name": "first-low-id-music"
+  },
+  {
+    "item": {
+      "type": "Folder",
+      "id": "97910000-0000-0000-0000-000000000001",
+      "Path": "Z:\\Media"
+    },
+    "parents": [
+      {
+        "type": "AggregateFolder",
+        "id": "97910000-0000-0000-0000-000000000002",
+        "Path": "Z:\\Root"
+      }
+    ],
+    "collections": [
+      {
+        "type": "CollectionFolder",
+        "id": "97910000-0000-0000-0000-000000000020",
+        "Path": "Z:\\Views\\A",
+        "PhysicalLocationsList": [
+          "Z:\\Media"
+        ],
+        "CollectionType": null,
+        "country": "AA"
+      },
+      {
+        "type": "CollectionFolder",
+        "id": "97910000-0000-0000-0000-000000000010",
+        "Path": "Z:\\Views\\B",
+        "PhysicalLocationsList": [
+          "Z:\\Media"
+        ],
+        "CollectionType": "music",
+        "country": "BB"
+      }
+    ],
+    "name": "first-missing-type"
+  },
+  {
+    "item": {
+      "type": "Folder",
+      "id": "97910000-0000-0000-0000-000000000001",
+      "Path": "Z:\\Media"
+    },
+    "parents": [
+      {
+        "type": "AggregateFolder",
+        "id": "97910000-0000-0000-0000-000000000002",
+        "Path": "Z:\\Root"
+      }
+    ],
+    "collections": [
+      {
+        "type": "Folder",
+        "id": "97910000-0000-0000-0000-000000000020",
+        "Path": "Z:\\Media"
+      },
+      {
+        "type": "CollectionFolder",
+        "id": "97910000-0000-0000-0000-000000000010",
+        "Path": "Z:\\Views\\B",
+        "PhysicalLocationsList": [
+          "Z:\\Media"
+        ],
+        "CollectionType": "music",
+        "country": "BB"
+      }
+    ],
+    "name": "first-folder-only"
+  },
+  {
+    "item": {
+      "type": "Folder",
+      "id": "97910000-0000-0000-0000-000000000001",
+      "Path": "Z:\\Media"
+    },
+    "parents": [
+      {
+        "type": "AggregateFolder",
+        "id": "97910000-0000-0000-0000-000000000002",
+        "Path": "Z:\\Root"
+      }
+    ],
+    "collections": [
+      {
+        "type": "CollectionFolder",
+        "id": "97910000-0000-0000-0000-000000000020",
+        "Path": "Z:\\Views\\A",
+        "PhysicalLocationsList": [
+          "Z:\\Media"
+        ],
+        "CollectionType": "movies",
+        "country": "AA"
+      }
+    ],
+    "name": "physical-location-exact"
+  },
+  {
+    "item": {
+      "type": "Folder",
+      "id": "97910000-0000-0000-0000-000000000001",
+      "Path": "Z:\\Media"
+    },
+    "parents": [
+      {
+        "type": "AggregateFolder",
+        "id": "97910000-0000-0000-0000-000000000002",
+        "Path": "Z:\\Root"
+      }
+    ],
+    "collections": [
+      {
+        "type": "CollectionFolder",
+        "id": "97910000-0000-0000-0000-000000000020",
+        "Path": "Z:\\Views\\A",
+        "PhysicalLocationsList": [
+          "z:\\media"
+        ],
+        "CollectionType": "movies",
+        "country": "AA"
+      }
+    ],
+    "name": "physical-location-case"
+  },
+  {
+    "item": {
+      "type": "Folder",
+      "id": "97910000-0000-0000-0000-000000000001",
+      "Path": "Z:\\Media"
+    },
+    "parents": [
+      {
+        "type": "AggregateFolder",
+        "id": "97910000-0000-0000-0000-000000000002",
+        "Path": "Z:\\Root"
+      }
+    ],
+    "collections": [
+      {
+        "type": "CollectionFolder",
+        "id": "97910000-0000-0000-0000-000000000020",
+        "Path": "Z:\\Views\\A",
+        "PhysicalLocationsList": [
+          "Z:/Media"
+        ],
+        "CollectionType": "movies",
+        "country": "AA"
+      }
+    ],
+    "name": "physical-location-slash"
+  },
+  {
+    "item": {
+      "type": "Folder",
+      "id": "97910000-0000-0000-0000-000000000001",
+      "Path": "Z:\\Media"
+    },
+    "parents": [
+      {
+        "type": "AggregateFolder",
+        "id": "97910000-0000-0000-0000-000000000002",
+        "Path": "Z:\\Root"
+      }
+    ],
+    "collections": [
+      {
+        "type": "CollectionFolder",
+        "id": "97910000-0000-0000-0000-000000000020",
+        "Path": "Z:\\Views\\A",
+        "PhysicalLocationsList": [
+          "Z:\\Media\\"
+        ],
+        "CollectionType": "movies",
+        "country": "AA"
+      }
+    ],
+    "name": "physical-location-trailing"
+  },
+  {
+    "item": {
+      "type": "Folder",
+      "id": "97910000-0000-0000-0000-000000000001",
+      "Path": "Z:\\Media"
+    },
+    "parents": [
+      {
+        "type": "AggregateFolder",
+        "id": "97910000-0000-0000-0000-000000000002",
+        "Path": "Z:\\Root"
+      }
+    ],
+    "collections": [
+      {
+        "type": "CollectionFolder",
+        "id": "97910000-0000-0000-0000-000000000020",
+        "Path": "Z:\\Views\\A",
+        "PhysicalLocationsList": null,
+        "CollectionType": "movies",
+        "country": "AA"
+      }
+    ],
+    "name": "physical-location-null",
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "item": {
+      "type": "Folder",
+      "id": "97910000-0000-0000-0000-000000000001",
+      "Path": "Z:\\Media"
+    },
+    "parents": [
+      {
+        "type": "AggregateFolder",
+        "id": "97910000-0000-0000-0000-000000000002",
+        "Path": "Z:\\Root"
+      }
+    ],
+    "collections": [
+      {
+        "type": "CollectionFolder",
+        "id": "97910000-0000-0000-0000-000000000020",
+        "Path": "Z:\\Media",
+        "PhysicalLocationsList": [],
+        "CollectionType": "movies",
+        "country": "AA"
+      }
+    ],
+    "name": "collection-path-exact"
+  },
+  {
+    "item": {
+      "type": "Folder",
+      "id": "97910000-0000-0000-0000-000000000001",
+      "Path": "Z:\\Media"
+    },
+    "parents": [
+      {
+        "type": "AggregateFolder",
+        "id": "97910000-0000-0000-0000-000000000002",
+        "Path": "Z:\\Root"
+      }
+    ],
+    "collections": [
+      {
+        "type": "CollectionFolder",
+        "id": "97910000-0000-0000-0000-000000000020",
+        "Path": "z:\\media",
+        "PhysicalLocationsList": [],
+        "CollectionType": "movies",
+        "country": "AA"
+      }
+    ],
+    "name": "collection-path-case"
+  },
+  {
+    "item": {
+      "type": "Folder",
+      "id": "97910000-0000-0000-0000-000000000001",
+      "Path": "Z:\\Media"
+    },
+    "parents": [
+      {
+        "type": "AggregateFolder",
+        "id": "97910000-0000-0000-0000-000000000002",
+        "Path": "Z:\\Root"
+      }
+    ],
+    "collections": [
+      {
+        "type": "CollectionFolder",
+        "id": "97910000-0000-0000-0000-000000000020",
+        "Path": "Z:/Media",
+        "PhysicalLocationsList": [],
+        "CollectionType": "movies",
+        "country": "AA"
+      }
+    ],
+    "name": "collection-path-slash"
+  },
+  {
+    "item": {
+      "type": "Folder",
+      "id": "97910000-0000-0000-0000-000000000001",
+      "Path": "Z:\\Media"
+    },
+    "parents": [
+      {
+        "type": "AggregateFolder",
+        "id": "97910000-0000-0000-0000-000000000002",
+        "Path": "Z:\\Root"
+      }
+    ],
+    "collections": [
+      {
+        "type": "CollectionFolder",
+        "id": "97910000-0000-0000-0000-000000000020",
+        "Path": "Z:\\Media\\",
+        "PhysicalLocationsList": [],
+        "CollectionType": "movies",
+        "country": "AA"
+      }
+    ],
+    "name": "collection-path-trailing"
+  },
+  {
+    "item": {
+      "type": "Folder",
+      "id": "97910000-0000-0000-0000-000000000001",
+      "Path": "Z:\\Linked",
+      "ParentId": "00000000-0000-0000-0000-000000000000",
+      "OwnerId": "97910000-0000-0000-0000-000000000003"
+    },
+    "parents": [
+      {
+        "type": "Folder",
+        "id": "97910000-0000-0000-0000-000000000003",
+        "Path": "Z:\\Media"
+      },
+      {
+        "type": "AggregateFolder",
+        "id": "97910000-0000-0000-0000-000000000002",
+        "Path": "Z:\\Root"
+      }
+    ],
+    "collections": [
+      {
+        "type": "CollectionFolder",
+        "id": "97910000-0000-0000-0000-000000000020",
+        "Path": "Z:\\Views\\A",
+        "PhysicalLocationsList": [
+          "Z:\\Media"
+        ],
+        "CollectionType": "movies",
+        "country": "AA"
+      }
+    ],
+    "name": "owned-item"
+  },
+  {
+    "item": {
+      "type": "CollectionFolder",
+      "id": "97910000-0000-0000-0000-000000000020",
+      "Path": "Z:\\Views\\A",
+      "PhysicalLocationsList": [
+        "Z:\\Media"
+      ],
+      "CollectionType": "movies",
+      "country": "AA"
+    },
+    "parents": [],
+    "collections": [
+      {
+        "type": "CollectionFolder",
+        "id": "97910000-0000-0000-0000-000000000010",
+        "Path": "Z:\\Views\\B",
+        "PhysicalLocationsList": [
+          "Z:\\Media"
+        ],
+        "CollectionType": "music",
+        "country": "BB"
+      }
+    ],
+    "name": "self-collection"
+  },
+  {
+    "item": {
+      "type": "Folder",
+      "id": "97910000-0000-0000-0000-000000000001",
+      "Path": "Z:\\Media"
+    },
+    "parents": [
+      {
+        "type": "AggregateFolder",
+        "id": "97910000-0000-0000-0000-000000000002",
+        "Path": "Z:\\Root"
+      }
+    ],
+    "collections": [
+      {
+        "type": "CollectionFolder",
+        "id": "97910000-0000-0000-0000-000000000020",
+        "Path": "Z:\\Views\\A",
+        "PhysicalLocationsList": [
+          "Z:\\Media"
+        ],
+        "CollectionType": "movies",
+        "country": "AA"
+      },
+      {
+        "type": "CollectionFolder",
+        "id": "97910000-0000-0000-0000-000000000010",
+        "Path": "Z:\\Views\\B",
+        "PhysicalLocationsList": [
+          "Z:\\Media"
+        ],
+        "CollectionType": "music",
+        "country": "BB"
+      }
+    ],
+    "name": "override-exact",
+    "contentTypes": [
+      {
+        "Name": "Z:\\Media",
+        "Value": "tvshows"
+      }
+    ]
+  },
+  {
+    "item": {
+      "type": "Folder",
+      "id": "97910000-0000-0000-0000-000000000001",
+      "Path": "Z:\\Media"
+    },
+    "parents": [
+      {
+        "type": "AggregateFolder",
+        "id": "97910000-0000-0000-0000-000000000002",
+        "Path": "Z:\\Root"
+      }
+    ],
+    "collections": [
+      {
+        "type": "CollectionFolder",
+        "id": "97910000-0000-0000-0000-000000000020",
+        "Path": "Z:\\Views\\A",
+        "PhysicalLocationsList": [
+          "Z:\\Media"
+        ],
+        "CollectionType": "movies",
+        "country": "AA"
+      },
+      {
+        "type": "CollectionFolder",
+        "id": "97910000-0000-0000-0000-000000000010",
+        "Path": "Z:\\Views\\B",
+        "PhysicalLocationsList": [
+          "Z:\\Media"
+        ],
+        "CollectionType": "music",
+        "country": "BB"
+      }
+    ],
+    "name": "override-case-path",
+    "contentTypes": [
+      {
+        "Name": "z:\\media",
+        "Value": "tvshows"
+      }
+    ]
+  },
+  {
+    "item": {
+      "type": "Folder",
+      "id": "97910000-0000-0000-0000-000000000001",
+      "Path": "Z:\\Media"
+    },
+    "parents": [
+      {
+        "type": "AggregateFolder",
+        "id": "97910000-0000-0000-0000-000000000002",
+        "Path": "Z:\\Root"
+      }
+    ],
+    "collections": [
+      {
+        "type": "CollectionFolder",
+        "id": "97910000-0000-0000-0000-000000000020",
+        "Path": "Z:\\Views\\A",
+        "PhysicalLocationsList": [
+          "Z:\\Media"
+        ],
+        "CollectionType": "movies",
+        "country": "AA"
+      },
+      {
+        "type": "CollectionFolder",
+        "id": "97910000-0000-0000-0000-000000000010",
+        "Path": "Z:\\Views\\B",
+        "PhysicalLocationsList": [
+          "Z:\\Media"
+        ],
+        "CollectionType": "music",
+        "country": "BB"
+      }
+    ],
+    "name": "override-slash-path",
+    "contentTypes": [
+      {
+        "Name": "Z:/Media",
+        "Value": "tvshows"
+      }
+    ]
+  },
+  {
+    "item": {
+      "type": "Folder",
+      "id": "97910000-0000-0000-0000-000000000001",
+      "Path": "Z:\\Media"
+    },
+    "parents": [
+      {
+        "type": "AggregateFolder",
+        "id": "97910000-0000-0000-0000-000000000002",
+        "Path": "Z:\\Root"
+      }
+    ],
+    "collections": [
+      {
+        "type": "CollectionFolder",
+        "id": "97910000-0000-0000-0000-000000000020",
+        "Path": "Z:\\Views\\A",
+        "PhysicalLocationsList": [
+          "Z:\\Media"
+        ],
+        "CollectionType": "movies",
+        "country": "AA"
+      },
+      {
+        "type": "CollectionFolder",
+        "id": "97910000-0000-0000-0000-000000000010",
+        "Path": "Z:\\Views\\B",
+        "PhysicalLocationsList": [
+          "Z:\\Media"
+        ],
+        "CollectionType": "music",
+        "country": "BB"
+      }
+    ],
+    "name": "override-trailing-path",
+    "contentTypes": [
+      {
+        "Name": "Z:\\Media\\",
+        "Value": "tvshows"
+      }
+    ]
+  },
+  {
+    "item": {
+      "type": "Folder",
+      "id": "97910000-0000-0000-0000-000000000001",
+      "Path": "Z:\\Media"
+    },
+    "parents": [
+      {
+        "type": "AggregateFolder",
+        "id": "97910000-0000-0000-0000-000000000002",
+        "Path": "Z:\\Root"
+      }
+    ],
+    "collections": [
+      {
+        "type": "CollectionFolder",
+        "id": "97910000-0000-0000-0000-000000000020",
+        "Path": "Z:\\Views\\A",
+        "PhysicalLocationsList": [
+          "Z:\\Media"
+        ],
+        "CollectionType": "movies",
+        "country": "AA"
+      },
+      {
+        "type": "CollectionFolder",
+        "id": "97910000-0000-0000-0000-000000000010",
+        "Path": "Z:\\Views\\B",
+        "PhysicalLocationsList": [
+          "Z:\\Media"
+        ],
+        "CollectionType": "music",
+        "country": "BB"
+      }
+    ],
+    "name": "override-case-value",
+    "contentTypes": [
+      {
+        "Name": "Z:\\Media",
+        "Value": "Movies"
+      }
+    ]
+  },
+  {
+    "item": {
+      "type": "Folder",
+      "id": "97910000-0000-0000-0000-000000000001",
+      "Path": "Z:\\Media"
+    },
+    "parents": [
+      {
+        "type": "AggregateFolder",
+        "id": "97910000-0000-0000-0000-000000000002",
+        "Path": "Z:\\Root"
+      }
+    ],
+    "collections": [
+      {
+        "type": "CollectionFolder",
+        "id": "97910000-0000-0000-0000-000000000020",
+        "Path": "Z:\\Views\\A",
+        "PhysicalLocationsList": [
+          "Z:\\Media"
+        ],
+        "CollectionType": "movies",
+        "country": "AA"
+      },
+      {
+        "type": "CollectionFolder",
+        "id": "97910000-0000-0000-0000-000000000010",
+        "Path": "Z:\\Views\\B",
+        "PhysicalLocationsList": [
+          "Z:\\Media"
+        ],
+        "CollectionType": "music",
+        "country": "BB"
+      }
+    ],
+    "name": "override-numeric-value",
+    "contentTypes": [
+      {
+        "Name": "Z:\\Media",
+        "Value": "1"
+      }
+    ]
+  },
+  {
+    "item": {
+      "type": "Folder",
+      "id": "97910000-0000-0000-0000-000000000001",
+      "Path": "Z:\\Media"
+    },
+    "parents": [
+      {
+        "type": "AggregateFolder",
+        "id": "97910000-0000-0000-0000-000000000002",
+        "Path": "Z:\\Root"
+      }
+    ],
+    "collections": [
+      {
+        "type": "CollectionFolder",
+        "id": "97910000-0000-0000-0000-000000000020",
+        "Path": "Z:\\Views\\A",
+        "PhysicalLocationsList": [
+          "Z:\\Media"
+        ],
+        "CollectionType": "movies",
+        "country": "AA"
+      },
+      {
+        "type": "CollectionFolder",
+        "id": "97910000-0000-0000-0000-000000000010",
+        "Path": "Z:\\Views\\B",
+        "PhysicalLocationsList": [
+          "Z:\\Media"
+        ],
+        "CollectionType": "music",
+        "country": "BB"
+      }
+    ],
+    "name": "override-numeric-undefined",
+    "contentTypes": [
+      {
+        "Name": "Z:\\Media",
+        "Value": "999"
+      }
+    ]
+  },
+  {
+    "item": {
+      "type": "Folder",
+      "id": "97910000-0000-0000-0000-000000000001",
+      "Path": "Z:\\Media"
+    },
+    "parents": [
+      {
+        "type": "AggregateFolder",
+        "id": "97910000-0000-0000-0000-000000000002",
+        "Path": "Z:\\Root"
+      }
+    ],
+    "collections": [
+      {
+        "type": "CollectionFolder",
+        "id": "97910000-0000-0000-0000-000000000020",
+        "Path": "Z:\\Views\\A",
+        "PhysicalLocationsList": [
+          "Z:\\Media"
+        ],
+        "CollectionType": "movies",
+        "country": "AA"
+      },
+      {
+        "type": "CollectionFolder",
+        "id": "97910000-0000-0000-0000-000000000010",
+        "Path": "Z:\\Views\\B",
+        "PhysicalLocationsList": [
+          "Z:\\Media"
+        ],
+        "CollectionType": "music",
+        "country": "BB"
+      }
+    ],
+    "name": "override-invalid-first",
+    "contentTypes": [
+      {
+        "Name": "Z:\\Media",
+        "Value": "invalid"
+      },
+      {
+        "Name": "Z:\\Media",
+        "Value": "tvshows"
+      }
+    ]
+  },
+  {
+    "item": {
+      "type": "Folder",
+      "id": "97910000-0000-0000-0000-000000000001",
+      "Path": "Z:\\Media"
+    },
+    "parents": [
+      {
+        "type": "AggregateFolder",
+        "id": "97910000-0000-0000-0000-000000000002",
+        "Path": "Z:\\Root"
+      }
+    ],
+    "collections": [
+      {
+        "type": "CollectionFolder",
+        "id": "97910000-0000-0000-0000-000000000020",
+        "Path": "Z:\\Views\\A",
+        "PhysicalLocationsList": [
+          "Z:\\Media"
+        ],
+        "CollectionType": "movies",
+        "country": "AA"
+      },
+      {
+        "type": "CollectionFolder",
+        "id": "97910000-0000-0000-0000-000000000010",
+        "Path": "Z:\\Views\\B",
+        "PhysicalLocationsList": [
+          "Z:\\Media"
+        ],
+        "CollectionType": "music",
+        "country": "BB"
+      }
+    ],
+    "name": "override-missing-first",
+    "contentTypes": [
+      {
+        "Name": "Z:\\Media",
+        "Value": null
+      },
+      {
+        "Name": "Z:\\Media",
+        "Value": "tvshows"
+      }
+    ]
+  },
+  {
+    "item": {
+      "type": "Folder",
+      "id": "97910000-0000-0000-0000-000000000001",
+      "Path": "Z:\\Media"
+    },
+    "parents": [
+      {
+        "type": "AggregateFolder",
+        "id": "97910000-0000-0000-0000-000000000002",
+        "Path": "Z:\\Root"
+      }
+    ],
+    "collections": [
+      {
+        "type": "CollectionFolder",
+        "id": "97910000-0000-0000-0000-000000000020",
+        "Path": "Z:\\Views\\A",
+        "PhysicalLocationsList": [
+          "Z:\\Media"
+        ],
+        "CollectionType": "movies",
+        "country": "AA"
+      },
+      {
+        "type": "CollectionFolder",
+        "id": "97910000-0000-0000-0000-000000000010",
+        "Path": "Z:\\Views\\B",
+        "PhysicalLocationsList": [
+          "Z:\\Media"
+        ],
+        "CollectionType": "music",
+        "country": "BB"
+      }
+    ],
+    "name": "override-ancestor",
+    "contentTypes": [
+      {
+        "Name": "Z:\\",
+        "Value": "tvshows"
+      }
+    ]
+  },
+  {
+    "item": {
+      "type": "Folder",
+      "id": "97910000-0000-0000-0000-000000000001",
+      "Path": "Z:\\Media"
+    },
+    "parents": [
+      {
+        "type": "AggregateFolder",
+        "id": "97910000-0000-0000-0000-000000000002",
+        "Path": "Z:\\Root"
+      }
+    ],
+    "collections": [
+      {
+        "type": "CollectionFolder",
+        "id": "97910000-0000-0000-0000-000000000020",
+        "Path": "Z:\\Views\\A",
+        "PhysicalLocationsList": [
+          "Z:\\Media"
+        ],
+        "CollectionType": "movies",
+        "country": "AA"
+      },
+      {
+        "type": "CollectionFolder",
+        "id": "97910000-0000-0000-0000-000000000010",
+        "Path": "Z:\\Views\\B",
+        "PhysicalLocationsList": [
+          "Z:\\Media"
+        ],
+        "CollectionType": "music",
+        "country": "BB"
+      }
+    ],
+    "name": "override-ancestor-order",
+    "contentTypes": [
+      {
+        "Name": "Z:\\",
+        "Value": "music"
+      },
+      {
+        "Name": "Z:\\Media",
+        "Value": "tvshows"
+      }
+    ]
+  }
+]

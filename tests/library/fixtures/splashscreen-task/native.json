@@ -1,0 +1,1443 @@
+{
+  "actualPostScanTask": true,
+  "repositoryControlled": true,
+  "imageEncoderControlled": true,
+  "mediaOpened": false,
+  "portOpened": false,
+  "inputSha256": "0bb0affc835ab7cb03fd59131ca15a88e04e7922246bf858a025a3668d79b912",
+  "results": [
+    {
+      "sample": {
+        "Name": "empty",
+        "Posters": [],
+        "Thumbs": [],
+        "Backdrops": [],
+        "FailQuery": null,
+        "FailEncoder": false,
+        "FailProgress": false,
+        "CancelInitial": false
+      },
+      "calls": [
+        {
+          "action": "query",
+          "imageType": "Primary",
+          "CollapseBoxSetItems": false,
+          "Recursive": true,
+          "Limit": 30,
+          "MaxParentalRating": {
+            "score": 13,
+            "subScore": null
+          },
+          "EnableImages": true,
+          "EnableUserData": true,
+          "fields": [],
+          "kinds": [
+            "Movie",
+            "Series"
+          ],
+          "order": [
+            {
+              "name": "Random",
+              "direction": "Ascending"
+            }
+          ]
+        },
+        {
+          "action": "query",
+          "imageType": "Thumb",
+          "CollapseBoxSetItems": false,
+          "Recursive": true,
+          "Limit": 30,
+          "MaxParentalRating": {
+            "score": 13,
+            "subScore": null
+          },
+          "EnableImages": true,
+          "EnableUserData": true,
+          "fields": [],
+          "kinds": [
+            "Movie",
+            "Series"
+          ],
+          "order": [
+            {
+              "name": "Random",
+              "direction": "Ascending"
+            }
+          ]
+        },
+        {
+          "action": "query",
+          "imageType": "Backdrop",
+          "CollapseBoxSetItems": false,
+          "Recursive": true,
+          "Limit": 30,
+          "MaxParentalRating": {
+            "score": 13,
+            "subScore": null
+          },
+          "EnableImages": true,
+          "EnableUserData": true,
+          "fields": [],
+          "kinds": [
+            "Movie",
+            "Series"
+          ],
+          "order": [
+            {
+              "name": "Random",
+              "direction": "Ascending"
+            }
+          ]
+        },
+        {
+          "action": "splashscreen",
+          "posters": [],
+          "backdrops": []
+        }
+      ],
+      "logs": [
+        {
+          "level": "Debug",
+          "message": "No thumb images found. Using backdrops to generate splashscreen"
+        }
+      ],
+      "progress": [],
+      "failure": null
+    },
+    {
+      "sample": {
+        "Name": "posters without landscape",
+        "Posters": [
+          [
+            "poster.png"
+          ]
+        ],
+        "Thumbs": [],
+        "Backdrops": [],
+        "FailQuery": null,
+        "FailEncoder": false,
+        "FailProgress": false,
+        "CancelInitial": false
+      },
+      "calls": [
+        {
+          "action": "query",
+          "imageType": "Primary",
+          "CollapseBoxSetItems": false,
+          "Recursive": true,
+          "Limit": 30,
+          "MaxParentalRating": {
+            "score": 13,
+            "subScore": null
+          },
+          "EnableImages": true,
+          "EnableUserData": true,
+          "fields": [],
+          "kinds": [
+            "Movie",
+            "Series"
+          ],
+          "order": [
+            {
+              "name": "Random",
+              "direction": "Ascending"
+            }
+          ]
+        },
+        {
+          "action": "query",
+          "imageType": "Thumb",
+          "CollapseBoxSetItems": false,
+          "Recursive": true,
+          "Limit": 30,
+          "MaxParentalRating": {
+            "score": 13,
+            "subScore": null
+          },
+          "EnableImages": true,
+          "EnableUserData": true,
+          "fields": [],
+          "kinds": [
+            "Movie",
+            "Series"
+          ],
+          "order": [
+            {
+              "name": "Random",
+              "direction": "Ascending"
+            }
+          ]
+        },
+        {
+          "action": "query",
+          "imageType": "Backdrop",
+          "CollapseBoxSetItems": false,
+          "Recursive": true,
+          "Limit": 30,
+          "MaxParentalRating": {
+            "score": 13,
+            "subScore": null
+          },
+          "EnableImages": true,
+          "EnableUserData": true,
+          "fields": [],
+          "kinds": [
+            "Movie",
+            "Series"
+          ],
+          "order": [
+            {
+              "name": "Random",
+              "direction": "Ascending"
+            }
+          ]
+        },
+        {
+          "action": "splashscreen",
+          "posters": [
+            "poster.png"
+          ],
+          "backdrops": []
+        }
+      ],
+      "logs": [
+        {
+          "level": "Debug",
+          "message": "No thumb images found. Using backdrops to generate splashscreen"
+        }
+      ],
+      "progress": [],
+      "failure": null
+    },
+    {
+      "sample": {
+        "Name": "thumb preferred to backdrop",
+        "Posters": [
+          [
+            "poster.png"
+          ]
+        ],
+        "Thumbs": [
+          [
+            "thumb.png"
+          ]
+        ],
+        "Backdrops": [
+          [
+            "backdrop.png"
+          ]
+        ],
+        "FailQuery": null,
+        "FailEncoder": false,
+        "FailProgress": false,
+        "CancelInitial": false
+      },
+      "calls": [
+        {
+          "action": "query",
+          "imageType": "Primary",
+          "CollapseBoxSetItems": false,
+          "Recursive": true,
+          "Limit": 30,
+          "MaxParentalRating": {
+            "score": 13,
+            "subScore": null
+          },
+          "EnableImages": true,
+          "EnableUserData": true,
+          "fields": [],
+          "kinds": [
+            "Movie",
+            "Series"
+          ],
+          "order": [
+            {
+              "name": "Random",
+              "direction": "Ascending"
+            }
+          ]
+        },
+        {
+          "action": "query",
+          "imageType": "Thumb",
+          "CollapseBoxSetItems": false,
+          "Recursive": true,
+          "Limit": 30,
+          "MaxParentalRating": {
+            "score": 13,
+            "subScore": null
+          },
+          "EnableImages": true,
+          "EnableUserData": true,
+          "fields": [],
+          "kinds": [
+            "Movie",
+            "Series"
+          ],
+          "order": [
+            {
+              "name": "Random",
+              "direction": "Ascending"
+            }
+          ]
+        },
+        {
+          "action": "splashscreen",
+          "posters": [
+            "poster.png"
+          ],
+          "backdrops": [
+            "thumb.png"
+          ]
+        }
+      ],
+      "logs": [],
+      "progress": [],
+      "failure": null
+    },
+    {
+      "sample": {
+        "Name": "backdrop fallback",
+        "Posters": [
+          [
+            "poster.png"
+          ]
+        ],
+        "Thumbs": [],
+        "Backdrops": [
+          [
+            "backdrop.png"
+          ]
+        ],
+        "FailQuery": null,
+        "FailEncoder": false,
+        "FailProgress": false,
+        "CancelInitial": false
+      },
+      "calls": [
+        {
+          "action": "query",
+          "imageType": "Primary",
+          "CollapseBoxSetItems": false,
+          "Recursive": true,
+          "Limit": 30,
+          "MaxParentalRating": {
+            "score": 13,
+            "subScore": null
+          },
+          "EnableImages": true,
+          "EnableUserData": true,
+          "fields": [],
+          "kinds": [
+            "Movie",
+            "Series"
+          ],
+          "order": [
+            {
+              "name": "Random",
+              "direction": "Ascending"
+            }
+          ]
+        },
+        {
+          "action": "query",
+          "imageType": "Thumb",
+          "CollapseBoxSetItems": false,
+          "Recursive": true,
+          "Limit": 30,
+          "MaxParentalRating": {
+            "score": 13,
+            "subScore": null
+          },
+          "EnableImages": true,
+          "EnableUserData": true,
+          "fields": [],
+          "kinds": [
+            "Movie",
+            "Series"
+          ],
+          "order": [
+            {
+              "name": "Random",
+              "direction": "Ascending"
+            }
+          ]
+        },
+        {
+          "action": "query",
+          "imageType": "Backdrop",
+          "CollapseBoxSetItems": false,
+          "Recursive": true,
+          "Limit": 30,
+          "MaxParentalRating": {
+            "score": 13,
+            "subScore": null
+          },
+          "EnableImages": true,
+          "EnableUserData": true,
+          "fields": [],
+          "kinds": [
+            "Movie",
+            "Series"
+          ],
+          "order": [
+            {
+              "name": "Random",
+              "direction": "Ascending"
+            }
+          ]
+        },
+        {
+          "action": "splashscreen",
+          "posters": [
+            "poster.png"
+          ],
+          "backdrops": [
+            "backdrop.png"
+          ]
+        }
+      ],
+      "logs": [
+        {
+          "level": "Debug",
+          "message": "No thumb images found. Using backdrops to generate splashscreen"
+        }
+      ],
+      "progress": [],
+      "failure": null
+    },
+    {
+      "sample": {
+        "Name": "first image only and empty paths",
+        "Posters": [
+          [
+            null,
+            "later.png"
+          ],
+          [
+            "",
+            "later.png"
+          ],
+          [
+            " "
+          ],
+          [
+            "a.png"
+          ],
+          [
+            "a.png"
+          ]
+        ],
+        "Thumbs": [
+          [
+            "",
+            "later.png"
+          ]
+        ],
+        "Backdrops": [
+          [
+            null,
+            "later.png"
+          ],
+          [
+            "fallback.png"
+          ],
+          [
+            " "
+          ]
+        ],
+        "FailQuery": null,
+        "FailEncoder": false,
+        "FailProgress": false,
+        "CancelInitial": false
+      },
+      "calls": [
+        {
+          "action": "query",
+          "imageType": "Primary",
+          "CollapseBoxSetItems": false,
+          "Recursive": true,
+          "Limit": 30,
+          "MaxParentalRating": {
+            "score": 13,
+            "subScore": null
+          },
+          "EnableImages": true,
+          "EnableUserData": true,
+          "fields": [],
+          "kinds": [
+            "Movie",
+            "Series"
+          ],
+          "order": [
+            {
+              "name": "Random",
+              "direction": "Ascending"
+            }
+          ]
+        },
+        {
+          "action": "query",
+          "imageType": "Thumb",
+          "CollapseBoxSetItems": false,
+          "Recursive": true,
+          "Limit": 30,
+          "MaxParentalRating": {
+            "score": 13,
+            "subScore": null
+          },
+          "EnableImages": true,
+          "EnableUserData": true,
+          "fields": [],
+          "kinds": [
+            "Movie",
+            "Series"
+          ],
+          "order": [
+            {
+              "name": "Random",
+              "direction": "Ascending"
+            }
+          ]
+        },
+        {
+          "action": "query",
+          "imageType": "Backdrop",
+          "CollapseBoxSetItems": false,
+          "Recursive": true,
+          "Limit": 30,
+          "MaxParentalRating": {
+            "score": 13,
+            "subScore": null
+          },
+          "EnableImages": true,
+          "EnableUserData": true,
+          "fields": [],
+          "kinds": [
+            "Movie",
+            "Series"
+          ],
+          "order": [
+            {
+              "name": "Random",
+              "direction": "Ascending"
+            }
+          ]
+        },
+        {
+          "action": "splashscreen",
+          "posters": [
+            " ",
+            "a.png",
+            "a.png"
+          ],
+          "backdrops": [
+            "fallback.png",
+            " "
+          ]
+        }
+      ],
+      "logs": [
+        {
+          "level": "Debug",
+          "message": "No thumb images found. Using backdrops to generate splashscreen"
+        }
+      ],
+      "progress": [],
+      "failure": null
+    },
+    {
+      "sample": {
+        "Name": "whitespace thumb prevents fallback",
+        "Posters": [],
+        "Thumbs": [
+          [
+            " "
+          ]
+        ],
+        "Backdrops": [
+          [
+            "backdrop.png"
+          ]
+        ],
+        "FailQuery": null,
+        "FailEncoder": false,
+        "FailProgress": false,
+        "CancelInitial": false
+      },
+      "calls": [
+        {
+          "action": "query",
+          "imageType": "Primary",
+          "CollapseBoxSetItems": false,
+          "Recursive": true,
+          "Limit": 30,
+          "MaxParentalRating": {
+            "score": 13,
+            "subScore": null
+          },
+          "EnableImages": true,
+          "EnableUserData": true,
+          "fields": [],
+          "kinds": [
+            "Movie",
+            "Series"
+          ],
+          "order": [
+            {
+              "name": "Random",
+              "direction": "Ascending"
+            }
+          ]
+        },
+        {
+          "action": "query",
+          "imageType": "Thumb",
+          "CollapseBoxSetItems": false,
+          "Recursive": true,
+          "Limit": 30,
+          "MaxParentalRating": {
+            "score": 13,
+            "subScore": null
+          },
+          "EnableImages": true,
+          "EnableUserData": true,
+          "fields": [],
+          "kinds": [
+            "Movie",
+            "Series"
+          ],
+          "order": [
+            {
+              "name": "Random",
+              "direction": "Ascending"
+            }
+          ]
+        },
+        {
+          "action": "splashscreen",
+          "posters": [],
+          "backdrops": [
+            " "
+          ]
+        }
+      ],
+      "logs": [],
+      "progress": [],
+      "failure": null
+    },
+    {
+      "sample": {
+        "Name": "image array order preserved",
+        "Posters": [
+          [
+            "z.png",
+            "a.png"
+          ],
+          [
+            "a.png"
+          ]
+        ],
+        "Thumbs": [
+          [
+            "2.png"
+          ],
+          [
+            "1.png"
+          ]
+        ],
+        "Backdrops": [],
+        "FailQuery": null,
+        "FailEncoder": false,
+        "FailProgress": false,
+        "CancelInitial": false
+      },
+      "calls": [
+        {
+          "action": "query",
+          "imageType": "Primary",
+          "CollapseBoxSetItems": false,
+          "Recursive": true,
+          "Limit": 30,
+          "MaxParentalRating": {
+            "score": 13,
+            "subScore": null
+          },
+          "EnableImages": true,
+          "EnableUserData": true,
+          "fields": [],
+          "kinds": [
+            "Movie",
+            "Series"
+          ],
+          "order": [
+            {
+              "name": "Random",
+              "direction": "Ascending"
+            }
+          ]
+        },
+        {
+          "action": "query",
+          "imageType": "Thumb",
+          "CollapseBoxSetItems": false,
+          "Recursive": true,
+          "Limit": 30,
+          "MaxParentalRating": {
+            "score": 13,
+            "subScore": null
+          },
+          "EnableImages": true,
+          "EnableUserData": true,
+          "fields": [],
+          "kinds": [
+            "Movie",
+            "Series"
+          ],
+          "order": [
+            {
+              "name": "Random",
+              "direction": "Ascending"
+            }
+          ]
+        },
+        {
+          "action": "splashscreen",
+          "posters": [
+            "z.png",
+            "a.png"
+          ],
+          "backdrops": [
+            "2.png",
+            "1.png"
+          ]
+        }
+      ],
+      "logs": [],
+      "progress": [],
+      "failure": null
+    },
+    {
+      "sample": {
+        "Name": "cancelled task still queries and encodes",
+        "Posters": [
+          [
+            "poster.png"
+          ]
+        ],
+        "Thumbs": [],
+        "Backdrops": [
+          [
+            "backdrop.png"
+          ]
+        ],
+        "FailQuery": null,
+        "FailEncoder": false,
+        "FailProgress": false,
+        "CancelInitial": true
+      },
+      "calls": [
+        {
+          "action": "query",
+          "imageType": "Primary",
+          "CollapseBoxSetItems": false,
+          "Recursive": true,
+          "Limit": 30,
+          "MaxParentalRating": {
+            "score": 13,
+            "subScore": null
+          },
+          "EnableImages": true,
+          "EnableUserData": true,
+          "fields": [],
+          "kinds": [
+            "Movie",
+            "Series"
+          ],
+          "order": [
+            {
+              "name": "Random",
+              "direction": "Ascending"
+            }
+          ]
+        },
+        {
+          "action": "query",
+          "imageType": "Thumb",
+          "CollapseBoxSetItems": false,
+          "Recursive": true,
+          "Limit": 30,
+          "MaxParentalRating": {
+            "score": 13,
+            "subScore": null
+          },
+          "EnableImages": true,
+          "EnableUserData": true,
+          "fields": [],
+          "kinds": [
+            "Movie",
+            "Series"
+          ],
+          "order": [
+            {
+              "name": "Random",
+              "direction": "Ascending"
+            }
+          ]
+        },
+        {
+          "action": "query",
+          "imageType": "Backdrop",
+          "CollapseBoxSetItems": false,
+          "Recursive": true,
+          "Limit": 30,
+          "MaxParentalRating": {
+            "score": 13,
+            "subScore": null
+          },
+          "EnableImages": true,
+          "EnableUserData": true,
+          "fields": [],
+          "kinds": [
+            "Movie",
+            "Series"
+          ],
+          "order": [
+            {
+              "name": "Random",
+              "direction": "Ascending"
+            }
+          ]
+        },
+        {
+          "action": "splashscreen",
+          "posters": [
+            "poster.png"
+          ],
+          "backdrops": [
+            "backdrop.png"
+          ]
+        }
+      ],
+      "logs": [
+        {
+          "level": "Debug",
+          "message": "No thumb images found. Using backdrops to generate splashscreen"
+        }
+      ],
+      "progress": [],
+      "failure": null
+    },
+    {
+      "sample": {
+        "Name": "cancelled empty task",
+        "Posters": [],
+        "Thumbs": [],
+        "Backdrops": [],
+        "FailQuery": null,
+        "FailEncoder": false,
+        "FailProgress": false,
+        "CancelInitial": true
+      },
+      "calls": [
+        {
+          "action": "query",
+          "imageType": "Primary",
+          "CollapseBoxSetItems": false,
+          "Recursive": true,
+          "Limit": 30,
+          "MaxParentalRating": {
+            "score": 13,
+            "subScore": null
+          },
+          "EnableImages": true,
+          "EnableUserData": true,
+          "fields": [],
+          "kinds": [
+            "Movie",
+            "Series"
+          ],
+          "order": [
+            {
+              "name": "Random",
+              "direction": "Ascending"
+            }
+          ]
+        },
+        {
+          "action": "query",
+          "imageType": "Thumb",
+          "CollapseBoxSetItems": false,
+          "Recursive": true,
+          "Limit": 30,
+          "MaxParentalRating": {
+            "score": 13,
+            "subScore": null
+          },
+          "EnableImages": true,
+          "EnableUserData": true,
+          "fields": [],
+          "kinds": [
+            "Movie",
+            "Series"
+          ],
+          "order": [
+            {
+              "name": "Random",
+              "direction": "Ascending"
+            }
+          ]
+        },
+        {
+          "action": "query",
+          "imageType": "Backdrop",
+          "CollapseBoxSetItems": false,
+          "Recursive": true,
+          "Limit": 30,
+          "MaxParentalRating": {
+            "score": 13,
+            "subScore": null
+          },
+          "EnableImages": true,
+          "EnableUserData": true,
+          "fields": [],
+          "kinds": [
+            "Movie",
+            "Series"
+          ],
+          "order": [
+            {
+              "name": "Random",
+              "direction": "Ascending"
+            }
+          ]
+        },
+        {
+          "action": "splashscreen",
+          "posters": [],
+          "backdrops": []
+        }
+      ],
+      "logs": [
+        {
+          "level": "Debug",
+          "message": "No thumb images found. Using backdrops to generate splashscreen"
+        }
+      ],
+      "progress": [],
+      "failure": null
+    },
+    {
+      "sample": {
+        "Name": "progress observer never invoked",
+        "Posters": [],
+        "Thumbs": [],
+        "Backdrops": [],
+        "FailQuery": null,
+        "FailEncoder": false,
+        "FailProgress": true,
+        "CancelInitial": false
+      },
+      "calls": [
+        {
+          "action": "query",
+          "imageType": "Primary",
+          "CollapseBoxSetItems": false,
+          "Recursive": true,
+          "Limit": 30,
+          "MaxParentalRating": {
+            "score": 13,
+            "subScore": null
+          },
+          "EnableImages": true,
+          "EnableUserData": true,
+          "fields": [],
+          "kinds": [
+            "Movie",
+            "Series"
+          ],
+          "order": [
+            {
+              "name": "Random",
+              "direction": "Ascending"
+            }
+          ]
+        },
+        {
+          "action": "query",
+          "imageType": "Thumb",
+          "CollapseBoxSetItems": false,
+          "Recursive": true,
+          "Limit": 30,
+          "MaxParentalRating": {
+            "score": 13,
+            "subScore": null
+          },
+          "EnableImages": true,
+          "EnableUserData": true,
+          "fields": [],
+          "kinds": [
+            "Movie",
+            "Series"
+          ],
+          "order": [
+            {
+              "name": "Random",
+              "direction": "Ascending"
+            }
+          ]
+        },
+        {
+          "action": "query",
+          "imageType": "Backdrop",
+          "CollapseBoxSetItems": false,
+          "Recursive": true,
+          "Limit": 30,
+          "MaxParentalRating": {
+            "score": 13,
+            "subScore": null
+          },
+          "EnableImages": true,
+          "EnableUserData": true,
+          "fields": [],
+          "kinds": [
+            "Movie",
+            "Series"
+          ],
+          "order": [
+            {
+              "name": "Random",
+              "direction": "Ascending"
+            }
+          ]
+        },
+        {
+          "action": "splashscreen",
+          "posters": [],
+          "backdrops": []
+        }
+      ],
+      "logs": [
+        {
+          "level": "Debug",
+          "message": "No thumb images found. Using backdrops to generate splashscreen"
+        }
+      ],
+      "progress": [],
+      "failure": null
+    },
+    {
+      "sample": {
+        "Name": "primary selection failure",
+        "Posters": [],
+        "Thumbs": [],
+        "Backdrops": [],
+        "FailQuery": "Primary",
+        "FailEncoder": false,
+        "FailProgress": false,
+        "CancelInitial": false
+      },
+      "calls": [
+        {
+          "action": "query",
+          "imageType": "Primary",
+          "CollapseBoxSetItems": false,
+          "Recursive": true,
+          "Limit": 30,
+          "MaxParentalRating": {
+            "score": 13,
+            "subScore": null
+          },
+          "EnableImages": true,
+          "EnableUserData": true,
+          "fields": [],
+          "kinds": [
+            "Movie",
+            "Series"
+          ],
+          "order": [
+            {
+              "name": "Random",
+              "direction": "Ascending"
+            }
+          ]
+        }
+      ],
+      "logs": [],
+      "progress": [],
+      "failure": {
+        "type": "IOException",
+        "Message": "Controlled Primary query failure"
+      }
+    },
+    {
+      "sample": {
+        "Name": "thumb selection failure",
+        "Posters": [
+          [
+            "poster.png"
+          ]
+        ],
+        "Thumbs": [],
+        "Backdrops": [],
+        "FailQuery": "Thumb",
+        "FailEncoder": false,
+        "FailProgress": false,
+        "CancelInitial": false
+      },
+      "calls": [
+        {
+          "action": "query",
+          "imageType": "Primary",
+          "CollapseBoxSetItems": false,
+          "Recursive": true,
+          "Limit": 30,
+          "MaxParentalRating": {
+            "score": 13,
+            "subScore": null
+          },
+          "EnableImages": true,
+          "EnableUserData": true,
+          "fields": [],
+          "kinds": [
+            "Movie",
+            "Series"
+          ],
+          "order": [
+            {
+              "name": "Random",
+              "direction": "Ascending"
+            }
+          ]
+        },
+        {
+          "action": "query",
+          "imageType": "Thumb",
+          "CollapseBoxSetItems": false,
+          "Recursive": true,
+          "Limit": 30,
+          "MaxParentalRating": {
+            "score": 13,
+            "subScore": null
+          },
+          "EnableImages": true,
+          "EnableUserData": true,
+          "fields": [],
+          "kinds": [
+            "Movie",
+            "Series"
+          ],
+          "order": [
+            {
+              "name": "Random",
+              "direction": "Ascending"
+            }
+          ]
+        }
+      ],
+      "logs": [],
+      "progress": [],
+      "failure": {
+        "type": "IOException",
+        "Message": "Controlled Thumb query failure"
+      }
+    },
+    {
+      "sample": {
+        "Name": "fallback selection failure",
+        "Posters": [],
+        "Thumbs": [],
+        "Backdrops": [],
+        "FailQuery": "Backdrop",
+        "FailEncoder": false,
+        "FailProgress": false,
+        "CancelInitial": false
+      },
+      "calls": [
+        {
+          "action": "query",
+          "imageType": "Primary",
+          "CollapseBoxSetItems": false,
+          "Recursive": true,
+          "Limit": 30,
+          "MaxParentalRating": {
+            "score": 13,
+            "subScore": null
+          },
+          "EnableImages": true,
+          "EnableUserData": true,
+          "fields": [],
+          "kinds": [
+            "Movie",
+            "Series"
+          ],
+          "order": [
+            {
+              "name": "Random",
+              "direction": "Ascending"
+            }
+          ]
+        },
+        {
+          "action": "query",
+          "imageType": "Thumb",
+          "CollapseBoxSetItems": false,
+          "Recursive": true,
+          "Limit": 30,
+          "MaxParentalRating": {
+            "score": 13,
+            "subScore": null
+          },
+          "EnableImages": true,
+          "EnableUserData": true,
+          "fields": [],
+          "kinds": [
+            "Movie",
+            "Series"
+          ],
+          "order": [
+            {
+              "name": "Random",
+              "direction": "Ascending"
+            }
+          ]
+        },
+        {
+          "action": "query",
+          "imageType": "Backdrop",
+          "CollapseBoxSetItems": false,
+          "Recursive": true,
+          "Limit": 30,
+          "MaxParentalRating": {
+            "score": 13,
+            "subScore": null
+          },
+          "EnableImages": true,
+          "EnableUserData": true,
+          "fields": [],
+          "kinds": [
+            "Movie",
+            "Series"
+          ],
+          "order": [
+            {
+              "name": "Random",
+              "direction": "Ascending"
+            }
+          ]
+        }
+      ],
+      "logs": [
+        {
+          "level": "Debug",
+          "message": "No thumb images found. Using backdrops to generate splashscreen"
+        }
+      ],
+      "progress": [],
+      "failure": {
+        "type": "IOException",
+        "Message": "Controlled Backdrop query failure"
+      }
+    },
+    {
+      "sample": {
+        "Name": "encoder failure",
+        "Posters": [
+          [
+            "poster.png"
+          ]
+        ],
+        "Thumbs": [
+          [
+            "thumb.png"
+          ]
+        ],
+        "Backdrops": [],
+        "FailQuery": null,
+        "FailEncoder": true,
+        "FailProgress": false,
+        "CancelInitial": false
+      },
+      "calls": [
+        {
+          "action": "query",
+          "imageType": "Primary",
+          "CollapseBoxSetItems": false,
+          "Recursive": true,
+          "Limit": 30,
+          "MaxParentalRating": {
+            "score": 13,
+            "subScore": null
+          },
+          "EnableImages": true,
+          "EnableUserData": true,
+          "fields": [],
+          "kinds": [
+            "Movie",
+            "Series"
+          ],
+          "order": [
+            {
+              "name": "Random",
+              "direction": "Ascending"
+            }
+          ]
+        },
+        {
+          "action": "query",
+          "imageType": "Thumb",
+          "CollapseBoxSetItems": false,
+          "Recursive": true,
+          "Limit": 30,
+          "MaxParentalRating": {
+            "score": 13,
+            "subScore": null
+          },
+          "EnableImages": true,
+          "EnableUserData": true,
+          "fields": [],
+          "kinds": [
+            "Movie",
+            "Series"
+          ],
+          "order": [
+            {
+              "name": "Random",
+              "direction": "Ascending"
+            }
+          ]
+        },
+        {
+          "action": "splashscreen",
+          "posters": [
+            "poster.png"
+          ],
+          "backdrops": [
+            "thumb.png"
+          ]
+        }
+      ],
+      "logs": [],
+      "progress": [],
+      "failure": {
+        "type": "IOException",
+        "Message": "Controlled splashscreen failure"
+      }
+    }
+  ],
+  "assemblies": [
+    {
+      "name": "Emby.Server.Implementations",
+      "sha256": "8d369435646570958505c58b9cb17da169855dabc105d0e933524361e9b7b1c8"
+    },
+    {
+      "name": "Jellyfin.Data",
+      "sha256": "b991153c8e091e6e618b27b47ec2c070c003fc5c4453406a74fe843c43611d7e"
+    },
+    {
+      "name": "Jellyfin.Database.Implementations",
+      "sha256": "5ffd9a90affb635962267da294a36a4cd6972da5f38083b51ecfb4fba4c31ee6"
+    },
+    {
+      "name": "MediaBrowser.Controller",
+      "sha256": "051c588a8e85a3a7cdde8dc3d9a1112217fd7e973a86fe2ff90cf765bedb75a8"
+    },
+    {
+      "name": "MediaBrowser.Model",
+      "sha256": "7b2c1b16721cf7747b572e4de3761de635fad4bd12bec346983545bee73fd92c"
+    },
+    {
+      "name": "Microsoft.Extensions.Logging.Abstractions",
+      "sha256": "90c41d68d297e54c4def3cfd38eb620513a744ab01131840ea3e2634cf973be3"
+    },
+    {
+      "name": "Oracle",
+      "sha256": "6e5ee7644a60073207f7adfea90d2e702f8e20ec9b6ef971dd9c1e6a367a8f8c"
+    },
+    {
+      "name": "System.Collections",
+      "sha256": "df6f2037eabee28100184e92f7536427ba2f086c1110629804d466b124bc4d54"
+    },
+    {
+      "name": "System.Collections.Concurrent",
+      "sha256": "082f4bc0da1141eb65111b6da633d75624adfb7bb067d7ee90c5622c8b30885b"
+    },
+    {
+      "name": "System.Console",
+      "sha256": "3b85daf02a3d9ed99b84bb1c639fe8b1ced46d8d157fa56f525f6b8c5be43b3e"
+    },
+    {
+      "name": "System.Linq",
+      "sha256": "284d38945b6e92e847129bd28af458b19818d0f2181f79882888ab2003f4c519"
+    },
+    {
+      "name": "System.Memory",
+      "sha256": "f8f9d38efd6b0de30954d6bf1f353e9617bfb36d3d245c013a3b12be9f6bd88a"
+    },
+    {
+      "name": "System.Numerics.Vectors",
+      "sha256": "a9a980ee33ed0c798a5e1960c4557521f465ac9e0987dfd2c3049d53b1f2fa5a"
+    },
+    {
+      "name": "System.Private.CoreLib",
+      "sha256": "1125acc8106c43fc8bad2d203c4c4485df6182d292846c2fff415c1040c54678"
+    },
+    {
+      "name": "System.Private.Uri",
+      "sha256": "b15c84d2120e1ec9612c66ba59bc3d7e67d841e2bce7b7d0478cb212537539b4"
+    },
+    {
+      "name": "System.Reflection.DispatchProxy",
+      "sha256": "bf93a361c0bba8497889c9f7713add5968ba39394f9e6bda27e86294c6c43560"
+    },
+    {
+      "name": "System.Reflection.Emit",
+      "sha256": "09059981bbeea0fdc5df589be5d7e3937d57e22bec4d78ceb492c587926fc238"
+    },
+    {
+      "name": "System.Reflection.Emit.ILGeneration",
+      "sha256": "6b42ddd05b0ca1c7342d73ea9f401fe588044215d65c67b756deb780f0894a26"
+    },
+    {
+      "name": "System.Reflection.Emit.Lightweight",
+      "sha256": "d2724a2b7b46146877ec1f6e400c49ea05f84bdd31f3bba52ae139ee68a4f779"
+    },
+    {
+      "name": "System.Reflection.Primitives",
+      "sha256": "c2bbd885d03da5e880667c228ac1f56a5f3a72ea37d43f010ada000adc33da28"
+    },
+    {
+      "name": "System.Runtime",
+      "sha256": "76be53624f64b23d0249dfa0bbe85390086de7c44bfd490642ea86c6faaf44af"
+    },
+    {
+      "name": "System.Runtime.InteropServices",
+      "sha256": "e5eb1679f3579c9141e2bb9dbdce62624a623f38d299805cc1de07bacd21841f"
+    },
+    {
+      "name": "System.Runtime.Loader",
+      "sha256": "9b9b2a4f0358d9146e76178ddb87d019be380c78baa7dac853493d45df089f03"
+    },
+    {
+      "name": "System.Security.Cryptography",
+      "sha256": "e0a839a540e47343b53a936b32d91599a3470005228d50fd0b896f8bbdcc65b0"
+    },
+    {
+      "name": "System.Text.Encoding.Extensions",
+      "sha256": "8f51b9535db64fe027a40d6076200b1a6b0889bf05f62bb8e68c3eb083c7f113"
+    },
+    {
+      "name": "System.Text.Encodings.Web",
+      "sha256": "d20431f20d992e71a4e82e5f25c822474e2f4097d8527972d3d78ea1f26e47c3"
+    },
+    {
+      "name": "System.Text.Json",
+      "sha256": "fa99f413be21ed5f484a09093fe5f0beba7de3062cf9cc9f847dbf8108dba55a"
+    },
+    {
+      "name": "System.Threading",
+      "sha256": "6c32ed1bf8067e4169e8feddd15e6489b89d19d1c7aae1520a551b57745d0a60"
+    }
+  ]
+}

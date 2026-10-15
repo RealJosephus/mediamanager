@@ -1,0 +1,68 @@
+[
+  {
+    "name": "anonymous",
+    "path": "/Videos/22222222222222222222222222222222/22222222222222222222222222222222/Attachments/0",
+    "anonymous": true,
+    "status": 404,
+    "contentType": "application/json; charset=utf-8",
+    "length": null,
+    "text": "\"MediaSource 22222222222222222222222222222222 has no attachment with stream index 0\""
+  },
+  {
+    "name": "missing-item",
+    "path": "/Videos/ffffffffffffffffffffffffffffffff/22222222222222222222222222222222/Attachments/0",
+    "status": 404,
+    "contentType": "application/json; charset=utf-8",
+    "length": null,
+    "text": "{\"type\":\"https://tools.ietf.org/html/rfc9110#section-15.5.5\",\"title\":\"Not Found\",\"status\":404,\"traceId\":\"00-87e1e73f412863d8a89e723f79748580-a19ed4832b309371-00\"}"
+  },
+  {
+    "name": "missing-source",
+    "path": "/Videos/22222222222222222222222222222222/missing-source/Attachments/0",
+    "status": 404,
+    "contentType": "application/json; charset=utf-8",
+    "length": null,
+    "text": "\"MediaSource missing-source not found\""
+  },
+  {
+    "name": "missing-source-json",
+    "path": "/Videos/22222222222222222222222222222222/missing-source/Attachments/0",
+    "accept": "application/json",
+    "status": 404,
+    "contentType": "application/json; charset=utf-8",
+    "length": null,
+    "text": "\"MediaSource missing-source not found\""
+  },
+  {
+    "name": "missing-attachment",
+    "path": "/Videos/22222222222222222222222222222222/22222222222222222222222222222222/Attachments/99",
+    "status": 404,
+    "contentType": "application/json; charset=utf-8",
+    "length": null,
+    "text": "\"MediaSource 22222222222222222222222222222222 has no attachment with stream index 99\""
+  },
+  {
+    "name": "query-does-not-override",
+    "path": "/Videos/22222222222222222222222222222222/22222222222222222222222222222222/Attachments/99?index=1&mediaSourceId=other&videoId=invalid",
+    "status": 404,
+    "contentType": "application/json; charset=utf-8",
+    "length": null,
+    "text": "\"MediaSource 22222222222222222222222222222222 has no attachment with stream index 99\""
+  },
+  {
+    "name": "invalid-video",
+    "path": "/Videos/invalid/22222222222222222222222222222222/Attachments/0",
+    "status": 400,
+    "contentType": "application/json; charset=utf-8",
+    "length": null,
+    "text": "{\"type\":\"https://tools.ietf.org/html/rfc9110#section-15.5.1\",\"title\":\"One or more validation errors occurred.\",\"status\":400,\"errors\":{\"videoId\":[\"The value \\u0027invalid\\u0027 is not valid.\"]},\"traceId\":\"00-469a39d30ed9090ae5e51a603b66b633-4760f688b4212c94-00\"}"
+  },
+  {
+    "name": "invalid-index",
+    "path": "/Videos/22222222222222222222222222222222/22222222222222222222222222222222/Attachments/a",
+    "status": 400,
+    "contentType": "application/json; charset=utf-8",
+    "length": null,
+    "text": "{\"type\":\"https://tools.ietf.org/html/rfc9110#section-15.5.1\",\"title\":\"One or more validation errors occurred.\",\"status\":400,\"errors\":{\"index\":[\"The value \\u0027a\\u0027 is not valid.\"]},\"traceId\":\"00-574a36cc7d436327f1266938651e59b7-0ce79802934fcd81-00\"}"
+  }
+]

@@ -1,0 +1,1244 @@
+[
+  {
+    "name": "movie dispatches id set aspect and ignores music fields--crlf",
+    "type": "Movie",
+    "originalName": "movie dispatches id set aspect and ignores music fields",
+    "equivalent": true
+  },
+  {
+    "name": "movie dispatches id set aspect and ignores music fields--lf",
+    "type": "Movie",
+    "originalName": "movie dispatches id set aspect and ignores music fields",
+    "equivalent": true
+  },
+  {
+    "name": "movie dispatches id set aspect and ignores music fields--bom-lf",
+    "type": "Movie",
+    "originalName": "movie dispatches id set aspect and ignores music fields",
+    "equivalent": true
+  },
+  {
+    "name": "video dispatches movie id but not movie collection--crlf",
+    "type": "Video",
+    "originalName": "video dispatches movie id but not movie collection",
+    "equivalent": true
+  },
+  {
+    "name": "video dispatches movie id but not movie collection--lf",
+    "type": "Video",
+    "originalName": "video dispatches movie id but not movie collection",
+    "equivalent": true
+  },
+  {
+    "name": "video dispatches movie id but not movie collection--bom-lf",
+    "type": "Video",
+    "originalName": "video dispatches movie id but not movie collection",
+    "equivalent": true
+  },
+  {
+    "name": "music video appends artists and overwrites album--crlf",
+    "type": "MusicVideo",
+    "originalName": "music video appends artists and overwrites album",
+    "equivalent": true
+  },
+  {
+    "name": "music video appends artists and overwrites album--lf",
+    "type": "MusicVideo",
+    "originalName": "music video appends artists and overwrites album",
+    "equivalent": true
+  },
+  {
+    "name": "music video appends artists and overwrites album--bom-lf",
+    "type": "MusicVideo",
+    "originalName": "music video appends artists and overwrites album",
+    "equivalent": true
+  },
+  {
+    "name": "series dispatches television fields and skips named season--crlf",
+    "type": "Series",
+    "originalName": "series dispatches television fields and skips named season",
+    "equivalent": true
+  },
+  {
+    "name": "series dispatches television fields and skips named season--lf",
+    "type": "Series",
+    "originalName": "series dispatches television fields and skips named season",
+    "equivalent": true
+  },
+  {
+    "name": "series dispatches television fields and skips named season--bom-lf",
+    "type": "Series",
+    "originalName": "series dispatches television fields and skips named season",
+    "equivalent": true
+  },
+  {
+    "name": "season dispatches name and integer only--crlf",
+    "type": "Season",
+    "originalName": "season dispatches name and integer only",
+    "equivalent": true
+  },
+  {
+    "name": "season dispatches name and integer only--lf",
+    "type": "Season",
+    "originalName": "season dispatches name and integer only",
+    "equivalent": true
+  },
+  {
+    "name": "season dispatches name and integer only--bom-lf",
+    "type": "Season",
+    "originalName": "season dispatches name and integer only",
+    "equivalent": true
+  },
+  {
+    "name": "series season selects matching raw named season only--crlf",
+    "type": "SeriesSeason",
+    "originalName": "series season selects matching raw named season only",
+    "equivalent": true
+  },
+  {
+    "name": "series season selects matching raw named season only--lf",
+    "type": "SeriesSeason",
+    "originalName": "series season selects matching raw named season only",
+    "equivalent": true
+  },
+  {
+    "name": "series season selects matching raw named season only--bom-lf",
+    "type": "SeriesSeason",
+    "originalName": "series season selects matching raw named season only",
+    "equivalent": true
+  },
+  {
+    "name": "episode dispatches numbering and show title--crlf",
+    "type": "Episode",
+    "originalName": "episode dispatches numbering and show title",
+    "equivalent": true
+  },
+  {
+    "name": "episode dispatches numbering and show title--lf",
+    "type": "Episode",
+    "originalName": "episode dispatches numbering and show title",
+    "equivalent": true
+  },
+  {
+    "name": "episode dispatches numbering and show title--bom-lf",
+    "type": "Episode",
+    "originalName": "episode dispatches numbering and show title",
+    "equivalent": true
+  },
+  {
+    "name": "music album uses generic scalar parser--crlf",
+    "type": "MusicAlbum",
+    "originalName": "music album uses generic scalar parser",
+    "equivalent": true
+  },
+  {
+    "name": "music album uses generic scalar parser--lf",
+    "type": "MusicAlbum",
+    "originalName": "music album uses generic scalar parser",
+    "equivalent": true
+  },
+  {
+    "name": "music album uses generic scalar parser--bom-lf",
+    "type": "MusicAlbum",
+    "originalName": "music album uses generic scalar parser",
+    "equivalent": true
+  },
+  {
+    "name": "music artist uses generic scalar parser--crlf",
+    "type": "MusicArtist",
+    "originalName": "music artist uses generic scalar parser",
+    "equivalent": true
+  },
+  {
+    "name": "music artist uses generic scalar parser--lf",
+    "type": "MusicArtist",
+    "originalName": "music artist uses generic scalar parser",
+    "equivalent": true
+  },
+  {
+    "name": "music artist uses generic scalar parser--bom-lf",
+    "type": "MusicArtist",
+    "originalName": "music artist uses generic scalar parser",
+    "equivalent": true
+  },
+  {
+    "name": "normalized scalars use CLR whitespace trimming--crlf",
+    "type": "Movie",
+    "originalName": "normalized scalars use CLR whitespace trimming",
+    "equivalent": true
+  },
+  {
+    "name": "normalized scalars use CLR whitespace trimming--lf",
+    "type": "Movie",
+    "originalName": "normalized scalars use CLR whitespace trimming",
+    "equivalent": true
+  },
+  {
+    "name": "normalized scalars use CLR whitespace trimming--bom-lf",
+    "type": "Movie",
+    "originalName": "normalized scalars use CLR whitespace trimming",
+    "equivalent": true
+  },
+  {
+    "name": "empty nil and repeated scalars overwrite prior values--crlf",
+    "type": "Movie",
+    "originalName": "empty nil and repeated scalars overwrite prior values",
+    "equivalent": true
+  },
+  {
+    "name": "empty nil and repeated scalars overwrite prior values--lf",
+    "type": "Movie",
+    "originalName": "empty nil and repeated scalars overwrite prior values",
+    "equivalent": true
+  },
+  {
+    "name": "empty nil and repeated scalars overwrite prior values--bom-lf",
+    "type": "Movie",
+    "originalName": "empty nil and repeated scalars overwrite prior values",
+    "equivalent": true
+  },
+  {
+    "name": "lock fields parse whitespace casing numerics and preserve on empty--crlf",
+    "type": "Movie",
+    "originalName": "lock fields parse whitespace casing numerics and preserve on empty",
+    "equivalent": true
+  },
+  {
+    "name": "lock fields parse whitespace casing numerics and preserve on empty--lf",
+    "type": "Movie",
+    "originalName": "lock fields parse whitespace casing numerics and preserve on empty",
+    "equivalent": true
+  },
+  {
+    "name": "lock fields parse whitespace casing numerics and preserve on empty--bom-lf",
+    "type": "Movie",
+    "originalName": "lock fields parse whitespace casing numerics and preserve on empty",
+    "equivalent": true
+  },
+  {
+    "name": "collections trim split deduplicate and preserve order--crlf",
+    "type": "Movie",
+    "originalName": "collections trim split deduplicate and preserve order",
+    "equivalent": true
+  },
+  {
+    "name": "collections trim split deduplicate and preserve order--lf",
+    "type": "Movie",
+    "originalName": "collections trim split deduplicate and preserve order",
+    "equivalent": true
+  },
+  {
+    "name": "collections trim split deduplicate and preserve order--bom-lf",
+    "type": "Movie",
+    "originalName": "collections trim split deduplicate and preserve order",
+    "equivalent": true
+  },
+  {
+    "name": "integer scalar boundaries preserve last valid value--crlf",
+    "type": "Movie",
+    "originalName": "integer scalar boundaries preserve last valid value",
+    "equivalent": true
+  },
+  {
+    "name": "integer scalar boundaries preserve last valid value--lf",
+    "type": "Movie",
+    "originalName": "integer scalar boundaries preserve last valid value",
+    "equivalent": true
+  },
+  {
+    "name": "integer scalar boundaries preserve last valid value--bom-lf",
+    "type": "Movie",
+    "originalName": "integer scalar boundaries preserve last valid value",
+    "equivalent": true
+  },
+  {
+    "name": "rating grammars and bounds preserve last valid value--crlf",
+    "type": "Movie",
+    "originalName": "rating grammars and bounds preserve last valid value",
+    "equivalent": true
+  },
+  {
+    "name": "rating grammars and bounds preserve last valid value--lf",
+    "type": "Movie",
+    "originalName": "rating grammars and bounds preserve last valid value",
+    "equivalent": true
+  },
+  {
+    "name": "rating grammars and bounds preserve last valid value--bom-lf",
+    "type": "Movie",
+    "originalName": "rating grammars and bounds preserve last valid value",
+    "equivalent": true
+  },
+  {
+    "name": "director writer and credits delimiter rules--crlf",
+    "type": "Movie",
+    "originalName": "director writer and credits delimiter rules",
+    "equivalent": true
+  },
+  {
+    "name": "director writer and credits delimiter rules--lf",
+    "type": "Movie",
+    "originalName": "director writer and credits delimiter rules",
+    "equivalent": true
+  },
+  {
+    "name": "director writer and credits delimiter rules--bom-lf",
+    "type": "Movie",
+    "originalName": "director writer and credits delimiter rules",
+    "equivalent": true
+  },
+  {
+    "name": "actors accept the complete PersonKind enum and unknown fallback--crlf",
+    "type": "Movie",
+    "originalName": "actors accept the complete PersonKind enum and unknown fallback",
+    "equivalent": true
+  },
+  {
+    "name": "actors accept the complete PersonKind enum and unknown fallback--lf",
+    "type": "Movie",
+    "originalName": "actors accept the complete PersonKind enum and unknown fallback",
+    "equivalent": true
+  },
+  {
+    "name": "actors accept the complete PersonKind enum and unknown fallback--bom-lf",
+    "type": "Movie",
+    "originalName": "actors accept the complete PersonKind enum and unknown fallback",
+    "equivalent": true
+  },
+  {
+    "name": "actor type accepts defined numeric PersonKind--crlf",
+    "type": "Movie",
+    "originalName": "actor type accepts defined numeric PersonKind",
+    "equivalent": true
+  },
+  {
+    "name": "actor type accepts defined numeric PersonKind--lf",
+    "type": "Movie",
+    "originalName": "actor type accepts defined numeric PersonKind",
+    "equivalent": true
+  },
+  {
+    "name": "actor type accepts defined numeric PersonKind--bom-lf",
+    "type": "Movie",
+    "originalName": "actor type accepts defined numeric PersonKind",
+    "equivalent": true
+  },
+  {
+    "name": "actor type preserves undefined positive numeric PersonKind--crlf",
+    "type": "Movie",
+    "originalName": "actor type preserves undefined positive numeric PersonKind",
+    "equivalent": true
+  },
+  {
+    "name": "actor type preserves undefined positive numeric PersonKind--lf",
+    "type": "Movie",
+    "originalName": "actor type preserves undefined positive numeric PersonKind",
+    "equivalent": true
+  },
+  {
+    "name": "actor type preserves undefined positive numeric PersonKind--bom-lf",
+    "type": "Movie",
+    "originalName": "actor type preserves undefined positive numeric PersonKind",
+    "equivalent": true
+  },
+  {
+    "name": "actor type preserves undefined negative numeric PersonKind--crlf",
+    "type": "Movie",
+    "originalName": "actor type preserves undefined negative numeric PersonKind",
+    "equivalent": true
+  },
+  {
+    "name": "actor type preserves undefined negative numeric PersonKind--lf",
+    "type": "Movie",
+    "originalName": "actor type preserves undefined negative numeric PersonKind",
+    "equivalent": true
+  },
+  {
+    "name": "actor type preserves undefined negative numeric PersonKind--bom-lf",
+    "type": "Movie",
+    "originalName": "actor type preserves undefined negative numeric PersonKind",
+    "equivalent": true
+  },
+  {
+    "name": "actor type combines comma separated named PersonKinds--crlf",
+    "type": "Movie",
+    "originalName": "actor type combines comma separated named PersonKinds",
+    "equivalent": true
+  },
+  {
+    "name": "actor type combines comma separated named PersonKinds--lf",
+    "type": "Movie",
+    "originalName": "actor type combines comma separated named PersonKinds",
+    "equivalent": true
+  },
+  {
+    "name": "actor type combines comma separated named PersonKinds--bom-lf",
+    "type": "Movie",
+    "originalName": "actor type combines comma separated named PersonKinds",
+    "equivalent": true
+  },
+  {
+    "name": "actor type locks named numeric comma composite behavior--crlf",
+    "type": "Movie",
+    "originalName": "actor type locks named numeric comma composite behavior",
+    "equivalent": true
+  },
+  {
+    "name": "actor type locks named numeric comma composite behavior--lf",
+    "type": "Movie",
+    "originalName": "actor type locks named numeric comma composite behavior",
+    "equivalent": true
+  },
+  {
+    "name": "actor type locks named numeric comma composite behavior--bom-lf",
+    "type": "Movie",
+    "originalName": "actor type locks named numeric comma composite behavior",
+    "equivalent": true
+  },
+  {
+    "name": "actor type locks numeric comma composite behavior--crlf",
+    "type": "Movie",
+    "originalName": "actor type locks numeric comma composite behavior",
+    "equivalent": true
+  },
+  {
+    "name": "actor type locks numeric comma composite behavior--lf",
+    "type": "Movie",
+    "originalName": "actor type locks numeric comma composite behavior",
+    "equivalent": true
+  },
+  {
+    "name": "actor type locks numeric comma composite behavior--bom-lf",
+    "type": "Movie",
+    "originalName": "actor type locks numeric comma composite behavior",
+    "equivalent": true
+  },
+  {
+    "name": "actor type invalid comma composite resets to unknown--crlf",
+    "type": "Movie",
+    "originalName": "actor type invalid comma composite resets to unknown",
+    "equivalent": true
+  },
+  {
+    "name": "actor type invalid comma composite resets to unknown--lf",
+    "type": "Movie",
+    "originalName": "actor type invalid comma composite resets to unknown",
+    "equivalent": true
+  },
+  {
+    "name": "actor type invalid comma composite resets to unknown--bom-lf",
+    "type": "Movie",
+    "originalName": "actor type invalid comma composite resets to unknown",
+    "equivalent": true
+  },
+  {
+    "name": "actor type accepts maximum Int32 numeric PersonKind--crlf",
+    "type": "Movie",
+    "originalName": "actor type accepts maximum Int32 numeric PersonKind",
+    "equivalent": true
+  },
+  {
+    "name": "actor type accepts maximum Int32 numeric PersonKind--lf",
+    "type": "Movie",
+    "originalName": "actor type accepts maximum Int32 numeric PersonKind",
+    "equivalent": true
+  },
+  {
+    "name": "actor type accepts maximum Int32 numeric PersonKind--bom-lf",
+    "type": "Movie",
+    "originalName": "actor type accepts maximum Int32 numeric PersonKind",
+    "equivalent": true
+  },
+  {
+    "name": "actor type accepts minimum Int32 numeric PersonKind--crlf",
+    "type": "Movie",
+    "originalName": "actor type accepts minimum Int32 numeric PersonKind",
+    "equivalent": true
+  },
+  {
+    "name": "actor type accepts minimum Int32 numeric PersonKind--lf",
+    "type": "Movie",
+    "originalName": "actor type accepts minimum Int32 numeric PersonKind",
+    "equivalent": true
+  },
+  {
+    "name": "actor type accepts minimum Int32 numeric PersonKind--bom-lf",
+    "type": "Movie",
+    "originalName": "actor type accepts minimum Int32 numeric PersonKind",
+    "equivalent": true
+  },
+  {
+    "name": "actor type positive Int32 overflow resets to unknown--crlf",
+    "type": "Movie",
+    "originalName": "actor type positive Int32 overflow resets to unknown",
+    "equivalent": true
+  },
+  {
+    "name": "actor type positive Int32 overflow resets to unknown--lf",
+    "type": "Movie",
+    "originalName": "actor type positive Int32 overflow resets to unknown",
+    "equivalent": true
+  },
+  {
+    "name": "actor type positive Int32 overflow resets to unknown--bom-lf",
+    "type": "Movie",
+    "originalName": "actor type positive Int32 overflow resets to unknown",
+    "equivalent": true
+  },
+  {
+    "name": "actor type negative Int32 overflow resets to unknown--crlf",
+    "type": "Movie",
+    "originalName": "actor type negative Int32 overflow resets to unknown",
+    "equivalent": true
+  },
+  {
+    "name": "actor type negative Int32 overflow resets to unknown--lf",
+    "type": "Movie",
+    "originalName": "actor type negative Int32 overflow resets to unknown",
+    "equivalent": true
+  },
+  {
+    "name": "actor type negative Int32 overflow resets to unknown--bom-lf",
+    "type": "Movie",
+    "originalName": "actor type negative Int32 overflow resets to unknown",
+    "equivalent": true
+  },
+  {
+    "name": "trailers convert both youtube plugin forms and deduplicate--crlf",
+    "type": "Movie",
+    "originalName": "trailers convert both youtube plugin forms and deduplicate",
+    "equivalent": true
+  },
+  {
+    "name": "trailers convert both youtube plugin forms and deduplicate--lf",
+    "type": "Movie",
+    "originalName": "trailers convert both youtube plugin forms and deduplicate",
+    "equivalent": true
+  },
+  {
+    "name": "trailers convert both youtube plugin forms and deduplicate--bom-lf",
+    "type": "Movie",
+    "originalName": "trailers convert both youtube plugin forms and deduplicate",
+    "equivalent": true
+  },
+  {
+    "name": "series enum numerics aliases invalids and empty air days--crlf",
+    "type": "Series",
+    "originalName": "series enum numerics aliases invalids and empty air days",
+    "equivalent": true
+  },
+  {
+    "name": "series enum numerics aliases invalids and empty air days--lf",
+    "type": "Series",
+    "originalName": "series enum numerics aliases invalids and empty air days",
+    "equivalent": true
+  },
+  {
+    "name": "series enum numerics aliases invalids and empty air days--bom-lf",
+    "type": "Series",
+    "originalName": "series enum numerics aliases invalids and empty air days",
+    "equivalent": true
+  },
+  {
+    "name": "xml element names stay case sensitive except configured provider nodes--crlf",
+    "type": "Movie",
+    "originalName": "xml element names stay case sensitive except configured provider nodes",
+    "equivalent": true
+  },
+  {
+    "name": "xml element names stay case sensitive except configured provider nodes--lf",
+    "type": "Movie",
+    "originalName": "xml element names stay case sensitive except configured provider nodes",
+    "equivalent": true
+  },
+  {
+    "name": "xml element names stay case sensitive except configured provider nodes--bom-lf",
+    "type": "Movie",
+    "originalName": "xml element names stay case sensitive except configured provider nodes",
+    "equivalent": true
+  },
+  {
+    "name": "release date aliases overwrite premiere and derive first year--crlf",
+    "type": "Movie",
+    "originalName": "release date aliases overwrite premiere and derive first year",
+    "equivalent": true
+  },
+  {
+    "name": "release date aliases overwrite premiere and derive first year--lf",
+    "type": "Movie",
+    "originalName": "release date aliases overwrite premiere and derive first year",
+    "equivalent": true
+  },
+  {
+    "name": "release date aliases overwrite premiere and derive first year--bom-lf",
+    "type": "Movie",
+    "originalName": "release date aliases overwrite premiere and derive first year",
+    "equivalent": true
+  },
+  {
+    "name": "explicit year prevents premiere year derivation--crlf",
+    "type": "Movie",
+    "originalName": "explicit year prevents premiere year derivation",
+    "equivalent": true
+  },
+  {
+    "name": "explicit year prevents premiere year derivation--lf",
+    "type": "Movie",
+    "originalName": "explicit year prevents premiere year derivation",
+    "equivalent": true
+  },
+  {
+    "name": "explicit year prevents premiere year derivation--bom-lf",
+    "type": "Movie",
+    "originalName": "explicit year prevents premiere year derivation",
+    "equivalent": true
+  },
+  {
+    "name": "custom release format adjusts positive offset across previous year--crlf",
+    "type": "Movie",
+    "originalName": "custom release format adjusts positive offset across previous year",
+    "equivalent": true
+  },
+  {
+    "name": "custom release format adjusts positive offset across previous year--lf",
+    "type": "Movie",
+    "originalName": "custom release format adjusts positive offset across previous year",
+    "equivalent": true
+  },
+  {
+    "name": "custom release format adjusts positive offset across previous year--bom-lf",
+    "type": "Movie",
+    "originalName": "custom release format adjusts positive offset across previous year",
+    "equivalent": true
+  },
+  {
+    "name": "custom release format adjusts negative offset across next year--crlf",
+    "type": "Series",
+    "originalName": "custom release format adjusts negative offset across next year",
+    "equivalent": true
+  },
+  {
+    "name": "custom release format adjusts negative offset across next year--lf",
+    "type": "Series",
+    "originalName": "custom release format adjusts negative offset across next year",
+    "equivalent": true
+  },
+  {
+    "name": "custom release format adjusts negative offset across next year--bom-lf",
+    "type": "Series",
+    "originalName": "custom release format adjusts negative offset across next year",
+    "equivalent": true
+  },
+  {
+    "name": "invalid exact date keeps prior valid premiere and year--crlf",
+    "type": "Movie",
+    "originalName": "invalid exact date keeps prior valid premiere and year",
+    "equivalent": true
+  },
+  {
+    "name": "invalid exact date keeps prior valid premiere and year--lf",
+    "type": "Movie",
+    "originalName": "invalid exact date keeps prior valid premiere and year",
+    "equivalent": true
+  },
+  {
+    "name": "invalid exact date keeps prior valid premiere and year--bom-lf",
+    "type": "Movie",
+    "originalName": "invalid exact date keeps prior valid premiere and year",
+    "equivalent": true
+  },
+  {
+    "name": "end date never derives production year--crlf",
+    "type": "Series",
+    "originalName": "end date never derives production year",
+    "equivalent": true
+  },
+  {
+    "name": "end date never derives production year--lf",
+    "type": "Series",
+    "originalName": "end date never derives production year",
+    "equivalent": true
+  },
+  {
+    "name": "end date never derives production year--bom-lf",
+    "type": "Series",
+    "originalName": "end date never derives production year",
+    "equivalent": true
+  },
+  {
+    "name": "dateadded accepts invariant date time and invalid preserves prior--crlf",
+    "type": "Movie",
+    "originalName": "dateadded accepts invariant date time and invalid preserves prior",
+    "equivalent": true
+  },
+  {
+    "name": "dateadded accepts invariant date time and invalid preserves prior--lf",
+    "type": "Movie",
+    "originalName": "dateadded accepts invariant date time and invalid preserves prior",
+    "equivalent": true
+  },
+  {
+    "name": "dateadded accepts invariant date time and invalid preserves prior--bom-lf",
+    "type": "Movie",
+    "originalName": "dateadded accepts invariant date time and invalid preserves prior",
+    "equivalent": true
+  },
+  {
+    "name": "dateadded adjusts explicit timezone offsets--crlf",
+    "type": "Movie",
+    "originalName": "dateadded adjusts explicit timezone offsets",
+    "equivalent": true
+  },
+  {
+    "name": "dateadded adjusts explicit timezone offsets--lf",
+    "type": "Movie",
+    "originalName": "dateadded adjusts explicit timezone offsets",
+    "equivalent": true
+  },
+  {
+    "name": "dateadded adjusts explicit timezone offsets--bom-lf",
+    "type": "Movie",
+    "originalName": "dateadded adjusts explicit timezone offsets",
+    "equivalent": true
+  },
+  {
+    "name": "dateadded trims CLR whitespace and accepts month names--crlf",
+    "type": "Movie",
+    "originalName": "dateadded trims CLR whitespace and accepts month names",
+    "equivalent": true
+  },
+  {
+    "name": "dateadded trims CLR whitespace and accepts month names--lf",
+    "type": "Movie",
+    "originalName": "dateadded trims CLR whitespace and accepts month names",
+    "equivalent": true
+  },
+  {
+    "name": "dateadded trims CLR whitespace and accepts month names--bom-lf",
+    "type": "Movie",
+    "originalName": "dateadded trims CLR whitespace and accepts month names",
+    "equivalent": true
+  },
+  {
+    "name": "dateadded preserves seven fractional digits--crlf",
+    "type": "Movie",
+    "originalName": "dateadded preserves seven fractional digits",
+    "equivalent": true
+  },
+  {
+    "name": "dateadded preserves seven fractional digits--lf",
+    "type": "Movie",
+    "originalName": "dateadded preserves seven fractional digits",
+    "equivalent": true
+  },
+  {
+    "name": "dateadded preserves seven fractional digits--bom-lf",
+    "type": "Movie",
+    "originalName": "dateadded preserves seven fractional digits",
+    "equivalent": true
+  },
+  {
+    "name": "dateadded preserves a single 100ns tick--crlf",
+    "type": "Movie",
+    "originalName": "dateadded preserves a single 100ns tick",
+    "equivalent": true
+  },
+  {
+    "name": "dateadded preserves a single 100ns tick--lf",
+    "type": "Movie",
+    "originalName": "dateadded preserves a single 100ns tick",
+    "equivalent": true
+  },
+  {
+    "name": "dateadded preserves a single 100ns tick--bom-lf",
+    "type": "Movie",
+    "originalName": "dateadded preserves a single 100ns tick",
+    "equivalent": true
+  },
+  {
+    "name": "dateadded preserves fractional ticks while adjusting offset--crlf",
+    "type": "Movie",
+    "originalName": "dateadded preserves fractional ticks while adjusting offset",
+    "equivalent": true
+  },
+  {
+    "name": "dateadded preserves fractional ticks while adjusting offset--lf",
+    "type": "Movie",
+    "originalName": "dateadded preserves fractional ticks while adjusting offset",
+    "equivalent": true
+  },
+  {
+    "name": "dateadded preserves fractional ticks while adjusting offset--bom-lf",
+    "type": "Movie",
+    "originalName": "dateadded preserves fractional ticks while adjusting offset",
+    "equivalent": true
+  },
+  {
+    "name": "dateadded canonicalizes no fraction to seven zero digits--crlf",
+    "type": "Movie",
+    "originalName": "dateadded canonicalizes no fraction to seven zero digits",
+    "equivalent": true
+  },
+  {
+    "name": "dateadded canonicalizes no fraction to seven zero digits--lf",
+    "type": "Movie",
+    "originalName": "dateadded canonicalizes no fraction to seven zero digits",
+    "equivalent": true
+  },
+  {
+    "name": "dateadded canonicalizes no fraction to seven zero digits--bom-lf",
+    "type": "Movie",
+    "originalName": "dateadded canonicalizes no fraction to seven zero digits",
+    "equivalent": true
+  },
+  {
+    "name": "direct provider nodes aliases and configured mappings--crlf",
+    "type": "Movie",
+    "originalName": "direct provider nodes aliases and configured mappings",
+    "equivalent": true
+  },
+  {
+    "name": "direct provider nodes aliases and configured mappings--lf",
+    "type": "Movie",
+    "originalName": "direct provider nodes aliases and configured mappings",
+    "equivalent": true
+  },
+  {
+    "name": "direct provider nodes aliases and configured mappings--bom-lf",
+    "type": "Movie",
+    "originalName": "direct provider nodes aliases and configured mappings",
+    "equivalent": true
+  },
+  {
+    "name": "provider node lookup is case insensitive and invalid overwrite is rejected--crlf",
+    "type": "Movie",
+    "originalName": "provider node lookup is case insensitive and invalid overwrite is rejected",
+    "equivalent": true
+  },
+  {
+    "name": "provider node lookup is case insensitive and invalid overwrite is rejected--lf",
+    "type": "Movie",
+    "originalName": "provider node lookup is case insensitive and invalid overwrite is rejected",
+    "equivalent": true
+  },
+  {
+    "name": "provider node lookup is case insensitive and invalid overwrite is rejected--bom-lf",
+    "type": "Movie",
+    "originalName": "provider node lookup is case insensitive and invalid overwrite is rejected",
+    "equivalent": true
+  },
+  {
+    "name": "uniqueid maps configured types and preserves custom key casing--crlf",
+    "type": "Movie",
+    "originalName": "uniqueid maps configured types and preserves custom key casing",
+    "equivalent": true
+  },
+  {
+    "name": "uniqueid maps configured types and preserves custom key casing--lf",
+    "type": "Movie",
+    "originalName": "uniqueid maps configured types and preserves custom key casing",
+    "equivalent": true
+  },
+  {
+    "name": "uniqueid maps configured types and preserves custom key casing--bom-lf",
+    "type": "Movie",
+    "originalName": "uniqueid maps configured types and preserves custom key casing",
+    "equivalent": true
+  },
+  {
+    "name": "uniqueid ignores empty missing and forbidden provider names--crlf",
+    "type": "Movie",
+    "originalName": "uniqueid ignores empty missing and forbidden provider names",
+    "equivalent": true
+  },
+  {
+    "name": "uniqueid ignores empty missing and forbidden provider names--lf",
+    "type": "Movie",
+    "originalName": "uniqueid ignores empty missing and forbidden provider names",
+    "equivalent": true
+  },
+  {
+    "name": "uniqueid ignores empty missing and forbidden provider names--bom-lf",
+    "type": "Movie",
+    "originalName": "uniqueid ignores empty missing and forbidden provider names",
+    "equivalent": true
+  },
+  {
+    "name": "provider numeric and imdb validators enforce native ranges--crlf",
+    "type": "Movie",
+    "originalName": "provider numeric and imdb validators enforce native ranges",
+    "equivalent": true
+  },
+  {
+    "name": "provider numeric and imdb validators enforce native ranges--lf",
+    "type": "Movie",
+    "originalName": "provider numeric and imdb validators enforce native ranges",
+    "equivalent": true
+  },
+  {
+    "name": "provider numeric and imdb validators enforce native ranges--bom-lf",
+    "type": "Movie",
+    "originalName": "provider numeric and imdb validators enforce native ranges",
+    "equivalent": true
+  },
+  {
+    "name": "musicbrainz validators accept guid forms and reject arbitrary text--crlf",
+    "type": "MusicAlbum",
+    "originalName": "musicbrainz validators accept guid forms and reject arbitrary text",
+    "equivalent": true
+  },
+  {
+    "name": "musicbrainz validators accept guid forms and reject arbitrary text--lf",
+    "type": "MusicAlbum",
+    "originalName": "musicbrainz validators accept guid forms and reject arbitrary text",
+    "equivalent": true
+  },
+  {
+    "name": "musicbrainz validators accept guid forms and reject arbitrary text--bom-lf",
+    "type": "MusicAlbum",
+    "originalName": "musicbrainz validators accept guid forms and reject arbitrary text",
+    "equivalent": true
+  },
+  {
+    "name": "movie id attributes precede content and validate independently--crlf",
+    "type": "Movie",
+    "originalName": "movie id attributes precede content and validate independently",
+    "equivalent": true
+  },
+  {
+    "name": "movie id attributes precede content and validate independently--lf",
+    "type": "Movie",
+    "originalName": "movie id attributes precede content and validate independently",
+    "equivalent": true
+  },
+  {
+    "name": "movie id attributes precede content and validate independently--bom-lf",
+    "type": "Movie",
+    "originalName": "movie id attributes precede content and validate independently",
+    "equivalent": true
+  },
+  {
+    "name": "movie id attribute names and content prefix are case sensitive--crlf",
+    "type": "Movie",
+    "originalName": "movie id attribute names and content prefix are case sensitive",
+    "equivalent": true
+  },
+  {
+    "name": "movie id attribute names and content prefix are case sensitive--lf",
+    "type": "Movie",
+    "originalName": "movie id attribute names and content prefix are case sensitive",
+    "equivalent": true
+  },
+  {
+    "name": "movie id attribute names and content prefix are case sensitive--bom-lf",
+    "type": "Movie",
+    "originalName": "movie id attribute names and content prefix are case sensitive",
+    "equivalent": true
+  },
+  {
+    "name": "movie trailing urls extract imdb and movie tmdb only--crlf",
+    "type": "Movie",
+    "originalName": "movie trailing urls extract imdb and movie tmdb only",
+    "equivalent": true
+  },
+  {
+    "name": "movie trailing urls extract imdb and movie tmdb only--lf",
+    "type": "Movie",
+    "originalName": "movie trailing urls extract imdb and movie tmdb only",
+    "equivalent": true
+  },
+  {
+    "name": "movie trailing urls extract imdb and movie tmdb only--bom-lf",
+    "type": "Movie",
+    "originalName": "movie trailing urls extract imdb and movie tmdb only",
+    "equivalent": true
+  },
+  {
+    "name": "series trailing urls extract imdb series tmdb and tvdb--crlf",
+    "type": "Series",
+    "originalName": "series trailing urls extract imdb series tmdb and tvdb",
+    "equivalent": true
+  },
+  {
+    "name": "series trailing urls extract imdb series tmdb and tvdb--lf",
+    "type": "Series",
+    "originalName": "series trailing urls extract imdb series tmdb and tvdb",
+    "equivalent": true
+  },
+  {
+    "name": "series trailing urls extract imdb series tmdb and tvdb--bom-lf",
+    "type": "Series",
+    "originalName": "series trailing urls extract imdb series tmdb and tvdb",
+    "equivalent": true
+  },
+  {
+    "name": "video music video and series season trailing urls only extract imdb--crlf",
+    "type": "Video",
+    "originalName": "video music video and series season trailing urls only extract imdb",
+    "equivalent": true
+  },
+  {
+    "name": "video music video and series season trailing urls only extract imdb--lf",
+    "type": "Video",
+    "originalName": "video music video and series season trailing urls only extract imdb",
+    "equivalent": true
+  },
+  {
+    "name": "video music video and series season trailing urls only extract imdb--bom-lf",
+    "type": "Video",
+    "originalName": "video music video and series season trailing urls only extract imdb",
+    "equivalent": true
+  },
+  {
+    "name": "provider url scanning is ordinal and resumes after short imdb ids--crlf",
+    "type": "Series",
+    "originalName": "provider url scanning is ordinal and resumes after short imdb ids",
+    "equivalent": true
+  },
+  {
+    "name": "provider url scanning is ordinal and resumes after short imdb ids--lf",
+    "type": "Series",
+    "originalName": "provider url scanning is ordinal and resumes after short imdb ids",
+    "equivalent": true
+  },
+  {
+    "name": "provider url scanning is ordinal and resumes after short imdb ids--bom-lf",
+    "type": "Series",
+    "originalName": "provider url scanning is ordinal and resumes after short imdb ids",
+    "equivalent": true
+  },
+  {
+    "name": "custom external id availability controls direct node recognition--crlf",
+    "type": "Movie",
+    "originalName": "custom external id availability controls direct node recognition",
+    "equivalent": true
+  },
+  {
+    "name": "custom external id availability controls direct node recognition--lf",
+    "type": "Movie",
+    "originalName": "custom external id availability controls direct node recognition",
+    "equivalent": true
+  },
+  {
+    "name": "custom external id availability controls direct node recognition--bom-lf",
+    "type": "Movie",
+    "originalName": "custom external id availability controls direct node recognition",
+    "equivalent": true
+  },
+  {
+    "name": "pre-cancelled movie scalar throws before first node--crlf",
+    "type": "Movie",
+    "originalName": "pre-cancelled movie scalar throws before first node",
+    "equivalent": true
+  },
+  {
+    "name": "pre-cancelled movie scalar throws before first node--lf",
+    "type": "Movie",
+    "originalName": "pre-cancelled movie scalar throws before first node",
+    "equivalent": true
+  },
+  {
+    "name": "pre-cancelled movie scalar throws before first node--bom-lf",
+    "type": "Movie",
+    "originalName": "pre-cancelled movie scalar throws before first node",
+    "equivalent": true
+  },
+  {
+    "name": "pre-cancelled movie empty root completes--crlf",
+    "type": "Movie",
+    "originalName": "pre-cancelled movie empty root completes",
+    "equivalent": true
+  },
+  {
+    "name": "pre-cancelled movie empty root completes--lf",
+    "type": "Movie",
+    "originalName": "pre-cancelled movie empty root completes",
+    "equivalent": true
+  },
+  {
+    "name": "pre-cancelled movie empty root completes--bom-lf",
+    "type": "Movie",
+    "originalName": "pre-cancelled movie empty root completes",
+    "equivalent": true
+  },
+  {
+    "name": "pre-cancelled movie url only commits providers and completes--crlf",
+    "type": "Movie",
+    "originalName": "pre-cancelled movie url only commits providers and completes",
+    "equivalent": true
+  },
+  {
+    "name": "pre-cancelled movie url only commits providers and completes--lf",
+    "type": "Movie",
+    "originalName": "pre-cancelled movie url only commits providers and completes",
+    "equivalent": true
+  },
+  {
+    "name": "pre-cancelled movie url only commits providers and completes--bom-lf",
+    "type": "Movie",
+    "originalName": "pre-cancelled movie url only commits providers and completes",
+    "equivalent": true
+  },
+  {
+    "name": "pre-cancelled movie trailing urls commit before cancellation--crlf",
+    "type": "Movie",
+    "originalName": "pre-cancelled movie trailing urls commit before cancellation",
+    "equivalent": true
+  },
+  {
+    "name": "pre-cancelled movie trailing urls commit before cancellation--lf",
+    "type": "Movie",
+    "originalName": "pre-cancelled movie trailing urls commit before cancellation",
+    "equivalent": true
+  },
+  {
+    "name": "pre-cancelled movie trailing urls commit before cancellation--bom-lf",
+    "type": "Movie",
+    "originalName": "pre-cancelled movie trailing urls commit before cancellation",
+    "equivalent": true
+  },
+  {
+    "name": "pre-cancelled strict season empty root completes--crlf",
+    "type": "Season",
+    "originalName": "pre-cancelled strict season empty root completes",
+    "equivalent": true
+  },
+  {
+    "name": "pre-cancelled strict season empty root completes--lf",
+    "type": "Season",
+    "originalName": "pre-cancelled strict season empty root completes",
+    "equivalent": true
+  },
+  {
+    "name": "pre-cancelled strict season empty root completes--bom-lf",
+    "type": "Season",
+    "originalName": "pre-cancelled strict season empty root completes",
+    "equivalent": true
+  },
+  {
+    "name": "pre-cancelled strict season scalar throws before first node--crlf",
+    "type": "Season",
+    "originalName": "pre-cancelled strict season scalar throws before first node",
+    "equivalent": true
+  },
+  {
+    "name": "pre-cancelled strict season scalar throws before first node--lf",
+    "type": "Season",
+    "originalName": "pre-cancelled strict season scalar throws before first node",
+    "equivalent": true
+  },
+  {
+    "name": "pre-cancelled strict season scalar throws before first node--bom-lf",
+    "type": "Season",
+    "originalName": "pre-cancelled strict season scalar throws before first node",
+    "equivalent": true
+  },
+  {
+    "name": "movie malformed id content preserves start-tag providers--crlf",
+    "type": "Movie",
+    "originalName": "movie malformed id content preserves start-tag providers",
+    "equivalent": true
+  },
+  {
+    "name": "movie malformed id content preserves start-tag providers--lf",
+    "type": "Movie",
+    "originalName": "movie malformed id content preserves start-tag providers",
+    "equivalent": true
+  },
+  {
+    "name": "movie malformed id content preserves start-tag providers--bom-lf",
+    "type": "Movie",
+    "originalName": "movie malformed id content preserves start-tag providers",
+    "equivalent": true
+  },
+  {
+    "name": "strict album malformed tail exposes committed scalar and provider prefix--crlf",
+    "type": "MusicAlbum",
+    "originalName": "strict album malformed tail exposes committed scalar and provider prefix",
+    "equivalent": true
+  },
+  {
+    "name": "strict album malformed tail exposes committed scalar and provider prefix--lf",
+    "type": "MusicAlbum",
+    "originalName": "strict album malformed tail exposes committed scalar and provider prefix",
+    "equivalent": true
+  },
+  {
+    "name": "strict album malformed tail exposes committed scalar and provider prefix--bom-lf",
+    "type": "MusicAlbum",
+    "originalName": "strict album malformed tail exposes committed scalar and provider prefix",
+    "equivalent": true
+  },
+  {
+    "name": "pre-cancelled movie paired empty root observes cancellation--crlf",
+    "type": "Movie",
+    "originalName": "pre-cancelled movie paired empty root observes cancellation",
+    "equivalent": true
+  },
+  {
+    "name": "pre-cancelled movie paired empty root observes cancellation--lf",
+    "type": "Movie",
+    "originalName": "pre-cancelled movie paired empty root observes cancellation",
+    "equivalent": true
+  },
+  {
+    "name": "pre-cancelled movie paired empty root observes cancellation--bom-lf",
+    "type": "Movie",
+    "originalName": "pre-cancelled movie paired empty root observes cancellation",
+    "equivalent": true
+  },
+  {
+    "name": "pre-cancelled strict season direct text observes cancellation--crlf",
+    "type": "Season",
+    "originalName": "pre-cancelled strict season direct text observes cancellation",
+    "equivalent": true
+  },
+  {
+    "name": "pre-cancelled strict season direct text observes cancellation--lf",
+    "type": "Season",
+    "originalName": "pre-cancelled strict season direct text observes cancellation",
+    "equivalent": true
+  },
+  {
+    "name": "pre-cancelled strict season direct text observes cancellation--bom-lf",
+    "type": "Season",
+    "originalName": "pre-cancelled strict season direct text observes cancellation",
+    "equivalent": true
+  },
+  {
+    "name": "pre-cancelled strict malformed setup fails before cancellation--crlf",
+    "type": "Season",
+    "originalName": "pre-cancelled strict malformed setup fails before cancellation",
+    "equivalent": true
+  },
+  {
+    "name": "pre-cancelled strict malformed setup fails before cancellation--lf",
+    "type": "Season",
+    "originalName": "pre-cancelled strict malformed setup fails before cancellation",
+    "equivalent": true
+  },
+  {
+    "name": "pre-cancelled strict malformed setup fails before cancellation--bom-lf",
+    "type": "Season",
+    "originalName": "pre-cancelled strict malformed setup fails before cancellation",
+    "equivalent": true
+  },
+  {
+    "name": "pre-cancelled movie no-closing malformed setup is treated as url only--crlf",
+    "type": "Movie",
+    "originalName": "pre-cancelled movie no-closing malformed setup is treated as url only",
+    "equivalent": true
+  },
+  {
+    "name": "pre-cancelled movie no-closing malformed setup is treated as url only--lf",
+    "type": "Movie",
+    "originalName": "pre-cancelled movie no-closing malformed setup is treated as url only",
+    "equivalent": true
+  },
+  {
+    "name": "pre-cancelled movie no-closing malformed setup is treated as url only--bom-lf",
+    "type": "Movie",
+    "originalName": "pre-cancelled movie no-closing malformed setup is treated as url only",
+    "equivalent": true
+  }
+]

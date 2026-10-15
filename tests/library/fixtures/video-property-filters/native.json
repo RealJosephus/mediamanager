@@ -1,0 +1,1757 @@
+{
+  "schemaVersion": 1,
+  "frozenJellyfin": true,
+  "sourceEvidence": ".agent-docs/evidence/video-property-filters-native-v2/native-contract.json",
+  "fixtureInputSha256": "fc2940927dbb1c4aec55236c9e2e3ca0ba7ffd745ea5380f4fcf79292a716151",
+  "endpoints": [
+    "/Items",
+    "/Users/{userId}/Items"
+  ],
+  "cases": [
+    {
+      "name": "is3d-true-key-presence",
+      "query": "Is3D=true",
+      "scope": [
+        "threeD",
+        "threeDNull",
+        "notThreeD",
+        "lowercase3dKey"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 2,
+      "ids": [
+        "71000000000000000000000000000112",
+        "71000000000000000000000000000113"
+      ],
+      "keys": [
+        "threeD",
+        "threeDNull"
+      ],
+      "problem": null
+    },
+    {
+      "name": "is3d-false-key-absence",
+      "query": "Is3D=false",
+      "scope": [
+        "threeD",
+        "threeDNull",
+        "notThreeD",
+        "lowercase3dKey"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 2,
+      "ids": [
+        "71000000000000000000000000000114",
+        "71000000000000000000000000000115"
+      ],
+      "keys": [
+        "lowercase3dKey",
+        "notThreeD"
+      ],
+      "problem": null
+    },
+    {
+      "name": "is3d-and-video-type-intersect",
+      "query": "Is3D=true&VideoTypes=VideoFile",
+      "scope": [
+        "videoFile",
+        "threeD",
+        "dvd"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 1,
+      "ids": [
+        "71000000000000000000000000000112"
+      ],
+      "keys": [
+        "threeD"
+      ],
+      "problem": null
+    },
+    {
+      "name": "is3d-nested-key-substring-matches",
+      "query": "Is3D=true",
+      "scope": [
+        "nested3d"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 1,
+      "ids": [
+        "71000000000000000000000000000119"
+      ],
+      "keys": [
+        "nested3d"
+      ],
+      "problem": null
+    },
+    {
+      "name": "is3d-string-value-substring-matches",
+      "query": "Is3D=true",
+      "scope": [
+        "stringText3d"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 1,
+      "ids": [
+        "71000000000000000000000000000120"
+      ],
+      "keys": [
+        "stringText3d"
+      ],
+      "problem": null
+    },
+    {
+      "name": "binding-is3d-case-insensitive",
+      "query": "is3d=TrUe",
+      "scope": [
+        "threeD",
+        "notThreeD"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 1,
+      "ids": [
+        "71000000000000000000000000000112"
+      ],
+      "keys": [
+        "threeD"
+      ],
+      "problem": null
+    },
+    {
+      "name": "binding-is3d-empty",
+      "query": "Is3D=",
+      "scope": [
+        "threeD",
+        "notThreeD"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 2,
+      "ids": [
+        "71000000000000000000000000000112",
+        "71000000000000000000000000000114"
+      ],
+      "keys": [
+        "notThreeD",
+        "threeD"
+      ],
+      "problem": null
+    },
+    {
+      "name": "binding-is3d-whitespace",
+      "query": "Is3D=%20%20",
+      "scope": [
+        "threeD",
+        "notThreeD"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 2,
+      "ids": [
+        "71000000000000000000000000000112",
+        "71000000000000000000000000000114"
+      ],
+      "keys": [
+        "notThreeD",
+        "threeD"
+      ],
+      "problem": null
+    },
+    {
+      "name": "binding-is3d-invalid",
+      "query": "Is3D=1",
+      "scope": [
+        "notThreeD"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 400,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": null,
+      "ids": [],
+      "keys": [],
+      "problem": {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "errors": {
+          "is3D": [
+            "The value '1' is not valid."
+          ]
+        }
+      }
+    },
+    {
+      "name": "binding-is3d-repeated-first-empty",
+      "query": "Is3D=&Is3D=true",
+      "scope": [
+        "threeD",
+        "notThreeD"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 2,
+      "ids": [
+        "71000000000000000000000000000112",
+        "71000000000000000000000000000114"
+      ],
+      "keys": [
+        "notThreeD",
+        "threeD"
+      ],
+      "problem": null
+    },
+    {
+      "name": "binding-is3d-repeated-first-false",
+      "query": "Is3D=false&Is3D=true",
+      "scope": [
+        "threeD",
+        "notThreeD"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 1,
+      "ids": [
+        "71000000000000000000000000000114"
+      ],
+      "keys": [
+        "notThreeD"
+      ],
+      "problem": null
+    },
+    {
+      "name": "binding-is3d-repeated-first-invalid",
+      "query": "Is3D=1&Is3D=true",
+      "scope": [
+        "threeD",
+        "notThreeD"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 400,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": null,
+      "ids": [],
+      "keys": [],
+      "problem": {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "errors": {
+          "is3D": [
+            "The value '1,true' is not valid."
+          ]
+        }
+      }
+    },
+    {
+      "name": "binding-is3d-mixed-case-repeated-key",
+      "query": "Is3D=true&is3d=false",
+      "scope": [
+        "threeD",
+        "notThreeD"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 1,
+      "ids": [
+        "71000000000000000000000000000112"
+      ],
+      "keys": [
+        "threeD"
+      ],
+      "problem": null
+    },
+    {
+      "name": "video-type-single-name",
+      "query": "VideoTypes=Dvd",
+      "scope": [
+        "videoFile",
+        "iso",
+        "dvd",
+        "bluRay"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 1,
+      "ids": [
+        "71000000000000000000000000000103"
+      ],
+      "keys": [
+        "dvd"
+      ],
+      "problem": null
+    },
+    {
+      "name": "video-type-name-case-insensitive",
+      "query": "videoTypes=bLuRaY",
+      "scope": [
+        "dvd",
+        "bluRay"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 1,
+      "ids": [
+        "71000000000000000000000000000104"
+      ],
+      "keys": [
+        "bluRay"
+      ],
+      "problem": null
+    },
+    {
+      "name": "video-type-single-comma-union",
+      "query": "VideoTypes=VideoFile,Dvd",
+      "scope": [
+        "videoFile",
+        "iso",
+        "dvd",
+        "bluRay"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 2,
+      "ids": [
+        "71000000000000000000000000000101",
+        "71000000000000000000000000000103"
+      ],
+      "keys": [
+        "dvd",
+        "videoFile"
+      ],
+      "problem": null
+    },
+    {
+      "name": "video-type-isotype-also-matches",
+      "query": "VideoTypes=Dvd",
+      "scope": [
+        "dvd",
+        "isoTypeDvd",
+        "isoTypeBluRay"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 2,
+      "ids": [
+        "71000000000000000000000000000103",
+        "71000000000000000000000000000105"
+      ],
+      "keys": [
+        "dvd",
+        "isoTypeDvd"
+      ],
+      "problem": null
+    },
+    {
+      "name": "video-type-null-value-does-not-match",
+      "query": "VideoTypes=VideoFile",
+      "scope": [
+        "nullVideoType"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 0,
+      "ids": [],
+      "keys": [],
+      "problem": null
+    },
+    {
+      "name": "video-type-data-value-is-case-sensitive",
+      "query": "VideoTypes=Dvd",
+      "scope": [
+        "lowercaseDvd"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 0,
+      "ids": [],
+      "keys": [],
+      "problem": null
+    },
+    {
+      "name": "video-type-spaced-json-does-not-match",
+      "query": "VideoTypes=Dvd",
+      "scope": [
+        "spacedDvd"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 0,
+      "ids": [],
+      "keys": [],
+      "problem": null
+    },
+    {
+      "name": "video-type-nested-substring-matches",
+      "query": "VideoTypes=Dvd",
+      "scope": [
+        "nestedDvd"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 1,
+      "ids": [
+        "71000000000000000000000000000117"
+      ],
+      "keys": [
+        "nestedDvd"
+      ],
+      "problem": null
+    },
+    {
+      "name": "video-type-data-key-is-case-sensitive",
+      "query": "VideoTypes=Dvd",
+      "scope": [
+        "lowercaseVideoTypeKey"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 0,
+      "ids": [],
+      "keys": [],
+      "problem": null
+    },
+    {
+      "name": "video-type-json-number-does-not-match-name",
+      "query": "VideoTypes=2",
+      "scope": [
+        "numericVideoTypeNumber"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 0,
+      "ids": [],
+      "keys": [],
+      "problem": null
+    },
+    {
+      "name": "binding-video-types-empty",
+      "query": "VideoTypes=",
+      "scope": [
+        "videoFile",
+        "dvd"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 2,
+      "ids": [
+        "71000000000000000000000000000101",
+        "71000000000000000000000000000103"
+      ],
+      "keys": [
+        "dvd",
+        "videoFile"
+      ],
+      "problem": null
+    },
+    {
+      "name": "binding-video-types-comma-empty",
+      "query": "VideoTypes=,",
+      "scope": [
+        "videoFile",
+        "dvd"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 2,
+      "ids": [
+        "71000000000000000000000000000101",
+        "71000000000000000000000000000103"
+      ],
+      "keys": [
+        "dvd",
+        "videoFile"
+      ],
+      "problem": null
+    },
+    {
+      "name": "binding-video-types-whitespace",
+      "query": "VideoTypes=%20%20",
+      "scope": [
+        "videoFile",
+        "dvd"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 2,
+      "ids": [
+        "71000000000000000000000000000101",
+        "71000000000000000000000000000103"
+      ],
+      "keys": [
+        "dvd",
+        "videoFile"
+      ],
+      "problem": null
+    },
+    {
+      "name": "binding-video-types-invalid-only",
+      "query": "VideoTypes=NotAType",
+      "scope": [
+        "videoFile",
+        "dvd"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 2,
+      "ids": [
+        "71000000000000000000000000000101",
+        "71000000000000000000000000000103"
+      ],
+      "keys": [
+        "dvd",
+        "videoFile"
+      ],
+      "problem": null
+    },
+    {
+      "name": "binding-video-types-single-invalid-and-valid",
+      "query": "VideoTypes=NotAType,Dvd",
+      "scope": [
+        "videoFile",
+        "dvd"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 1,
+      "ids": [
+        "71000000000000000000000000000103"
+      ],
+      "keys": [
+        "dvd"
+      ],
+      "problem": null
+    },
+    {
+      "name": "binding-video-types-repeated-values",
+      "query": "VideoTypes=VideoFile&VideoTypes=Dvd",
+      "scope": [
+        "videoFile",
+        "dvd",
+        "bluRay"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 2,
+      "ids": [
+        "71000000000000000000000000000101",
+        "71000000000000000000000000000103"
+      ],
+      "keys": [
+        "dvd",
+        "videoFile"
+      ],
+      "problem": null
+    },
+    {
+      "name": "binding-video-types-repeated-first-has-comma",
+      "query": "VideoTypes=VideoFile,Dvd&VideoTypes=BluRay",
+      "scope": [
+        "videoFile",
+        "dvd",
+        "bluRay"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 2,
+      "ids": [
+        "71000000000000000000000000000103",
+        "71000000000000000000000000000104"
+      ],
+      "keys": [
+        "bluRay",
+        "dvd"
+      ],
+      "problem": null
+    },
+    {
+      "name": "binding-video-types-repeated-second-has-comma",
+      "query": "VideoTypes=VideoFile&VideoTypes=Dvd,BluRay",
+      "scope": [
+        "videoFile",
+        "dvd",
+        "bluRay"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 2,
+      "ids": [
+        "71000000000000000000000000000101",
+        "71000000000000000000000000000104"
+      ],
+      "keys": [
+        "bluRay",
+        "videoFile"
+      ],
+      "problem": null
+    },
+    {
+      "name": "binding-video-types-repeated-invalid-and-valid",
+      "query": "VideoTypes=NotAType&VideoTypes=Dvd",
+      "scope": [
+        "videoFile",
+        "dvd"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 1,
+      "ids": [
+        "71000000000000000000000000000103"
+      ],
+      "keys": [
+        "dvd"
+      ],
+      "problem": null
+    },
+    {
+      "name": "binding-video-types-numeric-zero",
+      "query": "VideoTypes=0",
+      "scope": [
+        "videoFile",
+        "iso"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 1,
+      "ids": [
+        "71000000000000000000000000000101"
+      ],
+      "keys": [
+        "videoFile"
+      ],
+      "problem": null
+    },
+    {
+      "name": "binding-video-types-numeric-one",
+      "query": "VideoTypes=1",
+      "scope": [
+        "videoFile",
+        "iso"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 1,
+      "ids": [
+        "71000000000000000000000000000102"
+      ],
+      "keys": [
+        "iso"
+      ],
+      "problem": null
+    },
+    {
+      "name": "binding-video-types-numeric-two",
+      "query": "VideoTypes=2",
+      "scope": [
+        "dvd",
+        "bluRay"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 1,
+      "ids": [
+        "71000000000000000000000000000103"
+      ],
+      "keys": [
+        "dvd"
+      ],
+      "problem": null
+    },
+    {
+      "name": "binding-video-types-numeric-three",
+      "query": "VideoTypes=3",
+      "scope": [
+        "dvd",
+        "bluRay"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 1,
+      "ids": [
+        "71000000000000000000000000000104"
+      ],
+      "keys": [
+        "bluRay"
+      ],
+      "problem": null
+    },
+    {
+      "name": "binding-video-types-numeric-undefined-four",
+      "query": "VideoTypes=4",
+      "scope": [
+        "numeric4",
+        "videoFile"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 1,
+      "ids": [
+        "71000000000000000000000000000110"
+      ],
+      "keys": [
+        "numeric4"
+      ],
+      "problem": null
+    },
+    {
+      "name": "binding-video-types-numeric-negative-one",
+      "query": "VideoTypes=-1",
+      "scope": [
+        "negative1",
+        "videoFile"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 1,
+      "ids": [
+        "71000000000000000000000000000111"
+      ],
+      "keys": [
+        "negative1"
+      ],
+      "problem": null
+    },
+    {
+      "name": "binding-video-types-numeric-int32-max",
+      "query": "VideoTypes=2147483647",
+      "scope": [
+        "notThreeD"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 0,
+      "ids": [],
+      "keys": [],
+      "problem": null
+    },
+    {
+      "name": "binding-video-types-numeric-int32-overflow",
+      "query": "VideoTypes=2147483648",
+      "scope": [
+        "notThreeD"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 1,
+      "ids": [
+        "71000000000000000000000000000114"
+      ],
+      "keys": [
+        "notThreeD"
+      ],
+      "problem": null
+    },
+    {
+      "name": "binding-video-types-numeric-negative-overflow",
+      "query": "VideoTypes=-2147483649",
+      "scope": [
+        "notThreeD"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 1,
+      "ids": [
+        "71000000000000000000000000000114"
+      ],
+      "keys": [
+        "notThreeD"
+      ],
+      "problem": null
+    },
+    {
+      "name": "binding-video-types-hex",
+      "query": "VideoTypes=0x2",
+      "scope": [
+        "dvd"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 1,
+      "ids": [
+        "71000000000000000000000000000103"
+      ],
+      "keys": [
+        "dvd"
+      ],
+      "problem": null
+    },
+    {
+      "name": "binding-video-types-hash-hex",
+      "query": "VideoTypes=%232",
+      "scope": [
+        "dvd"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 1,
+      "ids": [
+        "71000000000000000000000000000103"
+      ],
+      "keys": [
+        "dvd"
+      ],
+      "problem": null
+    },
+    {
+      "name": "binding-video-types-decimal-int32-min",
+      "query": "VideoTypes=-2147483648",
+      "scope": [
+        "numericIntMin"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 1,
+      "ids": [
+        "71000000000000000000000000000121"
+      ],
+      "keys": [
+        "numericIntMin"
+      ],
+      "problem": null
+    },
+    {
+      "name": "binding-video-types-hex-int32-sign-bit",
+      "query": "VideoTypes=0x80000000",
+      "scope": [
+        "numericIntMin"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 1,
+      "ids": [
+        "71000000000000000000000000000121"
+      ],
+      "keys": [
+        "numericIntMin"
+      ],
+      "problem": null
+    },
+    {
+      "name": "binding-video-types-hex-uint32-max",
+      "query": "VideoTypes=0xFFFFFFFF",
+      "scope": [
+        "negative1"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 1,
+      "ids": [
+        "71000000000000000000000000000111"
+      ],
+      "keys": [
+        "negative1"
+      ],
+      "problem": null
+    },
+    {
+      "name": "binding-video-types-hex-uint32-overflow",
+      "query": "VideoTypes=0x100000000",
+      "scope": [
+        "videoFile"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 1,
+      "ids": [
+        "71000000000000000000000000000101"
+      ],
+      "keys": [
+        "videoFile"
+      ],
+      "problem": null
+    },
+    {
+      "name": "binding-video-types-negative-signed-hex",
+      "query": "VideoTypes=-0x1",
+      "scope": [
+        "videoFile"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 1,
+      "ids": [
+        "71000000000000000000000000000101"
+      ],
+      "keys": [
+        "videoFile"
+      ],
+      "problem": null
+    },
+    {
+      "name": "binding-video-types-positive-signed-hex",
+      "query": "VideoTypes=%2B0x2",
+      "scope": [
+        "dvd"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 1,
+      "ids": [
+        "71000000000000000000000000000103"
+      ],
+      "keys": [
+        "dvd"
+      ],
+      "problem": null
+    },
+    {
+      "name": "ancestor-video-type-transitive",
+      "query": "VideoTypes=Dvd",
+      "scope": [
+        "ancestorRoot",
+        "ancestorChild"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 2,
+      "ids": [
+        "71000000000000000000000000000200",
+        "71000000000000000000000000000201"
+      ],
+      "keys": [
+        "ancestorChild",
+        "ancestorRoot"
+      ],
+      "problem": null
+    },
+    {
+      "name": "ancestor-is3d-transitive",
+      "query": "Is3D=true",
+      "scope": [
+        "ancestorRoot",
+        "ancestorChild"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 2,
+      "ids": [
+        "71000000000000000000000000000200",
+        "71000000000000000000000000000201"
+      ],
+      "keys": [
+        "ancestorChild",
+        "ancestorRoot"
+      ],
+      "problem": null
+    },
+    {
+      "name": "ancestor-is3d-false-excludes-folders",
+      "query": "Is3D=false",
+      "scope": [
+        "ancestorRoot",
+        "ancestorChild"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 0,
+      "ids": [],
+      "keys": [],
+      "problem": null
+    },
+    {
+      "name": "linked-media-video-type-one-hop",
+      "query": "VideoTypes=BluRay",
+      "scope": [
+        "linkedBox"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 1,
+      "ids": [
+        "71000000000000000000000000000300"
+      ],
+      "keys": [
+        "linkedBox"
+      ],
+      "problem": null
+    },
+    {
+      "name": "linked-media-is3d-one-hop",
+      "query": "Is3D=true",
+      "scope": [
+        "linkedBox"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 1,
+      "ids": [
+        "71000000000000000000000000000300"
+      ],
+      "keys": [
+        "linkedBox"
+      ],
+      "problem": null
+    },
+    {
+      "name": "linked-childtype-one-still-matches",
+      "query": "VideoTypes=Iso",
+      "scope": [
+        "linkedAltTypeBox"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 1,
+      "ids": [
+        "71000000000000000000000000000310"
+      ],
+      "keys": [
+        "linkedAltTypeBox"
+      ],
+      "problem": null
+    },
+    {
+      "name": "linked-folder-matches-own-descendant",
+      "query": "VideoTypes=Dvd",
+      "scope": [
+        "linkedFolder"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 1,
+      "ids": [
+        "71000000000000000000000000000321"
+      ],
+      "keys": [
+        "linkedFolder"
+      ],
+      "problem": null
+    },
+    {
+      "name": "linked-grandparent-does-not-chain-video-type",
+      "query": "VideoTypes=Dvd",
+      "scope": [
+        "linkedGrandparent"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 0,
+      "ids": [],
+      "keys": [],
+      "problem": null
+    },
+    {
+      "name": "linked-grandparent-does-not-chain-is3d",
+      "query": "Is3D=true",
+      "scope": [
+        "linkedGrandparent"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 0,
+      "ids": [],
+      "keys": [],
+      "problem": null
+    },
+    {
+      "name": "linked-inner-box-matches-direct-child",
+      "query": "VideoTypes=BluRay",
+      "scope": [
+        "linkedInnerBox"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 1,
+      "ids": [
+        "71000000000000000000000000000331"
+      ],
+      "keys": [
+        "linkedInnerBox"
+      ],
+      "problem": null
+    },
+    {
+      "name": "linked-match-does-not-propagate-to-ordinary-ancestor",
+      "query": "VideoTypes=BluRay",
+      "scope": [
+        "linkedOuterFolder"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 0,
+      "ids": [],
+      "keys": [],
+      "problem": null
+    },
+    {
+      "name": "linked-is3d-does-not-propagate-to-ordinary-ancestor",
+      "query": "Is3D=true",
+      "scope": [
+        "linkedOuterFolder"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 0,
+      "ids": [],
+      "keys": [],
+      "problem": null
+    },
+    {
+      "name": "folder-can-satisfy-filters-with-different-descendants",
+      "query": "Is3D=true&VideoTypes=Dvd",
+      "scope": [
+        "splitDescendantFolder"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 1,
+      "ids": [
+        "71000000000000000000000000000340"
+      ],
+      "keys": [
+        "splitDescendantFolder"
+      ],
+      "problem": null
+    },
+    {
+      "name": "version-primary-does-not-expand-video-type",
+      "query": "VideoTypes=Dvd",
+      "scope": [
+        "versionPrimary"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 0,
+      "ids": [],
+      "keys": [],
+      "problem": null
+    },
+    {
+      "name": "version-alternate-matches-video-type",
+      "query": "VideoTypes=Dvd",
+      "scope": [
+        "versionAlternate"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 1,
+      "ids": [
+        "71000000000000000000000000000401"
+      ],
+      "keys": [
+        "versionAlternate"
+      ],
+      "problem": null
+    },
+    {
+      "name": "version-primary-does-not-expand-is3d",
+      "query": "Is3D=true",
+      "scope": [
+        "versionPrimary"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 0,
+      "ids": [],
+      "keys": [],
+      "problem": null
+    },
+    {
+      "name": "version-alternate-matches-is3d",
+      "query": "Is3D=true",
+      "scope": [
+        "versionAlternate"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 1,
+      "ids": [
+        "71000000000000000000000000000401"
+      ],
+      "keys": [
+        "versionAlternate"
+      ],
+      "problem": null
+    },
+    {
+      "name": "video-type-filter-includes-owned-item",
+      "query": "VideoTypes=Iso",
+      "scope": [
+        "ownedVideo"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 1,
+      "ids": [
+        "71000000000000000000000000000410"
+      ],
+      "keys": [
+        "ownedVideo"
+      ],
+      "problem": null
+    },
+    {
+      "name": "is3d-filter-includes-owned-item",
+      "query": "Is3D=true",
+      "scope": [
+        "ownedVideo"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 1,
+      "ids": [
+        "71000000000000000000000000000410"
+      ],
+      "keys": [
+        "ownedVideo"
+      ],
+      "problem": null
+    },
+    {
+      "name": "is3d-false-includes-owned-item",
+      "query": "Is3D=false",
+      "scope": [
+        "ownedNotThreeD"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 1,
+      "ids": [
+        "71000000000000000000000000000411"
+      ],
+      "keys": [
+        "ownedNotThreeD"
+      ],
+      "problem": null
+    },
+    {
+      "name": "invalid-video-type-does-not-enable-owned-items",
+      "query": "VideoTypes=NotAType",
+      "scope": [
+        "ownedNotThreeD"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 0,
+      "ids": [],
+      "keys": [],
+      "problem": null
+    },
+    {
+      "name": "is3d-false-includes-alternate-row",
+      "query": "Is3D=false",
+      "scope": [
+        "versionFalseAlternate"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 1,
+      "ids": [
+        "71000000000000000000000000000421"
+      ],
+      "keys": [
+        "versionFalseAlternate"
+      ],
+      "problem": null
+    },
+    {
+      "name": "empty-is3d-does-not-enable-alternate-row",
+      "query": "Is3D=",
+      "scope": [
+        "versionFalseAlternate"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 0,
+      "ids": [],
+      "keys": [],
+      "problem": null
+    },
+    {
+      "name": "invalid-video-type-does-not-enable-alternate-row",
+      "query": "VideoTypes=NotAType",
+      "scope": [
+        "versionAlternate"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 0,
+      "ids": [],
+      "keys": [],
+      "problem": null
+    },
+    {
+      "name": "user-video-type-presentation-grouping",
+      "query": "VideoTypes=Dvd",
+      "scope": [
+        "groupFirst",
+        "groupSecond"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 1,
+      "ids": [
+        "71000000000000000000000000000500"
+      ],
+      "keys": [
+        "groupFirst"
+      ],
+      "problem": null
+    },
+    {
+      "name": "api-key-video-type-does-not-group-modern",
+      "query": "VideoTypes=Dvd",
+      "scope": [
+        "groupFirst",
+        "groupSecond"
+      ],
+      "auth": "apiKey",
+      "endpoints": [
+        "items"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 2,
+      "ids": [
+        "71000000000000000000000000000500",
+        "71000000000000000000000000000501"
+      ],
+      "keys": [
+        "groupFirst",
+        "groupSecond"
+      ],
+      "problem": null
+    },
+    {
+      "name": "api-key-video-type-legacy-route",
+      "query": "VideoTypes=Dvd",
+      "scope": [
+        "groupFirst",
+        "groupSecond"
+      ],
+      "auth": "apiKey",
+      "endpoints": [
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 1,
+      "ids": [
+        "71000000000000000000000000000500"
+      ],
+      "keys": [
+        "groupFirst"
+      ],
+      "problem": null
+    },
+    {
+      "name": "user-is3d-presentation-grouping",
+      "query": "Is3D=true",
+      "scope": [
+        "groupFirst",
+        "groupSecond"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 1,
+      "ids": [
+        "71000000000000000000000000000500"
+      ],
+      "keys": [
+        "groupFirst"
+      ],
+      "problem": null
+    },
+    {
+      "name": "api-key-is3d-does-not-group-modern",
+      "query": "Is3D=true",
+      "scope": [
+        "groupFirst",
+        "groupSecond"
+      ],
+      "auth": "apiKey",
+      "endpoints": [
+        "items"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 2,
+      "ids": [
+        "71000000000000000000000000000500",
+        "71000000000000000000000000000501"
+      ],
+      "keys": [
+        "groupFirst",
+        "groupSecond"
+      ],
+      "problem": null
+    }
+  ]
+}

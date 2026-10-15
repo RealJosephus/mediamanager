@@ -1,0 +1,130 @@
+{
+  "source": "Pinned Jellyfin DLL XmlSerializer",
+  "cases": [
+    {
+      "input": "\u003CServerName\u003E00123\u003C/ServerName\u003E\u003CIsStartupWizardCompleted\u003E1\u003C/IsStartupWizardCompleted\u003E\u003CMinResumePct\u003E\u002B005\u003C/MinResumePct\u003E\u003CCastReceiverApplications\u003E\u003CCastReceiverApplication\u003E\u003CId\u003E00042\u003C/Id\u003E\u003CName\u003Efalse\u003C/Name\u003E\u003C/CastReceiverApplication\u003E\u003C/CastReceiverApplications\u003E\u003CSortRemoveWords\u003E\u003Cstring\u003E001\u003C/string\u003E\u003Cstring\u003Etrue\u003C/string\u003E\u003C/SortRemoveWords\u003E",
+      "accepted": true,
+      "ServerName": "00123",
+      "IsStartupWizardCompleted": true,
+      "MinResumePct": 5,
+      "SortRemoveWords": [
+        "001",
+        "true"
+      ],
+      "SortRemoveCharacters": [
+        ",",
+        "\u0026",
+        "-",
+        "{",
+        "}",
+        "\u0027"
+      ],
+      "EnableCaseSensitiveItemIds": true,
+      "CastReceiverApplications": [
+        {
+          "Id": "00042",
+          "Name": "false"
+        }
+      ]
+    },
+    {
+      "input": "\u003CServerName\u003Etest\u003C/ServerName\u003E\u003CSortRemoveCharacters/\u003E",
+      "accepted": true,
+      "ServerName": "test",
+      "IsStartupWizardCompleted": false,
+      "MinResumePct": 5,
+      "SortRemoveWords": [
+        "the",
+        "a",
+        "an"
+      ],
+      "SortRemoveCharacters": [],
+      "EnableCaseSensitiveItemIds": true,
+      "CastReceiverApplications": []
+    },
+    {
+      "input": "\u003CIsStartupWizardCompleted\u003ETrue\u003C/IsStartupWizardCompleted\u003E",
+      "accepted": false,
+      "error": "The string \u0027True\u0027 is not a valid Boolean value."
+    },
+    {
+      "input": "\u003CMinResumePct\u003E2147483648\u003C/MinResumePct\u003E",
+      "accepted": false,
+      "error": "Value was either too large or too small for an Int32."
+    },
+    {
+      "input": "\u003CMinResumePct\u003E5.0\u003C/MinResumePct\u003E",
+      "accepted": false,
+      "error": "The input string \u00275.0\u0027 was not in a correct format."
+    },
+    {
+      "input": "",
+      "accepted": true,
+      "ServerName": "",
+      "IsStartupWizardCompleted": false,
+      "MinResumePct": 5,
+      "SortRemoveWords": [
+        "the",
+        "a",
+        "an"
+      ],
+      "SortRemoveCharacters": [
+        ",",
+        "\u0026",
+        "-",
+        "{",
+        "}",
+        "\u0027"
+      ],
+      "EnableCaseSensitiveItemIds": true,
+      "CastReceiverApplications": []
+    }
+  ],
+  "networks": [
+    {
+      "input": "native/",
+      "BaseUrl": "/native",
+      "EnableIPv4": true,
+      "EnableIPv6": false,
+      "LocalNetworkSubnets": [
+        "2130706433"
+      ]
+    },
+    {
+      "input": " /native/ ",
+      "BaseUrl": "/ /native/ ",
+      "EnableIPv4": true,
+      "EnableIPv6": false,
+      "LocalNetworkSubnets": [
+        "2130706433"
+      ]
+    },
+    {
+      "input": "/",
+      "BaseUrl": "",
+      "EnableIPv4": true,
+      "EnableIPv6": false,
+      "LocalNetworkSubnets": [
+        "2130706433"
+      ]
+    },
+    {
+      "input": "native//",
+      "BaseUrl": "/native/",
+      "EnableIPv4": true,
+      "EnableIPv6": false,
+      "LocalNetworkSubnets": [
+        "2130706433"
+      ]
+    },
+    {
+      "input": "",
+      "BaseUrl": "",
+      "EnableIPv4": true,
+      "EnableIPv6": false,
+      "LocalNetworkSubnets": [
+        "2130706433"
+      ]
+    }
+  ]
+}

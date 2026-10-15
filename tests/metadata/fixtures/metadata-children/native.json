@@ -1,0 +1,241 @@
+{
+  "results": [
+    {
+      "name": "folder physical traversal includes only root links and never linked-folder descendants",
+      "children": [
+        "nested",
+        "leaf",
+        "linked",
+        "outside"
+      ],
+      "queries": []
+    },
+    {
+      "name": "album selects Audio and inherited AudioBook through physical recursion and root links",
+      "children": [
+        "audio",
+        "book",
+        "linkedAudio"
+      ],
+      "queries": []
+    },
+    {
+      "name": "physical artist includes recursive nonfolder IHasArtist and root links",
+      "children": [
+        "song",
+        "book",
+        "video",
+        "external"
+      ],
+      "queries": []
+    },
+    {
+      "name": "by-name artist queries tags rather than its cached physical children",
+      "children": [
+        "song",
+        "video"
+      ],
+      "queries": [
+        {
+          "SeriesPresentationUniqueKey": null,
+          "AncestorWithPresentationUniqueKey": null,
+          "IsFolder": false,
+          "Recursive": true,
+          "IncludeItemTypes": [
+            "Audio",
+            "MusicVideo",
+            "MusicAlbum"
+          ],
+          "ArtistIds": [
+            "88000000-0000-0000-0000-000000000023"
+          ],
+          "IsMissing": null
+        }
+      ]
+    },
+    {
+      "name": "boxset uses ordered linked children directly including duplicates",
+      "children": [
+        "second",
+        "first",
+        "second",
+        "folder"
+      ],
+      "queries": []
+    },
+    {
+      "name": "season matches number before checking a stale explicit SeasonId",
+      "children": [
+        "first",
+        "second"
+      ],
+      "queries": [
+        {
+          "SeriesPresentationUniqueKey": "group",
+          "AncestorWithPresentationUniqueKey": null,
+          "IsFolder": null,
+          "Recursive": false,
+          "IncludeItemTypes": [
+            "Episode"
+          ],
+          "ArtistIds": [],
+          "IsMissing": null
+        }
+      ]
+    },
+    {
+      "name": "season fallback compares referenced presentation key ordinal ignore case",
+      "children": [
+        "episode"
+      ],
+      "queries": [
+        {
+          "SeriesPresentationUniqueKey": "group",
+          "AncestorWithPresentationUniqueKey": null,
+          "IsFolder": null,
+          "Recursive": false,
+          "IncludeItemTypes": [
+            "Episode"
+          ],
+          "ArtistIds": [],
+          "IsMissing": null
+        }
+      ]
+    },
+    {
+      "name": "specials appear within the target season and use native aired order",
+      "children": [
+        "episode1",
+        "before",
+        "episode2",
+        "after"
+      ],
+      "queries": [
+        {
+          "SeriesPresentationUniqueKey": "group",
+          "AncestorWithPresentationUniqueKey": null,
+          "IsFolder": null,
+          "Recursive": false,
+          "IncludeItemTypes": [
+            "Episode"
+          ],
+          "ArtistIds": [],
+          "IsMissing": null
+        }
+      ]
+    },
+    {
+      "name": "disabled specials query uses season presentation-key ancestors",
+      "children": [
+        "episode"
+      ],
+      "queries": [
+        {
+          "SeriesPresentationUniqueKey": null,
+          "AncestorWithPresentationUniqueKey": "group-001",
+          "IsFolder": null,
+          "Recursive": false,
+          "IncludeItemTypes": [
+            "Episode"
+          ],
+          "ArtistIds": [],
+          "IsMissing": null
+        }
+      ]
+    },
+    {
+      "name": "special season uses original parent numbers and SortName order",
+      "children": [
+        "early",
+        "late"
+      ],
+      "queries": [
+        {
+          "SeriesPresentationUniqueKey": "group",
+          "AncestorWithPresentationUniqueKey": null,
+          "IsFolder": null,
+          "Recursive": false,
+          "IncludeItemTypes": [
+            "Episode"
+          ],
+          "ArtistIds": [],
+          "IsMissing": null
+        }
+      ]
+    },
+    {
+      "name": "unknown virtual season accepts unnumbered episodes with no resolved season",
+      "children": [
+        "missing",
+        "orphan"
+      ],
+      "queries": [
+        {
+          "SeriesPresentationUniqueKey": "group",
+          "AncestorWithPresentationUniqueKey": null,
+          "IsFolder": null,
+          "Recursive": false,
+          "IncludeItemTypes": [
+            "Episode"
+          ],
+          "ArtistIds": [],
+          "IsMissing": null
+        }
+      ]
+    },
+    {
+      "name": "unknown physical season uses presentation-key fallback rather than virtual matching",
+      "children": [
+        "own"
+      ],
+      "queries": [
+        {
+          "SeriesPresentationUniqueKey": "group",
+          "AncestorWithPresentationUniqueKey": null,
+          "IsFolder": null,
+          "Recursive": false,
+          "IncludeItemTypes": [
+            "Episode"
+          ],
+          "ArtistIds": [],
+          "IsMissing": null
+        }
+      ]
+    },
+    {
+      "name": "season with dangling explicit SeriesId does not query or fall back to physical series",
+      "children": [],
+      "queries": []
+    },
+    {
+      "name": "season empty series presentation key leaves the repository query unfiltered",
+      "children": [
+        "episode"
+      ],
+      "queries": [
+        {
+          "SeriesPresentationUniqueKey": "",
+          "AncestorWithPresentationUniqueKey": null,
+          "IsFolder": null,
+          "Recursive": false,
+          "IncludeItemTypes": [
+            "Episode"
+          ],
+          "ArtistIds": [],
+          "IsMissing": null
+        }
+      ]
+    },
+    {
+      "name": "series aggregation recursion differs from stale query ancestors",
+      "children": [
+        "nested",
+        "episode"
+      ],
+      "queries": []
+    }
+  ],
+  "candidateVerified": false,
+  "inputSha256": "f1c9f927964f5b943d4ef9f77591efc0f02594568afb7801d923db271f450f34",
+  "boundary": "Actual metadata GetChildrenForMetadataUpdates, Folder recursive/linked traversal, Season.GetEpisodes, Series filtering, typed Episode.Season and LibraryManager.Sort with native comparers. Physical cached child lists, ItemId lookup and repository query result arrays are explicit controls. Captured queries are native, but EF translation, ownership/repository filters, ancestors and artist relation lookups are not executed by this oracle."
+}

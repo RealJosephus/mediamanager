@@ -1,0 +1,99 @@
+{
+  "actualFrozenNullPathHooks": true,
+  "candidateVerified": false,
+  "results": [
+    {
+      "name": "Genre-requires",
+      "exception": "ArgumentNullException",
+      "changed": null,
+      "itemName": "Genre",
+      "Path": null
+    },
+    {
+      "name": "Genre-before",
+      "exception": "ArgumentNullException",
+      "changed": null,
+      "itemName": "Genre",
+      "Path": null
+    },
+    {
+      "name": "MusicGenre-requires",
+      "exception": "ArgumentNullException",
+      "changed": null,
+      "itemName": "MusicGenre",
+      "Path": null
+    },
+    {
+      "name": "MusicGenre-before",
+      "exception": "ArgumentNullException",
+      "changed": null,
+      "itemName": "MusicGenre",
+      "Path": null
+    },
+    {
+      "name": "Studio-requires",
+      "exception": "ArgumentNullException",
+      "changed": null,
+      "itemName": "Studio",
+      "Path": null
+    },
+    {
+      "name": "Studio-before",
+      "exception": "ArgumentNullException",
+      "changed": null,
+      "itemName": "Studio",
+      "Path": null
+    },
+    {
+      "name": "Year-requires",
+      "exception": "ArgumentNullException",
+      "changed": null,
+      "itemName": "Year",
+      "Path": null
+    },
+    {
+      "name": "Year-before",
+      "exception": "ArgumentNullException",
+      "changed": null,
+      "itemName": "Year",
+      "Path": null
+    },
+    {
+      "name": "Person-requires",
+      "exception": "NullReferenceException",
+      "changed": null,
+      "itemName": "Person",
+      "Path": null
+    },
+    {
+      "name": "Person-before",
+      "exception": "NullReferenceException",
+      "changed": null,
+      "itemName": "Person",
+      "Path": null
+    },
+    {
+      "name": "MusicArtist-requires",
+      "exception": "ArgumentNullException",
+      "changed": null,
+      "itemName": "MusicArtist",
+      "Path": null
+    },
+    {
+      "name": "MusicArtist-before",
+      "exception": "ArgumentNullException",
+      "changed": null,
+      "itemName": "MusicArtist",
+      "Path": null
+    }
+  ],
+  "assembly": {
+    "name": "MediaBrowser.Controller",
+    "path": "D:\\mediamanager\\.test-output\\validation\\by-name-path-errors-oracle-20261005-2\\bin\\Release\\net10.0\\MediaBrowser.Controller.dll",
+    "sha256": "56a527307ef93f810fdadec33ba8380cc8416d38cb1cfea92297b0f65288808e"
+  },
+  "scope": "Actual RequiresRefresh/BeforeMetadataRefresh on six by-name classes with null Path and nonempty Name. Application paths are controls. No EF, filesystem, metadata service or HTTP.",
+  "schemaVersion": 1,
+  "inputSha256": "8eeb954083a9af888adaf2d53b629560d6c32c2f0f2885e4c752b3f4dd9127d0",
+  "sourceFilesSha256": "f4f913196f37e5fd4b54fca8d5e7c7fc98bf922a7c04bf110352bbf2bb080849"
+}

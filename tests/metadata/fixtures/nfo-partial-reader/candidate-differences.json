@@ -1,0 +1,256 @@
+[
+  {
+    "name": "movie malformed xml is swallowed",
+    "paths": [
+      "/item/Name",
+      "/item/nameUtf16"
+    ]
+  },
+  {
+    "name": "video malformed xml is swallowed",
+    "paths": [
+      "/item/Name",
+      "/item/nameUtf16"
+    ]
+  },
+  {
+    "name": "music video malformed xml is swallowed",
+    "paths": [
+      "/item/Name",
+      "/item/nameUtf16"
+    ]
+  },
+  {
+    "name": "series malformed xml is swallowed",
+    "paths": [
+      "/item/Name",
+      "/item/nameUtf16"
+    ]
+  },
+  {
+    "name": "series season malformed xml is swallowed",
+    "paths": [
+      "/item/Name",
+      "/item/nameUtf16"
+    ]
+  },
+  {
+    "name": "episode malformed xml is swallowed",
+    "paths": [
+      "/item/Name",
+      "/item/nameUtf16"
+    ]
+  },
+  {
+    "name": "season malformed xml propagates",
+    "paths": [
+      "/item/Name",
+      "/item/nameUtf16"
+    ]
+  },
+  {
+    "name": "album malformed xml propagates",
+    "paths": [
+      "/item/Name",
+      "/item/nameUtf16"
+    ]
+  },
+  {
+    "name": "artist malformed xml propagates",
+    "paths": [
+      "/item/Name",
+      "/item/nameUtf16"
+    ]
+  },
+  {
+    "name": "scalar commits prior title but not final plot",
+    "paths": [
+      "/item/Name",
+      "/item/nameUtf16"
+    ]
+  },
+  {
+    "name": "complete actor and remote image commit before truncation",
+    "paths": [
+      "/people/0",
+      "/remoteImages/0"
+    ]
+  },
+  {
+    "name": "id attributes commit before content and imdb",
+    "paths": [
+      "/item/providers/Tmdb",
+      "/item/providers/Tvdb"
+    ]
+  },
+  {
+    "name": "set attribute commits before inner content",
+    "paths": [
+      "/item/providers/TmdbCollection"
+    ]
+  },
+  {
+    "name": "episode no closing block retains parsed prefix",
+    "paths": [
+      "/item/IndexNumber",
+      "/item/Name",
+      "/item/nameUtf16"
+    ]
+  },
+  {
+    "name": "episode complete blocks sort then merge",
+    "paths": [
+      "/item/IndexNumber",
+      "/item/Name",
+      "/item/OriginalTitle",
+      "/item/Overview",
+      "/item/indexNumberEnd",
+      "/item/nameUtf16",
+      "/item/overviewUtf16"
+    ]
+  },
+  {
+    "name": "movie undeclared entity is swallowed after prefix",
+    "paths": [
+      "/item/Overview",
+      "/item/overviewUtf16"
+    ]
+  },
+  {
+    "name": "season undeclared entity propagates",
+    "paths": [
+      "/exception",
+      "/hasMetadata",
+      "/item/Overview",
+      "/item/overviewUtf16"
+    ]
+  },
+  {
+    "name": "literal nul is rejected",
+    "paths": [
+      "/item/Name",
+      "/item/nameUtf16"
+    ]
+  },
+  {
+    "name": "numeric soh reference reaches title",
+    "paths": [
+      "/item/Name",
+      "/item/nameUtf16/6",
+      "/item/nameUtf16/7",
+      "/item/nameUtf16/8",
+      "/item/nameUtf16/9",
+      "/item/nameUtf16/10",
+      "/item/nameUtf16/11"
+    ]
+  },
+  {
+    "name": "numeric nul reference reaches title",
+    "paths": [
+      "/item/Name",
+      "/item/nameUtf16/6",
+      "/item/nameUtf16/7",
+      "/item/nameUtf16/8",
+      "/item/nameUtf16/9",
+      "/item/nameUtf16/10",
+      "/item/nameUtf16/11"
+    ]
+  },
+  {
+    "name": "numeric surrogate reference reaches title",
+    "paths": [
+      "/item/Name",
+      "/item/nameUtf16/6",
+      "/item/nameUtf16/7",
+      "/item/nameUtf16/8",
+      "/item/nameUtf16/9",
+      "/item/nameUtf16/10",
+      "/item/nameUtf16/11"
+    ]
+  },
+  {
+    "name": "numeric value above unicode range is rejected",
+    "paths": [
+      "/item/Name",
+      "/item/nameUtf16"
+    ]
+  },
+  {
+    "name": "empty item id mutates cached userdata but does not save",
+    "paths": [
+      "/calls/0",
+      "/calls/1",
+      "/calls/2",
+      "/calls/3",
+      "/calls/4",
+      "/calls/5",
+      "/userData/current/PlayCount",
+      "/userData/current/Played",
+      "/userData/current/lastPlayedDate"
+    ]
+  },
+  {
+    "name": "existing item id saves userdata sequentially with none token",
+    "paths": [
+      "/calls/2/tokenCanBeCanceled",
+      "/calls/2/tokenIsCancellationRequested",
+      "/calls/3/action",
+      "/calls/3/id",
+      "/calls/3/value",
+      "/calls/4/action",
+      "/calls/4/attempt",
+      "/calls/4/reason",
+      "/calls/4/tokenCanBeCanceled",
+      "/calls/4/tokenIsCancellationRequested",
+      "/calls/4/value/PlayCount",
+      "/calls/5/action",
+      "/calls/5/attempt",
+      "/calls/5/reason",
+      "/calls/5/tokenCanBeCanceled",
+      "/calls/5/tokenIsCancellationRequested",
+      "/calls/6/action",
+      "/calls/6/attempt",
+      "/calls/6/id",
+      "/calls/6/reason",
+      "/calls/6/tokenCanBeCanceled",
+      "/calls/6/tokenIsCancellationRequested",
+      "/calls/6/value",
+      "/calls/7",
+      "/calls/8"
+    ]
+  },
+  {
+    "name": "cancellation after first userdata save stops before second node",
+    "paths": [
+      "/calls/2/tokenCanBeCanceled",
+      "/calls/2/tokenIsCancellationRequested",
+      "/calls/3",
+      "/calls/4",
+      "/exception",
+      "/hasMetadata",
+      "/item/Name",
+      "/item/nameUtf16",
+      "/userData/current/PlayCount",
+      "/userData/persisted/PlayCount"
+    ]
+  },
+  {
+    "name": "second userdata save failure preserves first successful call",
+    "paths": [
+      "/calls/2/tokenCanBeCanceled",
+      "/calls/2/tokenIsCancellationRequested",
+      "/calls/3/action",
+      "/calls/3/id",
+      "/calls/3/value",
+      "/calls/4/action",
+      "/calls/4/attempt",
+      "/calls/4/reason",
+      "/calls/4/tokenCanBeCanceled",
+      "/calls/4/tokenIsCancellationRequested",
+      "/calls/4/value/PlayCount",
+      "/calls/5",
+      "/item/Name",
+      "/item/nameUtf16"
+    ]
+  }
+]

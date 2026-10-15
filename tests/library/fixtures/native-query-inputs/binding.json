@@ -1,0 +1,134 @@
+{
+  "reference": {
+    "sourceDatabase": {
+      "filename": "D:/mediamanager-validation/20261011/query-results/native-controlled-reference-v1/initial.db",
+      "sha256": "554fc3357fb41343e21b6cfa6adfeddf808b0a58160052963b394c4a894a0738"
+    },
+    "preparationInputs": [
+      [
+        "nativeReferencePreparation",
+        "../mediamanager-validation/20261011/query-results/native-controlled-reference-v1/bootstrap.json"
+      ],
+      [
+        "referencePreparationVerifier",
+        "tools/compat/filter-reference-inputs.mjs"
+      ],
+      [
+        "referenceBootstrapScript",
+        "tools/compat/prepare-http-filter-reference.mjs"
+      ],
+      [
+        "referencePreparationVerificationTool",
+        "tools/compat/verify-baseline.js"
+      ],
+      [
+        "referencePreparationVerificationTool",
+        "tools/compat/reference-inputs.js"
+      ],
+      [
+        "nativeReferenceBootstrapLog",
+        "../mediamanager-validation/20261011/query-results/native-controlled-reference-v1/bootstrap.log"
+      ],
+      [
+        "nativeReferenceBaselineManifest",
+        "../mediamanager-validation/20261011/results/jellyfin-designated-workspace-controlled-v2/manifest.json"
+      ],
+      [
+        "nativeReferenceModel",
+        "src/database/native-model.json"
+      ],
+      [
+        "nativeReferencePreparationExecutable",
+        "../mediamanager-validation/20261010/results/jellyfin-designated-workspace-dependencies-v2/dotnet/dotnet.exe"
+      ],
+      [
+        "nativeReferencePreparationExecutable",
+        "../mediamanager-validation/20261011/results/jellyfin-designated-workspace-controlled-v2/source/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll"
+      ],
+      [
+        "nativeReferencePreparationExecutable",
+        "../mediamanager-validation/20261005/tools/jellyfin-ffmpeg-8.1.3-1/runtime/ffmpeg.exe"
+      ]
+    ]
+  },
+  "recordedFilterOutputRoot": "D:/mediamanager-validation/20261011/filter-results",
+  "runtimeDirectory": {
+    "path": "D:/mediamanager-validation/20261011/results/jellyfin-designated-workspace-controlled-v2/source/Jellyfin.Server/bin/Release/net10.0",
+    "entriesSha256": "91cbe0423d1255936c89b01135e6db133cb27efa5debb9214380e4df4cf79dfe"
+  },
+  "independentNativeAudits": [
+    {
+      "filename": "D:/mediamanager-validation/20261011/filter-results/item-filter-restoration-repeat-audit.json",
+      "sha256": "68e928ac751eda7528394f1a65f3d62a5062cca72f5a056919e02077246c2661",
+      "acceptanceField": "allRawArtifactsAndCurrentInputsVerified"
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261011/view-results/repeat-audit-v1.json",
+      "sha256": "0e95823203bbf7cf06c6686d7a287bca5a5e6788aa1751db7be9eda714fa0676",
+      "acceptanceField": "passed"
+    }
+  ],
+  "completeBuildInputClosure": false,
+  "releaseAcceptance": false,
+  "preparationInputFiles": [
+    {
+      "kind": "nativeReferencePreparation",
+      "filename": "D:/mediamanager-validation/20261011/query-results/native-controlled-reference-v1/bootstrap.json",
+      "sha256": "be3b3b56b35ca2ef3b701879679d7c2412498f53d6019b7e3a4eba254ff9905a"
+    },
+    {
+      "kind": "referencePreparationVerifier",
+      "filename": "D:/mediamanager/tools/compat/filter-reference-inputs.mjs",
+      "sha256": "91de1f092df29d5144282b780dacc64255cc7779bdcf77f1202fe235aa791ace"
+    },
+    {
+      "kind": "referenceBootstrapScript",
+      "filename": "D:/mediamanager/tools/compat/prepare-http-filter-reference.mjs",
+      "sha256": "fbebe189b2fade5075355a4f0256545ae13fb4493eb5ec20f55aa4b73bb8089d"
+    },
+    {
+      "kind": "referencePreparationVerificationTool",
+      "filename": "D:/mediamanager/tools/compat/verify-baseline.js",
+      "sha256": "46991bed271e61663c6f262ff4fda0a25c7bd6f19d4c63749e6848774375c54c"
+    },
+    {
+      "kind": "referencePreparationVerificationTool",
+      "filename": "D:/mediamanager/tools/compat/reference-inputs.js",
+      "sha256": "11ed62001527e2a77e07ed1eec65c52b7906b4684a5d7c0b54fbc0a6cbca4b38"
+    },
+    {
+      "kind": "nativeReferenceBootstrapLog",
+      "filename": "D:/mediamanager-validation/20261011/query-results/native-controlled-reference-v1/bootstrap.log",
+      "sha256": "f1852af96a6e9cf6a86014070a9ac0e111dbafdb88fa6e4f21cbe5a9e3529830"
+    },
+    {
+      "kind": "nativeReferenceBaselineManifest",
+      "filename": "D:/mediamanager-validation/20261011/results/jellyfin-designated-workspace-controlled-v2/manifest.json",
+      "sha256": "3299791acef852bd33b5c521a32dbc1d1fcd0741e38a80d6351b87bd4324ae6d"
+    },
+    {
+      "kind": "nativeReferenceModel",
+      "filename": "D:/mediamanager/src/database/native-model.json",
+      "sha256": "942796bb521d2adb04951cd184ffad4988664ea7f6371e2c378b1c207903dbe6"
+    },
+    {
+      "kind": "nativeReferencePreparationExecutable",
+      "filename": "D:/mediamanager-validation/20261010/results/jellyfin-designated-workspace-dependencies-v2/dotnet/dotnet.exe",
+      "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6"
+    },
+    {
+      "kind": "nativeReferencePreparationExecutable",
+      "filename": "D:/mediamanager-validation/20261011/results/jellyfin-designated-workspace-controlled-v2/source/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll",
+      "sha256": "13e667fa6caad2e20728946c59ca459f6ce439b200caad4c0fab76b29a9a9488"
+    },
+    {
+      "kind": "nativeReferencePreparationExecutable",
+      "filename": "D:/mediamanager-validation/20261005/tools/jellyfin-ffmpeg-8.1.3-1/runtime/ffmpeg.exe",
+      "sha256": "47495334f74912826bc474d246fe69fb4c01cd0d3c612d24b6a06000fe4c1483"
+    }
+  ],
+  "dotnetDirectory": {
+    "path": "D:/mediamanager-validation/20261010/results/jellyfin-designated-workspace-dependencies-v2/dotnet",
+    "entriesSha256": "5b289d693d7a381abdc43016ca8cfe9b75232dce26e06c2a8cb2a7bd17d46340"
+  }
+}

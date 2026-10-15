@@ -1,0 +1,137 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-10-08T00:39:31.537Z",
+  "fixtureFiles": [
+    {
+      "path": "tests/library/fixtures/directory-video-delete-items/input.json",
+      "sha256": "4120308d153a5838257604ea4c852bbcbe141a58566cbe7acc1bd7dfc0c97d3e"
+    },
+    {
+      "path": "tests/library/fixtures/directory-video-delete-items/Program.cs",
+      "sha256": "218611ac7b190186311f2705a843d6c199388c1c82ab7e861b1ac3022d82def0"
+    },
+    {
+      "path": "tests/library/fixtures/directory-video-delete-items/Oracle.csproj",
+      "sha256": "cbe1a514da582cbf55a443ee14c93f731f84816d10e7672fb713045ac5d78efe"
+    },
+    {
+      "path": "tests/library/fixtures/directory-video-delete-items/native.json",
+      "sha256": "33a774b4cfcee027894f9b5735ed89a53451a51d66225309f3b978da5705de7f"
+    },
+    {
+      "path": "tests/Directory.Build.props",
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    }
+  ],
+  "sourceFiles": [
+    {
+      "path": "Emby.Server.Implementations/Library/LibraryManager.cs",
+      "sha256": "4729de97560262702a44c5829bf93bbc5deec379e9b3018b231aaa6d65643c44"
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/Video.cs",
+      "sha256": "03df015992ee4e95e175c499b36a7b21d9facc4f391cfd89235ad652d2eb0b11"
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/BaseItem.cs",
+      "sha256": "9dc7b96a93c9fbe874cdcededdca395b5aa2df6070f5cfc9c8959539dcd76469"
+    },
+    {
+      "path": "Jellyfin.Server.Implementations/Item/ItemPersistenceService.cs",
+      "sha256": "df64ede4e72fca107cb86127e44b4c81321b3cf560ea3b7f0eccf4462f148d14"
+    },
+    {
+      "path": "Emby.Server.Implementations/Library/ExternalDataManager.cs",
+      "sha256": "9645e24af7dab72bced234455ed708e347853c8c4f692ee728a01d9f9554c478"
+    },
+    {
+      "path": "Emby.Server.Implementations/Library/PathManager.cs",
+      "sha256": "35db88229462c4531839f6bb19ed3cdd00a354eaf96eeac8422307bca5e9e98b"
+    }
+  ],
+  "sourceAnchors": [
+    {
+      "path": "Emby.Server.Implementations/Library/LibraryManager.cs",
+      "lines": "558-624",
+      "contract": "internal metadata precedes required source deletion; Parent detach, external cleanup, persistence, cache and Removed follow"
+    },
+    {
+      "path": "Emby.Server.Implementations/Library/LibraryManager.cs",
+      "lines": "667-679",
+      "contract": "required source IOException and UnauthorizedAccessException propagate"
+    },
+    {
+      "path": "Emby.Server.Implementations/Library/LibraryManager.cs",
+      "lines": "725-754",
+      "contract": "every item contributes internal metadata while only Video contributes trickplay, chapter, subtitle and attachment paths"
+    }
+  ],
+  "scope": "Actual frozen ResolvePaths/CreateItems/ItemPersistenceService and LibraryManager.DeleteItem with controlled ordinary Movie/Folder sources and isolated direct or multi-disc DVD/Blu-ray Movie, MusicVideo and Video sources. Complete original resolved/dispatch/row/full Data/link/file/cache/event/created lookup projections, all 72 scalar columns and full ancestor/provider relations remain. Real internal metadata, extracted-data markers and media trees run inside a verified controlled state root. The recording covers DeleteFileLocation false and true, direct-disc Path deletion, the multi-disc single outer-parent delete path rather than per-part deletion, sidecar and sibling boundaries, already-missing sources, Windows read-only and exclusive-lock failures with partial recursive deletion, and source cleanup retained across a later real EF SQLite delete failure. Six counterexamples mutate persisted Data.VideoType and the live VideoType independently after CreateItems: native deletion follows only the live value, including the direct disc-to-VideoFile drift that derives and deletes the whole discovery parent with its Keep sentinel and sibling primary. Folder source failures additionally prove that only internal metadata is removed before the source attempt while extracted data is retained; Video source-failure ordering remains unchanged. Phase snapshots freeze internal/source/external/DB/cache/Parent/event ordering. The prior ordinary source retention/deletion, version promotion, alternate cleanup, recursive Folder descendants, channel suppression, null parent, no-notify and SQL-fault scenes remain. Metadata saver/provider, collection membership and media-source/channel-static-source dispatch are explicit empty controls; production deliberately rejects the recorded VideoType divergence, while disc owned/version families and arbitrary native types remain fail-closed and outside this recording, as are child MetadataService, migration, clients, performance and release acceptance.",
+  "assemblies": [
+    {
+      "name": "MediaBrowser.Controller",
+      "sha256": "051c588a8e85a3a7cdde8dc3d9a1112217fd7e973a86fe2ff90cf765bedb75a8"
+    },
+    {
+      "name": "Emby.Server.Implementations",
+      "sha256": "8d369435646570958505c58b9cb17da169855dabc105d0e933524361e9b7b1c8"
+    },
+    {
+      "name": "Jellyfin.Server.Implementations",
+      "sha256": "4da187af02503e82135eb192351d01490484e8ebc8c653d849f7e2900a177672"
+    }
+  ],
+  "reference": {
+    "head": "208c278b75abd897aefa1e1175126eac5e4dbfaa",
+    "contentDigest": "e28a983db179b720c3b16d7416ee4112894a3115c4be6fe43c61c52e0d9a8313"
+  },
+  "runtime": {
+    "timezone": "Asia/Taipei",
+    "node": "v24.16.0",
+    "dotnet": {
+      "path": "D:/mediamanager/.tools/dotnet/dotnet.exe",
+      "bytes": 167208,
+      "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6"
+    },
+    "jellyfinDll": {
+      "path": "D:/mediamanager-validation/20261005/jellyfin-baseline/source/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll",
+      "bytes": 506368,
+      "sha256": "a43fa24c44677e579fcec79d637789b9f36633d02e5434e76a0e03fa13027767"
+    },
+    "assemblies": {
+      "MediaBrowser.Controller.dll": {
+        "bytes": 655872,
+        "sha256": "051c588a8e85a3a7cdde8dc3d9a1112217fd7e973a86fe2ff90cf765bedb75a8"
+      },
+      "Emby.Server.Implementations.dll": {
+        "bytes": 1673728,
+        "sha256": "8d369435646570958505c58b9cb17da169855dabc105d0e933524361e9b7b1c8"
+      },
+      "Jellyfin.Server.Implementations.dll": {
+        "bytes": 664064,
+        "sha256": "4da187af02503e82135eb192351d01490484e8ebc8c653d849f7e2900a177672"
+      },
+      "Emby.Naming.dll": {
+        "bytes": 105984,
+        "sha256": "55085cf14d1e58a7a1e99e0ffc37bde0545bbe85f7f09995388a6e465cca3a45"
+      }
+    }
+  },
+  "record": {
+    "path": "D:/mediamanager-validation/20261005/results/directory-disc-source-delete-oracle-20261008-v8-drift-actual/record.json",
+    "sha256": "05c16f8af93dc3abbe5e02837ef28d4fcfe3de9fbb438ae46f98c56024b482e6",
+    "sourceFilesSha256": "dc017434f0f86a8e0b20fb1d292878b00cb6e4090d11d2aa74e1164b55c0daa1",
+    "oracleAssemblySha256": "0c4fa6cfcb8a5987a1fb45336a114cba1b796b04bf15a3ea613235a8bae7439a",
+    "rawNativeSha256": "95285eb391e6c3ff71ac56f67c87258f1f7b97f43298fad04e36f757e07f3347",
+    "portableNativeSha256": "33a774b4cfcee027894f9b5735ed89a53451a51d66225309f3b978da5705de7f",
+    "previous23ResultsSha256": "4d7a9ec180ad8d948eede8b015766d15c29a8251be07233c0ada0d465640992e",
+    "previous33ResultsSha256": "4586e8586dc9fb89ceb25bdafcbeeca351c5dd3f1d1129060e59e9f263b77f15",
+    "previous35ResultsSha256": "55c897a7d8513f61ab964d51509b5413cf23116a6e1a4c838e8c1d5751b490d8",
+    "portableNormalization": "CRLF to LF with the original final LF retained",
+    "buildStatus": 0,
+    "processStatus": 0
+  },
+  "command": "node tools/validation/oracle.js tests/library/fixtures/directory-video-delete-items/Oracle.csproj D:/mediamanager-validation/20261005/results/directory-disc-source-delete-oracle-20261008-v8-drift-actual tests/library/fixtures/directory-video-delete-items/input.json {output}/native.json {output}/state",
+  "candidateVerified": true,
+  "candidateComparison": "The 41-scene v8 native seal and the 35-scene parity differential pass on real SQLite and PostgreSQL; the focused fixture and production matrix passes 189/189 with no skips. Independent review reran the exact README commands against postgresql://validation@127.0.0.1:15439/postgres: the 11-file resolver/scan partition passed 866/866 and the disjoint 13-file linked/version/owned/external-data partition passed 626/626, both without failures or skips. These are newly reproduced results and replace, rather than purport to reproduce, the earlier local 502/502 and 582/582 summaries. All prior 35 native result objects remain unchanged. Six actual post-CreateItems VideoType divergence counterexamples prove that native uses only mutable live state, including direct persisted Dvd to live VideoFile selecting the discovery parent and deleting both Keep/sentinel.txt and sibling primary.mkv. Production deliberately rejects every direct/multi persisted-live Dvd/VideoFile/BluRay mismatch before side effects on both stores, preserving complete DB state, live/cache identity, events, internal and external markers, disc media, Keep sentinel and sibling primary. The prior mixed-folder, owner, primary-version and channel drift gates and Folder/Video cleanup ordering remain covered. Disc owned/version semantics, arbitrary native types, migration, clients, performance and release acceptance remain outside this scoped candidate verification."
+}

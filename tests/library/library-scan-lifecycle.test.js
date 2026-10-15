@@ -1,0 +1,212 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
+import { createHash, randomUUID } from 'node:crypto';
+import { LibraryScanLifecycle, LibraryScanService } from '../../src/library/index.js';
+import { updateInheritedValues } from '../../src/library/item-persistence.js';
+import { PostgresDatabase } from '../../src/database/postgres.js';
+import { DomainStore } from '../../src/database/domain-store.js';
+import { tableDefinition } from '../../src/database/model.js';
+import { checkAbort, StorageError } from '../../src/storage/errors.js';
+
+const root = new URL('./fixtures/library-scan-lifecycle/', import.meta.url);
+const [input, native, provenance] = await Promise.all(['input.json', 'native.json', 'provenance.json'].map(async name => JSON.parse(await readFile(new URL(name, root), 'utf8'))));
+const hash = value => createHash('sha256').update(value).digest('hex');
+const comparison = value => assert.deepEqual(value.actual, value.expected);
+const modes = { None: 0, ValidationOnly: 1, Default: 2, FullRefresh: 3 };
+
+test('native scan lifecycle binds the real manager, ignore cache, directories and EF cleanup', async () => {
+  for (const file of Object.values(provenance.files)) assert.equal(hash(await readFile(new URL('../../' + file.path, import.meta.url))), file.sha256, file.path);
+  assert.equal(native.inputSha256, provenance.files.input.sha256);
+  assert.equal(native.sourceFilesSha256, provenance.sourceFilesSha256);
+  assert.equal(provenance.runtime.jellyfinDll.sha256, '29c34541350089dc0522c4309ecd617e78fd402774681f32491d089803939c03');
+  assert.equal(native.candidateVerified, false); assert.equal(provenance.candidateVerified, false);
+  assert.equal(native.results.length, 22); assert.equal(input.length, native.results.length);
+  assert.equal(new Set(input.map(sample => sample.name)).size, input.length);
+  assert.deepEqual(input.map(sample => sample.name), native.results.map(sample => sample.name));
+});
+
+test('scan comparison detects lost restoration, progress and retained SQL maps', () => {
+  for (const name of ['empty-post-scan', 'two-post-tasks', 'inherited-links-clear']) {
+    const expected = native.results.find(sample => sample.name === name), actual = structuredClone(expected);
+    if (name === 'inherited-links-clear') actual.maps.push({ itemId: 'missing', itemValueId: 'unexpected' });
+    else if (name === 'two-post-tasks') actual.progress[4] = 50;
+    else actual.calls = actual.calls.filter(call => call.action !== 'monitor-start');
+    assert.throws(() => comparison({ actual, expected }), { code: 'ERR_ASSERTION' });
+  }
+});
+
+function lifecycleFor(sample) {
+  const calls = [], progress = [], controller = new AbortController();
+  const aggregate = { Name: 'aggregate', Type: 'AggregateFolder', IsFolder: true };
+  const userRoot = { Name: 'user-root', Type: 'UserRootFolder', IsFolder: true };
+  const children = (sample.collections ?? []).map(value => ({ ...value, Id: value.id, Name: value.name, Type: 'CollectionFolder', IsFolder: true }));
+  if (sample.ordinaryChild) children.push({ Name: 'ordinary', Type: 'Folder', IsFolder: true });
+  let cacheEmpty = false, lifecycle;
+  const trace = (action, item = null) => calls.push({ action, item, scanRunning: lifecycle.isScanRunning, cacheEmpty });
+  const control = (action, item) => {
+    trace(action, item);
+    if (sample.cancelAt === action) controller.abort(new StorageError('cancelled', 'Controlled cancellation'));
+    checkAbort(controller.signal);
+    if (sample.failure === action) throw Object.assign(new Error('Controlled failure'), { name: 'IOException' });
+    cacheEmpty = false;
+  };
+  const host = {
+    getAggregateFolder: async () => aggregate,
+    getUserRootFolder: async () => userRoot,
+    clearIgnoreRuleCache() { cacheEmpty = true; },
+    invalidateChildren() {},
+    async refreshMetadata(item) { control('refresh-' + item.Name, item.Name); },
+    async validateChildren(item, options) {
+      control(item === aggregate ? options.recursive ? 'recursive-aggregate' : 'validate-aggregate' : 'validate-user-root', item.Name);
+      calls.push({ action: 'validation-options', item: item.Name, recursive: options.recursive,
+        refreshChildMetadata: options.refreshChildMetadata ?? false,
+        allowRemoveRoot: options.allowRemoveRoot, MetadataRefreshMode: modes[options.MetadataRefreshMode],
+        ImageRefreshMode: modes[options.ImageRefreshMode], IsAutomated: options.IsAutomated, ForceSave: options.ForceSave });
+      for (const value of options.recursive ? [0, 25, 100] : [50]) options.reportProgress(value);
+      return { structurallyComplete: true, incompleteReasons: [] };
+    },
+    getChildren: async () => children,
+    collectionDirectoryExists: async item => item.exists,
+    async deleteCollections(ids) { calls.push({ action: 'delete-collections', ids }); control('delete-collections'); },
+    async updateInheritedValues() { control('update-inherited'); }
+  };
+  const monitor = Object.fromEntries(['stop', 'start'].map(name => [name, async () => {
+    trace('monitor-' + name);
+    if (sample.failure === 'monitor-' + name) throw Object.assign(new Error('Controlled monitor failure'), { name: 'IOException' });
+  }]));
+  const postScanTasks = (sample.postTasks ?? []).map(value => ({ name: value.name, async run({ reportProgress }) {
+    control('post-' + value.name);
+    if (value.replaceTasks) lifecycle.postScanTasks = [];
+    for (const percent of value.progress ?? []) reportProgress(percent);
+  } }));
+  lifecycle = new LibraryScanLifecycle({ host, monitor, postScanTasks, logger: { error: error => calls.push({ action: 'logged-error', exception: error.name }) } });
+  if (sample.cancelled) controller.abort(new StorageError('cancelled', 'Controlled cancellation'));
+  return { lifecycle, host, calls, progress, controller, cacheEmpty: () => cacheEmpty };
+}
+
+for (const sample of input.filter(sample => sample.mode !== 'inheritance')) test(`native library scan lifecycle: ${sample.name}`, async () => {
+  const fixture = lifecycleFor(sample);
+  let exception = null;
+  try {
+    const options = { signal: fixture.controller.signal, reportProgress: value => fixture.progress.push(value) };
+    if (sample.mode === 'top') await fixture.lifecycle.validateTopLibraryFolders({ ...options, removeRoot: sample.removeRoot });
+    else await fixture.lifecycle.run(options);
+  } catch (error) { exception = error.code === 'cancelled' ? 'OperationCanceledException' : error.name; }
+  const actual = { name: sample.name, exception, calls: fixture.calls, progress: fixture.progress,
+    scanRunning: fixture.lifecycle.isScanRunning, cacheEmpty: fixture.cacheEmpty() };
+  comparison({ actual, expected: native.results.find(value => value.name === sample.name) });
+});
+
+function blank(table) {
+  return Object.fromEntries(tableDefinition(table).columns.filter(column => !column.generated).map(column => {
+    const type = column.clrType.replace('?', '');
+    return [column.name, type === 'DateTime' ? '2025-01-02 03:04:05' : column.nullable ? null
+      : type === 'bool' ? false : column.type === 'TEXT' ? '' : ['long', 'uint'].includes(type) ? 0n : 0];
+  }));
+}
+
+async function databaseFor(t, dialect) {
+  const schema = 'scan_lifecycle_' + randomUUID().replaceAll('-', '').slice(0, 18);
+  const database = await PostgresDatabase.open({ connectionString: process.env.MEDIAMANAGER_TEST_POSTGRES, schema, create: true });
+  const store = new DomainStore(database);
+  t.after(async () => {
+    if (dialect === 'postgres') {
+      await database.client.query(`DROP SCHEMA "${schema}" CASCADE`);
+      await database.client.query(`DROP SCHEMA "${schema}__mm" CASCADE`);
+    }
+    await store.close();
+  });
+  return { database, store, schema };
+}
+
+for (const dialect of ['postgres']) for (const sample of input.filter(sample => sample.mode === 'inheritance')) {
+  test(`${dialect}: native inherited-link cleanup ${sample.name}`, { skip: dialect === 'postgres' && !process.env.MEDIAMANAGER_TEST_POSTGRES }, async t => {
+    const { database, store, schema } = await databaseFor(t, dialect);
+    const ids = ['97020000-0000-0000-0000-000000000001', '97020000-0000-0000-0000-000000000002'];
+    for (const [index, Id] of ids.entries()) await database.insert('BaseItems', { ...blank('BaseItems'), Id,
+      Type: index ? 'MediaBrowser.Controller.Entities.Movies.Movie' : 'MediaBrowser.Controller.Entities.Folder', Name: index ? 'Two' : 'One' });
+    for (const value of sample.values) {
+      await database.insert('ItemValues', { ItemValueId: value.id, Type: value.type, Value: value.value, CleanValue: value.value.toLowerCase() });
+      for (const index of value.items) await database.insert('ItemValuesMap', { ItemId: ids[index], ItemValueId: value.id });
+    }
+    const originalItems = await database.rows('BaseItems');
+    if (sample.sqlFailure) {
+      await database.client.query(`CREATE FUNCTION "${schema}".fail_inherited_delete() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN RAISE EXCEPTION 'Controlled inherited delete failure'; END $$`);
+      await database.client.query(`CREATE TRIGGER fail_inherited_delete AFTER DELETE ON "${schema}"."ItemValuesMap" FOR EACH ROW EXECUTE FUNCTION "${schema}".fail_inherited_delete()`);
+    }
+    let exception = null;
+    try { for (let iteration = 0; iteration < (sample.repeat ?? 1); iteration++) await updateInheritedValues(store); }
+    catch (error) {
+      assert.equal(sample.sqlFailure, true);
+      assert.equal(error.code, 'P0001');
+      exception = 'SqliteException';
+    }
+    const values = (await database.rows('ItemValues')).map(value => ({ id: value.ItemValueId.toLowerCase(), type: value.Type, value: value.Value, cleanValue: value.CleanValue })).sort((a, b) => a.id.localeCompare(b.id));
+    const maps = (await database.rows('ItemValuesMap')).map(row => ({ itemId: row.ItemId.toLowerCase(), itemValueId: row.ItemValueId.toLowerCase() })).sort((a, b) => a.itemId.localeCompare(b.itemId) || a.itemValueId.localeCompare(b.itemValueId));
+    comparison({ actual: { name: sample.name, exception, values, maps }, expected: native.results.find(value => value.name === sample.name) });
+    assert.deepEqual(await database.rows('BaseItems'), originalItems);
+  });
+}
+
+test('root coordinator uses the native lifecycle and preserves monotonic task progress', async () => {
+  const fixture = lifecycleFor({ postTasks: [{ name: 'a', progress: [100, 0, 50] }, { name: 'b', progress: [100] }] });
+  const reported = [], roots = [{ Id: 'one', Path: '/one' }, { Id: 'two', Path: '/two' }];
+  const scanner = new LibraryScanService({ library: { getPhysicalScanRoots: async () => roots }, lifecycle: fixture.lifecycle,
+    folderScanner: { supports: () => true, scan: async item => { fixture.calls.push({ action: 'physical-' + item.Id }); return { structurallyComplete: true, incompleteReasons: [] }; } } });
+  const result = await scanner.runCompleteScan({ reportProgress: value => reported.push(value) });
+  await scanner.close();
+  assert.equal(result.rootCount, 2); assert.equal(result.structurallyComplete, true);
+  assert.equal(scanner.capabilities.completeLibraryScan, false);
+  assert.deepEqual(fixture.calls.filter(call => /physical|post-|update-inherited|monitor-/.test(call.action)).map(call => call.action),
+    ['monitor-stop', 'physical-one', 'physical-two', 'post-a', 'post-b', 'update-inherited', 'monitor-start']);
+  assert.ok(reported.every((value, index) => value >= 0 && value <= 99 && (!index || value >= reported[index - 1])));
+  assert.ok(reported.includes(96)); assert.equal(reported.at(-1), 99);
+});
+
+test('a failed root restores monitoring and prevents post-scan cleanup of partial state', async () => {
+  const fixture = lifecycleFor({ postTasks: [{ name: 'a' }] });
+  const scanner = new LibraryScanService({ library: { getPhysicalScanRoots: async () => [{ Id: 'one' }] }, lifecycle: fixture.lifecycle,
+    folderScanner: { supports: () => true, scan: async () => { throw Object.assign(new Error('Failed physical scan'), { code: 'physical-scan-failed' }); } } });
+  await assert.rejects(scanner.runCompleteScan(), { code: 'physical-scan-failed' });
+  await scanner.close();
+  assert.equal(fixture.calls.at(-1).action, 'monitor-start');
+  assert.equal(fixture.lifecycle.isScanRunning, false);
+  assert.ok(!fixture.calls.some(call => call.action.startsWith('post-') || call.action === 'update-inherited'));
+});
+
+test('a queued replacement drains the cancelled lifecycle before starting its successor', async () => {
+  const fixture = lifecycleFor({ postTasks: [{ name: 'a' }] });
+  const started = Promise.withResolvers();
+  let rootCalls = 0;
+  const scanner = new LibraryScanService({ library: { getPhysicalScanRoots: async () => [{ Id: 'one' }] }, lifecycle: fixture.lifecycle,
+    folderScanner: { supports: () => true, scan: async (root, { signal }) => {
+      if (++rootCalls === 1) {
+        started.resolve();
+        await new Promise((resolve, reject) => signal.addEventListener('abort', () => reject(new StorageError('cancelled', 'Superseded scan')), { once: true }));
+      }
+      return { structurallyComplete: true, incompleteReasons: [] };
+    } } });
+  const first = scanner.queue();
+  await started.promise;
+  const second = scanner.queue();
+  assert.equal((await first).status, 'cancelled');
+  assert.equal((await second).status, 'completed');
+  await scanner.close();
+  assert.deepEqual(fixture.calls.filter(call => /post-|update-inherited|monitor-/.test(call.action)).map(call => call.action),
+    ['monitor-stop', 'monitor-start', 'monitor-stop', 'post-a', 'update-inherited', 'monitor-start']);
+  assert.equal(fixture.lifecycle.isScanRunning, false);
+});
+
+test('progress observer rejection cannot prevent post-scan work or monitor restoration', async () => {
+  const fixture = lifecycleFor({ postTasks: [{ name: 'a', progress: [50, 100] }] });
+  const errors = [];
+  const scanner = new LibraryScanService({ library: { getPhysicalScanRoots: async () => [{ Id: 'one' }] }, lifecycle: fixture.lifecycle,
+    folderScanner: { supports: () => true, scan: async () => ({ structurallyComplete: true, incompleteReasons: [] }) }, onError: error => errors.push(error.message) });
+  const result = await scanner.runCompleteScan({ reportProgress: async () => { throw new Error('Observer rejected progress'); } });
+  await scanner.close();
+  assert.equal(result.structurallyComplete, true);
+  assert.ok(errors.length > 0); assert.ok(errors.every(message => message === 'Observer rejected progress'));
+  assert.equal(fixture.calls.at(-1).action, 'monitor-start');
+  assert.ok(fixture.calls.some(call => call.action === 'update-inherited'));
+});

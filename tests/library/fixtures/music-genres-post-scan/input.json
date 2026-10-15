@@ -1,0 +1,19 @@
+[
+  { "name": "empty", "names": [] },
+  { "name": "new genres", "names": ["Rock", "Jazz"] },
+  { "name": "existing genres", "names": ["Rock", "Jazz"], "existing": ["Rock", "Jazz"] },
+  { "name": "mixed initial genres", "names": ["Rock", "Jazz"], "existing": ["Rock"] },
+  { "name": "case collision refreshes twice", "names": ["Rock", "rock"] },
+  { "name": "initial case collision skips twice", "names": ["Rock", "rock"], "existing": ["Rock"] },
+  { "name": "lookup failure continues", "names": ["Rock", "Jazz", "Pop"], "failLookup": ["Jazz"] },
+  { "name": "refresh failure continues", "names": ["Rock", "Jazz"], "failRefresh": ["Rock"] },
+  { "name": "initial cancellation creates first", "names": ["Rock", "Jazz"], "cancelInitial": true },
+  { "name": "initial cancellation skips existing", "names": ["Rock", "Jazz"], "existing": ["Rock", "Jazz"], "cancelInitial": true },
+  { "name": "later refresh cancellation", "names": ["Rock", "Jazz", "Pop"], "cancelRefresh": "Jazz" },
+  { "name": "lookup cancellation", "names": ["Rock", "Jazz", "Pop"], "cancelLookup": "Jazz" },
+  { "name": "wrong initial type", "names": ["Rock"], "existing": ["Rock"], "existingType": "Movie" },
+  { "name": "owned initial genre", "names": ["Rock"], "existing": ["Rock"], "existingOwner": true },
+  { "name": "alternate initial genre", "names": ["Rock"], "existing": ["Rock"], "existingAlternate": true },
+  { "name": "empty spelling accepted", "names": ["", "Rock"] },
+  { "name": "source kinds and grouping", "names": ["Rock"], "probeSourceKinds": true }
+]

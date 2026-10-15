@@ -1,0 +1,62 @@
+[
+  {
+    "Input": "{}",
+    "Result": "{\u0022CanSeek\u0022:false,\u0022ItemId\u0022:\u002200000000000000000000000000000000\u0022,\u0022IsPaused\u0022:false,\u0022IsMuted\u0022:false,\u0022PlayMethod\u0022:\u0022Transcode\u0022,\u0022RepeatMode\u0022:\u0022RepeatNone\u0022,\u0022PlaybackOrder\u0022:\u0022Default\u0022}",
+    "Error": null
+  },
+  {
+    "Input": "{\u0022playMethod\u0022:\u0022directstream\u0022,\u0022repeatMode\u0022:1,\u0022playbackOrder\u0022:\u00221\u0022}",
+    "Result": "{\u0022CanSeek\u0022:false,\u0022ItemId\u0022:\u002200000000000000000000000000000000\u0022,\u0022IsPaused\u0022:false,\u0022IsMuted\u0022:false,\u0022PlayMethod\u0022:\u0022DirectStream\u0022,\u0022RepeatMode\u0022:\u0022RepeatAll\u0022,\u0022PlaybackOrder\u0022:\u0022Shuffle\u0022}",
+    "Error": null
+  },
+  {
+    "Input": "{\u0022playMethod\u0022:9}",
+    "Result": "{\u0022CanSeek\u0022:false,\u0022ItemId\u0022:\u002200000000000000000000000000000000\u0022,\u0022IsPaused\u0022:false,\u0022IsMuted\u0022:false,\u0022PlayMethod\u0022:9,\u0022RepeatMode\u0022:\u0022RepeatNone\u0022,\u0022PlaybackOrder\u0022:\u0022Default\u0022}",
+    "Error": null
+  },
+  {
+    "Input": "{\u0022playMethod\u0022:\u00229\u0022}",
+    "Result": "{\u0022CanSeek\u0022:false,\u0022ItemId\u0022:\u002200000000000000000000000000000000\u0022,\u0022IsPaused\u0022:false,\u0022IsMuted\u0022:false,\u0022PlayMethod\u0022:9,\u0022RepeatMode\u0022:\u0022RepeatNone\u0022,\u0022PlaybackOrder\u0022:\u0022Default\u0022}",
+    "Error": null
+  },
+  {
+    "Input": "{\u0022playMethod\u0022:\u0022 DirectPlay \u0022}",
+    "Result": "{\u0022CanSeek\u0022:false,\u0022ItemId\u0022:\u002200000000000000000000000000000000\u0022,\u0022IsPaused\u0022:false,\u0022IsMuted\u0022:false,\u0022PlayMethod\u0022:\u0022DirectPlay\u0022,\u0022RepeatMode\u0022:\u0022RepeatNone\u0022,\u0022PlaybackOrder\u0022:\u0022Default\u0022}",
+    "Error": null
+  },
+  {
+    "Input": "{\u0022playMethod\u0022:\u0022DirectPlay, DirectStream\u0022}",
+    "Result": "{\u0022CanSeek\u0022:false,\u0022ItemId\u0022:\u002200000000000000000000000000000000\u0022,\u0022IsPaused\u0022:false,\u0022IsMuted\u0022:false,\u0022PlayMethod\u0022:3,\u0022RepeatMode\u0022:\u0022RepeatNone\u0022,\u0022PlaybackOrder\u0022:\u0022Default\u0022}",
+    "Error": null
+  },
+  {
+    "Input": "{\u0022playMethod\u0022:\u00221,2\u0022}",
+    "Result": null,
+    "Error": "JsonException"
+  },
+  {
+    "Input": "{\u0022playMethod\u0022:null}",
+    "Result": null,
+    "Error": "JsonException"
+  },
+  {
+    "Input": "{\u0022playMethod\u0022:\u0022invalid\u0022}",
+    "Result": null,
+    "Error": "JsonException"
+  },
+  {
+    "Input": "{\u0022isPaused\u0022:\u0022true\u0022}",
+    "Result": null,
+    "Error": "JsonException"
+  },
+  {
+    "Input": "{\u0022positionTicks\u0022:\u0022\u002B1\u0022}",
+    "Result": "{\u0022CanSeek\u0022:false,\u0022ItemId\u0022:\u002200000000000000000000000000000000\u0022,\u0022IsPaused\u0022:false,\u0022IsMuted\u0022:false,\u0022PositionTicks\u0022:1,\u0022PlayMethod\u0022:\u0022Transcode\u0022,\u0022RepeatMode\u0022:\u0022RepeatNone\u0022,\u0022PlaybackOrder\u0022:\u0022Default\u0022}",
+    "Error": null
+  },
+  {
+    "Input": "{\u0022positionTicks\u0022:\u0022 1 \u0022}",
+    "Result": null,
+    "Error": "JsonException"
+  }
+]

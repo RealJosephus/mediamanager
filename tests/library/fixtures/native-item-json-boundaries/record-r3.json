@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "scope": "Single pinned JsonDefaults execution proving the nonnullable MediaBrowser.Model.Entities.VideoType null-token behavior used by raw HTTP fixture rows.",
+  "caseCount": 1,
+  "runtime": "10.0.12",
+  "timezone": "Taipei Standard Time",
+  "execution": {
+    "initialNoBuildRunExitCode": 1,
+    "initialNoBuildRunFailure": "The project-local Oracle.exe path did not exist because the sealed oracle build output is retained at the capture root.",
+    "finalCommand": "D:/mediamanager/.tools/dotnet/dotnet.exe bin/Release/net10.0/Oracle.dll input-r3.json native-r3.json",
+    "finalExitCode": 0
+  },
+  "result": {
+    "id": "enum-null-videotype",
+    "success": false,
+    "errorType": "System.Text.Json.JsonException",
+    "inner": null
+  },
+  "artifacts": [
+    { "path": "input-r3.json", "bytes": 94, "sha256": "2D2BEDA92A6EAC8B8390E139F3CA87E07A83FAA50DD11558536056F5338C3724" },
+    { "path": "native-r3.json", "bytes": 609, "sha256": "15A1B6A0ACABEC61B98C1F0FAC50C04D8C9B74AA0421A95945483351E25EE395" },
+    { "path": "project/Oracle.csproj", "bytes": 554, "sha256": "DA74F4379BB99743F3EAC06F27D8B674E8D7877829EA971625344302503B2661" },
+    { "path": "project/Program.cs", "bytes": 3438, "sha256": "4AE1985CC792BA009D27105C0F073D93FDDAA8BDDF44751289028B6BB23D68AF" },
+    { "path": "bin/Release/net10.0/Oracle.dll", "bytes": 22016, "sha256": "90792BF8B19FC6723F311F8E08D4108A1AAAEF15A816A723C96D0A0F98AB325F" }
+  ]
+}

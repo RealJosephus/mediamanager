@@ -1,0 +1,324 @@
+{
+  "schemaVersion": 1,
+  "sourceBindings": [
+    {
+      "path": ".agent-docs/evidence/child-count-linked-native-v5/Program.cs",
+      "sha256": "52162c58ad2139042ad7057bbf7ccd430a8620ff085e88c5304bd073c718cdcc",
+      "bytes": 5577
+    },
+    {
+      "path": ".agent-docs/evidence/child-count-linked-native-v5/Oracle.csproj",
+      "sha256": "f5aceeed752306180d41685b345fbab2f4faf42aa817aa3f8407882ea78a52e3",
+      "bytes": 394
+    },
+    {
+      "path": ".agent-docs/evidence/child-count-linked-native-v5/stdout.txt",
+      "sha256": "8966fcc73294d951865c337c4ad65b43a09898b1161e335baddf0b1d2e505a5b",
+      "bytes": 4573
+    },
+    {
+      "path": ".agent-docs/evidence/child-count-linked-native-v5/summary.json",
+      "sha256": "1b04150fdcf2f4f07edd0ec06cad2e9089946921663eea9be332c27d3bf61329",
+      "bytes": 13460
+    },
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/MediaBrowser.Controller/Entities/Folder.cs",
+      "sha256": "d5f227d462ce3c2df0d5a45d912778427f87321fc9d6e13d863ec28bb639e0c1",
+      "bytes": 83390
+    },
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/MediaBrowser.Controller/Entities/CollectionFolder.cs",
+      "sha256": "6250b085fafa9adbaa153063ef2abccbde20a2b04f372dbbc8fa80ee73151487",
+      "bytes": 13354
+    },
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/MediaBrowser.Controller/Entities/BaseItem.cs",
+      "sha256": "9dc7b96a93c9fbe874cdcededdca395b5aa2df6070f5cfc9c8959539dcd76469",
+      "bytes": 105800
+    },
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/MediaBrowser.Controller/Entities/UserViewBuilder.cs",
+      "sha256": "006c551a073cff64101f181a1d34c2c2840ac8e8bc412ce126f6a3c36f069794",
+      "bytes": 32703
+    },
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/MediaBrowser.Controller/Entities/InternalItemsQuery.cs",
+      "sha256": "d3002a8af3e88fba82a46a1541620518968677425694978c3e967e325106e964",
+      "bytes": 20315
+    },
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/MediaBrowser.Controller/Entities/Video.cs",
+      "sha256": "03df015992ee4e95e175c499b36a7b21d9facc4f391cfd89235ad652d2eb0b11",
+      "bytes": 32932
+    },
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/src/Jellyfin.Database/Jellyfin.Database.Implementations/Entities/User.cs",
+      "sha256": "66283a001640450d95c460a4b3225d932c62dfc02152a8aeaec9645735075104",
+      "bytes": 11790
+    },
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/Emby.Server.Implementations/Dto/DtoService.cs",
+      "sha256": "d00b1e73b167dc3068e619d52dbc394ea2f7187c1c87524d0e6b094d1cab5b55",
+      "bytes": 72274
+    },
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/Jellyfin.Server.Implementations/Item/BaseItemRepository.QueryBuilding.cs",
+      "sha256": "b4c3ddd5a657ac4d9308131bfb5bf490df11d5f56c3df50d0a1b6645d282bdb2",
+      "bytes": 31527
+    },
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/Jellyfin.Server/bin/Release/net10.0/MediaBrowser.Controller.dll",
+      "sha256": "0b7bd01db6605bb54658d07e8b7d5d70615a7f741cfdd6615b0cfa628f0d1644",
+      "bytes": 655872
+    },
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/Jellyfin.Server/bin/Release/net10.0/MediaBrowser.Model.dll",
+      "sha256": "991b3ca08b544ea91feff5c05d8dbb1d8b6ca3392f90753073cc09e353395946",
+      "bytes": 489472
+    },
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/Jellyfin.Server/bin/Release/net10.0/Jellyfin.Server.Implementations.dll",
+      "sha256": "eb3e6e24a44d691a70122a68feb8452420df94e93f85f2ca3b8a860bf1a42a2e",
+      "bytes": 664064
+    },
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/Jellyfin.Server/bin/Release/net10.0/Jellyfin.Database.Implementations.dll",
+      "sha256": "987e24d22a0f54a0eb2c459f9073fc6721bcbed98763da7e23e85e19e3e62ed1",
+      "bytes": 249344
+    },
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/Jellyfin.Server/bin/Release/net10.0/Jellyfin.Extensions.dll",
+      "sha256": "857e4a37f69c65f1b66cd281fe735a75caf3ae76ae878726eaf20130755cabde",
+      "bytes": 37888
+    },
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/Jellyfin.Server/bin/Release/net10.0/Emby.Server.Implementations.dll",
+      "sha256": "c63a43b6d4dc0c82f59b1d5a1c71788738f3629fdf60e01993de606b83559b1a",
+      "bytes": 1673728
+    }
+  ],
+  "oracleSourceSha256": "52162c58ad2139042ad7057bbf7ccd430a8620ff085e88c5304bd073c718cdcc",
+  "nativeProcessExit": 0,
+  "raw": {
+    "actualFrozenFolderMethods": true,
+    "actualFrozenCollectionFolder": true,
+    "dependenciesControlled": true,
+    "actualFullDtoServiceInvoked": false,
+    "databaseOpened": false,
+    "output": [
+      {
+        "Id": "99100000-0000-0000-0000-000000000004",
+        "type": "MediaBrowser.Controller.Entities.CollectionFolder",
+        "physicalFolderIds": [],
+        "LinkedChildrenLoaded": true,
+        "links": [
+          {
+            "ItemId": "99100000-0000-0000-0000-000000000005",
+            "Type": 0
+          }
+        ],
+        "sources": [
+          {
+            "Id": "99100000-0000-0000-0000-000000000005",
+            "Name": "Linked source",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "Path": null,
+            "IsVirtualItem": false,
+            "OwnerId": "00000000-0000-0000-0000-000000000000",
+            "PresentationUniqueKey": "shared-video-key"
+          },
+          {
+            "Id": "99100000-0000-0000-0000-000000000006",
+            "Name": "Other linked source",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "Path": null,
+            "IsVirtualItem": false,
+            "OwnerId": "00000000-0000-0000-0000-000000000000",
+            "PresentationUniqueKey": "shared-video-key"
+          }
+        ],
+        "withoutLinks": [],
+        "withoutCount": 0,
+        "withLinks": [
+          "99100000-0000-0000-0000-000000000005"
+        ],
+        "withCount": 1,
+        "itemIds": [
+          "99100000-0000-0000-0000-000000000005"
+        ],
+        "TotalRecordCount": 1,
+        "cachedChildren": [],
+        "anonymousItemIds": [],
+        "anonymousTotalRecordCount": 0,
+        "childCount": 1
+      },
+      {
+        "Id": "99100000-0000-0000-0000-000000000008",
+        "type": "MediaBrowser.Controller.Entities.Folder",
+        "physicalFolderIds": null,
+        "LinkedChildrenLoaded": true,
+        "links": [
+          {
+            "ItemId": "99100000-0000-0000-0000-000000000005",
+            "Type": 0
+          }
+        ],
+        "sources": [
+          {
+            "Id": "99100000-0000-0000-0000-000000000005",
+            "Name": "Linked source",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "Path": null,
+            "IsVirtualItem": false,
+            "OwnerId": "00000000-0000-0000-0000-000000000000",
+            "PresentationUniqueKey": "shared-video-key"
+          },
+          {
+            "Id": "99100000-0000-0000-0000-000000000006",
+            "Name": "Other linked source",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "Path": null,
+            "IsVirtualItem": false,
+            "OwnerId": "00000000-0000-0000-0000-000000000000",
+            "PresentationUniqueKey": "shared-video-key"
+          }
+        ],
+        "withoutLinks": [],
+        "withoutCount": 0,
+        "withLinks": [
+          "99100000-0000-0000-0000-000000000005"
+        ],
+        "withCount": 1,
+        "itemIds": [
+          "99100000-0000-0000-0000-000000000005"
+        ],
+        "TotalRecordCount": 1,
+        "cachedChildren": [],
+        "anonymousItemIds": [],
+        "anonymousTotalRecordCount": 0,
+        "childCount": 1
+      },
+      {
+        "Id": "99100000-0000-0000-0000-000000000009",
+        "type": "MediaBrowser.Controller.Entities.CollectionFolder",
+        "physicalFolderIds": [],
+        "LinkedChildrenLoaded": true,
+        "links": [
+          {
+            "ItemId": "99100000-0000-0000-0000-000000000005",
+            "Type": 0
+          },
+          {
+            "ItemId": "99100000-0000-0000-0000-000000000005",
+            "Type": 1
+          },
+          {
+            "ItemId": "99100000-0000-0000-0000-000000000005",
+            "Type": 2
+          }
+        ],
+        "sources": [
+          {
+            "Id": "99100000-0000-0000-0000-000000000005",
+            "Name": "Linked source",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "Path": null,
+            "IsVirtualItem": false,
+            "OwnerId": "00000000-0000-0000-0000-000000000000",
+            "PresentationUniqueKey": "shared-video-key"
+          },
+          {
+            "Id": "99100000-0000-0000-0000-000000000006",
+            "Name": "Other linked source",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "Path": null,
+            "IsVirtualItem": false,
+            "OwnerId": "00000000-0000-0000-0000-000000000000",
+            "PresentationUniqueKey": "shared-video-key"
+          }
+        ],
+        "withoutLinks": [],
+        "withoutCount": 0,
+        "withLinks": [
+          "99100000-0000-0000-0000-000000000005"
+        ],
+        "withCount": 3,
+        "itemIds": [
+          "99100000-0000-0000-0000-000000000005"
+        ],
+        "TotalRecordCount": 1,
+        "cachedChildren": [],
+        "anonymousItemIds": [],
+        "anonymousTotalRecordCount": 0,
+        "childCount": 1
+      },
+      {
+        "Id": "99100000-0000-0000-0000-000000000010",
+        "type": "MediaBrowser.Controller.Entities.CollectionFolder",
+        "physicalFolderIds": [],
+        "LinkedChildrenLoaded": true,
+        "links": [
+          {
+            "ItemId": "99100000-0000-0000-0000-000000000005",
+            "Type": 0
+          },
+          {
+            "ItemId": "99100000-0000-0000-0000-000000000006",
+            "Type": 0
+          }
+        ],
+        "sources": [
+          {
+            "Id": "99100000-0000-0000-0000-000000000005",
+            "Name": "Linked source",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "Path": null,
+            "IsVirtualItem": false,
+            "OwnerId": "00000000-0000-0000-0000-000000000000",
+            "PresentationUniqueKey": "shared-video-key"
+          },
+          {
+            "Id": "99100000-0000-0000-0000-000000000006",
+            "Name": "Other linked source",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "Path": null,
+            "IsVirtualItem": false,
+            "OwnerId": "00000000-0000-0000-0000-000000000000",
+            "PresentationUniqueKey": "shared-video-key"
+          }
+        ],
+        "withoutLinks": [],
+        "withoutCount": 0,
+        "withLinks": [
+          "99100000-0000-0000-0000-000000000005",
+          "99100000-0000-0000-0000-000000000006"
+        ],
+        "withCount": 2,
+        "itemIds": [
+          "99100000-0000-0000-0000-000000000005",
+          "99100000-0000-0000-0000-000000000006"
+        ],
+        "TotalRecordCount": 2,
+        "cachedChildren": [],
+        "anonymousItemIds": [],
+        "anonymousTotalRecordCount": 0,
+        "childCount": 2
+      }
+    ],
+    "calls": [
+      "GetItemList",
+      "GetItemList",
+      "GetItemList",
+      "GetItemList",
+      "GetItemList",
+      "GetItemList",
+      "GetItemList",
+      "GetItemList",
+      "GetItemList",
+      "GetItemList",
+      "GetItemList",
+      "GetItemList"
+    ]
+  },
+  "limitations": "Real frozen Folder/CollectionFolder GetChildren/GetItems/GetChildCount and explicit entity field readback. Library lookup, configuration, user-data and recordings interfaces are controlled, and source admission is controlled. Full DtoService, native SQL repository and HTTP controller were not invoked. The regression covers CollectionFolder fallback and controls for cached Children, anonymous GetItems and plain Folder batch; public Items linked-child behavior remains a separate unaccepted difference."
+}

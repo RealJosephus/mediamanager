@@ -1,0 +1,1325 @@
+{
+  "results": [
+    {
+      "name": "ordinary folder does not aggregate metadata",
+      "enabled": false,
+      "updateType": 1,
+      "exception": null,
+      "result": {
+        "Name": "Folder",
+        "PremiereDate": null,
+        "ProductionYear": null,
+        "Genres": [
+          "Keep"
+        ],
+        "Studios": [],
+        "OfficialRating": null,
+        "RunTimeTicks": 9,
+        "IsVirtualItem": false,
+        "DateLastMediaAdded": null,
+        "Artists": null,
+        "AlbumArtists": null,
+        "ProviderIds": {},
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "name": "series updates date during None",
+      "enabled": true,
+      "updateType": 3,
+      "exception": null,
+      "result": {
+        "Name": "Series",
+        "PremiereDate": null,
+        "ProductionYear": null,
+        "Genres": [],
+        "Studios": [],
+        "OfficialRating": null,
+        "RunTimeTicks": null,
+        "IsVirtualItem": false,
+        "DateLastMediaAdded": "2026-02-01T00:00:00.0000000Z",
+        "Artists": null,
+        "AlbumArtists": null,
+        "ProviderIds": {},
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "name": "locked series date ignores item lock",
+      "enabled": true,
+      "updateType": 3,
+      "exception": null,
+      "result": {
+        "Name": "Series",
+        "PremiereDate": null,
+        "ProductionYear": null,
+        "Genres": [],
+        "Studios": [],
+        "OfficialRating": null,
+        "RunTimeTicks": null,
+        "IsVirtualItem": false,
+        "DateLastMediaAdded": "2026-02-01T00:00:00.1234567Z",
+        "Artists": null,
+        "AlbumArtists": null,
+        "ProviderIds": {},
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "name": "series empty children clears old date to MinValue",
+      "enabled": true,
+      "updateType": 3,
+      "exception": null,
+      "result": {
+        "Name": "Series",
+        "PremiereDate": null,
+        "ProductionYear": null,
+        "Genres": [],
+        "Studios": [],
+        "OfficialRating": null,
+        "RunTimeTicks": null,
+        "IsVirtualItem": false,
+        "DateLastMediaAdded": "0001-01-01T00:00:00.0000000",
+        "Artists": null,
+        "AlbumArtists": null,
+        "ProviderIds": {},
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "name": "series null last media date with no children is imported",
+      "enabled": true,
+      "updateType": 3,
+      "exception": null,
+      "result": {
+        "Name": "Series",
+        "PremiereDate": null,
+        "ProductionYear": null,
+        "Genres": [],
+        "Studios": [],
+        "OfficialRating": null,
+        "RunTimeTicks": null,
+        "IsVirtualItem": false,
+        "DateLastMediaAdded": "0001-01-01T00:00:00.0000000",
+        "Artists": null,
+        "AlbumArtists": null,
+        "ProviderIds": {},
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "name": "series hydrated MinValue with no children remains unchanged",
+      "enabled": true,
+      "updateType": 1,
+      "exception": null,
+      "result": {
+        "Name": "Series",
+        "PremiereDate": null,
+        "ProductionYear": null,
+        "Genres": [],
+        "Studios": [],
+        "OfficialRating": null,
+        "RunTimeTicks": null,
+        "IsVirtualItem": false,
+        "DateLastMediaAdded": "0001-01-01T00:00:00.0000000Z",
+        "Artists": null,
+        "AlbumArtists": null,
+        "ProviderIds": {},
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "name": "series only virtual items are excluded from added date",
+      "enabled": true,
+      "updateType": 1,
+      "exception": null,
+      "result": {
+        "Name": "Series",
+        "PremiereDate": null,
+        "ProductionYear": null,
+        "Genres": [],
+        "Studios": [],
+        "OfficialRating": null,
+        "RunTimeTicks": null,
+        "IsVirtualItem": false,
+        "DateLastMediaAdded": "0001-01-01T00:00:00.0000000Z",
+        "Artists": null,
+        "AlbumArtists": null,
+        "ProviderIds": {},
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "name": "series minimum creation date remains minimum",
+      "enabled": true,
+      "updateType": 1,
+      "exception": null,
+      "result": {
+        "Name": "Series",
+        "PremiereDate": null,
+        "ProductionYear": null,
+        "Genres": [],
+        "Studios": [],
+        "OfficialRating": null,
+        "RunTimeTicks": null,
+        "IsVirtualItem": false,
+        "DateLastMediaAdded": "0001-01-01T00:00:00.0000000Z",
+        "Artists": null,
+        "AlbumArtists": null,
+        "ProviderIds": {},
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "name": "album None does not aggregate",
+      "enabled": false,
+      "updateType": 1,
+      "exception": null,
+      "result": {
+        "Name": "Keep",
+        "PremiereDate": null,
+        "ProductionYear": null,
+        "Genres": [],
+        "Studios": [],
+        "OfficialRating": null,
+        "RunTimeTicks": 9,
+        "IsVirtualItem": false,
+        "DateLastMediaAdded": null,
+        "Artists": [],
+        "AlbumArtists": [],
+        "ProviderIds": {},
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "name": "album image update enables aggregation",
+      "enabled": true,
+      "updateType": 19,
+      "exception": null,
+      "result": {
+        "Name": "Change",
+        "PremiereDate": null,
+        "ProductionYear": null,
+        "Genres": [],
+        "Studios": [],
+        "OfficialRating": null,
+        "RunTimeTicks": 80,
+        "IsVirtualItem": false,
+        "DateLastMediaAdded": null,
+        "Artists": [],
+        "AlbumArtists": [],
+        "ProviderIds": {},
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "name": "album empty children sets zero ticks and clears lists",
+      "enabled": true,
+      "updateType": 19,
+      "exception": null,
+      "result": {
+        "Name": "MusicAlbum",
+        "PremiereDate": null,
+        "ProductionYear": null,
+        "Genres": [],
+        "Studios": [],
+        "OfficialRating": null,
+        "RunTimeTicks": 0,
+        "IsVirtualItem": false,
+        "DateLastMediaAdded": null,
+        "Artists": [],
+        "AlbumArtists": [],
+        "ProviderIds": {},
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "name": "artist cumulative runtime includes virtual leaves and excludes folders",
+      "enabled": true,
+      "updateType": 3,
+      "exception": null,
+      "result": {
+        "Name": "MusicArtist",
+        "PremiereDate": null,
+        "ProductionYear": null,
+        "Genres": [],
+        "Studios": [],
+        "OfficialRating": null,
+        "RunTimeTicks": 90,
+        "IsVirtualItem": false,
+        "DateLastMediaAdded": null,
+        "Artists": null,
+        "AlbumArtists": null,
+        "ProviderIds": {},
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "name": "album runtime wraps native unchecked Int64",
+      "enabled": true,
+      "updateType": 3,
+      "exception": null,
+      "result": {
+        "Name": "MusicAlbum",
+        "PremiereDate": null,
+        "ProductionYear": null,
+        "Genres": [],
+        "Studios": [],
+        "OfficialRating": null,
+        "RunTimeTicks": -9223372036854775806,
+        "IsVirtualItem": false,
+        "DateLastMediaAdded": null,
+        "Artists": [],
+        "AlbumArtists": [],
+        "ProviderIds": {},
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "name": "locked album still updates runtime without user metadata",
+      "enabled": true,
+      "updateType": 3,
+      "exception": null,
+      "result": {
+        "Name": "Keep",
+        "PremiereDate": null,
+        "ProductionYear": null,
+        "Genres": [
+          "Old"
+        ],
+        "Studios": [],
+        "OfficialRating": null,
+        "RunTimeTicks": 11,
+        "IsVirtualItem": false,
+        "DateLastMediaAdded": null,
+        "Artists": [
+          "Old"
+        ],
+        "AlbumArtists": [],
+        "ProviderIds": {
+          "MusicBrainzAlbum": "old"
+        },
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "name": "Runtime field lock does not block cumulative ticks",
+      "enabled": true,
+      "updateType": 3,
+      "exception": null,
+      "result": {
+        "Name": "MusicAlbum",
+        "PremiereDate": null,
+        "ProductionYear": null,
+        "Genres": [],
+        "Studios": [],
+        "OfficialRating": null,
+        "RunTimeTicks": 11,
+        "IsVirtualItem": false,
+        "DateLastMediaAdded": null,
+        "Artists": [],
+        "AlbumArtists": [],
+        "ProviderIds": {},
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "name": "album takes first nonempty name rather than most frequent",
+      "enabled": true,
+      "updateType": 19,
+      "exception": null,
+      "result": {
+        "Name": "First",
+        "PremiereDate": null,
+        "ProductionYear": null,
+        "Genres": [],
+        "Studios": [],
+        "OfficialRating": null,
+        "RunTimeTicks": 0,
+        "IsVirtualItem": false,
+        "DateLastMediaAdded": null,
+        "Artists": [],
+        "AlbumArtists": [],
+        "ProviderIds": {},
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "name": "album whitespace name counts as nonempty",
+      "enabled": true,
+      "updateType": 19,
+      "exception": null,
+      "result": {
+        "Name": "  ",
+        "PremiereDate": null,
+        "ProductionYear": null,
+        "Genres": [],
+        "Studios": [],
+        "OfficialRating": null,
+        "RunTimeTicks": 0,
+        "IsVirtualItem": false,
+        "DateLastMediaAdded": null,
+        "Artists": [],
+        "AlbumArtists": [],
+        "ProviderIds": {},
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "name": "Name field lock preserves album name",
+      "enabled": true,
+      "updateType": 3,
+      "exception": null,
+      "result": {
+        "Name": "Keep",
+        "PremiereDate": null,
+        "ProductionYear": null,
+        "Genres": [],
+        "Studios": [],
+        "OfficialRating": null,
+        "RunTimeTicks": 0,
+        "IsVirtualItem": false,
+        "DateLastMediaAdded": null,
+        "Artists": [],
+        "AlbumArtists": [],
+        "ProviderIds": {},
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "name": "artists frequency combines ordinal ignore case and preserves first spelling",
+      "enabled": true,
+      "updateType": 19,
+      "exception": null,
+      "result": {
+        "Name": "MusicAlbum",
+        "PremiereDate": null,
+        "ProductionYear": null,
+        "Genres": [],
+        "Studios": [],
+        "OfficialRating": null,
+        "RunTimeTicks": 0,
+        "IsVirtualItem": false,
+        "DateLastMediaAdded": null,
+        "Artists": [
+          "alpha",
+          "Beta",
+          "",
+          "Gamma"
+        ],
+        "AlbumArtists": [
+          "A",
+          "B",
+          "C"
+        ],
+        "ProviderIds": {},
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "name": "artists equal counts preserve encounter order",
+      "enabled": true,
+      "updateType": 19,
+      "exception": null,
+      "result": {
+        "Name": "MusicAlbum",
+        "PremiereDate": null,
+        "ProductionYear": null,
+        "Genres": [],
+        "Studios": [],
+        "OfficialRating": null,
+        "RunTimeTicks": 0,
+        "IsVirtualItem": false,
+        "DateLastMediaAdded": null,
+        "Artists": [
+          "Beta",
+          "alpha"
+        ],
+        "AlbumArtists": [],
+        "ProviderIds": {},
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "name": "artists case-only sequence is an edit",
+      "enabled": true,
+      "updateType": 19,
+      "exception": null,
+      "result": {
+        "Name": "MusicAlbum",
+        "PremiereDate": null,
+        "ProductionYear": null,
+        "Genres": [],
+        "Studios": [],
+        "OfficialRating": null,
+        "RunTimeTicks": 0,
+        "IsVirtualItem": false,
+        "DateLastMediaAdded": null,
+        "Artists": [
+          "ALPHA"
+        ],
+        "AlbumArtists": [],
+        "ProviderIds": {},
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "name": "invalid provider value is rejected while aggregation reports an edit",
+      "enabled": true,
+      "updateType": 19,
+      "exception": null,
+      "result": {
+        "Name": "MusicAlbum",
+        "PremiereDate": null,
+        "ProductionYear": null,
+        "Genres": [],
+        "Studios": [],
+        "OfficialRating": null,
+        "RunTimeTicks": 0,
+        "IsVirtualItem": false,
+        "DateLastMediaAdded": null,
+        "Artists": [],
+        "AlbumArtists": [],
+        "ProviderIds": {
+          "MusicBrainzAlbum": "old"
+        },
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "name": "provider null majority keeps previous ID",
+      "enabled": true,
+      "updateType": 3,
+      "exception": null,
+      "result": {
+        "Name": "MusicAlbum",
+        "PremiereDate": null,
+        "ProductionYear": null,
+        "Genres": [],
+        "Studios": [],
+        "OfficialRating": null,
+        "RunTimeTicks": 0,
+        "IsVirtualItem": false,
+        "DateLastMediaAdded": null,
+        "Artists": [],
+        "AlbumArtists": [],
+        "ProviderIds": {
+          "MusicBrainzAlbum": "old"
+        },
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "name": "provider empty majority keeps previous ID",
+      "enabled": true,
+      "updateType": 3,
+      "exception": null,
+      "result": {
+        "Name": "MusicAlbum",
+        "PremiereDate": null,
+        "ProductionYear": null,
+        "Genres": [],
+        "Studios": [],
+        "OfficialRating": null,
+        "RunTimeTicks": 0,
+        "IsVirtualItem": false,
+        "DateLastMediaAdded": null,
+        "Artists": [],
+        "AlbumArtists": [],
+        "ProviderIds": {
+          "MusicBrainzAlbum": "old"
+        },
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "name": "provider case-only value preserves existing spelling",
+      "enabled": true,
+      "updateType": 3,
+      "exception": null,
+      "result": {
+        "Name": "MusicAlbum",
+        "PremiereDate": null,
+        "ProductionYear": null,
+        "Genres": [],
+        "Studios": [],
+        "OfficialRating": null,
+        "RunTimeTicks": 0,
+        "IsVirtualItem": false,
+        "DateLastMediaAdded": null,
+        "Artists": [],
+        "AlbumArtists": [],
+        "ProviderIds": {
+          "MusicBrainzAlbum": "ABC"
+        },
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "name": "all three invalid album provider IDs are rejected while reporting an edit",
+      "enabled": true,
+      "updateType": 19,
+      "exception": null,
+      "result": {
+        "Name": "MusicAlbum",
+        "PremiereDate": null,
+        "ProductionYear": null,
+        "Genres": [],
+        "Studios": [],
+        "OfficialRating": null,
+        "RunTimeTicks": 0,
+        "IsVirtualItem": false,
+        "DateLastMediaAdded": null,
+        "Artists": [],
+        "AlbumArtists": [],
+        "ProviderIds": {},
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "name": "valid provider values group ordinal and retain the most frequent spelling",
+      "enabled": true,
+      "updateType": 19,
+      "exception": null,
+      "result": {
+        "Name": "MusicAlbum",
+        "PremiereDate": null,
+        "ProductionYear": null,
+        "Genres": [],
+        "Studios": [],
+        "OfficialRating": null,
+        "RunTimeTicks": 0,
+        "IsVirtualItem": false,
+        "DateLastMediaAdded": null,
+        "Artists": [],
+        "AlbumArtists": [],
+        "ProviderIds": {
+          "MusicBrainzAlbum": "abcdef00-1234-1234-1234-123456789012"
+        },
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "name": "valid provider ties retain first encounter",
+      "enabled": true,
+      "updateType": 19,
+      "exception": null,
+      "result": {
+        "Name": "MusicAlbum",
+        "PremiereDate": null,
+        "ProductionYear": null,
+        "Genres": [],
+        "Studios": [],
+        "OfficialRating": null,
+        "RunTimeTicks": 0,
+        "IsVirtualItem": false,
+        "DateLastMediaAdded": null,
+        "Artists": [],
+        "AlbumArtists": [],
+        "ProviderIds": {
+          "MusicBrainzAlbum": "ABCDEF00-1234-1234-1234-123456789012"
+        },
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "name": "null and empty provider values share one absent group",
+      "enabled": true,
+      "updateType": 3,
+      "exception": null,
+      "result": {
+        "Name": "MusicAlbum",
+        "PremiereDate": null,
+        "ProductionYear": null,
+        "Genres": [],
+        "Studios": [],
+        "OfficialRating": null,
+        "RunTimeTicks": 0,
+        "IsVirtualItem": false,
+        "DateLastMediaAdded": null,
+        "Artists": [],
+        "AlbumArtists": [],
+        "ProviderIds": {
+          "MusicBrainzAlbum": "ABCD0000-1234-1234-1234-123456789012"
+        },
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "name": "all three valid album provider IDs are taken from songs",
+      "enabled": true,
+      "updateType": 19,
+      "exception": null,
+      "result": {
+        "Name": "MusicAlbum",
+        "PremiereDate": null,
+        "ProductionYear": null,
+        "Genres": [],
+        "Studios": [],
+        "OfficialRating": null,
+        "RunTimeTicks": 0,
+        "IsVirtualItem": false,
+        "DateLastMediaAdded": null,
+        "Artists": [],
+        "AlbumArtists": [],
+        "ProviderIds": {
+          "MusicBrainzAlbumArtist": "ABCDEF00-1234-1234-1234-123456789012",
+          "MusicBrainzAlbum": "ABCDEF00-1234-1234-1234-123456789012",
+          "MusicBrainzReleaseGroup": "ABCD0000-1234-1234-1234-123456789012"
+        },
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "name": "whitespace provider choice throws after earlier child fields have changed",
+      "enabled": true,
+      "updateType": 1,
+      "exception": "ArgumentException",
+      "result": {
+        "Name": "Before failure",
+        "PremiereDate": null,
+        "ProductionYear": null,
+        "Genres": [],
+        "Studios": [],
+        "OfficialRating": null,
+        "RunTimeTicks": 0,
+        "IsVirtualItem": false,
+        "DateLastMediaAdded": null,
+        "Artists": [
+          "Before failure"
+        ],
+        "AlbumArtists": [],
+        "ProviderIds": {},
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "name": "premiere takes minimum real date and its year",
+      "enabled": true,
+      "updateType": 19,
+      "exception": null,
+      "result": {
+        "Name": "MusicAlbum",
+        "PremiereDate": "2018-03-01T00:00:00.0000001Z",
+        "ProductionYear": 2018,
+        "Genres": [],
+        "Studios": [],
+        "OfficialRating": null,
+        "RunTimeTicks": 0,
+        "IsVirtualItem": false,
+        "DateLastMediaAdded": null,
+        "Artists": [],
+        "AlbumArtists": [],
+        "ProviderIds": {},
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "name": "all missing premiere dates take minimum positive production year",
+      "enabled": true,
+      "updateType": 19,
+      "exception": null,
+      "result": {
+        "Name": "MusicAlbum",
+        "PremiereDate": "2000-01-01T00:00:00.0000000Z",
+        "ProductionYear": 2009,
+        "Genres": [],
+        "Studios": [],
+        "OfficialRating": null,
+        "RunTimeTicks": 0,
+        "IsVirtualItem": false,
+        "DateLastMediaAdded": null,
+        "Artists": [],
+        "AlbumArtists": [],
+        "ProviderIds": {},
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "name": "a missing production year suppresses year fallback",
+      "enabled": true,
+      "updateType": 3,
+      "exception": null,
+      "result": {
+        "Name": "MusicAlbum",
+        "PremiereDate": null,
+        "ProductionYear": 1999,
+        "Genres": [],
+        "Studios": [],
+        "OfficialRating": null,
+        "RunTimeTicks": 0,
+        "IsVirtualItem": false,
+        "DateLastMediaAdded": null,
+        "Artists": [],
+        "AlbumArtists": [],
+        "ProviderIds": {},
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "name": "MinValue premiere blocks date adoption and invokes year fallback",
+      "enabled": true,
+      "updateType": 19,
+      "exception": null,
+      "result": {
+        "Name": "MusicAlbum",
+        "PremiereDate": "2000-01-01T00:00:00.0000000Z",
+        "ProductionYear": 2011,
+        "Genres": [],
+        "Studios": [],
+        "OfficialRating": null,
+        "RunTimeTicks": 0,
+        "IsVirtualItem": false,
+        "DateLastMediaAdded": null,
+        "Artists": [],
+        "AlbumArtists": [],
+        "ProviderIds": {},
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "name": "MaxValue premiere invokes year fallback",
+      "enabled": true,
+      "updateType": 19,
+      "exception": null,
+      "result": {
+        "Name": "MusicAlbum",
+        "PremiereDate": null,
+        "ProductionYear": 2011,
+        "Genres": [],
+        "Studios": [],
+        "OfficialRating": null,
+        "RunTimeTicks": 0,
+        "IsVirtualItem": false,
+        "DateLastMediaAdded": null,
+        "Artists": [],
+        "AlbumArtists": [],
+        "ProviderIds": {},
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "name": "empty premiere children preserve old date and year",
+      "enabled": true,
+      "updateType": 17,
+      "exception": null,
+      "result": {
+        "Name": "Season",
+        "PremiereDate": "2000-01-01T00:00:00.0000000Z",
+        "ProductionYear": 2000,
+        "Genres": [],
+        "Studios": [],
+        "OfficialRating": null,
+        "RunTimeTicks": null,
+        "IsVirtualItem": true,
+        "DateLastMediaAdded": null,
+        "Artists": null,
+        "AlbumArtists": null,
+        "ProviderIds": {},
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "name": "genres and studios use first ordinal-ignorecase distinct spelling",
+      "enabled": true,
+      "updateType": 19,
+      "exception": null,
+      "result": {
+        "Name": "MusicAlbum",
+        "PremiereDate": null,
+        "ProductionYear": null,
+        "Genres": [
+          "Zeta",
+          "Alpha",
+          "Beta"
+        ],
+        "Studios": [
+          "B",
+          "A",
+          "C"
+        ],
+        "OfficialRating": null,
+        "RunTimeTicks": 0,
+        "IsVirtualItem": false,
+        "DateLastMediaAdded": null,
+        "Artists": [],
+        "AlbumArtists": [],
+        "ProviderIds": {},
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "name": "equal genre and studio sets reorder without edit",
+      "enabled": true,
+      "updateType": 1,
+      "exception": null,
+      "result": {
+        "Name": "BoxSet",
+        "PremiereDate": null,
+        "ProductionYear": null,
+        "Genres": [
+          "ALPHA",
+          "Beta"
+        ],
+        "Studios": [
+          "a",
+          "B"
+        ],
+        "OfficialRating": null,
+        "RunTimeTicks": null,
+        "IsVirtualItem": false,
+        "DateLastMediaAdded": null,
+        "Artists": null,
+        "AlbumArtists": null,
+        "ProviderIds": {},
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "name": "genre and studio field locks preserve old lists",
+      "enabled": true,
+      "updateType": 1,
+      "exception": null,
+      "result": {
+        "Name": "BoxSet",
+        "PremiereDate": null,
+        "ProductionYear": null,
+        "Genres": [
+          "Keep"
+        ],
+        "Studios": [
+          "Keep"
+        ],
+        "OfficialRating": null,
+        "RunTimeTicks": null,
+        "IsVirtualItem": false,
+        "DateLastMediaAdded": null,
+        "Artists": null,
+        "AlbumArtists": null,
+        "ProviderIds": {},
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "name": "Unicode list comparison retains ordinal distinctions",
+      "enabled": true,
+      "updateType": 1,
+      "exception": null,
+      "result": {
+        "Name": "BoxSet",
+        "PremiereDate": null,
+        "ProductionYear": null,
+        "Genres": [
+          "a",
+          "e",
+          "\u00C9",
+          "\u00DF",
+          "SS"
+        ],
+        "Studios": [
+          "A B",
+          "A-B"
+        ],
+        "OfficialRating": null,
+        "RunTimeTicks": null,
+        "IsVirtualItem": false,
+        "DateLastMediaAdded": null,
+        "Artists": null,
+        "AlbumArtists": null,
+        "ProviderIds": {},
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "name": "by-name artist full aggregates runtime and genres",
+      "enabled": true,
+      "updateType": 19,
+      "exception": null,
+      "result": {
+        "Name": "MusicArtist",
+        "PremiereDate": null,
+        "ProductionYear": null,
+        "Genres": [
+          "Rock",
+          "Pop"
+        ],
+        "Studios": [],
+        "OfficialRating": null,
+        "RunTimeTicks": 28,
+        "IsVirtualItem": false,
+        "DateLastMediaAdded": null,
+        "Artists": null,
+        "AlbumArtists": null,
+        "ProviderIds": {},
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "name": "physical artist full aggregates runtime and genres",
+      "enabled": true,
+      "updateType": 19,
+      "exception": null,
+      "result": {
+        "Name": "MusicArtist",
+        "PremiereDate": null,
+        "ProductionYear": null,
+        "Genres": [
+          "Jazz"
+        ],
+        "Studios": [],
+        "OfficialRating": null,
+        "RunTimeTicks": 12,
+        "IsVirtualItem": false,
+        "DateLastMediaAdded": null,
+        "Artists": null,
+        "AlbumArtists": null,
+        "ProviderIds": {},
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "name": "artist None does not aggregate",
+      "enabled": false,
+      "updateType": 1,
+      "exception": null,
+      "result": {
+        "Name": "MusicArtist",
+        "PremiereDate": null,
+        "ProductionYear": null,
+        "Genres": [
+          "Keep"
+        ],
+        "Studios": [],
+        "OfficialRating": null,
+        "RunTimeTicks": 99,
+        "IsVirtualItem": false,
+        "DateLastMediaAdded": null,
+        "Artists": null,
+        "AlbumArtists": null,
+        "ProviderIds": {},
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "name": "locked artist updates runtime but keeps genres",
+      "enabled": true,
+      "updateType": 3,
+      "exception": null,
+      "result": {
+        "Name": "MusicArtist",
+        "PremiereDate": null,
+        "ProductionYear": null,
+        "Genres": [
+          "Keep"
+        ],
+        "Studios": [],
+        "OfficialRating": null,
+        "RunTimeTicks": 8,
+        "IsVirtualItem": false,
+        "DateLastMediaAdded": null,
+        "Artists": null,
+        "AlbumArtists": null,
+        "ProviderIds": {},
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "name": "virtual season with no episodes becomes virtual",
+      "enabled": true,
+      "updateType": 17,
+      "exception": null,
+      "result": {
+        "Name": "Season",
+        "PremiereDate": null,
+        "ProductionYear": null,
+        "Genres": [],
+        "Studios": [],
+        "OfficialRating": null,
+        "RunTimeTicks": null,
+        "IsVirtualItem": true,
+        "DateLastMediaAdded": null,
+        "Artists": null,
+        "AlbumArtists": null,
+        "ProviderIds": {},
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "name": "virtual season with remote episode becomes nonvirtual",
+      "enabled": true,
+      "updateType": 17,
+      "exception": null,
+      "result": {
+        "Name": "Season",
+        "PremiereDate": null,
+        "ProductionYear": null,
+        "Genres": [],
+        "Studios": [],
+        "OfficialRating": null,
+        "RunTimeTicks": null,
+        "IsVirtualItem": false,
+        "DateLastMediaAdded": null,
+        "Artists": null,
+        "AlbumArtists": null,
+        "ProviderIds": {},
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "name": "virtual season with only virtual locations becomes virtual even when locked",
+      "enabled": true,
+      "updateType": 17,
+      "exception": null,
+      "result": {
+        "Name": "Season",
+        "PremiereDate": null,
+        "ProductionYear": null,
+        "Genres": [],
+        "Studios": [],
+        "OfficialRating": null,
+        "RunTimeTicks": null,
+        "IsVirtualItem": true,
+        "DateLastMediaAdded": null,
+        "Artists": null,
+        "AlbumArtists": null,
+        "ProviderIds": {},
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "name": "physical season never becomes virtual",
+      "enabled": true,
+      "updateType": 17,
+      "exception": null,
+      "result": {
+        "Name": "Season",
+        "PremiereDate": null,
+        "ProductionYear": null,
+        "Genres": [],
+        "Studios": [],
+        "OfficialRating": null,
+        "RunTimeTicks": null,
+        "IsVirtualItem": false,
+        "DateLastMediaAdded": null,
+        "Artists": null,
+        "AlbumArtists": null,
+        "ProviderIds": {},
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "name": "season None leaves virtual state unchanged",
+      "enabled": false,
+      "updateType": 1,
+      "exception": null,
+      "result": {
+        "Name": "Season",
+        "PremiereDate": null,
+        "ProductionYear": null,
+        "Genres": [],
+        "Studios": [],
+        "OfficialRating": null,
+        "RunTimeTicks": null,
+        "IsVirtualItem": false,
+        "DateLastMediaAdded": null,
+        "Artists": null,
+        "AlbumArtists": null,
+        "ProviderIds": {},
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "name": "season image-only change updates virtual state",
+      "enabled": true,
+      "updateType": 17,
+      "exception": null,
+      "result": {
+        "Name": "Season",
+        "PremiereDate": null,
+        "ProductionYear": null,
+        "Genres": [],
+        "Studios": [],
+        "OfficialRating": null,
+        "RunTimeTicks": null,
+        "IsVirtualItem": true,
+        "DateLastMediaAdded": null,
+        "Artists": null,
+        "AlbumArtists": null,
+        "ProviderIds": {},
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "name": "boxset selects lowest rating score",
+      "enabled": true,
+      "updateType": 17,
+      "exception": null,
+      "result": {
+        "Name": "BoxSet",
+        "PremiereDate": null,
+        "ProductionYear": null,
+        "Genres": [],
+        "Studios": [],
+        "OfficialRating": "G",
+        "RunTimeTicks": null,
+        "IsVirtualItem": false,
+        "DateLastMediaAdded": null,
+        "Artists": null,
+        "AlbumArtists": null,
+        "ProviderIds": {},
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "name": "boxset equal rating score keeps input order",
+      "enabled": true,
+      "updateType": 17,
+      "exception": null,
+      "result": {
+        "Name": "BoxSet",
+        "PremiereDate": null,
+        "ProductionYear": null,
+        "Genres": [],
+        "Studios": [],
+        "OfficialRating": "Rated PG",
+        "RunTimeTicks": null,
+        "IsVirtualItem": false,
+        "DateLastMediaAdded": null,
+        "Artists": null,
+        "AlbumArtists": null,
+        "ProviderIds": {},
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "name": "boxset unrecognized ratings preserve first candidate",
+      "enabled": true,
+      "updateType": 17,
+      "exception": null,
+      "result": {
+        "Name": "BoxSet",
+        "PremiereDate": null,
+        "ProductionYear": null,
+        "Genres": [],
+        "Studios": [],
+        "OfficialRating": "First unknown",
+        "RunTimeTicks": null,
+        "IsVirtualItem": false,
+        "DateLastMediaAdded": null,
+        "Artists": null,
+        "AlbumArtists": null,
+        "ProviderIds": {},
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "name": "boxset no nonempty ratings preserves prior rating",
+      "enabled": true,
+      "updateType": 1,
+      "exception": null,
+      "result": {
+        "Name": "BoxSet",
+        "PremiereDate": null,
+        "ProductionYear": null,
+        "Genres": [],
+        "Studios": [],
+        "OfficialRating": "R",
+        "RunTimeTicks": null,
+        "IsVirtualItem": false,
+        "DateLastMediaAdded": null,
+        "Artists": null,
+        "AlbumArtists": null,
+        "ProviderIds": {},
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "name": "boxset rating field lock preserves prior rating",
+      "enabled": true,
+      "updateType": 1,
+      "exception": null,
+      "result": {
+        "Name": "BoxSet",
+        "PremiereDate": null,
+        "ProductionYear": null,
+        "Genres": [],
+        "Studios": [],
+        "OfficialRating": "R",
+        "RunTimeTicks": null,
+        "IsVirtualItem": false,
+        "DateLastMediaAdded": null,
+        "Artists": null,
+        "AlbumArtists": null,
+        "ProviderIds": {},
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "name": "boxset rating case-only change is not an edit",
+      "enabled": true,
+      "updateType": 1,
+      "exception": null,
+      "result": {
+        "Name": "BoxSet",
+        "PremiereDate": null,
+        "ProductionYear": null,
+        "Genres": [],
+        "Studios": [],
+        "OfficialRating": "pg",
+        "RunTimeTicks": null,
+        "IsVirtualItem": false,
+        "DateLastMediaAdded": null,
+        "Artists": null,
+        "AlbumArtists": null,
+        "ProviderIds": {},
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "name": "boxset localized rating uses native subscore",
+      "enabled": true,
+      "updateType": 17,
+      "exception": null,
+      "result": {
+        "Name": "BoxSet",
+        "PremiereDate": null,
+        "ProductionYear": null,
+        "Genres": [],
+        "Studios": [],
+        "OfficialRating": "PG-13",
+        "RunTimeTicks": null,
+        "IsVirtualItem": false,
+        "DateLastMediaAdded": null,
+        "Artists": null,
+        "AlbumArtists": null,
+        "ProviderIds": {},
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "name": "boxset explicit numeric rating may outrank unknown threshold",
+      "enabled": true,
+      "updateType": 17,
+      "exception": null,
+      "result": {
+        "Name": "BoxSet",
+        "PremiereDate": null,
+        "ProductionYear": null,
+        "Genres": [],
+        "Studios": [],
+        "OfficialRating": "1001",
+        "RunTimeTicks": null,
+        "IsVirtualItem": false,
+        "DateLastMediaAdded": null,
+        "Artists": null,
+        "AlbumArtists": null,
+        "ProviderIds": {},
+        "RemoteTrailers": []
+      }
+    }
+  ],
+  "candidateVerified": false,
+  "inputSha256": "9463c78672daa03042e12625c2508f2478c288e570408e17cb1af90fdaa8a215",
+  "culture": "zh-CN",
+  "boundary": "Actual EnableUpdateMetadataFromChildren and UpdateMetadataFromChildren, including Album/Season overrides and real LocalizationManager resources. Ordered child arrays and library options are explicit controlled inputs. Child selection, BeforeSave, file operations, repository persistence, providers and AfterMetadataRefresh are excluded."
+}
