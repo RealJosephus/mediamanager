@@ -3,6 +3,7 @@ export function validateMetadataExtension(plugin) {
     const ids = new Set();
     for (const provider of plugin.providers) {
       if (!provider.id || !provider.name || !provider.kind || !Array.isArray(provider.itemTypes)) throw new TypeError('Invalid metadata provider declaration.');
+      if (provider.kind === 'image' && !['remote', 'dynamic'].includes(provider.imageSource)) throw new TypeError('An image provider must declare its remote or dynamic source.');
       if (ids.has(provider.id)) throw new Error(`Duplicate metadata provider: ${provider.id}`);
       ids.add(provider.id);
     }
@@ -44,7 +45,7 @@ export class MetadataRegistry {
       if (includeDisabled) return true;
       if (provider.kind === 'externalId' || provider.kind === 'externalUrl' || provider.kind === 'saver') return true;
       if (provider.kind === 'image') {
-        if (item.IsLocked && imageRefreshMode !== 'FullRefresh' || item.ExtraType != null) return false;
+        if (item.IsLocked && imageRefreshMode !== 'FullRefresh' || item.ExtraType != null && provider.imageSource === 'remote') return false;
         return isImageFetcherEnabled ? isImageFetcherEnabled(item, typeOptions, provider.name) : enabled('Image', provider.name);
       }
       if (item.IsLocked && provider.kind !== 'local' && !provider.forced) return false;

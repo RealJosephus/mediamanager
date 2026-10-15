@@ -556,7 +556,7 @@ export class MetadataRefreshHost {
       }
     }
     if (runImageProviders) {
-      const result = await this.images.refreshRemoteProviders({ ...loaded, item }, metadata.Images, imageProviders, options);
+      const result = await this.images.refreshProviders({ ...loaded, item }, metadata.Images, imageProviders, options);
       if (result.changed) updateType |= ItemUpdateType.ImageUpdate;
       failures += result.failures;
       errorMessage = result.errorMessage ?? errorMessage;

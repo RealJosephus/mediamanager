@@ -83,13 +83,13 @@ test('lazy backdrop replacement prunes the old file and its empty episode metada
   const images = [{ ...image(oldPath), Type: 'Backdrop' }];
   const bytes = Buffer.from('new backdrop');
   const provider = {
-    name: 'Fixture', imageTypes: ['Backdrop'],
+    imageSource: 'remote', name: 'Fixture', imageTypes: ['Backdrop'],
     getImages: async () => [{ Type: 'Backdrop', Url: 'https://provider.invalid/backdrop.png', Width: 1920 }],
     getImageResponse: async () => new Response(bytes, { headers: { 'content-type': 'image/png' } }),
   };
   const loaded = { item, imageAssets: assets, metadataPath: state, saveLocalMetadataEnabled: true, globalOptions: {}, nfoConfiguration: {},
     libraryOptions: { TypeOptions: [{ Type: 'Episode', ImageOptions: [{ Type: 'Backdrop', Limit: 1 }] }] } };
-  const result = await new MetadataImages().refreshRemoteProviders(loaded, images, [provider], { ImageRefreshMode: 'FullRefresh', ReplaceAllImages: true, signal });
+  const result = await new MetadataImages().refreshProviders(loaded, images, [provider], { ImageRefreshMode: 'FullRefresh', ReplaceAllImages: true, signal });
   assert.deepEqual(result, { changed: true, failures: 0, errorMessage: undefined });
   assert.equal(images.length, 1);
   assert.equal(images[0].Type, 'Backdrop');

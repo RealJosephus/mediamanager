@@ -271,3 +271,30 @@ src/core/resources/native-charset-models.json -text whitespace=cr-at-eol
 /tests/core/fixtures/server-identity/native.json whitespace=cr-at-eol
 /tests/library/fixtures/folder-validation-progress/native.json whitespace=cr-at-eol
 /tests/http/fixtures/library-structure/native.json whitespace=cr-at-eol
+
+/tests/metadata/fixtures/book-opf-epub/assets/** -text
+/tests/metadata/fixtures/book-opf-epub/README.md text eol=lf
+/tests/metadata/fixtures/book-opf-epub/create-assets.mjs text eol=lf
+/tests/metadata/fixtures/book-opf-epub/native.json whitespace=cr-at-eol
+/tests/metadata/fixtures/book-comic/native.json whitespace=cr-at-eol
+/tests/metadata/fixtures/book-comic/assets/** -text
+/tests/metadata/fixtures/book-opf-xml-edges/assets/** -text
+/tests/metadata/fixtures/book-opf-xml-edges/README.md text eol=lf
+/tests/metadata/fixtures/book-opf-xml-edges/create-assets.mjs text eol=lf
+/tests/metadata/fixtures/book-opf-xml-edges/scalars/README.md text eol=lf
+/tests/metadata/fixtures/book-opf-xml-edges/scalars/create-assets.mjs text eol=lf
+/tests/metadata/fixtures/book-opf-xml-edges/resources/README.md text eol=lf
+/tests/metadata/fixtures/book-opf-xml-edges/resources/create-assets.mjs text eol=lf
+/tests/metadata/fixtures/book-opf-xml-edges/scalars/assets/** -text
+/tests/metadata/fixtures/book-opf-xml-edges/resources/assets/** -text
+/tests/metadata/fixtures/book-comic/README.md text eol=lf
+/tests/storage/fixtures/archive-codec/README.md text eol=lf
+/tests/metadata/fixtures/book-provider-order/README.md text eol=lf
+/tests/metadata/fixtures/dynamic-image-host/README.md text eol=lf
+/tests/storage/fixtures/deflate64-archives/README.md text eol=lf
+/tests/storage/fixtures/deflate64-archives/generate.mjs text eol=lf
+/tests/storage/fixtures/deflate64-archives/LICENSE-SharpCompress.txt -text
+/tests/storage/fixtures/deflate64-archives/assets/** -text
+src/metadata/resources/comic-culture-language.json -text
+/tests/metadata/fixtures/book-comic/rar-directory/README.md text eol=lf
+/tests/metadata/fixtures/book-comic/rar-directory/native.json whitespace=cr-at-eol

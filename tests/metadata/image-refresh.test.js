@@ -42,7 +42,7 @@ test('remote image refresh uses native language order, limits, minimum width and
   };
   const images = [row('Primary', 'https://old.invalid/poster'), row('Backdrop', 'https://old.invalid/backdrop-1'), row('Backdrop', 'https://old.invalid/backdrop-2')];
   const provider = {
-    name: 'Fixture', imageTypes: ['Primary', 'Backdrop'],
+    imageSource: 'remote', name: 'Fixture', imageTypes: ['Primary', 'Backdrop'],
     async getImages() {
       return [
         { Type: 'Primary', Url: 'https://new.invalid/en-best', Language: 'en', Width: 2000, CommunityRating: 10, VoteCount: 100 },
@@ -55,7 +55,7 @@ test('remote image refresh uses native language order, limits, minimum width and
       ];
     },
   };
-  const result = await service.refreshRemoteProviders(loaded, images, [provider], { ImageRefreshMode: 'FullRefresh', ReplaceAllImages: true, signal });
+  const result = await service.refreshProviders(loaded, images, [provider], { ImageRefreshMode: 'FullRefresh', ReplaceAllImages: true, signal });
   assert.deepEqual(result, { changed: true, failures: 0, errorMessage: undefined });
   assert.deepEqual(images.map(image => [image.Type, image.Path]), [
     ['Primary', 'https://new.invalid/de-best'],
@@ -64,8 +64,8 @@ test('remote image refresh uses native language order, limits, minimum width and
   ]);
 
   const retained = [row('Primary', 'https://old.invalid/retained')];
-  const empty = { name: 'Empty', imageTypes: ['Primary'], getImages: async () => [] };
-  assert.deepEqual(await service.refreshRemoteProviders(loaded, retained, [empty], { ImageRefreshMode: 'FullRefresh', ReplaceAllImages: true, signal }), { changed: false, failures: 0, errorMessage: undefined });
+  const empty = { imageSource: 'remote', name: 'Empty', imageTypes: ['Primary'], getImages: async () => [] };
+  assert.deepEqual(await service.refreshProviders(loaded, retained, [empty], { ImageRefreshMode: 'FullRefresh', ReplaceAllImages: true, signal }), { changed: false, failures: 0, errorMessage: undefined });
   assert.equal(retained[0].Path, 'https://old.invalid/retained');
 });
 
@@ -74,8 +74,8 @@ test('Default with ReplaceAllImages queries providers without replacing an exist
   const loaded = { item: { Id: id, Type: 'Movie', IsFileProtocol: false, MetadataLanguage: 'en' }, libraryOptions: {} };
   const images = [row('Primary', 'https://old.invalid/poster')];
   let calls = 0;
-  const provider = { name: 'Fixture', imageTypes: ['Primary'], getImages: async () => { calls++; return [{ Type: 'Primary', Url: 'https://new.invalid/poster' }]; } };
-  assert.deepEqual(await service.refreshRemoteProviders(loaded, images, [provider], { ImageRefreshMode: 'Default', ReplaceAllImages: true, signal }), { changed: false, failures: 0, errorMessage: undefined });
+  const provider = { imageSource: 'remote', name: 'Fixture', imageTypes: ['Primary'], getImages: async () => { calls++; return [{ Type: 'Primary', Url: 'https://new.invalid/poster' }]; } };
+  assert.deepEqual(await service.refreshProviders(loaded, images, [provider], { ImageRefreshMode: 'Default', ReplaceAllImages: true, signal }), { changed: false, failures: 0, errorMessage: undefined });
   assert.equal(calls, 1);
   assert.equal(images[0].Path, 'https://old.invalid/poster');
 });
@@ -93,7 +93,7 @@ test('file-backed providers own image responses and stop one type after a non-re
     body: { cancel: async () => { closed++; } },
   });
   const provider = {
-    name: 'Fixture', imageTypes: ['Primary', 'Logo'],
+    imageSource: 'remote', name: 'Fixture', imageTypes: ['Primary', 'Logo'],
     async getImages() {
       return [
         { Type: 'Primary', Url: 'https://provider.invalid/missing.png' },
@@ -115,7 +115,7 @@ test('file-backed providers own image responses and stop one type after a non-re
     globalOptions: {}, nfoConfiguration: {}, libraryOptions: { TypeOptions: [{ Type: 'Movie', ImageOptions: [{ Type: 'Primary', Limit: 1 }, { Type: 'Logo', Limit: 1 }] }] },
   };
   const images = [];
-  const result = await service.refreshRemoteProviders(loaded, images, [provider], { signal });
+  const result = await service.refreshProviders(loaded, images, [provider], { signal });
   assert.deepEqual(result, { changed: true, failures: 0, errorMessage: undefined });
   assert.deepEqual(calls, ['https://provider.invalid/missing.png', 'https://provider.invalid/poster.png', 'https://provider.invalid/broken.png']);
   assert.equal(closed, 3);
@@ -179,14 +179,14 @@ test('provider listing failures become empty results, while provider execution f
   const errors = [];
   const service = new MetadataImages({ logger: { error: error => errors.push(error.message) } });
   const loaded = { item: { Id: id, Type: 'Movie', IsFileProtocol: false }, libraryOptions: {} };
-  const unavailable = await service.refreshRemoteProviders(loaded, [], [{ name: 'Unavailable', imageTypes: ['Primary'], getImages: async () => { throw new Error('unreachable'); } }], { signal });
+  const unavailable = await service.refreshProviders(loaded, [], [{ imageSource: 'remote', name: 'Unavailable', imageTypes: ['Primary'], getImages: async () => { throw new Error('unreachable'); } }], { signal });
   assert.deepEqual(unavailable, { changed: false, failures: 0, errorMessage: undefined });
-  const broken = { name: 'Broken', get imageTypes() { throw new Error('broken supported types'); } };
-  assert.deepEqual(await service.refreshRemoteProviders(loaded, [], [broken], { signal }), { changed: false, failures: 1, errorMessage: 'broken supported types' });
+  const broken = { imageSource: 'remote', name: 'Broken', get imageTypes() { throw new Error('broken supported types'); } };
+  assert.deepEqual(await service.refreshProviders(loaded, [], [broken], { signal }), { changed: false, failures: 1, errorMessage: 'broken supported types' });
   assert.deepEqual(errors, ['unreachable', 'broken supported types']);
   let calls = 0;
   const missing = { item: { Id: id, Type: 'Episode', IsMissingEpisode: true, IsFileProtocol: false }, libraryOptions: {} };
-  assert.deepEqual(await service.refreshRemoteProviders(missing, [], [{ name: 'Episode', imageTypes: ['Primary'], getImages: async () => { calls++; return []; } }], { signal }), { changed: false, failures: 0, errorMessage: undefined });
+  assert.deepEqual(await service.refreshProviders(missing, [], [{ imageSource: 'remote', name: 'Episode', imageTypes: ['Primary'], getImages: async () => { calls++; return []; } }], { signal }), { changed: false, failures: 0, errorMessage: undefined });
   assert.equal(calls, 0);
 });
 
@@ -196,8 +196,8 @@ test('full image refresh runs independently, prioritizes the identified provider
     DateLastRefreshed: '2024-01-01 00:00:00', MetadataLanguage: 'en', ProviderIds: {} };
   const calls = [];
   const providers = [
-    { name: 'Other', imageTypes: ['Primary'], getImages: async () => { calls.push('Other'); return [{ Type: 'Primary', Url: 'https://other.invalid/poster' }]; } },
-    { name: 'Chosen', imageTypes: ['Primary'], getImages: async () => { calls.push('Chosen'); return [{ Type: 'Primary', Url: 'https://chosen.invalid/poster' }]; } },
+    { imageSource: 'remote', name: 'Other', imageTypes: ['Primary'], getImages: async () => { calls.push('Other'); return [{ Type: 'Primary', Url: 'https://other.invalid/poster' }]; } },
+    { imageSource: 'remote', name: 'Chosen', imageTypes: ['Primary'], getImages: async () => { calls.push('Chosen'); return [{ Type: 'Primary', Url: 'https://chosen.invalid/poster' }]; } },
   ];
   const registry = { discover({ kind }) { return kind === 'image' ? [...providers] : []; } };
   const loaded = { item, lookup: { ProviderIds: {} }, context: { images: [] }, libraryOptions: {}, globalOptions: {}, saveLocalMetadataEnabled: false,

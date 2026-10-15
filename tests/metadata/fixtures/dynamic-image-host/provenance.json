@@ -1,0 +1,238 @@
+{
+  "scope": "Actual new-source-built byte dynamic image host and stream-save execution; controlled provider payloads/interfaces/faults; no SQL or native HTTP.",
+  "files": [
+    {
+      "filename": "Program.cs",
+      "bytes": 12786,
+      "sha256": "fdd746437424989cdc40e60509271c53bb6d66866b6e402a1f46e8fc69d75e4c"
+    },
+    {
+      "filename": "Oracle.csproj",
+      "bytes": 403,
+      "sha256": "3f2610631c594ffd08dcc82f03d3509abc1c9c9541f159519800df046fc770ee"
+    },
+    {
+      "filename": "input.json",
+      "bytes": 2491,
+      "sha256": "25f7e1c691df1b1701872a7a537d897a11c5b53f3e50b7e62b5fc1f764e7cf9c"
+    },
+    {
+      "filename": "native.json",
+      "bytes": 23954,
+      "sha256": "55830207d43080fe06dc2fe0e8c3a1204b274b1987650bd7711eedcdd44835db"
+    },
+    {
+      "filename": "README.md",
+      "bytes": 1758,
+      "sha256": "f3ab727b058f4afcf5b014eb9c0410709889eef4eae817b7a88d71ef646375f1"
+    },
+    {
+      "filename": "../../../Directory.Build.props",
+      "bytes": 780,
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    }
+  ],
+  "requiredInputs": [
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/final-build-receipt.json",
+      "available": true,
+      "kind": "file",
+      "bytes": 14246,
+      "sha256": "44711dacc1c4e65d2f36202267423d3212c3577c41383696643ff04ebe8c49d2",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 506368,
+      "sha256": "474c7c638fe93cc61f1a588849fb93c81a2927388f6f4cf19953b3a76e9deb26",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/MediaBrowser.Controller.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 655872,
+      "sha256": "e4f1e201e43c9e22fd07cbd0ed2c52c427b0bdaa2dfe0ed5e5ab7ee604b537cf",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/MediaBrowser.Providers.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 1030656,
+      "sha256": "4aa9ca407da2bb0db21ef0a7da5bdef162260fd9c5873f06cfb239780ccc4e3e",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/Emby.Server.Implementations.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 1673728,
+      "sha256": "9c732ba80d1b1980c36d2d64780da28d64c0a8d503bf044c89bc35285eab219e",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/MediaBrowser.Providers/Manager/ItemImageProvider.cs",
+      "available": true,
+      "kind": "file",
+      "bytes": 30532,
+      "sha256": "215c28b672fe65c6abfb24d0fc0201d102d52154ec4d5a8e915bd58b7d255488",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Providers/Manager/ItemImageProvider.cs",
+      "available": true,
+      "kind": "file",
+      "bytes": 30532,
+      "sha256": "215c28b672fe65c6abfb24d0fc0201d102d52154ec4d5a8e915bd58b7d255488",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/MediaBrowser.Providers/Manager/ProviderManager.cs",
+      "available": true,
+      "kind": "file",
+      "bytes": 55938,
+      "sha256": "ce45e7c317afeddb32166eea4387b187fc9a6d0f3e9f59c33cdf949c220d6c55",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Providers/Manager/ProviderManager.cs",
+      "available": true,
+      "kind": "file",
+      "bytes": 55938,
+      "sha256": "ce45e7c317afeddb32166eea4387b187fc9a6d0f3e9f59c33cdf949c220d6c55",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/MediaBrowser.Providers/Manager/ImageSaver.cs",
+      "available": true,
+      "kind": "file",
+      "bytes": 27917,
+      "sha256": "b3f51c08b91ffd4062945c840493b0133f39aed7cfea01e9d8cc79b950851e53",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Providers/Manager/ImageSaver.cs",
+      "available": true,
+      "kind": "file",
+      "bytes": 27917,
+      "sha256": "b3f51c08b91ffd4062945c840493b0133f39aed7cfea01e9d8cc79b950851e53",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/MediaBrowser.Providers/Manager/MetadataService.cs",
+      "available": true,
+      "kind": "file",
+      "bytes": 61028,
+      "sha256": "6e08f11ce31d47be3e09787ebe2c1edff9bda5684d4444c2444f399e4b2dd7d5",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Providers/Manager/MetadataService.cs",
+      "available": true,
+      "kind": "file",
+      "bytes": 61028,
+      "sha256": "6e08f11ce31d47be3e09787ebe2c1edff9bda5684d4444c2444f399e4b2dd7d5",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/MediaBrowser.Providers/Books/BookMetadataService.cs",
+      "available": true,
+      "kind": "file",
+      "bytes": 2338,
+      "sha256": "39aa2a318535814ad94d88be202fa20f12515caca6a3f9ea85b3ff957fd659bc",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Providers/Books/BookMetadataService.cs",
+      "available": true,
+      "kind": "file",
+      "bytes": 2338,
+      "sha256": "39aa2a318535814ad94d88be202fa20f12515caca6a3f9ea85b3ff957fd659bc",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/MediaBrowser.Controller/BaseItemManager/BaseItemManager.cs",
+      "available": true,
+      "kind": "file",
+      "bytes": 2674,
+      "sha256": "2eb0a8ffc938865aaff206db747b65df14f27cdb6c13d342891ba07d1bdb650d",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Controller/BaseItemManager/BaseItemManager.cs",
+      "available": true,
+      "kind": "file",
+      "bytes": 2674,
+      "sha256": "2eb0a8ffc938865aaff206db747b65df14f27cdb6c13d342891ba07d1bdb650d",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/MediaBrowser.Controller/Providers/DynamicImageResponse.cs",
+      "available": true,
+      "kind": "file",
+      "bytes": 1103,
+      "sha256": "ff6eb45caa6c8b97a7dd24fbc3a1a00dc9a0e1461608b04547b0362f4e8a7b38",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Controller/Providers/DynamicImageResponse.cs",
+      "available": true,
+      "kind": "file",
+      "bytes": 1103,
+      "sha256": "ff6eb45caa6c8b97a7dd24fbc3a1a00dc9a0e1461608b04547b0362f4e8a7b38",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/MediaBrowser.Controller/Providers/ImageRefreshOptions.cs",
+      "available": true,
+      "kind": "file",
+      "bytes": 1257,
+      "sha256": "291d2b4da3abecb0baab439ed869891dfaa7906a85666906d254637d21e2743d",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Controller/Providers/ImageRefreshOptions.cs",
+      "available": true,
+      "kind": "file",
+      "bytes": 1257,
+      "sha256": "291d2b4da3abecb0baab439ed869891dfaa7906a85666906d254637d21e2743d",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/MediaBrowser.Model/Configuration/TypeOptions.cs",
+      "available": true,
+      "kind": "file",
+      "bytes": 10609,
+      "sha256": "abdbd27e598a434411570b8d771e1e879c726d1daf8ebcbcbdf02000a722ccd3",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Model/Configuration/TypeOptions.cs",
+      "available": true,
+      "kind": "file",
+      "bytes": 10609,
+      "sha256": "abdbd27e598a434411570b8d771e1e879c726d1daf8ebcbcbdf02000a722ccd3",
+      "required": true
+    }
+  ],
+  "record": {
+    "filename": "D:/mediamanager-validation/20261016-book-stage/results/dynamic-image-native-3/record.json",
+    "available": true,
+    "kind": "file",
+    "bytes": 4371,
+    "sha256": "2b99bdc8502254bee115c98d4767ab831fe6a90b3da36104a6652b56a52e27e8",
+    "required": true
+  },
+  "inputPins": {
+    "filename": "D:/mediamanager-validation/20261016-book-stage/results/dynamic-image-native-3-inputs/pins.json",
+    "available": true,
+    "kind": "file",
+    "bytes": 7244,
+    "sha256": "bede91b610895ab33899e3abd1719d7a6734be2390c0290cbb01a9daae74f65e",
+    "required": true
+  },
+  "sourceFilesSha256": "b5c3e00115f0e5a9f101d4c382d0763d7de532060047ba43ab0fe4d1f29ca27c"
+}
