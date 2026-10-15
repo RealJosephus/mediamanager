@@ -68,10 +68,10 @@ for (const dialect of ['postgres']) test(`${dialect}: child metadata starts afte
     'Recursive Folder validation must commit descendants before metadata traversal begins.');
   assert.equal(metadataCalls[0].signal, undefined);
   assert.deepEqual(providerCalls, ['Curated title', 'Sub', 'A', 'B']);
-  assert.equal(observedProgress[0], 10);
+  assert.deepEqual(observedProgress.slice(0, 4), [5, 5.5, 6, 7]);
   assert.equal(observedProgress.at(-1), 100);
   assert.ok(observedProgress.indexOf(50) < observedProgress.lastIndexOf(100));
-  assert.equal(providerProgress[0], 10);
+  assert.deepEqual(providerProgress.slice(0, 4), [5, 5.5, 6, 7]);
   assert.equal(providerProgress.at(-1), 100);
   assert.ok(providerProgress.every((value, index) => !index || value > providerProgress[index - 1]));
 });

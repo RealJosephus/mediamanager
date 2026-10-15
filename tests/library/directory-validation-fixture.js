@@ -397,6 +397,7 @@ export async function assertDirectoryValidation(t, dialect, sample, expected, {
   assert.deepEqual(actual, expected);
   assert.equal(resolverErrors.length, sample.resolverFailure
     || (sample.recursive && (sample.failDirectory || sample.cancelFromSaver)) ? 1 : 0);
+  return { fixture, validation, loaded, creator };
 }
 
 const databaseFault = error => error.code === 'P0001';

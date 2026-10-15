@@ -87,7 +87,7 @@ for (const sample of input.cases) test('LibraryStructure native HTTP differentia
     const physicalHost = new LibraryScanHost({ store: {}, library: { validateChildren: async (item, options) => trace('validate-physical', {
       id: item.Id, recursive: options.recursive, refreshChildMetadata: options.refreshChildMetadata, allowRemoveRoot: options.allowRemoveRoot, tokenCanCancel: !!options.signal }) },
       itemCreation: { withItem: async (key, operation) => { trace('item', key); return operation({ Id: key, IsFolder: key.endsWith('12') }); } },
-      metadataScanner: { refreshItem: async (key, options) => trace('refresh-physical', { id: key, metadata: options.MetadataRefreshMode,
+      metadataScanner: { refreshLiveItem: async (item, options) => trace('refresh-physical', { id: item.Id, metadata: options.MetadataRefreshMode,
         image: options.ImageRefreshMode, automated: options.IsAutomated, force: options.ForceSave, tokenCanCancel: !!options.signal }) }, topLevelValidation: { supports: () => false } });
     let moves = 0;
     const configuration = new LibraryConfigurationService({ programDataPath: root, optionsStore: { clear: async () => {} }, mediaAssets: {},

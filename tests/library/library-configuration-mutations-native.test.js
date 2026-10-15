@@ -11,6 +11,7 @@ import { once } from 'node:events';
 import { LibraryConfigurationService } from '../../src/library/library-configuration-service.js';
 import { LibraryOptionsStore } from '../../src/library/library-options-store.js';
 import { LibraryScanLifecycle } from '../../src/library/library-scan-lifecycle.js';
+import { scanChildScope } from './scan-child-scope-fixture.js';
 import { defaultLibraryOptions, deserializeLibraryOptions } from '../../src/library/options.js';
 import { decodeNativeText } from '../../src/core/native-text.js';
 import { getNewItemId } from '../../src/core/identity.js';
@@ -148,6 +149,7 @@ test('native virtual library mutations preserve path synchronization, ordinal re
         if (sample.failure === action) throw new Error('Controlled root validation failure.'); if (item === userRoot) await rebuild(); } };
     const monitor = { stop: async () => { trace('monitor-stop'); if (sample.failure === 'monitor-stop') throw new Error('Controlled monitor failure.'); },
       start: async () => { trace('monitor-start'); if (sample.failure === 'monitor-start') throw new Error('Controlled monitor failure.'); } };
+    host.withChildren = scanChildScope(host);
     const lifecycle = new LibraryScanLifecycle({ host, monitor }); lifecycle.isScanRunning = sample.scanRunning === true;
     let shortcut = 0, resolveFailureActive = sample.failure === 'resolve-shortcut';
     const fileSystem = { ...fs, writeFile: async (filename, bytes, options) => {

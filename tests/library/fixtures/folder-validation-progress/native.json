@@ -1,0 +1,336 @@
+{
+  "inputSha256": "0d14ee87bb1d7c40c86954f75713c30b1a8993c0fc18e02cde5dea750da0cb05",
+  "assembly": {
+    "name": "MediaBrowser.Controller",
+    "sha256": "051c588a8e85a3a7cdde8dc3d9a1112217fd7e973a86fe2ff90cf765bedb75a8"
+  },
+  "results": [
+    {
+      "name": "empty",
+      "progress": [
+        5,
+        5.5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "providerProgress": [],
+      "calls": [
+        "retrieval",
+        "enumeration",
+        "load"
+      ],
+      "exception": null
+    },
+    {
+      "name": "one",
+      "progress": [
+        5,
+        5.5,
+        6,
+        7,
+        8,
+        8,
+        9,
+        10
+      ],
+      "providerProgress": [],
+      "calls": [
+        "retrieval",
+        "enumeration",
+        "load",
+        "create"
+      ],
+      "exception": null
+    },
+    {
+      "name": "twenty-four",
+      "progress": [
+        5,
+        5.5,
+        6,
+        7,
+        8,
+        8,
+        9,
+        10
+      ],
+      "providerProgress": [],
+      "calls": [
+        "retrieval",
+        "enumeration",
+        "load",
+        "create"
+      ],
+      "exception": null
+    },
+    {
+      "name": "twenty-five",
+      "progress": [
+        5,
+        5.5,
+        6,
+        7,
+        8,
+        8,
+        9,
+        10
+      ],
+      "providerProgress": [],
+      "calls": [
+        "retrieval",
+        "enumeration",
+        "load",
+        "create"
+      ],
+      "exception": null
+    },
+    {
+      "name": "twenty-six",
+      "progress": [
+        5,
+        5.5,
+        6,
+        7,
+        7.961538461538462,
+        8,
+        8,
+        9,
+        10
+      ],
+      "providerProgress": [],
+      "calls": [
+        "retrieval",
+        "enumeration",
+        "load",
+        "create"
+      ],
+      "exception": null
+    },
+    {
+      "name": "fifty",
+      "progress": [
+        5,
+        5.5,
+        6,
+        7,
+        7.5,
+        8,
+        8,
+        9,
+        10
+      ],
+      "providerProgress": [],
+      "calls": [
+        "retrieval",
+        "enumeration",
+        "load",
+        "create"
+      ],
+      "exception": null
+    },
+    {
+      "name": "retrieval-failure",
+      "progress": [],
+      "providerProgress": [],
+      "calls": [
+        "retrieval"
+      ],
+      "exception": null
+    },
+    {
+      "name": "enumeration-failure",
+      "progress": [
+        5,
+        5.5
+      ],
+      "providerProgress": [],
+      "calls": [
+        "retrieval",
+        "enumeration"
+      ],
+      "exception": null
+    },
+    {
+      "name": "current-children-failure",
+      "progress": [
+        5,
+        5.5,
+        6
+      ],
+      "providerProgress": [],
+      "calls": [
+        "retrieval",
+        "enumeration",
+        "load"
+      ],
+      "exception": "IOException"
+    },
+    {
+      "name": "creation-failure",
+      "progress": [
+        5,
+        5.5,
+        6,
+        7,
+        8,
+        8
+      ],
+      "providerProgress": [],
+      "calls": [
+        "retrieval",
+        "enumeration",
+        "load",
+        "create"
+      ],
+      "exception": "IOException"
+    },
+    {
+      "name": "removed",
+      "progress": [
+        5,
+        5.5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "providerProgress": [],
+      "calls": [
+        "retrieval",
+        "enumeration",
+        "load",
+        "delete"
+      ],
+      "exception": null
+    },
+    {
+      "name": "deletion-failure",
+      "progress": [
+        5,
+        5.5,
+        6,
+        7,
+        8
+      ],
+      "providerProgress": [],
+      "calls": [
+        "retrieval",
+        "enumeration",
+        "load",
+        "delete"
+      ],
+      "exception": "IOException"
+    },
+    {
+      "name": "cancel-after-load",
+      "progress": [
+        5,
+        5.5,
+        6,
+        7
+      ],
+      "providerProgress": [],
+      "calls": [
+        "retrieval",
+        "enumeration",
+        "load"
+      ],
+      "exception": "OperationCanceledException"
+    },
+    {
+      "name": "cancel-after-retrieval",
+      "progress": [
+        5,
+        5.5,
+        6,
+        7
+      ],
+      "providerProgress": [],
+      "calls": [
+        "retrieval",
+        "enumeration",
+        "load"
+      ],
+      "exception": "OperationCanceledException"
+    },
+    {
+      "name": "cancel-during-resolution",
+      "progress": [
+        5,
+        5.5,
+        6,
+        7
+      ],
+      "providerProgress": [],
+      "calls": [
+        "retrieval",
+        "enumeration",
+        "load"
+      ],
+      "exception": "OperationCanceledException"
+    },
+    {
+      "name": "cancel-after-resolution",
+      "progress": [
+        5,
+        5.5,
+        6,
+        7
+      ],
+      "providerProgress": [],
+      "calls": [
+        "retrieval",
+        "enumeration",
+        "load"
+      ],
+      "exception": "OperationCanceledException"
+    },
+    {
+      "name": "cancel-and-enumeration-failure",
+      "progress": [
+        5,
+        5.5
+      ],
+      "providerProgress": [],
+      "calls": [
+        "retrieval",
+        "enumeration"
+      ],
+      "exception": null
+    },
+    {
+      "name": "recursive-cancel-after-load",
+      "progress": [
+        5,
+        5.5,
+        6,
+        7
+      ],
+      "providerProgress": [
+        5,
+        5.5,
+        6,
+        7
+      ],
+      "calls": [
+        "start",
+        "retrieval",
+        "enumeration",
+        "load",
+        "complete"
+      ],
+      "exception": "OperationCanceledException"
+    },
+    {
+      "name": "initial-cancellation",
+      "progress": [],
+      "providerProgress": [],
+      "calls": [],
+      "exception": "OperationCanceledException"
+    }
+  ]
+}

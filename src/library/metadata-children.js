@@ -194,7 +194,7 @@ export function createMetadataChildren({ store, library, linkedChildren, configu
     }
   }
 
-  async function selected(item, mode, { series, physicalSeriesId, includeLinkedChildren = true } = {}) {
+  async function selected(item, mode, { series, physicalSeriesId, includeLinkedChildren = true, preserveDuplicates = false } = {}) {
     let cohort = await createNativeItemCohort({ linkedChildren }), view;
     try {
       view = await store.run(async session => {
@@ -245,7 +245,7 @@ export function createMetadataChildren({ store, library, linkedChildren, configu
             }
           }
           const sql = nativeTextSql(session.schemaName);
-          const selection = mode === 'linked' ? `SELECT row_number() OVER(ORDER BY "Ordinal") AS "Ordinal","SlotKey" FROM ${target} ORDER BY "Ordinal"`
+          const selection = mode === 'linked' || preserveDuplicates ? `SELECT row_number() OVER(ORDER BY "Ordinal") AS "Ordinal","SlotKey" FROM ${target} ORDER BY "Ordinal"`
             : `WITH ranked AS (SELECT *,row_number() OVER(PARTITION BY ${sql.guidKey('"Id"')} ORDER BY "Ordinal") AS first,
               first_value("SlotKey") OVER(PARTITION BY ${sql.guidKey('"Id"')} ORDER BY "Ordinal" DESC) AS last_slot FROM ${target})
               SELECT row_number() OVER(ORDER BY "Ordinal") AS "Ordinal",last_slot AS "SlotKey" FROM ranked WHERE first=1 ORDER BY "Ordinal"`;
@@ -314,7 +314,7 @@ export function createMetadataChildren({ store, library, linkedChildren, configu
   return Object.freeze({
     children: item => selected(item, item.Type === 'BoxSet' ? 'linked' : item.Type === 'Season' ? 'season'
       : item.Type === 'MusicArtist' && !nonemptyId(item.ParentId) ? 'artist-by-name' : item.Type === 'MusicAlbum' ? 'tracks' : 'children'),
-    physical: item => selected(item, 'physical'), recursive: (item,options) => selected(item, 'recursive',options),
+    physical: (item, options) => selected(item, 'physical', options), recursive: (item,options) => selected(item, 'recursive',options),
     seasonEpisodes: (item, options) => selected(item, 'season', options), seriesEpisodes: item => selected(item, 'series'),
     tracks: item => selected(item, 'tracks'), albums: item => selected(item, 'albums'), libraryFolderIds
   });

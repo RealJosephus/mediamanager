@@ -578,11 +578,13 @@ export class DirectoryItemResolverPipeline {
     return result;
   }
 
-  async resolve({ parent, root, collectionContext = null, candidates, peekDirectory, getExtraCandidates, resolveExtra, deletionSafe = true, signal } = {}) {
+  async resolve({ parent, root, collectionContext = null, candidates, peekDirectory, getExtraCandidates, resolveExtra,
+    onEnumerationReady, deletionSafe = true, signal } = {}) {
     if (!Array.isArray(candidates)) throw new TypeError('Directory resolution requires a sibling candidate array.');
     if (peekDirectory != null && typeof peekDirectory !== 'function') throw new TypeError('peekDirectory must be a function.');
     if (getExtraCandidates != null && typeof getExtraCandidates !== 'function') throw new TypeError('getExtraCandidates must be a function.');
     if (resolveExtra != null && typeof resolveExtra !== 'function') throw new TypeError('resolveExtra must be a function.');
+    if (onEnumerationReady != null && typeof onEnumerationReady !== 'function') throw new TypeError('onEnumerationReady must be a function.');
     if (typeof deletionSafe !== 'boolean') throw new TypeError('Directory resolution deletionSafe must be a boolean.');
     checkAbort(signal);
     const byPath = indexCandidates(candidates);
@@ -648,7 +650,7 @@ export class DirectoryItemResolverPipeline {
       : (...args) => observeHost(() => resolveExtra(...args));
     const base = { parent, root, collectionContext, candidates: ordered, available, deletionSafe,
       peekDirectory: resolverPeekDirectory, getExtraCandidates: resolverExtraCandidates, resolveExtra: resolverResolveExtra, signal };
-    let singleCandidates = ordered;
+    let singleCandidates = ordered, multiItemWinner = false;
 
     for (const resolver of this.#resolvers.filter(value => typeof value.resolveMultiple === 'function')) {
       const result = await this.#call(resolver, 'resolveMultiple', { ...base, available: available() }, signal);
@@ -691,6 +693,7 @@ export class DirectoryItemResolverPipeline {
         if (!state.consumedPaths.has(key) && !extraKeys.has(key)) state.withheldPaths.add(key);
       }
       singleCandidates = result.extraFiles.map(value => byPath.get(keyFor(candidatePath(value))));
+      multiItemWinner = true;
       break;
     }
 
@@ -736,7 +739,11 @@ export class DirectoryItemResolverPipeline {
         draft: { Name: candidate.entry.name, IsFolder: true, MediaType: 'Unknown', SourceType: 'Library' }
       }, folderResolver, state, candidate, singleKeys);
     };
+    // ResolvePaths returns a lazy single-item sequence, while a multi-item
+    // winner eagerly resolves its extras before returning the completed list.
+    if (!multiItemWinner) onEnumerationReady?.();
     for (const candidate of singleCandidates) await resolveSingle(candidate);
+    if (multiItemWinner) onEnumerationReady?.();
 
     const unclaimedPaths = ordered.filter(candidate => !state.consumedPaths.has(keyFor(candidate.identityPath)))
       .map(candidate => candidate.identityPath);

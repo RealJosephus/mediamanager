@@ -43,6 +43,28 @@ function pipeline(resolvers, configuration = {}) {
   return new DirectoryItemResolverPipeline({ resolvers, programDataPath, configuration });
 }
 
+for (const winner of [false, true]) test(`enumeration progress begins ${winner ? 'after eager multi extras' : 'before lazy singles'}`, async () => {
+  const first = candidate('First.mkv'), second = candidate('Second.mkv'), calls = [];
+  const subject = pipeline([resolver('stages', {
+    resolveMultiple() {
+      calls.push('multi');
+      return winner ? { items: [movieClaim(first)], extraFiles: [second] } : null;
+    },
+    resolveFile({ candidate }) { calls.push(candidate.entry.name); return movieClaim(candidate); }
+  })]);
+  await subject.resolve({ candidates: [first, second], onEnumerationReady: () => calls.push('ready') });
+  assert.deepEqual(calls, winner ? ['multi', 'Second.mkv', 'ready'] : ['multi', 'ready', 'First.mkv', 'Second.mkv']);
+});
+
+test('an eager multi failure does not advertise retrieved children', async () => {
+  const expected = new Error('Controlled multi failure.');
+  const subject = pipeline([resolver('failed-multi', { resolveMultiple() { throw expected; } })]);
+  let reported = false;
+  await assert.rejects(subject.resolve({ candidates: [candidate('Film.mkv')],
+    onEnumerationReady: () => { reported = true; } }), error => error === expected);
+  assert.equal(reported, false);
+});
+
 test('the internal Folder fallback resolver id is reserved', () => {
   assert.throws(() => pipeline([resolver('folder-fallback', { resolveFile() { return null; } })]), /reserved/u);
 });

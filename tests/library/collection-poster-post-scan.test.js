@@ -93,7 +93,7 @@ for (const recording of native.results) test(`native library poster maintenance:
 
 test('Library scan continues later tasks after poster failure and propagates cancellation', async () => {
   const calls = [], required = ['getAggregateFolder', 'getUserRootFolder', 'clearIgnoreRuleCache', 'invalidateChildren',
-    'refreshMetadata', 'validateChildren', 'getChildren', 'collectionDirectoryExists', 'deleteCollections'];
+    'refreshMetadata', 'validateChildren', 'withChildren', 'collectionDirectoryExists'];
   const host = Object.fromEntries(required.map(name => [name, async () => {}]));
   host.updateInheritedValues = async () => calls.push('inherit');
   const poster = new CollectionPosterVerifyPostScanTask({ host: { getUserRootFolder: async () => ({}),

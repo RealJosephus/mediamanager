@@ -255,3 +255,5 @@ src/core/resources/native-charset-models.json -text whitespace=cr-at-eol
 /src/core/resources/configuration-model-provenance.json -text
 /tests/core/fixtures/server-identity/observations.js -text
 /tests/core/fixtures/server-identity/native.json whitespace=cr-at-eol
+/tests/library/fixtures/folder-validation-progress/native.json whitespace=cr-at-eol
+/tests/http/fixtures/library-structure/native.json whitespace=cr-at-eol

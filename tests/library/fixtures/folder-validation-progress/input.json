@@ -1,0 +1,21 @@
+[
+  { "name": "empty", "childCount": 0 },
+  { "name": "one", "childCount": 1 },
+  { "name": "twenty-four", "childCount": 24 },
+  { "name": "twenty-five", "childCount": 25 },
+  { "name": "twenty-six", "childCount": 26 },
+  { "name": "fifty", "childCount": 50 },
+  { "name": "retrieval-failure", "childCount": 1, "failAt": "retrieval" },
+  { "name": "enumeration-failure", "childCount": 2, "failAt": "enumeration" },
+  { "name": "current-children-failure", "childCount": 1, "failAt": "load" },
+  { "name": "creation-failure", "childCount": 1, "failAt": "create" },
+  { "name": "removed", "childCount": 0, "currentCount": 1 },
+  { "name": "deletion-failure", "childCount": 0, "currentCount": 1, "failAt": "delete" },
+  { "name": "cancel-after-load", "childCount": 1, "cancelAt": 7 },
+  { "name": "cancel-after-retrieval", "childCount": 1, "cancelAt": 5 },
+  { "name": "cancel-during-resolution", "childCount": 1, "cancelAt": 5.5 },
+  { "name": "cancel-after-resolution", "childCount": 1, "cancelAt": 6 },
+  { "name": "cancel-and-enumeration-failure", "childCount": 1, "cancelAt": 5, "failAt": "enumeration" },
+  { "name": "recursive-cancel-after-load", "childCount": 1, "cancelAt": 7, "recursive": true },
+  { "name": "initial-cancellation", "childCount": 1, "cancelled": true }
+]

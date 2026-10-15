@@ -1,0 +1,43 @@
+{
+  "scope": "Actual Folder.ValidateChildrenInternal early progress with controlled GetNonCachedChildren enumeration, repository, creation, deletion, provider and media-protocol dependencies. No native database, default resolver registry, child metadata, recursive descendants, watcher or complete library scan.",
+  "recording": "D:/mediamanager-validation/20261016-release-validation/folder-progress-native-7/record.json",
+  "fixtureFiles": [
+    {
+      "path": "tests/library/fixtures/folder-validation-progress/input.json",
+      "bytes": 1278,
+      "sha256": "0d14ee87bb1d7c40c86954f75713c30b1a8993c0fc18e02cde5dea750da0cb05"
+    },
+    {
+      "path": "tests/library/fixtures/folder-validation-progress/Program.cs",
+      "bytes": 5915,
+      "sha256": "4ef56f222f174548b6014e221727a62f7152703c20f9f904ea65587f6bfb535e"
+    },
+    {
+      "path": "tests/library/fixtures/folder-validation-progress/Oracle.csproj",
+      "bytes": 453,
+      "sha256": "56e42cc99a5305248cb523db75850ab8bce9868f3a283101fa0a208332829234"
+    },
+    {
+      "path": "tests/library/fixtures/folder-validation-progress/native.json",
+      "bytes": 6000,
+      "sha256": "da9d6eecf50ef3dea2475fd2870bccbf3fe1bcf7b1933bc8d6024ea62a9c1233"
+    },
+    {
+      "path": "tests/library/fixtures/folder-validation-progress/record.json",
+      "bytes": 4302,
+      "sha256": "67e4f8420b68eeab9a68569267db4931d90274de13fdad6196e0ce2ad34fd021"
+    }
+  ],
+  "referenceSources": [
+    {
+      "path": "D:/jellyfin/MediaBrowser.Controller/Entities/Folder.cs",
+      "bytes": 83390,
+      "sha256": "d5f227d462ce3c2df0d5a45d912778427f87321fc9d6e13d863ec28bb639e0c1"
+    },
+    {
+      "path": "D:/jellyfin/Emby.Server.Implementations/Library/LibraryManager.cs",
+      "bytes": 157087,
+      "sha256": "4729de97560262702a44c5829bf93bbc5deec379e9b3018b231aaa6d65643c44"
+    }
+  ]
+}

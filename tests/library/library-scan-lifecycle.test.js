@@ -8,6 +8,7 @@ import { PostgresDatabase } from '../../src/database/postgres.js';
 import { DomainStore } from '../../src/database/domain-store.js';
 import { tableDefinition } from '../../src/database/model.js';
 import { checkAbort, StorageError } from '../../src/storage/errors.js';
+import { scanChildScope } from './scan-child-scope-fixture.js';
 
 const root = new URL('./fixtures/library-scan-lifecycle/', import.meta.url);
 const [input, native, provenance] = await Promise.all(['input.json', 'native.json', 'provenance.json'].map(async name => JSON.parse(await readFile(new URL(name, root), 'utf8'))));
@@ -71,6 +72,7 @@ function lifecycleFor(sample) {
     async deleteCollections(ids) { calls.push({ action: 'delete-collections', ids }); control('delete-collections'); },
     async updateInheritedValues() { control('update-inherited'); }
   };
+  host.withChildren = scanChildScope(host);
   const monitor = Object.fromEntries(['stop', 'start'].map(name => [name, async () => {
     trace('monitor-' + name);
     if (sample.failure === 'monitor-' + name) throw Object.assign(new Error('Controlled monitor failure'), { name: 'IOException' });
