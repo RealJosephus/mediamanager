@@ -511,6 +511,7 @@ export async function projectItem(item, state, user, selected, options) {
   if (has('Width') && item.Width > 0) dto.Width = item.Width;
   if (has('Height') && item.Height > 0) dto.Height = item.Height;
   if (has('IsHD') && item.IsHD) dto.IsHD = true;
+  if (item.Type === 'Book') dto.SeriesName = item.SeriesName;
   if (['Series', 'Season', 'Episode'].includes(item.Type)) {
     for (const key of ['SeriesName', 'SeasonName', 'IndexNumberEnd', 'AirTime', 'Status']) if (item[key] != null) dto[key] = item[key];
     for (const key of item.Type === 'Episode' ? ['SeriesId', 'SeasonId'] : item.Type === 'Season' ? ['SeriesId'] : []) {

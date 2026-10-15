@@ -1,0 +1,139 @@
+{
+  "recordedAt": "2026-10-15T17:25:44.620Z",
+  "files": [
+    {
+      "filename": "Program.cs",
+      "sha256": "a6ad818bd900a22de737ab930349131536ae484a8ec8fc11e50289894580b35a",
+      "bytes": 11406
+    },
+    {
+      "filename": "Oracle.csproj",
+      "sha256": "3f2610631c594ffd08dcc82f03d3509abc1c9c9541f159519800df046fc770ee",
+      "bytes": 403
+    },
+    {
+      "filename": "input.json",
+      "sha256": "aca7944e49d3272d6be802022e7f2ce69416db92f7a0652fdc7e77af75f11f69",
+      "bytes": 15330
+    },
+    {
+      "filename": "native.json",
+      "sha256": "d04465d3dc32752c4ac90309a31909663cc7764011527cb1f330799669daa3d1",
+      "bytes": 25471
+    },
+    {
+      "filename": "README.md",
+      "sha256": "e3ccc2d8d1728e8c8db5425d89fa43ba66195b1c5537417d8fff5258ae687ada",
+      "bytes": 2256
+    },
+    {
+      "filename": "owned/Program.cs",
+      "sha256": "78670d845f163ed9c784a5e4dd7ae38c4127f800147c3e029a78bcdb9b6bf4c2",
+      "bytes": 20998
+    },
+    {
+      "filename": "owned/Oracle.csproj",
+      "sha256": "cbe1a514da582cbf55a443ee14c93f731f84816d10e7672fb713045ac5d78efe",
+      "bytes": 545
+    },
+    {
+      "filename": "owned/input.json",
+      "sha256": "02cfca449ebe78ec77cfad81d9bb163d6384e83562fbcda2b25e8f323e629a59",
+      "bytes": 3583
+    },
+    {
+      "filename": "owned/native.json",
+      "sha256": "eb72d279d01decdd21908aa68cb00de3f2d0cef0d32a392610f354dd4304afc3",
+      "bytes": 79734
+    },
+    {
+      "filename": "../../../Directory.Build.props",
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd",
+      "bytes": 780
+    }
+  ],
+  "sources": [
+    {
+      "relativePath": "MediaBrowser.Controller/Entities/Book.cs",
+      "filename": "D:/jellyfin/MediaBrowser.Controller/Entities/Book.cs",
+      "required": true,
+      "sha256": "b081cbb2b7fb794d6b3d348e10c547803f4c18a58c79153f3ca3a3f10f552a0b",
+      "bytes": 1929
+    },
+    {
+      "relativePath": "MediaBrowser.Providers/Books/BookMetadataService.cs",
+      "filename": "D:/jellyfin/MediaBrowser.Providers/Books/BookMetadataService.cs",
+      "required": true,
+      "sha256": "39aa2a318535814ad94d88be202fa20f12515caca6a3f9ea85b3ff957fd659bc",
+      "bytes": 2338
+    },
+    {
+      "relativePath": "MediaBrowser.Providers/Manager/MetadataService.cs",
+      "filename": "D:/jellyfin/MediaBrowser.Providers/Manager/MetadataService.cs",
+      "required": true,
+      "sha256": "6e08f11ce31d47be3e09787ebe2c1edff9bda5684d4444c2444f399e4b2dd7d5",
+      "bytes": 61028
+    },
+    {
+      "relativePath": "MediaBrowser.Controller/Entities/BaseItem.cs",
+      "filename": "D:/jellyfin/MediaBrowser.Controller/Entities/BaseItem.cs",
+      "required": true,
+      "sha256": "9dc7b96a93c9fbe874cdcededdca395b5aa2df6070f5cfc9c8959539dcd76469",
+      "bytes": 105800
+    },
+    {
+      "relativePath": "Emby.Server.Implementations/Library/LibraryManager.cs",
+      "filename": "D:/jellyfin/Emby.Server.Implementations/Library/LibraryManager.cs",
+      "required": true,
+      "sha256": "4729de97560262702a44c5829bf93bbc5deec379e9b3018b231aaa6d65643c44",
+      "bytes": 157087
+    },
+    {
+      "relativePath": "Emby.Naming/Video/VideoResolver.cs",
+      "filename": "D:/jellyfin/Emby.Naming/Video/VideoResolver.cs",
+      "required": true,
+      "sha256": "b94148bc6d67260305103434a938a4cf38b8a3c1f35ac6180dc96adb090c7ef0",
+      "bytes": 6573
+    },
+    {
+      "relativePath": "Emby.Naming/Video/StubResolver.cs",
+      "filename": "D:/jellyfin/Emby.Naming/Video/StubResolver.cs",
+      "required": true,
+      "sha256": "9d44fe33d21760019846c85ed22bbf07d5af595f9b0957658d2e85a7969ec54f",
+      "bytes": 1496
+    },
+    {
+      "relativePath": "Emby.Naming/Common/NamingOptions.cs",
+      "filename": "D:/jellyfin/Emby.Naming/Common/NamingOptions.cs",
+      "required": true,
+      "sha256": "4fc386ee2a335da97314845fcac71d2ffa534fbc37d772d44ae30e2dd4b07c02",
+      "bytes": 32540
+    }
+  ],
+  "recordings": [
+    {
+      "name": "service",
+      "record": {
+        "filename": "D:/mediamanager-validation/20261016-release-validation/results/book-lifecycle-service-native-1/record.json",
+        "required": true,
+        "available": true,
+        "kind": "file",
+        "bytes": 4539,
+        "sha256": "a2c84e7f3ab7f3eccdf925eb73abbfc07fe446b890a777d9adad3912ed667e4d"
+      },
+      "sourceFilesSha256": "f5e8ea65be3f466fc79e9c57d40104118966db9d4a7d7ef4d2725bba9561e9f3"
+    },
+    {
+      "name": "owned",
+      "record": {
+        "filename": "D:/mediamanager-validation/20261016-release-validation/results/book-lifecycle-owned-native-2/record.json",
+        "required": true,
+        "available": true,
+        "kind": "file",
+        "bytes": 4542,
+        "sha256": "726009bedc3995784af1b36693875e4958636331871cfc2ce4165e192778e97b"
+      },
+      "sourceFilesSha256": "30e83aa445335e533029952173b6998b53ad5c4fc7af492370f6f55339443a41"
+    }
+  ]
+}

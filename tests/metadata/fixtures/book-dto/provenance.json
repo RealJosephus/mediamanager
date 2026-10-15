@@ -1,0 +1,84 @@
+{
+  "comparison": "Actual DtoService.SetBookProperties observations from the unchanged 38-observation recording. Public SeriesName comparison uses the established ignore-null serializer policy; null is omitted, empty is present. Other photo observations are outside this fixture scope.",
+  "observations": [
+    "BookDto:null",
+    "BookDto:",
+    "BookDto:Book series"
+  ],
+  "record": {
+    "filename": "D:/mediamanager-validation/20261016-release-validation/results/photo-phase-native-3/record.json",
+    "available": true,
+    "kind": "file",
+    "bytes": 4427,
+    "sha256": "f2eaa7377aae29405d625324498d3363ba958040af46a29bc4abb8071b2d6e46",
+    "required": true
+  },
+  "rawNative": {
+    "filename": "D:/mediamanager-validation/20261016-release-validation/results/photo-phase-native-3/native.json",
+    "available": true,
+    "kind": "file",
+    "bytes": 22629,
+    "sha256": "a429f5eef63fa06ca038c58a8df13f18c19636a56c2f4570f0fefda4762007e9",
+    "required": true
+  },
+  "sourceBinding": {
+    "filename": "D:/mediamanager-validation/20261016-release-validation/results/photo-phase-native-3/source-binding.json",
+    "available": true,
+    "kind": "file",
+    "bytes": 4239,
+    "sha256": "0df6076004e5ba488d08e45a6156fe5d1e2d96c37cb092831c29664bcedea9af",
+    "required": true
+  },
+  "oracleInputs": [
+    {
+      "filename": "D:/mediamanager-validation/20261016-release-validation/results/photo-phase-native-3/project/Program.cs",
+      "available": true,
+      "kind": "file",
+      "bytes": 14095,
+      "sha256": "774be4fe3ddf0ead5a29c5b2e033aeda7e6dc197592c664ae18a3a81b7ef9b15",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-release-validation/results/photo-phase-native-3/project/Oracle.csproj",
+      "available": true,
+      "kind": "file",
+      "bytes": 403,
+      "sha256": "3f2610631c594ffd08dcc82f03d3509abc1c9c9541f159519800df046fc770ee",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-release-validation/results/photo-phase-native-3/project/Directory.Build.props",
+      "available": true,
+      "kind": "file",
+      "bytes": 780,
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd",
+      "required": true
+    }
+  ],
+  "sources": [
+    {
+      "filename": "D:/jellyfin/Emby.Server.Implementations/Dto/DtoService.cs",
+      "available": true,
+      "kind": "file",
+      "bytes": 72274,
+      "sha256": "d00b1e73b167dc3068e619d52dbc394ea2f7187c1c87524d0e6b094d1cab5b55",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/MediaBrowser.Controller/Entities/Book.cs",
+      "available": true,
+      "kind": "file",
+      "bytes": 1929,
+      "sha256": "b081cbb2b7fb794d6b3d348e10c547803f4c18a58c79153f3ca3a3f10f552a0b",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/MediaBrowser.Controller/Entities/BaseItem.cs",
+      "available": true,
+      "kind": "file",
+      "bytes": 105800,
+      "sha256": "9dc7b96a93c9fbe874cdcededdca395b5aa2df6070f5cfc9c8959539dcd76469",
+      "required": true
+    }
+  ]
+}

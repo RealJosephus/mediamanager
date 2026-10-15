@@ -3,7 +3,7 @@ import { cleanMetadataName, parseMetadataName } from '../metadata/naming.js';
 import { clrTrim } from '../metadata/whitespace.js';
 import { ordinalIgnoreCaseEquals } from '../storage/ordinal-comparer.js';
 import { audioNativeType } from './audio-item-resolver.js';
-import { nativeDirectoryName, sameNativePath } from './native-path.js';
+import { nativeDirectoryName, nativeFileName, sameNativePath } from './native-path.js';
 import { sameId } from './records.js';
 
 export const videoNativeType = 'MediaBrowser.Controller.Entities.Video';
@@ -630,6 +630,11 @@ function resolvedExtraMetadata(candidate, classification) {
 }
 
 export async function collectOwnedExtras(owner, versions, candidates, peekDirectory, localization, { resolveExtra } = {}) {
+  if (owner.entry.kind !== 'directory') {
+    const filename = nativeFileName(owner.identityPath, { windows: pathApiFor(owner.identityPath) === path.win32 });
+    const dot = filename.lastIndexOf('.'), extension = dot < 0 ? '' : filename.slice(dot).toLowerCase();
+    if (!nativeVideoFileExtensions.has(extension) && extension !== '.disc') return { extras: [], scopes: [], consumed: [] };
+  }
   const namingOptions = { ownerIsDirectory: owner.entry.kind === 'directory' };
   const discovered = [];
   const scopes = [];

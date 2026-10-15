@@ -1,0 +1,3 @@
+README.md -text
+native.json whitespace=cr-at-eol
+owned/native.json whitespace=cr-at-eol

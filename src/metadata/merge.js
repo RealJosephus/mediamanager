@@ -109,6 +109,7 @@ export async function mergeMetadata(sourceResult, targetResult, { lockedFields =
     }
   }
   if (target.Type === 'Movie') put('TmdbCollectionName');
+  if (target.Type === 'Book') put('SeriesName');
   if (target.Type === 'Series') { put('AirTime'); put('Status', missing); if (replaceData || !target.AirDays?.length) target.AirDays = cloneNativeItemValue(source.AirDays === undefined ? [] : source.AirDays); }
   if (target.Type === 'Episode') {
     for (const key of ['AirsBeforeSeasonNumber', 'AirsAfterSeasonNumber', 'AirsBeforeEpisodeNumber', 'IndexNumberEnd']) put(key, missing);
