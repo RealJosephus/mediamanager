@@ -24,8 +24,9 @@ for (const dialect of ['postgres']) test(`${dialect}: child metadata starts afte
     onRefreshProgress: event => {
       if (event.Item.Name === 'Parent') providerProgress.push(event.Progress);
     },
-    metadataScanner: ({ fixture }) => {
+    metadataScanner: ({ fixture, scheduler }) => {
       const scanner = new LibraryMetadataScanService({
+        scheduler,
         library: fixture.library,
         configuration: { ...fixture.configuration, LibraryScanFanoutConcurrency: 1 },
         metadata: {

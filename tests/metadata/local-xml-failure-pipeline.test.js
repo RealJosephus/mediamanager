@@ -156,7 +156,8 @@ test('actual PostgreSQL update pipeline and actual XML destination consumers', {
       return query(...args);
     };
     const saveResults = [];
-    const scanner = new LibraryMetadataScanService({ library: runtime.library, processors: () => 1, configuration: { LibraryScanFanoutConcurrency: 1 },
+    runtime.configuration.LibraryScanFanoutConcurrency = 1;
+    const scanner = new LibraryMetadataScanService({ library: runtime.library, scheduler: runtime.libraryTaskScheduler,
       metadata: { validateRefresh() {}, async refresh(reference) {
         const loaded = frames.get(reference);
         let Saves; try { Saves = await saveMetadataItem(runtime.metadataUpdates, loaded, { Item: loaded.item, Images: [] }, 16); } finally { await loaded.dispose(); }

@@ -1,6 +1,8 @@
 # Native JSON fixtures are sealed by raw SHA-256; keep checkout bytes intact.
 tests/metadata/fixtures/nfo-scalar-provider/README.md text eol=lf
 tests/metadata/fixtures/nfo-userdata-persistence/README.md text eol=lf
+tests/library/fixtures/library-task-scheduler/README.md text eol=lf
+tests/metadata/fixtures/book-lifecycle/README.md text eol=lf
 tests/http/fixtures/shows-api/native.json whitespace=cr-at-eol
 tests/http/fixtures/quick-connect/native.json whitespace=cr-at-eol
 tests/http/fixtures/branding/Oracle.csproj -text

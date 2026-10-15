@@ -1,5 +1,4 @@
 import { AsyncLocalStorage } from 'node:async_hooks';
-import { availableParallelism } from 'node:os';
 import path from 'node:path';
 import { StorageError } from '../storage/errors.js';
 import { joinPath } from '../storage/paths.js';
@@ -26,7 +25,6 @@ import { quoteIdentifier as q } from '../database/model.js';
 
 const pathStyle = value => /^(?:[A-Za-z]:[\\/]|[\\/]{2}[^\\/]+[\\/][^\\/]+)/u.test(value) ? 'windows' : 'posix';
 const itemType = item => String(item?.NativeType ?? item?.Type ?? '').split('.').at(-1);
-const validationWorkContext = new AsyncLocalStorage();
 
 function throwIfAborted(signal) {
   signal?.throwIfAborted();
@@ -57,7 +55,7 @@ export class FolderValidationService {
   }
   constructor({ store, library, itemCreation, resolvedItemLifecycle, vfs, identityMap, ignoreRule, resolverPipeline, loadContext,
     programDataPath, configurationDirectoryPath, metadataConfiguration = { UseFileCreationTimeForDateAdded: true },
-    configuration = library?.options?.configuration ?? {}, refreshes, linkedChildReferences, metadataScanner, processors = availableParallelism,
+    configuration = library?.options?.configuration ?? {}, refreshes, linkedChildReferences, metadataScanner, scheduler,
     clock = () => new Date(), onError = () => {}, reattach = reattachUserData } = {}) {
     if (!store || !library || !itemCreation || !vfs || !identityMap || !ignoreRule
       || !resolverPipeline || typeof resolverPipeline.resolve !== 'function' || typeof loadContext !== 'function') {
@@ -79,14 +77,14 @@ export class FolderValidationService {
       || typeof metadataScanner.refreshContainer !== 'function') {
       throw new TypeError('Folder validation requires child metadata traversal.');
     }
-    if (typeof processors !== 'function') throw new TypeError('Folder validation processor discovery must be a function.');
+    if (!scheduler || typeof scheduler.enqueue !== 'function') throw new TypeError('Folder validation requires the shared library scheduler.');
     if (!resolvedItemLifecycle || typeof resolvedItemLifecycle.apply !== 'function'
       || typeof resolvedItemLifecycle.updateRepository !== 'function') {
       throw new TypeError('Folder validation requires the existing-item repository lifecycle.');
     }
     Object.assign(this, { store, library, itemCreation, resolvedItemLifecycle, vfs, identityMap, ignoreRule, resolverPipeline, loadContext,
       programDataPath, configurationDirectoryPath, metadataConfiguration, configuration, refreshes, linkedChildReferences,
-      metadataScanner, processors, clock, onError, reattach });
+      metadataScanner, scheduler, clock, onError, reattach });
     const nativePath = pathStyle(programDataPath) === 'windows' ? path.win32 : path.posix;
     this.applicationRootPath = nativePath.join(programDataPath, 'root');
   }
@@ -352,51 +350,22 @@ export class FolderValidationService {
     catch { /* A progress observer cannot replace folder validation. */ }
   }
 
+  async #accessibleChildren(children) {
+    const cohort = await createNativeItemCohort({ linkedChildren: this.loadContext.linkedChildren });
+    this.#ownership.getStore().push(() => cohort.release());
+    let ordinal = 0n;
+    for (const child of children.values()) await cohort.capture(child, { ordinal: ++ordinal });
+    const sequence = metadataChildSequence(cohort, this.loadContext.linkedChildren, this.store);
+    this.#ownership.getStore().push(() => sequence.close());
+    return sequence;
+  }
+
   async #validateSubFolders(children, { collectionType, signal, reportProgress }) {
-    const folders = children.filter(child => child?.IsFolder === true);
-    if (!folders.length || signal?.aborted) {
-      this.#progress(reportProgress, 100);
-      return;
-    }
-    const requested = this.configuration.LibraryScanFanoutConcurrency ?? 0;
-    const limit = requested > 0 ? requested : Math.max(1, this.processors() - 3);
-    const current = validationWorkContext.getStore();
-    const nested = current?.owner === this && current.active === true;
-    const concurrency = nested ? 1 : Math.min(folders.length, limit);
-    const progress = Array(folders.length).fill(0);
-    const updateProgress = (index, value) => {
-      const rounded = Math.round(value);
-      if (progress[index] === rounded) return;
-      progress[index] = rounded;
-      this.#progress(reportProgress, progress.reduce((total, current) => total + current, 0) / folders.length);
-    };
-    let next = 0;
-    const worker = async () => {
-      while (next < folders.length) {
-        const index = next++, folder = folders[index];
-        if (signal?.aborted) {
-          updateProgress(index, 100);
-          continue;
-        }
-        const work = { owner: this, active: true };
-        try {
-          await validationWorkContext.run(work, () => this.validateChildren(folder, {
-            collectionType,
-            signal,
-            recursive: true,
-            refreshChildMetadata: false,
-            allowRemoveRoot: false,
-            reportProgress: value => updateProgress(index, value)
-          }));
-        } catch (error) {
-          this.#report(error);
-        } finally {
-          work.active = false;
-          updateProgress(index, 100);
-        }
-      }
-    };
-    await Promise.all(Array.from({ length: concurrency }, worker));
+    await this.scheduler.enqueue(children, (folder, progress) => this.validateChildren(folder, {
+      collectionType, signal, recursive: true, refreshChildMetadata: false, allowRemoveRoot: false,
+      reportProgress: progress
+    }), { signal, reportProgress: value => this.#progress(reportProgress, value),
+      predicate: child => child?.IsFolder === true, onError: error => this.#report(error) });
   }
 
   async validateChildren(parent, { collectionType, signal, recursive = false,
@@ -593,7 +562,9 @@ export class FolderValidationService {
       progress(9);
       progress(10);
       throwIfAborted(signal);
-      if (recursive) await this.#validateSubFolders([...accessible.values()], {
+      const container = ['Series', 'MusicAlbum'].includes(itemType(parent));
+      const children = recursive || refreshChildMetadata && !container ? await this.#accessibleChildren(accessible) : null;
+      if (recursive) await this.#validateSubFolders(children, {
         collectionType,
         signal,
         reportProgress: progress => {
@@ -610,16 +581,11 @@ export class FolderValidationService {
           this.#progress(reportProgress, value);
           if (recursive) this.refreshes.reportProgress(parent, value);
         };
-        if (['Series', 'MusicAlbum'].includes(itemType(parent))) {
+        if (container) {
           await this.metadataScanner.refreshContainer(parent.Id, metadataRefreshOptions, { reportProgress: progress });
         } else {
-          const cohort=await createNativeItemCohort({linkedChildren:this.loadContext.linkedChildren});
-          try {
-            let ordinal=0n;for(const child of accessible.values())await cohort.capture(child,{ordinal:++ordinal});
-            const sequence=metadataChildSequence(cohort,this.loadContext.linkedChildren,this.store);
-            try {await this.metadataScanner.refreshAccessibleChildren(sequence,metadataRefreshOptions,
-              {recursive,reportProgress:progress});} finally {await sequence.close();}
-          } finally {await cohort.release();}
+          await this.metadataScanner.refreshAccessibleChildren(children, metadataRefreshOptions,
+            { recursive, reportProgress: progress });
         }
       }
       return Object.freeze({ created: Object.freeze(created), resolved: resolution.claims });

@@ -1,0 +1,113 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-15T17:09:06.958Z",
+  "project": "D:\\mediamanager\\.agent-temp\\scheduler-oracle\\Oracle.csproj",
+  "dotnet": {
+    "filename": "D:\\mediamanager\\.tools\\dotnet\\dotnet.exe",
+    "available": true,
+    "kind": "file",
+    "bytes": 167208,
+    "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6"
+  },
+  "node": "v24.16.0",
+  "timezone": "Asia/Taipei",
+  "jellyfinDll": {
+    "filename": "D:/mediamanager-validation/20261015-node-plugins-acceptance/nfo-reader-native-2/bin/Release/net10.0/jellyfin.dll",
+    "available": true,
+    "kind": "file",
+    "bytes": 506368,
+    "sha256": "a43fa24c44677e579fcec79d637789b9f36633d02e5434e76a0e03fa13027767"
+  },
+  "sourceFiles": [
+    {
+      "filename": "D:\\mediamanager\\.agent-temp\\scheduler-oracle\\Oracle.csproj",
+      "available": true,
+      "kind": "file",
+      "bytes": 443,
+      "sha256": "59cbda83887e0cac6f2acc4cd1ea475f9230aed1fff034f6eedbf64574a27f54"
+    },
+    {
+      "filename": "D:\\mediamanager\\tests\\Directory.Build.props",
+      "available": true,
+      "kind": "file",
+      "bytes": 780,
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    },
+    {
+      "filename": "D:\\mediamanager\\.agent-temp\\scheduler-oracle\\Program.cs",
+      "available": true,
+      "kind": "file",
+      "bytes": 17393,
+      "sha256": "4852d78fb5bbff0730de4191f2d86461eba188e482c74f896f5d059287e15fa4"
+    }
+  ],
+  "sourceFilesSha256": "e75e5a452f3c856cd18d653ebee4bd9e639568765162afbdd09065fd0166e275",
+  "build": {
+    "args": [
+      "build",
+      "D:\\mediamanager-validation\\20261016-release-validation\\library-scheduler-cpu4-native-2\\project\\Oracle.csproj",
+      "-c",
+      "Release",
+      "--nologo",
+      "-v",
+      "minimal",
+      "-p:BaseOutputPath=D:\\mediamanager-validation\\20261016-release-validation\\library-scheduler-cpu4-native-2\\bin\\",
+      "-p:BaseIntermediateOutputPath=D:\\mediamanager-validation\\20261016-release-validation\\library-scheduler-cpu4-native-2\\obj\\"
+    ],
+    "status": 0,
+    "signal": null
+  },
+  "process": {
+    "args": [
+      "D:\\mediamanager-validation\\20261016-release-validation\\library-scheduler-cpu4-native-2\\bin\\Release\\net10.0\\Oracle.dll",
+      "D:\\mediamanager-validation\\20261016-release-validation\\library-scheduler-cpu4-native-2/native.json"
+    ],
+    "status": 0,
+    "signal": null
+  },
+  "outputs": [
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-release-validation\\library-scheduler-cpu4-native-2\\build.stderr.txt",
+      "available": true,
+      "kind": "file",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-release-validation\\library-scheduler-cpu4-native-2\\build.stdout.txt",
+      "available": true,
+      "kind": "file",
+      "bytes": 3010,
+      "sha256": "7473965e184628360dc0164769e9e3d52e15eee59bb7ef7f5259f36040c0be67"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-release-validation\\library-scheduler-cpu4-native-2\\native.json",
+      "available": true,
+      "kind": "file",
+      "bytes": 4881,
+      "sha256": "d0928e8ccdf9c03905ad3968203fac1a1b9ffec69910aeb7dc3adb14c729622a"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-release-validation\\library-scheduler-cpu4-native-2\\stderr.txt",
+      "available": true,
+      "kind": "file",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-release-validation\\library-scheduler-cpu4-native-2\\stdout.txt",
+      "available": true,
+      "kind": "file",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "oracleAssembly": {
+    "filename": "D:\\mediamanager-validation\\20261016-release-validation\\library-scheduler-cpu4-native-2\\bin\\Release\\net10.0\\Oracle.dll",
+    "available": true,
+    "kind": "file",
+    "bytes": 56320,
+    "sha256": "c40ae4746299c525d63053df1b24e52d6d69a447f8a39bd2da31331230e48e03"
+  },
+  "passed": true
+}

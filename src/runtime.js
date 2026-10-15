@@ -1,4 +1,5 @@
 import { PluginHost } from './plugins/host.js';
+import { LibraryTaskScheduler } from './library/library-task-scheduler.js';
 import { createConfiguredStorage } from './storage-bootstrap.js';
 import { DomainStore } from './database/domain-store.js';
 import { UserService, AuthenticationService, ApiKeyService, DeviceService, QuickConnectService, PasswordResetService, createNetworkClassifier } from './users/index.js';
@@ -252,11 +253,14 @@ export async function createRuntime({ database, configuration, serverId, serverN
   const linkedChildReferences = itemCreation && metadataUpdates
     ? new LinkedChildReferenceService({ store, linkedChildren, itemCreation, loadContext, updates: metadataUpdates })
     : undefined;
-  const metadataScanner = metadata ? new LibraryMetadataScanService({ library, metadata, configuration, logger }) : undefined;
+  const libraryTaskScheduler = loadContext ? new LibraryTaskScheduler({ configuration,
+    runWorker: operation => store.runDetached(() => loadContext.withDetachedScope(operation)), onError }) : undefined;
+  if (libraryTaskScheduler) rollback.push(() => libraryTaskScheduler.close());
+  const metadataScanner = metadata ? new LibraryMetadataScanService({ library, metadata, configuration, logger, scheduler: libraryTaskScheduler }) : undefined;
   const folderValidation = itemCreation && resolverPipeline ? new FolderValidationService({ store, library, itemCreation,
     resolvedItemLifecycle, vfs, identityMap, ignoreRule, resolverPipeline, loadContext, programDataPath, configurationDirectoryPath,
     metadataConfiguration: metadataOptions.metadataConfiguration ?? metadataSettings.metadata, configuration, refreshes,
-    linkedChildReferences, metadataScanner, onError }) : undefined;
+    linkedChildReferences, metadataScanner, scheduler: libraryTaskScheduler, onError }) : undefined;
   library.folderValidation = folderValidation;
   const itemDeletion = itemCreation ? new ItemDeletionService({ store, library, loadContext, itemCreation,
     updates: metadataUpdates, externalData, linkedChildReferences, vfs, metadataVfs, logger }) : undefined;
@@ -355,6 +359,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
   services.linkedChildren = linkedChildren;
   services.runWithContext = loadContext && (operation => loadContext.withScope(operation));
   services.libraryMonitor = libraryMonitor;
+  services.libraryTaskScheduler = libraryTaskScheduler;
   services.quickConnect = quickConnect;
   services.passwordResets = passwordResets;
   services.displayPreferences = displayPreferences;
@@ -427,6 +432,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
         attempt(() => itemUpdates.close())
       ]);
       await attempt(() => application.drainRequests());
+      await attempt(() => libraryTaskScheduler?.close());
       await attempt(() => metadata?.saver.stop());
       await attempt(() => metadata?.close());
       await attempt(() => metadata?.saver.dispose());

@@ -4,6 +4,7 @@ import path from 'node:path';
 import { nativeModel } from '../../src/database/model.js';
 import { DirectoryItemResolverPipeline } from '../../src/library/directory-item-resolver.js';
 import { FolderValidationService } from '../../src/library/folder-validation-service.js';
+import { LibraryTaskScheduler } from '../../src/library/library-task-scheduler.js';
 import { ItemCreationService } from '../../src/library/item-creation-service.js';
 import { ItemDeletionService } from '../../src/library/item-deletion-service.js';
 import { ResolvedItemLifecycleHost } from '../../src/library/resolved-item-lifecycle.js';
@@ -67,6 +68,7 @@ async function subject(t, { resolvers = [], failList = null } = {}) {
   });
   fixture.host.updates.library = fixture.library;
   const validation = new FolderValidationService({
+    scheduler: new LibraryTaskScheduler({ configuration: fixture.configuration }),
     store: fixture.store,
     library: fixture.library,
     itemCreation: creator,

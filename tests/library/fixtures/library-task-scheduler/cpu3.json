@@ -1,0 +1,234 @@
+{
+  "processorCount": 3,
+  "controlledProgressSynchronizationContext": "Inline Post callback for stable per-slot progress observations; real scheduler queue/workers remain active.",
+  "scope": "Actual LimitedConcurrencyLibraryScheduler with controlled delegates, gates, live configuration and IHostApplicationLifetime. No library traversal, SQL, metadata providers, HTTP, watcher or release acceptance.",
+  "assembly": {
+    "name": "MediaBrowser.Controller",
+    "sha256": "051c588a8e85a3a7cdde8dc3d9a1112217fd7e973a86fe2ff90cf765bedb75a8"
+  },
+  "results": [
+    {
+      "name": "explicit-one",
+      "fanout": 1,
+      "processorCount": 3,
+      "secondStartedBeforeRelease": true,
+      "first": {
+        "started": [
+          0
+        ],
+        "active": 0,
+        "maximum": 1
+      },
+      "second": {
+        "started": [
+          0
+        ],
+        "active": 0,
+        "maximum": 1
+      },
+      "errors": []
+    },
+    {
+      "name": "default",
+      "fanout": 0,
+      "processorCount": 3,
+      "secondStartedBeforeRelease": true,
+      "first": {
+        "started": [
+          0
+        ],
+        "active": 0,
+        "maximum": 1
+      },
+      "second": {
+        "started": [
+          0
+        ],
+        "active": 0,
+        "maximum": 1
+      },
+      "errors": []
+    },
+    {
+      "name": "negative-default",
+      "fanout": -9,
+      "processorCount": 3,
+      "secondStartedBeforeRelease": true,
+      "first": {
+        "started": [
+          0
+        ],
+        "active": 0,
+        "maximum": 1
+      },
+      "second": {
+        "started": [
+          0
+        ],
+        "active": 0,
+        "maximum": 1
+      },
+      "errors": []
+    },
+    {
+      "name": "pooled-overlap-fifo",
+      "secondStartedBeforeOlderQueuedItem": false,
+      "firstDoneAtSecondStart": false,
+      "first": {
+        "started": [
+          0,
+          1,
+          2
+        ],
+        "active": 0,
+        "maximum": 2
+      },
+      "second": {
+        "started": [
+          0,
+          1
+        ],
+        "active": 0,
+        "maximum": 2
+      },
+      "firstFinalProgress": 100,
+      "secondFinalProgress": 100
+    },
+    {
+      "name": "nested-same-instance",
+      "secondStartedBeforeRelease": false,
+      "inner": {
+        "started": [
+          0,
+          1
+        ],
+        "active": 0,
+        "maximum": 1
+      },
+      "finalProgress": 100
+    },
+    {
+      "name": "nested-other-instance",
+      "secondStartedBeforeRelease": false,
+      "inner": {
+        "started": [
+          0,
+          1
+        ],
+        "active": 0,
+        "maximum": 1
+      },
+      "finalProgress": 100
+    },
+    {
+      "name": "half-even-progress",
+      "progress": [
+        1,
+        0,
+        -1,
+        25,
+        26,
+        50,
+        63,
+        100
+      ]
+    },
+    {
+      "name": "worker-failure",
+      "calls": [
+        0,
+        1,
+        2
+      ],
+      "progress": [
+        33.333333333333336,
+        66.66666666666667,
+        100
+      ],
+      "errors": [
+        "IOException"
+      ]
+    },
+    {
+      "name": "cancel-active-and-queued",
+      "work": {
+        "started": [
+          0,
+          1
+        ],
+        "active": 0,
+        "maximum": 2
+      },
+      "progress": [
+        33.333333333333336,
+        66.66666666666667,
+        100
+      ],
+      "errors": [
+        "OperationCanceledException",
+        "OperationCanceledException"
+      ]
+    },
+    {
+      "name": "empty-and-pre-cancelled",
+      "invoked": 0,
+      "empty": [
+        100
+      ],
+      "cancelled": [
+        100
+      ]
+    },
+    {
+      "name": "dispose-active-and-queued",
+      "enqueueCompletedAtDispose": false,
+      "calledAfterDispose": false,
+      "work": {
+        "started": [
+          1,
+          0
+        ],
+        "active": 0,
+        "maximum": 2
+      },
+      "progress": [
+        66.66666666666667,
+        66.66666666666667
+      ],
+      "afterDisposeProgress": []
+    },
+    {
+      "name": "application-stop-then-dispose",
+      "enqueueCompletedAtStop": false,
+      "work": {
+        "started": [
+          0,
+          1
+        ],
+        "active": 0,
+        "maximum": 2
+      },
+      "progress": [
+        33.333333333333336,
+        66.66666666666667
+      ]
+    },
+    {
+      "name": "configuration-two-to-four",
+      "simultaneous": 4
+    },
+    {
+      "name": "configuration-four-to-two",
+      "simultaneous": 4
+    },
+    {
+      "name": "configuration-two-to-one",
+      "olderQueuedItemStarted": false,
+      "simultaneous": 3
+    },
+    {
+      "name": "independent-instance-lifetime",
+      "remainedActive": true
+    }
+  ]
+}

@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { LibraryMetadataScanService } from '../../src/library/metadata-scan-service.js';
+import { LibraryTaskScheduler } from '../../src/library/library-task-scheduler.js';
 import { ItemUpdateType } from '../../src/metadata/save-manager.js';
 import { idKey } from '../../src/library/records.js';
 import { readCachedFolderChildren, setFolderChildren } from '../../src/library/folder-cache.js';
@@ -67,7 +68,9 @@ function fixture(scenario) {
     }
     return [...result.values()];
   };
-  const scanner = new LibraryMetadataScanService({ library, metadata, configuration: { LibraryScanFanoutConcurrency: 1 },
+  const configuration = { LibraryScanFanoutConcurrency: 1 };
+  const scanner = new LibraryMetadataScanService({ library, metadata, configuration,
+    scheduler: new LibraryTaskScheduler({ configuration }),
     stateLoader: async reference => ({ children: { physical: async item => ownedSequence(physical(item)),
       recursive: async item => ownedSequence(recursive(item)) },
       item: byId.get(idKey(typeof reference === 'string' ? reference : reference.Id)), async close() {} }),

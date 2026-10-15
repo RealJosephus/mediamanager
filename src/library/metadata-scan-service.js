@@ -1,5 +1,3 @@
-import { AsyncLocalStorage } from 'node:async_hooks';
-import { availableParallelism } from 'node:os';
 import { ItemUpdateType } from '../metadata/save-manager.js';
 import { ordinalIgnoreCaseEquals, ordinalIgnoreCaseKey } from '../storage/ordinal-comparer.js';
 import { removeDiacritics } from '../sessions/user-data.js';
@@ -7,7 +5,6 @@ import { dateTicks, idKey, libraryError, nonemptyId, sameId } from './records.js
 import { createMetadataChildren } from './metadata-children.js';
 import { releaseCachedFolderChildren, setFolderChildren } from './folder-cache.js';
 
-const workContext = new AsyncLocalStorage();
 const dayTicks = 864000000000n;
 
 export function metadataScanOptions(options = {}) {
@@ -24,11 +21,12 @@ const receipt = () => ({ attemptedCount: 0, updatedCount: 0, providerFailures: 0
 
 export class LibraryMetadataScanService {
   constructor({ library, metadata, configuration = {}, now = () => new Date().toISOString(), logger = { error() {} },
-    processors = availableParallelism, stateLoader }) {
+    scheduler, stateLoader }) {
     if (!library?.store || !metadata?.refresh || !metadata?.validateRefresh) {
       throw new TypeError('Library metadata traversal requires authoritative library state and a refresh host.');
     }
-    Object.assign(this, { library, metadata, configuration, now, logger, processors, stateLoader });
+    if (!scheduler || typeof scheduler.enqueue !== 'function') throw new TypeError('Library metadata traversal requires the shared library scheduler.');
+    Object.assign(this, { library, metadata, configuration, now, logger, scheduler, stateLoader });
   }
 
   validateRefresh(item, options) { this.metadata.validateRefresh(item, metadataScanOptions(options)); }
@@ -117,63 +115,16 @@ export class LibraryMetadataScanService {
   }
 
   async #runChildren(children, options, recursive, receipt, ancestors, reportProgress, predicate = () => true) {
-    let total = 0;
-    for await (const page of children.pages()) for (const child of page) if (predicate(child)) total++;
-    if (!total || options.signal?.aborted) {
-      this.#progress(reportProgress, 100);
-      return;
-    }
-    const fanout = this.configuration.LibraryScanFanoutConcurrency ?? 0;
-    const count = fanout > 0 ? fanout : Math.max(1, this.processors() - 3);
-    const current = workContext.getStore();
-    const nested = current?.owner === this && current.active;
-    const concurrency = nested ? 1 : Math.min(total, Math.max(1, Math.min(128, count)));
-    const progress = new Map(), active = new Set();
-    let completed = 0, activeProgress = 0, next = 0;
-    const updateProgress = (index, value) => {
-      const rounded = Math.round(value);
-      const previous = progress.get(index);
-      if (previous === rounded) return;
-      activeProgress += rounded - previous;
-      progress.set(index, rounded);
-      this.#progress(reportProgress, (completed * 100 + activeProgress) / total);
-    };
-    const worker = async (index, child, branch) => {
-      progress.set(index, 0);
-      try {
-        if (options.signal?.aborted) {
-          updateProgress(index, 100);
-          return;
-        }
-        const work = { owner: this, active: true };
-        try {
-          await workContext.run(work, () => this.#child(child, options, recursive && child.IsFolder,
-            receipt, branch, value => updateProgress(index, value)));
-        }
-        catch (error) {
-          receipt.errors.push(Object.freeze({ itemId: child.Id, type: child.Type, name: child.Name,
-            code: error.code ?? error.name, message: error.message }));
-          this.#report(error);
-        } finally {
-          work.active = false;
-          updateProgress(index, 100);
-        }
-      } finally { activeProgress -= progress.get(index); progress.delete(index); completed++; }
-    };
-    for await (const page of children.pages()) {
-      const pageWork = [];
-      try {
-        for (const child of page) {
-          if (!predicate(child)) continue;
-          if (active.size >= concurrency) await Promise.race(active);
-          const branch = new Set(ancestors);
-          if (nonemptyId(child.ParentId)) branch.add(idKey(child.ParentId));
-          const work = worker(next++, child, branch);
-          active.add(work); pageWork.push(work);
-          void work.finally(() => active.delete(work));
-        }
-      } finally { await Promise.all(pageWork); }
-    }
+    await this.scheduler.enqueue(children, (child, progress) => {
+      const branch = new Set(ancestors);
+      if (nonemptyId(child.ParentId)) branch.add(idKey(child.ParentId));
+      return this.#child(child, options, recursive && child.IsFolder, receipt, branch, progress);
+    }, { signal: options.signal, reportProgress: value => this.#progress(reportProgress, value), predicate,
+      onError: (error, child) => {
+        receipt.errors.push(Object.freeze({ itemId: child.Id, type: child.Type, name: child.Name,
+          code: error.code ?? error.name, message: error.message }));
+        this.#report(error);
+      } });
   }
 
   async #child(child, options, recursive, receipt, ancestors, reportProgress = () => {}) {
