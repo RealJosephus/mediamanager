@@ -3,7 +3,7 @@ import path from 'node:path';
 import { StorageError } from '../storage/errors.js';
 import { joinPath } from '../storage/paths.js';
 import { EMPTY_ID, VIDEO_TYPES, idKey, nonemptyId, repositoryTopParentId } from './records.js';
-import { compareNativePaths, nativeFileNameWithoutExtension, nativePathKey, sameNativePath } from './native-path.js';
+import { compareNativePaths, nativeFileName, nativeFileNameWithoutExtension, nativePathKey, sameNativePath } from './native-path.js';
 import { filterResolutionCandidates } from './resolution-ignore.js';
 import { createResolvedItemEntity } from './resolved-item-entity.js';
 import { releaseCachedFolderChildren } from './folder-cache.js';
@@ -22,6 +22,10 @@ import { createNativeItemCohort } from './native-item-cohort.js';
 import { metadataChildSequence } from './metadata-child-sequence.js';
 import { nativeTextSql } from '../database/native-text-sql.js';
 import { quoteIdentifier as q } from '../database/model.js';
+import { getNewItemId } from '../core/identity.js';
+import { nativeGuid } from '../users/native.js';
+import { DotIgnoreRule } from './dot-ignore-rule.js';
+import { stateIgnoreFileAccess, stateOwnedFiles } from './state-owned-files.js';
 
 const pathStyle = value => /^(?:[A-Za-z]:[\\/]|[\\/]{2}[^\\/]+[\\/][^\\/]+)/u.test(value) ? 'windows' : 'posix';
 const itemType = item => String(item?.NativeType ?? item?.Type ?? '').split('.').at(-1);
@@ -193,6 +197,8 @@ export class FolderValidationService {
   }
 
   async #resolve(parent, root, collectionContext, onEnumerationReady) {
+    if (itemType(parent) === 'AggregateFolder') return this.#resolveAggregate(parent, onEnumerationReady);
+    if (itemType(parent) === 'PlaylistsFolder') return this.#resolveInstanceFolder(parent, root, collectionContext, onEnumerationReady);
     const accessPath = this.#accessPath(parent);
     const listing = await this.vfs.list(accessPath);
     if (root && idKey(root.Id) === idKey(parent.Id) && itemType(parent) !== 'BoxSet'
@@ -236,10 +242,84 @@ export class FolderValidationService {
     return Object.freeze({ ...resolution, deletionSafe: listing.deletionSafe === true });
   }
 
-  async #isAccessibleTopParent(parent, allowRemoveRoot) {
-    if (parent.IsTopParent !== true && idKey(repositoryTopParentId(parent)) !== idKey(parent.Id)) return true;
+  async #resolveAggregate(parent, onEnumerationReady) {
+    const loaded = await this.#context(parent.Id, { draft: parent });
+    // AggregateFolder.GetFileSystemChildren updates the live location list.
+    // A later metadata save persists that state, including across scans.
+    const resolution = await loaded.rootFolderResolveArgs(true);
+    onEnumerationReady();
+    const claims = [];
+    for (const file of resolution.files) if (file.IsDirectory && file.Exists !== false) {
+      const nativeType = 'MediaBrowser.Controller.Entities.Folder';
+      claims.push(Object.freeze({
+        Id: nativeGuid(getNewItemId(file.Path, nativeType, {
+          programDataPath: this.programDataPath,
+          enableCaseSensitiveItemIds: this.configuration.EnableCaseSensitiveItemIds
+        })),
+        nativeType, identityPath: file.Path,
+        entry: { kind: 'directory', name: file.Name ?? nativeFileName(file.Path) },
+        draft: { Name: file.Name ?? nativeFileName(file.Path), IsFolder: true, MediaType: 'Unknown', SourceType: 'Library' }
+      }));
+    }
+    // CreateRootFolder appends its registered plug-in entities after resolving
+    // physical locations. They are live entities, not resolver constructions.
+    for (const item of parent.VirtualChildren) claims.push(Object.freeze({
+      Id: item.Id, nativeType: item.NativeType, identityPath: item.Path,
+      entry: { kind: 'directory', name: nativeFileName(item.Path) },
+      draft: { Name: item.Name, IsFolder: true, MediaType: item.MediaType, SourceType: item.SourceType },
+      resolvedEntity: item
+    }));
+    return Object.freeze({ claims: Object.freeze(claims), withheldPaths: Object.freeze([]), deletionSafe: true });
+  }
+
+  async #resolveInstanceFolder(parent, root, collectionContext, onEnumerationReady) {
+    const loaded = await this.#context(parent.Id, { draft: parent });
+    const assets = loaded.context.imageAssets, files = stateOwnedFiles(assets);
+    const ignoreRule = new DotIgnoreRule({ fileAccess: stateIgnoreFileAccess(assets, this.ignoreRule.fileAccess) });
+    const snapshots = new Map();
+    const snapshot = identityPath => {
+      const key = nativePathKey(identityPath);
+      if (!snapshots.has(key)) snapshots.set(key, (async () => {
+        const listing = await files.list(identityPath);
+        // This namespace is used only for direct-child provenance checks;
+        // every actual read is through the confined instance asset source.
+        const candidates = listing.entries.map(entry => ({ identityPath: entry.Path,
+          accessPath: entry.Path.replaceAll('\\', '/'), entry }));
+        return { listing, candidates };
+      })());
+      return snapshots.get(key);
+    };
+    const filter = async raw => ({ ...raw, candidates: await filterResolutionCandidates(raw.candidates, {
+      ignoreRule, parent, root, applicationRootPath: this.applicationRootPath }) });
+    const initial = await filter(await snapshot(parent.Path));
+    const resolution = await this.resolverPipeline.resolve({ parent, root, collectionContext,
+      candidates: initial.candidates, deletionSafe: true, onEnumerationReady,
+      peekDirectory: async (candidate, { forExtras = false } = {}) => {
+        const raw = await snapshot(candidate.identityPath);
+        return forExtras ? raw : filter(raw);
+      },
+      getExtraCandidates: async candidate => {
+        const raw = await snapshot(candidate?.identityPath ?? parent.Path);
+        return filter(raw);
+      },
+      resolveExtra: async ({ candidate }) => (await filterResolutionCandidates([candidate], {
+        ignoreRule, applicationRootPath: this.applicationRootPath })).length > 0 });
+    return Object.freeze({ ...resolution, deletionSafe: true });
+  }
+
+  async #isAccessibleTopParent(parent, allowRemoveRoot, resolvedParent) {
+    if (itemType(parent) !== 'PlaylistsFolder' && itemType(resolvedParent) !== 'AggregateFolder'
+      && parent.IsTopParent !== true && idKey(repositoryTopParentId(parent)) !== idKey(parent.Id)) return true;
     if (!allowRemoveRoot && (itemType(parent) === 'BoxSet'
       || nativeFileNameWithoutExtension(parent.Path)?.toLowerCase() === 'collections')) return true;
+    if (itemType(parent) === 'PlaylistsFolder') {
+      const loaded = await this.#context(parent.Id, { draft: parent });
+      try { return (await loaded.rootFolderResolveArgs(false)).files.length > 0; }
+      catch (error) {
+        if (['not-found', 'not-directory', 'permission-denied', 'authentication-required'].includes(error?.code)) return false;
+        throw error;
+      }
+    }
     const accessPath = this.#accessPath(parent);
     try { return (await this.vfs.list(accessPath)).entries.length > 0; }
     catch (error) {
@@ -388,10 +468,10 @@ export class FolderValidationService {
 
   async #validateChildren(parent, { collectionType, signal, recursive,
     refreshChildMetadata, allowRemoveRoot, reportProgress, ...metadataRefreshOptions }) {
-    // Playlist overrides ValidateChildrenInternal with Task.CompletedTask.
+    // Playlist and CollectionFolder override validation with a completed task.
     // The outer Folder wrapper still clears children, without touching the
     // filesystem, persistence, refresh lifecycle, progress or cancellation.
-    if (itemType(parent) === 'Playlist' && parent?.IsFolder === true) {
+    if (['Playlist', 'CollectionFolder'].includes(itemType(parent)) && parent?.IsFolder === true) {
       releaseCachedFolderChildren(parent);
       return Object.freeze({ created: Object.freeze([]), resolved: Object.freeze([]), skipped: false });
     }
@@ -447,7 +527,7 @@ export class FolderValidationService {
       progress(7);
       throwIfAborted(signal);
       const loaded = await this.#context(parent.Id, { draft: parent });
-      const entities = new Map(resolution.claims.map(claim => [idKey(claim.Id), this.#retain(createResolvedItemEntity(claim, {
+      const entities = new Map(resolution.claims.map(claim => [idKey(claim.Id), this.#retain(claim.resolvedEntity ?? createResolvedItemEntity(claim, {
         parent,
         parents: loaded.parents,
         metadataConfiguration: this.metadataConfiguration,
@@ -476,7 +556,7 @@ export class FolderValidationService {
       for (const claim of resolution.claims) {
         const item = currentById.get(idKey(claim.Id));
         const entity = entities.get(idKey(claim.Id));
-        if (!await this.#isAccessibleTopParent(entity, allowRemoveRoot)) {
+        if (!await this.#isAccessibleTopParent(entity, allowRemoveRoot, parent)) {
           if (item) valid.set(idKey(item.Id), item);
           childProcessed();
           continue;

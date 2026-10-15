@@ -218,6 +218,8 @@ export class DirectoryItemResolverPipeline {
     }
     let itemSource = primary;
     let nestedDirectorySource = false;
+    const bookDirectorySource = nativeType === 'MediaBrowser.Controller.Entities.Book'
+      && raw.itemSource?.entry?.kind === 'directory';
     const replacementPaths = [];
     if (Object.hasOwn(raw, 'itemSource')) {
       const provenance = raw.itemSource && typeof raw.itemSource === 'object'
@@ -232,7 +234,8 @@ export class DirectoryItemResolverPipeline {
       if (!provenance.deletionSafe) {
         throw invalid(`Directory item resolver ${resolver.id} returned an item source from a weak directory snapshot.`);
       }
-      if (!directMember || directorySource && (!Array.isArray(raw.directoryParts) || raw.directoryParts.length === 0)) {
+      if (!directMember || directorySource && !bookDirectorySource
+        && (!Array.isArray(raw.directoryParts) || raw.directoryParts.length === 0)) {
         throw invalid(`Directory item resolver ${resolver.id} returned an invalid item source.`);
       }
       itemSource = raw.itemSource;
@@ -290,7 +293,7 @@ export class DirectoryItemResolverPipeline {
       throw invalid(`Directory item resolver ${resolver.id} returned an invalid nested item shape.`);
     }
     if (itemSource !== primary && itemSource?.entry?.kind === 'directory'
-      && !['Dvd', 'BluRay'].includes(normalizedDraft.data?.VideoType)) {
+      && !bookDirectorySource && !['Dvd', 'BluRay'].includes(normalizedDraft.data?.VideoType)) {
       throw invalid(`Directory item resolver ${resolver.id} returned an unsupported directory item source.`);
     }
     const Id = this.#id(itemSource.identityPath, nativeType);
@@ -422,8 +425,9 @@ export class DirectoryItemResolverPipeline {
         entry: partCandidate.entry
       }));
     }
-    if (nestedDirectorySource && (local.size !== directoryParts.length + 2
-      || directoryParts.length === 0)) {
+    if (nestedDirectorySource && (bookDirectorySource
+      ? local.size !== 2 || directoryParts.length !== 0
+      : local.size !== directoryParts.length + 2 || directoryParts.length === 0)) {
       throw invalid(`Directory item resolver ${resolver.id} returned an invalid multi-disc directory claim.`);
     }
     for (const owner of [{ Id, draft: normalizedDraft }, ...localAlternates]) {
@@ -564,13 +568,13 @@ export class DirectoryItemResolverPipeline {
     catch { /* Resolver diagnostics cannot replace native fallback behavior. */ }
   }
 
-  async #call(resolver, method, context, signal, { continueOnError = false, propagateErrors } = {}) {
+  async #call(resolver, method, context, signal, { continueOnError = false } = {}) {
     checkAbort(signal);
     let result;
     try { result = await resolver[method](context); }
     catch (error) {
       checkAbort(signal);
-      if (!continueOnError || pipelineInvariantErrors.has(error) || propagateErrors?.has(error)) throw error;
+      if (!continueOnError || pipelineInvariantErrors.has(error)) throw error;
       this.#report(error, resolver, method);
       return null;
     }
@@ -589,14 +593,6 @@ export class DirectoryItemResolverPipeline {
     checkAbort(signal);
     const byPath = indexCandidates(candidates);
     const ordered = [...candidates];
-    const hostObservationErrors = new Set();
-    const observeHost = async operation => {
-      try { return await operation(); }
-      catch (error) {
-        hostObservationErrors.add(error);
-        throw error;
-      }
-    };
     const state = { byPath, claims: [], consumedPaths: new Map(), withheldPaths: new Set(), itemIds: new Set(),
       peekedCandidates: new WeakMap(), primaryPeekedCandidates: new WeakMap(), peekedDirectories: new WeakMap(),
       extraByPath: new Map(), extraDeletionSafe: deletionSafe, deletionSafe };
@@ -624,9 +620,22 @@ export class DirectoryItemResolverPipeline {
       }
       return snapshot;
     };
-    const resolverPeekDirectory = peekDirectory == null ? undefined : async (candidate, options) => {
-      const snapshot = await observeHost(() => peekDirectory(candidate, options)); checkAbort(signal);
-      return recordPeek(candidate, snapshot, { primary: options?.forExtras !== true });
+    const primarySnapshots = new WeakMap();
+    const resolverPeekDirectory = peekDirectory == null ? undefined : (candidate, options) => {
+      const primary = options?.forExtras !== true;
+      const cacheable = options == null || Reflect.ownKeys(options).length === 0;
+      if (cacheable && primarySnapshots.has(candidate)) return primarySnapshots.get(candidate);
+      const pending = (async () => {
+        const snapshot = await peekDirectory(candidate, options); checkAbort(signal);
+        return recordPeek(candidate, snapshot, { primary });
+      })();
+      if (cacheable) {
+        primarySnapshots.set(candidate, pending);
+        void pending.catch(() => {
+          if (primarySnapshots.get(candidate) === pending) primarySnapshots.delete(candidate);
+        });
+      }
+      return pending;
     };
     const resolverExtraCandidates = getExtraCandidates == null ? undefined : async candidate => {
       if (candidate != null && (candidate.entry?.kind !== 'directory'
@@ -634,7 +643,7 @@ export class DirectoryItemResolverPipeline {
           && state.extraByPath.get(keyFor(candidate.identityPath)) !== candidate)) {
         throw invalid('An owned-extra snapshot was requested outside the directory observations.');
       }
-      const snapshot = await observeHost(() => getExtraCandidates(candidate)); checkAbort(signal);
+      const snapshot = await getExtraCandidates(candidate); checkAbort(signal);
       const extraByPath = indexCandidates(snapshot?.candidates);
       if (candidate != null) recordPeek(candidate, snapshot);
       else {
@@ -646,10 +655,8 @@ export class DirectoryItemResolverPipeline {
       }
       return snapshot.candidates;
     };
-    const resolverResolveExtra = resolveExtra == null ? undefined
-      : (...args) => observeHost(() => resolveExtra(...args));
     const base = { parent, root, collectionContext, candidates: ordered, available, deletionSafe,
-      peekDirectory: resolverPeekDirectory, getExtraCandidates: resolverExtraCandidates, resolveExtra: resolverResolveExtra, signal };
+      peekDirectory: resolverPeekDirectory, getExtraCandidates: resolverExtraCandidates, resolveExtra, signal };
     let singleCandidates = ordered, multiItemWinner = false;
 
     for (const resolver of this.#resolvers.filter(value => typeof value.resolveMultiple === 'function')) {
@@ -701,7 +708,7 @@ export class DirectoryItemResolverPipeline {
     const singleKeys = new Set(singleCandidates.map(candidate => keyFor(candidate.identityPath)));
     const folderResolver = { id: folderFallbackResolverId, declaredTypes: new Map([[folderNativeType, { isFolder: true }]]) };
     const singleResults = new Map();
-    const resolveSingle = async (candidate, limit = this.#resolvers.length) => {
+    const resolveSingleItem = async (candidate, limit) => {
       if (unavailable(candidate)) return;
       const method = candidate.entry.kind === 'file' ? 'resolveFile' : 'resolveDirectory';
       let results = singleResults.get(candidate);
@@ -712,7 +719,7 @@ export class DirectoryItemResolverPipeline {
         if (typeof resolver[method] !== 'function') continue;
         if (!results.has(index)) results.set(index, await this.#call(resolver, method, { ...base, candidate,
           available: singleCandidates.filter(value => !unavailable(value)) }, signal,
-        { continueOnError: true, propagateErrors: hostObservationErrors }));
+        { continueOnError: true }));
         const result = results.get(index);
         if (result == null) continue;
         if (Object.hasOwn(result, 'withhold')) {
@@ -734,10 +741,39 @@ export class DirectoryItemResolverPipeline {
         this.#claim(result, resolver, state, candidate, singleKeys);
         return;
       }
+      checkAbort(signal);
       if (limit === this.#resolvers.length && candidate.entry.kind === 'directory' && !unavailable(candidate)) this.#claim({
         nativeType: folderNativeType, primary: candidate, consumedPaths: [candidate], traversal: 'children',
         draft: { Name: candidate.entry.name, IsFolder: true, MediaType: 'Unknown', SourceType: 'Library' }
       }, folderResolver, state, candidate, singleKeys);
+    };
+    const failedSingles = new WeakSet();
+    const resolveSingle = async (candidate, limit = this.#resolvers.length) => {
+      checkAbort(signal);
+      if (unavailable(candidate) || failedSingles.has(candidate)) return;
+      if (candidate.entry.kind === 'directory' && resolverPeekDirectory) {
+        try {
+          // ResolvePath gathers the candidate's children before invoking any
+          // concrete resolver. Resolvers share that initial observation.
+          await resolverPeekDirectory(candidate);
+        } catch (error) {
+          checkAbort(signal);
+          if (pipelineInvariantErrors.has(error)) throw error;
+          // ResolveFileList skips this path while retaining sibling results.
+          // Reads made later inside a resolver use its own recovery boundary.
+          this.#report(error, { id: 'path-resolution' }, 'resolvePath');
+          if (parent?.IsPhysicalRoot !== true) {
+            failedSingles.add(candidate);
+            return;
+          }
+          // ResolvePath treats an unreadable child of the physical root as
+          // an empty directory and still invokes its concrete resolvers.
+          const snapshot = recordPeek(candidate, { listing: { deletionSafe: true }, candidates: [] }, { primary: true });
+          primarySnapshots.set(candidate, Promise.resolve(snapshot));
+        }
+      }
+      checkAbort(signal);
+      await resolveSingleItem(candidate, limit);
     };
     // ResolvePaths returns a lazy single-item sequence, while a multi-item
     // winner eagerly resolves its extras before returning the completed list.

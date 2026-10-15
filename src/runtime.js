@@ -313,8 +313,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
   const libraryMonitor = new InertLibraryDirectoryMonitor();
   const libraryScanLifecycle = libraryScanHost ? new LibraryScanLifecycle({ host: libraryScanHost,
     monitor: libraryMonitor, postScanTasks: [splashscreenPostScanTask, artistsPostScanTask, collectionPosterVerifyPostScanTask, genresPostScanTask, musicGenresPostScanTask, studiosPostScanTask, cleanDatabasePostScanTask], logger }) : undefined;
-  const libraryScanner = folderScanner ? new LibraryScanService({ library, folderScanner,
-    lifecycle: libraryScanLifecycle, onError }) : undefined;
+  const libraryScanner = libraryScanLifecycle ? new LibraryScanService({ lifecycle: libraryScanLifecycle, onError }) : undefined;
   if (libraryScanner) rollback.push(() => libraryScanner.close());
   const tasks = new ScheduledTaskManager({ scanner: libraryScanner, localization, onError, programDataPath, configurationDirectoryPath, dataPath });
   await plugins.bind('task', extension => tasks.register(extension));

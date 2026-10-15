@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <JellyfinDllDirectory Condition="'$(JellyfinDllDirectory)' == ''">$(MEDIAMANAGER_JELLYFIN_DLL_DIRECTORY)</JellyfinDllDirectory>
+    <JellyfinDllDirectory Condition="'$(JellyfinDllDirectory)' == '' And '$(MEDIAMANAGER_JELLYFIN_DLL)' != ''">$([System.IO.Path]::GetDirectoryName('$(MEDIAMANAGER_JELLYFIN_DLL)'))</JellyfinDllDirectory>
+  </PropertyGroup>
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <Reference Include="$(JellyfinDllDirectory)/*.dll" />
+    <None Include="$(JellyfinDllDirectory)/runtimes/win-x64/native/e_sqlite3.dll" Link="e_sqlite3.dll" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+  <Target Name="RequireDesignatedNativeInput" BeforeTargets="ResolveReferences">
+    <Error Condition="'$(JellyfinDllDirectory)' == '' Or !Exists('$(JellyfinDllDirectory)/jellyfin.dll')" Text="Supply the designated independently built native runtime directory." />
+  </Target>
+</Project>

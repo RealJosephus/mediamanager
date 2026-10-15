@@ -11,6 +11,8 @@ export class LibraryScanLifecycle {
     if (!monitor || typeof monitor.stop !== 'function' || typeof monitor.start !== 'function') throw new TypeError('Library scanning requires a directory monitor.');
     Object.assign(this, { host, monitor, postScanTasks, logger });
     this.capabilities = Object.freeze({
+      ...host.capabilities,
+      watchesLibraryDirectories: monitor.capabilities?.watchesLibraryDirectories === true,
       reconcilesTopLevelConfiguration: host.capabilities?.reconcilesTopLevelConfiguration === true,
       runsPostScanTasks: host.capabilities?.runsPostScanTasks === true
     });
@@ -60,7 +62,7 @@ export class LibraryScanLifecycle {
     reportProgress(100);
   }
 
-  async run({ signal, reportProgress = () => {}, scan } = {}) {
+  async run({ signal, reportProgress = () => {} } = {}) {
     this.isScanRunning = true;
     await this.host.clearIgnoreRuleCache();
     // Stop is outside the native try/finally; a Stop failure leaves scan state set.
@@ -72,11 +74,10 @@ export class LibraryScanLifecycle {
       const scanOptions = { ...metadataOptions(), signal, recursive: true,
         refreshChildMetadata: true, allowRemoveRoot: false,
         reportProgress: (value, detail) => reportProgress(value * 0.96, detail) };
-      const result = scan ? await scan(scanOptions) : await this.host.validateChildren(aggregate, scanOptions);
+      await this.host.validateChildren(aggregate, scanOptions);
       reportProgress(96);
       await this.runPostScanTasks({ signal, reportProgress: value => reportProgress(96 + value * 0.04) });
       reportProgress(100);
-      return result;
     } finally {
       await this.host.clearIgnoreRuleCache();
       await this.monitor.start();

@@ -4,7 +4,6 @@ import * as fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { setTimeout as delay } from 'node:timers/promises';
-import { tableDefinition } from '../../src/database/model.js';
 import { createRuntime } from '../../src/runtime.js';
 import { IdentityAccessMap, StorageRegistry, VirtualFileSystem } from '../../src/storage/index.js';
 import { MemoryStorageAdapter } from '../../src/storage/testing/memory-adapter.js';
@@ -13,29 +12,9 @@ import { refreshLibraryTaskId } from '../../src/tasks/index.js';
 import { tmdbUpcomingEpisodesTaskId } from '../../plugins/tmdb/task.js';
 import { createPostgresTestDatabase } from '../database/postgres-fixture.js';
 
-const ids = {
-  root: '52000000-0000-0000-0000-000000000001',
-  aggregate: '52000000-0000-0000-0000-000000000002',
-  collection: '52000000-0000-0000-0000-000000000003',
-  physical: '52000000-0000-0000-0000-000000000004',
-  dangling: '52000000-0000-0000-0000-000000000099'
-};
 const physicalPath = 'Z:\\LibraryRefresh';
 
-function blank(table) {
-  return Object.fromEntries(tableDefinition(table).columns.filter(column => !column.generated).map(column => {
-    const type = column.clrType.replace('?', '');
-    return [column.name, type === 'DateTime' ? '2026-09-27 00:00:00'
-      : column.nullable ? null : type === 'bool' ? false : column.type === 'TEXT' ? '' : type === 'long' || type === 'uint' ? 0n : 0];
-  }));
-}
-
-function item(Id, Type, values = {}) {
-  return { ...blank('BaseItems'), Id, Type: `MediaBrowser.Controller.Entities.${Type}`, Name: Type,
-    CleanName: Type.toLowerCase(), SortName: Type.toLowerCase(), MediaType: 'Unknown', Data: '{}', ...values };
-}
-
-test('incomplete Library Refresh is capability-gated while the runtime coordinator can restart physical roots', {
+test('incomplete Library Refresh is capability-gated while the aggregate coordinator restarts configured roots', {
   skip: !process.env.MEDIAMANAGER_TEST_POSTGRES
 }, async t => {
   const database = await createPostgresTestDatabase(t, 'library_refresh');
@@ -78,13 +57,6 @@ test('incomplete Library Refresh is capability-gated while the runtime coordinat
     serverId: 'library-refresh-http-test', onError: error => errors.push(error) });
   try {
     assert.deepEqual(errors, [], 'isolated runtime startup must not report errors');
-    await database.insert('BaseItems', item(ids.root, 'UserRootFolder', { IsFolder: true }));
-    await database.insert('BaseItems', item(ids.aggregate, 'AggregateFolder', { IsFolder: true }));
-    await database.insert('BaseItems', item(ids.collection, 'CollectionFolder', { IsFolder: true, ParentId: ids.root,
-      Data: JSON.stringify({ CollectionType: 'movies', PhysicalFolderIds: [ids.dangling], PhysicalLocationsList: ['z:/libraryrefresh/'] }) }));
-    await database.insert('BaseItems', item(ids.physical, 'Folder', { IsFolder: true, ParentId: ids.aggregate,
-      TopParentId: ids.physical, Path: physicalPath, Data: JSON.stringify({ SourceType: 'Library' }) }));
-
     const admin = await runtime.users.createUser({ Name: 'Library scan admin', Password: 'password' });
     await runtime.users.updatePolicy(admin.Id, { ...(await runtime.users.getUser(admin.Id)).Policy, IsAdministrator: true });
     await runtime.users.createUser({ Name: 'Library scan reader', Password: 'password' });
@@ -103,7 +75,7 @@ test('incomplete Library Refresh is capability-gated while the runtime coordinat
 
     assert.equal((await refresh(readerLogin.AccessToken)).status, 403);
     assert.equal((await refresh(adminLogin.AccessToken)).status, 501);
-    assert.equal(listingCalls, 0, 'the incomplete public endpoint must not start a partial scan');
+    assert.equal(listingCalls, 0, 'the incomplete public endpoint must not start scanning');
     assert.equal(errors.length, 1);
     assert.equal(errors[0].status, 501);
     errors.length = 0;
@@ -119,13 +91,18 @@ test('incomplete Library Refresh is capability-gated while the runtime coordinat
     assert.equal((await fetch(`${origin}/ScheduledTasks/Running/${refreshLibraryTaskId}`, {
       method: 'POST', headers: taskHeaders(adminLogin.AccessToken)
     })).status, 501);
-    assert.equal(listingCalls, 0, 'the scheduled task must not run the partial physical-root coordinator');
+    assert.equal(listingCalls, 0, 'the incomplete scheduled task must not start scanning');
     assert.equal(errors.length, 1);
     assert.equal(errors[0].code, 'task-unavailable');
     errors.length = 0;
 
+    const collectionPath = path.join(programDataPath, 'root', 'default', 'Movies');
+    await fs.mkdir(collectionPath, { recursive: true });
+    await fs.writeFile(path.join(collectionPath, 'movies.collection'), '');
+    await fs.writeFile(path.join(collectionPath, 'root.mblink'), physicalPath);
+
     runtime.libraryScanner.queue();
-    await Promise.race([listingEntered, delay(2000).then(() => { throw new Error('The physical root scan did not start.'); })]);
+    await Promise.race([listingEntered, delay(2000).then(() => { throw new Error('The configured aggregate scan did not start.'); })]);
 
     await adapter.mkdir('/Latest');
     runtime.libraryScanner.queue();

@@ -39,6 +39,9 @@ export class LibraryScanHost {
     }
     Object.assign(this, { store, library, itemCreation, metadataScanner, topLevelValidation, ignoreRule, now });
     this.capabilities = Object.freeze({
+      resolvesProductionMediaFiles: library.folderValidation?.resolverPipeline?.capabilities.resolvesProductionMediaFiles === true,
+      productionMediaScopes: library.folderValidation?.resolverPipeline?.capabilities.productionMediaScopes ?? Object.freeze([]),
+      runsMetadataProbeRefresh: typeof metadataScanner.refreshAccessibleChildren === 'function',
       reconcilesTopLevelConfiguration: topLevelValidation.capabilities?.reconcilesTopLevelConfiguration === true,
       runsPostScanTasks: false
     });
@@ -76,10 +79,31 @@ export class LibraryScanHost {
       if (type === 'UserRootFolder' && !resolved.persisted) {
         await this.itemCreation.saveItems([resolved.item], { creationIntent: 'library-save' });
       }
-      if (this.#roots.has(type)) { resolved.owner.release(); return this.#roots.get(type).item; }
+      if (type === 'AggregateFolder') {
+        const dataPath = this.library.options.dataPath ?? path.join(this.library.options.programDataPath, 'data');
+        const playlistPath = path.join(dataPath, 'playlists');
+        const playlistId = nativeGuid(getNewItemId(playlistPath, 'Emby.Server.Implementations.Playlists.PlaylistsFolder', {
+          programDataPath: path.resolve(this.library.options.programDataPath),
+          enableCaseSensitiveItemIds: this.library.options.configuration?.EnableCaseSensitiveItemIds
+        }));
+        const playlist = await this.itemCreation.getItemById(playlistId);
+        if (!playlist || itemType(playlist) !== 'PlaylistsFolder' || !sameNativePath(playlist.Path, playlistPath)) {
+          throw new Error('The registered playlists folder is not initialized.');
+        }
+        const playlistOwner = this.itemCreation.retainItem(playlist);
+        resolved.virtualOwners = [playlistOwner];
+        resolved.item.VirtualChildren.splice(0, resolved.item.VirtualChildren.length, playlist);
+      }
+      if (this.#roots.has(type)) {
+        for (const owner of resolved.virtualOwners ?? []) owner.release();
+        resolved.owner.release(); return this.#roots.get(type).item;
+      }
       this.#roots.set(type, resolved);
       return resolved.item;
-    } catch (error) { resolved.owner.release(); await this.itemCreation.linkedChildren.flushReleases(); throw error; }
+    } catch (error) {
+      for (const owner of resolved.virtualOwners ?? []) owner.release();
+      resolved.owner.release(); await this.itemCreation.linkedChildren.flushReleases(); throw error;
+    }
   }
 
   getAggregateFolder() { return this.#root('AggregateFolder'); }
@@ -258,7 +282,10 @@ export class LibraryScanHost {
 
   updateInheritedValues() { return updateInheritedValues(this.store); }
   async close() {
-    for (const root of this.#roots.values()) root.owner.release();
+    for (const root of this.#roots.values()) {
+      for (const owner of root.virtualOwners ?? []) owner.release();
+      root.owner.release();
+    }
     this.#roots.clear();
     await this.itemCreation.linkedChildren.flushReleases();
   }

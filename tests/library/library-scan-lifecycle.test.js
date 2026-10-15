@@ -151,64 +151,55 @@ for (const dialect of ['postgres']) for (const sample of input.filter(sample => 
   });
 }
 
-test('root coordinator uses the native lifecycle and preserves monotonic task progress', async () => {
+
+test('global coordinator delegates recursive aggregate traversal to the native lifecycle', async () => {
   const fixture = lifecycleFor({ postTasks: [{ name: 'a', progress: [100, 0, 50] }, { name: 'b', progress: [100] }] });
-  const reported = [], roots = [{ Id: 'one', Path: '/one' }, { Id: 'two', Path: '/two' }];
-  const scanner = new LibraryScanService({ library: { getPhysicalScanRoots: async () => roots }, lifecycle: fixture.lifecycle,
-    folderScanner: { supports: () => true, scan: async item => { fixture.calls.push({ action: 'physical-' + item.Id }); return { structurallyComplete: true, incompleteReasons: [] }; } } });
+  const reported = [], scanner = new LibraryScanService({ lifecycle: fixture.lifecycle });
   const result = await scanner.runCompleteScan({ reportProgress: value => reported.push(value) });
-  await scanner.close();
-  assert.equal(result.rootCount, 2); assert.equal(result.structurallyComplete, true);
+  await scanner.close(); assert.equal(result, null);
   assert.equal(scanner.capabilities.completeLibraryScan, false);
-  assert.deepEqual(fixture.calls.filter(call => /physical|post-|update-inherited|monitor-/.test(call.action)).map(call => call.action),
-    ['monitor-stop', 'physical-one', 'physical-two', 'post-a', 'post-b', 'update-inherited', 'monitor-start']);
+  assert.deepEqual(fixture.calls.filter(call => /recursive-aggregate|post-|update-inherited|monitor-/.test(call.action)).map(call => call.action),
+    ['monitor-stop', 'recursive-aggregate', 'post-a', 'post-b', 'update-inherited', 'monitor-start']);
   assert.ok(reported.every((value, index) => value >= 0 && value <= 99 && (!index || value >= reported[index - 1])));
   assert.ok(reported.includes(96)); assert.equal(reported.at(-1), 99);
 });
 
-test('a failed root restores monitoring and prevents post-scan cleanup of partial state', async () => {
+test('an uncaught aggregate validation failure restores monitoring and prevents post-scan cleanup', async () => {
   const fixture = lifecycleFor({ postTasks: [{ name: 'a' }] });
-  const scanner = new LibraryScanService({ library: { getPhysicalScanRoots: async () => [{ Id: 'one' }] }, lifecycle: fixture.lifecycle,
-    folderScanner: { supports: () => true, scan: async () => { throw Object.assign(new Error('Failed physical scan'), { code: 'physical-scan-failed' }); } } });
-  await assert.rejects(scanner.runCompleteScan(), { code: 'physical-scan-failed' });
-  await scanner.close();
-  assert.equal(fixture.calls.at(-1).action, 'monitor-start');
-  assert.equal(fixture.lifecycle.isScanRunning, false);
+  const validate = fixture.host.validateChildren;
+  fixture.host.validateChildren = async (item, options) => {
+    if (options.recursive) throw Object.assign(new Error('Failed aggregate scan'), { code: 'aggregate-scan-failed' });
+    return validate(item, options);
+  };
+  const scanner = new LibraryScanService({ lifecycle: fixture.lifecycle });
+  await assert.rejects(scanner.runCompleteScan(), { code: 'aggregate-scan-failed' }); await scanner.close();
+  assert.equal(fixture.calls.at(-1).action, 'monitor-start'); assert.equal(fixture.lifecycle.isScanRunning, false);
   assert.ok(!fixture.calls.some(call => call.action.startsWith('post-') || call.action === 'update-inherited'));
 });
 
 test('a queued replacement drains the cancelled lifecycle before starting its successor', async () => {
-  const fixture = lifecycleFor({ postTasks: [{ name: 'a' }] });
-  const started = Promise.withResolvers();
-  let rootCalls = 0;
-  const scanner = new LibraryScanService({ library: { getPhysicalScanRoots: async () => [{ Id: 'one' }] }, lifecycle: fixture.lifecycle,
-    folderScanner: { supports: () => true, scan: async (root, { signal }) => {
-      if (++rootCalls === 1) {
-        started.resolve();
-        await new Promise((resolve, reject) => signal.addEventListener('abort', () => reject(new StorageError('cancelled', 'Superseded scan')), { once: true }));
-      }
-      return { structurallyComplete: true, incompleteReasons: [] };
-    } } });
-  const first = scanner.queue();
-  await started.promise;
-  const second = scanner.queue();
-  assert.equal((await first).status, 'cancelled');
-  assert.equal((await second).status, 'completed');
-  await scanner.close();
+  const fixture = lifecycleFor({ postTasks: [{ name: 'a' }] }), started = Promise.withResolvers();
+  const validate = fixture.host.validateChildren; let recursiveCalls = 0;
+  fixture.host.validateChildren = async (item, options) => {
+    if (options.recursive && ++recursiveCalls === 1) {
+      started.resolve();
+      await new Promise((resolve, reject) => options.signal.addEventListener('abort', () => reject(new StorageError('cancelled', 'Superseded scan')), { once: true }));
+    }
+    return validate(item, options);
+  };
+  const scanner = new LibraryScanService({ lifecycle: fixture.lifecycle });
+  const first = scanner.queue(); await started.promise; const second = scanner.queue();
+  assert.equal((await first).status, 'cancelled'); assert.equal((await second).status, 'completed'); await scanner.close();
   assert.deepEqual(fixture.calls.filter(call => /post-|update-inherited|monitor-/.test(call.action)).map(call => call.action),
     ['monitor-stop', 'monitor-start', 'monitor-stop', 'post-a', 'update-inherited', 'monitor-start']);
   assert.equal(fixture.lifecycle.isScanRunning, false);
 });
 
 test('progress observer rejection cannot prevent post-scan work or monitor restoration', async () => {
-  const fixture = lifecycleFor({ postTasks: [{ name: 'a', progress: [50, 100] }] });
-  const errors = [];
-  const scanner = new LibraryScanService({ library: { getPhysicalScanRoots: async () => [{ Id: 'one' }] }, lifecycle: fixture.lifecycle,
-    folderScanner: { supports: () => true, scan: async () => ({ structurallyComplete: true, incompleteReasons: [] }) }, onError: error => errors.push(error.message) });
+  const fixture = lifecycleFor({ postTasks: [{ name: 'a', progress: [50, 100] }] }), errors = [];
+  const scanner = new LibraryScanService({ lifecycle: fixture.lifecycle, onError: error => errors.push(error.message) });
   const result = await scanner.runCompleteScan({ reportProgress: async () => { throw new Error('Observer rejected progress'); } });
-  await scanner.close();
-  assert.equal(result.structurallyComplete, true);
+  await scanner.close(); assert.equal(result, null);
   assert.ok(errors.length > 0); assert.ok(errors.every(message => message === 'Observer rejected progress'));
-  assert.equal(fixture.calls.at(-1).action, 'monitor-start');
-  assert.ok(fixture.calls.some(call => call.action === 'update-inherited'));
+  assert.equal(fixture.calls.at(-1).action, 'monitor-start'); assert.ok(fixture.calls.some(call => call.action === 'update-inherited'));
 });

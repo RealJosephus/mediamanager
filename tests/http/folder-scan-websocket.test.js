@@ -132,7 +132,7 @@ test('elevated folder Refresh scans folders and an ordinary root movie, then pub
       'ordinary-movies-homevideos-and-musicvideos', 'audiobook-files-and-single-file-directories']);
   assert.equal(runtime.folderScanner.capabilities.relationshipRows, false);
   assert.equal(runtime.libraryScanner.capabilities.completeLibraryScan, false);
-  assert.equal(runtime.libraryScanner.capabilities.scope, 'physical-folder-root-coordination');
+  assert.equal(runtime.libraryScanner.capabilities.scope, 'aggregate-folder-validation');
   assert.equal(runtime.libraryScanner.capabilities.scansMediaFiles, false);
   assert.equal(runtime.libraryScanner.capabilities.resolvesProductionMediaFiles, true);
   assert.deepEqual(runtime.libraryScanner.capabilities.productionMediaScopes,

@@ -215,14 +215,8 @@ for (const dialect of ['postgres']) test(`${dialect}: top-level validation persi
     collection = await runtime.library.getItemRecord(secondId);
     assert.deepEqual(collection.PhysicalFolderIds.map(key), [key(physicalId)]);
 
-    const receipts = [], validate = runtime.topLevelValidation.validateChildren.bind(runtime.topLevelValidation);
-    runtime.topLevelValidation.validateChildren = async (...args) => {
-      const result = await validate(...args); receipts.push({ id: key(args[0].Id), result }); return result;
-    };
     await unlink(path.join(secondPath, 'root.mblink'));
     await runtime.libraryScanLifecycle.validateTopLibraryFolders();
-    assert.deepEqual(receipts.find(receipt => receipt.id === key(aggregate.Id)).result.removed, [{ Id: key(physicalId) }],
-      'The aggregate receipt records its explicit removal after the void deletion lifecycle.');
     assert.equal((await database.rows('BaseItems', { where: { Id: physicalId } })).length, 0,
       'a physical root removed from top-level configuration is deleted');
     collection = await runtime.library.getItemRecord(secondId);

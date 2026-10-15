@@ -1,0 +1,402 @@
+[
+  {
+    "Name": "empty-no-configured-libraries",
+    "Libraries": [],
+    "Directories": [],
+    "Fanout": 1
+  },
+  {
+    "Name": "one-ordinary-directory-tree",
+    "Libraries": [
+      {
+        "Name": "Library",
+        "Locations": [
+          "one"
+        ]
+      }
+    ],
+    "Directories": [
+      "one/A/First",
+      "one/B/Second"
+    ],
+    "Fanout": 1
+  },
+  {
+    "Name": "two-collections-share-one-physical-root",
+    "Libraries": [
+      {
+        "Name": "First",
+        "Locations": [
+          "shared"
+        ]
+      },
+      {
+        "Name": "Second",
+        "Locations": [
+          "shared"
+        ]
+      }
+    ],
+    "Directories": [
+      "shared/A",
+      "shared/B"
+    ]
+  },
+  {
+    "Name": "shared-and-nested-physical-roots",
+    "Libraries": [
+      {
+        "Name": "First",
+        "Locations": [
+          "shared"
+        ]
+      },
+      {
+        "Name": "Second",
+        "Locations": [
+          "shared/Nested"
+        ]
+      },
+      {
+        "Name": "Third",
+        "Locations": [
+          "separate"
+        ]
+      }
+    ],
+    "Directories": [
+      "shared/A",
+      "shared/Nested/Deep",
+      "separate/Z"
+    ]
+  },
+  {
+    "Name": "siblings-25",
+    "Libraries": [
+      {
+        "Name": "Library",
+        "Locations": [
+          "one"
+        ]
+      }
+    ],
+    "Directories": [
+      "one/Item-00",
+      "one/Item-01",
+      "one/Item-02",
+      "one/Item-03",
+      "one/Item-04",
+      "one/Item-05",
+      "one/Item-06",
+      "one/Item-07",
+      "one/Item-08",
+      "one/Item-09",
+      "one/Item-10",
+      "one/Item-11",
+      "one/Item-12",
+      "one/Item-13",
+      "one/Item-14",
+      "one/Item-15",
+      "one/Item-16",
+      "one/Item-17",
+      "one/Item-18",
+      "one/Item-19",
+      "one/Item-20",
+      "one/Item-21",
+      "one/Item-22",
+      "one/Item-23",
+      "one/Item-24"
+    ]
+  },
+  {
+    "Name": "siblings-26",
+    "Libraries": [
+      {
+        "Name": "Library",
+        "Locations": [
+          "one"
+        ]
+      }
+    ],
+    "Directories": [
+      "one/Item-00",
+      "one/Item-01",
+      "one/Item-02",
+      "one/Item-03",
+      "one/Item-04",
+      "one/Item-05",
+      "one/Item-06",
+      "one/Item-07",
+      "one/Item-08",
+      "one/Item-09",
+      "one/Item-10",
+      "one/Item-11",
+      "one/Item-12",
+      "one/Item-13",
+      "one/Item-14",
+      "one/Item-15",
+      "one/Item-16",
+      "one/Item-17",
+      "one/Item-18",
+      "one/Item-19",
+      "one/Item-20",
+      "one/Item-21",
+      "one/Item-22",
+      "one/Item-23",
+      "one/Item-24",
+      "one/Item-25"
+    ]
+  },
+  {
+    "Name": "deep-enumeration-io-failure",
+    "Libraries": [
+      {
+        "Name": "Library",
+        "Locations": [
+          "one"
+        ]
+      }
+    ],
+    "Directories": [
+      "one/A/First",
+      "one/B/Second"
+    ],
+    "Fault": {
+      "Kind": "enumeration",
+      "Path": "one/B",
+      "AtOccurrence": 1
+    }
+  },
+  {
+    "Name": "deep-enumeration-after-baseline",
+    "Libraries": [
+      {
+        "Name": "Library",
+        "Locations": [
+          "one"
+        ]
+      }
+    ],
+    "Warmup": true,
+    "InitialDirectories": [
+      "one/A/Old",
+      "one/B/Keep"
+    ],
+    "Directories": [
+      "one/A/New",
+      "one/B/New"
+    ],
+    "Fault": {
+      "Kind": "enumeration",
+      "Path": "one/B",
+      "AtOccurrence": 1
+    }
+  },
+  {
+    "Name": "metadata-fails-after-real-refresh",
+    "Libraries": [
+      {
+        "Name": "Library",
+        "Locations": [
+          "one"
+        ]
+      }
+    ],
+    "Directories": [
+      "one/A/First",
+      "one/B/Second"
+    ],
+    "Fanout": 1,
+    "Fault": {
+      "Kind": "metadata-after",
+      "Path": "one/A",
+      "AtOccurrence": 1
+    }
+  },
+  {
+    "Name": "later-create-save-failure",
+    "Libraries": [
+      {
+        "Name": "Library",
+        "Locations": [
+          "one"
+        ]
+      }
+    ],
+    "Directories": [
+      "one/A/First",
+      "one/B/Second"
+    ],
+    "Fanout": 1,
+    "Fault": {
+      "Kind": "save-before",
+      "Path": "one/B/Second",
+      "AtOccurrence": 1
+    }
+  },
+  {
+    "Name": "cancel-aggregate-at-5",
+    "Libraries": [
+      {
+        "Name": "Library",
+        "Locations": [
+          "one"
+        ]
+      }
+    ],
+    "Directories": [
+      "one/A/First",
+      "one/B/Second"
+    ],
+    "Fanout": 1,
+    "Cancel": {
+      "Channel": "provider",
+      "Path": "@aggregate",
+      "Progress": 5
+    }
+  },
+  {
+    "Name": "cancel-aggregate-at-5-5",
+    "Libraries": [
+      {
+        "Name": "Library",
+        "Locations": [
+          "one"
+        ]
+      }
+    ],
+    "Directories": [
+      "one/A/First",
+      "one/B/Second"
+    ],
+    "Fanout": 1,
+    "Cancel": {
+      "Channel": "provider",
+      "Path": "@aggregate",
+      "Progress": 5.5
+    }
+  },
+  {
+    "Name": "cancel-aggregate-at-6",
+    "Libraries": [
+      {
+        "Name": "Library",
+        "Locations": [
+          "one"
+        ]
+      }
+    ],
+    "Directories": [
+      "one/A/First",
+      "one/B/Second"
+    ],
+    "Fanout": 1,
+    "Cancel": {
+      "Channel": "provider",
+      "Path": "@aggregate",
+      "Progress": 6
+    }
+  },
+  {
+    "Name": "cancel-aggregate-at-7",
+    "Libraries": [
+      {
+        "Name": "Library",
+        "Locations": [
+          "one"
+        ]
+      }
+    ],
+    "Directories": [
+      "one/A/First",
+      "one/B/Second"
+    ],
+    "Fanout": 1,
+    "Cancel": {
+      "Channel": "provider",
+      "Path": "@aggregate",
+      "Progress": 7
+    }
+  },
+  {
+    "Name": "cancel-aggregate-at-10",
+    "Libraries": [
+      {
+        "Name": "Library",
+        "Locations": [
+          "one"
+        ]
+      }
+    ],
+    "Directories": [
+      "one/A/First",
+      "one/B/Second"
+    ],
+    "Fanout": 1,
+    "Cancel": {
+      "Channel": "provider",
+      "Path": "@aggregate",
+      "Progress": 10
+    }
+  },
+  {
+    "Name": "cancel-aggregate-at-50",
+    "Libraries": [
+      {
+        "Name": "Library",
+        "Locations": [
+          "one"
+        ]
+      }
+    ],
+    "Directories": [
+      "one/A/First",
+      "one/B/Second"
+    ],
+    "Fanout": 1,
+    "Cancel": {
+      "Channel": "provider",
+      "Path": "@aggregate",
+      "Progress": 50
+    }
+  },
+  {
+    "Name": "cancel-after-structural-at-global-96",
+    "Libraries": [
+      {
+        "Name": "Library",
+        "Locations": [
+          "one"
+        ]
+      }
+    ],
+    "Directories": [
+      "one/A/First",
+      "one/B/Second"
+    ],
+    "Fanout": 1,
+    "Cancel": {
+      "Channel": "global",
+      "Progress": 96
+    }
+  },
+  {
+    "Name": "initial-cancellation",
+    "Libraries": [
+      {
+        "Name": "Library",
+        "Locations": [
+          "one"
+        ]
+      }
+    ],
+    "Directories": [
+      "one/A/First",
+      "one/B/Second"
+    ],
+    "Fanout": 1,
+    "Cancel": {
+      "Channel": "initial"
+    }
+  }
+]
