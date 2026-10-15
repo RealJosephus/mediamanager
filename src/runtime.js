@@ -35,6 +35,8 @@ import { loadMetadataConfiguration } from './metadata/configuration-loader.js';
 import { loadExternalUrlConfiguration } from './library/external-urls.js';
 import { loadEncodingConfiguration, serverFriendlyName } from './configuration.js';
 import { createBuiltinExternalUrlPlugin } from './metadata/external-url-providers.js';
+import { createPhotoMetadataPlugin } from './metadata/photo-provider.js';
+import { createPhotoAlbumImagePlugin } from './metadata/photo-album-provider.js';
 import { SyncPlayService } from './syncplay/service.js';
 import { UserViewService } from './library/user-view-service.js';
 import { initializeLibraryRoot } from './library/root-initialization.js';
@@ -227,6 +229,10 @@ export async function createRuntime({ database, configuration, serverId, serverN
       .map(provider => provider.getExternalIdInfo()) }));
     registry.register(createPlaylistItemsPlugin({ fileSystem, vfs, linkedChildren, spoolRoot }));
     registry.register(createBuiltinExternalUrlPlugin());
+    registry.register(createPhotoMetadataPlugin({ imageProcessor, logger }));
+    registry.register(createPhotoAlbumImagePlugin({ store, fileSystem, vfs, identityMap, metadataIdentityMap,
+      metadataPath, tempPath: programDataPath && path.join(programDataPath, 'cache', 'temp'), images: metadataImages,
+      configuration, expandPath: library.options.expandPath, logger }));
     library.options.externalUrlRegistry = registry;
     loadContext = createMetadataContextLoader({ fileSystem, store, library, linkedChildren, spoolRoot, vfs, identityMap, metadataIdentityMap, configuration, contextExtensions: () => plugins.entries('context'),
       metadataConfiguration: metadataOptions.metadataConfiguration ?? metadataSettings.metadata, ignoreRule, externalData, logger });
@@ -322,6 +328,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
   if (collections) rollback.push(() => collections.close());
   const images = new ImageService({ fileSystem, store, library, vfs, identityMap:metadataIdentityMap, mediaIdentityMap:identityMap, processor: imageProcessor, metadataImages, metadataUpdates, loadContext, metadataPath, logger,
     userImagePath: imageOptions.userImagePath ?? (programDataPath && path.join(componentConfigurationPath, 'users')) });
+  library.options.getImageDimensions = (item, image) => images.getImageDimensions(item, image);
   rollback.push(() => images.close());
   const brandingStore = new BrandingConfigurationStore({ configurationDirectoryPath, onError });
   rollback.push(() => brandingStore.close());

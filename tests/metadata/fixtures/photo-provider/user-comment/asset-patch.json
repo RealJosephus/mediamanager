@@ -1,0 +1,16 @@
+{
+  "scope": "Same-size EXIF UserComment header patch only; original rich JPEG asset unchanged.",
+  "source": {
+    "filename": "D:/mediamanager/tests/metadata/fixtures/photo-provider/assets/exif.jpg",
+    "bytes": 731,
+    "sha256": "daa0f9b64a12e81be9e70c30d3f024bb90ad64b1ff92578506114c6c4cc5a70e"
+  },
+  "headerOffset": 384,
+  "fromHex": "4153434949000000",
+  "toHex": "556e69636f646500",
+  "output": {
+    "filename": "D:/mediamanager-validation/20261016-photo-stage/inputs/photo-usercomment-1/assets/unicode-comment.jpg",
+    "bytes": 731,
+    "sha256": "29b9b26f0c7c937b3b672b6b40a9b54a2c97ef9cf588022ba647386b615a669a"
+  }
+}

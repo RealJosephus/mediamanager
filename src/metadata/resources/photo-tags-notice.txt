@@ -1,0 +1,26 @@
+Photo tag reader source attribution
+
+src/metadata/photo-tags.js adapts image-tag behavior from TagLibSharp 2.3.0,
+official mono/taglib-sharp commit b5ae84f2e84087bf160bb0471420200dd2b5d809.
+The adapted JavaScript reads static JPEG, PNG, TIFF and CR2 metadata through
+the caller's scoped storage assets. It does not embed the TagLibSharp runtime.
+
+Referenced upstream files:
+src/TaglibSharp/Image/CombinedImageTag.cs
+src/TaglibSharp/IFD/IFDTag.cs
+src/TaglibSharp/IFD/IFDReader.cs
+src/TaglibSharp/Xmp/XmpTag.cs
+src/TaglibSharp/Png/File.cs
+src/TaglibSharp/IIM/IIMReader.cs
+src/TaglibSharp/IFD/Entries/UserCommentIFDEntry.cs
+
+Upstream copyright notices:
+Copyright (C) 2009 Mike Gemuende
+Copyright (C) 2009 Ruben Vermeersch
+Copyright (C) 2010 Mike Gemuende
+Copyright (c) 2012 Eberhard Beilharz
+
+These referenced image readers are distributed under the GNU Lesser General
+Public License version 2.1. The unchanged upstream COPYING text accompanies
+this notice as photo-tags-license.txt. The JavaScript adaptation is included
+in this GPL-2.0-only project; see the repository LICENSE.

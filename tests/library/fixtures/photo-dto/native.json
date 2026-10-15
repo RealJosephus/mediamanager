@@ -1,0 +1,1332 @@
+{
+  "inputSha256": "c913a6465256526df17fcd2dcbc47ad0d78a0b6a01a41ba962bc3c69cb19da1f",
+  "results": [
+    {
+      "name": "no-values",
+      "wire": {}
+    },
+    {
+      "name": "empty-values",
+      "wire": {
+        "CameraMake": "",
+        "CameraModel": "",
+        "Software": "",
+        "ExposureTime": 0,
+        "FocalLength": 0,
+        "ImageOrientation": 0,
+        "Aperture": 0,
+        "ShutterSpeed": 0,
+        "Latitude": 0,
+        "Longitude": 0,
+        "Altitude": 0,
+        "IsoSpeedRating": 0
+      }
+    },
+    {
+      "name": "fields-no-album",
+      "wire": {
+        "CameraMake": "Camera \u5236\u9020\u5546",
+        "CameraModel": "Model 1",
+        "Software": "Camera software",
+        "ExposureTime": 0.125,
+        "FocalLength": 25,
+        "ImageOrientation": "RightTop",
+        "Aperture": 2.8,
+        "ShutterSpeed": -3,
+        "Latitude": 25.033,
+        "Longitude": 121.5654,
+        "Altitude": -12,
+        "IsoSpeedRating": 400
+      }
+    },
+    {
+      "name": "direct-album",
+      "wire": {
+        "Album": "Nearest album",
+        "AlbumId": "df100000000000000000000000000002",
+        "CameraMake": "Camera \u5236\u9020\u5546",
+        "CameraModel": "Model 1",
+        "Software": "Camera software",
+        "ExposureTime": 0.125,
+        "FocalLength": 25,
+        "ImageOrientation": "RightTop",
+        "Aperture": 2.8,
+        "ShutterSpeed": -3,
+        "Latitude": 25.033,
+        "Longitude": 121.5654,
+        "Altitude": -12,
+        "IsoSpeedRating": 400
+      }
+    },
+    {
+      "name": "through-folder",
+      "wire": {
+        "Album": "Nearest album",
+        "AlbumId": "df100000000000000000000000000002",
+        "CameraMake": "Camera \u5236\u9020\u5546",
+        "CameraModel": "Model 1",
+        "Software": "Camera software",
+        "ExposureTime": 0.125,
+        "FocalLength": 25,
+        "ImageOrientation": "RightTop",
+        "Aperture": 2.8,
+        "ShutterSpeed": -3,
+        "Latitude": 25.033,
+        "Longitude": 121.5654,
+        "Altitude": -12,
+        "IsoSpeedRating": 400
+      }
+    },
+    {
+      "name": "owner-only",
+      "wire": {
+        "CameraMake": "Camera \u5236\u9020\u5546",
+        "CameraModel": "Model 1",
+        "Software": "Camera software",
+        "ExposureTime": 0.125,
+        "FocalLength": 25,
+        "ImageOrientation": "RightTop",
+        "Aperture": 2.8,
+        "ShutterSpeed": -3,
+        "Latitude": 25.033,
+        "Longitude": 121.5654,
+        "Altitude": -12,
+        "IsoSpeedRating": 400
+      }
+    },
+    {
+      "name": "missing-parent",
+      "wire": {
+        "CameraMake": "Camera \u5236\u9020\u5546",
+        "CameraModel": "Model 1",
+        "Software": "Camera software",
+        "ExposureTime": 0.125,
+        "FocalLength": 25,
+        "ImageOrientation": "RightTop",
+        "Aperture": 2.8,
+        "ShutterSpeed": -3,
+        "Latitude": 25.033,
+        "Longitude": 121.5654,
+        "Altitude": -12,
+        "IsoSpeedRating": 400
+      }
+    },
+    {
+      "name": "album-null-name",
+      "wire": {
+        "AlbumId": "df100000000000000000000000000002",
+        "CameraMake": "Camera \u5236\u9020\u5546",
+        "CameraModel": "Model 1",
+        "Software": "Camera software",
+        "ExposureTime": 0.125,
+        "FocalLength": 25,
+        "ImageOrientation": "RightTop",
+        "Aperture": 2.8,
+        "ShutterSpeed": -3,
+        "Latitude": 25.033,
+        "Longitude": 121.5654,
+        "Altitude": -12,
+        "IsoSpeedRating": 400
+      }
+    },
+    {
+      "name": "album-empty-name",
+      "wire": {
+        "Album": "",
+        "AlbumId": "df100000000000000000000000000002",
+        "CameraMake": "Camera \u5236\u9020\u5546",
+        "CameraModel": "Model 1",
+        "Software": "Camera software",
+        "ExposureTime": 0.125,
+        "FocalLength": 25,
+        "ImageOrientation": "RightTop",
+        "Aperture": 2.8,
+        "ShutterSpeed": -3,
+        "Latitude": 25.033,
+        "Longitude": 121.5654,
+        "Altitude": -12,
+        "IsoSpeedRating": 400
+      }
+    },
+    {
+      "name": "orientation-null",
+      "wire": {
+        "CameraMake": "Camera \u5236\u9020\u5546",
+        "CameraModel": "Model 1",
+        "Software": "Camera software",
+        "ExposureTime": 0.125,
+        "FocalLength": 25,
+        "Aperture": 2.8,
+        "ShutterSpeed": -3,
+        "Latitude": 25.033,
+        "Longitude": 121.5654,
+        "Altitude": -12,
+        "IsoSpeedRating": 400
+      }
+    },
+    {
+      "name": "orientation-TopLeft",
+      "wire": {
+        "CameraMake": "Camera \u5236\u9020\u5546",
+        "CameraModel": "Model 1",
+        "Software": "Camera software",
+        "ExposureTime": 0.125,
+        "FocalLength": 25,
+        "ImageOrientation": "TopLeft",
+        "Aperture": 2.8,
+        "ShutterSpeed": -3,
+        "Latitude": 25.033,
+        "Longitude": 121.5654,
+        "Altitude": -12,
+        "IsoSpeedRating": 400
+      }
+    },
+    {
+      "name": "orientation-TopRight",
+      "wire": {
+        "CameraMake": "Camera \u5236\u9020\u5546",
+        "CameraModel": "Model 1",
+        "Software": "Camera software",
+        "ExposureTime": 0.125,
+        "FocalLength": 25,
+        "ImageOrientation": "TopRight",
+        "Aperture": 2.8,
+        "ShutterSpeed": -3,
+        "Latitude": 25.033,
+        "Longitude": 121.5654,
+        "Altitude": -12,
+        "IsoSpeedRating": 400
+      }
+    },
+    {
+      "name": "orientation-BottomRight",
+      "wire": {
+        "CameraMake": "Camera \u5236\u9020\u5546",
+        "CameraModel": "Model 1",
+        "Software": "Camera software",
+        "ExposureTime": 0.125,
+        "FocalLength": 25,
+        "ImageOrientation": "BottomRight",
+        "Aperture": 2.8,
+        "ShutterSpeed": -3,
+        "Latitude": 25.033,
+        "Longitude": 121.5654,
+        "Altitude": -12,
+        "IsoSpeedRating": 400
+      }
+    },
+    {
+      "name": "orientation-BottomLeft",
+      "wire": {
+        "CameraMake": "Camera \u5236\u9020\u5546",
+        "CameraModel": "Model 1",
+        "Software": "Camera software",
+        "ExposureTime": 0.125,
+        "FocalLength": 25,
+        "ImageOrientation": "BottomLeft",
+        "Aperture": 2.8,
+        "ShutterSpeed": -3,
+        "Latitude": 25.033,
+        "Longitude": 121.5654,
+        "Altitude": -12,
+        "IsoSpeedRating": 400
+      }
+    },
+    {
+      "name": "orientation-LeftTop",
+      "wire": {
+        "CameraMake": "Camera \u5236\u9020\u5546",
+        "CameraModel": "Model 1",
+        "Software": "Camera software",
+        "ExposureTime": 0.125,
+        "FocalLength": 25,
+        "ImageOrientation": "LeftTop",
+        "Aperture": 2.8,
+        "ShutterSpeed": -3,
+        "Latitude": 25.033,
+        "Longitude": 121.5654,
+        "Altitude": -12,
+        "IsoSpeedRating": 400
+      }
+    },
+    {
+      "name": "orientation-RightTop",
+      "wire": {
+        "CameraMake": "Camera \u5236\u9020\u5546",
+        "CameraModel": "Model 1",
+        "Software": "Camera software",
+        "ExposureTime": 0.125,
+        "FocalLength": 25,
+        "ImageOrientation": "RightTop",
+        "Aperture": 2.8,
+        "ShutterSpeed": -3,
+        "Latitude": 25.033,
+        "Longitude": 121.5654,
+        "Altitude": -12,
+        "IsoSpeedRating": 400
+      }
+    },
+    {
+      "name": "orientation-RightBottom",
+      "wire": {
+        "CameraMake": "Camera \u5236\u9020\u5546",
+        "CameraModel": "Model 1",
+        "Software": "Camera software",
+        "ExposureTime": 0.125,
+        "FocalLength": 25,
+        "ImageOrientation": "RightBottom",
+        "Aperture": 2.8,
+        "ShutterSpeed": -3,
+        "Latitude": 25.033,
+        "Longitude": 121.5654,
+        "Altitude": -12,
+        "IsoSpeedRating": 400
+      }
+    },
+    {
+      "name": "orientation-LeftBottom",
+      "wire": {
+        "CameraMake": "Camera \u5236\u9020\u5546",
+        "CameraModel": "Model 1",
+        "Software": "Camera software",
+        "ExposureTime": 0.125,
+        "FocalLength": 25,
+        "ImageOrientation": "LeftBottom",
+        "Aperture": 2.8,
+        "ShutterSpeed": -3,
+        "Latitude": 25.033,
+        "Longitude": 121.5654,
+        "Altitude": -12,
+        "IsoSpeedRating": 400
+      }
+    },
+    {
+      "name": "orientation-99",
+      "wire": {
+        "CameraMake": "Camera \u5236\u9020\u5546",
+        "CameraModel": "Model 1",
+        "Software": "Camera software",
+        "ExposureTime": 0.125,
+        "FocalLength": 25,
+        "ImageOrientation": 99,
+        "Aperture": 2.8,
+        "ShutterSpeed": -3,
+        "Latitude": 25.033,
+        "Longitude": 121.5654,
+        "Altitude": -12,
+        "IsoSpeedRating": 400
+      }
+    },
+    {
+      "name": "aspect-null-none-40-20",
+      "ratio": null,
+      "calls": 0
+    },
+    {
+      "name": "aspect-null-none-0-20",
+      "ratio": null,
+      "calls": 0
+    },
+    {
+      "name": "aspect-null-none-40-0",
+      "ratio": null,
+      "calls": 0
+    },
+    {
+      "name": "aspect-null-none--40-20",
+      "ratio": null,
+      "calls": 0
+    },
+    {
+      "name": "aspect-null-remote-40-20",
+      "ratio": 2,
+      "calls": 0
+    },
+    {
+      "name": "aspect-null-remote-0-20",
+      "ratio": 0,
+      "calls": 0
+    },
+    {
+      "name": "aspect-null-remote-40-0",
+      "ratio": 0,
+      "calls": 0
+    },
+    {
+      "name": "aspect-null-remote--40-20",
+      "ratio": -2,
+      "calls": 0
+    },
+    {
+      "name": "aspect-null-local-40-20",
+      "ratio": 1.5,
+      "calls": 1
+    },
+    {
+      "name": "aspect-null-local-0-20",
+      "ratio": 1.5,
+      "calls": 1
+    },
+    {
+      "name": "aspect-null-local-40-0",
+      "ratio": 1.5,
+      "calls": 1
+    },
+    {
+      "name": "aspect-null-local--40-20",
+      "ratio": 1.5,
+      "calls": 1
+    },
+    {
+      "name": "aspect-null-zero-40-20",
+      "ratio": 2,
+      "calls": 1
+    },
+    {
+      "name": "aspect-null-zero-0-20",
+      "ratio": 0,
+      "calls": 1
+    },
+    {
+      "name": "aspect-null-zero-40-0",
+      "ratio": 0,
+      "calls": 1
+    },
+    {
+      "name": "aspect-null-zero--40-20",
+      "ratio": -2,
+      "calls": 1
+    },
+    {
+      "name": "aspect-null-error-40-20",
+      "ratio": 2,
+      "calls": 1
+    },
+    {
+      "name": "aspect-null-error-0-20",
+      "ratio": 0,
+      "calls": 1
+    },
+    {
+      "name": "aspect-null-error-40-0",
+      "ratio": 0,
+      "calls": 1
+    },
+    {
+      "name": "aspect-null-error--40-20",
+      "ratio": -2,
+      "calls": 1
+    },
+    {
+      "name": "aspect-TopLeft-none-40-20",
+      "ratio": null,
+      "calls": 0
+    },
+    {
+      "name": "aspect-TopLeft-none-0-20",
+      "ratio": null,
+      "calls": 0
+    },
+    {
+      "name": "aspect-TopLeft-none-40-0",
+      "ratio": null,
+      "calls": 0
+    },
+    {
+      "name": "aspect-TopLeft-none--40-20",
+      "ratio": null,
+      "calls": 0
+    },
+    {
+      "name": "aspect-TopLeft-remote-40-20",
+      "ratio": 2,
+      "calls": 0
+    },
+    {
+      "name": "aspect-TopLeft-remote-0-20",
+      "ratio": 0,
+      "calls": 0
+    },
+    {
+      "name": "aspect-TopLeft-remote-40-0",
+      "ratio": 0,
+      "calls": 0
+    },
+    {
+      "name": "aspect-TopLeft-remote--40-20",
+      "ratio": -2,
+      "calls": 0
+    },
+    {
+      "name": "aspect-TopLeft-local-40-20",
+      "ratio": 1.5,
+      "calls": 1
+    },
+    {
+      "name": "aspect-TopLeft-local-0-20",
+      "ratio": 1.5,
+      "calls": 1
+    },
+    {
+      "name": "aspect-TopLeft-local-40-0",
+      "ratio": 1.5,
+      "calls": 1
+    },
+    {
+      "name": "aspect-TopLeft-local--40-20",
+      "ratio": 1.5,
+      "calls": 1
+    },
+    {
+      "name": "aspect-TopLeft-zero-40-20",
+      "ratio": 2,
+      "calls": 1
+    },
+    {
+      "name": "aspect-TopLeft-zero-0-20",
+      "ratio": 0,
+      "calls": 1
+    },
+    {
+      "name": "aspect-TopLeft-zero-40-0",
+      "ratio": 0,
+      "calls": 1
+    },
+    {
+      "name": "aspect-TopLeft-zero--40-20",
+      "ratio": -2,
+      "calls": 1
+    },
+    {
+      "name": "aspect-TopLeft-error-40-20",
+      "ratio": 2,
+      "calls": 1
+    },
+    {
+      "name": "aspect-TopLeft-error-0-20",
+      "ratio": 0,
+      "calls": 1
+    },
+    {
+      "name": "aspect-TopLeft-error-40-0",
+      "ratio": 0,
+      "calls": 1
+    },
+    {
+      "name": "aspect-TopLeft-error--40-20",
+      "ratio": -2,
+      "calls": 1
+    },
+    {
+      "name": "aspect-TopRight-none-40-20",
+      "ratio": null,
+      "calls": 0
+    },
+    {
+      "name": "aspect-TopRight-none-0-20",
+      "ratio": null,
+      "calls": 0
+    },
+    {
+      "name": "aspect-TopRight-none-40-0",
+      "ratio": null,
+      "calls": 0
+    },
+    {
+      "name": "aspect-TopRight-none--40-20",
+      "ratio": null,
+      "calls": 0
+    },
+    {
+      "name": "aspect-TopRight-remote-40-20",
+      "ratio": 2,
+      "calls": 0
+    },
+    {
+      "name": "aspect-TopRight-remote-0-20",
+      "ratio": 0,
+      "calls": 0
+    },
+    {
+      "name": "aspect-TopRight-remote-40-0",
+      "ratio": 0,
+      "calls": 0
+    },
+    {
+      "name": "aspect-TopRight-remote--40-20",
+      "ratio": -2,
+      "calls": 0
+    },
+    {
+      "name": "aspect-TopRight-local-40-20",
+      "ratio": 1.5,
+      "calls": 1
+    },
+    {
+      "name": "aspect-TopRight-local-0-20",
+      "ratio": 1.5,
+      "calls": 1
+    },
+    {
+      "name": "aspect-TopRight-local-40-0",
+      "ratio": 1.5,
+      "calls": 1
+    },
+    {
+      "name": "aspect-TopRight-local--40-20",
+      "ratio": 1.5,
+      "calls": 1
+    },
+    {
+      "name": "aspect-TopRight-zero-40-20",
+      "ratio": 2,
+      "calls": 1
+    },
+    {
+      "name": "aspect-TopRight-zero-0-20",
+      "ratio": 0,
+      "calls": 1
+    },
+    {
+      "name": "aspect-TopRight-zero-40-0",
+      "ratio": 0,
+      "calls": 1
+    },
+    {
+      "name": "aspect-TopRight-zero--40-20",
+      "ratio": -2,
+      "calls": 1
+    },
+    {
+      "name": "aspect-TopRight-error-40-20",
+      "ratio": 2,
+      "calls": 1
+    },
+    {
+      "name": "aspect-TopRight-error-0-20",
+      "ratio": 0,
+      "calls": 1
+    },
+    {
+      "name": "aspect-TopRight-error-40-0",
+      "ratio": 0,
+      "calls": 1
+    },
+    {
+      "name": "aspect-TopRight-error--40-20",
+      "ratio": -2,
+      "calls": 1
+    },
+    {
+      "name": "aspect-BottomRight-none-40-20",
+      "ratio": null,
+      "calls": 0
+    },
+    {
+      "name": "aspect-BottomRight-none-0-20",
+      "ratio": null,
+      "calls": 0
+    },
+    {
+      "name": "aspect-BottomRight-none-40-0",
+      "ratio": null,
+      "calls": 0
+    },
+    {
+      "name": "aspect-BottomRight-none--40-20",
+      "ratio": null,
+      "calls": 0
+    },
+    {
+      "name": "aspect-BottomRight-remote-40-20",
+      "ratio": 2,
+      "calls": 0
+    },
+    {
+      "name": "aspect-BottomRight-remote-0-20",
+      "ratio": 0,
+      "calls": 0
+    },
+    {
+      "name": "aspect-BottomRight-remote-40-0",
+      "ratio": 0,
+      "calls": 0
+    },
+    {
+      "name": "aspect-BottomRight-remote--40-20",
+      "ratio": -2,
+      "calls": 0
+    },
+    {
+      "name": "aspect-BottomRight-local-40-20",
+      "ratio": 1.5,
+      "calls": 1
+    },
+    {
+      "name": "aspect-BottomRight-local-0-20",
+      "ratio": 1.5,
+      "calls": 1
+    },
+    {
+      "name": "aspect-BottomRight-local-40-0",
+      "ratio": 1.5,
+      "calls": 1
+    },
+    {
+      "name": "aspect-BottomRight-local--40-20",
+      "ratio": 1.5,
+      "calls": 1
+    },
+    {
+      "name": "aspect-BottomRight-zero-40-20",
+      "ratio": 2,
+      "calls": 1
+    },
+    {
+      "name": "aspect-BottomRight-zero-0-20",
+      "ratio": 0,
+      "calls": 1
+    },
+    {
+      "name": "aspect-BottomRight-zero-40-0",
+      "ratio": 0,
+      "calls": 1
+    },
+    {
+      "name": "aspect-BottomRight-zero--40-20",
+      "ratio": -2,
+      "calls": 1
+    },
+    {
+      "name": "aspect-BottomRight-error-40-20",
+      "ratio": 2,
+      "calls": 1
+    },
+    {
+      "name": "aspect-BottomRight-error-0-20",
+      "ratio": 0,
+      "calls": 1
+    },
+    {
+      "name": "aspect-BottomRight-error-40-0",
+      "ratio": 0,
+      "calls": 1
+    },
+    {
+      "name": "aspect-BottomRight-error--40-20",
+      "ratio": -2,
+      "calls": 1
+    },
+    {
+      "name": "aspect-BottomLeft-none-40-20",
+      "ratio": null,
+      "calls": 0
+    },
+    {
+      "name": "aspect-BottomLeft-none-0-20",
+      "ratio": null,
+      "calls": 0
+    },
+    {
+      "name": "aspect-BottomLeft-none-40-0",
+      "ratio": null,
+      "calls": 0
+    },
+    {
+      "name": "aspect-BottomLeft-none--40-20",
+      "ratio": null,
+      "calls": 0
+    },
+    {
+      "name": "aspect-BottomLeft-remote-40-20",
+      "ratio": 2,
+      "calls": 0
+    },
+    {
+      "name": "aspect-BottomLeft-remote-0-20",
+      "ratio": 0,
+      "calls": 0
+    },
+    {
+      "name": "aspect-BottomLeft-remote-40-0",
+      "ratio": 0,
+      "calls": 0
+    },
+    {
+      "name": "aspect-BottomLeft-remote--40-20",
+      "ratio": -2,
+      "calls": 0
+    },
+    {
+      "name": "aspect-BottomLeft-local-40-20",
+      "ratio": 1.5,
+      "calls": 1
+    },
+    {
+      "name": "aspect-BottomLeft-local-0-20",
+      "ratio": 1.5,
+      "calls": 1
+    },
+    {
+      "name": "aspect-BottomLeft-local-40-0",
+      "ratio": 1.5,
+      "calls": 1
+    },
+    {
+      "name": "aspect-BottomLeft-local--40-20",
+      "ratio": 1.5,
+      "calls": 1
+    },
+    {
+      "name": "aspect-BottomLeft-zero-40-20",
+      "ratio": 2,
+      "calls": 1
+    },
+    {
+      "name": "aspect-BottomLeft-zero-0-20",
+      "ratio": 0,
+      "calls": 1
+    },
+    {
+      "name": "aspect-BottomLeft-zero-40-0",
+      "ratio": 0,
+      "calls": 1
+    },
+    {
+      "name": "aspect-BottomLeft-zero--40-20",
+      "ratio": -2,
+      "calls": 1
+    },
+    {
+      "name": "aspect-BottomLeft-error-40-20",
+      "ratio": 2,
+      "calls": 1
+    },
+    {
+      "name": "aspect-BottomLeft-error-0-20",
+      "ratio": 0,
+      "calls": 1
+    },
+    {
+      "name": "aspect-BottomLeft-error-40-0",
+      "ratio": 0,
+      "calls": 1
+    },
+    {
+      "name": "aspect-BottomLeft-error--40-20",
+      "ratio": -2,
+      "calls": 1
+    },
+    {
+      "name": "aspect-LeftTop-none-40-20",
+      "ratio": null,
+      "calls": 0
+    },
+    {
+      "name": "aspect-LeftTop-none-0-20",
+      "ratio": null,
+      "calls": 0
+    },
+    {
+      "name": "aspect-LeftTop-none-40-0",
+      "ratio": null,
+      "calls": 0
+    },
+    {
+      "name": "aspect-LeftTop-none--40-20",
+      "ratio": null,
+      "calls": 0
+    },
+    {
+      "name": "aspect-LeftTop-remote-40-20",
+      "ratio": 0.5,
+      "calls": 0
+    },
+    {
+      "name": "aspect-LeftTop-remote-0-20",
+      "ratio": 0,
+      "calls": 0
+    },
+    {
+      "name": "aspect-LeftTop-remote-40-0",
+      "ratio": 0,
+      "calls": 0
+    },
+    {
+      "name": "aspect-LeftTop-remote--40-20",
+      "ratio": -0.5,
+      "calls": 0
+    },
+    {
+      "name": "aspect-LeftTop-local-40-20",
+      "ratio": 1.5,
+      "calls": 1
+    },
+    {
+      "name": "aspect-LeftTop-local-0-20",
+      "ratio": 1.5,
+      "calls": 1
+    },
+    {
+      "name": "aspect-LeftTop-local-40-0",
+      "ratio": 1.5,
+      "calls": 1
+    },
+    {
+      "name": "aspect-LeftTop-local--40-20",
+      "ratio": 1.5,
+      "calls": 1
+    },
+    {
+      "name": "aspect-LeftTop-zero-40-20",
+      "ratio": 0.5,
+      "calls": 1
+    },
+    {
+      "name": "aspect-LeftTop-zero-0-20",
+      "ratio": 0,
+      "calls": 1
+    },
+    {
+      "name": "aspect-LeftTop-zero-40-0",
+      "ratio": 0,
+      "calls": 1
+    },
+    {
+      "name": "aspect-LeftTop-zero--40-20",
+      "ratio": -0.5,
+      "calls": 1
+    },
+    {
+      "name": "aspect-LeftTop-error-40-20",
+      "ratio": 0.5,
+      "calls": 1
+    },
+    {
+      "name": "aspect-LeftTop-error-0-20",
+      "ratio": 0,
+      "calls": 1
+    },
+    {
+      "name": "aspect-LeftTop-error-40-0",
+      "ratio": 0,
+      "calls": 1
+    },
+    {
+      "name": "aspect-LeftTop-error--40-20",
+      "ratio": -0.5,
+      "calls": 1
+    },
+    {
+      "name": "aspect-RightTop-none-40-20",
+      "ratio": null,
+      "calls": 0
+    },
+    {
+      "name": "aspect-RightTop-none-0-20",
+      "ratio": null,
+      "calls": 0
+    },
+    {
+      "name": "aspect-RightTop-none-40-0",
+      "ratio": null,
+      "calls": 0
+    },
+    {
+      "name": "aspect-RightTop-none--40-20",
+      "ratio": null,
+      "calls": 0
+    },
+    {
+      "name": "aspect-RightTop-remote-40-20",
+      "ratio": 0.5,
+      "calls": 0
+    },
+    {
+      "name": "aspect-RightTop-remote-0-20",
+      "ratio": 0,
+      "calls": 0
+    },
+    {
+      "name": "aspect-RightTop-remote-40-0",
+      "ratio": 0,
+      "calls": 0
+    },
+    {
+      "name": "aspect-RightTop-remote--40-20",
+      "ratio": -0.5,
+      "calls": 0
+    },
+    {
+      "name": "aspect-RightTop-local-40-20",
+      "ratio": 1.5,
+      "calls": 1
+    },
+    {
+      "name": "aspect-RightTop-local-0-20",
+      "ratio": 1.5,
+      "calls": 1
+    },
+    {
+      "name": "aspect-RightTop-local-40-0",
+      "ratio": 1.5,
+      "calls": 1
+    },
+    {
+      "name": "aspect-RightTop-local--40-20",
+      "ratio": 1.5,
+      "calls": 1
+    },
+    {
+      "name": "aspect-RightTop-zero-40-20",
+      "ratio": 0.5,
+      "calls": 1
+    },
+    {
+      "name": "aspect-RightTop-zero-0-20",
+      "ratio": 0,
+      "calls": 1
+    },
+    {
+      "name": "aspect-RightTop-zero-40-0",
+      "ratio": 0,
+      "calls": 1
+    },
+    {
+      "name": "aspect-RightTop-zero--40-20",
+      "ratio": -0.5,
+      "calls": 1
+    },
+    {
+      "name": "aspect-RightTop-error-40-20",
+      "ratio": 0.5,
+      "calls": 1
+    },
+    {
+      "name": "aspect-RightTop-error-0-20",
+      "ratio": 0,
+      "calls": 1
+    },
+    {
+      "name": "aspect-RightTop-error-40-0",
+      "ratio": 0,
+      "calls": 1
+    },
+    {
+      "name": "aspect-RightTop-error--40-20",
+      "ratio": -0.5,
+      "calls": 1
+    },
+    {
+      "name": "aspect-RightBottom-none-40-20",
+      "ratio": null,
+      "calls": 0
+    },
+    {
+      "name": "aspect-RightBottom-none-0-20",
+      "ratio": null,
+      "calls": 0
+    },
+    {
+      "name": "aspect-RightBottom-none-40-0",
+      "ratio": null,
+      "calls": 0
+    },
+    {
+      "name": "aspect-RightBottom-none--40-20",
+      "ratio": null,
+      "calls": 0
+    },
+    {
+      "name": "aspect-RightBottom-remote-40-20",
+      "ratio": 0.5,
+      "calls": 0
+    },
+    {
+      "name": "aspect-RightBottom-remote-0-20",
+      "ratio": 0,
+      "calls": 0
+    },
+    {
+      "name": "aspect-RightBottom-remote-40-0",
+      "ratio": 0,
+      "calls": 0
+    },
+    {
+      "name": "aspect-RightBottom-remote--40-20",
+      "ratio": -0.5,
+      "calls": 0
+    },
+    {
+      "name": "aspect-RightBottom-local-40-20",
+      "ratio": 1.5,
+      "calls": 1
+    },
+    {
+      "name": "aspect-RightBottom-local-0-20",
+      "ratio": 1.5,
+      "calls": 1
+    },
+    {
+      "name": "aspect-RightBottom-local-40-0",
+      "ratio": 1.5,
+      "calls": 1
+    },
+    {
+      "name": "aspect-RightBottom-local--40-20",
+      "ratio": 1.5,
+      "calls": 1
+    },
+    {
+      "name": "aspect-RightBottom-zero-40-20",
+      "ratio": 0.5,
+      "calls": 1
+    },
+    {
+      "name": "aspect-RightBottom-zero-0-20",
+      "ratio": 0,
+      "calls": 1
+    },
+    {
+      "name": "aspect-RightBottom-zero-40-0",
+      "ratio": 0,
+      "calls": 1
+    },
+    {
+      "name": "aspect-RightBottom-zero--40-20",
+      "ratio": -0.5,
+      "calls": 1
+    },
+    {
+      "name": "aspect-RightBottom-error-40-20",
+      "ratio": 0.5,
+      "calls": 1
+    },
+    {
+      "name": "aspect-RightBottom-error-0-20",
+      "ratio": 0,
+      "calls": 1
+    },
+    {
+      "name": "aspect-RightBottom-error-40-0",
+      "ratio": 0,
+      "calls": 1
+    },
+    {
+      "name": "aspect-RightBottom-error--40-20",
+      "ratio": -0.5,
+      "calls": 1
+    },
+    {
+      "name": "aspect-LeftBottom-none-40-20",
+      "ratio": null,
+      "calls": 0
+    },
+    {
+      "name": "aspect-LeftBottom-none-0-20",
+      "ratio": null,
+      "calls": 0
+    },
+    {
+      "name": "aspect-LeftBottom-none-40-0",
+      "ratio": null,
+      "calls": 0
+    },
+    {
+      "name": "aspect-LeftBottom-none--40-20",
+      "ratio": null,
+      "calls": 0
+    },
+    {
+      "name": "aspect-LeftBottom-remote-40-20",
+      "ratio": 0.5,
+      "calls": 0
+    },
+    {
+      "name": "aspect-LeftBottom-remote-0-20",
+      "ratio": 0,
+      "calls": 0
+    },
+    {
+      "name": "aspect-LeftBottom-remote-40-0",
+      "ratio": 0,
+      "calls": 0
+    },
+    {
+      "name": "aspect-LeftBottom-remote--40-20",
+      "ratio": -0.5,
+      "calls": 0
+    },
+    {
+      "name": "aspect-LeftBottom-local-40-20",
+      "ratio": 1.5,
+      "calls": 1
+    },
+    {
+      "name": "aspect-LeftBottom-local-0-20",
+      "ratio": 1.5,
+      "calls": 1
+    },
+    {
+      "name": "aspect-LeftBottom-local-40-0",
+      "ratio": 1.5,
+      "calls": 1
+    },
+    {
+      "name": "aspect-LeftBottom-local--40-20",
+      "ratio": 1.5,
+      "calls": 1
+    },
+    {
+      "name": "aspect-LeftBottom-zero-40-20",
+      "ratio": 0.5,
+      "calls": 1
+    },
+    {
+      "name": "aspect-LeftBottom-zero-0-20",
+      "ratio": 0,
+      "calls": 1
+    },
+    {
+      "name": "aspect-LeftBottom-zero-40-0",
+      "ratio": 0,
+      "calls": 1
+    },
+    {
+      "name": "aspect-LeftBottom-zero--40-20",
+      "ratio": -0.5,
+      "calls": 1
+    },
+    {
+      "name": "aspect-LeftBottom-error-40-20",
+      "ratio": 0.5,
+      "calls": 1
+    },
+    {
+      "name": "aspect-LeftBottom-error-0-20",
+      "ratio": 0,
+      "calls": 1
+    },
+    {
+      "name": "aspect-LeftBottom-error-40-0",
+      "ratio": 0,
+      "calls": 1
+    },
+    {
+      "name": "aspect-LeftBottom-error--40-20",
+      "ratio": -0.5,
+      "calls": 1
+    },
+    {
+      "name": "aspect-99-none-40-20",
+      "ratio": null,
+      "calls": 0
+    },
+    {
+      "name": "aspect-99-none-0-20",
+      "ratio": null,
+      "calls": 0
+    },
+    {
+      "name": "aspect-99-none-40-0",
+      "ratio": null,
+      "calls": 0
+    },
+    {
+      "name": "aspect-99-none--40-20",
+      "ratio": null,
+      "calls": 0
+    },
+    {
+      "name": "aspect-99-remote-40-20",
+      "ratio": 2,
+      "calls": 0
+    },
+    {
+      "name": "aspect-99-remote-0-20",
+      "ratio": 0,
+      "calls": 0
+    },
+    {
+      "name": "aspect-99-remote-40-0",
+      "ratio": 0,
+      "calls": 0
+    },
+    {
+      "name": "aspect-99-remote--40-20",
+      "ratio": -2,
+      "calls": 0
+    },
+    {
+      "name": "aspect-99-local-40-20",
+      "ratio": 1.5,
+      "calls": 1
+    },
+    {
+      "name": "aspect-99-local-0-20",
+      "ratio": 1.5,
+      "calls": 1
+    },
+    {
+      "name": "aspect-99-local-40-0",
+      "ratio": 1.5,
+      "calls": 1
+    },
+    {
+      "name": "aspect-99-local--40-20",
+      "ratio": 1.5,
+      "calls": 1
+    },
+    {
+      "name": "aspect-99-zero-40-20",
+      "ratio": 2,
+      "calls": 1
+    },
+    {
+      "name": "aspect-99-zero-0-20",
+      "ratio": 0,
+      "calls": 1
+    },
+    {
+      "name": "aspect-99-zero-40-0",
+      "ratio": 0,
+      "calls": 1
+    },
+    {
+      "name": "aspect-99-zero--40-20",
+      "ratio": -2,
+      "calls": 1
+    },
+    {
+      "name": "aspect-99-error-40-20",
+      "ratio": 2,
+      "calls": 1
+    },
+    {
+      "name": "aspect-99-error-0-20",
+      "ratio": 0,
+      "calls": 1
+    },
+    {
+      "name": "aspect-99-error-40-0",
+      "ratio": 0,
+      "calls": 1
+    },
+    {
+      "name": "aspect-99-error--40-20",
+      "ratio": -2,
+      "calls": 1
+    }
+  ],
+  "scope": "Actual DtoService.SetPhotoProperties and JsonDefaults serialization; actual GetPrimaryImageAspectRatio and Photo fallback. Parent repository, dimensions and logger are controlled. No native SQL, static decoder or HTTP claimed.",
+  "assemblies": [
+    {
+      "name": "MediaBrowser.Controller",
+      "sha256": "e4f1e201e43c9e22fd07cbd0ed2c52c427b0bdaa2dfe0ed5e5ab7ee604b537cf"
+    },
+    {
+      "name": "Emby.Server.Implementations",
+      "sha256": "9c732ba80d1b1980c36d2d64780da28d64c0a8d503bf044c89bc35285eab219e"
+    }
+  ]
+}

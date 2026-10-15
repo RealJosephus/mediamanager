@@ -94,7 +94,7 @@ test('PostgreSQL Book lookups use the first real Parent and preserve null, empty
 test('PostgreSQL Book providers, repository failures and cancellation preserve native save prefixes', async t => {
   const fixture = await setupChildrenFixture(t);
   assert.equal(fixture.host.supports('Book'), true);
-  assert.equal(fixture.host.supports('Photo'), false); assert.equal(fixture.host.supports('PhotoAlbum'), false);
+  assert.equal(fixture.host.supports('Photo'), true); assert.equal(fixture.host.supports('PhotoAlbum'), true);
   for (const sample of input.refresh) await t.test(sample.name, async () => {
     const target = { key: 'target', Id: Id(1), type: 'Book', Name: 'Stored title', ProductionYear: 2025, SeriesName: sample.seriesName,
       DateLastRefreshed: sample.first ? '0001-01-01 00:00:00' : '2026-10-01 00:00:00', IsLocked: sample.locked ?? false,

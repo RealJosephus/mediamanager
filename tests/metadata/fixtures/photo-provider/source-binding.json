@@ -1,0 +1,33 @@
+{
+  "scope": "PhotoProvider native tag reads",
+  "sources": [
+    {
+      "filename": "D:/jellyfin/Emby.Photos/PhotoProvider.cs",
+      "available": true,
+      "kind": "file",
+      "bytes": 6622,
+      "sha256": "4c8561f0b08a663224937759c1cd1135e9987a6b6d7c476419bd7f906c0730f5"
+    },
+    {
+      "filename": "D:/jellyfin/MediaBrowser.Controller/Entities/BaseItemExtensions.cs",
+      "available": true,
+      "kind": "file",
+      "bytes": 4674,
+      "sha256": "9773741141f7d38e7cde16eb2bf2a5f7b9e271a679df9b00782b57d087275b22"
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-photo-stage/inputs/photo-provider-synthetic-2/input.json",
+      "available": true,
+      "kind": "file",
+      "bytes": 5028,
+      "sha256": "93443c8c8375028264778e74646aaa248c2b0a3a1698cb86b204123da7bf5368"
+    }
+  ],
+  "record": {
+    "filename": "D:/mediamanager-validation/20261016-photo-stage/results/photo-provider-native-4/record.json",
+    "available": true,
+    "kind": "file",
+    "bytes": 4383,
+    "sha256": "14266d2b8959654055f933cc83d9bfba7ad90ee6d2f0e9c35f33340b15f74379"
+  }
+}

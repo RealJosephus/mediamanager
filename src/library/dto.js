@@ -512,6 +512,16 @@ export async function projectItem(item, state, user, selected, options) {
   if (has('Height') && item.Height > 0) dto.Height = item.Height;
   if (has('IsHD') && item.IsHD) dto.IsHD = true;
   if (item.Type === 'Book') dto.SeriesName = item.SeriesName;
+  if (item.Type === 'Photo') {
+    for (const key of ['CameraMake', 'CameraModel', 'Software', 'ExposureTime', 'FocalLength', 'Aperture', 'ShutterSpeed', 'Latitude', 'Longitude', 'Altitude', 'IsoSpeedRating']) dto[key] = item[key];
+    dto.ImageOrientation = item.Orientation;
+    let parent = state.byId.get(idKey(item.ParentId));
+    const visited = new Set([idKey(item.Id)]);
+    while (parent && parent.Type !== 'PhotoAlbum' && !visited.has(idKey(parent.Id))) {
+      visited.add(idKey(parent.Id)); parent = state.byId.get(idKey(parent.ParentId));
+    }
+    if (parent?.Type === 'PhotoAlbum') { dto.Album = parent.Name; dto.AlbumId = dtoId(parent.Id); }
+  }
   if (['Series', 'Season', 'Episode'].includes(item.Type)) {
     for (const key of ['SeriesName', 'SeasonName', 'IndexNumberEnd', 'AirTime', 'Status']) if (item[key] != null) dto[key] = item[key];
     for (const key of item.Type === 'Episode' ? ['SeriesId', 'SeasonId'] : item.Type === 'Season' ? ['SeriesId'] : []) {
@@ -542,7 +552,21 @@ export async function projectItem(item, state, user, selected, options) {
       dto.ImageBlurHashes.get(type).set(tag, Buffer.from(row.Blurhash).toString('utf8'));
     }
   }
-  if (has('PrimaryImageAspectRatio')) { const primary = images.find(row => row.ImageType === 0); if (primary?.Width > 0 && primary.Height > 0) dto.PrimaryImageAspectRatio = primary.Width / primary.Height; }
+  if (has('PrimaryImageAspectRatio')) {
+    const primary = images.find(row => row.ImageType === 0);
+    if (item.Type === 'Photo' && primary) {
+      let size;
+      if (!/^http/iu.test(primary.Path)) try {
+        size = options.getImageDimensions ? await options.getImageDimensions(item, primary) : primary;
+      } catch (error) { options.logger?.error?.(error, 'Could not read the primary image dimensions.'); }
+      if (size?.Width > 0 && size.Height > 0) dto.PrimaryImageAspectRatio = size.Width / size.Height;
+      else {
+        const rotated = ['LeftBottom', 'LeftTop', 'RightBottom', 'RightTop'].includes(item.Orientation);
+        dto.PrimaryImageAspectRatio = item.Width !== 0 && item.Height !== 0
+          ? rotated ? item.Height / item.Width : item.Width / item.Height : 0;
+      }
+    } else if (primary?.Width > 0 && primary.Height > 0) dto.PrimaryImageAspectRatio = primary.Width / primary.Height;
+  }
   if (['Audio', 'AudioBook'].includes(item.Type)) {
     dto.Album = item.Album;
     dto.ExtraType = extraType(item);
