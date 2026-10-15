@@ -1,0 +1,243 @@
+{
+  "inputSha256": "a655b639bc67eaca9f5194c1d4b5f5c76bd2db26ce67e61a6d0a71946b69bb38",
+  "boundary": "Actual MovieMetadataService, SeasonMetadataService and EpisodeMetadataService provider lookup inputs. Actual ApplySearchResult, provider ID validation and IsAutomated assignment run through the native refresh lifecycle. Pathless items, library/options/children, file metadata, repository and provider callbacks are controlled. SQL, images, sidecars, public Identify routes and remote service behavior are excluded.",
+  "results": [
+    {
+      "name": "Movie: no search automated false",
+      "lookups": [
+        {
+          "Name": "Stored title",
+          "Year": 2001,
+          "ProviderIds": {
+            "Tmdb": "11",
+            "Custom": "old"
+          },
+          "SeriesProviderIds": null,
+          "IsAutomated": false
+        }
+      ],
+      "Overview": "Stored title|2001|false|11"
+    },
+    {
+      "name": "Movie: no search automated true",
+      "lookups": [
+        {
+          "Name": "Stored title",
+          "Year": 2001,
+          "ProviderIds": {
+            "Tmdb": "11",
+            "Custom": "old"
+          },
+          "SeriesProviderIds": null,
+          "IsAutomated": true
+        }
+      ],
+      "Overview": "Stored title|2001|true|11"
+    },
+    {
+      "name": "Movie: identified name year and replacement IDs",
+      "lookups": [
+        {
+          "Name": "Identified title",
+          "Year": 2024,
+          "ProviderIds": {
+            "Tmdb": "22",
+            "Custom": "selected"
+          },
+          "SeriesProviderIds": null,
+          "IsAutomated": true
+        }
+      ],
+      "Overview": "Identified title|2024|true|22"
+    },
+    {
+      "name": "Movie: null search values clear previous lookup",
+      "lookups": [
+        {
+          "Name": null,
+          "Year": null,
+          "ProviderIds": {},
+          "SeriesProviderIds": null,
+          "IsAutomated": false
+        }
+      ],
+      "Overview": "\u003Cnull\u003E|\u003Cnull\u003E|false|\u003Cnone\u003E"
+    },
+    {
+      "name": "Movie: provider ID validation and normalization",
+      "lookups": [
+        {
+          "Name": "Identified title",
+          "Year": 2025,
+          "ProviderIds": {
+            "Tmdb": "23",
+            "Imdb": "tt42",
+            "Tvdb": "3",
+            "Custom": "padded"
+          },
+          "SeriesProviderIds": null,
+          "IsAutomated": false
+        }
+      ],
+      "Overview": "Identified title|2025|false|23"
+    },
+    {
+      "name": "Season: no search automated false",
+      "lookups": [
+        {
+          "Name": "Stored title",
+          "Year": 2001,
+          "ProviderIds": {
+            "Tmdb": "11",
+            "Custom": "old"
+          },
+          "SeriesProviderIds": {},
+          "IsAutomated": false
+        }
+      ],
+      "Overview": "Stored title|2001|false|\u003Cnone\u003E"
+    },
+    {
+      "name": "Season: no search automated true",
+      "lookups": [
+        {
+          "Name": "Stored title",
+          "Year": 2001,
+          "ProviderIds": {
+            "Tmdb": "11",
+            "Custom": "old"
+          },
+          "SeriesProviderIds": {},
+          "IsAutomated": true
+        }
+      ],
+      "Overview": "Stored title|2001|true|\u003Cnone\u003E"
+    },
+    {
+      "name": "Season: identified name year and replacement IDs",
+      "lookups": [
+        {
+          "Name": "Stored title",
+          "Year": 2001,
+          "ProviderIds": {},
+          "SeriesProviderIds": {
+            "tmdb": "22",
+            "Custom": "selected"
+          },
+          "IsAutomated": true
+        }
+      ],
+      "Overview": "Stored title|2001|true|22"
+    },
+    {
+      "name": "Season: null search values clear previous lookup",
+      "lookups": [
+        {
+          "Name": "Stored title",
+          "Year": 2001,
+          "ProviderIds": {},
+          "SeriesProviderIds": {},
+          "IsAutomated": false
+        }
+      ],
+      "Overview": "Stored title|2001|false|\u003Cnone\u003E"
+    },
+    {
+      "name": "Season: provider ID validation and normalization",
+      "lookups": [
+        {
+          "Name": "Stored title",
+          "Year": 2001,
+          "ProviderIds": {},
+          "SeriesProviderIds": {
+            "imdb": "tt42",
+            "Tvdb": "3",
+            "Custom": " padded ",
+            "bad=name": "accepted only as series ID"
+          },
+          "IsAutomated": false
+        }
+      ],
+      "Overview": "Stored title|2001|false|\u003Cnone\u003E"
+    },
+    {
+      "name": "Episode: no search automated false",
+      "lookups": [
+        {
+          "Name": "Stored title",
+          "Year": 2001,
+          "ProviderIds": {
+            "Tmdb": "11",
+            "Custom": "old"
+          },
+          "SeriesProviderIds": {},
+          "IsAutomated": false
+        }
+      ],
+      "Overview": "Stored title|2001|false|\u003Cnone\u003E"
+    },
+    {
+      "name": "Episode: no search automated true",
+      "lookups": [
+        {
+          "Name": "Stored title",
+          "Year": 2001,
+          "ProviderIds": {
+            "Tmdb": "11",
+            "Custom": "old"
+          },
+          "SeriesProviderIds": {},
+          "IsAutomated": true
+        }
+      ],
+      "Overview": "Stored title|2001|true|\u003Cnone\u003E"
+    },
+    {
+      "name": "Episode: identified name year and replacement IDs",
+      "lookups": [
+        {
+          "Name": "Stored title",
+          "Year": 2001,
+          "ProviderIds": {},
+          "SeriesProviderIds": {
+            "tmdb": "22",
+            "Custom": "selected"
+          },
+          "IsAutomated": true
+        }
+      ],
+      "Overview": "Stored title|2001|true|22"
+    },
+    {
+      "name": "Episode: null search values clear previous lookup",
+      "lookups": [
+        {
+          "Name": "Stored title",
+          "Year": 2001,
+          "ProviderIds": {},
+          "SeriesProviderIds": {},
+          "IsAutomated": false
+        }
+      ],
+      "Overview": "Stored title|2001|false|\u003Cnone\u003E"
+    },
+    {
+      "name": "Episode: provider ID validation and normalization",
+      "lookups": [
+        {
+          "Name": "Stored title",
+          "Year": 2001,
+          "ProviderIds": {},
+          "SeriesProviderIds": {
+            "imdb": "tt42",
+            "Tvdb": "3",
+            "Custom": " padded ",
+            "bad=name": "accepted only as series ID"
+          },
+          "IsAutomated": false
+        }
+      ],
+      "Overview": "Stored title|2001|false|\u003Cnone\u003E"
+    }
+  ]
+}

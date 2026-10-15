@@ -4,7 +4,8 @@ import { saveMetadataItem } from './save-item.js';
 import { mergeMetadata } from './merge.js';
 import { newNativeItemEntity, acquireNativeItemLinkOwner } from '../library/native-item-entity.js';
 import { MetadataUpdateHost } from './update-host.js';
-import { isValidProviderId } from './provider-ids.js';
+import { isValidProviderId, trySetProviderId } from './provider-ids.js';
+import { ordinalIgnoreCaseEquals } from '../storage/ordinal-comparer.js';
 import { MetadataImages } from './images.js';
 import { scanLocalImages } from './local-images.js';
 import { ExternalDataManager } from '../library/external-data.js';
@@ -42,6 +43,22 @@ const liveSeriesParent = Symbol('live series parent');
 const liveMetadataItem = Symbol('live metadata item');
 const snapshotFields = snapshot => ({ ...(itemRequiresJson(snapshot)
   ? typeof snapshot?.Data === 'string' ? parseLosslessJson(snapshot.Data) : snapshot?.Data : {}), ...snapshot });
+
+function applySearchResult(lookup, itemType, result) {
+  lookup.ProviderIds = {};
+  if (itemType === 'Episode' || itemType === 'Season') {
+    lookup.SeriesProviderIds = {};
+    for (const [name, value] of Object.entries(result.ProviderIds ?? {})) {
+      if (!validId(name, value)) continue;
+      const key = Object.keys(lookup.SeriesProviderIds).find(key => ordinalIgnoreCaseEquals(key, name)) ?? name;
+      Object.defineProperty(lookup.SeriesProviderIds, key, { value, enumerable: true, writable: true, configurable: true });
+    }
+  } else {
+    for (const [name, value] of Object.entries(result.ProviderIds ?? {})) trySetProviderId(lookup, name, value);
+    lookup.Name = result.Name ?? null;
+    lookup.Year = result.ProductionYear ?? null;
+  }
+}
 
 function applyLiveSeriesParent(loaded, series) {
   if (!series) return loaded;
@@ -493,7 +510,8 @@ export class MetadataRefreshHost {
     }
     const localLocked = temp.Item.IsLocked;
     const lookup = cloneNativeItemValue(loaded.lookup);
-    if (options.SearchResult) Object.assign(lookup, options.SearchResult, { ProviderIds: { ...lookup.ProviderIds, ...options.SearchResult.ProviderIds } });
+    if (options.SearchResult) applySearchResult(lookup, item.Type, options.SearchResult);
+    lookup.IsAutomated = options.IsAutomated ?? false;
     const mergeLookupIds = () => {
       for (const [key, value] of Object.entries(temp.Item.ProviderIds ?? {})) if (validId(key, value) && !validId(key, lookup.ProviderIds?.[key])) (lookup.ProviderIds ??= {})[key] = value;
     };
