@@ -41,6 +41,40 @@ const fixtureContract = {
 const nativeChannelId = 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa';
 const nativeRemoteImageId = 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb';
 
+for (const type of ['CollectionFolder', 'AggregateFolder']) test(`${type} export retains its configuration location and retargets only its media locations`, () => {
+  const programData = path.resolve('export-owner-state', 'data');
+  const metadata = path.resolve('export-owner-state', 'metadata');
+  const instanceStatePaths = { programData, metadata };
+  const projector = createSqliteExportPathProjector({ sourceContract, targetContract, instanceStatePaths });
+  for (const [ownerPath, location, expected] of [
+    [path.resolve('export-owner-state', 'root', 'default', 'Library'),
+      path.resolve('export-owner-state', 'root', 'default', 'Library'),
+      path.resolve('export-owner-state', 'root', 'default', 'Library')],
+    ['%AppDataPath%' + path.sep + 'collections', path.join(programData, 'collections'), '%AppDataPath%' + path.sep + 'collections'],
+  ]) {
+    const data = '{"PhysicalLocationsList":[' + JSON.stringify(location) + ',"Z:\\\\Media\\\\Films"],"Counter":9007199254740993}';
+    const row = exchangeRow('BaseItems', { Type: 'MediaBrowser.Controller.Entities.' + type, Path: ownerPath, Data: data });
+    const result = projector.projectRow('BaseItems', row);
+    assert.equal(result.Path.string(), ownerPath);
+    assert.deepEqual(JSON.parse(result.Data.string()).PhysicalLocationsList, [expected, '/srv/jellyfin/media/Films']);
+    assert.match(result.Data.string(), /"Counter":9007199254740993/u);
+  }
+});
+
+for (const [name, type, property, location] of [
+  ['unmapped media location', 'CollectionFolder', 'PhysicalLocationsList', 'Y:\\Outside\\Media'],
+  ['another configuration directory', 'CollectionFolder', 'PhysicalLocationsList', path.resolve('export-owner-state', 'root', 'default', 'Other')],
+  ['media part using the owner directory', 'CollectionFolder', 'AdditionalParts', path.resolve('export-owner-state', 'root', 'default', 'Library')],
+  ['ordinary item using a configuration location', 'Folder', 'PhysicalLocationsList', path.resolve('export-owner-state', 'root', 'default', 'Library')],
+  ['internal access path', 'CollectionFolder', 'PhysicalLocationsList', '/vfs/movies/Library'],
+]) test(`CollectionFolder owner path handling still rejects ${name}`, () => {
+  const projector = createSqliteExportPathProjector({ sourceContract, targetContract });
+  const row = exchangeRow('BaseItems', { Type: 'MediaBrowser.Controller.Entities.' + type,
+    Path: type === 'Folder' ? 'Z:\\Media\\Library' : path.resolve('export-owner-state', 'root', 'default', 'Library'),
+    Data: JSON.stringify({ [property]: [location] }) });
+  assert.throws(() => projector.projectRow('BaseItems', row), /outside every portable mount|VFS access path/u);
+});
+
 async function absent(filename) {
   try { await access(filename); return false; }
   catch (error) { if (error.code === 'ENOENT') return true; throw error; }
