@@ -66,3 +66,18 @@ export async function writeCompleteFilterHttpEvidence(actual, nativeHttp, option
   await writeFile(path.join(output, 'comparison.json'), json({ ...comparison, ...options,
     completeHttpContractEqual: true, releaseAcceptance: false }), { flag: 'wx' });
 }
+
+export function assertCompleteNativeFilterHttpRepeat(left, right, { leftServerId, rightServerId }) {
+  assert.equal(left.records.length, right.records.length);
+  const leftTraces = new Set(), rightTraces = new Set();
+  for (const [index, record] of left.records.entries()) {
+    const repeated = right.records[index];
+    assert.deepEqual({ name: record.name, endpoint: record.endpoint, query: record.query,
+      scope: record.scope, route: record.route, expectedStatus: record.expectedStatus },
+    { name: repeated.name, endpoint: repeated.endpoint, query: repeated.query,
+      scope: repeated.scope, route: repeated.route, expectedStatus: repeated.expectedStatus });
+    assert.deepEqual(fullContract(record.response, 'bodyJson', leftServerId, leftTraces),
+      fullContract(repeated.response, 'bodyJson', rightServerId, rightTraces), record.name + ':' + record.endpoint);
+  }
+  return { responses: left.records.length, leftTracesValidated: leftTraces.size, rightTracesValidated: rightTraces.size };
+}

@@ -5,7 +5,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { verifyNativeReferencePreparation } from './native-reference-preparation.js';
-import { nativeQueryReference, nativeQueryExecutables, nativeItemFilterRecordedOutputRoot } from './native-query-inputs.js';
+import { nativeQueryInputs, readNativeQueryBoundFile } from './native-query-inputs.js';
 
 const repoRoot = fileURLToPath(new URL('../../', import.meta.url));
 const sha256 = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -94,12 +94,13 @@ function assertResponseContracts(nativeHttp) {
 }
 
 export async function verifyNativeItemFilterEvidence(options) {
-  const recorderSource = await readFile(path.join(repoRoot, 'tools/compat/record-item-filter-native.mjs'), 'utf8');
-  return verifyNativeItemFilterEvidenceContract({ ...options, recorderSource });
+  const inputs = options.inputs ?? nativeQueryInputs;
+  const recorderSource = await inputs.readRecorderSource();
+  return verifyNativeItemFilterEvidenceContract({ ...options, inputs, recorderSource });
 }
 
 export async function verifyNativeItemFilterEvidenceContract({ evidence, fixtureUrl, scenario, runDirectory,
-  expectedRecords, recorderSource }) {
+  expectedRecords, recorderSource, inputs = nativeQueryInputs }) {
   assert.equal(typeof recorderSource, 'string');
   const nativeRun = fileURLToPath(evidence);
   const evidenceRoot = path.dirname(nativeRun.replace(/[\\/]$/u, ''));
@@ -115,7 +116,7 @@ export async function verifyNativeItemFilterEvidenceContract({ evidence, fixture
   assert.equal(invocation.scenario, scenario);
   assert.equal(invocation.evidenceName, path.basename(evidenceRoot));
   assert.equal(invocation.runDirectory, runDirectory);
-  const recordedOutputRoot = nativeItemFilterRecordedOutputRoot;
+  const recordedOutputRoot = inputs.recordedOutputRoot;
   assert.ok(isWithin(recordedOutputRoot, evidenceRoot));
   assert.equal(invocation.outputRoot, path.relative(recordedOutputRoot, evidenceRoot).replaceAll('\\', '/'));
   assert.ok(Number.isInteger(invocation.preferredPort) && Number.isInteger(invocation.selectedPort));
@@ -154,8 +155,8 @@ export async function verifyNativeItemFilterEvidenceContract({ evidence, fixture
   assert.deepEqual(provenance.negativeControls, summary.negativeControls);
   assert.deepEqual(oracle.negativeControls, summary.negativeControls);
 
-  const sourceDatabase = nativeQueryReference.sourceDatabase.filename;
-  const { jellyfinDll, dotnet } = nativeQueryExecutables;
+  const sourceDatabase = inputs.reference.sourceDatabase.filename;
+  const { jellyfinDll, dotnet, ffmpeg } = inputs.executables;
   assert.equal(summary.sourceSummary.sourceDatabaseSha256, await sha256File(sourceDatabase));
   assert.equal(summary.sourceSummary.jellyfinDllSha256, await sha256File(jellyfinDll));
   assert.equal(summary.sourceSummary.dotnetSha256, await sha256File(dotnet));
@@ -172,11 +173,35 @@ export async function verifyNativeItemFilterEvidenceContract({ evidence, fixture
     profile: 'item-filter',
     sourceDatabase,
     fixtureUserId: JSON.parse(fixtureBytes).userId,
+    inputs,
   });
   assert.equal(summary.sourceSummary.dotnetSha256, referencePreparation.executables.dotnet.sha256,
     'The recorder dotnet identity must match the prepared executable.');
   assert.equal(summary.sourceSummary.jellyfinDllSha256, referencePreparation.executables.jellyfinDll.sha256,
     'The recorder DLL identity must match the prepared executable.');
+
+  if (inputs.profile.executionInputs?.length) {
+    assert.equal(inputs.profile.executionInputs.length, 2);
+    assert.deepEqual(inputs.profile.executionInputs.map(entry => entry.kind).sort(), ['ffmpeg', 'ffprobe']);
+    assert.deepEqual(summary.nativeLaunch.command.slice(0, 2), [dotnet, jellyfinDll]);
+    const encoderIndex = summary.nativeLaunch.command.indexOf('--ffmpeg');
+    assert.ok(encoderIndex > 0);
+    assert.equal(summary.nativeLaunch.command[encoderIndex + 1], ffmpeg);
+    assert.equal(summary.executionInputsUnchanged, true);
+    for (const descriptor of inputs.profile.executionInputs) {
+      const bytes = await readNativeQueryBoundFile(descriptor);
+      const expected = { kind: descriptor.kind, filename: descriptor.filename,
+        bytes: bytes.length, sha256: sha256(bytes) };
+      assert.deepEqual(summary.nativeLaunch.before.find(entry => entry.kind === descriptor.kind), expected);
+      assert.deepEqual(summary.nativeLaunch.after.find(entry => entry.kind === descriptor.kind), expected);
+      if (descriptor.kind === 'ffprobe') {
+        assert.deepEqual(referencePreparation.bootstrap.ffprobeInput.before, expected);
+        assert.deepEqual(referencePreparation.bootstrap.ffprobeInput.after, expected);
+      }
+    }
+    assert.deepEqual(provenance.nativeLaunch, summary.nativeLaunch);
+    assert.deepEqual(oracle.nativeLaunch, summary.nativeLaunch);
+  }
 
   const recorderSha256 = await sha256File(path.join(evidenceRoot, 'record-native.mjs'));
   assert.equal(recorderSha256, summary.recorderSha256);

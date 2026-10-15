@@ -1,10 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { randomUUID, createHash } from 'node:crypto';
-import { readFile, mkdtemp, rm } from 'node:fs/promises';
+import { readFile, mkdtemp, rm, lstat, realpath } from 'node:fs/promises';
 import path from 'node:path';
 import { tmpdir } from 'node:os';
-import { execFileSync } from 'node:child_process';
 import { PostgresDatabase } from '../../src/database/postgres.js';
 import { tableDefinition, quoteIdentifier as q } from '../../src/database/model.js';
 import { localGenreTagSimilarQuery, queryPostgresLocalSimilarRows, queryPostgresMovieSimilarRows } from '../../src/library/postgres-similar-items-query.js';
@@ -15,11 +14,13 @@ import { SqliteDatabase } from '../../src/database/sqlite.js';
 import { exportCurrentSqlite, transferDatabase } from '../../src/migration/database-transfer.js';
 import { mapRecord } from '../../src/library/records.js';
 import { nativeTextBytes } from '../../src/database/native-text.js';
+import { captureReferenceInput } from '../../tools/compat/reference-inputs.js';
 
-const root = new URL('./fixtures/movie-similar/', import.meta.url);
+const provenanceUrl = new URL('./fixtures/movie-similar/provenance.json', import.meta.url);
+const root = new URL('./', provenanceUrl);
 const input = JSON.parse(await readFile(new URL('input.json', root), 'utf8'));
 const native = JSON.parse(await readFile(new URL('native.json', root), 'utf8'));
-const provenance = JSON.parse(await readFile(new URL('provenance.json', root), 'utf8'));
+const provenance = JSON.parse(await readFile(provenanceUrl, 'utf8'));
 const id = value => `14000000-0000-0000-0000-${String(value).padStart(12, '0')}`;
 const blank = table => Object.fromEntries(tableDefinition(table).columns.filter(column => !column.generated).map(column => {
   const type = column.clrType.replace('?', '');
@@ -30,30 +31,81 @@ const typeNames = { Movie: 'MediaBrowser.Controller.Entities.Movies.Movie', Trai
   Series: 'MediaBrowser.Controller.Entities.TV.Series', LiveTvProgram: 'MediaBrowser.Controller.LiveTv.LiveTvProgram' };
 
 async function verifyFile(entry) {
-  assert.equal(entry.available, true, entry.filename);
-  const bytes = await readFile(entry.filename);
+  assert.equal(entry.required, true, entry.filename);
+  const filename = path.resolve(entry.filename);
+  const [metadata, resolved, bytes] = await Promise.all([lstat(filename), realpath(filename), readFile(filename)]);
+  assert.ok(metadata.isFile() && !metadata.isSymbolicLink(), filename);
+  assert.equal(resolved, filename, filename);
+  assert.equal(metadata.size, bytes.length, filename);
   assert.equal(bytes.length, entry.bytes, entry.filename);
   assert.equal(createHash('sha256').update(bytes).digest('hex'), entry.sha256, entry.filename);
 }
 
-test('movie Similar oracle seals native-only output, shared input, source pin and actual runtime', async () => {
+test('movie Similar oracle seals the designated source build, actual new execution and retained history', async () => {
+  assert.equal(provenance.kind, 'new-designated-source-movie-similar-oracle');
   assert.equal(provenance.candidateVerified, false);
-  assert.equal(provenance.native.sha256, 'bf9949376bb9c599fc1fe44c6061a88c2a4a264bc06d01847873dacc6f3870fb');
-  assert.equal(createHash('sha256').update(await readFile(new URL('provenance.json', root))).digest('hex'),
-    '57bf53eb3a6f8d963cbeab510339cdbf04061ef52028678aca162a232ceecfeb');
+  assert.equal(provenance.native.sha256, 'c0b3eb54a893fcbed67805ad96ee4c6f93b550274511cfd6d07d28192971541f');
+  assert.equal(provenance.jellyfinDll.sha256, '474c7c638fe93cc61f1a588849fb93c81a2927388f6f4cf19953b3a76e9deb26');
+  assert.equal(provenance.native.sha256, provenance.raw.sha256);
+  const files = new Map();
+  for (const entry of provenance.requiredInputs) {
+    const filename = path.resolve(entry.filename);
+    assert.equal(files.has(filename), false, 'Required file declarations must be unique.');
+    files.set(filename, entry);
+    await verifyFile(entry);
+  }
+  const declared = entry => {
+    const actual = files.get(path.resolve(entry.filename));
+    assert.ok(actual, entry.filename);
+    assert.equal(actual.sha256, entry.sha256, entry.filename);
+    assert.equal(actual.bytes, entry.bytes, entry.filename);
+  };
+  for (const entry of [provenance.record, provenance.raw, provenance.native, provenance.dotnet, provenance.jellyfinDll,
+    provenance.sourceBuildReceipt, provenance.executionReceipt, provenance.inputSnapshots.before,
+    provenance.inputSnapshots.after, provenance.historical.snapshot, ...provenance.files, ...provenance.resolution,
+    ...provenance.jellyfin.sources]) declared(entry);
+  assert.equal(provenance.requiredDirectories.length, 2);
+  for (const entry of provenance.requiredDirectories) {
+    assert.equal(entry.required, true);
+    const actual = await captureReferenceInput(entry.path);
+    assert.equal(actual.entriesSha256, entry.entriesSha256, entry.path);
+  }
   assert.equal(native.candidateVerified, false);
   assert.match(native.boundary, /Actual pinned MovieSimilarItemsProvider with concrete BaseItemRepository and EF Core SQLite/u);
   assert.equal(provenance.jellyfin.commit, '208c278b75abd897aefa1e1175126eac5e4dbfaa');
-  const git = args => execFileSync('git', ['-C', provenance.jellyfin.source, ...args], { encoding: 'utf8', windowsHide: true }).trim();
-  assert.equal(git(['rev-parse', 'HEAD']), provenance.jellyfin.commit);
-  assert.equal(git(['status', '--short']), '');
-  for (const entry of [provenance.record, provenance.raw, provenance.native, provenance.dotnet, provenance.jellyfinDll,
-    ...provenance.files, ...provenance.resolution, ...provenance.jellyfin.sources]) await verifyFile(entry);
+  const build = JSON.parse(await readFile(provenance.sourceBuildReceipt.filename, 'utf8'));
+  assert.equal(build.passed, true); assert.equal(build.fullBuildInputClosure, true);
+  assert.equal(build.buildIdentity.head, provenance.jellyfin.commit);
+  assert.equal(build.buildIdentity.contentDigest, provenance.jellyfin.contentDigest);
+  assert.equal(build.buildIdentity.nativeDll.sha256, provenance.jellyfinDll.sha256);
+  const execution = JSON.parse(await readFile(provenance.executionReceipt.filename, 'utf8'));
+  assert.equal(execution.passed, true); assert.equal(execution.inputsUnchanged, true);
+  assert.equal(execution.sourceContentDigest, provenance.jellyfin.contentDigest);
+  assert.equal(execution.sourceFilesVerified, build.copiedSourceFilesVerified);
+  assert.equal(execution.nativeDll.sha256, provenance.jellyfinDll.sha256);
+  assert.equal(execution.historicalExecutionRestored, false);
+  const [before, after] = await Promise.all([provenance.inputSnapshots.before, provenance.inputSnapshots.after]
+    .map(entry => readFile(entry.filename, 'utf8').then(JSON.parse)));
+  assert.deepEqual(after, before, 'The native attempt retained its exact source, runtime and SDK input trees.');
+  assert.deepEqual(provenance.requiredDirectories.map(entry => [entry.path, entry.entriesSha256]),
+    [before.runtime, before.dotnet].map(entry => [entry.filename, entry.entriesSha256]));
   for (const entry of [...native.assemblies, native.nativeSqlite]) {
-    const bytes = await readFile(entry.path);
-    if (entry.bytes !== undefined) assert.equal(bytes.length, entry.bytes, entry.path);
-    assert.equal(createHash('sha256').update(bytes).digest('hex'), entry.sha256, entry.path);
+    const actual = files.get(path.resolve(entry.path));
+    assert.ok(actual, entry.path);
+    assert.equal(actual.sha256, entry.sha256, entry.path);
+    if (entry.bytes !== undefined) assert.equal(actual.bytes, entry.bytes, entry.path);
   }
+  const history = JSON.parse(await readFile(provenance.historical.snapshot.filename, 'utf8'));
+  assert.equal(history.oldProvenanceSha256, '57bf53eb3a6f8d963cbeab510339cdbf04061ef52028678aca162a232ceecfeb');
+  assert.equal(provenance.historical.executionRestored, false);
+  assert.equal(history.sources.length, 16);
+  assert.deepEqual(provenance.jellyfin.sources.map(entry => entry.name), history.sources.map(entry => entry.name));
+  for (const entry of [...history.files, ...history.sources]) declared(entry);
+  const oldNative = history.files.find(entry => path.basename(entry.original) === 'native.json');
+  assert.ok(oldNative);
+  assert.equal(oldNative.sha256, 'bf9949376bb9c599fc1fe44c6061a88c2a4a264bc06d01847873dacc6f3870fb');
+  const previous = JSON.parse(await readFile(oldNative.filename, 'utf8'));
+  for (const field of ['inputSha256', 'results', 'liveTv', 'tmdbMovie']) assert.deepEqual(native[field], previous[field], field);
   const record = JSON.parse(await readFile(provenance.record.filename, 'utf8'));
   assert.equal(record.passed, true); assert.equal(record.build.status, 0); assert.equal(record.process.status, 0);
   assert.equal(native.inputSha256, provenance.files.find(entry => entry.filename.endsWith('input.json')).sha256);

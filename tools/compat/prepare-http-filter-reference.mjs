@@ -45,6 +45,11 @@ async function verifySourceCopy() {
 await verifySourceCopy();
 const runtimeRoot = path.dirname(dll), runtimeBefore = await captureReferenceInput(runtimeRoot);
 const executablesBefore = await Promise.all([dotnet, dll, ffmpeg].map(async filename => ({ path: filename, sha256: hash(await readFile(filename)) })));
+assert.match(path.basename(ffmpeg), /^ffmpeg(?:\.exe)?$/iu);
+const ffprobe = path.join(path.dirname(ffmpeg), path.basename(ffmpeg).replace(/^ffmpeg/iu, 'ffprobe'));
+const ffprobeBytesBefore = await readFile(ffprobe);
+const ffprobeInput = { before: { kind: 'ffprobe', filename: ffprobe, bytes: ffprobeBytesBefore.length,
+  sha256: hash(ffprobeBytesBefore) }, after: null };
 const bootstrapScript = { path: fileURLToPath(import.meta.url), sha256: hash(await readFile(fileURLToPath(import.meta.url))) };
 const verificationTools = await Promise.all(['verify-baseline.js', 'reference-inputs.js'].map(async name => {
   const filename = fileURLToPath(new URL(name, import.meta.url));
@@ -69,8 +74,63 @@ await writeFile(path.join(root, 'config/network.xml'), `<?xml version="1.0" enco
   <LocalNetworkAddresses><string>127.0.0.1</string></LocalNetworkAddresses>
 </NetworkConfiguration>
 `);
-const args = [dll, '--nowebclient', '--datadir', path.join(root, 'data'), '--configdir', path.join(root, 'config'),
+const args = [dll, '--nowebclient', '--nonetchange', '--datadir', path.join(root, 'data'), '--configdir', path.join(root, 'config'),
   '--cachedir', path.join(root, 'cache'), '--logdir', path.join(root, 'log'), '--ffmpeg', ffmpeg];
+// Configure only this fresh instance before hosted services can run.
+const proxy = new URL(process.env.HTTPS_PROXY ?? '');
+assert.equal(proxy.hostname, '127.0.0.1', 'An owned loopback HTTP deny guard is required.');
+assert.equal(process.env.HTTP_PROXY, proxy.href.replace(/\/$/u, ''));
+assert.equal(process.env.ALL_PROXY, process.env.HTTP_PROXY);
+assert.equal(process.env.NO_PROXY, '127.0.0.1,localhost');
+await mkdir(path.join(root, 'config/ScheduledTasks'));
+await writeFile(path.join(root, 'config/system.xml'), '<?xml version="1.0" encoding="utf-8"?>\n<ServerConfiguration><IsStartupWizardCompleted>false</IsStartupWizardCompleted><PluginRepositories /><EnableMetrics>false</EnableMetrics><ServerName>IsolatedFilterReference</ServerName><UICulture>en-US</UICulture></ServerConfiguration>\n', { flag: 'wx' });
+function taskGuid(type) {
+  const b = createHash('md5').update(Buffer.from(type, 'utf16le')).digest();
+  const hex = Buffer.from([b[3], b[2], b[1], b[0], b[5], b[4], b[7], b[6], ...b.subarray(8)]).toString('hex');
+  return [hex.slice(0,8), hex.slice(8,12), hex.slice(12,16), hex.slice(16,20), hex.slice(20)].join('-');
+}
+const taskDefinitions = [];
+for (const entry of baseline.files.filter(file => !file.deleted && file.path.endsWith('.cs') && !file.path.startsWith('tests/'))) {
+  const source = path.join(copiedSource, entry.path), text = await readFile(source, 'utf8');
+  if (!text.includes('IScheduledTask')) continue;
+  const namespace = text.match(/\bnamespace\s+([A-Za-z0-9_.]+)/u)?.[1];
+  for (const match of text.matchAll(/\bclass\s+(\w+)\s*:\s*([^\{]*\bIScheduledTask\b[^\{]*)\{/gu)) {
+    const type = namespace + '.' + match[1], id = taskGuid(type);
+    const filename = path.join(root, 'config/ScheduledTasks', id + '.js');
+    await writeFile(filename, '[]\n', { flag: 'wx' });
+    taskDefinitions.push({ type, id, source: { filename: source, sha256: hash(await readFile(source)) },
+      configuration: { filename, sha256: hash(await readFile(filename)) } });
+  }
+}
+assert.ok(taskDefinitions.length >= 20 && taskDefinitions.some(task => task.type.endsWith('.PluginUpdateTask')));
+const migration = spawn(dotnet, [...args, '--mode', 'MigrateSystem'], { cwd: root, windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'] });
+let migrationStdout = '', migrationStderr = '';
+migration.stdout.on('data', chunk => { migrationStdout += chunk; });
+migration.stderr.on('data', chunk => { migrationStderr += chunk; });
+const migrationEnded = new Promise((resolve, reject) => { migration.once('error', reject); migration.once('close', (exitCode, signalCode) => resolve({ exitCode, signalCode })); });
+let migrationOutcome;
+let migrationTimer;
+try {
+  migrationOutcome = await Promise.race([migrationEnded, new Promise((_, reject) => { migrationTimer = setTimeout(() => reject(new Error('Native migration exceeded 60 seconds.')), 60000); })]);
+  assert.deepEqual(migrationOutcome, { exitCode: 0, signalCode: null });
+} finally {
+  clearTimeout(migrationTimer);
+  if (migration.exitCode === null && migration.signalCode === null) { migration.kill(); await migrationEnded; }
+  await writeFile(path.join(root, 'migration-stdout.log'), migrationStdout, { flag: 'wx' });
+  await writeFile(path.join(root, 'migration-stderr.log'), migrationStderr, { flag: 'wx' });
+  await writeFile(path.join(root, 'migration-process.json'), JSON.stringify({ command: [dotnet, ...args, '--mode', 'MigrateSystem'], pid: migration.pid, outcome: migrationOutcome ?? null }, null, 2) + '\n', { flag: 'wx' });
+}
+const systemPath = path.join(root, 'config/system.xml');
+const migratedSystem = await readFile(systemPath, 'utf8');
+await writeFile(path.join(root, 'system-after-native-migration.xml'), migratedSystem, { flag: 'wx' });
+const isolatedSystem = migratedSystem.replace(/<PluginRepositories\b[^>]*\/>/u, '<PluginRepositories />')
+  .replace(/<PluginRepositories\b[^>]*>[\s\S]*?<\/PluginRepositories>/u, '<PluginRepositories />');
+assert.ok(isolatedSystem.includes('<PluginRepositories />'));
+await writeFile(systemPath, isolatedSystem);
+const isolation = { taskDefinitions, migration: { pid: migration.pid, ...migrationOutcome },
+  configurationReset: { beforeSha256: hash(Buffer.from(migratedSystem)), afterSha256: hash(Buffer.from(isolatedSystem)) },
+  scope: 'Only fresh stopped native configuration changed after actual MigrateSystem. Source-derived schedules are empty; hosted services use loopback with an owned nonforwarding HTTP proxy. No OS-wide packet sandbox claim.' };
+await writeFile(path.join(root, 'isolation-preparation.json'), JSON.stringify(isolation, null, 2) + '\n', { flag: 'wx' });
 const child = spawn(dotnet, args, { cwd: root, windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'] });
 const ended = once(child, 'exit');
 ended.catch(() => {});
@@ -96,7 +156,7 @@ async function call(route, { body, auth = false, method } = {}) {
   try { parsed = text ? JSON.parse(text) : null; } catch { parsed = { rawBody: text }; }
   if (parsed?.AccessToken) secretStrings.push(parsed.AccessToken);
   observations.push({ route, method: method ?? (body !== undefined || ['/Startup/Complete', '/System/Shutdown'].includes(route) ? 'POST' : 'GET'),
-    status: response.status, requestBody: body ? JSON.parse(redact(JSON.stringify(body))) : null,
+    status: response.status, responseContentType: response.headers.get('content-type'), responseBodyText: redact(text), requestBody: body ? JSON.parse(redact(JSON.stringify(body))) : null,
     responseBody: parsed ? JSON.parse(redact(JSON.stringify(parsed))) : null });
   if (!response.ok) throw new Error(`Reference ${route} returned ${response.status}: ${redact(text).slice(0, 1000)}`);
   return parsed;
@@ -132,6 +192,24 @@ try {
   assert.equal(fixtureAuthentication.User.Id, createdAdmin.Id);
   assert.equal(fixtureAuthentication.User.Policy.IsAdministrator, true);
   token = fixtureAuthentication.AccessToken;
+  const actualConfiguration = await call('/System/Configuration', { auth: true });
+  assert.deepEqual(actualConfiguration.PluginRepositories, []);
+  let tasks;
+  for (let attempt = 0; attempt < 100; attempt++) {
+    tasks = await call('/ScheduledTasks', { auth: true });
+    assert.equal(tasks.length, taskDefinitions.length);
+    assert.ok(tasks.every(task => task.Triggers?.length === 0));
+    if (tasks.every(task => task.State === 'Idle')) break;
+    if (attempt === 99) throw new Error('Fresh native startup tasks did not become idle.');
+    await delay(100);
+  }
+  const actualNetwork = await call('/System/Configuration/network', { auth: true });
+  assert.equal(actualNetwork.AutoDiscovery, false); assert.equal(actualNetwork.EnableUPnP, false);
+  assert.equal(actualNetwork.EnableRemoteAccess, false); assert.equal(actualNetwork.EnableIPv6, false);
+  assert.deepEqual(actualNetwork.LocalNetworkAddresses, ['127.0.0.1']);
+  isolation.actualTasks = tasks.map(({ Id, Key, State, Triggers }) => ({ Id, Key, State, Triggers }));
+  isolation.actualNetwork = actualNetwork;
+  isolation.pluginRepositoriesEmpty = true;
   await call('/System/Shutdown', { auth: true });
   assert.equal(observations.at(-1).status, 204);
   let timer;
@@ -141,6 +219,7 @@ try {
   assert.equal(child.signalCode, null);
   const filename = path.join(root, 'data/data/jellyfin.db');
   const before = await readFile(filename);
+    await writeFile(path.join(root, 'source-before-guid-remap.db'), before, { flag: 'wx' });
   const database = new SqliteDatabase(filename, { requireMigrationHistory: true });
   const changedReferences = [];
   const actualIdKey = createdAdmin.Id.replaceAll('-', '').toLowerCase();
@@ -186,6 +265,10 @@ try {
     for (const entry of [...executablesBefore, bootstrapScript, ...verificationTools]) {
       assert.equal(hash(await readFile(entry.path)), entry.sha256, `Reference preparation input changed: ${entry.path}`);
     }
+    const ffprobeBytesAfter = await readFile(ffprobe);
+    ffprobeInput.after = { kind: 'ffprobe', filename: ffprobe, bytes: ffprobeBytesAfter.length,
+      sha256: hash(ffprobeBytesAfter) };
+    assert.deepEqual(ffprobeInput.after, ffprobeInput.before, 'Native bootstrap ffprobe input changed.');
     assert.equal(hash(await readFile(nativeModelPath)), nativeModelSha256, 'Native model changed during preparation.');
     report = { createdAt: new Date().toISOString(), initializedFromEmpty: true, root, port, origin,
       baseline: { head: baseline.head, contentDigest: baseline.contentDigest, files: baseline.files.length,
@@ -194,7 +277,8 @@ try {
         runtimeEntriesSha256: runtimeBefore.entriesSha256, runtimeUnchanged: true },
       outputResolvedInsideWorkspaceTemporary: true,
       executables: executablesBefore, executablesUnchanged: true, bootstrapScript, verificationTools,
-      nativeModelSha256, observations,
+      nativeModelSha256, observations, isolation, ffprobeInput,
+      sourceDatabaseBeforeOfflinePreparation: { filename: path.join(root, 'source-before-guid-remap.db'), sha256: hash(before), bytes: before.length },
       identityRemapping: { createdThroughNativeApi: true, actualUserId: createdAdmin.Id, fixtureUserId, changedReferences,
         scope: 'Stopped isolated database: only Guid-column references to the API-created synthetic admin are remapped; native password hashing and permission records are retained.' },
       sourceDatabaseSha256BeforeOfflinePreparation: hash(before), initialDatabase,

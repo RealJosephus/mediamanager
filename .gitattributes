@@ -298,3 +298,31 @@ src/core/resources/native-charset-models.json -text whitespace=cr-at-eol
 src/metadata/resources/comic-culture-language.json -text
 /tests/metadata/fixtures/book-comic/rar-directory/README.md text eol=lf
 /tests/metadata/fixtures/book-comic/rar-directory/native.json whitespace=cr-at-eol
+/tests/library/fixtures/image-type-filters/README.md text eol=lf
+/tests/images/fixtures/blurhash-resampling/README.md text eol=lf
+/tests/images/fixtures/blurhash-resampling/inputs/** -text
+/tests/images/fixtures/blurhash-resampling/*.rgba.gz -text
+/tests/library/fixtures/book-photo-global/README.md text eol=lf
+/tests/library/fixtures/book-directory-source/README.md text eol=lf
+/tests/library/fixtures/book-directory-source/native.json whitespace=cr-at-eol
+/tests/library/fixtures/book-photo-global/*.png -text
+/tests/library/fixtures/book-photo-global/*.jpg -text
+/tests/library/fixtures/book-photo-global/*.epub -text
+/tests/library/fixtures/book-photo-global/Directory.Build.props -text
+/tests/library/fixtures/global-scan/README.md text eol=lf
+/tests/images/fixtures/blurhash-resampling/Directory.Build.props -text
+/tests/images/fixtures/blurhash-resampling/native.json whitespace=cr-at-eol
+/tests/library/fixtures/global-scan/reader-native.json whitespace=cr-at-eol
+/tests/library/fixtures/movie-similar/README.md text eol=lf
+/tests/library/fixtures/movie-similar/native.json whitespace=cr-at-eol
+/tests/library/fixtures/resolver-io-boundary/README.md text eol=lf
+/tests/library/fixtures/resolver-io-boundary/native.json whitespace=cr-at-eol
+/tests/library/fixtures/resolver-io-boundary/NuGet.Config -text
+/tests/library/fixtures/classification-filters/README.md text eol=lf
+/tests/library/fixtures/extra-placeholder-filters/README.md text eol=lf
+/tests/library/fixtures/navigation-date-filters/README.md text eol=lf
+/tests/library/fixtures/official-rating-filters/README.md text eol=lf
+/tests/library/fixtures/official-rating-range/README.md text eol=lf
+/tests/library/fixtures/tag-filters/README.md text eol=lf
+/tests/library/fixtures/rating-permissions/README.md text eol=lf
+/tests/library/fixtures/tag-permissions/README.md text eol=lf

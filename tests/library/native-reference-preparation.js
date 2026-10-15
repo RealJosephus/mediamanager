@@ -4,7 +4,7 @@ import { lstat, readFile, realpath } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { nativeQueryReference, resolveNativeQueryInput, verifyNativeQuerySourceBindings } from './native-query-inputs.js';
+import { nativeQueryInputs } from './native-query-inputs.js';
 
 const sha256 = bytes => createHash('sha256').update(bytes).digest('hex');
 const idKey = value => String(value).replaceAll('-', '').toLowerCase();
@@ -20,14 +20,14 @@ function assertProfile(name) {
   assert.ok(['user-view', 'item-filter'].includes(name), 'Unknown native query reference profile: ' + name);
 }
 
-export function nativeReferencePreparationInputs(profileName) {
+export function nativeReferencePreparationInputs(profileName, inputs = nativeQueryInputs) {
   assertProfile(profileName);
-  return nativeQueryReference.preparationInputs;
+  return inputs.reference.preparationInputs;
 }
 
-export function resolveNativeReferencePreparationInput(profileName, filename) {
+export function resolveNativeReferencePreparationInput(profileName, filename, inputs = nativeQueryInputs) {
   assertProfile(profileName);
-  return resolveNativeQueryInput(filename);
+  return inputs.resolveInput(filename);
 }
 
 async function readRegularFile(filename, label) {
@@ -41,18 +41,18 @@ async function readRegularFile(filename, label) {
   return { filename: absolute, bytes, size: bytes.length, sha256: sha256(bytes) };
 }
 
-function assertIdentityRemapping(remapping, fixtureUserId, label) {
+function assertIdentityRemapping(remapping, fixtureUserId, label, expectedChangedReferences) {
   assert.deepEqual(Object.keys(remapping ?? {}).sort(),
     ['actualUserId', 'changedReferences', 'createdThroughNativeApi', 'fixtureUserId', 'scope'],
     `${label}: identity-remapping fields`);
   assert.equal(remapping.createdThroughNativeApi, true, `${label}: native user creation`);
   assert.match(remapping.actualUserId, /^[0-9a-f]{32}$/u, `${label}: actual native user ID`);
   assert.equal(idKey(remapping.fixtureUserId), idKey(fixtureUserId), `${label}: fixture user binding`);
-  assert.deepEqual(remapping.changedReferences, changedReferences, `${label}: remapped reference set`);
+  assert.deepEqual(remapping.changedReferences, expectedChangedReferences, `${label}: remapped reference set`);
   assert.equal(remapping.scope, remappingScope, `${label}: remapping scope`);
 }
 
-function assertBootstrapReport(report, { preparation, fixtureUserId, baselineManifest }, label) {
+function assertBootstrapReport(report, { preparation, fixtureUserId, baselineManifest, expectedChangedReferences }, label) {
   assert.equal(report.initializedFromEmpty, true, `${label}: empty-instance initialization`);
   assert.deepEqual(Object.keys(report.process ?? {}).sort(), ['exitCode', 'pid', 'signalCode', 'stopped'],
     `${label}: process fields`);
@@ -64,7 +64,7 @@ function assertBootstrapReport(report, { preparation, fixtureUserId, baselineMan
   assert.deepEqual(report.foreignKeyCheck, [], `${label}: foreign keys`);
   assert.ok(Number.isInteger(report.migrationHistory) && report.migrationHistory > 0, `${label}: migrations`);
   assert.equal(report.initialDatabaseSha256, preparation.sourceDatabaseSha256, `${label}: source database digest`);
-  assertIdentityRemapping(report.identityRemapping, fixtureUserId, `${label}:bootstrap`);
+  assertIdentityRemapping(report.identityRemapping, fixtureUserId, `${label}:bootstrap`, expectedChangedReferences);
   assert.deepEqual(report.identityRemapping, preparation.identityRemapping, `${label}: preparation remapping binding`);
 
   const baseline = report.baseline;
@@ -99,14 +99,17 @@ function assertBootstrapReport(report, { preparation, fixtureUserId, baselineMan
 
 export async function verifyNativeReferencePreparation(options) {
   assertProfile(options.profile);
-  await verifyNativeQuerySourceBindings();
+  const inputs = options.inputs ?? nativeQueryInputs;
+  assert.ok(Array.isArray(inputs.expectedChangedReferences), 'Exact profile remapping counts are required.');
+  await inputs.verifySourceBindings();
   return verifyNativeReferencePreparationContract({ ...options,
-    inputPaths: nativeReferencePreparationInputs(options.profile),
-    resolveInput: options.resolveInput ?? resolveNativeReferencePreparationInput });
+    expectedChangedReferences: inputs.expectedChangedReferences,
+    inputPaths: nativeReferencePreparationInputs(options.profile, inputs),
+    resolveInput: options.resolveInput ?? ((_profile, filename) => inputs.resolveInput(filename)) });
 }
 
 export async function verifyNativeReferencePreparationContract({ preparation, profile, sourceDatabase, fixtureUserId,
-  inputPaths, resolveInput }) {
+  inputPaths, resolveInput, expectedChangedReferences = changedReferences }) {
   const label = profile + ':reference-preparation';
   const expectedTopLevel = profile === 'user-view'
     ? ['copyBindings', 'createdThroughNativeApi', 'identityRemapping', 'initializedFromEmpty', 'inputs',
@@ -118,7 +121,7 @@ export async function verifyNativeReferencePreparationContract({ preparation, pr
     createdThroughNativeApi: preparation.createdThroughNativeApi, stopped: preparation.stopped },
   { initializedFromEmpty: true, createdThroughNativeApi: true, stopped: true }, `${label}: native preparation state`);
   assert.match(preparation.sourceDatabaseSha256, /^[0-9a-f]{64}$/u, `${label}: source database sha256`);
-  assertIdentityRemapping(preparation.identityRemapping, fixtureUserId, label);
+  assertIdentityRemapping(preparation.identityRemapping, fixtureUserId, label, expectedChangedReferences);
 
   assert.equal(inputPaths.length, 11, label + ': complete preparation input list');
   const expectedInputs = inputPaths;
@@ -142,7 +145,7 @@ export async function verifyNativeReferencePreparationContract({ preparation, pr
     ...baselineIdentity,
     document: JSON.parse(await readFile(baselineIdentity.currentPath, 'utf8')),
   };
-  assertBootstrapReport(bootstrap, { preparation, fixtureUserId, baselineManifest }, label);
+  assertBootstrapReport(bootstrap, { preparation, fixtureUserId, baselineManifest, expectedChangedReferences }, label);
 
   assert.equal(sha256(await readFile(resolveInput(profile, preparation.inputs[2].path))),
     bootstrap.bootstrapScript.sha256, `${label}: bootstrap script report binding`);

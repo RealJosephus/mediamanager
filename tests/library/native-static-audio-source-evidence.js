@@ -1,3 +1,4 @@
+import { readNativeQueryRecorderSource } from './native-query-inputs.js';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
@@ -39,7 +40,7 @@ export async function verifyNativeStaticAudioSourcePermissionBinding(binding) {
     assert.equal(audit[key], true, 'Static Audio independent audit: ' + key);
   assert.deepEqual(audit.neutralFixture, binding.neutralFixture);
   assert.deepEqual(audit.repetitions.map(entry => entry.root), binding.recordings.map(entry => entry.evidenceRoot));
-  const original = await readFile(new URL('../../tools/compat/record-item-filter-native.mjs', import.meta.url), 'utf8');
+  const original = await readNativeQueryRecorderSource();
   const declaration = parse(original, { sourceType: 'module', ecmaVersion: 'latest' }).body
     .flatMap(node => node.declarations ?? []).find(node => node.id.name === 'RATING_PERMISSION_CASES');
   assert.ok(declaration?.init);

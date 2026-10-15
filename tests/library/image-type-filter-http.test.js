@@ -5,23 +5,50 @@ import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 import { idKey } from '../../src/library/records.js';
 import { recordItemFilterCandidate } from './item-filter-http-scenario.js';
-import { verifyNativeItemFilterEvidence } from './native-item-filter-evidence.js';
-import { seedNativeFilterInput } from './native-filter-input.js';
-import { assertCompleteFilterHttpResponses, writeCompleteFilterHttpEvidence } from './full-filter-wire.js';
-import { readNativeQueryServerId } from './native-query-inputs.js';
+import { assertCompleteFilterHttpResponses, assertCompleteNativeFilterHttpRepeat, writeCompleteFilterHttpEvidence } from './full-filter-wire.js';
+import { pathToFileURL } from 'node:url';
 
-const evidence = validationFileUrl('../../.agent-docs/evidence/item-filter-inputs/image-type-filters-native-v1/native-run/', import.meta.url);
+// Read this explicit manifest before importing historical query helpers.
+// A new-profile failure is fatal; no historical path is consulted.
+const provenanceUrl = validationFileUrl('./fixtures/image-type-filters/provenance.json', import.meta.url);
+const provenance = JSON.parse(await readFile(provenanceUrl, 'utf8'));
+assert.equal(provenance.kind, 'new-designated-source-image-type-http');
+assert.equal(provenance.recordings.length, 2);
+assert.ok(provenance.profile.independentNativeAudits.length > 0);
+assert.ok(provenance.profile.recordedRecorder);
+assert.equal(provenance.profile.executionInputs.length, 2);
+assert.ok(provenance.profile.sourceBuildReceipt);
+assert.ok(provenance.profile.runtimeDirectory);
+assert.ok(provenance.profile.dotnetDirectory);
+assert.ok(Array.isArray(provenance.profile.expectedChangedReferences));
+const { createNativeQueryInputs, readNativeQueryBoundFile } = await import('./native-query-inputs.js');
+const inputs = createNativeQueryInputs(provenance.profile);
+for (const descriptor of provenance.requiredInputs) {
+  assert.equal(descriptor.required, true);
+  await readNativeQueryBoundFile(descriptor);
+}
+const { verifyNativeItemFilterEvidence } = await import('./native-item-filter-evidence.js');
+const { seedNativeFilterInput } = await import('./native-filter-input.js');
 const fixtureUrl = validationFileUrl('./fixtures/image-type-filters/input.json', import.meta.url);
 const fixture = JSON.parse(await readFile(fixtureUrl, 'utf8'));
-await verifyNativeItemFilterEvidence({ evidence, fixtureUrl, scenario: 'image-type',
-  runDirectory: 'native-run', expectedRecords: 40 });
-const nativeHttp = JSON.parse(await readFile(validationFileUrl('native-http.json', evidence), 'utf8'));
-const nativeServerId = await readNativeQueryServerId();
-const nativeStages = JSON.parse(await readFile(validationFileUrl('stages.json', evidence), 'utf8'));
-const nativeSummary = JSON.parse(await readFile(validationFileUrl('summary.json', evidence), 'utf8'));
+const runs = [];
+for (const recording of provenance.recordings) {
+  const evidence = pathToFileURL(recording.evidenceRoot + '/native-run/');
+  const run = await verifyNativeItemFilterEvidence({ evidence, fixtureUrl, scenario: 'image-type',
+    runDirectory: 'native-run', expectedRecords: 40, inputs });
+  runs.push(run);
+}
+const nativeHttp = runs[0].nativeHttp;
+const nativeServerId = await inputs.readServerId();
+assertCompleteNativeFilterHttpRepeat(runs[0].nativeHttp, runs[1].nativeHttp,
+  { leftServerId: nativeServerId, rightServerId: nativeServerId });
+assert.equal(runs[0].summary.scenarioDefinitionSha256, runs[1].summary.scenarioDefinitionSha256);
+const evidence = pathToFileURL(provenance.recordings[0].evidenceRoot + '/native-run/');
+const nativeStages = JSON.parse(await readFile(new URL('stages.json', evidence), 'utf8'));
+const nativeSummary = runs[0].summary;
 const sha256 = bytes => createHash('sha256').update(bytes).digest('hex');
 assert.equal(nativeSummary.passed, true);
-assert.equal(sha256(await readFile(validationFileUrl('../record-native.mjs', evidence))), nativeSummary.recorderSha256);
+assert.equal(sha256(await readFile(new URL('../record-native.mjs', evidence))), nativeSummary.recorderSha256);
 assert.equal(sha256(await readFile(fixtureUrl)), nativeSummary.fixtureSha256);
 assert.equal(nativeHttp.records.length, 40);
 assert.deepEqual(nativeStages.before.database, nativeStages.afterReads.database);
@@ -66,7 +93,7 @@ for (const dialect of dialects) {
   }, async () => {
     const actual = await recordItemFilterCandidate({
       captureResponseBodies: true,
-      prepareScenario: context => seedNativeFilterInput(context, "image-type"),
+      prepareScenario: context => seedNativeFilterInput(context, "image-type", inputs),
       dialect,
       fixture: scenario,
       connectionString: process.env.MEDIAMANAGER_TEST_POSTGRES,
