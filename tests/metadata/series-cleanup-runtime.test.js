@@ -99,8 +99,11 @@ test('postgres: actual Series cleanup promotes a linked episode and reroutes its
   const { observation: expected, release } = native.results[0];
   assert.equal(expected.Name, scenario.Name); assert.deepEqual(expected.SeriesCleanup, scenario.SeriesCleanup);
   assert.equal(expected.after.exception, null, expected.after.exception);
-  assert.deepEqual(release, { completed: true, resources: ['scheduler', 'provider', 'plugins', 'services', 'cache-and-tokens'] });
+  assert.deepEqual(release, { completed: true, resources: ['scheduler', 'provider', 'recordings', 'plugins', 'services', 'cache-and-tokens'] });
   assert.deepEqual(expected.providerControls, { metadataProviders: [], imageProviders: [], metadataSavers: [] });
+  assert.equal(expected.recordingControls.managerType, 'Jellyfin.LiveTv.Recordings.RecordingsManager');
+  assert.deepEqual(expected.recordingControls.episodes.map(episode => ({ ...episode, id: idKey(episode.id) })),
+    [3, 4].map(number => ({ id: idKey(id(number)), activeRecording: false, sourceType: 'Library' })));
   const before = expected.before.sql.result, after = expected.after.sql.result;
   const initialIds = new Set(expected.fixtureIds.map(idKey));
   assert.equal(initialIds.size, 5);
@@ -202,6 +205,9 @@ test('postgres: actual Series cleanup promotes a linked episode and reroutes its
   finally { await childSequence.close(); }
   setFolderChildren(season, children); season.UserData = [];
   assert.deepEqual(children.map(item => idKey(item.Id)), expected.before.parentChildren.map(idKey));
+  const episodeSources = children.map(item => ({ id: idKey(item.Id), sourceType: item.SourceType }))
+    .sort((left, right) => left.id.localeCompare(right.id));
+  assert.deepEqual(episodeSources, expected.recordingControls.episodes.map(({ id, sourceType }) => ({ id: idKey(id), sourceType })));
   const removal = [], events = [];
   for (const [event, action] of [['ItemAdded', 'added'], ['ItemUpdated', 'updated'], ['ItemRemoved', 'removed']]) runtime.library.on(event, ({ Item, Parent }) => {
     if (initialIds.has(idKey(Item.Id))) events.push({ action, id: idKey(Item.Id), parentId: Parent ? idKey(Parent.Id) : null });
@@ -219,7 +225,7 @@ test('postgres: actual Series cleanup promotes a linked episode and reroutes its
   const temporaryTables = (await database.client.query('SELECT relname FROM pg_class WHERE relnamespace = pg_my_temp_schema() ORDER BY relname')).rows;
   const candidateFiles = await files(programRoot);
   const removedLookupAbsent = await creator.getItemById(id(3)) == null;
-  await writeFile(path.join(output, 'candidate.json'), json({ programRoot, startedAt, completedAt, providerControls,
+  await writeFile(path.join(output, 'candidate.json'), json({ programRoot, startedAt, completedAt, providerControls, episodeSources,
     failure: failure?.stack ?? null, updateType: result?.UpdateType ?? null, errors, events, removal, removedLookupAbsent,
     playlistLinks, temporaryTables, sql: { BaseItems: rows, ...relations }, files: candidateFiles, nativeSha256: hash(nativeBytes) }), { flag: 'wx' });
   assert.equal(failure, undefined, failure?.stack); assert.deepEqual(errors, []);

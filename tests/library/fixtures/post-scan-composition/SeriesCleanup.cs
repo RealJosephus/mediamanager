@@ -38,6 +38,14 @@ public static class SeriesCleanupRecording
         survivor.SetPrimaryVersionId(obsolete.Id);
         var playlist = new Playlist { Id = Id(5), Name = seed.PlaylistName,
             LinkedChildren = [new LinkedChild { ItemId = obsolete.Id }] };
+        var recordingControls = new {
+            managerType = Video.RecordingsManager.GetType().FullName,
+            episodes = new[] { obsolete, survivor }.Select(item => new {
+                id = item.Id,
+                activeRecording = Video.RecordingsManager.GetActiveRecordingInfo(item.Path) is not null,
+                sourceType = item.SourceType.ToString()
+            }).ToArray()
+        };
         BaseItem[] items = [series, season, obsolete, survivor, playlist];
         foreach (var item in items)
         {
@@ -96,7 +104,7 @@ public static class SeriesCleanupRecording
             playlistLinks = livePlaylist.LinkedChildren.Select(link => link.ItemId).ToArray(),
             removal = removal.ToArray(), trace = host.Trace.ToArray(), exception, updateType };
         var observation = new { host.Scenario.Name, host.Scenario.SeriesCleanup, programRoot = host.Paths.ProgramDataPath,
-            fixtureIds = items.Select(item => item.Id).ToArray(), providerControls, before, after, startedAt, completedAt };
+            fixtureIds = items.Select(item => item.Id).ToArray(), providerControls, recordingControls, before, after, startedAt, completedAt };
         await File.WriteAllTextAsync(Path.Combine(host.CaseRoot, "series-cleanup-observation.json"),
             JsonSerializer.Serialize(observation, new JsonSerializerOptions { WriteIndented = true }));
         await host.DisposeAsync();

@@ -17,6 +17,7 @@ using Emby.Server.Implementations.Serialization;
 using Jellyfin.Database.Implementations;
 using Jellyfin.Database.Implementations.Locking;
 using Jellyfin.Database.Providers.Sqlite;
+using Jellyfin.LiveTv.Recordings;
 using Jellyfin.Server;
 using Jellyfin.Server.Implementations.Item;
 using MediaBrowser.Controller;
@@ -150,6 +151,7 @@ public sealed class NativeScanHost : IAsyncDisposable
     private readonly object _progressLock = new();
     private PluginManager _plugins = null!;
     private LimitedConcurrencyLibraryScheduler _scheduler = null!;
+    private RecordingsManager? _recordings;
     private IProviderManager _providerDispatch = null!;
     private bool _observing;
     private int _sequence, _faultOccurrence;
@@ -314,6 +316,16 @@ public sealed class NativeScanHost : IAsyncDisposable
         BaseItem.Logger=loggerFactory.CreateLogger<BaseItem>();BaseItem.UserDataManager=userData;
         BaseItem.MediaSourceManager=ForwardProxy.Make<IMediaSourceManager>((method,values)=>method.Name=="GetPathProtocol"
             ? MediaProtocol.File : ForwardProxy.Unused(method));
+        if (Scenario.SeriesCleanup is not null)
+        {
+            // Episode persistence evaluates Video.SourceType. Use the actual
+            // empty active-recording registry; this scenario never starts a
+            // recording or calls the unrelated tuner/timer/encoder services.
+            _recordings = new RecordingsManager(loggerFactory.CreateLogger<RecordingsManager>(), Configuration,
+                null!, FileSystem, Manager, monitor, _providerDispatch, null!, BaseItem.MediaSourceManager,
+                null!, null!, null!, null!);
+            Video.RecordingsManager = _recordings;
+        }
         BaseItem.MediaSegmentManager=ForwardProxy.Make<IMediaSegmentManager>((method,values)=>ForwardProxy.Unused(method));
         CollectionFolder.ApplicationHost=AppHost;CollectionFolder.XmlSerializer=new MyXmlSerializer();
         Folder.LimitedConcurrencyLibraryScheduler=_scheduler;
@@ -544,6 +556,7 @@ public sealed class NativeScanHost : IAsyncDisposable
         if(_disposed)return;_disposed=true;
         _lifetime.StopApplication();await _scheduler.DisposeAsync();ReleasedResources.Add("scheduler");
         Provider.Dispose();ReleasedResources.Add("provider");
+        if(_recordings is not null){_recordings.Dispose();ReleasedResources.Add("recordings");}
         _plugins.Dispose();ReleasedResources.Add("plugins");
         if(ServiceProvider is IAsyncDisposable asyncDisposable)await asyncDisposable.DisposeAsync();
         else if(ServiceProvider is IDisposable disposable)disposable.Dispose();
