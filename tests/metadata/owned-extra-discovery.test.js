@@ -5,7 +5,7 @@ import { createHash } from 'node:crypto';
 import { parseLosslessJson } from '../../src/core/json.js';
 import { OwnedItemMetadataLifecycleHost } from '../../src/metadata/owned-item-lifecycle.js';
 import { prepareOwnedItemRefresh } from '../../src/metadata/owned-item-refresh.js';
-import { projectItem, setup, project } from './owned-extra-fixture.js';
+import { setup, project } from './owned-extra-fixture.js';
 
 const root = new URL('./fixtures/owned-extra-discovery/', import.meta.url);
 const [input, native, provenance] = await Promise.all(['input.json', 'native.json', 'provenance.json']
@@ -30,7 +30,7 @@ for (const dialect of ['postgres']) for (const sample of input) test(`${dialect}
   const signal = sample.cancelled ? AbortSignal.abort(Object.assign(new Error('Controlled cancellation'), { nativeException: 'OperationCanceledException' })) : new AbortController().signal;
   const options = { ForceSave: false, MetadataRefreshMode: sample.fullRefresh ? 'FullRefresh' : 'None', ImageRefreshMode: 'None', SearchResult: { Name: 'Owner search' }, signal };
   const recordRefresh = (item, options) => {
-    calls.push({ action: 'refresh', item: projectItem(item, fixture.stateRoot), forceSave: options.ForceSave === true,
+    calls.push({ action: 'refresh', item: value.projectItem(item), forceSave: options.ForceSave === true,
       hasSearchResult: options.SearchResult != null, cancellationRequested: options.signal.aborted });
     options.signal.throwIfAborted();
   };

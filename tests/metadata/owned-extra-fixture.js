@@ -27,9 +27,9 @@ const videoData = () => ({ AdditionalParts: [], LocalAlternateVersions: [], Link
   Width: 0, Height: 0, DateLastSaved: MIN_DATE, RemoteTrailers: [] });
 const folderData = () => ({ IsRoot: false, IsHD: false, IsShortcut: false, Width: 0, Height: 0, DateLastSaved: MIN_DATE, RemoteTrailers: [] });
 
-export function projectItem(item, stateRoot) {
+export function projectItem(item, stateRoot, projectPath = (_, value) => projectStatePath(value, stateRoot) ?? null) {
   const normalize = value => projectStatePath(value, stateRoot) ?? null;
-  return { id: guid(item.Id), type: item.NativeType, name: item.Name, path: normalize(item.Path),
+  return { id: guid(item.Id), type: item.NativeType, name: item.Name, path: projectPath(item.Id, item.Path),
     parentId: guid(item.ParentId ?? EMPTY_ID), ownerId: guid(item.OwnerId ?? EMPTY_ID),
     primaryVersionId: item.PrimaryVersionId ? guid(item.PrimaryVersionId) : null,
     mixed: item.IsInMixedFolder ?? false, locked: item.IsLocked ?? false, productionYear: item.ProductionYear ?? null,
@@ -104,6 +104,18 @@ export async function setup(t, dialect, sample, { recordInserts = true } = {}) {
   let loaded = await loader(ownerId);
   const oldType = 'Trailer';
   const oldId = nativeGuid(loaded.getNewItemId(target, typeName(oldType)));
+  // The existing row was seeded with Path.Combine(directory, input filename),
+  // whose supplied filename can contain '/'. POSIX relocation makes that
+  // separator indistinguishable from an enumerated path, so retain the input
+  // spelling only for this seeded identity and verify its complete live path.
+  const projectPath = (id, value) => {
+    if (sample.existingType && idKey(id) === idKey(oldId)) {
+      assert.equal(value, target);
+      return projectStatePath(directory, fixture.stateRoot) + '\\' + sample.files[0];
+    }
+    return projectStatePath(value, fixture.stateRoot) ?? null;
+  };
+  const projectOwnedItem = item => projectItem(item, fixture.stateRoot, projectPath);
   if (sample.existingType) definitions.push({ key: 'old', type: oldType, Id: oldId,
     Name: sample.oldName ?? 'Old version', Path: target, ...(sample.attached ? { parent: 'parent' } : {}), OwnerId: ownerId,
     ExtraType: 2, LockedFields: sample.lockedName ? ['Name'] : [] });
@@ -130,7 +142,7 @@ export async function setup(t, dialect, sample, { recordInserts = true } = {}) {
   external.deleteItemFiles = (item, options) => { calls.push({ action: 'external-files', id: guid(item.Id) }); return deleteFiles(item, options); };
   const insert = fixture.database.insert.bind(fixture.database);
   fixture.database.insert = async (table, row) => {
-    if (table === 'BaseItems' && recordInserts) calls.push({ action: 'save', items: [projectItem(mapRecord(row), fixture.stateRoot)], cancellable: false });
+    if (table === 'BaseItems' && recordInserts) calls.push({ action: 'save', items: [projectOwnedItem(mapRecord(row))], cancellable: false });
     return insert(table, row);
   };
   observeBaseItemDeletes(fixture.database, ids => calls.push({ action: 'delete', ids: ids.map(guid) }));
@@ -143,7 +155,8 @@ export async function setup(t, dialect, sample, { recordInserts = true } = {}) {
     await fixture.database.client.query(`CREATE TRIGGER owned_discovery_failure BEFORE ${action} ON "BaseItems" FOR EACH ROW EXECUTE FUNCTION owned_discovery_failure()`);
   }
   const cold = [];
-  return { fixture, loaded, calls, oldId, childrenCleared: () => readCachedFolderChildren(loaded.parent, null, () => cold) === cold };
+  return { fixture, loaded, calls, oldId, projectPath, projectItem: projectOwnedItem,
+    childrenCleared: () => readCachedFolderChildren(loaded.parent, null, () => cold) === cold };
 }
 
 export async function project(value, sample, exception, { repository = false } = {}) {
@@ -153,7 +166,7 @@ export async function project(value, sample, exception, { repository = false } =
     ? Object.fromEntries(Object.entries(value).map(([key, entry]) => [key, rewrite(entry)]))
     : typeof value === 'string' ? value === fixture.now && repository ? '$UTC_SAVE' : normalize(value) : value;
   const rows = (await fixture.database.rows('BaseItems')).filter(row => row.Type !== 'PLACEHOLDER').map(row => ({
-    id: guid(row.Id), type: row.Type, name: row.Name, path: normalize(row.Path), parentId: row.ParentId && guid(row.ParentId),
+    id: guid(row.Id), type: row.Type, name: row.Name, path: value.projectPath(row.Id, row.Path), parentId: row.ParentId && guid(row.ParentId),
     topParentId: row.TopParentId && guid(row.TopParentId), ownerId: row.OwnerId && guid(row.OwnerId), primaryVersionId: row.PrimaryVersionId && guid(row.PrimaryVersionId),
     presentationUniqueKey: row.PresentationUniqueKey, mixed: row.IsInMixedFolder, locked: row.IsLocked,
     ...(repository ? { extraType: row.ExtraType } : {}),
@@ -196,6 +209,6 @@ export async function project(value, sample, exception, { repository = false } =
   }
   files.sort((a, b) => ordinal(a.path, b.path));
   const old = sample.existingType ? await loaded.videoVersionDiscovery.lookup(loaded, oldId) : null;
-  return { name: sample.name, exception, liveOwner: projectItem(loaded.item, fixture.stateRoot), calls, rows, links, files,
+  return { name: sample.name, exception, liveOwner: value.projectItem(loaded.item), calls, rows, links, files,
     parentChildrenCleared: childrenCleared(), parentUserDataCleared: loaded.parent.UserData === null, oldLookupName: old?.Name ?? null };
 }

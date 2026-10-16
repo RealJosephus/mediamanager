@@ -10,7 +10,7 @@ import { createMetadataContextLoader } from '../../src/library/metadata-context.
 import { resolveOwnedExtraFile } from '../../src/library/owned-extra-discovery.js';
 import { IdentityAccessMap } from '../../src/storage/identity-mapping.js';
 import { DotIgnoreRule } from '../../src/library/dot-ignore-rule.js';
-import { guid, MIN_DATE, dateText } from '../../src/library/records.js';
+import { guid, idKey, MIN_DATE, dateText } from '../../src/library/records.js';
 import { nativeDateFromUnixNanoseconds } from '../../src/users/native.js';
 import { internalImagePath } from '../../src/metadata/image-paths.js';
 import { readCachedFolderChildren, setFolderChildren } from '../../src/library/folder-cache.js';
@@ -29,11 +29,28 @@ const rewrite = (value, replace) => Array.isArray(value) ? value.map(entry => re
 // Seed from the separately recorded PRE-refresh native frame, never its final
 // expected result. Media bindings are per-item and cannot authorize state roots.
 export async function setupStateOwned(t, sample, recorded, { bindMedia = true, ancestors = true } = {}) {
-  const fixture = await setupChildrenFixture(t), calls = [], startedAt = Date.now();
+  const fixture = await setupChildrenFixture(t), calls = [], fileTimes = new Map();
   fixture.configuration.EnableCaseSensitiveItemIds = true;
-  const expand = text => expandStatePath(text, '$STATE', fixture.stateRoot);
+  const expand = text => {
+    const relocated = expandStatePath(text, '$STATE', fixture.stateRoot);
+    // Windows can retain the recorded Path.Combine filename spelling exactly.
+    // POSIX must relocate its directory separators before accessing real files.
+    return fixturePathStyle === 'windows' && relocated !== text
+      ? fixture.stateRoot + text.slice('$STATE'.length) : relocated;
+  };
   const initialRows = recorded.initialRows.map(source => ({ ...rewrite(source, expand),
     Data: source.Data == null ? null : JSON.stringify(rewrite(parseLosslessJson(source.Data), expand)) }));
+  const initialPaths = new Map(recorded.initialRows.filter(row => row.Path != null).map(row => [idKey(row.Id), row.Path]));
+  const projectInitialPath = (id, value) => {
+    const recordedPath = initialPaths.get(idKey(id));
+    if (recordedPath !== undefined) {
+      // Keep the exact supplied filename spelling in the initial native row.
+      // Only its declared state-root relocation is allowed in the candidate.
+      assert.equal(value, expand(recordedPath));
+      return recordedPath;
+    }
+    return projectStatePath(value, fixture.stateRoot) ?? null;
+  };
   const pending = [...initialRows], ordered = [];
   while (pending.length) {
     const index = pending.findIndex(row => ['ParentId', 'OwnerId', 'PrimaryVersionId', 'TopParentId', 'SeriesId', 'SeasonId']
@@ -48,7 +65,8 @@ export async function setupStateOwned(t, sample, recorded, { bindMedia = true, a
   }
   for (const row of recorded.initialMetadataFields) await fixture.database.insert('BaseItemMetadataFields', row);
   const normalizeRows = rows => rows.map(row => Object.fromEntries(Object.entries(row).map(([key, value]) => [key,
-    key === 'Data' && value != null ? JSON.stringify(rewrite(parseLosslessJson(value), text => projectStatePath(text, fixture.stateRoot)))
+    key === 'Path' ? projectInitialPath(row.Id, value)
+      : key === 'Data' && value != null ? JSON.stringify(rewrite(parseLosslessJson(value), text => projectStatePath(text, fixture.stateRoot)))
       : key.startsWith('Date') && value != null ? dateText(value)
         : typeof value === 'string' ? projectStatePath(value, fixture.stateRoot) : value])))
     .sort((a, b) => ordinal(a.Id, b.Id));
@@ -59,6 +77,8 @@ export async function setupStateOwned(t, sample, recorded, { bindMedia = true, a
   const write = async (filename, bytes, fixedTime = true) => {
     await mkdir(path.dirname(filename), { recursive: true }); await writeFile(filename, bytes);
     if (fixedTime) await utimes(filename, new Date('2025-01-03T04:05:06Z'), new Date('2025-01-03T04:05:06Z'));
+    const actual = await stat(filename, { bigint: true });
+    fileTimes.set(path.resolve(filename), { birthtimeNs: actual.birthtimeNs, mtimeNs: actual.mtimeNs });
   };
   for (const filename of sample.files) await write(path.join(parentPath, filename),
     Buffer.concat([Buffer.from([0xef, 0xbb, 0xbf]), Buffer.from('media control')]));
@@ -106,17 +126,22 @@ export async function setupStateOwned(t, sample, recorded, { bindMedia = true, a
   for (const [name, kind] of [['ItemAdded', 'added'], ['ItemRemoved', 'removed']]) fixture.host.updates.on(name,
     event => calls.push({ action: 'event', kind, id: guid(event.Item.Id) }));
   const cold = [];
-  return { fixture, loaded, calls, oldId, startedAt, sample,
+  return { fixture, loaded, calls, oldId, fileTimes, projectInitialPath, sample,
     childrenCleared: () => readCachedFolderChildren(loaded.parent, null, () => cold) === cold };
 }
 
 export async function projectStateItem(item, value) {
-  const projected = ordinaryProjectItem(item, value.fixture.stateRoot);
+  const projected = ordinaryProjectItem(item, value.fixture.stateRoot, value.projectInitialPath);
   if (projected.dateCreated !== MIN_DATE) {
     const actual = await stat(item.Path, { bigint: true });
+    const initial = value.fileTimes.get(path.resolve(item.Path));
+    assert.ok(initial, 'A discovered state-owned item must come from an observed fixture file.');
+    // Setting an earlier mtime can also lower birthtime on macOS. Compare the
+    // exact filesystem timestamp observed after that operation, retaining its
+    // nanosecond precision until the native 100 ns DateTime conversion.
+    assert.equal(actual.birthtimeNs, initial.birthtimeNs);
+    assert.equal(actual.mtimeNs, initial.mtimeNs);
     assert.equal(projected.dateCreated, dateText(nativeDateFromUnixNanoseconds(actual.birthtimeNs)));
-    assert.ok(Number(actual.birthtimeNs / 1_000_000n) >= value.startedAt - 1);
-    assert.ok(Number(actual.birthtimeNs / 1_000_000n) <= Date.now());
     projected.dateCreated = '$FILE_CREATED';
   }
   return projected;
@@ -126,7 +151,7 @@ export async function projectStateOwned(value, exception) {
   const { fixture, loaded, calls, oldId, childrenCleared } = value;
   const normalize = text => projectStatePath(text, fixture.stateRoot) ?? null;
   const rows = (await fixture.database.rows('BaseItems')).filter(row => row.Type !== 'PLACEHOLDER').map(row => ({
-    id: guid(row.Id), type: row.Type, name: row.Name, path: normalize(row.Path), parentId: row.ParentId && guid(row.ParentId),
+    id: guid(row.Id), type: row.Type, name: row.Name, path: value.projectInitialPath(row.Id, row.Path), parentId: row.ParentId && guid(row.ParentId),
     topParentId: row.TopParentId && guid(row.TopParentId), ownerId: row.OwnerId && guid(row.OwnerId), primaryVersionId: row.PrimaryVersionId && guid(row.PrimaryVersionId),
     presentationUniqueKey: row.PresentationUniqueKey, mixed: row.IsInMixedFolder, locked: row.IsLocked,
     productionYear: row.ProductionYear, size: integer(row.Size), runTimeTicks: row.RunTimeTicks,
