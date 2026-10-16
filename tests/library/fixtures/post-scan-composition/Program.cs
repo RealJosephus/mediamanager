@@ -53,18 +53,23 @@ foreach (var scenario in scenarios)
             Write(Path.Combine(directory, "extracted.txt"), "extracted marker\n");
     }
     var before = new { sql = host.SnapshotSql(), files = Files(host.Paths.ProgramDataPath) };
+    var providerControls = new {
+        metadataProviders = host.MetadataProviders.Select(value => value.GetType().FullName).ToArray(),
+        imageProviders = host.ImageProviders.Select(value => value.GetType().FullName).ToArray(),
+        metadataSavers = host.MetadataSavers.Select(value => value.GetType().FullName).ToArray()
+    };
     var startedAt = DateTime.UtcNow;
     var observation = await host.RunAsync();
     var completedAt = DateTime.UtcNow;
     // Retain the actual operation even if a later disposal fails or hangs.
     await File.WriteAllTextAsync(Path.Combine(root, "scan-observation.json"), JsonSerializer.Serialize(
-        new { scenario.Name, scenario.Cancel, inputSha256 = Hash(inputBytes), before, observation, startedAt, completedAt },
+        new { scenario.Name, scenario.Cancel, inputSha256 = Hash(inputBytes), providerControls, before, observation, startedAt, completedAt },
         new JsonSerializerOptions { WriteIndented = true }));
     await host.DisposeAsync();
     results.Add(new { scenario.Name, scenario.Cancel, seed, root, programRoot = host.Paths.ProgramDataPath,
         fixtureIds = sources.Concat(dead).Select(item => item.Id).ToArray(), orphanValueId = Id(4),
         discovered = host.DiscoveredPostScanTaskTypes, instantiated = host.PostScanTaskTypes,
-        before, observation, startedAt, completedAt, files = Files(host.Paths.ProgramDataPath),
+        providerControls, before, observation, startedAt, completedAt, files = Files(host.Paths.ProgramDataPath),
         release = new { completed = host.DisposalCompleted, resources = host.ReleasedResources.ToArray() },
         createdDirectories = createdDirectories
             .Select(filename => new { path = Path.GetRelativePath(host.Paths.ProgramDataPath, filename).Replace('\\', '/'),

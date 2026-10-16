@@ -91,7 +91,16 @@ temporary-table state before the single pooled connection is reused.
 
 The application paths/configuration and offline provider lists are explicit
 harness controls. Metadata/image providers and metadata savers are empty in the
-native host. Unused external video managers are absent and fail if exercised;
+native host and their actual registered types are recorded. Before seeding and
+scanning, the candidate disables its installed NFO and TMDB packages through the
+real plugin lifecycle. The local storage package and all original storage types
+remain active. `provider-controls.json` records plugin states, storage types and
+the actual provider registrations for the refreshed item types; assertions
+require empty external metadata/image/saver lists. This corrects the first music
+run's unequal host assembly, where the candidate's default NFO saver attempted
+an unconfigured sidecar destination before Artist aggregation. That original
+failure remains preserved; no storage behavior or saver error is suppressed.
+Unused external video managers are absent and fail if exercised;
 they are not successful cleanup substitutes. The native monitor is observational.
 No movie/audio file-scanning family, image composition, network provider, watcher, general
 cancellation guarantee, or complete-library-scan capability is accepted by these

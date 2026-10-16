@@ -107,6 +107,7 @@ async function compareComposition(t, scenarioFile) {
     'The helper actually loads the Jellyfin assembly supplied by this CI build.');
 
   const sample = native.results[0], before = sample.before.sql.result, expected = sample.observation.Sql.result;
+  assert.deepEqual(sample.providerControls, { metadataProviders: [], imageProviders: [], metadataSavers: [] });
   assert.deepEqual(sample.discovered, sample.instantiated);
   assert.deepEqual(sample.instantiated.map(name => name.split('.').at(-1)), nativeTasks);
   assert.deepEqual(sample.Cancel, scenario.Cancel ?? null);
@@ -208,6 +209,26 @@ async function compareComposition(t, scenarioFile) {
     configuration: { UICulture: 'en-US', MetadataCountryCode: 'US', IsStartupWizardCompleted: true,
       EnableCaseSensitiveItemIds: true, EnableNormalizedItemByNameIds: true, LibraryScanFanoutConcurrency: 1 },
     onError: error => errors.push(String(error?.stack ?? error)) });
+  // Match the native host's explicit empty provider/saver lists through the
+  // actual plugin lifecycle. Keep storage plugins and their application mounts.
+  const storageTypes = runtime.plugins.entries('storage').map(extension => extension.type).sort();
+  for (const id of ['nfo', 'tmdb']) await runtime.plugins.setEnabled(id, false);
+  const refreshedItemTypes = new Set(['AggregateFolder', 'UserRootFolder', 'CollectionFolder', 'Folder',
+    ...byNameTypes.map(type => type.split('.').at(-1))]);
+  const providerControls = {
+    plugins: runtime.plugins.list().map(({ id, enabled, status, extensions }) => ({ id, enabled, status, extensions })),
+    storageTypes: runtime.plugins.entries('storage').map(extension => extension.type).sort(),
+    externalMetadataPlugins: runtime.plugins.entries('metadata').map(extension => extension.id),
+    relevantProviders: runtime.metadata.registry.plugins().flatMap(extension => extension.providers)
+      .filter(provider => ['local', 'remote', 'custom', 'image', 'saver'].includes(provider.kind)
+        && provider.itemTypes.some(type => type === '*' || refreshedItemTypes.has(type)))
+      .map(({ id, kind, itemTypes }) => ({ id, kind, itemTypes }))
+  };
+  await writeFile(path.join(output, 'provider-controls.json'), JSON.stringify(providerControls, null, 2) + '\n', { flag: 'wx' });
+  assert.ok(providerControls.storageTypes.includes('local'));
+  assert.deepEqual(providerControls.storageTypes, storageTypes, 'Disabling metadata plugins preserves actual application storage.');
+  assert.deepEqual(providerControls.externalMetadataPlugins, []);
+  assert.deepEqual(providerControls.relevantProviders, [], 'The candidate has the same empty external provider/image/saver controls as native.');
   const initialIds = new Set(sample.fixtureIds.map(idKey));
   for (const row of [...before.BaseItems, ...expected.BaseItems]) assert.deepEqual(Object.keys(row).sort(), itemColumns.map(column => column.name).sort());
   const rebase = value => typeof value === 'string' ? value.replaceAll(sample.programRoot, programRoot)
@@ -276,7 +297,7 @@ async function compareComposition(t, scenarioFile) {
   const files = await stateFiles(programRoot);
   const temporaryTables = (await database.client.query(`SELECT relname FROM pg_class WHERE relnamespace = pg_my_temp_schema() ORDER BY relname`)).rows;
   await writeFile(path.join(output, 'candidate.json'), JSON.stringify({ startedAt: new Date(start).toISOString(), completedAt: new Date(end).toISOString(),
-    programRoot, started, completed, events, metadata, monitor, cancelRequests, inheritedCleanup, temporaryTables,
+    programRoot, providerControls, started, completed, events, metadata, monitor, cancelRequests, inheritedCleanup, temporaryTables,
     errors, failure: failure?.stack ?? null, failureName: failure?.name ?? null, sql: { BaseItems: rows, ItemValues: values, ItemValuesMap: maps },
     files, nativeSha256: hash(nativeBytes), record: path.join(output, 'record.json') },
   (_, value) => typeof value === 'bigint' ? JSON.rawJSON(String(value)) : value, 2) + '\n', { flag: 'wx' });
