@@ -195,7 +195,9 @@ function darwinFontApi(koffi) {
     const fill = cg.func('void CGContextSetRGBFillColor(void *context, double red, double green, double blue, double alpha)');
     const flush = cg.func('void CGContextFlush(void *context)');
     const settings = [
-      ['CGContextSetShouldAntialias', true], ['CGContextSetShouldSmoothFonts', false],
+      // Skia's normal-hinted outline path allows CoreGraphics smoothing
+      // (outline dilation). Disabling it draws visibly thinner title strokes.
+      ['CGContextSetShouldAntialias', true], ['CGContextSetShouldSmoothFonts', true],
       ['CGContextSetAllowsFontSubpixelPositioning', true], ['CGContextSetShouldSubpixelPositionFonts', true],
       ['CGContextSetAllowsFontSubpixelQuantization', false], ['CGContextSetShouldSubpixelQuantizeFonts', false]
     ].map(([name, value]) => [cg.func(name, 'void', ['void *', 'bool']), value]);
