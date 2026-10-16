@@ -4,6 +4,7 @@ import { dependencyClosure, describeFile, filesIn, sha256 } from './inventory.js
 import { recordedInput, recordedInputMapPath, repositoryRoot, validationPath } from './paths.js';
 import { collageFontFiles } from '../../src/images/font-collection.js';
 import { resolveCollageSystemFonts } from '../../src/images/system-fonts/index.js';
+import { alistBuildInputs } from './alist-inputs.js';
 
 const isDigest = value => typeof value === 'string' && /^[a-f0-9]{64}$/iu.test(value);
 
@@ -157,6 +158,10 @@ export async function captureInputIdentity({ selected, dependencies, preflight, 
     'tests/validation/input-identity.test.js'].includes(entry.path)
     || entry.path === 'src/images/user-view-collage.js'
       && entry.imports.includes('src/images/system-fonts/index.js'));
+  if (environment.MEDIAMANAGER_CI_ALIST_REFERENCE === 'true'
+    && closure.some(entry => entry.services?.includes('alist'))) {
+    for (const input of await alistBuildInputs(environment)) add(input.filename, 'service:alist-build-input', true, [input.sha256]);
+  }
   let systemFonts;
   if (usesSystemFonts) {
     const resolved = await resolveCollageSystemFonts();

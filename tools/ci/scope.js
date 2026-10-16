@@ -8,6 +8,7 @@ export const provisionedServices = ['postgres', 'dotnet'];
 export const provisionedTools = ['dotnet', 'ffmpeg', 'ffprobe', 'git'];
 export const provisionedServicesFor = environment => [...provisionedServices,
   ...(environment.MEDIAMANAGER_CI_NATIVE_REFERENCE === 'true' ? ['jellyfinDll'] : []),
+  ...(environment.MEDIAMANAGER_CI_ALIST_REFERENCE === 'true' ? ['alist'] : []),
   ...(typeof environment.MEDIAMANAGER_WEBDAV_EXECUTABLE === 'string'
     && path.isAbsolute(environment.MEDIAMANAGER_WEBDAV_EXECUTABLE) ? ['webdav'] : [])];
 
@@ -111,6 +112,7 @@ export async function classify({ dependencies, tracked, environment, platform = 
   // Provisioning failures must fail execution, never make the selected scope smaller.
   const plannedEnvironment = { ...environment, MEDIAMANAGER_TEST_POSTGRES: environment.MEDIAMANAGER_TEST_POSTGRES || '<provisioned>',
     MEDIAMANAGER_DOTNET: environment.MEDIAMANAGER_DOTNET || '<provisioned>',
+    ...(services.includes('alist') ? { MEDIAMANAGER_ALIST_EXECUTABLE: environment.MEDIAMANAGER_ALIST_EXECUTABLE || '<provisioned>' } : {}),
     ...(services.includes('jellyfinDll') ? { MEDIAMANAGER_JELLYFIN_DLL: environment.MEDIAMANAGER_JELLYFIN_DLL || '<provisioned>' } : {}) };
   const shipped = filename => {
     const relative = repositoryRelative(filename);

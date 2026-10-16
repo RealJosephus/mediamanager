@@ -16,6 +16,11 @@ on:
         type: boolean
         required: false
         default: false
+      alist_reference:
+        description: Build the designated AList Go source with the controlled API-only test frontend (Web UI unvalidated)
+        type: boolean
+        required: false
+        default: false
       platform:
         description: Platforms for this validation batch; use one OS for a platform-specific diagnosis
         type: choice
@@ -50,6 +55,7 @@ jobs:
       MEDIAMANAGER_TEST_POSTGRES: postgresql://validation@127.0.0.1:5432/postgres
       MEDIAMANAGER_CI_TEST_FILES: ${{ inputs.test_files || '' }}
       MEDIAMANAGER_CI_NATIVE_REFERENCE: ${{ inputs.native_reference && 'true' || 'false' }}
+      MEDIAMANAGER_CI_ALIST_REFERENCE: ${{ inputs.alist_reference && 'true' || 'false' }}
       DOTNET_CLI_TELEMETRY_OPTOUT: '1'
       DOTNET_NOLOGO: '1'
     steps:
@@ -89,6 +95,11 @@ jobs:
         shell: pwsh
         timeout-minutes: 5
         run: ./tools/ci/setup-webdav.ps1
+      - name: Build designated AList API-only test host
+        if: inputs.alist_reference == true
+        shell: pwsh
+        timeout-minutes: 30
+        run: ./tools/ci/build-alist.ps1
       - name: Prepare and verify macOS loopback alias
         id: loopback
         if: runner.os == 'macOS'
@@ -213,5 +224,16 @@ jobs:
             ${{ runner.temp }}/mediamanager-native-build/runtime
             ${{ runner.temp }}/mediamanager-native-build/source-offer
             ${{ runner.temp }}/mediamanager-native-build/receipts
+          if-no-files-found: error
+          retention-days: 14
+      - name: Preserve same-run AList API host source and build evidence
+        if: always() && inputs.alist_reference == true
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: alist-api-host-${{ matrix.os }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/mediamanager-alist-build/runtime
+            ${{ runner.temp }}/mediamanager-alist-build/source-offer
+            ${{ runner.temp }}/mediamanager-alist-build/receipts
           if-no-files-found: error
           retention-days: 14

@@ -186,6 +186,24 @@ test('CI native reference provisioning is an explicit promise independent of run
   assert.equal(promised.records[0].selected, true);
 });
 
+test('CI AList provisioning requires an explicit API-host promise and cannot narrow a failed exact request', async () => {
+  const dependencies = { entries: [entry(ownPath, { services: ['alist'] }), entry(otherPath)] };
+  const tracked = new Set([ownPath, otherPath]);
+  const filename = path.join(repositoryRoot, '.test-output', 'missing-alist');
+  const disabled = await classify({ dependencies, tracked, environment: { MEDIAMANAGER_ALIST_EXECUTABLE: filename } });
+  assert.equal(disabled.records[0].selected, false, 'an arbitrary executable is not a designated source build');
+  const environment = { MEDIAMANAGER_CI_ALIST_REFERENCE: 'true' };
+  const promised = await classify({ dependencies, tracked, environment });
+  assert.deepEqual(provisionedServicesFor(environment), ['postgres', 'dotnet', 'alist']);
+  assert.ok(promised.records.every(record => record.selected));
+  const errors = applyInputIdentity(promised, { entries: [{ filename, required: true, available: false,
+    reasons: ['service:alist'], requiredReasons: ['service:alist'] }] }, tracked);
+  assert.deepEqual(errors.map(error => error.code), ['input-unavailable']);
+  assert.equal(promised.records[0].selected, true, 'failed AList supply stays an infrastructure error');
+  await assert.rejects(captureInputIdentity({ dependencies, selected: [ownPath], environment,
+    preflight: { ready: true, services: [], tools: [] } }), /requires its build root and executable path/u);
+});
+
 test('CI binds same-run native receipts, source offer and runtime only for selected native consumers', async t => {
   const output = path.join(repositoryRoot, '.test-output'); await mkdir(output, { recursive: true });
   const root = await mkdtemp(path.join(output, 'ci-native-inputs-'));

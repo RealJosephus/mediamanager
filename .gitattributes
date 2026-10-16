@@ -335,3 +335,5 @@ src/metadata/resources/comic-culture-language.json -text
 # The TMDB seal also reads these original LF source bytes outside its fixture.
 /tools/compat/record-tmdb-missing.mjs text eol=lf
 /src/database/native-model.json text eol=lf
+# AList API-host source offer and controlled frontend are sealed by raw SHA-256.
+/tools/validation/fixtures/alist-api-host/** -text
