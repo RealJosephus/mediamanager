@@ -240,10 +240,15 @@ test('library root initialization failure closes the database once and preserves
       programDataPath
     }), error => {
       assert.equal(error instanceof AggregateError, false);
-      assert.equal(error instanceof TypeError, true);
-      assert.match(error.message, /physical directories/);
+      // Windows can reach the explicit ancestor guard after ENOENT; POSIX
+      // lstat rejects the child of that same ordinary file with ENOTDIR.
+      const rejectedPath = typeof error.path === 'string' ? path.relative(programDataPath, error.path) : null;
+      assert.ok(error instanceof TypeError && /physical directories/u.test(error.message)
+        || error.code === 'ENOTDIR' && rejectedPath !== null && !path.isAbsolute(rejectedPath)
+          && rejectedPath !== '..' && !rejectedPath.startsWith('..' + path.sep), error.stack);
       return true;
     });
+    assert.equal(await readFile(programDataPath, 'utf8'), 'not a directory');
     await assert.rejects(database.rows('Users'), /not open|closed/iu);
   } finally {
     try { await database.close(); }
