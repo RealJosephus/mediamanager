@@ -14,6 +14,7 @@ import { initializeLibraryRoot } from '../../src/library/root-initialization.js'
 import { idKey, dateText } from '../../src/library/records.js';
 import { nativeDateFromUnixNanoseconds } from '../../src/users/native.js';
 import { createPostgresTestDatabase } from '../database/postgres-fixture.js';
+import { expandStatePath } from './fixture-state-path.js';
 
 const bytes = await readFile(new URL('./fixtures/root-initialization/native.json', import.meta.url));
 const provenance = JSON.parse(await readFile(new URL('./fixtures/root-initialization/provenance.json', import.meta.url)));
@@ -55,10 +56,18 @@ async function seed(db, tables) {
   });
 }
 function relocation(referenceRoot, runtimeRoot) {
-  const rewriteString = value => value.replaceAll(referenceRoot, runtimeRoot)
-    .replaceAll(referenceRoot.replaceAll('\\', '\\\\'), runtimeRoot.replaceAll('\\', '\\\\'));
-  const rewrite = value => typeof value === 'string' ? rewriteString(value) : Array.isArray(value) ? value.map(rewrite)
-    : value && typeof value === 'object' ? Object.fromEntries(Object.entries(value).map(([key, entry]) => [key, rewrite(entry)])) : value;
+  const relocatePath = value => {
+    let result = expandStatePath(value, referenceRoot, runtimeRoot);
+    for (const token of ['%AppDataPath%', '%MetadataPath%']) result = expandStatePath(result, token, token);
+    return result;
+  };
+  const rewrite = (value, field) => typeof value === 'string'
+    ? field === 'Data' ? value.replace(/"(?:\\.|[^"\\])*"/gu, token => {
+      const original = JSON.parse(token), relocated = relocatePath(original);
+      return original === relocated ? token : JSON.stringify(relocated);
+    }) : relocatePath(value)
+    : Array.isArray(value) ? value.map(entry => rewrite(entry))
+      : value && typeof value === 'object' ? Object.fromEntries(Object.entries(value).map(([key, entry]) => [key, rewrite(entry, key)])) : value;
   return rewrite;
 }
 async function cleanupSchemas(names) {
@@ -178,7 +187,7 @@ for (const obstruction of ['data junction', 'root junction', 'playlist file']) t
   let saved = 0, closeCalls = 0; const upsert = db.upsert.bind(db), close = db.close.bind(db);
   db.upsert = (...args) => { saved++; return upsert(...args); }; db.close = (...args) => { closeCalls++; return close(...args); };
   try {
-    if (obstruction.endsWith('junction')) await symlink(outside, path.join(directory, obstruction.split(' ')[0]), 'junction');
+    if (obstruction.endsWith('junction')) await symlink(outside, path.join(directory, obstruction.split(' ')[0]), process.platform === 'win32' ? 'junction' : 'dir');
     else { await mkdir(path.join(directory, 'data')); await writeFile(path.join(directory, 'data', 'playlists'), 'existing file'); }
     await assert.rejects(createRuntime({ database: db, configuration: { UICulture: 'en-US' }, serverId: 'blocked-root', programDataPath: directory }), { code: 'UNSAFE_LIBRARY_ROOT_PATH' });
     assert.equal(saved, 0); assert.equal(closeCalls, 1);
@@ -195,15 +204,31 @@ test('runtime without ApplicationPaths retains an empty PostgreSQL schema',
   finally { await runtime.close(); }
 });
 
-test('runtime initializes a real Windows namespace path beyond MAX_PATH and reuses its canonical folders',
-  { skip: process.platform !== 'win32' || !process.env.MEDIAMANAGER_TEST_POSTGRES }, async t => {
+// Register one real control for each mechanism on every supported OS. TAP names
+// declare the actual platform mechanism; no platform branch silently skips work.
+const platformControls = process.platform === 'win32' ? {
+  longPath: 'runtime initializes a real Windows namespace path beyond MAX_PATH and reuses its canonical folders',
+  link: 'runtime rejects a junction escape through a Windows namespace root before any repository save',
+  unavailable: 'runtime reports an unavailable Windows drive and closes the database without repository writes',
+} : {
+  longPath: 'runtime initializes a real POSIX nested path longer than 260 characters and reuses its canonical folders',
+  link: 'runtime rejects a POSIX directory symlink escape before any repository save',
+  unavailable: 'runtime reports a POSIX non-directory state ancestor and closes the database without repository writes',
+};
+
+test(platformControls.longPath,
+  { skip: !process.env.MEDIAMANAGER_TEST_POSTGRES }, async t => {
     const directory = await mkdtemp(path.join(tmpdir(), 'mm-root-namespace-'));
-    const programDataPath = path.toNamespacedPath(path.join(directory, ...Array(3).fill('component'.repeat(11)), 'state'));
+    const nested = path.join(directory, ...Array(3).fill('component'.repeat(11)), 'state');
+    const programDataPath = process.platform === 'win32' ? path.toNamespacedPath(nested) : nested;
     assert.ok(programDataPath.length > 260);
+    if (process.platform === 'win32') assert.ok(programDataPath.startsWith('\\\\?\\'));
+    else assert.ok(programDataPath.startsWith('/'));
+    t.diagnostic(JSON.stringify({ platform: process.platform, mechanism: process.platform === 'win32' ? 'namespace-path' : 'nested-posix-path' }));
     const db = await createPostgresTestDatabase(t, 'root_namespace');
     let runtime, closed = false;
     const close = db.close.bind(db);
-    db.close = () => { close(); closed = true; };
+    db.close = async () => { await close(); closed = true; };
     try {
       runtime = await createRuntime({ database: db, configuration: { UICulture: 'en-US' }, serverId: 'namespace-root', programDataPath });
       const records = await db.rows('BaseItems');
@@ -225,19 +250,23 @@ test('runtime initializes a real Windows namespace path beyond MAX_PATH and reus
     }
   });
 
-test('runtime rejects a junction escape through a Windows namespace root before any repository save',
-  { skip: process.platform !== 'win32' || !process.env.MEDIAMANAGER_TEST_POSTGRES }, async t => {
+test(platformControls.link,
+  { skip: !process.env.MEDIAMANAGER_TEST_POSTGRES }, async t => {
     const directory = await mkdtemp(path.join(tmpdir(), 'mm-root-namespace-'));
     const outside = await mkdtemp(path.join(tmpdir(), 'mm-root-namespace-outside-'));
     const db = await createPostgresTestDatabase(t, 'root_namespace_escape');
     let writes = 0, closed = false; const upsert = db.upsert.bind(db), close = db.close.bind(db);
     db.upsert = (...args) => { writes++; return upsert(...args); };
-    db.close = () => { close(); closed = true; };
+    db.close = async () => { await close(); closed = true; };
     try {
-      await symlink(outside, path.join(directory, 'data'), 'junction');
+      await symlink(outside, path.join(directory, 'data'), process.platform === 'win32' ? 'junction' : 'dir');
+      const programDataPath = process.platform === 'win32' ? path.toNamespacedPath(directory) : directory;
+      assert.equal(await realpath(path.join(directory, 'data')), await realpath(outside));
+      t.diagnostic(JSON.stringify({ platform: process.platform, mechanism: process.platform === 'win32' ? 'namespace-junction' : 'directory-symlink' }));
       await assert.rejects(createRuntime({ database: db, configuration: { UICulture: 'en-US' }, serverId: 'namespace-escape',
-        programDataPath: path.toNamespacedPath(directory) }), { code: 'UNSAFE_LIBRARY_ROOT_PATH' });
+        programDataPath }), { code: 'UNSAFE_LIBRARY_ROOT_PATH' });
       assert.equal(writes, 0); assert.equal(closed, true);
+      await assert.rejects(db.client.query('SELECT 1'), /closed|ended/iu);
       await assert.rejects(stat(path.join(outside, 'playlists')), { code: 'ENOENT' });
     } finally {
       try { if (!closed) await db.close(); }
@@ -245,22 +274,38 @@ test('runtime rejects a junction escape through a Windows namespace root before 
     }
   });
 
-test('runtime reports an unavailable Windows drive and closes the database without repository writes',
-  { skip: process.platform !== 'win32' || !process.env.MEDIAMANAGER_TEST_POSTGRES }, async t => {
-    let unavailable;
-    for (const letter of 'ZYXWVUTSRQPONMLKJIHGFEDCBA') {
-      const drive = `${letter}:\\`;
-      try { await stat(drive); }
-      catch (error) { if (error.code === 'ENOENT') { unavailable = drive; break; } throw error; }
+test(platformControls.unavailable,
+  { skip: !process.env.MEDIAMANAGER_TEST_POSTGRES }, async t => {
+    let programDataPath, directory;
+    const expectedCode = process.platform === 'win32' ? 'ENOENT' : 'ENOTDIR';
+    if (process.platform === 'win32') {
+      let unavailable;
+      for (const letter of 'ZYXWVUTSRQPONMLKJIHGFEDCBA') {
+        const drive = `${letter}:\\`;
+        try { await stat(drive); }
+        catch (error) { if (error.code === 'ENOENT') { unavailable = drive; break; } throw error; }
+      }
+      assert.ok(unavailable, 'This Windows control requires an unavailable drive.');
+      programDataPath = path.join(unavailable, 'UnavailableTestState');
+    } else {
+      directory = await mkdtemp(path.join(tmpdir(), 'mm-root-not-directory-'));
+      t.after(() => removeTemporary(directory));
+      const obstruction = path.join(directory, 'file');
+      await writeFile(obstruction, 'state ancestor is a regular file');
+      assert.equal((await stat(obstruction)).isFile(), true);
+      programDataPath = path.join(obstruction, 'state');
     }
-    assert.ok(unavailable, 'This Windows control requires an unavailable drive.');
+    await assert.rejects(stat(programDataPath), { code: expectedCode });
+    t.diagnostic(JSON.stringify({ platform: process.platform, mechanism: process.platform === 'win32' ? 'unavailable-drive' : 'non-directory-ancestor', expectedCode }));
     const db = await createPostgresTestDatabase(t, 'root_missing_drive');
     let writes = 0, closed = false; const upsert = db.upsert.bind(db), close = db.close.bind(db);
     db.upsert = (...args) => { writes++; return upsert(...args); };
-    db.close = () => { close(); closed = true; };
+    db.close = async () => { await close(); closed = true; };
     try {
       await assert.rejects(createRuntime({ database: db, configuration: { UICulture: 'en-US' }, serverId: 'missing-drive',
-        programDataPath: path.join(unavailable, 'UnavailableTestState') }), { code: 'ENOENT' });
+        programDataPath }), { code: expectedCode });
       assert.equal(writes, 0); assert.equal(closed, true);
+      await assert.rejects(db.client.query('SELECT 1'), /closed|ended/iu);
+      if (directory) assert.equal(await readFile(path.join(directory, 'file'), 'utf8'), 'state ancestor is a regular file');
     } finally { if (!closed) await db.close(); }
   });
