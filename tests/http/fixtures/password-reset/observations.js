@@ -30,10 +30,14 @@ export function normalizeSnapshot(snapshot) {
 
 export async function projectResetObservation(row) {
   const generated = new Map();
-  const root = path.resolve(row.ProgramData);
+  // Interpret the observation's path syntax, including Windows recordings on Unix.
+  const observedPath = /^(?:[A-Za-z]:[\\/]|\\\\)/u.test(row.ProgramData) ? path.win32 : path.posix;
+  assert.ok(observedPath.isAbsolute(row.ProgramData), row.ProgramData);
+  const root = observedPath.resolve(row.ProgramData);
   const rooted = filename => {
-    assert.equal(path.relative(root, path.dirname(path.resolve(filename))), '', filename);
-    return '<instance>/' + path.basename(filename);
+    assert.ok(observedPath.isAbsolute(filename), filename);
+    assert.equal(observedPath.relative(root, observedPath.dirname(observedPath.resolve(filename))), '', filename);
+    return '<instance>/' + observedPath.basename(filename);
   };
   const expiration = (text, observation) => {
     const value = Date.parse(text), start = Date.parse(observation.started), end = Date.parse(observation.finished);
@@ -44,7 +48,7 @@ export async function projectResetObservation(row) {
     if (file.directory) continue;
     let value; try { value = JSON.parse(file.text); } catch { continue; }
     if (value?.PinFile && value?.ExpirationDate && value?.Pin && Math.abs(Date.parse(value.ExpirationDate) - Date.parse(observation.started) - 1_800_000) < 60_000) {
-      assert.match(value.Pin, pinPattern); assert.equal(path.basename(value.PinFile), file.name);
+      assert.match(value.Pin, pinPattern); assert.equal(observedPath.basename(value.PinFile), file.name);
       rooted(value.PinFile); expiration(value.ExpirationDate, observation); generated.set(value.Pin, true);
     }
   }

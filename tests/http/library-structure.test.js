@@ -114,7 +114,8 @@ for (const sample of input.cases) test('LibraryStructure native HTTP differentia
   await service.close?.();
   assert.equal(response.status, expected.status); assert.equal(response.headers.get('content-type'), expected.contentType);
   assert.deepEqual((response.headers.get('allow') ?? '').split(',').map(value => value.trim()).sort(), expected.allow.split(',').map(value => value.trim()).sort());
-  const nativeViews = path.join(path.dirname(proof.rawRecording), 'states', sample.name, 'root', 'default');
+  // These are paths emitted by the Windows oracle, not paths on this host.
+  const nativeViews = path.win32.join(path.win32.dirname(proof.rawRecording), 'states', sample.name, 'root', 'default');
   const actualBody = expected.jsonBody != null ? noTrace(JSON.parse(body)) : body;
   const expectedBody = expected.jsonBody != null ? noTrace(expected.jsonBody) : expected.body;
   assert.deepEqual(normalize(actualBody, views ?? ''), normalize(expectedBody, nativeViews));

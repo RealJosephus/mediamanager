@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { tableDefinition } from '../../../../src/database/model.js';
-import { nativeGuid, wireGuid } from '../../../../src/users/native.js';
+import { nativeGuid, wireGuid, upperInvariant } from '../../../../src/users/native.js';
 import { parsePasswordHash, verifyPasswordHash } from '../../../../src/core/password.js';
 import { parseLosslessJson } from '../../../../src/core/json.js';
 
@@ -9,8 +9,19 @@ const withoutTrace = value => Array.isArray(value) ? value.map(withoutTrace) : v
   ? Object.fromEntries(Object.entries(value).filter(([key]) => key !== 'traceId').map(([key, entry]) => [key, withoutTrace(entry)])) : value;
 export const startupTables = ['Users', 'Permissions', 'Preferences', 'AccessSchedules', 'ImageInfos'];
 
-export async function projectStartupObservation(row, sample) {
+export async function projectStartupObservation(row, sample, environmentUserName) {
   const originalIds = new Set(row.before.tables.Users.map(user => nativeGuid(user.Id)));
+  // UserManager.InitializeAsync uses Environment.UserName only when no user exists.
+  // Bind only the single initial GET cases; supplied names and later renames stay literal.
+  const bindInitialName = originalIds.size === 0 && sample.steps == null && (sample.method ?? 'GET') === 'GET'
+    && /^\/startup\/(?:user|firstuser)\/?$/iu.test(sample.path);
+  let initialName;
+  if (bindInitialName) {
+    assert.equal(typeof environmentUserName, 'string');
+    initialName = environmentUserName.length > 0 && !environmentUserName.startsWith(' ') && !environmentUserName.endsWith(' ')
+      && !/[\uD800-\uDFFF]/.test(environmentUserName) && /^[\p{L}\p{Mn}\p{Nd}\p{Pc} '\-._@+]+$/u.test(environmentUserName)
+      ? environmentUserName : 'MyJellyfinUser';
+  }
   const generated = new Map(), knownPasswords = new Set((sample.users ?? []).map(user => user.password).filter(value => value != null));
   for (const step of sample.steps ?? [sample]) {
     let body; try { body = JSON.parse(step.body); } catch { continue; }
@@ -41,6 +52,10 @@ export async function projectStartupObservation(row, sample) {
         if (value != null && column.clrType.replace('?', '') === 'Guid') value = id(value);
         if (column.clrType === 'bool') { assert.ok([true, false, 0, 1].includes(value)); value = value === true || value === 1; }
         if (table === 'Users' && column.name === 'Password') value = await password(value);
+        if (bindInitialName && table === 'Users' && generated.has(nativeGuid(row.Id))) {
+          if (column.name === 'Username') { assert.equal(value, initialName); value = '$environment-user'; }
+          if (column.name === 'NormalizedUsername') { assert.equal(value, upperInvariant(initialName)); value = '$ENVIRONMENT-USER'; }
+        }
         result[column.name] = value;
       }
       return result;
@@ -48,9 +63,15 @@ export async function projectStartupObservation(row, sample) {
     return wire({ tables, live: state.live, networkLive: state.networkLive });
   }
   const observations = [];
-  for (const observation of row.observations) observations.push({ status: observation.status, contentType: observation.contentType,
-    allow: observation.allow.split(',').map(value => value.trim()).filter(Boolean).sort(),
-    body: observation.json == null ? observation.body : withoutTrace(observation.json), state: await snapshot(observation.state) });
+  for (const observation of row.observations) {
+    let body = observation.json == null ? observation.body : withoutTrace(observation.json);
+    if (bindInitialName && observation.status === 200) {
+      assert.equal(body?.Name, initialName);
+      body = { ...body, Name: '$environment-user' };
+    }
+    observations.push({ status: observation.status, contentType: observation.contentType,
+      allow: observation.allow.split(',').map(value => value.trim()).filter(Boolean).sort(), body, state: await snapshot(observation.state) });
+  }
   return { name: row.name, before: await snapshot(row.before), observations, after: await snapshot(row.after),
     events: row.events.map(event => ({ ...event, userId: id(event.userId) })) };
 }

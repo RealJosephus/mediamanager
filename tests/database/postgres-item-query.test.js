@@ -24,7 +24,6 @@ import { queryPostgresFolderStats } from '../../src/library/postgres-library-que
 import { queryPostgresNextUpPage } from '../../src/library/postgres-next-up-query.js';
 import { idKey } from '../../src/library/records.js';
 import { clrWhitespaceCharacters } from '../../src/metadata/whitespace.js';
-import { ordinalIgnoreCaseKey } from '../../src/storage/ordinal-comparer.js';
 
 const database = {
   dialect: 'postgres',
@@ -434,10 +433,18 @@ test('real PostgreSQL provider presence uses ordinal-ignore-case without locale 
     ItemId: localeFalsePositiveId, ProviderId: '\u0130mdb', ProviderValue: 'tt-wrong',
   });
 
-  const keys = (await postgres.client.query(`SELECT lower('\u0130mdb') AS locale_key,
-    "${schema}"."${postgresOrdinalIgnoreCaseKeyFunctionName}"('\u0130mdb') AS ordinal_key`)).rows[0];
-  assert.equal(keys.locale_key, '\u0130mdb', 'the fixture retains its non-ASCII Turkish provider identity');
-  assert.notEqual(keys.ordinal_key, ordinalIgnoreCaseKey('imdb'));
+  const providers = await postgres.rows('BaseItemProviders', { where: { ItemId: localeFalsePositiveId } });
+  assert.equal(providers[0].ProviderId, '\u0130mdb', 'stored provider identity retains the dotted capital I');
+  const keys = (await postgres.client.query(`SELECT
+    "${schema}"."${postgresOrdinalIgnoreCaseKeyFunctionName}"($1::bytea) AS mixed_key,
+    "${schema}"."${postgresOrdinalIgnoreCaseKeyFunctionName}"($2::bytea) AS dotted_key,
+    "${schema}"."${postgresOrdinalIgnoreCaseKeyFunctionName}"($3::bytea) AS plain_key`,
+  ['iMdB', '\u0130mdb', 'imdb'].map(nativeTextBytes))).rows[0];
+  assert.deepEqual(keys.mixed_key, nativeTextOrdinalIgnoreCaseKey('iMdB'));
+  assert.deepEqual(keys.dotted_key, nativeTextOrdinalIgnoreCaseKey('\u0130mdb'));
+  assert.deepEqual(keys.plain_key, nativeTextOrdinalIgnoreCaseKey('imdb'));
+  assert.deepEqual(keys.mixed_key, keys.plain_key, 'ASCII provider casing shares one ordinal key');
+  assert.notDeepEqual(keys.dotted_key, keys.plain_key, 'ordinal comparison keeps dotted I distinct on every database locale');
 
   const present = await queryPostgresItemPage(postgres, {
     ids: [matchingId, localeFalsePositiveId, absentId], hasimdbid: true, sortby: ['SortName'], limit: 10,

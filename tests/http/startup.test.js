@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import * as fs from 'node:fs/promises';
 import path from 'node:path';
+import os from 'node:os';
 import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { createApplication } from '../../src/http/application.js';
@@ -36,8 +37,8 @@ test('Startup fixtures bind actual MVC, user/configuration managers, EF, native 
   assert.equal(repeat.inputSha256, native.inputSha256); assert.deepEqual(repeat.caseFoldExceptions, native.caseFoldExceptions);
   assert.equal(hash(await fs.readFile(new URL('../../src/core/resources/invariant-case-fold.json', import.meta.url))), proof.caseFoldSha256);
   assert.deepEqual(JSON.parse(await fs.readFile(new URL('../../src/core/resources/invariant-case-fold.json', import.meta.url))), native.caseFoldExceptions);
-  for (const sample of input) assert.deepEqual(await projectStartupObservation(repeat.results.find(row => row.name === sample.name), sample),
-    await projectStartupObservation(native.results.find(row => row.name === sample.name), sample));
+  for (const sample of input) assert.deepEqual(await projectStartupObservation(repeat.results.find(row => row.name === sample.name), sample, repeat.environmentUserName),
+    await projectStartupObservation(native.results.find(row => row.name === sample.name), sample, native.environmentUserName));
 });
 
 for (const sample of input) test(`postgres: native startup HTTP, rows, configuration and failure prefix: ${sample.name}`, enabled, async t => {
@@ -107,7 +108,8 @@ for (const sample of input) test(`postgres: native startup HTTP, rows, configura
     actual.observations.push({ status: response.status, body, json, contentType: response.headers.get('content-type'), allow: response.headers.get('allow') ?? '', state: await snapshot(expected.observations[index].state) });
   }
   actual.after = actual.observations.at(-1).state;
-  const projected = await projectStartupObservation(actual, sample), contract = await projectStartupObservation(expected, sample);
+  const projected = await projectStartupObservation(actual, sample, os.userInfo().username),
+    contract = await projectStartupObservation(expected, sample, native.environmentUserName);
   await fs.writeFile(path.join(output, 'startup-' + sample.name + '.json'), json({ actual, projected, contract, errors }), { flag: 'wx' });
   assert.deepEqual(projected, contract);
 });
