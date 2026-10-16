@@ -1,5 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { mkdtemp, realpath, rm } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
 import { createRuntime } from '../../src/runtime.js';
 import { parseLosslessJson } from '../../src/core/json.js';
 import { createPostgresTestDatabase } from '../database/postgres-fixture.js';
@@ -7,9 +10,16 @@ import { createPostgresTestDatabase } from '../database/postgres-fixture.js';
 test('device listing, options and deletion match the recorded native controller contract', {
   skip: !process.env.MEDIAMANAGER_TEST_POSTGRES
 }, async t => {
+  const temporaryRoot = await realpath(tmpdir());
+  const stateRoot = await mkdtemp(path.join(temporaryRoot, 'mediamanager-device-http-'));
+  t.after(async () => {
+    assert.equal(path.dirname(stateRoot), temporaryRoot);
+    assert.ok(path.basename(stateRoot).startsWith('mediamanager-device-http-'));
+    await rm(stateRoot, { recursive: true, force: true });
+  });
   const database = await createPostgresTestDatabase(t, 'http_devices');
   const runtime = await createRuntime({ database, configuration: { UICulture: 'en-US', IsStartupWizardCompleted: true },
-    serverId: 'device-http-test', programDataPath: 'D:\\device-http-test-state' });
+    serverId: 'device-http-test', programDataPath: path.join(stateRoot, 'program'), configurationDirectoryPath: path.join(stateRoot, 'config') });
   runtime.sessions.automaticProgress = false;
   try {
     const adminUser = await runtime.users.createUser({ Name: 'DeviceAdmin', Password: 'admin-password' });

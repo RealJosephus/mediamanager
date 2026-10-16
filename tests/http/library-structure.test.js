@@ -9,7 +9,9 @@ import { AuthenticationService } from '../../src/users/authentication-service.js
 import { LibraryConfigurationService } from '../../src/library/library-configuration-service.js';
 import { LibraryScanHost } from '../../src/library/library-scan-host.js';
 import { parseCollectionTypeOption } from '../../src/library/collection-type-options.js';
+import { recordedInputPath } from '../../tools/validation/paths.js';
 
+void JSON.parse(await fs.readFile(new URL('./fixtures/library-structure/required-inputs.json', import.meta.url)));
 const fixture = new URL('./fixtures/library-structure/', import.meta.url);
 const [inputBytes, nativeBytes, proofBytes] = await Promise.all(['input.json', 'native.json', 'provenance.json'].map(name => fs.readFile(new URL(name, fixture))));
 const input = JSON.parse(inputBytes), native = JSON.parse(nativeBytes), proof = JSON.parse(proofBytes);
@@ -20,17 +22,17 @@ const noTrace = value => Array.isArray(value) ? value.map(noTrace) : value && ty
 
 test('library structure native recording binds actual MVC, policy, rename files and CollectionFolder options', async () => {
   assert.equal(hash(inputBytes), proof.inputSha256); assert.equal(hash(nativeBytes), proof.nativeSha256);
-  assert.equal(hash(await fs.readFile(proof.rawRecording)), proof.nativeSha256);
+  assert.equal(hash(await fs.readFile(recordedInputPath(proof.rawRecording, [proof.nativeSha256]))), proof.nativeSha256);
   assert.equal(native.inputSha256, proof.inputSha256); assert.equal(proof.sourcesStable, true);
   for (const key of ['actualController','actualBinding','actualPermissionHandlers','actualRenameFiles','actualCollectionFolderOptions','principalControlled','managerControlled']) assert.equal(native[key], true);
   assert.equal(proof.build.status, 0); assert.equal(proof.process.status, 0); assert.equal(proof.phaseAcceptance, false);
   for (const source of proof.sources) {
-    assert.equal(hash(await fs.readFile(path.join('D:/jellyfin', source.filename))), source.sha256, source.filename);
-    assert.equal(hash(await fs.readFile(path.join(proof.jellyfin.buildSource, source.filename))), source.sha256, source.filename);
+    assert.equal(hash(await fs.readFile(recordedInputPath(path.join('D:/jellyfin', source.filename), [source.sha256]))), source.sha256, source.filename);
+    assert.equal(hash(await fs.readFile(recordedInputPath(path.join(proof.jellyfin.buildSource, source.filename), [source.sha256]))), source.sha256, source.filename);
   }
   for (const source of proof.oracleSources) assert.equal(hash(await fs.readFile(source.filename === 'Directory.Build.props'
     ? new URL('../Directory.Build.props', import.meta.url) : new URL(source.filename, fixture))), source.sha256, source.filename);
-  for (const assembly of proof.assemblies) assert.equal(hash(await fs.readFile(assembly.filename)), assembly.sha256, assembly.name);
+  for (const assembly of proof.assemblies) assert.equal(hash(await fs.readFile(recordedInputPath(assembly.filename, [assembly.sha256]))), assembly.sha256, assembly.name);
   assert.deepEqual(native.results.map(row => row.name), input.cases.map(row => row.name));
 });
 

@@ -19,7 +19,13 @@ try {
   const roles = (await client.query('SELECT rolname FROM pg_roles ORDER BY rolname')).rows;
   const record = { recordedAt: new Date().toISOString(), mode, database, schemas, connections, roles };
   if (mode === 'capture') {
+    const temporary = await fs.mkdtemp(path.join(await fs.realpath(process.env.RUNNER_TEMP ?? os.tmpdir()), 'mediamanager-test-tmp-'));
+    if (!process.env.GITHUB_ENV) throw new Error('CI environment capture requires GITHUB_ENV.');
+    // Hosted runners may expose /var or TEMP through a symbolic link. Keep the
+    // production physical-directory checks and give fixtures a canonical root.
+    await fs.appendFile(process.env.GITHUB_ENV, ['TMPDIR', 'TMP', 'TEMP'].map(name => `${name}=${temporary}\n`).join(''));
     record.runner = { platform: process.platform, arch: process.arch, release: os.release(), node: process.version,
+      temporary,
       image: process.env.ImageOS ?? null, imageVersion: process.env.ImageVersion ?? null,
       commit: process.env.GITHUB_SHA ?? null, runId: process.env.GITHUB_RUN_ID ?? null, attempt: process.env.GITHUB_RUN_ATTEMPT ?? null };
     record.tools = [];

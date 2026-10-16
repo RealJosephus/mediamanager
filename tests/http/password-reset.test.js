@@ -9,10 +9,11 @@ import { UserService, AuthenticationService, ApiKeyService, PasswordResetService
 import { parsePasswordHash, verifyPasswordHash } from '../../src/core/password.js';
 import { md5Guid } from '../../src/core/identity.js';
 import { wireGuid } from '../../src/users/native.js';
-import { validationOutputRoot } from '../../tools/validation/paths.js';
+import { recordedInputPath, validationOutputRoot } from '../../tools/validation/paths.js';
 import { createPostgresTestDatabase, dropPostgresTestDatabase, postgresTestConnectionString } from '../database/postgres-fixture.js';
 import { normalizeSnapshot, projectResetObservation } from './fixtures/password-reset/observations.js';
 
+void JSON.parse(await fs.readFile(new URL('./fixtures/password-reset/required-inputs.json', import.meta.url)));
 const fixture = new URL('./fixtures/password-reset/', import.meta.url);
 const [inputBytes, nativeBytes, proofBytes] = await Promise.all(['input.json', 'native.json', 'provenance.json'].map(name => fs.readFile(new URL(name, fixture))));
 const input = JSON.parse(inputBytes), native = JSON.parse(nativeBytes), proof = JSON.parse(proofBytes);
@@ -21,18 +22,18 @@ const enabled = { skip: !postgresTestConnectionString };
 
 test('password reset recording binds actual MVC, UserManager, EF SQLite, crypto and instance files', async () => {
   assert.equal(hash(inputBytes), proof.inputSha256); assert.equal(hash(nativeBytes), proof.nativeSha256);
-  assert.equal(hash(await fs.readFile(proof.rawRecording)), proof.nativeSha256);
+  assert.equal(hash(await fs.readFile(recordedInputPath(proof.rawRecording, [proof.nativeSha256]))), proof.nativeSha256);
   assert.equal(native.inputSha256, proof.inputSha256);
   for (const name of ['actualController', 'actualBinding', 'actualUserManager', 'actualDefaultProvider', 'actualEfSqlite', 'actualCrypto', 'eventsControlled', 'networkControlled']) assert.equal(native[name], true);
   assert.equal(proof.build.status, 0); assert.equal(proof.process.status, 0); assert.equal(proof.sourcesStable, true);
   assert.equal(proof.completeBuildInputClosure, false); assert.equal(proof.phaseAcceptance, false);
   assert.equal(proof.repeat.sameInputAndOracleSources, true);
-  assert.equal(hash(await fs.readFile(proof.repeat.filename)), proof.repeat.sha256);
+  assert.equal(hash(await fs.readFile(recordedInputPath(proof.repeat.filename, [proof.repeat.sha256]))), proof.repeat.sha256);
   assert.equal(hash(await fs.readFile(new URL('observations.js', fixture))), proof.repeat.comparisonSha256);
-  for (const row of proof.sources) for (const root of ['D:/jellyfin', proof.jellyfin.buildSource]) assert.equal(hash(await fs.readFile(path.join(root, row.filename))), row.sha256, row.filename);
+  for (const row of proof.sources) for (const root of ['D:/jellyfin', proof.jellyfin.buildSource]) assert.equal(hash(await fs.readFile(recordedInputPath(path.join(root, row.filename), [row.sha256]))), row.sha256, row.filename);
   for (const row of proof.oracleSources) assert.equal(hash(await fs.readFile(row.filename === 'Directory.Build.props'
     ? new URL('../Directory.Build.props', import.meta.url) : new URL(row.filename, fixture))), row.sha256, row.filename);
-  for (const row of [...proof.assemblies, ...proof.nativeLibraries, proof.sqliteRuntime]) assert.equal(hash(await fs.readFile(row.filename)), row.sha256, row.filename);
+  for (const row of [...proof.assemblies, ...proof.nativeLibraries, proof.sqliteRuntime]) assert.equal(hash(await fs.readFile(recordedInputPath(row.filename, [row.sha256]))), row.sha256, row.filename);
   assert.deepEqual(native.results.map(row => row.name), input.map(row => row.name));
 });
 
