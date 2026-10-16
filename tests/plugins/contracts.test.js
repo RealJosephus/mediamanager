@@ -26,7 +26,7 @@ test('core imports no concrete official plugin and managed content has no native
 });
 
 const capabilities={randomRead:false,reliableLength:true,reliableVersion:false,directorySnapshot:true,
- create:false,replace:false,mkdir:false,delete:false,rename:false,atomicReplace:false,conditionalWrite:false,directLease:false};
+ create:false,replace:false,mkdir:false,delete:false,rename:false,atomicReplace:false,conditionalWrite:false,directLease:false,watch:false};
 test('storage shutdown and type removal drain a factory and close its late adapter',async()=>{
  for(const operation of ['close','unregisterType']){
   const registry=new StorageRegistry(),ready=Promise.withResolvers();let closed=0;

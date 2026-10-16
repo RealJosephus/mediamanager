@@ -1,10 +1,10 @@
 import { StorageError, checkAbort } from './errors.js';
 
 const requiredMethods = ['stat', 'listPage', 'openRead', 'health', 'close'];
-const operationCapabilities = Object.freeze({ create: 'write', replace: 'write', mkdir: 'mkdir', delete: 'delete', rename: 'rename' });
+const operationCapabilities = Object.freeze({ create: 'write', replace: 'write', mkdir: 'mkdir', delete: 'delete', rename: 'rename', watch: 'watch' });
 export const storageCapabilityNames = Object.freeze([
   'randomRead', 'reliableLength', 'reliableVersion', 'directorySnapshot',
-  'create', 'replace', 'mkdir', 'delete', 'rename', 'atomicReplace', 'conditionalWrite', 'directLease'
+  'create', 'replace', 'mkdir', 'delete', 'rename', 'atomicReplace', 'conditionalWrite', 'directLease', 'watch'
 ]);
 
 function validateAdapter(instance) {

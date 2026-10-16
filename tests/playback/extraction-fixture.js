@@ -44,7 +44,7 @@ export async function extractionFixture(files, { reliableVersion = true, advisor
   const adapter = {
     capabilities: Object.freeze({ randomRead: true, reliableLength: true, reliableVersion, directorySnapshot: false,
       create: false, replace: false, mkdir: false, delete: false, rename: false, atomicReplace: false,
-      conditionalWrite: false, directLease: false }),
+      conditionalWrite: false, directLease: false, watch: false }),
     async stat(path, { signal } = {}) {
       const response = await fetch(origin + path, { method: 'HEAD', signal });
       if (response.status === 404) throw new StorageError('not-found', 'Missing fixture object.');

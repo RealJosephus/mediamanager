@@ -5,6 +5,7 @@ import { randomUUID, createHash } from 'node:crypto';
 import { StorageError, checkAbort, requireCapability } from '@mediamanager/plugin-sdk/storage/errors';
 import { normalizePath } from '@mediamanager/plugin-sdk/storage/paths';
 import { resolveRange } from '@mediamanager/plugin-sdk/storage/range';
+import { watchDirectory } from './watch.js';
 
 const codes = { ENOENT: 'not-found', ENOTDIR: 'not-directory', EISDIR: 'is-directory',
   EPERM: 'permission-denied', EACCES: 'permission-denied', EEXIST: 'already-exists',
@@ -60,7 +61,7 @@ export class LocalAdapter {
     const writable = configuration.writable === true;
     this.capabilities = Object.freeze({ randomRead: true, reliableLength: true, reliableVersion: false,
       directorySnapshot: true, create: writable, replace: writable, mkdir: writable, delete: writable,
-      rename: writable, atomicReplace: writable, conditionalWrite: false, directLease: false });
+      rename: writable, atomicReplace: writable, conditionalWrite: false, directLease: false, watch: true });
   }
   async #target(value, { missing = false, leafLink = false } = {}) {
     value = normalizePath(value);
@@ -217,6 +218,22 @@ export class LocalAdapter {
     await fs.rename(source, target);
   }, true); }
   health(options = {}) { return this.#operation(options, async () => { await this.#target('/'); return { available: true }; }); }
+  watch(value, options = {}) {
+    return this.#operation(options, async signal => {
+      const watcher = await watchDirectory(normalizePath(value), {
+        ...options, signal, resolve: filename => this.#target(filename, { missing: true }), failure
+      });
+      const abort = () => { void handle.close().catch(() => {}); };
+      const handle = { close: async () => {
+        signal.removeEventListener('abort', abort);
+        try { await watcher.close(); } finally { this.#handles.delete(handle); }
+      } };
+      this.#handles.add(handle);
+      signal.addEventListener('abort', abort, { once: true });
+      if (signal.aborted) { await handle.close(); checkAbort(signal); }
+      return handle;
+    });
+  }
   async close() {
     if (this.#closed) return; this.#closed = true; this.#lifetime.abort();
     await Promise.allSettled([...this.#pending]);

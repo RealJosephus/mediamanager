@@ -293,7 +293,7 @@ export class WebDavAdapter {
       create: declared.create === true, replace: declared.replace === true,
       conditionalWrite: declared.conditionalWrite === true,
       mkdir: declared.mkdir === true, delete: declared.delete === true, rename: declared.rename === true,
-      atomicReplace: false, directLease: false,
+      atomicReplace: false, directLease: false, watch: false,
     });
   }
 

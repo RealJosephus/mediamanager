@@ -14,7 +14,7 @@ function capabilities(value) {
   const result = Object.fromEntries(writableCapabilities.map(name => [name, value[name] === true]));
   if (result.atomicReplace && !result.replace) throw new TypeError('Memory storage atomicReplace requires replace capability.');
   return Object.freeze({ randomRead: true, reliableLength: true, reliableVersion: true,
-    directorySnapshot: true, ...result, directLease: false });
+    directorySnapshot: true, ...result, directLease: false, watch: false });
 }
 
 // An independent fixture adapter. It is never registered as a production media backend.
