@@ -125,10 +125,13 @@ export async function setupPlaylistDeletion(t, sample, recorded) {
     await fixture.database.client.query("CREATE FUNCTION playlist_deletion_failure() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN RAISE EXCEPTION 'Controlled deletion failure'; END $$");
     await fixture.database.client.query('CREATE TRIGGER playlist_deletion_failure BEFORE DELETE ON "BaseItems" FOR EACH ROW EXECUTE FUNCTION playlist_deletion_failure()');
   }
+  // The recorded managed directory deliberately contains mixed separators.
+  // Project both sides through the same isolated-root relocation as the seed.
+  const projectPath = text => projectStatePath(expand(text), fixture.stateRoot);
   const normalizeRows = rows => rows.map(row => Object.fromEntries(Object.entries(row).map(([key, value]) => [key,
-    key === 'Data' && value != null ? rewrite(parseLosslessJson(value), text => projectStatePath(text, fixture.stateRoot))
+    key === 'Data' && value != null ? rewrite(parseLosslessJson(value), projectPath)
       : key.startsWith('Date') && value != null ? dateText(value)
-        : typeof value === 'string' ? projectStatePath(value, fixture.stateRoot) : value])))
+        : typeof value === 'string' ? projectPath(value) : value])))
     .sort((a, b) => ordinal(a.Id, b.Id));
   const links = async () => (await fixture.database.rows('LinkedChildren')).sort((a, b) => ordinal(a.ParentId, b.ParentId) || a.SortOrder - b.SortOrder);
   const files = async () => {

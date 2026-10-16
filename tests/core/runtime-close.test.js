@@ -270,7 +270,7 @@ test('runtime without application paths serves users without starting a library 
     assert.equal(runtime.storageReadiness.ready, true);
     assert.deepEqual(await database.rows('BaseItems'), [], 'Rootless construction must not synthesize a persistent media root.');
     const user = await runtime.users.createUser({ Name: 'Rootless User' });
-    assert.equal((await runtime.users.getUser(user.Id)).Name, 'Rootless User');
+    assert.equal((await runtime.users.getUser(user.Id)).Username, 'Rootless User');
     await runtime.close();
     await assert.rejects(database.rows('Users'), /not open|closed/iu);
   } finally {
