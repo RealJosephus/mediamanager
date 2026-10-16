@@ -10,6 +10,8 @@ oracle execution, `record.json`, `candidate.json`, `comparison.json`, and candid
 share a case root, native database, PostgreSQL schema, or cancellation source.
 The music input also has a separate `post-scan-composition-music-*` receipt and
 does not change either existing input's bytes or recorded outcome.
+The independent `cleanup-input.json` likewise writes a
+`post-scan-composition-cleanup-*` receipt without changing the other inputs.
 
 `NativeScanHost.cs` derives from the actual eight-service host recorded in
 `post-scan-composition-native-1` on 2026-10-16. The previous empty/ordinary
@@ -39,6 +41,23 @@ continue to exclude these music-only names. The native trace must show Artist
 metadata completion before MusicGenres starts; fresh native SQL and file output
 remain authoritative for the complete candidate comparison. This is metadata
 over persisted Audio rows, not audio-file resolution, probe or playback proof.
+
+`cleanup-input.json` seeds a real Folder parent, one existing file Playlist,
+one missing file Playlist, and an unmapped ItemValue. It has no by-name values
+or dead by-name entities, so their earlier validators cannot remove the orphan
+as a side effect. Both Playlists have real internal and extracted marker files;
+the existing Playlist also has stable source bytes. The actual LibraryManager
+dispatch log captures SQL immediately before `CleanDatabaseScheduledTask`.
+That snapshot must show all seven preceding tasks completed, no item removal,
+and the orphan value and missing Playlist still present. Observation of the
+real persistence `DeleteItem` entry must then show the value cleanup already
+committed while the missing Playlist row still exists. The candidate observes
+the equivalent boundaries and still calls its original task and deletion
+methods. Final comparison includes all fixture BaseItems columns, all value
+relations, fixture ancestry and linked-child relations, removal events, and
+every remaining file byte. The existing Playlist and its source bytes must
+survive; missing-Playlist deletion must remove its actual metadata and extracted
+files. No dead-parent/media-source cleanup is claimed by this narrow input.
 
 `cancellation-input.json` preserves the same nonempty operations but requests
 cancellation at the new Studio's actual metadata-service entry. `GetStudio` has
@@ -104,7 +123,7 @@ Unused external video managers are absent and fail if exercised;
 they are not successful cleanup substitutes. The native monitor is observational.
 No movie/audio file-scanning family, image composition, network provider, watcher, general
 cancellation guarantee, or complete-library-scan capability is accepted by these
-narrow scenarios. The cancellation and music cases require their own Actions
+narrow scenarios. The cancellation, music and final-cleanup cases require their own Actions
 evidence; source preparation alone is not a pass.
 
 Required execution inputs are PostgreSQL, .NET 10, and the supplied current

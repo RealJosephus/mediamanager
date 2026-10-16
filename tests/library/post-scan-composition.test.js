@@ -17,11 +17,13 @@ import { validationOutputRoot } from '../../tools/validation/paths.js';
 const inputFile = new URL('./fixtures/post-scan-composition/input.json', import.meta.url);
 const cancellationInputFile = new URL('./fixtures/post-scan-composition/cancellation-input.json', import.meta.url);
 const musicInputFile = new URL('./fixtures/post-scan-composition/music-input.json', import.meta.url);
+const cleanupInputFile = new URL('./fixtures/post-scan-composition/cleanup-input.json', import.meta.url);
 const hash = value => createHash('sha256').update(value).digest('hex');
 const itemColumns = tableDefinition('BaseItems').columns;
 const ordinaryByNameTypes = ['Genre', 'Studio'].map(name => 'MediaBrowser.Controller.Entities.' + name);
 const artistType = 'MediaBrowser.Controller.Entities.Audio.MusicArtist';
 const musicGenreType = 'MediaBrowser.Controller.Entities.Audio.MusicGenre';
+const playlistType = 'MediaBrowser.Controller.Playlists.Playlist';
 const nativeTasks = ['SplashscreenPostScanTask', 'ArtistsPostScanTask', 'CollectionPosterVerifyPostScanTask',
   'CollectionPostScanTask', 'GenresPostScanTask', 'MusicGenresPostScanTask', 'StudiosPostScanTask', 'CleanDatabaseScheduledTask'];
 
@@ -85,15 +87,17 @@ async function stateFiles(root) {
 async function compareComposition(t, scenarioFile) {
   const inputBytes = await readFile(scenarioFile), scenario = JSON.parse(inputBytes)[0];
   const cancelling = scenario.Cancel?.Channel === 'metadata-before';
+  const cleaning = scenario.Cleanup != null;
+  const relationNames = ['ItemValues', 'ItemValuesMap', ...(cleaning ? ['AncestorIds', 'LinkedChildren'] : [])];
   const music = scenario.Seed.Music;
   const artistNames = [...new Set(music?.Tracks.flatMap(track => [...track.Artists, ...track.AlbumArtists]) ?? [])];
   const musicGenreNames = [...new Set(music?.Tracks.flatMap(track => track.Genres) ?? [])];
   const byNameTypes = [...ordinaryByNameTypes, ...(music ? [artistType, musicGenreType] : [])];
-  const refreshedTypes = [...(cancelling ? ordinaryByNameTypes.slice(0, 1) : ordinaryByNameTypes),
+  const refreshedTypes = [...(cleaning ? [] : cancelling ? ordinaryByNameTypes.slice(0, 1) : ordinaryByNameTypes),
     ...artistNames.map(() => artistType), ...musicGenreNames.map(() => musicGenreType)];
   assert.ok(process.env.MEDIAMANAGER_JELLYFIN_DLL, 'The actual composition requires the current native Jellyfin assembly directory.');
   await access(process.env.MEDIAMANAGER_JELLYFIN_DLL);
-  const output = path.join(validationOutputRoot(), 'post-scan-composition-' + (cancelling ? 'cancel-' : music ? 'music-' : '') + randomUUID());
+  const output = path.join(validationOutputRoot(), 'post-scan-composition-' + (cancelling ? 'cancel-' : music ? 'music-' : cleaning ? 'cleanup-' : '') + randomUUID());
   const recording = await recordOracle({ project: 'tests/library/fixtures/post-scan-composition/Oracle.csproj', output,
     args: [fileURLToPath(scenarioFile), '{output}/native.json', '{output}/cases'] });
   assert.equal(recording.passed, true);
@@ -111,6 +115,7 @@ async function compareComposition(t, scenarioFile) {
   assert.deepEqual(sample.discovered, sample.instantiated);
   assert.deepEqual(sample.instantiated.map(name => name.split('.').at(-1)), nativeTasks);
   assert.deepEqual(sample.Cancel, scenario.Cancel ?? null);
+  assert.deepEqual(sample.Cleanup, scenario.Cleanup ?? null);
   if (cancelling) assert.match(sample.observation.Exception ?? '', /^System\.(?:OperationCanceledException|Threading\.Tasks\.TaskCanceledException)$/u,
     sample.observation.ExceptionMessage ?? 'The actual metadata service must propagate its cancellation.');
   else assert.equal(sample.observation.Exception, null, sample.observation.ExceptionMessage);
@@ -149,14 +154,45 @@ async function compareComposition(t, scenarioFile) {
     assert.ok(studioCreation && studioCreation.ordinal < requests[0].ordinal);
     assert.equal(studioCreation.detail.sql.result.ItemValues.some(row => idKey(row.ItemValueId) === idKey(sample.orphanValueId)), false,
       'The earlier Genre deletion has already removed the orphan before the Studio cancellation.');
-  } else assert.deepEqual(sample.files, [], 'The native operation deletes every seeded cleanup marker.');
-  assert.equal(sample.createdDirectories.length, 2 + artistNames.length + musicGenreNames.length);
+  } else if (!cleaning) assert.deepEqual(sample.files, [], 'The native operation deletes every seeded cleanup marker.');
+  assert.equal(sample.createdDirectories.length, cleaning ? 0 : 2 + artistNames.length + musicGenreNames.length);
   assert.ok(sample.createdDirectories.every(entry => entry.exists));
   assert.ok(before.ItemValues.some(row => idKey(row.ItemValueId) === idKey(sample.orphanValueId)));
   assert.equal(expected.ItemValues.some(row => idKey(row.ItemValueId) === idKey(sample.orphanValueId)), false,
-    'ItemPersistenceService.DeleteItem removes globally unmapped values during committed by-name cleanup.');
+    'The completed native operation removes the seeded orphan value.');
   assert.deepEqual(expected.BaseItems.filter(row => byNameTypes.includes(row.Type)).map(row => row.Name).sort(),
-    [sample.seed.Genre, sample.seed.Studio, ...artistNames, ...musicGenreNames, ...(cancelling ? [sample.seed.DeadStudio] : [])].sort());
+    (cleaning ? [] : [sample.seed.Genre, sample.seed.Studio, ...artistNames, ...musicGenreNames, ...(cancelling ? [sample.seed.DeadStudio] : [])]).sort());
+  let cleanupItems;
+  if (cleaning) {
+    const present = before.BaseItems.find(row => row.Type === playlistType && row.Name === scenario.Cleanup.PresentPlaylist);
+    const missing = before.BaseItems.find(row => row.Type === playlistType && row.Name === scenario.Cleanup.MissingPlaylist);
+    assert.ok(present && missing);
+    cleanupItems = { present: idKey(present.Id), missing: idKey(missing.Id) };
+    const boundaries = sample.observation.Trace.filter(event => event.action === 'before-database-cleanup');
+    assert.equal(boundaries.length, 1);
+    const boundary = boundaries[0], entering = boundary.detail.sql.result;
+    assert.deepEqual(sample.observation.Trace.filter(event => event.ordinal < boundary.ordinal && event.action === 'log')
+      .map(event => /^Post-scan task (\w+) completed after /u.exec(event.detail.message)?.[1]).filter(Boolean), nativeTasks.slice(0, 7));
+    assert.ok(entering.ItemValues.some(row => idKey(row.ItemValueId) === idKey(sample.orphanValueId)),
+      'The orphan survives the first seven actual tasks.');
+    assert.ok(entering.BaseItems.some(row => idKey(row.Id) === cleanupItems.missing),
+      'The missing file Playlist still exists at the actual eighth-task boundary.');
+    assert.equal(sample.observation.Trace.some(event => event.action === 'removed' && event.ordinal < boundary.ordinal), false);
+    const deletions = sample.observation.Trace.filter(event => event.action === 'delete-begin');
+    assert.equal(deletions.length, 1);
+    assert.deepEqual(deletions[0].detail.ids.map(idKey), [cleanupItems.missing]);
+    assert.ok(deletions[0].ordinal > boundary.ordinal);
+    assert.equal(deletions[0].detail.sql.result.ItemValues.some(row => idKey(row.ItemValueId) === idKey(sample.orphanValueId)), false,
+      'CleanDatabase commits its orphan-value transaction before ordinary Playlist deletion.');
+    assert.ok(deletions[0].detail.sql.result.BaseItems.some(row => idKey(row.Id) === cleanupItems.missing));
+    assert.deepEqual(expected.BaseItems.filter(row => row.Type === playlistType).map(row => idKey(row.Id)), [cleanupItems.present]);
+    const presentPath = path.relative(sample.programRoot, present.Path).replaceAll('\\', '/');
+    const presentFile = sample.before.files.find(file => file.path === presentPath);
+    assert.ok(presentFile);
+    assert.ok(sample.files.some(file => file.path === presentPath && file.sha256 === presentFile.sha256));
+    assert.ok(sample.files.length > 0 && sample.files.length < sample.before.files.length);
+    assert.ok(sample.files.every(file => sample.before.files.some(original => original.path === file.path && original.sha256 === file.sha256)));
+  }
   if (music) {
     assert.ok(sample.observation.MetadataServiceTypes.includes('MediaBrowser.Providers.Music.ArtistMetadataService'));
     assert.ok(sample.observation.MetadataServiceTypes.includes('MediaBrowser.Providers.MusicGenres.MusicGenreMetadataService'));
@@ -230,6 +266,8 @@ async function compareComposition(t, scenarioFile) {
   assert.deepEqual(providerControls.externalMetadataPlugins, []);
   assert.deepEqual(providerControls.relevantProviders, [], 'The candidate has the same empty external provider/image/saver controls as native.');
   const initialIds = new Set(sample.fixtureIds.map(idKey));
+  const relevantRelations = (name, rows) => name === 'AncestorIds' ? rows.filter(row => initialIds.has(idKey(row.ItemId)))
+    : name === 'LinkedChildren' ? rows.filter(row => initialIds.has(idKey(row.ParentId)) || initialIds.has(idKey(row.ChildId))) : rows;
   for (const row of [...before.BaseItems, ...expected.BaseItems]) assert.deepEqual(Object.keys(row).sort(), itemColumns.map(column => column.name).sort());
   const rebase = value => typeof value === 'string' ? value.replaceAll(sample.programRoot, programRoot)
     .replaceAll(JSON.stringify(sample.programRoot).slice(1, -1), JSON.stringify(programRoot).slice(1, -1)) : value;
@@ -241,7 +279,7 @@ async function compareComposition(t, scenarioFile) {
         return [column.name, value];
       })));
     }
-    for (const name of ['ItemValues', 'ItemValuesMap']) for (const row of before[name]) {
+    for (const name of relationNames) for (const row of relevantRelations(name, before[name])) {
       await db.insert(name, Object.fromEntries(tableDefinition(name).columns.map(column => {
         const value = row[column.name];
         return [column.name, value != null && column.clrType.includes('Guid') ? nativeGuid(value) : value];
@@ -260,10 +298,25 @@ async function compareComposition(t, scenarioFile) {
     if (initialIds.has(idKey(Item.Id)) || byNameTypes.includes(Item.NativeType)) events.push({ action, id: idKey(Item.Id), name: Item.Name });
   });
   const tasks = runtime.libraryScanLifecycle.postScanTasks;
+  let cleanupBoundary;
+  const deletionBoundaries = [];
   assert.deepEqual(tasks.map(task => task.constructor.name), nativeTasks.map(name => name === 'CleanDatabaseScheduledTask' ? 'CleanDatabasePostScanTask' : name));
   for (const task of tasks) {
     const run = task.run.bind(task);
-    task.run = async options => { started.push(task.constructor.name); const result = await run(options); completed.push(task.constructor.name); return result; };
+    task.run = async options => {
+      started.push(task.constructor.name);
+      if (cleaning && task.constructor.name === 'CleanDatabasePostScanTask') cleanupBoundary = {
+        completed: [...completed], BaseItems: await database.rows('BaseItems'), ItemValues: await database.rows('ItemValues')
+      };
+      const result = await run(options); completed.push(task.constructor.name); return result;
+    };
+  }
+  if (cleaning) {
+    const remove = runtime.itemDeletion.deleteItem.bind(runtime.itemDeletion);
+    runtime.itemDeletion.deleteItem = async (item, ...args) => {
+      deletionBoundaries.push({ id: idKey(item.Id), BaseItems: await database.rows('BaseItems'), ItemValues: await database.rows('ItemValues') });
+      return remove(item, ...args);
+    };
   }
   for (const method of ['stop', 'start']) {
     const call = runtime.libraryMonitor[method].bind(runtime.libraryMonitor);
@@ -294,11 +347,14 @@ async function compareComposition(t, scenarioFile) {
   try { await runtime.libraryScanLifecycle.run({ signal: controller.signal }); } catch (error) { failure = error; }
   const end = Date.now();
   const rows = await database.rows('BaseItems'), values = await database.rows('ItemValues'), maps = await database.rows('ItemValuesMap');
+  const relations = { ItemValues: values, ItemValuesMap: maps };
+  for (const name of relationNames.slice(2)) relations[name] = await database.rows(name);
   const files = await stateFiles(programRoot);
   const temporaryTables = (await database.client.query(`SELECT relname FROM pg_class WHERE relnamespace = pg_my_temp_schema() ORDER BY relname`)).rows;
   await writeFile(path.join(output, 'candidate.json'), JSON.stringify({ startedAt: new Date(start).toISOString(), completedAt: new Date(end).toISOString(),
     programRoot, providerControls, started, completed, events, metadata, monitor, cancelRequests, inheritedCleanup, temporaryTables,
-    errors, failure: failure?.stack ?? null, failureName: failure?.name ?? null, sql: { BaseItems: rows, ItemValues: values, ItemValuesMap: maps },
+    cleanupBoundary, deletionBoundaries,
+    errors, failure: failure?.stack ?? null, failureName: failure?.name ?? null, sql: { BaseItems: rows, ...relations },
     files, nativeSha256: hash(nativeBytes), record: path.join(output, 'record.json') },
   (_, value) => typeof value === 'bigint' ? JSON.rawJSON(String(value)) : value, 2) + '\n', { flag: 'wx' });
   if (cancelling) {
@@ -318,15 +374,24 @@ async function compareComposition(t, scenarioFile) {
   assert.deepEqual(errors, [], 'Internally logged candidate failures must not pass the composition check.');
   assert.deepEqual(completed, expectedCompleted.map(name => name === 'CleanDatabaseScheduledTask' ? 'CleanDatabasePostScanTask' : name));
   assert.equal(runtime.libraryScanLifecycle.isScanRunning, false);
+  if (cleaning) {
+    assert.deepEqual(cleanupBoundary.completed, nativeTasks.slice(0, 7));
+    assert.ok(cleanupBoundary.ItemValues.some(row => idKey(row.ItemValueId) === idKey(sample.orphanValueId)));
+    assert.ok(cleanupBoundary.BaseItems.some(row => idKey(row.Id) === cleanupItems.missing));
+    assert.equal(deletionBoundaries.length, 1);
+    assert.equal(deletionBoundaries[0].id, cleanupItems.missing);
+    assert.ok(deletionBoundaries[0].BaseItems.some(row => idKey(row.Id) === cleanupItems.missing));
+    assert.equal(deletionBoundaries[0].ItemValues.some(row => idKey(row.ItemValueId) === idKey(sample.orphanValueId)), false);
+  }
   const actual = rowsForComparison(rows, { root: programRoot, initialIds, byNameTypes, start, end, expandPath: runtime.library.options.expandPath });
   const wanted = rowsForComparison(expected.BaseItems, { root: sample.programRoot, initialIds, byNameTypes,
     start: Date.parse(sample.startedAt), end: Date.parse(sample.completedAt) });
   assert.deepEqual(actual, wanted, 'All persistent columns of the source and by-name entities match the current native operation.');
   const order = rows => rows.sort((left, right) => JSON.stringify(left).localeCompare(JSON.stringify(right)));
-  for (const name of ['ItemValues', 'ItemValuesMap']) {
-    const normalize = rows => order(rows.map(row => Object.fromEntries(tableDefinition(name).columns.map(column =>
-      [column.name, rewrite(row[column.name], programRoot)]))));
-    assert.deepEqual(normalize(name === 'ItemValues' ? values : maps), normalize(expected[name]), name);
+  for (const name of relationNames) {
+    const normalize = (rows, root) => order(relevantRelations(name, rows).map(row => Object.fromEntries(tableDefinition(name).columns.map(column =>
+      [column.name, rewrite(row[column.name], root)]))));
+    assert.deepEqual(normalize(relations[name], programRoot), normalize(expected[name], sample.programRoot), name);
   }
   const nativeEvents = sample.observation.Trace.filter(event => ['added', 'removed'].includes(event.action)
     && (initialIds.has(idKey(event.detail.item.id)) || byNameTypes.includes(event.detail.item.type)))
@@ -350,3 +415,5 @@ test('postgres: cancelling the real Studio refresh preserves the eight-task comm
   t => compareComposition(t, cancellationInputFile));
 test('postgres: native Artist child aggregation and MusicGenres persist inside the real eight-task scan', options,
   t => compareComposition(t, musicInputFile));
+test('postgres: the eighth native task removes orphan values and missing file Playlists after seven non-deleting tasks', options,
+  t => compareComposition(t, cleanupInputFile));

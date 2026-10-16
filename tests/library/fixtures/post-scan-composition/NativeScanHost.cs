@@ -59,7 +59,13 @@ public sealed class Scenario
     public int Fanout { get; set; } = 1;
     public FaultPlan? Fault { get; set; }
     public CancellationPlan? Cancel { get; set; }
+    public DatabaseCleanupSeed? Cleanup { get; set; }
     public CompositionSeed Seed { get; set; } = new();
+}
+public sealed class DatabaseCleanupSeed
+{
+    public string PresentPlaylist { get; set; } = "";
+    public string MissingPlaylist { get; set; } = "";
 }
 public sealed class CompositionSeed
 {
@@ -260,6 +266,13 @@ public sealed class NativeScanHost : IAsyncDisposable
                 var result = ForwardProxy.Forward(actualPersistence,method,values);
                 foreach (var item in items) if (item.Path is not null) _committed[item.Path]=0;
                 Add("save-committed",new { items=items.Select(Item).ToArray(), sql=SnapshotSql() });
+                return result;
+            }
+            if (_observing && Scenario.Cleanup is not null && method.Name == "DeleteItem") {
+                var ids = ((IReadOnlyList<Guid>)values![0]!).ToArray();
+                Add("delete-begin",new { ids,sql=SnapshotSql() });
+                var result=ForwardProxy.Forward(actualPersistence,method,values);
+                Add("delete-committed",new { ids,sql=SnapshotSql() });
                 return result;
             }
             if (_observing && method.Name == "UpdateInheritedValues") Add("inherited-cleanup-begin",null);
@@ -556,8 +569,16 @@ public sealed class NativeScanHost : IAsyncDisposable
         public bool IsEnabled(LogLevel level)=>true;
         public void Log<TState>(LogLevel level,EventId eventId,TState state,Exception? exception,Func<TState,Exception?,string> formatter)
         {
-            if(level>=LogLevel.Information||exception is not null)host.Add("log",new { category,level=level.ToString(),
-                message=formatter(state,exception),exception=exception?.GetType().FullName });
+            if(level>=LogLevel.Information||exception is not null)
+            {
+                var message=formatter(state,exception);
+                host.Add("log",new { category,level=level.ToString(),message,exception=exception?.GetType().FullName });
+                // Observe the real dispatch boundary without substituting a task.
+                if(host._observing&&host.Scenario.Cleanup is not null&&category==typeof(LibraryManager).FullName
+                    &&message.StartsWith("Running post-scan task ",StringComparison.Ordinal)
+                    &&message.EndsWith(": CleanDatabaseScheduledTask",StringComparison.Ordinal))
+                    host.Add("before-database-cleanup",new { sql=host.SnapshotSql() });
+            }
         }
     }
 }
