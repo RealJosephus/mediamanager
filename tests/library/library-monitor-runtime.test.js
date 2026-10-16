@@ -178,6 +178,10 @@ for (const cancel of [false, true]) test(`postgres: actual full scan ${cancel ? 
       assert.ok(existing?.DateLastRefreshed, 'The completed scan persists its child metadata refresh.');
       assert.equal(progress.at(-1), 99, 'The scheduled scan observer retains its completion-progress contract.');
     }
+    // Cancellation released the first fetch through its aborted signal. The
+    // provider remains registered for later real watcher refreshes, which must
+    // not inherit the test-owned barrier from the cancelled scan.
+    releaseProvider.resolve();
     assert.equal(f.runtime.library.listeners('ItemAdded').filter(listener => listener === f.runtime.libraryMonitor.onItemAdded).length, 1);
     await addDirectory(f, 'CreatedAfterFullScan');
     const [during] = await f.rows(identityRoot + '\\CreatedDuringFullScan');
