@@ -223,7 +223,9 @@ async function seedControlRows(fixture, root) {
 export async function setupResolverEntityFixture(t, dialect, sample) {
   const fixture = await setupChildrenFixture(t, dialect);
   fixture.configuration.EnableCaseSensitiveItemIds = true;
-  const root = path.join(fixture.stateRoot, 'native-resolver-entity-types', sample.name);
+  // Keep the recorded Windows identity namespace separate from host paths.
+  // All media access in this fixture is supplied by the isolated memory VFS.
+  const root = path.win32.join('Z:\\NativeResolverEntityTypes', sample.name);
   fixture.identityMap.addPrefix({ identityRoot: root, accessRoot: `/fixture/native-resolver-entity-types/${sample.name}`,
     style: 'windows', returnAccess: 'native resolver entity type differential controls' });
   await seedControlRows(fixture, root);

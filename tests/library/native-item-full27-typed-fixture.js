@@ -555,7 +555,9 @@ export async function setupTypedFixture(t, dialect, caseName) {
   fixture = await setupChildrenFixture(t, dialect);
   fixture.ownTypedItem = item => { if (item) ownedItems.add(item); return item; };
   fixture.configuration.EnableCaseSensitiveItemIds = true;
-  const root = path.win32.join(fixture.stateRoot, 'native-item-full27-typed', caseName);
+  // These inputs exercise Windows identity spelling through the memory VFS;
+  // they are not physical files beneath the host's temporary state directory.
+  const root = path.win32.join('Z:\\NativeItemFull27Typed', caseName);
   fixture.identityMap.addPrefix({ identityRoot: root, accessRoot: `/fixture/native-item-full27-typed/${caseName}`,
     style: 'windows', returnAccess: 'full27 typed native differential controls' });
   return { fixture, root };

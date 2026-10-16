@@ -18,6 +18,7 @@ import { guid, idKey, MIN_DATE } from '../../src/library/records.js';
 import { nativeGuid } from '../../src/users/native.js';
 import { createPostgresTestDatabase } from '../database/postgres-fixture.js';
 import { setupChildrenFixture } from '../metadata/children-fixture.js';
+import { fixturePathStyle } from './fixture-state-path.js';
 
 const fixture = new URL('./fixtures/artist-maintenance/', import.meta.url);
 const [nativeBytes, inputBytes, provenanceBytes] = await Promise.all(['native.json', 'input.json', 'provenance.json'].map(name => readFile(new URL(name, fixture))));
@@ -134,7 +135,7 @@ for (const recording of recordings) test('postgres: native SaveItems batch inser
   skip: !process.env.MEDIAMANAGER_TEST_POSTGRES,
 }, async t => {
   const { database, store, library, stateRoot, loadContext, identityMap, linkedChildren } = await setupChildrenFixture(t);
-  identityMap.addPrefix({ identityRoot: path.join(stateRoot, 'physical'), accessRoot: '/fixture/physical', style: 'windows', returnAccess: 'isolated order fixture' });
+  identityMap.addPrefix({ identityRoot: path.join(stateRoot, 'physical'), accessRoot: '/fixture/physical', style: fixturePathStyle, returnAccess: 'isolated order fixture' });
   library.options.configuration.EnableNormalizedItemByNameIds = true;
   const creator = new ItemCreationService({ store, library, loadContext, linkedChildren }); t.after(() => creator.close());
   library.itemCreation = creator;
