@@ -15,6 +15,7 @@ import { IdentityAccessMap } from '../../src/storage/identity-mapping.js';
 import { StorageFileSystem } from '../../src/storage/files.js';
 import { LocalAdapter } from '../../plugins/local/adapter.js';
 import { setupChildrenFixture } from './children-fixture.js';
+import { expandStatePath, fixturePathStyle, projectStatePath } from '../library/fixture-state-path.js';
 
 const root = new URL('./fixtures/by-name-refresh/', import.meta.url);
 const [input, native, provenance] = await Promise.all(['input.json', 'native.json', 'provenance.json'].map(async name => JSON.parse(await readFile(new URL(name, root), 'utf8'))));
@@ -55,7 +56,7 @@ for (const sample of input.filter(value => value.mode === 'before')) test(`nativ
 for (const dialect of ['postgres']) for (const sample of input.filter(value => value.mode !== 'before')) {
   test(`${dialect}: real by-name refresh ${sample.name}`, async t => {
     const fixture = await setupChildrenFixture(t, dialect), calls = [];
-    const itemPath = sample.path.replaceAll('$STATE', fixture.stateRoot);
+    const itemPath = expandStatePath(sample.path, '$STATE', fixture.stateRoot);
     await mkdir(itemPath, { recursive: true });
     await fixture.seed({ target: 'target', items: [{ key: 'target', type: sample.type, Id: id, Name: sample.itemName, Path: itemPath,
       DateLastRefreshed: sample.first ? '0001-01-01T00:00:00.0000000Z' : initial, DateModified: '0001-01-01T00:00:00.0000000Z' }] });
@@ -67,7 +68,7 @@ for (const dialect of ['postgres']) for (const sample of input.filter(value => v
     const loaded = await fixture.loadContext(id);
     const expected = native.results.find(value => value.name === sample.name).result;
     if (sample.mode === 'requires') {
-      compare({ requiresRefresh: await loaded.requiresRefresh(), Name: loaded.item.Name, Path: loaded.item.Path.replace(fixture.stateRoot, '$STATE') }, expected);
+      compare({ requiresRefresh: await loaded.requiresRefresh(), Name: loaded.item.Name, Path: projectStatePath(loaded.item.Path, fixture.stateRoot) }, expected);
       return;
     }
     const host = new MetadataRefreshHost({ registry: fixture.registry, store: fixture.store, linkedChildren: fixture.linkedChildren, vfs: fixture.vfs,
@@ -80,12 +81,14 @@ for (const dialect of ['postgres']) for (const sample of input.filter(value => v
       }
       if (errors.length) throw new AggregateError(errors, 'Metadata fixture host cleanup failed.');
     };
-    host.updates.on('ItemUpdated', ({ Item, UpdateReason }) => calls.push({ action: 'save', Name: Item.Name, Path: Item.Path.replace(fixture.stateRoot, '$STATE'), reason: UpdateReason }));
+    host.updates.on('ItemUpdated', ({ Item, UpdateReason }) => calls.push({ action: 'save', Name: Item.Name, Path: projectStatePath(Item.Path, fixture.stateRoot), reason: UpdateReason }));
     host.updates.on('UserDataReattached', () => calls.push({ action: 'reattach' }));
     const result = await host.refresh(id, { MetadataRefreshMode: sample.metadataMode, ImageRefreshMode: 'None', ForceSave: sample.force ?? false });
     const row = (await fixture.database.rows('BaseItems', { where: { Id: id } }))[0], current = await fixture.loadContext(id);
-    compare({ updateType: result.UpdateType, calls, Name: current.item.Name, Path: current.item.Path.replace(fixture.stateRoot, '$STATE'),
-      storedPath: row.Path, Data: row.Data, stampChanged: dateTicks(current.item.DateLastRefreshed) !== dateTicks(loaded.item.DateLastRefreshed) }, expected);
+    assert.equal(row.Path, createVirtualPathReverser({ programDataPath: fixture.stateRoot })(current.item.Path));
+    compare({ updateType: result.UpdateType, calls, Name: current.item.Name, Path: projectStatePath(current.item.Path, fixture.stateRoot),
+      storedPath: projectStatePath(row.Path, '%MetadataPath%', '%MetadataPath%'), Data: row.Data,
+      stampChanged: dateTicks(current.item.DateLastRefreshed) !== dateTicks(loaded.item.DateLastRefreshed) }, expected);
   });
 }
 
@@ -107,7 +110,7 @@ for (const dialect of ['postgres']) {
     for (const [instanceId, root, identityRoot] of [['old-metadata', oldRoot, oldPath], ['new-metadata', newRoot, newPath]]) {
       await fixture.storage.createInstance(instanceId, 'by-name-local', { root, createRoot: true, writable: true });
       fixture.vfs.mount({ path: '/' + instanceId, instanceId, capabilities: { create: true, replace: true, mkdir: true, delete: true, rename: true } });
-      metadataIdentityMap.addPrefix({ identityRoot, accessRoot: '/' + instanceId, style: 'windows', returnAccess: 'Isolated by-name metadata storage.' });
+      metadataIdentityMap.addPrefix({ identityRoot, accessRoot: '/' + instanceId, style: fixturePathStyle, returnAccess: 'Isolated by-name metadata storage.' });
     }
     const fileSystem = new StorageFileSystem({ vfs: fixture.vfs, identityMap: metadataIdentityMap });
     fixture.loadContext = fixture.host.loadContext = fixture.trackContextLoader(createMetadataContextLoader({ ...fixture, fileSystem, metadataIdentityMap }));
@@ -115,7 +118,7 @@ for (const dialect of ['postgres']) {
     await fileSystem.writeFile(path.join(newPath, 'marker.txt'), 'new metadata storage');
     await fixture.adapter.mkdir('/by-name-old');
     await fixture.adapter.write('/by-name-old/marker.txt', Buffer.from('media binding must not supply metadata'));
-    fixture.identityMap.addPrefix({ identityRoot: oldPath, accessRoot: '/fixture/by-name-old', style: 'windows', returnAccess: 'isolated old by-name location' });
+    fixture.identityMap.addPrefix({ identityRoot: oldPath, accessRoot: '/fixture/by-name-old', style: fixturePathStyle, returnAccess: 'isolated old by-name location' });
     await fixture.seed({ target: 'target', items: [{ key: 'target', type: 'Genre', Id: id, Name: 'Presentation Name', Path: oldPath }] });
     const before = await fixture.loadContext(id);
     assert.equal(before.context.accessPath, undefined);
@@ -142,7 +145,7 @@ for (const dialect of ['postgres']) {
     assert.equal(current.context.accessPath, undefined);
     assert.equal((await current.imageAssets.resolve(current.item.Path)).localPath, newPath);
     assert.equal((await current.fileSystemMetadata()).kind, 'directory');
-    assert.equal((await fixture.database.rows('BaseItems', { where: { Id: id } }))[0].Path, '%MetadataPath%\\Genre\\Leaf.Name');
+    assert.equal((await fixture.database.rows('BaseItems', { where: { Id: id } }))[0].Path, path.join('%MetadataPath%', 'Genre', 'Leaf.Name'));
   });
 
   test(`${dialect}: creating and resaving a person persists a virtual path and reloads the physical directory`, async t => {
@@ -154,7 +157,7 @@ for (const dialect of ['postgres']) {
     const identity = loaded.personIdentity('First Person');
     assert.equal(person.item.Path, identity.Path);
     const storedPath = createVirtualPathReverser({ programDataPath: fixture.stateRoot })(identity.Path);
-    assert.match(storedPath, /^%MetadataPath%\\People\\/);
+    assert.ok(storedPath.startsWith(path.join('%MetadataPath%', 'People') + path.sep));
     assert.equal((await fixture.database.rows('BaseItems', { where: { Id: identity.Id } }))[0].Path, storedPath);
     await lifecycle.createItems(person);
     assert.equal((await fixture.loadContext(identity.Id)).item.Path, identity.Path);

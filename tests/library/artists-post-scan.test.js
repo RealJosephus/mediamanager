@@ -28,6 +28,7 @@ import { StorageError } from '../../src/storage/errors.js';
 import { StorageRegistry, VirtualFileSystem, IdentityAccessMap } from '../../src/storage/index.js';
 import { MemoryStorageAdapter } from '../../src/storage/testing/memory-adapter.js';
 import { setupChildrenFixture } from '../metadata/children-fixture.js';
+import { expandStatePath } from './fixture-state-path.js';
 
 const fixtureRoot = new URL('./fixtures/artist-maintenance/', import.meta.url);
 const [inputBytes, nativeBytes, provenanceBytes] = await Promise.all(['input.json', 'native.json', 'provenance.json']
@@ -54,8 +55,18 @@ const physicalSeed = row => encode(Object.fromEntries(columns.filter(column => !
   const value = row[column.name];
   return [column.name, column.type === 'TEXT' && value != null ? '\\x' + nativeTextBytes(value).toString('hex') : value];
 })));
-const rebase = (value, from, to) => typeof value === 'string' ? value.replaceAll(from, to)
-  .replaceAll(JSON.stringify(from).slice(1, -1), JSON.stringify(to).slice(1, -1)) : value;
+const rebase = (value, from, to) => {
+  let result = expandStatePath(value, from, to);
+  for (const root of ['%MetadataPath%', '%AppDataPath%']) result = expandStatePath(result, root, root);
+  return result;
+};
+const rebaseColumn = (name, value, from, to) => name !== 'Data' || value == null ? rebase(value, from, to)
+  // Relocate individual JSON path tokens while preserving every other byte,
+  // including unknown fields and numeric spelling in the recorded payload.
+  : value.replace(/"(?:[^"\\]|\\.)*"/gu, token => {
+    const original = JSON.parse(token), relocated = rebase(original, from, to);
+    return relocated === original ? token : JSON.stringify(relocated);
+  });
 const normalize = row => Object.fromEntries(columns.map(column => {
   let value = row[column.name];
   if (value != null && column.clrType.includes('Guid')) value = guid(value);
@@ -113,7 +124,7 @@ async function seedRecording({ database, store, stateRoot }, recording) {
   await store.transaction(async db => {
     await db.client.query('SET CONSTRAINTS ALL DEFERRED');
     for (const row of recording.before.insertionOrder.map(Id => recording.before.rows.find(row => row.Id === Id))) await db.insert('BaseItems', Object.fromEntries(columns.map(column => {
-      let entry = rebase(row[column.name], recording.root, stateRoot);
+      let entry = rebaseColumn(column.name, row[column.name], recording.root, stateRoot);
       if (entry != null && column.clrType.includes('Guid')) entry = nativeGuid(entry);
       return [column.name, entry];
     })));
@@ -226,7 +237,7 @@ for (const recording of recordings) test(`postgres: native ${recording.kind} pos
     images: call.images.map(image => ({ ...image, Path: rebase(image.Path, recording.root, stateRoot) })) } : call)); assert.deepEqual(progress, recording.progress);
   const actualRows = order((await database.rows('BaseItems')).map(normalize), ['Id']);
   const expectedRows = order(recording.after.rows.map(row => normalize(Object.fromEntries(Object.entries(row)
-    .map(([key, entry]) => [key, rebase(entry, recording.root, stateRoot)])))), ['Id']);
+    .map(([key, entry]) => [key, rebaseColumn(key, entry, recording.root, stateRoot)])))), ['Id']);
   const initialIds = new Set(recording.before.rows.map(row => guid(row.Id)));
   for (const row of actualRows) if (!initialIds.has(row.Id)) {
     const expected = expectedRows.find(item => item.Id === row.Id), info = lookupDirectories.get(row.Id);
