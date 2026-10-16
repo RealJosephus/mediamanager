@@ -1697,14 +1697,19 @@ export class FolderScanService {
   }
 
   async #enumerateFolder(folder, root, collectionContext, accessPath, signal, persisted, top, lifecycle, preparedListing = null,
-    parents = collectionContext.parents) {
+    parents = collectionContext.parents, preparedSnapshot = null) {
     checkAbort(signal);
+    const previewCaptures = await preparedSnapshot?.captures;
     let captured;
     if (persisted) {
-      captured = await this.#capture(folder, root, signal);
+      captured = previewCaptures?.find(value => sameId(value.folder.Id, folder.Id))
+        ?? await this.#capture(folder, root, signal);
       folder = captured.folder;
       if (top) root = captured.root;
     } else {
+      // A planned identity still needs this existence check after any resolver
+      // preview. Nonempty children force a retry before lifecycle side effects;
+      // they are never accepted as a new folder's reconciliation baseline.
       const direct = await this.store.run(db => this.#children(db, folder.Id), {
         signal,
         readOnly: true,
@@ -1730,16 +1735,35 @@ export class FolderScanService {
       return { folder, root, persisted, existingItems: captured.direct, children: new Map(), deletionSafe: listing.deletionSafe === true,
         emptyTopFolder: true };
     }
-    const directorySnapshots = new Map();
-    const peekDirectory = (candidate, { forExtras = false } = {}) => {
+    const directorySnapshots = preparedSnapshot?.descendants ?? new Map();
+    const getDirectorySnapshot = candidate => {
       if (candidate?.entry?.kind !== 'directory') throw new TypeError('Only directory candidates can be enumerated.');
       const key = pathKey(candidate.identityPath);
-      if (!directorySnapshots.has(key)) directorySnapshots.set(key, { raw: (async () => {
+      if (!directorySnapshots.has(key)) {
+        const nativePath = pathStyle(candidate.identityPath) === 'windows' ? path.win32 : path.posix;
+        const parentKey = pathKey(nativePath.dirname(candidate.identityPath));
+        const parentSnapshot = directorySnapshots.get(parentKey);
+        // A resolver may inspect grandchildren before recursion reaches their
+        // parent. Bind each preview to its database baseline before storage I/O;
+        // keep it with that local preview, not in an index of the whole tree.
+        const captures = (async () => {
+          const parents = parentKey === pathKey(folder.Path) ? [captured] : await parentSnapshot?.captures ?? [];
+          const existing = parents.flatMap(value => value.direct).filter(item => samePath(item.Path, candidate.identityPath)
+            && this.#supportsTraversal(item) && this.#isManagedItem(item, root.Id));
+          return Promise.all(existing.map(item => this.#capture(item, root, signal)));
+        })();
+        directorySnapshots.set(key, { identityPath: candidate.identityPath, captures });
+      }
+      return directorySnapshots.get(key);
+    };
+    const peekDirectory = (candidate, { forExtras = false } = {}) => {
+      const snapshots = getDirectorySnapshot(candidate);
+      snapshots.raw ??= (async () => {
+        await snapshots.captures;
         const childListing = await this.vfs.list(candidate.accessPath, { signal });
         checkAbort(signal);
         return { listing: childListing, ...this.#classifyEntries(candidate.accessPath, childListing.entries) };
-      })() });
-      const snapshots = directorySnapshots.get(key);
+      })();
       // FindExtras counts every nested file before ResolveExtraFile applies
       // ignore rules. Keep that observation separate from the resolver view.
       if (forExtras) return snapshots.raw;
@@ -1796,8 +1820,20 @@ export class FolderScanService {
       if (compatibleIdentity) this.#assertExistingTvStructure(existing, target, folder, root);
       const useExisting = compatibleIdentity;
       const child = useExisting ? existing : plannedTraversalItem(target, folder, root);
+      const childSnapshot = getDirectorySnapshot(target.primary), childKey = pathKey(target.primary.identityPath);
+      childSnapshot.descendants = new Map();
+      for (const [key, snapshot] of directorySnapshots) {
+        if (key === childKey || !identityWithin(snapshot.identityPath, target.identityPath)) continue;
+        // Filtering depends on the resolver's parent; only the original raw
+        // observation and its database baseline survive the scope handoff.
+        delete snapshot.filtered;
+        delete snapshot.extras;
+        childSnapshot.descendants.set(key, snapshot);
+        directorySnapshots.delete(key);
+      }
       children.set(idKey(target.Id), await this.#enumerateFolder(child, root, collectionContext, target.accessPath, signal,
-        useExisting, false, lifecycle, async () => (await peekDirectory(target.primary)).listing, [folder, ...parents]));
+        useExisting, false, lifecycle, async () => (await peekDirectory(target.primary)).listing, [folder, ...parents], childSnapshot));
+      directorySnapshots.delete(childKey);
     }
     return {
       folder,
