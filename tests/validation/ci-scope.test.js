@@ -1,10 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
-import { mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises';
+import { mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { applyInputIdentity, classify, provisionedServicesFor, restrictToRequested, skipGuards } from '../../tools/ci/scope.js';
-import { captureInputIdentity, inputsUnchanged } from '../../tools/validation/inputs.js';
+import { captureInputIdentity, executionManifestContract, executionManifestReferences, inputsUnchanged } from '../../tools/validation/inputs.js';
 import { repositoryRoot } from '../../tools/validation/paths.js';
 
 const ownPath = 'tests/validation/ci-scope.test.js';
@@ -16,6 +16,106 @@ const entry = (filename, overrides = {}) => ({ path: filename, test: true, impor
 const relative = filename => path.relative(repositoryRoot, filename).replaceAll('\\', '/');
 const description = filename => ({ filename, available: true, kind: 'file' });
 const digest = bytes => createHash('sha256').update(bytes).digest('hex');
+
+test('reviewed consumer records bind original source bytes and native runtime inputs without promoting ordinary DTO paths', () => {
+  const consumer = executionManifestContract('tests/consumer-contracts/consumer-readers.test.js');
+  assert.equal(consumer.argument, 'readers');
+  assert.equal(executionManifestContract('tests/playback/http-native.test.js').manifest, consumer.manifest);
+  assert.equal(executionManifestContract('tests/metadata/playlist-items.test.js').argument, 'playlist-layouts');
+  assert.equal(executionManifestContract('tests/consumer-contracts/date-roundtrip.test.js').argument, 'date-roundtrip');
+  assert.equal(executionManifestContract(ownPath), null, 'ordinary fixtures do not acquire an execution contract');
+  const filename = path.join(repositoryRoot, consumer.manifest), sha256 = digest('sealed bytes');
+  const source = 'D:/mediamanager-validation/consumer/input.json', record = 'D:/mediamanager-validation/consumer/record.json';
+  const references = executionManifestReferences(consumer, {
+    files: [{ filename: 'input.json', source, sha256 }], references: [{ filename: record, sha256 }],
+    unusedHistory: { filename: 'D:/unread-history.json', sha256 }, Path: 'Z:\\Media\\movie.mkv',
+  }, filename);
+  assert.deepEqual(references, [{ filename: path.join(path.dirname(filename), 'input.json'), sha256 },
+    { filename: source, sha256 }, { filename: record, sha256, nested: 'consumer-record' }]);
+  const sourceFile = { filename: 'D:/jellyfin/Reader.cs', sha256 }, dotnet = { filename: 'D:/tools/dotnet.exe', sha256 };
+  const jellyfinDll = { filename: 'D:/native/jellyfin.dll', sha256 }, oracleAssembly = { filename: 'D:/oracle/Oracle.dll', sha256 };
+  const recordReferences = executionManifestReferences({ kind: 'consumer-record' }, {
+    sourceFiles: [sourceFile], dotnet, jellyfinDll, oracleAssembly,
+  }, record);
+  assert.deepEqual(recordReferences, [{ ...sourceFile, sourceArchiveFallback: true }, dotnet, jellyfinDll, oracleAssembly]);
+  assert.deepEqual(executionManifestReferences({ kind: 'consumer-native' }, { assemblies: [jellyfinDll, { name: 'no location' }] }, record), [jellyfinDll]);
+});
+
+test('shared reader manifests require only the called layout and retain ownership at the actual consumer', async () => {
+  const consumer = 'tests/metadata/nfo-episode-blocks.test.js', sibling = 'tests/metadata/nfo-scalar-provider.test.js';
+  const contract = executionManifestContract(consumer), siblingContract = executionManifestContract(sibling);
+  assert.equal(executionManifestContract('tests/metadata/local-xml-provider.test.js').argument, 'local-xml-provider');
+  assert.equal(contract.manifest, siblingContract.manifest);
+  const sha256 = digest('reader record'), filename = path.join(repositoryRoot, contract.manifest);
+  const record = { kind: contract.argument, filename: 'D:\\recordings\\episode\\record.json', sha256 };
+  const unrelated = { kind: siblingContract.argument, filename: 'D:\\recordings\\scalar\\record.json', sha256 };
+  const files = [contract.argument, siblingContract.argument].flatMap(kind => ['input', 'native', 'comparison']
+    .map(suffix => ({ filename: `${kind}-${suffix}.json`, sha256 })));
+  const references = executionManifestReferences(contract, { records: [record, unrelated], files }, filename);
+  assert.equal(references.length, 4);
+  assert.deepEqual(references[0], { ...record, nested: 'reader-record' });
+  assert.ok(references.slice(1).every(reference => path.basename(reference.filename).startsWith(contract.argument + '-')));
+  assert.ok(!references.some(reference => reference.filename === unrelated.filename));
+  const dependencies = { entries: [entry(consumer, { imports: [contract.loader] }), entry(sibling, { imports: [contract.loader] }),
+    entry(contract.loader, { test: false })] };
+  const classification = await classify({ dependencies, tracked: new Set(dependencies.entries.map(value => value.path)), environment: {} });
+  const reason = `${consumer}:execution-manifest:${record.filename}`;
+  assert.deepEqual(applyInputIdentity(classification, { entries: [{ filename: path.resolve(repositoryRoot, record.filename),
+    required: true, available: false, reasons: [reason], requiredReasons: [reason] }] }, new Set()), []);
+  assert.deepEqual(classification.records.map(value => [value.path, value.selected]), [[consumer, false], [sibling, true]],
+    'sharing the loader must not promote an uncalled kind to required');
+});
+
+test('input capture wires the real consumer manifest to required ownership while leaving ordinary history and DTO paths optional', async t => {
+  const consumer = 'tests/consumer-contracts/consumer-readers.test.js', contract = executionManifestContract(consumer);
+  const output = path.join(repositoryRoot, '.test-output'); await mkdir(output, { recursive: true });
+  const root = await mkdtemp(path.join(output, 'ci-execution-inputs-'));
+  t.after(async () => { assert.equal(path.dirname(root), output); await rm(root, { recursive: true, force: true }); });
+  const history = path.join(root, 'unread-history.bin'), dtoPath = path.join(root, 'movie.mkv');
+  const ordinary = path.join(root, 'ordinary.json');
+  await writeFile(ordinary, JSON.stringify({ historical: { filename: history, sha256: digest('unread bytes') }, Path: dtoPath }));
+  const dependencies = { entries: [entry(consumer, { imports: [contract.loader] }),
+    entry(contract.loader, { test: false, fixtureReferences: [description(ordinary)] })] };
+  const identity = await captureInputIdentity({ selected: [consumer], dependencies, environment: {},
+    preflight: { ready: true, services: [], tools: [] } });
+  const manifest = JSON.parse(await readFile(path.join(repositoryRoot, contract.manifest), 'utf8'));
+  for (const file of manifest.files) {
+    const original = identity.entries.find(input => input.filename === path.resolve(repositoryRoot, file.source));
+    assert.ok(original?.required, 'the real loader directly reads each historical source');
+    assert.ok(original.requiredReasons.length > 0 && original.requiredReasons.every(reason => reason.startsWith(consumer + ':')));
+    assert.deepEqual(original.expectedDigests, [file.sha256]);
+  }
+  const optional = identity.entries.find(input => input.filename === history);
+  assert.equal(optional?.required, false);
+  assert.deepEqual(optional.requiredReasons, []);
+  assert.ok(!identity.entries.some(input => input.filename === dtoPath));
+  assert.ok(!identity.entries.some(input => input.required && input.filename.includes('20261012-r23-date-roundtrip')),
+    'an uncalled kind in the shared loader stays outside required execution inputs');
+});
+
+test('by-name execution inputs distinguish full selected recordings from the files actually read in other kinds', () => {
+  const contract = executionManifestContract('tests/library/genre-studio-filter-http.test.js');
+  const filename = path.join(repositoryRoot, contract.manifest), sha256 = digest('native file');
+  const root = path.join(repositoryRoot, '.test-output', 'byname-recording');
+  const recordings = ['genre', 'studio', 'album'].map(kind => ({ kind,
+    repetitions: [1, 2].map(index => ({ filename: path.join(root, kind + index), entriesSha256: sha256 })),
+    artifacts: ['reference-runtime-manifest.json', 'source-config-manifest.json', 'prepared-config-manifest.json', 'unused-http.json']
+      .map(name => ({ path: name, sha256 })),
+    configuration: { finalEntries: [{ path: 'nested', type: 'directory' }, { path: 'nested/config.xml', type: 'file', sha256 }] },
+  }));
+  const audit = { filename: path.join(root, 'audit.json'), sha256 };
+  const references = executionManifestReferences(contract, { independentNativeAudit: audit, recordings }, filename);
+  assert.deepEqual(references.filter(reference => reference.entriesSha256).map(reference => reference.filename),
+    recordings.slice(0, 2).flatMap(recording => recording.repetitions.map(reference => reference.filename)));
+  const albumRoot = recordings[2].repetitions[0].filename;
+  assert.deepEqual(references.filter(reference => reference.filename.startsWith(albumRoot + path.sep)).map(reference => path.relative(albumRoot, reference.filename)),
+    ['provenance.json', 'reference-runtime-manifest.json', 'source-config-manifest.json', 'prepared-config-manifest.json', path.join('reference/config', 'nested/config.xml')]);
+  assert.ok(!references.some(reference => reference.filename.includes('album2') || reference.filename.endsWith('unused-http.json')));
+  const sourceDatabase = { filename: 'D:/native/initial.db', sha256 }, runtimeDirectory = { filename: 'D:/native/runtime', entriesSha256: sha256 };
+  assert.deepEqual(executionManifestReferences({ kind: 'identity' }, { reference: { sourceDatabase },
+    preparationInputFiles: [audit], independentNativeAudits: [audit], runtimeDirectory, sdkDirectory: runtimeDirectory }, filename),
+  [sourceDatabase, audit, audit, runtimeDirectory, runtimeDirectory]);
+});
 
 test('CI statically resolves platform and provisioned-service guards without executing unknown probes', () => {
   const source = `

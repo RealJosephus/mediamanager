@@ -6,6 +6,84 @@ import { collageFontFiles } from '../../src/images/font-collection.js';
 
 const isDigest = value => typeof value === 'string' && /^[a-f0-9]{64}$/iu.test(value);
 
+// These loaders read historical descriptors as bytes, rather than merely
+// quoting provenance. Keep their reviewed execution contract at the actual
+// caller/kind boundary: another kind imported by the shared loader is optional.
+const executionManifests = new Map([
+  ['tests/consumer-contracts/consumer-readers.test.js', ['consumer', 'readers']],
+  ['tests/playback/http-native.test.js', ['consumer', 'readers']],
+  ['tests/consumer-contracts/date-roundtrip.test.js', ['consumer', 'date-roundtrip']],
+  ['tests/metadata/playlist-items.test.js', ['consumer', 'playlist-layouts']],
+  ...['local-xml-provider', 'nfo-episode-blocks', 'nfo-scalar-provider']
+    .map(kind => [`tests/metadata/${kind}.test.js`, ['reader-layout', kind]]),
+  ['tests/library/genre-studio-filter-http.test.js', ['byname']],
+]);
+
+export function executionManifestContract(consumer) {
+  const contract = executionManifests.get(consumer);
+  if (!contract) return null;
+  const [kind, argument] = contract;
+  return { kind, ...(argument ? { argument } : {}),
+    loader: kind === 'consumer' ? 'tests/consumer-contracts/fixture.js'
+      : kind === 'reader-layout' ? 'tests/metadata/reader-layout-fixture.js' : 'tests/library/native-byname-filter-inputs.js',
+    manifest: kind === 'consumer' ? `tests/consumer-contracts/fixtures/${argument}/provenance.json`
+      : kind === 'reader-layout' ? 'tests/metadata/fixtures/reader-layouts/provenance.json'
+        : 'tests/library/fixtures/native-byname-filter-inputs/binding.json' };
+}
+
+// Export the descriptor projection so changes to the loader contracts can be
+// checked with small in-repository records, without requiring historical tools.
+export function executionManifestReferences(contract, content, filename) {
+  const references = [], local = name => path.resolve(path.dirname(filename), name);
+  const add = (descriptor, options = {}) => {
+    if (!descriptor || typeof descriptor.filename !== 'string') throw new Error('Invalid execution input descriptor.');
+    references.push({ ...descriptor, ...options });
+  };
+  if (contract.kind === 'consumer') {
+    for (const file of content.files) {
+      add({ filename: local(file.filename), sha256: file.sha256 }, file.filename === 'native.json' ? { nested: 'consumer-native' } : {});
+      add({ filename: file.source, sha256: file.sha256 });
+    }
+    for (const reference of content.references) add(reference,
+      reference.filename.endsWith('/record.json') ? { nested: 'consumer-record' } : {});
+  } else if (contract.kind === 'reader-layout') {
+    const record = content.records.find(record => record.kind === contract.argument);
+    add(record, { nested: 'reader-record' });
+    for (const suffix of ['input', 'native', 'comparison']) {
+      const name = `${contract.argument}-${suffix}.json`, descriptor = content.files.find(file => file.filename === name);
+      add({ ...descriptor, filename: local(name) });
+    }
+  } else if (contract.kind === 'consumer-native') {
+    for (const descriptor of content.assemblies ?? []) if (descriptor.filename) add(descriptor);
+  } else if (contract.kind === 'consumer-record' || contract.kind === 'reader-record') {
+    for (const descriptor of content.sourceFiles) add(descriptor,
+      contract.kind === 'consumer-record' ? { sourceArchiveFallback: true } : {});
+    for (const descriptor of [content.dotnet, content.jellyfinDll, content.oracleAssembly]) add(descriptor);
+  } else if (contract.kind === 'identity') {
+    for (const descriptor of [content.reference.sourceDatabase, ...content.preparationInputFiles,
+      ...content.independentNativeAudits, content.runtimeDirectory, content.sdkDirectory]) add(descriptor);
+  } else if (contract.kind === 'byname') {
+    add(content.independentNativeAudit);
+    for (const recording of content.recordings) {
+      if (['genre', 'studio'].includes(recording.kind)) {
+        for (const descriptor of recording.repetitions) add(descriptor);
+      } else {
+        // Other kinds contribute only these files to source verification;
+        // their unused repetitions and response recordings are not required.
+        const root = recording.repetitions[0].filename;
+        add({ filename: path.join(root, 'provenance.json') });
+        for (const name of ['reference-runtime-manifest.json', 'source-config-manifest.json', 'prepared-config-manifest.json']) {
+          add({ ...recording.artifacts.find(file => file.path === name), filename: path.join(root, name) });
+        }
+        for (const file of recording.configuration.finalEntries.filter(file => file.type === 'file')) {
+          add({ filename: path.join(root, 'reference/config', file.path), sha256: file.sha256 });
+        }
+      }
+    }
+  } else throw new Error('Unknown execution manifest contract.');
+  return references;
+}
+
 export async function captureInputIdentity({ selected, dependencies, preflight, environment = process.env }) {
   const closure = dependencyClosure(dependencies, selected);
   const targets = new Map();
@@ -130,6 +208,40 @@ export async function captureInputIdentity({ selected, dependencies, preflight, 
       if (description.available && description.kind === 'file') await bindManifestReferences(target, reason);
       if (description.available && description.kind === 'directory') await bindDirectoryManifests(target, reason);
     }
+  }
+  async function bindExecutionManifest(filename, consumer, contract) {
+    const reason = `${consumer}:execution-manifest`;
+    add(filename, reason);
+    let content;
+    try { content = JSON.parse(await readFile(filename, 'utf8')); }
+    catch (error) { if (error.code === 'ENOENT' || error instanceof SyntaxError) return; throw error; }
+    for (const descriptor of executionManifestReferences(contract, content, filename)) {
+      // These consumers read the original filename directly. An evidence-map
+      // relocation must not claim availability until its consumer uses it too.
+      let target = path.resolve(repositoryRoot, descriptor.filename);
+      const pins = ['sha256', 'entriesSha256'].filter(key => Object.hasOwn(descriptor, key)).map(key => descriptor[key]);
+      if (descriptor.sourceArchiveFallback && environment.MEDIAMANAGER_RECORDED_SOURCE_ARCHIVE && isDigest(descriptor.sha256)) {
+        try { await lstat(target); }
+        catch (error) {
+          if (error.code !== 'ENOENT') throw error;
+          target = path.resolve(environment.MEDIAMANAGER_RECORDED_SOURCE_ARCHIVE, descriptor.sha256);
+        }
+      }
+      add(target, `${reason}:${descriptor.filename}`, true, pins.filter(isDigest).map(value => value.toLowerCase()),
+        !pins.every(isDigest));
+      if (descriptor.nested) await bindExecutionManifest(target, consumer, { kind: descriptor.nested });
+    }
+  }
+  for (const { path: consumer } of closure) {
+    const contract = executionManifestContract(consumer);
+    if (!contract) continue;
+    const consumerClosure = dependencyClosure(dependencies, [consumer]);
+    if (!consumerClosure.some(entry => entry.path === contract.loader)) {
+      throw new Error(`Reviewed execution input loader is missing from the dependency closure: ${consumer}`);
+    }
+    await bindExecutionManifest(path.resolve(repositoryRoot, contract.manifest), consumer, contract);
+    if (contract.kind === 'byname') await bindExecutionManifest(
+      path.resolve(repositoryRoot, 'tests/library/fixtures/native-identity-inputs/binding.json'), consumer, { kind: 'identity' });
   }
   for (const entry of closure) {
     for (const importedFile of entry.importedFiles || []) {
