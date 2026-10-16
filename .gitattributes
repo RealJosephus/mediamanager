@@ -332,3 +332,6 @@ src/metadata/resources/comic-culture-language.json -text
 # These sealed inputs were recorded with CRLF; preserve their original hashes.
 /tests/metadata/fixtures/tmdb-missing/persistence-input.mjs -text whitespace=cr-at-eol
 /tests/metadata/fixtures/tmdb-upcoming-task/README.md -text whitespace=cr-at-eol
+# The TMDB seal also reads these original LF source bytes outside its fixture.
+/tools/compat/record-tmdb-missing.mjs text eol=lf
+/src/database/native-model.json text eol=lf
