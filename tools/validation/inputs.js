@@ -2,6 +2,7 @@ import path from 'node:path';
 import { lstat, readFile, realpath } from 'node:fs/promises';
 import { dependencyClosure, describeFile, filesIn, sha256 } from './inventory.js';
 import { recordedInput, recordedInputMapPath, repositoryRoot, validationPath } from './paths.js';
+import { collageFontFiles } from '../../src/images/font-collection.js';
 
 const isDigest = value => typeof value === 'string' && /^[a-f0-9]{64}$/iu.test(value);
 
@@ -16,6 +17,9 @@ export async function captureInputIdentity({ selected, dependencies, preflight, 
     targets.get(absolute).invalidDigest ||= invalidDigest;
     for (const digest of expectedDigests) targets.get(absolute).expectedDigests.add(digest);
   };
+  if (closure.some(entry => entry.path === 'src/images/user-view-collage.js')) {
+    for (const filename of collageFontFiles()) add(filename, 'runtime:collage-system-font');
+  }
   const dotnetExecutables = [...preflight.services.filter(service => service.name === 'dotnet').map(service => service.filename),
     ...preflight.tools.filter(tool => tool.name === 'dotnet').map(tool => tool.executable)].filter(Boolean);
   const usesDotnet = dotnetExecutables.length > 0 || closure.some(entry => entry.services?.includes('dotnet') || entry.tools?.includes('dotnet'));

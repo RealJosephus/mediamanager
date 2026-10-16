@@ -7,6 +7,11 @@ import { describeFile } from '../../tools/validation/inventory.js';
 import { captureInputIdentity, inputsUnchanged } from '../../tools/validation/inputs.js';
 import { resultOutcome } from '../../tools/validation/run.js';
 import { repositoryRoot, validationPath } from '../../tools/validation/paths.js';
+import { collageFontFiles } from '../../src/images/font-collection.js';
+import { applyInputIdentity, classify } from '../../tools/ci/scope.js';
+// This regression reads the real reader's system-font input. Keep that reader
+// in the test dependency closure so strict validation binds the same bytes.
+import '../../src/images/user-view-collage.js';
 
 const counts = { tests: 1, suites: 0, pass: 1, fail: 0, cancelled: 0, skipped: 0, todo: 0 };
 const outcome = inputUnchanged => resultOutcome(0, counts, { candidateUnchanged: true, inputUnchanged, preflightReady: true });
@@ -25,6 +30,32 @@ async function temporaryInputs(t) {
 const captureService = async (name, filename) => captureInputIdentity({
   selected: [], dependencies: { entries: [] }, environment: {},
   preflight: { ready: true, tools: [], services: [{ name, ...await describeFile(filename) }] },
+});
+
+test('the collage source closure requires the exact system collection bytes used for face registration', async () => {
+  const filename = 'src/images/user-view-collage.js', consumer = 'tests/validation/input-identity.test.js';
+  const entry = (path, imports, test = false) => ({ path, imports, test, importedFiles: [], services: [], tools: [],
+    declaredReferences: [], fixtureReferences: [], conditionalRegistration: false, unresolvedImports: [], unresolvedExecutables: [] });
+  const dependencies = { entries: [entry(filename, []), entry(consumer, [filename], true)] };
+  const capture = selected => captureInputIdentity({ selected, dependencies, environment: {},
+    preflight: { ready: true, tools: [], services: [] } });
+  const selected = await capture([consumer]), unselected = await capture([]);
+  const reason = 'runtime:collage-system-font';
+  assert.deepEqual(selected.entries.filter(entry => entry.reasons.includes(reason)).map(entry => entry.filename), collageFontFiles());
+  assert.equal(unselected.entries.some(entry => entry.reasons.includes(reason)), false);
+  for (const font of collageFontFiles()) {
+    const entry = selected.entries.find(entry => entry.filename === font);
+    assert.equal(entry.available, true); assert.equal(entry.required, true);
+    assert.ok(entry.requiredReasons.includes(reason));
+    assert.equal(entry.sha256, createHash('sha256').update(await readFile(font)).digest('hex'));
+  }
+  const classification = await classify({ dependencies, tracked: new Set([filename, consumer]), environment: {} });
+  const fonts = selected.entries.filter(entry => entry.reasons.includes(reason));
+  assert.deepEqual(applyInputIdentity(classification, { entries: fonts }, new Set()), [], 'installed fonts are runner inputs, not unshipped historical evidence');
+  assert.equal(classification.records[0].selected, true);
+  const missing = { filename: collageFontFiles('darwin')[0], required: true, available: false, reasons: [reason], requiredReasons: [reason] };
+  assert.deepEqual(applyInputIdentity(classification, { entries: [missing] }, new Set()).map(error => error.code), ['input-unavailable']);
+  assert.equal(classification.records[0].selected, true, 'a missing promised system font fails infrastructure without shrinking the selection');
 });
 
 async function isolatedDotnet(t) {

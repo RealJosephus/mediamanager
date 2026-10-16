@@ -1,27 +1,49 @@
 // Thumb collage layout follows Jellyfin.Drawing.Skia/StripCollageBuilder.cs (GPL-2.0-or-later).
-import { createCanvas, ImageData } from '@napi-rs/canvas';
+import { readFileSync } from 'node:fs';
+import { createCanvas, GlobalFonts, ImageData } from '@napi-rs/canvas';
 import { nextSplashscreenImage } from './splashscreen.js';
 import { blendBlackForeground, renderPixels, stripCanvasColorProfile } from './renderer.js';
 import { clrTrim } from '../metadata/whitespace.js';
+import { collageFontFiles, fontCollectionFaces } from './font-collection.js';
 
 const width = 960, height = 540;
 const rtl = /[\u0600-\u06ff\u0530-\u058f\u0590-\u05ff\u0700-\u074f\u0780-\u07bf]/u;
+let fontsRegistered = false;
 
-function unshapedWidth(context, text) {
+function registerCollageFonts() {
+  if (fontsRegistered) return;
+  for (const filename of collageFontFiles()) {
+    const faces = [...fontCollectionFaces(readFileSync(filename))];
+    for (const face of faces) {
+      if (!GlobalFonts.register(face)) throw new Error(`Could not register a system font collection face: ${filename}`);
+    }
+  }
+  fontsRegistered = true;
+}
+
+function unshapedWidth(context, text, size) {
   // SKFont.MeasureText maps Unicode scalars to glyph advances without shaping.
   // Measuring the whole string in Canvas instead includes kerning, ligatures
   // and Arabic joining, changing both the overflow branch and its anchor.
-  // FreeType's default hinted metrics use integral advances on Linux.
+  // FreeType first selects an integer ppem for its hinted metrics. Rounding
+  // advances at the fractional rendering size instead shifts long titles.
+  const hinted = process.platform === 'linux', originalFont = context.font;
+  if (hinted) context.font = originalFont.replace(/[\d.]+px/, `${Math.max(1, Math.round(size))}px`);
   let measured = 0;
-  for (const scalar of text) {
-    const advance = context.measureText(scalar).width;
-    measured += process.platform === 'linux' ? Math.round(advance) : advance;
+  try {
+    for (const scalar of text) {
+      const advance = context.measureText(scalar).width;
+      measured += hinted ? Math.round(advance) : advance;
+    }
+  } finally {
+    context.font = originalFont;
   }
-  return measured;
+  return hinted && size < 1 ? measured * size : measured;
 }
 
 export function drawUserViewTitle(context, name) {
   if (name == null || !clrTrim(name)) return null;
+  registerCollageFonts();
   // NAPI's registered-font collection does not share the operating system's
   // generic-family aliases used by Skia's native font manager.
   const family = process.platform === 'win32' ? '"Segoe UI"' : process.platform === 'darwin' ? '"Helvetica"' : 'sans-serif';
@@ -29,18 +51,18 @@ export function drawUserViewTitle(context, name) {
   context.direction = direction; context.textBaseline = 'alphabetic';
   let size = 112;
   context.font = `bold ${size}px ${family}`;
-  const initialWidth = unshapedWidth(context, name);
+  const initialWidth = unshapedWidth(context, name, size);
   if (initialWidth > width * 0.95) {
     size = 0.9 * width * size / initialWidth;
     context.font = `bold ${size}px ${family}`;
   }
   const firstSize = size;
-  let measured = unshapedWidth(context, name);
+  let measured = unshapedWidth(context, name, size);
   const beforeFallbackResize = measured;
   if (measured > width * 0.95) {
     size = 0.9 * width * size / measured;
     context.font = `bold ${size}px ${family}`;
-    measured = unshapedWidth(context, name);
+    measured = unshapedWidth(context, name, size);
   }
   // X height belongs to the selected face; it is not always half an em.
   const xHeight = context.measureText('x').actualBoundingBoxAscent;
