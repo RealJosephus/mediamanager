@@ -125,6 +125,74 @@ test('postgres: runtime storage events reach metadata and folder validation, and
     'The next real event reconciles the directory contents accumulated while monitoring was stopped.');
 });
 
+for (const cancel of [false, true]) test(`postgres: actual full scan ${cancel ? 'cancellation' : 'completion'} restores filesystem monitoring after the stopped generation`, pg, async t => {
+  const f = await fixture(t), entered = Promise.withResolvers(), releaseProvider = Promise.withResolvers();
+  const controller = new AbortController(), previous = f.watches.filter(record => !record.closed);
+  const existingIdentity = identityRoot + '\\Existing';
+  let providerReleased = false;
+  f.runtime.metadata.registry.register({ id: 'monitor-scan-provider', name: 'Monitor scan provider', providers: [{
+    id: 'monitor-scan', name: 'Monitor scan', kind: 'custom', itemTypes: ['Folder'],
+    supports: item => item.Path === existingIdentity,
+    async fetch(_item, { signal }) {
+      const aborted = Promise.withResolvers(), onAbort = () => aborted.resolve();
+      signal.addEventListener('abort', onAbort, { once: true });
+      if (signal.aborted) onAbort();
+      entered.resolve(signal);
+      try {
+        await Promise.race([releaseProvider.promise, aborted.promise]);
+        signal.throwIfAborted();
+      } finally {
+        signal.removeEventListener('abort', onAbort);
+        providerReleased = true;
+      }
+    }
+  }] });
+  const progress = [], restarted = f.nextWatch();
+  const scan = f.runtime.libraryScanner.runCompleteScan({ signal: controller.signal,
+    reportProgress: value => progress.push(value) });
+  // Keep both operation outcomes observed while the actual provider holds its
+  // SQL-owned refresh context; querying that context from here would contend
+  // with the deliberately single-connection fixture.
+  const outcomes = Promise.allSettled([scan, restarted]);
+  try {
+    const signal = await until(entered.promise, 'The full scan did not reach the actual child metadata provider.');
+    assert.equal(signal.aborted, false);
+    assert.equal(f.runtime.libraryScanLifecycle.isScanRunning, true);
+    assert.ok(previous.length > 0 && previous.every(record => record.closed),
+      'The full scan releases the actual storage subscriptions before entering a child provider.');
+    assert.equal(f.runtime.library.listeners('ItemAdded').includes(f.runtime.libraryMonitor.onItemAdded), false);
+    await mkdir(path.join(f.media, 'CreatedDuringFullScan'));
+    if (cancel) controller.abort();
+    else releaseProvider.resolve();
+    const [scanned, watched] = await until(outcomes, 'The full scan did not settle and restore its storage subscription.');
+    assert.equal(watched.status, 'fulfilled');
+    assert.equal(providerReleased, true);
+    assert.equal(f.runtime.libraryScanLifecycle.isScanRunning, false);
+    if (cancel) {
+      assert.equal(scanned.status, 'rejected');
+      assert.ok(scanned.reason?.name === 'AbortError' || scanned.reason?.code === 'cancelled',
+        `The actual scan must propagate cancellation: ${scanned.reason?.message}`);
+    } else {
+      if (scanned.status === 'rejected') throw scanned.reason;
+      const [existing] = await f.rows(existingIdentity);
+      assert.ok(existing?.DateLastRefreshed, 'The completed scan persists its child metadata refresh.');
+      assert.equal(progress.at(-1), 99, 'The scheduled scan observer retains its completion-progress contract.');
+    }
+    assert.equal(f.runtime.library.listeners('ItemAdded').filter(listener => listener === f.runtime.libraryMonitor.onItemAdded).length, 1);
+    await addDirectory(f, 'CreatedAfterFullScan');
+    const [during] = await f.rows(identityRoot + '\\CreatedDuringFullScan');
+    assert.ok(during?.DateLastRefreshed,
+      'A real post-scan filesystem event reconciles the directory created while monitoring was stopped.');
+    assert.equal(f.watches.filter(record => !record.closed && record.identity === identityRoot).length, 1);
+  } finally {
+    // Release a failed assertion without leaving the real provider, scanner or
+    // fixture database waiting on a test-owned barrier.
+    releaseProvider.resolve();
+    controller.abort();
+    await Promise.allSettled([scan]);
+  }
+});
+
 test('postgres: reconfiguring storage closes old watches and refreshes the same identity from the replacement root', pg, async t => {
   const f = await fixture(t), previous = f.watches.filter(record => !record.closed);
   const closing = Promise.withResolvers(), releaseClose = Promise.withResolvers();
