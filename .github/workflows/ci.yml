@@ -25,10 +25,12 @@ jobs:
     env:
       TZ: Asia/Taipei
       MEDIAMANAGER_TEST_POSTGRES: postgresql://validation@127.0.0.1:5432/postgres
-      MEDIAMANAGER_VALIDATION_OUTPUT_ROOT: ${{ runner.temp }}/mediamanager-results
       DOTNET_CLI_TELEMETRY_OPTOUT: '1'
       DOTNET_NOLOGO: '1'
     steps:
+      - name: Configure isolated evidence output
+        shell: bash
+        run: printf 'MEDIAMANAGER_VALIDATION_OUTPUT_ROOT=%s\n' "$RUNNER_TEMP/mediamanager-results" >> "$GITHUB_ENV"
       - name: Check out exact candidate
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
