@@ -1,0 +1,93 @@
+name: Cross-platform validation
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: validation-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: ${{ matrix.os }} / Node 24 / PostgreSQL 17
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, windows-2025, macos-15]
+    env:
+      TZ: Asia/Taipei
+      MEDIAMANAGER_TEST_POSTGRES: postgresql://validation@127.0.0.1:5432/postgres
+      MEDIAMANAGER_VALIDATION_OUTPUT_ROOT: ${{ runner.temp }}/mediamanager-results
+      DOTNET_CLI_TELEMETRY_OPTOUT: '1'
+      DOTNET_NOLOGO: '1'
+    steps:
+      - name: Check out exact candidate
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Set up Node
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24.16.0
+          cache: npm
+      - name: Set up .NET oracle runtime
+        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
+        with:
+          dotnet-version: 10.0.401
+      - name: Set up PostgreSQL
+        uses: ankane/setup-postgres@b1a598d92f86cb2ed364411898d150d4eac6d5ca # v1
+        with:
+          postgres-version: '17'
+          user: validation
+      - name: Install media tools on Linux
+        if: runner.os == 'Linux'
+        shell: bash
+        run: |
+          if ! command -v ffmpeg >/dev/null; then
+            sudo apt-get update -qq
+            sudo apt-get install -y ffmpeg
+          fi
+      - name: Install media tools on macOS
+        if: runner.os == 'macOS'
+        shell: bash
+        run: |
+          if ! command -v ffmpeg >/dev/null; then
+            brew install ffmpeg
+          fi
+      - name: Install media tools on Windows
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          if (-not (Get-Command ffmpeg -ErrorAction SilentlyContinue)) {
+            choco install ffmpeg --yes --no-progress
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+            Join-Path $env:ChocolateyInstall 'lib/ffmpeg/tools/ffmpeg/bin' | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          }
+      - name: Install locked dependencies
+        run: npm ci --bin-links=false
+      - name: Record runner and database identity
+        id: environment
+        run: node tools/ci/environment.js capture
+      - name: Check syntax
+        run: npm run check
+      - name: Run available strict validation and report complete scope
+        run: node tools/ci/run.js
+      - name: Audit database resources
+        if: always() && steps.environment.outcome == 'success'
+        run: node tools/ci/environment.js audit
+      - name: Preserve validation evidence
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: validation-${{ matrix.os }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/mediamanager-results
+          if-no-files-found: warn
+          retention-days: 14
