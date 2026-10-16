@@ -2,14 +2,52 @@ import { spawn, spawnSync } from 'node:child_process';
 import { createWriteStream } from 'node:fs';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
+import { StringDecoder } from 'node:string_decoder';
 import { fileURLToPath } from 'node:url';
 import { dependencyClosure, dependencyVariables, describeFile, filesIn, inventory, sha256 } from './inventory.js';
 import { captureInputIdentity, inputsUnchanged } from './inputs.js';
 import { assertIsolatedOutput, repositoryRoot, validationExecutable, validationOutputRoot } from './paths.js';
-import registrationReporter from './tap-registration-reporter.js';
+import registrationReporter, { progressLineLimit, progressPrefix, progressRecord } from './tap-registration-reporter.js';
 
 void registrationReporter;
 const registrationReporterUrl = new URL('./tap-registration-reporter.js', import.meta.url).href;
+
+export async function validationPhase(label, operation, { environment = process.env, write = text => process.stderr.write(text) } = {}) {
+  if (environment.GITHUB_ACTIONS !== 'true') return operation();
+  const started = Date.now();
+  const report = state => write(`[strict ${new Date().toISOString()}] ${label}: ${state} (${Math.round((Date.now() - started) / 1000)}s).\n`);
+  report('started');
+  const heartbeat = setInterval(() => report('still running'), 60000);
+  heartbeat.unref();
+  try { const result = await operation(); report('completed'); return result; }
+  catch (error) { report('failed'); throw error; }
+  finally { clearInterval(heartbeat); }
+}
+
+export function progressForwarder({ environment = process.env, selected, write = text => process.stderr.write(text) }) {
+  if (environment.GITHUB_ACTIONS !== 'true') return () => {};
+  const selectedSet = new Set(selected), decoder = new StringDecoder('utf8');
+  let pending = '', dropping = false;
+  return chunk => {
+    const text = decoder.write(chunk);
+    let offset = 0;
+    while (offset < text.length) {
+      const newline = text.indexOf('\n', offset), end = newline === -1 ? text.length : newline;
+      if (!dropping) {
+        if (pending.length + end - offset > progressLineLimit) { pending = ''; dropping = true; }
+        else pending += text.slice(offset, end);
+      }
+      if (newline === -1) break;
+      if (!dropping && pending.startsWith(progressPrefix)) {
+        let value;
+        try { value = JSON.parse(pending.slice(progressPrefix.length)); } catch { /* Keep malformed output only in stderr.txt. */ }
+        const record = progressRecord(value, selectedSet);
+        if (record) write(progressPrefix + JSON.stringify(record) + '\n');
+      }
+      pending = ''; dropping = false; offset = newline + 1;
+    }
+  };
+}
 
 export const baseTests = Object.freeze([
   'tests/core/authorization.test.js', 'tests/core/password.test.js', 'tests/core/composite-format.test.js',
@@ -194,21 +232,22 @@ async function candidateIdentity() {
 export async function main(argv = process.argv.slice(2)) {
   const options = argumentsFor(argv);
   const environment = { ...process.env, ...await readConfig(options.config) };
+  const phase = (label, operation) => validationPhase(label, operation, { environment });
   const output = options.output ? path.resolve(repositoryRoot, options.output)
     : path.join(validationOutputRoot(environment), `${new Date().toISOString().replaceAll(/[:.]/gu, '-')}-${process.pid}`);
   assertIsolatedOutput(output, environment);
   await mkdir(path.dirname(output), { recursive: true });
   await mkdir(output);
-  const candidateBeforeInventory = await candidateIdentity();
-  const dependencies = await inventory(environment);
+  const candidateBeforeInventory = await phase('prepare candidate identity', () => candidateIdentity());
+  const dependencies = await phase('prepare dependency inventory', () => inventory(environment));
   const discovered = dependencies.entries.filter(entry => entry.test).map(entry => entry.path);
   const selected = (options.tests.length ? options.tests : options.profile === 'full' ? discovered : baseTests)
     .map(filename => path.relative(repositoryRoot, path.resolve(repositoryRoot, filename)).replaceAll('\\', '/'));
   if (selected.length === 0 || selected.some(filename => !discovered.includes(filename))) throw new Error('Every selected path must name a discovered .test.js file.');
   const notSelected = discovered.filter(filename => !selected.includes(filename));
-  const inputs = await preflight(selected, dependencies, environment, { fullProfile: options.profile === 'full' });
-  const inputIdentity = await captureInputIdentity({ selected, dependencies, preflight: inputs, environment });
-  const candidate = await candidateIdentity();
+  const inputs = await phase('prepare tool and service preflight', () => preflight(selected, dependencies, environment, { fullProfile: options.profile === 'full' }));
+  const inputIdentity = await phase('prepare input identity', () => captureInputIdentity({ selected, dependencies, preflight: inputs, environment }));
+  const candidate = await phase('prepare frozen candidate identity', () => candidateIdentity());
   const candidatePreparationStable = sameCandidate(candidateBeforeInventory, candidate);
   const inventoryDifferences = inventoryCandidateDifferences(dependencies, candidate);
   const expectedTests = candidate.entries.filter(entry => /^(?:tests\/).+\.test\.js$/u.test(entry.path.replaceAll('\\', '/')))
@@ -238,15 +277,22 @@ export async function main(argv = process.argv.slice(2)) {
     const childEnvironment = { ...environment, MEDIAMANAGER_TEST_REGISTRATION_OUTPUT: registrationOutput,
       MEDIAMANAGER_TEST_REGISTRATION_ROOT: repositoryRoot,
       MEDIAMANAGER_TEST_REGISTRATION_SELECTED: JSON.stringify(selected) };
-    const child = spawn(process.execPath, args, { cwd: repositoryRoot, env: childEnvironment,
-      windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'] });
-    child.stdout.pipe(raw);
-    child.stderr.pipe(errors);
-    const streams = Promise.all([raw, errors].map(stream => new Promise((resolve, reject) => {
-      stream.once('finish', resolve); stream.once('error', reject);
-    })));
-    const code = await new Promise((resolve, reject) => { child.once('error', reject); child.once('close', resolve); });
-    await streams;
+    const code = await phase(`execute ${selected.length} test files`, async () => {
+      const child = spawn(process.execPath, args, { cwd: repositoryRoot, env: childEnvironment,
+        windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'] });
+      child.stdout.pipe(raw);
+      child.stderr.pipe(errors);
+      const forward = progressForwarder({ environment, selected });
+      child.stderr.on('data', forward);
+      const streams = Promise.all([raw, errors].map(stream => new Promise((resolve, reject) => {
+        stream.once('finish', resolve); stream.once('error', reject);
+      })));
+      try {
+        const exitCode = await new Promise((resolve, reject) => { child.once('error', reject); child.once('close', resolve); });
+        await streams;
+        return exitCode;
+      } finally { child.stderr.removeListener('data', forward); }
+    });
     const counts = parseTapSummary(await readFile(path.join(output, 'test.tap'), 'utf8'));
     Object.assign(record, { executed: true, exitCode: code, counts });
     let registration = { files: [], missing: selected };
@@ -255,11 +301,11 @@ export async function main(argv = process.argv.slice(2)) {
     record.testRegistrations = registration;
     record.registrationComplete = registration.missing.length === 0
       && registration.files.length === selected.length;
-    const candidateBeforeAfterInventory = await candidateIdentity();
-    const dependenciesAfter = await inventory(environment);
-    record.preflightAfter = await preflight(selected, dependenciesAfter, environment, { fullProfile: options.profile === 'full' });
-    const inputsAfter = await captureInputIdentity({ selected, dependencies: dependenciesAfter, preflight: record.preflightAfter, environment });
-    const after = await candidateIdentity();
+    const candidateBeforeAfterInventory = await phase('audit candidate identity', () => candidateIdentity());
+    const dependenciesAfter = await phase('audit dependency inventory', () => inventory(environment));
+    record.preflightAfter = await phase('audit tool and service preflight', () => preflight(selected, dependenciesAfter, environment, { fullProfile: options.profile === 'full' }));
+    const inputsAfter = await phase('audit input identity', () => captureInputIdentity({ selected, dependencies: dependenciesAfter, preflight: record.preflightAfter, environment }));
+    const after = await phase('audit final candidate identity', () => candidateIdentity());
     record.inventoryDifferencesAfter = inventoryCandidateDifferences(dependenciesAfter, after);
     record.candidateUnchanged = sameCandidate(candidate, candidateBeforeAfterInventory)
       && sameCandidate(candidateBeforeAfterInventory, after) && record.inventoryDifferencesAfter.length === 0;
