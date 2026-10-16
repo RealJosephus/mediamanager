@@ -103,7 +103,8 @@ export function createMetadataChildren({ store, library, linkedChildren, configu
             const item = state.byId.get(idKey(decodeNativeTextBytes(row.Id)));
             if (!item || !predicate(item)) continue;
             const ordinal = offset + BigInt(row.Ordinal), slot = await cohort.capture(item, { ordinal });
-            await session.client.query(`INSERT INTO ${target}("Ordinal","Id","SlotKey") VALUES ($1,$2,$3)`, [ordinal, row.Id, slot]);
+            await session.client.query(`INSERT INTO ${target}("Ordinal","Id","SlotKey","Type") VALUES ($1,$2,$3,$4)`,
+              [ordinal, row.Id, slot, encoded(item.NativeType)]);
           }
         } catch (error) { rowFailure = error; throw error; }
         finally { await cleanupResources(rowFailure, [() => state.dispose({ session }), () => linkedChildren.flushReleases({ session })],
@@ -143,8 +144,8 @@ export function createMetadataChildren({ store, library, linkedChildren, configu
           try {
             if (predicate(child)) {
               const ordinal = ++cursor.value, slot = await cohort.capture(child, { ordinal });
-              await session.client.query(`INSERT INTO ${target}("Ordinal","Id","SlotKey") VALUES($1,$2,$3)`,
-                [ordinal, encoded(child.Id), slot]);
+              await session.client.query(`INSERT INTO ${target}("Ordinal","Id","SlotKey","Type") VALUES($1,$2,$3,$4)`,
+                [ordinal, encoded(child.Id), slot, encoded(child.NativeType)]);
             }
             if (recursive && child.IsFolder) await captureChildren(child);
           } catch (error) { childFailure = error; throw error; }
@@ -177,7 +178,8 @@ export function createMetadataChildren({ store, library, linkedChildren, configu
           if (!page.entries.length) break;
           for (const entry of page.entries) if (predicate(entry.item)) {
             const ordinal = offset + entry.Ordinal, slot = await cohort.capture(entry.item, { ordinal });
-            await session.client.query(`INSERT INTO ${target}("Ordinal","Id","SlotKey") VALUES($1,$2,$3)`, [ordinal, encoded(entry.item.Id), slot]);
+            await session.client.query(`INSERT INTO ${target}("Ordinal","Id","SlotKey","Type") VALUES($1,$2,$3,$4)`,
+              [ordinal, encoded(entry.item.Id), slot, encoded(entry.item.NativeType)]);
           }
           after = page.entries.at(-1).Ordinal;
         } catch (error) { pageFailure = error; throw error; }
@@ -194,12 +196,17 @@ export function createMetadataChildren({ store, library, linkedChildren, configu
     }
   }
 
-  async function selected(item, mode, { series, physicalSeriesId, includeLinkedChildren = true, preserveDuplicates = false } = {}) {
+  async function selected(item, mode, { series, physicalSeriesId, includeLinkedChildren = true, preserveDuplicates = false,
+    includeItemTypes } = {}) {
+    if (includeItemTypes !== undefined && (!Array.isArray(includeItemTypes)
+      || includeItemTypes.some(type => !nativeItemTypes.includes(type)))) {
+      throw new TypeError('Metadata child filters require exact native item types.');
+    }
     let cohort = await createNativeItemCohort({ linkedChildren }), view;
     try {
       view = await store.run(async session => {
         const target = q('mm_metadata_selection_' + randomUUID().replaceAll('-', ''));
-        await session.client.query(`CREATE TEMP TABLE ${target}("Ordinal" bigint,"Id" bytea,"SlotKey" uuid)`);
+        await session.client.query(`CREATE TEMP TABLE ${target}("Ordinal" bigint,"Id" bytea,"SlotKey" uuid,"Type" bytea NOT NULL)`);
         let failure;
         try {
           if (mode === 'linked') await captureLinks(session, item, cohort, target);
@@ -245,11 +252,14 @@ export function createMetadataChildren({ store, library, linkedChildren, configu
             }
           }
           const sql = nativeTextSql(session.schemaName);
-          const selection = mode === 'linked' || preserveDuplicates ? `SELECT row_number() OVER(ORDER BY "Ordinal") AS "Ordinal","SlotKey" FROM ${target} ORDER BY "Ordinal"`
+          // Hydrate the complete captured Children collection before filtering:
+          // a malformed late sibling must still fail before the first callback.
+          const source = includeItemTypes === undefined ? target : `(SELECT * FROM ${target} WHERE "Type"=ANY($1::bytea[])) filtered`;
+          const selection = mode === 'linked' || preserveDuplicates ? `SELECT row_number() OVER(ORDER BY "Ordinal") AS "Ordinal","SlotKey" FROM ${source} ORDER BY "Ordinal"`
             : `WITH ranked AS (SELECT *,row_number() OVER(PARTITION BY ${sql.guidKey('"Id"')} ORDER BY "Ordinal") AS first,
-              first_value("SlotKey") OVER(PARTITION BY ${sql.guidKey('"Id"')} ORDER BY "Ordinal" DESC) AS last_slot FROM ${target})
+              first_value("SlotKey") OVER(PARTITION BY ${sql.guidKey('"Id"')} ORDER BY "Ordinal" DESC) AS last_slot FROM ${source})
               SELECT row_number() OVER(ORDER BY "Ordinal") AS "Ordinal",last_slot AS "SlotKey" FROM ranked WHERE first=1 ORDER BY "Ordinal"`;
-          view = await cohort.view({ session, plan: plan(selection) });
+          view = await cohort.view({ session, plan: plan(selection, includeItemTypes === undefined ? [] : [includeItemTypes.map(encoded)]) });
           return view;
         } catch (error) { failure = error; throw error; }
         finally { await cleanupResources(failure, [() => session.client.query(`DROP TABLE ${target}`)],
