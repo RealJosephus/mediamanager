@@ -11,6 +11,7 @@ export async function watchDirectory(root, { signal, onChange, onError, resolve,
     throw new TypeError('Storage watching requires change and error callbacks.');
   }
   const watchers = new Map();
+  const missing = error => ['ENOENT', 'ENOTDIR', 'not-found', 'not-directory'].includes(error.code);
   let closed = false, tail = Promise.resolve();
   const report = error => {
     try { void Promise.resolve(onError(failure(error))).catch(() => {}); }
@@ -44,13 +45,15 @@ export async function watchDirectory(root, { signal, onChange, onError, resolve,
   const inspect = async (filename, initial = false) => {
     checkAbort(signal);
     if (closed) return;
-    const target = await resolve(filename);
-    checkAbort(signal);
-    if (closed) return;
-    let info;
-    try { info = await fs.lstat(target, { bigint: true }); }
+    let target, info;
+    try {
+      target = await resolve(filename);
+      checkAbort(signal);
+      if (closed) return;
+      info = await fs.lstat(target, { bigint: true });
+    }
     catch (error) {
-      if (initial || !['ENOENT', 'ENOTDIR'].includes(error.code)) throw error;
+      if (initial || !missing(error)) throw error;
       remove(filename); return;
     }
     checkAbort(signal);
@@ -66,7 +69,8 @@ export async function watchDirectory(root, { signal, onChange, onError, resolve,
     const identity = `${info.dev}:${info.ino}:${info.birthtimeNs}`;
     if (watchers.has(filename) && watchers.get(filename).identity !== identity) remove(filename);
     if (!watchers.has(filename)) {
-      const watcher = watch(target, { persistent: false }, (type, name) => enqueue(async () => {
+      let watcher;
+      try { watcher = watch(target, { persistent: false }, (type, name) => enqueue(async () => {
         if (name == null || name.length === 0) {
           await inspect(filename);
           changed({ path: filename, type });
@@ -76,17 +80,24 @@ export async function watchDirectory(root, { signal, onChange, onError, resolve,
         const relative = String(name);
         validateName(relative);
         const child = joinPath(filename, relative);
-        await resolve(child);
         if (type === 'rename') await inspect(child);
+        else {
+          try { await resolve(child); }
+          catch (error) { if (!missing(error)) throw error; }
+        }
         changed({ path: child, type });
-      }));
+      })); }
+      catch (error) {
+        if (initial || !missing(error)) throw error;
+        remove(filename); return;
+      }
       watcher.on('error', error => enqueue(async () => {
         // Removing a watched child can report an OS error on its own handle.
         // Its parent still watches the namespace and must remain subscribed.
         if (filename !== root) {
           try { await fs.lstat(await resolve(filename)); }
           catch (statError) {
-            if (['ENOENT', 'ENOTDIR'].includes(statError.code)) {
+            if (missing(statError)) {
               remove(filename); changed({ path: filename, type: 'rename' }); return;
             }
           }
@@ -97,7 +108,12 @@ export async function watchDirectory(root, { signal, onChange, onError, resolve,
     }
     // Open the watcher before walking: events during enumeration are queued and
     // reconciled once the initial tree is installed, including newly made dirs.
-    const directory = await fs.opendir(target);
+    let directory;
+    try { directory = await fs.opendir(target); }
+    catch (error) {
+      if (initial || !missing(error)) throw error;
+      remove(filename); return;
+    }
     if (closed || signal?.aborted) { await directory.close(); checkAbort(signal); return; }
     for await (const entry of directory) {
       checkAbort(signal);
@@ -110,7 +126,7 @@ export async function watchDirectory(root, { signal, onChange, onError, resolve,
     // A directory can disappear without an event on its own watcher.
     for (const name of [...watchers.keys()]) if (name !== filename && path.posix.dirname(name) === filename) {
       try { await fs.lstat(await resolve(name)); }
-      catch (error) { if (['ENOENT', 'ENOTDIR'].includes(error.code)) remove(name); else throw error; }
+      catch (error) { if (missing(error)) remove(name); else throw error; }
     }
   };
   signal?.addEventListener('abort', stop, { once: true });

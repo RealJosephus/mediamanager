@@ -66,6 +66,22 @@ test('local watches existing and newly created subdirectories and releases subsc
   assert.deepEqual(recorded.errors, []);
 });
 
+test('directory churn during event reconciliation keeps the root watch alive', { timeout: 10000 }, async t => {
+  const { root, adapter } = await local(t);
+  const recorded = recorder();
+  const subscription = await adapter.watch('/', recorded);
+  t.after(() => subscription.close());
+  for (let index = 0; index < 20; index++) {
+    const directory = path.join(root, 'transient-' + index);
+    await fs.mkdir(path.join(directory, 'nested'), { recursive: true });
+    await fs.rm(directory, { recursive: true, maxRetries: 5, retryDelay: 20 });
+  }
+  const change = recorded.next(event => event.path === '/surviving.txt');
+  await fs.writeFile(path.join(root, 'surviving.txt'), 'still watched');
+  await change;
+  assert.deepEqual(recorded.errors, []);
+});
+
 test('local watch rejects files and junctions and observes cancellation', { timeout: 10000 }, async t => {
   const { root, adapter } = await local(t);
   await fs.writeFile(path.join(root, 'file.txt'), 'file');
