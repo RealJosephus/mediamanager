@@ -27,6 +27,8 @@ const xml = (encoding, root, content) => encoded('<?xml version="1.0" encoding="
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 
 test('postgres: all Unicode configuration encodings feed the real runtime, persist startup changes, restart and accept native continuation', { skip: !postgresTestConnectionString }, async t => {
+  assert.ok(process.env.MEDIAMANAGER_JELLYFIN_DLL, 'Native configuration continuation requires MEDIAMANAGER_JELLYFIN_DLL and its assembly directory.');
+  await fs.access(process.env.MEDIAMANAGER_JELLYFIN_DLL);
   const output = path.join(path.resolve(validationOutputRoot()), 'configuration-runtime'); await fs.mkdir(output);
   const consumers = [], observations = [];
   for (const encoding of ['utf-16le', 'utf-16be', 'utf-32le', 'utf-32be']) await t.test(encoding, async t => {
