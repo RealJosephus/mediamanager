@@ -6,8 +6,10 @@ import { repositoryRoot, validationPath } from '../validation/paths.js';
 
 export const provisionedServices = ['postgres', 'dotnet'];
 export const provisionedTools = ['dotnet', 'ffmpeg', 'ffprobe', 'git'];
-export const provisionedServicesFor = environment => environment.MEDIAMANAGER_CI_NATIVE_REFERENCE === 'true'
-  ? [...provisionedServices, 'jellyfinDll'] : [...provisionedServices];
+export const provisionedServicesFor = environment => [...provisionedServices,
+  ...(environment.MEDIAMANAGER_CI_NATIVE_REFERENCE === 'true' ? ['jellyfinDll'] : []),
+  ...(typeof environment.MEDIAMANAGER_WEBDAV_EXECUTABLE === 'string'
+    && path.isAbsolute(environment.MEDIAMANAGER_WEBDAV_EXECUTABLE) ? ['webdav'] : [])];
 
 const unknown = Symbol('unknown');
 const key = node => node?.computed ? node.property?.value : node?.property?.name;

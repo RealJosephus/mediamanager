@@ -56,6 +56,47 @@ jobs:
         with:
           node-version: 24.16.0
           cache: npm
+      - name: Provision fixed WebDAV executable
+        shell: pwsh
+        timeout-minutes: 5
+        run: ./tools/ci/setup-webdav.ps1
+      - name: Prepare and verify macOS loopback alias
+        id: loopback
+        if: runner.os == 'macOS'
+        shell: bash
+        timeout-minutes: 2
+        run: |
+          set -euo pipefail
+          mkdir -p "$MEDIAMANAGER_VALIDATION_OUTPUT_ROOT/provisioning"
+          /sbin/ifconfig lo0 | tee "$MEDIAMANAGER_VALIDATION_OUTPUT_ROOT/provisioning/loopback-before.txt"
+          if /sbin/ifconfig lo0 | awk '$1 == "inet" && $2 == "127.0.0.2" { found = 1 } END { exit !found }'; then
+            printf 'created=false\n' >> "$GITHUB_OUTPUT"
+          else
+            # Apple ifconfig(8): same-subnet aliases use a non-conflicting /32 mask.
+            sudo /sbin/ifconfig lo0 inet 127.0.0.2 netmask 255.255.255.255 alias up
+            printf 'created=true\n' >> "$GITHUB_OUTPUT"
+          fi
+          /sbin/ifconfig lo0 | tee "$MEDIAMANAGER_VALIDATION_OUTPUT_ROOT/provisioning/loopback-ready.txt"
+          node --input-type=module <<'NODE'
+          import net from 'node:net';
+          import { writeFile } from 'node:fs/promises';
+          import path from 'node:path';
+          const servers = [net.createServer(), net.createServer()];
+          const listen = (server, host, port) => new Promise((resolve, reject) => {
+            server.once('error', reject);
+            server.listen(port, host, resolve);
+          });
+          try {
+            await listen(servers[0], '127.0.0.1', 0);
+            const port = servers[0].address().port;
+            await listen(servers[1], '127.0.0.2', port);
+            const record = { addresses: servers.map(server => server.address()), samePort: true };
+            await writeFile(path.join(process.env.MEDIAMANAGER_VALIDATION_OUTPUT_ROOT, 'provisioning/loopback-bind.json'), JSON.stringify(record, null, 2) + '\n');
+            console.log(`Verified 127.0.0.1 and 127.0.0.2 both bind port ${port}.`);
+          } finally {
+            await Promise.all(servers.filter(server => server.listening).map(server => new Promise((resolve, reject) => server.close(error => error ? reject(error) : resolve()))));
+          }
+          NODE
       - name: Set up .NET oracle runtime
         uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
         with:
@@ -115,6 +156,17 @@ jobs:
       - name: Audit database resources
         if: always() && steps.environment.outcome == 'success'
         run: node tools/ci/environment.js audit
+      - name: Remove created macOS loopback alias
+        if: always() && runner.os == 'macOS' && steps.loopback.outputs.created == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo /sbin/ifconfig lo0 inet 127.0.0.2 -alias
+          /sbin/ifconfig lo0 | tee "$MEDIAMANAGER_VALIDATION_OUTPUT_ROOT/provisioning/loopback-after.txt"
+          if /sbin/ifconfig lo0 | awk '$1 == "inet" && $2 == "127.0.0.2" { found = 1 } END { exit !found }'; then
+            echo 'The created loopback alias remained after cleanup.' >&2
+            exit 1
+          fi
       - name: Preserve validation evidence
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2

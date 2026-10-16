@@ -150,6 +150,27 @@ test('CI excludes only consumers of an explicitly unprovisioned service', async 
   assert.equal(classification.records[0].reasons[0].code, 'service-not-provisioned');
 });
 
+test('CI selects a configured WebDAV executable and leaves missing provisioned bytes as an infrastructure failure', async () => {
+  const dependencies = { entries: [entry(ownPath, { services: ['webdav'] }), entry(otherPath)] };
+  const tracked = new Set([ownPath, otherPath]);
+  for (const value of [undefined, '', 'rclone']) {
+    const environment = value === undefined ? {} : { MEDIAMANAGER_WEBDAV_EXECUTABLE: value };
+    const classification = await classify({ dependencies, tracked, environment });
+    assert.equal(classification.records[0].selected, false);
+    assert.equal(classification.records[1].selected, true);
+    assert.ok(!provisionedServicesFor(environment).includes('webdav'));
+  }
+  const filename = path.join(repositoryRoot, '.test-output', 'missing-rclone');
+  const environment = { MEDIAMANAGER_WEBDAV_EXECUTABLE: filename };
+  const classification = await classify({ dependencies, tracked, environment });
+  assert.deepEqual(provisionedServicesFor(environment), ['postgres', 'dotnet', 'webdav']);
+  assert.ok(classification.records.every(record => record.selected));
+  const errors = applyInputIdentity(classification, { entries: [{ filename, required: true, available: false,
+    reasons: ['service:webdav'], requiredReasons: ['service:webdav'] }] }, tracked);
+  assert.deepEqual(errors.map(error => error.code), ['input-unavailable']);
+  assert.ok(classification.records.every(record => record.selected), 'failed provisioning must not silently remove the WebDAV consumer');
+});
+
 test('CI native reference provisioning is an explicit promise independent of runtime file availability', async () => {
   const dependencies = { entries: [entry(ownPath, { services: ['jellyfinDll'] }), entry(otherPath)] };
   const tracked = new Set([ownPath, otherPath]);
