@@ -2,6 +2,7 @@ $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
 # This creates new reference outputs only. No tests, server or oracle are run.
 if ($env:GITHUB_ACTIONS -ne 'true' -or -not $env:RUNNER_TEMP) { throw 'Native builds must run in GitHub Actions.' }
+if (-not $env:MEDIAMANAGER_DOTNET -or -not $env:MEDIAMANAGER_CI_DOTNET_ROOT) { throw 'Verify the isolated .NET installation before building the native reference.' }
 $repository = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '../..'))
 $bundle = Join-Path $repository 'tests/fixtures/recorded-native'
 $output = Join-Path $env:RUNNER_TEMP 'mediamanager-native-build'
@@ -38,7 +39,7 @@ function Write-Record([string]$Name, $Value) {
 }
 function Invoke-Dotnet([string]$Name, [string[]]$NativeArguments) {
     $start = [Diagnostics.ProcessStartInfo]::new()
-    $start.FileName = (Get-Command dotnet -CommandType Application | Select-Object -First 1).Source
+    $start.FileName = $env:MEDIAMANAGER_DOTNET
     $start.WorkingDirectory = $sourceRoot
     $start.UseShellExecute = $false; $start.CreateNoWindow = $true
     $start.RedirectStandardOutput = $true; $start.RedirectStandardError = $true

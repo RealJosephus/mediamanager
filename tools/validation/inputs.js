@@ -1,5 +1,5 @@
 import path from 'node:path';
-import { readFile } from 'node:fs/promises';
+import { lstat, readFile, realpath } from 'node:fs/promises';
 import { dependencyClosure, describeFile, filesIn, sha256 } from './inventory.js';
 import { recordedInput, recordedInputMapPath, repositoryRoot, validationPath } from './paths.js';
 
@@ -16,6 +16,36 @@ export async function captureInputIdentity({ selected, dependencies, preflight, 
     targets.get(absolute).invalidDigest ||= invalidDigest;
     for (const digest of expectedDigests) targets.get(absolute).expectedDigests.add(digest);
   };
+  const dotnetExecutables = [...preflight.services.filter(service => service.name === 'dotnet').map(service => service.filename),
+    ...preflight.tools.filter(tool => tool.name === 'dotnet').map(tool => tool.executable)].filter(Boolean);
+  const usesDotnet = dotnetExecutables.length > 0 || closure.some(entry => entry.services?.includes('dotnet') || entry.tools?.includes('dotnet'));
+  if (usesDotnet && (environment.MEDIAMANAGER_CI_DOTNET_ROOT || environment.GITHUB_ACTIONS === 'true' && environment.DOTNET_INSTALL_DIR)) {
+    if (![environment.MEDIAMANAGER_CI_DOTNET_ROOT, environment.DOTNET_INSTALL_DIR,
+      environment.MEDIAMANAGER_DOTNET, environment.RUNNER_TEMP].every(value => typeof value === 'string' && path.isAbsolute(value))) {
+      throw new Error('CI .NET provisioning requires a verified isolated installation and executable.');
+    }
+    const root = path.resolve(environment.MEDIAMANAGER_CI_DOTNET_ROOT);
+    if (path.relative(root, path.resolve(environment.RUNNER_TEMP, 'mediamanager-dotnet')) !== ''
+      || path.relative(root, path.resolve(environment.DOTNET_INSTALL_DIR)) !== '') {
+      throw new Error('CI .NET inputs must use the declared isolated runner installation.');
+    }
+    const executable = path.join(root, process.platform === 'win32' ? 'dotnet.exe' : 'dotnet');
+    for (const directory of [root, ...['host', 'shared', 'sdk/10.0.401', 'packs'].map(name => path.join(root, name))]) {
+      const info = await lstat(directory);
+      if (!info.isDirectory() || info.isSymbolicLink()) throw new Error('CI .NET inputs require physical SDK and runtime directories.');
+    }
+    const executableInfo = await lstat(executable), installed = await realpath(executable);
+    if (!executableInfo.isFile() || executableInfo.isSymbolicLink()) throw new Error('The isolated dotnet executable must be an ordinary file.');
+    for (const selectedExecutable of [environment.MEDIAMANAGER_DOTNET, ...dotnetExecutables]) {
+      if (path.relative(installed, await realpath(path.resolve(selectedExecutable))) !== '') {
+        throw new Error('CI .NET consumers must use the verified isolated executable.');
+      }
+    }
+    // Bind the complete install, including reference packs and SDK manifests;
+    // do not redirect historical .tools/dotnet recording paths into this build.
+    add(root, 'runtime:dotnet-installation');
+    add(executable, 'runtime:dotnet-executable');
+  }
   // A shared fixture can be reached by several consumers. Deduplicate traversal
   // per consumer so every transitive input retains its actual dependency owners.
   const inspectedManifests = new Map(), inspectedDirectories = new Map();

@@ -6,7 +6,7 @@ import path from 'node:path';
 import { describeFile } from '../../tools/validation/inventory.js';
 import { captureInputIdentity, inputsUnchanged } from '../../tools/validation/inputs.js';
 import { resultOutcome } from '../../tools/validation/run.js';
-import { repositoryRoot } from '../../tools/validation/paths.js';
+import { repositoryRoot, validationPath } from '../../tools/validation/paths.js';
 
 const counts = { tests: 1, suites: 0, pass: 1, fail: 0, cancelled: 0, skipped: 0, todo: 0 };
 const outcome = inputUnchanged => resultOutcome(0, counts, { candidateUnchanged: true, inputUnchanged, preflightReady: true });
@@ -25,6 +25,66 @@ async function temporaryInputs(t) {
 const captureService = async (name, filename) => captureInputIdentity({
   selected: [], dependencies: { entries: [] }, environment: {},
   preflight: { ready: true, tools: [], services: [{ name, ...await describeFile(filename) }] },
+});
+
+async function isolatedDotnet(t) {
+  const directory = await temporaryInputs(t), root = path.join(directory, 'mediamanager-dotnet');
+  for (const name of ['host/fxr/10.0.4', 'shared/Microsoft.NETCore.App/10.0.4', 'sdk/10.0.401',
+    'packs/Microsoft.NETCore.App.Ref/10.0.4/ref/net10.0', 'sdk-manifests/10.0.400']) {
+    await mkdir(path.join(root, name), { recursive: true });
+    await writeFile(path.join(root, name, 'controlled-input.bin'), 'controlled SDK input: ' + name);
+  }
+  const executable = path.join(root, process.platform === 'win32' ? 'dotnet.exe' : 'dotnet');
+  await writeFile(executable, 'controlled executable identity; never executed');
+  const environment = { GITHUB_ACTIONS: 'true', RUNNER_TEMP: directory, DOTNET_INSTALL_DIR: root,
+    MEDIAMANAGER_CI_DOTNET_ROOT: root, MEDIAMANAGER_DOTNET: executable };
+  return { directory, root, executable, environment };
+}
+
+test('CI binds the entire verified dotnet installation, including reference packs, without redirecting historical paths', async t => {
+  const { root, executable, environment } = await isolatedDotnet(t);
+  const options = { selected: [], dependencies: { entries: [] }, environment,
+    preflight: { ready: true, tools: [{ name: 'dotnet', executable, available: true }],
+      services: [{ name: 'dotnet', filename: executable, available: true }] } };
+  const before = await captureInputIdentity(options), installed = before.entries.find(entry => entry.filename === root);
+  assert.equal(before.ready, true);
+  assert.equal(installed.kind, 'directory'); assert.equal(installed.required, true); assert.equal(installed.available, true);
+  assert.ok(installed.requiredReasons.includes('runtime:dotnet-installation'));
+  assert.ok(installed.entries.some(entry => entry.name === 'packs'));
+  assert.ok(installed.entries.some(entry => entry.name === 'sdk-manifests'));
+  for (const name of ['host', 'shared', 'sdk']) {
+    const entry = before.entries.find(entry => entry.filename === path.join(root, name));
+    assert.ok(entry.requiredReasons.includes('service:dotnet-' + name));
+    assert.ok(entry.requiredReasons.includes('tool:dotnet-' + name));
+  }
+  const pack = path.join(root, 'packs/Microsoft.NETCore.App.Ref/10.0.4/ref/net10.0/controlled-input.bin');
+  await writeFile(pack, 'changed reference assembly while the SDK executable stayed unchanged');
+  const after = await captureInputIdentity(options);
+  assert.equal(inputsUnchanged(before, after), false);
+  assert.equal(outcome(inputsUnchanged(before, after)), 'incomplete');
+  assert.notEqual(installed.entriesSha256, after.entries.find(entry => entry.filename === root).entriesSha256);
+  assert.equal(validationPath('.tools/dotnet/dotnet.exe', repositoryRoot, environment), path.join(repositoryRoot, '.tools/dotnet/dotnet.exe'),
+    'CI installation identity does not remap historical .tools/dotnet paths');
+});
+
+test('an isolated dotnet promise fails when verification, execution identity or required SDK inputs are missing', async t => {
+  const { directory, root, executable, environment } = await isolatedDotnet(t);
+  const selected = ['tests/controlled-dotnet.test.js'];
+  const dependencies = { entries: [{ path: selected[0], imports: [], importedFiles: [], services: ['dotnet'], tools: [],
+    declaredReferences: [], fixtureReferences: [] }] };
+  // Planning has no executable preflight yet; the selected dependency still
+  // owns the promised installation and cannot silently fall back to PATH.
+  const capture = overrides => captureInputIdentity({ selected, dependencies, environment: { ...environment, ...overrides },
+    preflight: { ready: true, tools: [], services: [] } });
+  await assert.rejects(capture({ MEDIAMANAGER_CI_DOTNET_ROOT: undefined }), /verified isolated installation/u);
+  await assert.rejects(capture({ MEDIAMANAGER_DOTNET: undefined }), /verified isolated installation/u);
+  await assert.rejects(capture({ DOTNET_INSTALL_DIR: directory }), /declared isolated runner installation/u);
+  const other = path.join(directory, path.basename(executable)); await writeFile(other, 'a different tool installation');
+  await assert.rejects(capture({ MEDIAMANAGER_DOTNET: other }), /verified isolated executable/u);
+  await assert.rejects(captureInputIdentity({ selected, dependencies, environment,
+    preflight: { ready: true, services: [], tools: [{ name: 'dotnet', executable: other, available: true }] } }), /verified isolated executable/u);
+  await rm(path.join(root, 'packs'), { recursive: true });
+  await assert.rejects(capture({}), { code: 'ENOENT' });
 });
 
 test('validation binds workspace package links and rejects unapproved link traversal', async()=>{
