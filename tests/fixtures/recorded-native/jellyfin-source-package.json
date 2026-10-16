@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "scope": "Complete 2620-file designated source manifest, including all local modifications, copied byte-for-byte from the receipt-bound build source tree. Original upstream documentation and build helpers are retained. No build or test was executed.",
+  "archive": {
+    "bytes": 3867186,
+    "required": true,
+    "sha256": "92edc03192499dcdd98439072a6ece32ab839bb1f5bb0c9abbda03284ec9f161",
+    "path": "jellyfin-source-208c278b75ab.zip"
+  },
+  "prefix": "jellyfin-source/",
+  "sourceManifest": {
+    "bytes": 513264,
+    "required": true,
+    "sha256": "2012abc83017dfd2a107a49b701531a0dad08c763bc721dc75726342002c8f5c",
+    "path": "jellyfin-source-manifest.json"
+  },
+  "localModifications": {
+    "bytes": 11636,
+    "required": true,
+    "sha256": "83671401df5455b4085fee49b4a4a437974981250f74bf345ca730814938fdc2",
+    "path": "jellyfin-local-modifications.json"
+  },
+  "license": {
+    "required": true,
+    "sha256": "f371b80469fb235bc500ec29e0e85b682d4a6157a158567d828ff0be544d4f1d",
+    "path": "LICENSE-Jellyfin.txt"
+  },
+  "buildReceipt": {
+    "bytes": 14246,
+    "required": true,
+    "sha256": "44711dacc1c4e65d2f36202267423d3212c3577c41383696643ff04ebe8c49d2",
+    "path": "objects/44711dacc1c4e65d2f36202267423d3212c3577c41383696643ff04ebe8c49d2.json"
+  },
+  "nativeAssembly": {
+    "bytes": 506368,
+    "required": true,
+    "sha256": "474c7c638fe93cc61f1a588849fb93c81a2927388f6f4cf19953b3a76e9deb26",
+    "path": "objects/474c7c638fe93cc61f1a588849fb93c81a2927388f6f4cf19953b3a76e9deb26.dll"
+  },
+  "head": "208c278b75abd897aefa1e1175126eac5e4dbfaa",
+  "sourceContentDigest": "e28a983db179b720c3b16d7416ee4112894a3115c4be6fe43c61c52e0d9a8313",
+  "sourceFiles": 2620,
+  "sourceBytes": 15855765.0,
+  "localModificationFiles": 20,
+  "excludedSourceFiles": [],
+  "audit": {
+    "manifestDigestsMatched": true,
+    "allLocalModificationsRetained": true,
+    "noInstanceOrBuildOutputInputs": true,
+    "sourcePathAndCredentialMarkerReview": true,
+    "archiveMemberDigestsMatched": true
+  },
+  "reviewedPublicPlaceholder": {
+    "reason": "Mock configuration uses user/password and secret placeholders at media.example.com to test URL sanitization. Original source bytes are retained.",
+    "path": "tests/Jellyfin.Networking.Tests/NetworkParseTests.cs"
+  },
+  "binaryUse": "The associated DLL is archived only as recorded evidence. This source offer does not supply SDK, operating-system or NuGet runtime binaries and does not claim a new reproducible build."
+}

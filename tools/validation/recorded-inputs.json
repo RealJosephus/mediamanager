@@ -1,0 +1,254 @@
+{
+  "schemaVersion": 1,
+  "scope": "Exact original-path-and-SHA-256 relocation of sealed monitor and collage recording inputs; no prefix, basename or runtime-executable fallback.",
+  "sourcesReviewed": "Only designated source files, controlled fixture helpers, synthetic recordings, execution/build receipts and pinned binary identities; no instance database, configuration, environment dump, key or user media is included.",
+  "entries": [
+    {
+      "source": "D:/jellyfin/Emby.Server.Implementations/Images/BaseDynamicImageProvider.cs",
+      "target": "tests/fixtures/recorded-native/objects/5ae8c13987a0f86202ed4c501f2d07a5a37a69a625d8eb1ad24c7e80327b4da7.cs",
+      "bytes": 11108,
+      "sha256": "5ae8c13987a0f86202ed4c501f2d07a5a37a69a625d8eb1ad24c7e80327b4da7",
+      "consumers": [
+        "tests/images/fixtures/user-view-collage/provenance.json"
+      ]
+    },
+    {
+      "source": "D:/jellyfin/Emby.Server.Implementations/Images/DynamicImageProvider.cs",
+      "target": "tests/fixtures/recorded-native/objects/6482437c4781991e9bedca5350dd7ea00884d7fd71c00b416b49d7ceef9726d1.cs",
+      "bytes": 4551,
+      "sha256": "6482437c4781991e9bedca5350dd7ea00884d7fd71c00b416b49d7ceef9726d1",
+      "consumers": [
+        "tests/images/fixtures/user-view-collage/provenance.json"
+      ]
+    },
+    {
+      "source": "D:/jellyfin/Emby.Server.Implementations/IO/FileRefresher.cs",
+      "target": "tests/fixtures/recorded-native/objects/3f3d67ce9c3b9f54450f170bdb4ef055bff3c67ddf7e5c6010f6c78f4fb12d47.cs",
+      "bytes": 6380,
+      "sha256": "3f3d67ce9c3b9f54450f170bdb4ef055bff3c67ddf7e5c6010f6c78f4fb12d47",
+      "consumers": [
+        "tests/library/fixtures/library-directory-monitor/provenance.json"
+      ]
+    },
+    {
+      "source": "D:/jellyfin/Emby.Server.Implementations/IO/LibraryMonitor.cs",
+      "target": "tests/fixtures/recorded-native/objects/977ff967b90d3ad22aad7ede03036b2803e5305c1e5e5550f2b74686c3180afc.cs",
+      "bytes": 18807,
+      "sha256": "977ff967b90d3ad22aad7ede03036b2803e5305c1e5e5550f2b74686c3180afc",
+      "consumers": [
+        "tests/library/fixtures/library-directory-monitor/provenance.json"
+      ]
+    },
+    {
+      "source": "D:/jellyfin/Emby.Server.Implementations/IO/ManagedFileSystem.cs",
+      "target": "tests/fixtures/recorded-native/objects/280ea08cf13065d8cd3790edf551b28ddfc9f352f4758d4fe0e62a55dbe0b14e.cs",
+      "bytes": 27461,
+      "sha256": "280ea08cf13065d8cd3790edf551b28ddfc9f352f4758d4fe0e62a55dbe0b14e",
+      "consumers": [
+        "tests/library/fixtures/library-directory-monitor/provenance.json"
+      ]
+    },
+    {
+      "source": "D:/jellyfin/Emby.Server.Implementations/Library/DotIgnoreIgnoreRule.cs",
+      "target": "tests/fixtures/recorded-native/objects/e668e657d2be554a5da9175ae1e90b7b1ed4fbc9223b0b8b1ec38931c395047f.cs",
+      "bytes": 11315,
+      "sha256": "e668e657d2be554a5da9175ae1e90b7b1ed4fbc9223b0b8b1ec38931c395047f",
+      "consumers": [
+        "tests/library/fixtures/library-directory-monitor/provenance.json"
+      ]
+    },
+    {
+      "source": "D:/jellyfin/Emby.Server.Implementations/Library/IgnorePatterns.cs",
+      "target": "tests/fixtures/recorded-native/objects/909ac57e1b0a789c0c64828d796abeeca5241d5166afee1d237f85848c3fbbb7.cs",
+      "bytes": 4227,
+      "sha256": "909ac57e1b0a789c0c64828d796abeeca5241d5166afee1d237f85848c3fbbb7",
+      "consumers": [
+        "tests/library/fixtures/library-directory-monitor/provenance.json"
+      ]
+    },
+    {
+      "source": "D:/jellyfin/LICENSE",
+      "target": "tests/fixtures/recorded-native/LICENSE-Jellyfin.txt",
+      "bytes": 18014,
+      "sha256": "f371b80469fb235bc500ec29e0e85b682d4a6157a158567d828ff0be544d4f1d",
+      "consumers": [
+        "license"
+      ]
+    },
+    {
+      "source": "D:/jellyfin/MediaBrowser.Controller/Entities/BaseItem.cs",
+      "target": "tests/fixtures/recorded-native/objects/9dc7b96a93c9fbe874cdcededdca395b5aa2df6070f5cfc9c8959539dcd76469.cs",
+      "bytes": 105800,
+      "sha256": "9dc7b96a93c9fbe874cdcededdca395b5aa2df6070f5cfc9c8959539dcd76469",
+      "consumers": [
+        "tests/library/fixtures/library-directory-monitor/provenance.json"
+      ]
+    },
+    {
+      "source": "D:/jellyfin/src/Jellyfin.Drawing.Skia/SkiaEncoder.cs",
+      "target": "tests/fixtures/recorded-native/objects/8c3c61b8be155b57460374c2bb7c7fba3cdddf8d3db4c75e4f8f9e113c4c83bc.cs",
+      "bytes": 34013,
+      "sha256": "8c3c61b8be155b57460374c2bb7c7fba3cdddf8d3db4c75e4f8f9e113c4c83bc",
+      "consumers": [
+        "tests/images/fixtures/user-view-collage/provenance.json"
+      ]
+    },
+    {
+      "source": "D:/jellyfin/src/Jellyfin.Drawing.Skia/SkiaHelper.cs",
+      "target": "tests/fixtures/recorded-native/objects/04fab405c909ed6a4e4525607ab976afc57348dcd3a84649dda1513ac9af5362.cs",
+      "bytes": 1539,
+      "sha256": "04fab405c909ed6a4e4525607ab976afc57348dcd3a84649dda1513ac9af5362",
+      "consumers": [
+        "tests/images/fixtures/user-view-collage/provenance.json"
+      ]
+    },
+    {
+      "source": "D:/jellyfin/src/Jellyfin.Drawing.Skia/StripCollageBuilder.cs",
+      "target": "tests/fixtures/recorded-native/objects/1478548f7646c5f437d9b3a7fd8e96e3d30d7743b60b9b1a02469d3f2f45b840.cs",
+      "bytes": 13239,
+      "sha256": "1478548f7646c5f437d9b3a7fd8e96e3d30d7743b60b9b1a02469d3f2f45b840",
+      "consumers": [
+        "tests/images/fixtures/user-view-collage/provenance.json"
+      ]
+    },
+    {
+      "source": "D:\\mediamanager-validation\\20261016-monitor-stage\\monitor-native-2\\bin\\Release\\net10.0\\Oracle.dll",
+      "target": "tests/fixtures/recorded-native/objects/da8531ca268ed46e0de457832d203a8e2b8a995a378773abc9bf06bdcd75794a.dll",
+      "bytes": 20992,
+      "sha256": "da8531ca268ed46e0de457832d203a8e2b8a995a378773abc9bf06bdcd75794a",
+      "consumers": [
+        "tests/library/fixtures/library-directory-monitor/provenance.json"
+      ]
+    },
+    {
+      "source": "D:/mediamanager-validation/20261016-monitor-stage/monitor-native-2/native.json",
+      "target": "tests/fixtures/recorded-native/objects/4e4a17b0a66fa965a18e53c016ccb4dc83a2f4d6c9e950a6de65612791e5b396.json",
+      "bytes": 16039,
+      "sha256": "4e4a17b0a66fa965a18e53c016ccb4dc83a2f4d6c9e950a6de65612791e5b396",
+      "consumers": [
+        "tests/library/fixtures/library-directory-monitor/provenance.json"
+      ]
+    },
+    {
+      "source": "D:/mediamanager-validation/20261016-monitor-stage/monitor-native-2/record.json",
+      "target": "tests/fixtures/recorded-native/objects/7cf4fc9a64be2b03e6da9ecaaa035200c09afd0d197f72db90d76c6232b66faf.json",
+      "bytes": 4250,
+      "sha256": "7cf4fc9a64be2b03e6da9ecaaa035200c09afd0d197f72db90d76c6232b66faf",
+      "consumers": [
+        "tests/library/fixtures/library-directory-monitor/provenance.json"
+      ]
+    },
+    {
+      "source": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll",
+      "target": "tests/fixtures/recorded-native/objects/474c7c638fe93cc61f1a588849fb93c81a2927388f6f4cf19953b3a76e9deb26.dll",
+      "bytes": 506368,
+      "sha256": "474c7c638fe93cc61f1a588849fb93c81a2927388f6f4cf19953b3a76e9deb26",
+      "consumers": [
+        "tests/library/fixtures/library-directory-monitor/provenance.json",
+        "tests/images/fixtures/user-view-collage/provenance.json"
+      ]
+    },
+    {
+      "source": "D:/mediamanager-validation/20261016-native-build-closure/final-build-receipt.json",
+      "target": "tests/fixtures/recorded-native/objects/44711dacc1c4e65d2f36202267423d3212c3577c41383696643ff04ebe8c49d2.json",
+      "bytes": 14246,
+      "sha256": "44711dacc1c4e65d2f36202267423d3212c3577c41383696643ff04ebe8c49d2",
+      "consumers": [
+        "tests/library/fixtures/library-directory-monitor/provenance.json",
+        "tests/images/fixtures/user-view-collage/provenance.json"
+      ]
+    },
+    {
+      "source": "D:\\mediamanager-validation\\20261016-user-view-collage\\native-2\\bin\\Release\\net10.0\\Oracle.dll",
+      "target": "tests/fixtures/recorded-native/objects/3d80a4f533b6ce90253a450ee2d840c6f7f9ef8f3a452f0a810dd81217d85622.dll",
+      "bytes": 21504,
+      "sha256": "3d80a4f533b6ce90253a450ee2d840c6f7f9ef8f3a452f0a810dd81217d85622",
+      "consumers": [
+        "tests/images/fixtures/user-view-collage/provenance.json"
+      ]
+    },
+    {
+      "source": "D:/mediamanager-validation/20261016-user-view-collage/native-2/record.json",
+      "target": "tests/fixtures/recorded-native/objects/b2db532d647f10a1f19893a36dfebc229c1fb81c03524a7ccdc5f69aff2c3750.json",
+      "bytes": 9019,
+      "sha256": "b2db532d647f10a1f19893a36dfebc229c1fb81c03524a7ccdc5f69aff2c3750",
+      "consumers": [
+        "tests/images/fixtures/user-view-collage/provenance.json"
+      ]
+    },
+    {
+      "source": "D:\\mediamanager\\.tools\\dotnet\\dotnet.exe",
+      "target": "tests/fixtures/recorded-native/objects/21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6.exe",
+      "bytes": 167208,
+      "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6",
+      "consumers": [
+        "tests/library/fixtures/library-directory-monitor/provenance.json",
+        "tests/images/fixtures/user-view-collage/provenance.json"
+      ]
+    },
+    {
+      "source": "D:/mediamanager/.tools/dotnet/LICENSE.txt",
+      "target": "tests/fixtures/recorded-native/LICENSE-Dotnet.txt",
+      "bytes": 9519,
+      "sha256": "7f6839a61ce892b79c6549e2dc5a81fdbd240a0b260f8881216b45b7fda8b45d",
+      "consumers": [
+        "license"
+      ]
+    },
+    {
+      "source": "D:/mediamanager/.tools/dotnet/ThirdPartyNotices.txt",
+      "target": "tests/fixtures/recorded-native/ThirdPartyNotices-Dotnet.txt",
+      "bytes": 78887,
+      "sha256": "deb4427a295e1ed474b0d81c5a0d972c1b550b9a715cda939cdfa9236b1b418f",
+      "consumers": [
+        "license"
+      ]
+    },
+    {
+      "source": "D:\\mediamanager\\tests\\Directory.Build.props",
+      "target": "tests/fixtures/recorded-native/objects/d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd.props",
+      "bytes": 780,
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd",
+      "consumers": [
+        "tests/library/fixtures/library-directory-monitor/provenance.json",
+        "tests/images/fixtures/user-view-collage/provenance.json"
+      ]
+    },
+    {
+      "source": "D:\\mediamanager\\tests\\images\\fixtures\\user-view-collage\\Oracle.csproj",
+      "target": "tests/fixtures/recorded-native/objects/7108dd70190c64098b4dd90c9597d73a107f17e8d403be6624c146f2f6a78e01.csproj",
+      "bytes": 769,
+      "sha256": "7108dd70190c64098b4dd90c9597d73a107f17e8d403be6624c146f2f6a78e01",
+      "consumers": [
+        "tests/images/fixtures/user-view-collage/provenance.json"
+      ]
+    },
+    {
+      "source": "D:\\mediamanager\\tests\\images\\fixtures\\user-view-collage\\Program.cs",
+      "target": "tests/fixtures/recorded-native/objects/8ff849f94584a8a59862c0451f8cf10469fc1096cb9ec0b26559ad88ddcc8015.cs",
+      "bytes": 4747,
+      "sha256": "8ff849f94584a8a59862c0451f8cf10469fc1096cb9ec0b26559ad88ddcc8015",
+      "consumers": [
+        "tests/images/fixtures/user-view-collage/provenance.json"
+      ]
+    },
+    {
+      "source": "D:\\mediamanager\\tests\\library\\fixtures\\library-directory-monitor\\Oracle.csproj",
+      "target": "tests/fixtures/recorded-native/objects/3f2610631c594ffd08dcc82f03d3509abc1c9c9541f159519800df046fc770ee.csproj",
+      "bytes": 403,
+      "sha256": "3f2610631c594ffd08dcc82f03d3509abc1c9c9541f159519800df046fc770ee",
+      "consumers": [
+        "tests/library/fixtures/library-directory-monitor/provenance.json"
+      ]
+    },
+    {
+      "source": "D:\\mediamanager\\tests\\library\\fixtures\\library-directory-monitor\\Program.cs",
+      "target": "tests/fixtures/recorded-native/objects/feadc16e6f74a738e7f0f6dde86b792483658d6a191e22b88f01a45576df551f.cs",
+      "bytes": 7431,
+      "sha256": "feadc16e6f74a738e7f0f6dde86b792483658d6a191e22b88f01a45576df551f",
+      "consumers": [
+        "tests/library/fixtures/library-directory-monitor/provenance.json"
+      ]
+    }
+  ]
+}

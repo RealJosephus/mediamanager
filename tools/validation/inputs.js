@@ -1,7 +1,7 @@
 import path from 'node:path';
 import { readFile } from 'node:fs/promises';
 import { dependencyClosure, describeFile, filesIn, sha256 } from './inventory.js';
-import { repositoryRoot, validationPath } from './paths.js';
+import { recordedInput, recordedInputMapPath, repositoryRoot, validationPath } from './paths.js';
 
 const isDigest = value => typeof value === 'string' && /^[a-f0-9]{64}$/iu.test(value);
 
@@ -15,22 +15,33 @@ export async function captureInputIdentity({ selected, dependencies, preflight, 
     targets.get(absolute).invalidDigest ||= invalidDigest;
     for (const digest of expectedDigests) targets.get(absolute).expectedDigests.add(digest);
   };
-  const inspectedManifests = new Set();
-  const inspectedDirectories = new Set();
+  // A shared fixture can be reached by several consumers. Deduplicate traversal
+  // per consumer so every transitive input retains its actual dependency owners.
+  const inspectedManifests = new Map(), inspectedDirectories = new Map();
+  const directoryFiles = new Map(), manifestContents = new Map();
+  function alreadyInspected(cache, filename, reason) {
+    if (!cache.has(filename)) cache.set(filename, new Set());
+    const consumers = cache.get(filename);
+    if (consumers.has(reason)) return true;
+    consumers.add(reason); return false;
+  }
   async function bindDirectoryManifests(directory, reason) {
-    if (inspectedDirectories.has(directory)) return;
-    inspectedDirectories.add(directory);
-    let files;
-    try { files = await filesIn(directory); }
-    catch (error) { if (error.code === 'ENOENT') return; throw error; }
+    if (alreadyInspected(inspectedDirectories, directory, reason)) return;
+    if (!directoryFiles.has(directory)) {
+      try { directoryFiles.set(directory, await filesIn(directory)); }
+      catch (error) { if (error.code === 'ENOENT') directoryFiles.set(directory, []); else throw error; }
+    }
+    const files = directoryFiles.get(directory);
     for (const file of files.filter(file => file.endsWith('.json'))) await bindManifestReferences(file, reason);
   }
   async function bindManifestReferences(filename, reason) {
-    if (inspectedManifests.has(filename) || !filename.endsWith('.json')) return;
-    inspectedManifests.add(filename);
-    let content;
-    try { content = JSON.parse(await readFile(filename, 'utf8')); }
-    catch (error) { if (error.code === 'ENOENT' || error instanceof SyntaxError) return; throw error; }
+    if (!filename.endsWith('.json') || alreadyInspected(inspectedManifests, filename, reason)) return;
+    if (!manifestContents.has(filename)) {
+      try { manifestContents.set(filename, JSON.parse(await readFile(filename, 'utf8'))); }
+      catch (error) { if (error.code === 'ENOENT' || error instanceof SyntaxError) manifestContents.set(filename, null); else throw error; }
+    }
+    const content = manifestContents.get(filename);
+    if (content === null) return;
     const references = new Map();
     const reference = (target, descriptor) => {
       const previous = references.get(target), expectedDigests = new Set(previous?.expectedDigests ?? []);
@@ -54,15 +65,17 @@ export async function captureInputIdentity({ selected, dependencies, preflight, 
             expectedDigests: declaredDigests.filter(isDigest), invalidDigest });
         } else {
           const sourcePath = ['sourceInstance', 'sourceDatabase', 'sourceRoot', 'initialDatabase', 'manifestPath'].includes(key);
-          const target = validationPath(value, repositoryRoot, environment);
+          const mapped = recordedInput(value, declaredDigests.filter(isDigest));
+          const target = mapped?.filename ?? validationPath(value, repositoryRoot, environment);
           const local = path.relative(repositoryRoot, target).replaceAll('\\', '/');
           const workspaceInput = /^(?:\.agent-temp|\.tools|\.test-output)(?:\/|$)/u.test(local);
           const initializedRoot = key === 'root' && owner?.initializedFromEmpty === true;
           const absolute = path.isAbsolute(value) || /^[A-Za-z]:[\\/]/u.test(value);
           if (!/[\r\n]/u.test(value) && (((hashBound || requiredPin) && (absolute || workspaceInput)) || (workspaceInput && (sourcePath || initializedRoot)))) {
             // Explicit hash-bound/source descriptors are inputs; ordinary DTO Path values are business data.
+            if (mapped) add(recordedInputMapPath, `${reason}:recorded-input-map`);
             reference(target, { logical: value, siblingDirectory: false, required: owner?.required === true,
-              expectedDigests: declaredDigests.filter(isDigest), invalidDigest });
+              expectedDigests: [...declaredDigests.filter(isDigest), ...(mapped ? [mapped.sha256] : [])], invalidDigest });
           }
         }
       } else if (value && typeof value === 'object') {

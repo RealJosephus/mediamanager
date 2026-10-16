@@ -1,0 +1,246 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-16T04:52:10.265Z",
+  "project": "D:\\mediamanager\\tests\\images\\fixtures\\user-view-collage\\Oracle.csproj",
+  "dotnet": {
+    "filename": "D:\\mediamanager\\.tools\\dotnet\\dotnet.exe",
+    "available": true,
+    "kind": "file",
+    "bytes": 167208,
+    "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6"
+  },
+  "node": "v24.16.0",
+  "timezone": "Asia/Taipei",
+  "jellyfinDll": {
+    "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll",
+    "available": true,
+    "kind": "file",
+    "bytes": 506368,
+    "sha256": "474c7c638fe93cc61f1a588849fb93c81a2927388f6f4cf19953b3a76e9deb26"
+  },
+  "sourceFiles": [
+    {
+      "filename": "D:\\mediamanager\\tests\\images\\fixtures\\user-view-collage\\Oracle.csproj",
+      "available": true,
+      "kind": "file",
+      "bytes": 769,
+      "sha256": "7108dd70190c64098b4dd90c9597d73a107f17e8d403be6624c146f2f6a78e01"
+    },
+    {
+      "filename": "D:\\mediamanager\\tests\\Directory.Build.props",
+      "available": true,
+      "kind": "file",
+      "bytes": 780,
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    },
+    {
+      "filename": "D:\\mediamanager\\tests\\images\\fixtures\\user-view-collage\\Program.cs",
+      "available": true,
+      "kind": "file",
+      "bytes": 4747,
+      "sha256": "8ff849f94584a8a59862c0451f8cf10469fc1096cb9ec0b26559ad88ddcc8015"
+    }
+  ],
+  "sourceFilesSha256": "cad683027dfeec9ea11abd2ebcecf59e79ee4b5e3b00fbb7fc5c72e29c3b397c",
+  "build": {
+    "args": [
+      "build",
+      "D:\\mediamanager-validation\\20261016-user-view-collage\\native-2\\project\\Oracle.csproj",
+      "-c",
+      "Release",
+      "--nologo",
+      "-v",
+      "minimal",
+      "-p:BaseOutputPath=D:\\mediamanager-validation\\20261016-user-view-collage\\native-2\\bin\\",
+      "-p:BaseIntermediateOutputPath=D:\\mediamanager-validation\\20261016-user-view-collage\\native-2\\obj\\"
+    ],
+    "status": 0,
+    "signal": null
+  },
+  "process": {
+    "args": [
+      "D:\\mediamanager-validation\\20261016-user-view-collage\\native-2\\bin\\Release\\net10.0\\Oracle.dll",
+      "D:\\mediamanager-validation\\20261016-user-view-collage\\native-2"
+    ],
+    "status": 0,
+    "signal": null
+  },
+  "outputs": [
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-user-view-collage\\native-2\\alpha.png",
+      "available": true,
+      "kind": "file",
+      "bytes": 453220,
+      "sha256": "dd43a6bccb6db8aae88f243eb1bb16ccbca15b43c76ffffa321a4a760e7b7d52"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-user-view-collage\\native-2\\build.stderr.txt",
+      "available": true,
+      "kind": "file",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-user-view-collage\\native-2\\build.stdout.txt",
+      "available": true,
+      "kind": "file",
+      "bytes": 348,
+      "sha256": "7a9658fd2b142d41bacf369bcaf7203fabc161f851906dab49b739178d26ecf9"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-user-view-collage\\native-2\\empty.png",
+      "available": true,
+      "kind": "file",
+      "bytes": 3277,
+      "sha256": "6b8d7b329a78502060a2f9979dfe1313e0cd29d5de19b99f31c7d3aae3fc8c47"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-user-view-collage\\native-2\\invalid.png",
+      "available": true,
+      "kind": "file",
+      "bytes": 3277,
+      "sha256": "6b8d7b329a78502060a2f9979dfe1313e0cd29d5de19b99f31c7d3aae3fc8c47"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-user-view-collage\\native-2\\large.png",
+      "available": true,
+      "kind": "file",
+      "bytes": 104148,
+      "sha256": "3761da20afe2dea8c1de5fe6ff246a5c547c65493755c0102c56a491d16a9e79"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-user-view-collage\\native-2\\native.json",
+      "available": true,
+      "kind": "file",
+      "bytes": 9399,
+      "sha256": "fcab77733b421ff265ca8891d56cb77620f51f058fe0f5087460c7e06d066510"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-user-view-collage\\native-2\\portrait.png",
+      "available": true,
+      "kind": "file",
+      "bytes": 359682,
+      "sha256": "182dc08c2a99e55394d08f3e88e00fd317f9d639d79be77119c99b02054ef566"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-user-view-collage\\native-2\\same.png",
+      "available": true,
+      "kind": "file",
+      "bytes": 59065,
+      "sha256": "4ab107af86f933959fa73156fd71567719b0e4b2ae4abec2d67ad75ca0667143"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-user-view-collage\\native-2\\skip.png",
+      "available": true,
+      "kind": "file",
+      "bytes": 59065,
+      "sha256": "4ab107af86f933959fa73156fd71567719b0e4b2ae4abec2d67ad75ca0667143"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-user-view-collage\\native-2\\small.png",
+      "available": true,
+      "kind": "file",
+      "bytes": 318556,
+      "sha256": "ceffb9a90027fdcf5a3206b58962e633a12d2491a45d8f348ec5121985a3e567"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-user-view-collage\\native-2\\stderr.txt",
+      "available": true,
+      "kind": "file",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-user-view-collage\\native-2\\stdout.txt",
+      "available": true,
+      "kind": "file",
+      "bytes": 271,
+      "sha256": "708e70099b8236d0eab78351c6b27e0d8b7af3a30c0162dd10826270283335fc"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-user-view-collage\\native-2\\text-11.png",
+      "available": true,
+      "kind": "file",
+      "bytes": 73385,
+      "sha256": "3c4f7a45eeb31a9db02e3725fdbc26be4058e68f43e80bbe1c99b1d17eed3484"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-user-view-collage\\native-2\\text-12.png",
+      "available": true,
+      "kind": "file",
+      "bytes": 74425,
+      "sha256": "0b8f3bc5fd5f95019ee0d0a4a87679d9846177bc40e503bf4cd3a755701d0b8f"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-user-view-collage\\native-2\\text-13.png",
+      "available": true,
+      "kind": "file",
+      "bytes": 79191,
+      "sha256": "d76a472a5e3b869c91f356409152f087299c0fc893371a636dd61a96add2a6d5"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-user-view-collage\\native-2\\text-14.png",
+      "available": true,
+      "kind": "file",
+      "bytes": 70193,
+      "sha256": "b2b685a0439c5aeb98c2f223381b629fc84acface3aba6a25e11c1f10ed052e7"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-user-view-collage\\native-2\\text-15.png",
+      "available": true,
+      "kind": "file",
+      "bytes": 73838,
+      "sha256": "1b9989446b1a94ebda5c28b2b140181263dce1658c5133617bb2cbf655f91d2d"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-user-view-collage\\native-2\\text-16.png",
+      "available": true,
+      "kind": "file",
+      "bytes": 81169,
+      "sha256": "82f37c4ce6f2cc963ba9617c19332aa908d61856a026b04b774359154b9af5fc"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-user-view-collage\\native-2\\text-17.png",
+      "available": true,
+      "kind": "file",
+      "bytes": 69104,
+      "sha256": "04c2e8ccbf2306f456d0e2487d1882bd38204f70554904b64cfa3a4f0e05a2d7"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-user-view-collage\\native-2\\text-18.png",
+      "available": true,
+      "kind": "file",
+      "bytes": 68727,
+      "sha256": "d7ed83a008063efb022886faf4fa2f6fd4b1f8e883a7e1d06f9b5ebc1e7935cd"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-user-view-collage\\native-2\\text-19.png",
+      "available": true,
+      "kind": "file",
+      "bytes": 73066,
+      "sha256": "fb719dd2c855a089d5d857cd90905031eccfdc4079ca2b7e229d656f52d42216"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-user-view-collage\\native-2\\text-20.png",
+      "available": true,
+      "kind": "file",
+      "bytes": 78809,
+      "sha256": "2c10d4324d58f3bc51cca3d49f83ef746e2b30b78d53d3ee3af1033e3fb0f14e"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-user-view-collage\\native-2\\wide.png",
+      "available": true,
+      "kind": "file",
+      "bytes": 17164,
+      "sha256": "8f2a288b4882d085a54151c8575e3bb09761942724b1f45ffb75af55c8a9f68f"
+    }
+  ],
+  "oracleAssembly": {
+    "filename": "D:\\mediamanager-validation\\20261016-user-view-collage\\native-2\\bin\\Release\\net10.0\\Oracle.dll",
+    "available": true,
+    "kind": "file",
+    "bytes": 21504,
+    "sha256": "3d80a4f533b6ce90253a450ee2d840c6f7f9ef8f3a452f0a810dd81217d85622"
+  },
+  "passed": true
+}

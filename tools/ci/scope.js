@@ -76,28 +76,36 @@ export function repositoryRelative(filename) {
   return relative !== '..' && !relative.startsWith('../') && !path.isAbsolute(relative) ? relative : null;
 }
 
-function rootsFor(entry, environment) {
-  return [...entry.declaredReferences.filter(reference => reference.required).map(reference => {
-    if (reference.dynamic) {
-      const prefix = reference.logicalPath.split(/\$\{|[?*]/u)[0];
-      return validationPath(prefix.endsWith('/') ? prefix : path.dirname(prefix), repositoryRoot, environment);
+export function restrictToRequested(classification, raw = '') {
+  if (typeof raw !== 'string') throw new TypeError('Requested tests must be newline- or comma-separated text.');
+  const requested = raw.split(/[\r\n,]+/u).map(value => value.trim()).filter(Boolean);
+  if (!requested.length) return { requested, infrastructureErrors: [] };
+  const discovered = new Set(classification.records.map(record => record.path));
+  const names = new Set();
+  // Validate the entire request before mutating the available-input selection.
+  for (const filename of requested) {
+    if (names.has(filename)) throw new Error(`Duplicate requested test: ${filename}`);
+    if (!discovered.has(filename)) throw new Error(`Unknown requested test: ${filename}`);
+    names.add(filename);
+  }
+  const infrastructureErrors = [];
+  for (const record of classification.records) {
+    if (!names.has(record.path)) {
+      record.selected = false;
+      if (!record.reasons.some(reason => reason.code === 'not-requested')) record.reasons.push({ code: 'not-requested' });
+    } else if (!record.selected) {
+      infrastructureErrors.push({ code: 'requested-test-unavailable', filename: record.path, reasons: [...record.reasons] });
     }
-    return reference.kind === 'file' ? path.dirname(reference.filename) : reference.filename;
-  }), ...entry.fixtureReferences.map(reference => path.dirname(reference.filename))];
-}
-
-function overlaps(left, right) {
-  const relative = path.relative(left, right);
-  return relative === '' || relative !== '..' && !relative.startsWith('..' + path.sep) && !path.isAbsolute(relative);
+  }
+  return { requested, infrastructureErrors };
 }
 
 export async function classify({ dependencies, tracked, environment, platform = process.platform }) {
-  const records = [], closures = new Map(), roots = new Map();
+  const records = [], closures = new Map();
   const guards = new Map();
   // Provisioning failures must fail execution, never make the selected scope smaller.
   const plannedEnvironment = { ...environment, MEDIAMANAGER_TEST_POSTGRES: environment.MEDIAMANAGER_TEST_POSTGRES || '<provisioned>',
     MEDIAMANAGER_DOTNET: environment.MEDIAMANAGER_DOTNET || '<provisioned>' };
-  for (const entry of dependencies.entries) roots.set(entry.path, rootsFor(entry, environment));
   const shipped = filename => {
     const relative = repositoryRelative(filename);
     return relative !== null && (tracked.has(relative) || [...tracked].some(file => file.startsWith(relative + '/')));
@@ -140,15 +148,22 @@ export async function classify({ dependencies, tracked, environment, platform = 
     record.selected = record.reasons.length === 0;
     records.push(record);
   }
-  return { records, closures, roots };
+  return { records, closures };
 }
 
 export function applyInputIdentity(classification, identity, tracked) {
   const infrastructureErrors = [];
+  const sources = [...new Set([...classification.closures.values()].flatMap(closure => [...closure]))];
   for (const input of identity.entries.filter(entry => entry.required)) {
     const runtime = input.reasons.some(reason => reason.startsWith('runtime:'));
     const relative = repositoryRelative(input.filename);
-    let code = !input.available ? 'input-unavailable' : input.expectedDigestMatched === false ? 'input-digest-mismatch' : null;
+    let code = input.invalidExpectedDigest ? 'input-digest-mismatch'
+      : !input.available ? 'input-unavailable' : input.expectedDigestMatched === false ? 'input-digest-mismatch' : null;
+    // A supplied input that fails its pinned digest is corrupt, not an absent
+    // platform dependency. Preserve selection and fail the validation attempt.
+    if (code === 'input-digest-mismatch') {
+      infrastructureErrors.push({ code, filename: input.filename, reasons: input.reasons }); continue;
+    }
     if (!runtime && !code) {
       const inspect = (description, prefix) => description.kind === 'directory'
         ? description.entries?.every(child => inspect(child, prefix + '/' + child.name))
@@ -157,13 +172,10 @@ export function applyInputIdentity(classification, identity, tracked) {
     }
     if (!code) continue;
     if (runtime) { infrastructureErrors.push({ code, filename: input.filename, reasons: input.reasons }); continue; }
-    const owners = [...classification.roots.keys()].filter(source => input.reasons.some(reason => reason.startsWith(source + ':')));
-    const sharedRoots = owners.flatMap(owner => classification.roots.get(owner));
-    const affectedSources = new Set([...owners, ...[...classification.roots].filter(([, roots]) =>
-      roots.some(root => sharedRoots.some(shared => overlaps(root, shared) || overlaps(shared, root)))).map(([source]) => source)]);
+    const owners = sources.filter(source => input.reasons.some(reason => reason.startsWith(source + ':')));
     let attributed = false;
     for (const record of classification.records) {
-      if (![...affectedSources].some(source => classification.closures.get(record.path).has(source))) continue;
+      if (!owners.some(source => classification.closures.get(record.path).has(source))) continue;
       record.reasons.push({ code, filename: input.filename, reasons: input.reasons });
       record.selected = false; attributed = true;
     }

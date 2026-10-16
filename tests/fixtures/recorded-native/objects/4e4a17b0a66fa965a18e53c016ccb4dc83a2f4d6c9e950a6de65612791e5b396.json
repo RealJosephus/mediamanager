@@ -1,0 +1,645 @@
+{
+  "actualLibraryMonitor": true,
+  "actualFileRefresher": true,
+  "inputSha256": "767a084f5e45ca7b153ecbf0e14ef292ac6cccf7e787f45ed04f2084a18357d7",
+  "windows": true,
+  "assemblies": [
+    {
+      "name": "Emby.Server.Implementations",
+      "path": "D:\\mediamanager-validation\\20261016-monitor-stage\\monitor-native-2\\bin\\Release\\net10.0\\Emby.Server.Implementations.dll",
+      "sha256": "9c732ba80d1b1980c36d2d64780da28d64c0a8d503bf044c89bc35285eab219e"
+    },
+    {
+      "name": "MediaBrowser.Controller",
+      "path": "D:\\mediamanager-validation\\20261016-monitor-stage\\monitor-native-2\\bin\\Release\\net10.0\\MediaBrowser.Controller.dll",
+      "sha256": "e4f1e201e43c9e22fd07cbd0ed2c52c427b0bdaa2dfe0ed5e5ab7ee604b537cf"
+    },
+    {
+      "name": "System.Private.CoreLib",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Private.CoreLib.dll",
+      "sha256": "1125acc8106c43fc8bad2d203c4c4485df6182d292846c2fff415c1040c54678"
+    }
+  ],
+  "results": [
+    {
+      "name": "same-path",
+      "eventCalls": [
+        {
+          "action": "info",
+          "path": "$ROOT\\media\\one.mkv"
+        },
+        {
+          "action": "invalidate",
+          "path": "$ROOT\\media\\one.mkv"
+        },
+        {
+          "action": "info",
+          "path": "$ROOT\\media\\one.mkv"
+        },
+        {
+          "action": "invalidate",
+          "path": "$ROOT\\media\\one.mkv"
+        }
+      ],
+      "batches": [
+        [
+          {
+            "action": "lookup",
+            "path": "$ROOT\\media\\one.mkv"
+          },
+          {
+            "action": "refresh",
+            "path": "$ROOT\\media\\one.mkv"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "siblings",
+      "eventCalls": [
+        {
+          "action": "info",
+          "path": "$ROOT\\media\\one.mkv"
+        },
+        {
+          "action": "invalidate",
+          "path": "$ROOT\\media\\one.mkv"
+        },
+        {
+          "action": "info",
+          "path": "$ROOT\\media\\two.mkv"
+        },
+        {
+          "action": "invalidate",
+          "path": "$ROOT\\media\\two.mkv"
+        },
+        {
+          "action": "info",
+          "path": "$ROOT\\media\\nested\\three.mkv"
+        },
+        {
+          "action": "invalidate",
+          "path": "$ROOT\\media\\nested\\three.mkv"
+        }
+      ],
+      "batches": [
+        [
+          {
+            "action": "lookup",
+            "path": "$ROOT\\media\\one.mkv"
+          },
+          {
+            "action": "lookup",
+            "path": "$ROOT\\media"
+          },
+          {
+            "action": "lookup",
+            "path": "$ROOT\\media\\two.mkv"
+          },
+          {
+            "action": "lookup",
+            "path": "$ROOT\\media\\nested\\three.mkv"
+          },
+          {
+            "action": "refresh",
+            "path": "$ROOT\\media\\one.mkv"
+          },
+          {
+            "action": "refresh",
+            "path": "$ROOT\\media"
+          },
+          {
+            "action": "refresh",
+            "path": "$ROOT\\media\\two.mkv"
+          },
+          {
+            "action": "refresh",
+            "path": "$ROOT\\media\\nested\\three.mkv"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "parent-after-child",
+      "eventCalls": [
+        {
+          "action": "info",
+          "path": "$ROOT\\media\\nested\\one.mkv"
+        },
+        {
+          "action": "invalidate",
+          "path": "$ROOT\\media\\nested\\one.mkv"
+        },
+        {
+          "action": "info",
+          "path": "$ROOT\\media"
+        },
+        {
+          "action": "invalidate",
+          "path": "$ROOT\\media"
+        }
+      ],
+      "batches": [
+        [
+          {
+            "action": "lookup",
+            "path": "$ROOT\\media\\nested\\one.mkv"
+          },
+          {
+            "action": "lookup",
+            "path": "$ROOT\\media"
+          },
+          {
+            "action": "refresh",
+            "path": "$ROOT\\media\\nested\\one.mkv"
+          },
+          {
+            "action": "refresh",
+            "path": "$ROOT\\media"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "first-matching-batch",
+      "eventCalls": [
+        {
+          "action": "info",
+          "path": "$ROOT\\media\\one\\film.mkv"
+        },
+        {
+          "action": "invalidate",
+          "path": "$ROOT\\media\\one\\film.mkv"
+        },
+        {
+          "action": "info",
+          "path": "$ROOT\\media\\two\\film.mkv"
+        },
+        {
+          "action": "invalidate",
+          "path": "$ROOT\\media\\two\\film.mkv"
+        },
+        {
+          "action": "info",
+          "path": "$ROOT\\media"
+        },
+        {
+          "action": "invalidate",
+          "path": "$ROOT\\media"
+        }
+      ],
+      "batches": [
+        [
+          {
+            "action": "lookup",
+            "path": "$ROOT\\media\\one\\film.mkv"
+          },
+          {
+            "action": "lookup",
+            "path": "$ROOT\\media"
+          },
+          {
+            "action": "refresh",
+            "path": "$ROOT\\media\\one\\film.mkv"
+          },
+          {
+            "action": "refresh",
+            "path": "$ROOT\\media"
+          }
+        ],
+        [
+          {
+            "action": "lookup",
+            "path": "$ROOT\\media\\two\\film.mkv"
+          },
+          {
+            "action": "refresh",
+            "path": "$ROOT\\media\\two\\film.mkv"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "ordinal-sibling-parent",
+      "eventCalls": [
+        {
+          "action": "info",
+          "path": "$ROOT\\Media\\one.mkv"
+        },
+        {
+          "action": "invalidate",
+          "path": "$ROOT\\Media\\one.mkv"
+        },
+        {
+          "action": "info",
+          "path": "$ROOT\\media\\two.mkv"
+        },
+        {
+          "action": "invalidate",
+          "path": "$ROOT\\media\\two.mkv"
+        }
+      ],
+      "batches": [
+        [
+          {
+            "action": "lookup",
+            "path": "$ROOT\\Media\\one.mkv"
+          },
+          {
+            "action": "refresh",
+            "path": "$ROOT\\Media\\one.mkv"
+          }
+        ],
+        [
+          {
+            "action": "lookup",
+            "path": "$ROOT\\media\\two.mkv"
+          },
+          {
+            "action": "refresh",
+            "path": "$ROOT\\media\\two.mkv"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "case-insensitive-same-path",
+      "eventCalls": [
+        {
+          "action": "info",
+          "path": "$ROOT\\media\\one.mkv"
+        },
+        {
+          "action": "invalidate",
+          "path": "$ROOT\\media\\one.mkv"
+        },
+        {
+          "action": "info",
+          "path": "$ROOT\\MEDIA\\ONE.MKV"
+        },
+        {
+          "action": "invalidate",
+          "path": "$ROOT\\MEDIA\\ONE.MKV"
+        }
+      ],
+      "batches": [
+        [
+          {
+            "action": "lookup",
+            "path": "$ROOT\\media\\one.mkv"
+          },
+          {
+            "action": "refresh",
+            "path": "$ROOT\\media\\one.mkv"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "raw-separator-prefix",
+      "eventCalls": [
+        {
+          "action": "info",
+          "path": "$ROOT\\media\\one.mkv"
+        },
+        {
+          "action": "invalidate",
+          "path": "$ROOT\\media\\one.mkv"
+        },
+        {
+          "action": "info",
+          "path": "$ROOT\\other\\media\\one.mkv"
+        },
+        {
+          "action": "invalidate",
+          "path": "$ROOT\\other\\media\\one.mkv"
+        },
+        {
+          "action": "info",
+          "path": "$ROOT\\media2\\one.mkv"
+        },
+        {
+          "action": "invalidate",
+          "path": "$ROOT\\media2\\one.mkv"
+        }
+      ],
+      "batches": [
+        [
+          {
+            "action": "lookup",
+            "path": "$ROOT\\media\\one.mkv"
+          },
+          {
+            "action": "refresh",
+            "path": "$ROOT\\media\\one.mkv"
+          }
+        ],
+        [
+          {
+            "action": "lookup",
+            "path": "$ROOT\\other\\media\\one.mkv"
+          },
+          {
+            "action": "refresh",
+            "path": "$ROOT\\other\\media\\one.mkv"
+          }
+        ],
+        [
+          {
+            "action": "lookup",
+            "path": "$ROOT\\media2\\one.mkv"
+          },
+          {
+            "action": "refresh",
+            "path": "$ROOT\\media2\\one.mkv"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "temporary-suppression",
+      "eventCalls": [
+        {
+          "action": "info",
+          "path": "$ROOT\\media\\Album\\album.nfo"
+        },
+        {
+          "action": "invalidate",
+          "path": "$ROOT\\media\\Album\\album.nfo"
+        },
+        {
+          "action": "info",
+          "path": "$ROOT\\media\\Album\\album.nfo\\child"
+        },
+        {
+          "action": "invalidate",
+          "path": "$ROOT\\media\\Album\\album.nfo\\child"
+        },
+        {
+          "action": "info",
+          "path": "$ROOT\\media\\Album"
+        },
+        {
+          "action": "invalidate",
+          "path": "$ROOT\\media\\Album"
+        },
+        {
+          "action": "info",
+          "path": "$ROOT\\media\\Album\\film.mkv"
+        },
+        {
+          "action": "invalidate",
+          "path": "$ROOT\\media\\Album\\film.mkv"
+        }
+      ],
+      "batches": [
+        [
+          {
+            "action": "lookup",
+            "path": "$ROOT\\media\\Album\\film.mkv"
+          },
+          {
+            "action": "refresh",
+            "path": "$ROOT\\media\\Album\\film.mkv"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "core-ignore",
+      "eventCalls": [
+        {
+          "action": "info",
+          "path": "$ROOT\\media\\valid.mkv"
+        },
+        {
+          "action": "invalidate",
+          "path": "$ROOT\\media\\valid.mkv"
+        }
+      ],
+      "batches": [
+        [
+          {
+            "action": "lookup",
+            "path": "$ROOT\\media\\valid.mkv"
+          },
+          {
+            "action": "refresh",
+            "path": "$ROOT\\media\\valid.mkv"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "dot-ignore",
+      "eventCalls": [
+        {
+          "action": "info",
+          "path": "$ROOT\\media\\ignored"
+        },
+        {
+          "action": "info",
+          "path": "$ROOT\\media\\ignored\\child.mkv"
+        },
+        {
+          "action": "info",
+          "path": "$ROOT\\media\\valid.mkv"
+        },
+        {
+          "action": "invalidate",
+          "path": "$ROOT\\media\\valid.mkv"
+        }
+      ],
+      "batches": [
+        [
+          {
+            "action": "lookup",
+            "path": "$ROOT\\media\\valid.mkv"
+          },
+          {
+            "action": "refresh",
+            "path": "$ROOT\\media\\valid.mkv"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "lookup-and-refresh-failures",
+      "eventCalls": [
+        {
+          "action": "info",
+          "path": "$ROOT\\media\\fail.mkv"
+        },
+        {
+          "action": "invalidate",
+          "path": "$ROOT\\media\\fail.mkv"
+        },
+        {
+          "action": "info",
+          "path": "$ROOT\\media\\other.mkv"
+        },
+        {
+          "action": "invalidate",
+          "path": "$ROOT\\media\\other.mkv"
+        },
+        {
+          "action": "info",
+          "path": "$ROOT\\media\\last.mkv"
+        },
+        {
+          "action": "invalidate",
+          "path": "$ROOT\\media\\last.mkv"
+        }
+      ],
+      "batches": [
+        [
+          {
+            "action": "lookup",
+            "path": "$ROOT\\media\\fail.mkv"
+          },
+          {
+            "action": "error",
+            "path": "lookup"
+          },
+          {
+            "action": "lookup",
+            "path": "$ROOT\\media"
+          },
+          {
+            "action": "lookup",
+            "path": "$ROOT\\media\\other.mkv"
+          },
+          {
+            "action": "lookup",
+            "path": "$ROOT\\media\\last.mkv"
+          },
+          {
+            "action": "refresh",
+            "path": "$ROOT\\media"
+          },
+          {
+            "action": "error",
+            "path": "refresh"
+          },
+          {
+            "action": "refresh",
+            "path": "$ROOT\\media\\other.mkv"
+          },
+          {
+            "action": "refresh",
+            "path": "$ROOT\\media\\last.mkv"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "same-item-deduplication",
+      "eventCalls": [
+        {
+          "action": "info",
+          "path": "$ROOT\\media\\one.mkv"
+        },
+        {
+          "action": "invalidate",
+          "path": "$ROOT\\media\\one.mkv"
+        },
+        {
+          "action": "info",
+          "path": "$ROOT\\media\\two.mkv"
+        },
+        {
+          "action": "invalidate",
+          "path": "$ROOT\\media\\two.mkv"
+        }
+      ],
+      "batches": [
+        [
+          {
+            "action": "lookup",
+            "path": "$ROOT\\media\\one.mkv"
+          },
+          {
+            "action": "lookup",
+            "path": "$ROOT\\media"
+          },
+          {
+            "action": "lookup",
+            "path": "$ROOT\\media\\two.mkv"
+          },
+          {
+            "action": "refresh",
+            "path": "$ROOT\\media\\one.mkv"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "aggregate-not-refreshed",
+      "eventCalls": [
+        {
+          "action": "info",
+          "path": "$ROOT\\media\\one.mkv"
+        },
+        {
+          "action": "invalidate",
+          "path": "$ROOT\\media\\one.mkv"
+        },
+        {
+          "action": "info",
+          "path": "$ROOT\\media\\two.mkv"
+        },
+        {
+          "action": "invalidate",
+          "path": "$ROOT\\media\\two.mkv"
+        }
+      ],
+      "batches": [
+        [
+          {
+            "action": "lookup",
+            "path": "$ROOT\\media\\one.mkv"
+          },
+          {
+            "action": "lookup",
+            "path": "$ROOT\\media"
+          },
+          {
+            "action": "lookup",
+            "path": "$ROOT\\media\\two.mkv"
+          },
+          {
+            "action": "refresh",
+            "path": "$ROOT\\media\\one.mkv"
+          },
+          {
+            "action": "refresh",
+            "path": "$ROOT\\media\\two.mkv"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "stop-discards-batches",
+      "eventCalls": [
+        {
+          "action": "info",
+          "path": "$ROOT\\media\\one.mkv"
+        },
+        {
+          "action": "invalidate",
+          "path": "$ROOT\\media\\one.mkv"
+        },
+        {
+          "action": "info",
+          "path": "$ROOT\\media\\two.mkv"
+        },
+        {
+          "action": "invalidate",
+          "path": "$ROOT\\media\\two.mkv"
+        }
+      ],
+      "batches": []
+    }
+  ],
+  "scope": "Actual LibraryMonitor ReportFileSystemChanged, temporary suppression, core/.ignore filtering, affected-path coalescing, Stop, FileRefresher timer completion, lookup failure continuation, ID deduplication, AggregateFolder exclusion and per-item refresh failure continuation. ManagedFileSystem and .ignore read real isolated directories. Timer callbacks are invoked directly after events; library lookup and ChangedExternally are controlled. No native watcher, forty-five-second wall-clock wait, production SQL/provider dispatch, or release acceptance."
+}

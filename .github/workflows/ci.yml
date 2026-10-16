@@ -5,12 +5,18 @@ on:
     branches: [main]
   pull_request:
   workflow_dispatch:
+    inputs:
+      test_files:
+        description: Exact test paths separated by commas or newlines; leave empty for all available tests
+        type: string
+        required: false
+        default: ''
 
 permissions:
   contents: read
 
 concurrency:
-  group: validation-${{ github.workflow }}-${{ github.ref }}
+  group: validation-${{ github.workflow }}-${{ github.ref }}-${{ github.event_name == 'workflow_dispatch' && 'manual' || 'automatic' }}
   cancel-in-progress: true
 
 jobs:
@@ -25,6 +31,7 @@ jobs:
     env:
       TZ: Asia/Taipei
       MEDIAMANAGER_TEST_POSTGRES: postgresql://validation@127.0.0.1:5432/postgres
+      MEDIAMANAGER_CI_TEST_FILES: ${{ inputs.test_files || '' }}
       DOTNET_CLI_TELEMETRY_OPTOUT: '1'
       DOTNET_NOLOGO: '1'
     steps:
@@ -81,6 +88,7 @@ jobs:
       - name: Check syntax
         run: npm run check
       - name: Run available strict validation and report complete scope
+        timeout-minutes: 110
         run: node tools/ci/run.js
       - name: Audit database resources
         if: always() && steps.environment.outcome == 'success'
