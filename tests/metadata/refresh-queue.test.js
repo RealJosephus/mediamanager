@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { setTimeout as delay } from 'node:timers/promises';
 import { MetadataRefreshHost } from '../../src/metadata/refresh-host.js';
-import native from './fixtures/refresh-queue-native.json' with { type: 'json' };
+import native from './fixtures/refresh-queue/native.json' with { type: 'json' };
 
 const inputs = {
   'equal-high': { priorities: [0, 0, 0, 0, 0, 0, 0, 0, 0] },

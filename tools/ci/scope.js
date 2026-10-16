@@ -155,14 +155,19 @@ export function applyInputIdentity(classification, identity, tracked) {
   const infrastructureErrors = [];
   const sources = [...new Set([...classification.closures.values()].flatMap(closure => [...closure]))];
   for (const input of identity.entries.filter(entry => entry.required)) {
-    const runtime = input.reasons.some(reason => reason.startsWith('runtime:'));
+    const requiredReasons = input.requiredReasons;
+    if (!Array.isArray(requiredReasons) || !requiredReasons.length
+      || requiredReasons.some(reason => typeof reason !== 'string' || !input.reasons.includes(reason))) {
+      throw new TypeError(`Required input has invalid required-reason ownership: ${input.filename}`);
+    }
+    const runtime = requiredReasons.some(reason => reason.startsWith('runtime:'));
     const relative = repositoryRelative(input.filename);
     let code = input.invalidExpectedDigest ? 'input-digest-mismatch'
       : !input.available ? 'input-unavailable' : input.expectedDigestMatched === false ? 'input-digest-mismatch' : null;
     // A supplied input that fails its pinned digest is corrupt, not an absent
     // platform dependency. Preserve selection and fail the validation attempt.
     if (code === 'input-digest-mismatch') {
-      infrastructureErrors.push({ code, filename: input.filename, reasons: input.reasons }); continue;
+      infrastructureErrors.push({ code, filename: input.filename, reasons: requiredReasons }); continue;
     }
     if (!runtime && !code) {
       const inspect = (description, prefix) => description.kind === 'directory'
@@ -171,16 +176,16 @@ export function applyInputIdentity(classification, identity, tracked) {
       if (relative === null || !inspect(input, relative)) code = 'input-not-shipped';
     }
     if (!code) continue;
-    if (runtime) { infrastructureErrors.push({ code, filename: input.filename, reasons: input.reasons }); continue; }
-    const owners = sources.filter(source => input.reasons.some(reason => reason.startsWith(source + ':')));
+    if (runtime) { infrastructureErrors.push({ code, filename: input.filename, reasons: requiredReasons }); continue; }
+    const owners = sources.filter(source => requiredReasons.some(reason => reason.startsWith(source + ':')));
     let attributed = false;
     for (const record of classification.records) {
       if (!owners.some(source => classification.closures.get(record.path).has(source))) continue;
-      record.reasons.push({ code, filename: input.filename, reasons: input.reasons });
+      record.reasons.push({ code, filename: input.filename, reasons: requiredReasons });
       record.selected = false; attributed = true;
     }
     if (!attributed && !classification.records.some(record => record.reasons.some(reason => reason.filename === input.filename))) {
-      infrastructureErrors.push({ code: 'unattributed-input-failure', filename: input.filename, reasons: input.reasons });
+      infrastructureErrors.push({ code: 'unattributed-input-failure', filename: input.filename, reasons: requiredReasons });
     }
   }
   return infrastructureErrors;

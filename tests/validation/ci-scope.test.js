@@ -38,7 +38,7 @@ test('CI selection retains provisioned dependencies when the current environment
   })] }, tracked: new Set([ownPath]), environment: {} });
   assert.equal(classification.records[0].selected, true);
   const errors = applyInputIdentity(classification, { entries: [{ filename: path.join(repositoryRoot, 'node_modules'),
-    required: true, available: false, reasons: ['runtime:node-modules'] }] }, new Set());
+    required: true, available: false, reasons: ['runtime:node-modules'], requiredReasons: ['runtime:node-modules'] }] }, new Set());
   assert.deepEqual(errors.map(error => error.code), ['input-unavailable']);
   assert.equal(classification.records[0].selected, true, 'a provisioning failure must fail the attempt without narrowing its selection');
 });
@@ -50,7 +50,7 @@ test('CI excludes only consumers of an explicitly unprovisioned service', async 
   assert.equal(classification.records[0].reasons[0].code, 'service-not-provisioned');
 });
 
-test('CI attributes a recursive required input to every actual consumer without excluding sibling fixtures', async t => {
+test('CI attributes a recursive required input to every required consumer while preserving an optional consumer of that same file', async t => {
   const output = path.join(repositoryRoot, '.test-output');
   await mkdir(output, { recursive: true });
   const root = await mkdtemp(path.join(output, 'ci-scope-'));
@@ -67,7 +67,7 @@ test('CI attributes a recursive required input to every actual consumer without 
   const manifest = path.join(root, 'provenance.json');
   await writeFile(manifest, JSON.stringify({ dependency: { filename: recursive, sha256: digest(recursiveBytes), required: true } }));
   const independent = path.join(sibling, 'native.json');
-  await writeFile(independent, '{}');
+  await writeFile(independent, JSON.stringify({ dependency: { filename: missing, sha256: '0'.repeat(64), required: false } }));
   const dependencies = { entries: [entry(ownPath, { fixtureReferences: [description(manifest)] }),
     entry(otherPath, { fixtureReferences: [description(recursive)] }),
     entry(unrelatedPath, { fixtureReferences: [description(independent)] })] };
@@ -77,12 +77,14 @@ test('CI attributes a recursive required input to every actual consumer without 
   assert.ok(classification.records.every(record => record.selected));
   const identity = await captureInputIdentity({ dependencies, selected, environment: {},
     preflight: { ready: true, services: [], tools: [] } });
+  assert.equal(identity.schemaVersion, 2);
   const absent = identity.entries.find(input => input.filename === missing);
   assert.ok(absent?.required);
   for (const consumer of [ownPath, otherPath]) {
-    assert.ok(absent.reasons.some(reason => reason.startsWith(consumer + ':')), `recursive ownership retained for ${consumer}`);
+    assert.ok(absent.requiredReasons.some(reason => reason.startsWith(consumer + ':')), `recursive required ownership retained for ${consumer}`);
   }
-  assert.ok(!absent.reasons.some(reason => reason.startsWith(unrelatedPath + ':')));
+  assert.ok(absent.reasons.some(reason => reason.startsWith(unrelatedPath + ':')), 'optional history remains in the input audit');
+  assert.ok(!absent.requiredReasons.some(reason => reason.startsWith(unrelatedPath + ':')), 'an unrelated requirement must not promote optional ownership');
   assert.deepEqual(applyInputIdentity(classification, { entries: [absent] }, tracked), []);
   assert.deepEqual(classification.records.map(record => record.selected), [false, false, true]);
 });
@@ -92,12 +94,14 @@ test('CI refuses a required digest mismatch without removing the failing consume
     tracked: new Set([ownPath, otherPath]), environment: {} });
   const filename = path.join(repositoryRoot, 'tests', 'fixtures', 'recording.json');
   const errors = applyInputIdentity(classification, { entries: [{ filename, kind: 'file', available: true,
-    required: true, expectedDigestMatched: false, reasons: [ownPath + ':manifest-reference:recording'] }] },
+    required: true, expectedDigestMatched: false, reasons: [ownPath + ':manifest-reference:recording'],
+    requiredReasons: [ownPath + ':manifest-reference:recording'] }] },
   new Set(['tests/fixtures/recording.json']));
   assert.deepEqual(errors.map(error => error.code), ['input-digest-mismatch']);
   assert.ok(classification.records.every(record => record.selected));
   const malformed = applyInputIdentity(classification, { entries: [{ filename, available: false,
-    required: true, invalidExpectedDigest: true, reasons: [ownPath + ':manifest-reference:recording'] }] }, new Set());
+    required: true, invalidExpectedDigest: true, reasons: [ownPath + ':manifest-reference:recording'],
+    requiredReasons: [ownPath + ':manifest-reference:recording'] }] }, new Set());
   assert.deepEqual(malformed.map(error => error.code), ['input-digest-mismatch'], 'a malformed required pin cannot become an unavailable-input exclusion');
   assert.ok(classification.records.every(record => record.selected));
 });
@@ -106,9 +110,9 @@ test('CI retains optional historical provenance and fails an unattributed requir
   const classification = await classify({ dependencies: { entries: [entry(ownPath)] }, tracked: new Set([ownPath]), environment: {} });
   const filename = path.join(repositoryRoot, 'unavailable-history.json');
   assert.deepEqual(applyInputIdentity(classification, { entries: [{ filename, available: false,
-    required: false, reasons: [ownPath + ':historical-provenance'] }] }, new Set()), []);
+    required: false, reasons: [ownPath + ':historical-provenance'], requiredReasons: [] }] }, new Set()), []);
   const errors = applyInputIdentity(classification, { entries: [{ filename, available: false,
-    required: true, reasons: ['unknown-consumer:manifest-reference'] }] }, new Set());
+    required: true, reasons: ['unknown-consumer:manifest-reference'], requiredReasons: ['unknown-consumer:manifest-reference'] }] }, new Set());
   assert.deepEqual(errors.map(error => error.code), ['unattributed-input-failure']);
   assert.equal(classification.records[0].selected, true);
 });
@@ -144,7 +148,8 @@ test('manual CI requests fail explicitly when declared or recursively discovered
   assert.deepEqual(initial.infrastructureErrors.map(error => [error.code, error.filename]), [['requested-test-unavailable', ownPath]]);
   assert.equal(initial.infrastructureErrors[0].reasons[0].code, 'service-not-provisioned');
   applyInputIdentity(classification, { entries: [{ filename: path.join(repositoryRoot, 'missing-native-input.json'),
-    required: true, available: false, reasons: [otherPath + ':manifest-reference:native-input'] }] }, new Set());
+    required: true, available: false, reasons: [otherPath + ':manifest-reference:native-input'],
+    requiredReasons: [otherPath + ':manifest-reference:native-input'] }] }, new Set());
   const final = restrictToRequested(classification, raw);
   assert.deepEqual(final.requested, [ownPath, otherPath]);
   assert.deepEqual(final.infrastructureErrors.map(error => error.filename), [ownPath, otherPath]);

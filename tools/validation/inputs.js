@@ -9,9 +9,9 @@ export async function captureInputIdentity({ selected, dependencies, preflight, 
   const targets = new Map();
   const add = (filename, reason, required = true, expectedDigests = [], invalidDigest = false) => {
     const absolute = path.resolve(repositoryRoot, filename);
-    if (!targets.has(absolute)) targets.set(absolute, { reasons: new Set(), required: false, expectedDigests: new Set() });
+    if (!targets.has(absolute)) targets.set(absolute, { reasons: new Set(), requiredReasons: new Set(), expectedDigests: new Set() });
     targets.get(absolute).reasons.add(reason);
-    targets.get(absolute).required ||= required;
+    if (required) targets.get(absolute).requiredReasons.add(reason);
     targets.get(absolute).invalidDigest ||= invalidDigest;
     for (const digest of expectedDigests) targets.get(absolute).expectedDigests.add(digest);
   };
@@ -148,10 +148,10 @@ export async function captureInputIdentity({ selected, dependencies, preflight, 
   add(process.execPath, 'runtime:node');
   add(path.join(repositoryRoot, 'node_modules'), 'runtime:node-modules');
   const entries = [];
-  for (const [filename, { reasons, required, expectedDigests, invalidDigest }] of [...targets].sort(([left], [right]) => left.localeCompare(right))) {
+  for (const [filename, { reasons, requiredReasons, expectedDigests, invalidDigest }] of [...targets].sort(([left], [right]) => left.localeCompare(right))) {
     const description = await describeFile(filename, {workspaceLinks:filename===path.join(repositoryRoot,'node_modules')});
     const expected = [...expectedDigests].sort();
-    entries.push({ reasons: [...reasons].sort(), required, ...description,
+    entries.push({ reasons: [...reasons].sort(), requiredReasons: [...requiredReasons].sort(), required: requiredReasons.size > 0, ...description,
       ...(invalidDigest ? { invalidExpectedDigest: true } : {}),
       ...(expected.length || invalidDigest ? { expectedDigests: expected,
         expectedDigestMatched: !invalidDigest && expected.every(digest => digest === (description.sha256 ?? description.entriesSha256)) } : {}) });
@@ -162,7 +162,7 @@ export async function captureInputIdentity({ selected, dependencies, preflight, 
   }));
   const identity = { entries, services, tools, preflightReady: preflight.ready,
     ready: entries.filter(entry => entry.required).every(entry => entry.available && entry.expectedDigestMatched !== false) && preflight.ready };
-  return { schemaVersion: 1, scope: 'Selected tests and their transitive local src/test/tool imports: imported local data files, declared/local fixture inputs, fixture siblings, transitive JSON provenance/hash-bound/source descriptors, configured native/runtime dependencies, Node modules and tool executables; service availability/version. Explicit required descriptors must exist and match every declared digest before execution. Ordinary DTO paths are not interpreted as dependencies. Dynamic reads outside these inputs require separate evidence.',
+  return { schemaVersion: 2, scope: 'Selected tests and their transitive local src/test/tool imports: imported local data files, declared/local fixture inputs, fixture siblings, transitive JSON provenance/hash-bound/source descriptors, configured native/runtime dependencies, Node modules and tool executables; service availability/version. Explicit required descriptors must exist and match every declared digest before execution. Required ownership is recorded per reason; optional consumers of the same file do not inherit another consumer\'s requirement. Ordinary DTO paths are not interpreted as dependencies. Dynamic reads outside these inputs require separate evidence.',
     ...identity, entriesSha256: sha256(JSON.stringify(identity)) };
 }
 
