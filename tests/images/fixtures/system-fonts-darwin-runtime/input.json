@@ -1,0 +1,42 @@
+{
+  "width": 960,
+  "height": 300,
+  "requiredOutlineTag": "hvgl",
+  "cases": [
+    {
+      "name": "cjk",
+      "probe": 40481,
+      "codepoints": [30005, 24433, 38651, 24433, 24235],
+      "size": 112,
+      "positions": [{"x": 80, "y": 210}, {"x": 240, "y": 210}, {"x": 400, "y": 210}, {"x": 560, "y": 210}, {"x": 720, "y": 210}]
+    },
+    {
+      "name": "cjk-fractional",
+      "probe": 38622,
+      "codepoints": [38651, 24433, 24235],
+      "size": 56.5,
+      "positions": [{"x": 88.25, "y": 200.5}, {"x": 251.5, "y": 176.25}, {"x": 520.75, "y": 220.75}]
+    },
+    {
+      "name": "latin-in-fallback",
+      "probe": 40481,
+      "codepoints": [65, 86, 65, 84, 65, 82],
+      "size": 112,
+      "positions": [{"x": 64, "y": 210}, {"x": 208, "y": 210}, {"x": 352, "y": 210}, {"x": 496, "y": 210}, {"x": 640, "y": 210}, {"x": 784, "y": 210}]
+    },
+    {
+      "name": "space-and-missing",
+      "probe": 40481,
+      "codepoints": [32, 1114111, 30005],
+      "size": 112,
+      "positions": [{"x": 80, "y": 210}, {"x": 240, "y": 210}, {"x": 400, "y": 210}]
+    },
+    {
+      "name": "empty",
+      "probe": 40481,
+      "codepoints": [],
+      "size": 112,
+      "positions": []
+    }
+  ]
+}

@@ -10,7 +10,7 @@ let resolution;
 const files = new Map(), faces = new Map(), registrations = new Map();
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const faceKey = face => JSON.stringify([face.path, face.collectionIndex, face.postscriptName ?? null,
-  face.weight, face.width, face.slant, face.namedInstance ?? 0, face.simulations ?? 0, face.nameTableSha256 ?? null]);
+  face.weight, face.width, face.slant, face.namedInstance ?? 0, face.simulations ?? 0, face.nameTableSha256 ?? null, face.variations ?? []]);
 
 /** Resolve the actual OS policy once. Importing this module loads no FFI. */
 export function resolveCollageSystemFonts() {
@@ -83,4 +83,15 @@ export function registerCollageSystemFace(face) {
     return Object.freeze({ ...loaded, canvasFamily });
   })());
   return registrations.get(key);
+}
+
+/** Draw explicit system glyphs; text shaping and fallback remain the caller's work. */
+export async function drawCollageSystemGlyphs(face, options) {
+  if (process.platform !== 'darwin') throw new Error('Direct system glyph drawing is available only on macOS.');
+  const selected = await resolveCollageSystemFonts();
+  if (!face || !selected.fallbackFaces.some(candidate => candidate && faceKey(candidate) === faceKey(face))) {
+    throw new TypeError('System glyph drawing requires an actually selected collage face.');
+  }
+  const { default: koffi } = await import('koffi');
+  return (await import('./darwin.js')).drawDarwinGlyphs(koffi, face, options);
 }

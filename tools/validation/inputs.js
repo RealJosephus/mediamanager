@@ -153,6 +153,7 @@ export async function captureInputIdentity({ selected, dependencies, preflight, 
   // policy only for actual consumers, never merely because that source is in
   // the dependency closure. The renderer opts in when it uses the new bridge.
   const usesSystemFonts = closure.some(entry => ['tests/images/system-fonts-runtime.test.js',
+    'tests/images/system-fonts-darwin-runtime.test.js',
     'tests/validation/input-identity.test.js'].includes(entry.path)
     || entry.path === 'src/images/user-view-collage.js'
       && entry.imports.includes('src/images/system-fonts/index.js'));
