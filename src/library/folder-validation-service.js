@@ -12,14 +12,12 @@ import { buildScanCollectionContext } from './scan-context.js';
 import { itemTopParentId } from './item-save-tuple.js';
 import { resolvedItemStructuralSnapshot } from './resolved-item-lifecycle.js';
 import { isFileProtocol } from './owned-items.js';
-import { ordinalIgnoreCaseKey } from '../storage/ordinal-comparer.js';
 import { setPrimaryVersion } from './live-item-repository.js';
-import { userDataKeys } from '../sessions/user-data.js';
 import { reattachUserData } from '../metadata/persistence.js';
 import { loadPostgresNavigationRows, loadPostgresPageGraph,
-  loadPostgresRowsByIds, queryPostgresValidationChildren } from './postgres-library-query.js';
+  loadPostgresRowsByIds } from './postgres-library-query.js';
 import { createNativeItemCohort } from './native-item-cohort.js';
-import { metadataChildSequence } from './metadata-child-sequence.js';
+import { withFolderValidationScope } from './folder-validation-scope.js';
 import { nativeTextSql } from '../database/native-text-sql.js';
 import { quoteIdentifier as q } from '../database/model.js';
 import { getNewItemId } from '../core/identity.js';
@@ -152,22 +150,6 @@ export class FolderValidationService {
       if (!ignored) candidates.push(candidate);
     }
     return { ...snapshot, candidates };
-  }
-
-  async #currentChildren(parent) {
-    return this.store.run(async db => {
-      const navigationRows = await loadPostgresNavigationRows(db, parent.Id);
-      const childRows = await queryPostgresValidationChildren(db, parent.Id);
-      const childIds = childRows.map(row => idKey(row.Id));
-      const graphRows = await loadPostgresPageGraph(db,
-        [...await loadPostgresRowsByIds(db, [parent.Id]), ...childRows], navigationRows);
-      const state = await this.#state(db, null, { includeUserData: false, baseRows: graphRows });
-      const persisted = state.byId.get(idKey(parent.Id));
-      if (!persisted || !persisted.IsFolder || itemType(persisted) !== itemType(parent)) {
-        throw Object.assign(new Error('Folder not found.'), { status: 404, statusCode: 404 });
-      }
-      return childIds.map(id => state.byId.get(id)).filter(Boolean);
-    }, { readOnly: true, lockTimeoutMs: 250 });
   }
 
   async #collectionContext(parent, collectionType) {
@@ -385,24 +367,6 @@ export class FolderValidationService {
     } });
   }
 
-  async #reattachRemovedUserData(removed, valid, signal) {
-    if (removed.size === 0) return;
-    const matching = await this.store.run(async db => {
-      const removedKeys = new Set();
-      for (const item of removed.values()) {
-        for (const key of await userDataKeys(db, item)) removedKeys.add(key);
-      }
-      const children = [];
-      for (const child of valid.values()) {
-        if ((await userDataKeys(db, child)).some(key => removedKeys.has(key))) children.push(child);
-      }
-      return children;
-    }, { signal, readOnly: true, lockTimeoutMs: 250 });
-    // Native reattaches each valid child independently. A later failure or
-    // cancellation therefore retains deletions, creation and earlier moves.
-    for (const child of matching) await this.reattach(this.store, child, { signal });
-  }
-
   async #assertAcyclic(parent) {
     await this.store.run(async db => {
       const navigationRows = await loadPostgresNavigationRows(db, parent.Id);
@@ -430,14 +394,113 @@ export class FolderValidationService {
     catch { /* A progress observer cannot replace folder validation. */ }
   }
 
-  async #accessibleChildren(children) {
-    const cohort = await createNativeItemCohort({ linkedChildren: this.loadContext.linkedChildren });
-    this.#ownership.getStore().push(() => cohort.release());
-    let ordinal = 0n;
-    for (const child of children.values()) await cohort.capture(child, { ordinal: ++ordinal });
-    const sequence = metadataChildSequence(cohort, this.loadContext.linkedChildren, this.store);
-    this.#ownership.getStore().push(() => sequence.close());
-    return sequence;
+  async #reconcileChildren(parent, resolution, { signal, allowRemoveRoot, progress, needsChildren }) {
+    return this.store.run(session => withFolderValidationScope({
+      session, store: this.store, library: this.library,
+      linkedChildren: this.loadContext.linkedChildren, parent
+    }, async scope => {
+      progress(7);
+      throwIfAborted(signal);
+      const loaded = await this.#context(parent.Id, { draft: parent });
+      const entities = new Map(resolution.claims.map(claim => [idKey(claim.Id), this.#retain(claim.resolvedEntity ?? createResolvedItemEntity(claim, {
+        parent,
+        parents: loaded.parents,
+        metadataConfiguration: this.metadataConfiguration,
+        clock: this.clock
+      }))]));
+      await scope.checkClaims(resolution.claims, resolution.deletionSafe);
+      const created = [];
+      let processedChildren = 0;
+      const childProcessed = () => {
+        processedChildren++;
+        if (processedChildren % 25 === 0 || processedChildren === resolution.claims.length) {
+          progress(7 + processedChildren / resolution.claims.length);
+        }
+      };
+      // Native lifecycles and same-path type replacement run in resolver order;
+      // remaining removals then precede the single new-sibling CreateItems batch.
+      for (const claim of resolution.claims) {
+        const entity = entities.get(idKey(claim.Id));
+        const ordinal = BigInt(processedChildren + 1);
+        await scope.withCurrent(claim.Id, async item => {
+          if (!await this.#isAccessibleTopParent(entity, allowRemoveRoot, parent)) {
+            if (item) await scope.valid(item, ordinal, false);
+            return;
+          }
+          if (item) {
+            await this.resolvedItemLifecycle.apply(item.Id, {
+              resolved: entity,
+              expected: resolvedItemStructuralSnapshot(item),
+              parent,
+              signal
+            });
+            await this.itemCreation.withItem(item.Id, refreshed => scope.valid(refreshed, ordinal, true));
+            return;
+          }
+          await scope.withPath(claim.identityPath, async replaced => {
+            if (replaced && idKey(replaced.Id) !== idKey(claim.Id)) {
+              await scope.forget(replaced);
+              replaced.ParentId = EMPTY_ID;
+              await this.library.deleteItem(replaced, { DeleteFileLocation: false }, parent, false);
+              await scope.removed(replaced);
+            }
+          });
+          created.push(entity);
+          await scope.valid(entity, ordinal, true);
+        });
+        childProcessed();
+      }
+      progress(8);
+      await scope.captureAlternatePaths();
+      await scope.eachRemoval(async item => {
+        if (item.CanDelete === false || item.IsRoot) return;
+        if (VIDEO_TYPES.has(item.Type)) {
+          if (item.Path && await scope.hasAlternate(item.Path)) return;
+          if (item.PrimaryVersionId == null && !nonemptyId(item.OwnerId)) {
+            const deferred = await scope.primaryFor(item.LocalAlternateVersions ?? [], async (_primary, slot) => {
+              item.ParentId = EMPTY_ID;
+              await scope.defer(item, slot);
+              return true;
+            });
+            if (deferred) return;
+          }
+        }
+        if (isFileProtocol(item)) {
+          await scope.removed(item); item.ParentId = EMPTY_ID;
+          await this.library.deleteItem(item, { DeleteFileLocation: false }, parent, false);
+        }
+      });
+      if (created.length) await this.library.createItems(created, parent, { signal });
+      await scope.eachDeferred(async (oldPrimary, newPrimary) => {
+        await this.#promoteVersion(newPrimary, signal);
+        await this.linkedChildReferences.reroute(oldPrimary.Id, newPrimary.Id);
+        await this.#transferVersions(oldPrimary, newPrimary, signal);
+        oldPrimary.LocalAlternateVersions = []; oldPrimary.LinkedAlternateVersions = [];
+        // DeleteItem consults persisted links even after these live arrays are
+        // cleared. Its independent promotion/save may therefore fail here.
+        await this.library.deleteItem(oldPrimary, { DeleteFileLocation: false }, parent, false);
+      });
+      await scope.eachDemotion(async oldPrimary => {
+        if (!VIDEO_TYPES.has(oldPrimary.Type) || nonemptyId(oldPrimary.OwnerId) || !oldPrimary.Path) return;
+        await scope.primaryFor([oldPrimary.Path], async newPrimary => {
+          await this.#promoteVersion(newPrimary, signal);
+          // Transfer owned versions first so clearing the old arrays cannot
+          // orphan-delete their rows from under the new primary.
+          await this.#transferVersions(oldPrimary, newPrimary, signal);
+          oldPrimary.LocalAlternateVersions = []; oldPrimary.LinkedAlternateVersions = [];
+          setPrimaryVersion(oldPrimary, newPrimary.Id); oldPrimary.OwnerId = newPrimary.Id;
+          await this.#updateVersion(oldPrimary, signal);
+          await this.linkedChildReferences.reroute(oldPrimary.Id, newPrimary.Id);
+        });
+      });
+      await scope.reattach(this.reattach, signal);
+      progress(9);
+      progress(10);
+      throwIfAborted(signal);
+      const children = needsChildren ? await scope.accessible() : null;
+      if (children) this.#ownership.getStore().push(() => children.close());
+      return { created, children };
+    }));
   }
 
   async #validateSubFolders(children, { collectionType, signal, reportProgress }) {
@@ -519,131 +582,9 @@ export class FolderValidationService {
       if (resolution.withheldPaths.length > 0) {
         throw new StorageError('not-supported', 'Folder validation cannot persist a partial sibling batch with withheld paths.');
       }
-      const current = await this.#currentChildren(parent);
-      const claims = new Map(resolution.claims.map(claim => [idKey(claim.Id), claim]));
-      const currentById = new Map(current.map(item => [idKey(item.Id), item]));
-      const currentByPath = new Map();
-      for (const item of current) if (item.Path && !currentByPath.has(ordinalIgnoreCaseKey(item.Path))) currentByPath.set(ordinalIgnoreCaseKey(item.Path), item);
-      progress(7);
-      throwIfAborted(signal);
-      const loaded = await this.#context(parent.Id, { draft: parent });
-      const entities = new Map(resolution.claims.map(claim => [idKey(claim.Id), this.#retain(claim.resolvedEntity ?? createResolvedItemEntity(claim, {
-        parent,
-        parents: loaded.parents,
-        metadataConfiguration: this.metadataConfiguration,
-        clock: this.clock
-      }))]));
-      for (const item of current) {
-        const claim = claims.get(idKey(item.Id));
-        if (claim && (item.NativeType !== claim.nativeType || !sameNativePath(item.Path, claim.identityPath))) {
-          throw new StorageError('not-supported', 'Changing an existing folder child requires structural reconciliation.');
-        }
-      }
-      const stale = current.filter(item => !claims.has(idKey(item.Id)));
-      if (stale.some(item => isFileProtocol(item) && item.CanDelete !== false && !item.IsRoot) && !resolution.deletionSafe) {
-        throw new StorageError('not-supported', 'Removing folder children requires a strong complete directory snapshot.');
-      }
-      const created = [], valid = new Map(), accessible = new Map(), actuallyRemoved = new Map();
-      let processedChildren = 0;
-      const childProcessed = () => {
-        processedChildren++;
-        if (processedChildren % 25 === 0 || processedChildren === resolution.claims.length) {
-          progress(7 + processedChildren / resolution.claims.length);
-        }
-      };
-      // Native lifecycles and same-path type replacement run in resolver order;
-      // remaining removals then precede the single new-sibling CreateItems batch.
-      for (const claim of resolution.claims) {
-        const item = currentById.get(idKey(claim.Id));
-        const entity = entities.get(idKey(claim.Id));
-        if (!await this.#isAccessibleTopParent(entity, allowRemoveRoot, parent)) {
-          if (item) valid.set(idKey(item.Id), item);
-          childProcessed();
-          continue;
-        }
-        if (item) {
-          await this.resolvedItemLifecycle.apply(item.Id, {
-            resolved: entity,
-            expected: resolvedItemStructuralSnapshot(item),
-            parent,
-            signal
-          });
-          const refreshed = this.#retain(await this.itemCreation.getItemById(item.Id));
-          valid.set(idKey(item.Id), refreshed);
-          accessible.set(idKey(item.Id), refreshed);
-          childProcessed();
-          continue;
-        }
-        const replaced = currentByPath.get(ordinalIgnoreCaseKey(claim.identityPath));
-        if (replaced && idKey(replaced.Id) !== idKey(claim.Id)) {
-          currentById.delete(idKey(replaced.Id));
-          currentByPath.delete(ordinalIgnoreCaseKey(replaced.Path));
-          replaced.ParentId = EMPTY_ID;
-          await this.library.deleteItem(replaced, { DeleteFileLocation: false }, parent, false);
-          actuallyRemoved.set(idKey(replaced.Id), replaced);
-        }
-        created.push(entity);
-        valid.set(idKey(claim.Id), entity);
-        accessible.set(idKey(claim.Id), entity);
-        childProcessed();
-      }
-      progress(8);
-      const validVideos = [...valid.values()].filter(item => VIDEO_TYPES.has(item.Type));
-      const alternatePaths = new Set(validVideos.flatMap(item => item.LocalAlternateVersions ?? [])
-        .filter(Boolean).map(ordinalIgnoreCaseKey));
-      const removed = [...currentById.values()].filter(item => !valid.has(idKey(item.Id))), replacedPrimaries = [];
-      for (const item of removed) {
-        if (item.CanDelete === false || item.IsRoot) continue;
-        if (VIDEO_TYPES.has(item.Type)) {
-          if (item.Path && alternatePaths.has(ordinalIgnoreCaseKey(item.Path))) continue;
-          const oldPaths = new Set((item.LocalAlternateVersions ?? []).filter(Boolean).map(ordinalIgnoreCaseKey));
-          if (item.PrimaryVersionId == null && !nonemptyId(item.OwnerId)
-            && [...oldPaths].some(value => alternatePaths.has(value))) {
-            const primary = validVideos.find(video => (video.LocalAlternateVersions ?? [])
-              .some(value => value && oldPaths.has(ordinalIgnoreCaseKey(value))));
-            if (primary) {
-              replacedPrimaries.push([item, primary]); actuallyRemoved.set(idKey(item.Id), item);
-              item.ParentId = EMPTY_ID;
-              continue;
-            }
-          }
-        }
-        if (isFileProtocol(item)) {
-          actuallyRemoved.set(idKey(item.Id), item); item.ParentId = EMPTY_ID;
-          await this.library.deleteItem(item, { DeleteFileLocation: false }, parent, false);
-        }
-      }
-      if (created.length) await this.library.createItems(created, parent, { signal });
-      for (const [oldPrimary, newPrimary] of replacedPrimaries) {
-        await this.#promoteVersion(newPrimary, signal);
-        await this.linkedChildReferences.reroute(oldPrimary.Id, newPrimary.Id);
-        await this.#transferVersions(oldPrimary, newPrimary, signal);
-        oldPrimary.LocalAlternateVersions = []; oldPrimary.LinkedAlternateVersions = [];
-        // DeleteItem consults persisted links even after these live arrays are
-        // cleared. Its independent promotion/save may therefore fail here.
-        await this.library.deleteItem(oldPrimary, { DeleteFileLocation: false }, parent, false);
-      }
-      for (const oldPrimary of removed) {
-        if (actuallyRemoved.has(idKey(oldPrimary.Id)) || !VIDEO_TYPES.has(oldPrimary.Type)
-          || nonemptyId(oldPrimary.OwnerId) || !oldPrimary.Path || !alternatePaths.has(ordinalIgnoreCaseKey(oldPrimary.Path))) continue;
-        const newPrimary = validVideos.find(item => (item.LocalAlternateVersions ?? [])
-          .some(value => value && ordinalIgnoreCaseKey(value) === ordinalIgnoreCaseKey(oldPrimary.Path)));
-        if (!newPrimary) continue;
-        await this.#promoteVersion(newPrimary, signal);
-        // Transfer owned versions first so clearing the old arrays cannot
-        // orphan-delete their rows from under the new primary.
-        await this.#transferVersions(oldPrimary, newPrimary, signal);
-        oldPrimary.LocalAlternateVersions = []; oldPrimary.LinkedAlternateVersions = [];
-        setPrimaryVersion(oldPrimary, newPrimary.Id); oldPrimary.OwnerId = newPrimary.Id;
-        await this.#updateVersion(oldPrimary, signal);
-        await this.linkedChildReferences.reroute(oldPrimary.Id, newPrimary.Id);
-      }
-      await this.#reattachRemovedUserData(actuallyRemoved, valid, signal);
-      progress(9);
-      progress(10);
-      throwIfAborted(signal);
       const container = ['Series', 'MusicAlbum'].includes(itemType(parent));
-      const children = recursive || refreshChildMetadata && !container ? await this.#accessibleChildren(accessible) : null;
+      const { created, children } = await this.#reconcileChildren(parent, resolution, { signal, allowRemoveRoot, progress,
+        needsChildren: recursive || refreshChildMetadata && !container });
       if (recursive) await this.#validateSubFolders(children, {
         collectionType,
         signal,

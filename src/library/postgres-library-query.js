@@ -182,23 +182,18 @@ export async function queryPostgresLinkTypes(database, parentIds) {
   return new Map(result.rows.map(row => [idKey(decodeNativeTextBytes(row.ParentId)), new Set(row.ChildTypes.map(Number))]));
 }
 
-/** Select the complete direct validation set with repository filtering/order in SQL. */
-export async function queryPostgresValidationChildren(database, parentId) {
-  if (!nonemptyId(parentId)) return [];
-  const result = await database.client.query({
-    text: `SELECT "Id"
-      FROM ${qualified(database, 'BaseItems')}
+/** The caller freezes this complete selection in SQL and hydrates bounded pages. */
+export function buildPostgresValidationChildrenQuery(database, parentId) {
+  return {
+    text: `SELECT row_number() OVER(ORDER BY "SortName" ASC NULLS FIRST, "Id") AS "Ordinal", item.*
+      FROM ${qualified(database, 'BaseItems')} item
       WHERE replace(${nativeTextSql(database.schemaName).guidLower("\"ParentId\"")}, '-', '') = $1
         AND ("OwnerId" IS NULL
           OR replace(${nativeTextSql(database.schemaName).guidLower("\"OwnerId\"")}, '-', '') = '00000000000000000000000000000000'
           OR "ExtraType" IS NOT NULL)
       ORDER BY "SortName" ASC NULLS FIRST, "Id" ASC`,
-    values: [idKey(parentId)],
-  });
-  const ids = result.rows.map(row => row.Id == null ? null : decodeNativeTextBytes(row.Id)).filter(nonemptyId);
-  const rows = await loadPostgresRowsByIds(database, ids);
-  const byId = new Map(rows.map(row => [idKey(row.Id), row]));
-  return ids.map(id => byId.get(idKey(id))).filter(Boolean);
+    values: [nonemptyId(parentId) ? idKey(parentId) : null],
+  };
 }
 
 /**
