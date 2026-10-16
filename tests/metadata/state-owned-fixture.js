@@ -16,6 +16,7 @@ import { internalImagePath } from '../../src/metadata/image-paths.js';
 import { readCachedFolderChildren, setFolderChildren } from '../../src/library/folder-cache.js';
 import { encodeIgnoreFile } from '../library/dot-ignore-fixture.js';
 import { parseLosslessJson } from '../../src/core/json.js';
+import { fixturePathStyle, projectStatePath, expandStatePath } from '../library/fixture-state-path.js';
 
 export const ownerId = '98c00000-0000-0000-0000-000000000001';
 const ordinal = (a, b) => a < b ? -1 : a > b ? 1 : 0;
@@ -30,7 +31,7 @@ const rewrite = (value, replace) => Array.isArray(value) ? value.map(entry => re
 export async function setupStateOwned(t, sample, recorded, { bindMedia = true, ancestors = true } = {}) {
   const fixture = await setupChildrenFixture(t), calls = [], startedAt = Date.now();
   fixture.configuration.EnableCaseSensitiveItemIds = true;
-  const expand = text => text.replaceAll('$STATE', fixture.stateRoot);
+  const expand = text => expandStatePath(text, '$STATE', fixture.stateRoot);
   const initialRows = recorded.initialRows.map(source => ({ ...rewrite(source, expand),
     Data: source.Data == null ? null : JSON.stringify(rewrite(parseLosslessJson(source.Data), expand)) }));
   const pending = [...initialRows], ordered = [];
@@ -47,9 +48,9 @@ export async function setupStateOwned(t, sample, recorded, { bindMedia = true, a
   }
   for (const row of recorded.initialMetadataFields) await fixture.database.insert('BaseItemMetadataFields', row);
   const normalizeRows = rows => rows.map(row => Object.fromEntries(Object.entries(row).map(([key, value]) => [key,
-    key === 'Data' && value != null ? JSON.stringify(rewrite(parseLosslessJson(value), text => text.replaceAll(fixture.stateRoot, '$STATE')))
+    key === 'Data' && value != null ? JSON.stringify(rewrite(parseLosslessJson(value), text => projectStatePath(text, fixture.stateRoot)))
       : key.startsWith('Date') && value != null ? dateText(value)
-        : typeof value === 'string' ? value.replaceAll(fixture.stateRoot, '$STATE') : value])))
+        : typeof value === 'string' ? projectStatePath(value, fixture.stateRoot) : value])))
     .sort((a, b) => ordinal(a.Id, b.Id));
   assert.deepEqual(normalizeRows(await fixture.database.rows('BaseItems')), [...recorded.initialRows].sort((a, b) => ordinal(a.Id, b.Id)));
   assert.deepEqual(await fixture.database.rows('BaseItemMetadataFields'), recorded.initialMetadataFields);
@@ -67,12 +68,12 @@ export async function setupStateOwned(t, sample, recorded, { bindMedia = true, a
     await fixture.storage.createInstance('state-ignore-ancestors', 'memory', {});
     fixture.vfs.mount({ path: '/state-ignore-ancestors', instanceId: 'state-ignore-ancestors', capabilities: {} });
     ignoreMap.addPrefix({ identityRoot: path.parse(fixture.stateRoot).root, accessRoot: '/state-ignore-ancestors',
-      style: 'windows', returnAccess: 'Explicit complete empty external .ignore ancestors for this isolated recording.' });
+      style: fixturePathStyle, returnAccess: 'Explicit complete empty external .ignore ancestors for this isolated recording.' });
   }
   fixture.ignoreIdentityMap = ignoreMap;
   fixture.ignoreRule = new DotIgnoreRule({ vfs: fixture.vfs, identityMap: ignoreMap });
   const loader = fixture.trackContextLoader(createMetadataContextLoader({fileSystem: testFileSystem,  ...fixture, extraPathResolver: (candidate, options) => {
-    if (!options.preview && options.nativeType === nativeType('Audio')) calls.push({ action: 'resolve', path: candidate.identityPath.replace(fixture.stateRoot, '$STATE') });
+    if (!options.preview && options.nativeType === nativeType('Audio')) calls.push({ action: 'resolve', path: projectStatePath(candidate.identityPath, fixture.stateRoot) });
     return resolveOwnedExtraFile(candidate, options);
   } }));
   fixture.loadContext = fixture.host.loadContext = loader; useIdentityPathReversalControl(fixture);
@@ -123,7 +124,7 @@ export async function projectStateItem(item, value) {
 
 export async function projectStateOwned(value, exception) {
   const { fixture, loaded, calls, oldId, childrenCleared } = value;
-  const normalize = text => text?.replaceAll(fixture.stateRoot, '$STATE') ?? null;
+  const normalize = text => projectStatePath(text, fixture.stateRoot) ?? null;
   const rows = (await fixture.database.rows('BaseItems')).filter(row => row.Type !== 'PLACEHOLDER').map(row => ({
     id: guid(row.Id), type: row.Type, name: row.Name, path: normalize(row.Path), parentId: row.ParentId && guid(row.ParentId),
     topParentId: row.TopParentId && guid(row.TopParentId), ownerId: row.OwnerId && guid(row.OwnerId), primaryVersionId: row.PrimaryVersionId && guid(row.PrimaryVersionId),

@@ -16,6 +16,7 @@ import { readCachedFolderChildren, setFolderChildren } from '../../src/library/f
 import { encodeIgnoreFile } from '../library/dot-ignore-fixture.js';
 import { IdentityAccessMap } from '../../src/storage/identity-mapping.js';
 import { DotIgnoreRule } from '../../src/library/dot-ignore-rule.js';
+import { fixturePathStyle, projectStatePath } from '../library/fixture-state-path.js';
 
 const ownerId = '98c00000-0000-0000-0000-000000000001', parentId = '98c00000-0000-0000-0000-000000000002';
 const typeName = type => `MediaBrowser.Controller.Entities.${type === 'Movie' ? 'Movies.' : ['Audio', 'MusicArtist', 'MusicAlbum'].includes(type) ? 'Audio.' : ['Series', 'Season', 'Episode'].includes(type) ? 'TV.' : ''}${type}`;
@@ -27,7 +28,7 @@ const videoData = () => ({ AdditionalParts: [], LocalAlternateVersions: [], Link
 const folderData = () => ({ IsRoot: false, IsHD: false, IsShortcut: false, Width: 0, Height: 0, DateLastSaved: MIN_DATE, RemoteTrailers: [] });
 
 export function projectItem(item, stateRoot) {
-  const normalize = value => value?.replace(stateRoot, '$STATE') ?? null;
+  const normalize = value => projectStatePath(value, stateRoot) ?? null;
   return { id: guid(item.Id), type: item.NativeType, name: item.Name, path: normalize(item.Path),
     parentId: guid(item.ParentId ?? EMPTY_ID), ownerId: guid(item.OwnerId ?? EMPTY_ID),
     primaryVersionId: item.PrimaryVersionId ? guid(item.PrimaryVersionId) : null,
@@ -49,7 +50,7 @@ export async function setup(t, dialect, sample, { recordInserts = true } = {}) {
   // later presents the same path with the host's separators.
   const directory = path.join(fixture.stateRoot, 'media'), target = directory + path.sep + sample.files[0];
   fixture.vfs.mount({ path: '/owned-discovery-write', instanceId: 'fixture', capabilities: { create: true, replace: true, mkdir: true, delete: true } });
-  fixture.identityMap.addPrefix({ identityRoot: directory, accessRoot: '/owned-discovery-write/owned-discovery', style: 'windows', returnAccess: 'isolated owned video discovery controls' });
+  fixture.identityMap.addPrefix({ identityRoot: directory, accessRoot: '/owned-discovery-write/owned-discovery', style: fixturePathStyle, returnAccess: 'isolated owned video discovery controls' });
   // The recorded native ancestors contain no .ignore outside this controlled
   // state. Model that namespace explicitly instead of inferring absence from
   // a missing media access mapping.
@@ -59,7 +60,7 @@ export async function setup(t, dialect, sample, { recordInserts = true } = {}) {
   const ignoreMap = new IdentityAccessMap();
   for (const prefix of fixture.identityMap.exportState().prefixes) ignoreMap.addPrefix(prefix);
   ignoreMap.addPrefix({ identityRoot: path.parse(fixture.stateRoot).root, accessRoot: '/owned-discovery-ancestors',
-    style: 'windows', returnAccess: 'Controlled complete ancestor namespace for the actual .ignore recording.' });
+    style: fixturePathStyle, returnAccess: 'Controlled complete ancestor namespace for the actual .ignore recording.' });
   fixture.ignoreIdentityMap = ignoreMap;
   fixture.ignoreRule = new DotIgnoreRule({ vfs: fixture.vfs, identityMap: ignoreMap });
   await fixture.adapter.mkdir('/owned-ancestors');
@@ -74,7 +75,7 @@ export async function setup(t, dialect, sample, { recordInserts = true } = {}) {
       Buffer.concat([Buffer.from([0xef, 0xbb, 0xbf]), Buffer.from('media control')]), { modified: '2025-01-03T04:05:06.0000000Z' });
   }
   for (const file of sample.ignoreFiles ?? []) {
-    const accessPath = ignoreMap.resolve({ identityPath: path.join(fixture.stateRoot, file.path), style: 'windows' });
+    const accessPath = ignoreMap.resolve({ identityPath: path.join(fixture.stateRoot, file.path), style: fixturePathStyle });
     const resolved = fixture.vfs.resolve(accessPath);
     let parent = '';
     for (const segment of path.posix.dirname(resolved.path).split('/').filter(Boolean)) {
@@ -90,7 +91,7 @@ export async function setup(t, dialect, sample, { recordInserts = true } = {}) {
     return result.kind === 'file' ? { ...result, created: '2025-01-02T03:04:05.0000000Z' } : result;
   };
   const loader = fixture.trackContextLoader(createMetadataContextLoader({fileSystem: testFileSystem,  ...fixture, extraPathResolver: (candidate, options) => {
-    if (!options.preview && options.nativeType === typeName('Audio')) calls.push({ action: 'resolve', path: candidate.identityPath.replace(fixture.stateRoot, '$STATE') });
+    if (!options.preview && options.nativeType === typeName('Audio')) calls.push({ action: 'resolve', path: projectStatePath(candidate.identityPath, fixture.stateRoot) });
     return resolveOwnedExtraFile(candidate, options);
   } }));
   fixture.loadContext = fixture.host.loadContext = loader;
@@ -147,7 +148,7 @@ export async function setup(t, dialect, sample, { recordInserts = true } = {}) {
 
 export async function project(value, sample, exception, { repository = false } = {}) {
   const { fixture, loaded, calls, oldId, childrenCleared } = value;
-  const normalize = name => name?.replace(fixture.stateRoot, '$STATE') ?? null;
+  const normalize = name => projectStatePath(name, fixture.stateRoot) ?? null;
   const rewrite = value => Array.isArray(value) ? value.map(rewrite) : value && typeof value === 'object'
     ? Object.fromEntries(Object.entries(value).map(([key, entry]) => [key, rewrite(entry)]))
     : typeof value === 'string' ? value === fixture.now && repository ? '$UTC_SAVE' : normalize(value) : value;
@@ -189,7 +190,7 @@ export async function project(value, sample, exception, { repository = false } =
   await mediaFiles('/owned-discovery-write/owned-discovery');
   for (const file of (sample.ignoreFiles ?? []).filter(file => !file.path.startsWith('media/'))) {
     const identityPath = path.join(fixture.stateRoot, file.path);
-    const handle = await fixture.vfs.openRead(fixture.ignoreIdentityMap.resolve({ identityPath, style: 'windows' })), chunks = [];
+    const handle = await fixture.vfs.openRead(fixture.ignoreIdentityMap.resolve({ identityPath, style: fixturePathStyle })), chunks = [];
     try { for await (const bytes of handle.stream) chunks.push(Buffer.from(bytes)); } finally { await handle.close(); }
     hashFile(identityPath, Buffer.concat(chunks));
   }
