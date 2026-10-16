@@ -7,6 +7,8 @@ import { setupChildrenFixture } from './children-fixture.js';
 import { MetadataRefreshHost } from '../../src/metadata/refresh-host.js';
 import { afterSeriesMetadataRefresh } from '../../src/metadata/series-lifecycle.js';
 import { EMPTY_ID, dateText, idKey } from '../../src/library/records.js';
+import { ItemDeletionService } from '../../src/library/item-deletion-service.js';
+import { LinkedChildReferenceService } from '../../src/library/linked-child-reference-service.js';
 
 const root = new URL('./fixtures/series-lifecycle/', import.meta.url);
 const input = JSON.parse(await readFile(new URL('input.json', root), 'utf8'));
@@ -73,6 +75,10 @@ async function fixtureFor(t, dialect, sample, { controlledRefresh = true } = {})
     try { return await operation(loaded); } finally { await loaded.dispose(); }
   };
   host = new MetadataRefreshHost({ registry: fixture.registry, store: fixture.store, linkedChildren: fixture.linkedChildren, vfs: fixture.vfs, loadContext, now: () => fixture.now });
+  const deletionServices = { ...fixture, loadContext, itemCreation: fixture.library.itemCreation,
+    updates: host.updates, externalData: host.externalData, now: () => fixture.now };
+  fixture.library.itemDeletion = new ItemDeletionService({ ...deletionServices,
+    linkedChildReferences: new LinkedChildReferenceService(deletionServices) });
 
   const calls = [], attempts = new Map();
   const relations = async id => {
@@ -138,7 +144,7 @@ for (const dialect of ['postgres']) test(`${dialect}: Series lifecycle matches a
 for (const dialect of ['postgres']) test(`${dialect}: created season runs real metadata host and keeps flat episode physical parent`, async t => {
   const sample = input.find(sample => sample.name === 'flat unrefreshed path resolves season first');
   const fixture = await fixtureFor(t, dialect, sample, { controlledRefresh: false });
-  const events = []; for (const name of ['ItemAdded', 'ItemUpdated', 'ItemRemoved']) fixture.host.updates.on(name, event => events.push({ name, id: event.Item.Id }));
+  const events = []; for (const name of ['ItemAdded', 'ItemUpdated', 'ItemRemoved']) fixture.library.on(name, event => events.push({ name, id: event.Item.Id }));
   await fixture.host.refresh(fixture.target, { MetadataRefreshMode: 'None', ImageRefreshMode: 'None' });
   const state = await fixture.state(), created = state.items.find(item => item.Type === 'Season' && item.IndexNumber === 2), episode = state.byId.get(idKey(sample.items.find(item => item.key === 'unrefreshed').Id));
   assert.ok(created); assert.equal(created.Path, null); assert.equal(created.PresentationUniqueKey, sample.items[0].PresentationUniqueKey + '-002');
@@ -159,7 +165,7 @@ for (const dialect of ['postgres']) test(`${dialect}: obsolete cleanup retains l
   const fixture = await fixtureFor(t, dialect, sample), db = fixture.database;
   await db.insert('LinkedChildren', { ParentId: virtual.Id, ChildId: physical.Id, ChildType: 0, SortOrder: 0 });
   const before = await db.rows('BaseItems'), links = await db.rows('LinkedChildren'), removed = [];
-  fixture.host.updates.on('ItemRemoved', event => removed.push(event.Item.Id));
+  fixture.library.on('ItemRemoved', event => removed.push(event.Item.Id));
   const restoreDelete = await failBaseItemDelete(db, virtual.Id, 'Injected SQL delete failure');
   try {
     await assert.rejects(fixture.host.refresh(fixture.target, { MetadataRefreshMode: 'None', ImageRefreshMode: 'None' }), /Injected SQL delete failure/);

@@ -1,0 +1,12 @@
+[
+  {
+    "Name": "series-cleanup-promotes-linked-alternate",
+    "SeriesCleanup": {
+      "SeriesName": "Series cleanup reference",
+      "SeasonName": "Season 1",
+      "VirtualEpisodeName": "Obsolete unnumbered virtual episode",
+      "SurvivingEpisodeName": "Existing linked episode",
+      "PlaylistName": "Curated episodes"
+    }
+  }
+]

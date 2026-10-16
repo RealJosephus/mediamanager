@@ -1,16 +1,11 @@
 import { saveMetadataItem } from './save-item.js';
 import { metadataSortName } from './sort-cache.js';
 import { tableDefinition } from '../database/model.js';
-import { EMPTY_ID, MIN_DATE, cleanValue, guid, idKey, mapRecord, nonemptyId } from '../library/records.js';
+import { EMPTY_ID, MIN_DATE, cleanValue, guid, mapRecord } from '../library/records.js';
 import { createMetadataChildren } from '../library/metadata-children.js';
-import { resolveSeries } from '../library/series-reference.js';
-import { deletePersistedItems } from '../library/item-persistence.js';
 import { persistItemRelations } from '../library/item-relations.js';
 import { createPresentationUniqueKey } from '../library/presentation-key.js';
 import { formatComposite } from '../core/composite-format.js';
-import {acquireNativeItemLinkOwner} from '../library/native-item-entity.js';
-import {nativeTextSql} from '../database/native-text-sql.js';
-import {ItemDeletionScope} from '../library/item-deletion-scope.js';
 
 const emptyRow = () => Object.fromEntries(tableDefinition('BaseItems').columns.filter(column => !column.generated).map(column => [column.name,
   column.nullable ? null : column.clrType === 'bool' ? false : column.type === 'TEXT' ? '' : column.clrType === 'long' ? 0n : 0]));
@@ -39,19 +34,10 @@ export class SeriesMetadataLifecycleHost {
 
   async remove(item){
     if(!['Episode','Season'].includes(item.Type))throw new TypeError('Obsolete TV cleanup requires an Episode or Season.');
-    if(nonemptyId(item.PrimaryVersionId)||(item.LocalAlternateVersions??[]).length||(item.LinkedAlternateVersions??[]).length)throw Object.assign(new Error('Alternate-version deletion is not implemented.'),{status:501});
-    return this.loadContext.withContext(item.Id,{draft:item,includeChildren:false},async loaded=>{
-      const factory=createMetadataChildren({store:this.store,library:this.loadContext.library,linkedChildren:this.loadContext.linkedChildren,configuration:loaded.globalOptions,libraryOptions:loaded.libraryOptions});
-      const children=await factory.recursive(item,{includeLinkedChildren:false}),parent=loaded.parent??null;
-      try{await children.aggregationSession(async(database,{plan})=>{const scope=new ItemDeletionScope({store:this.store,database}),sql=nativeTextSql(database.schemaName),values=[...plan.values,idKey(item.Id)];
-        const ids={text:`SELECT ${sql.guidKey('"Id"')} AS "Key" FROM (${plan.text}) children UNION SELECT $${values.length}::text`,values};
-        try{await scope.capturePlan(ids);await this.externalData.deleteInternalItemFiles(item,{loaded});for await(const page of children.pages())for(const child of page)await this.externalData.deleteInternalItemFiles(child,{loaded});
-        item.ParentId=EMPTY_ID;await this.externalData.deleteItemFiles(item,{loaded});for await(const page of children.pages())for(const child of page)await this.externalData.deleteItemFiles(child,{loaded});
-        await scope.persistPlan(ids,{now:this.now,publishDeletedPage:page=>{for(const row of page)this.itemCreation?.unregisterItem(row.Key);}});
-        for await(const page of children.pages())for(const child of page)this.updates.reportItemRemoved(child,item);this.updates.reportItemRemoved(item,parent);
-        }finally{await scope.close();}
-      });}finally{await children.close();}
-    });
+    // SeriesMetadataService uses ordinary LibraryManager.DeleteItem. That
+    // lifecycle owns version promotion, reference rerouting and cache/events
+    // as well as the metadata files and SQL deletion.
+    return this.loadContext.library.deleteItem(item,{DeleteFileLocation:false},undefined,false);
   }
 
   async createSeason(series, number, loaded, signal) {

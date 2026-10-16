@@ -60,6 +60,7 @@ public sealed class Scenario
     public FaultPlan? Fault { get; set; }
     public CancellationPlan? Cancel { get; set; }
     public DatabaseCleanupSeed? Cleanup { get; set; }
+    public SeriesCleanupSeed? SeriesCleanup { get; set; }
     public CompositionSeed Seed { get; set; } = new();
 }
 public sealed class DatabaseCleanupSeed
@@ -268,7 +269,7 @@ public sealed class NativeScanHost : IAsyncDisposable
                 Add("save-committed",new { items=items.Select(Item).ToArray(), sql=SnapshotSql() });
                 return result;
             }
-            if (_observing && Scenario.Cleanup is not null && method.Name == "DeleteItem") {
+            if (_observing && (Scenario.Cleanup is not null || Scenario.SeriesCleanup is not null) && method.Name == "DeleteItem") {
                 var ids = ((IReadOnlyList<Guid>)values![0]!).ToArray();
                 Add("delete-begin",new { ids,sql=SnapshotSql() });
                 var result=ForwardProxy.Forward(actualPersistence,method,values);
@@ -331,6 +332,10 @@ public sealed class NativeScanHost : IAsyncDisposable
             MetadataServices.Add(new MusicGenreMetadataService(Configuration,loggerFactory.CreateLogger<MusicGenreMetadataService>(),
                 _providerDispatch,FileSystem,Manager,ExternalData,Repository));
         }
+        if (Scenario.SeriesCleanup is not null)
+            MetadataServices.Add(new MediaBrowser.Providers.TV.SeriesMetadataService(Configuration,
+                loggerFactory.CreateLogger<MediaBrowser.Providers.TV.SeriesMetadataService>(),
+                _providerDispatch,FileSystem,Manager,localization,ExternalData,Repository));
         ApplyProviderParts();
         var services=new ServiceCollection();services.AddSingleton<ILoggerFactory>(loggerFactory);services.AddLogging();
         services.AddSingleton(Paths);services.AddSingleton(Configuration);services.AddSingleton(FileSystem);services.AddSingleton(ImageProcessor);
@@ -437,6 +442,15 @@ public sealed class NativeScanHost : IAsyncDisposable
         _observing=false;
         return new ScanObservation(exception,message,Manager.IsScanRunning,RootSnapshot(),SnapshotSql(),
             _trace.ToArray(),ResolverTypes,MetadataServices.Select(s=>s.GetType().FullName!).ToArray());
+    }
+
+    public async Task ObserveOperationAsync(Func<Task> operation)
+    {
+        if(_disposed)throw new ObjectDisposedException(nameof(NativeScanHost));
+        while(_trace.TryDequeue(out _)) { }
+        _sequence=0;_observing=true;
+        try { await operation(); }
+        finally { _observing=false; }
     }
 
     private async Task<MediaBrowser.Controller.Library.ItemUpdateType> RefreshSingleItem(IMetadataService service,BaseItem item,

@@ -133,3 +133,20 @@ on macOS. Missing native inputs fail before compilation. All fixture sources and
 the scenario are repository inputs; no developer-machine files, historical
 binary paths or historical digest substitution are used. Test execution and
 compilation are reserved for GitHub Actions.
+
+`series-cleanup-input.json` is an independent metadata lifecycle scenario. It
+reuses this real host but does not run the global scan or change the four scan
+inputs. The actual `SeriesMetadataService` receives a `None` refresh with a
+persisted unnumbered virtual Episode, a surviving linked Episode version and a
+Playlist referencing the obsolete Episode. Ordinary native `DeleteItem` must
+promote the version, reroute the Playlist, prune the deleted item's actual
+metadata/extracted files and invalidate its parent's warm Children/UserData.
+`SeriesCleanup.cs` records the complete SQLite state before/after, the deletion
+boundary, events and cache state; it preserves an operation observation before
+disposing the host. The candidate test seeds only that initial state, uses the
+actual runtime metadata and ordinary deletion services, and compares every
+BaseItems column, complete relevant relationships, source/metadata bytes,
+events, warm Playlist links and deletion cache state. Each operation's changed
+save/refresh clocks must lie within its own execution window. Its receipt and
+candidate cleanup evidence are independent of the four scan cases and require
+fresh same-run native-reference Actions execution.
