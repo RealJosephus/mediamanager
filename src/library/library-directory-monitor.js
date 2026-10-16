@@ -219,10 +219,14 @@ export class LibraryDirectoryMonitor {
             if (current()) this.#background(() => current() ? this.reportFileSystemChanged(event.path) : undefined,
               `Exception in directory change for ${event.path}.`);
           },
-          onError: error => {
+          onError: (error, state) => {
             if (!current()) return;
+            if (typeof state?.terminal !== 'boolean') {
+              error = new TypeError('A directory watch error must declare its subscription state.');
+              state = { terminal: true };
+            }
             logError(this.logger, error, `Error in directory watcher for ${path}.`);
-            if (!['permission-denied', 'EACCES', 'EPERM'].includes(error?.code)) {
+            if (state.terminal) {
               record.active = false;
               if (record.watcher) this.#background(() => this.#stopPath(path, record), `Error closing directory watcher for ${path}.`);
             }

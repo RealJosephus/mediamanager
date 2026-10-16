@@ -3,7 +3,9 @@ import assert from 'node:assert/strict';
 import * as fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
+import { EventEmitter } from 'node:events';
 import { LocalAdapter } from '../../plugins/local/adapter.js';
+import { watchDirectory } from '../../plugins/local/watch.js';
 import { StorageRegistry, VirtualFileSystem } from '../../src/storage/index.js';
 import { MemoryStorageAdapter } from '../../src/storage/testing/memory-adapter.js';
 
@@ -19,13 +21,23 @@ async function local(t) {
 }
 
 function recorder() {
-  const events = [], errors = [], waiting = new Set();
-  return { events, errors,
+  const events = [], errors = [], errorStates = [], waiting = new Set();
+  let terminalError;
+  return { events, errors, errorStates,
     onChange(event) { events.push(event); for (const entry of waiting) if (entry.predicate(event)) { waiting.delete(entry); entry.resolve(event); } },
-    onError(error) { errors.push(error); for (const entry of waiting) entry.reject(error); waiting.clear(); },
+    onError(error, state) {
+      errors.push(error); errorStates.push(state);
+      if (state?.terminal === false) return;
+      terminalError = error;
+      for (const entry of waiting) entry.reject(error); waiting.clear();
+    },
     next(predicate) {
       const deferred = Promise.withResolvers();
-      waiting.add({ predicate, ...deferred });
+      // An OS error can arrive while the caller is still awaiting its write.
+      // Preserve that rejection for next() without an unhandled-rejection race.
+      void deferred.promise.catch(() => {});
+      if (terminalError) deferred.reject(terminalError);
+      else waiting.add({ predicate, ...deferred });
       return deferred.promise;
     }
   };
@@ -95,8 +107,99 @@ test('local watch rejects files and junctions and observes cancellation', { time
   const outside = await fs.mkdtemp(path.join(os.tmpdir(), 'mediamanager-watch-outside-'));
   t.after(() => fs.rm(outside, { recursive: true, force: true }));
   await fs.symlink(outside, path.join(root, 'link'), process.platform === 'win32' ? 'junction' : 'dir');
-  await assert.rejects(adapter.watch('/', recorded), { code: 'permission-denied' });
+  await assert.rejects(adapter.watch('/link', recorded), { code: 'permission-denied' });
   assert.deepEqual(recorded.events, []);
+});
+
+test('a rejected link subtree preserves the active local watch and its replacement can be watched again', { timeout: 10000 }, async t => {
+  const { root, adapter } = await local(t);
+  const outside = await fs.mkdtemp(path.join(os.tmpdir(), 'mediamanager-watch-outside-'));
+  t.after(() => fs.rm(outside, { recursive: true, force: true }));
+  const recorded = recorder(), rejected = Promise.withResolvers();
+  const subscription = await adapter.watch('/', { ...recorded, onError(error, state) {
+    recorded.onError(error, state); rejected.resolve({ error, state });
+  } });
+  t.after(() => subscription.close());
+  await fs.symlink(outside, path.join(root, 'blocked'), process.platform === 'win32' ? 'junction' : 'dir');
+  const diagnostic = await rejected.promise;
+  assert.equal(diagnostic.error.code, 'permission-denied');
+  assert.deepEqual(diagnostic.state, { terminal: false });
+  let changed = recorded.next(event => event.path === '/surviving.txt');
+  await fs.writeFile(path.join(outside, 'outside.txt'), 'must not be observed');
+  await fs.writeFile(path.join(root, 'surviving.txt'), 'still active'); await changed;
+  assert.equal(recorded.events.some(event => event.path.startsWith('/blocked/')), false);
+  changed = recorded.next(event => event.path === '/blocked');
+  await fs.unlink(path.join(root, 'blocked')); await changed;
+  changed = recorded.next(event => event.path === '/blocked');
+  await fs.mkdir(path.join(root, 'blocked')); await changed;
+  changed = recorded.next(event => event.path === '/blocked/restored.txt');
+  await fs.writeFile(path.join(root, 'blocked', 'restored.txt'), 'watched'); await changed;
+  assert.ok(recorded.errorStates.every(state => state.terminal === false));
+});
+
+async function controlledWatch(t) {
+  const { root, adapter } = await local(t), handles = [], resolved = [], recorded = recorder();
+  const subscription = await watchDirectory('/', { ...recorded, windows: true, failure: error => error,
+    resolve: async filename => {
+      resolved.push(filename);
+      try { await adapter.stat(filename); }
+      catch (error) { if (!['not-found', 'not-directory'].includes(error.code)) throw error; }
+      return path.join(root, ...filename.split('/'));
+    },
+    watch: (target, options, callback) => {
+      assert.equal(options.recursive, false);
+      const handle = Object.assign(new EventEmitter(), { target, closed: false,
+        change(type, name) { callback(type, name); }, close() { this.closed = true; } });
+      handles.push(handle); return handle;
+    }
+  });
+  t.after(() => subscription.close());
+  return { root, handles, resolved, recorded, subscription };
+}
+
+test('Windows descendant and DeletePending callbacks retain sibling watches and reject stale owners', { timeout: 10000 }, async t => {
+  const f = await controlledWatch(t), rootWatch = f.handles[0];
+  await fs.mkdir(path.join(f.root, 'new', 'nested'), { recursive: true });
+  await fs.writeFile(path.join(f.root, 'new', 'nested', 'movie%2F.mkv'), 'one');
+  let change = f.recorded.next(event => event.path === '/new/nested/movie%2F.mkv');
+  rootWatch.change('change', 'new\\nested\\movie%2F.mkv'); await change;
+  const previous = f.handles.find(handle => handle.target === path.join(f.root, 'new', 'nested'));
+  assert.ok(previous);
+  await fs.rm(previous.target, { recursive: true });
+  change = f.recorded.next(event => event.path === '/new/nested');
+  previous.change('rename', path.win32.toNamespacedPath(previous.target)); await change;
+  assert.equal(previous.closed, true); assert.equal(rootWatch.closed, false);
+  await fs.mkdir(previous.target);
+  change = f.recorded.next(event => event.path === '/new/nested');
+  rootWatch.change('rename', 'new/nested'); await change;
+  const replacement = f.handles.findLast(handle => handle.target === previous.target);
+  assert.notEqual(replacement, previous);
+  previous.change('rename', path.win32.toNamespacedPath(previous.target));
+  change = f.recorded.next(event => event.path === '/surviving.txt');
+  rootWatch.change('change', 'surviving.txt'); await change;
+  assert.equal(replacement.closed, false);
+  assert.deepEqual(f.recorded.errors, []);
+});
+
+test('ambiguous native callback names rescan only the held directory and retain diagnostics', { timeout: 10000 }, async t => {
+  const f = await controlledWatch(t), rootWatch = f.handles[0];
+  for (const name of ['../escape', 'child\\..\\escape', 'C:\\outside\\file', 'C:outside',
+    '\\\\server\\share\\file', '/outside', 'child//file', 'bad\0name']) {
+    const after = f.resolved.length, change = f.recorded.next(event => event.path === '/');
+    rootWatch.change('rename', name); await change;
+    assert.deepEqual(f.resolved.slice(after), ['/']);
+    assert.equal(f.recorded.errors.at(-1).details.callbackName, name);
+    assert.equal(f.recorded.errors.at(-1).details.watchPath, '/');
+    assert.deepEqual(f.recorded.errorStates.at(-1), { terminal: false });
+    assert.equal(rootWatch.closed, false);
+  }
+  const callbackName = path.win32.toNamespacedPath(rootWatch.target);
+  await fs.rmdir(f.root);
+  const ended = f.recorded.next(() => true);
+  rootWatch.change('rename', callbackName);
+  await assert.rejects(ended, error => error.code === 'not-found' && error.details.callbackName === callbackName);
+  assert.deepEqual(f.recorded.errorStates.at(-1), { terminal: true });
+  assert.equal(rootWatch.closed, true);
 });
 
 async function fake(t, options = {}) {
@@ -149,6 +252,37 @@ test('VFS closes a late subscription after abort and rolls back a failed multi-m
   } });
   await assert.rejects(failed.vfs.watch('/media', recorder()), /Cannot subscribe/u);
   assert.equal(failed.subscriptions[0].closed, true);
+});
+
+test('VFS retains recoverable subscriptions and closes every backend when one terminates', async t => {
+  const { vfs, subscriptions } = await fake(t), recorded = recorder();
+  const subscription = await vfs.watch('/media', recorded);
+  const failure = Object.assign(new Error('Access changed'), { code: 'permission-denied' });
+  subscriptions[0].callbacks.onError(failure, { terminal: false });
+  assert.ok(subscriptions.every(entry => !entry.closed));
+  subscriptions[0].callbacks.onChange({ type: 'change', path: '/root/continuing.mkv' });
+  assert.deepEqual(recorded.events, [{ type: 'change', path: '/media/continuing.mkv' }]);
+  subscriptions[1].callbacks.onError(failure, { terminal: true });
+  await subscription.close();
+  assert.ok(subscriptions.every(entry => entry.closed));
+  assert.deepEqual(recorded.errorStates, [{ terminal: false }, { terminal: true }]);
+  subscriptions[0].callbacks.onChange({ type: 'change', path: '/root/late.mkv' });
+  assert.equal(recorded.events.length, 1);
+});
+
+test('VFS rejects a plugin error without lifetime state and releases a terminal late creation', async t => {
+  const f = await fake(t), recorded = recorder();
+  const subscription = await f.vfs.watch('/media', recorded);
+  f.subscriptions[0].callbacks.onError(new Error('Missing error contract'));
+  await subscription.close();
+  assert.equal(recorded.errors[0].code, 'invalid-response');
+  assert.deepEqual(recorded.errorStates, [{ terminal: true }]);
+  assert.ok(f.subscriptions.every(entry => entry.closed));
+  const late = await fake(t, { open: entry => {
+    if (entry.filename === '/other') entry.callbacks.onError(new Error('Terminated during setup'), { terminal: true });
+  } });
+  await assert.rejects(late.vfs.watch('/media', recorder()), { code: 'closed' });
+  assert.ok(late.subscriptions.every(entry => entry.closed));
 });
 
 test('registry rejects watch declarations without watch and VFS requires capability before subscribing', async t => {

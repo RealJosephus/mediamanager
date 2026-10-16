@@ -177,10 +177,22 @@ export class VirtualFileSystem {
         if (errors.length) throw new AggregateError(errors, 'Storage watches failed to close.');
       })();
     };
-    const report = error => {
-      if (closed) return;
-      try { void Promise.resolve(onError(error)).catch(() => {}); }
+    const notifyError = (error, terminal) => {
+      try { void Promise.resolve(onError(error, Object.freeze({ terminal }))).catch(() => {}); }
       catch { /* Error reporting cannot escape a watch callback. */ }
+    };
+    const report = (error, state) => {
+      if (closed) return;
+      if (typeof state?.terminal !== 'boolean') {
+        error = new StorageError('invalid-response', 'A storage watch error must declare whether its subscription terminated.');
+        state = { terminal: true };
+      }
+      if (state.terminal) {
+        // A composed watch cannot remain active after one backend stops.
+        // Close the remaining owners before permitting any more events.
+        void close().catch(cleanup => notifyError(cleanup, true));
+      }
+      notifyError(error, state.terminal);
     };
     const abort = () => { void close().catch(() => {}); };
     signal?.addEventListener('abort', abort, { once: true });
@@ -197,8 +209,8 @@ export class VirtualFileSystem {
             const target = joinPath(plan.virtualPath, source.slice(plan.path === '/' ? 1 : plan.path.length));
             // Parent backends cannot report changes hidden behind a child mount.
             if (this.resolve(target).mount !== plan.mount) return;
-            void Promise.resolve(onChange(Object.freeze({ path: target, type: event.type }))).catch(report);
-          } catch (error) { report(error); }
+            void Promise.resolve(onChange(Object.freeze({ path: target, type: event.type }))).catch(error => report(error, { terminal: false }));
+          } catch (error) { report(error, { terminal: true }); }
         } });
         if (!handle || typeof handle.close !== 'function') throw new StorageError('invalid-response', 'The storage watch handle is invalid.');
         if (closed || signal?.aborted) { await handle.close(); checkAbort(signal); throw new StorageError('closed', 'The storage watch is closed.'); }

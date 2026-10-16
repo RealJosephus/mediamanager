@@ -95,7 +95,7 @@ export class LibraryMonitorHost {
     return this.vfs.watch(access, { signal, onError, onChange: event => {
       const relative = path.posix.relative(access, event.path);
       if (relative === '..' || relative.startsWith('../') || path.posix.isAbsolute(relative)) {
-        onError?.(new Error('A storage watch event escaped its watched root.')); return;
+        onError?.(new Error('A storage watch event escaped its watched root.'), Object.freeze({ terminal: false })); return;
       }
       onChange?.({ ...event, path: relative ? api.join(identity, ...relative.split('/')) : identity });
     } });

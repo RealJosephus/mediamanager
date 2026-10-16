@@ -6,15 +6,33 @@ import { isWithin, joinPath, validateName } from '@mediamanager/plugin-sdk/stora
 
 // Use one non-recursive OS watcher per directory so recursive watching never
 // follows a symlink or junction. Events are invalidations, not a file snapshot.
-export async function watchDirectory(root, { signal, onChange, onError, resolve, failure }) {
+export async function watchDirectory(root, { signal, onChange, onError, resolve, failure,
+  watch: nativeWatch = watch, windows = process.platform === 'win32' }) {
   if (typeof onChange !== 'function' || typeof onError !== 'function') {
     throw new TypeError('Storage watching requires change and error callbacks.');
   }
   const watchers = new Map();
   const missing = error => ['ENOENT', 'ENOTDIR', 'not-found', 'not-directory'].includes(error.code);
+  const denied = error => ['EACCES', 'EPERM', 'permission-denied'].includes(error.code);
+  const callbackFailure = (error, filename, name) => {
+    const converted = failure(error), callbackName = name == null ? null : String(name);
+    return new StorageError(converted.code,
+      `${converted.message} (watchPath=${JSON.stringify(filename)}, callbackName=${JSON.stringify(callbackName)}).`,
+      { ...converted.details, watchPath: filename, callbackName });
+  };
+  const relativeParts = name => {
+    const value = windows ? name.replaceAll('\\', '/') : name;
+    if (value.startsWith('/') || /^[A-Za-z]:/u.test(value)) {
+      throw new StorageError('invalid-path', 'A watch callback must name a relative descendant.');
+    }
+    return value.split('/').map(validateName);
+  };
+  const sameNativePath = (left, right) => path.win32.toNamespacedPath(left).toLowerCase()
+    === path.win32.toNamespacedPath(right).toLowerCase();
   let closed = false, tail = Promise.resolve();
-  const report = error => {
-    try { void Promise.resolve(onError(failure(error))).catch(() => {}); }
+  const report = (error, terminal) => {
+    if (closed && !terminal) return;
+    try { void Promise.resolve(onError(failure(error), Object.freeze({ terminal }))).catch(() => {}); }
     catch { /* A diagnostic callback cannot escape an OS watcher. */ }
   };
   const stop = () => {
@@ -32,17 +50,27 @@ export async function watchDirectory(root, { signal, onChange, onError, resolve,
   };
   const changed = event => {
     if (closed) return;
-    try { void Promise.resolve(onChange(Object.freeze(event))).catch(report); }
-    catch (error) { report(error); }
+    try { void Promise.resolve(onChange(Object.freeze(event))).catch(error => report(error, false)); }
+    catch (error) { report(error, false); }
+  };
+  const rejectSubtree = (filename, error) => {
+    if (filename === root || !denied(error)) return false;
+    remove(filename);
+    report(error, false);
+    return true;
   };
   const enqueue = operation => {
     tail = tail.then(async () => {
       if (closed) return;
       checkAbort(signal);
       await operation();
-    }).catch(error => { if (!closed) { report(error); stop(); } });
+    }).catch(error => { if (!closed) { stop(); report(error, true); } });
   };
   const inspect = async (filename, initial = false) => {
+    try { await inspectDirectory(filename, initial); return true; }
+    catch (error) { if (rejectSubtree(filename, error)) return false; throw error; }
+  };
+  const inspectDirectory = async (filename, initial) => {
     checkAbort(signal);
     if (closed) return;
     let target, info;
@@ -53,7 +81,7 @@ export async function watchDirectory(root, { signal, onChange, onError, resolve,
       info = await fs.lstat(target, { bigint: true });
     }
     catch (error) {
-      if (initial || !missing(error)) throw error;
+      if (initial || filename === root || !missing(error)) throw error;
       remove(filename); return;
     }
     checkAbort(signal);
@@ -63,35 +91,53 @@ export async function watchDirectory(root, { signal, onChange, onError, resolve,
     }
     if (!info.isDirectory()) {
       remove(filename);
-      if (initial) throw new StorageError('not-directory', 'A storage watch requires a directory.');
+      if (initial || filename === root) throw new StorageError('not-directory', 'A storage watch requires a directory.');
       return;
     }
     const identity = `${info.dev}:${info.ino}:${info.birthtimeNs}`;
     if (watchers.has(filename) && watchers.get(filename).identity !== identity) remove(filename);
     if (!watchers.has(filename)) {
       let watcher;
-      try { watcher = watch(target, { persistent: false }, (type, name) => enqueue(async () => {
-        if (name == null || name.length === 0) {
-          await inspect(filename);
-          changed({ path: filename, type });
-          return;
-        }
-        // A non-recursive watcher must return exactly one local name.
-        const relative = String(name);
-        validateName(relative);
-        const child = joinPath(filename, relative);
-        if (type === 'rename') await inspect(child);
-        else {
-          try { await resolve(child); }
-          catch (error) { if (!missing(error)) throw error; }
-        }
-        changed({ path: child, type });
+      try { watcher = nativeWatch(target, { persistent: false, recursive: false }, (type, name) => enqueue(async () => {
+        // Closed handles can already have events queued when their path is
+        // replaced. They must not remove or reconcile the replacement owner.
+        if (watchers.get(filename)?.watcher !== watcher) return;
+        try {
+          if (name == null || name.length === 0) {
+            if (await inspect(filename)) changed({ path: filename, type });
+            return;
+          }
+          const value = String(name);
+          // Node 24's Windows libuv reports its absolute watched path when the
+          // handle is DeletePending (deps/uv/src/win/fs-event.c). Interpret only
+          // that already-owned identity; never resolve an absolute callback.
+          if (windows && type === 'rename' && path.win32.isAbsolute(value) && sameNativePath(value, target)) {
+            if (filename === root) throw new StorageError('not-found', 'The watched storage directory was deleted.');
+            remove(filename); changed({ path: filename, type }); return;
+          }
+          let parts;
+          try { parts = relativeParts(value); }
+          catch (error) {
+            report(callbackFailure(error, filename, name), false);
+            // Unknown native names are invalidations of the held directory,
+            // never paths to normalize, follow, or resolve outside that owner.
+            if (await inspect(filename)) changed({ path: filename, type });
+            return;
+          }
+          const child = joinPath(filename, parts.join('/'));
+          // A descendant notification can arrive before an intermediate
+          // directory's own event. Install that subtree before exposing it.
+          if (parts.length > 1 && !await inspect(joinPath(filename, parts[0]))) return;
+          // A change can restore access to a previously rejected directory.
+          if (await inspect(child)) changed({ path: child, type });
+        } catch (error) { throw callbackFailure(error, filename, name); }
       })); }
       catch (error) {
-        if (initial || !missing(error)) throw error;
+        if (initial || filename === root || !missing(error)) throw error;
         remove(filename); return;
       }
       watcher.on('error', error => enqueue(async () => {
+        if (watchers.get(filename)?.watcher !== watcher) return;
         // Removing a watched child can report an OS error on its own handle.
         // Its parent still watches the namespace and must remain subscribed.
         if (filename !== root) {
@@ -100,7 +146,9 @@ export async function watchDirectory(root, { signal, onChange, onError, resolve,
             if (missing(statError)) {
               remove(filename); changed({ path: filename, type: 'rename' }); return;
             }
+            if (rejectSubtree(filename, statError)) return;
           }
+          if (rejectSubtree(filename, error)) return;
         }
         throw error;
       }));
@@ -111,7 +159,7 @@ export async function watchDirectory(root, { signal, onChange, onError, resolve,
     let directory;
     try { directory = await fs.opendir(target); }
     catch (error) {
-      if (initial || !missing(error)) throw error;
+      if (initial || filename === root || !missing(error)) throw error;
       remove(filename); return;
     }
     if (closed || signal?.aborted) { await directory.close(); checkAbort(signal); return; }
@@ -119,14 +167,16 @@ export async function watchDirectory(root, { signal, onChange, onError, resolve,
       checkAbort(signal);
       if (closed) return;
       if (entry.isSymbolicLink()) {
-        throw new StorageError('permission-denied', 'Local storage does not watch symbolic links or junctions.', { reason: 'link' });
+        rejectSubtree(joinPath(filename, entry.name),
+          new StorageError('permission-denied', 'Local storage does not watch symbolic links or junctions.', { reason: 'link' }));
+        continue;
       }
       if (entry.isDirectory()) await inspect(joinPath(filename, entry.name));
     }
     // A directory can disappear without an event on its own watcher.
     for (const name of [...watchers.keys()]) if (name !== filename && path.posix.dirname(name) === filename) {
       try { await fs.lstat(await resolve(name)); }
-      catch (error) { if (missing(error)) remove(name); else throw error; }
+      catch (error) { if (missing(error)) remove(name); else if (!rejectSubtree(name, error)) throw error; }
     }
   };
   signal?.addEventListener('abort', stop, { once: true });

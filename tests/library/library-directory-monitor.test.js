@@ -169,15 +169,19 @@ test('aggregate item events start and stop paths while ordinary parents do not',
   } finally { await f.monitor.close(); }
 });
 
-test('permission watcher errors retain their watch; other errors close it', async () => {
+test('watch errors follow their explicit lifetime state and a terminal permission failure permits restart', async () => {
   const f = fixture();
   try {
     await f.monitor.start(); await settle(); const watcher = f.watches.get('C:\\media');
-    watcher.onError(Object.assign(new Error('permission'), { code: 'permission-denied' })); await settle();
+    watcher.onError(Object.assign(new Error('permission'), { code: 'permission-denied' }), { terminal: false }); await settle();
     assert.equal(f.watches.size, 1);
-    watcher.onError(new Error('overflow')); await settle(); assert.equal(f.watches.size, 0);
+    watcher.onError(Object.assign(new Error('permission'), { code: 'permission-denied' }), { terminal: true });
+    await settle(); assert.equal(f.watches.size, 0);
     watcher.onChange({ path: 'C:\\media\\late.mkv' }); await settle();
     assert.equal(f.trace.some(row => row[0] === 'info'), false);
+    await f.monitor.start(); await settle();
+    assert.equal(f.watches.size, 1);
+    assert.notEqual(f.watches.get('C:\\media'), watcher);
   } finally { await f.monitor.close(); }
 });
 
