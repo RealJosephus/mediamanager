@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { captureInputIdentity, executionManifestContract, executionManifestReferences } from '../../tools/validation/inputs.js';
-import { repositoryRoot } from '../../tools/validation/paths.js';
+import { recordedInputMapPath, recordedInputPath, repositoryRoot } from '../../tools/validation/paths.js';
 
 const consumers = [
   'tests/core/native-charset.test.js', 'tests/core/native-json-encoder.test.js',
@@ -71,4 +71,32 @@ test('HTTP deletion binds its raw repeat digest without promoting the unread rep
   assert.ok(references.some(reference => reference.filename === path.resolve(path.dirname(filename), raw.filename)));
   assert.ok(references.some(reference => reference.filename === 'D:/native/MediaBrowser.Controller.dll'));
   assert.ok(!references.some(reference => reference.filename.startsWith('D:/unread/') || reference.filename.startsWith('Z:')));
+});
+
+test('XML replay owns relocated byte and source pins while the historical seal alone requires every original assembly', async () => {
+  const replay = 'tests/metadata/local-xml-stream.test.js', historical = 'tests/metadata/local-xml-prefix-seal.test.js';
+  const manifest = path.join(repositoryRoot, executionManifestContract(replay).manifest);
+  const proof = JSON.parse(await readFile(new URL('../metadata/fixtures/local-xml-save-prefix/provenance.json', import.meta.url), 'utf8'));
+  const identity = await captureInputIdentity({ selected: [replay, historical],
+    dependencies: { entries: [entry(replay), entry(historical)] }, environment: {},
+    preflight: { ready: true, services: [], tools: [] } });
+  const required = (filename, digest, owners) => {
+    const target = recordedInputPath(filename, digest ? [digest] : [], repositoryRoot, {});
+    const input = identity.entries.find(value => value.filename === target);
+    assert.ok(input?.required, filename);
+    if (digest) assert.ok(input.expectedDigests.includes(digest), filename);
+    for (const consumer of [replay, historical]) assert.equal(
+      input.requiredReasons.some(reason => reason.startsWith(consumer + ':')), owners.includes(consumer), consumer + ': ' + filename);
+    return input;
+  };
+  required(manifest, undefined, [replay, historical]);
+  required(path.join(path.dirname(manifest), 'native.json'), proof.nativeSha256, [replay, historical]);
+  required(recordedInputMapPath, undefined, [replay, historical]);
+  assert.equal(required(proof.rawRecording, proof.nativeSha256, [replay, historical]).available, true);
+  for (const source of proof.sources) for (const filename of [source.designated, source.isolated]) {
+    assert.equal(required(filename, source.sha256, [replay, historical]).available, true);
+  }
+  for (const source of proof.oracleSources) required(path.join(path.dirname(manifest), source.name), source.sha256, [replay, historical]);
+  for (const assembly of proof.loadedAssemblies) required(assembly.filename, assembly.sha256, [historical]);
+  assert.ok(proof.loadedAssemblies.some(assembly => assembly.sha256 === proof.oracleAssembly.sha256));
 });

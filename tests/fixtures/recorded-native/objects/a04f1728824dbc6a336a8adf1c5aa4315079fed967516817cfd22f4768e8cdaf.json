@@ -1,0 +1,316 @@
+{
+  "actualBaseXmlSaver": true,
+  "actualBoxSetXmlSaver": true,
+  "actualManagedFileSystem": true,
+  "peopleAndLinkedRepositoryControlled": true,
+  "databaseOpened": false,
+  "portOpened": false,
+  "phaseAcceptance": false,
+  "results": [
+    {
+      "name": "existing-linked-lookup-failure",
+      "existing": true,
+      "fault": "links",
+      "actions": [
+        {
+          "action": "SetAttributes",
+          "path": "collection.xml"
+        },
+        {
+          "action": "people",
+          "length": 0
+        },
+        {
+          "action": "linked-items",
+          "length": 0,
+          "ItemIds": [
+            "cd310000-0000-0000-0000-000000000002"
+          ],
+          "fields": [],
+          "EnableImages": false
+        }
+      ],
+      "failure": {
+        "type": "IOException",
+        "Message": "Controlled linked-item lookup failure"
+      },
+      "parseFailure": null,
+      "previousLength": 175,
+      "previousSha256": "93127f2f944a84ad0c26027f1793fbd85372a013ada65b3c0101aefa22bb347e",
+      "fileExists": true,
+      "finalLength": 307,
+      "finalSha256": "8cf4948c1e50ba89d071b4b372fc7bf684801160f0ab19f8290a244cea76f428",
+      "changed": true,
+      "body": "\uFEFF\u003C?xml version=\u00221.0\u0022 encoding=\u0022utf-8\u0022 standalone=\u0022yes\u0022?\u003E\r\n\u003CItem\u003E\r\n  \u003CContentRating\u003EPG\u003C/ContentRating\u003E\r\n  \u003CAdded\u003E10/13/2026 08:00:00\u003C/Added\u003E\r\n  \u003CLockData\u003Efalse\u003C/LockData\u003E\r\n  \u003COverview\u003ENew overview\u003C/Overview\u003E\r\n  \u003CLocalTitle\u003ENew common title\u003C/LocalTitle\u003E\r\n  \u003CDisplayOrder\u003EPremiereDate\u003C/DisplayOrder\u003E\r\n\u003C/Item\u003E",
+      "relativePath": "existing-linked-lookup-failure/collection.xml"
+    },
+    {
+      "name": "absent-linked-lookup-failure",
+      "existing": false,
+      "fault": "links",
+      "actions": [
+        {
+          "action": "SetAttributes",
+          "path": "collection.xml"
+        },
+        {
+          "action": "people",
+          "length": 0
+        },
+        {
+          "action": "linked-items",
+          "length": 0,
+          "ItemIds": [
+            "cd310000-0000-0000-0000-000000000002"
+          ],
+          "fields": [],
+          "EnableImages": false
+        }
+      ],
+      "failure": {
+        "type": "IOException",
+        "Message": "Controlled linked-item lookup failure"
+      },
+      "parseFailure": null,
+      "previousLength": null,
+      "previousSha256": null,
+      "fileExists": true,
+      "finalLength": 307,
+      "finalSha256": "8cf4948c1e50ba89d071b4b372fc7bf684801160f0ab19f8290a244cea76f428",
+      "changed": true,
+      "body": "\uFEFF\u003C?xml version=\u00221.0\u0022 encoding=\u0022utf-8\u0022 standalone=\u0022yes\u0022?\u003E\r\n\u003CItem\u003E\r\n  \u003CContentRating\u003EPG\u003C/ContentRating\u003E\r\n  \u003CAdded\u003E10/13/2026 08:00:00\u003C/Added\u003E\r\n  \u003CLockData\u003Efalse\u003C/LockData\u003E\r\n  \u003COverview\u003ENew overview\u003C/Overview\u003E\r\n  \u003CLocalTitle\u003ENew common title\u003C/LocalTitle\u003E\r\n  \u003CDisplayOrder\u003EPremiereDate\u003C/DisplayOrder\u003E\r\n\u003C/Item\u003E",
+      "relativePath": "absent-linked-lookup-failure/collection.xml"
+    },
+    {
+      "name": "existing-people-lookup-failure",
+      "existing": true,
+      "fault": "people",
+      "actions": [
+        {
+          "action": "SetAttributes",
+          "path": "collection.xml"
+        },
+        {
+          "action": "people",
+          "length": 0
+        }
+      ],
+      "failure": {
+        "type": "IOException",
+        "Message": "Controlled people lookup failure"
+      },
+      "parseFailure": null,
+      "previousLength": 175,
+      "previousSha256": "93127f2f944a84ad0c26027f1793fbd85372a013ada65b3c0101aefa22bb347e",
+      "fileExists": true,
+      "finalLength": 307,
+      "finalSha256": "8cf4948c1e50ba89d071b4b372fc7bf684801160f0ab19f8290a244cea76f428",
+      "changed": true,
+      "body": "\uFEFF\u003C?xml version=\u00221.0\u0022 encoding=\u0022utf-8\u0022 standalone=\u0022yes\u0022?\u003E\r\n\u003CItem\u003E\r\n  \u003CContentRating\u003EPG\u003C/ContentRating\u003E\r\n  \u003CAdded\u003E10/13/2026 08:00:00\u003C/Added\u003E\r\n  \u003CLockData\u003Efalse\u003C/LockData\u003E\r\n  \u003COverview\u003ENew overview\u003C/Overview\u003E\r\n  \u003CLocalTitle\u003ENew common title\u003C/LocalTitle\u003E\r\n  \u003CDisplayOrder\u003EPremiereDate\u003C/DisplayOrder\u003E\r\n\u003C/Item\u003E",
+      "relativePath": "existing-people-lookup-failure/collection.xml"
+    },
+    {
+      "name": "existing-success-control",
+      "existing": true,
+      "fault": "none",
+      "actions": [
+        {
+          "action": "SetAttributes",
+          "path": "collection.xml"
+        },
+        {
+          "action": "people",
+          "length": 0
+        },
+        {
+          "action": "linked-items",
+          "length": 0,
+          "ItemIds": [
+            "cd310000-0000-0000-0000-000000000002"
+          ],
+          "fields": [],
+          "EnableImages": false
+        }
+      ],
+      "failure": null,
+      "parseFailure": null,
+      "previousLength": 175,
+      "previousSha256": "93127f2f944a84ad0c26027f1793fbd85372a013ada65b3c0101aefa22bb347e",
+      "fileExists": true,
+      "finalLength": 442,
+      "finalSha256": "ecf8cb9ba5875e94869944dd5273370344ba93adfa33e476b226518f547eb630",
+      "changed": true,
+      "body": "\uFEFF\u003C?xml version=\u00221.0\u0022 encoding=\u0022utf-8\u0022 standalone=\u0022yes\u0022?\u003E\r\n\u003CItem\u003E\r\n  \u003CContentRating\u003EPG\u003C/ContentRating\u003E\r\n  \u003CAdded\u003E10/13/2026 08:00:00\u003C/Added\u003E\r\n  \u003CLockData\u003Efalse\u003C/LockData\u003E\r\n  \u003COverview\u003ENew overview\u003C/Overview\u003E\r\n  \u003CLocalTitle\u003ENew common title\u003C/LocalTitle\u003E\r\n  \u003CDisplayOrder\u003EPremiereDate\u003C/DisplayOrder\u003E\r\n  \u003CCollectionItems\u003E\r\n    \u003CCollectionItem\u003E\r\n      \u003CPath\u003EZ:\\NeutralMedia\\member.mkv\u003C/Path\u003E\r\n    \u003C/CollectionItem\u003E\r\n  \u003C/CollectionItems\u003E\r\n\u003C/Item\u003E",
+      "relativePath": "existing-success-control/collection.xml"
+    },
+    {
+      "name": "existing-invalid-text-failure",
+      "existing": true,
+      "fault": "xml",
+      "actions": [
+        {
+          "action": "SetAttributes",
+          "path": "collection.xml"
+        }
+      ],
+      "failure": {
+        "type": "ArgumentException",
+        "Message": "\u0027.\u0027, hexadecimal value 0x00, is an invalid character."
+      },
+      "parseFailure": {
+        "type": "XmlException",
+        "Message": "Unexpected end of file has occurred. The following elements are not closed: Overview, Item. Line 6, position 13."
+      },
+      "previousLength": 175,
+      "previousSha256": "93127f2f944a84ad0c26027f1793fbd85372a013ada65b3c0101aefa22bb347e",
+      "fileExists": true,
+      "finalLength": 185,
+      "finalSha256": "2b480881edf4ec7787d2eb0c476b93eb9af518de914c1cd4f5631d0231fd9ee4",
+      "changed": true,
+      "body": "\uFEFF\u003C?xml version=\u00221.0\u0022 encoding=\u0022utf-8\u0022 standalone=\u0022yes\u0022?\u003E\r\n\u003CItem\u003E\r\n  \u003CContentRating\u003EPG\u003C/ContentRating\u003E\r\n  \u003CAdded\u003E10/13/2026 08:00:00\u003C/Added\u003E\r\n  \u003CLockData\u003Efalse\u003C/LockData\u003E\r\n  \u003COverview\u003E",
+      "relativePath": "existing-invalid-text-failure/collection.xml"
+    }
+  ],
+  "assemblies": [
+    {
+      "name": "Emby.Server.Implementations",
+      "location": "D:\\mediamanager-validation\\20261014-release-text-xml-prefix-mv72dklx\\oracle\\bin\\Release\\net10.0\\Emby.Server.Implementations.dll",
+      "sha256": "8d369435646570958505c58b9cb17da169855dabc105d0e933524361e9b7b1c8"
+    },
+    {
+      "name": "Jellyfin.Data",
+      "location": "D:\\mediamanager-validation\\20261014-release-text-xml-prefix-mv72dklx\\oracle\\bin\\Release\\net10.0\\Jellyfin.Data.dll",
+      "sha256": "b991153c8e091e6e618b27b47ec2c070c003fc5c4453406a74fe843c43611d7e"
+    },
+    {
+      "name": "Jellyfin.Database.Implementations",
+      "location": "D:\\mediamanager-validation\\20261014-release-text-xml-prefix-mv72dklx\\oracle\\bin\\Release\\net10.0\\Jellyfin.Database.Implementations.dll",
+      "sha256": "5ffd9a90affb635962267da294a36a4cd6972da5f38083b51ecfb4fba4c31ee6"
+    },
+    {
+      "name": "MediaBrowser.Common",
+      "location": "D:\\mediamanager-validation\\20261014-release-text-xml-prefix-mv72dklx\\oracle\\bin\\Release\\net10.0\\MediaBrowser.Common.dll",
+      "sha256": "c86a38f99a78d9d3b9dd5ba5245fb06bf654cfa3e16ec409d3ba77b1e69ed11e"
+    },
+    {
+      "name": "MediaBrowser.Controller",
+      "location": "D:\\mediamanager-validation\\20261014-release-text-xml-prefix-mv72dklx\\oracle\\bin\\Release\\net10.0\\MediaBrowser.Controller.dll",
+      "sha256": "051c588a8e85a3a7cdde8dc3d9a1112217fd7e973a86fe2ff90cf765bedb75a8"
+    },
+    {
+      "name": "MediaBrowser.LocalMetadata",
+      "location": "D:\\mediamanager-validation\\20261014-release-text-xml-prefix-mv72dklx\\oracle\\bin\\Release\\net10.0\\MediaBrowser.LocalMetadata.dll",
+      "sha256": "f2a102fe8490aa1d39551b1fbb6d9a99654d82bd65186c15a180e7a603e46868"
+    },
+    {
+      "name": "MediaBrowser.Model",
+      "location": "D:\\mediamanager-validation\\20261014-release-text-xml-prefix-mv72dklx\\oracle\\bin\\Release\\net10.0\\MediaBrowser.Model.dll",
+      "sha256": "7b2c1b16721cf7747b572e4de3761de635fad4bd12bec346983545bee73fd92c"
+    },
+    {
+      "name": "Microsoft.Extensions.Logging.Abstractions",
+      "location": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Logging.Abstractions.dll",
+      "sha256": "90c41d68d297e54c4def3cfd38eb620513a744ab01131840ea3e2634cf973be3"
+    },
+    {
+      "name": "Oracle",
+      "location": "D:\\mediamanager-validation\\20261014-release-text-xml-prefix-mv72dklx\\oracle\\bin\\Release\\net10.0\\Oracle.dll",
+      "sha256": "5cb84efcdf5b2289998f499790b10117a353bfce589e22fcfb473cd588d7e2a4"
+    },
+    {
+      "name": "System.Collections",
+      "location": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Collections.dll",
+      "sha256": "df6f2037eabee28100184e92f7536427ba2f086c1110629804d466b124bc4d54"
+    },
+    {
+      "name": "System.Console",
+      "location": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Console.dll",
+      "sha256": "3b85daf02a3d9ed99b84bb1c639fe8b1ced46d8d157fa56f525f6b8c5be43b3e"
+    },
+    {
+      "name": "System.Diagnostics.Process",
+      "location": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Diagnostics.Process.dll",
+      "sha256": "51a57fbe918f8b68930c090792b718fc0850ea12da869d50b97a3796af29a740"
+    },
+    {
+      "name": "System.Linq",
+      "location": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Linq.dll",
+      "sha256": "284d38945b6e92e847129bd28af458b19818d0f2181f79882888ab2003f4c519"
+    },
+    {
+      "name": "System.Memory",
+      "location": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Memory.dll",
+      "sha256": "f8f9d38efd6b0de30954d6bf1f353e9617bfb36d3d245c013a3b12be9f6bd88a"
+    },
+    {
+      "name": "System.Private.CoreLib",
+      "location": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Private.CoreLib.dll",
+      "sha256": "1125acc8106c43fc8bad2d203c4c4485df6182d292846c2fff415c1040c54678"
+    },
+    {
+      "name": "System.Private.Xml",
+      "location": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Private.Xml.dll",
+      "sha256": "d71e72a7a9de324352edd281a46466b51bd0bdd2831b1573f8d3bae8bd2dd4a6"
+    },
+    {
+      "name": "System.Reflection.DispatchProxy",
+      "location": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Reflection.DispatchProxy.dll",
+      "sha256": "bf93a361c0bba8497889c9f7713add5968ba39394f9e6bda27e86294c6c43560"
+    },
+    {
+      "name": "System.Reflection.Emit",
+      "location": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Reflection.Emit.dll",
+      "sha256": "09059981bbeea0fdc5df589be5d7e3937d57e22bec4d78ceb492c587926fc238"
+    },
+    {
+      "name": "System.Reflection.Emit.ILGeneration",
+      "location": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Reflection.Emit.ILGeneration.dll",
+      "sha256": "6b42ddd05b0ca1c7342d73ea9f401fe588044215d65c67b756deb780f0894a26"
+    },
+    {
+      "name": "System.Reflection.Primitives",
+      "location": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Reflection.Primitives.dll",
+      "sha256": "c2bbd885d03da5e880667c228ac1f56a5f3a72ea37d43f010ada000adc33da28"
+    },
+    {
+      "name": "System.Runtime",
+      "location": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Runtime.dll",
+      "sha256": "76be53624f64b23d0249dfa0bbe85390086de7c44bfd490642ea86c6faaf44af"
+    },
+    {
+      "name": "System.Runtime.InteropServices",
+      "location": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Runtime.InteropServices.dll",
+      "sha256": "e5eb1679f3579c9141e2bb9dbdce62624a623f38d299805cc1de07bacd21841f"
+    },
+    {
+      "name": "System.Runtime.Loader",
+      "location": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Runtime.Loader.dll",
+      "sha256": "9b9b2a4f0358d9146e76178ddb87d019be380c78baa7dac853493d45df089f03"
+    },
+    {
+      "name": "System.Security.Cryptography",
+      "location": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Security.Cryptography.dll",
+      "sha256": "e0a839a540e47343b53a936b32d91599a3470005228d50fd0b896f8bbdcc65b0"
+    },
+    {
+      "name": "System.Text.Encoding.Extensions",
+      "location": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Text.Encoding.Extensions.dll",
+      "sha256": "8f51b9535db64fe027a40d6076200b1a6b0889bf05f62bb8e68c3eb083c7f113"
+    },
+    {
+      "name": "System.Text.Json",
+      "location": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Text.Json.dll",
+      "sha256": "fa99f413be21ed5f484a09093fe5f0beba7de3062cf9cc9f847dbf8108dba55a"
+    },
+    {
+      "name": "System.Threading",
+      "location": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Threading.dll",
+      "sha256": "6c32ed1bf8067e4169e8feddd15e6489b89d19d1c7aae1520a551b57745d0a60"
+    },
+    {
+      "name": "System.Xml.ReaderWriter",
+      "location": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Xml.ReaderWriter.dll",
+      "sha256": "8e48fed4d12bcffff01e8059caafb564697275797d2f5ec6823fdd82b87fe938"
+    }
+  ]
+}

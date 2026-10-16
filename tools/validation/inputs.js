@@ -27,6 +27,8 @@ const sealedExecutionManifests = new Map([
   ['tests/library/native-item-cache.test.js', ['sealed-warm', 'tests/library/fixtures/native-item-cache/provenance.json']],
   ['tests/library/warm-item-deletion.test.js', ['sealed-warm', 'tests/library/fixtures/warm-item-deletion/provenance.json']],
   ['tests/http/warm-item-deletion.test.js', ['sealed-warm', 'tests/http/fixtures/warm-item-deletion/provenance.json']],
+  ['tests/metadata/local-xml-stream.test.js', ['sealed-xml-prefix', 'tests/metadata/fixtures/local-xml-save-prefix/provenance.json']],
+  ['tests/metadata/local-xml-prefix-seal.test.js', ['sealed-xml-prefix-history', 'tests/metadata/fixtures/local-xml-save-prefix/provenance.json']],
 ]);
 
 export function executionManifestContract(consumer) {
@@ -52,7 +54,17 @@ export function executionManifestReferences(contract, content, filename) {
     if (!descriptor || typeof descriptor.filename !== 'string') throw new Error('Invalid execution input descriptor.');
     references.push({ ...descriptor, ...options });
   };
-  if (contract.kind === 'sealed-charset') {
+  if (contract.kind === 'sealed-xml-prefix' || contract.kind === 'sealed-xml-prefix-history') {
+    add({ filename: local('native.json'), sha256: content.nativeSha256 });
+    add({ filename: content.rawRecording, sha256: content.nativeSha256 }, { recorded: true });
+    for (const source of content.oracleSources) add({ filename: local(source.name), sha256: source.sha256 });
+    for (const source of content.sources) for (const filename of [source.designated, source.isolated]) {
+      add({ filename, sha256: source.sha256 }, { recorded: true });
+    }
+    if (contract.kind === 'sealed-xml-prefix-history') {
+      for (const assembly of content.loadedAssemblies) add(assembly, { recorded: true });
+    }
+  } else if (contract.kind === 'sealed-charset') {
     for (const file of content.files) add({ filename: local(file.filename.split(/[\\/]/u).at(-1)), sha256: file.sha256 });
     add({ filename: local('native.json'), sha256: content.native.sha256 });
     add({ filename: path.resolve(repositoryRoot, 'src/core/resources/native-charset-models.json'), sha256: content.tables.sha256 });
@@ -287,10 +299,15 @@ export async function captureInputIdentity({ selected, dependencies, preflight, 
     try { content = JSON.parse(await readFile(filename, 'utf8')); }
     catch (error) { if (error.code === 'ENOENT' || error instanceof SyntaxError) return; throw error; }
     for (const descriptor of executionManifestReferences(contract, content, filename)) {
-      // These consumers read the original filename directly. An evidence-map
-      // relocation must not claim availability until its consumer uses it too.
+      // Only an explicitly reviewed recordedInputPath consumer can relocate
+      // evidence. Other contracts still read their original filename directly.
       let target = path.resolve(repositoryRoot, descriptor.filename);
       const pins = ['sha256', 'entriesSha256'].filter(key => Object.hasOwn(descriptor, key)).map(key => descriptor[key]);
+      if (descriptor.recorded) {
+        const mapped = recordedInput(descriptor.filename, pins);
+        target = mapped?.filename ?? validationPath(descriptor.filename, repositoryRoot, environment);
+        if (mapped) add(recordedInputMapPath, `${reason}:recorded-input-map`);
+      }
       if (descriptor.sourceArchiveFallback && environment.MEDIAMANAGER_RECORDED_SOURCE_ARCHIVE && isDigest(descriptor.sha256)) {
         try { await lstat(target); }
         catch (error) {

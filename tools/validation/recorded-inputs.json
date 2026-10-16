@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "scope": "Exact original-path-and-SHA-256 relocation of sealed monitor and collage recording inputs; no prefix, basename or runtime-executable fallback.",
+  "scope": "Exact original-path-and-SHA-256 relocation of sealed monitor, collage and XML recording inputs; no prefix, basename or runtime-executable fallback.",
   "sourcesReviewed": "Only designated source files, controlled fixture helpers, synthetic recordings, execution/build receipts and pinned binary identities; no instance database, configuration, environment dump, key or user media is included.",
   "entries": [
     {
@@ -45,7 +45,8 @@
       "bytes": 27461,
       "sha256": "280ea08cf13065d8cd3790edf551b28ddfc9f352f4758d4fe0e62a55dbe0b14e",
       "consumers": [
-        "tests/library/fixtures/library-directory-monitor/provenance.json"
+        "tests/library/fixtures/library-directory-monitor/provenance.json",
+        "tests/metadata/fixtures/local-xml-save-prefix/provenance.json"
       ]
     },
     {
@@ -248,6 +249,60 @@
       "sha256": "feadc16e6f74a738e7f0f6dde86b792483658d6a191e22b88f01a45576df551f",
       "consumers": [
         "tests/library/fixtures/library-directory-monitor/provenance.json"
+      ]
+    },
+    {
+      "source": "D:/mediamanager-validation/20261014-release-text-xml-prefix-mv72dklx/native.json",
+      "target": "tests/fixtures/recorded-native/objects/a04f1728824dbc6a336a8adf1c5aa4315079fed967516817cfd22f4768e8cdaf.json",
+      "bytes": 15327,
+      "sha256": "a04f1728824dbc6a336a8adf1c5aa4315079fed967516817cfd22f4768e8cdaf",
+      "consumers": [
+        "tests/metadata/fixtures/local-xml-save-prefix/provenance.json"
+      ]
+    },
+    {
+      "source": "D:/jellyfin/MediaBrowser.LocalMetadata/Savers/BaseXmlSaver.cs",
+      "target": "tests/fixtures/recorded-native/objects/98d19c4e13d59268f36304545546904bfec802bdb73ed9e8063b8a81c29be85c.cs",
+      "bytes": 22234,
+      "sha256": "98d19c4e13d59268f36304545546904bfec802bdb73ed9e8063b8a81c29be85c",
+      "consumers": [
+        "tests/metadata/fixtures/local-xml-save-prefix/provenance.json"
+      ]
+    },
+    {
+      "source": "D:/mediamanager-validation/20261005/jellyfin-baseline/source/MediaBrowser.LocalMetadata/Savers/BaseXmlSaver.cs",
+      "target": "tests/fixtures/recorded-native/objects/98d19c4e13d59268f36304545546904bfec802bdb73ed9e8063b8a81c29be85c.cs",
+      "bytes": 22234,
+      "sha256": "98d19c4e13d59268f36304545546904bfec802bdb73ed9e8063b8a81c29be85c",
+      "consumers": [
+        "tests/metadata/fixtures/local-xml-save-prefix/provenance.json"
+      ]
+    },
+    {
+      "source": "D:/jellyfin/MediaBrowser.LocalMetadata/Savers/BoxSetXmlSaver.cs",
+      "target": "tests/fixtures/recorded-native/objects/dfc48dd91326d0d84efd06db983cbc98383098bca3b6436f01578bddfb9bddc2.cs",
+      "bytes": 1948,
+      "sha256": "dfc48dd91326d0d84efd06db983cbc98383098bca3b6436f01578bddfb9bddc2",
+      "consumers": [
+        "tests/metadata/fixtures/local-xml-save-prefix/provenance.json"
+      ]
+    },
+    {
+      "source": "D:/mediamanager-validation/20261005/jellyfin-baseline/source/MediaBrowser.LocalMetadata/Savers/BoxSetXmlSaver.cs",
+      "target": "tests/fixtures/recorded-native/objects/dfc48dd91326d0d84efd06db983cbc98383098bca3b6436f01578bddfb9bddc2.cs",
+      "bytes": 1948,
+      "sha256": "dfc48dd91326d0d84efd06db983cbc98383098bca3b6436f01578bddfb9bddc2",
+      "consumers": [
+        "tests/metadata/fixtures/local-xml-save-prefix/provenance.json"
+      ]
+    },
+    {
+      "source": "D:/mediamanager-validation/20261005/jellyfin-baseline/source/Emby.Server.Implementations/IO/ManagedFileSystem.cs",
+      "target": "tests/fixtures/recorded-native/objects/280ea08cf13065d8cd3790edf551b28ddfc9f352f4758d4fe0e62a55dbe0b14e.cs",
+      "bytes": 27461,
+      "sha256": "280ea08cf13065d8cd3790edf551b28ddfc9f352f4758d4fe0e62a55dbe0b14e",
+      "consumers": [
+        "tests/metadata/fixtures/local-xml-save-prefix/provenance.json"
       ]
     }
   ]

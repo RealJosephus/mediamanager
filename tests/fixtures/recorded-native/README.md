@@ -1,12 +1,13 @@
 # Portable recording evidence
 
 This directory contains unchanged copies of the exact files required by the
-directory-monitor and UserView-collage recordings. The original native outputs
+directory-monitor, UserView-collage and XML prefix recordings. The original native outputs
 and provenance files remain unchanged. The relocation table is
 `tools/validation/recorded-inputs.json`; each original path and SHA-256 pair has
 one exact target and byte count. A missing or conflicting expected digest never
-selects a bundled file. `required-inputs.json` beside each fixture binds its
-additional helper/source/record inputs and the retained license files.
+selects a bundled file. `required-inputs.json` beside the monitor/collage fixtures
+binds their additional helper/source/record inputs and the retained license files;
+the XML entries use explicit execution-manifest contracts for each test consumer.
 
 `recordedInputPath` resolves these files only for reading recording evidence.
 It does not select a runtime or executable. In particular, the Windows
@@ -43,3 +44,9 @@ to replace existing different package bytes. It runs no oracle or test.
 
 `tools/validation/package-jellyfin-source.ps1` prepares the complete source ZIP
 from the receipt-bound source copy, retaining each member's exact recorded hash.
+
+The XML prefix additions contain the original recording bytes and three native
+source files, checked against the unchanged XML provenance digests. Each source
+maps both original source locations to the same byte copy. The missing historical
+XML `Oracle.dll` and original runtime assemblies are not supplied by this package;
+their separate historical-seal entry keeps those required inputs explicit.
