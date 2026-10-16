@@ -15,7 +15,7 @@ import { recordOracle } from '../../tools/validation/oracle.js';
 import { validationOutputRoot } from '../../tools/validation/paths.js';
 
 const inputFile = new URL('./fixtures/post-scan-composition/input.json', import.meta.url);
-const inputBytes = await readFile(inputFile);
+const cancellationInputFile = new URL('./fixtures/post-scan-composition/cancellation-input.json', import.meta.url);
 const hash = value => createHash('sha256').update(value).digest('hex');
 const itemColumns = tableDefinition('BaseItems').columns;
 const byNameTypes = ['Genre', 'Studio'].map(name => 'MediaBrowser.Controller.Entities.' + name);
@@ -46,7 +46,8 @@ function rowsForComparison(rows, { root, initialIds, start, end, expandPath = va
         }
       } else if (column.clrType.includes('DateTime')) {
         value = dateText(value);
-        if (created && ['DateCreated', 'DateModified', 'DateLastSaved', 'DateLastRefreshed'].includes(column.name)) {
+        if (created && !value.startsWith('0001-01-01')
+          && ['DateCreated', 'DateModified', 'DateLastSaved', 'DateLastRefreshed'].includes(column.name)) {
           const instant = Date.parse(value);
           assert.ok(instant >= start - 1000 && instant <= end + 1000, `${column.name} must belong to this actual operation: ${value}`);
           value = '$' + column.name.toUpperCase() + '_CLOCK';
@@ -78,14 +79,14 @@ async function stateFiles(root) {
   return result.sort((left, right) => left.path < right.path ? -1 : left.path > right.path ? 1 : 0);
 }
 
-test('postgres: current native eight-task global scan creates and cleans nonempty by-name state', {
-  skip: !process.env.MEDIAMANAGER_TEST_POSTGRES, timeout: 300000,
-}, async t => {
+async function compareComposition(t, scenarioFile) {
+  const inputBytes = await readFile(scenarioFile), scenario = JSON.parse(inputBytes)[0];
+  const cancelling = scenario.Cancel?.Channel === 'metadata-before';
   assert.ok(process.env.MEDIAMANAGER_JELLYFIN_DLL, 'The actual composition requires the current native Jellyfin assembly directory.');
   await access(process.env.MEDIAMANAGER_JELLYFIN_DLL);
-  const output = path.join(validationOutputRoot(), 'post-scan-composition-' + randomUUID());
+  const output = path.join(validationOutputRoot(), 'post-scan-composition-' + (cancelling ? 'cancel-' : '') + randomUUID());
   const recording = await recordOracle({ project: 'tests/library/fixtures/post-scan-composition/Oracle.csproj', output,
-    args: [fileURLToPath(inputFile), '{output}/native.json', '{output}/cases'] });
+    args: [fileURLToPath(scenarioFile), '{output}/native.json', '{output}/cases'] });
   assert.equal(recording.passed, true);
   const nativeBytes = await readFile(path.join(output, 'native.json'));
   const native = parseLosslessJson(nativeBytes.toString('utf8'));
@@ -99,32 +100,62 @@ test('postgres: current native eight-task global scan creates and cleans nonempt
   const sample = native.results[0], before = sample.before.sql.result, expected = sample.observation.Sql.result;
   assert.deepEqual(sample.discovered, sample.instantiated);
   assert.deepEqual(sample.instantiated.map(name => name.split('.').at(-1)), nativeTasks);
-  assert.equal(sample.observation.Exception, null, sample.observation.ExceptionMessage);
+  assert.deepEqual(sample.Cancel, scenario.Cancel ?? null);
+  if (cancelling) assert.match(sample.observation.Exception ?? '', /^System\.(?:OperationCanceledException|Threading\.Tasks\.TaskCanceledException)$/u,
+    sample.observation.ExceptionMessage ?? 'The actual metadata service must propagate its cancellation.');
+  else assert.equal(sample.observation.Exception, null, sample.observation.ExceptionMessage);
   assert.equal(sample.observation.ScanRunning, false);
+  assert.deepEqual(sample.release, { completed: true, resources: ['scheduler', 'provider', 'plugins', 'services', 'cache-and-tokens'] });
   const logs = sample.observation.Trace.filter(event => event.action === 'log').map(event => event.detail);
   assert.deepEqual(logs.filter(event => event.level === 'Error' || event.level === 'Critical'), [], 'An internally swallowed native task failure is still a test failure.');
-  assert.deepEqual(logs.map(event => /^Post-scan task (\w+) completed after /u.exec(event.message)?.[1]).filter(Boolean), nativeTasks);
+  const expectedCompleted = cancelling ? nativeTasks.slice(0, 6) : nativeTasks;
+  assert.deepEqual(logs.map(event => /^Post-scan task (\w+) completed after /u.exec(event.message)?.[1]).filter(Boolean), expectedCompleted);
   assert.deepEqual(sample.observation.Trace.filter(event => event.action === 'metadata-completed' && byNameTypes.includes(event.detail.item.type))
-    .map(event => event.detail.item.type).sort(), [...byNameTypes].sort(), 'Both native by-name items complete their real metadata service.');
+    .map(event => event.detail.item.type).sort(), (cancelling ? byNameTypes.slice(0, 1) : [...byNameTypes]).sort(),
+  'Only successfully refreshed by-name items complete their real metadata service.');
   assert.ok(sample.before.files.length >= 6, 'Native cleanup starts with real source, internal and extracted marker files.');
-  assert.deepEqual(sample.files, [], 'The native operation deletes every seeded cleanup marker.');
+  if (cancelling) {
+    assert.deepEqual(logs.map(event => /^Running post-scan task \d+\/\d+: (\w+)$/u.exec(event.message)?.[1]).filter(Boolean), nativeTasks.slice(0, 7));
+    assert.deepEqual(logs.map(event => /^Post-scan task (\w+) cancelled after /u.exec(event.message)?.[1]).filter(Boolean), ['StudiosPostScanTask']);
+    const requests = sample.observation.Trace.filter(event => event.action === 'cancel-request');
+    assert.equal(requests.length, 1);
+    assert.equal(requests[0].detail.channel, 'metadata-before');
+    assert.equal(requests[0].detail.item.type, byNameTypes[1]);
+    const cancelled = sample.observation.Trace.filter(event => event.action === 'metadata-cancelled');
+    assert.equal(cancelled.length, 1);
+    assert.equal(cancelled[0].detail.cancelled, true);
+    assert.equal(cancelled[0].detail.item.type, byNameTypes[1]);
+    assert.equal(sample.observation.Trace.some(event => event.action.startsWith('inherited-cleanup-')), false);
+    assert.deepEqual(sample.observation.Trace.filter(event => ['monitor-Stop', 'monitor-Start'].includes(event.action))
+      .map(event => event.action), ['monitor-Stop', 'monitor-Start']);
+    assert.ok(sample.files.length > 0 && sample.files.length < sample.before.files.length,
+      'Genre cleanup commits before cancellation leaves the Studio cleanup files intact.');
+    assert.ok(sample.files.every(file => sample.before.files.some(before => before.path === file.path && before.sha256 === file.sha256)));
+    const studio = expected.BaseItems.find(row => row.Type === byNameTypes[1] && row.Name === sample.seed.Studio);
+    assert.ok(studio, 'GetStudio commits the new entity before the refresh sees cancellation.');
+    assert.ok(studio.DateLastRefreshed == null || dateText(studio.DateLastRefreshed).startsWith('0001-01-01'));
+  } else assert.deepEqual(sample.files, [], 'The native operation deletes every seeded cleanup marker.');
   assert.deepEqual(sample.createdDirectories.map(entry => entry.exists), [true, true]);
-  assert.equal(expected.ItemValues.some(row => idKey(row.ItemValueId) === idKey(sample.orphanValueId)), false);
-  assert.deepEqual(expected.BaseItems.filter(row => byNameTypes.includes(row.Type)).map(row => row.Name).sort(), [sample.seed.Genre, sample.seed.Studio].sort());
+  assert.equal(expected.ItemValues.some(row => idKey(row.ItemValueId) === idKey(sample.orphanValueId)), cancelling);
+  assert.deepEqual(expected.BaseItems.filter(row => byNameTypes.includes(row.Type)).map(row => row.Name).sort(),
+    [sample.seed.Genre, sample.seed.Studio, ...(cancelling ? [sample.seed.DeadStudio] : [])].sort());
 
   const programRoot = await mkdtemp(path.join(os.tmpdir(), 'mediamanager-post-scan-'));
   let database, runtime;
   t.after(async () => {
-    const errors = [];
-    for (const close of [() => runtime?.close(), () => dropPostgresTestDatabase(database), async () => {
+    const errors = [], released = [];
+    for (const [name, close] of [['runtime', () => runtime?.close()], ['database', () => dropPostgresTestDatabase(database)], ['program-root', async () => {
       assert.equal(path.dirname(path.resolve(programRoot)), path.resolve(os.tmpdir()));
       assert.ok(path.basename(programRoot).startsWith('mediamanager-post-scan-'));
       await rm(programRoot, { recursive: true, force: true });
-    }]) try { await close(); } catch (error) { errors.push(error); }
+    }]]) try { await close(); released.push(name); } catch (error) { errors.push(error); }
+    await writeFile(path.join(output, 'cleanup.json'), JSON.stringify({ completed: errors.length === 0, released,
+      databaseClosed: database?.closed ?? null, errors: errors.map(error => error.stack ?? String(error)) }, null, 2) + '\n', { flag: 'wx' });
     if (errors.length) throw new AggregateError(errors, 'Post-scan composition cleanup failed.');
   });
   database = await createPostgresTestDatabase(null, 'post_scan', { max: 1 });
-  const errors = [], events = [], completed = [], metadata = [];
+  const errors = [], events = [], started = [], completed = [], metadata = [], monitor = [], cancelRequests = [];
+  const controller = new AbortController();
   runtime = await createRuntime({ database, programDataPath: programRoot,
     configurationDirectoryPath: path.join(programRoot, 'config'), serverId: 'post-scan-composition',
     configuration: { UICulture: 'en-US', MetadataCountryCode: 'US', IsStartupWizardCompleted: true,
@@ -164,26 +195,50 @@ test('postgres: current native eight-task global scan creates and cleans nonempt
   assert.deepEqual(tasks.map(task => task.constructor.name), nativeTasks.map(name => name === 'CleanDatabaseScheduledTask' ? 'CleanDatabasePostScanTask' : name));
   for (const task of tasks) {
     const run = task.run.bind(task);
-    task.run = async options => { const result = await run(options); completed.push(task.constructor.name); return result; };
+    task.run = async options => { started.push(task.constructor.name); const result = await run(options); completed.push(task.constructor.name); return result; };
   }
+  for (const method of ['stop', 'start']) {
+    const call = runtime.libraryMonitor[method].bind(runtime.libraryMonitor);
+    runtime.libraryMonitor[method] = async (...args) => { const result = await call(...args); monitor.push(method); return result; };
+  }
+  let inheritedCleanup = 0;
+  const inherited = runtime.libraryScanHost.updateInheritedValues.bind(runtime.libraryScanHost);
+  runtime.libraryScanHost.updateInheritedValues = async (...args) => { inheritedCleanup++; return inherited(...args); };
   const refresh = runtime.metadataScanner.refreshItem.bind(runtime.metadataScanner);
   runtime.metadataScanner.refreshItem = async (reference, options) => {
-    const result = await refresh(reference, options); metadata.push(idKey(typeof reference === 'string' ? reference : reference.Id)); return result;
+    const id = idKey(typeof reference === 'string' ? reference : reference.Id);
+    if (cancelling && events.some(event => event.action === 'added' && event.id === id && event.name === sample.seed.Studio)) {
+      assert.equal(options.signal, controller.signal, 'The actual post-scan task must carry the global scan signal.');
+      cancelRequests.push({ id, channel: 'metadata-before' });
+      controller.abort();
+    }
+    // Forward even after abort: the real refresh lifecycle decides the outcome.
+    const result = await refresh(reference, options); metadata.push(id); return result;
   };
   errors.length = 0;
   const start = Date.now();
   let failure;
-  try { await runtime.libraryScanLifecycle.run(); } catch (error) { failure = error; }
+  try { await runtime.libraryScanLifecycle.run({ signal: controller.signal }); } catch (error) { failure = error; }
   const end = Date.now();
   const rows = await database.rows('BaseItems'), values = await database.rows('ItemValues'), maps = await database.rows('ItemValuesMap');
   const files = await stateFiles(programRoot);
+  const temporaryTables = (await database.client.query(`SELECT relname FROM pg_class WHERE relnamespace = pg_my_temp_schema() ORDER BY relname`)).rows;
   await writeFile(path.join(output, 'candidate.json'), JSON.stringify({ startedAt: new Date(start).toISOString(), completedAt: new Date(end).toISOString(),
-    programRoot, completed, events, errors, failure: failure?.stack ?? null, sql: { BaseItems: rows, ItemValues: values, ItemValuesMap: maps },
+    programRoot, started, completed, events, metadata, monitor, cancelRequests, inheritedCleanup, temporaryTables,
+    errors, failure: failure?.stack ?? null, failureName: failure?.name ?? null, sql: { BaseItems: rows, ItemValues: values, ItemValuesMap: maps },
     files, nativeSha256: hash(nativeBytes), record: path.join(output, 'record.json') },
   (_, value) => typeof value === 'bigint' ? JSON.rawJSON(String(value)) : value, 2) + '\n', { flag: 'wx' });
-  assert.equal(failure, undefined, failure?.stack);
+  if (cancelling) {
+    assert.equal(failure?.name, 'AbortError', failure?.stack);
+    assert.equal(failure, controller.signal.reason, 'The cancellation reason propagates through refresh, task and scan without substitution.');
+    assert.equal(cancelRequests.length, 1);
+    assert.deepEqual(started, nativeTasks.slice(0, 7));
+    assert.equal(inheritedCleanup, 0);
+    assert.deepEqual(temporaryTables, [], 'Cancelled by-name SQL snapshots must be released before the only pooled connection is reused.');
+    assert.deepEqual(monitor, ['stop', 'start'], 'Cancellation still completes the scan monitor finally block.');
+  } else assert.equal(failure, undefined, failure?.stack);
   assert.deepEqual(errors, [], 'Internally logged candidate failures must not pass the composition check.');
-  assert.deepEqual(completed, tasks.map(task => task.constructor.name));
+  assert.deepEqual(completed, expectedCompleted.map(name => name === 'CleanDatabaseScheduledTask' ? 'CleanDatabasePostScanTask' : name));
   assert.equal(runtime.libraryScanLifecycle.isScanRunning, false);
   const actual = rowsForComparison(rows, { root: programRoot, initialIds, start, end, expandPath: runtime.library.options.expandPath });
   const wanted = rowsForComparison(expected.BaseItems, { root: sample.programRoot, initialIds,
@@ -199,10 +254,19 @@ test('postgres: current native eight-task global scan creates and cleans nonempt
     && (initialIds.has(idKey(event.detail.item.id)) || byNameTypes.includes(event.detail.item.type)))
     .map(event => ({ action: event.action, id: idKey(event.detail.item.id), name: event.detail.item.Name }));
   assert.deepEqual(events, nativeEvents);
-  for (const row of rows.filter(row => byNameTypes.includes(row.Type))) assert.ok(metadata.includes(idKey(row.Id)), 'Each newly created by-name item traverses the actual metadata scanner.');
+  const nativeRefreshed = sample.observation.Trace.filter(event => event.action === 'metadata-completed' && byNameTypes.includes(event.detail.item.type))
+    .map(event => idKey(event.detail.item.id)).sort();
+  assert.deepEqual(metadata.filter(id => rows.some(row => idKey(row.Id) === id && byNameTypes.includes(row.Type))).sort(), nativeRefreshed,
+    'Successful metadata refreshes match the native committed prefix.');
   assert.deepEqual(files, rewrite(sample.files, sample.programRoot));
   for (const entry of sample.createdDirectories) assert.equal((await stat(path.join(programRoot, entry.path))).isDirectory(), entry.exists);
   assert.equal(runtime.libraryScanner.capabilities.completeLibraryScan, false, 'This narrow nonempty scenario does not admit all media families or release capabilities.');
   await writeFile(path.join(output, 'comparison.json'), JSON.stringify({ passed: true, scope: sample.Name,
-    rows: actual, nativeSha256: hash(nativeBytes), candidate: 'candidate.json' }, null, 2) + '\n', { flag: 'wx' });
-});
+    cancelled: cancelling, rows: actual, nativeSha256: hash(nativeBytes), candidate: 'candidate.json', cleanup: 'cleanup.json' }, null, 2) + '\n', { flag: 'wx' });
+}
+
+const options = { skip: !process.env.MEDIAMANAGER_TEST_POSTGRES, timeout: 300000 };
+test('postgres: current native eight-task global scan creates and cleans nonempty by-name state', options,
+  t => compareComposition(t, inputFile));
+test('postgres: cancelling the real Studio refresh preserves the eight-task committed prefix and releases resources', options,
+  t => compareComposition(t, cancellationInputFile));

@@ -1,10 +1,13 @@
 # Nonempty eight-task composition
 
-This fixture is source preparation for an Actions differential, not a recorded
-pass or release admission. The test builds and executes `Oracle.csproj` against
+This fixture runs Actions differentials; source changes alone do not constitute
+a recorded pass or release admission. The test builds and executes `Oracle.csproj` against
 the Jellyfin runtime supplied by the same CI run. It retains fresh `record.json`,
 build/process logs, raw `native.json`, the native SQLite databases and a candidate
-receipt below `MEDIAMANAGER_VALIDATION_OUTPUT_ROOT`.
+receipt below `MEDIAMANAGER_VALIDATION_OUTPUT_ROOT`. Each input has its own fresh
+oracle execution, `record.json`, `candidate.json`, `comparison.json`, and candidate
+`cleanup.json`; the successful creation/cleanup input and cancellation input never
+share a case root, native database, PostgreSQL schema, or cancellation source.
 
 `NativeScanHost.cs` derives from the actual eight-service host recorded in
 `post-scan-composition-native-1` on 2026-10-16. The previous empty/ordinary
@@ -13,13 +16,41 @@ the by-name application paths to their real singular names, installs the actual
 Genre and Studio metadata services, and replaces the former unused external
 deletion seam with the real `ExternalDataManager` and `PathManager`.
 
-The single scenario saves a detached ordinary Folder with one Genre and one
+The ordinary scenario saves a detached Folder with one Genre and one
 Studio through native `ItemPersistenceService`. It also saves two unreferenced
 by-name items, writes source/internal/extracted marker files, and inserts an
 unmapped ItemValue. An empty-root global scan must then create both live by-name
 items, refresh them, delete both dead items and their files, and remove the orphan
 value. All eight actual post-scan exports remain registered in their discovered
 order and are dispatched by `LibraryManager.ValidateMediaLibraryInternal`.
+
+`cancellation-input.json` preserves the same nonempty operations but requests
+cancellation at the new Studio's actual metadata-service entry. `GetStudio` has
+already committed the item and directory, and the Genre task has already
+completed its real refresh and dead-item cleanup. The observation wrapper only
+cancels the actual global token source and still forwards to the actual
+`StudioMetadataService`; it neither throws a fabricated cancellation nor returns
+a successful substitute. The candidate similarly aborts the global scan signal
+at the new Studio's `metadataScanner.refreshItem` entry and still calls that
+original method. Native `MetadataService.SaveItemAsync` passes this token through
+`LibraryManager.UpdateItemsAsync` to `ItemPersistenceService.SaveItems`, whose
+`UpdateOrInsertItems` checks cancellation before the database write. Both the
+validator and global dispatcher rethrow cancellation, while the scan's finally
+block restarts its monitor and resets `IsScanRunning`.
+
+The new cancellation assertions require that actual recording to show six
+completed tasks, Studio task cancellation, no final database-cleanup task or
+inherited-value update, the new Studio's persisted creation prefix, and retained
+dead-Studio files and orphan value. All persistent columns, relations, relevant
+events, and remaining file bytes still compare against that fresh native
+recording. A different actual native outcome fails with its raw receipt retained;
+it is not rewritten to match the intended boundary. The candidate checks that
+its sole PostgreSQL connection is reusable and no temporary tables remain, then
+records runtime shutdown, schema removal, and application-root removal. The
+native receipt records completed scheduler, provider, plugin, service-provider,
+cache, and token disposal; the oracle must also exit successfully.
+The raw native `scan-observation.json` is written before disposal so a later
+shutdown failure cannot hide the already observed cancellation and SQL state.
 
 The candidate imports only the three fixture entities and their pre-action value
 relations from this newly recorded SQLite state into an isolated PostgreSQL
@@ -37,8 +68,9 @@ The application paths/configuration and offline provider lists are explicit
 harness controls. Metadata/image providers and metadata savers are empty in the
 native host. Unused external video managers are absent and fail if exercised;
 they are not successful cleanup substitutes. The native monitor is observational.
-No movie/audio family, image composition, network provider, watcher, cancellation,
-or complete-library-scan capability is accepted by this narrow scenario.
+No movie/audio family, image composition, network provider, watcher, general
+cancellation guarantee, or complete-library-scan capability is accepted by these
+narrow scenarios. The new cancellation case requires its own Actions evidence.
 
 Required execution inputs are PostgreSQL, .NET 10, and the supplied current
 Jellyfin assembly directory. SQLite is copied from the current SDK RID; Skia is

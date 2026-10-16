@@ -87,7 +87,7 @@ public sealed class FaultPlan
 }
 public sealed class CancellationPlan
 {
-    // provider | global. Provider progress uses unscaled actual Folder phases.
+    // provider | global | metadata-before. Cancellation only changes the real token.
     public string Channel { get; set; } = "provider";
     public string Path { get; set; } = "@aggregate";
     public double Progress { get; set; }
@@ -131,6 +131,8 @@ public sealed class NativeScanHost : IAsyncDisposable
     private bool _observing;
     private int _sequence, _faultOccurrence;
     private bool _disposed;
+    public bool DisposalCompleted { get; private set; }
+    public List<string> ReleasedResources { get; } = [];
     public string CaseRoot { get; }
     public string MediaRoot => Path.Combine(CaseRoot, "media");
     public Scenario Scenario { get; }
@@ -406,7 +408,15 @@ public sealed class NativeScanHost : IAsyncDisposable
     {
         Add("metadata-begin",new { item=Item(item),options.MetadataRefreshMode,options.ImageRefreshMode,
             options.IsAutomated,cancelled=token.IsCancellationRequested });
-        var result=await service.RefreshMetadata(item,options,token);
+        if(_observing)MaybeCancel("metadata-before",item,0);
+        ItemUpdateType result;
+        try { result=await service.RefreshMetadata(item,options,token); }
+        catch(OperationCanceledException error)
+        {
+            Add("metadata-cancelled",new { item=Item(item),cancelled=token.IsCancellationRequested,
+                exception=error.GetType().FullName });
+            throw;
+        }
         Add("metadata-completed",new { item=Item(item),updateType=result });
         if(_observing)MaybeFault("metadata-after",item.Path);
         return result;
@@ -430,6 +440,7 @@ public sealed class NativeScanHost : IAsyncDisposable
         var matches=cancel.Path switch {
             "@aggregate"=>item.GetType()==typeof(AggregateFolder),
             "@user-root"=>item.GetType()==typeof(UserRootFolder),
+            "@studio"=>item.GetType()==typeof(Studio),
             _=>item.Path is not null&&StringComparer.OrdinalIgnoreCase.Equals(Path.GetFullPath(item.Path),MediaPath(cancel.Path)) };
         if(!matches)return;
         Add("cancel-request",new { channel,progress=value,item=Item(item) });_cancel.Cancel();
@@ -481,11 +492,14 @@ public sealed class NativeScanHost : IAsyncDisposable
     public async ValueTask DisposeAsync()
     {
         if(_disposed)return;_disposed=true;
-        _lifetime.StopApplication();await _scheduler.DisposeAsync();
-        Provider.Dispose();_plugins.Dispose();
+        _lifetime.StopApplication();await _scheduler.DisposeAsync();ReleasedResources.Add("scheduler");
+        Provider.Dispose();ReleasedResources.Add("provider");
+        _plugins.Dispose();ReleasedResources.Add("plugins");
         if(ServiceProvider is IAsyncDisposable asyncDisposable)await asyncDisposable.DisposeAsync();
         else if(ServiceProvider is IDisposable disposable)disposable.Dispose();
-        _cache.Dispose();_cancel.Dispose();_lifetime.Dispose();
+        ReleasedResources.Add("services");
+        _cache.Dispose();_cancel.Dispose();_lifetime.Dispose();ReleasedResources.Add("cache-and-tokens");
+        DisposalCompleted=true;
     }
 
     private sealed class ObservedMetadataService(NativeScanHost host,IMetadataService actual):IMetadataService

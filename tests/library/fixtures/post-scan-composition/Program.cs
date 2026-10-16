@@ -39,10 +39,16 @@ foreach (var scenario in scenarios)
     var startedAt = DateTime.UtcNow;
     var observation = await host.RunAsync();
     var completedAt = DateTime.UtcNow;
-    results.Add(new { scenario.Name, seed, root, programRoot = host.Paths.ProgramDataPath,
+    // Retain the actual operation even if a later disposal fails or hangs.
+    await File.WriteAllTextAsync(Path.Combine(root, "scan-observation.json"), JsonSerializer.Serialize(
+        new { scenario.Name, scenario.Cancel, inputSha256 = Hash(inputBytes), before, observation, startedAt, completedAt },
+        new JsonSerializerOptions { WriteIndented = true }));
+    await host.DisposeAsync();
+    results.Add(new { scenario.Name, scenario.Cancel, seed, root, programRoot = host.Paths.ProgramDataPath,
         fixtureIds = new[] { source.Id, dead[0].Id, dead[1].Id }, orphanValueId = Id(4),
         discovered = host.DiscoveredPostScanTaskTypes, instantiated = host.PostScanTaskTypes,
         before, observation, startedAt, completedAt, files = Files(host.Paths.ProgramDataPath),
+        release = new { completed = host.DisposalCompleted, resources = host.ReleasedResources.ToArray() },
         createdDirectories = new[] { Genre.GetPath(seed.Genre), Studio.GetPath(seed.Studio) }
             .Select(filename => new { path = Path.GetRelativePath(host.Paths.ProgramDataPath, filename).Replace('\\', '/'),
                 exists = Directory.Exists(filename) }).ToArray() });

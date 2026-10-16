@@ -1,0 +1,17 @@
+[
+  {
+    "Name": "cancel-during-studio-refresh-after-genre-cleanup",
+    "Libraries": [],
+    "Directories": [],
+    "Fanout": 1,
+    "Cancel": { "Channel": "metadata-before", "Path": "@studio", "Progress": 0 },
+    "Seed": {
+      "SourceName": "Post-scan cancellation source folder",
+      "Genre": "Composition Genre",
+      "Studio": "Composition Studio",
+      "DeadGenre": "Unreferenced Genre",
+      "DeadStudio": "Unreferenced Studio",
+      "OrphanValue": "Unmapped composition value"
+    }
+  }
+]
