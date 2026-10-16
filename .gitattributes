@@ -329,3 +329,6 @@ src/metadata/resources/comic-culture-language.json -text
 
 /tests/library/fixtures/library-directory-monitor/* -text whitespace=cr-at-eol
 /tests/images/fixtures/user-view-collage/native.json whitespace=cr-at-eol
+# These sealed inputs were recorded with CRLF; preserve their original hashes.
+/tests/metadata/fixtures/tmdb-missing/persistence-input.mjs -text whitespace=cr-at-eol
+/tests/metadata/fixtures/tmdb-upcoming-task/README.md -text whitespace=cr-at-eol
