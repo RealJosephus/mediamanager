@@ -63,6 +63,23 @@ jobs:
         with:
           persist-credentials: false
           fetch-depth: 0
+      - name: Validate exact requested test paths before provisioning
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $trackedFiles = git ls-files -- tests
+          if ($LASTEXITCODE -ne 0) { throw 'Cannot list candidate test files.' }
+          $tracked = [Collections.Generic.HashSet[string]]::new([string[]]$trackedFiles, [StringComparer]::Ordinal)
+          $requested = [Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
+          foreach ($entry in ($env:MEDIAMANAGER_CI_TEST_FILES -split '[,\r\n]+')) {
+            $filename = $entry.Trim()
+            if (-not $filename) { continue }
+            if (-not $filename.EndsWith('.test.js', [StringComparison]::Ordinal) -or -not $tracked.Contains($filename)) {
+              throw "Unknown requested test: $filename"
+            }
+            if (-not $requested.Add($filename)) { throw "Duplicate requested test: $filename" }
+          }
+          Write-Output "Validated $($requested.Count) exact requests; an empty list retains automatic scope selection."
       - name: Set up Node
         uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
