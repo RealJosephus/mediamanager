@@ -164,23 +164,28 @@ export function applyInputIdentity(classification, identity, tracked) {
       || requiredReasons.some(reason => typeof reason !== 'string' || !input.reasons.includes(reason))) {
       throw new TypeError(`Required input has invalid required-reason ownership: ${input.filename}`);
     }
-    const runtime = requiredReasons.some(reason => reason.startsWith('runtime:'));
+    const supplied = requiredReasons.some(reason => /^(?:runtime|service|tool):/u.test(reason));
     const relative = repositoryRelative(input.filename);
     let code = input.invalidExpectedDigest ? 'input-digest-mismatch'
+      // A hosted runner may happen to have a different executable at an old
+      // recording's absolute path. That does not supply the recorded identity,
+      // even if the incidental bytes match. Only declared current inputs are
+      // held to the provisioning/digest failure gate below.
+      : !supplied && relative === null ? 'input-not-shipped'
       : !input.available ? 'input-unavailable' : input.expectedDigestMatched === false ? 'input-digest-mismatch' : null;
     // A supplied input that fails its pinned digest is corrupt, not an absent
     // platform dependency. Preserve selection and fail the validation attempt.
     if (code === 'input-digest-mismatch') {
       infrastructureErrors.push({ code, filename: input.filename, reasons: requiredReasons }); continue;
     }
-    if (!runtime && !code) {
+    if (!supplied && !code) {
       const inspect = (description, prefix) => description.kind === 'directory'
         ? description.entries?.every(child => inspect(child, prefix + '/' + child.name))
         : tracked.has(prefix);
       if (relative === null || !inspect(input, relative)) code = 'input-not-shipped';
     }
     if (!code) continue;
-    if (runtime) { infrastructureErrors.push({ code, filename: input.filename, reasons: requiredReasons }); continue; }
+    if (supplied) { infrastructureErrors.push({ code, filename: input.filename, reasons: requiredReasons }); continue; }
     const owners = sources.filter(source => requiredReasons.some(reason => reason.startsWith(source + ':')));
     let attributed = false;
     for (const record of classification.records) {

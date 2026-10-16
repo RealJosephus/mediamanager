@@ -179,6 +179,62 @@ test('CI refuses a required digest mismatch without removing the failing consume
   assert.ok(classification.records.every(record => record.selected));
 });
 
+test('CI treats unprovided external historical paths as not shipped regardless of incidental runner bytes', async () => {
+  const filename = path.resolve(repositoryRoot, '..', 'unprovided-historical-tools', 'node.exe');
+  const owner = ownPath + ':manifest-reference:' + filename, optional = otherPath + ':manifest-reference:' + filename;
+  for (const state of [
+    { available: true, expectedDigestMatched: false },
+    { available: false, expectedDigestMatched: false },
+    { available: true, expectedDigestMatched: true },
+  ]) {
+    const classification = await classify({ dependencies: { entries: [entry(ownPath), entry(otherPath)] },
+      tracked: new Set([ownPath, otherPath]), environment: {} });
+    const input = { filename, kind: 'file', required: true, reasons: [owner, optional], requiredReasons: [owner], ...state };
+    assert.deepEqual(applyInputIdentity(classification, { entries: [input] }, new Set()), []);
+    assert.equal(classification.records[0].selected, false);
+    assert.deepEqual(classification.records[0].reasons, [{ code: 'input-not-shipped', filename, reasons: [owner] }]);
+    assert.equal(classification.records[1].selected, true, 'an optional historical observer does not own this requirement');
+  }
+});
+
+test('CI keeps explicit external runtime, service and tool provisioning failures fatal', async () => {
+  const filename = path.resolve(repositoryRoot, '..', 'supplied-runtime', 'runtime.bin');
+  for (const supplied of ['runtime:node', 'runtime:native-reference', 'service:jellyfinDll', 'tool:ffmpeg']) {
+    for (const state of [
+      { available: true, expectedDigestMatched: false },
+      { available: false },
+    ]) {
+      const classification = await classify({ dependencies: { entries: [entry(ownPath), entry(otherPath)] },
+        tracked: new Set([ownPath, otherPath]), environment: {} });
+      const reasons = [ownPath + ':manifest-reference:' + filename, supplied];
+      const errors = applyInputIdentity(classification, { entries: [{ filename, kind: 'file', required: true,
+        reasons, requiredReasons: reasons, ...state }] }, new Set());
+      assert.deepEqual(errors, [{ code: state.available ? 'input-digest-mismatch' : 'input-unavailable', filename, reasons }]);
+      assert.ok(classification.records.every(record => record.selected), 'explicit supplied input failures cannot shrink scope');
+    }
+  }
+  const classification = await classify({ dependencies: { entries: [entry(ownPath)] }, tracked: new Set([ownPath]), environment: {} });
+  const reasons = [ownPath + ':manifest-reference:' + filename];
+  assert.deepEqual(applyInputIdentity(classification, { entries: [{ filename, required: true, available: false,
+    invalidExpectedDigest: true, reasons, requiredReasons: reasons }] }, new Set()),
+  [{ code: 'input-digest-mismatch', filename, reasons }], 'an invalid pin remains a declaration error even for unprovided history');
+  assert.equal(classification.records[0].selected, true);
+});
+
+test('an exact request still fails when its only required historical input is not shipped', async () => {
+  const classification = await classify({ dependencies: { entries: [entry(ownPath), entry(otherPath)] },
+    tracked: new Set([ownPath, otherPath]), environment: {} });
+  restrictToRequested(classification, ownPath);
+  const filename = path.resolve(repositoryRoot, '..', 'unprovided-historical-tools', 'ffprobe.exe');
+  const reasons = [ownPath + ':manifest-reference:' + filename];
+  assert.deepEqual(applyInputIdentity(classification, { entries: [{ filename, kind: 'file', required: true, available: true,
+    expectedDigestMatched: false, reasons, requiredReasons: reasons }] }, new Set()), []);
+  const request = restrictToRequested(classification, ownPath);
+  assert.deepEqual(request.infrastructureErrors.map(error => [error.code, error.filename]), [['requested-test-unavailable', ownPath]]);
+  assert.equal(request.infrastructureErrors[0].reasons[0].code, 'input-not-shipped');
+  assert.deepEqual(classification.records[1].reasons, [{ code: 'not-requested' }]);
+});
+
 test('CI retains optional historical provenance and fails an unattributed required input', async () => {
   const classification = await classify({ dependencies: { entries: [entry(ownPath)] }, tracked: new Set([ownPath]), environment: {} });
   const filename = path.join(repositoryRoot, 'unavailable-history.json');
