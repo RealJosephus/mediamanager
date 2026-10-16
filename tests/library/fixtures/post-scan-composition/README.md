@@ -150,3 +150,16 @@ events, warm Playlist links and deletion cache state. Each operation's changed
 save/refresh clocks must lie within its own execution window. Its receipt and
 candidate cleanup evidence are independent of the four scan cases and require
 fresh same-run native-reference Actions execution.
+
+Episode persistence evaluates `Video.SourceType`, so this scenario also owns
+the actual `RecordingsManager` with its initially empty active-recording
+registry. The observation records the manager type, active-recording lookup and
+both episodes' actual `SourceType`; the candidate must likewise expose
+`Library`. The same scenario uses the actual `MediaSourceManager`, stream and
+attachment repositories, and `MediaSegmentManager`: `DeleteItem` derives
+internal subtitle/attachment paths through `BaseItem.GetMediaSources`, including
+real database reads. These three initially empty tables are captured and compared
+alongside the existing relationships. The host disposes both owned managers
+and includes them in the Series release receipt. This is a non-recording metadata
+cleanup scenario; it does not exercise tuners, recording timers or encoders. The
+four global scan inputs retain their existing host resources and independent receipts.

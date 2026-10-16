@@ -20,7 +20,8 @@ import { validationOutputRoot } from '../../tools/validation/paths.js';
 const inputFile = new URL('../library/fixtures/post-scan-composition/series-cleanup-input.json', import.meta.url);
 const hash = value => createHash('sha256').update(value).digest('hex');
 const columns = tableDefinition('BaseItems').columns;
-const relationNames = ['AncestorIds', 'LinkedChildren', 'ItemValues', 'ItemValuesMap'];
+const relationNames = ['AncestorIds', 'LinkedChildren', 'ItemValues', 'ItemValuesMap',
+  'MediaStreamInfos', 'AttachmentStreamInfos', 'MediaSegments'];
 const id = number => 'ba400000-0000-0000-0000-' + String(number).padStart(12, '0');
 const json = value => JSON.stringify(value, (_, entry) => typeof entry === 'bigint' ? JSON.rawJSON(String(entry)) : entry, 2) + '\n';
 
@@ -99,12 +100,18 @@ test('postgres: actual Series cleanup promotes a linked episode and reroutes its
   const { observation: expected, release } = native.results[0];
   assert.equal(expected.Name, scenario.Name); assert.deepEqual(expected.SeriesCleanup, scenario.SeriesCleanup);
   assert.equal(expected.after.exception, null, expected.after.exception);
-  assert.deepEqual(release, { completed: true, resources: ['scheduler', 'provider', 'recordings', 'plugins', 'services', 'cache-and-tokens'] });
+  assert.deepEqual(release, { completed: true, resources: ['scheduler', 'provider', 'recordings', 'media-sources', 'plugins', 'services', 'cache-and-tokens'] });
   assert.deepEqual(expected.providerControls, { metadataProviders: [], imageProviders: [], metadataSavers: [] });
   assert.equal(expected.recordingControls.managerType, 'Jellyfin.LiveTv.Recordings.RecordingsManager');
   assert.deepEqual(expected.recordingControls.episodes.map(episode => ({ ...episode, id: idKey(episode.id) })),
     [3, 4].map(number => ({ id: idKey(id(number)), activeRecording: false, sourceType: 'Library' })));
+  assert.deepEqual(expected.mediaServices, {
+    sources: 'Emby.Server.Implementations.Library.MediaSourceManager',
+    segments: 'Jellyfin.Server.Implementations.MediaSegments.MediaSegmentManager'
+  });
   const before = expected.before.sql.result, after = expected.after.sql.result;
+  for (const table of ['MediaStreamInfos', 'AttachmentStreamInfos', 'MediaSegments']) assert.deepEqual(before[table], [],
+    'The metadata-only fixture has no probed media or extracted segment state.');
   const initialIds = new Set(expected.fixtureIds.map(idKey));
   assert.equal(initialIds.size, 5);
   const nativeEpisode = before.BaseItems.find(row => idKey(row.Id) === idKey(id(3)));

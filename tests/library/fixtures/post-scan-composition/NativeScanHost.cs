@@ -20,6 +20,7 @@ using Jellyfin.Database.Providers.Sqlite;
 using Jellyfin.LiveTv.Recordings;
 using Jellyfin.Server;
 using Jellyfin.Server.Implementations.Item;
+using Jellyfin.Server.Implementations.MediaSegments;
 using MediaBrowser.Controller;
 using MediaBrowser.Controller.BaseItemManager;
 using MediaBrowser.Controller.Configuration;
@@ -152,6 +153,7 @@ public sealed class NativeScanHost : IAsyncDisposable
     private PluginManager _plugins = null!;
     private LimitedConcurrencyLibraryScheduler _scheduler = null!;
     private RecordingsManager? _recordings;
+    private MediaSourceManager? _mediaSources;
     private IProviderManager _providerDispatch = null!;
     private bool _observing;
     private int _sequence, _faultOccurrence;
@@ -316,8 +318,18 @@ public sealed class NativeScanHost : IAsyncDisposable
         BaseItem.Logger=loggerFactory.CreateLogger<BaseItem>();BaseItem.UserDataManager=userData;
         BaseItem.MediaSourceManager=ForwardProxy.Make<IMediaSourceManager>((method,values)=>method.Name=="GetPathProtocol"
             ? MediaProtocol.File : ForwardProxy.Unused(method));
+        BaseItem.MediaSegmentManager=ForwardProxy.Make<IMediaSegmentManager>((method,values)=>ForwardProxy.Unused(method));
         if (Scenario.SeriesCleanup is not null)
         {
+            // DeleteItem derives internal subtitle/attachment paths from the
+            // actual media-source projection. All stream, attachment and
+            // segment reads use the real SQLite repositories, even when empty.
+            _mediaSources = new MediaSourceManager(AppHost, Repository, Paths, localization, null!, Manager,
+                loggerFactory.CreateLogger<MediaSourceManager>(), FileSystem, userData, null!, DirectoryService,
+                new MediaStreamRepository(Factory, AppHost, localization), new MediaAttachmentRepository(Factory));
+            _mediaSources.AddParts([]);
+            BaseItem.MediaSourceManager = _mediaSources;
+            BaseItem.MediaSegmentManager = new MediaSegmentManager(loggerFactory.CreateLogger<MediaSegmentManager>(), Factory, []);
             // Episode persistence evaluates Video.SourceType. Use the actual
             // empty active-recording registry; this scenario never starts a
             // recording or calls the unrelated tuner/timer/encoder services.
@@ -326,7 +338,6 @@ public sealed class NativeScanHost : IAsyncDisposable
                 null!, null!, null!, null!);
             Video.RecordingsManager = _recordings;
         }
-        BaseItem.MediaSegmentManager=ForwardProxy.Make<IMediaSegmentManager>((method,values)=>ForwardProxy.Unused(method));
         CollectionFolder.ApplicationHost=AppHost;CollectionFolder.XmlSerializer=new MyXmlSerializer();
         Folder.LimitedConcurrencyLibraryScheduler=_scheduler;
         MetadataServices.Add(new CollectionFolderMetadataService(Configuration,loggerFactory.CreateLogger<CollectionFolderMetadataService>(),
@@ -528,6 +539,7 @@ public sealed class NativeScanHost : IAsyncDisposable
             using var reader=command.ExecuteReader();while(reader.Read())tables.Add(reader.GetString(0));
         }
         var wanted=new HashSet<string>(["BaseItems","AncestorIds","ItemValues","ItemValuesMap","LinkedChildren","UserData","BaseItemImageInfos","Images"],StringComparer.Ordinal);
+        if(Scenario.SeriesCleanup is not null)wanted.UnionWith(["MediaStreamInfos","AttachmentStreamInfos","MediaSegments"]);
         var result=new Dictionary<string,object>();
         foreach(var table in tables.Where(wanted.Contains))
         {
@@ -557,6 +569,7 @@ public sealed class NativeScanHost : IAsyncDisposable
         _lifetime.StopApplication();await _scheduler.DisposeAsync();ReleasedResources.Add("scheduler");
         Provider.Dispose();ReleasedResources.Add("provider");
         if(_recordings is not null){_recordings.Dispose();ReleasedResources.Add("recordings");}
+        if(_mediaSources is not null){_mediaSources.Dispose();ReleasedResources.Add("media-sources");}
         _plugins.Dispose();ReleasedResources.Add("plugins");
         if(ServiceProvider is IAsyncDisposable asyncDisposable)await asyncDisposable.DisposeAsync();
         else if(ServiceProvider is IDisposable disposable)disposable.Dispose();

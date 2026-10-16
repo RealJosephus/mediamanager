@@ -85,6 +85,10 @@ public static class SeriesCleanupRecording
             imageProviders = host.ImageProviders.Select(value => value.GetType().FullName).ToArray(),
             metadataSavers = host.MetadataSavers.Select(value => value.GetType().FullName).ToArray()
         };
+        var mediaServices = new {
+            sources = BaseItem.MediaSourceManager.GetType().FullName,
+            segments = BaseItem.MediaSegmentManager.GetType().FullName
+        };
         var startedAt = DateTime.UtcNow;
         string? exception = null;
         int? updateType = null;
@@ -104,7 +108,7 @@ public static class SeriesCleanupRecording
             playlistLinks = livePlaylist.LinkedChildren.Select(link => link.ItemId).ToArray(),
             removal = removal.ToArray(), trace = host.Trace.ToArray(), exception, updateType };
         var observation = new { host.Scenario.Name, host.Scenario.SeriesCleanup, programRoot = host.Paths.ProgramDataPath,
-            fixtureIds = items.Select(item => item.Id).ToArray(), providerControls, recordingControls, before, after, startedAt, completedAt };
+            fixtureIds = items.Select(item => item.Id).ToArray(), providerControls, recordingControls, mediaServices, before, after, startedAt, completedAt };
         await File.WriteAllTextAsync(Path.Combine(host.CaseRoot, "series-cleanup-observation.json"),
             JsonSerializer.Serialize(observation, new JsonSerializerOptions { WriteIndented = true }));
         await host.DisposeAsync();
