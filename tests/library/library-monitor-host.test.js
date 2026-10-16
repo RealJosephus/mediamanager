@@ -209,7 +209,7 @@ test('postgres: queued Artist validates unique physical album artists before its
   await f.released();
 });
 
-test('postgres: an admitted filesystem change executes the actual metadata and Folder validation pipeline', pg, async t => {
+async function runtimeFixture(t) {
   const programDataPath = await mkdtemp(path.join(os.tmpdir(), 'library-monitor-host-'));
   const database = await createPostgresTestDatabase(null, 'monitor_pipeline', { max: 1 });
   const registry = new StorageRegistry(); let runtime;
@@ -235,11 +235,11 @@ test('postgres: an admitted filesystem change executes the actual metadata and F
   runtime = await createRuntime({ database, programDataPath, vfs, identityMap, ignoreIdentityMap, serverId: 'monitor-pipeline',
     configuration: { UICulture: 'en-US', EnableCaseSensitiveItemIds: true, LibraryScanFanoutConcurrency: 1 } });
   await runtime.libraryScanLifecycle.validateTopLibraryFolders();
-  const host = new LibraryMonitorHost({ store: runtime.store, library: runtime.library, itemCreation: runtime.itemCreation,
-    scanHost: runtime.libraryScanHost, metadata: runtime.metadata, metadataScanner: runtime.metadataScanner,
-    loadContext: runtime.metadata.loadContext, fileSystem: runtime.fileSystem, vfs, identityMap,
-    scheduler: runtime.libraryTaskScheduler });
-  runtime.metadata.queuedRefresh = host.refreshQueuedItem.bind(host);
+  return { database, runtime, adapter, identityRoot, host: runtime.libraryMonitorHost };
+}
+
+test('postgres: an admitted filesystem change executes the actual metadata and Folder validation pipeline', pg, async t => {
+  const { database, runtime, adapter, identityRoot, host } = await runtimeFixture(t);
   await adapter.mkdir('/Watched/Added');
   const selected = await host.resolveAffectedItem(identityRoot + '\\Watched\\Added');
   assert.ok(selected, JSON.stringify((await database.rows('BaseItems')).map(row => ({ type: row.Type, path: row.Path }))));
@@ -247,4 +247,77 @@ test('postgres: an admitted filesystem change executes the actual metadata and F
   host.changedExternally(selected.item); await selected.dispose(); await runtime.metadata.drain();
   const added = await database.rows('BaseItems', { where: { Path: identityRoot + '\\Watched\\Added' } });
   assert.equal(added.length, 1); assert.equal(added[0].Type, nativeTypes.Folder); assert.ok(added[0].DateLastRefreshed);
+});
+
+test('postgres: queued Artist cancellation reaches every physical validation and preserves the final metadata catch boundary', pg, async t => {
+  const { database, runtime, adapter, identityRoot } = await runtimeFixture(t);
+  const [parent] = await database.rows('BaseItems', { where: { Path: identityRoot + '\\Watched' } });
+  assert.ok(parent);
+  const seed = async (number, type, name, ParentId = parent.Id, relative = name) => {
+    const item = { Id: id(number), Type: nativeTypes[type], Name: name, CleanName: name.toLowerCase(),
+      SortName: name, Path: identityRoot + '\\Watched\\' + relative.replaceAll('/', '\\'), ParentId, TopParentId: parent.Id,
+      IsFolder: true, DateCreated: '2026-10-16 00:00:00.0000000', Data: '{}' };
+    await database.insert('BaseItems', postgresTestRow('BaseItems', item));
+    await adapter.mkdir('/Watched/' + relative);
+    return item;
+  };
+  const selected = await seed(701, 'MusicArtist', 'Selected');
+  const empty = await seed(702, 'MusicArtist', 'NoAlbums');
+  const physical = [await seed(703, 'MusicArtist', 'PhysicalA'), await seed(704, 'MusicArtist', 'PhysicalB')];
+  const ItemValueId = id(705);
+  await database.insert('ItemValues', { ItemValueId, Type: 1, Value: selected.Name, CleanValue: selected.CleanName });
+  for (let index = 0; index < physical.length; index++) {
+    const album = await seed(706 + index, 'MusicAlbum', 'Album' + index, physical[index].Id, physical[index].Name + '/Album' + index);
+    await database.insert('ItemValuesMap', { ItemValueId, ItemId: album.Id });
+  }
+  const physicalIds = physical.map(item => item.Id).sort(), started = [], completed = [], metadata = [], metadataFailures = [];
+  let controller, cancelWhenStarted = false, reason;
+  const onStarted = ({ Item }) => {
+    if (!physicalIds.includes(Item.Id)) return;
+    started.push(Item.Id);
+    if (cancelWhenStarted) { cancelWhenStarted = false; controller.abort(reason); }
+  };
+  const onCompleted = ({ Item }) => { if (physicalIds.includes(Item.Id)) completed.push(Item.Id); };
+  runtime.refreshes.on('RefreshStarted', onStarted);
+  runtime.refreshes.on('RefreshCompleted', onCompleted);
+  const refresh = runtime.metadataScanner.refreshLiveItem.bind(runtime.metadataScanner);
+  runtime.metadataScanner.refreshLiveItem = async (item, options) => {
+    metadata.push(item.Id);
+    try { return await refresh(item, options); }
+    catch (error) { metadataFailures.push(error); throw error; }
+  };
+  try {
+    for (const phase of ['before-physical-validation', 'during-physical-validation']) {
+      started.length = completed.length = metadata.length = metadataFailures.length = 0;
+      controller = new AbortController(); reason = new DOMException(phase, 'AbortError');
+      cancelWhenStarted = phase === 'during-physical-validation';
+      if (!cancelWhenStarted) controller.abort(reason);
+      // Both entries use the actual shared provider queue. Its second entry
+      // has no physical artists, so native RefreshArtist catches its own
+      // metadata cancellation and still lets the queue finish normally.
+      const results = await Promise.allSettled([
+        runtime.metadata.queue(selected.Id, { signal: controller.signal }),
+        runtime.metadata.queue(empty.Id, { signal: controller.signal })
+      ]);
+      await runtime.metadata.drain();
+      assert.equal(results[0].status, 'rejected', phase);
+      assert.equal(results[0].reason, reason, phase);
+      assert.equal(results[1].status, 'fulfilled', phase);
+      assert.deepEqual(started.sort(), physicalIds, phase);
+      assert.deepEqual(completed.sort(), physicalIds, phase);
+      assert.deepEqual(metadata, [empty.Id], phase);
+      assert.deepEqual(metadataFailures, [reason], phase);
+      assert.equal(runtime.metadata.getRefreshQueue().size, 0);
+      assert.equal(runtime.refreshes.snapshot().size, 0);
+      await runtime.linkedChildren.flushReleases();
+      for (const table of ['item_states', 'item_cohorts']) assert.equal(BigInt((await database.client.query(
+        `SELECT count(*) AS count FROM "${runtime.linkedChildren.schemaName}".${table}`)).rows[0].count), 0n, table);
+      assert.deepEqual((await database.client.query(`SELECT relname FROM pg_class WHERE relnamespace=pg_my_temp_schema()
+        AND relname LIKE 'mm_monitor_%'`)).rows, []);
+    }
+  } finally {
+    runtime.refreshes.off('RefreshStarted', onStarted);
+    runtime.refreshes.off('RefreshCompleted', onCompleted);
+    runtime.metadataScanner.refreshLiveItem = refresh;
+  }
 });

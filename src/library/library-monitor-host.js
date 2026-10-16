@@ -254,9 +254,12 @@ export class LibraryMonitorHost {
       const failures = [];
       try {
         if (!this.scheduler) throw new TypeError('Artist refresh requires the shared library scheduler.');
+        // ProviderManager awaits every physical artist's ValidateChildren task.
+        // Let that operation observe cancellation after its accessibility guard;
+        // scheduler cancellation would silently skip it and lose this boundary.
         await this.scheduler.enqueue(sequence, artist => this.scanHost.validateChildren(artist, { ...options,
           recursive: true, refreshChildMetadata: true, allowRemoveRoot: false, reportProgress() {} }),
-        { signal: options.signal, onError: error => failures.push(error) });
+        { onError: error => failures.push(error) });
         if (failures.length) throw failures[0];
       } finally { await sequence.close(); }
       try { await this.metadataScanner.refreshLiveItem(item, options); }
