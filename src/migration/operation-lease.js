@@ -7,7 +7,9 @@ function endpointFor(identity) {
   if (process.platform === 'linux') return { path: `\0mediamanager-operation-${digest}` };
   const bytes = Buffer.from(digest, 'hex');
   return {
-    host: `127.${bytes[0] || 1}.${bytes[1] || 1}.${bytes[2] || 1}`,
+    // macOS exposes 127.0.0.1 without requiring additional loopback aliases.
+    // The finite TCP port space fails closed if an unrelated owner collides.
+    host: '127.0.0.1',
     port: 20_000 + bytes.readUInt16BE(3) % 40_000,
     exclusive: true
   };
