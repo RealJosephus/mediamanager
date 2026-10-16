@@ -1,5 +1,5 @@
 import path from 'node:path';
-import { lstat, readFile, realpath } from 'node:fs/promises';
+import { lstat, readFile, readdir, readlink, realpath } from 'node:fs/promises';
 import { dependencyClosure, describeFile, filesIn, sha256 } from './inventory.js';
 import { recordedInput, recordedInputMapPath, repositoryRoot, validationPath } from './paths.js';
 import { collageFontFiles } from '../../src/images/font-collection.js';
@@ -146,12 +146,27 @@ export async function captureInputIdentity({ selected, dependencies, preflight, 
       && entry.imports.includes('src/images/system-fonts/index.js'));
   let systemFonts;
   if (usesSystemFonts) {
-    systemFonts = await resolveCollageSystemFonts();
+    const resolved = await resolveCollageSystemFonts();
+    const bindConfiguration = async (filename, parents = new Set()) => {
+      const actual = await realpath(filename), info = await lstat(actual), logical = await lstat(filename);
+      const binding = { filename, actual, ...(logical.isSymbolicLink() ? { linkTarget: await readlink(filename) } : {}) };
+      if (info.isFile()) {
+        add(actual, 'runtime:collage-font-configuration');
+        return { ...binding, kind: 'file' };
+      }
+      if (!info.isDirectory()) throw new Error('Fontconfig inputs must be files or include directories.');
+      if (parents.has(actual)) throw new Error('Fontconfig input directories contain a symbolic-link cycle.');
+      const ancestors = new Set([...parents, actual]), entries = [];
+      for (const name of (await readdir(filename)).sort()) entries.push(await bindConfiguration(path.join(filename, name), ancestors));
+      return { ...binding, kind: 'directory', entries };
+    };
+    const configurationBindings = [];
+    for (const filename of resolved.configurationFiles) configurationBindings.push(await bindConfiguration(filename));
+    systemFonts = { ...resolved, configurationBindings };
     // OS fontconfig entries and shared libraries commonly use symbolic links.
     // Resolve them on each capture and bind actual bytes; a retargeted link
     // therefore changes the input identity instead of bypassing file checks.
     for (const filename of systemFonts.files) add(await realpath(filename), 'runtime:collage-selected-font');
-    for (const filename of systemFonts.configurationFiles) add(await realpath(filename), 'runtime:collage-font-configuration');
     for (const filename of systemFonts.libraryFiles ?? []) add(await realpath(filename), 'runtime:collage-font-library');
   }
   const dotnetExecutables = [...preflight.services.filter(service => service.name === 'dotnet').map(service => service.filename),

@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
-import { mkdir, mkdtemp, readFile, realpath, rm, stat, utimes, writeFile } from 'node:fs/promises';
+import { lstat, mkdir, mkdtemp, readFile, readdir, readlink, realpath, rm, stat, utimes, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { describeFile } from '../../tools/validation/inventory.js';
 import { captureInputIdentity, inputsUnchanged } from '../../tools/validation/inputs.js';
@@ -71,10 +71,27 @@ test('actual system-font consumers bind selected bytes and configuration without
   assert.equal(Object.hasOwn(inactive, 'systemFonts'), false);
   assert.equal(inactive.entries.some(entry => entry.reasons.some(reason => reason.startsWith('runtime:collage-'))), false);
   const resolved = await resolveCollageSystemFonts();
-  assert.deepEqual(selected.systemFonts, resolved);
+  const { configurationBindings, ...selection } = selected.systemFonts;
+  assert.deepEqual(selection, resolved);
+  assert.deepEqual(configurationBindings.map(binding => binding.filename), resolved.configurationFiles);
+  const configurationFiles = [];
+  const verifyConfiguration = async binding => {
+    assert.equal(binding.actual, await realpath(binding.filename));
+    const logical = await lstat(binding.filename);
+    assert.equal(binding.linkTarget, logical.isSymbolicLink() ? await readlink(binding.filename) : undefined);
+    if (binding.kind === 'directory') {
+      assert.ok((await stat(binding.actual)).isDirectory());
+      assert.deepEqual(binding.entries.map(entry => path.basename(entry.filename)), (await readdir(binding.filename)).sort());
+      for (const child of binding.entries) await verifyConfiguration(child);
+    } else {
+      assert.equal(binding.kind, 'file');
+      configurationFiles.push(binding.actual);
+    }
+  };
+  for (const binding of configurationBindings) await verifyConfiguration(binding);
   assert.ok(resolved.defaultFace && resolved.files.length > 0, 'the actual runner must provide the default face');
   for (const [names, reason] of [[resolved.files, 'runtime:collage-selected-font'],
-    [resolved.configurationFiles, 'runtime:collage-font-configuration'], [resolved.libraryFiles ?? [], 'runtime:collage-font-library']]) {
+    [configurationFiles, 'runtime:collage-font-configuration'], [resolved.libraryFiles ?? [], 'runtime:collage-font-library']]) {
     const entries = selected.entries.filter(entry => entry.reasons.includes(reason));
     assert.deepEqual(entries.map(entry => entry.filename).sort(), [...new Set(await Promise.all(names.map(filename => realpath(filename))))].sort());
     for (const entry of entries) {
