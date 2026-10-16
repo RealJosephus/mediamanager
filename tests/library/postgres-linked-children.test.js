@@ -10,7 +10,7 @@ import {postgresTestRow} from '../database/postgres-fixture.js';
 import test from 'node:test';
 test('postgres: raw links own an independent max1 pool across readOnly, TEMP, rollback and drain', {skip:!process.env.MEDIAMANAGER_TEST_POSTGRES}, async()=>{
 const schema = 'source_relations_' + randomUUID().replaceAll('-', '').slice(0,20);
-const database = await PostgresDatabase.open({ connectionString: process.env.MEDIAMANAGER_TEST_POSTGRES, maxPoolSize: 1, schema, create:true });
+const database = await PostgresDatabase.open({ connectionString: process.env.MEDIAMANAGER_TEST_POSTGRES, max: 1, schema, create:true });
 const pool=database.pool;
 const store = new PostgresLinkedChildrenStore({ database });
 const checks = [], handles = [], observations = [];

@@ -14,7 +14,7 @@ const collectionType = 'MediaBrowser.Controller.Entities.CollectionFolder';
 
 test('postgres: top-level deletion observes a descendant committed by an independent writer before its lock is released',
   { skip: !postgresTestConnectionString, timeout: 20000 }, async t => {
-  const database = await createPostgresTestDatabase(t, 'scan_child_race', { maxPoolSize: 1 });
+  const database = await createPostgresTestDatabase(t, 'scan_child_race', { max: 1 });
   const store = new DomainStore(database), links = new PostgresLinkedChildrenStore({ database });
   await links.initialize();
   const library = new LibraryService({ store, linkedChildren: links, serverId: 'scan-child-writer-barrier' });
@@ -22,7 +22,7 @@ test('postgres: top-level deletion observes a descendant committed by an indepen
   library.itemCreation = itemCreation;
   const host = new LibraryScanHost({ store, library, itemCreation, metadataScanner: {}, topLevelValidation: {} });
   const otherDatabase = await PostgresDatabase.open({ connectionString: postgresTestConnectionString,
-    schema: database.schemaName, maxPoolSize: 1 });
+    schema: database.schemaName, max: 1 });
   const otherStore = new DomainStore(otherDatabase);
   const originalQuery = database.client.query;
   t.after(async () => {

@@ -8,7 +8,7 @@ import {createPostgresTestDatabase,postgresTestRow} from '../database/postgres-f
 
 const id=n=>n.toString(16).padStart(32,'0');
 async function fixture(t){
-  const database=await createPostgresTestDatabase(t,'record_owner',{maxPoolSize:1}),store=new DomainStore(database),links=new PostgresLinkedChildrenStore({database});await links.initialize();
+  const database=await createPostgresTestDatabase(t,'record_owner',{max:1}),store=new DomainStore(database),links=new PostgresLinkedChildrenStore({database});await links.initialize();
   const library=new LibraryService({fileSystem: testFileSystem, store,linkedChildren:links,serverId:'record-owner',configuration:{CacheSize:3}});
   const frames=new Set(),load=library.load.bind(library);library.load=async(...args)=>{const state=await load(...args),dispose=state.dispose.bind(state);frames.add(state);state.dispose=async options=>{try{await dispose(options);}finally{frames.delete(state);}};return state;};
   await database.insert('BaseItems',postgresTestRow('BaseItems',{Id:id(1),Type:'MediaBrowser.Controller.Entities.UserRootFolder',Name:'Root',Data:'{}',IsFolder:true}));

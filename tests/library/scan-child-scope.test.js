@@ -16,7 +16,7 @@ const folderType = 'MediaBrowser.Controller.Entities.Folder';
 const collectionType = 'MediaBrowser.Controller.Entities.CollectionFolder';
 
 async function fixture(t) {
-  const database = await createPostgresTestDatabase(t, 'scan_children', { maxPoolSize: 1 });
+  const database = await createPostgresTestDatabase(t, 'scan_children', { max: 1 });
   const store = new DomainStore(database), links = new PostgresLinkedChildrenStore({ database });
   await links.initialize();
   const library = new LibraryService({ store, linkedChildren: links, serverId: 'scan-child-scope' });
