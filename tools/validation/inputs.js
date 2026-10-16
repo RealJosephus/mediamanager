@@ -3,6 +3,7 @@ import { lstat, readFile, realpath } from 'node:fs/promises';
 import { dependencyClosure, describeFile, filesIn, sha256 } from './inventory.js';
 import { recordedInput, recordedInputMapPath, repositoryRoot, validationPath } from './paths.js';
 import { collageFontFiles } from '../../src/images/font-collection.js';
+import { resolveCollageSystemFonts } from '../../src/images/system-fonts/index.js';
 
 const isDigest = value => typeof value === 'string' && /^[a-f0-9]{64}$/iu.test(value);
 
@@ -135,6 +136,23 @@ export async function captureInputIdentity({ selected, dependencies, preflight, 
   };
   if (closure.some(entry => entry.path === 'src/images/user-view-collage.js')) {
     for (const filename of collageFontFiles()) add(filename, 'runtime:collage-system-font');
+  }
+  // Importing this collector also imports the resolver's source. Resolve OS
+  // policy only for actual consumers, never merely because that source is in
+  // the dependency closure. The renderer opts in when it uses the new bridge.
+  const usesSystemFonts = closure.some(entry => ['tests/images/system-fonts-runtime.test.js',
+    'tests/validation/input-identity.test.js'].includes(entry.path)
+    || entry.path === 'src/images/user-view-collage.js'
+      && entry.imports.includes('src/images/system-fonts/index.js'));
+  let systemFonts;
+  if (usesSystemFonts) {
+    systemFonts = await resolveCollageSystemFonts();
+    // OS fontconfig entries and shared libraries commonly use symbolic links.
+    // Resolve them on each capture and bind actual bytes; a retargeted link
+    // therefore changes the input identity instead of bypassing file checks.
+    for (const filename of systemFonts.files) add(await realpath(filename), 'runtime:collage-selected-font');
+    for (const filename of systemFonts.configurationFiles) add(await realpath(filename), 'runtime:collage-font-configuration');
+    for (const filename of systemFonts.libraryFiles ?? []) add(await realpath(filename), 'runtime:collage-font-library');
   }
   const dotnetExecutables = [...preflight.services.filter(service => service.name === 'dotnet').map(service => service.filename),
     ...preflight.tools.filter(tool => tool.name === 'dotnet').map(tool => tool.executable)].filter(Boolean);
@@ -395,7 +413,7 @@ export async function captureInputIdentity({ selected, dependencies, preflight, 
   const tools = preflight.tools.map(({ name, executable, available, version, errorCode }) => ({
     name, executable, available, version, ...(errorCode ? { errorCode } : {}),
   }));
-  const identity = { entries, services, tools, preflightReady: preflight.ready,
+  const identity = { entries, services, tools, ...(systemFonts ? { systemFonts } : {}), preflightReady: preflight.ready,
     ready: entries.filter(entry => entry.required).every(entry => entry.available && entry.expectedDigestMatched !== false) && preflight.ready };
   return { schemaVersion: 2, scope: 'Selected tests and their transitive local src/test/tool imports: imported local data files, declared/local fixture inputs, fixture siblings, transitive JSON provenance/hash-bound/source descriptors, configured native/runtime dependencies, Node modules and tool executables; service availability/version. Explicit required descriptors must exist and match every declared digest before execution. Required ownership is recorded per reason; optional consumers of the same file do not inherit another consumer\'s requirement. Ordinary DTO paths are not interpreted as dependencies. Dynamic reads outside these inputs require separate evidence.',
     ...identity, entriesSha256: sha256(JSON.stringify(identity)) };

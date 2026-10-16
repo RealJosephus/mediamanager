@@ -1,13 +1,14 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
-import { mkdir, mkdtemp, readFile, rm, stat, utimes, writeFile } from 'node:fs/promises';
+import { mkdir, mkdtemp, readFile, realpath, rm, stat, utimes, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { describeFile } from '../../tools/validation/inventory.js';
 import { captureInputIdentity, inputsUnchanged } from '../../tools/validation/inputs.js';
 import { resultOutcome } from '../../tools/validation/run.js';
 import { repositoryRoot, validationPath } from '../../tools/validation/paths.js';
 import { collageFontFiles } from '../../src/images/font-collection.js';
+import { resolveCollageSystemFonts } from '../../src/images/system-fonts/index.js';
 import { applyInputIdentity, classify } from '../../tools/ci/scope.js';
 // This regression reads the real reader's system-font input. Keep that reader
 // in the test dependency closure so strict validation binds the same bytes.
@@ -56,6 +57,40 @@ test('the collage source closure requires the exact system collection bytes used
   const missing = { filename: collageFontFiles('darwin')[0], required: true, available: false, reasons: [reason], requiredReasons: [reason] };
   assert.deepEqual(applyInputIdentity(classification, { entries: [missing] }, new Set()).map(error => error.code), ['input-unavailable']);
   assert.equal(classification.records[0].selected, true, 'a missing promised system font fails infrastructure without shrinking the selection');
+});
+
+test('actual system-font consumers bind selected bytes and configuration without activating unrelated resolver imports', async () => {
+  const consumer = 'tests/images/system-fonts-runtime.test.js', resolver = 'src/images/system-fonts/index.js';
+  const unrelated = 'tests/images/collage-fonts.test.js';
+  const entry = (path, imports, test = false) => ({ path, imports, test, importedFiles: [], services: [], tools: [],
+    declaredReferences: [], fixtureReferences: [], conditionalRegistration: false, unresolvedImports: [], unresolvedExecutables: [] });
+  const dependencies = { entries: [entry(resolver, []), entry(consumer, [resolver], true), entry(unrelated, [resolver], true)] };
+  const capture = selected => captureInputIdentity({ selected, dependencies, environment: {},
+    preflight: { ready: true, tools: [], services: [] } });
+  const selected = await capture([consumer]), inactive = await capture([unrelated]);
+  assert.equal(Object.hasOwn(inactive, 'systemFonts'), false);
+  assert.equal(inactive.entries.some(entry => entry.reasons.some(reason => reason.startsWith('runtime:collage-'))), false);
+  const resolved = await resolveCollageSystemFonts();
+  assert.deepEqual(selected.systemFonts, resolved);
+  assert.ok(resolved.defaultFace && resolved.files.length > 0, 'the actual runner must provide the default face');
+  for (const [names, reason] of [[resolved.files, 'runtime:collage-selected-font'],
+    [resolved.configurationFiles, 'runtime:collage-font-configuration'], [resolved.libraryFiles ?? [], 'runtime:collage-font-library']]) {
+    const entries = selected.entries.filter(entry => entry.reasons.includes(reason));
+    assert.deepEqual(entries.map(entry => entry.filename).sort(), [...new Set(await Promise.all(names.map(filename => realpath(filename))))].sort());
+    for (const entry of entries) {
+      assert.equal(entry.available, true); assert.equal(entry.required, true);
+      assert.ok(entry.requiredReasons.includes(reason));
+      const actual = await describeFile(entry.filename);
+      assert.equal(entry.sha256 ?? entry.entriesSha256, actual.sha256 ?? actual.entriesSha256);
+    }
+  }
+  const classification = await classify({ dependencies, tracked: new Set([consumer, resolver, unrelated]),
+    environment: { MEDIAMANAGER_CI_NATIVE_REFERENCE: 'true' } });
+  const font = selected.entries.find(entry => entry.reasons.includes('runtime:collage-selected-font'));
+  assert.deepEqual(applyInputIdentity(classification, { entries: [{ ...font, available: false }] }, new Set()).map(error => error.code),
+    ['input-unavailable']);
+  assert.equal(classification.records.find(record => record.path === consumer).selected, true,
+    'a missing actual system font fails infrastructure instead of shrinking requested scope');
 });
 
 async function isolatedDotnet(t) {
