@@ -38,7 +38,7 @@ function Write-Record([string]$Name, $Value) {
 }
 function Invoke-Dotnet([string]$Name, [string[]]$NativeArguments) {
     $start = [Diagnostics.ProcessStartInfo]::new()
-    $start.FileName = (Get-Command dotnet -CommandType Application).Source
+    $start.FileName = (Get-Command dotnet -CommandType Application | Select-Object -First 1).Source
     $start.WorkingDirectory = $sourceRoot
     $start.UseShellExecute = $false; $start.CreateNoWindow = $true
     $start.RedirectStandardOutput = $true; $start.RedirectStandardError = $true
