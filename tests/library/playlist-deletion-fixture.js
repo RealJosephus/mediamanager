@@ -12,6 +12,7 @@ import { internalImagePath } from '../../src/metadata/image-paths.js';
 import { readCachedFolderChildren, setFolderChildren } from '../../src/library/folder-cache.js';
 import { parseLosslessJson } from '../../src/core/json.js';
 import { guid, idKey, dateText } from '../../src/library/records.js';
+import { fixturePathStyle, projectStatePath, expandStatePath } from './fixture-state-path.js';
 
 export const playlistDeletionId = key => `99d00000-0000-0000-0000-${String(key).padStart(12, '0')}`;
 const ordinal = (a, b) => a < b ? -1 : a > b ? 1 : 0;
@@ -24,7 +25,7 @@ const rewrite = (value, transform) => Array.isArray(value) ? value.map(entry => 
 export async function setupPlaylistDeletion(t, sample, recorded) {
   const fixture = await setupChildrenFixture(t), calls = [];
   useIdentityPathReversalControl(fixture);
-  const expand = text => text.replaceAll('$STATE', fixture.stateRoot);
+  const expand = text => expandStatePath(text, '$STATE', fixture.stateRoot);
   // This is the recorded PRE-operation frame, not candidate expected state.
   const rows = recorded.initialRows.map(row => ({ ...rewrite(row, expand),
     Data: row.Data == null ? null : encode(rewrite(parseLosslessJson(row.Data), expand)) }));
@@ -41,7 +42,7 @@ export async function setupPlaylistDeletion(t, sample, recorded) {
   for (const link of recorded.initialLinks) await fixture.database.insert('LinkedChildren', link);
   fixture.vfs.mount({ path: '/playlist-source', instanceId: 'fixture', capabilities: { create: true, replace: true, mkdir: true, delete: true } });
   const mediaRoot = path.join(fixture.stateRoot, 'media');
-  fixture.identityMap.addPrefix({ identityRoot: mediaRoot, accessRoot: '/playlist-source/media', style: 'windows',
+  fixture.identityMap.addPrefix({ identityRoot: mediaRoot, accessRoot: '/playlist-source/media', style: fixturePathStyle,
     returnAccess: 'Isolated Playlist deletion media identity, never host-media access.' });
   await fixture.adapter.mkdir('/media');
   const assets = new MetadataImageAssets({fileSystem: testFileSystem,  ...fixture, metadataPath: path.join(fixture.stateRoot, 'metadata'),
@@ -125,9 +126,9 @@ export async function setupPlaylistDeletion(t, sample, recorded) {
     await fixture.database.client.query('CREATE TRIGGER playlist_deletion_failure BEFORE DELETE ON "BaseItems" FOR EACH ROW EXECUTE FUNCTION playlist_deletion_failure()');
   }
   const normalizeRows = rows => rows.map(row => Object.fromEntries(Object.entries(row).map(([key, value]) => [key,
-    key === 'Data' && value != null ? rewrite(parseLosslessJson(value), text => text.replaceAll(fixture.stateRoot, '$STATE'))
+    key === 'Data' && value != null ? rewrite(parseLosslessJson(value), text => projectStatePath(text, fixture.stateRoot))
       : key.startsWith('Date') && value != null ? dateText(value)
-        : typeof value === 'string' ? value.replaceAll(fixture.stateRoot, '$STATE') : value])))
+        : typeof value === 'string' ? projectStatePath(value, fixture.stateRoot) : value])))
     .sort((a, b) => ordinal(a.Id, b.Id));
   const links = async () => (await fixture.database.rows('LinkedChildren')).sort((a, b) => ordinal(a.ParentId, b.ParentId) || a.SortOrder - b.SortOrder);
   const files = async () => {
@@ -135,7 +136,7 @@ export async function setupPlaylistDeletion(t, sample, recorded) {
     const local = async directory => { try { for (const entry of await readdir(directory, { withFileTypes: true })) {
       const filename = path.join(directory, entry.name);
       if (entry.isDirectory()) await local(filename);
-      else result.push({ path: filename.replaceAll(fixture.stateRoot, '$STATE'), sha256: sha(await readFile(filename)) });
+      else result.push({ path: projectStatePath(filename, fixture.stateRoot), sha256: sha(await readFile(filename)) });
     } } catch (error) { if (error.code !== 'ENOENT') throw error; } };
     for (const root of [loaded.dataPath, loaded.metadataPath]) await local(root);
     const network = async directory => { for (const entry of (await fixture.vfs.list(directory)).entries) {

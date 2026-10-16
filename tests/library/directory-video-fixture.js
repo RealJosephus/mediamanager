@@ -7,6 +7,7 @@ import { createResolvedItemEntity } from '../../src/library/resolved-item-entity
 import { dateText } from '../../src/library/records.js';
 import { ensureFixtureDirectory } from './ignore-file-fixture.js';
 import { projectItem, projectDiscovery } from './video-discovery-fixture.js';
+import { fixturePathStyle, projectStatePath } from './fixture-state-path.js';
 
 export async function resolveDirectoryVideo(value, sample) {
   const { fixture, loaded, calls } = value;
@@ -15,12 +16,12 @@ export async function resolveDirectoryVideo(value, sample) {
     loaded.parent.IsLocked = true;
   }
   for (const name of sample.directories) await ensureFixtureDirectory(fixture, '/discovery-write/discovery/' + name);
-  const normalize = value => value?.replace(fixture.stateRoot, '$STATE'), cache = new Map();
+  const normalize = value => projectStatePath(value, fixture.stateRoot), cache = new Map();
   const coreOptions = { ignoreRule: fixture.ignoreRule, parent: loaded.parent, applicationRootPath: path.join(fixture.stateRoot, 'root') };
   const snapshot = async candidate => {
     if (!cache.has(candidate.accessPath)) cache.set(candidate.accessPath, (async () => {
       const listing = await fixture.vfs.list(candidate.accessPath);
-      return { listing, candidates: listing.entries.map(entry => ({ identityPath: path.win32.join(candidate.identityPath, entry.name),
+      return { listing, candidates: listing.entries.map(entry => ({ identityPath: path.join(candidate.identityPath, entry.name),
         accessPath: path.posix.join(candidate.accessPath, entry.name), entry })) };
     })());
     return cache.get(candidate.accessPath);
@@ -33,7 +34,7 @@ export async function resolveDirectoryVideo(value, sample) {
     let raw;
     if (candidate) raw = await snapshot(candidate);
     else {
-      const accessPath = fixture.identityMap.resolve({ identityPath: loaded.parent.Path, style: 'windows' });
+      const accessPath = fixture.identityMap.resolve({ identityPath: loaded.parent.Path, style: fixturePathStyle });
       const listing = await fixture.vfs.list(accessPath), byPath = new Map(candidates.map(value => [value.identityPath, value]));
       raw = { listing, candidates: listing.entries.map(entry => {
         const identityPath = path.join(loaded.parent.Path, entry.name);
@@ -71,7 +72,7 @@ export async function resolveDirectoryVideo(value, sample) {
 }
 
 export function projectDirectoryItem(item, fixture, sample) {
-  const normalize = value => value?.replace(fixture.stateRoot, '$STATE');
+  const normalize = value => projectStatePath(value, fixture.stateRoot);
   // An existing file mutated to a disc enum still has its original file date.
   // The existing-child oracle normalizes only actual fresh directory resolves.
   const directoryVideo = item.IsFolder === false && ['Dvd', 'BluRay'].includes(item.VideoType)

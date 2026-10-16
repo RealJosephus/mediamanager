@@ -19,6 +19,7 @@ import { seedNativeConstructorControl, insertFailure, completeColumns } from './
 import { ensureFixtureDirectory } from './ignore-file-fixture.js';
 import { nativeTextBytes } from '../../src/database/native-text.js';
 import { nativeTextSql } from '../../src/database/native-text-sql.js';
+import { projectStatePath } from './fixture-state-path.js';
 
 export async function assertDirectoryValidation(t, dialect, sample, expected, {
   reconciliation = false,
@@ -77,7 +78,7 @@ export async function assertDirectoryValidation(t, dialect, sample, expected, {
     if (sample.failEvent) throw new Error('Controlled item-updated observer failure');
   });
 
-  const normalize = candidate => candidate.identityPath.replace(fixture.stateRoot, '$STATE');
+  const normalize = candidate => projectStatePath(candidate.identityPath, fixture.stateRoot);
   const video = createVideoFileResolver();
   const resolver = { ...video,
     async resolveMultiple(context) {
@@ -250,7 +251,7 @@ export async function assertDirectoryValidation(t, dialect, sample, expected, {
         return persistMetadata(fixture.store, context, result, options);
       }
     });
-    const projectImages = rows => rows.map(image => ({ path: image.Path.replace(fixture.stateRoot, '$STATE'), type: image.Type,
+    const projectImages = rows => rows.map(image => ({ path: projectStatePath(image.Path, fixture.stateRoot), type: image.Type,
       dateModified: dateText(image.DateModified), width: image.Width, height: image.Height,
       blurHash: image.Blurhash == null ? null : Buffer.from(image.Blurhash).toString('utf8') }));
     const updateImages = images.updateImages.bind(images);
@@ -263,14 +264,14 @@ export async function assertDirectoryValidation(t, dialect, sample, expected, {
     };
     images.processor.getImageSize = async (bytes, imagePath, options) => {
       assert.equal(options.signal, undefined, 'Native image work must not inherit the scan token.');
-      calls.push({ action: 'image-size', path: imagePath.replace(fixture.stateRoot, '$STATE') });
+      calls.push({ action: 'image-size', path: projectStatePath(imagePath, fixture.stateRoot) });
       if (sample.cancelFromImageSize) controller.abort();
       if (sample.imageCase === 'dimensions-failure') throw new Error('Controlled image dimensions failure');
       return { Width: 320, Height: 180 };
     };
     images.processor.getImageBlurHash = async (bytes, imagePath, size, options) => {
       assert.equal(options.signal, undefined);
-      calls.push({ action: 'image-blur', path: imagePath.replace(fixture.stateRoot, '$STATE'), width: size.Width, height: size.Height });
+      calls.push({ action: 'image-blur', path: projectStatePath(imagePath, fixture.stateRoot), width: size.Width, height: size.Height });
       if (sample.imageCase === 'blur-failure') throw new Error('Controlled image blur failure');
       return 'control-hash';
     };
@@ -388,7 +389,7 @@ export async function assertDirectoryValidation(t, dialect, sample, expected, {
     assert.equal(new Set(imageRows.map(row => idKey(row.Id))).size, imageRows.length);
     assert.ok(imageRows.every(row => /^[a-f0-9]{32}$/u.test(idKey(row.Id)) && !/^0+$/u.test(idKey(row.Id))));
     actual.images = imageRows.map(row => ({ id: `$IMAGE_GUID:${guid(row.ItemId)}:${row.ImageType}`,
-      itemId: guid(row.ItemId), imageType: row.ImageType, path: row.Path.replace(fixture.stateRoot, '$STATE'),
+      itemId: guid(row.ItemId), imageType: row.ImageType, path: projectStatePath(row.Path, fixture.stateRoot),
       dateModified: dateText(row.DateModified),
       width: row.Width, height: row.Height, blurhash: row.Blurhash == null ? null : Buffer.from(row.Blurhash).toString('base64') }))
       .sort((left, right) => ordinal(left.itemId, right.itemId) || left.imageType - right.imageType);
