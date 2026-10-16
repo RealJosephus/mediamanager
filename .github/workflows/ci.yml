@@ -42,6 +42,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+          fetch-depth: 0
       - name: Set up Node
         uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
@@ -87,7 +88,9 @@ jobs:
         run: node tools/ci/environment.js capture
       - name: Check syntax
         run: npm run check
-      - name: Run available strict validation and report complete scope
+      # GITHUB_EVENT_NAME/PATH supply the push base or PR merge parents. Manual
+      # dispatch with an empty test_files input still requests all available tests.
+      - name: Run affected or explicitly requested strict validation
         timeout-minutes: 110
         run: node tools/ci/run.js
       - name: Audit database resources
