@@ -166,22 +166,38 @@ function upstreamServer(requests, tlsOrigin, origins) {
 }
 
 test('frozen native HTTP(S) .strm static byte proxy on PostgreSQL',
-  { skip: !process.env.MEDIAMANAGER_TEST_POSTGRES }, async () => {
+  { skip: !process.env.MEDIAMANAGER_TEST_POSTGRES }, async t => {
+    const servers = [];
+    // Own listeners before any bind can fail, including an unavailable host
+    // alias. A setup failure must not keep this test process alive indefinitely.
+    t.after(async () => {
+      const errors = [];
+      for (const server of servers.toReversed()) {
+        try {
+          server.closeAllConnections();
+          if (server.listening) await new Promise((resolve, reject) => server.close(error => error ? reject(error) : resolve()));
+        } catch (error) { errors.push(error); }
+      }
+      if (errors.length) throw new AggregateError(errors, 'Remote static fixture listeners failed to close.');
+    });
     const tlsRequests = [];
     const tlsUpstream = createHttpsServer({ cert: tlsCertificate, key: tlsKey }, (request, response) => {
       tlsRequests.push(request.url);
       response.writeHead(200, { 'Content-Type': 'video/x-matroska', 'Content-Length': String(payload.length), 'Accept-Ranges': 'bytes' });
       response.end(payload);
     });
+    servers.push(tlsUpstream);
     tlsUpstream.listen(0, '127.0.0.1'); await once(tlsUpstream, 'listening');
     const tlsOrigin = `https://127.0.0.1:${tlsUpstream.address().port}`;
     const requests = [], origins = {};
     const upstream = upstreamServer(requests, tlsOrigin, origins);
+    servers.push(upstream);
     upstream.listen(0, '127.0.0.1'); await once(upstream, 'listening');
     const upstreamOrigin = `http://127.0.0.1:${upstream.address().port}`;
     const crossHostOrigin = `http://127.0.0.2:${upstream.address().port}`;
     Object.assign(origins, { upstream: upstreamOrigin, crossHost: crossHostOrigin });
     const crossUpstream = upstreamServer(requests, tlsOrigin, origins);
+    servers.push(crossUpstream);
     crossUpstream.listen(upstream.address().port, '127.0.0.2'); await once(crossUpstream, 'listening');
     let database, runtime;
     const candidateRecords = [];
@@ -247,9 +263,6 @@ test('frozen native HTTP(S) .strm static byte proxy on PostgreSQL',
           await database.client.query(`DROP SCHEMA "${schema}__mm" CASCADE`);
         }
         if (runtime) await runtime.close(); else await database?.close();
-        upstream.closeAllConnections(); await new Promise(resolve => upstream.close(resolve));
-        crossUpstream.closeAllConnections(); await new Promise(resolve => crossUpstream.close(resolve));
-        tlsUpstream.closeAllConnections(); await new Promise(resolve => tlsUpstream.close(resolve));
       }
     }
   });
