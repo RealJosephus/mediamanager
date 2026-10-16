@@ -2,6 +2,8 @@
 // mono/skia@7dbfc07dd33181f84e0958afb7ee805c6c769f0b, SkFontMgr_mac_ct.cpp
 // and SkTypeface_mac_ct.cpp. The family alias below is that backend's CSS
 // mapping; fallback families are always selected by CoreText, never a list.
+import { createHash } from 'node:crypto';
+
 export function resolveDarwinFonts(koffi, probes) {
   const cf = koffi.load('/System/Library/Frameworks/CoreFoundation.framework/CoreFoundation');
   const ct = koffi.load('/System/Library/Frameworks/CoreText.framework/CoreText');
@@ -16,6 +18,8 @@ export function resolveDarwinFonts(koffi, probes) {
   const floatNumber = cf.func('bool CFNumberIsFloatType(void *number)');
   const numberType = cf.func('ulong CFNumberGetTypeID()');
   const type = cf.func('ulong CFGetTypeID(void *value)');
+  const dataLength = cf.func('long CFDataGetLength(void *data)');
+  const dataBytes = cf.func('const uint8_t *CFDataGetBytePtr(void *data)');
   const createString = cf.func('void *CFStringCreateWithCString(void *allocator, const char *value, uint32_t encoding)');
   const stringLength = cf.func('long CFStringGetLength(void *value)');
   const getString = cf.func('bool CFStringGetCString(void *value, _Out_ char *buffer, long size, uint32_t encoding)');
@@ -28,6 +32,7 @@ export function resolveDarwinFonts(koffi, probes) {
   const copyFamily = ct.func('void *CTFontCopyFamilyName(void *font)');
   const copyPostscript = ct.func('void *CTFontCopyPostScriptName(void *font)');
   const copyAttribute = ct.func('void *CTFontCopyAttribute(void *font, void *attribute)');
+  const copyTable = ct.func('void *CTFontCopyTable(void *font, uint32_t tag, uint32_t options)');
   const range = koffi.struct({ location: 'long', length: 'long' });
   const forString = ct.func('CTFontCreateForString', 'void *', ['void *', 'void *', range]);
   const key = name => koffi.decode(ct.symbol(name), 'void *');
@@ -68,18 +73,26 @@ export function resolveDarwinFonts(koffi, probes) {
   function identity(font) {
     if (!font) return null;
     const traits = required(copyTraits(font), 'traits');
-    let url;
+    let url, names;
     try {
       const number = name => {
         const value = get(traits, keys[name]), out = [0];
         return value && type(value) === numberType() && floatNumber(value) && readNumber(value, 13, out) ? out[0] : 0;
       };
       url = required(copyAttribute(font, keys.URLAttribute), 'font file URL');
+      // CoreText can expose a public alias for a reserved system face. Bind
+      // its actual name table instead of guessing how that alias is spelled
+      // inside the TTC. Skia's table reader uses this same public API.
+      names = required(copyTable(font, 0x6e616d65, 0), 'name table');
+      const length = Number(dataLength(names));
+      if (!Number.isSafeInteger(length) || length < 6) throw new Error('CoreText returned an invalid name table.');
+      const nameTable = Buffer.from(koffi.decode(required(dataBytes(names), 'name table bytes'), 'uint8_t', length));
       return { path: ownedText(urlPath(url, 0)), collectionIndex: null,
         family: ownedText(copyFamily(font)), postscriptName: ownedText(copyPostscript(font)),
+        nameTableSha256: createHash('sha256').update(nameTable).digest('hex'),
         weight: weight(number('WeightTrait')), width: Math.max(1, Math.min(9, Math.round((number('WidthTrait') + 0.5) * 10))),
         slant: number('SlantTrait') ? 1 : 0 };
-    } finally { if (url) release(url); release(traits); }
+    } finally { if (names) release(names); if (url) release(url); release(traits); }
   }
   let regularDefault, defaultFont, familyFont;
   try {

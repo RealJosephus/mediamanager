@@ -10,7 +10,7 @@ let resolution;
 const files = new Map(), faces = new Map(), registrations = new Map();
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const faceKey = face => JSON.stringify([face.path, face.collectionIndex, face.postscriptName ?? null,
-  face.weight, face.width, face.slant, face.namedInstance ?? 0, face.simulations ?? 0]);
+  face.weight, face.width, face.slant, face.namedInstance ?? 0, face.simulations ?? 0, face.nameTableSha256 ?? null]);
 
 /** Resolve the actual OS policy once. Importing this module loads no FFI. */
 export function resolveCollageSystemFonts() {
@@ -56,8 +56,10 @@ export function loadCollageSystemFace(face) {
       }
     }
     const metadata = readCollageFontFace(bytes);
-    if (!metadata.families.includes(face.family)) throw new Error('The resolved system family is not present in its selected font file.');
-    const tableHashes = Object.fromEntries(['cmap', 'hmtx', 'maxp'].map(tag => {
+    // CoreText's public family/PS aliases are separate from its file's names.
+    // That path is bound to the exact OS-returned name table by the selector.
+    if (face.nameTableSha256 === undefined && !metadata.families.includes(face.family)) throw new Error('The resolved system family is not present in its selected font file.');
+    const tableHashes = Object.fromEntries(['name', 'cmap', 'hmtx', 'maxp'].map(tag => {
       const table = directory.tables.get(tag);
       if (!table) throw new TypeError(`The selected system font has no ${tag} table.`);
       return [tag, hash(table)];

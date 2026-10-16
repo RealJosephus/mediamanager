@@ -16,7 +16,7 @@ var scalars = input.Texts.SelectMany(text => text.EnumerateRunes().Select(rune =
 object? Identity(SKTypeface? face) {
     if (face is null) return null;
     var tableHashes = new Dictionary<string, string>();
-    foreach (var tag in new[] { "cmap", "hmtx", "maxp" }) {
+    foreach (var tag in new[] { "name", "cmap", "hmtx", "maxp" }) {
         uint value = 0; foreach (var ch in tag) value = (value << 8) | ch;
         tableHashes[tag] = Hash(face.GetTableData(value));
     }

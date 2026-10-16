@@ -1,6 +1,9 @@
 // Read only the selected system file's directories. No directory scanning or
 // filename-to-family guesses. Table offsets in a TTC remain file-relative.
+import { createHash } from 'node:crypto';
+
 const unicode = new TextDecoder('utf-16be', { fatal: true });
+const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 function range(bytes, offset, length) {
   if (!Number.isSafeInteger(offset) || !Number.isSafeInteger(length) || offset < 0 || length < 0 || offset + length > bytes.length) {
     throw new TypeError('Invalid system font directory range.');
@@ -48,12 +51,18 @@ export function selectSystemFontDirectory(bytes, descriptor) {
   let index = descriptor.collectionIndex;
   if (index === null) {
     if (!descriptor.postscriptName) throw new TypeError('CoreText must identify the selected face by PostScript name.');
-    const matches = directories.flatMap((tables, i) => systemFontPostscriptNames(tables).includes(descriptor.postscriptName) ? [i] : []);
-    if (matches.length !== 1) throw new Error('The selected CoreText face is not uniquely present in its system font file.');
+    const candidates = directories.map((tables, collectionIndex) => ({ collectionIndex,
+      postscriptNames: systemFontPostscriptNames(tables), nameTableSha256: hash(tables.get('name')) }));
+    const matches = candidates.filter(value => descriptor.nameTableSha256 === undefined
+      ? value.postscriptNames.includes(descriptor.postscriptName) : value.nameTableSha256 === descriptor.nameTableSha256)
+      .map(value => value.collectionIndex);
+    if (matches.length !== 1) throw Object.assign(new Error('The selected CoreText face is not uniquely present in its system font file.'), { candidates });
     [index] = matches;
   }
   if (!Number.isInteger(index) || index < 0 || index >= directories.length) throw new TypeError('The system font face index is out of range.');
   const tables = directories[index], postscriptNames = systemFontPostscriptNames(tables);
-  if (descriptor.postscriptName && !postscriptNames.includes(descriptor.postscriptName)) throw new Error('The selected system font PostScript identity changed.');
+  if (descriptor.nameTableSha256 !== undefined) {
+    if (hash(tables.get('name')) !== descriptor.nameTableSha256) throw new Error('The selected system font name table identity changed.');
+  } else if (descriptor.postscriptName && !postscriptNames.includes(descriptor.postscriptName)) throw new Error('The selected system font PostScript identity changed.');
   return { collectionIndex: index, tables, postscriptNames };
 }

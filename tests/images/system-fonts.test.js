@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import { selectSystemFontDirectory, systemFontDirectories, systemFontPostscriptNames } from '../../src/images/system-fonts/sfnt.js';
 
 function nameTable(name) {
@@ -49,4 +50,16 @@ test('system font metadata cannot traverse a truncated directory or table', () =
   assert.throws(() => systemFontDirectories(truncated), TypeError);
   const malformedName = new Map([['name', Buffer.alloc(5)]]);
   assert.throws(() => systemFontPostscriptNames(malformedName), TypeError);
+});
+
+test('CoreText public aliases locate only the exact OS-returned name table', () => {
+  const bytes = container(['Internal-Regular', 'Internal-Bold']), original = Buffer.from(bytes);
+  const nameTableSha256 = createHash('sha256').update(nameTable('Internal-Bold')).digest('hex');
+  const descriptor = { collectionIndex: null, postscriptName: 'Public-Bold', nameTableSha256 };
+  const selected = selectSystemFontDirectory(bytes, descriptor);
+  assert.equal(selected.collectionIndex, 1); assert.deepEqual(selected.postscriptNames, ['Internal-Bold']);
+  assert.deepEqual(bytes, original);
+  assert.throws(() => selectSystemFontDirectory(bytes, { ...descriptor, collectionIndex: 0 }), /name table identity changed/);
+  assert.throws(() => selectSystemFontDirectory(bytes, { ...descriptor, nameTableSha256: '0'.repeat(64) }), /not uniquely present/);
+  assert.throws(() => selectSystemFontDirectory(container(['Internal-Bold', 'Internal-Bold']), descriptor), /not uniquely present/);
 });

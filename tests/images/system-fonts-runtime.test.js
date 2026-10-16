@@ -47,7 +47,7 @@ test('system collage faces match actual native selection, font tables and nomina
         tableHashes: loaded.tableHashes, canvasFamily: registered.canvasFamily,
         glyphs: scalars.map(codepoint => ({ codepoint, glyph: loaded.glyphForCodepoint(codepoint) })),
         coverage: input.texts.map(text => ({ text, present: loaded.containsGlyphs(text) })) });
-    } catch (error) { observed.push({ descriptor: face, error: { name: error.name, message: error.message, stack: error.stack } }); }
+    } catch (error) { observed.push({ descriptor: face, error: { name: error.name, message: error.message, stack: error.stack, candidates: error.candidates } }); }
   }
   await writeFile(path.join(output, 'comparison.json'), JSON.stringify({ selected, observed, native, inputSha256: hash(inputBytes) }, null, 2) + '\n');
   for (let index = 0; index < expected.length; index++) await t.test(index === 0 ? 'default face' : `probe U+${input.probes[index - 1].toString(16)}`, () => {
@@ -56,7 +56,13 @@ test('system collage faces match actual native selection, font tables and nomina
     assert.ok(actual, 'The native system-selected face must exist.');
     assert.equal(actual.error, undefined, JSON.stringify(actual.error));
     assert.equal(actual.family, target.family);
-    assert.ok(actual.postscriptNames.includes(target.postscriptName), 'The exact selected face must occur in its actual system file.');
+    if (actual.descriptor.postscriptName !== undefined) assert.equal(actual.descriptor.postscriptName, target.postscriptName);
+    if (actual.descriptor.nameTableSha256 === undefined) {
+      assert.ok(actual.postscriptNames.includes(target.postscriptName), 'The exact selected face must occur in its actual system file.');
+    } else {
+      assert.equal(actual.descriptor.nameTableSha256, target.tableHashes.name, 'The CoreText alias must bind the actual native name table.');
+      assert.equal(actual.tableHashes.name, actual.descriptor.nameTableSha256, 'The selected file member must contain that exact name table.');
+    }
     for (const key of ['weight', 'width', 'slant', 'tableHashes', 'glyphs', 'coverage']) assert.deepEqual(actual[key], target[key], key);
     assert.match(actual.sourceSha256, /^[a-f0-9]{64}$/); assert.ok(actual.sourceBytes > 0);
     assert.match(actual.canvasFamily, /^MediaManager Collage [a-f0-9]{64}$/);
