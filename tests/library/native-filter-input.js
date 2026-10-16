@@ -6,7 +6,6 @@ import { tableDefinition } from '../../src/database/model.js';
 import { decodeValue } from '../../src/database/values.js';
 import { nativeTextBytes } from '../../src/database/native-text.js';
 import { idKey } from '../../src/library/records.js';
-import { nativeQueryInputs } from './native-query-inputs.js';
 
 // Test-only assembly from the declared, stopped neutral exchange database.
 // These are the recorder's input templates, never an expected HTTP response.
@@ -40,7 +39,8 @@ function typedRow(table, row) {
   }));
 }
 
-export async function seedNativeFilterInput({ database, fixture }, scenarioName, inputs = nativeQueryInputs) {
+export async function seedNativeFilterInput({ database, fixture }, scenarioName, inputs) {
+  assert.ok(inputs, 'Explicit native query inputs are required.');
   const { sourceDescriptor, folderTemplate, movieTemplate } = await readTemplates(inputs);
   assert.match(scenarioName, /^[a-z-]+$/u);
   const nativeTypes = { Folder: 'MediaBrowser.Controller.Entities.Folder', Movie: 'MediaBrowser.Controller.Entities.Movies.Movie',

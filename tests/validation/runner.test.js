@@ -320,9 +320,30 @@ test('inventory includes shared native evidence verifiers in the selected input 
   const itemFilter = dependencyClosure(dependencies, ['tests/library/classification-filter-http.test.js']);
   assert.ok(itemFilter.some(entry => entry.path === 'tests/library/native-item-filter-evidence.js'));
   assert.ok(itemFilter.some(entry => entry.path === 'tests/library/native-query-inputs.js'));
-  const bindingFixture = itemFilter.flatMap(entry => entry.fixtureReferences)
+  const defaultBindingPath = ['.', 'fixtures', 'native-query-inputs', 'binding.json'].join('/');
+  for (const filename of ['native-query-scope', 'classification-filter-http', 'extra-placeholder-filter-http',
+    'image-type-filter-http', 'navigation-date-filter-http', 'official-rating-filter-http',
+    'official-rating-range-http', 'rating-permissions-http', 'tag-filter-http', 'tag-permissions-http']) {
+    const closure = dependencyClosure(dependencies, ['tests/library/' + filename + '.test.js']);
+    assert.ok(closure.some(entry => entry.path === 'tests/library/native-query-inputs.js'), filename);
+    assert.equal(closure.some(entry => entry.path === 'tests/library/native-query-default-inputs.js'), false, filename);
+    assert.equal(closure.flatMap(entry => entry.fixtureReferences)
+      .some(reference => reference.relativePath === defaultBindingPath), false,
+    filename + ': explicit profiles and synthetic inputs must not inherit the default historical binding');
+  }
+  const profileFixture = itemFilter.flatMap(entry => entry.fixtureReferences)
+    .find(reference => reference.relativePath === ['.', 'fixtures', 'classification-filters', 'provenance.json'].join('/'));
+  assert.ok(profileFixture, 'the explicit classification profile must remain discoverable');
+  const profile = JSON.parse(await readFile(profileFixture.filename, 'utf8'));
+  assert.equal(profile.kind, 'new-designated-source-classification-http');
+  assert.equal(profile.profile.preparationInputFiles.length, 11);
+  assert.ok(profile.requiredInputs.length > 0 && profile.requiredInputs.every(entry => entry.required === true));
+
+  const staticPermissions = dependencyClosure(dependencies, ['tests/library/static-source-permissions-http.test.js']);
+  assert.ok(staticPermissions.some(entry => entry.path === 'tests/library/native-query-default-inputs.js'));
+  const bindingFixture = staticPermissions.flatMap(entry => entry.fixtureReferences)
     .find(reference => reference.relativePath === ['.', 'fixtures', 'native-query-inputs', 'binding.json'].join('/'));
-  assert.ok(bindingFixture, 'the exact current source binding must be discoverable');
+  assert.ok(bindingFixture, 'consumers of the default historical profile retain its exact source binding');
   const binding = JSON.parse(await readFile(bindingFixture.filename, 'utf8'));
   assert.equal(binding.reference.preparationInputs.length, 11);
   assert.equal(binding.preparationInputFiles.length, 11);
@@ -341,7 +362,6 @@ test('inventory includes shared native evidence verifiers in the selected input 
     .some(reference => reference.required && reference.logicalPath.startsWith('.agent-docs/evidence/core-flow-20260926/')), false,
   'new query evidence must not inherit unavailable historical preparation inputs');
 
-  const staticPermissions = dependencyClosure(dependencies, ['tests/library/static-source-permissions-http.test.js']);
   assert.ok(staticPermissions.some(entry => entry.path === 'tests/library/native-static-source-evidence.js'));
   assert.ok(staticPermissions.some(entry => entry.path === 'tests/library/native-item-filter-evidence.js'));
   const permissionFixture = staticPermissions.flatMap(entry => entry.fixtureReferences)

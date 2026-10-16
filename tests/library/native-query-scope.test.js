@@ -1,19 +1,34 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
-import { mkdtemp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
+import { mkdtemp, mkdir, readFile, realpath, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
 import { createNativeQueryInputs, readNativeQueryBoundFile } from './native-query-inputs.js';
 import { assertCompleteNativeFilterHttpRepeat } from './full-filter-wire.js';
+import { verifyNativeItemFilterEvidence, verifyNativeItemFilterEvidenceContract } from './native-item-filter-evidence.js';
+import { nativeReferencePreparationInputs, resolveNativeReferencePreparationInput,
+  verifyNativeReferencePreparation } from './native-reference-preparation.js';
+import { seedNativeFilterInput } from './native-filter-input.js';
 
 const digest = bytes => createHash('sha256').update(bytes).digest('hex');
 const descriptor = (filename, bytes) => ({ filename, bytes: bytes.length, sha256: digest(bytes) });
 
+test('shared query helpers require explicit inputs before opening evidence or a source database', async () => {
+  const required = /Explicit native query inputs are required/u;
+  assert.throws(() => nativeReferencePreparationInputs('item-filter'), required);
+  assert.throws(() => resolveNativeReferencePreparationInput('item-filter', 'undeclared'), required);
+  await assert.rejects(verifyNativeReferencePreparation({ profile: 'item-filter' }), required);
+  await assert.rejects(verifyNativeItemFilterEvidence({}), required);
+  await assert.rejects(verifyNativeItemFilterEvidenceContract({}), required);
+  await assert.rejects(seedNativeFilterInput({}, 'synthetic'), required);
+});
+
 async function fixture(t) {
-  const root = await mkdtemp(path.join(tmpdir(), 'mediamanager-native-query-scope-'));
+  const temporaryRoot = await realpath(tmpdir());
+  const root = await mkdtemp(path.join(temporaryRoot, 'mediamanager-native-query-scope-'));
   t.after(async () => {
-    assert.equal(path.dirname(root), path.resolve(tmpdir()));
+    assert.equal(path.dirname(root), temporaryRoot);
     assert.ok(path.basename(root).startsWith('mediamanager-native-query-scope-'));
     await rm(root, { recursive: true, force: true });
   });

@@ -3,6 +3,7 @@ import { createHash } from 'node:crypto';
 import { lstat, readFile, realpath } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { nativeQueryInputs } from './native-query-default-inputs.js';
 
 import { resolveNativeReferencePreparationInput,
   verifyNativeReferencePreparation } from './native-reference-preparation.js';
@@ -103,13 +104,14 @@ export async function assertUserViewEvidenceProvenance({ evidence, scenario, sou
     [preparation.inputs?.[5]?.path, bundledBootstrapLog.filename],
   ]);
   const referencePreparation = await verifyNativeReferencePreparation({
+    inputs: nativeQueryInputs,
     preparation,
     profile: 'user-view',
     sourceDatabase: bundledDatabase.filename,
     fixtureUserId,
     resolveInput(profile, historicalPath) {
       return bundledPreparationInputs.get(historicalPath)
-        ?? resolveNativeReferencePreparationInput(profile, historicalPath);
+        ?? resolveNativeReferencePreparationInput(profile, historicalPath, nativeQueryInputs);
     },
   });
   const [recorderBytes, databaseBytes, dllBytes, bootstrapBytes, bootstrapLogBytes] = await Promise.all([

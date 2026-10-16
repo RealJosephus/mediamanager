@@ -4,7 +4,7 @@ import test from 'node:test';
 import { recordItemFilterCandidate } from './item-filter-http-scenario.js';
 import { seedNativeFilterInput } from './native-filter-input.js';
 import { assertCompleteFilterHttpResponses, writeCompleteFilterHttpEvidence } from './full-filter-wire.js';
-import { readNativeQueryServerId } from './native-query-inputs.js';
+import { nativeQueryInputs, readNativeQueryServerId } from './native-query-default-inputs.js';
 import { readNativeStaticSourcePermissionEvidence } from './native-static-source-evidence.js';
 
 const fixture = JSON.parse(await readFile(new URL('./fixtures/rating-permissions/input.json', import.meta.url)));
@@ -24,7 +24,7 @@ test('postgres: eight static video source permission combinations match complete
     })) },
     fields: 'SortName', captureResponseBodies: true, trackUserData: true,
     trackFilesystem: true, captureFilesystemDomains: true,
-    prepareScenario: context => seedNativeFilterInput(context, 'rating-permissions'),
+    prepareScenario: context => seedNativeFilterInput(context, 'rating-permissions', nativeQueryInputs),
   });
   assertCompleteFilterHttpResponses(actual, nativeHttp, { scenarioName: 'static-source-permissions', nativeServerId });
   await writeCompleteFilterHttpEvidence(actual, nativeHttp, { scenarioName: 'static-source-permissions', nativeServerId });
