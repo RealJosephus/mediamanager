@@ -16,9 +16,12 @@ import { validationOutputRoot } from '../../tools/validation/paths.js';
 
 const inputFile = new URL('./fixtures/post-scan-composition/input.json', import.meta.url);
 const cancellationInputFile = new URL('./fixtures/post-scan-composition/cancellation-input.json', import.meta.url);
+const musicInputFile = new URL('./fixtures/post-scan-composition/music-input.json', import.meta.url);
 const hash = value => createHash('sha256').update(value).digest('hex');
 const itemColumns = tableDefinition('BaseItems').columns;
-const byNameTypes = ['Genre', 'Studio'].map(name => 'MediaBrowser.Controller.Entities.' + name);
+const ordinaryByNameTypes = ['Genre', 'Studio'].map(name => 'MediaBrowser.Controller.Entities.' + name);
+const artistType = 'MediaBrowser.Controller.Entities.Audio.MusicArtist';
+const musicGenreType = 'MediaBrowser.Controller.Entities.Audio.MusicGenre';
 const nativeTasks = ['SplashscreenPostScanTask', 'ArtistsPostScanTask', 'CollectionPosterVerifyPostScanTask',
   'CollectionPostScanTask', 'GenresPostScanTask', 'MusicGenresPostScanTask', 'StudiosPostScanTask', 'CleanDatabaseScheduledTask'];
 
@@ -32,7 +35,7 @@ function rewrite(value, root) {
   return value.replaceAll('\\', '/');
 }
 
-function rowsForComparison(rows, { root, initialIds, start, end, expandPath = value => value }) {
+function rowsForComparison(rows, { root, initialIds, byNameTypes, start, end, expandPath = value => value }) {
   return rows.filter(row => initialIds.has(idKey(row.Id)) || byNameTypes.includes(row.Type)).map(row => {
     const created = !initialIds.has(idKey(row.Id));
     return Object.fromEntries(itemColumns.map(column => {
@@ -82,9 +85,15 @@ async function stateFiles(root) {
 async function compareComposition(t, scenarioFile) {
   const inputBytes = await readFile(scenarioFile), scenario = JSON.parse(inputBytes)[0];
   const cancelling = scenario.Cancel?.Channel === 'metadata-before';
+  const music = scenario.Seed.Music;
+  const artistNames = [...new Set(music?.Tracks.flatMap(track => [...track.Artists, ...track.AlbumArtists]) ?? [])];
+  const musicGenreNames = [...new Set(music?.Tracks.flatMap(track => track.Genres) ?? [])];
+  const byNameTypes = [...ordinaryByNameTypes, ...(music ? [artistType, musicGenreType] : [])];
+  const refreshedTypes = [...(cancelling ? ordinaryByNameTypes.slice(0, 1) : ordinaryByNameTypes),
+    ...artistNames.map(() => artistType), ...musicGenreNames.map(() => musicGenreType)];
   assert.ok(process.env.MEDIAMANAGER_JELLYFIN_DLL, 'The actual composition requires the current native Jellyfin assembly directory.');
   await access(process.env.MEDIAMANAGER_JELLYFIN_DLL);
-  const output = path.join(validationOutputRoot(), 'post-scan-composition-' + (cancelling ? 'cancel-' : '') + randomUUID());
+  const output = path.join(validationOutputRoot(), 'post-scan-composition-' + (cancelling ? 'cancel-' : music ? 'music-' : '') + randomUUID());
   const recording = await recordOracle({ project: 'tests/library/fixtures/post-scan-composition/Oracle.csproj', output,
     args: [fileURLToPath(scenarioFile), '{output}/native.json', '{output}/cases'] });
   assert.equal(recording.passed, true);
@@ -111,7 +120,7 @@ async function compareComposition(t, scenarioFile) {
   const expectedCompleted = cancelling ? nativeTasks.slice(0, 6) : nativeTasks;
   assert.deepEqual(logs.map(event => /^Post-scan task (\w+) completed after /u.exec(event.message)?.[1]).filter(Boolean), expectedCompleted);
   assert.deepEqual(sample.observation.Trace.filter(event => event.action === 'metadata-completed' && byNameTypes.includes(event.detail.item.type))
-    .map(event => event.detail.item.type).sort(), (cancelling ? byNameTypes.slice(0, 1) : [...byNameTypes]).sort(),
+    .map(event => event.detail.item.type).sort(), refreshedTypes.sort(),
   'Only successfully refreshed by-name items complete their real metadata service.');
   assert.ok(sample.before.files.length >= 6, 'Native cleanup starts with real source, internal and extracted marker files.');
   if (cancelling) {
@@ -140,12 +149,43 @@ async function compareComposition(t, scenarioFile) {
     assert.equal(studioCreation.detail.sql.result.ItemValues.some(row => idKey(row.ItemValueId) === idKey(sample.orphanValueId)), false,
       'The earlier Genre deletion has already removed the orphan before the Studio cancellation.');
   } else assert.deepEqual(sample.files, [], 'The native operation deletes every seeded cleanup marker.');
-  assert.deepEqual(sample.createdDirectories.map(entry => entry.exists), [true, true]);
+  assert.equal(sample.createdDirectories.length, 2 + artistNames.length + musicGenreNames.length);
+  assert.ok(sample.createdDirectories.every(entry => entry.exists));
   assert.ok(before.ItemValues.some(row => idKey(row.ItemValueId) === idKey(sample.orphanValueId)));
   assert.equal(expected.ItemValues.some(row => idKey(row.ItemValueId) === idKey(sample.orphanValueId)), false,
-    'ItemPersistenceService.DeleteItem removes globally unmapped values during the committed Genre cleanup.');
+    'ItemPersistenceService.DeleteItem removes globally unmapped values during committed by-name cleanup.');
   assert.deepEqual(expected.BaseItems.filter(row => byNameTypes.includes(row.Type)).map(row => row.Name).sort(),
-    [sample.seed.Genre, sample.seed.Studio, ...(cancelling ? [sample.seed.DeadStudio] : [])].sort());
+    [sample.seed.Genre, sample.seed.Studio, ...artistNames, ...musicGenreNames, ...(cancelling ? [sample.seed.DeadStudio] : [])].sort());
+  if (music) {
+    assert.ok(sample.observation.MetadataServiceTypes.includes('MediaBrowser.Providers.Music.ArtistMetadataService'));
+    assert.ok(sample.observation.MetadataServiceTypes.includes('MediaBrowser.Providers.MusicGenres.MusicGenreMetadataService'));
+    const initialAudio = before.BaseItems.filter(row => row.Type === 'MediaBrowser.Controller.Entities.Audio.Audio');
+    const byName = (left, right) => left.Name < right.Name ? -1 : left.Name > right.Name ? 1 : 0;
+    assert.deepEqual(initialAudio.map(row => ({ Name: row.Name, Artists: row.Artists.split('|'), AlbumArtists: row.AlbumArtists.split('|'),
+      Genres: row.Genres.split('|'), RunTimeTicks: Number(row.RunTimeTicks) })).sort(byName), [...music.Tracks].sort(byName),
+    'Audio children come from actual native persistence, with both artist-name relation kinds.');
+    const musicTask = sample.observation.Trace.find(event => event.action === 'log'
+      && /^Running post-scan task \d+\/\d+: MusicGenresPostScanTask$/u.test(event.detail.message));
+    assert.ok(musicTask);
+    for (const name of artistNames) {
+      const artist = expected.BaseItems.find(row => row.Type === artistType && row.Name === name);
+      const tracks = music.Tracks.filter(track => track.Artists.includes(name) || track.AlbumArtists.includes(name));
+      assert.equal(BigInt(artist.RunTimeTicks), tracks.reduce((sum, track) => sum + BigInt(track.RunTimeTicks), 0n));
+      assert.deepEqual(artist.Genres.split('|').sort(), [...new Set(tracks.flatMap(track => track.Genres))].sort());
+      assert.ok(dateText(artist.DateLastRefreshed) && !dateText(artist.DateLastRefreshed).startsWith('0001-01-01'));
+      const refresh = sample.observation.Trace.find(event => event.action === 'metadata-completed'
+        && idKey(event.detail.item.id) === idKey(artist.Id));
+      assert.ok(refresh && refresh.ordinal < musicTask.ordinal, 'Actual Artist refresh commits before the MusicGenres task starts.');
+    }
+    assert.deepEqual(expected.BaseItems.filter(row => row.Type === ordinaryByNameTypes[0]).map(row => row.Name), [sample.seed.Genre],
+      'Music-only category names must not be turned into ordinary Genre entities.');
+    const deadArtist = before.BaseItems.find(row => row.Type === artistType && row.Name === music.DeadArtist);
+    assert.ok(deadArtist);
+    const artistSourceMarker = path.relative(sample.programRoot, path.join(deadArtist.Path, 'source.txt')).replaceAll('\\', '/');
+    assert.ok(sample.before.files.some(file => file.path === artistSourceMarker), 'The dead Artist starts with a real source marker.');
+    assert.equal(expected.BaseItems.some(row => idKey(row.Id) === idKey(deadArtist.Id)), false);
+    assert.ok(sample.observation.Trace.some(event => event.action === 'removed' && idKey(event.detail.item.id) === idKey(deadArtist.Id)));
+  }
 
   const programRoot = await mkdtemp(path.join(os.tmpdir(), 'mediamanager-post-scan-'));
   let database, runtime;
@@ -222,6 +262,11 @@ async function compareComposition(t, scenarioFile) {
     // Forward even after abort: the real refresh lifecycle decides the outcome.
     const result = await refresh(reference, options); metadata.push(id); return result;
   };
+  const refreshLive = runtime.metadataScanner.refreshLiveItem.bind(runtime.metadataScanner);
+  runtime.metadataScanner.refreshLiveItem = async (item, options) => {
+    assert.equal(options.signal, controller.signal, 'Artist live refresh carries the global scan signal.');
+    const result = await refreshLive(item, options); metadata.push(idKey(item.Id)); return result;
+  };
   errors.length = 0;
   const start = Date.now();
   let failure;
@@ -243,12 +288,17 @@ async function compareComposition(t, scenarioFile) {
     assert.equal(inheritedCleanup, 0);
     assert.deepEqual(temporaryTables, [], 'Cancelled by-name SQL snapshots must be released before the only pooled connection is reused.');
     assert.deepEqual(monitor, ['stop', 'start'], 'Cancellation still completes the scan monitor finally block.');
-  } else assert.equal(failure, undefined, failure?.stack);
+  } else {
+    assert.equal(failure, undefined, failure?.stack);
+    assert.equal(inheritedCleanup, 1);
+    assert.deepEqual(temporaryTables, [], 'Successful post-scan SQL snapshots must be released before the only pooled connection is reused.');
+    assert.deepEqual(monitor, ['stop', 'start']);
+  }
   assert.deepEqual(errors, [], 'Internally logged candidate failures must not pass the composition check.');
   assert.deepEqual(completed, expectedCompleted.map(name => name === 'CleanDatabaseScheduledTask' ? 'CleanDatabasePostScanTask' : name));
   assert.equal(runtime.libraryScanLifecycle.isScanRunning, false);
-  const actual = rowsForComparison(rows, { root: programRoot, initialIds, start, end, expandPath: runtime.library.options.expandPath });
-  const wanted = rowsForComparison(expected.BaseItems, { root: sample.programRoot, initialIds,
+  const actual = rowsForComparison(rows, { root: programRoot, initialIds, byNameTypes, start, end, expandPath: runtime.library.options.expandPath });
+  const wanted = rowsForComparison(expected.BaseItems, { root: sample.programRoot, initialIds, byNameTypes,
     start: Date.parse(sample.startedAt), end: Date.parse(sample.completedAt) });
   assert.deepEqual(actual, wanted, 'All persistent columns of the source and by-name entities match the current native operation.');
   const order = rows => rows.sort((left, right) => JSON.stringify(left).localeCompare(JSON.stringify(right)));
@@ -277,3 +327,5 @@ test('postgres: current native eight-task global scan creates and cleans nonempt
   t => compareComposition(t, inputFile));
 test('postgres: cancelling the real Studio refresh preserves the eight-task committed prefix and releases resources', options,
   t => compareComposition(t, cancellationInputFile));
+test('postgres: native Artist child aggregation and MusicGenres persist inside the real eight-task scan', options,
+  t => compareComposition(t, musicInputFile));

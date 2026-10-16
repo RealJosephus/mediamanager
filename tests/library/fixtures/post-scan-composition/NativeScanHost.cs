@@ -37,6 +37,8 @@ using MediaBrowser.Model.MediaInfo;
 using MediaBrowser.Model.Tasks;
 using MediaBrowser.Providers.Folders;
 using MediaBrowser.Providers.Genres;
+using MediaBrowser.Providers.Music;
+using MediaBrowser.Providers.MusicGenres;
 using MediaBrowser.Providers.Studios;
 using MediaBrowser.Providers.Manager;
 using Microsoft.EntityFrameworkCore;
@@ -67,6 +69,20 @@ public sealed class CompositionSeed
     public string DeadGenre { get; set; } = "";
     public string DeadStudio { get; set; } = "";
     public string OrphanValue { get; set; } = "";
+    public MusicCompositionSeed? Music { get; set; }
+}
+public sealed class MusicCompositionSeed
+{
+    public string DeadArtist { get; set; } = "";
+    public AudioCompositionSeed[] Tracks { get; set; } = [];
+}
+public sealed class AudioCompositionSeed
+{
+    public string Name { get; set; } = "";
+    public string[] Artists { get; set; } = [];
+    public string[] AlbumArtists { get; set; } = [];
+    public string[] Genres { get; set; } = [];
+    public long RunTimeTicks { get; set; }
 }
 public sealed class LibrarySeed
 {
@@ -295,6 +311,13 @@ public sealed class NativeScanHost : IAsyncDisposable
             _providerDispatch,FileSystem,Manager,ExternalData,Repository));
         MetadataServices.Add(new StudioMetadataService(Configuration,loggerFactory.CreateLogger<StudioMetadataService>(),
             _providerDispatch,FileSystem,Manager,ExternalData,Repository));
+        if (Scenario.Seed.Music is not null)
+        {
+            MetadataServices.Add(new ArtistMetadataService(Configuration,loggerFactory.CreateLogger<ArtistMetadataService>(),
+                _providerDispatch,FileSystem,Manager,ExternalData,Repository));
+            MetadataServices.Add(new MusicGenreMetadataService(Configuration,loggerFactory.CreateLogger<MusicGenreMetadataService>(),
+                _providerDispatch,FileSystem,Manager,ExternalData,Repository));
+        }
         ApplyProviderParts();
         var services=new ServiceCollection();services.AddSingleton<ILoggerFactory>(loggerFactory);services.AddLogging();
         services.AddSingleton(Paths);services.AddSingleton(Configuration);services.AddSingleton(FileSystem);services.AddSingleton(ImageProcessor);

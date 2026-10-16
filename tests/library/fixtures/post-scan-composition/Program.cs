@@ -3,6 +3,7 @@ using System.Security.Cryptography;
 using System.Text.Json;
 using Jellyfin.Database.Implementations.Entities;
 using MediaBrowser.Controller.Entities;
+using MediaBrowser.Controller.Entities.Audio;
 
 if (args.Length != 3) throw new ArgumentException("Oracle <input.json> <new-output.json> <new-case-root>");
 if (Directory.Exists(args[2]) || File.Exists(args[2])) throw new IOException("Case root must be new.");
@@ -15,13 +16,29 @@ foreach (var scenario in scenarios)
     await using var host = await NativeScanHost.CreateAsync(root, scenario);
     var seed = scenario.Seed;
     var source = new Folder { Id = Id(1), Name = seed.SourceName, Genres = [seed.Genre], Studios = [seed.Studio] };
-    var dead = new BaseItem[] {
+    List<BaseItem> sources = [source];
+    List<BaseItem> dead = [
         new Genre { Id = Id(2), Name = seed.DeadGenre, Path = Path.Combine(host.Paths.GenrePath, seed.DeadGenre) },
         new Studio { Id = Id(3), Name = seed.DeadStudio, Path = Path.Combine(host.Paths.StudioPath, seed.DeadStudio) }
-    };
+    ];
+    List<string> createdDirectories = [Genre.GetPath(seed.Genre), Studio.GetPath(seed.Studio)];
+    if (seed.Music is { } music)
+    {
+        sources.AddRange(music.Tracks.Select((track, index) => new Audio {
+            Id = Id(10 + index), Name = track.Name, Artists = track.Artists, AlbumArtists = track.AlbumArtists,
+            Genres = track.Genres, RunTimeTicks = track.RunTimeTicks
+        }));
+        dead.Add(new MusicArtist { Id = Id(5), Name = music.DeadArtist,
+            Path = MusicArtist.GetPath(music.DeadArtist) });
+        createdDirectories.AddRange(music.Tracks.SelectMany(track => track.Artists.Concat(track.AlbumArtists))
+            .Distinct(StringComparer.Ordinal).Select(name => MusicArtist.GetPath(name)));
+        createdDirectories.AddRange(music.Tracks.SelectMany(track => track.Genres)
+            .Distinct(StringComparer.Ordinal).Select(name => MusicGenre.GetPath(name)));
+    }
     // Real persistence builds the initial complete rows and value relations.
-    // The detached Folder is not a scanned path and survives empty-root validation.
-    host.Persistence.SaveItems([source, ..dead], CancellationToken.None);
+    // Detached source rows survive empty-root validation; the Audio rows are
+    // metadata children, never substituted audio-probe or file-scan results.
+    host.Persistence.SaveItems([..sources, ..dead], CancellationToken.None);
     using (var db = host.Factory.CreateDbContext())
     {
         db.ItemValues.Add(new ItemValue { ItemValueId = Id(4), Type = (ItemValueType)2,
@@ -45,11 +62,11 @@ foreach (var scenario in scenarios)
         new JsonSerializerOptions { WriteIndented = true }));
     await host.DisposeAsync();
     results.Add(new { scenario.Name, scenario.Cancel, seed, root, programRoot = host.Paths.ProgramDataPath,
-        fixtureIds = new[] { source.Id, dead[0].Id, dead[1].Id }, orphanValueId = Id(4),
+        fixtureIds = sources.Concat(dead).Select(item => item.Id).ToArray(), orphanValueId = Id(4),
         discovered = host.DiscoveredPostScanTaskTypes, instantiated = host.PostScanTaskTypes,
         before, observation, startedAt, completedAt, files = Files(host.Paths.ProgramDataPath),
         release = new { completed = host.DisposalCompleted, resources = host.ReleasedResources.ToArray() },
-        createdDirectories = new[] { Genre.GetPath(seed.Genre), Studio.GetPath(seed.Studio) }
+        createdDirectories = createdDirectories
             .Select(filename => new { path = Path.GetRelativePath(host.Paths.ProgramDataPath, filename).Replace('\\', '/'),
                 exists = Directory.Exists(filename) }).ToArray() });
 }
@@ -58,7 +75,7 @@ var assemblies = AppDomain.CurrentDomain.GetAssemblies().Where(assembly => !asse
     .Select(assembly => new { name = assembly.GetName().Name, path = assembly.Location, sha256 = Hash(File.ReadAllBytes(assembly.Location)) }).ToArray();
 await using var output = new FileStream(args[1], FileMode.CreateNew, FileAccess.Write, FileShare.Read);
 await JsonSerializer.SerializeAsync(output, new {
-    scope = "Actual CoreAppHost.GetExports constructs all eight built-in post-scan services; actual LibraryManager.ValidateMediaLibraryInternal dispatches them. Real Genre/Studio MetadataService, ItemPersistenceService, SQLite, PathManager and ExternalDataManager execute nonempty creation and file cleanup. No external metadata/image providers, metadata savers, media streams, image composition or watcher are admitted by this scenario.",
+    scope = "Actual CoreAppHost.GetExports constructs all eight built-in post-scan services; actual LibraryManager.ValidateMediaLibraryInternal dispatches them. Real Genre/Studio and, for the music input, Artist/MusicGenre MetadataService, ItemPersistenceService, SQLite, PathManager and ExternalDataManager execute nonempty creation, child aggregation and file cleanup. No external metadata/image providers, metadata savers, media probe, image composition or watcher are admitted by these scenarios.",
     inputSha256 = Hash(inputBytes), results, assemblies
 }, new JsonSerializerOptions { WriteIndented = true });
 
