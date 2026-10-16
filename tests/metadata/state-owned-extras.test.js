@@ -39,8 +39,12 @@ for (const sample of input) test('postgres: native state owned ' + sample.name, 
   const options = { ForceSave: false, MetadataRefreshMode: sample.fullRefresh ? 'FullRefresh' : 'None',
     ImageRefreshMode: 'None', SearchResult: { Name: 'Owner search' }, signal };
   const recordRefresh = async (item, options) => {
-    calls.push({ action: 'refresh', item: await projectStateItem(item, value), forceSave: options.ForceSave === true,
-      hasSearchResult: options.SearchResult != null, cancellationRequested: options.signal.aborted });
+    // Native records entry synchronously. Filesystem timestamp verification is
+    // asynchronous here and must not reorder concurrent provider invocations.
+    const call = { action: 'refresh', item: null, forceSave: options.ForceSave === true,
+      hasSearchResult: options.SearchResult != null, cancellationRequested: options.signal.aborted };
+    calls.push(call);
+    call.item = await projectStateItem(item, value);
     options.signal.throwIfAborted();
   };
   const lifecycle = new OwnedItemMetadataLifecycleHost({ store: fixture.store, updates: fixture.host.updates,
