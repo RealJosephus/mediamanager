@@ -61,6 +61,18 @@ function unmatchedInk(source, target) {
   }
   return unmatched;
 }
+function fontMeasurements(text, font, direction) {
+  const context = createCanvas(1, 1).getContext('2d');
+  context.font = font; context.direction = direction;
+  const shaped = context.measureText(text);
+  context.fontKerning = 'none';
+  const withoutKerning = context.measureText(text);
+  const scalars = [...text].map(text => ({ text, codepoint: text.codePointAt(0), advance: context.measureText(text).width }));
+  return { font: context.font, shapedWidth: shaped.width, withoutKerningWidth: withoutKerning.width,
+    scalarAdvanceSum: scalars.reduce((sum, scalar) => sum + scalar.advance, 0),
+    roundedScalarAdvanceSum: scalars.reduce((sum, scalar) => sum + Math.round(scalar.advance), 0),
+    xHeight: context.measureText('x').actualBoundingBoxAscent, scalars };
+}
 
 test('UserView thumbnails match the same-platform native selection, crop and title layout', async t => {
   assert.ok(process.env.MEDIAMANAGER_JELLYFIN_DLL, 'Live collage comparison requires the isolated native reference build.');
@@ -114,6 +126,15 @@ test('UserView thumbnails match the same-platform native selection, crop and tit
     if (row.layout) {
       const context = createCanvas(width, height).getContext('2d'), layout = drawUserViewTitle(context, row.sample.Text);
       observation.candidateLayout = layout;
+      // Diagnostic probes use the actual installed font collection. The native
+      // measurements never feed the production renderer or replace its output.
+      observation.fontMeasurements = {
+        candidate: [112, layout.firstSize, layout.size].filter((size, index, sizes) => sizes.indexOf(size) === index)
+          .map(size => fontMeasurements(row.sample.Text, layout.font.replace(/[\d.]+px/, `${size}px`), layout.direction)),
+        nativeFaces: native.fallbackFonts.map(face => ({ family: face.FamilyName,
+          registeredStyles: GlobalFonts.families.find(({ family }) => family === face.FamilyName)?.styles ?? [],
+          ...fontMeasurements(row.sample.Text, `${face.FontWeight} ${row.layout.size}px ${JSON.stringify(face.FamilyName)}`, layout.direction) }))
+      };
       const actualInk = glyphMask(actual.pixels, candidateBackground), expectedInk = glyphMask(expected.pixels, nativeBackground);
       observation.ink = { actual: { bounds: actualInk.bounds, count: actualInk.count }, expected: { bounds: expectedInk.bounds, count: expectedInk.count },
         extra: unmatchedInk(actualInk.mask, expectedInk.mask), missing: unmatchedInk(expectedInk.mask, actualInk.mask) };
@@ -132,7 +153,7 @@ test('UserView thumbnails match the same-platform native selection, crop and tit
     }
   });
   await writeFile(path.join(output, 'comparison.json'), JSON.stringify({ recording, nativeSha256: hash(nativeBytes),
-    candidateSystemFamilies: GlobalFonts.families, observations }, null, 2) + '\n', { flag: 'wx' });
+    candidateSystemFamilies: GlobalFonts.families, nativeFontFiles: native.fontFiles, observations }, null, 2) + '\n', { flag: 'wx' });
   assert.equal(hash(await readFile(path.join(nativeRoot, 'native.json'))), hash(nativeBytes));
   for (const input of native.inputs) assert.equal(hash(await readFile(path.join(nativeRoot, input.path))), input.sha256);
 });

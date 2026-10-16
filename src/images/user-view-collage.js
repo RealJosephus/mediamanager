@@ -7,27 +7,49 @@ import { clrTrim } from '../metadata/whitespace.js';
 const width = 960, height = 540;
 const rtl = /[\u0600-\u06ff\u0530-\u058f\u0590-\u05ff\u0700-\u074f\u0780-\u07bf]/u;
 
+function unshapedWidth(context, text) {
+  // SKFont.MeasureText maps Unicode scalars to glyph advances without shaping.
+  // Measuring the whole string in Canvas instead includes kerning, ligatures
+  // and Arabic joining, changing both the overflow branch and its anchor.
+  // FreeType's default hinted metrics use integral advances on Linux.
+  let measured = 0;
+  for (const scalar of text) {
+    const advance = context.measureText(scalar).width;
+    measured += process.platform === 'linux' ? Math.round(advance) : advance;
+  }
+  return measured;
+}
+
 export function drawUserViewTitle(context, name) {
   if (name == null || !clrTrim(name)) return null;
-  // The Windows Skia font manager resolves its generic sans-serif family to
-  // Segoe UI. Other platforms use their own generic font manager fallback.
-  const family = process.platform === 'win32' ? '"Segoe UI"' : 'sans-serif';
+  // NAPI's registered-font collection does not share the operating system's
+  // generic-family aliases used by Skia's native font manager.
+  const family = process.platform === 'win32' ? '"Segoe UI"' : process.platform === 'darwin' ? '"Helvetica"' : 'sans-serif';
   const direction = rtl.test(name) ? 'rtl' : 'ltr';
   context.direction = direction; context.textBaseline = 'alphabetic';
   let size = 112;
   context.font = `bold ${size}px ${family}`;
-  let measured = context.measureText(name).width;
+  const initialWidth = unshapedWidth(context, name);
+  if (initialWidth > width * 0.95) {
+    size = 0.9 * width * size / initialWidth;
+    context.font = `bold ${size}px ${family}`;
+  }
+  const firstSize = size;
+  let measured = unshapedWidth(context, name);
+  const beforeFallbackResize = measured;
   if (measured > width * 0.95) {
     size = 0.9 * width * size / measured;
     context.font = `bold ${size}px ${family}`;
-    measured = context.measureText(name).width;
+    measured = unshapedWidth(context, name);
   }
   // X height belongs to the selected face; it is not always half an em.
   const xHeight = context.measureText('x').actualBoundingBoxAscent;
-  const x = width / 2, y = height / 2 + xHeight / 2;
+  const padding = (width - measured) / 2;
+  const x = direction === 'rtl' ? width - padding : padding, y = height / 2 + xHeight / 2;
   context.fillStyle = '#ffffff';
-  context.textAlign = 'center'; context.fillText(name, x, y);
-  return { font: context.font, direction, size, measured, xHeight, x, y };
+  // Native DrawShapedText aligns the shaped run at the unshaped-width anchor.
+  context.textAlign = direction === 'rtl' ? 'right' : 'left'; context.fillText(name, x, y);
+  return { font: context.font, direction, initialWidth, firstSize, beforeFallbackResize, size, measured, xHeight, padding, x, y };
 }
 
 /** Compose a library thumbnail from existing static image assets. */

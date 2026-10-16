@@ -2,6 +2,7 @@
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
+using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using Jellyfin.Drawing.Skia;
@@ -45,6 +46,16 @@ var encoder = new SkiaEncoder(NullLogger<SkiaEncoder>.Instance, paths);
 var defaultFace = SkiaEncoder.DefaultTypeFace!;
 var faces = ((SKTypeface?[])typeof(SkiaEncoder).GetField("_typefaces", BindingFlags.Static | BindingFlags.NonPublic)!.GetValue(null)!).Where(face => face is not null).Cast<SKTypeface>().ToArray();
 var drawText = typeof(StripCollageBuilder).GetMethod("DrawText", BindingFlags.Static | BindingFlags.NonPublic)!;
+object FontMeasurements(string text, float size) => faces.Select((face, faceIndex) => {
+    using var font = new SKFont(face, size);
+    font.MeasureText("x", out var xBounds);
+    return new { faceIndex, face.FamilyName, face.FontWeight, face.FontWidth, face.FontSlant, size,
+        font.Subpixel, font.LinearMetrics, font.Hinting, xHeight = font.Metrics.XHeight, glyphXTop = xBounds.Top,
+        containsAll = font.ContainsGlyphs(text), rawWidth = font.MeasureText(text),
+        scalars = text.EnumerateRunes().Select(rune => new {
+            text = rune.ToString(), codepoint = rune.Value, glyph = font.GetGlyph(rune.Value), advance = font.MeasureText(rune.ToString())
+        }).ToArray() };
+}).ToArray();
 object? Layout(string? text) {
     if (string.IsNullOrWhiteSpace(text)) return null;
     using var font = new SKFont(defaultFace, 112);
@@ -58,6 +69,7 @@ object? Layout(string? text) {
     return new { initialWidth, firstSize, beforeFallbackResize, size = font.Size, measured,
         xHeight = font.Metrics.XHeight, y = 270f + font.Metrics.XHeight / 2, padding = (960 - measured) / 2,
         direction = Regex.IsMatch(text, @"\p{IsArabic}|\p{IsArmenian}|\p{IsHebrew}|\p{IsSyriac}|\p{IsThaana}") ? "rtl" : "ltr",
+        fontMeasurements = new[] { 112f, firstSize, font.Size }.Distinct().Select(size => FontMeasurements(text, size)).ToArray(),
         glyphFamilies = System.Globalization.StringInfo.GetTextElementEnumerator(text).AsElements()
             .Select(element => new { text = element, family = defaultFace.ContainsGlyphs(element) ? defaultFace.FamilyName : SkiaEncoder.GetFontForCharacter(element)?.FamilyName }).ToArray() };
 }
@@ -77,12 +89,19 @@ object FontIdentity(SKTypeface face) {
     if (bytes is not null && stream!.Read(bytes, bytes.Length) != bytes.Length) throw new IOException("Could not read the selected system font.");
     return new { face.FamilyName, face.FontWeight, face.FontWidth, face.FontSlant, collectionIndex, bytes = bytes?.Length, sha256 = bytes is null ? null : Hash(bytes) };
 }
+var fontRoots = OperatingSystem.IsWindows()
+    ? new[] { Environment.GetFolderPath(Environment.SpecialFolder.Fonts) }
+    : OperatingSystem.IsMacOS() ? new[] { "/System/Library/Fonts", "/Library/Fonts" } : new[] { "/usr/share/fonts", "/usr/local/share/fonts" };
+var fontFiles = fontRoots.Where(Directory.Exists).SelectMany(fontRoot => Directory.EnumerateFiles(fontRoot, "*",
+    new EnumerationOptions { RecurseSubdirectories = true, IgnoreInaccessible = true, AttributesToSkip = FileAttributes.ReparsePoint }))
+    .Where(filename => new[] { ".ttf", ".ttc", ".otf", ".dfont" }.Contains(Path.GetExtension(filename).ToLowerInvariant()))
+    .Order().Select(filename => new { path = filename, bytes = new FileInfo(filename).Length }).ToArray();
 var inputs = Directory.GetFiles(assets).Order().Select(filename => new { path = "assets/" + Path.GetFileName(filename), bytes = new FileInfo(filename).Length, sha256 = Hash(File.ReadAllBytes(filename)) }).ToArray();
 File.WriteAllText(Path.Combine(root, "native.json"), JsonSerializer.Serialize(new {
     actualSkiaEncoder = true, actualStripCollageBuilder = true, actualDrawTextMeasurements = true,
     inputSha256 = Hash(inputBytes),
     platform = RuntimeInformation.OSDescription, architecture = RuntimeInformation.ProcessArchitecture.ToString(),
-    defaultFont = FontIdentity(defaultFace), fallbackFonts = faces.Select(FontIdentity), inputs, results }, new JsonSerializerOptions { WriteIndented = true }) + "\n");
+    defaultFont = FontIdentity(defaultFace), fallbackFonts = faces.Select(FontIdentity), fontFiles, inputs, results }, new JsonSerializerOptions { WriteIndented = true }) + "\n");
 Console.WriteLine(JsonSerializer.Serialize(new { cases = results.Count, defaultFont = defaultFace.FamilyName }));
 
 public sealed record Sample(string Name, string[] Paths, string? Text);
