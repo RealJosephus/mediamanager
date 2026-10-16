@@ -7,6 +7,29 @@ import { clrTrim } from '../metadata/whitespace.js';
 const width = 960, height = 540;
 const rtl = /[\u0600-\u06ff\u0530-\u058f\u0590-\u05ff\u0700-\u074f\u0780-\u07bf]/u;
 
+export function drawUserViewTitle(context, name) {
+  if (name == null || !clrTrim(name)) return null;
+  // The Windows Skia font manager resolves its generic sans-serif family to
+  // Segoe UI. Other platforms use their own generic font manager fallback.
+  const family = process.platform === 'win32' ? '"Segoe UI"' : 'sans-serif';
+  const direction = rtl.test(name) ? 'rtl' : 'ltr';
+  context.direction = direction; context.textBaseline = 'alphabetic';
+  let size = 112;
+  context.font = `bold ${size}px ${family}`;
+  let measured = context.measureText(name).width;
+  if (measured > width * 0.95) {
+    size = 0.9 * width * size / measured;
+    context.font = `bold ${size}px ${family}`;
+    measured = context.measureText(name).width;
+  }
+  // X height belongs to the selected face; it is not always half an em.
+  const xHeight = context.measureText('x').actualBoundingBoxAscent;
+  const x = width / 2, y = height / 2 + xHeight / 2;
+  context.fillStyle = '#ffffff';
+  context.textAlign = 'center'; context.fillText(name, x, y);
+  return { font: context.font, direction, size, measured, xHeight, x, y };
+}
+
 /** Compose a library thumbnail from existing static image assets. */
 export async function composeUserViewCollage(paths, name, { assets }) {
   const canvas = createCanvas(width, height), context = canvas.getContext('2d');
@@ -25,21 +48,6 @@ export async function composeUserViewCollage(paths, name, { assets }) {
     { Width: width, Height: backdropHeight }, {});
   context.drawImage(backdrop, 0, 0);
   context.putImageData(new ImageData(new Uint8ClampedArray(blendBlackForeground(canvas.data(), 0x78)), width, height), 0, 0);
-  if (name != null && clrTrim(name)) {
-    // The Windows Skia font manager resolves its generic sans-serif family to
-    // Segoe UI. Other platforms use their own generic font manager fallback.
-    const family = process.platform === 'win32' ? '"Segoe UI"' : 'sans-serif';
-    let size = 112;
-    context.font = `bold ${size}px ${family}`;
-    let measured = context.measureText(name).width;
-    if (measured > width * 0.95) {
-      size = Math.fround(0.9 * width * size / measured);
-      context.font = `bold ${size}px ${family}`; measured = context.measureText(name).width;
-    }
-    context.fillStyle = '#ffffff'; context.textBaseline = 'alphabetic';
-    context.direction = rtl.test(name) ? 'rtl' : 'ltr';
-    context.textAlign = 'center';
-    context.fillText(name, width / 2, height / 2 + size / 4);
-  }
+  drawUserViewTitle(context, name);
   return stripCanvasColorProfile(await canvas.encode('png'), 'Png');
 }
