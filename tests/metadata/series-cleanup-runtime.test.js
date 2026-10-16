@@ -12,6 +12,7 @@ import { dateText, EMPTY_ID, idKey } from '../../src/library/records.js';
 import { nativeGuid } from '../../src/users/native.js';
 import { createMetadataChildren } from '../../src/library/metadata-children.js';
 import { cachedFolderChildrenSnapshot, setFolderChildren } from '../../src/library/folder-cache.js';
+import { isSaverEnabled, ItemUpdateType } from '../../src/metadata/save-manager.js';
 import { fixturePathStyle } from '../library/fixture-state-path.js';
 import { createPostgresTestDatabase, dropPostgresTestDatabase } from '../database/postgres-fixture.js';
 import { recordOracle } from '../../tools/validation/oracle.js';
@@ -163,19 +164,23 @@ test('postgres: actual Series cleanup promotes a linked episode and reroutes its
   runtime = await createRuntime({ database, programDataPath: programRoot,
     configurationDirectoryPath: path.join(programRoot, 'config'), storageConfiguration, serverId: 'series-cleanup',
     configuration: { UICulture: 'en-US', MetadataCountryCode: 'US', IsStartupWizardCompleted: true,
-      EnableCaseSensitiveItemIds: true, EnableNormalizedItemByNameIds: true, LibraryScanFanoutConcurrency: 1 },
+      EnableCaseSensitiveItemIds: true, EnableNormalizedItemByNameIds: true, LibraryScanFanoutConcurrency: 1,
+      DisabledMetadataSavers: ['Emby Xml'] },
     onError: error => errors.push(error?.stack ?? String(error)) });
   for (const plugin of ['nfo', 'tmdb']) await runtime.plugins.setEnabled(plugin, false);
   const providers = runtime.metadata.registry.plugins().flatMap(extension => extension.providers);
   const providerControls = { storageTypes: runtime.plugins.entries('storage').map(extension => extension.type).sort(),
     externalMetadataPlugins: runtime.plugins.entries('metadata').map(extension => extension.id),
     relevantProviders: providers.filter(provider => ['local', 'remote', 'custom', 'image'].includes(provider.kind)
-      && provider.itemTypes.some(type => type === '*' || type === 'Series') || provider.kind === 'saver'
+      && provider.itemTypes.some(type => type === '*' || type === 'Series'))
+      .map(({ id, kind, itemTypes }) => ({ id, kind, itemTypes })),
+    registeredSavers: providers.filter(provider => provider.kind === 'saver'
       && provider.itemTypes.some(type => ['*', 'Series', 'Season', 'Episode', 'Playlist'].includes(type)))
-      .map(({ id, kind, itemTypes }) => ({ id, kind, itemTypes })) };
+      .map(({ id, name, itemTypes }) => ({ id, name, itemTypes })) };
   await writeFile(path.join(output, 'provider-controls.json'), json(providerControls), { flag: 'wx' });
   assert.ok(providerControls.storageTypes.includes('local'));
   assert.deepEqual(providerControls.externalMetadataPlugins, []); assert.deepEqual(providerControls.relevantProviders, []);
+  assert.deepEqual(providerControls.registeredSavers, [{ id: 'PlaylistXmlSaver', name: 'Emby Xml', itemTypes: ['Playlist'] }]);
   const rebase = value => typeof value === 'string' ? value.replaceAll(expected.programRoot, programRoot)
     .replaceAll(JSON.stringify(expected.programRoot).slice(1, -1), JSON.stringify(programRoot).slice(1, -1)) : value;
   const relevant = (table, rows) => table === 'AncestorIds' ? rows.filter(row => initialIds.has(idKey(row.ItemId)))
@@ -203,6 +208,24 @@ test('postgres: actual Series cleanup promotes a linked episode and reroutes its
     await mkdir(path.dirname(filename), { recursive: true }); await writeFile(filename, bytes, { flag: 'wx' });
   }
   assert.deepEqual(await files(programRoot), expected.before.files);
+  // The built-in XML saver remains registered. Match the native host's empty
+  // saver set through actual configuration and selection, not registry removal.
+  const saverControls = [];
+  for (const number of [1, 2, 3, 4, 5]) {
+    const loaded = await runtime.metadata.loadContext(id(number));
+    try {
+      const enabled = [];
+      assert.deepEqual(loaded.globalOptions.DisabledMetadataSavers, ['Emby Xml']);
+      for (const saver of runtime.metadata.registry.discover({ ...loaded, kind: 'saver' })) {
+        for (const [reason, value] of Object.entries(ItemUpdateType)) if (await isSaverEnabled(saver, loaded.item, value, loaded)) {
+          enabled.push({ id: saver.id, reason });
+        }
+      }
+      saverControls.push({ id: idKey(loaded.item.Id), enabled });
+    } finally { await loaded.dispose(); }
+  }
+  await writeFile(path.join(output, 'saver-controls.json'), json(saverControls), { flag: 'wx' });
+  assert.deepEqual(saverControls, [1, 2, 3, 4, 5].map(number => ({ id: idKey(id(number)), enabled: [] })));
   const creator = runtime.itemCreation;
   const season = await creator.getItemById(id(2)), playlist = await creator.getItemById(id(5));
   for (const item of [season, playlist]) owners.push(creator.retainItem(item));
@@ -232,7 +255,7 @@ test('postgres: actual Series cleanup promotes a linked episode and reroutes its
   const temporaryTables = (await database.client.query('SELECT relname FROM pg_class WHERE relnamespace = pg_my_temp_schema() ORDER BY relname')).rows;
   const candidateFiles = await files(programRoot);
   const removedLookupAbsent = await creator.getItemById(id(3)) == null;
-  await writeFile(path.join(output, 'candidate.json'), json({ programRoot, startedAt, completedAt, providerControls, episodeSources,
+  await writeFile(path.join(output, 'candidate.json'), json({ programRoot, startedAt, completedAt, providerControls, saverControls, episodeSources,
     failure: failure?.stack ?? null, updateType: result?.UpdateType ?? null, errors, events, removal, removedLookupAbsent,
     playlistLinks, temporaryTables, sql: { BaseItems: rows, ...relations }, files: candidateFiles, nativeSha256: hash(nativeBytes) }), { flag: 'wx' });
   assert.equal(failure, undefined, failure?.stack); assert.deepEqual(errors, []);
