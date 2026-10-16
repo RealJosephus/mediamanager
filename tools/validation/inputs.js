@@ -6,6 +6,7 @@ import { recordedInput, recordedInputMapPath, repositoryRoot, validationPath } f
 const isDigest = value => typeof value === 'string' && /^[a-f0-9]{64}$/iu.test(value);
 
 export async function captureInputIdentity({ selected, dependencies, preflight, environment = process.env }) {
+  const closure = dependencyClosure(dependencies, selected);
   const targets = new Map();
   const add = (filename, reason, required = true, expectedDigests = [], invalidDigest = false) => {
     const absolute = path.resolve(repositoryRoot, filename);
@@ -96,7 +97,7 @@ export async function captureInputIdentity({ selected, dependencies, preflight, 
       if (description.available && description.kind === 'directory') await bindDirectoryManifests(target, reason);
     }
   }
-  for (const entry of dependencyClosure(dependencies, selected)) {
+  for (const entry of closure) {
     for (const importedFile of entry.importedFiles || []) {
       add(importedFile, `${entry.path}:imported-local-file`);
     }
@@ -121,6 +122,56 @@ export async function captureInputIdentity({ selected, dependencies, preflight, 
       add(path.dirname(fixture.filename), `${entry.path}:local-fixture-directory`);
       await bindDirectoryManifests(path.dirname(fixture.filename), entry.path);
       await bindManifestReferences(fixture.filename, entry.path);
+    }
+  }
+  if (environment.MEDIAMANAGER_CI_NATIVE_REFERENCE === 'true' && closure.some(entry => entry.services?.includes('jellyfinDll'))) {
+    // This is a promised same-run build, not a replacement for historical pins.
+    // Bind it during planning as well as strict preflight, even when files are
+    // missing, so a broken provision cannot silently remove its consumers.
+    if (!environment.MEDIAMANAGER_NATIVE_BUILD_ROOT || !environment.MEDIAMANAGER_JELLYFIN_DLL) {
+      throw new Error('Native reference provisioning requires its build root and Jellyfin DLL path.');
+    }
+    const root = path.resolve(environment.MEDIAMANAGER_NATIVE_BUILD_ROOT), runtime = path.join(root, 'runtime');
+    if (path.resolve(environment.MEDIAMANAGER_JELLYFIN_DLL) !== path.join(runtime, 'jellyfin.dll')
+      || environment.MEDIAMANAGER_JELLYFIN_DLL_DIRECTORY && path.resolve(environment.MEDIAMANAGER_JELLYFIN_DLL_DIRECTORY) !== runtime) {
+      throw new Error('Native reference consumers must use the same-run build runtime directory.');
+    }
+    const reason = 'runtime:native-reference';
+    for (const directory of ['runtime', 'receipts', 'source-offer']) add(path.join(root, directory), `${reason}:${directory}`);
+    add(path.join(runtime, 'jellyfin.dll'), `${reason}:entry-assembly`);
+    for (const filename of ['build-receipt.json', 'runtime-manifest.json', 'source-before.json', 'source-after.json', 'nuget-manifest.json']) {
+      add(path.join(root, 'receipts', filename), `${reason}:receipt`);
+    }
+    const read = async filename => {
+      try { return JSON.parse(await readFile(filename, 'utf8')); }
+      catch (error) { if (error.code === 'ENOENT') return null; throw error; }
+    };
+    const bind = (directory, descriptor) => {
+      if (!descriptor || typeof descriptor.path !== 'string' || /[:\\\r\n\0]/u.test(descriptor.path)
+        || descriptor.path.split('/').some(part => !part || part === '.' || part === '..')
+        || !isDigest(descriptor.sha256)) throw new Error('Invalid native build evidence descriptor.');
+      add(path.join(directory, descriptor.path), `${reason}:build-manifest`, true, [descriptor.sha256.toLowerCase()]);
+    };
+    const receipt = await read(path.join(root, 'receipts/build-receipt.json'));
+    if (receipt) {
+      if (receipt.schemaVersion !== 1 || receipt.status !== 'succeeded' || receipt.sdkActual !== '10.0.401'
+        || receipt.sourceUnchanged !== true || receipt.sourceBefore?.sha256 !== receipt.sourceAfter?.sha256
+        || !Array.isArray(receipt.sourceOffer) || receipt.sourceOffer.length !== 4) {
+        throw new Error('The native reference build did not finish with unchanged sealed sources.');
+      }
+      for (const [field, variable] of [['commit', 'GITHUB_SHA'], ['runId', 'GITHUB_RUN_ID'], ['runAttempt', 'GITHUB_RUN_ATTEMPT']]) {
+        if (environment[variable] && receipt[field] !== environment[variable]) throw new Error('Native reference evidence belongs to another candidate or workflow run.');
+      }
+      for (const descriptor of [receipt.runtimeManifest, receipt.sourceBefore, receipt.sourceAfter, receipt.nugetManifest]) {
+        bind(path.join(root, 'receipts'), descriptor);
+      }
+      for (const descriptor of receipt.sourceOffer) bind(path.join(root, 'source-offer'), descriptor);
+    }
+    const manifest = await read(path.join(root, 'receipts/runtime-manifest.json'));
+    if (manifest) {
+      if (!Array.isArray(manifest.files) || !manifest.files.some(file => file.path === 'jellyfin.dll')
+        || new Set(manifest.files.map(file => file.path)).size !== manifest.files.length) throw new Error('Invalid native runtime file manifest.');
+      for (const descriptor of manifest.files) bind(runtime, descriptor);
     }
   }
   for (const service of preflight.services) {

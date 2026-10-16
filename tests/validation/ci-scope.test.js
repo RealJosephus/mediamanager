@@ -3,8 +3,8 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
-import { applyInputIdentity, classify, restrictToRequested, skipGuards } from '../../tools/ci/scope.js';
-import { captureInputIdentity } from '../../tools/validation/inputs.js';
+import { applyInputIdentity, classify, provisionedServicesFor, restrictToRequested, skipGuards } from '../../tools/ci/scope.js';
+import { captureInputIdentity, inputsUnchanged } from '../../tools/validation/inputs.js';
 import { repositoryRoot } from '../../tools/validation/paths.js';
 
 const ownPath = 'tests/validation/ci-scope.test.js';
@@ -48,6 +48,79 @@ test('CI excludes only consumers of an explicitly unprovisioned service', async 
     tracked: new Set([ownPath, otherPath]), environment: {} });
   assert.deepEqual(classification.records.map(record => [record.path, record.selected]), [[ownPath, false], [otherPath, true]]);
   assert.equal(classification.records[0].reasons[0].code, 'service-not-provisioned');
+});
+
+test('CI native reference provisioning is an explicit promise independent of runtime file availability', async () => {
+  const dependencies = { entries: [entry(ownPath, { services: ['jellyfinDll'] }), entry(otherPath)] };
+  const tracked = new Set([ownPath, otherPath]);
+  const disabled = await classify({ dependencies, tracked, environment: { MEDIAMANAGER_JELLYFIN_DLL: '/unverified/jellyfin.dll' } });
+  assert.equal(disabled.records[0].selected, false, 'a DLL path alone must not enable the native service');
+  assert.deepEqual(provisionedServicesFor({ MEDIAMANAGER_CI_NATIVE_REFERENCE: 'false' }), ['postgres', 'dotnet']);
+  const environment = { MEDIAMANAGER_CI_NATIVE_REFERENCE: 'true' };
+  const promised = await classify({ dependencies, tracked, environment });
+  assert.ok(promised.records.every(record => record.selected), 'missing provisioning must not narrow selection');
+  assert.deepEqual(provisionedServicesFor(environment), ['postgres', 'dotnet', 'jellyfinDll']);
+  await assert.rejects(captureInputIdentity({ dependencies, selected: [ownPath], environment,
+    preflight: { ready: true, services: [], tools: [] } }), /requires its build root and Jellyfin DLL path/u);
+  assert.equal(promised.records[0].selected, true);
+});
+
+test('CI binds same-run native receipts, source offer and runtime only for selected native consumers', async t => {
+  const output = path.join(repositoryRoot, '.test-output'); await mkdir(output, { recursive: true });
+  const root = await mkdtemp(path.join(output, 'ci-native-inputs-'));
+  t.after(async () => { assert.ok(root.startsWith(output + path.sep)); await rm(root, { recursive: true, force: true }); });
+  for (const directory of ['runtime', 'receipts', 'source-offer']) await mkdir(path.join(root, directory));
+  const write = async (directory, filename, bytes) => {
+    await writeFile(path.join(root, directory, filename), bytes);
+    return { path: filename, sha256: digest(bytes), bytes: Buffer.byteLength(bytes) };
+  };
+  const runtimeFiles = [await write('runtime', 'jellyfin.dll', 'new same-run assembly'),
+    await write('runtime', 'MediaBrowser.Providers.dll', 'new same-run dependency')];
+  const runtimeManifest = await write('receipts', 'runtime-manifest.json', JSON.stringify({ files: runtimeFiles }));
+  const sourceBefore = await write('receipts', 'source-before.json', '{"allMatched":true}');
+  const sourceAfter = await write('receipts', 'source-after.json', '{"allMatched":true}');
+  const nugetManifest = await write('receipts', 'nuget-manifest.json', '{"packages":[]}');
+  await write('receipts', 'build.stdout.txt', 'successful build log');
+  const sourceOffer = [];
+  for (const filename of ['source.zip', 'source-manifest.json', 'local-modifications.json', 'LICENSE.txt']) {
+    sourceOffer.push(await write('source-offer', filename, 'controlled source evidence: ' + filename));
+  }
+  const receipt = { schemaVersion: 1, status: 'succeeded', sdkActual: '10.0.401', sourceUnchanged: true,
+    sourceBefore, sourceAfter, nugetManifest, runtimeManifest, sourceOffer };
+  await write('receipts', 'build-receipt.json', JSON.stringify(receipt));
+  const environment = { MEDIAMANAGER_CI_NATIVE_REFERENCE: 'true', MEDIAMANAGER_NATIVE_BUILD_ROOT: root,
+    MEDIAMANAGER_JELLYFIN_DLL: path.join(root, 'runtime/jellyfin.dll') };
+  const dependencies = { entries: [entry(ownPath, { services: ['jellyfinDll'] }), entry(otherPath)] };
+  const capture = (selected, overrides = {}) => captureInputIdentity({ dependencies, selected, environment: { ...environment, ...overrides },
+    preflight: { ready: true, services: [], tools: [] } });
+  const nativeInputs = identity => identity.entries.filter(input => input.requiredReasons.some(reason => reason.startsWith('runtime:native-reference')));
+  assert.equal(nativeInputs(await capture([otherPath])).length, 0, 'unselected native consumers do not require native artifacts');
+  const classification = await classify({ dependencies, tracked: new Set([ownPath, otherPath]), environment });
+  const before = await capture([ownPath]), bound = nativeInputs(before);
+  assert.ok(bound.every(input => input.required && input.available && input.expectedDigestMatched !== false));
+  for (const directory of ['runtime', 'receipts', 'source-offer']) {
+    assert.ok(bound.some(input => input.filename === path.join(root, directory) && input.kind === 'directory'));
+  }
+  assert.deepEqual(applyInputIdentity(classification, { entries: bound }, new Set()), [], 'same-run build inputs need no Git tracked-file exemption');
+  await write('runtime', 'MediaBrowser.Providers.dll', 'changed runtime dependency');
+  await write('receipts', 'build.stdout.txt', 'changed build log');
+  await write('source-offer', 'source.zip', 'changed source offer');
+  const changed = await capture([ownPath]);
+  assert.equal(inputsUnchanged(before, changed), false);
+  for (const directory of ['runtime', 'receipts', 'source-offer']) {
+    const filename = path.join(root, directory);
+    assert.notEqual(changed.entries.find(input => input.filename === filename).entriesSha256,
+      before.entries.find(input => input.filename === filename).entriesSha256);
+  }
+  assert.ok(applyInputIdentity(classification, { entries: nativeInputs(changed) }, new Set()).some(error => error.code === 'input-digest-mismatch'));
+  assert.equal(classification.records[0].selected, true, 'corrupt build inputs fail the attempt without removing their consumer');
+  await rm(path.join(root, 'receipts/build-receipt.json'));
+  const missing = await capture([ownPath]);
+  assert.ok(applyInputIdentity(classification, { entries: nativeInputs(missing) }, new Set()).some(error => error.code === 'input-unavailable'));
+  assert.equal(classification.records[0].selected, true);
+  await write('receipts', 'build-receipt.json', JSON.stringify({ ...receipt, sourceUnchanged: false }));
+  await assert.rejects(capture([ownPath]), /unchanged sealed sources/u);
+  await assert.rejects(capture([ownPath], { MEDIAMANAGER_JELLYFIN_DLL: path.join(root, 'unverified.dll') }), /same-run build runtime directory/u);
 });
 
 test('CI attributes a recursive required input to every required consumer while preserving an optional consumer of that same file', async t => {

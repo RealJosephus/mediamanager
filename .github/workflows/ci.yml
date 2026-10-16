@@ -11,6 +11,11 @@ on:
         type: string
         required: false
         default: ''
+      native_reference:
+        description: Build the sealed native reference runtime for selected native consumers
+        type: boolean
+        required: false
+        default: false
 
 permissions:
   contents: read
@@ -32,6 +37,7 @@ jobs:
       TZ: Asia/Taipei
       MEDIAMANAGER_TEST_POSTGRES: postgresql://validation@127.0.0.1:5432/postgres
       MEDIAMANAGER_CI_TEST_FILES: ${{ inputs.test_files || '' }}
+      MEDIAMANAGER_CI_NATIVE_REFERENCE: ${{ inputs.native_reference && 'true' || 'false' }}
       DOTNET_CLI_TELEMETRY_OPTOUT: '1'
       DOTNET_NOLOGO: '1'
     steps:
@@ -52,6 +58,14 @@ jobs:
         uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
         with:
           dotnet-version: 10.0.401
+      - name: Build isolated native reference from sealed source
+        if: inputs.native_reference == true
+        shell: pwsh
+        run: |
+          ./tools/ci/build-native.ps1
+          $nativeRoot = Join-Path $env:RUNNER_TEMP 'mediamanager-native-build'
+          "MEDIAMANAGER_NATIVE_BUILD_ROOT=$nativeRoot" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          "MEDIAMANAGER_JELLYFIN_DLL=$(Join-Path $nativeRoot 'runtime/jellyfin.dll')" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
       - name: Set up PostgreSQL
         uses: ankane/setup-postgres@b1a598d92f86cb2ed364411898d150d4eac6d5ca # v1
         with:
@@ -103,4 +117,15 @@ jobs:
           name: validation-${{ matrix.os }}-${{ github.run_attempt }}
           path: ${{ runner.temp }}/mediamanager-results
           if-no-files-found: warn
+          retention-days: 14
+      - name: Preserve same-run native reference and build evidence
+        if: always() && inputs.native_reference == true
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: native-reference-${{ matrix.os }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/mediamanager-native-build/runtime
+            ${{ runner.temp }}/mediamanager-native-build/source-offer
+            ${{ runner.temp }}/mediamanager-native-build/receipts
+          if-no-files-found: error
           retention-days: 14

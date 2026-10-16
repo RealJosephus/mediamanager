@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { inventory, sha256 } from '../validation/inventory.js';
 import { captureInputIdentity } from '../validation/inputs.js';
 import { repositoryRoot, validationExecutable, validationOutputRoot } from '../validation/paths.js';
-import { applyInputIdentity, classify, provisionedServices, provisionedTools, restrictToRequested } from './scope.js';
+import { applyInputIdentity, classify, provisionedServicesFor, provisionedTools, restrictToRequested } from './scope.js';
 import { affectedUnavailable, applyAffectedSelection, changedFilesForEvent, selectAffected } from './affected.js';
 
 const log = message => console.log(`[ci ${new Date().toISOString()}] ${message}`);
@@ -114,7 +114,8 @@ export async function main(argv = process.argv.slice(2)) {
   const scope = { schemaVersion: 1, profile: 'ci-available', phaseAcceptance: false, createdAt: new Date().toISOString(),
     platform: process.platform, node: process.version, planOnly, requested: request.requested, impact,
     selectionPolicy: 'Manual empty input selects all available tests; an exact request retains its required files. Push/PR narrow only added/modified test sources with declared source/input owners or reviewed documentation with no consumers; production, resource, global and unresolved changes fall back to all available tests. Unavailable affected tests fail the attempt. Scope freezes before execution; test failures never narrow it. Release full-profile acceptance remains separate.',
-    provisionedServices, provisionedTools, discovered: classification.records.map(record => record.path),
+    nativeReference: environment.MEDIAMANAGER_CI_NATIVE_REFERENCE === 'true',
+    provisionedServices: provisionedServicesFor(environment), provisionedTools, discovered: classification.records.map(record => record.path),
     selected: classification.records.filter(record => record.selected).map(record => record.path),
     excluded: classification.records.filter(record => !record.selected),
     records: classification.records, infrastructureErrors, inputEntriesSha256: identity?.entriesSha256 ?? null };

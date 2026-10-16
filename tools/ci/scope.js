@@ -6,6 +6,8 @@ import { repositoryRoot, validationPath } from '../validation/paths.js';
 
 export const provisionedServices = ['postgres', 'dotnet'];
 export const provisionedTools = ['dotnet', 'ffmpeg', 'ffprobe', 'git'];
+export const provisionedServicesFor = environment => environment.MEDIAMANAGER_CI_NATIVE_REFERENCE === 'true'
+  ? [...provisionedServices, 'jellyfinDll'] : [...provisionedServices];
 
 const unknown = Symbol('unknown');
 const key = node => node?.computed ? node.property?.value : node?.property?.name;
@@ -103,9 +105,11 @@ export function restrictToRequested(classification, raw = '') {
 export async function classify({ dependencies, tracked, environment, platform = process.platform }) {
   const records = [], closures = new Map();
   const guards = new Map();
+  const services = provisionedServicesFor(environment);
   // Provisioning failures must fail execution, never make the selected scope smaller.
   const plannedEnvironment = { ...environment, MEDIAMANAGER_TEST_POSTGRES: environment.MEDIAMANAGER_TEST_POSTGRES || '<provisioned>',
-    MEDIAMANAGER_DOTNET: environment.MEDIAMANAGER_DOTNET || '<provisioned>' };
+    MEDIAMANAGER_DOTNET: environment.MEDIAMANAGER_DOTNET || '<provisioned>',
+    ...(services.includes('jellyfinDll') ? { MEDIAMANAGER_JELLYFIN_DLL: environment.MEDIAMANAGER_JELLYFIN_DLL || '<provisioned>' } : {}) };
   const shipped = filename => {
     const relative = repositoryRelative(filename);
     return relative !== null && (tracked.has(relative) || [...tracked].some(file => file.startsWith(relative + '/')));
@@ -120,7 +124,7 @@ export async function classify({ dependencies, tracked, environment, platform = 
     record.services = [...new Set(closure.flatMap(entry => entry.services))].sort();
     record.tools = [...new Set(closure.flatMap(entry => entry.tools))].sort();
     for (const entry of closure) {
-      for (const name of entry.services.filter(name => !provisionedServices.includes(name))) {
+      for (const name of entry.services.filter(name => !services.includes(name))) {
         record.reasons.push({ code: 'service-not-provisioned', consumer: entry.path, service: name });
       }
       for (const name of entry.tools.filter(name => !provisionedTools.includes(name))) {
