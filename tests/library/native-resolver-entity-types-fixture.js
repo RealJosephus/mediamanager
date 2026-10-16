@@ -55,7 +55,7 @@ const mediaType = type => ['Audio', 'AudioBook'].includes(type) ? 'Audio' : type
 const unratedType = type => ({ Movie: 'Movie', Trailer: 'Trailer', MusicVideo: 'Music', Series: 'Series', Season: 'Series',
   Episode: 'Series', Audio: 'Music', AudioBook: 'Book', MusicAlbum: 'Music', MusicArtist: 'Music', Book: 'Book' })[type] ?? 'Other';
 const isFolder = (type, kind) => type === 'MusicArtist' ? kind !== 'none' : folderTypes.has(type);
-const itemPath = (root, type) => path.join(root,
+const itemPath = (root, type) => path.win32.join(root,
   videoTypes.has(type) || ['Audio', 'AudioBook', 'Book', 'Photo'].includes(type) ? `${type}.media` : type);
 
 export const itemRequiresJson = type => !sourceSerializedTypes.has(type);
@@ -79,7 +79,7 @@ export function buildResolvedEntity(sample, index, root) {
     identityPath: Path,
     entry: {
       kind: isFolder(type, sample.parentKind) ? 'directory' : 'file',
-      name: path.basename(Path),
+      name: path.win32.basename(Path),
       created: fixedDate(1, 2, 3, index),
       modified: fixedDate(2, 3, 4, index),
       size: 4096 + index,
@@ -125,7 +125,7 @@ export function buildResolvedEntity(sample, index, root) {
     ProviderIds: { ResolverOracle: type },
     RemoteTrailers: [{ Url: `https://resolver.invalid/${type.toLowerCase()}`, Name: 'Resolver trailer' }],
     ImageInfos: [{
-      Path: path.join(root, `${type}-primary.jpg`),
+      Path: path.win32.join(root, `${type}-primary.jpg`),
       Type: 'Primary',
       DateModified: fixedDate(5, 6, 7, index),
       Width: 640,
@@ -134,11 +134,11 @@ export function buildResolvedEntity(sample, index, root) {
     }],
   });
   if (videoTypes.has(type)) applyNativeItemValues(item, {
-    AdditionalParts: [path.join(root, `${type}-part2.media`)],
-    LocalAlternateVersions: [path.join(root, `${type}-alternate.media`)],
+    AdditionalParts: [path.win32.join(root, `${type}-part2.media`)],
+    LocalAlternateVersions: [path.win32.join(root, `${type}-alternate.media`)],
     LinkedAlternateVersions: [{ ItemId: controlIds.linked, Type: 'LinkedAlternateVersion' }],
-    SubtitleFiles: [path.join(root, `${type}.eng.srt`)],
-    AudioFiles: [path.join(root, `${type}.commentary.mka`)],
+    SubtitleFiles: [path.win32.join(root, `${type}.eng.srt`)],
+    AudioFiles: [path.win32.join(root, `${type}.commentary.mka`)],
     HasSubtitles: false,
     IsPlaceHolder: false,
     VideoType: 'VideoFile',
@@ -163,7 +163,7 @@ export function buildResolvedEntity(sample, index, root) {
   if (['Audio', 'AudioBook'].includes(type)) applyNativeItemValues(item, {
     Album: 'Parent album',
     IsInMixedFolder: true,
-    LyricFiles: [path.join(root, `${type}.lrc`)],
+    LyricFiles: [path.win32.join(root, `${type}.lrc`)],
   });
   return item;
 }
@@ -186,18 +186,18 @@ function blankRow() {
 
 async function seedControlRows(fixture, root) {
   const definitions = [
-    { id: controlIds.root, type: nativeTypes.Folder, name: 'Physical root', path: path.join(root, 'library'), parentId: null,
+    { id: controlIds.root, type: nativeTypes.Folder, name: 'Physical root', path: path.win32.join(root, 'library'), parentId: null,
       isFolder: true, unrated: 'Other', data: folderData() },
-    { id: controlIds.series, type: nativeTypes.Series, name: 'Parent series', path: path.join(root, 'library', 'Parent series'),
+    { id: controlIds.series, type: nativeTypes.Series, name: 'Parent series', path: path.win32.join(root, 'library', 'Parent series'),
       parentId: controlIds.root, isFolder: true, unrated: 'Series', data: folderData({ AirDays: [] }) },
-    { id: controlIds.season, type: nativeTypes.Season, name: 'Season 02', path: path.join(root, 'library', 'Parent series', 'Season 02'),
+    { id: controlIds.season, type: nativeTypes.Season, name: 'Season 02', path: path.win32.join(root, 'library', 'Parent series', 'Season 02'),
       parentId: controlIds.series, isFolder: true, unrated: 'Series', data: null, SeriesId: controlIds.series,
       SeriesName: 'Parent series', IndexNumber: 2 },
-    { id: controlIds.artist, type: nativeTypes.MusicArtist, name: 'Parent artist', path: path.join(root, 'library', 'Parent artist'),
+    { id: controlIds.artist, type: nativeTypes.MusicArtist, name: 'Parent artist', path: path.win32.join(root, 'library', 'Parent artist'),
       parentId: controlIds.root, isFolder: true, unrated: 'Music', data: null },
-    { id: controlIds.album, type: nativeTypes.MusicAlbum, name: 'Parent album', path: path.join(root, 'library', 'Parent artist', 'Parent album'),
+    { id: controlIds.album, type: nativeTypes.MusicAlbum, name: 'Parent album', path: path.win32.join(root, 'library', 'Parent artist', 'Parent album'),
       parentId: controlIds.artist, isFolder: true, unrated: 'Music', data: null },
-    { id: controlIds.linked, type: nativeTypes.Video, name: 'Linked alternate control', path: path.join(root, 'library', 'linked-alternate.media'),
+    { id: controlIds.linked, type: nativeTypes.Video, name: 'Linked alternate control', path: path.win32.join(root, 'library', 'linked-alternate.media'),
       parentId: controlIds.root, isFolder: false, unrated: 'Other', mediaType: 'Video', data: videoData() },
   ];
   for (const definition of definitions) await fixture.database.insert('BaseItems', {
