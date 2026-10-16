@@ -19,29 +19,38 @@ function movie() {
 }
 async function setup(configuration = {}, { metadata = false } = {}) {
   const database = await createPostgresTestDatabase(null, 'session_control');
-  const stateRoot = metadata ? await mkdtemp(path.join(tmpdir(), 'mediamanager-session-mix-')) : null;
-  const runtime = await createRuntime({ database, ...(stateRoot ? {
-    programDataPath: path.join(stateRoot, 'instance'), configurationDirectoryPath: path.join(stateRoot, 'config'),
-  } : {}), configuration: { UICulture: 'en-US', IsStartupWizardCompleted: true, ...configuration }, serverId: 'session-control-test' });
-  const close = runtime.close.bind(runtime);
-  let closePromise;
-  runtime.close = () => closePromise ??= (async () => {
-    try { await close(); }
+  let stateRoot, runtime, close, closePromise;
+  const dispose = () => closePromise ??= (async () => {
+    try { if (close) await close(); else await database.close(); }
     finally {
-      await dropPostgresTestDatabase(database);
-      if (stateRoot) {
-        const resolved = path.resolve(stateRoot);
-        assert.equal(path.dirname(resolved), path.resolve(tmpdir()));
-        assert.ok(path.basename(resolved).startsWith('mediamanager-session-mix-'));
-        await rm(resolved, { recursive: true, force: true });
+      try { await dropPostgresTestDatabase(database); }
+      finally {
+        if (stateRoot) {
+          const resolved = path.resolve(stateRoot);
+          assert.equal(path.dirname(resolved), path.resolve(tmpdir()));
+          assert.ok(path.basename(resolved).startsWith('mediamanager-session-mix-'));
+          await rm(resolved, { recursive: true, force: true });
+        }
       }
     }
   })();
+  try {
+  stateRoot = metadata ? await mkdtemp(path.join(tmpdir(), 'mediamanager-session-mix-')) : null;
+  runtime = await createRuntime({ database, ...(stateRoot ? {
+    programDataPath: path.join(stateRoot, 'instance'), configurationDirectoryPath: path.join(stateRoot, 'config'),
+  } : {}), configuration: { UICulture: 'en-US', IsStartupWizardCompleted: true, ...configuration }, serverId: 'session-control-test' });
+  close = runtime.close.bind(runtime);
+  runtime.close = dispose;
   await database.insert('BaseItems', movie());
   const user = await runtime.users.createUser({ Name: 'CoreFlowAdmin', Password: 'isolated-core-flow-password' });
   await runtime.users.updatePolicy(user.Id, { ...(await runtime.users.getUser(user.Id)).Policy, IsAdministrator: true });
   await new Promise(resolve => runtime.server.listen(0, '127.0.0.1', resolve));
   return { runtime, database, origin: `http://127.0.0.1:${runtime.server.address().port}`, user };
+  } catch (error) {
+    try { await dispose(); }
+    catch (cleanupError) { throw new AggregateError([error, cleanupError], 'Session fixture construction and cleanup failed.'); }
+    throw error;
+  }
 }
 async function controlledSession(runtime, deviceId) {
   const login = await runtime.authentication.login({ Username: 'CoreFlowAdmin', Pw: 'isolated-core-flow-password' },

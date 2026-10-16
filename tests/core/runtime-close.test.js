@@ -258,6 +258,27 @@ test('library root initialization failure closes the database once and preserves
   }
 });
 
+test('runtime without application paths serves users without starting a library directory monitor', {
+  skip: !postgresTestConnectionString,
+}, async () => {
+  const database = await createPostgresTestDatabase(null, 'runtime_no_root');
+  let runtime;
+  try {
+    runtime = await createRuntime({ database, configuration: { UICulture: 'en-US' }, serverId: 'runtime-no-root' });
+    assert.equal(runtime.libraryMonitor, undefined);
+    assert.equal(runtime.libraryMonitorHost, undefined);
+    assert.equal(runtime.storageReadiness.ready, true);
+    assert.deepEqual(await database.rows('BaseItems'), [], 'Rootless construction must not synthesize a persistent media root.');
+    const user = await runtime.users.createUser({ Name: 'Rootless User' });
+    assert.equal((await runtime.users.getUser(user.Id)).Name, 'Rootless User');
+    await runtime.close();
+    await assert.rejects(database.rows('Users'), /not open|closed/iu);
+  } finally {
+    try { if (runtime) await runtime.close(); else await database.close(); }
+    finally { await dropPostgresTestDatabase(database); }
+  }
+});
+
 test('runtime validates application paths before taking ownership of the database', {
   skip: !postgresTestConnectionString,
 }, async () => {

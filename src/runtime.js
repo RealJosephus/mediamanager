@@ -312,7 +312,9 @@ export async function createRuntime({ database, configuration, serverId, serverN
   const cleanDatabasePostScanTask = itemCreation && itemDeletion
     ? new CleanDatabasePostScanTask({ store, library, itemCreation, itemDeletion, externalData, vfs, identityMap, logger }) : undefined;
   const splashscreenPostScanTask = splashscreen ? new SplashscreenPostScanTask({ library, imageGenerator: splashscreen, logger }) : undefined;
-  const libraryMonitorHost = libraryScanHost && ignoreRule ? new LibraryMonitorHost({ store, library, itemCreation,
+  // Runtimes without application paths have no persistent AggregateFolder.
+  // Their query/session services remain usable without directory monitoring.
+  const libraryMonitorHost = programDataPath && libraryScanHost && ignoreRule ? new LibraryMonitorHost({ store, library, itemCreation,
     scanHost: libraryScanHost, metadata, metadataScanner, loadContext, fileSystem, vfs, identityMap,
     scheduler: libraryTaskScheduler, logger }) : undefined;
   const libraryMonitor = libraryMonitorHost ? new LibraryDirectoryMonitor({ host: libraryMonitorHost,
