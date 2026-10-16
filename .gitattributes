@@ -337,3 +337,4 @@ src/metadata/resources/comic-culture-language.json -text
 /src/database/native-model.json text eol=lf
 # AList API-host source offer and controlled frontend are sealed by raw SHA-256.
 /tools/validation/fixtures/alist-api-host/** -text
+/tests/library/fixtures/book-photo-global-runtime/assets/** -text
