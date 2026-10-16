@@ -315,7 +315,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
   // Runtimes without application paths have no persistent AggregateFolder.
   // Their query/session services remain usable without directory monitoring.
   const libraryMonitorHost = programDataPath && libraryScanHost && ignoreRule ? new LibraryMonitorHost({ store, library, itemCreation,
-    scanHost: libraryScanHost, metadata, metadataScanner, loadContext, fileSystem, vfs, identityMap,
+    scanHost: libraryScanHost, metadata, metadataScanner, fileSystem, vfs, identityMap,
     scheduler: libraryTaskScheduler, logger }) : undefined;
   const libraryMonitor = libraryMonitorHost ? new LibraryDirectoryMonitor({ host: libraryMonitorHost,
     configuration, ignoreRule, logger, runBackground: operation => store.runDetached(() => loadContext.withDetachedScope(operation)) }) : undefined;

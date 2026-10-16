@@ -11,6 +11,7 @@ import { nativeItemDescriptor } from './native-item-entity.js';
 import { createNativeItemCohort } from './native-item-cohort.js';
 import { metadataChildSequence } from './metadata-child-sequence.js';
 import { resolvePostgresSearchCollation } from './postgres-search-provider.js';
+import { defaultLibraryOptions } from './options.js';
 
 const itemType = item => String(item?.NativeType ?? item?.Type ?? '').split('.').at(-1);
 const folder = item => item?.NativeType ? nativeItemDescriptor(item.NativeType)?.family === 'folder' : item?.IsFolder === true;
@@ -23,18 +24,25 @@ const missing = error => ['ENOENT', 'ENOTDIR', 'not-found', 'not-directory'].inc
  * shared provider queue. Each lookup remains bounded and retains its entity
  * until FileRefresher has admitted every selected item to the queue. */
 export class LibraryMonitorHost {
-  constructor({ store, library, itemCreation, scanHost, metadata, metadataScanner, loadContext,
+  constructor({ store, library, itemCreation, scanHost, metadata, metadataScanner,
     fileSystem = library?.options?.fileSystem, vfs = fileSystem?.vfs, identityMap = fileSystem?.identityMap,
     scheduler, logger = {} } = {}) {
-    if (!store || !library || !itemCreation || !scanHost || !metadata || !metadataScanner || !loadContext
+    if (!store || !library || !itemCreation || !scanHost || !metadata || !metadataScanner
       || !fileSystem || !vfs || !identityMap) throw new TypeError('Library monitoring requires query, storage and metadata owners.');
-    Object.assign(this, { store, library, itemCreation, scanHost, metadata, metadataScanner, loadContext,
+    Object.assign(this, { store, library, itemCreation, scanHost, metadata, metadataScanner,
       fileSystem, vfs, identityMap, scheduler, logger, events: library });
   }
 
   async #enabled(item) {
     if (pluginFolder(item)) return false;
-    const options = await this.loadContext.withContext(item.Id, { draft: item, includeChildren: false }, loaded => loaded.libraryOptions);
+    // Native GetLibraryOptions reads collection membership and options only.
+    // Media access belongs to watch setup; an unavailable mount must not turn
+    // this configuration lookup into a metadata load or prevent startup.
+    const collection = itemType(item) === 'CollectionFolder' ? item
+      : (await this.library.getCollectionFolders(item)).find(folder => itemType(folder) === 'CollectionFolder');
+    const configured = this.library.options.libraryOptions;
+    const options = collection && (configured instanceof Map ? configured.get(idKey(collection.Id))
+      : configured?.[idKey(collection.Id)]) || defaultLibraryOptions();
     return options?.EnableRealtimeMonitor === true;
   }
 
