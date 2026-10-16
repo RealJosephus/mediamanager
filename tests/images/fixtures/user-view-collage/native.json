@@ -1,0 +1,360 @@
+{
+  "actualSkiaEncoder": true,
+  "actualStripCollageBuilder": true,
+  "fontInfo": {
+    "FamilyName": "Segoe UI",
+    "FontWeight": 700,
+    "FontWidth": 5,
+    "FontSlant": 0,
+    "metrics": 56,
+    "measure": 378.0547,
+    "typefaces": [
+      "Microsoft YaHei UI",
+      "Microsoft YaHei UI",
+      "Microsoft YaHei UI",
+      "Malgun Gothic",
+      "Segoe UI Emoji",
+      "Segoe UI",
+      "Segoe UI",
+      "Segoe UI"
+    ]
+  },
+  "results": [
+    {
+      "sample": {
+        "Name": "same",
+        "Paths": [
+          "same.png"
+        ],
+        "Text": ""
+      },
+      "error": null,
+      "output": {
+        "Width": 960,
+        "Height": 540,
+        "pixelHash": "59b2ad4a0a1b20d7d29f0de3cfbe06b29cd0dc5070be73a53b8d055e897276f2",
+        "sha256": "4ab107af86f933959fa73156fd71567719b0e4b2ae4abec2d67ad75ca0667143"
+      }
+    },
+    {
+      "sample": {
+        "Name": "small",
+        "Paths": [
+          "small.png"
+        ],
+        "Text": ""
+      },
+      "error": null,
+      "output": {
+        "Width": 960,
+        "Height": 540,
+        "pixelHash": "620595da17b04084a43cc9d237970a2138312597087893208a7378c89eb8be03",
+        "sha256": "ceffb9a90027fdcf5a3206b58962e633a12d2491a45d8f348ec5121985a3e567"
+      }
+    },
+    {
+      "sample": {
+        "Name": "large",
+        "Paths": [
+          "large.png"
+        ],
+        "Text": ""
+      },
+      "error": null,
+      "output": {
+        "Width": 960,
+        "Height": 540,
+        "pixelHash": "54293ee29a54025fa5e3e9f4c1ba04aa4bf8ff3bc5d5e0d4cd89e116959d9e7d",
+        "sha256": "3761da20afe2dea8c1de5fe6ff246a5c547c65493755c0102c56a491d16a9e79"
+      }
+    },
+    {
+      "sample": {
+        "Name": "portrait",
+        "Paths": [
+          "portrait.png"
+        ],
+        "Text": ""
+      },
+      "error": null,
+      "output": {
+        "Width": 960,
+        "Height": 540,
+        "pixelHash": "b1c50411a9143ce8be84b3b93c99f1f01906b19f8b3bc235e56ee1e49364f302",
+        "sha256": "182dc08c2a99e55394d08f3e88e00fd317f9d639d79be77119c99b02054ef566"
+      }
+    },
+    {
+      "sample": {
+        "Name": "wide",
+        "Paths": [
+          "wide.png"
+        ],
+        "Text": ""
+      },
+      "error": null,
+      "output": {
+        "Width": 960,
+        "Height": 540,
+        "pixelHash": "53e457616b27f71346b0ab86e23c09804e1a43bd7dac6439e925204029e6e8ae",
+        "sha256": "8f2a288b4882d085a54151c8575e3bb09761942724b1f45ffb75af55c8a9f68f"
+      }
+    },
+    {
+      "sample": {
+        "Name": "alpha",
+        "Paths": [
+          "alpha.png"
+        ],
+        "Text": ""
+      },
+      "error": null,
+      "output": {
+        "Width": 960,
+        "Height": 540,
+        "pixelHash": "c138578218a7db49a5625ff029827d412046a2b236192e9956d3cf21aa974f92",
+        "sha256": "dd43a6bccb6db8aae88f243eb1bb16ccbca15b43c76ffffa321a4a760e7b7d52"
+      }
+    },
+    {
+      "sample": {
+        "Name": "skip",
+        "Paths": [
+          "missing.png",
+          "broken.png",
+          "vector.svg",
+          "same.png"
+        ],
+        "Text": ""
+      },
+      "error": null,
+      "output": {
+        "Width": 960,
+        "Height": 540,
+        "pixelHash": "59b2ad4a0a1b20d7d29f0de3cfbe06b29cd0dc5070be73a53b8d055e897276f2",
+        "sha256": "4ab107af86f933959fa73156fd71567719b0e4b2ae4abec2d67ad75ca0667143"
+      }
+    },
+    {
+      "sample": {
+        "Name": "empty",
+        "Paths": [],
+        "Text": "Movies"
+      },
+      "error": null,
+      "output": {
+        "Width": 960,
+        "Height": 540,
+        "pixelHash": "7b1fcc441fd6c2518b2a0f818b1982eba6287d23712be4a8c7c51e4b281f719b",
+        "sha256": "6b8d7b329a78502060a2f9979dfe1313e0cd29d5de19b99f31c7d3aae3fc8c47"
+      }
+    },
+    {
+      "sample": {
+        "Name": "invalid",
+        "Paths": [
+          "missing.png",
+          "broken.png",
+          "vector.svg"
+        ],
+        "Text": "Movies"
+      },
+      "error": null,
+      "output": {
+        "Width": 960,
+        "Height": 540,
+        "pixelHash": "7b1fcc441fd6c2518b2a0f818b1982eba6287d23712be4a8c7c51e4b281f719b",
+        "sha256": "6b8d7b329a78502060a2f9979dfe1313e0cd29d5de19b99f31c7d3aae3fc8c47"
+      }
+    },
+    {
+      "sample": {
+        "Name": "directory",
+        "Paths": [
+          "directory.png",
+          "same.png"
+        ],
+        "Text": "Movies"
+      },
+      "error": {
+        "type": "FileNotFoundException",
+        "Message": "File not found"
+      },
+      "output": null
+    },
+    {
+      "sample": {
+        "Name": "gif",
+        "Paths": [
+          "static.gif"
+        ],
+        "Text": "Movies"
+      },
+      "error": {
+        "type": "ArgumentException",
+        "Message": "Cannot decode images with multiple frames"
+      },
+      "output": null
+    },
+    {
+      "sample": {
+        "Name": "text-11",
+        "Paths": [
+          "same.png"
+        ],
+        "Text": "Movies"
+      },
+      "error": null,
+      "output": {
+        "Width": 960,
+        "Height": 540,
+        "pixelHash": "be629b9e059a1d75b23e32c0deb03c45ab5172c6aefa9f76182cdb403e7c78b2",
+        "sha256": "3c4f7a45eeb31a9db02e3725fdbc26be4058e68f43e80bbe1c99b1d17eed3484"
+      }
+    },
+    {
+      "sample": {
+        "Name": "text-12",
+        "Paths": [
+          "same.png"
+        ],
+        "Text": "AVATAR"
+      },
+      "error": null,
+      "output": {
+        "Width": 960,
+        "Height": 540,
+        "pixelHash": "561e39ffc6ef5ce38e11d3ff578344a20c004198899a03ebdfd3798303f227bc",
+        "sha256": "0b8f3bc5fd5f95019ee0d0a4a87679d9846177bc40e503bf4cd3a755701d0b8f"
+      }
+    },
+    {
+      "sample": {
+        "Name": "text-13",
+        "Paths": [
+          "same.png"
+        ],
+        "Text": "A very long library name for movies and documentaries"
+      },
+      "error": null,
+      "output": {
+        "Width": 960,
+        "Height": 540,
+        "pixelHash": "e167edabbbf9334bf29d239560ba2f1019de7e10a678d48cb16f9510c3467a52",
+        "sha256": "d76a472a5e3b869c91f356409152f087299c0fc893371a636dd61a96add2a6d5"
+      }
+    },
+    {
+      "sample": {
+        "Name": "text-14",
+        "Paths": [
+          "same.png"
+        ],
+        "Text": "\u7535\u5F71"
+      },
+      "error": null,
+      "output": {
+        "Width": 960,
+        "Height": 540,
+        "pixelHash": "288aeb7eb3f9cd26bb1b26b15e8fa59743fa10879ecd39abf88d49f16d798d5d",
+        "sha256": "b2b685a0439c5aeb98c2f223381b629fc84acface3aba6a25e11c1f10ed052e7"
+      }
+    },
+    {
+      "sample": {
+        "Name": "text-15",
+        "Paths": [
+          "same.png"
+        ],
+        "Text": "\u96FB\u5F71\u5EAB"
+      },
+      "error": null,
+      "output": {
+        "Width": 960,
+        "Height": 540,
+        "pixelHash": "9fda0e7c9b433799ca0f3e5867048dfc74afb209a90d824bf0e7e3c5e71bc8b3",
+        "sha256": "1b9989446b1a94ebda5c28b2b140181263dce1658c5133617bb2cbf655f91d2d"
+      }
+    },
+    {
+      "sample": {
+        "Name": "text-16",
+        "Paths": [
+          "same.png"
+        ],
+        "Text": "Movies \u7535\u5F71"
+      },
+      "error": null,
+      "output": {
+        "Width": 960,
+        "Height": 540,
+        "pixelHash": "f13d82887b4e235ec5725941c138599b58ad6fb5d6e2269eba3a14cb01feca2f",
+        "sha256": "82f37c4ce6f2cc963ba9617c19332aa908d61856a026b04b774359154b9af5fc"
+      }
+    },
+    {
+      "sample": {
+        "Name": "text-17",
+        "Paths": [
+          "same.png"
+        ],
+        "Text": "\u0627\u0644\u0639\u0631\u0628\u064A\u0629"
+      },
+      "error": null,
+      "output": {
+        "Width": 960,
+        "Height": 540,
+        "pixelHash": "3ae32094a68d640f2e7f07b695ed9f67c5101d0e081d6f68b45c42338f7317f1",
+        "sha256": "04c2e8ccbf2306f456d0e2487d1882bd38204f70554904b64cfa3a4f0e05a2d7"
+      }
+    },
+    {
+      "sample": {
+        "Name": "text-18",
+        "Paths": [
+          "same.png"
+        ],
+        "Text": "\u05E2\u05D1\u05E8\u05D9\u05EA"
+      },
+      "error": null,
+      "output": {
+        "Width": 960,
+        "Height": 540,
+        "pixelHash": "706c637fd2c21fb2e8d81462e61e07df2dfeaf9f655d8617557438fe895d976a",
+        "sha256": "d7ed83a008063efb022886faf4fa2f6fd4b1f8e883a7e1d06f9b5ebc1e7935cd"
+      }
+    },
+    {
+      "sample": {
+        "Name": "text-19",
+        "Paths": [
+          "same.png"
+        ],
+        "Text": "\u0540\u0561\u0575\u0565\u0580\u0565\u0576"
+      },
+      "error": null,
+      "output": {
+        "Width": 960,
+        "Height": 540,
+        "pixelHash": "40684f2b367edc5c5c2b148f40f6676f308bd43020e3674dcaba414d29cd265c",
+        "sha256": "fb719dd2c855a089d5d857cd90905031eccfdc4079ca2b7e229d656f52d42216"
+      }
+    },
+    {
+      "sample": {
+        "Name": "text-20",
+        "Paths": [
+          "same.png"
+        ],
+        "Text": "\uD83D\uDE00 Movies"
+      },
+      "error": null,
+      "output": {
+        "Width": 960,
+        "Height": 540,
+        "pixelHash": "5401505cb92d59e8eaad821c36997c6d3490633929fe40122549274c9aa6078f",
+        "sha256": "2c10d4324d58f3bc51cca3d49f83ef746e2b30b78d53d3ee3af1033e3fb0f14e"
+      }
+    }
+  ]
+}

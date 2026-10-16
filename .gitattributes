@@ -328,3 +328,4 @@ src/metadata/resources/comic-culture-language.json -text
 /tests/library/fixtures/tag-permissions/README.md text eol=lf
 
 /tests/library/fixtures/library-directory-monitor/* -text whitespace=cr-at-eol
+/tests/images/fixtures/user-view-collage/native.json whitespace=cr-at-eol
