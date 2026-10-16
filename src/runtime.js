@@ -77,6 +77,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
   metadataPath = absoluteApplicationPath(metadataPath, 'metadataPath');
   const rollback = [];
   let splashscreen;
+  let cancelMetadata = () => {};
   let plugins, configuredStorage, fileSystem;
   try {
   const store = new DomainStore(database);
@@ -263,6 +264,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
       itemCreation, refresh: (reference, options) => metadata.refresh(reference, options), logger, now: metadataNow });
     metadata = new MetadataRefreshHost({ registry, loadContext, store, linkedChildren, vfs, logger, userData, probe, externalData,
       images: metadataImages, updates: metadataUpdates, seriesLifecycle, now: metadataNow });
+    cancelMetadata = () => metadata.cancel();
     rollback.push(async () => { await bookArchives.close(); await metadata.close(); });
     Object.assign(metadata, { saver });
   }
@@ -444,6 +446,10 @@ export async function createRuntime({ database, configuration, serverId, serverN
       const attempt = async operation => { try { await operation(); } catch (error) { errors.push(error); } };
       application.beginClose();
       stopStorageObserver();
+      // A scheduler worker can be awaiting a metadata provider's cancellation.
+      // Signal it before waiting for any scan owner; savers and SQL ownership
+      // remain available until those operations have completed their cleanup.
+      cancelMetadata();
       // Signal every scan owner before awaiting any of them. A scheduled task
       // may wait behind a library generation which itself waits behind an
       // older folder scan; each owner must receive cancellation to release the
@@ -505,6 +511,9 @@ export async function createRuntime({ database, configuration, serverId, serverN
   return { ...application, ...services, get implementedRoutes() { return application.implementedRoutes; }, startAutoDiscovery, close };
   } catch (error) {
     const errors = [error];
+    // Late initialization may already have admitted a provider through the
+    // shared scheduler. Cancel before any rollback owner waits for that work.
+    try { cancelMetadata(); } catch (cancelError) { errors.push(cancelError); }
     try { await splashscreen?.close(); } catch (closeError) { errors.push(closeError); }
     for (const dispose of rollback.reverse()) {
       try { await dispose(); }

@@ -607,5 +607,6 @@ export class MetadataRefreshHost {
   async drain() {
     while (this.#processing || this.#active.size) await Promise.allSettled([this.#processing, ...this.#active.values()]);
   }
-  async close() { this.#lifetime.abort(); await this.drain(); }
+  cancel() { this.#lifetime.abort(); }
+  async close() { this.cancel(); await this.drain(); }
 }

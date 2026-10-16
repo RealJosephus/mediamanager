@@ -201,3 +201,54 @@ test('postgres: runtime close cancels an admitted provider and releases database
   assert.equal(f.database.closed, true);
   await assert.rejects(f.database.rows('BaseItems'), /not open|closed/iu);
 });
+
+test('postgres: runtime close cancels a watched child provider before waiting for its scheduler worker', pg, async t => {
+  const f = await fixture(t), entered = Promise.withResolvers(), releaseProvider = Promise.withResolvers();
+  const identity = identityRoot + '\\ShutdownChild', activeWorkerPaths = new Set();
+  const enqueue = f.runtime.libraryTaskScheduler.enqueue.bind(f.runtime.libraryTaskScheduler);
+  f.runtime.libraryTaskScheduler.enqueue = (sequence, worker, options) => enqueue(sequence, async (item, progress) => {
+    activeWorkerPaths.add(item.Path);
+    try { return await worker(item, progress); }
+    finally { activeWorkerPaths.delete(item.Path); }
+  }, options);
+  let saverStopped = false, providerCleanup;
+  const stopSaver = f.runtime.metadata.saver.stop.bind(f.runtime.metadata.saver);
+  f.runtime.metadata.saver.stop = async () => { saverStopped = true; return stopSaver(); };
+  f.runtime.metadata.registry.register({ id: 'monitor-child-shutdown-provider', name: 'Monitor child shutdown provider', providers: [{
+    id: 'monitor-child-shutdown', name: 'Monitor child shutdown', kind: 'custom', itemTypes: ['Folder'],
+    supports: item => item.Path === identity,
+    async fetch(item, { signal }) {
+      const aborted = Promise.withResolvers();
+      const onAbort = () => aborted.resolve();
+      signal.addEventListener('abort', onAbort, { once: true });
+      if (signal.aborted) onAbort();
+      entered.resolve({ signal, scheduled: activeWorkerPaths.has(item.Path) });
+      try {
+        await Promise.race([aborted.promise, releaseProvider.promise]);
+        signal.throwIfAborted();
+      } finally {
+        signal.removeEventListener('abort', onAbort);
+        // Admitted providers may still release SQL-owned state after cancellation.
+        // Exercise real database admission while checking that the saver is live.
+        const rows = await f.rows(identity);
+        providerCleanup = { aborted: signal.aborted, saverStopped, databaseClosed: f.database.closed, rows: rows.length };
+      }
+    }
+  }] });
+  try {
+    await mkdir(path.join(f.media, 'ShutdownChild'));
+    const { signal, scheduled } = await until(entered.promise, 'The actual watch did not reach the scheduled child provider.');
+    assert.equal(scheduled, true, 'The provider must run inside an active child worker, not the root refresh.');
+    const closing = f.runtime.close();
+    assert.equal(f.runtime.close(), closing);
+    assert.equal(signal.aborted, true, 'Shutdown must cancel metadata before waiting for the child worker.');
+    await until(closing, 'Runtime cleanup waited for a child worker whose provider was not cancelled.');
+    assert.deepEqual(providerCleanup, { aborted: true, saverStopped: false, databaseClosed: false, rows: 1 });
+    assert.equal(saverStopped, true);
+    assert.ok(f.watches.every(record => record.closed));
+    assert.equal(f.database.closed, true);
+  } finally {
+    // A regression must fail the assertion without stranding fixture teardown.
+    releaseProvider.resolve();
+  }
+});
