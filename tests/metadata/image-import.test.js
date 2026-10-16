@@ -13,7 +13,7 @@ import { parseNfo } from '../../plugins/nfo/parser.js';
 import { StorageRegistry, VirtualFileSystem, IdentityAccessMap } from '../../src/storage/index.js';
 import { MemoryStorageAdapter } from '../../src/storage/testing/memory-adapter.js';
 
-const native = JSON.parse(readFileSync(new URL('./fixtures/image-import-oracle.json', import.meta.url), 'utf8'));
+const native = JSON.parse(readFileSync(new URL('./fixtures/image-import/native.json', import.meta.url), 'utf8'));
 const root = path.win32.dirname(native.ImageImports[0].Url);
 const id = '22222222-2222-2222-2222-222222222222';
 async function fixture(t) {
