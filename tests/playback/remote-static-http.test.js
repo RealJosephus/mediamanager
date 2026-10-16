@@ -6,8 +6,9 @@ import { createServer as createHttpsServer } from 'node:https';
 import { once } from 'node:events';
 import { getCACertificates, setDefaultCACertificates } from 'node:tls';
 import { brotliCompressSync, deflateSync, gzipSync } from 'node:zlib';
-import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
+import os from 'node:os';
 import { PostgresDatabase } from '../../src/database/postgres.js';
 import { tableDefinition } from '../../src/database/model.js';
 import { createRuntime } from '../../src/runtime.js';
@@ -168,6 +169,7 @@ function upstreamServer(requests, tlsOrigin, origins) {
 test('frozen native HTTP(S) .strm static byte proxy on PostgreSQL',
   { skip: !process.env.MEDIAMANAGER_TEST_POSTGRES }, async t => {
     const servers = [];
+    let stateRoot;
     // Own listeners before any bind can fail, including an unavailable host
     // alias. A setup failure must not keep this test process alive indefinitely.
     t.after(async () => {
@@ -178,8 +180,16 @@ test('frozen native HTTP(S) .strm static byte proxy on PostgreSQL',
           if (server.listening) await new Promise((resolve, reject) => server.close(error => error ? reject(error) : resolve()));
         } catch (error) { errors.push(error); }
       }
+      if (stateRoot) {
+        try {
+          assert.equal(path.dirname(path.resolve(stateRoot)), path.resolve(os.tmpdir()));
+          assert.ok(path.basename(stateRoot).startsWith('remote-static-state-'));
+          await rm(stateRoot, { recursive: true, force: true });
+        } catch (error) { errors.push(error); }
+      }
       if (errors.length) throw new AggregateError(errors, 'Remote static fixture listeners failed to close.');
     });
+    stateRoot = await mkdtemp(path.join(os.tmpdir(), 'remote-static-state-'));
     const tlsRequests = [];
     const tlsUpstream = createHttpsServer({ cert: tlsCertificate, key: tlsKey }, (request, response) => {
       tlsRequests.push(request.url);
@@ -206,7 +216,8 @@ test('frozen native HTTP(S) .strm static byte proxy on PostgreSQL',
       database = await PostgresDatabase.open({ connectionString: process.env.MEDIAMANAGER_TEST_POSTGRES, schema, create: true });
       await seed(database, upstreamOrigin, tlsOrigin);
       runtime = await createRuntime({ database, configuration: { UICulture: 'en-US', IsStartupWizardCompleted: true },
-        serverId: libraryFixture.serverId, programDataPath: libraryFixture.programDataPath });
+        serverId: libraryFixture.serverId, programDataPath: path.join(stateRoot, 'data'),
+        configurationDirectoryPath: path.join(stateRoot, 'config') });
       const user = await runtime.users.createUser({ Name: 'CoreFlowAdmin', Password: 'isolated-core-flow-password' });
       await runtime.users.updatePolicy(user.Id, { ...libraryFixture.user.Policy });
       runtime.server.listen(0, '127.0.0.1'); await once(runtime.server, 'listening');
