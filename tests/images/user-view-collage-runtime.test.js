@@ -4,7 +4,7 @@ import { access, mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createHash } from 'node:crypto';
-import { createCanvas, GlobalFonts, loadImage } from '@napi-rs/canvas';
+import { createCanvas, GlobalFonts, ImageData, loadImage } from '@napi-rs/canvas';
 import { composeUserViewCollage, drawUserViewTitle } from '../../src/images/user-view-collage.js';
 import { MetadataImageAssets } from '../../src/metadata/image-assets.js';
 import { testFileSystem } from '../storage/plugin-files.js';
@@ -15,6 +15,14 @@ const width = 960, height = 540;
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const inputFile = new URL('./fixtures/user-view-collage-runtime/input.json', import.meta.url);
 const inputBytes = await readFile(inputFile), input = JSON.parse(inputBytes.toString('utf8'));
+// These same-face titles have independently observed raster-edge differences.
+// Other platforms, text and fallback runs retain the glyph-boundary comparison.
+const singleFaceTitles = {
+  linux: { 'text-18': ['עברית', 'DejaVu Sans'] },
+  darwin: { 'text-12': ['AVATAR', 'Helvetica'] },
+  win32: { 'text-12': ['AVATAR', 'Segoe UI'], 'text-13': ['A very long library name for movies and documentaries', 'Segoe UI'],
+    'text-17': ['العربية', 'Segoe UI'], 'text-18': ['עברית', 'Segoe UI'], 'text-19': ['Հայերեն', 'Segoe UI'] }
+};
 async function decoded(bytes) {
   const image = await loadImage(bytes), canvas = createCanvas(image.width, image.height);
   canvas.getContext('2d').drawImage(image, 0, 0);
@@ -73,6 +81,63 @@ function fontMeasurements(text, font, direction) {
     roundedScalarAdvanceSum: scalars.reduce((sum, scalar) => sum + Math.round(scalar.advance), 0),
     xHeight: context.measureText('x').actualBoundingBoxAscent, scalars };
 }
+function titleContext(background) {
+  const canvas = createCanvas(width, height), context = canvas.getContext('2d');
+  context.putImageData(new ImageData(new Uint8ClampedArray(background), width, height), 0, 0);
+  return context;
+}
+function observeTitle(context, text) {
+  const draws = [], fillText = context.fillText;
+  context.fillText = function (...args) {
+    draws.push({ args, font: this.font, direction: this.direction, textAlign: this.textAlign,
+      textBaseline: this.textBaseline, fillStyle: this.fillStyle, globalAlpha: this.globalAlpha });
+    return fillText.apply(this, args);
+  };
+  try { return { layout: drawUserViewTitle(context, text), draws }; }
+  finally { context.fillText = fillText; }
+}
+function assertSingleFaceTitle({ specification, row, native, layout, draws, context, background, pixelHash }) {
+  const [text, family] = specification, nativeLayout = row.layout;
+  assert.equal(row.sample.Text, text, 'The observed raster case must retain its reviewed title.');
+  assert.equal(native.defaultFont.FamilyName, family);
+  assert.equal(native.defaultFont.FontWeight, 700);
+  assert.equal(native.defaultFont.FontWidth, 5); assert.equal(native.defaultFont.FontSlant, 0);
+  assert.ok(GlobalFonts.families.find(face => face.family === family)?.styles.some(style => style.weight === 700 && style.width === 'normal' && style.style === 'normal'),
+    'The native default bold face must be registered in Canvas.');
+  assert.match(native.defaultFont.sha256, /^[a-f0-9]{64}$/);
+  assert.deepEqual(native.fallbackFonts.at(-1), native.defaultFont, 'The measured last face must be the actual native default.');
+  const nativeFont = nativeLayout.fontMeasurements.at(-1).at(-1);
+  assert.equal(nativeFont.FamilyName, family); assert.equal(nativeFont.FontWeight, 700);
+  assert.equal(nativeFont.size, nativeLayout.size); assert.equal(nativeFont.containsAll, true);
+  assert.equal(nativeFont.scalars.map(scalar => scalar.text).join(''), text);
+  assert.ok(nativeFont.scalars.every(scalar => scalar.glyph > 0), 'Every character must use a present default-face glyph.');
+  assert.equal(draws.length, 1, 'The complete default-face title must be drawn once.');
+  const draw = draws[0];
+  assert.deepEqual(draw.args, [text, layout.x, layout.y], 'Drawing must retain all text and use the measured anchor without maxWidth scaling.');
+  assert.equal(draw.font, layout.font); assert.match(draw.font, /^bold [\d.]+px /);
+  assert.equal(draw.direction, nativeLayout.direction);
+  assert.equal(draw.textAlign, nativeLayout.direction === 'rtl' ? 'right' : 'left');
+  assert.equal(draw.textBaseline, 'alphabetic'); assert.equal(draw.fillStyle, '#ffffff'); assert.equal(draw.globalAlpha, 1);
+  // Compare layout in raster units, not floating-point representation. The
+  // observed Canvas scalar metrics round to hundredths; this does not permit
+  // a different overflow decision, font size, whole-pixel advance or anchor.
+  for (const key of ['firstSize', 'size']) assert.equal(Math.round(layout[key] * 1000), Math.round(nativeLayout[key] * 1000), `Title ${key} differs.`);
+  for (const key of ['initialWidth', 'beforeFallbackResize', 'measured']) assert.equal(Math.round(layout[key]), Math.round(nativeLayout[key]), `Title ${key} differs.`);
+  const raw = fontMeasurements(text, draw.font, draw.direction);
+  const advance = process.platform === 'linux' ? raw.roundedScalarAdvanceSum : raw.scalarAdvanceSum;
+  assert.equal(Math.round(advance), Math.round(nativeFont.rawWidth), 'The actually drawn font must retain the native raw advance.');
+  const nativeX = nativeLayout.direction === 'rtl' ? width - nativeLayout.padding : nativeLayout.padding;
+  assert.equal(Math.round(draw.args[1]), Math.round(nativeX));
+  assert.ok(Math.abs(draw.args[2] - nativeLayout.y) <= 0.5, 'The observed baseline may differ by at most half a raster row.');
+  assert.equal(hash(context.canvas.data()), pixelHash, 'The captured complete title drawing must reproduce the composed image.');
+  // An explicit face replay also proves which face Canvas actually used for a
+  // generic family. Font strings or returned metrics alone do not prove this.
+  const explicit = titleContext(background);
+  for (const key of ['direction', 'textAlign', 'textBaseline', 'fillStyle', 'globalAlpha']) explicit[key] = draw[key];
+  explicit.font = `700 ${layout.size}px ${JSON.stringify(family)}`;
+  explicit.fillText(...draw.args);
+  assert.equal(hash(explicit.canvas.data()), pixelHash, 'The actual title must use the native default family and bold face.');
+}
 
 test('UserView thumbnails match the same-platform native selection, crop and title layout', async t => {
   assert.ok(process.env.MEDIAMANAGER_JELLYFIN_DLL, 'Live collage comparison requires the isolated native reference build.');
@@ -124,8 +189,11 @@ test('UserView thumbnails match the same-platform native selection, crop and tit
       }
     }
     if (row.layout) {
-      const context = createCanvas(width, height).getContext('2d'), layout = drawUserViewTitle(context, row.sample.Text);
+      const specification = singleFaceTitles[process.platform]?.[row.sample.Name];
+      const context = specification ? titleContext(candidateBackground) : createCanvas(width, height).getContext('2d');
+      const { layout, draws } = observeTitle(context, row.sample.Text);
       observation.candidateLayout = layout;
+      observation.candidateDraws = draws;
       // Diagnostic probes use the actual installed font collection. The native
       // measurements never feed the production renderer or replace its output.
       observation.fontMeasurements = {
@@ -142,6 +210,15 @@ test('UserView thumbnails match the same-platform native selection, crop and tit
       assert.ok(actualInk.count > 0 && expectedInk.count > 0, 'Both renderers must produce visible title glyphs.');
       assert.equal(layout.size < 112, row.layout.size < 112, 'The title must take the native overflow branch.');
       assert.ok(Math.abs(layout.y - row.layout.y) <= 1, 'The baseline must agree within one raster row.');
+      if (specification) {
+        assertSingleFaceTitle({ specification, row, native, layout, draws, context,
+          background: candidateBackground, pixelHash: observation.pixelHash });
+        observation.titleContract = 'complete-default-face-drawing';
+        // RGB and glyph-mask differences remain recorded above. For these
+        // proven same-face drawings they describe rasterization, not missing
+        // text, fallback, sizing or placement.
+        return;
+      }
       // This is a title geometry comparison, not a general image tolerance.
       // Allow a single boundary pixel for coverage/rasterization, but require
       // every glyph's occupied region and placement in both directions.
