@@ -9,7 +9,7 @@ import { brotliCompressSync, deflateSync, gzipSync } from 'node:zlib';
 import { mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import os from 'node:os';
-import { PostgresDatabase } from '../../src/database/postgres.js';
+import { createPostgresTestDatabase, dropPostgresTestDatabase } from '../database/postgres-fixture.js';
 import { tableDefinition } from '../../src/database/model.js';
 import { createRuntime } from '../../src/runtime.js';
 import { remoteStaticStreamResult } from '../../src/playback/remote-static.js';
@@ -169,11 +169,16 @@ function upstreamServer(requests, tlsOrigin, origins) {
 test('frozen native HTTP(S) .strm static byte proxy on PostgreSQL',
   { skip: !process.env.MEDIAMANAGER_TEST_POSTGRES }, async t => {
     const servers = [];
-    let stateRoot;
+    let stateRoot, database, runtime;
     // Own listeners before any bind can fail, including an unavailable host
     // alias. A setup failure must not keep this test process alive indefinitely.
     t.after(async () => {
       const errors = [];
+      // Runtime construction owns and may close the database before rejecting.
+      // The fixture cleanup reopens its own schema when needed, and failures
+      // here remain teardown failures instead of replacing the original error.
+      try { await runtime?.close(); } catch (error) { errors.push(error); }
+      try { await dropPostgresTestDatabase(database); } catch (error) { errors.push(error); }
       for (const server of servers.toReversed()) {
         try {
           server.closeAllConnections();
@@ -187,7 +192,7 @@ test('frozen native HTTP(S) .strm static byte proxy on PostgreSQL',
           await rm(stateRoot, { recursive: true, force: true });
         } catch (error) { errors.push(error); }
       }
-      if (errors.length) throw new AggregateError(errors, 'Remote static fixture listeners failed to close.');
+      if (errors.length) throw new AggregateError(errors, 'Remote static fixture resources failed to close.');
     });
     stateRoot = await mkdtemp(path.join(os.tmpdir(), 'remote-static-state-'));
     const tlsRequests = [];
@@ -209,11 +214,9 @@ test('frozen native HTTP(S) .strm static byte proxy on PostgreSQL',
     const crossUpstream = upstreamServer(requests, tlsOrigin, origins);
     servers.push(crossUpstream);
     crossUpstream.listen(upstream.address().port, '127.0.0.2'); await once(crossUpstream, 'listening');
-    let database, runtime;
     const candidateRecords = [];
-    const schema = `remote_static_${Date.now()}_${Math.floor(Math.random() * 100000)}`;
     try {
-      database = await PostgresDatabase.open({ connectionString: process.env.MEDIAMANAGER_TEST_POSTGRES, schema, create: true });
+      database = await createPostgresTestDatabase(null, 'remote_static');
       await seed(database, upstreamOrigin, tlsOrigin);
       runtime = await createRuntime({ database, configuration: { UICulture: 'en-US', IsStartupWizardCompleted: true },
         serverId: libraryFixture.serverId, programDataPath: path.join(stateRoot, 'data'),
@@ -262,18 +265,10 @@ test('frozen native HTTP(S) .strm static byte proxy on PostgreSQL',
           assert.deepEqual(tlsRequests, [], 'Untrusted TLS must fail before an HTTP request reaches the upstream.');
       }
     } finally {
-      try {
-        if (process.env.MEDIAMANAGER_REMOTE_STATIC_EVIDENCE) {
-          const output = process.env.MEDIAMANAGER_REMOTE_STATIC_EVIDENCE;
-          await mkdir(output, { recursive: true });
-          await writeFile(path.join(output, 'postgres.json'), JSON.stringify({ engine: 'postgres', candidateRecords }, null, 2) + '\n', { flag: 'wx' });
-        }
-      } finally {
-        if (database) {
-          await database.client.query(`DROP SCHEMA "${schema}" CASCADE`);
-          await database.client.query(`DROP SCHEMA "${schema}__mm" CASCADE`);
-        }
-        if (runtime) await runtime.close(); else await database?.close();
+      if (process.env.MEDIAMANAGER_REMOTE_STATIC_EVIDENCE) {
+        const output = process.env.MEDIAMANAGER_REMOTE_STATIC_EVIDENCE;
+        await mkdir(output, { recursive: true });
+        await writeFile(path.join(output, 'postgres.json'), JSON.stringify({ engine: 'postgres', candidateRecords }, null, 2) + '\n', { flag: 'wx' });
       }
     }
   });

@@ -1,10 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
-import path from 'node:path';
 import { analyzeJavaScriptDependencies, inventory } from '../../tools/validation/inventory.js';
 import { captureInputIdentity } from '../../tools/validation/inputs.js';
-import { repositoryRoot } from '../../tools/validation/paths.js';
+import { recordedInputPath, repositoryRoot } from '../../tools/validation/paths.js';
 
 test('static relative JSON URLs retain fixture edges through variables without interpreting DTOs, dynamic bases or shadowed URL', () => {
   const source = `
@@ -56,7 +55,10 @@ test('the real RAR entry consumer discovers both manifests and captures their re
     assert.ok(proof.requiredInputs.length > 0);
     for (const descriptor of proof.requiredInputs) {
       assert.equal(descriptor.required, true);
-      const required = identity.entries.find(input => input.filename === path.resolve(repositoryRoot, descriptor.path));
+      // Historical identities may have a byte-identical repository relocation.
+      // Require the original digest at that declared location on every host.
+      const filename = recordedInputPath(descriptor.path, [descriptor.sha256], repositoryRoot, {});
+      const required = identity.entries.find(input => input.filename === filename);
       assert.ok(required?.required, descriptor.path);
       assert.ok(required.requiredReasons.length > 0 && required.requiredReasons.every(reason => reason.startsWith(consumer + ':')), descriptor.path);
       assert.ok(required.expectedDigests.includes(descriptor.sha256), descriptor.path);
