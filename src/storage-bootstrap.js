@@ -77,8 +77,14 @@ export async function createConfiguredStorage(filename, { environment = process.
   plugins ??= await PluginHost.open();
   filename ??= path.join(plugins.directory,'storage.json');
   let configuration, current, closed = false, initializing = true, tail = Promise.resolve();
-  const extensions = new Map(), listeners = new Set();
+  const extensions = new Map(), listeners = new Set(), beforeListeners = new Set();
   const notify = async () => { for (const listener of listeners) await listener(); };
+  const report = async error => { try { await plugins.onError(error); } catch { /* Diagnostics cannot interrupt storage ownership transfer. */ } };
+  const notifyBefore = async () => {
+    // Once a candidate is built and persisted, the ownership transfer must
+    // finish even if a stopped observer reports a cleanup failure.
+    for (const listener of beforeListeners) try { await listener(); } catch (error) { await report(error); }
+  };
   const credential = reference => {
     if (typeof reference !== 'string' || !/^[A-Za-z_][A-Za-z0-9_]*$/u.test(reference)) throw new TypeError('Storage credentialRef must name an environment variable.');
     const token = environment[reference];
@@ -127,8 +133,9 @@ export async function createConfiguredStorage(filename, { environment = process.
     const candidate = await build(definition,{tolerateUnavailable:initializing || !save,strictType});
     try { if (save) await persist(filename,definition); }
     catch (error) { await candidate.registry.close(); throw error; }
+    if (!initializing) await notifyBefore();
     const previous = current; current = candidate; configuration = clone(definition);
-    try { await previous?.registry.close(); } catch (error) { plugins.onError(error); }
+    try { await previous?.registry.close(); } catch (error) { await report(error); }
     if (save && !initializing) await notify();
     return clone(configuration);
   };
@@ -162,7 +169,10 @@ export async function createConfiguredStorage(filename, { environment = process.
       catch (error) { extensions.delete(extension.type); throw error; }
       return async () => {
         extensions.delete(extension.type);
-        if (!initializing && !closed) await enqueue(()=>current.registry.unregisterType(extension.type));
+        if (!initializing && !closed) await enqueue(async () => {
+          await notifyBefore();
+          await current.registry.unregisterType(extension.type);
+        });
       };
     });
     await change(configuration); initializing = false;
@@ -187,6 +197,7 @@ export async function createConfiguredStorage(filename, { environment = process.
       status:()=>configuration.instances.map(instance=>({id:instance.id,type:instance.type,
         available:current.registry.hasInstance(instance.id),error:current.unavailable.find(entry=>entry.id===instance.id)?.error??null})),
       subscribe:listener=>{listeners.add(listener);return()=>listeners.delete(listener);},
+      subscribeBeforeChange:listener=>{beforeListeners.add(listener);return()=>beforeListeners.delete(listener);},
       configure:value=>enqueue(()=>change(clone(value))),
       bindPath:value=>enqueue(async()=>{
         if (!fields(value,['identityRoot','instanceId','root','style','caseSensitive','returnAccess','capabilities','purpose'])) throw new TypeError('Invalid storage path binding.');
@@ -226,7 +237,7 @@ export async function createConfiguredStorage(filename, { environment = process.
         next.mounts.push({path:accessRoot,instanceId:value.instanceId,root:value.root??'/',capabilities:value.capabilities});
         return change(next);
       }),
-      close:async()=>{if(closed)return;closed=true;unsubscribe();listeners.clear();await tail;try{if(ownsPlugins)await plugins.close();}finally{await current.registry.close();}},
+      close:async()=>{if(closed)return;closed=true;unsubscribe();listeners.clear();beforeListeners.clear();await tail;try{if(ownsPlugins)await plugins.close();}finally{await current.registry.close();}},
     };
   } catch(error) { closed=true; if(ownsPlugins)await plugins.close().catch(()=>{}); await current?.registry.close(); throw error; }
 }

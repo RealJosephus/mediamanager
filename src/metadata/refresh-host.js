@@ -166,14 +166,29 @@ export class MetadataRefreshHost {
   }
   #startQueue() {
     if (this.#processing || !this.#queue.length) return;
-    this.#processing = Promise.resolve().then(async () => {
+    const processEntries = async () => {
       while (this.#queue.length) {
         const entry = this.#dequeue();
         try {
           this.#lifetime.signal.throwIfAborted();
-          entry.resolve(await this.refresh(entry.reference, entry.options));
+          entry.resolve(await (this.queuedRefresh
+            ? this.queuedRefresh(entry.reference, { ...entry.options, signal: entry.options.signal
+              ? AbortSignal.any([entry.options.signal, this.#lifetime.signal]) : this.#lifetime.signal })
+            : this.refresh(entry.reference, entry.options)));
         } catch (error) { entry.reject(error); }
       }
+    };
+    this.#processing = Promise.resolve().then(() => {
+      // A batch owns ignore-cache boundaries; each admitted item still has
+      // independent failure and cancellation, and can admit more queued work.
+      return this.runQueuedBatch && !this.#lifetime.signal.aborted
+        ? this.runQueuedBatch(processEntries, { signal: this.#lifetime.signal }) : processEntries();
+    }).catch(error => {
+      // A host boundary failure must neither strand callers nor spin through
+      // repeated empty batches. Already completed entries remain completed.
+      while (this.#queue.length) this.#dequeue().reject(error);
+      try { void Promise.resolve(this.logger.error(error, 'Error processing metadata refresh queue')).catch(() => {}); }
+      catch { /* Logging must not prevent the queue from standing down. */ }
     }).finally(() => {
       this.#processing = undefined;
       this.#startQueue();

@@ -31,7 +31,9 @@ export { CollectionPosterVerifyPostScanTask } from './collection-poster-post-sca
 export { CleanDatabasePostScanTask } from './clean-database-post-scan-task.js';
 export { SplashscreenPostScanTask } from './splashscreen-post-scan-task.js';
 export { GenresPostScanTask, StudiosPostScanTask } from './by-name-post-scan-task.js';
-export { LibraryScanHost, InertLibraryDirectoryMonitor } from './library-scan-host.js';
+export { LibraryScanHost } from './library-scan-host.js';
+export { LibraryDirectoryMonitor } from './library-directory-monitor.js';
+export { LibraryMonitorHost } from './library-monitor-host.js';
 export { TopLevelFolderValidationService, refreshCollectionFolderLocations,
   physicalFolderNativeType, collectionFolderNativeType } from './top-level-folder-validation.js';
 export { LibraryMetadataScanService, metadataScanOptions } from './metadata-scan-service.js';

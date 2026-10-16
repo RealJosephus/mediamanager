@@ -57,3 +57,57 @@ test('refresh queue preserves repeated ids and admits a new entry after standing
   await host.queue('disposed');
   assert.deepEqual(order, ['same', 'same', 'later']);
 });
+
+test('refresh queue admits full item dispatch with its existing priority and shutdown lifetime', async () => {
+  const host = new MetadataRefreshHost({ registry: {}, loadContext() {}, store: {} });
+  const started = Promise.withResolvers(), release = Promise.withResolvers(), calls = [];
+  host.refresh = async () => assert.fail('Queued full-item work must use its installed dispatcher.');
+  host.queuedRefresh = async (reference, options) => {
+    calls.push(reference);
+    assert.equal(options.IsAutomated, true);
+    if (reference === 'active') { started.resolve(options.signal); await release.promise; options.signal.throwIfAborted(); }
+  };
+  const active = host.queue('active', { IsAutomated: true }, 0), activeResult = Promise.allSettled([active]);
+  const signal = await started.promise;
+  const pending = host.queue('pending', { IsAutomated: true }, 0), pendingResult = Promise.allSettled([pending]);
+  const closing = host.close(); assert.equal(signal.aborted, true); release.resolve();
+  await closing;
+  assert.equal((await activeResult)[0].status, 'rejected'); assert.equal((await pendingResult)[0].status, 'rejected');
+  assert.deepEqual(calls, ['active']);
+});
+
+test('the queue boundary owns one live batch across provider failures and new admission', async () => {
+  const host = new MetadataRefreshHost({ registry: {}, loadContext() {}, store: {} });
+  const started = Promise.withResolvers(), release = Promise.withResolvers(), events = [];
+  host.runQueuedBatch = async (operation, { signal }) => {
+    events.push('begin');
+    try { await operation(); } finally { if (!signal.aborted) events.push('end'); }
+  };
+  host.queuedRefresh = async reference => {
+    events.push(reference);
+    if (reference === 'first') { started.resolve(); await release.promise; throw new Error('Provider failed'); }
+  };
+  const first = host.queue('first'), firstResult = Promise.allSettled([first]);
+  await started.promise;
+  const second = host.queue('second');
+  release.resolve();
+  await second; await firstResult; await host.drain();
+  assert.deepEqual(events, ['begin', 'first', 'second', 'end']);
+  await host.queue('later'); await host.drain();
+  assert.deepEqual(events.slice(-3), ['begin', 'later', 'end']);
+  await host.close();
+});
+
+test('a queue boundary failure settles pending callers and permits a later batch', async () => {
+  const failure = new Error('Cannot initialize queue boundary'), errors = [];
+  const host = new MetadataRefreshHost({ registry: {}, loadContext() {}, store: {}, logger: { error: error => errors.push(error) } });
+  host.runQueuedBatch = async () => { throw failure; };
+  const results = await Promise.allSettled([host.queue('first'), host.queue('second')]);
+  await host.drain();
+  assert.ok(results.every(result => result.status === 'rejected' && result.reason === failure));
+  assert.deepEqual(errors, [failure]);
+  host.runQueuedBatch = operation => operation();
+  host.queuedRefresh = async reference => reference;
+  assert.equal(await host.queue('later'), 'later');
+  await host.close();
+});

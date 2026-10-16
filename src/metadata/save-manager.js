@@ -61,12 +61,12 @@ export async function saveMetadata(item, updateType, savers, { now = () => new D
     try { path = saver.getSavePath?.(item, context); }
     catch (error) { logger.error(error, 'Error resolving metadata save path'); outcomes.push({ saver: saver.id, error }); continue; }
     try {
-      if (path != null) monitor.begin?.(path);
+      if (path != null) monitor.reportFileSystemChangeBeginning?.(path);
       // The baseline intentionally uses CancellationToken.None in this manager entry point.
       const result = await saver.save(item, { ...context, signal: undefined });
       item.DateLastSaved = now(); outcomes.push({ saver: saver.id, result });
     } catch (error) { logger.error(error, 'Error in metadata saver'); outcomes.push({ saver: saver.id, error }); }
-    finally { if (path != null) monitor.complete?.(path, false); }
+    finally { if (path != null) monitor.reportFileSystemChangeComplete?.(path, false); }
   }
   return outcomes;
 }

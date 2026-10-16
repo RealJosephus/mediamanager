@@ -16,7 +16,7 @@ test('manual edits preserve existing NFO despite save-local disabled while downl
 test('save manager catches saver failure, completes monitor, continues and updates DateLastSaved only after success', async () => {
   const events = []; const item = { DateLastSaved: 'old' }; const error = new Error('network failure');
   const failing = { ...saver, id: 'failing', save: async () => { throw error; } };
-  const options = { includeDisabled: true, now: () => 'new', monitor: { begin: (path) => events.push(['begin', path]), complete: (path, reset) => events.push(['complete', path, reset]) } };
+  const options = { includeDisabled: true, now: () => 'new', monitor: { reportFileSystemChangeBeginning: (path) => events.push(['begin', path]), reportFileSystemChangeComplete: (path, reset) => events.push(['complete', path, reset]) } };
   const failed = await saveMetadata(item, ItemUpdateType.MetadataDownload, [failing], options);
   assert.equal(failed[0].error, error); assert.equal(item.DateLastSaved, 'old');
   await saveMetadata(item, ItemUpdateType.MetadataDownload, [failing, saver], options);

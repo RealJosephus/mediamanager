@@ -1,0 +1,16 @@
+[
+  {"name":"same-path", "changes":["media/one.mkv","media/one.mkv"]},
+  {"name":"siblings", "changes":["media/one.mkv","media/two.mkv","media/nested/three.mkv"]},
+  {"name":"parent-after-child", "changes":["media/nested/one.mkv","media"]},
+  {"name":"first-matching-batch", "changes":["media/one/film.mkv","media/two/film.mkv","media"]},
+  {"name":"ordinal-sibling-parent", "changes":["Media/one.mkv","media/two.mkv"]},
+  {"name":"case-insensitive-same-path", "changes":["media/one.mkv","MEDIA/ONE.MKV"]},
+  {"name":"raw-separator-prefix", "changes":["media/one.mkv","other/media/one.mkv","media2/one.mkv"]},
+  {"name":"temporary-suppression", "begin":["media/Album/album.nfo"], "changes":["media/Album/album.nfo","media/Album/album.nfo/child","media/Album","media/Album/film.mkv"]},
+  {"name":"core-ignore", "changes":["media/small.jpg","media/film.sample.mkv","media/.hidden","media/metadata/info.xml","media/valid.mkv"]},
+  {"name":"dot-ignore", "ignoreDirectories":["media/ignored"], "changes":["media/ignored","media/ignored/child.mkv","media/valid.mkv"]},
+  {"name":"lookup-and-refresh-failures", "changes":["media/fail.mkv","media/other.mkv","media/last.mkv"], "lookupFailure":"media/fail.mkv", "refreshFailure":"media"},
+  {"name":"same-item-deduplication", "changes":["media/one.mkv","media/two.mkv"], "sameItemId":true},
+  {"name":"aggregate-not-refreshed", "changes":["media/one.mkv","media/two.mkv"], "aggregateItem":"media"},
+  {"name":"stop-discards-batches", "changes":["media/one.mkv","media/two.mkv"], "stop":true}
+]

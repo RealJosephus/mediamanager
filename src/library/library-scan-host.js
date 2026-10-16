@@ -280,11 +280,3 @@ export class LibraryScanHost {
     await this.itemCreation.linkedChildren.flushReleases();
   }
 }
-
-/** No watcher is active yet, but the lifecycle still owns a truthful gate. */
-export class InertLibraryDirectoryMonitor {
-  async stop() {}
-  async start() {}
-  reportFileSystemChangeBeginning() {}
-  reportFileSystemChangeComplete() {}
-}

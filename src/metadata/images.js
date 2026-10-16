@@ -69,7 +69,7 @@ export class MetadataImages {
   #operations = new Set();
   #cacheTimer;
   #lifetime = new AbortController();
-  constructor({ fetch = globalThis.fetch, now = () => Date.now(), logger = { error() {} }, processor = new ImageProcessor({ logger }) } = {}) { Object.assign(this, { fetch, now, logger, processor }); }
+  constructor({ fetch = globalThis.fetch, now = () => Date.now(), logger = { error() {} }, processor = new ImageProcessor({ logger }), monitor } = {}) { Object.assign(this, { fetch, now, logger, processor, monitor }); }
   get cacheEntryCount() { return this.#cache.size; }
   #runOperation(signal, operation) {
     this.#lifetime.signal.throwIfAborted();
@@ -390,9 +390,17 @@ export class MetadataImages {
     for (const [i, path] of paths.entries()) {
       let file;
       const write = async filename => {
-        // ImageSaver opens FileMode.Create before the cancellation-aware copy.
-        if (createBeforeCopy) await assets.write(filename, Buffer.alloc(0));
-        return assets.write(filename, bytes, { signal });
+        const parent = imagePathApi(filename).dirname(filename);
+        try {
+          this.monitor?.reportFileSystemChangeBeginning(filename);
+          this.monitor?.reportFileSystemChangeBeginning(parent);
+          // ImageSaver opens FileMode.Create before the cancellation-aware copy.
+          if (createBeforeCopy) await assets.write(filename, Buffer.alloc(0));
+          return await assets.write(filename, bytes, { signal });
+        } finally {
+          this.monitor?.reportFileSystemChangeComplete(filename, false);
+          this.monitor?.reportFileSystemChangeComplete(parent, false);
+        }
       };
       try { file = await write(path); }
       catch (error) { if (!['permission-denied', 'unavailable', 'not-supported'].includes(error.code) || paths.length !== retries.length || same(path, retries[i])) throw error; file = await write(retries[i]); }
@@ -400,7 +408,9 @@ export class MetadataImages {
     }
     if (old) Object.assign(old, { Path: saved[0].Path, DateModified: modified(saved[0]), Width: 0, Height: 0 }); else images.push(row(saved[0], image.Type));
     if (oldIsLocal && !saved.some(file => same(file.Path, oldPath)) && (saveLocally || loaded.metadataPath && ordinalIgnoreCaseKey(oldPath).includes(ordinalIgnoreCaseKey(loaded.metadataPath)))) {
+      this.monitor?.reportFileSystemChangeBeginning(oldPath);
       try { await assets.delete(oldPath, { signal }); } catch (error) { if (error.code !== 'not-found') throw error; }
+      finally { this.monitor?.reportFileSystemChangeComplete(oldPath, false); }
     }
     return saved;
   }
