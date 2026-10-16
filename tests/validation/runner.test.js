@@ -240,9 +240,13 @@ test('inventory includes shared native evidence verifiers in the selected input 
   const identityBinding = JSON.parse(await readFile(identityFixture.filename, 'utf8'));
   assert.equal(identityBinding.reference.preparationInputs.length, 11);
   assert.equal(identityBinding.preparationInputFiles.length, 11);
+  // These immutable bindings describe the Windows workspace that recorded them,
+  // not the current runner checkout or a relocated executable/input mapping.
+  const recordedRepositoryRoot = 'D:/mediamanager';
   for (const [index, descriptor] of identityBinding.preparationInputFiles.entries()) {
-    assert.equal(path.resolve(descriptor.filename),
-      path.resolve(repositoryRoot, identityBinding.reference.preparationInputs[index][1]));
+    assert.ok(path.win32.isAbsolute(descriptor.filename));
+    assert.equal(path.win32.normalize(descriptor.filename),
+      path.win32.resolve(recordedRepositoryRoot, identityBinding.reference.preparationInputs[index][1]));
     assert.match(descriptor.sha256, /^[a-f0-9]{64}$/u);
   }
   assert.ok(identityBinding.preparationInputFiles[9].filename.endsWith('/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll'));
@@ -250,7 +254,7 @@ test('inventory includes shared native evidence verifiers in the selected input 
   assert.equal(identityBinding.recordings.length, 5);
   for (const directory of [identityBinding.runtimeDirectory, identityBinding.sdkDirectory,
     ...identityBinding.recordings.flatMap(recording => recording.repetitions)]) {
-    assert.ok(path.isAbsolute(directory.filename));
+    assert.ok(path.win32.isAbsolute(directory.filename));
     assert.match(directory.entriesSha256, /^[a-f0-9]{64}$/u);
   }
   assert.equal(identity.flatMap(entry => entry.declaredReferences)
@@ -272,7 +276,7 @@ test('inventory includes shared native evidence verifiers in the selected input 
   for (const recording of byNameBinding.recordings) {
     assert.equal(recording.repetitions.length, 2);
     for (const descriptor of recording.repetitions) {
-      assert.ok(path.isAbsolute(descriptor.filename));
+      assert.ok(path.win32.isAbsolute(descriptor.filename));
       assert.match(descriptor.entriesSha256, /^[a-f0-9]{64}$/u);
     }
   }
@@ -307,7 +311,7 @@ test('inventory includes shared native evidence verifiers in the selected input 
   for (const recording of syncPlayDateBinding.recordings) {
     assert.equal(recording.databaseDigestTables.length, 31);
     assert.match(recording.entriesSha256, /^[a-f0-9]{64}$/u);
-    assert.ok(path.isAbsolute(recording.filename));
+    assert.ok(path.win32.isAbsolute(recording.filename));
   }
   assert.equal(syncPlayDate.flatMap(entry => entry.declaredReferences)
     .some(reference => reference.required && reference.logicalPath === '.agent-docs/evidence/syncplay-date-impact-native-v1'), false);
@@ -326,11 +330,11 @@ test('inventory includes shared native evidence verifiers in the selected input 
     binding.reference.preparationInputs.map(([kind]) => kind));
   for (const entry of [...binding.preparationInputFiles, binding.reference.sourceDatabase,
     ...binding.independentNativeAudits]) {
-    assert.ok(path.isAbsolute(entry.filename));
+    assert.ok(path.win32.isAbsolute(entry.filename));
     assert.match(entry.sha256, /^[a-f0-9]{64}$/u);
   }
   for (const directory of [binding.runtimeDirectory, binding.dotnetDirectory]) {
-    assert.ok(path.isAbsolute(directory.path));
+    assert.ok(path.win32.isAbsolute(directory.path));
     assert.match(directory.entriesSha256, /^[a-f0-9]{64}$/u);
   }
   assert.equal(itemFilter.flatMap(entry => entry.declaredReferences)
@@ -347,12 +351,12 @@ test('inventory includes shared native evidence verifiers in the selected input 
   assert.equal(permissionBinding.cases.length, 8);
   assert.equal(permissionBinding.recordings.length, 2);
   for (const descriptor of [permissionBinding.independentAudit, ...permissionBinding.recordings.map(entry => entry.oracle)]) {
-    assert.ok(path.isAbsolute(descriptor.filename));
+    assert.ok(path.win32.isAbsolute(descriptor.filename));
     assert.match(descriptor.sha256, /^[a-f0-9]{64}$/u);
   }
   for (const entry of permissionBinding.recordings) {
     assert.equal(entry.directory.path, entry.evidenceRoot);
-    assert.ok(path.isAbsolute(entry.directory.path));
+    assert.ok(path.win32.isAbsolute(entry.directory.path));
     assert.match(entry.directory.entriesSha256, /^[a-f0-9]{64}$/u);
   }
   assert.ok(staticPermissions.flatMap(entry => entry.variables).includes('MEDIAMANAGER_FILTER_WIRE_EVIDENCE'));
@@ -367,11 +371,11 @@ test('inventory includes shared native evidence verifiers in the selected input 
   assert.equal(audioBinding.cases.length, 8); assert.equal(audioBinding.recordings.length, 2);
   for (const descriptor of [audioBinding.originalNeutralFixture, audioBinding.neutralFixture,
     audioBinding.independentAudit, ...audioBinding.recordings.map(entry => entry.oracle)]) {
-    assert.ok(path.isAbsolute(descriptor.filename)); assert.match(descriptor.sha256, /^[a-f0-9]{64}$/u);
+    assert.ok(path.win32.isAbsolute(descriptor.filename)); assert.match(descriptor.sha256, /^[a-f0-9]{64}$/u);
   }
   for (const recording of audioBinding.recordings) {
     assert.equal(recording.directory.path, recording.evidenceRoot);
-    assert.ok(path.isAbsolute(recording.directory.path));
+    assert.ok(path.win32.isAbsolute(recording.directory.path));
     assert.match(recording.directory.entriesSha256, /^[a-f0-9]{64}$/u);
   }
   assert.ok(audioPermissions.flatMap(entry => entry.variables).includes('MEDIAMANAGER_FILTER_WIRE_EVIDENCE'));
