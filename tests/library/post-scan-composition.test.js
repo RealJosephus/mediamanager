@@ -134,9 +134,16 @@ async function compareComposition(t, scenarioFile) {
     const studio = expected.BaseItems.find(row => row.Type === byNameTypes[1] && row.Name === sample.seed.Studio);
     assert.ok(studio, 'GetStudio commits the new entity before the refresh sees cancellation.');
     assert.ok(studio.DateLastRefreshed == null || dateText(studio.DateLastRefreshed).startsWith('0001-01-01'));
+    const studioCreation = sample.observation.Trace.find(event => event.action === 'save-committed'
+      && event.detail.items.some(item => item.type === byNameTypes[1] && item.Name === sample.seed.Studio));
+    assert.ok(studioCreation && studioCreation.ordinal < requests[0].ordinal);
+    assert.equal(studioCreation.detail.sql.result.ItemValues.some(row => idKey(row.ItemValueId) === idKey(sample.orphanValueId)), false,
+      'The earlier Genre deletion has already removed the orphan before the Studio cancellation.');
   } else assert.deepEqual(sample.files, [], 'The native operation deletes every seeded cleanup marker.');
   assert.deepEqual(sample.createdDirectories.map(entry => entry.exists), [true, true]);
-  assert.equal(expected.ItemValues.some(row => idKey(row.ItemValueId) === idKey(sample.orphanValueId)), cancelling);
+  assert.ok(before.ItemValues.some(row => idKey(row.ItemValueId) === idKey(sample.orphanValueId)));
+  assert.equal(expected.ItemValues.some(row => idKey(row.ItemValueId) === idKey(sample.orphanValueId)), false,
+    'ItemPersistenceService.DeleteItem removes globally unmapped values during the committed Genre cleanup.');
   assert.deepEqual(expected.BaseItems.filter(row => byNameTypes.includes(row.Type)).map(row => row.Name).sort(),
     [sample.seed.Genre, sample.seed.Studio, ...(cancelling ? [sample.seed.DeadStudio] : [])].sort());
 

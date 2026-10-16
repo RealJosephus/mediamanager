@@ -41,7 +41,11 @@ block restarts its monitor and resets `IsScanRunning`.
 The new cancellation assertions require that actual recording to show six
 completed tasks, Studio task cancellation, no final database-cleanup task or
 inherited-value update, the new Studio's persisted creation prefix, and retained
-dead-Studio files and orphan value. All persistent columns, relations, relevant
+dead-Studio files. The orphan value is already deleted by the earlier Genre
+cleanup: native `ItemPersistenceService.DeleteItem` removes all unmapped values,
+independently of the later `CleanDatabaseScheduledTask`. The fresh native trace
+must show that removal in the Studio creation snapshot before cancellation.
+All persistent columns, relations, relevant
 events, and remaining file bytes still compare against that fresh native
 recording. A different actual native outcome fails with its raw receipt retained;
 it is not rewritten to match the intended boundary. The candidate checks that
