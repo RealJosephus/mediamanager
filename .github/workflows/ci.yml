@@ -21,7 +21,9 @@ permissions:
   contents: read
 
 concurrency:
-  group: validation-${{ github.workflow }}-${{ github.ref }}-${{ github.event_name == 'workflow_dispatch' && 'manual' || 'automatic' }}
+  # Independent manual subsets must retain their own evidence. A newer push
+  # still supersedes an older automatic run on the same ref.
+  group: validation-${{ github.workflow }}-${{ github.ref }}-${{ github.event_name == 'workflow_dispatch' && github.run_id || 'automatic' }}
   cancel-in-progress: true
 
 jobs:
