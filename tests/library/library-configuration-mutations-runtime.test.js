@@ -1,4 +1,5 @@
 import test from 'node:test';
+import { once } from 'node:events';
 import assert from 'node:assert/strict';
 import * as fs from 'node:fs/promises';
 import path from 'node:path';
@@ -10,6 +11,8 @@ import { validationOutputRoot } from '../../tools/validation/paths.js';
 import { createPostgresTestDatabase, dropPostgresTestDatabase, postgresTestConnectionString } from '../database/postgres-fixture.js';
 import { StorageRegistry, VirtualFileSystem, IdentityAccessMap } from '../../src/storage/index.js';
 import { MemoryStorageAdapter } from '../../src/storage/testing/memory-adapter.js';
+import { LocalAdapter } from '../../plugins/local/adapter.js';
+import { knownAncestorIgnoreIdentityMap } from './ignore-namespace-fixture.js';
 
 const collectionType = 'MediaBrowser.Controller.Entities.CollectionFolder';
 async function setup(t) {
@@ -36,10 +39,18 @@ async function setup(t) {
   const vfs = new VirtualFileSystem(registry); vfs.mount({ path: '/remote', instanceId: 'media', capabilities: {} });
   const identityMap = new IdentityAccessMap(), identityRoot = 'Z:\\LibraryMutationMedia';
   identityMap.addPrefix({ identityRoot, accessRoot: '/remote', style: 'windows', returnAccess: 'isolated mutation fixture' });
+  registry.registerType('state-local', options => LocalAdapter.open(options));
+  await registry.createInstance('state', 'state-local', { root, writable: true });
+  vfs.mount({ path: '/state', instanceId: 'state', capabilities: {
+    create: true, replace: true, mkdir: true, delete: true, rename: true, atomicReplace: true
+  } });
+  identityMap.addPrefix({ identityRoot: root, accessRoot: '/state',
+    style: process.platform === 'win32' ? 'windows' : 'posix', returnAccess: 'Actual isolated application state.' });
   database = await createPostgresTestDatabase(null, 'lib_mutations_runtime');
   const configuration = { UICulture: 'en-US', EnableCaseSensitiveItemIds: true, IsStartupWizardCompleted: true,
     ContentTypes: [{ Name: identityRoot + '\\Additional', Value: 'homevideos' }, { Name: identityRoot, Value: 'movies' }] }, errors = [];
   runtime = await createRuntime({ database, registry, vfs, identityMap, programDataPath, configurationDirectoryPath,
+    ignoreIdentityMap: await knownAncestorIgnoreIdentityMap({ registry, vfs, identityMap, identityRoots: [identityRoot, root] }),
     dataPath, metadataPath, configuration, serverId: 'library-mutations-runtime', onError: error => errors.push(error) });
   runtime.libraryConfiguration.sleep = async milliseconds => assert.equal(milliseconds, 1000);
   const mediaPath = identityRoot + '\\Movies', additionalPath = identityRoot + '\\Additional';
@@ -105,13 +116,15 @@ test('postgres: virtual library removal keeps media and defers database cleanup 
   assert.notEqual(published, removedOptions); assert.deepEqual(published, defaultLibraryOptions());
   assert.equal((await adapter.stat('/Movies/Present.txt')).kind, 'file');
   await runtime.libraryConfiguration.addVirtualFolder('Movies', 'movies', { ...defaultLibraryOptions(), PathInfos: [{ Path: mediaPath }] });
+  const completion = once(runtime.tasks, 'completed', { signal: AbortSignal.timeout(60_000) });
   await runtime.libraryConfiguration.removeVirtualFolder('Movies', true);
+  const [{ Result }] = await completion;
   assert.deepEqual(await runtime.libraryConfiguration.getVirtualFolders(), []);
   assert.deepEqual(await database.rows('BaseItems', { where: { Type: collectionType } }), []);
   assert.equal((await adapter.stat('/Movies/Present.txt')).kind, 'file');
-  assert.equal(runtime.libraryScanner.capabilities.completeLibraryScan, false);
-  await new Promise(resolve => setImmediate(resolve));
-  assert.ok(state.errors.some(error => error.code === 'task-unavailable'));
+  assert.equal(runtime.libraryScanner.capabilities.completeLibraryScan, true);
+  assert.equal(Result.Status, 'Completed', Result.ErrorMessage);
+  assert.deepEqual(state.errors, []);
 });
 
 test('postgres: late option failure preserves admitted shortcut and content-type cleanup without structural writes', { skip: !postgresTestConnectionString }, async t => {

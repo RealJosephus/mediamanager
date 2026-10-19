@@ -6,16 +6,16 @@ import { createHash, randomUUID } from 'node:crypto';
 import { PostgresDatabase } from '../../src/database/postgres.js';
 import { DomainStore } from '../../src/database/domain-store.js';
 import { tableDefinition } from '../../src/database/model.js';
-import { EMPTY_ID, mapRecord, idKey, nonemptyId } from '../../src/library/records.js';
+import { EMPTY_ID, idKey, nonemptyId } from '../../src/library/records.js';
 import { applyNativeItemValues, newNativeItemEntity } from '../../src/library/native-item-entity.js';
 import { persistMetadata } from '../../src/metadata/persistence.js';
 import { parentChainForItem, collectionFoldersForItem } from '../../src/library/collection-membership.js';
-import { FolderScanService, LibraryService, DirectoryItemResolverPipeline } from '../../src/library/index.js';
-import { ProviderRefreshService } from '../../src/metadata/provider-refresh-service.js';
+import { LibraryService, DirectoryItemResolverPipeline } from '../../src/library/index.js';
 import { IdentityAccessMap, StorageRegistry, VirtualFileSystem } from '../../src/storage/index.js';
 import { MemoryStorageAdapter } from '../../src/storage/testing/memory-adapter.js';
 import { knownAncestorIgnoreRule } from './ignore-namespace-fixture.js';
 import { createResolvedItemLifecycleFixture } from './resolved-item-lifecycle-fixture.js';
+import { createFolderValidationScanFixture } from '../helpers/folder-validation-scan-fixture.js';
 
 import { itemListColumn, itemListFields } from '../../src/library/item-list-columns.js';
 
@@ -87,7 +87,7 @@ async function capture(database, sample) {
   const valueId = id => { const value = values.find(value => idKey(value.ItemValueId) === idKey(id)); assert.ok(value);
     return seeded.has(idKey(id)) ? id.toLowerCase() : '$NEW/' + value.Type + '/' + value.Value; };
   const stored = (await database.rows('BaseItems')).find(row => idKey(row.Id) === idKey(sample.item.id));
-  assert.ok(stored, 'The scanner must create the actual native deterministic identity.');
+  assert.ok(stored, 'The real creation path must preserve the native deterministic identity.');
   return { values: values.map(value => ({ id: valueId(value.ItemValueId), type: value.Type, value: value.Value, cleanValue: value.CleanValue })).sort((a, b) => ordinal(a.id, b.id)),
     maps: (await database.rows('ItemValuesMap')).map(row => ({ itemId: row.ItemId.toLowerCase(), valueId: valueId(row.ItemValueId) })).sort((a, b) => ordinal(a.itemId, b.itemId) || ordinal(a.valueId, b.valueId)),
     ancestors: (await database.rows('AncestorIds')).map(row => ({ itemId: row.ItemId.toLowerCase(), parentId: row.ParentItemId.toLowerCase() })).sort((a, b) => ordinal(a.itemId, b.itemId) || ordinal(a.parentId, b.parentId)),
@@ -128,7 +128,7 @@ for (const dialect of ['postgres']) for (const sample of input) test(`${dialect}
 
 const scanSamples = input.filter(sample => sample.parents.length > 0 && !['Season', 'Episode'].includes(sample.item.type)
   && !['stale-persisted-ancestor', 'repeat-create'].includes(sample.name));
-for (const dialect of ['postgres']) for (const sample of scanSamples) test(`${dialect}: real resolver and scanner create native relations ${sample.name}`,
+for (const dialect of ['postgres']) for (const sample of scanSamples) test(`${dialect}: Folder validation creates native relations ${sample.name}`,
   { skip: dialect === 'postgres' && !process.env.MEDIAMANAGER_TEST_POSTGRES }, async t => {
     const { database, store } = await databaseFor(t, dialect), current = stateFor(sample), expected = native.results.find(value => value.name === sample.name);
     const userRootId = '97b00000-0000-0000-0000-000000000008';
@@ -149,22 +149,23 @@ for (const dialect of ['postgres']) for (const sample of scanSamples) test(`${di
       resolveDirectory: ({ candidate }) => claim(candidate), resolveFile: ({ candidate }) => claim(candidate) };
     const resolverPipeline = new DirectoryItemResolverPipeline({ programDataPath, configuration, resolvers: [resolver] });
     const lifecycleFixture = await createResolvedItemLifecycleFixture({ store, library, vfs, identityMap, configuration });
-    const scanner = new FolderScanService({ store, library, vfs, identityMap, refreshes: new ProviderRefreshService(),
+    const validationFixture = createFolderValidationScanFixture({ store, library, vfs, identityMap,
       ignoreRule: await knownAncestorIgnoreRule({ registry, vfs, identityMap, identityRoots: ['Z:\\Library'] }),
-      programDataPath, configuration, resolverPipeline, resolvedItemLifecycle: lifecycleFixture.lifecycle });
-    t.after(async () => { await scanner.close(); await lifecycleFixture.close(); await registry.close(); });
+      programDataPath, configuration, resolverPipeline, lifecycleFixture });
+    t.after(async () => { await validationFixture.close(); await lifecycleFixture.close(); await registry.close(); });
     const calls = []; library.on('ItemAdded', ({ Item, Parent }) => calls.push({ action: 'added', id: Item.Id.toLowerCase(), parentId: Parent?.Id.toLowerCase() }));
-    const reference = mapRecord((await database.rows('BaseItems', { where: { Id: current.parents[0].Id } }))[0]);
+    const validate = () => validationFixture.itemCreation.withItem(current.parents[0].Id, parent =>
+      validationFixture.validation.validateChildren(parent, { refreshChildMetadata: false }));
     const before = {};
     for (const table of ['BaseItems', 'ItemValues', 'ItemValuesMap', 'AncestorIds']) before[table] = await database.rows(table);
     if (expected.exception) {
-      await assert.rejects(scanner.scan(reference, { Recursive: false }), failure => failure.nativeException === expected.exception
+      await assert.rejects(validate(), failure => failure.nativeException === expected.exception
         && failure.parameterName === expected.exceptionParameter);
       for (const [table, rows] of Object.entries(before)) compare(await database.rows(table), rows);
       compare(calls, []); return;
     }
-    const receipt = await scanner.scan(reference, { Recursive: false }); assert.equal(receipt.added, 1);
+    const receipt = await validate(); assert.equal(receipt.created.length, 1);
     compare(await capture(database, sample), savedProjection(expected)); compare(calls, expected.calls);
-    const second = await scanner.scan(reference, { Recursive: false }); assert.equal(second.added, 0);
+    const second = await validate(); assert.equal(second.created.length, 0);
     compare(await capture(database, sample), savedProjection(expected)); assert.equal(calls.length, 1);
   });

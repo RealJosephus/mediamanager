@@ -125,7 +125,7 @@ test('postgres: managed collection creation and member edits persist XML and sur
     assert.deepEqual(await readTestLinkIds(item), links);
     assert.equal(await fs.readFile(path.join(item.Path, 'collection.xml'), 'utf8'), persistedXml);
     assert.equal(typeof reopened.libraryScanner?.queue, 'function');
-    assert.equal(reopened.libraryScanner?.capabilities.completeLibraryScan, false);
+    assert.equal(reopened.libraryScanner?.capabilities.completeLibraryScan, true);
   } finally { if (reopened) await reopened.close(); else await reopenedDatabase.close(); }
 });
 
@@ -230,7 +230,7 @@ test('postgres: registered Collection task runs through the post-scan lifecycle 
   const registrations = runtime.libraryScanLifecycle.postScanTasks;
   const posterIndex = registrations.indexOf(runtime.collectionPosterVerifyPostScanTask);
   assert.equal(registrations[posterIndex + 1], runtime.collectionPostScanTask);
-  assert.notEqual(runtime.libraryScanner?.capabilities.completeLibraryScan, true);
+  assert.equal(runtime.libraryScanner?.capabilities.completeLibraryScan, true);
   const original = await runtime.collections.create({ Name: 'A', ItemIdList: [] });
   const aggregate = await runtime.libraryScanHost.getAggregateFolder(), userRoot = await runtime.libraryScanHost.getUserRootFolder();
   const physicalId = '9a000000-0000-0000-0000-000000000001', libraryId = '9a000000-0000-0000-0000-000000000002';

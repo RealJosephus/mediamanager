@@ -9,11 +9,10 @@ import { tableDefinition } from '../../src/database/model.js';
 import { getNewItemId } from '../../src/core/identity.js';
 import { nativeGuid } from '../../src/users/native.js';
 import { DirectoryItemResolverPipeline } from '../../src/library/directory-item-resolver.js';
-import { FolderScanService, folderScanIncompleteReasonCodes } from '../../src/library/folder-scan-service.js';
+import { createOwnedFolderValidationFixture, ownedRefreshOptions, withoutSaveTime } from '../helpers/owned-folder-validation-fixture.js';
+import { createResolvedItemLifecycleFixture } from './resolved-item-lifecycle-fixture.js';
 import { LibraryService } from '../../src/library/library-service.js';
-import { idKey, mapRecord, nonemptyId } from '../../src/library/records.js';
-import { updateFromResolvedItem } from '../../src/library/resolved-item-update.js';
-import { ItemUpdateType } from '../../src/metadata/save-manager.js';
+import { idKey, nonemptyId } from '../../src/library/records.js';
 import { createVideoFileResolver, movieNativeType, videoNativeType } from '../../src/library/video-file-resolver.js';
 import { ProviderRefreshService } from '../../src/metadata/provider-refresh-service.js';
 import { IdentityAccessMap, StorageRegistry, VirtualFileSystem } from '../../src/storage/index.js';
@@ -65,9 +64,9 @@ async function fixture(t, dialect, collectionType = 'movies') {
   const { database, schema } = await databaseFor(dialect);
   const store = new DomainStore(database);
   const registry = new StorageRegistry();
-  let library, scanner;
+  let library, validationFixture, lifecycleFixture, referenceOwner, rootOwner;
   t.after(async () => {
-    await scanner?.close();
+    referenceOwner?.release(); rootOwner?.release(); await validationFixture?.close(); await lifecycleFixture?.close();
     await library?.close();
     await registry.close();
     if (dialect === 'postgres') {
@@ -92,31 +91,16 @@ async function fixture(t, dialect, collectionType = 'movies') {
     Name: 'Movies', ParentId: userRootId, IsFolder: true,
     Data: JSON.stringify({ CollectionType: collectionType, PhysicalFolderIds: [rootId], PhysicalLocationsList: [rootPath] })
   }));
-  library = new LibraryService({fileSystem: testFileSystem,  store, serverId: 'owned-part-scan' });
-  const lifecycle = {
-    async apply(id, { resolved, markIrreversible }) {
-      markIrreversible();
-      return store.transaction(async db => {
-        const [stored] = await db.rows('BaseItems', { where: { Id: id }, limit: 1 });
-        const item = mapRecord(stored), updated = { ...item };
-        const updateType = updateFromResolvedItem(updated, resolved);
-        if (updateType <= ItemUpdateType.None) return Object.freeze({ changed: false });
-        const data = { ...item.Data };
-        for (const field of ['AdditionalParts', 'LocalAlternateVersions', 'VideoType']) data[field] = updated[field];
-        await db.update('BaseItems', { Id: stored.Id }, {
-          IsInMixedFolder: updated.IsInMixedFolder,
-          Data: JSON.stringify(data)
-        });
-        return Object.freeze({ changed: true });
-      });
-    }
-  };
+  library = new LibraryService({fileSystem: testFileSystem,  store, programDataPath, serverId: 'owned-part-scan' });
+  const ignoreRule = await knownAncestorIgnoreRule({ registry, vfs, identityMap, identityRoots: [rootPath] });
+  ignoreRule.normalizePath = true;
+  lifecycleFixture = await createResolvedItemLifecycleFixture({ store, library, vfs, identityMap, ignoreRule });
   const resolverPipeline = new DirectoryItemResolverPipeline({
     programDataPath,
     resolvers: [createVideoFileResolver()]
   });
-  scanner = new FolderScanService({
-    ignoreRule: await knownAncestorIgnoreRule({ registry, vfs, identityMap, identityRoots: [rootPath] }),
+  validationFixture = createOwnedFolderValidationFixture({
+    ignoreRule,
     store,
     library,
     vfs,
@@ -124,14 +108,17 @@ async function fixture(t, dialect, collectionType = 'movies') {
     refreshes: new ProviderRefreshService(),
     programDataPath,
     resolverPipeline,
-    resolvedItemLifecycle: lifecycle
+    lifecycleFixture, configuration: { LibraryScanFanoutConcurrency: 1 }
   });
-  const reference = mapRecord((await database.rows('BaseItems', { where: { Id: rootId } }))[0]);
-  return { database, library, adapter, vfs, scanner, reference };
+  const { validation, itemCreation, metadata, errors } = validationFixture;
+  const reference = await itemCreation.getItemById(rootId);
+  referenceOwner = itemCreation.retainItem(reference);
+  return { database, library, adapter, vfs, validation, metadata, errors, reference };
 }
 
 async function state(database) {
   return (await database.rows('BaseItems')).filter(value => [movieNativeType, videoNativeType].includes(value.Type))
+    .map(withoutSaveTime)
     .toSorted((left, right) => String(left.Path).localeCompare(String(right.Path)));
 }
 
@@ -146,48 +133,48 @@ function assertStack(items, primaryName, partNames) {
     assert.ok(part, `missing owned part ${name}`);
     assert.equal(part.Type, videoNativeType);
     assert.equal(idKey(part.OwnerId), idKey(primary.Id));
-    assert.equal(idKey(part.ParentId), idKey(rootId));
-    assert.equal(idKey(part.TopParentId), idKey(rootId));
+    assert.equal(part.ParentId, null, 'cross-type owned parts retain the native five-field construction');
+    assert.equal(part.TopParentId, null);
     assert.equal(part.PrimaryVersionId, null);
     assert.equal(part.ExtraType, null);
   }
   return primary;
 }
 
-for (const dialect of ['postgres']) test(`${dialect}: stacked movie parts persist, reorder, promote and collapse atomically`, {
+for (const dialect of ['postgres']) test(`${dialect}: stacked movie parts persist, reorder, promote and collapse through owned refresh`, {
   skip: dialect === 'postgres' && !process.env.MEDIAMANAGER_TEST_POSTGRES
 }, async t => {
-  const { database, adapter, scanner, reference } = await fixture(t, dialect);
+  const { database, adapter, validation, metadata, errors, reference } = await fixture(t, dialect);
   await adapter.write('/Film cd2.mkv', Buffer.from('two'));
   await adapter.write('/Film cd1.mkv', Buffer.from('one'));
 
-  const created = await scanner.scan(reference);
-  assert.equal(created.added, 1, 'only the stack primary is a direct CreateItems addition');
+  const created = await validation.validateChildren(reference, ownedRefreshOptions);
+  assert.equal(created.created.length, 1, 'only the stack primary is a direct CreateItems addition');
   let items = await state(database);
   assertStack(items, 'Film cd1.mkv', ['Film cd2.mkv']);
   const stable = structuredClone(items);
-  assert.deepEqual((await scanner.scan(reference)).added, 0);
+  assert.deepEqual((await validation.validateChildren(reference, ownedRefreshOptions)).created.length, 0);
   assert.deepEqual(await state(database), stable);
 
   await adapter.write('/Film cd0.mkv', Buffer.from('zero'));
-  await scanner.scan(reference);
+  await validation.validateChildren(reference, ownedRefreshOptions);
   items = await state(database);
   assertStack(items, 'Film cd0.mkv', ['Film cd1.mkv', 'Film cd2.mkv']);
   assert.equal(items.some(item => idKey(item.Id) === idKey(deterministicId('Film cd1.mkv', movieNativeType))), false,
     'the demoted path no longer retains its Movie identity');
 
   await adapter.delete('/Film cd0.mkv');
-  await scanner.scan(reference);
+  await validation.validateChildren(reference, ownedRefreshOptions);
   items = await state(database);
   assertStack(items, 'Film cd1.mkv', ['Film cd2.mkv']);
 
   await adapter.write('/Film cd10.mkv', Buffer.from('ten'));
-  await scanner.scan(reference);
+  await validation.validateChildren(reference, ownedRefreshOptions);
   items = await state(database);
   assertStack(items, 'Film cd1.mkv', ['Film cd10.mkv', 'Film cd2.mkv']);
 
   await adapter.delete('/Film cd1.mkv');
-  await scanner.scan(reference);
+  await validation.validateChildren(reference, ownedRefreshOptions);
   items = await state(database);
   assertStack(items, 'Film cd10.mkv', ['Film cd2.mkv']);
   assert.equal(items.some(item => item.Path === `${rootPath}\\Film cd1.mkv`), false);
@@ -195,7 +182,9 @@ for (const dialect of ['postgres']) test(`${dialect}: stacked movie parts persis
     'the promoted path no longer retains its owned Video identity');
 
   await adapter.delete('/Film cd2.mkv');
-  await scanner.scan(reference);
+  const owner = items.find(item => item.Type === movieNativeType);
+  await metadata.refresh(owner.Id, ownedRefreshOptions);
+  await validation.validateChildren(reference, ownedRefreshOptions);
   items = await state(database);
   const standalone = items.find(item => item.Path === `${rootPath}\\Film cd10.mkv`);
   assert.equal(standalone.Type, movieNativeType);
@@ -206,31 +195,30 @@ for (const dialect of ['postgres']) test(`${dialect}: stacked movie parts persis
 for (const dialect of ['postgres']) test(`${dialect}: weak snapshots preserve an existing owned-part family`, {
   skip: dialect === 'postgres' && !process.env.MEDIAMANAGER_TEST_POSTGRES
 }, async t => {
-  const { database, adapter, vfs, scanner, reference } = await fixture(t, dialect);
+  const { database, adapter, vfs, validation, metadata, errors, reference } = await fixture(t, dialect);
   await adapter.write('/Film cd1.mkv', Buffer.from('one'));
   await adapter.write('/Film cd2.mkv', Buffer.from('two'));
-  await scanner.scan(reference);
+  await validation.validateChildren(reference, ownedRefreshOptions);
   const before = await state(database);
   await adapter.delete('/Film cd2.mkv');
   const list = vfs.list.bind(vfs);
   vfs.list = async (path, options) => ({ ...await list(path, options), consistency: 'weak', snapshot: null, deletionSafe: false });
-  const weak = await scanner.scan(reference);
-  assert.equal(weak.structurallyComplete, false);
-  assert.ok(weak.incompleteReasons.some(reason => reason.code === 'weak-directory-snapshot'));
+  await assert.rejects(validation.validateChildren(reference, ownedRefreshOptions), { code: 'not-supported' });
   assert.deepEqual(await state(database), before);
   vfs.list = list;
-  await scanner.scan(reference);
+  await metadata.refresh(before.find(item => item.Type === movieNativeType).Id, ownedRefreshOptions);
+  await validation.validateChildren(reference, ownedRefreshOptions);
   const after = await state(database);
   assert.equal(after.length, 1);
   assert.deepEqual(JSON.parse(after[0].Data).AdditionalParts, []);
 });
 
-for (const dialect of ['postgres']) test(`${dialect}: owned-part insertion failure rolls back its complete stack`, {
+for (const dialect of ['postgres']) test(`${dialect}: owned-part insertion failure retains the independently saved owner declaration`, {
   skip: dialect === 'postgres' && !process.env.MEDIAMANAGER_TEST_POSTGRES
 }, async t => {
-  const { database, adapter, scanner, reference } = await fixture(t, dialect);
+  const { database, adapter, validation, errors, reference } = await fixture(t, dialect);
   await adapter.write('/Film cd1.mkv', Buffer.from('one'));
-  await scanner.scan(reference);
+  await validation.validateChildren(reference, ownedRefreshOptions);
   const before = await state(database);
   await adapter.write('/Film cd2.mkv', Buffer.from('two'));
   const insert = database.insert.bind(database);
@@ -240,22 +228,27 @@ for (const dialect of ['postgres']) test(`${dialect}: owned-part insertion failu
     }
     return insert(table, values);
   };
-  await assert.rejects(scanner.scan(reference), /controlled owned-part insert failure/u);
-  database.insert = insert;
-  assert.deepEqual(await state(database), before);
-  await scanner.scan(reference);
+  try { await validation.validateChildren(reference, ownedRefreshOptions); }
+  finally { database.insert = insert; }
+  assert.ok(errors.some(error => /controlled owned-part insert failure/u.test(error.message)));
+  const failed = await state(database);
+  assert.equal(failed.length, 1);
+  assert.equal(failed[0].Id, before[0].Id);
+  assert.deepEqual(JSON.parse(failed[0].Data).AdditionalParts, [`${rootPath}\\Film cd2.mkv`]);
+  assert.equal((await adapter.stat('/Film cd2.mkv')).kind, 'file');
+  await validation.validateChildren(reference, ownedRefreshOptions);
   assertStack(await state(database), 'Film cd1.mkv', ['Film cd2.mkv']);
 });
 
 for (const dialect of ['postgres']) test(`${dialect}: each stacked movie version persists its own parts through cold reads and repeat scans`, {
   skip: dialect === 'postgres' && !process.env.MEDIAMANAGER_TEST_POSTGRES
 }, async t => {
-  const { database, library, adapter, scanner, reference } = await fixture(t, dialect);
+  const { database, library, adapter, validation, errors, reference } = await fixture(t, dialect);
   for (const name of ['Film - Director cd1.mkv', 'Film - Director cd2.mkv',
     'Film - Theatrical cd1.mkv', 'Film - Theatrical cd2.mkv']) {
     await adapter.write(`/${name}`, Buffer.from(name));
   }
-  await scanner.scan(reference);
+  await validation.validateChildren(reference, ownedRefreshOptions);
   const items = await state(database);
   const primary = items.find(item => item.Type === movieNativeType
     && item.Path === `${rootPath}\\Film - Director cd1.mkv`);
@@ -277,8 +270,8 @@ for (const dialect of ['postgres']) test(`${dialect}: each stacked movie version
   assert.equal(idKey(alternate.PrimaryVersionId), idKey(primary.Id));
   for (const [owner, ownedPart] of [[primary, part], [alternate, alternatePart]]) {
     assert.equal(idKey(ownedPart.OwnerId), idKey(owner.Id));
-    assert.equal(idKey(ownedPart.ParentId), idKey(rootId));
-    assert.equal(idKey(ownedPart.TopParentId), idKey(rootId));
+    assert.equal(ownedPart.ParentId, null);
+    assert.equal(ownedPart.TopParentId, null);
     assert.equal(ownedPart.PrimaryVersionId, null);
     assert.equal(ownedPart.ExtraType, null);
     const coldOwner = await library.getItemRecord(owner.Id);
@@ -292,21 +285,20 @@ for (const dialect of ['postgres']) test(`${dialect}: each stacked movie version
     assert.equal(coldPart.NativeType, videoNativeType);
     assert.equal(coldPart.Path, ownedPart.Path);
     assert.equal(idKey(coldPart.OwnerId), idKey(owner.Id));
-    assert.equal(idKey(coldPart.ParentId), idKey(rootId));
+    assert.ok(!nonemptyId(coldPart.ParentId));
   }
-  const repeated = await scanner.scan(reference);
-  assert.deepEqual({ added: repeated.added, updated: repeated.updated, removed: repeated.removed },
-    { added: 0, updated: 0, removed: 0 });
+  const repeated = await validation.validateChildren(reference, ownedRefreshOptions);
+  assert.equal(repeated.created.length, 0);
   assert.deepEqual(await state(database), items);
 });
 
 for (const dialect of ['postgres']) test(`${dialect}: home-video stack promotion reuses the Video identity safely`, {
   skip: dialect === 'postgres' && !process.env.MEDIAMANAGER_TEST_POSTGRES
 }, async t => {
-  const { database, adapter, scanner, reference } = await fixture(t, dialect, 'homevideos');
+  const { database, adapter, validation, errors, reference } = await fixture(t, dialect, 'homevideos');
   await adapter.write('/Holiday pt1.mp4', Buffer.from('one'));
   await adapter.write('/Holiday pt2.mp4', Buffer.from('two'));
-  await scanner.scan(reference);
+  await validation.validateChildren(reference, ownedRefreshOptions);
   let items = await state(database);
   const primary = items.find(item => item.Path === `${rootPath}\\Holiday pt1.mp4`);
   const part = items.find(item => item.Path === `${rootPath}\\Holiday pt2.mp4`);
@@ -317,7 +309,7 @@ for (const dialect of ['postgres']) test(`${dialect}: home-video stack promotion
   assert.deepEqual(JSON.parse(primary.Data).AdditionalParts, [`${rootPath}\\Holiday pt2.mp4`]);
 
   await adapter.delete('/Holiday pt1.mp4');
-  await scanner.scan(reference);
+  await validation.validateChildren(reference, ownedRefreshOptions);
   items = await state(database);
   assert.equal(items.length, 1);
   assert.equal(items[0].Path, `${rootPath}\\Holiday pt2.mp4`);
@@ -329,10 +321,10 @@ for (const dialect of ['postgres']) test(`${dialect}: home-video stack promotion
 for (const dialect of ['postgres']) test(`${dialect}: an external reference protects a missing owned part until released`, {
   skip: dialect === 'postgres' && !process.env.MEDIAMANAGER_TEST_POSTGRES
 }, async t => {
-  const { database, adapter, scanner, reference } = await fixture(t, dialect);
+  const { database, adapter, validation, metadata, errors, reference } = await fixture(t, dialect);
   await adapter.write('/Film cd1.mkv', Buffer.from('one'));
   await adapter.write('/Film cd2.mkv', Buffer.from('two'));
-  await scanner.scan(reference);
+  await validation.validateChildren(reference, ownedRefreshOptions);
   const partId = deterministicId('Film cd2.mkv', videoNativeType);
   const referenceId = randomUUID();
   await database.insert('BaseItems', row(referenceId, 'Plugin.Entities.ExternalReference', {
@@ -340,39 +332,41 @@ for (const dialect of ['postgres']) test(`${dialect}: an external reference prot
   }));
   await adapter.delete('/Film cd2.mkv');
 
-  const protectedResult = await scanner.scan(reference);
-
-  assert.equal(protectedResult.structurallyComplete, false);
-  assert.ok(protectedResult.incompleteReasons.some(reason =>
-    reason.code === folderScanIncompleteReasonCodes.EXTERNAL_REFERENCE_DELETION_SKIPPED
-      && idKey(reason.itemId) === idKey(partId)));
+  const owner = (await state(database)).find(item => item.Type === movieNativeType);
+  await metadata.refresh(owner.Id, ownedRefreshOptions);
+  assert.ok(errors.some(error => error.code === '23503'), 'the independent owned delete records its FK failure');
   assert.ok((await state(database)).some(item => idKey(item.Id) === idKey(partId)));
 
   await database.delete('BaseItems', { Id: referenceId });
-  const removed = await scanner.scan(reference);
-  assert.equal(removed.structurallyComplete, true);
+  await metadata.refresh(owner.Id, ownedRefreshOptions);
+  await validation.validateChildren(reference, ownedRefreshOptions);
   assert.equal((await state(database)).some(item => idKey(item.Id) === idKey(partId)), false);
 });
 
-for (const dialect of ['postgres']) test(`${dialect}: owned-part deletion failure rolls back the declaring path array`, {
+for (const dialect of ['postgres']) test(`${dialect}: owned-part deletion failure leaves its row and declaration available for a later refresh`, {
   skip: dialect === 'postgres' && !process.env.MEDIAMANAGER_TEST_POSTGRES
 }, async t => {
-  const { database, adapter, scanner, reference } = await fixture(t, dialect);
+  const { database, adapter, validation, metadata, errors, reference } = await fixture(t, dialect);
   await adapter.write('/Film cd1.mkv', Buffer.from('one'));
   await adapter.write('/Film cd2.mkv', Buffer.from('two'));
-  await scanner.scan(reference);
+  await validation.validateChildren(reference, ownedRefreshOptions);
   const before = await state(database);
   const partId = deterministicId('Film cd2.mkv', videoNativeType);
   await adapter.delete('/Film cd2.mkv');
   const restoreDelete = await failBaseItemDelete(database, partId, 'controlled owned-part delete failure');
   try {
-    await assert.rejects(scanner.scan(reference), /controlled owned-part delete failure/u);
+    await metadata.refresh(before.find(item => item.Type === movieNativeType).Id, ownedRefreshOptions);
+    assert.ok(errors.some(error => /controlled owned-part delete failure/u.test(error.message)));
   } finally {
     await restoreDelete();
   }
 
-  assert.deepEqual(await state(database), before);
-  await scanner.scan(reference);
+  const failed = await state(database);
+  assert.ok(failed.some(item => idKey(item.Id) === idKey(partId)));
+  assert.deepEqual(JSON.parse(failed.find(item => item.Type === movieNativeType).Data).AdditionalParts,
+    [`${rootPath}\\Film cd2.mkv`]);
+  await metadata.refresh(before.find(item => item.Type === movieNativeType).Id, ownedRefreshOptions);
+  await validation.validateChildren(reference, ownedRefreshOptions);
   const after = await state(database);
   assert.equal(after.length, 1);
   assert.deepEqual(JSON.parse(after[0].Data).AdditionalParts ?? [], []);

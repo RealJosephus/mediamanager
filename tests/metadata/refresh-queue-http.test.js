@@ -16,7 +16,7 @@ import { MetadataRefreshHost, MetadataRegistry, createMetadataContextLoader } fr
 import { createApplication } from '../../src/http/application.js';
 import { StorageRegistry, VirtualFileSystem, IdentityAccessMap } from '../../src/storage/index.js';
 import { MemoryStorageAdapter } from '../../src/storage/testing/memory-adapter.js';
-import nativeHttp from './fixtures/refresh-http-native.json' with { type: 'json' };
+import nativeHttp from './fixtures/refresh-queue-http/native.json' with { type: 'json' };
 
 const ids = Array.from({ length: 4 }, (_, index) => `F1111111-1111-1111-1111-${String(index + 1).padStart(12, '0')}`);
 const empty = table => Object.fromEntries(tableDefinition(table).columns.filter(column => !column.generated)
@@ -178,7 +178,7 @@ for (const postgres of [true]) {
       return result(lookup.Name);
     });
     assert.equal((await fixture.post(0)).status, 204); await until(started.promise);
-    const worker = fileURLToPath(new URL('./fixtures/refresh-race-writer.mjs', import.meta.url));
+    const worker = fileURLToPath(new URL('./fixtures/refresh-queue-http/refresh-race-writer.mjs', import.meta.url));
     const execution = await executeNode([worker, fixture.schema, ids[0]],
       { timeout: 10000 });
     const observation = JSON.parse(execution.stdout);

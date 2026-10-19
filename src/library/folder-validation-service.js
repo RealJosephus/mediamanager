@@ -91,6 +91,8 @@ export class FolderValidationService {
       structuralCompletenessProof: true,
       directStructuralRoots: true,
       typeReclassification: true,
+      secondaryOwnershipTransfer: true,
+      groupedOwnership: true,
       relationshipRows: true,
       scansMediaFiles: resolverPipeline.capabilities?.resolvesProductionMediaFiles === true
     });

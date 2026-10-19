@@ -9,7 +9,7 @@ import { tableDefinition } from '../../src/database/model.js';
 import { getNewItemId } from '../../src/core/identity.js';
 import { nativeGuid } from '../../src/users/native.js';
 import { DirectoryItemResolverPipeline, folderNativeType } from '../../src/library/directory-item-resolver.js';
-import { FolderScanService } from '../../src/library/folder-scan-service.js';
+import { createOwnedFolderValidationFixture, ownedRefreshOptions } from '../helpers/owned-folder-validation-fixture.js';
 import { ItemCreationService } from '../../src/library/item-creation-service.js';
 import { ItemDeletionService } from '../../src/library/item-deletion-service.js';
 import { LinkedChildReferenceService } from '../../src/library/linked-child-reference-service.js';
@@ -58,9 +58,9 @@ async function fixture(t, dialect) {
   const database = await PostgresDatabase.open({ connectionString: process.env.MEDIAMANAGER_TEST_POSTGRES, schema, create: true });
   const linkedChildren=new PostgresLinkedChildrenStore({database});await linkedChildren.initialize();
   const store = new DomainStore(database), registry = new StorageRegistry();
-  let scanner, itemCreation, lifecycleFixture, library;
+  let validationFixture, itemCreation, lifecycleFixture, library, referenceOwner;
   t.after(async () => {
-    await scanner?.close();
+    referenceOwner?.release(); await validationFixture?.close();
     await itemCreation?.close();
     await lifecycleFixture?.close();
     await library?.close();await linkedChildren.flushReleases();await linkedChildren.close();
@@ -88,7 +88,8 @@ async function fixture(t, dialect) {
     Data: JSON.stringify({ CollectionType: 'movies', PhysicalFolderIds: [rootId], PhysicalLocationsList: [rootPath] })
   }));
   library = new LibraryService({fileSystem: testFileSystem,  store, linkedChildren, serverId: 'linked-folder-scan', programDataPath });
-  lifecycleFixture = await createResolvedItemLifecycleFixture({ store, library, linkedChildren, vfs, identityMap });
+  const ignoreRule = await knownAncestorIgnoreRule({ registry, vfs, identityMap, identityRoots: [rootPath] });
+  lifecycleFixture = await createResolvedItemLifecycleFixture({ store, library, linkedChildren, vfs, identityMap, ignoreRule });
   itemCreation = new ItemCreationService({ store, library, linkedChildren, loadContext: lifecycleFixture.loadContext });
   library.itemCreation = itemCreation;
   const linkedChildReferences = new LinkedChildReferenceService({ store, itemCreation,
@@ -156,14 +157,16 @@ async function fixture(t, dialect) {
     library.on(event, value => record({ phase, id: idKey(value.Item.Id) }));
   }
   const resolverPipeline = new DirectoryItemResolverPipeline({ programDataPath, resolvers: [createVideoFileResolver()] });
-  scanner = new FolderScanService({
-    ignoreRule: await knownAncestorIgnoreRule({ registry, vfs, identityMap, identityRoots: [rootPath] }),
+  validationFixture = createOwnedFolderValidationFixture({
+    ignoreRule, lifecycleFixture, configuration: { LibraryScanFanoutConcurrency: 1 },
     store, library, vfs, identityMap, refreshes: new ProviderRefreshService(), programDataPath,
-    resolverPipeline, resolvedItemLifecycle: lifecycleFixture.lifecycle, itemCreation, linkedChildReferences
+    resolverPipeline, resolvedItemLifecycle: lifecycleFixture.lifecycle, itemCreation, itemDeletion: library.itemDeletion, linkedChildReferences
   });
-  const reference = mapRecord((await database.rows('BaseItems', { where: { Id: rootId } }))[0]);
+  const reference = await itemCreation.getItemById(rootId);
+  referenceOwner = itemCreation.retainItem(reference);
+  const { validation, errors } = validationFixture;
   return {
-    database, store, adapter, vfs, scanner, reference, library, itemCreation, linkedChildReferences, trace, control,
+    database, store, adapter, vfs, validation, errors, reference, library, itemCreation, linkedChildReferences, trace, control,
     startTrace() { trace.length = 0; control.active = true; },
     stopTrace() { control.active = false; }
   };
@@ -196,7 +199,7 @@ linkedTest('two-version removal deletes first, promotes, reroutes, transfers and
   const value = await fixture(t, dialect);
   await value.adapter.write('/Film - 1080p.mkv', Buffer.from('1080'));
   await value.adapter.write('/Film - 2160p.mkv', Buffer.from('2160'));
-  await value.scanner.scan(value.reference);
+  await value.validation.validateChildren(value.reference, ownedRefreshOptions);
   const source = await movieAt(value, `${rootPath}\\Film - 2160p.mkv`);
   const target = await movieAt(value, `${rootPath}\\Film - 1080p.mkv`);
   await insertManualReference(value, source.Id);
@@ -207,11 +210,12 @@ linkedTest('two-version removal deletes first, promotes, reroutes, transfers and
   await value.adapter.write('/Linked.remote', Buffer.from('linked'));
   await value.database.insert('LinkedChildren', { ParentId: source.Id, SortOrder: 9,
     ChildId: linkedAlternateId, ChildType: 3 });
+  value.itemCreation.unregisterItem(source.Id);
   await value.itemCreation.getItemById(source.Id);
   await value.itemCreation.getItemById(target.Id);
   await value.adapter.delete('/Film - 2160p.mkv');
   value.startTrace();
-  await value.scanner.scan(value.reference);
+  await value.validation.validateChildren(value.reference, ownedRefreshOptions);
   value.stopTrace();
   const deleteAt = position(value.trace, entry => entry.phase === 'delete:start' && entry.id === idKey(source.Id));
   const promoteAt = position(value.trace, entry => entry.phase === 'save:start' && entry.id === idKey(target.Id));
@@ -240,12 +244,12 @@ linkedTest('manual rows owned by a generic Folder reroute even without a Folder-
   const value = await fixture(t, dialect);
   await value.adapter.write('/Film - 1080p.mkv', Buffer.from('1080'));
   await value.adapter.write('/Film - 2160p.mkv', Buffer.from('2160'));
-  await value.scanner.scan(value.reference);
+  await value.validation.validateChildren(value.reference, ownedRefreshOptions);
   const source = await movieAt(value, `${rootPath}\\Film - 2160p.mkv`);
   const target = await movieAt(value, `${rootPath}\\Film - 1080p.mkv`);
   const manualParent = await insertManualReference(value, source.Id, 0, folderNativeType);
   await value.adapter.delete('/Film - 2160p.mkv');
-  await value.scanner.scan(value.reference);
+  await value.validation.validateChildren(value.reference, ownedRefreshOptions);
   const [link] = await value.database.rows('LinkedChildren', { where: { ParentId: manualParent, ChildType: 0 } });
   assert.equal(idKey(link.ChildId), idKey(target.Id));
 });
@@ -254,14 +258,14 @@ linkedTest('linked demotion creates its target before transfer, old-source save 
   const value = await fixture(t, dialect);
   await value.adapter.write('/Film - 1080p.mkv', Buffer.from('1080'));
   await value.adapter.write('/Film - 2160p.mkv', Buffer.from('2160'));
-  await value.scanner.scan(value.reference);
+  await value.validation.validateChildren(value.reference, ownedRefreshOptions);
   const source = await movieAt(value, `${rootPath}\\Film - 2160p.mkv`);
   const alternate = await movieAt(value, `${rootPath}\\Film - 1080p.mkv`);
   await insertManualReference(value, source.Id);
   await value.itemCreation.getItemById(source.Id);
   await value.adapter.write('/Film.mkv', Buffer.from('exact'));
   value.startTrace();
-  await value.scanner.scan(value.reference);
+  await value.validation.validateChildren(value.reference, ownedRefreshOptions);
   value.stopTrace();
   const targetId = itemId('Film.mkv');
   const createAt = position(value.trace, entry => entry.phase === 'create:end' && entry.ids.includes(idKey(targetId)));
@@ -279,7 +283,7 @@ linkedTest('linked parent image failure keeps the committed reroute prefix and d
   const value = await fixture(t, dialect);
   await value.adapter.write('/Film - 1080p.mkv', Buffer.from('1080'));
   await value.adapter.write('/Film - 2160p.mkv', Buffer.from('2160'));
-  await value.scanner.scan(value.reference);
+  await value.validation.validateChildren(value.reference, ownedRefreshOptions);
   const source = await movieAt(value, `${rootPath}\\Film - 2160p.mkv`);
   const target = await movieAt(value, `${rootPath}\\Film - 1080p.mkv`);
   const manualParent = await insertManualReference(value, source.Id);
@@ -287,10 +291,10 @@ linkedTest('linked parent image failure keeps the committed reroute prefix and d
   value.control.failLinkedImage = failure;
   await value.adapter.delete('/Film - 2160p.mkv');
   value.startTrace();
-  await assert.rejects(value.scanner.scan(value.reference), error => error === failure);
+  await assert.rejects(value.validation.validateChildren(value.reference, ownedRefreshOptions), error => error === failure);
   value.stopTrace();
   assert.equal(value.trace.filter(entry => entry.phase === 'reroute' && entry.from === idKey(source.Id)).length, 1,
-    'an irreversible linked prefix disables the whole-tree retry');
+    'the failed linked action is not replayed');
   assert.equal(value.trace.some(entry => entry.phase === 'cleanup:internal' && entry.id === idKey(source.Id)), false);
   assert.ok(await value.itemCreation.getItemById(source.Id));
   const promoted = await value.itemCreation.getItemById(target.Id);
@@ -307,7 +311,7 @@ linkedTest('one scope batches every prerequisite before serial linked actions an
       await value.adapter.write(`/${title}/${name}`, Buffer.from(name));
     }
   }
-  await value.scanner.scan(value.reference);
+  await value.validation.validateChildren(value.reference, ownedRefreshOptions);
   const filmParent = `${rootPath}\\Film`, otherParent = `${rootPath}\\Other`;
   const filmSource = await movieAt(value, `${filmParent}\\Film - 2160p.mkv`);
   const otherSource = await movieAt(value, `${otherParent}\\Other - 2160p.mkv`);
@@ -323,14 +327,14 @@ linkedTest('one scope batches every prerequisite before serial linked actions an
     Data: JSON.stringify({ SourceType: 'Library' })
   }));
   value.startTrace();
-  await value.scanner.scan(value.reference);
+  await value.validation.validateChildren(value.reference, ownedRefreshOptions);
   value.stopTrace();
   const create = value.trace.find(entry => entry.phase === 'create:end');
   assert.deepEqual(new Set(create.ids), new Set([idKey(filmTargetId), idKey(otherTargetId)]));
   const reroutes = value.trace.map((entry, index) => ({ entry, index })).filter(value => value.entry.phase === 'reroute');
   const sourceSaves = value.trace.map((entry, index) => ({ entry, index })).filter(value => value.entry.phase === 'save:start'
     && [idKey(filmSource.Id), idKey(otherSource.Id)].includes(value.entry.id));
-  assert.equal(reroutes.length, 2, JSON.stringify(value.trace)); assert.equal(sourceSaves.length, 2, JSON.stringify(value.trace));
+  assert.equal(reroutes.length, 2, JSON.stringify(value.trace));
   assert.ok(position(value.trace, entry => entry === create) < reroutes[0].index,
     'the complete prerequisite batch commits before the first action');
   assert.ok(sourceSaves[0].index < reroutes[0].index && reroutes[0].index < sourceSaves[1].index
@@ -347,7 +351,7 @@ linkedTest('parent scope publishes before a child linked action', async (t, dial
   for (const name of ['Film - 1080p.mkv', 'Film - 2160p.mkv', 'Other.mkv']) {
     await value.adapter.write(name === 'Other.mkv' ? '/Sub/' + name : '/Sub/Film/' + name, Buffer.from(name));
   }
-  await value.scanner.scan(value.reference);
+  await value.validation.validateChildren(value.reference, ownedRefreshOptions);
   const filmPath = `${rootPath}\\Sub\\Film`;
   const source = await movieAt(value, `${filmPath}\\Film - 2160p.mkv`);
   assert.ok(source, 'the parent directory remains a traversed Folder scope');
@@ -356,7 +360,7 @@ linkedTest('parent scope publishes before a child linked action', async (t, dial
   await value.vfs.mkdir('/movies/New');
   const newFolderId = itemId('New', folderNativeType);
   value.startTrace();
-  await value.scanner.scan(value.reference);
+  await value.validation.validateChildren(value.reference, ownedRefreshOptions);
   value.stopTrace();
   const parentPublish = position(value.trace, entry => entry.phase === 'event:added' && entry.id === idKey(newFolderId));
   const childAction = position(value.trace, entry => entry.phase === 'reroute' && entry.from === idKey(source.Id));
@@ -364,25 +368,26 @@ linkedTest('parent scope publishes before a child linked action', async (t, dial
     `the parent scope commits and publishes before child linked work starts: ${JSON.stringify(value.trace)}`);
 });
 
-linkedTest('whole-tree linked dependency preflight fails before any parent scope side effect', async (t, dialect) => {
+linkedTest('a child linked failure preserves the already published parent directory', async (t, dialect) => {
   const value = await fixture(t, dialect);
   await value.vfs.mkdir('/movies/Sub');
   await value.vfs.mkdir('/movies/Sub/Film');
   await value.adapter.write('/Sub/Film/Film - 1080p.mkv', Buffer.from('1080'));
   await value.adapter.write('/Sub/Film/Film - 2160p.mkv', Buffer.from('2160'));
   await value.adapter.write('/Sub/Other.mkv', Buffer.from('other'));
-  await value.scanner.scan(value.reference);
+  await value.validation.validateChildren(value.reference, ownedRefreshOptions);
   const source = await movieAt(value, `${rootPath}\\Sub\\Film\\Film - 2160p.mkv`);
   await insertManualReference(value, source.Id);
   await value.adapter.write('/Sub/Film/Film.mkv', Buffer.from('exact'));
   await value.vfs.mkdir('/movies/New');
   const newFolderId = itemId('New', folderNativeType);
-  value.scanner.linkedChildReferences = null;
+  const failure = new Error('controlled child reroute failure');
+  value.linkedChildReferences.reroute = async () => { throw failure; };
   value.startTrace();
-  await assert.rejects(value.scanner.scan(value.reference), TypeError);
+  await value.validation.validateChildren(value.reference, ownedRefreshOptions);
   value.stopTrace();
-  assert.deepEqual(value.trace, [], 'no lifecycle, deletion, creation or publish callback ran before dependency preflight');
-  assert.equal((await value.database.rows('BaseItems', { where: { Id: newFolderId } })).length, 0);
+  assert.ok(value.errors.includes(failure), 'recursive child errors are reported after the parent has committed');
+  assert.equal((await value.database.rows('BaseItems', { where: { Id: newFolderId } })).length, 1);
   assert.ok(await value.itemCreation.getItemById(source.Id));
 });
 
@@ -390,7 +395,7 @@ linkedTest('missing alternate cancellation waits for reroute, primary save and f
   const value = await fixture(t, dialect);
   await value.adapter.write('/Film - 1080p.mkv', Buffer.from('1080'));
   await value.adapter.write('/Film - 2160p.mkv', Buffer.from('2160'));
-  await value.scanner.scan(value.reference);
+  await value.validation.validateChildren(value.reference, ownedRefreshOptions);
   const primary = await movieAt(value, `${rootPath}\\Film - 2160p.mkv`);
   const alternate = await movieAt(value, `${rootPath}\\Film - 1080p.mkv`);
   const manualParent = await insertManualReference(value, alternate.Id);
@@ -400,7 +405,7 @@ linkedTest('missing alternate cancellation waits for reroute, primary save and f
   value.control.cancelOnLinkedSaver = true;
   value.control.controller = controller;
   value.startTrace();
-  await assert.rejects(value.scanner.scan(value.reference, { signal: controller.signal }),
+  await assert.rejects(value.validation.validateChildren(value.reference, { ...ownedRefreshOptions, signal: controller.signal }),
     error => error?.code === 'cancelled' || error?.name === 'AbortError');
   value.stopTrace();
   const rerouteAt = position(value.trace, entry => entry.phase === 'reroute' && entry.from === idKey(alternate.Id));
@@ -420,14 +425,14 @@ linkedTest('three-version replacement with a manual reference preserves the froz
   for (const name of ['Film - 720p.mkv', 'Film - 1080p.mkv', 'Film - 2160p.mkv']) {
     await value.adapter.write('/' + name, Buffer.from(name));
   }
-  await value.scanner.scan(value.reference);
+  await value.validation.validateChildren(value.reference, ownedRefreshOptions);
   const source = await movieAt(value, `${rootPath}\\Film - 2160p.mkv`);
   const target = await movieAt(value, `${rootPath}\\Film - 1080p.mkv`);
   await insertManualReference(value, source.Id);
   await value.adapter.delete('/Film - 2160p.mkv');
   value.startTrace();
   let failure;
-  try { await value.scanner.scan(value.reference); } catch (error) { failure = error; }
+  try { await value.validation.validateChildren(value.reference, ownedRefreshOptions); } catch (error) { failure = error; }
   value.stopTrace();
   assert.ok(failure, 'the frozen three-version boundary still fails');
   assert.equal(failure.code, '23503',
@@ -452,17 +457,18 @@ linkedTest('slash-variant alternate strings do not classify an old primary as a 
   for (const name of ['Film - 720p.mkv', 'Film - 1080p.mkv', 'Film - 2160p.mkv']) {
     await value.adapter.write('/' + name, Buffer.from(name));
   }
-  await value.scanner.scan(value.reference);
+  await value.validation.validateChildren(value.reference, ownedRefreshOptions);
   const source = await movieAt(value, `${rootPath}\\Film - 2160p.mkv`);
   const [stored] = await value.database.rows('BaseItems', { where: { Id: source.Id } });
   const data = JSON.parse(stored.Data);
   data.LocalAlternateVersions = [`${rootPath.replaceAll('\\', '/')}\\Film - 720p.mkv`];
   await value.database.update('BaseItems', { Id: source.Id }, { Data: JSON.stringify(data) });
+  value.itemCreation.unregisterItem(source.Id);
   await insertManualReference(value, source.Id);
   await value.adapter.delete('/Film - 2160p.mkv');
   value.startTrace();
   let failure;
-  try { await value.scanner.scan(value.reference); } catch (error) { failure = error; }
+  try { await value.validation.validateChildren(value.reference, ownedRefreshOptions); } catch (error) { failure = error; }
   value.stopTrace();
   const deleteAt = position(value.trace, entry => entry.phase === 'delete:start' && entry.id === idKey(source.Id));
   const createAt = position(value.trace, entry => entry.phase === 'create:start');
@@ -473,81 +479,25 @@ linkedTest('slash-variant alternate strings do not classify an old primary as a 
     `ordinary DeleteItem reaches the deliberately non-mappable raw alternate string before creation: ${failure?.message}`);
 });
 
-linkedTest('a plain missing item with only a manual reference stays on the structural safety path', async (t, dialect) => {
+for (const type of ['movie', 'folder']) linkedTest(`a missing ${type} removes its manual reference through ordinary deletion`, async (t, dialect) => {
   const value = await fixture(t, dialect);
-  await value.adapter.write('/Film.mkv', Buffer.from('film'));
   await value.adapter.write('/Other.mkv', Buffer.from('other'));
-  await value.scanner.scan(value.reference);
-  const source = await movieAt(value, `${rootPath}\\Film.mkv`);
+  if (type === 'folder') await value.vfs.mkdir('/movies/Loose');
+  else await value.adapter.write('/Film.mkv', Buffer.from('film'));
+  await value.validation.validateChildren(value.reference, ownedRefreshOptions);
+  const suffix = type === 'folder' ? 'Loose' : 'Film.mkv';
+  const source = await movieAt(value, `${rootPath}\\${suffix}`);
   const manualParent = await insertManualReference(value, source.Id);
   await value.itemCreation.getItemById(source.Id);
-  await value.adapter.delete('/Film.mkv');
-  value.startTrace();
-  const result = await value.scanner.scan(value.reference);
-  value.stopTrace();
-  assert.equal(result.removed, 0);
-  assert.ok(result.incompleteReasons.some(reason => reason.code === 'external-reference-deletion-skipped'));
-  assert.ok(await value.itemCreation.getItemById(source.Id));
-  const [link] = await value.database.rows('LinkedChildren', { where: { ParentId: manualParent } });
-  assert.equal(idKey(link.ChildId), idKey(source.Id));
-  assert.equal(value.trace.some(entry => entry.phase === 'delete:start'), false,
-    'a non-version deletion does not enter the native linked action runner');
+  await value.adapter.delete('/' + suffix, { recursive: type === 'folder' });
+  await value.validation.validateChildren(value.reference, ownedRefreshOptions);
+  assert.equal(await value.itemCreation.getItemById(source.Id), null);
+  assert.equal((await value.database.rows('BaseItems', { where: { Id: source.Id } })).length, 0);
+  assert.deepEqual(await value.database.rows('LinkedChildren', { where: { ParentId: manualParent } }), []);
+  assert.equal((await value.vfs.stat('/movies/Other.mkv')).kind, 'file');
 });
 
-linkedTest('an active version action does not absorb an unrelated owned deletion closure', async (t, dialect) => {
-  const value = await fixture(t, dialect);
-  await value.adapter.write('/Film - 1080p.mkv', Buffer.from('1080'));
-  await value.adapter.write('/Film - 2160p.mkv', Buffer.from('2160'));
-  await value.scanner.scan(value.reference);
-  const versionSource = await movieAt(value, `${rootPath}\\Film - 2160p.mkv`);
-  await insertManualReference(value, versionSource.Id);
-  const [stored] = await value.database.rows('BaseItems', { where: { Id: versionSource.Id } });
-  const sourceId = itemId('Other.mkv');
-  await value.database.insert('BaseItems', { ...stored, Id: sourceId, Name: 'Other', Path: `${rootPath}\\Other.mkv`,
-    OwnerId: null, PrimaryVersionId: null,
-    Data: JSON.stringify({ ...JSON.parse(stored.Data), LocalAlternateVersions: [], LinkedAlternateVersions: [] }) });
-  const source = await value.itemCreation.getItemById(sourceId);
-  const ownedId = itemId('Owned.remote');
-  await value.database.insert('BaseItems', { ...stored, Id: ownedId, Name: 'Owned', Path: `${rootPath}\\Owned.remote`,
-    OwnerId: source.Id, PrimaryVersionId: null });
-  const manualParent = await insertManualReference(value, ownedId);
-  await value.itemCreation.getItemById(versionSource.Id);
-  await value.itemCreation.getItemById(ownedId);
-  await value.adapter.delete('/Film - 2160p.mkv');
-  value.startTrace();
-  const result = await value.scanner.scan(value.reference);
-  value.stopTrace();
-  assert.equal(result.removed, 1, `only the linked version source is removed: ${JSON.stringify(value.trace)}`);
-  assert.ok(result.incompleteReasons.some(reason => reason.code === 'external-reference-deletion-skipped'));
-  assert.equal(await value.itemCreation.getItemById(versionSource.Id), null);
-  assert.ok(await value.itemCreation.getItemById(source.Id));
-  assert.ok(await value.itemCreation.getItemById(ownedId));
-  const [link] = await value.database.rows('LinkedChildren', { where: { ParentId: manualParent } });
-  assert.equal(idKey(link.ChildId), idKey(ownedId));
-  assert.deepEqual(value.trace.filter(entry => entry.phase === 'delete:start').map(entry => entry.id),
-    [idKey(versionSource.Id)]);
-});
-
-linkedTest('a plain Folder with only a manual reference remains structurally protected', async (t, dialect) => {
-  const value = await fixture(t, dialect);
-  await value.vfs.mkdir('/movies/Loose');
-  await value.adapter.write('/Other.mkv', Buffer.from('other'));
-  await value.scanner.scan(value.reference);
-  const folderPath = `${rootPath}\\Loose`;
-  const folder = await movieAt(value, folderPath);
-  assert.ok(folder?.IsFolder);
-  const manualParent = await insertManualReference(value, folder.Id);
-  await value.itemCreation.getItemById(folder.Id);
-  await value.adapter.delete('/Loose', { recursive: true });
-  const result = await value.scanner.scan(value.reference);
-  assert.equal(result.removed, 0);
-  assert.ok(result.incompleteReasons.some(reason => reason.code === 'external-reference-deletion-skipped'));
-  assert.ok(await value.itemCreation.getItemById(folder.Id));
-  const [link] = await value.database.rows('LinkedChildren', { where: { ParentId: manualParent } });
-  assert.equal(idKey(link.ChildId), idKey(folder.Id));
-});
-
-linkedTest('a same-path stale Folder with only a manual reference rejects reclassification', async (t, dialect) => {
+linkedTest('same-path stale Folder deletion precedes creation and clears its old manual reference', async (t, dialect) => {
   const value = await fixture(t, dialect);
   const targetPath = `${rootPath}\\Film.mkv`;
   const staleId = itemId('Film.mkv', folderNativeType);
@@ -558,12 +508,18 @@ linkedTest('a same-path stale Folder with only a manual reference rejects reclas
   await value.adapter.write('/Film.mkv', Buffer.from('film'));
   const manualParent = await insertManualReference(value, staleId);
   await value.itemCreation.getItemById(staleId);
-  await assert.rejects(value.scanner.scan(value.reference),
-    error => error?.code === 'unsupported/type-reclassification-required');
-  assert.ok(await value.itemCreation.getItemById(staleId));
-  assert.equal(await movieAt(value, targetPath).then(item => idKey(item.Id)), idKey(staleId));
-  const [link] = await value.database.rows('LinkedChildren', { where: { ParentId: manualParent } });
-  assert.equal(idKey(link.ChildId), idKey(staleId));
+  value.startTrace();
+  await value.validation.validateChildren(value.reference, ownedRefreshOptions);
+  value.stopTrace();
+  assert.equal(await value.itemCreation.getItemById(staleId), null);
+  const replacement = await movieAt(value, targetPath);
+  assert.equal(replacement.Type, 'Movie');
+  assert.equal(idKey(replacement.Id), idKey(itemId('Film.mkv')));
+  assert.deepEqual(await value.database.rows('LinkedChildren', { where: { ParentId: manualParent } }), []);
+  const deleted = position(value.trace, entry => entry.phase === 'delete:end' && entry.id === idKey(staleId));
+  const created = position(value.trace, entry => entry.phase === 'create:start' && entry.ids.includes(idKey(replacement.Id)));
+  assert.ok(deleted >= 0 && deleted < created);
+  assert.equal((await value.vfs.stat('/movies/Film.mkv')).kind, 'file');
 });
 
 linkedTest('a weak collapsed version snapshot is not promoted into an eager linked action', async (t, dialect) => {
@@ -571,7 +527,7 @@ linkedTest('a weak collapsed version snapshot is not promoted into an eager link
   await value.vfs.mkdir('/movies/Nested');
   await value.adapter.write('/Nested/Nested - 1080p.mkv', Buffer.from('1080'));
   await value.adapter.write('/Nested/Nested - 2160p.mkv', Buffer.from('2160'));
-  await value.scanner.scan(value.reference);
+  await value.validation.validateChildren(value.reference, ownedRefreshOptions);
   const sourcePath = `${rootPath}\\Nested\\Nested - 2160p.mkv`;
   const source = await movieAt(value, sourcePath);
   assert.ok(source);
@@ -585,8 +541,8 @@ linkedTest('a weak collapsed version snapshot is not promoted into an eager link
       : listing;
   };
   value.startTrace();
-  await assert.rejects(value.scanner.scan(value.reference),
-    error => error?.code === 'unsupported/type-reclassification-required');
+  await assert.rejects(value.validation.validateChildren(value.reference, ownedRefreshOptions),
+    error => error?.code === 'not-supported');
   value.stopTrace();
   assert.ok(await movieAt(value, sourcePath), 'the missing version survives the weak nested absence');
   const [link] = await value.database.rows('LinkedChildren', { where: { ParentId: manualParent, ChildType: 0 } });

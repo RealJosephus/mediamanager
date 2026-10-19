@@ -286,7 +286,7 @@ test('postgres: runtime registers Genre, MusicGenre and Studio maintenance and s
   assert.deepEqual(registered.map(task => task.name), ['Splashscreen', 'Artists', 'CollectionPosterVerify', 'Collections', 'Genres', 'MusicGenres', 'Studios', 'CleanDatabase']);
   assert.ok(registered.every((task, index) => task === [runtime.splashscreenPostScanTask, runtime.artistsPostScanTask, runtime.collectionPosterVerifyPostScanTask, runtime.collectionPostScanTask, runtime.genresPostScanTask,
     runtime.musicGenresPostScanTask, runtime.studiosPostScanTask, runtime.cleanDatabasePostScanTask][index]), 'Task services retain their registered identity.');
-  assert.equal(runtime.libraryScanner.capabilities.completeLibraryScan, false); assert.equal(runtime.libraryScanLifecycle.capabilities.runsPostScanTasks, true);
+  assert.equal(runtime.libraryScanner.capabilities.completeLibraryScan, true); assert.equal(runtime.libraryScanLifecycle.capabilities.runsPostScanTasks, true);
   const template = native.results.find(entry => entry.kind === 'Genre' && entry.sample.Name === 'new names').before.rows.find(row => row.Type.endsWith('.Movie'));
   const movie = { ...template, Id: 'ba390000-0000-0000-0000-000000005001', Name: 'Movie source' };
   const audio = { ...template, Id: 'ba390000-0000-0000-0000-000000005002', Name: 'Audio source', Type: 'MediaBrowser.Controller.Entities.Audio.Audio', Data: null };

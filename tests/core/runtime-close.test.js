@@ -45,13 +45,11 @@ test('runtime closes every resource after an actual HLS cache initialization fai
 
   const scanCloseStarted = {
     tasks: Promise.withResolvers(),
-    library: Promise.withResolvers(),
-    folder: Promise.withResolvers()
+    library: Promise.withResolvers()
   };
   for (const [name, owner, peer] of [
-    ['tasks', runtime.tasks, 'folder'],
-    ['library', runtime.libraryScanner, 'folder'],
-    ['folder', runtime.folderScanner, 'tasks']
+    ['tasks', runtime.tasks, 'library'],
+    ['library', runtime.libraryScanner, 'tasks']
   ]) {
     const original = owner.close.bind(owner);
     owner.close = async () => {

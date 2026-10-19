@@ -81,8 +81,7 @@ export async function startProductionInstance({ environment = process.env, onErr
     // while storage and observers must remain alive until every layer drains.
     await Promise.all([
       Promise.resolve().then(() => application?.tasks?.close()).catch(error => errors.push(error)),
-      Promise.resolve().then(() => application?.libraryScanner?.close()).catch(error => errors.push(error)),
-      Promise.resolve().then(() => application?.folderScanner?.close()).catch(error => errors.push(error))
+      Promise.resolve().then(() => application?.libraryScanner?.close()).catch(error => errors.push(error))
     ]);
     // Stop remaining upstream reads so HTTP shutdown cannot wait for an endless media body.
     try {

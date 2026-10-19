@@ -8,12 +8,12 @@ import { tableDefinition } from '../../src/database/model.js';
 import { getNewItemId } from '../../src/core/identity.js';
 import { nativeGuid } from '../../src/users/native.js';
 import { DirectoryItemResolverPipeline } from '../../src/library/directory-item-resolver.js';
-import { FolderScanService } from '../../src/library/folder-scan-service.js';
+import { createOwnedFolderValidationFixture, ownedRefreshOptions, withoutSaveTime } from '../helpers/owned-folder-validation-fixture.js';
 import { ItemCreationService } from '../../src/library/item-creation-service.js';
 import { ItemDeletionService } from '../../src/library/item-deletion-service.js';
 import { LinkedChildReferenceService } from '../../src/library/linked-child-reference-service.js';
 import { LibraryService } from '../../src/library/library-service.js';
-import { idKey, mapRecord } from '../../src/library/records.js';
+import { idKey } from '../../src/library/records.js';
 import { createVideoFileResolver, movieNativeType } from '../../src/library/video-file-resolver.js';
 import { ProviderRefreshService } from '../../src/metadata/provider-refresh-service.js';
 import { IdentityAccessMap, StorageRegistry, VirtualFileSystem } from '../../src/storage/index.js';
@@ -62,9 +62,9 @@ async function fixture(t, dialect) {
   const { database, schema } = await databaseFor(dialect);
   const store = new DomainStore(database);
   const registry = new StorageRegistry();
-  let library, scanner, lifecycleFixture, itemCreation;
+  let library, validationFixture, lifecycleFixture, itemCreation, referenceOwner;
   t.after(async () => {
-    await scanner?.close();
+    referenceOwner?.release(); await validationFixture?.close();
     await itemCreation?.close();
     await lifecycleFixture?.close();
     await library?.close();
@@ -92,7 +92,8 @@ async function fixture(t, dialect) {
     Data: JSON.stringify({ CollectionType: 'movies', PhysicalFolderIds: [rootId], PhysicalLocationsList: [rootPath] })
   }));
   library = new LibraryService({fileSystem: testFileSystem,  store, serverId: 'local-version-scan', programDataPath });
-  lifecycleFixture = await createResolvedItemLifecycleFixture({ store, library, vfs, identityMap });
+  const ignoreRule = await knownAncestorIgnoreRule({ registry, vfs, identityMap, identityRoots: [rootPath] });
+  lifecycleFixture = await createResolvedItemLifecycleFixture({ store, library, vfs, identityMap, ignoreRule });
   itemCreation = new ItemCreationService({ store, library, linkedChildren:lifecycleFixture.linkedChildren, loadContext: lifecycleFixture.loadContext });
   library.itemCreation = itemCreation;
   const linkedChildReferences = new LinkedChildReferenceService({ store, itemCreation,
@@ -104,8 +105,8 @@ async function fixture(t, dialect) {
     programDataPath,
     resolvers: [createVideoFileResolver()]
   });
-  scanner = new FolderScanService({
-    ignoreRule: await knownAncestorIgnoreRule({ registry, vfs, identityMap, identityRoots: [rootPath] }),
+  validationFixture = createOwnedFolderValidationFixture({
+    ignoreRule, lifecycleFixture, configuration: { LibraryScanFanoutConcurrency: 1 },
     store,
     library,
     vfs,
@@ -114,15 +115,18 @@ async function fixture(t, dialect) {
     programDataPath,
     resolverPipeline,
     resolvedItemLifecycle: lifecycleFixture.lifecycle,
-    itemCreation,
+    itemCreation, itemDeletion: library.itemDeletion,
     linkedChildReferences
   });
-  const reference = mapRecord((await database.rows('BaseItems', { where: { Id: rootId } }))[0]);
-  return { database, adapter, vfs, scanner, reference };
+  const reference = await itemCreation.getItemById(rootId);
+  referenceOwner = itemCreation.retainItem(reference);
+  const { validation, errors } = validationFixture;
+  return { database, adapter, vfs, validation, errors, reference };
 }
 
 async function versionState(database) {
   const items = (await database.rows('BaseItems')).filter(value => value.Type === movieNativeType)
+    .map(withoutSaveTime)
     .toSorted((left, right) => String(left.Path).localeCompare(String(right.Path)));
   const links = (await database.rows('LinkedChildren')).toSorted((left, right) =>
     `${left.ParentId}:${left.SortOrder}`.localeCompare(`${right.ParentId}:${right.SortOrder}`));
@@ -152,20 +156,20 @@ const dbFailure = (error, dialect) => dialect === 'postgres' ? error.code === '2
 for (const dialect of ['postgres']) test(`${dialect}: local movie versions persist, regroup and retain the native failed replacement prefix`, {
   skip: dialect === 'postgres' && !process.env.MEDIAMANAGER_TEST_POSTGRES
 }, async t => {
-  const { database, adapter, scanner, reference } = await fixture(t, dialect);
+  const { database, adapter, validation, errors, reference } = await fixture(t, dialect);
   await adapter.write('/Film - 1080p.mkv', Buffer.from('1080'));
   await adapter.write('/Film - 2160p.mkv', Buffer.from('2160'));
 
-  const created = await scanner.scan(reference);
-  assert.equal(created.added, 1, 'native CreateItems publishes only the resolved primary, not synthesized alternates');
+  const created = await validation.validateChildren(reference, ownedRefreshOptions);
+  assert.equal(created.created.length, 1, 'native CreateItems publishes only the resolved primary, not synthesized alternates');
   let state = await versionState(database);
   const resolutionPrimary = assertFamily(state, 'Film - 2160p.mkv', ['Film - 1080p.mkv']);
   const stable = structuredClone(state);
-  assert.equal((await scanner.scan(reference)).added, 0);
+  assert.equal((await validation.validateChildren(reference, ownedRefreshOptions)).created.length, 0);
   assert.deepEqual(await versionState(database), stable);
 
   await adapter.write('/Other.mkv', Buffer.from('other'));
-  await scanner.scan(reference);
+  await validation.validateChildren(reference, ownedRefreshOptions);
   state = await versionState(database);
   assert.equal(state.items.length, 3);
   assert.ok(state.items.every(item => item.OwnerId == null && item.PrimaryVersionId == null));
@@ -173,7 +177,7 @@ for (const dialect of ['postgres']) test(`${dialect}: local movie versions persi
   assert.deepEqual(JSON.parse(state.items.find(item => item.Id === resolutionPrimary.Id).Data).LocalAlternateVersions, []);
 
   await adapter.delete('/Other.mkv');
-  await scanner.scan(reference);
+  await validation.validateChildren(reference, ownedRefreshOptions);
   state = await versionState(database);
   assertFamily(state, 'Film - 2160p.mkv', ['Film - 1080p.mkv']);
 
@@ -184,9 +188,10 @@ for (const dialect of ['postgres']) test(`${dialect}: local movie versions persi
   }));
   await database.insert('LinkedChildren', { ParentId: manualParentId, SortOrder: 0, ChildId: resolutionPrimary.Id, ChildType: 0 });
   await database.insert('LinkedChildren', { ParentId: resolutionPrimary.Id, SortOrder: 4, ChildId: linkedAlternateId, ChildType: 3 });
+  validation.itemCreation.unregisterItem(resolutionPrimary.Id);
 
   await adapter.write('/Film.mkv', Buffer.from('exact'));
-  await scanner.scan(reference);
+  await validation.validateChildren(reference, ownedRefreshOptions);
   state = await versionState(database);
   const exactPrimary = assertFamily(state, 'Film.mkv', ['Film - 2160p.mkv', 'Film - 1080p.mkv']);
   assert.ok(state.links.some(link => idKey(link.ParentId) === idKey(manualParentId)
@@ -198,7 +203,7 @@ for (const dialect of ['postgres']) test(`${dialect}: local movie versions persi
   'native transfers the row but clears the old primary arrays without recreating ChildType=3');
 
   await adapter.delete('/Film.mkv');
-  await assert.rejects(scanner.scan(reference), error => dbFailure(error, dialect));
+  await assert.rejects(validation.validateChildren(reference, ownedRefreshOptions), error => dbFailure(error, dialect));
   state = await versionState(database);
   const promoted = assertFamily(state, 'Film - 2160p.mkv', ['Film - 1080p.mkv']);
   assert.ok(state.items.some(item => item.Path === `${rootPath}\\Film.mkv`),
@@ -211,10 +216,10 @@ for (const dialect of ['postgres']) test(`${dialect}: local movie versions persi
 for (const dialect of ['postgres']) test(`${dialect}: disappearing local alternate collapses duplicate manual references`, {
   skip: dialect === 'postgres' && !process.env.MEDIAMANAGER_TEST_POSTGRES
 }, async t => {
-  const { database, adapter, scanner, reference } = await fixture(t, dialect);
+  const { database, adapter, validation, errors, reference } = await fixture(t, dialect);
   await adapter.write('/Film - 1080p.mkv', Buffer.from('1080'));
   await adapter.write('/Film - 2160p.mkv', Buffer.from('2160'));
-  await scanner.scan(reference);
+  await validation.validateChildren(reference, ownedRefreshOptions);
   let state = await versionState(database);
   const primary = assertFamily(state, 'Film - 2160p.mkv', ['Film - 1080p.mkv']);
   await database.insert('BaseItems', row(manualParentId, 'MediaBrowser.Controller.Playlists.Playlist', { IsFolder: true }));
@@ -223,7 +228,7 @@ for (const dialect of ['postgres']) test(`${dialect}: disappearing local alterna
   await database.insert('LinkedChildren', { ParentId: manualParentId, SortOrder: 2,
     ChildId: primary.Id, ChildType: 0 });
   await adapter.delete('/Film - 1080p.mkv');
-  await scanner.scan(reference);
+  await validation.validateChildren(reference, ownedRefreshOptions);
   state = await versionState(database);
   const promoted = assertFamily(state, 'Film - 2160p.mkv', []);
   assert.equal(state.items.some(item => item.Path === `${rootPath}\\Film - 1080p.mkv`), false);
@@ -236,10 +241,10 @@ for (const dialect of ['postgres']) test(`${dialect}: disappearing local alterna
 for (const dialect of ['postgres']) test(`${dialect}: a post-promotion link failure retains only the committed target prerequisite`, {
   skip: dialect === 'postgres' && !process.env.MEDIAMANAGER_TEST_POSTGRES
 }, async t => {
-  const { database, adapter, scanner, reference } = await fixture(t, dialect);
+  const { database, adapter, validation, errors, reference } = await fixture(t, dialect);
   await adapter.write('/Film - 1080p.mkv', Buffer.from('1080'));
   await adapter.write('/Film - 2160p.mkv', Buffer.from('2160'));
-  await scanner.scan(reference);
+  await validation.validateChildren(reference, ownedRefreshOptions);
   const sourceId = itemId('Film - 2160p.mkv');
   await database.insert('BaseItems', row(manualParentId, 'MediaBrowser.Controller.Playlists.Playlist', { IsFolder: true }));
   await database.insert('LinkedChildren', { ParentId: manualParentId, SortOrder: 0, ChildId: sourceId, ChildType: 0 });
@@ -249,7 +254,7 @@ for (const dialect of ['postgres']) test(`${dialect}: a post-promotion link fail
   await database.client.query(`CREATE FUNCTION fail_manual_reroute() RETURNS trigger LANGUAGE plpgsql AS $$
     BEGIN IF OLD."ChildType"=0 THEN RAISE EXCEPTION 'controlled local-version link failure'; END IF; RETURN NEW; END $$`);
   await database.client.query('CREATE TRIGGER fail_manual_reroute BEFORE UPDATE ON "LinkedChildren" FOR EACH ROW EXECUTE FUNCTION fail_manual_reroute()');
-  await assert.rejects(scanner.scan(reference), /controlled local-version link failure/u);
+  await assert.rejects(validation.validateChildren(reference, ownedRefreshOptions), /controlled local-version link failure/u);
   await database.client.query('DROP TRIGGER fail_manual_reroute ON "LinkedChildren"');
   await database.client.query('DROP FUNCTION fail_manual_reroute()');
   const failed = await versionState(database), target = failed.items.find(item => idKey(item.Id) === idKey(itemId('Film.mkv')));
@@ -265,32 +270,28 @@ for (const dialect of ['postgres']) test(`${dialect}: a post-promotion link fail
       && idKey(value.ChildId) === idKey(link.ChildId) && Number(value.ChildType) === Number(link.ChildType)),
     'the old family remains intact until its per-action transfer starts');
   }
-  await scanner.scan(reference);
+  await validation.validateChildren(reference, ownedRefreshOptions);
   assertFamily(await versionState(database), 'Film.mkv', ['Film - 1080p.mkv']);
 });
 
 for (const dialect of ['postgres']) test(`${dialect}: a weak snapshot cannot add, promote or drop a local version`, {
   skip: dialect === 'postgres' && !process.env.MEDIAMANAGER_TEST_POSTGRES
 }, async t => {
-  const { database, adapter, vfs, scanner, reference } = await fixture(t, dialect);
+  const { database, adapter, vfs, validation, errors, reference } = await fixture(t, dialect);
   await adapter.write('/Film - 1080p.mkv', Buffer.from('1080'));
   await adapter.write('/Film - 2160p.mkv', Buffer.from('2160'));
-  await scanner.scan(reference);
+  await validation.validateChildren(reference, ownedRefreshOptions);
   const before = await versionState(database);
   const list = vfs.list.bind(vfs);
   vfs.list = async (path, options) => ({ ...await list(path, options), consistency: 'weak', snapshot: null, deletionSafe: false });
   await adapter.write('/Film.mkv', Buffer.from('exact'));
-  let weak = await scanner.scan(reference);
-  assert.equal(weak.structurallyComplete, false);
-  assert.ok(weak.incompleteReasons.some(reason => reason.code === 'weak-directory-snapshot'));
+  await assert.rejects(validation.validateChildren(reference, ownedRefreshOptions), { code: 'not-supported' });
   assert.deepEqual(await versionState(database), before);
   await adapter.delete('/Film.mkv');
   await adapter.delete('/Film - 2160p.mkv');
-  weak = await scanner.scan(reference);
-  assert.equal(weak.structurallyComplete, false);
-  assert.ok(weak.incompleteReasons.some(reason => reason.code === 'weak-directory-snapshot'));
+  await assert.rejects(validation.validateChildren(reference, ownedRefreshOptions), { code: 'not-supported' });
   assert.deepEqual(await versionState(database), before);
   vfs.list = list;
-  await scanner.scan(reference);
+  await validation.validateChildren(reference, ownedRefreshOptions);
   assertFamily(await versionState(database), 'Film - 1080p.mkv', []);
 });

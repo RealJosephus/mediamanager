@@ -80,17 +80,24 @@ export class ItemDeletionService {
       linkedChildReferences, vfs, metadataVfs, channelManager, logger, now });
   }
 
-  async #context(item, { allowDirectoryDisc = false, cleanupOnly = false, relatedVersion = false } = {}) {
+  async #context(item, { allowDirectoryDisc = false, cleanupOnly = false, relatedVersion = false,
+    parent, deleteFileLocation } = {}) {
     if (!['Folder', ...VIDEO_TYPES, ...genericFileLeafTypes, ...generalItemTypes].includes(item.Type)) {
       throw libraryError(501, 'Deletion of this native item type is not implemented.');
     }
     const loaded = await loadLiveItemContext(item, this, { allowRetainedItem: true, includeChildren: false });
     try {
     const snapshot = loaded.sourceSnapshot;
+    // Folder.ValidateChildren clears ParentId before its DB-only deletion.
+    // MusicArtist.IsFolder then becomes false, even for a persisted physical
+    // artist. Only the matching captured parent authorizes this transient.
+    const removedPhysicalArtist = item.Type === 'MusicArtist' && snapshot?.IsFolder === true
+      && item.IsFolder === false && nonemptyId(snapshot.ParentId) && !nonemptyId(item.ParentId)
+      && parent?.IsFolder === true && sameId(snapshot.ParentId, parent.Id) && deleteFileLocation === false;
     let stored;
     try { stored = JSON.parse(snapshot?.Data ?? '{}'); } catch { stored = null; }
     if (generalItemTypes.has(item.Type)) {
-      if (snapshot?.IsFolder !== item.IsFolder
+      if ((snapshot?.IsFolder !== item.IsFolder && !removedPhysicalArtist)
         || snapshot?.IsInMixedFolder !== item.IsInMixedFolder
         || snapshot?.IsVirtualItem !== item.IsVirtualItem
         || !sameOptionalId(snapshot?.OwnerId, item.OwnerId)
@@ -100,7 +107,7 @@ export class ItemDeletionService {
       }
     }
     if (internalByNameFolders.has(item.Type)) {
-      const accessedByName = item.Type !== 'MusicArtist' || !nonemptyId(item.ParentId);
+      const accessedByName = item.Type !== 'MusicArtist' || (!nonemptyId(item.ParentId) && !removedPhysicalArtist);
       if (item.IsInMixedFolder || item.IsVirtualItem || (accessedByName && nonemptyId(item.OwnerId))
         || nonemptyId(item.PrimaryVersionId) || nonemptyId(item.ChannelId)) {
         throw libraryError(501, 'Deletion of this native by-name item shape is not implemented.');
@@ -121,7 +128,7 @@ export class ItemDeletionService {
           throw libraryError(501, 'Deletion of this by-name item requires isolated instance state.');
         }
         loaded.internalSourcePath = item.Path;
-      } else if (!item.IsFolder || !loaded.context.accessPath) {
+      } else if ((!item.IsFolder && !removedPhysicalArtist) || !loaded.context.accessPath) {
         throw libraryError(501, 'Deletion of this physical music artist requires mapped folder storage.');
       }
     }
@@ -265,7 +272,9 @@ export class ItemDeletionService {
       let children,cohort,scope,failure; const logical=q('mm_delete_logical_'+randomUUID().replaceAll('-',''));
       owners.push(acquireNativeItemLinkOwner(item));
       try{
-      const loaded = validatedVersionContext ?? keep(await this.#context(item, { allowDirectoryDisc }));
+      const loaded = validatedVersionContext ?? keep(await this.#context(item, {
+        allowDirectoryDisc, parent, deleteFileLocation: options.DeleteFileLocation
+      }));
       if (parent === undefined) {
         const owner = nonemptyId(item.OwnerId) ? await this.itemCreation.getItemById(item.OwnerId) : null;
         parent = owner ?? (nonemptyId(item.ParentId) ? await this.itemCreation.getItemById(item.ParentId) : null);

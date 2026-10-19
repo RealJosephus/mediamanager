@@ -51,7 +51,7 @@ test('HTTP user deletion revokes tokens, transfers ownership and preserves the r
   const { runtime, request, admin, adminToken } = await setup(t);
   assert.ok(runtime.metadata); assert.ok(runtime.library.itemCreation); assert.ok(runtime.library.itemDeletion);
   assert.equal(typeof runtime.probe?.refresh, 'function', 'The configured storage exposes the probe service.');
-  assert.equal(runtime.libraryScanner?.capabilities.completeLibraryScan, false);
+  assert.equal(runtime.libraryScanner?.capabilities.completeLibraryScan, true);
   const victim = await runtime.users.createUser({ Name: 'PlaylistOwner', Password: 'owner password' });
   const victimRecord = await runtime.users.getUser(victim.Id);
   const administrator = await runtime.users.getUser(admin.Id);

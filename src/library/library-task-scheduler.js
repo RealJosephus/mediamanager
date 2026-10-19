@@ -24,12 +24,12 @@ export class LibraryTaskScheduler {
   #closed = false;
   #closing;
 
-  constructor({ configuration = {}, processors = availableParallelism, runWorker = operation => operation(),
+  constructor({ configuration = {}, processors = availableParallelism, runWorker = operation => operation(), captureWorker = operation => operation,
     onError = () => {} } = {}) {
-    if (typeof processors !== 'function' || typeof runWorker !== 'function' || typeof onError !== 'function') {
+    if (typeof processors !== 'function' || typeof runWorker !== 'function' || typeof captureWorker !== 'function' || typeof onError !== 'function') {
       throw new TypeError('Library scheduling requires processor, worker-scope and error callbacks.');
     }
-    Object.assign(this, { configuration, processors, runWorker, onError });
+    Object.assign(this, { configuration, processors, runWorker, captureWorker, onError });
   }
 
   #sequential() {
@@ -57,7 +57,7 @@ export class LibraryTaskScheduler {
     }
     if (signal?.aborted) { this.#observe(reportProgress, 100); return Promise.resolve(); }
     const deferred = Promise.withResolvers();
-    const record = { sequence, worker, signal, reportProgress, onError, predicate,
+    const record = { sequence, worker: this.captureWorker(worker), signal, reportProgress, onError, predicate,
       ...deferred, total: null, dispatched: 0, completed: 0, sum: 0, active: 0,
       iterator: null, page: [], index: 0, noMore: false, finishing: false, failure: null, sequentialRunning: false };
     this.#records.add(record);

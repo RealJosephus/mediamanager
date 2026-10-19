@@ -14,7 +14,7 @@ function refreshMode(value, name) {
   return mode;
 }
 
-export function registerMetadataRoutes(add, { library, folderScanner, libraryScanner, tasks, metadata, onError = () => {} }) {
+export function registerMetadataRoutes(add, { library, libraryScanner, tasks, metadata, onError = () => {} }) {
   const report = error => {
     try { void Promise.resolve(onError(error)).catch(() => {}); }
     catch { /* Background reporting cannot change the HTTP response. */ }
@@ -51,17 +51,11 @@ export function registerMetadataRoutes(add, { library, folderScanner, librarySca
     catch (error) { if (error.status === 404) return notFound(); throw error; }
     options.ForceSave = options.MetadataRefreshMode === 'FullRefresh' || options.ImageRefreshMode === 'FullRefresh' || options.ReplaceAllMetadata || options.ReplaceAllImages;
     options.RemoveOldMetadata = options.ReplaceAllMetadata;
-    if (folderScanner?.supports(item)) {
-      folderScanner.validateRefresh(item,options);
-      try { void Promise.resolve(folderScanner.queue(itemId,options)).catch(report); }
-      catch (error) { report(error); }
-      return noContent();
-    }
     if (!metadata) throw httpError(501,'Metadata refresh requires configured storage.');
     if (options.RegenerateTrickplay) throw httpError(501,'Trickplay generation is not implemented.');
     metadata.validateRefresh(item,options);
     // The native endpoint acknowledges a queued operation. Runtime shutdown drains it.
-    try { void Promise.resolve(metadata.queue(itemId,options)).catch(report); }
+    try { void Promise.resolve(metadata.queue(itemId,options,0)).catch(report); }
     catch (error) { report(error); }
     return noContent();
   }, {policy:'RequiresElevation'});

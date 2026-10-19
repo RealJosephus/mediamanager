@@ -1,5 +1,6 @@
 import { testFileSystem } from '../storage/plugin-files.js';
 import test from 'node:test';
+import { once } from 'node:events';
 import assert from 'node:assert/strict';
 import * as fs from 'node:fs/promises';
 import path from 'node:path';
@@ -14,6 +15,8 @@ import { validationOutputRoot } from '../../tools/validation/paths.js';
 import { createPostgresTestDatabase, dropPostgresTestDatabase, postgresTestConnectionString } from '../database/postgres-fixture.js';
 import { StorageRegistry, VirtualFileSystem, IdentityAccessMap } from '../../src/storage/index.js';
 import { MemoryStorageAdapter } from '../../src/storage/testing/memory-adapter.js';
+import { LocalAdapter } from '../../plugins/local/adapter.js';
+import { knownAncestorIgnoreIdentityMap } from './ignore-namespace-fixture.js';
 
 const collectionType = 'MediaBrowser.Controller.Entities.CollectionFolder';
 async function setup(t) {
@@ -32,12 +35,21 @@ async function setup(t) {
   registry.registerType('memory', options => new MemoryStorageAdapter(options)); const adapter = await registry.createInstance('media', 'memory', {});
   await adapter.mkdir('/Movies'); await adapter.write('/Movies/Present.txt', Buffer.from('remote fixture'), { overwrite: true });
   const vfs = new VirtualFileSystem(registry); vfs.mount({ path: '/remote', instanceId: 'media', capabilities: {} });
-  const mediaPath = 'Z:\\PortableLibrary\\Movies', identityMap = new IdentityAccessMap();
-  identityMap.addPrefix({ identityRoot: mediaPath, accessRoot: '/remote/Movies', style: 'windows', returnAccess: 'portable runtime fixture' });
+  const mediaPath = path.join(root, 'media', 'Movies'), identityMap = new IdentityAccessMap();
+  identityMap.addPrefix({ identityRoot: mediaPath, accessRoot: '/remote/Movies',
+    style: process.platform === 'win32' ? 'windows' : 'posix', returnAccess: 'runtime content-type ancestry fixture' });
+  registry.registerType('state-local', options => LocalAdapter.open(options));
+  await registry.createInstance('state', 'state-local', { root, writable: true });
+  vfs.mount({ path: '/state', instanceId: 'state', capabilities: {
+    create: true, replace: true, mkdir: true, delete: true, rename: true, atomicReplace: true
+  } });
+  identityMap.addPrefix({ identityRoot: root, accessRoot: '/state',
+    style: process.platform === 'win32' ? 'windows' : 'posix', returnAccess: 'Actual isolated application state.' });
   database = await createPostgresTestDatabase(null, 'lib_config_runtime'); const errors = [];
   const configuration = { UICulture: 'en-US', EnableCaseSensitiveItemIds: true, IsStartupWizardCompleted: true,
-    ContentTypes: [{ Name: mediaPath, Value: 'homevideos' }, { Name: mediaPath + '\\Child', Value: 'tvshows' }, { Name: 'Z:\\PortableLibrary', Value: 'movies' }] };
+    ContentTypes: [{ Name: mediaPath, Value: 'homevideos' }, { Name: path.join(mediaPath, 'Child'), Value: 'tvshows' }, { Name: path.dirname(mediaPath), Value: 'movies' }] };
   runtime = await createRuntime({ database, registry, vfs, identityMap, programDataPath, configurationDirectoryPath, dataPath, metadataPath,
+    ignoreIdentityMap: await knownAncestorIgnoreIdentityMap({ registry, vfs, identityMap, identityRoots: [mediaPath, root] }),
     configuration, serverId: 'library-configuration-runtime', onError: error => errors.push(error) });
   return { runtime, database, root, programDataPath, configurationDirectoryPath, dataPath, mediaPath, configuration, errors };
 }
@@ -58,7 +70,7 @@ test('postgres: virtual library creation binds options before refresh and persis
   let folders = await runtime.libraryConfiguration.getVirtualFolders(true);
   assert.equal(folders.length, 1); assert.equal(folders[0].ItemId, id); assert.equal(folders[0].LibraryOptions, options); assert.deepEqual(folders[0].Locations, [mediaPath]); assert.equal(folders[0].RefreshStatus, 'Idle');
   const rows = await database.rows('BaseItems', { where: { Type: collectionType } }); assert.equal(rows.length, 1); assert.equal(idKey(rows[0].Id), id);
-  assert.deepEqual(configuration.ContentTypes, [{ Name: 'Z:\\PortableLibrary', Value: 'movies' }]);
+  assert.deepEqual(configuration.ContentTypes, [{ Name: path.dirname(mediaPath), Value: 'movies' }]);
   assert.match(await fs.readFile(path.join(state.configurationDirectoryPath, 'system.xml'), 'utf8'), /<Other>preserved<\/Other>/);
   await runtime.libraryConfiguration.addVirtualFolder('Movies', 'movies', { ...defaultLibraryOptions(), PathInfos: [{ Path: mediaPath }] }, false);
   folders = await runtime.libraryConfiguration.getVirtualFolders(true); assert.deepEqual(folders.map(folder => folder.Name), ['Movies', 'Movies2']);
@@ -72,12 +84,16 @@ test('postgres: virtual library creation binds options before refresh and persis
   try { assert.equal((await runtime.libraryConfiguration.getVirtualFolders(true))[0].RefreshStatus, 'Queued'); }
   finally { release.resolve(); await Promise.all([first, second]); runtime.metadata.refresh = refresh; }
   assert.equal((await runtime.libraryConfiguration.getVirtualFolders(true))[0].RefreshStatus, 'Idle');
-  await runtime.libraryConfiguration.addVirtualFolder('Queued', null, defaultLibraryOptions(), true); await new Promise(resolve => setImmediate(resolve));
-  assert.equal(runtime.libraryScanner.capabilities.completeLibraryScan, false); assert.ok(state.errors.some(error => error.code === 'task-unavailable'));
+  const completion = once(runtime.tasks, 'completed', { signal: AbortSignal.timeout(60_000) });
+  await runtime.libraryConfiguration.addVirtualFolder('Queued', null, defaultLibraryOptions(), true);
+  const [{ Result }] = await completion;
+  assert.equal(runtime.libraryScanner.capabilities.completeLibraryScan, true);
+  assert.equal(Result.Status, 'Completed', Result.ErrorMessage);
+  assert.deepEqual(state.errors, []);
 });
 
 test('postgres: runtime close drains admitted library writes before closing their option and metadata dependencies', { skip: !postgresTestConnectionString }, async t => {
-  const { runtime, programDataPath, database } = await setup(t), entered = Promise.withResolvers(), release = Promise.withResolvers();
+  const { runtime, programDataPath, database, errors } = await setup(t), entered = Promise.withResolvers(), release = Promise.withResolvers();
   runtime.libraryConfiguration.sleep = async () => {};
   runtime.libraryConfiguration.fileSystem = { ...fs, writeFile: async (...args) => {
     if (args[0].endsWith('.collection')) { entered.resolve(); await release.promise; } return fs.writeFile(...args);
@@ -89,6 +105,7 @@ test('postgres: runtime close drains admitted library writes before closing thei
     await runtime.libraryOptionsStore.get(path.join(programDataPath, 'root', 'default', 'Admitted'));
   } finally { release.resolve(); await pending; await closing; }
   assert.equal(database.closed, true);
+  assert.deepEqual(errors, [], 'admitted root validation must finish before its metadata dependencies close');
   assert.equal(await fs.readFile(path.join(programDataPath, 'root', 'default', 'Admitted', 'boxsets.collection'), 'utf8'), '');
 });
 

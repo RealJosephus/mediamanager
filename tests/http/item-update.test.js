@@ -275,25 +275,17 @@ async function setup(t, { writable = true, saveLocal = true } = {}) {
     assert.equal(await readFile(path.join(configurationDirectoryPath, 'system.xml'), 'utf8'), systemXml);
   });
 
-  test(`${dialect}: a live content-type edit invalidates an in-flight scan and changes resolver output`, options, async t => {
+  test(`${dialect}: a live content-type edit changes the next queued folder refresh resolver output`, options, async t => {
     const { runtime, database, adapter, user, instanceRoot } = await setup(t);
     await database.delete('BaseItems', { Id: ids.movie }); await database.delete('BaseItems', { Id: ids.hidden });
     await adapter.delete('/movie.mkv'); await adapter.delete('/hidden.mkv'); await adapter.write('/fresh.mkv', Buffer.from('fresh media'));
-    const entered = Promise.withResolvers(), release = Promise.withResolvers();
-    const list = adapter.listPage.bind(adapter); let listingCalls = 0;
-    adapter.listPage = async (...args) => {
-      if (++listingCalls === 1) { entered.resolve(); await release.promise; }
-      return list(...args);
-    };
-    const scan = runtime.folderScanner.scan(ids.folder);
-    try {
-      await entered.promise;
-      await runtime.metadataEditor.updateContentType(ids.folder, 'homevideos', { user });
-    } finally { release.resolve(); }
-    const result = await scan;
-    assert.ok(listingCalls >= 2, 'the stale movie plan must be discarded and enumerated with the edited configuration');
-    assert.equal(result.structurallyComplete, true);
+    await runtime.metadataEditor.updateContentType(ids.folder, 'homevideos', { user });
+    // ProviderManager refreshes the requested Folder, then validates children
+    // using its current content type. There is no separate retrying scan plan.
+    await runtime.metadata.queue(ids.folder, { MetadataRefreshMode: 'None', ImageRefreshMode: 'None' });
+    await runtime.metadata.drain();
     const saved = (await database.rows('BaseItems')).find(item => item.Path === 'Z:\\EditMedia\\fresh.mkv');
+    assert.ok(saved, 'The actual queued Folder validation discovers the new media.');
     assert.equal(saved.Type, 'MediaBrowser.Controller.Entities.Video');
     assert.equal(saved.MediaType, 'Video');
     assert.equal((await readInstanceConfiguration(instanceRoot)).configuration.ContentTypes[0].Value, 'homevideos');

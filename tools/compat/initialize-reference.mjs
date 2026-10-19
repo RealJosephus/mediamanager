@@ -1,46 +1,31 @@
 import { spawn } from 'node:child_process';
 import { once } from 'node:events';
 import { createHash, randomBytes } from 'node:crypto';
-import { lstat, mkdir, readFile, readdir, realpath, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, readdir, realpath, writeFile } from 'node:fs/promises';
+import { fileURLToPath } from 'node:url';
 import net from 'node:net';
 import path from 'node:path';
 import { setTimeout as delay } from 'node:timers/promises';
 import { SqliteDatabase } from '../../src/database/sqlite.js';
-import { verifyBaseline } from './verify-baseline.js';
-import { assertFreshReferenceOutput, captureReferenceInput, verifyReferenceInput } from './reference-inputs.js';
+import { verifyNativeBuild } from '../validation/native-build-inputs.js';
+import { describeFile } from '../validation/inventory.js';
+import { validationExecutable } from '../validation/paths.js';
+import { assertFreshReferenceOutput, captureReferenceInput } from './reference-inputs.js';
 
-const [dotnet, dll, ffmpeg, destination, manifestPath] = process.argv.slice(2);
-if (![dotnet, dll, ffmpeg, destination, manifestPath].every(Boolean)) {
-  throw new Error('Usage: node tools/compat/initialize-reference.mjs DOTNET JELLYFIN_DLL FFMPEG NEW_OUTPUT_DIRECTORY BASELINE_MANIFEST');
-}
+const [destination, ...extra] = process.argv.slice(2);
+if (!destination || extra.length) throw new Error('Usage: node tools/compat/initialize-reference.mjs NEW_OUTPUT_DIRECTORY (requires the same-run native build environment)');
+const build = await verifyNativeBuild();
+const dotnet = await realpath(validationExecutable('dotnet')), ffmpeg = await realpath(validationExecutable('ffmpeg')), dll = build.dll;
 const outputRoot = path.resolve(destination), root = path.join(outputRoot, 'instance');
-for (const executable of [dotnet, dll, ffmpeg]) {
+const executables = [];
+for (const executable of [dotnet, ffmpeg]) {
   if (!path.isAbsolute(executable)) throw new Error('Reference executable paths must be absolute.');
+  const identity = await describeFile(executable);
+  if (!identity.available || identity.kind !== 'file') throw new Error('Reference executable must be an ordinary file.');
+  executables.push(identity);
 }
-const manifestBytes = await readFile(manifestPath);
-const baseline = JSON.parse(manifestBytes);
-const baselineVerified = await verifyBaseline(manifestPath);
-const copiedSource = path.resolve(path.dirname(manifestPath), 'source');
-assertFreshReferenceOutput(outputRoot, [baseline.source, copiedSource]);
-const runtimeBefore = await captureReferenceInput(path.dirname(dll));
-async function verifySourceCopy() {
-  for (const file of baseline.files) {
-    const filename = path.join(copiedSource, file.path);
-    let info;
-    try { info = await lstat(filename); } catch (error) { if (error.code !== 'ENOENT' || !file.deleted) throw error; }
-    if (file.deleted) { if (info) throw new Error('Deleted source copy entry reappeared: ' + file.path); continue; }
-    if (!info?.isFile() || info.isSymbolicLink()) throw new Error('Unsupported source copy object: ' + file.path);
-    const bytes = await readFile(filename);
-    if (bytes.length !== file.size || createHash('sha256').update(bytes).digest('hex') !== file.sha256) {
-      throw new Error('Reference source copy differs from the captured manifest: ' + file.path);
-    }
-  }
-}
-const dllRelative = path.relative(await realpath(copiedSource), await realpath(dll));
-if (dllRelative === '..' || dllRelative.startsWith('..' + path.sep) || path.isAbsolute(dllRelative)) {
-  throw new Error('The native DLL must belong to the verified isolated source copy.');
-}
-await verifySourceCopy();
+assertFreshReferenceOutput(outputRoot, [build.root, path.dirname(dotnet), path.dirname(ffmpeg)]);
+const initializer = await describeFile(fileURLToPath(import.meta.url));
 await mkdir(root, { recursive: true });
 for (const name of ['data', 'config', 'cache', 'log']) await mkdir(path.join(root, name));
 const listener = net.createServer();
@@ -113,17 +98,19 @@ try {
     await Promise.race([ended, new Promise((_, reject) => { timer = setTimeout(() => reject(new Error('Reference shutdown timed out.')), 10000); })]);
   } finally { clearTimeout(timer); }
   if (child.exitCode !== 0) throw new Error(`Reference shutdown was unsuccessful: ${child.exitCode}/${child.signalCode}`);
-  await verifyBaseline(manifestPath);
-  await verifySourceCopy();
-  await verifyReferenceInput(path.dirname(dll), runtimeBefore);
-  if (!(await readFile(manifestPath)).equals(manifestBytes)) throw new Error('Reference manifest changed during initialization.');
+  const after = await verifyNativeBuild();
+  if (after.identitySha256 !== build.identitySha256) throw new Error('Native build inputs changed during initialization.');
+  for (const executable of executables) {
+    if ((await describeFile(executable.filename)).sha256 !== executable.sha256) throw new Error('Initialization executable changed.');
+  }
   const filename = path.join(root, 'data', 'data', 'jellyfin.db');
   const database = new SqliteDatabase(filename, { readOnly: true, requireMigrationHistory: true });
   try {
-    report = { createdAt: new Date().toISOString(), root, port, base, initializedFromEmpty: true,
-      baseline: { head: baseline.head, contentDigest: baseline.contentDigest, files: baseline.files.length,
-        manifestSha256: createHash('sha256').update(manifestBytes).digest('hex'), verified: baselineVerified, copiedSource,
-        sourceCopyVerifiedBeforeAndAfter: true, runtimeEntriesSha256: runtimeBefore.entriesSha256, runtimeUnchanged: true },
+    report = { schemaVersion: 1, createdAt: new Date().toISOString(), root, port, base, initializedFromEmpty: true, credentialsRecorded: false,
+      initializer, executables,
+      build: { root: build.root, identitySha256: build.identitySha256,
+        source: build.receipt.source, commit: build.receipt.commit, runId: build.receipt.runId, runAttempt: build.receipt.runAttempt,
+        runtimeEntriesSha256: build.runtimeEntriesSha256, runtimeUnchanged: true },
       dotnet, dll, ffmpeg, serverId: info.Id, version: info.Version, observations,
       database: { filename, sha256: createHash('sha256').update(await readFile(filename)).digest('hex'),
         tables: database.schema.tables.length, migrationHistory: database.schema.history.length },
@@ -133,6 +120,7 @@ try {
       process: { pid: child.pid, exitCode: child.exitCode, signalCode: child.signalCode, stopped: true },
       limitations: ['Empty native instance; no full media library or client acceptance.'] };
   } finally { database.close(); }
+  report.instanceEntriesSha256 = (await captureReferenceInput(root)).entriesSha256;
 } catch (error) { failure = error; }
 finally {
   if (child.pid && child.exitCode === null && child.signalCode === null) { child.kill(); await ended; }

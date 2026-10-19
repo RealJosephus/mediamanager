@@ -112,7 +112,7 @@ async function setup(t, collectionType, { writable = true, global = false } = {}
   await runtime.users.updatePolicy(created.Id, { ...(await runtime.users.getUser(created.Id)).Policy, IsAdministrator: true });
   const login = await runtime.authentication.login({ Username: 'ScanAdmin', Pw: 'scan-password' }, { Client: 'ScanTest', Device: 'Fixture', DeviceId: 'scan-test', Version: '1' });
   await new Promise(resolve => runtime.server.listen(0, '127.0.0.1', resolve));
-  const post = query => fetch(`http://127.0.0.1:${runtime.server.address().port}/Items/${ids.folder}/Refresh?${query}`, {
+  const post = (query = '', pathname = `/Items/${ids.folder}/Refresh`) => fetch(`http://127.0.0.1:${runtime.server.address().port}${pathname}?${query}`, {
     method: 'POST', headers: { Authorization: `MediaBrowser Token="${login.AccessToken}", Client="ScanTest", Device="Fixture", DeviceId="scan-test", Version="1"` }
   });
   const generate = async (audio, { dvd = false, bluray = false } = {}) => {
@@ -139,6 +139,79 @@ async function setup(t, collectionType, { writable = true, global = false } = {}
 {
   const dialect = 'postgres';
   const options = { skip: !process.env.MEDIAMANAGER_TEST_POSTGRES };
+  test(`${dialect}: queued None refresh rebuilds Movie and Folder identities when directory contents change`, options, async t => {
+    const { runtime, database, adapter, vfs, post, errors, generate } = await setup(t, 'movies');
+    const bytes = await generate(false);
+    const directoryPath = identityRoot + '\\Dynamic';
+    const moviePath = directoryPath + '\\Story (2024).mkv';
+    await adapter.mkdir('/Dynamic');
+    await adapter.write('/Dynamic/Story (2024).mkv', bytes);
+    const events = [];
+    for (const kind of ['ItemAdded', 'ItemRemoved']) runtime.library.on(kind, event => {
+      events.push({ kind, id: event.Item.Id });
+    });
+    const refresh = async () => {
+      assert.equal((await post('metadataRefreshMode=None&imageRefreshMode=None')).status, 204);
+      await runtime.metadata.drain();
+      assert.deepEqual(errors, []);
+      assert.deepEqual(await read(vfs, '/media/Dynamic/Story (2024).mkv'), bytes);
+      return database.rows('BaseItems');
+    };
+    const curate = async (id, label) => {
+      // These values exist only in the database. No NFO carries them into a
+      // newly resolved item when native validation deletes the old identity.
+      await database.update('BaseItems', { Id: id }, { Name: label, Overview: label });
+      runtime.library.itemCreation.unregisterItem(id);
+      const cold = await runtime.library.getItemRecord(id);
+      assert.equal(cold.Name, label); assert.equal(cold.Overview, label);
+    };
+    const assertRecreated = (id, label) => {
+      const removed = events.findIndex(event => event.kind === 'ItemRemoved' && event.id === id);
+      const added = events.findIndex(event => event.kind === 'ItemAdded' && event.id === id);
+      assert.ok(removed >= 0, label + ': old item was removed');
+      assert.ok(added > removed, label + ': the same deterministic identity was recreated');
+    };
+    const firstRows = await refresh();
+    const first = firstRows.find(item => item.Path === moviePath);
+    assert.ok(first); assert.equal(first.Type, 'MediaBrowser.Controller.Entities.Movies.Movie');
+    assert.equal(first.ParentId, ids.folder); assert.equal(first.IsInMixedFolder, false);
+    assert.equal(firstRows.some(item => item.Path === directoryPath), false);
+    await curate(first.Id, 'Curated before expansion');
+
+    events.length = 0;
+    await adapter.write('/Dynamic/Other (2023).mkv', bytes);
+    const expandedRows = await refresh();
+    const folder = expandedRows.find(item => item.Path === directoryPath);
+    const expanded = expandedRows.find(item => item.Path === moviePath);
+    const second = expandedRows.find(item => item.Path === directoryPath + '\\Other (2023).mkv');
+    assert.ok(folder); assert.equal(folder.Type, 'MediaBrowser.Controller.Entities.Folder');
+    assert.equal(folder.ParentId, ids.folder);
+    assert.ok(expanded); assert.ok(second);
+    assert.equal(expanded.Id, first.Id); assert.equal(expanded.ParentId, folder.Id);
+    assert.equal(second.ParentId, folder.Id); assert.equal(expanded.IsInMixedFolder, true);
+    assert.notEqual(expanded.Name, 'Curated before expansion'); assert.equal(expanded.Overview, null);
+    assertRecreated(first.Id, 'expansion');
+    assert.ok(events.some(event => event.kind === 'ItemAdded' && event.id === folder.Id));
+    assert.deepEqual(await read(vfs, '/media/Dynamic/Other (2023).mkv'), bytes);
+    await curate(first.Id, 'Curated before collapse');
+
+    events.length = 0;
+    await adapter.delete('/Dynamic/Other (2023).mkv');
+    const collapsedRows = await refresh();
+    const collapsed = collapsedRows.find(item => item.Path === moviePath);
+    assert.ok(collapsed); assert.equal(collapsed.Id, first.Id);
+    assert.equal(collapsed.ParentId, ids.folder); assert.equal(collapsed.IsInMixedFolder, false);
+    assert.notEqual(collapsed.Name, 'Curated before collapse'); assert.equal(collapsed.Overview, null);
+    assert.equal(collapsedRows.some(item => item.Id === folder.Id || item.Id === second.Id), false);
+    assertRecreated(first.Id, 'collapse');
+    assert.ok(events.some(event => event.kind === 'ItemRemoved' && event.id === folder.Id));
+    assert.ok(events.some(event => event.kind === 'ItemRemoved' && event.id === second.Id));
+    runtime.library.itemCreation.unregisterItem(first.Id);
+    const cold = await runtime.library.getItemRecord(first.Id);
+    assert.equal(cold.ParentId, ids.folder); assert.equal(cold.Overview, null);
+    assert.notEqual(cold.Name, 'Curated before collapse');
+  });
+
   for (const collectionType of ['movies', 'tvshows']) test(`${dialect}: ${collectionType} disc placeholders refresh NFO without probing media`, options, async t => {
     const { runtime, database, adapter, errors, user } = await setup(t, collectionType);
     const tv = collectionType === 'tvshows', directory = tv ? '/Stub Show/Season 01' : '';
@@ -156,8 +229,7 @@ async function setup(t, collectionType, { writable = true, global = false } = {}
     }
     runtime.probe.probe = runtime.probe.probeRemote = async () => { throw new Error('A placeholder must not reach a media prober.'); };
     for (const mode of ['Default', 'FullRefresh']) {
-      const receipt = await runtime.folderScanner.scan(ids.folder, { MetadataRefreshMode: mode, ImageRefreshMode: 'None' });
-      assert.equal(receipt.structurallyComplete, true); assert.equal(receipt.metadataComplete, true, JSON.stringify(receipt.metadata));
+      await runtime.metadata.queue(ids.folder, { MetadataRefreshMode: mode, ImageRefreshMode: 'None' });
       assert.deepEqual(errors, []);
       for (const entry of files) {
         const identityPath = identityRoot + entry.path.replaceAll('/', '\\');
@@ -177,8 +249,7 @@ async function setup(t, collectionType, { writable = true, global = false } = {}
       }
     }
     for (const entry of files) await adapter.delete(entry.path);
-    const removed = await runtime.folderScanner.scan(ids.folder, { MetadataRefreshMode: 'Default', ImageRefreshMode: 'None' });
-    assert.equal(removed.structurallyComplete, true); assert.equal(removed.metadataComplete, true);
+    await runtime.metadata.queue(ids.folder, { MetadataRefreshMode: 'Default', ImageRefreshMode: 'None' });
     for (const entry of files) assert.deepEqual(await database.rows('BaseItems', { where: { Id: entry.id } }), []);
     assert.deepEqual(errors, []);
   });
@@ -210,8 +281,7 @@ async function setup(t, collectionType, { writable = true, global = false } = {}
       return realProbe(bridge, source, options);
     };
     for (const mode of ['Default', 'FullRefresh']) {
-      const receipt = await runtime.folderScanner.scan(ids.folder, { MetadataRefreshMode: mode, ImageRefreshMode: 'None' });
-      assert.equal(receipt.structurallyComplete, true); assert.equal(receipt.metadataComplete, true, JSON.stringify(receipt.metadata));
+      await runtime.metadata.queue(ids.folder, { MetadataRefreshMode: mode, ImageRefreshMode: 'None' });
       assert.deepEqual(errors, []);
       for (const entry of files) {
         const identityPath = identityRoot + entry.path.replaceAll('/', '\\');
@@ -240,8 +310,7 @@ async function setup(t, collectionType, { writable = true, global = false } = {}
     }
     assert.ok(files.every(entry => probedPaths.includes('/media' + entry.path)));
     for (const entry of files) await adapter.delete(entry.path);
-    const removed = await runtime.folderScanner.scan(ids.folder, { MetadataRefreshMode: 'Default', ImageRefreshMode: 'None' });
-    assert.equal(removed.structurallyComplete, true); assert.equal(removed.metadataComplete, true);
+    await runtime.metadata.queue(ids.folder, { MetadataRefreshMode: 'Default', ImageRefreshMode: 'None' });
     for (const entry of files) {
       assert.deepEqual(await database.rows('BaseItems', { where: { Id: entry.id } }), []);
       assert.deepEqual(await database.rows('MediaStreamInfos', { where: { ItemId: entry.id } }), []);
@@ -272,8 +341,7 @@ async function setup(t, collectionType, { writable = true, global = false } = {}
     let movieId, extraId;
     for (const mode of ['Default', 'FullRefresh']) {
       probes.length = 0;
-      const receipt = await runtime.folderScanner.scan(ids.folder, { MetadataRefreshMode: mode, ImageRefreshMode: 'None' });
-      assert.equal(receipt.structurallyComplete, true); assert.equal(receipt.metadataComplete, true, JSON.stringify(receipt.metadata));
+      await runtime.metadata.queue(ids.folder, { MetadataRefreshMode: mode, ImageRefreshMode: 'None' });
       assert.deepEqual(errors, []);
       const [movie] = await database.rows('BaseItems', { where: { Path: identityRoot + '\\DVD Movie' } });
       assert.ok(movie); assert.equal(movie.Type, 'MediaBrowser.Controller.Entities.Movies.Movie');
@@ -305,8 +373,7 @@ async function setup(t, collectionType, { writable = true, global = false } = {}
       assert.deepEqual(removedIds, [movieId], 'Owned extras are persistence children, not logical Folder children.');
     } else await adapter.delete('/DVD Movie', { recursive: true });
     await assert.rejects(vfs.stat('/media/DVD Movie'), { code: 'not-found' });
-    const removed = await runtime.folderScanner.scan(ids.folder, { MetadataRefreshMode: 'Default', ImageRefreshMode: 'None' });
-    assert.equal(removed.structurallyComplete, true); assert.equal(removed.metadataComplete, true);
+    await runtime.metadata.queue(ids.folder, { MetadataRefreshMode: 'Default', ImageRefreshMode: 'None' });
     for (const Id of [movieId, extraId]) {
       assert.deepEqual(await database.rows('BaseItems', { where: { Id } }), []);
       assert.deepEqual(await database.rows('MediaStreamInfos', { where: { ItemId: Id } }), []);
@@ -324,8 +391,7 @@ async function setup(t, collectionType, { writable = true, global = false } = {}
     const identityPath = identityRoot + directory.replaceAll('/', '\\');
     let episodeId;
     for (const mode of ['Default', 'FullRefresh']) {
-      const receipt = await runtime.folderScanner.scan(ids.folder, { MetadataRefreshMode: mode, ImageRefreshMode: 'None' });
-      assert.equal(receipt.structurallyComplete, true); assert.equal(receipt.metadataComplete, true, JSON.stringify(receipt.metadata));
+      await runtime.metadata.queue(ids.folder, { MetadataRefreshMode: mode, ImageRefreshMode: 'None' });
       assert.deepEqual(errors, []);
       const [episode] = await database.rows('BaseItems', { where: { Path: identityPath } });
       const [season] = await database.rows('BaseItems', { where: { Path: identityRoot + '\\DVD Show\\Season 1' } });
@@ -347,8 +413,7 @@ async function setup(t, collectionType, { writable = true, global = false } = {}
       episodeId = episode.Id;
     }
     await adapter.delete(directory);
-    const removed = await runtime.folderScanner.scan(ids.folder, { MetadataRefreshMode: 'Default', ImageRefreshMode: 'None' });
-    assert.equal(removed.structurallyComplete, true); assert.equal(removed.metadataComplete, true);
+    await runtime.metadata.queue(ids.folder, { MetadataRefreshMode: 'Default', ImageRefreshMode: 'None' });
     assert.deepEqual(await database.rows('BaseItems', { where: { Id: episodeId } }), []);
     assert.deepEqual(await database.rows('MediaStreamInfos', { where: { ItemId: episodeId } }), []);
     assert.deepEqual(errors, []);
@@ -378,8 +443,7 @@ async function setup(t, collectionType, { writable = true, global = false } = {}
     let mediaId, extraId;
     for (const mode of ['Default', 'FullRefresh']) {
       probes.length = 0;
-      const receipt = await runtime.folderScanner.scan(ids.folder, { MetadataRefreshMode: mode, ImageRefreshMode: 'None' });
-      assert.equal(receipt.structurallyComplete, true); assert.equal(receipt.metadataComplete, true, JSON.stringify(receipt.metadata));
+      await runtime.metadata.queue(ids.folder, { MetadataRefreshMode: mode, ImageRefreshMode: 'None' });
       assert.deepEqual(errors, []);
       const [media] = await database.rows('BaseItems', { where: { Path: identityPath } });
       assert.ok(media); assert.equal(media.IsFolder, false); assert.equal(media.Name, title);
@@ -414,8 +478,7 @@ async function setup(t, collectionType, { writable = true, global = false } = {}
     if (tv) await adapter.delete(directory, { recursive: true });
     else await runtime.library.itemCreation.withItem(mediaId, item => runtime.library.deleteItem(item, { DeleteFileLocation: true }));
     await assert.rejects(vfs.stat('/media' + directory), { code: 'not-found' });
-    const removed = await runtime.folderScanner.scan(ids.folder, { MetadataRefreshMode: 'Default', ImageRefreshMode: 'None' });
-    assert.equal(removed.structurallyComplete, true); assert.equal(removed.metadataComplete, true);
+    await runtime.metadata.queue(ids.folder, { MetadataRefreshMode: 'Default', ImageRefreshMode: 'None' });
     for (const Id of [mediaId, extraId].filter(Boolean)) {
       assert.deepEqual(await database.rows('BaseItems', { where: { Id } }), []);
       assert.deepEqual(await database.rows('MediaStreamInfos', { where: { ItemId: Id } }), []);
@@ -449,8 +512,7 @@ async function setup(t, collectionType, { writable = true, global = false } = {}
     await adapter.write('/Remote (2024).nfo', nfo('movie', 'Remote movie'));
     const probeRemote = runtime.probe.probeRemote.bind(runtime.probe);
     runtime.probe.probeRemote = async (...args) => { remoteProbes++; return probeRemote(...args); };
-    const receipt = await runtime.folderScanner.scan(ids.folder, { MetadataRefreshMode: 'Default', ImageRefreshMode: 'None' });
-    assert.equal(receipt.structurallyComplete, true); assert.equal(receipt.metadataComplete, true, JSON.stringify(receipt.metadata));
+    await runtime.metadata.queue(ids.folder, { MetadataRefreshMode: 'Default', ImageRefreshMode: 'None' });
     assert.deepEqual(errors, []); assert.equal(requests, 0); assert.equal(remoteProbes, 0);
     const [movie] = await database.rows('BaseItems', { where: { Path: identityRoot + '\\Remote (2024).strm' } });
     assert.equal(movie.Type, 'MediaBrowser.Controller.Entities.Movies.Movie'); assert.equal(movie.Name, 'Remote movie');
@@ -466,14 +528,12 @@ async function setup(t, collectionType, { writable = true, global = false } = {}
     await runtime.playback.sources(await runtime.library.getItemRecord(movie.Id), user);
     assert.equal(remoteProbes, 2, 'an existing video stream does not suppress shortcut playback probing');
     const count = requests;
-    const repeated = await runtime.folderScanner.scan(ids.folder, { MetadataRefreshMode: 'FullRefresh', ImageRefreshMode: 'None' });
-    assert.equal(repeated.metadataComplete, true, JSON.stringify(repeated.metadata));
+    await runtime.metadata.queue(ids.folder, { MetadataRefreshMode: 'FullRefresh', ImageRefreshMode: 'None' });
     assert.equal(requests, count); assert.equal(remoteProbes, 2);
     assert.ok((await database.rows('MediaStreamInfos', { where: { ItemId: movie.Id } })).some(stream => stream.Codec === 'ffv1'));
     assert.equal((await runtime.library.getItemRecord(movie.Id)).ShortcutPath, target);
     await adapter.delete('/Remote (2024).strm');
-    const removed = await runtime.folderScanner.scan(ids.folder, { MetadataRefreshMode: 'Default', ImageRefreshMode: 'None' });
-    assert.equal(removed.structurallyComplete, true); assert.equal(removed.metadataComplete, true);
+    await runtime.metadata.queue(ids.folder, { MetadataRefreshMode: 'Default', ImageRefreshMode: 'None' });
     assert.deepEqual(await database.rows('BaseItems', { where: { Id: movie.Id } }), []);
     assert.deepEqual(await database.rows('MediaStreamInfos', { where: { ItemId: movie.Id } }), []);
     assert.equal(requests, count); assert.deepEqual(errors, []);
@@ -497,9 +557,11 @@ async function setup(t, collectionType, { writable = true, global = false } = {}
       runtime.probe.probeRemote = async () => { throw new Error('An ordinary music scan must not probe a remote shortcut.'); };
     }
     const calls = []; const refresh = runtime.metadata.refresh.bind(runtime.metadata);
-    runtime.metadata.refresh = async (Id, options) => { calls.push({ Id, options }); return refresh(Id, options); };
-    const receipt = await runtime.folderScanner.scan(ids.folder, { MetadataRefreshMode: 'Default', ImageRefreshMode: 'None' });
-    assert.equal(receipt.structurallyComplete, true); assert.equal(receipt.metadataComplete, true, JSON.stringify(receipt.metadata));
+    runtime.metadata.refresh = async (reference, options) => {
+      calls.push({ Id: typeof reference === 'string' ? reference : reference.Id, options });
+      return refresh(reference, options);
+    };
+    await runtime.metadata.queue(ids.folder, { MetadataRefreshMode: 'Default', ImageRefreshMode: 'None' });
     assert.deepEqual(errors, []);
     const media = (await database.rows('BaseItems')).find(item => item.Path === identityRoot + mediaPath.replaceAll('/', '\\'));
     assert.ok(media); assert.ok(media.RunTimeTicks > 0n);
@@ -527,7 +589,7 @@ async function setup(t, collectionType, { writable = true, global = false } = {}
     const firstCallCount = calls.length;
     await adapter.write(sidecar, nfo(kind, 'Queued full title', true));
     assert.equal((await post('metadataRefreshMode=FullRefresh')).status, 204);
-    await runtime.folderScanner.whenIdle();
+    await runtime.metadata.drain();
     assert.deepEqual(errors, []);
     const updated = (await database.rows('BaseItems')).find(item => item.Path === (collectionType === 'music' ? identityRoot + '\\Artist\\Album' : media.Path));
     assert.equal(updated.Name, 'Queued full title');
@@ -540,17 +602,16 @@ async function setup(t, collectionType, { writable = true, global = false } = {}
       assert.equal(savedShortcut.ShortcutPath, shortcutTarget);
       assert.equal(savedShortcut.ParentId, media.ParentId);
       await adapter.delete(shortcutPath);
-      const removed = await runtime.folderScanner.scan(ids.folder, { MetadataRefreshMode: 'Default', ImageRefreshMode: 'None' });
-      assert.equal(removed.structurallyComplete, true); assert.equal(removed.metadataComplete, true);
+      await runtime.metadata.queue(ids.folder, { MetadataRefreshMode: 'Default', ImageRefreshMode: 'None' });
       assert.deepEqual(errors, []);
       assert.deepEqual(await database.rows('BaseItems', { where: { Id: shortcut.Id } }), []);
       assert.deepEqual(await database.rows('AncestorIds', { where: { ItemId: shortcut.Id } }), []);
     }
-    assert.equal(runtime.libraryScanner.capabilities.completeLibraryScan, false);
+    assert.equal(runtime.libraryScanner.capabilities.completeLibraryScan, true);
   });
 
   test(`${dialect}: global Movie scan connects NFO, probe, collections and missing-media cleanup`, options, async t => {
-    const { runtime, database, adapter, vfs, errors, generate, programDataPath, user } = await setup(t, 'movies', { global: true });
+    const { runtime, database, adapter, vfs, post, errors, generate, programDataPath, user } = await setup(t, 'movies', { global: true });
     const output = validationOutputRoot(); await mkdir(output, { recursive: true });
     const evidence = await mkdtemp(path.join(output, 'movie-global-'));
     const json = value => JSON.stringify(value, (_, entry) => typeof entry === 'bigint' ? entry.toString() : entry, 2) + '\n';
@@ -597,7 +658,10 @@ async function setup(t, collectionType, { writable = true, global = false } = {}
       scanPhase = phase;
       let failure;
       try {
-        await runtime.libraryScanner.runCompleteScan();
+        const completion = once(runtime.tasks, 'completed', { signal: AbortSignal.timeout(60_000) });
+        assert.equal((await post('', '/Library/Refresh')).status, 204);
+        const [{ Result }] = await completion;
+        assert.equal(Result.Status, 'Completed', Result.ErrorMessage);
         // Collection membership queues its actual metadata/XML save. Await the
         // owning queue before observing the persisted output, without replacing it.
         await runtime.metadata.drain();
@@ -704,7 +768,7 @@ async function setup(t, collectionType, { writable = true, global = false } = {}
     // still stop exposing the removed movie and retain the surviving one.
     assert.equal((await assertCollection(deleted, [secondPath])).Id, collection.Id);
     assert.deepEqual(await read(vfs, '/media/Second.mkv'), bytes);
-    assert.equal(runtime.libraryScanner.capabilities.completeLibraryScan, false);
+    assert.equal(runtime.libraryScanner.capabilities.completeLibraryScan, true);
   });
 
   test(`${dialect}: read-only scan writers reject before probe or first metadata commit and retain structural state`, options, async t => {
@@ -712,10 +776,9 @@ async function setup(t, collectionType, { writable = true, global = false } = {}
     await adapter.write('/Feature.mkv', await generate(false));
     let probes = 0; const refresh = runtime.probe.refreshMetadata.bind(runtime.probe);
     runtime.probe.refreshMetadata = (...args) => { probes++; return refresh(...args); };
-    const receipt = await runtime.folderScanner.scan(ids.folder, { MetadataRefreshMode: 'FullRefresh', ImageRefreshMode: 'None', ForceSave: true });
-    assert.equal(receipt.structurallyComplete, true); assert.equal(receipt.metadataComplete, false); assert.equal(probes, 0);
-    assert.equal(receipt.metadata.children.errors.length, 1); assert.equal(errors.length, 1);
-    assert.equal(receipt.metadata.children.errors[0].code, 'not-supported');
+    await runtime.metadata.queue(ids.folder, { MetadataRefreshMode: 'FullRefresh', ImageRefreshMode: 'None', ForceSave: true });
+    assert.equal(probes, 0); assert.equal(errors.length, 1);
+    assert.equal(errors[0].code, 'not-supported');
     const media = (await database.rows('BaseItems')).find(item => item.Path === identityRoot + '\\Feature.mkv');
     assert.ok(media); assert.equal(media.RunTimeTicks, null); assert.equal(media.DateLastRefreshed, null);
     assert.equal((await database.rows('MediaStreamInfos', { where: { ItemId: media.Id } })).length, 0);
@@ -725,7 +788,7 @@ async function setup(t, collectionType, { writable = true, global = false } = {}
     const { runtime, database, adapter, vfs, errors, generate } = await setup(t, 'movies');
     await adapter.write('/Feature.mkv', await generate(false));
     await adapter.write('/Feature.nfo', nfo('movie', 'Original title'));
-    await runtime.folderScanner.scan(ids.folder, { MetadataRefreshMode: 'Default', ImageRefreshMode: 'None' });
+    await runtime.metadata.queue(ids.folder, { MetadataRefreshMode: 'Default', ImageRefreshMode: 'None' });
     const media = (await database.rows('BaseItems')).find(item => item.Path === identityRoot + '\\Feature.mkv');
     const before = nfo('movie', 'Rejected title', true); await adapter.write('/Feature.nfo', before);
     const update = database.update.bind(database);
@@ -733,9 +796,9 @@ async function setup(t, collectionType, { writable = true, global = false } = {}
       if (args[0] === 'BaseItems' && args[1].Id === media.Id && args[2].Name === 'Rejected title') throw new Error('Injected final metadata persistence failure');
       return update(...args);
     };
-    const receipt = await runtime.folderScanner.scan(ids.folder, { MetadataRefreshMode: 'FullRefresh', ImageRefreshMode: 'None', ForceSave: true });
-    assert.equal(receipt.structurallyComplete, true); assert.equal(receipt.metadataComplete, false);
-    assert.match(receipt.metadata.children.errors[0].message, /Injected final metadata persistence failure/u);
+    await runtime.metadata.queue(ids.folder, { MetadataRefreshMode: 'FullRefresh', ImageRefreshMode: 'None', ForceSave: true });
+    assert.equal(errors.length, 1);
+    assert.match(errors[0].message, /Injected final metadata persistence failure/u);
     const savedXml = (await read(vfs, '/media/Feature.nfo')).toString();
     assert.match(savedXml, /<title>Rejected title<\/title>/u);
     assert.match(savedXml, /<streamdetails>/u);
@@ -745,7 +808,7 @@ async function setup(t, collectionType, { writable = true, global = false } = {}
     assert.equal(errors.length, 1);
   });
 
-  test(`${dialect}: failure after metadata commit retains the matching NFO and reports incomplete traversal`, options, async t => {
+  test(`${dialect}: failure after metadata commit retains the matching NFO and reports the failed child`, options, async t => {
     const { runtime, database, adapter, vfs, errors, generate } = await setup(t, 'movies');
     await adapter.write('/Feature.mkv', await generate(false));
     await adapter.write('/Feature.nfo', nfo('movie', 'Committed title'));
@@ -754,13 +817,12 @@ async function setup(t, collectionType, { writable = true, global = false } = {}
       if (item.Type === 'Movie') throw new Error('Injected post-commit user data failure');
       return reattach(store, item, options);
     };
-    const receipt = await runtime.folderScanner.scan(ids.folder, { MetadataRefreshMode: 'FullRefresh', ImageRefreshMode: 'None', ForceSave: true });
-    assert.equal(receipt.metadataComplete, false);
+    await runtime.metadata.queue(ids.folder, { MetadataRefreshMode: 'FullRefresh', ImageRefreshMode: 'None', ForceSave: true });
     const media = (await database.rows('BaseItems')).find(item => item.Path === identityRoot + '\\Feature.mkv');
     // FullRefresh without replacement fills missing data but retains the resolved name.
     assert.equal(media.Name, 'Feature'); assert.equal(media.Overview, 'Stored sidecar overview'); assert.ok(media.RunTimeTicks > 0n);
     const xml = (await read(vfs, '/media/Feature.nfo')).toString();
     assert.match(xml, /<title>Feature<\/title>/u); assert.match(xml, /<streamdetails>/u);
-    assert.equal(errors.length, 1); assert.match(receipt.metadata.children.errors[0].message, /Injected post-commit user data failure/u);
+    assert.equal(errors.length, 1); assert.match(errors[0].message, /Injected post-commit user data failure/u);
   });
 }

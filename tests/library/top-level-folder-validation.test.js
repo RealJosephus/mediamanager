@@ -162,7 +162,7 @@ for (const dialect of ['postgres']) test(`${dialect}: top-level validation persi
     assert.equal(runtime.libraryScanner.capabilities.reconcilesTopLevelConfiguration, true);
     assert.equal(runtime.libraryScanner.capabilities.runsMetadataProbeRefresh, true);
     assert.equal(runtime.libraryScanner.capabilities.runsPostScanTasks, true);
-    assert.equal(runtime.libraryScanner.capabilities.completeLibraryScan, false);
+    assert.equal(runtime.libraryScanner.capabilities.completeLibraryScan, true);
 
     await runtime.libraryScanLifecycle.validateTopLibraryFolders();
     let userRoots = await rowsByType(database, 'MediaBrowser.Controller.Entities.UserRootFolder');

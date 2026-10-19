@@ -10,12 +10,12 @@ import { nativeDate } from '../../src/sessions/user-data.js';
 import { tableDefinition, quoteIdentifier } from '../../src/database/model.js';
 import { PostgresDatabase } from '../../src/database/postgres.js';
 import { DomainStore } from '../../src/database/domain-store.js';
-import { FolderScanService, LibraryService, DirectoryItemResolverPipeline } from '../../src/library/index.js';
-import { ProviderRefreshService } from '../../src/metadata/provider-refresh-service.js';
+import { LibraryService, DirectoryItemResolverPipeline } from '../../src/library/index.js';
 import { IdentityAccessMap, StorageRegistry, VirtualFileSystem } from '../../src/storage/index.js';
 import { MemoryStorageAdapter } from '../../src/storage/testing/memory-adapter.js';
 import { knownAncestorIgnoreRule } from './ignore-namespace-fixture.js';
 import { createResolvedItemLifecycleFixture } from './resolved-item-lifecycle-fixture.js';
+import { createFolderValidationScanFixture } from '../helpers/folder-validation-scan-fixture.js';
 
 const input = parseLosslessJson(await readFile(new URL('./fixtures/resolved-item-update/input.json', import.meta.url), 'utf8'));
 const native = parseLosslessJson(await readFile(new URL('./fixtures/resolved-item-update/native.json', import.meta.url), 'utf8'));
@@ -25,6 +25,18 @@ const programDataPath = 'C:\\ProgramData\\MediaManager';
 const rootPath = 'Z:\\Library';
 const movieType = 'MediaBrowser.Controller.Entities.Movies.Movie';
 const date = '2026-10-01 01:02:03.1234567';
+const alternatePaths = new Map(['A', 'B', 'b', 'P'].map(value => [value, rootPath + '\\' + value + '.mkv']));
+alternatePaths.set('Z:\\alternate.mkv', rootPath + '\\alternate.mkv');
+function lifecycleVersionPaths(values) {
+  // The sealed UpdateFromResolvedItem controls use in-memory string tokens.
+  // Actual saves also discover versions. Supply absent files in this fixture's
+  // declared VFS namespace, preserving each token's case, order and null value.
+  return values?.map(value => {
+    if (value == null || value === '') return value;
+    assert.ok(alternatePaths.has(value), 'Undeclared alternate path control: ' + value);
+    return alternatePaths.get(value);
+  }) ?? values;
+}
 const encode = value => JSON.stringify(value, (_, entry) => typeof entry === 'bigint' ? JSON.rawJSON(entry.toString()) : entry);
 const blank = table => Object.fromEntries(tableDefinition(table).columns.filter(column => !column.generated)
   .map(column => [column.name, column.nullable ? null : column.clrType === 'bool' ? false : column.type === 'TEXT' ? ''
@@ -35,11 +47,11 @@ async function fixture(t, dialect, sample, { wrapResolvedItemLifecycle, configur
   const schema = 'resolved_scan_' + randomUUID().replaceAll('-', '').slice(0, 16);
   const database = await PostgresDatabase.open({ connectionString: process.env.MEDIAMANAGER_TEST_POSTGRES, schema, create: true });
   const store = new DomainStore(database);
-  const library = new LibraryService({fileSystem: testFileSystem,  store, serverId: 'resolved-item-scan' });
+  const library = new LibraryService({fileSystem: testFileSystem,  store, serverId: 'resolved-item-scan', programDataPath });
   const registry = new StorageRegistry();
-  let scanner, lifecycleFixture;
+  let validationFixture, lifecycleFixture;
   t.after(async () => {
-    await scanner?.close(); await lifecycleFixture?.close(); await library.close(); await registry.close();
+    await validationFixture?.close(); await lifecycleFixture?.close(); await library.close(); await registry.close();
     if (dialect === 'postgres') {
       await database.client.query(`DROP SCHEMA ${quoteIdentifier(schema)} CASCADE`);
       await database.client.query(`DROP SCHEMA ${quoteIdentifier(database.controlSchema)} CASCADE`);
@@ -52,7 +64,8 @@ async function fixture(t, dialect, sample, { wrapResolvedItemLifecycle, configur
   vfs.mount({ path: '/library', instanceId: 'library', capabilities: { create: true, replace: true, delete: true } });
   const identityMap = new IdentityAccessMap();
   identityMap.addPrefix({ identityRoot: rootPath, accessRoot: '/library', style: 'windows', returnAccess: 'Isolated resolved-item scan control' });
-  lifecycleFixture = await createResolvedItemLifecycleFixture({ store, library, vfs, identityMap,
+  const ignoreRule = await knownAncestorIgnoreRule({ registry, vfs, identityMap, identityRoots: [rootPath] });
+  lifecycleFixture = await createResolvedItemLifecycleFixture({ store, library, vfs, identityMap, ignoreRule,
     now: () => '2026-10-05T00:00:00.000Z', logger });
   configureLifecycle?.(lifecycleFixture);
   const resolvedItemLifecycle = wrapResolvedItemLifecycle
@@ -81,13 +94,14 @@ async function fixture(t, dialect, sample, { wrapResolvedItemLifecycle, configur
         columns: { IsInMixedFolder: sample.resolved.IsInMixedFolder }, initialColumns: { ProductionYear: sample.resolved.ProductionYear },
         data: { VideoType: sample.resolved.VideoType, AdditionalParts: sample.resolved.AdditionalParts,
           LocalAlternateVersions: sample.resolved.LocalAlternateVersions, Overview: 'Do not import', Tags: ['Do not import'], UnknownPlugin: 'Do not overwrite' } } }) };
-  scanner = new FolderScanService({ store, library, vfs, identityMap,
-    ignoreRule: await knownAncestorIgnoreRule({ registry, vfs, identityMap, identityRoots: [rootPath] }),
-    refreshes: new ProviderRefreshService(), programDataPath,
+  validationFixture = createFolderValidationScanFixture({ store, library, vfs, identityMap,
+    ignoreRule,
+    programDataPath, lifecycleFixture,
     resolverPipeline: new DirectoryItemResolverPipeline({ programDataPath, resolvers: [resolver] }),
     resolvedItemLifecycle,
     clock: () => new Date('2026-10-05T00:00:00.000Z') });
-  return { database, store, library, adapter, scanner, itemId, original };
+  const parent = await validationFixture.itemCreation.getItemById(rootId);
+  return { database, store, library, adapter, validation: validationFixture.validation, parent, itemId, original };
 }
 
 // Non-empty AdditionalParts are structural ownership claims and are covered
@@ -96,17 +110,16 @@ async function fixture(t, dialect, sample, { wrapResolvedItemLifecycle, configur
 // those claims through the directory resolver boundary.
 const samples = input.filter(sample => ['Movie-unchanged', 'Movie-mixed', 'Movie-parts-clear',
   'Movie-alternates-added', 'Movie-alternates-case', 'Movie-alternates-order', 'Movie-alternates-clear',
-  'AdditionalParts-null-empty', 'AdditionalParts-empty-null', 'LocalAlternateVersions-value-null'].includes(sample.name));
+  'AdditionalParts-null-empty', 'AdditionalParts-empty-null', 'LocalAlternateVersions-value-null'].includes(sample.name))
+  .map(sample => ({ ...sample,
+    current: { ...sample.current, LocalAlternateVersions: lifecycleVersionPaths(sample.current.LocalAlternateVersions) },
+    resolved: { ...sample.resolved, LocalAlternateVersions: lifecycleVersionPaths(sample.resolved.LocalAlternateVersions) } }));
 
-for (const dialect of ['postgres']) for (const sample of samples) test(`${dialect}: scanner preserves metadata and persists native resolved update ${sample.name}`,
+for (const dialect of ['postgres']) for (const sample of samples) test(`${dialect}: Folder validation preserves metadata through the resolved update ${sample.name}`,
   { skip: dialect === 'postgres' && !process.env.MEDIAMANAGER_TEST_POSTGRES }, async t => {
-    const deferredOwnership = ['AdditionalParts', 'LocalAlternateVersions'].some(field => {
-      const current = sample.current[field] ?? [], desired = sample.resolved[field] ?? [];
-      return current.length !== desired.length || current.some((value, index) => value !== desired[index]);
-    });
     const lifecycleBranches = [];
-    const { database, library, scanner, itemId, original } = await fixture(t, dialect, sample, {
-      wrapResolvedItemLifecycle: lifecycle => ({ async apply(id, options) {
+    const { database, library, validation, parent, itemId, original } = await fixture(t, dialect, sample, {
+      wrapResolvedItemLifecycle: lifecycle => ({ updateRepository: (...args) => lifecycle.updateRepository(...args), async apply(id, options) {
         const outcome = await lifecycle.apply(id, options);
         lifecycleBranches.push(outcome.branch);
         return outcome;
@@ -115,20 +128,30 @@ for (const dialect of ['postgres']) for (const sample of samples) test(`${dialec
     const expected = native.results.find(value => value.name === sample.name);
     const updates = [];
     library.on('ItemUpdated', event => updates.push(event));
-    const first = await scanner.scan(rootId);
+    if (sample.resolved.LocalAlternateVersions === null) {
+      // The sealed UpdateFromResolvedItem control only mutates a live array.
+      // Actual SaveItems rejects a null version array before committing it.
+      const tables = ['BaseItems', 'BaseItemProviders', 'AncestorIds', 'ItemValues', 'ItemValuesMap', 'LinkedChildren'];
+      const before = await Promise.all(tables.map(table => database.rows(table)));
+      await assert.rejects(validation.validateChildren(parent, { refreshChildMetadata: false }),
+        /video version array cannot be null/u);
+      assert.deepEqual(await Promise.all(tables.map(table => database.rows(table))), before);
+      assert.deepEqual(updates, []);
+      return;
+    }
+    await validation.validateChildren(parent, { refreshChildMetadata: false });
     const [stored] = await database.rows('BaseItems', { where: { Id: itemId } });
     const data = parseLosslessJson(stored.Data);
     const changed = expected.first.updateType > 1;
-    assert.equal(first.updated, changed ? 1 : 0);
-    assert.deepEqual(lifecycleBranches, deferredOwnership ? [] : [changed ? 'save' : 'images']);
+    assert.deepEqual(lifecycleBranches, [changed ? 'save' : 'images']);
     assert.equal(stored.IsInMixedFolder, expected.after.IsInMixedFolder);
     for (const field of ['AdditionalParts', 'LocalAlternateVersions', 'VideoType']) {
       // UpdateFromResolvedItem projects live null arrays, whereas the actual
-      // SaveItems serializer omits null object properties. Ownership changes
-      // defer that lifecycle to the structural transaction; its typed encoder
-      // uses the same null omission. No-ops keep the exact existing bytes.
+      // SaveItems serializer omits null object properties. No-ops keep the
+      // exact existing bytes rather than resaving a reconstructed entity.
       if (changed && expected.after[field] === null) assert.equal(Object.hasOwn(data, field), false, field);
-      else assert.deepEqual(data[field], expected.after[field]);
+      else assert.deepEqual(data[field], field === 'LocalAlternateVersions'
+        ? lifecycleVersionPaths(expected.after[field]) : expected.after[field]);
     }
     if (changed) assert.equal(Object.hasOwn(data, 'UnknownPlugin'), false, 'typed saves discard undeclared JSON fields');
     else assert.deepEqual(data.UnknownPlugin, { counter: 9223372036854775807n, text: 'keep' }, 'no-op keeps raw bytes');
@@ -149,17 +172,16 @@ for (const dialect of ['postgres']) for (const sample of samples) test(`${dialec
       assert.deepEqual(updates[0].Item.ProviderIds, sample.current.ProviderIds);
     } else assert.deepEqual(stored, original, 'a no-op preserves the exact stored JSON and dates');
     const maps = await database.rows('ItemValuesMap');
-    const second = await scanner.scan(rootId);
-    assert.equal(second.updated, 0);
-    assert.deepEqual(lifecycleBranches, deferredOwnership ? ['images'] : [changed ? 'save' : 'images', 'images']);
+    await validation.validateChildren(parent, { refreshChildMetadata: false });
+    assert.deepEqual(lifecycleBranches, [changed ? 'save' : 'images', 'images']);
     assert.deepEqual(await database.rows('BaseItems', { where: { Id: itemId } }), [stored]);
     assert.deepEqual(await database.rows('ItemValuesMap'), maps);
     assert.equal(updates.length, changed ? 1 : 0);
   });
 
-for (const dialect of ['postgres']) test(`${dialect}: a native resolved update SQL failure rolls back the tree and emits no events`,
+for (const dialect of ['postgres']) test(`${dialect}: an existing-child save failure prevents the later new-sibling batch and emits no events`,
   { skip: dialect === 'postgres' && !process.env.MEDIAMANAGER_TEST_POSTGRES }, async t => {
-    const { database, library, scanner, adapter, itemId } = await fixture(t, dialect, input.find(sample => sample.name === 'Movie-mixed'));
+    const { database, library, validation, parent, adapter, itemId } = await fixture(t, dialect, input.find(sample => sample.name === 'Movie-mixed'));
     await adapter.write('/Alpha.mkv', Buffer.from('new media'));
     const schema = quoteIdentifier(database.schemaName);
     await database.client.query(`CREATE FUNCTION ${schema}.reject_resolved_update() RETURNS trigger LANGUAGE plpgsql AS $$
@@ -170,25 +192,26 @@ for (const dialect of ['postgres']) test(`${dialect}: a native resolved update S
     const before = await Promise.all(tables.map(table => database.rows(table)));
     const events = [];
     for (const name of ['ItemAdded', 'ItemUpdated', 'ItemRemoved']) library.on(name, event => events.push({ name, id: event.Item.Id }));
-    await assert.rejects(scanner.scan(rootId), /Controlled resolved update failure/u);
+    await assert.rejects(validation.validateChildren(parent, { refreshChildMetadata: false }), /Controlled resolved update failure/u);
     assert.deepEqual(await Promise.all(tables.map(table => database.rows(table))), before);
     assert.deepEqual(events, []);
   });
 
 for (const dialect of ['postgres']) test(`${dialect}: resolved saves use the actual clock when the previous save is in the future`,
   { skip: dialect === 'postgres' && !process.env.MEDIAMANAGER_TEST_POSTGRES }, async t => {
-    const { database, scanner, itemId } = await fixture(t, dialect, input.find(sample => sample.name === 'Movie-mixed'));
+    const { database, validation, parent, itemId } = await fixture(t, dialect, input.find(sample => sample.name === 'Movie-mixed'));
     await database.update('BaseItems', { Id: itemId }, { DateLastSaved: '2027-01-01 00:00:00.0000001' });
-    await scanner.scan(rootId);
+    await validation.validateChildren(parent, { refreshChildMetadata: false });
     const [stored] = await database.rows('BaseItems', { where: { Id: itemId } });
     assert.equal(stored.DateLastSaved, nativeDate('2026-10-05T00:00:00.000Z'));
   });
 
-test('scanner dispatches both native existing-item lifecycle branches without duplicate update events', {
+test('Folder validation dispatches both native existing-item lifecycle branches without duplicate update events', {
   skip: !process.env.MEDIAMANAGER_TEST_POSTGRES,
 }, async t => {
   const calls = [];
   const wrapResolvedItemLifecycle = lifecycle => ({
+    updateRepository: (...args) => lifecycle.updateRepository(...args),
     async apply(id, options) {
       const outcome = await lifecycle.apply(id, options);
       calls.push({ id, resolved: options.resolved, ...outcome });
@@ -200,13 +223,13 @@ test('scanner dispatches both native existing-item lifecycle branches without du
   const updates = [];
   fixtureState.library.on('ItemUpdated', event => updates.push(event));
 
-  await fixtureState.scanner.scan(rootId);
-  await fixtureState.scanner.scan(rootId);
+  await fixtureState.validation.validateChildren(fixtureState.parent, { refreshChildMetadata: false });
+  await fixtureState.validation.validateChildren(fixtureState.parent, { refreshChildMetadata: false });
 
   assert.deepEqual(calls.map(({ id, branch, changed }) => ({ id, branch, changed })),
     [{ id: fixtureState.itemId, branch: 'save', changed: true },
       { id: fixtureState.itemId, branch: 'images', changed: false }]);
-  assert.equal(calls[0].resolved.Type, movieType);
+  assert.equal(calls[0].resolved.NativeType, movieType);
   assert.equal(calls[0].resolved.IsInMixedFolder, true);
   assert.equal(updates.length, 1);
   assert.equal(updates[0].Item.Id, fixtureState.itemId);
@@ -234,9 +257,7 @@ test('remote image localization publishes the nested ImageUpdate before the reso
   const updates = [];
   fixtureState.library.on('ItemUpdated', event => updates.push(event.UpdateReason));
 
-  const result = await fixtureState.scanner.scan(rootId);
-
-  assert.equal(result.updated, 1);
+  await fixtureState.validation.validateChildren(fixtureState.parent, { refreshChildMetadata: false });
   assert.deepEqual(updates, [4, 2], JSON.stringify(errors));
   const [image] = await fixtureState.database.rows('BaseItemImageInfos', { where: { ItemId: fixtureState.itemId } });
   assert.equal(image.Path.startsWith('Z:\\Library\\'), true);

@@ -28,7 +28,7 @@ test('metadata refresh query binding matches 13 isolated native HTTP responses',
     const normalize=value=>Array.isArray(value)?value.map(normalize):value&&typeof value==='object'?Object.fromEntries(Object.entries(value).filter(([key])=>key!=='traceId').map(([key,value])=>[key,normalize(value)])):value;
     assert.deepEqual(normalize(records),normalize(expected));
     assert.equal(queued.length,3);
-    for(const [id,options] of queued){assert.equal(id,itemId);assert.equal(options.MetadataRefreshMode,'None');assert.equal(options.ForceSave,false);}
+    for(const [id,options,priority] of queued){assert.equal(id,itemId);assert.equal(options.MetadataRefreshMode,'None');assert.equal(options.ForceSave,false);assert.equal(priority,0);}
   }finally{await app.close();}
 });
 
@@ -59,31 +59,24 @@ test('metadata refresh queues full image replacement and only rejects generated 
   try{assert.equal((await fetch(`${noStorage.origin}/Items/${itemId}/Refresh`,{method:'POST'})).status,501);}finally{await noStorage.close();}
 });
 
-test('a structure-only folder scanner validates modes and receives the queued refresh options',async()=>{
+test('folder refresh uses the shared metadata queue with native high priority and refresh options',async()=>{
   const queued=[];
-  const folderScanner={
-    supports:item=>item.Type==='Folder',
-    validateRefresh(_item,options){
-      if(!['None','ValidationOnly'].includes(options.MetadataRefreshMode)||options.ImageRefreshMode!=='None')
-        throw Object.assign(new Error('Unsupported Folder metadata mode'),{status:501});
-    },
-    async queue(id,options){queued.push({id,options});}
-  };
   const application=await createApplication({configuration:{UICulture:'en-US',IsStartupWizardCompleted:true},
     authentication:{authenticate:async()=>({IsAuthenticated:true,IsAdministrator:true}),authorize(_auth,{policy}){assert.equal(policy,'RequiresElevation');}},
     library:{async getItemRecord(id){return {Id:id,Type:'Folder',IsFolder:true,Path:'Z:\\Library'};}},
-    folderScanner,
-    metadata:{validateRefresh(){throw new Error('Folder refresh reached metadata');},async queue(){throw new Error('Folder refresh reached metadata');}}});
+    metadata:{validateRefresh(item){assert.equal(item.Type,'Folder');},async queue(id,options,priority){queued.push({id,options,priority});}}});
   await new Promise(resolve=>application.server.listen(0,'127.0.0.1',resolve));
   const origin=`http://127.0.0.1:${application.server.address().port}`;
   try{
     assert.equal((await fetch(`${origin}/Items/${itemId}/Refresh`,{method:'POST'})).status,204);
     await new Promise(resolve=>setImmediate(resolve));
-    assert.deepEqual(queued,[{id:itemId,options:{MetadataRefreshMode:'None',ImageRefreshMode:'None',ReplaceAllMetadata:false,
+    assert.deepEqual(queued,[{id:itemId,priority:0,options:{MetadataRefreshMode:'None',ImageRefreshMode:'None',ReplaceAllMetadata:false,
       ReplaceAllImages:false,RegenerateTrickplay:false,IsAutomated:false,ForceSave:false,RemoveOldMetadata:false}}]);
     assert.equal((await fetch(`${origin}/Items/${itemId}/Refresh?metadataRefreshMode=ValidationOnly`,{method:'POST'})).status,204);
-    assert.equal((await fetch(`${origin}/Items/${itemId}/Refresh?metadataRefreshMode=FullRefresh`,{method:'POST'})).status,501);
-    assert.equal((await fetch(`${origin}/Items/${itemId}/Refresh?imageRefreshMode=ValidationOnly`,{method:'POST'})).status,501);
+    assert.equal((await fetch(`${origin}/Items/${itemId}/Refresh?metadataRefreshMode=FullRefresh`,{method:'POST'})).status,204);
+    assert.equal((await fetch(`${origin}/Items/${itemId}/Refresh?imageRefreshMode=ValidationOnly`,{method:'POST'})).status,204);
+    assert.deepEqual(queued.map(entry=>[entry.priority,entry.options.MetadataRefreshMode,entry.options.ImageRefreshMode,entry.options.ForceSave]),
+      [[0,'None','None',false],[0,'ValidationOnly','None',false],[0,'FullRefresh','None',true],[0,'None','ValidationOnly',false]]);
   }finally{await new Promise(resolve=>application.server.close(resolve));}
 });
 
@@ -156,8 +149,7 @@ for (const folder of [false, true]) for (const synchronous of [false, true]) tes
   const application = await createApplication({configuration:{UICulture:'en-US',IsStartupWizardCompleted:true},
     authentication:{authenticate:async()=>({IsAuthenticated:true,IsAdministrator:true}),authorize(){}},
     library:{async getItemRecord(id){return {Id:id,Type:folder?'Folder':'Movie'};}},
-    ...(folder ? {folderScanner:{supports:()=>true,validateRefresh(){},queue(){if(synchronous)throw failure;return Promise.reject(failure);}}}
-      : {metadata:{validateRefresh(){},queue(){if(synchronous)throw failure;return Promise.reject(failure);}}}),
+    metadata:{validateRefresh(){},queue(){if(synchronous)throw failure;return Promise.reject(failure);}},
     onError:async error=>{assert.equal(error,failure);throw new Error('Controlled reporter failure');}});
   await new Promise(resolve=>application.server.listen(0,'127.0.0.1',resolve));
   try {

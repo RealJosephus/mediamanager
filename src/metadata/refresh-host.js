@@ -25,6 +25,7 @@ import { afterAlbumMetadataRefresh } from './album-after-refresh.js';
 import { itemRequiresJson } from '../library/item-data.js';
 import { isDeepStrictEqual } from 'node:util';
 import { addAbortListener } from 'node:events';
+import { AsyncLocalStorage } from 'node:async_hooks';
 import { nonemptyId, sameId } from '../library/records.js';
 import { ownedTitleFields, prepareOwnedItemRefresh } from './owned-item-refresh.js';
 import { OwnedItemMetadataLifecycleHost } from './owned-item-lifecycle.js';
@@ -103,6 +104,8 @@ export class MetadataRefreshHost {
   #queue = [];
   #processing;
   #lifetime = new AbortController();
+  #shutdownDrain = new AsyncLocalStorage();
+  #drainingOperations = new Set();
   constructor({ registry, loadContext, linkedChildren, store, vfs, userData, images, probe, updates, externalData, seriesLifecycle,
     supportedItemTypes = supported, logger = { error() {} }, now = () => new Date().toISOString() }) {
     if (!registry || !loadContext || !store) throw new TypeError('Metadata refresh requires registry, authoritative context and persistence.');
@@ -117,6 +120,25 @@ export class MetadataRefreshHost {
       refreshOwnedItem: (owner, reference, options, inheritance) => this.refreshOwnedItem(owner, reference, options, inheritance) });
   }
   supports(item) { return this.supportedItemTypes.includes(typeof item === 'string' ? item.split('.').at(-1) : item.Type.split('.').at(-1)) || Boolean(this.probe?.supportsMetadata(typeof item === 'string' ? { Type: item } : item)); }
+  admitShutdownDrain() {
+    this.#lifetime.signal.throwIfAborted();
+    const completion = Promise.withResolvers(), scope = { active: true, completion: completion.promise };
+    this.#drainingOperations.add(scope);
+    return Object.freeze({
+      run: operation => this.#shutdownDrain.run(scope, operation),
+      release: () => {
+        if (!scope.active) return;
+        scope.active = false;
+        this.#drainingOperations.delete(scope);
+        completion.resolve();
+      }
+    });
+  }
+  bindShutdownDrain(operation) {
+    const scope = this.#shutdownDrain.getStore();
+    // Capture only this admission, never a caller's database transaction.
+    return (...args) => this.#shutdownDrain.run(scope, () => operation(...args));
+  }
   validateRefresh(item, options = {}) {
     if (!this.supports(item)) throw Object.assign(new Error(`Metadata refresh persistence is not implemented for ${item.Type ?? item}.`), { status: 501 });
     if (modes[options.MetadataRefreshMode ?? 'FullRefresh'] == null) throw Object.assign(new TypeError('Unknown metadata refresh mode.'), { status: 400 });
@@ -183,7 +205,7 @@ export class MetadataRefreshHost {
           }
           entry.resolve(await (this.queuedRefresh
             ? this.queuedRefresh(entry.reference, { ...entry.options, signal })
-            : this.refresh(entry.reference, entry.options)));
+            : this.refresh(entry.reference, { ...entry.options, signal })));
         } catch (error) { entry.reject(error); }
       }
     };
@@ -208,8 +230,14 @@ export class MetadataRefreshHost {
     return this.refresh(item, { ...options, [liveMetadataItem]: item });
   }
   async refresh(reference, options = {}) {
-    this.#lifetime.signal.throwIfAborted();
-    options = { ...options, signal: options.signal ? AbortSignal.any([options.signal, this.#lifetime.signal]) : this.#lifetime.signal };
+    options = { ...options };
+    // Admitted configuration writes finish their CancellationToken.None root
+    // validation during shutdown. Explicit request cancellation still applies.
+    if (!this.#shutdownDrain.getStore()?.active) {
+      this.#lifetime.signal.throwIfAborted();
+      options.signal = options.signal ? AbortSignal.any([options.signal, this.#lifetime.signal]) : this.#lifetime.signal;
+    }
+    options.signal?.throwIfAborted();
     const key = String(typeof reference === 'string' ? reference : reference.Id).replaceAll('-', '').toLowerCase();
     const ancestors = options[ownedRefreshAncestors] ?? [];
     if (ancestors.includes(key)) {
@@ -617,5 +645,9 @@ export class MetadataRefreshHost {
     while (this.#processing || this.#active.size) await Promise.allSettled([this.#processing, ...this.#active.values()]);
   }
   cancel() { this.#lifetime.abort(); }
-  async close() { this.cancel(); await this.drain(); }
+  async close() {
+    this.cancel();
+    while (this.#drainingOperations.size) await Promise.all([...this.#drainingOperations].map(scope => scope.completion));
+    await this.drain();
+  }
 }

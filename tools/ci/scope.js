@@ -6,11 +6,17 @@ import { repositoryRoot, validationPath } from '../validation/paths.js';
 
 export const provisionedServices = ['postgres', 'dotnet'];
 export const provisionedTools = ['dotnet', 'ffmpeg', 'ffprobe', 'git'];
-export const provisionedServicesFor = environment => [...provisionedServices,
-  ...(environment.MEDIAMANAGER_CI_NATIVE_REFERENCE === 'true' ? ['jellyfinDll'] : []),
-  ...(environment.MEDIAMANAGER_CI_ALIST_REFERENCE === 'true' ? ['alist'] : []),
-  ...(typeof environment.MEDIAMANAGER_WEBDAV_EXECUTABLE === 'string'
-    && path.isAbsolute(environment.MEDIAMANAGER_WEBDAV_EXECUTABLE) ? ['webdav'] : [])];
+export const provisionedServicesFor = environment => {
+  if (environment.MEDIAMANAGER_CI_NATIVE_INSTANCE === 'true' && environment.MEDIAMANAGER_CI_NATIVE_REFERENCE !== 'true') {
+    throw new Error('Native instance provisioning requires native reference provisioning.');
+  }
+  return [...provisionedServices,
+    ...(environment.MEDIAMANAGER_CI_NATIVE_REFERENCE === 'true' ? ['jellyfinDll'] : []),
+    ...(environment.MEDIAMANAGER_CI_NATIVE_INSTANCE === 'true' ? ['nativeInstance'] : []),
+    ...(environment.MEDIAMANAGER_CI_ALIST_REFERENCE === 'true' ? ['alist'] : []),
+    ...(typeof environment.MEDIAMANAGER_WEBDAV_EXECUTABLE === 'string'
+      && path.isAbsolute(environment.MEDIAMANAGER_WEBDAV_EXECUTABLE) ? ['webdav'] : [])];
+};
 
 const unknown = Symbol('unknown');
 const key = node => node?.computed ? node.property?.value : node?.property?.name;
@@ -113,6 +119,8 @@ export async function classify({ dependencies, tracked, environment, platform = 
   const plannedEnvironment = { ...environment, MEDIAMANAGER_TEST_POSTGRES: environment.MEDIAMANAGER_TEST_POSTGRES || '<provisioned>',
     MEDIAMANAGER_DOTNET: environment.MEDIAMANAGER_DOTNET || '<provisioned>',
     ...(services.includes('alist') ? { MEDIAMANAGER_ALIST_EXECUTABLE: environment.MEDIAMANAGER_ALIST_EXECUTABLE || '<provisioned>' } : {}),
+    ...(services.includes('nativeInstance') ? { MEDIAMANAGER_TEST_NATIVE_INSTANCE: environment.MEDIAMANAGER_TEST_NATIVE_INSTANCE || '<provisioned>',
+      MEDIAMANAGER_NATIVE_INSTANCE_ROOT: environment.MEDIAMANAGER_NATIVE_INSTANCE_ROOT || '<provisioned>' } : {}),
     ...(services.includes('jellyfinDll') ? { MEDIAMANAGER_JELLYFIN_DLL: environment.MEDIAMANAGER_JELLYFIN_DLL || '<provisioned>' } : {}) };
   const shipped = filename => {
     const relative = repositoryRelative(filename);

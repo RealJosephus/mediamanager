@@ -5,7 +5,6 @@ import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { parseLosslessJson } from '../../src/core/json.js';
-import { createRuntime } from '../../src/runtime.js';
 import { tableDefinition } from '../../src/database/model.js';
 import { StorageError } from '../../src/storage/errors.js';
 import {
@@ -13,10 +12,10 @@ import {
   DirectoryItemResolverPipeline, ItemCreationService, newNativeItemEntity, playlistNativeType,
 } from '../../src/library/index.js';
 import { setFolderChildren, readCachedFolderChildren } from '../../src/library/folder-cache.js';
-import { nativeFileName } from '../../src/library/native-path.js';
 import { projectStored } from './native-resolver-entity-types-fixture.js';
 import { setupChildrenFixture, useIdentityPathReversalControl } from '../metadata/children-fixture.js';
-import { PostgresDatabase } from '../../src/database/postgres.js';
+
+import { subjectId, created, modified, stateRoot, sampleContext, runtimeFixture } from './collection-playlist-runtime-fixture.js';
 
 const root = new URL('./fixtures/collection-playlist-resolution/', import.meta.url);
 const inputBytes = await readFile(new URL('input.json', root));
@@ -24,44 +23,6 @@ const input = JSON.parse(inputBytes);
 const native = parseLosslessJson(await readFile(new URL('native.json', root), 'utf8'));
 const provenance = JSON.parse(await readFile(new URL('provenance.json', root), 'utf8'));
 const hash = value => createHash('sha256').update(value).digest('hex');
-const parentId = '15000000-0000-0000-0000-000000000099';
-const subjectId = index => `15000000-0000-0000-0000-${String(index).padStart(12, '0')}`;
-const created = '2026-10-09T01:02:03.0000000Z', modified = '2026-10-09T02:03:04.0000000Z';
-const stateRoot = 'Z:\\CollectionResolverFixture';
-
-function sampleContext(sample, sampleRoot = stateRoot) {
-  const media = path.win32.join(sampleRoot, 'media');
-  const entries = new Map();
-  const add = (relative, kind) => {
-    const parts = relative.split('/');
-    for (let index = 1; index < parts.length; index++) entries.set(parts.slice(0, index).join('/'), 'directory');
-    entries.set(relative, kind);
-  };
-  for (const name of sample.directories ?? []) add(name, 'directory');
-  for (const name of sample.files ?? []) add(name, 'file');
-  const candidates = [...entries].map(([relative, kind]) => ({
-    identityPath: path.win32.join(media, ...relative.split('/')),
-    accessPath: '/fixture/collection-resolver/' + relative,
-    entry: { name: relative.split('/').at(-1), kind, size: kind === 'file' ? 20n : null, created, modified }
-  }));
-  const target = candidates.find(candidate => candidate.identityPath === path.win32.join(media, ...sample.target.split('/')));
-  assert.ok(target, `${sample.name}: neutral input must create its target`);
-  const children = candidates.filter(candidate => path.win32.dirname(candidate.identityPath) === target.identityPath);
-  if (sample.trailingSeparator) target.identityPath += '\\';
-  if (sample.enumerationError) target.identityPath = path.win32.join(media, 'absent-native-directory');
-  const parent = newNativeItemEntity(sample.parentKind === 'PlaylistsFolder'
-    ? 'Emby.Server.Implementations.Playlists.PlaylistsFolder' : 'MediaBrowser.Controller.Entities.Folder');
-  Object.assign(parent, { Id: parentId, Name: 'Physical root', Path: media });
-  return {
-    parent, candidate: target, collectionContext: { collectionType: sample.collectionType ?? null },
-    deletionSafe: true,
-    peekDirectory: async () => {
-      if (sample.enumerationError) throw new StorageError('not-found', 'Controlled missing directory.');
-      return { listing: { deletionSafe: true }, candidates: children };
-    }
-  };
-}
-
 async function resolve(sample, index, sampleRoot = stateRoot) {
   const context = sampleContext(sample, sampleRoot);
   const resolvers = sample.resolver === 'chain' ? [createPlaylistItemResolver(), createBoxSetItemResolver()]
@@ -231,160 +192,4 @@ test('Playlist child validation matches native no-op before cancellation, storag
   } finally {
     service.vfs.list = original.list; service.store.run = original.run; service.refreshes = original.refreshes;
   }
-});
-
-async function runtimeFixture(t, contentTypes = []) {
-  assert.ok(process.env.MEDIAMANAGER_TEST_POSTGRES, 'Real PostgreSQL is required for production assembly.');
-  const fixture = await setupChildrenFixture(t);
-  // Runtime owns its connection pool; the fixture's independent pool retains
-  // ownership of the exact random schemas used for teardown.
-  const database = await PostgresDatabase.open({ connectionString: process.env.MEDIAMANAGER_TEST_POSTGRES,
-    schema: fixture.database.schemaName });
-  const runtime = await createRuntime({ database, programDataPath: fixture.stateRoot,
-    vfs: fixture.vfs, identityMap: fixture.identityMap,
-    configuration: { IsStartupWizardCompleted: true, UICulture: 'en-US', ContentTypes: contentTypes },
-    serverId: 'special-resolver-runtime' });
-  t.after(() => runtime.close());
-  return { fixture, runtime };
-}
-
-test('Production runtime registers special resolvers without claiming full scanning or physical Playlist traversal', async t => {
-  const { runtime } = await runtimeFixture(t);
-  const pipeline = runtime.folderValidation.resolverPipeline;
-  assert.ok(pipeline.nativeTypes.includes(playlistNativeType));
-  assert.ok(pipeline.nativeTypes.includes(boxSetNativeType));
-  const context = sampleContext(input.find(sample => sample.name === 'chain-both-markers'));
-  const result = await pipeline.resolve({ ...context, candidates: [context.candidate] });
-  assert.equal(result.claims[0].nativeType, playlistNativeType);
-  assert.equal(result.claims[0].traversal, 'none');
-  assert.equal(runtime.folderScanner.supports(createResolvedItemEntity(result.claims[0], { parent: context.parent })), false);
-  assert.equal(runtime.libraryScanner.capabilities.completeLibraryScan, false);
-});
-
-test('Production folder validation persists external and directory Playlists without discovering physical children', async t => {
-  const { fixture, runtime } = await runtimeFixture(t);
-  const media = 'Z:\\PlaylistValidation';
-  fixture.identityMap.addPrefix({ identityRoot: media, accessRoot: '/fixture/playlists', style: 'windows',
-    returnAccess: 'Isolated production Playlist validation.' });
-  await fixture.adapter.mkdir('/playlists');
-  await fixture.adapter.mkdir('/playlists/Favorites [playlist]');
-  await fixture.adapter.write('/playlists/Favorites [playlist]/must-not-be-discovered.mp3', Buffer.from('neutral media'));
-  await fixture.adapter.write('/playlists/Road Trip.M3U', Buffer.from('neutral playlist'));
-  await fixture.seed({ target: 'root', items: [
-    { key: 'root', type: 'Folder', Id: parentId, Path: media, TopParentId: parentId },
-    { key: 'linked', type: 'Audio', Id: subjectId(80), Name: 'Linked music', Path: null }
-  ] });
-  const parent = await runtime.itemCreation.getItemById(parentId);
-  const listed = [], list = fixture.vfs.list.bind(fixture.vfs);
-  fixture.vfs.list = async (...args) => { listed.push(args[0]); return list(...args); };
-  const createdItems = await runtime.library.validateChildren(parent, { collectionType: 'music',
-    recursive: true, refreshChildMetadata: false });
-  assert.equal(createdItems.created.length, 2);
-  assert.ok(createdItems.created.every(item => item.Type === 'Playlist'));
-  assert.equal(listed.some(value => value.includes('Favorites [playlist]')), false, 'Playlist overrides do not enumerate their physical contents.');
-  const directory = createdItems.created.find(item => item.Name === 'Favorites');
-  const file = createdItems.created.find(item => item.Name === 'Road Trip');
-  assert.equal(directory.OpenAccess, true);
-  assert.equal(file.OpenAccess, true);
-  assert.equal(file.MediaType, 'Audio');
-  assert.equal(file.IsFolder, true);
-  assert.equal(file.IsInMixedFolder, true);
-  assert.deepEqual(await fixture.database.rows('BaseItems', { where: { ParentId: directory.Id } }), []);
-  await fixture.database.insert('LinkedChildren', { ParentId: directory.Id, ChildId: subjectId(80), SortOrder: 0, ChildType: 0 });
-  const before = await fixture.database.rows('LinkedChildren', { where: { ParentId: directory.Id } });
-  const controller = new AbortController(); controller.abort();
-  assert.equal((await runtime.library.validateChildren(directory, { recursive: true, signal: controller.signal })).skipped, false);
-  await runtime.library.validateChildren(parent, { collectionType: 'music', recursive: true, refreshChildMetadata: false });
-  assert.deepEqual(await fixture.database.rows('LinkedChildren', { where: { ParentId: directory.Id } }), before);
-  assert.equal(listed.some(value => value.includes('Favorites [playlist]')), false);
-  runtime.itemCreation.unregisterItem(file.Id);
-  const cold = await runtime.itemCreation.getItemById(file.Id);
-  assert.equal(cold.MediaType, 'Audio'); assert.equal(cold.OpenAccess, true);
-});
-
-test('Production validation retains internal Playlist identity and links after playlist.xml disappears', async t => {
-  const { fixture, runtime } = await runtimeFixture(t);
-  const media = 'Z:\\InternalPlaylistValidation';
-  fixture.identityMap.addPrefix({ identityRoot: media, accessRoot: '/fixture/internal-playlists', style: 'windows',
-    returnAccess: 'Mapped PlaylistsFolder type control; not actual local state-folder traversal.' });
-  await fixture.adapter.mkdir('/internal-playlists');
-  await fixture.adapter.mkdir('/internal-playlists/Favorites');
-  await fixture.adapter.write('/internal-playlists/Favorites/playlist.xml', Buffer.from('neutral XML'));
-  const parent = newNativeItemEntity('Emby.Server.Implementations.Playlists.PlaylistsFolder');
-  Object.assign(parent, { Id: parentId, Path: media });
-  await runtime.itemCreation.saveItems([parent]);
-  const linked = newNativeItemEntity('MediaBrowser.Controller.Entities.Audio.Audio');
-  Object.assign(linked, { Id: subjectId(80), Name: 'Linked music' });
-  await runtime.itemCreation.saveItems([linked]);
-  const first = await runtime.library.validateChildren(parent, { recursive: true, refreshChildMetadata: false });
-  assert.equal(first.created.length, 1);
-  const playlist = first.created[0];
-  await fixture.database.insert('LinkedChildren', { ParentId: playlist.Id, ChildId: linked.Id, SortOrder: 0, ChildType: 0 });
-  const before = await fixture.database.rows('LinkedChildren', { where: { ParentId: playlist.Id } });
-  await fixture.adapter.delete('/internal-playlists/Favorites/playlist.xml');
-  const second = await runtime.library.validateChildren(parent, { recursive: true, refreshChildMetadata: false });
-  assert.equal(second.created.length, 0);
-  assert.equal(second.resolved.length, 1);
-  assert.equal(second.resolved[0].Id, playlist.Id);
-  assert.deepEqual(await fixture.database.rows('LinkedChildren', { where: { ParentId: playlist.Id } }), before);
-});
-
-test('Production validation recursively creates BoxSet children and persists only its own TMDB attribute', async t => {
-  const { fixture, runtime } = await runtimeFixture(t);
-  const media = 'Z:\\BoxSetValidation [tmdb=999]';
-  fixture.identityMap.addPrefix({ identityRoot: media, accessRoot: '/fixture/boxsets', style: 'windows',
-    returnAccess: 'Isolated production BoxSet validation.' });
-  await fixture.adapter.mkdir('/boxsets');
-  await fixture.adapter.mkdir('/boxsets/Saga [boxset] [tmdb=007]');
-  await fixture.adapter.write('/boxsets/Saga [boxset] [tmdb=007]/One.epub', Buffer.from('neutral book'));
-  await fixture.seed({ target: 'root', items: [
-    { key: 'root', type: 'Folder', Id: parentId, Path: media, TopParentId: parentId }
-  ] });
-  const rootItem = await runtime.itemCreation.getItemById(parentId);
-  const result = await runtime.library.validateChildren(rootItem, { collectionType: 'books',
-    recursive: true, refreshChildMetadata: false });
-  assert.equal(result.created.length, 1);
-  const boxSet = result.created[0];
-  assert.equal(boxSet.NativeType, boxSetNativeType);
-  assert.equal(boxSet.ProviderIds.Tmdb, '007');
-  const children = await fixture.database.rows('BaseItems', { where: { ParentId: boxSet.Id } });
-  assert.equal(children.length, 1);
-  assert.equal(children[0].Type, 'MediaBrowser.Controller.Entities.Book');
-  assert.equal(children[0].Name, 'One');
-  runtime.itemCreation.unregisterItem(boxSet.Id);
-  const cold = await runtime.itemCreation.getItemById(boxSet.Id);
-  assert.equal(cold.ProviderIds.Tmdb, '007');
-  assert.equal(cold.DisplayOrder, 'PremiereDate');
-});
-
-test('Production structural scan traverses BoxSet but never physical Playlist contents', async t => {
-  const media = 'Z:\\SpecialStructuralScan';
-  const { fixture, runtime } = await runtimeFixture(t, [{ Name: media, Value: 'books' }]);
-  fixture.identityMap.addPrefix({ identityRoot: media, accessRoot: '/fixture/special-scan', style: 'windows',
-    returnAccess: 'Controlled strong-snapshot structural scan.' });
-  await fixture.adapter.mkdir('/special-scan');
-  await fixture.adapter.mkdir('/special-scan/Favorites [playlist]');
-  await fixture.adapter.write('/special-scan/Favorites [playlist]/must-not-be-discovered.epub', Buffer.from('neutral book'));
-  await fixture.adapter.mkdir('/special-scan/Saga [boxset] [tmdb=007]');
-  await fixture.adapter.write('/special-scan/Saga [boxset] [tmdb=007]/One.epub', Buffer.from('neutral book'));
-  await fixture.seed({ target: 'root', items: [
-    { key: 'root', type: 'Folder', Id: parentId, Path: media, TopParentId: parentId }
-  ] });
-  const listed = [], list = fixture.vfs.list.bind(fixture.vfs);
-  fixture.vfs.list = async (...args) => { listed.push(args[0]); return list(...args); };
-  const result = await runtime.folderScanner.scan({ Id: parentId }, { MetadataRefreshMode: 'None', ImageRefreshMode: 'None' });
-  assert.equal(result.added, 3, 'The structural receipt must include BoxSet, Book and Playlist.');
-  const direct = await fixture.database.rows('BaseItems', { where: { ParentId: parentId } });
-  assert.equal(direct.length, 2);
-  const playlist = direct.find(row => row.Type === playlistNativeType), boxSet = direct.find(row => row.Type === boxSetNativeType);
-  assert.ok(playlist); assert.ok(boxSet);
-  assert.equal(JSON.parse(playlist.Data).OpenAccess, true);
-  assert.equal(listed.some(value => value.includes('Favorites [playlist]')), false);
-  assert.deepEqual(await fixture.database.rows('BaseItems', { where: { ParentId: playlist.Id } }), []);
-  const children = await fixture.database.rows('BaseItems', { where: { ParentId: boxSet.Id } });
-  assert.equal(children.length, 1);
-  assert.equal(children[0].Type, 'MediaBrowser.Controller.Entities.Book');
-  assert.deepEqual(await fixture.database.rows('BaseItemProviders', { where: { ItemId: boxSet.Id } }),
-    [{ ItemId: boxSet.Id, ProviderId: 'Tmdb', ProviderValue: '007' }]);
-  assert.equal(runtime.libraryScanner.capabilities.completeLibraryScan, false);
 });

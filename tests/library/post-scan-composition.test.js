@@ -406,7 +406,7 @@ async function compareComposition(t, scenarioFile) {
     'Successful metadata refreshes match the native committed prefix.');
   assert.deepEqual(files, rewrite(sample.files, sample.programRoot));
   for (const entry of sample.createdDirectories) assert.equal((await stat(path.join(programRoot, entry.path))).isDirectory(), entry.exists);
-  assert.equal(runtime.libraryScanner.capabilities.completeLibraryScan, false, 'This narrow nonempty scenario does not admit all media families or release capabilities.');
+  assert.equal(runtime.libraryScanner.capabilities.completeLibraryScan, true, 'The configured runtime admits the production library scan.');
   await writeFile(path.join(output, 'comparison.json'), JSON.stringify({ passed: true, scope: sample.Name,
     cancelled: cancelling, rows: actual, nativeSha256: hash(nativeBytes), candidate: 'candidate.json', cleanup: 'cleanup.json' }, null, 2) + '\n', { flag: 'wx' });
 }

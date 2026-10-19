@@ -6,6 +6,7 @@ import path from 'node:path';
 import { applyInputIdentity, classify, provisionedServicesFor, restrictToRequested, skipGuards } from '../../tools/ci/scope.js';
 import { captureInputIdentity, executionManifestContract, executionManifestReferences, inputsUnchanged } from '../../tools/validation/inputs.js';
 import { repositoryRoot } from '../../tools/validation/paths.js';
+import { verifyNativeBuild } from '../../tools/validation/native-build-inputs.js';
 
 const ownPath = 'tests/validation/ci-scope.test.js';
 const otherPath = 'tests/core/password.test.js';
@@ -204,6 +205,22 @@ test('CI AList provisioning requires an explicit API-host promise and cannot nar
     preflight: { ready: true, services: [], tools: [] } }), /requires its build root and executable path/u);
 });
 
+test('CI native instance supply is explicit, depends on the build and never supplies the historical SQLite fixture', async () => {
+  const dependencies = { entries: [entry(ownPath, { services: ['nativeInstance'] }), entry(otherPath, { services: ['nativeSqlite'] })] };
+  const tracked = new Set([ownPath, otherPath]);
+  const disabled = await classify({ dependencies, tracked, environment: { MEDIAMANAGER_TEST_NATIVE_INSTANCE: '/arbitrary/instance' } });
+  assert.ok(disabled.records.every(record => !record.selected));
+  assert.throws(() => provisionedServicesFor({ MEDIAMANAGER_CI_NATIVE_INSTANCE: 'true' }), /requires native reference/u);
+  const environment = { MEDIAMANAGER_CI_NATIVE_REFERENCE: 'true', MEDIAMANAGER_CI_NATIVE_INSTANCE: 'true' };
+  assert.deepEqual(provisionedServicesFor(environment), ['postgres', 'dotnet', 'jellyfinDll', 'nativeInstance']);
+  const promised = await classify({ dependencies, tracked, environment });
+  assert.equal(promised.records[0].selected, true, 'an unavailable promised instance must fail provisioning instead of shrinking selection');
+  assert.equal(promised.records[1].selected, false, 'fresh generated instances cannot replace historical query SQLite pins');
+  await assert.rejects(captureInputIdentity({ dependencies, selected: [ownPath], environment,
+    preflight: { ready: true, services: [], tools: [] } }), /requires its build root and Jellyfin DLL path/u);
+  assert.equal(promised.records[0].selected, true);
+});
+
 test('CI binds same-run native receipts, source offer and runtime only for selected native consumers', async t => {
   const output = path.join(repositoryRoot, '.test-output'); await mkdir(output, { recursive: true });
   const root = await mkdtemp(path.join(output, 'ci-native-inputs-'));
@@ -236,6 +253,10 @@ test('CI binds same-run native receipts, source offer and runtime only for selec
   assert.equal(nativeInputs(await capture([otherPath])).length, 0, 'unselected native consumers do not require native artifacts');
   const classification = await classify({ dependencies, tracked: new Set([ownPath, otherPath]), environment });
   const before = await capture([ownPath]), bound = nativeInputs(before);
+  assert.match((await verifyNativeBuild(environment)).identitySha256, /^[a-f0-9]{64}$/u);
+  await write('runtime', 'unlisted.dll', 'an unlisted runtime member');
+  await assert.rejects(verifyNativeBuild(environment), /membership differs/u);
+  await rm(path.join(root, 'runtime/unlisted.dll'));
   assert.ok(bound.every(input => input.required && input.available && input.expectedDigestMatched !== false));
   for (const directory of ['runtime', 'receipts', 'source-offer']) {
     assert.ok(bound.some(input => input.filename === path.join(root, directory) && input.kind === 'directory'));
@@ -245,6 +266,7 @@ test('CI binds same-run native receipts, source offer and runtime only for selec
   await write('receipts', 'build.stdout.txt', 'changed build log');
   await write('source-offer', 'source.zip', 'changed source offer');
   const changed = await capture([ownPath]);
+  await assert.rejects(verifyNativeBuild(environment), /input is missing or changed/u);
   assert.equal(inputsUnchanged(before, changed), false);
   for (const directory of ['runtime', 'receipts', 'source-offer']) {
     const filename = path.join(root, directory);

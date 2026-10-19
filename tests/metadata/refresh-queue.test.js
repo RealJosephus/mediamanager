@@ -58,6 +58,29 @@ test('refresh queue preserves repeated ids and admits a new entry after standing
   assert.deepEqual(order, ['same', 'same', 'later']);
 });
 
+test('shutdown drains admitted configuration refreshes while preserving explicit cancellation and expiring their admission', async () => {
+  const reachedContext = new Error('Admitted refresh reached its persistence context.');
+  const host = new MetadataRefreshHost({ registry: {}, store: {},
+    linkedChildren: { async flushReleases() {} }, loadContext() { throw reachedContext; } });
+  const admission = host.admitShutdownDrain();
+  const ordinaryRefresh = host.bindShutdownDrain(() => host.refresh('ordinary-worker'));
+  const refresh = admission.run(() => host.bindShutdownDrain(options => host.refresh('configuration', options)));
+  const queued = admission.run(() => host.queue('queued', {}, 0, { ready: new Promise(() => {}) }));
+  const cancelledQueue = assert.rejects(queued, { name: 'AbortError' });
+  let closed = false;
+  const closing = host.close().then(() => { closed = true; });
+  try {
+    await cancelledQueue;
+    assert.equal(closed, false, 'close retains the dependencies of the admitted configuration operation');
+    await assert.rejects(host.refresh('ordinary'), { name: 'AbortError' });
+    await assert.rejects(admission.run(ordinaryRefresh), { name: 'AbortError' });
+    await assert.rejects(refresh(Object.freeze({})), error => error === reachedContext);
+    await assert.rejects(refresh({ signal: AbortSignal.abort() }), { name: 'AbortError' });
+  } finally { admission.release(); await closing; }
+  await assert.rejects(refresh(), { name: 'AbortError' });
+  assert.throws(() => host.admitShutdownDrain(), { name: 'AbortError' });
+});
+
 test('refresh queue admits full item dispatch with its existing priority and shutdown lifetime', async () => {
   const host = new MetadataRefreshHost({ registry: {}, loadContext() {}, store: {} });
   const started = Promise.withResolvers(), release = Promise.withResolvers(), calls = [];

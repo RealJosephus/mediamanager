@@ -105,10 +105,12 @@ test('elevated folder Refresh scans folders and an ordinary root movie, then pub
   const listingEntered = new Promise(resolve => { enteredListing = resolve; });
   const listingReleased = new Promise(resolve => { releaseListing = resolve; });
   const listPage = adapter.listPage.bind(adapter);
-  let blockFirstListing = true;
+  let blockValidationListing = false;
+  let validationListingBlocked = false;
   adapter.listPage = async (...args) => {
-    if (blockFirstListing) {
-      blockFirstListing = false;
+    if (blockValidationListing) {
+      blockValidationListing = false;
+      validationListingBlocked = true;
       enteredListing();
       await listingReleased;
     }
@@ -122,16 +124,17 @@ test('elevated folder Refresh scans folders and an ordinary root movie, then pub
     configuration: { UICulture: 'en-US', IsStartupWizardCompleted: true, LibraryUpdateDuration: 0 },
     serverId: 'folder-scan-websocket-test', onError: error => errors.push(error) });
   t.after(() => runtime.close());
-  assert.equal(runtime.folderScanner.capabilities.completeLibraryScan, false);
-  assert.equal(runtime.folderScanner.capabilities.scope, 'generic-folder-tree-reconciliation');
-  assert.equal(runtime.folderScanner.capabilities.scansMediaFiles, false);
-  assert.equal(runtime.folderScanner.capabilities.resolvesProductionMediaFiles, true);
-  assert.deepEqual(runtime.folderScanner.capabilities.productionMediaScopes,
-    ['playlist-files-and-logical-directories', 'book-files-and-single-file-directories', 'photos-and-homevideos-photo-albums',
-      'tv-ordinary-video-files', 'music-ordinary-tracks-and-conventional-albums',
-      'ordinary-movies-homevideos-and-musicvideos', 'audiobook-files-and-single-file-directories']);
-  assert.equal(runtime.folderScanner.capabilities.relationshipRows, false);
-  assert.equal(runtime.libraryScanner.capabilities.completeLibraryScan, false);
+  // ProviderManager refreshes the folder's own metadata before ValidateChildren.
+  // Hold an actual validation listing after its RefreshStarted event; holding
+  // the earlier metadata listing would prevent that event from being emitted.
+  const onRefreshStarted = event => {
+    if (!validationListingBlocked && guidN(event.Item.Id) === guidN(ids.physical)) {
+      blockValidationListing = true;
+    }
+  };
+  runtime.refreshes.on('RefreshStarted', onRefreshStarted);
+  t.after(() => runtime.refreshes.off('RefreshStarted', onRefreshStarted));
+  assert.equal(runtime.libraryScanner.capabilities.completeLibraryScan, true);
   assert.equal(runtime.libraryScanner.capabilities.scope, 'aggregate-folder-validation');
   assert.equal(runtime.libraryScanner.capabilities.scansMediaFiles, true);
   assert.equal(runtime.libraryScanner.capabilities.resolvesProductionMediaFiles, true);
@@ -143,6 +146,8 @@ test('elevated folder Refresh scans folders and an ordinary root movie, then pub
   assert.equal(runtime.libraryScanner.capabilities.structuralCompletenessProof, true);
   assert.equal(runtime.libraryScanner.capabilities.directStructuralRoots, true);
   assert.equal(runtime.libraryScanner.capabilities.typeReclassification, true);
+  assert.equal(runtime.libraryScanner.capabilities.secondaryOwnershipTransfer, true);
+  assert.equal(runtime.libraryScanner.capabilities.groupedOwnership, true);
   assert.equal(runtime.libraryScanner.capabilities.runsPostScanTasks, true);
   const sockets = [];
   try {
@@ -192,7 +197,7 @@ test('elevated folder Refresh scans folders and an ordinary root movie, then pub
     // Let an intermediate notification pass the native throttle before completion.
     await delay(refreshProgressThrottleMs + 50);
     releaseListing();
-    await runtime.folderScanner.whenIdle();
+    await runtime.metadata.drain();
     const rows = await database.rows('BaseItems');
     const scannedPaths = rows.filter(row => row.Type === 'MediaBrowser.Controller.Entities.Folder').map(row => row.Path).toSorted();
     assert.deepEqual(scannedPaths, [physicalPath, `${physicalPath}\\Alpha`, `${physicalPath}\\Alpha\\Deep`]);

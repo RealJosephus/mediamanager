@@ -6,24 +6,36 @@ import { createHash, randomUUID } from 'node:crypto';
 import { PostgresDatabase } from '../../src/database/postgres.js';
 import { DomainStore } from '../../src/database/domain-store.js';
 import { tableDefinition } from '../../src/database/model.js';
-import { LibraryService, FolderScanService, DirectoryItemResolverPipeline } from '../../src/library/index.js';
-import { idKey, mapRecord } from '../../src/library/records.js';
+import { LibraryService, DirectoryItemResolverPipeline } from '../../src/library/index.js';
+import { idKey } from '../../src/library/records.js';
 import { collectionFoldersForItem, parentChainForItem, userRootFolders } from '../../src/library/collection-membership.js';
 import { buildScanCollectionContext, configuredItemType, inheritedItemType } from '../../src/library/scan-context.js';
 import { createVideoFileResolver } from '../../src/library/video-file-resolver.js';
-import { ProviderRefreshService } from '../../src/metadata/provider-refresh-service.js';
 import { IdentityAccessMap, StorageRegistry, VirtualFileSystem } from '../../src/storage/index.js';
 import { MemoryStorageAdapter } from '../../src/storage/testing/memory-adapter.js';
 import { knownAncestorIgnoreRule } from './ignore-namespace-fixture.js';
 import { createResolvedItemLifecycleFixture } from './resolved-item-lifecycle-fixture.js';
+import { createFolderValidationScanFixture } from '../helpers/folder-validation-scan-fixture.js';
 
 const compare = (actual, expected) => assert.deepEqual(actual, expected);
 const hash = value => createHash('sha256').update(value).digest('hex');
+function hostAncestorControl(sample) {
+  if (process.platform === 'win32' || !['override-ancestor', 'override-ancestor-order'].includes(sample.name)) return sample;
+  // ContainsSubPath uses the host directory separator. These two controls
+  // exercise ancestor precedence, so give them equivalent host paths while
+  // preserving the sealed Windows input and all case/separator controls.
+  const relocate = value => value?.startsWith('Z:\\') ? '/native-scan-context/' + value.slice(3).replaceAll('\\', '/') : value;
+  const entity = value => ({ ...value, Path: relocate(value.Path),
+    ...(value.PhysicalLocationsList ? { PhysicalLocationsList: value.PhysicalLocationsList.map(relocate) } : {}) });
+  return { ...sample, item: entity(sample.item), parents: sample.parents.map(entity),
+    collections: sample.collections.map(entity),
+    contentTypes: sample.contentTypes.map(value => ({ ...value, Name: relocate(value.Name) })) };
+}
 const fixtures = [];
 for (const [name, count, flag] of [['native-scan-context', 28, 'actualFrozenNativeScanContext'], ['native-scan-context-edges', 43, 'actualFrozenNativeScanContextEdges']]) {
   const root = new URL('./fixtures/' + name + '/', import.meta.url);
   const [input, native, provenance] = await Promise.all(['input.json', 'native.json', 'provenance.json'].map(async file => JSON.parse(await readFile(new URL(file, root), 'utf8'))));
-  fixtures.push({ input, native });
+  fixtures.push({ input: input.map(hostAncestorControl), native });
   test(name + ' seals actual manager getter calls and live options/order controls', async () => {
     for (const file of Object.values(provenance.files)) assert.equal(hash(await readFile(new URL('../../' + file.path, import.meta.url))), file.sha256, file.path);
     assert.equal(native.inputSha256, provenance.files.input.sha256); assert.equal(native.sourceFilesSha256, provenance.sourceFilesSha256);
@@ -115,7 +127,7 @@ for (const dialect of ['postgres']) for (const fixture of fixtures) for (const s
     });
 }
 for (const dialect of ['postgres']) for (const name of ['first-high-id-movies', 'first-low-id-music', 'first-missing-type', 'physical-location-case', 'override-invalid-first', 'override-numeric-value']) {
-  test(dialect + ': actual scanner receives frozen native ordered context ' + name,
+  test(dialect + ': Folder validation receives frozen native ordered context ' + name,
     { skip: dialect === 'postgres' && !process.env.MEDIAMANAGER_TEST_POSTGRES }, async t => {
       const fixture = fixtures[0], sample = fixture.input.find(value => value.name === name), native = fixture.native.results.find(value => value.name === name);
       const { database, store } = await databaseFor(t, dialect), current = controlledState(sample); await seed(database, current);
@@ -129,21 +141,27 @@ for (const dialect of ['postgres']) for (const name of ['first-high-id-movies', 
           country: collectionContext.libraryOptions.MetadataCountryCode ?? null, type: collectionContext.collectionType }); return null; } };
       const programDataPath = 'C:\\ProgramData\\MediaManager', resolverPipeline = new DirectoryItemResolverPipeline({ programDataPath, configuration, resolvers: [observer, createVideoFileResolver()] });
       const lifecycleFixture = await createResolvedItemLifecycleFixture({ store, library, vfs, identityMap, configuration });
-      const scanner = new FolderScanService({ store, library, vfs, identityMap, refreshes: new ProviderRefreshService(),
+      const errors = [];
+      const validationFixture = createFolderValidationScanFixture({ store, library, vfs, identityMap,
         ignoreRule: await knownAncestorIgnoreRule({ registry, vfs, identityMap, identityRoots: [current.item.Path] }),
-        programDataPath, configuration, resolverPipeline, resolvedItemLifecycle: lifecycleFixture.lifecycle });
-      t.after(async () => { await scanner.close(); await lifecycleFixture.close(); await library.close(); await registry.close(); });
-      const receipt = await scanner.scan(mapRecord((await database.rows('BaseItems', { where: { Id: current.item.Id } }))[0]), { Recursive: false });
+        programDataPath, configuration, resolverPipeline, lifecycleFixture, onError: error => errors.push(error) });
+      t.after(async () => { await validationFixture.close(); await lifecycleFixture.close(); await library.close(); await registry.close(); });
+      const receipt = await validationFixture.itemCreation.withItem(current.item.Id, parent =>
+        validationFixture.validation.validateChildren(parent, { refreshChildMetadata: false }));
+      assert.deepEqual(errors, []);
       assert.ok(seen.length > 0); for (const value of seen) compare(value, { ids: native.result.collectionIds, country: native.result.country, type: native.result.contentType });
-      assert.equal(receipt.added, native.result.contentType === 'movies' ? 1 : 0);
+      // The context remains the native observation; a null content type now
+      // also admits ordinary movies through the actual mixed-library resolver.
+      const createsMovie = native.result.contentType == null || native.result.contentType === 'movies';
+      assert.equal(receipt.created.length, createsMovie ? 1 : 0);
       const rows = (await database.rows('BaseItems', { where: { ParentId: current.item.Id } }));
-      assert.equal(rows.length, native.result.contentType === 'movies' ? 1 : 0);
+      assert.equal(rows.length, createsMovie ? 1 : 0);
       if (rows.length) assert.equal(rows[0].Type, 'MediaBrowser.Controller.Entities.Movies.Movie');
     });
 }
 
 for (const dialect of ['postgres']) for (const sample of fixtures[1].input.filter(value => value.name.startsWith('deep-'))) {
-  test(dialect + ': recursive scanner keeps actual intermediate parents ' + sample.name,
+  test(dialect + ': recursive Folder validation keeps actual intermediate parents ' + sample.name,
     { skip: dialect === 'postgres' && !process.env.MEDIAMANAGER_TEST_POSTGRES }, async t => {
       const native = fixtures[1].native.results.find(value => value.name === sample.name);
       const { database, store } = await databaseFor(t, dialect), current = controlledState(sample);
@@ -167,11 +185,14 @@ for (const dialect of ['postgres']) for (const sample of fixtures[1].input.filte
         } };
       const programDataPath = 'C:\\ProgramData\\MediaManager', resolverPipeline = new DirectoryItemResolverPipeline({ programDataPath, configuration, resolvers: [observer, createVideoFileResolver()] });
       const lifecycleFixture = await createResolvedItemLifecycleFixture({ store, library, vfs, identityMap, configuration });
-      const scanner = new FolderScanService({ store, library, vfs, identityMap, refreshes: new ProviderRefreshService(),
+      const errors = [];
+      const validationFixture = createFolderValidationScanFixture({ store, library, vfs, identityMap,
         ignoreRule: await knownAncestorIgnoreRule({ registry, vfs, identityMap, identityRoots: [scanRoot.Path] }),
-        programDataPath, configuration, resolverPipeline, resolvedItemLifecycle: lifecycleFixture.lifecycle });
-      t.after(async () => { await scanner.close(); await lifecycleFixture.close(); await library.close(); await registry.close(); });
-      await scanner.scan(scanRoot);
+        programDataPath, configuration, resolverPipeline, lifecycleFixture, onError: error => errors.push(error) });
+      t.after(async () => { await validationFixture.close(); await lifecycleFixture.close(); await library.close(); await registry.close(); });
+      await validationFixture.itemCreation.withItem(scanRoot.Id, parent =>
+        validationFixture.validation.validateChildren(parent, { recursive: true, refreshChildMetadata: false }));
+      assert.deepEqual(errors, []);
       compare(seen.filter(value => value.path === sample.item.Path), [{ path: sample.item.Path, type: native.result.contentType }]);
       const videos = await database.rows('BaseItems', { where: { Path: sample.item.Path + '\\Film.mkv' } });
       assert.equal(videos.length, native.result.contentType === 'movies' ? 1 : 0);

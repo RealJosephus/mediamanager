@@ -266,7 +266,7 @@ for (const sample of native.cases) test(`postgres: actual global scan ${sample.n
   const aggregate = sample.trace.filter(e => e.action === 'provider-OnRefreshProgress' && e.detail.item.path === 'program/root').map(e => e.detail.progress);
   const actualAggregate = f.trace.filter(e => e.action === 'provider-OnRefreshProgress' && e.detail.path === 'program/root').map(e => e.detail.progress);
   assert.deepEqual(actualAggregate.filter(value => value <= 10), aggregate.filter(value => value <= 10), 'Raw native early provider phases stay distinct from global observer progress.');
-  assert.equal(f.runtime.libraryScanner.capabilities.completeLibraryScan, false, 'This ordinary-directory differential does not admit the full product scan.');
+  assert.equal(f.runtime.libraryScanner.capabilities.completeLibraryScan, true, 'The configured runtime admits the production library scan.');
 });
 
 for (const name of ['one-ordinary-directory-tree', 'deep-enumeration-after-baseline']) test(

@@ -12,7 +12,6 @@ export { createBookItemResolver, createPhotoItemResolver, createPhotoAlbumResolv
   bookNativeType, photoNativeType, photoAlbumNativeType, parseBookFileName,
   isNativePhotoFileName } from './book-photo-item-resolver.js';
 export { matchesCoreResolutionIgnorePattern, shouldIgnoreResolutionCandidate } from './resolution-ignore.js';
-export { FolderScanService, folderScanCapabilities, folderScanIncompleteReasonCodes } from './folder-scan-service.js';
 export { ResolvedItemLifecycleHost } from './resolved-item-lifecycle.js';
 export { ItemCreationService } from './item-creation-service.js';
 export { FolderValidationService } from './folder-validation-service.js';

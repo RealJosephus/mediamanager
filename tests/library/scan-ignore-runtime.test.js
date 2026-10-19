@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import { mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
@@ -15,8 +16,13 @@ import { idKey } from '../../src/library/records.js';
 import { createPostgresTestDatabase, dropPostgresTestDatabase } from '../database/postgres-fixture.js';
 import { knownAncestorIgnoreIdentityMap } from './ignore-namespace-fixture.js';
 
-const nativeGlobal = JSON.parse(await readFile(new URL('./fixtures/global-scan/native.json', import.meta.url), 'utf8'));
-const nativeProof = JSON.parse(await readFile(new URL('./fixtures/global-scan/provenance.json', import.meta.url), 'utf8'));
+// This integration consumes recorded outcomes, not the historical build/source
+// closure. Keep the complete recorded JSON byte-for-byte in its own input scope.
+const nativeBytes = await readFile(new URL('./fixtures/scan-ignore-runtime/native.json', import.meta.url));
+assert.equal(createHash('sha256').update(nativeBytes).digest('hex'),
+  '690f9fc6704493b1b7a6b7c761e52ac67d1e4c360dce74c2f3b5b5ee1af0c3de');
+const nativeGlobal = JSON.parse(nativeBytes);
+assert.equal(nativeGlobal.rawSha256, '079acd441188f2ab3be05f00f0b488afd8b8787a475dd492b5d71cb503162947');
 const nativeRetrievalFailure = nativeGlobal.cases.find(sample => sample.name === 'deep-enumeration-after-baseline');
 const nativeCancellation = nativeGlobal.cases.find(sample => sample.name === 'cancel-aggregate-at-7');
 const identityRoot = 'Z:\\Movies\\Film';
@@ -129,12 +135,9 @@ function assertUnchangedFolder(observation) {
 for (const mode of ['success', 'failure', 'cancel']) {
   test(`postgres: runtime shares ignore discovery and clears scan directory caches after ${mode}`, pg, async t => {
     const f = await fixture(t), { database, adapter, runtime, movieId, errors } = f, rule = runtime.ignoreRule;
-    assert.equal(runtime.folderScanner.ignoreRule, rule);
     assert.equal(runtime.folderValidation.ignoreRule, rule);
     assert.equal(runtime.folderValidation.metadataScanner, runtime.metadataScanner);
-    assert.equal(runtime.folderScanner.metadataScanner, runtime.metadataScanner);
     assert.equal(runtime.folderValidation.linkedChildReferences, runtime.linkedChildReferences);
-    assert.equal(runtime.folderScanner.linkedChildReferences, runtime.linkedChildReferences);
     assert.equal(runtime.itemDeletion.linkedChildReferences, runtime.linkedChildReferences);
     assert.equal(runtime.library.folderValidation, runtime.folderValidation);
     await runtime.metadata.loadContext.withContext(movieId, {}, async loaded => {
@@ -188,7 +191,6 @@ for (const mode of ['success', 'failure', 'cancel']) {
       assert.match(nativeCancellation.exception, /OperationCanceledException$/u);
       await assert.rejects(scan(), { code: 'cancelled' });
     } else {
-      assert.equal(nativeGlobal.rawSha256, nativeProof.rawSha256);
       assert.equal(nativeRetrievalFailure.exception, null, 'The actual native global scan logs retrieval failure and continues.');
       assert.equal(await scan(), null);
       assert.equal(progress.at(-1), 99, 'The real global lifecycle reaches its public completion progress.');

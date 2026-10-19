@@ -1,8 +1,10 @@
 import { cp, mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { SqliteDatabase } from '../../src/database/sqlite.js';
 import { tableDefinition } from '../../src/database/model.js';
+import { describeFile } from '../validation/inventory.js';
 import { assertFreshReferenceOutput, captureReferenceInput, verifyReferenceInput } from './reference-inputs.js';
 
 const [sourceArgument, destinationArgument] = process.argv.slice(2);
@@ -11,7 +13,8 @@ const sourceOutput = path.resolve(sourceArgument), outputRoot = path.resolve(des
 const source = path.join(sourceOutput, 'instance'), destination = path.join(outputRoot, 'instance');
 assertFreshReferenceOutput(outputRoot, [sourceOutput]);
 const sourceBefore = await captureReferenceInput(sourceOutput);
-const initialization = JSON.parse(await readFile(path.join(sourceOutput, 'initialization.json')));
+const initializationFile = path.join(sourceOutput, 'initialization.json');
+const initialization = JSON.parse(await readFile(initializationFile));
 if (!initialization.initializedFromEmpty || !initialization.process?.stopped || initialization.process.exitCode !== 0
   || path.resolve(initialization.root ?? '') !== source) {
   throw new Error('A successfully initialized, stopped empty native instance is required.');
@@ -64,7 +67,9 @@ try {
   });
 } finally { database.close(); }
 await verifyReferenceInput(sourceOutput, sourceBefore);
-await writeFile(path.join(outputRoot, 'synthetic-media-fixture.json'), JSON.stringify({ preparedAt: new Date().toISOString(), source,
+await writeFile(path.join(outputRoot, 'synthetic-media-fixture.json'), JSON.stringify({ schemaVersion: 1, preparedAt: new Date().toISOString(), source,
+  preparation: await describeFile(fileURLToPath(import.meta.url)), initialization: await describeFile(initializationFile),
   originalDatabaseSha256: originalHash, sourceEntriesSha256: sourceBefore.entriesSha256, destination, ids, seededItems: 2, nativeMigrationHistoryRetained: true, sourceUnchanged: true,
+  instanceEntriesSha256: (await captureReferenceInput(destination)).entriesSha256,
   credentialsRecorded: false, mediaBytesCreated: false, completeLibraryVerified: false }, null, 2) + '\n');
 console.log(JSON.stringify({ output: outputRoot, instance: destination, seededItems: 2, sourceUnchanged: true }));

@@ -31,34 +31,39 @@ export class LibraryConfigurationService {
   #closing;
   constructor({ programDataPath, optionsStore, configuration = {}, configurationStore, mediaAssets,
     lifecycle, monitor, host, refreshes, refreshQueue = () => new Set(), queueLibraryScan,
-    invalidateDirectory = () => {}, sleep = delay, fileSystem, runBackground = operation => Promise.resolve().then(operation), onError = () => {} } = {}) {
+    invalidateDirectory = () => {}, sleep = delay, fileSystem, runBackground = operation => Promise.resolve().then(operation),
+    admitMetadataDrain = () => ({ run: operation => operation(), release() {} }), onError = () => {} } = {}) {
     if (!path.isAbsolute(programDataPath ?? '') || !optionsStore || !mediaAssets || !lifecycle || !monitor || !host
       || typeof queueLibraryScan !== 'function') throw new TypeError('Library configuration requires instance state, VFS access and top-level lifecycle owners.');
     Object.assign(this, { programDataPath: path.resolve(programDataPath), optionsStore, configuration, configurationStore,
-      mediaAssets, lifecycle, monitor, host, refreshes, refreshQueue, queueLibraryScan, invalidateDirectory, sleep, fileSystem, runBackground, onError });
+      mediaAssets, lifecycle, monitor, host, refreshes, refreshQueue, queueLibraryScan, invalidateDirectory, sleep, fileSystem, runBackground, admitMetadataDrain, onError });
     this.root = path.join(this.programDataPath, 'root', 'default');
     this.locationComparer = new Intl.Collator(undefined, { sensitivity: 'variant' });
   }
   #enqueue(operation) {
     if (this.#closed) return Promise.reject(libraryError(503, 'Library configuration is closing.'));
-    return this.#append(operation);
+    let admission;
+    try { admission = this.admitMetadataDrain(); }
+    catch (error) { return Promise.reject(error); }
+    return admission.run(() => this.#append(operation)).finally(() => admission.release());
   }
   #append(operation) {
     const result = this.#tail.then(operation); this.#tail = result.catch(() => {}); return result;
   }
   admitCollectionOperation() {
     if (this.#closed) throw libraryError(503, 'Library configuration is closing.');
+    const metadataAdmission = this.admitMetadataDrain();
     const completion = Promise.withResolvers();
     const entry = { pending: 0, released: false, completion: completion.promise };
     const finish = () => {
       if (!entry.released || entry.pending) return;
-      this.#collectionOperations.delete(admission); completion.resolve();
+      this.#collectionOperations.delete(admission); metadataAdmission.release(); completion.resolve();
     };
     const admission = Object.freeze({
       addVirtualFolder: (name, collectionType, options, refreshLibrary = false) => {
         if (entry.released) return Promise.reject(libraryError(503, 'Collection configuration admission is released.'));
         entry.pending++;
-        return this.#append(() => this.#addVirtualFolder(name, collectionType, options, refreshLibrary))
+        return metadataAdmission.run(() => this.#append(() => this.#addVirtualFolder(name, collectionType, options, refreshLibrary)))
           .finally(() => { entry.pending--; finish(); });
       },
       release: () => {

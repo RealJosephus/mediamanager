@@ -16,6 +16,11 @@ on:
         type: boolean
         required: false
         default: false
+      native_instance:
+        description: Initialize a fresh stopped native instance and a separate controlled media seed (requires native_reference)
+        type: boolean
+        required: false
+        default: false
       alist_reference:
         description: Build the designated AList Go source with the controlled API-only test frontend (Web UI unvalidated)
         type: boolean
@@ -55,6 +60,7 @@ jobs:
       MEDIAMANAGER_TEST_POSTGRES: postgresql://validation@127.0.0.1:5432/postgres
       MEDIAMANAGER_CI_TEST_FILES: ${{ inputs.test_files || '' }}
       MEDIAMANAGER_CI_NATIVE_REFERENCE: ${{ inputs.native_reference && 'true' || 'false' }}
+      MEDIAMANAGER_CI_NATIVE_INSTANCE: ${{ inputs.native_instance && 'true' || 'false' }}
       MEDIAMANAGER_CI_ALIST_REFERENCE: ${{ inputs.alist_reference && 'true' || 'false' }}
       DOTNET_CLI_TELEMETRY_OPTOUT: '1'
       DOTNET_NOLOGO: '1'
@@ -73,6 +79,9 @@ jobs:
         shell: pwsh
         run: |
           $ErrorActionPreference = 'Stop'
+          if ($env:MEDIAMANAGER_CI_NATIVE_INSTANCE -eq 'true' -and $env:MEDIAMANAGER_CI_NATIVE_REFERENCE -ne 'true') {
+            throw 'native_instance requires native_reference.'
+          }
           $trackedFiles = git ls-files -- tests
           if ($LASTEXITCODE -ne 0) { throw 'Cannot list candidate test files.' }
           $tracked = [Collections.Generic.HashSet[string]]::new([string[]]$trackedFiles, [StringComparer]::Ordinal)
@@ -183,6 +192,25 @@ jobs:
           }
       - name: Install locked dependencies
         run: npm ci --bin-links=false
+      - name: Initialize isolated native instance and controlled media seed
+        if: inputs.native_instance == true
+        shell: pwsh
+        timeout-minutes: 10
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $instanceRoot = Join-Path $env:RUNNER_TEMP 'mediamanager-native-instance'
+          $empty = Join-Path $instanceRoot 'empty'
+          $seeded = Join-Path $instanceRoot 'seeded'
+          $validationOutput = $env:MEDIAMANAGER_VALIDATION_OUTPUT_ROOT
+          try {
+            $env:MEDIAMANAGER_VALIDATION_OUTPUT_ROOT = $instanceRoot
+            node tools/compat/initialize-reference.mjs $empty
+            if ($LASTEXITCODE -ne 0) { throw 'Native instance initialization failed.' }
+            node tools/compat/prepare-media-reference.mjs $empty $seeded
+            if ($LASTEXITCODE -ne 0) { throw 'Controlled native media seed preparation failed.' }
+          } finally { $env:MEDIAMANAGER_VALIDATION_OUTPUT_ROOT = $validationOutput }
+          "MEDIAMANAGER_NATIVE_INSTANCE_ROOT=$instanceRoot" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          "MEDIAMANAGER_TEST_NATIVE_INSTANCE=$(Join-Path $seeded 'instance')" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
       - name: Record runner and database identity
         id: environment
         run: node tools/ci/environment.js capture
@@ -224,6 +252,17 @@ jobs:
             ${{ runner.temp }}/mediamanager-native-build/runtime
             ${{ runner.temp }}/mediamanager-native-build/source-offer
             ${{ runner.temp }}/mediamanager-native-build/receipts
+          if-no-files-found: error
+          retention-days: 14
+      - name: Preserve native initialization receipts and redacted log
+        if: always() && inputs.native_instance == true
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: native-instance-${{ matrix.os }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/mediamanager-native-instance/empty/initialization.json
+            ${{ runner.temp }}/mediamanager-native-instance/empty/initialization.log
+            ${{ runner.temp }}/mediamanager-native-instance/seeded/synthetic-media-fixture.json
           if-no-files-found: error
           retention-days: 14
       - name: Preserve same-run AList API host source and build evidence
