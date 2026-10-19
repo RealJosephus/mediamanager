@@ -51,9 +51,14 @@ async function startRuntime(database, programDataPath) {
 test('full HTTP media and NowPlaying use native request UI language without concurrent context leakage',
   { skip: !process.env.MEDIAMANAGER_TEST_POSTGRES }, async t => {
   const database = await createPostgresTestDatabase(t, 'http_language');
+  const testRoot = await temporaryOptionsDirectory();
+  t.after(async () => {
+    assert.ok(path.resolve(testRoot).startsWith(path.join(validationOutputRoot(), 'library-options-test-')));
+    await rm(testRoot, { recursive: true });
+  });
   await database.insert('BaseItems', { ...nativeMedia, ParentId: null, TopParentId: null, RunTimeTicks: BigInt(nativeMedia.RunTimeTicks) });
   for (const row of streamFixture.rows) await database.insert('MediaStreamInfos', row);
-  const { runtime, call } = await startRuntime(database, 'D:\\isolated-language-state');
+  const { runtime, call } = await startRuntime(database, path.join(testRoot, 'data'));
   const expectedScope = new AsyncLocalStorage();
   const run = runtime.localization.run.bind(runtime.localization);
   runtime.localization.run = (context, callback) => expectedScope.run(context, () => run(context, callback));

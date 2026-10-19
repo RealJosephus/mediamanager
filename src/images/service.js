@@ -249,7 +249,7 @@ export class ImageService {
         response.setHeader('Content-Type', result.mimeType ?? 'text/plain');
         if (dlna) { response.setHeader('transferMode.dlna.org', 'Interactive'); response.setHeader('realTimeInfo.dlna.org', 'DLNA.ORG_TLAG=*'); }
         response.setHeader('Age', String(roundEven((Date.now() - date.getTime()) / 1000)));
-        response.setHeader('Vary', 'Accept'); response.setHeader('Content-Disposition', 'attachment');
+        response.appendHeader('Vary', 'Accept'); response.setHeader('Content-Disposition', 'attachment');
         if (disabled) { response.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate'); response.setHeader('Pragma', 'no-cache, no-store, must-revalidate'); }
         else {
           response.setHeader('Cache-Control', tag ? 'public, max-age=31536000, immutable' : 'public'); response.setHeader('Last-Modified', date.toUTCString());

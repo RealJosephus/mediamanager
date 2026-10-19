@@ -329,6 +329,13 @@ test('runtime external playlist repository runs XML and images before the commit
   runtime.library.on('ItemUpdated', event => {
     if (idKey(event.Item.Id) === idKey(playlistId)) phases.push({ event: event.UpdateReason, name: event.Item.Name });
   });
+  const queuedRefreshReady = Promise.withResolvers(), queuedRefresh = runtime.metadata.queuedRefresh;
+  runtime.metadata.queuedRefresh = async (...args) => { await queuedRefreshReady.promise; return queuedRefresh(...args); };
+  const refreshModes = [], refreshLiveItem = runtime.metadata.refreshLiveItem.bind(runtime.metadata);
+  runtime.metadata.refreshLiveItem = (item, options) => {
+    refreshModes.push({ id: item.Id, mode: options.MetadataRefreshMode, forceSave: options.ForceSave });
+    return refreshLiveItem(item, options);
+  };
   try {
     await runtime.playlists.update(playlistId, { user: owner, name: 'Runtime name' });
     assert.deepEqual(phaseNames(), ['/fixture/lists/mix.xml', 'images', 16, accessPath('.m3u')]);
@@ -376,11 +383,19 @@ test('runtime external playlist repository runs XML and images before the commit
     // no-op callback, and it cannot inherit the preparation transaction.
     phases.length = 0;
     await runtime.playlists.add(playlistId, [id(2)], { user: owner });
+    assert.deepEqual((await h.snapshot()).links, [id(1), id(2), id(1), id(2)]);
+    const committedFile = await bytes(h.vfs, accessPath('.m3u'));
+    queuedRefreshReady.resolve();
     await runtime.store.run(() => {});
     await runtime.metadata.drain();
-    assert.deepEqual((await h.snapshot()).links, [id(1), id(2)],
-      'the native XML sidecar wins local provider selection; its empty file links merge by cached ID');
+    assert.deepEqual(refreshModes, [{ id: playlistId, mode: 'Default', forceSave: true }]);
+    // Native MetadataRefreshOptions defaults to Default, whose local result
+    // replaces links. BaseXmlSaver omits PlaylistItems for an external file;
+    // the XML provider therefore replaces the repository relation with empty.
+    assert.deepEqual((await h.snapshot()).links, []);
+    assert.doesNotMatch(Buffer.from(await bytes(h.vfs, '/fixture/lists/mix.xml'), 'base64').toString('utf8'), /<PlaylistItems/u);
+    assert.equal(await bytes(h.vfs, accessPath('.m3u')), committedFile, 'ForceSave does not rewrite the external playlist file.');
     assert.ok(phases.filter(phase => phase.filename === '/fixture/lists/mix.xml').length >= 2);
     assert.equal((await h.database.rows('BaseItems', { where: { Id: playlistId } }))[0].Path, identityPath('.m3u'));
-  } finally { h.vfs.write = h.originalWrite; h.database.queryHook = null; await runtime.close(); }
+  } finally { queuedRefreshReady.resolve(); h.vfs.write = h.originalWrite; h.database.queryHook = null; await runtime.close(); }
 });

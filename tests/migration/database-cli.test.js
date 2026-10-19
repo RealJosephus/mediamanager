@@ -549,9 +549,9 @@ test('PostgreSQL schema cleanup rejects a database open that did not create the 
   }
 });
 
-test('real CLI roundtrip uses pinned SQLite and PostgreSQL when integration inputs are configured', {
-  skip: !process.env.MEDIAMANAGER_TEST_POSTGRES || !process.env.MEDIAMANAGER_TEST_NATIVE_SQLITE
-    || !process.env.MEDIAMANAGER_TEST_PORTABLE_MOUNT_CONTRACT_JSON,
+test('real CLI roundtrip preserves the current native SQLite source in PostgreSQL', {
+  skip: !process.env.MEDIAMANAGER_TEST_POSTGRES || !process.env.MEDIAMANAGER_TEST_CURRENT_NATIVE_SQLITE
+    || !process.env.MEDIAMANAGER_TEST_CURRENT_NATIVE_SQLITE_MOUNT_CONTRACT_JSON,
   timeout: 120_000,
 }, async () => {
   const directory = await mkdtemp(path.join(os.tmpdir(), 'mediamanager-database-cli-real-'));
@@ -560,11 +560,11 @@ test('real CLI roundtrip uses pinned SQLite and PostgreSQL when integration inpu
   const contract = path.join(directory, 'contract.json');
   const output = path.join(directory, 'jellyfin.db');
   await writeFile(binding, JSON.stringify(instanceBinding));
-  await writeFile(contract, process.env.MEDIAMANAGER_TEST_PORTABLE_MOUNT_CONTRACT_JSON);
+  await writeFile(contract, process.env.MEDIAMANAGER_TEST_CURRENT_NATIVE_SQLITE_MOUNT_CONTRACT_JSON);
   let client, native, returned;
   try {
     const imported = await importJellyfinSqlite([
-      '--source', process.env.MEDIAMANAGER_TEST_NATIVE_SQLITE,
+      '--source', process.env.MEDIAMANAGER_TEST_CURRENT_NATIVE_SQLITE,
       '--postgres-url-env', 'MEDIAMANAGER_TEST_POSTGRES',
       '--schema', schema,
       '--instance-binding', binding,
@@ -579,11 +579,11 @@ test('real CLI roundtrip uses pinned SQLite and PostgreSQL when integration inpu
     assert.equal(exported.verified, true);
     assert.equal(exported.nativeSchemaFingerprint, pinnedNativeSqliteSchemaFingerprint);
     assert.equal(exported.migrationHistoryRows, pinnedNativeSqliteMigrationHistory.length);
-    native = new SqliteDatabase(process.env.MEDIAMANAGER_TEST_NATIVE_SQLITE, {
+    native = new SqliteDatabase(process.env.MEDIAMANAGER_TEST_CURRENT_NATIVE_SQLITE, {
       readOnly: true, requireMigrationHistory: true,
     });
     returned = new SqliteDatabase(output, { readOnly: true, requireMigrationHistory: true });
-    assert.equal(JSON.stringify(returned.schema.history), JSON.stringify(pinnedNativeSqliteMigrationHistory));
+    assert.deepEqual(returned.schema.history, native.schema.history);
     assert.deepEqual(await databaseDigest(returned), await databaseDigest(native));
     assert.equal(returned.database.prepare('PRAGMA integrity_check').get().integrity_check, 'ok');
     assert.deepEqual(returned.database.prepare('PRAGMA foreign_key_check').all(), []);

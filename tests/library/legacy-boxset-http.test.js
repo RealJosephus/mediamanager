@@ -74,7 +74,9 @@ for (const dialect of dialects) {
           if (item.pathKind === 'dataExact') return dataRoot;
           if (item.pathKind === 'dataTrailing') return dataRoot + path.sep;
           if (item.pathKind === 'dataEscape') return dataRoot + path.sep + '..' + path.sep + item.key;
-          if (item.pathKind === 'dataUpper') return dataRoot.toUpperCase() + path.sep + item.key;
+          // The Windows recording addresses the same owned data directory
+          // with a case variant. Preserve that location on case-sensitive hosts.
+          if (item.pathKind === 'dataUpper') return (process.platform === 'win32' ? dataRoot.toUpperCase() : dataRoot) + path.sep + item.key;
           if (item.pathKind === 'dataSibling') return dataRoot + '-sibling' + path.sep + item.key;
           if (item.pathKind === 'boxset') return path.join(paths.collections, item.key);
           if (item.pathKind === 'child') {

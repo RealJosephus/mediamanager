@@ -15,10 +15,10 @@ import { createPostgresTestDatabase, dropPostgresTestDatabase, postgresTestConne
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 test('postgres: startup first-user insertion order survives SQLite export, actual native user continuation and complete table reimport', {
-  skip: !postgresTestConnectionString || !process.env.MEDIAMANAGER_TEST_NATIVE_SQLITE || !process.env.MEDIAMANAGER_JELLYFIN_DLL
+  skip: !postgresTestConnectionString || !process.env.MEDIAMANAGER_TEST_CURRENT_NATIVE_SQLITE || !process.env.MEDIAMANAGER_JELLYFIN_DLL
 }, async t => {
   const root = path.join(path.resolve(validationOutputRoot()), 'startup-exchange'); await fs.mkdir(root, { recursive: false });
-  const sourceBytes = await fs.readFile(process.env.MEDIAMANAGER_TEST_NATIVE_SQLITE), sourceHash = hash(sourceBytes), sourcePath = path.join(root, 'source.db');
+  const sourceBytes = await fs.readFile(process.env.MEDIAMANAGER_TEST_CURRENT_NATIVE_SQLITE), sourceHash = hash(sourceBytes), sourcePath = path.join(root, 'source.db');
   await fs.writeFile(sourcePath, sourceBytes, { flag: 'wx' });
   let source, returned, database, reimported, runtime, importedRuntime;
   t.after(async () => {
@@ -63,7 +63,7 @@ test('postgres: startup first-user insertion order survives SQLite export, actua
   const first = await importedRuntime.users.getFirstUser(); assert.equal(first.Id, firstId); assert.equal(first.Username, 'Native first');
   assert.equal(await verifyPasswordHash(parsePasswordHash(first.Password), 'Native startup password'), true);
   assert.equal(await importedRuntime.users.getUser(otherId), null);
-  assert.equal(hash(await fs.readFile(process.env.MEDIAMANAGER_TEST_NATIVE_SQLITE)), sourceHash);
+  assert.equal(hash(await fs.readFile(process.env.MEDIAMANAGER_TEST_CURRENT_NATIVE_SQLITE)), sourceHash);
   await fs.writeFile(path.join(root, 'proof.json'), JSON.stringify({ sourceHash, exportedSha256, exportResult: result, nativeRecording: recording,
     beforeOrder: native.beforeOrder, afterOrder: native.afterOrder, actualNativeUserReadAndWrite: true, allTablesRoundTrip: true,
     fullInstanceVerified: false, completeBuildInputClosure: false, phaseAcceptance: false }, (_key, value) => typeof value === 'bigint' ? JSON.rawJSON(value.toString()) : value, 2) + '\n', { flag: 'wx' });

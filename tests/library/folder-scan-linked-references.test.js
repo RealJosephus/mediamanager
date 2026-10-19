@@ -9,7 +9,7 @@ import { tableDefinition } from '../../src/database/model.js';
 import { getNewItemId } from '../../src/core/identity.js';
 import { nativeGuid } from '../../src/users/native.js';
 import { DirectoryItemResolverPipeline, folderNativeType } from '../../src/library/directory-item-resolver.js';
-import { createOwnedFolderValidationFixture, ownedRefreshOptions } from '../helpers/owned-folder-validation-fixture.js';
+import { createOwnedFolderValidationFixture, ownedStatePaths, ownedRefreshOptions } from '../helpers/owned-folder-validation-fixture.js';
 import { ItemCreationService } from '../../src/library/item-creation-service.js';
 import { ItemDeletionService } from '../../src/library/item-deletion-service.js';
 import { LinkedChildReferenceService } from '../../src/library/linked-child-reference-service.js';
@@ -87,7 +87,7 @@ async function fixture(t, dialect) {
     Name: 'Movies', ParentId: userRootId, IsFolder: true,
     Data: JSON.stringify({ CollectionType: 'movies', PhysicalFolderIds: [rootId], PhysicalLocationsList: [rootPath] })
   }));
-  library = new LibraryService({fileSystem: testFileSystem,  store, linkedChildren, serverId: 'linked-folder-scan', programDataPath });
+  library = new LibraryService({fileSystem: testFileSystem, ...await ownedStatePaths(t), store, linkedChildren, serverId: 'linked-folder-scan', programDataPath });
   const ignoreRule = await knownAncestorIgnoreRule({ registry, vfs, identityMap, identityRoots: [rootPath] });
   lifecycleFixture = await createResolvedItemLifecycleFixture({ store, library, linkedChildren, vfs, identityMap, ignoreRule });
   itemCreation = new ItemCreationService({ store, library, linkedChildren, loadContext: lifecycleFixture.loadContext });
@@ -391,7 +391,7 @@ linkedTest('a child linked failure preserves the already published parent direct
   assert.ok(await value.itemCreation.getItemById(source.Id));
 });
 
-linkedTest('missing alternate cancellation waits for reroute, primary save and final deletion closure', async (t, dialect) => {
+linkedTest('a missing alternate save fails before the linked saver can cancel deletion', async (t, dialect) => {
   const value = await fixture(t, dialect);
   await value.adapter.write('/Film - 1080p.mkv', Buffer.from('1080'));
   await value.adapter.write('/Film - 2160p.mkv', Buffer.from('2160'));
@@ -404,20 +404,17 @@ linkedTest('missing alternate cancellation waits for reroute, primary save and f
   const controller = new AbortController();
   value.control.cancelOnLinkedSaver = true;
   value.control.controller = controller;
+  const before = await value.database.rows('LinkedChildren', { orderBy: [{ column: 'ParentId', direction: 'ASC' }, { column: 'SortOrder', direction: 'ASC' }] });
   value.startTrace();
   await assert.rejects(value.validation.validateChildren(value.reference, { ...ownedRefreshOptions, signal: controller.signal }),
-    error => error?.code === 'cancelled' || error?.name === 'AbortError');
+    { code: '23503' });
   value.stopTrace();
-  const rerouteAt = position(value.trace, entry => entry.phase === 'reroute' && entry.from === idKey(alternate.Id));
-  const primarySaveAt = position(value.trace, entry => entry.phase === 'save:end' && entry.id === idKey(primary.Id));
-  const deletionAt = position(value.trace, entry => entry.phase === 'delete:end' && entry.id === idKey(alternate.Id));
-  assert.ok(rerouteAt >= 0 && rerouteAt < primarySaveAt && primarySaveAt < deletionAt,
-    'scan cancellation is observed only after the missing-alternate action finishes');
-  assert.equal((await value.database.rows('BaseItems', { where: { Id: alternate.Id } })).length, 0);
-  assert.equal(await value.itemCreation.getItemById(alternate.Id), null, 'the full deletion closure evicts the warm alternate');
-  const links = await value.database.rows('LinkedChildren', { where: { ParentId: manualParent } });
-  assert.equal(links.length, 1);
-  assert.equal(idKey(links[0].ChildId), idKey(primary.Id), 'the non-replacement manual link is rerouted before deletion');
+  assert.equal(controller.signal.aborted, false, 'the linked saver was never reached');
+  assert.ok(value.trace.some(entry => entry.phase === 'save:start' && entry.id === idKey(primary.Id)));
+  assert.equal(value.trace.some(entry => entry.phase === 'reroute' || entry.phase === 'delete:start'), false);
+  assert.equal((await value.database.rows('BaseItems', { where: { Id: alternate.Id } })).length, 1);
+  assert.deepEqual(await value.database.rows('LinkedChildren', { orderBy: [{ column: 'ParentId', direction: 'ASC' }, { column: 'SortOrder', direction: 'ASC' }] }), before);
+  assert.equal((await value.database.rows('LinkedChildren', { where: { ParentId: manualParent } }))[0].ChildId, alternate.Id);
 });
 
 linkedTest('three-version replacement with a manual reference preserves the frozen failure after its committed prefix', async (t, dialect) => {
@@ -475,8 +472,10 @@ linkedTest('slash-variant alternate strings do not classify an old primary as a 
   assert.ok(deleteAt >= 0, `the old primary follows ordinary DeleteItem: ${JSON.stringify(value.trace)}`);
   assert.ok(createAt < 0 || deleteAt < createAt,
     `OrdinalIgnoreCase does not normalize slash variants into deferred replacement: ${JSON.stringify(value.trace)}`);
-  assert.equal(failure?.code, 'ignore-search-unmapped',
-    `ordinary DeleteItem reaches the deliberately non-mappable raw alternate string before creation: ${failure?.message}`);
+  assert.equal(failure, undefined);
+  assert.equal((await value.database.rows('BaseItems', { where: { Id: source.Id } })).length, 0);
+  assert.equal((await value.database.rows('LinkedChildren')).some(link => idKey(link.ChildId) === idKey(source.Id)), false,
+    'ordinary deletion removes the old primary and its incoming manual reference');
 });
 
 for (const type of ['movie', 'folder']) linkedTest(`a missing ${type} removes its manual reference through ordinary deletion`, async (t, dialect) => {

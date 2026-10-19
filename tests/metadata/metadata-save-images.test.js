@@ -1,3 +1,4 @@
+import { fixturePathStyle, projectStatePath } from '../library/fixture-state-path.js';
 import { testFileSystem } from '../storage/plugin-files.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -40,7 +41,7 @@ async function fixtureFor(t, dialect, sample) {
   const { stateRoot, database, store, registry } = fixture;
   const media = path.join(stateRoot, 'media'), metadataPath = path.join(stateRoot, 'metadata');
   await mkdir(media);
-  fixture.identityMap.addPrefix({ identityRoot: media, accessRoot: '/fixture/save-images', style: 'windows', returnAccess: 'isolated file controls' });
+  fixture.identityMap.addPrefix({ identityRoot: media, accessRoot: '/fixture/save-images', style: fixturePathStyle, returnAccess: 'isolated file controls' });
   const items = [];
   if (Object.hasOwn(sample, 'parentSource')) items.push({ key: 'parent', Id: parentId, type: 'Folder', Name: 'Parent', Path: media,
     ChannelId: sample.parentSource === 'Channel' ? channelId : null });
@@ -49,7 +50,7 @@ async function fixtureFor(t, dialect, sample) {
   await fixture.seed({ target: 'owner', items });
   await writeFile(path.join(media, 'movie.mkv'), 'media control');
   for (const image of sample.images) {
-    const identity = /^http/u.test(image.path) ? image.path : path.join(stateRoot, image.path);
+    const identity = /^http/u.test(image.path) ? image.path : path.join(stateRoot, image.path.replaceAll('\\', path.sep));
     if (!/^http/u.test(identity) && !image.missing) {
       await mkdir(path.dirname(identity), { recursive: true }); await writeFile(identity, picture); await utimes(identity, new Date(stamp), new Date(stamp));
     }
@@ -70,7 +71,7 @@ async function fixtureFor(t, dialect, sample) {
   };
   const loaded = await loadContext(ownerId), calls = [], cancellation = new AbortController();
   const cancelled = Object.assign(new Error('Injected request cancellation'), { nativeException: 'OperationCanceledException' });
-  const projectPath = identity => identity == null ? null : identity.replace(stateRoot, '$STATE');
+  const projectPath = identity => identity == null ? null : projectStatePath(identity, stateRoot);
   const projectImages = images => images.map(image => ({ path: projectPath(image.Path), type: image.Type, width: image.Width ?? 0, height: image.Height ?? 0,
     blurhash: image.Blurhash == null ? null : Buffer.from(image.Blurhash).toString('utf8'), date: dateText(image.DateModified ?? MIN_DATE) }));
   registry.register({ id: 'controlled-images', name: 'Controlled', providers: [{ id: 'controlled-saver', name: 'Controlled', kind: 'saver', itemTypes: ['Movie'],

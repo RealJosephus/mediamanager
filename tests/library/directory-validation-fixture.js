@@ -22,6 +22,7 @@ import { nativeTextSql } from '../../src/database/native-text-sql.js';
 import { projectStatePath } from './fixture-state-path.js';
 
 export async function assertDirectoryValidation(t, dialect, sample, expected, {
+  compare = assert.deepEqual,
   reconciliation = false,
   onReroute,
   onRefreshProgress,
@@ -400,7 +401,7 @@ export async function assertDirectoryValidation(t, dialect, sample, expected, {
     actual.mutationLookup = lookup && projectDirectoryItem(lookup, fixture, sample);
     actual.mutatedLive = projectDirectoryItem(mutationItem, fixture, sample);
   }
-  assert.deepEqual(actual, expected);
+  compare(actual, expected);
   assert.equal(resolverErrors.length, sample.resolverFailure
     || (sample.recursive && (sample.failDirectory || sample.cancelFromSaver)) ? 1 : 0);
   return { fixture, validation, loaded, creator };

@@ -33,6 +33,31 @@ const captureService = async (name, filename) => captureInputIdentity({
   preflight: { ready: true, tools: [], services: [{ name, ...await describeFile(filename) }] },
 });
 
+test('shared fixture roots keep nested execution pins with their actual file or directory consumer', async t => {
+  const directory = await temporaryInputs(t), used = path.join(directory, 'probe.json');
+  const nested = path.join(directory, 'another-fixture'); await mkdir(nested);
+  const manifest = path.join(nested, 'provenance.json'), missing = path.join(directory, 'missing-original.bin');
+  await writeFile(used, '{}');
+  await writeFile(manifest, JSON.stringify({ requiredInputs: [{ filename: missing, sha256: '0'.repeat(64), required: true }] }));
+  const consumer = 'tests/shared-fixture-consumer.test.js';
+  const entry = overrides => ({ path: consumer, imports: [], test: true, importedFiles: [], services: [], tools: [],
+    declaredReferences: [], fixtureReferences: [], ...overrides });
+  const capture = overrides => captureInputIdentity({ selected: [consumer], dependencies: { entries: [entry(overrides)] },
+    environment: {}, preflight: { ready: true, services: [], tools: [] } });
+  const shared = await capture({ fixtureReferences: [{ filename: used }] });
+  assert.equal(shared.ready, true);
+  assert.equal(shared.entries.some(input => input.filename === missing && input.required), false,
+    'a sibling file does not acquire a nested fixture consumer\'s original execution inputs');
+  const direct = await capture({ fixtureReferences: [{ filename: manifest }] });
+  const tree = await capture({ declaredReferences: [{ filename: directory, required: true, dynamic: false, kind: 'directory', available: true }] });
+  for (const identity of [direct, tree]) {
+    assert.equal(identity.ready, false);
+    const required = identity.entries.find(input => input.filename === missing);
+    assert.equal(required.required, true);
+    assert.ok(required.requiredReasons.every(reason => reason.startsWith(consumer + ':')));
+  }
+});
+
 test('the collage source closure requires the exact system collection bytes used for face registration', async () => {
   const filename = 'src/images/user-view-collage.js', consumer = 'tests/validation/input-identity.test.js';
   const entry = (path, imports, test = false) => ({ path, imports, test, importedFiles: [], services: [], tools: [],

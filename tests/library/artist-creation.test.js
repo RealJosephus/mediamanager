@@ -12,6 +12,7 @@ import { createMetadataContextLoader } from '../../src/library/metadata-context.
 import { dateText, guid } from '../../src/library/records.js';
 import { nativeDateFromUnixNanoseconds, nativeGuid } from '../../src/users/native.js';
 import { setupChildrenFixture } from '../metadata/children-fixture.js';
+import { expandStatePath, projectStatePath, projectStateMacroPath } from './fixture-state-path.js';
 
 const identities = { MusicArtist: nativeArtistIdentity };
 const getters = { MusicArtist: 'getArtist' };
@@ -22,7 +23,8 @@ const provenance = JSON.parse(await readFile(new URL('provenance.json', fixtureR
 const columns = tableDefinition('BaseItems').columns;
 const normalize = (row, stateRoot) => Object.fromEntries(columns.map(column => {
   let value = row[column.name];
-  if (typeof value === 'string' && stateRoot) value = value.replaceAll(stateRoot, '$STATE');
+  if (typeof value === 'string' && stateRoot) value = projectStatePath(value, stateRoot);
+  if (column.name === 'Path') value = projectStateMacroPath(value, stateRoot);
   if (value != null && column.clrType.includes('Guid')) value = guid(value);
   if (value != null && column.clrType.includes('DateTime')) value = dateText(value);
   if (typeof value === 'bigint' && Number.isSafeInteger(Number(value))) value = Number(value);
@@ -61,12 +63,13 @@ for (const observation of native.observations) test('postgres: native ' + observ
   configuration.EnableNormalizedItemByNameIds = sample.Normalized;
   const identity = identities[observation.kind](sample.Name, library.options);
   assert.equal(guid(identity.Id), observation.artistId);
-  assert.equal(identity.Path.replace(stateRoot, '$STATE'), observation.artistPath.replace(observation.root, '$STATE'));
+  assert.equal(projectStatePath(identity.Path, stateRoot), projectStatePath(observation.artistPath, observation.root));
   // The recording includes its pre-action constructor rows as independent inputs.
   // Candidate creation runs against those inputs, never against result rows.
   for (const row of observation.initialRows) await database.insert('BaseItems', Object.fromEntries(columns.map(column => {
     let entry = row[column.name];
-    if (typeof entry === 'string') entry = entry.replaceAll(observation.root, stateRoot);
+    if (typeof entry === 'string') entry = expandStatePath(entry, observation.root, stateRoot);
+    if (column.name === 'Path') for (const macro of ['%AppDataPath%', '%MetadataPath%']) entry = expandStatePath(entry, macro, macro);
     if (entry != null && column.clrType.includes('Guid')) entry = nativeGuid(entry);
     return [column.name, entry];
   })));
@@ -100,9 +103,9 @@ for (const observation of native.observations) test('postgres: native ' + observ
     const directoryExists = Boolean(info?.isDirectory()), fileExists = Boolean(info?.isFile());
     assert.equal(directoryExists, reference.directoryExists); assert.equal(fileExists, reference.fileExists);
     const actualReturn = returnProjection(item), expectedReturn = reference.returned && { ...reference.returned,
-      Path: reference.returned.Path.replace(observation.root, '$STATE'),
+      Path: projectStatePath(reference.returned.Path, observation.root),
       DateCreated: dateText(reference.returned.DateCreated), DateModified: dateText(reference.returned.DateModified) };
-    if (actualReturn) actualReturn.Path = actualReturn.Path.replace(stateRoot, '$STATE');
+    if (actualReturn) actualReturn.Path = projectStatePath(actualReturn.Path, stateRoot);
     const rows = order((await database.rows('BaseItems')).map(row => normalize(row, stateRoot)));
     const expectedRows = order(reference.rows.map(row => normalize(row, observation.root)));
     if (directoryExists) {

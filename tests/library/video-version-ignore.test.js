@@ -3,17 +3,21 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { parseLosslessJson } from '../../src/core/json.js';
-import { guid } from '../../src/library/records.js';
-import { ItemUpdateType } from '../../src/metadata/save-manager.js';
-import { persistMetadata } from '../../src/metadata/persistence.js';
-
-import { typeName, discoveryFixture, projectItem, projectDiscovery } from './video-discovery-fixture.js';
+import { runVideoIgnoreScenario } from './video-ignore-scenario.js';
+import { projectStatePath } from './fixture-state-path.js';
 
 const root = new URL('./fixtures/video-version-ignore/', import.meta.url);
 const [input, native, provenance] = await Promise.all(['input.json', 'native.json', 'provenance.json']
   .map(async name => parseLosslessJson(await readFile(new URL(name, root), 'utf8'))));
-const ids = { owner: '98C00000-0000-0000-0000-000000000001', parent: '98C00000-0000-0000-0000-000000000002' };
-
+const platformProof = JSON.parse(await readFile(new URL('platform/provenance.json', root), 'utf8'));
+const posix = await Promise.all(platformProof.recordings.map(async proof => {
+  const bytes = await readFile(new URL('platform/' + proof.native.filename, root));
+  const recordBytes = await readFile(new URL('platform/' + proof.record.filename, root));
+  return { proof, bytes, recordBytes, native: parseLosslessJson(bytes.toString('utf8')), record: JSON.parse(recordBytes) };
+}));
+const project = value => typeof value === 'string' ? projectStatePath(value, '$STATE')
+  : Array.isArray(value) ? value.map(project)
+    : value && typeof value === 'object' ? Object.fromEntries(Object.entries(value).map(([key, child]) => [key, project(child)])) : value;
 test('video version discovery ignore recording seals actual rules/resolver/batch/delete and exact Int64', async () => {
   for (const file of provenance.fixtureFiles) {
     const source = file.path === 'tests/Directory.Build.props' ? new URL('../../../Directory.Build.props', root)
@@ -28,33 +32,27 @@ test('video version discovery ignore recording seals actual rules/resolver/batch
   assert.equal(native.results.length, 26);
   const existing = native.results.find(result => result.name === 'update-existing-bypasses-exclusion');
   assert.equal(existing.rows.find(row => row.name === 'Old version').runTimeTicks, 9007199254740995n);
+  assert.equal(platformProof.inputSha256, provenance.fixtureFiles[0].sha256);
+  assert.deepEqual(platformProof.recordings.map(value => value.platform).sort(), ['darwin', 'linux']);
+  for (const entry of posix) {
+    assert.equal(createHash('sha256').update(entry.bytes).digest('hex'), entry.proof.native.sha256);
+    assert.equal(createHash('sha256').update(entry.recordBytes).digest('hex'), entry.proof.record.sha256);
+    assert.equal(entry.native.inputSha256, entry.proof.selectedInputSha256);
+    assert.equal(entry.native.actualFrozenVideoVersionDiscovery, true);
+    assert.equal(entry.record.passed, true); assert.equal(entry.record.build.status, 0); assert.equal(entry.record.process.status, 0);
+    assert.equal(entry.record.sourceFilesSha256, entry.proof.sourceFilesSha256);
+    assert.equal(entry.native.results.length, 1); assert.equal(entry.native.results[0].name, platformProof.case);
+    const projectSource = entry.record.sourceFiles.find(file => file.filename.endsWith('/PlatformOracle.csproj'));
+    assert.equal(createHash('sha256').update(await readFile(new URL('PlatformOracle.csproj', root))).digest('hex'), projectSource.sha256);
+  }
+  assert.deepEqual(project(posix[0].native.results), project(posix[1].native.results));
 });
 
 for (const dialect of ['postgres']) for (const sample of input) {
   test(`${dialect}: complete native ignore discovery ${sample.name}`, { skip: dialect === 'postgres' && !process.env.MEDIAMANAGER_TEST_POSTGRES }, async t => {
-    const value = await discoveryFixture(t, dialect, sample), { fixture, loaded, calls, target } = value;
-    const cancellation = new AbortController();
-    if (sample.cancelled) cancellation.abort(Object.assign(new Error('Controlled cancellation'), { nativeException: 'OperationCanceledException' }));
-    let resolved = null, exception = null;
-    try {
-      if (sample.operation === 'resolve') resolved = await loaded.videoVersionDiscovery.resolveAlternateVersion(loaded, target, typeName(sample.expectedType),
-        { reportRemoved: (item, parent) => fixture.host.updates.reportItemRemoved(item, parent) });
-      else await fixture.host.updates.updateRepository(loaded, { Item: loaded.item, Images: null }, ItemUpdateType.MetadataImport, {
-        signal: cancellation.signal,
-        saverOperation: async () => { value.activate(); calls.push({ action: 'saver', id: guid(ids.owner), reason: 2 }); return []; },
-        persist: async (updated, result, options) => {
-          calls.push({ action: 'save', items: [updated.item, ...options.newVersions].map(item => projectItem(item, fixture.stateRoot)), cancellable: true });
-          return persistMetadata(fixture.store, loaded, result, options);
-        }
-      });
-    } catch (error) {
-      if (error.nativeException) exception = error.nativeException;
-      else {
-        assert.ok(sample.expectException, error.stack);
-        assert.equal(error.code, 'P0001', error.stack);
-        exception = sample.failure === 'delete' ? 'SqliteException' : 'DbUpdateException';
-      }
-    }
-    assert.deepEqual(await projectDiscovery(fixture, loaded, sample, { ...value, resolved, exception }), native.results.find(result => result.name === sample.name));
+    const recording = process.platform !== 'win32' && sample.name === platformProof.case
+      ? project(posix.find(entry => entry.proof.platform === process.platform).native.results[0])
+      : native.results.find(result => result.name === sample.name);
+    assert.deepEqual(await runVideoIgnoreScenario(t, dialect, sample), recording);
   });
 }

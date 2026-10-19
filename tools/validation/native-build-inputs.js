@@ -78,6 +78,7 @@ export async function verifyNativeBuild(environment = process.env) {
   if (JSON.stringify(files.sort()) !== JSON.stringify(build.manifest.files.map(file => file.path).sort())) {
     throw new Error('Native runtime membership differs from its build manifest.');
   }
-  return { ...build, identitySha256: sha256(JSON.stringify([...descriptions.values()])),
+  const identityEntries = [...descriptions.values()];
+  return { ...build, identitySha256: sha256(JSON.stringify(identityEntries)), identityEntries,
     runtimeEntriesSha256: descriptions.get(build.runtime).entriesSha256 };
 }

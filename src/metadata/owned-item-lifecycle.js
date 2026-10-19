@@ -8,9 +8,10 @@ import { isDeepStrictEqual } from 'node:util';
 
 const conflict = message => Object.assign(new Error(message), { code: 'metadata-conflict', status: 409 });
 const nativeTypeName = item => item.NativeType;
-const assertOwnedVideo = (item, owner, identityPath, nativeType) => {
+const assertOwnedVideo = (item, owner, identityPath, nativeType, repairedOwner = false) => {
   if (!item || !VIDEO_TYPES.has(item.Type) || nativeTypeName(item) !== nativeType
-    || !sameNativePath(item.Path, identityPath) || !sameId(item.OwnerId, owner.Id)) {
+    || !sameNativePath(item.Path, identityPath)
+    || !sameId(item.OwnerId, owner.Id) && !(repairedOwner && !nonemptyId(item.OwnerId))) {
     throw conflict('An owned video must be structurally reconciled before its metadata refresh.');
   }
 };
@@ -46,7 +47,7 @@ export class OwnedItemMetadataLifecycleHost {
   async #update(ownerContext, item, changes, reason, options, expected) {
     let loaded = await this.loadContext(item.Id);
     const contexts=new Set([loaded]);try {
-    if (expected) assertOwnedVideo(loaded.item, expected.owner, expected.identityPath, expected.nativeType);
+    if (expected) assertOwnedVideo(loaded.item, expected.owner, expected.identityPath, expected.nativeType, expected.repairedOwner);
     if (expected?.missingPrimaryVersion && nonemptyId(loaded.item.PrimaryVersionId)) {
       throw conflict('A local alternate acquired a primary before its missing-primary repair.');
     }
@@ -159,42 +160,72 @@ export class OwnedItemMetadataLifecycleHost {
         if (!resolved) return null;
         ({ item, created } = resolved); state.byId.set(idKey(item.Id), item);
       }
+      // Video.RefreshMetadataForOwnedVideo repairs an existing unowned
+      // same-type video before dispatching its real metadata lifecycle.
+      // An already owned item still belongs exclusively to that owner.
+      const repairedOwner = item && VIDEO_TYPES.has(item.Type) && nativeTypeName(item) === nativeType
+        && sameNativePath(item.Path, identityPath) && !nonemptyId(item.OwnerId);
+      if (repairedOwner) item.OwnerId = owner.Id;
       assertOwnedVideo(item, owner, identityPath, nativeType);
-      return { item, created };
+      return { item, created, repairedOwner };
     };
-    await completeOwnedRefreshes((owner.AdditionalParts ?? []).map(async identityPath => {
-      if (!await loaded.ownedFileExists(identityPath, 'MediaBrowser.Controller.Entities.Video')) {
-        const part = state.byId.get(idKey(loaded.getNewItemId(identityPath, 'MediaBrowser.Controller.Entities.Video')));
-        if (part && VIDEO_TYPES.has(part.Type) && sameId(part.OwnerId, owner.Id)) {
-          await loaded.videoVersionDiscovery.removeMissingOwnedItem(loaded, part,
-            { reportRemoved: (item, parent) => this.updates.reportItemRemoved(item, parent) });
-          state.byId.delete(idKey(part.Id));
+    const refreshVideo = async (resolved, refreshOptions, copyTitleMetadata) => {
+      // Preserve a repaired or no-longer-persisted cached video. An ordinary
+      // persisted child can join the existing queue and read its baseline
+      // after an earlier duplicate dispatch finishes.
+      const videoContext = await loaded.loadDraftContext(resolved.item);
+      try {
+        if (!resolved.repairedOwner && videoContext.snapshot) {
+          return await this.refreshOwnedItem(owner, resolved.item.Id, refreshOptions, { copyTitleMetadata });
         }
-        return;
+        return await this.refreshOwnedItem(owner, resolved.item, refreshOptions, { copyTitleMetadata, videoContext });
       }
-      const part = await getVideo(identityPath, 'MediaBrowser.Controller.Entities.Video', false);
-      if (!part) return;
-      return this.refreshOwnedItem(owner, part.item.Id, part.created ? { ...options, ForceSave: true } : options, { copyTitleMetadata: true });
+      finally { await videoContext.dispose(); }
+    };
+    const partRefreshes = new Map();
+    await completeOwnedRefreshes((owner.AdditionalParts ?? []).map(identityPath => {
+      const key = idKey(loaded.getNewItemId(identityPath, 'MediaBrowser.Controller.Entities.Video'));
+      // Native lookup, creation and inheritance reach a duplicate's cached
+      // entity before the next dispatch. Keep that boundary across Node I/O
+      // awaits; distinct parts still refresh concurrently.
+      const refresh = (partRefreshes.get(key) ?? Promise.resolve()).catch(() => {}).then(async () => {
+        if (!await loaded.ownedFileExists(identityPath, 'MediaBrowser.Controller.Entities.Video')) {
+          const part = state.byId.get(idKey(loaded.getNewItemId(identityPath, 'MediaBrowser.Controller.Entities.Video')));
+          if (part && VIDEO_TYPES.has(part.Type) && sameId(part.OwnerId, owner.Id)) {
+            await loaded.videoVersionDiscovery.removeMissingOwnedItem(loaded, part,
+              { reportRemoved: (item, parent) => this.updates.reportItemRemoved(item, parent) });
+            state.byId.delete(idKey(part.Id));
+          }
+          return;
+        }
+        const part = await getVideo(identityPath, 'MediaBrowser.Controller.Entities.Video', false);
+        if (!part) return;
+        return refreshVideo(part, part.created ? { ...options, ForceSave: true } : options, true);
+      });
+      partRefreshes.set(key, refresh);
+      return refresh;
     }));
     const existingCount = state.links.filter(link => sameId(link.ParentId, owner.Id) && Number(link.ChildType) === 2).length;
     await completeOwnedRefreshes((owner.LocalAlternateVersions ?? []).map(async identityPath => {
       const resolved = await getVideo(identityPath, nativeType, true);
       if (!resolved) return;
       const alternate = resolved.item;
-      const expected = { owner, identityPath, nativeType };
+      const expected = { owner, identityPath, nativeType, repairedOwner: resolved.repairedOwner };
       if (alternate.IsInMixedFolder !== owner.IsInMixedFolder) {
         await this.#update(loaded, alternate, { IsInMixedFolder: owner.IsInMixedFolder }, ItemUpdateType.MetadataImport, options, expected);
       }
-      await this.refreshOwnedItem(owner, alternate.Id, options, { copyTitleMetadata: false });
+      await refreshVideo(resolved, options, false);
       await this.store.serializeWrites(async () => {
         const committedLinks = await this.store.transaction(async database => {
           options.signal?.throwIfAborted();
           const [currentOwner] = await database.rows('BaseItems', { where: { Id: owner.Id } });
           const [currentAlternate] = await database.rows('BaseItems', { where: { Id: alternate.Id } });
+          // A None refresh need not save the repaired live OwnerId. Native
+          // still upserts the link before SetPrimaryVersionId's later save.
           if (!currentOwner || currentOwner.Type !== nativeType || !sameNativePath(currentOwner.Path, owner.Path)
             || !sameId(currentOwner.ParentId ?? EMPTY_ID, owner.ParentId) || !sameId(currentOwner.OwnerId ?? EMPTY_ID, owner.OwnerId)
             || !currentAlternate || currentAlternate.Type !== nativeType || !sameNativePath(currentAlternate.Path, identityPath)
-            || !sameId(currentAlternate.OwnerId, owner.Id)
+            || !sameId(currentAlternate.OwnerId, owner.Id) && !(resolved.repairedOwner && !nonemptyId(currentAlternate.OwnerId))
             || nonemptyId(currentAlternate.PrimaryVersionId) && !sameId(currentAlternate.PrimaryVersionId, owner.Id)) {
             throw conflict('The local version relationship changed before its link update.');
           }
@@ -216,7 +247,7 @@ export class OwnedItemMetadataLifecycleHost {
         if (loaded.versionLinks != null) loaded.versionLinks = committedLinks;
       }, { signal: options.signal });
       const current = await this.loadContext(alternate.Id);try {
-      assertOwnedVideo(current.item, owner, identityPath, nativeType);
+      assertOwnedVideo(current.item, owner, identityPath, nativeType, resolved.repairedOwner);
       if (!nonemptyId(current.item.PrimaryVersionId)) {
         // Native SetPrimaryVersionId also recalculates the presentation key.
         await this.#update(loaded, alternate, { PrimaryVersionId: owner.Id, PresentationUniqueKey: idKey(owner.Id) },

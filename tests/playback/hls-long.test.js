@@ -32,7 +32,15 @@ test('native long HLS segment cleanup, copy seek and regeneration through a slow
       finally { request.removeListener('aborted', abort); response.removeListener('close', abort); }
     });
     server.listen(0, '127.0.0.1'); await once(server, 'listening'); const origin = `http://127.0.0.1:${server.address().port}`;
-    const get = async (expected, agent, container = 'ts') => { const response = await fetch(origin + '/' + expected.index + '?container=' + container, { headers: agent ? { 'User-Agent': agent } : {} }), bytes = Buffer.from(await response.arrayBuffer()); assert.equal(response.status, expected.status); assert.equal(bytes.length, expected.size); assert.equal(createHash('sha256').update(bytes).digest('hex'), expected.sha256); };
+    const get = async (expected, agent, container = 'ts') => {
+      const response = await fetch(origin + '/' + expected.index + '?container=' + container, { headers: agent ? { 'User-Agent': agent } : {} }), bytes = Buffer.from(await response.arrayBuffer());
+      assert.equal(response.status, expected.status);
+      assert.equal(Number(response.headers.get('content-length')), bytes.length);
+      if (expected.index !== -1) {
+        assert.equal(bytes.length, expected.size); assert.equal(createHash('sha256').update(bytes).digest('hex'), expected.sha256);
+      } else assert.equal(response.headers.get('content-type'), 'video/mp4');
+      return bytes;
+    };
     await get(reference.first); await get(reference.sought);
     const jobs = await readdir(cache); assert.equal(jobs.length, 1); const output = path.join(cache, jobs[0]);
     assert.ok((await readdir(output)).includes('segment0.ts'));
@@ -43,7 +51,21 @@ test('native long HLS segment cleanup, copy seek and regeneration through a slow
     await get(reference.back); assert.ok((await readdir(output)).includes('segment0.ts')); assert.equal(processes.length, 3);
     await get(switches.other, 'different-agent'); await get(switches.cached);
     assert.equal(processes.length, 4, 'Replacing a task leaves complete cached segments readable.');
-    await get(switches.init, undefined, 'mp4'); await get(switches.changed, undefined, 'mp4');
+    const init = await get(switches.init, undefined, 'mp4'), fragment = await get(switches.changed, undefined, 'mp4');
+    // Init muxer tags can change with FFmpeg versions. Bind the actual HTTP
+    // length and decode it with the byte-exact native fragment, then compare
+    // the frozen native streams, timestamps and packet payload hashes.
+    const joined = path.join(directory, 'delivered.mp4'); await writeFile(joined, Buffer.concat([init, fragment]));
+    const probe = spawnSync(validationExecutable('ffprobe'), ['-v', 'error', '-show_streams', '-show_packets', '-show_data_hash', 'sha256', '-of', 'json', joined],
+      { windowsHide: true, encoding: 'utf8', maxBuffer: 16 * 1024 * 1024 });
+    assert.equal(probe.status, 0, probe.stderr);
+    const parsed = JSON.parse(probe.stdout), native = media.records.find(record => record.name === 'mp4').segments[1];
+    const projection = { streams: parsed.streams.map(value => Object.fromEntries(['codec_name', 'profile', 'width', 'height', 'pix_fmt', 'sample_rate', 'channels']
+      .filter(key => value[key] != null).map(key => [key, value[key]]))),
+      packets: parsed.packets.map(value => Object.fromEntries(['stream_index', 'pts_time', 'dts_time', 'duration_time', 'size', 'data_hash', 'flags']
+        .filter(key => value[key] != null).map(key => [key, value[key]]))) };
+    assert.equal(parsed.packets.length, native.packetCount);
+    assert.equal(createHash('sha256').update(JSON.stringify(projection)).digest('hex'), native.packetHash);
     assert.equal(processes.length, 5, 'A different container starts immediately instead of waiting for the old process.');
     await hls.stop('long-hls', 'long-session'); assert.deepEqual(await readdir(cache), []); assert.deepEqual(errors, []);
   } finally {

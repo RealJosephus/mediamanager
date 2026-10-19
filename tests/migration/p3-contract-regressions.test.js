@@ -200,14 +200,14 @@ test('package capture recovers from each pre-journal staging shape', async t => 
   });
 });
 
-test('package path binding accepts equivalent Windows separators in configured native paths', {
-  skip: process.platform !== 'win32',
-}, async t => {
-  const fixture = await createInstanceFixture(t, { prefix: 'mediamanager-p3-windows-path-' });
+test('package path binding accepts configured absolute paths with host separator semantics', async t => {
+  const fixture = await createInstanceFixture(t, { prefix: 'mediamanager-p3-native-path-' });
   const metadata = path.join(fixture.root, 'data/metadata/custom');
   const cache = path.join(fixture.root, 'cache/custom');
   await mkdir(metadata, { recursive: true });
   await mkdir(cache, { recursive: true });
+  // Windows accepts forward slashes in these absolute paths; POSIX already
+  // uses them. Exercise actual host paths without simulating another OS.
   await writeFile(path.join(fixture.root, 'config/system.xml'), [
     '<ServerConfiguration>',
     `<MetadataPath>${xml(metadata.replaceAll('\\', '/'))}</MetadataPath>`,

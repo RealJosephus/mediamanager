@@ -1,6 +1,19 @@
 import { MetadataRefreshHost } from '../../src/metadata/refresh-host.js';
 import { LibraryMetadataScanService } from '../../src/library/metadata-scan-service.js';
 import { createFolderValidationScanFixture } from './folder-validation-scan-fixture.js';
+import { mkdtemp, mkdir, rm } from 'node:fs/promises';
+import os from 'node:os';
+import path from 'node:path';
+
+// Media identities remain the recorded Windows paths. Instance metadata is
+// real, isolated host storage, reached through the fixture's local plugin.
+export async function ownedStatePaths(t) {
+  const root = await mkdtemp(path.join(os.tmpdir(), 'owned-validation-'));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const metadataPath = path.join(root, 'metadata'), dataPath = path.join(root, 'data');
+  await mkdir(metadataPath); await mkdir(dataPath);
+  return { metadataPath, dataPath };
+}
 
 // These media bytes exercise owned-item discovery and persistence, not probe.
 export const ownedRefreshOptions = Object.freeze({

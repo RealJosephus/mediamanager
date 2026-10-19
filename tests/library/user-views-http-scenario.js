@@ -10,6 +10,7 @@ import { PostgresDatabase } from '../../src/database/postgres.js';
 import { dependencyOrder, quoteIdentifier, tableDefinition } from '../../src/database/model.js';
 import { nativeGuid } from '../../src/users/native.js';
 import { createRuntime } from '../../src/runtime.js';
+import { expandStatePath } from './fixture-state-path.js';
 
 const tables = { baseItems: 'BaseItems', ancestorIds: 'AncestorIds', linkedChildren: 'LinkedChildren',
   itemValues: 'ItemValues', itemValueLinks: 'ItemValuesMap', userData: 'UserData', images: 'BaseItemImageInfos',
@@ -74,9 +75,13 @@ export async function recordUserViewsCandidate({ dialect, fixture, contract, con
     for (const table of dependencyOrder().filter(table => table.name !== 'BaseItems' && byTable[table.name])) {
       for (const row of nativeStages.before.database[byTable[table.name]]) await database.insert(table.name, row);
     }
-    const rewrite = value => value == null ? value : value.replaceAll(referenceRoot, root).replaceAll(referenceRoot.replaceAll('\\', '\\\\'), root.replaceAll('\\', '\\\\'));
+    const rewrite = value => typeof value === 'string' ? expandStatePath(value, referenceRoot, root)
+      : Array.isArray(value) ? value.map(rewrite)
+        : value && typeof value === 'object' ? Object.fromEntries(Object.entries(value).map(([key, child]) => [key, rewrite(child)])) : value;
     for (const row of await database.rows('BaseItems')) {
-      const Path = rewrite(row.Path), Data = rewrite(row.Data);
+      let Path = rewrite(row.Path);
+      for (const macro of ['%AppDataPath%', '%MetadataPath%']) Path = expandStatePath(Path, macro, macro);
+      const Data = row.Data == null ? null : JSON.stringify(rewrite(JSON.parse(row.Data)));
       if (Path !== row.Path || Data !== row.Data) await database.update('BaseItems', { Id: row.Id }, { Path, Data });
     }
     runtime = await createRuntime({ database, configuration: { ...configuration, IsStartupWizardCompleted: true, UICulture: 'en-US',

@@ -321,8 +321,8 @@ test('real PostgreSQL keeps specials out of physical-season mode without hydrati
     lower('bounded-Σ') AS locale_sigma, lower('bounded-ς') AS locale_final_sigma,
     "${schema}"."${postgresOrdinalIgnoreCaseKeyFunctionName}"('bounded-Σ') AS ordinal_sigma,
     "${schema}"."${postgresOrdinalIgnoreCaseKeyFunctionName}"('bounded-ς') AS ordinal_final_sigma`)).rows[0];
-  assert.notEqual(comparisonKeys.locale_lower_sigma, comparisonKeys.locale_upper_sigma,
-    'the fixture must expose the database lower() false negative for forced sort names');
+  // Server locale providers may already fold upper sigma. The product query
+  // must use the native ordinal keys independently of that server policy.
   assert.deepEqual(comparisonKeys.ordinal_lower_sigma, comparisonKeys.ordinal_upper_sigma,
     'native OrdinalIgnoreCase equates lower and upper sigma');
   assert.notEqual(comparisonKeys.locale_sigma, comparisonKeys.locale_final_sigma,

@@ -554,10 +554,10 @@ test('SQLite export rejects credentials in a native remote shortcut URL', async 
 });
 
 test('real pinned Jellyfin fixture exports as a strict directly-readable instance database', {
-  skip: !process.env.MEDIAMANAGER_TEST_NATIVE_SQLITE
+  skip: !process.env.MEDIAMANAGER_TEST_CURRENT_NATIVE_SQLITE
 }, async () => {
   const directory = await mkdtemp(path.join(os.tmpdir(), 'mediamanager-export-native-'));
-  const source = new SqliteDatabase(process.env.MEDIAMANAGER_TEST_NATIVE_SQLITE, { readOnly: true, requireMigrationHistory: true });
+  const source = new SqliteDatabase(process.env.MEDIAMANAGER_TEST_CURRENT_NATIVE_SQLITE, { readOnly: true, requireMigrationHistory: true });
   let returned;
   try {
     await exportCurrentSqlite(source, path.join(directory, 'jellyfin.db'));

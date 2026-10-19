@@ -14,10 +14,10 @@ import { normalizeKeyRows } from './fixtures/api-keys/observations.js';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 test('postgres: API-created and revoked keys export to native controller/EF continuation and reimport with all tables unchanged', {
-  skip: !postgresTestConnectionString || !process.env.MEDIAMANAGER_TEST_NATIVE_SQLITE || !process.env.MEDIAMANAGER_JELLYFIN_DLL
+  skip: !postgresTestConnectionString || !process.env.MEDIAMANAGER_TEST_CURRENT_NATIVE_SQLITE || !process.env.MEDIAMANAGER_JELLYFIN_DLL
 }, async t => {
   const root = path.join(path.resolve(validationOutputRoot()), 'api-key-exchange'); await fs.mkdir(root);
-  const sourceBytes = await fs.readFile(process.env.MEDIAMANAGER_TEST_NATIVE_SQLITE), sourceHash = hash(sourceBytes);
+  const sourceBytes = await fs.readFile(process.env.MEDIAMANAGER_TEST_CURRENT_NATIVE_SQLITE), sourceHash = hash(sourceBytes);
   const sourcePath = path.join(root, 'source.db'); await fs.writeFile(sourcePath, sourceBytes, { flag: 'wx' });
   let source, returned, database, reimported, runtime, importedRuntime;
   t.after(async () => {
@@ -63,7 +63,7 @@ test('postgres: API-created and revoked keys export to native controller/EF cont
   await assert.rejects(importedRuntime.authentication.authenticate({ headers: { authorization: `MediaBrowser Token="${selected}"` } }), { status: 401 });
   await assert.rejects(importedRuntime.authentication.authenticate({ headers: { authorization: `MediaBrowser Token="${removed}"` } }), { status: 401 });
   assert.equal((await importedRuntime.authentication.authenticate({ headers: { authorization: `MediaBrowser Token="${native.after.Items[1].AccessToken}"` } })).IsApiKey, true);
-  assert.equal(hash(await fs.readFile(process.env.MEDIAMANAGER_TEST_NATIVE_SQLITE)), sourceHash);
+  assert.equal(hash(await fs.readFile(process.env.MEDIAMANAGER_TEST_CURRENT_NATIVE_SQLITE)), sourceHash);
   await fs.writeFile(path.join(root, 'proof.json'), JSON.stringify({ sourceHash, exportedSha256, exportResult, recording,
     actualNativeReadAndWrite: true, allTablesRoundTrip: true, fullInstanceVerified: false, completeBuildInputClosure: false, phaseAcceptance: false },
     (_, value) => typeof value === 'bigint' ? JSON.rawJSON(value.toString()) : value, 2) + '\n', { flag: 'wx' });

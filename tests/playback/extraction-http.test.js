@@ -5,6 +5,7 @@ import { setTimeout as delay } from 'node:timers/promises';
 import { PostgresDatabase } from '../../src/database/postgres.js';
 import { tableDefinition } from '../../src/database/model.js';
 import { createRuntime } from '../../src/runtime.js';
+import { createPlaybackState } from './runtime-state.js';
 import { probeStreamRow } from '../../src/library/probe-service.js';
 import { extractionFixture } from './extraction-fixture.js';
 import reference from './fixtures/extraction-reference.json' with { type: 'json' };
@@ -41,12 +42,13 @@ test('real embedded extraction, attachment MVC errors and access cancellation on
 }, async () => {
   const schema = `extraction_http_${randomBytes(8).toString('hex')}`;
   const fixture = await extractionFixture(Object.fromEntries(reference.sources.map(value => ['/' + value.name, Buffer.from(value.media, 'base64')])));
+  const state = await createPlaybackState();
   let database, runtime;
   try {
     database = await PostgresDatabase.open({ connectionString: process.env.MEDIAMANAGER_TEST_POSTGRES, schema, create: true });
     await seed(database);
     runtime = await createRuntime({ database, configuration: { UICulture: 'en-US', IsStartupWizardCompleted: true }, serverId: libraryFixture.serverId,
-      programDataPath: libraryFixture.programDataPath, vfs: fixture.vfs, identityMap: fixture.identityMap, onError: () => {} });
+      programDataPath: state.root, vfs: fixture.vfs, identityMap: fixture.identityMap, onError: () => {} });
     const user = await runtime.users.createUser({ Name: 'ExtractionAdmin', Password: 'isolated-extraction-password' });
     await runtime.users.updatePolicy(user.Id, { ...libraryFixture.user.Policy });
     await new Promise(resolve => runtime.server.listen(0, '127.0.0.1', resolve));
@@ -70,7 +72,11 @@ test('real embedded extraction, attachment MVC errors and access cancellation on
     for (const expected of reference.outputs.filter(value => value.source === 'media.mkv')) {
       const response = await fetch(origin + `/Videos/${id}/${id}/Subtitles/${expected.index}/0/Stream.${expected.format}`, { headers });
       assert.equal(response.status, 200);
-      assert.equal(Buffer.from(await response.arrayBuffer()).toString('base64'), expected.bytes);
+      const bytes = Buffer.from(await response.arrayBuffer()), recorded = Buffer.from(expected.bytes, 'base64');
+      if (expected.format === 'ass') {
+        const lines = value => value.toString('latin1').replace(/\r?\n/gu, '\n');
+        assert.equal(lines(bytes), lines(recorded), 'ASS line terminators may differ; every other byte stays exact.');
+      } else assert.deepEqual(bytes, recorded);
       assert.equal(response.headers.get('content-type'), expected.format === 'ass' ? 'text/x-ssa' : 'application/x-subrip');
     }
     const converted = await fetch(origin + `/Videos/${id}/${id}/Subtitles/1/15000000/Stream.vtt?endPositionTicks=26000000`, { headers });
@@ -100,7 +106,7 @@ test('real embedded extraction, attachment MVC errors and access cancellation on
     assert.equal(fixture.requests.some(value => value.authorization), false, 'The private VFS bridge must never expose the user token upstream.');
   } finally {
     if (database) { await database.client.query(`DROP SCHEMA "${schema}" CASCADE`); await database.client.query(`DROP SCHEMA "${schema}__mm" CASCADE`); }
-    if (runtime) await runtime.close(); else await database?.close();
-    await fixture.close();
+    try { if (runtime) await runtime.close(); else await database?.close(); await fixture.close(); }
+    finally { await state.close(); }
   }
 });

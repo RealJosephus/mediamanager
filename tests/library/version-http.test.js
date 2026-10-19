@@ -1,3 +1,6 @@
+import { createPlaybackState } from '../playback/runtime-state.js';
+import path from 'node:path';
+import { expandStatePath } from './fixture-state-path.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
@@ -26,19 +29,24 @@ function parentFirstBaseItems(rows) {
 test('16 actual native HTTP version/detail/permissions cases match on PostgreSQL',
   { skip: !process.env.MEDIAMANAGER_TEST_POSTGRES }, async t => {
   const db = await createPostgresTestDatabase(t, 'version_http');
+  const state = await createPlaybackState();
   let runtime;
   try{
     for (const table of dependencyOrder()) {
       const rows = table.name === 'BaseItems'
         ? parentFirstBaseItems(fixture.tables[table.name] ?? []) : fixture.tables[table.name] ?? [];
-      for (const row of rows) await db.insert(table.name, row);
+      for (const source of rows) {
+        const row = { ...source };
+        if (table.name === 'BaseItems') for (const macro of ['%AppDataPath%', '%MetadataPath%']) row.Path = expandStatePath(row.Path, macro, macro);
+        await db.insert(table.name, row);
+      }
     }
-    runtime=await createRuntime({...fixture.settings,database:db,onError:()=>{}});
+    runtime=await createRuntime({...fixture.settings,programDataPath:state.root,metadataPath:path.join(state.root,'metadata'),database:db,onError:()=>{}});
     await new Promise(resolve=>runtime.server.listen(0,'127.0.0.1',resolve));
     const actual=await recordVersionHttp(`http://127.0.0.1:${runtime.server.address().port}`);
     assert.equal(actual.length,16);
     assert.deepEqual(normalize(actual),normalize(native));
   }finally{
-    if(runtime)await runtime.close();
+    try { if(runtime)await runtime.close(); } finally { await state.close(); }
   }
 });

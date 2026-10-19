@@ -161,12 +161,21 @@ for (const dialect of ['postgres']) {
     const fixture = await setup(t, dialect), deleteRow = fixture.database.deleteWhere.bind(fixture.database);
     for (const scenario of input) await t.test(scenario.name, async () => {
       const state = await seed(fixture, scenario.name, scenario), calls = [];
-      const manager = new ExternalDataManager({fileSystem: testFileSystem,  ...fixture, dataPath: path.join(state.root, 'data'), metadataPath: path.join(state.root, 'metadata'),
+      let deniedDirectory;
+      const fileSystem = scenario.readOnly ? new Proxy(testFileSystem, { get(target, name) {
+        if (name === 'rm') return async (filename, options) => {
+          if (path.resolve(filename) === deniedDirectory) throw Object.assign(new Error('Controlled read-only directory failure.'), { code: 'EACCES' });
+          return target.rm(filename, options);
+        };
+        const value = Reflect.get(target, name, target); return typeof value === 'function' ? value.bind(target) : value;
+      } }) : testFileSystem;
+      const manager = new ExternalDataManager({fileSystem, ...fixture, dataPath: path.join(state.root, 'data'), metadataPath: path.join(state.root, 'metadata'),
         logger: { warn() { calls.push({ phase: 'log', level: 'Warning', exception: null }); },
           error(error) { calls.push({ phase: 'log', level: 'Error', exception: error.name }); } },
         segmentProviders: scenario.pluginError ? [{ name: 'Controlled cleanup failure', async cleanupExtractedData(Id, { signal }) {
           assert.equal(Id, itemId); calls.push({ phase: 'plugin', cancellable: Boolean(signal) }); throw ioError('Injected segment provider failure');
         } }] : [] });
+      if (scenario.readOnly) deniedDirectory = path.resolve(manager.paths(state.item)[0]);
       const assets = await createAssets(manager, fixture, state.item, scenario), before = await fixture.database.rows('BaseItems');
       fixture.database.deleteWhere = async (table, where) => {
         calls.push({ phase: 'delete', table, cancellable: false });

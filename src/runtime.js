@@ -168,7 +168,10 @@ export async function createRuntime({ database, configuration, serverId, serverN
         if (changes.mediaAdded) item.DateLastMediaAdded = new Date().toISOString();
         await metadataUpdates.update(loaded, { Item: item }, 16);
       }),
-      queueExternalRefresh: playlist => store.enqueue(() => metadata?.queue(playlist.Id, { ForceSave: true }, 0)) })
+      queueExternalRefresh: playlist => {
+        const ready = store.currentOperationCompletion();
+        return store.runDetached(() => metadata?.queue(playlist.Id, { ForceSave: true }, 0, { ready }));
+      } })
     : undefined;
   if (playlists) rollback.push(() => playlists.close());
   const userData = new UserDataService({ store, library, users, configuration });
@@ -408,7 +411,9 @@ export async function createRuntime({ database, configuration, serverId, serverN
   services.apiKeys = apiKeys;
   services.splashscreenPostScanTask = splashscreenPostScanTask;
   await plugins.connect({ ...services, vfs, identityMap, metadataVfs, metadataIdentityMap, loadContext, seriesLifecycle, metadataImages, spoolRoot, fileSystem });
-  const application = await createApplication({ ...services, onError });
+  const application = await createApplication({ ...services, onError,
+    applicationPaths: { programDataPath, metadataPath,
+      cachePath: programDataPath && path.join(programDataPath, 'cache') } });
   rollback.push(async () => { application.beginClose(); await application.drainRequests();
     if (application.server.listening) await new Promise((resolve, reject) => application.server.close(error => error ? reject(error) : resolve())); });
   if (application.webSockets) rollback.push(() => application.webSockets.close());

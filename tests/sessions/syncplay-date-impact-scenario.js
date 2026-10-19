@@ -84,11 +84,13 @@ export function assertSyncPlayDateImpactContract(actual, expected) {
 }
 
 export async function recordSyncPlayDateImpact(origin, {
+  credentials,
   onAuthenticated,
   onBeforeTargetReady,
   onAfterTargetReady,
   onCompleted,
 } = {}) {
+  assert.ok(credentials?.username && typeof credentials.password === 'string', 'Explicit isolated user credentials are required.');
   const actors = {}, sockets = [], raw = [], cases = [];
 
   async function request(route, { actor = 'a', method = 'GET', body } = {}) {
@@ -140,7 +142,7 @@ export async function recordSyncPlayDateImpact(origin, {
       const login = await request('/Users/AuthenticateByName', {
         actor,
         method: 'POST',
-        body: { Username: 'CoreFlowAdmin', Pw: 'isolated-core-flow-password' },
+        body: { Username: credentials.username, Pw: credentials.password },
       });
       assert.equal(login.status, 200, `${actor}: native/candidate fixture login failed`);
       actors[actor] = login.body;

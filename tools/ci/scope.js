@@ -6,13 +6,45 @@ import { repositoryRoot, validationPath } from '../validation/paths.js';
 
 export const provisionedServices = ['postgres', 'dotnet'];
 export const provisionedTools = ['dotnet', 'ffmpeg', 'ffprobe', 'git'];
+
+export function ciProfile(environment) {
+  const profile = environment.MEDIAMANAGER_CI_PROFILE || 'available';
+  if (!['available', 'full'].includes(profile)) throw new Error('CI profile must be available or full.');
+  if (profile === 'full' && (environment.MEDIAMANAGER_CI_TEST_FILES ?? '').split(/[\r\n,]+/u).some(value => value.trim())) {
+    throw new Error('The full profile cannot be combined with an explicit test subset.');
+  }
+  return profile;
+}
+
+export function ciExecutionArguments(scope, output) {
+  if (scope.schemaVersion !== 1 || !Array.isArray(scope.selected) || !scope.selected.length) throw new Error('Invalid CI scope.');
+  if (scope.profile === 'full') {
+    if (scope.requested?.length || scope.excluded?.length || !Array.isArray(scope.discovered)
+      || new Set(scope.selected).size !== scope.selected.length
+      || JSON.stringify(scope.selected) !== JSON.stringify(scope.discovered)) {
+      throw new Error('The full CI profile must retain every discovered test without an explicit subset.');
+    }
+    return ['--output', output, '--concurrency', '1', '--profile', 'full'];
+  }
+  if (scope.profile !== 'ci-available') throw new Error('Invalid CI profile.');
+  return ['--output', output, '--concurrency', '1', '--', ...scope.selected];
+}
+
 export const provisionedServicesFor = environment => {
+  if (environment.MEDIAMANAGER_CI_WEB_CLIENTS === 'true' && environment.MEDIAMANAGER_CI_NATIVE_SQLITE !== 'true') {
+    throw new Error('Web client validation requires current native SQLite provisioning.');
+  }
+  if (environment.MEDIAMANAGER_CI_NATIVE_SQLITE === 'true' && environment.MEDIAMANAGER_CI_NATIVE_INSTANCE !== 'true') {
+    throw new Error('Current native SQLite provisioning requires native instance provisioning.');
+  }
   if (environment.MEDIAMANAGER_CI_NATIVE_INSTANCE === 'true' && environment.MEDIAMANAGER_CI_NATIVE_REFERENCE !== 'true') {
     throw new Error('Native instance provisioning requires native reference provisioning.');
   }
   return [...provisionedServices,
     ...(environment.MEDIAMANAGER_CI_NATIVE_REFERENCE === 'true' ? ['jellyfinDll'] : []),
     ...(environment.MEDIAMANAGER_CI_NATIVE_INSTANCE === 'true' ? ['nativeInstance'] : []),
+    ...(environment.MEDIAMANAGER_CI_NATIVE_SQLITE === 'true' ? ['currentNativeSqlite'] : []),
+    ...(environment.MEDIAMANAGER_CI_WEB_CLIENTS === 'true' ? ['jellyfinWeb', 'browser'] : []),
     ...(environment.MEDIAMANAGER_CI_ALIST_REFERENCE === 'true' ? ['alist'] : []),
     ...(typeof environment.MEDIAMANAGER_WEBDAV_EXECUTABLE === 'string'
       && path.isAbsolute(environment.MEDIAMANAGER_WEBDAV_EXECUTABLE) ? ['webdav'] : [])];
@@ -121,6 +153,12 @@ export async function classify({ dependencies, tracked, environment, platform = 
     ...(services.includes('alist') ? { MEDIAMANAGER_ALIST_EXECUTABLE: environment.MEDIAMANAGER_ALIST_EXECUTABLE || '<provisioned>' } : {}),
     ...(services.includes('nativeInstance') ? { MEDIAMANAGER_TEST_NATIVE_INSTANCE: environment.MEDIAMANAGER_TEST_NATIVE_INSTANCE || '<provisioned>',
       MEDIAMANAGER_NATIVE_INSTANCE_ROOT: environment.MEDIAMANAGER_NATIVE_INSTANCE_ROOT || '<provisioned>' } : {}),
+    ...(services.includes('currentNativeSqlite') ? {
+      MEDIAMANAGER_TEST_CURRENT_NATIVE_SQLITE: environment.MEDIAMANAGER_TEST_CURRENT_NATIVE_SQLITE || '<provisioned>',
+      MEDIAMANAGER_TEST_CURRENT_NATIVE_SQLITE_MOUNT_CONTRACT_JSON: environment.MEDIAMANAGER_TEST_CURRENT_NATIVE_SQLITE_MOUNT_CONTRACT_JSON || '<provisioned>',
+    } : {}),
+    ...(services.includes('jellyfinWeb') ? { MEDIAMANAGER_JELLYFIN_WEB_ROOT: environment.MEDIAMANAGER_JELLYFIN_WEB_ROOT || '<provisioned>' } : {}),
+    ...(services.includes('browser') ? { MEDIAMANAGER_BROWSER_EXECUTABLE: environment.MEDIAMANAGER_BROWSER_EXECUTABLE || '<provisioned>' } : {}),
     ...(services.includes('jellyfinDll') ? { MEDIAMANAGER_JELLYFIN_DLL: environment.MEDIAMANAGER_JELLYFIN_DLL || '<provisioned>' } : {}) };
   const shipped = filename => {
     const relative = repositoryRelative(filename);

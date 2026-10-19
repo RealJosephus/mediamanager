@@ -15,6 +15,11 @@ foreach (var scenario in scenarios)
 {
     var root = Path.GetFullPath(Path.Combine(args[2], scenario.Name));
     await using var host = await NativeScanHost.CreateAsync(root, scenario);
+    if (scenario.StackReplacement is not null)
+    {
+        results.Add(await StackReplacementRecording.RunAsync(host));
+        continue;
+    }
     if (scenario.SeriesCleanup is not null)
     {
         results.Add(await SeriesCleanupRecording.RunAsync(host));
@@ -99,7 +104,7 @@ var assemblies = AppDomain.CurrentDomain.GetAssemblies().Where(assembly => !asse
     .Select(assembly => new { name = assembly.GetName().Name, path = assembly.Location, sha256 = Hash(File.ReadAllBytes(assembly.Location)) }).ToArray();
 await using var output = new FileStream(args[1], FileMode.CreateNew, FileAccess.Write, FileShare.Read);
 await JsonSerializer.SerializeAsync(output, new {
-    scope = "Actual CoreAppHost.GetExports constructs all eight built-in post-scan services; actual LibraryManager.ValidateMediaLibraryInternal dispatches them. Real by-name MetadataService, ItemPersistenceService, SQLite, PathManager and ExternalDataManager execute nonempty creation, child aggregation and file cleanup. The independent cleanup input executes actual orphan-value and missing-file Playlist deletion after seven non-deleting tasks. The separate Series cleanup input uses actual SeriesMetadataService and ordinary LibraryManager.DeleteItem, without running the global scan. No external metadata/image providers, metadata savers, media probe, image composition or watcher are admitted by these scenarios.",
+    scope = "Actual CoreAppHost.GetExports constructs all eight built-in post-scan services; actual LibraryManager.ValidateMediaLibraryInternal dispatches them. Real by-name MetadataService, ItemPersistenceService, SQLite, PathManager and ExternalDataManager execute nonempty creation, child aggregation and file cleanup. The independent cleanup input executes actual orphan-value and missing-file Playlist deletion after seven non-deleting tasks. The separate Series cleanup input uses actual SeriesMetadataService and ordinary LibraryManager.DeleteItem, without running the global scan. The independent stack input runs actual Folder.ValidateChildren and Movie/Video metadata services across physical file replacement, retaining each stage's SQL, files and errors. No external metadata/image providers, metadata savers, media probe, image composition or watcher are admitted by these scenarios.",
     inputSha256 = Hash(inputBytes), results, assemblies
 }, new JsonSerializerOptions { WriteIndented = true });
 

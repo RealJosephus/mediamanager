@@ -40,12 +40,21 @@ export async function nativeInstanceInputs(environment = process.env) {
   for (const value of [initialization.instanceEntriesSha256, seed.instanceEntriesSha256, seed.sourceEntriesSha256, seed.initialization.sha256]) {
     if (typeof value !== 'string' || !/^[a-f0-9]{64}$/u.test(value)) throw new Error('Native instance content binding is missing.');
   }
-  if (!Array.isArray(initialization.executables) || initialization.executables.length !== 2
-    || initialization.executables.some(value => !path.isAbsolute(value.filename ?? '') || !/^[a-f0-9]{64}$/u.test(value.sha256 ?? ''))) {
+  const executableDescriptor = value => path.isAbsolute(value?.filename ?? '') && /^[a-f0-9]{64}$/u.test(value.sha256 ?? '');
+  if (!Array.isArray(initialization.executables) || initialization.executables.length !== 3
+    || new Set(initialization.executables.map(value => value.name)).size !== 3
+    || initialization.executables.some(value => !['dotnet', 'ffmpeg', 'ffprobe'].includes(value.name)
+      || !executableDescriptor(value) || !Array.isArray(value.dispatch) || value.dispatch.some(entry => !executableDescriptor(entry)))) {
     throw new Error('Native instance executable binding is missing.');
+  }
+  const ffmpeg = initialization.executables.find(value => value.name === 'ffmpeg');
+  const ffprobe = initialization.executables.find(value => value.name === 'ffprobe');
+  if (ffprobe.requested !== ffmpeg.filename.replace(/[^/\\]+?(\.[^/\\\n.]+)?$/u, 'ffprobe$1')) {
+    throw new Error('Native instance ffprobe must be derived from its actual ffmpeg path.');
   }
   const scripts = [
     [initialization.initializer, fileURLToPath(new URL('../compat/initialize-reference.mjs', import.meta.url))],
+    [initialization.nativeProcessInputs, fileURLToPath(new URL('../compat/native-process-inputs.js', import.meta.url))],
     [seed.preparation, fileURLToPath(new URL('../compat/prepare-media-reference.mjs', import.meta.url))],
   ];
   for (const [descriptor, filename] of scripts) {
@@ -56,6 +65,6 @@ export async function nativeInstanceInputs(environment = process.env) {
   await bind(empty, seed.sourceEntriesSha256);
   await bind(initialization.root, initialization.instanceEntriesSha256);
   await bind(seed.destination, seed.instanceEntriesSha256);
-  for (const descriptor of initialization.executables) await bind(descriptor.filename, descriptor.sha256);
+  for (const descriptor of initialization.executables.flatMap(value => [value, ...value.dispatch])) await bind(descriptor.filename, descriptor.sha256);
   return { root, initialization, seed, inputs };
 }

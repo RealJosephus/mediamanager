@@ -6,6 +6,14 @@ on:
   pull_request:
   workflow_dispatch:
     inputs:
+      validation_profile:
+        description: Available tests for development, or strict full with no exclusions for release validation
+        type: choice
+        required: true
+        default: available
+        options:
+          - available
+          - full
       test_files:
         description: Exact test paths separated by commas or newlines; leave empty for all available tests
         type: string
@@ -18,6 +26,16 @@ on:
         default: false
       native_instance:
         description: Initialize a fresh stopped native instance and a separate controlled media seed (requires native_reference)
+        type: boolean
+        required: false
+        default: false
+      native_sqlite:
+        description: Supply a separate current stopped-instance SQLite input, never historical recordings (requires native_instance)
+        type: boolean
+        required: false
+        default: false
+      web_clients:
+        description: Build the designated Jellyfin Web and install fixed Chromium for real browser validation (requires native_sqlite)
         type: boolean
         required: false
         default: false
@@ -48,19 +66,25 @@ concurrency:
 
 jobs:
   validate:
-    name: ${{ matrix.os }} / Node 24 / PostgreSQL 17
+    name: ${{ matrix.os }} / shard ${{ matrix.shard }} / Node 24 / PostgreSQL 17
     runs-on: ${{ matrix.os }}
     timeout-minutes: 120
     strategy:
       fail-fast: false
       matrix:
         os: ${{ fromJSON(inputs.platform == 'windows' && '["windows-2025"]' || inputs.platform == 'linux' && '["ubuntu-24.04"]' || inputs.platform == 'macos' && '["macos-15"]' || '["ubuntu-24.04","windows-2025","macos-15"]') }}
+        shard: ${{ fromJSON((inputs.validation_profile == 'full' || inputs.test_files) && '[1]' || '[1,2,3,4]') }}
     env:
       TZ: Asia/Taipei
       MEDIAMANAGER_TEST_POSTGRES: postgresql://validation@127.0.0.1:5432/postgres
       MEDIAMANAGER_CI_TEST_FILES: ${{ inputs.test_files || '' }}
+      MEDIAMANAGER_CI_PROFILE: ${{ inputs.validation_profile || 'available' }}
+      MEDIAMANAGER_CI_SHARD: ${{ matrix.shard }}
+      MEDIAMANAGER_CI_SHARDS: ${{ (inputs.validation_profile == 'full' || inputs.test_files) && '1' || '4' }}
       MEDIAMANAGER_CI_NATIVE_REFERENCE: ${{ inputs.native_reference && 'true' || 'false' }}
       MEDIAMANAGER_CI_NATIVE_INSTANCE: ${{ inputs.native_instance && 'true' || 'false' }}
+      MEDIAMANAGER_CI_NATIVE_SQLITE: ${{ inputs.native_sqlite && 'true' || 'false' }}
+      MEDIAMANAGER_CI_WEB_CLIENTS: ${{ inputs.web_clients && 'true' || 'false' }}
       MEDIAMANAGER_CI_ALIST_REFERENCE: ${{ inputs.alist_reference && 'true' || 'false' }}
       DOTNET_CLI_TELEMETRY_OPTOUT: '1'
       DOTNET_NOLOGO: '1'
@@ -79,8 +103,17 @@ jobs:
         shell: pwsh
         run: |
           $ErrorActionPreference = 'Stop'
+          if ($env:MEDIAMANAGER_CI_PROFILE -eq 'full' -and ($env:MEDIAMANAGER_CI_TEST_FILES -split '[,\r\n]+' | Where-Object { $_.Trim() })) {
+            throw 'The full profile cannot be combined with an explicit test subset.'
+          }
           if ($env:MEDIAMANAGER_CI_NATIVE_INSTANCE -eq 'true' -and $env:MEDIAMANAGER_CI_NATIVE_REFERENCE -ne 'true') {
             throw 'native_instance requires native_reference.'
+          }
+          if ($env:MEDIAMANAGER_CI_NATIVE_SQLITE -eq 'true' -and $env:MEDIAMANAGER_CI_NATIVE_INSTANCE -ne 'true') {
+            throw 'native_sqlite requires native_instance.'
+          }
+          if ($env:MEDIAMANAGER_CI_WEB_CLIENTS -eq 'true' -and $env:MEDIAMANAGER_CI_NATIVE_SQLITE -ne 'true') {
+            throw 'web_clients requires native_sqlite.'
           }
           $trackedFiles = git ls-files -- tests
           if ($LASTEXITCODE -ne 0) { throw 'Cannot list candidate test files.' }
@@ -166,30 +199,10 @@ jobs:
         with:
           postgres-version: '17'
           user: validation
-      - name: Install media tools on Linux
-        if: runner.os == 'Linux'
-        shell: bash
-        run: |
-          if ! command -v ffmpeg >/dev/null; then
-            sudo apt-get update -qq
-            sudo apt-get install -y ffmpeg
-          fi
-      - name: Install media tools on macOS
-        if: runner.os == 'macOS'
-        shell: bash
-        run: |
-          if ! command -v ffmpeg >/dev/null; then
-            brew install ffmpeg
-          fi
-      - name: Install media tools on Windows
-        if: runner.os == 'Windows'
+      - name: Provision pinned media tools
         shell: pwsh
-        run: |
-          if (-not (Get-Command ffmpeg -ErrorAction SilentlyContinue)) {
-            choco install ffmpeg --yes --no-progress
-            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-            Join-Path $env:ChocolateyInstall 'lib/ffmpeg/tools/ffmpeg/bin' | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-          }
+        timeout-minutes: 5
+        run: ./tools/ci/setup-media.ps1
       - name: Install locked dependencies
         run: npm ci --bin-links=false
       - name: Initialize isolated native instance and controlled media seed
@@ -211,6 +224,55 @@ jobs:
           } finally { $env:MEDIAMANAGER_VALIDATION_OUTPUT_ROOT = $validationOutput }
           "MEDIAMANAGER_NATIVE_INSTANCE_ROOT=$instanceRoot" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
           "MEDIAMANAGER_TEST_NATIVE_INSTANCE=$(Join-Path $seeded 'instance')" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+      - name: Supply current stopped-instance SQLite input
+        if: inputs.native_sqlite == true
+        shell: pwsh
+        timeout-minutes: 5
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $sqliteOutput = Join-Path $env:RUNNER_TEMP 'mediamanager-current-sqlite'
+          New-Item -ItemType Directory -Path $sqliteOutput | Out-Null
+          $sqliteRoot = Join-Path $sqliteOutput 'input'
+          $validationOutput = $env:MEDIAMANAGER_VALIDATION_OUTPUT_ROOT
+          try {
+            $env:MEDIAMANAGER_VALIDATION_OUTPUT_ROOT = $sqliteOutput
+            node tools/compat/prepare-current-sqlite.mjs $sqliteRoot
+            if ($LASTEXITCODE -ne 0) { throw 'Current native SQLite supply failed.' }
+          } finally { $env:MEDIAMANAGER_VALIDATION_OUTPUT_ROOT = $validationOutput }
+          "MEDIAMANAGER_TEST_CURRENT_NATIVE_SQLITE=$(Join-Path $sqliteRoot 'input.db')" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          'MEDIAMANAGER_TEST_CURRENT_NATIVE_SQLITE_MOUNT_CONTRACT_JSON={"mounts":[]}' | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+      - name: Build the designated Jellyfin Web client
+        if: inputs.web_clients == true
+        shell: pwsh
+        timeout-minutes: 25
+        run: ./tools/ci/build-jellyfin-web.ps1
+      - name: Install the fixed browser for actual Web interaction
+        if: inputs.web_clients == true
+        shell: pwsh
+        timeout-minutes: 10
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $browserRoot = Join-Path $env:RUNNER_TEMP 'mediamanager-browsers'
+          if (Test-Path -LiteralPath $browserRoot) { throw 'Browser installation requires a fresh isolated directory.' }
+          $env:PLAYWRIGHT_BROWSERS_PATH = $browserRoot
+          "PLAYWRIGHT_BROWSERS_PATH=$browserRoot" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          $log = Join-Path $env:MEDIAMANAGER_VALIDATION_OUTPUT_ROOT 'provisioning/browser-install.log'
+          node node_modules/playwright/cli.js install --with-deps --no-shell chromium *> $log
+          if ($LASTEXITCODE -ne 0) { throw 'The fixed Chromium installation failed; see browser-install.log.' }
+          @'
+          import { appendFile, writeFile } from 'node:fs/promises';
+          import path from 'node:path';
+          import { chromium } from 'playwright';
+          const executable = chromium.executablePath();
+          await appendFile(process.env.GITHUB_ENV, `MEDIAMANAGER_BROWSER_EXECUTABLE=${executable}\n`);
+          await writeFile(path.join(process.env.MEDIAMANAGER_VALIDATION_OUTPUT_ROOT, 'provisioning/browser-install.json'),
+            JSON.stringify({ candidate: process.env.GITHUB_SHA, runId: process.env.GITHUB_RUN_ID,
+              runAttempt: process.env.GITHUB_RUN_ATTEMPT, node: process.execPath,
+              command: ['node_modules/playwright/cli.js', 'install', '--with-deps', '--no-shell', 'chromium'],
+              exitCode: 0, root: process.env.PLAYWRIGHT_BROWSERS_PATH, executable,
+              webInteractionValidated: false }, null, 2) + '\n', { flag: 'wx' });
+          '@ | node --input-type=module
+          if ($LASTEXITCODE -ne 0) { throw 'Browser installation receipt failed.' }
       - name: Record runner and database identity
         id: environment
         run: node tools/ci/environment.js capture
@@ -239,7 +301,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
-          name: validation-${{ matrix.os }}-${{ github.run_attempt }}
+          name: validation-${{ matrix.os }}-shard-${{ matrix.shard }}-${{ github.run_attempt }}
           path: ${{ runner.temp }}/mediamanager-results
           if-no-files-found: warn
           retention-days: 14
@@ -247,7 +309,7 @@ jobs:
         if: always() && inputs.native_reference == true
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
-          name: native-reference-${{ matrix.os }}-${{ github.run_attempt }}
+          name: native-reference-${{ matrix.os }}-shard-${{ matrix.shard }}-${{ github.run_attempt }}
           path: |
             ${{ runner.temp }}/mediamanager-native-build/runtime
             ${{ runner.temp }}/mediamanager-native-build/source-offer
@@ -258,7 +320,7 @@ jobs:
         if: always() && inputs.native_instance == true
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
-          name: native-instance-${{ matrix.os }}-${{ github.run_attempt }}
+          name: native-instance-${{ matrix.os }}-shard-${{ matrix.shard }}-${{ github.run_attempt }}
           path: |
             ${{ runner.temp }}/mediamanager-native-instance/empty/initialization.json
             ${{ runner.temp }}/mediamanager-native-instance/empty/initialization.log
@@ -269,10 +331,30 @@ jobs:
         if: always() && inputs.alist_reference == true
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
-          name: alist-api-host-${{ matrix.os }}-${{ github.run_attempt }}
+          name: alist-api-host-${{ matrix.os }}-shard-${{ matrix.shard }}-${{ github.run_attempt }}
           path: |
             ${{ runner.temp }}/mediamanager-alist-build/runtime
             ${{ runner.temp }}/mediamanager-alist-build/source-offer
             ${{ runner.temp }}/mediamanager-alist-build/receipts
           if-no-files-found: error
+          retention-days: 14
+      - name: Preserve current SQLite supply receipt without database credentials
+        if: always() && inputs.native_sqlite == true
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: current-native-sqlite-${{ matrix.os }}-shard-${{ matrix.shard }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/mediamanager-current-sqlite/input/receipt.json
+          if-no-files-found: error
+          retention-days: 14
+      - name: Preserve designated Jellyfin Web assets and build evidence
+        if: always() && inputs.web_clients == true
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: jellyfin-web-${{ matrix.os }}-shard-${{ matrix.shard }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/mediamanager-jellyfin-web/runtime
+            ${{ runner.temp }}/mediamanager-jellyfin-web/receipts
+            ${{ runner.temp }}/mediamanager-jellyfin-web/source-offer
+          if-no-files-found: error
+          include-hidden-files: true
           retention-days: 14

@@ -95,7 +95,7 @@ test('actual network ffprobe persists native streams, version cache and current 
   } finally { await rm(directory, { recursive: true }); }
 });
 
-test('actual network ffprobe persists the ATL common audio-tag subset', {
+test('actual network ffprobe persists its emitted common audio-tag subset', {
   skip: !process.env.MEDIAMANAGER_TEST_POSTGRES || spawnSync(validationExecutable('ffprobe'), ['-version'], { windowsHide: true }).status !== 0
 }, async t => {
   const { database, adapter, service, stateRoot, attachMetadata } = await setup(t);
@@ -106,9 +106,9 @@ test('actual network ffprobe persists the ATL common audio-tag subset', {
   const item = (await database.rows('BaseItems', { where: { Id: id } }))[0];
   assert.equal(item.Name, atlTags.Title);
   assert.equal(item.Album, atlTags.Album);
-  assert.equal(item.Artists, atlTags.Artist.split('\u001f')[0]);
+  assert.equal(item.Artists, atlTags.Artist.replaceAll('\u001f', ';'));
   assert.equal(item.AlbumArtists, atlTags.AlbumArtist);
-  assert.equal(item.Genres, atlTags.Genre.split('\u001f')[0]);
+  assert.equal(item.Genres, atlTags.Genre.replaceAll('\u001f', ';'));
   assert.equal(item.IndexNumber, atlTags.TrackNumber);
   assert.equal(item.ParentIndexNumber, atlTags.DiscNumber);
   assert.equal(item.ProductionYear, atlTags.Year);
@@ -122,7 +122,7 @@ test('actual network ffprobe persists the ATL common audio-tag subset', {
     const person = people.find(entry => entry.Id === row.PeopleId);
     return [person.Name, person.PersonType];
   });
-  assert.deepEqual(credits, [['Album Artist', 'AlbumArtist'], ['Artist One', 'Artist'], ['Composer One', 'Composer']]);
+  assert.deepEqual(credits, [['Album Artist', 'AlbumArtist'], ['Artist One;Artist Two', 'Artist'], ['Composer One', 'Composer']]);
   const loaded = await service.loadContext(id);
   for (const [name] of credits) {
     const personId = loaded.personIdentity(name).Id;
@@ -132,8 +132,9 @@ test('actual network ffprobe persists the ATL common audio-tag subset', {
     assert.notEqual(person.DateLastSaved, null);
     assert.equal((await stat(library.options.expandPath(person.Path))).isDirectory(), true);
   }
-  // ATL retains both ID3v2.4 null-separated values. ffprobe exposes only the
-  // first value, which is the explicit boundary of this dependency-free path.
+  // ATL preserves ID3v2.4 value boundaries. The pinned ffprobe emits joined
+  // semicolon text; with custom delimiters disabled, that text remains exact.
+  // This fallback does not claim complete ATL multi-value tag compatibility.
   assert.equal(atlTags.Artist, 'Artist One\u001fArtist Two');
   assert.equal(atlTags.Genre, 'Rock\u001fPop');
 });

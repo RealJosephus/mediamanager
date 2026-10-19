@@ -1,3 +1,4 @@
+import { fixturePathStyle } from '../library/fixture-state-path.js';
 import { testFileSystem } from './plugin-files.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -62,7 +63,7 @@ test('actual external rclone WebDAV supports independent VFS access, writes, NFO
   } });
   vfs.mount({ path: '/readonly', instanceId: 'actual', root: '/', capabilities: {} });
   const identityMap = new IdentityAccessMap();
-  identityMap.addPrefix({ identityRoot: service.media, accessRoot: '/network', style: 'windows', caseSensitive: false,
+  identityMap.addPrefix({ identityRoot: service.media, accessRoot: '/network', style: fixturePathStyle, caseSensitive: false,
     returnAccess: 'The isolated rclone source root remains directly enumerable by the stopped native instance during return-access validation.' });
   const bridge = new ProbeReadBridge(vfs);
   t.after(async () => {
@@ -83,7 +84,7 @@ test('actual external rclone WebDAV supports independent VFS access, writes, NFO
   const identityPath = path.join(service.media, name);
 
   await t.test('identity mapping, create, stat and full read preserve decoded logical names', async () => {
-    assert.equal(identityMap.resolve({ identityPath, style: 'windows' }), mediaPath);
+    assert.equal(identityMap.resolve({ identityPath, style: fixturePathStyle }), mediaPath);
     assert.equal(identityMap.identityFor(mediaPath).identityPath, identityPath);
     await vfs.write(mediaPath, bytes, { overwrite: false, size: BigInt(bytes.length) });
     const info = await vfs.stat(mediaPath);

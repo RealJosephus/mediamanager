@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 1,
+  "userId": "5c6b5f77-bea9-4a9a-98aa-fae5909892b7",
+  "rootId": "75000000-0000-0000-0000-000000000100",
+  "items": [
+    { "key": "aggregateRoot", "id": "f27caa37-e514-2225-cced-ed48f6553502", "name": "root", "type": "AggregateFolder", "parentId": null, "topParentId": null, "nativeExisting": true },
+    { "key": "userRoot", "id": "e9d5075a-555c-1cbc-394e-ec4cef295274", "name": "Media Folders", "type": "UserRootFolder", "parentId": null, "topParentId": null, "nativeManaged": true, "pathKind": "userRoot", "data": { "PhysicalLocationsList": [], "IsRoot": true } },
+    { "key": "physicalRoot", "id": "75000000-0000-0000-0000-000000000100", "name": "Genre Filter Physical Root", "type": "Folder", "parentId": "f27caa37-e514-2225-cced-ed48f6553502", "topParentId": "75000000-0000-0000-0000-000000000100", "nativeManaged": true },
+    { "key": "collectionView", "id": "75000000-0000-0000-0000-000000000101", "name": "Genre Filter Library", "type": "CollectionFolder", "parentId": "e9d5075a-555c-1cbc-394e-ec4cef295274", "topParentId": "75000000-0000-0000-0000-000000000101", "nativeManaged": true, "pathKind": "collectionView", "data": { "CollectionType": "movies", "PhysicalFolderIds": ["75000000-0000-0000-0000-000000000100"], "PhysicalLocationsList": ["Z:\\GenreFilterOracle\\Library"] } },
+
+    { "key": "genreRock", "id": "75000000-0000-0000-0000-000000000010", "name": "Rock", "cleanName": "rock", "sortName": "selector-genre-rock", "type": "Genre", "parentId": null, "topParentId": null },
+    { "key": "musicGenreRock", "id": "75000000-0000-0000-0000-000000000011", "name": "ROCK", "cleanName": "rock", "sortName": "selector-musicgenre-rock", "type": "MusicGenre", "parentId": null, "topParentId": null },
+    { "key": "wrongTypeRock", "id": "75000000-0000-0000-0000-000000000012", "name": "Rock", "cleanName": "rock", "sortName": "selector-wrong-type-rock", "type": "Movie", "parentId": null, "topParentId": null },
+    { "key": "genreNameRockCleanStored", "id": "75000000-0000-0000-0000-000000000013", "name": "Rock", "cleanName": "stored only", "sortName": "selector-name-rock-clean-stored", "type": "Genre", "parentId": null, "topParentId": null },
+    { "key": "musicGenreNameAliasCleanRock", "id": "75000000-0000-0000-0000-000000000014", "name": "Alias Display", "cleanName": "rock", "sortName": "selector-name-alias-clean-rock", "type": "MusicGenre", "parentId": null, "topParentId": null },
+    { "key": "genreJazz", "id": "75000000-0000-0000-0000-000000000015", "name": "Jazz", "cleanName": "jazz", "sortName": "selector-genre-jazz", "type": "Genre", "parentId": null, "topParentId": null },
+    { "key": "genreEmptyIdRock", "id": "00000000-0000-0000-0000-000000000000", "name": "Rock", "cleanName": "rock", "sortName": "selector-empty-id-rock", "type": "Genre", "parentId": null, "topParentId": null },
+    { "key": "emptyMemoryFolder", "id": "75000000-0000-0000-0000-000000000110", "name": "Empty Memory Folder", "sortName": "empty-memory-folder", "type": "Folder", "parentId": "75000000-0000-0000-0000-000000000100", "topParentId": "75000000-0000-0000-0000-000000000100" },
+
+    { "key": "rockBoth", "id": "75000000-0000-0000-0000-000000000200", "name": "Rock Both", "sortName": "01-rock-both", "type": "Movie", "genresText": "Rock", "parentId": "75000000-0000-0000-0000-000000000100", "topParentId": "75000000-0000-0000-0000-000000000100" },
+    { "key": "jazzBoth", "id": "75000000-0000-0000-0000-000000000201", "name": "Jazz Both", "sortName": "02-jazz-both", "type": "Movie", "genresText": "Jazz", "parentId": "75000000-0000-0000-0000-000000000100", "topParentId": "75000000-0000-0000-0000-000000000100" },
+    { "key": "rockJazzBoth", "id": "75000000-0000-0000-0000-000000000202", "name": "Rock Jazz Both", "sortName": "03-rock-jazz-both", "type": "Movie", "genresText": "Rock|Jazz", "parentId": "75000000-0000-0000-0000-000000000100", "topParentId": "75000000-0000-0000-0000-000000000100" },
+    { "key": "sciFiBoth", "id": "75000000-0000-0000-0000-000000000203", "name": "Sci-Fi Both", "sortName": "04-sci-fi-both", "type": "Movie", "genresText": "Sci-Fi", "parentId": "75000000-0000-0000-0000-000000000100", "topParentId": "75000000-0000-0000-0000-000000000100" },
+    { "key": "rockColumnOnly", "id": "75000000-0000-0000-0000-000000000204", "name": "Rock Column Only", "sortName": "05-rock-column-only", "type": "Movie", "genresText": "Rock", "parentId": "75000000-0000-0000-0000-000000000100", "topParentId": "75000000-0000-0000-0000-000000000100" },
+    { "key": "rockMapOnly", "id": "75000000-0000-0000-0000-000000000205", "name": "Rock Map Only", "sortName": "06-rock-map-only", "type": "Movie", "genresText": "Unrelated", "parentId": "75000000-0000-0000-0000-000000000100", "topParentId": "75000000-0000-0000-0000-000000000100" },
+    { "key": "rockColumnStoredMap", "id": "75000000-0000-0000-0000-000000000206", "name": "Rock Column Stored Map", "sortName": "07-rock-column-stored-map", "type": "Movie", "genresText": "Rock", "parentId": "75000000-0000-0000-0000-000000000100", "topParentId": "75000000-0000-0000-0000-000000000100" },
+    { "key": "compositeMapOnly", "id": "75000000-0000-0000-0000-000000000207", "name": "Composite Map Only", "sortName": "08-composite-map-only", "type": "Movie", "genresText": "Composite", "parentId": "75000000-0000-0000-0000-000000000100", "topParentId": "75000000-0000-0000-0000-000000000100" },
+    { "key": "rockEmptySegmentsColumnOnly", "id": "75000000-0000-0000-0000-000000000208", "name": "Rock Empty Segments Column Only", "sortName": "09-rock-empty-segments-column-only", "type": "Movie", "genresText": "Rock||Tail|", "parentId": "75000000-0000-0000-0000-000000000100", "topParentId": "75000000-0000-0000-0000-000000000100" }
+  ],
+  "links": [],
+  "itemValues": [
+    { "key": "valueRock", "id": "75000000-0000-0000-0000-000000000300", "type": "Genre", "value": "Rock", "cleanValue": "rock" },
+    { "key": "valueJazz", "id": "75000000-0000-0000-0000-000000000301", "type": "Genre", "value": "Jazz", "cleanValue": "jazz" },
+    { "key": "valueSciFi", "id": "75000000-0000-0000-0000-000000000302", "type": "Genre", "value": "Sci-Fi", "cleanValue": "sci fi" },
+    { "key": "valueStoredOnly", "id": "75000000-0000-0000-0000-000000000303", "type": "Genre", "value": "Stored Only", "cleanValue": "stored only" },
+    { "key": "valueRockJazz", "id": "75000000-0000-0000-0000-000000000304", "type": "Genre", "value": "Rock Jazz", "cleanValue": "rock jazz" }
+  ],
+  "itemValueLinks": [
+    { "itemKey": "rockBoth", "valueKey": "valueRock" },
+    { "itemKey": "jazzBoth", "valueKey": "valueJazz" },
+    { "itemKey": "rockJazzBoth", "valueKey": "valueRock" },
+    { "itemKey": "rockJazzBoth", "valueKey": "valueJazz" },
+    { "itemKey": "sciFiBoth", "valueKey": "valueSciFi" },
+    { "itemKey": "rockMapOnly", "valueKey": "valueRock" },
+    { "itemKey": "rockColumnStoredMap", "valueKey": "valueStoredOnly" },
+    { "itemKey": "compositeMapOnly", "valueKey": "valueRockJazz" }
+  ],
+  "cases": [
+    { "name": "genres-pipe-or", "query": "Genres=Rock%7CJazz", "scope": ["rockBoth", "jazzBoth", "rockJazzBoth", "sciFiBoth", "rockColumnOnly", "rockMapOnly", "rockColumnStoredMap", "compositeMapOnly"] },
+    { "name": "genres-clean-normalization", "query": "Genres=Sci%20Fi", "scope": ["rockBoth", "jazzBoth", "rockJazzBoth", "sciFiBoth", "rockColumnOnly", "rockMapOnly", "rockColumnStoredMap", "compositeMapOnly"] },
+    { "name": "genres-comma-is-literal", "query": "Genres=Rock%2CJazz", "scope": ["rockBoth", "jazzBoth", "rockJazzBoth", "sciFiBoth", "rockColumnOnly", "rockMapOnly", "rockColumnStoredMap", "compositeMapOnly"] },
+    { "name": "genres-repeated-does-not-split", "query": "Genres=Rock%7CJazz&Genres=Jazz", "scope": ["rockBoth", "jazzBoth", "rockJazzBoth", "sciFiBoth", "rockColumnOnly", "rockMapOnly", "rockColumnStoredMap", "compositeMapOnly"] },
+    { "name": "genres-single-double-pipe-removes-empty", "query": "Genres=Rock%7C%7CJazz", "scope": ["rockBoth", "jazzBoth", "rockJazzBoth", "sciFiBoth", "rockColumnOnly", "rockMapOnly", "rockColumnStoredMap", "compositeMapOnly"] },
+    { "name": "genres-empty-omits-filter", "query": "Genres=", "scope": ["rockBoth", "jazzBoth", "rockJazzBoth", "sciFiBoth", "rockColumnOnly", "rockMapOnly", "rockColumnStoredMap", "compositeMapOnly"] },
+    { "name": "genres-whitespace-is-active-empty", "query": "Genres=%20", "scope": ["rockBoth", "jazzBoth", "rockJazzBoth", "sciFiBoth", "rockColumnOnly", "rockMapOnly", "rockColumnStoredMap", "compositeMapOnly"] },
+    { "name": "genres-repeated-empty-is-active", "query": "Genres=&Genres=", "scope": ["rockBoth", "jazzBoth", "rockJazzBoth", "sciFiBoth", "rockColumnOnly", "rockMapOnly", "rockColumnStoredMap", "compositeMapOnly"] },
+    { "name": "genre-ids-genre-selector", "query": "GenreIds=75000000-0000-0000-0000-000000000010", "scope": ["rockBoth", "jazzBoth", "rockJazzBoth", "sciFiBoth", "rockColumnOnly", "rockMapOnly", "rockColumnStoredMap", "compositeMapOnly"] },
+    { "name": "genre-ids-musicgenre-selector-api-key-routes", "query": "GenreIds=75000000-0000-0000-0000-000000000011", "scope": ["rockBoth", "jazzBoth", "rockJazzBoth", "sciFiBoth", "rockColumnOnly", "rockMapOnly", "rockColumnStoredMap", "compositeMapOnly"], "auth": "apiKey", "endpoints": ["items", "legacy"] },
+    { "name": "genre-ids-do-not-validate-selector-type", "query": "GenreIds=75000000-0000-0000-0000-000000000012", "scope": ["rockBoth", "jazzBoth", "rockJazzBoth", "sciFiBoth", "rockColumnOnly", "rockMapOnly", "rockColumnStoredMap", "compositeMapOnly"] },
+    { "name": "genre-ids-repository-uses-selector-clean-name", "query": "GenreIds=75000000-0000-0000-0000-000000000013", "scope": ["rockBoth", "jazzBoth", "rockJazzBoth", "sciFiBoth", "rockColumnOnly", "rockMapOnly", "rockColumnStoredMap", "compositeMapOnly"] },
+    { "name": "genre-ids-comma-or", "query": "GenreIds=75000000-0000-0000-0000-000000000010,75000000-0000-0000-0000-000000000015", "scope": ["rockBoth", "jazzBoth", "rockJazzBoth", "sciFiBoth", "rockColumnOnly", "rockMapOnly", "rockColumnStoredMap", "compositeMapOnly"] },
+    { "name": "genre-ids-invalid-only-omits-filter", "query": "GenreIds=not-a-guid", "scope": ["rockBoth", "jazzBoth", "rockJazzBoth", "sciFiBoth", "rockColumnOnly", "rockMapOnly", "rockColumnStoredMap", "compositeMapOnly"] },
+    { "name": "genre-ids-invalid-plus-valid-keeps-valid", "query": "GenreIds=not-a-guid,75000000-0000-0000-0000-000000000010", "scope": ["rockBoth", "jazzBoth", "rockJazzBoth", "sciFiBoth", "rockColumnOnly", "rockMapOnly", "rockColumnStoredMap", "compositeMapOnly"] },
+    { "name": "genre-ids-empty-omits-filter", "query": "GenreIds=", "scope": ["rockBoth", "jazzBoth", "rockJazzBoth", "sciFiBoth", "rockColumnOnly", "rockMapOnly", "rockColumnStoredMap", "compositeMapOnly"] },
+    { "name": "genre-ids-empty-guid-repository", "query": "GenreIds=00000000-0000-0000-0000-000000000000", "scope": ["rockBoth", "jazzBoth", "rockJazzBoth", "sciFiBoth", "rockColumnOnly", "rockMapOnly", "rockColumnStoredMap", "compositeMapOnly"] },
+    { "name": "genre-ids-unknown-valid-repository", "query": "GenreIds=75ffffff-ffff-ffff-ffff-ffffffffffff", "scope": ["rockBoth", "jazzBoth", "rockJazzBoth", "sciFiBoth", "rockColumnOnly", "rockMapOnly", "rockColumnStoredMap", "compositeMapOnly"] },
+    { "name": "genre-ids-pipe-is-invalid", "query": "GenreIds=75000000-0000-0000-0000-000000000010%7C75000000-0000-0000-0000-000000000015", "scope": ["rockBoth", "jazzBoth", "rockJazzBoth", "sciFiBoth", "rockColumnOnly", "rockMapOnly", "rockColumnStoredMap", "compositeMapOnly"] },
+    { "name": "genre-ids-repeated-comma-occurrence-not-split", "query": "GenreIds=75000000-0000-0000-0000-000000000010,75000000-0000-0000-0000-000000000015&GenreIds=75000000-0000-0000-0000-000000000015", "scope": ["rockBoth", "jazzBoth", "rockJazzBoth", "sciFiBoth", "rockColumnOnly", "rockMapOnly", "rockColumnStoredMap", "compositeMapOnly"] },
+    { "name": "genre-ids-repeated-valid-occurrences-or", "query": "GenreIds=75000000-0000-0000-0000-000000000010&GenreIds=75000000-0000-0000-0000-000000000015", "scope": ["rockBoth", "jazzBoth", "rockJazzBoth", "sciFiBoth", "rockColumnOnly", "rockMapOnly", "rockColumnStoredMap", "compositeMapOnly"] },
+    { "name": "genres-and-genre-ids-repository", "query": "Genres=Jazz&GenreIds=75000000-0000-0000-0000-000000000010", "scope": ["rockBoth", "jazzBoth", "rockJazzBoth", "sciFiBoth", "rockColumnOnly", "rockMapOnly", "rockColumnStoredMap", "compositeMapOnly"] },
+
+    { "name": "memory-genres-uses-baseitems-column-api-key-routes", "query": "Genres=Rock", "scope": ["rockBoth", "jazzBoth", "rockJazzBoth", "sciFiBoth", "rockColumnOnly", "rockMapOnly", "rockColumnStoredMap", "compositeMapOnly"], "parentKey": "physicalRoot", "omitIds": true, "recursive": false, "auth": "apiKey", "endpoints": ["items", "legacy"] },
+    { "name": "memory-genres-does-not-clean", "query": "Genres=Sci%20Fi", "scope": ["rockBoth", "jazzBoth", "rockJazzBoth", "sciFiBoth", "rockColumnOnly", "rockMapOnly", "rockColumnStoredMap", "compositeMapOnly"], "parentKey": "physicalRoot", "omitIds": true, "recursive": false },
+    { "name": "memory-genres-raw-punctuation", "query": "Genres=Sci-Fi", "scope": ["rockBoth", "jazzBoth", "rockJazzBoth", "sciFiBoth", "rockColumnOnly", "rockMapOnly", "rockColumnStoredMap", "compositeMapOnly"], "parentKey": "physicalRoot", "omitIds": true, "recursive": false },
+    { "name": "memory-genre-ids-uses-name-not-clean-name", "query": "GenreIds=75000000-0000-0000-0000-000000000013", "scope": ["rockBoth", "jazzBoth", "rockJazzBoth", "sciFiBoth", "rockColumnOnly", "rockMapOnly", "rockColumnStoredMap", "compositeMapOnly"], "parentKey": "physicalRoot", "omitIds": true, "recursive": false },
+    { "name": "memory-genre-ids-do-not-use-clean-name", "query": "GenreIds=75000000-0000-0000-0000-000000000014", "scope": ["rockBoth", "jazzBoth", "rockJazzBoth", "sciFiBoth", "rockColumnOnly", "rockMapOnly", "rockColumnStoredMap", "compositeMapOnly"], "parentKey": "physicalRoot", "omitIds": true, "recursive": false },
+    { "name": "memory-genre-ids-empty-guid-is-bad-request", "query": "GenreIds=00000000-0000-0000-0000-000000000000", "scope": ["rockBoth", "jazzBoth", "rockJazzBoth", "sciFiBoth", "rockColumnOnly", "rockMapOnly", "rockColumnStoredMap", "compositeMapOnly"], "parentKey": "physicalRoot", "omitIds": true, "recursive": false, "expectedStatus": 400 },
+    { "name": "memory-genres-and-genre-ids", "query": "Genres=Jazz&GenreIds=75000000-0000-0000-0000-000000000010", "scope": ["rockBoth", "jazzBoth", "rockJazzBoth", "sciFiBoth", "rockColumnOnly", "rockMapOnly", "rockColumnStoredMap", "compositeMapOnly"], "parentKey": "physicalRoot", "omitIds": true, "recursive": false },
+    { "name": "memory-genre-ids-unknown-valid", "query": "GenreIds=75ffffff-ffff-ffff-ffff-ffffffffffff", "scope": ["rockBoth", "jazzBoth", "rockJazzBoth", "sciFiBoth", "rockColumnOnly", "rockMapOnly", "rockColumnStoredMap", "compositeMapOnly"], "parentKey": "physicalRoot", "omitIds": true, "recursive": false }
+    ,{ "name": "memory-genre-ids-empty-guid-empty-folder-short-circuits", "query": "GenreIds=00000000-0000-0000-0000-000000000000", "scope": [], "parentKey": "emptyMemoryFolder", "omitIds": true, "recursive": false }
+    ,{ "name": "memory-genres-precondition-short-circuits-empty-guid", "query": "Genres=Missing&GenreIds=00000000-0000-0000-0000-000000000000", "scope": ["rockBoth", "jazzBoth", "rockJazzBoth", "sciFiBoth", "rockColumnOnly", "rockMapOnly", "rockColumnStoredMap", "compositeMapOnly"], "parentKey": "physicalRoot", "omitIds": true, "recursive": false }
+    ,{ "name": "memory-genres-whitespace-matches-empty-segment", "query": "Genres=%20", "scope": ["rockEmptySegmentsColumnOnly"], "parentKey": "physicalRoot", "omitIds": true, "recursive": false }
+    ,{ "name": "memory-genres-repeated-empty-matches-empty-segment", "query": "Genres=&Genres=", "scope": ["rockEmptySegmentsColumnOnly"], "parentKey": "physicalRoot", "omitIds": true, "recursive": false }
+  ]
+}

@@ -9,6 +9,9 @@ import { repositoryRoot, validationPath } from './paths.js';
 export const dependencyVariables = Object.freeze({
   postgres: 'MEDIAMANAGER_TEST_POSTGRES',
   nativeSqlite: 'MEDIAMANAGER_TEST_NATIVE_SQLITE',
+  currentNativeSqlite: 'MEDIAMANAGER_TEST_CURRENT_NATIVE_SQLITE',
+  jellyfinWeb: 'MEDIAMANAGER_JELLYFIN_WEB_ROOT',
+  browser: 'MEDIAMANAGER_BROWSER_EXECUTABLE',
   nativeInstance: 'MEDIAMANAGER_TEST_NATIVE_INSTANCE',
   jellyfinDll: 'MEDIAMANAGER_JELLYFIN_DLL',
   dotnet: 'MEDIAMANAGER_DOTNET',
@@ -588,7 +591,15 @@ export function analyzeJavaScriptDependencies(source) {
   const conditionalRegistration = registrations.some(({ ancestors }) => ancestors.some(ancestor =>
     ['IfStatement', 'ConditionalExpression', 'LogicalExpression', 'SwitchCase', 'WhileStatement', 'DoWhileStatement']
       .includes(ancestor.type)));
-  return { importSpecifiers: [...imports.values()].sort((left, right) =>
+  const declaredServices = [];
+  for (const { node } of nodes) if (node.type === 'VariableDeclarator' && node.id?.name === 'requiredValidationServices') {
+    if (node.init?.type !== 'ArrayExpression' || node.init.elements.some(element =>
+      !Object.hasOwn(dependencyVariables, staticString(element)))) {
+      throw new Error('requiredValidationServices must be a static array of known services.');
+    }
+    declaredServices.push(...node.init.elements.map(staticString));
+  }
+  return { declaredServices, importSpecifiers: [...imports.values()].sort((left, right) =>
     left.specifier.localeCompare(right.specifier) || left.kind.localeCompare(right.kind)),
   unresolvedImports: [...unresolved.values()], unresolvedExecutables: [...unresolvedExecutables.values()],
   tools: [...tools].sort(), environmentVariables: [...environmentVariables].sort(), testRegistrations: registrations.length,
@@ -773,7 +784,8 @@ export async function inventory(environment = process.env) {
       const testFile = filename.endsWith('.test.js');
       entries.push({ path: path.relative(repositoryRoot, filename).replaceAll('\\', '/'),
         sha256: sha256(bytes), test: testFile, variables,
-        services: Object.entries(dependencyVariables).filter(([, variable]) => variables.includes(variable)).map(([name]) => name),
+        services: [...new Set([...Object.entries(dependencyVariables).filter(([, variable]) => variables.includes(variable)).map(([name]) => name),
+          ...(analysis.declaredServices ?? [])])].sort(),
         tools: analysis.tools,
         testRegistrations: analysis.testRegistrations,
         conditionalRegistration: testFile && (analysis.testRegistrations === 0 || analysis.conditionalRegistration),

@@ -1,0 +1,54 @@
+name: Designated Web client build
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  jellyfin-web:
+    name: Build and verify the designated Jellyfin Web
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - name: Check out exact candidate
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Set up Node
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24.16.0
+          cache: npm
+      - name: Install validation dependencies
+        run: npm ci --bin-links=false
+      - name: Build the designated Jellyfin Web checkout
+        shell: pwsh
+        run: ./tools/ci/build-jellyfin-web.ps1
+      - name: Verify client source, runtime and build inputs
+        run: |
+          node --input-type=module <<'NODE'
+          import { writeFile } from 'node:fs/promises';
+          import path from 'node:path';
+          import { jellyfinWebInputs } from './tools/validation/jellyfin-web-inputs.js';
+          const supplied = await jellyfinWebInputs();
+          const result = { sourceHead: supplied.receipt.sourceHead, candidate: process.env.GITHUB_SHA,
+            runId: process.env.GITHUB_RUN_ID, inputsVerified: true, webInteractionValidated: false,
+            runtime: supplied.runtime, inputs: supplied.inputs };
+          await writeFile(path.join(process.env.RUNNER_TEMP, 'jellyfin-web-verification.json'), JSON.stringify(result, null, 2) + '\n');
+          console.log('Designated Jellyfin Web build inputs verified; browser interaction has not run.');
+          NODE
+      - name: Upload client assets and build evidence
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: jellyfin-web-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/mediamanager-jellyfin-web/runtime
+            ${{ runner.temp }}/mediamanager-jellyfin-web/receipts
+            ${{ runner.temp }}/mediamanager-jellyfin-web/source-offer
+            ${{ runner.temp }}/jellyfin-web-verification.json
+          if-no-files-found: error
+          include-hidden-files: true
+          retention-days: 7

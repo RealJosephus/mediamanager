@@ -5,21 +5,14 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
 
-import { validationFileUrl } from '../../tools/validation/paths.js';
-import { nativeQueryInputs, nativeQueryReference } from './native-query-default-inputs.js';
 import {
   assertNativeIdentityLaunchBinding,
   assertNativeIdentityArtifactManifest,
   nativeIdentityArtifactPaths,
 } from './native-identity-evidence-contract.js';
 import { assertNativeItemFilterArtifactManifest } from './native-item-filter-evidence.js';
-import {
-  resolveNativeReferencePreparationInput,
-  verifyNativeReferencePreparation,
-} from './native-reference-preparation.js';
 
 const sha256 = bytes => createHash('sha256').update(bytes).digest('hex');
-const fixtureUserId = '5c6b5f77-bea9-4a9a-98aa-fae5909892b7';
 const clone = value => structuredClone(value);
 
 async function artifact(root, relative) {
@@ -124,95 +117,33 @@ test('identity artifact manifest rejects list, metadata, traversal, root-link, a
     artifacts: junctionArtifacts, expectedPaths }), /escapes its real root/u);
 });
 
-test('reference-preparation gate rejects state, exact-input, hash, and current-input tampering', async t => {
-  const preparationUrl = validationFileUrl(
-    '../../.agent-docs/evidence/item-filter-inputs/classification-filters-native-v1/native-run/reference-preparation.json',
-    import.meta.url);
-  const sourceDatabase = nativeQueryReference.sourceDatabase.filename;
-  const preparation = JSON.parse(await readFile(preparationUrl, 'utf8'));
-  const verify = candidate => verifyNativeReferencePreparation({
-    inputs: nativeQueryInputs,
-    preparation: candidate,
-    profile: 'item-filter',
-    sourceDatabase,
-    fixtureUserId,
-  });
-  await verify(preparation);
-  const mutations = [
-    candidate => { candidate.initializedFromEmpty = false; },
-    candidate => { candidate.createdThroughNativeApi = false; },
-    candidate => { candidate.stopped = false; },
-    candidate => { candidate.extra = true; },
-    candidate => { candidate.inputs.pop(); },
-    candidate => { candidate.inputs.push(clone(candidate.inputs[0])); },
-    candidate => { [candidate.inputs[0], candidate.inputs[1]] = [candidate.inputs[1], candidate.inputs[0]]; },
-    candidate => { candidate.inputs[0].kind = 'tampered'; },
-    candidate => { candidate.inputs[0].path = '../bootstrap.json'; },
-    candidate => { candidate.inputs[0].sha256 = '0'.repeat(64); },
-  ];
-  for (const mutate of mutations) {
-    const candidate = clone(preparation);
-    mutate(candidate);
-    await assert.rejects(verify(candidate));
-  }
-
-  const temporary = await mkdtemp(path.join(tmpdir(), 'mediamanager-reference-input-'));
-  t.after(() => rm(temporary, { recursive: true, force: true }));
-  const originalBootstrap = resolveNativeReferencePreparationInput('item-filter', preparation.inputs[0].path, nativeQueryInputs);
-  const tamperedReport = JSON.parse(await readFile(originalBootstrap, 'utf8'));
-  tamperedReport.process.stopped = false;
-  const tamperedBytes = Buffer.from(JSON.stringify(tamperedReport));
-  const tamperedBootstrap = path.join(temporary, 'bootstrap.json');
-  await writeFile(tamperedBootstrap, tamperedBytes);
-  const coherent = clone(preparation);
-  coherent.inputs[0].sha256 = sha256(tamperedBytes);
-  const injectedResolver = (profile, historicalPath) => historicalPath === coherent.inputs[0].path
-    ? tamperedBootstrap : resolveNativeReferencePreparationInput(profile, historicalPath, nativeQueryInputs);
-  await assert.rejects(verifyNativeReferencePreparation({ preparation: coherent, profile: 'item-filter',
-    sourceDatabase, fixtureUserId, resolveInput: injectedResolver, inputs: nativeQueryInputs }), /stopped process/u);
-});
-
-test('identity launch binding rejects executable corruption in a synthetic envelope over verified native inputs', async () => {
-  const evidenceRoot = validationFileUrl(
-    '../../.agent-docs/evidence/user-view-inputs/user-root-visibility-native-v1/', import.meta.url);
-  const [provenance, summary, preparation] = await Promise.all([
-    readFile(new URL('provenance.json', evidenceRoot), 'utf8').then(JSON.parse),
-    readFile(new URL('native-run-v4/summary.json', evidenceRoot), 'utf8').then(JSON.parse),
-    readFile(new URL('native-run-v4/reference-preparation.json', evidenceRoot), 'utf8').then(JSON.parse),
-  ]);
-  const referencePreparation = await verifyNativeReferencePreparation({
-    inputs: nativeQueryInputs,
-    preparation,
-    profile: 'user-view',
-    sourceDatabase: new URL('source-initial.db', evidenceRoot),
-    fixtureUserId,
-  });
-  const hashes = summary;
-  // UserView records executable digests directly, rather than an identity
-  // recorder's before/after envelope. This is a negative-control unit fixture,
-  // not a claim that the identity recorder ran or emitted this envelope.
-  const digestFields = ['dotnetSha256', 'dllSha256', 'ffmpegSha256'];
-  const launch = {
-    command: provenance.launch.command,
-    before: Object.fromEntries(digestFields.map(key => [key, provenance.launch[key]])),
-    after: Object.fromEntries(digestFields.map(key => [key, provenance.launch[key]])),
+// Historical source/preparation revalidation is preserved as original source in
+// fixtures/historical-evidence-checks. These descriptors are synthetic controls,
+// not a claim that the native application was launched.
+test('identity launch binding rejects changed executable paths and digests in a synthetic envelope', () => {
+  const files = ['dotnet', 'jellyfin.dll', 'ffmpeg'].map(name => path.join(tmpdir(), 'synthetic-launch', name));
+  const hashes = { dotnetSha256: sha256('dotnet control'), dllSha256: sha256('DLL control'),
+    ffmpegSha256: sha256('ffmpeg control') };
+  const referencePreparation = {
+    bootstrap: { executables: files.map(filename => ({ path: filename })) },
+    executables: { dotnet: { sha256: hashes.dotnetSha256 }, jellyfinDll: { sha256: hashes.dllSha256 },
+      ffmpeg: { sha256: hashes.ffmpegSha256 } },
   };
-  const verify = launch => assertNativeIdentityLaunchBinding({
-    launch,
-    referencePreparation,
-    hashes,
-    label: 'negative-control',
+  const launch = { command: [files[0], files[1], '--ffmpeg', files[2]], before: { ...hashes }, after: { ...hashes } };
+  const verify = (value, preparation = referencePreparation) => assertNativeIdentityLaunchBinding({
+    launch: value, referencePreparation: preparation, hashes, label: 'synthetic-negative-control',
   });
   assert.doesNotThrow(() => verify(launch));
-  const mutations = [
-    launch => { launch.command[0] = 'tampered-dotnet'; },
-    launch => { launch.command[launch.command.indexOf('--ffmpeg') + 1] = 'tampered-ffmpeg'; },
-    launch => { launch.before.dotnetSha256 = '0'.repeat(64); },
-    launch => { launch.after.ffmpegSha256 = '0'.repeat(64); },
-  ];
-  for (const mutate of mutations) {
-    const candidate = clone(launch);
-    mutate(candidate);
-    assert.throws(() => verify(candidate));
+  for (const mutate of [
+    value => { value.command[0] = path.join(tmpdir(), 'different-dotnet'); },
+    value => { value.command[value.command.indexOf('--ffmpeg') + 1] = path.join(tmpdir(), 'different-ffmpeg'); },
+    value => { value.before.dotnetSha256 = '0'.repeat(64); },
+    value => { value.after.ffmpegSha256 = '0'.repeat(64); },
+  ]) {
+    const changed = clone(launch); mutate(changed);
+    assert.throws(() => verify(changed));
   }
+  const changedPreparation = clone(referencePreparation);
+  changedPreparation.executables.jellyfinDll.sha256 = '0'.repeat(64);
+  assert.throws(() => verify(launch, changedPreparation));
 });

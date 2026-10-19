@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtemp, readFile, realpath, rm } from 'node:fs/promises';
+import { mkdtemp, readFile, realpath, rm, stat } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { nativeInstanceInputs } from '../../tools/validation/native-instance-inputs.js';
@@ -18,6 +18,20 @@ test('same-run native supply preserves a stopped empty instance and a separate c
   assert.equal(initialization.build.runtimeUnchanged, true);
   assert.equal(initialization.process.exitCode, 0);
   assert.equal(initialization.process.stopped, true);
+  assert.deepEqual(initialization.executables.map(value => value.name), ['dotnet', 'ffmpeg', 'ffprobe']);
+  const [, ffmpeg, ffprobe] = initialization.executables;
+  assert.equal(ffprobe.requested, ffmpeg.filename.replace(/[^/\\]+?(\.[^/\\\n.]+)?$/u, 'ffprobe$1'));
+  for (const executable of initialization.executables.flatMap(value => [value, ...value.dispatch])) {
+    assert.ok(supplied.inputs.some(input => input.filename === executable.filename && input.sha256 === executable.sha256));
+  }
+  if (process.platform === 'linux' || process.platform === 'darwin') {
+    const userConfiguration = path.join(initialization.root, 'config', 'native-user');
+    assert.deepEqual(initialization.runtimeEnvironment, process.platform === 'linux'
+      ? { XDG_CONFIG_HOME: userConfiguration } : { CFFIXED_USER_HOME: userConfiguration });
+    assert.equal(initialization.subtitleEditDataDirectory, path.join(userConfiguration,
+      ...(process.platform === 'darwin' ? ['Library', 'Application Support'] : []), 'Subtitle Edit'));
+    assert.equal((await stat(path.join(initialization.subtitleEditDataDirectory, 'Dictionaries'))).isDirectory(), true);
+  }
   for (const route of ['/Startup/User', '/Users/AuthenticateByName', '/Startup/Configuration', '/Startup/Complete', '/System/Info', '/System/Shutdown']) {
     assert.ok(initialization.observations.some(response => response.route === route && response.status >= 200 && response.status < 300), route);
   }
@@ -46,7 +60,10 @@ test('same-run native supply preserves a stopped empty instance and a separate c
   }
   const [empty, seeded] = copies;
   assert.ok(empty.every(item => ['PLACEHOLDER', 'MediaBrowser.Controller.Entities.AggregateFolder',
-    'Emby.Server.Implementations.Playlists.PlaylistsFolder'].includes(item.Type)));
+    'Emby.Server.Implementations.Playlists.PlaylistsFolder'].includes(item.Type)
+    || item.Type === 'MediaBrowser.Controller.Entities.UserRootFolder'
+      && item.IsFolder === true && item.MediaType === 'Unknown'
+      && item.Path === path.join(initialization.root, 'data', 'root', 'default')));
   assert.equal(empty.some(item => item.Id === seed.ids.movie || item.Id === seed.ids.folder), false);
   assert.equal(seeded.length, empty.length + 2);
   const movie = seeded.find(item => item.Id === seed.ids.movie), folder = seeded.find(item => item.Id === seed.ids.folder);

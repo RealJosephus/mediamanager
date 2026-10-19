@@ -11,6 +11,7 @@ import { createRuntime } from '../../src/runtime.js';
 import { parseLosslessJson } from '../../src/core/json.js';
 import { createMediaFixture } from './http-scenario.js';
 import { recordPlaybackBinding } from './binding-scenario.js';
+import { createPlaybackState } from './runtime-state.js';
 import libraryFixture from '../library/fixtures/reference-media.json' with { type: 'json' };
 import streamsFixture from '../library/fixtures/reference-streams.json' with { type: 'json' };
 import inputs from './fixtures/json-model-binding/http-input.json' with { type: 'json' };
@@ -54,12 +55,13 @@ test('104 native PlaybackInfo HTTP binding cases on PostgreSQL match complete re
   assert.deepEqual(expected.map(record => record.name), inputs.map(record => record.name));
   const schema = `playback_binding_${randomBytes(8).toString('hex')}`;
   const fixture = await createMediaFixture({ subtitleRoot });
+  const state = await createPlaybackState();
   let database, runtime;
   try {
     database = await PostgresDatabase.open({ connectionString: process.env.MEDIAMANAGER_TEST_POSTGRES, schema, create: true });
     await seed(database);
     runtime = await createRuntime({ database, configuration: { UICulture: 'en-US', IsStartupWizardCompleted: true },
-      serverId: libraryFixture.serverId, programDataPath: libraryFixture.programDataPath,
+      serverId: libraryFixture.serverId, programDataPath: state.root,
       vfs: fixture.vfs, identityMap: fixture.identityMap, onError: () => {} });
     const user = await runtime.users.createUser({ Name: 'CoreFlowAdmin', Password: 'isolated-core-flow-password' });
     await runtime.users.updatePolicy(user.Id, { ...libraryFixture.user.Policy });
@@ -86,7 +88,8 @@ test('104 native PlaybackInfo HTTP binding cases on PostgreSQL match complete re
         await database.client.query(`DROP SCHEMA "${schema}__mm" CASCADE`);
       }
     } finally {
-      if (runtime) await runtime.close(); else await database?.close();
+      try { if (runtime) await runtime.close(); else await database?.close(); }
+      finally { await state.close(); }
     }
   }
 });

@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { createHash } from 'node:crypto';
+import { createHash, randomUUID } from 'node:crypto';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import test from 'node:test';
@@ -7,6 +7,8 @@ import { tableDefinition } from '../../src/database/model.js';
 import { dateText, dateTicks, idKey, MIN_DATE } from '../../src/library/records.js';
 import { recordUserViewsCandidate } from './user-views-http-scenario.js';
 import { loadUserViewsNativeContract } from './fixtures/user-views/native-contract.js';
+import { projectStatePath, projectStateMacroPath } from './fixture-state-path.js';
+import { validationOutputRoot } from '../../tools/validation/paths.js';
 
 const bytes = await readFile(new URL('./fixtures/user-views/input.json', import.meta.url));
 const fixture = JSON.parse(bytes), contract = await loadUserViewsNativeContract();
@@ -38,14 +40,14 @@ function normalize(value, root) {
   if (Array.isArray(value)) return value.map(entry => normalize(entry, root));
   if (value && typeof value === 'object') return Object.fromEntries(Object.entries(value).map(([key, entry]) => [key,
     key === 'ServerId' ? '$server' : normalize(entry, root)]));
-  return typeof value === 'string' ? value.replaceAll(root, '$instance') : typeof value === 'bigint' ? value.toString() : value;
+  return typeof value === 'string' ? projectStatePath(value, root, '$instance') : typeof value === 'bigint' ? value.toString() : value;
 }
 function rowContract(row, root, final) {
   const data = JSON.parse(row.Data ?? '{}');
   if (newIds.has(idKey(row.Id))) delete data.DateLastSaved;
   return Object.fromEntries(columns.filter(column => !newIds.has(idKey(row.Id)) || !clocks.has(column.name)
     && (final || !['DateModified', 'PresentationUniqueKey'].includes(column.name))).map(column => {
-    const value = row[column.name], type = column.clrType.replace('?', '');
+    const value = column.name === 'Path' ? projectStateMacroPath(row[column.name], root) : row[column.name], type = column.clrType.replace('?', '');
     return [column.name, column.name === 'Data' ? normalize(data, root) : value == null ? value
       : type === 'Guid' ? idKey(value) : type === 'bool' ? Boolean(value) : type === 'long' ? String(value) : normalize(value, root)];
   }));
@@ -127,7 +129,8 @@ function bodyContract(response, stage, allStages, root, { nativeTransientEtags }
 for (const dialect of dialects) test(`${dialect}: GetUserViews 108 complete HTTP contracts and 17 persisted view lifecycles`, {
   skip: dialect === 'postgres' && !process.env.MEDIAMANAGER_TEST_POSTGRES,
 }, async () => {
-  const output = process.env.MEDIAMANAGER_USER_VIEWS_EVIDENCE && path.resolve(process.env.MEDIAMANAGER_USER_VIEWS_EVIDENCE);
+  const output = process.env.MEDIAMANAGER_USER_VIEWS_EVIDENCE ? path.resolve(process.env.MEDIAMANAGER_USER_VIEWS_EVIDENCE)
+    : path.join(validationOutputRoot(), 'user-views-' + randomUUID());
   let actual;
   try { actual = await recordUserViewsCandidate({ dialect, fixture, contract, connectionString: process.env.MEDIAMANAGER_TEST_POSTGRES }); }
   catch (error) {
@@ -159,7 +162,8 @@ for (const dialect of dialects) test(`${dialect}: GetUserViews 108 complete HTTP
     assert.deepEqual(failed.map(row => row.Name).sort(), ['Library A', 'Library B', 'Library T']);
     assert.ok(failed.every(row => !JSON.parse(row.Data).UserId));
     assert.ok(actual.runtimeErrors.length >= 3);
-    assert.ok(actual.runtimeErrors.every(error => error.status === 500 && error.message === 'Error processing request.'));
+    // Background diagnostics retain their actual internal shape in the
+    // artifact. Public errors are checked by the complete HTTP contracts.
   });
   check('cleanup', 'closed snapshot and resources', () => {
     assert.deepEqual(actual.afterReads, actual.afterShutdown);

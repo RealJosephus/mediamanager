@@ -1,7 +1,7 @@
 import { spawn } from 'node:child_process';
 import { once } from 'node:events';
 import { createHash, randomBytes } from 'node:crypto';
-import { mkdir, readFile, readdir, realpath, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import net from 'node:net';
 import path from 'node:path';
@@ -11,23 +11,20 @@ import { verifyNativeBuild } from '../validation/native-build-inputs.js';
 import { describeFile } from '../validation/inventory.js';
 import { validationExecutable } from '../validation/paths.js';
 import { assertFreshReferenceOutput, captureReferenceInput } from './reference-inputs.js';
+import { prepareNativeApplicationData, resolveNativeTools, verifyNativeProcessInputs } from './native-process-inputs.js';
 
 const [destination, ...extra] = process.argv.slice(2);
 if (!destination || extra.length) throw new Error('Usage: node tools/compat/initialize-reference.mjs NEW_OUTPUT_DIRECTORY (requires the same-run native build environment)');
 const build = await verifyNativeBuild();
-const dotnet = await realpath(validationExecutable('dotnet')), ffmpeg = await realpath(validationExecutable('ffmpeg')), dll = build.dll;
-const outputRoot = path.resolve(destination), root = path.join(outputRoot, 'instance');
-const executables = [];
-for (const executable of [dotnet, ffmpeg]) {
-  if (!path.isAbsolute(executable)) throw new Error('Reference executable paths must be absolute.');
-  const identity = await describeFile(executable);
-  if (!identity.available || identity.kind !== 'file') throw new Error('Reference executable must be an ordinary file.');
-  executables.push(identity);
-}
-assertFreshReferenceOutput(outputRoot, [build.root, path.dirname(dotnet), path.dirname(ffmpeg)]);
+const { dotnet, ffmpeg, executables } = await resolveNativeTools();
+const dll = build.dll, outputRoot = path.resolve(destination), root = path.join(outputRoot, 'instance');
+assertFreshReferenceOutput(outputRoot, [build.root, ...executables.flatMap(executable =>
+  [executable, ...executable.dispatch].map(identity => path.dirname(identity.filename)))]);
 const initializer = await describeFile(fileURLToPath(import.meta.url));
+const nativeProcessInputs = await describeFile(fileURLToPath(new URL('./native-process-inputs.js', import.meta.url)));
 await mkdir(root, { recursive: true });
 for (const name of ['data', 'config', 'cache', 'log']) await mkdir(path.join(root, name));
+const { runtimeEnvironment, subtitleEditDataDirectory } = await prepareNativeApplicationData(root);
 const listener = net.createServer();
 listener.listen(0, '127.0.0.1');
 await once(listener, 'listening');
@@ -45,7 +42,9 @@ await writeFile(path.join(root, 'config', 'network.xml'), `<?xml version="1.0" e
 `);
 const args = [dll, '--nowebclient', '--datadir', path.join(root, 'data'), '--configdir', path.join(root, 'config'),
   '--cachedir', path.join(root, 'cache'), '--logdir', path.join(root, 'log'), '--ffmpeg', ffmpeg];
-const child = spawn(dotnet, args, { cwd: root, windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'] });
+const childEnvironment = { ...process.env, ...runtimeEnvironment, MEDIAMANAGER_DOTNET: dotnet };
+const child = spawn(validationExecutable('dotnet', childEnvironment), args, { cwd: root, env: childEnvironment,
+  windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'] });
 const ended = once(child, 'exit');
 ended.catch(() => {});
 let output = '', spawnError, token;
@@ -68,7 +67,7 @@ async function call(route, { body, auth = false } = {}) {
   if (!response.ok) throw new Error(`Reference ${route} returned ${response.status}: ${redact(text).slice(0, 1000)}`);
   return text ? JSON.parse(text) : null;
 }
-let report, failure;
+let report, failure, buildIdentityChange;
 try {
   let initialUser;
   for (let attempt = 0; attempt < 300; attempt++) {
@@ -99,15 +98,31 @@ try {
   } finally { clearTimeout(timer); }
   if (child.exitCode !== 0) throw new Error(`Reference shutdown was unsuccessful: ${child.exitCode}/${child.signalCode}`);
   const after = await verifyNativeBuild();
-  if (after.identitySha256 !== build.identitySha256) throw new Error('Native build inputs changed during initialization.');
-  for (const executable of executables) {
-    if ((await describeFile(executable.filename)).sha256 !== executable.sha256) throw new Error('Initialization executable changed.');
+  if (after.identitySha256 !== build.identitySha256) {
+    const flatten = entries => {
+      const values = new Map();
+      const visit = (entry, filename = entry.filename) => {
+        values.set(filename, { kind: entry.kind, sha256: entry.sha256 ?? entry.entriesSha256,
+          ...(entry.bytes == null ? {} : { bytes: entry.bytes }) });
+        for (const child of entry.entries ?? []) visit(child, path.join(filename, child.name));
+      };
+      for (const entry of entries) visit(entry);
+      return values;
+    };
+    const previous = flatten(build.identityEntries), current = flatten(after.identityEntries);
+    buildIdentityChange = { before: build.identitySha256, after: after.identitySha256,
+      entries: [...new Set([...previous.keys(), ...current.keys()])].sort().flatMap(filename => {
+        const before = previous.get(filename) ?? null, after = current.get(filename) ?? null;
+        return JSON.stringify(before) === JSON.stringify(after) ? [] : [{ filename, before, after }];
+      }) };
+    throw new Error('Native build inputs changed during initialization.');
   }
+  await verifyNativeProcessInputs({ executables, subtitleEditDataDirectory });
   const filename = path.join(root, 'data', 'data', 'jellyfin.db');
   const database = new SqliteDatabase(filename, { readOnly: true, requireMigrationHistory: true });
   try {
     report = { schemaVersion: 1, createdAt: new Date().toISOString(), root, port, base, initializedFromEmpty: true, credentialsRecorded: false,
-      initializer, executables,
+      initializer, nativeProcessInputs, executables, runtimeEnvironment, subtitleEditDataDirectory,
       build: { root: build.root, identitySha256: build.identitySha256,
         source: build.receipt.source, commit: build.receipt.commit, runId: build.receipt.runId, runAttempt: build.receipt.runAttempt,
         runtimeEntriesSha256: build.runtimeEntriesSha256, runtimeUnchanged: true },
@@ -126,6 +141,7 @@ finally {
   if (child.pid && child.exitCode === null && child.signalCode === null) { child.kill(); await ended; }
   await writeFile(path.join(outputRoot, 'initialization.log'), redact(output));
   await writeFile(path.join(outputRoot, 'initialization.json'), `${JSON.stringify(report ?? { failure: redact(String(failure)), observations,
+    ...(buildIdentityChange ? { buildIdentityChange } : {}),
     process: { pid: child.pid, exitCode: child.exitCode, signalCode: child.signalCode, stopped: child.exitCode !== null || child.signalCode !== null } }, null, 2)}\n`);
 }
 if (failure) throw failure;

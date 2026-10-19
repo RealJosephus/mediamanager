@@ -13,6 +13,7 @@ import { folderChildIds, setFolderChildren, releaseCachedFolderChildren } from '
 import { markInternalFolderRefresh, internalFolderRefreshFlag, requiresInternalFolderRefresh } from '../../src/metadata/internal-folder-refresh.js';
 import { RootFolderFileData, nativeDirectoryFullName } from '../../src/library/root-folder-file-data.js';
 import { setupChildrenFixture } from './children-fixture.js';
+import { fixturePathStyle, projectStatePath } from '../library/fixture-state-path.js';
 const hash = value => createHash('sha256').update(value).digest('hex');
 const compare = (actual, expected) => assert.deepEqual(actual, expected);
 const recent = '2026-10-05T02:00:00.0000000Z', initial = '2026-10-04T12:00:00.0000000Z';
@@ -34,10 +35,19 @@ async function fixtureFor(name, count, flag) {
 }
 const identity = (value, stateRoot) => value == null ? value : value.replaceAll('$STATE', stateRoot);
 const project = (value, stateRoot) => value == null ? value : value.replaceAll(stateRoot, '$STATE');
+const resolvedLocationLists = new WeakSet();
+const virtualLocations = new Map();
+const projectLocations = (locations, stateRoot, resolved = false) => locations?.map((value, index) =>
+  resolved && index === 0 ? projectStatePath(value, stateRoot) : virtualLocations.get(stateRoot)?.get(value) ?? project(value, stateRoot)) ?? null;
+const projectFilePath = (value, stateRoot) => projectStatePath(projectStatePath(projectStatePath(value, stateRoot),
+  process.cwd(), '$WORKSPACE'), 'D:\\mediamanager', '$WORKSPACE');
+const expectedResult = result => result.files ? { ...result,
+  files: result.files.map(file => ({ ...file, Path: projectFilePath(file.Path, '$STATE') })) } : result;
 function stateProjection(item, stateRoot) {
   return { Name: item.Name, Path: project(item.Path, stateRoot), refreshFlag: internalFolderRefreshFlag(item),
     cacheCleared: ['AggregateFolder', 'UserRootFolder'].includes(item.Type) ? folderChildIds(item) == null : null,
-    locations: ['AggregateFolder', 'CollectionFolder'].includes(item.Type) ? item.PhysicalLocationsList?.map(value => project(value, stateRoot)) ?? null : null,
+    locations: ['AggregateFolder', 'CollectionFolder'].includes(item.Type)
+      ? projectLocations(item.PhysicalLocationsList, stateRoot, resolvedLocationLists.has(item.PhysicalLocationsList)) : null,
     physicalIds: item.Type === 'CollectionFolder' ? item.PhysicalFolderIds : null };
 }
 function encodedText(value, encoding) {
@@ -56,18 +66,24 @@ function encodedText(value, encoding) {
 }
 async function seedSample(fixture, sample) {
   const itemPath = identity(sample.path, fixture.stateRoot);
+  const virtualTargets = new Map();
+  for (const value of Object.values(sample.files ?? {})) if (/%(?:AppDataPath|MetadataPath)%/u.test(value)) {
+    virtualTargets.set(value.replaceAll('%AppDataPath%', path.join(fixture.stateRoot, 'data')).replaceAll('%MetadataPath%', path.join(fixture.stateRoot, 'metadata')),
+      value.replaceAll('%AppDataPath%', '$STATE\\data').replaceAll('%MetadataPath%', '$STATE\\metadata'));
+  }
+  virtualLocations.set(fixture.stateRoot, virtualTargets);
   // This oracle's missing-directory control is outside RootFolderPath.
   // Map it to a missing VFS directory instead of granting host-file access.
   if (sample.overridePath === '$STATE/missing-root') fixture.identityMap.addPrefix({
     identityRoot: path.join(fixture.stateRoot, 'missing-root'), accessRoot: '/fixture/missing-root',
-    style: 'windows', caseSensitive: false, returnAccess: 'isolated missing directory control'
+    style: fixturePathStyle, caseSensitive: false, returnAccess: 'isolated missing directory control'
   });
   await mkdir(itemPath, { recursive: true });
   for (const directory of sample.directories ?? []) await mkdir(path.join(itemPath, directory), { recursive: true });
   for (const directory of sample.stateDirectories ?? []) await mkdir(path.join(fixture.stateRoot, directory), { recursive: true });
   if ((sample.stateDirectories ?? []).some(value => value === 'media' || value.startsWith('media/'))) {
     fixture.identityMap.addPrefix({ identityRoot: path.join(fixture.stateRoot, 'media'), accessRoot: '/fixture/targets',
-      style: 'windows', caseSensitive: false, returnAccess: 'isolated native shortcut target control' });
+      style: fixturePathStyle, caseSensitive: false, returnAccess: 'isolated native shortcut target control' });
     const directories = new Set(['/targets']);
     for (const value of sample.stateDirectories.filter(value => value === 'media' || value.startsWith('media/'))) {
       const components = value.split('/').slice(1); let target = '/targets';
@@ -86,7 +102,9 @@ async function seedSample(fixture, sample) {
     DateLastRefreshed: sample.first ? MIN_DATE : initial, DateModified: MIN_DATE, ...fields }] });
   await fixture.database.update('BaseItems', { Id: id }, { Type: typeName(sample.type), IsFolder: true,
     Path: createVirtualPathReverser({ programDataPath: fixture.stateRoot })(itemPath), ...(sample.type === 'PlaylistsFolder' ? { Data: null } : {}) });
-  return fixture.loadContext(id);
+  const loaded = await fixture.loadContext(id);
+  if (sample.useResolvedLocations) resolvedLocationLists.add(loaded.item.PhysicalLocationsList);
+  return loaded;
 }
 
 const direct = await fixtureFor('internal-folder-refresh', 37, 'actualFrozenInternalFolderRefresh');
@@ -118,8 +136,9 @@ for (const dialect of ['postgres']) {
     try {
       if (sample.mode === 'resolve') {
         const resolved = await loaded.rootFolderResolveArgs(sample.setLocations);
-        result = { state: stateProjection(item, fixture.stateRoot), locations: resolved.locations.map(value => project(value, fixture.stateRoot)),
-          files: resolved.files.map(value => ({ ...value, Path: project(value.Path, fixture.stateRoot) })) };
+        if (sample.setLocations) resolvedLocationLists.add(item.PhysicalLocationsList);
+        result = { state: stateProjection(item, fixture.stateRoot), locations: projectLocations(resolved.locations, fixture.stateRoot, true),
+          files: resolved.files.map(value => ({ ...value, Path: projectFilePath(value.Path, fixture.stateRoot) })) };
       } else if (sample.mode === 'before') result = { changed: beforeMetadataRefresh(item, loaded), state: stateProjection(item, fixture.stateRoot) };
       else {
         const requiresRefresh = await loaded.requiresRefresh(), state = stateProjection(item, fixture.stateRoot);
@@ -127,7 +146,7 @@ for (const dialect of ['postgres']) {
       }
     } catch (error) { exception = error.nativeException ?? error.name; parameterName = error.parameterName ?? null; result = { state: stateProjection(item, fixture.stateRoot) }; }
     const expected = edges.native.results.find(value => value.name === sample.name);
-    compare({ exception, parameterName, result }, { exception: expected.exception, parameterName: expected.parameterName, result: expected.result });
+    compare({ exception, parameterName, result }, { exception: expected.exception, parameterName: expected.parameterName, result: expectedResult(expected.result) });
   });
   for (const sample of direct.input) test(dialect + ': actual internal directory hook ' + sample.name, options, async t => {
     const fixture = await setupChildrenFixture(t, dialect), loaded = await seedSample(fixture, sample), item = loaded.item;
@@ -146,8 +165,10 @@ for (const dialect of ['postgres']) {
   for (const sample of resolved.input) test(dialect + ': actual internal directory resolve args ' + sample.name, options, async t => {
     const fixture = await setupChildrenFixture(t, dialect), loaded = await seedSample(fixture, sample), item = loaded.item;
     const result = await loaded.rootFolderResolveArgs(sample.setLocations);
-    compare({ state: stateProjection(item, fixture.stateRoot), locations: result.locations.map(value => project(value, fixture.stateRoot)),
-      files: result.files.map(file => ({ ...file, Path: project(file.Path, fixture.stateRoot) })) }, resolved.native.results.find(value => value.name === sample.name).result);
+    if (sample.setLocations) resolvedLocationLists.add(item.PhysicalLocationsList);
+    compare({ state: stateProjection(item, fixture.stateRoot), locations: projectLocations(result.locations, fixture.stateRoot, true),
+      files: result.files.map(file => ({ ...file, Path: projectFilePath(file.Path, fixture.stateRoot) })) },
+    expectedResult(resolved.native.results.find(value => value.name === sample.name).result));
   });
   for (const sample of cache.input) test(dialect + ': actual EF-backed root child cache ' + sample.name, options, async t => {
     const fixture = await setupChildrenFixture(t, dialect), loaded = await seedSample(fixture, sample), item = loaded.item;

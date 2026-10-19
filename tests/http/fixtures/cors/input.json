@@ -1,0 +1,20 @@
+[
+  { "name": "default-public", "method": "GET", "path": "/media/System/Ping", "headers": { "Origin": "https://app.emby.media" } },
+  { "name": "default-auth-preflight", "method": "OPTIONS", "path": "/media/ScheduledTasks", "headers": { "Origin": "https://app.emby.media", "Access-Control-Request-Method": "GET", "Access-Control-Request-Headers": "authorization, content-type, x-emby-authorization" } },
+  { "name": "empty-policy-unknown-preflight", "hosts": [], "method": "OPTIONS", "path": "/media/missing", "headers": { "Origin": "https://client.invalid", "Access-Control-Request-Method": "DELETE" } },
+  { "name": "allowed-auth-failure", "hosts": ["https://app.emby.media"], "method": "GET", "path": "/media/ScheduledTasks", "headers": { "Origin": "https://app.emby.media" } },
+  { "name": "denied-preflight", "hosts": ["https://allowed.invalid"], "method": "OPTIONS", "path": "/media/ScheduledTasks", "headers": { "Origin": "https://denied.invalid", "Access-Control-Request-Method": "POST", "Access-Control-Request-Headers": "authorization" } },
+  { "name": "several-origins-preflight", "hosts": ["https://allowed.invalid", "https://app.emby.media"], "method": "OPTIONS", "path": "/media/System/Ping", "headers": { "Origin": "https://app.emby.media", "Access-Control-Request-Method": "POST", "Access-Control-Request-Headers": "content-type, authorization" } },
+  { "name": "denied-normal-request", "hosts": ["https://allowed.invalid", "https://app.emby.media"], "method": "GET", "path": "/media/System/Ping", "headers": { "Origin": "https://denied.invalid" } },
+  { "name": "ordinary-options", "method": "OPTIONS", "path": "/media/System/Ping", "headers": {} },
+  { "name": "origin-only-options", "method": "OPTIONS", "path": "/media/System/Ping", "headers": { "Origin": "https://app.emby.media" } },
+  { "name": "method-without-origin", "method": "OPTIONS", "path": "/media/System/Ping", "headers": { "Access-Control-Request-Method": "POST" } },
+  { "name": "outside-base-url", "method": "OPTIONS", "path": "/System/Ping", "headers": { "Origin": "https://app.emby.media", "Access-Control-Request-Method": "POST" } },
+  { "name": "null-origin-default", "method": "GET", "path": "/media/System/Ping", "headers": { "Origin": "null" } },
+  { "name": "empty-origin-preflight", "method": "OPTIONS", "path": "/media/System/Ping", "headers": { "Origin": "", "Access-Control-Request-Method": "POST" } },
+  { "name": "configured-ascii-case", "hosts": ["HTTPS://APP.EMBY.MEDIA"], "method": "GET", "path": "/media/System/Ping", "headers": { "Origin": "https://app.emby.media" } },
+  { "name": "configured-idn-default-port", "hosts": ["https://bücher.example:443"], "method": "GET", "path": "/media/System/Ping", "headers": { "Origin": "https://xn--bcher-kva.example" } },
+  { "name": "configured-ascii-default-port-is-exact", "hosts": ["https://app.emby.media:443"], "method": "GET", "path": "/media/System/Ping", "headers": { "Origin": "https://app.emby.media" } },
+  { "name": "mixed-star-is-not-wildcard", "hosts": ["*", "https://allowed.invalid"], "method": "GET", "path": "/media/System/Ping", "headers": { "Origin": "https://denied.invalid" } },
+  { "name": "mixed-star-explicit-origin", "hosts": ["*", "https://allowed.invalid"], "method": "GET", "path": "/media/System/Ping", "headers": { "Origin": "https://allowed.invalid" } }
+]

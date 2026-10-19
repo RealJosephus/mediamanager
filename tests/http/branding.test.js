@@ -85,7 +85,16 @@ test('branding HTTP matches native actions, model binding, files and failure com
         formats: options.SupportedOutputFormats.map(String) });
       return { original: true, path: options.image.Path, mimeType: 'image/png', dateModified: MIN_DATE };
     } };
-    const images = new ImageService({fileSystem: testFileSystem,  processor }), branding = new BrandingService({fileSystem: testFileSystem,  configurationStore: store, images, dataPath });
+    // The recording's read-only delete is a Windows access-denied control.
+    // POSIX directory permissions otherwise allow unlinking a read-only file.
+    const fileSystem = sample.readOnlyFile ? new Proxy(testFileSystem, { get(target, name) {
+      if (name === 'unlink') return async filename => {
+        if (filename === path.join(dataPath, sample.readOnlyFile)) throw Object.assign(new Error('Controlled read-only delete failure.'), { code: 'EACCES' });
+        return target.unlink(filename);
+      };
+      const value = Reflect.get(target, name); return typeof value === 'function' ? value.bind(target) : value;
+    } }) : testFileSystem;
+    const images = new ImageService({ fileSystem, processor }), branding = new BrandingService({ fileSystem, configurationStore: store, images, dataPath });
     const auth = { IsAuthenticated: sample.identity != null && sample.identity !== 'anonymous', IsAdministrator: sample.identity === 'admin' };
     const authentication = { read: () => auth, authenticate: async () => auth, authorize(value, { policy }) {
       if (!value.IsAuthenticated) throw Object.assign(new Error('Unauthenticated.'), { status: 401 });
@@ -115,7 +124,8 @@ test('branding HTTP matches native actions, model binding, files and failure com
     } finally {
       await branding.close(); await images.close(); await new Promise(resolve => application.server.close(resolve));
       if (sample.readOnlyConfig) await chmod(filename, 0o666);
-      if (sample.readOnlyFile) await chmod(path.join(dataPath, sample.readOnlyFile), 0o666);
+      if (sample.readOnlyFile) await chmod(path.join(dataPath, sample.readOnlyFile), 0o666)
+        .catch(error => { if (error.code !== 'ENOENT') throw error; });
     }
   });
 });

@@ -13,7 +13,11 @@ const fixture = new URL('./fixtures/library-options/', import.meta.url);
 const [inputBytes, nativeBytes, proofBytes] = await Promise.all(['input.json', 'native.json', 'provenance.json'].map(name => readFile(new URL(name, fixture))));
 const input = JSON.parse(inputBytes), native = JSON.parse(nativeBytes), proof = JSON.parse(proofBytes);
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
-const normalize = (value, root) => typeof value === 'string' ? value.replaceAll(root, '{state}')
+const normalize = (value, root) => typeof value === 'string' ? (() => {
+  const text = value.replaceAll(root + '\\data', '{state}/data').replaceAll(root + '\\metadata', '{state}/metadata')
+    .replaceAll(root, '{state}');
+  return /^(?:\{state\}|%AppDataPath%|%MetadataPath%)/u.test(text) ? text.replaceAll('\\', '/') : text;
+})()
   : Array.isArray(value) ? value.map(entry => normalize(entry, root))
     : value && typeof value === 'object' ? Object.fromEntries(Object.entries(value).map(([key, entry]) => [key, normalize(entry, root)])) : value;
 function requestOptions(options, mapPath) {
@@ -72,7 +76,7 @@ test('library option cache, XML, failures and reopen match the actual native sto
       await store.clear(); const reopened = await store.get(directory);
       const actual = { before, sameCachedBefore, requested, cached, sameRequested: requested === cached, failure: failure != null,
         reverseCalls, events, disk, diskFailure, reopened };
-      const row = native.observations.find(row => row.name === sample.name), nativeRoot = path.join(proof.process.args[2], sample.name);
+      const row = native.observations.find(row => row.name === sample.name), nativeRoot = path.win32.join(proof.process.args[2], sample.name);
       const expected = { ...row, failure: row.failure != null, diskFailure: row.diskFailure != null }; delete expected.name; delete expected.xml;
       assert.deepEqual(normalize(actual, state), normalize(expected, nativeRoot));
       if (sample.options) {

@@ -1246,9 +1246,9 @@ test('real PostgreSQL transfers persist, validate and preserve canonical instanc
   }
 });
 
-test('runtime Jellyfin SQLite schema and real migration history round trip', { skip: !process.env.MEDIAMANAGER_TEST_NATIVE_SQLITE }, async () => {
+test('runtime Jellyfin SQLite schema and real migration history round trip', { skip: !process.env.MEDIAMANAGER_TEST_CURRENT_NATIVE_SQLITE }, async () => {
   const directory = await mkdtemp(path.join(os.tmpdir(), 'mediamanager-native-'));
-  const source = new SqliteDatabase(process.env.MEDIAMANAGER_TEST_NATIVE_SQLITE, { readOnly: true, requireMigrationHistory: true });
+  const source = new SqliteDatabase(process.env.MEDIAMANAGER_TEST_CURRENT_NATIVE_SQLITE, { readOnly: true, requireMigrationHistory: true });
   let target;
   try {
     await exportCurrentSqlite(source, path.join(directory, 'native.db'));

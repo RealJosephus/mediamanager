@@ -5,8 +5,10 @@ import { fileURLToPath } from 'node:url';
 import { inventory, sha256 } from '../validation/inventory.js';
 import { captureInputIdentity } from '../validation/inputs.js';
 import { repositoryRoot, validationExecutable, validationOutputRoot } from '../validation/paths.js';
-import { applyInputIdentity, classify, provisionedServicesFor, provisionedTools, restrictToRequested } from './scope.js';
+import { applyInputIdentity, ciProfile, classify, provisionedServicesFor, provisionedTools, restrictToRequested } from './scope.js';
 import { affectedUnavailable, applyAffectedSelection, changedFilesForEvent, selectAffected } from './affected.js';
+import { partitionSelection } from './shards.js';
+import { ciSummary } from './summary.js';
 
 const log = message => console.log(`[ci ${new Date().toISOString()}] ${message}`);
 const save = (filename, value) => writeFile(filename, JSON.stringify(value, null, 2) + '\n', { flag: 'wx' });
@@ -48,29 +50,12 @@ async function execute(scopeFile, output, environment) {
   }
 }
 
-function markdown(scope, result) {
-  const lines = ['## Cross-platform CI validation', '',
-    `Platform: ${scope.platform}. Discovered: **${scope.discovered.length}**. Selected: **${scope.selected.length}**. Excluded: **${scope.excluded.length}**.`, '',
-    `Selection mode: **${scope.impact.mode}**. Event: ${scope.impact.event ?? 'local/manual'}.`, '',
-    ...(scope.impact.baseSha ? [`Comparison: \`${scope.impact.baseSha}\` → \`${scope.impact.headSha}\`.`, ''] : []),
-    ...(scope.impact.fallbackReasons.length ? ['Automatic narrowing fell back to all available tests:', '',
-      ...scope.impact.fallbackReasons.map(reason => `- ${reason.code}: ${String(reason.path ?? reason.consumer ?? reason.detail ?? '').replaceAll('\n', ' ')}`), ''] : []),
-    ...(scope.impact.mode === 'not-applicable' ? ['No tests executed: every changed file is on the documentation allowlist and has no declared consumer.', ''] : []),
-    `Outcome: **${result.outcome}**. This is an explicit available-input subset; release full-profile acceptance remains separate.`, '',
-    'All selected tests retain the strict zero-failure, zero-skip, registration and unchanged-input gates. Test failures never change selection.', '',
-    '### Excluded files', '', '| Test | Dependency or scope reason |', '| --- | --- |'];
-  for (const record of scope.excluded) lines.push(`| ${record.path} | ${[...new Set(record.reasons.map(reason =>
-    [reason.code, reason.service ?? reason.tool ?? reason.input ?? reason.filename ?? reason.expression ?? reason.detail ?? reason.consumer].filter(Boolean).join(': ')))].join('<br>').replaceAll('|', '\\|')} |`);
-  if (!scope.excluded.length) lines.push('| None | All discovered test files selected |');
-  if (scope.infrastructureErrors.length) lines.push('', '### Infrastructure errors', '', '```json', JSON.stringify(scope.infrastructureErrors, null, 2), '```');
-  return lines.join('\n') + '\n';
-}
-
 export async function main(argv = process.argv.slice(2)) {
   if (argv.some(argument => argument !== '--plan-only')) throw new Error('Only --plan-only is supported.');
   const planOnly = argv.includes('--plan-only');
   if (!planOnly && process.env.GITHUB_ACTIONS !== 'true') throw new Error('Test execution is reserved for GitHub Actions; use --plan-only locally.');
   const environment = { ...process.env };
+  const full = ciProfile(environment) === 'full';
   for (const name of provisionedTools) {
     const candidate = validationExecutable(name, environment);
     try { environment[`MEDIAMANAGER_${name.toUpperCase()}`] = await realpath(candidate); }
@@ -85,11 +70,13 @@ export async function main(argv = process.argv.slice(2)) {
   if (git.status !== 0) throw new Error('Cannot identify files shipped by the repository.');
   const tracked = new Set(git.stdout.split('\0').filter(Boolean));
   const classification = await preparing('Classifying available dependencies', () => classify({ dependencies, tracked, environment }));
+  // Availability is diagnostic in full mode; it must never remove a test.
+  if (full) for (const record of classification.records) record.selected = true;
   const request = restrictToRequested(classification, environment.MEDIAMANAGER_CI_TEST_FILES ?? '');
-  let impact = { schemaVersion: 1, mode: request.requested.length ? 'exact' : 'allavailable',
+  let impact = { schemaVersion: 1, mode: full ? 'full' : request.requested.length ? 'exact' : 'allavailable',
     event: environment.GITHUB_EVENT_NAME ?? null, baseSha: null, headSha: null, changes: [],
     fallbackReasons: [], affected: [], matches: [], documentationOnly: [] };
-  if (!request.requested.length && ['push', 'pull_request'].includes(environment.GITHUB_EVENT_NAME)) {
+  if (!full && !request.requested.length && ['push', 'pull_request'].includes(environment.GITHUB_EVENT_NAME)) {
     const comparison = await preparing('Comparing candidate changes', () => changedFilesForEvent(environment));
     impact = selectAffected({ dependencies, tracked, comparison, environment });
     applyAffectedSelection(classification, impact);
@@ -104,16 +91,18 @@ export async function main(argv = process.argv.slice(2)) {
   const identity = impact.mode === 'not-applicable' ? null : await preparing('Capturing input identity', () => captureInputIdentity({ selected: candidates, dependencies, environment,
     preflight: { ready: true, services: [], tools: [] } }));
   const infrastructureErrors = [...request.infrastructureErrors,
-    ...(identity ? applyInputIdentity(classification, identity, tracked) : []), ...affectedUnavailable(classification, impact)];
+    ...(!full && identity ? applyInputIdentity(classification, identity, tracked) : []), ...affectedUnavailable(classification, impact)];
   for (const filename of request.requested) {
     const record = classification.records.find(record => record.path === filename);
     if (!record.selected && !infrastructureErrors.some(error => error.code === 'requested-test-unavailable' && error.filename === filename)) {
       infrastructureErrors.push({ code: 'requested-test-unavailable', filename, reasons: record.reasons });
     }
   }
-  const scope = { schemaVersion: 1, profile: 'ci-available', phaseAcceptance: false, createdAt: new Date().toISOString(),
-    platform: process.platform, node: process.version, planOnly, requested: request.requested, impact,
-    selectionPolicy: 'Manual empty input selects all available tests; an exact request retains its required files. Push/PR narrow only added/modified test sources with declared source/input owners or reviewed documentation with no consumers; production, resource, global and unresolved changes fall back to all available tests. Unavailable affected tests fail the attempt. Scope freezes before execution; test failures never narrow it. Release full-profile acceptance remains separate.',
+  const sharding = partitionSelection(classification, environment, full ? 'full' : 'ci-available', request.requested);
+  const scope = { schemaVersion: 1, profile: full ? 'full' : 'ci-available', phaseAcceptance: false, createdAt: new Date().toISOString(),
+    platform: process.platform, node: process.version, planOnly, requested: request.requested, impact, sharding,
+    selectionPolicy: full ? 'Full retains every discovered test, regardless of input availability or change scope, and invokes the strict full profile without an explicit subset. Missing inputs, skipped tests and narrowing environments cannot pass.'
+      : 'Manual empty input selects all available tests; an exact request retains its required files. Push/PR narrow only added/modified test sources with declared source/input owners or reviewed documentation with no consumers; production, resource, global and unresolved changes fall back to all available tests. Unavailable affected tests fail the attempt. Scope freezes before execution; test failures never narrow it. Release full-profile acceptance remains separate.',
     nativeReference: environment.MEDIAMANAGER_CI_NATIVE_REFERENCE === 'true',
     provisionedServices: provisionedServicesFor(environment), provisionedTools, discovered: classification.records.map(record => record.path),
     selected: classification.records.filter(record => record.selected).map(record => record.path),
@@ -123,7 +112,8 @@ export async function main(argv = process.argv.slice(2)) {
   await save(path.join(output, 'inputs-plan.json'), identity);
   const scopeFile = path.join(output, 'scope.json'); await save(scopeFile, scope);
   log(`Scope frozen: ${scope.selected.length} selected, ${scope.excluded.length} excluded. Full reasons: ${scopeFile}`);
-  const notApplicable = impact.mode === 'not-applicable' && !infrastructureErrors.length;
+  const notApplicable = !infrastructureErrors.length && (impact.mode === 'not-applicable'
+    || sharding.total > 1 && sharding.available.length > 0 && !sharding.assigned.length);
   let result = { schemaVersion: 1, phaseAcceptance: false, outcome: planOnly ? 'planned' : notApplicable ? 'not-applicable' : 'incomplete', executed: false,
     selectionSha256: scope.selectionSha256 };
   if (!planOnly && !infrastructureErrors.length && scope.selected.length) {
@@ -133,13 +123,14 @@ export async function main(argv = process.argv.slice(2)) {
     let strictResult;
     try { strictResult = JSON.parse(await readFile(path.join(strictOutput, 'result.json'), 'utf8')); }
     catch (error) { strictResult = { outcome: 'incomplete', error: error.message }; }
-    const unchangedSelection = JSON.stringify(strictResult.selected) === JSON.stringify(scope.selected);
+    const unchangedSelection = JSON.stringify(strictResult.selected) === JSON.stringify(scope.selected)
+      && (!full || strictResult.profile === 'full' && strictResult.allDiscoveredSelected === true && strictResult.scopeComplete === true);
     result = { ...result, ...execution, executed: strictResult.executed === true, strictOutput, unchangedSelection,
       outcome: execution.exitCode === 0 && !execution.timedOut && !execution.cancelled && unchangedSelection && strictResult.outcome === 'passed' ? 'passed' : 'failed',
       strictOutcome: strictResult.outcome, counts: strictResult.counts };
   }
   await save(path.join(output, 'result.json'), result);
-  const summary = markdown(scope, result);
+  const summary = ciSummary(scope, result);
   await writeFile(path.join(output, 'summary.md'), summary, { flag: 'wx' });
   if (environment.GITHUB_STEP_SUMMARY) await appendFile(environment.GITHUB_STEP_SUMMARY, summary);
   log(`Finished: ${result.outcome}; ${scope.selected.length} selected, ${scope.excluded.length} excluded.`);

@@ -29,8 +29,16 @@ function escapeXml(value) {
 }
 
 function normalize(value, sampleRoot) {
-  const uriRoot = pathToFileURL(sampleRoot + path.sep).href.replace(/\/$/, '');
+  const uriRoot = windowsFileUrl(sampleRoot + '\\').replace(/\/$/, '');
   return value.replaceAll(sampleRoot, '$ROOT').replaceAll(uriRoot, '$ROOT_URI');
+}
+const windowsFileUrl = value => process.platform === 'win32' ? pathToFileURL(value).href
+  : new URL('file:///' + value.replaceAll('\\', '/')).href;
+function localControlPath(value, prepared) {
+  if (!value.startsWith(prepared.sampleRoot + '\\') && !value.startsWith(prepared.sampleRoot + '/')) return value;
+  const relative = path.win32.relative(prepared.sampleRoot, value);
+  if (relative === '..' || relative.startsWith('..\\') || path.win32.isAbsolute(relative)) return value;
+  return path.join(prepared.physicalRoot, ...relative.split('\\'));
 }
 
 function nativeError(error) {
@@ -56,7 +64,7 @@ function frozenMissingUnc(value) {
 async function prepareSample(base, sample, index) {
   const sampleRoot = path.join(base, String(index).padStart(3, '0'));
   await mkdir(sampleRoot, { recursive: true });
-  const locations = {
+  const physical = {
     present: path.join(sampleRoot, 'present image.jpg'),
     second: path.join(sampleRoot, 'second image.jpg'),
     unicode: path.join(sampleRoot, '圖像-İ-中文.jpg'),
@@ -65,22 +73,26 @@ async function prepareSample(base, sample, index) {
     existing: path.join(sampleRoot, 'preexisting image.jpg'),
   };
   await Promise.all([
-    writeFile(locations.present, 'present'),
-    writeFile(locations.second, 'second'),
-    writeFile(locations.unicode, 'unicode'),
-    writeFile(locations.existing, 'existing'),
-    mkdir(locations.directory),
+    writeFile(physical.present, 'present'),
+    writeFile(physical.second, 'second'),
+    writeFile(physical.unicode, 'unicode'),
+    writeFile(physical.existing, 'existing'),
+    mkdir(physical.directory),
   ]);
+  // These sealed cases exercise Windows URI/path syntax on every host. Their
+  // independent local-file controls map only this synthetic identity root.
+  const identityRoot = process.platform === 'win32' ? sampleRoot : path.win32.join('N:\\NfoLocalImages', String(index));
+  const locations = Object.fromEntries(Object.entries(physical).map(([key, value]) => [key, path.win32.join(identityRoot, path.basename(value))]));
   const xml = replaceAll(sample.xml, {
     '{{PRESENT}}': locations.present,
     '{{SECOND}}': locations.second,
     '{{UNICODE}}': locations.unicode,
     '{{MISSING}}': locations.missing,
     '{{DIRECTORY}}': locations.directory,
-    '{{PRESENT_URI}}': pathToFileURL(locations.present).href,
-    '{{MISSING_URI}}': pathToFileURL(locations.missing).href,
+    '{{PRESENT_URI}}': windowsFileUrl(locations.present),
+    '{{MISSING_URI}}': windowsFileUrl(locations.missing),
   });
-  return { sampleRoot, locations, xml };
+  return { sampleRoot: identityRoot, physicalRoot: sampleRoot, locations, xml };
 }
 
 function initialState(sample, locations) {
@@ -124,7 +136,7 @@ function syncStat(sample, prepared, controller, calls) {
       throw Object.assign(new Error('Injected directory-service failure.'), { nativeException: 'IOException' });
     }
     let file = null;
-    if (!frozenMissingUnc(value)) try { file = statSync(value); } catch (error) { if (!missing(error)) throw error; }
+    if (!frozenMissingUnc(value)) try { file = statSync(localControlPath(value, prepared)); } catch (error) { if (!missing(error)) throw error; }
     calls.push({ path: normalize(value, prepared.sampleRoot), outcome: lookupResult(file) });
     if (call === sample.cancelAfterLookup) controller.abort();
     return file;
@@ -140,7 +152,7 @@ function asyncStat(sample, prepared, controller, calls, initialCount = 0) {
       throw Object.assign(new Error('Injected directory-service failure.'), { nativeException: 'IOException' });
     }
     let file = null;
-    if (!frozenMissingUnc(value)) try { file = await stat(value); } catch (error) { if (!missing(error)) throw error; }
+    if (!frozenMissingUnc(value)) try { file = await stat(localControlPath(value, prepared)); } catch (error) { if (!missing(error)) throw error; }
     calls.push({ path: normalize(value, prepared.sampleRoot), outcome: lookupResult(file) });
     if (call === sample.cancelAfterLookup) controller.abort();
     return file;
@@ -152,9 +164,9 @@ async function candidate(sample, prepared, asynchronous) {
   if (sample.cancelBefore) controller.abort();
   let error = null, hasMetadata = false;
   if (sample.providerRuntime) {
-    calls.push({ path: normalize(path.join(prepared.sampleRoot, 'movie.nfo'), prepared.sampleRoot), outcome: 'file' });
+    calls.push({ path: normalize(path.win32.join(prepared.sampleRoot, 'movie.nfo'), prepared.sampleRoot), outcome: 'file' });
     let storage;
-    let item = { Type: 'Movie', Path: path.join(prepared.sampleRoot, 'movie.mkv') };
+    let item = { Type: 'Movie', Path: path.win32.join(prepared.sampleRoot, 'movie.mkv') };
     let vfs = {
       stat: async () => ({ kind: 'file' }),
       openRead: async () => ({ version: null, stream: (async function* () { yield Buffer.from(prepared.xml); })(), close: async () => {} }),
@@ -215,7 +227,6 @@ test('native local-image fixture binds Windows, culture, inputs and scene order'
   for (const file of Object.values(provenance.files)) {
     assert.equal(sha256(await readFile(new URL('../../' + file.path, import.meta.url))), file.sha256, file.path);
   }
-  assert.equal(process.platform, 'win32');
   assert.equal(native.schemaVersion, 1);
   assert.equal(provenance.schemaVersion, 1);
   assert.equal(provenance.recordedAt, '2026-10-08T01:50:45.637Z');

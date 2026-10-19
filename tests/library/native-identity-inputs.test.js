@@ -1,111 +1,31 @@
 import assert from 'node:assert/strict';
-import { readFile } from 'node:fs/promises';
 import test from 'node:test';
-import { validationFileUrl } from '../../tools/validation/paths.js';
-import { assertNativeIdentityOutput, nativeIdentityBinding, nativeIdentityReference, resolveNativeIdentityInput,
-  verifyNativeIdentityRecordingBinding, verifyNativeIdentitySourceBindings } from './native-identity-inputs.js';
-import { verifyNativeReferencePreparation } from './native-identity-reference-preparation.js';
-import { assertCompleteIdentityHttpResponses } from './full-identity-wire.js';
+import { assertCompleteFilterHttpResponses } from './full-filter-wire.js';
 
-test('identity inputs bind both independent audits, all preparation files and current executable trees', async () => {
-  await verifyNativeIdentitySourceBindings();
-  assert.equal(nativeIdentityBinding.recordings.length, 5);
-  assert.equal(nativeIdentityBinding.recordings.reduce((total, recording) =>
-    total + Object.keys(recording.expectedRunModes).length, 0), 14);
-});
-
-test('identity inputs reject changed source, preparation, audit and executable directory digests', async () => {
-  const mutations = [
-    binding => { binding.reference.sourceDatabase.sha256 = '0'.repeat(64); },
-    binding => { binding.preparationInputFiles[0].sha256 = '0'.repeat(64); },
-    binding => { binding.preparationInputFiles.pop(); },
-    binding => { binding.independentNativeAudits[0].sha256 = '0'.repeat(64); },
-    binding => { binding.runtimeDirectory.entriesSha256 = '0'.repeat(64); },
-    binding => { binding.sdkDirectory.entriesSha256 = '0'.repeat(64); },
-    binding => { binding.recordings[0].repetitions[0].entriesSha256 = '0'.repeat(64); },
-  ];
-  for (const mutate of mutations) {
-    const binding = structuredClone(nativeIdentityBinding);
-    mutate(binding);
-    await assert.rejects(verifyNativeIdentitySourceBindings(binding));
-  }
-});
-
-test('identity recording gate rejects foreign roots, changed modes and directory bytes', async () => {
-  const recording = nativeIdentityBinding.recordings[0];
-  const options = { evidenceRoot: recording.repetitions[0].filename, kind: recording.kind,
-    evidenceName: recording.evidenceName, expectedRunModes: recording.expectedRunModes };
-  for (const descriptor of recording.repetitions) {
-    await verifyNativeIdentityRecordingBinding({ ...options, evidenceRoot: descriptor.filename });
-  }
-  await assert.rejects(verifyNativeIdentityRecordingBinding({ ...options, evidenceRoot: '.' }));
-  await assert.rejects(verifyNativeIdentityRecordingBinding({ ...options, kind: 'studio' }));
-  await assert.rejects(verifyNativeIdentityRecordingBinding({ ...options, expectedRunModes: {} }));
-  const changed = structuredClone(nativeIdentityBinding);
-  changed.recordings[0].repetitions[0].entriesSha256 = '0'.repeat(64);
-  await assert.rejects(verifyNativeIdentityRecordingBinding(options, changed));
-});
-
-test('identity preparation accepts only the eleven exact native API and launch inputs', async () => {
-  const root = validationFileUrl(
-    '../../.agent-docs/evidence/identity-inputs/artist-concurrency-native-v1/native-run/', import.meta.url);
-  const preparation = JSON.parse(await readFile(new URL('reference-preparation.json', root), 'utf8'));
-  const options = { profile: 'http-filter', sourceDatabase: new URL('reference/initial.db', root),
-    fixtureUserId: '5c6b5f77-bea9-4a9a-98aa-fae5909892b7' };
-  await verifyNativeReferencePreparation({ ...options, preparation });
-  for (const mutate of [
-    value => { value.initializedFromEmpty = false; },
-    value => { value.createdThroughNativeApi = false; },
-    value => { value.stopped = false; },
-    value => { value.inputs.pop(); },
-    value => { value.inputs[0].path = '../foreign-bootstrap.json'; },
-    value => { value.inputs[0].sha256 = '0'.repeat(64); },
-    value => { [value.inputs[0], value.inputs[1]] = [value.inputs[1], value.inputs[0]]; },
-  ]) {
-    const changed = structuredClone(preparation);
-    mutate(changed);
-    await assert.rejects(verifyNativeReferencePreparation({ ...options, preparation: changed }));
-  }
-  assert.equal(resolveNativeIdentityInput(nativeIdentityReference.preparationInputs[0][1])
-    .replaceAll('\\', '/'), nativeIdentityBinding.preparationInputFiles[0].filename);
-  assert.throws(() => resolveNativeIdentityInput('../foreign-bootstrap.json'), /exact independently audited/u);
-});
-
-test('identity full HTTP gate rejects added DTO fields, bytes, headers, counts and record-order tampering', async () => {
-  const root = validationFileUrl(
-    '../../.agent-docs/evidence/identity-inputs/artist-concurrency-native-v1/native-run/', import.meta.url);
-  const native = JSON.parse(await readFile(new URL('native-http.json', root), 'utf8'));
-  // This synthetic comparator control is not a candidate runtime observation.
-  const endpoint = record => ({ endpoint: 'items', response: { status: record.response.status,
-    contentType: record.response.contentType, bodyText: record.response.bodyText,
-    body: structuredClone(record.response.bodyJson) } });
-  const candidate = { cases: [{ name: 'parallel', endpoints: native.records.slice(0, -1).map(endpoint) },
-    { name: 'followup', endpoints: [endpoint(native.records.at(-1))] }] };
-  const options = { scenarioName: 'identity-comparator-control' };
-  assert.equal((await assertCompleteIdentityHttpResponses(candidate, native, options)).responses, 9);
+// Explicit synthetic observations exercise the shared HTTP comparison contract.
+// Original historical input/audit revalidation remains archived separately.
+test('complete identity responses reject added fields, content types, counts and reordered observations', () => {
+  const names = ['parallel', 'followup'];
+  const observations = names.map((name, index) => ({ name,
+    body: { Items: [{ Id: `item-${index}`, Name: name }], TotalRecordCount: 1, StartIndex: 0 } }));
+  const candidate = { cases: observations.map(({ name, body }) => ({ name, endpoints: [{ endpoint: 'items',
+    response: { status: 200, contentType: 'application/json', bodyText: JSON.stringify(body), body: structuredClone(body) },
+  }] })) };
+  const reference = { records: observations.map(({ name, body }) => ({ name, endpoint: 'items',
+    response: { status: 200, contentType: 'application/json', bodyText: JSON.stringify(body), bodyJson: body },
+  })) };
+  const options = { scenarioName: 'synthetic-identity-comparator', nativeServerId: 'synthetic-reference' };
+  const verify = value => assertCompleteFilterHttpResponses(value, reference, options);
+  assert.equal(verify(candidate).responses, 2);
   for (const mutate of [
     value => { const response = value.cases[0].endpoints[0].response;
       response.body.Unexpected = true; response.bodyText = JSON.stringify(response.body); },
-    value => { value.cases[0].endpoints[0].response.bodyText = '{}'; },
     value => { value.cases[0].endpoints[0].response.contentType = 'text/plain'; },
-    value => { value.cases[0].endpoints[0].response.status = 201; },
-    value => { value.cases[0].endpoints.pop(); },
+    value => { value.cases.pop(); },
+    value => { value.cases.push(structuredClone(value.cases[0])); },
     value => { value.cases.reverse(); },
   ]) {
-    const changed = structuredClone(candidate);
-    mutate(changed);
-    await assert.rejects(assertCompleteIdentityHttpResponses(changed, native, options));
+    const changed = structuredClone(candidate); mutate(changed);
+    assert.throws(() => verify(changed));
   }
-});
-
-test('identity output cannot overlap either repetition, source database, audit or executable tree', () => {
-  const environment = { MEDIAMANAGER_VALIDATION_OUTPUT_ROOT: 'D:/mediamanager-validation/20261011/release-results' };
-  assert.doesNotThrow(() => assertNativeIdentityOutput(environment.MEDIAMANAGER_VALIDATION_OUTPUT_ROOT, environment));
-  for (const descriptor of [nativeIdentityBinding.runtimeDirectory, nativeIdentityBinding.sdkDirectory,
-    ...nativeIdentityBinding.recordings.flatMap(recording => recording.repetitions)]) {
-    assert.throws(() => assertNativeIdentityOutput(descriptor.filename, environment), /outside reference/u);
-    assert.throws(() => assertNativeIdentityOutput(descriptor.filename + '/output', environment), /outside reference/u);
-  }
-  assert.throws(() => assertNativeIdentityOutput(nativeIdentityReference.sourceDatabase.filename, environment), /outside reference/u);
-  assert.throws(() => assertNativeIdentityOutput(nativeIdentityBinding.independentNativeAudits[0].filename, environment), /outside reference/u);
 });

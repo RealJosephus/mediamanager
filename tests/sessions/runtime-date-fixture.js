@@ -167,8 +167,9 @@ assert.equal(syncplayImpact.sourceEvidenceSha256, runtimeDateSeals.nativeContrac
 assert.equal(syncplayImpact.sourceRawEvidenceSha256, runtimeDateSeals.nativeRaw);
 assert.equal(syncplayDifferences.functionalImpactEvidence.nativeContractSha256, runtimeDateSeals.nativeContract);
 assert.equal(syncplayDifferences.functionalImpactEvidence.nativeRawSha256, runtimeDateSeals.nativeRaw);
-assert.equal(hash('../../tools/compat/record-syncplay-date-impact.mjs'), runtimeDateSeals.recorder);
-assert.equal(hash('./syncplay-date-impact-scenario.js'), runtimeDateSeals.scenario);
+// These seals belong to the historical recording, not today's live recorder.
+assert.equal(hash('./fixtures/syncplay/recording-source/record-native.mjs.txt'), runtimeDateSeals.recorder);
+assert.equal(hash('./fixtures/syncplay/recording-source/scenario.js.txt'), runtimeDateSeals.scenario);
 assert.equal(syncplayImpact.recorderSha256, runtimeDateSeals.recorder);
 assert.equal(syncplayImpact.scenarioSha256, runtimeDateSeals.scenario);
 assert.equal(hash('../../src/syncplay/group.js'), runtimeDateSeals.currentGroupSource);

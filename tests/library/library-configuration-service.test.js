@@ -110,10 +110,11 @@ test('native virtual library creation retains naming, option/shortcut prefixes, 
       invalidateDirectory: filename => trace('invalidate', filename), queueLibraryScan: () => trace('task-QueueScheduledTask'), sleep: async milliseconds => assert.equal(milliseconds, 1000),
       configurationStore: { updateContentTypes: async transform => { configuration.ContentTypes = transform(structuredClone(configuration.ContentTypes));
         trace('configuration-save', configuration.ContentTypes); if (sample.failure === 'configuration-save') throw new Error('Controlled configuration failure.'); } } });
+    service.locationComparer = new Intl.Collator('zh-CN', { sensitivity: 'variant' });
     t.after(() => service.close());
     let failure = false; try { await service.addVirtualFolder(sample.name, sample.collectionType, options, sample.refreshLibrary === true); } catch { failure = true; }
     const folders = await service.getVirtualFolders(true), files = await filesUnder(views);
-    const original = native.results.find(row => row.key === sample.key), nativeState = path.join(proof.process.args[2], sample.key);
+    const original = native.results.find(row => row.key === sample.key), nativeState = path.win32.join(proof.process.args[2], sample.key);
     const actual = { failure, calls, folders, files: consumerFiles(files), contentTypes: configuration.ContentTypes, options };
     const expected = { failure: original.exception != null, calls: original.calls, folders: original.folders,
       files: consumerFiles(original.files.map(entry => ({ path: entry.path, bytes: Buffer.from(entry.bytes, 'base64') }))), contentTypes: original.contentTypes, options: original.options };

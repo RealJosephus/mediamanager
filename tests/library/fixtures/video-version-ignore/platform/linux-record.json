@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-19T10:33:22.213Z",
+  "project": "/home/runner/work/mediamanager/mediamanager/tests/library/fixtures/video-version-ignore/PlatformOracle.csproj",
+  "dotnet": {
+    "filename": "/home/runner/work/_temp/mediamanager-dotnet/dotnet",
+    "available": true,
+    "kind": "file",
+    "bytes": 71744,
+    "sha256": "8b3d902364f618e31e029d4eba077d52c141dd641e375f4555715604806e44b6"
+  },
+  "node": "v24.16.0",
+  "timezone": "Asia/Taipei",
+  "jellyfinDll": {
+    "filename": "/home/runner/work/_temp/mediamanager-native-build/runtime/jellyfin.dll",
+    "available": true,
+    "kind": "file",
+    "bytes": 505856,
+    "sha256": "124bb4d9036ccc4c9c682226436730ece27c77371cb6bdd6237f773f8abea471"
+  },
+  "sourceFiles": [
+    {
+      "filename": "/home/runner/work/mediamanager/mediamanager/tests/library/fixtures/video-version-ignore/PlatformOracle.csproj",
+      "available": true,
+      "kind": "file",
+      "bytes": 1086,
+      "sha256": "47c8109484ebc429a57103bed649229ed9cf698de6f2b0512f0133ff912d30a4"
+    },
+    {
+      "filename": "/home/runner/work/mediamanager/mediamanager/tests/Directory.Build.props",
+      "available": true,
+      "kind": "file",
+      "bytes": 780,
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    },
+    {
+      "filename": "/home/runner/work/mediamanager/mediamanager/tests/library/fixtures/video-version-ignore/Program.cs",
+      "available": true,
+      "kind": "file",
+      "bytes": 19793,
+      "sha256": "6415a4c69972b26ca7e7ca11377e6b0fbc3b7b6801f50e5c6874a4269a09f8b2"
+    }
+  ],
+  "sourceFilesSha256": "6cd0d4553c5fc2759d421f9a50ca75a957a320ace445f62bc79f4cabdea0587d",
+  "build": {
+    "args": [
+      "build",
+      "/home/runner/work/_temp/mediamanager-results/video-version-platform-0762851d-2d13-4dee-84ed-5beb08c9af68/oracle/project/PlatformOracle.csproj",
+      "-c",
+      "Release",
+      "--nologo",
+      "-v",
+      "minimal",
+      "-p:BaseOutputPath=/home/runner/work/_temp/mediamanager-results/video-version-platform-0762851d-2d13-4dee-84ed-5beb08c9af68/oracle/bin/",
+      "-p:BaseIntermediateOutputPath=/home/runner/work/_temp/mediamanager-results/video-version-platform-0762851d-2d13-4dee-84ed-5beb08c9af68/oracle/obj/"
+    ],
+    "status": 0,
+    "signal": null
+  },
+  "process": {
+    "args": [
+      "/home/runner/work/_temp/mediamanager-results/video-version-platform-0762851d-2d13-4dee-84ed-5beb08c9af68/oracle/bin/Release/net10.0/PlatformOracle.dll",
+      "/home/runner/work/_temp/mediamanager-results/video-version-platform-0762851d-2d13-4dee-84ed-5beb08c9af68/input.json",
+      "/home/runner/work/_temp/mediamanager-results/video-version-platform-0762851d-2d13-4dee-84ed-5beb08c9af68/oracle/native.json",
+      "/home/runner/work/_temp/mediamanager-results/video-version-platform-0762851d-2d13-4dee-84ed-5beb08c9af68/oracle/state"
+    ],
+    "status": 0,
+    "signal": null
+  },
+  "outputs": [
+    {
+      "filename": "/home/runner/work/_temp/mediamanager-results/video-version-platform-0762851d-2d13-4dee-84ed-5beb08c9af68/oracle/build.stderr.txt",
+      "available": true,
+      "kind": "file",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "filename": "/home/runner/work/_temp/mediamanager-results/video-version-platform-0762851d-2d13-4dee-84ed-5beb08c9af68/oracle/build.stdout.txt",
+      "available": true,
+      "kind": "file",
+      "bytes": 449,
+      "sha256": "c092475c19e7507c77c2bdc857fe2ba48ff3c933d37b3bfb00906397a8923ddb"
+    },
+    {
+      "filename": "/home/runner/work/_temp/mediamanager-results/video-version-platform-0762851d-2d13-4dee-84ed-5beb08c9af68/oracle/native.json",
+      "available": true,
+      "kind": "file",
+      "bytes": 7984,
+      "sha256": "e756466ca619e8597ba815884ac77df697433882347940221988e1b41128b9dc"
+    },
+    {
+      "filename": "/home/runner/work/_temp/mediamanager-results/video-version-platform-0762851d-2d13-4dee-84ed-5beb08c9af68/oracle/stderr.txt",
+      "available": true,
+      "kind": "file",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "filename": "/home/runner/work/_temp/mediamanager-results/video-version-platform-0762851d-2d13-4dee-84ed-5beb08c9af68/oracle/stdout.txt",
+      "available": true,
+      "kind": "file",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "oracleAssembly": {
+    "filename": "/home/runner/work/_temp/mediamanager-results/video-version-platform-0762851d-2d13-4dee-84ed-5beb08c9af68/oracle/bin/Release/net10.0/PlatformOracle.dll",
+    "available": true,
+    "kind": "file",
+    "bytes": 63488,
+    "sha256": "104198f4b32c6186a79b926a1fe99cc49a2a0bd0eef42e9bac4a6ef938f5ba22"
+  },
+  "passed": true
+}

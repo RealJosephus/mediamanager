@@ -1,3 +1,4 @@
+import { createPlaybackState } from './runtime-state.js';
 import { validationExecutable } from '../../tools/validation/paths.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -39,11 +40,12 @@ test('native audio HLS manifests, copy packets, seek and task lifecycle on Postg
   const fixture = await extractionFixture({ '/source.mka': Buffer.from(reference.media, 'base64') });
   fixture.identityMap = new IdentityAccessMap(); fixture.identityMap.bind(id, '/source.mka');
   const directory = await mkdtemp(path.join(tmpdir(), 'mediamanager-hls-test-')), processes = [], errors = [];
+  const state = await createPlaybackState();
   let database, runtime;
   try {
     database = await PostgresDatabase.open({ connectionString: process.env.MEDIAMANAGER_TEST_POSTGRES, schema, create: true });
     await seed(database);
-    runtime = await createRuntime({ database, configuration: { UICulture: 'en-US', IsStartupWizardCompleted: true }, serverId: library.serverId, programDataPath: library.programDataPath,
+    runtime = await createRuntime({ database, configuration: { UICulture: 'en-US', IsStartupWizardCompleted: true }, serverId: library.serverId, programDataPath: state.root,
       vfs: fixture.vfs, identityMap: fixture.identityMap, hlsOptions: { onProcess: entry => processes.push(entry.args), cacheDirectory: directory }, onError: error => errors.push({ message: error.message, code: error.code, details: error.details }) });
     const user = await runtime.users.createUser({ Name: 'HlsReader', Password: 'isolated-hls-password' });
     const policy = { ...library.user.Policy, EnableAudioPlaybackTranscoding: true, EnableVideoPlaybackTranscoding: false, EnablePlaybackRemuxing: true };
@@ -100,7 +102,7 @@ test('native audio HLS manifests, copy packets, seek and task lifecycle on Postg
     assert.equal((await fetch(origin + '/Audio/' + id + '/master.m3u8', { headers })).status, 400);
     for (const args of processes) { assert.equal(args[args.indexOf('-codec:a:0') + 1], 'copy'); assert.ok(args.includes('-vn')); assert.ok(!args.includes('-vf') && !args.includes('-af')); }
   } finally {
-    await runtime?.close(); await fixture.close();
+    await runtime?.close(); await fixture.close(); await state.close();
     const cleanup = await PostgresDatabase.open({ connectionString: process.env.MEDIAMANAGER_TEST_POSTGRES, schema });
     try { await cleanup.client.query(`DROP SCHEMA IF EXISTS "${schema}", "${schema}__mm" CASCADE`); } finally { await cleanup.close(); }
     assert.equal(path.dirname(directory), tmpdir()); await rm(directory, { recursive: true, force: true });

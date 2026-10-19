@@ -94,7 +94,7 @@ class FolderValidationScope {
     await this.query(`DROP TABLE ${t.source}`);
   }
 
-  async checkClaims(claims, deletionSafe) {
+  async checkClaims(claims, deletionSafe, resolvedItems) {
     const t = this.tables;
     for (let offset = 0; offset < claims.length; offset += 128) {
       const page = claims.slice(offset, offset + 128);
@@ -112,6 +112,19 @@ class FolderValidationScope {
     if (!deletionSafe && (await this.query(`SELECT EXISTS(SELECT 1 FROM ${t.current} current
       WHERE "Deletable" AND NOT EXISTS(SELECT 1 FROM ${t.claims} claim WHERE claim."Key"=current."Key")) AS unsafe`)).rows[0].unsafe) {
       throw new StorageError('not-supported', 'Removing folder children requires a strong complete directory snapshot.');
+    }
+    if (!deletionSafe) for (const claim of claims) {
+      const resolved = resolvedItems.get(idKey(claim.Id));
+      if (!VIDEO_TYPES.has(resolved?.Type)) continue;
+      await this.withCurrent(claim.Id, current => {
+        if (!VIDEO_TYPES.has(current?.Type)) return;
+        for (const field of ['AdditionalParts', 'LocalAlternateVersions']) {
+          const observed = new Set((resolved[field] ?? []).map(identityPath => nativePathKey(identityPath) ?? identityPath));
+          if ((current[field] ?? []).some(identityPath => !observed.has(nativePathKey(identityPath) ?? identityPath))) {
+            throw new StorageError('not-supported', 'Removing an owned video declaration requires a strong complete directory snapshot.');
+          }
+        }
+      });
     }
   }
 

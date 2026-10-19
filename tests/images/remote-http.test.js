@@ -52,12 +52,13 @@ test('PostgreSQL remote image GET matches native retry, failure cleanup and imme
       const normalizeImage = (image, root, remoteBase) => ({
         ImageType: image.ImageType, ItemId: image.ItemId, Width: image.Width, Height: image.Height,
         Blurhash: image.Blurhash == null ? null : Buffer.from(image.Blurhash).toString('utf8'),
-        Path: image.Path.startsWith('http') ? image.Path.replaceAll(remoteBase, '<upstream>') : path.relative(root, image.Path).replaceAll('\\', '/'),
+        Path: image.Path.startsWith('http') ? image.Path.replaceAll(remoteBase, '<upstream>')
+          : (/^[A-Za-z]:[\\/]/u.test(root) ? path.win32 : path).relative(root, image.Path).replaceAll('\\', '/'),
       });
       const actual = { status: response.status, savedChanged: before !== after, contentType: response.headers['content-type'], length: response.bytes.length,
         sha256: createHash('sha256').update(response.bytes).digest('hex'), requests: requested.slice(start), images: images.map(image => normalizeImage(image, metadataPath, remoteOrigin)) };
       const projected = { status: expected.status, savedChanged: expected.savedChanged, contentType: expected.contentType, length: expected.length, sha256: expected.sha256,
-        requests: expected.requests, images: expected.images.map(image => normalizeImage(image, path.join(native.reference, 'data/metadata'), 'http://127.0.0.1:18370')) };
+        requests: expected.requests, images: expected.images.map(image => normalizeImage(image, path.win32.join(native.reference, 'data/metadata'), 'http://127.0.0.1:18370')) };
       assert.deepEqual(actual, projected, `${entry.id}:${expected.iteration}`);
       assert.equal(events.length - previousEvents, Number(expected.savedChanged));
       if (images[0] && !images[0].Path.startsWith('http')) {

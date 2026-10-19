@@ -63,6 +63,7 @@ public sealed class Scenario
     public CancellationPlan? Cancel { get; set; }
     public DatabaseCleanupSeed? Cleanup { get; set; }
     public SeriesCleanupSeed? SeriesCleanup { get; set; }
+    public StackReplacementSeed? StackReplacement { get; set; }
     public CompositionSeed Seed { get; set; } = new();
 }
 public sealed class DatabaseCleanupSeed
@@ -273,7 +274,7 @@ public sealed class NativeScanHost : IAsyncDisposable
                 Add("save-committed",new { items=items.Select(Item).ToArray(), sql=SnapshotSql() });
                 return result;
             }
-            if (_observing && (Scenario.Cleanup is not null || Scenario.SeriesCleanup is not null) && method.Name == "DeleteItem") {
+            if (_observing && (Scenario.Cleanup is not null || Scenario.SeriesCleanup is not null || Scenario.StackReplacement is not null) && method.Name == "DeleteItem") {
                 var ids = ((IReadOnlyList<Guid>)values![0]!).ToArray();
                 Add("delete-begin",new { ids,sql=SnapshotSql() });
                 var result=ForwardProxy.Forward(actualPersistence,method,values);
@@ -319,7 +320,7 @@ public sealed class NativeScanHost : IAsyncDisposable
         BaseItem.MediaSourceManager=ForwardProxy.Make<IMediaSourceManager>((method,values)=>method.Name=="GetPathProtocol"
             ? MediaProtocol.File : ForwardProxy.Unused(method));
         BaseItem.MediaSegmentManager=ForwardProxy.Make<IMediaSegmentManager>((method,values)=>ForwardProxy.Unused(method));
-        if (Scenario.SeriesCleanup is not null)
+        if (Scenario.SeriesCleanup is not null || Scenario.StackReplacement is not null)
         {
             // DeleteItem derives internal subtitle/attachment paths from the
             // actual media-source projection. All stream, attachment and
@@ -359,6 +360,15 @@ public sealed class NativeScanHost : IAsyncDisposable
             MetadataServices.Add(new MediaBrowser.Providers.TV.SeriesMetadataService(Configuration,
                 loggerFactory.CreateLogger<MediaBrowser.Providers.TV.SeriesMetadataService>(),
                 _providerDispatch,FileSystem,Manager,localization,ExternalData,Repository));
+        if (Scenario.StackReplacement is not null)
+        {
+            MetadataServices.Add(new MediaBrowser.Providers.Movies.MovieMetadataService(Configuration,
+                loggerFactory.CreateLogger<MediaBrowser.Providers.Movies.MovieMetadataService>(),
+                _providerDispatch,FileSystem,Manager,ExternalData,Repository));
+            MetadataServices.Add(new MediaBrowser.Providers.Videos.VideoMetadataService(Configuration,
+                loggerFactory.CreateLogger<MediaBrowser.Providers.Videos.VideoMetadataService>(),
+                _providerDispatch,FileSystem,Manager,ExternalData,Repository));
+        }
         ApplyProviderParts();
         var services=new ServiceCollection();services.AddSingleton<ILoggerFactory>(loggerFactory);services.AddLogging();
         services.AddSingleton(Paths);services.AddSingleton(Configuration);services.AddSingleton(FileSystem);services.AddSingleton(ImageProcessor);
@@ -539,7 +549,7 @@ public sealed class NativeScanHost : IAsyncDisposable
             using var reader=command.ExecuteReader();while(reader.Read())tables.Add(reader.GetString(0));
         }
         var wanted=new HashSet<string>(["BaseItems","AncestorIds","ItemValues","ItemValuesMap","LinkedChildren","UserData","BaseItemImageInfos","Images"],StringComparer.Ordinal);
-        if(Scenario.SeriesCleanup is not null)wanted.UnionWith(["MediaStreamInfos","AttachmentStreamInfos","MediaSegments"]);
+        if(Scenario.SeriesCleanup is not null || Scenario.StackReplacement is not null)wanted.UnionWith(["MediaStreamInfos","AttachmentStreamInfos","MediaSegments"]);
         var result=new Dictionary<string,object>();
         foreach(var table in tables.Where(wanted.Contains))
         {
@@ -613,6 +623,8 @@ public sealed class NativeScanHost : IAsyncDisposable
             {
                 var message=formatter(state,exception);
                 host.Add("log",new { category,level=level.ToString(),message,exception=exception?.GetType().FullName });
+                if(host.Scenario.StackReplacement is not null && exception is not null)
+                    host.Add("stack-operation-error",new { category,error=exception.ToString() });
                 // Observe the real dispatch boundary without substituting a task.
                 if(host._observing&&host.Scenario.Cleanup is not null&&category==typeof(LibraryManager).FullName
                     &&message.StartsWith("Running post-scan task ",StringComparison.Ordinal)

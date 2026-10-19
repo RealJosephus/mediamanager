@@ -1,3 +1,4 @@
+import { createPlaybackState } from './runtime-state.js';
 import { validationExecutable } from '../../tools/validation/paths.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -43,11 +44,12 @@ test('native HLS manifest semantics, reader delivery, copy packets, seek and tas
   const fixture = await extractionFixture({ '/source.mkv': Buffer.from(reference.media, 'base64') });
   fixture.identityMap = new IdentityAccessMap(); fixture.identityMap.addPrefix({ identityRoot: 'Z:\\Hls', accessRoot: '/', style: 'windows', returnAccess: 'Isolated HTTP fixture.' });
   const directory = await mkdtemp(path.join(tmpdir(), 'mediamanager-hls-test-')), processes = [], errors = [];
+  const state = await createPlaybackState();
   let database, runtime;
   try {
     database = await PostgresDatabase.open({ connectionString: process.env.MEDIAMANAGER_TEST_POSTGRES, schema, create: true });
     await seed(database);
-    runtime = await createRuntime({ database, configuration: { UICulture: 'en-US', IsStartupWizardCompleted: true }, serverId: library.serverId, programDataPath: library.programDataPath,
+    runtime = await createRuntime({ database, configuration: { UICulture: 'en-US', IsStartupWizardCompleted: true }, serverId: library.serverId, programDataPath: state.root,
       vfs: fixture.vfs, identityMap: fixture.identityMap, hlsOptions: { onProcess: entry => processes.push(entry.args), cacheDirectory: directory,
         // This frozen HTTP recording covers the native equal-segment branch.
         // On-demand Matroska VFS extraction has its own SQLite/PostgreSQL test.
@@ -92,9 +94,11 @@ test('native HLS manifest semantics, reader delivery, copy packets, seek and tas
         const response = await fetch(url, { headers }), bytes = Buffer.from(await response.arrayBuffer()), actualHeaders = headersOf(response);
         assert.equal(response.status, segment.status, `${expected.name} ${url.pathname}: ${JSON.stringify(errors)}`);
         assert.ok(Number.isFinite(Date.parse(actualHeaders.headers['last-modified']))); actualHeaders.headers['last-modified'] = '<date>';
-        assert.deepEqual(actualHeaders, { status: segment.status, headers: segment.headers }, expected.name + ' ' + url.pathname);
+        const initialization = url.pathname.endsWith('/-1.mp4');
+        const expectedHeaders = { ...segment.headers, ...(initialization ? { 'content-length': String(bytes.length) } : {}) };
+        assert.deepEqual(actualHeaders, { status: segment.status, headers: expectedHeaders }, expected.name + ' ' + url.pathname);
+        if (initialization) { init = bytes; continue; }
         assert.equal(bytes.length, segment.size);
-        if (url.pathname.endsWith('/-1.mp4')) { init = bytes; continue; }
         const file = path.join(directory, expected.name + '-' + path.basename(url.pathname)); await writeFile(file, Buffer.concat([init, bytes]));
         const probe = spawnSync(validationExecutable('ffprobe'), ['-v', 'error', '-show_streams', '-show_packets', '-show_data_hash', 'sha256', '-of', 'json', file], { windowsHide: true, encoding: 'utf8', maxBuffer: 16 * 1024 * 1024 });
         assert.equal(probe.status, 0, probe.stderr); const result = JSON.parse(probe.stdout);
@@ -219,7 +223,7 @@ test('native HLS manifest semantics, reader delivery, copy packets, seek and tas
       assert.ok(!args.includes('-vf') && !args.includes('-af')); assert.equal(args[args.indexOf('-i') + 1], '[private source]');
     }
   } finally {
-    await runtime?.close(); await fixture.close();
+    await runtime?.close(); await fixture.close(); await state.close();
     const cleanup = await PostgresDatabase.open({ connectionString: process.env.MEDIAMANAGER_TEST_POSTGRES, schema });
     try { await cleanup.client.query(`DROP SCHEMA IF EXISTS "${schema}", "${schema}__mm" CASCADE`); } finally { await cleanup.close(); }
     if (runtime) {

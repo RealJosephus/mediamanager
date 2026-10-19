@@ -7,6 +7,9 @@ import { resolveCollageSystemFonts } from '../../src/images/system-fonts/index.j
 import { alistBuildInputs } from './alist-inputs.js';
 import { nativeBuildInputs } from './native-build-inputs.js';
 import { nativeInstanceInputs } from './native-instance-inputs.js';
+import { currentNativeSqliteInputs } from './current-native-sqlite-inputs.js';
+import { jellyfinWebInputs } from './jellyfin-web-inputs.js';
+import { browserInputs } from './browser-inputs.js';
 
 const isDigest = value => typeof value === 'string' && /^[a-f0-9]{64}$/iu.test(value);
 
@@ -21,8 +24,20 @@ const executionManifests = new Map([
   ...['local-xml-provider', 'nfo-episode-blocks', 'nfo-scalar-provider']
     .map(kind => [`tests/metadata/${kind}.test.js`, ['reader-layout', kind]]),
   ['tests/library/genre-studio-filter-http.test.js', ['byname']],
+  ...['native-byname-filter-inputs', 'native-byname-filter-wire']
+    .map(name => [`tests/library/${name}.test.js`, ['byname', 'all']]),
 ]);
 const sealedExecutionManifests = new Map([
+  ['tests/metadata/search-lookup.test.js', ['search-lookup-sources', 'tests/metadata/fixtures/metadata-search-lookup/provenance.json']],
+  ['tests/plugins/native-repeat.test.js', ['nfo-repeats', 'tests/metadata/fixtures/nfo-partial-reader/repeat.json']],
+  ['tests/core/parental-rating-unicode.test.js', ['sealed-rating', 'tests/core/fixtures/parental-rating-unicode/provenance.json']],
+  ['tests/http/password-reset-consumer.test.js', ['password-reader', 'tests/http/fixtures/password-reset/consumer.json']],
+  ['tests/http/shows-api.test.js', ['sealed-shows', 'tests/http/fixtures/shows-api/provenance.json']],
+  ['tests/http/startup.test.js', ['sealed-startup', 'tests/http/fixtures/startup/provenance.json']],
+  ['tests/images/splashscreen.test.js', ['splashscreen-sources', 'tests/images/fixtures/splashscreen/files.json']],
+  ['tests/library/collection-playlist-resolution.test.js', ['sealed-collection-playlist', 'tests/library/fixtures/collection-playlist-resolution/provenance.json']],
+  ['tests/library/collection-post-scan.test.js', ['collection-task-sources', 'tests/library/fixtures/collection-post-scan/provenance.json']],
+  ['tests/library/native-conflict-inputs.js', ['conflict', 'tests/library/fixtures/native-conflict-inputs/binding.json']],
   ['tests/core/native-charset.test.js', ['sealed-charset', 'tests/core/fixtures/native-charset/provenance.json']],
   ['tests/core/native-json-encoder.test.js', ['sealed-json', 'tests/core/fixtures/native-json-encoder/provenance.json']],
   ['tests/http/item-deletion.test.js', ['sealed-http-delete', 'tests/http/fixtures/item-deletion/provenance.json']],
@@ -57,7 +72,76 @@ export function executionManifestReferences(contract, content, filename) {
     if (!descriptor || typeof descriptor.filename !== 'string') throw new Error('Invalid execution input descriptor.');
     references.push({ ...descriptor, ...options });
   };
-  if (contract.kind === 'sealed-xml-prefix' || contract.kind === 'sealed-xml-prefix-history') {
+  if (contract.kind === 'search-lookup-sources') {
+    for (const [name, descriptor] of Object.entries(content.files)) {
+      add({ ...descriptor, filename: name === 'buildProperties'
+        ? path.resolve(repositoryRoot, 'tests/Directory.Build.props') : local(descriptor.filename) });
+    }
+    for (const source of content.sources) add({ filename: path.resolve(process.env.MEDIAMANAGER_JELLYFIN_SOURCE ?? 'D:/jellyfin',
+      source.filename.slice('D:/jellyfin/'.length)), sha256: source.sha256 });
+    add(content.oracle.record);
+  } else if (contract.kind === 'nfo-repeats' || contract.kind === 'nfo-repeat') {
+    add(content.input);
+    for (const record of content.recordings) for (const descriptor of [record.dotnet, record.jellyfinDll,
+      record.oracleAssembly, ...record.sourceFiles, ...record.outputs]) add(descriptor);
+    for (const descriptor of content.outputs) add(descriptor);
+    add({ filename: local('provenance.json') }, { nested: 'nfo-repeat-source' });
+    if (contract.kind === 'nfo-repeats') add({ filename: local('../nfo-scalar-provider/repeat.json') }, { nested: 'nfo-repeat' });
+  } else if (contract.kind === 'nfo-repeat-source') {
+    for (const [filename, sha256] of Object.entries(content.jellyfin.sources)) {
+      for (const root of [content.jellyfin.root, 'D:/mediamanager-validation/20261005/jellyfin-baseline/source']) {
+        add({ filename: path.join(root, filename), sha256 });
+      }
+    }
+    for (const [filename, descriptor] of Object.entries(content.runtime.assemblies)) {
+      add({ ...descriptor, filename: path.join(path.dirname(content.runtime.jellyfinDll.path), filename) });
+    }
+  } else if (contract.kind === 'sealed-rating') {
+    for (const descriptor of [content.rawRecording, content.oracleAssembly]) add(descriptor);
+    for (const source of content.sources) for (const name of ['designated', 'isolated']) add({ ...source[name], sha256: source.sha256 });
+    for (const assembly of content.actualLoadedAssemblies) add({ filename: assembly.Filename, sha256: assembly.Sha256 });
+  } else if (contract.kind === 'password-reader') {
+    add({ filename: content.rawReading, sha256: content.readingSha256 }, { nested: 'password-reading' });
+    add({ filename: content.manifest, sha256: content.manifestSha256 }, { nested: 'password-manifest' });
+    for (const descriptor of [...content.producerSources, ...content.sources]) add(descriptor);
+  } else if (contract.kind === 'password-reading') {
+    for (const descriptor of content.assemblies) add(descriptor);
+  } else if (contract.kind === 'password-manifest') {
+    for (const row of content) add(row.source);
+  } else if (contract.kind === 'sealed-shows') {
+    for (const descriptor of [content.input, content.native, content.fixture, content.record, content.repeat]) {
+      add({ ...descriptor, filename: descriptor.filename ?? descriptor.path });
+    }
+    for (const source of content.jellyfin.sources) for (const root of [content.jellyfin.repository,
+      'D:/mediamanager-validation/20261005/jellyfin-baseline/source']) {
+      add({ filename: path.join(root, source.path), sha256: source.sha256 });
+    }
+    for (const record of content.recordings) for (const descriptor of [...record.sourceFiles, record.dotnet,
+      record.jellyfinDll, record.oracleAssembly, ...record.outputs]) add(descriptor);
+  } else if (contract.kind === 'sealed-startup') {
+    add({ filename: content.rawRecording, sha256: content.nativeSha256 });
+    add(content.repeat);
+    for (const source of content.sources) for (const root of ['D:/jellyfin', content.jellyfin.buildSource]) {
+      add({ filename: path.join(root, source.filename), sha256: source.sha256 });
+    }
+    for (const descriptor of [...content.assemblies, ...content.nativeLibraries, ...content.oracleSources]) add(descriptor);
+  } else if (contract.kind === 'splashscreen-sources') {
+    for (const source of content.consumerSources) add(source);
+  } else if (contract.kind === 'collection-task-sources') {
+    for (const source of content.sources) add({ filename: path.join('D:/jellyfin', source.path), sha256: source.sha256 });
+  } else if (contract.kind === 'sealed-collection-playlist') {
+    add({ filename: content.jellyfin.source });
+    for (const descriptor of [content.record, content.raw, content.native, content.dotnet, content.jellyfinDll,
+      ...content.files, ...content.jellyfin.sources, ...content.resolution]) {
+      add({ ...descriptor, filename: descriptor.filename ?? descriptor.path });
+    }
+  } else if (contract.kind === 'conflict') {
+    add(content.independentNativeAudit);
+    for (const recording of content.recordings) {
+      for (const descriptor of [recording.originalRecorder, recording.libraryManagerSource, ...recording.executableBindings,
+        ...recording.repetitions]) add(descriptor);
+    }
+  } else if (contract.kind === 'sealed-xml-prefix' || contract.kind === 'sealed-xml-prefix-history') {
     add({ filename: local('native.json'), sha256: content.nativeSha256 });
     add({ filename: content.rawRecording, sha256: content.nativeSha256 }, { recorded: true });
     for (const source of content.oracleSources) add({ filename: local(source.name), sha256: source.sha256 });
@@ -119,7 +203,7 @@ export function executionManifestReferences(contract, content, filename) {
   } else if (contract.kind === 'byname') {
     add(content.independentNativeAudit);
     for (const recording of content.recordings) {
-      if (['genre', 'studio'].includes(recording.kind)) {
+      if (contract.argument === 'all' || ['genre', 'studio'].includes(recording.kind)) {
         for (const descriptor of recording.repetitions) add(descriptor);
       } else {
         // Other kinds contribute only these files to source verification;
@@ -228,14 +312,19 @@ export async function captureInputIdentity({ selected, dependencies, preflight, 
     if (consumers.has(reason)) return true;
     consumers.add(reason); return false;
   }
-  async function bindDirectoryManifests(directory, reason) {
-    if (alreadyInspected(inspectedDirectories, directory, reason)) return;
+  async function bindDirectoryManifests(directory, reason, siblingOnly = false) {
+    if (alreadyInspected(inspectedDirectories, directory + (siblingOnly ? '\0siblings' : '\0tree'), reason)) return;
     if (!directoryFiles.has(directory)) {
       try { directoryFiles.set(directory, await filesIn(directory)); }
       catch (error) { if (error.code === 'ENOENT') directoryFiles.set(directory, []); else throw error; }
     }
     const files = directoryFiles.get(directory);
-    for (const file of files.filter(file => file.endsWith('.json'))) await bindManifestReferences(file, reason);
+    // A file consumer can construct sibling filenames, but does not thereby
+    // consume manifests belonging to every nested fixture in a shared root.
+    // Explicit directory dependencies still bind their complete tree.
+    for (const file of files.filter(file => file.endsWith('.json') && (!siblingOnly || path.dirname(file) === directory))) {
+      await bindManifestReferences(file, reason);
+    }
   }
   async function bindManifestReferences(filename, reason) {
     if (!filename.endsWith('.json') || alreadyInspected(inspectedManifests, filename, reason)) return;
@@ -293,7 +382,7 @@ export async function captureInputIdentity({ selected, dependencies, preflight, 
       // explicitly declares the hash-bound input required for execution.
       if (siblingDirectory && (description.kind === 'file' || path.extname(target))) {
         add(path.dirname(target), `${reason}:manifest-reference-directory`, false);
-        await bindDirectoryManifests(path.dirname(target), reason);
+        await bindDirectoryManifests(path.dirname(target), reason, true);
       }
       if (description.available && description.kind === 'file') await bindManifestReferences(target, reason);
       if (description.available && description.kind === 'directory') await bindDirectoryManifests(target, reason);
@@ -335,7 +424,7 @@ export async function captureInputIdentity({ selected, dependencies, preflight, 
       throw new Error(`Reviewed execution input loader is missing from the dependency closure: ${consumer}`);
     }
     await bindExecutionManifest(path.resolve(repositoryRoot, contract.manifest), consumer, contract);
-    if (contract.kind === 'byname') await bindExecutionManifest(
+    if (['byname', 'conflict'].includes(contract.kind)) await bindExecutionManifest(
       path.resolve(repositoryRoot, 'tests/library/fixtures/native-identity-inputs/binding.json'), consumer, { kind: 'identity' });
   }
   for (const entry of closure) {
@@ -348,7 +437,7 @@ export async function captureInputIdentity({ selected, dependencies, preflight, 
         // A fixture's manifest may reference sibling files whose paths are constructed dynamically.
         if (reference.kind === 'file') {
           add(path.dirname(reference.filename), `${entry.path}:fixture-directory`);
-          await bindDirectoryManifests(path.dirname(reference.filename), entry.path);
+          await bindDirectoryManifests(path.dirname(reference.filename), entry.path, true);
         }
         if (reference.available && reference.kind === 'directory') await bindDirectoryManifests(reference.filename, entry.path);
         if (reference.available && reference.kind === 'file') await bindManifestReferences(reference.filename, entry.path);
@@ -361,21 +450,39 @@ export async function captureInputIdentity({ selected, dependencies, preflight, 
     for (const fixture of entry.fixtureReferences || []) {
       add(fixture.filename, `${entry.path}:local-fixture`);
       add(path.dirname(fixture.filename), `${entry.path}:local-fixture-directory`);
-      await bindDirectoryManifests(path.dirname(fixture.filename), entry.path);
+      await bindDirectoryManifests(path.dirname(fixture.filename), entry.path, true);
       await bindManifestReferences(fixture.filename, entry.path);
     }
   }
+  const usesCurrentNativeSqlite = environment.MEDIAMANAGER_CI_NATIVE_SQLITE === 'true'
+    && closure.some(entry => entry.services?.includes('currentNativeSqlite'));
   const usesNativeInstance = environment.MEDIAMANAGER_CI_NATIVE_INSTANCE === 'true'
     && closure.some(entry => entry.services?.includes('nativeInstance'));
   if (environment.MEDIAMANAGER_CI_NATIVE_REFERENCE === 'true'
-    && (usesNativeInstance || closure.some(entry => entry.services?.includes('jellyfinDll')))) {
+    && (usesCurrentNativeSqlite || usesNativeInstance || closure.some(entry => entry.services?.includes('jellyfinDll')))) {
     for (const input of (await nativeBuildInputs(environment)).inputs) {
       add(input.filename, `runtime:native-reference:${input.reason}`, true, input.sha256 ? [input.sha256] : []);
     }
   }
-  if (usesNativeInstance) {
+  if (usesCurrentNativeSqlite) {
+    for (const input of (await currentNativeSqliteInputs(environment)).inputs) {
+      add(input.filename, 'runtime:current-native-sqlite', true, [input.sha256]);
+    }
+  } else if (usesNativeInstance) {
     for (const input of (await nativeInstanceInputs(environment)).inputs) {
       add(input.filename, 'runtime:native-instance', true, [input.sha256]);
+    }
+  }
+  if (environment.MEDIAMANAGER_CI_WEB_CLIENTS === 'true') {
+    if (closure.some(entry => entry.services?.includes('jellyfinWeb'))) {
+      for (const input of (await jellyfinWebInputs(environment)).inputs) {
+        add(input.filename, 'runtime:jellyfin-web', true, [input.sha256]);
+      }
+    }
+    if (closure.some(entry => entry.services?.includes('browser'))) {
+      for (const input of (await browserInputs(environment)).inputs) {
+        add(input.filename, 'runtime:browser', true, [input.sha256]);
+      }
     }
   }
   for (const service of preflight.services) {

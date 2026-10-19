@@ -13,7 +13,7 @@ Oracle.cs is the exact successful Program.cs, checked by fixed hash. The
 fixture also pins four native C# sources, 23 loaded assembly byte copies and
 sixteen original evidence inputs. project-native.mjs mechanically projects
 the evidence parent directory and never overwrites an existing fixture.
-Tests read only these tracked files and installed dependencies.
+The historical seal checks read only these tracked files.
 
 Supplemental raw observations retain 25 actual Windows runtime root-trimming
 controls. The root algorithm ports published dotnet/runtime v10.0.0 source;
@@ -25,7 +25,9 @@ Copyright .NET Foundation and Contributors; its license is preserved in
 src/core/resources/native-sort-license.txt. The Jellyfin prefix and Playlist
 contracts retain their GPL-2.0-only source attribution.
 
-This proves the Windows raw path and selected private visibility contract.
-The non-Windows helper branch follows the pinned source and is not an actual
-non-Windows native run. Ownership/open-access/shares variants, HTTP, host
-cancellation and full phase acceptance are outside this fixture.
+This recording proves the Windows raw path and selected private visibility
+contract. The separate `../playlist-path-runtime` oracle now reuses the same
+sixteen raw visibility inputs with the supplied current-platform DLL, without
+changing this recording or claiming that its Windows outputs apply to POSIX.
+Ownership/open-access/shares variants, HTTP, host cancellation and full phase
+acceptance are outside this fixture.

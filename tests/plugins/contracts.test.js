@@ -20,7 +20,9 @@ test('core imports no concrete official plugin and managed content has no native
   for(const node of tree.body){
    if(!node.source)continue;
    assert.doesNotMatch(node.source.value,/(?:^|\/)plugins\/(?:tmdb|nfo|alist|webdav|local)(?:\/|$)|^@mediamanager\/(?:tmdb|nfo|alist|webdav|local)(?:\/|$)/u,name);
-   if(/^src\/(?:metadata|images|library)\//u.test(name)&&!resources.has(name))assert.doesNotMatch(node.source.value,/^(?:node:)?fs(?:\/|$)/u,name);
+   // OS font files and fontconfig are infrastructure inputs, outside managed
+   // media/metadata access. The rest of the image pipeline still uses storage.
+   if(/^src\/(?:metadata|images|library)\//u.test(name)&&!resources.has(name)&&!name.startsWith('src/images/system-fonts/'))assert.doesNotMatch(node.source.value,/^(?:node:)?fs(?:\/|$)/u,name);
   }
  }
 });

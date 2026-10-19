@@ -11,6 +11,8 @@ import { ItemUpdateType } from '../../src/metadata/save-manager.js';
 import { cloneNativeItemEntity, isNativeItemEntity, newNativeItemEntity, acquireNativeItemLinkOwner, releaseNativeItemLinks } from '../../src/library/native-item-entity.js';
 import { ExternalDataManager } from '../../src/library/external-data.js';
 import { ItemCreationService } from '../../src/library/item-creation-service.js';
+import { ItemDeletionService } from '../../src/library/item-deletion-service.js';
+import { LinkedChildReferenceService } from '../../src/library/linked-child-reference-service.js';
 import { setupChildrenFixture } from './children-fixture.js';
 
 const ids = {
@@ -336,6 +338,9 @@ for (const dialect of ['postgres']) test(`${dialect}: disabled provider composes
   const itemCreation = new ItemCreationService({ store: current.store, library: current.library, linkedChildren: current.linkedChildren,
     loadContext: current.loadContext });
   current.library.itemCreation = itemCreation;
+  const linkedChildReferences = new LinkedChildReferenceService({ ...current, itemCreation, updates });
+  current.library.itemDeletion = new ItemDeletionService({ ...current, itemCreation, updates, externalData, linkedChildReferences,
+    now: () => current.now });
   const seriesLifecycle = new SeriesMetadataLifecycleHost({ store: current.store, loadContext: current.loadContext,
     updates, externalData, itemCreation, refresh: async () => { throw new Error('disabled cleanup must not refresh'); }, now: () => current.now });
   const lifecycle = new TmdbMissingEpisodeLifecycleHost({ seriesLifecycle, itemCreation,

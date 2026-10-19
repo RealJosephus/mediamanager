@@ -10,6 +10,7 @@ import { createVideoFileResolver } from '../../src/library/video-file-resolver.j
 import { applyNativeItemValues, newNativeItemEntity } from '../../src/library/native-item-entity.js';
 import { dateText, MIN_DATE } from '../../src/library/records.js';
 import { discoveryFixture, projectItem, projectDiscovery } from './video-discovery-fixture.js';
+import { projectStatePath } from './fixture-state-path.js';
 
 const root = new URL('./fixtures/resolution-ignore-chain/', import.meta.url);
 const repository = new URL('../../', import.meta.url);
@@ -30,7 +31,7 @@ for (const dialect of ['postgres']) for (const sample of input) test(`${dialect}
   skip: dialect === 'postgres' && !process.env.MEDIAMANAGER_TEST_POSTGRES
 }, async t => {
   const value = await discoveryFixture(t, dialect, sample), { fixture, loaded, calls } = value;
-  const normalize = value => value?.replace(fixture.stateRoot, '$STATE');
+  const normalize = value => projectStatePath(value, fixture.stateRoot);
   const candidates = [];
   for (const filename of sample.files) {
     const identityPath = path.join(fixture.stateRoot, 'media', filename), accessPath = '/discovery-write/discovery/' + filename;

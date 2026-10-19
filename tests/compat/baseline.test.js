@@ -1,10 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtemp, mkdir, writeFile, readFile, rm, symlink, unlink } from 'node:fs/promises';
+import { mkdtemp, mkdir, writeFile, readFile, readdir, rm, symlink, unlink } from 'node:fs/promises';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import os from 'node:os';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { captureBaseline } from '../../tools/compat/capture-baseline.js';
 import { verifyBaseline } from '../../tools/compat/verify-baseline.js';
 
@@ -37,6 +38,30 @@ test('baseline verification binds local modifications, untracked source and dele
   assert.equal(result.verifiedFiles, 3);
   assert.equal(result.head, item.manifest.head);
   assert.equal(result.contentDigest, item.manifest.contentDigest);
+});
+
+test('baseline CLI requires explicit inputs before writing and captures/verifies the supplied checkout', async t => {
+  const item = await fixture(t);
+  const directory = path.dirname(item.source);
+  const captureScript = fileURLToPath(new URL('../../tools/compat/capture-baseline.js', import.meta.url));
+  const verifyScript = fileURLToPath(new URL('../../tools/compat/verify-baseline.js', import.meta.url));
+  const invoke = (script, ...args) => execFileSync(process.execPath, [script, ...args], {
+    cwd: directory, stdio: 'pipe', encoding: 'utf8', windowsHide: true, timeout: 10_000,
+  });
+  const before = await readdir(directory);
+  for (const [script, args] of [[captureScript, []], [captureScript, [item.source]], [verifyScript, []]]) {
+    assert.throws(() => invoke(script, ...args), error => {
+      assert.equal(error.status, 1); assert.match(error.stderr, /Usage: node tools\/compat\//u); return true;
+    });
+  }
+  assert.deepEqual(await readdir(directory), before);
+  const destination = path.join(directory, 'explicit-capture');
+  const captured = JSON.parse(invoke(captureScript, item.source, destination));
+  const verified = JSON.parse(invoke(verifyScript, path.join(destination, 'manifest.json')));
+  assert.equal(verified.source, item.source);
+  assert.equal(verified.head, captured.head);
+  assert.equal(verified.contentDigest, captured.contentDigest);
+  assert.equal(verified.verifiedFiles, 3);
 });
 
 test('baseline verification detects changed bytes even when Git status remains modified', async t => {

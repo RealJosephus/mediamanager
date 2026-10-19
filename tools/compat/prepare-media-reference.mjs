@@ -43,8 +43,21 @@ const database = new SqliteDatabase(path.join(destination, 'data/data/jellyfin.d
 const ids = { folder: '11111111-1111-1111-1111-111111111111', movie: '22222222-2222-2222-2222-222222222222' };
 try {
   const items = database.rows('BaseItems');
-  if (items.some(item => !['PLACEHOLDER', 'MediaBrowser.Controller.Entities.AggregateFolder', 'Emby.Server.Implementations.Playlists.PlaylistsFolder'].includes(item.Type))) {
-    throw new Error('The fixture source contains existing media; only the empty initializer output may be seeded.');
+  // Startup/Complete queues library validation. If it finishes before shutdown,
+  // LibraryManager.ValidateTopLibraryFolders saves the empty UserRootFolder too.
+  const isUserRoot = item => item.Type === 'MediaBrowser.Controller.Entities.UserRootFolder'
+    && item.IsFolder === true && item.MediaType === 'Unknown'
+    && item.Path === path.join(source, 'data', 'root', 'default');
+  const unexpected = items.filter(item => !['PLACEHOLDER', 'MediaBrowser.Controller.Entities.AggregateFolder', 'Emby.Server.Implementations.Playlists.PlaylistsFolder'].includes(item.Type)
+    && !isUserRoot(item));
+  if (unexpected.length) {
+    const observations = unexpected.map(item => {
+      const relative = typeof item.Path === 'string' && path.isAbsolute(item.Path) ? path.relative(source, item.Path) : null;
+      const internalPath = relative !== null && !path.isAbsolute(relative) && relative !== '..' && !relative.startsWith(`..${path.sep}`);
+      return { id: item.Id, type: item.Type, isFolder: item.IsFolder, mediaType: item.MediaType,
+        sourceRelativePath: internalPath ? relative : '[outside controlled instance or absent]' };
+    });
+    throw new Error(`The fixture source contains unexpected items; only the empty initializer output may be seeded: ${JSON.stringify(observations)}`);
   }
   const aggregate = items.find(item => item.Type.endsWith('.AggregateFolder'));
   const device = database.rows('Devices').find(item => item.DeviceId === 'reference-initializer');

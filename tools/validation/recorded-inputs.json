@@ -1,8 +1,36 @@
 {
   "schemaVersion": 1,
-  "scope": "Exact original-path-and-SHA-256 relocation of sealed monitor, collage and XML recording inputs; no prefix, basename or runtime-executable fallback.",
+  "scope": "Exact original-path-and-SHA-256 relocation of sealed monitor, collage, XML and scheduler recording inputs; no prefix, basename or runtime-executable fallback.",
   "sourcesReviewed": "Only designated source files, controlled fixture helpers, synthetic recordings, execution/build receipts and pinned binary identities; no instance database, configuration, environment dump, key or user media is included.",
   "entries": [
+    {
+      "source": "D:/jellyfin/MediaBrowser.Controller/LibraryTaskScheduler/LimitedConcurrencyLibraryScheduler.cs",
+      "target": "tests/fixtures/recorded-native/objects/6f12fba06b37eafd31b1f50e02b9c01e0c2459771e8246c11a0fe7c1cfc46ba8.cs",
+      "bytes": 14480,
+      "sha256": "6f12fba06b37eafd31b1f50e02b9c01e0c2459771e8246c11a0fe7c1cfc46ba8",
+      "consumers": ["tests/library/fixtures/library-task-scheduler/provenance.json"]
+    },
+    {
+      "source": "D:/jellyfin/MediaBrowser.Controller/LibraryTaskScheduler/ILimitedConcurrencyLibraryScheduler.cs",
+      "target": "tests/fixtures/recorded-native/objects/948ed9cdb18f10570d5fb2685a48e0f78fcd5beee1b0a485be8313e19602912c.cs",
+      "bytes": 1018,
+      "sha256": "948ed9cdb18f10570d5fb2685a48e0f78fcd5beee1b0a485be8313e19602912c",
+      "consumers": ["tests/library/fixtures/library-task-scheduler/provenance.json"]
+    },
+    {
+      "source": "D:/jellyfin/MediaBrowser.Controller/Entities/Folder.cs",
+      "target": "tests/fixtures/recorded-native/objects/d5f227d462ce3c2df0d5a45d912778427f87321fc9d6e13d863ec28bb639e0c1.cs",
+      "bytes": 83390,
+      "sha256": "d5f227d462ce3c2df0d5a45d912778427f87321fc9d6e13d863ec28bb639e0c1",
+      "consumers": ["tests/library/fixtures/library-task-scheduler/provenance.json"]
+    },
+    {
+      "source": "D:/jellyfin/Emby.Server.Implementations/ApplicationHost.cs",
+      "target": "tests/fixtures/recorded-native/objects/11119ed0761ae8fdf4e0fa6f9cae175c969ff0b1f563a43f4dc013617fc9c5ef.cs",
+      "bytes": 42960,
+      "sha256": "11119ed0761ae8fdf4e0fa6f9cae175c969ff0b1f563a43f4dc013617fc9c5ef",
+      "consumers": ["tests/library/fixtures/library-task-scheduler/provenance.json"]
+    },
     {
       "source": "D:/jellyfin/Emby.Server.Implementations/Images/BaseDynamicImageProvider.cs",
       "target": "tests/fixtures/recorded-native/objects/5ae8c13987a0f86202ed4c501f2d07a5a37a69a625d8eb1ad24c7e80327b4da7.cs",

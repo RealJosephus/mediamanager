@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { LibraryTaskScheduler } from '../../src/library/library-task-scheduler.js';
+import { recordedInputPath } from '../../tools/validation/paths.js';
 
 const provenanceUrl = new URL('./fixtures/library-task-scheduler/provenance.json', import.meta.url);
 const root = new URL('.', provenanceUrl);
@@ -23,7 +24,9 @@ test('shared scheduler oracle binds three actual native executions and their fun
       const target = name === 'Directory.Build.props' ? new URL('../Directory.Build.props', import.meta.url) : new URL(name, root);
       assert.equal(hash(await readFile(target)), file.sha256, name);
     }
-    for (const file of sources.referenceSources) assert.equal(hash(await readFile(file.path)), file.sha256, file.path);
+    for (const file of sources.referenceSources) {
+      assert.equal(hash(await readFile(recordedInputPath(file.path, [file.sha256]))), file.sha256, file.path);
+    }
   }
   assert.equal(native.results.length, 16); assert.equal(lowCpu.results.length, 16); assert.equal(repeat.results.length, 16);
   assert.equal(native.processorCount, 4); assert.equal(lowCpu.processorCount, 3);

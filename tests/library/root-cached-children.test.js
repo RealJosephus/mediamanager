@@ -10,6 +10,7 @@ import { DomainStore } from '../../src/database/domain-store.js';
 import { tableDefinition, quoteIdentifier } from '../../src/database/model.js';
 import { LibraryService } from '../../src/library/library-service.js';
 import { stringifyNativeJson } from '../../src/core/json.js';
+import { expandStatePath } from './fixture-state-path.js';
 
 const fixtures = [];
 for (const [filename, sha256, items] of [['native.json', 'fbb598befe36fddf3d1bcfb9ebd1df384253875865cbde0c6f65acb2a8c917a4', 22], ['native-virtual-controls.json', '90cd587fa63f072dbbd07b7f3bdf9e3bd37364cddb1e36cbe8150fcb3c2e7e50', 26]]) {
@@ -60,7 +61,11 @@ for (const dialect of ['postgres']) test(`${dialect}: 48 complete cached-root an
       // permit this recorded insertion order without replacing the root graph.
       await db.transaction(async transaction => {
         await transaction.client.query('SET CONSTRAINTS ALL DEFERRED');
-        for (const row of run.seed.BaseItems) await transaction.insert('BaseItems', adapt('BaseItems', row));
+        for (const source of run.seed.BaseItems) {
+          const row = { ...source };
+          for (const macro of ['%AppDataPath%', '%MetadataPath%']) row.Path = expandStatePath(row.Path, macro, macro);
+          await transaction.insert('BaseItems', adapt('BaseItems', row));
+        }
       });
       for (const table of ['AncestorIds', 'ItemValues', 'ItemValuesMap', 'Peoples', 'PeopleBaseItemMap']) {
         for (const row of run.seed[table]) await db.insert(table, adapt(table, row));

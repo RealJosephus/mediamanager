@@ -206,7 +206,7 @@ async function isolatedInstance(fixture, t) {
   await writeFile(path.join(directory, 'config/system.xml'), '<ServerConfiguration><IsStartupWizardCompleted>true</IsStartupWizardCompleted><EnableLegacyAuthorization>true</EnableLegacyAuthorization></ServerConfiguration>');
   await writeFile(path.join(directory, 'config/network.xml'), '<NetworkConfiguration><AutoDiscovery>false</AutoDiscovery></NetworkConfiguration>');
   await writeFile(path.join(directory, 'data/data/device.txt'), '0123456789abcdef0123456789abcdef');
-  const source = new SqliteDatabase(process.env.MEDIAMANAGER_TEST_NATIVE_SQLITE, { readOnly: true, requireMigrationHistory: true });
+  const source = new SqliteDatabase(process.env.MEDIAMANAGER_TEST_CURRENT_NATIVE_SQLITE, { readOnly: true, requireMigrationHistory: true });
   try { await source.snapshot(databasePath); } finally { source.close(); }
   const database = new SqliteDatabase(databasePath);
   const connectionString = process.env.MEDIAMANAGER_TEST_POSTGRES;
@@ -246,7 +246,7 @@ async function isolatedInstance(fixture, t) {
 }
 
 test('production entry uses PostgreSQL and configured storage, then closes active raw reads before HTTP shutdown', {
-  skip: !process.env.MEDIAMANAGER_TEST_NATIVE_SQLITE || !process.env.MEDIAMANAGER_TEST_POSTGRES,
+  skip: !process.env.MEDIAMANAGER_TEST_CURRENT_NATIVE_SQLITE || !process.env.MEDIAMANAGER_TEST_POSTGRES,
   timeout: 30000
 }, async t => {
   const fixture = await setup(t);
@@ -274,7 +274,7 @@ test('production entry uses PostgreSQL and configured storage, then closes activ
 });
 
 test('production startup returns port errors and releases PostgreSQL resources for a subsequent start', {
-  skip: !process.env.MEDIAMANAGER_TEST_NATIVE_SQLITE || !process.env.MEDIAMANAGER_TEST_POSTGRES,
+  skip: !process.env.MEDIAMANAGER_TEST_CURRENT_NATIVE_SQLITE || !process.env.MEDIAMANAGER_TEST_POSTGRES,
   timeout: 30000
 }, async t => {
   const fixture = await setup(t);

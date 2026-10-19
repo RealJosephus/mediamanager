@@ -1,3 +1,4 @@
+import { fixturePathStyle } from '../library/fixture-state-path.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
@@ -49,7 +50,7 @@ async function setup(t, { actual = false, stateIgnoreAncestors = false } = {}) {
     vfs.mount({ path: '/state-ignore-ancestors', instanceId: 'ancestors', capabilities: {} });
     ignoreIdentityMap = new IdentityAccessMap();
     for (const prefix of identityMap.exportState().prefixes) ignoreIdentityMap.addPrefix(prefix);
-    ignoreIdentityMap.addPrefix({ identityRoot: path.parse(stateRoot).root, accessRoot: '/state-ignore-ancestors', style: 'windows',
+    ignoreIdentityMap.addPrefix({ identityRoot: path.parse(stateRoot).root, accessRoot: '/state-ignore-ancestors', style: fixturePathStyle,
       returnAccess: 'explicit complete ignore-only ancestor namespace; no media mapping' });
   }
   const nativeType = Type => Type === 'Playlist' ? 'MediaBrowser.Controller.Playlists.Playlist'
@@ -192,16 +193,15 @@ test('runtime external logical Playlist edits use XML only, batch newly added ID
   assert.equal((savedWrites[1].match(/New\.mp3/gu) ?? []).length, 2, 'the synchronous edit resolves newly added IDs in one fresh SQL batch');
   assert.equal((savedWrites[1].match(/A\.mp3/gu) ?? []).length, 1);
   const saved = (await read(h.vfs, '/fixture/Road.m3u/playlist.xml')).toString();
-  assert.equal((saved.match(/New\.mp3/gu) ?? []).length, 1, 'the subsequent native refresh saver uses only cached IDs');
+  assert.equal((saved.match(/New\.mp3/gu) ?? []).length, 2, 'Default refresh replaces links from the committed XML and preserves duplicate paths');
   assert.equal((saved.match(/A\.mp3/gu) ?? []).length, 1);
-  assert.deepEqual((await h.links(id(5))).map(link => link.ChildId), [id(9), id(7), id(9), id(7)],
-    'cached IDs and raw XML paths remain distinct merge keys until repository resolution');
+  assert.deepEqual((await h.links(id(5))).map(link => link.ChildId), [id(9), id(7), id(9)]);
   const count = writes.length;
   h.identityMap.bind(id(5), '/readonly/Road.m3u');
   await assert.rejects(h.runtime.playlists.update(id(5), { user: owner, name: 'Read only', ids: [id(8)] }), { code: 'not-supported' });
   assert.equal(writes.length, count);
   assert.equal((await h.database.rows('BaseItems', { where: { Id: id(5) } }))[0].Name, 'Directory name');
-  assert.deepEqual((await h.links(id(5))).map(link => link.ChildId), [id(9), id(7), id(9), id(7)]);
+  assert.deepEqual((await h.links(id(5))).map(link => link.ChildId), [id(9), id(7), id(9)]);
   assert.deepEqual(h.errors, []);
 });
 
@@ -218,7 +218,7 @@ test('actual WebDAV runtime reads and writes a logical Playlist directory withou
   await h.runtime.metadata.drain();
   assert.equal((await h.vfs.stat('/fixture/Road.m3u')).kind, 'directory');
   assert.match((await read(h.vfs, '/fixture/Road.m3u/playlist.xml')).toString(), /<Path>Z:\\XmlFixture\\New\.mp3<\/Path>/u);
-  assert.deepEqual((await h.links(id(5))).map(link => link.ChildId), [id(9), id(9)]);
+  assert.deepEqual((await h.links(id(5))).map(link => link.ChildId), [id(9)]);
   assert.deepEqual(h.errors, []);
 });
 

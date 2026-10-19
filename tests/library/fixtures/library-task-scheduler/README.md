@@ -7,6 +7,13 @@ with SHA-256 descriptors in `provenance.json`. Gates control worker entry and
 completion. An inline `SynchronizationContext.Post` controls per-slot progress
 delivery; the native queue and workers still execute normally.
 
+The four original reference-source pins are supplied as unchanged members of
+`tests/fixtures/recorded-native/jellyfin-source-208c278b75ab.zip`. Their extracted
+objects total 141,848 bytes and are selected only by original path plus SHA-256
+through `recordedInputPath`. All three source records still verify the actual
+raw bytes. The original provenance, recordings and assembly pins are unchanged;
+this relocation neither runs a new oracle nor replaces a historical binary.
+
 The 16 cases record independent sequential calls versus pooled work, overlapping
 worksets, nested calls on the same or another scheduler, half-even progress,
 worker errors, active/queued cancellation, empty inputs, disposal, application

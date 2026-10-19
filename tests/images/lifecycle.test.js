@@ -86,7 +86,7 @@ test('image shutdown waits for delayed VFS handle cleanup', async () => {
     },
   } };
   const request = Object.assign(new EventEmitter(), { method: 'GET', headers: {} });
-  const response = Object.assign(new EventEmitter(), { headersSent: false, setHeader() {}, write() { return true; }, end() {}, destroy() { this.emit('close'); } });
+  const response = Object.assign(new EventEmitter(), { headersSent: false, setHeader() {}, appendHeader() {}, write() { return true; }, end() {}, destroy() { this.emit('close'); } });
   const sending = service.result({ loaded, image, options: {}, context: { query: new URLSearchParams() }, index: 0 }).send(request, response);
   await opened.promise;
   const stopping = service.close().then(() => { serviceFinished = true; });

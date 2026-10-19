@@ -1,4 +1,4 @@
-import { validationExecutable } from '../../tools/validation/paths.js';
+import { assertValidationOutputChild, validationExecutable, validationOutputRoot } from '../../tools/validation/paths.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createHash, randomUUID } from 'node:crypto';
@@ -26,6 +26,7 @@ import { nativeGuid } from '../../src/users/native.js';
 import { startActualAList } from '../storage/helpers/actual-alist.js';
 import { startActualWebDav } from '../storage/helpers/actual-webdav.js';
 import { stopNativeReference } from '../../tools/compat/native-shutdown.js';
+import { prepareNativeApplicationData, resolveNativeTools, verifyNativeProcessInputs } from '../../tools/compat/native-process-inputs.js';
 
 const id = '22222222-2222-2222-2222-222222222222';
 const negativeId = '92929292-9292-9292-9292-929292929292';
@@ -34,6 +35,29 @@ const enabled = process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE && process.env.MED
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
 const json = value => JSON.stringify(value, (_, entry) => typeof entry === 'bigint' ? entry.toString() : entry, 2);
 const expected = (bytes, range = false) => ({ bytes: String(bytes.length), sha256: sha(bytes), ...(range ? { range: { start: '17', end: '63', sha256: sha(bytes.subarray(17, 64)) } } : {}) });
+const hostPathStyle = process.platform === 'win32' ? 'windows' : 'posix';
+
+// Only these reports may leave the private exchange root. Never copy an
+// instance, database, network configuration or state package into CI artifacts.
+const branchReports = ['branch-result.json', 'initial-nfo-restore.json', 'native-item.json', 'native-signed-access.json',
+  'native-nfo-item.json', 'native-media-access.json', 'native-changed-nfo-item.json', 'reverse-nfo-restore.json',
+  'reverse-native-nfo-item.json', 'reverse-native-media-access.json', 'reverse-node-reimport.json',
+  ...['native-process', 'native-changed-process', 'reverse-native-process'].flatMap(name => [`${name}.json`, `${name}.log`])];
+async function preserveReports(directory, output, secrets) {
+  const filenames = ['report.json', 'isolated-alist-access.json',
+    ...['alist-process', 'webdav-process'].flatMap(name => [`${name}/actual-service.log`, `${name}/actual-instance.json`]),
+    ...['webdav', 'alist'].flatMap(protocol => branchReports.map(name => `${protocol}/${name}`))];
+  for (const relative of filenames) {
+    let text;
+    try { text = await readFile(path.join(directory, relative), 'utf8'); }
+    catch (error) { if (error.code === 'ENOENT') continue; throw error; }
+    for (const secret of secrets) if (secret) text = text.replaceAll(secret, '[isolated credential redacted]');
+    text = text.replace(/([?&](?:api_key|token|sign)=)[^&\s"']+/giu, '$1[redacted]');
+    const target = path.join(output, relative);
+    await mkdir(path.dirname(target), { recursive: true });
+    await writeFile(target, text, { flag: 'wx' });
+  }
+}
 
 class IsolatedVersionedFilesystemAdapter {
   #root;
@@ -155,20 +179,38 @@ async function startNative(root, port, token, { evidenceDirectory, evidenceName 
   }
   if (!/^[A-Za-z0-9_-]+$/u.test(evidenceName)) throw new TypeError('Invalid native process evidence name');
   const dll = path.resolve(process.env.MEDIAMANAGER_JELLYFIN_DLL);
-  const args = [dll, '--nowebclient', '--datadir', path.join(root, 'data'), '--configdir', path.join(root, 'config'), '--cachedir', path.join(root, 'cache'), '--logdir', path.join(root, 'log'), '--ffmpeg', validationExecutable('ffmpeg')];
-  const child = spawn(process.env.MEDIAMANAGER_DOTNET, args, { cwd: root, windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'] });
+  const { dotnet, ffmpeg, executables } = await resolveNativeTools();
+  const { runtimeEnvironment, subtitleEditDataDirectory } = await prepareNativeApplicationData(root);
+  const args = [dll, '--nowebclient', '--datadir', path.join(root, 'data'), '--configdir', path.join(root, 'config'), '--cachedir', path.join(root, 'cache'), '--logdir', path.join(root, 'log'), '--ffmpeg', ffmpeg];
+  const childEnvironment = { ...process.env, ...runtimeEnvironment, MEDIAMANAGER_DOTNET: dotnet };
+  const child = spawn(validationExecutable('dotnet', childEnvironment), args, { cwd: root, env: childEnvironment,
+    windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'] });
   const output = []; child.stdout.on('data', chunk => output.push(chunk)); child.stderr.on('data', chunk => output.push(chunk));
   let error; child.on('error', failure => error = failure);
   const baseUrl = `http://127.0.0.1:${port}`;
-  let stopped, receipt;
+  let stopped, receipt, inputFailure;
   const stop = () => stopped ??= stopNativeReference(child, async () => {
     const response = await fetch(baseUrl + '/System/Shutdown', { method: 'POST', headers: { Authorization: `MediaBrowser Token="${token}"` }, signal: AbortSignal.timeout(3000) });
     await response.body?.cancel();
     return response.status;
   }, async outcome => {
+    let inputVerification;
+    try {
+      await verifyNativeProcessInputs({ executables, subtitleEditDataDirectory });
+      inputVerification = { unchanged: true };
+    } catch (failure) {
+      inputFailure = failure;
+      inputVerification = { unchanged: false, failure: String(failure) };
+    }
     await writeFile(path.join(evidenceDirectory, `${evidenceName}.log`), Buffer.concat(output).toString().replaceAll(token, '[isolated token redacted]'));
-    await writeFile(path.join(evidenceDirectory, `${evidenceName}.json`), json({ executable: process.env.MEDIAMANAGER_DOTNET, args, port, ...outcome }));
-  }).then(outcome => receipt = Object.freeze(structuredClone(outcome)));
+    await writeFile(path.join(evidenceDirectory, `${evidenceName}.json`), json({ executable: dotnet, args, port,
+      executables, runtimeEnvironment, subtitleEditDataDirectory, inputVerification, ...outcome }));
+  }).then(outcome => {
+    // Preserve shutdown failure as the primary error; input checks are recorded
+    // in either case but fail a clean shutdown only after its receipt is saved.
+    if (inputFailure) throw inputFailure;
+    return receipt = Object.freeze(structuredClone(outcome));
+  });
   const assertStopped = async () => {
     if (!stopped) throw new Error('Native Jellyfin has not completed its owned shutdown');
     const observed = await stopped;
@@ -198,8 +240,9 @@ async function startNative(root, port, token, { evidenceDirectory, evidenceName 
 test('PostgreSQL runtime over WebDAV and AList returns SQLite exchange state to actual Jellyfin with media, text subtitles and versioned NFO roundtrip', { skip: !enabled }, async t => {
   const sourceRoot = path.resolve(process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE);
   const sourceInstanceState = await discoverInstanceState({ instanceRoot: sourceRoot });
-  const evidence = process.env.MEDIAMANAGER_MEDIA_ACCESS_EVIDENCE && path.resolve(process.env.MEDIAMANAGER_MEDIA_ACCESS_EVIDENCE);
-  const requestedDirectory = evidence ?? path.join(os.tmpdir(), `mediamanager-media-return-${randomUUID()}`);
+  const evidence = assertValidationOutputChild(path.join(validationOutputRoot(), `native-media-access-${randomUUID()}`));
+  const secrets = new Set([process.env.MEDIAMANAGER_TEST_POSTGRES]);
+  const requestedDirectory = path.join(os.tmpdir(), `mediamanager-media-return-${randomUUID()}`);
   const directory = await assertIsolatedInstanceOutput({ instanceState: sourceInstanceState, output: requestedDirectory });
   await mkdir(directory, { recursive: false });
   let actual, actualWebDav;
@@ -207,9 +250,8 @@ test('PostgreSQL runtime over WebDAV and AList returns SQLite exchange state to 
     const errors = [];
     try { await actualWebDav?.stop(); } catch (error) { errors.push(error); }
     try { await actual?.stop(); } catch (error) { errors.push(error); }
-    if (!evidence) {
-      try { assert.equal(path.dirname(directory), os.tmpdir()); await rm(directory, { recursive: true }); } catch (error) { errors.push(error); }
-    }
+    try { await preserveReports(directory, evidence, secrets); } catch (error) { errors.push(error); }
+    try { assert.equal(path.dirname(directory), os.tmpdir()); await rm(directory, { recursive: true }); } catch (error) { errors.push(error); }
     if (errors.length) throw new AggregateError(errors, 'Actual storage services did not all clean up');
   });
   // Hold our own immutable stopped control for both long protocol branches.
@@ -220,13 +262,18 @@ test('PostgreSQL runtime over WebDAV and AList returns SQLite exchange state to 
   await cloneStoppedInstance({ instanceState: sourceInstanceState, destination: stoppedControl });
   const stoppedControlState = await discoverInstanceState({ instanceRoot: stoppedControl });
   actual = await startActualAList({ connectionString: process.env.MEDIAMANAGER_TEST_POSTGRES, port: 5244, evidenceDirectory: path.join(directory, 'alist-process') });
+  secrets.add(actual.token);
   const readable = path.join(actual.media, 'returned-media');
   const missing = path.join(actual.root, 'missing-enumeration');
   const candidateMedia = path.join(actual.media, 'candidate-media');
   await mkdir(readable); await mkdir(candidateMedia);
   actualWebDav = await startActualWebDav({ sourceRoot: actual.media, basePath: '/return-webdav',
     evidenceDirectory: path.join(directory, 'webdav-process') });
-  for (const [mount, root] of [['/Candidate', candidateMedia], ['/' + readable.replaceAll('\\', '/'), readable]]) {
+  secrets.add(actualWebDav.authorization);
+  // LocalMediaProxy.GetProxyUrl adds '/' only for paths without a leading '/'.
+  const proxyPath = readable.replaceAll('\\', '/');
+  const returnedAListRoot = proxyPath.startsWith('/') ? proxyPath : '/' + proxyPath;
+  for (const [mount, root] of [['/Candidate', candidateMedia], [returnedAListRoot, readable]]) {
     await actual.api('admin/storage/create', { mount_path: mount, driver: 'Local', cache_expiration: 0, enable_sign: false, addition: JSON.stringify({ root_folder_path: root, show_hidden: true, thumbnail: false, mkdir_perm: '777' }) });
   }
   const ffmpeg = spawnSync(validationExecutable('ffmpeg'), ['-hide_banner', '-loglevel', 'error', '-f', 'lavfi', '-i', 'color=size=32x32:rate=10:duration=0.2', '-metadata', 'title=Current candidate embedded title', '-c:v', 'ffv1', path.join(candidateMedia, 'feature.mkv')], { windowsHide: true });
@@ -269,7 +316,7 @@ test('PostgreSQL runtime over WebDAV and AList returns SQLite exchange state to 
     sqlite.upsert('BaseItems', { ...folder, Id: userRootId, Type: 'MediaBrowser.Controller.Entities.UserRootFolder', Name: 'Media Folders',
       Path: userRootDirectory, ParentId: null, TopParentId: null, Data: '{"IsRoot":true}' });
     sqlite.upsert('BaseItems', { ...folder, Id: collectionId, Type: 'MediaBrowser.Controller.Entities.CollectionFolder', Name: 'Return',
-      Path: '%AppDataPath%\\root\\default\\Return', ParentId: userRootId, TopParentId: null,
+      Path: path.join('%AppDataPath%', 'root', 'default', 'Return'), ParentId: userRootId, TopParentId: null,
       Data: JSON.stringify({ CollectionType: 'movies', PhysicalFolderIds: [folder.Id], PhysicalLocationsList: [readable] }) });
     const stateId = sourceInstanceState.identity.serverId;
     const administratorIds = new Set(sqlite.rows('Permissions', { where: { Kind: 0, Value: true } })
@@ -277,6 +324,7 @@ test('PostgreSQL runtime over WebDAV and AList returns SQLite exchange state to 
     const token = sqlite.rows('Devices').find(device => device.AccessToken
       && typeof device.UserId === 'string' && administratorIds.has(device.UserId.toLowerCase()))?.AccessToken;
     assert.ok(token, 'The stopped native instance must contain an authenticated administrator device.');
+    secrets.add(token);
     for (const table of ['MediaStreamInfos', 'AttachmentStreamInfos', 'Chapters', 'BaseItemImageInfos', 'BaseItemMetadataFields', 'BaseItemProviders', 'PeopleBaseItemMap', 'ItemValuesMap']) {
       const rows = sqlite.rows(table, { where: { ItemId: id } });
       for (const row of rows) {
@@ -301,9 +349,9 @@ test('PostgreSQL runtime over WebDAV and AList returns SQLite exchange state to 
     const instanceBinding = { serverId: stateId, originIdentityDigest: originInstanceState.identity.digest };
     const sourcePortableMountContract = {
       mounts: [
-        { mountId: 'return-media', identityRoot: readable, accessRoot: '/media', pathStyle: 'windows',
+        { mountId: 'return-media', identityRoot: readable, accessRoot: '/media', pathStyle: hostPathStyle,
           caseSensitive: false, returnPolicy: 'required' },
-        { mountId: 'missing-return-media', identityRoot: missing, accessRoot: '/missing-media', pathStyle: 'windows',
+        { mountId: 'missing-return-media', identityRoot: missing, accessRoot: '/missing-media', pathStyle: hostPathStyle,
           caseSensitive: false, returnPolicy: 'required' },
       ]
     };
@@ -319,7 +367,7 @@ test('PostgreSQL runtime over WebDAV and AList returns SQLite exchange state to 
     const runtimeErrors = [];
     const reimportSchema = `media_reimport_${schemaNonce}`;
     const candidateStorageRoot = storageProtocol === 'webdav' ? '/candidate-media' : '/Candidate';
-    const returnedStorageRoot = storageProtocol === 'webdav' ? '/returned-media' : '/' + readable.replaceAll('\\', '/');
+    const returnedStorageRoot = storageProtocol === 'webdav' ? '/returned-media' : returnedAListRoot;
     const candidateNfoVirtual = '/sidecar-state/candidate-media/movie.nfo';
     const returnedNfoVirtual = '/sidecar-state/returned-media/movie.nfo';
     try {
@@ -336,7 +384,7 @@ test('PostgreSQL runtime over WebDAV and AList returns SQLite exchange state to 
         create: true, replace: true, conditionalWrite: true, atomicReplace: true
       } });
       const identityMap = new IdentityAccessMap();
-      identityMap.addPrefix({ identityRoot: readable, accessRoot: '/media', style: 'windows', returnAccess: 'Native physical directory and actual local media proxy mount' });
+      identityMap.addPrefix({ identityRoot: readable, accessRoot: '/media', style: hostPathStyle, returnAccess: 'Native physical directory and actual local media proxy mount' });
       identityMap.bind(negativeId, '/media/feature.mkv');
       database = await PostgresDatabase.open({ connectionString: process.env.MEDIAMANAGER_TEST_POSTGRES, schema, create: true });
       databaseOwner = 'branch'; mainSchemaOwned = true;
@@ -548,9 +596,9 @@ test('PostgreSQL runtime over WebDAV and AList returns SQLite exchange state to 
         originIdentityDigest: reimportInstanceState.identity.digest,
       }, portableMountContract: {
         mounts: [
-          { mountId: 'return-media', identityRoot: readable, accessRoot: '/reimport-media', pathStyle: 'windows',
+          { mountId: 'return-media', identityRoot: readable, accessRoot: '/reimport-media', pathStyle: hostPathStyle,
             caseSensitive: false, returnPolicy: 'required' },
-          { mountId: 'missing-return-media', identityRoot: missing, accessRoot: '/reimport-missing-media', pathStyle: 'windows',
+          { mountId: 'missing-return-media', identityRoot: missing, accessRoot: '/reimport-missing-media', pathStyle: hostPathStyle,
             caseSensitive: false, returnPolicy: 'required' },
         ]
       } });
@@ -563,7 +611,7 @@ test('PostgreSQL runtime over WebDAV and AList returns SQLite exchange state to 
       const reimportVfs = new VirtualFileSystem(registry);
       reimportVfs.mount({ path: '/reimport-media', instanceId: 'return-media', root: returnedStorageRoot, capabilities: {} });
       const reimportIdentityMap = new IdentityAccessMap();
-      reimportIdentityMap.addPrefix({ identityRoot: readable, accessRoot: '/reimport-media', style: 'windows', returnAccess: 'Verified native directory and network proxy mount' });
+      reimportIdentityMap.addPrefix({ identityRoot: readable, accessRoot: '/reimport-media', style: hostPathStyle, returnAccess: 'Verified native directory and network proxy mount' });
       await reimportDatabase.update('BaseItems', { Id: id }, { Overview: null, IsLocked: false });
       await reimportDatabase.delete('BaseItemProviders', { ItemId: id, ProviderId: 'Tmdb' });
       reimportRuntime = await createRuntime({ database: reimportDatabase, vfs: reimportVfs, identityMap: reimportIdentityMap,
@@ -677,6 +725,8 @@ test('PostgreSQL runtime over WebDAV and AList returns SQLite exchange state to 
           await attempt(async () => admin.end());
         }
       }
+      await attempt(() => writeFile(path.join(root, 'branch-result.json'), json({ storageProtocol, hostPathStyle,
+        operationError: operationError?.stack ?? null, cleanupErrors: cleanupErrors.map(error => error?.stack ?? String(error)), runtimeErrors })));
     }
     if (operationError && cleanupErrors.length) {
       throw new AggregateError([operationError, ...cleanupErrors], `Native ${storageProtocol} branch failed and did not clean up every resource`);

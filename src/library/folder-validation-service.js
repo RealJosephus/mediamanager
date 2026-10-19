@@ -3,7 +3,7 @@ import path from 'node:path';
 import { StorageError } from '../storage/errors.js';
 import { joinPath } from '../storage/paths.js';
 import { EMPTY_ID, VIDEO_TYPES, idKey, nonemptyId, repositoryTopParentId } from './records.js';
-import { compareNativePaths, nativeFileName, nativeFileNameWithoutExtension, nativePathKey, sameNativePath } from './native-path.js';
+import { nativeFileName, nativeFileNameWithoutExtension, nativePathKey, sameNativePath } from './native-path.js';
 import { filterResolutionCandidates } from './resolution-ignore.js';
 import { createResolvedItemEntity } from './resolved-item-entity.js';
 import { releaseCachedFolderChildren } from './folder-cache.js';
@@ -130,7 +130,8 @@ export class FolderValidationService {
       paths.add(key);
       candidates.push({ identityPath: identity.identityPath, accessPath: childAccessPath, entry });
     }
-    candidates.sort((left, right) => compareNativePaths(left.identityPath, right.identityPath));
+    // DirectoryService and ResolvePaths consume storage enumeration order.
+    // Sorting by identity changes resolver calls and failure prefixes.
     return { candidates, observedPaths: paths };
   }
 
@@ -417,7 +418,7 @@ export class FolderValidationService {
         metadataConfiguration: this.metadataConfiguration,
         clock: this.clock
       }))]));
-      await scope.checkClaims(resolution.claims, resolution.deletionSafe);
+      await scope.checkClaims(resolution.claims, resolution.deletionSafe, entities);
       const created = [];
       let processedChildren = 0;
       const childProcessed = () => {

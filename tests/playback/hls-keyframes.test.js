@@ -11,6 +11,7 @@ import { computeKeyframeSegments, formatHlsDurationTicks, hlsDurationUrlTicks, H
 import { PostgresDatabase } from '../../src/database/postgres.js';
 import { tableDefinition } from '../../src/database/model.js';
 import { createRuntime } from '../../src/runtime.js';
+import { createPlaybackState } from './runtime-state.js';
 import { IdentityAccessMap } from '../../src/storage/index.js';
 import { extractionFixture } from './extraction-fixture.js';
 import libraryFixture from '../library/fixtures/reference-media.json' with { type: 'json' };
@@ -149,6 +150,7 @@ test('stored keyframes drive the real HLS HTTP result on PostgreSQL', {
 }, async t => {
   const schema = `hls_keyframes_${randomBytes(8).toString('hex')}`;
   let database, runtime, fixture;
+  const state = await createPlaybackState();
   try {
     database = await PostgresDatabase.open({ connectionString: process.env.MEDIAMANAGER_TEST_POSTGRES, schema, create: true });
     await seed(database);
@@ -156,7 +158,7 @@ test('stored keyframes drive the real HLS HTTP result on PostgreSQL', {
     fixture.identityMap = new IdentityAccessMap();
     fixture.identityMap.addPrefix({ identityRoot: 'Z:\\Hls', accessRoot: '/', style: 'windows', returnAccess: 'Isolated HTTP fixture.' });
     runtime = await createRuntime({ database, configuration: { UICulture: 'en-US', IsStartupWizardCompleted: true }, serverId: libraryFixture.serverId,
-      programDataPath: libraryFixture.programDataPath, vfs: fixture.vfs, identityMap: fixture.identityMap });
+      programDataPath: state.root, vfs: fixture.vfs, identityMap: fixture.identityMap });
     const result = await runtime.playback.hlsStream(itemId, 'main', { ...options, QueryString: 'MediaSourceId=' + sourceId + '&SegmentContainer=ts' });
     const server = http.createServer((request, response) => result.send(request, response));
     server.listen(0, '127.0.0.1'); await once(server, 'listening');
@@ -170,6 +172,7 @@ test('stored keyframes drive the real HLS HTTP result on PostgreSQL', {
   } finally {
     await runtime?.close(); await fixture?.close();
     const cleanup = await PostgresDatabase.open({ connectionString: process.env.MEDIAMANAGER_TEST_POSTGRES, schema });
-    try { await cleanup.client.query(`DROP SCHEMA IF EXISTS "${schema}", "${schema}__mm" CASCADE`); } finally { await cleanup.close(); }
+    try { await cleanup.client.query(`DROP SCHEMA IF EXISTS "${schema}", "${schema}__mm" CASCADE`); }
+    finally { try { await cleanup.close(); } finally { await state.close(); } }
   }
 });

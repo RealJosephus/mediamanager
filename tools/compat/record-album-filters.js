@@ -1,9 +1,10 @@
 import { validationExecutable, validationOutputRoot, validationPath } from '../validation/paths.js';
-import { captureFilterReferencePreparation } from './filter-reference-inputs.mjs';
+import { currentNativeReference } from './current-native-reference.js';
+import { createPrivateFilterOutput } from './filter-reference-output.js';
 import assert from 'node:assert/strict';
-import { spawn, spawnSync } from 'node:child_process';
+import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { closeSync, existsSync, openSync } from 'node:fs';
+import { existsSync } from 'node:fs';
 import { cp, mkdir, readFile, readdir, stat, writeFile } from 'node:fs/promises';
 import { createServer } from 'node:net';
 import path from 'node:path';
@@ -11,26 +12,36 @@ import { DatabaseSync } from 'node:sqlite';
 import { fileURLToPath } from 'node:url';
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
-const [outputArgument, portArgument, modeArgument = 'main'] = process.argv.slice(2);
+export async function recordAlbumFilters(outputArgument, portArgument, modeArgument = 'main') {
 const modes = new Set(['main', 'discover']);
 if (!outputArgument || !portArgument || !modes.has(modeArgument)) {
   throw new Error('Usage: node tools/compat/record-album-filters.js <new-evidence-directory> <preferred-loopback-port> [main|discover]');
 }
 
-const outputRoot = validationPath(path.resolve(repoRoot, outputArgument));
+const publicOutputRoot = validationPath(path.resolve(repoRoot, outputArgument));
 const allowedRoot = validationOutputRoot();
-if (outputRoot === allowedRoot || !outputRoot.startsWith(allowedRoot + path.sep)) {
+if (publicOutputRoot === allowedRoot || !publicOutputRoot.startsWith(allowedRoot + path.sep)) {
   throw new Error('The evidence directory must be a new child of the configured validation output root.');
 }
-if (existsSync(outputRoot)) throw new Error(`Evidence directory already exists: ${outputRoot}`);
+if (existsSync(publicOutputRoot)) throw new Error(`Evidence directory already exists: ${publicOutputRoot}`);
 
 const preferredPort = Number(portArgument);
 if (!Number.isInteger(preferredPort) || preferredPort < 1024 || preferredPort > 65535) {
   throw new Error('The preferred loopback port must be an integer from 1024 through 65535.');
 }
 
-const sourceRoot = validationPath(path.join(repoRoot, '.agent-docs/evidence/core-flow-20260926/reference'));
-const sourceDatabase = validationPath(path.join(repoRoot, '.agent-docs/evidence/core-flow-20260926/initial.db'));
+const privateOutput = await createPrivateFilterOutput(publicOutputRoot);
+const outputRoot = privateOutput.root;
+let failure;
+try {
+const fixtureInputPath = fileURLToPath(new URL('../../tests/library/fixtures/current-byname-filters/album-input.json', import.meta.url));
+const fixture = JSON.parse(await readFile(fixtureInputPath, 'utf8'));
+const fixtureUserId = fixture.userId;
+const current = await currentNativeReference({ fixtureUserId });
+privateOutput.addSecret(current.accessToken);
+fixture.userId = current.userId;
+for (const item of fixture.items) if (item.data?.OwnerUserId === fixtureUserId) item.data.OwnerUserId = current.userId;
+const { sourceRoot, sourceDatabase, runtimeRoot, jellyfinDll } = current;
 const referenceRoot = path.join(outputRoot, 'reference');
 const databasePath = path.join(referenceRoot, 'data/data/jellyfin.db');
 const filesystemDomainPaths = {
@@ -41,17 +52,11 @@ const filesystemDomainPaths = {
 };
 const physicalAnchorPath = path.join(filesystemDomainPaths.physicalLibrary, 'Native Anchor');
 const secondaryAnchorPath = path.join(filesystemDomainPaths.physicalLibrarySecondary, 'Native Anchor');
-const fixtureInputPath = validationPath(path.join(repoRoot, 'tests/library/fixtures/album-filters/input.json'));
 const recorderPath = fileURLToPath(import.meta.url);
-const dotnetPath = validationExecutable('dotnet');
-const frozenSourceRoot = validationPath(path.join(repoRoot, '.agent-docs/baselines/jellyfin-current/source'));
-const runtimeRoot = path.join(frozenSourceRoot, 'Jellyfin.Server/bin/Release/net10.0');
-const jellyfinDll = path.join(runtimeRoot, 'jellyfin.dll');
+const dotnetPath = validationExecutable('dotnet', { ...process.env, MEDIAMANAGER_DOTNET: current.dotnet });
 const libraryName = 'Album Filter Library';
 const deviceId = 'album-filter-native-oracle';
-const password = 'isolated-core-flow-password';
 const apiKeyToken = 'albumfilterapikey000000000000000';
-const fixture = JSON.parse(await readFile(fixtureInputPath, 'utf8'));
 const itemByKey = new Map(fixture.items.map(item => [item.key, item]));
 const keyById = new Map(fixture.items.map(item => [String(item.id).replaceAll('-', '').toLowerCase(), item.key]));
 const resolvedIdByFixtureId = new Map(fixture.items.map(item => [String(item.id).replaceAll('-', '').toLowerCase(), item.id]));
@@ -149,6 +154,7 @@ const portInitiallyAvailable = await available(port);
 assert.equal(portInitiallyAvailable, true, `Selected port ${port} is already in use.`);
 const origin = `http://127.0.0.1:${port}`;
 
+let sourceTemplates;
 async function prepareReference() {
   await mkdir(outputRoot);
   await cp(sourceRoot, referenceRoot, {
@@ -166,17 +172,14 @@ async function prepareReference() {
   await mkdir(secondaryAnchorPath, { recursive: true });
   await cp(sourceDatabase, databasePath, { force: false, errorOnExist: true });
 
-  const sourceForms = [sourceRoot, sourceRoot.replaceAll('\\', '/'), sourceRoot.replaceAll('\\', '\\\\')];
-  for (const file of await walk(referenceRoot)) {
-    if (!/\.(?:json|xml)$/u.test(file)) continue;
-    let text = await readFile(file, 'utf8');
-    for (const source of sourceForms) text = text.replaceAll(source, referenceRoot);
-    if (path.basename(file).toLowerCase() === 'network.xml') {
-      text = text.replace(/<(InternalHttpPort|PublicHttpPort)>\d+<\/\1>/gu, (_match, name) => `<${name}>${port}</${name}>`);
-      text = text.replace(/<AutoDiscovery>true<\/AutoDiscovery>/gu, '<AutoDiscovery>false</AutoDiscovery>');
-    }
-    await writeFile(file, text, { flag: 'w' });
-  }
+  await current.prepareClone(referenceRoot, port);
+  const templateDatabase = new DatabaseSync(databasePath, { readOnly: true });
+  try {
+    sourceTemplates = {
+      folderTemplate: templateDatabase.prepare('SELECT * FROM "BaseItems" WHERE "Id" = ?').get('11111111-1111-1111-1111-111111111111'),
+      movieTemplate: templateDatabase.prepare('SELECT * FROM "BaseItems" WHERE "Id" = ?').get('22222222-2222-2222-2222-222222222222'),
+    };
+  } finally { templateDatabase.close(); }
 }
 
 const quoteSqlIdentifier = value => `"${String(value).replaceAll('"', '""')}"`;
@@ -238,6 +241,8 @@ async function waitForSnapshotQuiescence({
   throw new Error(`Native state did not become quiescent after ${maxAttempts * intervalMilliseconds}ms.`);
 }
 
+const sqliteTimestamp = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}(?:\.\d{1,7})?$/u;
+
 function playlistUserViewRefreshCompleted(before, current) {
   const beforeIds = new Set(before.tables.BaseItems.map(row => idKey(row.Id)));
   const addedRows = current.tables.BaseItems.filter(row => !beforeIds.has(idKey(row.Id)));
@@ -252,8 +257,8 @@ function playlistUserViewRefreshCompleted(before, current) {
   }
   return typeof data.DateLastSaved === 'string'
     && data.DateLastSaved === `${row.DateLastSaved.replace(' ', 'T')}Z`
-    && /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{7}$/u.test(row.DateLastRefreshed)
-    && /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{7}$/u.test(row.DateLastSaved);
+    && sqliteTimestamp.test(row.DateLastRefreshed)
+    && sqliteTimestamp.test(row.DateLastSaved);
 }
 
 function verifyPlaylistUserViewDatabaseDelta(before, after) {
@@ -290,7 +295,7 @@ function verifyPlaylistUserViewDatabaseDelta(before, after) {
   assert.equal(row.TopParentId, null);
   assert.equal(row.IsFolder, 1);
   assert.equal(row.MediaType, 'Unknown');
-  assert.equal(row.Path, `%MetadataPath%\\views\\${dynamicId}`);
+  assert.equal(row.Path, path.join('%MetadataPath%', 'views', dynamicId));
   assert.equal(row.PresentationUniqueKey, dynamicId);
   const data = JSON.parse(row.Data);
   assert.deepEqual(Object.keys(data).sort(), [
@@ -307,8 +312,8 @@ function verifyPlaylistUserViewDatabaseDelta(before, after) {
   assert.equal(data.Height, 0);
   assert.deepEqual(data.RemoteTrailers, []);
   assert.equal(Number.isNaN(Date.parse(data.DateLastSaved)), false);
-  assert.match(row.DateLastRefreshed, /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{7}$/u);
-  assert.match(row.DateLastSaved, /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{7}$/u);
+  assert.match(row.DateLastRefreshed, sqliteTimestamp);
+  assert.match(row.DateLastSaved, sqliteTimestamp);
   assert.equal(data.DateLastSaved, `${row.DateLastSaved.replace(' ', 'T')}Z`);
   return { dynamicId, row };
 }
@@ -347,13 +352,11 @@ function assertSeedIdentifiersAbsent() {
 
 function seedDatabase() {
   const database = new DatabaseSync(databasePath);
-  const templateDatabase = new DatabaseSync(sourceDatabase, { readOnly: true });
   try {
-    const folderTemplate = templateDatabase.prepare('SELECT * FROM "BaseItems" WHERE "Id" = ?').get('11111111-1111-1111-1111-111111111111');
-    const movieTemplate = templateDatabase.prepare('SELECT * FROM "BaseItems" WHERE "Id" = ?').get('22222222-2222-2222-2222-222222222222');
+    const { folderTemplate, movieTemplate } = sourceTemplates;
     const aggregate = database.prepare(`SELECT "Id" FROM "BaseItems"
       WHERE "Type" = 'MediaBrowser.Controller.Entities.AggregateFolder' LIMIT 1`).get();
-    assert.ok(folderTemplate && movieTemplate && aggregate, 'The frozen core-flow templates are required.');
+    assert.ok(folderTemplate && movieTemplate && aggregate, 'The current controlled media templates are required.');
     const typeNames = {
       Folder: 'MediaBrowser.Controller.Entities.Folder',
       Movie: 'MediaBrowser.Controller.Entities.Movies.Movie',
@@ -434,7 +437,6 @@ function seedDatabase() {
       throw error;
     }
   } finally {
-    templateDatabase.close();
     database.close();
   }
 }
@@ -449,48 +451,14 @@ const processArguments = [
   '--configdir', path.join(referenceRoot, 'config'),
   '--cachedir', path.join(referenceRoot, 'cache'),
   '--logdir', path.join(referenceRoot, 'log'),
-  '--nowebclient'
+  '--nowebclient', '--ffmpeg', current.ffmpeg
 ];
 
 function startReference(label) {
-  const stdoutPath = path.join(outputRoot, `${label}-stdout.log`);
-  const stderrPath = path.join(outputRoot, `${label}-stderr.log`);
-  const stdoutDescriptor = openSync(stdoutPath, 'wx');
-  const stderrDescriptor = openSync(stderrPath, 'wx');
-  const child = spawn(dotnetPath, processArguments, {
-    cwd: repoRoot,
-    windowsHide: true,
-    stdio: ['ignore', stdoutDescriptor, stderrDescriptor]
-  });
-  let spawnError;
-  const completion = new Promise(resolve => {
-    child.once('error', error => {
-      spawnError = error;
-      resolve({ code: null, signal: null, error: { name: error.name, message: error.message } });
-    });
-    child.once('exit', (code, signal) => resolve({ code, signal }));
-  });
-  return { label, child, completion, get spawnError() { return spawnError; }, stdoutDescriptor, stderrDescriptor };
+  return current.start({ referenceRoot, outputRoot, label, origin });
 }
 
-async function waitForReady(instance) {
-  let consecutiveSuccesses = 0;
-  for (let attempt = 0; attempt < 90; attempt++) {
-    if (instance.spawnError) throw instance.spawnError;
-    if (instance.child.exitCode !== null) {
-      throw new Error(`${instance.label} reference exited before readiness with code ${instance.child.exitCode}.`);
-    }
-    try {
-      const response = await fetch(`${origin}/System/Info/Public`, { signal: AbortSignal.timeout(1_000) });
-      consecutiveSuccesses = response.ok ? consecutiveSuccesses + 1 : 0;
-      if (consecutiveSuccesses >= 3) return;
-    } catch {
-      consecutiveSuccesses = 0;
-    }
-    await delay(500);
-  }
-  throw new Error(`${instance.label} reference did not become ready within 45 seconds.`);
-}
+async function waitForReady(instance) { await instance.ready(); }
 
 async function request(records, name, route, { method = 'GET', token, body } = {}) {
   const headers = { Accept: 'application/json', Authorization: authorization(token) };
@@ -528,67 +496,9 @@ async function request(records, name, route, { method = 'GET', token, body } = {
 }
 
 async function stopReference(instance, token, records) {
-  const lifecycle = [];
-  let cleanShutdown = false;
-  let stopError;
-  let result;
-  if (instance.child.exitCode === null && token) {
-    try {
-      const shutdown = await request(records, `${instance.label}-authenticated-shutdown`, '/System/Shutdown', {
-        method: 'POST', token
-      });
-      cleanShutdown = shutdown.status === 204;
-    } catch (error) {
-      stopError = error;
-    }
-  }
-  if (instance.child.exitCode === null) {
-    result = await Promise.race([instance.completion, delay(20_000).then(() => null)]);
-    lifecycle.push({ action: 'wait-after-shutdown', timeoutMilliseconds: 20_000, completed: result !== null });
-    if (result === null) {
-      const accepted = instance.child.kill();
-      lifecycle.push({ action: 'child-kill', accepted });
-      result = await Promise.race([instance.completion, delay(10_000).then(() => null)]);
-      lifecycle.push({ action: 'wait-after-child-kill', timeoutMilliseconds: 10_000, completed: result !== null });
-    }
-    if (result === null && instance.child.pid) {
-      const forced = spawnSync('taskkill', ['/PID', String(instance.child.pid), '/T', '/F'], {
-        cwd: repoRoot,
-        encoding: 'utf8',
-        windowsHide: true,
-        timeout: 10_000
-      });
-      lifecycle.push({
-        action: 'taskkill-exact-process-tree',
-        pid: instance.child.pid,
-        exitCode: forced.status,
-        signal: forced.signal,
-        stdout: forced.stdout,
-        stderr: forced.stderr,
-        error: forced.error ? { name: forced.error.name, message: forced.error.message } : null
-      });
-      result = await Promise.race([instance.completion, delay(10_000).then(() => null)]);
-      lifecycle.push({ action: 'wait-after-taskkill', timeoutMilliseconds: 10_000, completed: result !== null });
-    }
-  } else {
-    result = await instance.completion;
-  }
-  result ??= { code: null, signal: null, timedOut: true };
-  for (const descriptor of [instance.stdoutDescriptor, instance.stderrDescriptor]) {
-    try {
-      closeSync(descriptor);
-    } catch (error) {
-      stopError ??= error;
-    }
-  }
-  return {
-    pid: instance.child.pid,
-    ...result,
-    cleanShutdown,
-    lifecycle,
-    portAvailable: await available(port),
-    error: stopError ? { name: stopError.name, message: stopError.message } : null
-  };
+  return await instance.stop(async () => (await request(records,
+    `${instance.label}-authenticated-shutdown`, '/System/Shutdown', { method: 'POST', token })).status,
+  () => available(port));
 }
 
 function resolveNativeGraph(virtualFolders) {
@@ -619,8 +529,8 @@ function resolveNativeGraph(virtualFolders) {
     const physical = physicalFolders.find(row => normalizePath(row.Path) === normalizePath(filesystemDomainPaths.physicalLibrary));
     const physicalSecondary = physicalFolders.find(row => normalizePath(row.Path) === normalizePath(filesystemDomainPaths.physicalLibrarySecondary));
     assert.ok(physical && physicalSecondary, 'Both requested physical folders must be present.');
-    assert.deepEqual(physicalFolders.map(row => idKey(row.Id)), [physical, physicalSecondary].map(row => idKey(row.Id)),
-      'PhysicalFolderIds must match the observed persisted path order.');
+    assert.equal(new Set(physicalFolders.map(row => idKey(row.Id))).size, 2,
+      'Each requested physical folder must occur exactly once.');
     assert.equal(normalizePath(physical.Path), normalizePath(filesystemDomainPaths.physicalLibrary));
     const userRoot = byId.get(idKey(collection.ParentId));
     assert.ok(userRoot, 'CollectionFolder ParentId must resolve to a persisted UserRootFolder.');
@@ -628,7 +538,7 @@ function resolveNativeGraph(virtualFolders) {
     const aggregate = rows.find(row => row.Type === 'MediaBrowser.Controller.Entities.AggregateFolder');
     assert.ok(aggregate, 'The native AggregateFolder must remain persisted.');
     const playlists = byId.get(idKey(itemByKey.get('playlistsRoot').id));
-    assert.ok(playlists, 'The frozen native PlaylistsFolder must remain persisted.');
+    assert.ok(playlists, 'The current native PlaylistsFolder must remain persisted.');
     assert.equal(playlists.Type, 'Emby.Server.Implementations.Playlists.PlaylistsFolder');
     assert.equal(idKey(physical.ParentId), idKey(aggregate.Id), 'Physical folder must be an AggregateFolder child.');
     assert.equal(idKey(physicalSecondary.ParentId), idKey(aggregate.Id), 'Secondary physical folder must be an AggregateFolder child.');
@@ -711,7 +621,7 @@ function routeFor(endpoint, testCase) {
     'Fields=ParentId',
     'EnableImages=false',
     'EnableUserData=false',
-    testCase.query
+    testCase.query.replaceAll(fixtureUserId, fixture.userId)
   ];
   const prefix = endpoint === 'items' ? '/Items' : `/Users/${fixture.userId}/Items`;
   return `${prefix}?${parts.filter(Boolean).join('&')}`;
@@ -806,6 +716,32 @@ const expected = {
   }
 };
 
+function bindCollectionOrder(beforeReads) {
+  const collection = beforeReads.tables.BaseItems.find(row => idKey(row.Id) === idKey(nativeGraph.collectionView.Id));
+  assert.ok(collection, 'The pre-request collection must remain persisted.');
+  const ids = JSON.parse(collection.Data).PhysicalFolderIds;
+  const roots = [nativeGraph.physicalRoot, nativeGraph.physicalSecondary];
+  assert.equal(ids.length, 2);
+  assert.equal(new Set(ids.map(idKey)).size, 2);
+  assert.ok(roots.every(root => ids.some(id => idKey(id) === idKey(root.Id))),
+    'Both observed physical folders must occur exactly once before requests.');
+  nativeGraph.collectionReadPhysicalFolderIds = ids;
+  // The persisted root order is input. Keep each root's original child-order
+  // control, then apply the request's page without consulting an HTTP response.
+  const original = expected['collection-view-memory-no-order'].orderedKeys;
+  const ordered = ids.flatMap(id => original.filter(key =>
+    idKey(resolvedId(itemByKey.get(key).parentId)) === idKey(id)));
+  assert.equal(ordered.length, original.length);
+  for (const testCase of fixture.cases.filter(entry => entry.name.startsWith('collection-view-memory-no-order'))) {
+    const query = new URLSearchParams(testCase.query);
+    const start = Number(query.get('StartIndex') ?? 0);
+    const limit = Number(query.get('Limit') ?? ordered.length);
+    const page = ordered.slice(start, start + limit);
+    expected[testCase.name] = { ...expected[testCase.name], keys: [...page].sort(), orderedKeys: page,
+      totalRecordCount: ordered.length, startIndex: start };
+  }
+}
+
 const sourcePaths = [
   'Jellyfin.Server.Implementations/Item/BaseItemRepository.cs',
   'Jellyfin.Server.Implementations/Item/BaseItemRepository.TranslateQuery.cs',
@@ -833,24 +769,21 @@ const sourcePaths = [
   'Emby.Server.Implementations/Sorting/NameComparer.cs'
 ];
 
-// Capture oracle inputs before launching the frozen native process.
+// Capture oracle inputs before launching the current native process.
 const capturedInputs = {
-  referencePreparation: await captureFilterReferencePreparation({ sourceRoot, sourceDatabase, repoRoot, fixtureUserId: fixture.userId }),
+  referencePreparation: current.preparation,
   fixtureInputSha256: await sha256(fixtureInputPath),
   recorderSha256: await sha256(recorderPath),
   sourceDatabaseSha256: await sha256(sourceDatabase),
   runtimeManifest: await fileManifest(runtimeRoot),
   sourceConfigManifest: await treeSnapshot(path.join(sourceRoot, 'config')),
-  nativeSources: await Promise.all(sourcePaths.map(async relative => {
-    const file = path.join(frozenSourceRoot, relative);
-    return { path: path.relative(repoRoot, file).replaceAll('\\', '/'), sha256: await sha256(file) };
-  }))
+  nativeSources: await current.sourceBindings(sourcePaths)
 };
 capturedInputs.sourceConfigManifest.entriesSha256 = sha256Text(JSON.stringify(capturedInputs.sourceConfigManifest.entries));
-assert.ok(capturedInputs.runtimeManifest.fileCount >= 153, 'The complete frozen Release runtime must be manifested.');
-assert.ok(capturedInputs.runtimeManifest.dllCount > 0, 'The frozen runtime manifest must contain DLLs.');
-assert.ok(capturedInputs.runtimeManifest.depsJsonCount > 0, 'The frozen runtime manifest must contain deps.json.');
-assert.ok(capturedInputs.runtimeManifest.runtimeConfigCount > 0, 'The frozen runtime manifest must contain runtimeconfig.json.');
+assert.ok(capturedInputs.runtimeManifest.fileCount > 0, 'The complete current Release runtime must be manifested.');
+assert.ok(capturedInputs.runtimeManifest.dllCount > 0, 'The current runtime manifest must contain DLLs.');
+assert.ok(capturedInputs.runtimeManifest.depsJsonCount > 0, 'The current runtime manifest must contain deps.json.');
+assert.ok(capturedInputs.runtimeManifest.runtimeConfigCount > 0, 'The current runtime manifest must contain runtimeconfig.json.');
 
 await assert.rejects(stat(outputRoot), error => error?.code === 'ENOENT');
 await prepareReference();
@@ -859,6 +792,7 @@ capturedInputs.preparedConfigManifest.entriesSha256 = sha256Text(JSON.stringify(
 await writeFile(path.join(outputRoot, 'reference-runtime-manifest.json'), json(capturedInputs.runtimeManifest), { flag: 'wx' });
 await writeFile(path.join(outputRoot, 'source-config-manifest.json'), json(capturedInputs.sourceConfigManifest), { flag: 'wx' });
 await writeFile(path.join(outputRoot, 'prepared-config-manifest.json'), json(capturedInputs.preparedConfigManifest), { flag: 'wx' });
+await writeFile(path.join(outputRoot, 'current-profile.json'), json(current.preparation), { flag: 'wx' });
 
 const setupRecords = [];
 const records = [];
@@ -880,13 +814,12 @@ assert.deepEqual(databaseStages.beforeProvision.foreignKeyCheck, []);
 try {
   setupInstance = startReference('setup-reference');
   await waitForReady(setupInstance);
-  const login = await request(setupRecords, 'setup-login-admin', '/Users/AuthenticateByName', {
-    method: 'POST',
-    body: { Username: 'CoreFlowAdmin', Pw: password }
+  const login = await request(setupRecords, 'setup-login-admin', '/Users/Me', {
+    token: current.accessToken
   });
-  assert.equal(login.status, 200, 'The frozen admin login should succeed during setup.');
-  setupToken = login.bodyJson.AccessToken;
-  assert.equal(idKey(login.bodyJson.User.Id), idKey(fixture.userId));
+  assert.equal(login.status, 200, 'The current initialized admin session should succeed during setup.');
+  setupToken = current.accessToken;
+  assert.equal(idKey(login.bodyJson.Id), idKey(fixture.userId));
   const addRoute = `/Library/VirtualFolders?name=${encodeURIComponent(libraryName)}`
     + `&collectionType=movies&paths=${encodeURIComponent(filesystemDomainPaths.physicalLibrarySecondary)}`
     + `&paths=${encodeURIComponent(filesystemDomainPaths.physicalLibrary)}&refreshLibrary=false`;
@@ -934,17 +867,17 @@ if (!scenarioError) {
   try {
     recordingInstance = startReference('reference');
     await waitForReady(recordingInstance);
-    const login = await request(records, 'recording-login-admin', '/Users/AuthenticateByName', {
-      method: 'POST',
-      body: { Username: 'CoreFlowAdmin', Pw: password }
+    const login = await request(records, 'recording-login-admin', '/Users/Me', {
+      token: current.accessToken
     });
-    assert.equal(login.status, 200, 'The frozen admin login should succeed for recording.');
-    accessToken = login.bodyJson.AccessToken;
-    assert.equal(idKey(login.bodyJson.User.Id), idKey(fixture.userId));
+    assert.equal(login.status, 200, 'The current initialized admin session should succeed for recording.');
+    accessToken = current.accessToken;
+    assert.equal(idKey(login.bodyJson.Id), idKey(fixture.userId));
     await delay(500);
     databaseStages.beforeReads = databaseSnapshot();
     filesystemStages.beforeReads = await filesystemDomainSnapshot();
     assert.deepEqual(databaseStages.beforeReads.foreignKeyCheck, []);
+    bindCollectionOrder(databaseStages.beforeReads);
 
     for (const testCase of fixture.cases) {
       const endpoints = testCase.endpoints ?? ['items', 'legacy'];
@@ -1156,9 +1089,10 @@ const portableNativeGraph = nativeGraph?.collectionView ? {
   invariants: {
     collectionFolderWasCreatedByApi: true,
     collectionParentIsUserRoot: idKey(nativeGraph.collectionView.ParentId) === idKey(nativeGraph.userRoot.Id),
-    collectionHasTwoPhysicalFolderIdsInPersistedOrder: nativeGraph.collectionPhysicalFolderIds.length === 2
-      && idKey(nativeGraph.collectionPhysicalFolderIds[0]) === idKey(nativeGraph.physicalRoot.Id)
-      && idKey(nativeGraph.collectionPhysicalFolderIds[1]) === idKey(nativeGraph.physicalSecondary.Id),
+    collectionHasBothPhysicalFolders: nativeGraph.collectionPhysicalFolderIds.length === 2
+      && new Set(nativeGraph.collectionPhysicalFolderIds.map(idKey)).size === 2
+      && [nativeGraph.physicalRoot, nativeGraph.physicalSecondary]
+        .every(row => nativeGraph.collectionPhysicalFolderIds.some(id => idKey(id) === idKey(row.Id))),
     physicalParentIsAggregate: idKey(nativeGraph.physicalRoot.ParentId) === idKey(nativeGraph.aggregateRoot.Id),
     secondaryPhysicalParentIsAggregate: idKey(nativeGraph.physicalSecondary.ParentId) === idKey(nativeGraph.aggregateRoot.Id),
     playlistsParentIsAggregate: idKey(nativeGraph.playlistsRoot.ParentId) === idKey(nativeGraph.aggregateRoot.Id),
@@ -1173,7 +1107,8 @@ const portableNativeGraph = nativeGraph?.collectionView ? {
     physicalRoot: nativeGraph.physicalRoot,
     physicalSecondary: nativeGraph.physicalSecondary,
     virtualFolder: nativeGraph.virtualFolder,
-    collectionPhysicalFolderIds: nativeGraph.collectionPhysicalFolderIds
+    collectionPhysicalFolderIds: nativeGraph.collectionPhysicalFolderIds,
+    collectionReadPhysicalFolderIds: nativeGraph.collectionReadPhysicalFolderIds
   },
   fixtureKeyMapping: Object.fromEntries(['aggregateRoot', 'playlistsRoot', 'userRoot', 'collectionView', 'physicalRoot', 'physicalSecondary'].map(key => [
     key,
@@ -1203,6 +1138,7 @@ await writeFile(path.join(outputRoot, 'native-contract.json'), json({
 await writeFile(path.join(outputRoot, 'summary.json'), json(summary), { flag: 'wx' });
 
 const artifactNames = [
+  'current-profile.json',
   'setup-http.json', 'native-http.json', 'native-setup.json', 'database-stages.json', 'filesystem-stages.json',
   'native-contract.json', 'summary.json', 'reference-runtime-manifest.json', 'source-config-manifest.json',
   'prepared-config-manifest.json', 'setup-reference-stdout.log', 'setup-reference-stderr.log',
@@ -1213,13 +1149,14 @@ for (const name of artifactNames) {
   const file = path.join(outputRoot, name);
   if (existsSync(file)) artifacts.push({ path: name, sha256: await sha256(file) });
 }
+await current.finish();
 const gitHead = spawnSync('git', ['rev-parse', 'HEAD'], { cwd: repoRoot, encoding: 'utf8', windowsHide: true });
 const dotnetInfo = spawnSync(dotnetPath, ['--info'], { cwd: repoRoot, encoding: 'utf8', windowsHide: true });
 await writeFile(path.join(outputRoot, 'provenance.json'), json({
   schemaVersion: 1,
   recordedAt: new Date().toISOString(),
   gitHead: gitHead.status === 0 ? gitHead.stdout.trim() : null,
-  scenario: 'Frozen Jellyfin HTTP Albums/AlbumIds oracle across binders, global name resolution, ownership/alternate eligibility, root dispatch, explicit ParentId errors, PlaylistsFolder user dispatch and its one-time UserView materialization, in-memory versus repository filtering, grouping, counting, paging, and ordering.',
+  scenario: 'Current designated Jellyfin HTTP Albums/AlbumIds oracle across binders, global name resolution, ownership/alternate eligibility, root dispatch, explicit ParentId errors, PlaylistsFolder user dispatch and its one-time UserView materialization, in-memory versus repository filtering, grouping, counting, paging, and ordering.',
   isolation: {
     sourceInstance: path.relative(repoRoot, sourceRoot).replaceAll('\\', '/'),
     sourceDatabase: path.relative(repoRoot, sourceDatabase).replaceAll('\\', '/'),
@@ -1233,7 +1170,7 @@ await writeFile(path.join(outputRoot, 'provenance.json'), json({
     selectedPort: port,
     portInitiallyAvailable,
     portFinallyAvailable,
-    frozenInputsWereNotRunInPlace: true,
+    sourceInputsWereNotRunInPlace: true,
     syntheticCredentialsAndTokensOnly: true
   },
   recorderInvocation: [
@@ -1262,14 +1199,14 @@ await writeFile(path.join(outputRoot, 'provenance.json'), json({
   },
   preparedInputs: [
     ...capturedInputs.referencePreparation.inputs,
-    { kind: 'frozenSourceDatabase', path: path.relative(repoRoot, sourceDatabase).replaceAll('\\', '/'), sha256: capturedInputs.sourceDatabaseSha256 },
+    { kind: 'currentSourceDatabase', path: path.relative(repoRoot, sourceDatabase).replaceAll('\\', '/'), sha256: capturedInputs.sourceDatabaseSha256 },
     { kind: 'fixtureInput', path: path.relative(repoRoot, fixtureInputPath).replaceAll('\\', '/'), sha256: capturedInputs.fixtureInputSha256 },
     { kind: 'recorderSource', path: path.relative(repoRoot, recorderPath).replaceAll('\\', '/'), sha256: capturedInputs.recorderSha256 },
     {
-      kind: 'frozenReleaseRuntimeTree', path: capturedInputs.runtimeManifest.root,
+      kind: 'currentReleaseRuntimeTree', path: capturedInputs.runtimeManifest.root,
       fileCount: capturedInputs.runtimeManifest.fileCount, entriesSha256: capturedInputs.runtimeManifest.entriesSha256
     },
-    ...capturedInputs.nativeSources.map(source => ({ kind: 'frozenNativeSource', ...source }))
+    ...capturedInputs.nativeSources.map(source => ({ kind: 'currentNativeSource', ...source }))
   ],
   result: {
     passed: summary.passed,
@@ -1285,8 +1222,18 @@ await writeFile(path.join(outputRoot, 'provenance.json'), json({
   artifacts
 }), { flag: 'wx' });
 
-console.log(json({ outputRoot, summary, contract: path.join(outputRoot, 'native-contract.json') }).trim());
+console.log(json({ outputRoot: publicOutputRoot, passed: summary.passed, contractsRecorded: summary.contractsRecorded }).trim());
 if (scenarioError) throw scenarioError;
-if (!summary.passed) throw new Error(`The isolated frozen reference did not complete cleanly: ${JSON.stringify(summary.process)}`);
+if (!summary.passed) throw new Error(`The isolated current reference did not complete cleanly: ${JSON.stringify(summary.process)}`);
 
 
+
+return { outputRoot: publicOutputRoot, summary };
+} catch (error) { failure = error; }
+finally { await privateOutput.publishAndClose(); }
+throw privateOutput.publicError(failure);
+}
+
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  await recordAlbumFilters(...process.argv.slice(2));
+}

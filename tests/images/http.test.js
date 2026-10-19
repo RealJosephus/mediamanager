@@ -133,6 +133,22 @@ test('PostgreSQL image HTTP reproduces native originals, conditions, binding, ch
   }
   alternateLayout = false;
   runtime.server.removeListener('request', rewriteHeaders);
+  runtime.configuration.CorsHosts = ['https://app.emby.media', 'https://another-client.invalid'];
+  const corsImage = await rawHttp(origin + `/Items/${input.id}/Images/Primary?tag=provided`, {
+    headers: { Origin: 'https://app.emby.media' }
+  });
+  assert.equal(corsImage.status, 200);
+  assert.equal(corsImage.headers['access-control-allow-origin'], 'https://app.emby.media');
+  assert.equal(corsImage.headers['access-control-allow-credentials'], 'true');
+  assert.deepEqual(corsImage.headers.vary.split(',').map(value => value.trim()).sort(), ['Accept', 'Origin']);
+  const corsUnchanged = await rawHttp(origin + `/Items/${input.id}/Images/Primary?tag=provided`, {
+    headers: { Origin: 'https://app.emby.media', 'If-None-Match': corsImage.headers.etag }
+  });
+  assert.equal(corsUnchanged.status, 304);
+  assert.equal(corsUnchanged.bytes.length, 0);
+  assert.equal(corsUnchanged.headers['access-control-allow-origin'], 'https://app.emby.media');
+  assert.deepEqual(corsUnchanged.headers.vary.split(',').map(value => value.trim()).sort(), ['Accept', 'Origin']);
+  runtime.configuration.CorsHosts = ['*'];
   for (const value of ['public, private', 'max-age=1, max-age=2', 'public, extension=1', 'no-cache="field"'])
     assert.equal(imageHeaderProjection({ 'cache-control': value })['cache-control'], value);
   const filename = 'Attachment; filename="Case.png"';

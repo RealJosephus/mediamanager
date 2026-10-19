@@ -1,3 +1,4 @@
+import { createPlaybackState } from './runtime-state.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { mkdtemp, rm } from 'node:fs/promises';
@@ -93,12 +94,13 @@ test('PlaybackInfo and authenticated HLS deliver strict external ASS as native W
   fixture.identityMap = new IdentityAccessMap();
   fixture.identityMap.addPrefix({ identityRoot: 'Z:\\Hls', accessRoot: '/', style: 'windows', returnAccess: 'Isolated ASS fixture.' });
   const cacheDirectory = await mkdtemp(path.join(tmpdir(), `mediamanager-ass-hls-${randomBytes(4).toString('hex')}-`));
+  const state = await createPlaybackState();
   let runtime;
   try {
     await seed(database);
     const processes = [];
     runtime = await createRuntime({ database, configuration: { UICulture: 'en-US', IsStartupWizardCompleted: true }, serverId: library.serverId,
-      programDataPath: library.programDataPath, vfs: fixture.vfs, identityMap: fixture.identityMap,
+      programDataPath: state.root, vfs: fixture.vfs, identityMap: fixture.identityMap,
       hlsOptions: { cacheDirectory, onProcess: process => processes.push(process) } });
     const user = await runtime.users.createUser({ Name: 'AssReader', Password: 'isolated-ass-password' });
     await runtime.users.updatePolicy(user.Id, { ...library.user.Policy, EnableVideoPlaybackTranscoding: false, EnablePlaybackRemuxing: true });
@@ -147,7 +149,7 @@ test('PlaybackInfo and authenticated HLS deliver strict external ASS as native W
     assert.deepEqual(processes, []);
     assert.equal(fixture.requests.every(request => request.authorization == null), true);
   } finally {
-    await runtime?.close(); await fixture.close(); if (!runtime) await database.close();
+    await runtime?.close(); await fixture.close(); await state.close(); if (!runtime) await database.close();
     assert.equal(path.dirname(cacheDirectory), tmpdir()); await rm(cacheDirectory, { recursive: true, force: true });
   }
 });

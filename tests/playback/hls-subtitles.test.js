@@ -1,3 +1,4 @@
+import { createPlaybackState } from './runtime-state.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { mkdtemp, rm } from 'node:fs/promises';
@@ -116,12 +117,13 @@ test('authenticated HTTP serves native master, subtitle manifest and timed WebVT
   fixture.identityMap = new IdentityAccessMap();
   fixture.identityMap.addPrefix({ identityRoot: 'Z:\\Hls', accessRoot: '/', style: 'windows', returnAccess: 'Isolated HTTP fixture.' });
   const cacheDirectory = await mkdtemp(path.join(tmpdir(), `mediamanager-subtitle-hls-${randomBytes(4).toString('hex')}-`));
+  const state = await createPlaybackState();
   let runtime;
   try {
     await seed(database);
     const processes = [];
     runtime = await createRuntime({ database, configuration: { UICulture: 'en-US', IsStartupWizardCompleted: true }, serverId: library.serverId,
-      programDataPath: library.programDataPath, vfs: fixture.vfs, identityMap: fixture.identityMap,
+      programDataPath: state.root, vfs: fixture.vfs, identityMap: fixture.identityMap,
       hlsOptions: { cacheDirectory, onProcess: process => processes.push(process) } });
     const user = await runtime.users.createUser({ Name: 'SubtitleReader', Password: 'isolated-subtitle-password' });
     await runtime.users.updatePolicy(user.Id, { ...library.user.Policy, EnableVideoPlaybackTranscoding: false, EnablePlaybackRemuxing: true });
@@ -169,7 +171,7 @@ test('authenticated HTTP serves native master, subtitle manifest and timed WebVT
     assert.deepEqual(processes, [], 'Manifest and sidecar delivery must not start ffmpeg.');
     assert.equal(fixture.requests.every(request => request.authorization == null), true);
   } finally {
-    await runtime?.close(); await fixture.close();
+    await runtime?.close(); await fixture.close(); await state.close();
     if (!runtime) await database.close();
     assert.equal(path.dirname(cacheDirectory), tmpdir());
     await rm(cacheDirectory, { recursive: true, force: true });

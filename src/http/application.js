@@ -1,4 +1,5 @@
 import { createServer } from 'node:http';
+import { MIMEType } from 'node:util';
 import { createCoreLocalization } from '../core/i18n.js';
 import { loadLocalizationData } from '../core/localization-data.js';
 import { stringifyNativeJson } from '../core/json.js';
@@ -25,8 +26,38 @@ import { registerStartupRoutes } from './startup-routes.js';
 import { registerApiKeyRoutes } from './api-key-routes.js';
 import { registerPluginRoutes } from './plugin-routes.js';
 import { serverFriendlyName } from '../configuration.js';
+import { applyCors } from './cors.js';
 
 const decodeRouteValue = value => decodeURIComponent(value.replace(/%2f/giu, encoded => '%25' + encoded.slice(1)));
+
+function jsonProfile(accept) {
+  let selected, selectedQuality = -1;
+  // BaseJellyfinApiController offers plain JSON, CamelCase and PascalCase.
+  // MVC chooses a matching offer by quality and then request order; a later
+  // profile in the SDK's Accept list must not change an earlier plain offer.
+  for (const range of accept.match(/(?:[^,"]|"(?:\\.|[^"\\])*")+/gu) ?? []) {
+    let mediaType;
+    try { mediaType = new MIMEType(range); }
+    catch { continue; }
+    if (!['application/json', 'application/*', '*/*'].includes(mediaType.essence)) continue;
+    const weight = mediaType.params.get('q') ?? '1';
+    if (!/^(?:\d+(?:\.\d*)?|\.\d+)$/u.test(weight)) continue;
+    const quality = Number(weight);
+    if (!Number.isFinite(quality) || quality <= selectedQuality) continue;
+    let profile, supported = true;
+    for (const [name, value] of mediaType.params) {
+      // Parameters after q describe the Accept offer, not the output format.
+      if (name === 'q') break;
+      if (name === 'profile' && /^(?:CamelCase|PascalCase)$/iu.test(value)) {
+        profile = /^CamelCase$/iu.test(value) ? 'CamelCase' : 'PascalCase';
+      } else if (name !== '*') supported = false;
+    }
+    if (supported) { selected = profile; selectedQuality = quality; }
+  }
+  // Native MVC falls back to its default plain JSON formatter when no offer
+  // matches; the application does not enable ReturnHttpNotAcceptable.
+  return selected;
+}
 
 export async function createApplication(services = {}) {
   const { configuration, authentication, serverId, serverName = 'MediaManager', serverVersion = '13.0.0', onError = () => {} } = services;
@@ -45,9 +76,27 @@ export async function createApplication(services = {}) {
     }
   }
   for (const method of ['GET', 'POST']) add(method, '/System/Ping', () => new HttpResult(200, 'MediaManager', { text: true }), { public: true });
-  add('GET', '/System/Info/Public', context => ({ LocalAddress: configuration.PublicAddress || `http://${context.request.headers.host}${configuration.BaseUrl || ''}`,
+  const publicSystemInfo = context => ({ LocalAddress: configuration.PublicAddress || `http://${context.request.headers.host}${configuration.BaseUrl || ''}`,
     ServerName: serverFriendlyName(configuration, serverName), Version: serverVersion, ProductName: 'MediaManager', Id: serverId,
-    StartupWizardCompleted: Boolean(configuration.IsStartupWizardCompleted) }), { public: true });
+    StartupWizardCompleted: Boolean(configuration.IsStartupWizardCompleted) });
+  add('GET', '/System/Info/Public', publicSystemInfo, { public: true });
+  // SystemController.GetSystemInfo permits session validation outside parental
+  // schedules. Its SystemManager DTO reports the current application's state.
+  add('GET', '/System/Info', context => ({ ...publicSystemInfo(context),
+    // Plugins activate in-process; this runtime has no deferred restart or
+    // completed-installation history. Do not fabricate native installation data.
+    HasPendingRestart: false, IsShuttingDown: closing, CompletedInstallations: [],
+    WebSocketPortNumber: context.request.socket.localPort,
+    SupportsLibraryMonitor: Boolean(services.libraryMonitor),
+    CastReceiverApplications: configuration.CastReceiverApplications ?? [],
+    ProgramDataPath: services.applicationPaths?.programDataPath ?? null,
+    ItemsByNamePath: services.applicationPaths?.metadataPath ?? null,
+    InternalMetadataPath: services.applicationPaths?.metadataPath ?? null,
+    CachePath: services.applicationPaths?.cachePath ?? null,
+    TranscodingTempPath: services.hls?.cacheDirectory ?? null,
+    // Web files are supplied by a separate static server; logs use onError.
+    WebPath: null, LogPath: null, PackageName: null
+  }), { policy: 'FirstTimeSetupOrIgnoreParentalControl' });
   for (const [name, run] of Object.entries({ Cultures: () => data.cultures(localization.context.culture), Countries: () => data.countries,
     ParentalRatings: () => data.parentalRatings(configuration.MetadataCountryCode || 'US'), Options: () => data.options })) {
     add('GET', `/Localization/${name}`, run, { policy: 'FirstTimeSetupOrDefault' });
@@ -105,9 +154,9 @@ export async function createApplication(services = {}) {
         if (result.body === undefined || result.status === 204) { response.end(); return; }
         const accept = request.headers.accept ?? '';
         const json = !result.text || accept.includes('application/json');
-        const profile = accept.match(/application\/json\s*;\s*profile\s*=\s*"?(CamelCase|PascalCase)"?/i)?.[1];
-        response.setHeader('Content-Type', json ? 'application/json' + (profile ? '; profile="' + (/^camelcase$/i.test(profile) ? 'CamelCase' : 'PascalCase') + '"' : '') + '; charset=utf-8' : 'text/plain; charset=utf-8');
-        const body = json ? stringifyNativeJson(result.body, { camel: /profile\s*=\s*"?CamelCase/i.test(accept) }) : result.body;
+        const profile = jsonProfile(accept);
+        response.setHeader('Content-Type', json ? 'application/json' + (profile ? '; profile="' + profile + '"' : '') + '; charset=utf-8' : 'text/plain; charset=utf-8');
+        const body = json ? stringifyNativeJson(result.body, { camel: profile === 'CamelCase' }) : result.body;
         if (!json) response.setHeader('Content-Length', Buffer.byteLength(body));
         if (request.method !== 'HEAD') response.write(body);
         response.end();
@@ -121,6 +170,7 @@ export async function createApplication(services = {}) {
           if (path.toLowerCase() !== prefix.toLowerCase() && !path.toLowerCase().startsWith(`${prefix.toLowerCase()}/`)) { send(new HttpResult(404)); return; }
           path = path.slice(prefix.length) || '/';
         }
+        if (applyCors(request, response, configuration)) return;
         const matching = routes.filter(route => {
           const match = route.pattern.exec(path);
           return match && route.names.every((name, index) => !route.constraints[name] || route.constraints[name](decodeRouteValue(match[index + 1])));

@@ -1,4 +1,6 @@
 import { testFileSystem } from '../storage/plugin-files.js';
+import { ItemDeletionService } from '../../src/library/item-deletion-service.js';
+import { LinkedChildReferenceService } from '../../src/library/linked-child-reference-service.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
@@ -403,6 +405,9 @@ for (const dialect of ['postgres']) test(`${dialect}: active pass composes real 
   const itemCreation = new ItemCreationService({ store: current.store, library: current.library,
     linkedChildren: current.linkedChildren, loadContext: current.loadContext });
   current.library.itemCreation = itemCreation;
+  const linkedChildReferences = new LinkedChildReferenceService({ ...current, itemCreation, updates });
+  current.library.itemDeletion = new ItemDeletionService({ ...current, itemCreation, updates, externalData, linkedChildReferences,
+    now: () => current.now });
   let host;
   const seriesLifecycle = new SeriesMetadataLifecycleHost({ store: current.store, loadContext: current.loadContext, updates,
     externalData, itemCreation, refresh: (...args) => host.refresh(...args), now: () => current.now });

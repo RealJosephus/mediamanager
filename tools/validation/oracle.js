@@ -5,6 +5,8 @@ import { fileURLToPath } from 'node:url';
 import { describeFile, sha256 } from './inventory.js';
 import { assertIsolatedOutput, repositoryRoot, validationExecutable } from './paths.js';
 
+export const requiredValidationServices = ['dotnet', 'jellyfinDll'];
+
 export async function recordOracle({ project, output, args = [], environment = process.env }) {
   project = path.resolve(repositoryRoot, project);
   output = path.resolve(repositoryRoot, output);

@@ -3,9 +3,9 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
-import { applyInputIdentity, classify, provisionedServicesFor, restrictToRequested, skipGuards } from '../../tools/ci/scope.js';
+import { applyInputIdentity, ciExecutionArguments, ciProfile, classify, provisionedServicesFor, restrictToRequested, skipGuards } from '../../tools/ci/scope.js';
 import { captureInputIdentity, executionManifestContract, executionManifestReferences, inputsUnchanged } from '../../tools/validation/inputs.js';
-import { repositoryRoot } from '../../tools/validation/paths.js';
+import { repositoryRoot, validationPath } from '../../tools/validation/paths.js';
 import { verifyNativeBuild } from '../../tools/validation/native-build-inputs.js';
 
 const ownPath = 'tests/validation/ci-scope.test.js';
@@ -17,6 +17,21 @@ const entry = (filename, overrides = {}) => ({ path: filename, test: true, impor
 const relative = filename => path.relative(repositoryRoot, filename).replaceAll('\\', '/');
 const description = filename => ({ filename, available: true, kind: 'file' });
 const digest = bytes => createHash('sha256').update(bytes).digest('hex');
+
+test('CI full forwards the strict full profile and refuses every form of selection narrowing', () => {
+  assert.equal(ciProfile({}), 'available');
+  assert.equal(ciProfile({ MEDIAMANAGER_CI_PROFILE: 'full', MEDIAMANAGER_CI_TEST_FILES: ' ,\r\n ' }), 'full');
+  assert.throws(() => ciProfile({ MEDIAMANAGER_CI_PROFILE: 'unknown' }), /CI profile/u);
+  assert.throws(() => ciProfile({ MEDIAMANAGER_CI_PROFILE: 'full', MEDIAMANAGER_CI_TEST_FILES: ownPath }), /explicit test subset/u);
+  const scope = { schemaVersion: 1, profile: 'full', selected: [ownPath, otherPath], discovered: [ownPath, otherPath], requested: [], excluded: [] };
+  assert.deepEqual(ciExecutionArguments(scope, 'output'), ['--output', 'output', '--concurrency', '1', '--profile', 'full']);
+  for (const narrowed of [
+    { selected: [ownPath] }, { requested: [ownPath] }, { excluded: [{ path: otherPath }] },
+    { selected: [ownPath, ownPath], discovered: [ownPath, ownPath] }
+  ]) assert.throws(() => ciExecutionArguments({ ...scope, ...narrowed }, 'output'), /every discovered test/u);
+  assert.deepEqual(ciExecutionArguments({ ...scope, profile: 'ci-available', selected: [ownPath] }, 'output'),
+    ['--output', 'output', '--concurrency', '1', '--', ownPath]);
+});
 
 test('reviewed consumer records bind original source bytes and native runtime inputs without promoting ordinary DTO paths', () => {
   const consumer = executionManifestContract('tests/consumer-contracts/consumer-readers.test.js');
@@ -219,6 +234,51 @@ test('CI native instance supply is explicit, depends on the build and never supp
   await assert.rejects(captureInputIdentity({ dependencies, selected: [ownPath], environment,
     preflight: { ready: true, services: [], tools: [] } }), /requires its build root and Jellyfin DLL path/u);
   assert.equal(promised.records[0].selected, true);
+});
+
+test('CI current SQLite supply requires an instance and leaves historical SQLite unavailable', async () => {
+  const dependencies = { entries: [entry(ownPath, { services: ['currentNativeSqlite'] }), entry(otherPath, { services: ['nativeSqlite'] })] };
+  const tracked = new Set([ownPath, otherPath]);
+  assert.throws(() => provisionedServicesFor({ MEDIAMANAGER_CI_NATIVE_SQLITE: 'true' }), /requires native instance/u);
+  assert.throws(() => provisionedServicesFor({ MEDIAMANAGER_CI_NATIVE_SQLITE: 'true', MEDIAMANAGER_CI_NATIVE_INSTANCE: 'true' }), /requires native reference/u);
+  const disabled = await classify({ dependencies, tracked, environment: { MEDIAMANAGER_TEST_CURRENT_NATIVE_SQLITE: '/arbitrary/input.db' } });
+  assert.ok(disabled.records.every(record => !record.selected));
+  const environment = { MEDIAMANAGER_CI_NATIVE_REFERENCE: 'true', MEDIAMANAGER_CI_NATIVE_INSTANCE: 'true', MEDIAMANAGER_CI_NATIVE_SQLITE: 'true' };
+  assert.equal(validationPath('.agent-docs/evidence/core-flow-20260926/initial.db', repositoryRoot,
+    { ...environment, MEDIAMANAGER_TEST_CURRENT_NATIVE_SQLITE: '/current/input.db' }),
+  path.resolve(repositoryRoot, '.agent-docs/evidence/core-flow-20260926/initial.db'), 'the current input must not remap a historical recording path');
+  const promised = await classify({ dependencies, tracked, environment });
+  assert.equal(promised.records[0].selected, true);
+  assert.equal(promised.records[1].selected, false, 'a new input cannot stand in for a historical database binding');
+  assert.deepEqual(provisionedServicesFor(environment), ['postgres', 'dotnet', 'jellyfinDll', 'nativeInstance', 'currentNativeSqlite']);
+  const filename = path.join(repositoryRoot, '.test-output', 'missing-current-native.db');
+  const errors = applyInputIdentity(promised, { entries: [{ filename, required: true, available: false,
+    reasons: ['service:currentNativeSqlite'], requiredReasons: ['service:currentNativeSqlite'] }] }, tracked);
+  assert.equal(errors[0].code, 'input-unavailable');
+  assert.equal(promised.records[0].selected, true, 'failed promised supply remains an infrastructure error');
+  await assert.rejects(captureInputIdentity({ dependencies, selected: [ownPath], environment,
+    preflight: { ready: true, services: [], tools: [] } }), /requires its build root and Jellyfin DLL path/u);
+});
+
+test('CI Web consumers require explicit browser and client supply without hiding missing inputs', async () => {
+  const dependencies = { entries: [entry(ownPath, { services: ['jellyfinWeb', 'browser'] }), entry(otherPath)] };
+  const tracked = new Set([ownPath, otherPath]);
+  assert.throws(() => provisionedServicesFor({ MEDIAMANAGER_CI_WEB_CLIENTS: 'true' }), /requires current native SQLite/u);
+  const disabled = await classify({ dependencies, tracked, environment: {
+    MEDIAMANAGER_JELLYFIN_WEB_ROOT: '/arbitrary/web', MEDIAMANAGER_BROWSER_EXECUTABLE: '/arbitrary/chromium',
+  } });
+  assert.equal(disabled.records[0].selected, false);
+  const environment = { MEDIAMANAGER_CI_NATIVE_REFERENCE: 'true', MEDIAMANAGER_CI_NATIVE_INSTANCE: 'true',
+    MEDIAMANAGER_CI_NATIVE_SQLITE: 'true', MEDIAMANAGER_CI_WEB_CLIENTS: 'true' };
+  const promised = await classify({ dependencies, tracked, environment });
+  assert.ok(promised.records.every(record => record.selected));
+  const filename = path.join(repositoryRoot, '.test-output', 'missing-browser');
+  const errors = applyInputIdentity(promised, { entries: [{ filename, required: true, available: false,
+    reasons: ['service:browser'], requiredReasons: ['service:browser'] }] }, tracked);
+  assert.equal(errors[0].code, 'input-unavailable');
+  assert.equal(promised.records[0].selected, true);
+  await assert.rejects(captureInputIdentity({ dependencies, selected: [ownPath], environment,
+    preflight: { ready: true, services: [], tools: [] } }), /requires an explicit same-run build root and runtime/u);
 });
 
 test('CI binds same-run native receipts, source offer and runtime only for selected native consumers', async t => {

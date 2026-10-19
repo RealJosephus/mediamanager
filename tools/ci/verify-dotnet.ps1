@@ -23,6 +23,14 @@ $selected = (Get-Command dotnet -CommandType Application | Select-Object -First 
 if (-not [string]::Equals([IO.Path]::GetFullPath($selected), $filename, $comparison)) {
     throw 'PATH selected a dotnet executable outside the isolated installation.'
 }
+# The SDK lazily creates this empty workload metadata directory on first use.
+# Prepare it before strict validation binds the entire installation tree.
+$metadata = Join-Path $root 'metadata'
+New-Item -ItemType Directory -Path $metadata -Force | Out-Null
+$metadataItem = Get-Item -LiteralPath $metadata -Force
+if (-not $metadataItem.PSIsContainer -or ($metadataItem.Attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0) {
+    throw 'The SDK metadata directory must be physical.'
+}
 "MEDIAMANAGER_DOTNET=$filename" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 "MEDIAMANAGER_CI_DOTNET_ROOT=$root" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 Write-Output "Verified isolated .NET SDK 10.0.401: $filename"

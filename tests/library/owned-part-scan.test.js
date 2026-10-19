@@ -2,14 +2,20 @@ import { testFileSystem } from '../storage/plugin-files.js';
 import { failBaseItemDelete } from '../database/postgres-faults.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { randomUUID } from 'node:crypto';
+import { createHash, randomUUID } from 'node:crypto';
+import { readFile, writeFile } from 'node:fs/promises';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { parseLosslessJson } from '../../src/core/json.js';
+import { recordOracle } from '../../tools/validation/oracle.js';
+import { validationOutputRoot } from '../../tools/validation/paths.js';
 import { PostgresDatabase } from '../../src/database/postgres.js';
 import { DomainStore } from '../../src/database/domain-store.js';
 import { tableDefinition } from '../../src/database/model.js';
 import { getNewItemId } from '../../src/core/identity.js';
 import { nativeGuid } from '../../src/users/native.js';
 import { DirectoryItemResolverPipeline } from '../../src/library/directory-item-resolver.js';
-import { createOwnedFolderValidationFixture, ownedRefreshOptions, withoutSaveTime } from '../helpers/owned-folder-validation-fixture.js';
+import { createOwnedFolderValidationFixture, ownedStatePaths, ownedRefreshOptions, withoutSaveTime } from '../helpers/owned-folder-validation-fixture.js';
 import { createResolvedItemLifecycleFixture } from './resolved-item-lifecycle-fixture.js';
 import { LibraryService } from '../../src/library/library-service.js';
 import { idKey, nonemptyId } from '../../src/library/records.js';
@@ -26,6 +32,9 @@ const aggregateId = 'A7300000-0000-0000-0000-000000000002';
 const userRootId = 'A7300000-0000-0000-0000-000000000003';
 const collectionId = 'A7300000-0000-0000-0000-000000000004';
 const folderNativeType = 'MediaBrowser.Controller.Entities.Folder';
+const stackInputFile = new URL('./fixtures/post-scan-composition/stack-replacement-input.json', import.meta.url);
+const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+const evidenceJson = value => JSON.stringify(value, (_, entry) => typeof entry === 'bigint' ? JSON.rawJSON(String(entry)) : entry, 2) + '\n';
 const blank = Object.fromEntries(tableDefinition('BaseItems').columns.filter(column => !column.generated).map(column => [column.name,
   column.nullable ? null : column.clrType === 'bool' ? false : column.type === 'TEXT' ? '' : column.clrType === 'long' ? 0n : 0]));
 
@@ -91,7 +100,7 @@ async function fixture(t, dialect, collectionType = 'movies') {
     Name: 'Movies', ParentId: userRootId, IsFolder: true,
     Data: JSON.stringify({ CollectionType: collectionType, PhysicalFolderIds: [rootId], PhysicalLocationsList: [rootPath] })
   }));
-  library = new LibraryService({fileSystem: testFileSystem,  store, programDataPath, serverId: 'owned-part-scan' });
+  library = new LibraryService({fileSystem: testFileSystem, ...await ownedStatePaths(t), store, programDataPath, serverId: 'owned-part-scan' });
   const ignoreRule = await knownAncestorIgnoreRule({ registry, vfs, identityMap, identityRoots: [rootPath] });
   ignoreRule.normalizePath = true;
   lifecycleFixture = await createResolvedItemLifecycleFixture({ store, library, vfs, identityMap, ignoreRule });
@@ -141,57 +150,94 @@ function assertStack(items, primaryName, partNames) {
   return primary;
 }
 
-for (const dialect of ['postgres']) test(`${dialect}: stacked movie parts persist, reorder, promote and collapse through owned refresh`, {
-  skip: dialect === 'postgres' && !process.env.MEDIAMANAGER_TEST_POSTGRES
+function stackProjection(stages, directory, parentId) {
+  const api = /^[A-Za-z]:[\\/]/u.test(directory) ? path.win32 : path.posix;
+  const relative = value => {
+    const result = api.relative(directory, value);
+    assert.ok(result && !result.startsWith('..') && !api.isAbsolute(result), `stack path is inside the observed media directory: ${value}`);
+    return result.replaceAll('\\', '/');
+  };
+  const identities = new Map([[idKey(parentId), '$PARENT']]);
+  for (const stage of stages) for (const row of stage.sql.BaseItems) {
+    if ([movieNativeType, videoNativeType].includes(row.Type)) identities.set(idKey(row.Id), row.Type + ':' + relative(row.Path));
+  }
+  const identity = value => !nonemptyId(value) ? null : identities.get(idKey(value)) ?? idKey(value);
+  return stages.map(stage => ({ name: stage.name, failed: stage.exception != null, files: stage.files,
+    items: stage.sql.BaseItems.filter(row => [movieNativeType, videoNativeType].includes(row.Type)).map(row => {
+      const data = JSON.parse(row.Data ?? '{}');
+      return { identity: identity(row.Id), Name: row.Name, OwnerId: identity(row.OwnerId), ParentId: identity(row.ParentId),
+        TopParentId: identity(row.TopParentId), PrimaryVersionId: identity(row.PrimaryVersionId),
+        IsInMixedFolder: Boolean(row.IsInMixedFolder), ExtraType: row.ExtraType,
+        AdditionalParts: (data.AdditionalParts ?? []).map(relative),
+        LocalAlternateVersions: (data.LocalAlternateVersions ?? []).map(relative) };
+    }).sort((left, right) => left.identity < right.identity ? -1 : left.identity > right.identity ? 1 : 0),
+    links: stage.sql.LinkedChildren.filter(link => identities.has(idKey(link.ParentId)) && idKey(link.ParentId) !== idKey(parentId))
+      .map(link => ({ parent: identity(link.ParentId), child: identity(link.ChildId), type: Number(link.ChildType), order: Number(link.SortOrder) }))
+      .sort((left, right) => left.parent < right.parent ? -1 : left.parent > right.parent ? 1 : left.order - right.order)
+  }));
+}
+
+for (const dialect of ['postgres']) test(`${dialect}: movie stack replacement matches actual native owned persistence`, {
+  skip: !process.env.MEDIAMANAGER_TEST_POSTGRES || !process.env.MEDIAMANAGER_JELLYFIN_DLL, timeout: 180000
 }, async t => {
-  const { database, adapter, validation, metadata, errors, reference } = await fixture(t, dialect);
-  await adapter.write('/Film cd2.mkv', Buffer.from('two'));
-  await adapter.write('/Film cd1.mkv', Buffer.from('one'));
-
-  const created = await validation.validateChildren(reference, ownedRefreshOptions);
-  assert.equal(created.created.length, 1, 'only the stack primary is a direct CreateItems addition');
-  let items = await state(database);
-  assertStack(items, 'Film cd1.mkv', ['Film cd2.mkv']);
-  const stable = structuredClone(items);
-  assert.deepEqual((await validation.validateChildren(reference, ownedRefreshOptions)).created.length, 0);
-  assert.deepEqual(await state(database), stable);
-
-  await adapter.write('/Film cd0.mkv', Buffer.from('zero'));
-  await validation.validateChildren(reference, ownedRefreshOptions);
-  items = await state(database);
-  assertStack(items, 'Film cd0.mkv', ['Film cd1.mkv', 'Film cd2.mkv']);
-  assert.equal(items.some(item => idKey(item.Id) === idKey(deterministicId('Film cd1.mkv', movieNativeType))), false,
-    'the demoted path no longer retains its Movie identity');
-
-  await adapter.delete('/Film cd0.mkv');
-  await validation.validateChildren(reference, ownedRefreshOptions);
-  items = await state(database);
-  assertStack(items, 'Film cd1.mkv', ['Film cd2.mkv']);
-
-  await adapter.write('/Film cd10.mkv', Buffer.from('ten'));
-  await validation.validateChildren(reference, ownedRefreshOptions);
-  items = await state(database);
-  assertStack(items, 'Film cd1.mkv', ['Film cd10.mkv', 'Film cd2.mkv']);
-
-  await adapter.delete('/Film cd1.mkv');
-  await validation.validateChildren(reference, ownedRefreshOptions);
-  items = await state(database);
-  assertStack(items, 'Film cd10.mkv', ['Film cd2.mkv']);
-  assert.equal(items.some(item => item.Path === `${rootPath}\\Film cd1.mkv`), false);
-  assert.equal(items.some(item => idKey(item.Id) === idKey(deterministicId('Film cd10.mkv', videoNativeType))), false,
-    'the promoted path no longer retains its owned Video identity');
-
-  await adapter.delete('/Film cd2.mkv');
-  const owner = items.find(item => item.Type === movieNativeType);
-  await metadata.refresh(owner.Id, ownedRefreshOptions);
-  await validation.validateChildren(reference, ownedRefreshOptions);
-  items = await state(database);
-  const standalone = items.find(item => item.Path === `${rootPath}\\Film cd10.mkv`);
-  assert.equal(standalone.Type, movieNativeType);
-  assert.deepEqual(JSON.parse(standalone.Data).AdditionalParts, []);
-  assert.equal(items.length, 1);
+  const input = await readFile(stackInputFile), scenario = JSON.parse(input)[0];
+  const output = path.join(validationOutputRoot(), 'owned-stack-replacement-' + randomUUID());
+  const receipt = await recordOracle({ project: 'tests/library/fixtures/post-scan-composition/Oracle.csproj', output,
+    args: [fileURLToPath(stackInputFile), '{output}/native.json', '{output}/cases'] });
+  const bytes = await readFile(path.join(output, 'native.json')), native = parseLosslessJson(bytes.toString('utf8'));
+  assert.equal(native.inputSha256, hash(input));
+  assert.equal(receipt.outputs.find(file => path.basename(file.filename) === 'native.json').sha256, hash(bytes));
+  assert.ok(native.assemblies.some(assembly => assembly.name === 'jellyfin' && assembly.sha256 === receipt.jellyfinDll.sha256));
+  assert.equal(native.results.length, 1);
+  const expected = native.results[0];
+  assert.equal(expected.Name, scenario.Name);
+  assert.equal(expected.controls.collectionType, 'movies');
+  for (const collection of ['metadataProviders', 'imageProviders', 'metadataSavers']) assert.deepEqual(expected.controls[collection], []);
+  for (const service of ['MediaBrowser.Providers.Movies.MovieMetadataService', 'MediaBrowser.Providers.Videos.VideoMetadataService']) {
+    assert.ok(expected.controls.metadataServices.includes(service));
+  }
+  assert.equal(expected.release.completed, true);
+  const { database, adapter, vfs, validation, metadata, errors, reference } = await fixture(t, dialect);
+  const stages = [];
+  for (const step of scenario.StackReplacement.Steps) {
+    for (const name of step.Write ?? []) {
+      const value = Buffer.from(name);
+      await adapter.write('/' + name, value);
+    }
+    for (const name of step.Delete ?? []) await adapter.delete('/' + name);
+    let exception = null;
+    try {
+      if (step.RefreshBeforeScan) {
+        const owner = (await state(database)).find(item => item.Type === movieNativeType);
+        assert.ok(owner, 'the actual persisted primary exists before its explicit owned refresh');
+        await metadata.refresh(owner.Id, ownedRefreshOptions);
+      }
+      await validation.validateChildren(reference, ownedRefreshOptions);
+    } catch (error) { exception = { name: error.name, code: error.code, message: error.message, stack: error.stack }; }
+    const sql = {};
+    for (const table of Object.keys(expected.stages[0].sql.result)) sql[table] = await database.rows(table);
+    const files = [];
+    for (const file of (await vfs.list('/movies')).entries) {
+      assert.equal(file.kind, 'file');
+      const handle = await vfs.openRead('/movies/' + file.name, { ifMatch: file.version });
+      try {
+        const digest = createHash('sha256');
+        for await (const bytes of handle.stream) digest.update(bytes);
+        files.push({ name: file.name, sha256: digest.digest('hex') });
+      } finally { await handle.close(); }
+    }
+    stages.push({ name: step.Name, exception, sql,
+      errors: errors.splice(0).map(error => ({ name: error.name, code: error.code, message: error.message, stack: error.stack })),
+      files: files.sort((left, right) => left.name < right.name ? -1 : left.name > right.name ? 1 : 0) });
+    await writeFile(path.join(output, 'candidate.json'), evidenceJson({ directory: rootPath, stages }));
+  }
+  const actualProjection = stackProjection(stages, rootPath, rootId);
+  const nativeProjection = stackProjection(expected.stages.map(stage => ({ name: stage.Name, exception: stage.exception,
+    files: stage.files, sql: stage.sql.result })), expected.directory, expected.parentId);
+  await writeFile(path.join(output, 'comparison.json'), evidenceJson({ actual: actualProjection, native: nativeProjection }));
+  assert.deepEqual(actualProjection, nativeProjection,
+    'compare real source files, persisted owned declarations, entity rows and version relations; full SQL/errors are retained separately');
 });
-
 for (const dialect of ['postgres']) test(`${dialect}: weak snapshots preserve an existing owned-part family`, {
   skip: dialect === 'postgres' && !process.env.MEDIAMANAGER_TEST_POSTGRES
 }, async t => {
@@ -318,7 +364,7 @@ for (const dialect of ['postgres']) test(`${dialect}: home-video stack promotion
   assert.deepEqual(JSON.parse(items[0].Data).AdditionalParts ?? [], []);
 });
 
-for (const dialect of ['postgres']) test(`${dialect}: an external reference protects a missing owned part until released`, {
+for (const dialect of ['postgres']) test(`${dialect}: an informational series reference does not own a missing part`, {
   skip: dialect === 'postgres' && !process.env.MEDIAMANAGER_TEST_POSTGRES
 }, async t => {
   const { database, adapter, validation, metadata, errors, reference } = await fixture(t, dialect);
@@ -334,13 +380,10 @@ for (const dialect of ['postgres']) test(`${dialect}: an external reference prot
 
   const owner = (await state(database)).find(item => item.Type === movieNativeType);
   await metadata.refresh(owner.Id, ownedRefreshOptions);
-  assert.ok(errors.some(error => error.code === '23503'), 'the independent owned delete records its FK failure');
-  assert.ok((await state(database)).some(item => idKey(item.Id) === idKey(partId)));
-
-  await database.delete('BaseItems', { Id: referenceId });
-  await metadata.refresh(owner.Id, ownedRefreshOptions);
-  await validation.validateChildren(reference, ownedRefreshOptions);
+  assert.deepEqual(errors, []);
   assert.equal((await state(database)).some(item => idKey(item.Id) === idKey(partId)), false);
+  assert.equal((await database.rows('BaseItems', { where: { Id: referenceId } }))[0].SeriesId, partId,
+    'SeriesId has no native FK or ownership semantics; the unrelated row is retained');
 });
 
 for (const dialect of ['postgres']) test(`${dialect}: owned-part deletion failure leaves its row and declaration available for a later refresh`, {

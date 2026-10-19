@@ -381,14 +381,15 @@ test('restore rejects a directory swapped to a junction after staging inventory 
   await assert.rejects(access(destination), { code: 'ENOENT' });
 });
 
-test('Windows restore resumes an interrupted staging tree through a destination case alias', {
-  skip: process.platform !== 'win32',
-}, async t => {
+test('restore resumes an interrupted staging tree through an equivalent destination path', async t => {
   const fixture = await createInstanceFixture(t, { prefix: 'mediamanager-state-restore-case-' });
   const packageDirectory = path.join(fixture.directory, 'package');
   await createStatePackage(await fixture.packageOptions({ destination: packageDirectory }));
   const destination = path.join(fixture.directory, 'Restored-Case');
-  const alias = path.join(fixture.directory, 'RESTORED-CASE');
+  // Retain the Windows case-alias regression. On POSIX, use its real dot
+  // segment equivalence instead of requiring case-insensitive path identity.
+  const alias = process.platform === 'win32' ? path.join(fixture.directory, 'RESTORED-CASE')
+    : `${fixture.directory}/./Restored-Case`;
   const controller = new AbortController();
   await assert.rejects(restoreStatePackage(packageDirectory, destination, {
     signal: controller.signal,

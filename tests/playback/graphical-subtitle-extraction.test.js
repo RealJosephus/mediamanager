@@ -11,6 +11,7 @@ import { negotiateSource } from '../../src/playback/profile.js';
 import { decodeSubtitle, convertSubtitle } from '../../src/playback/subtitles.js';
 import { extractionFixture } from './extraction-fixture.js';
 import reference from './fixtures/graphical-subtitle-reference.json' with { type: 'json' };
+import ssaNative from './fixtures/graphical-ssa-native.json' with { type: 'json' };
 
 const digest = bytes => createHash('sha256').update(bytes).digest('hex');
 const files = () => Object.fromEntries(reference.sources.map(entry => ['/' + entry.name, Buffer.from(entry.media, 'base64')]));
@@ -65,7 +66,12 @@ test('actual PGS, VobSub and S_TEXT/SSA containers match the frozen extraction o
     const stream = entry.source.MediaStreams.find(value => value.Index === expected.index);
     const result = await service.subtitle(entry.source, stream, '/' + entry.name);
     assert.equal(result.format, expected.format, `${entry.name}: native format casing`);
-    if (expected.comparison === 'bytes') {
+    if (expected.format === 'ass') {
+      const original = Buffer.from(ssaNative.text, 'utf8');
+      assert.equal(digest(original), expected.native.sha256, 'The original upstream SSA bytes match the sealed native extraction.');
+      const lines = bytes => bytes.toString('latin1').replace(/\r?\n/gu, '\n');
+      assert.equal(lines(result.bytes), lines(original), 'ASS line terminators may differ; every other byte stays exact.');
+    } else if (expected.comparison === 'bytes') {
       assert.equal(result.bytes.length, expected.native.byteLength, `${entry.name}: byte length`);
       assert.equal(digest(result.bytes), expected.native.sha256, `${entry.name}: frozen DLL bytes`);
     } else {

@@ -1,4 +1,13 @@
 # Native JSON fixtures are sealed by raw SHA-256; keep checkout bytes intact.
+tests/sessions/fixtures/syncplay/recording-source/* -text
+# The runtime-date seals also bind these original LF source bytes.
+/tests/sessions/user-data-binding-cases.js text eol=lf
+/tools/compat/user-data-date-oracle/Program.cs text eol=lf
+/tools/compat/user-data-date-oracle/UserDataDateOracle.csproj text eol=lf
+/tools/compat/record-user-data-date-environment.mjs text eol=lf
+/src/http/json-date-time.js text eol=lf
+/src/syncplay/group.js text eol=lf
+tests/library/fixtures/historical-evidence-checks/* -text
 src/images/system-fonts/harfbuzz/* -text
 tests/metadata/fixtures/nfo-scalar-provider/README.md text eol=lf
 tests/metadata/fixtures/nfo-userdata-persistence/README.md text eol=lf
@@ -42,6 +51,12 @@ tests/**/fixtures/**/*.csproj -text
 /tests/library/fixtures/music-genres-post-scan/native.json whitespace=cr-at-eol
 /tests/library/fixtures/native-relation-order/native.json whitespace=cr-at-eol
 tests/Directory.Build.props -text
+# Execution manifests bind these projectors by their original bytes.
+tests/http/fixtures/item-deletion/normalize.js -text
+tests/http/fixtures/warm-item-deletion/normalize.js -text
+/src/core/identity.js text eol=lf
+/src/users/native.js text eol=lf
+/src/users/password-reset-service.js text eol=lf
 src/core/resources/native-sort-license.txt -text
 # This pinned projector already contains CRLF; preserve its literal bytes.
 tools/project-memory-sort-native.mjs -text

@@ -1,3 +1,4 @@
+import { createPlaybackState } from './runtime-state.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { randomBytes } from 'node:crypto';
@@ -69,12 +70,13 @@ test('embedded ASS is an authenticated HLS WebVTT rendition on PostgreSQL', {
   fixture.identityMap.addPrefix({ identityRoot: 'Z:\\Hls', accessRoot: '/', style: 'windows', returnAccess: 'Isolated embedded subtitle fixture.' });
   const cacheDirectory = await mkdtemp(path.join(tmpdir(), `mediamanager-embedded-subtitle-${randomBytes(4).toString('hex')}-`));
   const extractionProcesses = [], hlsProcesses = [];
+  const state = await createPlaybackState();
   let database, runtime;
   try {
     database = await PostgresDatabase.open({ connectionString: process.env.MEDIAMANAGER_TEST_POSTGRES, schema, create: true });
     await seed(database);
     runtime = await createRuntime({ database, configuration: { UICulture: 'en-US', IsStartupWizardCompleted: true }, serverId: library.serverId,
-      programDataPath: library.programDataPath, vfs: fixture.vfs, identityMap: fixture.identityMap,
+      programDataPath: state.root, vfs: fixture.vfs, identityMap: fixture.identityMap,
       extractionOptions: { onProcess: process => extractionProcesses.push(process) }, hlsOptions: { cacheDirectory, onProcess: process => hlsProcesses.push(process) } });
     const user = await runtime.users.createUser({ Name: 'EmbeddedAssPostgres', Password: 'isolated-embedded-ass-password' });
     await runtime.users.updatePolicy(user.Id, { ...library.user.Policy, EnableVideoPlaybackTranscoding: false, EnablePlaybackRemuxing: true });
@@ -124,7 +126,7 @@ test('embedded ASS is an authenticated HLS WebVTT rendition on PostgreSQL', {
       await database.client.query(`DROP SCHEMA "${schema}__mm" CASCADE`);
     }
     if (runtime) await runtime.close(); else await database?.close();
-    await fixture.close();
+    await fixture.close(); await state.close();
     await rm(cacheDirectory, { recursive: true, force: true });
   }
 });

@@ -11,7 +11,8 @@ import { MetadataImageAssets } from '../../src/metadata/image-assets.js';
 import { StorageRegistry, VirtualFileSystem, IdentityAccessMap } from '../../src/storage/index.js';
 import { MemoryStorageAdapter } from '../../src/storage/testing/memory-adapter.js';
 
-const mediaRoot = 'Z:\\Media', mediaA = mediaRoot + '\\A', mediaB = mediaRoot + '\\B';
+const mediaRoot = process.platform === 'win32' ? 'Z:\\Media' : '/media',
+  mediaA = path.join(mediaRoot, 'A'), mediaB = path.join(mediaRoot, 'B');
 async function setup(t, { infos = [], files = {}, configuration = { ContentTypes: [] } } = {}) {
   const root = await fs.mkdtemp(path.join(os.tmpdir(), 'library-mutations-')), views = path.join(root, 'root', 'default'),
     directory = path.join(views, 'Library'), data = path.join(root, 'data');
@@ -28,7 +29,7 @@ async function setup(t, { infos = [], files = {}, configuration = { ContentTypes
   registry.registerType('memory', options => new MemoryStorageAdapter(options)); const adapter = await registry.createInstance('media', 'memory', {});
   for (const name of ['A', 'B', 'C']) await adapter.mkdir('/' + name);
   const vfs = new VirtualFileSystem(registry); vfs.mount({ path: '/remote', instanceId: 'media', capabilities: {} });
-  const identityMap = new IdentityAccessMap(); identityMap.addPrefix({ identityRoot: mediaRoot, accessRoot: '/remote', style: 'windows', returnAccess: 'mutation test' });
+  const identityMap = new IdentityAccessMap(); identityMap.addPrefix({ identityRoot: mediaRoot, accessRoot: '/remote', style: process.platform === 'win32' ? 'windows' : 'posix', returnAccess: 'mutation test' });
   optionsStore = new LibraryOptionsStore({fileSystem: testFileSystem,  programDataPath: root, dataPath: data, optionsById });
   const options = { ...defaultLibraryOptions(), PathInfos: structuredClone(infos) };
   await optionsStore.save(directory, options);
@@ -52,7 +53,7 @@ const actions = state => state.calls.map(call => call.action);
 
 test('media-path addition writes colliding shortcuts before appending options and preserves duplicate paths', async t => {
   const state = await setup(t, { infos: [{ Path: mediaA }], files: { 'A.mblink': mediaA },
-    configuration: { ContentTypes: [{ Name: mediaA, Value: 'movies' }, { Name: mediaA + '\\Child', Value: 'books' }, { Name: mediaRoot, Value: 'music' }] } });
+    configuration: { ContentTypes: [{ Name: mediaA, Value: 'movies' }, { Name: path.join(mediaA, 'Child'), Value: 'books' }, { Name: mediaRoot, Value: 'music' }] } });
   const info = { Path: mediaA }; await state.service.addMediaPath('Library', info);
   assert.equal(await fs.readFile(path.join(state.directory, 'A1.mblink'), 'utf8'), mediaA);
   assert.deepEqual(state.options.PathInfos, [{ Path: mediaA }, info]); assert.equal(state.options.PathInfos[1], info);
@@ -62,9 +63,9 @@ test('media-path addition writes colliding shortcuts before appending options an
 });
 
 test('media-path addition appends missing exact shortcut locations only when their count differs', async t => {
-  const state = await setup(t, { infos: [{ Path: mediaA }], files: { 'A.mblink': mediaA, 'C.mblink': mediaRoot + '\\C' } });
+  const state = await setup(t, { infos: [{ Path: mediaA }], files: { 'A.mblink': mediaA, 'C.mblink': path.join(mediaRoot, 'C') } });
   await state.service.addMediaPath('Library', { Path: mediaB });
-  assert.deepEqual(state.options.PathInfos, [{ Path: mediaA }, { Path: mediaB }, { Path: mediaRoot + '\\C' }]);
+  assert.deepEqual(state.options.PathInfos, [{ Path: mediaA }, { Path: mediaB }, { Path: path.join(mediaRoot, 'C') }]);
   assert.deepEqual(actions(state), ['invalidate', 'options-updated']);
 });
 

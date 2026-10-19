@@ -3,7 +3,6 @@ import { createHash } from 'node:crypto';
 import { isAbsolute, resolve } from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { pathToFileURL } from 'node:url';
-import { validationPath } from '../validation/paths.js';
 
 const hash = value => createHash('sha256').update(value).digest('hex');
 const git = (root, args) => execFileSync('git', ['-C', root, ...args], { maxBuffer: 32 * 1024 * 1024 });
@@ -56,5 +55,7 @@ export async function verifyBaseline(manifestPath) {
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
-  console.log(JSON.stringify(await verifyBaseline(validationPath(process.argv[2] ?? '.agent-docs/baselines/jellyfin-current/manifest.json'))));
+  const [manifestPath, ...extra] = process.argv.slice(2);
+  if (!manifestPath || extra.length) throw new Error('Usage: node tools/compat/verify-baseline.js MANIFEST');
+  console.log(JSON.stringify(await verifyBaseline(resolve(manifestPath))));
 }

@@ -1,3 +1,4 @@
+import { fixturePathStyle, projectStatePath } from '../library/fixture-state-path.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile, mkdir, writeFile, readdir } from 'node:fs/promises';
@@ -64,7 +65,7 @@ async function fixtureFor(t, dialect, sample) {
   const calls = [], cancellation = new AbortController();
   if (sample.cancelled) cancellation.abort(Object.assign(new Error('Injected cancellation'), { nativeException: 'OperationCanceledException' }));
   const projection = (item, images = []) => ({ Id: item.Id.toLowerCase(), Name: item.Name, Type: item.Type,
-    Path: item.Path?.replace(fixture.stateRoot, '$STATE') ?? null,
+    Path: projectStatePath(item.Path, fixture.stateRoot) ?? null,
     saved: item.DateLastSaved != null && dateText(item.DateLastSaved) !== MIN_DATE,
     ProviderIds: { ...item.ProviderIds }, imageCount: images.length });
   let personSaves = 0;
@@ -113,14 +114,14 @@ async function capture(fixture, sample, exception) {
       if (value != null && ['DateCreated', 'DateModified', 'DateLastSaved'].includes(key)) value = value.startsWith('2025-') ? dateText(value) : '$RECENT';
       else if (value != null && columns.get(key)?.clrType.includes('DateTime')) value = dateText(value);
       if (typeof value === 'bigint') value = Number(value);
-      if (key === 'Path' && value) value = value.replace(stateRoot, '$STATE');
+      if (key === 'Path' && value) value = projectStatePath(value, stateRoot);
       return [key, value];
     })));
   const providers = (await database.rows('BaseItemProviders')).filter(row => row.ItemId !== parentId).map(row => ({ ...row, ItemId: row.ItemId.toLowerCase() }))
     .sort((a, b) => a.ItemId.localeCompare(b.ItemId) || a.ProviderId.localeCompare(b.ProviderId));
   let directories = [];
   try { directories = (await readdir(path.join(stateRoot, 'metadata'), { recursive: true, withFileTypes: true })).filter(entry => entry.isDirectory())
-    .map(entry => path.join(entry.parentPath, entry.name).replace(stateRoot, '$STATE')).sort(); }
+    .map(entry => projectStatePath(path.join(entry.parentPath, entry.name), stateRoot)).sort(); }
   catch (error) { if (error.code !== 'ENOENT') throw error; }
   return { name: sample.name, exception, calls, credits, items, providers, directories,
     parentName: (await database.rows('BaseItems', { where: { Id: parentId } }))[0].Name,
@@ -136,7 +137,14 @@ for (const dialect of ['postgres']) for (const source of input) test(`${dialect}
       await saveMetadataItem(fixture.updates, fixture.loaded, { Item: fixture.loaded.item, People: sample.people }, 8, { signal: fixture.cancellation.signal });
     } else await fixture.updates.updatePeople(fixture.loaded, sample.people, { signal: fixture.cancellation.signal });
   } catch (error) { exception = error.nativeException ?? error.constructor.name; }
-  compare(await capture(fixture, sample, exception), native.results.find(result => result.name === sample.name));
+  const expected = structuredClone(native.results.find(result => result.name === sample.name));
+  if (process.platform === 'linux' && sample.name === 'case-sensitive-non-normalized') {
+    // The recording already contains both distinct identities and paths.
+    // A case-sensitive filesystem materializes both requested directories.
+    expected.directories = [...new Set([...expected.directories, ...expected.items
+      .filter(item => item.Type === 'MediaBrowser.Controller.Entities.Person').map(item => item.Path)])].sort();
+  }
+  compare(await capture(fixture, sample, exception), expected);
 });
 
 for (const dialect of ['postgres']) test(`${dialect}: committed credits survive a cancelled person lifecycle without creating directories`, async t => {

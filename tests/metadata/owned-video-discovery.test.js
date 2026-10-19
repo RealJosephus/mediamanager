@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import path from 'node:path';
 import { readFile, readdir } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
+import { setTimeout as delay } from 'node:timers/promises';
 import { parseLosslessJson } from '../../src/core/json.js';
 import { dateText, EMPTY_ID, MIN_DATE, guid, idKey, mapRecord } from '../../src/library/records.js';
 import { nativeGuid } from '../../src/users/native.js';
@@ -45,15 +46,14 @@ test('owned video recording binds actual independent create/delete and controlle
 
 async function verifySample(t, sample, { delayedLookup = false } = {}) {
   const value = await setup(t, 'postgres', sample), { fixture, loaded, calls } = value;
-  const firstRefresh = Promise.withResolvers();
   if (delayedLookup) {
     const creator = fixture.library.itemCreation, withItem = creator.withItem.bind(creator);
     let lookups = 0;
     creator.withItem = async (...args) => {
-      if (++lookups === 2) await firstRefresh.promise;
+      if (++lookups === 2) await delay(10);
       return withItem(...args);
     };
-    t.after(() => { firstRefresh.resolve(); creator.withItem = withItem; });
+    t.after(() => { creator.withItem = withItem; });
   }
   const signal = sample.cancelled ? AbortSignal.abort(Object.assign(new Error('Controlled cancellation'), { nativeException: 'OperationCanceledException' })) : new AbortController().signal;
   const options = { ForceSave: false, MetadataRefreshMode: 'None', ImageRefreshMode: 'None', SearchResult: { Name: 'Owner search' }, signal };
@@ -68,7 +68,6 @@ async function verifySample(t, sample, { delayedLookup = false } = {}) {
       // inherited fields survive a repeated dispatch without a provider save.
       const item = await loaded.videoVersionDiscovery.lookup(loaded, child);
       recordRefresh(item, prepareOwnedItemRefresh(loaded.item, item, options, inheritance));
-      firstRefresh.resolve();
     } });
   let requiresSave = false, exception = null;
   try { requiresSave = await lifecycle.beforeRefresh(loaded, options); }
@@ -84,5 +83,8 @@ async function verifySample(t, sample, { delayedLookup = false } = {}) {
 
 for (const sample of input) test(`postgres: native owned video ${sample.name}`, t => verifySample(t, sample));
 
-test('postgres: delayed owned-video lookup preserves inherited fields across duplicate part dispatches', t =>
-  verifySample(t, input.find(sample => sample.name === 'duplicate-part-paths'), { delayedLookup: true }));
+test('postgres: delayed owned-video lookup preserves inherited fields across duplicate part dispatches', async t => {
+  const sample = input.find(sample => sample.name === 'duplicate-part-paths');
+  for (let attempt = 0; attempt < 8; attempt++) await t.test('dispatch ' + attempt,
+    child => verifySample(child, sample, { delayedLookup: true }));
+});

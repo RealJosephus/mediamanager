@@ -90,7 +90,8 @@ export async function captureBaseline(source, destination) {
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
-  const [, , source = 'D:/jellyfin', destination = '.agent-docs/baselines/jellyfin-current'] = process.argv;
+  const [source, destination, ...extra] = process.argv.slice(2);
+  if (!source || !destination || extra.length) throw new Error('Usage: node tools/compat/capture-baseline.js SOURCE NEW_DESTINATION');
   await mkdir(dirname(resolve(destination)), { recursive: true });
   const result = await captureBaseline(source, destination);
   console.log(JSON.stringify({ head: result.head, files: result.files.length, contentDigest: result.contentDigest }));

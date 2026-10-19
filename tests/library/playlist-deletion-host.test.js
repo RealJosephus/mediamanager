@@ -13,6 +13,7 @@ import { readCachedFolderChildren, setFolderChildren } from '../../src/library/f
 import { initializeLibraryRoot } from '../../src/library/root-initialization.js';
 import { createVirtualPathReverser } from '../../src/library/options.js';
 import { setupPlaylistDeletion, playlistDeletionId as id } from './playlist-deletion-fixture.js';
+import { fixturePathStyle } from './fixture-state-path.js';
 import { startActualWebDav } from '../storage/helpers/actual-webdav.js';
 
 const root = new URL('./fixtures/playlist-deletion/', import.meta.url);
@@ -113,11 +114,11 @@ for (const name of ['playlists', 'collections']) test(`postgres: managed Playlis
   await assert.rejects(value.playlists.delete(id(1), { user: owner }), { status: 501 });
   assert.deepEqual(await value.fixture.database.rows('BaseItems'), rows); assert.deepEqual(await value.files(), files); assert.deepEqual(value.calls, []);
 });
-test('postgres: managed Playlist junction escape has no file or database side effect', { ...options, skip: options.skip || process.platform !== 'win32' }, async t => {
+test('postgres: managed Playlist directory link escape has no file or database side effect', options, async t => {
   const value = await setup(t), outside = await mkdtemp(path.join(os.tmpdir(), 'playlist-delete-outside-'));
   t.after(async () => { assert.equal(path.dirname(outside), os.tmpdir()); await rm(outside, { recursive: true }); });
   const link = path.join(value.loaded.dataPath, 'playlists', 'Escape');
-  await symlink(outside, link, 'junction');
+  await symlink(outside, link, process.platform === 'win32' ? 'junction' : 'dir');
   await value.fixture.database.update('BaseItems', { Id: id(1) }, { Path: link }); value.item.Path = link;
   const rows = await value.fixture.database.rows('BaseItems');
   await assert.rejects(value.playlists.delete(id(1), { user: owner }), { code: 'permission-denied' });
@@ -193,7 +194,7 @@ test('postgres: Playlist deletion uses actual WebDAV for files, directories and 
       value.fixture.vfs.mount({ path: '/actual-delete', instanceId: 'actual-delete', capabilities: { create: true, replace: true, mkdir: true, delete: true } });
       const directory = '/actual-delete/' + name, remote = directory + '/' + value.sample.filename;
       await value.fixture.vfs.mkdir(directory);
-      value.fixture.identityMap.addPrefix({ identityRoot: value.item.Path, accessRoot: remote, style: 'windows', returnAccess: 'Isolated actual Playlist deletion source.' });
+      value.fixture.identityMap.addPrefix({ identityRoot: value.item.Path, accessRoot: remote, style: fixturePathStyle, returnAccess: 'Isolated actual Playlist deletion source.' });
       if (!value.sample.missing) {
         if (value.sample.directory) { await value.fixture.vfs.mkdir(remote); await value.fixture.vfs.write(remote + '/source.txt', Buffer.from('source')); }
         else await value.fixture.vfs.write(remote, Buffer.from('source'));

@@ -7,7 +7,7 @@ import { PostgresDatabase } from '../../src/database/postgres.js';
 import { DomainStore } from '../../src/database/domain-store.js';
 import { tableDefinition } from '../../src/database/model.js';
 import { DirectoryItemResolverPipeline, folderNativeType } from '../../src/library/directory-item-resolver.js';
-import { createOwnedFolderValidationFixture, ownedRefreshOptions } from '../helpers/owned-folder-validation-fixture.js';
+import { createOwnedFolderValidationFixture, ownedStatePaths, ownedRefreshOptions } from '../helpers/owned-folder-validation-fixture.js';
 import { ItemCreationService } from '../../src/library/item-creation-service.js';
 import { ItemDeletionService } from '../../src/library/item-deletion-service.js';
 import { LinkedChildReferenceService } from '../../src/library/linked-child-reference-service.js';
@@ -82,7 +82,7 @@ async function fixture(t, dialect, versionCount, { manual = true } = {}) {
     Name: 'Movies', ParentId: userRootId, IsFolder: true,
     Data: JSON.stringify({ CollectionType: 'movies', PhysicalFolderIds: [rootId], PhysicalLocationsList: [rootPath] })
   }));
-  library = new LibraryService({fileSystem: testFileSystem,  store, serverId: 'remote-linked-replacement', programDataPath });
+  library = new LibraryService({fileSystem: testFileSystem, ...await ownedStatePaths(t), store, serverId: 'remote-linked-replacement', programDataPath });
   const ignoreRule = await knownAncestorIgnoreRule({ registry, vfs, identityMap, identityRoots: [rootPath] });
   lifecycleFixture = await createResolvedItemLifecycleFixture({ store, library, vfs, identityMap, ignoreRule });
   itemCreation = new ItemCreationService({ store, library, linkedChildren:lifecycleFixture.linkedChildren, loadContext: lifecycleFixture.loadContext });

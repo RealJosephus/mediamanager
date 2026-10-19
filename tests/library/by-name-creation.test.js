@@ -12,6 +12,7 @@ import { createMetadataContextLoader } from '../../src/library/metadata-context.
 import { dateText, guid } from '../../src/library/records.js';
 import { nativeDateFromUnixNanoseconds, nativeGuid } from '../../src/users/native.js';
 import { setupChildrenFixture } from '../metadata/children-fixture.js';
+import { expandStatePath, projectStatePath, projectStateMacroPath } from './fixture-state-path.js';
 
 const identities = { Genre: nativeGenreIdentity, Studio: nativeStudioIdentity };
 const getters = { Genre: 'getGenre', Studio: 'getStudio' };
@@ -20,8 +21,10 @@ const bytes = await readFile(new URL('native.json', fixtureRoot));
 const native = parseLosslessJson(bytes.toString('utf8'));
 const provenance = JSON.parse(await readFile(new URL('provenance.json', fixtureRoot), 'utf8'));
 const columns = tableDefinition('BaseItems').columns;
-const normalize = row => Object.fromEntries(columns.map(column => {
+const normalize = (row, root) => Object.fromEntries(columns.map(column => {
   let value = row[column.name];
+  if (typeof value === 'string') value = projectStatePath(value, root);
+  if (column.name === 'Path') value = projectStateMacroPath(value, root);
   if (value != null && column.clrType.includes('Guid')) value = guid(value);
   if (value != null && column.clrType.includes('DateTime')) value = dateText(value);
   if (typeof value === 'bigint' && Number.isSafeInteger(Number(value))) value = Number(value);
@@ -59,12 +62,13 @@ for (const observation of native.observations) test('postgres: native ' + observ
   configuration.EnableNormalizedItemByNameIds = sample.Normalized;
   const identity = identities[observation.kind](sample.Name, library.options);
   assert.equal(guid(identity.Id), observation.genreId);
-  assert.equal(identity.Path.replace(stateRoot, '$STATE'), observation.genrePath.replace(observation.root, '$STATE'));
+  assert.equal(projectStatePath(identity.Path, stateRoot), projectStatePath(observation.genrePath, observation.root));
   // The recording includes its pre-action constructor rows as independent inputs.
   // Candidate creation runs against those inputs, never against result rows.
   for (const row of observation.initialRows) await database.insert('BaseItems', Object.fromEntries(columns.map(column => {
     let entry = row[column.name];
-    if (typeof entry === 'string') entry = entry.replaceAll(observation.root, stateRoot);
+    if (typeof entry === 'string') entry = expandStatePath(entry, observation.root, stateRoot);
+    if (column.name === 'Path') for (const macro of ['%AppDataPath%', '%MetadataPath%']) entry = expandStatePath(entry, macro, macro);
     if (entry != null && column.clrType.includes('Guid')) entry = nativeGuid(entry);
     return [column.name, entry];
   })));
@@ -98,11 +102,11 @@ for (const observation of native.observations) test('postgres: native ' + observ
     const directoryExists = Boolean(info?.isDirectory()), fileExists = Boolean(info?.isFile());
     assert.equal(directoryExists, reference.directoryExists); assert.equal(fileExists, reference.fileExists);
     const actualReturn = returnProjection(item), expectedReturn = reference.returned && { ...reference.returned,
-      Path: reference.returned.Path.replace(observation.root, '$STATE'),
+      Path: projectStatePath(reference.returned.Path, observation.root),
       DateCreated: dateText(reference.returned.DateCreated), DateModified: dateText(reference.returned.DateModified) };
-    if (actualReturn) actualReturn.Path = actualReturn.Path.replace(stateRoot, '$STATE');
-    const rows = order((await database.rows('BaseItems')).map(normalize));
-    const expectedRows = order(reference.rows.map(normalize));
+    if (actualReturn) actualReturn.Path = projectStatePath(actualReturn.Path, stateRoot);
+    const rows = order((await database.rows('BaseItems')).map(row => normalize(row, stateRoot)));
+    const expectedRows = order(reference.rows.map(row => normalize(row, observation.root)));
     if (directoryExists) {
       const created = dateText(nativeDateFromUnixNanoseconds(info.birthtimeNs)), modified = dateText(nativeDateFromUnixNanoseconds(info.mtimeNs));
       if (actualReturn && sample.Existing !== 'Same') {

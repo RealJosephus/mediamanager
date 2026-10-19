@@ -301,21 +301,15 @@ test('inventory includes shared native evidence verifiers in the selected input 
   assert.ok(conflicts.flatMap(entry => entry.variables).includes('MEDIAMANAGER_CONFLICT_EVIDENCE'));
 
   const syncPlayDate = dependencyClosure(dependencies, ['tests/sessions/syncplay-date-impact-http.test.js']);
-  assert.ok(syncPlayDate.some(entry => entry.path === 'tests/sessions/syncplay-date-impact-inputs.js'));
-  const syncPlayDateFixture = syncPlayDate.flatMap(entry => entry.fixtureReferences)
-    .find(reference => reference.relativePath === ['.', 'fixtures', 'syncplay', 'date-impact-inputs', 'binding.json'].join('/'));
-  assert.ok(syncPlayDateFixture, 'both actual native SyncPlay recordings must be discoverable');
-  const syncPlayDateBinding = JSON.parse(await readFile(syncPlayDateFixture.filename, 'utf8'));
-  assert.equal(syncPlayDateBinding.recordings.length, 2);
-  assert.equal(syncPlayDateBinding.preparationInputFiles.length, 11);
-  for (const recording of syncPlayDateBinding.recordings) {
-    assert.equal(recording.databaseDigestTables.length, 31);
-    assert.match(recording.entriesSha256, /^[a-f0-9]{64}$/u);
-    assert.ok(path.win32.isAbsolute(recording.filename));
+  for (const filename of ['tools/compat/record-syncplay-date-impact.mjs', 'tools/compat/current-native-reference.js',
+    'tools/validation/native-instance-inputs.js', 'tests/sessions/syncplay-date-impact-scenario.js']) {
+    assert.ok(syncPlayDate.some(entry => entry.path === filename), filename);
   }
-  assert.equal(syncPlayDate.flatMap(entry => entry.declaredReferences)
-    .some(reference => reference.required && reference.logicalPath === '.agent-docs/evidence/syncplay-date-impact-native-v1'), false);
-  assert.ok(syncPlayDate.flatMap(entry => entry.variables).includes('MEDIAMANAGER_SYNCPLAY_DATE_EVIDENCE'));
+  assert.equal(syncPlayDate.some(entry => entry.path === 'tests/sessions/syncplay-date-impact-inputs.js'), false,
+    'the current actual comparison must not require historical recordings');
+  for (const variable of ['MEDIAMANAGER_TEST_NATIVE_INSTANCE', 'MEDIAMANAGER_TEST_POSTGRES']) {
+    assert.ok(syncPlayDate.flatMap(entry => entry.variables).includes(variable), variable);
+  }
 
   const itemFilter = dependencyClosure(dependencies, ['tests/library/classification-filter-http.test.js']);
   assert.ok(itemFilter.some(entry => entry.path === 'tests/library/native-item-filter-evidence.js'));

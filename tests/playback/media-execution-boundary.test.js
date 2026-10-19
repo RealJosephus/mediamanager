@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import test from 'node:test';
@@ -15,6 +16,16 @@ const reviewedPluginImports = new Set([
   "import(pathToFileURL(path.join(directory,record.package.manifest.mediamanager.entry)).href+'?activation='+randomUUID())",
   'import(pathToFileURL(path.join(directory,next.package.manifest.mediamanager.entry)).href)',
 ]);
+const reviewedResourceImports = new Map([
+  ['images/system-fonts/index.js', new Set(["import('koffi')", "import('./win32.js')", "import('./darwin.js')", "import('./linux.js')", "import('@napi-rs/canvas')"])],
+  ['images/system-fonts/text.js', new Set(["import('./harfbuzz/index.mjs')"])],
+  ['storage/archive-worker.js', new Set(["import('./resources/archive-codec.mjs')"])],
+]);
+const reviewedWorkerImports = new Map([
+  ['storage/archive-reader.js', ['Worker']],
+  ['storage/archive-worker.js', ['parentPort', 'workerData']],
+]);
+const archiveWorkerConstruction = "newWorker(newURL('./archive-worker.js',import.meta.url),{workerData,trackUnmanagedFds:true})";
 const reviewedResourceReflection = new Map([
   ['plugins/host.js', new Set(['Object.getPrototypeOf(value)', 'Reflect.get(target,key,target)', 'Reflect.getOwnPropertyDescriptor(value,key)'])],
   ['../plugins/local/adapter.js', new Set(['Reflect.get(object,key,object)'])],
@@ -25,6 +36,13 @@ const allowedChildProcessModules = [
   'playback/remux.js',
   'storage/ffprobe.js',
 ];
+// Vendored font and archive WASM resource loaders use Emscripten module/FS
+// bridges. They do not execute external media tools; keep their bytes exact.
+const reviewedGeneratedResources = new Map([
+  ['images/system-fonts/harfbuzz/harfbuzz.js', '074ea18bd5f22e1e1aa7ad000f79a271b935390da9e5be94cc91b5aa55901c78'],
+  ['images/system-fonts/harfbuzz/index.mjs', '04ece1914c8720ad96257728119c1bf24088ee4ef3ab2a2ca688c9a4895d4e7e'],
+  ['storage/resources/archive-codec.mjs', 'ed4e0fd0d4e40c46c0fc2581b41cce7f169a21eff4312e68daf10840f8d600c8'],
+]);
 
 const alternateModules = new Set(['worker_threads', 'cluster', 'vm', 'module', 'process', 'inspector', 'repl']);
 const indirectProperties = new Set([
@@ -89,7 +107,7 @@ export function auditMediaExecutionSource(relative, source) {
   const expression = node => source.slice(node.start, node.end).replace(/\s+/gu, '');
   walkSyntax(syntax, node => {
     if (node.type === 'ImportExpression') assert.equal(relative === 'plugins/host.js'
-      && reviewedPluginImports.has(expression(node)), true,
+      && reviewedPluginImports.has(expression(node)) || reviewedResourceImports.get(relative)?.has(expression(node)) === true, true,
     `${relative} must not use dynamic import outside the reviewed plugin entry loaders`);
   });
   const childProcessImports = [];
@@ -99,7 +117,13 @@ export function auditMediaExecutionSource(relative, source) {
       if (!node.source) return;
       const moduleName = String(node.source.value).replace(/^node:/u, '');
       if (moduleName === 'child_process') childProcessImports.push(node);
-      if (alternateModules.has(moduleName)) assert.fail(`${relative} must not load an alternate execution runtime`);
+      if (alternateModules.has(moduleName)) {
+        const allowed = reviewedWorkerImports.get(relative);
+        assert.equal(moduleName === 'worker_threads' && node.type === 'ImportDeclaration' && Boolean(allowed)
+          && node.specifiers.every(specifier => specifier.type === 'ImportSpecifier'
+            && allowed.includes(specifier.imported.name) && specifier.local.name === specifier.imported.name), true,
+        `${relative} must not load an alternate execution runtime`);
+      }
       if (/^(?:data|file|https?):/u.test(String(node.source.value))
         || /\.(?:node|wasm)(?:[?#]|$)/u.test(String(node.source.value))) {
         assert.fail(`${relative} must not use an indirect execution bridge`);
@@ -173,7 +197,10 @@ export function auditMediaExecutionSource(relative, source) {
         || (node.computed ? staticText(node.key) : node.key?.name || node.key?.value) === 'constructor')) {
       assert.fail(`${relative} must not destructure an indirect execution bridge`);
     }
-    if (node.type === 'Identifier' && indirectIdentifiers.has(node.name)) {
+    const archiveWorkerIdentifier = node.type === 'Identifier' && node.name === 'Worker' && relative === 'storage/archive-reader.js'
+      && (parent?.type === 'ImportSpecifier' || parent?.type === 'NewExpression' && parent.callee === node
+        && expression(parent) === archiveWorkerConstruction);
+    if (node.type === 'Identifier' && indirectIdentifiers.has(node.name) && !archiveWorkerIdentifier) {
       assert.fail(`${relative} must not use an indirect execution bridge`);
     }
     if (node.type === 'Identifier' && node.name === 'spawn'
@@ -210,12 +237,24 @@ test('production process execution stays inside the audited probe and packet-cop
   for (const filename of (await Promise.all(productionRoots.map(sourceFiles))).flat()) {
     const relative = path.relative(sourceRoot, filename).replaceAll('\\', '/');
     const source = await readFile(filename, 'utf8');
+    if (reviewedGeneratedResources.has(relative)) {
+      assert.equal(createHash('sha256').update(await readFile(filename)).digest('hex'), reviewedGeneratedResources.get(relative));
+      continue;
+    }
     if (auditMediaExecutionSource(relative, source)) processModules.push(relative);
   }
   assert.deepEqual(processModules.sort(), allowedChildProcessModules);
 });
 
 test('plugin entry and resource exceptions remain limited to their reviewed expressions', () => {
+  const workerImport = "import { Worker } from 'node:worker_threads';";
+  assert.equal(auditMediaExecutionSource('storage/archive-reader.js', workerImport + archiveWorkerConstruction.replace('newWorker', 'new Worker').replace('newURL', 'new URL')), false);
+  assert.throws(() => auditMediaExecutionSource('storage/archive-reader.js', workerImport + 'new Worker(entry);'), /indirect execution bridge/u);
+  assert.throws(() => auditMediaExecutionSource('storage/archive-reader.js', workerImport + 'const other = Worker;'), /indirect execution bridge/u);
+  for (const relative of reviewedResourceImports.keys()) {
+    assert.throws(() => auditMediaExecutionSource(relative, "await import('node:child_process');"), /dynamic import/u);
+    assert.throws(() => auditMediaExecutionSource(relative, 'await import(entry);'), /dynamic import/u);
+  }
   for (const expression of reviewedPluginImports) {
     assert.equal(auditMediaExecutionSource('plugins/host.js', expression + ';'), false);
     assert.throws(() => auditMediaExecutionSource('../plugins/local/adapter.js', expression + ';'), /dynamic import/u);

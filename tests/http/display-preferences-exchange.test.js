@@ -17,10 +17,10 @@ const dto = value => ({ ...value, ViewType: value.ViewType ?? null, IndexBy: val
   ScrollDirection: { Horizontal: 0, Vertical: 1 }[value.ScrollDirection] ?? value.ScrollDirection,
   SortOrder: { Ascending: 0, Descending: 1 }[value.SortOrder] ?? value.SortOrder });
 test('postgres: display preference API writes export to real native EF/controller consumption and native edits reimport losslessly', {
-  skip: !postgresTestConnectionString || !process.env.MEDIAMANAGER_TEST_NATIVE_SQLITE || !process.env.MEDIAMANAGER_JELLYFIN_DLL
+  skip: !postgresTestConnectionString || !process.env.MEDIAMANAGER_TEST_CURRENT_NATIVE_SQLITE || !process.env.MEDIAMANAGER_JELLYFIN_DLL
 }, async t => {
   const output = path.resolve(validationOutputRoot()), root = path.join(output, 'display-preferences-exchange'); await fs.mkdir(root, { recursive: false });
-  const sourceBytes = await fs.readFile(process.env.MEDIAMANAGER_TEST_NATIVE_SQLITE);
+  const sourceBytes = await fs.readFile(process.env.MEDIAMANAGER_TEST_CURRENT_NATIVE_SQLITE);
   const sourceHash = hash(sourceBytes), sourcePath = path.join(root, 'source.db'); await fs.writeFile(sourcePath, sourceBytes, { flag: 'wx' });
   let source, returned, database, reimported, runtime;
   t.after(async () => {
@@ -65,7 +65,7 @@ test('postgres: display preference API writes export to real native EF/controlle
     assert.equal(after.SortBy, 'Name'); assert.equal(after.CustomPrefs.get('foo'), 'native\0write');
     assert.equal(after.CustomPrefs.get('homesection0'), 'librarybuttons'); assert.equal(after.CustomPrefs.get('homesection4'), 'latestmedia');
   } finally { await importedRuntime.close(); }
-  assert.equal(hash(await fs.readFile(process.env.MEDIAMANAGER_TEST_NATIVE_SQLITE)), sourceHash);
+  assert.equal(hash(await fs.readFile(process.env.MEDIAMANAGER_TEST_CURRENT_NATIVE_SQLITE)), sourceHash);
   await fs.writeFile(path.join(root, 'proof.json'), JSON.stringify({ sourceHash, exportedSha256, exportResult, nativeRecording: recording,
     allTablesRoundTrip: true, actualNativeReadAndWrite: true, fullInstanceVerified: false, completeBuildInputClosure: false, phaseAcceptance: false },
     (_key, value) => typeof value === 'bigint' ? JSON.rawJSON(value.toString()) : value, 2) + '\n');

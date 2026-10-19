@@ -1,4 +1,5 @@
 import test from 'node:test';
+import { projectStatePath } from '../library/fixture-state-path.js';
 import assert from 'node:assert/strict';
 import { readFile, mkdir, writeFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
@@ -33,10 +34,12 @@ async function fixtureFor(name, count, flag) {
 }
 const identity = (value, stateRoot) => value?.replaceAll('$STATE', stateRoot);
 const project = (value, stateRoot) => value?.replaceAll(stateRoot, '$STATE');
+const canonicalLocations = new Map();
+const projectLocation = (value, root) => canonicalLocations.get(root)?.has(value) ? projectStatePath(value, root) : project(value, root);
 function stateProjection(item, stateRoot) {
   return { Name: item.Name, Path: project(item.Path, stateRoot), refreshFlag: internalFolderRefreshFlag(item),
     cacheCleared: ['AggregateFolder', 'UserRootFolder'].includes(item.Type) ? folderChildIds(item) == null : null,
-    locations: ['AggregateFolder', 'CollectionFolder'].includes(item.Type) ? item.PhysicalLocationsList.map(value => project(value, stateRoot)) : null,
+    locations: ['AggregateFolder', 'CollectionFolder'].includes(item.Type) ? item.PhysicalLocationsList.map(value => projectLocation(value, stateRoot)) : null,
     physicalIds: item.Type === 'CollectionFolder' ? item.PhysicalFolderIds : null };
 }
 async function seedSample(fixture, sample) {
@@ -48,6 +51,7 @@ async function seedSample(fixture, sample) {
     const target = path.join(itemPath, relative); await mkdir(path.dirname(target), { recursive: true }); await writeFile(target, identity(value, fixture.stateRoot));
   }
   const lists = sample.useResolvedLocations ? [nativeDirectoryFullName(itemPath)] : (sample.locations ?? []).map(value => identity(value, fixture.stateRoot));
+  canonicalLocations.set(fixture.stateRoot, new Set(sample.useResolvedLocations ? lists : []));
   const fields = ['AggregateFolder', 'CollectionFolder'].includes(sample.type) ? { PhysicalLocationsList: lists } : {};
   if (sample.type === 'CollectionFolder') fields.PhysicalFolderIds = sample.physicalIds ?? [];
   await fixture.seed({ target: 'target', items: [{ key: 'target', type: sample.type, Id: id, Name: sample.itemName, Path: itemPath,
@@ -61,7 +65,7 @@ const full = await fixtureFor('internal-folder-service', 53, 'actualFrozenIntern
 function dataProjection(data, stateRoot) {
   if (data == null) return null;
   const value = parseLosslessJson(data);
-  return { locations: value.PhysicalLocationsList?.map(location => project(location, stateRoot)) ?? null,
+  return { locations: value.PhysicalLocationsList?.map(location => projectLocation(location, stateRoot)) ?? null,
     physicalIds: value.PhysicalFolderIds?.map(idKey) ?? null };
 }
 test('service projection rejects extra structural location writes or missing first save', () => {

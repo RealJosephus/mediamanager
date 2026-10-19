@@ -79,7 +79,7 @@ async function seed(database) {
       ParentId: ids.userRoot, Data: JSON.stringify({ CollectionType: 'music', PhysicalFolderIds: [ids.otherPhysical] }),
     }),
     row(ids.playlists, 'PlaylistsFolder', 'Playlists', {
-      ParentId: ids.aggregate, TopParentId: ids.playlists, Path: '%AppDataPath%\\playlists', Data: JSON.stringify({ CollectionType: 'playlists' }),
+      ParentId: ids.aggregate, TopParentId: ids.playlists, Path: '%AppDataPath%' + path.sep + 'playlists', Data: JSON.stringify({ CollectionType: 'playlists' }),
     }),
     row(ids.physical, 'Folder', 'Physical music', { ParentId: ids.aggregate, TopParentId: ids.physical }),
     row(ids.otherPhysical, 'Folder', 'Other physical music', { ParentId: ids.aggregate, TopParentId: ids.otherPhysical }),

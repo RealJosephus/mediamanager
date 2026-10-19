@@ -1,9 +1,10 @@
 import { validationExecutable, validationOutputRoot, validationPath } from '../validation/paths.js';
-import { captureFilterReferencePreparation } from './filter-reference-inputs.mjs';
+import { currentNativeReference } from './current-native-reference.js';
+import { createPrivateFilterOutput } from './filter-reference-output.js';
 import assert from 'node:assert/strict';
-import { spawn, spawnSync } from 'node:child_process';
+import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { closeSync, existsSync, openSync } from 'node:fs';
+import { existsSync } from 'node:fs';
 import { cp, mkdir, readFile, readdir, stat, writeFile } from 'node:fs/promises';
 import { createServer } from 'node:net';
 import path from 'node:path';
@@ -11,26 +12,35 @@ import { DatabaseSync } from 'node:sqlite';
 import { fileURLToPath } from 'node:url';
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
-const [outputArgument, portArgument, modeArgument = 'main'] = process.argv.slice(2);
+export async function recordGenreFilters(outputArgument, portArgument, modeArgument = 'main') {
 const modes = new Set(['main', 'discover']);
 if (!outputArgument || !portArgument || !modes.has(modeArgument)) {
   throw new Error('Usage: node tools/compat/record-genre-filters.js <new-evidence-directory> <preferred-loopback-port> [main|discover]');
 }
 
-const outputRoot = validationPath(path.resolve(repoRoot, outputArgument));
+const publicOutputRoot = validationPath(path.resolve(repoRoot, outputArgument));
 const allowedRoot = validationOutputRoot();
-if (outputRoot === allowedRoot || !outputRoot.startsWith(allowedRoot + path.sep)) {
+if (publicOutputRoot === allowedRoot || !publicOutputRoot.startsWith(allowedRoot + path.sep)) {
   throw new Error('The evidence directory must be a new child of the configured validation output root.');
 }
-if (existsSync(outputRoot)) throw new Error(`Evidence directory already exists: ${outputRoot}`);
+if (existsSync(publicOutputRoot)) throw new Error(`Evidence directory already exists: ${publicOutputRoot}`);
 
 const preferredPort = Number(portArgument);
 if (!Number.isInteger(preferredPort) || preferredPort < 1024 || preferredPort > 65535) {
   throw new Error('The preferred loopback port must be an integer from 1024 through 65535.');
 }
 
-const sourceRoot = validationPath(path.join(repoRoot, '.agent-docs/evidence/core-flow-20260926/reference'));
-const sourceDatabase = validationPath(path.join(repoRoot, '.agent-docs/evidence/core-flow-20260926/initial.db'));
+const privateOutput = await createPrivateFilterOutput(publicOutputRoot);
+const outputRoot = privateOutput.root;
+let failure;
+try {
+const fixtureInputPath = fileURLToPath(new URL('../../tests/library/fixtures/current-byname-filters/genre-input.json', import.meta.url));
+const fixture = JSON.parse(await readFile(fixtureInputPath, 'utf8'));
+const fixtureUserId = fixture.userId;
+const current = await currentNativeReference({ fixtureUserId });
+privateOutput.addSecret(current.accessToken);
+fixture.userId = current.userId;
+const { sourceRoot, sourceDatabase, runtimeRoot, jellyfinDll } = current;
 const referenceRoot = path.join(outputRoot, 'reference');
 const databasePath = path.join(referenceRoot, 'data/data/jellyfin.db');
 const filesystemDomainPaths = {
@@ -39,17 +49,11 @@ const filesystemDomainPaths = {
   physicalLibrary: path.join(referenceRoot, 'library-content/Genre Filter Physical Root')
 };
 const physicalAnchorPath = path.join(filesystemDomainPaths.physicalLibrary, 'Native Anchor');
-const fixtureInputPath = validationPath(path.join(repoRoot, 'tests/library/fixtures/genre-filters/input.json'));
 const recorderPath = fileURLToPath(import.meta.url);
-const dotnetPath = validationExecutable('dotnet');
-const frozenSourceRoot = validationPath(path.join(repoRoot, '.agent-docs/baselines/jellyfin-current/source'));
-const runtimeRoot = path.join(frozenSourceRoot, 'Jellyfin.Server/bin/Release/net10.0');
-const jellyfinDll = path.join(runtimeRoot, 'jellyfin.dll');
+const dotnetPath = validationExecutable('dotnet', { ...process.env, MEDIAMANAGER_DOTNET: current.dotnet });
 const libraryName = 'Genre Filter Library';
 const deviceId = 'genre-filter-native-oracle';
-const password = 'isolated-core-flow-password';
 const apiKeyToken = 'genrefilterapikey000000000000000';
-const fixture = JSON.parse(await readFile(fixtureInputPath, 'utf8'));
 const itemByKey = new Map(fixture.items.map(item => [item.key, item]));
 const valueByKey = new Map(fixture.itemValues.map(value => [value.key, value]));
 const keyById = new Map(fixture.items.map(item => [String(item.id).replaceAll('-', '').toLowerCase(), item.key]));
@@ -148,6 +152,7 @@ const portInitiallyAvailable = await available(port);
 assert.equal(portInitiallyAvailable, true, `Selected port ${port} is already in use.`);
 const origin = `http://127.0.0.1:${port}`;
 
+let sourceTemplates;
 async function prepareReference() {
   await mkdir(outputRoot);
   await cp(sourceRoot, referenceRoot, {
@@ -163,17 +168,14 @@ async function prepareReference() {
   await mkdir(physicalAnchorPath, { recursive: true });
   await cp(sourceDatabase, databasePath, { force: false, errorOnExist: true });
 
-  const sourceForms = [sourceRoot, sourceRoot.replaceAll('\\', '/'), sourceRoot.replaceAll('\\', '\\\\')];
-  for (const file of await walk(referenceRoot)) {
-    if (!/\.(?:json|xml)$/u.test(file)) continue;
-    let text = await readFile(file, 'utf8');
-    for (const source of sourceForms) text = text.replaceAll(source, referenceRoot);
-    if (path.basename(file).toLowerCase() === 'network.xml') {
-      text = text.replace(/<(InternalHttpPort|PublicHttpPort)>\d+<\/\1>/gu, (_match, name) => `<${name}>${port}</${name}>`);
-      text = text.replace(/<AutoDiscovery>true<\/AutoDiscovery>/gu, '<AutoDiscovery>false</AutoDiscovery>');
-    }
-    await writeFile(file, text, { flag: 'w' });
-  }
+  await current.prepareClone(referenceRoot, port);
+  const templateDatabase = new DatabaseSync(databasePath, { readOnly: true });
+  try {
+    sourceTemplates = {
+      folderTemplate: templateDatabase.prepare('SELECT * FROM "BaseItems" WHERE "Id" = ?').get('11111111-1111-1111-1111-111111111111'),
+      movieTemplate: templateDatabase.prepare('SELECT * FROM "BaseItems" WHERE "Id" = ?').get('22222222-2222-2222-2222-222222222222'),
+    };
+  } finally { templateDatabase.close(); }
 }
 
 const quoteSqlIdentifier = value => `"${String(value).replaceAll('"', '""')}"`;
@@ -221,13 +223,11 @@ function assertSeedIdentifiersAbsent() {
 
 function seedDatabase() {
   const database = new DatabaseSync(databasePath);
-  const templateDatabase = new DatabaseSync(sourceDatabase, { readOnly: true });
   try {
-    const folderTemplate = templateDatabase.prepare('SELECT * FROM "BaseItems" WHERE "Id" = ?').get('11111111-1111-1111-1111-111111111111');
-    const movieTemplate = templateDatabase.prepare('SELECT * FROM "BaseItems" WHERE "Id" = ?').get('22222222-2222-2222-2222-222222222222');
+    const { folderTemplate, movieTemplate } = sourceTemplates;
     const aggregate = database.prepare(`SELECT "Id" FROM "BaseItems"
       WHERE "Type" = 'MediaBrowser.Controller.Entities.AggregateFolder' LIMIT 1`).get();
-    assert.ok(folderTemplate && movieTemplate && aggregate, 'The frozen core-flow templates are required.');
+    assert.ok(folderTemplate && movieTemplate && aggregate, 'The current controlled media templates are required.');
     const typeNames = {
       Folder: 'MediaBrowser.Controller.Entities.Folder',
       Genre: 'MediaBrowser.Controller.Entities.Genre',
@@ -315,7 +315,6 @@ function seedDatabase() {
       throw error;
     }
   } finally {
-    templateDatabase.close();
     database.close();
   }
 }
@@ -330,48 +329,14 @@ const processArguments = [
   '--configdir', path.join(referenceRoot, 'config'),
   '--cachedir', path.join(referenceRoot, 'cache'),
   '--logdir', path.join(referenceRoot, 'log'),
-  '--nowebclient'
+  '--nowebclient', '--ffmpeg', current.ffmpeg
 ];
 
 function startReference(label) {
-  const stdoutPath = path.join(outputRoot, `${label}-stdout.log`);
-  const stderrPath = path.join(outputRoot, `${label}-stderr.log`);
-  const stdoutDescriptor = openSync(stdoutPath, 'wx');
-  const stderrDescriptor = openSync(stderrPath, 'wx');
-  const child = spawn(dotnetPath, processArguments, {
-    cwd: repoRoot,
-    windowsHide: true,
-    stdio: ['ignore', stdoutDescriptor, stderrDescriptor]
-  });
-  let spawnError;
-  const completion = new Promise(resolve => {
-    child.once('error', error => {
-      spawnError = error;
-      resolve({ code: null, signal: null, error: { name: error.name, message: error.message } });
-    });
-    child.once('exit', (code, signal) => resolve({ code, signal }));
-  });
-  return { label, child, completion, get spawnError() { return spawnError; }, stdoutDescriptor, stderrDescriptor };
+  return current.start({ referenceRoot, outputRoot, label, origin });
 }
 
-async function waitForReady(instance) {
-  let consecutiveSuccesses = 0;
-  for (let attempt = 0; attempt < 90; attempt++) {
-    if (instance.spawnError) throw instance.spawnError;
-    if (instance.child.exitCode !== null) {
-      throw new Error(`${instance.label} reference exited before readiness with code ${instance.child.exitCode}.`);
-    }
-    try {
-      const response = await fetch(`${origin}/System/Info/Public`, { signal: AbortSignal.timeout(1_000) });
-      consecutiveSuccesses = response.ok ? consecutiveSuccesses + 1 : 0;
-      if (consecutiveSuccesses >= 3) return;
-    } catch {
-      consecutiveSuccesses = 0;
-    }
-    await delay(500);
-  }
-  throw new Error(`${instance.label} reference did not become ready within 45 seconds.`);
-}
+async function waitForReady(instance) { await instance.ready(); }
 
 async function request(records, name, route, { method = 'GET', token, body } = {}) {
   const headers = { Accept: 'application/json', Authorization: authorization(token) };
@@ -408,79 +373,10 @@ async function request(records, name, route, { method = 'GET', token, body } = {
   return result;
 }
 
-function processIsGone(pid) {
-  if (!Number.isInteger(pid) || pid <= 0) return true;
-  try {
-    process.kill(pid, 0);
-    return false;
-  } catch (error) {
-    return error?.code === 'ESRCH';
-  }
-}
-
 async function stopReference(instance, token, records) {
-  const lifecycle = [];
-  let cleanShutdown = false;
-  let stopError;
-  let result;
-  if (instance.child.exitCode === null && token) {
-    try {
-      const shutdown = await request(records, `${instance.label}-authenticated-shutdown`, '/System/Shutdown', {
-        method: 'POST', token
-      });
-      cleanShutdown = shutdown.status === 204;
-    } catch (error) {
-      stopError = error;
-    }
-  }
-  if (instance.child.exitCode === null) {
-    result = await Promise.race([instance.completion, delay(20_000).then(() => null)]);
-    lifecycle.push({ action: 'wait-after-shutdown', timeoutMilliseconds: 20_000, completed: result !== null });
-    if (result === null) {
-      const accepted = instance.child.kill();
-      lifecycle.push({ action: 'child-kill', accepted });
-      result = await Promise.race([instance.completion, delay(10_000).then(() => null)]);
-      lifecycle.push({ action: 'wait-after-child-kill', timeoutMilliseconds: 10_000, completed: result !== null });
-    }
-    if (result === null && instance.child.pid) {
-      const forced = spawnSync('taskkill', ['/PID', String(instance.child.pid), '/T', '/F'], {
-        cwd: repoRoot,
-        encoding: 'utf8',
-        windowsHide: true,
-        timeout: 10_000
-      });
-      lifecycle.push({
-        action: 'taskkill-exact-process-tree',
-        pid: instance.child.pid,
-        exitCode: forced.status,
-        signal: forced.signal,
-        stdout: forced.stdout,
-        stderr: forced.stderr,
-        error: forced.error ? { name: forced.error.name, message: forced.error.message } : null
-      });
-      result = await Promise.race([instance.completion, delay(10_000).then(() => null)]);
-      lifecycle.push({ action: 'wait-after-taskkill', timeoutMilliseconds: 10_000, completed: result !== null });
-    }
-  } else {
-    result = await instance.completion;
-  }
-  result ??= { code: null, signal: null, timedOut: true };
-  for (const descriptor of [instance.stdoutDescriptor, instance.stderrDescriptor]) {
-    try {
-      closeSync(descriptor);
-    } catch (error) {
-      stopError ??= error;
-    }
-  }
-  return {
-    pid: instance.child.pid,
-    ...result,
-    cleanShutdown,
-    lifecycle,
-    portAvailable: await available(port),
-    pidGone: processIsGone(instance.child.pid),
-    error: stopError ? { name: stopError.name, message: stopError.message } : null
-  };
+  return await instance.stop(async () => (await request(records,
+    `${instance.label}-authenticated-shutdown`, '/System/Shutdown', { method: 'POST', token })).status,
+  () => available(port));
 }
 
 function resolveNativeGraph(virtualFolders) {
@@ -590,7 +486,7 @@ function routeFor(endpoint, testCase) {
     'Fields=ParentId',
     'EnableImages=false',
     'EnableUserData=false',
-    testCase.query
+    testCase.query.replaceAll(fixtureUserId, fixture.userId)
   ];
   const prefix = endpoint === 'items' ? '/Items' : `/Users/${fixture.userId}/Items`;
   return `${prefix}?${parts.filter(Boolean).join('&')}`;
@@ -1086,24 +982,21 @@ const sourcePaths = [
   'src/Jellyfin.Extensions/StringExtensions.cs'
 ];
 
-// Capture oracle inputs before launching the frozen native process.
+// Capture oracle inputs before launching the current native process.
 const capturedInputs = {
-  referencePreparation: await captureFilterReferencePreparation({ sourceRoot, sourceDatabase, repoRoot, fixtureUserId: fixture.userId }),
+  referencePreparation: current.preparation,
   fixtureInputSha256: await sha256(fixtureInputPath),
   recorderSha256: await sha256(recorderPath),
   sourceDatabaseSha256: await sha256(sourceDatabase),
   runtimeManifest: await fileManifest(runtimeRoot),
   sourceConfigManifest: await treeSnapshot(path.join(sourceRoot, 'config')),
-  nativeSources: await Promise.all(sourcePaths.map(async relative => {
-    const file = path.join(frozenSourceRoot, relative);
-    return { path: path.relative(repoRoot, file).replaceAll('\\', '/'), sha256: await sha256(file) };
-  }))
+  nativeSources: await current.sourceBindings(sourcePaths)
 };
 capturedInputs.sourceConfigManifest.entriesSha256 = sha256Text(JSON.stringify(capturedInputs.sourceConfigManifest.entries));
-assert.ok(capturedInputs.runtimeManifest.fileCount >= 153, 'The complete frozen Release runtime must be manifested.');
-assert.ok(capturedInputs.runtimeManifest.dllCount > 0, 'The frozen runtime manifest must contain DLLs.');
-assert.ok(capturedInputs.runtimeManifest.depsJsonCount > 0, 'The frozen runtime manifest must contain deps.json.');
-assert.ok(capturedInputs.runtimeManifest.runtimeConfigCount > 0, 'The frozen runtime manifest must contain runtimeconfig.json.');
+assert.ok(capturedInputs.runtimeManifest.fileCount > 0, 'The complete current Release runtime must be manifested.');
+assert.ok(capturedInputs.runtimeManifest.dllCount > 0, 'The current runtime manifest must contain DLLs.');
+assert.ok(capturedInputs.runtimeManifest.depsJsonCount > 0, 'The current runtime manifest must contain deps.json.');
+assert.ok(capturedInputs.runtimeManifest.runtimeConfigCount > 0, 'The current runtime manifest must contain runtimeconfig.json.');
 
 await assert.rejects(stat(outputRoot), error => error?.code === 'ENOENT');
 await prepareReference();
@@ -1112,6 +1005,7 @@ capturedInputs.preparedConfigManifest.entriesSha256 = sha256Text(JSON.stringify(
 await writeFile(path.join(outputRoot, 'reference-runtime-manifest.json'), json(capturedInputs.runtimeManifest), { flag: 'wx' });
 await writeFile(path.join(outputRoot, 'source-config-manifest.json'), json(capturedInputs.sourceConfigManifest), { flag: 'wx' });
 await writeFile(path.join(outputRoot, 'prepared-config-manifest.json'), json(capturedInputs.preparedConfigManifest), { flag: 'wx' });
+await writeFile(path.join(outputRoot, 'current-profile.json'), json(current.preparation), { flag: 'wx' });
 
 const setupRecords = [];
 const records = [];
@@ -1131,13 +1025,12 @@ assert.deepEqual(databaseStages.beforeProvision.foreignKeyCheck, []);
 try {
   setupInstance = startReference('setup-reference');
   await waitForReady(setupInstance);
-  const login = await request(setupRecords, 'setup-login-admin', '/Users/AuthenticateByName', {
-    method: 'POST',
-    body: { Username: 'CoreFlowAdmin', Pw: password }
+  const login = await request(setupRecords, 'setup-login-admin', '/Users/Me', {
+    token: current.accessToken
   });
-  assert.equal(login.status, 200, 'The frozen admin login should succeed during setup.');
-  setupToken = login.bodyJson.AccessToken;
-  assert.equal(idKey(login.bodyJson.User.Id), idKey(fixture.userId));
+  assert.equal(login.status, 200, 'The current initialized admin session should succeed during setup.');
+  setupToken = current.accessToken;
+  assert.equal(idKey(login.bodyJson.Id), idKey(fixture.userId));
   const addRoute = `/Library/VirtualFolders?name=${encodeURIComponent(libraryName)}`
     + `&collectionType=movies&paths=${encodeURIComponent(filesystemDomainPaths.physicalLibrary)}&refreshLibrary=false`;
   const add = await request(setupRecords, 'setup-create-virtual-folder', addRoute, {
@@ -1184,13 +1077,12 @@ if (!scenarioError) {
   try {
     recordingInstance = startReference('reference');
     await waitForReady(recordingInstance);
-    const login = await request(records, 'recording-login-admin', '/Users/AuthenticateByName', {
-      method: 'POST',
-      body: { Username: 'CoreFlowAdmin', Pw: password }
+    const login = await request(records, 'recording-login-admin', '/Users/Me', {
+      token: current.accessToken
     });
-    assert.equal(login.status, 200, 'The frozen admin login should succeed for recording.');
-    accessToken = login.bodyJson.AccessToken;
-    assert.equal(idKey(login.bodyJson.User.Id), idKey(fixture.userId));
+    assert.equal(login.status, 200, 'The current initialized admin session should succeed for recording.');
+    accessToken = current.accessToken;
+    assert.equal(idKey(login.bodyJson.Id), idKey(fixture.userId));
     await delay(500);
     databaseStages.beforeReads = databaseSnapshot();
     filesystemStages.beforeReads = await filesystemDomainSnapshot();
@@ -1379,6 +1271,7 @@ await writeFile(path.join(outputRoot, 'native-contract.json'), json({
 await writeFile(path.join(outputRoot, 'summary.json'), json(summary), { flag: 'wx' });
 
 const artifactNames = [
+  'current-profile.json',
   'setup-http.json', 'native-http.json', 'native-setup.json', 'database-stages.json', 'filesystem-stages.json',
   'native-contract.json', 'summary.json', 'reference-runtime-manifest.json', 'source-config-manifest.json',
   'prepared-config-manifest.json', 'setup-reference-stdout.log', 'setup-reference-stderr.log',
@@ -1389,13 +1282,14 @@ for (const name of artifactNames) {
   const file = path.join(outputRoot, name);
   if (existsSync(file)) artifacts.push({ path: name, sha256: await sha256(file) });
 }
+await current.finish();
 const gitHead = spawnSync('git', ['rev-parse', 'HEAD'], { cwd: repoRoot, encoding: 'utf8', windowsHide: true });
 const dotnetInfo = spawnSync(dotnetPath, ['--info'], { cwd: repoRoot, encoding: 'utf8', windowsHide: true });
 await writeFile(path.join(outputRoot, 'provenance.json'), json({
   schemaVersion: 1,
   recordedAt: new Date().toISOString(),
   gitHead: gitHead.status === 0 ? gitHead.stdout.trim() : null,
-  scenario: 'Frozen Jellyfin HTTP Genres/GenreIds oracle across delimiter binders, invalid and empty GUIDs, selector type and name/clean-name resolution, repository versus memory filtering, predicate short-circuiting, AND/OR composition, and user-token versus API-key routes.',
+  scenario: 'Current designated Jellyfin HTTP Genres/GenreIds oracle across delimiter binders, invalid and empty GUIDs, selector type and name/clean-name resolution, repository versus memory filtering, predicate short-circuiting, AND/OR composition, and user-token versus API-key routes.',
   isolation: {
     sourceInstance: path.relative(repoRoot, sourceRoot).replaceAll('\\', '/'),
     sourceDatabase: path.relative(repoRoot, sourceDatabase).replaceAll('\\', '/'),
@@ -1409,7 +1303,7 @@ await writeFile(path.join(outputRoot, 'provenance.json'), json({
     selectedPort: port,
     portInitiallyAvailable,
     portFinallyAvailable,
-    frozenInputsWereNotRunInPlace: true,
+    sourceInputsWereNotRunInPlace: true,
     syntheticCredentialsAndTokensOnly: true
   },
   recorderInvocation: [
@@ -1438,14 +1332,14 @@ await writeFile(path.join(outputRoot, 'provenance.json'), json({
   },
   preparedInputs: [
     ...capturedInputs.referencePreparation.inputs,
-    { kind: 'frozenSourceDatabase', path: path.relative(repoRoot, sourceDatabase).replaceAll('\\', '/'), sha256: capturedInputs.sourceDatabaseSha256 },
+    { kind: 'currentSourceDatabase', path: path.relative(repoRoot, sourceDatabase).replaceAll('\\', '/'), sha256: capturedInputs.sourceDatabaseSha256 },
     { kind: 'fixtureInput', path: path.relative(repoRoot, fixtureInputPath).replaceAll('\\', '/'), sha256: capturedInputs.fixtureInputSha256 },
     { kind: 'recorderSource', path: path.relative(repoRoot, recorderPath).replaceAll('\\', '/'), sha256: capturedInputs.recorderSha256 },
     {
-      kind: 'frozenReleaseRuntimeTree', path: capturedInputs.runtimeManifest.root,
+      kind: 'currentReleaseRuntimeTree', path: capturedInputs.runtimeManifest.root,
       fileCount: capturedInputs.runtimeManifest.fileCount, entriesSha256: capturedInputs.runtimeManifest.entriesSha256
     },
-    ...capturedInputs.nativeSources.map(source => ({ kind: 'frozenNativeSource', ...source }))
+    ...capturedInputs.nativeSources.map(source => ({ kind: 'currentNativeSource', ...source }))
   ],
   result: {
     passed: summary.passed,
@@ -1463,8 +1357,18 @@ await writeFile(path.join(outputRoot, 'provenance.json'), json({
   artifacts
 }), { flag: 'wx' });
 
-console.log(json({ outputRoot, summary, contract: path.join(outputRoot, 'native-contract.json') }).trim());
+console.log(json({ outputRoot: publicOutputRoot, passed: summary.passed, contractsRecorded: summary.contractsRecorded }).trim());
 if (scenarioError) throw scenarioError;
-if (!summary.passed) throw new Error(`The isolated frozen reference did not complete cleanly: ${JSON.stringify(summary.process)}`);
+if (!summary.passed) throw new Error(`The isolated current reference did not complete cleanly: ${JSON.stringify(summary.process)}`);
 
 
+
+return { outputRoot: publicOutputRoot, summary };
+} catch (error) { failure = error; }
+finally { await privateOutput.publishAndClose(); }
+throw privateOutput.publicError(failure);
+}
+
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  await recordGenreFilters(...process.argv.slice(2));
+}

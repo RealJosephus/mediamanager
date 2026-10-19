@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { setTimeout as delay } from 'node:timers/promises';
 import { MetadataRefreshHost } from '../../src/metadata/refresh-host.js';
+import { newNativeItemEntity } from '../../src/library/native-item-entity.js';
 import native from './fixtures/refresh-queue/native.json' with { type: 'json' };
 
 const inputs = {
@@ -75,7 +76,15 @@ test('shutdown drains admitted configuration refreshes while preserving explicit
     await assert.rejects(host.refresh('ordinary'), { name: 'AbortError' });
     await assert.rejects(admission.run(ordinaryRefresh), { name: 'AbortError' });
     await assert.rejects(refresh(Object.freeze({})), error => error === reachedContext);
-    await assert.rejects(refresh({ signal: AbortSignal.abort() }), { name: 'AbortError' });
+    // A caller token is observed at the provider boundary, after loading and
+    // owned-file maintenance. Supply a real non-owned entity to reach it.
+    const item = newNativeItemEntity('MediaBrowser.Controller.Entities.Person');
+    item.Id = '6e7cc5e2-80a1-4b66-bfd5-d9356d7e2918';
+    let disposed = false;
+    host.loadContext = async () => ({ item, async dispose() { disposed = true; } });
+    const reason = new DOMException('Explicit configuration cancellation.', 'AbortError');
+    await assert.rejects(refresh({ signal: AbortSignal.abort(reason) }), error => error === reason);
+    assert.equal(disposed, true);
   } finally { admission.release(); await closing; }
   await assert.rejects(refresh(), { name: 'AbortError' });
   assert.throws(() => host.admitShutdownDrain(), { name: 'AbortError' });

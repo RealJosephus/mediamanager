@@ -1,3 +1,4 @@
+import { createPlaybackState } from './runtime-state.js';
 import { validationExecutable } from '../../tools/validation/paths.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -45,11 +46,12 @@ test('native progressive remux HTTP, packet hashes, multi-version access and can
   fixture.identityMap.addPrefix({ identityRoot: 'Z:\\Remux', accessRoot: '/', style: 'windows', returnAccess: 'Isolated HTTP fixture.' });
   const directory = await mkdtemp(path.join(tmpdir(), 'mediamanager-remux-'));
   const processes = [];
+  const state = await createPlaybackState();
   let database, runtime;
   try {
     database = await PostgresDatabase.open({ connectionString: process.env.MEDIAMANAGER_TEST_POSTGRES, schema, create: true });
     await seed(database);
-    runtime = await createRuntime({ database, configuration: { UICulture: 'en-US', IsStartupWizardCompleted: true }, serverId: library.serverId, programDataPath: library.programDataPath,
+    runtime = await createRuntime({ database, configuration: { UICulture: 'en-US', IsStartupWizardCompleted: true }, serverId: library.serverId, programDataPath: state.root,
       vfs: fixture.vfs, identityMap: fixture.identityMap, remuxOptions: { onProcess: entry => processes.push(entry.args), maxConcurrentRemuxes: 1 }, onError: () => {} });
     const user = await runtime.users.createUser({ Name: 'RemuxReader', Password: 'isolated-remux-password' });
     const policy = { ...library.user.Policy, EnableAudioPlaybackTranscoding: false, EnableVideoPlaybackTranscoding: false, EnablePlaybackRemuxing: true };
@@ -154,7 +156,7 @@ test('native progressive remux HTTP, packet hashes, multi-version access and can
   } finally {
     if (database) { await database.client.query(`DROP SCHEMA "${schema}" CASCADE`); await database.client.query(`DROP SCHEMA "${schema}__mm" CASCADE`); }
     if (runtime) await runtime.close(); else await database?.close();
-    await fixture.close();
+    await fixture.close(); await state.close();
     assert.equal(path.dirname(path.resolve(directory)), path.resolve(tmpdir()));
     assert.ok(path.basename(directory).startsWith('mediamanager-remux-'));
     await rm(directory, { recursive: true, force: true });

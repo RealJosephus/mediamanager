@@ -26,7 +26,7 @@ import { itemRequiresJson } from '../library/item-data.js';
 import { isDeepStrictEqual } from 'node:util';
 import { addAbortListener } from 'node:events';
 import { AsyncLocalStorage } from 'node:async_hooks';
-import { nonemptyId, sameId } from '../library/records.js';
+import { EMPTY_ID, VIDEO_TYPES, nonemptyId, sameId } from '../library/records.js';
 import { ownedTitleFields, prepareOwnedItemRefresh } from './owned-item-refresh.js';
 import { OwnedItemMetadataLifecycleHost } from './owned-item-lifecycle.js';
 import { persistImageMetadata } from './persistence.js';
@@ -195,7 +195,10 @@ export class MetadataRefreshHost {
         try {
           const signal = entry.options.signal
             ? AbortSignal.any([entry.options.signal, this.#lifetime.signal]) : this.#lifetime.signal;
-          signal.throwIfAborted();
+          // Per-item cancellation belongs to the domain refresh boundary.
+          // Artist refresh still validates physical items and owns its final
+          // metadata catch; only host shutdown prevents admission here.
+          this.#lifetime.signal.throwIfAborted();
           if (entry.ready) {
             const cancelled = Promise.withResolvers();
             const listener = addAbortListener(signal, () => cancelled.reject(signal.reason));
@@ -237,7 +240,9 @@ export class MetadataRefreshHost {
       this.#lifetime.signal.throwIfAborted();
       options.signal = options.signal ? AbortSignal.any([options.signal, this.#lifetime.signal]) : this.#lifetime.signal;
     }
-    options.signal?.throwIfAborted();
+    // BaseItem's owned-file wrapper runs before its provider observes the
+    // caller token. Lifetime cancellation still rejects new work above; the
+    // queue has its own admission check before dispatching any refresh.
     const key = String(typeof reference === 'string' ? reference : reference.Id).replaceAll('-', '').toLowerCase();
     const ancestors = options[ownedRefreshAncestors] ?? [];
     if (ancestors.includes(key)) {
@@ -249,28 +254,45 @@ export class MetadataRefreshHost {
     this.#active.set(key, task);
     try { return await task; } finally { if (this.#active.get(key) === task) this.#active.delete(key); }
   }
-  async refreshOwnedItem(ownerReference, reference, options = {}, { copyTitleMetadata = true, extraContext } = {}) {
+  async refreshOwnedItem(ownerReference, reference, options = {}, { copyTitleMetadata = true, extraContext, videoContext } = {}) {
     const ownerId = typeof ownerReference === 'string' ? ownerReference : ownerReference.Id;
     const ownedId = typeof reference === 'string' ? reference : reference.Id;
     if (!nonemptyId(ownerId) || !nonemptyId(ownedId) || sameId(ownerId, ownedId)) {
       throw Object.assign(new Error('An owned metadata refresh requires distinct owner and child identities.'), { status: 409 });
     }
+    if (videoContext && (extraContext || !isNativeItemEntity(reference) || reference !== videoContext.item)) {
+      throw new TypeError('An owned video requires its branded live context.');
+    }
     // Validate before joining the per-item queue: an invalid back-reference
     // must not wait on the owner's active refresh and deadlock it.
-    const preflight=await this.#loadOwnedContext(ownerId,ownedId,extraContext);
+    const preflight=await this.#loadOwnedContext(ownerId,ownedId,extraContext,videoContext);
     try { /* Relationship preflight completes before queue admission. */ }
     finally {await preflight.owned.dispose();await preflight.owner.dispose();}
     return this.refresh(reference, { ...options, [ownerMetadataRefresh]: { ownerId, copyTitleMetadata,
-      extraContext, ownerItem: typeof ownerReference === 'object' ? ownerReference : undefined } });
+      extraContext, videoContext, ownerItem: typeof ownerReference === 'object' ? ownerReference : undefined } });
   }
   refreshSeasonWithLiveSeries(season, series, options = {}) {
     return this.refresh(season, { ...options, [liveSeriesParent]: series });
   }
-  async #loadOwnedContext(ownerId, ownedId, extraContext) {
+  async #loadOwnedContext(ownerId, ownedId, extraContext, videoContext) {
     let owner,owned;
     try {
     owner=await this.loadContext(ownerId);
-    owned=await this.loadContext(ownedId,extraContext?{draft:extraContext.item}:undefined);
+    owned=await this.loadContext(ownedId,extraContext?{draft:extraContext.item}:videoContext?{draft:videoContext.item}:undefined);
+    if (videoContext && (!VIDEO_TYPES.has(owned.item.Type) || owned.item.ExtraType != null
+      || (owned.snapshot
+        ? owned.snapshot.Type !== owned.item.NativeType || owned.snapshot.Path !== owned.reversePath(owned.item.Path)
+          || !sameId(owned.snapshot.ParentId ?? EMPTY_ID, owned.item.ParentId ?? EMPTY_ID)
+          || nonemptyId(owned.snapshot.OwnerId) && !sameId(owned.snapshot.OwnerId, ownerId)
+          || nonemptyId(owned.snapshot.PrimaryVersionId) && !sameId(owned.snapshot.PrimaryVersionId, ownerId)
+        : !sameId(owned.item.Id, owned.getNewItemId(owned.item.Path, owned.item.NativeType))
+          || nonemptyId(owned.item.PrimaryVersionId) && !sameId(owned.item.PrimaryVersionId, ownerId))
+      || !isDeepStrictEqual(owned.snapshot, videoContext.snapshot)
+      || !isDeepStrictEqual(owned.relationships, videoContext.relationships)
+      || !isDeepStrictEqual(owned.versionLinks, videoContext.versionLinks))) {
+      throw Object.assign(new Error('The owned video changed before its provider refresh.'), { code: 'metadata-conflict', status: 409 });
+    }
+    if (videoContext && !owned.snapshot) owned.creationIntent = 'video-version';
     if (extraContext) {
       if (owned.item.ExtraType == null || !['Video', 'Trailer', 'Audio'].includes(owned.item.Type)
         || !sameId(owned.item.Id, owned.getNewItemId(owned.item.Path, owned.item.NativeType))
@@ -337,7 +359,8 @@ export class MetadataRefreshHost {
     let loaded;
     if (options[ownerMetadataRefresh]) {
       const inheritance = options[ownerMetadataRefresh];
-      const contexts = await this.#loadOwnedContext(inheritance.ownerId, typeof reference === 'string' ? reference : reference.Id, inheritance.extraContext);
+      const contexts = await this.#loadOwnedContext(inheritance.ownerId, typeof reference === 'string' ? reference : reference.Id,
+        inheritance.extraContext, inheritance.videoContext);
       ownership.contexts.add(contexts.owner); ownership.contexts.add(contexts.owned);
       loaded = contexts.owned;
       options = prepareOwnedItemRefresh(inheritance.ownerItem ?? contexts.owner.item, loaded.item, options, inheritance);

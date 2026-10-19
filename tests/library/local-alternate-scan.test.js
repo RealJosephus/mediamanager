@@ -8,7 +8,7 @@ import { tableDefinition } from '../../src/database/model.js';
 import { getNewItemId } from '../../src/core/identity.js';
 import { nativeGuid } from '../../src/users/native.js';
 import { DirectoryItemResolverPipeline } from '../../src/library/directory-item-resolver.js';
-import { createOwnedFolderValidationFixture, ownedRefreshOptions, withoutSaveTime } from '../helpers/owned-folder-validation-fixture.js';
+import { createOwnedFolderValidationFixture, ownedStatePaths, ownedRefreshOptions, withoutSaveTime } from '../helpers/owned-folder-validation-fixture.js';
 import { ItemCreationService } from '../../src/library/item-creation-service.js';
 import { ItemDeletionService } from '../../src/library/item-deletion-service.js';
 import { LinkedChildReferenceService } from '../../src/library/linked-child-reference-service.js';
@@ -91,7 +91,7 @@ async function fixture(t, dialect) {
     Name: 'Movies', ParentId: userRootId, IsFolder: true,
     Data: JSON.stringify({ CollectionType: 'movies', PhysicalFolderIds: [rootId], PhysicalLocationsList: [rootPath] })
   }));
-  library = new LibraryService({fileSystem: testFileSystem,  store, serverId: 'local-version-scan', programDataPath });
+  library = new LibraryService({fileSystem: testFileSystem, ...await ownedStatePaths(t), store, serverId: 'local-version-scan', programDataPath });
   const ignoreRule = await knownAncestorIgnoreRule({ registry, vfs, identityMap, identityRoots: [rootPath] });
   lifecycleFixture = await createResolvedItemLifecycleFixture({ store, library, vfs, identityMap, ignoreRule });
   itemCreation = new ItemCreationService({ store, library, linkedChildren:lifecycleFixture.linkedChildren, loadContext: lifecycleFixture.loadContext });
@@ -121,7 +121,8 @@ async function fixture(t, dialect) {
   const reference = await itemCreation.getItemById(rootId);
   referenceOwner = itemCreation.retainItem(reference);
   const { validation, errors } = validationFixture;
-  return { database, adapter, vfs, validation, errors, reference };
+  return { database, adapter, vfs, validation, metadata: validationFixture.metadata,
+    loadContext: lifecycleFixture.loadContext, errors, reference };
 }
 
 async function versionState(database) {
@@ -213,7 +214,7 @@ for (const dialect of ['postgres']) test(`${dialect}: local movie versions persi
   assert.equal(idKey(state.items.find(item => idKey(item.Id) === idKey(linkedAlternateId)).PrimaryVersionId), idKey(exactPrimary.Id));
 });
 
-for (const dialect of ['postgres']) test(`${dialect}: disappearing local alternate collapses duplicate manual references`, {
+for (const dialect of ['postgres']) test(`${dialect}: a missing alternate remains when its initial repository save hits a manual reference`, {
   skip: dialect === 'postgres' && !process.env.MEDIAMANAGER_TEST_POSTGRES
 }, async t => {
   const { database, adapter, validation, errors, reference } = await fixture(t, dialect);
@@ -227,7 +228,12 @@ for (const dialect of ['postgres']) test(`${dialect}: disappearing local alterna
     ChildId: itemId('Film - 1080p.mkv'), ChildType: 0 });
   await database.insert('LinkedChildren', { ParentId: manualParentId, SortOrder: 2,
     ChildId: primary.Id, ChildType: 0 });
+  const before = await versionState(database);
   await adapter.delete('/Film - 1080p.mkv');
+  await assert.rejects(validation.validateChildren(reference, ownedRefreshOptions), { code: '23503' });
+  assert.deepEqual(await versionState(database), before,
+    'UpdateFromResolvedItem saves the primary before ordinary deletion could reroute its alternate');
+  await database.delete('LinkedChildren', { ParentId: manualParentId, SortOrder: 1 });
   await validation.validateChildren(reference, ownedRefreshOptions);
   state = await versionState(database);
   const promoted = assertFamily(state, 'Film - 2160p.mkv', []);
@@ -235,13 +241,13 @@ for (const dialect of ['postgres']) test(`${dialect}: disappearing local alterna
   assert.equal(state.links.some(link => idKey(link.ChildId) === idKey(itemId('Film - 1080p.mkv'))), false);
   assert.equal(state.links.filter(link => idKey(link.ParentId) === idKey(manualParentId)
     && idKey(link.ChildId) === idKey(promoted.Id) && Number(link.ChildType) === 0).length, 1,
-  'duplicate manual references collapse while an alternate is rerouted to its primary');
+  'removing the blocking reference leaves the existing primary reference untouched');
 });
 
 for (const dialect of ['postgres']) test(`${dialect}: a post-promotion link failure retains only the committed target prerequisite`, {
   skip: dialect === 'postgres' && !process.env.MEDIAMANAGER_TEST_POSTGRES
 }, async t => {
-  const { database, adapter, validation, errors, reference } = await fixture(t, dialect);
+  const { database, adapter, validation, metadata, loadContext, errors, reference } = await fixture(t, dialect);
   await adapter.write('/Film - 1080p.mkv', Buffer.from('1080'));
   await adapter.write('/Film - 2160p.mkv', Buffer.from('2160'));
   await validation.validateChildren(reference, ownedRefreshOptions);
@@ -271,7 +277,18 @@ for (const dialect of ['postgres']) test(`${dialect}: a post-promotion link fail
     'the old family remains intact until its per-action transfer starts');
   }
   await validation.validateChildren(reference, ownedRefreshOptions);
-  assertFamily(await versionState(database), 'Film.mkv', ['Film - 1080p.mkv']);
+  assert.deepEqual(errors, [], 'retry repairs an existing unowned alternate through its metadata lifecycle');
+  const primary = assertFamily(await versionState(database), 'Film.mkv', ['Film - 1080p.mkv']);
+  const child = await loadContext(itemId('Film - 1080p.mkv'));
+  try {
+    // A later writer changes persisted ownership after a live child was
+    // loaded. Carrying that child must not overwrite the foreign owner.
+    await database.update('BaseItems', { Id: child.item.Id }, { OwnerId: manualParentId });
+    const beforeConflict = await versionState(database);
+    await assert.rejects(metadata.refreshOwnedItem(primary.Id, child.item, ownedRefreshOptions,
+      { copyTitleMetadata: false, videoContext: child }), { code: 'metadata-conflict' });
+    assert.deepEqual(await versionState(database), beforeConflict);
+  } finally { await child.dispose(); }
 });
 
 for (const dialect of ['postgres']) test(`${dialect}: a weak snapshot cannot add, promote or drop a local version`, {

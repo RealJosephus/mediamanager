@@ -29,4 +29,13 @@ test('native MusicVideo resolver and validation input, raw recording and complet
 
 for (const dialect of ['postgres']) for (const sample of input) test(`${dialect}: native MusicVideo ${sample.name}`, {
   skip: dialect === 'postgres' && !process.env.MEDIAMANAGER_TEST_POSTGRES
-}, async t => assertDirectoryValidation(t, dialect, sample, native.results.find(result => result.name === sample.name)));
+}, async t => assertDirectoryValidation(t, dialect, sample, native.results.find(result => result.name === sample.name), {
+  compare(actual, expected) {
+    // Directory enumeration order varies by filesystem. Verify the complete
+    // multi-resolver input multiset; chosen versions, saves, links, all columns
+    // and every subsequent callback retain their exact recorded order.
+    const projection = value => ({ ...value, calls: value.calls.map(call => call.action === 'multi'
+      ? { ...call, files: [...call.files].sort() } : call) });
+    assert.deepEqual(projection(actual), projection(expected));
+  }
+}));

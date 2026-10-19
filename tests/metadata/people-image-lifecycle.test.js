@@ -5,6 +5,7 @@ import { readFile, mkdir, writeFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { setupChildrenFixture, useIdentityPathReversalControl } from './children-fixture.js';
+import { projectStatePath } from '../library/fixture-state-path.js';
 import { PeopleMetadataLifecycleHost } from '../../src/metadata/people-lifecycle.js';
 import { saveMetadataItem } from '../../src/metadata/save-item.js';
 import { tableDefinition } from '../../src/database/model.js';
@@ -67,7 +68,7 @@ async function fixtureFor(t, dialect, sample) {
   const calls = [], cancellation = new AbortController();
   if (sample.cancelled) cancellation.abort(Object.assign(new Error('Injected cancellation'), { nativeException: 'OperationCanceledException' }));
   const projection = (item, images = []) => ({ Id: item.Id.toLowerCase(), Name: item.Name, Type: item.Type,
-    Path: item.Path?.replace(fixture.stateRoot, '$STATE') ?? null,
+    Path: projectStatePath(item.Path, fixture.stateRoot) ?? null,
     saved: item.DateLastSaved != null && dateText(item.DateLastSaved) !== MIN_DATE,
     ProviderIds: { ...item.ProviderIds }, imageCount: images.length });
   fixture.host.images.processor.getImageSize = async () => {
@@ -139,21 +140,21 @@ async function capture(fixture, sample, exception) {
       if (value != null && ['DateCreated', 'DateModified', 'DateLastSaved'].includes(key)) value = value.startsWith('2025-') ? dateText(value) : '$RECENT';
       else if (value != null && columns.get(key)?.clrType.includes('DateTime')) value = dateText(value);
       if (typeof value === 'bigint') value = Number(value);
-      if (key === 'Path' && value) value = value.replace(stateRoot, '$STATE');
+      if (key === 'Path' && value) value = projectStatePath(value, stateRoot);
       return [key, value];
     })));
   const providers = (await database.rows('BaseItemProviders')).filter(row => row.ItemId !== parentId).map(row => ({ ...row, ItemId: row.ItemId.toLowerCase() }))
     .sort((a, b) => a.ItemId.localeCompare(b.ItemId) || a.ProviderId.localeCompare(b.ProviderId));
   let directories = [];
   try { directories = (await readdir(path.join(stateRoot, 'metadata'), { recursive: true, withFileTypes: true })).filter(entry => entry.isDirectory())
-    .map(entry => path.join(entry.parentPath, entry.name).replace(stateRoot, '$STATE')).sort(); }
+    .map(entry => projectStatePath(path.join(entry.parentPath, entry.name), stateRoot)).sort(); }
   catch (error) { if (error.code !== 'ENOENT') throw error; }
   const imageRows = (await database.rows('BaseItemImageInfos')).sort((a,b) => a.ItemId.localeCompare(b.ItemId))
-    .map(row => ({ ItemId: row.ItemId.toLowerCase(), Path: row.Path.replace(stateRoot, '$STATE'), Type: 'Primary', Width: row.Width, Height: row.Height,
+    .map(row => ({ ItemId: row.ItemId.toLowerCase(), Path: projectStatePath(row.Path, stateRoot), Type: 'Primary', Width: row.Width, Height: row.Height,
       Blurhash: row.Blurhash == null ? null : row.Blurhash.toString('utf8'), DateModified: row.DateModified == null ? null : Number(row.DateModified.slice(0,4)) > 2025 ? '$RECENT' : dateText(row.DateModified) }));
   let files = [];
   try { files = await Promise.all((await readdir(path.join(stateRoot, 'metadata'), { recursive: true, withFileTypes: true })).filter(entry => entry.isFile())
-    .map(async entry => { const filename = path.join(entry.parentPath, entry.name), bytes = await readFile(filename); return { Path: filename.replace(stateRoot, '$STATE'), bytes: bytes.length, sha256: hash(bytes) }; })); }
+    .map(async entry => { const filename = path.join(entry.parentPath, entry.name), bytes = await readFile(filename); return { Path: projectStatePath(filename, stateRoot), bytes: bytes.length, sha256: hash(bytes) }; })); }
   catch (error) { if (error.code !== 'ENOENT') throw error; }
   files.sort((a,b) => a.Path < b.Path ? -1 : a.Path > b.Path ? 1 : 0);
   return { name: sample.name, exception, calls, credits, items, providers, directories,
