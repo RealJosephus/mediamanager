@@ -63,7 +63,7 @@ async function setup(t, dialect, sample) {
       ...(sample.internalItem ? {} : { parent: 'parent' }),
       IsInMixedFolder: sample.mixed ?? false, IsVirtualItem: sample.virtual ?? false,
       IsShortcut: sample.shortcut ?? false, ShortcutPath: sample.shortcut ? 'https://example.invalid/source' : null,
-      ...(VIDEO_TYPES.has(sample.type) ? { VideoType: 'VideoFile', IsPlaceHolder: false,
+      ...(VIDEO_TYPES.has(sample.type) ? { VideoType: sample.videoType ?? 'VideoFile', IsPlaceHolder: sample.placeholder ?? false,
         AdditionalParts: [], LocalAlternateVersions: [], LinkedAlternateVersions: [] } : {}),
       ChannelId: sample.channel ? ids.channel : null,
       OwnerId: sample.ownedItem ? ids.owner : null, PrimaryVersionId: sample.primaryVersion ? ids.owner : null },
@@ -120,8 +120,31 @@ async function setup(t, dialect, sample) {
     if (sample.channel === 'argument') throw Object.assign(new Error('Missing channel'), { nativeException: 'ArgumentException' });
     if (sample.channel === 'failure') throw new Error('Controlled channel failure');
   } };
+  const loadDeletionContext = async (...args) => {
+    const context = await fixture.loadContext(...args);
+    if (sample.channel && VIDEO_TYPES.has(context.item.Type)) {
+      const getMediaSources = context.getMediaSources;
+      context.getMediaSources = current => {
+        if (current.SourceType !== 'Channel') return getMediaSources(current);
+        // The sealed oracle's channel manager returns no static sources.
+        // Video then supplies itself; this fixture has no alternate versions.
+        // Internal cleanup consumes only that source's ID.
+        assert.equal(guid(current.Id), guid(ids.target));
+        assert.equal(current.PrimaryVersionId == null || guid(current.PrimaryVersionId) === guid(EMPTY_ID), true);
+        assert.deepEqual(current.LocalAlternateVersions, []);
+        assert.deepEqual(current.LinkedAlternateVersions, []);
+        return [{ Id: idKey(current.Id) }];
+      };
+    }
+    return context;
+  };
+  Object.assign(loadDeletionContext, fixture.loadContext);
+  loadDeletionContext.withContext = async (reference, options, operation) => {
+    const context = await loadDeletionContext(reference, options);
+    try { return await operation(context); } finally { await context.dispose(); }
+  };
   const deletion = new ItemDeletionService({ ...fixture, itemCreation: creator, updates: fixture.host.updates, externalData: external,
-    linkedChildReferences: { reroute: async () => [] }, channelManager, now: () => fixture.now });
+    loadContext: loadDeletionContext, linkedChildReferences: { reroute: async () => [] }, channelManager, now: () => fixture.now });
   const deleteItems = deletion.deleteItems.bind(deletion);
   deletion.deleteItems = async (idsPlan, scope, publishDeletedPage) => {
     const values = [];
@@ -311,6 +334,101 @@ for (const dialect of ['postgres']) for (const sample of input.filter(sample => 
 
 for (const dialect of ['postgres']) {
   const options = { skip: dialect === 'postgres' && !process.env.MEDIAMANAGER_TEST_POSTGRES };
+  for (const deleteSource of [false, true]) test(`${dialect}: Book extension-named directory ${deleteSource ? 'deletes only its actual source' : 'preserves source during DB-only deletion'}`, options, async t => {
+    // BookResolver.GetBook accepts its one extension-matching child regardless
+    // of physical kind, as in the existing book-extension-named-directory case.
+    const value = await setup(t, dialect, { ...input.find(sample => sample.name === 'book-db-only'),
+      sourceDirectory: true, deleteSource, sidecars: ['book.nfo'] });
+    assert.equal(value.item.Type, 'Book');
+    assert.equal(value.item.IsFolder, false);
+    assert.equal((await value.fixture.vfs.stat(value.sourceAccess)).kind, 'directory');
+    const deleted = [], remove = value.fixture.adapter.delete.bind(value.fixture.adapter);
+    value.fixture.adapter.delete = async (location, settings) => {
+      deleted.push({ location, recursive: settings?.recursive === true });
+      assert.equal((await value.state()).internalExists, false, 'internal metadata is cleaned before source deletion');
+      return remove(location, settings);
+    };
+
+    await value.operation();
+
+    assert.deepEqual(deleted, deleteSource ? [{ location: '/media/book.epub', recursive: true }] : []);
+    assert.deepEqual(await value.state(), { sourceExists: !deleteSource, internalExists: false,
+      externalExists: false, databaseExists: false, parentId: guid(EMPTY_ID) });
+    assert.equal(await value.creator.getItemById(value.item.Id), null);
+    assert.deepEqual((await value.fixture.database.rows('BaseItems')).map(row => guid(row.Id)), [guid(ids.parent)]);
+    assert.equal(readCachedFolderChildren(value.parent, {}, () => null), null);
+    assert.deepEqual(value.calls.map(call => call.action), ['external', 'delete', 'event']);
+    for (const filename of ['sibling.keep', 'book.nfo', 'track.nfo', 'track-cover.jpg']) {
+      assert.equal((await value.fixture.vfs.stat(`/leaf-write/media/${filename}`)).kind, 'file');
+    }
+    if (!deleteSource) assert.equal((await value.fixture.vfs.stat(`${value.sourceAccess}/source.txt`)).kind, 'file');
+    assert.equal((await value.fixture.vfs.stat('/leaf-write/media')).kind, 'directory');
+  });
+  for (const scene of [
+    { name: 'movie-mixed-source', removed: ['/media/track.strm', '/media/track.nfo', '/media/track-cover.jpg'],
+      remaining: ['sibling.keep'] },
+    { name: 'movie-directory-source', removed: ['/media'], remaining: null },
+    { name: 'episode-file-source', removed: ['/media/track.strm'],
+      remaining: ['sibling.keep', 'track-cover.jpg', 'track.nfo'] }
+  ]) test(`${dialect}: ${scene.name} deletes local STRM sources without following their remote target`, options, async t => {
+    const value = await setup(t, dialect, { ...input.find(sample => sample.name === scene.name),
+      sourceName: 'track.strm', shortcut: true });
+    const remoteTarget = value.item.ShortcutPath;
+    assert.equal(remoteTarget, 'https://example.invalid/source');
+    assert.equal(value.item.IsShortcut, true);
+    assert.equal(value.item.VideoType, 'VideoFile');
+    await value.fixture.adapter.write('/media/track.strm', Buffer.from(`${remoteTarget}\n`));
+    await value.fixture.adapter.write('/outside.keep', Buffer.from('outside'));
+    const removed = [], remove = value.fixture.adapter.delete.bind(value.fixture.adapter);
+    value.fixture.adapter.delete = async (location, settings) => {
+      removed.push(location);
+      return remove(location, settings);
+    };
+
+    await value.operation();
+
+    assert.deepEqual(removed.sort(), [...scene.removed].sort());
+    const final = await value.state();
+    assert.equal(final.sourceExists, false);
+    assert.equal(final.databaseExists, false);
+    assert.equal(final.internalExists, false);
+    assert.equal(final.externalExists, false);
+    assert.equal(Boolean(await value.creator.getItemById(value.item.Id)), false);
+    assert.deepEqual((await value.fixture.database.rows('BaseItems')).map(row => guid(row.Id)), [guid(ids.parent)]);
+    assert.deepEqual(value.calls.map(call => call.action), ['external', 'delete', 'event']);
+    assert.equal((await value.fixture.vfs.stat('/leaf-write/outside.keep')).kind, 'file');
+    if (scene.remaining === null) await assert.rejects(value.fixture.vfs.stat('/leaf-write/media'), { code: 'not-found' });
+    else assert.deepEqual((await value.fixture.vfs.list('/leaf-write/media')).entries.map(entry => entry.name).sort(), scene.remaining);
+  });
+  for (const scene of [
+    { name: 'movie-mixed-source', sourceName: 'track.disc', videoType: 'VideoFile', remaining: ['sibling.keep'] },
+    { name: 'movie-directory-source', sourceName: 'track.dvd.disc', videoType: 'Dvd', remaining: null },
+    { name: 'episode-file-source', sourceName: 'track.bluray.disc', videoType: 'BluRay',
+      remaining: ['sibling.keep', 'track-cover.jpg', 'track.nfo'] },
+    { name: 'movie-mixed-source', sourceName: 'track.iso', videoType: 'Iso', placeholder: false, remaining: ['sibling.keep'] },
+    { name: 'movie-directory-source', sourceName: 'track.dvd.iso', videoType: 'Iso', placeholder: false, remaining: null },
+    { name: 'episode-file-source', sourceName: 'track.bluray.img', videoType: 'Iso', placeholder: false,
+      remaining: ['sibling.keep', 'track-cover.jpg', 'track.nfo'] }
+  ]) test(`${dialect}: ${scene.sourceName} uses ${scene.name} deletion paths`, options, async t => {
+    const value = await setup(t, dialect, { ...input.find(sample => sample.name === scene.name),
+      sourceName: scene.sourceName, videoType: scene.videoType, placeholder: scene.placeholder ?? true });
+    assert.equal(value.item.IsPlaceHolder, scene.placeholder ?? true);
+    assert.equal(value.item.VideoType, scene.videoType);
+    await value.fixture.adapter.write('/outside.keep', Buffer.from('outside'));
+
+    await value.operation();
+
+    const final = await value.state();
+    assert.equal(final.sourceExists, false);
+    assert.equal(final.databaseExists, false);
+    assert.equal(final.internalExists, false);
+    assert.equal(final.externalExists, false);
+    assert.equal(Boolean(await value.creator.getItemById(value.item.Id)), false);
+    assert.deepEqual((await value.fixture.database.rows('BaseItems')).map(row => guid(row.Id)), [guid(ids.parent)]);
+    assert.equal((await value.fixture.vfs.stat('/leaf-write/outside.keep')).kind, 'file');
+    if (scene.remaining === null) await assert.rejects(value.fixture.vfs.stat('/leaf-write/media'), { code: 'not-found' });
+    else assert.deepEqual((await value.fixture.vfs.list('/leaf-write/media')).entries.map(entry => entry.name).sort(), scene.remaining);
+  });
   test(`${dialect}: managed BoxSet source deletion rejects a different state root before side effects`, options, async t => {
     const value = await setup(t, dialect, input.find(sample => sample.name === 'boxset-state-source'));
     const wrong = path.join(value.fixture.stateRoot, 'data', 'not-collections', 'Target [boxset]');
@@ -370,7 +488,7 @@ for (const dialect of ['postgres']) {
     assert.deepEqual(await value.fixture.database.rows('BaseItems'), rows);
     assert.deepEqual(value.calls, []);
   });
-  for (const [field, replacement] of [['IsInMixedFolder', false], ['IsVirtualItem', true], ['ChannelId', ids.channel]]) {
+  for (const [field, replacement] of [['IsInMixedFolder', false], ['IsVirtualItem', true], ['ChannelId', ids.channel], ['IsPlaceHolder', true]]) {
     test(`${dialect}: video ${field} drift fails before source or metadata cleanup`, options, async t => {
       const value = await setup(t, dialect, input.find(sample => sample.name === 'movie-mixed-source'));
       value.item[field] = replacement;
@@ -382,7 +500,7 @@ for (const dialect of ['postgres']) {
       assert.deepEqual(readCachedFolderChildren(value.parent, {}, () => { throw new Error('parent cache invalidated'); }), [value.item]);
     });
   }
-  for (const type of ['Episode', 'Trailer']) test(`${dialect}: ${type} directory disc remains withheld before side effects`, options, async t => {
+  for (const type of ['Trailer']) test(`${dialect}: ${type} directory disc remains withheld before side effects`, options, async t => {
     const value = await setup(t, dialect, input.find(sample => sample.type === type && sample.deleteSource));
     await value.fixture.adapter.mkdir('/media/disc');
     await value.fixture.adapter.write('/media/disc/marker.vob', Buffer.from('disc'));

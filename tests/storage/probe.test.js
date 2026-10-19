@@ -3,6 +3,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
 import { StorageRegistry, VirtualFileSystem, ProbeReadBridge, buildHttpProbeArguments, probeRaw } from '../../src/storage/index.js';
+import { buildRemoteProbeArguments, probeRemoteRaw } from '../../src/storage/ffprobe.js';
 import { MemoryStorageAdapter } from '../../src/storage/testing/memory-adapter.js';
 
 async function fixture(t, bytes = Buffer.from('0123456789')) {
@@ -64,6 +65,58 @@ test('HTTP probe arguments follow baseline precedence without media generation f
   assert.throws(() => buildHttpProbeArguments('file:///production/movie.mkv'), TypeError);
   assert.throws(() => buildHttpProbeArguments('http://remote.invalid/movie'), TypeError);
   assert.throws(() => buildHttpProbeArguments(url, { configuredProbeSize: '1M -show_frames' }), TypeError);
+});
+
+test('remote probe arguments preserve the four shortcut protocols and RTSP transport options', () => {
+  for (const url of ['HTTP://media.invalid/audio%20track.flac?token=fixture',
+    'https://media.invalid/audio.flac', 'rtsp://media.invalid:8554/audio', 'rtp://239.0.0.1:5004']) {
+    const protocol = new URL(url).protocol;
+    assert.deepEqual(buildRemoteProbeArguments(url, {
+      analyzeDurationMs: 1234, configuredAnalyzeDuration: '2M', configuredProbeSize: '1G',
+      userAgent: 'Test "Agent"', extractChapters: true, threads: 2
+    }), ['-analyzeduration', '1234000', '-probesize', '1G', '-user_agent', 'Test "Agent"',
+      ...(protocol === 'rtsp:' ? ['-rtsp_transport', 'tcp+udp', '-rtsp_flags', 'prefer_tcp'] : []),
+      '-i', url, '-threads', '2', '-v', 'warning', '-print_format', 'json',
+      '-show_streams', '-show_chapters', '-show_format']);
+    const fallback = buildRemoteProbeArguments(url, { configuredAnalyzeDuration: '200M' });
+    assert.equal(fallback[1], '200M');
+    assert.equal(fallback.includes('-show_frames'), false);
+    assert.equal(fallback.includes('-only_first_vframe'), false);
+    assert.throws(() => buildHttpProbeArguments(url), TypeError,
+      'remote input does not become a private bridge lease');
+  }
+});
+
+test('remote probing rejects local files and other protocols before launching a process', async () => {
+  for (const url of ['file:///production/audio.flac', 'C:\\Media\\audio.flac', '/media/audio.flac',
+    'ftp://media.invalid/audio.flac', 'udp://239.0.0.1:5004',
+    'concat:http://media.invalid/audio.flac|file:///production/audio.flac', 'https://']) {
+    assert.throws(() => buildRemoteProbeArguments(url), TypeError, url);
+    await assert.rejects(probeRemoteRaw(url, { executable: 'mediamanager-nonexistent-ffprobe-test' }), TypeError, url);
+  }
+  assert.throws(() => buildRemoteProbeArguments('https://media.invalid/audio.flac', {
+    configuredProbeSize: '1M -show_frames'
+  }), TypeError);
+  assert.throws(() => buildRemoteProbeArguments('https://media.invalid/audio.flac', {
+    userAgent: 'Agent\r\nUnexpected: header'
+  }), TypeError);
+  await assert.rejects(probeRemoteRaw('https://media.invalid/audio.flac', {
+    signal: AbortSignal.abort(), executable: 'mediamanager-nonexistent-ffprobe-test'
+  }), { code: 'cancelled' });
+});
+
+test('the VFS probe entry point rejects non-lease sources and still releases the lease', async () => {
+  for (const url of ['file:///production/audio.flac', 'https://media.invalid/audio.flac',
+    'http://127.0.0.1:1234/not-a-lease']) {
+    let released = false;
+    const bridge = { async lease() {
+      return { url, consistency: 'version-precondition', async release() { released = true; } };
+    } };
+    await assert.rejects(probeRaw(bridge, '/network/media', {
+      executable: 'mediamanager-nonexistent-ffprobe-test'
+    }), TypeError);
+    assert.equal(released, true);
+  }
 });
 
 function waveFixture() {

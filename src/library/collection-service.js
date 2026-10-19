@@ -147,7 +147,10 @@ export class CollectionService extends EventEmitter {
   }
 
   #queue(item, options) {
-    const queued = this.metadata.queue(item.Id, options, 0);
+    // Admit the refresh immediately, but let the enclosing collection mutation
+    // finish before its background worker captures a repository baseline.
+    const ready = Promise.all([this.#tail, this.store.currentOperationCompletion()]);
+    const queued = this.metadata.queue(item.Id, options, 0, { ready });
     queued?.catch?.(error => { try { this.onError(error); } catch { /* Reporting cannot change a completed mutation. */ } });
   }
 

@@ -11,7 +11,7 @@ import { nativeGuid } from '../../src/users/native.js';
 import { DirectoryItemResolverPipeline } from '../../src/library/directory-item-resolver.js';
 import { FolderScanService, folderScanIncompleteReasonCodes } from '../../src/library/folder-scan-service.js';
 import { LibraryService } from '../../src/library/library-service.js';
-import { idKey, mapRecord } from '../../src/library/records.js';
+import { idKey, mapRecord, nonemptyId } from '../../src/library/records.js';
 import { updateFromResolvedItem } from '../../src/library/resolved-item-update.js';
 import { ItemUpdateType } from '../../src/metadata/save-manager.js';
 import { createVideoFileResolver, movieNativeType, videoNativeType } from '../../src/library/video-file-resolver.js';
@@ -127,7 +127,7 @@ async function fixture(t, dialect, collectionType = 'movies') {
     resolvedItemLifecycle: lifecycle
   });
   const reference = mapRecord((await database.rows('BaseItems', { where: { Id: rootId } }))[0]);
-  return { database, adapter, vfs, scanner, reference };
+  return { database, library, adapter, vfs, scanner, reference };
 }
 
 async function state(database) {
@@ -247,10 +247,10 @@ for (const dialect of ['postgres']) test(`${dialect}: owned-part insertion failu
   assertStack(await state(database), 'Film cd1.mkv', ['Film cd2.mkv']);
 });
 
-for (const dialect of ['postgres']) test(`${dialect}: only the selected stack persists parts when stacked movie versions group`, {
+for (const dialect of ['postgres']) test(`${dialect}: each stacked movie version persists its own parts through cold reads and repeat scans`, {
   skip: dialect === 'postgres' && !process.env.MEDIAMANAGER_TEST_POSTGRES
 }, async t => {
-  const { database, adapter, scanner, reference } = await fixture(t, dialect);
+  const { database, library, adapter, scanner, reference } = await fixture(t, dialect);
   for (const name of ['Film - Director cd1.mkv', 'Film - Director cd2.mkv',
     'Film - Theatrical cd1.mkv', 'Film - Theatrical cd2.mkv']) {
     await adapter.write(`/${name}`, Buffer.from(name));
@@ -263,17 +263,41 @@ for (const dialect of ['postgres']) test(`${dialect}: only the selected stack pe
     && item.Path === `${rootPath}\\Film - Theatrical cd1.mkv`);
   const part = items.find(item => item.Type === videoNativeType
     && item.Path === `${rootPath}\\Film - Director cd2.mkv`);
+  const alternatePart = items.find(item => item.Type === videoNativeType
+    && item.Path === `${rootPath}\\Film - Theatrical cd2.mkv`);
   assert.ok(primary);
   assert.ok(alternate);
   assert.ok(part);
+  assert.ok(alternatePart);
+  assert.equal(items.length, 4);
   assert.deepEqual(JSON.parse(primary.Data).AdditionalParts, [`${rootPath}\\Film - Director cd2.mkv`]);
   assert.deepEqual(JSON.parse(primary.Data).LocalAlternateVersions, [`${rootPath}\\Film - Theatrical cd1.mkv`]);
-  assert.deepEqual(JSON.parse(alternate.Data).AdditionalParts ?? [], []);
+  assert.deepEqual(JSON.parse(alternate.Data).AdditionalParts, [`${rootPath}\\Film - Theatrical cd2.mkv`]);
   assert.equal(idKey(alternate.OwnerId), idKey(primary.Id));
   assert.equal(idKey(alternate.PrimaryVersionId), idKey(primary.Id));
-  assert.equal(idKey(part.OwnerId), idKey(primary.Id));
-  assert.equal(items.some(item => item.Path === `${rootPath}\\Film - Theatrical cd2.mkv`), false,
-    'native resolution consumes an alternate stack tail without persisting it as an owned part');
+  for (const [owner, ownedPart] of [[primary, part], [alternate, alternatePart]]) {
+    assert.equal(idKey(ownedPart.OwnerId), idKey(owner.Id));
+    assert.equal(idKey(ownedPart.ParentId), idKey(rootId));
+    assert.equal(idKey(ownedPart.TopParentId), idKey(rootId));
+    assert.equal(ownedPart.PrimaryVersionId, null);
+    assert.equal(ownedPart.ExtraType, null);
+    const coldOwner = await library.getItemRecord(owner.Id);
+    const coldPart = await library.getItemRecord(ownedPart.Id);
+    assert.equal(coldOwner.NativeType, movieNativeType);
+    assert.deepEqual(coldOwner.AdditionalParts, [ownedPart.Path]);
+    for (const field of ['OwnerId', 'PrimaryVersionId']) {
+      if (nonemptyId(owner[field])) assert.equal(idKey(coldOwner[field]), idKey(owner[field]));
+      else assert.ok(!nonemptyId(coldOwner[field]), `${field} remains an empty relationship`);
+    }
+    assert.equal(coldPart.NativeType, videoNativeType);
+    assert.equal(coldPart.Path, ownedPart.Path);
+    assert.equal(idKey(coldPart.OwnerId), idKey(owner.Id));
+    assert.equal(idKey(coldPart.ParentId), idKey(rootId));
+  }
+  const repeated = await scanner.scan(reference);
+  assert.deepEqual({ added: repeated.added, updated: repeated.updated, removed: repeated.removed },
+    { added: 0, updated: 0, removed: 0 });
+  assert.deepEqual(await state(database), items);
 });
 
 for (const dialect of ['postgres']) test(`${dialect}: home-video stack promotion reuses the Video identity safely`, {

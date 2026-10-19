@@ -50,6 +50,19 @@ export function providerAttributeValue(value, attribute) {
 
 export function setResolverProviderIdsFromPath(item) {
   const type = item.Type ?? item.NativeType?.split('.').at(-1);
+  if (['Series', 'Season', 'Episode'].includes(type)) {
+    const name = type === 'Episode' ? nativeFileNameWithoutExtension(item.Path) : nativeFileName(item.Path);
+    if (!name) return item;
+    const attributes = [['Tvdb', 'tvdbid'], ['TvMaze', 'tvmazeid'], ['Tmdb', 'tmdbid']];
+    if (type !== 'Season') attributes.unshift(['Imdb', 'imdbid']);
+    if (type !== 'Episode') attributes.push(['AniDB', 'anidbid'], ['AniList', 'anilistid'], ['AniSearch', 'anisearchid']);
+    item.ProviderIds ??= {};
+    for (const [provider, attribute] of attributes) {
+      const value = providerAttributeValue(name, attribute);
+      if (value) item.ProviderIds[provider] = value;
+    }
+    return item;
+  }
   if (type === 'BoxSet') {
     const name = nativeFileName(item.Path), value = name && providerAttributeValue(name, 'tmdbid');
     if (value) { item.ProviderIds ??= {}; item.ProviderIds.Tmdb = value; }

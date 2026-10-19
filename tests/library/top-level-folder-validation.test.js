@@ -77,7 +77,7 @@ async function fixture(t, dialect) {
   assert.deepEqual(tasks.map(task => task.name), ['Splashscreen', 'Artists', 'CollectionPosterVerify', 'Collections', 'Genres', 'MusicGenres', 'Studios', 'CleanDatabase']);
   assert.ok(tasks.every((task, index) => task === [runtime.splashscreenPostScanTask, runtime.artistsPostScanTask, runtime.collectionPosterVerifyPostScanTask, runtime.collectionPostScanTask, runtime.genresPostScanTask,
     runtime.musicGenresPostScanTask, runtime.studiosPostScanTask, runtime.cleanDatabasePostScanTask][index]), 'Task services retain their registered identity.');
-  assert.equal(runtime.libraryScanLifecycle.capabilities.runsPostScanTasks, false);
+  assert.equal(runtime.libraryScanLifecycle.capabilities.runsPostScanTasks, true);
   return { runtime, database, adapter, stateRoot, firstPath, errors };
 }
 
@@ -161,7 +161,7 @@ for (const dialect of ['postgres']) test(`${dialect}: top-level validation persi
 
     assert.equal(runtime.libraryScanner.capabilities.reconcilesTopLevelConfiguration, true);
     assert.equal(runtime.libraryScanner.capabilities.runsMetadataProbeRefresh, true);
-    assert.equal(runtime.libraryScanner.capabilities.runsPostScanTasks, false);
+    assert.equal(runtime.libraryScanner.capabilities.runsPostScanTasks, true);
     assert.equal(runtime.libraryScanner.capabilities.completeLibraryScan, false);
 
     await runtime.libraryScanLifecycle.validateTopLibraryFolders();

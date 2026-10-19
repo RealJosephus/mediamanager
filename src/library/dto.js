@@ -309,14 +309,17 @@ async function projectPeople(item, state, user, options) {
 
 async function mediaSource(item, queriedItem, type, prefix, state, user, options) {
   if (item.SourceType === 'Channel') unsupported('Channel media source projection is not implemented.');
-  const protocol = item.LocationType === 'FileSystem' ? 'File' : /^https?:/i.test(item.Path ?? '') ? 'Http' : !item.Path ? 'File' : null;
+  const protocol = isFileSource(item) ? 'File' : /^https?:/i.test(item.Path ?? '') ? 'Http' : null;
   if (!protocol) unsupported('This media source protocol is not implemented.');
-  let remoteShortcut = false;
-  if (item.IsShortcut && item.ShortcutPath) {
-    if (/^https?:/i.test(item.ShortcutPath)) remoteShortcut = true;
+  let shortcutProtocol;
+  if (VIDEO_TYPES.has(item.Type) && item.IsShortcut && item.ShortcutPath) {
+    if (/^https?:/i.test(item.ShortcutPath)) shortcutProtocol = 'Http';
+    else if (/^rtsp:/i.test(item.ShortcutPath)) shortcutProtocol = 'Rtsp';
+    else if (/^rtp:/i.test(item.ShortcutPath)) shortcutProtocol = 'Rtp';
     else if (!isFileSource({ Path: item.ShortcutPath })) unsupported('This shortcut media source protocol is not implemented.');
   }
-  const sourceProtocol = remoteShortcut ? 'Http' : protocol;
+  const remoteShortcut = shortcutProtocol != null;
+  const sourceProtocol = shortcutProtocol ?? protocol;
   const sourcePath = remoteShortcut ? item.ShortcutPath : item.Path;
   const attachments = (await relationRows(state, item, 'attachmentRowsByItem', 'AttachmentStreamInfos'))
     .map(({ ItemId, ...entry }) => entry);

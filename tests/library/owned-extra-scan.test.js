@@ -138,8 +138,12 @@ async function fixture(t, dialect) {
     programDataPath,
     resolvers: [createVideoFileResolver()]
   });
+  const ignoreRule = await knownAncestorIgnoreRule({ registry, vfs, identityMap, identityRoots: [physicalRootPath] });
+  // This fixture's media identities deliberately use Windows separators on
+  // every host. Match ignore patterns in that same controlled namespace.
+  ignoreRule.normalizePath = true;
   scanner = new FolderScanService({
-    ignoreRule: await knownAncestorIgnoreRule({ registry, vfs, identityMap, identityRoots: [physicalRootPath] }),
+    ignoreRule,
     store,
     library,
     vfs,
@@ -453,7 +457,7 @@ for (const dialect of ['postgres']) test(`${dialect}: collapsed movie-directory 
     'the replaced generic folder is removed in the same transaction');
 });
 
-for (const dialect of ['postgres']) test(`${dialect}: an ambiguous mixed-folder transition preserves prior extra ownership`, {
+for (const dialect of ['postgres']) test(`${dialect}: a mixed-folder transition completes without reassigning prior extras`, {
   skip: dialect === 'postgres' && !process.env.MEDIAMANAGER_TEST_POSTGRES
 }, async t => {
   const { database, adapter, scanner, reference } = await fixture(t, dialect);
@@ -467,15 +471,16 @@ for (const dialect of ['postgres']) test(`${dialect}: an ambiguous mixed-folder 
   assert.ok(trailer);
 
   await adapter.write('/Film/Other.mkv', Buffer.from('other'));
-  const ambiguous = await scanner.scan(reference);
+  const mixed = await scanner.scan(reference);
 
-  assert.equal(ambiguous.structurallyComplete, false);
-  assert.ok(ambiguous.incompleteReasons.some(reason =>
-    reason.code === folderScanIncompleteReasonCodes.RESOLVER_PATH_WITHHELD
-      && reason.path === `${movieFolderPath}\\Film-trailer.mkv`));
-  const preserved = extraAt(await state(database), 'Film-trailer.mkv', trailerNativeType);
-  assert.ok(preserved);
+  assert.equal(mixed.structurallyComplete, true);
+  const mixedState = await state(database);
+  const preserved = extraAt(mixedState, 'Film-trailer.mkv', trailerNativeType);
+  assert.deepEqual(preserved, trailer);
   assert.equal(idKey(preserved.OwnerId), idKey(primary.Id));
+  assert.ok(mixedState.items.some(item => item.Path === `${movieFolderPath}\\Other.mkv` && item.Type === movieNativeType));
+  assert.equal((await scanner.scan(reference)).structurallyComplete, true);
+  assert.deepEqual(await state(database), mixedState, 'a repeated scan keeps the cold database rows and ownership unchanged');
 
   await adapter.delete('/Film/Other.mkv');
   const unambiguous = await scanner.scan(reference);

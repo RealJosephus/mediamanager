@@ -4,9 +4,11 @@ import { validationExecutable } from '../../tools/validation/paths.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import path from 'node:path';
-import { mkdtemp, mkdir, rm, writeFile } from 'node:fs/promises';
+import { mkdtemp, mkdir, rm, writeFile, readFile } from 'node:fs/promises';
 import os from 'node:os';
 import { spawnSync } from 'node:child_process';
+import { createServer } from 'node:http';
+import { once } from 'node:events';
 import { createHash } from 'node:crypto';
 import samples from './fixtures/probe-lifecycle/native.json' with { type: 'json' };
 import selection from './fixtures/probe-lifecycle/selection.json' with { type: 'json' };
@@ -28,6 +30,11 @@ import { ItemUpdateType } from '../../src/metadata/save-manager.js';
 import { exportCurrentSqlite, transferDatabase } from '../../src/migration/database-transfer.js';
 import { probeRaw } from '../../src/storage/ffprobe.js';
 import { createApplication } from '../../src/http/application.js';
+import { PlaybackService } from '../../src/playback/service.js';
+import { nativeDate } from '../../src/sessions/user-data.js';
+import { makeBlurayFiles } from './fixtures/bluray-disc-info/fixture.js';
+
+const blurayInput = JSON.parse(await readFile(new URL('./fixtures/bluray-disc-info/input.json', import.meta.url)));
 
 const id = '71717171-7171-7171-7171-717171717171';
 const identity = 'Z:\\media\\sample.wav';
@@ -68,7 +75,7 @@ test('probe change detection, early fetch gates and lyric discovery match actual
   });
 });
 
-async function fixture(t, backend = 'postgres', probe) {
+async function fixture(t, backend = 'postgres', probe, configuration) {
   const schema = `probe_lifecycle_${Date.now()}_${Math.floor(Math.random() * 100000)}`;
   let database, source, store, adapters, library, linkedChildren, itemCreation, service, host, directory;
   const contextLoaders = [];
@@ -93,7 +100,7 @@ async function fixture(t, backend = 'postgres', probe) {
   adapters = new StorageRegistry(); adapters.registerType('fixture', () => new MemoryStorageAdapter());
   await adapters.createInstance('fixture', 'fixture', {});
   const vfs = new VirtualFileSystem(adapters); vfs.mount({ path: '/media', instanceId: 'fixture', root: '/', capabilities: { create: true, replace: true, delete: true } });
-  const adapter = { write: (name, bytes) => vfs.write('/media' + name, bytes), delete: name => vfs.delete('/media' + name) };
+  const adapter = { write: (name, bytes, options) => vfs.write('/media' + name, bytes, options), delete: name => vfs.delete('/media' + name) };
   await adapter.write('/sample.wav', wave());
   const identityMap = new IdentityAccessMap(); identityMap.addPrefix({ identityRoot: 'Z:\\media', accessRoot: '/media', style: 'windows', returnAccess: 'Synthetic fixture mapped only during isolated tests' });
   directory = await mkdtemp(path.join(os.tmpdir(), 'probe-lifecycle-state-'));
@@ -101,15 +108,330 @@ async function fixture(t, backend = 'postgres', probe) {
   linkedChildren = await openMetadataRelations(database, spoolRoot);
   store = new DomainStore(database);
   library = new LibraryService({fileSystem: testFileSystem,  store, linkedChildren, serverId: 'fixture', programDataPath: directory });
-  const loadContext = trackMetadataContexts(createMetadataContextLoader({fileSystem: testFileSystem,  store, library, linkedChildren, spoolRoot, vfs, identityMap }), contextLoaders);
+  const loadContext = trackMetadataContexts(createMetadataContextLoader({fileSystem: testFileSystem,  store, library, linkedChildren, spoolRoot, vfs, identityMap, configuration }), contextLoaders);
   itemCreation = attachMetadataItemCreation({ store, library, linkedChildren, loadContext });
   service = probe ?? new ProbeService({ store, vfs, identityMap, loadContext, library });
   const registry = new MetadataRegistry();
   host = new MetadataRefreshHost({ registry, store, linkedChildren, vfs, loadContext, probe: service, now: () => date });
   host.updates.library = library;
 
-  return { database, store, adapter, service, registry, host, loadContext, library };
+  return { database, store, adapter, vfs, service, registry, host, loadContext, library };
 }
+
+test('DVD directory probe persists first-file media information, summed duration and disc-local external streams', {
+  skip: !process.env.MEDIAMANAGER_TEST_POSTGRES
+}, async t => {
+  const state = await fixture(t, 'postgres', undefined, { DummyChapterDuration: 0 });
+  const media = state.vfs.resolve('/media').adapter;
+  await media.mkdir('/Disc.Edition'); await media.mkdir('/Disc.Edition/VIDEO_TS');
+  const header = Buffer.alloc(197); header[0] = 1; header[4] = 71; header[196] = 71;
+  await state.adapter.write('/Disc.Edition/VIDEO_TS/VTS_01_1.VOB', header);
+  await state.adapter.write('/Disc.Edition/VIDEO_TS/VTS_02_1.VOB', Buffer.from('second'));
+  for (const name of ['Disc.Edition.en.srt', 'Disc.Edition.en.wav', 'Disc.en.srt']) {
+    await state.adapter.write('/Disc.Edition/' + name, Buffer.from(name));
+  }
+  await state.adapter.write('/Disc.Edition.en.srt', Buffer.from('outside the disc'));
+  await state.database.update('BaseItems', { Id: id }, {
+    Type: 'MediaBrowser.Controller.Entities.Movies.Movie', MediaType: 'Video', Path: 'Z:\\media\\Disc.Edition',
+    Data: JSON.stringify({ VideoType: 'Dvd' })
+  });
+  const [initial] = await state.database.rows('BaseItems', { where: { Id: id } });
+  let laterDuration = '2.5';
+  state.service.probe = async (_bridge, source) => {
+    if (source.endsWith('/VTS_01_1.VOB')) {
+      // Metadata writers may change the directory while its media stays fixed.
+      await state.adapter.write('/Disc.Edition/movie.nfo', Buffer.from('<movie/>'));
+      return { raw: { format: { duration: '1.25', size: '777', bit_rate: '1000000', format_name: 'mpegts' },
+        streams: [{ index: 0, codec_type: 'video', codec_name: 'mpeg2video', width: 720, height: 480 },
+          { index: 1, codec_type: 'attachment', codec_name: 'ttf', tags: { filename: 'first.ttf' } }],
+        chapters: [{ start_time: '0', tags: { title: 'First file chapter' } }] } };
+    }
+    if (source.endsWith('/VTS_02_1.VOB')) return { raw: {
+      format: { duration: laterDuration, size: '888', bit_rate: '2000000', format_name: 'matroska' },
+      streams: [{ index: 0, codec_type: 'video', codec_name: 'h264', width: 1920, height: 1080 }],
+      chapters: [{ start_time: '1', tags: { title: 'Not imported' } }]
+    } };
+    if (source === '/media/Disc.Edition/Disc.Edition.en.srt') return { raw: {
+      streams: [{ index: 0, codec_type: 'subtitle', codec_name: 'subrip' }]
+    } };
+    assert.equal(source, '/media/Disc.Edition/Disc.Edition.en.wav');
+    return { raw: { format: { duration: '4' }, streams: [
+      { index: 0, codec_type: 'audio', codec_name: 'pcm_s16le', sample_rate: '8000', channels: 1 }
+    ] } };
+  };
+  const result = await state.service.refresh(id, { force: true });
+  assert.equal(result.changed, true); assert.equal(result.sourceConsistency, 'unversioned');
+  assert.deepEqual(result.externalStreamFailures, []);
+  const [saved] = await state.database.rows('BaseItems', { where: { Id: id } });
+  assert.equal(saved.RunTimeTicks, 37500000n); assert.equal(saved.Size, 777n); assert.equal(saved.TotalBitrate, 1000000);
+  assert.equal(saved.Width, 720); assert.equal(saved.Height, 480);
+  assert.equal(dateTicks(saved.DateModified), dateTicks(initial.DateModified));
+  const data = JSON.parse(saved.Data);
+  assert.equal(data.VideoType, 'Dvd'); assert.equal(data.Timestamp, 'Valid'); assert.equal(data.Container, 'ts');
+  assert.deepEqual(data.SubtitleFiles, ['Z:\\media\\Disc.Edition\\Disc.Edition.en.srt']);
+  assert.deepEqual(data.AudioFiles, ['Z:\\media\\Disc.Edition\\Disc.Edition.en.wav']);
+  const streams = await state.database.rows('MediaStreamInfos', { where: { ItemId: id }, orderBy: [{ column: 'StreamIndex', direction: 'ASC' }] });
+  assert.deepEqual(streams.map(stream => [stream.StreamType, stream.IsExternal, stream.Codec]),
+    [[2, true, 'subrip'], [0, true, 'pcm_s16le'], [1, false, 'mpeg2video']]);
+  assert.deepEqual((await state.database.rows('AttachmentStreamInfos', { where: { ItemId: id } })).map(row => row.Filename), ['first.ttf']);
+  assert.deepEqual((await state.database.rows('Chapters', { where: { ItemId: id } })).map(row => [row.Name, row.StartPositionTicks]),
+    [['First file chapter', 0n]]);
+  laterDuration = '3.5';
+  await state.adapter.write('/Disc.Edition/VIDEO_TS/VTS_02_1.VOB', Buffer.from('new second file'));
+  const refreshed = await state.service.refresh(id);
+  assert.equal(refreshed.changed, true, 'a stable directory version cannot cache its VOB children');
+  assert.equal((await state.database.rows('BaseItems', { where: { Id: id } }))[0].RunTimeTicks, 47500000n);
+});
+
+test('DVD later-file failure, cancellation and source drift leave persisted media information intact', {
+  skip: !process.env.MEDIAMANAGER_TEST_POSTGRES
+}, async t => {
+  const state = await fixture(t);
+  const media = state.vfs.resolve('/media').adapter;
+  await media.mkdir('/Disc'); await media.mkdir('/Disc/VIDEO_TS');
+  await state.adapter.write('/Disc/VIDEO_TS/VTS_01_1.VOB', Buffer.from('first'));
+  await state.adapter.write('/Disc/VIDEO_TS/VTS_02_1.VOB', Buffer.from('second'), { modified: new Date(date) });
+  await state.database.update('BaseItems', { Id: id }, {
+    Type: 'MediaBrowser.Controller.Entities.Movies.Movie', MediaType: 'Video', Path: 'Z:\\media\\Disc',
+    RunTimeTicks: 123000000n, Width: 320, Height: 240, Data: JSON.stringify({ VideoType: 'Dvd' })
+  });
+  const tables = ['BaseItems', 'MediaStreamInfos', 'AttachmentStreamInfos', 'Chapters'];
+  const snapshot = () => Promise.all(tables.map(table => state.database.rows(table)));
+  const before = await snapshot(), capabilities = state.vfs.capabilities.bind(state.vfs);
+  const active = new Set(), open = state.vfs.openRead.bind(state.vfs);
+  state.vfs.openRead = async (...args) => {
+    const handle = await open(...args); active.add(handle);
+    return { ...handle, close: async () => { try { await handle.close(); } finally { active.delete(handle); } } };
+  };
+  for (const mode of ['failure', 'cancel', 'version-change', 'unversioned-change']) await t.test(mode, async () => {
+    const controller = new AbortController(), failure = new Error('Second VOB could not be probed.');
+    state.vfs.capabilities = source => ({ ...capabilities(source), reliableVersion: mode !== 'unversioned-change' });
+    state.service.probe = async (_bridge, source, options) => {
+      const handle = await state.vfs.openRead(source, { signal: options.signal });
+      try {
+        for await (const _ of handle.stream) { /* Consume the real selected VOB. */ }
+        if (source.endsWith('/VTS_02_1.VOB')) {
+          if (mode === 'failure') throw failure;
+          if (mode === 'cancel') controller.abort();
+          else await state.adapter.write('/Disc/VIDEO_TS/VTS_02_1.VOB', Buffer.from('other!'), {
+            modified: new Date(mode === 'unversioned-change' ? '2026-10-19T00:00:00Z' : date)
+          });
+        }
+        return { raw: { format: { duration: '1', size: '5', format_name: 'mpeg' },
+          streams: [{ index: 0, codec_type: 'video', codec_name: 'mpeg2video', width: 720, height: 480 }] } };
+      } finally { await handle.close(); }
+    };
+    await assert.rejects(state.service.refresh(id, { force: true, signal: controller.signal }),
+      mode === 'failure' ? error => error === failure : { code: mode === 'cancel' ? 'cancelled' : 'version-changed' });
+    assert.equal(active.size, 0);
+    assert.deepEqual(await snapshot(), before);
+    await state.adapter.write('/Disc/VIDEO_TS/VTS_02_1.VOB', Buffer.from('second'), { modified: new Date(date) });
+  });
+});
+
+async function blurayFixture(t) {
+  const state = await fixture(t, 'postgres', undefined, { DummyChapterDuration: 0 });
+  const media = state.vfs.resolve('/media').adapter;
+  for (const name of ['/Disc', '/Disc/BDMV', '/Disc/BDMV/CLIPINF', '/Disc/BDMV/PLAYLIST', '/Disc/BDMV/STREAM']) await media.mkdir(name);
+  const header = Buffer.alloc(197); header[0] = 1; header[4] = 71; header[196] = 71;
+  const files = makeBlurayFiles(blurayInput, header);
+  for (const [name, bytes] of files) await state.adapter.write('/Disc/' + name, bytes, { modified: new Date(date) });
+  await state.database.update('BaseItems', { Id: id }, {
+    Type: 'MediaBrowser.Controller.Entities.Movies.Movie', MediaType: 'Video', Path: 'Z:\\media\\Disc',
+    RunTimeTicks: 123000000n, Width: 320, Height: 240, Data: JSON.stringify({ VideoType: 'BluRay' })
+  });
+  const active = new Set(), open = state.vfs.openRead.bind(state.vfs);
+  state.vfs.openRead = async (...args) => {
+    const handle = await open(...args); active.add(handle);
+    return { ...handle, close: async () => { try { await handle.close(); } finally { active.delete(handle); } } };
+  };
+  return { ...state, files, active };
+}
+
+const blurayFirstRaw = () => ({ format: { duration: '1.25', size: '777', bit_rate: '1000000', format_name: 'mpegts' },
+  streams: [{ index: 0, id: '0x1011', codec_type: 'video', codec_name: 'mpeg2video', width: 720, height: 576 },
+    { index: 1, codec_type: 'attachment', codec_name: 'ttf', tags: { filename: 'first.ttf' } }],
+  chapters: [{ start_time: '0.5', tags: { title: 'Not the playlist chapter' } }] });
+const blurayReferenceRaw = channels => ({ format: { duration: '99', size: '888', bit_rate: '2000000', format_name: 'matroska' },
+  streams: [{ index: 0, id: '0x1100', codec_type: 'audio', codec_name: 'ac3', channels,
+    channel_layout: channels === 6 ? '5.1(side)' : 'stereo', sample_rate: '48000', bit_rate: '448000' },
+  { index: 1, id: '0x1011', codec_type: 'video', codec_name: 'h264', width: 1920, height: 1080 }] });
+
+test('Blu-ray probe persists the playlist with reference audio and first-file scalars, attachments and external subtitles', {
+  skip: !process.env.MEDIAMANAGER_TEST_POSTGRES
+}, async t => {
+  const state = await blurayFixture(t);
+  await state.adapter.write('/Disc/Disc.en.srt', Buffer.from('disc-local subtitle'));
+  await state.adapter.write('/Disc.en.srt', Buffer.from('outside the disc'));
+  const [initial] = await state.database.rows('BaseItems', { where: { Id: id } });
+  let channels = 6;
+  state.service.probe = async (_bridge, source) => {
+    if (source.endsWith('/00001.m2ts')) {
+      await state.adapter.write('/Disc/movie.nfo', Buffer.from('<movie/>'));
+      return { raw: blurayFirstRaw() };
+    }
+    if (source.endsWith('/00002.m2ts')) return { raw: blurayReferenceRaw(channels) };
+    assert.equal(source, '/media/Disc/Disc.en.srt');
+    return { raw: { streams: [{ index: 0, codec_type: 'subtitle', codec_name: 'subrip' }] } };
+  };
+  const result = await state.service.refresh(id, { force: true });
+  assert.equal(result.changed, true); assert.equal(result.sourceConsistency, 'unversioned');
+  assert.deepEqual(result.externalStreamFailures, []);
+  const [saved] = await state.database.rows('BaseItems', { where: { Id: id } });
+  assert.equal(saved.RunTimeTicks, 35000000n); assert.equal(saved.Size, 777n); assert.equal(saved.TotalBitrate, 1000000);
+  assert.deepEqual([saved.Width, saved.Height], [720, 480]);
+  assert.equal(dateTicks(saved.DateModified), dateTicks(initial.DateModified));
+  const data = JSON.parse(saved.Data);
+  assert.equal(data.VideoType, 'BluRay'); assert.equal(data.Container, 'ts'); assert.equal(data.Timestamp, 'Valid');
+  assert.deepEqual(data.SubtitleFiles, ['Z:\\media\\Disc\\Disc.en.srt']);
+  const streams = await state.database.rows('MediaStreamInfos', { where: { ItemId: id }, orderBy: [{ column: 'StreamIndex', direction: 'ASC' }] });
+  assert.deepEqual(streams.map(stream => [stream.StreamType, stream.IsExternal, stream.Codec]),
+    [[2, true, 'subrip'], [1, false, 'mpeg2video'], [1, false, 'mpeg2video'], [0, false, 'AC3'], [2, false, 'pgssub'], [2, false, 'SUB']]);
+  assert.deepEqual(streams.filter(stream => stream.StreamType === 1).map(stream => [stream.Width, stream.Height]), [[720, 480], [0, 480]]);
+  const audio = streams.find(stream => stream.StreamType === 0);
+  assert.deepEqual([audio.Channels, audio.ChannelLayout, audio.SampleRate, audio.BitRate, audio.Language], [6, '5.1', 48000, 448000, 'eng']);
+  assert.deepEqual((await state.database.rows('AttachmentStreamInfos', { where: { ItemId: id } })).map(row => row.Filename), ['first.ttf']);
+  assert.deepEqual((await state.database.rows('Chapters', { where: { ItemId: id }, orderBy: [{ column: 'ChapterIndex', direction: 'ASC' }] }))
+    .map(row => row.StartPositionTicks), [0n, 15000000n]);
+  channels = 2;
+  await state.adapter.write('/Disc/BDMV/STREAM/00002.m2ts', Buffer.from('changed reference'));
+  const repeated = await state.service.refresh(id);
+  assert.equal(repeated.changed, true, 'directory revisions do not cache the reference clip');
+  assert.equal((await state.database.rows('MediaStreamInfos', { where: { ItemId: id, StreamType: 0 } }))[0].Channels, 2);
+  assert.equal(state.active.size, 0);
+});
+
+test('Blu-ray metadata or reference failures skip technical saving, while absent playlists, first-file failure, cancellation and drift fail without replacement', {
+  skip: !process.env.MEDIAMANAGER_TEST_POSTGRES
+}, async t => {
+  const state = await blurayFixture(t);
+  const empty = table => Object.fromEntries(tableDefinition(table).columns.filter(column => !column.generated).map(column => [column.name,
+    column.nullable ? null : column.clrType === 'bool' ? false : column.type === 'TEXT' ? '' : 0]));
+  await state.database.insert('MediaStreamInfos', { ...empty('MediaStreamInfos'), ItemId: id, StreamIndex: 0, StreamType: 1,
+    Codec: 'mpeg2video', Width: 320, Height: 240 });
+  await state.database.insert('AttachmentStreamInfos', { ...empty('AttachmentStreamInfos'), ItemId: id, Index: 1, Filename: 'stored.ttf' });
+  await state.database.insert('Chapters', { ...empty('Chapters'), ItemId: id, ChapterIndex: 0, Name: 'Stored chapter', StartPositionTicks: 0n });
+  const tables = ['BaseItems', 'MediaStreamInfos', 'AttachmentStreamInfos', 'Chapters'];
+  const snapshot = () => Promise.all(tables.map(table => state.database.rows(table)));
+  const before = await snapshot();
+  for (const mode of ['malformed', 'no-playlist', 'first-failure', 'reference-failure', 'both-failure', 'same-file-failure', 'cancel', 'source-drift']) await t.test(mode, async () => {
+    const controller = new AbortController(), failure = new Error('The selected Blu-ray media could not be probed.');
+    if (mode === 'malformed') await state.adapter.write('/Disc/BDMV/CLIPINF/00001.clpi', Buffer.from('bad CLPI'));
+    if (mode === 'no-playlist') for (const name of ['00000', '00001']) await state.adapter.delete(`/Disc/BDMV/PLAYLIST/${name}.mpls`);
+    if (mode === 'same-file-failure') for (const name of ['00001', '00002']) await state.adapter.delete(`/Disc/BDMV/PLAYLIST/${name}.mpls`);
+    state.service.probe = async (_bridge, source, options) => {
+      assert.ok(!['malformed', 'no-playlist'].includes(mode), 'unusable disc metadata must not start probing');
+      const handle = await state.vfs.openRead(source, { signal: options.signal });
+      try {
+        for await (const _ of handle.stream) { /* Consume the actual selected file before injecting a boundary failure. */ }
+        if (source.endsWith('/00001.m2ts')) {
+          if (['first-failure', 'both-failure', 'same-file-failure'].includes(mode)) throw failure;
+          return { raw: blurayFirstRaw() };
+        }
+        assert.ok(source.endsWith('/00002.m2ts'));
+        if (mode === 'reference-failure' || mode === 'both-failure') throw failure;
+        if (mode === 'cancel') controller.abort();
+        if (mode === 'source-drift') await state.adapter.write('/Disc/BDMV/STREAM/00002.m2ts', Buffer.from('changed during probe'));
+        return { raw: blurayReferenceRaw(2) };
+      } finally { await handle.close(); }
+    };
+    if (['malformed', 'reference-failure', 'both-failure'].includes(mode)) {
+      const loaded = await state.loadContext(id);
+      try {
+        const result = await state.service.refreshMetadata(loaded, { MetadataRefreshMode: 'FullRefresh', signal: controller.signal });
+        assert.equal(result.changed, false); assert.equal(result.UpdateType, ItemUpdateType.MetadataImport);
+        assert.equal(result.reason, mode === 'malformed' ? 'bluray-info-unavailable' : 'bluray-reference-unavailable');
+      } finally { await loaded.dispose(); }
+    } else await assert.rejects(state.service.refresh(id, { force: true, signal: controller.signal }),
+      mode.endsWith('failure') ? error => error === failure
+        : { code: mode === 'cancel' ? 'cancelled' : mode === 'source-drift' ? 'version-changed' : 'invalid-response' });
+    assert.deepEqual(await snapshot(), before); assert.equal(state.active.size, 0);
+    for (const [name, bytes] of state.files) await state.adapter.write('/Disc/' + name, bytes, { modified: new Date(date) });
+  });
+});
+
+test('ISO probe preserves disc classification and does not interpret image bytes as transport timestamps', {
+  skip: !process.env.MEDIAMANAGER_TEST_POSTGRES
+}, async t => {
+  const state = await fixture(t);
+  await state.adapter.delete('/sample.wav');
+  await state.adapter.write('/sample.img', Buffer.alloc(2048), { modified: date });
+  await state.database.update('BaseItems', { Id: id }, {
+    Type: 'MediaBrowser.Controller.Entities.Movies.Movie', MediaType: 'Video', Path: 'Z:\\media\\sample.img',
+    DateModified: nativeDate((await state.vfs.stat('/media/sample.img')).modified),
+    Data: JSON.stringify({ VideoType: 'Iso', IsoType: 'BluRay' })
+  });
+  let probes = 0;
+  state.service.probe = async (_bridge, source) => {
+    assert.equal(source, '/media/sample.img'); probes++;
+    return { raw: { format: { duration: '2', size: '2048', format_name: 'mpegts' },
+      streams: [{ index: 0, codec_type: 'video', codec_name: 'mpeg2video', width: 720, height: 480,
+        r_frame_rate: '25/1', avg_frame_rate: '25/1' }] } };
+  };
+  const openRead = state.vfs.openRead.bind(state.vfs);
+  state.vfs.openRead = (source, options) => {
+    assert.notEqual(source, '/media/sample.img', 'ISO transport timestamps must not inspect image headers');
+    return openRead(source, options);
+  };
+  const refreshed = await state.service.refresh(id, { force: true });
+  assert.equal(refreshed.changed, true); assert.equal(probes, 1);
+  const [stored] = await state.database.rows('BaseItems', { where: { Id: id } });
+  const data = JSON.parse(stored.Data);
+  assert.equal(data.VideoType, 'Iso'); assert.equal(data.IsoType, 'BluRay'); assert.equal(data.Timestamp ?? null, null);
+  assert.equal(stored.RunTimeTicks, 20000000n); assert.equal(stored.Width, 720); assert.equal(stored.Height, 480);
+  assert.equal((await state.database.rows('MediaStreamInfos', { where: { ItemId: id } }))[0].Codec, 'mpeg2video');
+});
+
+test('Video STRM default refresh preserves technical fields and embedded streams while replacing external data', {
+  skip: !process.env.MEDIAMANAGER_TEST_POSTGRES
+}, async t => {
+  const state = await fixture(t, 'postgres', undefined, { DummyChapterDuration: 0 });
+  const empty = table => Object.fromEntries(tableDefinition(table).columns.filter(column => !column.generated)
+    .map(column => [column.name, column.nullable ? null : column.clrType === 'bool' ? false : column.type === 'TEXT' ? '' : 0]));
+  const target = 'rtsp://media.invalid/current-video';
+  await state.adapter.delete('/sample.wav');
+  await state.adapter.write('/sample.strm', Buffer.from(`# video shortcut\n${target}\n`), { modified: date });
+  await state.adapter.write('/sample.en.forced.srt', Buffer.from('1\n00:00:00,000 --> 00:00:00,100\nLocal subtitle\n'));
+  await state.database.update('BaseItems', { Id: id }, {
+    Type: 'MediaBrowser.Controller.Entities.Movies.Movie', MediaType: 'Video', Path: 'Z:\\media\\sample.strm',
+    DateModified: nativeDate((await state.vfs.stat('/media/sample.strm')).modified),
+    RunTimeTicks: 250000000n, TotalBitrate: 123456, Width: 640, Height: 360,
+    Data: JSON.stringify({ IsShortcut: true, VideoType: 'VideoFile', Container: 'mkv', Timestamp: 'Valid' })
+  });
+  await state.database.insertBatch('MediaStreamInfos', [
+    { ...empty('MediaStreamInfos'), ItemId: id, StreamIndex: 0, StreamType: 1, Codec: 'h264', Width: 640, Height: 360, IsAvc: true },
+    { ...empty('MediaStreamInfos'), ItemId: id, StreamIndex: 1, StreamType: 2, Codec: 'subrip' },
+    { ...empty('MediaStreamInfos'), ItemId: id, StreamIndex: 2, StreamType: 2, Codec: 'subrip', IsExternal: true, Path: 'Z:\\media\\removed.srt' }
+  ]);
+  await state.database.insert('AttachmentStreamInfos', { ...empty('AttachmentStreamInfos'), ItemId: id, Index: 3, Filename: 'old.ttf' });
+  await state.database.insert('Chapters', { ...empty('Chapters'), ItemId: id, ChapterIndex: 0, Name: 'Stored chapter', StartPositionTicks: 0n });
+  const oldChapters = await state.database.rows('Chapters', { where: { ItemId: id } });
+  state.service.probe = async (bridge, source, options) => {
+    assert.equal(source, '/media/sample.en.forced.srt');
+    return probeRaw(bridge, source, options);
+  };
+  state.service.probeRemote = async () => { throw new Error('Default shortcut refresh must not probe remote media.'); };
+  const result = await state.service.refresh(id, { force: true, metadataRefreshMode: 'ValidationOnly' });
+  assert.equal(result.changed, true); assert.equal(result.mediaInfo, null);
+  assert.deepEqual(result.externalStreamFailures, []);
+  const [saved] = await state.database.rows('BaseItems', { where: { Id: id } });
+  assert.equal(saved.Name, 'Locked fixture title');
+  assert.equal(saved.RunTimeTicks, 250000000n); assert.equal(saved.TotalBitrate, 123456);
+  assert.equal(saved.Width, 640); assert.equal(saved.Height, 360);
+  const data = JSON.parse(saved.Data);
+  assert.equal(data.ShortcutPath, target); assert.equal(data.Container, 'mkv'); assert.equal(data.Timestamp, 'Valid');
+  assert.equal(data.DefaultVideoStreamIndex, 1); assert.equal(data.HasSubtitles, true);
+  assert.deepEqual(data.SubtitleFiles, ['Z:\\media\\sample.en.forced.srt']);
+  const streams = await state.database.rows('MediaStreamInfos', { where: { ItemId: id }, orderBy: [{ column: 'StreamIndex', direction: 'ASC' }] });
+  assert.deepEqual(streams.map(stream => [stream.StreamIndex, stream.StreamType, stream.IsExternal, stream.Codec]),
+    [[0, 2, true, 'subrip'], [1, 1, false, 'h264'], [2, 2, false, 'subrip']]);
+  assert.equal(streams[1].IsAvc, true);
+  assert.deepEqual(await state.database.rows('AttachmentStreamInfos', { where: { ItemId: id } }), []);
+  assert.deepEqual(await state.database.rows('Chapters', { where: { ItemId: id } }), oldChapters);
+  await state.service.refresh(id, { force: true, metadataRefreshMode: 'FullRefresh' });
+  assert.deepEqual(await state.database.rows('Chapters', { where: { ItemId: id } }), []);
+  assert.equal((await state.library.getItemRecord(id)).ShortcutPath, target);
+});
 
 test('refresh host provider selection follows 90 actual MetadataService.GetProviders results', async t => {
   let current, checks = [], fetched = [];
@@ -194,6 +516,118 @@ test('real ffprobe refresh lifecycle, lyrics, locks and native SQLite return on 
     try { assert.deepEqual(returned.rows('BaseItems'), await state.database.rows('BaseItems')); assert.deepEqual(returned.rows('MediaStreamInfos'), await state.database.rows('MediaStreamInfos')); }
     finally { await returned.close(); }
   } finally { if (temporary) await rm(directory, { recursive: true }); }
+});
+
+test('Audio STRM refresh stores the target without probing and explicit playback refresh probes the remote audio', {
+  skip: !process.env.MEDIAMANAGER_TEST_POSTGRES
+}, async t => {
+  const state = await fixture(t);
+  const shortcut = 'Z:\\media\\sample.strm';
+  let payload = wave(), requests = 0;
+  const upstream = createServer((request, response) => {
+    requests++;
+    const range = /^bytes=(\d+)-(\d*)$/u.exec(request.headers.range ?? '');
+    const start = range ? Number(range[1]) : 0;
+    const end = range?.[2] ? Math.min(Number(range[2]), payload.length - 1) : payload.length - 1;
+    if (start > end) {
+      response.writeHead(416, { 'Content-Range': `bytes */${payload.length}` }); response.end(); return;
+    }
+    const bytes = payload.subarray(start, end + 1);
+    response.writeHead(range ? 206 : 200, {
+      'Content-Type': 'audio/wav', 'Accept-Ranges': 'bytes', 'Content-Length': String(bytes.length),
+      ...(range ? { 'Content-Range': `bytes ${start}-${end}/${payload.length}` } : {})
+    });
+    response.end(request.method === 'HEAD' ? undefined : bytes);
+  });
+  t.after(async () => {
+    upstream.closeAllConnections();
+    await new Promise((resolve, reject) => upstream.close(error => error ? reject(error) : resolve()));
+  });
+  upstream.listen(0, '127.0.0.1'); await once(upstream, 'listening');
+  const target = `http://127.0.0.1:${upstream.address().port}/audio.wav`;
+  await state.database.update('BaseItems', { Id: id }, { Path: shortcut, Data: JSON.stringify({ IsShortcut: true }) });
+  await state.adapter.write('/sample.strm', Buffer.from(`\uFEFF# a remote audio source\r\n \t${target}\t \r\nhttps://unused.invalid/second.wav`));
+  state.service.probe = async () => { throw new Error('A shortcut file must not be sent to the local media prober.'); };
+  const options = { MetadataRefreshMode: 'FullRefresh', ImageRefreshMode: 'None' };
+  const readItem = async () => (await state.database.rows('BaseItems', { where: { Id: id } }))[0];
+  const refresh = async extra => {
+    const result = await state.host.refresh(id, { ...options, ...extra });
+    assert.equal(result.Failures, 0, result.ErrorMessage);
+    return readItem();
+  };
+  let row = await refresh();
+  assert.equal(JSON.parse(row.Data).ShortcutPath, target);
+  assert.equal(row.RunTimeTicks, null);
+  assert.deepEqual(await state.database.rows('MediaStreamInfos', { where: { ItemId: id } }), []);
+  assert.equal(requests, 0, 'ordinary metadata refresh never contacts the remote target');
+  const [source] = await state.library.getMediaSources(id);
+  assert.equal(source.Protocol, 'File'); assert.equal(source.Path, shortcut); assert.equal(source.IsRemote, false);
+
+  for (const invalid of ['# no target\r\n \t', 'file:///private/audio.wav', `../audio.wav\n${target}`]) {
+    await state.adapter.write('/sample.strm', Buffer.from(invalid));
+    row = await refresh();
+    assert.equal(JSON.parse(row.Data).ShortcutPath, target, 'empty or invalid first lines preserve the saved target');
+    assert.equal(requests, 0);
+  }
+  await state.adapter.write('/sample.strm', Buffer.from(target));
+  await state.adapter.write('/sample.en.lrc', Buffer.from('[00:00.00]Remote audio lyric'));
+  row = await refresh({ EnableRemoteContentProbe: true });
+  assert.equal(row.RunTimeTicks, 1000000n);
+  assert.equal(JSON.parse(row.Data).Container, 'wav');
+  assert.equal(JSON.parse(row.Data).ShortcutPath, target);
+  let streams = await state.database.rows('MediaStreamInfos', { where: { ItemId: id } });
+  assert.equal(streams.find(stream => stream.StreamType === 0)?.Codec, 'pcm_s16le');
+  assert.equal(streams.find(stream => stream.StreamType === 5)?.Path, 'Z:\\media\\sample.en.lrc');
+  assert.ok(requests > 0, 'explicit remote probing read the real HTTP audio');
+
+  const requestsBeforeDefault = requests;
+  payload = wave(1600);
+  row = await refresh();
+  assert.equal(row.RunTimeTicks, 1000000n);
+  assert.deepEqual(await state.database.rows('MediaStreamInfos', { where: { ItemId: id } }), streams);
+  assert.equal(requests, requestsBeforeDefault);
+  const playback = new PlaybackService({ library: state.library, probe: state.service });
+  await playback.sources(await state.library.getItemRecord(id));
+  assert.equal((await readItem()).RunTimeTicks, 2000000n,
+    'playback probes a shortcut again even when a saved audio stream already exists');
+  assert.equal(JSON.parse((await readItem()).Data).ShortcutPath, target);
+});
+
+test('Audio shortcut probe failure preserves the read target while cancellation prevents the final target save', {
+  skip: !process.env.MEDIAMANAGER_TEST_POSTGRES
+}, async t => {
+  const state = await fixture(t);
+  await state.database.update('BaseItems', { Id: id }, {
+    Path: 'Z:\\media\\sample.strm', Data: JSON.stringify({ IsShortcut: true }),
+    PresentationUniqueKey: id.replaceAll('-', '')
+  });
+  const target = 'https://media.invalid/failed-audio.wav';
+  await state.adapter.write('/sample.strm', Buffer.from(target));
+  const options = { MetadataRefreshMode: 'FullRefresh', ImageRefreshMode: 'None', EnableRemoteContentProbe: true };
+  state.service.probeRemote = async url => {
+    assert.equal(url, target);
+    throw new Error('Isolated remote audio probe failure');
+  };
+  const failed = await state.host.refresh(id, options);
+  assert.equal(failed.Failures, 1); assert.equal(failed.ErrorMessage, 'Isolated remote audio probe failure');
+  const before = await state.database.rows('BaseItems', { where: { Id: id } });
+  assert.equal(JSON.parse(before[0].Data).ShortcutPath, target);
+  assert.equal(before[0].RunTimeTicks, null);
+  assert.deepEqual(await state.database.rows('MediaStreamInfos', { where: { ItemId: id } }), []);
+
+  await state.adapter.write('/sample.strm', Buffer.from('https://media.invalid/cancelled-audio.wav'));
+  let started;
+  const running = new Promise(resolve => { started = resolve; });
+  state.service.probeRemote = async (_url, { signal }) => {
+    started();
+    await new Promise((resolve, reject) => signal.addEventListener('abort', () => reject(signal.reason), { once: true }));
+  };
+  const controller = new AbortController();
+  const pending = state.host.refresh(id, { ...options, signal: controller.signal });
+  await running; controller.abort();
+  await assert.rejects(pending, error => error.name === 'AbortError' || error.code === 'cancelled');
+  assert.deepEqual(await state.database.rows('BaseItems', { where: { Id: id } }), before);
+  assert.deepEqual(await state.database.rows('MediaStreamInfos', { where: { ItemId: id } }), []);
 });
 
 test('probe failure retains the native file-date save, later cancellation rolls back and refresh remains usable', async t => {

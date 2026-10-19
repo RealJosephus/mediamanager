@@ -95,10 +95,11 @@ export class MetadataImageAssets {
     try {
       const location = await this.resolve(identity); options.signal?.throwIfAborted();
       if (location.accessPath) return this.vfs.openRead(location.accessPath, options);
-      const value = await this.fileSystem.stat(location.localPath, { bigint: true });
-      if (!value.isFile()) throw Object.assign(new Error('Image asset is not a file.'), { code: 'not-found' });
-      const stream = this.fileSystem.createReadStream(location.localPath, { signal: options.signal });
-      return { stream, size: value.size, modified: modifiedDate(value), close: async () => { stream.destroy(); } };
+      try { return await this.fileSystem.openRead(location.localPath, options); }
+      catch (error) {
+        if (error.code === 'is-directory') throw Object.assign(new Error('Image asset is not a file.'), { code: 'not-found' });
+        throw error;
+      }
     } catch (error) { throw errorCode(error); }
   }
   async write(identity, bytes, options = {}) {

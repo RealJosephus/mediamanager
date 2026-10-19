@@ -155,7 +155,7 @@ export function makeNativeAbsolutePath(folderPath, filePath) {
   const windows = windowsPath(folderPath) || windowsPath(filePath), api = windows ? path.win32 : path.posix;
   if (api.isAbsolute(filePath) && (!windows || filePath[0] !== '\\')) return filePath;
   if (filePath.startsWith('\\\\')) return filePath;
-  const relative = windows && filePath[0] === '\\' ? filePath.slice(1) : filePath;
+  const relative = filePath[0] === '\\' ? filePath.slice(1) : filePath;
   try { return api.resolve(folderPath, relative); }
   catch { return filePath; }
 }

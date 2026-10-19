@@ -1,9 +1,10 @@
 import { testFileSystem } from '../storage/plugin-files.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { randomUUID } from 'node:crypto';
 import { readFileSync } from 'node:fs';
+import { mkdtemp, mkdir, rm } from 'node:fs/promises';
 import path from 'node:path';
+import os from 'node:os';
 import { PostgresDatabase } from '../../src/database/postgres.js';
 import { tableDefinition, quoteIdentifier } from '../../src/database/model.js';
 import { DomainStore } from '../../src/database/domain-store.js';
@@ -17,7 +18,10 @@ import { createExternalUrlRegistry } from '../../src/metadata/external-url-provi
 import { createTmdbPlugin } from '../../plugins/tmdb/plugin.js';
 import { stringifyNativeJson, withNativeFloats, cloneNativeValue } from '../../src/core/json.js';
 import { createRuntime } from '../../src/runtime.js';
-import { createPostgresTestDatabase } from '../database/postgres-fixture.js';
+import { StorageRegistry, VirtualFileSystem, IdentityAccessMap } from '../../src/storage/index.js';
+import { MemoryStorageAdapter } from '../../src/storage/testing/memory-adapter.js';
+import { LocalAdapter } from '../../plugins/local/adapter.js';
+import { createPostgresTestDatabase, dropPostgresTestDatabase } from '../database/postgres-fixture.js';
 
 const input = JSON.parse(readFileSync(new URL('./fixtures/media-versions/input.json', import.meta.url)));
 const native = JSON.parse(readFileSync(new URL('./fixtures/media-versions/native.json', import.meta.url)));
@@ -106,62 +110,122 @@ test('version resume ordering preserves queried streams and excludes inaccessibl
   } finally { await library?.close(); }
 });
 
-test('channel and non-HTTP remote shortcut sources remain explicitly unsupported',
+test('channel media sources remain explicitly unsupported',
   { skip: !process.env.MEDIAMANAGER_TEST_POSTGRES }, async t => {
   const db = await createPostgresTestDatabase(t, 'media_version_unsupported');
+  const entry = structuredClone(shortcutInput.cases[0]);
+  entry.items[0].ChannelId = '97840000-0000-0000-0000-000000000099';
+  await seed(db, entry);
+  const state = await loadLibrary(db, {}, { baseRows: await db.rows('BaseItems') });
   try {
-    for (const [mutate, message] of [
-      [item => { item.ChannelId = '97840000-0000-0000-0000-000000000099'; }, 'Channel media source projection is not implemented.'],
-      [item => { item.ShortcutPath = 'rtsp://example.invalid/video'; }, 'This shortcut media source protocol is not implemented.']
-    ]) {
-      const entry = structuredClone(shortcutInput.cases[0]);
-      mutate(entry.items[0]);
-      await seed(db, entry);
-      const state = await loadLibrary(db, {}, { baseRows: await db.rows('BaseItems') });
-      const item = state.byId.get(idKey(entry.query));
-      await assert.rejects(mediaSources(item, state, null, {}), error => error.status === 501 && error.message === message);
-    }
-  } finally { /* PostgreSQL cleanup is registered on the test. */ }
+    const item = state.byId.get(idKey(entry.query));
+    await assert.rejects(mediaSources(item, state, null, {}), error => error.status === 501 && error.message === 'Channel media source projection is not implemented.');
+  } finally { await state.dispose(); }
 });
 
-for (const dialect of ['postgres']) test(`recorded HTTP(S) shortcut sources reach PlaybackInfo on ${dialect}`, {
-  skip: dialect === 'postgres' && !process.env.MEDIAMANAGER_TEST_POSTGRES
-}, async () => {
-  const connectionString = process.env.MEDIAMANAGER_TEST_POSTGRES;
-  const schema = `shortcut_http_${randomUUID().replaceAll('-', '').slice(0, 20)}`;
-  const db = await PostgresDatabase.open({ connectionString, schema, create: true });
-  let runtime;
-  try {
-    runtime = await createRuntime({ database: db, configuration: { UICulture: 'en-US', IsStartupWizardCompleted: true },
-      serverId: 'shortcut-http-test', programDataPath: 'D:\\shortcut-http-test-state' });
-    runtime.sessions.automaticProgress = false;
-    const user = await runtime.users.createUser({ Name: 'ShortcutAdmin', Password: 'shortcut-password' });
-    const login = await runtime.authentication.login({ Username: 'ShortcutAdmin', Pw: 'shortcut-password' },
-      { Client: 'ShortcutTest', Device: 'Shortcut Device', DeviceId: `shortcut-${dialect}`, Version: '1' }, { remoteEndPoint: '127.0.0.1' });
-    await new Promise(resolve => runtime.server.listen(0, '127.0.0.1', resolve));
-    const origin = `http://127.0.0.1:${runtime.server.address().port}`;
-    const authorization = `MediaBrowser Client="ShortcutTest", Device="Shortcut Device", DeviceId="shortcut-${dialect}", Version="1", Token="${login.AccessToken}"`;
-    for (const entry of shortcutInput.cases) {
-      await seed(db, entry);
-      const response = await fetch(`${origin}/Items/${entry.query}/PlaybackInfo`, {
-        method: 'POST', headers: { Authorization: authorization, 'Content-Type': 'application/json' }, body: '{}'
-      });
-      const text = await response.text();
-      assert.equal(response.status, 200, entry.name + ': ' + text);
-      const source = JSON.parse(text).MediaSources[0];
-      const expected = shortcutNative.results.find(result => result.name === entry.name).sources[0];
-      assert.deepEqual(Object.fromEntries(['Protocol', 'Id', 'Path', 'Type', 'Container', 'Name', 'IsRemote', 'ETag']
-        .map(key => [key, source[key]])), Object.fromEntries(['Protocol', 'Id', 'Path', 'Type', 'Container', 'Name', 'IsRemote', 'ETag']
-        .map(key => [key, expected[key]])), entry.name);
-      assert.deepEqual(source.MediaStreams, expected.MediaStreams, entry.name + ' preloaded streams');
-      if (entry.name === 'shortcut-local-target') assert.equal(text.includes('do-not-expose'), false, 'local shortcut target must not leak');
-    }
-  } finally {
-    if (runtime) await runtime.close(); else await db.close();
-    const cleanup = await PostgresDatabase.open({ connectionString, schema });
+test('RTSP and RTP video shortcuts expose remote DTOs without static direct streaming',
+  { skip: !process.env.MEDIAMANAGER_TEST_POSTGRES }, async t => {
+  const db = await createPostgresTestDatabase(t, 'media_version_remote');
+  for (const [scheme, protocol] of [['rtsp', 'Rtsp'], ['rtp', 'Rtp']]) {
+    const entry = structuredClone(shortcutInput.cases[0]);
+    const target = `${scheme}://127.0.0.1:1/video`;
+    entry.items[0].ShortcutPath = target;
+    await seed(db, entry);
+    const state = await loadLibrary(db, {}, { baseRows: await db.rows('BaseItems') });
     try {
-      await cleanup.client.query(`DROP SCHEMA ${quoteIdentifier(schema)} CASCADE`);
-      await cleanup.client.query(`DROP SCHEMA ${quoteIdentifier(schema + '__mm')} CASCADE`);
-    } finally { await cleanup.close(); }
+      const item = state.byId.get(idKey(entry.query));
+      const [source] = await mediaSources(item, state, null, {});
+      assert.equal(source.Protocol, protocol);
+      assert.equal(source.Path, target);
+      assert.equal(source.IsRemote, true);
+      assert.equal(source.SupportsDirectStream, false);
+      assert.equal(source.Id, idKey(entry.query));
+      assert.equal(source.MediaStreams[0].Width, 1920);
+    } finally { await state.dispose(); }
   }
+});
+
+test('HTTP PlaybackInfo reads real video shortcut files and persists refreshed remote streams', {
+  skip: !process.env.MEDIAMANAGER_TEST_POSTGRES
+}, async t => {
+  let db, runtime, directory;
+  const storage = new StorageRegistry();
+  t.after(async () => {
+    const failures = [];
+    const attempt = async operation => { try { await operation(); } catch (error) { failures.push(error); } };
+    await attempt(() => runtime?.close());
+    await attempt(() => storage.close());
+    await attempt(() => dropPostgresTestDatabase(db));
+    await attempt(async () => {
+      if (!directory) return;
+      assert.equal(path.dirname(directory), os.tmpdir());
+      assert.ok(path.basename(directory).startsWith('shortcut-http-'));
+      await rm(directory, { recursive: true, force: true });
+    });
+    if (failures.length) throw new AggregateError(failures, 'Shortcut PlaybackInfo cleanup failed.');
+  });
+  directory = await mkdtemp(path.join(os.tmpdir(), 'shortcut-http-'));
+  const programDataPath = path.join(directory, 'data');
+  await mkdir(programDataPath, { recursive: true });
+  db = await createPostgresTestDatabase(undefined, 'shortcut_http');
+  const entry = structuredClone(shortcutInput.cases[0]);
+  entry.items[0].ShortcutPath = null;
+  entry.items[0].IsInMixedFolder = true;
+  await seed(db, entry);
+  storage.registerType('fixture', () => new MemoryStorageAdapter());
+  const adapter = await storage.createInstance('fixture', 'fixture', {});
+  storage.registerType('state-local', configuration => LocalAdapter.open(configuration));
+  await storage.createInstance('state-local', 'state-local', { root: programDataPath, writable: true });
+  const vfs = new VirtualFileSystem(storage);
+  vfs.mount({ path: '/media', instanceId: 'fixture', capabilities: { create: true, replace: true, delete: true } });
+  vfs.mount({ path: '/state', instanceId: 'state-local', capabilities: { create: true, replace: true, mkdir: true, delete: true, rename: true, atomicReplace: true } });
+  const identityMap = new IdentityAccessMap();
+  identityMap.addPrefix({ identityRoot: 'Z:\\Library\\Shortcuts', accessRoot: '/media', style: 'windows', returnAccess: 'Isolated shortcut bytes.' });
+  identityMap.addPrefix({ identityRoot: programDataPath, accessRoot: '/state', style: process.platform === 'win32' ? 'windows' : 'posix', returnAccess: 'Isolated application state.' });
+  const errors = [], observedTargets = [];
+  runtime = await createRuntime({ database: db, vfs, identityMap, programDataPath,
+    configuration: { UICulture: 'en-US', IsStartupWizardCompleted: true },
+    serverId: 'shortcut-http-test', onError: error => errors.push(error) });
+  runtime.sessions.automaticProgress = false;
+  runtime.probe.probe = async () => { throw new Error('The shortcut text must never reach the local media prober.'); };
+  // The HTTP endpoint exercises the real file read, normalization and PG save.
+  // The existing probe lifecycle suite covers actual remote ffprobe execution.
+  let expectedTarget, width, seconds;
+  runtime.probe.probeRemote = async target => {
+    assert.equal(target, expectedTarget);
+    observedTargets.push(target);
+    return { raw: {
+      streams: [{ index: 0, codec_type: 'video', codec_name: 'ffv1', width, height: 24, pix_fmt: 'yuv420p', avg_frame_rate: '10/1' }],
+      format: { format_name: 'matroska', duration: String(seconds), bit_rate: '32000' }
+    }, sourceConsistency: 'unversioned' };
+  };
+  await runtime.users.createUser({ Name: 'ShortcutAdmin', Password: 'shortcut-password' });
+  const login = await runtime.authentication.login({ Username: 'ShortcutAdmin', Pw: 'shortcut-password' },
+    { Client: 'ShortcutTest', Device: 'Shortcut Device', DeviceId: 'shortcut-postgres', Version: '1' }, { remoteEndPoint: '127.0.0.1' });
+  await new Promise(resolve => runtime.server.listen(0, '127.0.0.1', resolve));
+  const origin = `http://127.0.0.1:${runtime.server.address().port}`;
+  const authorization = `MediaBrowser Client="ShortcutTest", Device="Shortcut Device", DeviceId="shortcut-postgres", Version="1", Token="${login.AccessToken}"`;
+  for (const [index, scheme] of ['http', 'https'].entries()) {
+    expectedTarget = `${scheme}://127.0.0.1:1/controlled-${index}.mkv`;
+    width = 32 + index * 16; seconds = index + 1;
+    await adapter.write('/Remote Shortcut.strm', Buffer.from(`\uFEFF# current remote target\r\n\t${expectedTarget}\t\r\n`));
+    const response = await fetch(`${origin}/Items/${entry.query}/PlaybackInfo`, {
+      method: 'POST', headers: { Authorization: authorization, 'Content-Type': 'application/json' }, body: '{}'
+    });
+    const text = await response.text();
+    assert.equal(response.status, 200, text);
+    const source = JSON.parse(text).MediaSources[0];
+    assert.equal(source.Protocol, 'Http'); assert.equal(source.Path, expectedTarget); assert.equal(source.IsRemote, true);
+    assert.equal(source.Id, idKey(entry.query)); assert.equal(source.Container, 'mkv');
+    assert.equal(source.RunTimeTicks, seconds * 10000000);
+    assert.deepEqual(source.MediaStreams.map(stream => [stream.Type, stream.Codec, stream.Width, stream.Height]), [['Video', 'ffv1', width, 24]]);
+    const stored = (await db.rows('BaseItems', { where: { Id: entry.query } }))[0];
+    assert.equal(stored.Path, entry.items[0].Path);
+    assert.equal(JSON.parse(stored.Data).ShortcutPath, expectedTarget);
+    assert.equal(stored.RunTimeTicks, BigInt(seconds) * 10000000n);
+    assert.deepEqual((await db.rows('MediaStreamInfos', { where: { ItemId: entry.query } }))
+      .map(stream => [stream.StreamIndex, stream.StreamType, stream.Codec, stream.Width, stream.Height]), [[0, 1, 'ffv1', width, 24]]);
+  }
+  assert.equal(observedTargets.length, 2, 'both requests refresh an existing saved video stream');
+  assert.deepEqual(errors, []);
 });

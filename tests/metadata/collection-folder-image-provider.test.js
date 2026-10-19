@@ -55,6 +55,8 @@ async function fixture(t) {
     }));
     await database.insert('BaseItems', itemRow(number, 'CollectionFolder', { ParentId: userRoot.Id, Path: folderPath,
       Data: JSON.stringify({ CollectionType, PhysicalFolderIds: [physicalId] }) }));
+    // Fixture inserts bypass ItemCreation and its live-root child invalidation.
+    runtime.libraryScanHost.invalidateChildren(userRoot);
     return { Id: id(number), Type: 'CollectionFolder', Name: 'Library ' + number, CollectionType, physicalId };
   };
   const addItem = async (folder, number, type, { parentId = folder.physicalId, data = '{}' } = {}) => {
@@ -129,7 +131,15 @@ test('the registered CollectionPoster task generates and persists a real mapped 
     opened++;
     return { ...handle, async close() { closed++; return handle.close(); } };
   };
+  const refresh = f.runtime.metadataScanner.refreshLiveItem.bind(f.runtime.metadataScanner), refreshed = [];
+  f.runtime.metadataScanner.refreshLiveItem = async (item, options) => {
+    const result = await refresh(item, options);
+    refreshed.push(item.Id);
+    assert.equal(result.Failures, 0, result.ErrorMessage);
+    return result;
+  };
   await f.runtime.collectionPosterVerifyPostScanTask.run();
+  assert.deepEqual(refreshed, [folder.Id]);
   const saved = await f.database.rows('BaseItemImageInfos', { where: { ItemId: folder.Id, ImageType: 0 } });
   assert.equal(saved.length, 1);
   const filename = f.runtime.library.options.expandPath(saved[0].Path), bytes = await readFile(filename);
@@ -140,6 +150,7 @@ test('the registered CollectionPoster task generates and persists a real mapped 
   assert.deepEqual(await readdir(path.join(f.root, 'cache', 'temp')), []);
   const previousOpens = opened;
   await f.runtime.collectionPosterVerifyPostScanTask.run();
+  assert.deepEqual(refreshed, [folder.Id]);
   assert.equal(opened, previousOpens); assert.deepEqual(await readFile(filename), bytes);
   assert.deepEqual(f.errors, []);
 });

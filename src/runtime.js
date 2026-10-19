@@ -10,6 +10,7 @@ import { createCoreLocalization } from './core/i18n.js';
 import { loadLibraryOptions, createVirtualPathExpander } from './library/options.js';
 import { PlaybackService } from './playback/service.js';
 import { ProbeService } from './library/probe-service.js';
+import { detectUdfDiscType } from './storage/udf-disc-type.js';
 import { ExternalDataManager } from './library/external-data.js';
 import { UnsafeItemDeletionService } from './library/unsafe-item-deletion-service.js';
 import { GenresPostScanTask, StudiosPostScanTask } from './library/by-name-post-scan-task.js';
@@ -177,10 +178,13 @@ export async function createRuntime({ database, configuration, serverId, serverN
   rollback.push(() => syncPlay.close());
   const devices = new DeviceService({ store, users, sessions });
   const refreshes = new ProviderRefreshService({ onError });
+  const classifyIso = (candidate, { signal } = {}) => detectUdfDiscType(vfs, candidate.accessPath,
+    { signal, version: candidate.entry.version });
   const resolverPipeline = vfs && identityMap && programDataPath ? new DirectoryItemResolverPipeline({
     resolvers: directoryItemResolvers ?? [createPlaylistItemResolver(), createBoxSetItemResolver(),
       createBookItemResolver(), createPhotoItemResolver(), createPhotoAlbumResolver(),
-      createTvItemResolver(), createAudioItemResolver(), createVideoFileResolver({ localization }),
+      createTvItemResolver({ localization, classifyIso, logger }), createAudioItemResolver(),
+      createVideoFileResolver({ localization, classifyIso, logger }),
       createAudioBookItemResolver()],
     programDataPath,
     configuration,

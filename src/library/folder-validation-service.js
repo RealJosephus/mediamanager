@@ -87,6 +87,13 @@ export class FolderValidationService {
     Object.assign(this, { store, library, itemCreation, resolvedItemLifecycle, vfs, identityMap, ignoreRule, resolverPipeline, loadContext,
       programDataPath, configurationDirectoryPath, metadataConfiguration, configuration, refreshes, linkedChildReferences,
       metadataScanner, scheduler, clock, onError, reattach });
+    this.capabilities = Object.freeze({
+      structuralCompletenessProof: true,
+      directStructuralRoots: true,
+      typeReclassification: true,
+      relationshipRows: true,
+      scansMediaFiles: resolverPipeline.capabilities?.resolvesProductionMediaFiles === true
+    });
     const nativePath = pathStyle(programDataPath) === 'windows' ? path.win32 : path.posix;
     this.applicationRootPath = nativePath.join(programDataPath, 'root');
   }

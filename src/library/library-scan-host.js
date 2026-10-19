@@ -38,11 +38,11 @@ export class LibraryScanHost {
     }
     Object.assign(this, { store, library, itemCreation, metadataScanner, topLevelValidation, ignoreRule, now });
     this.capabilities = Object.freeze({
+      ...library.folderValidation?.capabilities,
       resolvesProductionMediaFiles: library.folderValidation?.resolverPipeline?.capabilities.resolvesProductionMediaFiles === true,
       productionMediaScopes: library.folderValidation?.resolverPipeline?.capabilities.productionMediaScopes ?? Object.freeze([]),
       runsMetadataProbeRefresh: typeof metadataScanner.refreshAccessibleChildren === 'function',
-      reconcilesTopLevelConfiguration: topLevelValidation.capabilities?.reconcilesTopLevelConfiguration === true,
-      runsPostScanTasks: false
+      reconcilesTopLevelConfiguration: topLevelValidation.capabilities?.reconcilesTopLevelConfiguration === true
     });
   }
 

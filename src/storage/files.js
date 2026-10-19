@@ -58,10 +58,11 @@ export class StorageFileSystem {
       const bytes = Buffer.concat(chunks); return encoding ? bytes.toString(encoding) : bytes;
     } finally { await handle.close(); }
   }); }
+  openRead(identity, options = {}) { return this.vfs.openRead(this.accessPath(identity), options); }
   createReadStream(identity, options = {}) {
     const owner = this;
     return Readable.from((async function* () {
-      const handle = await owner.vfs.openRead(owner.accessPath(identity), options);
+      const handle = await owner.openRead(identity, options);
       try { yield* handle.stream; } finally { await handle.close(); }
     })());
   }

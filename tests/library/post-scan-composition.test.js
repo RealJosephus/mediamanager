@@ -249,6 +249,9 @@ async function compareComposition(t, scenarioFile) {
   // actual plugin lifecycle. Keep storage plugins and their application mounts.
   const storageTypes = runtime.plugins.entries('storage').map(extension => extension.type).sort();
   for (const id of ['nfo', 'tmdb']) await runtime.plugins.setEnabled(id, false);
+  // This oracle host explicitly supplies no custom providers. The separate
+  // CollectionPoster runtime test exercises this builtin with real artwork.
+  runtime.metadata.registry.unregister('builtin-collection-folder-images');
   const refreshedItemTypes = new Set(['AggregateFolder', 'UserRootFolder', 'CollectionFolder', 'Folder',
     ...byNameTypes.map(type => type.split('.').at(-1))]);
   const providerControls = {

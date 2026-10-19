@@ -22,6 +22,7 @@ import { StorageError } from '../../src/storage/errors.js';
 import { StorageRegistry, VirtualFileSystem, IdentityAccessMap } from '../../src/storage/index.js';
 import { MemoryStorageAdapter } from '../../src/storage/testing/memory-adapter.js';
 import { setupChildrenFixture } from '../metadata/children-fixture.js';
+import { expandStatePath } from './fixture-state-path.js';
 
 const fixtureRoot = new URL('./fixtures/by-name-post-scan/', import.meta.url);
 const [inputBytes, nativeBytes, provenanceBytes] = await Promise.all(['input.json', 'native.json', 'provenance.json']
@@ -33,8 +34,10 @@ const identities = { Genre: nativeGenreIdentity, Studio: nativeStudioIdentity };
 const columns = tableDefinition('BaseItems').columns;
 const hash = value => createHash('sha256').update(value).digest('hex');
 const encode = value => JSON.stringify(value, (_, entry) => typeof entry === 'bigint' ? JSON.rawJSON(String(entry)) : entry);
-const rebase = (value, from, to) => typeof value === 'string' ? value.replaceAll(from, to)
-  .replaceAll(JSON.stringify(from).slice(1, -1), JSON.stringify(to).slice(1, -1)) : value;
+// Only the recorded instance Path is relocated. Keep all other columns and
+// unknown Data bytes intact, including unrelated Windows media identities.
+const rebaseRecordedPath = (value, from, to) => expandStatePath(
+  expandStatePath(value, from, to), '%MetadataPath%', '%MetadataPath%');
 const normalize = row => Object.fromEntries(columns.map(column => {
   let value = row[column.name];
   if (value != null && column.clrType.includes('Guid')) value = guid(value);
@@ -101,7 +104,8 @@ for (const recording of native.results) test(`postgres: native ${recording.kind}
   await store.transaction(async db => {
     await db.client.query('SET CONSTRAINTS ALL DEFERRED');
     for (const row of recording.before.rows) await db.insert('BaseItems', Object.fromEntries(columns.map(column => {
-      let entry = rebase(row[column.name], recording.root, stateRoot);
+      let entry = column.name === 'Path'
+        ? rebaseRecordedPath(row[column.name], recording.root, stateRoot) : row[column.name];
       if (entry != null && column.clrType.includes('Guid')) entry = nativeGuid(entry);
       return [column.name, entry];
     })));
@@ -184,7 +188,8 @@ for (const recording of native.results) test(`postgres: native ${recording.kind}
   assert.deepEqual(calls, normalizeCalls(recording.calls)); assert.deepEqual(progress, recording.progress);
   const actualRows = order((await database.rows('BaseItems')).map(normalize), ['Id']);
   const expectedRows = order(recording.after.rows.map(row => normalize(Object.fromEntries(Object.entries(row)
-    .map(([key, entry]) => [key, rebase(entry, recording.root, stateRoot)])))), ['Id']);
+    .map(([key, entry]) => [key, key === 'Path'
+      ? rebaseRecordedPath(entry, recording.root, stateRoot) : entry])))), ['Id']);
   const initialIds = new Set(recording.before.rows.map(row => guid(row.Id)));
   for (const row of actualRows) if (!initialIds.has(row.Id)) {
     const expected = expectedRows.find(item => item.Id === row.Id), info = lookupDirectories.get(row.Id);
@@ -281,7 +286,7 @@ test('postgres: runtime registers Genre, MusicGenre and Studio maintenance and s
   assert.deepEqual(registered.map(task => task.name), ['Splashscreen', 'Artists', 'CollectionPosterVerify', 'Collections', 'Genres', 'MusicGenres', 'Studios', 'CleanDatabase']);
   assert.ok(registered.every((task, index) => task === [runtime.splashscreenPostScanTask, runtime.artistsPostScanTask, runtime.collectionPosterVerifyPostScanTask, runtime.collectionPostScanTask, runtime.genresPostScanTask,
     runtime.musicGenresPostScanTask, runtime.studiosPostScanTask, runtime.cleanDatabasePostScanTask][index]), 'Task services retain their registered identity.');
-  assert.equal(runtime.libraryScanner.capabilities.completeLibraryScan, false); assert.equal(runtime.libraryScanLifecycle.capabilities.runsPostScanTasks, false);
+  assert.equal(runtime.libraryScanner.capabilities.completeLibraryScan, false); assert.equal(runtime.libraryScanLifecycle.capabilities.runsPostScanTasks, true);
   const template = native.results.find(entry => entry.kind === 'Genre' && entry.sample.Name === 'new names').before.rows.find(row => row.Type.endsWith('.Movie'));
   const movie = { ...template, Id: 'ba390000-0000-0000-0000-000000005001', Name: 'Movie source' };
   const audio = { ...template, Id: 'ba390000-0000-0000-0000-000000005002', Name: 'Audio source', Type: 'MediaBrowser.Controller.Entities.Audio.Audio', Data: null };

@@ -187,6 +187,7 @@ export function scanCollectionContextForItem(context, item, parents) {
   return Object.freeze({
     ...context,
     parentPath: item.Path,
+    parents: immutable(parents.map(contextItem)),
     configuredCollectionType: configured,
     collectionType,
     collectionTypeSource: inheritedOverride != null ? isCollection(item) ? 'collection-folder' : 'content-type-override'

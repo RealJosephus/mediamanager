@@ -27,7 +27,7 @@ function candidate(name, { directory = rootPath, kind = 'file' } = {}) {
   };
 }
 
-async function resolve(candidates, { parentPath = `${rootPath}\\Film`, peekDirectory, localization } = {}) {
+async function resolve(candidates, { parentPath = `${rootPath}\\Film`, peekDirectory, localization, deletionSafe = true } = {}) {
   const pipeline = new DirectoryItemResolverPipeline({
     programDataPath,
     resolvers: [createVideoFileResolver({ localization })]
@@ -37,7 +37,8 @@ async function resolve(candidates, { parentPath = `${rootPath}\\Film`, peekDirec
     root,
     collectionContext: Object.freeze({ collectionType: 'movies', collectionTypeSource: 'collection-folder' }),
     candidates,
-    peekDirectory
+    peekDirectory,
+    deletionSafe
   });
 }
 
@@ -199,7 +200,7 @@ test('theme-song resolution keeps the audio resolver filename instead of video m
   assert.equal(Object.hasOwn(extra.draft, 'data'), false);
 });
 
-test('mixed movie folders never assign an ambiguous owner and withhold extra-shaped candidates', async () => {
+test('mixed movie folders leave extras unclaimed without assigning an owner or blocking ordinary movies', async () => {
   const parentPath = `${rootPath}\\Mixed`;
   const first = candidate('First.mkv', { directory: parentPath });
   const second = candidate('Second.mkv', { directory: parentPath });
@@ -209,6 +210,10 @@ test('mixed movie folders never assign an ambiguous owner and withhold extra-sha
 
   assert.deepEqual(result.claims.map(claim => claim.identityPath), [first.identityPath, second.identityPath]);
   assert.ok(result.claims.every(claim => claim.ownsOwnedExtras === false && claim.ownedExtras.length === 0));
-  assert.deepEqual(result.withheldPaths, [trailer.identityPath]);
+  assert.deepEqual(result.withheldPaths, []);
   assert.deepEqual(result.unclaimedPaths, [trailer.identityPath]);
+
+  const weak = await resolve([first, trailer, second], { parentPath, deletionSafe: false });
+  assert.deepEqual(weak.withheldPaths, [trailer.identityPath]);
+  assert.ok(weak.claims.every(claim => claim.ownsOwnedExtras === false && claim.ownedExtras.length === 0));
 });

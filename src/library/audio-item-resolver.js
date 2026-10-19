@@ -1,22 +1,19 @@
-import { sameId } from './records.js';
 import { configuredTypeForPath } from './scan-context.js';
-import { sameNativePath } from './native-path.js';
+import namingOptions from '../metadata/episode-patterns.json' with { type: 'json' };
 
 export const audioNativeType = 'MediaBrowser.Controller.Entities.Audio.Audio';
 export const musicAlbumNativeType = 'MediaBrowser.Controller.Entities.Audio.MusicAlbum';
 export const musicArtistNativeType = 'MediaBrowser.Controller.Entities.Audio.MusicArtist';
 
-// These ordinary formats have no native playlist, cue, shortcut or video
-// resolver precedence in a music collection. The wider native audio extension
-// set remains recognized below so unsupported shapes are withheld rather than
-// falling through as an apparently complete scan.
+// Video-overlapping audio formats remain Audio in a music collection.
+// Playlists, CUE and shortcuts retain their separate resolver handling.
 const ordinaryAudioExtensions = new Set([
-  '.669', '.aa', '.aac', '.aax', '.ac3', '.act', '.adp', '.adplug', '.adx', '.afc', '.amf', '.aif',
+  '.669', '.3gp', '.aa', '.aac', '.aax', '.ac3', '.act', '.adp', '.adplug', '.adx', '.afc', '.amf', '.aif',
   '.aifc', '.aiff', '.alac', '.amr', '.ape', '.ast', '.au', '.awb', '.cda', '.dmf', '.dsf', '.dsm',
   '.dsp', '.dts', '.dvf', '.eac3', '.ec3', '.far', '.flac', '.gdm', '.gsm', '.gym', '.hps', '.imf',
   '.it', '.m15', '.m4a', '.m4b', '.mac', '.med', '.mka', '.mmf', '.mod', '.mogg', '.mp2', '.mp3',
-  '.mpa', '.mpc', '.mpp', '.mp+', '.msv', '.nmf', '.nsf', '.oga', '.ogg', '.okt', '.opus', '.ra',
-  '.rf64', '.s3m', '.sfx', '.shn', '.sid', '.stm', '.ult', '.uni', '.vox', '.wav', '.wma', '.wv',
+  '.mpa', '.mpc', '.mpp', '.mp+', '.msv', '.nmf', '.nsf', '.nsv', '.oga', '.ogg', '.okt', '.opus', '.ra',
+  '.rf64', '.rm', '.s3m', '.sfx', '.shn', '.sid', '.stm', '.ult', '.uni', '.vox', '.wav', '.wma', '.wv',
   '.xm', '.xsp', '.ymf'
 ]);
 const nativeAudioExtensions = new Set([
@@ -29,13 +26,7 @@ const nativeAudioExtensions = new Set([
   '.ult', '.uni', '.vox', '.wav', '.wma', '.wv', '.xm', '.xsp', '.ymf'
 ]);
 const playlistExtensions = new Set(['.m3u', '.m3u8', '.pls', '.wpl', '.zpl']);
-const videoExtensions = new Set([
-  '.001', '.3g2', '.3gp', '.amv', '.asf', '.asx', '.avi', '.bin', '.bivx', '.disc', '.divx', '.dv',
-  '.dvr-ms', '.f4v', '.fli', '.flv', '.ifo', '.img', '.iso', '.m2t', '.m2ts', '.m2v', '.m4v',
-  '.mkv', '.mk3d', '.mov', '.mp4', '.mpe', '.mpeg', '.mpg', '.mts', '.mxf', '.nrg', '.nsv', '.nuv',
-  '.ogm', '.ogv', '.pva', '.qt', '.rec', '.rm', '.rmvb', '.strm', '.svq3', '.tp', '.ts', '.ty',
-  '.viv', '.vob', '.vp3', '.webm', '.wmv', '.wtv', '.xvid'
-]);
+const mixedVideoExtensions = new Set(namingOptions.VideoFileExtensions.map(extension => extension.toLowerCase()));
 const artistSubfolders = new Set([
   'albums', 'broadcasts', 'bootlegs', 'compilations', 'dj-mixes', 'eps', 'live', 'mixtapes', 'others',
   'remixes', 'singles', 'soundtracks', 'spokenwords', 'streets'
@@ -61,16 +52,20 @@ function ordinaryAudio(candidate) {
   return Boolean(stem) && ordinaryAudioExtensions.has(extension);
 }
 
+function cueFile(candidate) {
+  return candidate?.entry?.kind === 'file' && fileParts(candidate.entry.name).extension === '.cue';
+}
+
+function audioShortcut(candidate) {
+  if (candidate?.entry?.kind !== 'file') return false;
+  const { stem, extension } = fileParts(candidate.entry.name);
+  return Boolean(stem) && extension === '.strm';
+}
+
 function potentialAudio(candidate) {
   if (candidate?.entry?.kind !== 'file') return false;
   const { stem, extension } = fileParts(candidate.entry.name);
   return Boolean(stem) && (nativeAudioExtensions.has(extension) || playlistExtensions.has(extension));
-}
-
-function conflictingMedia(candidate) {
-  if (candidate?.entry?.kind !== 'file') return false;
-  const extension = fileParts(candidate.entry.name).extension;
-  return potentialAudio(candidate) && !ordinaryAudio(candidate) || videoExtensions.has(extension);
 }
 
 function multiPartFolder(name) {
@@ -84,10 +79,7 @@ function multiPartFolder(name) {
       if (Number.isInteger(value) && value >= -2147483648 && value <= 2147483647) return true;
     }
   }
-  // These are not native AlbumParser positives, but remain conservatively
-  // withheld until non-native naming collisions have an explicit contract.
-  return /^(?:dvd|pt)[ ._-]*(?:\d+|[a-d])(?:$|[ ._()[\]-])/iu.test(name)
-    || /^(?:cd|disc|disk|part|vol|volume|act)[ ._-]*[a-d](?:$|[ ._()[\]-])/iu.test(name);
+  return false;
 }
 
 function playlistDirectory(candidate, snapshot) {
@@ -123,7 +115,8 @@ function audioClaim(candidate) {
     IsFolder: false,
     MediaType: 'Audio',
     columns: { IsInMixedFolder: true, UnratedType: 'Music' },
-    initialColumns: { Artists: [], AlbumArtists: [] }
+    initialColumns: { Artists: [], AlbumArtists: [] },
+    ...(audioShortcut(candidate) ? { data: { IsShortcut: true } } : {})
   });
 }
 
@@ -154,103 +147,138 @@ function strongSnapshot(snapshot) {
 function directAudioState(snapshot) {
   const files = snapshot.candidates.filter(candidate => candidate?.entry?.kind === 'file');
   return {
-    ordinary: files.some(ordinaryAudio),
+    // ContainsMusic includes CUE and PLS, although their leaf handling is
+    // respectively ignore and the higher-priority Playlist resolver.
+    music: files.some(candidate => isNativeAudioFileName(candidate.entry.name)),
     potential: files.some(potentialAudio),
-    artistNfo: files.some(candidate => candidate.entry.name.toLowerCase() === 'artist.nfo')
+    artistNfo: snapshot.candidates.some(candidate => candidate.entry.name === 'artist.nfo')
   };
 }
 
-async function conventionalAlbum(candidate, peekDirectory) {
+async function conventionalAlbum(candidate, peekDirectory, collectionContext) {
   const snapshot = await peekDirectory?.(candidate);
   if (!strongSnapshot(snapshot) || playlistDirectory(candidate, snapshot)) return { snapshot, result: 'withhold' };
   const audio = directAudioState(snapshot);
   const directories = snapshot.candidates.filter(child => child?.entry?.kind === 'directory');
-  const conflict = snapshot.candidates.some(conflictingMedia);
-  if (directories.length) {
-    if (audio.ordinary || audio.potential || audio.artistNfo || conflict
-      || directories.some(child => multiPartFolder(child.entry.name))) {
-      return { snapshot, result: 'withhold' };
+  if (audio.music) return { snapshot, result: 'album' };
+  if (audio.potential) return { snapshot, result: 'withhold' };
+
+  // MusicAlbumResolver.ContainsMusic looks only for direct files in each
+  // child: one music-bearing disc is enough, empty directories do not count,
+  // and a music-bearing non-disc prevents this directory being an album.
+  let disc = false, otherAlbum = false;
+  for (const child of directories) {
+    const override = exactCollectionOverride(collectionContext, child.identityPath);
+    if (override != null && override !== 'music') return { snapshot, result: 'withhold' };
+    const contents = await peekDirectory?.(child);
+    if (!strongSnapshot(contents) || playlistDirectory(child, contents)) return { snapshot, result: 'withhold' };
+    const childAudio = directAudioState(contents);
+    if (childAudio.music) {
+      if (multiPartFolder(child.entry.name)) disc = true;
+      else otherAlbum = true;
     }
-    return { snapshot, result: 'unknown' };
   }
-  if (conflict) return { snapshot, result: 'withhold' };
-  if (audio.ordinary && !audio.artistNfo) return { snapshot, result: 'album' };
-  if (audio.potential || audio.artistNfo) return { snapshot, result: 'withhold' };
-  return { snapshot, result: 'unknown' };
+  return { snapshot, result: disc && !otherAlbum ? 'album' : 'unknown' };
 }
 
 /**
- * Resolves only proof-carrying conventional music layouts:
+ * Resolves ordinary audio files in music collections and conventional layouts:
  *   Album / track.<ordinary audio>
  *   Artist / Album / track.<ordinary audio>
+ *   Artist / Albums / Album / track.<ordinary audio>
+ *   Album / CD1 / track.<ordinary audio>
  *
- * Native-but-unimplemented audio formats, playlists, artist.nfo, special
- * artist groupings, multi-disc layouts, shortcuts and uncertain hierarchy are
- * withheld so they make structural completeness fail visibly.
+ * A direct artist.nfo entry explicitly identifies an Artist without albums.
+ * Playlist directories and weak snapshots are withheld so unsupported
+ * structural decisions fail visibly.
  */
 export function createAudioItemResolver() {
   return Object.freeze({
     id: 'builtin-audio-items',
     priority: 30,
-    productionMediaScope: 'conventional-music-artist-album-tracks',
+    productionMediaScope: 'music-ordinary-tracks-and-conventional-albums',
     nativeTypes: {
       [audioNativeType]: { isFolder: false },
       [musicAlbumNativeType]: { isFolder: true },
       [musicArtistNativeType]: { isFolder: true }
     },
-    async resolveDirectory({ parent, root, collectionContext, candidate, deletionSafe, peekDirectory }) {
+    async resolveDirectory({ parent, collectionContext, candidate, deletionSafe, peekDirectory }) {
       const override = exactCollectionOverride(collectionContext, candidate.identityPath);
       const exactMusicOverride = override === 'music';
-      const parentType = nativeType(parent);
+      const parentTypes = [parent, ...(collectionContext?.parents ?? [])].map(nativeType);
+      const hasArtist = parentTypes.includes(musicArtistNativeType);
+      const hasAlbum = parentTypes.includes(musicAlbumNativeType);
       if (!resolvableMusicContext(collectionContext) && !exactMusicOverride) {
-        return [musicArtistNativeType, musicAlbumNativeType].includes(parentType) ? withheld : null;
+        return hasArtist || hasAlbum ? withheld : null;
       }
       if (!deletionSafe || override != null && override !== 'music') return withheld;
-      if (parentType === musicAlbumNativeType) return withheld;
-      if (!sameId(parent?.Id, root?.Id) && parentType !== musicArtistNativeType) return withheld;
-
-      const candidateAlbum = await conventionalAlbum(candidate, peekDirectory);
-      if (candidateAlbum.result === 'withhold') return withheld;
-      const snapshot = candidateAlbum.snapshot;
-      if (snapshot.candidates.some(child => child?.entry?.kind === 'directory'
-        && artistSubfolders.has(child.entry.name.toLowerCase()))) return withheld;
-
-      // MusicArtistResolver has priority over MusicAlbumResolver and claims a
-      // root child when one direct subdirectory is itself a music album.
-      if (sameId(parent?.Id, root?.Id)) {
-        const directories = snapshot.candidates.filter(value => value?.entry?.kind === 'directory');
-        if (directories.length) {
-          for (const child of directories) {
-            const childOverride = exactCollectionOverride(collectionContext, child.identityPath);
-            if (childOverride != null && childOverride !== 'music') return withheld;
-            const nested = await conventionalAlbum(child, peekDirectory);
-            if (nested.result !== 'album') return withheld;
+      const snapshot = await peekDirectory?.(candidate);
+      if (!strongSnapshot(snapshot) || playlistDirectory(candidate, snapshot)) return withheld;
+      if (hasAlbum) {
+        // HasParent includes every physical ancestor, so directories below a
+        // disc Folder cannot become a second Album or Artist either.
+        return null;
+      }
+      if (!hasArtist && directAudioState(snapshot).artistNfo) return artistClaim(candidate);
+      // Native Artist checks its explicit marker before excluding true roots;
+      // Album inference always excludes them. A physical library Folder is not
+      // the AggregateFolder/UserRootFolder identified by this flag.
+      if (parent?.IsRoot === true) return null;
+      if (!hasArtist) {
+        // MusicArtistResolver precedes album inference. Named release groups
+        // identify the outer Artist even while those groups are empty.
+        const groups = snapshot.candidates.filter(child => child?.entry?.kind === 'directory'
+          && artistSubfolders.has(child.entry.name.toLowerCase()));
+        if (groups.length) {
+          for (const group of groups) {
+            const groupOverride = exactCollectionOverride(collectionContext, group.identityPath);
+            if (groupOverride != null && groupOverride !== 'music') return withheld;
           }
           return artistClaim(candidate);
         }
       }
 
+      const candidateAlbum = await conventionalAlbum(candidate, peekDirectory, collectionContext);
+      if (candidateAlbum.result === 'withhold') return withheld;
+
+      // MusicArtistResolver has priority over MusicAlbumResolver when one
+      // direct subdirectory is itself a music album, at any physical depth.
+      if (!hasArtist) {
+        const directories = snapshot.candidates.filter(value => value?.entry?.kind === 'directory'
+          && !multiPartFolder(value.entry.name));
+        if (directories.length) {
+          let hasAlbum = false;
+          for (const child of directories) {
+            const childOverride = exactCollectionOverride(collectionContext, child.identityPath);
+            if (childOverride != null && childOverride !== 'music') return withheld;
+            const nested = await conventionalAlbum(child, peekDirectory, collectionContext);
+            if (nested.result === 'album') hasAlbum = true;
+            else if (nested.result === 'withhold') return withheld;
+          }
+          if (hasAlbum) return artistClaim(candidate);
+        }
+      }
+
       if (candidateAlbum.result === 'album') return albumClaim(candidate);
-      // This narrow first slice deliberately does not persist a generic Folder
-      // for an unresolved music hierarchy; a later strong scan may classify it
-      // as Artist, Album, playlist or multi-disc album.
-      return withheld;
+      // The final native FolderResolver preserves directories that are neither
+      // Artists nor Albums. Their children retain the same ancestor context.
+      return null;
     },
-    resolveFile({ parent, root, collectionContext, candidate, deletionSafe }) {
+    resolveFile({ parent, collectionContext, candidate, deletionSafe }) {
+      if (cueFile(candidate)) return null;
       const override = exactCollectionOverride(collectionContext, candidate.identityPath);
       const exactMusicOverride = override === 'music';
-      if (!resolvableMusicContext(collectionContext) && !exactMusicOverride) {
+      const mixed = collectionContext?.collectionType === null && override == null;
+      if (!resolvableMusicContext(collectionContext) && !exactMusicOverride && !mixed) {
         return [musicArtistNativeType, musicAlbumNativeType].includes(nativeType(parent))
           && potentialAudio(candidate) ? withheld : null;
       }
+      // Only an untyped collection gives conflicting audio/video extensions
+      // to VideoResolver; a music collection continues to create Audio.
+      if (mixed && mixedVideoExtensions.has(fileParts(candidate.entry.name).extension)) return null;
       if (override != null && override !== 'music') return potentialAudio(candidate) ? withheld : null;
       if (!deletionSafe) return potentialAudio(candidate) ? withheld : null;
-      if (!sameId(parent?.Id, root?.Id)
-        && ![musicArtistNativeType, musicAlbumNativeType].includes(nativeType(parent))) {
-        return potentialAudio(candidate) ? withheld : null;
-      }
-      if (nativeType(parent) !== musicAlbumNativeType) return potentialAudio(candidate) ? withheld : null;
-      if (ordinaryAudio(candidate)) return audioClaim(candidate);
+      if (ordinaryAudio(candidate) || audioShortcut(candidate)) return audioClaim(candidate);
       return potentialAudio(candidate) ? withheld : null;
     }
   });

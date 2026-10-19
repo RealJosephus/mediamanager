@@ -44,6 +44,29 @@ test('exact child overrides precede inherited paths and parent collection types'
   assert.equal(contextFor(root.Path + '/special/exact').collectionType, 'movies');
   assert.equal(contextFor(root.Path + '/ordinary').collectionType, 'music');
 });
+
+test('recursive resolver context carries the current physical ancestors without changing the root attempt', () => {
+  const base = buildScanCollectionContext({ root, collectionFolders: [collection(ids[0], 'music')] });
+  const artist = { Id: '30000000-0000-0000-0000-000000000001', Type: 'MusicArtist',
+    NativeType: 'MediaBrowser.Controller.Entities.Audio.MusicArtist', IsFolder: true,
+    Path: root.Path + '/Artist', ParentId: root.Id };
+  const group = { Id: '30000000-0000-0000-0000-000000000002', Type: 'Folder', IsFolder: true,
+    Path: artist.Path + '/Albums', ParentId: artist.Id };
+  const current = scanCollectionContextForItem(base, group, [artist, root]);
+  assert.deepEqual(current.parents.map(item => item.Id), [artist.Id, root.Id]);
+  assert.equal(current.parents[0].NativeType, artist.NativeType);
+  assert.equal(current.parentPath, group.Path);
+  assert.equal(current.collectionType, 'music');
+  assert.equal(current.rootId, base.rootId);
+  assert.equal(current.signature, base.signature);
+  assert.deepEqual(base.parents, []);
+  assert.throws(() => { current.parents[0].NativeType = 'Plugin.Entities.Other'; }, TypeError);
+  artist.Type = 'Changed after capture';
+  assert.equal(current.parents[0].Type, 'MusicArtist');
+  const sibling = scanCollectionContextForItem(current, { ...group, Path: root.Path + '/Sibling' }, [root]);
+  assert.deepEqual(sibling.parents.map(item => item.Id), [root.Id]);
+  assert.equal(sibling.signature, base.signature);
+});
 test('context provenance and options are deeply immutable without mutating their source', () => {
   const options = { Enabled: true, Nested: { order: ['first', 'second'] } };
   const source = collection(ids[0], 'homevideos'), context = buildScanCollectionContext({ root, collectionFolders: [source],

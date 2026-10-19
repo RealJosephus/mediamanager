@@ -24,6 +24,7 @@ import { SeriesMetadataLifecycleHost } from './series-lifecycle-host.js';
 import { afterAlbumMetadataRefresh } from './album-after-refresh.js';
 import { itemRequiresJson } from '../library/item-data.js';
 import { isDeepStrictEqual } from 'node:util';
+import { addAbortListener } from 'node:events';
 import { nonemptyId, sameId } from '../library/records.js';
 import { ownedTitleFields, prepareOwnedItemRefresh } from './owned-item-refresh.js';
 import { OwnedItemMetadataLifecycleHost } from './owned-item-lifecycle.js';
@@ -122,11 +123,11 @@ export class MetadataRefreshHost {
     if (modes[options.ImageRefreshMode ?? 'None'] == null) throw Object.assign(new TypeError('Unknown image refresh mode.'), { status: 400 });
     if (options.RegenerateTrickplay) throw Object.assign(new Error('Generated media is not implemented.'), { status: 501 });
   }
-  queue(reference, options = {}, priority = 0) {
+  queue(reference, options = {}, priority = 0, { ready } = {}) {
     if (!Number.isInteger(priority) || priority < 0 || priority > 2) throw new TypeError('A native refresh priority is required.');
     if (this.#lifetime.signal.aborted) return Promise.resolve();
     const task = new Promise((resolve, reject) => {
-      const entry = { reference, options, priority, resolve, reject };
+      const entry = { reference, options, priority, ready, resolve, reject };
       // System.Collections.Generic.PriorityQueue uses a quaternary min heap.
       // Equal priorities retain the replacement node rather than sorting by age.
       let index = this.#queue.length;
@@ -170,10 +171,18 @@ export class MetadataRefreshHost {
       while (this.#queue.length) {
         const entry = this.#dequeue();
         try {
-          this.#lifetime.signal.throwIfAborted();
+          const signal = entry.options.signal
+            ? AbortSignal.any([entry.options.signal, this.#lifetime.signal]) : this.#lifetime.signal;
+          signal.throwIfAborted();
+          if (entry.ready) {
+            const cancelled = Promise.withResolvers();
+            const listener = addAbortListener(signal, () => cancelled.reject(signal.reason));
+            try { await Promise.race([entry.ready, cancelled.promise]); }
+            finally { listener[Symbol.dispose](); }
+            signal.throwIfAborted();
+          }
           entry.resolve(await (this.queuedRefresh
-            ? this.queuedRefresh(entry.reference, { ...entry.options, signal: entry.options.signal
-              ? AbortSignal.any([entry.options.signal, this.#lifetime.signal]) : this.#lifetime.signal })
+            ? this.queuedRefresh(entry.reference, { ...entry.options, signal })
             : this.refresh(entry.reference, entry.options)));
         } catch (error) { entry.reject(error); }
       }

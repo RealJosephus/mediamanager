@@ -5,20 +5,26 @@ import { ordinalIgnoreCaseEquals } from '../storage/ordinal-comparer.js';
 import { audioNativeType } from './audio-item-resolver.js';
 import { nativeDirectoryName, nativeFileName, sameNativePath } from './native-path.js';
 import { sameId } from './records.js';
+import { configuredTypeForPath } from './scan-context.js';
+import { resolveEpisodePath } from '../metadata/episode-naming.js';
+import episodeNamingOptions from '../metadata/episode-patterns.json' with { type: 'json' };
+import { checkAbort } from '../storage/errors.js';
+import { preserveResolutionReadFailure } from './directory-item-resolver.js';
 
 export const videoNativeType = 'MediaBrowser.Controller.Entities.Video';
 export const movieNativeType = 'MediaBrowser.Controller.Entities.Movies.Movie';
 export const musicVideoNativeType = 'MediaBrowser.Controller.Entities.MusicVideo';
 export const trailerNativeType = 'MediaBrowser.Controller.Entities.Trailer';
+const episodeNativeType = 'MediaBrowser.Controller.Entities.TV.Episode';
 
 const videoExtensions = new Set([
   '.001', '.3g2', '.3gp', '.amv', '.asf', '.asx', '.avi', '.bin', '.bivx', '.divx', '.dv', '.dvr-ms',
-  '.f4v', '.fli', '.flv', '.ifo', '.m2t', '.m2ts', '.m2v', '.m4v', '.mkv', '.mk3d', '.mov', '.mp4',
+  '.f4v', '.fli', '.flv', '.ifo', '.img', '.iso', '.m2t', '.m2ts', '.m2v', '.m4v', '.mkv', '.mk3d', '.mov', '.mp4',
   '.mpe', '.mpeg', '.mpg', '.mts', '.mxf', '.nrg', '.nsv', '.nuv', '.ogm', '.ogv', '.pva', '.qt', '.rec',
-  '.rm', '.rmvb', '.svq3', '.tp', '.ts', '.ty', '.viv', '.vob', '.vp3', '.webm', '.wmv', '.wtv', '.xvid'
+  '.rm', '.rmvb', '.strm', '.svq3', '.tp', '.ts', '.ty', '.viv', '.vob', '.vp3', '.webm', '.wmv', '.wtv', '.xvid'
 ]);
-const unsupportedExtensions = new Set(['.disc', '.img', '.iso', '.strm']);
-const nativeVideoFileExtensions = new Set([...videoExtensions, '.img', '.iso', '.strm']);
+const stubExtensions = new Set(episodeNamingOptions.StubFileExtensions.map(extension => extension.toLowerCase()));
+const nativeVideoFileExtensions = new Set(videoExtensions);
 const audioExtensions = new Set([
   '.669', '.3gp', '.aa', '.aac', '.aax', '.ac3', '.act', '.adp', '.adplug', '.adx', '.afc', '.amf',
   '.aif', '.aifc', '.aiff', '.alac', '.amr', '.ape', '.ast', '.au', '.awb', '.cda', '.cue', '.dmf',
@@ -106,6 +112,37 @@ function fileParts(name) {
     : { stem: name, extension: '' };
 }
 
+function videoSourceFields(name, identityPath = name) {
+  const { stem, extension } = fileParts(name);
+  if (extension === '.iso' || extension === '.img') return { VideoType: 'Iso',
+    IsoType: /dvd/iu.test(identityPath) ? 'Dvd' : /bluray/iu.test(identityPath) ? 'BluRay' : null };
+  if (stubExtensions.has(extension)) {
+    const token = fileParts(stem).extension.slice(1);
+    const type = episodeNamingOptions.StubTypes.find(rule => ordinalIgnoreCaseEquals(token, rule.Token))?.StubType;
+    return { VideoType: type === 'dvd' ? 'Dvd' : type === 'bluray' ? 'BluRay' : 'VideoFile', IsPlaceHolder: true };
+  }
+  return { VideoType: 'VideoFile', ...(extension === '.strm' ? { IsShortcut: true } : {}) };
+}
+
+export async function resolveVideoSourceFields(candidate, { classifyIso, logger = {}, signal } = {}) {
+  const fields = videoSourceFields(candidate.entry.name, candidate.identityPath);
+  if (fields.VideoType !== 'Iso') return fields;
+  checkAbort(signal);
+  if (fields.IsoType != null) return fields;
+  if (typeof classifyIso !== 'function') throw preserveResolutionReadFailure(new TypeError('ISO resolution requires a storage classifier.'));
+  let type;
+  try {
+    type = await classifyIso(candidate, { signal });
+    checkAbort(signal);
+  } catch (error) {
+    if (signal?.aborted || error.name === 'AbortError' || ['cancelled', 'version-changed'].includes(error.code)) throw preserveResolutionReadFailure(error);
+    logger.error?.(error, `Error opening UDF/ISO image: ${candidate.identityPath}`);
+    return fields;
+  }
+  if (type != null && !['Dvd', 'BluRay'].includes(type)) throw preserveResolutionReadFailure(new TypeError('The ISO classifier returned an invalid disc type.'));
+  return { ...fields, IsoType: type ?? null };
+}
+
 export function isNativeVideoFileName(name) {
   const { stem, extension } = fileParts(String(name));
   return Boolean(stem) && nativeVideoFileExtensions.has(extension);
@@ -126,8 +163,7 @@ function trimVideoFlagDelimiters(value) {
 
 function matchedExtraRule(candidatePath, libraryRoot = '') {
   const api = pathApiFor(candidatePath);
-  const extension = api.extname(candidatePath).toLowerCase();
-  const stem = api.basename(candidatePath, extension);
+  const { extension, stem } = fileParts(api.basename(candidatePath));
   const trimmedStem = stem.replace(/[0-9]+$/u, '');
   const directory = api.dirname(candidatePath);
   const directoryName = api.basename(directory);
@@ -194,42 +230,23 @@ export function resolveVideoExtraCandidate(ownerPath, candidatePath, { libraryRo
   });
 }
 
-function extraVideo(stem) {
+function extraVideo(stem, extension) {
   const lower = stem.toLowerCase();
   const trimmed = lower.replace(/[0-9]+$/u, '');
-  return /\bsample\b/iu.test(stem) || ['trailer', 'sample'].includes(lower)
-    || extraSuffixes.some(suffix => trimmed.endsWith(suffix));
+  return /\bsample\b/iu.test(stem) || !stubExtensions.has(extension)
+    && (['trailer', 'sample'].includes(lower) || extraSuffixes.some(suffix => trimmed.endsWith(suffix)));
 }
 
-function recognizedVideo(candidate, includeUnsupported = false) {
+function recognizedVideo(candidate) {
   if (candidate?.entry?.kind !== 'file') return false;
   const { stem, extension } = fileParts(candidate.entry.name);
-  return Boolean(stem) && (videoExtensions.has(extension) || includeUnsupported && unsupportedExtensions.has(extension));
-}
-
-const discFolder = candidate => candidate?.entry?.kind === 'directory'
-  && ['video_ts', 'bdmv'].includes(candidate.entry.name.toLowerCase());
-
-function potentialPrimaryFile(candidate) {
-  if (!recognizedVideo(candidate, true)) return false;
-  const { stem } = fileParts(candidate.entry.name);
-  const logicalStem = stackLogicalStem(stem) ?? stem;
-  return !extraVideo(stem) && !extraVideo(logicalStem);
-}
-
-const potentialPrimaryMedia = candidate => discFolder(candidate) || potentialPrimaryFile(candidate);
-
-function stackLogicalStem(stem) {
-  const match = stackPattern.exec(stem);
-  if (!match) return null;
-  const logicalStem = match[1].trimEnd();
-  return logicalStem || null;
+  return Boolean(stem) && (videoExtensions.has(extension) || stubExtensions.has(extension));
 }
 
 function stackMetadata(candidate) {
   if (!recognizedVideo(candidate)) return null;
-  const { stem } = fileParts(candidate.entry.name);
-  if (extraVideo(stem)) return null;
+  const { stem, extension } = fileParts(candidate.entry.name);
+  if (extraVideo(stem, extension)) return null;
   const match = stackPattern.exec(stem);
   if (!match) return null;
   return {
@@ -299,7 +316,7 @@ export function resolveOrdinaryVideoFile(candidate, { nativeType = videoNativeTy
   const parsed = parseName ? parseMetadataName(name) : { Name: name, Year: null };
   const Video3DFormat = video3DFormatFromPath(candidate.identityPath);
   return { NativeType: nativeType, Type: nativeType.split('.').at(-1), Path: candidate.identityPath,
-    Name: parsed.Name, ProductionYear: parsed.Year, VideoType: 'VideoFile',
+    Name: parsed.Name, ProductionYear: parsed.Year, ...videoSourceFields(candidate.entry.name, candidate.identityPath),
     ...(Video3DFormat == null ? {} : { Video3DFormat }),
     ExtraType: extra ? extraTypeNames[extra.extraType] : null };
 }
@@ -349,37 +366,7 @@ function eligibleMovieVersion(prefix, candidate) {
   return !remainder || ['-', '_', '.'].includes(remainder[0]) || /^\[[^\]]*\]/u.test(remainder);
 }
 
-function unsupportedMovieVersionFamily(parent, candidates) {
-  const prefix = pathLeaf(parent?.Path);
-  if (!prefix) return new Set();
-  const buckets = new Map();
-  for (const candidate of candidates.filter(potentialPrimaryFile)) {
-    const { stem } = fileParts(candidate.entry.name);
-    const logicalStem = stackLogicalStem(stem) ?? stem;
-    const logicalCandidate = { ...candidate, entry: { ...candidate.entry, name: `${logicalStem}.mkv` } };
-    if (!eligibleMovieVersion(prefix, logicalCandidate)) continue;
-    const year = parseMetadataName(logicalStem).Year ?? null;
-    const bucket = buckets.get(year) ?? [];
-    bucket.push({ candidate, supported: recognizedVideo(candidate) });
-    buckets.set(year, bucket);
-  }
-  const withheldCandidates = new Set();
-  for (const bucket of buckets.values()) {
-    const logicalVersions = new Set(bucket.map(({ candidate }) => {
-      const stem = fileParts(candidate.entry.name).stem;
-      return (stackLogicalStem(stem) ?? stem).toLowerCase();
-    }));
-    if (logicalVersions.size < 2 || bucket.every(value => value.supported)) continue;
-    for (const value of bucket) withheldCandidates.add(value.candidate);
-  }
-  return withheldCandidates;
-}
-
-function organizeMovieGroups(parent, groups) {
-  const prefix = pathLeaf(parent?.Path);
-  if (!prefix || prefix.length <= 1 || !groups.length) return groups;
-  if (groups.some(group => group.year !== groups[0].year || !eligibleMovieVersion(prefix, group.primary))) return groups;
-  const exact = groups.find(group => fileParts(group.primary.entry.name).stem === prefix);
+function organizeAlternateVersions(groups, primaryOverride, nameOverride) {
   const resolution = groups.filter(group => resolutionMatch(group.primary) != null).sort((left, right) => {
     const byResolution = numericOrdinalCompare(resolutionMatch(right.primary), resolutionMatch(left.primary));
     return byResolution || numericOrdinalCompare(fileParts(left.primary.entry.name).stem,
@@ -389,14 +376,44 @@ function organizeMovieGroups(parent, groups) {
     .sort((left, right) => numericOrdinalCompare(fileParts(left.primary.entry.name).stem,
       fileParts(right.primary.entry.name).stem));
   const ordered = [...resolution, ...other];
-  const primary = exact ?? ordered.find(group => group.parts.length) ?? ordered[0];
-  return [{ ...primary, name: prefix, alternates: ordered.filter(group => group !== primary) }];
+  const primary = primaryOverride ?? ordered.find(group => group.parts.length) ?? ordered[0];
+  return { ...primary, ...(nameOverride == null ? {} : { name: nameOverride }),
+    alternates: ordered.filter(group => group !== primary) };
 }
 
-function resolveVideoGroups(parent, candidates, parseName, supportMultiVersion) {
+function organizeMovieGroups(parent, groups) {
+  const prefix = pathLeaf(parent?.Path);
+  if (!prefix || prefix.length <= 1 || !groups.length) return groups;
+  if (groups.some(group => group.year !== groups[0].year || !eligibleMovieVersion(prefix, group.primary))) return groups;
+  const exact = groups.find(group => fileParts(group.primary.entry.name).stem === prefix);
+  return [organizeAlternateVersions(groups, exact, prefix)];
+}
+
+function organizeEpisodeGroups(groups) {
+  const result = [], episodes = new Map();
+  for (const group of groups) {
+    // Guessed episode numbers must not merge physically separate episodes.
+    const episode = resolveEpisodePath(group.primary.identityPath, { optimistic: false });
+    const key = episode?.IsByDate
+      ? episode.Year != null && episode.Month != null && episode.Day != null
+        ? `D${episode.Year}${String(episode.Month).padStart(2, '0')}${String(episode.Day).padStart(2, '0')}` : null
+      : episode?.SeasonNumber != null && episode.EpisodeNumber != null
+        ? `S${episode.SeasonNumber}E${episode.EpisodeNumber}` : null;
+    if (key == null) { result.push(group); continue; }
+    const versions = episodes.get(key) ?? [];
+    versions.push(group);
+    episodes.set(key, versions);
+  }
+  for (const versions of episodes.values()) result.push(versions.length === 1
+    ? versions[0] : organizeAlternateVersions(versions));
+  return result;
+}
+
+function resolveVideoGroups(parent, candidates, parseName, supportMultiVersion, episodeVersions = false) {
   const videos = candidates.filter(candidate => {
     if (!recognizedVideo(candidate)) return false;
-    return !extraVideo(fileParts(candidate.entry.name).stem);
+    const { stem, extension } = fileParts(candidate.entry.name);
+    return !extraVideo(stem, extension) && matchedExtraRule(candidate.identityPath, parent?.Path) == null;
   });
   const stacks = resolveFileStacks(videos);
   const stacked = new Set(stacks.flatMap(stack => stack.files));
@@ -417,16 +434,32 @@ function resolveVideoGroups(parent, candidates, parseName, supportMultiVersion) 
     const parsed = parseName ? parseMetadataName(stem) : { Name: stem, Year: null };
     groups.push({ name: parsed.Name, year: parsed.Year ?? null, primary, parts: [], alternates: [] });
   }
-  return supportMultiVersion ? organizeMovieGroups(parent, groups) : groups;
+  return !supportMultiVersion ? groups : episodeVersions ? organizeEpisodeGroups(groups) : organizeMovieGroups(parent, groups);
 }
 
-function videoResolutionPolicy(collectionContext) {
+function videoResolutionPolicy(collectionContext, multiple = false, parent) {
   const type = collectionContext?.collectionType;
+  if (type === null && multiple) return {
+    nativeType: parent == null ? videoNativeType : movieNativeType,
+    parseName: parent != null, supportMultiVersion: false
+  };
+  if (type === null) return { nativeType: movieNativeType, parseName: true, supportMultiVersion: true, collapseDirectory: true };
+  // Photos libraries admit video files, but their directories remain
+  // PhotoAlbum/Folder rather than movie or disc directory candidates.
+  if (type === 'photos' && multiple) return { nativeType: videoNativeType, parseName: false, supportMultiVersion: false };
+  if (type === 'tvshows' && multiple) return { nativeType: episodeNativeType, parseName: true, supportMultiVersion: true, episodeVersions: true };
   if (type === 'movies') return { nativeType: movieNativeType, parseName: true, supportMultiVersion: true, collapseDirectory: true };
   if (type === 'musicvideos') return { nativeType: musicVideoNativeType, parseName: false, supportMultiVersion: true, collapseDirectory: true };
   if (type === 'homevideos') return { nativeType: videoNativeType, parseName: false, supportMultiVersion: false, collapseDirectory: false };
   return null;
 }
+
+function mixedVideoParentExcluded(parent, collectionContext) {
+  return parent?.IsRoot === true || [parent, ...(collectionContext?.parents ?? [])]
+    .some(value => ['MediaBrowser.Controller.Entities.TV.Series', 'Series'].includes(value?.NativeType ?? value?.Type));
+}
+
+const hasTvMarker = candidates => candidates.some(candidate => ['tvshow.nfo', 'season.nfo'].includes(candidate.entry.name.toLowerCase()));
 
 function draft(candidate, parseName, isInMixedFolder, nameOverride) {
   const { stem } = fileParts(candidate.entry.name);
@@ -440,7 +473,7 @@ function draft(candidate, parseName, isInMixedFolder, nameOverride) {
     SourceType: 'Library',
     columns: { IsInMixedFolder: isInMixedFolder },
     ...(parsed.Year == null ? {} : { initialColumns: { ProductionYear: parsed.Year } }),
-    data: { VideoType: 'VideoFile', LocalAlternateVersions: [],
+    data: { ...videoSourceFields(candidate.entry.name, candidate.identityPath), LocalAlternateVersions: [],
       ...(Video3DFormat == null ? {} : { Video3DFormat }) }
   };
 }
@@ -615,7 +648,10 @@ function extraDraft(candidate, classification, name, isInMixedFolder) {
   };
   if (classification.resolvedYear != null) result.initialColumns = { ProductionYear: classification.resolvedYear };
   if (classification.nativeType !== audioNativeType) {
-    result.data = { VideoType: 'VideoFile', LocalAlternateVersions: [] };
+    result.data = { ...videoSourceFields(candidate.entry.name, candidate.identityPath), LocalAlternateVersions: [] };
+  }
+  if (fileParts(candidate.entry.name).extension === '.strm') {
+    result.data = { ...result.data, IsShortcut: true };
   }
   return result;
 }
@@ -629,13 +665,15 @@ function resolvedExtraMetadata(candidate, classification) {
   };
 }
 
-export async function collectOwnedExtras(owner, versions, candidates, peekDirectory, localization, { resolveExtra } = {}) {
-  if (owner.entry.kind !== 'directory') {
+export async function collectOwnedExtras(owner, versions, candidates, peekDirectory, localization, {
+  resolveExtra, ownerIsDirectory = owner.entry.kind === 'directory'
+} = {}) {
+  if (!ownerIsDirectory) {
     const filename = nativeFileName(owner.identityPath, { windows: pathApiFor(owner.identityPath) === path.win32 });
     const dot = filename.lastIndexOf('.'), extension = dot < 0 ? '' : filename.slice(dot).toLowerCase();
-    if (!nativeVideoFileExtensions.has(extension) && extension !== '.disc') return { extras: [], scopes: [], consumed: [] };
+    if (!nativeVideoFileExtensions.has(extension) && !stubExtensions.has(extension)) return { extras: [], scopes: [], consumed: [] };
   }
-  const namingOptions = { ownerIsDirectory: owner.entry.kind === 'directory' };
+  const namingOptions = { ownerIsDirectory };
   const discovered = [];
   const scopes = [];
   const consumed = [];
@@ -690,15 +728,21 @@ function claim(group, nativeType, parseName, isInMixedFolder, {
   if (!primaryDraft) return null;
   if (group.parts.length) primaryDraft.data.AdditionalParts = group.parts.map(value => value.identityPath);
   primaryDraft.data.LocalAlternateVersions = group.alternates.map(value => value.primary.identityPath);
-  const localAlternates = group.alternates.map(alternate => ({
-    primary: alternate.primary,
-    draft: draft(alternate.primary, parseName, isInMixedFolder, alternate.name)
-  }));
-  const ownedParts = group.parts.map(part => ({
-    primary: part,
-    nativeType: videoNativeType,
-    owner: group.primary,
-    draft: draft(part, parseName, isInMixedFolder)
+  const localAlternates = group.alternates.map(alternate => {
+    const alternateDraft = draft(alternate.primary, parseName, isInMixedFolder, alternate.name);
+    if (alternate.parts.length) alternateDraft.data.AdditionalParts = alternate.parts.map(value => value.identityPath);
+    return { primary: alternate.primary, draft: alternateDraft };
+  });
+  const ownedParts = [group, ...group.alternates].flatMap(version => version.parts.map(part => {
+    const partDraft = draft(part, parseName, isInMixedFolder);
+    // Native owned-part conversion from a concrete video subtype to Video
+    // copies only five fields; shortcut and placeholder flags are not among them.
+    if (nativeType !== videoNativeType) {
+      delete partDraft.data.IsShortcut;
+      delete partDraft.data.IsPlaceHolder;
+      delete partDraft.data.IsoType;
+    }
+    return { primary: part, nativeType: videoNativeType, owner: version.primary, draft: partDraft };
   }));
   const groupedCandidates = [group.primary, ...group.parts,
     ...group.alternates.flatMap(alternate => [alternate.primary, ...alternate.parts])];
@@ -727,14 +771,24 @@ function collapsedVideoDirectoryClaim(directory, group, policy, { ownedExtras, o
   };
 }
 
+async function classifyClaimSources(value, options) {
+  if (!value) return value;
+  for (const source of [value, ...value.localAlternates ?? [], ...value.ownedParts ?? [], ...value.ownedExtras ?? []]) {
+    if (source.draft?.data?.VideoType !== 'Iso') continue;
+    const fields = await resolveVideoSourceFields(source.itemSource ?? source.primary, options);
+    // Subtype-to-Video owned-part coercion keeps only the native five fields.
+    if (value.nativeType === videoNativeType || !value.ownedParts?.includes(source)) source.draft.data.IsoType = fields.IsoType;
+  }
+  return value;
+}
+
 /**
  * Resolves ordinary video files plus the unambiguous, strongly enumerated
  * video-directory collapse, direct DVD/Blu-ray directories, native file stacks, ordinary
- * same-folder local movie/music-video versions and their direct or convention-folder
- * extras, and strongly observed DVD/Blu-ray directory stacks. Disc images,
- * streams and stubs remain outside this resolver.
+ * same-folder local movie/music-video/episode versions and their direct or convention-folder
+ * extras, STRM shortcuts, disc placeholders, ISO images, and strongly observed DVD/Blu-ray directory stacks.
  */
-export function createVideoFileResolver({ localization } = {}) {
+export function createVideoFileResolver({ localization, classifyIso, logger } = {}) {
   return Object.freeze({
     id: 'builtin-video-files',
     priority: 40,
@@ -743,46 +797,74 @@ export function createVideoFileResolver({ localization } = {}) {
       [videoNativeType]: { isFolder: false },
       [movieNativeType]: { isFolder: false },
       [musicVideoNativeType]: { isFolder: false },
+      [episodeNativeType]: { isFolder: false },
       [trailerNativeType]: { isFolder: false },
       [audioNativeType]: { isFolder: false }
     },
-    async resolveMultiple({ parent, root, collectionContext, available, peekDirectory, getExtraCandidates, resolveExtra }) {
-      const policy = videoResolutionPolicy(collectionContext);
+    async resolveMultiple({ parent, root, collectionContext, available, peekDirectory, getExtraCandidates, resolveExtra, deletionSafe = true, signal }) {
+      const untyped = collectionContext?.collectionType === null;
+      if (untyped && (mixedVideoParentExcluded(parent, collectionContext) || !deletionSafe
+        || hasTvMarker(available))) return null;
+      const policy = videoResolutionPolicy(collectionContext, true, parent);
       if (!policy || discStructure(parent, root)) return null;
-      const unsupportedVersions = policy.supportMultiVersion ? unsupportedMovieVersionFamily(parent, available) : new Set();
-      const safe = available.filter(candidate => recognizedVideo(candidate) && !unsupportedVersions.has(candidate));
-      const groups = resolveVideoGroups(parent, safe, policy.parseName, policy.supportMultiVersion);
+      if (policy.episodeVersions && (!parent || parent.IsRoot === true || !deletionSafe)) return null;
+      const safe = available.filter(candidate => {
+        if (!recognizedVideo(candidate)) return false;
+        if (!policy.episodeVersions) return true;
+        const override = configuredTypeForPath(collectionContext.contentTypeOverrides ?? [], candidate.identityPath);
+        return override == null || override === 'tvshows';
+      });
+      const groups = resolveVideoGroups(parent, safe, policy.parseName, policy.supportMultiVersion, policy.episodeVersions);
       if (!groups.length) return null;
-      const nativeExtraCount = safe.filter(candidate => extraVideo(fileParts(candidate.entry.name).stem)).length;
+      const nativeExtraCount = safe.filter(candidate => {
+        const { stem, extension } = fileParts(candidate.entry.name);
+        return extraVideo(stem, extension) || matchedExtraRule(candidate.identityPath, parent?.Path) != null;
+      }).length;
       const mixed = groups.length + nativeExtraCount > 1 || sameId(parent?.Id, root?.Id);
       let items = [];
       for (const group of groups) {
-        const unambiguousOwner = groups.length === 1 && !sameId(parent?.Id, root?.Id);
+        const supportsExtras = !policy.episodeVersions || !mixed && Boolean(group.parts.length || group.alternates.length);
+        const unambiguousOwner = supportsExtras && groups.length === 1 && !sameId(parent?.Id, root?.Id);
         const extraCandidates = unambiguousOwner && getExtraCandidates ? await getExtraCandidates() : available;
         const extras = !unambiguousOwner ? null : await collectOwnedExtras(group.primary,
-          [group.primary, ...group.alternates.map(value => value.primary)], extraCandidates, peekDirectory, localization, { resolveExtra });
-        items.push(claim(group, policy.nativeType, policy.parseName, mixed, extras == null ? {} : {
+          [group.primary, ...group.alternates.map(value => value.primary)], extraCandidates, peekDirectory, localization, {
+            resolveExtra, ownerIsDirectory: ['Dvd', 'BluRay'].includes(videoSourceFields(group.primary.entry.name).VideoType)
+          });
+        items.push(await classifyClaimSources(claim(group, policy.nativeType, policy.parseName, mixed, extras == null ? {} : {
           ownedExtras: extras.extras,
           ownedExtraScopes: extras.scopes,
           additionalConsumed: extras.consumed.filter(candidate => available.includes(candidate))
-        }));
+        }), { classifyIso, logger, signal }));
       }
       items = items.filter(Boolean);
       if (!items.length) return null;
       const consumed = new Set(items.flatMap(item => item.consumedPaths));
       return { items, extraFiles: available.filter(candidate => !consumed.has(candidate)) };
     },
-    resolveFile({ candidate, parent, collectionContext, candidates }) {
+    async resolveFile({ candidate, parent, root, collectionContext, candidates, deletionSafe = true, signal }) {
+      if (collectionContext?.collectionType === null) {
+        if (mixedVideoParentExcluded(parent, collectionContext) || discStructure(parent, root)) return null;
+        if (isPotentialVideoExtraCandidate(candidate)) return deletionSafe ? null : withheld;
+        const video = resolveOrdinaryVideoFile(candidate);
+        if (!video || video.ExtraType != null) return null;
+        if (!deletionSafe) return withheld;
+        return classifyClaimSources(claim({ primary: candidate, parts: [], alternates: [], name: video.Name },
+          videoNativeType, false, true), { classifyIso, logger, signal });
+      }
       const policy = videoResolutionPolicy(collectionContext);
       if (!policy) return null;
-      if (isPotentialVideoExtraCandidate(candidate)) return withheld;
+      // Native single-file resolution declines extras. Without an owning
+      // family they remain unclaimed files, not an unsupported sibling batch.
+      if (isPotentialVideoExtraCandidate(candidate)) return deletionSafe ? null : withheld;
       if (!policy.supportMultiVersion) return null;
       const groups = resolveVideoGroups(parent, candidates, policy.parseName, true);
       return groups.some(group => group.alternates.some(alternate => alternate.primary === candidate
         || alternate.parts.includes(candidate)) || group.parts.includes(candidate))
-        || unsupportedMovieVersionFamily(parent, candidates).has(candidate) ? withheld : null;
+        ? withheld : null;
     },
-    async resolveDirectory({ candidate, parent, root, collectionContext, peekDirectory, getExtraCandidates, resolveExtra }) {
+    async resolveDirectory({ candidate, parent, root, collectionContext, peekDirectory, getExtraCandidates, resolveExtra, signal }) {
+      const untyped = collectionContext?.collectionType === null;
+      if (untyped && (!parent || mixedVideoParentExcluded(parent, collectionContext))) return null;
       const policy = videoResolutionPolicy(collectionContext);
       if (!policy) return null;
       if (extrasFolderNames.has(candidate.entry.name.toLowerCase()) && !sameId(parent?.Id, root?.Id)) return withheld;
@@ -796,9 +878,8 @@ export function createVideoFileResolver({ localization } = {}) {
       if (disc) return disc;
       const directDirectories = snapshot.candidates.filter(child => child?.entry?.kind === 'directory'
         && !extrasFolderNames.has(child.entry.name.toLowerCase()));
-      const directPotentialMedia = snapshot.candidates.filter(potentialPrimaryMedia);
-      if (directPotentialMedia.some(child => !discFolder(child) && !recognizedVideo(child))) return withheld;
-      const groups = resolveVideoGroups({ Path: candidate.identityPath }, snapshot.candidates, policy.parseName, true);
+      const groups = untyped && hasTvMarker(snapshot.candidates) ? []
+        : resolveVideoGroups({ Path: candidate.identityPath }, snapshot.candidates, policy.parseName, true);
       if (!policy.collapseDirectory) {
         if (groups.length) return null;
         return await resolveMultiDiscDirectory(candidate, snapshot, policy.nativeType, peekDirectory);
@@ -807,11 +888,13 @@ export function createVideoFileResolver({ localization } = {}) {
         const [group] = groups;
         const extraCandidates = getExtraCandidates ? await getExtraCandidates(candidate) : snapshot.candidates;
         const extras = await collectOwnedExtras(group.primary, [group.primary, ...group.alternates.map(value => value.primary)],
-          extraCandidates, peekDirectory, localization, { resolveExtra });
-        return collapsedVideoDirectoryClaim(candidate, group, policy, {
+          extraCandidates, peekDirectory, localization, {
+            resolveExtra, ownerIsDirectory: ['Dvd', 'BluRay'].includes(videoSourceFields(group.primary.entry.name).VideoType)
+          });
+        return classifyClaimSources(collapsedVideoDirectoryClaim(candidate, group, policy, {
           ownedExtras: extras.extras,
           ownedExtraScopes: extras.scopes
-        });
+        }), { classifyIso, logger, signal });
       }
       if (groups.length) return null;
       const multiDisc = await resolveMultiDiscDirectory(candidate, snapshot, policy.nativeType, peekDirectory);

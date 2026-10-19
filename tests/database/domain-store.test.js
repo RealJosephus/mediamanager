@@ -85,6 +85,28 @@ test('enqueued background writes leave a reentrant request and wait for its roll
   assert.deepEqual((await store.run(db => db.rows('ApiKeys'))).map(row => row.Name), ['background-commit']);
 });
 
+test('detached work cannot observe or join its originating PostgreSQL transaction', {
+  skip: !postgresTestConnectionString,
+}, async t => {
+  const { database, store } = await postgresStoreFixture(t, 'domain_detached');
+  await assert.rejects(store.transaction(async db => {
+    await db.insert('ApiKeys', apiKey('request-rollback'));
+    await bounded(store.runDetached(async () => {
+      // Direct repository calls and new domain operations must both leave the
+      // caller's uncommitted connection, while normal nested calls still see it.
+      assert.deepEqual(await database.rows('ApiKeys'), []);
+      await store.run(async detached => {
+        assert.deepEqual(await detached.rows('ApiKeys'), []);
+        await detached.insert('ApiKeys', apiKey('detached-commit'));
+      });
+    }), 5000);
+    assert.deepEqual((await store.run(nested => nested.rows('ApiKeys'))).map(row => row.Name),
+      ['request-rollback'], 'The originating repeatable-read snapshot retains its own write.');
+    throw new Error('Request rollback');
+  }), /Request rollback/);
+  assert.deepEqual((await store.run(db => db.rows('ApiKeys'))).map(row => row.Name), ['detached-commit']);
+});
+
 test('an aborted enqueue never runs and a failed background operation leaves the connection queue usable', {
   skip: !postgresTestConnectionString,
 }, async t => {

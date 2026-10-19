@@ -9,13 +9,24 @@ function numericOption(value, name) {
 
 // A VFS lease is always HTTP input,
 // so the native inputProtocol == File first-video-frame branch does not apply here.
-export function buildHttpProbeArguments(url, {
-  analyzeDurationMs = 0, configuredAnalyzeDuration, configuredProbeSize, userAgent,
-  extractChapters = false, threads = 0,
-} = {}) {
+export function buildHttpProbeArguments(url, options = {}) {
   const input = new URL(url);
   if (input.protocol !== 'http:' || input.hostname !== '127.0.0.1' || !/^\/[a-f0-9]{64}(?:\/[^/]+)?$/u.test(input.pathname)
     || input.username || input.password || input.search || input.hash) throw new TypeError('ffprobe requires a private bridge lease.');
+  return probeArguments(input.href, options);
+}
+
+export function buildRemoteProbeArguments(url, options = {}) {
+  if (typeof url !== 'string' || /[\0\r\n]/u.test(url)) throw new TypeError('Remote probing requires a shortcut URL.');
+  const input = new URL(url);
+  if (!['http:', 'https:', 'rtsp:', 'rtp:'].includes(input.protocol)) throw new TypeError('Unsupported shortcut probe protocol.');
+  return probeArguments(url, options, input.protocol === 'rtsp:');
+}
+
+function probeArguments(input, {
+  analyzeDurationMs = 0, configuredAnalyzeDuration, configuredProbeSize, userAgent,
+  extractChapters = false, threads = 0,
+} = {}, rtsp = false) {
   const duration = unsignedInteger(analyzeDurationMs, 'analyze duration');
   const args = [];
   if (duration > 0n) args.push('-analyzeduration', String(duration * 1000n));
@@ -25,7 +36,8 @@ export function buildHttpProbeArguments(url, {
     if (typeof userAgent !== 'string' || /[\r\n\0]/u.test(userAgent)) throw new TypeError('Invalid probe user agent.');
     args.push('-user_agent', userAgent);
   }
-  args.push('-i', input.href, '-threads', String(unsignedInteger(threads, 'thread count')), '-v', 'warning', '-print_format', 'json', '-show_streams');
+  if (rtsp) args.push('-rtsp_transport', 'tcp+udp', '-rtsp_flags', 'prefer_tcp');
+  args.push('-i', input, '-threads', String(unsignedInteger(threads, 'thread count')), '-v', 'warning', '-print_format', 'json', '-show_streams');
   if (extractChapters) args.push('-show_chapters');
   args.push('-show_format');
   return args;
@@ -33,16 +45,34 @@ export function buildHttpProbeArguments(url, {
 
 // Returns raw probe data explicitly. Native normalization and persistence are separate required stages.
 export async function probeRaw(bridge, virtualPath, {
-  executable = 'ffprobe', signal, timeoutMs = 60000, maxOutputBytes = 32 * 1024 * 1024, relatedPaths = [], ...probeOptions
+  executable, signal, timeoutMs = 60000, maxOutputBytes = 32 * 1024 * 1024, relatedPaths = [], ...probeOptions
 } = {}) {
   checkAbort(signal);
   for (const limit of [timeoutMs, maxOutputBytes]) {
     if (!Number.isSafeInteger(limit) || limit < 1) throw new TypeError('Probe limits must be positive safe integers.');
   }
   const lease = await bridge.lease(virtualPath, { signal, expiresInMs: timeoutMs + 1000, relatedPaths });
+  try {
+    return await runProbe(buildHttpProbeArguments(lease.url, probeOptions), lease.url,
+      { executable, signal, timeoutMs, maxOutputBytes, sourceConsistency: lease.consistency });
+  } finally { await lease.release(); }
+}
+
+/** Explicit native shortcut targets are remote media, never filesystem identities. */
+export async function probeRemoteRaw(url, {
+  executable, signal, timeoutMs = 60000, maxOutputBytes = 32 * 1024 * 1024, ...probeOptions
+} = {}) {
+  checkAbort(signal);
+  return runProbe(buildRemoteProbeArguments(url, probeOptions), url,
+    { executable, signal, timeoutMs, maxOutputBytes, sourceConsistency: 'unversioned' });
+}
+
+async function runProbe(args, source, { executable = 'ffprobe', signal, timeoutMs, maxOutputBytes, sourceConsistency }) {
+  for (const limit of [timeoutMs, maxOutputBytes]) {
+    if (!Number.isSafeInteger(limit) || limit < 1) throw new TypeError('Probe limits must be positive safe integers.');
+  }
   let child;
   try {
-    const args = buildHttpProbeArguments(lease.url, probeOptions);
     checkAbort(signal);
     child = spawn(executable, args, { shell: false, windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'] });
     let failure;
@@ -88,10 +118,9 @@ export async function probeRaw(bridge, virtualPath, {
       if (stream.display_aspect_ratio === '0:1') stream.display_aspect_ratio = '';
       if (stream.sample_aspect_ratio === '0:1') stream.sample_aspect_ratio = '';
     }
-    const diagnostics = Buffer.concat(stderr).toString('utf8').replaceAll(lease.url, '[probe source]');
-    return { raw, diagnostics, exitCode: child.exitCode, sourceConsistency: lease.consistency };
+    const diagnostics = Buffer.concat(stderr).toString('utf8').replaceAll(source, '[probe source]');
+    return { raw, diagnostics, exitCode: child.exitCode, sourceConsistency };
   } finally {
     if (child && child.exitCode === null && child.signalCode === null) child.kill();
-    await lease.release();
   }
 }

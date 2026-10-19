@@ -128,18 +128,22 @@ test('elevated folder Refresh scans folders and an ordinary root movie, then pub
   assert.equal(runtime.folderScanner.capabilities.resolvesProductionMediaFiles, true);
   assert.deepEqual(runtime.folderScanner.capabilities.productionMediaScopes,
     ['playlist-files-and-logical-directories', 'book-files-and-single-file-directories', 'photos-and-homevideos-photo-albums',
-      'conventional-tv-series-season-single-episodes', 'conventional-music-artist-album-tracks',
+      'tv-ordinary-video-files', 'music-ordinary-tracks-and-conventional-albums',
       'ordinary-movies-homevideos-and-musicvideos', 'audiobook-files-and-single-file-directories']);
   assert.equal(runtime.folderScanner.capabilities.relationshipRows, false);
   assert.equal(runtime.libraryScanner.capabilities.completeLibraryScan, false);
   assert.equal(runtime.libraryScanner.capabilities.scope, 'aggregate-folder-validation');
-  assert.equal(runtime.libraryScanner.capabilities.scansMediaFiles, false);
+  assert.equal(runtime.libraryScanner.capabilities.scansMediaFiles, true);
   assert.equal(runtime.libraryScanner.capabilities.resolvesProductionMediaFiles, true);
   assert.deepEqual(runtime.libraryScanner.capabilities.productionMediaScopes,
     ['playlist-files-and-logical-directories', 'book-files-and-single-file-directories', 'photos-and-homevideos-photo-albums',
-      'conventional-tv-series-season-single-episodes', 'conventional-music-artist-album-tracks',
+      'tv-ordinary-video-files', 'music-ordinary-tracks-and-conventional-albums',
       'ordinary-movies-homevideos-and-musicvideos', 'audiobook-files-and-single-file-directories']);
-  assert.equal(runtime.libraryScanner.capabilities.relationshipRows, false);
+  assert.equal(runtime.libraryScanner.capabilities.relationshipRows, true);
+  assert.equal(runtime.libraryScanner.capabilities.structuralCompletenessProof, true);
+  assert.equal(runtime.libraryScanner.capabilities.directStructuralRoots, true);
+  assert.equal(runtime.libraryScanner.capabilities.typeReclassification, true);
+  assert.equal(runtime.libraryScanner.capabilities.runsPostScanTasks, true);
   const sockets = [];
   try {
     await database.insert('BaseItems', item(ids.root, 'UserRootFolder', { Name: 'Media Folders', IsFolder: true }));

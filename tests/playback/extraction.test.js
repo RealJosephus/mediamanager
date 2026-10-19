@@ -12,6 +12,15 @@ import profileOracle from './fixtures/oracle-output.json' with { type: 'json' };
 const files = () => Object.fromEntries(reference.sources.map(value => ['/' + value.name, Buffer.from(value.media, 'base64')]));
 const source = reference.sources[0].source;
 const subtitle = source.MediaStreams.find(value => value.Type === 'Subtitle');
+function assertExtractionBytes(bytes, expected) {
+  const normalize = expected.type === 'subtitle' && expected.format === 'ass'
+    // FFmpeg's ASS records may use LF or CRLF. The one-byte encoding preserves
+    // the BOM, styles, dialogue, timing and every other byte during comparison.
+    ? value => Buffer.from(value.toString('latin1').replace(/\r?\n/gu, '\r\n'), 'latin1')
+    : value => value;
+  assert.deepEqual(normalize(bytes), normalize(Buffer.from(expected.bytes, 'base64')),
+    `${expected.source}:${expected.index}`);
+}
 async function until(predicate) {
   for (let i = 0; i < 300; i++) { if (predicate()) return; await delay(10); }
   assert.fail('The expected extraction state was not reached.');
@@ -25,13 +34,13 @@ async function setup(t, options = {}, fixtureOptions = {}) {
   return { fixture, service, processes, count: () => processes.filter(args => !args.includes('-version')).length };
 }
 
-test('real HTTP container extraction matches frozen native DLL bytes and never selects audio or video outputs', async t => {
+test('real HTTP container extraction preserves native subtitle content and attachment bytes without audio or video outputs', async t => {
   const { fixture, service, processes } = await setup(t);
   for (const expected of reference.outputs) {
     const entry = reference.sources.find(value => value.name === expected.source);
     const stream = (expected.type === 'subtitle' ? entry.source.MediaStreams : entry.source.MediaAttachments).find(value => value.Index === expected.index);
     const result = await service[expected.type](entry.source, stream, '/' + entry.name);
-    assert.equal(result.bytes.toString('base64'), expected.bytes, `${entry.name}:${expected.index}`);
+    assertExtractionBytes(result.bytes, expected);
     assert.equal(result.format, expected.format);
     assert.equal(result.consistency, 'versioned');
   }
@@ -62,6 +71,19 @@ test('private VFS input supports seeking and binds every read to its leased vers
   fixture.replace('/media.mkv', files()['/media.mkv']);
   assert.equal((await fetch(lease.url, { headers: { Range: 'bytes=100-' } })).status, 412);
   assert.equal((await fetch(lease.url, { method: 'HEAD' })).status, 412);
+});
+
+test('ISO-classified file sources use the existing raw HTTP subtitle and attachment extraction', async t => {
+  const { fixture, service, processes } = await setup(t);
+  // The fork passes ISO bytes through its HTTP proxy. A known demuxable input
+  // isolates that transport contract from disc filesystem classification.
+  fixture.replace('/media.iso', files()['/media.mkv']);
+  const iso = { ...source, VideoType: 'Iso', IsoType: 'BluRay', Path: 'Z:\\Extraction\\media.iso' };
+  const expected = reference.outputs.find(value => value.source === 'media.mkv' && value.type === 'subtitle' && value.index === subtitle.Index);
+  assertExtractionBytes((await service.subtitle(iso, subtitle, '/media.iso')).bytes, expected);
+  assert.equal((await service.attachment(iso, source.MediaAttachments[0], '/media.iso')).bytes.toString('base64'), reference.attachment);
+  assert.ok(fixture.requests.some(request => request.path === '/media.iso' && request.method === 'GET'));
+  assert.equal(processes.filter(args => !args.includes('-version')).every(args => args.includes('[private source]')), true);
 });
 
 test('concurrent readers share extraction while individual cancellation preserves the other result', async t => {

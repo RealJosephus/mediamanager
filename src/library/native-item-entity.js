@@ -555,12 +555,14 @@ export function initializeNativeResolvedRelationships(item, { parent, parents = 
     item.SeriesName = parent.Name;
   } else if (item.Type === 'Episode') {
     const series = [parent, ...parents].find(value => value?.Type === 'Series');
-    if (!series) throw new TypeError('A resolved Episode requires its Series ancestor.');
-    item.SeriesId = series.Id;
-    item.SeriesName = series.Name;
-    if (parent?.Type === 'Season') {
-      item.SeasonId = parent.Id;
-      item.SeasonName = parent.Name;
+    if (series) {
+      item.SeriesId = series.Id;
+      item.SeriesName = series.Name;
+    }
+    const season = [parent, ...parents].find(value => value?.Type === 'Season');
+    if (season) {
+      item.SeasonId = season.Id;
+      item.SeasonName = season.Name;
     }
   }
   return item;

@@ -13,9 +13,13 @@ import { MetadataImageAssets } from '../../src/metadata/image-assets.js';
 import { internalImagePath } from '../../src/metadata/image-paths.js';
 import { setFolderChildren } from '../../src/library/folder-cache.js';
 import { persistMetadata } from '../../src/metadata/persistence.js';
-import { guid, idKey } from '../../src/library/records.js';
+import { EMPTY_ID, guid, idKey } from '../../src/library/records.js';
 import { discoveryFixture, ordinal } from './video-discovery-fixture.js';
 import { resolveDirectoryVideo, projectDirectoryItem, projectDirectoryResolution } from './directory-video-fixture.js';
+import { fixturePathStyle, projectStatePath } from './fixture-state-path.js';
+import { newNativeItemEntity } from '../../src/library/native-item-entity.js';
+import { mediaSources } from '../../src/library/dto.js';
+import { mediaVersions, sortMediaSources } from '../../src/library/media-versions.js';
 
 import { seedNativeConstructorControl, completeColumns } from './directory-persistence-fixture.js';
 
@@ -27,6 +31,35 @@ const sourceHashes = Object.fromEntries(provenance.sourceFiles.map(file => [file
 const runtimeHashes = Object.fromEntries(Object.entries(provenance.runtime.assemblies)
   .map(([name, value]) => [name, value.sha256]));
 const safetyDivergence = input.filter(sample => sample.safetyDivergence);
+
+test('live video source protocols depend on the actual path without a repository LocationType projection', async () => {
+  const item = newNativeItemEntity('MediaBrowser.Controller.Entities.Movies.Movie');
+  item.Id = '98c00000-0000-0000-0000-000000000010'; item.Name = 'Live movie';
+  assert.equal(item.LocationType, undefined);
+  const project = () => mediaSources(item, { byId: new Map([[idKey(item.Id), item]]), links: [],
+    db: { rows: async () => [] } }, null, {});
+  for (const Path of ['D:\\Media\\Film.mkv', '\\\\server\\share\\Film.mkv', '/media/Film.mkv', null]) {
+    item.Path = Path;
+    const [source] = await project();
+    assert.equal(source.Protocol, 'File'); assert.equal(source.Path, Path); assert.equal(source.Id, idKey(item.Id));
+    assert.equal(source.Type, Path ? 'Default' : 'Placeholder');
+  }
+  item.Path = 'https://media.example.test/Film.mkv';
+  assert.equal((await project())[0].Protocol, 'Http');
+  item.Path = 'unknown://media.example.test/Film.mkv';
+  await assert.rejects(project(), error => error.status === 501 && /media source protocol/u.test(error.message));
+  item.Path = '/media/Film.strm'; item.IsShortcut = true;
+  for (const [target, protocol] of [['https://media.example.test/Film.mkv', 'Http'],
+    ['rtsp://media.example.test/Film', 'Rtsp'], ['rtp://media.example.test/Film', 'Rtp']]) {
+    item.ShortcutPath = target;
+    const [source] = await project();
+    assert.equal(source.Path, target); assert.equal(source.Protocol, protocol); assert.equal(source.IsRemote, true);
+  }
+  item.ShortcutPath = '/private/Film.mkv';
+  assert.equal((await project())[0].Path, item.Path, 'a local shortcut target does not replace its source file');
+  item.ShortcutPath = 'unknown://media.example.test/Film';
+  await assert.rejects(project(), error => error.status === 501 && /shortcut media source protocol/u.test(error.message));
+});
 
 test('directory DeleteItem seals all native columns, complete families and real batch faults', async () => {
   for (const file of provenance.fixtureFiles) assert.equal(createHash('sha256')
@@ -154,6 +187,21 @@ for (const dialect of ['postgres']) for (const sample of input.filter(value => !
     registerItem: item => registered.set(idKey(item.Id), item) });
   fixture.library.itemCreation = creator;
   creator.registerItem(loaded.parent);
+  if (sample.channelOriginal) {
+    const getLiveMediaSources = fixture.library.getLiveMediaSources.bind(fixture.library);
+    fixture.library.getLiveMediaSources = item => item.SourceType !== 'Channel' ? getLiveMediaSources(item)
+      : fixture.store.run(async database => {
+        // The sealed oracle supplies no static channel sources or streams.
+        // BaseItem then enumerates the actual Video version family; internal
+        // cleanup consumes their IDs, including any alternate sources.
+        const state = await fixture.library.load(database, null, { baseRows: await database.rows('BaseItems'), includeUserData: false });
+        try {
+          state.byId.set(idKey(item.Id), item);
+          return sortMediaSources(mediaVersions(item, state).map(({ item }) => ({ Id: idKey(item.Id),
+            VideoType: item.VideoType, Video3DFormat: item.Video3DFormat, MediaStreams: [] })), item.Id);
+        } finally { await state.dispose(); }
+      });
+  }
   fixture.library.itemDeletion = new ItemDeletionService({ ...fixture, itemCreation: creator,
     updates: fixture.host.updates, externalData: loaded.videoVersionDiscovery.externalData,
     linkedChildReferences: { reroute: async () => [] }, now: () => fixture.now });
@@ -200,7 +248,7 @@ for (const dialect of ['postgres']) for (const sample of input.filter(value => !
       deleted = await creator.getItemById(link.ChildId);
     }
     const createDescendants = async folder => {
-      const accessPath = fixture.identityMap.resolve({ identityPath: folder.Path, style: 'windows' });
+      const accessPath = fixture.identityMap.resolve({ identityPath: folder.Path, style: fixturePathStyle });
       // This control models ManagedFileSystem directory enumeration on the
       // frozen Windows fixture. Explicit ResolvePaths inputs keep their order.
       const entries = (await fixture.vfs.list(accessPath)).entries.map(entry => path.relative(path.join(fixture.stateRoot, 'media'), path.join(folder.Path, entry.name)).replaceAll('\\', '/'))
@@ -217,7 +265,7 @@ for (const dialect of ['postgres']) for (const sample of input.filter(value => !
       if (sample.removeAlternatesBeforeDelete === 'first') links = links.slice(0, 1);
       for (const link of links) {
         const child = await creator.getItemById(link.ChildId);
-        const accessPath = fixture.identityMap.resolve({ identityPath: child.Path, style: 'windows' });
+        const accessPath = fixture.identityMap.resolve({ identityPath: child.Path, style: fixturePathStyle });
         await fixture.vfs.delete(accessPath);
       }
     }
@@ -229,11 +277,11 @@ for (const dialect of ['postgres']) for (const sample of input.filter(value => !
       await assets.write(path.join(absolute, 'marker.txt'), Buffer.from('delete marker'));
     }
     const directoryDisc = ['Dvd', 'BluRay'].includes(deleted.VideoType);
-    const primaryAccess = fixture.identityMap.resolve({ itemId: deleted.Id, identityPath: deleted.Path, style: 'windows' });
+    const primaryAccess = fixture.identityMap.resolve({ itemId: deleted.Id, identityPath: deleted.Path, style: fixturePathStyle });
     const sourceAccess = deleted.IsFolder || directoryDisc && deleted.AdditionalParts.length === 0
       ? primaryAccess : path.posix.dirname(primaryAccess);
     const sourceIdentity = deleted.IsFolder || directoryDisc && deleted.AdditionalParts.length === 0
-      ? deleted.Path : path.win32.dirname(deleted.Path);
+      ? deleted.Path : path.dirname(deleted.Path);
     const internalMarker = path.join(internalImagePath(deleted, loaded.metadataPath), 'marker.txt');
     const externalMarkers = external.paths(deleted, loaded).map(directory => path.join(directory, 'marker.txt'));
     const exists = async (target, reader) => { try { await reader(target); return true; } catch { return false; } };
@@ -248,7 +296,7 @@ for (const dialect of ['postgres']) for (const sample of input.filter(value => !
     if (sample.removeSourceBeforeDelete) await fixture.vfs.delete(sourceAccess, { recursive: true });
     if (sample.recordDeletePhases) calls.push({
       action: 'delete-paths',
-      paths: [{ path: sourceIdentity.replace(fixture.stateRoot, '$STATE'), directory: true }],
+      paths: [{ path: projectStatePath(sourceIdentity, fixture.stateRoot), directory: true }],
       state: await fixture.deletionPhaseState()
     });
     const externalFiles = external.deleteItemFiles.bind(external);

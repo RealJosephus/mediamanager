@@ -42,9 +42,10 @@ export class PlaybackService {
   async sources(item, user, { signal } = {}) {
     let sources = await this.library.getMediaSources(item.Id, { user });
     const primary = sources[0];
-    if (primary && primary.Type !== 'Placeholder' && !primary.MediaStreams.some(stream => stream.Type === item.MediaType)) {
+    const shortcut = /\.strm$/iu.test(item.Path ?? '');
+    if (primary && primary.Type !== 'Placeholder' && (shortcut || !primary.MediaStreams.some(stream => stream.Type === item.MediaType))) {
       if (!this.probe) throw httpError(503, 'Media probing has not been configured.');
-      await this.probe.refresh(item.Id, { force: true, signal });
+      await this.probe.refresh(item.Id, { force: true, signal, enableRemoteContentProbe: shortcut, metadataRefreshMode: 'FullRefresh' });
       sources = await this.library.getMediaSources(item.Id, { user });
     }
     return sources;
@@ -93,11 +94,12 @@ export class PlaybackService {
       item = await this.library.getItemRecord(source.Id, { user });
     }
     if (playback) {
-      // Static playback resolves media sources without probing. A remote .strm
-      // is a URL source, while /Items/{id}/File remains the local shortcut file.
+      // Static playback resolves media sources without probing. Native Video
+      // shortcuts use their URL; Audio and /Items/{id}/File retain the file.
       const source = (await this.library.getMediaSources(item.Id, { user }))
         .find(value => value.Id.toLowerCase() === item.Id.replaceAll('-', '').toLowerCase());
       if (source?.Protocol === 'Http') return remoteStaticStreamResult(source.Path, source.RequiredHttpHeaders, this.serverVersion);
+      if (source && source.Protocol !== 'File') throw httpError(400, `Input protocol ${source.Protocol} cannot be streamed statically`);
     }
     return vfsStreamResult(this.vfs, this.accessPath(item), { contentType: mimeType(item.Path), filename: filename ? path.win32.basename(item.Path).replaceAll('"', '') : undefined });
   }

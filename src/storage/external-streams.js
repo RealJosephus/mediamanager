@@ -42,10 +42,13 @@ export function parseExternalPath(filename, extra, type, naming = {}) {
   return info;
 }
 
-export async function externalCandidates(vfs, virtualPath, identityPath, { signal, naming, additionalDirectories = [], types = ['Subtitle', 'Audio'] } = {}) {
+export async function externalCandidates(vfs, virtualPath, identityPath, {
+  signal, naming, additionalDirectories = [], types = ['Subtitle', 'Audio'], sourceIsDirectory = false, useFullFileName = false,
+} = {}) {
   const api = /^[A-Za-z]:[\\/]|^\\\\/u.test(identityPath) ? path.win32 : path.posix;
-  const stem = api.basename(identityPath, api.extname(identityPath));
-  const directories = [{ virtualPath: path.posix.dirname(virtualPath), identityPath: api.dirname(identityPath) }, ...additionalDirectories];
+  const stem = useFullFileName ? api.basename(identityPath) : api.basename(identityPath, api.extname(identityPath));
+  const directories = [sourceIsDirectory ? { virtualPath, identityPath }
+    : { virtualPath: path.posix.dirname(virtualPath), identityPath: api.dirname(identityPath) }, ...additionalDirectories];
   const files = [];
   for (const directory of directories) {
     const listing = await vfs.list(directory.virtualPath, { signal });

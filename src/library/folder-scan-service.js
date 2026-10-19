@@ -253,7 +253,7 @@ function scanPlanPaths(plan) {
   return [...values];
 }
 
-function tvStructure(target, parent, root) {
+function tvStructure(target, parent, root, parents = []) {
   const type = target.nativeType;
   if (![seriesNativeType, seasonNativeType, episodeNativeType].includes(type)) return null;
   const parentNativeType = parent?.NativeType ?? parent?.Type;
@@ -265,32 +265,42 @@ function tvStructure(target, parent, root) {
     return { relationships: { SeriesId: null, SeasonId: null }, indices: {} };
   }
   if (type === seasonNativeType) {
-    if (parentNativeType !== seriesNativeType || !Number.isSafeInteger(initial.IndexNumber) || initial.IndexNumber <= 0) {
-      throw new StorageError('invalid-response', 'A TV Season requires a positive initial index and a Series parent.');
+    if (parentNativeType !== seriesNativeType || initial.IndexNumber != null
+      && (!Number.isSafeInteger(initial.IndexNumber) || initial.IndexNumber < 0)) {
+      throw new StorageError('invalid-response', 'A TV Season requires a Series parent and an absent or nonnegative initial index.');
     }
     return {
       relationships: { SeriesId: parent.Id, SeasonId: null },
       indices: { IndexNumber: initial.IndexNumber }
     };
   }
-  if (parentNativeType !== seasonNativeType || !nonemptyId(parent.SeriesId)
-    || !Number.isSafeInteger(initial.IndexNumber) || initial.IndexNumber <= 0
-    || !Number.isSafeInteger(initial.ParentIndexNumber) || initial.ParentIndexNumber <= 0
-    || initial.ParentIndexNumber !== parent.IndexNumber) {
-    throw new StorageError('invalid-response', 'A TV Episode requires positive initial indices and a related Season parent.');
+  if (![folderNativeType, seriesNativeType, seasonNativeType].includes(parentNativeType)) {
+    throw new StorageError('invalid-response', 'A TV Episode requires a physical Folder, Series or Season parent.');
+  }
+  const hierarchy = [parent, ...parents];
+  const season = hierarchy.find(item => (item.NativeType ?? item.Type) === seasonNativeType);
+  const series = hierarchy.find(item => (item.NativeType ?? item.Type) === seriesNativeType);
+  const seriesId = series?.Id ?? season?.SeriesId ?? null;
+  if (season && !nonemptyId(seriesId)) {
+    throw new StorageError('invalid-response', 'A physical TV Season requires its related Series.');
   }
   return {
-    relationships: { SeriesId: parent.SeriesId, SeasonId: parent.Id },
-    indices: { IndexNumber: initial.IndexNumber, ParentIndexNumber: initial.ParentIndexNumber }
+    relationships: { SeriesId: seriesId, SeasonId: season?.Id ?? null },
+    indices: {}, metadataSeason: !season && Boolean(series)
   };
 }
 
 function matchesTvStructure(item, structure) {
   if (structure == null) return true;
   for (const [field, expected] of Object.entries(structure.relationships)) {
+    // Episodes without a physical Season retain their Series or Folder parent.
+    // Metadata may associate a synthetic Season without reparenting the file.
+    if (field === 'SeasonId' && structure.metadataSeason) continue;
     if (expected == null ? nonemptyId(item?.[field]) : !sameId(item?.[field], expected)) return false;
   }
-  return Object.entries(structure.indices).every(([field, expected]) => item?.[field] === expected);
+  // Numbers are metadata, including NFO edits and absolute/date ordering.
+  // A new filename observation cannot invalidate those persisted values.
+  return true;
 }
 
 function plannedTraversalItem(target, parent, root) {
@@ -313,10 +323,10 @@ function plannedTraversalItem(target, parent, root) {
 const movieCollapsedTypes = new Set([movieNativeType]);
 const musicVideoCollapsedTypes = new Set([musicVideoNativeType]);
 const bookCollapsedTypes = new Set([bookNativeType, audioBookNativeType]);
-const movableCollapsedTypes = new Set([bookNativeType, audioBookNativeType]);
+const movableCollapsedTypes = new Set([bookNativeType, audioBookNativeType, movieNativeType]);
 
 function collapsedItemNativeTypes(context) {
-  return context?.collectionType === 'movies' ? movieCollapsedTypes
+  return context?.collectionType === 'movies' || context?.collectionType === null ? movieCollapsedTypes
     : context?.collectionType === 'musicvideos' ? musicVideoCollapsedTypes
       : context?.collectionType === 'books' ? bookCollapsedTypes : null;
 }
@@ -672,7 +682,7 @@ export class FolderScanService {
 
   #isVideoPlanTarget(target) {
     return target?.draft?.IsFolder === false
-      && [movieNativeType, musicVideoNativeType, videoNativeType].includes(target.nativeType);
+      && [movieNativeType, musicVideoNativeType, videoNativeType, episodeNativeType].includes(target.nativeType);
   }
 
   #isVideoItem(item) {
@@ -756,7 +766,7 @@ export class FolderScanService {
   }
 
   #directoryDiscPromotionFailure(action, detail) {
-    const lifecycle = action?.mode === 'folder' ? '2-to-Folder reclassification' : '3-to-2 primary-loss lifecycle';
+    const lifecycle = action?.mode === 'folder' ? 'directory-to-Folder reclassification' : 'primary-loss lifecycle';
     return new StorageError('unsupported/type-reclassification-required',
       `Changing the multi-disc directory stack at ${action.containerPath} requires an isolated ${lifecycle}${detail ? `: ${detail}` : '.'}`);
   }
@@ -786,22 +796,25 @@ export class FolderScanService {
       || scope.observedPaths.has(pathKey(source.Path))) {
       throw this.#directoryDiscPromotionFailure(action, 'the resolver or snapshot contract is incomplete');
     }
+    const survivingPaths = oldPaths.filter(value => scope.observedPaths.has(pathKey(value)));
     if (action.mode === 'promotion') {
-      if (oldPaths.length !== 3 || newPaths?.length !== 2 || source.NativeType !== target.nativeType
+      if (oldPaths.length < 3 || !(newPaths?.length >= 2) || newPaths.length >= oldPaths.length
+        || source.NativeType !== target.nativeType
         || target.draft?.data?.VideoType !== source.VideoType
         || !samePath(target.primary?.identityPath, containerPath)
         || !this.#orderedDirectDirectoryFamily(newPaths, containerPath)
         || newPaths.some(value => !scope.observedPaths.has(pathKey(value)))) {
         throw this.#directoryDiscPromotionFailure(action, 'the resolver or snapshot contract is incomplete');
       }
-      const expectedNew = oldPaths.slice(1);
-      if (!newPaths.every((value, index) => samePath(value, expectedNew[index]))) {
-        throw this.#directoryDiscPromotionFailure(action, 'the surviving directory family is not the old ordered tail');
+      if (newPaths.length !== survivingPaths.length
+        || !newPaths.every((value, index) => samePath(value, survivingPaths[index]))) {
+        throw this.#directoryDiscPromotionFailure(action, 'the surviving directory family is not the observed old ordered subset');
       }
     } else {
       const childPlan = plan.children?.get(idKey(target.Id));
       const nested = childPlan?.desired?.[0];
-      if (oldPaths.length !== 2 || newPaths != null || target.traversal !== 'children'
+      const survivor = survivingPaths[0];
+      if (oldPaths.length < 2 || survivingPaths.length !== 1 || newPaths != null || target.traversal !== 'children'
         || target.entry?.kind !== 'directory' || target.primary?.entry?.kind !== 'directory'
         || !samePath(target.identityPath, containerPath) || !samePath(target.primary.identityPath, containerPath)
         || target.consumedPaths?.length !== 1 || !samePath(target.consumedPaths[0], containerPath)
@@ -817,15 +830,15 @@ export class FolderScanService {
         || !nested || nested.nativeType !== source.NativeType || nested.draft?.IsFolder !== false
         || nested.draft?.data?.VideoType !== source.VideoType || nested.traversal !== 'none'
         || nested.entry?.kind !== 'directory' || nested.primary?.entry?.kind !== 'directory'
-        || !samePath(nested.identityPath, oldPaths[1]) || !samePath(nested.primary.identityPath, oldPaths[1])
-        || nested.consumedPaths?.length !== 1 || !samePath(nested.consumedPaths[0], oldPaths[1])
+        || !samePath(nested.identityPath, survivor) || !samePath(nested.primary.identityPath, survivor)
+        || nested.consumedPaths?.length !== 1 || !samePath(nested.consumedPaths[0], survivor)
         || nested.replacementPaths?.length || nested.localAlternates?.length || nested.directoryParts?.length
         || nested.ownedParts?.length || nested.ownedExtras?.length
         || nested.draft?.data?.AdditionalParts?.length || nested.draft?.data?.LocalAlternateVersions?.length
         || nested.draft?.data?.LinkedAlternateVersions?.length
-        || !scope.observedPaths.has(pathKey(oldPaths[1]))
-        || !childPlan.observedPaths.has(pathKey(oldPaths[1]))
-        || !childPlan.directoryPaths.has(pathKey(oldPaths[1]))) {
+        || !scope.observedPaths.has(pathKey(survivor))
+        || !childPlan.observedPaths.has(pathKey(survivor))
+        || !childPlan.directoryPaths.has(pathKey(survivor))) {
         throw this.#directoryDiscPromotionFailure(action, 'the recursive Folder and direct-disc plan is incomplete');
       }
       action.nestedPlan = childPlan;
@@ -1130,7 +1143,7 @@ export class FolderScanService {
         const actions = current.linkedActions ?? this.#linkedScopeActions(current);
         this.#requireLinkedActionServices(actions);
         const unsupported = (actions.deletionRoots ?? this.#linkedDeletionRoots(actions))
-          .find(item => !['Movie', 'MusicVideo', 'Video', 'Folder'].includes(itemType(item)));
+          .find(item => !['Movie', 'MusicVideo', 'Video', 'Episode', 'Folder'].includes(itemType(item)));
         if (unsupported) {
           throw new StorageError('not-supported',
             `Linked folder reconciliation cannot run the deletion lifecycle for ${unsupported.NativeType ?? unsupported.Type}.`);
@@ -1284,7 +1297,7 @@ export class FolderScanService {
       ...(actions.deletionRoots ?? this.#linkedDeletionRoots(actions)),
       ...promotions.map(action => action.source)
     ].map(item => [idKey(item.Id), item])).values()];
-    const unsupportedRemoval = removals.find(item => !['Movie', 'MusicVideo', 'Video', 'Folder'].includes(itemType(item)));
+    const unsupportedRemoval = removals.find(item => !['Movie', 'MusicVideo', 'Video', 'Episode', 'Folder'].includes(itemType(item)));
     if (unsupportedRemoval) {
       throw new StorageError('not-supported',
         `Linked folder reconciliation cannot run the deletion lifecycle for ${unsupportedRemoval.NativeType ?? unsupportedRemoval.Type}.`);
@@ -1929,7 +1942,7 @@ export class FolderScanService {
 
   #isSameIdentityDirectoryStackUpdate(existing, target, plan) {
     const desiredParts = target.draft.data?.AdditionalParts;
-    if (plan.deletionSafe !== true || existing.IsFolder !== false
+    if (plan.deletionSafe !== true || existing.IsFolder !== false || existing.IsPlaceHolder
       || target.entry?.kind !== 'directory' || target.primary?.entry?.kind !== 'directory'
       || !Array.isArray(target.directoryParts) || target.directoryParts.length === 0
       || !Array.isArray(desiredParts) || desiredParts.length !== target.directoryParts.length
@@ -1995,7 +2008,7 @@ export class FolderScanService {
       if (!plan.deletionSafe && (Array.isArray(existing.LocalAlternateVersions)
         && existing.LocalAlternateVersions.length || Array.isArray(existing.AdditionalParts)
         && existing.AdditionalParts.length)) continue;
-      this.#assertExistingTvStructure(existing, target, plan.folder, plan.root);
+      this.#assertExistingTvStructure(existing, target, plan.folder, plan.root, plan.collectionContext.parents);
       // Once native existing-item work begins, saver, image or repository
       // side effects can survive any later failure. Never retry the tree.
       const outcome = await this.resolvedItemLifecycle.apply(existing.Id, {
@@ -2110,7 +2123,7 @@ export class FolderScanService {
   }
 
   #isMultiDiscDirectoryItem(item) {
-    return item?.IsFolder === false && ['Dvd', 'BluRay'].includes(item?.VideoType)
+    return item?.IsFolder === false && !item.IsPlaceHolder && ['Dvd', 'BluRay'].includes(item?.VideoType)
       && Array.isArray(item?.AdditionalParts) && item.AdditionalParts.length > 0;
   }
 
@@ -2263,11 +2276,11 @@ export class FolderScanService {
     }
   }
 
-  #assertExistingTvStructure(existing, desired, parent, root) {
-    const structure = tvStructure(desired, parent, root);
+  #assertExistingTvStructure(existing, desired, parent, root, parents = []) {
+    const structure = tvStructure(desired, parent, root, parents);
     if (structure != null && !matchesTvStructure(existing, structure)) {
       throw new StorageError('unsupported/relationship-reclassification-required',
-        `The existing TV relationship or numbering at ${existing.Path} does not match its scan hierarchy.`);
+        `The existing TV relationship at ${existing.Path} does not match its scan hierarchy.`);
     }
     return structure;
   }
@@ -2279,12 +2292,13 @@ export class FolderScanService {
     const size = desired.entry.kind === 'file' ? desired.entry.size ?? null : null;
     const columns = this.#draftColumns(desired);
     const initialColumns = this.#draftColumns(desired, 'initialColumns');
-    const structure = tvStructure(desired, parent, root);
+    const parents = relationState ? parentChainForItem(parent, relationState) : [];
+    const structure = tvStructure(desired, parent, root, parents);
     const ownedExtra = extraType !== undefined;
     const initial = setResolverInitialValues({ Type: desired.nativeType.split('.').at(-1), Path: desired.identityPath,
       Name: name, IsFolder: desired.draft.IsFolder, IsInMixedFolder: columns.IsInMixedFolder ?? false,
       ...this.#draftData(desired) }, { identityPath: desired.identityPath, entry: desired.entry, parent,
-      parents: relationState ? parentChainForItem(parent, relationState) : [],
+      parents,
       metadataConfiguration: this.metadataConfiguration, clock: this.clock });
     const row = {
       Id: desired.Id,
@@ -2319,9 +2333,9 @@ export class FolderScanService {
     return row;
   }
 
-  #changesFor(existing, desired, parent, root) {
+  #changesFor(existing, desired, parent, root, parents = []) {
     this.#assertDraftRelationships(desired);
-    this.#assertExistingTvStructure(existing, desired, parent, root);
+    this.#assertExistingTvStructure(existing, desired, parent, root, parents);
     const resolved = this.#resolvedDraft(desired);
     const updated = cloneNativeItemEntity(existing);
     if (updateFromResolvedItem(updated, resolved) <= ItemUpdateType.None) return {};
@@ -2346,6 +2360,10 @@ export class FolderScanService {
       || directChildrenSignature(direct, folder.Id) !== directSignature) {
       throw new StorageError('version-changed', 'The folder hierarchy changed during enumeration.');
     }
+    // Unchanged directories need not have entered this attempt's relation
+    // state through a save. Load their physical ancestors before checking or
+    // creating child relationships, including Episodes below ordinary Folders.
+    await this.#loadLineage(db, folder, state.libraryState);
     const journal = { removed: [], updated: [], added: [] };
     const desiredEntries = [];
     const desiredParts = [];
@@ -2593,15 +2611,25 @@ export class FolderScanService {
     const moveCollapsedIdentity = async (source, target, parent) => {
       const current = await this.#item(db, source.Id);
       const closure = current ? await collectItemDeletionIds(db, [current.Id]) : new Map();
+      const fileMovie = current?.NativeType !== movieNativeType
+        || (['VideoFile', 'Iso'].includes(current.VideoType)
+            || current.IsPlaceHolder && ['Dvd', 'BluRay'].includes(current.VideoType))
+          && current.VideoType === target.draft.data?.VideoType
+          && Boolean(current.IsShortcut) === Boolean(target.draft.data?.IsShortcut)
+          && Boolean(current.IsPlaceHolder) === Boolean(target.draft.data?.IsPlaceHolder)
+          && ['AdditionalParts', 'LocalAlternateVersions', 'LinkedAlternateVersions'].every(field =>
+            !(current[field]?.length || target.draft.data?.[field]?.length))
+          && !target.localAlternates?.length && !target.ownedParts?.length && !target.ownedExtras?.length;
       if (!current || !this.#isManagedItem(current, root.Id)
         || !movableCollapsedTypes.has(current.NativeType) || current.IsFolder !== false
+        || !fileMovie
         || target.nativeType !== current.NativeType || target.draft.IsFolder !== false
         || !sameId(current.Id, target.Id) || !samePath(current.Path, target.identityPath)
         || closure.size !== 1 || !closure.has(idKey(current.Id))) {
         throw new StorageError('unsupported/type-reclassification-required',
           `The collapsed identity at ${source.Path} cannot move across the directory boundary.`);
       }
-      const changes = this.#changesFor(current, target, parent, root);
+      const changes = this.#changesFor(current, target, parent, root, parentChainForItem(parent, state.libraryState));
       if (!sameId(current.ParentId, parent.Id)) changes.ParentId = parent.Id;
       if (!sameId(repositoryTopParentId(current), root.Id)) changes.TopParentId = root.Id;
       if (!Object.keys(changes).length) return current;
@@ -2700,7 +2728,7 @@ export class FolderScanService {
             const childPlan = plan?.children?.get(idKey(desiredAtContainer.Id));
             const nested = childPlan?.desired?.find(target => sameId(target.Id, item.Id));
             const collapsedExpansion = movableCollapsedTypes.has(item.NativeType)
-              && collectionContext?.collectionType === 'books'
+              && supportsCollapsedItemType(collectionContext, item.NativeType)
               && desiredAtContainer.nativeType === folderNativeType
               && desiredAtContainer.draft.IsFolder === true
               && desiredAtContainer.traversal === 'children'
@@ -2956,6 +2984,16 @@ export class FolderScanService {
 
     for (const family of partFamilies) {
       for (const [fromId, toId] of reroutes) if (family.ownerIds.has(idKey(toId))) family.ownerIds.add(fromId);
+      // A missing local alternate no longer appears in the resolver's current
+      // version list, but its owned parts still belong to this stored family.
+      // Reconcile those parts with the existing bounded ownership checks before
+      // deleting the alternate; never treat an observed or weak path as absent.
+      if (deletionSafe) for (const alternate of direct) {
+        const alternateId = idKey(alternate.Id), previousOwner = priorLocalOwners.get(alternateId);
+        if (previousOwner && family.ownerIds.has(idKey(previousOwner.Id))
+          && !desiredIds.has(alternateId) && !removedIds.has(alternateId)
+          && !observedPaths.has(pathKey(alternate.Path))) family.ownerIds.add(alternateId);
+      }
       if (!family.deletionSafe) {
         markIncomplete(folderScanIncompleteReasonCodes.WEAK_DIRECTORY_SNAPSHOT, family.target,
           family.target.primary?.identityPath ?? family.target.identityPath);
@@ -3057,7 +3095,7 @@ export class FolderScanService {
           || !samePath(existing.Path, target.identityPath) || !sameId(existing.ParentId, folder.Id)) {
           throw new StorageError('invalid-response', 'The deterministic owned-part identity conflicts with an existing item.');
         }
-        const changes = this.#changesFor(existing, target, folder, root);
+        const changes = this.#changesFor(existing, target, folder, root, parentChainForItem(folder, state.libraryState));
         if (!sameId(existing.OwnerId, ownerId)) changes.OwnerId = ownerId;
         if (nonemptyId(existing.PrimaryVersionId)) changes.PrimaryVersionId = null;
         if (!sameId(existing.ParentId, folder.Id)) changes.ParentId = folder.Id;
@@ -3175,7 +3213,7 @@ export class FolderScanService {
           || !samePath(existing.Path, target.identityPath)) {
           throw new StorageError('invalid-response', 'The deterministic owned-extra identity conflicts with an existing item.');
         }
-        const changes = this.#changesFor(existing, target, folder, root);
+        const changes = this.#changesFor(existing, target, folder, root, parentChainForItem(folder, state.libraryState));
         if (!sameId(existing.OwnerId, ownerId)) changes.OwnerId = ownerId;
         if (nonemptyId(existing.ParentId)) changes.ParentId = null;
         if (nonemptyId(repositoryTopParentId(existing))) changes.TopParentId = null;
@@ -3268,7 +3306,7 @@ export class FolderScanService {
       if (addedIds.has(idKey(target.Id))) continue;
       if (weakPreservedIds.has(idKey(target.Id)) || weakPreservedIds.has(idKey(primaryId))) continue;
       let existing = await this.#item(db, target.Id);
-      const changes = this.#changesFor(existing, target, folder, root);
+      const changes = this.#changesFor(existing, target, folder, root, parentChainForItem(folder, state.libraryState));
       const linkedCreation = state.linkedChanges?.added.has(idKey(existing.Id)) === true;
       if (linkedCreation && !sameId(repositoryTopParentId(existing), root.Id)) changes.TopParentId = root.Id;
       const previousOwner = previousOwners.get(idKey(target.Id));

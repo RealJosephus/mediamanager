@@ -9,6 +9,13 @@ const folderFallbackResolverId = 'folder-fallback';
 
 const keyFor = value => nativePathKey(value);
 const pipelineInvariantErrors = new WeakSet();
+const resolutionReadFailures = new WeakSet();
+/** A builtin reader can bind a consistency failure to this resolution. Error
+ * names or codes from an arbitrary resolver do not grant this propagation. */
+export function preserveResolutionReadFailure(error) {
+  resolutionReadFailures.add(error);
+  return error;
+}
 const invalid = message => {
   const error = new StorageError('invalid-response', message);
   pipelineInvariantErrors.add(error);
@@ -574,7 +581,7 @@ export class DirectoryItemResolverPipeline {
     try { result = await resolver[method](context); }
     catch (error) {
       checkAbort(signal);
-      if (!continueOnError || pipelineInvariantErrors.has(error)) throw error;
+      if (!continueOnError || pipelineInvariantErrors.has(error) || resolutionReadFailures.has(error)) throw error;
       this.#report(error, resolver, method);
       return null;
     }

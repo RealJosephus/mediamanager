@@ -23,6 +23,8 @@ import { quoteIdentifier } from '../../src/database/model.js';
 
 import { videoData, folderData, typeName, ordinal, integer, discoveryFixture, projectItem, projectDiscovery } from './video-discovery-fixture.js';
 import { prepareIgnoreFileFixture } from './ignore-file-fixture.js';
+import { fixturePathStyle } from './fixture-state-path.js';
+import { makeUdfImage } from '../storage/fixtures/udf-disc-type.js';
 
 const root = new URL('./fixtures/video-version-discovery/', import.meta.url);
 const [input, native, provenance] = await Promise.all(['input.json', 'native.json', 'provenance.json']
@@ -56,7 +58,7 @@ async function setupVersion(t, dialect, name) {
   await fixture.adapter.write('/discovery/primary.mkv', Buffer.from('primary control'));
   for (const filename of sample.files) await fixture.adapter.write('/discovery/' + filename,
     Buffer.concat([Buffer.from([0xef, 0xbb, 0xbf]), Buffer.from('media control')]));
-  fixture.identityMap.addPrefix({ identityRoot: directory, accessRoot: '/fixture/discovery', style: 'windows',
+  fixture.identityMap.addPrefix({ identityRoot: directory, accessRoot: '/fixture/discovery', style: fixturePathStyle,
     returnAccess: 'isolated ordinary version resolution controls' });
   await prepareIgnoreFileFixture(fixture);
   fixture.loadContext = fixture.host.loadContext = ownedLoader(fixture);
@@ -212,6 +214,29 @@ for (const dialect of ['postgres']) {
     const [alternate] = await fixture.database.rows('BaseItems', { where: { Id: nativeGuid(loaded.getNewItemId(target, movieType)) } });
     assert.equal(alternate.Name, 'Film'); assert.equal(alternate.ProductionYear, 2025);
     assert.equal(alternate.ParentId, ids.parent); assert.equal(alternate.Size, 16n);
+  });
+  databaseTest('metadata version discovery reads UDF and preserves disc type only for the resolved native type', async t => {
+    const { fixture, loaded, target } = await setupVersion(t, dialect, 'update-missing-movie-retains-movie-initial-values');
+    const imagePath = path.join(path.dirname(target), 'Image Version.img');
+    await fixture.adapter.write('/discovery/Image Version.img', makeUdfImage({ discType: 'BluRay', metadata: true, extended: true }));
+    fixture.configuration.ContentTypes = [{ Name: path.dirname(target), Value: 'movies' }];
+    loaded.item.LocalAlternateVersions = [imagePath];
+    await fixture.host.updates.updateRepository(loaded, { Item: loaded.item, Images: null }, ItemUpdateType.MetadataImport);
+    const alternateId = nativeGuid(loaded.getNewItemId(imagePath, movieType));
+    const [alternate] = await fixture.database.rows('BaseItems', { where: { Id: alternateId } });
+    assert.equal(alternate.Type, movieType); assert.equal(alternate.Path, imagePath);
+    assert.equal(alternate.OwnerId, ids.owner); assert.equal(alternate.PrimaryVersionId, ids.owner);
+    assert.equal(alternate.ParentId, ids.parent);
+    assert.equal(JSON.parse(alternate.Data).VideoType, 'Iso');
+    assert.equal(JSON.parse(alternate.Data).IsoType, 'BluRay');
+    fixture.library.itemCreation.unregisterItem(alternateId);
+    const cold = await fixture.loadContext(alternateId);
+    assert.equal(cold.item.VideoType, 'Iso'); assert.equal(cold.item.IsoType, 'BluRay');
+    await cold.dispose();
+    const part = await loaded.videoVersionDiscovery.resolveAlternateVersion(loaded, imagePath, videoType);
+    assert.equal(part.NativeType, videoType); assert.equal(part.Path, imagePath);
+    assert.equal(part.VideoType, 'Iso');
+    assert.equal(part.IsoType, null, 'native subtype-to-Video coercion copies five fields and excludes IsoType');
   });
   databaseTest('the custom image persistence producer saves new versions and their relation before recursive propagation', async t => {
     const { fixture, loaded, target } = await setupVersion(t, dialect, 'update-new-version-inherits-mixed');

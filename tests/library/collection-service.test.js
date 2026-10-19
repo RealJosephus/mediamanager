@@ -84,7 +84,13 @@ function normalize(value, program, createdId) {
 async function runSample(t, sample, directory, { dataPath, blockCreate } = {}) {
   const program = path.join(directory, 'program'), data = dataPath ?? path.join(program, 'data'), collections = path.join(data, 'collections');
   await fs.mkdir(program, { recursive: true });
-  const map = value => value?.replaceAll('{collections}', collections).replaceAll('{data}', data).replaceAll('{program}', program);
+  const map = value => {
+    // Recorded instance paths use Windows separators. Rebase only declared
+    // state roots; bare legacy links such as \\movie.mkv keep their raw bytes.
+    const statePath = /^(?:\{collections\}|\{data\}|\{program\})(?:[\\/]|$)/u.test(value ?? '')
+      ? value.replaceAll('\\', path.sep) : value;
+    return statePath?.replaceAll('{collections}', collections).replaceAll('{data}', data).replaceAll('{program}', program);
+  };
   const pending = [], calls = [], trace = (action, value = null) => {
     calls.push({ action, value: structuredClone(value) });
     if (sample.failure === action) throw new Error(`Controlled ${action} failure.`);

@@ -32,6 +32,9 @@ test('copy plans enforce stream identity, container constraints and native EOF s
   assert.deepEqual(audio.streams.map(stream => stream.type), ['Audio']);
   const sparse = { ...source, MediaStreams: source.MediaStreams.filter(stream => stream.Index !== 1), DefaultAudioStreamIndex: 2 };
   assert.deepEqual(remuxPlan(sparse, { Container: 'mp4' }).streams.map(stream => stream.index), [0, 2]);
+  assert.deepEqual(remuxPlan({ ...source, VideoType: 'Iso', IsoType: 'BluRay' }, { Container: 'mp4' }),
+    remuxPlan(source, { Container: 'mp4' }), 'ISO sources use the same audited packet-copy limits');
+  assert.throws(() => remuxPlan({ ...source, VideoType: 'Iso' }, { Container: 'mp4', VideoCodec: 'hevc' }), { code: 'not-supported' });
 });
 
 test('PlaybackInfo advertises remux and HLS only for sources resolvable through identity mapping and VFS', async () => {

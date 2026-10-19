@@ -141,7 +141,14 @@ export class DomainStore {
   // A service-owned background operation can wait on timers or remote work
   // without reserving a database connection or blocking later requests.
   // Its individual SQL operations acquire their own ordinary store scopes.
-  runDetached(operation) { return this.#context.exit(operation); }
+  runDetached(operation) {
+    return this.#context.exit(() => this.database.runDetached(operation));
+  }
+
+  currentOperationCompletion() {
+    const scope = this.#context.getStore();
+    return scope?.active ? scope.finished : undefined;
+  }
 
   async close() {
     if (this.#context.getStore()?.active) throw new Error('Cannot close a DomainStore from an active operation');

@@ -359,6 +359,8 @@ export class PostgresDatabase {
     } finally { client.release(setupError ?? session?.connectionReleaseError ?? undefined); }
   }
 
+  runDetached(operation) { return this.root.operationContext.exit(operation); }
+
   async pooledQuery(...args) {
     if (this.connectionSession) return this.client.query(...args);
     if (this.closed) throw new Error(closedClientMessage);

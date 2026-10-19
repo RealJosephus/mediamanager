@@ -67,7 +67,7 @@ export class OwnedItemMetadataLifecycleHost {
   }
 
   async validateBeforeRefresh(loaded, options) {
-    if (!maintainsExtras(loaded) || !['VideoFile', 'Iso'].includes(loaded.item.VideoType ?? 'VideoFile')) return;
+    if (!maintainsExtras(loaded) || !['VideoFile', 'Iso', 'Dvd', 'BluRay'].includes(loaded.item.VideoType ?? 'VideoFile')) return;
     const state = await loaded.loadLibraryState();let found;try {
     const current=currentOwnedExtras(state,loaded.item);
     // A read-only discovery failure belongs to the native owned wrapper's

@@ -42,7 +42,7 @@ import { IdentityAccessMap, StorageRegistry, VirtualFileSystem } from '../../src
 import { MemoryStorageAdapter } from '../../src/storage/testing/memory-adapter.js';
 import { knownAncestorIgnoreRule } from './ignore-namespace-fixture.js';
 import { createResolvedItemLifecycleFixture } from './resolved-item-lifecycle-fixture.js';
-import { dateText } from '../../src/library/records.js';
+import { dateText, nonemptyId, repositoryTopParentId } from '../../src/library/records.js';
 import { nativeTextSql } from '../../src/database/native-text-sql.js';
 import { parseLosslessJson } from '../../src/core/json.js';
 import { guidD } from '../../src/sessions/user-data.js';
@@ -690,7 +690,7 @@ async function assertDiscPromotionRejected(t, dialect, scenario) {
 
   await assert.rejects(scanner.scan(reference), error => {
     assert.equal(error.code, 'unsupported/type-reclassification-required');
-    assert.match(error.message, /3-to-2 primary-loss lifecycle/u);
+    assert.match(error.message, /primary-loss lifecycle/u);
     return true;
   });
   assert.deepEqual(calls, [], `${scenario} must fail before delete, save, reroute, reattach or events`);
@@ -923,9 +923,9 @@ for (const dialect of ['postgres']) {
       { added: 0, updated: 0, removed: 0 });
   });
 
-  test(`${dialect}: Photo albums exclude native artwork names and images owned by videos`, options, async t => {
-    const { database, adapter, scanner, reference } = await fixture(t, dialect,
-      [createPhotoItemResolver(), createPhotoAlbumResolver()]);
+  test(`${dialect}: Photo albums retain videos while excluding artwork and video-owned images`, options, async t => {
+    const { database, library, adapter, scanner, reference } = await fixture(t, dialect,
+      [createPhotoItemResolver(), createPhotoAlbumResolver(), createVideoFileResolver()]);
     const collectionId = await insertCollection(database, 'photos');
     await adapter.write('/standalone.JPG', Buffer.from('standalone'));
     await adapter.write('/cover-library.jpg', Buffer.from('cover'));
@@ -939,6 +939,7 @@ for (const dialect of ['postgres']) {
       standalone: `${ROOT_PATH}\\standalone.JPG`,
       cover: `${ROOT_PATH}\\cover-library.jpg`,
       album: `${ROOT_PATH}\\Album`,
+      video: `${ROOT_PATH}\\Album\\clip.mp4`,
       sunset: `${ROOT_PATH}\\Album\\sunset.webp`,
       poster: `${ROOT_PATH}\\Album\\poster-art.jpg`,
       owned: `${ROOT_PATH}\\Album\\clip-poster.jpg`
@@ -946,13 +947,15 @@ for (const dialect of ['postgres']) {
     const ids = {
       standalone: itemId(paths.standalone, photoNativeType),
       album: itemId(paths.album, photoAlbumNativeType),
+      video: itemId(paths.video, videoNativeType),
       sunset: itemId(paths.sunset, photoNativeType)
     };
 
     const result = await scanner.scan(reference);
 
     assert.equal(result.structurallyComplete, true);
-    assert.deepEqual(scanner.capabilities.productionMediaScopes, ['photos-and-homevideos-photo-albums']);
+    assert.deepEqual(scanner.capabilities.productionMediaScopes,
+      ['photos-and-homevideos-photo-albums', 'ordinary-movies-homevideos-and-musicvideos']);
     const [standalone] = await database.rows('BaseItems', { where: { Id: ids.standalone } });
     const [album] = await database.rows('BaseItems', { where: { Id: ids.album } });
     const [sunset] = await database.rows('BaseItems', { where: { Id: ids.sunset } });
@@ -965,12 +968,21 @@ for (const dialect of ['postgres']) {
     { type: photoAlbumNativeType, name: 'Album', path: paths.album, parent: ROOT_ID, isFolder: true });
     assert.deepEqual({ type: sunset.Type, name: sunset.Name, parent: sunset.ParentId, mediaType: sunset.MediaType },
       { type: photoNativeType, name: 'sunset', parent: ids.album, mediaType: 'Photo' });
+    const [video] = await database.rows('BaseItems', { where: { Id: ids.video } });
+    assert.deepEqual({ type: video.Type, path: video.Path, parent: video.ParentId, mediaType: video.MediaType },
+      { type: videoNativeType, path: paths.video, parent: ids.album, mediaType: 'Video' });
+    const coldVideo = await library.getItemRecord(ids.video);
+    assert.equal(coldVideo.Type, 'Video');
+    assert.equal(coldVideo.VideoType, 'VideoFile');
+    assert.equal(coldVideo.ParentId, ids.album);
     for (const path of [paths.cover, paths.poster, paths.owned]) {
       assert.equal((await database.rows('BaseItems', { where: { Path: path } })).length, 0);
     }
     const ancestors = new Set((await database.rows('AncestorIds', { where: { ItemId: ids.sunset } }))
       .map(row => idKey(row.ParentItemId)));
     assert.deepEqual(ancestors, new Set([idKey(ids.album), idKey(ROOT_ID), idKey(collectionId)]));
+    assert.deepEqual(new Set((await database.rows('AncestorIds', { where: { ItemId: ids.video } }))
+      .map(row => idKey(row.ParentItemId))), ancestors);
     const repeated = await scanner.scan(reference);
     assert.deepEqual({ added: repeated.added, updated: repeated.updated, removed: repeated.removed },
       { added: 0, updated: 0, removed: 0 });
@@ -1809,6 +1821,94 @@ for (const dialect of ['postgres']) {
       ]);
     });
 
+  for (const survivors of [[2, 4], [4]]) test(
+    `${dialect}: four-disc primary loss preserves ${survivors.length === 1 ? 'one nested survivor' : 'the noncontiguous surviving stack'}`,
+    options, async t => {
+      const { database, library, adapter, scanner, reference } = await fixture(t, dialect,
+        [createVideoFileResolver()], { nativeActions: true });
+      const aggregateId = 'D1000000-0000-0000-0000-000000000006';
+      await database.insert('BaseItems', baseItem(aggregateId,
+        'MediaBrowser.Controller.Entities.AggregateFolder', {
+          Name: 'Aggregate', CleanName: 'aggregate', SortName: 'aggregate', IsFolder: true
+        }));
+      await database.update('BaseItems', { Id: ROOT_ID }, { ParentId: aggregateId });
+      const collectionId = await insertCollection(database, 'movies');
+      const containerPath = `${ROOT_PATH}\\Film`;
+      const discPath = number => `${containerPath}\\Film Disc ${number}`;
+      const accessPath = number => `/Film/Film Disc ${number}`;
+      const sourceId = itemId(discPath(1), MOVIE_TYPE);
+      const sourceFiles = new Map();
+      await adapter.mkdir('/Film');
+      for (const number of [4, 2, 3, 1]) {
+        await adapter.mkdir(accessPath(number));
+        const file = `${accessPath(number)}/video_ts.ifo`;
+        await adapter.write(file, Buffer.from(`disc ${number}`));
+        sourceFiles.set(number, await adapter.stat(file));
+      }
+      const created = await scanner.scan(reference);
+      assert.equal(created.structurallyComplete, true);
+      assert.equal(created.added, 1);
+      assert.deepEqual((await library.getItemRecord(sourceId)).AdditionalParts, [2, 3, 4].map(discPath));
+
+      const events = [];
+      for (const name of ['ItemAdded', 'ItemUpdated', 'ItemRemoved']) {
+        library.on(name, event => events.push([name, idKey(event.Item.Id)]));
+      }
+      for (const number of [1, 2, 3, 4].filter(number => !survivors.includes(number))) {
+        await adapter.delete(`${accessPath(number)}/video_ts.ifo`);
+        await adapter.delete(accessPath(number));
+      }
+      const result = await scanner.scan(reference);
+      const becomesFolder = survivors.length === 1;
+      const folderId = itemId(containerPath, FOLDER_TYPE);
+      const targetId = itemId(discPath(survivors[0]), MOVIE_TYPE);
+      const expectedParts = survivors.slice(1).map(discPath);
+      assert.equal(result.structurallyComplete, true);
+      assert.deepEqual({ added: result.added, updated: result.updated, removed: result.removed },
+        { added: becomesFolder ? 2 : 1, updated: 0, removed: 1 });
+      assert.equal((await database.rows('BaseItems', { where: { Id: sourceId } })).length, 0);
+      const [target] = await database.rows('BaseItems', { where: { Id: targetId } });
+      assert.equal(target.Type, MOVIE_TYPE);
+      assert.equal(target.Path, discPath(survivors[0]));
+      assert.equal(target.ParentId, becomesFolder ? folderId : ROOT_ID);
+      assert.equal(target.TopParentId, ROOT_ID);
+      assert.equal(target.OwnerId, null);
+      assert.equal(target.PrimaryVersionId, null);
+      assert.equal(JSON.parse(target.Data).VideoType, 'Dvd');
+      assert.deepEqual(JSON.parse(target.Data).AdditionalParts, expectedParts);
+      const cold = await library.getItemRecord(targetId);
+      assert.equal(cold.ParentId, target.ParentId);
+      assert.deepEqual(cold.AdditionalParts, expectedParts);
+      const folderRows = await database.rows('BaseItems', { where: { Path: containerPath } });
+      assert.equal(folderRows.length, becomesFolder ? 1 : 0);
+      if (becomesFolder) {
+        assert.equal(folderRows[0].Type, FOLDER_TYPE);
+        assert.equal(folderRows[0].Id, folderId);
+        assert.equal(folderRows[0].ParentId, ROOT_ID);
+        assert.equal((await library.getItemRecord(folderId)).Type, 'Folder');
+      }
+      assert.deepEqual(new Set((await database.rows('AncestorIds', { where: { ItemId: targetId } }))
+        .map(row => idKey(row.ParentItemId))),
+        new Set([ROOT_ID, aggregateId, collectionId, ...(becomesFolder ? [folderId] : [])].map(idKey)));
+      assert.deepEqual(events, [
+        ['ItemRemoved', idKey(sourceId)],
+        ...(becomesFolder ? [['ItemAdded', idKey(folderId)]] : []),
+        ['ItemAdded', idKey(targetId)]
+      ]);
+      for (const number of survivors) {
+        assert.deepEqual(await adapter.stat(`${accessPath(number)}/video_ts.ifo`), sourceFiles.get(number),
+          'repository reclassification must preserve surviving source files');
+      }
+      const beforeRepeat = await snapshot(database);
+      events.length = 0;
+      const repeated = await scanner.scan(reference);
+      assert.equal(repeated.structurallyComplete, true);
+      assert.deepEqual({ added: repeated.added, updated: repeated.updated, removed: repeated.removed },
+        { added: 0, updated: 0, removed: 0 });
+      assert.deepEqual(await snapshot(database), beforeRepeat);
+      assert.deepEqual(events, []);
+    });
+
   for (const sample of discReclassificationInput.slice(0, 9)) test(
     `${dialect}: directory disc reclassification lifecycle ${sample.name}`,
     options,
@@ -1901,6 +2001,83 @@ for (const dialect of ['postgres']) {
       ['ItemRemoved', idKey(directoryId)],
       ['ItemAdded', idKey(movieId)]
     ]);
+  });
+
+  for (const [collectionType, filename, videoType, shortcut, placeholder] of [
+    ['movies', 'Story.mkv', 'VideoFile', false, false],
+    [null, 'Story.mkv', 'VideoFile', false, false],
+    ['movies', 'Story.iso', 'Iso', false, false],
+    ['movies', 'Story.strm', 'VideoFile', true, false],
+    ['movies', 'Story.dvd.disc', 'Dvd', false, true]
+  ]) test(`${dialect}: ${filename} in ${collectionType ?? 'an untyped library'} moves between a single-film directory and a populated Folder`, options, async t => {
+    const { database, library, adapter, scanner, reference } = await fixture(t, dialect, [createVideoFileResolver()]);
+    const collectionId = await insertCollection(database, collectionType);
+    await adapter.mkdir('/Dynamic');
+    const source = Buffer.from(shortcut ? 'https://example.invalid/story.mkv' : 'story');
+    await adapter.write('/Dynamic/' + filename, source);
+    const directoryPath = `${ROOT_PATH}\\Dynamic`, moviePath = `${directoryPath}\\${filename}`;
+    const folderId = itemId(directoryPath, FOLDER_TYPE), movieId = itemId(moviePath, MOVIE_TYPE);
+    const secondId = itemId(`${directoryPath}\\Second.mkv`, MOVIE_TYPE);
+    await scanner.scan(reference);
+    await database.update('BaseItems', { Id: movieId }, {
+      Name: 'Provider Movie', Overview: 'Preserved movie metadata'
+    });
+    const userId = 'D1000000-0000-0000-0000-000000000021';
+    await database.insert('Users', { ...blank('Users'), Id: userId, InternalId: 1701,
+      Username: 'Movie Viewer', NormalizedUsername: 'MOVIE VIEWER' });
+    await database.insert('UserData', { ...blank('UserData'), ItemId: movieId, UserId: userId,
+      CustomDataKey: idKey(movieId), IsFavorite: true, Played: true, PlayCount: 7,
+      PlaybackPositionTicks: 9007199254740993n });
+    const userData = await database.rows('UserData');
+    const assertMovie = async (parentId, mixed, ancestors) => {
+      const movie = await library.getItemRecord(movieId);
+      assert.deepEqual({ id: movie.Id, path: movie.Path, parent: movie.ParentId, mixed: movie.IsInMixedFolder,
+        name: movie.Name, overview: movie.Overview },
+      { id: movieId, path: moviePath, parent: parentId, mixed,
+        name: 'Provider Movie', overview: 'Preserved movie metadata' });
+      assert.deepEqual(new Set((await database.rows('AncestorIds', { where: { ItemId: movieId } }))
+        .map(row => idKey(row.ParentItemId))), new Set(ancestors.map(idKey)));
+      assert.deepEqual(await database.rows('UserData'), userData);
+      assert.equal(movie.VideoType, videoType);
+      assert.equal(Boolean(movie.IsShortcut), shortcut);
+      assert.equal(Boolean(movie.IsPlaceHolder), placeholder);
+      const media = await adapter.openRead('/Dynamic/' + filename);
+      try {
+        const chunks = [];
+        for await (const chunk of media.stream) chunks.push(Buffer.from(chunk));
+        assert.deepEqual(Buffer.concat(chunks), source);
+      } finally { await media.close(); }
+    };
+
+    await adapter.write('/Dynamic/Second.mkv', Buffer.from('second'));
+    assert.equal((await scanner.scan(reference)).structurallyComplete, true);
+    assert.equal((await library.getItemRecord(folderId)).Type, 'Folder');
+    assert.equal((await library.getItemRecord(secondId)).ParentId, folderId);
+    await assertMovie(folderId, true, [folderId, ROOT_ID, collectionId]);
+    const expanded = await completeSnapshot(database);
+    assert.equal((await scanner.scan(reference)).structurallyComplete, true);
+    assert.deepEqual(await completeSnapshot(database), expanded);
+
+    await adapter.delete('/Dynamic/Second.mkv');
+    const beforeFailedCollapse = await completeSnapshot(database), events = [];
+    for (const name of ['ItemAdded', 'ItemUpdated', 'ItemRemoved']) {
+      library.on(name, event => events.push([name, idKey(event.Item.Id)]));
+    }
+    const dropFailure = await deleteFailureTrigger(database, folderId);
+    try {
+      await assert.rejects(scanner.scan(reference), /Controlled primary deletion failure/u);
+      assert.deepEqual(await completeSnapshot(database), beforeFailedCollapse,
+        'a failed Folder deletion rolls back the Movie parent move and preserves its user data');
+      assert.deepEqual(events, []);
+    } finally { await dropFailure(); }
+
+    assert.equal((await scanner.scan(reference)).structurallyComplete, true);
+    assert.equal((await database.rows('BaseItems', { where: { Id: folderId } })).length, 0);
+    assert.equal((await database.rows('BaseItems', { where: { Id: secondId } })).length, 0);
+    await assertMovie(ROOT_ID, false, [ROOT_ID, collectionId]);
+    const collapsed = await completeSnapshot(database);
+    assert.equal((await scanner.scan(reference)).structurallyComplete, true);
+    assert.deepEqual(await completeSnapshot(database), collapsed);
   });
 
   test(`${dialect}: a multi winner cannot silently preserve an omitted managed sibling`, options, async t => {
@@ -2076,17 +2253,36 @@ for (const dialect of ['postgres']) {
 
   test(`${dialect}: conventional TV hierarchy persists deterministic relationships and ancestors atomically`, options,
     async t => {
-      const { database, adapter, scanner, reference } = await fixture(t, dialect, [createTvItemResolver()]);
+      const { database, library, adapter, scanner, reference } = await fixture(t, dialect, [createTvItemResolver()]);
       const collectionId = await insertCollection(database, 'tvshows');
       await adapter.mkdir('/Example Show (2024)');
+      await adapter.mkdir('/Example Show (2024)/Empty');
       await adapter.mkdir('/Example Show (2024)/Season 01');
       await adapter.write('/Example Show (2024)/Season 01/Example.Show.S01E02.mkv', Buffer.from('episode'));
+      await adapter.mkdir('/Example Show (2024)/Unnumbered');
+      await adapter.write('/Example Show (2024)/Unnumbered/Unnumbered.mkv', Buffer.from('unnumbered episode'));
+      await adapter.mkdir('/Example Show (2024)/Unnumbered/Nested');
+      await adapter.write('/Example Show (2024)/Unnumbered/Nested/Unnumbered.mkv', Buffer.from('nested episode'));
+      await adapter.mkdir('/Example Show (2024)/Example.Show.S01E05');
+      await adapter.write('/Example Show (2024)/Example.Show.S01E05/video.mkv', Buffer.from('episode folder'));
+      await adapter.write('/Example Show (2024)/Example.Show.S01E03.mkv', Buffer.from('flat episode'));
+      await adapter.write('/Root.Show.S03E05.mkv', Buffer.from('root episode'));
       const seriesPath = `${ROOT_PATH}\\Example Show (2024)`;
       const seasonPath = `${seriesPath}\\Season 01`;
       const episodePath = `${seasonPath}\\Example.Show.S01E02.mkv`;
       const seriesId = itemId(seriesPath, seriesNativeType);
       const seasonId = itemId(seasonPath, seasonNativeType);
       const episodeId = itemId(episodePath, episodeNativeType);
+      const flatId = itemId(`${seriesPath}\\Example.Show.S01E03.mkv`, episodeNativeType);
+      const rootEpisodeId = itemId(`${ROOT_PATH}\\Root.Show.S03E05.mkv`, episodeNativeType);
+      const unnumberedSeasonId = itemId(`${seriesPath}\\Unnumbered`, seasonNativeType);
+      const unnumberedEpisodeId = itemId(`${seriesPath}\\Unnumbered\\Unnumbered.mkv`, episodeNativeType);
+      const nestedFolders = [
+        { folderPath: `${seriesPath}\\Unnumbered\\Nested`, parentId: unnumberedSeasonId,
+          filename: 'Unnumbered.mkv', seasonId: unnumberedSeasonId, ancestors: [unnumberedSeasonId] },
+        { folderPath: `${seriesPath}\\Example.Show.S01E05`, parentId: seriesId,
+          filename: 'video.mkv', seasonId: null, ancestors: [] }
+      ];
 
       const result = await scanner.scan(reference);
 
@@ -2095,10 +2291,13 @@ for (const dialect of ['postgres']) {
         'the narrow TV slice must not advertise the complete relationship stage');
       assert.equal(scanner.capabilities.completeLibraryScan, false);
       assert.deepEqual(scanner.capabilities.productionMediaScopes,
-        ['conventional-tv-series-season-single-episodes']);
+        ['tv-ordinary-video-files']);
       const [series] = await database.rows('BaseItems', { where: { Id: seriesId } });
       const [season] = await database.rows('BaseItems', { where: { Id: seasonId } });
       const [episode] = await database.rows('BaseItems', { where: { Id: episodeId } });
+      const emptyFolder = await library.getItemRecord(itemId(`${seriesPath}\\Empty`, FOLDER_TYPE));
+      assert.equal(emptyFolder.Type, 'Folder');
+      assert.equal(emptyFolder.ParentId, seriesId);
       assert.equal(series.Type, seriesNativeType);
       assert.equal(series.Name, 'Example Show');
       assert.equal(series.ProductionYear, 2024);
@@ -2118,23 +2317,79 @@ for (const dialect of ['postgres']) {
       assert.equal(episode.TopParentId, ROOT_ID);
       assert.equal(episode.SeriesId, seriesId);
       assert.equal(episode.SeasonId, seasonId);
-      assert.equal(episode.IndexNumber, 2);
-      assert.equal(episode.ParentIndexNumber, 1);
-      assert.equal(episode.SortName, '001 - 0002 - Example.Show.S01E02');
+      assert.equal(episode.IndexNumber, null);
+      assert.equal(episode.ParentIndexNumber, null);
+      assert.equal(episode.SortName, 'Example.Show.S01E02');
       assert.equal(episode.MediaType, 'Video');
       assert.deepEqual(JSON.parse(episode.Data), { VideoType: 'VideoFile', SourceType: 'Library' });
+      const [flat] = await database.rows('BaseItems', { where: { Id: flatId } });
+      assert.equal(flat.ParentId, seriesId);
+      assert.equal(flat.SeriesId, seriesId);
+      assert.equal(flat.SeasonId, null);
+      const [unnumberedSeason] = await database.rows('BaseItems', { where: { Id: unnumberedSeasonId } });
+      assert.equal(unnumberedSeason.Type, seasonNativeType);
+      assert.equal(unnumberedSeason.Path, `${seriesPath}\\Unnumbered`);
+      assert.equal(unnumberedSeason.Name, 'Unnumbered');
+      assert.equal(unnumberedSeason.IndexNumber, null);
+      assert.equal(unnumberedSeason.ParentId, seriesId);
+      assert.equal(unnumberedSeason.SeriesId, seriesId);
+      const unnumberedEpisode = await library.getItemRecord(unnumberedEpisodeId);
+      assert.equal(unnumberedEpisode.Type, 'Episode');
+      assert.equal(unnumberedEpisode.ParentId, unnumberedSeasonId);
+      assert.equal(unnumberedEpisode.SeriesId, seriesId);
+      assert.equal(unnumberedEpisode.SeasonId, unnumberedSeasonId);
+      assert.equal(unnumberedEpisode.ParentIndexNumber, null);
+      assert.equal(unnumberedEpisode.IndexNumber, null);
+      const rootEpisode = await library.getItemRecord(rootEpisodeId);
+      assert.equal(rootEpisode.NativeType, episodeNativeType);
+      assert.equal(rootEpisode.Type, 'Episode');
+      assert.equal(rootEpisode.ParentId, ROOT_ID);
+      assert.equal(repositoryTopParentId(rootEpisode), ROOT_ID);
+      assert.equal(nonemptyId(rootEpisode.SeriesId), false);
+      assert.equal(nonemptyId(rootEpisode.SeasonId), false);
+      assert.equal(rootEpisode.IndexNumber, null);
+      assert.equal(rootEpisode.ParentIndexNumber, null);
+      const [rootEpisodeRow] = await database.rows('BaseItems', { where: { Id: rootEpisodeId } });
+      assert.equal(rootEpisodeRow.SeriesId, null);
+      assert.equal(rootEpisodeRow.SeasonId, null);
       const ancestors = async id => new Set((await database.rows('AncestorIds', { where: { ItemId: id } }))
         .map(row => idKey(row.ParentItemId)));
       assert.deepEqual(await ancestors(seriesId), new Set([idKey(ROOT_ID), idKey(collectionId)]));
       assert.deepEqual(await ancestors(seasonId), new Set([idKey(seriesId), idKey(ROOT_ID), idKey(collectionId)]));
       assert.deepEqual(await ancestors(episodeId),
         new Set([idKey(seasonId), idKey(seriesId), idKey(ROOT_ID), idKey(collectionId)]));
+      assert.deepEqual(await ancestors(rootEpisodeId), new Set([idKey(ROOT_ID), idKey(collectionId)]));
+      assert.deepEqual(await ancestors(unnumberedSeasonId), new Set([idKey(seriesId), idKey(ROOT_ID), idKey(collectionId)]));
+      assert.deepEqual(await ancestors(unnumberedEpisodeId),
+        new Set([idKey(unnumberedSeasonId), idKey(seriesId), idKey(ROOT_ID), idKey(collectionId)]));
+      for (const { folderPath, parentId, filename, seasonId: expectedSeasonId, ancestors: extraAncestors } of nestedFolders) {
+        const folderId = itemId(folderPath, FOLDER_TYPE);
+        const nestedEpisodeId = itemId(`${folderPath}\\${filename}`, episodeNativeType);
+        const folder = await library.getItemRecord(folderId), nested = await library.getItemRecord(nestedEpisodeId);
+        assert.equal(folder.Type, 'Folder'); assert.equal(folder.ParentId, parentId);
+        assert.equal(nested.Type, 'Episode'); assert.equal(nested.ParentId, folderId);
+        assert.equal(nested.SeriesId, seriesId);
+        if (expectedSeasonId) assert.equal(nested.SeasonId, expectedSeasonId);
+        else assert.equal(nonemptyId(nested.SeasonId), false);
+        assert.equal(nested.IndexNumber, null, 'structural scanning does not replace metadata numbering');
+        assert.deepEqual(await ancestors(nestedEpisodeId),
+          new Set([folderId, ...extraAncestors, seriesId, ROOT_ID, collectionId].map(idKey)));
+      }
 
+      // Repository metadata can change episode/season numbering independently
+      // of their physical directory relationship.
+      await database.update('BaseItems', { Id: seasonId }, { IndexNumber: 0 });
+      await database.update('BaseItems', { Id: episodeId }, { IndexNumber: 8, ParentIndexNumber: 0 });
+      await database.update('BaseItems', { Id: flatId }, { IndexNumber: 3, ParentIndexNumber: 1, SeasonId: seasonId });
       const before = await snapshot(database);
       const second = await scanner.scan(reference);
       assert.deepEqual({ added: second.added, updated: second.updated, removed: second.removed },
         { added: 0, updated: 0, removed: 0 });
       assert.deepEqual(await snapshot(database), before);
+      const repeatedRootEpisode = await library.getItemRecord(rootEpisodeId);
+      assert.equal(repeatedRootEpisode.ParentId, ROOT_ID);
+      assert.equal(nonemptyId(repeatedRootEpisode.SeriesId), false);
+      assert.equal(nonemptyId(repeatedRootEpisode.SeasonId), false);
 
       await database.update('BaseItems', { Id: seasonId }, { SeriesId: FOREIGN_ID });
       const mismatched = await snapshot(database);
@@ -2144,6 +2399,126 @@ for (const dialect of ['postgres']) {
       });
       assert.deepEqual(await snapshot(database), mismatched,
         'an existing nonempty relationship is never silently replaced by the scanner');
+    });
+
+  test(`${dialect}: TV versions and stacks keep Episode identities, physical parents and owned video parts`, options,
+    async t => {
+      const { database, library, adapter, scanner, reference, itemCreation } = await fixture(t, dialect,
+        [createVideoFileResolver(), createTvItemResolver()], { nativeActions: true });
+      const aggregateId = 'D1000000-0000-0000-0000-000000000006';
+      await database.insert('BaseItems', baseItem(aggregateId,
+        'MediaBrowser.Controller.Entities.AggregateFolder', {
+          Name: 'Aggregate', CleanName: 'aggregate', SortName: 'aggregate', IsFolder: true
+        }));
+      await database.update('BaseItems', { Id: ROOT_ID }, { ParentId: aggregateId });
+      const collectionId = await insertCollection(database, 'tvshows');
+      await adapter.mkdir('/Version Show');
+      await adapter.mkdir('/Version Show/Season 01');
+      const names = ['Version.Show.S01E01 - 1080p cd1.mkv', 'Other.Title.S01E01 - 720p cd1.mkv',
+        'Version.Show.S01E02 - 1080p.mkv', 'Version.Show.S01E03 - 1080p cd1.mkv', 'Version.Show.S01E03 - 1080p cd2.mkv',
+        'Other.Title.S01E01 - 720p cd2.mkv', 'Version.Show.S01E01 - 1080p cd2.mkv',
+        'Other.Title.S01E02 - 720p.mkv'];
+      for (const name of names) await adapter.write(`/Version Show/Season 01/${name}`, Buffer.from(name));
+      const seriesPath = `${ROOT_PATH}\\Version Show`, seasonPath = `${seriesPath}\\Season 01`;
+      const seriesId = itemId(seriesPath, seriesNativeType), seasonId = itemId(seasonPath, seasonNativeType);
+      const paths = names.map(name => `${seasonPath}\\${name}`);
+      const identities = paths.map((identityPath, index) => itemId(identityPath,
+        index >= 4 && index <= 6 ? videoNativeType : episodeNativeType));
+      const [primaryId, alternateId, otherId, stackId, partId, alternatePartId, primaryPartId, otherAlternateId] = identities;
+
+      const result = await scanner.scan(reference);
+      assert.equal(result.structurallyComplete, true);
+      assert.equal((await library.getItemRecord(seriesId)).Type, 'Series');
+      assert.equal((await library.getItemRecord(seasonId)).Type, 'Season');
+      for (const id of [primaryId, alternateId, otherId, stackId, otherAlternateId]) {
+        const item = await library.getItemRecord(id);
+        assert.equal(item.Type, 'Episode'); assert.equal(item.ParentId, seasonId);
+        assert.equal(item.SeriesId, seriesId); assert.equal(item.SeasonId, seasonId);
+        assert.deepEqual(new Set((await database.rows('AncestorIds', { where: { ItemId: id } })).map(row => idKey(row.ParentItemId))),
+          new Set([seasonId, seriesId, ROOT_ID, aggregateId, collectionId].map(idKey)));
+      }
+      const primary = await library.getItemRecord(primaryId), alternate = await library.getItemRecord(alternateId);
+      assert.deepEqual(primary.LocalAlternateVersions, [paths[1]]);
+      assert.deepEqual(primary.AdditionalParts, [paths[6]]);
+      const primaryPart = await library.getItemRecord(primaryPartId);
+      assert.equal(primaryPart.NativeType, videoNativeType); assert.equal(primaryPart.OwnerId, primaryId);
+      assert.equal(alternate.OwnerId, primaryId); assert.equal(alternate.PrimaryVersionId, primaryId);
+      assert.deepEqual(alternate.AdditionalParts, [paths[5]]);
+      const alternatePart = await library.getItemRecord(alternatePartId);
+      assert.equal(alternatePart.NativeType, videoNativeType); assert.equal(alternatePart.OwnerId, alternateId);
+      assert.equal(alternatePart.ParentId, seasonId); assert.ok(!nonemptyId(alternatePart.PrimaryVersionId));
+      const versions = await database.rows('LinkedChildren', { where: { ParentId: primaryId, ChildType: 2 } });
+      assert.deepEqual(versions.map(row => row.ChildId), [alternateId]);
+      assert.ok(!nonemptyId((await library.getItemRecord(otherId)).OwnerId));
+      const stack = await library.getItemRecord(stackId), part = await library.getItemRecord(partId);
+      assert.deepEqual(stack.AdditionalParts, [paths[4]]);
+      assert.equal(part.NativeType, videoNativeType); assert.equal(part.ParentId, seasonId);
+      assert.equal(part.OwnerId, stackId); assert.ok(!nonemptyId(part.PrimaryVersionId));
+
+      const before = await snapshot(database);
+      const repeated = await scanner.scan(reference);
+      assert.equal(repeated.structurallyComplete, true);
+      assert.deepEqual({ added: repeated.added, updated: repeated.updated, removed: repeated.removed },
+        { added: 0, updated: 0, removed: 0 });
+      assert.deepEqual(await snapshot(database), before);
+
+      await adapter.delete(`/Version Show/Season 01/${names[1]}`);
+      await adapter.delete(`/Version Show/Season 01/${names[5]}`);
+      await database.insert('BaseItems', baseItem(FOREIGN_ID, videoNativeType, {
+        Name: 'Unmanaged owned video', Path: 'X:\\Unrelated\\part.mkv', MediaType: 'Video',
+        ParentId: null, TopParentId: ROOT_ID, OwnerId: alternateId,
+        Data: JSON.stringify({ SourceType: 'Library', VideoType: 'VideoFile' })
+      }));
+      const guarded = await snapshot(database);
+      await assert.rejects(scanner.scan(reference), error => {
+        assert.equal(error.code, 'unsupported/type-reclassification-required');
+        assert.match(error.message, /missing local alternate.*still owns items/u);
+        return true;
+      });
+      assert.deepEqual(await snapshot(database), guarded,
+        'a missing alternate cannot delete an unrelated item merely because its OwnerId matches');
+      await database.delete('BaseItems', { Id: FOREIGN_ID });
+      const removed = await scanner.scan(reference);
+      assert.equal(removed.structurallyComplete, true);
+      assert.equal((await database.rows('BaseItems', { where: { Id: alternateId } })).length, 0);
+      assert.equal((await database.rows('BaseItems', { where: { Id: alternatePartId } })).length, 0);
+      assert.deepEqual((await library.getItemRecord(primaryId)).LocalAlternateVersions, []);
+      assert.deepEqual(await database.rows('LinkedChildren', { where: { ParentId: primaryId, ChildType: 2 } }), []);
+      assert.equal((await library.getItemRecord(primaryPartId)).OwnerId, primaryId);
+      assert.deepEqual((await library.getItemRecord(stackId)).AdditionalParts, [paths[4]]);
+
+      // Ordinary Episode versions use the same live DeleteItem promotion and
+      // manual-reference rerouting as Movies when their primary disappears.
+      await database.insert('LinkedChildren', { ParentId: ROOT_ID, ChildId: otherId, ChildType: 0, SortOrder: 0 });
+      itemCreation.unregisterItem(ROOT_ID);
+      const caller = await itemCreation.getItemById(ROOT_ID);
+      const manualLinks = async () => (await itemCreation.linkedChildren.page(caller.LinkedChildren, { limit: 8 }))
+        .map(link => idKey(link.ItemId));
+      assert.deepEqual(await manualLinks(), [idKey(otherId)]);
+      assert.deepEqual((await library.getItemRecord(otherId)).LocalAlternateVersions, [paths[7]]);
+      await adapter.delete(`/Version Show/Season 01/${names[2]}`);
+      const promoted = await scanner.scan(reference);
+      assert.equal(promoted.structurallyComplete, true);
+      assert.deepEqual(await database.rows('BaseItems', { where: { Id: otherId } }), []);
+      assert.equal(await itemCreation.getItemById(otherId), null);
+      assert.deepEqual((await database.rows('LinkedChildren', { where: { ParentId: ROOT_ID, ChildType: 0 } }))
+        .map(link => idKey(link.ChildId)), [idKey(otherAlternateId)]);
+      assert.deepEqual(await manualLinks(), [idKey(otherAlternateId)]);
+      itemCreation.unregisterItem(otherAlternateId);
+      const survivor = await itemCreation.getItemById(otherAlternateId);
+      assert.equal(survivor.Type, 'Episode'); assert.equal(survivor.Path, paths[7]);
+      assert.equal(survivor.ParentId, seasonId); assert.equal(survivor.SeriesId, seriesId); assert.equal(survivor.SeasonId, seasonId);
+      assert.ok(!nonemptyId(survivor.OwnerId)); assert.ok(!nonemptyId(survivor.PrimaryVersionId));
+      assert.deepEqual(survivor.LocalAlternateVersions, []);
+      assert.equal((await adapter.stat(`/Version Show/Season 01/${names[7]}`)).kind, 'file');
+      const afterPromotion = await snapshot(database);
+      const afterPromotionLinks = await database.rows('LinkedChildren');
+      const stablePromotion = await scanner.scan(reference);
+      assert.equal(stablePromotion.structurallyComplete, true);
+      assert.deepEqual({ added: stablePromotion.added, updated: stablePromotion.updated, removed: stablePromotion.removed },
+        { added: 0, updated: 0, removed: 0 });
+      assert.deepEqual(await snapshot(database), afterPromotion);
+      assert.deepEqual(await database.rows('LinkedChildren'), afterPromotionLinks);
     });
 
   test(`${dialect}: Series and Season are direct structural scan roots within their physical library`, options,
@@ -2171,7 +2546,8 @@ for (const dialect of ['postgres']) {
       await adapter.write('/Direct Show/Season 01/Direct.Show.S01E02.mkv', Buffer.from('two'));
       // An unsupported sibling outside the requested subtree must not poison a
       // direct Season scan.
-      await adapter.write('/Untouched Show/Season 01/Alternate.S01E01.mp4', Buffer.from('alternate'));
+      await adapter.mkdir('/Untouched Show/Season 01/Alternate.S01E01');
+      await adapter.mkdir('/Untouched Show/Season 01/Alternate.S01E01/BDMV');
       const seasonResult = await scanner.scan(season);
       assert.equal(seasonResult.structurallyComplete, true);
       assert.equal(seasonResult.added, 1);
@@ -2208,30 +2584,34 @@ for (const dialect of ['postgres']) {
         'a rejected direct root cannot mutate its subtree or ancestor state');
     });
 
-  test(`${dialect}: unsupported TV branches are withheld and invalidate structural proof`, options, async t => {
+  test(`${dialect}: TV disc episodes, shortcuts and unnumbered folders complete structural scanning`, options, async t => {
     const { database, adapter, scanner, reference } = await fixture(t, dialect, [createTvItemResolver()]);
     await insertCollection(database, 'tvshows');
     await adapter.mkdir('/Example Show');
-    await adapter.mkdir('/Example Show/Specials');
+    await adapter.mkdir('/Example Show/Unnumbered Season');
     await adapter.mkdir('/Example Show/Season 01');
-    await adapter.write('/Example Show/Season 01/Example.Show.S01E01.mkv', Buffer.from('first'));
-    await adapter.write('/Example Show/Season 01/Alternate.S01E01.mp4', Buffer.from('alternate'));
+    await adapter.mkdir('/Example Show/Season 01/Example.Show.S01E01');
+    await adapter.mkdir('/Example Show/Season 01/Example.Show.S01E01/BDMV');
+    await adapter.write('/Example Show/Season 01/Alternate.S01E01.strm', Buffer.from('shortcut'));
 
     const result = await scanner.scan(reference);
 
-    assert.equal(result.structurallyComplete, false);
-    assert.ok(result.incompleteReasons.some(reason =>
-      reason.code === folderScanIncompleteReasonCodes.RESOLVER_PATH_WITHHELD
-        && reason.path === `${ROOT_PATH}\\Example Show\\Specials`));
-    assert.equal((await database.rows('BaseItems', { where: {
-      Path: `${ROOT_PATH}\\Example Show\\Specials`
-    } })).length, 0);
-    assert.equal((await database.rows('BaseItems', { where: {
-      Path: `${ROOT_PATH}\\Example Show\\Season 01\\Example.Show.S01E01.mkv`
-    } })).length, 0);
-    assert.equal((await database.rows('BaseItems', { where: {
-      Path: `${ROOT_PATH}\\Example Show\\Season 01\\Alternate.S01E01.mp4`
-    } })).length, 0);
+    assert.equal(result.structurallyComplete, true);
+    const [ordinaryFolder] = await database.rows('BaseItems', { where: {
+      Path: `${ROOT_PATH}\\Example Show\\Unnumbered Season`
+    } });
+    assert.equal(ordinaryFolder.Type, FOLDER_TYPE);
+    const [disc] = await database.rows('BaseItems', { where: {
+      Path: `${ROOT_PATH}\\Example Show\\Season 01\\Example.Show.S01E01`
+    } });
+    assert.equal(disc.Type, episodeNativeType);
+    assert.equal(disc.IsFolder, false);
+    assert.equal(JSON.parse(disc.Data).VideoType, 'BluRay');
+    const [shortcut] = await database.rows('BaseItems', { where: {
+      Path: `${ROOT_PATH}\\Example Show\\Season 01\\Alternate.S01E01.strm`
+    } });
+    assert.equal(shortcut.Type, episodeNativeType);
+    assert.equal(JSON.parse(shortcut.Data).IsShortcut, true);
   });
 
   test(`${dialect}: a weak TV root snapshot writes no TV identities and carries an incomplete proof`, options, async t => {
@@ -2330,28 +2710,37 @@ for (const dialect of ['postgres']) {
       }
     });
 
-  test(`${dialect}: conventional music hierarchies persist native parents, ancestors and create-only tag columns`, options,
+  test(`${dialect}: music tracks persist native parents, ancestors and create-only tag columns in albums, artists and roots`, options,
     async t => {
-      const { database, adapter, scanner, reference } = await fixture(t, dialect, [createAudioItemResolver()]);
+      const { database, library, adapter, scanner, reference } = await fixture(t, dialect, [createAudioItemResolver()]);
       const collectionId = await insertCollection(database, 'music');
+      await adapter.write('/Loose.3gp', Buffer.from('root track'));
       await adapter.mkdir('/Direct Album');
       await adapter.write('/Direct Album/Track.flac', Buffer.from('direct'));
+      await adapter.write('/Direct Album/Clip.mkv', Buffer.from('unrelated video'));
       await adapter.mkdir('/Artist');
+      await adapter.write('/Artist/Loose.rm', Buffer.from('artist track'));
+      await adapter.write('/Artist/Clip.mkv', Buffer.from('unrelated video'));
       await adapter.mkdir('/Artist/First Album');
       await adapter.write('/Artist/First Album/One.mp3', Buffer.from('one'));
+      await adapter.write('/Artist/First Album/Clip.mkv', Buffer.from('unrelated video'));
       await adapter.mkdir('/Artist/Second Album');
-      await adapter.write('/Artist/Second Album/Two.wav', Buffer.from('two'));
+      await adapter.write('/Artist/Second Album/Two.nsv', Buffer.from('two'));
 
       const paths = {
+        rootTrack: `${ROOT_PATH}\\Loose.3gp`,
+        artistTrack: `${ROOT_PATH}\\Artist\\Loose.rm`,
         directAlbum: `${ROOT_PATH}\\Direct Album`,
         directTrack: `${ROOT_PATH}\\Direct Album\\Track.flac`,
         artist: `${ROOT_PATH}\\Artist`,
         firstAlbum: `${ROOT_PATH}\\Artist\\First Album`,
         firstTrack: `${ROOT_PATH}\\Artist\\First Album\\One.mp3`,
         secondAlbum: `${ROOT_PATH}\\Artist\\Second Album`,
-        secondTrack: `${ROOT_PATH}\\Artist\\Second Album\\Two.wav`
+        secondTrack: `${ROOT_PATH}\\Artist\\Second Album\\Two.nsv`
       };
       const ids = {
+        rootTrack: itemId(paths.rootTrack, audioNativeType),
+        artistTrack: itemId(paths.artistTrack, audioNativeType),
         directAlbum: itemId(paths.directAlbum, musicAlbumNativeType),
         directTrack: itemId(paths.directTrack, audioNativeType),
         artist: itemId(paths.artist, musicArtistNativeType),
@@ -2366,7 +2755,7 @@ for (const dialect of ['postgres']) {
       assert.equal(result.structurallyComplete, true);
       assert.equal(scanner.capabilities.completeLibraryScan, false);
       assert.deepEqual(scanner.capabilities.productionMediaScopes,
-        ['conventional-music-artist-album-tracks']);
+        ['music-ordinary-tracks-and-conventional-albums']);
       const rows = {};
       for (const [name, Id] of Object.entries(ids)) {
         rows[name] = (await database.rows('BaseItems', { where: { Id } }))[0];
@@ -2395,6 +2784,15 @@ for (const dialect of ['postgres']) {
       assert.equal(rows.secondAlbum.ParentId, ids.artist);
       assert.equal(rows.secondTrack.ParentId, ids.secondAlbum);
       assert.deepEqual(JSON.parse(rows.firstTrack.Data), { SourceType: 'Library' });
+      for (const [name, parent] of [['rootTrack', ROOT_ID], ['artistTrack', ids.artist]]) {
+        assert.equal(rows[name].Type, audioNativeType);
+        assert.equal(rows[name].ParentId, parent);
+        assert.equal(rows[name].TopParentId, ROOT_ID);
+        assert.equal(rows[name].IsInMixedFolder, true);
+        const item = await library.getItemRecord(ids[name]);
+        assert.equal(item.Type, 'Audio');
+        assert.equal(item.ParentId, parent);
+      }
 
       const ancestors = async Id => new Set((await database.rows('AncestorIds', { where: { ItemId: Id } }))
         .map(row => idKey(row.ParentItemId)));
@@ -2402,8 +2800,15 @@ for (const dialect of ['postgres']) {
         new Set([idKey(ids.directAlbum), idKey(ROOT_ID), idKey(collectionId)]));
       assert.deepEqual(await ancestors(ids.firstTrack),
         new Set([idKey(ids.firstAlbum), idKey(ids.artist), idKey(ROOT_ID), idKey(collectionId)]));
+      assert.deepEqual(await ancestors(ids.rootTrack), new Set([idKey(ROOT_ID), idKey(collectionId)]));
+      assert.deepEqual(await ancestors(ids.artistTrack), new Set([idKey(ids.artist), idKey(ROOT_ID), idKey(collectionId)]));
       assert.equal((await database.rows('ItemValues')).length, 0);
       assert.equal((await database.rows('ItemValuesMap')).length, 0);
+      for (const relative of ['Direct Album', 'Artist', 'Artist\\First Album']) {
+        assert.deepEqual(await database.rows('BaseItems', { where: { Path: `${ROOT_PATH}\\${relative}\\Clip.mkv` } }), [],
+          'unrelated videos do not prevent music discovery or become Audio items');
+      }
+      assert.equal((await library.getItemRecord(ids.secondTrack)).Type, 'Audio');
 
       await database.update('BaseItems', { Id: ids.firstTrack }, {
         Album: 'Imported Album', Artists: 'Imported Artist', AlbumArtists: 'Imported Album Artist',
@@ -2411,6 +2816,9 @@ for (const dialect of ['postgres']) {
       });
       const rescanned = await scanner.scan(reference);
       assert.equal(rescanned.updated, 0);
+      for (const name of ['rootTrack', 'artistTrack']) {
+        assert.equal((await database.rows('BaseItems', { where: { Path: paths[name] } }))[0].Id, ids[name]);
+      }
       const [preserved] = await database.rows('BaseItems', { where: { Id: ids.firstTrack } });
       assert.equal(preserved.Album, 'Imported Album');
       assert.equal(preserved.Artists, 'Imported Artist');
@@ -2419,38 +2827,90 @@ for (const dialect of ['postgres']) {
       assert.equal(preserved.ParentIndexNumber, 2);
       assert.equal(preserved.PresentationUniqueKey, 'provider-key');
 
-      const directBeforeWithhold = {
-        album: structuredClone((await database.rows('BaseItems', { where: { Id: ids.directAlbum } }))[0]),
-        track: structuredClone((await database.rows('BaseItems', { where: { Id: ids.directTrack } }))[0]),
-        ancestors: structuredClone(await database.rows('AncestorIds', { where: { ItemId: ids.directTrack } }))
-      };
       await adapter.delete('/Direct Album/Track.flac');
       await adapter.write('/Direct Album/disc.cue', Buffer.from('cue'));
-      await assert.rejects(scanner.scan(reference), error =>
-        error.code === 'unsupported/type-reclassification-required'
-        && error.message.includes(paths.directAlbum));
-      assert.deepEqual((await database.rows('BaseItems', { where: { Id: ids.directAlbum } }))[0],
-        directBeforeWithhold.album);
-      assert.deepEqual((await database.rows('BaseItems', { where: { Id: ids.directTrack } }))[0],
-        directBeforeWithhold.track);
-      assert.deepEqual(await database.rows('AncestorIds', { where: { ItemId: ids.directTrack } }),
-        directBeforeWithhold.ancestors);
+      const cueOnly = await scanner.scan(reference);
+      assert.equal(cueOnly.structurallyComplete, true);
+      assert.equal(cueOnly.removed, 1);
+      const [cueAlbum] = await database.rows('BaseItems', { where: { Id: ids.directAlbum } });
+      assert.equal(cueAlbum.Type, musicAlbumNativeType, 'CUE retains the Album identity without creating an Audio item');
+      assert.equal(cueAlbum.Path, paths.directAlbum);
+      assert.equal(cueAlbum.ParentId, ROOT_ID);
+      assert.equal((await database.rows('BaseItems', { where: { Id: ids.directTrack } })).length, 0);
+      assert.deepEqual(await database.rows('AncestorIds', { where: { ItemId: ids.directTrack } }), []);
+      assert.equal((await database.rows('BaseItems', { where: { Path: `${paths.directAlbum}\\disc.cue` } })).length, 0);
       await adapter.delete('/Direct Album/disc.cue');
       await adapter.write('/Direct Album/Track.flac', Buffer.from('direct'));
 
       for (const target of [
-        '/Artist/First Album/One.mp3', '/Artist/Second Album/Two.wav',
+        '/Loose.3gp', '/Artist/Loose.rm', '/Artist/Clip.mkv',
+        '/Artist/First Album/One.mp3', '/Artist/First Album/Clip.mkv', '/Artist/Second Album/Two.nsv',
         '/Artist/First Album', '/Artist/Second Album', '/Artist'
       ]) await adapter.delete(target);
       const removed = await scanner.scan(reference);
       assert.equal(removed.structurallyComplete, true);
-      assert.equal(removed.removed, 5);
-      for (const key of ['artist', 'firstAlbum', 'firstTrack', 'secondAlbum', 'secondTrack']) {
+      assert.equal(removed.removed, 7);
+      for (const key of ['rootTrack', 'artistTrack', 'artist', 'firstAlbum', 'firstTrack', 'secondAlbum', 'secondTrack']) {
         assert.equal((await database.rows('BaseItems', { where: { Id: ids[key] } })).length, 0);
         assert.equal((await database.rows('AncestorIds', { where: { ItemId: ids[key] } })).length, 0);
       }
       assert.equal((await database.rows('BaseItems', { where: { Id: ids.directAlbum } })).length, 1);
     });
+
+  test(`${dialect}: an untyped library persists Audio and Movie files through ordinary Folders`, options, async t => {
+    const { database, library, adapter, scanner, reference } = await fixture(t, dialect,
+      [createAudioItemResolver(), createVideoFileResolver()]);
+    const collectionId = await insertCollection(database, null);
+    await adapter.write('/Song.flac', Buffer.from('audio'));
+    await adapter.write('/Film (2020).mp4', Buffer.from('video'));
+    await adapter.write('/Recording.3gp', Buffer.from('overlapping extension'));
+    await adapter.mkdir('/Mixed');
+    await adapter.write('/Mixed/Second.flac', Buffer.from('nested audio'));
+    await adapter.write('/Mixed/Another (2021).mkv', Buffer.from('nested video'));
+    await adapter.write('/Mixed/Other.mkv', Buffer.from('another nested video'));
+    const folderPath = `${ROOT_PATH}\\Mixed`, folderId = itemId(folderPath, FOLDER_TYPE);
+    const entries = [
+      ['Song.flac', audioNativeType, ROOT_ID, 'Song', null],
+      ['Film (2020).mp4', MOVIE_TYPE, ROOT_ID, 'Film', 2020],
+      ['Recording.3gp', MOVIE_TYPE, ROOT_ID, 'Recording', null],
+      ['Mixed\\Second.flac', audioNativeType, folderId, 'Second', null],
+      ['Mixed\\Another (2021).mkv', MOVIE_TYPE, folderId, 'Another', 2021],
+      ['Mixed\\Other.mkv', MOVIE_TYPE, folderId, 'Other', null]
+    ].map(([relative, type, parentId, name, year]) => ({ relative, type, parentId, name, year,
+      path: `${ROOT_PATH}\\${relative}`, id: itemId(`${ROOT_PATH}\\${relative}`, type) }));
+    const result = await scanner.scan(reference);
+    assert.equal(result.structurallyComplete, true);
+    const [folder] = await database.rows('BaseItems', { where: { Id: folderId } });
+    assert.equal(folder.Type, FOLDER_TYPE);
+    assert.equal(folder.ParentId, ROOT_ID);
+    for (const entry of entries) {
+      const [row] = await database.rows('BaseItems', { where: { Id: entry.id } });
+      assert.deepEqual({ type: row.Type, path: row.Path, parent: row.ParentId, name: row.Name, year: row.ProductionYear },
+        { type: entry.type, path: entry.path, parent: entry.parentId, name: entry.name, year: entry.year });
+      const cold = await library.getItemRecord(entry.id);
+      assert.equal(cold.NativeType, entry.type);
+      assert.equal(cold.ParentId, entry.parentId);
+      if (entry.type === MOVIE_TYPE) assert.equal(cold.VideoType, 'VideoFile');
+      assert.deepEqual(new Set((await database.rows('AncestorIds', { where: { ItemId: entry.id } }))
+        .map(value => idKey(value.ParentItemId))),
+      new Set([ROOT_ID, collectionId, ...(entry.parentId === folderId ? [folderId] : [])].map(idKey)));
+    }
+    const before = await snapshot(database);
+    const repeated = await scanner.scan(reference);
+    assert.deepEqual({ added: repeated.added, updated: repeated.updated, removed: repeated.removed },
+      { added: 0, updated: 0, removed: 0 });
+    assert.deepEqual(await snapshot(database), before);
+    await adapter.delete('/Song.flac');
+    await adapter.delete('/Film (2020).mp4');
+    const removed = await scanner.scan(reference);
+    assert.equal(removed.structurallyComplete, true);
+    assert.equal(removed.removed, 2);
+    for (const entry of entries.slice(0, 2)) {
+      assert.deepEqual(await database.rows('BaseItems', { where: { Id: entry.id } }), []);
+      assert.deepEqual(await database.rows('AncestorIds', { where: { ItemId: entry.id } }), []);
+    }
+    for (const entry of entries.slice(2)) assert.equal((await library.getItemRecord(entry.id)).ParentId, entry.parentId);
+  });
 
   test(`${dialect}: MusicArtist and MusicAlbum are direct structural scan roots within their physical library`, options,
     async t => {
@@ -2495,27 +2955,135 @@ for (const dialect of ['postgres']) {
       assert.equal(secondTrack.TopParentId, ROOT_ID);
     });
 
-  test(`${dialect}: uncertain music structures are withheld without creating Folder or Audio identities`, options,
+  for (const grouped of [false, true]) test(`${dialect}: multi-disc Albums ${grouped ? 'inside Artist groups' : 'at the library root'} retain physical parents and stable tracks through repeat and deletion`, options,
     async t => {
-      const { database, adapter, scanner, reference } = await fixture(t, dialect, [createAudioItemResolver()]);
-      await insertCollection(database, 'music');
+      const { database, library, adapter, scanner, reference } = await fixture(t, dialect, [createAudioItemResolver()]);
+      const collectionId = await insertCollection(database, 'music');
+      const relativeAlbum = grouped ? '/Grouped Artist/Albums/Multi Disc' : '/Multi Disc';
+      if (grouped) {
+        await adapter.mkdir('/Grouped Artist');
+        await adapter.mkdir('/Grouped Artist/Albums');
+      }
+      await adapter.mkdir(relativeAlbum);
+      await adapter.mkdir(`${relativeAlbum}/Artwork`);
+      const albumPath = ROOT_PATH + relativeAlbum.replaceAll('/', '\\'), albumId = itemId(albumPath, musicAlbumNativeType);
+      const artistId = itemId(`${ROOT_PATH}\\Grouped Artist`, musicArtistNativeType);
+      const groupId = itemId(`${ROOT_PATH}\\Grouped Artist\\Albums`, FOLDER_TYPE);
+      const groupAncestors = grouped ? [groupId, artistId] : [];
+      const discs = [];
+      for (const name of ['CD1', 'CD2']) {
+        await adapter.mkdir(`${relativeAlbum}/${name}`);
+        await adapter.write(`${relativeAlbum}/${name}/01 Track.flac`, Buffer.from(name));
+        const discPath = `${albumPath}\\${name}`, trackPath = `${discPath}\\01 Track.flac`;
+        discs.push({ discPath, trackPath, folderParentId: albumId, extraAncestors: [],
+          discId: itemId(discPath, FOLDER_TYPE), trackId: itemId(trackPath, audioNativeType) });
+      }
+      if (grouped) {
+        await adapter.mkdir(`${relativeAlbum}/CD1/Archive`);
+        await adapter.write(`${relativeAlbum}/CD1/Archive/Bonus.flac`, Buffer.from('nested album track'));
+        const discPath = `${albumPath}\\CD1\\Archive`, trackPath = `${discPath}\\Bonus.flac`;
+        discs.push({ discPath, trackPath, folderParentId: discs[0].discId, extraAncestors: [discs[0].discId],
+          discId: itemId(discPath, FOLDER_TYPE), trackId: itemId(trackPath, audioNativeType) });
+      }
+
+      const result = await scanner.scan(reference);
+      assert.equal(result.structurallyComplete, true);
+      const albums = await database.rows('BaseItems', { where: { Type: musicAlbumNativeType } });
+      assert.equal(albums.length, 1);
+      assert.equal(albums[0].Id, albumId);
+      assert.equal(albums[0].ParentId, grouped ? groupId : ROOT_ID);
+      assert.equal((await database.rows('BaseItems', { where: { Type: musicArtistNativeType } })).length, grouped ? 1 : 0);
+      if (grouped) {
+        const group = await library.getItemRecord(groupId);
+        assert.equal(group.Type, 'Folder');
+        assert.equal(group.ParentId, artistId);
+      }
+      const [artwork] = await database.rows('BaseItems', { where: { Path: `${albumPath}\\Artwork` } });
+      assert.equal(artwork.Type, FOLDER_TYPE);
+      assert.equal(artwork.ParentId, albumId);
+      for (const { discPath, trackPath, discId, trackId, folderParentId, extraAncestors } of discs) {
+        const disc = await library.getItemRecord(discId), track = await library.getItemRecord(trackId);
+        assert.equal(disc.NativeType, FOLDER_TYPE);
+        assert.equal(disc.Path, discPath);
+        assert.equal(disc.ParentId, folderParentId);
+        assert.equal(track.NativeType, audioNativeType);
+        assert.equal(track.Path, trackPath);
+        assert.equal(track.ParentId, discId);
+        assert.equal(repositoryTopParentId(track), ROOT_ID);
+        assert.equal(track.ParentIndexNumber, null, 'a disc directory does not supply audio tag metadata');
+        assert.deepEqual(new Set((await database.rows('AncestorIds', { where: { ItemId: trackId } }))
+          .map(row => idKey(row.ParentItemId))), new Set([discId, ...extraAncestors, albumId, ...groupAncestors, ROOT_ID, collectionId].map(idKey)));
+        const dto = await library.getItem(trackId, { EnableImages: false });
+        assert.equal(idKey(dto.AlbumId), idKey(albumId));
+      }
+
+      const before = await snapshot(database);
+      const repeated = await scanner.scan(reference);
+      assert.equal(repeated.structurallyComplete, true);
+      assert.deepEqual({ added: repeated.added, updated: repeated.updated, removed: repeated.removed },
+        { added: 0, updated: 0, removed: 0 });
+      assert.deepEqual(await snapshot(database), before);
+
+      await adapter.delete(`${relativeAlbum}/CD2/01 Track.flac`);
+      await adapter.delete(`${relativeAlbum}/CD2`);
+      const removed = await scanner.scan(reference);
+      assert.equal(removed.structurallyComplete, true, 'one remaining music-bearing disc still identifies the Album');
+      assert.equal(removed.removed, 2);
+      for (const Id of [discs[1].discId, discs[1].trackId]) {
+        assert.equal((await database.rows('BaseItems', { where: { Id } })).length, 0);
+        assert.equal((await database.rows('AncestorIds', { where: { ItemId: Id } })).length, 0);
+      }
+      assert.equal((await library.getItemRecord(discs[0].trackId)).ParentId, discs[0].discId);
+      assert.equal(idKey((await library.getItem(discs[0].trackId, { EnableImages: false })).AlbumId), idKey(albumId));
+    });
+
+  test(`${dialect}: CUE albums, ordinary release names and empty music folders follow their physical hierarchy`, options,
+    async t => {
+      const { database, library, adapter, scanner, reference } = await fixture(t, dialect, [createAudioItemResolver()]);
+      const collectionId = await insertCollection(database, 'music');
       await adapter.mkdir('/Cue Album');
       await adapter.write('/Cue Album/disc.cue', Buffer.from('cue'));
+      await adapter.write('/Ignored.CUE', Buffer.from('root cue'));
       await adapter.write('/Loose.mp3', Buffer.from('loose'));
       await adapter.mkdir('/Multi Disc');
-      await adapter.mkdir('/Multi Disc/Disc 01 (Title)');
-      await adapter.write('/Multi Disc/Disc 01 (Title)/Track.flac', Buffer.from('track'));
+      await adapter.mkdir('/Multi Disc/DVD A');
+      await adapter.mkdir('/Multi Disc/Artwork');
+      await adapter.write('/Multi Disc/DVD A/Track.flac', Buffer.from('track'));
+      await adapter.mkdir('/Empty Music');
+      await adapter.mkdir('/Empty Music/Archive');
 
       const result = await scanner.scan(reference);
 
-      assert.equal(result.structurallyComplete, false);
-      for (const path of [
-        `${ROOT_PATH}\\Cue Album`, `${ROOT_PATH}\\Loose.mp3`, `${ROOT_PATH}\\Multi Disc`
+      assert.equal(result.structurallyComplete, true);
+      const artistId = itemId(`${ROOT_PATH}\\Multi Disc`, musicArtistNativeType);
+      const albumId = itemId(`${ROOT_PATH}\\Multi Disc\\DVD A`, musicAlbumNativeType);
+      const emptyId = itemId(`${ROOT_PATH}\\Empty Music`, FOLDER_TYPE);
+      for (const [relative, nativeType, parentId] of [
+        ['Cue Album', musicAlbumNativeType, ROOT_ID], ['Multi Disc', musicArtistNativeType, ROOT_ID],
+        ['Multi Disc\\DVD A', musicAlbumNativeType, artistId], ['Multi Disc\\Artwork', FOLDER_TYPE, artistId],
+        ['Empty Music', FOLDER_TYPE, ROOT_ID], ['Empty Music\\Archive', FOLDER_TYPE, emptyId]
       ]) {
-        assert.ok(result.incompleteReasons.some(reason =>
-          reason.code === folderScanIncompleteReasonCodes.RESOLVER_PATH_WITHHELD && reason.path === path));
-        assert.equal((await database.rows('BaseItems', { where: { Path: path } })).length, 0);
+        const identityPath = `${ROOT_PATH}\\${relative}`;
+        const item = await library.getItemRecord(itemId(identityPath, nativeType));
+        assert.equal(item.NativeType, nativeType); assert.equal(item.Path, identityPath);
+        assert.equal(item.ParentId, parentId);
       }
+      const trackId = itemId(`${ROOT_PATH}\\Multi Disc\\DVD A\\Track.flac`, audioNativeType);
+      const track = await library.getItemRecord(trackId);
+      assert.equal(track.ParentId, albumId);
+      assert.equal(idKey((await library.getItem(trackId, { EnableImages: false })).AlbumId), idKey(albumId));
+      assert.deepEqual(new Set((await database.rows('AncestorIds', { where: { ItemId: trackId } })).map(row => idKey(row.ParentItemId))),
+        new Set([albumId, artistId, ROOT_ID, collectionId].map(idKey)));
+      assert.equal((await database.rows('BaseItems')).some(item => /\.cue$/iu.test(item.Path ?? '')), false);
+      const [loose] = await database.rows('BaseItems', { where: { Path: `${ROOT_PATH}\\Loose.mp3` } });
+      assert.equal(loose.Type, audioNativeType);
+      assert.equal(loose.ParentId, ROOT_ID);
+      const before = await snapshot(database);
+      const repeated = await scanner.scan(reference);
+      assert.equal(repeated.structurallyComplete, true);
+      assert.deepEqual({ added: repeated.added, updated: repeated.updated, removed: repeated.removed },
+        { added: 0, updated: 0, removed: 0 });
+      assert.deepEqual(await snapshot(database), before);
     });
 
   test(`${dialect}: a single resolver failure is reported and later candidates still reconcile`, options, async t => {

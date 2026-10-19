@@ -7,6 +7,7 @@ import { ItemCreationService } from '../../src/library/item-creation-service.js'
 import { ItemDeletionService } from '../../src/library/item-deletion-service.js';
 import { LinkedChildReferenceService } from '../../src/library/linked-child-reference-service.js';
 import { resolveOrdinaryVideoFile } from '../../src/library/video-file-resolver.js';
+import { setPrimaryVersion, updateLiveItemRepository } from '../../src/library/live-item-repository.js';
 import { EMPTY_ID, idKey, sameId } from '../../src/library/records.js';
 import { readCachedFolderChildren, setFolderChildren } from '../../src/library/folder-cache.js';
 import { MetadataImageAssets } from '../../src/metadata/image-assets.js';
@@ -100,6 +101,41 @@ async function setPersistedVideoType(fixture, item, videoType) {
   const data = JSON.parse(row.Data);
   data.VideoType = videoType;
   await fixture.database.update('BaseItems', { Id: item.Id }, { Data: JSON.stringify(data) });
+}
+
+async function addIndependentFileVersion(value) {
+  const { fixture, item, loaded, creator } = value;
+  const [row] = await fixture.database.rows('BaseItems', { where: { Id: item.Id } });
+  const Id = 'DA666666-6666-6666-6666-666666666666';
+  await fixture.adapter.mkdir('/discovery/Other');
+  await fixture.adapter.write('/discovery/Other/Other.mkv', Buffer.from('independent file version'));
+  await fixture.database.insert('BaseItems', { ...row, Id, Name: 'Other version',
+    Path: path.join(loaded.parent.Path, 'Other', 'Other.mkv'), ParentId: loaded.parent.Id,
+    OwnerId: null, PrimaryVersionId: null, PresentationUniqueKey: idKey(Id),
+    Data: JSON.stringify({ ...JSON.parse(row.Data), VideoType: 'VideoFile', AdditionalParts: [],
+      LocalAlternateVersions: [], LinkedAlternateVersions: [] }) });
+  for (const ancestor of await fixture.database.rows('AncestorIds', { where: { ItemId: item.Id } })) {
+    await fixture.database.insert('AncestorIds', { ...ancestor, ItemId: Id });
+  }
+  return creator.getItemById(Id);
+}
+
+async function linkIndependentVersion(value, primary, alternate) {
+  const { fixture, creator } = value;
+  const update = item => updateLiveItemRepository(item, { ...fixture, itemCreation: creator,
+    updates: fixture.host.updates, updateReason: 16 });
+  primary.LinkedAlternateVersions = [{ ItemId: alternate.Id, Type: 3 }];
+  await update(primary);
+  creator.unregisterItem(alternate.Id);
+  alternate = await creator.getItemById(alternate.Id);
+  assert.equal(idKey(alternate.PrimaryVersionId), idKey(primary.Id));
+  setPrimaryVersion(alternate, primary.Id);
+  alternate.OwnerId = EMPTY_ID;
+  await update(alternate);
+  assert.deepEqual((await fixture.database.rows('LinkedChildren', {
+    where: { ParentId: primary.Id, ChildType: 3 }
+  })).map(row => idKey(row.ChildId)), [idKey(alternate.Id)]);
+  return alternate;
 }
 
 function installLinkedReferences(value, controls = {}) {
@@ -406,24 +442,108 @@ for (const dialect of ['postgres']) {
     assert.equal((await fixture.vfs.stat('/discovery-write/discovery/Film/Film Disc 1/video_ts.ifo')).kind, 'file');
   });
 
-  databaseTest('does not extend direct-disc authorization to a Folder descendant', async t => {
+  for (const deleteSource of [false, true]) databaseTest(`deletes Folder disc descendants${deleteSource ? ' and the parent source' : ' while preserving media'}`, async t => {
     const value = await setup(t, dialect, 'delete-direct-dvd-preserve-source');
-    const { fixture, item, loaded, resolved, events, assets, marker, creator } = value;
-    const before = await rows(fixture), parentId = item.ParentId;
+    const { fixture, item, loaded, events, assets, marker, creator } = value;
+    const parent = loaded.parent;
+    // An imported Episode disc is a logical child, even though deleting that
+    // Episode directly uses file-style GetDeletePaths rather than recursion.
+    const [row] = await fixture.database.rows('BaseItems', { where: { Id: item.Id } });
+    const episodeId = 'DA555555-5555-5555-5555-555555555555';
+    await fixture.database.insert('BaseItems', { ...row, Id: episodeId,
+      Type: 'MediaBrowser.Controller.Entities.TV.Episode', Name: 'Disc Episode',
+      Path: path.join(parent.Path, 'Disc Episode'), ParentId: parent.Id,
+      Data: JSON.stringify({ ...JSON.parse(row.Data), VideoType: 'BluRay' }) });
+    await fixture.database.insert('AncestorIds', { ItemId: episodeId, ParentItemId: parent.Id });
+    await fixture.adapter.mkdir('/discovery/Disc Episode');
+    await fixture.adapter.mkdir('/discovery/Disc Episode/BDMV');
+    await fixture.adapter.write('/discovery/Disc Episode/BDMV/index.bdmv', Buffer.from('imported disc control'));
+    await fixture.adapter.write('/outside-folder.txt', Buffer.from('outside parent control'));
+    const episode = await creator.getItemById(episodeId);
+    assert.equal(episode.Type, 'Episode'); assert.equal(episode.VideoType, 'BluRay');
+    setFolderChildren(parent, [item, episode]);
+    const metadataMarkers = new Set([marker]);
+    for (const target of [parent, item, episode]) {
+      for (const directory of new Set([internalImagePath(target, loaded.metadataPath),
+        ...loaded.videoVersionDiscovery.externalData.paths(target, loaded)])) {
+        const filename = path.join(directory, 'folder-disc-delete-control.txt');
+        await assets.write(filename, Buffer.from('folder descendant metadata control'));
+        metadataMarkers.add(filename);
+      }
+    }
+    const sourceDeletes = [], remove = fixture.adapter.delete.bind(fixture.adapter);
+    fixture.adapter.delete = async (location, options) => {
+      if (['/discovery', '/discovery/Film', '/discovery/Disc Episode'].includes(location)) {
+        sourceDeletes.push({ location, recursive: options?.recursive });
+      }
+      return remove(location, options);
+    };
 
-    await assert.rejects(
-      fixture.library.deleteItem(loaded.parent, { DeleteFileLocation: false }, null),
-      { status: 501 }
-    );
+    await fixture.library.deleteItem(parent, { DeleteFileLocation: deleteSource }, null);
 
-    assert.deepEqual(await rows(fixture), before);
-    assert.equal(item.ParentId, parentId);
-    assert.equal(await creator.getItemById(item.Id), item);
-    assert.equal(readCachedFolderChildren(loaded.parent, {}, () => null), resolved);
-    assert.deepEqual(events, []);
-    assert.equal((await assets.stat(marker)).kind, 'file');
-    assert.equal((await fixture.vfs.stat('/discovery-write/discovery/Film/VIDEO_TS/VTS_01_1.VOB')).kind, 'file');
+    for (const target of [parent, item, episode]) {
+      assert.deepEqual(await fixture.database.rows('BaseItems', { where: { Id: target.Id } }), []);
+      assert.deepEqual(await fixture.database.rows('AncestorIds', { where: { ItemId: target.Id } }), []);
+      assert.equal(await creator.getItemById(target.Id), null);
+    }
+    assert.deepEqual(events, [['removed', idKey(item.Id)], ['removed', idKey(episode.Id)], ['removed', idKey(parent.Id)]]);
+    for (const filename of metadataMarkers) await assert.rejects(assets.stat(filename), { code: 'not-found' });
+    assert.deepEqual(sourceDeletes, deleteSource ? [{ location: '/discovery', recursive: true }] : [],
+      'only the requested Folder removes media; descendants do not run separate source deletion');
+    if (deleteSource) await assert.rejects(fixture.vfs.stat('/discovery-write/discovery'), { code: 'not-found' });
+    else for (const filename of ['Film/VIDEO_TS/VTS_01_1.VOB', 'Disc Episode/BDMV/index.bdmv']) {
+      assert.equal((await fixture.vfs.stat('/discovery-write/discovery/' + filename)).kind, 'file');
+    }
+    assert.equal((await fixture.vfs.stat('/discovery-write/outside-folder.txt')).kind, 'file');
   });
+
+  for (const [scene, videoType, sourceFile] of [
+    ['delete-direct-dvd-preserve-source', 'Dvd', 'Film/VIDEO_TS/VTS_01_1.VOB'],
+    ['delete-direct-bluray-preserve-source', 'BluRay', 'Film/BDMV/index.bdmv']
+  ]) for (const deleteSource of [false, true]) databaseTest(
+    `${videoType} Episode ${deleteSource ? 'fails its required file delete after internal cleanup' : 'supports DB-only deletion while preserving its directory'}`,
+    async t => {
+      const { fixture, item, loaded, creator, assets, marker, events } = await setup(t, dialect, scene);
+      // Imported directory episodes retain their persisted identity and source
+      // type; only the native entity type differs from the resolver control.
+      await fixture.database.update('BaseItems', { Id: item.Id }, { Type: 'MediaBrowser.Controller.Entities.TV.Episode' });
+      creator.unregisterItem(item.Id);
+      const episode = await creator.getItemById(item.Id);
+      assert.equal(episode.Type, 'Episode'); assert.equal(episode.VideoType, videoType);
+      assert.equal(episode.IsFolder, false);
+      const children = [episode];
+      setFolderChildren(loaded.parent, children);
+      const externalDirectory = path.join(episode.Path, 'Film.trickplay');
+      assert.ok(loaded.videoVersionDiscovery.externalData.paths(episode, loaded).includes(externalDirectory));
+      const externalMarker = path.join(externalDirectory, 'episode-delete-control.txt');
+      await assets.write(externalMarker, Buffer.from('external episode data'));
+      await fixture.adapter.write('/discovery/Film.nfo', Buffer.from('episode sidecar'));
+      const before = await rows(fixture), parentId = episode.ParentId;
+
+      if (deleteSource) {
+        await assert.rejects(fixture.library.deleteItem(episode, { DeleteFileLocation: true }, loaded.parent), {
+          name: 'StorageError', code: 'is-directory'
+        });
+        assert.deepEqual(await rows(fixture), before);
+        assert.equal(episode.ParentId, parentId);
+        assert.equal(await creator.getItemById(episode.Id), episode);
+        assert.equal(readCachedFolderChildren(loaded.parent, {}, () => null), children);
+        assert.deepEqual(events, []);
+        assert.equal((await assets.stat(externalMarker)).kind, 'file');
+      } else {
+        await fixture.library.deleteItem(episode, { DeleteFileLocation: false }, loaded.parent);
+        assert.deepEqual(await fixture.database.rows('BaseItems', { where: { Id: episode.Id } }), []);
+        assert.deepEqual(await fixture.database.rows('AncestorIds', { where: { ItemId: episode.Id } }), []);
+        assert.equal(await creator.getItemById(episode.Id), null);
+        assert.equal(readCachedFolderChildren(loaded.parent, {}, () => null), null);
+        assert.deepEqual(events, [['removed', idKey(episode.Id)]]);
+        await assert.rejects(assets.stat(externalMarker), { code: 'not-found' });
+      }
+      await assert.rejects(assets.stat(marker), { code: 'not-found' });
+      assert.equal((await fixture.vfs.stat('/discovery-write/discovery/' + sourceFile)).kind, 'file');
+      assert.equal((await fixture.vfs.stat('/discovery-write/discovery/Film.nfo')).kind, 'file');
+      assert.equal((await fixture.vfs.stat('/discovery-write/discovery/primary.mkv')).kind, 'file');
+    });
 
   databaseTest('does not extend direct-disc authorization to a multi-disc representation', async t => {
     const value = await setup(t, dialect, 'delete-direct-dvd-preserve-source');
@@ -470,23 +590,24 @@ for (const dialect of ['postgres']) {
     assert.equal((await fixture.vfs.stat('/discovery-write/discovery/Film/VIDEO_TS/VTS_01_1.VOB')).kind, 'file');
   });
 
-  databaseTest('rejects a persisted multi-disc owned deletion closure before source or metadata cleanup', async t => {
+  databaseTest('deletes a multi-disc source and its owned persistence closure without extra logical events', async t => {
     const value = await setup(t, dialect, 'delete-multidisc-dvd-source-directory');
-    const { fixture, item, loaded, resolved, events, assets, marker, creator } = value;
+    const { fixture, item, loaded, events, assets, marker, creator } = value;
     const [row] = await fixture.database.rows('BaseItems', { where: { Id: item.Id } });
     const ownedId = 'DA444444-4444-4444-4444-444444444444';
-    await fixture.database.insert('BaseItems', { ...row, Id: ownedId, OwnerId: item.Id, PrimaryVersionId: null });
-    const before = await rows(fixture), parentId = item.ParentId;
+    await fixture.database.insert('BaseItems', { ...row, Id: ownedId, OwnerId: item.Id, ParentId: null,
+      Type: 'MediaBrowser.Controller.Entities.Video', Path: path.join(item.Path, 'bonus.mkv'), ExtraType: 1,
+      PrimaryVersionId: null, Data: JSON.stringify({ VideoType: 'VideoFile', AdditionalParts: [], LocalAlternateVersions: [] }) });
 
-    await assert.rejects(fixture.library.deleteItem(item, { DeleteFileLocation: true }, loaded.parent), { status: 501 });
+    await fixture.library.deleteItem(item, { DeleteFileLocation: true }, loaded.parent);
 
-    assert.deepEqual(await rows(fixture), before);
-    assert.equal(item.ParentId, parentId);
-    assert.equal(await creator.getItemById(item.Id), item);
-    assert.equal(readCachedFolderChildren(loaded.parent, {}, () => null), resolved);
-    assert.deepEqual(events, []);
-    assert.equal((await assets.stat(marker)).kind, 'file');
-    assert.equal((await fixture.vfs.stat('/discovery-write/discovery/Film/Film Disc 1/video_ts.ifo')).kind, 'file');
+    for (const Id of [item.Id, ownedId]) assert.deepEqual(await fixture.database.rows('BaseItems', { where: { Id } }), []);
+    assert.equal(await creator.getItemById(item.Id), null);
+    assert.equal(readCachedFolderChildren(loaded.parent, {}, () => null), null);
+    assert.deepEqual(events, [['removed', idKey(item.Id)]]);
+    await assert.rejects(assets.stat(marker), { code: 'not-found' });
+    await assert.rejects(fixture.vfs.stat('/discovery-write/discovery/Film'), { code: 'not-found' });
+    assert.equal((await fixture.vfs.stat('/discovery-write/discovery/Keep/sentinel.txt')).kind, 'file');
   });
 
   for (const direction of ['outgoing', 'incoming']) databaseTest(`rejects a persisted multi-disc ${direction} version relation before side effects`, async t => {
@@ -536,6 +657,89 @@ for (const dialect of ['postgres']) {
     assert.deepEqual(events, []);
     assert.equal((await assets.stat(marker)).kind, 'file');
     assert.equal((await fixture.vfs.stat(`/discovery-write/discovery/${sample.files[0]}`)).kind, 'file');
+  });
+
+  databaseTest('promotes an independent file version when deleting its linked disc primary', async t => {
+    const value = await setup(t, dialect, 'delete-direct-dvd-source-directory');
+    const { fixture, item, loaded, creator, assets, marker } = value;
+    const alternate = await linkIndependentVersion(value, item, await addIndependentFileVersion(value));
+    await addManualReference(value, item);
+    const { phases } = installLinkedReferences(value);
+
+    await fixture.library.deleteItem(item, { DeleteFileLocation: true }, loaded.parent);
+
+    assert.deepEqual(await fixture.database.rows('BaseItems', { where: { Id: item.Id } }), []);
+    assert.equal(await creator.getItemById(item.Id), null);
+    const [saved] = await fixture.database.rows('BaseItems', { where: { Id: alternate.Id } });
+    assert.equal(saved.PrimaryVersionId, null); assert.ok(!saved.OwnerId || sameId(saved.OwnerId, EMPTY_ID));
+    assert.equal(saved.PresentationUniqueKey, idKey(alternate.Id));
+    const cold = await fixture.loadContext(alternate.Id);
+    try {
+      assert.equal(cold.item.PrimaryVersionId, null);
+      assert.deepEqual(cold.item.LinkedAlternateVersions, []);
+    } finally { await cold.dispose(); }
+    const [reference] = await fixture.database.rows('LinkedChildren', { where: { ParentId: loaded.parent.Id, ChildType: 0 } });
+    assert.equal(idKey(reference.ChildId), idKey(alternate.Id));
+    assert.equal(idKey((await fixture.linkedChildren.page(loaded.parent.LinkedChildren, { limit: 1 }))[0].ItemId), idKey(alternate.Id));
+    const promotion = phases.findIndex(phase => phase[0] === 'update' && phase[1] === idKey(alternate.Id));
+    const reroute = phases.findIndex(phase => phase[0] === 'reroute');
+    assert.ok(promotion >= 0 && promotion < reroute);
+    assert.ok(phases.some(phase => phase[0] === 'saver' && phase[1] === idKey(loaded.parent.Id)));
+    await assert.rejects(assets.stat(marker), { code: 'not-found' });
+    await assert.rejects(fixture.vfs.stat('/discovery-write/discovery/Film'), { code: 'not-found' });
+    assert.equal((await fixture.vfs.stat('/discovery-write/discovery/Other/Other.mkv')).kind, 'file');
+  });
+
+  databaseTest('removes a linked disc alternate as a missing file while preserving its directory source', async t => {
+    const value = await setup(t, dialect, 'delete-direct-dvd-source-directory');
+    const { fixture, loaded, creator, assets, marker, events } = value;
+    const primary = await addIndependentFileVersion(value);
+    const disc = await linkIndependentVersion(value, primary, value.item);
+    events.length = 0;
+    const { phases } = installLinkedReferences(value);
+
+    await fixture.library.deleteItem(primary, { DeleteFileLocation: true }, loaded.parent);
+
+    for (const item of [disc, primary]) {
+      assert.deepEqual(await fixture.database.rows('BaseItems', { where: { Id: item.Id } }), []);
+      assert.equal(await creator.getItemById(item.Id), null);
+    }
+    assert.deepEqual(events.filter(event => event[0] === 'removed'), [
+      ['removed', idKey(disc.Id)], ['removed', idKey(primary.Id)]
+    ]);
+    assert.deepEqual(phases.filter(phase => phase[0] === 'delete').map(phase => phase[1]), [idKey(disc.Id), idKey(primary.Id)]);
+    assert.equal(phases.some(phase => phase[0] === 'reroute'), false);
+    assert.deepEqual(await fixture.database.rows('LinkedChildren', { where: { ParentId: primary.Id } }), []);
+    await assert.rejects(assets.stat(marker), { code: 'not-found' });
+    await assert.rejects(fixture.vfs.stat('/discovery-write/discovery/Other'), { code: 'not-found' });
+    assert.equal((await fixture.vfs.stat('/discovery-write/discovery/Film/VIDEO_TS/VTS_01_1.VOB')).kind, 'file');
+  });
+
+  databaseTest('deletes an independent linked disc alternate and reroutes its manual references to the primary', async t => {
+    const value = await setup(t, dialect, 'delete-direct-dvd-source-directory');
+    const { fixture, loaded, creator, assets, marker } = value;
+    const primary = await addIndependentFileVersion(value);
+    const disc = await linkIndependentVersion(value, primary, value.item);
+    await addManualReference(value, disc);
+    const { phases } = installLinkedReferences(value);
+
+    await fixture.library.deleteItem(disc, { DeleteFileLocation: true }, loaded.parent);
+
+    assert.deepEqual(await fixture.database.rows('BaseItems', { where: { Id: disc.Id } }), []);
+    assert.equal(await creator.getItemById(disc.Id), null);
+    assert.deepEqual(await fixture.database.rows('LinkedChildren', { where: { ParentId: primary.Id, ChildType: 3 } }), []);
+    const cold = await fixture.loadContext(primary.Id);
+    try { assert.deepEqual(cold.item.LinkedAlternateVersions, []); }
+    finally { await cold.dispose(); }
+    const [reference] = await fixture.database.rows('LinkedChildren', { where: { ParentId: loaded.parent.Id, ChildType: 0 } });
+    assert.equal(idKey(reference.ChildId), idKey(primary.Id));
+    assert.equal(idKey((await fixture.linkedChildren.page(loaded.parent.LinkedChildren, { limit: 1 }))[0].ItemId), idKey(primary.Id));
+    const reroute = phases.findIndex(phase => phase[0] === 'reroute');
+    const primaryUpdate = phases.findIndex(phase => phase[0] === 'update' && phase[1] === idKey(primary.Id));
+    assert.ok(reroute >= 0 && reroute < primaryUpdate);
+    await assert.rejects(assets.stat(marker), { code: 'not-found' });
+    await assert.rejects(fixture.vfs.stat('/discovery-write/discovery/Film'), { code: 'not-found' });
+    assert.equal((await fixture.vfs.stat('/discovery-write/discovery/Other/Other.mkv')).kind, 'file');
   });
 
   databaseTest('rejects an ID-bound read-only source before cleanup or SQL despite a writable identity prefix', async t => {

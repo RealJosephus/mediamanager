@@ -28,6 +28,29 @@ test('state assets create absent directories and write within declared state roo
   assert.equal(created.isDirectory(), true);
 });
 
+test('state asset range reads deliver only the selected bytes and reject out-of-bounds requests', async t => {
+  const directory = await temporary(t), assets = new MetadataImageAssets({ fileSystem: testFileSystem, stateRoots: [directory] });
+  const filename = path.join(directory, 'disc.img'), bytes = Buffer.from('0123456789abcdef');
+  await assets.write(filename, bytes);
+  const handle = await assets.openRead(filename, { range: { start: 4n, end: 8n } });
+  try {
+    assert.equal(handle.rangeHonored, true); assert.equal(handle.totalSize, 16n); assert.equal(handle.contentLength ?? handle.size, 5n);
+    assert.deepEqual(handle.range, { start: 4n, end: 8n });
+    const chunks = []; for await (const chunk of handle.stream) chunks.push(chunk);
+    assert.equal(Buffer.concat(chunks).toString(), '45678');
+  } finally { await handle.close(); }
+  assert.equal((await assets.read(filename, { range: { suffix: 3n } })).toString(), 'def');
+  await assert.rejects(assets.openRead(filename, { range: { start: 16n } }), { code: 'range-not-satisfiable' });
+  const fallback = await assets.openRead(filename, { range: { start: 4n, end: 8n }, ifRange: 'stale-version' });
+  try {
+    assert.equal(fallback.rangeHonored, false); assert.equal(fallback.range, null);
+    const chunks = []; for await (const chunk of fallback.stream) chunks.push(chunk);
+    assert.deepEqual(Buffer.concat(chunks), bytes);
+  } finally { await fallback.close(); }
+  assert.deepEqual(await assets.read(filename), bytes);
+  await assert.rejects(assets.openRead(directory), { code: 'not-found' });
+});
+
 test('state assets reject an existing external directory link before writing', async t => {
   const directory = await temporary(t), state = path.join(directory, 'state'), external = path.join(directory, 'external');
   await fs.mkdir(state); await fs.mkdir(external);

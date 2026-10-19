@@ -37,6 +37,7 @@ import { resolveVideoVersionLinks } from './video-version-relations.js';
 import { VideoVersionDiscovery } from './video-version-discovery.js';
 import { buildScanCollectionContext } from './scan-context.js';
 import { OwnedExtraDiscovery } from './owned-extra-discovery.js';
+import { detectUdfDiscType } from '../storage/udf-disc-type.js';
 import { stateOwnedFiles, stateIgnoreFileAccess } from './state-owned-files.js';
 import { DotIgnoreRule } from './dot-ignore-rule.js';
 import { loadPostgresMetadataRows, loadPostgresPageGraph,
@@ -88,10 +89,12 @@ export function createMetadataContextLoader({ store, library, fileSystem = libra
   const rootFileData = new RootFolderFileData({ assets: internalAssets, expandPath: library.options.expandPath });
   ignoreRule ??= vfs && identityMap ? new DotIgnoreRule({ vfs, identityMap }) : undefined;
   const videoVersionDiscovery = vfs && identityMap ? new VideoVersionDiscovery({ store, library, vfs, identityMap, ignoreRule, resolveFile: videoPathResolver, externalData, logger }) : undefined;
-  const ownedExtraDiscovery = vfs && identityMap ? new OwnedExtraDiscovery({ vfs, identityMap, ignoreRule, resolveFile: extraPathResolver }) : undefined;
+  const ownedExtraDiscovery = vfs && identityMap ? new OwnedExtraDiscovery({ vfs, identityMap, ignoreRule, resolveFile: extraPathResolver, logger }) : undefined;
   const stateExtraDiscovery = assets => new OwnedExtraDiscovery({ files: stateOwnedFiles(assets),
     ignoreRule: new DotIgnoreRule({ fileAccess: stateIgnoreFileAccess(instanceIgnoreAssets, ignoreRule?.fileAccess) }),
-    resolveFile: extraPathResolver });
+    classifyIso: (candidate, { signal } = {}) => detectUdfDiscType(assets, candidate.identityPath,
+      { signal, version: candidate.entry.version }),
+    resolveFile: extraPathResolver, logger });
   const stateOwnedExtraDiscovery = stateExtraDiscovery(stateLocalXmlAssets);
   const managedCollectionExtraDiscovery = stateExtraDiscovery(managedCollectionAssets);
   const access = item => identityMap.resolve({ itemId: item.Id, identityPath: item.Path,

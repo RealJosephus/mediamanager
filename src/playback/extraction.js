@@ -89,7 +89,7 @@ export class ExtractionService {
       : format === 'ass' ? ['ass', 'vtt', 'webvtt']
         : format === 'ssa' ? ['ssa', 'ass', 'vtt', 'webvtt'] : [format];
     return this.available && Boolean(format) && (!delivered || outputs.includes(delivered)) && !source.IsInfiniteStream
-      && (!source.VideoType || source.VideoType === 'VideoFile') && stream.SupportsExternalStream !== false;
+      && (!source.VideoType || ['VideoFile', 'Iso'].includes(source.VideoType)) && stream.SupportsExternalStream !== false;
   }
 
   async subtitle(source, stream, virtualPath, { signal } = {}) {
@@ -102,7 +102,7 @@ export class ExtractionService {
   async attachment(source, attachment, virtualPath, { signal } = {}) {
     if (attachment.Codec?.toLowerCase() === 'mjpeg') throw failure('not-found', `Attachment with stream index ${attachment.Index} can't be extracted for MediaSource ${source.Id}`);
     if (!await this.initialize()) throw failure('unavailable', 'The ffmpeg extraction process is unavailable.');
-    if (source.IsInfiniteStream || source.VideoType && source.VideoType !== 'VideoFile') throw failure('not-supported', 'Attachment extraction requires a finite media file.');
+    if (source.IsInfiniteStream || source.VideoType && !['VideoFile', 'Iso'].includes(source.VideoType)) throw failure('not-supported', 'Attachment extraction requires a finite media file.');
     return this.#extract(source, attachment, virtualPath, { kind: 'attachment', index: attachment.Index, signal });
   }
 

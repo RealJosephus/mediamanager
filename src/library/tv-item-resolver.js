@@ -1,191 +1,204 @@
+import path from 'node:path';
 import { sameId } from './records.js';
 import { configuredTypeForPath } from './scan-context.js';
-import { sameNativePath } from './native-path.js';
+import { nativeContainingFolderPath, nativeDirectoryName, sameNativePath } from './native-path.js';
+import { parseSeasonPath } from '../metadata/season-path.js';
+import { resolveEpisodePath } from '../metadata/episode-naming.js';
+import episodeNamingOptions from '../metadata/episode-patterns.json' with { type: 'json' };
+import { formatComposite } from '../core/composite-format.js';
+import { isNativeVideoFileName, isPotentialVideoExtraCandidate, resolveOrdinaryVideoFile, resolveVideoSourceFields, video3DFormatFromPath } from './video-file-resolver.js';
 
 export const seriesNativeType = 'MediaBrowser.Controller.Entities.TV.Series';
 export const seasonNativeType = 'MediaBrowser.Controller.Entities.TV.Season';
 export const episodeNativeType = 'MediaBrowser.Controller.Entities.TV.Episode';
 
-const recognizedVideoExtensions = new Set([
-  '.001', '.3g2', '.3gp', '.amv', '.asf', '.asx', '.avi', '.bin', '.bivx', '.divx', '.dv', '.dvr-ms',
-  '.disc', '.f4v', '.fli', '.flv', '.ifo', '.img', '.iso', '.m2t', '.m2ts', '.m2v', '.m4v', '.mkv', '.mk3d',
-  '.mov', '.mp4', '.mpe', '.mpeg', '.mpg', '.mts', '.mxf', '.nrg', '.nsv', '.nuv', '.ogm', '.ogv',
-  '.pva', '.qt', '.rec', '.rm', '.rmvb', '.strm', '.svq3', '.tp', '.ts', '.ty', '.viv', '.vob',
-  '.vp3', '.webm', '.wmv', '.wtv', '.xvid'
-]);
-const ordinaryEpisodeExtensions = new Set([
-  '.3g2', '.3gp', '.avi', '.divx', '.f4v', '.flv', '.m2t', '.m2ts', '.m4v', '.mkv', '.mov', '.mp4',
-  '.mpe', '.mpeg', '.mpg', '.mts', '.ogv', '.ts', '.webm', '.wmv', '.wtv'
-]);
 const withheld = Object.freeze({ withhold: true });
-const versionToken = /(?:^|[ ._\-[\]()])(?:2160p|1080p|720p|480p|4k|uhd|bluray|blu-ray|web[ ._-]?dl|webrip|hdtv|x26[45]|hevc)(?:$|[ ._\-[\]()])/iu;
-
 const nativeType = item => item?.NativeType ?? item?.nativeType ?? item?.Type;
+const recognizedVideo = candidate => candidate?.entry?.kind === 'file'
+  && (isNativeVideoFileName(candidate.entry.name) || episodeNamingOptions.StubFileExtensions
+    .some(extension => candidate.entry.name.toLowerCase().endsWith(extension.toLowerCase())));
 
-function fileParts(name) {
-  const index = name.lastIndexOf('.');
-  return index > 0 ? { stem: name.slice(0, index), extension: name.slice(index).toLowerCase() }
-    : { stem: name, extension: '' };
+async function containsSeasonVideo(candidate, peekDirectory) {
+  // SeasonResolver checks the raw subtree, before normal item ignore rules.
+  const snapshot = await peekDirectory?.(candidate, { forExtras: true });
+  if (snapshot?.listing?.deletionSafe !== true || !Array.isArray(snapshot.candidates)) return null;
+  for (const child of snapshot.candidates) {
+    if (child.entry.kind !== 'file') continue;
+    const name = child.entry.name, dot = name.lastIndexOf('.');
+    // This particular native directory search compares extensions exactly.
+    if (dot >= 0 && episodeNamingOptions.VideoFileExtensions.includes(name.slice(dot))) return true;
+  }
+  for (const child of snapshot.candidates) if (child.entry.kind === 'directory') {
+    const found = await containsSeasonVideo(child, peekDirectory);
+    if (found !== false) return found;
+  }
+  return false;
 }
 
-function recognizedVideo(candidate) {
-  if (candidate?.entry?.kind !== 'file') return false;
-  const { stem, extension } = fileParts(candidate.entry.name);
-  return Boolean(stem) && recognizedVideoExtensions.has(extension);
+function directDiscMember(child, directory) {
+  const windows = /^[A-Za-z]:[\\/]|^[\\/]{2}/u.test(child.identityPath);
+  return sameNativePath(nativeDirectoryName(child.identityPath, { windows }), directory.identityPath)
+    && path.posix.dirname(child.accessPath) === path.posix.normalize(directory.accessPath);
+}
+
+function episodeDiscClaim(candidate, videoType) {
+  const Video3DFormat = video3DFormatFromPath(candidate.identityPath);
+  return claim(candidate, episodeNativeType, {
+    Name: candidate.entry.name, IsFolder: false, MediaType: 'Video',
+    data: { VideoType: videoType, ...(Video3DFormat == null ? {} : { Video3DFormat }) }
+  });
+}
+
+async function resolveEpisodeFolder(candidate, peekDirectory) {
+  if (isPotentialVideoExtraCandidate(candidate)
+    || ['video_ts', 'bdmv'].includes(candidate.entry.name.toLowerCase())) return withheld;
+  const snapshot = await peekDirectory?.(candidate);
+  if (snapshot?.listing?.deletionSafe !== true || !Array.isArray(snapshot.candidates)) return withheld;
+  for (const child of snapshot.candidates) {
+    if (child.entry.kind === 'directory' && child.entry.name.toLowerCase() === 'video_ts') {
+      if (!directDiscMember(child, candidate)) return withheld;
+      // BaseVideoResolver.IsDvdDirectory checks direct files before item ignore filtering.
+      const contents = await peekDirectory(child, { forExtras: true });
+      if (contents?.listing?.deletionSafe !== true || !Array.isArray(contents.candidates)) return withheld;
+      const vob = contents.candidates.find(value => value.entry.kind === 'file'
+        && path.posix.extname(value.entry.name).toLowerCase() === '.vob');
+      if (vob) {
+        if (!directDiscMember(vob, child)) return withheld;
+        return episodeDiscClaim(candidate, 'Dvd');
+      }
+    } else if (child.entry.kind === 'directory' && child.entry.name.toLowerCase() === 'bdmv') {
+      return directDiscMember(child, candidate) ? episodeDiscClaim(candidate, 'BluRay') : withheld;
+    } else if (child.entry.kind === 'file' && child.entry.name.toLowerCase() === 'video_ts.ifo') return withheld;
+  }
+  // BaseVideoResolver only resolves directory videos for disc structures.
+  // Ordinary directories retain their Folder identity and physical children.
+  if (snapshot.candidates.some(child => child.entry.kind === 'directory'
+    ? ['video_ts', 'bdmv'].includes(child.entry.name.toLowerCase())
+    : child.entry.kind === 'file' && child.entry.name.toLowerCase() === 'video_ts.ifo')) return withheld;
+  return null;
 }
 
 function exactCollectionOverride(collectionContext, identityPath) {
-  const overrides = collectionContext?.contentTypeOverrides;
-  return configuredTypeForPath(overrides === undefined ? [] : overrides, identityPath);
-}
-
-function resolvableTvContext(collectionContext) {
-  return collectionContext?.collectionType === 'tvshows';
+  return configuredTypeForPath(collectionContext?.contentTypeOverrides ?? [], identityPath);
 }
 
 function parseSeries(candidate) {
-  const leaf = candidate?.entry?.name?.trim();
+  const leaf = candidate?.entry?.name;
   if (!leaf) return null;
-  const year = /^(?<name>.+?)\s*\((?<year>(?:18|19|20|21)\d{2})\)$/u.exec(leaf);
-  if (!year) return { name: leaf, year: null };
-  const name = year.groups.name.trim();
-  return name ? { name, year: Number(year.groups.year) } : null;
+  const year = /(?<name>.+?)\s*\((?<year>[0-9]{4})\)/u.exec(leaf);
+  if (year) return { name: year.groups.name.trim(), year: Number(year.groups.year) };
+  return { name: leaf.replace(/(?<=[^\s._]{2})[._]+|[._]+(?=[^\s._]{2})/gu, ' ').trim(), year: null };
 }
 
-function parseSeason(candidate) {
-  if (candidate?.entry?.kind !== 'directory') return null;
-  const match = /^Season (?<index>\d{1,3})$/iu.exec(candidate.entry.name);
-  if (!match) return null;
-  const index = Number(match.groups.index);
-  return Number.isSafeInteger(index) && index > 0 && index <= 199 ? index : null;
-}
-
-function episodeMarkers(candidate) {
-  if (!recognizedVideo(candidate)) return null;
-  const { stem } = fileParts(candidate.entry.name);
-  return [...stem.matchAll(/s(?<season>\d{1,3})e(?<episode>\d{1,4})/giu)].map(match => ({
-    season: Number(match.groups.season),
-    episode: Number(match.groups.episode)
-  })).filter(value => Number.isSafeInteger(value.season) && value.season > 0 && value.season <= 199
-    && Number.isSafeInteger(value.episode) && value.episode > 0);
-}
-
-function episodeMarker(candidate) {
-  const markers = episodeMarkers(candidate);
-  return markers?.length === 1 ? markers[0] : null;
-}
-
-function parseEpisode(candidate) {
-  const marker = episodeMarker(candidate);
-  if (!marker) return null;
-  const { stem, extension } = fileParts(candidate.entry.name);
-  if (!ordinaryEpisodeExtensions.has(extension) || versionToken.test(stem)) return null;
-  const match = /^(?:(?<prefix>.+?)[ ._-]+)?s(?<season>\d{1,3})e(?<episode>\d{1,4})$/iu.exec(stem);
-  if (!match) return null;
-  const season = Number(match.groups.season);
-  const episode = Number(match.groups.episode);
-  return Number.isSafeInteger(season) && season > 0 && season <= 199
-    && Number.isSafeInteger(episode) && episode > 0
-    ? { name: stem, season, episode } : null;
+function isMixedSeries(candidate, children) {
+  if (children.some(child => child.entry.name === 'tvshow.nfo')) return true;
+  return children.some(child => child.entry.kind === 'directory'
+    ? parseSeasonPath(child.identityPath, candidate.identityPath, {
+      supportSpecialAliases: false, supportNumericSeasonFolders: false
+    }).SeasonNumber != null
+    // SeriesResolver tests the containing directory's extension in this branch.
+    : isNativeVideoFileName(candidate.identityPath)
+      && resolveEpisodePath(child.identityPath, { named: true, optimistic: false })?.EpisodeNumber != null);
 }
 
 function claim(candidate, type, draft, traversal = 'none') {
-  return {
-    nativeType: type,
-    primary: candidate,
-    consumedPaths: [candidate],
-    traversal,
-    draft: { ...draft, SourceType: 'Library' }
-  };
+  return { nativeType: type, primary: candidate, consumedPaths: [candidate], traversal,
+    draft: { ...draft, SourceType: 'Library' } };
 }
 
-/**
- * Resolves only a proof-carrying conventional TV layout:
- *   Series [(YYYY)] / Season N / [prefix.]SxxEyy.<ordinary video>
- *
- * Flat, special, multi-episode, alternate/version, extra, disc and stream
- * layouts are intentionally withheld until their native ownership rules are
- * implemented as complete units.
- */
-export function createTvItemResolver() {
+/** TV files and single disc directories retain their physical parent. Episode numbering and
+ * virtual-season association belong to the existing metadata lifecycle, which
+ * also observes Series display order, sidecars and multi-episode ranges. */
+export function createTvItemResolver({ localization, classifyIso, logger } = {}) {
   return Object.freeze({
     id: 'builtin-tv-items',
     priority: 20,
-    productionMediaScope: 'conventional-tv-series-season-single-episodes',
+    productionMediaScope: 'tv-ordinary-video-files',
     nativeTypes: {
       [seriesNativeType]: { isFolder: true },
       [seasonNativeType]: { isFolder: true },
       [episodeNativeType]: { isFolder: false }
     },
-    async resolveDirectory({ parent, root, collectionContext, candidate, candidates, deletionSafe, peekDirectory }) {
+    async resolveDirectory({ parent, root, collectionContext, candidate, deletionSafe, peekDirectory }) {
       const override = exactCollectionOverride(collectionContext, candidate.identityPath);
-      const exactTvOverride = override === 'tvshows';
       const parentType = nativeType(parent);
-      if (!resolvableTvContext(collectionContext) && !exactTvOverride) {
-        return [seriesNativeType, seasonNativeType].includes(parentType) ? withheld : null;
+      const hasTvParent = [parent, ...(collectionContext?.parents ?? [])]
+        .some(value => [seriesNativeType, seasonNativeType].includes(nativeType(value)));
+      const mixed = collectionContext?.collectionType === null && override == null;
+      if (collectionContext?.collectionType !== 'tvshows' && override !== 'tvshows' && !mixed) {
+        return hasTvParent ? withheld : null;
       }
-      if (!deletionSafe) return withheld;
-      if (override != null && override !== 'tvshows') return withheld;
+      if (!deletionSafe || override != null && override !== 'tvshows') return withheld;
 
-      if (sameId(parent?.Id, root?.Id)) {
+      if (mixed && !hasTvParent) {
+        if (parent?.IsRoot === true) return null;
+        const snapshot = await peekDirectory?.(candidate, { forExtras: true });
+        if (snapshot?.listing?.deletionSafe !== true || !Array.isArray(snapshot.candidates)) return withheld;
+        if (!isMixedSeries(candidate, snapshot.candidates)) return null;
         const parsed = parseSeries(candidate);
-        if (!parsed) return withheld;
-        const snapshot = await peekDirectory?.(candidate);
-        if (snapshot?.listing?.deletionSafe !== true
-          || !snapshot.candidates.some(child => parseSeason(child) != null)) return withheld;
+        if (!parsed?.name) return withheld;
         return claim(candidate, seriesNativeType, {
-          Name: parsed.name,
-          IsFolder: true,
-          MediaType: 'Unknown',
+          Name: parsed.name, IsFolder: true, MediaType: 'Unknown'
+        }, 'children');
+      }
+
+      if (!hasTvParent && sameId(parent?.Id, root?.Id)) {
+        const parsed = parseSeries(candidate);
+        if (!parsed?.name) return withheld;
+        const snapshot = await peekDirectory?.(candidate);
+        if (snapshot?.listing?.deletionSafe !== true) return withheld;
+        return claim(candidate, seriesNativeType, {
+          Name: parsed.name, IsFolder: true, MediaType: 'Unknown',
           ...(parsed.year == null ? {} : { initialColumns: { ProductionYear: parsed.year } })
         }, 'children');
       }
 
       if (parentType === seriesNativeType) {
-        const index = parseSeason(candidate);
-        if (index == null) return withheld;
-        const duplicate = candidates.filter(value => parseSeason(value) === index).length !== 1;
-        if (duplicate) return withheld;
-        const snapshot = await peekDirectory?.(candidate);
-        if (snapshot?.listing?.deletionSafe !== true) return withheld;
+        const parsed = parseSeasonPath(candidate.identityPath, nativeContainingFolderPath(parent));
+        if (parsed.SeasonNumber == null || !parsed.IsSeasonFolder) {
+          const episode = resolveEpisodePath('\\\\test\\' + candidate.entry.name, { directory: true });
+          if (episode?.EpisodeNumber != null && episode.SeasonNumber != null) {
+            return resolveEpisodeFolder(candidate, peekDirectory);
+          }
+          const containsVideo = await containsSeasonVideo(candidate, peekDirectory);
+          if (containsVideo === false) return resolveEpisodeFolder(candidate, peekDirectory);
+          if (containsVideo !== true) return withheld;
+        } else {
+          const snapshot = await peekDirectory?.(candidate);
+          if (snapshot?.listing?.deletionSafe !== true) return withheld;
+        }
+        const index = parsed.SeasonNumber;
+        const options = collectionContext?.libraryOptions ?? {};
+        const name = index == null ? candidate.entry.name
+          : index === 0 ? Object.hasOwn(options, 'SeasonZeroDisplayName') ? options.SeasonZeroDisplayName : 'Specials'
+          : formatComposite(localization?.text('NameSeasonNumber') ?? 'Season {0}', [index]);
         return claim(candidate, seasonNativeType, {
-          Name: candidate.entry.name,
-          IsFolder: true,
-          MediaType: 'Unknown',
-          initialColumns: { IndexNumber: index }
+          Name: name || candidate.entry.name,
+          IsFolder: true, MediaType: 'Unknown', initialColumns: { IndexNumber: index }
         }, 'children');
       }
 
-      if (parentType === seasonNativeType) return withheld;
+      if (hasTvParent) return resolveEpisodeFolder(candidate, peekDirectory);
       return null;
     },
-    resolveFile({ parent, root, collectionContext, candidate, candidates, deletionSafe }) {
+    async resolveFile({ parent, collectionContext, candidate, deletionSafe, signal }) {
+      if (parent == null) return null;
       const override = exactCollectionOverride(collectionContext, candidate.identityPath);
-      const exactTvOverride = override === 'tvshows';
-      const parentType = nativeType(parent);
-      if (!resolvableTvContext(collectionContext) && !exactTvOverride) {
-        return [seriesNativeType, seasonNativeType].includes(parentType) && recognizedVideo(candidate)
-          ? withheld : null;
+      const hasTvParent = [parent, ...(collectionContext?.parents ?? [])]
+        .some(value => [seriesNativeType, seasonNativeType].includes(nativeType(value)));
+      const mixedTvParent = collectionContext?.collectionType === null && override == null && hasTvParent;
+      if (collectionContext?.collectionType !== 'tvshows' && override !== 'tvshows' && !mixedTvParent) {
+        return hasTvParent && recognizedVideo(candidate) ? withheld : null;
       }
-      if (!deletionSafe) return recognizedVideo(candidate) ? withheld : null;
-      if (override != null && override !== 'tvshows') return withheld;
       if (!recognizedVideo(candidate)) return null;
-      if (sameId(parent?.Id, root?.Id) || parentType === seriesNativeType) return withheld;
-      if (parentType !== seasonNativeType) return null;
-
-      const parsed = parseEpisode(candidate);
-      if (!parsed || parsed.season !== parent.IndexNumber) return withheld;
-      const duplicates = candidates.filter(value => {
-        const markers = episodeMarkers(value) ?? [];
-        return markers.some(other => other.season === parsed.season && other.episode === parsed.episode);
-      });
-      if (duplicates.length !== 1) return withheld;
+      if (!deletionSafe || override != null && override !== 'tvshows') return withheld;
+      const video = resolveOrdinaryVideoFile(candidate, { nativeType: episodeNativeType });
+      if (!video) return withheld;
+      if (video.ExtraType != null) return null;
       return claim(candidate, episodeNativeType, {
-        Name: parsed.name,
-        IsFolder: false,
-        MediaType: 'Video',
-        initialColumns: { IndexNumber: parsed.episode, ParentIndexNumber: parsed.season },
-        data: { VideoType: 'VideoFile' }
+        Name: video.Name, IsFolder: false, MediaType: 'Video',
+        data: { ...await resolveVideoSourceFields(candidate, { classifyIso, logger, signal }),
+          ...(video.Video3DFormat == null ? {} : { Video3DFormat: video.Video3DFormat }) }
       });
     }
   });

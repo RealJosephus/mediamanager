@@ -14,7 +14,9 @@ export class LibraryScanLifecycle {
       ...host.capabilities,
       watchesLibraryDirectories: monitor.capabilities?.watchesLibraryDirectories === true,
       reconcilesTopLevelConfiguration: host.capabilities?.reconcilesTopLevelConfiguration === true,
-      runsPostScanTasks: host.capabilities?.runsPostScanTasks === true
+      // This lifecycle owns task execution, including empty registrations and
+      // tasks registered after the host is constructed.
+      runsPostScanTasks: true
     });
     this.isScanRunning = false;
   }

@@ -40,7 +40,7 @@ export function createCollectionFolderImagePlugin({ library, images: metadataIma
         const paths = selected.paths(), first = await paths.next();
         if (first.done) return null;
         async function* sources() { try { yield first.value; yield* paths; } finally { await paths.return(); } }
-        return compose(sources(), item.Name, { assets });
+        return compose(sources(), item.Name, { assets: imageAssets });
       });
       if (!output) return ItemUpdateType.None;
       const temporary = imagePathApi(tempPath).join(tempPath, randomUUID().replaceAll('-', '') + '.png');

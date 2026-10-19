@@ -2,7 +2,9 @@ import path from 'node:path';
 import { isDeepStrictEqual } from 'node:util';
 import { EMPTY_ID, MIN_DATE, VIDEO_TYPES, idKey, mapRecord, nonemptyId, repositoryTopParentId } from './records.js';
 import { nativeGuid } from '../users/native.js';
-import { resolveOrdinaryVideoFile, additionalVideoStackParts, movieNativeType, musicVideoNativeType, videoNativeType } from './video-file-resolver.js';
+import { resolveOrdinaryVideoFile, resolveVideoSourceFields, additionalVideoStackParts, movieNativeType, musicVideoNativeType, videoNativeType } from './video-file-resolver.js';
+import { detectUdfDiscType } from '../storage/udf-disc-type.js';
+import { episodeNativeType } from './tv-item-resolver.js';
 import { ExternalDataManager } from './external-data.js';
 import { collectItemDeletionIds, deleteItemsInDatabase } from './item-persistence.js';
 import { setFolderChildren } from './folder-cache.js';
@@ -10,7 +12,7 @@ import { insertVideoVersions } from '../metadata/persistence.js';
 import { DotIgnoreRule } from './dot-ignore-rule.js';
 import { shouldIgnoreResolutionCandidate } from './resolution-ignore.js';
 import { setResolverInitialValues } from './resolver-initial-values.js';
-import { applyNativeItemValues, cloneNativeItemEntity, newNativeItemEntity } from './native-item-entity.js';
+import { applyNativeItemValues, cloneNativeItemEntity, initializeNativeResolvedRelationships, newNativeItemEntity } from './native-item-entity.js';
 
 export function invalidateVideoParent(parent) {
   if (!parent?.IsFolder) return;
@@ -29,8 +31,10 @@ const conflict = () => Object.assign(new Error('A video version changed before i
  */
 export class VideoVersionDiscovery {
   #ownedCreations = new WeakMap();
-  constructor({ store, library, vfs, identityMap, ignoreRule = new DotIgnoreRule({ vfs, identityMap }), resolveFile = resolveOrdinaryVideoFile, externalData, logger = {} }) {
-    Object.assign(this, { store, library, vfs, identityMap, ignoreRule, resolveFile, logger });
+  constructor({ store, library, vfs, identityMap, ignoreRule = new DotIgnoreRule({ vfs, identityMap }), resolveFile = resolveOrdinaryVideoFile,
+    classifyIso = vfs && ((candidate, { signal }) => detectUdfDiscType(vfs, candidate.accessPath, { signal, version: candidate.entry.version })),
+    externalData, logger = {} }) {
+    Object.assign(this, { store, library, vfs, identityMap, ignoreRule, resolveFile, classifyIso, logger });
     this.externalData = externalData ?? new ExternalDataManager({ store, vfs, identityMap, logger });
   }
 
@@ -129,11 +133,17 @@ export class VideoVersionDiscovery {
     const ignoreRule = preview ? this.ignoreRule.clone() : this.ignoreRule;
     if (await ignoreRule.shouldIgnore(candidate.identityPath, { isDirectory: entry.kind === 'directory' })) return null;
     const collectionType = loaded.getVideoVersionCollectionType();
+    const tvEpisode = loaded.parent?.IsFolder && (collectionType === 'tvshows'
+      || [loaded.parent, ...(loaded.parents ?? [])].some(parent => ['Season', 'Series'].includes(parent?.Type)));
     const raw = await this.resolveFile(candidate,
-      { nativeType: collectionType === 'movies' ? movieNativeType : collectionType === 'musicvideos' ? musicVideoNativeType : videoNativeType,
-        parseName: collectionType === 'movies', loaded, preview });
+      { nativeType: tvEpisode ? episodeNativeType : collectionType === 'movies' ? movieNativeType
+        : collectionType === 'musicvideos' ? musicVideoNativeType : videoNativeType,
+        parseName: !tvEpisode && collectionType === 'movies', loaded, preview });
     if (entry.exists === false || !raw || !VIDEO_TYPES.has(raw.Type)) return null;
-    const resolved = applyNativeItemValues(newNativeItemEntity(raw.NativeType), raw);
+    if (raw.NativeType === episodeNativeType && raw.ExtraType != null) return null;
+    const sourceFields = raw.VideoType === 'Iso' && raw.IsoType == null
+      ? await resolveVideoSourceFields(candidate, { classifyIso: this.classifyIso, logger: this.logger }) : null;
+    const resolved = applyNativeItemValues(newNativeItemEntity(raw.NativeType), sourceFields ? { ...raw, IsoType: sourceFields.IsoType } : raw);
     if (loaded.parent?.IsFolder) {
       resolved.ParentId = loaded.parent.Id;
       const parentTopParentId = repositoryTopParentId(loaded.parent);
@@ -145,6 +155,7 @@ export class VideoVersionDiscovery {
     }
     setResolverInitialValues(resolved, { identityPath, entry, parent: loaded.parent?.IsFolder ? loaded.parent : null,
       parents: loaded.parents, metadataConfiguration: loaded.metadataConfiguration });
+    initializeNativeResolvedRelationships(resolved, { parent: loaded.parent, parents: loaded.parents });
     if (raw.NativeType !== expectedType) {
       // Activator.CreateInstance, not a spread: native coercion intentionally
       // loses resolver ownership, timestamps, size, locks and all other data.

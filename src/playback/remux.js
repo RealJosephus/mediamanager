@@ -23,7 +23,7 @@ const finite = value => value == null || Number.isFinite(Number(value));
 
 export function remuxPlan(source, options = {}) {
   options = { ...options };
-  if (source.IsInfiniteStream || source.RequiresOpening || source.RequiresClosing || source.VideoType && source.VideoType !== 'VideoFile'
+  if (source.IsInfiniteStream || source.RequiresOpening || source.RequiresClosing || source.VideoType && !['VideoFile', 'Iso'].includes(source.VideoType)
     || /^(?:hls|applehttp|dash)$/i.test(source.Container)) throw failure('not-supported', 'Remuxing requires a finite, opened media file.');
   const container = options.Container?.toLowerCase();
   const output = containers[container];

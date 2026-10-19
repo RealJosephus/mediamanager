@@ -13,6 +13,7 @@ import { loadLiveItemContext, updateLiveItemRepository, setPrimaryVersion as set
 import { ordinalIgnoreCaseEquals } from '../storage/ordinal-comparer.js';
 import { ItemUpdateType } from '../metadata/save-manager.js';
 import { prepareItemSourceDeletion } from './item-source-deletion.js';
+import { resolveVideoVersionLinks } from './video-version-relations.js';
 
 const conflict = () => Object.assign(new Error('The item changed before deletion.'), { code: 'metadata-conflict', status: 409 });
 const genericFileLeafTypes = new Set(['Audio', 'AudioBook', 'Book']);
@@ -32,28 +33,27 @@ function pathApi(value) {
 
 const sameOptionalId = (left, right) => !nonemptyId(left) && !nonemptyId(right) || sameId(left, right);
 
-function directoryDiscLayout(item, snapshot, stored) {
-  if (item.IsFolder === true || typeof item.Path !== 'string' || item.Path === ''
-    || item.IsFileProtocol !== true || item.IsInMixedFolder === true) return null;
-  if (nonemptyId(item.PrimaryVersionId) || nonemptyId(item.OwnerId) || nonemptyId(item.ChannelId)
-    || !Array.isArray(item.AdditionalParts)
-    || !Array.isArray(item.LocalAlternateVersions) || item.LocalAlternateVersions.length !== 0
-    || !Array.isArray(item.LinkedAlternateVersions) || item.LinkedAlternateVersions.length !== 0) return null;
-  if (snapshot?.IsInMixedFolder !== item.IsInMixedFolder
+function directoryDiscStateMatches(item, snapshot, stored) {
+  if (snapshot?.IsFolder !== item.IsFolder || snapshot?.IsInMixedFolder !== item.IsInMixedFolder
     || !sameOptionalId(snapshot?.OwnerId, item.OwnerId)
     || !sameOptionalId(snapshot?.PrimaryVersionId, item.PrimaryVersionId)
-    || !sameOptionalId(snapshot?.ChannelId, item.ChannelId)) return null;
-  const storedLinkedAlternateVersions = stored != null && Object.hasOwn(stored, 'LinkedAlternateVersions')
-    ? stored.LinkedAlternateVersions : [];
+    || !sameOptionalId(snapshot?.ChannelId, item.ChannelId)) return false;
   if (!['Dvd', 'BluRay'].includes(item.VideoType) || stored?.VideoType !== item.VideoType
-    || stored.IsShortcut === true || stored.IsPlaceHolder === true
+    || Boolean(stored.IsShortcut) !== Boolean(item.IsShortcut)
+    || stored.IsPlaceHolder === true || item.IsPlaceHolder === true
+    || !Array.isArray(item.AdditionalParts) || !Array.isArray(item.LocalAlternateVersions)
+    || !Array.isArray(item.LinkedAlternateVersions)
     || !Array.isArray(stored.AdditionalParts) || !isDeepStrictEqual(stored.AdditionalParts, item.AdditionalParts)
     || !Array.isArray(stored.LocalAlternateVersions) || !isDeepStrictEqual(stored.LocalAlternateVersions, item.LocalAlternateVersions)
-    // LinkedAlternateVersions is a runtime/relationship property and may be
-    // absent from scanner-authored Data even though the hydrated live list is
-    // authoritatively empty.
-    || !Array.isArray(storedLinkedAlternateVersions)
-    || !isDeepStrictEqual(storedLinkedAlternateVersions, item.LinkedAlternateVersions)) return null;
+    // This JsonIgnore list is hydrated from LinkedChildren, not Data.
+    || Object.hasOwn(stored, 'LinkedAlternateVersions') && !Array.isArray(stored.LinkedAlternateVersions)) return false;
+  return true;
+}
+
+function directoryDiscLayout(item) {
+  if (item.IsFolder === true || typeof item.Path !== 'string' || item.Path === ''
+    || item.IsFileProtocol !== true || item.IsInMixedFolder === true
+    || nonemptyId(item.OwnerId) || nonemptyId(item.ChannelId)) return null;
   if (item.AdditionalParts.length === 0) return { stacked: false };
   const api = pathApi(item.Path), container = api.dirname(item.Path);
   if (!container || container === item.Path) return null;
@@ -80,7 +80,7 @@ export class ItemDeletionService {
       linkedChildReferences, vfs, metadataVfs, channelManager, logger, now });
   }
 
-  async #context(item, { allowDirectoryDisc = false } = {}) {
+  async #context(item, { allowDirectoryDisc = false, cleanupOnly = false, relatedVersion = false } = {}) {
     if (!['Folder', ...VIDEO_TYPES, ...genericFileLeafTypes, ...generalItemTypes].includes(item.Type)) {
       throw libraryError(501, 'Deletion of this native item type is not implemented.');
     }
@@ -137,19 +137,56 @@ export class ItemDeletionService {
     if (VIDEO_TYPES.has(item.Type)) {
       if (snapshot?.IsInMixedFolder !== item.IsInMixedFolder
         || snapshot?.IsVirtualItem !== item.IsVirtualItem
-        || !sameOptionalId(snapshot?.ChannelId, item.ChannelId)) {
+        || !sameOptionalId(snapshot?.ChannelId, item.ChannelId)
+        || Boolean(stored?.IsPlaceHolder) !== Boolean(item.IsPlaceHolder)
+        || item.IsPlaceHolder && stored?.VideoType !== item.VideoType) {
         throw libraryError(501, 'Deletion of this native video with a changed source shape is not implemented.');
       }
-      const directoryDisc = ['Dvd', 'BluRay'].includes(item.VideoType)
-        || ['Dvd', 'BluRay'].includes(stored?.VideoType);
+      const directoryDisc = !item.IsPlaceHolder && (['Dvd', 'BluRay'].includes(item.VideoType)
+        || ['Dvd', 'BluRay'].includes(stored?.VideoType));
       if (directoryDisc) {
+        if (cleanupOnly) {
+          if (snapshot?.IsFolder !== item.IsFolder || stored?.VideoType !== item.VideoType
+            || Boolean(stored?.IsShortcut) !== Boolean(item.IsShortcut)
+            || !sameOptionalId(snapshot?.OwnerId, item.OwnerId)
+            || !sameOptionalId(snapshot?.PrimaryVersionId, item.PrimaryVersionId)) {
+            throw libraryError(501, 'Deletion of this native video with a changed source shape is not implemented.');
+          }
+          // Folder deletion cleans captured descendants' metadata and rows.
+          // Only the requested parent contributes source deletion paths.
+          return loaded;
+        }
+        if (!directoryDiscStateMatches(item, snapshot, stored)) {
+          throw libraryError(501, 'Deletion of this native video with a changed source shape is not implemented.');
+        }
+        await this.store.run(async db => {
+          const plan = await resolveVideoVersionLinks(db, item, { reversePath: loaded.reversePath });
+          const project = links => links.map(link => [idKey(link.ChildId), link.ChildType]);
+          const links = loaded.versionLinks.filter(link => link.ChildType === 2 || link.ChildType === 3);
+          const incoming = await db.rows('LinkedChildren', { where: { ChildId: item.Id }, whereIn: { ChildType: [2, 3] } });
+          if (!isDeepStrictEqual(project(plan.links), project(links))
+            || incoming.some(link => !sameId(link.ParentId, item.PrimaryVersionId))) {
+            throw libraryError(501, 'Deletion of a disc with inconsistent version relationships is not implemented.');
+          }
+        });
+        // Version promotion and missing-version cleanup only need metadata
+        // context; they do not authorize deleting the related source tree.
+        if (relatedVersion) return loaded;
+        // Episode.GetDeletePaths keeps its own Path as a file target even for
+        // disc media. Source deletion must fail at that execution boundary if
+        // the path is a directory; DB-only cleanup remains valid.
+        if (allowDirectoryDisc && item.Type === 'Episode' && item.IsFolder === false
+          && item.IsFileProtocol && !item.IsShortcut) return loaded;
         const discLayout = allowDirectoryDisc && ['Movie', 'MusicVideo', 'Video'].includes(item.Type)
           && !item.IsShortcut && !item.IsPlaceHolder
-          ? directoryDiscLayout(item, snapshot, stored) : null;
+          ? directoryDiscLayout(item) : null;
         if (!discLayout) throw libraryError(501, 'Deletion of this native disc source requires its isolated directory lifecycle.');
         return { ...loaded, discLayout };
       }
-      if (item.VideoType !== 'VideoFile' || item.IsShortcut || item.IsPlaceHolder) {
+      // STRM, ISO and placeholder files use the ordinary local Path deletion rules.
+      // ShortcutPath is a playback target and never a source deletion path.
+      if (!['VideoFile', 'Iso'].includes(item.VideoType)
+        && !(item.IsPlaceHolder && ['Dvd', 'BluRay'].includes(item.VideoType))) {
         throw libraryError(501, 'Deletion of this native video source requires its resolver lifecycle.');
       }
     }
@@ -205,7 +242,7 @@ export class ItemDeletionService {
     const accessPath = loaded.context.accessPath && (fileLeaf || item.IsFolder || loaded.discLayout && !loaded.discLayout.stacked
       ? loaded.context.accessPath : path.posix.dirname(loaded.context.accessPath));
     return prepareItemSourceDeletion({ item, accessPath, vfs: this.vfs, metadataVfs: this.metadataVfs,
-      fileLeaf, mixed });
+      fileLeaf, mixed, actualSourceKind: genericFileLeafTypes.has(item.Type) });
   }
 
   async #stateSourceDeletion(loaded, sourcePath) {
@@ -221,14 +258,14 @@ export class ItemDeletionService {
     return this.#deleteItem(item, options, parent, notifyParentItem, true);
   }
 
-  async #deleteItem(item, options, parent, notifyParentItem, allowDirectoryDisc = false) {
+  async #deleteItem(item, options, parent, notifyParentItem, allowDirectoryDisc = false, validatedVersionContext) {
     if (item == null) throw new TypeError('DeleteItem requires a native item.');
     return this.store.serializeWrites(async database => {
       const contexts=new Set(),owners=[],keep=value=>{contexts.add(value);return value;};
       let children,cohort,scope,failure; const logical=q('mm_delete_logical_'+randomUUID().replaceAll('-',''));
       owners.push(acquireNativeItemLinkOwner(item));
       try{
-      const loaded = keep(await this.#context(item, { allowDirectoryDisc }));
+      const loaded = validatedVersionContext ?? keep(await this.#context(item, { allowDirectoryDisc }));
       if (parent === undefined) {
         const owner = nonemptyId(item.OwnerId) ? await this.itemCreation.getItemById(item.OwnerId) : null;
         parent = owner ?? (nonemptyId(item.ParentId) ? await this.itemCreation.getItemById(item.ParentId) : null);
@@ -244,7 +281,7 @@ export class ItemDeletionService {
       if(children)for await(const page of children.pages())for(const child of page){
         // Native deletion consumes the captured Children entity directly. A
         // same-ID manager cache entry cannot replace its name, path or data.
-        const context=await this.#context(child);let childFailure;
+        const context=await this.#context(child,{cleanupOnly:true});let childFailure;
         try {await cohort.capture(child,{ordinal:++ordinal});await database.client.query(`INSERT INTO ${logical} VALUES($1,$2)`,[ordinal,idKey(child.Id)]);}
         catch(error){childFailure=error;throw error;}
         finally {
@@ -260,25 +297,19 @@ export class ItemDeletionService {
       const idsPlan={text:`SELECT "Key",min("Ordinal") AS "Ordinal" FROM ${logical} GROUP BY "Key"`,values:[]};
       scope = new ItemDeletionScope({ store: this.store, database });
       await scope.capturePlan(idsPlan);
-      const directoryDisc = Boolean(loaded.discLayout);
-      if (directoryDisc && scope.count !== 1) throw libraryError(501, 'Deletion of a directory disc with an owned deletion scope is not implemented.');
+      // Disc extras use the same SQL OwnerId closure as ordinary videos.
+      // They are not logical Folder children and receive no separate deletion events.
         const existingPrimary = nonemptyId(item.PrimaryVersionId) ? await this.itemCreation.getItemById(item.PrimaryVersionId) : null;
-        if (existingPrimary && VIDEO_TYPES.has(existingPrimary.Type)){owners.push(acquireNativeItemLinkOwner(existingPrimary));keep(await this.#context(existingPrimary));}
+        if (existingPrimary && VIDEO_TYPES.has(existingPrimary.Type)){owners.push(acquireNativeItemLinkOwner(existingPrimary));keep(await this.#context(existingPrimary,{relatedVersion:true}));}
         const links = VIDEO_TYPES.has(item.Type) ? await database.rows('LinkedChildren', { where: { ParentId: item.Id }, whereIn:{ChildType:[2,3]},
           orderBy: [{ column: 'SortOrder', direction: 'ASC' }] }) : [];
-        if (directoryDisc) {
-          const incoming = await database.rows('LinkedChildren', { where: { ChildId: item.Id }, whereIn:{ChildType:[2,3]}, limit:1 });
-          if ([...links, ...incoming].some(link => link.ChildType === 2 || link.ChildType === 3)) {
-            throw libraryError(501, 'Deletion of a directory disc version family is not implemented.');
-          }
-        }
         const alternateIds = new Map(links.filter(link => link.ChildType === 2).map(link => [idKey(link.ChildId), link.ChildId]));
         const localIds = new Set(alternateIds.keys());
         for (const link of links) if (link.ChildType === 3 && !alternateIds.has(idKey(link.ChildId))) alternateIds.set(idKey(link.ChildId), link.ChildId);
         const alternates = [];
         for (const id of alternateIds.values()) {
           const alternate = await this.itemCreation.getItemById(id);
-          if (alternate && VIDEO_TYPES.has(alternate.Type)){owners.push(acquireNativeItemLinkOwner(alternate));alternates.push({item:alternate,loaded:keep(await this.#context(alternate))});}
+          if (alternate && VIDEO_TYPES.has(alternate.Type)){owners.push(acquireNativeItemLinkOwner(alternate));alternates.push({item:alternate,loaded:keep(await this.#context(alternate,{relatedVersion:true}))});}
         }
         if (!isDeepStrictEqual((await database.rows('BaseItems', { where: { Id: item.Id } }))[0], loaded.snapshot)) throw conflict();
         const deleteSource = loaded.internalSourcePath ? await this.#stateSourceDeletion(loaded, loaded.internalSourcePath)
@@ -301,13 +332,18 @@ export class ItemDeletionService {
             // are missing alternates for DeleteItem's purposes, not mount paths.
             const exists = alternate.item.Path && alternate.item.IsFileProtocol && alternate.loaded.context.accessPath
               ? await alternate.loaded.exists(alternate.loaded.context.accessPath) : false;
-            if (alternate.item.Path && !exists) missing.push(alternate.item);
+            if (alternate.item.Path && !exists) missing.push(alternate);
             else surviving.push(alternate.item);
           }
-          for (const alternate of missing) {
+          for (const {item:alternate,loaded:alternateContext} of missing) {
             setPrimary(alternate, null); alternate.OwnerId = EMPTY_ID;
             alternate.LocalAlternateVersions = []; alternate.LinkedAlternateVersions = [];
-            await this.#deleteItem(alternate, { DeleteFileLocation: false }, undefined, false);
+            // These native in-memory resets intentionally precede persistence.
+            // Reuse a disc's validated context owned by this call, without
+            // granting source deletion or rejecting deliberate version changes.
+            const discContext = !alternate.IsPlaceHolder && ['Dvd', 'BluRay'].includes(alternate.VideoType)
+              ? alternateContext : undefined;
+            await this.#deleteItem(alternate, { DeleteFileLocation: false }, undefined, false, false, discContext);
           }
           if (surviving.length) {
             const primary = surviving[0]; setPrimary(primary, null); primary.OwnerId = EMPTY_ID;

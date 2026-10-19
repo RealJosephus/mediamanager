@@ -2,7 +2,8 @@ import path from 'node:path';
 import { MIN_DATE, VIDEO_TYPES, dateText, idKey, sameId } from './records.js';
 import { nativeGuid } from '../users/native.js';
 import { nativeContainingFolderPath, sameNativePath } from './native-path.js';
-import { collectOwnedExtras } from './video-file-resolver.js';
+import { collectOwnedExtras, resolveVideoSourceFields } from './video-file-resolver.js';
+import { detectUdfDiscType } from '../storage/udf-disc-type.js';
 import { audioNativeType } from './audio-item-resolver.js';
 import { applyNativeItemValues, cloneNativeItemEntity, newNativeItemEntity } from './native-item-entity.js';
 import { DotIgnoreRule } from './dot-ignore-rule.js';
@@ -21,8 +22,9 @@ export function resolveOwnedExtraFile(candidate, { nativeType, draft }) {
 
 /** FindExtras resolves live entities; its first provider save creates new rows. */
 export class OwnedExtraDiscovery {
-  constructor({ vfs, identityMap, files, ignoreRule = new DotIgnoreRule({ vfs, identityMap }), resolveFile = resolveOwnedExtraFile }) {
-    Object.assign(this, { ignoreRule, resolveFile });
+  constructor({ vfs, identityMap, files, ignoreRule = new DotIgnoreRule({ vfs, identityMap }), resolveFile = resolveOwnedExtraFile,
+    classifyIso = vfs && ((candidate, { signal }) => detectUdfDiscType(vfs, candidate.accessPath, { signal, version: candidate.entry.version })), logger = {} }) {
+    Object.assign(this, { ignoreRule, resolveFile, classifyIso, logger });
     this.files = files ?? {
       async list(identityPath) {
         const api = apiFor(identityPath);
@@ -33,10 +35,10 @@ export class OwnedExtraDiscovery {
     };
   }
 
-  async find(loaded, state, { preview = false } = {}) {
+  async find(loaded, state, { preview = false, signal } = {}) {
     const owner = loaded.item, folder = nativeContainingFolderPath(owner), api = apiFor(folder);
     const ignoreRule = preview ? this.ignoreRule.clone() : this.ignoreRule;
-    if (!['VideoFile', 'Iso'].includes(owner.VideoType ?? 'VideoFile')) {
+    if (!['VideoFile', 'Iso', 'Dvd', 'BluRay'].includes(owner.VideoType ?? 'VideoFile')) {
       throw Object.assign(new Error('Owned extra discovery requires an ordinary file or folder owner.'), { status: 501 });
     }
     const candidateFor = (identityPath, entry, accessPath) => ({ identityPath, entry, accessPath });
@@ -58,13 +60,20 @@ export class OwnedExtraDiscovery {
     const resolvedFiles = new Map();
     const { extras: claims } = await collectOwnedExtras(ownerCandidate, versions, candidates,
       candidate => list(candidate.identityPath), loaded.libraryRuntimeOptions?.localization, {
+        ownerIsDirectory: owner.IsFolder || ['Dvd', 'BluRay'].includes(owner.VideoType),
         resolveExtra: async ({ candidate, classification, isInMixedFolder }) => {
           if (shouldIgnoreResolutionCandidate(candidate, { applicationRootPath: loaded.libraryRuntimeOptions?.programDataPath
             && apiFor(loaded.libraryRuntimeOptions.programDataPath).join(loaded.libraryRuntimeOptions.programDataPath, 'root') })
             || await ignoreRule.shouldIgnore(candidate.identityPath)) return false;
           const draft = { Name: classification.resolvedName, columns: { IsInMixedFolder: isInMixedFolder },
             ...(classification.resolvedYear == null ? {} : { initialColumns: { ProductionYear: classification.resolvedYear } }),
-            ...(classification.nativeType === audioNativeType ? {} : { data: { VideoType: 'VideoFile', LocalAlternateVersions: [] } }) };
+            ...(classification.nativeType === audioNativeType ? {} : { data: {
+              ...await resolveVideoSourceFields(candidate, { classifyIso: this.classifyIso, logger: this.logger, signal }),
+              LocalAlternateVersions: []
+            } }) };
+          if (api.extname(candidate.identityPath).toLowerCase() === '.strm') {
+            draft.data = { ...draft.data, IsShortcut: true };
+          }
           const item = await this.resolveFile(candidate, { nativeType: classification.nativeType, draft, preview, loaded });
           if (item) resolvedFiles.set(candidate.identityPath, item);
           return Boolean(item);

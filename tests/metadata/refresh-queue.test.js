@@ -98,6 +98,25 @@ test('the queue boundary owns one live batch across provider failures and new ad
   await host.close();
 });
 
+test('queued metadata waits for its mutation owner and shutdown cancels that wait', { timeout: 5000 }, async () => {
+  const host = new MetadataRefreshHost({ registry: {}, loadContext() {}, store: {} });
+  const ready = Promise.withResolvers(), calls = [];
+  host.queuedRefresh = async reference => calls.push(reference);
+  const queued = host.queue('collection', {}, 0, { ready: ready.promise });
+  assert.ok(host.getRefreshQueue().has('collection'), 'admission remains synchronous');
+  await delay(0);
+  assert.deepEqual(calls, [], 'the worker cannot capture the item before its mutation completes');
+  ready.resolve();
+  await queued;
+  assert.deepEqual(calls, ['collection']);
+  const waiting = host.queue('cancelled', {}, 0, { ready: new Promise(() => {}) });
+  const rejected = assert.rejects(waiting, { name: 'AbortError' });
+  await delay(0);
+  await host.close();
+  await rejected;
+  assert.deepEqual(calls, ['collection']);
+});
+
 test('a queue boundary failure settles pending callers and permits a later batch', async () => {
   const failure = new Error('Cannot initialize queue boundary'), errors = [];
   const host = new MetadataRefreshHost({ registry: {}, loadContext() {}, store: {}, logger: { error: error => errors.push(error) } });

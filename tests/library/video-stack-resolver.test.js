@@ -65,7 +65,10 @@ test('file-stack grouping and item projection match the actual frozen resolvers'
     }));
     assert.deepEqual(actualItems, expected.items, sample.name);
     for (const item of result.items) {
-      assert.deepEqual(item.ownedParts.map(part => part.primary.identityPath), item.draft.data.AdditionalParts ?? []);
+      for (const owner of [item, ...item.localAlternates]) {
+        assert.deepEqual(item.ownedParts.filter(part => part.owner.identityPath === owner.primary.identityPath)
+          .map(part => part.primary.identityPath), owner.draft.data.AdditionalParts ?? []);
+      }
       assert.ok(item.ownedParts.every(part => part.nativeType === videoNativeType));
       assert.ok(item.localAlternates.every(alternate => alternate.nativeType == null
         || alternate.nativeType === item.nativeType));
@@ -74,7 +77,7 @@ test('file-stack grouping and item projection match the actual frozen resolvers'
   }
 });
 
-test('an alternate stack is consumed but only the selected primary stack owns additional parts', async () => {
+test('each stacked version declares and owns its additional parts', async () => {
   const resolver = createVideoFileResolver();
   const parentPath = 'Z:\\Media\\A\\Film';
   const names = ['Film - Theatrical cd2.mkv', 'Film - Director cd1.mkv',
@@ -86,7 +89,11 @@ test('an alternate stack is consumed but only the selected primary stack owns ad
     available: names.map(name => candidate(parentPath, name))
   });
   const [item] = result.items;
-  assert.deepEqual(item.ownedParts.map(part => part.primary.entry.name), ['Film - Director cd2.mkv']);
+  assert.deepEqual(item.ownedParts.map(part => [part.owner.entry.name, part.primary.entry.name]), [
+    ['Film - Director cd1.mkv', 'Film - Director cd2.mkv'],
+    ['Film - Theatrical cd1.mkv', 'Film - Theatrical cd2.mkv']
+  ]);
   assert.deepEqual(item.localAlternates.map(alternate => alternate.primary.entry.name), ['Film - Theatrical cd1.mkv']);
+  assert.deepEqual(item.localAlternates[0].draft.data.AdditionalParts, [parentPath + '\\Film - Theatrical cd2.mkv']);
   assert.ok(item.consumedPaths.some(value => value.identityPath.endsWith('Film - Theatrical cd2.mkv')));
 });

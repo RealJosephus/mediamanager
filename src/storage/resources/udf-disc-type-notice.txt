@@ -1,0 +1,42 @@
+UDF root-directory classifier source notice
+
+src/storage/udf-disc-type.js adapts the read-only UDF layout and allocation
+logic from DiscUtils.Udf 0.16.13, the dependency used by the reference server.
+The installed NuGet package identifies this source revision:
+https://github.com/DiscUtils/DiscUtils/tree/59d7cadab839c6d8dfcf52f8be5efe6d2ced190f/Library/DiscUtils.Udf
+
+Relevant source files: UdfReader.cs, DescriptorTag.cs, PartitionDescriptor.cs,
+LogicalVolumeDescriptor.cs, PartitionMap.cs, Type1PartitionMap.cs,
+MetadataPartitionMap.cs, PhysicalPartition.cs, LogicalPartition.cs,
+MetadataPartition.cs, FileSetDescriptor.cs, File.cs, FileEntry.cs,
+ExtendedFileEntry.cs, FileContentBuffer.cs, InformationControlBlock.cs,
+ShortAllocationDescriptor.cs, LongAllocationDescriptor.cs, Directory.cs,
+FileIdentifier.cs and UdfUtilities.cs.
+
+The JavaScript implementation exposes only DVD/Blu-ray root classification.
+It does not mount, extract, write, or expose a general archive filesystem.
+VFS reads, cancellation, version validation and bounded metadata buffers are
+MediaManager integration code. Tests build isolated UDF descriptors and do
+not contain third-party media or a copied filesystem image.
+
+DiscUtils source license (MIT):
+
+Copyright (c) 2008-2011, Kenneth Bell
+
+Permission is hereby granted, free of charge, to any person obtaining a
+copy of this software and associated documentation files (the "Software"),
+to deal in the Software without restriction, including without limitation
+the rights to use, copy, modify, merge, publish, distribute, sublicense,
+and/or sell copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+DEALINGS IN THE SOFTWARE.
