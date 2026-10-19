@@ -1,0 +1,15 @@
+[
+  "empty",
+  "sources-kept",
+  "sources-deleted",
+  "later-null-plan",
+  "kept-null-plan",
+  "later-external-failure",
+  "persistence-failure",
+  "sqlite-trigger-failure",
+  "later-internal-readonly",
+  "later-source-readonly",
+  "parent-event",
+  "cached-root-parent",
+  "relational-closure"
+]

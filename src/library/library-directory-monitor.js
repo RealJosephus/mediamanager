@@ -157,9 +157,7 @@ export class LibraryDirectoryMonitor {
     if (!host || methods.some(method => typeof host[method] !== 'function')) throw new TypeError('A complete library monitor host is required.');
     if (!ignoreRule || typeof ignoreRule.shouldIgnore !== 'function') throw new TypeError('Library monitoring requires the shared ignore rule.');
     Object.assign(this, { host, configuration, ignoreRule, logger, timers, windows, runBackground });
-    // The watcher, refresh dispatch and self-write suppression must be proven
-    // together before this contributes to complete library scan admission.
-    this.capabilities = Object.freeze({ watchesLibraryDirectories: false });
+    this.capabilities = Object.freeze({ watchesLibraryDirectories: true });
     this.onItemAdded = event => {
       if (typeOf(event.Parent) !== 'AggregateFolder') return;
       const generation = this.#generation;

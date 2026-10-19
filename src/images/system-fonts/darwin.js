@@ -7,6 +7,7 @@ import { createHash } from 'node:crypto';
 let api;
 export function resolveDarwinFonts(koffi, probes) { return (api ??= darwinFontApi(koffi)).resolve(probes); }
 export function drawDarwinGlyphs(koffi, face, options) { return (api ??= darwinFontApi(koffi)).draw(face, options); }
+export function measureDarwinGlyphs(koffi, face, glyphs, size) { return (api ??= darwinFontApi(koffi)).measure(face, glyphs, size); }
 
 function darwinFontApi(koffi) {
   const cf = koffi.load('/System/Library/Frameworks/CoreFoundation.framework/CoreFoundation');
@@ -42,6 +43,8 @@ function darwinFontApi(koffi) {
   const copyTable = ct.func('void *CTFontCopyTable(void *font, uint32_t tag, uint32_t options)');
   const copyVariation = ct.func('void *CTFontCopyVariation(void *font)');
   const copySized = ct.func('void *CTFontCreateCopyWithAttributes(void *font, double size, void *matrix, void *attributes)');
+  const xHeight = ct.func('double CTFontGetXHeight(void *font)');
+  const glyphAdvances = ct.func('double CTFontGetAdvancesForGlyphs(void *font, uint32_t orientation, const uint16_t *glyphs, void *advances, long count)');
   const range = koffi.struct({ location: 'long', length: 'long' });
   const forString = ct.func('CTFontCreateForString', 'void *', ['void *', 'void *', range]);
   const key = name => koffi.decode(ct.symbol(name), 'void *');
@@ -157,12 +160,7 @@ function darwinFontApi(koffi) {
   // backend cannot decode. Draw explicit glyphs through the public OS API;
   // this neither selects fallback fonts nor performs text shaping.
   let graphics;
-  function draw(face, { glyphs, positions, size, width, height }) {
-    if (!Array.isArray(glyphs) || !Array.isArray(positions) || glyphs.length !== positions.length
-      || glyphs.some(glyph => !Number.isInteger(glyph) || glyph < 0 || glyph > 65535)
-      || positions.some(point => !Number.isFinite(point.x) || !Number.isFinite(point.y))
-      || !Number.isFinite(size) || size <= 0 || !Number.isSafeInteger(width) || !Number.isSafeInteger(height)
-      || width <= 0 || height <= 0 || !Number.isSafeInteger(width * height * 4)) throw new TypeError('Invalid system glyph drawing input.');
+  function withFont(face, size, operation) {
     const owned = [], own = value => { owned.push(required(value, 'glyph drawing')); return value; };
     try {
       const attributes = own(dictionary(null, 0, dictionaryKeys, dictionaryValues));
@@ -182,9 +180,32 @@ function darwinFontApi(koffi) {
       for (const name of ['path', 'family', 'postscriptName', 'nameTableSha256', 'weight', 'width', 'slant', 'variations']) {
         if (JSON.stringify(drawnFace[name]) !== JSON.stringify(face[name])) throw new Error(`The sized system drawing face changed its ${name}: ${JSON.stringify(face[name])} -> ${JSON.stringify(drawnFace[name])}.`);
       }
-      graphics ??= drawingApi();
-      return { ...graphics.draw(font, { glyphs, positions, size, width, height }), identity: drawnFace };
+      return { ...operation(font), identity: drawnFace };
     } finally { for (const value of owned.reverse()) release(value); }
+  }
+  function validateGlyphs(glyphs, size) {
+    if (!Array.isArray(glyphs) || glyphs.some(glyph => !Number.isInteger(glyph) || glyph < 0 || glyph > 65535)
+      || !Number.isFinite(size) || size <= 0) throw new TypeError('Invalid system glyph input.');
+  }
+  function advances(font, glyphs) {
+    const widths = Buffer.alloc(glyphs.length * 16);
+    if (glyphs.length) glyphAdvances(font, 1, Uint16Array.from(glyphs), widths, glyphs.length);
+    return glyphs.map((_, index) => ({ x: widths.readDoubleLE(index * 16), y: -widths.readDoubleLE(index * 16 + 8) }));
+  }
+  function measure(face, glyphs, size) {
+    validateGlyphs(glyphs, size);
+    return withFont(face, size, font => ({ advances: advances(font, glyphs), xHeight: xHeight(font) }));
+  }
+  function draw(face, { glyphs, positions, size, width, height }) {
+    validateGlyphs(glyphs, size);
+    if (!Array.isArray(positions) || glyphs.length !== positions.length
+      || positions.some(point => !point || !Number.isFinite(point.x) || !Number.isFinite(point.y))
+      || !Number.isSafeInteger(width) || !Number.isSafeInteger(height)
+      || width <= 0 || height <= 0 || !Number.isSafeInteger(width * height * 4)) throw new TypeError('Invalid system glyph drawing input.');
+    return withFont(face, size, font => {
+      graphics ??= drawingApi();
+      return graphics.draw(font, { glyphs, positions, size, width, height });
+    });
   }
   function drawingApi() {
     const cg = koffi.load('/System/Library/Frameworks/CoreGraphics.framework/CoreGraphics');
@@ -202,10 +223,9 @@ function darwinFontApi(koffi) {
       ['CGContextSetAllowsFontSubpixelQuantization', false], ['CGContextSetShouldSubpixelQuantizeFonts', false]
     ].map(([name, value]) => [cg.func(name, 'void', ['void *', 'bool']), value]);
     // CGPoint and CGSize both contain two CGFloat (double) fields on macOS.
-    const measure = ct.func('double CTFontGetAdvancesForGlyphs(void *font, uint32_t orientation, const uint16_t *glyphs, void *advances, long count)');
     const drawGlyphs = ct.func('void CTFontDrawGlyphs(void *font, const uint16_t *glyphs, const void *positions, size_t count, void *context)');
     return { draw(font, { glyphs, positions, size, width, height }) {
-      const pixels = Buffer.alloc(width * height * 4), points = Buffer.alloc(positions.length * 16), widths = Buffer.alloc(glyphs.length * 16);
+      const pixels = Buffer.alloc(width * height * 4), points = Buffer.alloc(positions.length * 16);
       positions.forEach((point, index) => { points.writeDoubleLE(point.x, index * 16); points.writeDoubleLE(height - point.y, index * 16 + 8); });
       const ids = Uint16Array.from(glyphs), space = required(colorSpace(), 'color space');
       let context;
@@ -214,12 +234,12 @@ function darwinFontApi(koffi) {
         context = required(bitmap(pixels, width, height, 8, width * 4, space, 0x4001), 'bitmap context');
         for (const [setting, value] of settings) setting(context, value);
         fill(context, 1, 1, 1, 1);
-        if (glyphs.length) { measure(font, 1, ids, widths, glyphs.length); drawGlyphs(font, ids, points, glyphs.length, context); }
+        if (glyphs.length) drawGlyphs(font, ids, points, glyphs.length, context);
         flush(context);
         return { width, height, size, format: 'rgba-premultiplied', pixels,
-          advances: glyphs.map((_, index) => ({ x: widths.readDoubleLE(index * 16), y: -widths.readDoubleLE(index * 16 + 8) })) };
+          advances: advances(font, glyphs) };
       } finally { if (context) releaseContext(context); releaseColorSpace(space); }
     } };
   }
-  return { resolve, draw };
+  return { resolve, draw, measure };
 }

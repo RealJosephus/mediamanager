@@ -122,7 +122,7 @@ test('monitor selects parent watch paths and maintains one event subscription ac
     await f.monitor.start(); await settle(); await f.monitor.start(); await settle();
     assert.deepEqual(f.trace.filter(row => row[0] === 'watch'), [['watch', 'C:\\Media'], ['watch', 'C:\\Media2']]);
     assert.equal(f.events.listenerCount('ItemAdded'), 1);
-    assert.equal(f.monitor.capabilities.watchesLibraryDirectories, false);
+    assert.equal(f.monitor.capabilities.watchesLibraryDirectories, true);
     await f.monitor.stop();
     assert.equal(f.events.listenerCount('ItemAdded'), 0);
     assert.equal(f.watches.size, 0);

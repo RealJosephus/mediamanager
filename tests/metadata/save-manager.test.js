@@ -28,3 +28,16 @@ test('save manager preserves baseline uncancelled save entry point', async () =>
   await saveMetadata({}, ItemUpdateType.MetadataEdit, [{ ...saver, save: async (_, context) => { received = context.signal; } }], { includeDisabled: true, context: { signal: controller.signal } });
   assert.equal(received, undefined);
 });
+
+test('savers keep their access path for availability and report a distinct identity path to monitoring', async () => {
+  const events = [], identity = 'Z:\\Media\\movie.nfo';
+  const mapped = { ...saver, getSavePath: () => '/access/movie.nfo', getMonitorPath: () => identity,
+    save: async () => events.push(['save']) };
+  const outcomes = await saveMetadata({ SaveLocalMetadata: false }, ItemUpdateType.MetadataEdit, [mapped], {
+    exists: async filename => { assert.equal(filename, '/access/movie.nfo'); return true; },
+    monitor: { reportFileSystemChangeBeginning: filename => events.push(['begin', filename]),
+      reportFileSystemChangeComplete: (filename, refresh) => events.push(['complete', filename, refresh]) }
+  });
+  assert.equal(outcomes.length, 1); assert.equal(outcomes[0].error, undefined);
+  assert.deepEqual(events, [['begin', identity], ['save'], ['complete', identity, false]]);
+});

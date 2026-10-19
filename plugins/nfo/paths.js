@@ -16,6 +16,15 @@ export function nfoPaths(item, { accessPath = item.Path, containingFolderPath, s
   return result;
 }
 
+// File access and directory monitoring use different namespaces. Keep the
+// sidecar's relative location, but report it beside the item's identity path.
+export function nfoMonitorPath(item, context = {}) {
+  const accessPath = context.accessPath ?? item.Path;
+  const relative = path.posix.relative(accessPath, nfoPaths(item, context)[0]);
+  const api = /^[A-Za-z]:[\\/]|^\\\\/u.test(item.Path) ? path.win32 : path.posix;
+  return api.resolve(item.Path, ...relative.split('/'));
+}
+
 const timestamp = value => value == null ? -62135596800000 : new Date(typeof value === 'string' && /^\d{4}-\d\d-\d\d[ T]\d\d:\d\d:\d\d(?:\.\d+)?$/.test(value)
   ? value.replace(' ', 'T') + 'Z' : value).valueOf();
 export const nfoHasChanged = (modified, dateLastSaved) => timestamp(modified) - timestamp(dateLastSaved) > 60_000;

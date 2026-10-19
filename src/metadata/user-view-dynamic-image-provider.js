@@ -1,16 +1,17 @@
 import { collectionType } from '../library/user-view-query.js';
 import { randomUUID } from 'node:crypto';
-import { nonemptyId, dateTicks, MIN_DATE, unsupported } from '../library/records.js';
+import { nonemptyId, dateTicks, MIN_DATE } from '../library/records.js';
 import { nativeContainsSubPath } from '../library/native-path.js';
 import { withUserViewImageCandidates } from '../library/user-view-image-query.js';
 import { internalImagePath, imageTypes } from './image-paths.js';
 import { MetadataImageAssets, imagePathApi } from './image-assets.js';
 import { ItemUpdateType } from './save-manager.js';
+import { composeUserViewCollage } from '../images/user-view-collage.js';
 
 const remote = image => /^http/iu.test(image.Path);
 
 /** The provider runs the actual view query, including its native null-user failure. */
-export function createUserViewDynamicImagePlugin({ library, users, images: metadataImages, compose }) {
+export function createUserViewDynamicImagePlugin({ library, users, images: metadataImages, compose = composeUserViewCollage }) {
   if (!library || !users) throw new TypeError('Dynamic UserView images require the library and users.');
   const metadataPath = library.options.metadataPath ?? (library.options.programDataPath && imagePathApi(library.options.programDataPath).join(library.options.programDataPath, 'metadata'));
   const fileSystem = library.options.fileSystem;
@@ -48,9 +49,6 @@ export function createUserViewDynamicImagePlugin({ library, users, images: metad
         const paths = selected.paths(), first = await paths.next();
         if (first.done) return null;
         async function* sources() { try { yield first.value; yield* paths; } finally { await paths.return(); } }
-        // Production admission remains closed until the complete static
-        // renderer, including text and upscaling, meets its pixel contract.
-        if (!compose) { await paths.return(); unsupported('UserView image collage creation is not implemented.'); }
         return compose(sources(), item.Name, { assets });
       });
       if (!output) return ItemUpdateType.None;

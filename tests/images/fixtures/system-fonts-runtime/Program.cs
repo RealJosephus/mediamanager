@@ -8,6 +8,7 @@ using System.Text;
 using System.Text.Json;
 using Jellyfin.Drawing.Skia;
 using SkiaSharp;
+using SkiaSharp.HarfBuzz;
 
 if (args.Length != 2) throw new ArgumentException("Oracle <input.json> <output-root>");
 var inputBytes = File.ReadAllBytes(args[0]);
@@ -54,7 +55,15 @@ object? Identity(SKTypeface? face) {
         weight = face.FontWeight, width = face.FontWidth, slant = (int)face.FontSlant,
         tableHashes, tables = TableSummaries(face), stream = StreamSummary(face),
         glyphs = scalars.Select(codepoint => new { codepoint, glyph = face.GetGlyph(codepoint) }).ToArray(),
-        coverage = input.Texts.Select(text => new { text, present = face.ContainsGlyphs(text) }).ToArray() };
+        coverage = input.Texts.Select(text => new { text, present = face.ContainsGlyphs(text) }).ToArray(),
+        shaping = input.Texts.SelectMany(text => new[] { 112f, 56.5f }.Select(size => {
+            using var font = new SKFont(face, size);
+            using var shaper = new SKShaper(face);
+            var result = shaper.Shape(text, font);
+            return new { text, size = font.Size, rawWidth = font.MeasureText(text), xHeight = font.Metrics.XHeight,
+                glyphs = result.Codepoints, clusters = result.Clusters, width = result.Width,
+                positions = result.Points.Select(point => new { x = point.X, y = point.Y }).ToArray() };
+        })).ToArray() };
 }
 var defaultFace = SkiaEncoder.DefaultTypeFace;
 var fallbacks = (SKTypeface?[])typeof(SkiaEncoder).GetField("_typefaces", BindingFlags.Static | BindingFlags.NonPublic)!.GetValue(null)!;

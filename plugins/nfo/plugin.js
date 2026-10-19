@@ -1,6 +1,6 @@
 import { decodeNativeText } from '@mediamanager/plugin-sdk/core/native-text';
 import { nfoConfiguration } from './configuration.js';
-import { nfoPaths, nfoHasChanged } from './paths.js';
+import { nfoPaths, nfoMonitorPath, nfoHasChanged } from './paths.js';
 import { parseNfoAsync } from './parser.js';
 import { serializeNfo } from './saver.js';
 import { ItemUpdateType } from '@mediamanager/plugin-sdk/metadata/save-manager';
@@ -127,6 +127,7 @@ export function createNfoPlugin({ vfs, configuration, store, userData, spoolRoot
   for (const [name, itemTypes] of [['Movie', ['Movie', 'Video', 'MusicVideo']], ['Series', ['Series']], ['Season', ['Season']], ['Episode', ['Episode']], ['Album', ['MusicAlbum']], ['Artist', ['MusicArtist']]]) plugin.providers.push({
     id: `${name}NfoSaver`, name: 'Nfo', kind: 'saver', itemTypes, save, prepareSave, validateSave,
     getSavePath: (item, context) => nfoPaths(item, context)[0],
+    getMonitorPath: nfoMonitorPath,
     isEnabledFor: async (item, updateType, context) => {
       if (!item.SupportsLocalMetadata || !itemTypes.includes(item.Type)) return false;
       if (name === 'Movie' && item.ExtraType != null) return false;

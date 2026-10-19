@@ -2,9 +2,10 @@ import { testFileSystem } from '../storage/plugin-files.js';
 import {nativeTextBytes,decodeNativeTextBytes} from '../../src/database/native-text.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { createHash } from 'node:crypto';
+import { createHash, randomUUID } from 'node:crypto';
 import { readFile, mkdir, writeFile, readdir, stat, chmod } from 'node:fs/promises';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { parseLosslessJson } from '../../src/core/json.js';
 import { tableDefinition } from '../../src/database/model.js';
 import { UnsafeItemDeletionService } from '../../src/library/unsafe-item-deletion-service.js';
@@ -14,11 +15,16 @@ import { createMetadataContextLoader } from '../../src/library/metadata-context.
 import { dateText, dateTicks, guid, idKey } from '../../src/library/records.js';
 import { nativeGuid } from '../../src/users/native.js';
 import { setupChildrenFixture } from '../metadata/children-fixture.js';
+import { expandStatePath } from './fixture-state-path.js';
+import { recordOracle } from '../../tools/validation/oracle.js';
+import { validationOutputRoot } from '../../tools/validation/paths.js';
 
 const fixture = new URL('./fixtures/unsafe-fast-deletion/', import.meta.url);
 const bytes = await readFile(new URL('native.json', fixture));
 const native = parseLosslessJson(bytes.toString('utf8'));
 const provenance = JSON.parse(await readFile(new URL('provenance.json', fixture), 'utf8'));
+const inputFile = new URL('./fixtures/unsafe-fast-deletion-runtime/input.json', import.meta.url);
+const inputBytes = await readFile(inputFile), sampleNames = JSON.parse(inputBytes);
 const hash = value => createHash('sha256').update(value).digest('hex');
 const encode = value => JSON.stringify(value, (_, entry) => typeof entry === 'bigint' ? JSON.rawJSON(String(entry)) : entry);
 const tables = { rows: 'BaseItems', users: 'Users', userData: 'UserData', links: 'LinkedChildren' };
@@ -39,8 +45,34 @@ const order = (table, rows) => rows.sort((left, right) => {
   }
   return 0;
 });
-const rebase = (value, from, to) => typeof value === 'string' ? value.replaceAll(from, to)
-  .replaceAll(JSON.stringify(from).slice(1, -1), JSON.stringify(to).slice(1, -1)) : value;
+// Only the declared isolated state-root prefix relocates. Virtual metadata
+// suffixes now come from this platform's fresh native persistence, not Windows.
+const rebase = (value, from, to) => expandStatePath(value, from, to);
+let recording;
+function currentNative() {
+  return recording ??= (async () => {
+    const output = path.join(validationOutputRoot(), 'unsafe-fast-deletion-runtime-' + randomUUID());
+    const receipt = await recordOracle({ project: 'tests/library/fixtures/unsafe-fast-deletion-runtime/Oracle.csproj', output,
+      args: [fileURLToPath(inputFile), '{output}/native.json', '{output}/cases'] });
+    const recordedBytes = await readFile(path.join(output, 'native.json'));
+    const reference = parseLosslessJson(recordedBytes.toString('utf8'));
+    assert.equal(receipt.passed, true);
+    assert.equal(reference.inputSha256, hash(inputBytes)); assert.equal(reference.platform, process.platform);
+    assert.equal(receipt.outputs.find(file => path.basename(file.filename) === 'native.json').sha256, hash(recordedBytes));
+    assert.ok(reference.assemblies.some(assembly => assembly.name === 'jellyfin' && assembly.sha256 === receipt.jellyfinDll.sha256));
+    assert.deepEqual(reference.observations.map(sample => sample.sample), sampleNames);
+    for (const flag of ['actualLibraryManagerUnsafeFast', 'actualSqlitePersistence', 'actualPathManager', 'actualExternalDataFiles']) assert.equal(reference[flag], true);
+    assert.equal(reference.mediaOpened, false); assert.equal(reference.portOpened, false);
+    for (const sample of reference.observations) {
+      assert.deepEqual(sample.release, { readonlyAttributesReset: true, databaseExclusiveOpen: true });
+      assert.equal(Boolean(sample.readonlyControl), ['later-internal-readonly', 'later-source-readonly'].includes(sample.sample));
+      for (const side of ['before', 'after']) for (const [field, table] of Object.entries(tables)) {
+        for (const row of sample[side][field]) assert.deepEqual(Object.keys(row).sort(), tableDefinition(table).columns.map(column => column.name).sort());
+      }
+    }
+    return { output, reference, nativeSha256: hash(recordedBytes) };
+  })();
+}
 async function tree(root) {
   const entries = [];
   async function visit(folder) {
@@ -64,6 +96,7 @@ const normalizeCalls = calls => calls.map(call => ({ ...call,
 
 test('UnsafeFast seals actual batch preparation, filesystem, SQLite closure, cache and Removed observations', async () => {
   assert.equal(hash(bytes), provenance.nativeSha256); assert.equal(native.observations.length, 13);
+  assert.deepEqual(sampleNames, native.observations.map(sample => sample.sample), 'The live recorder retains all thirteen historical controls in their original order.');
   for (const flag of ['actualLibraryManagerUnsafeFast', 'actualSqlitePersistence', 'actualPathManager', 'actualExternalDataFiles']) assert.equal(native[flag], true);
   assert.equal(native.mediaOpened, false); assert.equal(native.portOpened, false);
   for (const source of provenance.oracleSources) assert.equal(hash(await readFile(source.name === 'Directory.Build.props'
@@ -73,9 +106,10 @@ test('UnsafeFast seals actual batch preparation, filesystem, SQLite closure, cac
   }
 });
 
-for (const sample of native.observations) test('postgres: UnsafeFast matches native ' + sample.sample, {
-  skip: !process.env.MEDIAMANAGER_TEST_POSTGRES,
+for (const sampleName of sampleNames) test('postgres: UnsafeFast matches native ' + sampleName, {
+  skip: !process.env.MEDIAMANAGER_TEST_POSTGRES || !process.env.MEDIAMANAGER_JELLYFIN_DLL, timeout: 180000,
 }, async t => {
+  const recorded = await currentNative(), sample = recorded.reference.observations.find(entry => entry.sample === sampleName);
   const value = await setupChildrenFixture(t), { database, library, store, stateRoot, configuration } = value;
   configuration.CacheSize = 64;
   const creator = new ItemCreationService({ store, library, linkedChildren:value.linkedChildren,loadContext:value.loadContext });
@@ -115,6 +149,11 @@ for (const sample of native.observations) test('postgres: UnsafeFast matches nat
   for (const id of sample.warmed) assert.ok(await creator.getItemById(id));
   if (sample.sample === 'later-internal-readonly') await chmod(path.join(stateRoot, 'metadata/library/ba/ba360000000000000000000000000020/internal.jpg'), 0o444);
   if (sample.sample === 'later-source-readonly') await chmod(path.join(stateRoot, 'metadata/Studio/Second/poster.jpg'), 0o444);
+  if (sample.readonlyControl) {
+    assert.equal(sample.readonlyControl.isReadOnly, true);
+    assert.equal((await stat(path.join(stateRoot, sample.readonlyControl.path))).mode & 0o222, 0,
+      'Both sides apply the actual OS read-only mechanism; its deletion outcome is recorded on this platform.');
+  }
   t.after(async () => { for (const entry of await tree(stateRoot)) if (!entry.directory) await chmod(path.join(stateRoot, entry.path), 0o666); });
   assert.deepEqual(await tree(stateRoot), sample.before.tree);
   const calls = [], deleteFiles = external.deleteItemFiles.bind(external);
@@ -149,9 +188,6 @@ for (const sample of native.observations) test('postgres: UnsafeFast matches nat
       assert.deepEqual((await query("SELECT relname FROM pg_class WHERE relnamespace = pg_my_temp_schema() AND relname LIKE 'mm_%'")).rows, []);
     } finally { store.transaction = transaction; db.client.query = query; }
   });
-  assert.equal(Boolean(failure), Boolean(sample.failure), failure?.stack ?? 'Native failure boundary');
-  if (sample.sample === 'sqlite-trigger-failure') assert.equal(failure?.code, 'P0001');
-  if (sample.sample.endsWith('null-plan') && sample.deleteSourceFiles) assert.equal(failure?.name, 'TypeError');
   const actual = { tree: await tree(stateRoot) }, expected = { tree: sample.after.tree };
   for (const [field, table] of Object.entries(tables)) {
     actual[field] = order(table, (await database.rows(table)).map(row => normalize(table, row)));
@@ -164,15 +200,22 @@ for (const sample of native.observations) test('postgres: UnsafeFast matches nat
     assert.ok(dateTicks(row.RetentionDate) >= dateTicks(sample.started) && dateTicks(row.RetentionDate) <= dateTicks(sample.ended));
     row.RetentionDate = '$DELETION_NOW';
   }
-  assert.deepEqual(actual, expected);
-  assert.deepEqual(calls, normalizeCalls(sample.calls));
   const warmedAfter = [];
   for (const id of sample.warmed) warmedAfter.push({ id: guid(id), exists: await creator.getItemById(id) !== null });
+  const evidence = { actual, calls, warmedAfter, nativeSha256: recorded.nativeSha256,
+    failure: failure ? { name: failure.name, code: failure.code, message: failure.message } : null };
+  await writeFile(path.join(recorded.output, sampleName + '.candidate.json'), encode(evidence) + '\n', { flag: 'wx' });
+  assert.equal(Boolean(failure), Boolean(sample.failure), failure?.stack ?? 'Native failure boundary');
+  if (sample.sample === 'sqlite-trigger-failure') assert.equal(failure?.code, 'P0001');
+  if (sample.sample.endsWith('null-plan') && sample.deleteSourceFiles) assert.equal(failure?.name, 'TypeError');
+  assert.deepEqual(actual, expected);
+  assert.deepEqual(calls, normalizeCalls(sample.calls));
   assert.deepEqual(warmedAfter, sample.warmedAfter.map(row => ({ ...row, id: guid(row.id) })));
+  await writeFile(path.join(recorded.output, sampleName + '.comparison.json'), encode({ passed: true,
+    nativeSha256: recorded.nativeSha256, tables: Object.values(tables), calls: calls.length }) + '\n', { flag: 'wx' });
   if (process.env.MEDIAMANAGER_UNSAFE_FAST_EVIDENCE) {
     await mkdir(process.env.MEDIAMANAGER_UNSAFE_FAST_EVIDENCE, { recursive: true });
-    await writeFile(path.join(process.env.MEDIAMANAGER_UNSAFE_FAST_EVIDENCE, sample.sample + '.json'), encode({ actual, calls, warmedAfter,
-      failure: failure ? { name: failure.name, code: failure.code, message: failure.message } : null }) + '\n', { flag: 'wx' });
+    await writeFile(path.join(process.env.MEDIAMANAGER_UNSAFE_FAST_EVIDENCE, sample.sample + '.json'), encode(evidence) + '\n', { flag: 'wx' });
   }
 });
 

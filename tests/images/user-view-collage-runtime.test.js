@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { createHash } from 'node:crypto';
 import { createCanvas, GlobalFonts, ImageData, loadImage } from '@napi-rs/canvas';
 import { composeUserViewCollage, drawUserViewTitle } from '../../src/images/user-view-collage.js';
+import { loadCollageSystemFace } from '../../src/images/system-fonts/index.js';
 import { MetadataImageAssets } from '../../src/metadata/image-assets.js';
 import { testFileSystem } from '../storage/plugin-files.js';
 import { recordOracle } from '../../tools/validation/oracle.js';
@@ -15,14 +16,6 @@ const width = 960, height = 540;
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const inputFile = new URL('./fixtures/user-view-collage-runtime/input.json', import.meta.url);
 const inputBytes = await readFile(inputFile), input = JSON.parse(inputBytes.toString('utf8'));
-// These same-face titles have independently observed raster-edge differences.
-// Other platforms, text and fallback runs retain the glyph-boundary comparison.
-const singleFaceTitles = {
-  linux: { 'text-18': ['עברית', 'DejaVu Sans'] },
-  darwin: { 'text-12': ['AVATAR', 'Helvetica'] },
-  win32: { 'text-12': ['AVATAR', 'Segoe UI'], 'text-13': ['A very long library name for movies and documentaries', 'Segoe UI'],
-    'text-17': ['العربية', 'Segoe UI'], 'text-18': ['עברית', 'Segoe UI'], 'text-19': ['Հայերեն', 'Segoe UI'] }
-};
 async function decoded(bytes) {
   const image = await loadImage(bytes), canvas = createCanvas(image.width, image.height);
   canvas.getContext('2d').drawImage(image, 0, 0);
@@ -86,60 +79,92 @@ function titleContext(background) {
   context.putImageData(new ImageData(new Uint8ClampedArray(background), width, height), 0, 0);
   return context;
 }
-function observeTitle(context, text) {
-  const draws = [], fillText = context.fillText;
+async function observeTitle(context, text) {
+  const draws = [], fillText = context.fillText, drawImage = context.drawImage;
   context.fillText = function (...args) {
-    draws.push({ args, font: this.font, direction: this.direction, textAlign: this.textAlign,
-      textBaseline: this.textBaseline, fillStyle: this.fillStyle, globalAlpha: this.globalAlpha });
+    const metrics = this.measureText(args[0]), [, x, y] = args;
+    draws.push({ kind: 'text', args, font: this.font, direction: this.direction, textAlign: this.textAlign,
+      textBaseline: this.textBaseline, fillStyle: this.fillStyle, globalAlpha: this.globalAlpha,
+      bounds: { left: x - metrics.actualBoundingBoxLeft, right: x + metrics.actualBoundingBoxRight,
+        top: y - metrics.actualBoundingBoxAscent, bottom: y + metrics.actualBoundingBoxDescent } });
     return fillText.apply(this, args);
   };
-  try { return { layout: drawUserViewTitle(context, text), draws }; }
-  finally { context.fillText = fillText; }
+  context.drawImage = function (layer, ...args) {
+    const pixels = layer.data(), ink = glyphMask(pixels, new Uint8Array(pixels.length));
+    draws.push({ kind: 'glyph-layer', args, width: layer.width, height: layer.height,
+      pixelHash: hash(pixels), ink: { count: ink.count, bounds: ink.bounds }, globalAlpha: this.globalAlpha });
+    return drawImage.call(this, layer, ...args);
+  };
+  try { return { layout: await drawUserViewTitle(context, text), draws }; }
+  finally { context.fillText = fillText; context.drawImage = drawImage; }
 }
-function assertSingleFaceTitle({ specification, row, native, layout, draws, context, background, pixelHash }) {
-  const [text, family] = specification, nativeLayout = row.layout;
-  assert.equal(row.sample.Text, text, 'The observed raster case must retain its reviewed title.');
-  assert.equal(native.defaultFont.FamilyName, family);
-  assert.equal(native.defaultFont.FontWeight, 700);
-  assert.equal(native.defaultFont.FontWidth, 5); assert.equal(native.defaultFont.FontSlant, 0);
-  assert.ok(GlobalFonts.families.find(face => face.family === family)?.styles.some(style => style.weight === 700 && style.width === 'normal' && style.style === 'normal'),
-    'The native default bold face must be registered in Canvas.');
-  assert.match(native.defaultFont.sha256, /^[a-f0-9]{64}$/);
-  assert.deepEqual(native.fallbackFonts.at(-1), native.defaultFont, 'The measured last face must be the actual native default.');
-  const nativeFont = nativeLayout.fontMeasurements.at(-1).at(-1);
-  assert.equal(nativeFont.FamilyName, family); assert.equal(nativeFont.FontWeight, 700);
-  assert.equal(nativeFont.size, nativeLayout.size); assert.equal(nativeFont.containsAll, true);
-  assert.equal(nativeFont.scalars.map(scalar => scalar.text).join(''), text);
-  assert.ok(nativeFont.scalars.every(scalar => scalar.glyph > 0), 'Every character must use a present default-face glyph.');
-  assert.equal(draws.length, 1, 'The complete default-face title must be drawn once.');
-  const draw = draws[0];
-  assert.deepEqual(draw.args, [text, layout.x, layout.y], 'Drawing must retain all text and use the measured anchor without maxWidth scaling.');
-  assert.equal(draw.font, layout.font); assert.match(draw.font, /^bold [\d.]+px /);
-  assert.equal(draw.direction, nativeLayout.direction);
-  assert.equal(draw.textAlign, nativeLayout.direction === 'rtl' ? 'right' : 'left');
-  assert.equal(draw.textBaseline, 'alphabetic'); assert.equal(draw.fillStyle, '#ffffff'); assert.equal(draw.globalAlpha, 1);
-  // Compare layout in raster units, not floating-point representation. The
-  // observed Canvas scalar metrics round to hundredths; this does not permit
-  // a different overflow decision, font size, whole-pixel advance or anchor.
-  for (const key of ['firstSize', 'size']) assert.equal(Math.round(layout[key] * 1000), Math.round(nativeLayout[key] * 1000), `Title ${key} differs.`);
-  for (const key of ['initialWidth', 'beforeFallbackResize', 'measured']) assert.equal(Math.round(layout[key]), Math.round(nativeLayout[key]), `Title ${key} differs.`);
-  const raw = fontMeasurements(text, draw.font, draw.direction);
-  const advance = process.platform === 'linux' ? raw.roundedScalarAdvanceSum : raw.scalarAdvanceSum;
-  assert.equal(Math.round(advance), Math.round(nativeFont.rawWidth), 'The actually drawn font must retain the native raw advance.');
-  const nativeX = nativeLayout.direction === 'rtl' ? width - nativeLayout.padding : nativeLayout.padding;
-  assert.equal(Math.round(draw.args[1]), Math.round(nativeX));
-  assert.ok(Math.abs(draw.args[2] - nativeLayout.y) <= 0.5, 'The observed baseline may differ by at most half a raster row.');
-  assert.equal(hash(context.canvas.data()), pixelHash, 'The captured complete title drawing must reproduce the composed image.');
-  // An explicit face replay also proves which face Canvas actually used for a
-  // generic family. Font strings or returned metrics alone do not prove this.
-  const explicit = titleContext(background);
-  for (const key of ['direction', 'textAlign', 'textBaseline', 'fillStyle', 'globalAlpha']) explicit[key] = draw[key];
-  explicit.font = `700 ${layout.size}px ${JSON.stringify(family)}`;
-  explicit.fillText(...draw.args);
-  assert.equal(hash(explicit.canvas.data()), pixelHash, 'The actual title must use the native default family and bold face.');
+function coloredInk(pixels, background) {
+  let count = 0;
+  for (let offset = 0; offset < pixels.length; offset += 4) {
+    const rgb = [...pixels.subarray(offset, offset + 3)];
+    const coverage = rgb.map((value, channel) => (value - background[offset + channel]) / (255 - background[offset + channel]));
+    // White text over this backdrop has equal coverage in all channels.
+    // Count visibly coloured paint, without requiring a particular palette.
+    if (Math.max(...rgb) - Math.min(...rgb) > 32 && Math.max(...coverage) - Math.min(...coverage) > 0.1) count++;
+  }
+  return count;
+}
+async function assertTitleDrawing({ row, layout, draws, context, pixelHash, ink }) {
+  const text = row.sample.Text;
+  assert.equal(hash(context.canvas.data()), pixelHash, 'Captured actual title calls must reproduce the composed image.');
+  assert.ok(layout.runs.map(run => run.text).join('').startsWith(text), 'The complete input title must be passed to drawing in order.');
+  assert.equal(draws.length, layout.runs.length);
+  assert.ok(Number.isFinite(layout.size) && layout.size > 0 && layout.size <= 112);
+  assert.ok(layout.measured > 0 && layout.measured <= width * 0.95 + 1, 'The measured title must fit the available width.');
+  assert.ok(layout.padding >= 0 && layout.x > 0 && layout.x < width);
+  assert.ok(layout.y > height / 4 && layout.y < height * 3 / 4, 'The title must remain in the central band.');
+  assert.equal(layout.direction, row.layout.direction, 'The title must retain its semantic direction.');
+  assert.ok(ink.count > 0);
+  assert.ok(ink.bounds.left > 0 && ink.bounds.top > 0 && ink.bounds.right < width - 1 && ink.bounds.bottom < height - 1,
+    'Visible title content must remain inside the image without clipping.');
+  const clusters = [...new Intl.Segmenter('und', { granularity: 'grapheme' }).segment(text)].map(row => row.segment);
+  for (const cluster of clusters) assert.ok(layout.runs.some(run => run.text.includes(cluster)), 'A grapheme must not be split between drawing calls.');
+  for (let index = 0; index < layout.runs.length; index++) {
+    const run = layout.runs[index], draw = draws[index];
+    assert.ok(text.includes(run.text), 'Drawing must not substitute unrelated text.');
+    assert.equal(draw.globalAlpha, 1);
+    if (draw.kind === 'text') {
+      assert.equal(run.backend, 'canvas-text');
+      assert.deepEqual(draw.args, [run.text, run.x, run.y], 'The real text call must retain all characters without maxWidth scaling.');
+      assert.equal(draw.font, run.font);
+      assert.equal(draw.direction, layout.direction);
+      assert.equal(draw.textAlign, layout.direction === 'rtl' ? 'right' : 'left');
+      assert.equal(draw.textBaseline, 'alphabetic'); assert.equal(draw.fillStyle, '#ffffff');
+    } else {
+      assert.equal(draw.kind, 'glyph-layer'); assert.equal(run.backend, 'coretext-glyphs');
+      assert.deepEqual(draw.args, [0, 0]); assert.equal(draw.width, width); assert.equal(draw.height, height);
+      assert.match(draw.pixelHash, /^[a-f0-9]{64}$/);
+      if (run.text.trim()) assert.ok(draw.ink.count > 0, 'Every nonblank run must produce actual paint.');
+      assert.equal(run.shaped.glyphs.length, run.shaped.positions.length);
+      const loaded = await loadCollageSystemFace(run.face);
+      if (loaded.containsGlyphs(run.text)) assert.ok(run.shaped.glyphs.every(glyph => glyph > 0), 'Available characters must not become missing-glyph boxes.');
+      if (/^[\p{Script=Arabic}\p{Script=Hebrew}\p{Mark}\s]+$/u.test(run.text)) {
+        assert.ok(run.shaped.clusters.every((cluster, index, values) => index === 0 || cluster <= values[index - 1]),
+          'An Arabic or Hebrew word must retain right-to-left character order.');
+      }
+      // A joined emoji may use one glyph or several overlaid glyphs. A skin
+      // tone or gender symbol must not be advanced as a separate character.
+      for (const cluster of clusters.filter(value => value.includes('\u200d') && run.text.includes(value))) {
+        const start = Buffer.byteLength(run.text.slice(0, run.text.indexOf(cluster)));
+        const end = start + Buffer.byteLength(cluster);
+        const glyphs = run.shaped.glyphs.map((glyph, index) => ({ glyph, point: run.shaped.positions[index], cluster: run.shaped.clusters[index] }))
+          .filter(glyph => glyph.cluster >= start && glyph.cluster < end);
+        assert.ok(glyphs.length > 0 && glyphs.every(glyph => glyph.glyph > 0), 'A supported emoji cluster must not contain missing glyphs.');
+        const parts = [...cluster].filter(value => /\p{Emoji_Modifier}|[\u2640\u2642]/u.test(value)).map(value => loaded.glyphForCodepoint(value.codePointAt(0)));
+        for (const part of glyphs.filter(glyph => parts.includes(glyph.glyph))) {
+          assert.ok(Math.abs(part.point.x - glyphs[0].point.x) < run.size / 2, 'An emoji modifier must remain part of the joined symbol.');
+        }
+      }
+    }
+  }
 }
 
-test('UserView thumbnails match the same-platform native selection, crop and title layout', async t => {
+test('UserView thumbnails preserve source selection, crop and complete readable titles', async t => {
   assert.ok(process.env.MEDIAMANAGER_JELLYFIN_DLL, 'Live collage comparison requires the isolated native reference build.');
   await access(process.env.MEDIAMANAGER_JELLYFIN_DLL);
   const output = path.join(validationOutputRoot(), 'user-view-collage-runtime'); await mkdir(output);
@@ -172,6 +197,7 @@ test('UserView thumbnails match the same-platform native selection, crop and tit
       assert.equal(failure.message, row.error.Message); return;
     }
     assert.ifError(failure);
+    assert.deepEqual(candidate.subarray(0, 8), Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]), 'The thumbnail must remain a PNG.');
     await writeFile(path.join(candidateRoot, row.sample.Name + '.png'), candidate, { flag: 'wx' });
     const actual = await decoded(candidate), expected = await decoded(await readFile(path.join(nativeRoot, row.sample.Name + '.png')));
     observation.sha256 = hash(candidate); observation.pixelHash = hash(actual.pixels);
@@ -189,9 +215,8 @@ test('UserView thumbnails match the same-platform native selection, crop and tit
       }
     }
     if (row.layout) {
-      const specification = singleFaceTitles[process.platform]?.[row.sample.Name];
-      const context = specification ? titleContext(candidateBackground) : createCanvas(width, height).getContext('2d');
-      const { layout, draws } = observeTitle(context, row.sample.Text);
+      const context = titleContext(candidateBackground);
+      const { layout, draws } = await observeTitle(context, row.sample.Text);
       observation.candidateLayout = layout;
       observation.candidateDraws = draws;
       // Diagnostic probes use the actual installed font collection. The native
@@ -206,27 +231,13 @@ test('UserView thumbnails match the same-platform native selection, crop and tit
       const actualInk = glyphMask(actual.pixels, candidateBackground), expectedInk = glyphMask(expected.pixels, nativeBackground);
       observation.ink = { actual: { bounds: actualInk.bounds, count: actualInk.count }, expected: { bounds: expectedInk.bounds, count: expectedInk.count },
         extra: unmatchedInk(actualInk.mask, expectedInk.mask), missing: unmatchedInk(expectedInk.mask, actualInk.mask) };
-      assert.equal(layout.direction, row.layout.direction);
-      assert.ok(actualInk.count > 0 && expectedInk.count > 0, 'Both renderers must produce visible title glyphs.');
-      assert.equal(layout.size < 112, row.layout.size < 112, 'The title must take the native overflow branch.');
-      assert.ok(Math.abs(layout.y - row.layout.y) <= 1, 'The baseline must agree within one raster row.');
-      if (specification) {
-        assertSingleFaceTitle({ specification, row, native, layout, draws, context,
-          background: candidateBackground, pixelHash: observation.pixelHash });
-        observation.titleContract = 'complete-default-face-drawing';
-        // RGB and glyph-mask differences remain recorded above. For these
-        // proven same-face drawings they describe rasterization, not missing
-        // text, fallback, sizing or placement.
-        return;
+      assert.ok(expectedInk.count > 0, 'The native reference must contain title content.');
+      await assertTitleDrawing({ row, layout, draws, context, pixelHash: observation.pixelHash, ink: actualInk });
+      if (/\p{Extended_Pictographic}/u.test(row.sample.Text)) {
+        observation.color = { actual: coloredInk(actual.pixels, candidateBackground), expected: coloredInk(expected.pixels, nativeBackground) };
+        if (observation.color.expected > 0) assert.ok(observation.color.actual > 0, 'Available colour emoji must retain visible colour.');
       }
-      // This is a title geometry comparison, not a general image tolerance.
-      // Allow a single boundary pixel for coverage/rasterization, but require
-      // every glyph's occupied region and placement in both directions.
-      for (const edge of ['left', 'top', 'right', 'bottom']) {
-        assert.ok(Math.abs(actualInk.bounds[edge] - expectedInk.bounds[edge]) <= 1, `Title ${edge} bound differs.`);
-      }
-      assert.equal(observation.ink.extra, 0, 'Candidate title has ink beyond the native glyph boundary.');
-      assert.equal(observation.ink.missing, 0, 'Candidate title omits native glyphs or moves their boundaries.');
+      observation.titleContract = 'complete-visible-title';
     }
   });
   await writeFile(path.join(output, 'comparison.json'), JSON.stringify({ recording, nativeSha256: hash(nativeBytes),

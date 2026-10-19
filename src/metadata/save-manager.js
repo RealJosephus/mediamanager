@@ -58,7 +58,7 @@ export async function saveMetadata(item, updateType, savers, { now = () => new D
   const outcomes = [];
   for (const saver of applicable) {
     let path;
-    try { path = saver.getSavePath?.(item, context); }
+    try { path = saver.getMonitorPath ? saver.getMonitorPath(item, context) : saver.getSavePath?.(item, context); }
     catch (error) { logger.error(error, 'Error resolving metadata save path'); outcomes.push({ saver: saver.id, error }); continue; }
     try {
       if (path != null) monitor.reportFileSystemChangeBeginning?.(path);

@@ -1,77 +1,67 @@
 // Thumb collage layout follows Jellyfin.Drawing.Skia/StripCollageBuilder.cs (GPL-2.0-or-later).
-import { readFileSync } from 'node:fs';
-import { createCanvas, GlobalFonts, ImageData } from '@napi-rs/canvas';
+import { createCanvas, ImageData } from '@napi-rs/canvas';
 import { nextSplashscreenImage } from './splashscreen.js';
 import { blendBlackForeground, renderPixels, stripCanvasColorProfile } from './renderer.js';
 import { clrTrim } from '../metadata/whitespace.js';
-import { collageFontFiles, fontCollectionFaces } from './font-collection.js';
+import { collageTextRuns } from './collage-fonts.js';
+import { resolveCollageSystemFonts, loadCollageSystemFace } from './system-fonts/index.js';
+import { measureCollageText, shapeCollageText, drawCollageText } from './system-fonts/text.js';
 
 const width = 960, height = 540;
 const rtl = /[\u0600-\u06ff\u0530-\u058f\u0590-\u05ff\u0700-\u074f\u0780-\u07bf]/u;
-let fontsRegistered = false;
-
-function registerCollageFonts() {
-  if (fontsRegistered) return;
-  for (const filename of collageFontFiles()) {
-    const faces = [...fontCollectionFaces(readFileSync(filename))];
-    for (const face of faces) {
-      if (!GlobalFonts.register(face)) throw new Error(`Could not register a system font collection face: ${filename}`);
-    }
-  }
-  fontsRegistered = true;
+let fonts;
+function titleFonts() {
+  return fonts ??= (async () => {
+    const selected = await resolveCollageSystemFonts(), loaded = new Map();
+    const load = async descriptor => {
+      if (!descriptor) return null;
+      if (!loaded.has(descriptor)) loaded.set(descriptor, loadCollageSystemFace(descriptor).then(face => ({ ...face, descriptor })));
+      return loaded.get(descriptor);
+    };
+    const defaultFace = await load(selected.defaultFace);
+    if (!defaultFace) throw new Error('The system has no default collage font.');
+    return { defaultFace, fallbackFaces: await Promise.all(selected.fallbackFaces.map(load)) };
+  })();
 }
 
-function unshapedWidth(context, text, size) {
-  // SKFont.MeasureText maps Unicode scalars to glyph advances without shaping.
-  // Measuring the whole string in Canvas instead includes kerning, ligatures
-  // and Arabic joining, changing both the overflow branch and its anchor.
-  // FreeType first selects an integer ppem for its hinted metrics. Rounding
-  // advances at the fractional rendering size instead shifts long titles.
-  const hinted = process.platform === 'linux', originalFont = context.font;
-  if (hinted) context.font = originalFont.replace(/[\d.]+px/, `${Math.max(1, Math.round(size))}px`);
-  let measured = 0;
-  try {
-    for (const scalar of text) {
-      const advance = context.measureText(scalar).width;
-      measured += hinted ? Math.round(advance) : advance;
-    }
-  } finally {
-    context.font = originalFont;
-  }
-  return hinted && size < 1 ? measured * size : measured;
-}
-
-export function drawUserViewTitle(context, name) {
+export async function drawUserViewTitle(context, name) {
   if (name == null || !clrTrim(name)) return null;
-  registerCollageFonts();
-  // NAPI's registered-font collection does not share the operating system's
-  // generic-family aliases used by Skia's native font manager.
-  const family = process.platform === 'win32' ? '"Segoe UI"' : process.platform === 'darwin' ? '"Helvetica"' : 'sans-serif';
+  const { defaultFace, fallbackFaces } = await titleFonts();
+  const runs = collageTextRuns(name, defaultFace, fallbackFaces);
   const direction = rtl.test(name) ? 'rtl' : 'ltr';
-  context.direction = direction; context.textBaseline = 'alphabetic';
   let size = 112;
-  context.font = `bold ${size}px ${family}`;
-  const initialWidth = unshapedWidth(context, name, size);
+  const initialWidth = (await measureCollageText(defaultFace.descriptor, name, size)).width;
   if (initialWidth > width * 0.95) {
     size = 0.9 * width * size / initialWidth;
-    context.font = `bold ${size}px ${family}`;
   }
   const firstSize = size;
-  let measured = unshapedWidth(context, name, size);
+  const measure = async () => {
+    let total = 0;
+    for (const run of runs) total += (await measureCollageText(run.face.descriptor, run.text, size)).width;
+    return total;
+  };
+  let measured = await measure();
   const beforeFallbackResize = measured;
   if (measured > width * 0.95) {
     size = 0.9 * width * size / measured;
-    context.font = `bold ${size}px ${family}`;
-    measured = unshapedWidth(context, name, size);
+    measured = await measure();
   }
   // X height belongs to the selected face; it is not always half an em.
-  const xHeight = context.measureText('x').actualBoundingBoxAscent;
+  const defaultMetrics = await measureCollageText(defaultFace.descriptor, 'x', size), xHeight = defaultMetrics.xHeight;
   const padding = (width - measured) / 2;
   const x = direction === 'rtl' ? width - padding : padding, y = height / 2 + xHeight / 2;
-  context.fillStyle = '#ffffff';
-  // Native DrawShapedText aligns the shaped run at the unshaped-width anchor.
-  context.textAlign = direction === 'rtl' ? 'right' : 'left'; context.fillText(name, x, y);
-  return { font: context.font, direction, initialWidth, firstSize, beforeFallbackResize, size, measured, xHeight, padding, x, y };
+  let advance = 0;
+  const drawing = [];
+  for (const run of runs) {
+    const face = run.face.descriptor, origin = direction === 'rtl' ? x - advance : x + advance;
+    const metrics = await measureCollageText(face, run.text, size);
+    const shaped = await shapeCollageText(face, run.text, size, origin, y, direction);
+    const output = await drawCollageText(context, face, run.text, size, origin, y, direction, shaped);
+    drawing.push({ text: run.text, face, x: origin, y, size, measured: metrics.width, nominalGlyphs: metrics.glyphs,
+      nominalAdvances: metrics.advances, shaped, ...output });
+    advance += metrics.width;
+  }
+  return { font: defaultMetrics.font, direction, initialWidth, firstSize, beforeFallbackResize, size, measured, xHeight, padding, x, y, runs: drawing };
 }
 
 /** Compose a library thumbnail from existing static image assets. */
@@ -92,6 +82,6 @@ export async function composeUserViewCollage(paths, name, { assets }) {
     { Width: width, Height: backdropHeight }, {});
   context.drawImage(backdrop, 0, 0);
   context.putImageData(new ImageData(new Uint8ClampedArray(blendBlackForeground(canvas.data(), 0x78)), width, height), 0, 0);
-  drawUserViewTitle(context, name);
+  await drawUserViewTitle(context, name);
   return stripCanvasColorProfile(await canvas.encode('png'), 'Png');
 }

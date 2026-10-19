@@ -17,7 +17,6 @@ import { ItemUpdateType } from '../../src/metadata/save-manager.js';
 import { dateTicks, idKey, MIN_DATE } from '../../src/library/records.js';
 import { internalImagePath } from '../../src/metadata/image-paths.js';
 import { withUserViewImageCandidates } from '../../src/library/user-view-image-query.js';
-import { composeUserViewCollage } from '../../src/images/user-view-collage.js';
 import { nativeTextBytes } from '../../src/database/native-text.js';
 
 const nativeBytes = await readFile(new URL('./fixtures/user-view-dynamic/native.json', import.meta.url));
@@ -80,7 +79,7 @@ async function fixture(t) {
   await database.insert('BaseItems', view);
   const user = { Id: id(100), Configuration: {}, Policy: { EnableAllFolders: true, EnabledFolders: [], BlockedMediaFolders: [], BlockedTags: [], AllowedTags: [], BlockUnratedItems: [] } };
   const users = { getUser: async userId => { assert.equal(idKey(userId), idKey(user.Id)); return user; } };
-  const provider = createUserViewDynamicImagePlugin({ library, users, compose: composeUserViewCollage }).providers[0];
+  const provider = createUserViewDynamicImagePlugin({ library, users }).providers[0];
   return { database, library, provider, user, directory, errors, view: { Id: view.Id, Type: 'UserView', ViewType: 'movies', DisplayParentId: id(3) } };
 }
 test('dynamic images use actual recursive movie/TV queries, including the frozen null-user failure', async t => {
@@ -126,8 +125,9 @@ test('a genuine local source image creates and saves a UserView thumbnail for mo
   await database.update('BaseItems', { Id: view.Id }, { Data: JSON.stringify({ ViewType: 'playlists', DisplayParentId: idKey(id(3)) }) });
   assert.equal(await provider.fetch({ ...view, ViewType: 'playlists' }, { images }), ItemUpdateType.ImageUpdate);
   const production = createUserViewDynamicImagePlugin({ library, users: { getUser: async () => user } }).providers[0];
-  await assert.rejects(production.fetch({ ...view, ViewType: 'playlists' }, { images }),
-    error => error.status === 501 && error.message === 'UserView image collage creation is not implemented.');
+  assert.equal(await production.fetch({ ...view, Name: 'Movies 中影', ViewType: 'playlists' }, { images }), ItemUpdateType.ImageUpdate);
+  assert.deepEqual(await sharp(await readFile(images[0].Path)).metadata().then(({ width, height }) => ({ width, height })), { width: 960, height: 540 });
+  assert.deepEqual(await readdir(path.join(directory, 'cache', 'temp')), []);
 });
 test('a remote image source changes the candidate set but produces no local collage input', async t => {
   const { provider, database, view, user } = await fixture(t);

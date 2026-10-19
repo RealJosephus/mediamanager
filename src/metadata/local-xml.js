@@ -132,6 +132,7 @@ export function createLocalXmlPlugin({ vfs, fileSystem, externalIdInfos, spoolRo
     id, name: providerName, kind: 'saver', itemTypes: [itemType], save,
     validateSave: validateDestination,
     getSavePath: (item, context = {}) => destinationPath(item, context),
+    getMonitorPath: (item, context = {}) => localXmlSavePath(item, { playlistFile: context.playlistFile }),
     isEnabledFor: item => item.SupportsLocalMetadata === true && typeOf(item) === itemType
   });
   const boxSet = provider('BoxSetXmlSaver', 'BoxSet');

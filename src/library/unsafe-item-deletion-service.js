@@ -105,7 +105,9 @@ export class UnsafeItemDeletionService {
             const item = state.byId.get(idKey(readRows([page[index]])[0].Id));
             if (!item) throw new TypeError('Unsafe deletion could not hydrate its selected root.');
             const slot=await cohort.capture(item,{ordinal:BigInt(page[index].__ordinal)});
-            const internalPaths = this.externalData.internalPaths(item);
+            const internalPaths = await this.externalData.internalPaths(item, {
+              getMediaSources: value => this.library.getLiveMediaSources(value)
+            });
             const sourcePaths = deleteSourceFiles ? await this.#sourcePaths(item) : [];
             await db.client.query({ text: `INSERT INTO ${work} VALUES ($1, $2, $3, $4)`,
               values: [page[index].__ordinal, slot, serialize(internalPaths), serialize(sourcePaths)] });

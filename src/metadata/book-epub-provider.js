@@ -1,3 +1,4 @@
+import path from 'node:path';
 import { imagePathApi } from './image-assets.js';
 import { parseOpfDocument, readOpfMetadata, readOpfCoverPath, readEpubContentPath } from './opf-reader.js';
 
@@ -5,9 +6,18 @@ const noMetadata = () => ({ HasMetadata: false, Item: null, People: null, Result
 const isEpub = item => imagePathApi(item.Path).extname(item.Path ?? '').toLowerCase() === '.epub';
 const formatMimeType = mimeType => /gif$/iu.test(mimeType) ? 'image/gif' : /bmp$/iu.test(mimeType) ? 'image/bmp' : /png$/iu.test(mimeType) ? 'image/png' : 'image/jpeg';
 const directoryName = filename => {
+  if (!filename || filename === path.parse(filename).root) return null;
+  if (process.platform !== 'win32') {
+    const separator = filename.lastIndexOf('/');
+    if (separator < 0) return '';
+    return filename.slice(0, separator).replace(/\/+/gu, '/').replace(/\/$/u, '') || '/';
+  }
   const separator = Math.max(filename.lastIndexOf('/'), filename.lastIndexOf('\\'));
   return separator < 0 ? '' : filename.slice(0, separator).replaceAll('/', '\\');
 };
+// Native archive entry lookup uses host Path.Combine, independently of the
+// identity style used to access the EPUB file through the storage mapping.
+const containerKey = path.join('META-INF', 'container.xml');
 
 export function createBookEpubPlugin({ openArchive, logger = { error() {} } } = {}) {
   if (typeof openArchive !== 'function') throw new TypeError('Book EPUB requires original-media archive access.');
@@ -20,7 +30,7 @@ export function createBookEpubPlugin({ openArchive, logger = { error() {} } } = 
       // Cancellation is first checked by OpfReader after XML loading.
       const archive = await openArchive(item, { zipOnly: true });
       try {
-        const container = archive.findEntry('META-INF\\container.xml'); if (!container) return noMetadata();
+        const container = archive.findEntry(containerKey); if (!container) return noMetadata();
         const filename = readEpubContentPath(parseOpfDocument(await archive.read(container)));
         if (filename == null) return noMetadata();
         const entry = archive.findEntry(filename); if (!entry) return noMetadata();
@@ -35,11 +45,12 @@ export function createBookEpubPlugin({ openArchive, logger = { error() {} } } = 
       signal?.throwIfAborted();
       const archive = await openArchive(item, { signal, zipOnly: true });
       try {
-        const container = archive.findEntry('META-INF\\container.xml'); if (!container) return null;
+        const container = archive.findEntry(containerKey); if (!container) return null;
         const filename = readEpubContentPath(parseOpfDocument(await archive.read(container)));
         if (filename == null) return null;
+        const directory = directoryName(filename); if (directory == null) return null;
         const entry = archive.findEntry(filename); if (!entry) return null;
-        const reference = readOpfCoverPath(parseOpfDocument(await archive.read(entry, { signal })), directoryName(filename));
+        const reference = readOpfCoverPath(parseOpfDocument(await archive.read(entry, { signal })), directory);
         if (!reference) return null;
         const image = archive.findEntry(reference.path); if (!image) return null;
         return { bytes: await archive.read(image, { signal }), mimeType: formatMimeType(reference.mimeType) };

@@ -110,6 +110,7 @@ test('postgres: actual Series cleanup promotes a linked episode and reroutes its
     sources: 'Emby.Server.Implementations.Library.MediaSourceManager',
     segments: 'Jellyfin.Server.Implementations.MediaSegments.MediaSegmentManager'
   });
+  assert.deepEqual(expected.configurationControls, { preferredMetadataLanguage: 'en' });
   const before = expected.before.sql.result, after = expected.after.sql.result;
   for (const table of ['MediaStreamInfos', 'AttachmentStreamInfos', 'MediaSegments']) assert.deepEqual(before[table], [],
     'The metadata-only fixture has no probed media or extracted segment state.');
@@ -163,7 +164,7 @@ test('postgres: actual Series cleanup promotes a linked episode and reroutes its
   const errors = [];
   runtime = await createRuntime({ database, programDataPath: programRoot,
     configurationDirectoryPath: path.join(programRoot, 'config'), storageConfiguration, serverId: 'series-cleanup',
-    configuration: { UICulture: 'en-US', MetadataCountryCode: 'US', IsStartupWizardCompleted: true,
+    configuration: { UICulture: 'en-US', MetadataCountryCode: 'US', PreferredMetadataLanguage: 'en', IsStartupWizardCompleted: true,
       EnableCaseSensitiveItemIds: true, EnableNormalizedItemByNameIds: true, LibraryScanFanoutConcurrency: 1,
       DisabledMetadataSavers: ['Emby Xml'] },
     onError: error => errors.push(error?.stack ?? String(error)) });
@@ -216,6 +217,8 @@ test('postgres: actual Series cleanup promotes a linked episode and reroutes its
     try {
       const enabled = [];
       assert.deepEqual(loaded.globalOptions.DisabledMetadataSavers, ['Emby Xml']);
+      assert.equal(loaded.item.MetadataLanguage, expected.configurationControls.preferredMetadataLanguage,
+        'Series grouping uses the same actual inherited metadata language as the native host.');
       for (const saver of runtime.metadata.registry.discover({ ...loaded, kind: 'saver' })) {
         for (const [reason, value] of Object.entries(ItemUpdateType)) if (await isSaverEnabled(saver, loaded.item, value, loaded)) {
           enabled.push({ id: saver.id, reason });
@@ -235,8 +238,13 @@ test('postgres: actual Series cleanup promotes a linked episode and reroutes its
   finally { await childSequence.close(); }
   setFolderChildren(season, children); season.UserData = [];
   assert.deepEqual(children.map(item => idKey(item.Id)), expected.before.parentChildren.map(idKey));
-  const episodeSources = children.map(item => ({ id: idKey(item.Id), sourceType: item.SourceType }))
-    .sort((left, right) => left.id.localeCompare(right.id));
+  // Folder.Children intentionally omits a linked alternate. Native recording
+  // controls inspect both Episode objects independently of that cached view.
+  const episodeSources = [];
+  for (const number of [3, 4]) episodeSources.push(await creator.withItem(id(number), item => {
+    assert.ok(item); return { id: idKey(item.Id), sourceType: item.SourceType };
+  }));
+  await writeFile(path.join(output, 'episode-source-controls.json'), json(episodeSources), { flag: 'wx' });
   assert.deepEqual(episodeSources, expected.recordingControls.episodes.map(({ id, sourceType }) => ({ id: idKey(id), sourceType })));
   const removal = [], events = [];
   for (const [event, action] of [['ItemAdded', 'added'], ['ItemUpdated', 'updated'], ['ItemRemoved', 'removed']]) runtime.library.on(event, ({ Item, Parent }) => {

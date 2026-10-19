@@ -61,7 +61,7 @@ export class PeopleMetadataLifecycleHost {
   async runSavers(loaded, reason) {
     const savers = this.updates.registry?.discover({ ...loaded, kind: 'saver' }) ?? [];
     if (loaded.item.IsFileProtocol) await saveMetadata(loaded.item, reason, savers, { ...loaded,
-      now: this.updates.now, logger: this.updates.logger });
+      now: this.updates.now, logger: this.updates.logger, monitor: this.updates.monitor });
     const images = loaded.context.images;
     const imageLoaded = { ...loaded, onImageRemoteChange: async () => {
       // Native ConvertImageToLocal independently updates the Person before

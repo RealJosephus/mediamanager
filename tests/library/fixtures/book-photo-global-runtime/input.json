@@ -1,0 +1,597 @@
+{
+  "culture": "en-US",
+  "mediaMutationTimeStepSeconds": 2,
+  "assets": [
+    {
+      "id": "cover",
+      "filename": "assets/cover.png",
+      "bytes": 8787,
+      "sha256": "f56b8c908ee572720fdfc3f6550be78a9fce29d850b9a38d945b08bf56a5c7af"
+    },
+    {
+      "id": "plain-photo",
+      "filename": "assets/plain-photo.jpg",
+      "bytes": 268,
+      "sha256": "a729b8340d27546ad6280e36b9cbe69b739c8f261e6c9fd09dc169ec386d9fb9"
+    },
+    {
+      "id": "rich-photo",
+      "filename": "assets/rich-photo.jpg",
+      "bytes": 1840,
+      "sha256": "6999f5a213f39a41fba09ee9d1f5a987bbe80dc5e9651abb8744bc971cf2398a"
+    },
+    {
+      "id": "oriented-photo",
+      "filename": "assets/oriented-photo.jpg",
+      "bytes": 316,
+      "sha256": "3ea14c8406697c22d53839e51ec96631fa87f3e515868775c65ead0b2754db48"
+    },
+    {
+      "id": "invalid-photo",
+      "filename": "assets/invalid-photo.jpg",
+      "bytes": 13,
+      "sha256": "44275f51235c3c76d7349f2e74a03a36e664db90550072d1a79942302f3739ef"
+    },
+    {
+      "id": "epub-positive",
+      "filename": "assets/epub-positive.epub",
+      "bytes": 1119,
+      "sha256": "de9955fc668dbda33334d579d3560c24940c3aa384ec5b63606d6f6fd93d1228"
+    },
+    {
+      "id": "epub-standard-slashes",
+      "filename": "assets/epub-standard-slashes.epub",
+      "bytes": 735,
+      "sha256": "8f00f74fcdc3f47bd23ff590b8f206f2375120be8233a4f259f2412cbc5d4311"
+    },
+    {
+      "id": "epub-malformed",
+      "filename": "assets/epub-malformed.epub",
+      "bytes": 17,
+      "sha256": "4405d141e06d03ca972fc90ad9d61db24399ef5e48269da27b1852124d0029be"
+    }
+  ],
+  "declaredSeams": [
+    "Shared NativeScanHost owns actual CoreAppHost resolver discovery, concrete LibraryManager, real root/default/{library} .mblink discovery, actual Folder/global traversal, EF SQLite and native persistence. No traversal or provider response is synthesized.",
+    "LibrarySeed writes actual CollectionFolder library options. SaveLocalMetadata and EnablePhotos are controlled input configuration, not ILibraryManager return-value proxies.",
+    "BookPhotoProviders appends real native local providers/services and actual LocalImageProvider/ImageProcessor/Skia. Equal-priority local Book order follows retained actual CoreAppHost discovery evidence: Comic, EPUB, OPF.",
+    "No Internet metadata providers, plugin downloads or hosted HTTP are installed in this first compound. Shared host must reject every outbound HTTP attempt. Network denial must not become a successful provider response.",
+    "Shared S1 posttasks may be two declared sentinels. Their presence is not full posttask acceptance. Watcher/timers and startup tasks stay under shared-host explicit qualification.",
+    "Input file bytes, names, timestamps and mutations are controlled only inside a fresh case media root. Media and internal metadata roots remain physically separate. Future candidate validation must map original media and metadata sidecars independently.",
+    "Each host anchors media-copy/comic mtimes to its case-start UTC whole second, minus remaining scan steps times mediaMutationTimeStepSeconds. Replacements therefore exceed BaseItem.HasChanged's one-second threshold without sleeps or future mtimes. Actual filesystem timestamps are read back and recorded. Text/OPF/XML writes and DateLastSaved retain their real wall clocks.",
+    "This preparation has no native output or acceptance counts. Fresh actual execution, full source/build closure, raw stdout/stderr/receipt, loaded assemblies, files and SQLite hashes must be bound later before candidate comparison."
+  ],
+  "cases": [
+    {
+      "name": "book-comic-internal",
+      "collectionType": "books",
+      "saveLocalMetadata": false,
+      "steps": [
+        {
+          "name": "empty-first-scan",
+          "changes": []
+        },
+        {
+          "name": "discover-comic",
+          "changes": [
+            {
+              "kind": "comic",
+              "path": "Subjects/Story.cbz",
+              "asset": "cover",
+              "text": "<ComicInfo><Title>First Comic Title</Title><Series>Scan Saga</Series><Number>2</Number><Writer>Native Writer</Writer><Genre>Adventure,Science</Genre></ComicInfo>"
+            }
+          ]
+        },
+        {
+          "name": "repeat-without-input-change",
+          "changes": []
+        },
+        {
+          "name": "replace-comic-input",
+          "changes": [
+            {
+              "kind": "comic",
+              "path": "Subjects/Story.cbz",
+              "asset": "cover",
+              "text": "<ComicInfo><Title>Changed Comic Title</Title><Series>Scan Saga</Series><Number>2</Number><Writer>Native Writer</Writer><Genre>Adventure,Science</Genre></ComicInfo>"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "book-comic-local-cover",
+      "collectionType": "books",
+      "saveLocalMetadata": true,
+      "steps": [
+        {
+          "name": "empty-first-scan",
+          "changes": []
+        },
+        {
+          "name": "discover-comic",
+          "changes": [
+            {
+              "kind": "comic",
+              "path": "Subjects/Story.cbz",
+              "asset": "cover",
+              "text": "<ComicInfo><Title>Local Cover Comic</Title><Series>Scan Saga</Series><Number>2</Number><Writer>Native Writer</Writer><Genre>Adventure,Science</Genre></ComicInfo>"
+            }
+          ]
+        },
+        {
+          "name": "repeat-without-input-change",
+          "changes": []
+        }
+      ]
+    },
+    {
+      "name": "book-local-reader-precedence",
+      "collectionType": "books",
+      "steps": [
+        {
+          "name": "empty-first-scan",
+          "changes": []
+        },
+        {
+          "name": "discover-three-reader-inputs",
+          "changes": [
+            {
+              "kind": "comic",
+              "path": "Subjects/Story.cbz",
+              "asset": "cover",
+              "text": "<ComicInfo><Title>Embedded Comic</Title><Series>Scan Saga</Series><Number>2</Number><Writer>Native Writer</Writer><Genre>Adventure,Science</Genre></ComicInfo>"
+            },
+            {
+              "kind": "text",
+              "path": "Subjects/Story.xml",
+              "text": "<ComicInfo><Title>External Comic</Title><Series>Scan Saga</Series><Number>2</Number><Writer>Native Writer</Writer><Genre>Adventure,Science</Genre></ComicInfo>"
+            },
+            {
+              "kind": "text",
+              "path": "Subjects/Story.opf",
+              "text": "<package xmlns=\"http://www.idpf.org/2007/opf\" version=\"2.0\"><metadata xmlns:dc=\"http://purl.org/dc/elements/1.1/\"><dc:title>External OPF</dc:title><dc:creator>Native OPF Writer</dc:creator><dc:language>en-US</dc:language><dc:subject>Scan Genre</dc:subject></metadata></package>"
+            }
+          ]
+        },
+        {
+          "name": "repeat-without-input-change",
+          "changes": []
+        },
+        {
+          "name": "remove-external-comic",
+          "changes": [
+            {
+              "kind": "remove-file",
+              "path": "Subjects/Story.xml"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "book-epub-positive",
+      "collectionType": "books",
+      "steps": [
+        {
+          "name": "empty-first-scan",
+          "changes": []
+        },
+        {
+          "name": "discover-epub",
+          "changes": [
+            {
+              "kind": "copy",
+              "path": "Subjects/Story.epub",
+              "asset": "epub-positive"
+            }
+          ]
+        },
+        {
+          "name": "repeat-without-input-change",
+          "changes": []
+        },
+        {
+          "name": "remove-epub",
+          "changes": [
+            {
+              "kind": "remove-file",
+              "path": "Subjects/Story.epub"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "book-epub-separator-control",
+      "collectionType": "books",
+      "steps": [
+        {
+          "name": "empty-first-scan",
+          "changes": []
+        },
+        {
+          "name": "discover-standard-container-keys",
+          "changes": [
+            {
+              "kind": "copy",
+              "path": "Subjects/Story.epub",
+              "asset": "epub-standard-slashes"
+            }
+          ]
+        },
+        {
+          "name": "repeat-without-input-change",
+          "changes": []
+        }
+      ]
+    },
+    {
+      "name": "book-collapse-expand",
+      "collectionType": "books",
+      "steps": [
+        {
+          "name": "empty-first-scan",
+          "changes": []
+        },
+        {
+          "name": "single-book-directory",
+          "changes": [
+            {
+              "kind": "copy",
+              "path": "Subjects/Novel/edition.epub",
+              "asset": "epub-positive"
+            }
+          ]
+        },
+        {
+          "name": "second-book-expands-folder",
+          "changes": [
+            {
+              "kind": "comic",
+              "path": "Subjects/Novel/second.cbz",
+              "asset": "cover",
+              "text": "<ComicInfo><Title>Second Book</Title><Series>Scan Saga</Series><Number>2</Number><Writer>Native Writer</Writer><Genre>Adventure,Science</Genre></ComicInfo>"
+            }
+          ]
+        },
+        {
+          "name": "remove-second-book-collapses-directory",
+          "changes": [
+            {
+              "kind": "remove-file",
+              "path": "Subjects/Novel/second.cbz"
+            }
+          ]
+        },
+        {
+          "name": "repeat-without-input-change",
+          "changes": []
+        }
+      ]
+    },
+    {
+      "name": "book-extension-named-directory",
+      "collectionType": "books",
+      "steps": [
+        {
+          "name": "empty-first-scan",
+          "changes": []
+        },
+        {
+          "name": "matching-extension-is-directory",
+          "changes": [
+            {
+              "kind": "mkdir",
+              "path": "Subjects/Novel/chapter.epub"
+            }
+          ]
+        },
+        {
+          "name": "repeat-without-input-change",
+          "changes": []
+        },
+        {
+          "name": "replace-directory-with-real-epub",
+          "changes": [
+            {
+              "kind": "remove-directory",
+              "path": "Subjects/Novel/chapter.epub"
+            },
+            {
+              "kind": "copy",
+              "path": "Subjects/Novel/chapter.epub",
+              "asset": "epub-positive"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "photo-fresh-nested-album",
+      "collectionType": "photos",
+      "steps": [
+        {
+          "name": "empty-first-scan",
+          "changes": []
+        },
+        {
+          "name": "discover-two-album-levels",
+          "changes": [
+            {
+              "kind": "copy",
+              "path": "Subjects/Outer/Inner/Sunset.jpg",
+              "asset": "rich-photo"
+            }
+          ]
+        },
+        {
+          "name": "repeat-without-input-change",
+          "changes": []
+        },
+        {
+          "name": "add-earlier-child",
+          "changes": [
+            {
+              "kind": "copy",
+              "path": "Subjects/Outer/Inner/AA.jpg",
+              "asset": "plain-photo"
+            }
+          ]
+        },
+        {
+          "name": "remove-original-child",
+          "changes": [
+            {
+              "kind": "remove-file",
+              "path": "Subjects/Outer/Inner/Sunset.jpg"
+            }
+          ]
+        },
+        {
+          "name": "repeat-without-input-change",
+          "changes": []
+        }
+      ]
+    },
+    {
+      "name": "photo-order-and-metadata",
+      "collectionType": "photos",
+      "steps": [
+        {
+          "name": "empty-first-scan",
+          "changes": []
+        },
+        {
+          "name": "discover-filename-and-title-inputs",
+          "changes": [
+            {
+              "kind": "copy",
+              "path": "Subjects/Album/z-name.jpg",
+              "asset": "rich-photo"
+            },
+            {
+              "kind": "copy",
+              "path": "Subjects/Album/a-name.jpg",
+              "asset": "oriented-photo"
+            }
+          ]
+        },
+        {
+          "name": "repeat-without-input-change",
+          "changes": []
+        },
+        {
+          "name": "replace-current-first-input",
+          "changes": [
+            {
+              "kind": "copy",
+              "path": "Subjects/Album/a-name.jpg",
+              "asset": "plain-photo"
+            }
+          ]
+        },
+        {
+          "name": "repeat-without-input-change",
+          "changes": []
+        }
+      ]
+    },
+    {
+      "name": "photo-folder-album-folder",
+      "collectionType": "photos",
+      "steps": [
+        {
+          "name": "empty-first-scan",
+          "changes": []
+        },
+        {
+          "name": "metadata-only-directory",
+          "changes": [
+            {
+              "kind": "mkdir",
+              "path": "Subjects/Changing"
+            },
+            {
+              "kind": "text",
+              "path": "Subjects/Changing/readme.txt",
+              "text": "Input-only directory marker"
+            }
+          ]
+        },
+        {
+          "name": "add-photo",
+          "changes": [
+            {
+              "kind": "copy",
+              "path": "Subjects/Changing/Photo.jpg",
+              "asset": "rich-photo"
+            }
+          ]
+        },
+        {
+          "name": "repeat-without-input-change",
+          "changes": []
+        },
+        {
+          "name": "remove-photo",
+          "changes": [
+            {
+              "kind": "remove-file",
+              "path": "Subjects/Changing/Photo.jpg"
+            }
+          ]
+        },
+        {
+          "name": "repeat-without-input-change",
+          "changes": []
+        }
+      ]
+    },
+    {
+      "name": "photo-local-cover",
+      "collectionType": "photos",
+      "saveLocalMetadata": true,
+      "steps": [
+        {
+          "name": "empty-first-scan",
+          "changes": []
+        },
+        {
+          "name": "discover-photo",
+          "changes": [
+            {
+              "kind": "copy",
+              "path": "Subjects/Album/Photo.jpg",
+              "asset": "rich-photo"
+            }
+          ]
+        },
+        {
+          "name": "repeat-without-input-change",
+          "changes": []
+        },
+        {
+          "name": "add-earlier-photo",
+          "changes": [
+            {
+              "kind": "copy",
+              "path": "Subjects/Album/AA.jpg",
+              "asset": "plain-photo"
+            }
+          ]
+        },
+        {
+          "name": "repeat-without-input-change",
+          "changes": []
+        }
+      ]
+    },
+    {
+      "name": "photo-and-book-parser-failures",
+      "collectionType": "photos",
+      "steps": [
+        {
+          "name": "empty-first-scan",
+          "changes": []
+        },
+        {
+          "name": "invalid-photo-keeps-real-save-failure-boundary",
+          "changes": [
+            {
+              "kind": "copy",
+              "path": "Subjects/Album/Bad.jpg",
+              "asset": "invalid-photo"
+            }
+          ]
+        },
+        {
+          "name": "repeat-without-input-change",
+          "changes": []
+        },
+        {
+          "name": "replace-invalid-photo",
+          "changes": [
+            {
+              "kind": "copy",
+              "path": "Subjects/Album/Bad.jpg",
+              "asset": "rich-photo"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "book-corrupt-epub",
+      "collectionType": "books",
+      "steps": [
+        {
+          "name": "empty-first-scan",
+          "changes": []
+        },
+        {
+          "name": "corrupt-archive-input",
+          "changes": [
+            {
+              "kind": "copy",
+              "path": "Subjects/Broken.epub",
+              "asset": "epub-malformed"
+            }
+          ]
+        },
+        {
+          "name": "repeat-without-input-change",
+          "changes": []
+        },
+        {
+          "name": "repair-archive-input",
+          "changes": [
+            {
+              "kind": "copy",
+              "path": "Subjects/Broken.epub",
+              "asset": "epub-positive"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "book-extension-directory-plus-book",
+      "collectionType": "books",
+      "steps": [
+        {
+          "name": "empty-first-scan",
+          "changes": []
+        },
+        {
+          "name": "matching-extension-directory-and-genuine-comic",
+          "changes": [
+            {
+              "kind": "mkdir",
+              "path": "Subjects/Novel/chapter.epub"
+            },
+            {
+              "kind": "comic",
+              "path": "Subjects/Novel/Story.cbz",
+              "asset": "cover",
+              "text": "<ComicInfo><Title>Sibling Comic</Title></ComicInfo>"
+            }
+          ]
+        },
+        {
+          "name": "repeat-without-input-change",
+          "changes": []
+        },
+        {
+          "name": "remove-sibling-book",
+          "changes": [
+            {
+              "kind": "remove-file",
+              "path": "Subjects/Novel/Story.cbz"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

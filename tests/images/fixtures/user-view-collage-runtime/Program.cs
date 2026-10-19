@@ -10,6 +10,7 @@ using MediaBrowser.Common.Configuration;
 using MediaBrowser.Controller.Drawing;
 using Microsoft.Extensions.Logging.Abstractions;
 using SkiaSharp;
+using SkiaSharp.HarfBuzz;
 
 if (args.Length != 2) throw new ArgumentException("Oracle <input.json> <output-root>");
 var inputBytes = File.ReadAllBytes(args[0]);
@@ -48,10 +49,14 @@ var faces = ((SKTypeface?[])typeof(SkiaEncoder).GetField("_typefaces", BindingFl
 var drawText = typeof(StripCollageBuilder).GetMethod("DrawText", BindingFlags.Static | BindingFlags.NonPublic)!;
 object FontMeasurements(string text, float size) => faces.Select((face, faceIndex) => {
     using var font = new SKFont(face, size);
+    using var shaper = new SKShaper(face);
+    var shaped = shaper.Shape(text, font);
     font.MeasureText("x", out var xBounds);
     return new { faceIndex, face.FamilyName, face.FontWeight, face.FontWidth, face.FontSlant, size,
         font.Subpixel, font.LinearMetrics, font.Hinting, xHeight = font.Metrics.XHeight, glyphXTop = xBounds.Top,
         containsAll = font.ContainsGlyphs(text), rawWidth = font.MeasureText(text),
+        shaped = new { glyphs = shaped.Codepoints, clusters = shaped.Clusters, width = shaped.Width,
+            positions = shaped.Points.Select(point => new { x = point.X, y = point.Y }).ToArray() },
         scalars = text.EnumerateRunes().Select(rune => new {
             text = rune.ToString(), codepoint = rune.Value, glyph = font.GetGlyph(rune.Value), advance = font.MeasureText(rune.ToString())
         }).ToArray() };
@@ -87,7 +92,8 @@ object FontIdentity(SKTypeface face) {
     using var stream = face.OpenStream(out var collectionIndex);
     var bytes = stream is null ? null : new byte[stream.Length];
     if (bytes is not null && stream!.Read(bytes, bytes.Length) != bytes.Length) throw new IOException("Could not read the selected system font.");
-    return new { face.FamilyName, face.FontWeight, face.FontWidth, face.FontSlant, collectionIndex, bytes = bytes?.Length, sha256 = bytes is null ? null : Hash(bytes) };
+    return new { face.FamilyName, face.PostScriptName, face.FontWeight, face.FontWidth, face.FontSlant, collectionIndex,
+        nameTableSha256 = Hash(face.GetTableData(0x6e616d65)), bytes = bytes?.Length, sha256 = bytes is null ? null : Hash(bytes) };
 }
 var fontRoots = OperatingSystem.IsWindows()
     ? new[] { Environment.GetFolderPath(Environment.SpecialFolder.Fonts) }

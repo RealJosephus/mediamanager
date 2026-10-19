@@ -6,6 +6,7 @@ import { createHash } from 'node:crypto';
 import { createRuntime } from '../../src/runtime.js';
 import { LibraryMetadataScanService } from '../../src/library/metadata-scan-service.js';
 import { saveMetadataItem } from '../../src/metadata/save-item.js';
+import { localXmlSavePath } from '../../src/metadata/local-xml.js';
 import { idKey } from '../../src/library/records.js';
 import { createNativeItemCohort } from '../../src/library/native-item-cohort.js';
 import { metadataChildSequence } from '../../src/library/metadata-child-sequence.js';
@@ -74,7 +75,21 @@ export async function runLocalXmlFailurePipeline(t, protocols, startActualAList)
     configurationDirectoryPath: path.join(stateRoot, 'config'), serverId: 'ignored-xml-pipeline',
     configuration: { UICulture: 'en-US', IsStartupWizardCompleted: true }, onError: error => errors.push({ message: error.message, code: error.code ?? null }) });
 
-  let calls, activeLookup;
+  let calls, activeLookup, activeMonitorPath;
+  const monitor = runtime.libraryMonitor;
+  assert.equal(runtime.metadataUpdates.monitor, monitor);
+  const begin = monitor.reportFileSystemChangeBeginning.bind(monitor);
+  const complete = monitor.reportFileSystemChangeComplete.bind(monitor);
+  monitor.reportFileSystemChangeBeginning = filename => {
+    assert.equal(filename, activeMonitorPath, 'The saver reports the current item identity.');
+    calls.push({ action: 'monitor-begin' });
+    return begin(filename);
+  };
+  monitor.reportFileSystemChangeComplete = (filename, refreshPath) => {
+    assert.equal(filename, activeMonitorPath); assert.equal(refreshPath, false);
+    calls.push({ action: 'monitor-complete', reset: refreshPath });
+    return complete(filename, refreshPath);
+  };
   runtime.metadataUpdates.logger = { error(error, message) { calls.push({ action: 'logger', message, error: error.message }); } };
   runtime.metadata.registry.register({ id: 'pipeline-control', name: 'Other', providers: [{ id: 'other', name: 'Other', kind: 'saver', itemTypes: ['BoxSet'],
     isEnabledFor: () => true, validateSave: async () => {}, save: async (_item, context) => calls.push({ action: 'other-saver', cancellable: context.signal != null }) }] });
@@ -102,18 +117,6 @@ export async function runLocalXmlFailurePipeline(t, protocols, startActualAList)
     const loaded = await runtime.metadata.loadContext(ownerId);
     assert.equal(loaded.context.spoolRoot, await fs.realpath(spoolRoot));
     loaded.libraryOptions = { MetadataSavers: ['Emby Xml', 'Other'] };
-    const savePath = loaded.context.localPath != null ? path.join(loaded.context.localPath, 'collection.xml')
-      : path.posix.join(loaded.context.accessPath, 'collection.xml');
-    loaded.monitor = {
-      reportFileSystemChangeBeginning(filename) {
-        assert.equal(filename, savePath);
-        calls.push({ action: 'monitor-begin' });
-      },
-      reportFileSystemChangeComplete(filename, refreshPath) {
-        assert.equal(filename, savePath);
-        assert.equal(refreshPath, false); calls.push({ action: 'monitor-complete', reset: refreshPath });
-      }
-    };
     const getPeople = loaded.context.getPeople;
     loaded.context.getPeople = async current => {
       calls.push({ action: 'people', length: (await fs.stat(path.join(physical, 'collection.xml'))).size });
@@ -134,6 +137,7 @@ export async function runLocalXmlFailurePipeline(t, protocols, startActualAList)
   }
   for (const protocol of protocols) for (const fault of ['links', 'people', 'xml-control', 'none', 'xml']) await t.test(protocol + '/' + fault, async () => {
     calls = []; const h = await prepareCase(protocol, fault), writeStart = writes.length;
+    activeMonitorPath = localXmlSavePath(h.loaded.item);
     const query = database.client.query.bind(database.client);
     database.client.query = (...args) => {
       const text = typeof args[0] === 'string' ? args[0] : args[0].text;
@@ -178,6 +182,7 @@ export async function runLocalXmlFailurePipeline(t, protocols, startActualAList)
     const scanner = new LibraryMetadataScanService({ library: runtime.library, scheduler: runtime.libraryTaskScheduler,
       metadata: { validateRefresh() {}, async refresh(reference) {
         const loaded = frames.get(reference);
+        activeMonitorPath = localXmlSavePath(loaded.item);
         let Saves; try { Saves = await saveMetadataItem(runtime.metadataUpdates, loaded, { Item: loaded.item, Images: [] }, 16); } finally { await loaded.dispose(); }
         saveResults.push(Saves);
         return { changed: true, UpdateType: 16, Failures: 0, Saves };

@@ -1,4 +1,5 @@
 # Native JSON fixtures are sealed by raw SHA-256; keep checkout bytes intact.
+src/images/system-fonts/harfbuzz/* -text
 tests/metadata/fixtures/nfo-scalar-provider/README.md text eol=lf
 tests/metadata/fixtures/nfo-userdata-persistence/README.md text eol=lf
 tests/library/fixtures/library-task-scheduler/README.md text eol=lf
@@ -337,3 +338,5 @@ src/metadata/resources/comic-culture-language.json -text
 /src/database/native-model.json text eol=lf
 # AList API-host source offer and controlled frontend are sealed by raw SHA-256.
 /tools/validation/fixtures/alist-api-host/** -text
+/tests/library/fixtures/book-photo-global-runtime/assets/** -text
+/tests/metadata/fixtures/book-epub-runtime/assets/** -text

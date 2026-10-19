@@ -29,16 +29,26 @@ export class ExternalDataManager {
     return paths;
   }
 
-  internalPaths(item, loaded) {
+  async internalPaths(item, loaded) {
     const dataPath = loaded?.dataPath ?? this.dataPath, metadataPath = loaded?.metadataPath ?? this.metadataPath;
     const trickplayPath = this.trickplayPath ?? (dataPath && imagePathApi(dataPath).join(dataPath, 'trickplay'));
     const id = nativeGuid(item.Id).toLowerCase(), paths = [];
     if (metadataPath) paths.push(internalImagePath(item, metadataPath));
     if (VIDEO_TYPES.has(item.Type)) {
-      if (dataPath) for (const directory of ['attachments', 'subtitles']) {
-        paths.push(imagePathApi(dataPath).join(dataPath, directory, id.slice(0, 2), id));
-      }
       if (trickplayPath) paths.push(imagePathApi(trickplayPath).join(trickplayPath, id.slice(0, 2), id));
+      if (metadataPath) paths.push(imagePathApi(metadataPath).join(internalImagePath(item, metadataPath), 'chapters'));
+      if (typeof loaded?.getMediaSources !== 'function') throw new TypeError('Internal video cleanup requires actual live media sources.');
+      // LibraryManager enumerates GetMediaSources(false) before file deletion.
+      // A promoted linked alternate keeps its own metadata and trickplay, but
+      // its extracted subtitles and attachments belong to this cleanup too.
+      for (const source of await loaded.getMediaSources(item)) {
+        let sourceId;
+        try { sourceId = nativeGuid(source.Id).toLowerCase(); }
+        catch { continue; } // PathManager has no on-disk folder for a non-GUID source.
+        if (dataPath) for (const directory of ['subtitles', 'attachments']) {
+          paths.push(imagePathApi(dataPath).join(dataPath, directory, sourceId.slice(0, 2), sourceId));
+        }
+      }
     }
     return paths;
   }
@@ -70,7 +80,7 @@ export class ExternalDataManager {
     // LibraryManager removes the internal metadata directory for every item;
     // only Video adds extracted-data paths before attempting the source. The
     // later external cleanup repeats them and adds media-local trickplay.
-    for (const directory of this.internalPaths(item, loaded)) {
+    for (const directory of await this.internalPaths(item, loaded)) {
       let info;
       try { info = await assets.stat(directory); } catch { continue; }
       if (info.kind !== 'directory') continue;

@@ -348,6 +348,10 @@ export function readOpfMetadata(document, { signal, logger = { error() {} } } = 
 // Path.Combine retains relative separators and dot segments; archive keys must
 // not pass through a filesystem path normalizer before exact entry lookup.
 export function combineOpfPath(directory, filename) {
+  if (process.platform !== 'win32') {
+    if (!directory || filename.startsWith('/')) return filename;
+    return directory + (directory.endsWith('/') ? '' : '/') + filename;
+  }
   if (!directory || /^[\\/]|^[A-Za-z]:/u.test(filename)) return filename;
   return directory + (/[\\/]$/u.test(directory) ? '' : '\\') + filename;
 }

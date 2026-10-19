@@ -1,0 +1,176 @@
+{
+  "schemaVersion": 1,
+  "kind": "harfbuzz-complete-wasm",
+  "status": "built",
+  "repository": "RealJosephus/mediamanager",
+  "commit": "cf9ed939f1adfcfea1830c1bed4207d9ff080f3d",
+  "runId": "39175865595",
+  "runAttempt": "1",
+  "emscriptenVersion": "4.0.13",
+  "imageVersion": "20261012.334.1",
+  "sources": [
+    {
+      "path": "hbjs.tar.gz",
+      "bytes": 1275421,
+      "sha256": "017e3289b3a98ac7a07c22e8561b8249ba520d97e7f27ca74bcf43d8347988c4",
+      "url": "https://codeload.github.com/harfbuzz/harfbuzzjs/tar.gz/79860e8f1343093469dace1546aad148e08b47de"
+    },
+    {
+      "path": "harfbuzz.tar.gz",
+      "bytes": 38888629,
+      "sha256": "10dcea60bd85ff219490d55525630650ac8c57044c4efdc878162f286451775b",
+      "url": "https://codeload.github.com/harfbuzz/harfbuzz/tar.gz/c7a7457b7385f33178e8cf87615ca077a810bbe7"
+    },
+    {
+      "path": "emsdk.tar.gz",
+      "bytes": 200908,
+      "sha256": "bf4e2482096e80fdb2f2883ca87fb129d3ade763cc13b7802531479c1628b46f",
+      "url": "https://codeload.github.com/emscripten-core/emsdk/tar.gz/404dc1ec13f64fce1af1eaf5c007e18212f63527"
+    },
+    {
+      "path": "npm.tar.gz",
+      "bytes": 492574,
+      "sha256": "d911e1d8ffe0ba977f6a693d3b9a83941384c8df84087ff5d5e5ec8d1f085b8c",
+      "url": "https://registry.npmjs.org/harfbuzzjs/-/harfbuzzjs-1.6.3.tgz"
+    }
+  ],
+  "commands": [
+    {
+      "name": "install-emsdk",
+      "arguments": [
+        "python3",
+        "/home/runner/work/_temp/mediamanager-harfbuzz-build/emsdk/emsdk-404dc1ec13f64fce1af1eaf5c007e18212f63527/emsdk.py",
+        "install",
+        "4.0.13"
+      ],
+      "timeoutSeconds": 600,
+      "started": 1792365447.59617,
+      "exitCode": 0,
+      "finished": 1792365470.9552612,
+      "stdout": {
+        "path": "install-emsdk.stdout.txt",
+        "bytes": 1887,
+        "sha256": "51f352bf5a450bc2ecfbbdee923ebef250fcb930a374c834fd3a051c9aaf62ad"
+      },
+      "stderr": {
+        "path": "install-emsdk.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "activate-emsdk",
+      "arguments": [
+        "python3",
+        "/home/runner/work/_temp/mediamanager-harfbuzz-build/emsdk/emsdk-404dc1ec13f64fce1af1eaf5c007e18212f63527/emsdk.py",
+        "activate",
+        "4.0.13"
+      ],
+      "timeoutSeconds": 60,
+      "started": 1792365470.9554808,
+      "exitCode": 0,
+      "finished": 1792365471.0697937,
+      "stdout": {
+        "path": "activate-emsdk.stdout.txt",
+        "bytes": 990,
+        "sha256": "6a0a60ab7d3c7932b5a4c48f84ea29da4d59e6cc7bbc1b98322387910d62e6c8"
+      },
+      "stderr": {
+        "path": "activate-emsdk.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "compile",
+      "arguments": [
+        "bash",
+        "-c",
+        "set -euo pipefail; source \"$1/emsdk_env.sh\"; em++ --version; make -C \"$2\" harfbuzz",
+        "harfbuzz-build",
+        "/home/runner/work/_temp/mediamanager-harfbuzz-build/emsdk/emsdk-404dc1ec13f64fce1af1eaf5c007e18212f63527",
+        "/home/runner/work/_temp/mediamanager-harfbuzz-build/hbjs/harfbuzzjs-79860e8f1343093469dace1546aad148e08b47de"
+      ],
+      "timeoutSeconds": 900,
+      "started": 1792365471.301493,
+      "exitCode": 0,
+      "finished": 1792365514.8549259,
+      "stdout": {
+        "path": "compile.stdout.txt",
+        "bytes": 630,
+        "sha256": "df971179f7d36e415cc054d58865f0edc7fcdf1848b615a5c1f131e4426383fb"
+      },
+      "stderr": {
+        "path": "compile.stderr.txt",
+        "bytes": 5791,
+        "sha256": "56fee72de5aa9e9ad256f58101fe8515bfbcf603cd53ddd52789c22b5baec60b"
+      }
+    },
+    {
+      "name": "load-generated-runtime",
+      "arguments": [
+        "node",
+        "--input-type=module",
+        "-e",
+        "import * as hb from \"./index.mjs\"; console.log(JSON.stringify({version: hb.versionString(), blob: typeof hb.Blob, shape: typeof hb.shape})); if(typeof hb.Blob!==\"function\"||typeof hb.shape!==\"function\") process.exit(1);"
+      ],
+      "timeoutSeconds": 60,
+      "started": 1792365515.2263503,
+      "exitCode": 0,
+      "finished": 1792365515.258239,
+      "stdout": {
+        "path": "load-generated-runtime.stdout.txt",
+        "bytes": 58,
+        "sha256": "6ae46c8318f6f211c08aefcc76fc921a3aec47e8568e684d3a1d29b6ee3b58f1"
+      },
+      "stderr": {
+        "path": "load-generated-runtime.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  ],
+  "productFontParityValidated": false,
+  "patch": {
+    "operation": "remove exactly one -DHB_TINY compiler flag",
+    "beforeSha256": "ec8a3a7f71b95207579bfd31bd5b186b7a255d40cddbfddcb1495e7117105e40",
+    "after": {
+      "path": "Makefile",
+      "bytes": 2055,
+      "sha256": "8a141e1244d7e50a63d8d562fd9ccecb98a06fda5ca5bf6b5e1ba9b46cd169c5"
+    }
+  },
+  "sourceUnchangedDuringBuild": true,
+  "runtime": [
+    {
+      "path": "LICENSE.harfbuzz",
+      "bytes": 1971,
+      "sha256": "ba8f810f2455c2f08e2d56bb49b72f37fcf68f1f4fade38977cfd7372050ad64"
+    },
+    {
+      "path": "LICENSE.harfbuzzjs",
+      "bytes": 1079,
+      "sha256": "5d09767b2cc476f08028b56d9384dc45061c5a3e90f9ad966e44addc8d26c8b1"
+    },
+    {
+      "path": "harfbuzz.js",
+      "bytes": 35389,
+      "sha256": "074ea18bd5f22e1e1aa7ad000f79a271b935390da9e5be94cc91b5aa55901c78"
+    },
+    {
+      "path": "harfbuzz.wasm",
+      "bytes": 634972,
+      "sha256": "b9f43850270dff11165bdb7fe99942435829472f518f35a6647648ee552965a2"
+    },
+    {
+      "path": "index.mjs",
+      "bytes": 82693,
+      "sha256": "04ece1914c8720ad96257728119c1bf24088ee4ef3ab2a2ca688c9a4895d4e7e"
+    },
+    {
+      "path": "package.json",
+      "bytes": 42,
+      "sha256": "f69ed17eea98f49ee075f676bae79df9cb779e54d5887b94d94313d34511170c"
+    }
+  ]
+}

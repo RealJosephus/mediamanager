@@ -10,9 +10,9 @@ import { publishNativeImageInfos } from './images.js';
 const repositoryAncestors = Symbol('video repository ancestors');
 
 export class MetadataUpdateHost extends EventEmitter {
-  constructor({ registry, store, images, library, logger = { error() {} }, now = () => new Date().toISOString(), reattach = reattachUserData }) {
+  constructor({ registry, store, images, library, monitor, logger = { error() {} }, now = () => new Date().toISOString(), reattach = reattachUserData }) {
     super();
-    Object.assign(this, { registry, store, images, library, logger, now, reattach });
+    Object.assign(this, { registry, store, images, library, monitor, logger, now, reattach });
   }
 
   #report(name, event) {
@@ -56,7 +56,7 @@ export class MetadataUpdateHost extends EventEmitter {
     const item = loaded.item, images = loaded.context?.images ?? [];
     const savers = this.registry?.discover({ ...loaded, kind: 'saver' }) ?? [];
     const saves = item.IsFileProtocol ? await saverOperation(item, updateReason, savers,
-      { ...loaded, now: this.now, logger: this.logger }) : [];
+      { ...loaded, now: this.now, logger: this.logger, monitor: this.monitor }) : [];
     await this.images.updateImages(loaded, images, {
       forceUpdate: updateReason >= ItemUpdateType.ImageUpdate,
       persistImages: values => persistImages ? persistImages(loaded, values) : persistImageMetadata(this.store, persistenceContext, values)

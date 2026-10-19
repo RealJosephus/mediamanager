@@ -433,6 +433,7 @@ export function createMetadataContextLoader({ store, library, fileSystem = libra
       resolveSeries: resolveItemSeries, resolveSeason: resolveItemSeason, refreshPreferredMetadata, refreshTvContext, requiresRefresh, reversePath, refreshMetadataPathContext, rootFolderResolveArgs, physicalFolders, findMetadataItemByPath,
       sortName: value => metadataSortName(value, library.options),
       metadataChildren:value=>childrenSource.children(value),
+      getMediaSources: value => library.getLiveMediaSources(value),
       boxSetLibraryFolderIds:value=>childrenSource.libraryFolderIds(value),
       loadLibraryState:()=>store.run(async database=>{
         const sql=nativeTextSql(database.schemaName),base=`${q(database.schemaName)}.${q('BaseItems')}`;

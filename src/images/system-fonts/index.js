@@ -88,10 +88,21 @@ export function registerCollageSystemFace(face) {
 /** Draw explicit system glyphs; text shaping and fallback remain the caller's work. */
 export async function drawCollageSystemGlyphs(face, options) {
   if (process.platform !== 'darwin') throw new Error('Direct system glyph drawing is available only on macOS.');
+  await requireSelectedFace(face);
+  const { default: koffi } = await import('koffi');
+  return (await import('./darwin.js')).drawDarwinGlyphs(koffi, face, options);
+}
+
+export async function measureCollageSystemGlyphs(face, glyphs, size) {
+  if (process.platform !== 'darwin') throw new Error('Direct system glyph measurement is available only on macOS.');
+  await requireSelectedFace(face);
+  const { default: koffi } = await import('koffi');
+  return (await import('./darwin.js')).measureDarwinGlyphs(koffi, face, glyphs, size);
+}
+
+async function requireSelectedFace(face) {
   const selected = await resolveCollageSystemFonts();
   if (!face || !selected.fallbackFaces.some(candidate => candidate && faceKey(candidate) === faceKey(face))) {
     throw new TypeError('System glyph drawing requires an actually selected collage face.');
   }
-  const { default: koffi } = await import('koffi');
-  return (await import('./darwin.js')).drawDarwinGlyphs(koffi, face, options);
 }

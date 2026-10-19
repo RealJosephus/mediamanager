@@ -37,6 +37,7 @@ import { loadEncodingConfiguration, serverFriendlyName } from './configuration.j
 import { createBuiltinExternalUrlPlugin } from './metadata/external-url-providers.js';
 import { createPhotoMetadataPlugin } from './metadata/photo-provider.js';
 import { createPhotoAlbumImagePlugin } from './metadata/photo-album-provider.js';
+import { createCollectionFolderImagePlugin } from './metadata/collection-folder-image-provider.js';
 import { createBookOpfPlugin } from './metadata/book-opf-provider.js';
 import { createBookEpubPlugin } from './metadata/book-epub-provider.js';
 import { createBookComicPlugin } from './metadata/book-comic-provider.js';
@@ -241,6 +242,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
     registry.register(createPhotoAlbumImagePlugin({ store, fileSystem, vfs, identityMap, metadataIdentityMap,
       metadataPath, tempPath: programDataPath && path.join(programDataPath, 'cache', 'temp'), images: metadataImages,
       configuration, expandPath: library.options.expandPath, logger }));
+    registry.register(createCollectionFolderImagePlugin({ library, images: metadataImages }));
     registry.register(createBookComicPlugin({ fileSystem, openArchive: bookArchives.openArchive, logger,
       culture: () => configuration.UICulture || 'en-US' }));
     registry.register(createBookEpubPlugin({ openArchive: bookArchives.openArchive, logger }));
@@ -326,6 +328,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
     metadata.runQueuedBatch = (operation, options) => store.runDetached(() => loadContext.withDetachedScope(
       () => libraryMonitorHost.runQueuedBatch(operation, options)));
     metadata.saver.monitor = libraryMonitor;
+    metadataUpdates.monitor = libraryMonitor;
     metadataImages.monitor = libraryMonitor;
   }
   const libraryScanLifecycle = libraryMonitor ? new LibraryScanLifecycle({ host: libraryScanHost,
