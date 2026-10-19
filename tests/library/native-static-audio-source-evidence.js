@@ -1,4 +1,4 @@
-import { readNativeQueryRecorderSource } from './native-query-inputs.js';
+import { nativeQueryInputs, readNativeQueryRecorderSource } from './native-query-default-inputs.js';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
@@ -79,7 +79,7 @@ export async function verifyNativeStaticAudioSourcePermissionBinding(binding) {
     const run = await verifyNativeItemFilterEvidenceContract({
       evidence: pathToFileURL(path.join(recording.evidenceRoot, 'native-run/')),
       fixtureUrl: pathToFileURL(binding.neutralFixture.filename), scenario: 'rating-permissions',
-      runDirectory: 'native-run', expectedRecords: 8, recorderSource: recipe,
+      runDirectory: 'native-run', expectedRecords: 8, recorderSource: recipe, inputs: nativeQueryInputs,
     });
     assert.deepEqual(run.oracle, oracle);
     assert.equal(run.summary.cases, 8);

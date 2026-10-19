@@ -1,12 +1,18 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
-import { mkdir, mkdtemp, readFile, rm, stat, utimes, writeFile } from 'node:fs/promises';
+import { lstat, mkdir, mkdtemp, readFile, readdir, readlink, realpath, rm, stat, utimes, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { describeFile } from '../../tools/validation/inventory.js';
 import { captureInputIdentity, inputsUnchanged } from '../../tools/validation/inputs.js';
 import { resultOutcome } from '../../tools/validation/run.js';
-import { repositoryRoot } from '../../tools/validation/paths.js';
+import { repositoryRoot, validationPath } from '../../tools/validation/paths.js';
+import { collageFontFiles } from '../../src/images/font-collection.js';
+import { resolveCollageSystemFonts } from '../../src/images/system-fonts/index.js';
+import { applyInputIdentity, classify } from '../../tools/ci/scope.js';
+// This regression reads the real reader's system-font input. Keep that reader
+// in the test dependency closure so strict validation binds the same bytes.
+import '../../src/images/user-view-collage.js';
 
 const counts = { tests: 1, suites: 0, pass: 1, fail: 0, cancelled: 0, skipped: 0, todo: 0 };
 const outcome = inputUnchanged => resultOutcome(0, counts, { candidateUnchanged: true, inputUnchanged, preflightReady: true });
@@ -25,6 +31,143 @@ async function temporaryInputs(t) {
 const captureService = async (name, filename) => captureInputIdentity({
   selected: [], dependencies: { entries: [] }, environment: {},
   preflight: { ready: true, tools: [], services: [{ name, ...await describeFile(filename) }] },
+});
+
+test('the collage source closure requires the exact system collection bytes used for face registration', async () => {
+  const filename = 'src/images/user-view-collage.js', consumer = 'tests/validation/input-identity.test.js';
+  const entry = (path, imports, test = false) => ({ path, imports, test, importedFiles: [], services: [], tools: [],
+    declaredReferences: [], fixtureReferences: [], conditionalRegistration: false, unresolvedImports: [], unresolvedExecutables: [] });
+  const dependencies = { entries: [entry(filename, []), entry(consumer, [filename], true)] };
+  const capture = selected => captureInputIdentity({ selected, dependencies, environment: {},
+    preflight: { ready: true, tools: [], services: [] } });
+  const selected = await capture([consumer]), unselected = await capture([]);
+  const reason = 'runtime:collage-system-font';
+  assert.deepEqual(selected.entries.filter(entry => entry.reasons.includes(reason)).map(entry => entry.filename), collageFontFiles());
+  assert.equal(unselected.entries.some(entry => entry.reasons.includes(reason)), false);
+  for (const font of collageFontFiles()) {
+    const entry = selected.entries.find(entry => entry.filename === font);
+    assert.equal(entry.available, true); assert.equal(entry.required, true);
+    assert.ok(entry.requiredReasons.includes(reason));
+    assert.equal(entry.sha256, createHash('sha256').update(await readFile(font)).digest('hex'));
+  }
+  const classification = await classify({ dependencies, tracked: new Set([filename, consumer]), environment: {} });
+  const fonts = selected.entries.filter(entry => entry.reasons.includes(reason));
+  assert.deepEqual(applyInputIdentity(classification, { entries: fonts }, new Set()), [], 'installed fonts are runner inputs, not unshipped historical evidence');
+  assert.equal(classification.records[0].selected, true);
+  const missing = { filename: collageFontFiles('darwin')[0], required: true, available: false, reasons: [reason], requiredReasons: [reason] };
+  assert.deepEqual(applyInputIdentity(classification, { entries: [missing] }, new Set()).map(error => error.code), ['input-unavailable']);
+  assert.equal(classification.records[0].selected, true, 'a missing promised system font fails infrastructure without shrinking the selection');
+});
+
+test('actual system-font consumers bind selected bytes and configuration without activating unrelated resolver imports', async () => {
+  const consumer = 'tests/images/system-fonts-runtime.test.js', resolver = 'src/images/system-fonts/index.js';
+  const unrelated = 'tests/images/collage-fonts.test.js';
+  const entry = (path, imports, test = false) => ({ path, imports, test, importedFiles: [], services: [], tools: [],
+    declaredReferences: [], fixtureReferences: [], conditionalRegistration: false, unresolvedImports: [], unresolvedExecutables: [] });
+  const dependencies = { entries: [entry(resolver, []), entry(consumer, [resolver], true), entry(unrelated, [resolver], true)] };
+  const capture = selected => captureInputIdentity({ selected, dependencies, environment: {},
+    preflight: { ready: true, tools: [], services: [] } });
+  const selected = await capture([consumer]), inactive = await capture([unrelated]);
+  assert.equal(Object.hasOwn(inactive, 'systemFonts'), false);
+  assert.equal(inactive.entries.some(entry => entry.reasons.some(reason => reason.startsWith('runtime:collage-'))), false);
+  const resolved = await resolveCollageSystemFonts();
+  const { configurationBindings, ...selection } = selected.systemFonts;
+  assert.deepEqual(selection, resolved);
+  assert.deepEqual(configurationBindings.map(binding => binding.filename), resolved.configurationFiles);
+  const configurationFiles = [];
+  const verifyConfiguration = async binding => {
+    assert.equal(binding.actual, await realpath(binding.filename));
+    const logical = await lstat(binding.filename);
+    assert.equal(binding.linkTarget, logical.isSymbolicLink() ? await readlink(binding.filename) : undefined);
+    if (binding.kind === 'directory') {
+      assert.ok((await stat(binding.actual)).isDirectory());
+      assert.deepEqual(binding.entries.map(entry => path.basename(entry.filename)), (await readdir(binding.filename)).sort());
+      for (const child of binding.entries) await verifyConfiguration(child);
+    } else {
+      assert.equal(binding.kind, 'file');
+      configurationFiles.push(binding.actual);
+    }
+  };
+  for (const binding of configurationBindings) await verifyConfiguration(binding);
+  assert.ok(resolved.defaultFace && resolved.files.length > 0, 'the actual runner must provide the default face');
+  for (const [names, reason] of [[resolved.files, 'runtime:collage-selected-font'],
+    [configurationFiles, 'runtime:collage-font-configuration'], [resolved.libraryFiles ?? [], 'runtime:collage-font-library']]) {
+    const entries = selected.entries.filter(entry => entry.reasons.includes(reason));
+    assert.deepEqual(entries.map(entry => entry.filename).sort(), [...new Set(await Promise.all(names.map(filename => realpath(filename))))].sort());
+    for (const entry of entries) {
+      assert.equal(entry.available, true); assert.equal(entry.required, true);
+      assert.ok(entry.requiredReasons.includes(reason));
+      const actual = await describeFile(entry.filename);
+      assert.equal(entry.sha256 ?? entry.entriesSha256, actual.sha256 ?? actual.entriesSha256);
+    }
+  }
+  const classification = await classify({ dependencies, tracked: new Set([consumer, resolver, unrelated]),
+    environment: { MEDIAMANAGER_CI_NATIVE_REFERENCE: 'true' } });
+  const font = selected.entries.find(entry => entry.reasons.includes('runtime:collage-selected-font'));
+  assert.deepEqual(applyInputIdentity(classification, { entries: [{ ...font, available: false }] }, new Set()).map(error => error.code),
+    ['input-unavailable']);
+  assert.equal(classification.records.find(record => record.path === consumer).selected, true,
+    'a missing actual system font fails infrastructure instead of shrinking requested scope');
+});
+
+async function isolatedDotnet(t) {
+  const directory = await temporaryInputs(t), root = path.join(directory, 'mediamanager-dotnet');
+  for (const name of ['host/fxr/10.0.4', 'shared/Microsoft.NETCore.App/10.0.4', 'sdk/10.0.401',
+    'packs/Microsoft.NETCore.App.Ref/10.0.4/ref/net10.0', 'sdk-manifests/10.0.400']) {
+    await mkdir(path.join(root, name), { recursive: true });
+    await writeFile(path.join(root, name, 'controlled-input.bin'), 'controlled SDK input: ' + name);
+  }
+  const executable = path.join(root, process.platform === 'win32' ? 'dotnet.exe' : 'dotnet');
+  await writeFile(executable, 'controlled executable identity; never executed');
+  const environment = { GITHUB_ACTIONS: 'true', RUNNER_TEMP: directory, DOTNET_INSTALL_DIR: root,
+    MEDIAMANAGER_CI_DOTNET_ROOT: root, MEDIAMANAGER_DOTNET: executable };
+  return { directory, root, executable, environment };
+}
+
+test('CI binds the entire verified dotnet installation, including reference packs, without redirecting historical paths', async t => {
+  const { root, executable, environment } = await isolatedDotnet(t);
+  const options = { selected: [], dependencies: { entries: [] }, environment,
+    preflight: { ready: true, tools: [{ name: 'dotnet', executable, available: true }],
+      services: [{ name: 'dotnet', filename: executable, available: true }] } };
+  const before = await captureInputIdentity(options), installed = before.entries.find(entry => entry.filename === root);
+  assert.equal(before.ready, true);
+  assert.equal(installed.kind, 'directory'); assert.equal(installed.required, true); assert.equal(installed.available, true);
+  assert.ok(installed.requiredReasons.includes('runtime:dotnet-installation'));
+  assert.ok(installed.entries.some(entry => entry.name === 'packs'));
+  assert.ok(installed.entries.some(entry => entry.name === 'sdk-manifests'));
+  for (const name of ['host', 'shared', 'sdk']) {
+    const entry = before.entries.find(entry => entry.filename === path.join(root, name));
+    assert.ok(entry.requiredReasons.includes('service:dotnet-' + name));
+    assert.ok(entry.requiredReasons.includes('tool:dotnet-' + name));
+  }
+  const pack = path.join(root, 'packs/Microsoft.NETCore.App.Ref/10.0.4/ref/net10.0/controlled-input.bin');
+  await writeFile(pack, 'changed reference assembly while the SDK executable stayed unchanged');
+  const after = await captureInputIdentity(options);
+  assert.equal(inputsUnchanged(before, after), false);
+  assert.equal(outcome(inputsUnchanged(before, after)), 'incomplete');
+  assert.notEqual(installed.entriesSha256, after.entries.find(entry => entry.filename === root).entriesSha256);
+  assert.equal(validationPath('.tools/dotnet/dotnet.exe', repositoryRoot, environment), path.join(repositoryRoot, '.tools/dotnet/dotnet.exe'),
+    'CI installation identity does not remap historical .tools/dotnet paths');
+});
+
+test('an isolated dotnet promise fails when verification, execution identity or required SDK inputs are missing', async t => {
+  const { directory, root, executable, environment } = await isolatedDotnet(t);
+  const selected = ['tests/controlled-dotnet.test.js'];
+  const dependencies = { entries: [{ path: selected[0], imports: [], importedFiles: [], services: ['dotnet'], tools: [],
+    declaredReferences: [], fixtureReferences: [] }] };
+  // Planning has no executable preflight yet; the selected dependency still
+  // owns the promised installation and cannot silently fall back to PATH.
+  const capture = overrides => captureInputIdentity({ selected, dependencies, environment: { ...environment, ...overrides },
+    preflight: { ready: true, tools: [], services: [] } });
+  await assert.rejects(capture({ MEDIAMANAGER_CI_DOTNET_ROOT: undefined }), /verified isolated installation/u);
+  await assert.rejects(capture({ MEDIAMANAGER_DOTNET: undefined }), /verified isolated installation/u);
+  await assert.rejects(capture({ DOTNET_INSTALL_DIR: directory }), /declared isolated runner installation/u);
+  const other = path.join(directory, path.basename(executable)); await writeFile(other, 'a different tool installation');
+  await assert.rejects(capture({ MEDIAMANAGER_DOTNET: other }), /verified isolated executable/u);
+  await assert.rejects(captureInputIdentity({ selected, dependencies, environment,
+    preflight: { ready: true, services: [], tools: [{ name: 'dotnet', executable: other, available: true }] } }), /verified isolated executable/u);
+  await rm(path.join(root, 'packs'), { recursive: true });
+  await assert.rejects(capture({}), { code: 'ENOENT' });
 });
 
 test('validation binds workspace package links and rejects unapproved link traversal', async()=>{

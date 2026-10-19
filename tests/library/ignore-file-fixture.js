@@ -2,6 +2,7 @@ import path from 'node:path';
 import { IdentityAccessMap } from '../../src/storage/identity-mapping.js';
 import { DotIgnoreRule } from '../../src/library/dot-ignore-rule.js';
 import { encodeIgnoreFile } from './dot-ignore-fixture.js';
+import { fixturePathStyle } from './fixture-state-path.js';
 
 export async function ensureFixtureDirectory(fixture, accessPath) {
   const pending = [];
@@ -26,12 +27,12 @@ export async function prepareIgnoreFileFixture(fixture, ignoreFiles = []) {
   await fixture.storage.createInstance('state-ignore-ancestors', 'memory', {});
   fixture.vfs.mount({ path: '/state-ignore-ancestors', instanceId: 'state-ignore-ancestors',
     capabilities: { create: true, replace: true, mkdir: true, delete: true } });
-  identityMap.addPrefix({ identityRoot: path.parse(fixture.stateRoot).root, accessRoot: '/state-ignore-ancestors', style: 'windows',
+  identityMap.addPrefix({ identityRoot: path.parse(fixture.stateRoot).root, accessRoot: '/state-ignore-ancestors', style: fixturePathStyle,
     returnAccess: 'Known empty ancestors of the controlled native state namespace.' });
   fixture.ignoreRule = new DotIgnoreRule({ vfs: fixture.vfs, identityMap });
   fixture.ignoreFilePaths = [];
   for (const file of ignoreFiles) {
-    const identityPath = path.join(fixture.stateRoot, file.path), accessPath = identityMap.resolve({ identityPath, style: 'windows' });
+    const identityPath = path.join(fixture.stateRoot, file.path), accessPath = identityMap.resolve({ identityPath, style: fixturePathStyle });
     await ensureFixtureDirectory(fixture, path.posix.dirname(accessPath));
     await fixture.vfs.write(accessPath, encodeIgnoreFile(file.text, file.encoding ?? 'utf8'), {
       modified: '2025-01-03T04:05:06.0000000Z'

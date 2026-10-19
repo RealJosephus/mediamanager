@@ -144,6 +144,83 @@ export class VirtualFileSystem {
     return resolved.adapter.openRead(resolved.path, options);
   }
 
+  async watch(path, { signal, onChange, onError } = {}) {
+    checkAbort(signal);
+    path = normalizePath(path);
+    if (typeof onChange !== 'function' || typeof onError !== 'function') {
+      throw new TypeError('Storage watching requires change and error callbacks.');
+    }
+    const revision = this.#mountRevision, plans = [];
+    try {
+      const resolved = this.resolve(path);
+      let include = true;
+      if (this.#overlays(path).size && !this.#mounts.has(path)) {
+        try { include = (await resolved.adapter.stat(resolved.path, { signal })).kind === 'directory'; }
+        catch (error) { if (error.code === 'not-found') include = false; else throw error; }
+      }
+      if (include) plans.push({ virtualPath: path, ...resolved });
+    }
+    catch (error) { if (!this.#overlays(path).size || error.code !== 'not-found') throw error; }
+    for (const mount of this.#mounts.values()) if (mount.path !== path && isWithin(mount.path, path)) {
+      plans.push({ virtualPath: mount.path, ...this.resolve(mount.path) });
+    }
+    for (const plan of plans) requireCapability(plan, 'watch');
+    const handles = [];
+    let closed = false, closing;
+    const close = () => {
+      if (closing) return closing;
+      closed = true;
+      signal?.removeEventListener('abort', abort);
+      return closing = (async () => {
+        const results = await Promise.allSettled(handles.map(handle => Promise.resolve().then(() => handle.close())));
+        const errors = results.filter(result => result.status === 'rejected').map(result => result.reason);
+        if (errors.length) throw new AggregateError(errors, 'Storage watches failed to close.');
+      })();
+    };
+    const notifyError = (error, terminal) => {
+      try { void Promise.resolve(onError(error, Object.freeze({ terminal }))).catch(() => {}); }
+      catch { /* Error reporting cannot escape a watch callback. */ }
+    };
+    const report = (error, state) => {
+      if (closed) return;
+      if (typeof state?.terminal !== 'boolean') {
+        error = new StorageError('invalid-response', 'A storage watch error must declare whether its subscription terminated.');
+        state = { terminal: true };
+      }
+      if (state.terminal) {
+        // A composed watch cannot remain active after one backend stops.
+        // Close the remaining owners before permitting any more events.
+        void close().catch(cleanup => notifyError(cleanup, true));
+      }
+      notifyError(error, state.terminal);
+    };
+    const abort = () => { void close().catch(() => {}); };
+    signal?.addEventListener('abort', abort, { once: true });
+    try {
+      for (const plan of plans) {
+        checkAbort(signal);
+        const handle = await plan.adapter.watch(plan.path, { signal, onError: report, onChange: event => {
+          if (closed) return;
+          try {
+            if (revision !== this.#mountRevision) throw new StorageError('version-changed', 'The mount namespace changed during watching.');
+            if (!event || !['change', 'rename'].includes(event.type)) throw new StorageError('invalid-response', 'The storage watch event is invalid.');
+            const source = normalizePath(event.path);
+            if (!isWithin(source, plan.path)) throw new StorageError('invalid-response', 'The storage watch event escaped its directory.');
+            const target = joinPath(plan.virtualPath, source.slice(plan.path === '/' ? 1 : plan.path.length));
+            // Parent backends cannot report changes hidden behind a child mount.
+            if (this.resolve(target).mount !== plan.mount) return;
+            void Promise.resolve(onChange(Object.freeze({ path: target, type: event.type }))).catch(error => report(error, { terminal: false }));
+          } catch (error) { report(error, { terminal: true }); }
+        } });
+        if (!handle || typeof handle.close !== 'function') throw new StorageError('invalid-response', 'The storage watch handle is invalid.');
+        if (closed || signal?.aborted) { await handle.close(); checkAbort(signal); throw new StorageError('closed', 'The storage watch is closed.'); }
+        handles.push(handle);
+      }
+      if (revision !== this.#mountRevision) throw new StorageError('version-changed', 'The mount namespace changed during watching.');
+      return Object.freeze({ close });
+    } catch (error) { await close().catch(() => {}); throw error; }
+  }
+
   #writable(path, capability) {
     path = normalizePath(path);
     if (this.#mounts.has(path) || this.#overlays(path).size) {

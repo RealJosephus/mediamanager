@@ -1,0 +1,221 @@
+{
+  "scope": "Designated Windows LibraryMonitor/FileRefresher policy over real isolated directories and controlled lookup/refresh callbacks. No actual watchers or release acceptance.",
+  "files": {
+    "input.json": {
+      "path": "input.json",
+      "bytes": 1535,
+      "sha256": "767a084f5e45ca7b153ecbf0e14ef292ac6cccf7e787f45ed04f2084a18357d7"
+    },
+    "native.json": {
+      "path": "native.json",
+      "bytes": 16039,
+      "sha256": "4e4a17b0a66fa965a18e53c016ccb4dc83a2f4d6c9e950a6de65612791e5b396"
+    },
+    "Program.cs": {
+      "path": "Program.cs",
+      "bytes": 7431,
+      "sha256": "feadc16e6f74a738e7f0f6dde86b792483658d6a191e22b88f01a45576df551f"
+    },
+    "Oracle.csproj": {
+      "path": "Oracle.csproj",
+      "bytes": 403,
+      "sha256": "3f2610631c594ffd08dcc82f03d3509abc1c9c9541f159519800df046fc770ee"
+    },
+    "README.md": {
+      "path": "README.md",
+      "bytes": 1794,
+      "sha256": "beb1c813556efbed6364a0bd3b62eb0f6fb6ee0eb8bd8f94ea729a0ffa50bd51"
+    }
+  },
+  "sourceFiles": [
+    {
+      "path": "D:/jellyfin/Emby.Server.Implementations/IO/LibraryMonitor.cs",
+      "bytes": 18807,
+      "sha256": "977ff967b90d3ad22aad7ede03036b2803e5305c1e5e5550f2b74686c3180afc",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/Emby.Server.Implementations/IO/FileRefresher.cs",
+      "bytes": 6380,
+      "sha256": "3f3d67ce9c3b9f54450f170bdb4ef055bff3c67ddf7e5c6010f6c78f4fb12d47",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/Emby.Server.Implementations/IO/ManagedFileSystem.cs",
+      "bytes": 27461,
+      "sha256": "280ea08cf13065d8cd3790edf551b28ddfc9f352f4758d4fe0e62a55dbe0b14e",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/Emby.Server.Implementations/Library/IgnorePatterns.cs",
+      "bytes": 4227,
+      "sha256": "909ac57e1b0a789c0c64828d796abeeca5241d5166afee1d237f85848c3fbbb7",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/Emby.Server.Implementations/Library/DotIgnoreIgnoreRule.cs",
+      "bytes": 11315,
+      "sha256": "e668e657d2be554a5da9175ae1e90b7b1ed4fbc9223b0b8b1ec38931c395047f",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/MediaBrowser.Controller/Entities/BaseItem.cs",
+      "bytes": 105800,
+      "sha256": "9dc7b96a93c9fbe874cdcededdca395b5aa2df6070f5cfc9c8959539dcd76469",
+      "required": true
+    }
+  ],
+  "runtime": {
+    "schemaVersion": 1,
+    "recordedAt": "2026-10-16T04:59:18.224Z",
+    "project": "D:\\mediamanager\\tests\\library\\fixtures\\library-directory-monitor\\Oracle.csproj",
+    "dotnet": {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\dotnet.exe",
+      "available": true,
+      "kind": "file",
+      "bytes": 167208,
+      "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6"
+    },
+    "node": "v24.16.0",
+    "timezone": "Asia/Taipei",
+    "jellyfinDll": {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 506368,
+      "sha256": "474c7c638fe93cc61f1a588849fb93c81a2927388f6f4cf19953b3a76e9deb26"
+    },
+    "sourceFiles": [
+      {
+        "filename": "D:\\mediamanager\\tests\\library\\fixtures\\library-directory-monitor\\Oracle.csproj",
+        "available": true,
+        "kind": "file",
+        "bytes": 403,
+        "sha256": "3f2610631c594ffd08dcc82f03d3509abc1c9c9541f159519800df046fc770ee"
+      },
+      {
+        "filename": "D:\\mediamanager\\tests\\Directory.Build.props",
+        "available": true,
+        "kind": "file",
+        "bytes": 780,
+        "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+      },
+      {
+        "filename": "D:\\mediamanager\\tests\\library\\fixtures\\library-directory-monitor\\Program.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 7431,
+        "sha256": "feadc16e6f74a738e7f0f6dde86b792483658d6a191e22b88f01a45576df551f"
+      }
+    ],
+    "sourceFilesSha256": "3bc883ca2245980a3f2c3e9b55435ef5ceaca67ed963427f7b52a7949bf7c179",
+    "build": {
+      "args": [
+        "build",
+        "D:\\mediamanager-validation\\20261016-monitor-stage\\monitor-native-2\\project\\Oracle.csproj",
+        "-c",
+        "Release",
+        "--nologo",
+        "-v",
+        "minimal",
+        "-p:BaseOutputPath=D:\\mediamanager-validation\\20261016-monitor-stage\\monitor-native-2\\bin\\",
+        "-p:BaseIntermediateOutputPath=D:\\mediamanager-validation\\20261016-monitor-stage\\monitor-native-2\\obj\\"
+      ],
+      "status": 0,
+      "signal": null
+    },
+    "process": {
+      "args": [
+        "D:\\mediamanager-validation\\20261016-monitor-stage\\monitor-native-2\\bin\\Release\\net10.0\\Oracle.dll",
+        "D:/mediamanager/tests/library/fixtures/library-directory-monitor/input.json",
+        "D:\\mediamanager-validation\\20261016-monitor-stage\\monitor-native-2/native.json",
+        "D:\\mediamanager-validation\\20261016-monitor-stage\\monitor-native-2/state"
+      ],
+      "status": 0,
+      "signal": null
+    },
+    "outputs": [
+      {
+        "filename": "D:\\mediamanager-validation\\20261016-monitor-stage\\monitor-native-2\\build.stderr.txt",
+        "available": true,
+        "kind": "file",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261016-monitor-stage\\monitor-native-2\\build.stdout.txt",
+        "available": true,
+        "kind": "file",
+        "bytes": 356,
+        "sha256": "ade448740e69f59284b7353e106714b063ebb95068f5f372ab35b6ad2e4c4f9a"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261016-monitor-stage\\monitor-native-2\\native.json",
+        "available": true,
+        "kind": "file",
+        "bytes": 16039,
+        "sha256": "4e4a17b0a66fa965a18e53c016ccb4dc83a2f4d6c9e950a6de65612791e5b396"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261016-monitor-stage\\monitor-native-2\\stderr.txt",
+        "available": true,
+        "kind": "file",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261016-monitor-stage\\monitor-native-2\\stdout.txt",
+        "available": true,
+        "kind": "file",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    ],
+    "oracleAssembly": {
+      "filename": "D:\\mediamanager-validation\\20261016-monitor-stage\\monitor-native-2\\bin\\Release\\net10.0\\Oracle.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 20992,
+      "sha256": "da8531ca268ed46e0de457832d203a8e2b8a995a378773abc9bf06bdcd75794a"
+    },
+    "passed": true
+  },
+  "requiredInputs": [
+    {
+      "path": "D:/mediamanager-validation/20261016-monitor-stage/monitor-native-2/record.json",
+      "bytes": 4250,
+      "sha256": "7cf4fc9a64be2b03e6da9ecaaa035200c09afd0d197f72db90d76c6232b66faf",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-monitor-stage/monitor-native-2/native.json",
+      "bytes": 16039,
+      "sha256": "4e4a17b0a66fa965a18e53c016ccb4dc83a2f4d6c9e950a6de65612791e5b396",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/final-build-receipt.json",
+      "bytes": 14246,
+      "sha256": "44711dacc1c4e65d2f36202267423d3212c3577c41383696643ff04ebe8c49d2",
+      "required": true
+    },
+    {
+      "path": "D:\\mediamanager\\.tools\\dotnet\\dotnet.exe",
+      "bytes": 167208,
+      "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll",
+      "bytes": 506368,
+      "sha256": "474c7c638fe93cc61f1a588849fb93c81a2927388f6f4cf19953b3a76e9deb26",
+      "required": true
+    },
+    {
+      "path": "D:\\mediamanager-validation\\20261016-monitor-stage\\monitor-native-2\\bin\\Release\\net10.0\\Oracle.dll",
+      "bytes": 20992,
+      "sha256": "da8531ca268ed46e0de457832d203a8e2b8a995a378773abc9bf06bdcd75794a",
+      "required": true
+    }
+  ]
+}

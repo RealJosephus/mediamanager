@@ -15,6 +15,7 @@ import { MetadataImageAssets } from '../../src/metadata/image-assets.js';
 import { readCachedFolderChildren, setFolderChildren } from '../../src/library/folder-cache.js';
 import { setupChildrenFixture } from './children-fixture.js';
 import { prepareIgnoreFileFixture, projectAncestorIgnoreFiles, ensureFixtureDirectory } from '../library/ignore-file-fixture.js';
+import { fixturePathStyle, projectStatePath } from '../library/fixture-state-path.js';
 const ownerId = '98c00000-0000-0000-0000-000000000001', parentId = '98c00000-0000-0000-0000-000000000002';
 const typeName = type => `MediaBrowser.Controller.Entities.${type === 'Movie' ? 'Movies.' : ''}${type}`;
 const ordinal = (a, b) => a < b ? -1 : a > b ? 1 : 0;
@@ -24,8 +25,17 @@ const videoData = () => ({ AdditionalParts: [], LocalAlternateVersions: [], Link
   Width: 0, Height: 0, DateLastSaved: MIN_DATE, RemoteTrailers: [] });
 const folderData = () => ({ IsRoot: false, IsHD: false, IsShortcut: false, Width: 0, Height: 0, DateLastSaved: MIN_DATE, RemoteTrailers: [] });
 
+// Native Path.Combine preserves each supplied version filename verbatim. These
+// input arrays retain nested/Film.mkv even when discovery returns nested\Film.mkv.
+function projectVersionPath(value, stateRoot) {
+  const directory = path.join(stateRoot, 'media');
+  return typeof value === 'string' && value.startsWith(directory + path.sep)
+    ? projectStatePath(directory, stateRoot) + '\\' + value.slice(directory.length + path.sep.length)
+    : projectStatePath(value, stateRoot);
+}
+
 export function projectItem(item, stateRoot) {
-  const normalize = value => value?.replace(stateRoot, '$STATE') ?? null;
+  const normalize = value => projectStatePath(value, stateRoot) ?? null;
   return { id: guid(item.Id), type: item.NativeType, name: item.Name, path: normalize(item.Path),
     parentId: guid(item.ParentId ?? EMPTY_ID), ownerId: guid(item.OwnerId ?? EMPTY_ID),
     primaryVersionId: item.PrimaryVersionId ? guid(item.PrimaryVersionId) : null,
@@ -36,7 +46,8 @@ export function projectItem(item, stateRoot) {
     videoType: item.VideoType ?? 'VideoFile', extraType: typeof item.ExtraType === 'number'
       ? ['Unknown', 'Clip', 'Trailer', 'BehindTheScenes', 'DeletedScene', 'Interview', 'Scene', 'Sample', 'ThemeSong', 'ThemeVideo', 'Featurette', 'Short'][item.ExtraType]
       : item.ExtraType ?? null,
-    parts: (item.AdditionalParts ?? []).map(normalize), alternates: (item.LocalAlternateVersions ?? []).map(normalize),
+    parts: (item.AdditionalParts ?? []).map(value => projectVersionPath(value, stateRoot)),
+    alternates: (item.LocalAlternateVersions ?? []).map(value => projectVersionPath(value, stateRoot)),
     genres: item.Genres ?? [], overview: item.Overview ?? null };
 }
 
@@ -46,7 +57,7 @@ export async function setup(t, dialect, sample) {
   const directory = path.join(fixture.stateRoot, 'media'), nativePath = name => directory + path.sep + name;
   const target = nativePath(sample.files[0]);
   fixture.vfs.mount({ path: '/owned-discovery-write', instanceId: 'fixture', capabilities: { create: true, replace: true, mkdir: true, delete: true } });
-  fixture.identityMap.addPrefix({ identityRoot: directory, accessRoot: '/owned-discovery-write/owned-discovery', style: 'windows', returnAccess: 'isolated owned video discovery controls' });
+  fixture.identityMap.addPrefix({ identityRoot: directory, accessRoot: '/owned-discovery-write/owned-discovery', style: fixturePathStyle, returnAccess: 'isolated owned video discovery controls' });
   await fixture.adapter.mkdir('/owned-discovery');
   await prepareIgnoreFileFixture(fixture, sample.ignoreFiles);
   await fixture.adapter.write('/owned-discovery/primary.mkv', Buffer.from('primary control'));
@@ -63,7 +74,7 @@ export async function setup(t, dialect, sample) {
   };
   const loader = createMetadataContextLoader({fileSystem: testFileSystem,  ...fixture, videoPathResolver: (candidate, options) => {
     // Read-only D3 destination preflight has no equivalent native dispatch.
-    if (!options.preview) calls.push({ action: 'resolve', path: candidate.identityPath.replace(fixture.stateRoot, '$STATE') });
+    if (!options.preview) calls.push({ action: 'resolve', path: projectStatePath(candidate.identityPath, fixture.stateRoot) });
     return resolveOrdinaryVideoFile(candidate, { ...options, nativeType: typeName(sample.resolverType), parseName: sample.parseName });
   } });
   fixture.loadContext = fixture.host.loadContext = loader;
@@ -129,7 +140,7 @@ export async function setup(t, dialect, sample) {
 
 export async function project(value, sample, exception) {
   const { fixture, loaded, calls, oldId, childrenCleared } = value;
-  const normalize = name => name?.replace(fixture.stateRoot, '$STATE') ?? null;
+  const normalize = name => projectStatePath(name, fixture.stateRoot) ?? null;
   const rows = (await fixture.database.rows('BaseItems')).filter(row => row.Type !== 'PLACEHOLDER').map(row => ({
     id: guid(row.Id), type: row.Type, name: row.Name, path: normalize(row.Path), parentId: row.ParentId && guid(row.ParentId),
     topParentId: row.TopParentId && guid(row.TopParentId), ownerId: row.OwnerId && guid(row.OwnerId), primaryVersionId: row.PrimaryVersionId && guid(row.PrimaryVersionId),
@@ -141,6 +152,8 @@ export async function project(value, sample, exception) {
   function rewriteSavedData(data, row) {
     const rewrite = value => Array.isArray(value) ? value.map(rewrite) : value && typeof value === 'object'
       ? Object.fromEntries(Object.entries(value).map(([key, entry]) => {
+        if (['AdditionalParts', 'LocalAlternateVersions'].includes(key) && Array.isArray(entry))
+          return [key, entry.map(value => projectVersionPath(value, fixture.stateRoot))];
         if (key !== 'DateLastSaved' || entry === MIN_DATE) return [key, rewrite(entry)];
         assert.equal(dateText(entry), dateText(fixture.now));
         assert.equal(dateText(row.DateLastSaved), dateText(entry));

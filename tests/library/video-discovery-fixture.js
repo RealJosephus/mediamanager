@@ -13,6 +13,7 @@ import { MetadataImageAssets } from '../../src/metadata/image-assets.js';
 import { readCachedFolderChildren, setFolderChildren } from '../../src/library/folder-cache.js';
 import { setupChildrenFixture } from '../metadata/children-fixture.js';
 import { prepareIgnoreFileFixture, projectAncestorIgnoreFiles, ensureFixtureDirectory } from './ignore-file-fixture.js';
+import { fixturePathStyle, projectStatePath } from './fixture-state-path.js';
 const ids = { owner: '98C00000-0000-0000-0000-000000000001', parent: '98C00000-0000-0000-0000-000000000002' };
 // Independent constructor defaults, as recorded by the real native mapper.
 export const videoData = () => ({ AdditionalParts: [], LocalAlternateVersions: [], LinkedAlternateVersions: [], SubtitleFiles: [], AudioFiles: [],
@@ -42,7 +43,7 @@ export async function discoveryFixture(t, dialect, sample, { resolveFile, captur
   const directory = path.join(fixture.stateRoot, parentDirectory), nativePath = name => directory + path.sep + name;
   const target = nativePath(sample.files[0]);
   fixture.vfs.mount({ path: '/discovery-write', instanceId: 'fixture', capabilities: { create: true, replace: true, mkdir: true, delete: true } });
-  fixture.identityMap.addPrefix({ identityRoot: directory, accessRoot: '/discovery-write/discovery', style: 'windows', returnAccess: 'isolated native discovery files' });
+  fixture.identityMap.addPrefix({ identityRoot: directory, accessRoot: '/discovery-write/discovery', style: fixturePathStyle, returnAccess: 'isolated native discovery files' });
   await fixture.adapter.mkdir('/discovery');
   await prepareIgnoreFileFixture(fixture, sample.ignoreFiles);
   await fixture.adapter.write('/discovery/primary.mkv', Buffer.from('primary control'));
@@ -74,11 +75,11 @@ export async function discoveryFixture(t, dialect, sample, { resolveFile, captur
       ? { ...entry, created: '2025-01-02T03:04:05.0000000Z' } : entry) };
   };
   const baseLoader = createMetadataContextLoader({fileSystem: testFileSystem,  ...fixture, videoPathResolver: (candidate, options) => {
-    if (active) calls.push({ action: 'resolve', path: candidate.identityPath.replace(fixture.stateRoot, '$STATE') });
+    if (active) calls.push({ action: 'resolve', path: projectStatePath(candidate.identityPath, fixture.stateRoot) });
     if (candidate.entry.exists === false && candidate.entry.kind === 'directory' && sample.deleteCreated) {
       // Explicit empty MovieResolver / generic Folder fallback control. The
       // actual fallback is a Folder and cannot be returned as a Video.
-      if (active) calls.push({ action: 'folder', path: candidate.identityPath.replace(fixture.stateRoot, '$STATE') });
+      if (active) calls.push({ action: 'folder', path: projectStatePath(candidate.identityPath, fixture.stateRoot) });
       return null;
     }
     return resolveFile ? resolveFile(candidate, options)
@@ -161,7 +162,7 @@ export async function discoveryFixture(t, dialect, sample, { resolveFile, captur
 
 export function projectItem(item, root) {
   if (!item) return null;
-  const normalize = value => value?.replace(root, '$STATE');
+  const normalize = value => projectStatePath(value, root);
   return { id: guid(item.Id), type: item.NativeType, name: item.Name, path: normalize(item.Path),
     parentId: guid(item.ParentId ?? EMPTY_ID), ownerId: guid(item.OwnerId ?? EMPTY_ID), primaryVersionId: item.PrimaryVersionId ? guid(item.PrimaryVersionId) : null,
     mixed: item.IsInMixedFolder, locked: item.IsLocked, productionYear: item.ProductionYear, size: integer(item.Size), runTimeTicks: item.RunTimeTicks,
@@ -171,7 +172,7 @@ export function projectItem(item, root) {
 
 export async function projectDiscovery(fixture, loaded, sample, { resolved, exception, calls, childrenCleared, oldId }) {
   const parentDirectory = sample.parentDirectory ?? 'media';
-  const normalize = value => value?.replace(fixture.stateRoot, '$STATE') ?? null;
+  const normalize = value => projectStatePath(value, fixture.stateRoot) ?? null;
   const rows = (await fixture.database.rows('BaseItems')).filter(row => row.Type !== 'PLACEHOLDER').map(row => {
     const data = parseLosslessJson(row.Data);
     const savedDate = value => {

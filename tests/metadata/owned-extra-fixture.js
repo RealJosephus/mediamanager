@@ -16,6 +16,7 @@ import { readCachedFolderChildren, setFolderChildren } from '../../src/library/f
 import { encodeIgnoreFile } from '../library/dot-ignore-fixture.js';
 import { IdentityAccessMap } from '../../src/storage/identity-mapping.js';
 import { DotIgnoreRule } from '../../src/library/dot-ignore-rule.js';
+import { fixturePathStyle, projectStatePath } from '../library/fixture-state-path.js';
 
 const ownerId = '98c00000-0000-0000-0000-000000000001', parentId = '98c00000-0000-0000-0000-000000000002';
 const typeName = type => `MediaBrowser.Controller.Entities.${type === 'Movie' ? 'Movies.' : ['Audio', 'MusicArtist', 'MusicAlbum'].includes(type) ? 'Audio.' : ['Series', 'Season', 'Episode'].includes(type) ? 'TV.' : ''}${type}`;
@@ -26,9 +27,9 @@ const videoData = () => ({ AdditionalParts: [], LocalAlternateVersions: [], Link
   Width: 0, Height: 0, DateLastSaved: MIN_DATE, RemoteTrailers: [] });
 const folderData = () => ({ IsRoot: false, IsHD: false, IsShortcut: false, Width: 0, Height: 0, DateLastSaved: MIN_DATE, RemoteTrailers: [] });
 
-export function projectItem(item, stateRoot) {
-  const normalize = value => value?.replace(stateRoot, '$STATE') ?? null;
-  return { id: guid(item.Id), type: item.NativeType, name: item.Name, path: normalize(item.Path),
+export function projectItem(item, stateRoot, projectPath = (_, value) => projectStatePath(value, stateRoot) ?? null) {
+  const normalize = value => projectStatePath(value, stateRoot) ?? null;
+  return { id: guid(item.Id), type: item.NativeType, name: item.Name, path: projectPath(item.Id, item.Path),
     parentId: guid(item.ParentId ?? EMPTY_ID), ownerId: guid(item.OwnerId ?? EMPTY_ID),
     primaryVersionId: item.PrimaryVersionId ? guid(item.PrimaryVersionId) : null,
     mixed: item.IsInMixedFolder ?? false, locked: item.IsLocked ?? false, productionYear: item.ProductionYear ?? null,
@@ -49,7 +50,7 @@ export async function setup(t, dialect, sample, { recordInserts = true } = {}) {
   // later presents the same path with the host's separators.
   const directory = path.join(fixture.stateRoot, 'media'), target = directory + path.sep + sample.files[0];
   fixture.vfs.mount({ path: '/owned-discovery-write', instanceId: 'fixture', capabilities: { create: true, replace: true, mkdir: true, delete: true } });
-  fixture.identityMap.addPrefix({ identityRoot: directory, accessRoot: '/owned-discovery-write/owned-discovery', style: 'windows', returnAccess: 'isolated owned video discovery controls' });
+  fixture.identityMap.addPrefix({ identityRoot: directory, accessRoot: '/owned-discovery-write/owned-discovery', style: fixturePathStyle, returnAccess: 'isolated owned video discovery controls' });
   // The recorded native ancestors contain no .ignore outside this controlled
   // state. Model that namespace explicitly instead of inferring absence from
   // a missing media access mapping.
@@ -59,7 +60,7 @@ export async function setup(t, dialect, sample, { recordInserts = true } = {}) {
   const ignoreMap = new IdentityAccessMap();
   for (const prefix of fixture.identityMap.exportState().prefixes) ignoreMap.addPrefix(prefix);
   ignoreMap.addPrefix({ identityRoot: path.parse(fixture.stateRoot).root, accessRoot: '/owned-discovery-ancestors',
-    style: 'windows', returnAccess: 'Controlled complete ancestor namespace for the actual .ignore recording.' });
+    style: fixturePathStyle, returnAccess: 'Controlled complete ancestor namespace for the actual .ignore recording.' });
   fixture.ignoreIdentityMap = ignoreMap;
   fixture.ignoreRule = new DotIgnoreRule({ vfs: fixture.vfs, identityMap: ignoreMap });
   await fixture.adapter.mkdir('/owned-ancestors');
@@ -74,7 +75,7 @@ export async function setup(t, dialect, sample, { recordInserts = true } = {}) {
       Buffer.concat([Buffer.from([0xef, 0xbb, 0xbf]), Buffer.from('media control')]), { modified: '2025-01-03T04:05:06.0000000Z' });
   }
   for (const file of sample.ignoreFiles ?? []) {
-    const accessPath = ignoreMap.resolve({ identityPath: path.join(fixture.stateRoot, file.path), style: 'windows' });
+    const accessPath = ignoreMap.resolve({ identityPath: path.join(fixture.stateRoot, file.path), style: fixturePathStyle });
     const resolved = fixture.vfs.resolve(accessPath);
     let parent = '';
     for (const segment of path.posix.dirname(resolved.path).split('/').filter(Boolean)) {
@@ -90,7 +91,7 @@ export async function setup(t, dialect, sample, { recordInserts = true } = {}) {
     return result.kind === 'file' ? { ...result, created: '2025-01-02T03:04:05.0000000Z' } : result;
   };
   const loader = fixture.trackContextLoader(createMetadataContextLoader({fileSystem: testFileSystem,  ...fixture, extraPathResolver: (candidate, options) => {
-    if (!options.preview && options.nativeType === typeName('Audio')) calls.push({ action: 'resolve', path: candidate.identityPath.replace(fixture.stateRoot, '$STATE') });
+    if (!options.preview && options.nativeType === typeName('Audio')) calls.push({ action: 'resolve', path: projectStatePath(candidate.identityPath, fixture.stateRoot) });
     return resolveOwnedExtraFile(candidate, options);
   } }));
   fixture.loadContext = fixture.host.loadContext = loader;
@@ -103,6 +104,18 @@ export async function setup(t, dialect, sample, { recordInserts = true } = {}) {
   let loaded = await loader(ownerId);
   const oldType = 'Trailer';
   const oldId = nativeGuid(loaded.getNewItemId(target, typeName(oldType)));
+  // The existing row was seeded with Path.Combine(directory, input filename),
+  // whose supplied filename can contain '/'. POSIX relocation makes that
+  // separator indistinguishable from an enumerated path, so retain the input
+  // spelling only for this seeded identity and verify its complete live path.
+  const projectPath = (id, value) => {
+    if (sample.existingType && idKey(id) === idKey(oldId)) {
+      assert.equal(value, target);
+      return projectStatePath(directory, fixture.stateRoot) + '\\' + sample.files[0];
+    }
+    return projectStatePath(value, fixture.stateRoot) ?? null;
+  };
+  const projectOwnedItem = item => projectItem(item, fixture.stateRoot, projectPath);
   if (sample.existingType) definitions.push({ key: 'old', type: oldType, Id: oldId,
     Name: sample.oldName ?? 'Old version', Path: target, ...(sample.attached ? { parent: 'parent' } : {}), OwnerId: ownerId,
     ExtraType: 2, LockedFields: sample.lockedName ? ['Name'] : [] });
@@ -129,7 +142,7 @@ export async function setup(t, dialect, sample, { recordInserts = true } = {}) {
   external.deleteItemFiles = (item, options) => { calls.push({ action: 'external-files', id: guid(item.Id) }); return deleteFiles(item, options); };
   const insert = fixture.database.insert.bind(fixture.database);
   fixture.database.insert = async (table, row) => {
-    if (table === 'BaseItems' && recordInserts) calls.push({ action: 'save', items: [projectItem(mapRecord(row), fixture.stateRoot)], cancellable: false });
+    if (table === 'BaseItems' && recordInserts) calls.push({ action: 'save', items: [projectOwnedItem(mapRecord(row))], cancellable: false });
     return insert(table, row);
   };
   observeBaseItemDeletes(fixture.database, ids => calls.push({ action: 'delete', ids: ids.map(guid) }));
@@ -142,17 +155,18 @@ export async function setup(t, dialect, sample, { recordInserts = true } = {}) {
     await fixture.database.client.query(`CREATE TRIGGER owned_discovery_failure BEFORE ${action} ON "BaseItems" FOR EACH ROW EXECUTE FUNCTION owned_discovery_failure()`);
   }
   const cold = [];
-  return { fixture, loaded, calls, oldId, childrenCleared: () => readCachedFolderChildren(loaded.parent, null, () => cold) === cold };
+  return { fixture, loaded, calls, oldId, projectPath, projectItem: projectOwnedItem,
+    childrenCleared: () => readCachedFolderChildren(loaded.parent, null, () => cold) === cold };
 }
 
 export async function project(value, sample, exception, { repository = false } = {}) {
   const { fixture, loaded, calls, oldId, childrenCleared } = value;
-  const normalize = name => name?.replace(fixture.stateRoot, '$STATE') ?? null;
+  const normalize = name => projectStatePath(name, fixture.stateRoot) ?? null;
   const rewrite = value => Array.isArray(value) ? value.map(rewrite) : value && typeof value === 'object'
     ? Object.fromEntries(Object.entries(value).map(([key, entry]) => [key, rewrite(entry)]))
     : typeof value === 'string' ? value === fixture.now && repository ? '$UTC_SAVE' : normalize(value) : value;
   const rows = (await fixture.database.rows('BaseItems')).filter(row => row.Type !== 'PLACEHOLDER').map(row => ({
-    id: guid(row.Id), type: row.Type, name: row.Name, path: normalize(row.Path), parentId: row.ParentId && guid(row.ParentId),
+    id: guid(row.Id), type: row.Type, name: row.Name, path: value.projectPath(row.Id, row.Path), parentId: row.ParentId && guid(row.ParentId),
     topParentId: row.TopParentId && guid(row.TopParentId), ownerId: row.OwnerId && guid(row.OwnerId), primaryVersionId: row.PrimaryVersionId && guid(row.PrimaryVersionId),
     presentationUniqueKey: row.PresentationUniqueKey, mixed: row.IsInMixedFolder, locked: row.IsLocked,
     ...(repository ? { extraType: row.ExtraType } : {}),
@@ -189,12 +203,12 @@ export async function project(value, sample, exception, { repository = false } =
   await mediaFiles('/owned-discovery-write/owned-discovery');
   for (const file of (sample.ignoreFiles ?? []).filter(file => !file.path.startsWith('media/'))) {
     const identityPath = path.join(fixture.stateRoot, file.path);
-    const handle = await fixture.vfs.openRead(fixture.ignoreIdentityMap.resolve({ identityPath, style: 'windows' })), chunks = [];
+    const handle = await fixture.vfs.openRead(fixture.ignoreIdentityMap.resolve({ identityPath, style: fixturePathStyle })), chunks = [];
     try { for await (const bytes of handle.stream) chunks.push(Buffer.from(bytes)); } finally { await handle.close(); }
     hashFile(identityPath, Buffer.concat(chunks));
   }
   files.sort((a, b) => ordinal(a.path, b.path));
   const old = sample.existingType ? await loaded.videoVersionDiscovery.lookup(loaded, oldId) : null;
-  return { name: sample.name, exception, liveOwner: projectItem(loaded.item, fixture.stateRoot), calls, rows, links, files,
+  return { name: sample.name, exception, liveOwner: value.projectItem(loaded.item), calls, rows, links, files,
     parentChildrenCleared: childrenCleared(), parentUserDataCleared: loaded.parent.UserData === null, oldLookupName: old?.Name ?? null };
 }

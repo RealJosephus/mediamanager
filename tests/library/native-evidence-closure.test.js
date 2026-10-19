@@ -6,7 +6,7 @@ import path from 'node:path';
 import test from 'node:test';
 
 import { validationFileUrl } from '../../tools/validation/paths.js';
-import { nativeQueryReference } from './native-query-inputs.js';
+import { nativeQueryInputs, nativeQueryReference } from './native-query-default-inputs.js';
 import {
   assertNativeIdentityLaunchBinding,
   assertNativeIdentityArtifactManifest,
@@ -131,6 +131,7 @@ test('reference-preparation gate rejects state, exact-input, hash, and current-i
   const sourceDatabase = nativeQueryReference.sourceDatabase.filename;
   const preparation = JSON.parse(await readFile(preparationUrl, 'utf8'));
   const verify = candidate => verifyNativeReferencePreparation({
+    inputs: nativeQueryInputs,
     preparation: candidate,
     profile: 'item-filter',
     sourceDatabase,
@@ -157,7 +158,7 @@ test('reference-preparation gate rejects state, exact-input, hash, and current-i
 
   const temporary = await mkdtemp(path.join(tmpdir(), 'mediamanager-reference-input-'));
   t.after(() => rm(temporary, { recursive: true, force: true }));
-  const originalBootstrap = resolveNativeReferencePreparationInput('item-filter', preparation.inputs[0].path);
+  const originalBootstrap = resolveNativeReferencePreparationInput('item-filter', preparation.inputs[0].path, nativeQueryInputs);
   const tamperedReport = JSON.parse(await readFile(originalBootstrap, 'utf8'));
   tamperedReport.process.stopped = false;
   const tamperedBytes = Buffer.from(JSON.stringify(tamperedReport));
@@ -166,9 +167,9 @@ test('reference-preparation gate rejects state, exact-input, hash, and current-i
   const coherent = clone(preparation);
   coherent.inputs[0].sha256 = sha256(tamperedBytes);
   const injectedResolver = (profile, historicalPath) => historicalPath === coherent.inputs[0].path
-    ? tamperedBootstrap : resolveNativeReferencePreparationInput(profile, historicalPath);
+    ? tamperedBootstrap : resolveNativeReferencePreparationInput(profile, historicalPath, nativeQueryInputs);
   await assert.rejects(verifyNativeReferencePreparation({ preparation: coherent, profile: 'item-filter',
-    sourceDatabase, fixtureUserId, resolveInput: injectedResolver }), /stopped process/u);
+    sourceDatabase, fixtureUserId, resolveInput: injectedResolver, inputs: nativeQueryInputs }), /stopped process/u);
 });
 
 test('identity launch binding rejects executable corruption in a synthetic envelope over verified native inputs', async () => {
@@ -180,6 +181,7 @@ test('identity launch binding rejects executable corruption in a synthetic envel
     readFile(new URL('native-run-v4/reference-preparation.json', evidenceRoot), 'utf8').then(JSON.parse),
   ]);
   const referencePreparation = await verifyNativeReferencePreparation({
+    inputs: nativeQueryInputs,
     preparation,
     profile: 'user-view',
     sourceDatabase: new URL('source-initial.db', evidenceRoot),

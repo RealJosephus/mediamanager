@@ -22,7 +22,10 @@ export function imageSavePaths(item, type, index, mimeType, { saveLocally, metad
   const episode = () => api.join(api.dirname(item.Path), api.basename(item.Path, api.extname(item.Path)) + '-thumb' + extension);
   const backdrop = (zero, prefix) => {
     if (index === 0) return zero;
-    const filenames = images.filter(image => image.Type === 'Backdrop').map(image => ordinalIgnoreCaseKey(api.basename(image.Path, api.extname(image.Path))));
+    const filenames = images.filter(image => image.Type === 'Backdrop').map(image => {
+      const imageApi = imagePathApi(image.Path);
+      return ordinalIgnoreCaseKey(imageApi.basename(image.Path, imageApi.extname(image.Path)));
+    });
     let value = 1; while (filenames.includes(ordinalIgnoreCaseKey(prefix + value))) value++; return prefix + value;
   };
   if (saveLocally && !legacy) {
@@ -46,5 +49,7 @@ export function imageSavePaths(item, type, index, mimeType, { saveLocally, metad
   const name = { Art: 'clearart', BoxRear: 'back', Thumb: 'landscape', Disc: item.Type === 'MusicAlbum' ? 'cdart' : 'disc', Primary: folderName, Backdrop: backdrop('backdrop', 'backdrop') }[type] ?? type.toLowerCase();
   if (saveLocally && type === 'Primary' && item.Type === 'Episode') return [episode()];
   if (saveLocally && item.IsInMixedFolder) return [mixed(name)];
-  return [api.join(saveLocally ? folder : internalImagePath(item, metadataPath), name + extension)];
+  const directory = saveLocally ? folder : internalImagePath(item, metadataPath);
+  // The instance metadata directory can use a different path style from the media identity.
+  return [imagePathApi(directory).join(directory, name + extension)];
 }

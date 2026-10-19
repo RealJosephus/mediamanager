@@ -1,6 +1,6 @@
 import { validationFileUrl } from '../../tools/validation/paths.js';
 import assert from 'node:assert/strict';
-import { nativeQueryExecutables } from './native-query-inputs.js';
+import { nativeQueryExecutables } from './native-query-default-inputs.js';
 import { createHash } from 'node:crypto';
 import { mkdir, mkdtemp, readFile, rm, symlink, writeFile } from 'node:fs/promises';
 import os from 'node:os';

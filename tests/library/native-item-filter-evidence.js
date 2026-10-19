@@ -5,7 +5,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { verifyNativeReferencePreparation } from './native-reference-preparation.js';
-import { nativeQueryInputs, readNativeQueryBoundFile } from './native-query-inputs.js';
+import { readNativeQueryBoundFile } from './native-query-inputs.js';
 
 const repoRoot = fileURLToPath(new URL('../../', import.meta.url));
 const sha256 = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -94,13 +94,15 @@ function assertResponseContracts(nativeHttp) {
 }
 
 export async function verifyNativeItemFilterEvidence(options) {
-  const inputs = options.inputs ?? nativeQueryInputs;
+  const inputs = options.inputs;
+  assert.ok(inputs, 'Explicit native query inputs are required.');
   const recorderSource = await inputs.readRecorderSource();
   return verifyNativeItemFilterEvidenceContract({ ...options, inputs, recorderSource });
 }
 
 export async function verifyNativeItemFilterEvidenceContract({ evidence, fixtureUrl, scenario, runDirectory,
-  expectedRecords, recorderSource, inputs = nativeQueryInputs }) {
+  expectedRecords, recorderSource, inputs }) {
+  assert.ok(inputs, 'Explicit native query inputs are required.');
   assert.equal(typeof recorderSource, 'string');
   const nativeRun = fileURLToPath(evidence);
   const evidenceRoot = path.dirname(nativeRun.replace(/[\\/]$/u, ''));

@@ -6,6 +6,8 @@ import path from 'node:path';
 import { nativeGuid } from '../../src/users/native.js';
 import { quoteIdentifier as q } from '../../src/database/model.js';
 import { createPostgresTestDatabase } from '../database/postgres-fixture.js';
+import { recordedInputPath } from '../../tools/validation/paths.js';
+void JSON.parse(await readFile(new URL('./fixtures/guid-contract/required-inputs.json', import.meta.url)));
 const fixture = new URL('./fixtures/guid-contract/', import.meta.url);
 const [inputBytes, nativeBytes, proofBytes] = await Promise.all(['input.json', 'native.json', 'provenance.json']
   .map(name => readFile(new URL(name, fixture))));
@@ -20,15 +22,15 @@ test('GUID contract binds actual System.Guid.Parse and Jellyfin JSON converters'
   assert.deepEqual(native.cases.map(row => ({ Name: row.Name, Value: row.value })), input.Cases);
   assert.equal(proof.build.status, 0); assert.equal(proof.process.status, 0);
   assert.equal(proof.completeBuildInputClosure, false); assert.equal(proof.phaseAcceptance, false);
-  assert.equal(hash(await readFile(proof.rawRecording.filename)), proof.nativeSha256);
-  assert.equal(hash(await readFile(proof.oracleAssembly.filename)), proof.oracleAssembly.sha256);
+  assert.equal(hash(await readFile(recordedInputPath(proof.rawRecording.filename, [proof.nativeSha256]))), proof.nativeSha256);
+  assert.equal(hash(await readFile(recordedInputPath(proof.oracleAssembly.filename, [proof.oracleAssembly.sha256]))), proof.oracleAssembly.sha256);
   for (const source of proof.oracleSources) assert.equal(hash(await readFile(source.name === 'Directory.Build.props'
     ? new URL('../Directory.Build.props', import.meta.url) : new URL(source.name, fixture))), source.sha256);
   for (const source of proof.sources) for (const root of ['D:/jellyfin', proof.buildSource]) {
-    assert.equal(hash(await readFile(path.join(root, source.path))), source.sha256);
+    assert.equal(hash(await readFile(recordedInputPath(path.join(root, source.path), [source.sha256]))), source.sha256);
   }
-  for (const assembly of proof.assemblies) assert.equal(hash(await readFile(assembly.filename)), assembly.sha256, assembly.name);
-  for (const assembly of proof.matchingLibraryAssemblies) assert.equal(hash(await readFile(assembly.filename)), assembly.sha256, assembly.name);
+  for (const assembly of proof.assemblies) assert.equal(hash(await readFile(recordedInputPath(assembly.filename, [assembly.sha256]))), assembly.sha256, assembly.name);
+  for (const assembly of proof.matchingLibraryAssemblies) assert.equal(hash(await readFile(recordedInputPath(assembly.filename, [assembly.sha256]))), assembly.sha256, assembly.name);
   assert.ok(proof.assemblies.some(row => row.name === 'System.Private.CoreLib'));
   assert.ok(proof.matchingLibraryAssemblies.some(row => row.name === 'Jellyfin.Extensions'));
 });

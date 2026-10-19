@@ -1,8 +1,58 @@
 import path from 'node:path';
-import { existsSync, realpathSync } from 'node:fs';
+import { existsSync, lstatSync, realpathSync } from 'node:fs';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import recordedInputs from './recorded-inputs.json' with { type: 'json' };
 
 export const repositoryRoot = fileURLToPath(new URL('../../', import.meta.url));
+export const recordedInputMapPath = fileURLToPath(new URL('./recorded-inputs.json', import.meta.url));
+
+const recordedKey = value => {
+  const filename = (value instanceof URL ? fileURLToPath(value) : String(value)).replace(/^\/(?=[A-Za-z]:[\\/])/u, '');
+  return /^[A-Za-z]:[\\/]/u.test(filename) && !/[\r\n\0]/u.test(filename)
+    ? path.win32.normalize(filename).replaceAll('\\', '/').toLowerCase() : null;
+};
+const recordedByPath = new Map();
+const recordedTargets = new Map();
+if (recordedInputs.schemaVersion !== 1 || !Array.isArray(recordedInputs.entries)) throw new Error('Invalid recorded-input relocation manifest.');
+for (const entry of recordedInputs.entries) {
+  const key = recordedKey(entry.source);
+  if (!key || !/^[a-f0-9]{64}$/u.test(entry.sha256)
+    || !Number.isSafeInteger(entry.bytes) || entry.bytes < 0
+    || typeof entry.target !== 'string' || !entry.target.startsWith('tests/fixtures/recorded-native/')
+    || /[:\\\r\n\0]/u.test(entry.target) || entry.target.split('/').some(part => !part || part === '.' || part === '..')) {
+    throw new Error('Invalid or conflicting recorded-input relocation.');
+  }
+  const versions = recordedByPath.get(key) ?? new Map(), target = recordedTargets.get(entry.target);
+  if (versions.has(entry.sha256) || target && (target.sha256 !== entry.sha256 || target.bytes !== entry.bytes)) {
+    throw new Error('Conflicting recorded-input identity.');
+  }
+  const bound = Object.freeze({ source: entry.source, filename: path.resolve(repositoryRoot, entry.target),
+    sha256: entry.sha256, bytes: entry.bytes });
+  versions.set(entry.sha256, bound); recordedByPath.set(key, versions); recordedTargets.set(entry.target, bound);
+}
+
+/** Locate byte-identical recording evidence. This deliberately does not affect
+ * validationPath or validationExecutable, which locate executable runtimes. */
+export function recordedInput(value, expectedDigests = []) {
+  if (!Array.isArray(expectedDigests) || !expectedDigests.length
+    || expectedDigests.some(digest => typeof digest !== 'string' || !/^[a-f0-9]{64}$/iu.test(digest))) return null;
+  const expected = expectedDigests[0].toLowerCase();
+  if (!expectedDigests.every(digest => digest.toLowerCase() === expected)) return null;
+  const entry = recordedByPath.get(recordedKey(value))?.get(expected);
+  if (!entry) return null;
+  let current = repositoryRoot;
+  for (const part of path.relative(repositoryRoot, entry.filename).split(path.sep)) {
+    current = path.join(current, part);
+    try {
+      if (lstatSync(current).isSymbolicLink()) throw new Error('Recorded inputs cannot traverse symbolic links.');
+    } catch (error) { if (error.code === 'ENOENT') break; throw error; }
+  }
+  return entry;
+}
+
+export function recordedInputPath(value, expectedDigests = [], base = repositoryRoot, environment = process.env) {
+  return recordedInput(value, expectedDigests)?.filename ?? validationPath(value, base, environment);
+}
 
 const roots = [
   ['.agent-docs/evidence/syncplay-date-impact-inputs', 'MEDIAMANAGER_SYNCPLAY_DATE_IMPACT_INPUT_ROOT'],

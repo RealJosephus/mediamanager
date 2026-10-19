@@ -1,0 +1,239 @@
+name: Cross-platform validation
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      test_files:
+        description: Exact test paths separated by commas or newlines; leave empty for all available tests
+        type: string
+        required: false
+        default: ''
+      native_reference:
+        description: Build the sealed native reference runtime for selected native consumers
+        type: boolean
+        required: false
+        default: false
+      alist_reference:
+        description: Build the designated AList Go source with the controlled API-only test frontend (Web UI unvalidated)
+        type: boolean
+        required: false
+        default: false
+      platform:
+        description: Platforms for this validation batch; use one OS for a platform-specific diagnosis
+        type: choice
+        required: true
+        default: all
+        options:
+          - all
+          - windows
+          - linux
+          - macos
+
+permissions:
+  contents: read
+
+concurrency:
+  # Independent manual subsets must retain their own evidence. A newer push
+  # still supersedes an older automatic run on the same ref.
+  group: validation-${{ github.workflow }}-${{ github.ref }}-${{ github.event_name == 'workflow_dispatch' && github.run_id || 'automatic' }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: ${{ matrix.os }} / Node 24 / PostgreSQL 17
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ${{ fromJSON(inputs.platform == 'windows' && '["windows-2025"]' || inputs.platform == 'linux' && '["ubuntu-24.04"]' || inputs.platform == 'macos' && '["macos-15"]' || '["ubuntu-24.04","windows-2025","macos-15"]') }}
+    env:
+      TZ: Asia/Taipei
+      MEDIAMANAGER_TEST_POSTGRES: postgresql://validation@127.0.0.1:5432/postgres
+      MEDIAMANAGER_CI_TEST_FILES: ${{ inputs.test_files || '' }}
+      MEDIAMANAGER_CI_NATIVE_REFERENCE: ${{ inputs.native_reference && 'true' || 'false' }}
+      MEDIAMANAGER_CI_ALIST_REFERENCE: ${{ inputs.alist_reference && 'true' || 'false' }}
+      DOTNET_CLI_TELEMETRY_OPTOUT: '1'
+      DOTNET_NOLOGO: '1'
+    steps:
+      - name: Configure isolated evidence output
+        shell: bash
+        run: |
+          printf 'MEDIAMANAGER_VALIDATION_OUTPUT_ROOT=%s\n' "$RUNNER_TEMP/mediamanager-results" >> "$GITHUB_ENV"
+          printf 'DOTNET_INSTALL_DIR=%s\n' "$RUNNER_TEMP/mediamanager-dotnet" >> "$GITHUB_ENV"
+      - name: Check out exact candidate
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - name: Validate exact requested test paths before provisioning
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $trackedFiles = git ls-files -- tests
+          if ($LASTEXITCODE -ne 0) { throw 'Cannot list candidate test files.' }
+          $tracked = [Collections.Generic.HashSet[string]]::new([string[]]$trackedFiles, [StringComparer]::Ordinal)
+          $requested = [Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
+          foreach ($entry in ($env:MEDIAMANAGER_CI_TEST_FILES -split '[,\r\n]+')) {
+            $filename = $entry.Trim()
+            if (-not $filename) { continue }
+            if (-not $filename.EndsWith('.test.js', [StringComparison]::Ordinal) -or -not $tracked.Contains($filename)) {
+              throw "Unknown requested test: $filename"
+            }
+            if (-not $requested.Add($filename)) { throw "Duplicate requested test: $filename" }
+          }
+          Write-Output "Validated $($requested.Count) exact requests; an empty list retains automatic scope selection."
+      - name: Set up Node
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24.16.0
+          cache: npm
+      - name: Provision fixed WebDAV executable
+        shell: pwsh
+        timeout-minutes: 5
+        run: ./tools/ci/setup-webdav.ps1
+      - name: Build designated AList API-only test host
+        if: inputs.alist_reference == true
+        shell: pwsh
+        timeout-minutes: 30
+        run: ./tools/ci/build-alist.ps1
+      - name: Prepare and verify macOS loopback alias
+        id: loopback
+        if: runner.os == 'macOS'
+        shell: bash
+        timeout-minutes: 2
+        run: |
+          set -euo pipefail
+          mkdir -p "$MEDIAMANAGER_VALIDATION_OUTPUT_ROOT/provisioning"
+          /sbin/ifconfig lo0 | tee "$MEDIAMANAGER_VALIDATION_OUTPUT_ROOT/provisioning/loopback-before.txt"
+          if /sbin/ifconfig lo0 | awk '$1 == "inet" && $2 == "127.0.0.2" { found = 1 } END { exit !found }'; then
+            printf 'created=false\n' >> "$GITHUB_OUTPUT"
+          else
+            # Apple ifconfig(8): same-subnet aliases use a non-conflicting /32 mask.
+            sudo /sbin/ifconfig lo0 inet 127.0.0.2 netmask 255.255.255.255 alias up
+            printf 'created=true\n' >> "$GITHUB_OUTPUT"
+          fi
+          /sbin/ifconfig lo0 | tee "$MEDIAMANAGER_VALIDATION_OUTPUT_ROOT/provisioning/loopback-ready.txt"
+          node --input-type=module <<'NODE'
+          import net from 'node:net';
+          import { writeFile } from 'node:fs/promises';
+          import path from 'node:path';
+          const servers = [net.createServer(), net.createServer()];
+          const listen = (server, host, port) => new Promise((resolve, reject) => {
+            server.once('error', reject);
+            server.listen(port, host, resolve);
+          });
+          try {
+            await listen(servers[0], '127.0.0.1', 0);
+            const port = servers[0].address().port;
+            await listen(servers[1], '127.0.0.2', port);
+            const record = { addresses: servers.map(server => server.address()), samePort: true };
+            await writeFile(path.join(process.env.MEDIAMANAGER_VALIDATION_OUTPUT_ROOT, 'provisioning/loopback-bind.json'), JSON.stringify(record, null, 2) + '\n');
+            console.log(`Verified 127.0.0.1 and 127.0.0.2 both bind port ${port}.`);
+          } finally {
+            await Promise.all(servers.filter(server => server.listening).map(server => new Promise((resolve, reject) => server.close(error => error ? reject(error) : resolve()))));
+          }
+          NODE
+      - name: Set up .NET oracle runtime
+        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
+        with:
+          dotnet-version: 10.0.401
+      - name: Verify isolated .NET installation
+        shell: pwsh
+        run: ./tools/ci/verify-dotnet.ps1
+      - name: Build isolated native reference from sealed source
+        if: inputs.native_reference == true
+        shell: pwsh
+        run: |
+          ./tools/ci/build-native.ps1
+          $nativeRoot = Join-Path $env:RUNNER_TEMP 'mediamanager-native-build'
+          "MEDIAMANAGER_NATIVE_BUILD_ROOT=$nativeRoot" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          "MEDIAMANAGER_JELLYFIN_DLL=$(Join-Path $nativeRoot 'runtime/jellyfin.dll')" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+      - name: Set up PostgreSQL
+        uses: ankane/setup-postgres@b1a598d92f86cb2ed364411898d150d4eac6d5ca # v1
+        with:
+          postgres-version: '17'
+          user: validation
+      - name: Install media tools on Linux
+        if: runner.os == 'Linux'
+        shell: bash
+        run: |
+          if ! command -v ffmpeg >/dev/null; then
+            sudo apt-get update -qq
+            sudo apt-get install -y ffmpeg
+          fi
+      - name: Install media tools on macOS
+        if: runner.os == 'macOS'
+        shell: bash
+        run: |
+          if ! command -v ffmpeg >/dev/null; then
+            brew install ffmpeg
+          fi
+      - name: Install media tools on Windows
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          if (-not (Get-Command ffmpeg -ErrorAction SilentlyContinue)) {
+            choco install ffmpeg --yes --no-progress
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+            Join-Path $env:ChocolateyInstall 'lib/ffmpeg/tools/ffmpeg/bin' | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          }
+      - name: Install locked dependencies
+        run: npm ci --bin-links=false
+      - name: Record runner and database identity
+        id: environment
+        run: node tools/ci/environment.js capture
+      - name: Check syntax
+        run: npm run check
+      # GITHUB_EVENT_NAME/PATH supply the push base or PR merge parents. Manual
+      # dispatch with an empty test_files input still requests all available tests.
+      - name: Run affected or explicitly requested strict validation
+        timeout-minutes: 110
+        run: node tools/ci/run.js
+      - name: Audit database resources
+        if: always() && steps.environment.outcome == 'success'
+        run: node tools/ci/environment.js audit
+      - name: Remove created macOS loopback alias
+        if: always() && runner.os == 'macOS' && steps.loopback.outputs.created == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo /sbin/ifconfig lo0 inet 127.0.0.2 -alias
+          /sbin/ifconfig lo0 | tee "$MEDIAMANAGER_VALIDATION_OUTPUT_ROOT/provisioning/loopback-after.txt"
+          if /sbin/ifconfig lo0 | awk '$1 == "inet" && $2 == "127.0.0.2" { found = 1 } END { exit !found }'; then
+            echo 'The created loopback alias remained after cleanup.' >&2
+            exit 1
+          fi
+      - name: Preserve validation evidence
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: validation-${{ matrix.os }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/mediamanager-results
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Preserve same-run native reference and build evidence
+        if: always() && inputs.native_reference == true
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: native-reference-${{ matrix.os }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/mediamanager-native-build/runtime
+            ${{ runner.temp }}/mediamanager-native-build/source-offer
+            ${{ runner.temp }}/mediamanager-native-build/receipts
+          if-no-files-found: error
+          retention-days: 14
+      - name: Preserve same-run AList API host source and build evidence
+        if: always() && inputs.alist_reference == true
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: alist-api-host-${{ matrix.os }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/mediamanager-alist-build/runtime
+            ${{ runner.temp }}/mediamanager-alist-build/source-offer
+            ${{ runner.temp }}/mediamanager-alist-build/receipts
+          if-no-files-found: error
+          retention-days: 14

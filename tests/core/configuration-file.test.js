@@ -45,6 +45,8 @@ async function heldFile(filename, mode, records) {
 }
 
 test('configuration helper matches native recovery, canonical write admission and real file sharing, then native cold read', async t => {
+  assert.ok(process.env.MEDIAMANAGER_JELLYFIN_DLL, 'Native configuration cold reads require MEDIAMANAGER_JELLYFIN_DLL and its assembly directory.');
+  await fs.access(process.env.MEDIAMANAGER_JELLYFIN_DLL);
   const root = path.join(path.resolve(validationOutputRoot()), 'configuration-files'); await fs.mkdir(root);
   const observations = [], consumers = [], locks = [];
   for (const sample of input.filter(sample => sample.helper)) await t.test(sample.name, async () => {

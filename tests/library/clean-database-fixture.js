@@ -13,6 +13,7 @@ import { tableDefinition } from '../../src/database/model.js';
 import { nativeGuid } from '../../src/users/native.js';
 import { parseLosslessJson } from '../../src/core/json.js';
 import { dateText, guid } from '../../src/library/records.js';
+import { fixturePathStyle, projectStatePath, expandStatePath } from './fixture-state-path.js';
 
 export const cleanupId = value => `ba420000-0000-0000-0000-${String(value).padStart(12, '0')}`;
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -27,7 +28,7 @@ export async function setupDatabaseCleanup(t, observation) {
   useIdentityPathReversalControl(fixture);
   const sample = observation.sample, calls = [], progress = [], logs = [], abort = new AbortController();
   const metadataPath = path.join(fixture.stateRoot, 'metadata'), dataPath = path.join(fixture.stateRoot, 'data');
-  const expand = text => text.replaceAll(observation.root, fixture.stateRoot);
+  const expand = text => expandStatePath(text, observation.root, fixture.stateRoot);
   const nativeRows = rows => rows.map(row => ({ ...rewrite(row, expand),
     Data: row.Data == null ? null : encode(rewrite(parseLosslessJson(row.Data), expand)) }));
   await database.transaction(async db => {
@@ -40,7 +41,7 @@ export async function setupDatabaseCleanup(t, observation) {
     }
   });
   fixture.vfs.mount({ path: '/cleanup-source', instanceId: 'fixture', capabilities: { create: true, replace: true, mkdir: true, delete: true } });
-  fixture.identityMap.addPrefix({ identityRoot: path.join(fixture.stateRoot, 'media'), accessRoot: '/cleanup-source/media', style: 'windows',
+  fixture.identityMap.addPrefix({ identityRoot: path.join(fixture.stateRoot, 'media'), accessRoot: '/cleanup-source/media', style: fixturePathStyle,
     returnAccess: 'Isolated cleanup media identities, accessed through VFS only.' });
   await fixture.adapter.mkdir('/media');
   const assets = new MetadataImageAssets({fileSystem: testFileSystem,  ...fixture, metadataPath, stateRoots: [dataPath] });
@@ -66,9 +67,9 @@ export async function setupDatabaseCleanup(t, observation) {
     logger: Object.fromEntries(['debug', 'info', 'warn'].map(level => [level, message => logs.push({ level, message })])) });
   const snapshot = async () => {
     const normalizeRows = rows => rows.map(row => Object.fromEntries(Object.entries(row).map(([key, value]) => [key,
-      key === 'Data' && value != null ? rewrite(parseLosslessJson(value), text => text.replaceAll(fixture.stateRoot, '$ROOT'))
+      key === 'Data' && value != null ? rewrite(parseLosslessJson(value), text => projectStatePath(text, fixture.stateRoot, '$ROOT'))
         : key.startsWith('Date') && value != null ? dateText(value)
-          : typeof value === 'string' ? value.replaceAll(fixture.stateRoot, '$ROOT') : value])))
+          : typeof value === 'string' ? projectStatePath(value, fixture.stateRoot, '$ROOT') : value])))
       .sort((a, b) => ordinal(a.Id, b.Id));
     const tree = [];
     const local = async directory => {

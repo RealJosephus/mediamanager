@@ -130,9 +130,10 @@ export function analyzeJavaScriptDependencies(source) {
   } catch (error) {
     return { importSpecifiers: [], unresolvedImports: [{ kind: 'parse', reason: error.message }],
       unresolvedExecutables: [], tools: [], environmentVariables: [], testRegistrations: 0,
-      conditionalRegistration: true, referenceDeclarations: [] };
+      conditionalRegistration: true, referenceDeclarations: [], fixtureSpecifiers: [] };
   }
   const imports = new Map();
+  const fixtureSpecifiers = new Set();
   const unresolved = new Map();
   const unresolvedExecutables = new Map();
   const tools = new Set();
@@ -496,10 +497,25 @@ export function analyzeJavaScriptDependencies(source) {
     }
     return { resolved: false, tools: [] };
   };
-  for (const { node } of nodes) {
+  for (const { node, ancestors } of nodes) {
     if (node.type === 'NewExpression' && node.callee?.type === 'Identifier' && node.callee.name === 'URL'
       && node.arguments.length === 2) {
       const specifier = staticSpecifier(node.arguments[0]), base = node.arguments[1];
+      const importMetaBase = base?.type === 'MemberExpression' && !base.computed
+        && base.object?.type === 'MetaProperty' && base.object.meta?.name === 'import' && base.object.property?.name === 'meta'
+        && base.property?.name === 'url';
+      const directRead = ancestors.some(parent => parent.type === 'CallExpression'
+        && ['readFile', 'readFileSync', 'openSync'].includes(parent.callee?.name ?? memberName(parent.callee)));
+      const outputOrAssertion = !directRead && ancestors.some(parent => parent.type === 'CallExpression' && (
+        ['writeFile', 'writeFileSync', 'appendFile', 'appendFileSync'].includes(parent.callee?.name ?? memberName(parent.callee))
+        || parent.callee?.type === 'MemberExpression' && parent.callee.object?.type === 'Identifier' && parent.callee.object.name === 'assert'));
+      if (!shadowedUrl && importMetaBase && specifier && /\.json(?:[?#]|$)/u.test(specifier)
+        && !/^(?:[A-Za-z][A-Za-z0-9+.-]*:|[\\/])/u.test(specifier) && !/[\r\n\0]/u.test(specifier)
+        // Existing declarations preserve environment remapping and distinguish
+        // evidence identity assertions from actual external reads.
+        && !/^(?:\.\.\/)*\.agent-docs\//u.test(specifier) && !outputOrAssertion) {
+        fixtureSpecifiers.add(specifier);
+      }
       if (specifier && /\.wasm$/u.test(specifier)) {
         if (!shadowedUrl && !/^(?:[A-Za-z][A-Za-z0-9+.-]*:|[\\/])/u.test(specifier)
           && base?.type === 'MemberExpression' && !base.computed
@@ -576,7 +592,7 @@ export function analyzeJavaScriptDependencies(source) {
     left.specifier.localeCompare(right.specifier) || left.kind.localeCompare(right.kind)),
   unresolvedImports: [...unresolved.values()], unresolvedExecutables: [...unresolvedExecutables.values()],
   tools: [...tools].sort(), environmentVariables: [...environmentVariables].sort(), testRegistrations: registrations.length,
-  conditionalRegistration, referenceDeclarations: referenceDeclarations(source, nodes) };
+  conditionalRegistration, referenceDeclarations: referenceDeclarations(source, nodes), fixtureSpecifiers: [...fixtureSpecifiers].sort() };
 }
 
 export function caseFoldedEntryMap(paths) {
@@ -725,7 +741,7 @@ export async function inventory(environment = process.env) {
       const analysis = /\.(?:js|mjs|cjs)$/u.test(filename)
         ? analyzeJavaScriptDependencies(source) : { importSpecifiers: [], unresolvedImports: [], unresolvedExecutables: [],
           tools: [], environmentVariables: [],
-          testRegistrations: 0, conditionalRegistration: false, referenceDeclarations: [] };
+          testRegistrations: 0, conditionalRegistration: false, referenceDeclarations: [], fixtureSpecifiers: [] };
       // The host loads verified installed byte copies. Bind both reviewed
       // load expressions and every bundled package to the candidate closure.
       if(path.relative(repositoryRoot,filename).replaceAll('\\','/')==='src/plugins/host.js'){
@@ -748,8 +764,11 @@ export async function inventory(environment = process.env) {
           ...(declaration.dynamic ? {} : await describeFile(validationPath(declaration.logicalPath, repositoryRoot, environment), { recursive: false })) });
       }
       const fixtureReferences = [];
-      for (const value of [...new Set([...source.matchAll(/["']((?:\.\.?\/)+fixtures\/[^"'\r\n]*\.json)["']/gu)].map(match => match[1]))]) {
-        fixtureReferences.push({ relativePath: value, ...await describeFile(path.resolve(path.dirname(filename), value), { recursive: false }) });
+      for (const value of new Set([...[...source.matchAll(/["']((?:\.\.?\/)+fixtures\/[^"'\r\n]*\.json)["']/gu)].map(match => match[1]),
+        ...analysis.fixtureSpecifiers])) {
+        fixtureReferences.push({ relativePath: value,
+          ...await describeFile(analysis.fixtureSpecifiers.includes(value)
+            ? fileURLToPath(new URL(value, pathToFileURL(filename))) : path.resolve(path.dirname(filename), value), { recursive: false }) });
       }
       const testFile = filename.endsWith('.test.js');
       entries.push({ path: path.relative(repositoryRoot, filename).replaceAll('\\', '/'),

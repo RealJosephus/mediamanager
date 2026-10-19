@@ -1433,6 +1433,49 @@ test('repository children racing a newly planned folder retry before any stale l
     'only the fresh retry runs lifecycle work for the concurrently committed hierarchy');
 });
 
+test('resolver previews of grandchildren retain the database baseline across later recursion and retry', async t => {
+  const { database, library, adapter, vfs, scanner, reference } = await fixture(t, 'postgres');
+  await adapter.mkdir('/Existing'); await adapter.mkdir('/Existing/Nested');
+  await scanner.scan(reference);
+  const nestedId = folderId('Z:\\Library\\Existing\\Nested');
+  const rootTargetId = folderId('Z:\\Library\\RootWouldRollback');
+  await adapter.mkdir('/RootWouldRollback');
+  const inserted = ['E5000000-0000-0000-0000-000000000001', 'E5000000-0000-0000-0000-000000000002'];
+  const events = [];
+  for (const name of ['ItemAdded', 'ItemUpdated', 'ItemRemoved']) library.on(name, event => events.push([name, event.Item.Id]));
+  const list = vfs.list.bind(vfs);
+  let attempts = 0, injected = 0;
+  vfs.list = async (pathname, options) => {
+    const result = await list(pathname, options);
+    if (pathname === '/library') attempts++;
+    if (pathname === '/library/Existing/Nested' && injected < attempts && injected < inserted.length) {
+      const Id = inserted[injected++];
+      await database.insert('BaseItems', item(Id, 'Movie', {
+        Name: `Concurrent nested item ${injected}`, ParentId: nestedId, TopParentId: ROOT_ID,
+        Path: `Z:\\Library\\Existing\\Nested\\concurrent-${injected}.mkv`
+      }));
+    }
+    return result;
+  };
+  // Directory resolvers can peek below a direct candidate before they return a
+  // traversal claim. Keep the actual resolver and use its public peek contract.
+  const resolve = scanner.resolverPipeline.resolve.bind(scanner.resolverPipeline);
+  scanner.resolverPipeline.resolve = async context => {
+    if (key(context.parent.Id) === key(ROOT_ID)) {
+      const existing = context.candidates.find(candidate => candidate.entry.name === 'Existing');
+      const preview = await context.peekDirectory(existing);
+      await context.peekDirectory(preview.candidates.find(candidate => candidate.entry.name === 'Nested'));
+    }
+    return resolve(context);
+  };
+  await assert.rejects(scanner.scan(reference), { code: 'version-changed' });
+  assert.equal(attempts, 2); assert.equal(injected, 2);
+  for (const Id of inserted) assert.equal((await database.rows('BaseItems', { where: { Id } })).length, 1);
+  assert.equal((await database.rows('BaseItems', { where: { Id: rootTargetId } })).length, 0);
+  assert.equal((await database.rows('AncestorIds', { where: { ItemId: rootTargetId } })).length, 0);
+  assert.deepEqual(events, [], 'both conflicted attempts retain concurrent rows and roll back their structural journal');
+});
+
 test('scan cancellation during a no-token lifecycle lets direct siblings finish before recursion', async t => {
   const controller = new AbortController();
   const calls = [];

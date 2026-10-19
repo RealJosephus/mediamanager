@@ -1,4 +1,4 @@
-import { queryPostgresItemPage } from '../database/postgres-item-query.js';
+import { buildPostgresItemPageQuery, queryPostgresItemPage } from '../database/postgres-item-query.js';
 
 // UserViewBuilder materializes a deliberately smaller filter surface than an
 // InternalItemsQuery.  Keep that boundary explicit: repository-only switches
@@ -34,9 +34,10 @@ export function queryPostgresUserViewMenuPage(database, query, itemIds, {
   memoryRatingContext = null,
   signal,
   childScope,
-  visibility,
+  visibility, onPlan,
 } = {}) {
-  return queryPostgresItemPage(database, menuQuery(query, userId != null), {
+  const filtered = menuQuery(query, userId != null);
+  const options = {
     scope: childScope ?? { ids: itemIds },
     userId,
     includeOwnedItems: childScope == null,
@@ -49,5 +50,7 @@ export function queryPostgresUserViewMenuPage(database, query, itemIds, {
     memoryFolderPlayback: true,
     memoryUserViewFilter: true,
     signal,
-  });
+  };
+  return onPlan ? onPlan(buildPostgresItemPageQuery(database, filtered, { ...options, includeOrdinal: true }))
+    : queryPostgresItemPage(database, filtered, options);
 }

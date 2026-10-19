@@ -8,6 +8,7 @@ import { ServerIdentity, readServerIdentity, isServerIdentity } from '../../src/
 import { validationOutputRoot, validationExecutable } from '../../tools/validation/paths.js';
 import { identityObservation } from './fixtures/server-identity/observations.js';
 
+void JSON.parse(await fs.readFile(new URL('./fixtures/server-identity/required-inputs.json', import.meta.url)));
 const fixture = new URL('./fixtures/server-identity/', import.meta.url);
 const [inputBytes, nativeBytes, proofBytes] = await Promise.all(['input.json', 'native.json', 'provenance.json'].map(name => fs.readFile(new URL(name, fixture))));
 const input = JSON.parse(inputBytes), native = JSON.parse(nativeBytes), proof = JSON.parse(proofBytes), hash = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -24,6 +25,9 @@ test('server identity evidence binds real DeviceId, files, source and independen
 });
 
 async function lockFile(filename, mode) {
+  // A relocated recording is evidence only; execute the original helper after
+  // verifying its actual bytes, not a path chosen by the recording map.
+  assert.equal(hash(await fs.readFile(proof.oracleAssembly.filename)), proof.oracleAssembly.sha256);
   const child = spawn(validationExecutable('dotnet'), [proof.oracleAssembly.filename, 'hold-file', filename, mode], { windowsHide: true, stdio: ['pipe', 'pipe', 'pipe'] });
   const completion = new Promise(resolve => { child.once('exit', (code, signal) => resolve({ code, signal })); child.once('error', error => resolve({ error: error.message })); });
   let stdout = '', stderr = '', timer;

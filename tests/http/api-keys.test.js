@@ -6,10 +6,11 @@ import { createHash } from 'node:crypto';
 import { createApplication } from '../../src/http/application.js';
 import { DomainStore } from '../../src/database/domain-store.js';
 import { AuthenticationService, ApiKeyService } from '../../src/users/index.js';
-import { validationOutputRoot } from '../../tools/validation/paths.js';
+import { recordedInputPath, validationOutputRoot } from '../../tools/validation/paths.js';
 import { createPostgresTestDatabase, dropPostgresTestDatabase, postgresTestConnectionString } from '../database/postgres-fixture.js';
 import { normalizeKeyRows, projectKeyObservation } from './fixtures/api-keys/observations.js';
 
+void JSON.parse(await fs.readFile(new URL('./fixtures/api-keys/required-inputs.json', import.meta.url)));
 const fixture = new URL('./fixtures/api-keys/', import.meta.url);
 const [inputBytes, nativeBytes, proofBytes] = await Promise.all(['input.json', 'native.json', 'provenance.json'].map(name => fs.readFile(new URL(name, fixture))));
 const input = JSON.parse(inputBytes), native = JSON.parse(nativeBytes), proof = JSON.parse(proofBytes);
@@ -19,17 +20,17 @@ const stringify = value => JSON.stringify(value, (_, entry) => typeof entry === 
 
 test('API-key recording binds actual MVC, manager, EF SQLite and independent repeated observations', async () => {
   assert.equal(hash(inputBytes), proof.inputSha256); assert.equal(hash(nativeBytes), proof.nativeSha256);
-  assert.equal(hash(await fs.readFile(proof.rawRecording)), proof.nativeSha256);
+  assert.equal(hash(await fs.readFile(recordedInputPath(proof.rawRecording, [proof.nativeSha256]))), proof.nativeSha256);
   assert.equal(native.inputSha256, proof.inputSha256);
   for (const name of ['actualController', 'actualBinding', 'actualManager', 'actualEfSqlite', 'principalControlled']) assert.equal(native[name], true);
   assert.equal(proof.build.status, 0); assert.equal(proof.process.status, 0); assert.equal(proof.sourcesStable, true);
   assert.equal(proof.completeBuildInputClosure, false); assert.equal(proof.phaseAcceptance, false);
-  for (const row of proof.sources) for (const root of ['D:/jellyfin', proof.jellyfin.buildSource]) assert.equal(hash(await fs.readFile(path.join(root, row.filename))), row.sha256, row.filename);
-  for (const row of proof.oracleSources) assert.equal(hash(await fs.readFile(row.filename)), row.sha256, row.filename);
-  for (const row of [...proof.assemblies, ...proof.nativeLibraries]) assert.equal(hash(await fs.readFile(row.filename)), row.sha256, row.filename);
-  assert.equal(hash(await fs.readFile(proof.repeat.filename)), proof.repeat.sha256);
+  for (const row of proof.sources) for (const root of ['D:/jellyfin', proof.jellyfin.buildSource]) assert.equal(hash(await fs.readFile(recordedInputPath(path.join(root, row.filename), [row.sha256]))), row.sha256, row.filename);
+  for (const row of proof.oracleSources) assert.equal(hash(await fs.readFile(recordedInputPath(row.filename, [row.sha256]))), row.sha256, row.filename);
+  for (const row of [...proof.assemblies, ...proof.nativeLibraries]) assert.equal(hash(await fs.readFile(recordedInputPath(row.filename, [row.sha256]))), row.sha256, row.filename);
+  assert.equal(hash(await fs.readFile(recordedInputPath(proof.repeat.filename, [proof.repeat.sha256]))), proof.repeat.sha256);
   assert.equal(hash(await fs.readFile(new URL('observations.js', fixture))), proof.repeat.comparisonSha256);
-  const repeated = JSON.parse(await fs.readFile(proof.repeat.filename));
+  const repeated = JSON.parse(await fs.readFile(recordedInputPath(proof.repeat.filename, [proof.repeat.sha256])));
   assert.deepEqual(repeated.results.map(projectKeyObservation), native.results.map(projectKeyObservation));
   assert.deepEqual(native.results.map(row => row.name), input.map(row => row.name));
 });

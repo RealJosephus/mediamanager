@@ -6,7 +6,9 @@ import { createHash } from 'node:crypto';
 import { createApplication } from '../../src/http/application.js';
 import { AuthenticationService } from '../../src/users/authentication-service.js';
 import { wireGuid } from '../../src/users/native.js';
+import { recordedInputPath } from '../../tools/validation/paths.js';
 
+void JSON.parse(await readFile(new URL('./fixtures/collections/required-inputs.json', import.meta.url)));
 const fixture = new URL('./fixtures/collections/', import.meta.url);
 const [inputBytes, nativeBytes, proofBytes] = await Promise.all(['input.json', 'native.json', 'provenance.json'].map(name => readFile(new URL(name, fixture))));
 const input = JSON.parse(inputBytes), native = JSON.parse(nativeBytes), proof = JSON.parse(proofBytes);
@@ -17,20 +19,20 @@ const noTrace = value => Array.isArray(value) ? value.map(noTrace) : value && ty
 
 test('collection HTTP recording binds native controller, binder, permission handlers and controlled seams', async () => {
   assert.equal(hash(inputBytes), proof.inputSha256); assert.equal(hash(nativeBytes), proof.nativeSha256);
-  assert.equal(hash(await readFile(proof.rawRecording)), proof.nativeSha256);
-  assert.equal(hash(await readFile(proof.repeat.filename)), proof.repeat.sha256);
+  assert.equal(hash(await readFile(recordedInputPath(proof.rawRecording, [proof.nativeSha256]))), proof.nativeSha256);
+  assert.equal(hash(await readFile(recordedInputPath(proof.repeat.filename, [proof.repeat.sha256]))), proof.repeat.sha256);
   assert.equal(proof.repeat.sameInputAndOracleSources, true);
   assert.equal(native.inputSha256, proof.inputSha256);
   for (const key of ['actualController', 'actualBinding', 'actualPermissionHandlers', 'actualManagerErrors', 'principalControlled', 'userNetworkControlled', 'managerDtoControlled']) assert.equal(native[key], true);
   assert.equal(proof.build.status, 0); assert.equal(proof.process.status, 0);
   assert.equal(proof.completeBuildInputClosure, false); assert.equal(proof.phaseAcceptance, false);
   for (const source of proof.sources) {
-    assert.equal(hash(await readFile(path.join('D:/jellyfin', source.filename))), source.sha256, source.filename);
-    assert.equal(hash(await readFile(path.join(proof.jellyfin.buildSource, source.filename))), source.sha256, source.filename);
+    assert.equal(hash(await readFile(recordedInputPath(path.join('D:/jellyfin', source.filename), [source.sha256]))), source.sha256, source.filename);
+    assert.equal(hash(await readFile(recordedInputPath(path.join(proof.jellyfin.buildSource, source.filename), [source.sha256]))), source.sha256, source.filename);
   }
   for (const source of proof.oracleSources) assert.equal(hash(await readFile(source.filename === 'Directory.Build.props'
     ? new URL('../Directory.Build.props', import.meta.url) : new URL(source.filename, fixture))), source.sha256, source.filename);
-  for (const assembly of proof.assemblies) assert.equal(hash(await readFile(assembly.filename)), assembly.sha256, assembly.name);
+  for (const assembly of proof.assemblies) assert.equal(hash(await readFile(recordedInputPath(assembly.filename, [assembly.sha256]))), assembly.sha256, assembly.name);
   assert.deepEqual(native.results.map(row => row.name), input.cases.map(row => row.name));
 });
 

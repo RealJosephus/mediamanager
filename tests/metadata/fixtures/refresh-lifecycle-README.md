@@ -2,7 +2,7 @@
 
 The queue recorder invokes the baseline `ProviderManager` and `BaseItem` from
 the freshly isolated Release DLLs. Its dependency `IMetadataService` is controlled;
-it does not host HTTP or execute native SQL. `refresh-queue-native.json` retains
+it does not host HTTP or execute native SQL. `refresh-queue/native.json` retains
 equal-priority ordering, mixed priorities, provider cancellation and disposal.
 The native priority queue is a quaternary heap and does not promise FIFO ordering
 for equal priorities. Ordinary Movie metadata refreshes do not emit Folder

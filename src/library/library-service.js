@@ -33,7 +33,7 @@ import { clrTrim } from '../metadata/whitespace.js';
 import { ordinalIgnoreCaseKey } from '../storage/ordinal-comparer.js';
 import { createPresentationUniqueKey } from './presentation-key.js';
 import { SimilarItemsManager } from './similar-items.js';
-import { queryPostgresDtoChildCounts, queryPostgresItemPage } from '../database/postgres-item-query.js';
+import { buildPostgresItemPageQuery, queryPostgresDtoChildCounts, queryPostgresItemPage } from '../database/postgres-item-query.js';
 import { loadPostgresItemGraph, loadPostgresNavigationRows, loadPostgresPageGraph, loadPostgresRowsByIds, queryPostgresFolderStats,
   countPostgresNullVideoTypeRows, queryPostgresAlbumSelectorIds, queryPostgresArtistSelectorId,
   queryPostgresArtistSelectorIds,
@@ -1210,6 +1210,19 @@ export class LibraryService extends EventEmitter {
       { user, fromUserViewChildren: true, playedFolderScope, checkParentAccess }, false)).Items;
   }
 
+  /** Consume an internal item query relationally after its normal dispatch and
+   * permission checks, without materializing the complete result in Node. */
+  async withItemQueryPlan(input, { user = null } = {}, operation) {
+    if (typeof operation !== 'function') throw new TypeError('An item query plan requires a consumer.');
+    let consumed = false;
+    const result = await this.#queryItems(input, { user, fromUserViewChildren: true }, async (db, plan) => {
+      consumed = true;
+      return operation(db, plan);
+    });
+    if (!consumed) throw new TypeError('This item query does not expose a relational plan.');
+    return result;
+  }
+
   async #queryItems(input, {
     user = null, isApiKey = false, fromUserViewChildren = false, playedFolderScope = null, checkParentAccess = true,
   }, project) {
@@ -1370,6 +1383,9 @@ export class LibraryService extends EventEmitter {
     // Synthetic user-view menus are persisted entities rather than catalogue
     // rows.  Their construction is being kept explicit so a future view type
     // cannot silently fall back to an unbounded JavaScript scan.
+    if (typeof project === 'function' && (dispatch.nextUpView || dispatch.foldersView || dispatch.menuType)) {
+      throw new TypeError('This item query does not expose a relational plan.');
+    }
     if (dispatch.nextUpView) {
       return this.#queryNextUpViewPostgres(db, query, user, parent, navigationRows, navigation, project);
     }
@@ -1591,6 +1607,8 @@ export class LibraryService extends EventEmitter {
         } catch { /* Error observers do not alter item queries. */ }
       }
     }
+    if (typeof project === 'function') return await project(db,
+      buildPostgresItemPageQuery(db, query, { ...postgresQueryOptions, includeOrdinal: true }));
     const page = await queryPostgresItemPage(db, query, postgresQueryOptions);
     const graphRows = await loadPostgresPageGraph(db, page.rows, navigationRows);
     const state = await this.load(db, user, { baseRows: graphRows });
@@ -1666,7 +1684,9 @@ export class LibraryService extends EventEmitter {
       memorySortConfiguration: this.options.configuration,
       memoryRatingContext: postgresParentalRatingContext(navigation, this.options),
       ...scopeOptions,
+      ...(typeof project === 'function' ? { onPlan: plan => project(db, plan) } : {}),
     });
+    if (typeof project === 'function') return page;
     const graphRows = await loadPostgresPageGraph(db, page.rows, navigationRows);
     const state = await this.load(db, user, { baseRows: graphRows });
     const items = page.rows.map(row => state.byId.get(idKey(row.Id))).filter(Boolean);

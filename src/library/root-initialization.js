@@ -3,7 +3,7 @@ import { getNewItemId } from '../core/identity.js';
 import { nativeGuid, nativeDateFromUnixNanoseconds } from '../users/native.js';
 import { nativeDate } from '../sessions/user-data.js';
 import { dateText, EMPTY_ID, sameId } from './records.js';
-import { createVirtualPathExpander } from './options.js';
+import { createVirtualPathExpander, createVirtualPathReverser } from './options.js';
 import { ordinalIgnoreCaseKey } from '../storage/ordinal-comparer.js';
 
 const aggregateType = 'MediaBrowser.Controller.Entities.AggregateFolder';
@@ -53,6 +53,7 @@ export async function initializeLibraryRoot({ fileSystem, store, programDataPath
   const rootId = nativeGuid(getNewItemId(rootPath, aggregateType, identityOptions));
   const playlistId = nativeGuid(getNewItemId(playlistPath, playlistType, identityOptions));
   const expandPath = createVirtualPathExpander({ programDataPath, dataPath, metadataPath });
+  const reversePath = createVirtualPathReverser({ programDataPath, dataPath, metadataPath });
   await fileSystem.mkdir(programDataPath, { recursive: true });
   const stateRoot = await fileSystem.realpath(programDataPath);
   // A default/in-tree data path remains confined by the program-data root.
@@ -81,7 +82,7 @@ export async function initializeLibraryRoot({ fileSystem, store, programDataPath
     // Native GetItemById must yield a BasePluginFolder with the same path.
     const reuse = existing?.Type === playlistType
       && ordinalIgnoreCaseKey(expandPath(existing.Path) ?? '') === ordinalIgnoreCaseKey(playlistPath);
-    const playlists = reuse ? existing : folder(playlistId, playlistType, 'Playlists', '%AppDataPath%\\playlists', {
+    const playlists = reuse ? existing : folder(playlistId, playlistType, 'Playlists', reversePath(playlistPath), {
       DateCreated: nativeDateFromUnixNanoseconds(directory.birthtimeNs),
       DateModified: nativeDateFromUnixNanoseconds(directory.mtimeNs), TopParentId: playlistId,
     });

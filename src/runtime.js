@@ -3,7 +3,7 @@ import { LibraryTaskScheduler } from './library/library-task-scheduler.js';
 import { createConfiguredStorage } from './storage-bootstrap.js';
 import { DomainStore } from './database/domain-store.js';
 import { UserService, AuthenticationService, ApiKeyService, DeviceService, QuickConnectService, PasswordResetService, createNetworkClassifier } from './users/index.js';
-import { createAudioBookItemResolver, createAudioItemResolver, createBookItemResolver, createBoxSetItemResolver, createPhotoAlbumResolver, createPhotoItemResolver, createPlaylistItemResolver, createTvItemResolver, createVideoFileResolver, DirectoryItemResolverPipeline, FolderScanService, FolderValidationService, InertLibraryDirectoryMonitor, ItemCreationService, ItemDeletionService, LibraryMetadataScanService, LibraryScanHost, LibraryScanLifecycle, LibraryScanService, LibraryService, LinkedChildReferenceService, MusicGenresPostScanTask, PlaylistService, ResolvedItemLifecycleHost, SimilarItemsManager, TopLevelFolderValidationService } from './library/index.js';
+import { createAudioBookItemResolver, createAudioItemResolver, createBookItemResolver, createBoxSetItemResolver, createPhotoAlbumResolver, createPhotoItemResolver, createPlaylistItemResolver, createTvItemResolver, createVideoFileResolver, DirectoryItemResolverPipeline, FolderScanService, FolderValidationService, LibraryDirectoryMonitor, LibraryMonitorHost, ItemCreationService, ItemDeletionService, LibraryMetadataScanService, LibraryScanHost, LibraryScanLifecycle, LibraryScanService, LibraryService, LinkedChildReferenceService, MusicGenresPostScanTask, PlaylistService, ResolvedItemLifecycleHost, SimilarItemsManager, TopLevelFolderValidationService } from './library/index.js';
 import { SessionService, UserDataService } from './sessions/index.js';
 import { createApplication } from './http/application.js';
 import { createCoreLocalization } from './core/i18n.js';
@@ -77,6 +77,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
   metadataPath = absoluteApplicationPath(metadataPath, 'metadataPath');
   const rollback = [];
   let splashscreen;
+  let cancelMetadata = () => {};
   let plugins, configuredStorage, fileSystem;
   try {
   const store = new DomainStore(database);
@@ -263,6 +264,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
       itemCreation, refresh: (reference, options) => metadata.refresh(reference, options), logger, now: metadataNow });
     metadata = new MetadataRefreshHost({ registry, loadContext, store, linkedChildren, vfs, logger, userData, probe, externalData,
       images: metadataImages, updates: metadataUpdates, seriesLifecycle, now: metadataNow });
+    cancelMetadata = () => metadata.cancel();
     rollback.push(async () => { await bookArchives.close(); await metadata.close(); });
     Object.assign(metadata, { saver });
   }
@@ -310,8 +312,23 @@ export async function createRuntime({ database, configuration, serverId, serverN
   const cleanDatabasePostScanTask = itemCreation && itemDeletion
     ? new CleanDatabasePostScanTask({ store, library, itemCreation, itemDeletion, externalData, vfs, identityMap, logger }) : undefined;
   const splashscreenPostScanTask = splashscreen ? new SplashscreenPostScanTask({ library, imageGenerator: splashscreen, logger }) : undefined;
-  const libraryMonitor = new InertLibraryDirectoryMonitor();
-  const libraryScanLifecycle = libraryScanHost ? new LibraryScanLifecycle({ host: libraryScanHost,
+  // Runtimes without application paths have no persistent AggregateFolder.
+  // Their query/session services remain usable without directory monitoring.
+  const libraryMonitorHost = programDataPath && libraryScanHost && ignoreRule ? new LibraryMonitorHost({ store, library, itemCreation,
+    scanHost: libraryScanHost, metadata, metadataScanner, fileSystem, vfs, identityMap,
+    scheduler: libraryTaskScheduler, logger }) : undefined;
+  const libraryMonitor = libraryMonitorHost ? new LibraryDirectoryMonitor({ host: libraryMonitorHost,
+    configuration, ignoreRule, logger, runBackground: operation => store.runDetached(() => loadContext.withDetachedScope(operation)) }) : undefined;
+  if (libraryMonitor) {
+    rollback.push(() => libraryMonitor.close());
+    metadata.queuedRefresh = (reference, options) => store.runDetached(() => loadContext.withDetachedScope(
+      () => libraryMonitorHost.refreshQueuedItem(reference, options)));
+    metadata.runQueuedBatch = (operation, options) => store.runDetached(() => loadContext.withDetachedScope(
+      () => libraryMonitorHost.runQueuedBatch(operation, options)));
+    metadata.saver.monitor = libraryMonitor;
+    metadataImages.monitor = libraryMonitor;
+  }
+  const libraryScanLifecycle = libraryMonitor ? new LibraryScanLifecycle({ host: libraryScanHost,
     monitor: libraryMonitor, postScanTasks: [splashscreenPostScanTask, artistsPostScanTask, collectionPosterVerifyPostScanTask, genresPostScanTask, musicGenresPostScanTask, studiosPostScanTask, cleanDatabasePostScanTask], logger }) : undefined;
   const libraryScanner = libraryScanLifecycle ? new LibraryScanService({ lifecycle: libraryScanLifecycle, onError }) : undefined;
   if (libraryScanner) rollback.push(() => libraryScanner.close());
@@ -354,7 +371,8 @@ export async function createRuntime({ database, configuration, serverId, serverN
   rollback.push(() => metadataEditor.close());
   const itemUpdates = new MetadataEditService({ library, loadContext, updates: metadataUpdates, refreshes: metadata });
   rollback.push(() => itemUpdates.close());
-  const stopStorageObserver = configuredStorage.subscribe(async () => {
+  const stopBeforeStorageObserver = configuredStorage.subscribeBeforeChange(() => libraryMonitor?.stop());
+  const stopAfterStorageObserver = configuredStorage.subscribe(async () => {
     storageReadiness.ready = false; storageReadiness.error = null;
     storageReadiness.ready = await deferUnavailable(async () => {
       await initializeStorageRoots();
@@ -362,7 +380,9 @@ export async function createRuntime({ database, configuration, serverId, serverN
       await libraryOptionsStore?.clear();
       await libraryConfiguration?.initialize();
     });
+    if (storageReadiness.ready) await libraryMonitor?.start();
   });
+  const stopStorageObserver = () => { stopBeforeStorageObserver(); stopAfterStorageObserver(); };
   rollback.push(stopStorageObserver);
   const services = { storage: configuredStorage, storageReadiness, fileSystem, configuration, store, users, devices, library, itemCreation, itemDeletion, unsafeItemDeletion, folderValidation, linkedChildReferences, playlists, folderScanner, topLevelValidation, libraryScanHost, libraryScanLifecycle, libraryScanner, metadataScanner, artistsPostScanTask, genresPostScanTask, musicGenresPostScanTask, studiosPostScanTask, tasks, userData, sessions, syncPlay, refreshes, authentication, localization, playback, probe, externalData, extraction, remux, hls, images, imageProcessor, metadata, metadataUpdates, resolvedItemLifecycle, metadataEditor, itemUpdates, plugins, similarItems, ignoreRule, serverId, serverName, serverVersion };
   services.collectionPosterVerifyPostScanTask = collectionPosterVerifyPostScanTask;
@@ -376,6 +396,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
   services.linkedChildren = linkedChildren;
   services.runWithContext = loadContext && (operation => loadContext.withScope(operation));
   services.libraryMonitor = libraryMonitor;
+  services.libraryMonitorHost = libraryMonitorHost;
   services.libraryTaskScheduler = libraryTaskScheduler;
   services.quickConnect = quickConnect;
   services.passwordResets = passwordResets;
@@ -427,6 +448,10 @@ export async function createRuntime({ database, configuration, serverId, serverN
       const attempt = async operation => { try { await operation(); } catch (error) { errors.push(error); } };
       application.beginClose();
       stopStorageObserver();
+      // A scheduler worker can be awaiting a metadata provider's cancellation.
+      // Signal it before waiting for any scan owner; savers and SQL ownership
+      // remain available until those operations have completed their cleanup.
+      cancelMetadata();
       // Signal every scan owner before awaiting any of them. A scheduled task
       // may wait behind a library generation which itself waits behind an
       // older folder scan; each owner must receive cancellation to release the
@@ -441,6 +466,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
         attempt(() => branding.close()),
         attempt(() => collections?.close()),
         attempt(() => libraryConfiguration?.close()),
+        attempt(() => libraryMonitor?.close()),
         attempt(() => tasks.close()),
         attempt(() => libraryScanner?.close()),
         attempt(() => folderScanner?.close()),
@@ -481,11 +507,15 @@ export async function createRuntime({ database, configuration, serverId, serverN
   // Start persisted task triggers only after every runtime service and its
   // shutdown path exist. A startup trigger can otherwise outlive a later
   // constructor failure and keep using a database the caller never received.
+  if (storageReadiness.ready) await libraryMonitor?.start();
   await tasks.initialize();
   rollback.length = 0;
   return { ...application, ...services, get implementedRoutes() { return application.implementedRoutes; }, startAutoDiscovery, close };
   } catch (error) {
     const errors = [error];
+    // Late initialization may already have admitted a provider through the
+    // shared scheduler. Cancel before any rollback owner waits for that work.
+    try { cancelMetadata(); } catch (cancelError) { errors.push(cancelError); }
     try { await splashscreen?.close(); } catch (closeError) { errors.push(closeError); }
     for (const dispose of rollback.reverse()) {
       try { await dispose(); }

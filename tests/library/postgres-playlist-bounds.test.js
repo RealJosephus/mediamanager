@@ -118,7 +118,7 @@ test('playlist folder queries apply private access before counting and paging', 
     assert.deepEqual(result.Items.map(item => item.Id), expected ? [idKey(expected)] : []);
     assert.equal(result.TotalRecordCount, total);
   }
-  await database.update('BaseItems', { Id: privateId }, { Path: '%appdatapath%\\playlists\\A private' });
+  await database.update('BaseItems', { Id: privateId }, { Path: path.join('%appdatapath%', 'playlists', 'A private') });
   const virtualPathPage = await library.queryItems(query, { user: reader });
   assert.deepEqual(virtualPathPage.Items.map(item => item.Id), [idKey(publicId)]);
   assert.equal(virtualPathPage.TotalRecordCount, 1);

@@ -6,7 +6,9 @@ import { createHash } from 'node:crypto';
 import { createApplication } from '../../src/http/application.js';
 import { AuthenticationService } from '../../src/users/authentication-service.js';
 import { QuickConnectService } from '../../src/users/quick-connect-service.js';
+import { recordedInputPath } from '../../tools/validation/paths.js';
 
+void JSON.parse(await readFile(new URL('./fixtures/quick-connect/required-inputs.json', import.meta.url)));
 const fixture = new URL('./fixtures/quick-connect/', import.meta.url);
 const [inputBytes, nativeBytes, proofBytes] = await Promise.all(['input.json', 'native.json', 'provenance.json'].map(name => readFile(new URL(name, fixture))));
 const input = JSON.parse(inputBytes), native = JSON.parse(nativeBytes), proof = JSON.parse(proofBytes);
@@ -17,19 +19,19 @@ const noTrace = value => Array.isArray(value) ? value.map(noTrace) : value && ty
 
 test('Quick Connect recording binds actual manager, MVC and authorization with explicit session seams', async () => {
   assert.equal(hash(inputBytes), proof.inputSha256); assert.equal(hash(nativeBytes), proof.nativeSha256);
-  assert.equal(hash(await readFile(proof.rawRecording)), proof.nativeSha256);
-  assert.equal(hash(await readFile(proof.repeat.filename)), proof.repeat.sha256);
+  assert.equal(hash(await readFile(recordedInputPath(proof.rawRecording, [proof.nativeSha256]))), proof.nativeSha256);
+  assert.equal(hash(await readFile(recordedInputPath(proof.repeat.filename, [proof.repeat.sha256]))), proof.repeat.sha256);
   assert.equal(proof.repeat.sameInputAndOracleSources, true);
   assert.equal(native.inputSha256, proof.inputSha256);
   for (const name of ['actualManager', 'actualControllers', 'actualBinding', 'actualDefaultAuthorization', 'sessionManagerControlled', 'principalControlled']) assert.equal(native[name], true);
   assert.equal(proof.build.status, 0); assert.equal(proof.process.status, 0); assert.equal(proof.sourcesStable, true);
   assert.equal(proof.completeBuildInputClosure, false); assert.equal(proof.phaseAcceptance, false);
   for (const row of proof.sources) {
-    for (const root of ['D:/jellyfin', proof.jellyfin.buildSource]) assert.equal(hash(await readFile(path.join(root, row.filename))), row.sha256, row.filename);
+    for (const root of ['D:/jellyfin', proof.jellyfin.buildSource]) assert.equal(hash(await readFile(recordedInputPath(path.join(root, row.filename), [row.sha256]))), row.sha256, row.filename);
   }
   for (const row of proof.oracleSources) assert.equal(hash(await readFile(row.filename === 'Directory.Build.props'
     ? new URL('../Directory.Build.props', import.meta.url) : new URL(row.filename, fixture))), row.sha256, row.filename);
-  for (const row of proof.assemblies) assert.equal(hash(await readFile(row.filename)), row.sha256, row.name);
+  for (const row of proof.assemblies) assert.equal(hash(await readFile(recordedInputPath(row.filename, [row.sha256]))), row.sha256, row.name);
   assert.deepEqual(input.map(row => row.name), native.results.map(row => row.name));
   assert.equal(native.directResults.length, 9);
 });

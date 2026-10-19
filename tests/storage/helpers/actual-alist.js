@@ -7,9 +7,11 @@ import os from 'node:os';
 import path from 'node:path';
 import { setTimeout as delay } from 'node:timers/promises';
 import pg from 'pg';
+import { alistBuildInputs } from '../../../tools/validation/alist-inputs.js';
 
 /** Run an actual externally built AList with a new database and synthetic-only Local drive. */
 export async function startActualAList({ connectionString, evidenceDirectory, port: requestedPort = 0 } = {}) {
+  await alistBuildInputs();
   const executable = path.resolve(process.env.MEDIAMANAGER_ALIST_EXECUTABLE);
   if (!path.isAbsolute(executable)) throw new TypeError('An absolute actual AList executable path is required.');
   if (!Number.isInteger(requestedPort) || requestedPort !== 0 && (requestedPort < 1024 || requestedPort > 65535)) throw new TypeError('Invalid isolated AList port.');

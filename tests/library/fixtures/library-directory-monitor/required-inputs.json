@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 1,
+  "scope": "Recorded regression evidence only. Original manifests and native outputs remain unchanged. Bundled executables are hash inputs, never runtime executables.",
+  "provenanceSha256": "6a8b8fdfe99db3d35a822727b4890594b53581cacd0a885b358490a7b9319e51",
+  "requiredInputs": [
+    {
+      "path": "D:/jellyfin/Emby.Server.Implementations/IO/LibraryMonitor.cs",
+      "bytes": 18807,
+      "sha256": "977ff967b90d3ad22aad7ede03036b2803e5305c1e5e5550f2b74686c3180afc",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/Emby.Server.Implementations/IO/FileRefresher.cs",
+      "bytes": 6380,
+      "sha256": "3f3d67ce9c3b9f54450f170bdb4ef055bff3c67ddf7e5c6010f6c78f4fb12d47",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/Emby.Server.Implementations/IO/ManagedFileSystem.cs",
+      "bytes": 27461,
+      "sha256": "280ea08cf13065d8cd3790edf551b28ddfc9f352f4758d4fe0e62a55dbe0b14e",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/Emby.Server.Implementations/Library/IgnorePatterns.cs",
+      "bytes": 4227,
+      "sha256": "909ac57e1b0a789c0c64828d796abeeca5241d5166afee1d237f85848c3fbbb7",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/Emby.Server.Implementations/Library/DotIgnoreIgnoreRule.cs",
+      "bytes": 11315,
+      "sha256": "e668e657d2be554a5da9175ae1e90b7b1ed4fbc9223b0b8b1ec38931c395047f",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/MediaBrowser.Controller/Entities/BaseItem.cs",
+      "bytes": 105800,
+      "sha256": "9dc7b96a93c9fbe874cdcededdca395b5aa2df6070f5cfc9c8959539dcd76469",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-monitor-stage/monitor-native-2/record.json",
+      "bytes": 4250,
+      "sha256": "7cf4fc9a64be2b03e6da9ecaaa035200c09afd0d197f72db90d76c6232b66faf",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-monitor-stage/monitor-native-2/native.json",
+      "bytes": 16039,
+      "sha256": "4e4a17b0a66fa965a18e53c016ccb4dc83a2f4d6c9e950a6de65612791e5b396",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/final-build-receipt.json",
+      "bytes": 14246,
+      "sha256": "44711dacc1c4e65d2f36202267423d3212c3577c41383696643ff04ebe8c49d2",
+      "required": true
+    },
+    {
+      "path": "D:\\mediamanager\\.tools\\dotnet\\dotnet.exe",
+      "bytes": 167208,
+      "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll",
+      "bytes": 506368,
+      "sha256": "474c7c638fe93cc61f1a588849fb93c81a2927388f6f4cf19953b3a76e9deb26",
+      "required": true
+    },
+    {
+      "path": "D:\\mediamanager-validation\\20261016-monitor-stage\\monitor-native-2\\bin\\Release\\net10.0\\Oracle.dll",
+      "bytes": 20992,
+      "sha256": "da8531ca268ed46e0de457832d203a8e2b8a995a378773abc9bf06bdcd75794a",
+      "required": true
+    },
+    {
+      "path": "D:\\mediamanager\\tests\\library\\fixtures\\library-directory-monitor\\Oracle.csproj",
+      "bytes": 403,
+      "sha256": "3f2610631c594ffd08dcc82f03d3509abc1c9c9541f159519800df046fc770ee",
+      "required": true
+    },
+    {
+      "path": "D:\\mediamanager\\tests\\Directory.Build.props",
+      "bytes": 780,
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd",
+      "required": true
+    },
+    {
+      "path": "D:\\mediamanager\\tests\\library\\fixtures\\library-directory-monitor\\Program.cs",
+      "bytes": 7431,
+      "sha256": "feadc16e6f74a738e7f0f6dde86b792483658d6a191e22b88f01a45576df551f",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/LICENSE",
+      "bytes": 18014,
+      "sha256": "f371b80469fb235bc500ec29e0e85b682d4a6157a158567d828ff0be544d4f1d",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/LICENSE.txt",
+      "bytes": 9519,
+      "sha256": "7f6839a61ce892b79c6549e2dc5a81fdbd240a0b260f8881216b45b7fda8b45d",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/ThirdPartyNotices.txt",
+      "bytes": 78887,
+      "sha256": "deb4427a295e1ed474b0d81c5a0d972c1b550b9a715cda939cdfa9236b1b418f",
+      "required": true
+    }
+  ]
+}

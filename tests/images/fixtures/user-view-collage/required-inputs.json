@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "scope": "Recorded regression evidence only. Original manifests and native outputs remain unchanged. Bundled executables are hash inputs, never runtime executables.",
+  "provenanceSha256": "26e8db50e7e712c30a95034a9faf2affdbce47a03882019042169b14d1325863",
+  "requiredInputs": [
+    {
+      "path": "D:/jellyfin/Emby.Server.Implementations/Images/DynamicImageProvider.cs",
+      "bytes": 4551,
+      "sha256": "6482437c4781991e9bedca5350dd7ea00884d7fd71c00b416b49d7ceef9726d1",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/Emby.Server.Implementations/Images/BaseDynamicImageProvider.cs",
+      "bytes": 11108,
+      "sha256": "5ae8c13987a0f86202ed4c501f2d07a5a37a69a625d8eb1ad24c7e80327b4da7",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/src/Jellyfin.Drawing.Skia/StripCollageBuilder.cs",
+      "bytes": 13239,
+      "sha256": "1478548f7646c5f437d9b3a7fd8e96e3d30d7743b60b9b1a02469d3f2f45b840",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/src/Jellyfin.Drawing.Skia/SkiaEncoder.cs",
+      "bytes": 34013,
+      "sha256": "8c3c61b8be155b57460374c2bb7c7fba3cdddf8d3db4c75e4f8f9e113c4c83bc",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/src/Jellyfin.Drawing.Skia/SkiaHelper.cs",
+      "bytes": 1539,
+      "sha256": "04fab405c909ed6a4e4525607ab976afc57348dcd3a84649dda1513ac9af5362",
+      "required": true
+    },
+    {
+      "path": "D:\\mediamanager\\tests\\images\\fixtures\\user-view-collage\\Oracle.csproj",
+      "bytes": 769,
+      "sha256": "7108dd70190c64098b4dd90c9597d73a107f17e8d403be6624c146f2f6a78e01",
+      "required": true
+    },
+    {
+      "path": "D:\\mediamanager\\tests\\Directory.Build.props",
+      "bytes": 780,
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd",
+      "required": true
+    },
+    {
+      "path": "D:\\mediamanager\\tests\\images\\fixtures\\user-view-collage\\Program.cs",
+      "bytes": 4747,
+      "sha256": "8ff849f94584a8a59862c0451f8cf10469fc1096cb9ec0b26559ad88ddcc8015",
+      "required": true
+    },
+    {
+      "path": "D:\\mediamanager-validation\\20261016-user-view-collage\\native-2\\bin\\Release\\net10.0\\Oracle.dll",
+      "bytes": 21504,
+      "sha256": "3d80a4f533b6ce90253a450ee2d840c6f7f9ef8f3a452f0a810dd81217d85622",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll",
+      "bytes": 506368,
+      "sha256": "474c7c638fe93cc61f1a588849fb93c81a2927388f6f4cf19953b3a76e9deb26",
+      "required": true
+    },
+    {
+      "path": "D:\\mediamanager\\.tools\\dotnet\\dotnet.exe",
+      "bytes": 167208,
+      "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-user-view-collage/native-2/record.json",
+      "bytes": 9019,
+      "sha256": "b2db532d647f10a1f19893a36dfebc229c1fb81c03524a7ccdc5f69aff2c3750",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/final-build-receipt.json",
+      "bytes": 14246,
+      "sha256": "44711dacc1c4e65d2f36202267423d3212c3577c41383696643ff04ebe8c49d2",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/LICENSE",
+      "bytes": 18014,
+      "sha256": "f371b80469fb235bc500ec29e0e85b682d4a6157a158567d828ff0be544d4f1d",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/LICENSE.txt",
+      "bytes": 9519,
+      "sha256": "7f6839a61ce892b79c6549e2dc5a81fdbd240a0b260f8881216b45b7fda8b45d",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/ThirdPartyNotices.txt",
+      "bytes": 78887,
+      "sha256": "deb4427a295e1ed474b0d81c5a0d972c1b550b9a715cda939cdfa9236b1b418f",
+      "required": true
+    }
+  ]
+}

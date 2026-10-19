@@ -65,9 +65,9 @@ test('postgres: database cleanup freezes playlist objects across 128-row pages a
       'Id', convert_to('ba420000-0000-0000-0000-' || lpad(generated.number::text, 12, '0'), 'UTF8'),
       'Name', convert_to('Playlist ' || generated.number, 'UTF8'),
       'SortName', convert_to(lpad(generated.number::text, 12, '0'), 'UTF8'),
-      'Path', $2::bytea || convert_to('\\playlist-' || generated.number || '.m3u', 'UTF8'))) created`,
+      'Path', $2::bytea || convert_to('playlist-' || generated.number || '.m3u', 'UTF8'))) created`,
     values: [JSON.stringify(physicalTemplate, (_, entry) => typeof entry === 'bigint' ? JSON.rawJSON(String(entry)) : entry),
-      nativeTextBytes(path.join(value.stateRoot, 'media'))] });
+      nativeTextBytes(path.join(value.stateRoot, 'media') + path.sep)] });
   const select = database.client.query.bind(database.client); let largest = 0;
   database.client.query = async (...args) => { const result = await select(...args); largest = Math.max(largest, result.rows.length); return result; };
   await value.operation();

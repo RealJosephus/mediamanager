@@ -4,6 +4,7 @@ import { tableDefinition } from '../../src/database/model.js';
 import { parseLosslessJson } from '../../src/core/json.js';
 import { guid, idKey, dateText, EMPTY_ID, cleanValue } from '../../src/library/records.js';
 import { ordinal, integer, folderData } from './video-discovery-fixture.js';
+import { projectStatePath } from './fixture-state-path.js';
 
 export async function seedNativeConstructorControl(fixture, loaded, sample) {
   // The recorder seeds one Folder and one video using native constructors.
@@ -47,7 +48,7 @@ export async function insertFailure(fixture, sample) {
 function rewriteData(value, fixture) {
   if (Array.isArray(value)) return value.map(value => rewriteData(value, fixture));
   if (value && typeof value === 'object') return Object.fromEntries(Object.entries(value).map(([key, value]) => [key, rewriteData(value, fixture)]));
-  return typeof value === 'string' ? value.replace(fixture.stateRoot, '$STATE') : integer(value);
+  return typeof value === 'string' ? projectStatePath(value, fixture.stateRoot) : integer(value);
 }
 
 export async function completeColumns(fixture, resolved, sample) {

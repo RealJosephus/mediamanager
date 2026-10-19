@@ -15,6 +15,7 @@ const dateNs = value => {
   return BigInt(milliseconds - ((milliseconds % 1000) + 1000) % 1000) * 1000000n
     + BigInt(fraction.padEnd(9, '0').slice(0, 9));
 };
+const identityPathApi = identity => /^[A-Za-z]:[\\/]|^\\\\/u.test(identity) ? path.win32 : path.posix;
 
 /** Identity paths belong to the database. Only this facade resolves them to a
  * storage instance; it never falls back to the host operating system. */
@@ -22,7 +23,7 @@ export class StorageFileSystem {
   constructor({ vfs, identityMap }) { Object.assign(this, { vfs, identityMap }); }
   accessPath(identity) {
     return this.identityMap.resolve({ identityPath: identity,
-      style: /^[A-Za-z]:[\\/]|^\\\\/u.test(identity) ? 'windows' : 'posix' });
+      style: identityPathApi(identity) === path.win32 ? 'windows' : 'posix' });
   }
   resolve(identity) { return this.vfs.resolve(this.accessPath(identity)); }
   async #run(work) { try { return await work(); } catch (error) { throw nativeError(error); } }
@@ -38,7 +39,12 @@ export class StorageFileSystem {
       isDirectory: () => value.kind === 'directory', isFile: () => value.kind === 'file', isSymbolicLink: () => false };
   }); }
   lstat(identity, options) { return this.stat(identity, options); }
-  async realpath(identity) { await this.stat(identity); return path.resolve(identity); }
+  async realpath(identity) {
+    // Validate access and let the storage adapter reject links before returning
+    // a normalized identity. The backing storage path is never an identity.
+    await this.stat(identity);
+    return identityPathApi(identity).resolve(identity);
+  }
   async readdir(identity, options = {}) { return this.#run(async () => {
     const { entries } = await this.vfs.list(this.accessPath(identity), options);
     return options.withFileTypes ? entries.map(value => ({ name: value.name,
@@ -71,7 +77,7 @@ export class StorageFileSystem {
       try { const info = await this.vfs.stat(access, options); if (info.kind === 'directory') return;
         throw new StorageError('already-exists', 'The requested directory is a file.');
       } catch (error) { if (error.code !== 'not-found') throw error; }
-      await this.mkdir(path.dirname(identity), options);
+      await this.mkdir(identityPathApi(identity).dirname(identity), options);
     }
     await this.vfs.mkdir(access, options);
   }); }

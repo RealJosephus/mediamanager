@@ -22,7 +22,11 @@ const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const noTrace = value => Array.isArray(value) ? value.map(noTrace) : value && typeof value === 'object'
   ? Object.fromEntries(Object.entries(value).filter(([name]) => name !== 'traceId').map(([name, entry]) => [name, noTrace(entry)])) : value;
 function project(value, root) {
-  if (typeof value === 'string') return value.replaceAll(root, '{state}');
+  if (typeof value === 'string') {
+    if (value === root) return '{state}';
+    if (!value.startsWith(root + '/') && !value.startsWith(root + '\\')) return value;
+    return '{state}/' + value.slice(root.length + 1).replaceAll('\\', '/');
+  }
   if (Array.isArray(value)) return value.map(entry => project(entry, root));
   if (value && typeof value === 'object') return Object.fromEntries(Object.entries(value).map(([key, entry]) =>
     [key, key === 'dateModified' ? String(dateTicks(entry)) : project(entry, root)]));
@@ -93,7 +97,8 @@ test('branding HTTP matches native actions, model binding, files and failure com
       const actual = await rawHttp(`http://127.0.0.1:${application.server.address().port}${sample.path}`, {
         method: sample.method, body: sample.body, headers: { Accept: sample.accept ?? 'application/json', ...sample.headers, ...(sample.contentType && { 'Content-Type': sample.contentType }) } });
       const expected = native.results.find(value => value.name === sample.name);
-      const referenceDirectory = path.join(proof.process.args[1], 'cases', sample.name);
+      // The recorded process ran on Windows, independently of this test's host.
+      const referenceDirectory = path.win32.join(proof.process.args[1], 'cases', sample.name);
       assert.equal(actual.status, expected.status);
       const headers = Object.fromEntries(Object.keys(expected.headers).map(name => [name, actual.headers[name]]));
       assert.deepEqual(imageHeaderProjection(headers), imageHeaderProjection(expected.headers));

@@ -6,22 +6,27 @@ import { recordInternalFolderResolve } from '../metadata/internal-folder-refresh
 import { clearFolderChildIds } from './folder-cache.js';
 import { decodeNativeText } from '../core/native-text.js';
 
-const pathApi = () => process.platform === 'win32' ? path.win32 : path.posix;
+// Persisted media identities retain their own path style when the instance is
+// moved to another host. Relative paths keep the host DirectoryInfo contract.
+const pathApi = value => /^(?:[A-Za-z]:[\\/]|[\\/]{2}[^\\/]+[\\/][^\\/]+)/u.test(value ?? '') ? path.win32
+  : value?.startsWith('/') ? path.posix : process.platform === 'win32' ? path.win32 : path.posix;
 const trimEndingSeparator = value => {
-  const api = pathApi();
-  return /[\\/]$/u.test(value) && value.length > api.parse(value).root.length ? value.slice(0, -1) : value;
+  const api = pathApi(value);
+  const trailingSeparator = api === path.win32 ? /[\\/]$/u : /\/$/u;
+  return trailingSeparator.test(value) && value.length > api.parse(value).root.length ? value.slice(0, -1) : value;
 };
 export function nativeDirectoryFullName(value) {
   if (value == null) throw Object.assign(new TypeError("Value cannot be null. (Parameter 'path')"),
     { nativeException: 'ArgumentNullException', parameterName: 'path', status: 500 });
   if (value === '' || value.includes('\0')) throw Object.assign(new TypeError("Invalid path. (Parameter 'path')"),
     { nativeException: 'ArgumentException', parameterName: 'path', status: 500 });
-  return pathApi().resolve(value);
+  return pathApi(value).resolve(value);
 }
 export function nativeFileSystemPathsEqual(left, right) {
   if (left == null || right == null || clrTrim(left) === '' || clrTrim(right) === '') return false;
   left = trimEndingSeparator(left); right = trimEndingSeparator(right);
-  return process.platform === 'win32' ? ordinalIgnoreCaseKey(left) === ordinalIgnoreCaseKey(right) : left === right;
+  return pathApi(left) === path.win32 && pathApi(right) === path.win32
+    ? ordinalIgnoreCaseKey(left) === ordinalIgnoreCaseKey(right) : left === right;
 }
 
 export class RootFolderFileData {
@@ -34,7 +39,7 @@ export class RootFolderFileData {
     let exists = false;
     try { exists = (await this.assets.stat(fullName)).kind === 'directory'; }
     catch (error) { if (!['not-found', 'unmapped-path', 'invalid-path'].includes(error.code)) throw error; }
-    return { Path: fullName, Name: nativeFileName(trimEndingSeparator(fullName)), IsDirectory: true, Exists: exists };
+    return { Path: fullName, Name: nativeFileName(trimEndingSeparator(fullName), { windows: pathApi(fullName) === path.win32 }), IsDirectory: true, Exists: exists };
   }
   async filteredEntries(identity, args, flattenDepth) {
     let entries;
@@ -48,7 +53,7 @@ export class RootFolderFileData {
     const values = new Map();
     for (const entry of entries) {
       const fullName = nativeDirectoryFullName(entry.Path);
-      if (pathApi().extname(fullName).toLowerCase() === '.mblink') {
+      if (pathApi(fullName).extname(fullName).toLowerCase() === '.mblink') {
         try {
           const raw = decodeNativeText(await this.assets.read(fullName));
           const target = this.expandPath(trimEndingSeparator(raw));
@@ -59,14 +64,15 @@ export class RootFolderFileData {
         } catch (error) { this.logger.error(error, 'Error resolving shortcut'); }
       } else if (flattenDepth > 0 && entry.kind === 'directory') {
         for (const child of await this.filteredEntries(fullName, args, flattenDepth - 1)) values.set(ordinalIgnoreCaseKey(child.Path), child);
-      } else values.set(ordinalIgnoreCaseKey(fullName), { Path: fullName, Name: nativeFileName(trimEndingSeparator(fullName)),
+      } else values.set(ordinalIgnoreCaseKey(fullName), { Path: fullName, Name: nativeFileName(trimEndingSeparator(fullName), { windows: pathApi(fullName) === path.win32 }),
         IsDirectory: entry.kind === 'directory', Exists: true });
     }
     return [...values.values()];
   }
   async normalizeRootPaths(entries) {
     const paths = [...new Set(entries.filter(entry => entry.IsDirectory).map(entry => trimEndingSeparator(entry.Path)))];
-    const selected = paths.filter(value => value.endsWith(':\\') || !paths.some(parent => nativeContainsSubPath(value, parent)));
+    const selected = paths.filter(value => value.endsWith(':\\') || !paths.some(parent => pathApi(value) === pathApi(parent)
+      && nativeContainsSubPath(value, parent, { windows: pathApi(value) === path.win32 })));
     return [...await Promise.all(selected.map(value => this.directoryInfo(value))), ...entries.filter(entry => !entry.IsDirectory)];
   }
   async resolveArgs(item, setLocations = false) {

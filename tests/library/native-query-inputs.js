@@ -111,21 +111,3 @@ export function createNativeQueryInputs(binding) {
     expectedChangedReferences: binding.expectedChangedReferences,
     resolveInput, readServerId, verifySourceBindings, readRecorderSource });
 }
-
-// Existing profiles keep their original source identities. Missing descriptors
-// fail when requested; a new profile is never substituted for an old one.
-const binding = JSON.parse(await readFile(new URL('./fixtures/native-query-inputs/binding.json', import.meta.url), 'utf8'));
-export const nativeQueryInputs = createNativeQueryInputs({ ...binding, expectedChangedReferences: [
-  { table: 'ActivityLogs', column: 'UserId', count: 4 },
-  { table: 'Devices', column: 'UserId', count: 1 },
-  { table: 'Permissions', column: 'UserId', count: 24 },
-  { table: 'Preferences', column: 'UserId', count: 13 },
-  { table: 'Users', column: 'Id', count: 1 },
-] });
-export const nativeQueryReference = nativeQueryInputs.reference;
-export const nativeItemFilterRecordedOutputRoot = nativeQueryInputs.recordedOutputRoot;
-export const nativeQueryExecutables = nativeQueryInputs.executables;
-export const readNativeQueryServerId = nativeQueryInputs.readServerId;
-export const verifyNativeQuerySourceBindings = nativeQueryInputs.verifySourceBindings;
-export const resolveNativeQueryInput = nativeQueryInputs.resolveInput;
-export const readNativeQueryRecorderSource = nativeQueryInputs.readRecorderSource;

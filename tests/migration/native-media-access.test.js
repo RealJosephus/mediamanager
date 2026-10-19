@@ -42,7 +42,7 @@ class IsolatedVersionedFilesystemAdapter {
   constructor(root) {
     this.#root = path.resolve(root);
     this.capabilities = Object.freeze({ randomRead: false, reliableLength: true, reliableVersion: true, directorySnapshot: false,
-      create: true, replace: true, atomicReplace: true, conditionalWrite: true, mkdir: false, delete: false, rename: false, directLease: false });
+      create: true, replace: true, atomicReplace: true, conditionalWrite: true, mkdir: false, delete: false, rename: false, directLease: false, watch: false });
   }
 
   #check(signal) {

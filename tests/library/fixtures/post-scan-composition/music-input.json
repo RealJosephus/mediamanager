@@ -1,0 +1,35 @@
+[
+  {
+    "Name": "nonempty-artist-children-and-music-genres",
+    "Libraries": [],
+    "Directories": [],
+    "Fanout": 1,
+    "Seed": {
+      "SourceName": "Post-scan music composition folder",
+      "Genre": "Composition Genre",
+      "Studio": "Composition Studio",
+      "DeadGenre": "Unreferenced Genre",
+      "DeadStudio": "Unreferenced Studio",
+      "OrphanValue": "Unmapped music composition value",
+      "Music": {
+        "DeadArtist": "Unreferenced Composition Artist",
+        "Tracks": [
+          {
+            "Name": "Composition Track One",
+            "Artists": ["Composition Performer"],
+            "AlbumArtists": ["Composition Album Artist"],
+            "Genres": ["Composition Music One"],
+            "RunTimeTicks": 170000000
+          },
+          {
+            "Name": "Composition Track Two",
+            "Artists": ["Composition Performer"],
+            "AlbumArtists": ["Composition Album Artist"],
+            "Genres": ["Composition Music Two", "Composition Music One"],
+            "RunTimeTicks": 230000000
+          }
+        ]
+      }
+    }
+  }
+]

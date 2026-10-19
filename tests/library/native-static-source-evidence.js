@@ -1,4 +1,4 @@
-import { readNativeQueryRecorderSource } from './native-query-inputs.js';
+import { nativeQueryInputs, readNativeQueryRecorderSource } from './native-query-default-inputs.js';
 import { readFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { pathToFileURL } from 'node:url';
@@ -61,7 +61,7 @@ export async function readNativeStaticSourcePermissionEvidence() {
     const oracle = await boundJson(recording.oracle);
     const run = await verifyNativeItemFilterEvidenceContract({ evidence: pathToFileURL(path.join(recording.evidenceRoot, 'native-run/')),
       fixtureUrl: new URL('./fixtures/rating-permissions/input.json', import.meta.url), scenario: 'rating-permissions',
-      runDirectory: 'native-run', expectedRecords: 8, recorderSource: recipe });
+      runDirectory: 'native-run', expectedRecords: 8, recorderSource: recipe, inputs: nativeQueryInputs });
     assert.deepEqual(run.oracle, oracle); assert.equal(run.summary.cases, 8);
     const setup = JSON.parse(await readFile(path.join(recording.evidenceRoot, 'native-run/setup-http.json')));
     const readbacks = setup.records.filter(entry => entry.kind === 'static-source-policy-readback');

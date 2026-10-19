@@ -1,5 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
 import { queryPostgresPlaylistAccessBatch } from '../../src/library/postgres-playlist-query.js';
 
 const ids = [
@@ -43,17 +45,18 @@ test('PostgreSQL evaluates a page of playlist member gates in one partitioned qu
     } },
   };
   const user = { Id: 'b1000000-0000-0000-0000-000000000001' };
+  const dataPath = path.join(tmpdir(), 'playlist-access-batch', 'data');
   const result = await queryPostgresPlaylistAccessBatch(database, [
     playlist(ids[0]),
     playlist(ids[1]),
     playlist(ids[2]),
     playlist(ids[3], {
-      Path: 'C:\\program\\data\\playlists\\private',
+      Path: path.join(dataPath, 'playlists', 'private'),
       OpenAccess: false,
       OwnerUserId: 'b1000000-0000-0000-0000-000000000002',
       Shares: [],
     }),
-  ], { user, dataPath: 'C:\\program\\data', visibility });
+  ], { user, dataPath, visibility });
 
   assert.equal(calls.length, 1);
   assert.deepEqual(calls[0].values[0], ids.slice(0, 3).map(key));

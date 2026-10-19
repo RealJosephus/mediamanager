@@ -76,7 +76,7 @@ test('WebDAV has one strict configuration and a complete conservative capability
   assert.deepEqual(adapter.capabilities, {
     randomRead: 'conditional', reliableLength: false, reliableVersion: false, directorySnapshot: false,
     create: true, replace: true, conditionalWrite: true, mkdir: true, delete: true, rename: true,
-    atomicReplace: false, directLease: false,
+    atomicReplace: false, directLease: false, watch: false,
   });
   assert.equal(Object.hasOwn(adapter.capabilities, 'write'), false);
 });

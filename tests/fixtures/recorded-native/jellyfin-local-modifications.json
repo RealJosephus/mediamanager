@@ -1,0 +1,305 @@
+{
+  "head": "208c278b75abd897aefa1e1175126eac5e4dbfaa",
+  "sourceContentDigest": "e28a983db179b720c3b16d7416ee4112894a3115c4be6fe43c61c52e0d9a8313",
+  "original": "D:\\jellyfin",
+  "copy": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source",
+  "status": " M Emby.Server.Implementations/Library/LibraryManager.cs\u0000 M Emby.Server.Implementations/Localization/Core/zh-CN.json\u0000 M Jellyfin.Api/Controllers/LibraryController.cs\u0000 M Jellyfin.Api/Controllers/SubtitleController.cs\u0000 M Jellyfin.Api/Controllers/UserController.cs\u0000 M Jellyfin.Api/Helpers/FileStreamResponseHelpers.cs\u0000 M Jellyfin.Server.Implementations/Security/AuthorizationContext.cs\u0000 M Jellyfin.Server/Migrations/Routines/20250420210000_MoveExtractedFiles.cs\u0000 M Jellyfin.Server/Migrations/Routines/20250421000000_MigrateKeyframeData.cs\u0000 M Jellyfin.Server/Migrations/Routines/20260113120000_MigrateLinkedChildren.cs\u0000 M MediaBrowser.Controller/Entities/Folder.cs\u0000 M MediaBrowser.Controller/MediaEncoding/EncodingHelper.cs\u0000 M MediaBrowser.Controller/MediaEncoding/IMediaEncoder.cs\u0000 M MediaBrowser.MediaEncoding/Encoder/MediaEncoder.cs\u0000 M MediaBrowser.MediaEncoding/Subtitles/SubtitleEncoder.cs\u0000 M MediaBrowser.Providers/Lyric/LyricManager.cs\u0000 M MediaBrowser.Providers/MediaInfo/MediaInfoResolver.cs\u0000 M tests/Jellyfin.Controller.Tests/MediaEncoding/EncodingHelperTests.cs\u0000 M tests/Jellyfin.MediaEncoding.Tests/Subtitles/SubtitleEncoderTests.cs\u0000?? MediaBrowser.Controller/IO/LocalMediaProxy.cs\u0000",
+  "entries": [
+    {
+      "status": " M",
+      "path": "Emby.Server.Implementations/Library/LibraryManager.cs",
+      "sourceDescriptor": {
+        "path": "Emby.Server.Implementations/Library/LibraryManager.cs",
+        "size": 157087,
+        "sha256": "4729de97560262702a44c5829bf93bbc5deec379e9b3018b231aaa6d65643c44"
+      },
+      "actualBuildRoles": [
+        "Sources"
+      ],
+      "compiledInServerGraph": true,
+      "resourceInServerGraph": false,
+      "scope": "actual-server-build-input"
+    },
+    {
+      "status": " M",
+      "path": "Emby.Server.Implementations/Localization/Core/zh-CN.json",
+      "sourceDescriptor": {
+        "path": "Emby.Server.Implementations/Localization/Core/zh-CN.json",
+        "size": 7203,
+        "sha256": "a18528c69b57601d9aac0c97d8bdab83952381067a10fccd09a6bcf1a5996c3c"
+      },
+      "actualBuildRoles": [
+        "Resources"
+      ],
+      "compiledInServerGraph": false,
+      "resourceInServerGraph": true,
+      "scope": "actual-server-build-input"
+    },
+    {
+      "status": " M",
+      "path": "Jellyfin.Api/Controllers/LibraryController.cs",
+      "sourceDescriptor": {
+        "path": "Jellyfin.Api/Controllers/LibraryController.cs",
+        "size": 43414,
+        "sha256": "bfd0dbebee1e344c1f5a9077cd3d95a99d425db3ea3c4c233d9937f6bdd30753"
+      },
+      "actualBuildRoles": [
+        "Sources"
+      ],
+      "compiledInServerGraph": true,
+      "resourceInServerGraph": false,
+      "scope": "actual-server-build-input"
+    },
+    {
+      "status": " M",
+      "path": "Jellyfin.Api/Controllers/SubtitleController.cs",
+      "sourceDescriptor": {
+        "path": "Jellyfin.Api/Controllers/SubtitleController.cs",
+        "size": 27580,
+        "sha256": "1e2dd163281447ad902249652f80139c9090880751e9bfa7baa35074aebac31b"
+      },
+      "actualBuildRoles": [
+        "Sources"
+      ],
+      "compiledInServerGraph": true,
+      "resourceInServerGraph": false,
+      "scope": "actual-server-build-input"
+    },
+    {
+      "status": " M",
+      "path": "Jellyfin.Api/Controllers/UserController.cs",
+      "sourceDescriptor": {
+        "path": "Jellyfin.Api/Controllers/UserController.cs",
+        "size": 27703,
+        "sha256": "2d13fb243a1ab0d6805fba7424f8be825833b5906adb19f0004d567b1c3e1df7"
+      },
+      "actualBuildRoles": [
+        "Sources"
+      ],
+      "compiledInServerGraph": true,
+      "resourceInServerGraph": false,
+      "scope": "actual-server-build-input"
+    },
+    {
+      "status": " M",
+      "path": "Jellyfin.Api/Helpers/FileStreamResponseHelpers.cs",
+      "sourceDescriptor": {
+        "path": "Jellyfin.Api/Helpers/FileStreamResponseHelpers.cs",
+        "size": 10564,
+        "sha256": "e5b09ca7bc578d0e21e6e49c55d13044ac2daf4264d808eb6256f52b0de94e11"
+      },
+      "actualBuildRoles": [
+        "Sources"
+      ],
+      "compiledInServerGraph": true,
+      "resourceInServerGraph": false,
+      "scope": "actual-server-build-input"
+    },
+    {
+      "status": " M",
+      "path": "Jellyfin.Server.Implementations/Security/AuthorizationContext.cs",
+      "sourceDescriptor": {
+        "path": "Jellyfin.Server.Implementations/Security/AuthorizationContext.cs",
+        "size": 13167,
+        "sha256": "2eb0886ba9cb68e94f0400e5fbe68e0d8f74941ba33e8c164b68ab13654aedb9"
+      },
+      "actualBuildRoles": [
+        "Sources"
+      ],
+      "compiledInServerGraph": true,
+      "resourceInServerGraph": false,
+      "scope": "actual-server-build-input"
+    },
+    {
+      "status": " M",
+      "path": "Jellyfin.Server/Migrations/Routines/20250420210000_MoveExtractedFiles.cs",
+      "sourceDescriptor": {
+        "path": "Jellyfin.Server/Migrations/Routines/20250420210000_MoveExtractedFiles.cs",
+        "size": 8095,
+        "sha256": "7733e032e9afebab675e74ca98e2aa10450415e691ed0f3ab58275ca75306d19"
+      },
+      "actualBuildRoles": [
+        "Sources"
+      ],
+      "compiledInServerGraph": true,
+      "resourceInServerGraph": false,
+      "scope": "actual-server-build-input"
+    },
+    {
+      "status": " M",
+      "path": "Jellyfin.Server/Migrations/Routines/20250421000000_MigrateKeyframeData.cs",
+      "sourceDescriptor": {
+        "path": "Jellyfin.Server/Migrations/Routines/20250421000000_MigrateKeyframeData.cs",
+        "size": 1918,
+        "sha256": "c58bbf85a46dda3861698878a04c5c129ccf7497077b04d9ef9e1934889b7b21"
+      },
+      "actualBuildRoles": [
+        "Sources"
+      ],
+      "compiledInServerGraph": true,
+      "resourceInServerGraph": false,
+      "scope": "actual-server-build-input"
+    },
+    {
+      "status": " M",
+      "path": "Jellyfin.Server/Migrations/Routines/20260113120000_MigrateLinkedChildren.cs",
+      "sourceDescriptor": {
+        "path": "Jellyfin.Server/Migrations/Routines/20260113120000_MigrateLinkedChildren.cs",
+        "size": 25367,
+        "sha256": "9c685fe22a2d9a7e55cc4c7d00a98a811c12fb9bcfb17005690fc72e97ed02e2"
+      },
+      "actualBuildRoles": [
+        "Sources"
+      ],
+      "compiledInServerGraph": true,
+      "resourceInServerGraph": false,
+      "scope": "actual-server-build-input"
+    },
+    {
+      "status": " M",
+      "path": "MediaBrowser.Controller/Entities/Folder.cs",
+      "sourceDescriptor": {
+        "path": "MediaBrowser.Controller/Entities/Folder.cs",
+        "size": 83390,
+        "sha256": "d5f227d462ce3c2df0d5a45d912778427f87321fc9d6e13d863ec28bb639e0c1"
+      },
+      "actualBuildRoles": [
+        "Sources"
+      ],
+      "compiledInServerGraph": true,
+      "resourceInServerGraph": false,
+      "scope": "actual-server-build-input"
+    },
+    {
+      "status": " M",
+      "path": "MediaBrowser.Controller/MediaEncoding/EncodingHelper.cs",
+      "sourceDescriptor": {
+        "path": "MediaBrowser.Controller/MediaEncoding/EncodingHelper.cs",
+        "size": 356000,
+        "sha256": "719d8dde377f5eda671c7e2d23181bdd6f5724004ed501f7520e5027e1813a3b"
+      },
+      "actualBuildRoles": [
+        "Sources"
+      ],
+      "compiledInServerGraph": true,
+      "resourceInServerGraph": false,
+      "scope": "actual-server-build-input"
+    },
+    {
+      "status": " M",
+      "path": "MediaBrowser.Controller/MediaEncoding/IMediaEncoder.cs",
+      "sourceDescriptor": {
+        "path": "MediaBrowser.Controller/MediaEncoding/IMediaEncoder.cs",
+        "size": 13041,
+        "sha256": "381a18d4744e50f92078007f9454a63b7bfdad80b1fe203254c7d4742920af48"
+      },
+      "actualBuildRoles": [
+        "Sources"
+      ],
+      "compiledInServerGraph": true,
+      "resourceInServerGraph": false,
+      "scope": "actual-server-build-input"
+    },
+    {
+      "status": " M",
+      "path": "MediaBrowser.MediaEncoding/Encoder/MediaEncoder.cs",
+      "sourceDescriptor": {
+        "path": "MediaBrowser.MediaEncoding/Encoder/MediaEncoder.cs",
+        "size": 63746,
+        "sha256": "4b642e5c06c3ba7298ed95371975e407ace0edab9719f8cb2a9a5f4df959c343"
+      },
+      "actualBuildRoles": [
+        "Sources"
+      ],
+      "compiledInServerGraph": true,
+      "resourceInServerGraph": false,
+      "scope": "actual-server-build-input"
+    },
+    {
+      "status": " M",
+      "path": "MediaBrowser.MediaEncoding/Subtitles/SubtitleEncoder.cs",
+      "sourceDescriptor": {
+        "path": "MediaBrowser.MediaEncoding/Subtitles/SubtitleEncoder.cs",
+        "size": 46948,
+        "sha256": "4d62bd4c7a62c57911489c6e0f1f6a76987a97997a252db39f71367eb9eee6d8"
+      },
+      "actualBuildRoles": [
+        "Sources"
+      ],
+      "compiledInServerGraph": true,
+      "resourceInServerGraph": false,
+      "scope": "actual-server-build-input"
+    },
+    {
+      "status": " M",
+      "path": "MediaBrowser.Providers/Lyric/LyricManager.cs",
+      "sourceDescriptor": {
+        "path": "MediaBrowser.Providers/Lyric/LyricManager.cs",
+        "size": 17750,
+        "sha256": "60169b9115e313fc423daa0584db45ad488a07d4b725fabfaaaf47a4c00da90c"
+      },
+      "actualBuildRoles": [
+        "Sources"
+      ],
+      "compiledInServerGraph": true,
+      "resourceInServerGraph": false,
+      "scope": "actual-server-build-input"
+    },
+    {
+      "status": " M",
+      "path": "MediaBrowser.Providers/MediaInfo/MediaInfoResolver.cs",
+      "sourceDescriptor": {
+        "path": "MediaBrowser.Providers/MediaInfo/MediaInfoResolver.cs",
+        "size": 19353,
+        "sha256": "4fb2aae81a27f8e4799948c11512b3f4668feabd4d482b3a101e85d491178ba9"
+      },
+      "actualBuildRoles": [
+        "Sources"
+      ],
+      "compiledInServerGraph": true,
+      "resourceInServerGraph": false,
+      "scope": "actual-server-build-input"
+    },
+    {
+      "status": " M",
+      "path": "tests/Jellyfin.Controller.Tests/MediaEncoding/EncodingHelperTests.cs",
+      "sourceDescriptor": {
+        "path": "tests/Jellyfin.Controller.Tests/MediaEncoding/EncodingHelperTests.cs",
+        "size": 12692,
+        "sha256": "27abc19629825e0972279109139ad899bfdaffc574c93bdbe3c7a8e6dd393914"
+      },
+      "actualBuildRoles": [],
+      "compiledInServerGraph": false,
+      "resourceInServerGraph": false,
+      "scope": "captured-designated-source-outside-server-compilation"
+    },
+    {
+      "status": " M",
+      "path": "tests/Jellyfin.MediaEncoding.Tests/Subtitles/SubtitleEncoderTests.cs",
+      "sourceDescriptor": {
+        "path": "tests/Jellyfin.MediaEncoding.Tests/Subtitles/SubtitleEncoderTests.cs",
+        "size": 12981,
+        "sha256": "c1034c3fca72a662ecd9894b2e5b56f5f499540761a9868c437d7097625716af"
+      },
+      "actualBuildRoles": [],
+      "compiledInServerGraph": false,
+      "resourceInServerGraph": false,
+      "scope": "captured-designated-source-outside-server-compilation"
+    },
+    {
+      "status": "??",
+      "path": "MediaBrowser.Controller/IO/LocalMediaProxy.cs",
+      "sourceDescriptor": {
+        "path": "MediaBrowser.Controller/IO/LocalMediaProxy.cs",
+        "size": 3322,
+        "sha256": "e6705c2f7af28a55f1fdd1476cdae22c6216a981f80827f4f59d77c588f5ca88"
+      },
+      "actualBuildRoles": [
+        "Sources"
+      ],
+      "compiledInServerGraph": true,
+      "resourceInServerGraph": false,
+      "scope": "actual-server-build-input"
+    }
+  ]
+}

@@ -8,7 +8,8 @@ import { OwnedItemMetadataLifecycleHost } from '../../src/metadata/owned-item-li
 import { prepareOwnedItemRefresh } from '../../src/metadata/owned-item-refresh.js';
 import { persistMetadata } from '../../src/metadata/persistence.js';
 import { ItemUpdateType } from '../../src/metadata/save-manager.js';
-import { projectItem, setup, project } from './owned-extra-fixture.js';
+import { setup, project } from './owned-extra-fixture.js';
+import { fixturePathStyle } from '../library/fixture-state-path.js';
 
 const root = new URL('./fixtures/owned-extra-repository/', import.meta.url);
 const [input, native, provenance] = await Promise.all(['input.json', 'native.json', 'provenance.json']
@@ -36,7 +37,7 @@ for (const dialect of ['postgres']) for (const sample of input) test(`${dialect}
   const options = { ForceSave: false, MetadataRefreshMode: sample.fullRefresh ? 'FullRefresh' : 'None', ImageRefreshMode: 'None',
     SearchResult: { Name: 'Owner search' }, signal: cancellation.signal };
   const recordRefresh = (item, options) => {
-    calls.push({ action: 'refresh', item: projectItem(item, fixture.stateRoot), forceSave: options.ForceSave === true,
+    calls.push({ action: 'refresh', item: value.projectItem(item), forceSave: options.ForceSave === true,
       hasSearchResult: options.SearchResult != null, cancellationRequested: options.signal.aborted });
     options.signal.throwIfAborted();
   };
@@ -57,12 +58,12 @@ for (const dialect of ['postgres']) for (const sample of input) test(`${dialect}
         signal: options.signal,
         async saverOperation(item, reason) {
           calls.push({ action: 'saver', id: guid(item.Id), reason });
-          if (sample.saverFile) await fixture.vfs.write(fixture.identityMap.resolve({ identityPath: item.Path + '.saved', style: 'windows' }), Buffer.from('saver control'));
+          if (sample.saverFile) await fixture.vfs.write(fixture.identityMap.resolve({ identityPath: item.Path + '.saved', style: fixturePathStyle }), Buffer.from('saver control'));
           if (sample.cancelDuringSaver) abort();
           return [];
         },
         async persist(_, result, saveOptions) {
-          calls.push({ action: 'save', items: [projectItem(result.Item, fixture.stateRoot)], cancellable: true });
+          calls.push({ action: 'save', items: [value.projectItem(result.Item)], cancellable: true });
           return persistMetadata(fixture.store, context, result, saveOptions);
         }
       });

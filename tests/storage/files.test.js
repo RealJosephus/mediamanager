@@ -8,6 +8,53 @@ import { StorageRegistry, VirtualFileSystem, IdentityAccessMap } from '../../src
 import { StorageFileSystem } from '../../src/storage/files.js';
 import { MemoryStorageAdapter } from '../../src/storage/testing/memory-adapter.js';
 
+test('recursive directories and realpath retain mapped identity style and reject host escapes', async t => {
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), 'storage-identity-paths-'));
+  const disk = path.join(root, 'disk'), outside = path.join(root, 'outside');
+  const registry = new StorageRegistry();
+  t.after(async () => {
+    try { await registry.close(); }
+    finally { await fs.rm(root, { recursive: true, force: true }); }
+  });
+  await fs.mkdir(disk); await fs.mkdir(outside);
+  registry.registerType('local', configuration => LocalAdapter.open(configuration));
+  await registry.createInstance('disk', 'local', { root: disk, writable: true });
+  const vfs = new VirtualFileSystem(registry), identityMap = new IdentityAccessMap();
+  const identities = [
+    { name: 'windows', root: 'Z:\\Library', api: path.win32, style: 'windows' },
+    { name: 'unc', root: '\\\\server\\share\\Library', api: path.win32, style: 'windows' },
+    { name: 'posix', root: '/portable/library', api: path.posix, style: 'posix' },
+    { name: 'state', root: disk, api: path, style: process.platform === 'win32' ? 'windows' : 'posix' },
+  ];
+  for (const identity of identities) {
+    vfs.mount({ path: '/' + identity.name, instanceId: 'disk', capabilities: { mkdir: true, create: true, replace: true } });
+    identityMap.addPrefix({ identityRoot: identity.root, accessRoot: '/' + identity.name, style: identity.style,
+      returnAccess: 'Retain the original portable or application-state identity.' });
+  }
+  const files = new StorageFileSystem({ vfs, identityMap });
+  for (const identity of identities) {
+    const directory = identity.api.join(identity.root, identity.name, 'nested');
+    await files.mkdir(directory, { recursive: true });
+    await files.mkdir(directory, { recursive: true });
+    assert.equal(await files.realpath(directory), directory);
+    assert.equal(await files.realpath(identity.root), identity.root);
+    const filename = identity.api.join(directory, 'metadata.nfo');
+    await files.writeFile(filename, identity.name);
+    assert.equal(await files.realpath(filename), filename);
+    assert.equal(await fs.readFile(path.join(disk, identity.name, 'nested', 'metadata.nfo'), 'utf8'), identity.name);
+    await assert.rejects(files.realpath(directory + identity.api.sep + '..'), { code: 'invalid-path' });
+  }
+  // State-path confinement still goes through the actual local adapter. An
+  // existing host directory without a mapping never becomes an access fallback.
+  await assert.rejects(files.realpath(outside), { code: 'ENOENT' });
+  await fs.symlink(outside, path.join(disk, 'link'), process.platform === 'win32' ? 'junction' : 'dir');
+  for (const identity of identities) {
+    await assert.rejects(files.realpath(identity.api.join(identity.root, 'link')), { code: 'EACCES' });
+    await assert.rejects(files.mkdir(identity.api.join(identity.root, 'link', 'escaped'), { recursive: true }), { code: 'EACCES' });
+  }
+  assert.deepEqual(await fs.readdir(outside), []);
+});
+
 test('file handles enforce mount creation, replacement and virtual directory restrictions', async t => {
   const root = await fs.mkdtemp(path.join(os.tmpdir(), 'storage-file-handles-'));
   const registry = new StorageRegistry();

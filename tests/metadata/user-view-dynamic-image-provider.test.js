@@ -2,7 +2,8 @@ import { testFileSystem } from '../storage/plugin-files.js';
 import { openMetadataRelations, trackMetadataContexts, attachMetadataItemCreation } from './relations-fixture.js';
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { mkdir, mkdtemp, readFile, rm, stat } from 'node:fs/promises';
+import { mkdir, mkdtemp, readFile, readdir, rm, stat, writeFile } from 'node:fs/promises';
+import sharp from 'sharp';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { createHash, randomUUID } from 'node:crypto';
@@ -15,6 +16,9 @@ import { createUserViewDynamicImagePlugin } from '../../src/metadata/user-view-d
 import { ItemUpdateType } from '../../src/metadata/save-manager.js';
 import { dateTicks, idKey, MIN_DATE } from '../../src/library/records.js';
 import { internalImagePath } from '../../src/metadata/image-paths.js';
+import { withUserViewImageCandidates } from '../../src/library/user-view-image-query.js';
+import { composeUserViewCollage } from '../../src/images/user-view-collage.js';
+import { nativeTextBytes } from '../../src/database/native-text.js';
 
 const nativeBytes = await readFile(new URL('./fixtures/user-view-dynamic/native.json', import.meta.url));
 assert.equal(createHash('sha256').update(nativeBytes).digest('hex'), 'e0404526906b6ecc66f38353f64a7747b172d3a6a9d970aa03cae1e6bf6e30c5');
@@ -76,7 +80,7 @@ async function fixture(t) {
   await database.insert('BaseItems', view);
   const user = { Id: id(100), Configuration: {}, Policy: { EnableAllFolders: true, EnabledFolders: [], BlockedMediaFolders: [], BlockedTags: [], AllowedTags: [], BlockUnratedItems: [] } };
   const users = { getUser: async userId => { assert.equal(idKey(userId), idKey(user.Id)); return user; } };
-  const provider = createUserViewDynamicImagePlugin({ library, users }).providers[0];
+  const provider = createUserViewDynamicImagePlugin({ library, users, compose: composeUserViewCollage }).providers[0];
   return { database, library, provider, user, directory, errors, view: { Id: view.Id, Type: 'UserView', ViewType: 'movies', DisplayParentId: id(3) } };
 }
 test('dynamic images use actual recursive movie/TV queries, including the frozen null-user failure', async t => {
@@ -103,16 +107,27 @@ test('an existing remote or media-side primary image prevents the null-user quer
     assert.equal(await provider.hasChanged(view, { images }), false);
   }
 });
-test('a genuine local source image reaches the explicit unsupported collage path', async t => {
-  const { provider, database, view, user } = await fixture(t);
+test('a genuine local source image creates and saves a UserView thumbnail for movies and playlists', async t => {
+  const { provider, database, library, view, user, directory } = await fixture(t);
+  const Path = path.join(directory, 'source.png');
+  await writeFile(Path, await readFile(new URL('../images/fixtures/user-view-collage/assets/same.png', import.meta.url)));
   await database.insert('BaseItems', item(6, 'Movies.Movie', { ParentId: id(4), TopParentId: id(4), IsFolder: false }));
   await database.insert('AncestorIds', { ItemId: id(6), ParentItemId: id(4) });
-  await database.insert('BaseItemImageInfos', { Id: id(7), ItemId: id(6), ImageType: 0, Path: 'Z:\\MediaLibrary\\poster.jpg',
+  await database.insert('BaseItemImageInfos', { Id: id(7), ItemId: id(6), ImageType: 0, Path,
     DateModified: '2026-10-01T00:00:00.0000000Z', Width: 960, Height: 540, Blurhash: null });
   assert.equal(await provider.hasChanged({ ...view, UserId: user.Id }), true);
-  await assert.rejects(provider.fetch({ ...view, UserId: user.Id }), error => error.status === 501 && error.message === 'UserView image collage creation is not implemented.');
+  const images = [];
+  assert.equal(await provider.fetch({ ...view, UserId: user.Id }, { images }), ItemUpdateType.ImageUpdate);
+  assert.equal(images.length, 1); assert.equal(images[0].Type, 'Primary');
+  assert.ok(images[0].Path.startsWith(internalImagePath(view, path.join(directory, 'metadata'))));
+  assert.deepEqual(await sharp(await readFile(images[0].Path)).metadata().then(({ width, height }) => ({ width, height })), { width: 960, height: 540 });
+  assert.deepEqual(await readdir(path.join(directory, 'cache', 'temp')), []);
+  assert.equal(await provider.hasChanged({ ...view, UserId: user.Id }, { images }), false);
   await database.update('BaseItems', { Id: view.Id }, { Data: JSON.stringify({ ViewType: 'playlists', DisplayParentId: idKey(id(3)) }) });
-  await assert.rejects(provider.fetch({ ...view, ViewType: 'playlists' }), error => error.status === 501 && error.message === 'UserView image collage creation is not implemented.');
+  assert.equal(await provider.fetch({ ...view, ViewType: 'playlists' }, { images }), ItemUpdateType.ImageUpdate);
+  const production = createUserViewDynamicImagePlugin({ library, users: { getUser: async () => user } }).providers[0];
+  await assert.rejects(production.fetch({ ...view, ViewType: 'playlists' }, { images }),
+    error => error.status === 501 && error.message === 'UserView image collage creation is not implemented.');
 });
 test('a remote image source changes the candidate set but produces no local collage input', async t => {
   const { provider, database, view, user } = await fixture(t);
@@ -122,6 +137,80 @@ test('a remote image source changes the candidate set but produces no local coll
     DateModified: '2026-10-01T00:00:00.0000000Z', Width: 960, Height: 540, Blurhash: null });
   assert.equal(await provider.hasChanged({ ...view, UserId: user.Id }), true);
   assert.equal(await provider.fetch({ ...view, UserId: user.Id }), ItemUpdateType.None);
+});
+
+test('UserView cancelled image save retains the native truncated destination and removes its temporary source', async t => {
+  const { provider, database, view, user, directory } = await fixture(t);
+  const source = path.join(directory, 'source.png');
+  await writeFile(source, await readFile(new URL('../images/fixtures/user-view-collage/assets/same.png', import.meta.url)));
+  await database.insert('BaseItems', item(6, 'Movies.Movie', { ParentId: id(4), TopParentId: id(4), IsFolder: false }));
+  await database.insert('BaseItemImageInfos', { Id: id(7), ItemId: id(6), ImageType: 0, Path: source,
+    DateModified: '2026-10-01T00:00:00.0000000Z', Width: 960, Height: 540, Blurhash: null });
+  const images = [], signal = AbortSignal.abort(new Error('Controlled save cancellation'));
+  await assert.rejects(provider.fetch({ ...view, UserId: user.Id }, { images, signal }), error => error === signal.reason);
+  assert.deepEqual(images, []);
+  assert.equal((await stat(path.join(internalImagePath(view, path.join(directory, 'metadata')), 'poster.png'))).size, 0);
+  assert.deepEqual(await readdir(path.join(directory, 'cache', 'temp')), []);
+});
+
+test('UserView image membership remains SQL-owned across 260 items and first-image local fallback', async t => {
+  const { database, library, view, user } = await fixture(t);
+  const rows = Array.from({ length: 260 }, (_, index) => item(index + 1000, 'Movies.Movie', {
+    ParentId: id(4), TopParentId: id(4), IsFolder: false, PresentationUniqueKey: idKey(id(index + 1000)) }));
+  await database.insertBatch('BaseItems', rows);
+  const images = rows.flatMap((value, index) => [
+    { Id: id(index * 4 + 10000), ItemId: value.Id, ImageType: 0, Path: 'https://fixture.invalid/primary.png',
+      DateModified: '2026-10-01T00:00:00.0000000Z', Width: 960, Height: 540, Blurhash: null },
+    { Id: id(index * 4 + 10001), ItemId: value.Id, ImageType: 0, Path: `D:\\wrong-${index}.png`,
+      DateModified: '2026-10-01T00:00:00.0000000Z', Width: 960, Height: 540, Blurhash: null },
+    { Id: id(index * 4 + 10002), ItemId: value.Id, ImageType: 5, Path: `D:\\thumb-${index}.png`,
+      DateModified: '2026-10-01T00:00:00.0000000Z', Width: 960, Height: 540, Blurhash: null }
+  ]);
+  await database.insertBatch('BaseItemImageInfos', images);
+  const selection = await withUserViewImageCandidates(library, view, user, async candidates => {
+    assert.equal(await candidates.hasItems(), true);
+    const paths = []; for await (const filename of candidates.paths()) paths.push(filename);
+    return paths;
+  });
+  assert.equal(selection.length, 260);
+  assert.deepEqual(new Set(selection), new Set(rows.map((_, index) => `D:\\thumb-${index}.png`)));
+});
+
+test('UserView image candidates replace repeated episodes and seasons by their real series', async t => {
+  const { database, library, view, user } = await fixture(t);
+  await database.update('BaseItems', { Id: view.Id }, { Data: JSON.stringify({ ViewType: 'tvshows', DisplayParentId: idKey(id(3)) }) });
+  await database.insertBatch('BaseItems', [
+    item(6, 'TV.Series', { ParentId: id(4), TopParentId: id(4) }),
+    item(7, 'TV.Season', { ParentId: id(6), TopParentId: id(4) }),
+    item(8, 'TV.Episode', { ParentId: id(7), TopParentId: id(4), SeriesId: id(6), IsFolder: false })
+  ]);
+  await database.insert('BaseItemImageInfos', { Id: id(9), ItemId: id(6), ImageType: 0, Path: 'D:\\series.png',
+    DateModified: '2026-10-01T00:00:00.0000000Z', Width: 960, Height: 540, Blurhash: null });
+  const selected = await withUserViewImageCandidates(library, { ...view, ViewType: 'tvshows' }, user, async candidates => {
+    const paths = []; for await (const filename of candidates.paths()) paths.push(filename); return paths;
+  });
+  assert.deepEqual(selected, ['D:\\series.png']);
+});
+
+test('UserView audio candidates resolve the nearest album across intermediate folders', async t => {
+  const { database, library, view, user } = await fixture(t);
+  await database.insertBatch('BaseItems', [
+    item(6, 'Audio.MusicAlbum', { ParentId: id(4), TopParentId: id(4) }),
+    item(7, 'Folder', { ParentId: id(6), TopParentId: id(4) }),
+    item(8, 'Audio.Audio', { ParentId: id(7), TopParentId: id(4), IsFolder: false })
+  ]);
+  await database.insert('BaseItemImageInfos', { Id: id(9), ItemId: id(6), ImageType: 0, Path: 'D:\\album.png',
+    DateModified: '2026-10-01T00:00:00.0000000Z', Width: 960, Height: 540, Blurhash: null });
+  // Isolate candidate mapping from the view dispatch: a playlist can supply
+  // an Audio child whose MusicAlbum is not its immediate parent.
+  const source = { options: library.options, withItemQueryPlan: (_input, _options, operation) => library.store.run(db => operation(db, {
+    text: `SELECT "Id",1::bigint AS "__ordinal" FROM "${db.schemaName}"."BaseItems" WHERE "Id"=$1`,
+    values: [nativeTextBytes(id(8))]
+  })) };
+  const selected = await withUserViewImageCandidates(source, view, user, async candidates => {
+    const paths = []; for await (const filename of candidates.paths()) paths.push(filename); return paths;
+  });
+  assert.deepEqual(selected, ['D:\\album.png']);
 });
 
 for (const dialect of ['postgres']) {
@@ -160,9 +249,9 @@ for (const dialect of ['postgres']) {
     await assert.rejects(library.userViews.metadata.refresh(view.Id, { ...refreshOptions, signal }), error => error === signal.reason);
     assert.deepEqual(await database.rows('BaseItems'), before);
     assert.deepEqual(await database.rows('AncestorIds'), beforeRelations);
-    const query = library.queryItems.bind(library);
+    const query = library.withItemQueryPlan.bind(library);
     let active = 0, maximumActive = 0, calls = 0;
-    library.queryItems = async (...args) => {
+    library.withItemQueryPlan = async (...args) => {
       active++; calls++; maximumActive = Math.max(maximumActive, active);
       try { await new Promise(resolve => setImmediate(resolve)); return await query(...args); }
       finally { active--; }
@@ -192,16 +281,17 @@ for (const dialect of ['postgres']) {
 test('the frozen dynamic provider controlled query executes before its cancellation-aware save stage', async t => {
   const { provider, library, view } = await fixture(t);
   let QueryCount = 0;
-  library.queryItems = async () => { QueryCount++; return { Items: [] }; };
+  library.withItemQueryPlan = async (_query, _options, operation) => { QueryCount++; return library.store.run(db => operation(db,
+    { text: 'SELECT NULL::bytea AS "Id",0::bigint AS "__ordinal" WHERE FALSE', values: [] })); };
   const signal = AbortSignal.abort(new Error('Controlled cancellation'));
   const updateType = await provider.fetch(view, { signal });
   assert.deepEqual({ name: 'cancelled-empty-query', updateType, QueryCount, collageCalls: 0, saveCalls: 0 }, native.output[2]);
-  library.queryItems = async () => { QueryCount++; const failure = new Error(native.output[3].Message); failure.name = native.output[3].error; throw failure; };
+  library.withItemQueryPlan = async () => { QueryCount++; const failure = new Error(native.output[3].Message); failure.name = native.output[3].error; throw failure; };
   let error;
   try { await provider.fetch(view, { signal }); } catch (failure) { error = failure; }
   assert.deepEqual({ name: 'cancelled-failing-query', error: error?.name, Message: error?.message, QueryCount, collageCalls: 0, saveCalls: 0 }, native.output[3]);
   // The fifth raw native record reaches a controlled collage processor and
-  // SaveImage. Candidate real local collage inputs remain explicit 501.
+  // SaveImage; the real file-write prefix is covered separately below.
   assert.deepEqual(native.output[4], { name: 'cancelled-local-source', error: 'TaskCanceledException', QueryCount: 3, collageCalls: 1, saveCalls: 1 });
 });
 

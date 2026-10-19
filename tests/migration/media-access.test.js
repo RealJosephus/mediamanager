@@ -29,12 +29,13 @@ const plan = () => ({ scope: 'explicit-items', items: [{ itemId: id, identityRoo
   ] }] });
 function database(t, root = 'Z:\\Media', { filename = 'movie.mkv', mixed = true } = {}) {
   const db = new SqliteDatabase(':memory:', { create: true }); t.after(() => db.close());
-  db.insert('BaseItems', { ...emptyRow('BaseItems'), Id: id, Path: path.join(root, filename), Type: 'MediaBrowser.Controller.Entities.Movies.Movie', MediaType: 'Video',
+  const identityPath = /^[A-Za-z]:[\\/]|^\\\\/u.test(root) ? path.win32 : path;
+  db.insert('BaseItems', { ...emptyRow('BaseItems'), Id: id, Path: identityPath.join(root, filename), Type: 'MediaBrowser.Controller.Entities.Movies.Movie', MediaType: 'Video',
     IsInMixedFolder: mixed, Data: '{"VideoType":"VideoFile"}' });
-  db.insert('MediaStreamInfos', { ...emptyRow('MediaStreamInfos'), ItemId: id, StreamIndex: 0, StreamType: 2, IsExternal: true, Codec: 'ass', Path: path.join(root, 'movie.de.ass') });
-  db.insert('MediaStreamInfos', { ...emptyRow('MediaStreamInfos'), ItemId: id, StreamIndex: 1, StreamType: 2, IsExternal: true, Codec: 'subrip', Path: path.join(root, 'movie.en.srt') });
-  db.insert('MediaStreamInfos', { ...emptyRow('MediaStreamInfos'), ItemId: id, StreamIndex: 2, StreamType: 2, IsExternal: true, Codec: 'ass', Path: path.join(root, 'movie.ja.ssa') });
-  db.insert('MediaStreamInfos', { ...emptyRow('MediaStreamInfos'), ItemId: id, StreamIndex: 3, StreamType: 2, IsExternal: true, Codec: 'webvtt', Path: path.join(root, 'movie.fr.vtt') });
+  db.insert('MediaStreamInfos', { ...emptyRow('MediaStreamInfos'), ItemId: id, StreamIndex: 0, StreamType: 2, IsExternal: true, Codec: 'ass', Path: identityPath.join(root, 'movie.de.ass') });
+  db.insert('MediaStreamInfos', { ...emptyRow('MediaStreamInfos'), ItemId: id, StreamIndex: 1, StreamType: 2, IsExternal: true, Codec: 'subrip', Path: identityPath.join(root, 'movie.en.srt') });
+  db.insert('MediaStreamInfos', { ...emptyRow('MediaStreamInfos'), ItemId: id, StreamIndex: 2, StreamType: 2, IsExternal: true, Codec: 'ass', Path: identityPath.join(root, 'movie.ja.ssa') });
+  db.insert('MediaStreamInfos', { ...emptyRow('MediaStreamInfos'), ItemId: id, StreamIndex: 3, StreamType: 2, IsExternal: true, Codec: 'webvtt', Path: identityPath.join(root, 'movie.fr.vtt') });
   return db;
 }
 

@@ -1,5 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { mkdtemp, realpath, rm } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
 import { tableDefinition } from '../../src/database/model.js';
 import { createRuntime } from '../../src/runtime.js';
 import { parseLosslessJson, stringifyNativeJson } from '../../src/core/json.js';
@@ -27,8 +30,16 @@ function nativeItem() {
 test('real runtime HTTP binds session bodies and user data without losing Int64 or accepting cross-user control', {
   skip: !process.env.MEDIAMANAGER_TEST_POSTGRES
 }, async t => {
+  const temporaryRoot = await realpath(tmpdir());
+  const stateRoot = await mkdtemp(path.join(temporaryRoot, 'mediamanager-session-data-'));
+  t.after(async () => {
+    assert.equal(path.dirname(stateRoot), temporaryRoot);
+    assert.ok(path.basename(stateRoot).startsWith('mediamanager-session-data-'));
+    await rm(stateRoot, { recursive: true, force: true });
+  });
   const database = await createPostgresTestDatabase(t, 'http_session_data');
-  const runtime = await createRuntime({ database, configuration: { UICulture: 'en-US', IsStartupWizardCompleted: true }, serverId: 'http-test', programDataPath: 'D:\\isolated-test-state' });
+  const runtime = await createRuntime({ database, configuration: { UICulture: 'en-US', IsStartupWizardCompleted: true }, serverId: 'http-test',
+    programDataPath: path.join(stateRoot, 'program'), configurationDirectoryPath: path.join(stateRoot, 'config') });
   runtime.sessions.automaticProgress = false;
   try {
     await database.insert('BaseItems', nativeItem());

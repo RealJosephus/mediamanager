@@ -1,5 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { mkdtemp, realpath, rm } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
 import { createRuntime } from '../../src/runtime.js';
 import { parseLosslessJson, stringifyNativeJson } from '../../src/core/json.js';
 import { AUTHENTICATION_PROVIDER, PASSWORD_RESET_PROVIDER } from '../../src/users/native.js';
@@ -8,9 +11,16 @@ import { createPostgresTestDatabase } from '../database/postgres-fixture.js';
 test('session listing, provider discovery and additional-user management match the native HTTP contract', {
   skip: !process.env.MEDIAMANAGER_TEST_POSTGRES
 }, async t => {
+  const temporaryRoot = await realpath(tmpdir());
+  const stateRoot = await mkdtemp(path.join(temporaryRoot, 'mediamanager-session-management-'));
+  t.after(async () => {
+    assert.equal(path.dirname(stateRoot), temporaryRoot);
+    assert.ok(path.basename(stateRoot).startsWith('mediamanager-session-management-'));
+    await rm(stateRoot, { recursive: true, force: true });
+  });
   const database = await createPostgresTestDatabase(t, 'http_sessions');
   const runtime = await createRuntime({ database, configuration: { UICulture: 'en-US', IsStartupWizardCompleted: true },
-    serverId: 'session-management-test', programDataPath: 'D:\\session-management-test-state' });
+    serverId: 'session-management-test', programDataPath: path.join(stateRoot, 'program'), configurationDirectoryPath: path.join(stateRoot, 'config') });
   runtime.sessions.automaticProgress = false;
   let sessionNow = new Date('2026-09-27T12:00:00.000Z');
   runtime.sessions.clock = () => new Date(sessionNow);

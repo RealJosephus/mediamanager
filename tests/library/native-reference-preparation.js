@@ -4,8 +4,6 @@ import { lstat, readFile, realpath } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { nativeQueryInputs } from './native-query-inputs.js';
-
 const sha256 = bytes => createHash('sha256').update(bytes).digest('hex');
 const idKey = value => String(value).replaceAll('-', '').toLowerCase();
 const changedReferences = Object.freeze([
@@ -20,13 +18,15 @@ function assertProfile(name) {
   assert.ok(['user-view', 'item-filter'].includes(name), 'Unknown native query reference profile: ' + name);
 }
 
-export function nativeReferencePreparationInputs(profileName, inputs = nativeQueryInputs) {
+export function nativeReferencePreparationInputs(profileName, inputs) {
   assertProfile(profileName);
+  assert.ok(inputs, 'Explicit native query inputs are required.');
   return inputs.reference.preparationInputs;
 }
 
-export function resolveNativeReferencePreparationInput(profileName, filename, inputs = nativeQueryInputs) {
+export function resolveNativeReferencePreparationInput(profileName, filename, inputs) {
   assertProfile(profileName);
+  assert.ok(inputs, 'Explicit native query inputs are required.');
   return inputs.resolveInput(filename);
 }
 
@@ -99,7 +99,8 @@ function assertBootstrapReport(report, { preparation, fixtureUserId, baselineMan
 
 export async function verifyNativeReferencePreparation(options) {
   assertProfile(options.profile);
-  const inputs = options.inputs ?? nativeQueryInputs;
+  const inputs = options.inputs;
+  assert.ok(inputs, 'Explicit native query inputs are required.');
   assert.ok(Array.isArray(inputs.expectedChangedReferences), 'Exact profile remapping counts are required.');
   await inputs.verifySourceBindings();
   return verifyNativeReferencePreparationContract({ ...options,

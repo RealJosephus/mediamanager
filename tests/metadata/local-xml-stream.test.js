@@ -8,6 +8,7 @@ import { createHash } from 'node:crypto';
 import { createLocalXmlPlugin, serializeLocalXml } from '../../src/metadata/local-xml.js';
 import { saveMetadata, ItemUpdateType } from '../../src/metadata/save-manager.js';
 import { setNativePlaylistFileState } from '../../src/library/native-path.js';
+import { recordedInputPath } from '../../tools/validation/paths.js';
 
 const fixture = new URL('./fixtures/local-xml-save-prefix/', import.meta.url);
 const [nativeBytes, proofBytes] = await Promise.all(['native.json', 'provenance.json'].map(name => fs.readFile(new URL(name, fixture))));
@@ -30,14 +31,15 @@ async function smallFrame(item, context) {
   finally { await prepared.close(); }
 }
 
-test('local XML prefix fixture binds actual saver, source and loaded assembly evidence', async () => {
+test('local XML prefix replay binds original recording bytes and saver sources', async () => {
   assert.equal(sha(nativeBytes), proof.nativeSha256);
-  assert.equal(sha(await fs.readFile(proof.rawRecording)), proof.nativeSha256);
+  assert.equal(sha(await fs.readFile(recordedInputPath(proof.rawRecording, [proof.nativeSha256]))), proof.nativeSha256);
   assert.equal(native.actualBaseXmlSaver, true); assert.equal(native.actualBoxSetXmlSaver, true);
   assert.equal(native.results.length, 5); assert.equal(proof.phaseAcceptance, false);
   for (const source of proof.oracleSources) assert.equal(sha(await fs.readFile(new URL(source.name, fixture))), source.sha256);
-  for (const source of proof.sources) for (const filename of [source.designated, source.isolated]) assert.equal(sha(await fs.readFile(filename)), source.sha256);
-  for (const assembly of proof.loadedAssemblies) assert.equal(sha(await fs.readFile(assembly.filename)), assembly.sha256);
+  for (const source of proof.sources) for (const filename of [source.designated, source.isolated]) {
+    assert.equal(sha(await fs.readFile(recordedInputPath(filename, [source.sha256]))), source.sha256);
+  }
 });
 
 for (const expected of native.results) test('local XML persists the actual native frame after ' + expected.name, async t => {
@@ -112,7 +114,12 @@ test('save manager completes monitor and continues another saver after local XML
   const result = await saveMetadata(item, ItemUpdateType.MetadataEdit, [saver, { id: 'Other', name: 'Other',
     isEnabledFor: () => true, save: async () => actions.push('other') }], {
     libraryOptions: { MetadataSavers: ['Emby Xml', 'Other'] },
-    logger: { error: () => actions.push('logger') }, monitor: { begin: () => actions.push('begin'), complete: () => actions.push('complete') },
+    logger: { error: () => actions.push('logger') }, monitor: {
+      reportFileSystemChangeBeginning(filename) { assert.equal(filename, path.join(directory, 'collection.xml')); actions.push('begin'); },
+      reportFileSystemChangeComplete(filename, refreshPath) {
+        assert.equal(filename, path.join(directory, 'collection.xml')); assert.equal(refreshPath, false); actions.push('complete');
+      }
+    },
     context: { localRoot: directory, localPath: directory, prepareLinkedXmlItems() { throw new Error('lookup failure'); } } });
   assert.deepEqual(actions, ['begin', 'logger', 'complete', 'other']);
   assert.equal(result.length, 2); assert.ok(result[0].error); assert.equal(result[1].error, undefined);

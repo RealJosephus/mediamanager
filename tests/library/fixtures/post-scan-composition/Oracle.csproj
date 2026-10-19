@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <UseSharedCompilation>false</UseSharedCompilation>
+    <RequiresJellyfinAssemblies>true</RequiresJellyfinAssemblies>
+    <NativeRuntimeDirectory>$(JellyfinDllDirectory)/runtimes/$(NETCoreSdkRuntimeIdentifier)/native</NativeRuntimeDirectory>
+    <SqliteNativeName Condition="$([MSBuild]::IsOSPlatform('Windows'))">e_sqlite3.dll</SqliteNativeName>
+    <SqliteNativeName Condition="$([MSBuild]::IsOSPlatform('Linux'))">libe_sqlite3.so</SqliteNativeName>
+    <SqliteNativeName Condition="$([MSBuild]::IsOSPlatform('OSX'))">libe_sqlite3.dylib</SqliteNativeName>
+    <SkiaNativeName Condition="$([MSBuild]::IsOSPlatform('Windows'))">libSkiaSharp.dll</SkiaNativeName>
+    <SkiaNativeName Condition="$([MSBuild]::IsOSPlatform('Linux'))">libSkiaSharp.so</SkiaNativeName>
+    <SkiaNativeName Condition="$([MSBuild]::IsOSPlatform('OSX'))">libSkiaSharp.dylib</SkiaNativeName>
+    <SkiaNativeDirectory>$(NativeRuntimeDirectory)</SkiaNativeDirectory>
+    <SkiaNativeDirectory Condition="$([MSBuild]::IsOSPlatform('OSX'))">$(JellyfinDllDirectory)/runtimes/osx/native</SkiaNativeDirectory>
+  </PropertyGroup>
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <Reference Include="$(JellyfinDllDirectory)/*.dll" />
+    <Content Include="$(NativeRuntimeDirectory)/$(SqliteNativeName)" Link="$(SqliteNativeName)" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="$(SkiaNativeDirectory)/$(SkiaNativeName)" Link="$(SkiaNativeName)" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+  <Target Name="RequirePlatformNativeInputs" BeforeTargets="ResolveReferences">
+    <Error Condition="'$(SqliteNativeName)' == '' Or !Exists('$(NativeRuntimeDirectory)/$(SqliteNativeName)')" Text="The supplied Jellyfin runtime must contain SQLite for the current SDK RID." />
+    <Error Condition="'$(SkiaNativeName)' == '' Or !Exists('$(SkiaNativeDirectory)/$(SkiaNativeName)')" Text="The supplied Jellyfin runtime must contain Skia for the current platform (macOS uses its universal native image)." />
+  </Target>
+</Project>
