@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "scope": "Additive pinned JsonDefaults DateTime kind/offset and double-format threshold probe.",
+  "caseCount": 34,
+  "originalCaseCount": 23,
+  "originalCasesStructurallyIdentical": true,
+  "runtime": "10.0.12",
+  "timezone": "Taipei Standard Time",
+  "runExitCode": 0,
+  "unchangedOriginalArtifacts": [
+    { "path": "input.json", "bytes": 1874, "sha256": "A908DC6A65FF82B4B6239767DF39F43F9B067A7A9A43D37F53A08F993A0A2730" },
+    { "path": "native.json", "bytes": 11492, "sha256": "2D59212DD109CAB6903690A40C567578E04141423999C09F7F7A627AF123D0C6" },
+    { "path": "record.json", "bytes": 2249, "sha256": "82A7ABA9D6C9347EBB1B7DB1680D01087570AE6FFC662683816833346BF6EC06" }
+  ],
+  "artifacts": [
+    { "path": "input-r2.json", "bytes": 2810, "sha256": "8544B06BFB3A46D0B83A3821049F66E58351837428D77E7FECA6635F9905AC19" },
+    { "path": "native-r2.json", "bytes": 16496, "sha256": "B5B69E894167CA3B462766FE2CF633547CBEBB91D92C948435168DDCC140FB8D" }
+  ],
+  "pinnedAssemblies": [
+    { "name": "Jellyfin.Extensions.dll", "sha256": "DB952E3013A6949AD22DB9AC3379BE2EFDF441C139DDC6919E86F8C2ABBC7207" },
+    { "name": "MediaBrowser.Model.dll", "sha256": "7B2C1B16721CF7747B572E4DE3761DE635FAD4BD12BEC346983545BEE73FD92C" }
+  ]
+}

@@ -1,0 +1,214 @@
+{
+  "reference": {
+    "sourceDatabase": {
+      "filename": "D:/mediamanager-validation/20261011/results/native-http-filter-reference-v1/initial.db",
+      "sha256": "72e9201e55f9367c31b1ecae9c001bb568405275b916e96f78728e76c2cac400"
+    },
+    "preparationInputs": [
+      [
+        "nativeReferencePreparation",
+        "../mediamanager-validation/20261011/results/native-http-filter-reference-v1/bootstrap.json"
+      ],
+      [
+        "referencePreparationVerifier",
+        "tools/compat/filter-reference-inputs.mjs"
+      ],
+      [
+        "referenceBootstrapScript",
+        "tools/compat/prepare-http-filter-reference.mjs"
+      ],
+      [
+        "referencePreparationVerificationTool",
+        "tools/compat/verify-baseline.js"
+      ],
+      [
+        "referencePreparationVerificationTool",
+        "tools/compat/reference-inputs.js"
+      ],
+      [
+        "nativeReferenceBootstrapLog",
+        "../mediamanager-validation/20261011/results/native-http-filter-reference-v1/bootstrap.log"
+      ],
+      [
+        "nativeReferenceBaselineManifest",
+        "../mediamanager-validation/20261010/results/jellyfin-designated-workspace-capture-v2/manifest.json"
+      ],
+      [
+        "nativeReferenceModel",
+        "src/database/native-model.json"
+      ],
+      [
+        "nativeReferencePreparationExecutable",
+        ".tools/dotnet/dotnet.exe"
+      ],
+      [
+        "nativeReferencePreparationExecutable",
+        "../mediamanager-validation/20261010/results/jellyfin-designated-workspace-capture-v2/source/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll"
+      ],
+      [
+        "nativeReferencePreparationExecutable",
+        "../mediamanager-validation/20261005/tools/jellyfin-ffmpeg-8.1.3-1/runtime/ffmpeg.exe"
+      ]
+    ]
+  },
+  "preparationInputFiles": [
+    {
+      "filename": "D:/mediamanager-validation/20261011/results/native-http-filter-reference-v1/bootstrap.json",
+      "sha256": "9eb48de1e56e136b2fe537380ea3329226d6dacf7e6a5a9b4119d5a21a1795fb"
+    },
+    {
+      "filename": "D:/mediamanager/tools/compat/filter-reference-inputs.mjs",
+      "sha256": "91de1f092df29d5144282b780dacc64255cc7779bdcf77f1202fe235aa791ace"
+    },
+    {
+      "filename": "D:/mediamanager/tools/compat/prepare-http-filter-reference.mjs",
+      "sha256": "fbebe189b2fade5075355a4f0256545ae13fb4493eb5ec20f55aa4b73bb8089d"
+    },
+    {
+      "filename": "D:/mediamanager/tools/compat/verify-baseline.js",
+      "sha256": "46991bed271e61663c6f262ff4fda0a25c7bd6f19d4c63749e6848774375c54c"
+    },
+    {
+      "filename": "D:/mediamanager/tools/compat/reference-inputs.js",
+      "sha256": "11ed62001527e2a77e07ed1eec65c52b7906b4684a5d7c0b54fbc0a6cbca4b38"
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261011/results/native-http-filter-reference-v1/bootstrap.log",
+      "sha256": "0c3e6e4d0b60134925294e1f5a9cbd93d2508f2178b641c4d569136f0c06cc46"
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261010/results/jellyfin-designated-workspace-capture-v2/manifest.json",
+      "sha256": "a278db96281767142568596a447f942e69134f05de6d26a56cbc6026db1ecbad"
+    },
+    {
+      "filename": "D:/mediamanager/src/database/native-model.json",
+      "sha256": "942796bb521d2adb04951cd184ffad4988664ea7f6371e2c378b1c207903dbe6"
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/dotnet.exe",
+      "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6"
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261010/results/jellyfin-designated-workspace-capture-v2/source/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll",
+      "sha256": "8fb1d56d006aa01b5dc9aa5cf2578646f7013f57c9937593955bce32e23722d2"
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261005/tools/jellyfin-ffmpeg-8.1.3-1/runtime/ffmpeg.exe",
+      "sha256": "47495334f74912826bc474d246fe69fb4c01cd0d3c612d24b6a06000fe4c1483"
+    }
+  ],
+  "runtimeDirectory": {
+    "filename": "D:/mediamanager-validation/20261010/results/jellyfin-designated-workspace-capture-v2/source/Jellyfin.Server/bin/Release/net10.0",
+    "entriesSha256": "b58b4fea84e19c9a0603edac1ab4b9651e07146639b7c1f6116e5efdb226190a"
+  },
+  "sdkDirectory": {
+    "filename": "D:/mediamanager/.tools/dotnet",
+    "entriesSha256": "5b289d693d7a381abdc43016ca8cfe9b75232dce26e06c2a8cb2a7bd17d46340"
+  },
+  "independentNativeAudits": [
+    {
+      "filename": "D:/mediamanager-validation/20261011/identity-results/identity-repeat-audit-v1.json",
+      "sha256": "087c108eea6fc55eaa9377368e906d6b9ad434bbd403370d94b2bc1f2b104336"
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261011/identity-results/identity-repeat-audit-v2.json",
+      "sha256": "6bddbe8f1c729b4cb7b4034f3a6d89cf07e1bb84ae140d42b17c5471c80d22fa"
+    }
+  ],
+  "recordings": [
+    {
+      "kind": "artist",
+      "evidenceName": "artist-concurrency-native-v1",
+      "expectedRunModes": {
+        "native-run": "concurrency",
+        "native-run-b": "race",
+        "native-run-c": "race",
+        "native-run-d": "race-reverse",
+        "native-run-f": "race-eight",
+        "native-run-g": "race-eight-reverse"
+      },
+      "repetitions": [
+        {
+          "filename": "D:/mediamanager-validation/20261011/identity-results/restoration-v1/artist-concurrency-native-v1",
+          "entriesSha256": "ef6c10fa2a02ff572730ae7bb2111b8d72e44fe390678c8d3ce4939a1acf9e72"
+        },
+        {
+          "filename": "D:/mediamanager-validation/20261011/identity-results/restoration-v2/artist-concurrency-native-v1",
+          "entriesSha256": "e7b9cd1a573ef96a9d88ba96e0855f67718d4fe73bf88fe01f153a475b27f8a7"
+        }
+      ]
+    },
+    {
+      "kind": "artist",
+      "evidenceName": "artist-unicode-sortname-native-v1",
+      "expectedRunModes": {
+        "native-run": "unicode"
+      },
+      "repetitions": [
+        {
+          "filename": "D:/mediamanager-validation/20261011/identity-results/restoration-v1/artist-unicode-sortname-native-v1",
+          "entriesSha256": "9d395636eb54c93846f2090d825494ebffbbe3f2ce8277f72424df9850cd3a23"
+        },
+        {
+          "filename": "D:/mediamanager-validation/20261011/identity-results/restoration-v2/artist-unicode-sortname-native-v1",
+          "entriesSha256": "7aef1130d05eaeed4b4f90a80962260ca7b1211da0f295e0480e0c8d968c23f0"
+        }
+      ]
+    },
+    {
+      "kind": "studio",
+      "evidenceName": "studio-concurrency-native-v1",
+      "expectedRunModes": {
+        "native-run": "concurrency"
+      },
+      "repetitions": [
+        {
+          "filename": "D:/mediamanager-validation/20261011/identity-results/restoration-v1/studio-concurrency-native-v1",
+          "entriesSha256": "fdc67a8f5188d774a7797ff7fbd59b1002b4733999f8b1f84f50e6c0bb8b73bf"
+        },
+        {
+          "filename": "D:/mediamanager-validation/20261011/identity-results/restoration-v2/studio-concurrency-native-v1",
+          "entriesSha256": "e40b834c9e57e771da6c3c9a8b3b480d771d0ac2df5f36dd1c5bab01b4d081fe"
+        }
+      ]
+    },
+    {
+      "kind": "studio",
+      "evidenceName": "studio-path-race-native-v1",
+      "expectedRunModes": {
+        "native-run-b": "race",
+        "native-run-c": "race",
+        "native-run-d": "race-reverse",
+        "native-run-f": "race-eight",
+        "native-run-g": "race-eight-reverse"
+      },
+      "repetitions": [
+        {
+          "filename": "D:/mediamanager-validation/20261011/identity-results/restoration-v1/studio-path-race-native-v1",
+          "entriesSha256": "2ef8720e4284e035df493e82363ed187471d10f48c0f2f9be904a543212f5898"
+        },
+        {
+          "filename": "D:/mediamanager-validation/20261011/identity-results/restoration-v2/studio-path-race-native-v1",
+          "entriesSha256": "6630413e6043988484ab498f2dfe39cb54f62553866cec3365c3f0ebac0c99e8"
+        }
+      ]
+    },
+    {
+      "kind": "studio",
+      "evidenceName": "studio-unicode-sortname-native-v1",
+      "expectedRunModes": {
+        "native-run": "unicode"
+      },
+      "repetitions": [
+        {
+          "filename": "D:/mediamanager-validation/20261011/identity-results/restoration-v1/studio-unicode-sortname-native-v1",
+          "entriesSha256": "dbc6541bf2093c7d7902d3c2c1f1ddee433b120b2c7297edcee91c0247e0bfdc"
+        },
+        {
+          "filename": "D:/mediamanager-validation/20261011/identity-results/restoration-v2/studio-unicode-sortname-native-v1",
+          "entriesSha256": "96388a0d52cc31f89d60e660497c80dfc36399e204d04022d91d476992d6cbc4"
+        }
+      ]
+    }
+  ]
+}

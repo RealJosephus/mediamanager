@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-10-07T02:04:13.798Z",
+  "fixtureFiles": [
+    {
+      "path": "tests/library/fixtures/ignore-regex-references/input.json",
+      "sha256": "d70bbe2ae6b91efbc89dc8012244a2ac0926c8d36897b883d0b9c33d4f4c9172"
+    },
+    {
+      "path": "tests/library/fixtures/ignore-regex-references/Program.cs",
+      "sha256": "95be27c29d6c03a1bdc39551af00fc7d2a24e356817313a8e652957b05674d62"
+    },
+    {
+      "path": "tests/library/fixtures/ignore-regex-references/Oracle.csproj",
+      "sha256": "3f2610631c594ffd08dcc82f03d3509abc1c9c9541f159519800df046fc770ee"
+    },
+    {
+      "path": "tests/library/fixtures/ignore-regex-references/native.json",
+      "sha256": "5aa51624011b8d310b0a7269b0ec887ccd31379626e39f05d5d82be9a6abf0c1"
+    },
+    {
+      "path": "tests/Directory.Build.props",
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    },
+    {
+      "path": "src/core/resources/native-ignore-regex.json",
+      "sha256": "b1b40f209985a055fe2c538889f96d2f95c783e7c30e5b5062f65807688d8c02"
+    }
+  ],
+  "scope": "Actual frozen DotIgnoreIgnoreRule.CheckIgnoreRules/Ignore 0.2.1 with its bound CLR Regex runtime. ASCII and non-ASCII control escape validation, numeric named references, initial bracket and subtracted classes, capture participation, forward references, optional/repeated captures, alternatives, boundaries and case equivalences. No file/cache operations, FindExtras, providers, scanning/network or release acceptance.",
+  "assemblies": [
+    {
+      "name": "Emby.Server.Implementations",
+      "sha256": "8d369435646570958505c58b9cb17da169855dabc105d0e933524361e9b7b1c8"
+    },
+    {
+      "name": "Ignore",
+      "sha256": "e362b92af4a52f6bfd5b94f2692acdf3a1f3491477a12ce2ea5394cde369de2e"
+    },
+    {
+      "name": "System.Text.RegularExpressions",
+      "sha256": "060bcc88a688e687ff1404b83b5fb5cf17e19ec57f33d5b8a48ab494da83c134"
+    }
+  ],
+  "reference": {
+    "head": "208c278b75abd897aefa1e1175126eac5e4dbfaa",
+    "contentDigest": "e28a983db179b720c3b16d7416ee4112894a3115c4be6fe43c61c52e0d9a8313"
+  },
+  "capture": {
+    "record": "D:/mediamanager-validation/20261005/results/ignore-reference-controls-oracle-20261007/record.json",
+    "sourceFilesSha256": "713c197bba1b11155a68844a3b6d5ee88e6b02bf33f827a9797105c3cbd7f997"
+  },
+  "candidateVerified": true,
+  "candidateComparison": "Production compares all 53 groups (309 checks) with the actual frozen CLR results, including ASCII/non-ASCII control validation, absent/forward/empty captures, retained repeated captures, alternatives, boundaries and numeric named references. The original 25-group native projections remain unchanged. The original 263 rule checks and all recorded file/cache projections also pass their production regressions (152/152 component tests). Raw source/input/output and pinned runtime character facts are sealed separately. No complete CLR syntax, file/cache integration, FindExtras, provider/scanner or release acceptance is claimed by this fixture."
+}

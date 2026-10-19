@@ -1,0 +1,868 @@
+[
+  {
+    "input": {
+      "name": "unchanged",
+      "item": {
+        "Type": "Movie",
+        "Path": "Z:\\media\\sample.mkv",
+        "RunTimeTicks": 1,
+        "DateModified": "2026-09-26T00:00:00.0000000Z",
+        "VideoType": "VideoFile",
+        "SubtitleFiles": [],
+        "AudioFiles": []
+      }
+    },
+    "expected": {
+      "changed": false,
+      "missing": false,
+      "gate": "ProberBoundary",
+      "lyricStreams": null
+    }
+  },
+  {
+    "input": {
+      "name": "mtime-equal",
+      "item": {
+        "Type": "Movie",
+        "Path": "Z:\\media\\sample.mkv",
+        "RunTimeTicks": 1,
+        "DateModified": "2026-09-26T00:00:00.0000000Z",
+        "VideoType": "VideoFile",
+        "SubtitleFiles": [],
+        "AudioFiles": []
+      },
+      "modified": "2026-09-26T00:00:00.0000000Z"
+    },
+    "expected": {
+      "changed": false,
+      "missing": false,
+      "gate": "ProberBoundary",
+      "lyricStreams": null
+    }
+  },
+  {
+    "input": {
+      "name": "mtime-1sec",
+      "item": {
+        "Type": "Movie",
+        "Path": "Z:\\media\\sample.mkv",
+        "RunTimeTicks": 1,
+        "DateModified": "2026-09-26T00:00:00.0000000Z",
+        "VideoType": "VideoFile",
+        "SubtitleFiles": [],
+        "AudioFiles": []
+      },
+      "modified": "2026-09-26T00:00:01.0000000Z"
+    },
+    "expected": {
+      "changed": false,
+      "missing": false,
+      "gate": "ProberBoundary",
+      "lyricStreams": null
+    }
+  },
+  {
+    "input": {
+      "name": "mtime-1sec-1tick",
+      "item": {
+        "Type": "Movie",
+        "Path": "Z:\\media\\sample.mkv",
+        "RunTimeTicks": 1,
+        "DateModified": "2026-09-26T00:00:00.0000000Z",
+        "VideoType": "VideoFile",
+        "SubtitleFiles": [],
+        "AudioFiles": []
+      },
+      "modified": "2026-09-26T00:00:00.9999999Z"
+    },
+    "expected": {
+      "changed": false,
+      "missing": false,
+      "gate": "ProberBoundary",
+      "lyricStreams": null
+    }
+  },
+  {
+    "input": {
+      "name": "mtime-1sec\u002B1tick",
+      "item": {
+        "Type": "Movie",
+        "Path": "Z:\\media\\sample.mkv",
+        "RunTimeTicks": 1,
+        "DateModified": "2026-09-26T00:00:00.0000000Z",
+        "VideoType": "VideoFile",
+        "SubtitleFiles": [],
+        "AudioFiles": []
+      },
+      "modified": "2026-09-26T00:00:01.0000001Z"
+    },
+    "expected": {
+      "changed": true,
+      "missing": false,
+      "gate": "ProberBoundary",
+      "lyricStreams": null
+    }
+  },
+  {
+    "input": {
+      "name": "mtime-earlier",
+      "item": {
+        "Type": "Movie",
+        "Path": "Z:\\media\\sample.mkv",
+        "RunTimeTicks": 1,
+        "DateModified": "2026-09-26T00:00:00.0000000Z",
+        "VideoType": "VideoFile",
+        "SubtitleFiles": [],
+        "AudioFiles": []
+      },
+      "modified": "2026-09-25T23:59:58.9999999Z"
+    },
+    "expected": {
+      "changed": true,
+      "missing": false,
+      "gate": "ProberBoundary",
+      "lyricStreams": null
+    }
+  },
+  {
+    "input": {
+      "name": "missing-6",
+      "item": {
+        "Type": "Movie",
+        "Path": "Z:\\media\\sample.mkv",
+        "RunTimeTicks": null,
+        "DateModified": "2026-09-26T00:00:00.0000000Z",
+        "VideoType": "VideoFile",
+        "SubtitleFiles": [],
+        "AudioFiles": []
+      }
+    },
+    "expected": {
+      "changed": true,
+      "missing": true,
+      "gate": "ProberBoundary",
+      "lyricStreams": null
+    }
+  },
+  {
+    "input": {
+      "name": "missing-7",
+      "item": {
+        "Type": "Movie",
+        "Path": "Z:\\media\\sample.mkv",
+        "RunTimeTicks": 0,
+        "DateModified": "2026-09-26T00:00:00.0000000Z",
+        "VideoType": "VideoFile",
+        "SubtitleFiles": [],
+        "AudioFiles": []
+      }
+    },
+    "expected": {
+      "changed": false,
+      "missing": false,
+      "gate": "ProberBoundary",
+      "lyricStreams": null
+    }
+  },
+  {
+    "input": {
+      "name": "missing-8",
+      "item": {
+        "Type": "Movie",
+        "Path": "Z:\\media\\sample.mkv",
+        "RunTimeTicks": null,
+        "DateModified": "2026-09-26T00:00:00.0000000Z",
+        "VideoType": "VideoFile",
+        "SubtitleFiles": [],
+        "AudioFiles": [],
+        "TotalBitrate": 0
+      }
+    },
+    "expected": {
+      "changed": false,
+      "missing": false,
+      "gate": "ProberBoundary",
+      "lyricStreams": null
+    }
+  },
+  {
+    "input": {
+      "name": "missing-9",
+      "item": {
+        "Type": "Movie",
+        "Path": "Z:\\media\\sample.mkv",
+        "RunTimeTicks": null,
+        "DateModified": "2026-09-26T00:00:00.0000000Z",
+        "VideoType": "VideoFile",
+        "SubtitleFiles": [],
+        "AudioFiles": [],
+        "IsVirtualItem": true
+      }
+    },
+    "expected": {
+      "changed": false,
+      "missing": false,
+      "gate": "None",
+      "lyricStreams": null
+    }
+  },
+  {
+    "input": {
+      "name": "missing-10",
+      "item": {
+        "Type": "Movie",
+        "Path": "Z:\\media\\sample.mkv",
+        "RunTimeTicks": null,
+        "DateModified": "2026-09-26T00:00:00.0000000Z",
+        "VideoType": "VideoFile",
+        "SubtitleFiles": [],
+        "AudioFiles": [],
+        "IsPlaceHolder": true
+      }
+    },
+    "expected": {
+      "changed": false,
+      "missing": false,
+      "gate": "None",
+      "lyricStreams": null
+    }
+  },
+  {
+    "input": {
+      "name": "missing-11",
+      "item": {
+        "Type": "Movie",
+        "Path": "Z:\\media\\sample.mkv",
+        "RunTimeTicks": null,
+        "DateModified": "2026-09-26T00:00:00.0000000Z",
+        "VideoType": "VideoFile",
+        "SubtitleFiles": [],
+        "AudioFiles": [],
+        "SourceType": "Channel",
+        "Tags": [
+          "LiVeStReAm"
+        ]
+      }
+    },
+    "expected": {
+      "changed": false,
+      "missing": false,
+      "gate": "None",
+      "lyricStreams": null
+    }
+  },
+  {
+    "input": {
+      "name": "missing-12",
+      "item": {
+        "Type": "Movie",
+        "Path": "https://invalid.example/sample.mkv",
+        "RunTimeTicks": null,
+        "DateModified": "2026-09-26T00:00:00.0000000Z",
+        "VideoType": "VideoFile",
+        "SubtitleFiles": [],
+        "AudioFiles": []
+      }
+    },
+    "expected": {
+      "changed": false,
+      "missing": false,
+      "gate": "None",
+      "lyricStreams": null
+    }
+  },
+  {
+    "input": {
+      "name": "remote-enabled",
+      "item": {
+        "Type": "Movie",
+        "Path": "https://invalid.example/sample.mkv",
+        "RunTimeTicks": 1,
+        "DateModified": "2026-09-26T00:00:00.0000000Z",
+        "VideoType": "VideoFile",
+        "SubtitleFiles": [],
+        "AudioFiles": []
+      },
+      "remote": true
+    },
+    "expected": {
+      "changed": false,
+      "missing": false,
+      "gate": "ProberBoundary",
+      "lyricStreams": null
+    }
+  },
+  {
+    "input": {
+      "name": "dvd-mtime",
+      "item": {
+        "Type": "Movie",
+        "Path": "Z:\\media\\sample.mkv",
+        "RunTimeTicks": 1,
+        "DateModified": "2026-09-26T00:00:00.0000000Z",
+        "VideoType": "Dvd",
+        "SubtitleFiles": [],
+        "AudioFiles": []
+      },
+      "modified": "2026-09-26T00:00:02Z"
+    },
+    "expected": {
+      "changed": false,
+      "missing": false,
+      "gate": "ProberBoundary",
+      "lyricStreams": null
+    }
+  },
+  {
+    "input": {
+      "name": "iso-mtime",
+      "item": {
+        "Type": "Movie",
+        "Path": "Z:\\media\\sample.mkv",
+        "RunTimeTicks": 1,
+        "DateModified": "2026-09-26T00:00:00.0000000Z",
+        "VideoType": "Iso",
+        "SubtitleFiles": [],
+        "AudioFiles": []
+      },
+      "modified": "2026-09-26T00:00:02Z"
+    },
+    "expected": {
+      "changed": true,
+      "missing": false,
+      "gate": "ProberBoundary",
+      "lyricStreams": null
+    }
+  },
+  {
+    "input": {
+      "name": "subtitle-new",
+      "item": {
+        "Type": "Movie",
+        "Path": "Z:\\media\\sample.mkv",
+        "RunTimeTicks": 1,
+        "DateModified": "2026-09-26T00:00:00.0000000Z",
+        "VideoType": "VideoFile",
+        "SubtitleFiles": [],
+        "AudioFiles": []
+      },
+      "files": [
+        "Z:\\media\\sample.en.srt"
+      ]
+    },
+    "expected": {
+      "changed": true,
+      "missing": false,
+      "gate": "ProberBoundary",
+      "lyricStreams": null
+    }
+  },
+  {
+    "input": {
+      "name": "subtitle-known",
+      "item": {
+        "Type": "Movie",
+        "Path": "Z:\\media\\sample.mkv",
+        "RunTimeTicks": 1,
+        "DateModified": "2026-09-26T00:00:00.0000000Z",
+        "VideoType": "VideoFile",
+        "SubtitleFiles": [
+          "Z:\\media\\sample.en.srt"
+        ],
+        "AudioFiles": []
+      },
+      "files": [
+        "Z:\\media\\sample.en.srt"
+      ]
+    },
+    "expected": {
+      "changed": false,
+      "missing": false,
+      "gate": "ProberBoundary",
+      "lyricStreams": null
+    }
+  },
+  {
+    "input": {
+      "name": "subtitle-deleted",
+      "item": {
+        "Type": "Movie",
+        "Path": "Z:\\media\\sample.mkv",
+        "RunTimeTicks": 1,
+        "DateModified": "2026-09-26T00:00:00.0000000Z",
+        "VideoType": "VideoFile",
+        "SubtitleFiles": [
+          "Z:\\media\\sample.en.srt"
+        ],
+        "AudioFiles": []
+      }
+    },
+    "expected": {
+      "changed": true,
+      "missing": false,
+      "gate": "ProberBoundary",
+      "lyricStreams": null
+    }
+  },
+  {
+    "input": {
+      "name": "subtitle-case-change",
+      "item": {
+        "Type": "Movie",
+        "Path": "Z:\\media\\sample.mkv",
+        "RunTimeTicks": 1,
+        "DateModified": "2026-09-26T00:00:00.0000000Z",
+        "VideoType": "VideoFile",
+        "SubtitleFiles": [
+          "Z:\\media\\sample.en.srt"
+        ],
+        "AudioFiles": []
+      },
+      "files": [
+        "Z:\\media\\sample.EN.srt"
+      ]
+    },
+    "expected": {
+      "changed": true,
+      "missing": false,
+      "gate": "ProberBoundary",
+      "lyricStreams": null
+    }
+  },
+  {
+    "input": {
+      "name": "subtitle-case-duplicate-first",
+      "item": {
+        "Type": "Movie",
+        "Path": "Z:\\media\\sample.mkv",
+        "RunTimeTicks": 1,
+        "DateModified": "2026-09-26T00:00:00.0000000Z",
+        "VideoType": "VideoFile",
+        "SubtitleFiles": [
+          "Z:\\media\\sample.en.srt"
+        ],
+        "AudioFiles": []
+      },
+      "files": [
+        "Z:\\media\\sample.en.srt",
+        "Z:\\media\\sample.EN.srt"
+      ]
+    },
+    "expected": {
+      "changed": false,
+      "missing": false,
+      "gate": "ProberBoundary",
+      "lyricStreams": null
+    }
+  },
+  {
+    "input": {
+      "name": "subtitle-case-duplicate-last",
+      "item": {
+        "Type": "Movie",
+        "Path": "Z:\\media\\sample.mkv",
+        "RunTimeTicks": 1,
+        "DateModified": "2026-09-26T00:00:00.0000000Z",
+        "VideoType": "VideoFile",
+        "SubtitleFiles": [
+          "Z:\\media\\sample.en.srt"
+        ],
+        "AudioFiles": []
+      },
+      "files": [
+        "Z:\\media\\sample.EN.srt",
+        "Z:\\media\\sample.en.srt"
+      ]
+    },
+    "expected": {
+      "changed": true,
+      "missing": false,
+      "gate": "ProberBoundary",
+      "lyricStreams": null
+    }
+  },
+  {
+    "input": {
+      "name": "subtitle-internal",
+      "item": {
+        "Type": "Movie",
+        "Path": "Z:\\media\\sample.mkv",
+        "RunTimeTicks": 1,
+        "DateModified": "2026-09-26T00:00:00.0000000Z",
+        "VideoType": "VideoFile",
+        "SubtitleFiles": [],
+        "AudioFiles": []
+      },
+      "internalFiles": [
+        "Z:\\metadata\\sample.en.srt"
+      ]
+    },
+    "expected": {
+      "changed": true,
+      "missing": false,
+      "gate": "ProberBoundary",
+      "lyricStreams": null
+    }
+  },
+  {
+    "input": {
+      "name": "subtitle-other-stem",
+      "item": {
+        "Type": "Movie",
+        "Path": "Z:\\media\\sample.mkv",
+        "RunTimeTicks": 1,
+        "DateModified": "2026-09-26T00:00:00.0000000Z",
+        "VideoType": "VideoFile",
+        "SubtitleFiles": [],
+        "AudioFiles": []
+      },
+      "files": [
+        "Z:\\media\\sample2.srt",
+        "Z:\\media\\else.srt"
+      ]
+    },
+    "expected": {
+      "changed": false,
+      "missing": false,
+      "gate": "ProberBoundary",
+      "lyricStreams": null
+    }
+  },
+  {
+    "input": {
+      "name": "subtitle-idx-no-sub",
+      "item": {
+        "Type": "Movie",
+        "Path": "Z:\\media\\sample.mkv",
+        "RunTimeTicks": 1,
+        "DateModified": "2026-09-26T00:00:00.0000000Z",
+        "VideoType": "VideoFile",
+        "SubtitleFiles": [],
+        "AudioFiles": []
+      },
+      "files": [
+        "Z:\\media\\sample.idx"
+      ]
+    },
+    "expected": {
+      "changed": false,
+      "missing": false,
+      "gate": "ProberBoundary",
+      "lyricStreams": null
+    }
+  },
+  {
+    "input": {
+      "name": "subtitle-idx-pair",
+      "item": {
+        "Type": "Movie",
+        "Path": "Z:\\media\\sample.mkv",
+        "RunTimeTicks": 1,
+        "DateModified": "2026-09-26T00:00:00.0000000Z",
+        "VideoType": "VideoFile",
+        "SubtitleFiles": [],
+        "AudioFiles": []
+      },
+      "files": [
+        "Z:\\media\\sample.idx",
+        "Z:\\media\\sample.sub"
+      ]
+    },
+    "expected": {
+      "changed": true,
+      "missing": false,
+      "gate": "ProberBoundary",
+      "lyricStreams": null
+    }
+  },
+  {
+    "input": {
+      "name": "subtitle-placeholder",
+      "item": {
+        "Type": "Movie",
+        "Path": "Z:\\media\\sample.mkv",
+        "RunTimeTicks": 1,
+        "DateModified": "2026-09-26T00:00:00.0000000Z",
+        "VideoType": "VideoFile",
+        "SubtitleFiles": [],
+        "AudioFiles": [],
+        "IsPlaceHolder": true
+      },
+      "files": [
+        "Z:\\media\\sample.srt"
+      ]
+    },
+    "expected": {
+      "changed": false,
+      "missing": false,
+      "gate": "None",
+      "lyricStreams": null
+    }
+  },
+  {
+    "input": {
+      "name": "subtitle-channel",
+      "item": {
+        "Type": "Movie",
+        "Path": "Z:\\media\\sample.mkv",
+        "RunTimeTicks": 1,
+        "DateModified": "2026-09-26T00:00:00.0000000Z",
+        "VideoType": "VideoFile",
+        "SubtitleFiles": [],
+        "AudioFiles": [],
+        "SourceType": "Channel"
+      },
+      "files": [
+        "Z:\\media\\sample.srt"
+      ]
+    },
+    "expected": {
+      "changed": false,
+      "missing": false,
+      "gate": "ProberBoundary",
+      "lyricStreams": null
+    }
+  },
+  {
+    "input": {
+      "name": "audio-new",
+      "item": {
+        "Type": "Movie",
+        "Path": "Z:\\media\\sample.mkv",
+        "RunTimeTicks": 1,
+        "DateModified": "2026-09-26T00:00:00.0000000Z",
+        "VideoType": "VideoFile",
+        "SubtitleFiles": [],
+        "AudioFiles": []
+      },
+      "files": [
+        "Z:\\media\\sample.en.wav"
+      ]
+    },
+    "expected": {
+      "changed": true,
+      "missing": false,
+      "gate": "ProberBoundary",
+      "lyricStreams": null
+    }
+  },
+  {
+    "input": {
+      "name": "audio-known",
+      "item": {
+        "Type": "Movie",
+        "Path": "Z:\\media\\sample.mkv",
+        "RunTimeTicks": 1,
+        "DateModified": "2026-09-26T00:00:00.0000000Z",
+        "VideoType": "VideoFile",
+        "SubtitleFiles": [],
+        "AudioFiles": [
+          "Z:\\media\\sample.en.wav"
+        ]
+      },
+      "files": [
+        "Z:\\media\\sample.en.wav"
+      ]
+    },
+    "expected": {
+      "changed": false,
+      "missing": false,
+      "gate": "ProberBoundary",
+      "lyricStreams": null
+    }
+  },
+  {
+    "input": {
+      "name": "audio-unchanged",
+      "item": {
+        "Type": "Audio",
+        "Path": "Z:\\media\\sample.wav",
+        "RunTimeTicks": 1,
+        "DateModified": "2026-09-26T00:00:00.0000000Z",
+        "LyricFiles": []
+      },
+      "files": []
+    },
+    "expected": {
+      "changed": false,
+      "missing": false,
+      "gate": "ProberBoundary",
+      "lyricStreams": []
+    }
+  },
+  {
+    "input": {
+      "name": "audio-missing",
+      "item": {
+        "Type": "Audio",
+        "Path": "Z:\\media\\sample.wav",
+        "RunTimeTicks": null,
+        "DateModified": "2026-09-26T00:00:00.0000000Z",
+        "LyricFiles": []
+      },
+      "files": []
+    },
+    "expected": {
+      "changed": true,
+      "missing": true,
+      "gate": "ProberBoundary",
+      "lyricStreams": []
+    }
+  },
+  {
+    "input": {
+      "name": "lyric-new",
+      "item": {
+        "Type": "Audio",
+        "Path": "Z:\\media\\sample.wav",
+        "RunTimeTicks": 1,
+        "DateModified": "2026-09-26T00:00:00.0000000Z",
+        "LyricFiles": []
+      },
+      "files": [
+        "Z:\\media\\sample.en.lrc"
+      ]
+    },
+    "expected": {
+      "changed": true,
+      "missing": false,
+      "gate": "ProberBoundary",
+      "lyricStreams": [
+        {
+          "Type": "Lyric",
+          "Path": "Z:\\media\\sample.en.lrc",
+          "Language": "eng",
+          "Index": 3,
+          "IsExternal": false
+        }
+      ]
+    }
+  },
+  {
+    "input": {
+      "name": "lyric-known",
+      "item": {
+        "Type": "Audio",
+        "Path": "Z:\\media\\sample.wav",
+        "RunTimeTicks": 1,
+        "DateModified": "2026-09-26T00:00:00.0000000Z",
+        "LyricFiles": [
+          "Z:\\media\\sample.en.lrc"
+        ]
+      },
+      "files": [
+        "Z:\\media\\sample.en.lrc"
+      ]
+    },
+    "expected": {
+      "changed": false,
+      "missing": false,
+      "gate": "ProberBoundary",
+      "lyricStreams": [
+        {
+          "Type": "Lyric",
+          "Path": "Z:\\media\\sample.en.lrc",
+          "Language": "eng",
+          "Index": 3,
+          "IsExternal": false
+        }
+      ]
+    }
+  },
+  {
+    "input": {
+      "name": "lyric-multiple",
+      "item": {
+        "Type": "Audio",
+        "Path": "Z:\\media\\sample.wav",
+        "RunTimeTicks": 1,
+        "DateModified": "2026-09-26T00:00:00.0000000Z",
+        "LyricFiles": []
+      },
+      "files": [
+        "Z:\\media\\sample.en.lrc",
+        "Z:\\media\\sample.elrc",
+        "Z:\\media\\sample.txt",
+        "Z:\\media\\sample.srt"
+      ]
+    },
+    "expected": {
+      "changed": true,
+      "missing": false,
+      "gate": "ProberBoundary",
+      "lyricStreams": [
+        {
+          "Type": "Lyric",
+          "Path": "Z:\\media\\sample.en.lrc",
+          "Language": "eng",
+          "Index": 3,
+          "IsExternal": false
+        },
+        {
+          "Type": "Lyric",
+          "Path": "Z:\\media\\sample.elrc",
+          "Language": null,
+          "Index": 4,
+          "IsExternal": false
+        },
+        {
+          "Type": "Lyric",
+          "Path": "Z:\\media\\sample.txt",
+          "Language": null,
+          "Index": 5,
+          "IsExternal": false
+        }
+      ]
+    }
+  },
+  {
+    "input": {
+      "name": "lyric-removed",
+      "item": {
+        "Type": "Audio",
+        "Path": "Z:\\media\\sample.wav",
+        "RunTimeTicks": 1,
+        "DateModified": "2026-09-26T00:00:00.0000000Z",
+        "LyricFiles": [
+          "Z:\\media\\sample.lrc"
+        ]
+      },
+      "files": []
+    },
+    "expected": {
+      "changed": true,
+      "missing": false,
+      "gate": "ProberBoundary",
+      "lyricStreams": []
+    }
+  },
+  {
+    "input": {
+      "name": "book-lyric",
+      "item": {
+        "Type": "AudioBook",
+        "Path": "Z:\\media\\sample.wav",
+        "RunTimeTicks": 1,
+        "DateModified": "2026-09-26T00:00:00.0000000Z",
+        "LyricFiles": []
+      },
+      "files": [
+        "Z:\\media\\sample.lrc"
+      ]
+    },
+    "expected": {
+      "changed": true,
+      "missing": false,
+      "gate": "ProberBoundary",
+      "lyricStreams": [
+        {
+          "Type": "Lyric",
+          "Path": "Z:\\media\\sample.lrc",
+          "Language": null,
+          "Index": 3,
+          "IsExternal": false
+        }
+      ]
+    }
+  }
+]

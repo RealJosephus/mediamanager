@@ -1,0 +1,257 @@
+# Native JSON fixtures are sealed by raw SHA-256; keep checkout bytes intact.
+tests/metadata/fixtures/nfo-scalar-provider/README.md text eol=lf
+tests/metadata/fixtures/nfo-userdata-persistence/README.md text eol=lf
+tests/http/fixtures/shows-api/native.json whitespace=cr-at-eol
+tests/http/fixtures/quick-connect/native.json whitespace=cr-at-eol
+tests/http/fixtures/branding/Oracle.csproj -text
+tests/http/fixtures/branding/native.json whitespace=cr-at-eol
+tests/library/fixtures/library-options/Oracle.csproj -text
+tests/library/fixtures/library-options/native.json whitespace=cr-at-eol
+tests/library/fixtures/library-configuration/Oracle.csproj -text
+tests/library/fixtures/library-configuration/native.json whitespace=cr-at-eol
+tests/library/fixtures/library-configuration-mutations/Oracle.csproj -text
+tests/library/fixtures/library-configuration-mutations/native.json whitespace=cr-at-eol
+tests/**/fixtures/**/*.json -text
+tests/consumer-contracts/fixtures/readers/native.json whitespace=cr-at-eol
+tests/consumer-contracts/fixtures/playlist-layouts/native.json whitespace=cr-at-eol
+tests/metadata/fixtures/reader-layouts/local-xml-provider-native.json whitespace=cr-at-eol
+tests/**/fixtures/**/*.cs -text
+tests/**/fixtures/**/*.csproj -text
+/tests/sessions/fixtures/instant-mix/Oracle.csproj -text
+/tests/sessions/fixtures/instant-mix/native.json whitespace=cr-at-eol
+/tests/library/fixtures/music-genre-creation/Oracle.csproj -text
+/tests/library/fixtures/music-genre-creation/native.json whitespace=cr-at-eol
+/tests/http/fixtures/instant-mix/Oracle.csproj -text
+/tests/http/fixtures/instant-mix/native.json whitespace=cr-at-eol
+/tests/library/fixtures/music-genres-post-scan/Oracle.csproj -text
+/tests/library/fixtures/music-genres-post-scan/native.json whitespace=cr-at-eol
+/tests/library/fixtures/native-relation-order/native.json whitespace=cr-at-eol
+tests/Directory.Build.props -text
+src/core/resources/native-sort-license.txt -text
+# This pinned projector already contains CRLF; preserve its literal bytes.
+tools/project-memory-sort-native.mjs -text
+tools/record-native-memory-sort.mjs text eol=lf
+tools/project-sort-binding-native.mjs text eol=lf
+tests/playback/fixtures/vobsub-delivery/source.mkv -text
+tests/library/fixtures/user-view-search/NativeRecorder.mjs text eol=lf
+src/http/resources/item-update-schema.json -text
+tests/metadata/fixtures/item-update/Oracle.csproj -text
+tests/metadata/fixtures/editor-lifecycle/Oracle.csproj -text
+tests/library/fixtures/metadata-scan/Oracle.csproj -text
+tests/metadata/fixtures/tv-before-save/Oracle.csproj -text
+tests/metadata/fixtures/children-metadata/Oracle.csproj -text
+tests/metadata/fixtures/metadata-children/Oracle.csproj -text
+tests/metadata/fixtures/metadata-changed/Oracle.csproj -text
+tests/metadata/fixtures/metadata-sort-save/Oracle.csproj -text
+tests/metadata/fixtures/before-metadata-refresh/Oracle.csproj -text
+tests/metadata/fixtures/file-before-save/Oracle.csproj -text
+tests/metadata/fixtures/external-data/Oracle.csproj -text
+tests/metadata/fixtures/episode-before-refresh/Oracle.csproj -text
+src/metadata/episode-patterns.json -text
+src/metadata/calendar-timezones.json -text
+tests/metadata/fixtures/boxset-before-save/Oracle.csproj -text
+tests/metadata/fixtures/series-lifecycle/Oracle.csproj -text
+tests/metadata/fixtures/album-after-refresh/Oracle.csproj -text
+tests/metadata/fixtures/people-lifecycle/Oracle.csproj -text
+tests/metadata/fixtures/people-image-lifecycle/Oracle.csproj -text
+tests/metadata/fixtures/people-image-file-lifecycle/Oracle.csproj -text
+tests/metadata/fixtures/nfo-partial-file-lifecycle/Oracle.csproj -text
+tests/library/fixtures/library-scan-lifecycle/Oracle.csproj -text
+tests/library/fixtures/item-save-relations/Oracle.csproj -text
+tests/metadata/fixtures/by-name-refresh/Oracle.csproj -text
+tests/metadata/fixtures/by-name-path-errors/Oracle.csproj -text
+tests/library/fixtures/item-data-policy/Oracle.csproj -text
+/tests/library/fixtures/scan-item-save/Oracle.csproj -text
+/tests/metadata/fixtures/audiobook-item-update/Oracle.csproj -text
+/tests/library/fixtures/item-list-columns/Oracle.csproj -text
+/tests/library/fixtures/item-null-precedence/Oracle.csproj -text
+/tests/sessions/fixtures/item-user-data-hydration/Oracle.csproj -text
+/tests/sessions/fixtures/item-user-data-ignored-getters/Oracle.csproj -text
+/tests/metadata/fixtures/internal-folder-refresh/Oracle.csproj -text
+/tests/metadata/fixtures/internal-folder-service/Oracle.csproj -text
+/tests/metadata/fixtures/internal-folder-resolve/Oracle.csproj -text
+/tests/metadata/fixtures/internal-folder-cache/Oracle.csproj -text
+/tests/metadata/fixtures/internal-folder-resolve-edges/Oracle.csproj -text
+/tests/metadata/fixtures/internal-folder-physical-folders/Oracle.csproj -text
+/tests/library/fixtures/native-scan-context/Oracle.csproj -text
+/tests/library/fixtures/native-scan-context-edges/Oracle.csproj -text
+/tests/library/fixtures/nested-movie-resolver/Oracle.csproj -text
+/tests/library/fixtures/resolved-item-update/Oracle.csproj -text
+/tests/library/fixtures/video-stacks/Oracle.csproj -text
+/tests/metadata/fixtures/owned-item-refresh/Oracle.csproj -text
+/tests/metadata/fixtures/owned-item-lifecycle/Oracle.csproj -text
+/tests/metadata/fixtures/owned-item-support/Oracle.csproj -text
+/tests/metadata/fixtures/video-repository/Oracle.csproj -text
+/tests/library/fixtures/video-version-relations/Oracle.csproj -text
+/tests/metadata/fixtures/metadata-save-images/Oracle.csproj -text
+/tests/library/fixtures/video-version-discovery/Oracle.csproj -text
+/tests/metadata/fixtures/owned-video-discovery/Oracle.csproj -text
+/tests/metadata/fixtures/owned-extra-discovery/Oracle.csproj -text
+/tests/metadata/fixtures/owned-extra-repository/Oracle.csproj -text
+/tests/library/fixtures/resolved-item-update/native.json whitespace=cr-at-eol
+/tests/metadata/fixtures/owned-extra-discovery/native.json whitespace=cr-at-eol
+/tests/metadata/fixtures/owned-extra-repository/native.json whitespace=cr-at-eol
+/tests/library/fixtures/dot-ignore-rule/Oracle.csproj -text
+/tests/library/fixtures/dot-ignore-rule/native.json whitespace=cr-at-eol
+src/core/resources/native-ignore-regex.json -text
+/tests/metadata/fixtures/owned-extra-ignore/Oracle.csproj -text
+/tests/metadata/fixtures/owned-extra-ignore/native.json whitespace=cr-at-eol
+/tests/library/fixtures/ignore-regex-references/Oracle.csproj -text
+/tests/library/fixtures/ignore-regex-references/native.json whitespace=cr-at-eol
+/tests/library/fixtures/video-version-ignore/Oracle.csproj -text
+/tests/library/fixtures/video-version-ignore/native.json whitespace=cr-at-eol
+/tests/metadata/fixtures/owned-video-ignore/Oracle.csproj -text
+/tests/metadata/fixtures/owned-video-ignore/native.json whitespace=cr-at-eol
+/tests/library/fixtures/resolution-ignore-chain/Oracle.csproj -text
+/tests/library/fixtures/resolution-ignore-chain/native.json whitespace=cr-at-eol
+/tests/library/fixtures/directory-video-resolution/Oracle.csproj -text
+/tests/library/fixtures/directory-video-resolution/native.json whitespace=cr-at-eol
+/tests/library/fixtures/directory-video-create-items/Oracle.csproj -text
+/tests/library/fixtures/directory-video-create-items/native.json whitespace=cr-at-eol
+
+/tests/library/fixtures/directory-video-delete-items/Oracle.csproj -text
+/tests/library/fixtures/directory-video-delete-items/native.json whitespace=cr-at-eol
+/tests/library/fixtures/directory-native-validation/Oracle.csproj -text
+/tests/library/fixtures/directory-native-validation/native.json whitespace=cr-at-eol
+/tests/library/fixtures/native-resolver-entity-types/Oracle.csproj -text
+/tests/library/fixtures/native-resolver-entity-types/native.json whitespace=cr-at-eol
+/tests/library/fixtures/native-item-full27-typed/Oracle.csproj -text
+/tests/library/fixtures/native-item-full27-typed/native.json whitespace=cr-at-eol
+/tests/library/fixtures/native-item-json-boundaries/Oracle.csproj -text
+/tests/library/fixtures/native-item-json-boundaries/native*.json whitespace=cr-at-eol
+/tests/library/fixtures/music-video-resolution/input.json -text
+/tests/library/fixtures/music-video-resolution/Program.cs -text
+/tests/library/fixtures/music-video-resolution/Oracle.csproj -text
+/tests/library/fixtures/music-video-resolution/native.json -text whitespace=cr-at-eol
+/tests/library/fixtures/folder-existing-validation/input.json -text
+/tests/library/fixtures/folder-existing-validation/Program.cs -text
+/tests/library/fixtures/folder-existing-validation/Oracle.csproj -text
+/tests/library/fixtures/folder-existing-validation/native.json -text whitespace=cr-at-eol
+/tests/library/fixtures/folder-child-reconciliation/input.json -text
+/tests/library/fixtures/folder-child-reconciliation/Program.cs -text
+/tests/library/fixtures/folder-child-reconciliation/Oracle.csproj -text
+/tests/library/fixtures/folder-child-reconciliation/native.json -text whitespace=cr-at-eol
+/tests/library/fixtures/folder-version-reconciliation/input.json -text
+/tests/library/fixtures/folder-version-reconciliation/Program.cs -text
+/tests/library/fixtures/folder-version-reconciliation/Oracle.csproj -text
+/tests/library/fixtures/folder-version-reconciliation/native.json -text whitespace=cr-at-eol
+/tests/library/fixtures/folder-remote-linked-replacement/native.json -text whitespace=cr-at-eol
+/tests/library/fixtures/folder-traversal/native.json -text whitespace=cr-at-eol
+/tests/library/fixtures/general-leaf-deletion/Oracle.csproj -text
+/tests/library/fixtures/general-leaf-deletion/README.md -text
+/tests/library/fixtures/movie-similar/Oracle.csproj -text
+/tests/library/fixtures/movie-similar/README.md -text
+/tests/library/fixtures/collection-playlist-resolution/Oracle.csproj -text
+/tests/library/fixtures/collection-playlist-resolution/README.md -text
+/tests/core/fixtures/native-charset/Oracle.csproj -text
+/tests/core/fixtures/native-charset/README.md -text
+src/core/resources/native-charset-models.json -text whitespace=cr-at-eol
+/tests/core/fixtures/native-charset/native.json -text whitespace=cr-at-eol
+/tests/library/fixtures/playlist-file/input.json -text
+/tests/library/fixtures/playlist-file/Program.cs -text
+/tests/library/fixtures/playlist-file/Oracle.csproj -text
+/tests/library/fixtures/playlist-file/native.json -text whitespace=cr-at-eol
+/tests/library/fixtures/playlist-file/provenance.json -text
+/tests/library/fixtures/playlist-file/README.md -text
+/tests/metadata/fixtures/local-xml-provider/Oracle.csproj -text
+/tests/metadata/fixtures/local-xml-provider/README.md -text
+/tests/metadata/fixtures/state-owned-extras/Oracle.csproj -text
+/tests/metadata/fixtures/state-owned-extras/README.md -text
+/tests/library/fixtures/playlist-deletion/Oracle.csproj -text
+/tests/library/fixtures/playlist-deletion/README.md -text
+/tests/http/fixtures/item-deletion/Oracle.csproj -text
+/tests/http/fixtures/item-deletion/README.md -text
+/tests/core/fixtures/native-json-encoder/Oracle.csproj -text
+/tests/core/fixtures/native-json-encoder/README.md -text
+/tests/library/fixtures/delete-dto-permission/Oracle.csproj -text
+/tests/library/fixtures/delete-dto-permission/README.md -text
+/tests/library/fixtures/native-item-cache/Oracle.csproj -text
+/tests/library/fixtures/native-item-cache/README.md -text
+/tests/library/fixtures/warm-item-deletion/Oracle.csproj -text
+/tests/library/fixtures/warm-item-deletion/README.md -text
+/tests/library/fixtures/by-name-creation/Oracle.csproj -text
+/tests/library/fixtures/by-name-creation/native.json whitespace=cr-at-eol
+/tests/library/fixtures/dead-by-name/Oracle.csproj -text
+/tests/library/fixtures/dead-by-name/native.json whitespace=cr-at-eol
+/tests/library/fixtures/unsafe-fast-deletion/Oracle.csproj -text
+/tests/library/fixtures/unsafe-fast-deletion/native.json whitespace=cr-at-eol
+/tests/http/fixtures/warm-item-deletion/Oracle.csproj -text
+/tests/http/fixtures/warm-item-deletion/README.md -text
+
+/tests/library/fixtures/by-name-post-scan/Oracle.csproj -text
+/tests/library/fixtures/by-name-post-scan/native.json whitespace=cr-at-eol
+
+/tests/library/fixtures/artist-creation/Program.cs -text
+/tests/library/fixtures/artist-creation/Oracle.csproj -text
+/tests/library/fixtures/artist-creation/native.json -text whitespace=cr-at-eol
+/tests/library/fixtures/artist-creation/provenance.json -text
+
+/tests/library/fixtures/artist-maintenance/Program.cs -text
+/tests/library/fixtures/artist-maintenance/Oracle.csproj -text
+/tests/library/fixtures/artist-maintenance/native.json -text whitespace=cr-at-eol
+/tests/library/fixtures/artist-maintenance/input.json -text
+/tests/library/fixtures/artist-maintenance/provenance.json -text
+/tests/library/fixtures/artist-maintenance/reverse/Program.cs -text
+/tests/library/fixtures/artist-maintenance/reverse/Oracle.csproj -text
+/tests/library/fixtures/artist-maintenance/reverse/native.json -text whitespace=cr-at-eol
+/tests/library/fixtures/artist-maintenance/reverse/input.json -text
+/tests/library/fixtures/artist-maintenance/reverse/provenance.json -text
+/tests/library/fixtures/artist-maintenance/refresh-state/Program.cs -text
+/tests/library/fixtures/artist-maintenance/refresh-state/Oracle.csproj -text
+/tests/library/fixtures/artist-maintenance/refresh-state/native.json -text whitespace=cr-at-eol
+/tests/library/fixtures/artist-maintenance/refresh-state/input.json -text
+/tests/library/fixtures/artist-maintenance/refresh-state/provenance.json -text
+
+/tests/library/fixtures/collection-poster/*.json -text whitespace=cr-at-eol
+/tests/library/fixtures/collection-poster/*.cs -text
+/tests/library/fixtures/collection-poster/*.csproj -text
+
+/tests/library/fixtures/dead-parent/*.json -text whitespace=cr-at-eol
+/tests/library/fixtures/dead-parent/*.cs -text
+/tests/library/fixtures/dead-parent/*.csproj -text
+
+/tests/library/fixtures/clean-database/*.json -text whitespace=cr-at-eol
+/tests/library/fixtures/clean-database/*.cs -text
+/tests/library/fixtures/clean-database/*.csproj -text
+
+/tests/library/fixtures/splashscreen-task/*.json -text whitespace=cr-at-eol
+/tests/library/fixtures/splashscreen-task/*.cs -text
+/tests/library/fixtures/splashscreen-task/*.csproj -text
+/tests/library/fixtures/splashscreen-query/*.json -text whitespace=cr-at-eol
+/tests/library/fixtures/splashscreen-query/*.cs -text
+/tests/library/fixtures/splashscreen-query/*.csproj -text
+
+/tests/images/fixtures/splashscreen/*.json -text whitespace=cr-at-eol
+/tests/images/fixtures/splashscreen/*.cs -text
+/tests/images/fixtures/splashscreen/*.csproj -text
+
+/tests/library/fixtures/collection-manager/*.csproj -text
+/tests/library/fixtures/collection-manager/native.json whitespace=cr-at-eol
+
+/tests/http/fixtures/collections/Oracle.csproj -text
+/tests/http/fixtures/collections/native.json whitespace=cr-at-eol
+/tests/library/fixtures/collection-post-scan/Oracle.csproj -text
+/tests/library/fixtures/collection-post-scan/native.json whitespace=cr-at-eol
+/tests/library/fixtures/collection-source/Oracle.csproj -text
+/tests/library/fixtures/collection-source/input.json whitespace=cr-at-eol
+/tests/library/fixtures/collection-source/native.json whitespace=cr-at-eol
+
+/tests/users/fixtures/guid-contract/Oracle.csproj -text
+/tests/users/fixtures/guid-contract/native.json whitespace=cr-at-eol
+
+/tests/core/fixtures/parental-rating-unicode/Oracle.csproj -text
+/tests/core/fixtures/parental-rating-unicode/native.json whitespace=cr-at-eol
+/tests/core/fixtures/native-text-sort-boundaries/native.json whitespace=cr-at-eol
+/tests/metadata/fixtures/local-xml-failure-pipeline/native.json whitespace=cr-at-eol
+/tests/metadata/fixtures/local-xml-save-prefix/native.json whitespace=cr-at-eol
+/tests/metadata/fixtures/nfo-member-stream/native.json whitespace=cr-at-eol
+/tests/http/fixtures/password-reset/native.json whitespace=cr-at-eol
+/tests/http/fixtures/display-preferences/native.json whitespace=cr-at-eol
+/tests/http/fixtures/display-preferences/snapshot-native.json whitespace=cr-at-eol
+/tests/http/fixtures/startup/native.json whitespace=cr-at-eol
+/tests/core/fixtures/configuration/native.json whitespace=cr-at-eol
+/tests/core/fixtures/configuration/observations.js -text
+/src/core/resources/configuration-model.json -text whitespace=cr-at-eol
+/src/core/resources/configuration-model-provenance.json -text
+/tests/core/fixtures/server-identity/observations.js -text
+/tests/core/fixtures/server-identity/native.json whitespace=cr-at-eol

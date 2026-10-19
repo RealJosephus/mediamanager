@@ -1,0 +1,335 @@
+{
+  "actualDeviceId": true,
+  "actualFiles": true,
+  "inputSha256": "89319125677621ddd9672b194abf2b7282aa7fd5f2e2cec57050398a65304cfe",
+  "assemblies": [
+    {
+      "filename": "D:\\mediamanager-validation\\20261015-release-server-identity-native-1\\bin\\Release\\net10.0\\Emby.Server.Implementations.dll",
+      "sha256": "8d369435646570958505c58b9cb17da169855dabc105d0e933524361e9b7b1c8"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261015-release-server-identity-native-1\\bin\\Release\\net10.0\\MediaBrowser.Common.dll",
+      "sha256": "c86a38f99a78d9d3b9dd5ba5245fb06bf654cfa3e16ec409d3ba77b1e69ed11e"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261015-release-server-identity-native-1\\bin\\Release\\net10.0\\MediaBrowser.Controller.dll",
+      "sha256": "051c588a8e85a3a7cdde8dc3d9a1112217fd7e973a86fe2ff90cf765bedb75a8"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261015-release-server-identity-native-1\\bin\\Release\\net10.0\\Oracle.dll",
+      "sha256": "37e69176ea615e90e2b240a2d70beb7e463cc2e87326d7eec06d1c2df88bc383"
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Logging.Abstractions.dll",
+      "sha256": "90c41d68d297e54c4def3cfd38eb620513a744ab01131840ea3e2634cf973be3"
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Collections.dll",
+      "sha256": "df6f2037eabee28100184e92f7536427ba2f086c1110629804d466b124bc4d54"
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Console.dll",
+      "sha256": "3b85daf02a3d9ed99b84bb1c639fe8b1ced46d8d157fa56f525f6b8c5be43b3e"
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Linq.dll",
+      "sha256": "284d38945b6e92e847129bd28af458b19818d0f2181f79882888ab2003f4c519"
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Memory.dll",
+      "sha256": "f8f9d38efd6b0de30954d6bf1f353e9617bfb36d3d245c013a3b12be9f6bd88a"
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Private.CoreLib.dll",
+      "sha256": "1125acc8106c43fc8bad2d203c4c4485df6182d292846c2fff415c1040c54678"
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Runtime.dll",
+      "sha256": "76be53624f64b23d0249dfa0bbe85390086de7c44bfd490642ea86c6faaf44af"
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Security.Cryptography.dll",
+      "sha256": "e0a839a540e47343b53a936b32d91599a3470005228d50fd0b896f8bbdcc65b0"
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Text.Encoding.Extensions.dll",
+      "sha256": "8f51b9535db64fe027a40d6076200b1a6b0889bf05f62bb8e68c3eb083c7f113"
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Text.Json.dll",
+      "sha256": "fa99f413be21ed5f484a09093fe5f0beba7de3062cf9cc9f847dbf8108dba55a"
+    }
+  ],
+  "results": [
+    {
+      "name": "n-lower",
+      "value": "e5900000000000000000000000000001",
+      "cachedValue": "e5900000000000000000000000000001",
+      "reopenedValue": "e5900000000000000000000000000001",
+      "beforeBytes": "ZTU5MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDE=",
+      "afterBytes": "ZTU5MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDE=",
+      "afterDirectory": false,
+      "validGuid": true
+    },
+    {
+      "name": "n-upper",
+      "value": "E5900000000000000000000000000001",
+      "cachedValue": "E5900000000000000000000000000001",
+      "reopenedValue": "E5900000000000000000000000000001",
+      "beforeBytes": "RTU5MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDE=",
+      "afterBytes": "RTU5MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDE=",
+      "afterDirectory": false,
+      "validGuid": true
+    },
+    {
+      "name": "d",
+      "value": "e5900000-0000-0000-0000-000000000001",
+      "cachedValue": "e5900000-0000-0000-0000-000000000001",
+      "reopenedValue": "e5900000-0000-0000-0000-000000000001",
+      "beforeBytes": "ZTU5MDAwMDAtMDAwMC0wMDAwLTAwMDAtMDAwMDAwMDAwMDAx",
+      "afterBytes": "ZTU5MDAwMDAtMDAwMC0wMDAwLTAwMDAtMDAwMDAwMDAwMDAx",
+      "afterDirectory": false,
+      "validGuid": true
+    },
+    {
+      "name": "b-spaces",
+      "value": " \t{E5900000-0000-0000-0000-000000000001}\r\n",
+      "cachedValue": " \t{E5900000-0000-0000-0000-000000000001}\r\n",
+      "reopenedValue": " \t{E5900000-0000-0000-0000-000000000001}\r\n",
+      "beforeBytes": "IAl7RTU5MDAwMDAtMDAwMC0wMDAwLTAwMDAtMDAwMDAwMDAwMDAxfQ0K",
+      "afterBytes": "IAl7RTU5MDAwMDAtMDAwMC0wMDAwLTAwMDAtMDAwMDAwMDAwMDAxfQ0K",
+      "afterDirectory": false,
+      "validGuid": true
+    },
+    {
+      "name": "p",
+      "value": "(e5900000-0000-0000-0000-000000000001)",
+      "cachedValue": "(e5900000-0000-0000-0000-000000000001)",
+      "reopenedValue": "(e5900000-0000-0000-0000-000000000001)",
+      "beforeBytes": "KGU1OTAwMDAwLTAwMDAtMDAwMC0wMDAwLTAwMDAwMDAwMDAwMSk=",
+      "afterBytes": "KGU1OTAwMDAwLTAwMDAtMDAwMC0wMDAwLTAwMDAwMDAwMDAwMSk=",
+      "afterDirectory": false,
+      "validGuid": true
+    },
+    {
+      "name": "x",
+      "value": "{0xe5900000,0x0000,0x0000,{0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01}}",
+      "cachedValue": "{0xe5900000,0x0000,0x0000,{0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01}}",
+      "reopenedValue": "{0xe5900000,0x0000,0x0000,{0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01}}",
+      "beforeBytes": "ezB4ZTU5MDAwMDAsMHgwMDAwLDB4MDAwMCx7MHgwMCwweDAwLDB4MDAsMHgwMCwweDAwLDB4MDAsMHgwMCwweDAxfX0=",
+      "afterBytes": "ezB4ZTU5MDAwMDAsMHgwMDAwLDB4MDAwMCx7MHgwMCwweDAwLDB4MDAsMHgwMCwweDAwLDB4MDAsMHgwMCwweDAxfX0=",
+      "afterDirectory": false,
+      "validGuid": true
+    },
+    {
+      "name": "empty-guid",
+      "value": "00000000000000000000000000000000",
+      "cachedValue": "00000000000000000000000000000000",
+      "reopenedValue": "00000000000000000000000000000000",
+      "beforeBytes": "MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA=",
+      "afterBytes": "MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA=",
+      "afterDirectory": false,
+      "validGuid": true
+    },
+    {
+      "name": "nbsp",
+      "value": "\u00A0e5900000000000000000000000000001\u00A0",
+      "cachedValue": "\u00A0e5900000000000000000000000000001\u00A0",
+      "reopenedValue": "\u00A0e5900000000000000000000000000001\u00A0",
+      "beforeBytes": "wqBlNTkwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMcKg",
+      "afterBytes": "wqBlNTkwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMcKg",
+      "afterDirectory": false,
+      "validGuid": true
+    },
+    {
+      "name": "bom-character",
+      "value": "e5900000000000000000000000000001",
+      "cachedValue": "e5900000000000000000000000000001",
+      "reopenedValue": "e5900000000000000000000000000001",
+      "beforeBytes": "77u/ZTU5MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDE=",
+      "afterBytes": "77u/ZTU5MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDE=",
+      "afterDirectory": false,
+      "validGuid": true
+    },
+    {
+      "name": "empty",
+      "value": "8c8e24530e014a2d83470c2065b61a46",
+      "cachedValue": "8c8e24530e014a2d83470c2065b61a46",
+      "reopenedValue": "8c8e24530e014a2d83470c2065b61a46",
+      "beforeBytes": "",
+      "afterBytes": "77u/OGM4ZTI0NTMwZTAxNGEyZDgzNDcwYzIwNjViNjFhNDY=",
+      "afterDirectory": false,
+      "validGuid": true
+    },
+    {
+      "name": "spaces",
+      "value": "68e35c8e3bd04d7fbdb0a0405831d57b",
+      "cachedValue": "68e35c8e3bd04d7fbdb0a0405831d57b",
+      "reopenedValue": "68e35c8e3bd04d7fbdb0a0405831d57b",
+      "beforeBytes": "IAkNCg==",
+      "afterBytes": "77u/NjhlMzVjOGUzYmQwNGQ3ZmJkYjBhMDQwNTgzMWQ1N2I=",
+      "afterDirectory": false,
+      "validGuid": true
+    },
+    {
+      "name": "invalid",
+      "value": "11c1569de1f6452c9ea8897a26432741",
+      "cachedValue": "11c1569de1f6452c9ea8897a26432741",
+      "reopenedValue": "11c1569de1f6452c9ea8897a26432741",
+      "beforeBytes": "bm90LWEtZ3VpZA==",
+      "afterBytes": "77u/MTFjMTU2OWRlMWY2NDUyYzllYTg4OTdhMjY0MzI3NDE=",
+      "afterDirectory": false,
+      "validGuid": true
+    },
+    {
+      "name": "trailing-nul",
+      "value": "f4e4ca333cc74beba4fdaf01bc7e9143",
+      "cachedValue": "f4e4ca333cc74beba4fdaf01bc7e9143",
+      "reopenedValue": "f4e4ca333cc74beba4fdaf01bc7e9143",
+      "beforeBytes": "ZTU5MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDEA",
+      "afterBytes": "77u/ZjRlNGNhMzMzY2M3NGJlYmE0ZmRhZjAxYmM3ZTkxNDM=",
+      "afterDirectory": false,
+      "validGuid": true
+    },
+    {
+      "name": "double-id",
+      "value": "d1de0594f3f34219aef628f6f6a1a10b",
+      "cachedValue": "d1de0594f3f34219aef628f6f6a1a10b",
+      "reopenedValue": "d1de0594f3f34219aef628f6f6a1a10b",
+      "beforeBytes": "ZTU5MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDFlNTkwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMQ==",
+      "afterBytes": "77u/ZDFkZTA1OTRmM2YzNDIxOWFlZjYyOGY2ZjZhMWExMGI=",
+      "afterDirectory": false,
+      "validGuid": true
+    },
+    {
+      "name": "utf8-bom",
+      "value": "e5900000000000000000000000000001",
+      "cachedValue": "e5900000000000000000000000000001",
+      "reopenedValue": "e5900000000000000000000000000001",
+      "beforeBytes": "77u/ZTU5MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDE=",
+      "afterBytes": "77u/ZTU5MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDE=",
+      "afterDirectory": false,
+      "validGuid": true
+    },
+    {
+      "name": "utf16le",
+      "value": " \t{E5900000-0000-0000-0000-000000000001}\r\n",
+      "cachedValue": " \t{E5900000-0000-0000-0000-000000000001}\r\n",
+      "reopenedValue": " \t{E5900000-0000-0000-0000-000000000001}\r\n",
+      "beforeBytes": "//4gAAkAewBFADUAOQAwADAAMAAwADAALQAwADAAMAAwAC0AMAAwADAAMAAtADAAMAAwADAALQAwADAAMAAwADAAMAAwADAAMAAwADAAMQB9AA0ACgA=",
+      "afterBytes": "//4gAAkAewBFADUAOQAwADAAMAAwADAALQAwADAAMAAwAC0AMAAwADAAMAAtADAAMAAwADAALQAwADAAMAAwADAAMAAwADAAMAAwADAAMQB9AA0ACgA=",
+      "afterDirectory": false,
+      "validGuid": true
+    },
+    {
+      "name": "utf16be",
+      "value": "e5900000-0000-0000-0000-000000000001",
+      "cachedValue": "e5900000-0000-0000-0000-000000000001",
+      "reopenedValue": "e5900000-0000-0000-0000-000000000001",
+      "beforeBytes": "/v8AZQA1ADkAMAAwADAAMAAwAC0AMAAwADAAMAAtADAAMAAwADAALQAwADAAMAAwAC0AMAAwADAAMAAwADAAMAAwADAAMAAwADE=",
+      "afterBytes": "/v8AZQA1ADkAMAAwADAAMAAwAC0AMAAwADAAMAAtADAAMAAwADAALQAwADAAMAAwAC0AMAAwADAAMAAwADAAMAAwADAAMAAwADE=",
+      "afterDirectory": false,
+      "validGuid": true
+    },
+    {
+      "name": "utf32le",
+      "value": "e5900000000000000000000000000001",
+      "cachedValue": "e5900000000000000000000000000001",
+      "reopenedValue": "e5900000000000000000000000000001",
+      "beforeBytes": "//4AAGUAAAA1AAAAOQAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAxAAAA",
+      "afterBytes": "//4AAGUAAAA1AAAAOQAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAxAAAA",
+      "afterDirectory": false,
+      "validGuid": true
+    },
+    {
+      "name": "utf32be",
+      "value": "e5900000000000000000000000000001",
+      "cachedValue": "e5900000000000000000000000000001",
+      "reopenedValue": "e5900000000000000000000000000001",
+      "beforeBytes": "AAD\u002B/wAAAGUAAAA1AAAAOQAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAx",
+      "afterBytes": "AAD\u002B/wAAAGUAAAA1AAAAOQAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAx",
+      "afterDirectory": false,
+      "validGuid": true
+    },
+    {
+      "name": "missing",
+      "value": "b038f3e3ac384affaf55654a3fe6ee32",
+      "cachedValue": "b038f3e3ac384affaf55654a3fe6ee32",
+      "reopenedValue": "b038f3e3ac384affaf55654a3fe6ee32",
+      "beforeBytes": null,
+      "afterBytes": "77u/YjAzOGYzZTNhYzM4NGFmZmFmNTU2NTRhM2ZlNmVlMzI=",
+      "afterDirectory": false,
+      "validGuid": true
+    },
+    {
+      "name": "directory",
+      "value": "c5ca241094a143afa613b78016c036dc",
+      "cachedValue": "c5ca241094a143afa613b78016c036dc",
+      "reopenedValue": "bf6b322818354a08bdee4b0ce407d3de",
+      "beforeBytes": null,
+      "afterBytes": null,
+      "afterDirectory": true,
+      "validGuid": true
+    },
+    {
+      "name": "n-upper-readonly",
+      "value": "E5900000000000000000000000000001",
+      "cachedValue": "E5900000000000000000000000000001",
+      "reopenedValue": "E5900000000000000000000000000001",
+      "beforeBytes": "RTU5MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDE=",
+      "afterBytes": "RTU5MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDE=",
+      "afterDirectory": false,
+      "validGuid": true
+    },
+    {
+      "name": "n-upper-locked-read",
+      "value": "E5900000000000000000000000000001",
+      "cachedValue": "E5900000000000000000000000000001",
+      "reopenedValue": "E5900000000000000000000000000001",
+      "beforeBytes": "RTU5MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDE=",
+      "afterBytes": "RTU5MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDE=",
+      "afterDirectory": false,
+      "validGuid": true
+    },
+    {
+      "name": "n-upper-locked-none",
+      "value": "d73a70e8191446c29582f6bf15170a4b",
+      "cachedValue": "d73a70e8191446c29582f6bf15170a4b",
+      "reopenedValue": "E5900000000000000000000000000001",
+      "beforeBytes": "RTU5MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDE=",
+      "afterBytes": "RTU5MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDE=",
+      "afterDirectory": false,
+      "validGuid": true
+    },
+    {
+      "name": "invalid-readonly",
+      "value": "88e8a2d0724b476384fcb527a950001c",
+      "cachedValue": "88e8a2d0724b476384fcb527a950001c",
+      "reopenedValue": "bddebaf30809406b8a03a26d07f50664",
+      "beforeBytes": "bm90LWEtZ3VpZA==",
+      "afterBytes": "bm90LWEtZ3VpZA==",
+      "afterDirectory": false,
+      "validGuid": true
+    },
+    {
+      "name": "invalid-locked-read",
+      "value": "8b35fec301fa4c9fa5f903b67f36b65b",
+      "cachedValue": "8b35fec301fa4c9fa5f903b67f36b65b",
+      "reopenedValue": "d25d588d71a14a539f66152c5ecb8c0c",
+      "beforeBytes": "bm90LWEtZ3VpZA==",
+      "afterBytes": "bm90LWEtZ3VpZA==",
+      "afterDirectory": false,
+      "validGuid": true
+    },
+    {
+      "name": "invalid-locked-none",
+      "value": "8b8a0464e11043aa97419c74612ce74c",
+      "cachedValue": "8b8a0464e11043aa97419c74612ce74c",
+      "reopenedValue": "92a6e1a6930647bcbc003cd803482ef5",
+      "beforeBytes": "bm90LWEtZ3VpZA==",
+      "afterBytes": "bm90LWEtZ3VpZA==",
+      "afterDirectory": false,
+      "validGuid": true
+    }
+  ]
+}

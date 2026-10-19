@@ -1,0 +1,174 @@
+{
+  "schemaVersion": 1,
+  "userId": "5c6b5f77-bea9-4a9a-98aa-fae5909892b7",
+  "rootId": "72000000-0000-0000-0000-000000000001",
+  "items": [
+    {
+      "key": "root",
+      "id": "72000000-0000-0000-0000-000000000001",
+      "name": "Extras Root",
+      "sortName": "extras root",
+      "type": "Folder",
+      "parentId": null,
+      "topParentId": "72000000-0000-0000-0000-000000000001",
+      "ancestorIds": []
+    },
+    {
+      "key": "alpha",
+      "id": "72000000-0000-0000-0000-000000000002",
+      "name": "Alpha Owner",
+      "sortName": "alpha owner",
+      "type": "Movie",
+      "parentId": "72000000-0000-0000-0000-000000000001",
+      "topParentId": "72000000-0000-0000-0000-000000000001",
+      "ancestorIds": ["72000000-0000-0000-0000-000000000001"],
+      "presentationUniqueKey": "extra-filter-alpha"
+    },
+    {
+      "key": "beta",
+      "id": "72000000-0000-0000-0000-000000000003",
+      "name": "Beta Primary",
+      "sortName": "beta primary",
+      "type": "Movie",
+      "parentId": "72000000-0000-0000-0000-000000000001",
+      "topParentId": "72000000-0000-0000-0000-000000000001",
+      "ancestorIds": ["72000000-0000-0000-0000-000000000001"],
+      "presentationUniqueKey": "extra-filter-beta"
+    },
+    {
+      "key": "placeholder",
+      "id": "72000000-0000-0000-0000-000000000004",
+      "name": "Delta Placeholder",
+      "sortName": "delta placeholder",
+      "type": "Movie",
+      "parentId": "72000000-0000-0000-0000-000000000001",
+      "topParentId": "72000000-0000-0000-0000-000000000001",
+      "ancestorIds": ["72000000-0000-0000-0000-000000000001"],
+      "presentationUniqueKey": "extra-filter-placeholder",
+      "data": {
+        "VideoType": "VideoFile",
+        "IsPlaceHolder": true,
+        "IsShortcut": false,
+        "Width": 1920,
+        "Height": 1080,
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "key": "linkedBox",
+      "id": "72000000-0000-0000-0000-000000000005",
+      "name": "Echo Linked Box",
+      "sortName": "echo linked box",
+      "type": "BoxSet",
+      "parentId": "72000000-0000-0000-0000-000000000001",
+      "topParentId": "72000000-0000-0000-0000-000000000001",
+      "ancestorIds": ["72000000-0000-0000-0000-000000000001"],
+      "presentationUniqueKey": "extra-filter-box"
+    },
+    {
+      "key": "betaAlternate",
+      "id": "72000000-0000-0000-0000-000000000006",
+      "name": "Beta Alternate",
+      "sortName": "beta alternate",
+      "type": "Movie",
+      "parentId": "72000000-0000-0000-0000-000000000001",
+      "topParentId": "72000000-0000-0000-0000-000000000001",
+      "ancestorIds": ["72000000-0000-0000-0000-000000000001"],
+      "primaryVersionId": "72000000-0000-0000-0000-000000000003",
+      "presentationUniqueKey": "extra-filter-beta"
+    },
+    {
+      "key": "trailerExtra",
+      "id": "72000000-0000-0000-0000-000000000007",
+      "name": "Alpha Trailer",
+      "sortName": "alpha trailer",
+      "type": "Movie",
+      "parentId": "72000000-0000-0000-0000-000000000001",
+      "topParentId": "72000000-0000-0000-0000-000000000001",
+      "ancestorIds": ["72000000-0000-0000-0000-000000000001"],
+      "ownerId": "72000000-0000-0000-0000-000000000002",
+      "extraType": 2,
+      "presentationUniqueKey": "extra-filter-trailer"
+    },
+    {
+      "key": "clipExtra",
+      "id": "72000000-0000-0000-0000-000000000008",
+      "name": "Alpha Clip",
+      "sortName": "alpha clip",
+      "type": "Movie",
+      "parentId": "72000000-0000-0000-0000-000000000001",
+      "topParentId": "72000000-0000-0000-0000-000000000001",
+      "ancestorIds": ["72000000-0000-0000-0000-000000000001"],
+      "ownerId": "72000000-0000-0000-0000-000000000002",
+      "extraType": 1,
+      "presentationUniqueKey": "extra-filter-clip"
+    },
+    {
+      "key": "themeSongExtra",
+      "id": "72000000-0000-0000-0000-000000000009",
+      "name": "Beta Theme Song",
+      "sortName": "beta theme song",
+      "type": "Movie",
+      "parentId": "72000000-0000-0000-0000-000000000001",
+      "topParentId": "72000000-0000-0000-0000-000000000001",
+      "ancestorIds": ["72000000-0000-0000-0000-000000000001"],
+      "ownerId": "72000000-0000-0000-0000-000000000003",
+      "extraType": 8,
+      "presentationUniqueKey": "extra-filter-theme-song"
+    },
+    {
+      "key": "themeVideoExtra",
+      "id": "72000000-0000-0000-0000-000000000010",
+      "name": "Alternate Theme Video",
+      "sortName": "alternate theme video",
+      "type": "Movie",
+      "parentId": "72000000-0000-0000-0000-000000000001",
+      "topParentId": "72000000-0000-0000-0000-000000000001",
+      "ancestorIds": ["72000000-0000-0000-0000-000000000001"],
+      "ownerId": "72000000-0000-0000-0000-000000000006",
+      "extraType": 9,
+      "presentationUniqueKey": "extra-filter-theme-video"
+    },
+    {
+      "key": "unknownExtra",
+      "id": "72000000-0000-0000-0000-000000000011",
+      "name": "Placeholder Unknown Extra",
+      "sortName": "placeholder unknown extra",
+      "type": "Movie",
+      "parentId": "72000000-0000-0000-0000-000000000001",
+      "topParentId": "72000000-0000-0000-0000-000000000001",
+      "ancestorIds": ["72000000-0000-0000-0000-000000000001"],
+      "ownerId": "72000000-0000-0000-0000-000000000004",
+      "extraType": 0,
+      "presentationUniqueKey": "extra-filter-unknown"
+    }
+  ],
+  "links": [
+    {
+      "parentId": "72000000-0000-0000-0000-000000000005",
+      "childId": "72000000-0000-0000-0000-000000000002",
+      "childType": 2,
+      "sortOrder": 0
+    }
+  ],
+  "cases": [
+    { "name": "has-trailer-true", "query": "HasTrailer=true" },
+    { "name": "has-trailer-false", "query": "HasTrailer=false" },
+    { "name": "has-special-feature-true", "query": "HasSpecialFeature=true" },
+    { "name": "has-special-feature-false", "query": "HasSpecialFeature=false" },
+    { "name": "has-theme-song-true", "query": "HasThemeSong=true" },
+    { "name": "has-theme-song-false", "query": "HasThemeSong=false" },
+    { "name": "has-theme-video-true", "query": "HasThemeVideo=true" },
+    { "name": "has-theme-video-false", "query": "HasThemeVideo=false" },
+    { "name": "is-placeholder-true", "query": "IsPlaceHolder=true" },
+    { "name": "is-placeholder-false", "query": "IsPlaceHolder=false" },
+    { "name": "trailer-and-song", "query": "HasTrailer=true&HasThemeSong=true" },
+    { "name": "song-and-video", "query": "HasThemeSong=true&HasThemeVideo=true" },
+    { "name": "placeholder-and-no-trailer", "query": "IsPlaceHolder=true&HasTrailer=false" },
+    { "name": "special-and-no-trailer", "query": "HasSpecialFeature=true&HasTrailer=false" },
+    { "name": "case-insensitive-true", "query": "HasTrailer=TrUe" },
+    { "name": "empty-omitted", "query": "HasTrailer=" },
+    { "name": "whitespace-omitted", "query": "HasTrailer=%20" },
+    { "name": "repeated-first-false", "query": "HasTrailer=false&HasTrailer=true" }
+  ]
+}

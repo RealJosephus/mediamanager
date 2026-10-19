@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-06T15:39:22.428Z",
+  "frozenJellyfin": {
+    "commit": "208c278b75abd897aefa1e1175126eac5e4dbfaa",
+    "workspaceContentDigest": "e28a983db179b720c3b16d7416ee4112894a3115c4be6fe43c61c52e0d9a8313"
+  },
+  "fixtureFiles": [
+    {
+      "path": "tests/library/fixtures/video-extras/input.json",
+      "sha256": "f5543209c3df036801efaaa76cc20d1acadb0046fbbfef1c66d80c4d3f4a7f70"
+    },
+    {
+      "path": "tests/library/fixtures/video-extras/Program.cs",
+      "sha256": "8bb55f7e1b46ba9fa874b1582c7333a844bf44b35201f57bebef3abf9823d7cd"
+    },
+    {
+      "path": "tests/library/fixtures/video-extras/Oracle.csproj",
+      "sha256": "3f2610631c594ffd08dcc82f03d3509abc1c9c9541f159519800df046fc770ee"
+    },
+    {
+      "path": "tests/Directory.Build.props",
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    },
+    {
+      "path": "tests/library/fixtures/video-extras/native.json",
+      "sha256": "cf22dbdad16bb2faef9510f4eec17832cacad2d5cfd65f9a0bcd82cf362d410f"
+    }
+  ],
+  "sourceFiles": [
+    {
+      "path": "Emby.Naming/Common/NamingOptions.cs",
+      "sha256": "4fc386ee2a335da97314845fcac71d2ffa534fbc37d772d44ae30e2dd4b07c02"
+    },
+    {
+      "path": "Emby.Naming/Video/ExtraRuleResolver.cs",
+      "sha256": "47f09abc0c5cd080ffc1000165f60a66ebd45f88ed4c3bf6f93eb5dc654a7ef6"
+    },
+    {
+      "path": "Emby.Naming/Video/VideoResolver.cs",
+      "sha256": "b94148bc6d67260305103434a938a4cf38b8a3c1f35ac6180dc96adb090c7ef0"
+    },
+    {
+      "path": "Emby.Server.Implementations/Library/Resolvers/ExtraResolver.cs",
+      "sha256": "8cba4a3546d359e788259a822e482df734f87c79f5f101813112cf484669feb6"
+    },
+    {
+      "path": "Emby.Server.Implementations/Library/LibraryManager.cs",
+      "sha256": "4729de97560262702a44c5829bf93bbc5deec379e9b3018b231aaa6d65643c44"
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/BaseItem.cs",
+      "sha256": "9dc7b96a93c9fbe874cdcededdca395b5aa2df6070f5cfc9c8959539dcd76469"
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/Video.cs",
+      "sha256": "03df015992ee4e95e175c499b36a7b21d9facc4f391cfd89235ad652d2eb0b11"
+    }
+  ],
+  "assemblies": [
+    {
+      "name": "jellyfin.dll",
+      "sha256": "a43fa24c44677e579fcec79d637789b9f36633d02e5434e76a0e03fa13027767"
+    },
+    {
+      "name": "Emby.Server.Implementations.dll",
+      "sha256": "8d369435646570958505c58b9cb17da169855dabc105d0e933524361e9b7b1c8"
+    },
+    {
+      "name": "Emby.Naming.dll",
+      "sha256": "55085cf14d1e58a7a1e99e0ffc37bde0545bbe85f7f09995388a6e465cca3a45"
+    }
+  ],
+  "recording": {
+    "passed": true,
+    "sourceFilesSha256": "4bb9ff3080cfb504c03f974a6f1b6dfa03c14916d0b506e557c37073c0d77712",
+    "originalNativeSha256": "3adc46da9ef23912a2c99c26e296d93ab97cdce111a5bf16191486ea0d7a0269",
+    "portableNativeLineEndings": "LF"
+  },
+  "scope": "Actual frozen ExtraResolver.TryGetExtraTypeForOwner, ExtraRuleResolver and VideoResolver name/year resolution. File-system enumeration, LibraryManager.FindExtras localization/numbering, ownership selection, repository persistence and native scanning are outside this oracle."
+}

@@ -1,0 +1,93 @@
+{
+  "recordedAt": "2026-10-10T17:19:31.206Z",
+  "candidateVerified": false,
+  "completeBuildInputClosure": false,
+  "releaseAcceptance": false,
+  "scope": "DIAGNOSTIC designated captured runtime v2: real LibraryManager constructor/RegisterItem/GetItemById and actual BitFaster.Caching 2.6.1 cache. Only repository RetrieveItem and configuration collaborators are controlled; repository rows, SQL/file deletion, metadata saves, complete native build closure, native authentication, clients and release acceptance are not claimed.",
+  "files": {
+    "input.json": {
+      "filename": "input.json",
+      "sha256": "640d9a17998dad4ff16f77a6b2245f88e95b16132a9d07cd4495151ea1e15b82"
+    },
+    "Program.cs": {
+      "filename": "Program.cs",
+      "sha256": "b6880c8dae7a289567d7a68256f293d2bb6cb8a5d08d4ca6bb1a7421cb1b23d7"
+    },
+    "Oracle.csproj": {
+      "filename": "Oracle.csproj",
+      "sha256": "d75e3738335deb069f70f8ddabc039cfa692be29cf4d8e945534b3e59c5af517"
+    },
+    "README.md": {
+      "filename": "README.md",
+      "sha256": "6f0825ec07263c0701211bd872a89f8c5794e0aa4174571250c950e0b7e51061"
+    },
+    "native.json": {
+      "filename": "native.json",
+      "sha256": "f8606394d5f437271032428b9bab90828d6eaf4e02267594bd3a8fd1ec36d747"
+    },
+    "rawRecording": {
+      "filename": "D:/mediamanager-validation/20261011/results/formal-warm-cache-v1/native.raw.json",
+      "sha256": "31c16ce156ea571682a4a68d3bba9354f252afd44b2262a59f5fcc7bc2dff353"
+    }
+  },
+  "counts": {
+    "cases": 40,
+    "observations": 2428
+  },
+  "assemblies": [
+    {
+      "name": "Emby.Server.Implementations",
+      "sha256": "5c45d4fbb29ff9708edb50f0dc99f7dffbf01fbbf06c7ca2614e2a5f7aaff102"
+    },
+    {
+      "name": "MediaBrowser.Controller",
+      "sha256": "96e58e4c256e7230a17333b2d93d3fe2f6e80b7b9d990300d02b490f52dcb23a"
+    },
+    {
+      "name": "BitFaster.Caching",
+      "sha256": "a58275640773dc3ff06ceafad752fd399e4ed7cef93039354b7eb06a126590ff"
+    },
+    {
+      "name": "MediaBrowser.Model",
+      "sha256": "9f1a9348c82e706a36c215903f2e8c4040561c8603045542bf031c77aadb0ed6"
+    }
+  ],
+  "jellyfin": {
+    "assemblyDirectory": "D:/mediamanager-validation/20261010/results/jellyfin-designated-workspace-capture-v2/source/Jellyfin.Server/bin/Release/net10.0",
+    "sourceCapture": {
+      "filename": "D:/mediamanager-validation/20261010/results/jellyfin-designated-workspace-capture-v2/manifest.json",
+      "sha256": "a278db96281767142568596a447f942e69134f05de6d26a56cbc6026db1ecbad"
+    },
+    "boundBuildAudit": {
+      "filename": "D:/mediamanager-validation/20261010/results/jellyfin-designated-workspace-capture-v2/source-build-startup-audit.json",
+      "sha256": "52ab357ea8c6c0e4fc043f8ae00b4a8aff39f73e37ccf990dad38ee33ea66aaf"
+    }
+  },
+  "runtime": {
+    "dotnet": {
+      "filename": "D:/mediamanager/.tools/dotnet/dotnet.exe",
+      "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6"
+    },
+    "oracleAssembly": {
+      "filename": "D:/mediamanager-validation/20261011/results/formal-warm-cache-v1/bin/Oracle.dll",
+      "sha256": "675dfed18eb9b0c83a7550d81aca334c2b1db725a2ef839b98c6d796df1bae92"
+    }
+  },
+  "repeat": {
+    "filename": "D:/mediamanager-validation/20261011/results/formal-warm-cache-v2/native.raw.json",
+    "sha256": "31c16ce156ea571682a4a68d3bba9354f252afd44b2262a59f5fcc7bc2dff353",
+    "byteEqual": true,
+    "projectionEqual": true,
+    "normalization": "None; native driver state-root projection only.",
+    "runtime": {
+      "dotnet": {
+        "filename": "D:/mediamanager/.tools/dotnet/dotnet.exe",
+        "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6"
+      },
+      "oracleAssembly": {
+        "filename": "D:/mediamanager-validation/20261011/results/formal-warm-cache-v2/bin/Oracle.dll",
+        "sha256": "675dfed18eb9b0c83a7550d81aca334c2b1db725a2ef839b98c6d796df1bae92"
+      }
+    }
+  }
+}

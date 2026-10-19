@@ -1,0 +1,74 @@
+[
+  {
+    "name": "numeric-basic",
+    "parentName": "Film",
+    "collectionType": "movies",
+    "files": ["Film cd2.mkv", "Film cd1.mkv"]
+  },
+  {
+    "name": "numeric-ordinal-path-order",
+    "parentName": "Film",
+    "collectionType": "movies",
+    "files": ["Film cd2.mkv", "Film cd10.mkv", "Film cd1.mkv"]
+  },
+  {
+    "name": "alphabetic-parts",
+    "parentName": "Film",
+    "collectionType": "movies",
+    "files": ["Film disc b.mkv", "Film disc a.mkv"]
+  },
+  {
+    "name": "parts-need-not-start-at-one",
+    "parentName": "Film",
+    "collectionType": "movies",
+    "files": ["Film part3.mkv", "Film part2.mkv"]
+  },
+  {
+    "name": "mixed-part-tokens-do-not-stack",
+    "parentName": "Film",
+    "collectionType": "movies",
+    "files": ["Film cd1.mkv", "Film part2.mkv"]
+  },
+  {
+    "name": "mixed-numeric-alpha-do-not-stack",
+    "parentName": "Film",
+    "collectionType": "movies",
+    "files": ["Film disk1.mkv", "Film diskb.mkv"]
+  },
+  {
+    "name": "case-distinct-stack-names",
+    "parentName": "Film",
+    "collectionType": "movies",
+    "files": ["Film cd1.mkv", "film cd2.mkv"]
+  },
+  {
+    "name": "stack-with-trailer",
+    "parentName": "Film",
+    "collectionType": "movies",
+    "files": ["Film cd2.mkv", "Film-trailer.mkv", "Film cd1.mkv"]
+  },
+  {
+    "name": "stack-preferred-over-ordinary-version",
+    "parentName": "Film",
+    "collectionType": "movies",
+    "files": ["Film - 1080p.mkv", "Film cd2.mkv", "Film cd1.mkv"]
+  },
+  {
+    "name": "two-stacked-versions",
+    "parentName": "Film",
+    "collectionType": "movies",
+    "files": ["Film - Theatrical cd2.mkv", "Film - Director cd1.mkv", "Film - Theatrical cd1.mkv", "Film - Director cd2.mkv"]
+  },
+  {
+    "name": "stack-shaped-featurette",
+    "parentName": "Film",
+    "collectionType": "movies",
+    "files": ["Film-featurette cd2.mkv", "Film-featurette cd1.mkv"]
+  },
+  {
+    "name": "home-video-stack",
+    "parentName": "Family",
+    "collectionType": "homevideos",
+    "files": ["Holiday pt2.mp4", "Holiday pt1.mp4"]
+  }
+]

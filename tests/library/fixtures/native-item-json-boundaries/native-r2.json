@@ -1,0 +1,516 @@
+{
+  "schemaVersion": 1,
+  "runtime": "10.0.12",
+  "timezone": "Taipei Standard Time",
+  "caseCount": 34,
+  "cases": [
+    {
+      "Id": "date-invalid-nonleap-feb29",
+      "Kind": "date",
+      "ValueJson": "\u00222025-02-29T01:02:03Z\u0022",
+      "Json": "{\u0022Value\u0022:\u00222025-02-29T01:02:03Z\u0022}",
+      "Success": false,
+      "Value": null,
+      "Reserialized": null,
+      "Error": {
+        "type": "System.Text.Json.JsonException",
+        "Message": "The JSON value could not be converted to System.DateTime. Path: $.Value | LineNumber: 0 | BytePositionInLine: 31.",
+        "inner": {
+          "type": "System.FormatException",
+          "Message": "The JSON value is not in a supported DateTime format.",
+          "inner": null
+        }
+      }
+    },
+    {
+      "Id": "date-invalid-april31",
+      "Kind": "date",
+      "ValueJson": "\u00222025-04-31T01:02:03Z\u0022",
+      "Json": "{\u0022Value\u0022:\u00222025-04-31T01:02:03Z\u0022}",
+      "Success": false,
+      "Value": null,
+      "Reserialized": null,
+      "Error": {
+        "type": "System.Text.Json.JsonException",
+        "Message": "The JSON value could not be converted to System.DateTime. Path: $.Value | LineNumber: 0 | BytePositionInLine: 31.",
+        "inner": {
+          "type": "System.FormatException",
+          "Message": "The JSON value is not in a supported DateTime format.",
+          "inner": null
+        }
+      }
+    },
+    {
+      "Id": "date-invalid-year-zero",
+      "Kind": "date",
+      "ValueJson": "\u00220000-01-01T00:00:00Z\u0022",
+      "Json": "{\u0022Value\u0022:\u00220000-01-01T00:00:00Z\u0022}",
+      "Success": false,
+      "Value": null,
+      "Reserialized": null,
+      "Error": {
+        "type": "System.Text.Json.JsonException",
+        "Message": "The JSON value could not be converted to System.DateTime. Path: $.Value | LineNumber: 0 | BytePositionInLine: 31.",
+        "inner": {
+          "type": "System.FormatException",
+          "Message": "The JSON value is not in a supported DateTime format.",
+          "inner": null
+        }
+      }
+    },
+    {
+      "Id": "date-invalid-hour24",
+      "Kind": "date",
+      "ValueJson": "\u00222025-01-01T24:00:00Z\u0022",
+      "Json": "{\u0022Value\u0022:\u00222025-01-01T24:00:00Z\u0022}",
+      "Success": false,
+      "Value": null,
+      "Reserialized": null,
+      "Error": {
+        "type": "System.Text.Json.JsonException",
+        "Message": "The JSON value could not be converted to System.DateTime. Path: $.Value | LineNumber: 0 | BytePositionInLine: 31.",
+        "inner": {
+          "type": "System.FormatException",
+          "Message": "The JSON value is not in a supported DateTime format.",
+          "inner": null
+        }
+      }
+    },
+    {
+      "Id": "date-no-offset",
+      "Kind": "date",
+      "ValueJson": "\u00222025-01-01T00:00:00\u0022",
+      "Json": "{\u0022Value\u0022:\u00222025-01-01T00:00:00\u0022}",
+      "Success": true,
+      "Value": {
+        "text": "2025-01-01T00:00:00.0000000",
+        "kind": "Unspecified",
+        "ticks": 638712864000000000,
+        "utcText": "2024-12-31T16:00:00.0000000Z"
+      },
+      "Reserialized": "{\u0022Value\u0022:\u00222025-01-01T00:00:00.0000000Z\u0022}",
+      "Error": null
+    },
+    {
+      "Id": "date-plus08",
+      "Kind": "date",
+      "ValueJson": "\u00222025-01-01T00:00:00\u002B08:00\u0022",
+      "Json": "{\u0022Value\u0022:\u00222025-01-01T00:00:00\u002B08:00\u0022}",
+      "Success": true,
+      "Value": {
+        "text": "2025-01-01T00:00:00.0000000\u002B08:00",
+        "kind": "Local",
+        "ticks": 638712864000000000,
+        "utcText": "2024-12-31T16:00:00.0000000Z"
+      },
+      "Reserialized": "{\u0022Value\u0022:\u00222025-01-01T00:00:00.0000000Z\u0022}",
+      "Error": null
+    },
+    {
+      "Id": "date-z-baseline",
+      "Kind": "date",
+      "ValueJson": "\u00222025-01-01T00:00:00.1234567Z\u0022",
+      "Json": "{\u0022Value\u0022:\u00222025-01-01T00:00:00.1234567Z\u0022}",
+      "Success": true,
+      "Value": {
+        "text": "2025-01-01T00:00:00.1234567Z",
+        "kind": "Utc",
+        "ticks": 638712864001234567,
+        "utcText": "2025-01-01T00:00:00.1234567Z"
+      },
+      "Reserialized": "{\u0022Value\u0022:\u00222025-01-01T00:00:00.1234567Z\u0022}",
+      "Error": null
+    },
+    {
+      "Id": "enum-number-exponent",
+      "Kind": "enum",
+      "ValueJson": "1e0",
+      "Json": "{\u0022Value\u0022:1e0}",
+      "Success": false,
+      "Value": null,
+      "Reserialized": null,
+      "Error": {
+        "type": "System.Text.Json.JsonException",
+        "Message": "The JSON value could not be converted to MediaBrowser.Model.Entities.VideoType. Path: $.Value | LineNumber: 0 | BytePositionInLine: 12.",
+        "inner": null
+      }
+    },
+    {
+      "Id": "enum-number-decimal",
+      "Kind": "enum",
+      "ValueJson": "1.0",
+      "Json": "{\u0022Value\u0022:1.0}",
+      "Success": false,
+      "Value": null,
+      "Reserialized": null,
+      "Error": {
+        "type": "System.Text.Json.JsonException",
+        "Message": "The JSON value could not be converted to MediaBrowser.Model.Entities.VideoType. Path: $.Value | LineNumber: 0 | BytePositionInLine: 12.",
+        "inner": null
+      }
+    },
+    {
+      "Id": "enum-comma-names",
+      "Kind": "enum",
+      "ValueJson": "\u0022Iso, Dvd\u0022",
+      "Json": "{\u0022Value\u0022:\u0022Iso, Dvd\u0022}",
+      "Success": true,
+      "Value": {
+        "text": "BluRay",
+        "numeric": 3,
+        "defined": true
+      },
+      "Reserialized": "{\u0022Value\u0022:\u0022BluRay\u0022}",
+      "Error": null
+    },
+    {
+      "Id": "enum-unknown-number",
+      "Kind": "enum",
+      "ValueJson": "99",
+      "Json": "{\u0022Value\u0022:99}",
+      "Success": true,
+      "Value": {
+        "text": "99",
+        "numeric": 99,
+        "defined": false
+      },
+      "Reserialized": "{\u0022Value\u0022:99}",
+      "Error": null
+    },
+    {
+      "Id": "enum-name-baseline",
+      "Kind": "enum",
+      "ValueJson": "\u0022Iso\u0022",
+      "Json": "{\u0022Value\u0022:\u0022Iso\u0022}",
+      "Success": true,
+      "Value": {
+        "text": "Iso",
+        "numeric": 1,
+        "defined": true
+      },
+      "Reserialized": "{\u0022Value\u0022:\u0022Iso\u0022}",
+      "Error": null
+    },
+    {
+      "Id": "int-quoted-exponent",
+      "Kind": "int",
+      "ValueJson": "\u00221e3\u0022",
+      "Json": "{\u0022Value\u0022:\u00221e3\u0022}",
+      "Success": false,
+      "Value": null,
+      "Reserialized": null,
+      "Error": {
+        "type": "System.Text.Json.JsonException",
+        "Message": "The JSON value could not be converted to System.Int32. Path: $.Value | LineNumber: 0 | BytePositionInLine: 14.",
+        "inner": {
+          "type": "System.FormatException",
+          "Message": "Either the JSON value is not in a supported format, or is out of bounds for an Int32.",
+          "inner": null
+        }
+      }
+    },
+    {
+      "Id": "long-quoted-exponent",
+      "Kind": "long",
+      "ValueJson": "\u00221e3\u0022",
+      "Json": "{\u0022Value\u0022:\u00221e3\u0022}",
+      "Success": false,
+      "Value": null,
+      "Reserialized": null,
+      "Error": {
+        "type": "System.Text.Json.JsonException",
+        "Message": "The JSON value could not be converted to System.Int64. Path: $.Value | LineNumber: 0 | BytePositionInLine: 14.",
+        "inner": {
+          "type": "System.FormatException",
+          "Message": "Either the JSON value is not in a supported format, or is out of bounds for an Int64.",
+          "inner": null
+        }
+      }
+    },
+    {
+      "Id": "int-quoted-plus",
+      "Kind": "int",
+      "ValueJson": "\u0022\u002B1\u0022",
+      "Json": "{\u0022Value\u0022:\u0022\u002B1\u0022}",
+      "Success": true,
+      "Value": {
+        "value": 1
+      },
+      "Reserialized": "{\u0022Value\u0022:1}",
+      "Error": null
+    },
+    {
+      "Id": "long-quoted-plus",
+      "Kind": "long",
+      "ValueJson": "\u0022\u002B1\u0022",
+      "Json": "{\u0022Value\u0022:\u0022\u002B1\u0022}",
+      "Success": true,
+      "Value": {
+        "value": 1
+      },
+      "Reserialized": "{\u0022Value\u0022:1}",
+      "Error": null
+    },
+    {
+      "Id": "int-quoted-space",
+      "Kind": "int",
+      "ValueJson": "\u0022 1 \u0022",
+      "Json": "{\u0022Value\u0022:\u0022 1 \u0022}",
+      "Success": false,
+      "Value": null,
+      "Reserialized": null,
+      "Error": {
+        "type": "System.Text.Json.JsonException",
+        "Message": "The JSON value could not be converted to System.Int32. Path: $.Value | LineNumber: 0 | BytePositionInLine: 14.",
+        "inner": {
+          "type": "System.FormatException",
+          "Message": "Either the JSON value is not in a supported format, or is out of bounds for an Int32.",
+          "inner": null
+        }
+      }
+    },
+    {
+      "Id": "long-quoted-space",
+      "Kind": "long",
+      "ValueJson": "\u0022 1 \u0022",
+      "Json": "{\u0022Value\u0022:\u0022 1 \u0022}",
+      "Success": false,
+      "Value": null,
+      "Reserialized": null,
+      "Error": {
+        "type": "System.Text.Json.JsonException",
+        "Message": "The JSON value could not be converted to System.Int64. Path: $.Value | LineNumber: 0 | BytePositionInLine: 14.",
+        "inner": {
+          "type": "System.FormatException",
+          "Message": "Either the JSON value is not in a supported format, or is out of bounds for an Int64.",
+          "inner": null
+        }
+      }
+    },
+    {
+      "Id": "int-quoted-baseline",
+      "Kind": "int",
+      "ValueJson": "\u00221000\u0022",
+      "Json": "{\u0022Value\u0022:\u00221000\u0022}",
+      "Success": true,
+      "Value": {
+        "value": 1000
+      },
+      "Reserialized": "{\u0022Value\u0022:1000}",
+      "Error": null
+    },
+    {
+      "Id": "long-quoted-baseline",
+      "Kind": "long",
+      "ValueJson": "\u00221000\u0022",
+      "Json": "{\u0022Value\u0022:\u00221000\u0022}",
+      "Success": true,
+      "Value": {
+        "value": 1000
+      },
+      "Reserialized": "{\u0022Value\u0022:1000}",
+      "Error": null
+    },
+    {
+      "Id": "double-1e20",
+      "Kind": "double",
+      "ValueJson": "1e20",
+      "Json": "{\u0022Value\u0022:1e20}",
+      "Success": true,
+      "Value": {
+        "text": "1E\u002B20",
+        "bits": 4906019910204099648,
+        "negativeZero": false
+      },
+      "Reserialized": "{\u0022Value\u0022:1E\u002B20}",
+      "Error": null
+    },
+    {
+      "Id": "double-1e-7",
+      "Kind": "double",
+      "ValueJson": "1e-7",
+      "Json": "{\u0022Value\u0022:1e-7}",
+      "Success": true,
+      "Value": {
+        "text": "1E-07",
+        "bits": 4502148214488346440,
+        "negativeZero": false
+      },
+      "Reserialized": "{\u0022Value\u0022:1E-07}",
+      "Error": null
+    },
+    {
+      "Id": "double-negative-zero",
+      "Kind": "double",
+      "ValueJson": "-0",
+      "Json": "{\u0022Value\u0022:-0}",
+      "Success": true,
+      "Value": {
+        "text": "-0",
+        "bits": -9223372036854775808,
+        "negativeZero": true
+      },
+      "Reserialized": "{\u0022Value\u0022:-0}",
+      "Error": null
+    },
+    {
+      "Id": "date-fraction-no-offset",
+      "Kind": "date",
+      "ValueJson": "\u00222025-01-01T00:00:00.123\u0022",
+      "Json": "{\u0022Value\u0022:\u00222025-01-01T00:00:00.123\u0022}",
+      "Success": true,
+      "Value": {
+        "text": "2025-01-01T00:00:00.1230000",
+        "kind": "Unspecified",
+        "ticks": 638712864001230000,
+        "utcText": "2024-12-31T16:00:00.1230000Z"
+      },
+      "Reserialized": "{\u0022Value\u0022:\u00222025-01-01T00:00:00.123\u0022}",
+      "Error": null
+    },
+    {
+      "Id": "date-fraction-plus08",
+      "Kind": "date",
+      "ValueJson": "\u00222025-01-01T00:00:00.123\u002B08:00\u0022",
+      "Json": "{\u0022Value\u0022:\u00222025-01-01T00:00:00.123\u002B08:00\u0022}",
+      "Success": true,
+      "Value": {
+        "text": "2025-01-01T00:00:00.1230000\u002B08:00",
+        "kind": "Local",
+        "ticks": 638712864001230000,
+        "utcText": "2024-12-31T16:00:00.1230000Z"
+      },
+      "Reserialized": "{\u0022Value\u0022:\u00222025-01-01T00:00:00.123\u002B08:00\u0022}",
+      "Error": null
+    },
+    {
+      "Id": "date-fraction-plus02",
+      "Kind": "date",
+      "ValueJson": "\u00222025-01-01T00:00:00.123\u002B02:00\u0022",
+      "Json": "{\u0022Value\u0022:\u00222025-01-01T00:00:00.123\u002B02:00\u0022}",
+      "Success": true,
+      "Value": {
+        "text": "2025-01-01T06:00:00.1230000\u002B08:00",
+        "kind": "Local",
+        "ticks": 638713080001230000,
+        "utcText": "2024-12-31T22:00:00.1230000Z"
+      },
+      "Reserialized": "{\u0022Value\u0022:\u00222025-01-01T06:00:00.123\u002B08:00\u0022}",
+      "Error": null
+    },
+    {
+      "Id": "date-fraction-minus05",
+      "Kind": "date",
+      "ValueJson": "\u00222025-01-01T00:00:00.123-05:00\u0022",
+      "Json": "{\u0022Value\u0022:\u00222025-01-01T00:00:00.123-05:00\u0022}",
+      "Success": true,
+      "Value": {
+        "text": "2025-01-01T13:00:00.1230000\u002B08:00",
+        "kind": "Local",
+        "ticks": 638713332001230000,
+        "utcText": "2025-01-01T05:00:00.1230000Z"
+      },
+      "Reserialized": "{\u0022Value\u0022:\u00222025-01-01T13:00:00.123\u002B08:00\u0022}",
+      "Error": null
+    },
+    {
+      "Id": "date-fraction-z",
+      "Kind": "date",
+      "ValueJson": "\u00222025-01-01T00:00:00.123Z\u0022",
+      "Json": "{\u0022Value\u0022:\u00222025-01-01T00:00:00.123Z\u0022}",
+      "Success": true,
+      "Value": {
+        "text": "2025-01-01T00:00:00.1230000Z",
+        "kind": "Utc",
+        "ticks": 638712864001230000,
+        "utcText": "2025-01-01T00:00:00.1230000Z"
+      },
+      "Reserialized": "{\u0022Value\u0022:\u00222025-01-01T00:00:00.123Z\u0022}",
+      "Error": null
+    },
+    {
+      "Id": "double-1e-4",
+      "Kind": "double",
+      "ValueJson": "1e-4",
+      "Json": "{\u0022Value\u0022:1e-4}",
+      "Success": true,
+      "Value": {
+        "text": "0.0001",
+        "bits": 4547007122018943789,
+        "negativeZero": false
+      },
+      "Reserialized": "{\u0022Value\u0022:0.0001}",
+      "Error": null
+    },
+    {
+      "Id": "double-1e-5",
+      "Kind": "double",
+      "ValueJson": "1e-5",
+      "Json": "{\u0022Value\u0022:1e-5}",
+      "Success": true,
+      "Value": {
+        "text": "1E-05",
+        "bits": 4532020583610935537,
+        "negativeZero": false
+      },
+      "Reserialized": "{\u0022Value\u0022:1E-05}",
+      "Error": null
+    },
+    {
+      "Id": "double-1e-6",
+      "Kind": "double",
+      "ValueJson": "1e-6",
+      "Json": "{\u0022Value\u0022:1e-6}",
+      "Success": true,
+      "Value": {
+        "text": "1E-06",
+        "bits": 4517329193108106637,
+        "negativeZero": false
+      },
+      "Reserialized": "{\u0022Value\u0022:1E-06}",
+      "Error": null
+    },
+    {
+      "Id": "double-1e16",
+      "Kind": "double",
+      "ValueJson": "1e16",
+      "Json": "{\u0022Value\u0022:1e16}",
+      "Success": true,
+      "Value": {
+        "text": "10000000000000000",
+        "bits": 4846369599423283200,
+        "negativeZero": false
+      },
+      "Reserialized": "{\u0022Value\u0022:10000000000000000}",
+      "Error": null
+    },
+    {
+      "Id": "double-1e17",
+      "Kind": "double",
+      "ValueJson": "1e17",
+      "Json": "{\u0022Value\u0022:1e17}",
+      "Success": true,
+      "Value": {
+        "text": "1E\u002B17",
+        "bits": 4861130398305394688,
+        "negativeZero": false
+      },
+      "Reserialized": "{\u0022Value\u0022:1E\u002B17}",
+      "Error": null
+    },
+    {
+      "Id": "double-1.23456789e17",
+      "Kind": "double",
+      "ValueJson": "1.23456789e17",
+      "Json": "{\u0022Value\u0022:1.23456789e17}",
+      "Success": true,
+      "Value": {
+        "text": "1.23456789E\u002B17",
+        "bits": 4862596447617894688,
+        "negativeZero": false
+      },
+      "Reserialized": "{\u0022Value\u0022:1.23456789E\u002B17}",
+      "Error": null
+    }
+  ]
+}

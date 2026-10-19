@@ -1,0 +1,1150 @@
+{
+  "results": [
+    {
+      "name": "movie-success",
+      "exception": null,
+      "paths": [
+        "data\\attachments\\da\\da111111-1111-1111-1111-111111111111",
+        "data\\subtitles\\da\\da111111-1111-1111-1111-111111111111",
+        "data\\trickplay\\da\\da111111-1111-1111-1111-111111111111",
+        "media\\Film.trickplay",
+        "metadata\\library\\da\\da111111111111111111111111111111\\chapters"
+      ],
+      "calls": [
+        {
+          "phase": "delete",
+          "table": "KeyframeData",
+          "cancellable": false
+        },
+        {
+          "phase": "delete",
+          "table": "MediaSegments",
+          "cancellable": false
+        },
+        {
+          "phase": "delete",
+          "table": "TrickplayInfos",
+          "cancellable": false
+        },
+        {
+          "phase": "delete",
+          "table": "Chapters",
+          "cancellable": false
+        }
+      ],
+      "remaining": [
+        {
+          "target": true,
+          "keyframes": 0,
+          "segments": 0,
+          "trickplay": 0,
+          "chapters": 0,
+          "baseItems": 1
+        },
+        {
+          "target": false,
+          "keyframes": 1,
+          "segments": 1,
+          "trickplay": 1,
+          "chapters": 1,
+          "baseItems": 1
+        }
+      ],
+      "assets": [
+        {
+          "directory": false,
+          "file": false
+        },
+        {
+          "directory": false,
+          "file": false
+        },
+        {
+          "directory": false,
+          "file": false
+        },
+        {
+          "directory": false,
+          "file": false
+        },
+        {
+          "directory": false,
+          "file": false
+        }
+      ],
+      "sourceExists": true
+    },
+    {
+      "name": "dotfile-success",
+      "exception": null,
+      "paths": [
+        "data\\attachments\\da\\da111111-1111-1111-1111-111111111111",
+        "data\\subtitles\\da\\da111111-1111-1111-1111-111111111111",
+        "data\\trickplay\\da\\da111111-1111-1111-1111-111111111111",
+        "media\\.trickplay",
+        "metadata\\library\\da\\da111111111111111111111111111111\\chapters"
+      ],
+      "calls": [
+        {
+          "phase": "delete",
+          "table": "KeyframeData",
+          "cancellable": false
+        },
+        {
+          "phase": "delete",
+          "table": "MediaSegments",
+          "cancellable": false
+        },
+        {
+          "phase": "delete",
+          "table": "TrickplayInfos",
+          "cancellable": false
+        },
+        {
+          "phase": "delete",
+          "table": "Chapters",
+          "cancellable": false
+        }
+      ],
+      "remaining": [
+        {
+          "target": true,
+          "keyframes": 0,
+          "segments": 0,
+          "trickplay": 0,
+          "chapters": 0,
+          "baseItems": 1
+        },
+        {
+          "target": false,
+          "keyframes": 1,
+          "segments": 1,
+          "trickplay": 1,
+          "chapters": 1,
+          "baseItems": 1
+        }
+      ],
+      "assets": [
+        {
+          "directory": false,
+          "file": false
+        },
+        {
+          "directory": false,
+          "file": false
+        },
+        {
+          "directory": false,
+          "file": false
+        },
+        {
+          "directory": false,
+          "file": false
+        },
+        {
+          "directory": false,
+          "file": false
+        }
+      ],
+      "sourceExists": true
+    },
+    {
+      "name": "dvd-success",
+      "exception": null,
+      "paths": [
+        "data\\attachments\\da\\da111111-1111-1111-1111-111111111111",
+        "data\\subtitles\\da\\da111111-1111-1111-1111-111111111111",
+        "data\\trickplay\\da\\da111111-1111-1111-1111-111111111111",
+        "media\\DVD\\DVD.trickplay",
+        "metadata\\library\\da\\da111111111111111111111111111111\\chapters"
+      ],
+      "calls": [
+        {
+          "phase": "delete",
+          "table": "KeyframeData",
+          "cancellable": false
+        },
+        {
+          "phase": "delete",
+          "table": "MediaSegments",
+          "cancellable": false
+        },
+        {
+          "phase": "delete",
+          "table": "TrickplayInfos",
+          "cancellable": false
+        },
+        {
+          "phase": "delete",
+          "table": "Chapters",
+          "cancellable": false
+        }
+      ],
+      "remaining": [
+        {
+          "target": true,
+          "keyframes": 0,
+          "segments": 0,
+          "trickplay": 0,
+          "chapters": 0,
+          "baseItems": 1
+        },
+        {
+          "target": false,
+          "keyframes": 1,
+          "segments": 1,
+          "trickplay": 1,
+          "chapters": 1,
+          "baseItems": 1
+        }
+      ],
+      "assets": [
+        {
+          "directory": false,
+          "file": false
+        },
+        {
+          "directory": false,
+          "file": false
+        },
+        {
+          "directory": false,
+          "file": false
+        },
+        {
+          "directory": false,
+          "file": false
+        },
+        {
+          "directory": false,
+          "file": false
+        }
+      ],
+      "sourceExists": true
+    },
+    {
+      "name": "bluray-success",
+      "exception": null,
+      "paths": [
+        "data\\attachments\\da\\da111111-1111-1111-1111-111111111111",
+        "data\\subtitles\\da\\da111111-1111-1111-1111-111111111111",
+        "data\\trickplay\\da\\da111111-1111-1111-1111-111111111111",
+        "media\\BluRay\\BluRay.trickplay",
+        "metadata\\library\\da\\da111111111111111111111111111111\\chapters"
+      ],
+      "calls": [
+        {
+          "phase": "delete",
+          "table": "KeyframeData",
+          "cancellable": false
+        },
+        {
+          "phase": "delete",
+          "table": "MediaSegments",
+          "cancellable": false
+        },
+        {
+          "phase": "delete",
+          "table": "TrickplayInfos",
+          "cancellable": false
+        },
+        {
+          "phase": "delete",
+          "table": "Chapters",
+          "cancellable": false
+        }
+      ],
+      "remaining": [
+        {
+          "target": true,
+          "keyframes": 0,
+          "segments": 0,
+          "trickplay": 0,
+          "chapters": 0,
+          "baseItems": 1
+        },
+        {
+          "target": false,
+          "keyframes": 1,
+          "segments": 1,
+          "trickplay": 1,
+          "chapters": 1,
+          "baseItems": 1
+        }
+      ],
+      "assets": [
+        {
+          "directory": false,
+          "file": false
+        },
+        {
+          "directory": false,
+          "file": false
+        },
+        {
+          "directory": false,
+          "file": false
+        },
+        {
+          "directory": false,
+          "file": false
+        },
+        {
+          "directory": false,
+          "file": false
+        }
+      ],
+      "sourceExists": true
+    },
+    {
+      "name": "stacked-dvd-success",
+      "exception": null,
+      "paths": [
+        "data\\attachments\\da\\da111111-1111-1111-1111-111111111111",
+        "data\\subtitles\\da\\da111111-1111-1111-1111-111111111111",
+        "data\\trickplay\\da\\da111111-1111-1111-1111-111111111111",
+        "media\\DVD.trickplay",
+        "metadata\\library\\da\\da111111111111111111111111111111\\chapters"
+      ],
+      "calls": [
+        {
+          "phase": "delete",
+          "table": "KeyframeData",
+          "cancellable": false
+        },
+        {
+          "phase": "delete",
+          "table": "MediaSegments",
+          "cancellable": false
+        },
+        {
+          "phase": "delete",
+          "table": "TrickplayInfos",
+          "cancellable": false
+        },
+        {
+          "phase": "delete",
+          "table": "Chapters",
+          "cancellable": false
+        }
+      ],
+      "remaining": [
+        {
+          "target": true,
+          "keyframes": 0,
+          "segments": 0,
+          "trickplay": 0,
+          "chapters": 0,
+          "baseItems": 1
+        },
+        {
+          "target": false,
+          "keyframes": 1,
+          "segments": 1,
+          "trickplay": 1,
+          "chapters": 1,
+          "baseItems": 1
+        }
+      ],
+      "assets": [
+        {
+          "directory": false,
+          "file": false
+        },
+        {
+          "directory": false,
+          "file": false
+        },
+        {
+          "directory": false,
+          "file": false
+        },
+        {
+          "directory": false,
+          "file": false
+        },
+        {
+          "directory": false,
+          "file": false
+        }
+      ],
+      "sourceExists": true
+    },
+    {
+      "name": "channel-success",
+      "exception": null,
+      "paths": [
+        "data\\attachments\\da\\da111111-1111-1111-1111-111111111111",
+        "data\\subtitles\\da\\da111111-1111-1111-1111-111111111111",
+        "data\\trickplay\\da\\da111111-1111-1111-1111-111111111111",
+        "media\\Film.trickplay",
+        "metadata\\channels\\da222222222222222222222222222222\\da111111111111111111111111111111\\chapters"
+      ],
+      "calls": [
+        {
+          "phase": "delete",
+          "table": "KeyframeData",
+          "cancellable": false
+        },
+        {
+          "phase": "delete",
+          "table": "MediaSegments",
+          "cancellable": false
+        },
+        {
+          "phase": "delete",
+          "table": "TrickplayInfos",
+          "cancellable": false
+        },
+        {
+          "phase": "delete",
+          "table": "Chapters",
+          "cancellable": false
+        }
+      ],
+      "remaining": [
+        {
+          "target": true,
+          "keyframes": 0,
+          "segments": 0,
+          "trickplay": 0,
+          "chapters": 0,
+          "baseItems": 1
+        },
+        {
+          "target": false,
+          "keyframes": 1,
+          "segments": 1,
+          "trickplay": 1,
+          "chapters": 1,
+          "baseItems": 1
+        }
+      ],
+      "assets": [
+        {
+          "directory": false,
+          "file": false
+        },
+        {
+          "directory": false,
+          "file": false
+        },
+        {
+          "directory": false,
+          "file": false
+        },
+        {
+          "directory": false,
+          "file": false
+        },
+        {
+          "directory": false,
+          "file": false
+        }
+      ],
+      "sourceExists": true
+    },
+    {
+      "name": "audio-success",
+      "exception": null,
+      "paths": [
+        "data\\attachments\\da\\da111111-1111-1111-1111-111111111111",
+        "data\\subtitles\\da\\da111111-1111-1111-1111-111111111111",
+        "data\\trickplay\\da\\da111111-1111-1111-1111-111111111111",
+        "media\\Film.trickplay",
+        "metadata\\library\\da\\da111111111111111111111111111111\\chapters"
+      ],
+      "calls": [
+        {
+          "phase": "delete",
+          "table": "KeyframeData",
+          "cancellable": false
+        },
+        {
+          "phase": "delete",
+          "table": "MediaSegments",
+          "cancellable": false
+        },
+        {
+          "phase": "delete",
+          "table": "TrickplayInfos",
+          "cancellable": false
+        },
+        {
+          "phase": "delete",
+          "table": "Chapters",
+          "cancellable": false
+        }
+      ],
+      "remaining": [
+        {
+          "target": true,
+          "keyframes": 0,
+          "segments": 0,
+          "trickplay": 0,
+          "chapters": 0,
+          "baseItems": 1
+        },
+        {
+          "target": false,
+          "keyframes": 1,
+          "segments": 1,
+          "trickplay": 1,
+          "chapters": 1,
+          "baseItems": 1
+        }
+      ],
+      "assets": [
+        {
+          "directory": false,
+          "file": false
+        },
+        {
+          "directory": false,
+          "file": false
+        },
+        {
+          "directory": false,
+          "file": false
+        },
+        {
+          "directory": false,
+          "file": false
+        },
+        {
+          "directory": false,
+          "file": false
+        }
+      ],
+      "sourceExists": true
+    },
+    {
+      "name": "pathless-success",
+      "exception": null,
+      "paths": [
+        "data\\attachments\\da\\da111111-1111-1111-1111-111111111111",
+        "data\\subtitles\\da\\da111111-1111-1111-1111-111111111111",
+        "data\\trickplay\\da\\da111111-1111-1111-1111-111111111111",
+        "metadata\\library\\da\\da111111111111111111111111111111\\chapters"
+      ],
+      "calls": [
+        {
+          "phase": "delete",
+          "table": "KeyframeData",
+          "cancellable": false
+        },
+        {
+          "phase": "delete",
+          "table": "MediaSegments",
+          "cancellable": false
+        },
+        {
+          "phase": "delete",
+          "table": "TrickplayInfos",
+          "cancellable": false
+        },
+        {
+          "phase": "delete",
+          "table": "Chapters",
+          "cancellable": false
+        }
+      ],
+      "remaining": [
+        {
+          "target": true,
+          "keyframes": 0,
+          "segments": 0,
+          "trickplay": 0,
+          "chapters": 0,
+          "baseItems": 1
+        },
+        {
+          "target": false,
+          "keyframes": 1,
+          "segments": 1,
+          "trickplay": 1,
+          "chapters": 1,
+          "baseItems": 1
+        }
+      ],
+      "assets": [
+        {
+          "directory": false,
+          "file": false
+        },
+        {
+          "directory": false,
+          "file": false
+        },
+        {
+          "directory": false,
+          "file": false
+        },
+        {
+          "directory": false,
+          "file": false
+        }
+      ],
+      "sourceExists": true
+    },
+    {
+      "name": "read-only-asset",
+      "exception": null,
+      "paths": [
+        "data\\attachments\\da\\da111111-1111-1111-1111-111111111111",
+        "data\\subtitles\\da\\da111111-1111-1111-1111-111111111111",
+        "data\\trickplay\\da\\da111111-1111-1111-1111-111111111111",
+        "media\\Film.trickplay",
+        "metadata\\library\\da\\da111111111111111111111111111111\\chapters"
+      ],
+      "calls": [
+        {
+          "phase": "log",
+          "level": "Warning",
+          "exception": null
+        },
+        {
+          "phase": "delete",
+          "table": "KeyframeData",
+          "cancellable": false
+        },
+        {
+          "phase": "delete",
+          "table": "MediaSegments",
+          "cancellable": false
+        },
+        {
+          "phase": "delete",
+          "table": "TrickplayInfos",
+          "cancellable": false
+        },
+        {
+          "phase": "delete",
+          "table": "Chapters",
+          "cancellable": false
+        }
+      ],
+      "remaining": [
+        {
+          "target": true,
+          "keyframes": 0,
+          "segments": 0,
+          "trickplay": 0,
+          "chapters": 0,
+          "baseItems": 1
+        },
+        {
+          "target": false,
+          "keyframes": 1,
+          "segments": 1,
+          "trickplay": 1,
+          "chapters": 1,
+          "baseItems": 1
+        }
+      ],
+      "assets": [
+        {
+          "directory": true,
+          "file": false
+        },
+        {
+          "directory": false,
+          "file": false
+        },
+        {
+          "directory": false,
+          "file": false
+        },
+        {
+          "directory": false,
+          "file": false
+        },
+        {
+          "directory": false,
+          "file": false
+        }
+      ],
+      "sourceExists": true
+    },
+    {
+      "name": "file-at-cache-path",
+      "exception": null,
+      "paths": [
+        "data\\attachments\\da\\da111111-1111-1111-1111-111111111111",
+        "data\\subtitles\\da\\da111111-1111-1111-1111-111111111111",
+        "data\\trickplay\\da\\da111111-1111-1111-1111-111111111111",
+        "media\\Film.trickplay",
+        "metadata\\library\\da\\da111111111111111111111111111111\\chapters"
+      ],
+      "calls": [
+        {
+          "phase": "delete",
+          "table": "KeyframeData",
+          "cancellable": false
+        },
+        {
+          "phase": "delete",
+          "table": "MediaSegments",
+          "cancellable": false
+        },
+        {
+          "phase": "delete",
+          "table": "TrickplayInfos",
+          "cancellable": false
+        },
+        {
+          "phase": "delete",
+          "table": "Chapters",
+          "cancellable": false
+        }
+      ],
+      "remaining": [
+        {
+          "target": true,
+          "keyframes": 0,
+          "segments": 0,
+          "trickplay": 0,
+          "chapters": 0,
+          "baseItems": 1
+        },
+        {
+          "target": false,
+          "keyframes": 1,
+          "segments": 1,
+          "trickplay": 1,
+          "chapters": 1,
+          "baseItems": 1
+        }
+      ],
+      "assets": [
+        {
+          "directory": false,
+          "file": true
+        },
+        {
+          "directory": false,
+          "file": false
+        },
+        {
+          "directory": false,
+          "file": false
+        },
+        {
+          "directory": false,
+          "file": false
+        },
+        {
+          "directory": false,
+          "file": false
+        }
+      ],
+      "sourceExists": true
+    },
+    {
+      "name": "files-only",
+      "exception": null,
+      "paths": [
+        "data\\attachments\\da\\da111111-1111-1111-1111-111111111111",
+        "data\\subtitles\\da\\da111111-1111-1111-1111-111111111111",
+        "data\\trickplay\\da\\da111111-1111-1111-1111-111111111111",
+        "media\\Film.trickplay",
+        "metadata\\library\\da\\da111111111111111111111111111111\\chapters"
+      ],
+      "calls": [],
+      "remaining": [
+        {
+          "target": true,
+          "keyframes": 1,
+          "segments": 1,
+          "trickplay": 1,
+          "chapters": 1,
+          "baseItems": 1
+        },
+        {
+          "target": false,
+          "keyframes": 1,
+          "segments": 1,
+          "trickplay": 1,
+          "chapters": 1,
+          "baseItems": 1
+        }
+      ],
+      "assets": [
+        {
+          "directory": false,
+          "file": false
+        },
+        {
+          "directory": false,
+          "file": false
+        },
+        {
+          "directory": false,
+          "file": false
+        },
+        {
+          "directory": false,
+          "file": false
+        },
+        {
+          "directory": false,
+          "file": false
+        }
+      ],
+      "sourceExists": true
+    },
+    {
+      "name": "segment-plugin-error",
+      "exception": null,
+      "paths": [
+        "data\\attachments\\da\\da111111-1111-1111-1111-111111111111",
+        "data\\subtitles\\da\\da111111-1111-1111-1111-111111111111",
+        "data\\trickplay\\da\\da111111-1111-1111-1111-111111111111",
+        "media\\Film.trickplay",
+        "metadata\\library\\da\\da111111111111111111111111111111\\chapters"
+      ],
+      "calls": [
+        {
+          "phase": "delete",
+          "table": "KeyframeData",
+          "cancellable": false
+        },
+        {
+          "phase": "plugin",
+          "cancellable": false
+        },
+        {
+          "phase": "log",
+          "level": "Error",
+          "exception": "IOException"
+        },
+        {
+          "phase": "delete",
+          "table": "MediaSegments",
+          "cancellable": false
+        },
+        {
+          "phase": "delete",
+          "table": "TrickplayInfos",
+          "cancellable": false
+        },
+        {
+          "phase": "delete",
+          "table": "Chapters",
+          "cancellable": false
+        }
+      ],
+      "remaining": [
+        {
+          "target": true,
+          "keyframes": 0,
+          "segments": 0,
+          "trickplay": 0,
+          "chapters": 0,
+          "baseItems": 1
+        },
+        {
+          "target": false,
+          "keyframes": 1,
+          "segments": 1,
+          "trickplay": 1,
+          "chapters": 1,
+          "baseItems": 1
+        }
+      ],
+      "assets": [
+        {
+          "directory": false,
+          "file": false
+        },
+        {
+          "directory": false,
+          "file": false
+        },
+        {
+          "directory": false,
+          "file": false
+        },
+        {
+          "directory": false,
+          "file": false
+        },
+        {
+          "directory": false,
+          "file": false
+        }
+      ],
+      "sourceExists": true
+    },
+    {
+      "name": "failure-KeyframeData",
+      "exception": "IOException",
+      "paths": [
+        "data\\attachments\\da\\da111111-1111-1111-1111-111111111111",
+        "data\\subtitles\\da\\da111111-1111-1111-1111-111111111111",
+        "data\\trickplay\\da\\da111111-1111-1111-1111-111111111111",
+        "media\\Film.trickplay",
+        "metadata\\library\\da\\da111111111111111111111111111111\\chapters"
+      ],
+      "calls": [
+        {
+          "phase": "delete",
+          "table": "KeyframeData",
+          "cancellable": false
+        }
+      ],
+      "remaining": [
+        {
+          "target": true,
+          "keyframes": 1,
+          "segments": 1,
+          "trickplay": 1,
+          "chapters": 1,
+          "baseItems": 1
+        },
+        {
+          "target": false,
+          "keyframes": 1,
+          "segments": 1,
+          "trickplay": 1,
+          "chapters": 1,
+          "baseItems": 1
+        }
+      ],
+      "assets": [
+        {
+          "directory": false,
+          "file": false
+        },
+        {
+          "directory": false,
+          "file": false
+        },
+        {
+          "directory": false,
+          "file": false
+        },
+        {
+          "directory": false,
+          "file": false
+        },
+        {
+          "directory": false,
+          "file": false
+        }
+      ],
+      "sourceExists": true
+    },
+    {
+      "name": "failure-MediaSegments",
+      "exception": "IOException",
+      "paths": [
+        "data\\attachments\\da\\da111111-1111-1111-1111-111111111111",
+        "data\\subtitles\\da\\da111111-1111-1111-1111-111111111111",
+        "data\\trickplay\\da\\da111111-1111-1111-1111-111111111111",
+        "media\\Film.trickplay",
+        "metadata\\library\\da\\da111111111111111111111111111111\\chapters"
+      ],
+      "calls": [
+        {
+          "phase": "delete",
+          "table": "KeyframeData",
+          "cancellable": false
+        },
+        {
+          "phase": "delete",
+          "table": "MediaSegments",
+          "cancellable": false
+        }
+      ],
+      "remaining": [
+        {
+          "target": true,
+          "keyframes": 0,
+          "segments": 1,
+          "trickplay": 1,
+          "chapters": 1,
+          "baseItems": 1
+        },
+        {
+          "target": false,
+          "keyframes": 1,
+          "segments": 1,
+          "trickplay": 1,
+          "chapters": 1,
+          "baseItems": 1
+        }
+      ],
+      "assets": [
+        {
+          "directory": false,
+          "file": false
+        },
+        {
+          "directory": false,
+          "file": false
+        },
+        {
+          "directory": false,
+          "file": false
+        },
+        {
+          "directory": false,
+          "file": false
+        },
+        {
+          "directory": false,
+          "file": false
+        }
+      ],
+      "sourceExists": true
+    },
+    {
+      "name": "failure-TrickplayInfos",
+      "exception": "IOException",
+      "paths": [
+        "data\\attachments\\da\\da111111-1111-1111-1111-111111111111",
+        "data\\subtitles\\da\\da111111-1111-1111-1111-111111111111",
+        "data\\trickplay\\da\\da111111-1111-1111-1111-111111111111",
+        "media\\Film.trickplay",
+        "metadata\\library\\da\\da111111111111111111111111111111\\chapters"
+      ],
+      "calls": [
+        {
+          "phase": "delete",
+          "table": "KeyframeData",
+          "cancellable": false
+        },
+        {
+          "phase": "delete",
+          "table": "MediaSegments",
+          "cancellable": false
+        },
+        {
+          "phase": "delete",
+          "table": "TrickplayInfos",
+          "cancellable": false
+        }
+      ],
+      "remaining": [
+        {
+          "target": true,
+          "keyframes": 0,
+          "segments": 0,
+          "trickplay": 1,
+          "chapters": 1,
+          "baseItems": 1
+        },
+        {
+          "target": false,
+          "keyframes": 1,
+          "segments": 1,
+          "trickplay": 1,
+          "chapters": 1,
+          "baseItems": 1
+        }
+      ],
+      "assets": [
+        {
+          "directory": false,
+          "file": false
+        },
+        {
+          "directory": false,
+          "file": false
+        },
+        {
+          "directory": false,
+          "file": false
+        },
+        {
+          "directory": false,
+          "file": false
+        },
+        {
+          "directory": false,
+          "file": false
+        }
+      ],
+      "sourceExists": true
+    },
+    {
+      "name": "failure-Chapters",
+      "exception": "IOException",
+      "paths": [
+        "data\\attachments\\da\\da111111-1111-1111-1111-111111111111",
+        "data\\subtitles\\da\\da111111-1111-1111-1111-111111111111",
+        "data\\trickplay\\da\\da111111-1111-1111-1111-111111111111",
+        "media\\Film.trickplay",
+        "metadata\\library\\da\\da111111111111111111111111111111\\chapters"
+      ],
+      "calls": [
+        {
+          "phase": "delete",
+          "table": "KeyframeData",
+          "cancellable": false
+        },
+        {
+          "phase": "delete",
+          "table": "MediaSegments",
+          "cancellable": false
+        },
+        {
+          "phase": "delete",
+          "table": "TrickplayInfos",
+          "cancellable": false
+        },
+        {
+          "phase": "delete",
+          "table": "Chapters",
+          "cancellable": false
+        }
+      ],
+      "remaining": [
+        {
+          "target": true,
+          "keyframes": 0,
+          "segments": 0,
+          "trickplay": 0,
+          "chapters": 1,
+          "baseItems": 1
+        },
+        {
+          "target": false,
+          "keyframes": 1,
+          "segments": 1,
+          "trickplay": 1,
+          "chapters": 1,
+          "baseItems": 1
+        }
+      ],
+      "assets": [
+        {
+          "directory": false,
+          "file": false
+        },
+        {
+          "directory": false,
+          "file": false
+        },
+        {
+          "directory": false,
+          "file": false
+        },
+        {
+          "directory": false,
+          "file": false
+        },
+        {
+          "directory": false,
+          "file": false
+        }
+      ],
+      "sourceExists": true
+    }
+  ],
+  "candidateVerified": false,
+  "sqliteLibrarySha256": "b7385d722c83fb52142a00477a726723745916d22a555711ee89834c1111fb2e",
+  "inputSha256": "8118576603ade74186619dbaeb1ce215d47825eff4008af4e68d3357317f585c",
+  "boundary": "Actual PathManager/ExternalDataManager delete real isolated extracted directories; actual KeyframeManager/KeyframeRepository, MediaSegmentManager, TrickplayManager and ChapterManager/ChapterRepository delete from an isolated native EF SQLite database. Native SQLite command interception injects each delete-stage failure, and a controlled segment provider throws during cleanup. Application paths/library lookup are controlled, source and cache bytes are inert sentinels. Full metadata refresh, native NFO, actual network media, generic item deletion and generated media are excluded."
+}

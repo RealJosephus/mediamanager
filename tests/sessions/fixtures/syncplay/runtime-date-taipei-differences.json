@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 3,
+  "environment": {
+    "node": "v24.16.0",
+    "platform": "win32",
+    "timeZone": "Asia/Taipei"
+  },
+  "referenceFixtureSha256": "96919167f4d75563645b9224344210ee4492da5f40a9467132d4f611d1c9cb7b",
+  "candidateDateSourceSha256": "2b519f0ba14477bb7067398c6d01347e09c4bdabe091e891c73cc1c858dd9d95",
+  "recordedCandidateDateSourceSha256": "697b751a949020c3e23812de114ca898dd901a087018e53325381f39aaad2ea5",
+  "sourceBoundary": "Standard JavaScript candidate date conversion is compared with the fresh actual Windows Taipei CLR 53-date recording. The two raw binding discrepancies remain visible. Their functional effect is independently recorded through frozen Jellyfin POST /SyncPlay/Ready plus WebSocket output, then replayed through the candidate HTTP/WebSocket stack on SQLite and PostgreSQL. The native recording is retained while a sealed candidate-only re-projection proves that the later source hash change removed leading comments only and preserves all 53 candidate outcomes.",
+  "differences": {
+    "\"0001-01-01T00:00:00-14:00\"": {
+      "reference": {
+        "ticks": "792000000000",
+        "kind": "Local"
+      },
+      "candidate": {
+        "ticks": "795600000000",
+        "kind": "Local"
+      },
+      "decision": "acceptable-nonfunctional",
+      "impact": "Frozen Jellyfin logs the two-second Ready guard for this raw input with IsPlaying true and false, then reports position 6000000000, Playing, Unpause and the default approximately-one-second schedule. The candidate HTTP/WebSocket path produces the same contract on SQLite and PostgreSQL. The request When is not echoed; complete logical table digests are stable only across the afterAuthentication-to-afterCases operation window, and native shutdown then adds two ActivityLogs."
+    },
+    "\"0001-01-01T00:00:00+00:00\"": {
+      "reference": {
+        "ticks": "288000000000",
+        "kind": "Local"
+      },
+      "candidate": {
+        "ticks": "291600000000",
+        "kind": "Local"
+      },
+      "decision": "acceptable-nonfunctional",
+      "impact": "Frozen Jellyfin logs the two-second Ready guard for this raw input with IsPlaying true and false, then reports position 6000000000, Playing, Unpause and the default approximately-one-second schedule. The candidate HTTP/WebSocket path produces the same contract on SQLite and PostgreSQL. The request When is not echoed; complete logical table digests are stable only across the afterAuthentication-to-afterCases operation window, and native shutdown then adds two ActivityLogs."
+    }
+  },
+  "functionalImpactEvidence": {
+    "projection": "tests/sessions/fixtures/syncplay/date-impact-native.json",
+    "projectionSha256": "86df96c254fdda235194bb40fba21a3851f07289b36b5019dafffdafd9b8d75e",
+    "candidateReprojection": "tests/sessions/fixtures/syncplay/runtime-date-candidate-reprojection.json",
+    "candidateReprojectionSha256": "9fd7a0754cf8a0624449b4610eed4b83390abbeb9c054895ab10f3ce36476918",
+    "nativeContract": ".agent-docs/evidence/syncplay-date-impact-native-v1/native-run/native-contract.json",
+    "nativeContractSha256": "81d53056f6a8be7d30ad99570c84c6edd6468488f83ee427152a7288a71e5cd9",
+    "nativeRaw": ".agent-docs/evidence/syncplay-date-impact-native-v1/native-run/native-http.json",
+    "nativeRawSha256": "f821c4df12f88f252f540b51ef1b21361b0a296abeab81491de1201cacba98ab",
+    "nativeSource": "MediaBrowser.Controller/SyncPlay/GroupStates/WaitingGroupState.cs:430-524 at 208c278b75abd897aefa1e1175126eac5e4dbfaa; source sha256 81757b195e5538cca56094df2699b31583a285646ae481ae48eb408a20f9dad8; jellyfin.dll sha256 29c34541350089dc0522c4309ecd617e78fd402774681f32491d089803939c03",
+    "candidateSource": "src/syncplay/group.js guard and scheduling path; current sha256 3d5058e92a76998d024d52f0ac165becb6a6afcb6007886183276ae56ed35214; native-recording-time sha256 7ef8d66f551df84df8b1f4b10310acc257fa88f2aae25a172d2534888e03f765; the sealed re-projection proves the difference is two removed leading comments",
+    "recorder": "tools/compat/record-syncplay-date-impact.mjs; sha256 f3ce5cd160c8757682a9645b27d489c8d8cef823bd6e6228b20ec427a025657f",
+    "scenario": "tests/sessions/syncplay-date-impact-scenario.js; sha256 a3bce89f039a3aac5556a40efe51bda653798df0a80b1e8387c43582d3a6b74a",
+    "regression": "tests/sessions/syncplay-date-impact-http.test.js",
+    "coverage": "Six independent black-box cases: both minimum-year sources with IsPlaying true and false, plus server-clock-minus-1000ms and minus-3000ms controls. Native warning counts are 1,1,1,1,0,1; the inside-guard control seeks and remains Waiting while the other five unpause into Playing.",
+    "persistence": {
+      "nativeStableWindow": ["afterAuthentication", "afterCases"],
+      "nativeCompleteDigestStableInWindow": true,
+      "nativeAfterShutdownActivityLogDelta": 2,
+      "candidateStableWindow": ["afterAuthentication", "afterCases"],
+      "candidateCompleteDigestStableInWindow": true,
+      "requestWhenPersisted": false
+    },
+    "negativeControl": "The consumer injects command, state, echo, artifact-hash, current-source, recorded-source, removed-prefix and candidate-projection corruption and requires every mutation to be rejected."
+  },
+  "phaseAcceptance": false
+}

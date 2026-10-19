@@ -1,0 +1,149 @@
+[
+  {
+    "Flag": null,
+    "Kinds": [],
+    "Start": 0,
+    "Limit": null
+  },
+  {
+    "Flag": false,
+    "Kinds": [],
+    "Start": 0,
+    "Limit": null
+  },
+  {
+    "Flag": true,
+    "Kinds": [],
+    "Start": 0,
+    "Limit": null
+  },
+  {
+    "Flag": null,
+    "Kinds": [
+      "Movie"
+    ],
+    "Start": 0,
+    "Limit": null
+  },
+  {
+    "Flag": false,
+    "Kinds": [
+      "Movie"
+    ],
+    "Start": 0,
+    "Limit": null
+  },
+  {
+    "Flag": true,
+    "Kinds": [
+      "Movie"
+    ],
+    "Start": 0,
+    "Limit": null
+  },
+  {
+    "Flag": null,
+    "Kinds": [
+      "Genre"
+    ],
+    "Start": 0,
+    "Limit": null
+  },
+  {
+    "Flag": false,
+    "Kinds": [
+      "Genre"
+    ],
+    "Start": 0,
+    "Limit": null
+  },
+  {
+    "Flag": true,
+    "Kinds": [
+      "Genre"
+    ],
+    "Start": 0,
+    "Limit": null
+  },
+  {
+    "Flag": null,
+    "Kinds": [
+      "Folder"
+    ],
+    "Start": 0,
+    "Limit": null
+  },
+  {
+    "Flag": false,
+    "Kinds": [
+      "Folder"
+    ],
+    "Start": 0,
+    "Limit": null
+  },
+  {
+    "Flag": true,
+    "Kinds": [
+      "Folder"
+    ],
+    "Start": 0,
+    "Limit": null
+  },
+  {
+    "Flag": null,
+    "Kinds": [
+      "Movie",
+      "Folder"
+    ],
+    "Start": 0,
+    "Limit": null
+  },
+  {
+    "Flag": false,
+    "Kinds": [
+      "Movie",
+      "Folder"
+    ],
+    "Start": 0,
+    "Limit": null
+  },
+  {
+    "Flag": true,
+    "Kinds": [
+      "Movie",
+      "Folder"
+    ],
+    "Start": 0,
+    "Limit": null
+  },
+  {
+    "Flag": true,
+    "Kinds": [],
+    "Start": 0,
+    "Limit": 1
+  },
+  {
+    "Flag": true,
+    "Kinds": [],
+    "Start": 1,
+    "Limit": 2
+  },
+  {
+    "Flag": true,
+    "Kinds": [],
+    "Start": 0,
+    "Limit": 0
+  },
+  {
+    "Flag": true,
+    "Kinds": [],
+    "Start": 50,
+    "Limit": 2
+  },
+  {
+    "Flag": true,
+    "Kinds": [],
+    "Start": 0,
+    "Limit": -1
+  }
+]

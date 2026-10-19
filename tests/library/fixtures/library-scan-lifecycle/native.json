@@ -1,0 +1,1804 @@
+{
+  "actualFrozenLibraryManager": true,
+  "results": [
+    {
+      "name": "empty-post-scan",
+      "exception": null,
+      "calls": [
+        {
+          "action": "monitor-stop",
+          "item": null,
+          "scanRunning": true,
+          "cacheEmpty": true
+        },
+        {
+          "action": "refresh-aggregate",
+          "item": "aggregate",
+          "scanRunning": true,
+          "cacheEmpty": true
+        },
+        {
+          "action": "validate-aggregate",
+          "item": "aggregate",
+          "scanRunning": true,
+          "cacheEmpty": false
+        },
+        {
+          "action": "validation-options",
+          "item": "aggregate",
+          "recursive": false,
+          "refreshChildMetadata": true,
+          "allowRemoveRoot": false,
+          "MetadataRefreshMode": 2,
+          "ImageRefreshMode": 2,
+          "IsAutomated": true,
+          "ForceSave": false
+        },
+        {
+          "action": "refresh-user-root",
+          "item": "user-root",
+          "scanRunning": true,
+          "cacheEmpty": false
+        },
+        {
+          "action": "validate-user-root",
+          "item": "user-root",
+          "scanRunning": true,
+          "cacheEmpty": false
+        },
+        {
+          "action": "validation-options",
+          "item": "user-root",
+          "recursive": false,
+          "refreshChildMetadata": true,
+          "allowRemoveRoot": false,
+          "MetadataRefreshMode": 2,
+          "ImageRefreshMode": 2,
+          "IsAutomated": true,
+          "ForceSave": false
+        },
+        {
+          "action": "recursive-aggregate",
+          "item": "aggregate",
+          "scanRunning": true,
+          "cacheEmpty": true
+        },
+        {
+          "action": "validation-options",
+          "item": "aggregate",
+          "recursive": true,
+          "refreshChildMetadata": true,
+          "allowRemoveRoot": false,
+          "MetadataRefreshMode": 2,
+          "ImageRefreshMode": 2,
+          "IsAutomated": true,
+          "ForceSave": false
+        },
+        {
+          "action": "update-inherited",
+          "item": null,
+          "scanRunning": true,
+          "cacheEmpty": false
+        },
+        {
+          "action": "monitor-start",
+          "item": null,
+          "scanRunning": true,
+          "cacheEmpty": true
+        }
+      ],
+      "progress": [
+        0,
+        24,
+        96,
+        96,
+        100,
+        100
+      ],
+      "scanRunning": false,
+      "cacheEmpty": true
+    },
+    {
+      "name": "two-post-tasks",
+      "exception": null,
+      "calls": [
+        {
+          "action": "monitor-stop",
+          "item": null,
+          "scanRunning": true,
+          "cacheEmpty": true
+        },
+        {
+          "action": "refresh-aggregate",
+          "item": "aggregate",
+          "scanRunning": true,
+          "cacheEmpty": true
+        },
+        {
+          "action": "validate-aggregate",
+          "item": "aggregate",
+          "scanRunning": true,
+          "cacheEmpty": false
+        },
+        {
+          "action": "validation-options",
+          "item": "aggregate",
+          "recursive": false,
+          "refreshChildMetadata": true,
+          "allowRemoveRoot": false,
+          "MetadataRefreshMode": 2,
+          "ImageRefreshMode": 2,
+          "IsAutomated": true,
+          "ForceSave": false
+        },
+        {
+          "action": "refresh-user-root",
+          "item": "user-root",
+          "scanRunning": true,
+          "cacheEmpty": false
+        },
+        {
+          "action": "validate-user-root",
+          "item": "user-root",
+          "scanRunning": true,
+          "cacheEmpty": false
+        },
+        {
+          "action": "validation-options",
+          "item": "user-root",
+          "recursive": false,
+          "refreshChildMetadata": true,
+          "allowRemoveRoot": false,
+          "MetadataRefreshMode": 2,
+          "ImageRefreshMode": 2,
+          "IsAutomated": true,
+          "ForceSave": false
+        },
+        {
+          "action": "recursive-aggregate",
+          "item": "aggregate",
+          "scanRunning": true,
+          "cacheEmpty": true
+        },
+        {
+          "action": "validation-options",
+          "item": "aggregate",
+          "recursive": true,
+          "refreshChildMetadata": true,
+          "allowRemoveRoot": false,
+          "MetadataRefreshMode": 2,
+          "ImageRefreshMode": 2,
+          "IsAutomated": true,
+          "ForceSave": false
+        },
+        {
+          "action": "post-a",
+          "item": null,
+          "scanRunning": true,
+          "cacheEmpty": false
+        },
+        {
+          "action": "post-b",
+          "item": null,
+          "scanRunning": true,
+          "cacheEmpty": false
+        },
+        {
+          "action": "update-inherited",
+          "item": null,
+          "scanRunning": true,
+          "cacheEmpty": false
+        },
+        {
+          "action": "monitor-start",
+          "item": null,
+          "scanRunning": true,
+          "cacheEmpty": true
+        }
+      ],
+      "progress": [
+        0,
+        24,
+        96,
+        96,
+        96,
+        96.5,
+        98,
+        98,
+        98,
+        99,
+        100,
+        100,
+        100,
+        100
+      ],
+      "scanRunning": false,
+      "cacheEmpty": true
+    },
+    {
+      "name": "post-error-continues",
+      "exception": null,
+      "calls": [
+        {
+          "action": "monitor-stop",
+          "item": null,
+          "scanRunning": true,
+          "cacheEmpty": true
+        },
+        {
+          "action": "refresh-aggregate",
+          "item": "aggregate",
+          "scanRunning": true,
+          "cacheEmpty": true
+        },
+        {
+          "action": "validate-aggregate",
+          "item": "aggregate",
+          "scanRunning": true,
+          "cacheEmpty": false
+        },
+        {
+          "action": "validation-options",
+          "item": "aggregate",
+          "recursive": false,
+          "refreshChildMetadata": true,
+          "allowRemoveRoot": false,
+          "MetadataRefreshMode": 2,
+          "ImageRefreshMode": 2,
+          "IsAutomated": true,
+          "ForceSave": false
+        },
+        {
+          "action": "refresh-user-root",
+          "item": "user-root",
+          "scanRunning": true,
+          "cacheEmpty": false
+        },
+        {
+          "action": "validate-user-root",
+          "item": "user-root",
+          "scanRunning": true,
+          "cacheEmpty": false
+        },
+        {
+          "action": "validation-options",
+          "item": "user-root",
+          "recursive": false,
+          "refreshChildMetadata": true,
+          "allowRemoveRoot": false,
+          "MetadataRefreshMode": 2,
+          "ImageRefreshMode": 2,
+          "IsAutomated": true,
+          "ForceSave": false
+        },
+        {
+          "action": "recursive-aggregate",
+          "item": "aggregate",
+          "scanRunning": true,
+          "cacheEmpty": true
+        },
+        {
+          "action": "validation-options",
+          "item": "aggregate",
+          "recursive": true,
+          "refreshChildMetadata": true,
+          "allowRemoveRoot": false,
+          "MetadataRefreshMode": 2,
+          "ImageRefreshMode": 2,
+          "IsAutomated": true,
+          "ForceSave": false
+        },
+        {
+          "action": "post-a",
+          "item": null,
+          "scanRunning": true,
+          "cacheEmpty": false
+        },
+        {
+          "action": "logged-error",
+          "exception": "IOException"
+        },
+        {
+          "action": "post-b",
+          "item": null,
+          "scanRunning": true,
+          "cacheEmpty": false
+        },
+        {
+          "action": "update-inherited",
+          "item": null,
+          "scanRunning": true,
+          "cacheEmpty": false
+        },
+        {
+          "action": "monitor-start",
+          "item": null,
+          "scanRunning": true,
+          "cacheEmpty": true
+        }
+      ],
+      "progress": [
+        0,
+        24,
+        96,
+        96,
+        98,
+        100,
+        100,
+        100,
+        100
+      ],
+      "scanRunning": false,
+      "cacheEmpty": true
+    },
+    {
+      "name": "post-cancel-stops",
+      "exception": "OperationCanceledException",
+      "calls": [
+        {
+          "action": "monitor-stop",
+          "item": null,
+          "scanRunning": true,
+          "cacheEmpty": true
+        },
+        {
+          "action": "refresh-aggregate",
+          "item": "aggregate",
+          "scanRunning": true,
+          "cacheEmpty": true
+        },
+        {
+          "action": "validate-aggregate",
+          "item": "aggregate",
+          "scanRunning": true,
+          "cacheEmpty": false
+        },
+        {
+          "action": "validation-options",
+          "item": "aggregate",
+          "recursive": false,
+          "refreshChildMetadata": true,
+          "allowRemoveRoot": false,
+          "MetadataRefreshMode": 2,
+          "ImageRefreshMode": 2,
+          "IsAutomated": true,
+          "ForceSave": false
+        },
+        {
+          "action": "refresh-user-root",
+          "item": "user-root",
+          "scanRunning": true,
+          "cacheEmpty": false
+        },
+        {
+          "action": "validate-user-root",
+          "item": "user-root",
+          "scanRunning": true,
+          "cacheEmpty": false
+        },
+        {
+          "action": "validation-options",
+          "item": "user-root",
+          "recursive": false,
+          "refreshChildMetadata": true,
+          "allowRemoveRoot": false,
+          "MetadataRefreshMode": 2,
+          "ImageRefreshMode": 2,
+          "IsAutomated": true,
+          "ForceSave": false
+        },
+        {
+          "action": "recursive-aggregate",
+          "item": "aggregate",
+          "scanRunning": true,
+          "cacheEmpty": true
+        },
+        {
+          "action": "validation-options",
+          "item": "aggregate",
+          "recursive": true,
+          "refreshChildMetadata": true,
+          "allowRemoveRoot": false,
+          "MetadataRefreshMode": 2,
+          "ImageRefreshMode": 2,
+          "IsAutomated": true,
+          "ForceSave": false
+        },
+        {
+          "action": "post-a",
+          "item": null,
+          "scanRunning": true,
+          "cacheEmpty": false
+        },
+        {
+          "action": "monitor-start",
+          "item": null,
+          "scanRunning": true,
+          "cacheEmpty": true
+        }
+      ],
+      "progress": [
+        0,
+        24,
+        96,
+        96
+      ],
+      "scanRunning": false,
+      "cacheEmpty": true
+    },
+    {
+      "name": "post-list-snapshot",
+      "exception": null,
+      "calls": [
+        {
+          "action": "monitor-stop",
+          "item": null,
+          "scanRunning": true,
+          "cacheEmpty": true
+        },
+        {
+          "action": "refresh-aggregate",
+          "item": "aggregate",
+          "scanRunning": true,
+          "cacheEmpty": true
+        },
+        {
+          "action": "validate-aggregate",
+          "item": "aggregate",
+          "scanRunning": true,
+          "cacheEmpty": false
+        },
+        {
+          "action": "validation-options",
+          "item": "aggregate",
+          "recursive": false,
+          "refreshChildMetadata": true,
+          "allowRemoveRoot": false,
+          "MetadataRefreshMode": 2,
+          "ImageRefreshMode": 2,
+          "IsAutomated": true,
+          "ForceSave": false
+        },
+        {
+          "action": "refresh-user-root",
+          "item": "user-root",
+          "scanRunning": true,
+          "cacheEmpty": false
+        },
+        {
+          "action": "validate-user-root",
+          "item": "user-root",
+          "scanRunning": true,
+          "cacheEmpty": false
+        },
+        {
+          "action": "validation-options",
+          "item": "user-root",
+          "recursive": false,
+          "refreshChildMetadata": true,
+          "allowRemoveRoot": false,
+          "MetadataRefreshMode": 2,
+          "ImageRefreshMode": 2,
+          "IsAutomated": true,
+          "ForceSave": false
+        },
+        {
+          "action": "recursive-aggregate",
+          "item": "aggregate",
+          "scanRunning": true,
+          "cacheEmpty": true
+        },
+        {
+          "action": "validation-options",
+          "item": "aggregate",
+          "recursive": true,
+          "refreshChildMetadata": true,
+          "allowRemoveRoot": false,
+          "MetadataRefreshMode": 2,
+          "ImageRefreshMode": 2,
+          "IsAutomated": true,
+          "ForceSave": false
+        },
+        {
+          "action": "post-a",
+          "item": null,
+          "scanRunning": true,
+          "cacheEmpty": false
+        },
+        {
+          "action": "post-b",
+          "item": null,
+          "scanRunning": true,
+          "cacheEmpty": false
+        },
+        {
+          "action": "update-inherited",
+          "item": null,
+          "scanRunning": true,
+          "cacheEmpty": false
+        },
+        {
+          "action": "monitor-start",
+          "item": null,
+          "scanRunning": true,
+          "cacheEmpty": true
+        }
+      ],
+      "progress": [
+        0,
+        24,
+        96,
+        96,
+        98,
+        100,
+        100,
+        100
+      ],
+      "scanRunning": false,
+      "cacheEmpty": true
+    },
+    {
+      "name": "missing-collections",
+      "exception": null,
+      "calls": [
+        {
+          "action": "monitor-stop",
+          "item": null,
+          "scanRunning": true,
+          "cacheEmpty": true
+        },
+        {
+          "action": "refresh-aggregate",
+          "item": "aggregate",
+          "scanRunning": true,
+          "cacheEmpty": true
+        },
+        {
+          "action": "validate-aggregate",
+          "item": "aggregate",
+          "scanRunning": true,
+          "cacheEmpty": false
+        },
+        {
+          "action": "validation-options",
+          "item": "aggregate",
+          "recursive": false,
+          "refreshChildMetadata": true,
+          "allowRemoveRoot": false,
+          "MetadataRefreshMode": 2,
+          "ImageRefreshMode": 2,
+          "IsAutomated": true,
+          "ForceSave": false
+        },
+        {
+          "action": "refresh-user-root",
+          "item": "user-root",
+          "scanRunning": true,
+          "cacheEmpty": false
+        },
+        {
+          "action": "validate-user-root",
+          "item": "user-root",
+          "scanRunning": true,
+          "cacheEmpty": false
+        },
+        {
+          "action": "validation-options",
+          "item": "user-root",
+          "recursive": false,
+          "refreshChildMetadata": true,
+          "allowRemoveRoot": false,
+          "MetadataRefreshMode": 2,
+          "ImageRefreshMode": 2,
+          "IsAutomated": true,
+          "ForceSave": false
+        },
+        {
+          "action": "refresh-existing",
+          "item": "existing",
+          "scanRunning": true,
+          "cacheEmpty": false
+        },
+        {
+          "action": "refresh-ordinary",
+          "item": "ordinary",
+          "scanRunning": true,
+          "cacheEmpty": false
+        },
+        {
+          "action": "delete-collections",
+          "ids": [
+            "97010000-0000-0000-0000-000000000002",
+            "97010000-0000-0000-0000-000000000003"
+          ]
+        },
+        {
+          "action": "delete-collections",
+          "item": null,
+          "scanRunning": true,
+          "cacheEmpty": false
+        },
+        {
+          "action": "recursive-aggregate",
+          "item": "aggregate",
+          "scanRunning": true,
+          "cacheEmpty": true
+        },
+        {
+          "action": "validation-options",
+          "item": "aggregate",
+          "recursive": true,
+          "refreshChildMetadata": true,
+          "allowRemoveRoot": false,
+          "MetadataRefreshMode": 2,
+          "ImageRefreshMode": 2,
+          "IsAutomated": true,
+          "ForceSave": false
+        },
+        {
+          "action": "update-inherited",
+          "item": null,
+          "scanRunning": true,
+          "cacheEmpty": false
+        },
+        {
+          "action": "monitor-start",
+          "item": null,
+          "scanRunning": true,
+          "cacheEmpty": true
+        }
+      ],
+      "progress": [
+        0,
+        24,
+        96,
+        96,
+        100,
+        100
+      ],
+      "scanRunning": false,
+      "cacheEmpty": true
+    },
+    {
+      "name": "top-only-remove",
+      "exception": null,
+      "calls": [
+        {
+          "action": "refresh-aggregate",
+          "item": "aggregate",
+          "scanRunning": false,
+          "cacheEmpty": true
+        },
+        {
+          "action": "validate-aggregate",
+          "item": "aggregate",
+          "scanRunning": false,
+          "cacheEmpty": false
+        },
+        {
+          "action": "validation-options",
+          "item": "aggregate",
+          "recursive": false,
+          "refreshChildMetadata": true,
+          "allowRemoveRoot": true,
+          "MetadataRefreshMode": 2,
+          "ImageRefreshMode": 2,
+          "IsAutomated": true,
+          "ForceSave": false
+        },
+        {
+          "action": "refresh-user-root",
+          "item": "user-root",
+          "scanRunning": false,
+          "cacheEmpty": false
+        },
+        {
+          "action": "validate-user-root",
+          "item": "user-root",
+          "scanRunning": false,
+          "cacheEmpty": false
+        },
+        {
+          "action": "validation-options",
+          "item": "user-root",
+          "recursive": false,
+          "refreshChildMetadata": true,
+          "allowRemoveRoot": true,
+          "MetadataRefreshMode": 2,
+          "ImageRefreshMode": 2,
+          "IsAutomated": true,
+          "ForceSave": false
+        }
+      ],
+      "progress": [],
+      "scanRunning": false,
+      "cacheEmpty": true
+    },
+    {
+      "name": "cancelled-before",
+      "exception": "OperationCanceledException",
+      "calls": [
+        {
+          "action": "monitor-stop",
+          "item": null,
+          "scanRunning": true,
+          "cacheEmpty": true
+        },
+        {
+          "action": "refresh-aggregate",
+          "item": "aggregate",
+          "scanRunning": true,
+          "cacheEmpty": true
+        },
+        {
+          "action": "monitor-start",
+          "item": null,
+          "scanRunning": true,
+          "cacheEmpty": true
+        }
+      ],
+      "progress": [],
+      "scanRunning": false,
+      "cacheEmpty": true
+    },
+    {
+      "name": "failure-monitor-stop",
+      "exception": "IOException",
+      "calls": [
+        {
+          "action": "monitor-stop",
+          "item": null,
+          "scanRunning": true,
+          "cacheEmpty": true
+        }
+      ],
+      "progress": [],
+      "scanRunning": true,
+      "cacheEmpty": true
+    },
+    {
+      "name": "failure-monitor-start",
+      "exception": "IOException",
+      "calls": [
+        {
+          "action": "monitor-stop",
+          "item": null,
+          "scanRunning": true,
+          "cacheEmpty": true
+        },
+        {
+          "action": "refresh-aggregate",
+          "item": "aggregate",
+          "scanRunning": true,
+          "cacheEmpty": true
+        },
+        {
+          "action": "validate-aggregate",
+          "item": "aggregate",
+          "scanRunning": true,
+          "cacheEmpty": false
+        },
+        {
+          "action": "validation-options",
+          "item": "aggregate",
+          "recursive": false,
+          "refreshChildMetadata": true,
+          "allowRemoveRoot": false,
+          "MetadataRefreshMode": 2,
+          "ImageRefreshMode": 2,
+          "IsAutomated": true,
+          "ForceSave": false
+        },
+        {
+          "action": "refresh-user-root",
+          "item": "user-root",
+          "scanRunning": true,
+          "cacheEmpty": false
+        },
+        {
+          "action": "validate-user-root",
+          "item": "user-root",
+          "scanRunning": true,
+          "cacheEmpty": false
+        },
+        {
+          "action": "validation-options",
+          "item": "user-root",
+          "recursive": false,
+          "refreshChildMetadata": true,
+          "allowRemoveRoot": false,
+          "MetadataRefreshMode": 2,
+          "ImageRefreshMode": 2,
+          "IsAutomated": true,
+          "ForceSave": false
+        },
+        {
+          "action": "refresh-existing",
+          "item": "existing",
+          "scanRunning": true,
+          "cacheEmpty": false
+        },
+        {
+          "action": "delete-collections",
+          "ids": [
+            "97010000-0000-0000-0000-000000000002"
+          ]
+        },
+        {
+          "action": "delete-collections",
+          "item": null,
+          "scanRunning": true,
+          "cacheEmpty": false
+        },
+        {
+          "action": "recursive-aggregate",
+          "item": "aggregate",
+          "scanRunning": true,
+          "cacheEmpty": true
+        },
+        {
+          "action": "validation-options",
+          "item": "aggregate",
+          "recursive": true,
+          "refreshChildMetadata": true,
+          "allowRemoveRoot": false,
+          "MetadataRefreshMode": 2,
+          "ImageRefreshMode": 2,
+          "IsAutomated": true,
+          "ForceSave": false
+        },
+        {
+          "action": "update-inherited",
+          "item": null,
+          "scanRunning": true,
+          "cacheEmpty": false
+        },
+        {
+          "action": "monitor-start",
+          "item": null,
+          "scanRunning": true,
+          "cacheEmpty": true
+        }
+      ],
+      "progress": [
+        0,
+        24,
+        96,
+        96,
+        100,
+        100
+      ],
+      "scanRunning": true,
+      "cacheEmpty": true
+    },
+    {
+      "name": "failure-refresh-aggregate",
+      "exception": "IOException",
+      "calls": [
+        {
+          "action": "monitor-stop",
+          "item": null,
+          "scanRunning": true,
+          "cacheEmpty": true
+        },
+        {
+          "action": "refresh-aggregate",
+          "item": "aggregate",
+          "scanRunning": true,
+          "cacheEmpty": true
+        },
+        {
+          "action": "monitor-start",
+          "item": null,
+          "scanRunning": true,
+          "cacheEmpty": true
+        }
+      ],
+      "progress": [],
+      "scanRunning": false,
+      "cacheEmpty": true
+    },
+    {
+      "name": "failure-validate-aggregate",
+      "exception": "IOException",
+      "calls": [
+        {
+          "action": "monitor-stop",
+          "item": null,
+          "scanRunning": true,
+          "cacheEmpty": true
+        },
+        {
+          "action": "refresh-aggregate",
+          "item": "aggregate",
+          "scanRunning": true,
+          "cacheEmpty": true
+        },
+        {
+          "action": "validate-aggregate",
+          "item": "aggregate",
+          "scanRunning": true,
+          "cacheEmpty": false
+        },
+        {
+          "action": "monitor-start",
+          "item": null,
+          "scanRunning": true,
+          "cacheEmpty": true
+        }
+      ],
+      "progress": [],
+      "scanRunning": false,
+      "cacheEmpty": true
+    },
+    {
+      "name": "failure-refresh-user-root",
+      "exception": "IOException",
+      "calls": [
+        {
+          "action": "monitor-stop",
+          "item": null,
+          "scanRunning": true,
+          "cacheEmpty": true
+        },
+        {
+          "action": "refresh-aggregate",
+          "item": "aggregate",
+          "scanRunning": true,
+          "cacheEmpty": true
+        },
+        {
+          "action": "validate-aggregate",
+          "item": "aggregate",
+          "scanRunning": true,
+          "cacheEmpty": false
+        },
+        {
+          "action": "validation-options",
+          "item": "aggregate",
+          "recursive": false,
+          "refreshChildMetadata": true,
+          "allowRemoveRoot": false,
+          "MetadataRefreshMode": 2,
+          "ImageRefreshMode": 2,
+          "IsAutomated": true,
+          "ForceSave": false
+        },
+        {
+          "action": "refresh-user-root",
+          "item": "user-root",
+          "scanRunning": true,
+          "cacheEmpty": false
+        },
+        {
+          "action": "monitor-start",
+          "item": null,
+          "scanRunning": true,
+          "cacheEmpty": true
+        }
+      ],
+      "progress": [],
+      "scanRunning": false,
+      "cacheEmpty": true
+    },
+    {
+      "name": "failure-validate-user-root",
+      "exception": "IOException",
+      "calls": [
+        {
+          "action": "monitor-stop",
+          "item": null,
+          "scanRunning": true,
+          "cacheEmpty": true
+        },
+        {
+          "action": "refresh-aggregate",
+          "item": "aggregate",
+          "scanRunning": true,
+          "cacheEmpty": true
+        },
+        {
+          "action": "validate-aggregate",
+          "item": "aggregate",
+          "scanRunning": true,
+          "cacheEmpty": false
+        },
+        {
+          "action": "validation-options",
+          "item": "aggregate",
+          "recursive": false,
+          "refreshChildMetadata": true,
+          "allowRemoveRoot": false,
+          "MetadataRefreshMode": 2,
+          "ImageRefreshMode": 2,
+          "IsAutomated": true,
+          "ForceSave": false
+        },
+        {
+          "action": "refresh-user-root",
+          "item": "user-root",
+          "scanRunning": true,
+          "cacheEmpty": false
+        },
+        {
+          "action": "validate-user-root",
+          "item": "user-root",
+          "scanRunning": true,
+          "cacheEmpty": false
+        },
+        {
+          "action": "monitor-start",
+          "item": null,
+          "scanRunning": true,
+          "cacheEmpty": true
+        }
+      ],
+      "progress": [],
+      "scanRunning": false,
+      "cacheEmpty": true
+    },
+    {
+      "name": "failure-recursive-aggregate",
+      "exception": "IOException",
+      "calls": [
+        {
+          "action": "monitor-stop",
+          "item": null,
+          "scanRunning": true,
+          "cacheEmpty": true
+        },
+        {
+          "action": "refresh-aggregate",
+          "item": "aggregate",
+          "scanRunning": true,
+          "cacheEmpty": true
+        },
+        {
+          "action": "validate-aggregate",
+          "item": "aggregate",
+          "scanRunning": true,
+          "cacheEmpty": false
+        },
+        {
+          "action": "validation-options",
+          "item": "aggregate",
+          "recursive": false,
+          "refreshChildMetadata": true,
+          "allowRemoveRoot": false,
+          "MetadataRefreshMode": 2,
+          "ImageRefreshMode": 2,
+          "IsAutomated": true,
+          "ForceSave": false
+        },
+        {
+          "action": "refresh-user-root",
+          "item": "user-root",
+          "scanRunning": true,
+          "cacheEmpty": false
+        },
+        {
+          "action": "validate-user-root",
+          "item": "user-root",
+          "scanRunning": true,
+          "cacheEmpty": false
+        },
+        {
+          "action": "validation-options",
+          "item": "user-root",
+          "recursive": false,
+          "refreshChildMetadata": true,
+          "allowRemoveRoot": false,
+          "MetadataRefreshMode": 2,
+          "ImageRefreshMode": 2,
+          "IsAutomated": true,
+          "ForceSave": false
+        },
+        {
+          "action": "refresh-existing",
+          "item": "existing",
+          "scanRunning": true,
+          "cacheEmpty": false
+        },
+        {
+          "action": "delete-collections",
+          "ids": [
+            "97010000-0000-0000-0000-000000000002"
+          ]
+        },
+        {
+          "action": "delete-collections",
+          "item": null,
+          "scanRunning": true,
+          "cacheEmpty": false
+        },
+        {
+          "action": "recursive-aggregate",
+          "item": "aggregate",
+          "scanRunning": true,
+          "cacheEmpty": true
+        },
+        {
+          "action": "monitor-start",
+          "item": null,
+          "scanRunning": true,
+          "cacheEmpty": true
+        }
+      ],
+      "progress": [],
+      "scanRunning": false,
+      "cacheEmpty": true
+    },
+    {
+      "name": "failure-update-inherited",
+      "exception": "IOException",
+      "calls": [
+        {
+          "action": "monitor-stop",
+          "item": null,
+          "scanRunning": true,
+          "cacheEmpty": true
+        },
+        {
+          "action": "refresh-aggregate",
+          "item": "aggregate",
+          "scanRunning": true,
+          "cacheEmpty": true
+        },
+        {
+          "action": "validate-aggregate",
+          "item": "aggregate",
+          "scanRunning": true,
+          "cacheEmpty": false
+        },
+        {
+          "action": "validation-options",
+          "item": "aggregate",
+          "recursive": false,
+          "refreshChildMetadata": true,
+          "allowRemoveRoot": false,
+          "MetadataRefreshMode": 2,
+          "ImageRefreshMode": 2,
+          "IsAutomated": true,
+          "ForceSave": false
+        },
+        {
+          "action": "refresh-user-root",
+          "item": "user-root",
+          "scanRunning": true,
+          "cacheEmpty": false
+        },
+        {
+          "action": "validate-user-root",
+          "item": "user-root",
+          "scanRunning": true,
+          "cacheEmpty": false
+        },
+        {
+          "action": "validation-options",
+          "item": "user-root",
+          "recursive": false,
+          "refreshChildMetadata": true,
+          "allowRemoveRoot": false,
+          "MetadataRefreshMode": 2,
+          "ImageRefreshMode": 2,
+          "IsAutomated": true,
+          "ForceSave": false
+        },
+        {
+          "action": "refresh-existing",
+          "item": "existing",
+          "scanRunning": true,
+          "cacheEmpty": false
+        },
+        {
+          "action": "delete-collections",
+          "ids": [
+            "97010000-0000-0000-0000-000000000002"
+          ]
+        },
+        {
+          "action": "delete-collections",
+          "item": null,
+          "scanRunning": true,
+          "cacheEmpty": false
+        },
+        {
+          "action": "recursive-aggregate",
+          "item": "aggregate",
+          "scanRunning": true,
+          "cacheEmpty": true
+        },
+        {
+          "action": "validation-options",
+          "item": "aggregate",
+          "recursive": true,
+          "refreshChildMetadata": true,
+          "allowRemoveRoot": false,
+          "MetadataRefreshMode": 2,
+          "ImageRefreshMode": 2,
+          "IsAutomated": true,
+          "ForceSave": false
+        },
+        {
+          "action": "update-inherited",
+          "item": null,
+          "scanRunning": true,
+          "cacheEmpty": false
+        },
+        {
+          "action": "monitor-start",
+          "item": null,
+          "scanRunning": true,
+          "cacheEmpty": true
+        }
+      ],
+      "progress": [
+        0,
+        24,
+        96,
+        96
+      ],
+      "scanRunning": false,
+      "cacheEmpty": true
+    },
+    {
+      "name": "failure-refresh-existing",
+      "exception": "IOException",
+      "calls": [
+        {
+          "action": "monitor-stop",
+          "item": null,
+          "scanRunning": true,
+          "cacheEmpty": true
+        },
+        {
+          "action": "refresh-aggregate",
+          "item": "aggregate",
+          "scanRunning": true,
+          "cacheEmpty": true
+        },
+        {
+          "action": "validate-aggregate",
+          "item": "aggregate",
+          "scanRunning": true,
+          "cacheEmpty": false
+        },
+        {
+          "action": "validation-options",
+          "item": "aggregate",
+          "recursive": false,
+          "refreshChildMetadata": true,
+          "allowRemoveRoot": false,
+          "MetadataRefreshMode": 2,
+          "ImageRefreshMode": 2,
+          "IsAutomated": true,
+          "ForceSave": false
+        },
+        {
+          "action": "refresh-user-root",
+          "item": "user-root",
+          "scanRunning": true,
+          "cacheEmpty": false
+        },
+        {
+          "action": "validate-user-root",
+          "item": "user-root",
+          "scanRunning": true,
+          "cacheEmpty": false
+        },
+        {
+          "action": "validation-options",
+          "item": "user-root",
+          "recursive": false,
+          "refreshChildMetadata": true,
+          "allowRemoveRoot": false,
+          "MetadataRefreshMode": 2,
+          "ImageRefreshMode": 2,
+          "IsAutomated": true,
+          "ForceSave": false
+        },
+        {
+          "action": "refresh-existing",
+          "item": "existing",
+          "scanRunning": true,
+          "cacheEmpty": false
+        },
+        {
+          "action": "monitor-start",
+          "item": null,
+          "scanRunning": true,
+          "cacheEmpty": true
+        }
+      ],
+      "progress": [],
+      "scanRunning": false,
+      "cacheEmpty": true
+    },
+    {
+      "name": "failure-delete-collections",
+      "exception": "IOException",
+      "calls": [
+        {
+          "action": "monitor-stop",
+          "item": null,
+          "scanRunning": true,
+          "cacheEmpty": true
+        },
+        {
+          "action": "refresh-aggregate",
+          "item": "aggregate",
+          "scanRunning": true,
+          "cacheEmpty": true
+        },
+        {
+          "action": "validate-aggregate",
+          "item": "aggregate",
+          "scanRunning": true,
+          "cacheEmpty": false
+        },
+        {
+          "action": "validation-options",
+          "item": "aggregate",
+          "recursive": false,
+          "refreshChildMetadata": true,
+          "allowRemoveRoot": false,
+          "MetadataRefreshMode": 2,
+          "ImageRefreshMode": 2,
+          "IsAutomated": true,
+          "ForceSave": false
+        },
+        {
+          "action": "refresh-user-root",
+          "item": "user-root",
+          "scanRunning": true,
+          "cacheEmpty": false
+        },
+        {
+          "action": "validate-user-root",
+          "item": "user-root",
+          "scanRunning": true,
+          "cacheEmpty": false
+        },
+        {
+          "action": "validation-options",
+          "item": "user-root",
+          "recursive": false,
+          "refreshChildMetadata": true,
+          "allowRemoveRoot": false,
+          "MetadataRefreshMode": 2,
+          "ImageRefreshMode": 2,
+          "IsAutomated": true,
+          "ForceSave": false
+        },
+        {
+          "action": "refresh-existing",
+          "item": "existing",
+          "scanRunning": true,
+          "cacheEmpty": false
+        },
+        {
+          "action": "delete-collections",
+          "ids": [
+            "97010000-0000-0000-0000-000000000002"
+          ]
+        },
+        {
+          "action": "delete-collections",
+          "item": null,
+          "scanRunning": true,
+          "cacheEmpty": false
+        },
+        {
+          "action": "monitor-start",
+          "item": null,
+          "scanRunning": true,
+          "cacheEmpty": true
+        }
+      ],
+      "progress": [],
+      "scanRunning": false,
+      "cacheEmpty": true
+    },
+    {
+      "name": "inherited-links-clear",
+      "exception": null,
+      "values": [
+        {
+          "id": "97030000-0000-0000-0000-000000000001",
+          "type": 0,
+          "value": "Value 0",
+          "cleanValue": "value 0"
+        },
+        {
+          "id": "97030000-0000-0000-0000-000000000002",
+          "type": 1,
+          "value": "Value 1",
+          "cleanValue": "value 1"
+        },
+        {
+          "id": "97030000-0000-0000-0000-000000000003",
+          "type": 2,
+          "value": "Value 2",
+          "cleanValue": "value 2"
+        },
+        {
+          "id": "97030000-0000-0000-0000-000000000004",
+          "type": 3,
+          "value": "Value 3",
+          "cleanValue": "value 3"
+        },
+        {
+          "id": "97030000-0000-0000-0000-000000000005",
+          "type": 4,
+          "value": "Value 4",
+          "cleanValue": "value 4"
+        },
+        {
+          "id": "97030000-0000-0000-0000-000000000006",
+          "type": 5,
+          "value": "Value 5",
+          "cleanValue": "value 5"
+        },
+        {
+          "id": "97030000-0000-0000-0000-000000000007",
+          "type": 6,
+          "value": "Value 6",
+          "cleanValue": "value 6"
+        },
+        {
+          "id": "97030000-0000-0000-0000-000000000008",
+          "type": 7,
+          "value": "Value 7",
+          "cleanValue": "value 7"
+        },
+        {
+          "id": "97030000-0000-0000-0000-000000000010",
+          "type": 6,
+          "value": "Orphan",
+          "cleanValue": "orphan"
+        }
+      ],
+      "maps": [
+        {
+          "itemId": "97020000-0000-0000-0000-000000000001",
+          "itemValueId": "97030000-0000-0000-0000-000000000001"
+        },
+        {
+          "itemId": "97020000-0000-0000-0000-000000000001",
+          "itemValueId": "97030000-0000-0000-0000-000000000002"
+        },
+        {
+          "itemId": "97020000-0000-0000-0000-000000000001",
+          "itemValueId": "97030000-0000-0000-0000-000000000003"
+        },
+        {
+          "itemId": "97020000-0000-0000-0000-000000000001",
+          "itemValueId": "97030000-0000-0000-0000-000000000004"
+        },
+        {
+          "itemId": "97020000-0000-0000-0000-000000000001",
+          "itemValueId": "97030000-0000-0000-0000-000000000005"
+        },
+        {
+          "itemId": "97020000-0000-0000-0000-000000000001",
+          "itemValueId": "97030000-0000-0000-0000-000000000006"
+        },
+        {
+          "itemId": "97020000-0000-0000-0000-000000000001",
+          "itemValueId": "97030000-0000-0000-0000-000000000008"
+        },
+        {
+          "itemId": "97020000-0000-0000-0000-000000000002",
+          "itemValueId": "97030000-0000-0000-0000-000000000001"
+        },
+        {
+          "itemId": "97020000-0000-0000-0000-000000000002",
+          "itemValueId": "97030000-0000-0000-0000-000000000002"
+        },
+        {
+          "itemId": "97020000-0000-0000-0000-000000000002",
+          "itemValueId": "97030000-0000-0000-0000-000000000003"
+        },
+        {
+          "itemId": "97020000-0000-0000-0000-000000000002",
+          "itemValueId": "97030000-0000-0000-0000-000000000004"
+        },
+        {
+          "itemId": "97020000-0000-0000-0000-000000000002",
+          "itemValueId": "97030000-0000-0000-0000-000000000005"
+        },
+        {
+          "itemId": "97020000-0000-0000-0000-000000000002",
+          "itemValueId": "97030000-0000-0000-0000-000000000006"
+        },
+        {
+          "itemId": "97020000-0000-0000-0000-000000000002",
+          "itemValueId": "97030000-0000-0000-0000-000000000008"
+        }
+      ]
+    },
+    {
+      "name": "inherited-links-repeat",
+      "exception": null,
+      "values": [
+        {
+          "id": "97030000-0000-0000-0000-000000000001",
+          "type": 0,
+          "value": "Value 0",
+          "cleanValue": "value 0"
+        },
+        {
+          "id": "97030000-0000-0000-0000-000000000002",
+          "type": 1,
+          "value": "Value 1",
+          "cleanValue": "value 1"
+        },
+        {
+          "id": "97030000-0000-0000-0000-000000000003",
+          "type": 2,
+          "value": "Value 2",
+          "cleanValue": "value 2"
+        },
+        {
+          "id": "97030000-0000-0000-0000-000000000004",
+          "type": 3,
+          "value": "Value 3",
+          "cleanValue": "value 3"
+        },
+        {
+          "id": "97030000-0000-0000-0000-000000000005",
+          "type": 4,
+          "value": "Value 4",
+          "cleanValue": "value 4"
+        },
+        {
+          "id": "97030000-0000-0000-0000-000000000006",
+          "type": 5,
+          "value": "Value 5",
+          "cleanValue": "value 5"
+        },
+        {
+          "id": "97030000-0000-0000-0000-000000000007",
+          "type": 6,
+          "value": "Value 6",
+          "cleanValue": "value 6"
+        },
+        {
+          "id": "97030000-0000-0000-0000-000000000008",
+          "type": 7,
+          "value": "Value 7",
+          "cleanValue": "value 7"
+        },
+        {
+          "id": "97030000-0000-0000-0000-000000000010",
+          "type": 6,
+          "value": "Orphan",
+          "cleanValue": "orphan"
+        }
+      ],
+      "maps": [
+        {
+          "itemId": "97020000-0000-0000-0000-000000000001",
+          "itemValueId": "97030000-0000-0000-0000-000000000001"
+        },
+        {
+          "itemId": "97020000-0000-0000-0000-000000000001",
+          "itemValueId": "97030000-0000-0000-0000-000000000002"
+        },
+        {
+          "itemId": "97020000-0000-0000-0000-000000000001",
+          "itemValueId": "97030000-0000-0000-0000-000000000003"
+        },
+        {
+          "itemId": "97020000-0000-0000-0000-000000000001",
+          "itemValueId": "97030000-0000-0000-0000-000000000004"
+        },
+        {
+          "itemId": "97020000-0000-0000-0000-000000000001",
+          "itemValueId": "97030000-0000-0000-0000-000000000005"
+        },
+        {
+          "itemId": "97020000-0000-0000-0000-000000000001",
+          "itemValueId": "97030000-0000-0000-0000-000000000006"
+        },
+        {
+          "itemId": "97020000-0000-0000-0000-000000000001",
+          "itemValueId": "97030000-0000-0000-0000-000000000008"
+        },
+        {
+          "itemId": "97020000-0000-0000-0000-000000000002",
+          "itemValueId": "97030000-0000-0000-0000-000000000001"
+        },
+        {
+          "itemId": "97020000-0000-0000-0000-000000000002",
+          "itemValueId": "97030000-0000-0000-0000-000000000002"
+        },
+        {
+          "itemId": "97020000-0000-0000-0000-000000000002",
+          "itemValueId": "97030000-0000-0000-0000-000000000003"
+        },
+        {
+          "itemId": "97020000-0000-0000-0000-000000000002",
+          "itemValueId": "97030000-0000-0000-0000-000000000004"
+        },
+        {
+          "itemId": "97020000-0000-0000-0000-000000000002",
+          "itemValueId": "97030000-0000-0000-0000-000000000005"
+        },
+        {
+          "itemId": "97020000-0000-0000-0000-000000000002",
+          "itemValueId": "97030000-0000-0000-0000-000000000006"
+        },
+        {
+          "itemId": "97020000-0000-0000-0000-000000000002",
+          "itemValueId": "97030000-0000-0000-0000-000000000008"
+        }
+      ]
+    },
+    {
+      "name": "inherited-links-failure-rolls-back",
+      "exception": "SqliteException",
+      "values": [
+        {
+          "id": "97030000-0000-0000-0000-000000000001",
+          "type": 0,
+          "value": "Value 0",
+          "cleanValue": "value 0"
+        },
+        {
+          "id": "97030000-0000-0000-0000-000000000002",
+          "type": 1,
+          "value": "Value 1",
+          "cleanValue": "value 1"
+        },
+        {
+          "id": "97030000-0000-0000-0000-000000000003",
+          "type": 2,
+          "value": "Value 2",
+          "cleanValue": "value 2"
+        },
+        {
+          "id": "97030000-0000-0000-0000-000000000004",
+          "type": 3,
+          "value": "Value 3",
+          "cleanValue": "value 3"
+        },
+        {
+          "id": "97030000-0000-0000-0000-000000000005",
+          "type": 4,
+          "value": "Value 4",
+          "cleanValue": "value 4"
+        },
+        {
+          "id": "97030000-0000-0000-0000-000000000006",
+          "type": 5,
+          "value": "Value 5",
+          "cleanValue": "value 5"
+        },
+        {
+          "id": "97030000-0000-0000-0000-000000000007",
+          "type": 6,
+          "value": "Value 6",
+          "cleanValue": "value 6"
+        },
+        {
+          "id": "97030000-0000-0000-0000-000000000008",
+          "type": 7,
+          "value": "Value 7",
+          "cleanValue": "value 7"
+        },
+        {
+          "id": "97030000-0000-0000-0000-000000000010",
+          "type": 6,
+          "value": "Orphan",
+          "cleanValue": "orphan"
+        }
+      ],
+      "maps": [
+        {
+          "itemId": "97020000-0000-0000-0000-000000000001",
+          "itemValueId": "97030000-0000-0000-0000-000000000001"
+        },
+        {
+          "itemId": "97020000-0000-0000-0000-000000000001",
+          "itemValueId": "97030000-0000-0000-0000-000000000002"
+        },
+        {
+          "itemId": "97020000-0000-0000-0000-000000000001",
+          "itemValueId": "97030000-0000-0000-0000-000000000003"
+        },
+        {
+          "itemId": "97020000-0000-0000-0000-000000000001",
+          "itemValueId": "97030000-0000-0000-0000-000000000004"
+        },
+        {
+          "itemId": "97020000-0000-0000-0000-000000000001",
+          "itemValueId": "97030000-0000-0000-0000-000000000005"
+        },
+        {
+          "itemId": "97020000-0000-0000-0000-000000000001",
+          "itemValueId": "97030000-0000-0000-0000-000000000006"
+        },
+        {
+          "itemId": "97020000-0000-0000-0000-000000000001",
+          "itemValueId": "97030000-0000-0000-0000-000000000007"
+        },
+        {
+          "itemId": "97020000-0000-0000-0000-000000000001",
+          "itemValueId": "97030000-0000-0000-0000-000000000008"
+        },
+        {
+          "itemId": "97020000-0000-0000-0000-000000000002",
+          "itemValueId": "97030000-0000-0000-0000-000000000001"
+        },
+        {
+          "itemId": "97020000-0000-0000-0000-000000000002",
+          "itemValueId": "97030000-0000-0000-0000-000000000002"
+        },
+        {
+          "itemId": "97020000-0000-0000-0000-000000000002",
+          "itemValueId": "97030000-0000-0000-0000-000000000003"
+        },
+        {
+          "itemId": "97020000-0000-0000-0000-000000000002",
+          "itemValueId": "97030000-0000-0000-0000-000000000004"
+        },
+        {
+          "itemId": "97020000-0000-0000-0000-000000000002",
+          "itemValueId": "97030000-0000-0000-0000-000000000005"
+        },
+        {
+          "itemId": "97020000-0000-0000-0000-000000000002",
+          "itemValueId": "97030000-0000-0000-0000-000000000006"
+        },
+        {
+          "itemId": "97020000-0000-0000-0000-000000000002",
+          "itemValueId": "97030000-0000-0000-0000-000000000007"
+        },
+        {
+          "itemId": "97020000-0000-0000-0000-000000000002",
+          "itemValueId": "97030000-0000-0000-0000-000000000008"
+        }
+      ]
+    },
+    {
+      "name": "inherited-links-empty",
+      "exception": null,
+      "values": [],
+      "maps": []
+    }
+  ],
+  "assemblies": [
+    {
+      "name": "Emby.Server.Implementations",
+      "path": "D:\\mediamanager\\.test-output\\validation\\library-scan-lifecycle-oracle-20261005-2\\bin\\Release\\net10.0\\Emby.Server.Implementations.dll",
+      "sha256": "ccff8514100a65508b65882d5881463fe4ff73ea07eb4d2b2d98e234d7b4ac99"
+    },
+    {
+      "name": "MediaBrowser.Controller",
+      "path": "D:\\mediamanager\\.test-output\\validation\\library-scan-lifecycle-oracle-20261005-2\\bin\\Release\\net10.0\\MediaBrowser.Controller.dll",
+      "sha256": "56a527307ef93f810fdadec33ba8380cc8416d38cb1cfea92297b0f65288808e"
+    },
+    {
+      "name": "Jellyfin.Server.Implementations",
+      "path": "D:\\mediamanager\\.test-output\\validation\\library-scan-lifecycle-oracle-20261005-2\\bin\\Release\\net10.0\\Jellyfin.Server.Implementations.dll",
+      "sha256": "b91a6797f81f8563b8896c3da3e5cd4e9d11c61eb084578bf7b81108c3c3e2e6"
+    },
+    {
+      "name": "Jellyfin.Database.Providers.Sqlite",
+      "path": "D:\\mediamanager\\.test-output\\validation\\library-scan-lifecycle-oracle-20261005-2\\bin\\Release\\net10.0\\Jellyfin.Database.Providers.Sqlite.dll",
+      "sha256": "eefedf49a1c6c62c7eab9b4347c0bca377c3e059ec61ef26a08148de7bba94bb"
+    },
+    {
+      "name": "System.Private.CoreLib",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Private.CoreLib.dll",
+      "sha256": "1125acc8106c43fc8bad2d203c4c4485df6182d292846c2fff415c1040c54678"
+    }
+  ],
+  "runtime": ".NET 10.0.12",
+  "scope": "Real ValidateMediaLibraryInternal, ValidateTopLibraryFolders, PerformLibraryValidation and RunPostScanTasks. Controlled aggregate/user-root ValidateChildrenInternal, metadata provider, lifecycle persistence and monitor. Real ignore cache and collection-directory existence. Four independent real ItemPersistenceService/EF SQLite inherited-link cleanup controls. No production recursive scanner, watcher or socket.",
+  "schemaVersion": 1,
+  "candidateVerified": false,
+  "inputSha256": "f9f9499960349aa0e638ec33b11538aee8ee4c4c55fcc6326740d7892c54a7f7",
+  "sourceFilesSha256": "35d6c2b822bc325562d48b7b4e9059edad7d069aaeee0bb31546c71511c9a756"
+}

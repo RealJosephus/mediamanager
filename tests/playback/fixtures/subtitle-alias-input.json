@@ -1,0 +1,1901 @@
+{
+  "profiles": [],
+  "subtitles": [
+    {
+      "name": "srt-srt-0-0-true",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "srt",
+      "start": 0,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "srt-srt-0-0-false",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "srt",
+      "start": 0,
+      "end": 0,
+      "copy": false
+    },
+    {
+      "name": "srt-srt-20000000-0-true",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "srt",
+      "start": 20000000,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "srt-srt-20000000-0-false",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "srt",
+      "start": 20000000,
+      "end": 0,
+      "copy": false
+    },
+    {
+      "name": "srt-srt-35000000-0-true",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "srt",
+      "start": 35000000,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "srt-srt-35000000-0-false",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "srt",
+      "start": 35000000,
+      "end": 0,
+      "copy": false
+    },
+    {
+      "name": "srt-srt-50000000-0-true",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "srt",
+      "start": 50000000,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "srt-srt-50000000-0-false",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "srt",
+      "start": 50000000,
+      "end": 0,
+      "copy": false
+    },
+    {
+      "name": "srt-srt-50000001-0-true",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "srt",
+      "start": 50000001,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "srt-srt-50000001-0-false",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "srt",
+      "start": 50000001,
+      "end": 0,
+      "copy": false
+    },
+    {
+      "name": "srt-srt-0-35000000-true",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "srt",
+      "start": 0,
+      "end": 35000000,
+      "copy": true
+    },
+    {
+      "name": "srt-srt-0-35000000-false",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "srt",
+      "start": 0,
+      "end": 35000000,
+      "copy": false
+    },
+    {
+      "name": "srt-srt-20000000-40000000-true",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "srt",
+      "start": 20000000,
+      "end": 40000000,
+      "copy": true
+    },
+    {
+      "name": "srt-srt-20000000-40000000-false",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "srt",
+      "start": 20000000,
+      "end": 40000000,
+      "copy": false
+    },
+    {
+      "name": "srt-srt-10001-0-true",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "srt",
+      "start": 10001,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "srt-srt-10001-0-false",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "srt",
+      "start": 10001,
+      "end": 0,
+      "copy": false
+    },
+    {
+      "name": "srt-srt-15000-0-true",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "srt",
+      "start": 15000,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "srt-srt-15000-0-false",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "srt",
+      "start": 15000,
+      "end": 0,
+      "copy": false
+    },
+    {
+      "name": "srt-subrip-0-0-true",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "subrip",
+      "start": 0,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "srt-subrip-0-0-false",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "subrip",
+      "start": 0,
+      "end": 0,
+      "copy": false
+    },
+    {
+      "name": "srt-subrip-20000000-0-true",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "subrip",
+      "start": 20000000,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "srt-subrip-20000000-0-false",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "subrip",
+      "start": 20000000,
+      "end": 0,
+      "copy": false
+    },
+    {
+      "name": "srt-subrip-35000000-0-true",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "subrip",
+      "start": 35000000,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "srt-subrip-35000000-0-false",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "subrip",
+      "start": 35000000,
+      "end": 0,
+      "copy": false
+    },
+    {
+      "name": "srt-subrip-50000000-0-true",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "subrip",
+      "start": 50000000,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "srt-subrip-50000000-0-false",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "subrip",
+      "start": 50000000,
+      "end": 0,
+      "copy": false
+    },
+    {
+      "name": "srt-subrip-50000001-0-true",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "subrip",
+      "start": 50000001,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "srt-subrip-50000001-0-false",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "subrip",
+      "start": 50000001,
+      "end": 0,
+      "copy": false
+    },
+    {
+      "name": "srt-subrip-0-35000000-true",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "subrip",
+      "start": 0,
+      "end": 35000000,
+      "copy": true
+    },
+    {
+      "name": "srt-subrip-0-35000000-false",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "subrip",
+      "start": 0,
+      "end": 35000000,
+      "copy": false
+    },
+    {
+      "name": "srt-subrip-20000000-40000000-true",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "subrip",
+      "start": 20000000,
+      "end": 40000000,
+      "copy": true
+    },
+    {
+      "name": "srt-subrip-20000000-40000000-false",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "subrip",
+      "start": 20000000,
+      "end": 40000000,
+      "copy": false
+    },
+    {
+      "name": "srt-subrip-10001-0-true",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "subrip",
+      "start": 10001,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "srt-subrip-10001-0-false",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "subrip",
+      "start": 10001,
+      "end": 0,
+      "copy": false
+    },
+    {
+      "name": "srt-subrip-15000-0-true",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "subrip",
+      "start": 15000,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "srt-subrip-15000-0-false",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "subrip",
+      "start": 15000,
+      "end": 0,
+      "copy": false
+    },
+    {
+      "name": "srt-vtt-0-0-true",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "vtt",
+      "start": 0,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "srt-vtt-0-0-false",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "vtt",
+      "start": 0,
+      "end": 0,
+      "copy": false
+    },
+    {
+      "name": "srt-vtt-20000000-0-true",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "vtt",
+      "start": 20000000,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "srt-vtt-20000000-0-false",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "vtt",
+      "start": 20000000,
+      "end": 0,
+      "copy": false
+    },
+    {
+      "name": "srt-vtt-35000000-0-true",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "vtt",
+      "start": 35000000,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "srt-vtt-35000000-0-false",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "vtt",
+      "start": 35000000,
+      "end": 0,
+      "copy": false
+    },
+    {
+      "name": "srt-vtt-50000000-0-true",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "vtt",
+      "start": 50000000,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "srt-vtt-50000000-0-false",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "vtt",
+      "start": 50000000,
+      "end": 0,
+      "copy": false
+    },
+    {
+      "name": "srt-vtt-50000001-0-true",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "vtt",
+      "start": 50000001,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "srt-vtt-50000001-0-false",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "vtt",
+      "start": 50000001,
+      "end": 0,
+      "copy": false
+    },
+    {
+      "name": "srt-vtt-0-35000000-true",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "vtt",
+      "start": 0,
+      "end": 35000000,
+      "copy": true
+    },
+    {
+      "name": "srt-vtt-0-35000000-false",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "vtt",
+      "start": 0,
+      "end": 35000000,
+      "copy": false
+    },
+    {
+      "name": "srt-vtt-20000000-40000000-true",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "vtt",
+      "start": 20000000,
+      "end": 40000000,
+      "copy": true
+    },
+    {
+      "name": "srt-vtt-20000000-40000000-false",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "vtt",
+      "start": 20000000,
+      "end": 40000000,
+      "copy": false
+    },
+    {
+      "name": "srt-vtt-10001-0-true",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "vtt",
+      "start": 10001,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "srt-vtt-10001-0-false",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "vtt",
+      "start": 10001,
+      "end": 0,
+      "copy": false
+    },
+    {
+      "name": "srt-vtt-15000-0-true",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "vtt",
+      "start": 15000,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "srt-vtt-15000-0-false",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "vtt",
+      "start": 15000,
+      "end": 0,
+      "copy": false
+    },
+    {
+      "name": "srt-webvtt-0-0-true",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "webvtt",
+      "start": 0,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "srt-webvtt-0-0-false",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "webvtt",
+      "start": 0,
+      "end": 0,
+      "copy": false
+    },
+    {
+      "name": "srt-webvtt-20000000-0-true",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "webvtt",
+      "start": 20000000,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "srt-webvtt-20000000-0-false",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "webvtt",
+      "start": 20000000,
+      "end": 0,
+      "copy": false
+    },
+    {
+      "name": "srt-webvtt-35000000-0-true",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "webvtt",
+      "start": 35000000,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "srt-webvtt-35000000-0-false",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "webvtt",
+      "start": 35000000,
+      "end": 0,
+      "copy": false
+    },
+    {
+      "name": "srt-webvtt-50000000-0-true",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "webvtt",
+      "start": 50000000,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "srt-webvtt-50000000-0-false",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "webvtt",
+      "start": 50000000,
+      "end": 0,
+      "copy": false
+    },
+    {
+      "name": "srt-webvtt-50000001-0-true",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "webvtt",
+      "start": 50000001,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "srt-webvtt-50000001-0-false",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "webvtt",
+      "start": 50000001,
+      "end": 0,
+      "copy": false
+    },
+    {
+      "name": "srt-webvtt-0-35000000-true",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "webvtt",
+      "start": 0,
+      "end": 35000000,
+      "copy": true
+    },
+    {
+      "name": "srt-webvtt-0-35000000-false",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "webvtt",
+      "start": 0,
+      "end": 35000000,
+      "copy": false
+    },
+    {
+      "name": "srt-webvtt-20000000-40000000-true",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "webvtt",
+      "start": 20000000,
+      "end": 40000000,
+      "copy": true
+    },
+    {
+      "name": "srt-webvtt-20000000-40000000-false",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "webvtt",
+      "start": 20000000,
+      "end": 40000000,
+      "copy": false
+    },
+    {
+      "name": "srt-webvtt-10001-0-true",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "webvtt",
+      "start": 10001,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "srt-webvtt-10001-0-false",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "webvtt",
+      "start": 10001,
+      "end": 0,
+      "copy": false
+    },
+    {
+      "name": "srt-webvtt-15000-0-true",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "webvtt",
+      "start": 15000,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "srt-webvtt-15000-0-false",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "webvtt",
+      "start": 15000,
+      "end": 0,
+      "copy": false
+    },
+    {
+      "name": "srt-json-0-0-true",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "json",
+      "start": 0,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "srt-json-0-0-false",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "json",
+      "start": 0,
+      "end": 0,
+      "copy": false
+    },
+    {
+      "name": "srt-json-20000000-0-true",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "json",
+      "start": 20000000,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "srt-json-20000000-0-false",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "json",
+      "start": 20000000,
+      "end": 0,
+      "copy": false
+    },
+    {
+      "name": "srt-json-35000000-0-true",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "json",
+      "start": 35000000,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "srt-json-35000000-0-false",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "json",
+      "start": 35000000,
+      "end": 0,
+      "copy": false
+    },
+    {
+      "name": "srt-json-50000000-0-true",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "json",
+      "start": 50000000,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "srt-json-50000000-0-false",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "json",
+      "start": 50000000,
+      "end": 0,
+      "copy": false
+    },
+    {
+      "name": "srt-json-50000001-0-true",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "json",
+      "start": 50000001,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "srt-json-50000001-0-false",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "json",
+      "start": 50000001,
+      "end": 0,
+      "copy": false
+    },
+    {
+      "name": "srt-json-0-35000000-true",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "json",
+      "start": 0,
+      "end": 35000000,
+      "copy": true
+    },
+    {
+      "name": "srt-json-0-35000000-false",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "json",
+      "start": 0,
+      "end": 35000000,
+      "copy": false
+    },
+    {
+      "name": "srt-json-20000000-40000000-true",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "json",
+      "start": 20000000,
+      "end": 40000000,
+      "copy": true
+    },
+    {
+      "name": "srt-json-20000000-40000000-false",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "json",
+      "start": 20000000,
+      "end": 40000000,
+      "copy": false
+    },
+    {
+      "name": "srt-json-10001-0-true",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "json",
+      "start": 10001,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "srt-json-10001-0-false",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "json",
+      "start": 10001,
+      "end": 0,
+      "copy": false
+    },
+    {
+      "name": "srt-json-15000-0-true",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "json",
+      "start": 15000,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "srt-json-15000-0-false",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "srt",
+      "outputFormat": "json",
+      "start": 15000,
+      "end": 0,
+      "copy": false
+    },
+    {
+      "name": "vtt-srt-0-0-true",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "srt",
+      "start": 0,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "vtt-srt-0-0-false",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "srt",
+      "start": 0,
+      "end": 0,
+      "copy": false
+    },
+    {
+      "name": "vtt-srt-20000000-0-true",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "srt",
+      "start": 20000000,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "vtt-srt-20000000-0-false",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "srt",
+      "start": 20000000,
+      "end": 0,
+      "copy": false
+    },
+    {
+      "name": "vtt-srt-35000000-0-true",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "srt",
+      "start": 35000000,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "vtt-srt-35000000-0-false",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "srt",
+      "start": 35000000,
+      "end": 0,
+      "copy": false
+    },
+    {
+      "name": "vtt-srt-50000000-0-true",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "srt",
+      "start": 50000000,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "vtt-srt-50000000-0-false",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "srt",
+      "start": 50000000,
+      "end": 0,
+      "copy": false
+    },
+    {
+      "name": "vtt-srt-50000001-0-true",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "srt",
+      "start": 50000001,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "vtt-srt-50000001-0-false",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "srt",
+      "start": 50000001,
+      "end": 0,
+      "copy": false
+    },
+    {
+      "name": "vtt-srt-0-35000000-true",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "srt",
+      "start": 0,
+      "end": 35000000,
+      "copy": true
+    },
+    {
+      "name": "vtt-srt-0-35000000-false",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "srt",
+      "start": 0,
+      "end": 35000000,
+      "copy": false
+    },
+    {
+      "name": "vtt-srt-20000000-40000000-true",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "srt",
+      "start": 20000000,
+      "end": 40000000,
+      "copy": true
+    },
+    {
+      "name": "vtt-srt-20000000-40000000-false",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "srt",
+      "start": 20000000,
+      "end": 40000000,
+      "copy": false
+    },
+    {
+      "name": "vtt-srt-10001-0-true",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "srt",
+      "start": 10001,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "vtt-srt-10001-0-false",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "srt",
+      "start": 10001,
+      "end": 0,
+      "copy": false
+    },
+    {
+      "name": "vtt-srt-15000-0-true",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "srt",
+      "start": 15000,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "vtt-srt-15000-0-false",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "srt",
+      "start": 15000,
+      "end": 0,
+      "copy": false
+    },
+    {
+      "name": "vtt-subrip-0-0-true",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "subrip",
+      "start": 0,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "vtt-subrip-0-0-false",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "subrip",
+      "start": 0,
+      "end": 0,
+      "copy": false
+    },
+    {
+      "name": "vtt-subrip-20000000-0-true",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "subrip",
+      "start": 20000000,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "vtt-subrip-20000000-0-false",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "subrip",
+      "start": 20000000,
+      "end": 0,
+      "copy": false
+    },
+    {
+      "name": "vtt-subrip-35000000-0-true",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "subrip",
+      "start": 35000000,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "vtt-subrip-35000000-0-false",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "subrip",
+      "start": 35000000,
+      "end": 0,
+      "copy": false
+    },
+    {
+      "name": "vtt-subrip-50000000-0-true",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "subrip",
+      "start": 50000000,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "vtt-subrip-50000000-0-false",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "subrip",
+      "start": 50000000,
+      "end": 0,
+      "copy": false
+    },
+    {
+      "name": "vtt-subrip-50000001-0-true",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "subrip",
+      "start": 50000001,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "vtt-subrip-50000001-0-false",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "subrip",
+      "start": 50000001,
+      "end": 0,
+      "copy": false
+    },
+    {
+      "name": "vtt-subrip-0-35000000-true",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "subrip",
+      "start": 0,
+      "end": 35000000,
+      "copy": true
+    },
+    {
+      "name": "vtt-subrip-0-35000000-false",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "subrip",
+      "start": 0,
+      "end": 35000000,
+      "copy": false
+    },
+    {
+      "name": "vtt-subrip-20000000-40000000-true",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "subrip",
+      "start": 20000000,
+      "end": 40000000,
+      "copy": true
+    },
+    {
+      "name": "vtt-subrip-20000000-40000000-false",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "subrip",
+      "start": 20000000,
+      "end": 40000000,
+      "copy": false
+    },
+    {
+      "name": "vtt-subrip-10001-0-true",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "subrip",
+      "start": 10001,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "vtt-subrip-10001-0-false",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "subrip",
+      "start": 10001,
+      "end": 0,
+      "copy": false
+    },
+    {
+      "name": "vtt-subrip-15000-0-true",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "subrip",
+      "start": 15000,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "vtt-subrip-15000-0-false",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "subrip",
+      "start": 15000,
+      "end": 0,
+      "copy": false
+    },
+    {
+      "name": "vtt-vtt-0-0-true",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "vtt",
+      "start": 0,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "vtt-vtt-0-0-false",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "vtt",
+      "start": 0,
+      "end": 0,
+      "copy": false
+    },
+    {
+      "name": "vtt-vtt-20000000-0-true",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "vtt",
+      "start": 20000000,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "vtt-vtt-20000000-0-false",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "vtt",
+      "start": 20000000,
+      "end": 0,
+      "copy": false
+    },
+    {
+      "name": "vtt-vtt-35000000-0-true",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "vtt",
+      "start": 35000000,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "vtt-vtt-35000000-0-false",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "vtt",
+      "start": 35000000,
+      "end": 0,
+      "copy": false
+    },
+    {
+      "name": "vtt-vtt-50000000-0-true",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "vtt",
+      "start": 50000000,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "vtt-vtt-50000000-0-false",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "vtt",
+      "start": 50000000,
+      "end": 0,
+      "copy": false
+    },
+    {
+      "name": "vtt-vtt-50000001-0-true",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "vtt",
+      "start": 50000001,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "vtt-vtt-50000001-0-false",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "vtt",
+      "start": 50000001,
+      "end": 0,
+      "copy": false
+    },
+    {
+      "name": "vtt-vtt-0-35000000-true",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "vtt",
+      "start": 0,
+      "end": 35000000,
+      "copy": true
+    },
+    {
+      "name": "vtt-vtt-0-35000000-false",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "vtt",
+      "start": 0,
+      "end": 35000000,
+      "copy": false
+    },
+    {
+      "name": "vtt-vtt-20000000-40000000-true",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "vtt",
+      "start": 20000000,
+      "end": 40000000,
+      "copy": true
+    },
+    {
+      "name": "vtt-vtt-20000000-40000000-false",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "vtt",
+      "start": 20000000,
+      "end": 40000000,
+      "copy": false
+    },
+    {
+      "name": "vtt-vtt-10001-0-true",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "vtt",
+      "start": 10001,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "vtt-vtt-10001-0-false",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "vtt",
+      "start": 10001,
+      "end": 0,
+      "copy": false
+    },
+    {
+      "name": "vtt-vtt-15000-0-true",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "vtt",
+      "start": 15000,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "vtt-vtt-15000-0-false",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "vtt",
+      "start": 15000,
+      "end": 0,
+      "copy": false
+    },
+    {
+      "name": "vtt-webvtt-0-0-true",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "webvtt",
+      "start": 0,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "vtt-webvtt-0-0-false",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "webvtt",
+      "start": 0,
+      "end": 0,
+      "copy": false
+    },
+    {
+      "name": "vtt-webvtt-20000000-0-true",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "webvtt",
+      "start": 20000000,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "vtt-webvtt-20000000-0-false",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "webvtt",
+      "start": 20000000,
+      "end": 0,
+      "copy": false
+    },
+    {
+      "name": "vtt-webvtt-35000000-0-true",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "webvtt",
+      "start": 35000000,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "vtt-webvtt-35000000-0-false",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "webvtt",
+      "start": 35000000,
+      "end": 0,
+      "copy": false
+    },
+    {
+      "name": "vtt-webvtt-50000000-0-true",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "webvtt",
+      "start": 50000000,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "vtt-webvtt-50000000-0-false",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "webvtt",
+      "start": 50000000,
+      "end": 0,
+      "copy": false
+    },
+    {
+      "name": "vtt-webvtt-50000001-0-true",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "webvtt",
+      "start": 50000001,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "vtt-webvtt-50000001-0-false",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "webvtt",
+      "start": 50000001,
+      "end": 0,
+      "copy": false
+    },
+    {
+      "name": "vtt-webvtt-0-35000000-true",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "webvtt",
+      "start": 0,
+      "end": 35000000,
+      "copy": true
+    },
+    {
+      "name": "vtt-webvtt-0-35000000-false",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "webvtt",
+      "start": 0,
+      "end": 35000000,
+      "copy": false
+    },
+    {
+      "name": "vtt-webvtt-20000000-40000000-true",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "webvtt",
+      "start": 20000000,
+      "end": 40000000,
+      "copy": true
+    },
+    {
+      "name": "vtt-webvtt-20000000-40000000-false",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "webvtt",
+      "start": 20000000,
+      "end": 40000000,
+      "copy": false
+    },
+    {
+      "name": "vtt-webvtt-10001-0-true",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "webvtt",
+      "start": 10001,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "vtt-webvtt-10001-0-false",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "webvtt",
+      "start": 10001,
+      "end": 0,
+      "copy": false
+    },
+    {
+      "name": "vtt-webvtt-15000-0-true",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "webvtt",
+      "start": 15000,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "vtt-webvtt-15000-0-false",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "webvtt",
+      "start": 15000,
+      "end": 0,
+      "copy": false
+    },
+    {
+      "name": "vtt-json-0-0-true",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "json",
+      "start": 0,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "vtt-json-0-0-false",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "json",
+      "start": 0,
+      "end": 0,
+      "copy": false
+    },
+    {
+      "name": "vtt-json-20000000-0-true",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "json",
+      "start": 20000000,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "vtt-json-20000000-0-false",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "json",
+      "start": 20000000,
+      "end": 0,
+      "copy": false
+    },
+    {
+      "name": "vtt-json-35000000-0-true",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "json",
+      "start": 35000000,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "vtt-json-35000000-0-false",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "json",
+      "start": 35000000,
+      "end": 0,
+      "copy": false
+    },
+    {
+      "name": "vtt-json-50000000-0-true",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "json",
+      "start": 50000000,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "vtt-json-50000000-0-false",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "json",
+      "start": 50000000,
+      "end": 0,
+      "copy": false
+    },
+    {
+      "name": "vtt-json-50000001-0-true",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "json",
+      "start": 50000001,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "vtt-json-50000001-0-false",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "json",
+      "start": 50000001,
+      "end": 0,
+      "copy": false
+    },
+    {
+      "name": "vtt-json-0-35000000-true",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "json",
+      "start": 0,
+      "end": 35000000,
+      "copy": true
+    },
+    {
+      "name": "vtt-json-0-35000000-false",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "json",
+      "start": 0,
+      "end": 35000000,
+      "copy": false
+    },
+    {
+      "name": "vtt-json-20000000-40000000-true",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "json",
+      "start": 20000000,
+      "end": 40000000,
+      "copy": true
+    },
+    {
+      "name": "vtt-json-20000000-40000000-false",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "json",
+      "start": 20000000,
+      "end": 40000000,
+      "copy": false
+    },
+    {
+      "name": "vtt-json-10001-0-true",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "json",
+      "start": 10001,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "vtt-json-10001-0-false",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "json",
+      "start": 10001,
+      "end": 0,
+      "copy": false
+    },
+    {
+      "name": "vtt-json-15000-0-true",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "json",
+      "start": 15000,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "vtt-json-15000-0-false",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "vtt",
+      "outputFormat": "json",
+      "start": 15000,
+      "end": 0,
+      "copy": false
+    },
+    {
+      "name": "parser-alias-subrip-srt",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "subrip",
+      "outputFormat": "srt",
+      "start": 0,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "parser-alias-subrip-subrip",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "subrip",
+      "outputFormat": "subrip",
+      "start": 0,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "parser-alias-subrip-vtt",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "subrip",
+      "outputFormat": "vtt",
+      "start": 0,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "parser-alias-subrip-webvtt",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "subrip",
+      "outputFormat": "webvtt",
+      "start": 0,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "parser-alias-subrip-json",
+      "text": "7\r\n00:00:01,000 --> 00:00:03,500\r\n中文 & <i>one</i>\r\nsecond line\r\n\r\n42\r\n00:00:04,000 --> 00:00:05,000\r\nTwo\r\n",
+      "inputFormat": "subrip",
+      "outputFormat": "json",
+      "start": 0,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "parser-alias-webvtt-srt",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "webvtt",
+      "outputFormat": "srt",
+      "start": 0,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "parser-alias-webvtt-subrip",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "webvtt",
+      "outputFormat": "subrip",
+      "start": 0,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "parser-alias-webvtt-vtt",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "webvtt",
+      "outputFormat": "vtt",
+      "start": 0,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "parser-alias-webvtt-webvtt",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "webvtt",
+      "outputFormat": "webvtt",
+      "start": 0,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "parser-alias-webvtt-json",
+      "text": "WEBVTT\r\n\r\nfirst\r\n00:00:01.000 --> 00:00:03.500\r\n中文 &amp; <i>one</i>\r\nsecond line\r\n\r\nsecond\r\n00:00:04.000 --> 00:00:05.000\r\nTwo\r\n",
+      "inputFormat": "webvtt",
+      "outputFormat": "json",
+      "start": 0,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "vtt-settings-srt",
+      "text": "WEBVTT\n\n00:01.000 --> 00:03.500 align:center line:90%\n<v Alice><c.red>Red</c> &lt;test&gt; &nbsp; &lrm; &rlm; &#39; &#x41;\n",
+      "inputFormat": "vtt",
+      "outputFormat": "srt",
+      "start": 0,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "vtt-settings-subrip",
+      "text": "WEBVTT\n\n00:01.000 --> 00:03.500 align:center line:90%\n<v Alice><c.red>Red</c> &lt;test&gt; &nbsp; &lrm; &rlm; &#39; &#x41;\n",
+      "inputFormat": "vtt",
+      "outputFormat": "subrip",
+      "start": 0,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "vtt-settings-vtt",
+      "text": "WEBVTT\n\n00:01.000 --> 00:03.500 align:center line:90%\n<v Alice><c.red>Red</c> &lt;test&gt; &nbsp; &lrm; &rlm; &#39; &#x41;\n",
+      "inputFormat": "vtt",
+      "outputFormat": "vtt",
+      "start": 0,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "vtt-settings-webvtt",
+      "text": "WEBVTT\n\n00:01.000 --> 00:03.500 align:center line:90%\n<v Alice><c.red>Red</c> &lt;test&gt; &nbsp; &lrm; &rlm; &#39; &#x41;\n",
+      "inputFormat": "vtt",
+      "outputFormat": "webvtt",
+      "start": 0,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "vtt-settings-json",
+      "text": "WEBVTT\n\n00:01.000 --> 00:03.500 align:center line:90%\n<v Alice><c.red>Red</c> &lt;test&gt; &nbsp; &lrm; &rlm; &#39; &#x41;\n",
+      "inputFormat": "vtt",
+      "outputFormat": "json",
+      "start": 0,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "vtt-note-srt",
+      "text": "WEBVTT\n\nNOTE hidden\n00:00:00.000 --> 00:00:01.000\nnot a cue\n\n00:00:01.000 --> 00:00:02.000\nShown\n",
+      "inputFormat": "vtt",
+      "outputFormat": "srt",
+      "start": 0,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "vtt-note-subrip",
+      "text": "WEBVTT\n\nNOTE hidden\n00:00:00.000 --> 00:00:01.000\nnot a cue\n\n00:00:01.000 --> 00:00:02.000\nShown\n",
+      "inputFormat": "vtt",
+      "outputFormat": "subrip",
+      "start": 0,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "vtt-note-vtt",
+      "text": "WEBVTT\n\nNOTE hidden\n00:00:00.000 --> 00:00:01.000\nnot a cue\n\n00:00:01.000 --> 00:00:02.000\nShown\n",
+      "inputFormat": "vtt",
+      "outputFormat": "vtt",
+      "start": 0,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "vtt-note-webvtt",
+      "text": "WEBVTT\n\nNOTE hidden\n00:00:00.000 --> 00:00:01.000\nnot a cue\n\n00:00:01.000 --> 00:00:02.000\nShown\n",
+      "inputFormat": "vtt",
+      "outputFormat": "webvtt",
+      "start": 0,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "vtt-note-json",
+      "text": "WEBVTT\n\nNOTE hidden\n00:00:00.000 --> 00:00:01.000\nnot a cue\n\n00:00:01.000 --> 00:00:02.000\nShown\n",
+      "inputFormat": "vtt",
+      "outputFormat": "json",
+      "start": 0,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "srt-tags-srt",
+      "text": "5\n00:00:01,000 --> 00:00:02,000\n<b>bold</b> <font color=\"red\">red</font> &amp; &lt;test&gt; {\\an8}top\n",
+      "inputFormat": "srt",
+      "outputFormat": "srt",
+      "start": 0,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "srt-tags-subrip",
+      "text": "5\n00:00:01,000 --> 00:00:02,000\n<b>bold</b> <font color=\"red\">red</font> &amp; &lt;test&gt; {\\an8}top\n",
+      "inputFormat": "srt",
+      "outputFormat": "subrip",
+      "start": 0,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "srt-tags-vtt",
+      "text": "5\n00:00:01,000 --> 00:00:02,000\n<b>bold</b> <font color=\"red\">red</font> &amp; &lt;test&gt; {\\an8}top\n",
+      "inputFormat": "srt",
+      "outputFormat": "vtt",
+      "start": 0,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "srt-tags-webvtt",
+      "text": "5\n00:00:01,000 --> 00:00:02,000\n<b>bold</b> <font color=\"red\">red</font> &amp; &lt;test&gt; {\\an8}top\n",
+      "inputFormat": "srt",
+      "outputFormat": "webvtt",
+      "start": 0,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "srt-tags-json",
+      "text": "5\n00:00:01,000 --> 00:00:02,000\n<b>bold</b> <font color=\"red\">red</font> &amp; &lt;test&gt; {\\an8}top\n",
+      "inputFormat": "srt",
+      "outputFormat": "json",
+      "start": 0,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "srt-whitespace-srt",
+      "text": "5\n00:00:01,000 --> 00:00:02,000\n  leading and trailing  \n  second  \n\n",
+      "inputFormat": "srt",
+      "outputFormat": "srt",
+      "start": 0,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "srt-whitespace-subrip",
+      "text": "5\n00:00:01,000 --> 00:00:02,000\n  leading and trailing  \n  second  \n\n",
+      "inputFormat": "srt",
+      "outputFormat": "subrip",
+      "start": 0,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "srt-whitespace-vtt",
+      "text": "5\n00:00:01,000 --> 00:00:02,000\n  leading and trailing  \n  second  \n\n",
+      "inputFormat": "srt",
+      "outputFormat": "vtt",
+      "start": 0,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "srt-whitespace-webvtt",
+      "text": "5\n00:00:01,000 --> 00:00:02,000\n  leading and trailing  \n  second  \n\n",
+      "inputFormat": "srt",
+      "outputFormat": "webvtt",
+      "start": 0,
+      "end": 0,
+      "copy": true
+    },
+    {
+      "name": "srt-whitespace-json",
+      "text": "5\n00:00:01,000 --> 00:00:02,000\n  leading and trailing  \n  second  \n\n",
+      "inputFormat": "srt",
+      "outputFormat": "json",
+      "start": 0,
+      "end": 0,
+      "copy": true
+    }
+  ],
+  "extensions": [
+    "srt",
+    "subrip",
+    "vtt",
+    "webvtt"
+  ]
+}

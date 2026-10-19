@@ -1,0 +1,269 @@
+[
+  {
+    "name": "empty file is swallowed with initial item state",
+    "text": "",
+    "initialName": "Initial"
+  },
+  {
+    "name": "no complete block preserves a parsed scalar prefix",
+    "text": "<episodedetails><episode>3</episode><title>Prefix</title><plot>Tail</plot><broken"
+  },
+  {
+    "name": "one complete block applies all direct fields",
+    "text": "<episodedetails><season>2</season><episode>4</episode><title>Only</title><showtitle>Series</showtitle></episodedetails>"
+  },
+  {
+    "name": "one complete block ignores a trailing partial block",
+    "text": "<episodedetails><episode>4</episode><title>Complete</title></episodedetails><episodedetails><episode>5</episode><title>Ignored"
+  },
+  {
+    "name": "one complete block ignores arbitrary trailing text",
+    "text": "<episodedetails><episode>4</episode><title>Complete</title></episodedetails>not xml at all"
+  },
+  {
+    "name": "episode closing tag matching is ordinal ignore case",
+    "text": "<episodedetails><episode>6</episode><title>Upper</title></EPISODEDETAILS>"
+  },
+  {
+    "name": "empty complete block leaves direct nullable strings unchanged",
+    "text": "<episodedetails></episodedetails>"
+  },
+  {
+    "name": "two reversed blocks sort before merging",
+    "text": "<episodedetails><episode>2</episode><title>Second</title></episodedetails><episodedetails><episode>1</episode><title>First</title></episodedetails>"
+  },
+  {
+    "name": "three blocks sort and merge in ascending episode order",
+    "text": "<episodedetails><episode>3</episode><title>Third</title></episodedetails><episodedetails><episode>1</episode><title>First</title></episodedetails><episodedetails><episode>2</episode><title>Second</title></episodedetails>"
+  },
+  {
+    "name": "equal episode numbers retain source order",
+    "text": "<episodedetails><episode>1</episode><title>First tie</title></episodedetails><episodedetails><episode>1</episode><title>Second tie</title></episodedetails>"
+  },
+  {
+    "name": "missing episode number sorts after numbered blocks",
+    "text": "<episodedetails><title>Missing</title></episodedetails><episodedetails><episode>7</episode><title>Numbered</title></episodedetails>"
+  },
+  {
+    "name": "negative and zero episode numbers use ordinary ascending order",
+    "text": "<episodedetails><episode>0</episode><title>Zero</title></episodedetails><episodedetails><episode>-1</episode><title>Negative</title></episodedetails>"
+  },
+  {
+    "name": "malformed later complete block aborts the merge without target replay",
+    "text": "<episodedetails><episode>2</episode><title>Valid temporary</title></episodedetails><episodedetails><episode>1</episode><title>Broken</bad></episodedetails>",
+    "initialName": "Initial"
+  },
+  {
+    "name": "malformed first complete block aborts before later blocks",
+    "text": "<episodedetails><episode>2</episode><title>Broken</bad></episodedetails><episodedetails><episode>1</episode><title>Later</title></episodedetails>",
+    "initialName": "Initial"
+  },
+  {
+    "name": "malformed residual tail after a complete block is ignored",
+    "text": "<episodedetails><episode>1</episode><title>Complete</title></episodedetails><episodedetails><title>Broken</bad>"
+  },
+  {
+    "name": "inter-block garbage belongs to the later block and aborts merge",
+    "text": "<episodedetails><episode>1</episode><title>First</title></episodedetails>garbage<episodedetails><episode>2</episode><title>Second</title></episodedetails>",
+    "initialName": "Initial"
+  },
+  {
+    "name": "episode numbering fields use the winning block",
+    "text": "<episodedetails><season>5</season><episode>6</episode><episodenumberend>8</episodenumberend><airsbefore_episode>9</airsbefore_episode><airsafter_season>10</airsafter_season><airsbefore_season>11</airsbefore_season></episodedetails>"
+  },
+  {
+    "name": "display aliases map to the special numbering fields",
+    "text": "<episodedetails><displayepisode>12</displayepisode><displayafterseason>13</displayafterseason><displayseason>14</displayseason></episodedetails>"
+  },
+  {
+    "name": "duplicate numbering fields commit the last valid value",
+    "text": "<episodedetails><season>1</season><season>2</season><episode>3</episode><episode>4</episode><displayepisode>5</displayepisode><airsbefore_episode>6</airsbefore_episode></episodedetails>"
+  },
+  {
+    "name": "invalid numbering fields preserve initial values",
+    "text": "<episodedetails><season>bad</season><episode>2147483648</episode><episodenumberend></episodenumberend><displayepisode>1.5</displayepisode></episodedetails>",
+    "initialParentIndexNumber": 21,
+    "initialIndexNumber": 22,
+    "initialIndexNumberEnd": 23,
+    "initialAirsBeforeEpisodeNumber": 24
+  },
+  {
+    "name": "winning explicit episode end survives a lower additional episode",
+    "text": "<episodedetails><episode>1</episode><episodenumberend>9</episodenumberend><title>First</title></episodedetails><episodedetails><episode>2</episode><title>Second</title></episodedetails>"
+  },
+  {
+    "name": "higher additional episode raises episode end",
+    "text": "<episodedetails><episode>1</episode><episodenumberend>2</episodenumberend><title>First</title></episodedetails><episodedetails><episode>7</episode><title>Seventh</title></episodedetails>"
+  },
+  {
+    "name": "additional block numbering and display scalars are otherwise discarded",
+    "text": "<episodedetails><episode>1</episode><season>2</season><showtitle>Winner Series</showtitle><displayepisode>3</displayepisode></episodedetails><episodedetails><episode>4</episode><season>20</season><showtitle>Discarded Series</showtitle><displayepisode>30</displayepisode></episodedetails>"
+  },
+  {
+    "name": "winning block keeps season display and show title scalars",
+    "text": "<episodedetails><episode>5</episode><season>6</season><showtitle>Winner Series</showtitle><displayepisode>7</displayepisode><displayafterseason>8</displayafterseason><displayseason>9</displayseason></episodedetails><episodedetails><episode>10</episode></episodedetails>"
+  },
+  {
+    "name": "name original title and overview merge independently",
+    "text": "<episodedetails><episode>2</episode><title>Second</title><originaltitle>Original 2</originaltitle><plot>Overview 2</plot></episodedetails><episodedetails><episode>1</episode><title>First</title><originaltitle>Original 1</originaltitle><plot>Overview 1</plot></episodedetails>"
+  },
+  {
+    "name": "missing winning strings still receive leading merge separators",
+    "text": "<episodedetails><episode>1</episode></episodedetails><episodedetails><episode>2</episode><title>Second</title><originaltitle>Original 2</originaltitle><plot>Overview 2</plot></episodedetails>"
+  },
+  {
+    "name": "empty additional strings add no merge separators",
+    "text": "<episodedetails><episode>1</episode><title>First</title><originaltitle>Original 1</originaltitle><plot>Overview 1</plot></episodedetails><episodedetails><episode>2</episode></episodedetails>"
+  },
+  {
+    "name": "winning fields overwrite initial strings before merge",
+    "text": "<episodedetails><episode>1</episode><title>Winner</title></episodedetails><episodedetails><episode>2</episode><title>Additional</title></episodedetails>",
+    "initialName": "Initial",
+    "initialOriginalTitle": "Initial original",
+    "initialOverview": "Initial overview"
+  },
+  {
+    "name": "winning block keeps representative scalar metadata",
+    "text": "<episodedetails><episode>1</episode><year>2024</year><rating>7.5</rating><criticrating>81</criticrating><runtime>42</runtime><mpaa>TV-14</mpaa><genre>Drama / Mystery</genre><studio>Studio A</studio><tag>Tag A</tag></episodedetails><episodedetails><episode>2</episode><year>1999</year><rating>1</rating><runtime>5</runtime></episodedetails>"
+  },
+  {
+    "name": "winning provider identifiers are retained",
+    "text": "<episodedetails><episode>1</episode><uniqueid type=\"tmdb\">101</uniqueid><imdb_id>tt0000101</imdb_id></episodedetails><episodedetails><episode>2</episode><uniqueid type=\"tmdb\">202</uniqueid><imdb_id>tt0000202</imdb_id></episodedetails>"
+  },
+  {
+    "name": "additional provider identifiers do not merge",
+    "text": "<episodedetails><episode>1</episode><uniqueid type=\"tvdb\">303</uniqueid></episodedetails><episodedetails><episode>2</episode><uniqueid type=\"tmdb\">404</uniqueid></episodedetails>"
+  },
+  {
+    "name": "custom provider identifier survives on the winning block",
+    "text": "<episodedetails><episode>1</episode><uniqueid type=\"Custom.Provider\">custom-1</uniqueid></episodedetails><episodedetails><episode>2</episode><uniqueid type=\"Custom.Provider\">custom-2</uniqueid></episodedetails>"
+  },
+  {
+    "name": "duplicate provider identifier in the winner keeps the last value",
+    "text": "<episodedetails><episode>1</episode><uniqueid type=\"tmdb\">1</uniqueid><uniqueid type=\"tmdb\">2</uniqueid></episodedetails><episodedetails><episode>3</episode></episodedetails>"
+  },
+  {
+    "name": "winner people and remote image survive while additional collections are discarded",
+    "text": "<episodedetails><episode>1</episode><actor><name>Winner Actor</name><role>Lead</role></actor><thumb>https://example.test/winner.jpg</thumb></episodedetails><episodedetails><episode>2</episode><actor><name>Discarded Actor</name></actor><thumb aspect=\"banner\">https://example.test/discarded.jpg</thumb></episodedetails>"
+  },
+  {
+    "name": "episode fetch resets existing people even for an empty block",
+    "text": "<episodedetails></episodedetails>",
+    "initialPeople": true
+  },
+  {
+    "name": "single truncated block keeps earlier scalar but not unfinished scalar",
+    "text": "<episodedetails><title>Committed</title><plot>Unfinished</plot><broken"
+  },
+  {
+    "name": "nested scalar error keeps an earlier direct field",
+    "text": "<episodedetails><episode>3</episode><title><inner>Invalid</inner></title></episodedetails>"
+  },
+  {
+    "name": "xml failure after temporary userdata keeps its side effect but skips target replay",
+    "text": "<episodedetails><episode>2</episode><watched>true</watched></episodedetails><episodedetails><episode>1</episode><title>Broken</bad></episodedetails>",
+    "existingId": true,
+    "initialName": "Initial"
+  },
+  {
+    "name": "single zero id block performs transient userdata reads only",
+    "text": "<episodedetails><watched>true</watched><playcount>2</playcount><lastplayed>2025-01-02 03:04:05</lastplayed></episodedetails>"
+  },
+  {
+    "name": "single existing item saves userdata nodes sequentially",
+    "text": "<episodedetails><watched>true</watched><playcount>2</playcount><lastplayed>2025-01-02 03:04:05</lastplayed></episodedetails>",
+    "existingId": true
+  },
+  {
+    "name": "multi block zero id parses every temporary block then winner again",
+    "text": "<episodedetails><episode>2</episode><playcount>2</playcount></episodedetails><episodedetails><episode>1</episode><watched>true</watched></episodedetails>"
+  },
+  {
+    "name": "multi block existing item saves only winner after transient passes",
+    "text": "<episodedetails><episode>2</episode><playcount>2</playcount></episodedetails><episodedetails><episode>1</episode><watched>true</watched></episodedetails>",
+    "existingId": true
+  },
+  {
+    "name": "additional temporary userdata mutation is visible in winner persisted snapshot",
+    "text": "<episodedetails><episode>2</episode><playcount>9</playcount></episodedetails><episodedetails><episode>1</episode><watched>true</watched></episodedetails>",
+    "existingId": true
+  },
+  {
+    "name": "userdata failure in a later temporary block stops before target replay",
+    "text": "<episodedetails><episode>2</episode><watched>true</watched></episodedetails><episodedetails><episode>1</episode><playcount>2</playcount></episodedetails>",
+    "existingId": true,
+    "initialName": "Initial",
+    "failDataAt": 2,
+    "asyncOnly": true
+  },
+  {
+    "name": "winner save failure preserves its earlier scalar target prefix",
+    "text": "<episodedetails><episode>2</episode></episodedetails><episodedetails><episode>1</episode><title>Winner prefix</title><watched>true</watched><plot>Not reached</plot></episodedetails>",
+    "existingId": true,
+    "failSaveAt": 1,
+    "asyncOnly": true
+  },
+  {
+    "name": "pre cancellation propagates before the first episode node",
+    "text": "<episodedetails><episode>1</episode><title>Not reached</title></episodedetails>",
+    "cancelBefore": true
+  },
+  {
+    "name": "cancellation after temporary userdata is observed at the next block",
+    "text": "<episodedetails><episode>2</episode><watched>true</watched></episodedetails><episodedetails><episode>1</episode><title>Not reached</title></episodedetails>",
+    "existingId": true,
+    "cancelAfterData": 1,
+    "asyncOnly": true
+  },
+  {
+    "name": "cancellation after winner save preserves the saved prefix",
+    "text": "<episodedetails><episode>2</episode></episodedetails><episodedetails><episode>1</episode><watched>true</watched><title>Not reached</title></episodedetails>",
+    "existingId": true,
+    "cancelAfterSave": 1,
+    "asyncOnly": true
+  },
+  {
+    "name": "user manager failure is not swallowed as an xml error",
+    "text": "<episodedetails><title>Prefix</title><watched>true</watched><plot>Not reached</plot></episodedetails>",
+    "existingId": true,
+    "failUserAt": 1,
+    "asyncOnly": true
+  },
+  {
+    "name": "pre cancellation on an empty file is preceded by xml setup",
+    "text": "",
+    "cancelBefore": true
+  },
+  {
+    "name": "pre cancellation on a self closing root sees no interactive child",
+    "text": "<episodedetails/>",
+    "cancelBefore": true
+  },
+  {
+    "name": "pre cancellation on a paired empty root observes the end element",
+    "text": "<episodedetails></episodedetails>",
+    "cancelBefore": true
+  },
+  {
+    "name": "pre cancellation on direct root text observes the text node",
+    "text": "<episodedetails>text</episodedetails>",
+    "cancelBefore": true
+  },
+  {
+    "name": "malformed setup xml is swallowed before pre cancellation",
+    "text": "<",
+    "cancelBefore": true
+  },
+  {
+    "name": "pre cancellation in a multi block file stops in the first temporary block",
+    "text": "<episodedetails></episodedetails><episodedetails></episodedetails>",
+    "cancelBefore": true
+  },
+  {
+    "name": "cancellation after the final winner save is observed before root completion",
+    "text": "<episodedetails><episode>2</episode></episodedetails><episodedetails><episode>1</episode><watched>true</watched></episodedetails>",
+    "existingId": true,
+    "cancelAfterSave": 1,
+    "asyncOnly": true
+  }
+]

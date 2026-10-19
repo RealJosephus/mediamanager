@@ -1,0 +1,217 @@
+[
+  {
+    "name": "complete actor commits before immediate truncated token",
+    "type": "Movie",
+    "text": "<movie><actor><name>Committed Actor</name><role>Lead</role><order>7</order></actor><broken"
+  },
+  {
+    "name": "complete actor commits before unclosed root eof",
+    "type": "Movie",
+    "text": "<movie><actor><name>Committed At EOF</name><role>Support</role></actor>"
+  },
+  {
+    "name": "partial actor retains no person",
+    "type": "Movie",
+    "text": "<movie><actor><name>Incomplete Actor</name><role>Lead</role>"
+  },
+  {
+    "name": "season scalar nested element propagates and does not commit",
+    "type": "Season",
+    "initialName": "Initial",
+    "text": "<season><title>Outer<inner>Nested</inner>Tail</title></season>"
+  },
+  {
+    "name": "movie scalar nested element is swallowed and does not commit",
+    "type": "Movie",
+    "initialName": "Initial",
+    "text": "<movie><title>Outer<inner>Nested</inner>Tail</title></movie>"
+  },
+  {
+    "name": "critic rating nested element is swallowed and does not commit",
+    "type": "Movie",
+    "text": "<movie><criticrating>8<inner/>2</criticrating></movie>"
+  },
+  {
+    "name": "series-season skips ratings subtree",
+    "type": "Season",
+    "seriesSeason": true,
+    "text": "<tvshow><ratings><rating name=\"tmdb\"><value>7.5</value></rating></ratings></tvshow>"
+  },
+  {
+    "name": "series-season skips actor scalar rules before named season",
+    "type": "Season",
+    "seriesSeason": true,
+    "indexNumber": 2,
+    "initialName": "Initial",
+    "text": "<tvshow><actor><name>Ignored<inner/></name></actor><namedseason number=\"2\">Winter</namedseason></tvshow>"
+  },
+  {
+    "name": "non-video fileinfo ignores nested video fields",
+    "type": "Season",
+    "text": "<season><fileinfo><streamdetails><video><width>19<inner/>20</width></video></streamdetails></fileinfo></season>"
+  },
+  {
+    "name": "scalar commits when root end is valid lookahead",
+    "type": "Movie",
+    "initialName": "Initial",
+    "text": "<movie><title>Committed</title></movie>"
+  },
+  {
+    "name": "scalar does not commit before immediate truncated token",
+    "type": "Movie",
+    "initialName": "Initial",
+    "text": "<movie><title>Not Committed</title><broken"
+  },
+  {
+    "name": "scalar commits after lexing valid next sibling start",
+    "type": "Movie",
+    "initialName": "Initial",
+    "text": "<movie><title>Committed</title><plot>Not Committed</plot><broken"
+  },
+  {
+    "name": "complete ratings commits before immediate truncated token",
+    "type": "Movie",
+    "text": "<movie><ratings><rating name=\"tmdb\"><value>7.25</value></rating></ratings><broken"
+  },
+  {
+    "name": "rating value commits before ratings subtree truncation",
+    "type": "Movie",
+    "text": "<movie><ratings><rating name=\"tmdb\"><value>7.5</value></rating>"
+  },
+  {
+    "name": "rating value does not commit before malformed child token",
+    "type": "Movie",
+    "text": "<movie><ratings><rating name=\"tmdb\"><value>7.75</value><broken"
+  },
+  {
+    "name": "first rating commits before second rating truncates",
+    "type": "Movie",
+    "text": "<movie><ratings><rating name=\"tmdb\"><value>6.5</value></rating><rating name=\"tomatometer\"><value>81</value><broken"
+  },
+  {
+    "name": "critic rating commits independently before later community truncates",
+    "type": "Movie",
+    "text": "<movie><ratings><rating name=\"tomatometer\"><value>82</value></rating><rating name=\"tmdb\"><value>8.2</value><broken"
+  },
+  {
+    "name": "complete fileinfo commits before immediate truncated token",
+    "type": "Movie",
+    "text": "<movie><fileinfo><streamdetails><video><aspect>1.85:1</aspect><width>1920</width><height>1080</height><durationinseconds>61</durationinseconds><format3d>HSBS</format3d></video><subtitle><language>eng</language></subtitle></streamdetails></fileinfo><broken"
+  },
+  {
+    "name": "video width waits for valid following token",
+    "type": "Movie",
+    "text": "<movie><fileinfo><streamdetails><video><width>1920</width><broken"
+  },
+  {
+    "name": "video width commits before height lookahead fails",
+    "type": "Movie",
+    "text": "<movie><fileinfo><streamdetails><video><width>1920</width><height>1080</height><broken"
+  },
+  {
+    "name": "complete video fields survive streamdetails truncation",
+    "type": "Movie",
+    "text": "<movie><fileinfo><streamdetails><video><aspect>2.40:1</aspect><width>1280</width><height>720</height></video><broken"
+  },
+  {
+    "name": "subtitle flag waits for language lookahead",
+    "type": "Movie",
+    "text": "<movie><fileinfo><streamdetails><subtitle><language>eng</language><broken"
+  },
+  {
+    "name": "subtitle flag commits after complete subtitle before truncation",
+    "type": "Movie",
+    "text": "<movie><fileinfo><streamdetails><subtitle><language>eng</language></subtitle><broken"
+  },
+  {
+    "name": "default namespace keeps unprefixed parser names",
+    "type": "Movie",
+    "text": "<movie xmlns=\"urn:test\"><title>Namespaced</title></movie>"
+  },
+  {
+    "name": "declared prefixed scalar name is ignored case exactly",
+    "type": "Movie",
+    "initialName": "Initial",
+    "text": "<movie xmlns:n=\"urn:test\"><n:title>Ignored</n:title></movie>"
+  },
+  {
+    "name": "element names are case sensitive",
+    "type": "Movie",
+    "initialName": "Initial",
+    "text": "<movie><Title>Ignored</Title></movie>"
+  },
+  {
+    "name": "attributes are case sensitive",
+    "type": "Movie",
+    "text": "<movie><id tmdb=\"101\" tvdb=\"202\">tt0000303</id></movie>"
+  },
+  {
+    "name": "undeclared namespace prefix is rejected after prefix commit",
+    "type": "Movie",
+    "initialName": "Initial",
+    "text": "<movie><title>Committed</title><n:plot>Rejected</n:plot></movie>"
+  },
+  {
+    "name": "invalid element name start is rejected after prefix commit",
+    "type": "Movie",
+    "initialName": "Initial",
+    "text": "<movie><title>Committed</title><1bad>Rejected</1bad></movie>"
+  },
+  {
+    "name": "multiple colons in element name are rejected",
+    "type": "Movie",
+    "text": "<movie xmlns:n=\"urn:test\"><n:bad:name>Rejected</n:bad:name></movie>"
+  },
+  {
+    "name": "duplicate lexical attribute is rejected before id attributes commit",
+    "type": "Movie",
+    "text": "<movie><id TMDB=\"101\" TMDB=\"202\">tt0000303</id></movie>"
+  },
+  {
+    "name": "duplicate expanded namespace attribute is rejected",
+    "type": "Movie",
+    "text": "<movie xmlns:a=\"urn:test\" xmlns:b=\"urn:test\" a:id=\"1\" b:id=\"2\"><title>Never</title></movie>"
+  },
+  {
+    "name": "unquoted attribute is rejected",
+    "type": "Movie",
+    "text": "<movie><id TMDB=101>tt0000303</id></movie>"
+  },
+  {
+    "name": "literal less than in attribute is rejected",
+    "type": "Movie",
+    "text": "<movie><id TMDB=\"10<1\">tt0000303</id></movie>"
+  },
+  {
+    "name": "illegal xml namespace binding is rejected",
+    "type": "Movie",
+    "text": "<movie xmlns:xml=\"urn:not-xml\"><title>Never</title></movie>"
+  },
+  {
+    "name": "double hyphen in comment is rejected after prefix commit",
+    "type": "Movie",
+    "text": "<movie><title>Committed</title><!-- bad--comment --></movie>"
+  },
+  {
+    "name": "cdata terminator in text is rejected after prefix commit",
+    "type": "Movie",
+    "text": "<movie><title>Committed</title><plot>bad]]>text</plot></movie>"
+  },
+  {
+    "name": "mismatched namespace-qualified end tag is rejected",
+    "type": "Movie",
+    "text": "<movie xmlns:a=\"urn:a\" xmlns:b=\"urn:b\"><a:unknown></b:unknown></movie>"
+  },
+  {
+    "name": "nonwhitespace text after root is rejected after final scalar commit",
+    "type": "Season",
+    "initialName": "Initial",
+    "text": "<season><title>Committed</title></season>tail"
+  },
+  {
+    "name": "second root is rejected after first scalar commit",
+    "type": "Season",
+    "initialName": "Initial",
+    "text": "<season><title>Committed</title></season><other/>"
+  }
+]

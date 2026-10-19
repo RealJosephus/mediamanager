@@ -1,0 +1,379 @@
+{
+  "results": [
+    {
+      "name": "episode empty references resolve physical parents",
+      "type": "Episode",
+      "updateType": 3,
+      "result": {
+        "Name": "Stored target",
+        "PresentationUniqueKey": "86000000000000000000000000000010",
+        "IndexNumber": 1,
+        "SeriesId": "86000000000000000000000000000001",
+        "SeriesName": "Physical series",
+        "SeriesPresentationUniqueKey": "physical-series-key",
+        "SeasonId": "86000000000000000000000000000004",
+        "SeasonName": "Physical season"
+      }
+    },
+    {
+      "name": "episode correct references and caches remain unchanged",
+      "type": "Episode",
+      "updateType": 1,
+      "result": {
+        "Name": "Stored target",
+        "PresentationUniqueKey": "86000000000000000000000000000010",
+        "IndexNumber": 1,
+        "SeriesId": "86000000000000000000000000000001",
+        "SeriesName": "Physical series",
+        "SeriesPresentationUniqueKey": "physical-series-key",
+        "SeasonId": "86000000000000000000000000000004",
+        "SeasonName": "Physical season"
+      }
+    },
+    {
+      "name": "episode missing nonempty references preserve old series name and use season fallback first",
+      "type": "Episode",
+      "updateType": 3,
+      "result": {
+        "Name": "Stored target",
+        "PresentationUniqueKey": "86000000000000000000000000000010",
+        "IndexNumber": 1,
+        "SeriesId": "86000000000000000000000000000001",
+        "SeriesName": "Stored series",
+        "SeriesPresentationUniqueKey": "physical-series-key",
+        "SeasonId": "86000000000000000000000000000004",
+        "SeasonName": "Season 1"
+      }
+    },
+    {
+      "name": "episode wrong-type references use fallback getters before physical correction",
+      "type": "Episode",
+      "updateType": 3,
+      "result": {
+        "Name": "Stored target",
+        "PresentationUniqueKey": "86000000000000000000000000000010",
+        "IndexNumber": 1,
+        "SeriesId": "86000000000000000000000000000001",
+        "SeriesName": "Stored series",
+        "SeriesPresentationUniqueKey": "physical-series-key",
+        "SeasonId": "86000000000000000000000000000004",
+        "SeasonName": "Season 1"
+      }
+    },
+    {
+      "name": "episode external references contribute names before physical IDs and key are corrected",
+      "type": "Episode",
+      "updateType": 3,
+      "result": {
+        "Name": "Stored target",
+        "PresentationUniqueKey": "86000000000000000000000000000010",
+        "IndexNumber": 1,
+        "SeriesId": "86000000000000000000000000000001",
+        "SeriesName": "Other series",
+        "SeriesPresentationUniqueKey": "physical-series-key",
+        "SeasonId": "86000000000000000000000000000004",
+        "SeasonName": "Other season"
+      }
+    },
+    {
+      "name": "episode nested parent chain resolves typed physical ancestors",
+      "type": "Episode",
+      "updateType": 3,
+      "result": {
+        "Name": "Stored target",
+        "PresentationUniqueKey": "86000000000000000000000000000010",
+        "IndexNumber": 1,
+        "SeriesId": "86000000000000000000000000000001",
+        "SeriesName": "Physical series",
+        "SeriesPresentationUniqueKey": "physical-series-key",
+        "SeasonId": "86000000000000000000000000000004",
+        "SeasonName": "Physical season"
+      }
+    },
+    {
+      "name": "flat episode resolves numbered season",
+      "type": "Episode",
+      "updateType": 3,
+      "result": {
+        "Name": "Stored target",
+        "PresentationUniqueKey": "86000000000000000000000000000010",
+        "IndexNumber": 1,
+        "SeriesId": "86000000000000000000000000000001",
+        "SeriesName": "Physical series",
+        "SeriesPresentationUniqueKey": "physical-series-key",
+        "SeasonId": "86000000000000000000000000000004",
+        "SeasonName": "Physical season"
+      }
+    },
+    {
+      "name": "flat episode without a season number uses unknown name",
+      "type": "Episode",
+      "updateType": 3,
+      "result": {
+        "Name": "Stored target",
+        "PresentationUniqueKey": "86000000000000000000000000000010",
+        "IndexNumber": 1,
+        "SeriesId": "86000000000000000000000000000001",
+        "SeriesName": "Physical series",
+        "SeriesPresentationUniqueKey": "physical-series-key",
+        "SeasonId": null,
+        "SeasonName": "Season Unknown"
+      }
+    },
+    {
+      "name": "flat episode unmatched season number clears explicit stale season ID",
+      "type": "Episode",
+      "updateType": 3,
+      "result": {
+        "Name": "Stored target",
+        "PresentationUniqueKey": "86000000000000000000000000000010",
+        "IndexNumber": 1,
+        "SeriesId": "86000000000000000000000000000001",
+        "SeriesName": "Physical series",
+        "SeriesPresentationUniqueKey": "physical-series-key",
+        "SeasonId": null,
+        "SeasonName": "Season -1"
+      }
+    },
+    {
+      "name": "orphan episode clears typed IDs and key but keeps cached series name",
+      "type": "Episode",
+      "updateType": 3,
+      "result": {
+        "Name": "Stored target",
+        "PresentationUniqueKey": "86000000000000000000000000000010",
+        "IndexNumber": 1,
+        "SeriesId": "00000000000000000000000000000000",
+        "SeriesName": "Stored series",
+        "SeasonId": null,
+        "SeasonName": "Season Unknown"
+      }
+    },
+    {
+      "name": "orphan episode may read explicit external names before clearing IDs",
+      "type": "Episode",
+      "updateType": 3,
+      "result": {
+        "Name": "Stored target",
+        "PresentationUniqueKey": "86000000000000000000000000000010",
+        "IndexNumber": 1,
+        "SeriesId": "00000000000000000000000000000000",
+        "SeriesName": "Other series",
+        "SeasonId": null,
+        "SeasonName": "Other season"
+      }
+    },
+    {
+      "name": "episode reversed range is cleared before parent field updates",
+      "type": "Episode",
+      "updateType": 3,
+      "result": {
+        "Name": "Stored target",
+        "PresentationUniqueKey": "86000000000000000000000000000010",
+        "IndexNumber": 4,
+        "SeriesId": "86000000000000000000000000000001",
+        "SeriesName": "Physical series",
+        "SeriesPresentationUniqueKey": "physical-series-key",
+        "SeasonId": "86000000000000000000000000000004",
+        "SeasonName": "Physical season"
+      }
+    },
+    {
+      "name": "episode orphaned range end is cleared",
+      "type": "Episode",
+      "updateType": 3,
+      "result": {
+        "Name": "Stored target",
+        "PresentationUniqueKey": "86000000000000000000000000000010",
+        "SeriesId": "86000000000000000000000000000001",
+        "SeriesName": "Physical series",
+        "SeriesPresentationUniqueKey": "physical-series-key",
+        "SeasonId": "86000000000000000000000000000004",
+        "SeasonName": "Physical season"
+      }
+    },
+    {
+      "name": "episode valid provider range remains",
+      "type": "Episode",
+      "updateType": 3,
+      "result": {
+        "Name": "Stored target",
+        "PresentationUniqueKey": "86000000000000000000000000000010",
+        "IndexNumber": 2,
+        "IndexNumberEnd": 4,
+        "SeriesId": "86000000000000000000000000000001",
+        "SeriesName": "Physical series",
+        "SeriesPresentationUniqueKey": "physical-series-key",
+        "SeasonId": "86000000000000000000000000000004",
+        "SeasonName": "Physical season"
+      }
+    },
+    {
+      "name": "locked episode still corrects parent fields",
+      "type": "Episode",
+      "updateType": 3,
+      "result": {
+        "Name": "Stored target",
+        "PresentationUniqueKey": "86000000000000000000000000000010",
+        "IndexNumber": 1,
+        "SeriesId": "86000000000000000000000000000001",
+        "SeriesName": "Physical series",
+        "SeriesPresentationUniqueKey": "physical-series-key",
+        "SeasonId": "86000000000000000000000000000004",
+        "SeasonName": "Physical season"
+      }
+    },
+    {
+      "name": "season empty series reference resolves physical parent",
+      "type": "Season",
+      "updateType": 3,
+      "result": {
+        "Name": "Stored target",
+        "PresentationUniqueKey": "physical-series-key-001",
+        "IndexNumber": 1,
+        "SeriesId": "86000000000000000000000000000001",
+        "SeriesName": "Physical series",
+        "SeriesPresentationUniqueKey": "physical-series-key"
+      }
+    },
+    {
+      "name": "season explicit external series contributes key and name before ID correction",
+      "type": "Season",
+      "updateType": 3,
+      "result": {
+        "Name": "Stored target",
+        "PresentationUniqueKey": "other-series-key-001",
+        "IndexNumber": 1,
+        "SeriesId": "86000000000000000000000000000001",
+        "SeriesName": "Other series",
+        "SeriesPresentationUniqueKey": "other-series-key"
+      }
+    },
+    {
+      "name": "season missing nonempty series leaves own presentation key for this refresh",
+      "type": "Season",
+      "updateType": 3,
+      "result": {
+        "Name": "Stored target",
+        "PresentationUniqueKey": "86000000000000000000000000000010",
+        "IndexNumber": 1,
+        "SeriesId": "86000000000000000000000000000001",
+        "SeriesName": "Stored series"
+      }
+    },
+    {
+      "name": "season wrong-type reference clears cached grouping key before ID correction",
+      "type": "Season",
+      "updateType": 3,
+      "result": {
+        "Name": "Stored target",
+        "PresentationUniqueKey": "86000000000000000000000000000010",
+        "IndexNumber": 1,
+        "SeriesId": "86000000000000000000000000000001",
+        "SeriesName": "Stored series"
+      }
+    },
+    {
+      "name": "orphan season clears series ID but preserves series name",
+      "type": "Season",
+      "updateType": 3,
+      "result": {
+        "Name": "Stored target",
+        "PresentationUniqueKey": "86000000000000000000000000000010",
+        "IndexNumber": 1,
+        "SeriesId": "00000000000000000000000000000000",
+        "SeriesName": "Stored series"
+      }
+    },
+    {
+      "name": "special season gets configured display name",
+      "type": "Season",
+      "updateType": 19,
+      "result": {
+        "Name": "Extras",
+        "PresentationUniqueKey": "physical-series-key-000",
+        "IndexNumber": 0,
+        "SeriesId": "86000000000000000000000000000001",
+        "SeriesName": "Physical series",
+        "SeriesPresentationUniqueKey": "physical-series-key"
+      }
+    },
+    {
+      "name": "special season case-insensitive name equality preserves spelling",
+      "type": "Season",
+      "updateType": 3,
+      "result": {
+        "Name": "eXTrAs",
+        "PresentationUniqueKey": "physical-series-key-000",
+        "IndexNumber": 0,
+        "SeriesId": "86000000000000000000000000000001",
+        "SeriesName": "Physical series",
+        "SeriesPresentationUniqueKey": "physical-series-key"
+      }
+    },
+    {
+      "name": "special season Name lock preserves name",
+      "type": "Season",
+      "updateType": 3,
+      "result": {
+        "Name": "Stored target",
+        "PresentationUniqueKey": "physical-series-key-000",
+        "IndexNumber": 0,
+        "SeriesId": "86000000000000000000000000000001",
+        "SeriesName": "Physical series",
+        "SeriesPresentationUniqueKey": "physical-series-key"
+      }
+    },
+    {
+      "name": "locked special season preserves name",
+      "type": "Season",
+      "updateType": 3,
+      "result": {
+        "Name": "Stored target",
+        "PresentationUniqueKey": "physical-series-key-000",
+        "IndexNumber": 0,
+        "SeriesId": "86000000000000000000000000000001",
+        "SeriesName": "Physical series",
+        "SeriesPresentationUniqueKey": "physical-series-key"
+      }
+    },
+    {
+      "name": "special season retains configured empty display name",
+      "type": "Season",
+      "updateType": 19,
+      "result": {
+        "Name": "",
+        "PresentationUniqueKey": "physical-series-key-000",
+        "IndexNumber": 0,
+        "SeriesId": "86000000000000000000000000000001",
+        "SeriesName": "Physical series",
+        "SeriesPresentationUniqueKey": "physical-series-key"
+      }
+    },
+    {
+      "name": "special season retains configured null display name",
+      "type": "Season",
+      "updateType": 19,
+      "result": {
+        "PresentationUniqueKey": "physical-series-key-000",
+        "IndexNumber": 0,
+        "SeriesId": "86000000000000000000000000000001",
+        "SeriesName": "Physical series",
+        "SeriesPresentationUniqueKey": "physical-series-key"
+      }
+    }
+  ],
+  "candidateVerified": false,
+  "sourceBoundary": "Actual pinned Episode/Season BeforeSaveInternal with isFullRefresh=false/currentUpdateType=None. Actual entity parent and typed Series/Season lookups; library item lookup and library options are controlled callbacks. Filesystem reports missing; child aggregation, BeforeMetadataRefresh, providers, repository writes, images and AfterMetadataRefresh are excluded.",
+  "inputSha256": "89340496d426046880a13fffd81c3f202abc41912ce0cde63dd6c5e4bc87c359",
+  "assemblies": [
+    {
+      "path": "D:\\mediamanager\\.test-output\\recordings-current\\tv-before-save-2-20261004\\bin\\Release\\net10.0\\MediaBrowser.Providers.dll",
+      "sha256": "0255068ec9ff524c916c99aebd4553290141bb7b87e17da3a80c007b3b6fb129"
+    },
+    {
+      "path": "D:\\mediamanager\\.test-output\\recordings-current\\tv-before-save-2-20261004\\bin\\Release\\net10.0\\MediaBrowser.Controller.dll",
+      "sha256": "56a527307ef93f810fdadec33ba8380cc8416d38cb1cfea92297b0f65288808e"
+    }
+  ]
+}

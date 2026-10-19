@@ -1,0 +1,1706 @@
+[
+  {
+    "name": "Movie: changed file",
+    "mode": "beforeSave",
+    "full": false,
+    "currentUpdateType": 1,
+    "item": {
+      "Type": "MediaBrowser.Controller.Entities.Movies.Movie",
+      "Id": "d9999999-9999-9999-9999-000000000001",
+      "Name": "Metadata file control",
+      "Path": "Z:\\ChildrenMetadata\\file.mkv",
+      "DateModified": "2026-10-04T12:00:00.0000000Z",
+      "DateCreated": "2026-01-02T03:04:05.0000000Z",
+      "DateLastRefreshed": "2026-10-04T12:00:00.0000000Z",
+      "Size": 7,
+      "PresentationUniqueKey": "d9999999999999999999000000000001"
+    },
+    "file": {
+      "Exists": true,
+      "IsDirectory": false,
+      "LastWriteTimeUtc": "2026-10-04T12:00:02.0000000Z",
+      "CreationTimeUtc": "2026-03-04T05:06:07.0000000Z",
+      "Length": 99
+    }
+  },
+  {
+    "name": "Video: changed file",
+    "mode": "beforeSave",
+    "full": false,
+    "currentUpdateType": 1,
+    "item": {
+      "Type": "MediaBrowser.Controller.Entities.Video",
+      "Id": "d9999999-9999-9999-9999-000000000002",
+      "Name": "Metadata file control",
+      "Path": "Z:\\ChildrenMetadata\\file.mkv",
+      "DateModified": "2026-10-04T12:00:00.0000000Z",
+      "DateCreated": "2026-01-02T03:04:05.0000000Z",
+      "DateLastRefreshed": "2026-10-04T12:00:00.0000000Z",
+      "Size": 7,
+      "PresentationUniqueKey": "d9999999999999999999000000000002"
+    },
+    "file": {
+      "Exists": true,
+      "IsDirectory": false,
+      "LastWriteTimeUtc": "2026-10-04T12:00:02.0000000Z",
+      "CreationTimeUtc": "2026-03-04T05:06:07.0000000Z",
+      "Length": 99
+    }
+  },
+  {
+    "name": "MusicVideo: changed file",
+    "mode": "beforeSave",
+    "full": false,
+    "currentUpdateType": 1,
+    "item": {
+      "Type": "MediaBrowser.Controller.Entities.MusicVideo",
+      "Id": "d9999999-9999-9999-9999-000000000003",
+      "Name": "Metadata file control",
+      "Path": "Z:\\ChildrenMetadata\\file.mkv",
+      "DateModified": "2026-10-04T12:00:00.0000000Z",
+      "DateCreated": "2026-01-02T03:04:05.0000000Z",
+      "DateLastRefreshed": "2026-10-04T12:00:00.0000000Z",
+      "Size": 7,
+      "PresentationUniqueKey": "d9999999999999999999000000000003"
+    },
+    "file": {
+      "Exists": true,
+      "IsDirectory": false,
+      "LastWriteTimeUtc": "2026-10-04T12:00:02.0000000Z",
+      "CreationTimeUtc": "2026-03-04T05:06:07.0000000Z",
+      "Length": 99
+    }
+  },
+  {
+    "name": "Trailer: changed file",
+    "mode": "beforeSave",
+    "full": false,
+    "currentUpdateType": 1,
+    "item": {
+      "Type": "MediaBrowser.Controller.Entities.Trailer",
+      "Id": "d9999999-9999-9999-9999-000000000004",
+      "Name": "Metadata file control",
+      "Path": "Z:\\ChildrenMetadata\\file.mkv",
+      "DateModified": "2026-10-04T12:00:00.0000000Z",
+      "DateCreated": "2026-01-02T03:04:05.0000000Z",
+      "DateLastRefreshed": "2026-10-04T12:00:00.0000000Z",
+      "Size": 7,
+      "PresentationUniqueKey": "d9999999999999999999000000000004"
+    },
+    "file": {
+      "Exists": true,
+      "IsDirectory": false,
+      "LastWriteTimeUtc": "2026-10-04T12:00:02.0000000Z",
+      "CreationTimeUtc": "2026-03-04T05:06:07.0000000Z",
+      "Length": 99
+    }
+  },
+  {
+    "name": "Audio: changed file",
+    "mode": "beforeSave",
+    "full": false,
+    "currentUpdateType": 1,
+    "item": {
+      "Type": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "Id": "d9999999-9999-9999-9999-000000000005",
+      "Name": "Metadata file control",
+      "Path": "Z:\\ChildrenMetadata\\file.mkv",
+      "DateModified": "2026-10-04T12:00:00.0000000Z",
+      "DateCreated": "2026-01-02T03:04:05.0000000Z",
+      "DateLastRefreshed": "2026-10-04T12:00:00.0000000Z",
+      "Size": 7,
+      "PresentationUniqueKey": "d9999999999999999999000000000005"
+    },
+    "file": {
+      "Exists": true,
+      "IsDirectory": false,
+      "LastWriteTimeUtc": "2026-10-04T12:00:02.0000000Z",
+      "CreationTimeUtc": "2026-03-04T05:06:07.0000000Z",
+      "Length": 99
+    }
+  },
+  {
+    "name": "AudioBook: changed file",
+    "mode": "beforeSave",
+    "full": false,
+    "currentUpdateType": 1,
+    "item": {
+      "Type": "MediaBrowser.Controller.Entities.AudioBook",
+      "Id": "d9999999-9999-9999-9999-000000000006",
+      "Name": "Metadata file control",
+      "Path": "Z:\\ChildrenMetadata\\file.mkv",
+      "DateModified": "2026-10-04T12:00:00.0000000Z",
+      "DateCreated": "2026-01-02T03:04:05.0000000Z",
+      "DateLastRefreshed": "2026-10-04T12:00:00.0000000Z",
+      "Size": 7,
+      "PresentationUniqueKey": "d9999999999999999999000000000006"
+    },
+    "file": {
+      "Exists": true,
+      "IsDirectory": false,
+      "LastWriteTimeUtc": "2026-10-04T12:00:02.0000000Z",
+      "CreationTimeUtc": "2026-03-04T05:06:07.0000000Z",
+      "Length": 99
+    }
+  },
+  {
+    "name": "Book: changed file",
+    "mode": "beforeSave",
+    "full": false,
+    "currentUpdateType": 1,
+    "item": {
+      "Type": "MediaBrowser.Controller.Entities.Book",
+      "Id": "d9999999-9999-9999-9999-000000000007",
+      "Name": "Metadata file control",
+      "Path": "Z:\\ChildrenMetadata\\file.mkv",
+      "DateModified": "2026-10-04T12:00:00.0000000Z",
+      "DateCreated": "2026-01-02T03:04:05.0000000Z",
+      "DateLastRefreshed": "2026-10-04T12:00:00.0000000Z",
+      "Size": 7,
+      "PresentationUniqueKey": "d9999999999999999999000000000007"
+    },
+    "file": {
+      "Exists": true,
+      "IsDirectory": false,
+      "LastWriteTimeUtc": "2026-10-04T12:00:02.0000000Z",
+      "CreationTimeUtc": "2026-03-04T05:06:07.0000000Z",
+      "Length": 99
+    }
+  },
+  {
+    "name": "Folder: changed file",
+    "mode": "beforeSave",
+    "full": false,
+    "currentUpdateType": 1,
+    "item": {
+      "Type": "MediaBrowser.Controller.Entities.Folder",
+      "Id": "d9999999-9999-9999-9999-000000000008",
+      "Name": "Metadata file control",
+      "Path": "Z:\\ChildrenMetadata\\Folder",
+      "DateModified": "2026-10-04T12:00:00.0000000Z",
+      "DateCreated": "2026-01-02T03:04:05.0000000Z",
+      "DateLastRefreshed": "2026-10-04T12:00:00.0000000Z",
+      "Size": 7,
+      "PresentationUniqueKey": "d9999999999999999999000000000008"
+    },
+    "file": {
+      "Exists": true,
+      "IsDirectory": true,
+      "LastWriteTimeUtc": "2026-10-04T12:00:02.0000000Z",
+      "CreationTimeUtc": "2026-03-04T05:06:07.0000000Z",
+      "Length": 99
+    }
+  },
+  {
+    "name": "MusicAlbum: changed file",
+    "mode": "beforeSave",
+    "full": false,
+    "currentUpdateType": 1,
+    "item": {
+      "Type": "MediaBrowser.Controller.Entities.Audio.MusicAlbum",
+      "Id": "d9999999-9999-9999-9999-000000000009",
+      "Name": "Metadata file control",
+      "Path": "Z:\\ChildrenMetadata\\Folder",
+      "DateModified": "2026-10-04T12:00:00.0000000Z",
+      "DateCreated": "2026-01-02T03:04:05.0000000Z",
+      "DateLastRefreshed": "2026-10-04T12:00:00.0000000Z",
+      "Size": 7,
+      "PresentationUniqueKey": "d9999999999999999999000000000009"
+    },
+    "file": {
+      "Exists": true,
+      "IsDirectory": true,
+      "LastWriteTimeUtc": "2026-10-04T12:00:02.0000000Z",
+      "CreationTimeUtc": "2026-03-04T05:06:07.0000000Z",
+      "Length": 99
+    }
+  },
+  {
+    "name": "MusicArtist: changed file",
+    "mode": "beforeSave",
+    "full": false,
+    "currentUpdateType": 1,
+    "item": {
+      "Type": "MediaBrowser.Controller.Entities.Audio.MusicArtist",
+      "Id": "d9999999-9999-9999-9999-000000000010",
+      "Name": "Metadata file control",
+      "Path": "Z:\\ChildrenMetadata\\Folder",
+      "DateModified": "2026-10-04T12:00:00.0000000Z",
+      "DateCreated": "2026-01-02T03:04:05.0000000Z",
+      "DateLastRefreshed": "2026-10-04T12:00:00.0000000Z",
+      "Size": 7,
+      "PresentationUniqueKey": "Artist-Metadata file control"
+    },
+    "file": {
+      "Exists": true,
+      "IsDirectory": true,
+      "LastWriteTimeUtc": "2026-10-04T12:00:02.0000000Z",
+      "CreationTimeUtc": "2026-03-04T05:06:07.0000000Z",
+      "Length": 99
+    }
+  },
+  {
+    "name": "Series: changed file",
+    "mode": "beforeSave",
+    "full": false,
+    "currentUpdateType": 1,
+    "item": {
+      "Type": "MediaBrowser.Controller.Entities.TV.Series",
+      "Id": "d9999999-9999-9999-9999-000000000011",
+      "Name": "Metadata file control",
+      "Path": "Z:\\ChildrenMetadata\\Folder",
+      "DateModified": "2026-10-04T12:00:00.0000000Z",
+      "DateCreated": "2026-01-02T03:04:05.0000000Z",
+      "DateLastRefreshed": "2026-10-04T12:00:00.0000000Z",
+      "Size": 7,
+      "PresentationUniqueKey": "d9999999999999999999000000000011"
+    },
+    "file": {
+      "Exists": true,
+      "IsDirectory": true,
+      "LastWriteTimeUtc": "2026-10-04T12:00:02.0000000Z",
+      "CreationTimeUtc": "2026-03-04T05:06:07.0000000Z",
+      "Length": 99
+    }
+  },
+  {
+    "name": "Season: changed file",
+    "mode": "beforeSave",
+    "full": false,
+    "currentUpdateType": 1,
+    "item": {
+      "Type": "MediaBrowser.Controller.Entities.TV.Season",
+      "Id": "d9999999-9999-9999-9999-000000000012",
+      "Name": "Metadata file control",
+      "Path": "Z:\\ChildrenMetadata\\Folder",
+      "DateModified": "2026-10-04T12:00:00.0000000Z",
+      "DateCreated": "2026-01-02T03:04:05.0000000Z",
+      "DateLastRefreshed": "2026-10-04T12:00:00.0000000Z",
+      "Size": 7,
+      "PresentationUniqueKey": "d9999999999999999999000000000012"
+    },
+    "file": {
+      "Exists": true,
+      "IsDirectory": true,
+      "LastWriteTimeUtc": "2026-10-04T12:00:02.0000000Z",
+      "CreationTimeUtc": "2026-03-04T05:06:07.0000000Z",
+      "Length": 99
+    }
+  },
+  {
+    "name": "Episode: changed file",
+    "mode": "beforeSave",
+    "full": false,
+    "currentUpdateType": 1,
+    "item": {
+      "Type": "MediaBrowser.Controller.Entities.TV.Episode",
+      "Id": "d9999999-9999-9999-9999-000000000013",
+      "Name": "Metadata file control",
+      "Path": "Z:\\ChildrenMetadata\\file.mkv",
+      "DateModified": "2026-10-04T12:00:00.0000000Z",
+      "DateCreated": "2026-01-02T03:04:05.0000000Z",
+      "DateLastRefreshed": "2026-10-04T12:00:00.0000000Z",
+      "Size": 7,
+      "PresentationUniqueKey": "d9999999999999999999000000000013"
+    },
+    "file": {
+      "Exists": true,
+      "IsDirectory": false,
+      "LastWriteTimeUtc": "2026-10-04T12:00:02.0000000Z",
+      "CreationTimeUtc": "2026-03-04T05:06:07.0000000Z",
+      "Length": 99
+    }
+  },
+  {
+    "name": "Photo: changed file",
+    "mode": "beforeSave",
+    "full": false,
+    "currentUpdateType": 1,
+    "item": {
+      "Type": "MediaBrowser.Controller.Entities.Photo",
+      "Id": "d9999999-9999-9999-9999-000000000014",
+      "Name": "Metadata file control",
+      "Path": "Z:\\ChildrenMetadata\\file.mkv",
+      "DateModified": "2026-10-04T12:00:00.0000000Z",
+      "DateCreated": "2026-01-02T03:04:05.0000000Z",
+      "DateLastRefreshed": "2026-10-04T12:00:00.0000000Z",
+      "Size": 7,
+      "PresentationUniqueKey": "d9999999999999999999000000000014"
+    },
+    "file": {
+      "Exists": true,
+      "IsDirectory": false,
+      "LastWriteTimeUtc": "2026-10-04T12:00:02.0000000Z",
+      "CreationTimeUtc": "2026-03-04T05:06:07.0000000Z",
+      "Length": 99
+    }
+  },
+  {
+    "name": "PhotoAlbum: changed file",
+    "mode": "beforeSave",
+    "full": false,
+    "currentUpdateType": 1,
+    "item": {
+      "Type": "MediaBrowser.Controller.Entities.PhotoAlbum",
+      "Id": "d9999999-9999-9999-9999-000000000015",
+      "Name": "Metadata file control",
+      "Path": "Z:\\ChildrenMetadata\\Folder",
+      "DateModified": "2026-10-04T12:00:00.0000000Z",
+      "DateCreated": "2026-01-02T03:04:05.0000000Z",
+      "DateLastRefreshed": "2026-10-04T12:00:00.0000000Z",
+      "Size": 7,
+      "PresentationUniqueKey": "d9999999999999999999000000000015"
+    },
+    "file": {
+      "Exists": true,
+      "IsDirectory": true,
+      "LastWriteTimeUtc": "2026-10-04T12:00:02.0000000Z",
+      "CreationTimeUtc": "2026-03-04T05:06:07.0000000Z",
+      "Length": 99
+    }
+  },
+  {
+    "name": "CollectionFolder: changed file",
+    "mode": "beforeSave",
+    "full": false,
+    "currentUpdateType": 1,
+    "item": {
+      "Type": "MediaBrowser.Controller.Entities.CollectionFolder",
+      "Id": "d9999999-9999-9999-9999-000000000016",
+      "Name": "Metadata file control",
+      "Path": "Z:\\ChildrenMetadata\\Folder",
+      "DateModified": "2026-10-04T12:00:00.0000000Z",
+      "DateCreated": "2026-01-02T03:04:05.0000000Z",
+      "DateLastRefreshed": "2026-10-04T12:00:00.0000000Z",
+      "Size": 7,
+      "PresentationUniqueKey": "d9999999999999999999000000000016"
+    },
+    "file": {
+      "Exists": true,
+      "IsDirectory": true,
+      "LastWriteTimeUtc": "2026-10-04T12:00:02.0000000Z",
+      "CreationTimeUtc": "2026-03-04T05:06:07.0000000Z",
+      "Length": 99
+    }
+  },
+  {
+    "name": "Movie: same",
+    "mode": "beforeSave",
+    "full": false,
+    "currentUpdateType": 1,
+    "item": {
+      "Type": "MediaBrowser.Controller.Entities.Movies.Movie",
+      "Id": "d9999999-9999-9999-9999-000000000017",
+      "Name": "Metadata file control",
+      "Path": "Z:\\ChildrenMetadata\\file.mkv",
+      "DateModified": "2026-10-04T12:00:00.0000000Z",
+      "DateCreated": "2026-01-02T03:04:05.0000000Z",
+      "DateLastRefreshed": "2026-10-04T12:00:00.0000000Z",
+      "Size": 7,
+      "PresentationUniqueKey": "d9999999999999999999000000000017"
+    },
+    "file": {
+      "Exists": true,
+      "IsDirectory": false,
+      "LastWriteTimeUtc": "2026-10-04T12:00:00.0000000Z",
+      "CreationTimeUtc": "0001-01-01T00:00:00.0000000Z",
+      "Length": 99
+    }
+  },
+  {
+    "name": "Audio: same",
+    "mode": "beforeSave",
+    "full": false,
+    "currentUpdateType": 1,
+    "item": {
+      "Type": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "Id": "d9999999-9999-9999-9999-000000000018",
+      "Name": "Metadata file control",
+      "Path": "Z:\\ChildrenMetadata\\file.mkv",
+      "DateModified": "2026-10-04T12:00:00.0000000Z",
+      "DateCreated": "2026-01-02T03:04:05.0000000Z",
+      "DateLastRefreshed": "2026-10-04T12:00:00.0000000Z",
+      "Size": 7,
+      "PresentationUniqueKey": "d9999999999999999999000000000018"
+    },
+    "file": {
+      "Exists": true,
+      "IsDirectory": false,
+      "LastWriteTimeUtc": "2026-10-04T12:00:00.0000000Z",
+      "CreationTimeUtc": "0001-01-01T00:00:00.0000000Z",
+      "Length": 99
+    }
+  },
+  {
+    "name": "Folder: same",
+    "mode": "beforeSave",
+    "full": false,
+    "currentUpdateType": 1,
+    "item": {
+      "Type": "MediaBrowser.Controller.Entities.Folder",
+      "Id": "d9999999-9999-9999-9999-000000000019",
+      "Name": "Metadata file control",
+      "Path": "Z:\\ChildrenMetadata\\Folder",
+      "DateModified": "2026-10-04T12:00:00.0000000Z",
+      "DateCreated": "2026-01-02T03:04:05.0000000Z",
+      "DateLastRefreshed": "2026-10-04T12:00:00.0000000Z",
+      "Size": 7,
+      "PresentationUniqueKey": "d9999999999999999999000000000019"
+    },
+    "file": {
+      "Exists": true,
+      "IsDirectory": true,
+      "LastWriteTimeUtc": "2026-10-04T12:00:00.0000000Z",
+      "CreationTimeUtc": "0001-01-01T00:00:00.0000000Z",
+      "Length": 99
+    }
+  },
+  {
+    "name": "Movie: plus one second",
+    "mode": "beforeSave",
+    "full": false,
+    "currentUpdateType": 1,
+    "item": {
+      "Type": "MediaBrowser.Controller.Entities.Movies.Movie",
+      "Id": "d9999999-9999-9999-9999-000000000020",
+      "Name": "Metadata file control",
+      "Path": "Z:\\ChildrenMetadata\\file.mkv",
+      "DateModified": "2026-10-04T12:00:00.0000000Z",
+      "DateCreated": "2026-01-02T03:04:05.0000000Z",
+      "DateLastRefreshed": "2026-10-04T12:00:00.0000000Z",
+      "Size": 7,
+      "PresentationUniqueKey": "d9999999999999999999000000000020"
+    },
+    "file": {
+      "Exists": true,
+      "IsDirectory": false,
+      "LastWriteTimeUtc": "2026-10-04T12:00:01.0000000Z",
+      "CreationTimeUtc": "0001-01-01T00:00:00.0000000Z",
+      "Length": 99
+    }
+  },
+  {
+    "name": "Audio: plus one second",
+    "mode": "beforeSave",
+    "full": false,
+    "currentUpdateType": 1,
+    "item": {
+      "Type": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "Id": "d9999999-9999-9999-9999-000000000021",
+      "Name": "Metadata file control",
+      "Path": "Z:\\ChildrenMetadata\\file.mkv",
+      "DateModified": "2026-10-04T12:00:00.0000000Z",
+      "DateCreated": "2026-01-02T03:04:05.0000000Z",
+      "DateLastRefreshed": "2026-10-04T12:00:00.0000000Z",
+      "Size": 7,
+      "PresentationUniqueKey": "d9999999999999999999000000000021"
+    },
+    "file": {
+      "Exists": true,
+      "IsDirectory": false,
+      "LastWriteTimeUtc": "2026-10-04T12:00:01.0000000Z",
+      "CreationTimeUtc": "0001-01-01T00:00:00.0000000Z",
+      "Length": 99
+    }
+  },
+  {
+    "name": "Folder: plus one second",
+    "mode": "beforeSave",
+    "full": false,
+    "currentUpdateType": 1,
+    "item": {
+      "Type": "MediaBrowser.Controller.Entities.Folder",
+      "Id": "d9999999-9999-9999-9999-000000000022",
+      "Name": "Metadata file control",
+      "Path": "Z:\\ChildrenMetadata\\Folder",
+      "DateModified": "2026-10-04T12:00:00.0000000Z",
+      "DateCreated": "2026-01-02T03:04:05.0000000Z",
+      "DateLastRefreshed": "2026-10-04T12:00:00.0000000Z",
+      "Size": 7,
+      "PresentationUniqueKey": "d9999999999999999999000000000022"
+    },
+    "file": {
+      "Exists": true,
+      "IsDirectory": true,
+      "LastWriteTimeUtc": "2026-10-04T12:00:01.0000000Z",
+      "CreationTimeUtc": "0001-01-01T00:00:00.0000000Z",
+      "Length": 99
+    }
+  },
+  {
+    "name": "Movie: plus one second and tick",
+    "mode": "beforeSave",
+    "full": false,
+    "currentUpdateType": 1,
+    "item": {
+      "Type": "MediaBrowser.Controller.Entities.Movies.Movie",
+      "Id": "d9999999-9999-9999-9999-000000000023",
+      "Name": "Metadata file control",
+      "Path": "Z:\\ChildrenMetadata\\file.mkv",
+      "DateModified": "2026-10-04T12:00:00.0000000Z",
+      "DateCreated": "2026-01-02T03:04:05.0000000Z",
+      "DateLastRefreshed": "2026-10-04T12:00:00.0000000Z",
+      "Size": 7,
+      "PresentationUniqueKey": "d9999999999999999999000000000023"
+    },
+    "file": {
+      "Exists": true,
+      "IsDirectory": false,
+      "LastWriteTimeUtc": "2026-10-04T12:00:01.0000001Z",
+      "CreationTimeUtc": "0001-01-01T00:00:00.0000000Z",
+      "Length": 99
+    }
+  },
+  {
+    "name": "Audio: plus one second and tick",
+    "mode": "beforeSave",
+    "full": false,
+    "currentUpdateType": 1,
+    "item": {
+      "Type": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "Id": "d9999999-9999-9999-9999-000000000024",
+      "Name": "Metadata file control",
+      "Path": "Z:\\ChildrenMetadata\\file.mkv",
+      "DateModified": "2026-10-04T12:00:00.0000000Z",
+      "DateCreated": "2026-01-02T03:04:05.0000000Z",
+      "DateLastRefreshed": "2026-10-04T12:00:00.0000000Z",
+      "Size": 7,
+      "PresentationUniqueKey": "d9999999999999999999000000000024"
+    },
+    "file": {
+      "Exists": true,
+      "IsDirectory": false,
+      "LastWriteTimeUtc": "2026-10-04T12:00:01.0000001Z",
+      "CreationTimeUtc": "0001-01-01T00:00:00.0000000Z",
+      "Length": 99
+    }
+  },
+  {
+    "name": "Folder: plus one second and tick",
+    "mode": "beforeSave",
+    "full": false,
+    "currentUpdateType": 1,
+    "item": {
+      "Type": "MediaBrowser.Controller.Entities.Folder",
+      "Id": "d9999999-9999-9999-9999-000000000025",
+      "Name": "Metadata file control",
+      "Path": "Z:\\ChildrenMetadata\\Folder",
+      "DateModified": "2026-10-04T12:00:00.0000000Z",
+      "DateCreated": "2026-01-02T03:04:05.0000000Z",
+      "DateLastRefreshed": "2026-10-04T12:00:00.0000000Z",
+      "Size": 7,
+      "PresentationUniqueKey": "d9999999999999999999000000000025"
+    },
+    "file": {
+      "Exists": true,
+      "IsDirectory": true,
+      "LastWriteTimeUtc": "2026-10-04T12:00:01.0000001Z",
+      "CreationTimeUtc": "0001-01-01T00:00:00.0000000Z",
+      "Length": 99
+    }
+  },
+  {
+    "name": "Movie: minus one second",
+    "mode": "beforeSave",
+    "full": false,
+    "currentUpdateType": 1,
+    "item": {
+      "Type": "MediaBrowser.Controller.Entities.Movies.Movie",
+      "Id": "d9999999-9999-9999-9999-000000000026",
+      "Name": "Metadata file control",
+      "Path": "Z:\\ChildrenMetadata\\file.mkv",
+      "DateModified": "2026-10-04T12:00:00.0000000Z",
+      "DateCreated": "2026-01-02T03:04:05.0000000Z",
+      "DateLastRefreshed": "2026-10-04T12:00:00.0000000Z",
+      "Size": 7,
+      "PresentationUniqueKey": "d9999999999999999999000000000026"
+    },
+    "file": {
+      "Exists": true,
+      "IsDirectory": false,
+      "LastWriteTimeUtc": "2026-10-04T11:59:59.0000000Z",
+      "CreationTimeUtc": "0001-01-01T00:00:00.0000000Z",
+      "Length": 99
+    }
+  },
+  {
+    "name": "Audio: minus one second",
+    "mode": "beforeSave",
+    "full": false,
+    "currentUpdateType": 1,
+    "item": {
+      "Type": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "Id": "d9999999-9999-9999-9999-000000000027",
+      "Name": "Metadata file control",
+      "Path": "Z:\\ChildrenMetadata\\file.mkv",
+      "DateModified": "2026-10-04T12:00:00.0000000Z",
+      "DateCreated": "2026-01-02T03:04:05.0000000Z",
+      "DateLastRefreshed": "2026-10-04T12:00:00.0000000Z",
+      "Size": 7,
+      "PresentationUniqueKey": "d9999999999999999999000000000027"
+    },
+    "file": {
+      "Exists": true,
+      "IsDirectory": false,
+      "LastWriteTimeUtc": "2026-10-04T11:59:59.0000000Z",
+      "CreationTimeUtc": "0001-01-01T00:00:00.0000000Z",
+      "Length": 99
+    }
+  },
+  {
+    "name": "Folder: minus one second",
+    "mode": "beforeSave",
+    "full": false,
+    "currentUpdateType": 1,
+    "item": {
+      "Type": "MediaBrowser.Controller.Entities.Folder",
+      "Id": "d9999999-9999-9999-9999-000000000028",
+      "Name": "Metadata file control",
+      "Path": "Z:\\ChildrenMetadata\\Folder",
+      "DateModified": "2026-10-04T12:00:00.0000000Z",
+      "DateCreated": "2026-01-02T03:04:05.0000000Z",
+      "DateLastRefreshed": "2026-10-04T12:00:00.0000000Z",
+      "Size": 7,
+      "PresentationUniqueKey": "d9999999999999999999000000000028"
+    },
+    "file": {
+      "Exists": true,
+      "IsDirectory": true,
+      "LastWriteTimeUtc": "2026-10-04T11:59:59.0000000Z",
+      "CreationTimeUtc": "0001-01-01T00:00:00.0000000Z",
+      "Length": 99
+    }
+  },
+  {
+    "name": "Movie: minus one second and tick",
+    "mode": "beforeSave",
+    "full": false,
+    "currentUpdateType": 1,
+    "item": {
+      "Type": "MediaBrowser.Controller.Entities.Movies.Movie",
+      "Id": "d9999999-9999-9999-9999-000000000029",
+      "Name": "Metadata file control",
+      "Path": "Z:\\ChildrenMetadata\\file.mkv",
+      "DateModified": "2026-10-04T12:00:00.0000000Z",
+      "DateCreated": "2026-01-02T03:04:05.0000000Z",
+      "DateLastRefreshed": "2026-10-04T12:00:00.0000000Z",
+      "Size": 7,
+      "PresentationUniqueKey": "d9999999999999999999000000000029"
+    },
+    "file": {
+      "Exists": true,
+      "IsDirectory": false,
+      "LastWriteTimeUtc": "2026-10-04T11:59:58.9999999Z",
+      "CreationTimeUtc": "0001-01-01T00:00:00.0000000Z",
+      "Length": 99
+    }
+  },
+  {
+    "name": "Audio: minus one second and tick",
+    "mode": "beforeSave",
+    "full": false,
+    "currentUpdateType": 1,
+    "item": {
+      "Type": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "Id": "d9999999-9999-9999-9999-000000000030",
+      "Name": "Metadata file control",
+      "Path": "Z:\\ChildrenMetadata\\file.mkv",
+      "DateModified": "2026-10-04T12:00:00.0000000Z",
+      "DateCreated": "2026-01-02T03:04:05.0000000Z",
+      "DateLastRefreshed": "2026-10-04T12:00:00.0000000Z",
+      "Size": 7,
+      "PresentationUniqueKey": "d9999999999999999999000000000030"
+    },
+    "file": {
+      "Exists": true,
+      "IsDirectory": false,
+      "LastWriteTimeUtc": "2026-10-04T11:59:58.9999999Z",
+      "CreationTimeUtc": "0001-01-01T00:00:00.0000000Z",
+      "Length": 99
+    }
+  },
+  {
+    "name": "Folder: minus one second and tick",
+    "mode": "beforeSave",
+    "full": false,
+    "currentUpdateType": 1,
+    "item": {
+      "Type": "MediaBrowser.Controller.Entities.Folder",
+      "Id": "d9999999-9999-9999-9999-000000000031",
+      "Name": "Metadata file control",
+      "Path": "Z:\\ChildrenMetadata\\Folder",
+      "DateModified": "2026-10-04T12:00:00.0000000Z",
+      "DateCreated": "2026-01-02T03:04:05.0000000Z",
+      "DateLastRefreshed": "2026-10-04T12:00:00.0000000Z",
+      "Size": 7,
+      "PresentationUniqueKey": "d9999999999999999999000000000031"
+    },
+    "file": {
+      "Exists": true,
+      "IsDirectory": true,
+      "LastWriteTimeUtc": "2026-10-04T11:59:58.9999999Z",
+      "CreationTimeUtc": "0001-01-01T00:00:00.0000000Z",
+      "Length": 99
+    }
+  },
+  {
+    "name": "Movie: minimum",
+    "mode": "beforeSave",
+    "full": false,
+    "currentUpdateType": 1,
+    "item": {
+      "Type": "MediaBrowser.Controller.Entities.Movies.Movie",
+      "Id": "d9999999-9999-9999-9999-000000000032",
+      "Name": "Metadata file control",
+      "Path": "Z:\\ChildrenMetadata\\file.mkv",
+      "DateModified": "2026-10-04T12:00:00.0000000Z",
+      "DateCreated": "2026-01-02T03:04:05.0000000Z",
+      "DateLastRefreshed": "2026-10-04T12:00:00.0000000Z",
+      "Size": 7,
+      "PresentationUniqueKey": "d9999999999999999999000000000032"
+    },
+    "file": {
+      "Exists": true,
+      "IsDirectory": false,
+      "LastWriteTimeUtc": "0001-01-01T00:00:00.0000000Z",
+      "CreationTimeUtc": "0001-01-01T00:00:00.0000000Z",
+      "Length": 99
+    }
+  },
+  {
+    "name": "Audio: minimum",
+    "mode": "beforeSave",
+    "full": false,
+    "currentUpdateType": 1,
+    "item": {
+      "Type": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "Id": "d9999999-9999-9999-9999-000000000033",
+      "Name": "Metadata file control",
+      "Path": "Z:\\ChildrenMetadata\\file.mkv",
+      "DateModified": "2026-10-04T12:00:00.0000000Z",
+      "DateCreated": "2026-01-02T03:04:05.0000000Z",
+      "DateLastRefreshed": "2026-10-04T12:00:00.0000000Z",
+      "Size": 7,
+      "PresentationUniqueKey": "d9999999999999999999000000000033"
+    },
+    "file": {
+      "Exists": true,
+      "IsDirectory": false,
+      "LastWriteTimeUtc": "0001-01-01T00:00:00.0000000Z",
+      "CreationTimeUtc": "0001-01-01T00:00:00.0000000Z",
+      "Length": 99
+    }
+  },
+  {
+    "name": "Folder: minimum",
+    "mode": "beforeSave",
+    "full": false,
+    "currentUpdateType": 1,
+    "item": {
+      "Type": "MediaBrowser.Controller.Entities.Folder",
+      "Id": "d9999999-9999-9999-9999-000000000034",
+      "Name": "Metadata file control",
+      "Path": "Z:\\ChildrenMetadata\\Folder",
+      "DateModified": "2026-10-04T12:00:00.0000000Z",
+      "DateCreated": "2026-01-02T03:04:05.0000000Z",
+      "DateLastRefreshed": "2026-10-04T12:00:00.0000000Z",
+      "Size": 7,
+      "PresentationUniqueKey": "d9999999999999999999000000000034"
+    },
+    "file": {
+      "Exists": true,
+      "IsDirectory": true,
+      "LastWriteTimeUtc": "0001-01-01T00:00:00.0000000Z",
+      "CreationTimeUtc": "0001-01-01T00:00:00.0000000Z",
+      "Length": 99
+    }
+  },
+  {
+    "name": "Movie: creation disabled",
+    "mode": "beforeSave",
+    "full": false,
+    "currentUpdateType": 1,
+    "item": {
+      "Type": "MediaBrowser.Controller.Entities.Movies.Movie",
+      "Id": "d9999999-9999-9999-9999-000000000035",
+      "Name": "Metadata file control",
+      "Path": "Z:\\ChildrenMetadata\\file.mkv",
+      "DateModified": "2026-10-04T12:00:00.0000000Z",
+      "DateCreated": "2026-01-02T03:04:05.0000000Z",
+      "DateLastRefreshed": "2026-10-04T12:00:00.0000000Z",
+      "Size": 7,
+      "PresentationUniqueKey": "d9999999999999999999000000000035"
+    },
+    "file": {
+      "Exists": true,
+      "IsDirectory": false,
+      "LastWriteTimeUtc": "2026-10-04T12:00:02.0000000Z",
+      "CreationTimeUtc": "2026-03-04T05:06:07.0000000Z",
+      "Length": 99
+    },
+    "creationEnabled": false
+  },
+  {
+    "name": "Movie: creation minimum",
+    "mode": "beforeSave",
+    "full": false,
+    "currentUpdateType": 1,
+    "item": {
+      "Type": "MediaBrowser.Controller.Entities.Movies.Movie",
+      "Id": "d9999999-9999-9999-9999-000000000036",
+      "Name": "Metadata file control",
+      "Path": "Z:\\ChildrenMetadata\\file.mkv",
+      "DateModified": "2026-10-04T12:00:00.0000000Z",
+      "DateCreated": "2026-01-02T03:04:05.0000000Z",
+      "DateLastRefreshed": "2026-10-04T12:00:00.0000000Z",
+      "Size": 7,
+      "PresentationUniqueKey": "d9999999999999999999000000000036"
+    },
+    "file": {
+      "Exists": true,
+      "IsDirectory": false,
+      "LastWriteTimeUtc": "2026-10-04T12:00:02.0000000Z",
+      "CreationTimeUtc": "0001-01-01T00:00:00.0000000Z"
+    }
+  },
+  {
+    "name": "Movie: file missing",
+    "mode": "beforeSave",
+    "full": false,
+    "currentUpdateType": 1,
+    "item": {
+      "Type": "MediaBrowser.Controller.Entities.Movies.Movie",
+      "Id": "d9999999-9999-9999-9999-000000000037",
+      "Name": "Metadata file control",
+      "Path": "Z:\\ChildrenMetadata\\file.mkv",
+      "DateModified": "2026-10-04T12:00:00.0000000Z",
+      "DateCreated": "2026-01-02T03:04:05.0000000Z",
+      "DateLastRefreshed": "2026-10-04T12:00:00.0000000Z",
+      "Size": 7,
+      "PresentationUniqueKey": "d9999999999999999999000000000037"
+    },
+    "file": {
+      "Exists": false,
+      "LastWriteTimeUtc": "0001-01-01T00:00:00.0000000Z",
+      "CreationTimeUtc": "0001-01-01T00:00:00.0000000Z"
+    }
+  },
+  {
+    "name": "Movie: null path",
+    "mode": "beforeSave",
+    "full": false,
+    "currentUpdateType": 1,
+    "item": {
+      "Type": "MediaBrowser.Controller.Entities.Movies.Movie",
+      "Id": "d9999999-9999-9999-9999-000000000038",
+      "Name": "Metadata file control",
+      "Path": null,
+      "DateModified": "2026-10-04T12:00:00.0000000Z",
+      "DateCreated": "2026-01-02T03:04:05.0000000Z",
+      "DateLastRefreshed": "2026-10-04T12:00:00.0000000Z",
+      "Size": 7,
+      "PresentationUniqueKey": "d9999999999999999999000000000038"
+    },
+    "file": {
+      "Exists": true,
+      "IsDirectory": false,
+      "LastWriteTimeUtc": "2026-10-04T12:00:02.0000000Z",
+      "CreationTimeUtc": "2026-03-04T05:06:07.0000000Z",
+      "Length": 99
+    }
+  },
+  {
+    "name": "Movie: empty path",
+    "mode": "beforeSave",
+    "full": false,
+    "currentUpdateType": 1,
+    "item": {
+      "Type": "MediaBrowser.Controller.Entities.Movies.Movie",
+      "Id": "d9999999-9999-9999-9999-000000000039",
+      "Name": "Metadata file control",
+      "Path": "",
+      "DateModified": "2026-10-04T12:00:00.0000000Z",
+      "DateCreated": "2026-01-02T03:04:05.0000000Z",
+      "DateLastRefreshed": "2026-10-04T12:00:00.0000000Z",
+      "Size": 7,
+      "PresentationUniqueKey": "d9999999999999999999000000000039"
+    },
+    "file": {
+      "Exists": true,
+      "IsDirectory": false,
+      "LastWriteTimeUtc": "2026-10-04T12:00:02.0000000Z",
+      "CreationTimeUtc": "2026-03-04T05:06:07.0000000Z",
+      "Length": 99
+    }
+  },
+  {
+    "name": "Movie: stat failure after key",
+    "mode": "beforeSave",
+    "full": false,
+    "currentUpdateType": 1,
+    "item": {
+      "Type": "MediaBrowser.Controller.Entities.Movies.Movie",
+      "Id": "d9999999-9999-9999-9999-000000000040",
+      "Name": "Metadata file control",
+      "Path": "Z:\\ChildrenMetadata\\file.mkv",
+      "DateModified": "2026-10-04T12:00:00.0000000Z",
+      "DateCreated": "2026-01-02T03:04:05.0000000Z",
+      "DateLastRefreshed": "2026-10-04T12:00:00.0000000Z",
+      "Size": 7,
+      "PresentationUniqueKey": "old key"
+    },
+    "file": {
+      "Exists": true,
+      "IsDirectory": false,
+      "LastWriteTimeUtc": "2026-10-04T12:00:02.0000000Z",
+      "CreationTimeUtc": "2026-03-04T05:06:07.0000000Z",
+      "Length": 99
+    },
+    "fileError": true,
+    "expectException": "IOException"
+  },
+  {
+    "name": "Audio: creation disabled",
+    "mode": "beforeSave",
+    "full": false,
+    "currentUpdateType": 1,
+    "item": {
+      "Type": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "Id": "d9999999-9999-9999-9999-000000000041",
+      "Name": "Metadata file control",
+      "Path": "Z:\\ChildrenMetadata\\file.mkv",
+      "DateModified": "2026-10-04T12:00:00.0000000Z",
+      "DateCreated": "2026-01-02T03:04:05.0000000Z",
+      "DateLastRefreshed": "2026-10-04T12:00:00.0000000Z",
+      "Size": 7,
+      "PresentationUniqueKey": "d9999999999999999999000000000041"
+    },
+    "file": {
+      "Exists": true,
+      "IsDirectory": false,
+      "LastWriteTimeUtc": "2026-10-04T12:00:02.0000000Z",
+      "CreationTimeUtc": "2026-03-04T05:06:07.0000000Z",
+      "Length": 99
+    },
+    "creationEnabled": false
+  },
+  {
+    "name": "Audio: creation minimum",
+    "mode": "beforeSave",
+    "full": false,
+    "currentUpdateType": 1,
+    "item": {
+      "Type": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "Id": "d9999999-9999-9999-9999-000000000042",
+      "Name": "Metadata file control",
+      "Path": "Z:\\ChildrenMetadata\\file.mkv",
+      "DateModified": "2026-10-04T12:00:00.0000000Z",
+      "DateCreated": "2026-01-02T03:04:05.0000000Z",
+      "DateLastRefreshed": "2026-10-04T12:00:00.0000000Z",
+      "Size": 7,
+      "PresentationUniqueKey": "d9999999999999999999000000000042"
+    },
+    "file": {
+      "Exists": true,
+      "IsDirectory": false,
+      "LastWriteTimeUtc": "2026-10-04T12:00:02.0000000Z",
+      "CreationTimeUtc": "0001-01-01T00:00:00.0000000Z"
+    }
+  },
+  {
+    "name": "Audio: file missing",
+    "mode": "beforeSave",
+    "full": false,
+    "currentUpdateType": 1,
+    "item": {
+      "Type": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "Id": "d9999999-9999-9999-9999-000000000043",
+      "Name": "Metadata file control",
+      "Path": "Z:\\ChildrenMetadata\\file.mkv",
+      "DateModified": "2026-10-04T12:00:00.0000000Z",
+      "DateCreated": "2026-01-02T03:04:05.0000000Z",
+      "DateLastRefreshed": "2026-10-04T12:00:00.0000000Z",
+      "Size": 7,
+      "PresentationUniqueKey": "d9999999999999999999000000000043"
+    },
+    "file": {
+      "Exists": false,
+      "LastWriteTimeUtc": "0001-01-01T00:00:00.0000000Z",
+      "CreationTimeUtc": "0001-01-01T00:00:00.0000000Z"
+    }
+  },
+  {
+    "name": "Audio: null path",
+    "mode": "beforeSave",
+    "full": false,
+    "currentUpdateType": 1,
+    "item": {
+      "Type": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "Id": "d9999999-9999-9999-9999-000000000044",
+      "Name": "Metadata file control",
+      "Path": null,
+      "DateModified": "2026-10-04T12:00:00.0000000Z",
+      "DateCreated": "2026-01-02T03:04:05.0000000Z",
+      "DateLastRefreshed": "2026-10-04T12:00:00.0000000Z",
+      "Size": 7,
+      "PresentationUniqueKey": "d9999999999999999999000000000044"
+    },
+    "file": {
+      "Exists": true,
+      "IsDirectory": false,
+      "LastWriteTimeUtc": "2026-10-04T12:00:02.0000000Z",
+      "CreationTimeUtc": "2026-03-04T05:06:07.0000000Z",
+      "Length": 99
+    }
+  },
+  {
+    "name": "Audio: empty path",
+    "mode": "beforeSave",
+    "full": false,
+    "currentUpdateType": 1,
+    "item": {
+      "Type": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "Id": "d9999999-9999-9999-9999-000000000045",
+      "Name": "Metadata file control",
+      "Path": "",
+      "DateModified": "2026-10-04T12:00:00.0000000Z",
+      "DateCreated": "2026-01-02T03:04:05.0000000Z",
+      "DateLastRefreshed": "2026-10-04T12:00:00.0000000Z",
+      "Size": 7,
+      "PresentationUniqueKey": "d9999999999999999999000000000045"
+    },
+    "file": {
+      "Exists": true,
+      "IsDirectory": false,
+      "LastWriteTimeUtc": "2026-10-04T12:00:02.0000000Z",
+      "CreationTimeUtc": "2026-03-04T05:06:07.0000000Z",
+      "Length": 99
+    }
+  },
+  {
+    "name": "Audio: stat failure after key",
+    "mode": "beforeSave",
+    "full": false,
+    "currentUpdateType": 1,
+    "item": {
+      "Type": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "Id": "d9999999-9999-9999-9999-000000000046",
+      "Name": "Metadata file control",
+      "Path": "Z:\\ChildrenMetadata\\file.mkv",
+      "DateModified": "2026-10-04T12:00:00.0000000Z",
+      "DateCreated": "2026-01-02T03:04:05.0000000Z",
+      "DateLastRefreshed": "2026-10-04T12:00:00.0000000Z",
+      "Size": 7,
+      "PresentationUniqueKey": "old key"
+    },
+    "file": {
+      "Exists": true,
+      "IsDirectory": false,
+      "LastWriteTimeUtc": "2026-10-04T12:00:02.0000000Z",
+      "CreationTimeUtc": "2026-03-04T05:06:07.0000000Z",
+      "Length": 99
+    },
+    "fileError": true,
+    "expectException": "IOException"
+  },
+  {
+    "name": "Folder: creation disabled",
+    "mode": "beforeSave",
+    "full": false,
+    "currentUpdateType": 1,
+    "item": {
+      "Type": "MediaBrowser.Controller.Entities.Folder",
+      "Id": "d9999999-9999-9999-9999-000000000047",
+      "Name": "Metadata file control",
+      "Path": "Z:\\ChildrenMetadata\\Folder",
+      "DateModified": "2026-10-04T12:00:00.0000000Z",
+      "DateCreated": "2026-01-02T03:04:05.0000000Z",
+      "DateLastRefreshed": "2026-10-04T12:00:00.0000000Z",
+      "Size": 7,
+      "PresentationUniqueKey": "d9999999999999999999000000000047"
+    },
+    "file": {
+      "Exists": true,
+      "IsDirectory": true,
+      "LastWriteTimeUtc": "2026-10-04T12:00:02.0000000Z",
+      "CreationTimeUtc": "2026-03-04T05:06:07.0000000Z",
+      "Length": 99
+    },
+    "creationEnabled": false
+  },
+  {
+    "name": "Folder: creation minimum",
+    "mode": "beforeSave",
+    "full": false,
+    "currentUpdateType": 1,
+    "item": {
+      "Type": "MediaBrowser.Controller.Entities.Folder",
+      "Id": "d9999999-9999-9999-9999-000000000048",
+      "Name": "Metadata file control",
+      "Path": "Z:\\ChildrenMetadata\\Folder",
+      "DateModified": "2026-10-04T12:00:00.0000000Z",
+      "DateCreated": "2026-01-02T03:04:05.0000000Z",
+      "DateLastRefreshed": "2026-10-04T12:00:00.0000000Z",
+      "Size": 7,
+      "PresentationUniqueKey": "d9999999999999999999000000000048"
+    },
+    "file": {
+      "Exists": true,
+      "IsDirectory": true,
+      "LastWriteTimeUtc": "2026-10-04T12:00:02.0000000Z",
+      "CreationTimeUtc": "0001-01-01T00:00:00.0000000Z"
+    }
+  },
+  {
+    "name": "Folder: file missing",
+    "mode": "beforeSave",
+    "full": false,
+    "currentUpdateType": 1,
+    "item": {
+      "Type": "MediaBrowser.Controller.Entities.Folder",
+      "Id": "d9999999-9999-9999-9999-000000000049",
+      "Name": "Metadata file control",
+      "Path": "Z:\\ChildrenMetadata\\Folder",
+      "DateModified": "2026-10-04T12:00:00.0000000Z",
+      "DateCreated": "2026-01-02T03:04:05.0000000Z",
+      "DateLastRefreshed": "2026-10-04T12:00:00.0000000Z",
+      "Size": 7,
+      "PresentationUniqueKey": "d9999999999999999999000000000049"
+    },
+    "file": {
+      "Exists": false,
+      "LastWriteTimeUtc": "0001-01-01T00:00:00.0000000Z",
+      "CreationTimeUtc": "0001-01-01T00:00:00.0000000Z"
+    }
+  },
+  {
+    "name": "Folder: null path",
+    "mode": "beforeSave",
+    "full": false,
+    "currentUpdateType": 1,
+    "item": {
+      "Type": "MediaBrowser.Controller.Entities.Folder",
+      "Id": "d9999999-9999-9999-9999-000000000050",
+      "Name": "Metadata file control",
+      "Path": null,
+      "DateModified": "2026-10-04T12:00:00.0000000Z",
+      "DateCreated": "2026-01-02T03:04:05.0000000Z",
+      "DateLastRefreshed": "2026-10-04T12:00:00.0000000Z",
+      "Size": 7,
+      "PresentationUniqueKey": "d9999999999999999999000000000050"
+    },
+    "file": {
+      "Exists": true,
+      "IsDirectory": true,
+      "LastWriteTimeUtc": "2026-10-04T12:00:02.0000000Z",
+      "CreationTimeUtc": "2026-03-04T05:06:07.0000000Z",
+      "Length": 99
+    }
+  },
+  {
+    "name": "Folder: empty path",
+    "mode": "beforeSave",
+    "full": false,
+    "currentUpdateType": 1,
+    "item": {
+      "Type": "MediaBrowser.Controller.Entities.Folder",
+      "Id": "d9999999-9999-9999-9999-000000000051",
+      "Name": "Metadata file control",
+      "Path": "",
+      "DateModified": "2026-10-04T12:00:00.0000000Z",
+      "DateCreated": "2026-01-02T03:04:05.0000000Z",
+      "DateLastRefreshed": "2026-10-04T12:00:00.0000000Z",
+      "Size": 7,
+      "PresentationUniqueKey": "d9999999999999999999000000000051"
+    },
+    "file": {
+      "Exists": true,
+      "IsDirectory": true,
+      "LastWriteTimeUtc": "2026-10-04T12:00:02.0000000Z",
+      "CreationTimeUtc": "2026-03-04T05:06:07.0000000Z",
+      "Length": 99
+    }
+  },
+  {
+    "name": "Folder: stat failure after key",
+    "mode": "beforeSave",
+    "full": false,
+    "currentUpdateType": 1,
+    "item": {
+      "Type": "MediaBrowser.Controller.Entities.Folder",
+      "Id": "d9999999-9999-9999-9999-000000000052",
+      "Name": "Metadata file control",
+      "Path": "Z:\\ChildrenMetadata\\Folder",
+      "DateModified": "2026-10-04T12:00:00.0000000Z",
+      "DateCreated": "2026-01-02T03:04:05.0000000Z",
+      "DateLastRefreshed": "2026-10-04T12:00:00.0000000Z",
+      "Size": 7,
+      "PresentationUniqueKey": "old key"
+    },
+    "file": {
+      "Exists": true,
+      "IsDirectory": true,
+      "LastWriteTimeUtc": "2026-10-04T12:00:02.0000000Z",
+      "CreationTimeUtc": "2026-03-04T05:06:07.0000000Z",
+      "Length": 99
+    },
+    "fileError": true,
+    "expectException": "IOException"
+  },
+  {
+    "name": "Movie: cleanup failure retains dates and key",
+    "mode": "beforeSave",
+    "full": false,
+    "currentUpdateType": 1,
+    "item": {
+      "Type": "MediaBrowser.Controller.Entities.Movies.Movie",
+      "Id": "d9999999-9999-9999-9999-000000000053",
+      "Name": "Metadata file control",
+      "Path": "Z:\\ChildrenMetadata\\file.mkv",
+      "DateModified": "2026-10-04T12:00:00.0000000Z",
+      "DateCreated": "2026-01-02T03:04:05.0000000Z",
+      "DateLastRefreshed": "2026-10-04T12:00:00.0000000Z",
+      "Size": 7,
+      "PresentationUniqueKey": "old key"
+    },
+    "file": {
+      "Exists": true,
+      "IsDirectory": false,
+      "LastWriteTimeUtc": "2026-10-04T12:00:02.0000000Z",
+      "CreationTimeUtc": "2026-03-04T05:06:07.0000000Z",
+      "Length": 99
+    },
+    "cleanupError": true,
+    "expectException": "IOException"
+  },
+  {
+    "name": "Movie: existing edit flag survives file import",
+    "mode": "beforeSave",
+    "full": false,
+    "currentUpdateType": 17,
+    "item": {
+      "Type": "MediaBrowser.Controller.Entities.Movies.Movie",
+      "Id": "d9999999-9999-9999-9999-000000000054",
+      "Name": "Metadata file control",
+      "Path": "Z:\\ChildrenMetadata\\file.mkv",
+      "DateModified": "2026-10-04T12:00:00.0000000Z",
+      "DateCreated": "2026-01-02T03:04:05.0000000Z",
+      "DateLastRefreshed": "2026-10-04T12:00:00.0000000Z",
+      "Size": 7,
+      "PresentationUniqueKey": "d9999999999999999999000000000054"
+    },
+    "file": {
+      "Exists": true,
+      "IsDirectory": false,
+      "LastWriteTimeUtc": "2026-10-04T12:00:02.0000000Z",
+      "CreationTimeUtc": "2026-03-04T05:06:07.0000000Z",
+      "Length": 99
+    }
+  },
+  {
+    "name": "Movie: minimum modified date",
+    "mode": "beforeSave",
+    "full": false,
+    "currentUpdateType": 1,
+    "item": {
+      "Type": "MediaBrowser.Controller.Entities.Movies.Movie",
+      "Id": "d9999999-9999-9999-9999-000000000055",
+      "Name": "Metadata file control",
+      "Path": "Z:\\ChildrenMetadata\\file.mkv",
+      "DateModified": "0001-01-01T00:00:00.0000000Z",
+      "DateCreated": "2026-01-02T03:04:05.0000000Z",
+      "DateLastRefreshed": "2026-10-04T12:00:00.0000000Z",
+      "Size": 7,
+      "PresentationUniqueKey": "d9999999999999999999000000000055"
+    },
+    "file": {
+      "Exists": true,
+      "IsDirectory": false,
+      "LastWriteTimeUtc": "2026-10-04T12:00:02.0000000Z",
+      "CreationTimeUtc": "2026-03-04T05:06:07.0000000Z",
+      "Length": 99
+    }
+  },
+  {
+    "name": "Movie: locked metadata still updates dates",
+    "mode": "beforeSave",
+    "full": false,
+    "currentUpdateType": 1,
+    "item": {
+      "Type": "MediaBrowser.Controller.Entities.Movies.Movie",
+      "Id": "d9999999-9999-9999-9999-000000000056",
+      "Name": "Metadata file control",
+      "Path": "Z:\\ChildrenMetadata\\file.mkv",
+      "DateModified": "2026-10-04T12:00:00.0000000Z",
+      "DateCreated": "2026-01-02T03:04:05.0000000Z",
+      "DateLastRefreshed": "2026-10-04T12:00:00.0000000Z",
+      "Size": 7,
+      "PresentationUniqueKey": "d9999999999999999999000000000056",
+      "IsLocked": true,
+      "LockedFields": [
+        "Name",
+        "Runtime"
+      ]
+    },
+    "file": {
+      "Exists": true,
+      "IsDirectory": false,
+      "LastWriteTimeUtc": "2026-10-04T12:00:02.0000000Z",
+      "CreationTimeUtc": "2026-03-04T05:06:07.0000000Z",
+      "Length": 99
+    }
+  },
+  {
+    "name": "MusicAlbum: child edit survives file import",
+    "mode": "beforeSave",
+    "full": true,
+    "currentUpdateType": 1,
+    "item": {
+      "Type": "MediaBrowser.Controller.Entities.Audio.MusicAlbum",
+      "Id": "d9999999-9999-9999-9999-000000000057",
+      "Name": "Metadata file control",
+      "Path": "Z:\\ChildrenMetadata\\Folder",
+      "DateModified": "2026-10-04T12:00:00.0000000Z",
+      "DateCreated": "2026-01-02T03:04:05.0000000Z",
+      "DateLastRefreshed": "2026-10-04T12:00:00.0000000Z",
+      "Size": 7,
+      "PresentationUniqueKey": "d9999999999999999999000000000057",
+      "Genres": [
+        "Previous genre"
+      ]
+    },
+    "file": {
+      "Exists": true,
+      "IsDirectory": true,
+      "LastWriteTimeUtc": "2026-10-04T12:00:02.0000000Z",
+      "CreationTimeUtc": "2026-03-04T05:06:07.0000000Z",
+      "Length": 99
+    }
+  },
+  {
+    "name": "Series: child edit survives file import",
+    "mode": "beforeSave",
+    "full": true,
+    "currentUpdateType": 1,
+    "item": {
+      "Type": "MediaBrowser.Controller.Entities.TV.Series",
+      "Id": "d9999999-9999-9999-9999-000000000058",
+      "Name": "Metadata file control",
+      "Path": "Z:\\ChildrenMetadata\\Folder",
+      "DateModified": "2026-10-04T12:00:00.0000000Z",
+      "DateCreated": "2026-01-02T03:04:05.0000000Z",
+      "DateLastRefreshed": "2026-10-04T12:00:00.0000000Z",
+      "Size": 7,
+      "PresentationUniqueKey": "d9999999999999999999000000000058",
+      "Genres": [
+        "Previous genre"
+      ]
+    },
+    "file": {
+      "Exists": true,
+      "IsDirectory": true,
+      "LastWriteTimeUtc": "2026-10-04T12:00:02.0000000Z",
+      "CreationTimeUtc": "2026-03-04T05:06:07.0000000Z",
+      "Length": 99
+    }
+  },
+  {
+    "name": "MusicAlbum: None child edit and file import",
+    "mode": "refresh",
+    "full": false,
+    "currentUpdateType": 1,
+    "item": {
+      "Type": "MediaBrowser.Controller.Entities.Audio.MusicAlbum",
+      "Id": "d9999999-9999-9999-9999-000000000059",
+      "Name": "Metadata file control",
+      "Path": "Z:\\ChildrenMetadata\\Folder",
+      "DateModified": "2026-10-04T12:00:00.0000000Z",
+      "DateCreated": "2026-01-02T03:04:05.0000000Z",
+      "DateLastRefreshed": "2026-10-04T12:00:00.0000000Z",
+      "Size": 7,
+      "PresentationUniqueKey": "d9999999999999999999000000000059",
+      "Genres": [
+        "Previous genre"
+      ]
+    },
+    "file": {
+      "Exists": true,
+      "IsDirectory": true,
+      "LastWriteTimeUtc": "2026-10-04T12:00:02.0000000Z",
+      "CreationTimeUtc": "2026-03-04T05:06:07.0000000Z",
+      "Length": 99
+    },
+    "force": true
+  },
+  {
+    "name": "Movie: None existing refresh",
+    "mode": "refresh",
+    "full": false,
+    "currentUpdateType": 1,
+    "item": {
+      "Type": "MediaBrowser.Controller.Entities.Movies.Movie",
+      "Id": "d9999999-9999-9999-9999-000000000060",
+      "Name": "Metadata file control",
+      "Path": "Z:\\ChildrenMetadata\\file.mkv",
+      "DateModified": "2026-10-04T12:00:00.0000000Z",
+      "DateCreated": "2026-01-02T03:04:05.0000000Z",
+      "DateLastRefreshed": "2026-10-04T12:00:00.0000000Z",
+      "Size": 7,
+      "PresentationUniqueKey": "d9999999999999999999000000000060"
+    },
+    "file": {
+      "Exists": true,
+      "IsDirectory": false,
+      "LastWriteTimeUtc": "2026-10-04T12:00:02.0000000Z",
+      "CreationTimeUtc": "2026-03-04T05:06:07.0000000Z",
+      "Length": 99
+    }
+  },
+  {
+    "name": "Movie: None first refresh",
+    "mode": "refresh",
+    "full": false,
+    "currentUpdateType": 1,
+    "item": {
+      "Type": "MediaBrowser.Controller.Entities.Movies.Movie",
+      "Id": "d9999999-9999-9999-9999-000000000061",
+      "Name": "Metadata file control",
+      "Path": "Z:\\ChildrenMetadata\\file.mkv",
+      "DateModified": "2026-10-04T12:00:00.0000000Z",
+      "DateCreated": "2026-01-02T03:04:05.0000000Z",
+      "DateLastRefreshed": "0001-01-01T00:00:00.0000000Z",
+      "Size": 7,
+      "PresentationUniqueKey": "d9999999999999999999000000000061"
+    },
+    "file": {
+      "Exists": true,
+      "IsDirectory": false,
+      "LastWriteTimeUtc": "2026-10-04T12:00:02.0000000Z",
+      "CreationTimeUtc": "2026-03-04T05:06:07.0000000Z",
+      "Length": 99
+    }
+  },
+  {
+    "name": "Audio: None existing refresh",
+    "mode": "refresh",
+    "full": false,
+    "currentUpdateType": 1,
+    "item": {
+      "Type": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "Id": "d9999999-9999-9999-9999-000000000062",
+      "Name": "Metadata file control",
+      "Path": "Z:\\ChildrenMetadata\\file.mkv",
+      "DateModified": "2026-10-04T12:00:00.0000000Z",
+      "DateCreated": "2026-01-02T03:04:05.0000000Z",
+      "DateLastRefreshed": "2026-10-04T12:00:00.0000000Z",
+      "Size": 7,
+      "PresentationUniqueKey": "d9999999999999999999000000000062"
+    },
+    "file": {
+      "Exists": true,
+      "IsDirectory": false,
+      "LastWriteTimeUtc": "2026-10-04T12:00:02.0000000Z",
+      "CreationTimeUtc": "2026-03-04T05:06:07.0000000Z",
+      "Length": 99
+    }
+  },
+  {
+    "name": "Audio: None first refresh",
+    "mode": "refresh",
+    "full": false,
+    "currentUpdateType": 1,
+    "item": {
+      "Type": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "Id": "d9999999-9999-9999-9999-000000000063",
+      "Name": "Metadata file control",
+      "Path": "Z:\\ChildrenMetadata\\file.mkv",
+      "DateModified": "2026-10-04T12:00:00.0000000Z",
+      "DateCreated": "2026-01-02T03:04:05.0000000Z",
+      "DateLastRefreshed": "0001-01-01T00:00:00.0000000Z",
+      "Size": 7,
+      "PresentationUniqueKey": "d9999999999999999999000000000063"
+    },
+    "file": {
+      "Exists": true,
+      "IsDirectory": false,
+      "LastWriteTimeUtc": "2026-10-04T12:00:02.0000000Z",
+      "CreationTimeUtc": "2026-03-04T05:06:07.0000000Z",
+      "Length": 99
+    }
+  },
+  {
+    "name": "Folder: None existing refresh",
+    "mode": "refresh",
+    "full": false,
+    "currentUpdateType": 1,
+    "item": {
+      "Type": "MediaBrowser.Controller.Entities.Folder",
+      "Id": "d9999999-9999-9999-9999-000000000064",
+      "Name": "Metadata file control",
+      "Path": "Z:\\ChildrenMetadata\\Folder",
+      "DateModified": "2026-10-04T12:00:00.0000000Z",
+      "DateCreated": "2026-01-02T03:04:05.0000000Z",
+      "DateLastRefreshed": "2026-10-04T12:00:00.0000000Z",
+      "Size": 7,
+      "PresentationUniqueKey": "d9999999999999999999000000000064"
+    },
+    "file": {
+      "Exists": true,
+      "IsDirectory": true,
+      "LastWriteTimeUtc": "2026-10-04T12:00:02.0000000Z",
+      "CreationTimeUtc": "2026-03-04T05:06:07.0000000Z",
+      "Length": 99
+    }
+  },
+  {
+    "name": "Folder: None first refresh",
+    "mode": "refresh",
+    "full": false,
+    "currentUpdateType": 1,
+    "item": {
+      "Type": "MediaBrowser.Controller.Entities.Folder",
+      "Id": "d9999999-9999-9999-9999-000000000065",
+      "Name": "Metadata file control",
+      "Path": "Z:\\ChildrenMetadata\\Folder",
+      "DateModified": "2026-10-04T12:00:00.0000000Z",
+      "DateCreated": "2026-01-02T03:04:05.0000000Z",
+      "DateLastRefreshed": "0001-01-01T00:00:00.0000000Z",
+      "Size": 7,
+      "PresentationUniqueKey": "d9999999999999999999000000000065"
+    },
+    "file": {
+      "Exists": true,
+      "IsDirectory": true,
+      "LastWriteTimeUtc": "2026-10-04T12:00:02.0000000Z",
+      "CreationTimeUtc": "2026-03-04T05:06:07.0000000Z",
+      "Length": 99
+    }
+  },
+  {
+    "name": "Movie: None final directory lookup failure",
+    "mode": "refresh",
+    "full": false,
+    "currentUpdateType": 1,
+    "item": {
+      "Type": "MediaBrowser.Controller.Entities.Movies.Movie",
+      "Id": "d9999999-9999-9999-9999-000000000066",
+      "Name": "Metadata file control",
+      "Path": "Z:\\ChildrenMetadata\\file.mkv",
+      "DateModified": "2026-10-04T12:00:00.0000000Z",
+      "DateCreated": "2026-01-02T03:04:05.0000000Z",
+      "DateLastRefreshed": "0001-01-01T00:00:00.0000000Z",
+      "Size": 7,
+      "PresentationUniqueKey": "d9999999999999999999000000000066"
+    },
+    "file": {
+      "Exists": true,
+      "IsDirectory": false,
+      "LastWriteTimeUtc": "2026-10-04T12:00:02.0000000Z",
+      "CreationTimeUtc": "2026-03-04T05:06:07.0000000Z",
+      "Length": 99
+    },
+    "directoryError": true
+  },
+  {
+    "name": "Audio: None final directory lookup failure",
+    "mode": "refresh",
+    "full": false,
+    "currentUpdateType": 1,
+    "item": {
+      "Type": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "Id": "d9999999-9999-9999-9999-000000000067",
+      "Name": "Metadata file control",
+      "Path": "Z:\\ChildrenMetadata\\file.mkv",
+      "DateModified": "2026-10-04T12:00:00.0000000Z",
+      "DateCreated": "2026-01-02T03:04:05.0000000Z",
+      "DateLastRefreshed": "0001-01-01T00:00:00.0000000Z",
+      "Size": 7,
+      "PresentationUniqueKey": "d9999999999999999999000000000067"
+    },
+    "file": {
+      "Exists": true,
+      "IsDirectory": false,
+      "LastWriteTimeUtc": "2026-10-04T12:00:02.0000000Z",
+      "CreationTimeUtc": "2026-03-04T05:06:07.0000000Z",
+      "Length": 99
+    },
+    "directoryError": true
+  },
+  {
+    "name": "Folder: None final directory lookup failure",
+    "mode": "refresh",
+    "full": false,
+    "currentUpdateType": 1,
+    "item": {
+      "Type": "MediaBrowser.Controller.Entities.Folder",
+      "Id": "d9999999-9999-9999-9999-000000000068",
+      "Name": "Metadata file control",
+      "Path": "Z:\\ChildrenMetadata\\Folder",
+      "DateModified": "2026-10-04T12:00:00.0000000Z",
+      "DateCreated": "2026-01-02T03:04:05.0000000Z",
+      "DateLastRefreshed": "0001-01-01T00:00:00.0000000Z",
+      "Size": 7,
+      "PresentationUniqueKey": "d9999999999999999999000000000068"
+    },
+    "file": {
+      "Exists": true,
+      "IsDirectory": true,
+      "LastWriteTimeUtc": "2026-10-04T12:00:02.0000000Z",
+      "CreationTimeUtc": "2026-03-04T05:06:07.0000000Z",
+      "Length": 99
+    },
+    "directoryError": true
+  },
+  {
+    "name": "Movie: None cleanup failure saves nothing",
+    "mode": "refresh",
+    "full": false,
+    "currentUpdateType": 1,
+    "item": {
+      "Type": "MediaBrowser.Controller.Entities.Movies.Movie",
+      "Id": "d9999999-9999-9999-9999-000000000069",
+      "Name": "Metadata file control",
+      "Path": "Z:\\ChildrenMetadata\\file.mkv",
+      "DateModified": "2026-10-04T12:00:00.0000000Z",
+      "DateCreated": "2026-01-02T03:04:05.0000000Z",
+      "DateLastRefreshed": "0001-01-01T00:00:00.0000000Z",
+      "Size": 7,
+      "PresentationUniqueKey": "old key"
+    },
+    "file": {
+      "Exists": true,
+      "IsDirectory": false,
+      "LastWriteTimeUtc": "2026-10-04T12:00:02.0000000Z",
+      "CreationTimeUtc": "2026-03-04T05:06:07.0000000Z",
+      "Length": 99
+    },
+    "cleanupError": true,
+    "expectException": "IOException"
+  },
+  {
+    "name": "Audio: None stat failure saves nothing",
+    "mode": "refresh",
+    "full": false,
+    "currentUpdateType": 1,
+    "item": {
+      "Type": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "Id": "d9999999-9999-9999-9999-000000000070",
+      "Name": "Metadata file control",
+      "Path": "Z:\\ChildrenMetadata\\file.mkv",
+      "DateModified": "2026-10-04T12:00:00.0000000Z",
+      "DateCreated": "2026-01-02T03:04:05.0000000Z",
+      "DateLastRefreshed": "0001-01-01T00:00:00.0000000Z",
+      "Size": 7,
+      "PresentationUniqueKey": "old key"
+    },
+    "file": {
+      "Exists": true,
+      "IsDirectory": false,
+      "LastWriteTimeUtc": "2026-10-04T12:00:02.0000000Z",
+      "CreationTimeUtc": "2026-03-04T05:06:07.0000000Z",
+      "Length": 99
+    },
+    "fileError": true,
+    "expectException": "IOException"
+  }
+]

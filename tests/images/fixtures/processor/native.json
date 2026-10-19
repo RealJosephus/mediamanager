@@ -1,0 +1,758 @@
+{
+  "metadata": [
+    {
+      "filename": "single.png",
+      "Width": 1,
+      "Height": 1,
+      "BlurHash": "e00000fQfQfQfQfQfQfQfQfQfQfQfQfQfQfQfQfQfQfQfQfQfQfQfQ",
+      "sizeError": null,
+      "hashError": null
+    },
+    {
+      "filename": "single.jpg",
+      "Width": 1,
+      "Height": 1,
+      "BlurHash": "e00000fQfQfQfQfQfQfQfQfQfQfQfQfQfQfQfQfQfQfQfQfQfQfQfQ",
+      "sizeError": null,
+      "hashError": null
+    },
+    {
+      "filename": "single.webp",
+      "Width": 1,
+      "Height": 1,
+      "BlurHash": "e00000fQfQfQfQfQfQfQfQfQfQfQfQfQfQfQfQfQfQfQfQfQfQfQfQ",
+      "sizeError": null,
+      "hashError": null
+    },
+    {
+      "filename": "grid.png",
+      "Width": 20,
+      "Height": 12,
+      "BlurHash": "WhGSP=xVAmKIr\u002BksmcMzE}#lsmNhdeTEoewJOESNyUbEV]bYR%sp",
+      "sizeError": null,
+      "hashError": null
+    },
+    {
+      "filename": "grid.jpg",
+      "Width": 20,
+      "Height": 12,
+      "BlurHash": "WZF?5~$#ATF?nbo|ZWMzFI#lw]NNUiTDov#nS#S5%yk9V[X5R%of",
+      "sizeError": null,
+      "hashError": null
+    },
+    {
+      "filename": "grid.webp",
+      "Width": 20,
+      "Height": 12,
+      "BlurHash": "WZF?5}$$AAF?nIo|ZWMzFa#mw]NNY@TDkU#qSzS5%yf$V_X5R$of",
+      "sizeError": null,
+      "hashError": null
+    },
+    {
+      "filename": "alpha.png",
+      "Width": 20,
+      "Height": 12,
+      "BlurHash": "WhGSP=xVATKIr\u002Bg6mcM|E}#lsmNOh.TEoewJOESgyUa_V]bYR%sp",
+      "sizeError": null,
+      "hashError": null
+    },
+    {
+      "filename": "alpha.jpg",
+      "Width": 20,
+      "Height": 12,
+      "BlurHash": "WZF?2[$zATF?nbo|ZWMzFI#lw]NNU%TDov#nS#S6%yk9V[X5R%of",
+      "sizeError": null,
+      "hashError": null
+    },
+    {
+      "filename": "alpha.webp",
+      "Width": 20,
+      "Height": 12,
+      "BlurHash": "WbF~jh$zABF?nbo}V2MzFc#nw]NNZ8S|kS#pS#S4%ybYV_X5R%of",
+      "sizeError": null,
+      "hashError": null
+    },
+    {
+      "filename": "large.png",
+      "Width": 256,
+      "Height": 192,
+      "BlurHash": "V0HV9w^,WX^,a$~qaLbEWAfQfQVuWXVta$~qjFbEWBfQ",
+      "sizeError": null,
+      "hashError": null
+    },
+    {
+      "filename": "large.jpg",
+      "Width": 256,
+      "Height": 192,
+      "BlurHash": "V1Gu?z^,jv^*j?~qjKWFaxjbX3aJj?rYoI~qnifirtjJ",
+      "sizeError": null,
+      "hashError": null
+    },
+    {
+      "filename": "large.webp",
+      "Width": 256,
+      "Height": 192,
+      "BlurHash": "V1G\u002BXR^,o0^\u002BkB~qf8n%aebFj]R*jZV?oJ~pawjYaeba",
+      "sizeError": null,
+      "hashError": null
+    },
+    {
+      "filename": "wide.png",
+      "Width": 512,
+      "Height": 64,
+      "BlurHash": "H5HLrHt7fQt6jYt7fQs;n,~qn*fQo2jrjFfQjFfQ",
+      "sizeError": null,
+      "hashError": null
+    },
+    {
+      "filename": "wide.jpg",
+      "Width": 512,
+      "Height": 64,
+      "BlurHash": "HKF~dTxafQ%1#-bvfQt7Nb~qs;fQxGFvOYfQX9bF",
+      "sizeError": null,
+      "hashError": null
+    },
+    {
+      "filename": "wide.webp",
+      "Width": 512,
+      "Height": 64,
+      "BlurHash": "HKF~dSxaa|%1$4XTa|t8Na~qs;fQxHFtOXfQX8bE",
+      "sizeError": null,
+      "hashError": null
+    },
+    {
+      "filename": "original-http.png",
+      "Width": 1,
+      "Height": 1,
+      "BlurHash": "",
+      "sizeError": null,
+      "hashError": "NullReferenceException"
+    },
+    {
+      "filename": "empty.png",
+      "Width": 0,
+      "Height": 0,
+      "BlurHash": "",
+      "sizeError": null,
+      "hashError": null
+    },
+    {
+      "filename": "broken.png",
+      "Width": 0,
+      "Height": 0,
+      "BlurHash": "",
+      "sizeError": null,
+      "hashError": null
+    },
+    {
+      "filename": "vector.svg",
+      "Width": 20,
+      "Height": 12,
+      "BlurHash": "",
+      "sizeError": null,
+      "hashError": null
+    }
+  ],
+  "transforms": [
+    {
+      "filename": "grid.png",
+      "operation": "original",
+      "original": true,
+      "MimeType": "image/png",
+      "path": "grid.png",
+      "sha256": "dae6cccb9c43213b28013b3877bc48ae64c8613d8dfbde6efabdb4529ba7cd1e",
+      "width": 20,
+      "height": 12,
+      "pixelHash": "27fc742c00ec56b0769ce0c613fdcdd0c931e844523ef4d5560de6d38b80b227"
+    },
+    {
+      "filename": "grid.png",
+      "operation": "width",
+      "original": false,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\7\\74d69bbc-74c2-540f-ab8c-b55fafbcc02b.png",
+      "sha256": "00a1c4a40377fc76827fc655e82b3b1e1d349dc9e11bafece042cde114882cd6",
+      "width": 8,
+      "height": 5,
+      "pixelHash": "55ef43464abaf5525f3c755ffcafa055aa4b5a1a1096d44522bd8feb2dca9c97"
+    },
+    {
+      "filename": "grid.png",
+      "operation": "fill",
+      "original": false,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\9\\92535259-d27c-0aa1-7d09-f15f97d7d94f.png",
+      "sha256": "66882c8218102cda417c3dfcb2805c41a7d2c595518532059421b25a834857ad",
+      "width": 14,
+      "height": 8,
+      "pixelHash": "b8af16a97a0f9d8a06c589f91b26a6c5c133a4c10a32aa835aacd457adada0c7"
+    },
+    {
+      "filename": "grid.png",
+      "operation": "quality",
+      "original": false,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\9\\9360be2a-2d1c-68e5-1c6d-9e706d3706fe.png",
+      "sha256": "dae6cccb9c43213b28013b3877bc48ae64c8613d8dfbde6efabdb4529ba7cd1e",
+      "width": 20,
+      "height": 12,
+      "pixelHash": "27fc742c00ec56b0769ce0c613fdcdd0c931e844523ef4d5560de6d38b80b227"
+    },
+    {
+      "filename": "grid.png",
+      "operation": "webp",
+      "original": false,
+      "MimeType": "image/webp",
+      "path": "cache\\resized-images\\6\\6d7ed8e0-daeb-8d4a-c93a-d07604cbdd63.webp",
+      "sha256": "73b17476d780041bf47992194be45693f23c7d0911d5eb38aefff7cfa5217650",
+      "width": 20,
+      "height": 12,
+      "pixelHash": "27fc742c00ec56b0769ce0c613fdcdd0c931e844523ef4d5560de6d38b80b227"
+    },
+    {
+      "filename": "grid.png",
+      "operation": "jpg",
+      "original": false,
+      "MimeType": "image/jpeg",
+      "path": "cache\\resized-images\\d\\d34966d1-df9c-7264-9a87-b52bd5541c71.jpg",
+      "sha256": "1e18fb2d003f33c7f819a7522936b52f582a2f51c76feb804a54f06fd895ca10",
+      "width": 20,
+      "height": 12,
+      "pixelHash": "113a468fea381d728ea2d261f8ec4695b09226609393e06cc8959ff1375dd08b"
+    },
+    {
+      "filename": "grid.png",
+      "operation": "blur",
+      "original": false,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\2\\27e7cac8-0acc-ef7c-2239-e8c4efd9896d.png",
+      "sha256": "0525240e80392a94617c5197cae4a293ecc54ca0019b3513d33a2b0baf03cbe4",
+      "width": 20,
+      "height": 12,
+      "pixelHash": "836049be02a18a849e6d1d60cd127c85062adbb721a321758754276a8cf7ab10"
+    },
+    {
+      "filename": "grid.png",
+      "operation": "background",
+      "original": false,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\b\\b856adae-215c-b0b4-2c2e-58c75db960c3.png",
+      "sha256": "dae6cccb9c43213b28013b3877bc48ae64c8613d8dfbde6efabdb4529ba7cd1e",
+      "width": 20,
+      "height": 12,
+      "pixelHash": "27fc742c00ec56b0769ce0c613fdcdd0c931e844523ef4d5560de6d38b80b227"
+    },
+    {
+      "filename": "grid.png",
+      "operation": "foreground",
+      "original": false,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\c\\c88da074-5a49-048e-f6fc-fe7bfb323146.png",
+      "sha256": "bbe2ec9a704f3bb3390d7ef7147b0eb42dba6d9638c1949e365c78ea6a2802f6",
+      "width": 20,
+      "height": 12,
+      "pixelHash": "7906688cde0572a05ca880cabcaf5c368571f93710fc3f04ecbcefd4913cba69"
+    },
+    {
+      "filename": "grid.png",
+      "operation": "photo",
+      "original": false,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\9\\940c457f-8d54-9739-450f-6c48510c2850.png",
+      "sha256": "dae6cccb9c43213b28013b3877bc48ae64c8613d8dfbde6efabdb4529ba7cd1e",
+      "width": 20,
+      "height": 12,
+      "pixelHash": "27fc742c00ec56b0769ce0c613fdcdd0c931e844523ef4d5560de6d38b80b227"
+    },
+    {
+      "filename": "grid.jpg",
+      "operation": "original",
+      "original": true,
+      "MimeType": "image/jpeg",
+      "path": "grid.jpg",
+      "sha256": "318a52b0c019458fe8b9f040aab6460e5aeace2ad5e2af5401992b2df04d3c80",
+      "width": 20,
+      "height": 12,
+      "pixelHash": "be2edd76b3eeb4308a8d6d2d60feff9a20715cfab2869ce91201a379077b98bc"
+    },
+    {
+      "filename": "grid.jpg",
+      "operation": "width",
+      "original": false,
+      "MimeType": "image/jpeg",
+      "path": "cache\\resized-images\\5\\5513c4ae-25f2-2c98-7675-027f51bc0010.jpg",
+      "sha256": "098dcc57506043862bc2cca58ba34fb06dedc48aa05660a3c268912a74c6cc36",
+      "width": 8,
+      "height": 5,
+      "pixelHash": "0b528310835136d420c6e302c723d79236a633311bba1fc944e761caed8c7085"
+    },
+    {
+      "filename": "grid.jpg",
+      "operation": "fill",
+      "original": false,
+      "MimeType": "image/jpeg",
+      "path": "cache\\resized-images\\d\\d16f48b7-7d40-3962-362b-0124e585b6ee.jpg",
+      "sha256": "a34ada71efa2d9384d2ffbe97aea0ff86777f39923c6e55e4a1e28abc79082ec",
+      "width": 14,
+      "height": 8,
+      "pixelHash": "c85cfb92eb5627a8b2340138dc7abf510437c14aa6a88d8d8e8d01fd1e369f85"
+    },
+    {
+      "filename": "grid.jpg",
+      "operation": "quality",
+      "original": false,
+      "MimeType": "image/jpeg",
+      "path": "cache\\resized-images\\f\\f43f207d-e12b-44ae-f913-ef96fefa9d76.jpg",
+      "sha256": "5af41bf992d8f29ec7d10c6b7be6c0ceea2adc20ad3f0ef3488f5a28d4aae552",
+      "width": 20,
+      "height": 12,
+      "pixelHash": "36c9d35d54cf561141d872ab3320504c0bcf009eb63122e92464cc68eb464c05"
+    },
+    {
+      "filename": "grid.jpg",
+      "operation": "webp",
+      "original": false,
+      "MimeType": "image/webp",
+      "path": "cache\\resized-images\\4\\44f483d5-600a-2263-5e9c-c27b08ef95d5.webp",
+      "sha256": "c61628bfd494d8f53e4ce89a8d71d7cdd92c3916f4aebb0151e0b56762b913a3",
+      "width": 20,
+      "height": 12,
+      "pixelHash": "be2edd76b3eeb4308a8d6d2d60feff9a20715cfab2869ce91201a379077b98bc"
+    },
+    {
+      "filename": "grid.jpg",
+      "operation": "jpg",
+      "original": true,
+      "MimeType": "image/jpeg",
+      "path": "grid.jpg",
+      "sha256": "318a52b0c019458fe8b9f040aab6460e5aeace2ad5e2af5401992b2df04d3c80",
+      "width": 20,
+      "height": 12,
+      "pixelHash": "be2edd76b3eeb4308a8d6d2d60feff9a20715cfab2869ce91201a379077b98bc"
+    },
+    {
+      "filename": "grid.jpg",
+      "operation": "blur",
+      "original": false,
+      "MimeType": "image/jpeg",
+      "path": "cache\\resized-images\\2\\2ee799f3-b923-86a1-33b7-37df56b6e601.jpg",
+      "sha256": "2dda7b9943b7afd6342162e045c2e48008beda27801cca2dde29dec7021f7ac2",
+      "width": 20,
+      "height": 12,
+      "pixelHash": "127f43d1ea64cb228be99f129657c5556869d10762449a03fdb31cf011faba3c"
+    },
+    {
+      "filename": "grid.jpg",
+      "operation": "background",
+      "original": false,
+      "MimeType": "image/jpeg",
+      "path": "cache\\resized-images\\7\\76fcb820-a1b2-2681-38ff-c9a0eb777e56.jpg",
+      "sha256": "27878d95ab76488e1f1b65eb59865cec00446bd4311c834a187294769a1314ff",
+      "width": 20,
+      "height": 12,
+      "pixelHash": "bf9e6f9a87e1b3ef3a1ab75a0a06efdb40b64ea7e7720389555241d1234abdf7"
+    },
+    {
+      "filename": "grid.jpg",
+      "operation": "foreground",
+      "original": false,
+      "MimeType": "image/jpeg",
+      "path": "cache\\resized-images\\d\\daa3a789-624d-9a61-bd86-c78653d8cb40.jpg",
+      "sha256": "fba6862b8fce9bef33bebdac7d9b72f5b661b3c237448528c7f79a7798696bcd",
+      "width": 20,
+      "height": 12,
+      "pixelHash": "04aca6bc1cac07c0172b5ffda178a724b521d785747973a5d47573a3a9f39f1d"
+    },
+    {
+      "filename": "grid.jpg",
+      "operation": "photo",
+      "original": false,
+      "MimeType": "image/jpeg",
+      "path": "cache\\resized-images\\d\\dd9e0959-0607-a9a6-bdca-d67c5e7ef0da.jpg",
+      "sha256": "27878d95ab76488e1f1b65eb59865cec00446bd4311c834a187294769a1314ff",
+      "width": 20,
+      "height": 12,
+      "pixelHash": "bf9e6f9a87e1b3ef3a1ab75a0a06efdb40b64ea7e7720389555241d1234abdf7"
+    },
+    {
+      "filename": "alpha.png",
+      "operation": "original",
+      "original": true,
+      "MimeType": "image/png",
+      "path": "alpha.png",
+      "sha256": "b04975532fcc7f145d5575b8876960cd338f45a7d1dca5ad3481598d6f2abe4e",
+      "width": 20,
+      "height": 12,
+      "pixelHash": "1d914d4738ed064f854c0a4dbfc4d27bb15d01b647e5826f0e543fc34513f1e1"
+    },
+    {
+      "filename": "alpha.png",
+      "operation": "width",
+      "original": false,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\2\\2adbda71-d0f3-2199-c726-98b950a4b2c5.png",
+      "sha256": "187b9e918ef1446717e8adba2d989eae8825d57b7522e727cfe9af96d76c9099",
+      "width": 8,
+      "height": 5,
+      "pixelHash": "cefcc88960462be6551eaa5e4221202bb5ad39e8ea829cf5f5ef43ac882ff1dc"
+    },
+    {
+      "filename": "alpha.png",
+      "operation": "fill",
+      "original": false,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\4\\4dd0d5d7-b0d8-5f4c-8073-8f01e1d049f3.png",
+      "sha256": "acd7ff5eb99dfefad04ac7c5b4c9872161b25aa0d3a5139d5d98458ce25b498d",
+      "width": 14,
+      "height": 8,
+      "pixelHash": "cea93f27b004cca58bea2188afe163d38d18309cd2440d6a5d17c561edff04cd"
+    },
+    {
+      "filename": "alpha.png",
+      "operation": "quality",
+      "original": false,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\3\\3379be0d-0d56-4fc1-4114-8bdb4d852bb9.png",
+      "sha256": "bf2ec5e6ece1c944b47e72765c9891b22689d5935c37e71dbb8fcead4e715afd",
+      "width": 20,
+      "height": 12,
+      "pixelHash": "1d914d4738ed064f854c0a4dbfc4d27bb15d01b647e5826f0e543fc34513f1e1"
+    },
+    {
+      "filename": "alpha.png",
+      "operation": "webp",
+      "original": false,
+      "MimeType": "image/webp",
+      "path": "cache\\resized-images\\1\\1f37fc95-89a2-db42-015d-4291f7e98e2c.webp",
+      "sha256": "06e26213c10395616e3b51392b1146a1f7722d1c200020baee7db73e7df874ae",
+      "width": 20,
+      "height": 12,
+      "pixelHash": "a2733fd119128de635458298b60f8ca5deb90a2ee365c340f4eeb5439adca65c"
+    },
+    {
+      "filename": "alpha.png",
+      "operation": "jpg",
+      "original": false,
+      "MimeType": "image/jpeg",
+      "path": "cache\\resized-images\\e\\eee34080-26b5-84ac-2564-33a313e3d7bd.jpg",
+      "sha256": "327fe77f23220badbafb7b91cd8bec3a3cb4ce45e313b4de8bd8af8748bf7746",
+      "width": 20,
+      "height": 12,
+      "pixelHash": "6481fcd8bd19a8977a49b62f8cde8e781e56ac7a74549424905e9f5bab37fd37"
+    },
+    {
+      "filename": "alpha.png",
+      "operation": "blur",
+      "original": false,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\f\\f6ceeaa2-f134-805a-470b-bf854524c451.png",
+      "sha256": "d20a701efd67759c1fda7f549aaebb2a0910735ef0e7b2711c8903dad0fd96e2",
+      "width": 20,
+      "height": 12,
+      "pixelHash": "0bb0af2862375f0295238b008ecc3aa0e42a8fbb5a93ee805dadb373eecae865"
+    },
+    {
+      "filename": "alpha.png",
+      "operation": "background",
+      "original": false,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\b\\b1da8a59-50e7-2777-d6e5-1884f1f95a49.png",
+      "sha256": "d17fafeb072e55119a7006f5bfaefc00ce470f04652a2345b3cd84301eb77d46",
+      "width": 20,
+      "height": 12,
+      "pixelHash": "34c1bb5dc6c9e8d2cf3c072f3ade39b0ff5dee1b7944438c41c2023e688897f9"
+    },
+    {
+      "filename": "alpha.png",
+      "operation": "foreground",
+      "original": false,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\1\\11634590-74c5-4e04-7f1b-9235e18c7342.png",
+      "sha256": "5850f4d05802d2d77621592bac22cf5ac85be8723c6736a6841d391cf3b25983",
+      "width": 20,
+      "height": 12,
+      "pixelHash": "2f00382cfd3f89d69e03227553579d436c12221d307e4c9e09d55b179d222a18"
+    },
+    {
+      "filename": "alpha.png",
+      "operation": "photo",
+      "original": false,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\e\\e7a3d7ab-ed2c-fb6b-6b41-27f0ea8d9ec0.png",
+      "sha256": "bf2ec5e6ece1c944b47e72765c9891b22689d5935c37e71dbb8fcead4e715afd",
+      "width": 20,
+      "height": 12,
+      "pixelHash": "1d914d4738ed064f854c0a4dbfc4d27bb15d01b647e5826f0e543fc34513f1e1"
+    },
+    {
+      "filename": "large.png",
+      "operation": "original",
+      "original": true,
+      "MimeType": "image/png",
+      "path": "large.png",
+      "sha256": "b49ee9b701533148ae845834d0793f6fa11791ca92871617ece302735bbe450e",
+      "width": 256,
+      "height": 192,
+      "pixelHash": "145be83ba945246c6fd1f4175256d0fcbcec328c08ffb81a2c46ae5b1982581c"
+    },
+    {
+      "filename": "large.png",
+      "operation": "width",
+      "original": false,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\4\\483cfa43-2757-4d7f-8b73-fb68b49958f3.png",
+      "sha256": "adb20b31affb1a2f951793a40bb29197b5e673f5a1332589885898c547f43b19",
+      "width": 8,
+      "height": 6,
+      "pixelHash": "af3373b3e8e8b60fff3562c15b395b33bd9ca51dbd705592eaa1d4c4e724fd89"
+    },
+    {
+      "filename": "large.png",
+      "operation": "fill",
+      "original": false,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\a\\aef01615-a538-fb23-883d-d315a9b51866.png",
+      "sha256": "c1f4edc76806f29f0083b131336c685cc22e68ab54a198c38420489640e97b3c",
+      "width": 11,
+      "height": 8,
+      "pixelHash": "55d1923d737034d0727df14cd41578cd6f444f3c22098e680e1b1a365a87a5b5"
+    },
+    {
+      "filename": "large.png",
+      "operation": "quality",
+      "original": false,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\c\\c0ad90e5-5f82-7435-78ba-a4069c6c2db1.png",
+      "sha256": "b49ee9b701533148ae845834d0793f6fa11791ca92871617ece302735bbe450e",
+      "width": 256,
+      "height": 192,
+      "pixelHash": "145be83ba945246c6fd1f4175256d0fcbcec328c08ffb81a2c46ae5b1982581c"
+    },
+    {
+      "filename": "large.png",
+      "operation": "webp",
+      "original": false,
+      "MimeType": "image/webp",
+      "path": "cache\\resized-images\\c\\c8e0e3ab-547b-ae22-e1e0-d424c839731f.webp",
+      "sha256": "3e00be6be4f3acc0bb5a39540d5fda5e2db2cf75f58cd66cbf887e21639387ef",
+      "width": 256,
+      "height": 192,
+      "pixelHash": "145be83ba945246c6fd1f4175256d0fcbcec328c08ffb81a2c46ae5b1982581c"
+    },
+    {
+      "filename": "large.png",
+      "operation": "jpg",
+      "original": false,
+      "MimeType": "image/jpeg",
+      "path": "cache\\resized-images\\2\\2ca9d887-c1b5-a3ca-e51b-4ec9163837c8.jpg",
+      "sha256": "1226b0dbeb6e1681e05c2909892b4210915ba0893340500fa02e740913ed7fee",
+      "width": 256,
+      "height": 192,
+      "pixelHash": "cc2f516209fec324c56f3c6266f876cd4e383988277af265250d5d3931b2b011"
+    },
+    {
+      "filename": "large.png",
+      "operation": "blur",
+      "original": false,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\2\\2247db23-87cf-0300-aaa8-8dd87f1e26f4.png",
+      "sha256": "7ba7b9e1669f92e624fd72273cf6cc6f3a3489aede2824511fb6334965025f0f",
+      "width": 256,
+      "height": 192,
+      "pixelHash": "3e6b903298037ed353b43d4dd44098348b8402500baafc7b96ed7a8ac40eb218"
+    },
+    {
+      "filename": "large.png",
+      "operation": "background",
+      "original": false,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\e\\effdecd6-5105-aa7a-dd22-89b1204cc654.png",
+      "sha256": "b49ee9b701533148ae845834d0793f6fa11791ca92871617ece302735bbe450e",
+      "width": 256,
+      "height": 192,
+      "pixelHash": "145be83ba945246c6fd1f4175256d0fcbcec328c08ffb81a2c46ae5b1982581c"
+    },
+    {
+      "filename": "large.png",
+      "operation": "foreground",
+      "original": false,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\7\\7a0bc2d7-1ae7-426a-0bbf-0ec5e21dbd8e.png",
+      "sha256": "e5409f360efa23fba172c5249c240130b4c1b78ab31a3214ee25cc63483af72c",
+      "width": 256,
+      "height": 192,
+      "pixelHash": "ae3fe968a8b8d84015eda437c2ca2dfed25ab05f27034a8831de0b4b9c1f3b0e"
+    },
+    {
+      "filename": "large.png",
+      "operation": "photo",
+      "original": false,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\a\\a474a3c8-ff96-7ef3-3362-86d403a3cebc.png",
+      "sha256": "b49ee9b701533148ae845834d0793f6fa11791ca92871617ece302735bbe450e",
+      "width": 256,
+      "height": 192,
+      "pixelHash": "145be83ba945246c6fd1f4175256d0fcbcec328c08ffb81a2c46ae5b1982581c"
+    },
+    {
+      "filename": "vector.svg",
+      "operation": "original",
+      "original": true,
+      "MimeType": "image/svg\u002Bxml",
+      "path": "vector.svg",
+      "sha256": "5c246ce300c3cddc3b13809adf5d4bbaf84a18df5ec1bd1de6fc9e52dc543480",
+      "width": null,
+      "height": null,
+      "pixelHash": null
+    },
+    {
+      "filename": "vector.svg",
+      "operation": "width",
+      "original": false,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\8\\8e3ae5ad-5c57-b6ad-8189-a076cc23a2d6.png",
+      "sha256": "a996b76312c123d6d4648a17289246a2e70fc785cde461cd981918bdfc69dbc0",
+      "width": 8,
+      "height": 5,
+      "pixelHash": "868e17b7ef328823180b3d672af3ba062850b006e0c873a8807f8793a21deb66"
+    },
+    {
+      "filename": "vector.svg",
+      "operation": "fill",
+      "original": false,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\4\\49b7c3e0-ff21-2af6-9a70-2b406c028a04.png",
+      "sha256": "f28e961bee86d86937705715405d4811c72652b818954a4fc9b21b4a425e42f9",
+      "width": 14,
+      "height": 8,
+      "pixelHash": "714b10a44768ef85926c07ebf370f7ba384a2d12de2f3742e620d96fbc6f087c"
+    },
+    {
+      "filename": "vector.svg",
+      "operation": "quality",
+      "original": false,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\d\\dbaeecfc-5e8c-40dd-a349-af6e66f41a8a.png",
+      "sha256": "e104c00b5829cc56ee33a36ea69796c50a3d868dccb6da975a9f871be0f9cf9c",
+      "width": 20,
+      "height": 12,
+      "pixelHash": "9702ed55149799f1f85badf2064c43a125f96ad504e49088854f5b4140504ba9"
+    },
+    {
+      "filename": "vector.svg",
+      "operation": "webp",
+      "original": false,
+      "MimeType": "image/webp",
+      "path": "cache\\resized-images\\a\\ad4783ad-a7e6-bced-4012-1445beda7531.webp",
+      "sha256": "f675d76162d9f3302c70b9b4c33733b516eb716eb7c4069d9cb0a437a0e6c2c0",
+      "width": 20,
+      "height": 12,
+      "pixelHash": "9702ed55149799f1f85badf2064c43a125f96ad504e49088854f5b4140504ba9"
+    },
+    {
+      "filename": "vector.svg",
+      "operation": "jpg",
+      "original": false,
+      "MimeType": "image/jpeg",
+      "path": "cache\\resized-images\\1\\1b14897c-195b-20d4-8f52-51246692de2b.jpg",
+      "sha256": "313467053daf83ee87ba12c99be206ed9894a941af9f7b1e6d5aee28e4454b7f",
+      "width": 20,
+      "height": 12,
+      "pixelHash": "8df71acb4707ead485293e2cb947155e6cfcc892d86c4ec2df8f4d810793623a"
+    },
+    {
+      "filename": "vector.svg",
+      "operation": "blur",
+      "original": false,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\d\\dac253e0-5360-e766-b738-770e25d6f8ca.png",
+      "sha256": "4a73ca32e6b5ef215d0285cce58520c442d3d1a338a047348b37b9ffb73de513",
+      "width": 20,
+      "height": 12,
+      "pixelHash": "5a7384cb106aba946748c3547abd76650a42886cb474ce4c030880a82c1002b0"
+    },
+    {
+      "filename": "vector.svg",
+      "operation": "background",
+      "original": false,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\6\\658bd944-6d03-ae77-59a1-ca770ccc8ba2.png",
+      "sha256": "e104c00b5829cc56ee33a36ea69796c50a3d868dccb6da975a9f871be0f9cf9c",
+      "width": 20,
+      "height": 12,
+      "pixelHash": "9702ed55149799f1f85badf2064c43a125f96ad504e49088854f5b4140504ba9"
+    },
+    {
+      "filename": "vector.svg",
+      "operation": "foreground",
+      "original": false,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\9\\90786034-6fa7-3e72-2a4b-9faebdb4c8e2.png",
+      "sha256": "d8432c3fe4cbdbfd44f4ccb8d006385d9f6d524f0766ec32bd83cc042f52e0bd",
+      "width": 20,
+      "height": 12,
+      "pixelHash": "83d99c1104b0d5fa381a911b0ade09c596f03800dc8cd9deae920fecf7b8ae97"
+    },
+    {
+      "filename": "vector.svg",
+      "operation": "photo",
+      "original": false,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\c\\cee48d44-911d-543a-11c9-3d6bb4a67674.png",
+      "sha256": "e104c00b5829cc56ee33a36ea69796c50a3d868dccb6da975a9f871be0f9cf9c",
+      "width": 20,
+      "height": 12,
+      "pixelHash": "9702ed55149799f1f85badf2064c43a125f96ad504e49088854f5b4140504ba9"
+    }
+  ],
+  "pixelInputs": [
+    {
+      "filename": "large.png",
+      "scale": 0.5,
+      "decodeWidth": 256,
+      "decodeHeight": 192,
+      "width": 128,
+      "height": 96
+    },
+    {
+      "filename": "large.jpg",
+      "scale": 0.5,
+      "decodeWidth": 128,
+      "decodeHeight": 96,
+      "width": 64,
+      "height": 48
+    },
+    {
+      "filename": "large.webp",
+      "scale": 0.5,
+      "decodeWidth": 128,
+      "decodeHeight": 96,
+      "width": 64,
+      "height": 48
+    },
+    {
+      "filename": "wide.png",
+      "scale": 0.25,
+      "decodeWidth": 512,
+      "decodeHeight": 64,
+      "width": 128,
+      "height": 16
+    },
+    {
+      "filename": "wide.jpg",
+      "scale": 0.25,
+      "decodeWidth": 128,
+      "decodeHeight": 16,
+      "width": 32,
+      "height": 4
+    },
+    {
+      "filename": "wide.webp",
+      "scale": 0.25,
+      "decodeWidth": 128,
+      "decodeHeight": 16,
+      "width": 32,
+      "height": 4
+    }
+  ]
+}

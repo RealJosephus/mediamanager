@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-10-06T23:03:15.875Z",
+  "fixtureFiles": [
+    {
+      "path": "tests/metadata/fixtures/owned-video-discovery/input.json",
+      "sha256": "e087e4b5da3bb44498572fbe2162a7e25f83fe176eceb9a6c14328bab476e9f1"
+    },
+    {
+      "path": "tests/metadata/fixtures/owned-video-discovery/Program.cs",
+      "sha256": "f1db147603eb9dae295cbca286b36e42fdc12b1f8aeef9505968fdf9975b6c76"
+    },
+    {
+      "path": "tests/metadata/fixtures/owned-video-discovery/Oracle.csproj",
+      "sha256": "cbe1a514da582cbf55a443ee14c93f731f84816d10e7672fb713045ac5d78efe"
+    },
+    {
+      "path": "tests/metadata/fixtures/owned-video-discovery/native.json",
+      "sha256": "436494ad18767a725755abf0993a71a3508f29ef2fa374527db37fa0e530254e"
+    },
+    {
+      "path": "tests/Directory.Build.props",
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    }
+  ],
+  "assemblies": [
+    {
+      "name": "MediaBrowser.Controller",
+      "sha256": "051c588a8e85a3a7cdde8dc3d9a1112217fd7e973a86fe2ff90cf765bedb75a8"
+    },
+    {
+      "name": "Emby.Server.Implementations",
+      "sha256": "8d369435646570958505c58b9cb17da169855dabc105d0e933524361e9b7b1c8"
+    },
+    {
+      "name": "Jellyfin.Server.Implementations",
+      "sha256": "4da187af02503e82135eb192351d01490484e8ebc8c653d849f7e2900a177672"
+    }
+  ],
+  "scope": "Actual frozen BaseItem.RefreshMetadata/Video.RefreshedOwnedItems, ordinary file resolution/coercion, LibraryManager.CreateItem/DeleteItem/fast wrong-type cleanup and ItemPersistenceService/EF SQLite over actual files. Records independent create/delete, cancellation and SQL boundaries, selected columns, complete stored Data, provider dispatch, cache and events. Single-item provider performs no save, collection membership, savers, media-source list and external-file dispatch are controls. Mixed owners skip FindExtras. No complete scanner, network, provider save or release acceptance.",
+  "reference": {
+    "head": "208c278b75abd897aefa1e1175126eac5e4dbfaa",
+    "contentDigest": "e28a983db179b720c3b16d7416ee4112894a3115c4be6fe43c61c52e0d9a8313"
+  },
+  "capture": {
+    "record": "D:/mediamanager-validation/20261005/results/owned-video-discovery-oracle-20261007-3/record.json",
+    "sourceFilesSha256": "e3723efc919c494c448fca6d5a4e28500ce06985f38bec77b2419796227e6d81"
+  },
+  "candidateVerified": true,
+  "candidateComparison": "All 15 actual native recordings on real SQLite/PostgreSQL, including independent creation/deletion, coercion defaults, complete stored Data, file hashes, events, repeated live-entity dispatch and cancellation/SQL boundaries. Candidate media access uses Memory VFS with controlled creation time; instance state file cleanup is real. Read-only D3 destination previews are separate from the native mutation trace. Production host regressions cover creation before cancellation, live owner inheritance and writer preflight. Does not prove FindExtras, complete resolvers/scanner, general deletion, network/provider saves or release acceptance."
+}

@@ -1,0 +1,368 @@
+{
+  "schemaVersion": 1,
+  "sourceBindings": [
+    {
+      "path": ".agent-docs/evidence/dto-parent-id-native-v1/Program.cs",
+      "sha256": "d37555c41af99b2eacbdcfd7ded69e3120c25c256eadb1a841d899b3d5f4d6cb",
+      "bytes": 3447
+    },
+    {
+      "path": ".agent-docs/evidence/dto-parent-id-native-v1/Oracle.csproj",
+      "sha256": "f5aceeed752306180d41685b345fbab2f4faf42aa817aa3f8407882ea78a52e3",
+      "bytes": 394
+    },
+    {
+      "path": ".agent-docs/evidence/dto-parent-id-native-v1/stdout.txt",
+      "sha256": "3137f34d87d257f3a5923d054d37073376bd6f00acc58d92bd4ea7313e4f02f9",
+      "bytes": 7405
+    },
+    {
+      "path": ".agent-docs/evidence/dto-parent-id-native-v1/process.json",
+      "sha256": "1fa97984cef1d4e0c0dbf9f2cb5294fb995a8d14bfbc254a43434acfcea77ef0",
+      "bytes": 122
+    },
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/MediaBrowser.Controller/Entities/BaseItem.cs",
+      "sha256": "9dc7b96a93c9fbe874cdcededdca395b5aa2df6070f5cfc9c8959539dcd76469",
+      "bytes": 105800
+    },
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/MediaBrowser.Controller/Entities/UserView.cs",
+      "sha256": "45b09db8b50fd347d57ad30a52c761c65d4e64cae961941f31484dee86db858b",
+      "bytes": 5990
+    },
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/MediaBrowser.Controller/Entities/TV/Episode.cs",
+      "sha256": "9944d6d777c8309ceedc66b2ded3d1de29cbd8a514b1bfa7d9698e04bda33a96",
+      "bytes": 12020
+    },
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/MediaBrowser.Controller/Entities/TV/Season.cs",
+      "sha256": "3d49550fc03cfd556999e04a63bb4f692fbb574a37e946ab0b200fc9cc19ec04",
+      "bytes": 9041
+    },
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/Emby.Server.Implementations/Dto/DtoService.cs",
+      "sha256": "d00b1e73b167dc3068e619d52dbc394ea2f7187c1c87524d0e6b094d1cab5b55",
+      "bytes": 72274
+    },
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/Jellyfin.Server.Implementations/Item/BaseItemMapper.cs",
+      "sha256": "eea80de6656ccd8f988c610b48c69a93dae9e48fffbbb7a2c568a963b3451e92",
+      "bytes": 21359
+    },
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/src/Jellyfin.Extensions/Json/JsonDefaults.cs",
+      "sha256": "c0ab4cfad71ceade367d061f5a4ee04d001018155378713cd076df292bf3c815",
+      "bytes": 3675
+    },
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/src/Jellyfin.Extensions/Json/Converters/JsonNullableGuidConverter.cs",
+      "sha256": "451af180eb3b093bc326e633d453f835ae22c10da4bc3fb954018b9af547c2cd",
+      "bytes": 945
+    },
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/src/Jellyfin.Extensions/Json/Converters/JsonGuidConverter.cs",
+      "sha256": "b98afab0bf25be642aca0ca017d23049c2fb7dceb14ac565039a54473749580e",
+      "bytes": 1155
+    },
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/Jellyfin.Server/bin/Release/net10.0/MediaBrowser.Controller.dll",
+      "sha256": "0b7bd01db6605bb54658d07e8b7d5d70615a7f741cfdd6615b0cfa628f0d1644",
+      "bytes": 655872
+    },
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/Jellyfin.Server/bin/Release/net10.0/MediaBrowser.Model.dll",
+      "sha256": "991b3ca08b544ea91feff5c05d8dbb1d8b6ca3392f90753073cc09e353395946",
+      "bytes": 489472
+    },
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/Jellyfin.Server/bin/Release/net10.0/Jellyfin.Server.Implementations.dll",
+      "sha256": "eb3e6e24a44d691a70122a68feb8452420df94e93f85f2ca3b8a860bf1a42a2e",
+      "bytes": 664064
+    },
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/Jellyfin.Server/bin/Release/net10.0/Jellyfin.Database.Implementations.dll",
+      "sha256": "987e24d22a0f54a0eb2c459f9073fc6721bcbed98763da7e23e85e19e3e62ed1",
+      "bytes": 249344
+    },
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/Jellyfin.Server/bin/Release/net10.0/Jellyfin.Extensions.dll",
+      "sha256": "857e4a37f69c65f1b66cd281fe735a75caf3ae76ae878726eaf20130755cabde",
+      "bytes": 37888
+    },
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/Jellyfin.Server/bin/Release/net10.0/Emby.Server.Implementations.dll",
+      "sha256": "c63a43b6d4dc0c82f59b1d5a1c71788738f3629fdf60e01993de606b83559b1a",
+      "bytes": 1673728
+    }
+  ],
+  "oracleSourceSha256": "d37555c41af99b2eacbdcfd7ded69e3120c25c256eadb1a841d899b3d5f4d6cb",
+  "verified": {
+    "nativeProcessExit": 0,
+    "actualFrozenBaseItemMapper": true,
+    "actualFrozenDisplayParentGetter": true,
+    "actualFrozenNullableGuidSerializer": true,
+    "explicitPersistedGuidAssignment": true,
+    "actualFullDtoServiceInvoked": false
+  },
+  "result": [
+    {
+      "input": {
+        "Name": "episode-flat",
+        "Type": "Episode",
+        "ParentId": "99000000-0000-0000-0000-000000000001",
+        "SeasonId": "99000000-0000-0000-0000-000000000002",
+        "SeriesId": "99000000-0000-0000-0000-000000000003",
+        "DisplayParentId": null
+      },
+      "mappedParentId": "99000000-0000-0000-0000-000000000001",
+      "mappedSeasonId": "99000000-0000-0000-0000-000000000002",
+      "mappedSeriesId": "99000000-0000-0000-0000-000000000003",
+      "hiddenViewDisplayParentId": null,
+      "baseDisplayParentId": "99000000-0000-0000-0000-000000000002",
+      "dtoParentId": "99000000000000000000000000000002"
+    },
+    {
+      "input": {
+        "Name": "episode-parent-null",
+        "Type": "Episode",
+        "ParentId": null,
+        "SeasonId": "99000000-0000-0000-0000-000000000002",
+        "SeriesId": "99000000-0000-0000-0000-000000000003",
+        "DisplayParentId": null
+      },
+      "mappedParentId": "00000000-0000-0000-0000-000000000000",
+      "mappedSeasonId": "99000000-0000-0000-0000-000000000002",
+      "mappedSeriesId": "99000000-0000-0000-0000-000000000003",
+      "hiddenViewDisplayParentId": null,
+      "baseDisplayParentId": "99000000-0000-0000-0000-000000000002",
+      "dtoParentId": "99000000000000000000000000000002"
+    },
+    {
+      "input": {
+        "Name": "episode-season-empty",
+        "Type": "Episode",
+        "ParentId": "99000000-0000-0000-0000-000000000001",
+        "SeasonId": "00000000-0000-0000-0000-000000000000",
+        "SeriesId": "99000000-0000-0000-0000-000000000003",
+        "DisplayParentId": null
+      },
+      "mappedParentId": "99000000-0000-0000-0000-000000000001",
+      "mappedSeasonId": "00000000-0000-0000-0000-000000000000",
+      "mappedSeriesId": "99000000-0000-0000-0000-000000000003",
+      "hiddenViewDisplayParentId": null,
+      "baseDisplayParentId": "00000000-0000-0000-0000-000000000000",
+      "dtoParentId": null
+    },
+    {
+      "input": {
+        "Name": "episode-season-null",
+        "Type": "Episode",
+        "ParentId": "99000000-0000-0000-0000-000000000001",
+        "SeasonId": null,
+        "SeriesId": "99000000-0000-0000-0000-000000000003",
+        "DisplayParentId": null
+      },
+      "mappedParentId": "99000000-0000-0000-0000-000000000001",
+      "mappedSeasonId": "00000000-0000-0000-0000-000000000000",
+      "mappedSeriesId": "99000000-0000-0000-0000-000000000003",
+      "hiddenViewDisplayParentId": null,
+      "baseDisplayParentId": "00000000-0000-0000-0000-000000000000",
+      "dtoParentId": null
+    },
+    {
+      "input": {
+        "Name": "season-series-different",
+        "Type": "Season",
+        "ParentId": "99000000-0000-0000-0000-000000000001",
+        "SeasonId": null,
+        "SeriesId": "99000000-0000-0000-0000-000000000002",
+        "DisplayParentId": null
+      },
+      "mappedParentId": "99000000-0000-0000-0000-000000000001",
+      "mappedSeasonId": null,
+      "mappedSeriesId": "99000000-0000-0000-0000-000000000002",
+      "hiddenViewDisplayParentId": null,
+      "baseDisplayParentId": "99000000-0000-0000-0000-000000000002",
+      "dtoParentId": "99000000000000000000000000000002"
+    },
+    {
+      "input": {
+        "Name": "season-parent-null",
+        "Type": "Season",
+        "ParentId": null,
+        "SeasonId": null,
+        "SeriesId": "99000000-0000-0000-0000-000000000002",
+        "DisplayParentId": null
+      },
+      "mappedParentId": "00000000-0000-0000-0000-000000000000",
+      "mappedSeasonId": null,
+      "mappedSeriesId": "99000000-0000-0000-0000-000000000002",
+      "hiddenViewDisplayParentId": null,
+      "baseDisplayParentId": "99000000-0000-0000-0000-000000000002",
+      "dtoParentId": "99000000000000000000000000000002"
+    },
+    {
+      "input": {
+        "Name": "season-series-empty",
+        "Type": "Season",
+        "ParentId": "99000000-0000-0000-0000-000000000001",
+        "SeasonId": null,
+        "SeriesId": "00000000-0000-0000-0000-000000000000",
+        "DisplayParentId": null
+      },
+      "mappedParentId": "99000000-0000-0000-0000-000000000001",
+      "mappedSeasonId": null,
+      "mappedSeriesId": "00000000-0000-0000-0000-000000000000",
+      "hiddenViewDisplayParentId": null,
+      "baseDisplayParentId": "00000000-0000-0000-0000-000000000000",
+      "dtoParentId": null
+    },
+    {
+      "input": {
+        "Name": "season-series-null",
+        "Type": "Season",
+        "ParentId": "99000000-0000-0000-0000-000000000001",
+        "SeasonId": null,
+        "SeriesId": null,
+        "DisplayParentId": null
+      },
+      "mappedParentId": "99000000-0000-0000-0000-000000000001",
+      "mappedSeasonId": null,
+      "mappedSeriesId": "00000000-0000-0000-0000-000000000000",
+      "hiddenViewDisplayParentId": null,
+      "baseDisplayParentId": "00000000-0000-0000-0000-000000000000",
+      "dtoParentId": null
+    },
+    {
+      "input": {
+        "Name": "view-hidden-display",
+        "Type": "UserView",
+        "ParentId": "99000000-0000-0000-0000-000000000001",
+        "SeasonId": null,
+        "SeriesId": null,
+        "DisplayParentId": "99000000-0000-0000-0000-000000000002"
+      },
+      "mappedParentId": "99000000-0000-0000-0000-000000000001",
+      "mappedSeasonId": null,
+      "mappedSeriesId": null,
+      "hiddenViewDisplayParentId": "99000000-0000-0000-0000-000000000002",
+      "baseDisplayParentId": "99000000-0000-0000-0000-000000000001",
+      "dtoParentId": "99000000000000000000000000000001"
+    },
+    {
+      "input": {
+        "Name": "view-hidden-empty",
+        "Type": "UserView",
+        "ParentId": "99000000-0000-0000-0000-000000000001",
+        "SeasonId": null,
+        "SeriesId": null,
+        "DisplayParentId": "00000000-0000-0000-0000-000000000000"
+      },
+      "mappedParentId": "99000000-0000-0000-0000-000000000001",
+      "mappedSeasonId": null,
+      "mappedSeriesId": null,
+      "hiddenViewDisplayParentId": "00000000-0000-0000-0000-000000000000",
+      "baseDisplayParentId": "99000000-0000-0000-0000-000000000001",
+      "dtoParentId": "99000000000000000000000000000001"
+    },
+    {
+      "input": {
+        "Name": "view-parent-null",
+        "Type": "UserView",
+        "ParentId": null,
+        "SeasonId": null,
+        "SeriesId": null,
+        "DisplayParentId": "99000000-0000-0000-0000-000000000002"
+      },
+      "mappedParentId": "00000000-0000-0000-0000-000000000000",
+      "mappedSeasonId": null,
+      "mappedSeriesId": null,
+      "hiddenViewDisplayParentId": "99000000-0000-0000-0000-000000000002",
+      "baseDisplayParentId": "00000000-0000-0000-0000-000000000000",
+      "dtoParentId": null
+    },
+    {
+      "input": {
+        "Name": "folder-parent",
+        "Type": "Folder",
+        "ParentId": "99000000-0000-0000-0000-000000000001",
+        "SeasonId": null,
+        "SeriesId": null,
+        "DisplayParentId": null
+      },
+      "mappedParentId": "99000000-0000-0000-0000-000000000001",
+      "mappedSeasonId": null,
+      "mappedSeriesId": null,
+      "hiddenViewDisplayParentId": null,
+      "baseDisplayParentId": "99000000-0000-0000-0000-000000000001",
+      "dtoParentId": "99000000000000000000000000000001"
+    },
+    {
+      "input": {
+        "Name": "folder-injected-display",
+        "Type": "Folder",
+        "ParentId": "99000000-0000-0000-0000-000000000001",
+        "SeasonId": null,
+        "SeriesId": null,
+        "DisplayParentId": "99000000-0000-0000-0000-000000000002"
+      },
+      "mappedParentId": "99000000-0000-0000-0000-000000000001",
+      "mappedSeasonId": null,
+      "mappedSeriesId": null,
+      "hiddenViewDisplayParentId": null,
+      "baseDisplayParentId": "99000000-0000-0000-0000-000000000001",
+      "dtoParentId": "99000000000000000000000000000001"
+    },
+    {
+      "input": {
+        "Name": "folder-empty-injected-display",
+        "Type": "Folder",
+        "ParentId": "00000000-0000-0000-0000-000000000000",
+        "SeasonId": null,
+        "SeriesId": null,
+        "DisplayParentId": "99000000-0000-0000-0000-000000000002"
+      },
+      "mappedParentId": "00000000-0000-0000-0000-000000000000",
+      "mappedSeasonId": null,
+      "mappedSeriesId": null,
+      "hiddenViewDisplayParentId": null,
+      "baseDisplayParentId": "00000000-0000-0000-0000-000000000000",
+      "dtoParentId": null
+    },
+    {
+      "input": {
+        "Name": "video-injected-display",
+        "Type": "Video",
+        "ParentId": "99000000-0000-0000-0000-000000000001",
+        "SeasonId": null,
+        "SeriesId": null,
+        "DisplayParentId": "99000000-0000-0000-0000-000000000002"
+      },
+      "mappedParentId": "99000000-0000-0000-0000-000000000001",
+      "mappedSeasonId": null,
+      "mappedSeriesId": null,
+      "hiddenViewDisplayParentId": null,
+      "baseDisplayParentId": "99000000-0000-0000-0000-000000000001",
+      "dtoParentId": "99000000000000000000000000000001"
+    },
+    {
+      "input": {
+        "Name": "video-null-injected-display",
+        "Type": "Video",
+        "ParentId": null,
+        "SeasonId": null,
+        "SeriesId": null,
+        "DisplayParentId": "99000000-0000-0000-0000-000000000002"
+      },
+      "mappedParentId": "00000000-0000-0000-0000-000000000000",
+      "mappedSeasonId": null,
+      "mappedSeriesId": null,
+      "hiddenViewDisplayParentId": null,
+      "baseDisplayParentId": "00000000-0000-0000-0000-000000000000",
+      "dtoParentId": null
+    }
+  ],
+  "limitations": "This oracle calls the frozen BaseItemMapper and real virtual DisplayParentId getter, then serializes BaseItemDto.ParentId with the frozen nullable-Guid serializer. DtoService source is bound and its exact BaseItem-typed assignment is reproduced; the complete DtoService projection and HTTP controller are not invoked."
+}

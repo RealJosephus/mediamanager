@@ -1,0 +1,2089 @@
+{
+  "actualFrozenItemNullPrecedence": true,
+  "results": [
+    {
+      "name": "null-Genres",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "source",
+      "mapperException": "ArgumentNullException",
+      "mapperParameter": "source",
+      "mapperColumns": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "null-Studios",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "source",
+      "mapperException": null,
+      "mapperParameter": null,
+      "mapperColumns": {
+        "Artists": "",
+        "AlbumArtists": "",
+        "Genres": "",
+        "Studios": null,
+        "Tags": "",
+        "ProductionLocations": ""
+      },
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "null-Genres-Studios",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "source",
+      "mapperException": "ArgumentNullException",
+      "mapperParameter": "source",
+      "mapperColumns": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "null-Tags",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "collection",
+      "mapperException": null,
+      "mapperParameter": null,
+      "mapperColumns": {
+        "Artists": "",
+        "AlbumArtists": "",
+        "Genres": "",
+        "Studios": "",
+        "Tags": null,
+        "ProductionLocations": ""
+      },
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "null-Genres-Tags",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "collection",
+      "mapperException": "ArgumentNullException",
+      "mapperParameter": "source",
+      "mapperColumns": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "null-Studios-Tags",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "collection",
+      "mapperException": null,
+      "mapperParameter": null,
+      "mapperColumns": {
+        "Artists": "",
+        "AlbumArtists": "",
+        "Genres": "",
+        "Studios": null,
+        "Tags": null,
+        "ProductionLocations": ""
+      },
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "null-Genres-Studios-Tags",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "collection",
+      "mapperException": "ArgumentNullException",
+      "mapperParameter": "source",
+      "mapperColumns": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "null-Artists",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "source",
+      "mapperException": null,
+      "mapperParameter": null,
+      "mapperColumns": {
+        "Artists": null,
+        "AlbumArtists": "",
+        "Genres": "",
+        "Studios": "",
+        "Tags": "",
+        "ProductionLocations": ""
+      },
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "null-Genres-Artists",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "source",
+      "mapperException": "ArgumentNullException",
+      "mapperParameter": "source",
+      "mapperColumns": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "null-Studios-Artists",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "source",
+      "mapperException": null,
+      "mapperParameter": null,
+      "mapperColumns": {
+        "Artists": null,
+        "AlbumArtists": "",
+        "Genres": "",
+        "Studios": null,
+        "Tags": "",
+        "ProductionLocations": ""
+      },
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "null-Genres-Studios-Artists",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "source",
+      "mapperException": "ArgumentNullException",
+      "mapperParameter": "source",
+      "mapperColumns": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "null-Tags-Artists",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "collection",
+      "mapperException": null,
+      "mapperParameter": null,
+      "mapperColumns": {
+        "Artists": null,
+        "AlbumArtists": "",
+        "Genres": "",
+        "Studios": "",
+        "Tags": null,
+        "ProductionLocations": ""
+      },
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "null-Genres-Tags-Artists",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "collection",
+      "mapperException": "ArgumentNullException",
+      "mapperParameter": "source",
+      "mapperColumns": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "null-Studios-Tags-Artists",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "collection",
+      "mapperException": null,
+      "mapperParameter": null,
+      "mapperColumns": {
+        "Artists": null,
+        "AlbumArtists": "",
+        "Genres": "",
+        "Studios": null,
+        "Tags": null,
+        "ProductionLocations": ""
+      },
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "null-Genres-Studios-Tags-Artists",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "collection",
+      "mapperException": "ArgumentNullException",
+      "mapperParameter": "source",
+      "mapperColumns": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "null-AlbumArtists",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "source",
+      "mapperException": null,
+      "mapperParameter": null,
+      "mapperColumns": {
+        "Artists": "",
+        "AlbumArtists": null,
+        "Genres": "",
+        "Studios": "",
+        "Tags": "",
+        "ProductionLocations": ""
+      },
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "null-Genres-AlbumArtists",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "source",
+      "mapperException": "ArgumentNullException",
+      "mapperParameter": "source",
+      "mapperColumns": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "null-Studios-AlbumArtists",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "source",
+      "mapperException": null,
+      "mapperParameter": null,
+      "mapperColumns": {
+        "Artists": "",
+        "AlbumArtists": null,
+        "Genres": "",
+        "Studios": null,
+        "Tags": "",
+        "ProductionLocations": ""
+      },
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "null-Genres-Studios-AlbumArtists",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "source",
+      "mapperException": "ArgumentNullException",
+      "mapperParameter": "source",
+      "mapperColumns": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "null-Tags-AlbumArtists",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "source",
+      "mapperException": null,
+      "mapperParameter": null,
+      "mapperColumns": {
+        "Artists": "",
+        "AlbumArtists": null,
+        "Genres": "",
+        "Studios": "",
+        "Tags": null,
+        "ProductionLocations": ""
+      },
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "null-Genres-Tags-AlbumArtists",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "source",
+      "mapperException": "ArgumentNullException",
+      "mapperParameter": "source",
+      "mapperColumns": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "null-Studios-Tags-AlbumArtists",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "source",
+      "mapperException": null,
+      "mapperParameter": null,
+      "mapperColumns": {
+        "Artists": "",
+        "AlbumArtists": null,
+        "Genres": "",
+        "Studios": null,
+        "Tags": null,
+        "ProductionLocations": ""
+      },
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "null-Genres-Studios-Tags-AlbumArtists",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "source",
+      "mapperException": "ArgumentNullException",
+      "mapperParameter": "source",
+      "mapperColumns": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "null-Artists-AlbumArtists",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "source",
+      "mapperException": null,
+      "mapperParameter": null,
+      "mapperColumns": {
+        "Artists": null,
+        "AlbumArtists": null,
+        "Genres": "",
+        "Studios": "",
+        "Tags": "",
+        "ProductionLocations": ""
+      },
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "null-Genres-Artists-AlbumArtists",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "source",
+      "mapperException": "ArgumentNullException",
+      "mapperParameter": "source",
+      "mapperColumns": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "null-Studios-Artists-AlbumArtists",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "source",
+      "mapperException": null,
+      "mapperParameter": null,
+      "mapperColumns": {
+        "Artists": null,
+        "AlbumArtists": null,
+        "Genres": "",
+        "Studios": null,
+        "Tags": "",
+        "ProductionLocations": ""
+      },
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "null-Genres-Studios-Artists-AlbumArtists",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "source",
+      "mapperException": "ArgumentNullException",
+      "mapperParameter": "source",
+      "mapperColumns": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "null-Tags-Artists-AlbumArtists",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "source",
+      "mapperException": null,
+      "mapperParameter": null,
+      "mapperColumns": {
+        "Artists": null,
+        "AlbumArtists": null,
+        "Genres": "",
+        "Studios": "",
+        "Tags": null,
+        "ProductionLocations": ""
+      },
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "null-Genres-Tags-Artists-AlbumArtists",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "source",
+      "mapperException": "ArgumentNullException",
+      "mapperParameter": "source",
+      "mapperColumns": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "null-Studios-Tags-Artists-AlbumArtists",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "source",
+      "mapperException": null,
+      "mapperParameter": null,
+      "mapperColumns": {
+        "Artists": null,
+        "AlbumArtists": null,
+        "Genres": "",
+        "Studios": null,
+        "Tags": null,
+        "ProductionLocations": ""
+      },
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "null-Genres-Studios-Tags-Artists-AlbumArtists",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "source",
+      "mapperException": "ArgumentNullException",
+      "mapperParameter": "source",
+      "mapperColumns": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "null-ProductionLocations",
+      "exception": null,
+      "exceptionParameter": null,
+      "mapperException": null,
+      "mapperParameter": null,
+      "mapperColumns": {
+        "Artists": "",
+        "AlbumArtists": "",
+        "Genres": "",
+        "Studios": "",
+        "Tags": "",
+        "ProductionLocations": null
+      },
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": false,
+      "calls": [
+        {
+          "action": "added",
+          "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "parentId": "97b00000-0000-0000-0000-000000000002"
+        }
+      ],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [
+        {
+          "id": "$NEW/6/Collection",
+          "type": 6,
+          "value": "Collection",
+          "cleanValue": "collection"
+        },
+        {
+          "id": "$NEW/6/PERMIT",
+          "type": 6,
+          "value": "PERMIT",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/6/Parent",
+          "type": 6,
+          "value": "Parent",
+          "cleanValue": "parent"
+        },
+        {
+          "id": "$NEW/6/Root",
+          "type": 6,
+          "value": "Root",
+          "cleanValue": "root"
+        }
+      ],
+      "maps": [
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/6/Collection"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/6/PERMIT"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/6/Parent"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/6/Root"
+        }
+      ],
+      "ancestors": [
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "parentId": "97b00000-0000-0000-0000-000000000002"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "parentId": "97b00000-0000-0000-0000-000000000003"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "parentId": "97b00000-0000-0000-0000-000000000004"
+        }
+      ],
+      "columns": {
+        "Artists": "",
+        "AlbumArtists": "",
+        "Genres": "",
+        "Studios": "",
+        "Tags": "",
+        "ProductionLocations": null
+      }
+    },
+    {
+      "name": "null-Genres-ProductionLocations",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "source",
+      "mapperException": "ArgumentNullException",
+      "mapperParameter": "source",
+      "mapperColumns": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "null-Studios-ProductionLocations",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "source",
+      "mapperException": null,
+      "mapperParameter": null,
+      "mapperColumns": {
+        "Artists": "",
+        "AlbumArtists": "",
+        "Genres": "",
+        "Studios": null,
+        "Tags": "",
+        "ProductionLocations": null
+      },
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "null-Genres-Studios-ProductionLocations",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "source",
+      "mapperException": "ArgumentNullException",
+      "mapperParameter": "source",
+      "mapperColumns": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "null-Tags-ProductionLocations",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "collection",
+      "mapperException": null,
+      "mapperParameter": null,
+      "mapperColumns": {
+        "Artists": "",
+        "AlbumArtists": "",
+        "Genres": "",
+        "Studios": "",
+        "Tags": null,
+        "ProductionLocations": null
+      },
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "null-Genres-Tags-ProductionLocations",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "collection",
+      "mapperException": "ArgumentNullException",
+      "mapperParameter": "source",
+      "mapperColumns": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "null-Studios-Tags-ProductionLocations",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "collection",
+      "mapperException": null,
+      "mapperParameter": null,
+      "mapperColumns": {
+        "Artists": "",
+        "AlbumArtists": "",
+        "Genres": "",
+        "Studios": null,
+        "Tags": null,
+        "ProductionLocations": null
+      },
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "null-Genres-Studios-Tags-ProductionLocations",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "collection",
+      "mapperException": "ArgumentNullException",
+      "mapperParameter": "source",
+      "mapperColumns": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "null-Artists-ProductionLocations",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "source",
+      "mapperException": null,
+      "mapperParameter": null,
+      "mapperColumns": {
+        "Artists": null,
+        "AlbumArtists": "",
+        "Genres": "",
+        "Studios": "",
+        "Tags": "",
+        "ProductionLocations": null
+      },
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "null-Genres-Artists-ProductionLocations",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "source",
+      "mapperException": "ArgumentNullException",
+      "mapperParameter": "source",
+      "mapperColumns": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "null-Studios-Artists-ProductionLocations",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "source",
+      "mapperException": null,
+      "mapperParameter": null,
+      "mapperColumns": {
+        "Artists": null,
+        "AlbumArtists": "",
+        "Genres": "",
+        "Studios": null,
+        "Tags": "",
+        "ProductionLocations": null
+      },
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "null-Genres-Studios-Artists-ProductionLocations",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "source",
+      "mapperException": "ArgumentNullException",
+      "mapperParameter": "source",
+      "mapperColumns": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "null-Tags-Artists-ProductionLocations",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "collection",
+      "mapperException": null,
+      "mapperParameter": null,
+      "mapperColumns": {
+        "Artists": null,
+        "AlbumArtists": "",
+        "Genres": "",
+        "Studios": "",
+        "Tags": null,
+        "ProductionLocations": null
+      },
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "null-Genres-Tags-Artists-ProductionLocations",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "collection",
+      "mapperException": "ArgumentNullException",
+      "mapperParameter": "source",
+      "mapperColumns": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "null-Studios-Tags-Artists-ProductionLocations",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "collection",
+      "mapperException": null,
+      "mapperParameter": null,
+      "mapperColumns": {
+        "Artists": null,
+        "AlbumArtists": "",
+        "Genres": "",
+        "Studios": null,
+        "Tags": null,
+        "ProductionLocations": null
+      },
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "null-Genres-Studios-Tags-Artists-ProductionLocations",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "collection",
+      "mapperException": "ArgumentNullException",
+      "mapperParameter": "source",
+      "mapperColumns": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "null-AlbumArtists-ProductionLocations",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "source",
+      "mapperException": null,
+      "mapperParameter": null,
+      "mapperColumns": {
+        "Artists": "",
+        "AlbumArtists": null,
+        "Genres": "",
+        "Studios": "",
+        "Tags": "",
+        "ProductionLocations": null
+      },
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "null-Genres-AlbumArtists-ProductionLocations",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "source",
+      "mapperException": "ArgumentNullException",
+      "mapperParameter": "source",
+      "mapperColumns": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "null-Studios-AlbumArtists-ProductionLocations",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "source",
+      "mapperException": null,
+      "mapperParameter": null,
+      "mapperColumns": {
+        "Artists": "",
+        "AlbumArtists": null,
+        "Genres": "",
+        "Studios": null,
+        "Tags": "",
+        "ProductionLocations": null
+      },
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "null-Genres-Studios-AlbumArtists-ProductionLocations",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "source",
+      "mapperException": "ArgumentNullException",
+      "mapperParameter": "source",
+      "mapperColumns": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "null-Tags-AlbumArtists-ProductionLocations",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "source",
+      "mapperException": null,
+      "mapperParameter": null,
+      "mapperColumns": {
+        "Artists": "",
+        "AlbumArtists": null,
+        "Genres": "",
+        "Studios": "",
+        "Tags": null,
+        "ProductionLocations": null
+      },
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "null-Genres-Tags-AlbumArtists-ProductionLocations",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "source",
+      "mapperException": "ArgumentNullException",
+      "mapperParameter": "source",
+      "mapperColumns": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "null-Studios-Tags-AlbumArtists-ProductionLocations",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "source",
+      "mapperException": null,
+      "mapperParameter": null,
+      "mapperColumns": {
+        "Artists": "",
+        "AlbumArtists": null,
+        "Genres": "",
+        "Studios": null,
+        "Tags": null,
+        "ProductionLocations": null
+      },
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "null-Genres-Studios-Tags-AlbumArtists-ProductionLocations",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "source",
+      "mapperException": "ArgumentNullException",
+      "mapperParameter": "source",
+      "mapperColumns": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "null-Artists-AlbumArtists-ProductionLocations",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "source",
+      "mapperException": null,
+      "mapperParameter": null,
+      "mapperColumns": {
+        "Artists": null,
+        "AlbumArtists": null,
+        "Genres": "",
+        "Studios": "",
+        "Tags": "",
+        "ProductionLocations": null
+      },
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "null-Genres-Artists-AlbumArtists-ProductionLocations",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "source",
+      "mapperException": "ArgumentNullException",
+      "mapperParameter": "source",
+      "mapperColumns": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "null-Studios-Artists-AlbumArtists-ProductionLocations",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "source",
+      "mapperException": null,
+      "mapperParameter": null,
+      "mapperColumns": {
+        "Artists": null,
+        "AlbumArtists": null,
+        "Genres": "",
+        "Studios": null,
+        "Tags": "",
+        "ProductionLocations": null
+      },
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "null-Genres-Studios-Artists-AlbumArtists-ProductionLocations",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "source",
+      "mapperException": "ArgumentNullException",
+      "mapperParameter": "source",
+      "mapperColumns": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "null-Tags-Artists-AlbumArtists-ProductionLocations",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "source",
+      "mapperException": null,
+      "mapperParameter": null,
+      "mapperColumns": {
+        "Artists": null,
+        "AlbumArtists": null,
+        "Genres": "",
+        "Studios": "",
+        "Tags": null,
+        "ProductionLocations": null
+      },
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "null-Genres-Tags-Artists-AlbumArtists-ProductionLocations",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "source",
+      "mapperException": "ArgumentNullException",
+      "mapperParameter": "source",
+      "mapperColumns": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "null-Studios-Tags-Artists-AlbumArtists-ProductionLocations",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "source",
+      "mapperException": null,
+      "mapperParameter": null,
+      "mapperColumns": {
+        "Artists": null,
+        "AlbumArtists": null,
+        "Genres": "",
+        "Studios": null,
+        "Tags": null,
+        "ProductionLocations": null
+      },
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "null-Genres-Studios-Tags-Artists-AlbumArtists-ProductionLocations",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "source",
+      "mapperException": "ArgumentNullException",
+      "mapperParameter": "source",
+      "mapperColumns": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "parent-tags-null-album-false-genres-false",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "collection",
+      "mapperException": null,
+      "mapperParameter": null,
+      "mapperColumns": {
+        "Artists": "",
+        "AlbumArtists": "",
+        "Genres": "",
+        "Studios": "",
+        "Tags": "",
+        "ProductionLocations": ""
+      },
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "parent-tags-null-album-false-genres-true",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "collection",
+      "mapperException": "ArgumentNullException",
+      "mapperParameter": "source",
+      "mapperColumns": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "parent-tags-null-album-true-genres-false",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "source",
+      "mapperException": null,
+      "mapperParameter": null,
+      "mapperColumns": {
+        "Artists": "",
+        "AlbumArtists": null,
+        "Genres": "",
+        "Studios": "",
+        "Tags": "",
+        "ProductionLocations": ""
+      },
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "parent-tags-null-album-true-genres-true",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "source",
+      "mapperException": "ArgumentNullException",
+      "mapperParameter": "source",
+      "mapperColumns": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "root-tags-null-album-false-genres-false",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "collection",
+      "mapperException": null,
+      "mapperParameter": null,
+      "mapperColumns": {
+        "Artists": "",
+        "AlbumArtists": "",
+        "Genres": "",
+        "Studios": "",
+        "Tags": "",
+        "ProductionLocations": ""
+      },
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "root-tags-null-album-false-genres-true",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "collection",
+      "mapperException": "ArgumentNullException",
+      "mapperParameter": "source",
+      "mapperColumns": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "root-tags-null-album-true-genres-false",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "source",
+      "mapperException": null,
+      "mapperParameter": null,
+      "mapperColumns": {
+        "Artists": "",
+        "AlbumArtists": null,
+        "Genres": "",
+        "Studios": "",
+        "Tags": "",
+        "ProductionLocations": ""
+      },
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "root-tags-null-album-true-genres-true",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "source",
+      "mapperException": "ArgumentNullException",
+      "mapperParameter": "source",
+      "mapperColumns": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "collection-tags-null-album-false-genres-false",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "collection",
+      "mapperException": null,
+      "mapperParameter": null,
+      "mapperColumns": {
+        "Artists": "",
+        "AlbumArtists": "",
+        "Genres": "",
+        "Studios": "",
+        "Tags": "",
+        "ProductionLocations": ""
+      },
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "collection-tags-null-album-false-genres-true",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "collection",
+      "mapperException": "ArgumentNullException",
+      "mapperParameter": "source",
+      "mapperColumns": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "collection-tags-null-album-true-genres-false",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "source",
+      "mapperException": null,
+      "mapperParameter": null,
+      "mapperColumns": {
+        "Artists": "",
+        "AlbumArtists": null,
+        "Genres": "",
+        "Studios": "",
+        "Tags": "",
+        "ProductionLocations": ""
+      },
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "collection-tags-null-album-true-genres-true",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "source",
+      "mapperException": "ArgumentNullException",
+      "mapperParameter": "source",
+      "mapperColumns": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "AudioBook-null-AlbumArtists-Tags",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "source",
+      "mapperException": null,
+      "mapperParameter": null,
+      "mapperColumns": {
+        "Artists": "",
+        "AlbumArtists": null,
+        "Genres": "",
+        "Studios": "",
+        "Tags": null,
+        "ProductionLocations": ""
+      },
+      "nativeType": "MediaBrowser.Controller.Entities.AudioBook",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "AudioBook-null-Tags-Genres",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "collection",
+      "mapperException": "ArgumentNullException",
+      "mapperParameter": "source",
+      "mapperColumns": null,
+      "nativeType": "MediaBrowser.Controller.Entities.AudioBook",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "AudioBook-null-Artists",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "source",
+      "mapperException": null,
+      "mapperParameter": null,
+      "mapperColumns": {
+        "Artists": null,
+        "AlbumArtists": "",
+        "Genres": "",
+        "Studios": "",
+        "Tags": "",
+        "ProductionLocations": ""
+      },
+      "nativeType": "MediaBrowser.Controller.Entities.AudioBook",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "MusicAlbum-null-AlbumArtists-Tags",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "source",
+      "mapperException": null,
+      "mapperParameter": null,
+      "mapperColumns": {
+        "Artists": "",
+        "AlbumArtists": null,
+        "Genres": "",
+        "Studios": "",
+        "Tags": null,
+        "ProductionLocations": ""
+      },
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.MusicAlbum",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "MusicAlbum-null-Tags-Genres",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "collection",
+      "mapperException": "ArgumentNullException",
+      "mapperParameter": "source",
+      "mapperColumns": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.MusicAlbum",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "MusicAlbum-null-Artists",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "source",
+      "mapperException": null,
+      "mapperParameter": null,
+      "mapperColumns": {
+        "Artists": null,
+        "AlbumArtists": "",
+        "Genres": "",
+        "Studios": "",
+        "Tags": "",
+        "ProductionLocations": ""
+      },
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.MusicAlbum",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    }
+  ],
+  "assemblies": [
+    {
+      "name": "MediaBrowser.Controller",
+      "path": "D:\\mediamanager\\.test-output\\validation\\item-null-precedence-oracle-20261005-2\\bin\\Release\\net10.0\\MediaBrowser.Controller.dll",
+      "sha256": "56a527307ef93f810fdadec33ba8380cc8416d38cb1cfea92297b0f65288808e"
+    },
+    {
+      "name": "Jellyfin.Server.Implementations",
+      "path": "D:\\mediamanager\\.test-output\\validation\\item-null-precedence-oracle-20261005-2\\bin\\Release\\net10.0\\Jellyfin.Server.Implementations.dll",
+      "sha256": "b91a6797f81f8563b8896c3da3e5cd4e9d11c61eb084578bf7b81108c3c3e2e6"
+    },
+    {
+      "name": "Emby.Server.Implementations",
+      "path": "D:\\mediamanager\\.test-output\\validation\\item-null-precedence-oracle-20261005-2\\bin\\Release\\net10.0\\Emby.Server.Implementations.dll",
+      "sha256": "ccff8514100a65508b65882d5881463fe4ff73ea07eb4d2b2d98e234d7b4ac99"
+    },
+    {
+      "name": "Jellyfin.Database.Implementations",
+      "path": "D:\\mediamanager\\.test-output\\validation\\item-null-precedence-oracle-20261005-2\\bin\\Release\\net10.0\\Jellyfin.Database.Implementations.dll",
+      "sha256": "21648ea8e6eec045789c66c199b30c68b1b00f6e15918ac66347c19244b5670b"
+    },
+    {
+      "name": "Jellyfin.Database.Providers.Sqlite",
+      "path": "D:\\mediamanager\\.test-output\\validation\\item-null-precedence-oracle-20261005-2\\bin\\Release\\net10.0\\Jellyfin.Database.Providers.Sqlite.dll",
+      "sha256": "eefedf49a1c6c62c7eab9b4347c0bca377c3e059ec61ef26a08148de7bba94bb"
+    }
+  ],
+  "scope": "Actual mapper preview, LibraryManager.CreateItems and EF SaveItems: Audio all 63 nonempty combinations of six null lists plus inherited parent/collection null tags, and six AudioBook/MusicAlbum inheritance controls. Parent/owner lookup, user-root child array, library options and path reversal are controls. Native deterministic identity is checked for every subject. Projects mapper/save exception type and parameter, six SQL columns, relations and events. Excludes full JSON, other types and complete ValidateChildren/library acceptance."
+,"schemaVersion":1,"candidateVerified":false,"inputSha256":"6363ed17a53a38bbd8be663a3c22e2d1b298f270eef148f7e1a751cdce588f70","sourceFilesSha256":"b7e12be2bab88a8d658db4e00f8791ac772ff9eed7451142ee0739055519e015"}

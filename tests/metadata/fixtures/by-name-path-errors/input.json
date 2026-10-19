@@ -1,0 +1,62 @@
+[
+  {
+    "name": "Genre-requires",
+    "type": "Genre",
+    "mode": "requires"
+  },
+  {
+    "name": "Genre-before",
+    "type": "Genre",
+    "mode": "before"
+  },
+  {
+    "name": "MusicGenre-requires",
+    "type": "MusicGenre",
+    "mode": "requires"
+  },
+  {
+    "name": "MusicGenre-before",
+    "type": "MusicGenre",
+    "mode": "before"
+  },
+  {
+    "name": "Studio-requires",
+    "type": "Studio",
+    "mode": "requires"
+  },
+  {
+    "name": "Studio-before",
+    "type": "Studio",
+    "mode": "before"
+  },
+  {
+    "name": "Year-requires",
+    "type": "Year",
+    "mode": "requires"
+  },
+  {
+    "name": "Year-before",
+    "type": "Year",
+    "mode": "before"
+  },
+  {
+    "name": "Person-requires",
+    "type": "Person",
+    "mode": "requires"
+  },
+  {
+    "name": "Person-before",
+    "type": "Person",
+    "mode": "before"
+  },
+  {
+    "name": "MusicArtist-requires",
+    "type": "MusicArtist",
+    "mode": "requires"
+  },
+  {
+    "name": "MusicArtist-before",
+    "type": "MusicArtist",
+    "mode": "before"
+  }
+]

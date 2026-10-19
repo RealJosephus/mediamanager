@@ -1,0 +1,1264 @@
+{
+  "cases": [
+    {
+      "name": "path-only/empty",
+      "type": "Movie",
+      "itemCountry": null,
+      "parentCountry": null,
+      "outerCountry": null,
+      "libraryCountries": [
+        "AU",
+        null
+      ],
+      "optionCountries": [
+        null,
+        null
+      ],
+      "globalCountry": "US",
+      "shape": "path-only",
+      "cache": "empty",
+      "reverse": false,
+      "parent": "actual",
+      "owner": false,
+      "displayCountry": "NZ"
+    },
+    {
+      "name": "path-only/correct",
+      "type": "Movie",
+      "itemCountry": null,
+      "parentCountry": null,
+      "outerCountry": null,
+      "libraryCountries": [
+        "AU",
+        null
+      ],
+      "optionCountries": [
+        null,
+        null
+      ],
+      "globalCountry": "US",
+      "shape": "path-only",
+      "cache": "correct",
+      "reverse": false,
+      "parent": "actual",
+      "owner": false,
+      "displayCountry": "NZ"
+    },
+    {
+      "name": "path-only/stale",
+      "type": "Movie",
+      "itemCountry": null,
+      "parentCountry": null,
+      "outerCountry": null,
+      "libraryCountries": [
+        "AU",
+        null
+      ],
+      "optionCountries": [
+        null,
+        null
+      ],
+      "globalCountry": "US",
+      "shape": "path-only",
+      "cache": "stale",
+      "reverse": false,
+      "parent": "actual",
+      "owner": false,
+      "displayCountry": "NZ"
+    },
+    {
+      "name": "different-path/empty",
+      "type": "Movie",
+      "itemCountry": null,
+      "parentCountry": null,
+      "outerCountry": null,
+      "libraryCountries": [
+        "AU",
+        null
+      ],
+      "optionCountries": [
+        null,
+        null
+      ],
+      "globalCountry": "US",
+      "shape": "different-path",
+      "cache": "empty",
+      "reverse": false,
+      "parent": "actual",
+      "owner": false,
+      "displayCountry": "NZ"
+    },
+    {
+      "name": "different-path/correct",
+      "type": "Movie",
+      "itemCountry": null,
+      "parentCountry": null,
+      "outerCountry": null,
+      "libraryCountries": [
+        "AU",
+        null
+      ],
+      "optionCountries": [
+        null,
+        null
+      ],
+      "globalCountry": "US",
+      "shape": "different-path",
+      "cache": "correct",
+      "reverse": false,
+      "parent": "actual",
+      "owner": false,
+      "displayCountry": "NZ"
+    },
+    {
+      "name": "different-path/stale",
+      "type": "Movie",
+      "itemCountry": null,
+      "parentCountry": null,
+      "outerCountry": null,
+      "libraryCountries": [
+        "AU",
+        null
+      ],
+      "optionCountries": [
+        null,
+        null
+      ],
+      "globalCountry": "US",
+      "shape": "different-path",
+      "cache": "stale",
+      "reverse": false,
+      "parent": "actual",
+      "owner": false,
+      "displayCountry": "NZ"
+    },
+    {
+      "name": "two-path-libraries/empty",
+      "type": "Movie",
+      "itemCountry": null,
+      "parentCountry": null,
+      "outerCountry": null,
+      "libraryCountries": [
+        "AU",
+        null
+      ],
+      "optionCountries": [
+        null,
+        null
+      ],
+      "globalCountry": "US",
+      "shape": "two-path-libraries",
+      "cache": "empty",
+      "reverse": false,
+      "parent": "actual",
+      "owner": false,
+      "displayCountry": "NZ"
+    },
+    {
+      "name": "two-path-libraries/correct",
+      "type": "Movie",
+      "itemCountry": null,
+      "parentCountry": null,
+      "outerCountry": null,
+      "libraryCountries": [
+        "AU",
+        null
+      ],
+      "optionCountries": [
+        null,
+        null
+      ],
+      "globalCountry": "US",
+      "shape": "two-path-libraries",
+      "cache": "correct",
+      "reverse": false,
+      "parent": "actual",
+      "owner": false,
+      "displayCountry": "NZ"
+    },
+    {
+      "name": "two-path-libraries/stale",
+      "type": "Movie",
+      "itemCountry": null,
+      "parentCountry": null,
+      "outerCountry": null,
+      "libraryCountries": [
+        "AU",
+        null
+      ],
+      "optionCountries": [
+        null,
+        null
+      ],
+      "globalCountry": "US",
+      "shape": "two-path-libraries",
+      "cache": "stale",
+      "reverse": false,
+      "parent": "actual",
+      "owner": false,
+      "displayCountry": "NZ"
+    },
+    {
+      "name": "nested-path-library/empty",
+      "type": "Movie",
+      "itemCountry": null,
+      "parentCountry": null,
+      "outerCountry": null,
+      "libraryCountries": [
+        "AU",
+        null
+      ],
+      "optionCountries": [
+        null,
+        null
+      ],
+      "globalCountry": "US",
+      "shape": "nested-path-library",
+      "cache": "empty",
+      "reverse": false,
+      "parent": "actual",
+      "owner": false,
+      "displayCountry": "NZ"
+    },
+    {
+      "name": "nested-path-library/correct",
+      "type": "Movie",
+      "itemCountry": null,
+      "parentCountry": null,
+      "outerCountry": null,
+      "libraryCountries": [
+        "AU",
+        null
+      ],
+      "optionCountries": [
+        null,
+        null
+      ],
+      "globalCountry": "US",
+      "shape": "nested-path-library",
+      "cache": "correct",
+      "reverse": false,
+      "parent": "actual",
+      "owner": false,
+      "displayCountry": "NZ"
+    },
+    {
+      "name": "nested-path-library/stale",
+      "type": "Movie",
+      "itemCountry": null,
+      "parentCountry": null,
+      "outerCountry": null,
+      "libraryCountries": [
+        "AU",
+        null
+      ],
+      "optionCountries": [
+        null,
+        null
+      ],
+      "globalCountry": "US",
+      "shape": "nested-path-library",
+      "cache": "stale",
+      "reverse": false,
+      "parent": "actual",
+      "owner": false,
+      "displayCountry": "NZ"
+    },
+    {
+      "name": "Movie/actual/display",
+      "type": "Movie",
+      "itemCountry": null,
+      "parentCountry": "AU",
+      "outerCountry": null,
+      "libraryCountries": [
+        "AU",
+        null
+      ],
+      "optionCountries": [
+        null,
+        null
+      ],
+      "globalCountry": "US",
+      "shape": "path-only",
+      "cache": "empty",
+      "reverse": false,
+      "parent": "actual",
+      "owner": false,
+      "displayCountry": "NZ"
+    },
+    {
+      "name": "Movie/dangling/display",
+      "type": "Movie",
+      "itemCountry": null,
+      "parentCountry": "AU",
+      "outerCountry": null,
+      "libraryCountries": [
+        "AU",
+        null
+      ],
+      "optionCountries": [
+        null,
+        null
+      ],
+      "globalCountry": "US",
+      "shape": "path-only",
+      "cache": "empty",
+      "reverse": false,
+      "parent": "dangling",
+      "owner": false,
+      "displayCountry": "NZ"
+    },
+    {
+      "name": "Movie/none/display",
+      "type": "Movie",
+      "itemCountry": null,
+      "parentCountry": "AU",
+      "outerCountry": null,
+      "libraryCountries": [
+        "AU",
+        null
+      ],
+      "optionCountries": [
+        null,
+        null
+      ],
+      "globalCountry": "US",
+      "shape": "path-only",
+      "cache": "empty",
+      "reverse": false,
+      "parent": "none",
+      "owner": false,
+      "displayCountry": "NZ"
+    },
+    {
+      "name": "Episode/actual/display",
+      "type": "Episode",
+      "itemCountry": null,
+      "parentCountry": "AU",
+      "outerCountry": null,
+      "libraryCountries": [
+        "AU",
+        null
+      ],
+      "optionCountries": [
+        null,
+        null
+      ],
+      "globalCountry": "US",
+      "shape": "path-only",
+      "cache": "empty",
+      "reverse": false,
+      "parent": "actual",
+      "owner": false,
+      "displayCountry": "NZ"
+    },
+    {
+      "name": "Episode/dangling/display",
+      "type": "Episode",
+      "itemCountry": null,
+      "parentCountry": "AU",
+      "outerCountry": null,
+      "libraryCountries": [
+        "AU",
+        null
+      ],
+      "optionCountries": [
+        null,
+        null
+      ],
+      "globalCountry": "US",
+      "shape": "path-only",
+      "cache": "empty",
+      "reverse": false,
+      "parent": "dangling",
+      "owner": false,
+      "displayCountry": "NZ"
+    },
+    {
+      "name": "Episode/none/display",
+      "type": "Episode",
+      "itemCountry": null,
+      "parentCountry": "AU",
+      "outerCountry": null,
+      "libraryCountries": [
+        "AU",
+        null
+      ],
+      "optionCountries": [
+        null,
+        null
+      ],
+      "globalCountry": "US",
+      "shape": "path-only",
+      "cache": "empty",
+      "reverse": false,
+      "parent": "none",
+      "owner": false,
+      "displayCountry": "NZ"
+    },
+    {
+      "name": "Season/actual/display",
+      "type": "Season",
+      "itemCountry": null,
+      "parentCountry": "AU",
+      "outerCountry": null,
+      "libraryCountries": [
+        "AU",
+        null
+      ],
+      "optionCountries": [
+        null,
+        null
+      ],
+      "globalCountry": "US",
+      "shape": "path-only",
+      "cache": "empty",
+      "reverse": false,
+      "parent": "actual",
+      "owner": false,
+      "displayCountry": "NZ"
+    },
+    {
+      "name": "Season/dangling/display",
+      "type": "Season",
+      "itemCountry": null,
+      "parentCountry": "AU",
+      "outerCountry": null,
+      "libraryCountries": [
+        "AU",
+        null
+      ],
+      "optionCountries": [
+        null,
+        null
+      ],
+      "globalCountry": "US",
+      "shape": "path-only",
+      "cache": "empty",
+      "reverse": false,
+      "parent": "dangling",
+      "owner": false,
+      "displayCountry": "NZ"
+    },
+    {
+      "name": "Season/none/display",
+      "type": "Season",
+      "itemCountry": null,
+      "parentCountry": "AU",
+      "outerCountry": null,
+      "libraryCountries": [
+        "AU",
+        null
+      ],
+      "optionCountries": [
+        null,
+        null
+      ],
+      "globalCountry": "US",
+      "shape": "path-only",
+      "cache": "empty",
+      "reverse": false,
+      "parent": "none",
+      "owner": false,
+      "displayCountry": "NZ"
+    },
+    {
+      "name": "item/null",
+      "type": "Movie",
+      "itemCountry": null,
+      "parentCountry": "GB",
+      "outerCountry": "NZ",
+      "libraryCountries": [
+        "AU",
+        "US"
+      ],
+      "optionCountries": [
+        "GB",
+        "NZ"
+      ],
+      "globalCountry": "US",
+      "shape": "path-only",
+      "cache": "empty",
+      "reverse": false,
+      "parent": "actual",
+      "owner": false,
+      "displayCountry": "NZ"
+    },
+    {
+      "name": "item/\"\"",
+      "type": "Movie",
+      "itemCountry": "",
+      "parentCountry": "GB",
+      "outerCountry": "NZ",
+      "libraryCountries": [
+        "AU",
+        "US"
+      ],
+      "optionCountries": [
+        "GB",
+        "NZ"
+      ],
+      "globalCountry": "US",
+      "shape": "path-only",
+      "cache": "empty",
+      "reverse": false,
+      "parent": "actual",
+      "owner": false,
+      "displayCountry": "NZ"
+    },
+    {
+      "name": "item/\"US\"",
+      "type": "Movie",
+      "itemCountry": "US",
+      "parentCountry": "GB",
+      "outerCountry": "NZ",
+      "libraryCountries": [
+        "AU",
+        "US"
+      ],
+      "optionCountries": [
+        "GB",
+        "NZ"
+      ],
+      "globalCountry": "US",
+      "shape": "path-only",
+      "cache": "empty",
+      "reverse": false,
+      "parent": "actual",
+      "owner": false,
+      "displayCountry": "NZ"
+    },
+    {
+      "name": "item/\"AU\"",
+      "type": "Movie",
+      "itemCountry": "AU",
+      "parentCountry": "GB",
+      "outerCountry": "NZ",
+      "libraryCountries": [
+        "AU",
+        "US"
+      ],
+      "optionCountries": [
+        "GB",
+        "NZ"
+      ],
+      "globalCountry": "US",
+      "shape": "path-only",
+      "cache": "empty",
+      "reverse": false,
+      "parent": "actual",
+      "owner": false,
+      "displayCountry": "NZ"
+    },
+    {
+      "name": "item/\" \"",
+      "type": "Movie",
+      "itemCountry": " ",
+      "parentCountry": "GB",
+      "outerCountry": "NZ",
+      "libraryCountries": [
+        "AU",
+        "US"
+      ],
+      "optionCountries": [
+        "GB",
+        "NZ"
+      ],
+      "globalCountry": "US",
+      "shape": "path-only",
+      "cache": "empty",
+      "reverse": false,
+      "parent": "actual",
+      "owner": false,
+      "displayCountry": "NZ"
+    },
+    {
+      "name": "parent/null",
+      "type": "Movie",
+      "itemCountry": null,
+      "parentCountry": null,
+      "outerCountry": "NZ",
+      "libraryCountries": [
+        "AU",
+        "US"
+      ],
+      "optionCountries": [
+        "GB",
+        "NZ"
+      ],
+      "globalCountry": "US",
+      "shape": "path-only",
+      "cache": "empty",
+      "reverse": false,
+      "parent": "actual",
+      "owner": false,
+      "displayCountry": "NZ"
+    },
+    {
+      "name": "parent/\"\"",
+      "type": "Movie",
+      "itemCountry": null,
+      "parentCountry": "",
+      "outerCountry": "NZ",
+      "libraryCountries": [
+        "AU",
+        "US"
+      ],
+      "optionCountries": [
+        "GB",
+        "NZ"
+      ],
+      "globalCountry": "US",
+      "shape": "path-only",
+      "cache": "empty",
+      "reverse": false,
+      "parent": "actual",
+      "owner": false,
+      "displayCountry": "NZ"
+    },
+    {
+      "name": "parent/\"US\"",
+      "type": "Movie",
+      "itemCountry": null,
+      "parentCountry": "US",
+      "outerCountry": "NZ",
+      "libraryCountries": [
+        "AU",
+        "US"
+      ],
+      "optionCountries": [
+        "GB",
+        "NZ"
+      ],
+      "globalCountry": "US",
+      "shape": "path-only",
+      "cache": "empty",
+      "reverse": false,
+      "parent": "actual",
+      "owner": false,
+      "displayCountry": "NZ"
+    },
+    {
+      "name": "parent/\"AU\"",
+      "type": "Movie",
+      "itemCountry": null,
+      "parentCountry": "AU",
+      "outerCountry": "NZ",
+      "libraryCountries": [
+        "AU",
+        "US"
+      ],
+      "optionCountries": [
+        "GB",
+        "NZ"
+      ],
+      "globalCountry": "US",
+      "shape": "path-only",
+      "cache": "empty",
+      "reverse": false,
+      "parent": "actual",
+      "owner": false,
+      "displayCountry": "NZ"
+    },
+    {
+      "name": "parent/\" \"",
+      "type": "Movie",
+      "itemCountry": null,
+      "parentCountry": " ",
+      "outerCountry": "NZ",
+      "libraryCountries": [
+        "AU",
+        "US"
+      ],
+      "optionCountries": [
+        "GB",
+        "NZ"
+      ],
+      "globalCountry": "US",
+      "shape": "path-only",
+      "cache": "empty",
+      "reverse": false,
+      "parent": "actual",
+      "owner": false,
+      "displayCountry": "NZ"
+    },
+    {
+      "name": "options/null",
+      "type": "Movie",
+      "itemCountry": null,
+      "parentCountry": null,
+      "outerCountry": null,
+      "libraryCountries": [
+        null,
+        null
+      ],
+      "optionCountries": [
+        null,
+        "NZ"
+      ],
+      "globalCountry": "US",
+      "shape": "path-only",
+      "cache": "empty",
+      "reverse": false,
+      "parent": "actual",
+      "owner": false,
+      "displayCountry": "NZ"
+    },
+    {
+      "name": "options/\"\"",
+      "type": "Movie",
+      "itemCountry": null,
+      "parentCountry": null,
+      "outerCountry": null,
+      "libraryCountries": [
+        null,
+        null
+      ],
+      "optionCountries": [
+        "",
+        "NZ"
+      ],
+      "globalCountry": "US",
+      "shape": "path-only",
+      "cache": "empty",
+      "reverse": false,
+      "parent": "actual",
+      "owner": false,
+      "displayCountry": "NZ"
+    },
+    {
+      "name": "options/\"US\"",
+      "type": "Movie",
+      "itemCountry": null,
+      "parentCountry": null,
+      "outerCountry": null,
+      "libraryCountries": [
+        null,
+        null
+      ],
+      "optionCountries": [
+        "US",
+        "NZ"
+      ],
+      "globalCountry": "US",
+      "shape": "path-only",
+      "cache": "empty",
+      "reverse": false,
+      "parent": "actual",
+      "owner": false,
+      "displayCountry": "NZ"
+    },
+    {
+      "name": "options/\"AU\"",
+      "type": "Movie",
+      "itemCountry": null,
+      "parentCountry": null,
+      "outerCountry": null,
+      "libraryCountries": [
+        null,
+        null
+      ],
+      "optionCountries": [
+        "AU",
+        "NZ"
+      ],
+      "globalCountry": "US",
+      "shape": "path-only",
+      "cache": "empty",
+      "reverse": false,
+      "parent": "actual",
+      "owner": false,
+      "displayCountry": "NZ"
+    },
+    {
+      "name": "options/\" \"",
+      "type": "Movie",
+      "itemCountry": null,
+      "parentCountry": null,
+      "outerCountry": null,
+      "libraryCountries": [
+        null,
+        null
+      ],
+      "optionCountries": [
+        " ",
+        "NZ"
+      ],
+      "globalCountry": "US",
+      "shape": "path-only",
+      "cache": "empty",
+      "reverse": false,
+      "parent": "actual",
+      "owner": false,
+      "displayCountry": "NZ"
+    },
+    {
+      "name": "global/null",
+      "type": "Movie",
+      "itemCountry": null,
+      "parentCountry": null,
+      "outerCountry": null,
+      "libraryCountries": [
+        null,
+        null
+      ],
+      "optionCountries": [
+        null,
+        null
+      ],
+      "globalCountry": null,
+      "shape": "path-only",
+      "cache": "empty",
+      "reverse": false,
+      "parent": "actual",
+      "owner": false,
+      "displayCountry": "NZ"
+    },
+    {
+      "name": "global/\"\"",
+      "type": "Movie",
+      "itemCountry": null,
+      "parentCountry": null,
+      "outerCountry": null,
+      "libraryCountries": [
+        null,
+        null
+      ],
+      "optionCountries": [
+        null,
+        null
+      ],
+      "globalCountry": "",
+      "shape": "path-only",
+      "cache": "empty",
+      "reverse": false,
+      "parent": "actual",
+      "owner": false,
+      "displayCountry": "NZ"
+    },
+    {
+      "name": "global/\"US\"",
+      "type": "Movie",
+      "itemCountry": null,
+      "parentCountry": null,
+      "outerCountry": null,
+      "libraryCountries": [
+        null,
+        null
+      ],
+      "optionCountries": [
+        null,
+        null
+      ],
+      "globalCountry": "US",
+      "shape": "path-only",
+      "cache": "empty",
+      "reverse": false,
+      "parent": "actual",
+      "owner": false,
+      "displayCountry": "NZ"
+    },
+    {
+      "name": "global/\"AU\"",
+      "type": "Movie",
+      "itemCountry": null,
+      "parentCountry": null,
+      "outerCountry": null,
+      "libraryCountries": [
+        null,
+        null
+      ],
+      "optionCountries": [
+        null,
+        null
+      ],
+      "globalCountry": "AU",
+      "shape": "path-only",
+      "cache": "empty",
+      "reverse": false,
+      "parent": "actual",
+      "owner": false,
+      "displayCountry": "NZ"
+    },
+    {
+      "name": "global/\" \"",
+      "type": "Movie",
+      "itemCountry": null,
+      "parentCountry": null,
+      "outerCountry": null,
+      "libraryCountries": [
+        null,
+        null
+      ],
+      "optionCountries": [
+        null,
+        null
+      ],
+      "globalCountry": " ",
+      "shape": "path-only",
+      "cache": "empty",
+      "reverse": false,
+      "parent": "actual",
+      "owner": false,
+      "displayCountry": "NZ"
+    },
+    {
+      "name": "library-order/false/[\"US\",\"AU\"]",
+      "type": "Movie",
+      "itemCountry": null,
+      "parentCountry": null,
+      "outerCountry": null,
+      "libraryCountries": [
+        "US",
+        "AU"
+      ],
+      "optionCountries": [
+        "NZ",
+        "GB"
+      ],
+      "globalCountry": "US",
+      "shape": "two-path-libraries",
+      "cache": "empty",
+      "reverse": false,
+      "parent": "actual",
+      "owner": false,
+      "displayCountry": "NZ"
+    },
+    {
+      "name": "library-order/false/[null,\"AU\"]",
+      "type": "Movie",
+      "itemCountry": null,
+      "parentCountry": null,
+      "outerCountry": null,
+      "libraryCountries": [
+        null,
+        "AU"
+      ],
+      "optionCountries": [
+        "NZ",
+        "GB"
+      ],
+      "globalCountry": "US",
+      "shape": "two-path-libraries",
+      "cache": "empty",
+      "reverse": false,
+      "parent": "actual",
+      "owner": false,
+      "displayCountry": "NZ"
+    },
+    {
+      "name": "library-order/false/[\"\",\"AU\"]",
+      "type": "Movie",
+      "itemCountry": null,
+      "parentCountry": null,
+      "outerCountry": null,
+      "libraryCountries": [
+        "",
+        "AU"
+      ],
+      "optionCountries": [
+        "NZ",
+        "GB"
+      ],
+      "globalCountry": "US",
+      "shape": "two-path-libraries",
+      "cache": "empty",
+      "reverse": false,
+      "parent": "actual",
+      "owner": false,
+      "displayCountry": "NZ"
+    },
+    {
+      "name": "library-order/false/[\" \",\"AU\"]",
+      "type": "Movie",
+      "itemCountry": null,
+      "parentCountry": null,
+      "outerCountry": null,
+      "libraryCountries": [
+        " ",
+        "AU"
+      ],
+      "optionCountries": [
+        "NZ",
+        "GB"
+      ],
+      "globalCountry": "US",
+      "shape": "two-path-libraries",
+      "cache": "empty",
+      "reverse": false,
+      "parent": "actual",
+      "owner": false,
+      "displayCountry": "NZ"
+    },
+    {
+      "name": "library-order/true/[\"US\",\"AU\"]",
+      "type": "Movie",
+      "itemCountry": null,
+      "parentCountry": null,
+      "outerCountry": null,
+      "libraryCountries": [
+        "US",
+        "AU"
+      ],
+      "optionCountries": [
+        "NZ",
+        "GB"
+      ],
+      "globalCountry": "US",
+      "shape": "two-path-libraries",
+      "cache": "empty",
+      "reverse": true,
+      "parent": "actual",
+      "owner": false,
+      "displayCountry": "NZ"
+    },
+    {
+      "name": "library-order/true/[null,\"AU\"]",
+      "type": "Movie",
+      "itemCountry": null,
+      "parentCountry": null,
+      "outerCountry": null,
+      "libraryCountries": [
+        null,
+        "AU"
+      ],
+      "optionCountries": [
+        "NZ",
+        "GB"
+      ],
+      "globalCountry": "US",
+      "shape": "two-path-libraries",
+      "cache": "empty",
+      "reverse": true,
+      "parent": "actual",
+      "owner": false,
+      "displayCountry": "NZ"
+    },
+    {
+      "name": "library-order/true/[\"\",\"AU\"]",
+      "type": "Movie",
+      "itemCountry": null,
+      "parentCountry": null,
+      "outerCountry": null,
+      "libraryCountries": [
+        "",
+        "AU"
+      ],
+      "optionCountries": [
+        "NZ",
+        "GB"
+      ],
+      "globalCountry": "US",
+      "shape": "two-path-libraries",
+      "cache": "empty",
+      "reverse": true,
+      "parent": "actual",
+      "owner": false,
+      "displayCountry": "NZ"
+    },
+    {
+      "name": "library-order/true/[\" \",\"AU\"]",
+      "type": "Movie",
+      "itemCountry": null,
+      "parentCountry": null,
+      "outerCountry": null,
+      "libraryCountries": [
+        " ",
+        "AU"
+      ],
+      "optionCountries": [
+        "NZ",
+        "GB"
+      ],
+      "globalCountry": "US",
+      "shape": "two-path-libraries",
+      "cache": "empty",
+      "reverse": true,
+      "parent": "actual",
+      "owner": false,
+      "displayCountry": "NZ"
+    },
+    {
+      "name": "owner-not-parent",
+      "type": "Movie",
+      "itemCountry": null,
+      "parentCountry": "NZ",
+      "outerCountry": "US",
+      "libraryCountries": [
+        "AU",
+        null
+      ],
+      "optionCountries": [
+        null,
+        null
+      ],
+      "globalCountry": "US",
+      "shape": "path-only",
+      "cache": "empty",
+      "reverse": false,
+      "parent": "none",
+      "owner": true,
+      "displayCountry": "NZ"
+    },
+    {
+      "name": "direct-collection-options",
+      "type": "CollectionFolder",
+      "itemCountry": null,
+      "parentCountry": null,
+      "outerCountry": null,
+      "libraryCountries": [
+        null,
+        null
+      ],
+      "optionCountries": [
+        "AU",
+        "GB"
+      ],
+      "globalCountry": "US",
+      "shape": "path-only",
+      "cache": "empty",
+      "reverse": false,
+      "parent": "actual",
+      "owner": false,
+      "displayCountry": "NZ"
+    },
+    {
+      "name": "stored-ancestor-decoy",
+      "type": "Movie",
+      "itemCountry": null,
+      "parentCountry": null,
+      "outerCountry": null,
+      "libraryCountries": [
+        "AU",
+        null
+      ],
+      "optionCountries": [
+        null,
+        null
+      ],
+      "globalCountry": "US",
+      "shape": "path-only",
+      "cache": "empty",
+      "reverse": false,
+      "parent": "actual",
+      "owner": false,
+      "displayCountry": "NZ",
+      "storedAncestor": true
+    },
+    {
+      "name": "unknown-country-prefix/\"AU\"",
+      "type": "Movie",
+      "itemCountry": "XX",
+      "parentCountry": null,
+      "outerCountry": null,
+      "libraryCountries": [
+        "AU",
+        null
+      ],
+      "optionCountries": [
+        null,
+        null
+      ],
+      "globalCountry": "AU",
+      "shape": "path-only",
+      "cache": "empty",
+      "reverse": false,
+      "parent": "actual",
+      "owner": false,
+      "displayCountry": "NZ",
+      "officialRating": "Atlantis:PG"
+    },
+    {
+      "name": "unknown-country-prefix/\"GB\"",
+      "type": "Movie",
+      "itemCountry": "XX",
+      "parentCountry": null,
+      "outerCountry": null,
+      "libraryCountries": [
+        "AU",
+        null
+      ],
+      "optionCountries": [
+        null,
+        null
+      ],
+      "globalCountry": "GB",
+      "shape": "path-only",
+      "cache": "empty",
+      "reverse": false,
+      "parent": "actual",
+      "owner": false,
+      "displayCountry": "NZ",
+      "officialRating": "Atlantis:PG"
+    },
+    {
+      "name": "unknown-country-prefix/\"US\"",
+      "type": "Movie",
+      "itemCountry": "XX",
+      "parentCountry": null,
+      "outerCountry": null,
+      "libraryCountries": [
+        "AU",
+        null
+      ],
+      "optionCountries": [
+        null,
+        null
+      ],
+      "globalCountry": "US",
+      "shape": "path-only",
+      "cache": "empty",
+      "reverse": false,
+      "parent": "actual",
+      "owner": false,
+      "displayCountry": "NZ",
+      "officialRating": "Atlantis:PG"
+    },
+    {
+      "name": "unknown-country-prefix/null",
+      "type": "Movie",
+      "itemCountry": "XX",
+      "parentCountry": null,
+      "outerCountry": null,
+      "libraryCountries": [
+        "AU",
+        null
+      ],
+      "optionCountries": [
+        null,
+        null
+      ],
+      "globalCountry": null,
+      "shape": "path-only",
+      "cache": "empty",
+      "reverse": false,
+      "parent": "actual",
+      "owner": false,
+      "displayCountry": "NZ",
+      "officialRating": "Atlantis:PG"
+    },
+    {
+      "name": "unknown-country-prefix/\"\"",
+      "type": "Movie",
+      "itemCountry": "XX",
+      "parentCountry": null,
+      "outerCountry": null,
+      "libraryCountries": [
+        "AU",
+        null
+      ],
+      "optionCountries": [
+        null,
+        null
+      ],
+      "globalCountry": "",
+      "shape": "path-only",
+      "cache": "empty",
+      "reverse": false,
+      "parent": "actual",
+      "owner": false,
+      "displayCountry": "NZ",
+      "officialRating": "Atlantis:PG"
+    }
+  ]
+}

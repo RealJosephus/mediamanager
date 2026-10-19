@@ -1,0 +1,129 @@
+{
+  "schemaVersion": 1,
+  "userId": "5c6b5f77-bea9-4a9a-98aa-fae5909892b7",
+  "rootId": "76000000-0000-0000-0000-000000000001",
+  "items": [
+    {
+      "key": "root",
+      "id": "76000000-0000-0000-0000-000000000001",
+      "name": "Classification Root",
+      "sortName": "classification root",
+      "type": "Folder",
+      "parentId": null,
+      "topParentId": "76000000-0000-0000-0000-000000000001",
+      "ancestorIds": []
+    },
+    {
+      "key": "sportsContinuing",
+      "id": "76000000-0000-0000-0000-000000000002",
+      "name": "Alpha Sports Continuing",
+      "sortName": "alpha sports continuing",
+      "type": "Movie",
+      "parentId": "76000000-0000-0000-0000-000000000001",
+      "topParentId": "76000000-0000-0000-0000-000000000001",
+      "ancestorIds": ["76000000-0000-0000-0000-000000000001"],
+      "presentationUniqueKey": "classification-alpha",
+      "data": { "Status": "Continuing" }
+    },
+    {
+      "key": "newsEnded",
+      "id": "76000000-0000-0000-0000-000000000003",
+      "name": "Beta News Ended",
+      "sortName": "beta news ended",
+      "type": "Movie",
+      "parentId": "76000000-0000-0000-0000-000000000001",
+      "topParentId": "76000000-0000-0000-0000-000000000001",
+      "ancestorIds": ["76000000-0000-0000-0000-000000000001"],
+      "presentationUniqueKey": "classification-beta",
+      "data": { "Status": "Ended" }
+    },
+    {
+      "key": "kidsUnreleased",
+      "id": "76000000-0000-0000-0000-000000000004",
+      "name": "Gamma Kids Unreleased",
+      "sortName": "gamma kids unreleased",
+      "type": "Movie",
+      "parentId": "76000000-0000-0000-0000-000000000001",
+      "topParentId": "76000000-0000-0000-0000-000000000001",
+      "ancestorIds": ["76000000-0000-0000-0000-000000000001"],
+      "presentationUniqueKey": "classification-gamma",
+      "data": { "Status": "Unreleased" }
+    },
+    {
+      "key": "sportsNewsText",
+      "id": "76000000-0000-0000-0000-000000000005",
+      "name": "Delta Sports News Text",
+      "sortName": "delta sports news text",
+      "type": "Movie",
+      "parentId": "76000000-0000-0000-0000-000000000001",
+      "topParentId": "76000000-0000-0000-0000-000000000001",
+      "ancestorIds": ["76000000-0000-0000-0000-000000000001"],
+      "presentationUniqueKey": "classification-delta",
+      "data": { "Note": "Continuing elsewhere" }
+    },
+    {
+      "key": "customSubstring",
+      "id": "76000000-0000-0000-0000-000000000006",
+      "name": "Epsilon Custom Substring",
+      "sortName": "epsilon custom substring",
+      "type": "Movie",
+      "parentId": "76000000-0000-0000-0000-000000000001",
+      "topParentId": "76000000-0000-0000-0000-000000000001",
+      "ancestorIds": ["76000000-0000-0000-0000-000000000001"],
+      "presentationUniqueKey": "classification-epsilon",
+      "data": { "Note": "NotContinuing" }
+    },
+    {
+      "key": "lowercaseNumeric",
+      "id": "76000000-0000-0000-0000-000000000007",
+      "name": "Zeta Lowercase Numeric",
+      "sortName": "zeta lowercase numeric",
+      "type": "Movie",
+      "parentId": "76000000-0000-0000-0000-000000000001",
+      "topParentId": "76000000-0000-0000-0000-000000000001",
+      "ancestorIds": ["76000000-0000-0000-0000-000000000001"],
+      "presentationUniqueKey": "classification-zeta",
+      "data": { "Status": "continuing", "Code": "3" }
+    }
+  ],
+  "itemValues": [
+    { "key": "sports", "id": "76000000-0000-0000-0000-000000000101", "type": "Tags", "value": "Sports", "cleanValue": "sports" },
+    { "key": "news", "id": "76000000-0000-0000-0000-000000000102", "type": "Tags", "value": "News", "cleanValue": "news" },
+    { "key": "kids", "id": "76000000-0000-0000-0000-000000000103", "type": "Tags", "value": "Kids", "cleanValue": "kids" },
+    { "key": "custom", "id": "76000000-0000-0000-0000-000000000104", "type": "Tags", "value": "Custom", "cleanValue": "custom" }
+  ],
+  "itemValueLinks": [
+    { "itemKey": "sportsContinuing", "valueKey": "sports" },
+    { "itemKey": "newsEnded", "valueKey": "news" },
+    { "itemKey": "kidsUnreleased", "valueKey": "kids" },
+    { "itemKey": "sportsNewsText", "valueKey": "sports" },
+    { "itemKey": "sportsNewsText", "valueKey": "news" },
+    { "itemKey": "customSubstring", "valueKey": "custom" }
+  ],
+  "cases": [
+    { "name": "sports-true", "query": "IsSports=true" },
+    { "name": "sports-false", "query": "IsSports=false" },
+    { "name": "news-true", "query": "IsNews=true" },
+    { "name": "news-false", "query": "IsNews=false" },
+    { "name": "kids-true", "query": "IsKids=true" },
+    { "name": "kids-false", "query": "IsKids=false" },
+    { "name": "sports-or-news", "query": "IsSports=true&IsNews=true" },
+    { "name": "sports-and-not-news", "query": "IsSports=true&IsNews=false" },
+    { "name": "custom-or-sports", "query": "Tags=Custom&IsSports=true" },
+    { "name": "custom-and-not-sports", "query": "Tags=Custom&IsSports=false" },
+    { "name": "sports-empty-omitted", "query": "IsSports=" },
+    { "name": "sports-repeated-first-false", "query": "IsSports=false&IsSports=true" },
+    { "name": "status-continuing", "query": "SeriesStatus=Continuing" },
+    { "name": "status-ended", "query": "SeriesStatus=Ended" },
+    { "name": "status-unreleased", "query": "SeriesStatus=Unreleased" },
+    { "name": "status-continuing-ended", "query": "SeriesStatus=Continuing,Ended" },
+    { "name": "status-case-insensitive", "query": "SeriesStatus=continuing" },
+    { "name": "status-numeric-zero", "query": "SeriesStatus=0" },
+    { "name": "status-numeric-one", "query": "SeriesStatus=1" },
+    { "name": "status-numeric-unknown", "query": "SeriesStatus=3" },
+    { "name": "status-invalid-omitted", "query": "SeriesStatus=Bogus" },
+    { "name": "status-repeated", "query": "SeriesStatus=Ended&SeriesStatus=Unreleased" },
+    { "name": "sports-ended-empty", "query": "IsSports=true&SeriesStatus=Ended" },
+    { "name": "sports-continuing", "query": "IsSports=true&SeriesStatus=Continuing" }
+  ]
+}

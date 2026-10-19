@@ -1,0 +1,105 @@
+{
+  "recordedAt": "2026-10-10T17:21:33.126Z",
+  "candidateVerified": false,
+  "completeBuildInputClosure": false,
+  "releaseAcceptance": false,
+  "scope": "DIAGNOSTIC actual designated dirty runtime: persistence-only Playlist closure followed by single/batch LibraryController DELETE through native MVC/AddJellyfinApi/binders/formatters/middleware and the same real LibraryManager/EF SQLite/cache/files/events. API-key principal/default policy, application paths, collection-folder resolver and external provider are explicit controls. Complete dirty build-input closure, native authentication handlers, user cleanup, scanner, media backends, MetadataService, POSIX, clients, instance exchange and release acceptance are not claimed.",
+  "files": {
+    "input.json": {
+      "filename": "input.json",
+      "sha256": "b8411dc8389a59e3c159c87a5b416ca8cd6ee0b823be7a992d43b230e53f8d79"
+    },
+    "Program.cs": {
+      "filename": "Program.cs",
+      "sha256": "6a40dab32ffab37f8b3736561a857e6c81522e38346a4630dc45e6a10b215ba4"
+    },
+    "Oracle.csproj": {
+      "filename": "Oracle.csproj",
+      "sha256": "d75e3738335deb069f70f8ddabc039cfa692be29cf4d8e945534b3e59c5af517"
+    },
+    "README.md": {
+      "filename": "README.md",
+      "sha256": "be21e1cc02a2afd6ebbd4dbee82ef1e7ba9976a888bae9f9093a611cbca1b3ae"
+    },
+    "normalize.js": {
+      "filename": "normalize.js",
+      "sha256": "3bb39ca870eb37b3ac822e5e64a2ada037cb071fee5a6a79ed8029c83ef3d3cc"
+    },
+    "../item-deletion/normalize.js": {
+      "filename": "../item-deletion/normalize.js",
+      "sha256": "e3e752d10b9f4d71d828f6719cfc72b1a52636ebe96ef0d4d4efb9641fa8af02"
+    },
+    "native.json": {
+      "filename": "native.json",
+      "sha256": "5264f972f933268d7a6b92486b82b8e594c63bd4b6986dd32ffd037a45cd2278"
+    },
+    "rawRecording": {
+      "filename": "D:/mediamanager-validation/20261011/results/formal-warm-http-v1/native.raw.json",
+      "sha256": "9fc919cb6aaec57fdd6469d782363c25708bd863b581ae12a6565479a17b0033"
+    }
+  },
+  "counts": {
+    "cases": 16,
+    "observations": null
+  },
+  "assemblies": [
+    {
+      "name": "MediaBrowser.Controller",
+      "sha256": "96e58e4c256e7230a17333b2d93d3fe2f6e80b7b9d990300d02b490f52dcb23a"
+    },
+    {
+      "name": "Emby.Server.Implementations",
+      "sha256": "5c45d4fbb29ff9708edb50f0dc99f7dffbf01fbbf06c7ca2614e2a5f7aaff102"
+    },
+    {
+      "name": "Jellyfin.Server.Implementations",
+      "sha256": "13ab5e48bb761fb0414dcb12754c8f180b76156b0a4f701f7be498407f252ee3"
+    },
+    {
+      "name": "Jellyfin.Api",
+      "sha256": "cc4bcb867f3001d8e41e9b22f2c9199ba728205230af3f5d08f09901635c5128"
+    },
+    {
+      "name": "jellyfin",
+      "sha256": "8fb1d56d006aa01b5dc9aa5cf2578646f7013f57c9937593955bce32e23722d2"
+    }
+  ],
+  "jellyfin": {
+    "assemblyDirectory": "D:/mediamanager-validation/20261010/results/jellyfin-designated-workspace-capture-v2/source/Jellyfin.Server/bin/Release/net10.0",
+    "sourceCapture": {
+      "filename": "D:/mediamanager-validation/20261010/results/jellyfin-designated-workspace-capture-v2/manifest.json",
+      "sha256": "a278db96281767142568596a447f942e69134f05de6d26a56cbc6026db1ecbad"
+    },
+    "boundBuildAudit": {
+      "filename": "D:/mediamanager-validation/20261010/results/jellyfin-designated-workspace-capture-v2/source-build-startup-audit.json",
+      "sha256": "52ab357ea8c6c0e4fc043f8ae00b4a8aff39f73e37ccf990dad38ee33ea66aaf"
+    }
+  },
+  "runtime": {
+    "dotnet": {
+      "filename": "D:/mediamanager/.tools/dotnet/dotnet.exe",
+      "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6"
+    },
+    "oracleAssembly": {
+      "filename": "D:/mediamanager-validation/20261011/results/formal-warm-http-v1/bin/Oracle.dll",
+      "sha256": "af583f78ee6442e97b352cfaaf1cd8fec007c48576e6fb0647b7bcc57206ce7d"
+    }
+  },
+  "repeat": {
+    "filename": "D:/mediamanager-validation/20261011/results/formal-warm-http-v2/native.raw.json",
+    "sha256": "28234a13d1f7d00d905abb6be0a53513a47d0b6454f0d81357f64b9b0ece2ce4",
+    "byteEqual": false,
+    "projectionEqual": true,
+    "normalization": "Only validated unique W3C traceId in body/jsonBody; all other observations unchanged.",
+    "runtime": {
+      "dotnet": {
+        "filename": "D:/mediamanager/.tools/dotnet/dotnet.exe",
+        "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6"
+      },
+      "oracleAssembly": {
+        "filename": "D:/mediamanager-validation/20261011/results/formal-warm-http-v2/bin/Oracle.dll",
+        "sha256": "af583f78ee6442e97b352cfaaf1cd8fec007c48576e6fb0647b7bcc57206ce7d"
+      }
+    }
+  }
+}

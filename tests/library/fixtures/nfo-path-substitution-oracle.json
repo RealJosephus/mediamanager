@@ -1,0 +1,183 @@
+{
+  "Runtime": "10.0.12",
+  "PathCases": [
+    {
+      "Name": "windows-forward",
+      "Path": "C:/Users/jeff/myfile.mkv",
+      "From": "C:/Users/jeff",
+      "To": "/home/jeff",
+      "Matched": true,
+      "Result": "/home/jeff/myfile.mkv"
+    },
+    {
+      "Name": "windows-forward-source-trailing",
+      "Path": "C:/Users/jeff/myfile.mkv",
+      "From": "C:/Users/jeff/",
+      "To": "/home/jeff",
+      "Matched": true,
+      "Result": "/home/jeff/myfile.mkv"
+    },
+    {
+      "Name": "apostrophe-posix",
+      "Path": "/home/jeff/music/jeff\u0027s band/consistently inconsistent.mp3",
+      "From": "/home/jeff/music/jeff\u0027s band",
+      "To": "/home/not jeff",
+      "Matched": true,
+      "Result": "/home/not jeff/consistently inconsistent.mp3"
+    },
+    {
+      "Name": "mixed-windows",
+      "Path": "C:\\Users\\jeff\\myfile.mkv",
+      "From": "C:\\Users/jeff",
+      "To": "/home/jeff",
+      "Matched": true,
+      "Result": "/home/jeff/myfile.mkv"
+    },
+    {
+      "Name": "mixed-windows-target-trailing",
+      "Path": "C:\\Users\\jeff\\myfile.mkv",
+      "From": "C:\\Users/jeff",
+      "To": "/home/jeff/",
+      "Matched": true,
+      "Result": "/home/jeff/myfile.mkv"
+    },
+    {
+      "Name": "mixed-windows-source-target-trailing",
+      "Path": "C:\\Users\\jeff\\myfile.mkv",
+      "From": "C:\\Users/jeff/",
+      "To": "/home/jeff/",
+      "Matched": true,
+      "Result": "/home/jeff/myfile.mkv"
+    },
+    {
+      "Name": "target-root",
+      "Path": "C:\\Users\\jeff\\myfile.mkv",
+      "From": "C:\\Users/jeff/",
+      "To": "/",
+      "Matched": true,
+      "Result": "/myfile.mkv"
+    },
+    {
+      "Name": "exact-short",
+      "Path": "/o",
+      "From": "/o",
+      "To": "/s",
+      "Matched": true,
+      "Result": "/s"
+    },
+    {
+      "Name": "case-insensitive",
+      "Path": "c:\\MEDIA\\Film\\poster.jpg",
+      "From": "C:\\media",
+      "To": "Z:\\Kodi",
+      "Matched": true,
+      "Result": "Z:\\Kodi\\Film\\poster.jpg"
+    },
+    {
+      "Name": "segment-boundary",
+      "Path": "C:\\Media2\\poster.jpg",
+      "From": "C:\\Media",
+      "To": "Z:\\Kodi",
+      "Matched": false,
+      "Result": null
+    },
+    {
+      "Name": "source-longer",
+      "Path": "/one",
+      "From": "/one/two",
+      "To": "/target",
+      "Matched": false,
+      "Result": null
+    },
+    {
+      "Name": "empty-path",
+      "Path": "",
+      "From": "",
+      "To": "",
+      "Matched": false,
+      "Result": null
+    },
+    {
+      "Name": "empty-source",
+      "Path": "/my/path",
+      "From": "",
+      "To": "/new/subpath",
+      "Matched": false,
+      "Result": null
+    },
+    {
+      "Name": "empty-target",
+      "Path": "/my/path",
+      "From": "/my/path",
+      "To": "",
+      "Matched": false,
+      "Result": null
+    },
+    {
+      "Name": "unmatched",
+      "Path": "/home/jeff/music/jeff\u0027s band/consistently inconsistent.mp3",
+      "From": "/home/jeff/music/not jeff\u0027s band",
+      "To": "/home/not jeff",
+      "Matched": false,
+      "Result": null
+    },
+    {
+      "Name": "unicode-ordinal-case",
+      "Path": "/\u03A3/I/poster.jpg",
+      "From": "/\u03C2/i",
+      "To": "/target",
+      "Matched": true,
+      "Result": "/target/poster.jpg"
+    },
+    {
+      "Name": "unicode-dotless-i",
+      "Path": "/\u03A3/\u0131/poster.jpg",
+      "From": "/\u03C2/i",
+      "To": "/target",
+      "Matched": false,
+      "Result": null
+    }
+  ],
+  "ImageCases": [
+    {
+      "Path": "C:\\Media\\poster.jpg",
+      "Result": "substituted::C:\\Media\\poster.jpg",
+      "SubstitutionCalls": 1
+    },
+    {
+      "Path": "\\\\server\\share\\poster.jpg",
+      "Result": "substituted::\\\\server\\share\\poster.jpg",
+      "SubstitutionCalls": 1
+    },
+    {
+      "Path": "/media/poster.jpg",
+      "Result": "substituted::/media/poster.jpg",
+      "SubstitutionCalls": 1
+    },
+    {
+      "Path": "file:///media/poster.jpg",
+      "Result": "substituted::file:///media/poster.jpg",
+      "SubstitutionCalls": 1
+    },
+    {
+      "Path": "http://example.invalid/poster.jpg",
+      "Result": "http://example.invalid/poster.jpg",
+      "SubstitutionCalls": 0
+    },
+    {
+      "Path": "HTTP://example.invalid/poster.jpg",
+      "Result": "HTTP://example.invalid/poster.jpg",
+      "SubstitutionCalls": 0
+    },
+    {
+      "Path": "https://example.invalid/poster.jpg",
+      "Result": "https://example.invalid/poster.jpg",
+      "SubstitutionCalls": 0
+    },
+    {
+      "Path": "http-not-a-uri",
+      "Result": "http-not-a-uri",
+      "SubstitutionCalls": 0
+    }
+  ]
+}

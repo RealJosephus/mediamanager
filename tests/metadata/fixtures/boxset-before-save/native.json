@@ -1,0 +1,1054 @@
+{
+  "results": [
+    {
+      "name": "absent cache is computed",
+      "updateType": 3,
+      "exception": null,
+      "item": {
+        "LibraryFolderIds": [
+          "8d000000-0000-0000-0000-000000000005"
+        ],
+        "PresentationUniqueKey": "8d000000000000000000000000000009"
+      },
+      "mapped": {
+        "LibraryFolderIds": [
+          "8d000000000000000000000000000005"
+        ]
+      },
+      "calls": []
+    },
+    {
+      "name": "null cache is computed",
+      "updateType": 3,
+      "exception": null,
+      "item": {
+        "LibraryFolderIds": [
+          "8d000000-0000-0000-0000-000000000005"
+        ],
+        "PresentationUniqueKey": "8d000000000000000000000000000009"
+      },
+      "mapped": {
+        "LibraryFolderIds": [
+          "8d000000000000000000000000000005"
+        ]
+      },
+      "calls": []
+    },
+    {
+      "name": "matching cache remains",
+      "updateType": 1,
+      "exception": null,
+      "item": {
+        "LibraryFolderIds": [
+          "8d000000-0000-0000-0000-000000000005"
+        ],
+        "PresentationUniqueKey": "8d000000000000000000000000000009"
+      },
+      "mapped": {
+        "LibraryFolderIds": [
+          "8d000000000000000000000000000005"
+        ]
+      },
+      "calls": []
+    },
+    {
+      "name": "uppercase Guid cache remains",
+      "updateType": 1,
+      "exception": null,
+      "item": {
+        "LibraryFolderIds": [
+          "8d000000-0000-0000-0000-000000000005"
+        ],
+        "PresentationUniqueKey": "8d000000000000000000000000000009"
+      },
+      "mapped": {
+        "LibraryFolderIds": [
+          "8d000000000000000000000000000005"
+        ]
+      },
+      "calls": []
+    },
+    {
+      "name": "empty cache is recomputed",
+      "updateType": 3,
+      "exception": null,
+      "item": {
+        "LibraryFolderIds": [
+          "8d000000-0000-0000-0000-000000000005"
+        ],
+        "PresentationUniqueKey": "8d000000000000000000000000000009"
+      },
+      "mapped": {
+        "LibraryFolderIds": [
+          "8d000000000000000000000000000005"
+        ]
+      },
+      "calls": []
+    },
+    {
+      "name": "stale cache is replaced",
+      "updateType": 3,
+      "exception": null,
+      "item": {
+        "LibraryFolderIds": [
+          "8d000000-0000-0000-0000-000000000005"
+        ],
+        "PresentationUniqueKey": "8d000000000000000000000000000009"
+      },
+      "mapped": {
+        "LibraryFolderIds": [
+          "8d000000000000000000000000000005"
+        ]
+      },
+      "calls": []
+    },
+    {
+      "name": "cached duplicates are removed",
+      "updateType": 3,
+      "exception": null,
+      "item": {
+        "LibraryFolderIds": [
+          "8d000000-0000-0000-0000-000000000005"
+        ],
+        "PresentationUniqueKey": "8d000000000000000000000000000009"
+      },
+      "mapped": {
+        "LibraryFolderIds": [
+          "8d000000000000000000000000000005"
+        ]
+      },
+      "calls": []
+    },
+    {
+      "name": "cached reverse order is corrected",
+      "updateType": 3,
+      "exception": null,
+      "item": {
+        "LibraryFolderIds": [
+          "8d000000-0000-0000-0000-000000000005",
+          "8d000000-0000-0000-0000-000000000006"
+        ],
+        "PresentationUniqueKey": "8d000000000000000000000000000009"
+      },
+      "mapped": {
+        "LibraryFolderIds": [
+          "8d000000000000000000000000000005",
+          "8d000000000000000000000000000006"
+        ]
+      },
+      "calls": []
+    },
+    {
+      "name": "link order controls affiliation order",
+      "updateType": 3,
+      "exception": null,
+      "item": {
+        "LibraryFolderIds": [
+          "8d000000-0000-0000-0000-000000000006",
+          "8d000000-0000-0000-0000-000000000005"
+        ],
+        "PresentationUniqueKey": "8d000000000000000000000000000009"
+      },
+      "mapped": {
+        "LibraryFolderIds": [
+          "8d000000000000000000000000000006",
+          "8d000000000000000000000000000005"
+        ]
+      },
+      "calls": []
+    },
+    {
+      "name": "duplicate links keep distinct affiliation",
+      "updateType": 3,
+      "exception": null,
+      "item": {
+        "LibraryFolderIds": [
+          "8d000000-0000-0000-0000-000000000005",
+          "8d000000-0000-0000-0000-000000000006"
+        ],
+        "PresentationUniqueKey": "8d000000000000000000000000000009"
+      },
+      "mapped": {
+        "LibraryFolderIds": [
+          "8d000000000000000000000000000005",
+          "8d000000000000000000000000000006"
+        ]
+      },
+      "calls": []
+    },
+    {
+      "name": "locked box still recomputes",
+      "updateType": 3,
+      "exception": null,
+      "item": {
+        "LibraryFolderIds": [
+          "8d000000-0000-0000-0000-000000000005"
+        ],
+        "PresentationUniqueKey": "8d000000000000000000000000000009"
+      },
+      "mapped": {
+        "LibraryFolderIds": [
+          "8d000000000000000000000000000005"
+        ]
+      },
+      "calls": []
+    },
+    {
+      "name": "metadata field locks do not gate affiliation",
+      "updateType": 3,
+      "exception": null,
+      "item": {
+        "LibraryFolderIds": [
+          "8d000000-0000-0000-0000-000000000005"
+        ],
+        "PresentationUniqueKey": "8d000000000000000000000000000009"
+      },
+      "mapped": {
+        "LibraryFolderIds": [
+          "8d000000000000000000000000000005"
+        ]
+      },
+      "calls": []
+    },
+    {
+      "name": "nested box is flattened",
+      "updateType": 3,
+      "exception": null,
+      "item": {
+        "LibraryFolderIds": [
+          "8d000000-0000-0000-0000-000000000006",
+          "8d000000-0000-0000-0000-000000000005"
+        ],
+        "PresentationUniqueKey": "8d000000000000000000000000000009"
+      },
+      "mapped": {
+        "LibraryFolderIds": [
+          "8d000000000000000000000000000006",
+          "8d000000000000000000000000000005"
+        ]
+      },
+      "calls": []
+    },
+    {
+      "name": "nested cache never supplies affiliation",
+      "updateType": 3,
+      "exception": null,
+      "item": {
+        "LibraryFolderIds": [
+          "8d000000-0000-0000-0000-000000000006"
+        ],
+        "PresentationUniqueKey": "8d000000000000000000000000000009"
+      },
+      "mapped": {
+        "LibraryFolderIds": [
+          "8d000000000000000000000000000006"
+        ]
+      },
+      "calls": []
+    },
+    {
+      "name": "cycle returns each affiliation once",
+      "updateType": 3,
+      "exception": null,
+      "item": {
+        "LibraryFolderIds": [
+          "8d000000-0000-0000-0000-000000000006",
+          "8d000000-0000-0000-0000-000000000005"
+        ],
+        "PresentationUniqueKey": "8d000000000000000000000000000009"
+      },
+      "mapped": {
+        "LibraryFolderIds": [
+          "8d000000000000000000000000000006",
+          "8d000000000000000000000000000005"
+        ]
+      },
+      "calls": []
+    },
+    {
+      "name": "self link terminates",
+      "updateType": 3,
+      "exception": null,
+      "item": {
+        "LibraryFolderIds": [
+          "8d000000-0000-0000-0000-000000000005"
+        ],
+        "PresentationUniqueKey": "8d000000000000000000000000000009"
+      },
+      "mapped": {
+        "LibraryFolderIds": [
+          "8d000000000000000000000000000005"
+        ]
+      },
+      "calls": []
+    },
+    {
+      "name": "ordinary linked folder is not flattened",
+      "updateType": 3,
+      "exception": null,
+      "item": {
+        "LibraryFolderIds": [
+          "8d000000-0000-0000-0000-000000000006"
+        ],
+        "PresentationUniqueKey": "8d000000000000000000000000000009"
+      },
+      "mapped": {
+        "LibraryFolderIds": [
+          "8d000000000000000000000000000006"
+        ]
+      },
+      "calls": []
+    },
+    {
+      "name": "unknown affiliation becomes empty",
+      "updateType": 3,
+      "exception": null,
+      "item": {
+        "LibraryFolderIds": [],
+        "PresentationUniqueKey": "8d000000000000000000000000000009"
+      },
+      "mapped": {
+        "LibraryFolderIds": []
+      },
+      "calls": []
+    },
+    {
+      "name": "empty null cache becomes empty array",
+      "updateType": 3,
+      "exception": null,
+      "item": {
+        "LibraryFolderIds": [],
+        "PresentationUniqueKey": "8d000000000000000000000000000009"
+      },
+      "mapped": {
+        "LibraryFolderIds": []
+      },
+      "calls": []
+    },
+    {
+      "name": "empty matching cache has no import",
+      "updateType": 1,
+      "exception": null,
+      "item": {
+        "LibraryFolderIds": [],
+        "PresentationUniqueKey": "8d000000000000000000000000000009"
+      },
+      "mapped": {
+        "LibraryFolderIds": []
+      },
+      "calls": []
+    },
+    {
+      "name": "physical folder IDs do not supply membership",
+      "updateType": 3,
+      "exception": null,
+      "item": {
+        "LibraryFolderIds": [],
+        "PresentationUniqueKey": "8d000000000000000000000000000009"
+      },
+      "mapped": {
+        "LibraryFolderIds": []
+      },
+      "calls": []
+    },
+    {
+      "name": "membership retains ordinal path semantics",
+      "updateType": 3,
+      "exception": null,
+      "item": {
+        "LibraryFolderIds": [
+          "8d000000-0000-0000-0000-000000000005"
+        ],
+        "PresentationUniqueKey": "8d000000000000000000000000000009"
+      },
+      "mapped": {
+        "LibraryFolderIds": [
+          "8d000000000000000000000000000005"
+        ]
+      },
+      "calls": []
+    },
+    {
+      "name": "slash normalization is not performed",
+      "updateType": 3,
+      "exception": null,
+      "item": {
+        "LibraryFolderIds": [],
+        "PresentationUniqueKey": "8d000000000000000000000000000009"
+      },
+      "mapped": {
+        "LibraryFolderIds": []
+      },
+      "calls": []
+    },
+    {
+      "name": "root order controls overlapping affiliations",
+      "updateType": 3,
+      "exception": null,
+      "item": {
+        "LibraryFolderIds": [
+          "8d000000-0000-0000-0000-000000000006",
+          "8d000000-0000-0000-0000-000000000005"
+        ],
+        "PresentationUniqueKey": "8d000000000000000000000000000009"
+      },
+      "mapped": {
+        "LibraryFolderIds": [
+          "8d000000000000000000000000000006",
+          "8d000000000000000000000000000005"
+        ]
+      },
+      "calls": []
+    },
+    {
+      "name": "null physical locations fail before save",
+      "updateType": null,
+      "exception": "ArgumentNullException",
+      "item": {
+        "LibraryFolderIds": null,
+        "PresentationUniqueKey": "8d000000000000000000000000000009"
+      },
+      "mapped": null,
+      "calls": []
+    },
+    {
+      "name": "missing member lookup is dropped",
+      "updateType": 3,
+      "exception": null,
+      "item": {
+        "LibraryFolderIds": [
+          "8d000000-0000-0000-0000-000000000005"
+        ],
+        "PresentationUniqueKey": "8d000000000000000000000000000009"
+      },
+      "mapped": {
+        "LibraryFolderIds": [
+          "8d000000000000000000000000000005"
+        ]
+      },
+      "calls": []
+    },
+    {
+      "name": "refresh absent cache is computed",
+      "updateType": 3,
+      "exception": null,
+      "item": {
+        "LibraryFolderIds": [
+          "8d000000-0000-0000-0000-000000000005"
+        ],
+        "PresentationUniqueKey": "8d000000000000000000000000000009"
+      },
+      "mapped": {
+        "LibraryFolderIds": [
+          "8d000000000000000000000000000005"
+        ]
+      },
+      "calls": [
+        {
+          "item": {
+            "LibraryFolderIds": [
+              "8d000000-0000-0000-0000-000000000005"
+            ],
+            "PresentationUniqueKey": "8d000000000000000000000000000009"
+          },
+          "updateReason": 3
+        }
+      ]
+    },
+    {
+      "name": "refresh null cache is computed",
+      "updateType": 3,
+      "exception": null,
+      "item": {
+        "LibraryFolderIds": [
+          "8d000000-0000-0000-0000-000000000005"
+        ],
+        "PresentationUniqueKey": "8d000000000000000000000000000009"
+      },
+      "mapped": {
+        "LibraryFolderIds": [
+          "8d000000000000000000000000000005"
+        ]
+      },
+      "calls": [
+        {
+          "item": {
+            "LibraryFolderIds": [
+              "8d000000-0000-0000-0000-000000000005"
+            ],
+            "PresentationUniqueKey": "8d000000000000000000000000000009"
+          },
+          "updateReason": 3
+        }
+      ]
+    },
+    {
+      "name": "refresh matching cache remains",
+      "updateType": 1,
+      "exception": null,
+      "item": {
+        "LibraryFolderIds": [
+          "8d000000-0000-0000-0000-000000000005"
+        ],
+        "PresentationUniqueKey": "8d000000000000000000000000000009"
+      },
+      "mapped": {
+        "LibraryFolderIds": [
+          "8d000000000000000000000000000005"
+        ]
+      },
+      "calls": []
+    },
+    {
+      "name": "refresh uppercase Guid cache remains",
+      "updateType": 1,
+      "exception": null,
+      "item": {
+        "LibraryFolderIds": [
+          "8d000000-0000-0000-0000-000000000005"
+        ],
+        "PresentationUniqueKey": "8d000000000000000000000000000009"
+      },
+      "mapped": {
+        "LibraryFolderIds": [
+          "8d000000000000000000000000000005"
+        ]
+      },
+      "calls": []
+    },
+    {
+      "name": "refresh empty cache is recomputed",
+      "updateType": 3,
+      "exception": null,
+      "item": {
+        "LibraryFolderIds": [
+          "8d000000-0000-0000-0000-000000000005"
+        ],
+        "PresentationUniqueKey": "8d000000000000000000000000000009"
+      },
+      "mapped": {
+        "LibraryFolderIds": [
+          "8d000000000000000000000000000005"
+        ]
+      },
+      "calls": [
+        {
+          "item": {
+            "LibraryFolderIds": [
+              "8d000000-0000-0000-0000-000000000005"
+            ],
+            "PresentationUniqueKey": "8d000000000000000000000000000009"
+          },
+          "updateReason": 3
+        }
+      ]
+    },
+    {
+      "name": "refresh stale cache is replaced",
+      "updateType": 3,
+      "exception": null,
+      "item": {
+        "LibraryFolderIds": [
+          "8d000000-0000-0000-0000-000000000005"
+        ],
+        "PresentationUniqueKey": "8d000000000000000000000000000009"
+      },
+      "mapped": {
+        "LibraryFolderIds": [
+          "8d000000000000000000000000000005"
+        ]
+      },
+      "calls": [
+        {
+          "item": {
+            "LibraryFolderIds": [
+              "8d000000-0000-0000-0000-000000000005"
+            ],
+            "PresentationUniqueKey": "8d000000000000000000000000000009"
+          },
+          "updateReason": 3
+        }
+      ]
+    },
+    {
+      "name": "refresh cached duplicates are removed",
+      "updateType": 3,
+      "exception": null,
+      "item": {
+        "LibraryFolderIds": [
+          "8d000000-0000-0000-0000-000000000005"
+        ],
+        "PresentationUniqueKey": "8d000000000000000000000000000009"
+      },
+      "mapped": {
+        "LibraryFolderIds": [
+          "8d000000000000000000000000000005"
+        ]
+      },
+      "calls": [
+        {
+          "item": {
+            "LibraryFolderIds": [
+              "8d000000-0000-0000-0000-000000000005"
+            ],
+            "PresentationUniqueKey": "8d000000000000000000000000000009"
+          },
+          "updateReason": 3
+        }
+      ]
+    },
+    {
+      "name": "refresh cached reverse order is corrected",
+      "updateType": 3,
+      "exception": null,
+      "item": {
+        "LibraryFolderIds": [
+          "8d000000-0000-0000-0000-000000000005",
+          "8d000000-0000-0000-0000-000000000006"
+        ],
+        "PresentationUniqueKey": "8d000000000000000000000000000009"
+      },
+      "mapped": {
+        "LibraryFolderIds": [
+          "8d000000000000000000000000000005",
+          "8d000000000000000000000000000006"
+        ]
+      },
+      "calls": [
+        {
+          "item": {
+            "LibraryFolderIds": [
+              "8d000000-0000-0000-0000-000000000005",
+              "8d000000-0000-0000-0000-000000000006"
+            ],
+            "PresentationUniqueKey": "8d000000000000000000000000000009"
+          },
+          "updateReason": 3
+        }
+      ]
+    },
+    {
+      "name": "refresh link order controls affiliation order",
+      "updateType": 3,
+      "exception": null,
+      "item": {
+        "LibraryFolderIds": [
+          "8d000000-0000-0000-0000-000000000006",
+          "8d000000-0000-0000-0000-000000000005"
+        ],
+        "PresentationUniqueKey": "8d000000000000000000000000000009"
+      },
+      "mapped": {
+        "LibraryFolderIds": [
+          "8d000000000000000000000000000006",
+          "8d000000000000000000000000000005"
+        ]
+      },
+      "calls": [
+        {
+          "item": {
+            "LibraryFolderIds": [
+              "8d000000-0000-0000-0000-000000000006",
+              "8d000000-0000-0000-0000-000000000005"
+            ],
+            "PresentationUniqueKey": "8d000000000000000000000000000009"
+          },
+          "updateReason": 3
+        }
+      ]
+    },
+    {
+      "name": "refresh duplicate links keep distinct affiliation",
+      "updateType": 3,
+      "exception": null,
+      "item": {
+        "LibraryFolderIds": [
+          "8d000000-0000-0000-0000-000000000005",
+          "8d000000-0000-0000-0000-000000000006"
+        ],
+        "PresentationUniqueKey": "8d000000000000000000000000000009"
+      },
+      "mapped": {
+        "LibraryFolderIds": [
+          "8d000000000000000000000000000005",
+          "8d000000000000000000000000000006"
+        ]
+      },
+      "calls": [
+        {
+          "item": {
+            "LibraryFolderIds": [
+              "8d000000-0000-0000-0000-000000000005",
+              "8d000000-0000-0000-0000-000000000006"
+            ],
+            "PresentationUniqueKey": "8d000000000000000000000000000009"
+          },
+          "updateReason": 3
+        }
+      ]
+    },
+    {
+      "name": "refresh locked box still recomputes",
+      "updateType": 3,
+      "exception": null,
+      "item": {
+        "LibraryFolderIds": [
+          "8d000000-0000-0000-0000-000000000005"
+        ],
+        "PresentationUniqueKey": "8d000000000000000000000000000009"
+      },
+      "mapped": {
+        "LibraryFolderIds": [
+          "8d000000000000000000000000000005"
+        ]
+      },
+      "calls": [
+        {
+          "item": {
+            "LibraryFolderIds": [
+              "8d000000-0000-0000-0000-000000000005"
+            ],
+            "PresentationUniqueKey": "8d000000000000000000000000000009"
+          },
+          "updateReason": 3
+        }
+      ]
+    },
+    {
+      "name": "refresh metadata field locks do not gate affiliation",
+      "updateType": 3,
+      "exception": null,
+      "item": {
+        "LibraryFolderIds": [
+          "8d000000-0000-0000-0000-000000000005"
+        ],
+        "PresentationUniqueKey": "8d000000000000000000000000000009"
+      },
+      "mapped": {
+        "LibraryFolderIds": [
+          "8d000000000000000000000000000005"
+        ]
+      },
+      "calls": [
+        {
+          "item": {
+            "LibraryFolderIds": [
+              "8d000000-0000-0000-0000-000000000005"
+            ],
+            "PresentationUniqueKey": "8d000000000000000000000000000009"
+          },
+          "updateReason": 3
+        }
+      ]
+    },
+    {
+      "name": "refresh nested box is flattened",
+      "updateType": 3,
+      "exception": null,
+      "item": {
+        "LibraryFolderIds": [
+          "8d000000-0000-0000-0000-000000000006",
+          "8d000000-0000-0000-0000-000000000005"
+        ],
+        "PresentationUniqueKey": "8d000000000000000000000000000009"
+      },
+      "mapped": {
+        "LibraryFolderIds": [
+          "8d000000000000000000000000000006",
+          "8d000000000000000000000000000005"
+        ]
+      },
+      "calls": [
+        {
+          "item": {
+            "LibraryFolderIds": [
+              "8d000000-0000-0000-0000-000000000006",
+              "8d000000-0000-0000-0000-000000000005"
+            ],
+            "PresentationUniqueKey": "8d000000000000000000000000000009"
+          },
+          "updateReason": 3
+        }
+      ]
+    },
+    {
+      "name": "refresh nested cache never supplies affiliation",
+      "updateType": 3,
+      "exception": null,
+      "item": {
+        "LibraryFolderIds": [
+          "8d000000-0000-0000-0000-000000000006"
+        ],
+        "PresentationUniqueKey": "8d000000000000000000000000000009"
+      },
+      "mapped": {
+        "LibraryFolderIds": [
+          "8d000000000000000000000000000006"
+        ]
+      },
+      "calls": [
+        {
+          "item": {
+            "LibraryFolderIds": [
+              "8d000000-0000-0000-0000-000000000006"
+            ],
+            "PresentationUniqueKey": "8d000000000000000000000000000009"
+          },
+          "updateReason": 3
+        }
+      ]
+    },
+    {
+      "name": "refresh cycle returns each affiliation once",
+      "updateType": 3,
+      "exception": null,
+      "item": {
+        "LibraryFolderIds": [
+          "8d000000-0000-0000-0000-000000000006",
+          "8d000000-0000-0000-0000-000000000005"
+        ],
+        "PresentationUniqueKey": "8d000000000000000000000000000009"
+      },
+      "mapped": {
+        "LibraryFolderIds": [
+          "8d000000000000000000000000000006",
+          "8d000000000000000000000000000005"
+        ]
+      },
+      "calls": [
+        {
+          "item": {
+            "LibraryFolderIds": [
+              "8d000000-0000-0000-0000-000000000006",
+              "8d000000-0000-0000-0000-000000000005"
+            ],
+            "PresentationUniqueKey": "8d000000000000000000000000000009"
+          },
+          "updateReason": 3
+        }
+      ]
+    },
+    {
+      "name": "refresh self link terminates",
+      "updateType": 3,
+      "exception": null,
+      "item": {
+        "LibraryFolderIds": [
+          "8d000000-0000-0000-0000-000000000005"
+        ],
+        "PresentationUniqueKey": "8d000000000000000000000000000009"
+      },
+      "mapped": {
+        "LibraryFolderIds": [
+          "8d000000000000000000000000000005"
+        ]
+      },
+      "calls": [
+        {
+          "item": {
+            "LibraryFolderIds": [
+              "8d000000-0000-0000-0000-000000000005"
+            ],
+            "PresentationUniqueKey": "8d000000000000000000000000000009"
+          },
+          "updateReason": 3
+        }
+      ]
+    },
+    {
+      "name": "refresh ordinary linked folder is not flattened",
+      "updateType": 3,
+      "exception": null,
+      "item": {
+        "LibraryFolderIds": [
+          "8d000000-0000-0000-0000-000000000006"
+        ],
+        "PresentationUniqueKey": "8d000000000000000000000000000009"
+      },
+      "mapped": {
+        "LibraryFolderIds": [
+          "8d000000000000000000000000000006"
+        ]
+      },
+      "calls": [
+        {
+          "item": {
+            "LibraryFolderIds": [
+              "8d000000-0000-0000-0000-000000000006"
+            ],
+            "PresentationUniqueKey": "8d000000000000000000000000000009"
+          },
+          "updateReason": 3
+        }
+      ]
+    },
+    {
+      "name": "refresh unknown affiliation becomes empty",
+      "updateType": 3,
+      "exception": null,
+      "item": {
+        "LibraryFolderIds": [],
+        "PresentationUniqueKey": "8d000000000000000000000000000009"
+      },
+      "mapped": {
+        "LibraryFolderIds": []
+      },
+      "calls": [
+        {
+          "item": {
+            "LibraryFolderIds": [],
+            "PresentationUniqueKey": "8d000000000000000000000000000009"
+          },
+          "updateReason": 3
+        }
+      ]
+    },
+    {
+      "name": "refresh empty null cache becomes empty array",
+      "updateType": 3,
+      "exception": null,
+      "item": {
+        "LibraryFolderIds": [],
+        "PresentationUniqueKey": "8d000000000000000000000000000009"
+      },
+      "mapped": {
+        "LibraryFolderIds": []
+      },
+      "calls": [
+        {
+          "item": {
+            "LibraryFolderIds": [],
+            "PresentationUniqueKey": "8d000000000000000000000000000009"
+          },
+          "updateReason": 3
+        }
+      ]
+    },
+    {
+      "name": "refresh empty matching cache has no import",
+      "updateType": 1,
+      "exception": null,
+      "item": {
+        "LibraryFolderIds": [],
+        "PresentationUniqueKey": "8d000000000000000000000000000009"
+      },
+      "mapped": {
+        "LibraryFolderIds": []
+      },
+      "calls": []
+    },
+    {
+      "name": "refresh physical folder IDs do not supply membership",
+      "updateType": 3,
+      "exception": null,
+      "item": {
+        "LibraryFolderIds": [],
+        "PresentationUniqueKey": "8d000000000000000000000000000009"
+      },
+      "mapped": {
+        "LibraryFolderIds": []
+      },
+      "calls": [
+        {
+          "item": {
+            "LibraryFolderIds": [],
+            "PresentationUniqueKey": "8d000000000000000000000000000009"
+          },
+          "updateReason": 3
+        }
+      ]
+    },
+    {
+      "name": "refresh membership retains ordinal path semantics",
+      "updateType": 3,
+      "exception": null,
+      "item": {
+        "LibraryFolderIds": [
+          "8d000000-0000-0000-0000-000000000005"
+        ],
+        "PresentationUniqueKey": "8d000000000000000000000000000009"
+      },
+      "mapped": {
+        "LibraryFolderIds": [
+          "8d000000000000000000000000000005"
+        ]
+      },
+      "calls": [
+        {
+          "item": {
+            "LibraryFolderIds": [
+              "8d000000-0000-0000-0000-000000000005"
+            ],
+            "PresentationUniqueKey": "8d000000000000000000000000000009"
+          },
+          "updateReason": 3
+        }
+      ]
+    },
+    {
+      "name": "refresh slash normalization is not performed",
+      "updateType": 3,
+      "exception": null,
+      "item": {
+        "LibraryFolderIds": [],
+        "PresentationUniqueKey": "8d000000000000000000000000000009"
+      },
+      "mapped": {
+        "LibraryFolderIds": []
+      },
+      "calls": [
+        {
+          "item": {
+            "LibraryFolderIds": [],
+            "PresentationUniqueKey": "8d000000000000000000000000000009"
+          },
+          "updateReason": 3
+        }
+      ]
+    },
+    {
+      "name": "refresh root order controls overlapping affiliations",
+      "updateType": 3,
+      "exception": null,
+      "item": {
+        "LibraryFolderIds": [
+          "8d000000-0000-0000-0000-000000000006",
+          "8d000000-0000-0000-0000-000000000005"
+        ],
+        "PresentationUniqueKey": "8d000000000000000000000000000009"
+      },
+      "mapped": {
+        "LibraryFolderIds": [
+          "8d000000000000000000000000000006",
+          "8d000000000000000000000000000005"
+        ]
+      },
+      "calls": [
+        {
+          "item": {
+            "LibraryFolderIds": [
+              "8d000000-0000-0000-0000-000000000006",
+              "8d000000-0000-0000-0000-000000000005"
+            ],
+            "PresentationUniqueKey": "8d000000000000000000000000000009"
+          },
+          "updateReason": 3
+        }
+      ]
+    },
+    {
+      "name": "refresh null physical locations fail before save",
+      "updateType": null,
+      "exception": "ArgumentNullException",
+      "item": {
+        "LibraryFolderIds": null,
+        "PresentationUniqueKey": "8d000000000000000000000000000009"
+      },
+      "mapped": null,
+      "calls": []
+    }
+  ],
+  "candidateVerified": false,
+  "inputSha256": "024f5a87804a2db3f19d1c640b8ff12ec137989bc140ad36b10afb02dfb3a3f9",
+  "boundary": "Actual BoxSet.GetLibraryFolderIds, nested/cycle traversal, Folder linked resolution, actual LibraryManager.GetCollectionFolders, BoxSetMetadataService.BeforeSaveInternal and None RefreshMetadata with actual ProviderManager, plus BaseItemMapper data projection. Typed cached entities, root order, ItemId query/lookup, identity path reversal, absent files, default library options and repository callbacks are controlled. No native SQL, HTTP, files, NFO or external collection link merge runs."
+}

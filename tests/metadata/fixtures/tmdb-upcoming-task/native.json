@@ -1,0 +1,97 @@
+{
+  "type": "MediaBrowser.Providers.Plugins.Tmdb.TV.TmdbUpcomingEpisodesTask",
+  "id": "1ee23a5dd39fb4225715375c91bc2990",
+  "Name": "Refresh upcoming and missing episodes (TheMovieDb)",
+  "Description": "Checks TheMovieDb for newly announced episodes and creates virtual entries for unaired and missing episodes, according to the TMDb plugin settings. When both options are disabled, removes any virtual entries previously created.",
+  "Category": "Library",
+  "Key": "TmdbRefreshUpcomingEpisodes",
+  "intervals": [
+    {
+      "days": 3,
+      "Type": 2,
+      "IntervalTicks": 2592000000000
+    },
+    {
+      "days": 0,
+      "Type": 2,
+      "IntervalTicks": 6048000000000
+    },
+    {
+      "days": -1,
+      "Type": 2,
+      "IntervalTicks": 6048000000000
+    }
+  ],
+  "nullConfiguration": {
+    "progress": [
+      100
+    ],
+    "queries": 0
+  },
+  "disabled": {
+    "progress": [
+      47.5,
+      95,
+      100
+    ],
+    "removed": [
+      "a9000000-0000-0000-0000-000000000001",
+      "a9000000-0000-0000-0000-000000000002",
+      "a9000000-0000-0000-0000-000000000003"
+    ],
+    "queries": [
+      {
+        "includeItemTypes": [
+          9
+        ],
+        "IsVirtualItem": true,
+        "HasTmdbId": true,
+        "Recursive": true
+      },
+      {
+        "includeItemTypes": [
+          27
+        ],
+        "IsVirtualItem": true,
+        "HasTmdbId": true,
+        "Recursive": true
+      }
+    ],
+    "deleteOptions": [
+      {
+        "DeleteFileLocation": false,
+        "notifyParentItem": false
+      },
+      {
+        "DeleteFileLocation": false,
+        "notifyParentItem": false
+      },
+      {
+        "DeleteFileLocation": false,
+        "notifyParentItem": false
+      }
+    ]
+  },
+  "emptyActive": {
+    "progress": [
+      100
+    ],
+    "queries": [
+      {
+        "includeItemTypes": [
+          28
+        ],
+        "IsVirtualItem": null,
+        "HasTmdbId": null,
+        "Recursive": true
+      }
+    ]
+  },
+  "runtime": ".NET 10.0.12",
+  "assembly": {
+    "path": "D:\\mediamanager-validation\\20261005\\results\\tmdb-upcoming-task-oracle-20261008-v2\\bin\\Release\\net10.0\\MediaBrowser.Providers.dll",
+    "sha256": "1afa73573e3bda071db199cf76b4a3e1ca62381eef3a0d3311bca56cb68f2423"
+  },
+  "sourceBoundary": "Actual TmdbUpcomingEpisodesTask metadata, GetDefaultTriggers and ExecuteAsync run unmodified. The controlled ILibraryManager returns declared query results and records DeleteItem calls; null configuration, disabled global cleanup and enabled/no-Series completion are covered. Active Series ValidateChildren, file/DB/event effects and live TMDB transport are outside this oracle.",
+  "phaseAcceptance": false
+}

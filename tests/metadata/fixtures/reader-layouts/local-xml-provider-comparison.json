@@ -1,0 +1,1622 @@
+[
+  {
+    "name": "empty-root--crlf",
+    "type": "BoxSet",
+    "originalName": "empty-root",
+    "equivalent": true
+  },
+  {
+    "name": "empty-root--crlf",
+    "type": "Playlist",
+    "originalName": "empty-root",
+    "equivalent": true
+  },
+  {
+    "name": "empty-root--lf",
+    "type": "BoxSet",
+    "originalName": "empty-root",
+    "equivalent": true
+  },
+  {
+    "name": "empty-root--lf",
+    "type": "Playlist",
+    "originalName": "empty-root",
+    "equivalent": true
+  },
+  {
+    "name": "empty-root--bom-lf",
+    "type": "BoxSet",
+    "originalName": "empty-root",
+    "equivalent": true
+  },
+  {
+    "name": "empty-root--bom-lf",
+    "type": "Playlist",
+    "originalName": "empty-root",
+    "equivalent": true
+  },
+  {
+    "name": "empty-explicit--crlf",
+    "type": "BoxSet",
+    "originalName": "empty-explicit",
+    "equivalent": true
+  },
+  {
+    "name": "empty-explicit--crlf",
+    "type": "Playlist",
+    "originalName": "empty-explicit",
+    "equivalent": true
+  },
+  {
+    "name": "empty-explicit--lf",
+    "type": "BoxSet",
+    "originalName": "empty-explicit",
+    "equivalent": true
+  },
+  {
+    "name": "empty-explicit--lf",
+    "type": "Playlist",
+    "originalName": "empty-explicit",
+    "equivalent": true
+  },
+  {
+    "name": "empty-explicit--bom-lf",
+    "type": "BoxSet",
+    "originalName": "empty-explicit",
+    "equivalent": true
+  },
+  {
+    "name": "empty-explicit--bom-lf",
+    "type": "Playlist",
+    "originalName": "empty-explicit",
+    "equivalent": true
+  },
+  {
+    "name": "strings--crlf",
+    "type": "BoxSet",
+    "originalName": "strings",
+    "equivalent": true
+  },
+  {
+    "name": "strings--crlf",
+    "type": "Playlist",
+    "originalName": "strings",
+    "equivalent": true
+  },
+  {
+    "name": "strings--lf",
+    "type": "BoxSet",
+    "originalName": "strings",
+    "equivalent": true
+  },
+  {
+    "name": "strings--lf",
+    "type": "Playlist",
+    "originalName": "strings",
+    "equivalent": true
+  },
+  {
+    "name": "strings--bom-lf",
+    "type": "BoxSet",
+    "originalName": "strings",
+    "equivalent": true
+  },
+  {
+    "name": "strings--bom-lf",
+    "type": "Playlist",
+    "originalName": "strings",
+    "equivalent": true
+  },
+  {
+    "name": "case-sensitive--crlf",
+    "type": "BoxSet",
+    "originalName": "case-sensitive",
+    "equivalent": true
+  },
+  {
+    "name": "case-sensitive--crlf",
+    "type": "Playlist",
+    "originalName": "case-sensitive",
+    "equivalent": true
+  },
+  {
+    "name": "case-sensitive--lf",
+    "type": "BoxSet",
+    "originalName": "case-sensitive",
+    "equivalent": true
+  },
+  {
+    "name": "case-sensitive--lf",
+    "type": "Playlist",
+    "originalName": "case-sensitive",
+    "equivalent": true
+  },
+  {
+    "name": "case-sensitive--bom-lf",
+    "type": "BoxSet",
+    "originalName": "case-sensitive",
+    "equivalent": true
+  },
+  {
+    "name": "case-sensitive--bom-lf",
+    "type": "Playlist",
+    "originalName": "case-sensitive",
+    "equivalent": true
+  },
+  {
+    "name": "dates--crlf",
+    "type": "BoxSet",
+    "originalName": "dates",
+    "equivalent": true
+  },
+  {
+    "name": "dates--crlf",
+    "type": "Playlist",
+    "originalName": "dates",
+    "equivalent": true
+  },
+  {
+    "name": "dates--lf",
+    "type": "BoxSet",
+    "originalName": "dates",
+    "equivalent": true
+  },
+  {
+    "name": "dates--lf",
+    "type": "Playlist",
+    "originalName": "dates",
+    "equivalent": true
+  },
+  {
+    "name": "dates--bom-lf",
+    "type": "BoxSet",
+    "originalName": "dates",
+    "equivalent": true
+  },
+  {
+    "name": "dates--bom-lf",
+    "type": "Playlist",
+    "originalName": "dates",
+    "equivalent": true
+  },
+  {
+    "name": "invalid-dates--crlf",
+    "type": "BoxSet",
+    "originalName": "invalid-dates",
+    "equivalent": true
+  },
+  {
+    "name": "invalid-dates--crlf",
+    "type": "Playlist",
+    "originalName": "invalid-dates",
+    "equivalent": true
+  },
+  {
+    "name": "invalid-dates--lf",
+    "type": "BoxSet",
+    "originalName": "invalid-dates",
+    "equivalent": true
+  },
+  {
+    "name": "invalid-dates--lf",
+    "type": "Playlist",
+    "originalName": "invalid-dates",
+    "equivalent": true
+  },
+  {
+    "name": "invalid-dates--bom-lf",
+    "type": "BoxSet",
+    "originalName": "invalid-dates",
+    "equivalent": true
+  },
+  {
+    "name": "invalid-dates--bom-lf",
+    "type": "Playlist",
+    "originalName": "invalid-dates",
+    "equivalent": true
+  },
+  {
+    "name": "date-aliases--crlf",
+    "type": "BoxSet",
+    "originalName": "date-aliases",
+    "equivalent": true
+  },
+  {
+    "name": "date-aliases--crlf",
+    "type": "Playlist",
+    "originalName": "date-aliases",
+    "equivalent": true
+  },
+  {
+    "name": "date-aliases--lf",
+    "type": "BoxSet",
+    "originalName": "date-aliases",
+    "equivalent": true
+  },
+  {
+    "name": "date-aliases--lf",
+    "type": "Playlist",
+    "originalName": "date-aliases",
+    "equivalent": true
+  },
+  {
+    "name": "date-aliases--bom-lf",
+    "type": "BoxSet",
+    "originalName": "date-aliases",
+    "equivalent": true
+  },
+  {
+    "name": "date-aliases--bom-lf",
+    "type": "Playlist",
+    "originalName": "date-aliases",
+    "equivalent": true
+  },
+  {
+    "name": "runtime-int32--crlf",
+    "type": "BoxSet",
+    "originalName": "runtime-int32",
+    "equivalent": true
+  },
+  {
+    "name": "runtime-int32--crlf",
+    "type": "Playlist",
+    "originalName": "runtime-int32",
+    "equivalent": true
+  },
+  {
+    "name": "runtime-int32--lf",
+    "type": "BoxSet",
+    "originalName": "runtime-int32",
+    "equivalent": true
+  },
+  {
+    "name": "runtime-int32--lf",
+    "type": "Playlist",
+    "originalName": "runtime-int32",
+    "equivalent": true
+  },
+  {
+    "name": "runtime-int32--bom-lf",
+    "type": "BoxSet",
+    "originalName": "runtime-int32",
+    "equivalent": true
+  },
+  {
+    "name": "runtime-int32--bom-lf",
+    "type": "Playlist",
+    "originalName": "runtime-int32",
+    "equivalent": true
+  },
+  {
+    "name": "runtime-invalid--crlf",
+    "type": "BoxSet",
+    "originalName": "runtime-invalid",
+    "equivalent": true
+  },
+  {
+    "name": "runtime-invalid--crlf",
+    "type": "Playlist",
+    "originalName": "runtime-invalid",
+    "equivalent": true
+  },
+  {
+    "name": "runtime-invalid--lf",
+    "type": "BoxSet",
+    "originalName": "runtime-invalid",
+    "equivalent": true
+  },
+  {
+    "name": "runtime-invalid--lf",
+    "type": "Playlist",
+    "originalName": "runtime-invalid",
+    "equivalent": true
+  },
+  {
+    "name": "runtime-invalid--bom-lf",
+    "type": "BoxSet",
+    "originalName": "runtime-invalid",
+    "equivalent": true
+  },
+  {
+    "name": "runtime-invalid--bom-lf",
+    "type": "Playlist",
+    "originalName": "runtime-invalid",
+    "equivalent": true
+  },
+  {
+    "name": "floats--crlf",
+    "type": "BoxSet",
+    "originalName": "floats",
+    "equivalent": true
+  },
+  {
+    "name": "floats--crlf",
+    "type": "Playlist",
+    "originalName": "floats",
+    "equivalent": true
+  },
+  {
+    "name": "floats--lf",
+    "type": "BoxSet",
+    "originalName": "floats",
+    "equivalent": true
+  },
+  {
+    "name": "floats--lf",
+    "type": "Playlist",
+    "originalName": "floats",
+    "equivalent": true
+  },
+  {
+    "name": "floats--bom-lf",
+    "type": "BoxSet",
+    "originalName": "floats",
+    "equivalent": true
+  },
+  {
+    "name": "floats--bom-lf",
+    "type": "Playlist",
+    "originalName": "floats",
+    "equivalent": true
+  },
+  {
+    "name": "float-overflow--crlf",
+    "type": "BoxSet",
+    "originalName": "float-overflow",
+    "equivalent": true
+  },
+  {
+    "name": "float-overflow--crlf",
+    "type": "Playlist",
+    "originalName": "float-overflow",
+    "equivalent": true
+  },
+  {
+    "name": "float-overflow--lf",
+    "type": "BoxSet",
+    "originalName": "float-overflow",
+    "equivalent": true
+  },
+  {
+    "name": "float-overflow--lf",
+    "type": "Playlist",
+    "originalName": "float-overflow",
+    "equivalent": true
+  },
+  {
+    "name": "float-overflow--bom-lf",
+    "type": "BoxSet",
+    "originalName": "float-overflow",
+    "equivalent": true
+  },
+  {
+    "name": "float-overflow--bom-lf",
+    "type": "Playlist",
+    "originalName": "float-overflow",
+    "equivalent": true
+  },
+  {
+    "name": "float-nan--crlf",
+    "type": "BoxSet",
+    "originalName": "float-nan",
+    "equivalent": true
+  },
+  {
+    "name": "float-nan--crlf",
+    "type": "Playlist",
+    "originalName": "float-nan",
+    "equivalent": true
+  },
+  {
+    "name": "float-nan--lf",
+    "type": "BoxSet",
+    "originalName": "float-nan",
+    "equivalent": true
+  },
+  {
+    "name": "float-nan--lf",
+    "type": "Playlist",
+    "originalName": "float-nan",
+    "equivalent": true
+  },
+  {
+    "name": "float-nan--bom-lf",
+    "type": "BoxSet",
+    "originalName": "float-nan",
+    "equivalent": true
+  },
+  {
+    "name": "float-nan--bom-lf",
+    "type": "Playlist",
+    "originalName": "float-nan",
+    "equivalent": true
+  },
+  {
+    "name": "float-style--crlf",
+    "type": "BoxSet",
+    "originalName": "float-style",
+    "equivalent": true
+  },
+  {
+    "name": "float-style--crlf",
+    "type": "Playlist",
+    "originalName": "float-style",
+    "equivalent": true
+  },
+  {
+    "name": "float-style--lf",
+    "type": "BoxSet",
+    "originalName": "float-style",
+    "equivalent": true
+  },
+  {
+    "name": "float-style--lf",
+    "type": "Playlist",
+    "originalName": "float-style",
+    "equivalent": true
+  },
+  {
+    "name": "float-style--bom-lf",
+    "type": "BoxSet",
+    "originalName": "float-style",
+    "equivalent": true
+  },
+  {
+    "name": "float-style--bom-lf",
+    "type": "Playlist",
+    "originalName": "float-style",
+    "equivalent": true
+  },
+  {
+    "name": "enum-values--crlf",
+    "type": "BoxSet",
+    "originalName": "enum-values",
+    "equivalent": true
+  },
+  {
+    "name": "enum-values--crlf",
+    "type": "Playlist",
+    "originalName": "enum-values",
+    "equivalent": true
+  },
+  {
+    "name": "enum-values--lf",
+    "type": "BoxSet",
+    "originalName": "enum-values",
+    "equivalent": true
+  },
+  {
+    "name": "enum-values--lf",
+    "type": "Playlist",
+    "originalName": "enum-values",
+    "equivalent": true
+  },
+  {
+    "name": "enum-values--bom-lf",
+    "type": "BoxSet",
+    "originalName": "enum-values",
+    "equivalent": true
+  },
+  {
+    "name": "enum-values--bom-lf",
+    "type": "Playlist",
+    "originalName": "enum-values",
+    "equivalent": true
+  },
+  {
+    "name": "enum-case--crlf",
+    "type": "BoxSet",
+    "originalName": "enum-case",
+    "equivalent": true
+  },
+  {
+    "name": "enum-case--crlf",
+    "type": "Playlist",
+    "originalName": "enum-case",
+    "equivalent": true
+  },
+  {
+    "name": "enum-case--lf",
+    "type": "BoxSet",
+    "originalName": "enum-case",
+    "equivalent": true
+  },
+  {
+    "name": "enum-case--lf",
+    "type": "Playlist",
+    "originalName": "enum-case",
+    "equivalent": true
+  },
+  {
+    "name": "enum-case--bom-lf",
+    "type": "BoxSet",
+    "originalName": "enum-case",
+    "equivalent": true
+  },
+  {
+    "name": "enum-case--bom-lf",
+    "type": "Playlist",
+    "originalName": "enum-case",
+    "equivalent": true
+  },
+  {
+    "name": "enum-numeric--crlf",
+    "type": "BoxSet",
+    "originalName": "enum-numeric",
+    "equivalent": true
+  },
+  {
+    "name": "enum-numeric--crlf",
+    "type": "Playlist",
+    "originalName": "enum-numeric",
+    "equivalent": true
+  },
+  {
+    "name": "enum-numeric--lf",
+    "type": "BoxSet",
+    "originalName": "enum-numeric",
+    "equivalent": true
+  },
+  {
+    "name": "enum-numeric--lf",
+    "type": "Playlist",
+    "originalName": "enum-numeric",
+    "equivalent": true
+  },
+  {
+    "name": "enum-numeric--bom-lf",
+    "type": "BoxSet",
+    "originalName": "enum-numeric",
+    "equivalent": true
+  },
+  {
+    "name": "enum-numeric--bom-lf",
+    "type": "Playlist",
+    "originalName": "enum-numeric",
+    "equivalent": true
+  },
+  {
+    "name": "arrays--crlf",
+    "type": "BoxSet",
+    "originalName": "arrays",
+    "equivalent": true
+  },
+  {
+    "name": "arrays--crlf",
+    "type": "Playlist",
+    "originalName": "arrays",
+    "equivalent": true
+  },
+  {
+    "name": "arrays--lf",
+    "type": "BoxSet",
+    "originalName": "arrays",
+    "equivalent": true
+  },
+  {
+    "name": "arrays--lf",
+    "type": "Playlist",
+    "originalName": "arrays",
+    "equivalent": true
+  },
+  {
+    "name": "arrays--bom-lf",
+    "type": "BoxSet",
+    "originalName": "arrays",
+    "equivalent": true
+  },
+  {
+    "name": "arrays--bom-lf",
+    "type": "Playlist",
+    "originalName": "arrays",
+    "equivalent": true
+  },
+  {
+    "name": "empty-containers--crlf",
+    "type": "BoxSet",
+    "originalName": "empty-containers",
+    "equivalent": true
+  },
+  {
+    "name": "empty-containers--crlf",
+    "type": "Playlist",
+    "originalName": "empty-containers",
+    "equivalent": true
+  },
+  {
+    "name": "empty-containers--lf",
+    "type": "BoxSet",
+    "originalName": "empty-containers",
+    "equivalent": true
+  },
+  {
+    "name": "empty-containers--lf",
+    "type": "Playlist",
+    "originalName": "empty-containers",
+    "equivalent": true
+  },
+  {
+    "name": "empty-containers--bom-lf",
+    "type": "BoxSet",
+    "originalName": "empty-containers",
+    "equivalent": true
+  },
+  {
+    "name": "empty-containers--bom-lf",
+    "type": "Playlist",
+    "originalName": "empty-containers",
+    "equivalent": true
+  },
+  {
+    "name": "replace-containers--crlf",
+    "type": "BoxSet",
+    "originalName": "replace-containers",
+    "equivalent": true
+  },
+  {
+    "name": "replace-containers--crlf",
+    "type": "Playlist",
+    "originalName": "replace-containers",
+    "equivalent": true
+  },
+  {
+    "name": "replace-containers--lf",
+    "type": "BoxSet",
+    "originalName": "replace-containers",
+    "equivalent": true
+  },
+  {
+    "name": "replace-containers--lf",
+    "type": "Playlist",
+    "originalName": "replace-containers",
+    "equivalent": true
+  },
+  {
+    "name": "replace-containers--bom-lf",
+    "type": "BoxSet",
+    "originalName": "replace-containers",
+    "equivalent": true
+  },
+  {
+    "name": "replace-containers--bom-lf",
+    "type": "Playlist",
+    "originalName": "replace-containers",
+    "equivalent": true
+  },
+  {
+    "name": "people--crlf",
+    "type": "BoxSet",
+    "originalName": "people",
+    "equivalent": true
+  },
+  {
+    "name": "people--crlf",
+    "type": "Playlist",
+    "originalName": "people",
+    "equivalent": true
+  },
+  {
+    "name": "people--lf",
+    "type": "BoxSet",
+    "originalName": "people",
+    "equivalent": true
+  },
+  {
+    "name": "people--lf",
+    "type": "Playlist",
+    "originalName": "people",
+    "equivalent": true
+  },
+  {
+    "name": "people--bom-lf",
+    "type": "BoxSet",
+    "originalName": "people",
+    "equivalent": true
+  },
+  {
+    "name": "people--bom-lf",
+    "type": "Playlist",
+    "originalName": "people",
+    "equivalent": true
+  },
+  {
+    "name": "people-invalid-type--crlf",
+    "type": "BoxSet",
+    "originalName": "people-invalid-type",
+    "equivalent": true
+  },
+  {
+    "name": "people-invalid-type--crlf",
+    "type": "Playlist",
+    "originalName": "people-invalid-type",
+    "equivalent": true
+  },
+  {
+    "name": "people-invalid-type--lf",
+    "type": "BoxSet",
+    "originalName": "people-invalid-type",
+    "equivalent": true
+  },
+  {
+    "name": "people-invalid-type--lf",
+    "type": "Playlist",
+    "originalName": "people-invalid-type",
+    "equivalent": true
+  },
+  {
+    "name": "people-invalid-type--bom-lf",
+    "type": "BoxSet",
+    "originalName": "people-invalid-type",
+    "equivalent": true
+  },
+  {
+    "name": "people-invalid-type--bom-lf",
+    "type": "Playlist",
+    "originalName": "people-invalid-type",
+    "equivalent": true
+  },
+  {
+    "name": "providers--crlf",
+    "type": "BoxSet",
+    "originalName": "providers",
+    "equivalent": true
+  },
+  {
+    "name": "providers--crlf",
+    "type": "Playlist",
+    "originalName": "providers",
+    "equivalent": true
+  },
+  {
+    "name": "providers--lf",
+    "type": "BoxSet",
+    "originalName": "providers",
+    "equivalent": true
+  },
+  {
+    "name": "providers--lf",
+    "type": "Playlist",
+    "originalName": "providers",
+    "equivalent": true
+  },
+  {
+    "name": "providers--bom-lf",
+    "type": "BoxSet",
+    "originalName": "providers",
+    "equivalent": true
+  },
+  {
+    "name": "providers--bom-lf",
+    "type": "Playlist",
+    "originalName": "providers",
+    "equivalent": true
+  },
+  {
+    "name": "unregistered-ids--crlf",
+    "type": "BoxSet",
+    "originalName": "unregistered-ids",
+    "equivalent": true
+  },
+  {
+    "name": "unregistered-ids--crlf",
+    "type": "Playlist",
+    "originalName": "unregistered-ids",
+    "equivalent": true
+  },
+  {
+    "name": "unregistered-ids--lf",
+    "type": "BoxSet",
+    "originalName": "unregistered-ids",
+    "equivalent": true
+  },
+  {
+    "name": "unregistered-ids--lf",
+    "type": "Playlist",
+    "originalName": "unregistered-ids",
+    "equivalent": true
+  },
+  {
+    "name": "unregistered-ids--bom-lf",
+    "type": "BoxSet",
+    "originalName": "unregistered-ids",
+    "equivalent": true
+  },
+  {
+    "name": "unregistered-ids--bom-lf",
+    "type": "Playlist",
+    "originalName": "unregistered-ids",
+    "equivalent": true
+  },
+  {
+    "name": "links-shares--crlf",
+    "type": "BoxSet",
+    "originalName": "links-shares",
+    "equivalent": true
+  },
+  {
+    "name": "links-shares--crlf",
+    "type": "Playlist",
+    "originalName": "links-shares",
+    "equivalent": true
+  },
+  {
+    "name": "links-shares--lf",
+    "type": "BoxSet",
+    "originalName": "links-shares",
+    "equivalent": true
+  },
+  {
+    "name": "links-shares--lf",
+    "type": "Playlist",
+    "originalName": "links-shares",
+    "equivalent": true
+  },
+  {
+    "name": "links-shares--bom-lf",
+    "type": "BoxSet",
+    "originalName": "links-shares",
+    "equivalent": true
+  },
+  {
+    "name": "links-shares--bom-lf",
+    "type": "Playlist",
+    "originalName": "links-shares",
+    "equivalent": true
+  },
+  {
+    "name": "zero-owner--crlf",
+    "type": "BoxSet",
+    "originalName": "zero-owner",
+    "equivalent": true
+  },
+  {
+    "name": "zero-owner--crlf",
+    "type": "Playlist",
+    "originalName": "zero-owner",
+    "equivalent": true
+  },
+  {
+    "name": "zero-owner--lf",
+    "type": "BoxSet",
+    "originalName": "zero-owner",
+    "equivalent": true
+  },
+  {
+    "name": "zero-owner--lf",
+    "type": "Playlist",
+    "originalName": "zero-owner",
+    "equivalent": true
+  },
+  {
+    "name": "zero-owner--bom-lf",
+    "type": "BoxSet",
+    "originalName": "zero-owner",
+    "equivalent": true
+  },
+  {
+    "name": "zero-owner--bom-lf",
+    "type": "Playlist",
+    "originalName": "zero-owner",
+    "equivalent": true
+  },
+  {
+    "name": "alphabetic-guid--crlf",
+    "type": "BoxSet",
+    "originalName": "alphabetic-guid",
+    "equivalent": true
+  },
+  {
+    "name": "alphabetic-guid--crlf",
+    "type": "Playlist",
+    "originalName": "alphabetic-guid",
+    "equivalent": true
+  },
+  {
+    "name": "alphabetic-guid--lf",
+    "type": "BoxSet",
+    "originalName": "alphabetic-guid",
+    "equivalent": true
+  },
+  {
+    "name": "alphabetic-guid--lf",
+    "type": "Playlist",
+    "originalName": "alphabetic-guid",
+    "equivalent": true
+  },
+  {
+    "name": "alphabetic-guid--bom-lf",
+    "type": "BoxSet",
+    "originalName": "alphabetic-guid",
+    "equivalent": true
+  },
+  {
+    "name": "alphabetic-guid--bom-lf",
+    "type": "Playlist",
+    "originalName": "alphabetic-guid",
+    "equivalent": true
+  },
+  {
+    "name": "xml-comment-pi--crlf",
+    "type": "BoxSet",
+    "originalName": "xml-comment-pi",
+    "equivalent": true
+  },
+  {
+    "name": "xml-comment-pi--crlf",
+    "type": "Playlist",
+    "originalName": "xml-comment-pi",
+    "equivalent": true
+  },
+  {
+    "name": "xml-comment-pi--lf",
+    "type": "BoxSet",
+    "originalName": "xml-comment-pi",
+    "equivalent": true
+  },
+  {
+    "name": "xml-comment-pi--lf",
+    "type": "Playlist",
+    "originalName": "xml-comment-pi",
+    "equivalent": true
+  },
+  {
+    "name": "xml-comment-pi--bom-lf",
+    "type": "BoxSet",
+    "originalName": "xml-comment-pi",
+    "equivalent": true
+  },
+  {
+    "name": "xml-comment-pi--bom-lf",
+    "type": "Playlist",
+    "originalName": "xml-comment-pi",
+    "equivalent": true
+  },
+  {
+    "name": "xml-line-endings--crlf",
+    "type": "BoxSet",
+    "originalName": "xml-line-endings",
+    "equivalent": true
+  },
+  {
+    "name": "xml-line-endings--crlf",
+    "type": "Playlist",
+    "originalName": "xml-line-endings",
+    "equivalent": true
+  },
+  {
+    "name": "xml-line-endings--lf",
+    "type": "BoxSet",
+    "originalName": "xml-line-endings",
+    "equivalent": true
+  },
+  {
+    "name": "xml-line-endings--lf",
+    "type": "Playlist",
+    "originalName": "xml-line-endings",
+    "equivalent": true
+  },
+  {
+    "name": "xml-line-endings--bom-lf",
+    "type": "BoxSet",
+    "originalName": "xml-line-endings",
+    "equivalent": true
+  },
+  {
+    "name": "xml-line-endings--bom-lf",
+    "type": "Playlist",
+    "originalName": "xml-line-endings",
+    "equivalent": true
+  },
+  {
+    "name": "numeric-trailing-nul--crlf",
+    "type": "BoxSet",
+    "originalName": "numeric-trailing-nul",
+    "equivalent": true
+  },
+  {
+    "name": "numeric-trailing-nul--crlf",
+    "type": "Playlist",
+    "originalName": "numeric-trailing-nul",
+    "equivalent": true
+  },
+  {
+    "name": "numeric-trailing-nul--lf",
+    "type": "BoxSet",
+    "originalName": "numeric-trailing-nul",
+    "equivalent": true
+  },
+  {
+    "name": "numeric-trailing-nul--lf",
+    "type": "Playlist",
+    "originalName": "numeric-trailing-nul",
+    "equivalent": true
+  },
+  {
+    "name": "numeric-trailing-nul--bom-lf",
+    "type": "BoxSet",
+    "originalName": "numeric-trailing-nul",
+    "equivalent": true
+  },
+  {
+    "name": "numeric-trailing-nul--bom-lf",
+    "type": "Playlist",
+    "originalName": "numeric-trailing-nul",
+    "equivalent": true
+  },
+  {
+    "name": "invalid-scalar-after-comments--crlf",
+    "type": "BoxSet",
+    "originalName": "invalid-scalar-after-comments",
+    "equivalent": false
+  },
+  {
+    "name": "invalid-scalar-after-comments--crlf",
+    "type": "Playlist",
+    "originalName": "invalid-scalar-after-comments",
+    "equivalent": false
+  },
+  {
+    "name": "invalid-scalar-after-comments--lf",
+    "type": "BoxSet",
+    "originalName": "invalid-scalar-after-comments",
+    "equivalent": false
+  },
+  {
+    "name": "invalid-scalar-after-comments--lf",
+    "type": "Playlist",
+    "originalName": "invalid-scalar-after-comments",
+    "equivalent": false
+  },
+  {
+    "name": "invalid-scalar-after-comments--bom-lf",
+    "type": "BoxSet",
+    "originalName": "invalid-scalar-after-comments",
+    "equivalent": false
+  },
+  {
+    "name": "invalid-scalar-after-comments--bom-lf",
+    "type": "Playlist",
+    "originalName": "invalid-scalar-after-comments",
+    "equivalent": false
+  },
+  {
+    "name": "partial-container-next-invalid--crlf",
+    "type": "BoxSet",
+    "originalName": "partial-container-next-invalid",
+    "equivalent": false
+  },
+  {
+    "name": "partial-container-next-invalid--crlf",
+    "type": "Playlist",
+    "originalName": "partial-container-next-invalid",
+    "equivalent": false
+  },
+  {
+    "name": "partial-container-next-invalid--lf",
+    "type": "BoxSet",
+    "originalName": "partial-container-next-invalid",
+    "equivalent": false
+  },
+  {
+    "name": "partial-container-next-invalid--lf",
+    "type": "Playlist",
+    "originalName": "partial-container-next-invalid",
+    "equivalent": false
+  },
+  {
+    "name": "partial-container-next-invalid--bom-lf",
+    "type": "BoxSet",
+    "originalName": "partial-container-next-invalid",
+    "equivalent": false
+  },
+  {
+    "name": "partial-container-next-invalid--bom-lf",
+    "type": "Playlist",
+    "originalName": "partial-container-next-invalid",
+    "equivalent": false
+  },
+  {
+    "name": "invalid-guid-x--crlf",
+    "type": "BoxSet",
+    "originalName": "invalid-guid-x",
+    "equivalent": true
+  },
+  {
+    "name": "invalid-guid-x--crlf",
+    "type": "Playlist",
+    "originalName": "invalid-guid-x",
+    "equivalent": true
+  },
+  {
+    "name": "invalid-guid-x--lf",
+    "type": "BoxSet",
+    "originalName": "invalid-guid-x",
+    "equivalent": true
+  },
+  {
+    "name": "invalid-guid-x--lf",
+    "type": "Playlist",
+    "originalName": "invalid-guid-x",
+    "equivalent": true
+  },
+  {
+    "name": "invalid-guid-x--bom-lf",
+    "type": "BoxSet",
+    "originalName": "invalid-guid-x",
+    "equivalent": true
+  },
+  {
+    "name": "invalid-guid-x--bom-lf",
+    "type": "Playlist",
+    "originalName": "invalid-guid-x",
+    "equivalent": true
+  },
+  {
+    "name": "malformed-next-scalar--crlf",
+    "type": "BoxSet",
+    "originalName": "malformed-next-scalar",
+    "equivalent": false
+  },
+  {
+    "name": "malformed-next-scalar--crlf",
+    "type": "Playlist",
+    "originalName": "malformed-next-scalar",
+    "equivalent": false
+  },
+  {
+    "name": "malformed-next-scalar--lf",
+    "type": "BoxSet",
+    "originalName": "malformed-next-scalar",
+    "equivalent": false
+  },
+  {
+    "name": "malformed-next-scalar--lf",
+    "type": "Playlist",
+    "originalName": "malformed-next-scalar",
+    "equivalent": false
+  },
+  {
+    "name": "malformed-next-scalar--bom-lf",
+    "type": "BoxSet",
+    "originalName": "malformed-next-scalar",
+    "equivalent": false
+  },
+  {
+    "name": "malformed-next-scalar--bom-lf",
+    "type": "Playlist",
+    "originalName": "malformed-next-scalar",
+    "equivalent": false
+  },
+  {
+    "name": "malformed-next-container--crlf",
+    "type": "BoxSet",
+    "originalName": "malformed-next-container",
+    "equivalent": true
+  },
+  {
+    "name": "malformed-next-container--crlf",
+    "type": "Playlist",
+    "originalName": "malformed-next-container",
+    "equivalent": true
+  },
+  {
+    "name": "malformed-next-container--lf",
+    "type": "BoxSet",
+    "originalName": "malformed-next-container",
+    "equivalent": true
+  },
+  {
+    "name": "malformed-next-container--lf",
+    "type": "Playlist",
+    "originalName": "malformed-next-container",
+    "equivalent": true
+  },
+  {
+    "name": "malformed-next-container--bom-lf",
+    "type": "BoxSet",
+    "originalName": "malformed-next-container",
+    "equivalent": true
+  },
+  {
+    "name": "malformed-next-container--bom-lf",
+    "type": "Playlist",
+    "originalName": "malformed-next-container",
+    "equivalent": true
+  },
+  {
+    "name": "partial-genres--crlf",
+    "type": "BoxSet",
+    "originalName": "partial-genres",
+    "equivalent": true
+  },
+  {
+    "name": "partial-genres--crlf",
+    "type": "Playlist",
+    "originalName": "partial-genres",
+    "equivalent": true
+  },
+  {
+    "name": "partial-genres--lf",
+    "type": "BoxSet",
+    "originalName": "partial-genres",
+    "equivalent": true
+  },
+  {
+    "name": "partial-genres--lf",
+    "type": "Playlist",
+    "originalName": "partial-genres",
+    "equivalent": true
+  },
+  {
+    "name": "partial-genres--bom-lf",
+    "type": "BoxSet",
+    "originalName": "partial-genres",
+    "equivalent": true
+  },
+  {
+    "name": "partial-genres--bom-lf",
+    "type": "Playlist",
+    "originalName": "partial-genres",
+    "equivalent": true
+  },
+  {
+    "name": "partial-tags--crlf",
+    "type": "BoxSet",
+    "originalName": "partial-tags",
+    "equivalent": true
+  },
+  {
+    "name": "partial-tags--crlf",
+    "type": "Playlist",
+    "originalName": "partial-tags",
+    "equivalent": true
+  },
+  {
+    "name": "partial-tags--lf",
+    "type": "BoxSet",
+    "originalName": "partial-tags",
+    "equivalent": true
+  },
+  {
+    "name": "partial-tags--lf",
+    "type": "Playlist",
+    "originalName": "partial-tags",
+    "equivalent": true
+  },
+  {
+    "name": "partial-tags--bom-lf",
+    "type": "BoxSet",
+    "originalName": "partial-tags",
+    "equivalent": true
+  },
+  {
+    "name": "partial-tags--bom-lf",
+    "type": "Playlist",
+    "originalName": "partial-tags",
+    "equivalent": true
+  },
+  {
+    "name": "partial-person--crlf",
+    "type": "BoxSet",
+    "originalName": "partial-person",
+    "equivalent": true
+  },
+  {
+    "name": "partial-person--crlf",
+    "type": "Playlist",
+    "originalName": "partial-person",
+    "equivalent": true
+  },
+  {
+    "name": "partial-person--lf",
+    "type": "BoxSet",
+    "originalName": "partial-person",
+    "equivalent": true
+  },
+  {
+    "name": "partial-person--lf",
+    "type": "Playlist",
+    "originalName": "partial-person",
+    "equivalent": true
+  },
+  {
+    "name": "partial-person--bom-lf",
+    "type": "BoxSet",
+    "originalName": "partial-person",
+    "equivalent": true
+  },
+  {
+    "name": "partial-person--bom-lf",
+    "type": "Playlist",
+    "originalName": "partial-person",
+    "equivalent": true
+  },
+  {
+    "name": "partial-links--crlf",
+    "type": "BoxSet",
+    "originalName": "partial-links",
+    "equivalent": true
+  },
+  {
+    "name": "partial-links--crlf",
+    "type": "Playlist",
+    "originalName": "partial-links",
+    "equivalent": true
+  },
+  {
+    "name": "partial-links--lf",
+    "type": "BoxSet",
+    "originalName": "partial-links",
+    "equivalent": true
+  },
+  {
+    "name": "partial-links--lf",
+    "type": "Playlist",
+    "originalName": "partial-links",
+    "equivalent": true
+  },
+  {
+    "name": "partial-links--bom-lf",
+    "type": "BoxSet",
+    "originalName": "partial-links",
+    "equivalent": true
+  },
+  {
+    "name": "partial-links--bom-lf",
+    "type": "Playlist",
+    "originalName": "partial-links",
+    "equivalent": true
+  },
+  {
+    "name": "cancelled-empty--crlf",
+    "type": "BoxSet",
+    "originalName": "cancelled-empty",
+    "equivalent": true
+  },
+  {
+    "name": "cancelled-empty--crlf",
+    "type": "Playlist",
+    "originalName": "cancelled-empty",
+    "equivalent": true
+  },
+  {
+    "name": "cancelled-empty--lf",
+    "type": "BoxSet",
+    "originalName": "cancelled-empty",
+    "equivalent": true
+  },
+  {
+    "name": "cancelled-empty--lf",
+    "type": "Playlist",
+    "originalName": "cancelled-empty",
+    "equivalent": true
+  },
+  {
+    "name": "cancelled-empty--bom-lf",
+    "type": "BoxSet",
+    "originalName": "cancelled-empty",
+    "equivalent": true
+  },
+  {
+    "name": "cancelled-empty--bom-lf",
+    "type": "Playlist",
+    "originalName": "cancelled-empty",
+    "equivalent": true
+  },
+  {
+    "name": "cancelled-root-end--crlf",
+    "type": "BoxSet",
+    "originalName": "cancelled-root-end",
+    "equivalent": true
+  },
+  {
+    "name": "cancelled-root-end--crlf",
+    "type": "Playlist",
+    "originalName": "cancelled-root-end",
+    "equivalent": true
+  },
+  {
+    "name": "cancelled-root-end--lf",
+    "type": "BoxSet",
+    "originalName": "cancelled-root-end",
+    "equivalent": true
+  },
+  {
+    "name": "cancelled-root-end--lf",
+    "type": "Playlist",
+    "originalName": "cancelled-root-end",
+    "equivalent": true
+  },
+  {
+    "name": "cancelled-root-end--bom-lf",
+    "type": "BoxSet",
+    "originalName": "cancelled-root-end",
+    "equivalent": true
+  },
+  {
+    "name": "cancelled-root-end--bom-lf",
+    "type": "Playlist",
+    "originalName": "cancelled-root-end",
+    "equivalent": true
+  },
+  {
+    "name": "cancelled-fields--crlf",
+    "type": "BoxSet",
+    "originalName": "cancelled-fields",
+    "equivalent": true
+  },
+  {
+    "name": "cancelled-fields--crlf",
+    "type": "Playlist",
+    "originalName": "cancelled-fields",
+    "equivalent": true
+  },
+  {
+    "name": "cancelled-fields--lf",
+    "type": "BoxSet",
+    "originalName": "cancelled-fields",
+    "equivalent": true
+  },
+  {
+    "name": "cancelled-fields--lf",
+    "type": "Playlist",
+    "originalName": "cancelled-fields",
+    "equivalent": true
+  },
+  {
+    "name": "cancelled-fields--bom-lf",
+    "type": "BoxSet",
+    "originalName": "cancelled-fields",
+    "equivalent": true
+  },
+  {
+    "name": "cancelled-fields--bom-lf",
+    "type": "Playlist",
+    "originalName": "cancelled-fields",
+    "equivalent": true
+  },
+  {
+    "name": "dtd--crlf",
+    "type": "BoxSet",
+    "originalName": "dtd",
+    "equivalent": true
+  },
+  {
+    "name": "dtd--crlf",
+    "type": "Playlist",
+    "originalName": "dtd",
+    "equivalent": true
+  },
+  {
+    "name": "dtd--lf",
+    "type": "BoxSet",
+    "originalName": "dtd",
+    "equivalent": true
+  },
+  {
+    "name": "dtd--lf",
+    "type": "Playlist",
+    "originalName": "dtd",
+    "equivalent": true
+  },
+  {
+    "name": "dtd--bom-lf",
+    "type": "BoxSet",
+    "originalName": "dtd",
+    "equivalent": true
+  },
+  {
+    "name": "dtd--bom-lf",
+    "type": "Playlist",
+    "originalName": "dtd",
+    "equivalent": true
+  },
+  {
+    "name": "invalid-namespace--crlf",
+    "type": "BoxSet",
+    "originalName": "invalid-namespace",
+    "equivalent": false
+  },
+  {
+    "name": "invalid-namespace--crlf",
+    "type": "Playlist",
+    "originalName": "invalid-namespace",
+    "equivalent": false
+  },
+  {
+    "name": "invalid-namespace--lf",
+    "type": "BoxSet",
+    "originalName": "invalid-namespace",
+    "equivalent": false
+  },
+  {
+    "name": "invalid-namespace--lf",
+    "type": "Playlist",
+    "originalName": "invalid-namespace",
+    "equivalent": false
+  },
+  {
+    "name": "invalid-namespace--bom-lf",
+    "type": "BoxSet",
+    "originalName": "invalid-namespace",
+    "equivalent": false
+  },
+  {
+    "name": "invalid-namespace--bom-lf",
+    "type": "Playlist",
+    "originalName": "invalid-namespace",
+    "equivalent": false
+  },
+  {
+    "name": "multiple-roots--crlf",
+    "type": "BoxSet",
+    "originalName": "multiple-roots",
+    "equivalent": true
+  },
+  {
+    "name": "multiple-roots--crlf",
+    "type": "Playlist",
+    "originalName": "multiple-roots",
+    "equivalent": true
+  },
+  {
+    "name": "multiple-roots--lf",
+    "type": "BoxSet",
+    "originalName": "multiple-roots",
+    "equivalent": true
+  },
+  {
+    "name": "multiple-roots--lf",
+    "type": "Playlist",
+    "originalName": "multiple-roots",
+    "equivalent": true
+  },
+  {
+    "name": "multiple-roots--bom-lf",
+    "type": "BoxSet",
+    "originalName": "multiple-roots",
+    "equivalent": true
+  },
+  {
+    "name": "multiple-roots--bom-lf",
+    "type": "Playlist",
+    "originalName": "multiple-roots",
+    "equivalent": true
+  },
+  {
+    "name": "nested-known-field--crlf",
+    "type": "BoxSet",
+    "originalName": "nested-known-field",
+    "equivalent": true
+  },
+  {
+    "name": "nested-known-field--crlf",
+    "type": "Playlist",
+    "originalName": "nested-known-field",
+    "equivalent": true
+  },
+  {
+    "name": "nested-known-field--lf",
+    "type": "BoxSet",
+    "originalName": "nested-known-field",
+    "equivalent": true
+  },
+  {
+    "name": "nested-known-field--lf",
+    "type": "Playlist",
+    "originalName": "nested-known-field",
+    "equivalent": true
+  },
+  {
+    "name": "nested-known-field--bom-lf",
+    "type": "BoxSet",
+    "originalName": "nested-known-field",
+    "equivalent": true
+  },
+  {
+    "name": "nested-known-field--bom-lf",
+    "type": "Playlist",
+    "originalName": "nested-known-field",
+    "equivalent": true
+  }
+]

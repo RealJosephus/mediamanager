@@ -1,0 +1,901 @@
+{
+  "actualFrozenRemoteLinkedReplacement": true,
+  "inputSha256": "769b9813509ab0affc1f6ff46c263aa57133006b0c2694ff1a312c3c42ede26f",
+  "results": [
+    {
+      "name": "two-version-primary-removal",
+      "ids": {
+        "oldPrimary": "cf4f56fc-5da2-b791-125b-e803a0b776f3",
+        "remote": "98d00000-0000-0000-0000-000000000003",
+        "manual": "98d00000-0000-0000-0000-000000000004"
+      },
+      "remotePath": "https://media.invalid/film-linked.mkv",
+      "beforeLinks": [
+        {
+          "parentId": "98d00000-0000-0000-0000-000000000004",
+          "childId": "cf4f56fc-5da2-b791-125b-e803a0b776f3",
+          "childType": 0,
+          "sortOrder": 0
+        },
+        {
+          "parentId": "cf4f56fc-5da2-b791-125b-e803a0b776f3",
+          "childId": "f51e5153-9cba-946c-a6f1-9305b01103c1",
+          "childType": 2,
+          "sortOrder": 0
+        },
+        {
+          "parentId": "cf4f56fc-5da2-b791-125b-e803a0b776f3",
+          "childId": "98d00000-0000-0000-0000-000000000003",
+          "childType": 3,
+          "sortOrder": 1
+        }
+      ],
+      "stages": [
+        {
+          "exception": null,
+          "trace": [
+            {
+              "action": "external-files",
+              "id": "98d00000-0000-0000-0000-000000000003"
+            },
+            {
+              "action": "delete",
+              "ids": [
+                "98d00000-0000-0000-0000-000000000003"
+              ]
+            },
+            {
+              "action": "saver",
+              "id": "f51e5153-9cba-946c-a6f1-9305b01103c1"
+            },
+            {
+              "action": "save",
+              "ids": [
+                "f51e5153-9cba-946c-a6f1-9305b01103c1"
+              ],
+              "paths": [
+                "$STATE\\media\\Film\\Film - 1080p.mkv"
+              ]
+            },
+            {
+              "action": "external-files",
+              "id": "cf4f56fc-5da2-b791-125b-e803a0b776f3"
+            },
+            {
+              "action": "delete",
+              "ids": [
+                "cf4f56fc-5da2-b791-125b-e803a0b776f3"
+              ]
+            },
+            {
+              "action": "save",
+              "ids": [
+                "f51e5153-9cba-946c-a6f1-9305b01103c1"
+              ],
+              "paths": [
+                "$STATE\\media\\Film\\Film - 1080p.mkv"
+              ]
+            }
+          ],
+          "rows": [
+            {
+              "id": "00000000-0000-0000-0000-000000000001",
+              "type": "PLACEHOLDER",
+              "name": "This is a placeholder item for UserData that has been detached from its original item",
+              "path": null,
+              "parentId": null,
+              "ownerId": null,
+              "primaryVersionId": null
+            },
+            {
+              "id": "98d00000-0000-0000-0000-000000000001",
+              "type": "MediaBrowser.Controller.Entities.Folder",
+              "name": "Parent",
+              "path": "$STATE\\media",
+              "parentId": null,
+              "ownerId": null,
+              "primaryVersionId": null
+            },
+            {
+              "id": "98d00000-0000-0000-0000-000000000002",
+              "type": "MediaBrowser.Controller.Entities.Folder",
+              "name": "Remote parent",
+              "path": "$STATE\\remote-parent",
+              "parentId": null,
+              "ownerId": null,
+              "primaryVersionId": null
+            },
+            {
+              "id": "98d00000-0000-0000-0000-000000000004",
+              "type": "MediaBrowser.Controller.Entities.Movies.BoxSet",
+              "name": "Manual incoming",
+              "path": null,
+              "parentId": null,
+              "ownerId": null,
+              "primaryVersionId": null
+            },
+            {
+              "id": "f51e5153-9cba-946c-a6f1-9305b01103c1",
+              "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+              "name": "Film",
+              "path": "$STATE\\media\\Film\\Film - 1080p.mkv",
+              "parentId": "98d00000-0000-0000-0000-000000000001",
+              "ownerId": null,
+              "primaryVersionId": null
+            }
+          ],
+          "links": [
+            {
+              "parentId": "98d00000-0000-0000-0000-000000000004",
+              "childId": "f51e5153-9cba-946c-a6f1-9305b01103c1",
+              "childType": 0,
+              "sortOrder": 0
+            }
+          ]
+        }
+      ],
+      "rows": [
+        {
+          "id": "00000000-0000-0000-0000-000000000001",
+          "type": "PLACEHOLDER",
+          "name": "This is a placeholder item for UserData that has been detached from its original item",
+          "path": null,
+          "parentId": null,
+          "ownerId": null,
+          "primaryVersionId": null
+        },
+        {
+          "id": "98d00000-0000-0000-0000-000000000001",
+          "type": "MediaBrowser.Controller.Entities.Folder",
+          "name": "Parent",
+          "path": "$STATE\\media",
+          "parentId": null,
+          "ownerId": null,
+          "primaryVersionId": null
+        },
+        {
+          "id": "98d00000-0000-0000-0000-000000000002",
+          "type": "MediaBrowser.Controller.Entities.Folder",
+          "name": "Remote parent",
+          "path": "$STATE\\remote-parent",
+          "parentId": null,
+          "ownerId": null,
+          "primaryVersionId": null
+        },
+        {
+          "id": "98d00000-0000-0000-0000-000000000004",
+          "type": "MediaBrowser.Controller.Entities.Movies.BoxSet",
+          "name": "Manual incoming",
+          "path": null,
+          "parentId": null,
+          "ownerId": null,
+          "primaryVersionId": null
+        },
+        {
+          "id": "f51e5153-9cba-946c-a6f1-9305b01103c1",
+          "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+          "name": "Film",
+          "path": "$STATE\\media\\Film\\Film - 1080p.mkv",
+          "parentId": "98d00000-0000-0000-0000-000000000001",
+          "ownerId": null,
+          "primaryVersionId": null
+        }
+      ],
+      "links": [
+        {
+          "parentId": "98d00000-0000-0000-0000-000000000004",
+          "childId": "f51e5153-9cba-946c-a6f1-9305b01103c1",
+          "childType": 0,
+          "sortOrder": 0
+        }
+      ]
+    },
+    {
+      "name": "three-version-primary-removal",
+      "ids": {
+        "oldPrimary": "cf4f56fc-5da2-b791-125b-e803a0b776f3",
+        "remote": "98d00000-0000-0000-0000-000000000003",
+        "manual": "98d00000-0000-0000-0000-000000000004"
+      },
+      "remotePath": "https://media.invalid/film-linked.mkv",
+      "beforeLinks": [
+        {
+          "parentId": "98d00000-0000-0000-0000-000000000004",
+          "childId": "cf4f56fc-5da2-b791-125b-e803a0b776f3",
+          "childType": 0,
+          "sortOrder": 0
+        },
+        {
+          "parentId": "cf4f56fc-5da2-b791-125b-e803a0b776f3",
+          "childId": "f51e5153-9cba-946c-a6f1-9305b01103c1",
+          "childType": 2,
+          "sortOrder": 0
+        },
+        {
+          "parentId": "cf4f56fc-5da2-b791-125b-e803a0b776f3",
+          "childId": "cf2f5f54-cb05-e037-94da-be65b2255a38",
+          "childType": 2,
+          "sortOrder": 1
+        },
+        {
+          "parentId": "cf4f56fc-5da2-b791-125b-e803a0b776f3",
+          "childId": "98d00000-0000-0000-0000-000000000003",
+          "childType": 3,
+          "sortOrder": 2
+        }
+      ],
+      "stages": [
+        {
+          "exception": "DbUpdateException",
+          "trace": [
+            {
+              "action": "save",
+              "ids": [
+                "f51e5153-9cba-946c-a6f1-9305b01103c1"
+              ],
+              "paths": [
+                "$STATE\\media\\Film\\Film - 1080p.mkv"
+              ]
+            },
+            {
+              "action": "saver",
+              "id": "cf2f5f54-cb05-e037-94da-be65b2255a38"
+            },
+            {
+              "action": "save",
+              "ids": [
+                "cf2f5f54-cb05-e037-94da-be65b2255a38"
+              ],
+              "paths": [
+                "$STATE\\media\\Film\\Film - 720p.mkv"
+              ]
+            },
+            {
+              "action": "save",
+              "ids": [
+                "98d00000-0000-0000-0000-000000000003"
+              ],
+              "paths": [
+                "https://media.invalid/film-linked.mkv"
+              ]
+            },
+            {
+              "action": "external-files",
+              "id": "98d00000-0000-0000-0000-000000000003"
+            },
+            {
+              "action": "delete",
+              "ids": [
+                "98d00000-0000-0000-0000-000000000003"
+              ]
+            },
+            {
+              "action": "saver",
+              "id": "f51e5153-9cba-946c-a6f1-9305b01103c1"
+            },
+            {
+              "action": "save",
+              "ids": [
+                "f51e5153-9cba-946c-a6f1-9305b01103c1"
+              ],
+              "paths": [
+                "$STATE\\media\\Film\\Film - 1080p.mkv"
+              ]
+            }
+          ],
+          "rows": [
+            {
+              "id": "00000000-0000-0000-0000-000000000001",
+              "type": "PLACEHOLDER",
+              "name": "This is a placeholder item for UserData that has been detached from its original item",
+              "path": null,
+              "parentId": null,
+              "ownerId": null,
+              "primaryVersionId": null
+            },
+            {
+              "id": "98d00000-0000-0000-0000-000000000001",
+              "type": "MediaBrowser.Controller.Entities.Folder",
+              "name": "Parent",
+              "path": "$STATE\\media",
+              "parentId": null,
+              "ownerId": null,
+              "primaryVersionId": null
+            },
+            {
+              "id": "98d00000-0000-0000-0000-000000000002",
+              "type": "MediaBrowser.Controller.Entities.Folder",
+              "name": "Remote parent",
+              "path": "$STATE\\remote-parent",
+              "parentId": null,
+              "ownerId": null,
+              "primaryVersionId": null
+            },
+            {
+              "id": "98d00000-0000-0000-0000-000000000004",
+              "type": "MediaBrowser.Controller.Entities.Movies.BoxSet",
+              "name": "Manual incoming",
+              "path": null,
+              "parentId": null,
+              "ownerId": null,
+              "primaryVersionId": null
+            },
+            {
+              "id": "cf2f5f54-cb05-e037-94da-be65b2255a38",
+              "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+              "name": "Film - 720p",
+              "path": "$STATE\\media\\Film\\Film - 720p.mkv",
+              "parentId": null,
+              "ownerId": "f51e5153-9cba-946c-a6f1-9305b01103c1",
+              "primaryVersionId": "f51e5153-9cba-946c-a6f1-9305b01103c1"
+            },
+            {
+              "id": "cf4f56fc-5da2-b791-125b-e803a0b776f3",
+              "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+              "name": "Film",
+              "path": "$STATE\\media\\Film\\Film - 2160p.mkv",
+              "parentId": "98d00000-0000-0000-0000-000000000001",
+              "ownerId": null,
+              "primaryVersionId": null
+            },
+            {
+              "id": "f51e5153-9cba-946c-a6f1-9305b01103c1",
+              "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+              "name": "Film",
+              "path": "$STATE\\media\\Film\\Film - 1080p.mkv",
+              "parentId": "98d00000-0000-0000-0000-000000000001",
+              "ownerId": null,
+              "primaryVersionId": null
+            }
+          ],
+          "links": [
+            {
+              "parentId": "98d00000-0000-0000-0000-000000000004",
+              "childId": "f51e5153-9cba-946c-a6f1-9305b01103c1",
+              "childType": 0,
+              "sortOrder": 0
+            },
+            {
+              "parentId": "cf4f56fc-5da2-b791-125b-e803a0b776f3",
+              "childId": "cf2f5f54-cb05-e037-94da-be65b2255a38",
+              "childType": 2,
+              "sortOrder": 1
+            },
+            {
+              "parentId": "cf4f56fc-5da2-b791-125b-e803a0b776f3",
+              "childId": "f51e5153-9cba-946c-a6f1-9305b01103c1",
+              "childType": 2,
+              "sortOrder": 0
+            },
+            {
+              "parentId": "f51e5153-9cba-946c-a6f1-9305b01103c1",
+              "childId": "cf2f5f54-cb05-e037-94da-be65b2255a38",
+              "childType": 2,
+              "sortOrder": 0
+            }
+          ]
+        }
+      ],
+      "rows": [
+        {
+          "id": "00000000-0000-0000-0000-000000000001",
+          "type": "PLACEHOLDER",
+          "name": "This is a placeholder item for UserData that has been detached from its original item",
+          "path": null,
+          "parentId": null,
+          "ownerId": null,
+          "primaryVersionId": null
+        },
+        {
+          "id": "98d00000-0000-0000-0000-000000000001",
+          "type": "MediaBrowser.Controller.Entities.Folder",
+          "name": "Parent",
+          "path": "$STATE\\media",
+          "parentId": null,
+          "ownerId": null,
+          "primaryVersionId": null
+        },
+        {
+          "id": "98d00000-0000-0000-0000-000000000002",
+          "type": "MediaBrowser.Controller.Entities.Folder",
+          "name": "Remote parent",
+          "path": "$STATE\\remote-parent",
+          "parentId": null,
+          "ownerId": null,
+          "primaryVersionId": null
+        },
+        {
+          "id": "98d00000-0000-0000-0000-000000000004",
+          "type": "MediaBrowser.Controller.Entities.Movies.BoxSet",
+          "name": "Manual incoming",
+          "path": null,
+          "parentId": null,
+          "ownerId": null,
+          "primaryVersionId": null
+        },
+        {
+          "id": "cf2f5f54-cb05-e037-94da-be65b2255a38",
+          "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+          "name": "Film - 720p",
+          "path": "$STATE\\media\\Film\\Film - 720p.mkv",
+          "parentId": null,
+          "ownerId": "f51e5153-9cba-946c-a6f1-9305b01103c1",
+          "primaryVersionId": "f51e5153-9cba-946c-a6f1-9305b01103c1"
+        },
+        {
+          "id": "cf4f56fc-5da2-b791-125b-e803a0b776f3",
+          "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+          "name": "Film",
+          "path": "$STATE\\media\\Film\\Film - 2160p.mkv",
+          "parentId": "98d00000-0000-0000-0000-000000000001",
+          "ownerId": null,
+          "primaryVersionId": null
+        },
+        {
+          "id": "f51e5153-9cba-946c-a6f1-9305b01103c1",
+          "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+          "name": "Film",
+          "path": "$STATE\\media\\Film\\Film - 1080p.mkv",
+          "parentId": "98d00000-0000-0000-0000-000000000001",
+          "ownerId": null,
+          "primaryVersionId": null
+        }
+      ],
+      "links": [
+        {
+          "parentId": "98d00000-0000-0000-0000-000000000004",
+          "childId": "f51e5153-9cba-946c-a6f1-9305b01103c1",
+          "childType": 0,
+          "sortOrder": 0
+        },
+        {
+          "parentId": "cf4f56fc-5da2-b791-125b-e803a0b776f3",
+          "childId": "cf2f5f54-cb05-e037-94da-be65b2255a38",
+          "childType": 2,
+          "sortOrder": 1
+        },
+        {
+          "parentId": "cf4f56fc-5da2-b791-125b-e803a0b776f3",
+          "childId": "f51e5153-9cba-946c-a6f1-9305b01103c1",
+          "childType": 2,
+          "sortOrder": 0
+        },
+        {
+          "parentId": "f51e5153-9cba-946c-a6f1-9305b01103c1",
+          "childId": "cf2f5f54-cb05-e037-94da-be65b2255a38",
+          "childType": 2,
+          "sortOrder": 0
+        }
+      ]
+    },
+    {
+      "name": "exact-primary-demotion-then-removal",
+      "ids": {
+        "oldPrimary": "cf4f56fc-5da2-b791-125b-e803a0b776f3",
+        "remote": "98d00000-0000-0000-0000-000000000003",
+        "manual": "98d00000-0000-0000-0000-000000000004"
+      },
+      "remotePath": "https://media.invalid/film-linked.mkv",
+      "beforeLinks": [
+        {
+          "parentId": "98d00000-0000-0000-0000-000000000004",
+          "childId": "cf4f56fc-5da2-b791-125b-e803a0b776f3",
+          "childType": 0,
+          "sortOrder": 0
+        },
+        {
+          "parentId": "cf4f56fc-5da2-b791-125b-e803a0b776f3",
+          "childId": "f51e5153-9cba-946c-a6f1-9305b01103c1",
+          "childType": 2,
+          "sortOrder": 0
+        },
+        {
+          "parentId": "cf4f56fc-5da2-b791-125b-e803a0b776f3",
+          "childId": "98d00000-0000-0000-0000-000000000003",
+          "childType": 3,
+          "sortOrder": 1
+        }
+      ],
+      "stages": [
+        {
+          "exception": null,
+          "trace": [
+            {
+              "action": "save",
+              "ids": [
+                "1612a4bb-6811-69eb-bfa7-466f73db6f55"
+              ],
+              "paths": [
+                "$STATE\\media\\Film\\Film.mkv"
+              ]
+            },
+            {
+              "action": "saver",
+              "id": "f51e5153-9cba-946c-a6f1-9305b01103c1"
+            },
+            {
+              "action": "save",
+              "ids": [
+                "f51e5153-9cba-946c-a6f1-9305b01103c1"
+              ],
+              "paths": [
+                "$STATE\\media\\Film\\Film - 1080p.mkv"
+              ]
+            },
+            {
+              "action": "save",
+              "ids": [
+                "98d00000-0000-0000-0000-000000000003"
+              ],
+              "paths": [
+                "https://media.invalid/film-linked.mkv"
+              ]
+            },
+            {
+              "action": "saver",
+              "id": "cf4f56fc-5da2-b791-125b-e803a0b776f3"
+            },
+            {
+              "action": "save",
+              "ids": [
+                "cf4f56fc-5da2-b791-125b-e803a0b776f3"
+              ],
+              "paths": [
+                "$STATE\\media\\Film\\Film - 2160p.mkv"
+              ]
+            }
+          ],
+          "rows": [
+            {
+              "id": "00000000-0000-0000-0000-000000000001",
+              "type": "PLACEHOLDER",
+              "name": "This is a placeholder item for UserData that has been detached from its original item",
+              "path": null,
+              "parentId": null,
+              "ownerId": null,
+              "primaryVersionId": null
+            },
+            {
+              "id": "1612a4bb-6811-69eb-bfa7-466f73db6f55",
+              "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+              "name": "Film",
+              "path": "$STATE\\media\\Film\\Film.mkv",
+              "parentId": "98d00000-0000-0000-0000-000000000001",
+              "ownerId": null,
+              "primaryVersionId": null
+            },
+            {
+              "id": "98d00000-0000-0000-0000-000000000001",
+              "type": "MediaBrowser.Controller.Entities.Folder",
+              "name": "Parent",
+              "path": "$STATE\\media",
+              "parentId": null,
+              "ownerId": null,
+              "primaryVersionId": null
+            },
+            {
+              "id": "98d00000-0000-0000-0000-000000000002",
+              "type": "MediaBrowser.Controller.Entities.Folder",
+              "name": "Remote parent",
+              "path": "$STATE\\remote-parent",
+              "parentId": null,
+              "ownerId": null,
+              "primaryVersionId": null
+            },
+            {
+              "id": "98d00000-0000-0000-0000-000000000003",
+              "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+              "name": "Remote linked alternate",
+              "path": "https://media.invalid/film-linked.mkv",
+              "parentId": "98d00000-0000-0000-0000-000000000002",
+              "ownerId": null,
+              "primaryVersionId": "1612a4bb-6811-69eb-bfa7-466f73db6f55"
+            },
+            {
+              "id": "98d00000-0000-0000-0000-000000000004",
+              "type": "MediaBrowser.Controller.Entities.Movies.BoxSet",
+              "name": "Manual incoming",
+              "path": null,
+              "parentId": null,
+              "ownerId": null,
+              "primaryVersionId": null
+            },
+            {
+              "id": "cf4f56fc-5da2-b791-125b-e803a0b776f3",
+              "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+              "name": "Film",
+              "path": "$STATE\\media\\Film\\Film - 2160p.mkv",
+              "parentId": "98d00000-0000-0000-0000-000000000001",
+              "ownerId": "1612a4bb-6811-69eb-bfa7-466f73db6f55",
+              "primaryVersionId": "1612a4bb-6811-69eb-bfa7-466f73db6f55"
+            },
+            {
+              "id": "f51e5153-9cba-946c-a6f1-9305b01103c1",
+              "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+              "name": "Film - 1080p",
+              "path": "$STATE\\media\\Film\\Film - 1080p.mkv",
+              "parentId": null,
+              "ownerId": "1612a4bb-6811-69eb-bfa7-466f73db6f55",
+              "primaryVersionId": "1612a4bb-6811-69eb-bfa7-466f73db6f55"
+            }
+          ],
+          "links": [
+            {
+              "parentId": "1612a4bb-6811-69eb-bfa7-466f73db6f55",
+              "childId": "cf4f56fc-5da2-b791-125b-e803a0b776f3",
+              "childType": 2,
+              "sortOrder": 0
+            },
+            {
+              "parentId": "1612a4bb-6811-69eb-bfa7-466f73db6f55",
+              "childId": "f51e5153-9cba-946c-a6f1-9305b01103c1",
+              "childType": 2,
+              "sortOrder": 1
+            },
+            {
+              "parentId": "98d00000-0000-0000-0000-000000000004",
+              "childId": "1612a4bb-6811-69eb-bfa7-466f73db6f55",
+              "childType": 0,
+              "sortOrder": 0
+            }
+          ]
+        },
+        {
+          "exception": "DbUpdateException",
+          "trace": [
+            {
+              "action": "save",
+              "ids": [
+                "cf4f56fc-5da2-b791-125b-e803a0b776f3"
+              ],
+              "paths": [
+                "$STATE\\media\\Film\\Film - 2160p.mkv"
+              ]
+            },
+            {
+              "action": "saver",
+              "id": "f51e5153-9cba-946c-a6f1-9305b01103c1"
+            },
+            {
+              "action": "save",
+              "ids": [
+                "f51e5153-9cba-946c-a6f1-9305b01103c1"
+              ],
+              "paths": [
+                "$STATE\\media\\Film\\Film - 1080p.mkv"
+              ]
+            },
+            {
+              "action": "saver",
+              "id": "cf4f56fc-5da2-b791-125b-e803a0b776f3"
+            },
+            {
+              "action": "save",
+              "ids": [
+                "cf4f56fc-5da2-b791-125b-e803a0b776f3"
+              ],
+              "paths": [
+                "$STATE\\media\\Film\\Film - 2160p.mkv"
+              ]
+            }
+          ],
+          "rows": [
+            {
+              "id": "00000000-0000-0000-0000-000000000001",
+              "type": "PLACEHOLDER",
+              "name": "This is a placeholder item for UserData that has been detached from its original item",
+              "path": null,
+              "parentId": null,
+              "ownerId": null,
+              "primaryVersionId": null
+            },
+            {
+              "id": "1612a4bb-6811-69eb-bfa7-466f73db6f55",
+              "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+              "name": "Film",
+              "path": "$STATE\\media\\Film\\Film.mkv",
+              "parentId": "98d00000-0000-0000-0000-000000000001",
+              "ownerId": null,
+              "primaryVersionId": null
+            },
+            {
+              "id": "98d00000-0000-0000-0000-000000000001",
+              "type": "MediaBrowser.Controller.Entities.Folder",
+              "name": "Parent",
+              "path": "$STATE\\media",
+              "parentId": null,
+              "ownerId": null,
+              "primaryVersionId": null
+            },
+            {
+              "id": "98d00000-0000-0000-0000-000000000002",
+              "type": "MediaBrowser.Controller.Entities.Folder",
+              "name": "Remote parent",
+              "path": "$STATE\\remote-parent",
+              "parentId": null,
+              "ownerId": null,
+              "primaryVersionId": null
+            },
+            {
+              "id": "98d00000-0000-0000-0000-000000000003",
+              "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+              "name": "Remote linked alternate",
+              "path": "https://media.invalid/film-linked.mkv",
+              "parentId": "98d00000-0000-0000-0000-000000000002",
+              "ownerId": null,
+              "primaryVersionId": "1612a4bb-6811-69eb-bfa7-466f73db6f55"
+            },
+            {
+              "id": "98d00000-0000-0000-0000-000000000004",
+              "type": "MediaBrowser.Controller.Entities.Movies.BoxSet",
+              "name": "Manual incoming",
+              "path": null,
+              "parentId": null,
+              "ownerId": null,
+              "primaryVersionId": null
+            },
+            {
+              "id": "cf4f56fc-5da2-b791-125b-e803a0b776f3",
+              "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+              "name": "Film",
+              "path": "$STATE\\media\\Film\\Film - 2160p.mkv",
+              "parentId": "98d00000-0000-0000-0000-000000000001",
+              "ownerId": null,
+              "primaryVersionId": null
+            },
+            {
+              "id": "f51e5153-9cba-946c-a6f1-9305b01103c1",
+              "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+              "name": "Film - 1080p",
+              "path": "$STATE\\media\\Film\\Film - 1080p.mkv",
+              "parentId": null,
+              "ownerId": "cf4f56fc-5da2-b791-125b-e803a0b776f3",
+              "primaryVersionId": "cf4f56fc-5da2-b791-125b-e803a0b776f3"
+            }
+          ],
+          "links": [
+            {
+              "parentId": "1612a4bb-6811-69eb-bfa7-466f73db6f55",
+              "childId": "cf4f56fc-5da2-b791-125b-e803a0b776f3",
+              "childType": 2,
+              "sortOrder": 0
+            },
+            {
+              "parentId": "1612a4bb-6811-69eb-bfa7-466f73db6f55",
+              "childId": "f51e5153-9cba-946c-a6f1-9305b01103c1",
+              "childType": 2,
+              "sortOrder": 1
+            },
+            {
+              "parentId": "98d00000-0000-0000-0000-000000000004",
+              "childId": "cf4f56fc-5da2-b791-125b-e803a0b776f3",
+              "childType": 0,
+              "sortOrder": 0
+            },
+            {
+              "parentId": "cf4f56fc-5da2-b791-125b-e803a0b776f3",
+              "childId": "f51e5153-9cba-946c-a6f1-9305b01103c1",
+              "childType": 2,
+              "sortOrder": 0
+            }
+          ]
+        }
+      ],
+      "rows": [
+        {
+          "id": "00000000-0000-0000-0000-000000000001",
+          "type": "PLACEHOLDER",
+          "name": "This is a placeholder item for UserData that has been detached from its original item",
+          "path": null,
+          "parentId": null,
+          "ownerId": null,
+          "primaryVersionId": null
+        },
+        {
+          "id": "1612a4bb-6811-69eb-bfa7-466f73db6f55",
+          "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+          "name": "Film",
+          "path": "$STATE\\media\\Film\\Film.mkv",
+          "parentId": "98d00000-0000-0000-0000-000000000001",
+          "ownerId": null,
+          "primaryVersionId": null
+        },
+        {
+          "id": "98d00000-0000-0000-0000-000000000001",
+          "type": "MediaBrowser.Controller.Entities.Folder",
+          "name": "Parent",
+          "path": "$STATE\\media",
+          "parentId": null,
+          "ownerId": null,
+          "primaryVersionId": null
+        },
+        {
+          "id": "98d00000-0000-0000-0000-000000000002",
+          "type": "MediaBrowser.Controller.Entities.Folder",
+          "name": "Remote parent",
+          "path": "$STATE\\remote-parent",
+          "parentId": null,
+          "ownerId": null,
+          "primaryVersionId": null
+        },
+        {
+          "id": "98d00000-0000-0000-0000-000000000003",
+          "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+          "name": "Remote linked alternate",
+          "path": "https://media.invalid/film-linked.mkv",
+          "parentId": "98d00000-0000-0000-0000-000000000002",
+          "ownerId": null,
+          "primaryVersionId": "1612a4bb-6811-69eb-bfa7-466f73db6f55"
+        },
+        {
+          "id": "98d00000-0000-0000-0000-000000000004",
+          "type": "MediaBrowser.Controller.Entities.Movies.BoxSet",
+          "name": "Manual incoming",
+          "path": null,
+          "parentId": null,
+          "ownerId": null,
+          "primaryVersionId": null
+        },
+        {
+          "id": "cf4f56fc-5da2-b791-125b-e803a0b776f3",
+          "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+          "name": "Film",
+          "path": "$STATE\\media\\Film\\Film - 2160p.mkv",
+          "parentId": "98d00000-0000-0000-0000-000000000001",
+          "ownerId": null,
+          "primaryVersionId": null
+        },
+        {
+          "id": "f51e5153-9cba-946c-a6f1-9305b01103c1",
+          "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+          "name": "Film - 1080p",
+          "path": "$STATE\\media\\Film\\Film - 1080p.mkv",
+          "parentId": null,
+          "ownerId": "cf4f56fc-5da2-b791-125b-e803a0b776f3",
+          "primaryVersionId": "cf4f56fc-5da2-b791-125b-e803a0b776f3"
+        }
+      ],
+      "links": [
+        {
+          "parentId": "1612a4bb-6811-69eb-bfa7-466f73db6f55",
+          "childId": "cf4f56fc-5da2-b791-125b-e803a0b776f3",
+          "childType": 2,
+          "sortOrder": 0
+        },
+        {
+          "parentId": "1612a4bb-6811-69eb-bfa7-466f73db6f55",
+          "childId": "f51e5153-9cba-946c-a6f1-9305b01103c1",
+          "childType": 2,
+          "sortOrder": 1
+        },
+        {
+          "parentId": "98d00000-0000-0000-0000-000000000004",
+          "childId": "cf4f56fc-5da2-b791-125b-e803a0b776f3",
+          "childType": 0,
+          "sortOrder": 0
+        },
+        {
+          "parentId": "cf4f56fc-5da2-b791-125b-e803a0b776f3",
+          "childId": "f51e5153-9cba-946c-a6f1-9305b01103c1",
+          "childType": 2,
+          "sortOrder": 0
+        }
+      ]
+    }
+  ],
+  "assemblies": [
+    {
+      "name": "MediaBrowser.Controller",
+      "sha256": "051c588a8e85a3a7cdde8dc3d9a1112217fd7e973a86fe2ff90cf765bedb75a8"
+    },
+    {
+      "name": "Emby.Server.Implementations",
+      "sha256": "8d369435646570958505c58b9cb17da169855dabc105d0e933524361e9b7b1c8"
+    },
+    {
+      "name": "Jellyfin.Server.Implementations",
+      "sha256": "4da187af02503e82135eb192351d01490484e8ebc8c653d849f7e2900a177672"
+    }
+  ],
+  "scope": "Actual protected nonrecursive Folder.ValidateChildrenInternal with real warm CreateItems, EF SQLite, a persisted ChildType=3 remote linked alternate, and a manual incoming BoxSet link. Captures two- and three-version old-primary removal plus exact-primary demotion followed by exact-primary removal. Network, linked saver output, recursive validation, Web, migration, PostgreSQL native behavior and release acceptance are outside this oracle."
+}

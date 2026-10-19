@@ -1,0 +1,247 @@
+{
+  "actualFrozenNestedMovieResolver": true,
+  "results": [
+    {
+      "name": "nested-single-movie",
+      "items": [
+        {
+          "nativeType": "MediaBrowser.Controller.Entities.Movies.Movie",
+          "Name": "Film",
+          "Path": "Z:\\Media\\A\\B\\Film.mkv",
+          "ProductionYear": null,
+          "IsInMixedFolder": false,
+          "AdditionalParts": [],
+          "LocalAlternateVersions": [],
+          "VideoType": "VideoFile"
+        }
+      ],
+      "extraFiles": []
+    },
+    {
+      "name": "nested-two-movies",
+      "items": [
+        {
+          "nativeType": "MediaBrowser.Controller.Entities.Movies.Movie",
+          "Name": "Film",
+          "Path": "Z:\\Media\\A\\B\\Film.mkv",
+          "ProductionYear": null,
+          "IsInMixedFolder": true,
+          "AdditionalParts": [],
+          "LocalAlternateVersions": [],
+          "VideoType": "VideoFile"
+        },
+        {
+          "nativeType": "MediaBrowser.Controller.Entities.Movies.Movie",
+          "Name": "Other",
+          "Path": "Z:\\Media\\A\\B\\Other.mkv",
+          "ProductionYear": null,
+          "IsInMixedFolder": true,
+          "AdditionalParts": [],
+          "LocalAlternateVersions": [],
+          "VideoType": "VideoFile"
+        }
+      ],
+      "extraFiles": []
+    },
+    {
+      "name": "nested-year-movie",
+      "items": [
+        {
+          "nativeType": "MediaBrowser.Controller.Entities.Movies.Movie",
+          "Name": "Film",
+          "Path": "Z:\\Media\\A\\B\\Film (2020).mkv",
+          "ProductionYear": 2020,
+          "IsInMixedFolder": false,
+          "AdditionalParts": [],
+          "LocalAlternateVersions": [],
+          "VideoType": "VideoFile"
+        }
+      ],
+      "extraFiles": []
+    },
+    {
+      "name": "nested-home-video",
+      "items": [
+        {
+          "nativeType": "MediaBrowser.Controller.Entities.Video",
+          "Name": "Film",
+          "Path": "Z:\\Media\\A\\B\\Film.mkv",
+          "ProductionYear": null,
+          "IsInMixedFolder": false,
+          "AdditionalParts": [],
+          "LocalAlternateVersions": [],
+          "VideoType": "VideoFile"
+        }
+      ],
+      "extraFiles": []
+    },
+    {
+      "name": "nested-unrelated-music",
+      "items": null,
+      "extraFiles": null
+    },
+    {
+      "name": "alternate-exact-primary",
+      "items": [
+        {
+          "nativeType": "MediaBrowser.Controller.Entities.Movies.Movie",
+          "Name": "Film",
+          "Path": "Z:\\Media\\A\\Film\\Film.mkv",
+          "ProductionYear": null,
+          "IsInMixedFolder": false,
+          "AdditionalParts": [],
+          "LocalAlternateVersions": [
+            "Z:\\Media\\A\\Film\\Film - 2160p.mkv",
+            "Z:\\Media\\A\\Film\\Film - 1080p.mkv"
+          ],
+          "VideoType": "VideoFile"
+        }
+      ],
+      "extraFiles": []
+    },
+    {
+      "name": "alternate-resolution-primary",
+      "items": [
+        {
+          "nativeType": "MediaBrowser.Controller.Entities.Movies.Movie",
+          "Name": "Film",
+          "Path": "Z:\\Media\\A\\Film\\Film - 2160p.mkv",
+          "ProductionYear": null,
+          "IsInMixedFolder": false,
+          "AdditionalParts": [],
+          "LocalAlternateVersions": [
+            "Z:\\Media\\A\\Film\\Film - 1080p.mkv"
+          ],
+          "VideoType": "VideoFile"
+        }
+      ],
+      "extraFiles": []
+    },
+    {
+      "name": "alternate-lexical-primary",
+      "items": [
+        {
+          "nativeType": "MediaBrowser.Controller.Entities.Movies.Movie",
+          "Name": "Film",
+          "Path": "Z:\\Media\\A\\Film\\Film - Director.mkv",
+          "ProductionYear": null,
+          "IsInMixedFolder": false,
+          "AdditionalParts": [],
+          "LocalAlternateVersions": [
+            "Z:\\Media\\A\\Film\\Film - Theatrical.mkv"
+          ],
+          "VideoType": "VideoFile"
+        }
+      ],
+      "extraFiles": []
+    },
+    {
+      "name": "alternate-bracket-order",
+      "items": [
+        {
+          "nativeType": "MediaBrowser.Controller.Entities.Movies.Movie",
+          "Name": "Film",
+          "Path": "Z:\\Media\\A\\Film\\Film [2160p].mkv",
+          "ProductionYear": null,
+          "IsInMixedFolder": false,
+          "AdditionalParts": [],
+          "LocalAlternateVersions": [
+            "Z:\\Media\\A\\Film\\Film [1080p].mkv"
+          ],
+          "VideoType": "VideoFile"
+        }
+      ],
+      "extraFiles": []
+    },
+    {
+      "name": "alternate-different-years-remain-separate",
+      "items": [
+        {
+          "nativeType": "MediaBrowser.Controller.Entities.Movies.Movie",
+          "Name": "Film",
+          "Path": "Z:\\Media\\A\\Film\\Film (2020).mkv",
+          "ProductionYear": 2020,
+          "IsInMixedFolder": true,
+          "AdditionalParts": [],
+          "LocalAlternateVersions": [],
+          "VideoType": "VideoFile"
+        },
+        {
+          "nativeType": "MediaBrowser.Controller.Entities.Movies.Movie",
+          "Name": "Film",
+          "Path": "Z:\\Media\\A\\Film\\Film (2021).mkv",
+          "ProductionYear": 2021,
+          "IsInMixedFolder": true,
+          "AdditionalParts": [],
+          "LocalAlternateVersions": [],
+          "VideoType": "VideoFile"
+        }
+      ],
+      "extraFiles": []
+    },
+    {
+      "name": "alternate-unrelated-file-prevents-grouping",
+      "items": [
+        {
+          "nativeType": "MediaBrowser.Controller.Entities.Movies.Movie",
+          "Name": "Film -",
+          "Path": "Z:\\Media\\A\\Film\\Film - 1080p.mkv",
+          "ProductionYear": null,
+          "IsInMixedFolder": true,
+          "AdditionalParts": [],
+          "LocalAlternateVersions": [],
+          "VideoType": "VideoFile"
+        },
+        {
+          "nativeType": "MediaBrowser.Controller.Entities.Movies.Movie",
+          "Name": "Other",
+          "Path": "Z:\\Media\\A\\Film\\Other.mkv",
+          "ProductionYear": null,
+          "IsInMixedFolder": true,
+          "AdditionalParts": [],
+          "LocalAlternateVersions": [],
+          "VideoType": "VideoFile"
+        }
+      ],
+      "extraFiles": []
+    },
+    {
+      "name": "alternate-single-eligible-name",
+      "items": [
+        {
+          "nativeType": "MediaBrowser.Controller.Entities.Movies.Movie",
+          "Name": "Film",
+          "Path": "Z:\\Media\\A\\Film\\Film - 2160p.mkv",
+          "ProductionYear": null,
+          "IsInMixedFolder": false,
+          "AdditionalParts": [],
+          "LocalAlternateVersions": [],
+          "VideoType": "VideoFile"
+        }
+      ],
+      "extraFiles": []
+    }
+  ],
+  "assemblies": [
+    {
+      "name": "MediaBrowser.Controller",
+      "path": "D:\\mediamanager-validation\\20261005\\results\\nested-movie-alternates-oracle\\bin\\Release\\net10.0\\MediaBrowser.Controller.dll",
+      "sha256": "051c588a8e85a3a7cdde8dc3d9a1112217fd7e973a86fe2ff90cf765bedb75a8"
+    },
+    {
+      "name": "Emby.Server.Implementations",
+      "path": "D:\\mediamanager-validation\\20261005\\results\\nested-movie-alternates-oracle\\bin\\Release\\net10.0\\Emby.Server.Implementations.dll",
+      "sha256": "8d369435646570958505c58b9cb17da169855dabc105d0e933524361e9b7b1c8"
+    },
+    {
+      "name": "Emby.Naming",
+      "path": "D:\\mediamanager-validation\\20261005\\results\\nested-movie-alternates-oracle\\bin\\Release\\net10.0\\Emby.Naming.dll",
+      "sha256": "55085cf14d1e58a7a1e99e0ffc37bde0545bbe85f7f09995388a6e465cca3a45"
+    }
+  ],
+  "scope": "Actual MovieResolver.ResolveMultiple, VideoListResolver and initial item values for ordinary files and local alternate grouping under a real three-Folder parent chain. Parent lookup, file metadata and empty directory service are controls. No native scanner, repository saves, directory collapse, stacks, alternate database ownership or complete library acceptance.",
+  "schemaVersion": 1,
+  "candidateVerified": false,
+  "inputSha256": "78c7ff46b0d5fb1ce82f5b8a36d65178b240f61ff3a28f3e0cef2a1d1aba564e",
+  "sourceFilesSha256": "574288668c8465b1020c71dd74a48f38b3990e4b030893f83174f73dcceb10c5"
+}

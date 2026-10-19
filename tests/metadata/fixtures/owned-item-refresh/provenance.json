@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-06T17:13:09.237Z",
+  "frozenJellyfin": {
+    "commit": "208c278b75abd897aefa1e1175126eac5e4dbfaa",
+    "workspaceContentDigest": "e28a983db179b720c3b16d7416ee4112894a3115c4be6fe43c61c52e0d9a8313"
+  },
+  "fixtureFiles": [
+    {
+      "path": "tests/metadata/fixtures/owned-item-refresh/input.json",
+      "sha256": "bcefa7ce6279a79daf0597228465588d1ad0392c9df2409a81a7714df85a7864"
+    },
+    {
+      "path": "tests/metadata/fixtures/owned-item-refresh/Program.cs",
+      "sha256": "ab622ce735ea43b0ccfd3c1320405842148e19968328384ac45f78498d72099b"
+    },
+    {
+      "path": "tests/metadata/fixtures/owned-item-refresh/Oracle.csproj",
+      "sha256": "56e42cc99a5305248cb523db75850ab8bce9868f3a283101fa0a208332829234"
+    },
+    {
+      "path": "tests/metadata/fixtures/owned-item-refresh/native.json",
+      "sha256": "7786cf0f85addc05efbba981b99f3734ce444e9ce705e808da48ab641dc47e36"
+    },
+    {
+      "path": "tests/Directory.Build.props",
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    }
+  ],
+  "sourceFiles": [
+    {
+      "path": "MediaBrowser.Controller/Entities/BaseItem.cs",
+      "sha256": "9dc7b96a93c9fbe874cdcededdca395b5aa2df6070f5cfc9c8959539dcd76469"
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/Video.cs",
+      "sha256": "03df015992ee4e95e175c499b36a7b21d9facc4f391cfd89235ad652d2eb0b11"
+    },
+    {
+      "path": "MediaBrowser.Controller/Providers/MetadataRefreshOptions.cs",
+      "sha256": "a3c8c714480d398e284f730d88bbedccdc27f123f9bdf3a704d61ad98e5b7f10"
+    },
+    {
+      "path": "MediaBrowser.Controller/Providers/ImageRefreshOptions.cs",
+      "sha256": "291d2b4da3abecb0baab439ed869891dfaa7906a85666906d254637d21e2743d"
+    }
+  ],
+  "assemblies": [
+    {
+      "name": "MediaBrowser.Controller",
+      "sha256": "051c588a8e85a3a7cdde8dc3d9a1112217fd7e973a86fe2ff90cf765bedb75a8"
+    }
+  ],
+  "recording": {
+    "passed": true,
+    "sourceFilesSha256": "340279a92c760fa475a6221cd31f21f15922cbb8cb30cc4f86c1ee66ec99c8cc",
+    "originalNativeSha256": "e350570b7c672c2b5a6b77bb20e40e82a07204b10b3fbf00e430a7a8e920d068",
+    "portableNativeLineEndings": "LF"
+  },
+  "scope": "Actual frozen BaseItem.RefreshMetadataForOwnedItem and InheritDatesFromOwner. Native Movie/Video/Trailer/Audio entities, metadata option copying, field mutations and child RefreshMetadata dispatch execute. ProviderManager.RefreshSingleItem and path protocol are controls; owned children have no physical parent. File discovery, provider execution, images, persistence, full owner RefreshMetadata and complete library acceptance are excluded."
+}

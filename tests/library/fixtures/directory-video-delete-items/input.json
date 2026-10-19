@@ -1,0 +1,1019 @@
+[
+  {
+    "name": "delete-movie-preserve-source",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film (2025).mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": [],
+    "deleteCreated": true
+  },
+  {
+    "name": "delete-folder-preserve-source",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film.mkv"
+    ],
+    "directories": [
+      "Film",
+      "Film/Unrelated"
+    ],
+    "ignoreFiles": [],
+    "deleteCreated": true
+  },
+  {
+    "name": "delete-stack-preserve-source",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film cd2.mkv",
+      "Film/Film cd1.mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": [],
+    "deleteCreated": true
+  },
+  {
+    "name": "delete-primary-promotes-alternate",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film - 1080p.mkv",
+      "Film/Film - 2160p.mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": [],
+    "deleteCreated": true
+  },
+  {
+    "name": "delete-primary-promotes-alternate-stack",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film - Theatrical cd2.mkv",
+      "Film/Film - Director cd1.mkv",
+      "Film/Film - Theatrical cd1.mkv",
+      "Film/Film - Director cd2.mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": [],
+    "deleteCreated": true
+  },
+  {
+    "name": "delete-alternate",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film - 1080p.mkv",
+      "Film/Film - 2160p.mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": [],
+    "deleteCreated": true,
+    "deleteAlternate": true
+  },
+  {
+    "name": "delete-channel-retains-source",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film (2025).mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": [],
+    "channelOriginal": true,
+    "deleteCreated": true,
+    "deleteSource": true
+  },
+  {
+    "name": "delete-movie-no-parent",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film (2025).mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": [],
+    "deleteCreated": true,
+    "nullDeleteParent": true
+  },
+  {
+    "name": "delete-movie-no-notify",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film (2025).mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": [],
+    "deleteCreated": true,
+    "noNotify": true
+  },
+  {
+    "name": "delete-movie-sql-fault",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film (2025).mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": [],
+    "deleteCreated": true,
+    "failDelete": true,
+    "expectException": "SqliteException"
+  },
+  {
+    "name": "delete-primary-promotes-three-versions",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film - 1080p.mkv",
+      "Film/Film - 2160p.mkv",
+      "Film/Film - 720p.mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": [],
+    "deleteCreated": true
+  },
+  {
+    "name": "delete-primary-with-missing-first-alternate",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film - 1080p.mkv",
+      "Film/Film - 2160p.mkv",
+      "Film/Film - 720p.mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": [],
+    "deleteCreated": true,
+    "removeAlternatesBeforeDelete": "first"
+  },
+  {
+    "name": "delete-primary-with-all-alternates-missing",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film - 1080p.mkv",
+      "Film/Film - 2160p.mkv",
+      "Film/Film - 720p.mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": [],
+    "deleteCreated": true,
+    "removeAlternatesBeforeDelete": "all"
+  },
+  {
+    "name": "delete-alternate-three-versions",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film - 1080p.mkv",
+      "Film/Film - 2160p.mkv",
+      "Film/Film - 720p.mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": [],
+    "deleteCreated": true,
+    "deleteAlternate": true
+  },
+  {
+    "name": "delete-movie-source-directory",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film (2025).mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": [],
+    "deleteCreated": true,
+    "deleteSource": true
+  },
+  {
+    "name": "delete-folder-source-directory",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film.mkv"
+    ],
+    "directories": [
+      "Film",
+      "Film/Unrelated"
+    ],
+    "ignoreFiles": [],
+    "deleteCreated": true,
+    "deleteSource": true
+  },
+  {
+    "name": "delete-stack-source-directory",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film cd2.mkv",
+      "Film/Film cd1.mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": [],
+    "deleteCreated": true,
+    "deleteSource": true
+  },
+  {
+    "name": "delete-folder-logical-descendants",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Leaf.mkv",
+      "Film/Branch/Branch.mkv",
+      "Film/Branch/Nested/Deep.mkv"
+    ],
+    "directories": [
+      "Film",
+      "Film/Branch",
+      "Film/Branch/Nested",
+      "Film/Branch/Empty"
+    ],
+    "ignoreFiles": [],
+    "deleteCreated": true,
+    "createDescendants": true
+  },
+  {
+    "name": "delete-folder-logical-descendants-sql-fault",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Leaf.mkv",
+      "Film/Branch/Branch.mkv",
+      "Film/Branch/Nested/Deep.mkv"
+    ],
+    "directories": [
+      "Film",
+      "Film/Branch",
+      "Film/Branch/Nested",
+      "Film/Branch/Empty"
+    ],
+    "ignoreFiles": [],
+    "deleteCreated": true,
+    "createDescendants": true,
+    "failDelete": true,
+    "expectException": "SqliteException"
+  },
+  {
+    "name": "delete-folder-logical-descendants-and-source",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Leaf.mkv",
+      "Film/Branch/Branch.mkv",
+      "Film/Branch/Nested/Deep.mkv"
+    ],
+    "directories": [
+      "Film",
+      "Film/Branch",
+      "Film/Branch/Nested",
+      "Film/Branch/Empty"
+    ],
+    "ignoreFiles": [],
+    "deleteCreated": true,
+    "createDescendants": true,
+    "deleteSource": true
+  },
+  {
+    "name": "delete-direct-dvd-preserve-source",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "useResolveTime": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/VIDEO_TS/VTS_01_1.VOB"
+    ],
+    "directories": [
+      "Film",
+      "Film/VIDEO_TS"
+    ],
+    "ignoreFiles": [],
+    "deleteCreated": true
+  },
+  {
+    "name": "delete-direct-bluray-preserve-source",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "useResolveTime": true,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/BDMV/index.bdmv"
+    ],
+    "directories": [
+      "Film",
+      "Film/BDMV"
+    ],
+    "ignoreFiles": [],
+    "deleteCreated": true
+  },
+  {
+    "name": "delete-direct-dvd-ifo-preserve-source",
+    "operation": "resolvepaths",
+    "expectedType": "Video",
+    "resolverType": "Video",
+    "parseName": false,
+    "useResolveTime": true,
+    "mixed": false,
+    "collectionType": "homevideos",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/video_ts.ifo"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": [],
+    "deleteCreated": true
+  },
+  {
+    "name": "delete-direct-dvd-source-directory",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "useResolveTime": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/VIDEO_TS/VTS_01_1.VOB",
+      "Film/movie.nfo",
+      "Film/poster.jpg",
+      "Keep/sentinel.txt"
+    ],
+    "directories": [
+      "Film",
+      "Film/VIDEO_TS",
+      "Keep"
+    ],
+    "ignoreFiles": [],
+    "deleteCreated": true,
+    "deleteSource": true,
+    "recordDeletePhases": true
+  },
+  {
+    "name": "delete-direct-bluray-source-directory",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "useResolveTime": true,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/BDMV/index.bdmv",
+      "Film/notes.txt",
+      "Keep/sentinel.txt"
+    ],
+    "directories": [
+      "Film",
+      "Film/BDMV",
+      "Keep"
+    ],
+    "ignoreFiles": [],
+    "deleteCreated": true,
+    "deleteSource": true,
+    "recordDeletePhases": true
+  },
+  {
+    "name": "delete-multidisc-dvd-preserve-source",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "useResolveTime": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film Disc 2/video_ts.ifo",
+      "Film/Film Disc 1/video_ts.ifo",
+      "Film/notes.txt",
+      "Keep/sentinel.txt"
+    ],
+    "directories": [
+      "Film",
+      "Keep"
+    ],
+    "ignoreFiles": [],
+    "deleteCreated": true,
+    "recordDeletePhases": true
+  },
+  {
+    "name": "delete-multidisc-dvd-source-directory",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "useResolveTime": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film Disc 2/video_ts.ifo",
+      "Film/Film Disc 1/video_ts.ifo",
+      "Film/notes.txt",
+      "Keep/sentinel.txt"
+    ],
+    "directories": [
+      "Film",
+      "Keep"
+    ],
+    "ignoreFiles": [],
+    "deleteCreated": true,
+    "deleteSource": true,
+    "recordDeletePhases": true
+  },
+  {
+    "name": "delete-multidisc-bluray-source-directory",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "useResolveTime": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film Disc 2/BDMV/index.bdmv",
+      "Film/Film Disc 1/BDMV/index.bdmv",
+      "Film/notes.txt",
+      "Keep/sentinel.txt"
+    ],
+    "directories": [
+      "Film",
+      "Keep"
+    ],
+    "ignoreFiles": [],
+    "deleteCreated": true,
+    "deleteSource": true,
+    "recordDeletePhases": true
+  },
+  {
+    "name": "delete-direct-dvd-missing-source",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "useResolveTime": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/VIDEO_TS/VTS_01_1.VOB"
+    ],
+    "directories": [
+      "Film",
+      "Film/VIDEO_TS"
+    ],
+    "ignoreFiles": [],
+    "deleteCreated": true,
+    "deleteSource": true,
+    "removeSourceBeforeDelete": true,
+    "recordDeletePhases": true
+  },
+  {
+    "name": "delete-multidisc-dvd-missing-source",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "useResolveTime": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film Disc 2/video_ts.ifo",
+      "Film/Film Disc 1/video_ts.ifo"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": [],
+    "deleteCreated": true,
+    "deleteSource": true,
+    "removeSourceBeforeDelete": true,
+    "recordDeletePhases": true
+  },
+  {
+    "name": "delete-folder-source-io-failure",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "useResolveTime": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Unrelated/lock.bin"
+    ],
+    "directories": [
+      "Film",
+      "Film/Unrelated"
+    ],
+    "ignoreFiles": [],
+    "deleteCreated": true,
+    "deleteSource": true,
+    "lockSource": true,
+    "recordDeletePhases": true,
+    "expectException": "IOException"
+  },
+  {
+    "name": "delete-folder-readonly-source",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "useResolveTime": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Unrelated/readonly.bin"
+    ],
+    "directories": [
+      "Film",
+      "Film/Unrelated"
+    ],
+    "ignoreFiles": [],
+    "deleteCreated": true,
+    "deleteSource": true,
+    "readOnlySource": true,
+    "recordDeletePhases": true,
+    "expectException": "UnauthorizedAccessException"
+  },
+  {
+    "name": "delete-direct-dvd-source-io-failure",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "useResolveTime": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/VIDEO_TS/VTS_01_1.VOB",
+      "Film/lock.bin"
+    ],
+    "directories": [
+      "Film",
+      "Film/VIDEO_TS"
+    ],
+    "ignoreFiles": [],
+    "deleteCreated": true,
+    "deleteSource": true,
+    "lockSource": true,
+    "recordDeletePhases": true,
+    "expectException": "IOException"
+  },
+  {
+    "name": "delete-direct-dvd-readonly-source",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "useResolveTime": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/VIDEO_TS/VTS_01_1.VOB",
+      "Film/readonly.bin"
+    ],
+    "directories": [
+      "Film",
+      "Film/VIDEO_TS"
+    ],
+    "ignoreFiles": [],
+    "deleteCreated": true,
+    "deleteSource": true,
+    "readOnlySource": true,
+    "recordDeletePhases": true,
+    "expectException": "UnauthorizedAccessException"
+  },
+  {
+    "name": "delete-direct-dvd-source-before-sql-failure",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "useResolveTime": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/VIDEO_TS/VTS_01_1.VOB",
+      "Film/sidecar.nfo"
+    ],
+    "directories": [
+      "Film",
+      "Film/VIDEO_TS"
+    ],
+    "ignoreFiles": [],
+    "deleteCreated": true,
+    "deleteSource": true,
+    "failDelete": true,
+    "recordDeletePhases": true,
+    "expectException": "SqliteException"
+  },
+  {
+    "name": "delete-direct-dvd-persisted-disc-live-file-drift",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "useResolveTime": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/VIDEO_TS/VTS_01_1.VOB",
+      "Film/movie.nfo",
+      "Film/poster.jpg",
+      "Keep/sentinel.txt"
+    ],
+    "directories": [
+      "Film",
+      "Film/VIDEO_TS",
+      "Keep"
+    ],
+    "ignoreFiles": [],
+    "deleteCreated": true,
+    "deleteSource": true,
+    "recordDeletePhases": true,
+    "persistedVideoType": "Dvd",
+    "liveVideoType": "VideoFile",
+    "safetyDivergence": true
+  },
+  {
+    "name": "delete-multidisc-dvd-persisted-disc-live-file-drift",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "useResolveTime": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film Disc 2/video_ts.ifo",
+      "Film/Film Disc 1/video_ts.ifo",
+      "Film/notes.txt",
+      "Keep/sentinel.txt"
+    ],
+    "directories": [
+      "Film",
+      "Keep"
+    ],
+    "ignoreFiles": [],
+    "deleteCreated": true,
+    "deleteSource": true,
+    "recordDeletePhases": true,
+    "persistedVideoType": "Dvd",
+    "liveVideoType": "VideoFile",
+    "safetyDivergence": true
+  },
+  {
+    "name": "delete-direct-dvd-persisted-file-live-disc-drift",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "useResolveTime": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/VIDEO_TS/VTS_01_1.VOB",
+      "Film/movie.nfo",
+      "Film/poster.jpg",
+      "Keep/sentinel.txt"
+    ],
+    "directories": [
+      "Film",
+      "Film/VIDEO_TS",
+      "Keep"
+    ],
+    "ignoreFiles": [],
+    "deleteCreated": true,
+    "deleteSource": true,
+    "recordDeletePhases": true,
+    "persistedVideoType": "VideoFile",
+    "liveVideoType": "Dvd",
+    "safetyDivergence": true
+  },
+  {
+    "name": "delete-multidisc-dvd-persisted-file-live-disc-drift",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "useResolveTime": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film Disc 2/video_ts.ifo",
+      "Film/Film Disc 1/video_ts.ifo",
+      "Film/notes.txt",
+      "Keep/sentinel.txt"
+    ],
+    "directories": [
+      "Film",
+      "Keep"
+    ],
+    "ignoreFiles": [],
+    "deleteCreated": true,
+    "deleteSource": true,
+    "recordDeletePhases": true,
+    "persistedVideoType": "VideoFile",
+    "liveVideoType": "Dvd",
+    "safetyDivergence": true
+  },
+  {
+    "name": "delete-direct-dvd-live-bluray-drift",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "useResolveTime": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/VIDEO_TS/VTS_01_1.VOB",
+      "Film/movie.nfo",
+      "Film/poster.jpg",
+      "Keep/sentinel.txt"
+    ],
+    "directories": [
+      "Film",
+      "Film/VIDEO_TS",
+      "Keep"
+    ],
+    "ignoreFiles": [],
+    "deleteCreated": true,
+    "deleteSource": true,
+    "recordDeletePhases": true,
+    "persistedVideoType": "Dvd",
+    "liveVideoType": "BluRay",
+    "safetyDivergence": true
+  },
+  {
+    "name": "delete-multidisc-dvd-live-bluray-drift",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "useResolveTime": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film Disc 2/video_ts.ifo",
+      "Film/Film Disc 1/video_ts.ifo",
+      "Film/notes.txt",
+      "Keep/sentinel.txt"
+    ],
+    "directories": [
+      "Film",
+      "Keep"
+    ],
+    "ignoreFiles": [],
+    "deleteCreated": true,
+    "deleteSource": true,
+    "recordDeletePhases": true,
+    "persistedVideoType": "Dvd",
+    "liveVideoType": "BluRay",
+    "safetyDivergence": true
+  }
+]

@@ -1,0 +1,51 @@
+[
+  {
+    "name": "irregular-gop",
+    "totalDuration": "350000000",
+    "keyframeTicks": ["0", "104270000", "208540000", "312400000"],
+    "desiredSegmentLengthMs": 6000,
+    "segments": ["104270000", "104270000", "103860000", "37600000"]
+  },
+  {
+    "name": "dense-gop",
+    "totalDuration": "100000000",
+    "keyframeTicks": ["0", "10000000", "20000000", "30000000", "40000000", "50000000"],
+    "desiredSegmentLengthMs": 2000,
+    "segments": ["20000000", "20000000", "60000000"]
+  },
+  {
+    "name": "single-origin",
+    "totalDuration": "100000000",
+    "keyframeTicks": ["0"],
+    "desiredSegmentLengthMs": 6000,
+    "segments": ["100000000"]
+  },
+  {
+    "name": "empty",
+    "totalDuration": "100000000",
+    "keyframeTicks": [],
+    "desiredSegmentLengthMs": 6000,
+    "segments": ["100000000"]
+  },
+  {
+    "name": "zero-duration-overshoot",
+    "totalDuration": "0",
+    "keyframeTicks": ["100000000"],
+    "desiredSegmentLengthMs": 6000,
+    "segments": ["100000000"]
+  },
+  {
+    "name": "minor-duration-overshoot",
+    "totalDuration": "99000000",
+    "keyframeTicks": ["0", "50000000", "100000000"],
+    "desiredSegmentLengthMs": 6000,
+    "segments": ["100000000"]
+  },
+  {
+    "name": "zero-duration-empty",
+    "totalDuration": "0",
+    "keyframeTicks": [],
+    "desiredSegmentLengthMs": 6000,
+    "segments": []
+  }
+]

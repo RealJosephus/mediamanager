@@ -1,0 +1,149 @@
+{
+  "schemaVersion": 1,
+  "runtime": "10.0.12",
+  "timezone": "Taipei Standard Time",
+  "caseCount": 9,
+  "cases": [
+    {
+      "Id": "int-invalid-first",
+      "Kind": "int",
+      "ValueJson": "\u0022bad\u0022,\u0022Value\u0022:1",
+      "Json": "{\u0022Value\u0022:\u0022bad\u0022,\u0022Value\u0022:1}",
+      "Success": false,
+      "Value": null,
+      "Reserialized": null,
+      "Error": {
+        "type": "System.Text.Json.JsonException",
+        "Message": "The JSON value could not be converted to System.Int32. Path: $.Value | LineNumber: 0 | BytePositionInLine: 14.",
+        "inner": {
+          "type": "System.FormatException",
+          "Message": "Either the JSON value is not in a supported format, or is out of bounds for an Int32.",
+          "inner": null
+        }
+      }
+    },
+    {
+      "Id": "int-invalid-last",
+      "Kind": "int",
+      "ValueJson": "1,\u0022Value\u0022:\u0022bad\u0022",
+      "Json": "{\u0022Value\u0022:1,\u0022Value\u0022:\u0022bad\u0022}",
+      "Success": false,
+      "Value": null,
+      "Reserialized": null,
+      "Error": {
+        "type": "System.Text.Json.JsonException",
+        "Message": "The JSON value could not be converted to System.Int32. Path: $.Value | LineNumber: 0 | BytePositionInLine: 24.",
+        "inner": {
+          "type": "System.FormatException",
+          "Message": "Either the JSON value is not in a supported format, or is out of bounds for an Int32.",
+          "inner": null
+        }
+      }
+    },
+    {
+      "Id": "int-valid-last-wins",
+      "Kind": "int",
+      "ValueJson": "1,\u0022Value\u0022:2",
+      "Json": "{\u0022Value\u0022:1,\u0022Value\u0022:2}",
+      "Success": true,
+      "Value": {
+        "value": 2
+      },
+      "Reserialized": "{\u0022Value\u0022:2}",
+      "Error": null
+    },
+    {
+      "Id": "enum-invalid-first",
+      "Kind": "enum",
+      "ValueJson": "null,\u0022Value\u0022:\u0022Iso\u0022",
+      "Json": "{\u0022Value\u0022:null,\u0022Value\u0022:\u0022Iso\u0022}",
+      "Success": false,
+      "Value": null,
+      "Reserialized": null,
+      "Error": {
+        "type": "System.Text.Json.JsonException",
+        "Message": "The JSON value could not be converted to MediaBrowser.Model.Entities.VideoType. Path: $.Value | LineNumber: 0 | BytePositionInLine: 13.",
+        "inner": null
+      }
+    },
+    {
+      "Id": "enum-invalid-last",
+      "Kind": "enum",
+      "ValueJson": "\u0022Iso\u0022,\u0022Value\u0022:null",
+      "Json": "{\u0022Value\u0022:\u0022Iso\u0022,\u0022Value\u0022:null}",
+      "Success": false,
+      "Value": null,
+      "Reserialized": null,
+      "Error": {
+        "type": "System.Text.Json.JsonException",
+        "Message": "The JSON value could not be converted to MediaBrowser.Model.Entities.VideoType. Path: $.Value | LineNumber: 0 | BytePositionInLine: 27.",
+        "inner": null
+      }
+    },
+    {
+      "Id": "enum-valid-last-wins",
+      "Kind": "enum",
+      "ValueJson": "\u0022Iso\u0022,\u0022Value\u0022:\u0022Dvd\u0022",
+      "Json": "{\u0022Value\u0022:\u0022Iso\u0022,\u0022Value\u0022:\u0022Dvd\u0022}",
+      "Success": true,
+      "Value": {
+        "text": "Dvd",
+        "numeric": 2,
+        "defined": true
+      },
+      "Reserialized": "{\u0022Value\u0022:\u0022Dvd\u0022}",
+      "Error": null
+    },
+    {
+      "Id": "date-invalid-first",
+      "Kind": "date",
+      "ValueJson": "\u0022bad\u0022,\u0022Value\u0022:\u00222025-01-01T00:00:00Z\u0022",
+      "Json": "{\u0022Value\u0022:\u0022bad\u0022,\u0022Value\u0022:\u00222025-01-01T00:00:00Z\u0022}",
+      "Success": false,
+      "Value": null,
+      "Reserialized": null,
+      "Error": {
+        "type": "System.Text.Json.JsonException",
+        "Message": "The JSON value could not be converted to System.DateTime. Path: $.Value | LineNumber: 0 | BytePositionInLine: 14.",
+        "inner": {
+          "type": "System.FormatException",
+          "Message": "The JSON value is not in a supported DateTime format.",
+          "inner": null
+        }
+      }
+    },
+    {
+      "Id": "date-invalid-last",
+      "Kind": "date",
+      "ValueJson": "\u00222025-01-01T00:00:00Z\u0022,\u0022Value\u0022:\u0022bad\u0022",
+      "Json": "{\u0022Value\u0022:\u00222025-01-01T00:00:00Z\u0022,\u0022Value\u0022:\u0022bad\u0022}",
+      "Success": false,
+      "Value": null,
+      "Reserialized": null,
+      "Error": {
+        "type": "System.Text.Json.JsonException",
+        "Message": "The JSON value could not be converted to System.DateTime. Path: $.Value | LineNumber: 0 | BytePositionInLine: 45.",
+        "inner": {
+          "type": "System.FormatException",
+          "Message": "The JSON value is not in a supported DateTime format.",
+          "inner": null
+        }
+      }
+    },
+    {
+      "Id": "date-valid-last-wins",
+      "Kind": "date",
+      "ValueJson": "\u00222025-01-01T00:00:00Z\u0022,\u0022Value\u0022:\u00222026-01-01T00:00:00Z\u0022",
+      "Json": "{\u0022Value\u0022:\u00222025-01-01T00:00:00Z\u0022,\u0022Value\u0022:\u00222026-01-01T00:00:00Z\u0022}",
+      "Success": true,
+      "Value": {
+        "text": "2026-01-01T00:00:00.0000000Z",
+        "kind": "Utc",
+        "ticks": 639028224000000000,
+        "utcText": "2026-01-01T00:00:00.0000000Z"
+      },
+      "Reserialized": "{\u0022Value\u0022:\u00222026-01-01T00:00:00.0000000Z\u0022}",
+      "Error": null
+    }
+  ]
+}

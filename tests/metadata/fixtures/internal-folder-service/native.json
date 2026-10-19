@@ -1,0 +1,1175 @@
+{
+  "actualFrozenInternalFolderService": true,
+  "results": [
+    {
+      "name": "AggregateFolder-default-None-false-false",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "default",
+            "Path": "$STATE/root",
+            "reason": 3
+          }
+        ],
+        "Name": "default",
+        "Path": "$STATE/root",
+        "storedPath": "D:\\mediamanager\\.test-output\\validation\\internal-folder-service-oracle-20261005-1\\state\\AggregateFolder-default-None-false-false/root",
+        "Data": "{\u0022VirtualChildren\u0022:[],\u0022PhysicalLocationsList\u0022:[],\u0022IsRoot\u0022:false,\u0022IsHD\u0022:false,\u0022IsShortcut\u0022:false,\u0022Width\u0022:0,\u0022Height\u0022:0,\u0022DateLastSaved\u0022:\u00220001-01-01T00:00:00.0000000Z\u0022,\u0022RemoteTrailers\u0022:[]}",
+        "stampChanged": false
+      }
+    },
+    {
+      "name": "AggregateFolder-default-None-true-false",
+      "exception": null,
+      "result": {
+        "updateType": 11,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "default",
+            "Path": "$STATE/root",
+            "reason": 11
+          }
+        ],
+        "Name": "default",
+        "Path": "$STATE/root",
+        "storedPath": "D:\\mediamanager\\.test-output\\validation\\internal-folder-service-oracle-20261005-1\\state\\AggregateFolder-default-None-true-false/root",
+        "Data": "{\u0022VirtualChildren\u0022:[],\u0022PhysicalLocationsList\u0022:[],\u0022IsRoot\u0022:false,\u0022IsHD\u0022:false,\u0022IsShortcut\u0022:false,\u0022Width\u0022:0,\u0022Height\u0022:0,\u0022DateLastSaved\u0022:\u00220001-01-01T00:00:00.0000000Z\u0022,\u0022RemoteTrailers\u0022:[]}",
+        "stampChanged": false
+      }
+    },
+    {
+      "name": "AggregateFolder-default-ValidationOnly-false-false",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "default",
+            "Path": "$STATE/root",
+            "reason": 3
+          }
+        ],
+        "Name": "default",
+        "Path": "$STATE/root",
+        "storedPath": "D:\\mediamanager\\.test-output\\validation\\internal-folder-service-oracle-20261005-1\\state\\AggregateFolder-default-ValidationOnly-false-false/root",
+        "Data": "{\u0022VirtualChildren\u0022:[],\u0022PhysicalLocationsList\u0022:[],\u0022IsRoot\u0022:false,\u0022IsHD\u0022:false,\u0022IsShortcut\u0022:false,\u0022Width\u0022:0,\u0022Height\u0022:0,\u0022DateLastSaved\u0022:\u00220001-01-01T00:00:00.0000000Z\u0022,\u0022RemoteTrailers\u0022:[]}",
+        "stampChanged": false
+      }
+    },
+    {
+      "name": "AggregateFolder-default-Default-false-false",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "default",
+            "Path": "$STATE/root",
+            "reason": 3
+          }
+        ],
+        "Name": "default",
+        "Path": "$STATE/root",
+        "storedPath": "D:\\mediamanager\\.test-output\\validation\\internal-folder-service-oracle-20261005-1\\state\\AggregateFolder-default-Default-false-false/root",
+        "Data": "{\u0022VirtualChildren\u0022:[],\u0022PhysicalLocationsList\u0022:[],\u0022IsRoot\u0022:false,\u0022IsHD\u0022:false,\u0022IsShortcut\u0022:false,\u0022Width\u0022:0,\u0022Height\u0022:0,\u0022DateLastSaved\u0022:\u00220001-01-01T00:00:00.0000000Z\u0022,\u0022RemoteTrailers\u0022:[]}",
+        "stampChanged": true
+      }
+    },
+    {
+      "name": "AggregateFolder-default-FullRefresh-false-false",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "default",
+            "Path": "$STATE/root",
+            "reason": 3
+          }
+        ],
+        "Name": "default",
+        "Path": "$STATE/root",
+        "storedPath": "D:\\mediamanager\\.test-output\\validation\\internal-folder-service-oracle-20261005-1\\state\\AggregateFolder-default-FullRefresh-false-false/root",
+        "Data": "{\u0022VirtualChildren\u0022:[],\u0022PhysicalLocationsList\u0022:[],\u0022IsRoot\u0022:false,\u0022IsHD\u0022:false,\u0022IsShortcut\u0022:false,\u0022Width\u0022:0,\u0022Height\u0022:0,\u0022DateLastSaved\u0022:\u00220001-01-01T00:00:00.0000000Z\u0022,\u0022RemoteTrailers\u0022:[]}",
+        "stampChanged": true
+      }
+    },
+    {
+      "name": "AggregateFolder-default-FullRefresh-false-true",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "default",
+            "Path": "$STATE/root",
+            "reason": 2
+          },
+          {
+            "action": "save",
+            "Name": "default",
+            "Path": "$STATE/root",
+            "reason": 3
+          },
+          {
+            "action": "reattach"
+          }
+        ],
+        "Name": "default",
+        "Path": "$STATE/root",
+        "storedPath": "D:\\mediamanager\\.test-output\\validation\\internal-folder-service-oracle-20261005-1\\state\\AggregateFolder-default-FullRefresh-false-true/root",
+        "Data": "{\u0022VirtualChildren\u0022:[],\u0022PhysicalLocationsList\u0022:[],\u0022IsRoot\u0022:false,\u0022IsHD\u0022:false,\u0022IsShortcut\u0022:false,\u0022Width\u0022:0,\u0022Height\u0022:0,\u0022DateLastSaved\u0022:\u00220001-01-01T00:00:00.0000000Z\u0022,\u0022RemoteTrailers\u0022:[]}",
+        "stampChanged": true
+      }
+    },
+    {
+      "name": "AggregateFolder-empty-None-false-false",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "",
+            "Path": "$STATE/root",
+            "reason": 3
+          }
+        ],
+        "Name": "",
+        "Path": "$STATE/root",
+        "storedPath": "D:\\mediamanager\\.test-output\\validation\\internal-folder-service-oracle-20261005-1\\state\\AggregateFolder-empty-None-false-false/root",
+        "Data": "{\u0022VirtualChildren\u0022:[],\u0022PhysicalLocationsList\u0022:[],\u0022IsRoot\u0022:false,\u0022IsHD\u0022:false,\u0022IsShortcut\u0022:false,\u0022Width\u0022:0,\u0022Height\u0022:0,\u0022DateLastSaved\u0022:\u00220001-01-01T00:00:00.0000000Z\u0022,\u0022RemoteTrailers\u0022:[]}",
+        "stampChanged": false
+      }
+    },
+    {
+      "name": "AggregateFolder-empty-None-true-false",
+      "exception": null,
+      "result": {
+        "updateType": 11,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "",
+            "Path": "$STATE/root",
+            "reason": 11
+          }
+        ],
+        "Name": "",
+        "Path": "$STATE/root",
+        "storedPath": "D:\\mediamanager\\.test-output\\validation\\internal-folder-service-oracle-20261005-1\\state\\AggregateFolder-empty-None-true-false/root",
+        "Data": "{\u0022VirtualChildren\u0022:[],\u0022PhysicalLocationsList\u0022:[],\u0022IsRoot\u0022:false,\u0022IsHD\u0022:false,\u0022IsShortcut\u0022:false,\u0022Width\u0022:0,\u0022Height\u0022:0,\u0022DateLastSaved\u0022:\u00220001-01-01T00:00:00.0000000Z\u0022,\u0022RemoteTrailers\u0022:[]}",
+        "stampChanged": false
+      }
+    },
+    {
+      "name": "AggregateFolder-empty-ValidationOnly-false-false",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "root",
+            "Path": "$STATE/root",
+            "reason": 3
+          }
+        ],
+        "Name": "root",
+        "Path": "$STATE/root",
+        "storedPath": "D:\\mediamanager\\.test-output\\validation\\internal-folder-service-oracle-20261005-1\\state\\AggregateFolder-empty-ValidationOnly-false-false/root",
+        "Data": "{\u0022VirtualChildren\u0022:[],\u0022PhysicalLocationsList\u0022:[],\u0022IsRoot\u0022:false,\u0022IsHD\u0022:false,\u0022IsShortcut\u0022:false,\u0022Width\u0022:0,\u0022Height\u0022:0,\u0022DateLastSaved\u0022:\u00220001-01-01T00:00:00.0000000Z\u0022,\u0022RemoteTrailers\u0022:[]}",
+        "stampChanged": false
+      }
+    },
+    {
+      "name": "AggregateFolder-empty-Default-false-false",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "root",
+            "Path": "$STATE/root",
+            "reason": 3
+          }
+        ],
+        "Name": "root",
+        "Path": "$STATE/root",
+        "storedPath": "D:\\mediamanager\\.test-output\\validation\\internal-folder-service-oracle-20261005-1\\state\\AggregateFolder-empty-Default-false-false/root",
+        "Data": "{\u0022VirtualChildren\u0022:[],\u0022PhysicalLocationsList\u0022:[],\u0022IsRoot\u0022:false,\u0022IsHD\u0022:false,\u0022IsShortcut\u0022:false,\u0022Width\u0022:0,\u0022Height\u0022:0,\u0022DateLastSaved\u0022:\u00220001-01-01T00:00:00.0000000Z\u0022,\u0022RemoteTrailers\u0022:[]}",
+        "stampChanged": true
+      }
+    },
+    {
+      "name": "AggregateFolder-empty-FullRefresh-false-false",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "root",
+            "Path": "$STATE/root",
+            "reason": 3
+          }
+        ],
+        "Name": "root",
+        "Path": "$STATE/root",
+        "storedPath": "D:\\mediamanager\\.test-output\\validation\\internal-folder-service-oracle-20261005-1\\state\\AggregateFolder-empty-FullRefresh-false-false/root",
+        "Data": "{\u0022VirtualChildren\u0022:[],\u0022PhysicalLocationsList\u0022:[],\u0022IsRoot\u0022:false,\u0022IsHD\u0022:false,\u0022IsShortcut\u0022:false,\u0022Width\u0022:0,\u0022Height\u0022:0,\u0022DateLastSaved\u0022:\u00220001-01-01T00:00:00.0000000Z\u0022,\u0022RemoteTrailers\u0022:[]}",
+        "stampChanged": true
+      }
+    },
+    {
+      "name": "AggregateFolder-empty-FullRefresh-false-true",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "",
+            "Path": "$STATE/root",
+            "reason": 2
+          },
+          {
+            "action": "save",
+            "Name": "root",
+            "Path": "$STATE/root",
+            "reason": 3
+          },
+          {
+            "action": "reattach"
+          }
+        ],
+        "Name": "root",
+        "Path": "$STATE/root",
+        "storedPath": "D:\\mediamanager\\.test-output\\validation\\internal-folder-service-oracle-20261005-1\\state\\AggregateFolder-empty-FullRefresh-false-true/root",
+        "Data": "{\u0022VirtualChildren\u0022:[],\u0022PhysicalLocationsList\u0022:[],\u0022IsRoot\u0022:false,\u0022IsHD\u0022:false,\u0022IsShortcut\u0022:false,\u0022Width\u0022:0,\u0022Height\u0022:0,\u0022DateLastSaved\u0022:\u00220001-01-01T00:00:00.0000000Z\u0022,\u0022RemoteTrailers\u0022:[]}",
+        "stampChanged": true
+      }
+    },
+    {
+      "name": "AggregateFolder-matched-resolve",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "Named",
+            "Path": "$STATE/root",
+            "reason": 3
+          }
+        ],
+        "Name": "Named",
+        "Path": "$STATE/root",
+        "storedPath": "D:\\mediamanager\\.test-output\\validation\\internal-folder-service-oracle-20261005-1\\state\\AggregateFolder-matched-resolve/root",
+        "Data": "{\u0022VirtualChildren\u0022:[],\u0022PhysicalLocationsList\u0022:[\u0022D:\\\\mediamanager\\\\.test-output\\\\validation\\\\internal-folder-service-oracle-20261005-1\\\\state\\\\AggregateFolder-matched-resolve\\\\root\u0022],\u0022IsRoot\u0022:false,\u0022IsHD\u0022:false,\u0022IsShortcut\u0022:false,\u0022Width\u0022:0,\u0022Height\u0022:0,\u0022DateLastSaved\u0022:\u00220001-01-01T00:00:00.0000000Z\u0022,\u0022RemoteTrailers\u0022:[]}",
+        "stampChanged": true
+      }
+    },
+    {
+      "name": "AggregateFolder-stale-location",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "Named",
+            "Path": "$STATE/root",
+            "reason": 3
+          }
+        ],
+        "Name": "Named",
+        "Path": "$STATE/root",
+        "storedPath": "D:\\mediamanager\\.test-output\\validation\\internal-folder-service-oracle-20261005-1\\state\\AggregateFolder-stale-location/root",
+        "Data": "{\u0022VirtualChildren\u0022:[],\u0022PhysicalLocationsList\u0022:[\u0022D:\\\\mediamanager\\\\.test-output\\\\validation\\\\internal-folder-service-oracle-20261005-1\\\\state\\\\AggregateFolder-stale-location/old\u0022],\u0022IsRoot\u0022:false,\u0022IsHD\u0022:false,\u0022IsShortcut\u0022:false,\u0022Width\u0022:0,\u0022Height\u0022:0,\u0022DateLastSaved\u0022:\u00220001-01-01T00:00:00.0000000Z\u0022,\u0022RemoteTrailers\u0022:[]}",
+        "stampChanged": true
+      }
+    },
+    {
+      "name": "UserRootFolder-default-None-false-false",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "default",
+            "Path": "$STATE/root/default",
+            "reason": 3
+          }
+        ],
+        "Name": "default",
+        "Path": "$STATE/root/default",
+        "storedPath": "D:\\mediamanager\\.test-output\\validation\\internal-folder-service-oracle-20261005-1\\state\\UserRootFolder-default-None-false-false/root/default",
+        "Data": "{\u0022IsRoot\u0022:true,\u0022IsHD\u0022:false,\u0022IsShortcut\u0022:false,\u0022Width\u0022:0,\u0022Height\u0022:0,\u0022DateLastSaved\u0022:\u00220001-01-01T00:00:00.0000000Z\u0022,\u0022RemoteTrailers\u0022:[]}",
+        "stampChanged": false
+      }
+    },
+    {
+      "name": "UserRootFolder-default-None-true-false",
+      "exception": null,
+      "result": {
+        "updateType": 11,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "default",
+            "Path": "$STATE/root/default",
+            "reason": 11
+          }
+        ],
+        "Name": "default",
+        "Path": "$STATE/root/default",
+        "storedPath": "D:\\mediamanager\\.test-output\\validation\\internal-folder-service-oracle-20261005-1\\state\\UserRootFolder-default-None-true-false/root/default",
+        "Data": "{\u0022IsRoot\u0022:true,\u0022IsHD\u0022:false,\u0022IsShortcut\u0022:false,\u0022Width\u0022:0,\u0022Height\u0022:0,\u0022DateLastSaved\u0022:\u00220001-01-01T00:00:00.0000000Z\u0022,\u0022RemoteTrailers\u0022:[]}",
+        "stampChanged": false
+      }
+    },
+    {
+      "name": "UserRootFolder-default-ValidationOnly-false-false",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "default",
+            "Path": "$STATE/root/default",
+            "reason": 3
+          }
+        ],
+        "Name": "default",
+        "Path": "$STATE/root/default",
+        "storedPath": "D:\\mediamanager\\.test-output\\validation\\internal-folder-service-oracle-20261005-1\\state\\UserRootFolder-default-ValidationOnly-false-false/root/default",
+        "Data": "{\u0022IsRoot\u0022:true,\u0022IsHD\u0022:false,\u0022IsShortcut\u0022:false,\u0022Width\u0022:0,\u0022Height\u0022:0,\u0022DateLastSaved\u0022:\u00220001-01-01T00:00:00.0000000Z\u0022,\u0022RemoteTrailers\u0022:[]}",
+        "stampChanged": false
+      }
+    },
+    {
+      "name": "UserRootFolder-default-Default-false-false",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "default",
+            "Path": "$STATE/root/default",
+            "reason": 3
+          }
+        ],
+        "Name": "default",
+        "Path": "$STATE/root/default",
+        "storedPath": "D:\\mediamanager\\.test-output\\validation\\internal-folder-service-oracle-20261005-1\\state\\UserRootFolder-default-Default-false-false/root/default",
+        "Data": "{\u0022IsRoot\u0022:true,\u0022IsHD\u0022:false,\u0022IsShortcut\u0022:false,\u0022Width\u0022:0,\u0022Height\u0022:0,\u0022DateLastSaved\u0022:\u00220001-01-01T00:00:00.0000000Z\u0022,\u0022RemoteTrailers\u0022:[]}",
+        "stampChanged": true
+      }
+    },
+    {
+      "name": "UserRootFolder-default-FullRefresh-false-false",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "default",
+            "Path": "$STATE/root/default",
+            "reason": 3
+          }
+        ],
+        "Name": "default",
+        "Path": "$STATE/root/default",
+        "storedPath": "D:\\mediamanager\\.test-output\\validation\\internal-folder-service-oracle-20261005-1\\state\\UserRootFolder-default-FullRefresh-false-false/root/default",
+        "Data": "{\u0022IsRoot\u0022:true,\u0022IsHD\u0022:false,\u0022IsShortcut\u0022:false,\u0022Width\u0022:0,\u0022Height\u0022:0,\u0022DateLastSaved\u0022:\u00220001-01-01T00:00:00.0000000Z\u0022,\u0022RemoteTrailers\u0022:[]}",
+        "stampChanged": true
+      }
+    },
+    {
+      "name": "UserRootFolder-default-FullRefresh-false-true",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "default",
+            "Path": "$STATE/root/default",
+            "reason": 2
+          },
+          {
+            "action": "save",
+            "Name": "Media Folders",
+            "Path": "$STATE/root/default",
+            "reason": 3
+          },
+          {
+            "action": "reattach"
+          }
+        ],
+        "Name": "Media Folders",
+        "Path": "$STATE/root/default",
+        "storedPath": "D:\\mediamanager\\.test-output\\validation\\internal-folder-service-oracle-20261005-1\\state\\UserRootFolder-default-FullRefresh-false-true/root/default",
+        "Data": "{\u0022IsRoot\u0022:true,\u0022IsHD\u0022:false,\u0022IsShortcut\u0022:false,\u0022Width\u0022:0,\u0022Height\u0022:0,\u0022DateLastSaved\u0022:\u00220001-01-01T00:00:00.0000000Z\u0022,\u0022RemoteTrailers\u0022:[]}",
+        "stampChanged": true
+      }
+    },
+    {
+      "name": "UserRootFolder-empty-None-false-false",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "",
+            "Path": "$STATE/root/default",
+            "reason": 3
+          }
+        ],
+        "Name": "",
+        "Path": "$STATE/root/default",
+        "storedPath": "D:\\mediamanager\\.test-output\\validation\\internal-folder-service-oracle-20261005-1\\state\\UserRootFolder-empty-None-false-false/root/default",
+        "Data": "{\u0022IsRoot\u0022:true,\u0022IsHD\u0022:false,\u0022IsShortcut\u0022:false,\u0022Width\u0022:0,\u0022Height\u0022:0,\u0022DateLastSaved\u0022:\u00220001-01-01T00:00:00.0000000Z\u0022,\u0022RemoteTrailers\u0022:[]}",
+        "stampChanged": false
+      }
+    },
+    {
+      "name": "UserRootFolder-empty-None-true-false",
+      "exception": null,
+      "result": {
+        "updateType": 11,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "",
+            "Path": "$STATE/root/default",
+            "reason": 11
+          }
+        ],
+        "Name": "",
+        "Path": "$STATE/root/default",
+        "storedPath": "D:\\mediamanager\\.test-output\\validation\\internal-folder-service-oracle-20261005-1\\state\\UserRootFolder-empty-None-true-false/root/default",
+        "Data": "{\u0022IsRoot\u0022:true,\u0022IsHD\u0022:false,\u0022IsShortcut\u0022:false,\u0022Width\u0022:0,\u0022Height\u0022:0,\u0022DateLastSaved\u0022:\u00220001-01-01T00:00:00.0000000Z\u0022,\u0022RemoteTrailers\u0022:[]}",
+        "stampChanged": false
+      }
+    },
+    {
+      "name": "UserRootFolder-empty-ValidationOnly-false-false",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "",
+            "Path": "$STATE/root/default",
+            "reason": 3
+          }
+        ],
+        "Name": "",
+        "Path": "$STATE/root/default",
+        "storedPath": "D:\\mediamanager\\.test-output\\validation\\internal-folder-service-oracle-20261005-1\\state\\UserRootFolder-empty-ValidationOnly-false-false/root/default",
+        "Data": "{\u0022IsRoot\u0022:true,\u0022IsHD\u0022:false,\u0022IsShortcut\u0022:false,\u0022Width\u0022:0,\u0022Height\u0022:0,\u0022DateLastSaved\u0022:\u00220001-01-01T00:00:00.0000000Z\u0022,\u0022RemoteTrailers\u0022:[]}",
+        "stampChanged": false
+      }
+    },
+    {
+      "name": "UserRootFolder-empty-Default-false-false",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "",
+            "Path": "$STATE/root/default",
+            "reason": 3
+          }
+        ],
+        "Name": "",
+        "Path": "$STATE/root/default",
+        "storedPath": "D:\\mediamanager\\.test-output\\validation\\internal-folder-service-oracle-20261005-1\\state\\UserRootFolder-empty-Default-false-false/root/default",
+        "Data": "{\u0022IsRoot\u0022:true,\u0022IsHD\u0022:false,\u0022IsShortcut\u0022:false,\u0022Width\u0022:0,\u0022Height\u0022:0,\u0022DateLastSaved\u0022:\u00220001-01-01T00:00:00.0000000Z\u0022,\u0022RemoteTrailers\u0022:[]}",
+        "stampChanged": true
+      }
+    },
+    {
+      "name": "UserRootFolder-empty-FullRefresh-false-false",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "",
+            "Path": "$STATE/root/default",
+            "reason": 3
+          }
+        ],
+        "Name": "",
+        "Path": "$STATE/root/default",
+        "storedPath": "D:\\mediamanager\\.test-output\\validation\\internal-folder-service-oracle-20261005-1\\state\\UserRootFolder-empty-FullRefresh-false-false/root/default",
+        "Data": "{\u0022IsRoot\u0022:true,\u0022IsHD\u0022:false,\u0022IsShortcut\u0022:false,\u0022Width\u0022:0,\u0022Height\u0022:0,\u0022DateLastSaved\u0022:\u00220001-01-01T00:00:00.0000000Z\u0022,\u0022RemoteTrailers\u0022:[]}",
+        "stampChanged": true
+      }
+    },
+    {
+      "name": "UserRootFolder-empty-FullRefresh-false-true",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "",
+            "Path": "$STATE/root/default",
+            "reason": 2
+          },
+          {
+            "action": "save",
+            "Name": "Media Folders",
+            "Path": "$STATE/root/default",
+            "reason": 3
+          },
+          {
+            "action": "reattach"
+          }
+        ],
+        "Name": "Media Folders",
+        "Path": "$STATE/root/default",
+        "storedPath": "D:\\mediamanager\\.test-output\\validation\\internal-folder-service-oracle-20261005-1\\state\\UserRootFolder-empty-FullRefresh-false-true/root/default",
+        "Data": "{\u0022IsRoot\u0022:true,\u0022IsHD\u0022:false,\u0022IsShortcut\u0022:false,\u0022Width\u0022:0,\u0022Height\u0022:0,\u0022DateLastSaved\u0022:\u00220001-01-01T00:00:00.0000000Z\u0022,\u0022RemoteTrailers\u0022:[]}",
+        "stampChanged": true
+      }
+    },
+    {
+      "name": "CollectionFolder-default-None-false-false",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "default",
+            "Path": "$STATE/root/default/library",
+            "reason": 3
+          }
+        ],
+        "Name": "default",
+        "Path": "$STATE/root/default/library",
+        "storedPath": "D:\\mediamanager\\.test-output\\validation\\internal-folder-service-oracle-20261005-1\\state\\CollectionFolder-default-None-false-false/root/default/library",
+        "Data": "{\u0022PhysicalLocationsList\u0022:[],\u0022PhysicalFolderIds\u0022:[],\u0022IsRoot\u0022:false,\u0022IsHD\u0022:false,\u0022IsShortcut\u0022:false,\u0022Width\u0022:0,\u0022Height\u0022:0,\u0022DateLastSaved\u0022:\u00220001-01-01T00:00:00.0000000Z\u0022,\u0022RemoteTrailers\u0022:[]}",
+        "stampChanged": false
+      }
+    },
+    {
+      "name": "CollectionFolder-default-None-true-false",
+      "exception": null,
+      "result": {
+        "updateType": 11,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "default",
+            "Path": "$STATE/root/default/library",
+            "reason": 11
+          }
+        ],
+        "Name": "default",
+        "Path": "$STATE/root/default/library",
+        "storedPath": "D:\\mediamanager\\.test-output\\validation\\internal-folder-service-oracle-20261005-1\\state\\CollectionFolder-default-None-true-false/root/default/library",
+        "Data": "{\u0022PhysicalLocationsList\u0022:[],\u0022PhysicalFolderIds\u0022:[],\u0022IsRoot\u0022:false,\u0022IsHD\u0022:false,\u0022IsShortcut\u0022:false,\u0022Width\u0022:0,\u0022Height\u0022:0,\u0022DateLastSaved\u0022:\u00220001-01-01T00:00:00.0000000Z\u0022,\u0022RemoteTrailers\u0022:[]}",
+        "stampChanged": false
+      }
+    },
+    {
+      "name": "CollectionFolder-default-ValidationOnly-false-false",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "default",
+            "Path": "$STATE/root/default/library",
+            "reason": 3
+          }
+        ],
+        "Name": "default",
+        "Path": "$STATE/root/default/library",
+        "storedPath": "D:\\mediamanager\\.test-output\\validation\\internal-folder-service-oracle-20261005-1\\state\\CollectionFolder-default-ValidationOnly-false-false/root/default/library",
+        "Data": "{\u0022PhysicalLocationsList\u0022:[],\u0022PhysicalFolderIds\u0022:[],\u0022IsRoot\u0022:false,\u0022IsHD\u0022:false,\u0022IsShortcut\u0022:false,\u0022Width\u0022:0,\u0022Height\u0022:0,\u0022DateLastSaved\u0022:\u00220001-01-01T00:00:00.0000000Z\u0022,\u0022RemoteTrailers\u0022:[]}",
+        "stampChanged": false
+      }
+    },
+    {
+      "name": "CollectionFolder-default-Default-false-false",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "default",
+            "Path": "$STATE/root/default/library",
+            "reason": 3
+          }
+        ],
+        "Name": "default",
+        "Path": "$STATE/root/default/library",
+        "storedPath": "D:\\mediamanager\\.test-output\\validation\\internal-folder-service-oracle-20261005-1\\state\\CollectionFolder-default-Default-false-false/root/default/library",
+        "Data": "{\u0022PhysicalLocationsList\u0022:[],\u0022PhysicalFolderIds\u0022:[],\u0022IsRoot\u0022:false,\u0022IsHD\u0022:false,\u0022IsShortcut\u0022:false,\u0022Width\u0022:0,\u0022Height\u0022:0,\u0022DateLastSaved\u0022:\u00220001-01-01T00:00:00.0000000Z\u0022,\u0022RemoteTrailers\u0022:[]}",
+        "stampChanged": true
+      }
+    },
+    {
+      "name": "CollectionFolder-default-FullRefresh-false-false",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "default",
+            "Path": "$STATE/root/default/library",
+            "reason": 3
+          }
+        ],
+        "Name": "default",
+        "Path": "$STATE/root/default/library",
+        "storedPath": "D:\\mediamanager\\.test-output\\validation\\internal-folder-service-oracle-20261005-1\\state\\CollectionFolder-default-FullRefresh-false-false/root/default/library",
+        "Data": "{\u0022PhysicalLocationsList\u0022:[],\u0022PhysicalFolderIds\u0022:[],\u0022IsRoot\u0022:false,\u0022IsHD\u0022:false,\u0022IsShortcut\u0022:false,\u0022Width\u0022:0,\u0022Height\u0022:0,\u0022DateLastSaved\u0022:\u00220001-01-01T00:00:00.0000000Z\u0022,\u0022RemoteTrailers\u0022:[]}",
+        "stampChanged": true
+      }
+    },
+    {
+      "name": "CollectionFolder-default-FullRefresh-false-true",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "default",
+            "Path": "$STATE/root/default/library",
+            "reason": 2
+          },
+          {
+            "action": "save",
+            "Name": "default",
+            "Path": "$STATE/root/default/library",
+            "reason": 3
+          },
+          {
+            "action": "reattach"
+          }
+        ],
+        "Name": "default",
+        "Path": "$STATE/root/default/library",
+        "storedPath": "D:\\mediamanager\\.test-output\\validation\\internal-folder-service-oracle-20261005-1\\state\\CollectionFolder-default-FullRefresh-false-true/root/default/library",
+        "Data": "{\u0022PhysicalLocationsList\u0022:[],\u0022PhysicalFolderIds\u0022:[],\u0022IsRoot\u0022:false,\u0022IsHD\u0022:false,\u0022IsShortcut\u0022:false,\u0022Width\u0022:0,\u0022Height\u0022:0,\u0022DateLastSaved\u0022:\u00220001-01-01T00:00:00.0000000Z\u0022,\u0022RemoteTrailers\u0022:[]}",
+        "stampChanged": true
+      }
+    },
+    {
+      "name": "CollectionFolder-empty-None-false-false",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "",
+            "Path": "$STATE/root/default/library",
+            "reason": 3
+          }
+        ],
+        "Name": "",
+        "Path": "$STATE/root/default/library",
+        "storedPath": "D:\\mediamanager\\.test-output\\validation\\internal-folder-service-oracle-20261005-1\\state\\CollectionFolder-empty-None-false-false/root/default/library",
+        "Data": "{\u0022PhysicalLocationsList\u0022:[],\u0022PhysicalFolderIds\u0022:[],\u0022IsRoot\u0022:false,\u0022IsHD\u0022:false,\u0022IsShortcut\u0022:false,\u0022Width\u0022:0,\u0022Height\u0022:0,\u0022DateLastSaved\u0022:\u00220001-01-01T00:00:00.0000000Z\u0022,\u0022RemoteTrailers\u0022:[]}",
+        "stampChanged": false
+      }
+    },
+    {
+      "name": "CollectionFolder-empty-None-true-false",
+      "exception": null,
+      "result": {
+        "updateType": 11,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "",
+            "Path": "$STATE/root/default/library",
+            "reason": 11
+          }
+        ],
+        "Name": "",
+        "Path": "$STATE/root/default/library",
+        "storedPath": "D:\\mediamanager\\.test-output\\validation\\internal-folder-service-oracle-20261005-1\\state\\CollectionFolder-empty-None-true-false/root/default/library",
+        "Data": "{\u0022PhysicalLocationsList\u0022:[],\u0022PhysicalFolderIds\u0022:[],\u0022IsRoot\u0022:false,\u0022IsHD\u0022:false,\u0022IsShortcut\u0022:false,\u0022Width\u0022:0,\u0022Height\u0022:0,\u0022DateLastSaved\u0022:\u00220001-01-01T00:00:00.0000000Z\u0022,\u0022RemoteTrailers\u0022:[]}",
+        "stampChanged": false
+      }
+    },
+    {
+      "name": "CollectionFolder-empty-ValidationOnly-false-false",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "library",
+            "Path": "$STATE/root/default/library",
+            "reason": 3
+          }
+        ],
+        "Name": "library",
+        "Path": "$STATE/root/default/library",
+        "storedPath": "D:\\mediamanager\\.test-output\\validation\\internal-folder-service-oracle-20261005-1\\state\\CollectionFolder-empty-ValidationOnly-false-false/root/default/library",
+        "Data": "{\u0022PhysicalLocationsList\u0022:[],\u0022PhysicalFolderIds\u0022:[],\u0022IsRoot\u0022:false,\u0022IsHD\u0022:false,\u0022IsShortcut\u0022:false,\u0022Width\u0022:0,\u0022Height\u0022:0,\u0022DateLastSaved\u0022:\u00220001-01-01T00:00:00.0000000Z\u0022,\u0022RemoteTrailers\u0022:[]}",
+        "stampChanged": false
+      }
+    },
+    {
+      "name": "CollectionFolder-empty-Default-false-false",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "library",
+            "Path": "$STATE/root/default/library",
+            "reason": 3
+          }
+        ],
+        "Name": "library",
+        "Path": "$STATE/root/default/library",
+        "storedPath": "D:\\mediamanager\\.test-output\\validation\\internal-folder-service-oracle-20261005-1\\state\\CollectionFolder-empty-Default-false-false/root/default/library",
+        "Data": "{\u0022PhysicalLocationsList\u0022:[],\u0022PhysicalFolderIds\u0022:[],\u0022IsRoot\u0022:false,\u0022IsHD\u0022:false,\u0022IsShortcut\u0022:false,\u0022Width\u0022:0,\u0022Height\u0022:0,\u0022DateLastSaved\u0022:\u00220001-01-01T00:00:00.0000000Z\u0022,\u0022RemoteTrailers\u0022:[]}",
+        "stampChanged": true
+      }
+    },
+    {
+      "name": "CollectionFolder-empty-FullRefresh-false-false",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "library",
+            "Path": "$STATE/root/default/library",
+            "reason": 3
+          }
+        ],
+        "Name": "library",
+        "Path": "$STATE/root/default/library",
+        "storedPath": "D:\\mediamanager\\.test-output\\validation\\internal-folder-service-oracle-20261005-1\\state\\CollectionFolder-empty-FullRefresh-false-false/root/default/library",
+        "Data": "{\u0022PhysicalLocationsList\u0022:[],\u0022PhysicalFolderIds\u0022:[],\u0022IsRoot\u0022:false,\u0022IsHD\u0022:false,\u0022IsShortcut\u0022:false,\u0022Width\u0022:0,\u0022Height\u0022:0,\u0022DateLastSaved\u0022:\u00220001-01-01T00:00:00.0000000Z\u0022,\u0022RemoteTrailers\u0022:[]}",
+        "stampChanged": true
+      }
+    },
+    {
+      "name": "CollectionFolder-empty-FullRefresh-false-true",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "",
+            "Path": "$STATE/root/default/library",
+            "reason": 2
+          },
+          {
+            "action": "save",
+            "Name": "library",
+            "Path": "$STATE/root/default/library",
+            "reason": 3
+          },
+          {
+            "action": "reattach"
+          }
+        ],
+        "Name": "library",
+        "Path": "$STATE/root/default/library",
+        "storedPath": "D:\\mediamanager\\.test-output\\validation\\internal-folder-service-oracle-20261005-1\\state\\CollectionFolder-empty-FullRefresh-false-true/root/default/library",
+        "Data": "{\u0022PhysicalLocationsList\u0022:[],\u0022PhysicalFolderIds\u0022:[],\u0022IsRoot\u0022:false,\u0022IsHD\u0022:false,\u0022IsShortcut\u0022:false,\u0022Width\u0022:0,\u0022Height\u0022:0,\u0022DateLastSaved\u0022:\u00220001-01-01T00:00:00.0000000Z\u0022,\u0022RemoteTrailers\u0022:[]}",
+        "stampChanged": true
+      }
+    },
+    {
+      "name": "CollectionFolder-matched-resolve",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "Named",
+            "Path": "$STATE/root/default/library",
+            "reason": 3
+          }
+        ],
+        "Name": "Named",
+        "Path": "$STATE/root/default/library",
+        "storedPath": "D:\\mediamanager\\.test-output\\validation\\internal-folder-service-oracle-20261005-1\\state\\CollectionFolder-matched-resolve/root/default/library",
+        "Data": "{\u0022PhysicalLocationsList\u0022:[\u0022D:\\\\mediamanager\\\\.test-output\\\\validation\\\\internal-folder-service-oracle-20261005-1\\\\state\\\\CollectionFolder-matched-resolve\\\\root\\\\default\\\\library\u0022],\u0022PhysicalFolderIds\u0022:[],\u0022IsRoot\u0022:false,\u0022IsHD\u0022:false,\u0022IsShortcut\u0022:false,\u0022Width\u0022:0,\u0022Height\u0022:0,\u0022DateLastSaved\u0022:\u00220001-01-01T00:00:00.0000000Z\u0022,\u0022RemoteTrailers\u0022:[]}",
+        "stampChanged": true
+      }
+    },
+    {
+      "name": "CollectionFolder-stale-location",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "Named",
+            "Path": "$STATE/root/default/library",
+            "reason": 3
+          }
+        ],
+        "Name": "Named",
+        "Path": "$STATE/root/default/library",
+        "storedPath": "D:\\mediamanager\\.test-output\\validation\\internal-folder-service-oracle-20261005-1\\state\\CollectionFolder-stale-location/root/default/library",
+        "Data": "{\u0022PhysicalLocationsList\u0022:[\u0022D:\\\\mediamanager\\\\.test-output\\\\validation\\\\internal-folder-service-oracle-20261005-1\\\\state\\\\CollectionFolder-stale-location/old\u0022],\u0022PhysicalFolderIds\u0022:[],\u0022IsRoot\u0022:false,\u0022IsHD\u0022:false,\u0022IsShortcut\u0022:false,\u0022Width\u0022:0,\u0022Height\u0022:0,\u0022DateLastSaved\u0022:\u00220001-01-01T00:00:00.0000000Z\u0022,\u0022RemoteTrailers\u0022:[]}",
+        "stampChanged": true
+      }
+    },
+    {
+      "name": "CollectionFolder-stale-physical-id",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "Named",
+            "Path": "$STATE/root/default/library",
+            "reason": 3
+          }
+        ],
+        "Name": "Named",
+        "Path": "$STATE/root/default/library",
+        "storedPath": "D:\\mediamanager\\.test-output\\validation\\internal-folder-service-oracle-20261005-1\\state\\CollectionFolder-stale-physical-id/root/default/library",
+        "Data": "{\u0022PhysicalLocationsList\u0022:[\u0022D:\\\\mediamanager\\\\.test-output\\\\validation\\\\internal-folder-service-oracle-20261005-1\\\\state\\\\CollectionFolder-stale-physical-id\\\\root\\\\default\\\\library\u0022],\u0022PhysicalFolderIds\u0022:[\u002297c00000000000000000000000000099\u0022],\u0022IsRoot\u0022:false,\u0022IsHD\u0022:false,\u0022IsShortcut\u0022:false,\u0022Width\u0022:0,\u0022Height\u0022:0,\u0022DateLastSaved\u0022:\u00220001-01-01T00:00:00.0000000Z\u0022,\u0022RemoteTrailers\u0022:[]}",
+        "stampChanged": true
+      }
+    },
+    {
+      "name": "PlaylistsFolder-default-None-false-false",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "default",
+            "Path": "$STATE/root/default/library",
+            "reason": 3
+          }
+        ],
+        "Name": "default",
+        "Path": "$STATE/root/default/library",
+        "storedPath": "D:\\mediamanager\\.test-output\\validation\\internal-folder-service-oracle-20261005-1\\state\\PlaylistsFolder-default-None-false-false/root/default/library",
+        "Data": null,
+        "stampChanged": false
+      }
+    },
+    {
+      "name": "PlaylistsFolder-default-None-true-false",
+      "exception": null,
+      "result": {
+        "updateType": 11,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "default",
+            "Path": "$STATE/root/default/library",
+            "reason": 11
+          }
+        ],
+        "Name": "default",
+        "Path": "$STATE/root/default/library",
+        "storedPath": "D:\\mediamanager\\.test-output\\validation\\internal-folder-service-oracle-20261005-1\\state\\PlaylistsFolder-default-None-true-false/root/default/library",
+        "Data": null,
+        "stampChanged": false
+      }
+    },
+    {
+      "name": "PlaylistsFolder-default-ValidationOnly-false-false",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "default",
+            "Path": "$STATE/root/default/library",
+            "reason": 3
+          }
+        ],
+        "Name": "default",
+        "Path": "$STATE/root/default/library",
+        "storedPath": "D:\\mediamanager\\.test-output\\validation\\internal-folder-service-oracle-20261005-1\\state\\PlaylistsFolder-default-ValidationOnly-false-false/root/default/library",
+        "Data": null,
+        "stampChanged": false
+      }
+    },
+    {
+      "name": "PlaylistsFolder-default-Default-false-false",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "default",
+            "Path": "$STATE/root/default/library",
+            "reason": 3
+          }
+        ],
+        "Name": "default",
+        "Path": "$STATE/root/default/library",
+        "storedPath": "D:\\mediamanager\\.test-output\\validation\\internal-folder-service-oracle-20261005-1\\state\\PlaylistsFolder-default-Default-false-false/root/default/library",
+        "Data": null,
+        "stampChanged": true
+      }
+    },
+    {
+      "name": "PlaylistsFolder-default-FullRefresh-false-false",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "default",
+            "Path": "$STATE/root/default/library",
+            "reason": 3
+          }
+        ],
+        "Name": "default",
+        "Path": "$STATE/root/default/library",
+        "storedPath": "D:\\mediamanager\\.test-output\\validation\\internal-folder-service-oracle-20261005-1\\state\\PlaylistsFolder-default-FullRefresh-false-false/root/default/library",
+        "Data": null,
+        "stampChanged": true
+      }
+    },
+    {
+      "name": "PlaylistsFolder-default-FullRefresh-false-true",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "default",
+            "Path": "$STATE/root/default/library",
+            "reason": 2
+          },
+          {
+            "action": "save",
+            "Name": "default",
+            "Path": "$STATE/root/default/library",
+            "reason": 3
+          },
+          {
+            "action": "reattach"
+          }
+        ],
+        "Name": "default",
+        "Path": "$STATE/root/default/library",
+        "storedPath": "D:\\mediamanager\\.test-output\\validation\\internal-folder-service-oracle-20261005-1\\state\\PlaylistsFolder-default-FullRefresh-false-true/root/default/library",
+        "Data": null,
+        "stampChanged": true
+      }
+    },
+    {
+      "name": "PlaylistsFolder-empty-None-false-false",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "",
+            "Path": "$STATE/root/default/library",
+            "reason": 3
+          }
+        ],
+        "Name": "",
+        "Path": "$STATE/root/default/library",
+        "storedPath": "D:\\mediamanager\\.test-output\\validation\\internal-folder-service-oracle-20261005-1\\state\\PlaylistsFolder-empty-None-false-false/root/default/library",
+        "Data": null,
+        "stampChanged": false
+      }
+    },
+    {
+      "name": "PlaylistsFolder-empty-None-true-false",
+      "exception": null,
+      "result": {
+        "updateType": 11,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "",
+            "Path": "$STATE/root/default/library",
+            "reason": 11
+          }
+        ],
+        "Name": "",
+        "Path": "$STATE/root/default/library",
+        "storedPath": "D:\\mediamanager\\.test-output\\validation\\internal-folder-service-oracle-20261005-1\\state\\PlaylistsFolder-empty-None-true-false/root/default/library",
+        "Data": null,
+        "stampChanged": false
+      }
+    },
+    {
+      "name": "PlaylistsFolder-empty-ValidationOnly-false-false",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "",
+            "Path": "$STATE/root/default/library",
+            "reason": 3
+          }
+        ],
+        "Name": "",
+        "Path": "$STATE/root/default/library",
+        "storedPath": "D:\\mediamanager\\.test-output\\validation\\internal-folder-service-oracle-20261005-1\\state\\PlaylistsFolder-empty-ValidationOnly-false-false/root/default/library",
+        "Data": null,
+        "stampChanged": false
+      }
+    },
+    {
+      "name": "PlaylistsFolder-empty-Default-false-false",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "",
+            "Path": "$STATE/root/default/library",
+            "reason": 3
+          }
+        ],
+        "Name": "",
+        "Path": "$STATE/root/default/library",
+        "storedPath": "D:\\mediamanager\\.test-output\\validation\\internal-folder-service-oracle-20261005-1\\state\\PlaylistsFolder-empty-Default-false-false/root/default/library",
+        "Data": null,
+        "stampChanged": true
+      }
+    },
+    {
+      "name": "PlaylistsFolder-empty-FullRefresh-false-false",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "",
+            "Path": "$STATE/root/default/library",
+            "reason": 3
+          }
+        ],
+        "Name": "",
+        "Path": "$STATE/root/default/library",
+        "storedPath": "D:\\mediamanager\\.test-output\\validation\\internal-folder-service-oracle-20261005-1\\state\\PlaylistsFolder-empty-FullRefresh-false-false/root/default/library",
+        "Data": null,
+        "stampChanged": true
+      }
+    },
+    {
+      "name": "PlaylistsFolder-empty-FullRefresh-false-true",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "",
+            "Path": "$STATE/root/default/library",
+            "reason": 2
+          },
+          {
+            "action": "save",
+            "Name": "library",
+            "Path": "$STATE/root/default/library",
+            "reason": 3
+          },
+          {
+            "action": "reattach"
+          }
+        ],
+        "Name": "library",
+        "Path": "$STATE/root/default/library",
+        "storedPath": "D:\\mediamanager\\.test-output\\validation\\internal-folder-service-oracle-20261005-1\\state\\PlaylistsFolder-empty-FullRefresh-false-true/root/default/library",
+        "Data": null,
+        "stampChanged": true
+      }
+    }
+  ],
+  "assemblies": [
+    {
+      "name": "MediaBrowser.Controller",
+      "path": "D:\\mediamanager\\.test-output\\validation\\internal-folder-service-oracle-20261005-1\\bin\\Release\\net10.0\\MediaBrowser.Controller.dll",
+      "sha256": "56a527307ef93f810fdadec33ba8380cc8416d38cb1cfea92297b0f65288808e"
+    },
+    {
+      "name": "MediaBrowser.Providers",
+      "path": "D:\\mediamanager\\.test-output\\validation\\internal-folder-service-oracle-20261005-1\\bin\\Release\\net10.0\\MediaBrowser.Providers.dll",
+      "sha256": "0255068ec9ff524c916c99aebd4553290141bb7b87e17da3a80c007b3b6fb129"
+    },
+    {
+      "name": "Jellyfin.Server.Implementations",
+      "path": "D:\\mediamanager\\.test-output\\validation\\internal-folder-service-oracle-20261005-1\\bin\\Release\\net10.0\\Jellyfin.Server.Implementations.dll",
+      "sha256": "b91a6797f81f8563b8896c3da3e5cd4e9d11c61eb084578bf7b81108c3c3e2e6"
+    },
+    {
+      "name": "Emby.Server.Implementations",
+      "path": "D:\\mediamanager\\.test-output\\validation\\internal-folder-service-oracle-20261005-1\\bin\\Release\\net10.0\\Emby.Server.Implementations.dll",
+      "sha256": "ccff8514100a65508b65882d5881463fe4ff73ea07eb4d2b2d98e234d7b4ac99"
+    },
+    {
+      "name": "jellyfin",
+      "path": "D:\\mediamanager\\.test-output\\validation\\internal-folder-service-oracle-20261005-1\\bin\\Release\\net10.0\\jellyfin.dll",
+      "sha256": "29c34541350089dc0522c4309ecd617e78fd402774681f32491d089803939c03"
+    },
+    {
+      "name": "Jellyfin.Database.Implementations",
+      "path": "D:\\mediamanager\\.test-output\\validation\\internal-folder-service-oracle-20261005-1\\bin\\Release\\net10.0\\Jellyfin.Database.Implementations.dll",
+      "sha256": "21648ea8e6eec045789c66c199b30c68b1b00f6e15918ac66347c19244b5670b"
+    },
+    {
+      "name": "Jellyfin.Database.Providers.Sqlite",
+      "path": "D:\\mediamanager\\.test-output\\validation\\internal-folder-service-oracle-20261005-1\\bin\\Release\\net10.0\\Jellyfin.Database.Providers.Sqlite.dll",
+      "sha256": "eefedf49a1c6c62c7eab9b4347c0bca377c3e059ec61ef26a08148de7bba94bb"
+    }
+  ],
+  "scope": "Actual FolderMetadataService on four concrete internal folders, empty ProviderManager, actual hooks, FileData, NormalizeRootPathList, ReverseVirtualPath, repository/mapper and EF SQLite. Configuration/library options, empty physical-root children, FindByPath, parent/collection lookup and user-data reattachment callback are controlled. Captures update reasons, per-save calls, name/path, stored path/Data and refresh-stamp changes. Excludes full ValidateChildren, filesystem library rebuilding, external shortcuts/network, complete scalar/JSON acceptance, monitor and post-scan tasks."
+,"schemaVersion":1,"candidateVerified":false,"inputSha256":"d95a1c9ec161e7f007bb6a42f0a9f33c4c3fc4d906f2401b4c9a63dc72d83706","sourceFilesSha256":"a6686ffed372aaaa09f42f616d5b6d7b19fb95da5b75b0b75d19f36f65311f9f"}

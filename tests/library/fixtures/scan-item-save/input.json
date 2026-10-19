@@ -1,0 +1,2309 @@
+[
+  {
+    "name": "type-Folder",
+    "item": {
+      "id": "f3b8cadd-2e31-fba9-6a85-bbe56ef60988",
+      "type": "Folder",
+      "Path": "Z:\\Library\\Child",
+      "Tags": [
+        "Permit",
+        "permit"
+      ],
+      "Genres": [
+        "Drama",
+        "drama"
+      ],
+      "Studios": [
+        "Studio"
+      ],
+      "Artists": [
+        "Artist"
+      ],
+      "AlbumArtists": [
+        "Album Artist"
+      ],
+      "SeasonId": "97b00000-0000-0000-0000-000000000007"
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": []
+  },
+  {
+    "name": "type-Movie",
+    "item": {
+      "id": "3f490c72-9691-0bec-bfab-099230eed57b",
+      "type": "Movie",
+      "Path": "Z:\\Library\\Child",
+      "Tags": [
+        "Permit",
+        "permit"
+      ],
+      "Genres": [
+        "Drama",
+        "drama"
+      ],
+      "Studios": [
+        "Studio"
+      ],
+      "Artists": [
+        "Artist"
+      ],
+      "AlbumArtists": [
+        "Album Artist"
+      ],
+      "SeasonId": "97b00000-0000-0000-0000-000000000007"
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": []
+  },
+  {
+    "name": "type-Video",
+    "item": {
+      "id": "3bca00b0-cb81-1662-c9d5-eb09de031fea",
+      "type": "Video",
+      "Path": "Z:\\Library\\Child",
+      "Tags": [
+        "Permit",
+        "permit"
+      ],
+      "Genres": [
+        "Drama",
+        "drama"
+      ],
+      "Studios": [
+        "Studio"
+      ],
+      "Artists": [
+        "Artist"
+      ],
+      "AlbumArtists": [
+        "Album Artist"
+      ],
+      "SeasonId": "97b00000-0000-0000-0000-000000000007"
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": []
+  },
+  {
+    "name": "type-Series",
+    "item": {
+      "id": "64c296de-8b6a-e278-2273-697ea9b18090",
+      "type": "Series",
+      "Path": "Z:\\Library\\Child",
+      "Tags": [
+        "Permit",
+        "permit"
+      ],
+      "Genres": [
+        "Drama",
+        "drama"
+      ],
+      "Studios": [
+        "Studio"
+      ],
+      "Artists": [
+        "Artist"
+      ],
+      "AlbumArtists": [
+        "Album Artist"
+      ],
+      "SeasonId": "97b00000-0000-0000-0000-000000000007"
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": []
+  },
+  {
+    "name": "type-Season",
+    "item": {
+      "id": "e1a01341-c49f-c460-4b33-37648c5ede66",
+      "type": "Season",
+      "Path": "Z:\\Library\\Child",
+      "Tags": [
+        "Permit",
+        "permit"
+      ],
+      "Genres": [
+        "Drama",
+        "drama"
+      ],
+      "Studios": [
+        "Studio"
+      ],
+      "Artists": [
+        "Artist"
+      ],
+      "AlbumArtists": [
+        "Album Artist"
+      ],
+      "SeasonId": "97b00000-0000-0000-0000-000000000007"
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": []
+  },
+  {
+    "name": "type-Episode",
+    "item": {
+      "id": "6a5dd902-5e50-79d2-b27d-a754609b1511",
+      "type": "Episode",
+      "Path": "Z:\\Library\\Child",
+      "Tags": [
+        "Permit",
+        "permit"
+      ],
+      "Genres": [
+        "Drama",
+        "drama"
+      ],
+      "Studios": [
+        "Studio"
+      ],
+      "Artists": [
+        "Artist"
+      ],
+      "AlbumArtists": [
+        "Album Artist"
+      ],
+      "SeasonId": "97b00000-0000-0000-0000-000000000007"
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": []
+  },
+  {
+    "name": "type-MusicArtist",
+    "item": {
+      "id": "fbf85d2f-809e-91d8-4ea5-aa82d3afc36d",
+      "type": "MusicArtist",
+      "Path": "Z:\\Library\\Child",
+      "Tags": [
+        "Permit",
+        "permit"
+      ],
+      "Genres": [
+        "Drama",
+        "drama"
+      ],
+      "Studios": [
+        "Studio"
+      ],
+      "Artists": [
+        "Artist"
+      ],
+      "AlbumArtists": [
+        "Album Artist"
+      ],
+      "SeasonId": "97b00000-0000-0000-0000-000000000007"
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": []
+  },
+  {
+    "name": "type-MusicAlbum",
+    "item": {
+      "id": "678594dc-e884-ccac-e404-c924e6dc55cd",
+      "type": "MusicAlbum",
+      "Path": "Z:\\Library\\Child",
+      "Tags": [
+        "Permit",
+        "permit"
+      ],
+      "Genres": [
+        "Drama",
+        "drama"
+      ],
+      "Studios": [
+        "Studio"
+      ],
+      "Artists": [
+        "Artist"
+      ],
+      "AlbumArtists": [
+        "Album Artist"
+      ],
+      "SeasonId": "97b00000-0000-0000-0000-000000000007"
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": []
+  },
+  {
+    "name": "type-Audio",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": [
+        "Permit",
+        "permit"
+      ],
+      "Genres": [
+        "Drama",
+        "drama"
+      ],
+      "Studios": [
+        "Studio"
+      ],
+      "Artists": [
+        "Artist"
+      ],
+      "AlbumArtists": [
+        "Album Artist"
+      ],
+      "SeasonId": "97b00000-0000-0000-0000-000000000007"
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": []
+  },
+  {
+    "name": "type-AudioBook",
+    "item": {
+      "id": "3a53ed8d-b759-7c85-761c-b22aa7505faf",
+      "type": "AudioBook",
+      "Path": "Z:\\Library\\Child",
+      "Tags": [
+        "Permit",
+        "permit"
+      ],
+      "Genres": [
+        "Drama",
+        "drama"
+      ],
+      "Studios": [
+        "Studio"
+      ],
+      "Artists": [
+        "Artist"
+      ],
+      "AlbumArtists": [
+        "Album Artist"
+      ],
+      "SeasonId": "97b00000-0000-0000-0000-000000000007"
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": []
+  },
+  {
+    "name": "type-Book",
+    "item": {
+      "id": "e5d433e0-a4f0-a857-3c24-b76ce75c4dd5",
+      "type": "Book",
+      "Path": "Z:\\Library\\Child",
+      "Tags": [
+        "Permit",
+        "permit"
+      ],
+      "Genres": [
+        "Drama",
+        "drama"
+      ],
+      "Studios": [
+        "Studio"
+      ],
+      "Artists": [
+        "Artist"
+      ],
+      "AlbumArtists": [
+        "Album Artist"
+      ],
+      "SeasonId": "97b00000-0000-0000-0000-000000000007"
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": []
+  },
+  {
+    "name": "type-Photo",
+    "item": {
+      "id": "3b137d53-acfc-7284-b7d5-84f32da9754c",
+      "type": "Photo",
+      "Path": "Z:\\Library\\Child",
+      "Tags": [
+        "Permit",
+        "permit"
+      ],
+      "Genres": [
+        "Drama",
+        "drama"
+      ],
+      "Studios": [
+        "Studio"
+      ],
+      "Artists": [
+        "Artist"
+      ],
+      "AlbumArtists": [
+        "Album Artist"
+      ],
+      "SeasonId": "97b00000-0000-0000-0000-000000000007"
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": []
+  },
+  {
+    "name": "type-PhotoAlbum",
+    "item": {
+      "id": "cc4b2b4e-2d6b-fd8a-84a1-0daa32a73d24",
+      "type": "PhotoAlbum",
+      "Path": "Z:\\Library\\Child",
+      "Tags": [
+        "Permit",
+        "permit"
+      ],
+      "Genres": [
+        "Drama",
+        "drama"
+      ],
+      "Studios": [
+        "Studio"
+      ],
+      "Artists": [
+        "Artist"
+      ],
+      "AlbumArtists": [
+        "Album Artist"
+      ],
+      "SeasonId": "97b00000-0000-0000-0000-000000000007"
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": []
+  },
+  {
+    "name": "case-sensitive-Folder",
+    "item": {
+      "id": "a64bea11-71f0-e4c2-cc68-7767fa9abe8e",
+      "type": "Folder",
+      "Path": "Z:\\Library\\Child",
+      "Tags": [
+        "Permit",
+        "permit"
+      ],
+      "Genres": [
+        "Drama",
+        "drama"
+      ],
+      "Studios": [
+        "Studio"
+      ],
+      "Artists": [
+        "Artist"
+      ],
+      "AlbumArtists": [
+        "Album Artist"
+      ],
+      "SeasonId": "97b00000-0000-0000-0000-000000000007"
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "caseSensitive": true
+  },
+  {
+    "name": "case-sensitive-Movie",
+    "item": {
+      "id": "012bcee6-c10b-d82d-91ed-25959ad2c693",
+      "type": "Movie",
+      "Path": "Z:\\Library\\Child",
+      "Tags": [
+        "Permit",
+        "permit"
+      ],
+      "Genres": [
+        "Drama",
+        "drama"
+      ],
+      "Studios": [
+        "Studio"
+      ],
+      "Artists": [
+        "Artist"
+      ],
+      "AlbumArtists": [
+        "Album Artist"
+      ],
+      "SeasonId": "97b00000-0000-0000-0000-000000000007"
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "caseSensitive": true
+  },
+  {
+    "name": "physical-id-without-path",
+    "item": {
+      "id": "3f490c72-9691-0bec-bfab-099230eed57b",
+      "type": "Movie",
+      "Path": "Z:\\Library\\Child",
+      "Tags": [
+        "Permit",
+        "permit"
+      ],
+      "Genres": [
+        "Drama",
+        "drama"
+      ],
+      "Studios": [
+        "Studio"
+      ],
+      "Artists": [
+        "Artist"
+      ],
+      "AlbumArtists": [
+        "Album Artist"
+      ],
+      "SeasonId": "97b00000-0000-0000-0000-000000000007"
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": []
+  },
+  {
+    "name": "normalized-path-without-literal-match",
+    "item": {
+      "id": "3f490c72-9691-0bec-bfab-099230eed57b",
+      "type": "Movie",
+      "Path": "Z:\\Library\\Child",
+      "Tags": [
+        "Permit",
+        "permit"
+      ],
+      "Genres": [
+        "Drama",
+        "drama"
+      ],
+      "Studios": [
+        "Studio"
+      ],
+      "Artists": [
+        "Artist"
+      ],
+      "AlbumArtists": [
+        "Album Artist"
+      ],
+      "SeasonId": "97b00000-0000-0000-0000-000000000007"
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": []
+  },
+  {
+    "name": "no-user-root-children",
+    "item": {
+      "id": "3f490c72-9691-0bec-bfab-099230eed57b",
+      "type": "Movie",
+      "Path": "Z:\\Library\\Child",
+      "Tags": [
+        "Permit",
+        "permit"
+      ],
+      "Genres": [
+        "Drama",
+        "drama"
+      ],
+      "Studios": [
+        "Studio"
+      ],
+      "Artists": [
+        "Artist"
+      ],
+      "AlbumArtists": [
+        "Album Artist"
+      ],
+      "SeasonId": "97b00000-0000-0000-0000-000000000007"
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": []
+  },
+  {
+    "name": "ordinary-folder-path",
+    "item": {
+      "id": "3f490c72-9691-0bec-bfab-099230eed57b",
+      "type": "Movie",
+      "Path": "Z:\\Library\\Child",
+      "Tags": [
+        "Permit",
+        "permit"
+      ],
+      "Genres": [
+        "Drama",
+        "drama"
+      ],
+      "Studios": [
+        "Studio"
+      ],
+      "Artists": [
+        "Artist"
+      ],
+      "AlbumArtists": [
+        "Album Artist"
+      ],
+      "SeasonId": "97b00000-0000-0000-0000-000000000007"
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "Folder",
+        "Path": "z:\\LIBRARY",
+        "Tags": [
+          "Folder collection"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": []
+  },
+  {
+    "name": "owner-root",
+    "item": {
+      "id": "3f490c72-9691-0bec-bfab-099230eed57b",
+      "type": "Movie",
+      "Path": "Z:\\Library\\Child",
+      "Tags": [
+        "Permit",
+        "permit"
+      ],
+      "Genres": [
+        "Drama",
+        "drama"
+      ],
+      "Studios": [
+        "Studio"
+      ],
+      "Artists": [
+        "Artist"
+      ],
+      "AlbumArtists": [
+        "Album Artist"
+      ],
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ParentId": "00000000-0000-0000-0000-000000000000",
+      "OwnerId": "97b00000-0000-0000-0000-000000000002"
+    },
+    "parents": [],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "Owner"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": []
+  },
+  {
+    "name": "stale-persisted-ancestor",
+    "item": {
+      "id": "3f490c72-9691-0bec-bfab-099230eed57b",
+      "type": "Movie",
+      "Path": "Z:\\Library\\Child",
+      "Tags": [
+        "Permit",
+        "permit"
+      ],
+      "Genres": [
+        "Drama",
+        "drama"
+      ],
+      "Studios": [
+        "Studio"
+      ],
+      "Artists": [
+        "Artist"
+      ],
+      "AlbumArtists": [
+        "Album Artist"
+      ],
+      "SeasonId": "97b00000-0000-0000-0000-000000000007"
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      },
+      {
+        "id": "3f490c72-9691-0bec-bfab-099230eed57b"
+      }
+    ],
+    "ancestors": [
+      "97b00000-0000-0000-0000-000000000005"
+    ],
+    "values": []
+  },
+  {
+    "name": "repeat-create",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": [
+        "Permit",
+        "permit"
+      ],
+      "Genres": [
+        "Drama",
+        "drama"
+      ],
+      "Studios": [
+        "Studio"
+      ],
+      "Artists": [
+        "Artist"
+      ],
+      "AlbumArtists": [
+        "Album Artist"
+      ],
+      "SeasonId": "97b00000-0000-0000-0000-000000000007"
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "repeat": 2
+  },
+  {
+    "name": "clear-Movie",
+    "item": {
+      "id": "3f490c72-9691-0bec-bfab-099230eed57b",
+      "type": "Movie",
+      "Path": "Z:\\Library\\Child",
+      "Tags": [],
+      "Genres": [],
+      "Studios": [],
+      "Artists": [],
+      "AlbumArtists": [],
+      "SeasonId": "97b00000-0000-0000-0000-000000000007"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      },
+      {
+        "id": "3f490c72-9691-0bec-bfab-099230eed57b"
+      }
+    ],
+    "ancestors": [
+      "97b00000-0000-0000-0000-000000000005"
+    ],
+    "values": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000100",
+        "type": 7,
+        "value": "Old unknown",
+        "cleanValue": "sealed",
+        "items": [
+          "3f490c72-9691-0bec-bfab-099230eed57b",
+          "97b00000-0000-0000-0000-000000000005"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "clear-Person",
+    "item": {
+      "id": "14f6709d-5eff-2e3e-6e4a-d75110771394",
+      "type": "Person",
+      "Path": "Z:\\Library\\Child",
+      "Tags": [],
+      "Genres": [],
+      "Studios": [],
+      "Artists": [],
+      "AlbumArtists": [],
+      "SeasonId": "97b00000-0000-0000-0000-000000000007"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      },
+      {
+        "id": "14f6709d-5eff-2e3e-6e4a-d75110771394"
+      }
+    ],
+    "ancestors": [
+      "97b00000-0000-0000-0000-000000000005"
+    ],
+    "values": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000100",
+        "type": 7,
+        "value": "Old unknown",
+        "cleanValue": "sealed",
+        "items": [
+          "14f6709d-5eff-2e3e-6e4a-d75110771394",
+          "97b00000-0000-0000-0000-000000000005"
+        ]
+      }
+    ]
+  }
+]

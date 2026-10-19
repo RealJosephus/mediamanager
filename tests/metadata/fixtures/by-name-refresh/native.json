@@ -1,0 +1,1630 @@
+{
+  "actualFrozenByNameRefresh": true,
+  "results": [
+    {
+      "name": "Genre-before-rebase",
+      "exception": null,
+      "result": {
+        "changed": true,
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\Genre\\Leaf.Name"
+      }
+    },
+    {
+      "name": "Genre-before-current",
+      "exception": null,
+      "result": {
+        "changed": false,
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\Genre\\Leaf.Name"
+      }
+    },
+    {
+      "name": "Genre-requires-rebase",
+      "exception": null,
+      "result": {
+        "requiresRefresh": true,
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\old-scope\\Leaf.Name"
+      }
+    },
+    {
+      "name": "Genre-requires-current",
+      "exception": null,
+      "result": {
+        "requiresRefresh": false,
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\Genre\\Leaf.Name"
+      }
+    },
+    {
+      "name": "Genre-refresh-rebase",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\Genre\\Leaf.Name",
+            "reason": 3
+          }
+        ],
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\Genre\\Leaf.Name",
+        "storedPath": "%MetadataPath%\\Genre\\Leaf.Name",
+        "Data": null,
+        "stampChanged": true
+      }
+    },
+    {
+      "name": "Genre-refresh-current",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\Genre\\Leaf.Name",
+            "reason": 3
+          }
+        ],
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\Genre\\Leaf.Name",
+        "storedPath": "%MetadataPath%\\Genre\\Leaf.Name",
+        "Data": null,
+        "stampChanged": true
+      }
+    },
+    {
+      "name": "Genre-first-None",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+            "reason": 2
+          },
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+            "reason": 3
+          },
+          {
+            "action": "reattach"
+          }
+        ],
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+        "storedPath": "%MetadataPath%\\old-scope\\Leaf.Name",
+        "Data": null,
+        "stampChanged": false
+      }
+    },
+    {
+      "name": "Genre-first-ValidationOnly",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+            "reason": 2
+          },
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\Genre\\Leaf.Name",
+            "reason": 3
+          },
+          {
+            "action": "reattach"
+          }
+        ],
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\Genre\\Leaf.Name",
+        "storedPath": "%MetadataPath%\\Genre\\Leaf.Name",
+        "Data": null,
+        "stampChanged": false
+      }
+    },
+    {
+      "name": "Genre-first-Default",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+            "reason": 2
+          },
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\Genre\\Leaf.Name",
+            "reason": 3
+          },
+          {
+            "action": "reattach"
+          }
+        ],
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\Genre\\Leaf.Name",
+        "storedPath": "%MetadataPath%\\Genre\\Leaf.Name",
+        "Data": null,
+        "stampChanged": true
+      }
+    },
+    {
+      "name": "Genre-first-FullRefresh",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+            "reason": 2
+          },
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\Genre\\Leaf.Name",
+            "reason": 3
+          },
+          {
+            "action": "reattach"
+          }
+        ],
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\Genre\\Leaf.Name",
+        "storedPath": "%MetadataPath%\\Genre\\Leaf.Name",
+        "Data": null,
+        "stampChanged": true
+      }
+    },
+    {
+      "name": "Genre-none-force",
+      "exception": null,
+      "result": {
+        "updateType": 11,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+            "reason": 11
+          }
+        ],
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+        "storedPath": "%MetadataPath%\\old-scope\\Leaf.Name",
+        "Data": null,
+        "stampChanged": false
+      }
+    },
+    {
+      "name": "MusicGenre-before-rebase",
+      "exception": null,
+      "result": {
+        "changed": true,
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\MusicGenre\\Leaf.Name"
+      }
+    },
+    {
+      "name": "MusicGenre-before-current",
+      "exception": null,
+      "result": {
+        "changed": false,
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\MusicGenre\\Leaf.Name"
+      }
+    },
+    {
+      "name": "MusicGenre-requires-rebase",
+      "exception": null,
+      "result": {
+        "requiresRefresh": true,
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\old-scope\\Leaf.Name"
+      }
+    },
+    {
+      "name": "MusicGenre-requires-current",
+      "exception": null,
+      "result": {
+        "requiresRefresh": false,
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\MusicGenre\\Leaf.Name"
+      }
+    },
+    {
+      "name": "MusicGenre-refresh-rebase",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\MusicGenre\\Leaf.Name",
+            "reason": 3
+          }
+        ],
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\MusicGenre\\Leaf.Name",
+        "storedPath": "%MetadataPath%\\MusicGenre\\Leaf.Name",
+        "Data": null,
+        "stampChanged": true
+      }
+    },
+    {
+      "name": "MusicGenre-refresh-current",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\MusicGenre\\Leaf.Name",
+            "reason": 3
+          }
+        ],
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\MusicGenre\\Leaf.Name",
+        "storedPath": "%MetadataPath%\\MusicGenre\\Leaf.Name",
+        "Data": null,
+        "stampChanged": true
+      }
+    },
+    {
+      "name": "MusicGenre-first-None",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+            "reason": 2
+          },
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+            "reason": 3
+          },
+          {
+            "action": "reattach"
+          }
+        ],
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+        "storedPath": "%MetadataPath%\\old-scope\\Leaf.Name",
+        "Data": null,
+        "stampChanged": false
+      }
+    },
+    {
+      "name": "MusicGenre-first-ValidationOnly",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+            "reason": 2
+          },
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\MusicGenre\\Leaf.Name",
+            "reason": 3
+          },
+          {
+            "action": "reattach"
+          }
+        ],
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\MusicGenre\\Leaf.Name",
+        "storedPath": "%MetadataPath%\\MusicGenre\\Leaf.Name",
+        "Data": null,
+        "stampChanged": false
+      }
+    },
+    {
+      "name": "MusicGenre-first-Default",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+            "reason": 2
+          },
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\MusicGenre\\Leaf.Name",
+            "reason": 3
+          },
+          {
+            "action": "reattach"
+          }
+        ],
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\MusicGenre\\Leaf.Name",
+        "storedPath": "%MetadataPath%\\MusicGenre\\Leaf.Name",
+        "Data": null,
+        "stampChanged": true
+      }
+    },
+    {
+      "name": "MusicGenre-first-FullRefresh",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+            "reason": 2
+          },
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\MusicGenre\\Leaf.Name",
+            "reason": 3
+          },
+          {
+            "action": "reattach"
+          }
+        ],
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\MusicGenre\\Leaf.Name",
+        "storedPath": "%MetadataPath%\\MusicGenre\\Leaf.Name",
+        "Data": null,
+        "stampChanged": true
+      }
+    },
+    {
+      "name": "MusicGenre-none-force",
+      "exception": null,
+      "result": {
+        "updateType": 11,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+            "reason": 11
+          }
+        ],
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+        "storedPath": "%MetadataPath%\\old-scope\\Leaf.Name",
+        "Data": null,
+        "stampChanged": false
+      }
+    },
+    {
+      "name": "Studio-before-rebase",
+      "exception": null,
+      "result": {
+        "changed": true,
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\Studio\\Leaf.Name"
+      }
+    },
+    {
+      "name": "Studio-before-current",
+      "exception": null,
+      "result": {
+        "changed": false,
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\Studio\\Leaf.Name"
+      }
+    },
+    {
+      "name": "Studio-requires-rebase",
+      "exception": null,
+      "result": {
+        "requiresRefresh": true,
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\old-scope\\Leaf.Name"
+      }
+    },
+    {
+      "name": "Studio-requires-current",
+      "exception": null,
+      "result": {
+        "requiresRefresh": false,
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\Studio\\Leaf.Name"
+      }
+    },
+    {
+      "name": "Studio-refresh-rebase",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\Studio\\Leaf.Name",
+            "reason": 3
+          }
+        ],
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\Studio\\Leaf.Name",
+        "storedPath": "%MetadataPath%\\Studio\\Leaf.Name",
+        "Data": null,
+        "stampChanged": true
+      }
+    },
+    {
+      "name": "Studio-refresh-current",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\Studio\\Leaf.Name",
+            "reason": 3
+          }
+        ],
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\Studio\\Leaf.Name",
+        "storedPath": "%MetadataPath%\\Studio\\Leaf.Name",
+        "Data": null,
+        "stampChanged": true
+      }
+    },
+    {
+      "name": "Studio-first-None",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+            "reason": 2
+          },
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+            "reason": 3
+          },
+          {
+            "action": "reattach"
+          }
+        ],
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+        "storedPath": "%MetadataPath%\\old-scope\\Leaf.Name",
+        "Data": null,
+        "stampChanged": false
+      }
+    },
+    {
+      "name": "Studio-first-ValidationOnly",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+            "reason": 2
+          },
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\Studio\\Leaf.Name",
+            "reason": 3
+          },
+          {
+            "action": "reattach"
+          }
+        ],
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\Studio\\Leaf.Name",
+        "storedPath": "%MetadataPath%\\Studio\\Leaf.Name",
+        "Data": null,
+        "stampChanged": false
+      }
+    },
+    {
+      "name": "Studio-first-Default",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+            "reason": 2
+          },
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\Studio\\Leaf.Name",
+            "reason": 3
+          },
+          {
+            "action": "reattach"
+          }
+        ],
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\Studio\\Leaf.Name",
+        "storedPath": "%MetadataPath%\\Studio\\Leaf.Name",
+        "Data": null,
+        "stampChanged": true
+      }
+    },
+    {
+      "name": "Studio-first-FullRefresh",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+            "reason": 2
+          },
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\Studio\\Leaf.Name",
+            "reason": 3
+          },
+          {
+            "action": "reattach"
+          }
+        ],
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\Studio\\Leaf.Name",
+        "storedPath": "%MetadataPath%\\Studio\\Leaf.Name",
+        "Data": null,
+        "stampChanged": true
+      }
+    },
+    {
+      "name": "Studio-none-force",
+      "exception": null,
+      "result": {
+        "updateType": 11,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+            "reason": 11
+          }
+        ],
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+        "storedPath": "%MetadataPath%\\old-scope\\Leaf.Name",
+        "Data": null,
+        "stampChanged": false
+      }
+    },
+    {
+      "name": "Year-before-rebase",
+      "exception": null,
+      "result": {
+        "changed": true,
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\Year\\Leaf.Name"
+      }
+    },
+    {
+      "name": "Year-before-current",
+      "exception": null,
+      "result": {
+        "changed": false,
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\Year\\Leaf.Name"
+      }
+    },
+    {
+      "name": "Year-requires-rebase",
+      "exception": null,
+      "result": {
+        "requiresRefresh": true,
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\old-scope\\Leaf.Name"
+      }
+    },
+    {
+      "name": "Year-requires-current",
+      "exception": null,
+      "result": {
+        "requiresRefresh": false,
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\Year\\Leaf.Name"
+      }
+    },
+    {
+      "name": "Year-refresh-rebase",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\Year\\Leaf.Name",
+            "reason": 3
+          }
+        ],
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\Year\\Leaf.Name",
+        "storedPath": "%MetadataPath%\\Year\\Leaf.Name",
+        "Data": null,
+        "stampChanged": true
+      }
+    },
+    {
+      "name": "Year-refresh-current",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\Year\\Leaf.Name",
+            "reason": 3
+          }
+        ],
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\Year\\Leaf.Name",
+        "storedPath": "%MetadataPath%\\Year\\Leaf.Name",
+        "Data": null,
+        "stampChanged": true
+      }
+    },
+    {
+      "name": "Year-first-None",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+            "reason": 2
+          },
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+            "reason": 3
+          },
+          {
+            "action": "reattach"
+          }
+        ],
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+        "storedPath": "%MetadataPath%\\old-scope\\Leaf.Name",
+        "Data": null,
+        "stampChanged": false
+      }
+    },
+    {
+      "name": "Year-first-ValidationOnly",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+            "reason": 2
+          },
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\Year\\Leaf.Name",
+            "reason": 3
+          },
+          {
+            "action": "reattach"
+          }
+        ],
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\Year\\Leaf.Name",
+        "storedPath": "%MetadataPath%\\Year\\Leaf.Name",
+        "Data": null,
+        "stampChanged": false
+      }
+    },
+    {
+      "name": "Year-first-Default",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+            "reason": 2
+          },
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\Year\\Leaf.Name",
+            "reason": 3
+          },
+          {
+            "action": "reattach"
+          }
+        ],
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\Year\\Leaf.Name",
+        "storedPath": "%MetadataPath%\\Year\\Leaf.Name",
+        "Data": null,
+        "stampChanged": true
+      }
+    },
+    {
+      "name": "Year-first-FullRefresh",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+            "reason": 2
+          },
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\Year\\Leaf.Name",
+            "reason": 3
+          },
+          {
+            "action": "reattach"
+          }
+        ],
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\Year\\Leaf.Name",
+        "storedPath": "%MetadataPath%\\Year\\Leaf.Name",
+        "Data": null,
+        "stampChanged": true
+      }
+    },
+    {
+      "name": "Year-none-force",
+      "exception": null,
+      "result": {
+        "updateType": 11,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+            "reason": 11
+          }
+        ],
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+        "storedPath": "%MetadataPath%\\old-scope\\Leaf.Name",
+        "Data": null,
+        "stampChanged": false
+      }
+    },
+    {
+      "name": "Person-before-rebase",
+      "exception": null,
+      "result": {
+        "changed": true,
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\People\\L\\Leaf.Name"
+      }
+    },
+    {
+      "name": "Person-before-current",
+      "exception": null,
+      "result": {
+        "changed": false,
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\People\\L\\Leaf.Name"
+      }
+    },
+    {
+      "name": "Person-requires-rebase",
+      "exception": null,
+      "result": {
+        "requiresRefresh": true,
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\old-scope\\Leaf.Name"
+      }
+    },
+    {
+      "name": "Person-requires-current",
+      "exception": null,
+      "result": {
+        "requiresRefresh": false,
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\People\\L\\Leaf.Name"
+      }
+    },
+    {
+      "name": "Person-refresh-rebase",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\People\\L\\Leaf.Name",
+            "reason": 3
+          }
+        ],
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\People\\L\\Leaf.Name",
+        "storedPath": "%MetadataPath%\\People\\L\\Leaf.Name",
+        "Data": null,
+        "stampChanged": true
+      }
+    },
+    {
+      "name": "Person-refresh-current",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\People\\L\\Leaf.Name",
+            "reason": 3
+          }
+        ],
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\People\\L\\Leaf.Name",
+        "storedPath": "%MetadataPath%\\People\\L\\Leaf.Name",
+        "Data": null,
+        "stampChanged": true
+      }
+    },
+    {
+      "name": "Person-first-None",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+            "reason": 2
+          },
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+            "reason": 3
+          },
+          {
+            "action": "reattach"
+          }
+        ],
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+        "storedPath": "%MetadataPath%\\old-scope\\Leaf.Name",
+        "Data": null,
+        "stampChanged": false
+      }
+    },
+    {
+      "name": "Person-first-ValidationOnly",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+            "reason": 2
+          },
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\People\\L\\Leaf.Name",
+            "reason": 3
+          },
+          {
+            "action": "reattach"
+          }
+        ],
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\People\\L\\Leaf.Name",
+        "storedPath": "%MetadataPath%\\People\\L\\Leaf.Name",
+        "Data": null,
+        "stampChanged": false
+      }
+    },
+    {
+      "name": "Person-first-Default",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+            "reason": 2
+          },
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\People\\L\\Leaf.Name",
+            "reason": 3
+          },
+          {
+            "action": "reattach"
+          }
+        ],
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\People\\L\\Leaf.Name",
+        "storedPath": "%MetadataPath%\\People\\L\\Leaf.Name",
+        "Data": null,
+        "stampChanged": true
+      }
+    },
+    {
+      "name": "Person-first-FullRefresh",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+            "reason": 2
+          },
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\People\\L\\Leaf.Name",
+            "reason": 3
+          },
+          {
+            "action": "reattach"
+          }
+        ],
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\People\\L\\Leaf.Name",
+        "storedPath": "%MetadataPath%\\People\\L\\Leaf.Name",
+        "Data": null,
+        "stampChanged": true
+      }
+    },
+    {
+      "name": "Person-none-force",
+      "exception": null,
+      "result": {
+        "updateType": 11,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+            "reason": 11
+          }
+        ],
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+        "storedPath": "%MetadataPath%\\old-scope\\Leaf.Name",
+        "Data": null,
+        "stampChanged": false
+      }
+    },
+    {
+      "name": "MusicArtist-before-rebase",
+      "exception": null,
+      "result": {
+        "changed": true,
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\artists\\Leaf.Name"
+      }
+    },
+    {
+      "name": "MusicArtist-before-current",
+      "exception": null,
+      "result": {
+        "changed": false,
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\artists\\Leaf.Name"
+      }
+    },
+    {
+      "name": "MusicArtist-requires-rebase",
+      "exception": null,
+      "result": {
+        "requiresRefresh": true,
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\old-scope\\Leaf.Name"
+      }
+    },
+    {
+      "name": "MusicArtist-requires-current",
+      "exception": null,
+      "result": {
+        "requiresRefresh": true,
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\artists\\Leaf.Name"
+      }
+    },
+    {
+      "name": "MusicArtist-refresh-rebase",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\artists\\Leaf.Name",
+            "reason": 3
+          }
+        ],
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\artists\\Leaf.Name",
+        "storedPath": "%MetadataPath%\\artists\\Leaf.Name",
+        "Data": null,
+        "stampChanged": true
+      }
+    },
+    {
+      "name": "MusicArtist-refresh-current",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\artists\\Leaf.Name",
+            "reason": 3
+          }
+        ],
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\artists\\Leaf.Name",
+        "storedPath": "%MetadataPath%\\artists\\Leaf.Name",
+        "Data": null,
+        "stampChanged": true
+      }
+    },
+    {
+      "name": "MusicArtist-first-None",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+            "reason": 2
+          },
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+            "reason": 3
+          },
+          {
+            "action": "reattach"
+          }
+        ],
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+        "storedPath": "%MetadataPath%\\old-scope\\Leaf.Name",
+        "Data": null,
+        "stampChanged": false
+      }
+    },
+    {
+      "name": "MusicArtist-first-ValidationOnly",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+            "reason": 2
+          },
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\artists\\Leaf.Name",
+            "reason": 3
+          },
+          {
+            "action": "reattach"
+          }
+        ],
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\artists\\Leaf.Name",
+        "storedPath": "%MetadataPath%\\artists\\Leaf.Name",
+        "Data": null,
+        "stampChanged": false
+      }
+    },
+    {
+      "name": "MusicArtist-first-Default",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+            "reason": 2
+          },
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\artists\\Leaf.Name",
+            "reason": 3
+          },
+          {
+            "action": "reattach"
+          }
+        ],
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\artists\\Leaf.Name",
+        "storedPath": "%MetadataPath%\\artists\\Leaf.Name",
+        "Data": null,
+        "stampChanged": true
+      }
+    },
+    {
+      "name": "MusicArtist-first-FullRefresh",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+            "reason": 2
+          },
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\artists\\Leaf.Name",
+            "reason": 3
+          },
+          {
+            "action": "reattach"
+          }
+        ],
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\artists\\Leaf.Name",
+        "storedPath": "%MetadataPath%\\artists\\Leaf.Name",
+        "Data": null,
+        "stampChanged": true
+      }
+    },
+    {
+      "name": "MusicArtist-none-force",
+      "exception": null,
+      "result": {
+        "updateType": 11,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+            "reason": 11
+          }
+        ],
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+        "storedPath": "%MetadataPath%\\old-scope\\Leaf.Name",
+        "Data": null,
+        "stampChanged": false
+      }
+    },
+    {
+      "name": "physical-artist-keeps-path",
+      "exception": null,
+      "result": {
+        "changed": false,
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\old-scope\\Leaf.Name"
+      }
+    },
+    {
+      "name": "Genre-before-case-only",
+      "exception": null,
+      "result": {
+        "changed": true,
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\Genre\\Leaf.Name"
+      }
+    },
+    {
+      "name": "Genre-requires-case-only",
+      "exception": null,
+      "result": {
+        "requiresRefresh": true,
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\genre\\Leaf.Name"
+      }
+    },
+    {
+      "name": "Genre-refresh-case-only",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\Genre\\Leaf.Name",
+            "reason": 3
+          }
+        ],
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\Genre\\Leaf.Name",
+        "storedPath": "%MetadataPath%\\Genre\\Leaf.Name",
+        "Data": null,
+        "stampChanged": true
+      }
+    },
+    {
+      "name": "MusicGenre-before-case-only",
+      "exception": null,
+      "result": {
+        "changed": true,
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\MusicGenre\\Leaf.Name"
+      }
+    },
+    {
+      "name": "MusicGenre-requires-case-only",
+      "exception": null,
+      "result": {
+        "requiresRefresh": true,
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\musicgenre\\Leaf.Name"
+      }
+    },
+    {
+      "name": "MusicGenre-refresh-case-only",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\MusicGenre\\Leaf.Name",
+            "reason": 3
+          }
+        ],
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\MusicGenre\\Leaf.Name",
+        "storedPath": "%MetadataPath%\\MusicGenre\\Leaf.Name",
+        "Data": null,
+        "stampChanged": true
+      }
+    },
+    {
+      "name": "Studio-before-case-only",
+      "exception": null,
+      "result": {
+        "changed": true,
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\Studio\\Leaf.Name"
+      }
+    },
+    {
+      "name": "Studio-requires-case-only",
+      "exception": null,
+      "result": {
+        "requiresRefresh": true,
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\studio\\Leaf.Name"
+      }
+    },
+    {
+      "name": "Studio-refresh-case-only",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\Studio\\Leaf.Name",
+            "reason": 3
+          }
+        ],
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\Studio\\Leaf.Name",
+        "storedPath": "%MetadataPath%\\Studio\\Leaf.Name",
+        "Data": null,
+        "stampChanged": true
+      }
+    },
+    {
+      "name": "Year-before-case-only",
+      "exception": null,
+      "result": {
+        "changed": true,
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\Year\\Leaf.Name"
+      }
+    },
+    {
+      "name": "Year-requires-case-only",
+      "exception": null,
+      "result": {
+        "requiresRefresh": true,
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\year\\Leaf.Name"
+      }
+    },
+    {
+      "name": "Year-refresh-case-only",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\Year\\Leaf.Name",
+            "reason": 3
+          }
+        ],
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\Year\\Leaf.Name",
+        "storedPath": "%MetadataPath%\\Year\\Leaf.Name",
+        "Data": null,
+        "stampChanged": true
+      }
+    },
+    {
+      "name": "Person-before-case-only",
+      "exception": null,
+      "result": {
+        "changed": true,
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\People\\L\\Leaf.Name"
+      }
+    },
+    {
+      "name": "Person-requires-case-only",
+      "exception": null,
+      "result": {
+        "requiresRefresh": true,
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\people\\l\\Leaf.Name"
+      }
+    },
+    {
+      "name": "Person-refresh-case-only",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\People\\L\\Leaf.Name",
+            "reason": 3
+          }
+        ],
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\People\\L\\Leaf.Name",
+        "storedPath": "%MetadataPath%\\People\\L\\Leaf.Name",
+        "Data": null,
+        "stampChanged": true
+      }
+    },
+    {
+      "name": "MusicArtist-before-case-only",
+      "exception": null,
+      "result": {
+        "changed": true,
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\artists\\Leaf.Name"
+      }
+    },
+    {
+      "name": "MusicArtist-requires-case-only",
+      "exception": null,
+      "result": {
+        "requiresRefresh": true,
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\ARTISTS\\Leaf.Name"
+      }
+    },
+    {
+      "name": "MusicArtist-refresh-case-only",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "Different Name",
+            "Path": "$STATE\\metadata\\artists\\Leaf.Name",
+            "reason": 3
+          }
+        ],
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\artists\\Leaf.Name",
+        "storedPath": "%MetadataPath%\\artists\\Leaf.Name",
+        "Data": null,
+        "stampChanged": true
+      }
+    },
+    {
+      "name": "person-leaf-85",
+      "exception": null,
+      "result": {
+        "changed": true,
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\People\\L\\--! Leaf.Name"
+      }
+    },
+    {
+      "name": "person-leaf-86",
+      "exception": null,
+      "result": {
+        "changed": true,
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\People\\é\\éclair"
+      }
+    },
+    {
+      "name": "person-leaf-87",
+      "exception": null,
+      "result": {
+        "changed": true,
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\People\\人\\😀人名"
+      }
+    },
+    {
+      "name": "person-leaf-88",
+      "exception": null,
+      "result": {
+        "changed": true,
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\People\\L\\  Leading.Name"
+      }
+    },
+    {
+      "name": "person-leaf-89",
+      "exception": null,
+      "result": {
+        "changed": true,
+        "Name": "Different Name",
+        "Path": "$STATE\\metadata\\People"
+      }
+    },
+    {
+      "name": "genre-empty-name-before",
+      "exception": null,
+      "result": {
+        "changed": true,
+        "Name": "Leaf",
+        "Path": "$STATE\\metadata\\Genre\\Leaf.Name"
+      }
+    },
+    {
+      "name": "genre-empty-name-refresh",
+      "exception": null,
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "action": "save",
+            "Name": "Leaf",
+            "Path": "$STATE\\metadata\\Genre\\Leaf.Name",
+            "reason": 3
+          }
+        ],
+        "Name": "Leaf",
+        "Path": "$STATE\\metadata\\Genre\\Leaf.Name",
+        "storedPath": "%MetadataPath%\\Genre\\Leaf.Name",
+        "Data": null,
+        "stampChanged": true
+      }
+    }
+  ],
+  "assemblies": [
+    {
+      "name": "MediaBrowser.Controller",
+      "path": "D:\\mediamanager\\.test-output\\validation\\by-name-refresh-oracle-20261005-1\\bin\\Release\\net10.0\\MediaBrowser.Controller.dll",
+      "sha256": "56a527307ef93f810fdadec33ba8380cc8416d38cb1cfea92297b0f65288808e"
+    },
+    {
+      "name": "MediaBrowser.Providers",
+      "path": "D:\\mediamanager\\.test-output\\validation\\by-name-refresh-oracle-20261005-1\\bin\\Release\\net10.0\\MediaBrowser.Providers.dll",
+      "sha256": "0255068ec9ff524c916c99aebd4553290141bb7b87e17da3a80c007b3b6fb129"
+    },
+    {
+      "name": "Jellyfin.Server.Implementations",
+      "path": "D:\\mediamanager\\.test-output\\validation\\by-name-refresh-oracle-20261005-1\\bin\\Release\\net10.0\\Jellyfin.Server.Implementations.dll",
+      "sha256": "b91a6797f81f8563b8896c3da3e5cd4e9d11c61eb084578bf7b81108c3c3e2e6"
+    },
+    {
+      "name": "Emby.Server.Implementations",
+      "path": "D:\\mediamanager\\.test-output\\validation\\by-name-refresh-oracle-20261005-1\\bin\\Release\\net10.0\\Emby.Server.Implementations.dll",
+      "sha256": "ccff8514100a65508b65882d5881463fe4ff73ea07eb4d2b2d98e234d7b4ac99"
+    },
+    {
+      "name": "jellyfin",
+      "path": "D:\\mediamanager\\.test-output\\validation\\by-name-refresh-oracle-20261005-1\\bin\\Release\\net10.0\\jellyfin.dll",
+      "sha256": "29c34541350089dc0522c4309ecd617e78fd402774681f32491d089803939c03"
+    },
+    {
+      "name": "Jellyfin.Database.Implementations",
+      "path": "D:\\mediamanager\\.test-output\\validation\\by-name-refresh-oracle-20261005-1\\bin\\Release\\net10.0\\Jellyfin.Database.Implementations.dll",
+      "sha256": "21648ea8e6eec045789c66c199b30c68b1b00f6e15918ac66347c19244b5670b"
+    },
+    {
+      "name": "Jellyfin.Database.Providers.Sqlite",
+      "path": "D:\\mediamanager\\.test-output\\validation\\by-name-refresh-oracle-20261005-1\\bin\\Release\\net10.0\\Jellyfin.Database.Providers.Sqlite.dll",
+      "sha256": "eefedf49a1c6c62c7eab9b4347c0bca377c3e059ec61ef26a08148de7bba94bb"
+    }
+  ],
+  "scope": "Real entity RequiresRefresh/BeforeMetadataRefresh, six actual by-name MetadataServices and empty ProviderManager, ManagedFileSystem directories, ItemPersistenceService/EF SQLite. Actual ApplicationHost.ReverseVirtualPath on an unconstructed CoreAppHost with only its application-paths field initialized. Parent/collection/library-option lookups, save and reattachment bridges and path protocol are controls. Save bridge calls real SaveItems; reattachment bridge records invocation. No image/NFO provider, network, full scalar/table projection, top root or scanner acceptance.",
+  "schemaVersion": 1,
+  "candidateVerified": false,
+  "inputSha256": "e2904f9dc6eb8956bbc5a160ba364b6be243978c55c1b1fd1240a9335960ff0f",
+  "sourceFilesSha256": "706e46fc5b356689e40295eaadf0e1ac1e45b233f018bfa51f094ff53d50144b"
+}

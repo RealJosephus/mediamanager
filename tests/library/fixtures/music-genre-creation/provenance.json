@@ -1,0 +1,93 @@
+{
+  "nativeSha256": "b41ba620b6e1993df3f0e0b717dbd204d884ea7b4bfdfa592803f9a31f3c64aa",
+  "sources": [
+    {
+      "path": "Emby.Server.Implementations/Library/LibraryManager.cs",
+      "sha256": "4729de97560262702a44c5829bf93bbc5deec379e9b3018b231aaa6d65643c44",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/Audio/MusicGenre.cs",
+      "sha256": "8901cc5615e772e8accbd9f5a2c22009faa144cecc9a38b0e68d51d7ef9e7b83",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/BaseItem.cs",
+      "sha256": "9dc7b96a93c9fbe874cdcededdca395b5aa2df6070f5cfc9c8959539dcd76469",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Library/NameExtensions.cs",
+      "sha256": "58dbce701d53e74124ad4342c396ae14894b208316868a8210d9c4de5afd9c5f",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "Jellyfin.Server.Implementations/Item/ItemPersistenceService.cs",
+      "sha256": "df64ede4e72fca107cb86127e44b4c81321b3cf560ea3b7f0eccf4462f148d14",
+      "designatedSourceMatchesOracleBuildCopy": true
+    }
+  ],
+  "oracleSources": [
+    {
+      "name": "Oracle.csproj",
+      "sha256": "0b9d3e600bbf152d421f8a0ca199b075aa18811d2141e3f44f42533440e3320c"
+    },
+    {
+      "name": "Directory.Build.props",
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    },
+    {
+      "name": "Program.cs",
+      "sha256": "efedd0ffd817cda5c5094598326e679cf2f40fdfb4878a8d78784693e58a2fcd"
+    }
+  ],
+  "oracleAssembly": {
+    "filename": "D:\\mediamanager-validation\\20261012-music-genre-native-4\\native\\bin\\Release\\net10.0\\Oracle.dll",
+    "available": true,
+    "kind": "file",
+    "bytes": 45056,
+    "sha256": "3f450c92e4fca9d96d1e71a9b067850d84061911d5dc63e62b27d0f70e915239"
+  },
+  "jellyfinDll": {
+    "filename": "D:/mediamanager-validation/20261005/jellyfin-baseline/source/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll",
+    "available": true,
+    "kind": "file",
+    "bytes": 506368,
+    "sha256": "a43fa24c44677e579fcec79d637789b9f36633d02e5434e76a0e03fa13027767"
+  },
+  "dotnet": {
+    "filename": "D:\\mediamanager\\.tools\\dotnet\\dotnet.exe",
+    "available": true,
+    "kind": "file",
+    "bytes": 167208,
+    "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6"
+  },
+  "build": {
+    "args": [
+      "build",
+      "D:\\mediamanager-validation\\20261012-music-genre-native-4\\native\\project\\Oracle.csproj",
+      "-c",
+      "Release",
+      "--nologo",
+      "-v",
+      "minimal",
+      "-p:BaseOutputPath=D:\\mediamanager-validation\\20261012-music-genre-native-4\\native\\bin\\",
+      "-p:BaseIntermediateOutputPath=D:\\mediamanager-validation\\20261012-music-genre-native-4\\native\\obj\\"
+    ],
+    "status": 0,
+    "signal": null
+  },
+  "process": {
+    "args": [
+      "D:\\mediamanager-validation\\20261012-music-genre-native-4\\native\\bin\\Release\\net10.0\\Oracle.dll",
+      "D:\\mediamanager-validation\\20261012-music-genre-native-4\\native/instances",
+      "D:\\mediamanager-validation\\20261012-music-genre-native-4\\native/native.json"
+    ],
+    "status": 0,
+    "signal": null
+  },
+  "cases": 15,
+  "evidence": "D:/mediamanager-validation/20261012-music-genre-native-4",
+  "completeBuildInputClosure": false,
+  "phaseAcceptance": false
+}

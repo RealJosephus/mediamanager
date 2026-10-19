@@ -1,0 +1,1462 @@
+{
+  "actualFrozenVideoVersionRelations": true,
+  "inputSha256": "5c8c4bb94366ede755652f82fe520ae52ecc86db473cd6e952880ae634353142",
+  "results": [
+    {
+      "name": "empty-family",
+      "exception": null,
+      "items": [
+        {
+          "id": "a7180000-0000-0000-0000-000000000001",
+          "name": "Saved owner",
+          "path": "Z:\\Versions\\Film.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": "owner-saved-key",
+          "runTimeTicks": null
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000002",
+          "name": "Seed alternate A",
+          "path": "Z:\\Versions\\Film 1080p.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "runTimeTicks": 9007199254740995
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000003",
+          "name": "Seed alternate B",
+          "path": "Z:\\Versions\\Film 720p.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "runTimeTicks": null
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000004",
+          "name": "Foreign owner",
+          "path": "Z:\\Other\\Foreign.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "runTimeTicks": null
+        }
+      ],
+      "links": [],
+      "tables": []
+    },
+    {
+      "name": "local-order-empty-unresolved",
+      "exception": null,
+      "items": [
+        {
+          "id": "a7180000-0000-0000-0000-000000000001",
+          "name": "Saved owner",
+          "path": "Z:\\Versions\\Film.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": "owner-saved-key",
+          "runTimeTicks": null
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000002",
+          "name": "Seed alternate A",
+          "path": "Z:\\Versions\\Film 1080p.mkv",
+          "ownerId": null,
+          "primaryVersionId": "a7180000-0000-0000-0000-000000000001",
+          "presentationUniqueKey": "a7180000000000000000000000000001",
+          "runTimeTicks": 9007199254740995
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000003",
+          "name": "Seed alternate B",
+          "path": "Z:\\Versions\\Film 720p.mkv",
+          "ownerId": null,
+          "primaryVersionId": "a7180000-0000-0000-0000-000000000001",
+          "presentationUniqueKey": "a7180000000000000000000000000001",
+          "runTimeTicks": null
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000004",
+          "name": "Foreign owner",
+          "path": "Z:\\Other\\Foreign.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "runTimeTicks": null
+        }
+      ],
+      "links": [
+        {
+          "parentId": "a7180000-0000-0000-0000-000000000001",
+          "childId": "a7180000-0000-0000-0000-000000000003",
+          "childType": 2,
+          "sortOrder": 0
+        },
+        {
+          "parentId": "a7180000-0000-0000-0000-000000000001",
+          "childId": "a7180000-0000-0000-0000-000000000002",
+          "childType": 2,
+          "sortOrder": 1
+        }
+      ],
+      "tables": []
+    },
+    {
+      "name": "linked-order-empty-unresolved",
+      "exception": null,
+      "items": [
+        {
+          "id": "a7180000-0000-0000-0000-000000000001",
+          "name": "Saved owner",
+          "path": "Z:\\Versions\\Film.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": "owner-saved-key",
+          "runTimeTicks": null
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000002",
+          "name": "Seed alternate A",
+          "path": "Z:\\Versions\\Film 1080p.mkv",
+          "ownerId": null,
+          "primaryVersionId": "a7180000-0000-0000-0000-000000000001",
+          "presentationUniqueKey": "a7180000000000000000000000000001",
+          "runTimeTicks": 9007199254740995
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000003",
+          "name": "Seed alternate B",
+          "path": "Z:\\Versions\\Film 720p.mkv",
+          "ownerId": null,
+          "primaryVersionId": "a7180000-0000-0000-0000-000000000001",
+          "presentationUniqueKey": "a7180000000000000000000000000001",
+          "runTimeTicks": null
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000004",
+          "name": "Foreign owner",
+          "path": "Z:\\Other\\Foreign.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "runTimeTicks": null
+        }
+      ],
+      "links": [
+        {
+          "parentId": "a7180000-0000-0000-0000-000000000001",
+          "childId": "a7180000-0000-0000-0000-000000000003",
+          "childType": 3,
+          "sortOrder": 0
+        },
+        {
+          "parentId": "a7180000-0000-0000-0000-000000000001",
+          "childId": "a7180000-0000-0000-0000-000000000002",
+          "childType": 3,
+          "sortOrder": 1
+        }
+      ],
+      "tables": []
+    },
+    {
+      "name": "local-priority-and-dedup",
+      "exception": null,
+      "items": [
+        {
+          "id": "a7180000-0000-0000-0000-000000000001",
+          "name": "Saved owner",
+          "path": "Z:\\Versions\\Film.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": "owner-saved-key",
+          "runTimeTicks": null
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000002",
+          "name": "Seed alternate A",
+          "path": "Z:\\Versions\\Film 1080p.mkv",
+          "ownerId": null,
+          "primaryVersionId": "a7180000-0000-0000-0000-000000000001",
+          "presentationUniqueKey": "a7180000000000000000000000000001",
+          "runTimeTicks": 9007199254740995
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000003",
+          "name": "Seed alternate B",
+          "path": "Z:\\Versions\\Film 720p.mkv",
+          "ownerId": null,
+          "primaryVersionId": "a7180000-0000-0000-0000-000000000001",
+          "presentationUniqueKey": "a7180000000000000000000000000001",
+          "runTimeTicks": null
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000004",
+          "name": "Foreign owner",
+          "path": "Z:\\Other\\Foreign.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "runTimeTicks": null
+        }
+      ],
+      "links": [
+        {
+          "parentId": "a7180000-0000-0000-0000-000000000001",
+          "childId": "a7180000-0000-0000-0000-000000000003",
+          "childType": 2,
+          "sortOrder": 0
+        },
+        {
+          "parentId": "a7180000-0000-0000-0000-000000000001",
+          "childId": "a7180000-0000-0000-0000-000000000002",
+          "childType": 2,
+          "sortOrder": 1
+        }
+      ],
+      "tables": []
+    },
+    {
+      "name": "unrelated-parent-links-survive",
+      "exception": null,
+      "items": [
+        {
+          "id": "a7180000-0000-0000-0000-000000000001",
+          "name": "Saved owner",
+          "path": "Z:\\Versions\\Film.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": "owner-saved-key",
+          "runTimeTicks": null
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000002",
+          "name": "Seed alternate A",
+          "path": "Z:\\Versions\\Film 1080p.mkv",
+          "ownerId": null,
+          "primaryVersionId": "a7180000-0000-0000-0000-000000000001",
+          "presentationUniqueKey": "a7180000000000000000000000000001",
+          "runTimeTicks": 9007199254740995
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000003",
+          "name": "Seed alternate B",
+          "path": "Z:\\Versions\\Film 720p.mkv",
+          "ownerId": null,
+          "primaryVersionId": "a7180000-0000-0000-0000-000000000001",
+          "presentationUniqueKey": "a7180000000000000000000000000001",
+          "runTimeTicks": null
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000004",
+          "name": "Foreign owner",
+          "path": "Z:\\Other\\Foreign.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "runTimeTicks": null
+        }
+      ],
+      "links": [
+        {
+          "parentId": "a7180000-0000-0000-0000-000000000001",
+          "childId": "a7180000-0000-0000-0000-000000000002",
+          "childType": 2,
+          "sortOrder": 0
+        },
+        {
+          "parentId": "a7180000-0000-0000-0000-000000000001",
+          "childId": "a7180000-0000-0000-0000-000000000003",
+          "childType": 2,
+          "sortOrder": 1
+        },
+        {
+          "parentId": "a7180000-0000-0000-0000-000000000001",
+          "childId": "a7180000-0000-0000-0000-000000000004",
+          "childType": 0,
+          "sortOrder": 10
+        },
+        {
+          "parentId": "a7180000-0000-0000-0000-000000000001",
+          "childId": "a7180000-0000-0000-0000-000000000003",
+          "childType": 1,
+          "sortOrder": 11
+        }
+      ],
+      "tables": []
+    },
+    {
+      "name": "removed-owned-local-is-deleted",
+      "exception": null,
+      "items": [
+        {
+          "id": "a7180000-0000-0000-0000-000000000001",
+          "name": "Saved owner",
+          "path": "Z:\\Versions\\Film.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": "owner-saved-key",
+          "runTimeTicks": null
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000003",
+          "name": "Seed alternate B",
+          "path": "Z:\\Versions\\Film 720p.mkv",
+          "ownerId": null,
+          "primaryVersionId": "a7180000-0000-0000-0000-000000000001",
+          "presentationUniqueKey": null,
+          "runTimeTicks": null
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000004",
+          "name": "Foreign owner",
+          "path": "Z:\\Other\\Foreign.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "runTimeTicks": null
+        }
+      ],
+      "links": [],
+      "tables": []
+    },
+    {
+      "name": "removed-unowned-local-survives",
+      "exception": null,
+      "items": [
+        {
+          "id": "a7180000-0000-0000-0000-000000000001",
+          "name": "Saved owner",
+          "path": "Z:\\Versions\\Film.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": "owner-saved-key",
+          "runTimeTicks": null
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000002",
+          "name": "Seed alternate A",
+          "path": "Z:\\Versions\\Film 1080p.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "runTimeTicks": 9007199254740995
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000003",
+          "name": "Seed alternate B",
+          "path": "Z:\\Versions\\Film 720p.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "runTimeTicks": null
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000004",
+          "name": "Foreign owner",
+          "path": "Z:\\Other\\Foreign.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "runTimeTicks": null
+        }
+      ],
+      "links": [],
+      "tables": []
+    },
+    {
+      "name": "removed-foreign-owned-local-survives",
+      "exception": null,
+      "items": [
+        {
+          "id": "a7180000-0000-0000-0000-000000000001",
+          "name": "Saved owner",
+          "path": "Z:\\Versions\\Film.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": "owner-saved-key",
+          "runTimeTicks": null
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000002",
+          "name": "Seed alternate A",
+          "path": "Z:\\Versions\\Film 1080p.mkv",
+          "ownerId": "a7180000-0000-0000-0000-000000000004",
+          "primaryVersionId": "a7180000-0000-0000-0000-000000000004",
+          "presentationUniqueKey": null,
+          "runTimeTicks": 9007199254740995
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000003",
+          "name": "Seed alternate B",
+          "path": "Z:\\Versions\\Film 720p.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "runTimeTicks": null
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000004",
+          "name": "Foreign owner",
+          "path": "Z:\\Other\\Foreign.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "runTimeTicks": null
+        }
+      ],
+      "links": [],
+      "tables": []
+    },
+    {
+      "name": "local-becomes-linked-retains-owned-row",
+      "exception": null,
+      "items": [
+        {
+          "id": "a7180000-0000-0000-0000-000000000001",
+          "name": "Saved owner",
+          "path": "Z:\\Versions\\Film.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": "owner-saved-key",
+          "runTimeTicks": null
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000002",
+          "name": "Seed alternate A",
+          "path": "Z:\\Versions\\Film 1080p.mkv",
+          "ownerId": "a7180000-0000-0000-0000-000000000001",
+          "primaryVersionId": "a7180000-0000-0000-0000-000000000001",
+          "presentationUniqueKey": null,
+          "runTimeTicks": 9007199254740995
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000003",
+          "name": "Seed alternate B",
+          "path": "Z:\\Versions\\Film 720p.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "runTimeTicks": null
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000004",
+          "name": "Foreign owner",
+          "path": "Z:\\Other\\Foreign.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "runTimeTicks": null
+        }
+      ],
+      "links": [
+        {
+          "parentId": "a7180000-0000-0000-0000-000000000001",
+          "childId": "a7180000-0000-0000-0000-000000000002",
+          "childType": 3,
+          "sortOrder": 0
+        }
+      ],
+      "tables": []
+    },
+    {
+      "name": "linked-becomes-local",
+      "exception": null,
+      "items": [
+        {
+          "id": "a7180000-0000-0000-0000-000000000001",
+          "name": "Saved owner",
+          "path": "Z:\\Versions\\Film.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": "owner-saved-key",
+          "runTimeTicks": null
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000002",
+          "name": "Seed alternate A",
+          "path": "Z:\\Versions\\Film 1080p.mkv",
+          "ownerId": null,
+          "primaryVersionId": "a7180000-0000-0000-0000-000000000001",
+          "presentationUniqueKey": "a7180000000000000000000000000001",
+          "runTimeTicks": 9007199254740995
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000003",
+          "name": "Seed alternate B",
+          "path": "Z:\\Versions\\Film 720p.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "runTimeTicks": null
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000004",
+          "name": "Foreign owner",
+          "path": "Z:\\Other\\Foreign.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "runTimeTicks": null
+        }
+      ],
+      "links": [
+        {
+          "parentId": "a7180000-0000-0000-0000-000000000001",
+          "childId": "a7180000-0000-0000-0000-000000000002",
+          "childType": 2,
+          "sortOrder": 0
+        }
+      ],
+      "tables": []
+    },
+    {
+      "name": "self-and-own-primary-not-demoted",
+      "exception": null,
+      "items": [
+        {
+          "id": "a7180000-0000-0000-0000-000000000001",
+          "name": "Saved owner",
+          "path": "Z:\\Versions\\Film.mkv",
+          "ownerId": null,
+          "primaryVersionId": "a7180000-0000-0000-0000-000000000004",
+          "presentationUniqueKey": "owner-saved-key",
+          "runTimeTicks": null
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000002",
+          "name": "Seed alternate A",
+          "path": "Z:\\Versions\\Film 1080p.mkv",
+          "ownerId": null,
+          "primaryVersionId": "a7180000-0000-0000-0000-000000000001",
+          "presentationUniqueKey": "a7180000000000000000000000000001",
+          "runTimeTicks": 9007199254740995
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000003",
+          "name": "Seed alternate B",
+          "path": "Z:\\Versions\\Film 720p.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "runTimeTicks": null
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000004",
+          "name": "Foreign owner",
+          "path": "Z:\\Other\\Foreign.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "runTimeTicks": null
+        }
+      ],
+      "links": [
+        {
+          "parentId": "a7180000-0000-0000-0000-000000000001",
+          "childId": "a7180000-0000-0000-0000-000000000001",
+          "childType": 2,
+          "sortOrder": 0
+        },
+        {
+          "parentId": "a7180000-0000-0000-0000-000000000001",
+          "childId": "a7180000-0000-0000-0000-000000000004",
+          "childType": 2,
+          "sortOrder": 1
+        },
+        {
+          "parentId": "a7180000-0000-0000-0000-000000000001",
+          "childId": "a7180000-0000-0000-0000-000000000002",
+          "childType": 2,
+          "sortOrder": 2
+        }
+      ],
+      "tables": []
+    },
+    {
+      "name": "existing-primary-keeps-existing-key",
+      "exception": null,
+      "items": [
+        {
+          "id": "a7180000-0000-0000-0000-000000000001",
+          "name": "Saved owner",
+          "path": "Z:\\Versions\\Film.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": "owner-saved-key",
+          "runTimeTicks": null
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000002",
+          "name": "Seed alternate A",
+          "path": "Z:\\Versions\\Film 1080p.mkv",
+          "ownerId": null,
+          "primaryVersionId": "a7180000-0000-0000-0000-000000000001",
+          "presentationUniqueKey": "preexisting-key",
+          "runTimeTicks": 9007199254740995
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000003",
+          "name": "Seed alternate B",
+          "path": "Z:\\Versions\\Film 720p.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "runTimeTicks": null
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000004",
+          "name": "Foreign owner",
+          "path": "Z:\\Other\\Foreign.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "runTimeTicks": null
+        }
+      ],
+      "links": [
+        {
+          "parentId": "a7180000-0000-0000-0000-000000000001",
+          "childId": "a7180000-0000-0000-0000-000000000002",
+          "childType": 2,
+          "sortOrder": 0
+        }
+      ],
+      "tables": []
+    },
+    {
+      "name": "foreign-primary-is-demoted",
+      "exception": null,
+      "items": [
+        {
+          "id": "a7180000-0000-0000-0000-000000000001",
+          "name": "Saved owner",
+          "path": "Z:\\Versions\\Film.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": "owner-saved-key",
+          "runTimeTicks": null
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000002",
+          "name": "Seed alternate A",
+          "path": "Z:\\Versions\\Film 1080p.mkv",
+          "ownerId": null,
+          "primaryVersionId": "a7180000-0000-0000-0000-000000000001",
+          "presentationUniqueKey": "a7180000000000000000000000000001",
+          "runTimeTicks": 9007199254740995
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000003",
+          "name": "Seed alternate B",
+          "path": "Z:\\Versions\\Film 720p.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "runTimeTicks": null
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000004",
+          "name": "Foreign owner",
+          "path": "Z:\\Other\\Foreign.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "runTimeTicks": null
+        }
+      ],
+      "links": [
+        {
+          "parentId": "a7180000-0000-0000-0000-000000000001",
+          "childId": "a7180000-0000-0000-0000-000000000002",
+          "childType": 3,
+          "sortOrder": 0
+        }
+      ],
+      "tables": []
+    },
+    {
+      "name": "non-video-child-is-not-filtered",
+      "exception": null,
+      "items": [
+        {
+          "id": "a7180000-0000-0000-0000-000000000001",
+          "name": "Saved owner",
+          "path": "Z:\\Versions\\Film.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": "owner-saved-key",
+          "runTimeTicks": null
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000002",
+          "name": "Seed alternate A",
+          "path": "Z:\\Versions\\Film 1080p.mkv",
+          "ownerId": null,
+          "primaryVersionId": "a7180000-0000-0000-0000-000000000001",
+          "presentationUniqueKey": "a7180000000000000000000000000001",
+          "runTimeTicks": 9007199254740995
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000003",
+          "name": "Seed alternate B",
+          "path": "Z:\\Versions\\Film 720p.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "runTimeTicks": null
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000004",
+          "name": "Foreign owner",
+          "path": "Z:\\Other\\Foreign.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "runTimeTicks": null
+        }
+      ],
+      "links": [
+        {
+          "parentId": "a7180000-0000-0000-0000-000000000001",
+          "childId": "a7180000-0000-0000-0000-000000000002",
+          "childType": 2,
+          "sortOrder": 0
+        }
+      ],
+      "tables": []
+    },
+    {
+      "name": "literal-case-sensitive-path-resolution",
+      "exception": null,
+      "items": [
+        {
+          "id": "a7180000-0000-0000-0000-000000000001",
+          "name": "Saved owner",
+          "path": "Z:\\Versions\\Film.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": "owner-saved-key",
+          "runTimeTicks": null
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000002",
+          "name": "Seed alternate A",
+          "path": "Z:\\Versions\\Film 1080p.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "runTimeTicks": 9007199254740995
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000003",
+          "name": "Seed alternate B",
+          "path": "Z:\\Versions\\Film 720p.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "runTimeTicks": null
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000004",
+          "name": "Foreign owner",
+          "path": "Z:\\Other\\Foreign.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "runTimeTicks": null
+        }
+      ],
+      "links": [],
+      "tables": []
+    },
+    {
+      "name": "repeat-rebuild-is-stable",
+      "exception": null,
+      "items": [
+        {
+          "id": "a7180000-0000-0000-0000-000000000001",
+          "name": "Saved owner",
+          "path": "Z:\\Versions\\Film.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": "owner-saved-key",
+          "runTimeTicks": null
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000002",
+          "name": "Seed alternate A",
+          "path": "Z:\\Versions\\Film 1080p.mkv",
+          "ownerId": null,
+          "primaryVersionId": "a7180000-0000-0000-0000-000000000001",
+          "presentationUniqueKey": "a7180000000000000000000000000001",
+          "runTimeTicks": 9007199254740995
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000003",
+          "name": "Seed alternate B",
+          "path": "Z:\\Versions\\Film 720p.mkv",
+          "ownerId": null,
+          "primaryVersionId": "a7180000-0000-0000-0000-000000000001",
+          "presentationUniqueKey": "a7180000000000000000000000000001",
+          "runTimeTicks": null
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000004",
+          "name": "Foreign owner",
+          "path": "Z:\\Other\\Foreign.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "runTimeTicks": null
+        }
+      ],
+      "links": [
+        {
+          "parentId": "a7180000-0000-0000-0000-000000000001",
+          "childId": "a7180000-0000-0000-0000-000000000002",
+          "childType": 2,
+          "sortOrder": 0
+        },
+        {
+          "parentId": "a7180000-0000-0000-0000-000000000001",
+          "childId": "a7180000-0000-0000-0000-000000000003",
+          "childType": 2,
+          "sortOrder": 1
+        }
+      ],
+      "tables": []
+    },
+    {
+      "name": "non-video-owner-leaves-links",
+      "exception": null,
+      "items": [
+        {
+          "id": "a7180000-0000-0000-0000-000000000001",
+          "name": "Saved owner",
+          "path": "Z:\\Versions\\Film.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": "owner-saved-key",
+          "runTimeTicks": null
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000002",
+          "name": "Seed alternate A",
+          "path": "Z:\\Versions\\Film 1080p.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "runTimeTicks": 9007199254740995
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000003",
+          "name": "Seed alternate B",
+          "path": "Z:\\Versions\\Film 720p.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "runTimeTicks": null
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000004",
+          "name": "Foreign owner",
+          "path": "Z:\\Other\\Foreign.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "runTimeTicks": null
+        }
+      ],
+      "links": [
+        {
+          "parentId": "a7180000-0000-0000-0000-000000000001",
+          "childId": "a7180000-0000-0000-0000-000000000002",
+          "childType": 2,
+          "sortOrder": 0
+        },
+        {
+          "parentId": "a7180000-0000-0000-0000-000000000001",
+          "childId": "a7180000-0000-0000-0000-000000000003",
+          "childType": 3,
+          "sortOrder": 1
+        }
+      ],
+      "tables": []
+    },
+    {
+      "name": "direct-orphan-fk-and-non-fk-boundary",
+      "exception": null,
+      "items": [
+        {
+          "id": "a7180000-0000-0000-0000-000000000001",
+          "name": "Saved owner",
+          "path": "Z:\\Versions\\Film.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": "owner-saved-key",
+          "runTimeTicks": null
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000003",
+          "name": "Seed alternate B",
+          "path": "Z:\\Versions\\Film 720p.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "runTimeTicks": null
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000004",
+          "name": "Foreign owner",
+          "path": "Z:\\Other\\Foreign.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "runTimeTicks": null
+        }
+      ],
+      "links": [],
+      "tables": [
+        {
+          "name": "Users",
+          "rows": [
+            [
+              "a7180000-0000-0000-0000-000000000010"
+            ]
+          ]
+        },
+        {
+          "name": "Peoples",
+          "rows": [
+            [
+              "a7180000-0000-0000-0000-000000000011"
+            ]
+          ]
+        },
+        {
+          "name": "ItemValues",
+          "rows": [
+            [
+              "a7180000-0000-0000-0000-000000000012"
+            ]
+          ]
+        },
+        {
+          "name": "AncestorIds",
+          "rows": []
+        },
+        {
+          "name": "BaseItemProviders",
+          "rows": []
+        },
+        {
+          "name": "BaseItemMetadataFields",
+          "rows": []
+        },
+        {
+          "name": "BaseItemImageInfos",
+          "rows": []
+        },
+        {
+          "name": "BaseItemTrailerTypes",
+          "rows": []
+        },
+        {
+          "name": "AttachmentStreamInfos",
+          "rows": []
+        },
+        {
+          "name": "Chapters",
+          "rows": []
+        },
+        {
+          "name": "ItemValuesMap",
+          "rows": []
+        },
+        {
+          "name": "KeyframeData",
+          "rows": []
+        },
+        {
+          "name": "MediaStreamInfos",
+          "rows": []
+        },
+        {
+          "name": "PeopleBaseItemMap",
+          "rows": []
+        },
+        {
+          "name": "UserData",
+          "rows": []
+        },
+        {
+          "name": "MediaSegments",
+          "rows": [
+            [
+              "a7180000-0000-0000-0000-000000000002"
+            ]
+          ]
+        },
+        {
+          "name": "TrickplayInfos",
+          "rows": [
+            [
+              "a7180000-0000-0000-0000-000000000002"
+            ]
+          ]
+        },
+        {
+          "name": "CustomItemDisplayPreferences",
+          "rows": [
+            [
+              "a7180000-0000-0000-0000-000000000002"
+            ]
+          ]
+        },
+        {
+          "name": "DisplayPreferences",
+          "rows": [
+            [
+              "a7180000-0000-0000-0000-000000000002"
+            ]
+          ]
+        },
+        {
+          "name": "ItemDisplayPreferences",
+          "rows": [
+            [
+              "a7180000-0000-0000-0000-000000000002"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "name": "owned-extra-blocks-direct-orphan-delete",
+      "exception": "DbUpdateException",
+      "items": [
+        {
+          "id": "a7180000-0000-0000-0000-000000000001",
+          "name": "Seed owner",
+          "path": "Z:\\Versions\\Film.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "runTimeTicks": null
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000002",
+          "name": "Seed alternate A",
+          "path": "Z:\\Versions\\Film 1080p.mkv",
+          "ownerId": "a7180000-0000-0000-0000-000000000001",
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "runTimeTicks": 9007199254740995
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000003",
+          "name": "Seed alternate B",
+          "path": "Z:\\Versions\\Film 720p.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "runTimeTicks": null
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000004",
+          "name": "Foreign owner",
+          "path": "Z:\\Other\\Foreign.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "runTimeTicks": null
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000005",
+          "name": "Owned extra",
+          "path": null,
+          "ownerId": "a7180000-0000-0000-0000-000000000002",
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "runTimeTicks": null
+        }
+      ],
+      "links": [
+        {
+          "parentId": "a7180000-0000-0000-0000-000000000001",
+          "childId": "a7180000-0000-0000-0000-000000000002",
+          "childType": 2,
+          "sortOrder": 0
+        }
+      ],
+      "tables": []
+    },
+    {
+      "name": "foreign-link-blocks-direct-orphan-delete",
+      "exception": "DbUpdateException",
+      "items": [
+        {
+          "id": "a7180000-0000-0000-0000-000000000001",
+          "name": "Seed owner",
+          "path": "Z:\\Versions\\Film.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "runTimeTicks": null
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000002",
+          "name": "Seed alternate A",
+          "path": "Z:\\Versions\\Film 1080p.mkv",
+          "ownerId": "a7180000-0000-0000-0000-000000000001",
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "runTimeTicks": 9007199254740995
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000003",
+          "name": "Seed alternate B",
+          "path": "Z:\\Versions\\Film 720p.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "runTimeTicks": null
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000004",
+          "name": "Foreign owner",
+          "path": "Z:\\Other\\Foreign.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "runTimeTicks": null
+        }
+      ],
+      "links": [
+        {
+          "parentId": "a7180000-0000-0000-0000-000000000001",
+          "childId": "a7180000-0000-0000-0000-000000000002",
+          "childType": 2,
+          "sortOrder": 0
+        },
+        {
+          "parentId": "a7180000-0000-0000-0000-000000000004",
+          "childId": "a7180000-0000-0000-0000-000000000002",
+          "childType": 0,
+          "sortOrder": 0
+        }
+      ],
+      "tables": []
+    },
+    {
+      "name": "manual-sort-collision-rolls-back",
+      "exception": "InvalidOperationException",
+      "items": [
+        {
+          "id": "a7180000-0000-0000-0000-000000000001",
+          "name": "Seed owner",
+          "path": "Z:\\Versions\\Film.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "runTimeTicks": null
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000002",
+          "name": "Seed alternate A",
+          "path": "Z:\\Versions\\Film 1080p.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "runTimeTicks": 9007199254740995
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000003",
+          "name": "Seed alternate B",
+          "path": "Z:\\Versions\\Film 720p.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "runTimeTicks": null
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000004",
+          "name": "Foreign owner",
+          "path": "Z:\\Other\\Foreign.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "runTimeTicks": null
+        }
+      ],
+      "links": [
+        {
+          "parentId": "a7180000-0000-0000-0000-000000000001",
+          "childId": "a7180000-0000-0000-0000-000000000003",
+          "childType": 0,
+          "sortOrder": 0
+        }
+      ],
+      "tables": []
+    },
+    {
+      "name": "failure-delete-links",
+      "exception": "DbUpdateException",
+      "items": [
+        {
+          "id": "a7180000-0000-0000-0000-000000000001",
+          "name": "Seed owner",
+          "path": "Z:\\Versions\\Film.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "runTimeTicks": null
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000002",
+          "name": "Seed alternate A",
+          "path": "Z:\\Versions\\Film 1080p.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "runTimeTicks": 9007199254740995
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000003",
+          "name": "Seed alternate B",
+          "path": "Z:\\Versions\\Film 720p.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "runTimeTicks": null
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000004",
+          "name": "Foreign owner",
+          "path": "Z:\\Other\\Foreign.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "runTimeTicks": null
+        }
+      ],
+      "links": [
+        {
+          "parentId": "a7180000-0000-0000-0000-000000000001",
+          "childId": "a7180000-0000-0000-0000-000000000003",
+          "childType": 2,
+          "sortOrder": 3
+        }
+      ],
+      "tables": []
+    },
+    {
+      "name": "failure-insert-links",
+      "exception": "DbUpdateException",
+      "items": [
+        {
+          "id": "a7180000-0000-0000-0000-000000000001",
+          "name": "Seed owner",
+          "path": "Z:\\Versions\\Film.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "runTimeTicks": null
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000002",
+          "name": "Seed alternate A",
+          "path": "Z:\\Versions\\Film 1080p.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "runTimeTicks": 9007199254740995
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000003",
+          "name": "Seed alternate B",
+          "path": "Z:\\Versions\\Film 720p.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "runTimeTicks": null
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000004",
+          "name": "Foreign owner",
+          "path": "Z:\\Other\\Foreign.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "runTimeTicks": null
+        }
+      ],
+      "links": [],
+      "tables": []
+    },
+    {
+      "name": "failure-demotion",
+      "exception": "DbUpdateException",
+      "items": [
+        {
+          "id": "a7180000-0000-0000-0000-000000000001",
+          "name": "Seed owner",
+          "path": "Z:\\Versions\\Film.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "runTimeTicks": null
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000002",
+          "name": "Seed alternate A",
+          "path": "Z:\\Versions\\Film 1080p.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "runTimeTicks": 9007199254740995
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000003",
+          "name": "Seed alternate B",
+          "path": "Z:\\Versions\\Film 720p.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "runTimeTicks": null
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000004",
+          "name": "Foreign owner",
+          "path": "Z:\\Other\\Foreign.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "runTimeTicks": null
+        }
+      ],
+      "links": [],
+      "tables": []
+    },
+    {
+      "name": "failure-orphan-delete",
+      "exception": "DbUpdateException",
+      "items": [
+        {
+          "id": "a7180000-0000-0000-0000-000000000001",
+          "name": "Seed owner",
+          "path": "Z:\\Versions\\Film.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "runTimeTicks": null
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000002",
+          "name": "Seed alternate A",
+          "path": "Z:\\Versions\\Film 1080p.mkv",
+          "ownerId": "a7180000-0000-0000-0000-000000000001",
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "runTimeTicks": 9007199254740995
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000003",
+          "name": "Seed alternate B",
+          "path": "Z:\\Versions\\Film 720p.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "runTimeTicks": null
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000004",
+          "name": "Foreign owner",
+          "path": "Z:\\Other\\Foreign.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "runTimeTicks": null
+        }
+      ],
+      "links": [
+        {
+          "parentId": "a7180000-0000-0000-0000-000000000001",
+          "childId": "a7180000-0000-0000-0000-000000000002",
+          "childType": 2,
+          "sortOrder": 0
+        }
+      ],
+      "tables": []
+    },
+    {
+      "name": "already-cancelled",
+      "exception": "OperationCanceledException",
+      "items": [
+        {
+          "id": "a7180000-0000-0000-0000-000000000001",
+          "name": "Seed owner",
+          "path": "Z:\\Versions\\Film.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "runTimeTicks": null
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000002",
+          "name": "Seed alternate A",
+          "path": "Z:\\Versions\\Film 1080p.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "runTimeTicks": 9007199254740995
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000003",
+          "name": "Seed alternate B",
+          "path": "Z:\\Versions\\Film 720p.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "runTimeTicks": null
+        },
+        {
+          "id": "a7180000-0000-0000-0000-000000000004",
+          "name": "Foreign owner",
+          "path": "Z:\\Other\\Foreign.mkv",
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "runTimeTicks": null
+        }
+      ],
+      "links": [],
+      "tables": []
+    }
+  ],
+  "assemblies": [
+    {
+      "name": "MediaBrowser.Controller",
+      "sha256": "051c588a8e85a3a7cdde8dc3d9a1112217fd7e973a86fe2ff90cf765bedb75a8"
+    },
+    {
+      "name": "Jellyfin.Server.Implementations",
+      "sha256": "4da187af02503e82135eb192351d01490484e8ebc8c653d849f7e2900a177672"
+    },
+    {
+      "name": "Emby.Server.Implementations",
+      "sha256": "8d369435646570958505c58b9cb17da169855dabc105d0e933524361e9b7b1c8"
+    },
+    {
+      "name": "Jellyfin.Database.Implementations",
+      "sha256": "5ffd9a90affb635962267da294a36a4cd6972da5f38083b51ecfb4fba4c31ee6"
+    },
+    {
+      "name": "Jellyfin.Database.Providers.Sqlite",
+      "sha256": "c3be3a64502dae5f458c4ed71a0a81b7b03c8d25ae7681fc90e849eccdcae3a9"
+    }
+  ],
+  "scope": "Actual frozen ItemPersistenceService.SaveItems and EF SQLite: ordered typed version links, literal path resolution, local priority/deduplication, child demotion, owned orphan direct removal, real FK cascades and transaction failures. Typed entities, seed rows, virtual paths, library getters, cancellation and SQL triggers are controls. Projects six BaseItems fields plus exact Int64, all LinkedChildren and selected FK/non-FK identifier projections. Excludes the retention placeholder, missing-file discovery/creation, LibraryManager events/cache, savers/images, full scalar mapping, generic DeleteItem and complete library acceptance."
+}

@@ -1,0 +1,18 @@
+[
+  { "name": "folder-physical", "type": "Folder", "parentKind": "root" },
+  { "name": "movie-physical", "type": "Movie", "parentKind": "root" },
+  { "name": "video-physical", "type": "Video", "parentKind": "root" },
+  { "name": "trailer-physical", "type": "Trailer", "parentKind": "root" },
+  { "name": "music-video-physical", "type": "MusicVideo", "parentKind": "root" },
+  { "name": "series-physical", "type": "Series", "parentKind": "root" },
+  { "name": "season-under-series", "type": "Season", "parentKind": "series" },
+  { "name": "episode-under-season", "type": "Episode", "parentKind": "season" },
+  { "name": "audio-under-album", "type": "Audio", "parentKind": "album" },
+  { "name": "audio-book-physical", "type": "AudioBook", "parentKind": "root" },
+  { "name": "music-album-under-artist", "type": "MusicAlbum", "parentKind": "artist" },
+  { "name": "music-artist-physical", "type": "MusicArtist", "parentKind": "root" },
+  { "name": "music-artist-by-name", "type": "MusicArtist", "parentKind": "none" },
+  { "name": "book-physical", "type": "Book", "parentKind": "root" },
+  { "name": "photo-physical", "type": "Photo", "parentKind": "root" },
+  { "name": "photo-album-physical", "type": "PhotoAlbum", "parentKind": "root" }
+]

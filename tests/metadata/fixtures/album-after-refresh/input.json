@@ -1,0 +1,536 @@
+[
+  {
+    "name": "after-empty-preserves-credits",
+    "mode": "after",
+    "artists": [],
+    "albumArtists": []
+  },
+  {
+    "name": "after-artist-only",
+    "mode": "after",
+    "artists": [
+      "Song Artist"
+    ],
+    "albumArtists": []
+  },
+  {
+    "name": "after-album-artist-only",
+    "mode": "after",
+    "artists": [],
+    "albumArtists": [
+      "Album Artist"
+    ]
+  },
+  {
+    "name": "after-two-kinds-same-name",
+    "mode": "after",
+    "artists": [
+      "Shared"
+    ],
+    "albumArtists": [
+      "Shared"
+    ]
+  },
+  {
+    "name": "after-album-artists-before-artists",
+    "mode": "after",
+    "artists": [
+      "Zulu",
+      "Alpha"
+    ],
+    "albumArtists": [
+      "Second",
+      "First"
+    ]
+  },
+  {
+    "name": "after-case-duplicates-first-spelling",
+    "mode": "after",
+    "artists": [
+      " A ",
+      "a",
+      "A",
+      "B"
+    ],
+    "albumArtists": [
+      " b ",
+      "B",
+      "a"
+    ]
+  },
+  {
+    "name": "after-blank-members-clear-credits",
+    "mode": "after",
+    "artists": [
+      "",
+      " ",
+      "\t",
+      "\r\n"
+    ],
+    "albumArtists": [
+      " ",
+      " ",
+      null
+    ]
+  },
+  {
+    "name": "after-blank-album-only-clears-credits",
+    "mode": "after",
+    "artists": [],
+    "albumArtists": [
+      " "
+    ]
+  },
+  {
+    "name": "after-null-member-only-clears-credits",
+    "mode": "after",
+    "artists": [
+      null
+    ],
+    "albumArtists": []
+  },
+  {
+    "name": "after-clr-whitespace",
+    "mode": "after",
+    "artists": [
+      " Trimmed 　",
+      "  Artist ",
+      "﻿Visible"
+    ],
+    "albumArtists": [
+      "  Album  "
+    ]
+  },
+  {
+    "name": "after-zero-width-retained",
+    "mode": "after",
+    "artists": [
+      "​"
+    ],
+    "albumArtists": [
+      "﻿"
+    ]
+  },
+  {
+    "name": "after-unicode-distinct",
+    "mode": "after",
+    "artists": [
+      "Straße",
+      "STRASSE",
+      "Σ",
+      "σ",
+      "ς",
+      "İ",
+      "i",
+      "ı"
+    ],
+    "albumArtists": [
+      "𝔘nicode",
+      "中文"
+    ]
+  },
+  {
+    "name": "after-punctuation-retained",
+    "mode": "after",
+    "artists": [
+      "A/B",
+      "A:B",
+      "A_B",
+      "A.B"
+    ],
+    "albumArtists": [
+      "A, B",
+      "A & B"
+    ]
+  },
+  {
+    "name": "after-internal-whitespace-retained",
+    "mode": "after",
+    "artists": [
+      "A  B",
+      "A B",
+      "A\tB"
+    ],
+    "albumArtists": [
+      "A\nB"
+    ]
+  },
+  {
+    "name": "after-duplicates-across-kinds",
+    "mode": "after",
+    "artists": [
+      " First ",
+      "first",
+      "SECOND"
+    ],
+    "albumArtists": [
+      "FIRST",
+      "Second",
+      "second"
+    ]
+  },
+  {
+    "name": "after-artist-order",
+    "mode": "after",
+    "artists": [
+      "Third",
+      "First",
+      "Second",
+      "third"
+    ],
+    "albumArtists": []
+  },
+  {
+    "name": "after-locked-album",
+    "mode": "after",
+    "artists": [
+      "New Artist"
+    ],
+    "albumArtists": [
+      "New Album Artist"
+    ],
+    "locked": true
+  },
+  {
+    "name": "after-empty-with-lock",
+    "mode": "after",
+    "artists": [],
+    "albumArtists": [],
+    "locked": true
+  },
+  {
+    "name": "none-empty-preserves-credits",
+    "mode": "none",
+    "artists": [],
+    "albumArtists": []
+  },
+  {
+    "name": "none-artist-only",
+    "mode": "none",
+    "artists": [
+      "Song Artist"
+    ],
+    "albumArtists": []
+  },
+  {
+    "name": "none-album-artist-only",
+    "mode": "none",
+    "artists": [],
+    "albumArtists": [
+      "Album Artist"
+    ]
+  },
+  {
+    "name": "none-two-kinds-same-name",
+    "mode": "none",
+    "artists": [
+      "Shared"
+    ],
+    "albumArtists": [
+      "Shared"
+    ]
+  },
+  {
+    "name": "none-album-artists-before-artists",
+    "mode": "none",
+    "artists": [
+      "Zulu",
+      "Alpha"
+    ],
+    "albumArtists": [
+      "Second",
+      "First"
+    ]
+  },
+  {
+    "name": "none-case-duplicates-first-spelling",
+    "mode": "none",
+    "artists": [
+      " A ",
+      "a",
+      "A",
+      "B"
+    ],
+    "albumArtists": [
+      " b ",
+      "B",
+      "a"
+    ]
+  },
+  {
+    "name": "none-blank-members-clear-credits",
+    "mode": "none",
+    "artists": [
+      "",
+      " ",
+      "\t",
+      "\r\n"
+    ],
+    "albumArtists": [
+      " ",
+      " ",
+      null
+    ]
+  },
+  {
+    "name": "none-blank-album-only-clears-credits",
+    "mode": "none",
+    "artists": [],
+    "albumArtists": [
+      " "
+    ]
+  },
+  {
+    "name": "none-null-member-only-clears-credits",
+    "mode": "none",
+    "artists": [
+      null
+    ],
+    "albumArtists": []
+  },
+  {
+    "name": "none-clr-whitespace",
+    "mode": "none",
+    "artists": [
+      " Trimmed 　",
+      "  Artist ",
+      "﻿Visible"
+    ],
+    "albumArtists": [
+      "  Album  "
+    ]
+  },
+  {
+    "name": "none-zero-width-retained",
+    "mode": "none",
+    "artists": [
+      "​"
+    ],
+    "albumArtists": [
+      "﻿"
+    ]
+  },
+  {
+    "name": "none-unicode-distinct",
+    "mode": "none",
+    "artists": [
+      "Straße",
+      "STRASSE",
+      "Σ",
+      "σ",
+      "ς",
+      "İ",
+      "i",
+      "ı"
+    ],
+    "albumArtists": [
+      "𝔘nicode",
+      "中文"
+    ]
+  },
+  {
+    "name": "none-punctuation-retained",
+    "mode": "none",
+    "artists": [
+      "A/B",
+      "A:B",
+      "A_B",
+      "A.B"
+    ],
+    "albumArtists": [
+      "A, B",
+      "A & B"
+    ]
+  },
+  {
+    "name": "none-internal-whitespace-retained",
+    "mode": "none",
+    "artists": [
+      "A  B",
+      "A B",
+      "A\tB"
+    ],
+    "albumArtists": [
+      "A\nB"
+    ]
+  },
+  {
+    "name": "none-duplicates-across-kinds",
+    "mode": "none",
+    "artists": [
+      " First ",
+      "first",
+      "SECOND"
+    ],
+    "albumArtists": [
+      "FIRST",
+      "Second",
+      "second"
+    ]
+  },
+  {
+    "name": "none-artist-order",
+    "mode": "none",
+    "artists": [
+      "Third",
+      "First",
+      "Second",
+      "third"
+    ],
+    "albumArtists": []
+  },
+  {
+    "name": "none-locked-album",
+    "mode": "none",
+    "artists": [
+      "New Artist"
+    ],
+    "albumArtists": [
+      "New Album Artist"
+    ],
+    "locked": true
+  },
+  {
+    "name": "none-empty-with-lock",
+    "mode": "none",
+    "artists": [],
+    "albumArtists": [],
+    "locked": true
+  },
+  {
+    "name": "after-cancelled-still-updates-people",
+    "mode": "after",
+    "artists": [
+      "Artist"
+    ],
+    "albumArtists": [],
+    "cancelled": true
+  },
+  {
+    "name": "after-people-failure",
+    "mode": "after",
+    "artists": [
+      "New Artist"
+    ],
+    "albumArtists": [
+      "New Album Artist"
+    ],
+    "failure": "people",
+    "expectException": "IOException"
+  },
+  {
+    "name": "after-person-failure",
+    "mode": "after",
+    "artists": [
+      "New Artist"
+    ],
+    "albumArtists": [
+      "New Album Artist"
+    ],
+    "failure": "person",
+    "expectException": "IOException"
+  },
+  {
+    "name": "none-people-failure",
+    "mode": "none",
+    "artists": [
+      "New Artist"
+    ],
+    "albumArtists": [
+      "New Album Artist"
+    ],
+    "failure": "people",
+    "expectException": "IOException"
+  },
+  {
+    "name": "none-person-failure",
+    "mode": "none",
+    "artists": [
+      "New Artist"
+    ],
+    "albumArtists": [
+      "New Album Artist"
+    ],
+    "failure": "person",
+    "expectException": "IOException"
+  },
+  {
+    "name": "none-force-save-before-people",
+    "mode": "none",
+    "artists": [
+      "Artist"
+    ],
+    "albumArtists": [
+      "Album Artist"
+    ],
+    "force": true
+  },
+  {
+    "name": "none-item-save-failure-skips-after",
+    "mode": "none",
+    "artists": [
+      "Artist"
+    ],
+    "albumArtists": [
+      "Album Artist"
+    ],
+    "force": true,
+    "failure": "item",
+    "expectException": "IOException"
+  },
+  {
+    "name": "none-people-failure-retains-item-save",
+    "mode": "none",
+    "artists": [
+      "Artist"
+    ],
+    "albumArtists": [
+      "Album Artist"
+    ],
+    "force": true,
+    "failure": "people",
+    "expectException": "IOException"
+  },
+  {
+    "name": "after-null-album-artists",
+    "mode": "after",
+    "artists": [],
+    "albumArtists": null,
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "after-null-artists-empty-album-artists",
+    "mode": "after",
+    "artists": null,
+    "albumArtists": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "after-null-artists-nonempty-album-artists",
+    "mode": "after",
+    "artists": null,
+    "albumArtists": [
+      "Album Artist"
+    ],
+    "expectException": "NullReferenceException"
+  },
+  {
+    "name": "after-both-null-lists",
+    "mode": "after",
+    "artists": null,
+    "albumArtists": null,
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "none-cancellation-after-item-save-does-not-skip-people",
+    "mode": "none",
+    "artists": [
+      "Artist"
+    ],
+    "albumArtists": [
+      "Album Artist"
+    ],
+    "force": true,
+    "cancelAfterSave": true
+  }
+]

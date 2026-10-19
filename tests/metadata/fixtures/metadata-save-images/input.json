@@ -1,0 +1,270 @@
+[
+  {
+    "name": "local-outdated-null-images",
+    "reason": 2,
+    "images": [
+      {
+        "type": "Primary",
+        "path": "media\\poster.png"
+      }
+    ]
+  },
+  {
+    "name": "local-current-null-images",
+    "reason": 2,
+    "images": [
+      {
+        "type": "Primary",
+        "path": "media\\poster.png",
+        "ready": true,
+        "date": "2025-01-02T03:04:05Z"
+      }
+    ]
+  },
+  {
+    "name": "local-current-force-image-update",
+    "reason": 4,
+    "images": [
+      {
+        "type": "Primary",
+        "path": "media\\poster.png",
+        "ready": true,
+        "date": "2025-01-02T03:04:05Z"
+      }
+    ]
+  },
+  {
+    "name": "local-missing-removed",
+    "reason": 2,
+    "images": [
+      {
+        "type": "Primary",
+        "path": "media\\poster.png",
+        "missing": true
+      }
+    ]
+  },
+  {
+    "name": "explicit-empty-images-clear",
+    "reason": 2,
+    "images": [
+      {
+        "type": "Primary",
+        "path": "media\\poster.png"
+      }
+    ],
+    "clearImages": true
+  },
+  {
+    "name": "empty-current-images",
+    "reason": 2,
+    "images": []
+  },
+  {
+    "name": "remote-success-independent-save",
+    "reason": 2,
+    "images": [
+      {
+        "type": "Primary",
+        "path": "https://isolated.invalid/ok"
+      }
+    ]
+  },
+  {
+    "name": "remote-unavailable-independent-removal",
+    "reason": 2,
+    "images": [
+      {
+        "type": "Primary",
+        "path": "https://isolated.invalid/404"
+      }
+    ]
+  },
+  {
+    "name": "remote-retryable-kept",
+    "reason": 2,
+    "images": [
+      {
+        "type": "Primary",
+        "path": "https://isolated.invalid/500"
+      }
+    ]
+  },
+  {
+    "name": "remote-fallback-keeps-order",
+    "reason": 2,
+    "images": [
+      {
+        "type": "Primary",
+        "path": "https://isolated.invalid/404|https://isolated.invalid/ok"
+      }
+    ]
+  },
+  {
+    "name": "two-remotes-nested-independent-saves",
+    "reason": 2,
+    "images": [
+      {
+        "type": "Primary",
+        "path": "https://isolated.invalid/ok"
+      },
+      {
+        "type": "Backdrop",
+        "path": "https://isolated.invalid/ok"
+      }
+    ]
+  },
+  {
+    "name": "dimensions-failure-retains-blurhash",
+    "reason": 2,
+    "images": [
+      {
+        "type": "Primary",
+        "path": "media\\poster.png"
+      }
+    ],
+    "dimensionFailure": true
+  },
+  {
+    "name": "blurhash-failure-retains-dimensions",
+    "reason": 2,
+    "images": [
+      {
+        "type": "Primary",
+        "path": "media\\poster.png"
+      }
+    ],
+    "blurFailure": true
+  },
+  {
+    "name": "item-sql-failure-keeps-image-commit",
+    "reason": 2,
+    "images": [
+      {
+        "type": "Primary",
+        "path": "media\\poster.png"
+      }
+    ],
+    "failure": "items",
+    "expectException": "DbUpdateException"
+  },
+  {
+    "name": "image-sql-failure-keeps-independent-delete",
+    "reason": 2,
+    "images": [
+      {
+        "type": "Primary",
+        "path": "media\\poster.png"
+      }
+    ],
+    "failure": "images",
+    "expectException": "DbUpdateException"
+  },
+  {
+    "name": "cancel-in-saver-keeps-image-commit",
+    "reason": 2,
+    "images": [
+      {
+        "type": "Primary",
+        "path": "media\\poster.png"
+      }
+    ],
+    "cancelInSaver": true,
+    "expectException": "OperationCanceledException"
+  },
+  {
+    "name": "already-cancelled-keeps-saver-image-effects",
+    "reason": 2,
+    "images": [
+      {
+        "type": "Primary",
+        "path": "media\\poster.png"
+      }
+    ],
+    "cancelled": true,
+    "expectException": "OperationCanceledException"
+  },
+  {
+    "name": "cancelled-remote-keeps-conversion-commit",
+    "reason": 2,
+    "images": [
+      {
+        "type": "Primary",
+        "path": "https://isolated.invalid/ok"
+      }
+    ],
+    "cancelled": true,
+    "expectException": "OperationCanceledException"
+  },
+  {
+    "name": "channel-with-library-parent-processes",
+    "reason": 2,
+    "images": [
+      {
+        "type": "Primary",
+        "path": "media\\poster.png"
+      }
+    ],
+    "source": "Channel",
+    "parentSource": "Library"
+  },
+  {
+    "name": "channel-with-channel-parent-skips",
+    "reason": 2,
+    "images": [
+      {
+        "type": "Primary",
+        "path": "media\\poster.png"
+      }
+    ],
+    "source": "Channel",
+    "parentSource": "Channel"
+  },
+  {
+    "name": "library-with-channel-parent-processes",
+    "reason": 2,
+    "images": [
+      {
+        "type": "Primary",
+        "path": "media\\poster.png"
+      }
+    ],
+    "parentSource": "Channel"
+  },
+  {
+    "name": "channel-with-default-parent-processes",
+    "reason": 2,
+    "images": [
+      {
+        "type": "Primary",
+        "path": "media\\poster.png"
+      }
+    ],
+    "source": "Channel",
+    "parentSource": null
+  },
+  {
+    "name": "local-current-exact-one-second-kept",
+    "reason": 2,
+    "images": [
+      {
+        "type": "Primary",
+        "path": "media\\poster.png",
+        "ready": true,
+        "date": "2025-01-02T03:04:04Z"
+      }
+    ]
+  },
+  {
+    "name": "local-current-over-one-second-refreshed",
+    "reason": 2,
+    "images": [
+      {
+        "type": "Primary",
+        "path": "media\\poster.png",
+        "ready": true,
+        "date": "2025-01-02T03:04:03Z"
+      }
+    ]
+  }
+]

@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-10T14:52:29.060Z",
+  "candidateVerified": false,
+  "jellyfin": {
+    "commit": "208c278b75abd897aefa1e1175126eac5e4dbfaa",
+    "selectedCleanSources": [
+      {
+        "path": "src/Jellyfin.Extensions/Json/JsonDefaults.cs",
+        "sha256": "c0ab4cfad71ceade367d061f5a4ee04d001018155378713cd076df292bf3c815"
+      },
+      {
+        "path": "src/Jellyfin.Extensions/Json/Converters/JsonStringConverter.cs",
+        "sha256": "edb420cc9982b22ad19509e5ef45729b644a6e83b044b673c0fd9ce2d65d3de9"
+      }
+    ],
+    "assembly": {
+      "filename": "D:/mediamanager-validation/20261010/results/playlist-items-v4/bin/Release/net10.0/Jellyfin.Extensions.dll",
+      "sha256": "297b53cfd1858ca01e5cf273f9eb454252f0c88515550a2438ac031c08ced4c4",
+      "bytes": 37888
+    }
+  },
+  "runtime": {
+    "dotnet": {
+      "filename": "D:/mediamanager/.tools/dotnet/dotnet.exe",
+      "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6",
+      "bytes": 167208
+    },
+    "sdk": "10.0.401",
+    "oracleAssembly": {
+      "filename": "D:/mediamanager-validation/20261010/results/native-json-encoder-v1/bin/Oracle.dll",
+      "sha256": "d5700df49fdf76e455ac9ae724d9874c34f78d97a3e428f8a741f01673a51341",
+      "bytes": 10240
+    }
+  },
+  "files": {
+    "input.json": {
+      "filename": "input.json",
+      "sha256": "62168003d798f6a5fd0065ff548272604a7d04d9498baa33fc37adfc67549b50",
+      "bytes": 2411
+    },
+    "Program.cs": {
+      "filename": "Program.cs",
+      "sha256": "af0a6356a42d01d546c0972df7b76c2b74460d06f732313bf36d9649ec8173ab",
+      "bytes": 1656
+    },
+    "Oracle.csproj": {
+      "filename": "Oracle.csproj",
+      "sha256": "82e47ca2e26cc23d0b747d5c7878d616a8b30e01b6fd93ea8de5bb6d908ea593",
+      "bytes": 601
+    },
+    "README.md": {
+      "filename": "README.md",
+      "sha256": "9b46fc37c39db56535576e91c47bcd30c6320bd79db649c76ef6c4cb28d386f5",
+      "bytes": 740
+    },
+    "native.json": {
+      "filename": "native.json",
+      "sha256": "8586794ed117a022868e0cef7a0aaabcadc8bd1c1f617ae06755aa38f0bb3964",
+      "bytes": 10614
+    },
+    "rawRecording": {
+      "filename": "D:/mediamanager-validation/20261010/results/native-json-encoder-v1/native.raw.json",
+      "sha256": "2aa991aebf18b81ba7f25735b82fa6ef4c45de8ba39e7bae4c2ba1d343eaefa5",
+      "bytes": 12006
+    }
+  },
+  "repeat": {
+    "filename": "D:/mediamanager-validation/20261010/results/native-json-encoder-v2/native.raw.json",
+    "sha256": "2aa991aebf18b81ba7f25735b82fa6ef4c45de8ba39e7bae4c2ba1d343eaefa5",
+    "rawByteEqual": true
+  },
+  "counts": {
+    "inputCases": 6,
+    "profiles": 3,
+    "bodyComparisons": 18
+  },
+  "boundary": "Actual loaded JsonDefaults serializer/encoder and JsonStringConverter only; neutral UTF-16 code units, typed frame/array/dictionary/null/Int64 fields. No MVC negotiation, repository, server, media or dirty-workspace complete build-input closure."
+}

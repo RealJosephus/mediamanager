@@ -1,0 +1,15 @@
+{
+  "video": {
+    "bytes": 1894415,
+    "sha256": "ba1ed21ec02c3585c3a26632849186823a4c1045dfb30f0cce852220a560a323"
+  },
+  "subtitle": {
+    "bytes": 2912,
+    "sha256": "664d4a825c2f692c43b0d53b319323fc1574a5fe56884f9c5cab7f01c3208890"
+  },
+  "combined": {
+    "bytes": 1896947,
+    "sha256": "4a9a6e3be221f0d08506ca6bbd6d3ad73819c82605871e9fd981b7bf14399a6c",
+    "virtualPath": "Z:/VobSub/source.mkv"
+  }
+}

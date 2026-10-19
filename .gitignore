@@ -1,0 +1,8 @@
+/.agent-docs/
+/.agent-temp/
+/node_modules/
+/coverage/
+/var/
+/.tools/
+/.test-output/
+/tests/**/obj/

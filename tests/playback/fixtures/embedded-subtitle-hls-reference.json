@@ -1,0 +1,13 @@
+{
+  "source": {
+    "containerSha256": "d19ab5707ae7fe09357178a96fbeab135aeb9c5db7ee2f76de719cf4cfc65353",
+    "extractedAssSha256": "e9983974afec9f0814dee3697a3e3c98fb29651c0e79009f6beed5f9ccf92686",
+    "nativeExtractionRecord": {
+      "source": "media.mkv",
+      "index": 2,
+      "format": "ass"
+    }
+  },
+  "nativeVtt": "WEBVTT\r\n\r\n00:00:01.000 --> 00:00:03.000\r\nASS text",
+  "nativeHlsVtt": "WEBVTT\nX-TIMESTAMP-MAP=MPEGTS:900000,LOCAL:00:00:00.000\r\n\r\n00:00:01.000 --> 00:00:03.000\r\nASS text"
+}

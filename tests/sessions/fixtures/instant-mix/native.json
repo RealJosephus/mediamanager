@@ -1,0 +1,2428 @@
+{
+  "actualMusicManager": true,
+  "actualUserViewBuilder": true,
+  "dependenciesControlled": [
+    "entity lookup",
+    "repository query",
+    "genre lookup",
+    "TVSeriesManager",
+    "configuration",
+    "user data"
+  ],
+  "databaseOpened": false,
+  "portOpened": false,
+  "userId": "ab210000-0000-0000-0000-000000000001",
+  "parentId": "ab210000-0000-0000-0000-000000000002",
+  "candidates": [
+    {
+      "Id": "ab210000-0000-0000-0000-000000000003",
+      "Name": "First song",
+      "Genres": [
+        "Drama",
+        "DRAMA",
+        "\u7235\u58EB"
+      ]
+    },
+    {
+      "Id": "ab210000-0000-0000-0000-000000000004",
+      "Name": "Other song",
+      "Genres": [
+        "Drama"
+      ]
+    }
+  ],
+  "observations": [
+    {
+      "name": "audio",
+      "sourceType": "Audio",
+      "Id": "ab210000-0000-0000-0000-000000000003",
+      "viewType": null,
+      "userless": false,
+      "selected": [],
+      "Genres": [
+        "Drama",
+        "DRAMA",
+        "\u7235\u58EB"
+      ],
+      "ids": [
+        "ab210000-0000-0000-0000-000000000003",
+        "ab210000-0000-0000-0000-000000000004"
+      ],
+      "failure": null,
+      "calls": [
+        {
+          "method": "GetMusicGenre",
+          "name": "Drama"
+        },
+        {
+          "method": "GetMusicGenre",
+          "name": "\u7235\u58EB"
+        },
+        {
+          "method": "GetItemList",
+          "Recursive": false,
+          "ForceDirect": false,
+          "IsFolder": null,
+          "IsVirtualItem": null,
+          "Limit": 200,
+          "IsFavorite": null,
+          "IsResumable": null,
+          "includeItemTypes": [
+            "Audio"
+          ],
+          "genreIds": [
+            "ab210000-0000-0000-0000-000000000020",
+            "ab210000-0000-0000-0000-000000000021"
+          ],
+          "random": true
+        }
+      ]
+    },
+    {
+      "name": "audio-book",
+      "sourceType": "AudioBook",
+      "Id": "ab210000-0000-0000-0000-000000000005",
+      "viewType": null,
+      "userless": false,
+      "selected": [],
+      "Genres": [
+        "Drama"
+      ],
+      "ids": [
+        "ab210000-0000-0000-0000-000000000005",
+        "ab210000-0000-0000-0000-000000000003",
+        "ab210000-0000-0000-0000-000000000004"
+      ],
+      "failure": null,
+      "calls": [
+        {
+          "method": "GetMusicGenre",
+          "name": "Drama"
+        },
+        {
+          "method": "GetItemList",
+          "Recursive": false,
+          "ForceDirect": false,
+          "IsFolder": null,
+          "IsVirtualItem": null,
+          "Limit": 200,
+          "IsFavorite": null,
+          "IsResumable": null,
+          "includeItemTypes": [
+            "Audio"
+          ],
+          "genreIds": [
+            "ab210000-0000-0000-0000-000000000020"
+          ],
+          "random": true
+        }
+      ]
+    },
+    {
+      "name": "audio-book-userless",
+      "sourceType": "AudioBook",
+      "Id": "ab210000-0000-0000-0000-000000000005",
+      "viewType": null,
+      "userless": true,
+      "selected": [],
+      "Genres": [
+        "Drama"
+      ],
+      "ids": [
+        "ab210000-0000-0000-0000-000000000005",
+        "ab210000-0000-0000-0000-000000000003",
+        "ab210000-0000-0000-0000-000000000004"
+      ],
+      "failure": null,
+      "calls": [
+        {
+          "method": "GetMusicGenre",
+          "name": "Drama"
+        },
+        {
+          "method": "GetItemList",
+          "Recursive": false,
+          "ForceDirect": false,
+          "IsFolder": null,
+          "IsVirtualItem": null,
+          "Limit": 200,
+          "IsFavorite": null,
+          "IsResumable": null,
+          "includeItemTypes": [
+            "Audio"
+          ],
+          "genreIds": [
+            "ab210000-0000-0000-0000-000000000020"
+          ],
+          "random": true
+        }
+      ]
+    },
+    {
+      "name": "movie",
+      "sourceType": "Movie",
+      "Id": "ab210000-0000-0000-0000-000000000007",
+      "viewType": null,
+      "userless": false,
+      "selected": [],
+      "Genres": [
+        "Drama"
+      ],
+      "ids": [],
+      "failure": null,
+      "calls": []
+    },
+    {
+      "name": "paper-book",
+      "sourceType": "Book",
+      "Id": "ab210000-0000-0000-0000-000000000006",
+      "viewType": null,
+      "userless": false,
+      "selected": [],
+      "Genres": [
+        "Novel"
+      ],
+      "ids": [],
+      "failure": null,
+      "calls": []
+    },
+    {
+      "name": "music-genre",
+      "sourceType": "MusicGenre",
+      "Id": "ab210000-0000-0000-0000-000000000020",
+      "viewType": null,
+      "userless": false,
+      "selected": [],
+      "Genres": [],
+      "ids": [
+        "ab210000-0000-0000-0000-000000000003",
+        "ab210000-0000-0000-0000-000000000004"
+      ],
+      "failure": null,
+      "calls": [
+        {
+          "method": "GetItemList",
+          "Recursive": false,
+          "ForceDirect": false,
+          "IsFolder": null,
+          "IsVirtualItem": null,
+          "Limit": 200,
+          "IsFavorite": null,
+          "IsResumable": null,
+          "includeItemTypes": [
+            "Audio"
+          ],
+          "genreIds": [
+            "ab210000-0000-0000-0000-000000000020"
+          ],
+          "random": true
+        }
+      ]
+    },
+    {
+      "name": "music-album",
+      "sourceType": "MusicAlbum",
+      "Id": "ab210000-0000-0000-0000-000000000030",
+      "viewType": null,
+      "userless": false,
+      "selected": [],
+      "Genres": [
+        "Drama"
+      ],
+      "ids": [
+        "ab210000-0000-0000-0000-000000000003",
+        "ab210000-0000-0000-0000-000000000004"
+      ],
+      "failure": null,
+      "calls": [
+        {
+          "method": "GetMusicGenre",
+          "name": "Drama"
+        },
+        {
+          "method": "GetItemList",
+          "Recursive": false,
+          "ForceDirect": false,
+          "IsFolder": null,
+          "IsVirtualItem": null,
+          "Limit": 200,
+          "IsFavorite": null,
+          "IsResumable": null,
+          "includeItemTypes": [
+            "Audio"
+          ],
+          "genreIds": [
+            "ab210000-0000-0000-0000-000000000020"
+          ],
+          "random": true
+        }
+      ]
+    },
+    {
+      "name": "music-artist",
+      "sourceType": "MusicArtist",
+      "Id": "ab210000-0000-0000-0000-000000000031",
+      "viewType": null,
+      "userless": false,
+      "selected": [],
+      "Genres": [
+        "Drama"
+      ],
+      "ids": [
+        "ab210000-0000-0000-0000-000000000003",
+        "ab210000-0000-0000-0000-000000000004"
+      ],
+      "failure": null,
+      "calls": [
+        {
+          "method": "GetMusicGenre",
+          "name": "Drama"
+        },
+        {
+          "method": "GetItemList",
+          "Recursive": false,
+          "ForceDirect": false,
+          "IsFolder": null,
+          "IsVirtualItem": null,
+          "Limit": 200,
+          "IsFavorite": null,
+          "IsResumable": null,
+          "includeItemTypes": [
+            "Audio"
+          ],
+          "genreIds": [
+            "ab210000-0000-0000-0000-000000000020"
+          ],
+          "random": true
+        }
+      ]
+    },
+    {
+      "name": "playlist",
+      "sourceType": "Playlist",
+      "Id": "ab210000-0000-0000-0000-000000000032",
+      "viewType": null,
+      "userless": false,
+      "selected": [],
+      "Genres": [
+        "Drama"
+      ],
+      "ids": [
+        "ab210000-0000-0000-0000-000000000003",
+        "ab210000-0000-0000-0000-000000000004"
+      ],
+      "failure": null,
+      "calls": [
+        {
+          "method": "GetMusicGenre",
+          "name": "Drama"
+        },
+        {
+          "method": "GetItemList",
+          "Recursive": false,
+          "ForceDirect": false,
+          "IsFolder": null,
+          "IsVirtualItem": null,
+          "Limit": 200,
+          "IsFavorite": null,
+          "IsResumable": null,
+          "includeItemTypes": [
+            "Audio"
+          ],
+          "genreIds": [
+            "ab210000-0000-0000-0000-000000000020"
+          ],
+          "random": true
+        }
+      ]
+    },
+    {
+      "name": "failed-genre",
+      "sourceType": "Audio",
+      "Id": "ab210000-0000-0000-0000-000000000033",
+      "viewType": null,
+      "userless": false,
+      "selected": [],
+      "Genres": [
+        "Failure"
+      ],
+      "ids": [
+        "ab210000-0000-0000-0000-000000000033",
+        "ab210000-0000-0000-0000-000000000003",
+        "ab210000-0000-0000-0000-000000000004"
+      ],
+      "failure": null,
+      "calls": [
+        {
+          "method": "GetMusicGenre",
+          "name": "Failure"
+        },
+        {
+          "method": "GetItemList",
+          "Recursive": false,
+          "ForceDirect": false,
+          "IsFolder": null,
+          "IsVirtualItem": null,
+          "Limit": 200,
+          "IsFavorite": null,
+          "IsResumable": null,
+          "includeItemTypes": [
+            "Audio"
+          ],
+          "genreIds": [],
+          "random": true
+        }
+      ]
+    },
+    {
+      "name": "empty-genres",
+      "sourceType": "Audio",
+      "Id": "ab210000-0000-0000-0000-000000000034",
+      "viewType": null,
+      "userless": false,
+      "selected": [],
+      "Genres": [],
+      "ids": [
+        "ab210000-0000-0000-0000-000000000034",
+        "ab210000-0000-0000-0000-000000000003",
+        "ab210000-0000-0000-0000-000000000004"
+      ],
+      "failure": null,
+      "calls": [
+        {
+          "method": "GetItemList",
+          "Recursive": false,
+          "ForceDirect": false,
+          "IsFolder": null,
+          "IsVirtualItem": null,
+          "Limit": 200,
+          "IsFavorite": null,
+          "IsResumable": null,
+          "includeItemTypes": [
+            "Audio"
+          ],
+          "genreIds": [],
+          "random": true
+        }
+      ]
+    },
+    {
+      "name": "folder-userless",
+      "sourceType": "Folder",
+      "Id": "ab210000-0000-0000-0000-000000000035",
+      "viewType": null,
+      "userless": true,
+      "selected": [],
+      "Genres": [],
+      "ids": null,
+      "failure": {
+        "type": "System.ArgumentNullException",
+        "Message": "Value cannot be null. (Parameter \u0027user\u0027)"
+      },
+      "calls": []
+    },
+    {
+      "name": "books-empty",
+      "sourceType": "UserView",
+      "Id": "ab210000-0000-0000-0000-000000000100",
+      "viewType": "books",
+      "userless": false,
+      "selected": [],
+      "Genres": [],
+      "ids": [
+        "ab210000-0000-0000-0000-000000000003",
+        "ab210000-0000-0000-0000-000000000004"
+      ],
+      "failure": null,
+      "calls": [
+        {
+          "method": "GetItemsResult",
+          "Recursive": true,
+          "ForceDirect": true,
+          "IsFolder": null,
+          "IsVirtualItem": null,
+          "Limit": null,
+          "IsFavorite": null,
+          "IsResumable": null,
+          "includeItemTypes": [
+            "Book",
+            "AudioBook"
+          ],
+          "genreIds": [],
+          "random": false
+        },
+        {
+          "method": "GetItemList",
+          "Recursive": false,
+          "ForceDirect": false,
+          "IsFolder": null,
+          "IsVirtualItem": null,
+          "Limit": 200,
+          "IsFavorite": null,
+          "IsResumable": null,
+          "includeItemTypes": [
+            "Audio"
+          ],
+          "genreIds": [],
+          "random": true
+        }
+      ]
+    },
+    {
+      "name": "books-selected",
+      "sourceType": "UserView",
+      "Id": "ab210000-0000-0000-0000-000000000100",
+      "viewType": "books",
+      "userless": false,
+      "selected": [
+        {
+          "Id": "ab210000-0000-0000-0000-000000000005",
+          "type": "AudioBook",
+          "Genres": [
+            "Drama"
+          ]
+        }
+      ],
+      "Genres": [],
+      "ids": [
+        "ab210000-0000-0000-0000-000000000003",
+        "ab210000-0000-0000-0000-000000000004"
+      ],
+      "failure": null,
+      "calls": [
+        {
+          "method": "GetItemsResult",
+          "Recursive": true,
+          "ForceDirect": true,
+          "IsFolder": null,
+          "IsVirtualItem": null,
+          "Limit": null,
+          "IsFavorite": null,
+          "IsResumable": null,
+          "includeItemTypes": [
+            "Book",
+            "AudioBook"
+          ],
+          "genreIds": [],
+          "random": false
+        },
+        {
+          "method": "GetMusicGenre",
+          "name": "Drama"
+        },
+        {
+          "method": "GetItemList",
+          "Recursive": false,
+          "ForceDirect": false,
+          "IsFolder": null,
+          "IsVirtualItem": null,
+          "Limit": 200,
+          "IsFavorite": null,
+          "IsResumable": null,
+          "includeItemTypes": [
+            "Audio"
+          ],
+          "genreIds": [
+            "ab210000-0000-0000-0000-000000000020"
+          ],
+          "random": true
+        }
+      ]
+    },
+    {
+      "name": "books-userless",
+      "sourceType": "UserView",
+      "Id": "ab210000-0000-0000-0000-000000000100",
+      "viewType": "books",
+      "userless": true,
+      "selected": [],
+      "Genres": [],
+      "ids": null,
+      "failure": {
+        "type": "System.NullReferenceException",
+        "Message": "Object reference not set to an instance of an object."
+      },
+      "calls": []
+    },
+    {
+      "name": "tvshowseries-empty",
+      "sourceType": "UserView",
+      "Id": "ab210000-0000-0000-0000-000000000101",
+      "viewType": "tvshowseries",
+      "userless": false,
+      "selected": [],
+      "Genres": [],
+      "ids": [
+        "ab210000-0000-0000-0000-000000000003",
+        "ab210000-0000-0000-0000-000000000004"
+      ],
+      "failure": null,
+      "calls": [
+        {
+          "method": "GetItemsResult",
+          "Recursive": true,
+          "ForceDirect": true,
+          "IsFolder": null,
+          "IsVirtualItem": null,
+          "Limit": null,
+          "IsFavorite": null,
+          "IsResumable": null,
+          "includeItemTypes": [
+            "Series"
+          ],
+          "genreIds": [],
+          "random": false
+        },
+        {
+          "method": "GetItemList",
+          "Recursive": false,
+          "ForceDirect": false,
+          "IsFolder": null,
+          "IsVirtualItem": null,
+          "Limit": 200,
+          "IsFavorite": null,
+          "IsResumable": null,
+          "includeItemTypes": [
+            "Audio"
+          ],
+          "genreIds": [],
+          "random": true
+        }
+      ]
+    },
+    {
+      "name": "tvshowseries-selected",
+      "sourceType": "UserView",
+      "Id": "ab210000-0000-0000-0000-000000000101",
+      "viewType": "tvshowseries",
+      "userless": false,
+      "selected": [
+        {
+          "Id": "ab210000-0000-0000-0000-000000000008",
+          "type": "Series",
+          "Genres": [
+            "Drama"
+          ]
+        }
+      ],
+      "Genres": [],
+      "ids": null,
+      "failure": {
+        "type": "System.InvalidCastException",
+        "Message": "Unable to cast object of type \u0027MediaBrowser.Controller.Entities.TV.Series\u0027 to type \u0027MediaBrowser.Controller.Entities.Audio.Audio\u0027."
+      },
+      "calls": [
+        {
+          "method": "GetItemsResult",
+          "Recursive": true,
+          "ForceDirect": true,
+          "IsFolder": null,
+          "IsVirtualItem": null,
+          "Limit": null,
+          "IsFavorite": null,
+          "IsResumable": null,
+          "includeItemTypes": [
+            "Series"
+          ],
+          "genreIds": [],
+          "random": false
+        }
+      ]
+    },
+    {
+      "name": "tvshowseries-userless",
+      "sourceType": "UserView",
+      "Id": "ab210000-0000-0000-0000-000000000101",
+      "viewType": "tvshowseries",
+      "userless": true,
+      "selected": [],
+      "Genres": [],
+      "ids": null,
+      "failure": {
+        "type": "System.NullReferenceException",
+        "Message": "Object reference not set to an instance of an object."
+      },
+      "calls": []
+    },
+    {
+      "name": "tvgenre-empty",
+      "sourceType": "UserView",
+      "Id": "ab210000-0000-0000-0000-000000000102",
+      "viewType": "tvgenre",
+      "userless": false,
+      "selected": [],
+      "Genres": [],
+      "ids": [
+        "ab210000-0000-0000-0000-000000000003",
+        "ab210000-0000-0000-0000-000000000004"
+      ],
+      "failure": null,
+      "calls": [
+        {
+          "method": "GetItemsResult",
+          "Recursive": true,
+          "ForceDirect": true,
+          "IsFolder": null,
+          "IsVirtualItem": null,
+          "Limit": null,
+          "IsFavorite": null,
+          "IsResumable": null,
+          "includeItemTypes": [
+            "Series"
+          ],
+          "genreIds": [
+            "ab210000-0000-0000-0000-000000000102"
+          ],
+          "random": false
+        },
+        {
+          "method": "GetItemList",
+          "Recursive": false,
+          "ForceDirect": false,
+          "IsFolder": null,
+          "IsVirtualItem": null,
+          "Limit": 200,
+          "IsFavorite": null,
+          "IsResumable": null,
+          "includeItemTypes": [
+            "Audio"
+          ],
+          "genreIds": [],
+          "random": true
+        }
+      ]
+    },
+    {
+      "name": "tvgenre-selected",
+      "sourceType": "UserView",
+      "Id": "ab210000-0000-0000-0000-000000000102",
+      "viewType": "tvgenre",
+      "userless": false,
+      "selected": [
+        {
+          "Id": "ab210000-0000-0000-0000-000000000008",
+          "type": "Series",
+          "Genres": [
+            "Drama"
+          ]
+        }
+      ],
+      "Genres": [],
+      "ids": null,
+      "failure": {
+        "type": "System.InvalidCastException",
+        "Message": "Unable to cast object of type \u0027MediaBrowser.Controller.Entities.TV.Series\u0027 to type \u0027MediaBrowser.Controller.Entities.Audio.Audio\u0027."
+      },
+      "calls": [
+        {
+          "method": "GetItemsResult",
+          "Recursive": true,
+          "ForceDirect": true,
+          "IsFolder": null,
+          "IsVirtualItem": null,
+          "Limit": null,
+          "IsFavorite": null,
+          "IsResumable": null,
+          "includeItemTypes": [
+            "Series"
+          ],
+          "genreIds": [
+            "ab210000-0000-0000-0000-000000000102"
+          ],
+          "random": false
+        }
+      ]
+    },
+    {
+      "name": "tvgenre-userless",
+      "sourceType": "UserView",
+      "Id": "ab210000-0000-0000-0000-000000000102",
+      "viewType": "tvgenre",
+      "userless": true,
+      "selected": [],
+      "Genres": [],
+      "ids": null,
+      "failure": {
+        "type": "System.NullReferenceException",
+        "Message": "Object reference not set to an instance of an object."
+      },
+      "calls": []
+    },
+    {
+      "name": "tvfavoriteseries-empty",
+      "sourceType": "UserView",
+      "Id": "ab210000-0000-0000-0000-000000000103",
+      "viewType": "tvfavoriteseries",
+      "userless": false,
+      "selected": [],
+      "Genres": [],
+      "ids": [
+        "ab210000-0000-0000-0000-000000000003",
+        "ab210000-0000-0000-0000-000000000004"
+      ],
+      "failure": null,
+      "calls": [
+        {
+          "method": "GetItemsResult",
+          "Recursive": true,
+          "ForceDirect": true,
+          "IsFolder": null,
+          "IsVirtualItem": null,
+          "Limit": null,
+          "IsFavorite": true,
+          "IsResumable": null,
+          "includeItemTypes": [
+            "Series"
+          ],
+          "genreIds": [],
+          "random": false
+        },
+        {
+          "method": "GetItemList",
+          "Recursive": false,
+          "ForceDirect": false,
+          "IsFolder": null,
+          "IsVirtualItem": null,
+          "Limit": 200,
+          "IsFavorite": null,
+          "IsResumable": null,
+          "includeItemTypes": [
+            "Audio"
+          ],
+          "genreIds": [],
+          "random": true
+        }
+      ]
+    },
+    {
+      "name": "tvfavoriteseries-selected",
+      "sourceType": "UserView",
+      "Id": "ab210000-0000-0000-0000-000000000103",
+      "viewType": "tvfavoriteseries",
+      "userless": false,
+      "selected": [
+        {
+          "Id": "ab210000-0000-0000-0000-000000000008",
+          "type": "Series",
+          "Genres": [
+            "Drama"
+          ]
+        }
+      ],
+      "Genres": [],
+      "ids": null,
+      "failure": {
+        "type": "System.InvalidCastException",
+        "Message": "Unable to cast object of type \u0027MediaBrowser.Controller.Entities.TV.Series\u0027 to type \u0027MediaBrowser.Controller.Entities.Audio.Audio\u0027."
+      },
+      "calls": [
+        {
+          "method": "GetItemsResult",
+          "Recursive": true,
+          "ForceDirect": true,
+          "IsFolder": null,
+          "IsVirtualItem": null,
+          "Limit": null,
+          "IsFavorite": true,
+          "IsResumable": null,
+          "includeItemTypes": [
+            "Series"
+          ],
+          "genreIds": [],
+          "random": false
+        }
+      ]
+    },
+    {
+      "name": "tvfavoriteseries-userless",
+      "sourceType": "UserView",
+      "Id": "ab210000-0000-0000-0000-000000000103",
+      "viewType": "tvfavoriteseries",
+      "userless": true,
+      "selected": [],
+      "Genres": [],
+      "ids": null,
+      "failure": {
+        "type": "System.NullReferenceException",
+        "Message": "Object reference not set to an instance of an object."
+      },
+      "calls": []
+    },
+    {
+      "name": "tvfavoriteepisodes-empty",
+      "sourceType": "UserView",
+      "Id": "ab210000-0000-0000-0000-000000000104",
+      "viewType": "tvfavoriteepisodes",
+      "userless": false,
+      "selected": [],
+      "Genres": [],
+      "ids": [
+        "ab210000-0000-0000-0000-000000000003",
+        "ab210000-0000-0000-0000-000000000004"
+      ],
+      "failure": null,
+      "calls": [
+        {
+          "method": "GetItemsResult",
+          "Recursive": true,
+          "ForceDirect": true,
+          "IsFolder": null,
+          "IsVirtualItem": null,
+          "Limit": null,
+          "IsFavorite": true,
+          "IsResumable": null,
+          "includeItemTypes": [
+            "Episode"
+          ],
+          "genreIds": [],
+          "random": false
+        },
+        {
+          "method": "GetItemList",
+          "Recursive": false,
+          "ForceDirect": false,
+          "IsFolder": null,
+          "IsVirtualItem": null,
+          "Limit": 200,
+          "IsFavorite": null,
+          "IsResumable": null,
+          "includeItemTypes": [
+            "Audio"
+          ],
+          "genreIds": [],
+          "random": true
+        }
+      ]
+    },
+    {
+      "name": "tvfavoriteepisodes-selected",
+      "sourceType": "UserView",
+      "Id": "ab210000-0000-0000-0000-000000000104",
+      "viewType": "tvfavoriteepisodes",
+      "userless": false,
+      "selected": [
+        {
+          "Id": "ab210000-0000-0000-0000-000000000009",
+          "type": "Episode",
+          "Genres": [
+            "Drama"
+          ]
+        }
+      ],
+      "Genres": [],
+      "ids": null,
+      "failure": {
+        "type": "System.InvalidCastException",
+        "Message": "Unable to cast object of type \u0027MediaBrowser.Controller.Entities.TV.Episode\u0027 to type \u0027MediaBrowser.Controller.Entities.Audio.Audio\u0027."
+      },
+      "calls": [
+        {
+          "method": "GetItemsResult",
+          "Recursive": true,
+          "ForceDirect": true,
+          "IsFolder": null,
+          "IsVirtualItem": null,
+          "Limit": null,
+          "IsFavorite": true,
+          "IsResumable": null,
+          "includeItemTypes": [
+            "Episode"
+          ],
+          "genreIds": [],
+          "random": false
+        }
+      ]
+    },
+    {
+      "name": "tvfavoriteepisodes-userless",
+      "sourceType": "UserView",
+      "Id": "ab210000-0000-0000-0000-000000000104",
+      "viewType": "tvfavoriteepisodes",
+      "userless": true,
+      "selected": [],
+      "Genres": [],
+      "ids": null,
+      "failure": {
+        "type": "System.NullReferenceException",
+        "Message": "Object reference not set to an instance of an object."
+      },
+      "calls": []
+    },
+    {
+      "name": "tvlatest-empty",
+      "sourceType": "UserView",
+      "Id": "ab210000-0000-0000-0000-000000000105",
+      "viewType": "tvlatest",
+      "userless": false,
+      "selected": [],
+      "Genres": [],
+      "ids": [
+        "ab210000-0000-0000-0000-000000000003",
+        "ab210000-0000-0000-0000-000000000004"
+      ],
+      "failure": null,
+      "calls": [
+        {
+          "method": "GetItemList",
+          "Recursive": true,
+          "ForceDirect": true,
+          "IsFolder": null,
+          "IsVirtualItem": false,
+          "Limit": 50,
+          "IsFavorite": null,
+          "IsResumable": null,
+          "includeItemTypes": [
+            "Episode"
+          ],
+          "genreIds": [],
+          "random": false
+        },
+        {
+          "method": "GetItemList",
+          "Recursive": false,
+          "ForceDirect": false,
+          "IsFolder": null,
+          "IsVirtualItem": null,
+          "Limit": 200,
+          "IsFavorite": null,
+          "IsResumable": null,
+          "includeItemTypes": [
+            "Audio"
+          ],
+          "genreIds": [],
+          "random": true
+        }
+      ]
+    },
+    {
+      "name": "tvlatest-selected",
+      "sourceType": "UserView",
+      "Id": "ab210000-0000-0000-0000-000000000105",
+      "viewType": "tvlatest",
+      "userless": false,
+      "selected": [
+        {
+          "Id": "ab210000-0000-0000-0000-000000000009",
+          "type": "Episode",
+          "Genres": [
+            "Drama"
+          ]
+        }
+      ],
+      "Genres": [],
+      "ids": null,
+      "failure": {
+        "type": "System.InvalidCastException",
+        "Message": "Unable to cast object of type \u0027MediaBrowser.Controller.Entities.TV.Episode\u0027 to type \u0027MediaBrowser.Controller.Entities.Audio.Audio\u0027."
+      },
+      "calls": [
+        {
+          "method": "GetItemList",
+          "Recursive": true,
+          "ForceDirect": true,
+          "IsFolder": null,
+          "IsVirtualItem": false,
+          "Limit": 50,
+          "IsFavorite": null,
+          "IsResumable": null,
+          "includeItemTypes": [
+            "Episode"
+          ],
+          "genreIds": [],
+          "random": false
+        }
+      ]
+    },
+    {
+      "name": "tvlatest-userless",
+      "sourceType": "UserView",
+      "Id": "ab210000-0000-0000-0000-000000000105",
+      "viewType": "tvlatest",
+      "userless": true,
+      "selected": [],
+      "Genres": [],
+      "ids": null,
+      "failure": {
+        "type": "System.NullReferenceException",
+        "Message": "Object reference not set to an instance of an object."
+      },
+      "calls": []
+    },
+    {
+      "name": "tvresume-empty",
+      "sourceType": "UserView",
+      "Id": "ab210000-0000-0000-0000-000000000106",
+      "viewType": "tvresume",
+      "userless": false,
+      "selected": [],
+      "Genres": [],
+      "ids": [
+        "ab210000-0000-0000-0000-000000000003",
+        "ab210000-0000-0000-0000-000000000004"
+      ],
+      "failure": null,
+      "calls": [
+        {
+          "method": "GetItemList",
+          "Recursive": true,
+          "ForceDirect": true,
+          "IsFolder": null,
+          "IsVirtualItem": null,
+          "Limit": 50,
+          "IsFavorite": null,
+          "IsResumable": true,
+          "includeItemTypes": [
+            "Episode"
+          ],
+          "genreIds": [],
+          "random": false
+        },
+        {
+          "method": "GetItemList",
+          "Recursive": false,
+          "ForceDirect": false,
+          "IsFolder": null,
+          "IsVirtualItem": null,
+          "Limit": 200,
+          "IsFavorite": null,
+          "IsResumable": null,
+          "includeItemTypes": [
+            "Audio"
+          ],
+          "genreIds": [],
+          "random": true
+        }
+      ]
+    },
+    {
+      "name": "tvresume-selected",
+      "sourceType": "UserView",
+      "Id": "ab210000-0000-0000-0000-000000000106",
+      "viewType": "tvresume",
+      "userless": false,
+      "selected": [
+        {
+          "Id": "ab210000-0000-0000-0000-000000000009",
+          "type": "Episode",
+          "Genres": [
+            "Drama"
+          ]
+        }
+      ],
+      "Genres": [],
+      "ids": null,
+      "failure": {
+        "type": "System.InvalidCastException",
+        "Message": "Unable to cast object of type \u0027MediaBrowser.Controller.Entities.TV.Episode\u0027 to type \u0027MediaBrowser.Controller.Entities.Audio.Audio\u0027."
+      },
+      "calls": [
+        {
+          "method": "GetItemList",
+          "Recursive": true,
+          "ForceDirect": true,
+          "IsFolder": null,
+          "IsVirtualItem": null,
+          "Limit": 50,
+          "IsFavorite": null,
+          "IsResumable": true,
+          "includeItemTypes": [
+            "Episode"
+          ],
+          "genreIds": [],
+          "random": false
+        }
+      ]
+    },
+    {
+      "name": "tvresume-userless",
+      "sourceType": "UserView",
+      "Id": "ab210000-0000-0000-0000-000000000106",
+      "viewType": "tvresume",
+      "userless": true,
+      "selected": [],
+      "Genres": [],
+      "ids": null,
+      "failure": {
+        "type": "System.NullReferenceException",
+        "Message": "Object reference not set to an instance of an object."
+      },
+      "calls": []
+    },
+    {
+      "name": "tvnextup-empty",
+      "sourceType": "UserView",
+      "Id": "ab210000-0000-0000-0000-000000000107",
+      "viewType": "tvnextup",
+      "userless": false,
+      "selected": [],
+      "Genres": [],
+      "ids": [
+        "ab210000-0000-0000-0000-000000000003",
+        "ab210000-0000-0000-0000-000000000004"
+      ],
+      "failure": null,
+      "calls": [
+        {
+          "method": "GetNextUp",
+          "count": 0
+        },
+        {
+          "method": "GetItemList",
+          "Recursive": false,
+          "ForceDirect": false,
+          "IsFolder": null,
+          "IsVirtualItem": null,
+          "Limit": 200,
+          "IsFavorite": null,
+          "IsResumable": null,
+          "includeItemTypes": [
+            "Audio"
+          ],
+          "genreIds": [],
+          "random": true
+        }
+      ]
+    },
+    {
+      "name": "tvnextup-selected",
+      "sourceType": "UserView",
+      "Id": "ab210000-0000-0000-0000-000000000107",
+      "viewType": "tvnextup",
+      "userless": false,
+      "selected": [
+        {
+          "Id": "ab210000-0000-0000-0000-000000000009",
+          "type": "Episode",
+          "Genres": [
+            "Drama"
+          ]
+        }
+      ],
+      "Genres": [],
+      "ids": null,
+      "failure": {
+        "type": "System.InvalidCastException",
+        "Message": "Unable to cast object of type \u0027MediaBrowser.Controller.Entities.TV.Episode\u0027 to type \u0027MediaBrowser.Controller.Entities.Audio.Audio\u0027."
+      },
+      "calls": [
+        {
+          "method": "GetNextUp",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "name": "tvnextup-userless",
+      "sourceType": "UserView",
+      "Id": "ab210000-0000-0000-0000-000000000107",
+      "viewType": "tvnextup",
+      "userless": true,
+      "selected": [],
+      "Genres": [],
+      "ids": null,
+      "failure": {
+        "type": "System.NullReferenceException",
+        "Message": "Object reference not set to an instance of an object."
+      },
+      "calls": []
+    },
+    {
+      "name": "moviemovies-empty",
+      "sourceType": "UserView",
+      "Id": "ab210000-0000-0000-0000-000000000108",
+      "viewType": "moviemovies",
+      "userless": false,
+      "selected": [],
+      "Genres": [],
+      "ids": [
+        "ab210000-0000-0000-0000-000000000003",
+        "ab210000-0000-0000-0000-000000000004"
+      ],
+      "failure": null,
+      "calls": [
+        {
+          "method": "GetItemsResult",
+          "Recursive": true,
+          "ForceDirect": true,
+          "IsFolder": null,
+          "IsVirtualItem": null,
+          "Limit": null,
+          "IsFavorite": null,
+          "IsResumable": null,
+          "includeItemTypes": [
+            "Movie"
+          ],
+          "genreIds": [],
+          "random": false
+        },
+        {
+          "method": "GetItemList",
+          "Recursive": false,
+          "ForceDirect": false,
+          "IsFolder": null,
+          "IsVirtualItem": null,
+          "Limit": 200,
+          "IsFavorite": null,
+          "IsResumable": null,
+          "includeItemTypes": [
+            "Audio"
+          ],
+          "genreIds": [],
+          "random": true
+        }
+      ]
+    },
+    {
+      "name": "moviemovies-selected",
+      "sourceType": "UserView",
+      "Id": "ab210000-0000-0000-0000-000000000108",
+      "viewType": "moviemovies",
+      "userless": false,
+      "selected": [
+        {
+          "Id": "ab210000-0000-0000-0000-000000000007",
+          "type": "Movie",
+          "Genres": [
+            "Drama"
+          ]
+        }
+      ],
+      "Genres": [],
+      "ids": null,
+      "failure": {
+        "type": "System.InvalidCastException",
+        "Message": "Unable to cast object of type \u0027MediaBrowser.Controller.Entities.Movies.Movie\u0027 to type \u0027MediaBrowser.Controller.Entities.Audio.Audio\u0027."
+      },
+      "calls": [
+        {
+          "method": "GetItemsResult",
+          "Recursive": true,
+          "ForceDirect": true,
+          "IsFolder": null,
+          "IsVirtualItem": null,
+          "Limit": null,
+          "IsFavorite": null,
+          "IsResumable": null,
+          "includeItemTypes": [
+            "Movie"
+          ],
+          "genreIds": [],
+          "random": false
+        }
+      ]
+    },
+    {
+      "name": "moviemovies-userless",
+      "sourceType": "UserView",
+      "Id": "ab210000-0000-0000-0000-000000000108",
+      "viewType": "moviemovies",
+      "userless": true,
+      "selected": [],
+      "Genres": [],
+      "ids": null,
+      "failure": {
+        "type": "System.NullReferenceException",
+        "Message": "Object reference not set to an instance of an object."
+      },
+      "calls": []
+    },
+    {
+      "name": "moviegenre-empty",
+      "sourceType": "UserView",
+      "Id": "ab210000-0000-0000-0000-000000000109",
+      "viewType": "moviegenre",
+      "userless": false,
+      "selected": [],
+      "Genres": [],
+      "ids": [
+        "ab210000-0000-0000-0000-000000000003",
+        "ab210000-0000-0000-0000-000000000004"
+      ],
+      "failure": null,
+      "calls": [
+        {
+          "method": "GetItemsResult",
+          "Recursive": true,
+          "ForceDirect": true,
+          "IsFolder": null,
+          "IsVirtualItem": null,
+          "Limit": null,
+          "IsFavorite": null,
+          "IsResumable": null,
+          "includeItemTypes": [
+            "Movie"
+          ],
+          "genreIds": [
+            "ab210000-0000-0000-0000-000000000109"
+          ],
+          "random": false
+        },
+        {
+          "method": "GetItemList",
+          "Recursive": false,
+          "ForceDirect": false,
+          "IsFolder": null,
+          "IsVirtualItem": null,
+          "Limit": 200,
+          "IsFavorite": null,
+          "IsResumable": null,
+          "includeItemTypes": [
+            "Audio"
+          ],
+          "genreIds": [],
+          "random": true
+        }
+      ]
+    },
+    {
+      "name": "moviegenre-selected",
+      "sourceType": "UserView",
+      "Id": "ab210000-0000-0000-0000-000000000109",
+      "viewType": "moviegenre",
+      "userless": false,
+      "selected": [
+        {
+          "Id": "ab210000-0000-0000-0000-000000000007",
+          "type": "Movie",
+          "Genres": [
+            "Drama"
+          ]
+        }
+      ],
+      "Genres": [],
+      "ids": null,
+      "failure": {
+        "type": "System.InvalidCastException",
+        "Message": "Unable to cast object of type \u0027MediaBrowser.Controller.Entities.Movies.Movie\u0027 to type \u0027MediaBrowser.Controller.Entities.Audio.Audio\u0027."
+      },
+      "calls": [
+        {
+          "method": "GetItemsResult",
+          "Recursive": true,
+          "ForceDirect": true,
+          "IsFolder": null,
+          "IsVirtualItem": null,
+          "Limit": null,
+          "IsFavorite": null,
+          "IsResumable": null,
+          "includeItemTypes": [
+            "Movie"
+          ],
+          "genreIds": [
+            "ab210000-0000-0000-0000-000000000109"
+          ],
+          "random": false
+        }
+      ]
+    },
+    {
+      "name": "moviegenre-userless",
+      "sourceType": "UserView",
+      "Id": "ab210000-0000-0000-0000-000000000109",
+      "viewType": "moviegenre",
+      "userless": true,
+      "selected": [],
+      "Genres": [],
+      "ids": null,
+      "failure": {
+        "type": "System.NullReferenceException",
+        "Message": "Object reference not set to an instance of an object."
+      },
+      "calls": []
+    },
+    {
+      "name": "moviecollection-empty",
+      "sourceType": "UserView",
+      "Id": "ab210000-0000-0000-0000-000000000110",
+      "viewType": "moviecollection",
+      "userless": false,
+      "selected": [],
+      "Genres": [],
+      "ids": [
+        "ab210000-0000-0000-0000-000000000003",
+        "ab210000-0000-0000-0000-000000000004"
+      ],
+      "failure": null,
+      "calls": [
+        {
+          "method": "GetItemsResult",
+          "Recursive": true,
+          "ForceDirect": true,
+          "IsFolder": null,
+          "IsVirtualItem": null,
+          "Limit": null,
+          "IsFavorite": null,
+          "IsResumable": null,
+          "includeItemTypes": [
+            "BoxSet"
+          ],
+          "genreIds": [],
+          "random": false
+        },
+        {
+          "method": "GetItemList",
+          "Recursive": false,
+          "ForceDirect": false,
+          "IsFolder": null,
+          "IsVirtualItem": null,
+          "Limit": 200,
+          "IsFavorite": null,
+          "IsResumable": null,
+          "includeItemTypes": [
+            "Audio"
+          ],
+          "genreIds": [],
+          "random": true
+        }
+      ]
+    },
+    {
+      "name": "moviecollection-selected",
+      "sourceType": "UserView",
+      "Id": "ab210000-0000-0000-0000-000000000110",
+      "viewType": "moviecollection",
+      "userless": false,
+      "selected": [
+        {
+          "Id": "ab210000-0000-0000-0000-000000000010",
+          "type": "BoxSet",
+          "Genres": []
+        }
+      ],
+      "Genres": [],
+      "ids": null,
+      "failure": {
+        "type": "System.InvalidCastException",
+        "Message": "Unable to cast object of type \u0027MediaBrowser.Controller.Entities.Movies.BoxSet\u0027 to type \u0027MediaBrowser.Controller.Entities.Audio.Audio\u0027."
+      },
+      "calls": [
+        {
+          "method": "GetItemsResult",
+          "Recursive": true,
+          "ForceDirect": true,
+          "IsFolder": null,
+          "IsVirtualItem": null,
+          "Limit": null,
+          "IsFavorite": null,
+          "IsResumable": null,
+          "includeItemTypes": [
+            "BoxSet"
+          ],
+          "genreIds": [],
+          "random": false
+        }
+      ]
+    },
+    {
+      "name": "moviecollection-userless",
+      "sourceType": "UserView",
+      "Id": "ab210000-0000-0000-0000-000000000110",
+      "viewType": "moviecollection",
+      "userless": true,
+      "selected": [],
+      "Genres": [],
+      "ids": null,
+      "failure": {
+        "type": "System.NullReferenceException",
+        "Message": "Object reference not set to an instance of an object."
+      },
+      "calls": []
+    },
+    {
+      "name": "moviefavorites-empty",
+      "sourceType": "UserView",
+      "Id": "ab210000-0000-0000-0000-000000000111",
+      "viewType": "moviefavorites",
+      "userless": false,
+      "selected": [],
+      "Genres": [],
+      "ids": [
+        "ab210000-0000-0000-0000-000000000003",
+        "ab210000-0000-0000-0000-000000000004"
+      ],
+      "failure": null,
+      "calls": [
+        {
+          "method": "GetItemsResult",
+          "Recursive": true,
+          "ForceDirect": true,
+          "IsFolder": null,
+          "IsVirtualItem": null,
+          "Limit": null,
+          "IsFavorite": true,
+          "IsResumable": null,
+          "includeItemTypes": [
+            "Movie"
+          ],
+          "genreIds": [],
+          "random": false
+        },
+        {
+          "method": "GetItemList",
+          "Recursive": false,
+          "ForceDirect": false,
+          "IsFolder": null,
+          "IsVirtualItem": null,
+          "Limit": 200,
+          "IsFavorite": null,
+          "IsResumable": null,
+          "includeItemTypes": [
+            "Audio"
+          ],
+          "genreIds": [],
+          "random": true
+        }
+      ]
+    },
+    {
+      "name": "moviefavorites-selected",
+      "sourceType": "UserView",
+      "Id": "ab210000-0000-0000-0000-000000000111",
+      "viewType": "moviefavorites",
+      "userless": false,
+      "selected": [
+        {
+          "Id": "ab210000-0000-0000-0000-000000000007",
+          "type": "Movie",
+          "Genres": [
+            "Drama"
+          ]
+        }
+      ],
+      "Genres": [],
+      "ids": null,
+      "failure": {
+        "type": "System.InvalidCastException",
+        "Message": "Unable to cast object of type \u0027MediaBrowser.Controller.Entities.Movies.Movie\u0027 to type \u0027MediaBrowser.Controller.Entities.Audio.Audio\u0027."
+      },
+      "calls": [
+        {
+          "method": "GetItemsResult",
+          "Recursive": true,
+          "ForceDirect": true,
+          "IsFolder": null,
+          "IsVirtualItem": null,
+          "Limit": null,
+          "IsFavorite": true,
+          "IsResumable": null,
+          "includeItemTypes": [
+            "Movie"
+          ],
+          "genreIds": [],
+          "random": false
+        }
+      ]
+    },
+    {
+      "name": "moviefavorites-userless",
+      "sourceType": "UserView",
+      "Id": "ab210000-0000-0000-0000-000000000111",
+      "viewType": "moviefavorites",
+      "userless": true,
+      "selected": [],
+      "Genres": [],
+      "ids": null,
+      "failure": {
+        "type": "System.NullReferenceException",
+        "Message": "Object reference not set to an instance of an object."
+      },
+      "calls": []
+    },
+    {
+      "name": "movielatest-empty",
+      "sourceType": "UserView",
+      "Id": "ab210000-0000-0000-0000-000000000112",
+      "viewType": "movielatest",
+      "userless": false,
+      "selected": [],
+      "Genres": [],
+      "ids": [
+        "ab210000-0000-0000-0000-000000000003",
+        "ab210000-0000-0000-0000-000000000004"
+      ],
+      "failure": null,
+      "calls": [
+        {
+          "method": "GetItemList",
+          "Recursive": true,
+          "ForceDirect": true,
+          "IsFolder": null,
+          "IsVirtualItem": null,
+          "Limit": 50,
+          "IsFavorite": null,
+          "IsResumable": null,
+          "includeItemTypes": [
+            "Movie"
+          ],
+          "genreIds": [],
+          "random": false
+        },
+        {
+          "method": "GetItemList",
+          "Recursive": false,
+          "ForceDirect": false,
+          "IsFolder": null,
+          "IsVirtualItem": null,
+          "Limit": 200,
+          "IsFavorite": null,
+          "IsResumable": null,
+          "includeItemTypes": [
+            "Audio"
+          ],
+          "genreIds": [],
+          "random": true
+        }
+      ]
+    },
+    {
+      "name": "movielatest-selected",
+      "sourceType": "UserView",
+      "Id": "ab210000-0000-0000-0000-000000000112",
+      "viewType": "movielatest",
+      "userless": false,
+      "selected": [
+        {
+          "Id": "ab210000-0000-0000-0000-000000000007",
+          "type": "Movie",
+          "Genres": [
+            "Drama"
+          ]
+        }
+      ],
+      "Genres": [],
+      "ids": null,
+      "failure": {
+        "type": "System.InvalidCastException",
+        "Message": "Unable to cast object of type \u0027MediaBrowser.Controller.Entities.Movies.Movie\u0027 to type \u0027MediaBrowser.Controller.Entities.Audio.Audio\u0027."
+      },
+      "calls": [
+        {
+          "method": "GetItemList",
+          "Recursive": true,
+          "ForceDirect": true,
+          "IsFolder": null,
+          "IsVirtualItem": null,
+          "Limit": 50,
+          "IsFavorite": null,
+          "IsResumable": null,
+          "includeItemTypes": [
+            "Movie"
+          ],
+          "genreIds": [],
+          "random": false
+        }
+      ]
+    },
+    {
+      "name": "movielatest-userless",
+      "sourceType": "UserView",
+      "Id": "ab210000-0000-0000-0000-000000000112",
+      "viewType": "movielatest",
+      "userless": true,
+      "selected": [],
+      "Genres": [],
+      "ids": null,
+      "failure": {
+        "type": "System.NullReferenceException",
+        "Message": "Object reference not set to an instance of an object."
+      },
+      "calls": []
+    },
+    {
+      "name": "movieresume-empty",
+      "sourceType": "UserView",
+      "Id": "ab210000-0000-0000-0000-000000000113",
+      "viewType": "movieresume",
+      "userless": false,
+      "selected": [],
+      "Genres": [],
+      "ids": [
+        "ab210000-0000-0000-0000-000000000003",
+        "ab210000-0000-0000-0000-000000000004"
+      ],
+      "failure": null,
+      "calls": [
+        {
+          "method": "GetItemList",
+          "Recursive": true,
+          "ForceDirect": true,
+          "IsFolder": null,
+          "IsVirtualItem": null,
+          "Limit": 50,
+          "IsFavorite": null,
+          "IsResumable": true,
+          "includeItemTypes": [
+            "Movie"
+          ],
+          "genreIds": [],
+          "random": false
+        },
+        {
+          "method": "GetItemList",
+          "Recursive": false,
+          "ForceDirect": false,
+          "IsFolder": null,
+          "IsVirtualItem": null,
+          "Limit": 200,
+          "IsFavorite": null,
+          "IsResumable": null,
+          "includeItemTypes": [
+            "Audio"
+          ],
+          "genreIds": [],
+          "random": true
+        }
+      ]
+    },
+    {
+      "name": "movieresume-selected",
+      "sourceType": "UserView",
+      "Id": "ab210000-0000-0000-0000-000000000113",
+      "viewType": "movieresume",
+      "userless": false,
+      "selected": [
+        {
+          "Id": "ab210000-0000-0000-0000-000000000007",
+          "type": "Movie",
+          "Genres": [
+            "Drama"
+          ]
+        }
+      ],
+      "Genres": [],
+      "ids": null,
+      "failure": {
+        "type": "System.InvalidCastException",
+        "Message": "Unable to cast object of type \u0027MediaBrowser.Controller.Entities.Movies.Movie\u0027 to type \u0027MediaBrowser.Controller.Entities.Audio.Audio\u0027."
+      },
+      "calls": [
+        {
+          "method": "GetItemList",
+          "Recursive": true,
+          "ForceDirect": true,
+          "IsFolder": null,
+          "IsVirtualItem": null,
+          "Limit": 50,
+          "IsFavorite": null,
+          "IsResumable": true,
+          "includeItemTypes": [
+            "Movie"
+          ],
+          "genreIds": [],
+          "random": false
+        }
+      ]
+    },
+    {
+      "name": "movieresume-userless",
+      "sourceType": "UserView",
+      "Id": "ab210000-0000-0000-0000-000000000113",
+      "viewType": "movieresume",
+      "userless": true,
+      "selected": [],
+      "Genres": [],
+      "ids": null,
+      "failure": {
+        "type": "System.NullReferenceException",
+        "Message": "Object reference not set to an instance of an object."
+      },
+      "calls": []
+    },
+    {
+      "name": "books-paper-after-audio",
+      "sourceType": "UserView",
+      "Id": "ab210000-0000-0000-0000-000000000100",
+      "viewType": "books",
+      "userless": false,
+      "selected": [
+        {
+          "Id": "ab210000-0000-0000-0000-000000000005",
+          "type": "AudioBook",
+          "Genres": [
+            "Drama"
+          ]
+        },
+        {
+          "Id": "ab210000-0000-0000-0000-000000000006",
+          "type": "Book",
+          "Genres": [
+            "Novel"
+          ]
+        }
+      ],
+      "Genres": [],
+      "ids": null,
+      "failure": {
+        "type": "System.InvalidCastException",
+        "Message": "Unable to cast object of type \u0027MediaBrowser.Controller.Entities.Book\u0027 to type \u0027MediaBrowser.Controller.Entities.Audio.Audio\u0027."
+      },
+      "calls": [
+        {
+          "method": "GetItemsResult",
+          "Recursive": true,
+          "ForceDirect": true,
+          "IsFolder": null,
+          "IsVirtualItem": null,
+          "Limit": null,
+          "IsFavorite": null,
+          "IsResumable": null,
+          "includeItemTypes": [
+            "Book",
+            "AudioBook"
+          ],
+          "genreIds": [],
+          "random": false
+        },
+        {
+          "method": "GetMusicGenre",
+          "name": "Drama"
+        }
+      ]
+    },
+    {
+      "name": "books-paper-before-audio",
+      "sourceType": "UserView",
+      "Id": "ab210000-0000-0000-0000-000000000100",
+      "viewType": "books",
+      "userless": false,
+      "selected": [
+        {
+          "Id": "ab210000-0000-0000-0000-000000000006",
+          "type": "Book",
+          "Genres": [
+            "Novel"
+          ]
+        },
+        {
+          "Id": "ab210000-0000-0000-0000-000000000005",
+          "type": "AudioBook",
+          "Genres": [
+            "Drama"
+          ]
+        }
+      ],
+      "Genres": [],
+      "ids": null,
+      "failure": {
+        "type": "System.InvalidCastException",
+        "Message": "Unable to cast object of type \u0027MediaBrowser.Controller.Entities.Book\u0027 to type \u0027MediaBrowser.Controller.Entities.Audio.Audio\u0027."
+      },
+      "calls": [
+        {
+          "method": "GetItemsResult",
+          "Recursive": true,
+          "ForceDirect": true,
+          "IsFolder": null,
+          "IsVirtualItem": null,
+          "Limit": null,
+          "IsFavorite": null,
+          "IsResumable": null,
+          "includeItemTypes": [
+            "Book",
+            "AudioBook"
+          ],
+          "genreIds": [],
+          "random": false
+        }
+      ]
+    },
+    {
+      "name": "movies-audio",
+      "sourceType": "UserView",
+      "Id": "ab210000-0000-0000-0000-000000000201",
+      "viewType": "movies",
+      "userless": false,
+      "selected": [
+        {
+          "Id": "ab210000-0000-0000-0000-000000000003",
+          "type": "Audio",
+          "Genres": [
+            "Drama",
+            "DRAMA",
+            "\u7235\u58EB"
+          ]
+        }
+      ],
+      "Genres": [],
+      "ids": [
+        "ab210000-0000-0000-0000-000000000003",
+        "ab210000-0000-0000-0000-000000000004"
+      ],
+      "failure": null,
+      "calls": [
+        {
+          "method": "GetItemsResult",
+          "Recursive": true,
+          "ForceDirect": true,
+          "IsFolder": null,
+          "IsVirtualItem": null,
+          "Limit": null,
+          "IsFavorite": null,
+          "IsResumable": null,
+          "includeItemTypes": [
+            "Audio"
+          ],
+          "genreIds": [],
+          "random": false
+        },
+        {
+          "method": "GetMusicGenre",
+          "name": "Drama"
+        },
+        {
+          "method": "GetMusicGenre",
+          "name": "\u7235\u58EB"
+        },
+        {
+          "method": "GetItemList",
+          "Recursive": false,
+          "ForceDirect": false,
+          "IsFolder": null,
+          "IsVirtualItem": null,
+          "Limit": 200,
+          "IsFavorite": null,
+          "IsResumable": null,
+          "includeItemTypes": [
+            "Audio"
+          ],
+          "genreIds": [
+            "ab210000-0000-0000-0000-000000000020",
+            "ab210000-0000-0000-0000-000000000021"
+          ],
+          "random": true
+        }
+      ]
+    },
+    {
+      "name": "movies-userless",
+      "sourceType": "UserView",
+      "Id": "ab210000-0000-0000-0000-000000000201",
+      "viewType": "movies",
+      "userless": true,
+      "selected": [],
+      "Genres": [],
+      "ids": null,
+      "failure": {
+        "type": "System.NullReferenceException",
+        "Message": "Object reference not set to an instance of an object."
+      },
+      "calls": []
+    },
+    {
+      "name": "tvshows-audio",
+      "sourceType": "UserView",
+      "Id": "ab210000-0000-0000-0000-000000000202",
+      "viewType": "tvshows",
+      "userless": false,
+      "selected": [
+        {
+          "Id": "ab210000-0000-0000-0000-000000000003",
+          "type": "Audio",
+          "Genres": [
+            "Drama",
+            "DRAMA",
+            "\u7235\u58EB"
+          ]
+        }
+      ],
+      "Genres": [],
+      "ids": [
+        "ab210000-0000-0000-0000-000000000003",
+        "ab210000-0000-0000-0000-000000000004"
+      ],
+      "failure": null,
+      "calls": [
+        {
+          "method": "GetItemsResult",
+          "Recursive": true,
+          "ForceDirect": true,
+          "IsFolder": null,
+          "IsVirtualItem": null,
+          "Limit": null,
+          "IsFavorite": null,
+          "IsResumable": null,
+          "includeItemTypes": [
+            "Audio"
+          ],
+          "genreIds": [],
+          "random": false
+        },
+        {
+          "method": "GetMusicGenre",
+          "name": "Drama"
+        },
+        {
+          "method": "GetMusicGenre",
+          "name": "\u7235\u58EB"
+        },
+        {
+          "method": "GetItemList",
+          "Recursive": false,
+          "ForceDirect": false,
+          "IsFolder": null,
+          "IsVirtualItem": null,
+          "Limit": 200,
+          "IsFavorite": null,
+          "IsResumable": null,
+          "includeItemTypes": [
+            "Audio"
+          ],
+          "genreIds": [
+            "ab210000-0000-0000-0000-000000000020",
+            "ab210000-0000-0000-0000-000000000021"
+          ],
+          "random": true
+        }
+      ]
+    },
+    {
+      "name": "tvshows-userless",
+      "sourceType": "UserView",
+      "Id": "ab210000-0000-0000-0000-000000000202",
+      "viewType": "tvshows",
+      "userless": true,
+      "selected": [],
+      "Genres": [],
+      "ids": null,
+      "failure": {
+        "type": "System.NullReferenceException",
+        "Message": "Object reference not set to an instance of an object."
+      },
+      "calls": []
+    },
+    {
+      "name": "music-audio",
+      "sourceType": "UserView",
+      "Id": "ab210000-0000-0000-0000-000000000203",
+      "viewType": "music",
+      "userless": false,
+      "selected": [
+        {
+          "Id": "ab210000-0000-0000-0000-000000000003",
+          "type": "Audio",
+          "Genres": [
+            "Drama",
+            "DRAMA",
+            "\u7235\u58EB"
+          ]
+        }
+      ],
+      "Genres": [],
+      "ids": [
+        "ab210000-0000-0000-0000-000000000003",
+        "ab210000-0000-0000-0000-000000000004"
+      ],
+      "failure": null,
+      "calls": [
+        {
+          "method": "GetItemsResult",
+          "Recursive": true,
+          "ForceDirect": true,
+          "IsFolder": null,
+          "IsVirtualItem": null,
+          "Limit": null,
+          "IsFavorite": null,
+          "IsResumable": null,
+          "includeItemTypes": [
+            "Audio"
+          ],
+          "genreIds": [],
+          "random": false
+        },
+        {
+          "method": "GetMusicGenre",
+          "name": "Drama"
+        },
+        {
+          "method": "GetMusicGenre",
+          "name": "\u7235\u58EB"
+        },
+        {
+          "method": "GetItemList",
+          "Recursive": false,
+          "ForceDirect": false,
+          "IsFolder": null,
+          "IsVirtualItem": null,
+          "Limit": 200,
+          "IsFavorite": null,
+          "IsResumable": null,
+          "includeItemTypes": [
+            "Audio"
+          ],
+          "genreIds": [
+            "ab210000-0000-0000-0000-000000000020",
+            "ab210000-0000-0000-0000-000000000021"
+          ],
+          "random": true
+        }
+      ]
+    },
+    {
+      "name": "music-userless",
+      "sourceType": "UserView",
+      "Id": "ab210000-0000-0000-0000-000000000203",
+      "viewType": "music",
+      "userless": true,
+      "selected": [],
+      "Genres": [],
+      "ids": null,
+      "failure": {
+        "type": "System.NullReferenceException",
+        "Message": "Object reference not set to an instance of an object."
+      },
+      "calls": []
+    },
+    {
+      "name": "moviegenres-audio",
+      "sourceType": "UserView",
+      "Id": "ab210000-0000-0000-0000-000000000314",
+      "viewType": "moviegenres",
+      "userless": false,
+      "selected": [
+        {
+          "Id": "ab210000-0000-0000-0000-000000000003",
+          "type": "Audio",
+          "Genres": [
+            "Drama",
+            "DRAMA",
+            "\u7235\u58EB"
+          ]
+        }
+      ],
+      "Genres": [],
+      "ids": [
+        "ab210000-0000-0000-0000-000000000003",
+        "ab210000-0000-0000-0000-000000000004"
+      ],
+      "failure": null,
+      "calls": [
+        {
+          "method": "GetItemsResult",
+          "Recursive": true,
+          "ForceDirect": false,
+          "IsFolder": null,
+          "IsVirtualItem": null,
+          "Limit": null,
+          "IsFavorite": null,
+          "IsResumable": null,
+          "includeItemTypes": [
+            "Movie"
+          ],
+          "genreIds": [],
+          "random": false
+        },
+        {
+          "method": "GetItemList",
+          "Recursive": false,
+          "ForceDirect": false,
+          "IsFolder": null,
+          "IsVirtualItem": null,
+          "Limit": 200,
+          "IsFavorite": null,
+          "IsResumable": null,
+          "includeItemTypes": [
+            "Audio"
+          ],
+          "genreIds": [],
+          "random": true
+        }
+      ]
+    },
+    {
+      "name": "moviegenres-userless",
+      "sourceType": "UserView",
+      "Id": "ab210000-0000-0000-0000-000000000314",
+      "viewType": "moviegenres",
+      "userless": true,
+      "selected": [],
+      "Genres": [],
+      "ids": null,
+      "failure": {
+        "type": "System.NullReferenceException",
+        "Message": "Object reference not set to an instance of an object."
+      },
+      "calls": []
+    },
+    {
+      "name": "tvgenres-audio",
+      "sourceType": "UserView",
+      "Id": "ab210000-0000-0000-0000-000000000302",
+      "viewType": "tvgenres",
+      "userless": false,
+      "selected": [
+        {
+          "Id": "ab210000-0000-0000-0000-000000000003",
+          "type": "Audio",
+          "Genres": [
+            "Drama",
+            "DRAMA",
+            "\u7235\u58EB"
+          ]
+        }
+      ],
+      "Genres": [],
+      "ids": [
+        "ab210000-0000-0000-0000-000000000003",
+        "ab210000-0000-0000-0000-000000000004"
+      ],
+      "failure": null,
+      "calls": [
+        {
+          "method": "GetItemsResult",
+          "Recursive": true,
+          "ForceDirect": false,
+          "IsFolder": null,
+          "IsVirtualItem": null,
+          "Limit": null,
+          "IsFavorite": null,
+          "IsResumable": null,
+          "includeItemTypes": [
+            "Series"
+          ],
+          "genreIds": [],
+          "random": false
+        },
+        {
+          "method": "GetItemList",
+          "Recursive": false,
+          "ForceDirect": false,
+          "IsFolder": null,
+          "IsVirtualItem": null,
+          "Limit": 200,
+          "IsFavorite": null,
+          "IsResumable": null,
+          "includeItemTypes": [
+            "Audio"
+          ],
+          "genreIds": [],
+          "random": true
+        }
+      ]
+    },
+    {
+      "name": "tvgenres-userless",
+      "sourceType": "UserView",
+      "Id": "ab210000-0000-0000-0000-000000000302",
+      "viewType": "tvgenres",
+      "userless": true,
+      "selected": [],
+      "Genres": [],
+      "ids": null,
+      "failure": {
+        "type": "System.NullReferenceException",
+        "Message": "Object reference not set to an instance of an object."
+      },
+      "calls": []
+    }
+  ],
+  "assemblies": [
+    {
+      "name": "Diacritics",
+      "sha256": "893640462f6bfaa8cf5c18698ee655a1777b05d359963c129e95c2ffb94307b0"
+    },
+    {
+      "name": "Emby.Server.Implementations",
+      "sha256": "8d369435646570958505c58b9cb17da169855dabc105d0e933524361e9b7b1c8"
+    },
+    {
+      "name": "J2N",
+      "sha256": "93afc2ad2a3a7335992791ebe116a57908ebb027571c67c8ac8844fe12696c8c"
+    },
+    {
+      "name": "Jellyfin.Data",
+      "sha256": "b991153c8e091e6e618b27b47ec2c070c003fc5c4453406a74fe843c43611d7e"
+    },
+    {
+      "name": "Jellyfin.Database.Implementations",
+      "sha256": "5ffd9a90affb635962267da294a36a4cd6972da5f38083b51ecfb4fba4c31ee6"
+    },
+    {
+      "name": "Jellyfin.Extensions",
+      "sha256": "db952e3013a6949ad22db9ac3379be2efdf441c139ddc6919e86f8c2abbc7207"
+    },
+    {
+      "name": "MediaBrowser.Common",
+      "sha256": "c86a38f99a78d9d3b9dd5ba5245fb06bf654cfa3e16ec409d3ba77b1e69ed11e"
+    },
+    {
+      "name": "MediaBrowser.Controller",
+      "sha256": "051c588a8e85a3a7cdde8dc3d9a1112217fd7e973a86fe2ff90cf765bedb75a8"
+    },
+    {
+      "name": "MediaBrowser.Model",
+      "sha256": "7b2c1b16721cf7747b572e4de3761de635fad4bd12bec346983545bee73fd92c"
+    },
+    {
+      "name": "Microsoft.Extensions.Logging.Abstractions",
+      "sha256": "90c41d68d297e54c4def3cfd38eb620513a744ab01131840ea3e2634cf973be3"
+    },
+    {
+      "name": "Oracle",
+      "sha256": "818c86d9772ed0cfeb2fd46aba97be5827ec3acb400bc739c92147b6398a34e7"
+    },
+    {
+      "name": "System.Collections",
+      "sha256": "df6f2037eabee28100184e92f7536427ba2f086c1110629804d466b124bc4d54"
+    },
+    {
+      "name": "System.Console",
+      "sha256": "3b85daf02a3d9ed99b84bb1c639fe8b1ced46d8d157fa56f525f6b8c5be43b3e"
+    },
+    {
+      "name": "System.Diagnostics.Process",
+      "sha256": "51a57fbe918f8b68930c090792b718fc0850ea12da869d50b97a3796af29a740"
+    },
+    {
+      "name": "System.Linq",
+      "sha256": "284d38945b6e92e847129bd28af458b19818d0f2181f79882888ab2003f4c519"
+    },
+    {
+      "name": "System.Memory",
+      "sha256": "f8f9d38efd6b0de30954d6bf1f353e9617bfb36d3d245c013a3b12be9f6bd88a"
+    },
+    {
+      "name": "System.Private.CoreLib",
+      "sha256": "1125acc8106c43fc8bad2d203c4c4485df6182d292846c2fff415c1040c54678"
+    },
+    {
+      "name": "System.Reflection.DispatchProxy",
+      "sha256": "bf93a361c0bba8497889c9f7713add5968ba39394f9e6bda27e86294c6c43560"
+    },
+    {
+      "name": "System.Reflection.Emit",
+      "sha256": "09059981bbeea0fdc5df589be5d7e3937d57e22bec4d78ceb492c587926fc238"
+    },
+    {
+      "name": "System.Reflection.Emit.ILGeneration",
+      "sha256": "6b42ddd05b0ca1c7342d73ea9f401fe588044215d65c67b756deb780f0894a26"
+    },
+    {
+      "name": "System.Reflection.Primitives",
+      "sha256": "c2bbd885d03da5e880667c228ac1f56a5f3a72ea37d43f010ada000adc33da28"
+    },
+    {
+      "name": "System.Runtime",
+      "sha256": "76be53624f64b23d0249dfa0bbe85390086de7c44bfd490642ea86c6faaf44af"
+    },
+    {
+      "name": "System.Runtime.InteropServices",
+      "sha256": "e5eb1679f3579c9141e2bb9dbdce62624a623f38d299805cc1de07bacd21841f"
+    },
+    {
+      "name": "System.Runtime.Loader",
+      "sha256": "9b9b2a4f0358d9146e76178ddb87d019be380c78baa7dac853493d45df089f03"
+    },
+    {
+      "name": "System.Text.Json",
+      "sha256": "fa99f413be21ed5f484a09093fe5f0beba7de3062cf9cc9f847dbf8108dba55a"
+    },
+    {
+      "name": "System.Text.RegularExpressions",
+      "sha256": "060bcc88a688e687ff1404b83b5fb5cf17e19ec57f33d5b8a48ab494da83c134"
+    },
+    {
+      "name": "System.Threading",
+      "sha256": "6c32ed1bf8067e4169e8feddd15e6489b89d19d1c7aae1520a551b57745d0a60"
+    }
+  ]
+}

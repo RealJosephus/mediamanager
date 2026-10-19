@@ -1,0 +1,1133 @@
+{
+  "inputSha256": "fde8243dfffcdd862a113293653f50b33fb472c78911e075d66b8b8fe47d824d",
+  "actualCollectionPostScanTask": true,
+  "rootAndRepositoryControlled": true,
+  "collectionManagerControlled": true,
+  "candidateVerified": false,
+  "repositoryBoxSetsAndCachedManagerItemsAreIndependent": true,
+  "mediaOpened": false,
+  "portOpened": false,
+  "results": [
+    {
+      "Name": "empty root",
+      "calls": [],
+      "progress": [
+        100
+      ],
+      "logs": [],
+      "failure": null
+    },
+    {
+      "Name": "disabled library",
+      "calls": [
+        {
+          "action": "options",
+          "Name": "Disabled"
+        }
+      ],
+      "progress": [
+        100
+      ],
+      "logs": [],
+      "failure": null
+    },
+    {
+      "Name": "empty enabled library",
+      "calls": [
+        {
+          "action": "options",
+          "Name": "Enabled"
+        },
+        {
+          "action": "movies",
+          "Name": "Enabled",
+          "ParentId": "bc100000-0000-0000-0000-000000000001",
+          "ParentType": 10,
+          "includeTypes": [
+            13
+          ],
+          "MediaTypes": [
+            1
+          ],
+          "IsVirtualItem": false,
+          "order": [
+            {
+              "name": "SortName",
+              "direction": "Ascending"
+            }
+          ],
+          "StartIndex": 0,
+          "Limit": 1000,
+          "Recursive": true
+        }
+      ],
+      "progress": [
+        100
+      ],
+      "logs": [],
+      "failure": null
+    },
+    {
+      "Name": "new collection",
+      "calls": [
+        {
+          "action": "options",
+          "Name": "First"
+        },
+        {
+          "action": "movies",
+          "Name": "First",
+          "ParentId": "bc100000-0000-0000-0000-000000000001",
+          "ParentType": 10,
+          "includeTypes": [
+            13
+          ],
+          "MediaTypes": [
+            1
+          ],
+          "IsVirtualItem": false,
+          "order": [
+            {
+              "name": "SortName",
+              "direction": "Ascending"
+            }
+          ],
+          "StartIndex": 0,
+          "Limit": 1000,
+          "Recursive": true
+        },
+        {
+          "action": "boxsets",
+          "includeTypes": [
+            5
+          ],
+          "CollapseBoxSetItems": false,
+          "Recursive": true
+        },
+        {
+          "action": "create",
+          "Name": "Saga",
+          "IsLocked": false,
+          "ParentId": null,
+          "ItemIdList": [],
+          "ProviderIds": {},
+          "UserIds": []
+        },
+        {
+          "action": "add",
+          "id": "bc100000-0000-0000-0000-000000020000",
+          "members": [
+            "bc100000-0000-0000-0000-000000000001",
+            "bc100000-0000-0000-0000-000000000002"
+          ]
+        }
+      ],
+      "progress": [
+        100,
+        100
+      ],
+      "logs": [],
+      "failure": null
+    },
+    {
+      "Name": "single movie is not created",
+      "calls": [
+        {
+          "action": "options",
+          "Name": "First"
+        },
+        {
+          "action": "movies",
+          "Name": "First",
+          "ParentId": "bc100000-0000-0000-0000-000000000001",
+          "ParentType": 10,
+          "includeTypes": [
+            13
+          ],
+          "MediaTypes": [
+            1
+          ],
+          "IsVirtualItem": false,
+          "order": [
+            {
+              "name": "SortName",
+              "direction": "Ascending"
+            }
+          ],
+          "StartIndex": 0,
+          "Limit": 1000,
+          "Recursive": true
+        },
+        {
+          "action": "boxsets",
+          "includeTypes": [
+            5
+          ],
+          "CollapseBoxSetItems": false,
+          "Recursive": true
+        }
+      ],
+      "progress": [
+        100,
+        100
+      ],
+      "logs": [],
+      "failure": null
+    },
+    {
+      "Name": "existing single movie collection",
+      "calls": [
+        {
+          "action": "options",
+          "Name": "First"
+        },
+        {
+          "action": "movies",
+          "Name": "First",
+          "ParentId": "bc100000-0000-0000-0000-000000000001",
+          "ParentType": 10,
+          "includeTypes": [
+            13
+          ],
+          "MediaTypes": [
+            1
+          ],
+          "IsVirtualItem": false,
+          "order": [
+            {
+              "name": "SortName",
+              "direction": "Ascending"
+            }
+          ],
+          "StartIndex": 0,
+          "Limit": 1000,
+          "Recursive": true
+        },
+        {
+          "action": "boxsets",
+          "includeTypes": [
+            5
+          ],
+          "CollapseBoxSetItems": false,
+          "Recursive": true
+        },
+        {
+          "action": "add",
+          "id": "bc100000-0000-0000-0000-000000010000",
+          "members": [
+            "bc100000-0000-0000-0000-000000000001"
+          ]
+        }
+      ],
+      "progress": [
+        100,
+        100
+      ],
+      "logs": [],
+      "failure": null
+    },
+    {
+      "Name": "same IDs across libraries",
+      "calls": [
+        {
+          "action": "options",
+          "Name": "First"
+        },
+        {
+          "action": "movies",
+          "Name": "First",
+          "ParentId": "bc100000-0000-0000-0000-000000000001",
+          "ParentType": 10,
+          "includeTypes": [
+            13
+          ],
+          "MediaTypes": [
+            1
+          ],
+          "IsVirtualItem": false,
+          "order": [
+            {
+              "name": "SortName",
+              "direction": "Ascending"
+            }
+          ],
+          "StartIndex": 0,
+          "Limit": 1000,
+          "Recursive": true
+        },
+        {
+          "action": "options",
+          "Name": "Second"
+        },
+        {
+          "action": "movies",
+          "Name": "Second",
+          "ParentId": "bc100000-0000-0000-0000-000000000002",
+          "ParentType": 10,
+          "includeTypes": [
+            13
+          ],
+          "MediaTypes": [
+            1
+          ],
+          "IsVirtualItem": false,
+          "order": [
+            {
+              "name": "SortName",
+              "direction": "Ascending"
+            }
+          ],
+          "StartIndex": 0,
+          "Limit": 1000,
+          "Recursive": true
+        },
+        {
+          "action": "boxsets",
+          "includeTypes": [
+            5
+          ],
+          "CollapseBoxSetItems": false,
+          "Recursive": true
+        },
+        {
+          "action": "create",
+          "Name": "Saga",
+          "IsLocked": false,
+          "ParentId": null,
+          "ItemIdList": [],
+          "ProviderIds": {},
+          "UserIds": []
+        },
+        {
+          "action": "add",
+          "id": "bc100000-0000-0000-0000-000000020000",
+          "members": [
+            "bc100000-0000-0000-0000-000000000001",
+            "bc100000-0000-0000-0000-000000000002"
+          ]
+        }
+      ],
+      "progress": [
+        100,
+        100
+      ],
+      "logs": [],
+      "failure": null
+    },
+    {
+      "Name": "case sensitive collection names",
+      "calls": [
+        {
+          "action": "options",
+          "Name": "First"
+        },
+        {
+          "action": "movies",
+          "Name": "First",
+          "ParentId": "bc100000-0000-0000-0000-000000000001",
+          "ParentType": 10,
+          "includeTypes": [
+            13
+          ],
+          "MediaTypes": [
+            1
+          ],
+          "IsVirtualItem": false,
+          "order": [
+            {
+              "name": "SortName",
+              "direction": "Ascending"
+            }
+          ],
+          "StartIndex": 0,
+          "Limit": 1000,
+          "Recursive": true
+        },
+        {
+          "action": "boxsets",
+          "includeTypes": [
+            5
+          ],
+          "CollapseBoxSetItems": false,
+          "Recursive": true
+        },
+        {
+          "action": "create",
+          "Name": "Saga",
+          "IsLocked": false,
+          "ParentId": null,
+          "ItemIdList": [],
+          "ProviderIds": {},
+          "UserIds": []
+        },
+        {
+          "action": "add",
+          "id": "bc100000-0000-0000-0000-000000020000",
+          "members": [
+            "bc100000-0000-0000-0000-000000000001",
+            "bc100000-0000-0000-0000-000000000002"
+          ]
+        },
+        {
+          "action": "create",
+          "Name": "saga",
+          "IsLocked": false,
+          "ParentId": null,
+          "ItemIdList": [],
+          "ProviderIds": {},
+          "UserIds": []
+        },
+        {
+          "action": "add",
+          "id": "bc100000-0000-0000-0000-000000020001",
+          "members": [
+            "bc100000-0000-0000-0000-000000000003",
+            "bc100000-0000-0000-0000-000000000004"
+          ]
+        }
+      ],
+      "progress": [
+        50,
+        100,
+        100
+      ],
+      "logs": [],
+      "failure": null
+    },
+    {
+      "Name": "empty and whitespace collection names",
+      "calls": [
+        {
+          "action": "options",
+          "Name": "First"
+        },
+        {
+          "action": "movies",
+          "Name": "First",
+          "ParentId": "bc100000-0000-0000-0000-000000000001",
+          "ParentType": 10,
+          "includeTypes": [
+            13
+          ],
+          "MediaTypes": [
+            1
+          ],
+          "IsVirtualItem": false,
+          "order": [
+            {
+              "name": "SortName",
+              "direction": "Ascending"
+            }
+          ],
+          "StartIndex": 0,
+          "Limit": 1000,
+          "Recursive": true
+        },
+        {
+          "action": "boxsets",
+          "includeTypes": [
+            5
+          ],
+          "CollapseBoxSetItems": false,
+          "Recursive": true
+        },
+        {
+          "action": "create",
+          "Name": " ",
+          "IsLocked": false,
+          "ParentId": null,
+          "ItemIdList": [],
+          "ProviderIds": {},
+          "UserIds": []
+        },
+        {
+          "action": "add",
+          "id": "bc100000-0000-0000-0000-000000020000",
+          "members": [
+            "bc100000-0000-0000-0000-000000000003",
+            "bc100000-0000-0000-0000-000000000004"
+          ]
+        }
+      ],
+      "progress": [
+        100,
+        100
+      ],
+      "logs": [],
+      "failure": null
+    },
+    {
+      "Name": "alternate IDs including empty Guid are excluded",
+      "calls": [
+        {
+          "action": "options",
+          "Name": "First"
+        },
+        {
+          "action": "movies",
+          "Name": "First",
+          "ParentId": "bc100000-0000-0000-0000-000000000001",
+          "ParentType": 10,
+          "includeTypes": [
+            13
+          ],
+          "MediaTypes": [
+            1
+          ],
+          "IsVirtualItem": false,
+          "order": [
+            {
+              "name": "SortName",
+              "direction": "Ascending"
+            }
+          ],
+          "StartIndex": 0,
+          "Limit": 1000,
+          "Recursive": true
+        },
+        {
+          "action": "boxsets",
+          "includeTypes": [
+            5
+          ],
+          "CollapseBoxSetItems": false,
+          "Recursive": true
+        },
+        {
+          "action": "create",
+          "Name": "Saga",
+          "IsLocked": false,
+          "ParentId": null,
+          "ItemIdList": [],
+          "ProviderIds": {},
+          "UserIds": []
+        },
+        {
+          "action": "add",
+          "id": "bc100000-0000-0000-0000-000000020000",
+          "members": [
+            "bc100000-0000-0000-0000-000000000001",
+            "bc100000-0000-0000-0000-000000000002"
+          ]
+        }
+      ],
+      "progress": [
+        100,
+        100
+      ],
+      "logs": [],
+      "failure": null
+    },
+    {
+      "Name": "first matching existing BoxSet",
+      "calls": [
+        {
+          "action": "options",
+          "Name": "First"
+        },
+        {
+          "action": "movies",
+          "Name": "First",
+          "ParentId": "bc100000-0000-0000-0000-000000000001",
+          "ParentType": 10,
+          "includeTypes": [
+            13
+          ],
+          "MediaTypes": [
+            1
+          ],
+          "IsVirtualItem": false,
+          "order": [
+            {
+              "name": "SortName",
+              "direction": "Ascending"
+            }
+          ],
+          "StartIndex": 0,
+          "Limit": 1000,
+          "Recursive": true
+        },
+        {
+          "action": "boxsets",
+          "includeTypes": [
+            5
+          ],
+          "CollapseBoxSetItems": false,
+          "Recursive": true
+        },
+        {
+          "action": "add",
+          "id": "bc100000-0000-0000-0000-000000010000",
+          "members": [
+            "bc100000-0000-0000-0000-000000000001",
+            "bc100000-0000-0000-0000-000000000002"
+          ]
+        }
+      ],
+      "progress": [
+        100,
+        100
+      ],
+      "logs": [],
+      "failure": null
+    },
+    {
+      "Name": "precancelled task still runs",
+      "calls": [
+        {
+          "action": "options",
+          "Name": "First"
+        },
+        {
+          "action": "movies",
+          "Name": "First",
+          "ParentId": "bc100000-0000-0000-0000-000000000001",
+          "ParentType": 10,
+          "includeTypes": [
+            13
+          ],
+          "MediaTypes": [
+            1
+          ],
+          "IsVirtualItem": false,
+          "order": [
+            {
+              "name": "SortName",
+              "direction": "Ascending"
+            }
+          ],
+          "StartIndex": 0,
+          "Limit": 1000,
+          "Recursive": true
+        },
+        {
+          "action": "boxsets",
+          "includeTypes": [
+            5
+          ],
+          "CollapseBoxSetItems": false,
+          "Recursive": true
+        },
+        {
+          "action": "create",
+          "Name": "Saga",
+          "IsLocked": false,
+          "ParentId": null,
+          "ItemIdList": [],
+          "ProviderIds": {},
+          "UserIds": []
+        },
+        {
+          "action": "add",
+          "id": "bc100000-0000-0000-0000-000000020000",
+          "members": [
+            "bc100000-0000-0000-0000-000000000001",
+            "bc100000-0000-0000-0000-000000000002"
+          ]
+        }
+      ],
+      "progress": [
+        100,
+        100
+      ],
+      "logs": [],
+      "failure": null
+    },
+    {
+      "Name": "creation failure continues another group",
+      "calls": [
+        {
+          "action": "options",
+          "Name": "First"
+        },
+        {
+          "action": "movies",
+          "Name": "First",
+          "ParentId": "bc100000-0000-0000-0000-000000000001",
+          "ParentType": 10,
+          "includeTypes": [
+            13
+          ],
+          "MediaTypes": [
+            1
+          ],
+          "IsVirtualItem": false,
+          "order": [
+            {
+              "name": "SortName",
+              "direction": "Ascending"
+            }
+          ],
+          "StartIndex": 0,
+          "Limit": 1000,
+          "Recursive": true
+        },
+        {
+          "action": "boxsets",
+          "includeTypes": [
+            5
+          ],
+          "CollapseBoxSetItems": false,
+          "Recursive": true
+        },
+        {
+          "action": "create",
+          "Name": "Saga",
+          "IsLocked": false,
+          "ParentId": null,
+          "ItemIdList": [],
+          "ProviderIds": {},
+          "UserIds": []
+        },
+        {
+          "action": "create",
+          "Name": "Other",
+          "IsLocked": false,
+          "ParentId": null,
+          "ItemIdList": [],
+          "ProviderIds": {},
+          "UserIds": []
+        },
+        {
+          "action": "add",
+          "id": "bc100000-0000-0000-0000-000000020000",
+          "members": [
+            "bc100000-0000-0000-0000-000000000003",
+            "bc100000-0000-0000-0000-000000000004"
+          ]
+        }
+      ],
+      "progress": [
+        50,
+        100
+      ],
+      "logs": [
+        {
+          "level": "Error",
+          "message": "Error refreshing Saga with bc100000-0000-0000-0000-000000000001, bc100000-0000-0000-0000-000000000002",
+          "errorType": "IOException"
+        }
+      ],
+      "failure": null
+    },
+    {
+      "Name": "provider cancellation is caught",
+      "calls": [
+        {
+          "action": "options",
+          "Name": "First"
+        },
+        {
+          "action": "movies",
+          "Name": "First",
+          "ParentId": "bc100000-0000-0000-0000-000000000001",
+          "ParentType": 10,
+          "includeTypes": [
+            13
+          ],
+          "MediaTypes": [
+            1
+          ],
+          "IsVirtualItem": false,
+          "order": [
+            {
+              "name": "SortName",
+              "direction": "Ascending"
+            }
+          ],
+          "StartIndex": 0,
+          "Limit": 1000,
+          "Recursive": true
+        },
+        {
+          "action": "boxsets",
+          "includeTypes": [
+            5
+          ],
+          "CollapseBoxSetItems": false,
+          "Recursive": true
+        },
+        {
+          "action": "create",
+          "Name": "Saga",
+          "IsLocked": false,
+          "ParentId": null,
+          "ItemIdList": [],
+          "ProviderIds": {},
+          "UserIds": []
+        }
+      ],
+      "progress": [
+        100
+      ],
+      "logs": [
+        {
+          "level": "Error",
+          "message": "Error refreshing Saga with bc100000-0000-0000-0000-000000000001, bc100000-0000-0000-0000-000000000002",
+          "errorType": "OperationCanceledException"
+        }
+      ],
+      "failure": null
+    },
+    {
+      "Name": "add failure retains creation",
+      "calls": [
+        {
+          "action": "options",
+          "Name": "First"
+        },
+        {
+          "action": "movies",
+          "Name": "First",
+          "ParentId": "bc100000-0000-0000-0000-000000000001",
+          "ParentType": 10,
+          "includeTypes": [
+            13
+          ],
+          "MediaTypes": [
+            1
+          ],
+          "IsVirtualItem": false,
+          "order": [
+            {
+              "name": "SortName",
+              "direction": "Ascending"
+            }
+          ],
+          "StartIndex": 0,
+          "Limit": 1000,
+          "Recursive": true
+        },
+        {
+          "action": "boxsets",
+          "includeTypes": [
+            5
+          ],
+          "CollapseBoxSetItems": false,
+          "Recursive": true
+        },
+        {
+          "action": "create",
+          "Name": "Saga",
+          "IsLocked": false,
+          "ParentId": null,
+          "ItemIdList": [],
+          "ProviderIds": {},
+          "UserIds": []
+        },
+        {
+          "action": "add",
+          "id": "bc100000-0000-0000-0000-000000020000",
+          "members": [
+            "bc100000-0000-0000-0000-000000000001",
+            "bc100000-0000-0000-0000-000000000002"
+          ]
+        }
+      ],
+      "progress": [
+        100
+      ],
+      "logs": [
+        {
+          "level": "Error",
+          "message": "Error refreshing Saga with bc100000-0000-0000-0000-000000000001, bc100000-0000-0000-0000-000000000002",
+          "errorType": "IOException"
+        }
+      ],
+      "failure": null
+    },
+    {
+      "Name": "root selection failure",
+      "calls": [],
+      "progress": [],
+      "logs": [],
+      "failure": {
+        "type": "IOException",
+        "Message": "Controlled root failure"
+      }
+    },
+    {
+      "Name": "movie selection failure",
+      "calls": [
+        {
+          "action": "options",
+          "Name": "First"
+        },
+        {
+          "action": "movies",
+          "Name": "First",
+          "ParentId": "bc100000-0000-0000-0000-000000000001",
+          "ParentType": 10,
+          "includeTypes": [
+            13
+          ],
+          "MediaTypes": [
+            1
+          ],
+          "IsVirtualItem": false,
+          "order": [
+            {
+              "name": "SortName",
+              "direction": "Ascending"
+            }
+          ],
+          "StartIndex": 0,
+          "Limit": 1000,
+          "Recursive": true
+        }
+      ],
+      "progress": [],
+      "logs": [],
+      "failure": {
+        "type": "IOException",
+        "Message": "Controlled Movie selection failure"
+      }
+    },
+    {
+      "Name": "boxset selection failure",
+      "calls": [
+        {
+          "action": "options",
+          "Name": "First"
+        },
+        {
+          "action": "movies",
+          "Name": "First",
+          "ParentId": "bc100000-0000-0000-0000-000000000001",
+          "ParentType": 10,
+          "includeTypes": [
+            13
+          ],
+          "MediaTypes": [
+            1
+          ],
+          "IsVirtualItem": false,
+          "order": [
+            {
+              "name": "SortName",
+              "direction": "Ascending"
+            }
+          ],
+          "StartIndex": 0,
+          "Limit": 1000,
+          "Recursive": true
+        },
+        {
+          "action": "boxsets",
+          "includeTypes": [
+            5
+          ],
+          "CollapseBoxSetItems": false,
+          "Recursive": true
+        }
+      ],
+      "progress": [],
+      "logs": [],
+      "failure": {
+        "type": "IOException",
+        "Message": "Controlled BoxSet selection failure"
+      }
+    },
+    {
+      "Name": "group progress failure is caught",
+      "calls": [
+        {
+          "action": "options",
+          "Name": "First"
+        },
+        {
+          "action": "movies",
+          "Name": "First",
+          "ParentId": "bc100000-0000-0000-0000-000000000001",
+          "ParentType": 10,
+          "includeTypes": [
+            13
+          ],
+          "MediaTypes": [
+            1
+          ],
+          "IsVirtualItem": false,
+          "order": [
+            {
+              "name": "SortName",
+              "direction": "Ascending"
+            }
+          ],
+          "StartIndex": 0,
+          "Limit": 1000,
+          "Recursive": true
+        },
+        {
+          "action": "boxsets",
+          "includeTypes": [
+            5
+          ],
+          "CollapseBoxSetItems": false,
+          "Recursive": true
+        },
+        {
+          "action": "create",
+          "Name": "Saga",
+          "IsLocked": false,
+          "ParentId": null,
+          "ItemIdList": [],
+          "ProviderIds": {},
+          "UserIds": []
+        },
+        {
+          "action": "add",
+          "id": "bc100000-0000-0000-0000-000000020000",
+          "members": [
+            "bc100000-0000-0000-0000-000000000001",
+            "bc100000-0000-0000-0000-000000000002"
+          ]
+        }
+      ],
+      "progress": [
+        100,
+        100
+      ],
+      "logs": [
+        {
+          "level": "Error",
+          "message": "Error refreshing Saga with bc100000-0000-0000-0000-000000000001, bc100000-0000-0000-0000-000000000002",
+          "errorType": "IOException"
+        }
+      ],
+      "failure": null
+    },
+    {
+      "Name": "empty final progress failure propagates",
+      "calls": [],
+      "progress": [
+        100
+      ],
+      "logs": [],
+      "failure": {
+        "type": "IOException",
+        "Message": "Controlled progress failure"
+      }
+    },
+    {
+      "Name": "cached BoxSet name mutation preserves initial cohort",
+      "calls": [
+        {
+          "action": "options",
+          "Name": "First"
+        },
+        {
+          "action": "movies",
+          "Name": "First",
+          "ParentId": "bc100000-0000-0000-0000-000000000001",
+          "ParentType": 10,
+          "includeTypes": [
+            13
+          ],
+          "MediaTypes": [
+            1
+          ],
+          "IsVirtualItem": false,
+          "order": [
+            {
+              "name": "SortName",
+              "direction": "Ascending"
+            }
+          ],
+          "StartIndex": 0,
+          "Limit": 1000,
+          "Recursive": true
+        },
+        {
+          "action": "boxsets",
+          "includeTypes": [
+            5
+          ],
+          "CollapseBoxSetItems": false,
+          "Recursive": true
+        },
+        {
+          "action": "add",
+          "id": "bc100000-0000-0000-0000-000000010000",
+          "members": [
+            "bc100000-0000-0000-0000-000000000001",
+            "bc100000-0000-0000-0000-000000000002"
+          ]
+        }
+      ],
+      "progress": [
+        50,
+        100,
+        100
+      ],
+      "logs": [],
+      "failure": null
+    },
+    {
+      "Name": "1000 movie page boundary",
+      "calls": [
+        {
+          "action": "options",
+          "Name": "First"
+        },
+        {
+          "action": "movies",
+          "Name": "First",
+          "ParentId": "bc100000-0000-0000-0000-000000000001",
+          "ParentType": 10,
+          "includeTypes": [
+            13
+          ],
+          "MediaTypes": [
+            1
+          ],
+          "IsVirtualItem": false,
+          "order": [
+            {
+              "name": "SortName",
+              "direction": "Ascending"
+            }
+          ],
+          "StartIndex": 0,
+          "Limit": 1000,
+          "Recursive": true
+        },
+        {
+          "action": "movies",
+          "Name": "First",
+          "ParentId": "bc100000-0000-0000-0000-000000000001",
+          "ParentType": 10,
+          "includeTypes": [
+            13
+          ],
+          "MediaTypes": [
+            1
+          ],
+          "IsVirtualItem": false,
+          "order": [
+            {
+              "name": "SortName",
+              "direction": "Ascending"
+            }
+          ],
+          "StartIndex": 1000,
+          "Limit": 1000,
+          "Recursive": true
+        },
+        {
+          "action": "boxsets",
+          "includeTypes": [
+            5
+          ],
+          "CollapseBoxSetItems": false,
+          "Recursive": true
+        }
+      ],
+      "progress": [
+        100,
+        100
+      ],
+      "logs": [],
+      "failure": null
+    }
+  ]
+}

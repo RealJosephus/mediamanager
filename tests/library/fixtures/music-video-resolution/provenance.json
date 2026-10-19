@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-10-07T14:58:15.222Z",
+  "fixtureFiles": [
+    {
+      "path": "tests/library/fixtures/music-video-resolution/input.json",
+      "sha256": "27179c89717427c00a0d1ccc6a70a39e641c8fbe92499f837de33a1b8877a3a8"
+    },
+    {
+      "path": "tests/library/fixtures/music-video-resolution/Program.cs",
+      "sha256": "102e56b1a617dd01df862db299cd7fc6f220023b186d35ea97c7e47a4e9980df"
+    },
+    {
+      "path": "tests/library/fixtures/music-video-resolution/Oracle.csproj",
+      "sha256": "cbe1a514da582cbf55a443ee14c93f731f84816d10e7672fb713045ac5d78efe"
+    },
+    {
+      "path": "tests/library/fixtures/music-video-resolution/native.json",
+      "sha256": "0bfdea7c20ccc2b5d65a196609156f95cc68110597d282a923ba132d74917248"
+    },
+    {
+      "path": "tests/Directory.Build.props",
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    }
+  ],
+  "scope": "Actual frozen MovieResolver, VideoListResolver and LibraryManager.ResolvePaths followed separately by protected Folder.ValidateChildrenInternal without recursion or child metadata refresh. MusicVideo ordinary files, raw names, stacks, editions, strongly enumerated directory collapse, ignore, provider-path initialization, locks, 3D flags, repeated validation, cancellation and real insert/link faults. Complete 72 BaseItems columns, Data, relationships, created lookup, dispatch, files, cache and events are recorded. Dynamic resolve dates are asserted inside the native UTC capture window. MovieResolver and FolderResolver alone are registered; provider savers, collection membership, media sources and known ancestor namespace are controlled. No disc/stream resolution, complete MetadataService, production full scan, actual network, Web, migration or release acceptance.",
+  "assemblies": [
+    {
+      "name": "MediaBrowser.Controller",
+      "sha256": "051c588a8e85a3a7cdde8dc3d9a1112217fd7e973a86fe2ff90cf765bedb75a8"
+    },
+    {
+      "name": "Emby.Server.Implementations",
+      "sha256": "8d369435646570958505c58b9cb17da169855dabc105d0e933524361e9b7b1c8"
+    },
+    {
+      "name": "Jellyfin.Server.Implementations",
+      "sha256": "4da187af02503e82135eb192351d01490484e8ebc8c653d849f7e2900a177672"
+    }
+  ],
+  "reference": {
+    "head": "208c278b75abd897aefa1e1175126eac5e4dbfaa",
+    "contentDigest": "e28a983db179b720c3b16d7416ee4112894a3115c4be6fe43c61c52e0d9a8313",
+    "files": [
+      {
+        "path": "Emby.Server.Implementations/Library/Resolvers/Movies/MovieResolver.cs",
+        "sha256": "0a74d2079340fcfc85c9d72839112d42dbafe4285b286ceab137c0092c3f6e15"
+      },
+      {
+        "path": "Emby.Server.Implementations/Library/Resolvers/BaseVideoResolver.cs",
+        "sha256": "bd67ff9d8f91d38923ddb07a7d99a49947a73a8d2a3a844f7bc9c101b43c2dc1"
+      },
+      {
+        "path": "Emby.Server.Implementations/Library/LibraryManager.cs",
+        "sha256": "4729de97560262702a44c5829bf93bbc5deec379e9b3018b231aaa6d65643c44"
+      },
+      {
+        "path": "Emby.Naming/Video/VideoListResolver.cs",
+        "sha256": "5cf1e54f677781c0206dcb38ba90cb191cc3165411d1d9eb9d9ea0757560f165"
+      },
+      {
+        "path": "Emby.Naming/Video/VideoResolver.cs",
+        "sha256": "b94148bc6d67260305103434a938a4cf38b8a3c1f35ac6180dc96adb090c7ef0"
+      },
+      {
+        "path": "Emby.Naming/Video/Format3DParser.cs",
+        "sha256": "14ab224878ef0bce299c38b53ddbd68b7f7f56054a9cde9ad8781e090b4ff21b"
+      },
+      {
+        "path": "Emby.Naming/Common/NamingOptions.cs",
+        "sha256": "4fc386ee2a335da97314845fcac71d2ffa534fbc37d772d44ae30e2dd4b07c02"
+      },
+      {
+        "path": "MediaBrowser.Controller/Entities/Folder.cs",
+        "sha256": "d5f227d462ce3c2df0d5a45d912778427f87321fc9d6e13d863ec28bb639e0c1"
+      },
+      {
+        "path": "MediaBrowser.Controller/Entities/MusicVideo.cs",
+        "sha256": "fa9a519208acd409ddf3e84b08d6e322ad594097710cce7c77465019e85943cd"
+      }
+    ]
+  },
+  "capture": {
+    "record": "D:/mediamanager-validation/20261005/results/music-video-expanded-oracle-20261007/record.json",
+    "sourceFilesSha256": "4e0dc7534a821074eea3e56e1ced3c4809c6197dba4a99a6a0f371e46b924376",
+    "source": "D:/mediamanager-validation/20261005/results/music-video-expanded-source-20261007",
+    "jellyfinDllSha256": "a43fa24c44677e579fcec79d637789b9f36633d02e5434e76a0e03fa13027767",
+    "oracleAssemblySha256": "0d776075a034790c29d4fa9149c5c20cc4abea9cc24ffc2a3a5855cd64716598",
+    "buildWarnings": 0,
+    "buildErrors": 0
+  },
+  "candidateVerified": true,
+  "originalCapture": {
+    "directory": "D:/mediamanager-validation/20261005/results/music-video-initial-source-20261007",
+    "resultsUnchanged": 82
+  },
+  "candidateComparison": "All 92 native scenarios on real SQLite and PostgreSQL, plus the raw seal test, passed in the retained strict run. The overall run failed on scanner integration tests; no full-run or phase acceptance is claimed. Evidence: D:/mediamanager-validation/20261005/results/music-video-differential-promotion-audit-20261007.json; TAP SHA-256: ba01b4a5c9db848b9124efd6bd897d0f81b266f2143b14f3e653accb5527a2b5."
+}

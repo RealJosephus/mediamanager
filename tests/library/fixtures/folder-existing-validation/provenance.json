@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-10-07T15:49:25.299Z",
+  "scope": "Actual protected Folder.ValidateChildrenInternal after genuine frozen warm CreateItems setup, nonrecursive and without child metadata refresh. Ordinary Movie, MusicVideo, Video and Folder matching-child updates, current/outdated/missing local images, image dimension/blur faults, independent image insert and item update failures, ignored scan cancellation during the image-only branch, real saver/repository/event order, metadata preservation, file stacks, new siblings and AggregateFolder ancestry. Complete 72 BaseItems columns, typed Data, image and ordinary relationships, created lookup, dispatch, files and cache are recorded. Mapped saved dates are asserted inside each native UTC sample window then normalized; generated image-row GUIDs are asserted nonempty/unique then represented by item/type tokens. Image dimensions/blur processing, provider savers, collection membership, media sources and namespace are controlled. Excludes removal, type changes, ownership promotion, recursion, remote images, actual decoder, full MetadataService, network, Web, migration and release acceptance.",
+  "fixtureFiles": [
+    {
+      "path": "tests/library/fixtures/folder-existing-validation/input.json",
+      "sha256": "266f9cc09eeed2cce64b07f882edeac52593cdd758558e82bfeee018bf7ec587"
+    },
+    {
+      "path": "tests/library/fixtures/folder-existing-validation/Program.cs",
+      "sha256": "a0c13134059d79e298e448c3b275afc22da87d35c50e016c2b82513972d0f89d"
+    },
+    {
+      "path": "tests/library/fixtures/folder-existing-validation/Oracle.csproj",
+      "sha256": "cbe1a514da582cbf55a443ee14c93f731f84816d10e7672fb713045ac5d78efe"
+    },
+    {
+      "path": "tests/library/fixtures/folder-existing-validation/native.json",
+      "sha256": "34c455ec2f510ff9270cc613ddd1e9f702aaee51e5f24e228885e19141c4dcb2"
+    },
+    {
+      "path": "tests/Directory.Build.props",
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    }
+  ],
+  "assemblies": [
+    {
+      "name": "MediaBrowser.Controller",
+      "sha256": "051c588a8e85a3a7cdde8dc3d9a1112217fd7e973a86fe2ff90cf765bedb75a8"
+    },
+    {
+      "name": "Emby.Server.Implementations",
+      "sha256": "8d369435646570958505c58b9cb17da169855dabc105d0e933524361e9b7b1c8"
+    },
+    {
+      "name": "Jellyfin.Server.Implementations",
+      "sha256": "4da187af02503e82135eb192351d01490484e8ebc8c653d849f7e2900a177672"
+    }
+  ],
+  "reference": {
+    "head": "208c278b75abd897aefa1e1175126eac5e4dbfaa",
+    "contentDigest": "e28a983db179b720c3b16d7416ee4112894a3115c4be6fe43c61c52e0d9a8313",
+    "files": [
+      {
+        "path": "MediaBrowser.Controller/Entities/Folder.cs",
+        "sha256": "d5f227d462ce3c2df0d5a45d912778427f87321fc9d6e13d863ec28bb639e0c1"
+      },
+      {
+        "path": "MediaBrowser.Controller/Entities/BaseItem.cs",
+        "sha256": "9dc7b96a93c9fbe874cdcededdca395b5aa2df6070f5cfc9c8959539dcd76469"
+      },
+      {
+        "path": "MediaBrowser.Controller/Entities/Video.cs",
+        "sha256": "03df015992ee4e95e175c499b36a7b21d9facc4f391cfd89235ad652d2eb0b11"
+      },
+      {
+        "path": "Emby.Server.Implementations/Library/LibraryManager.cs",
+        "sha256": "4729de97560262702a44c5829bf93bbc5deec379e9b3018b231aaa6d65643c44"
+      },
+      {
+        "path": "Jellyfin.Server.Implementations/Item/BaseItemRepository.TranslateQuery.cs",
+        "sha256": "0b2d4aba6f4d73c224315c1a0abd82b3c65ba2a42683381e1e73c00b01019c06"
+      }
+    ]
+  },
+  "capture": {
+    "record": "D:/mediamanager-validation/20261005/results/folder-existing-validation-images-oracle-20261007/record.json",
+    "sourceFilesSha256": "a53c38284c05fc67061c6d9c723fcac8f6d540b4fed6816b3332cb10ec67556b",
+    "source": "D:/mediamanager-validation/20261005/results/folder-existing-validation-images-source-20261007",
+    "jellyfinDllSha256": "a43fa24c44677e579fcec79d637789b9f36633d02e5434e76a0e03fa13027767",
+    "oracleAssemblySha256": "09b731833c90c00ff9fbf0f1c73db58aa60e7d5f64cf68b8c8c219fd61e16fff",
+    "buildWarnings": 0,
+    "buildErrors": 0
+  },
+  "originalCapture": {
+    "record": "D:/mediamanager-validation/20261005/results/folder-existing-validation-oracle-20261007/record.json",
+    "scenarios": 35,
+    "sameFieldValuesAfterCheckedSaveClockNormalization": true
+  },
+  "candidateVerified": true,
+  "candidateComparison": "The 43 genuine frozen native scenarios passed on real SQLite and PostgreSQL, with raw seals, full 72 columns, typed Data, images, relationships, files, cache and lifecycle order. This is a strict selected subset with phaseAcceptance=false; no recursive/full-scan/release acceptance is claimed. Evidence: D:/mediamanager-validation/20261005/results/folder-existing-validation-differential-promotion-audit-20261008.json; TAP SHA-256: 9a0dd7ffe19f851431610f0cf82d1757e1f12bb656abaddd170306374a3dc7c9."
+}

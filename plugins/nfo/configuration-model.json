@@ -1,0 +1,79 @@
+{
+  "roots": {
+    "nfo": {
+      "type": {
+        "kind": "object",
+        "reference": "XbmcMetadataOptions"
+      },
+      "element": "XbmcMetadataOptions",
+      "defaults": {
+        "UserId": null,
+        "ReleaseDateFormat": "yyyy-MM-dd",
+        "SaveImagePathsInNfo": true,
+        "EnablePathSubstitution": true,
+        "EnableExtraThumbsDuplication": false
+      }
+    }
+  },
+  "definitions": {
+    "XbmcMetadataOptions": {
+      "xmlType": "XbmcMetadataOptions",
+      "fields": {
+        "UserId": {
+          "type": {
+            "kind": "string"
+          },
+          "element": "UserId",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "ReleaseDateFormat": {
+          "type": {
+            "kind": "string"
+          },
+          "element": "ReleaseDateFormat",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "SaveImagePathsInNfo": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "SaveImagePathsInNfo",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "EnablePathSubstitution": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "EnablePathSubstitution",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "EnableExtraThumbsDuplication": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "EnableExtraThumbsDuplication",
+          "nullable": false,
+          "defaultValue": null
+        }
+      },
+      "order": [
+        "UserId",
+        "ReleaseDateFormat",
+        "SaveImagePathsInNfo",
+        "EnablePathSubstitution",
+        "EnableExtraThumbsDuplication"
+      ],
+      "defaults": {
+        "UserId": null,
+        "ReleaseDateFormat": "yyyy-MM-dd",
+        "SaveImagePathsInNfo": true,
+        "EnablePathSubstitution": true,
+        "EnableExtraThumbsDuplication": false
+      }
+    }
+  }
+}

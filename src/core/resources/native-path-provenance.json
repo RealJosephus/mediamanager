@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "license": "MIT",
+  "licenseFile": "src/core/resources/native-sort-license.txt",
+  "oracleRuntimeCommit": "95017c711e6afc1085133d440e42b4bd78155701",
+  "sourceVersion": "dotnet/runtime v10.0.0",
+  "oracleRuntime": "Microsoft.NETCore.App 10.0.12 on Windows",
+  "implementation": "src/library/native-path.js#nativeContainsSubPath",
+  "scope": "ManagedFileSystem.ContainsSubPath raw prefix, host separators and case rule; PathInternal GetRootLength/IsDevice/IsDeviceUNC/TrimEndingDirectorySeparator. Published v10.0.0 source is pinned separately from actual 10.0.12 runtime commit; the runtime commit URL returned 404, so no exact runtime/source-commit identity is claimed. Actual Windows Playlist and root controls are separately bound; non-Windows branch is source-derived and not a native non-Windows run.",
+  "sources": [
+    {
+      "name": "PathInternal.Windows.cs",
+      "url": "https://raw.githubusercontent.com/dotnet/runtime/v10.0.0/src/libraries/Common/src/System/IO/PathInternal.Windows.cs",
+      "bytes": 18415,
+      "sha256": "1473848f007e73e49e19a3d3c2d615673a0a3d971528227ff6d1afbb5da26986"
+    },
+    {
+      "name": "PathInternal.Unix.cs",
+      "url": "https://raw.githubusercontent.com/dotnet/runtime/v10.0.0/src/libraries/Common/src/System/IO/PathInternal.Unix.cs",
+      "bytes": 3664,
+      "sha256": "ba2f043c73c6f3cbe70d6c10f85e5861caf4994bf9fe6b3b36081ef185353e60"
+    },
+    {
+      "name": "PathInternal.cs",
+      "url": "https://raw.githubusercontent.com/dotnet/runtime/v10.0.0/src/libraries/Common/src/System/IO/PathInternal.cs",
+      "bytes": 10340,
+      "sha256": "393dcabedd70ca6973c0aa73f6097e42c4ffcbedd9dd29e3925851254466e8cd"
+    }
+  ]
+}

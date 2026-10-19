@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "environment": {
+    "node": "v24.16.0",
+    "platform": "win32",
+    "timeZone": "Asia/Taipei"
+  },
+  "sourceBoundary": "Candidate-only re-projection over the existing 53-case actual Windows Taipei binding fixture. The frozen Jellyfin HTTP/WebSocket recording is not regenerated: its native behavior did not consume candidate source, while both candidate source hashes changed only because two leading line comments were removed before the initial repository commit.",
+  "sources": {
+    "date": {
+      "path": "src/http/json-date-time.js",
+      "recordedSha256": "697b751a949020c3e23812de114ca898dd901a087018e53325381f39aaad2ea5",
+      "recordedBytes": 3311,
+      "currentSha256": "2b519f0ba14477bb7067398c6d01347e09c4bdabe091e891c73cc1c858dd9d95",
+      "currentBytes": 3151,
+      "removedLeadingText": "// System.Text.Json Utf8JsonReader.GetDateTime ISO input and DateTime tick semantics.\n// Copyright Jellyfin contributors. SPDX-License-Identifier: GPL-2.0-only\n",
+      "removedLeadingTextSha256": "21a484031bda86181e0fe8ab42ff0fa4783362d42b8eecb1ade7ecaa9416086b",
+      "removedLeadingBytes": 160
+    },
+    "group": {
+      "path": "src/syncplay/group.js",
+      "recordedSha256": "7ef8d66f551df84df8b1f4b10310acc257fa88f2aae25a172d2534888e03f765",
+      "recordedBytes": 16231,
+      "currentSha256": "3d5058e92a76998d024d52f0ac165becb6a6afcb6007886183276ae56ed35214",
+      "currentBytes": 16077,
+      "removedLeadingText": "// Ported from Jellyfin Group and MediaBrowser.Controller.SyncPlay.GroupStates.\n// Copyright Jellyfin contributors. SPDX-License-Identifier: GPL-2.0-only\n",
+      "removedLeadingTextSha256": "2414da1fab3acb63eae1fc87e5d8006a97c72ba0428dae96330f3b3e27a44b26",
+      "removedLeadingBytes": 154
+    }
+  },
+  "input": {
+    "path": "tests/sessions/fixtures/syncplay/syncplay-date-taipei.json",
+    "sha256": "96919167f4d75563645b9224344210ee4492da5f40a9467132d4f611d1c9cb7b",
+    "dateCases": 53
+  },
+  "projection": {
+    "serialization": "SHA-256 of JSON.stringify over ordered {source,result} entries; a result is ticks/kind or candidate error name/message.",
+    "sha256": "ba531fea48a111921c1991507970dd249cb11e35d27a1ca7ce4ba626dac71220",
+    "dateCases": 53,
+    "validCases": 28,
+    "rejectedCases": 25,
+    "exactNativeValidCases": 26,
+    "documentedDifferenceSources": [
+      "\"0001-01-01T00:00:00-14:00\"",
+      "\"0001-01-01T00:00:00+00:00\""
+    ],
+    "recordedAndCurrentExecutableTextIdentical": true
+  },
+  "phaseAcceptance": false
+}

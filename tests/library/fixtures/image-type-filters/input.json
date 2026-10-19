@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "userId": "5c6b5f77-bea9-4a9a-98aa-fae5909892b7",
+  "rootId": "78000000-0000-0000-0000-000000000001",
+  "items": [
+    {
+      "key": "root",
+      "id": "78000000-0000-0000-0000-000000000001",
+      "name": "Alpha Banner Folder",
+      "sortName": "alpha banner folder",
+      "type": "Folder",
+      "parentId": null,
+      "topParentId": "78000000-0000-0000-0000-000000000001",
+      "ancestorIds": [],
+      "presentationUniqueKey": "image-root"
+    },
+    {
+      "key": "primaryOnly",
+      "id": "78000000-0000-0000-0000-000000000002",
+      "name": "Beta Primary",
+      "sortName": "beta primary",
+      "type": "Movie",
+      "parentId": "78000000-0000-0000-0000-000000000001",
+      "topParentId": "78000000-0000-0000-0000-000000000001",
+      "ancestorIds": ["78000000-0000-0000-0000-000000000001"],
+      "presentationUniqueKey": "image-primary"
+    },
+    {
+      "key": "backdropOnly",
+      "id": "78000000-0000-0000-0000-000000000003",
+      "name": "Charlie Backdrop",
+      "sortName": "charlie backdrop",
+      "type": "Movie",
+      "parentId": "78000000-0000-0000-0000-000000000001",
+      "topParentId": "78000000-0000-0000-0000-000000000001",
+      "ancestorIds": ["78000000-0000-0000-0000-000000000001"],
+      "presentationUniqueKey": "image-backdrop"
+    },
+    {
+      "key": "primaryBackdrop",
+      "id": "78000000-0000-0000-0000-000000000004",
+      "name": "Delta Primary Backdrop",
+      "sortName": "delta primary backdrop",
+      "type": "Movie",
+      "parentId": "78000000-0000-0000-0000-000000000001",
+      "topParentId": "78000000-0000-0000-0000-000000000001",
+      "ancestorIds": ["78000000-0000-0000-0000-000000000001"],
+      "presentationUniqueKey": "image-both"
+    },
+    {
+      "key": "logoOnly",
+      "id": "78000000-0000-0000-0000-000000000005",
+      "name": "Echo Logo",
+      "sortName": "echo logo",
+      "type": "Movie",
+      "parentId": "78000000-0000-0000-0000-000000000001",
+      "topParentId": "78000000-0000-0000-0000-000000000001",
+      "ancestorIds": ["78000000-0000-0000-0000-000000000001"],
+      "presentationUniqueKey": "image-logo"
+    },
+    {
+      "key": "noImage",
+      "id": "78000000-0000-0000-0000-000000000006",
+      "name": "Foxtrot No Image",
+      "sortName": "foxtrot no image",
+      "type": "Movie",
+      "parentId": "78000000-0000-0000-0000-000000000001",
+      "topParentId": "78000000-0000-0000-0000-000000000001",
+      "ancestorIds": ["78000000-0000-0000-0000-000000000001"],
+      "presentationUniqueKey": "image-none"
+    }
+  ],
+  "images": [
+    { "id": "78000000-0000-0000-0000-000000000101", "itemKey": "root", "imageType": 3 },
+    { "id": "78000000-0000-0000-0000-000000000102", "itemKey": "primaryOnly", "imageType": 0 },
+    { "id": "78000000-0000-0000-0000-000000000103", "itemKey": "backdropOnly", "imageType": 2 },
+    { "id": "78000000-0000-0000-0000-000000000104", "itemKey": "primaryBackdrop", "imageType": 0 },
+    { "id": "78000000-0000-0000-0000-000000000105", "itemKey": "primaryBackdrop", "imageType": 2 },
+    { "id": "78000000-0000-0000-0000-000000000106", "itemKey": "logoOnly", "imageType": 4 }
+  ],
+  "cases": [
+    { "name": "primary", "query": "ImageTypes=Primary" },
+    { "name": "backdrop", "query": "ImageTypes=Backdrop" },
+    { "name": "logo", "query": "ImageTypes=Logo" },
+    { "name": "banner-folder-own", "query": "ImageTypes=Banner" },
+    { "name": "thumb-none", "query": "ImageTypes=Thumb" },
+    { "name": "primary-or-backdrop", "query": "ImageTypes=Primary,Backdrop" },
+    { "name": "primary-or-logo", "query": "ImageTypes=Primary,Logo" },
+    { "name": "case-insensitive", "query": "ImageTypes=primary" },
+    { "name": "numeric-primary", "query": "ImageTypes=0" },
+    { "name": "numeric-backdrop", "query": "ImageTypes=2" },
+    { "name": "numeric-unknown", "query": "ImageTypes=13" },
+    { "name": "invalid-omitted", "query": "ImageTypes=Bogus" },
+    { "name": "empty-omitted", "query": "ImageTypes=" },
+    { "name": "repeated-values", "query": "ImageTypes=Primary&ImageTypes=Backdrop" },
+    { "name": "repeated-comma-enum", "query": "ImageTypes=Primary,Backdrop&ImageTypes=Logo" },
+    { "name": "pipe-invalid", "query": "ImageTypes=Primary%7CBackdrop" },
+    { "name": "partial-invalid", "query": "ImageTypes=Primary,Bogus,Logo" },
+    { "name": "trimmed", "query": "ImageTypes=%20Primary%20,%20Logo%20" },
+    { "name": "enable-image-types-is-projection", "query": "EnableImageTypes=Primary" },
+    { "name": "primary-does-not-inherit-child", "query": "ImageTypes=Primary", "scope": ["root", "primaryOnly"] }
+  ]
+}

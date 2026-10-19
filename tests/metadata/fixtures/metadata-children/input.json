@@ -1,0 +1,785 @@
+[
+  {
+    "name": "folder physical traversal includes only root links and never linked-folder descendants",
+    "items": [
+      {
+        "key": "root",
+        "type": "Folder",
+        "Id": "88000000-0000-0000-0000-000000000001",
+        "Name": "root",
+        "links": [
+          "linked",
+          "linked",
+          "outside"
+        ]
+      },
+      {
+        "key": "nested",
+        "type": "Folder",
+        "Id": "88000000-0000-0000-0000-000000000002",
+        "Name": "nested",
+        "parent": "root",
+        "links": [
+          "ignored"
+        ]
+      },
+      {
+        "key": "leaf",
+        "type": "Movie",
+        "Id": "88000000-0000-0000-0000-000000000003",
+        "Name": "leaf",
+        "parent": "nested"
+      },
+      {
+        "key": "linked",
+        "type": "Movie",
+        "Id": "88000000-0000-0000-0000-000000000004",
+        "Name": "linked"
+      },
+      {
+        "key": "outside",
+        "type": "Folder",
+        "Id": "88000000-0000-0000-0000-000000000005",
+        "Name": "outside"
+      },
+      {
+        "key": "notExpanded",
+        "type": "Movie",
+        "Id": "88000000-0000-0000-0000-000000000006",
+        "Name": "notExpanded",
+        "parent": "outside"
+      },
+      {
+        "key": "ignored",
+        "type": "Movie",
+        "Id": "88000000-0000-0000-0000-000000000007",
+        "Name": "ignored"
+      }
+    ],
+    "target": "root"
+  },
+  {
+    "name": "album selects Audio and inherited AudioBook through physical recursion and root links",
+    "items": [
+      {
+        "key": "album",
+        "type": "MusicAlbum",
+        "Id": "88000000-0000-0000-0000-000000000008",
+        "Name": "album",
+        "links": [
+          "linkedAudio",
+          "linkedVideo"
+        ]
+      },
+      {
+        "key": "disc",
+        "type": "Folder",
+        "Id": "88000000-0000-0000-0000-000000000009",
+        "Name": "disc",
+        "parent": "album"
+      },
+      {
+        "key": "audio",
+        "type": "Audio",
+        "Id": "88000000-0000-0000-0000-000000000010",
+        "Name": "audio",
+        "parent": "disc"
+      },
+      {
+        "key": "book",
+        "type": "AudioBook",
+        "Id": "88000000-0000-0000-0000-000000000011",
+        "Name": "book",
+        "parent": "disc"
+      },
+      {
+        "key": "video",
+        "type": "MusicVideo",
+        "Id": "88000000-0000-0000-0000-000000000012",
+        "Name": "video",
+        "parent": "album"
+      },
+      {
+        "key": "linkedAudio",
+        "type": "Audio",
+        "Id": "88000000-0000-0000-0000-000000000013",
+        "Name": "linkedAudio"
+      },
+      {
+        "key": "linkedVideo",
+        "type": "MusicVideo",
+        "Id": "88000000-0000-0000-0000-000000000014",
+        "Name": "linkedVideo"
+      }
+    ],
+    "target": "album"
+  },
+  {
+    "name": "physical artist includes recursive nonfolder IHasArtist and root links",
+    "items": [
+      {
+        "key": "root",
+        "type": "Folder",
+        "Id": "88000000-0000-0000-0000-000000000015",
+        "Name": "root"
+      },
+      {
+        "key": "artist",
+        "type": "MusicArtist",
+        "Id": "88000000-0000-0000-0000-000000000016",
+        "Name": "artist",
+        "parent": "root",
+        "links": [
+          "external"
+        ]
+      },
+      {
+        "key": "album",
+        "type": "MusicAlbum",
+        "Id": "88000000-0000-0000-0000-000000000017",
+        "Name": "album",
+        "parent": "artist"
+      },
+      {
+        "key": "song",
+        "type": "Audio",
+        "Id": "88000000-0000-0000-0000-000000000018",
+        "Name": "song",
+        "parent": "album"
+      },
+      {
+        "key": "book",
+        "type": "AudioBook",
+        "Id": "88000000-0000-0000-0000-000000000019",
+        "Name": "book",
+        "parent": "album"
+      },
+      {
+        "key": "video",
+        "type": "MusicVideo",
+        "Id": "88000000-0000-0000-0000-000000000020",
+        "Name": "video",
+        "parent": "artist"
+      },
+      {
+        "key": "movie",
+        "type": "Movie",
+        "Id": "88000000-0000-0000-0000-000000000021",
+        "Name": "movie",
+        "parent": "artist"
+      },
+      {
+        "key": "external",
+        "type": "MusicVideo",
+        "Id": "88000000-0000-0000-0000-000000000022",
+        "Name": "external"
+      }
+    ],
+    "target": "artist"
+  },
+  {
+    "name": "by-name artist queries tags rather than its cached physical children",
+    "items": [
+      {
+        "key": "artist",
+        "type": "MusicArtist",
+        "Id": "88000000-0000-0000-0000-000000000023",
+        "Name": "artist"
+      },
+      {
+        "key": "decoy",
+        "type": "Audio",
+        "Id": "88000000-0000-0000-0000-000000000024",
+        "Name": "decoy",
+        "parent": "artist"
+      },
+      {
+        "key": "song",
+        "type": "Audio",
+        "Id": "88000000-0000-0000-0000-000000000025",
+        "Name": "song",
+        "Artists": [
+          "artist"
+        ]
+      },
+      {
+        "key": "video",
+        "type": "MusicVideo",
+        "Id": "88000000-0000-0000-0000-000000000026",
+        "Name": "video",
+        "Artists": [
+          "artist"
+        ]
+      },
+      {
+        "key": "album",
+        "type": "MusicAlbum",
+        "Id": "88000000-0000-0000-0000-000000000027",
+        "Name": "album",
+        "AlbumArtists": [
+          "artist"
+        ]
+      }
+    ],
+    "target": "artist",
+    "queryItems": [
+      "song",
+      "video"
+    ]
+  },
+  {
+    "name": "boxset uses ordered linked children directly including duplicates",
+    "items": [
+      {
+        "key": "box",
+        "type": "BoxSet",
+        "Id": "88000000-0000-0000-0000-000000000028",
+        "Name": "box",
+        "links": [
+          "second",
+          "first",
+          "second",
+          "folder"
+        ]
+      },
+      {
+        "key": "physical",
+        "type": "Movie",
+        "Id": "88000000-0000-0000-0000-000000000029",
+        "Name": "physical",
+        "parent": "box"
+      },
+      {
+        "key": "first",
+        "type": "Movie",
+        "Id": "88000000-0000-0000-0000-000000000030",
+        "Name": "first"
+      },
+      {
+        "key": "second",
+        "type": "Movie",
+        "Id": "88000000-0000-0000-0000-000000000031",
+        "Name": "second"
+      },
+      {
+        "key": "folder",
+        "type": "Folder",
+        "Id": "88000000-0000-0000-0000-000000000032",
+        "Name": "folder"
+      },
+      {
+        "key": "ignored",
+        "type": "Movie",
+        "Id": "88000000-0000-0000-0000-000000000033",
+        "Name": "ignored",
+        "parent": "folder"
+      }
+    ],
+    "target": "box"
+  },
+  {
+    "name": "season matches number before checking a stale explicit SeasonId",
+    "items": [
+      {
+        "key": "series",
+        "type": "Series",
+        "Id": "88000000-0000-0000-0000-000000000034",
+        "Name": "series",
+        "PresentationUniqueKey": "group"
+      },
+      {
+        "key": "season",
+        "type": "Season",
+        "Id": "88000000-0000-0000-0000-000000000035",
+        "Name": "season",
+        "parent": "series",
+        "IndexNumber": 1,
+        "PresentationUniqueKey": "group-001"
+      },
+      {
+        "key": "second",
+        "type": "Episode",
+        "Id": "88000000-0000-0000-0000-000000000036",
+        "Name": "second",
+        "SeriesPresentationUniqueKey": "group",
+        "parent": "season",
+        "ParentIndexNumber": 1,
+        "IndexNumber": 2,
+        "SeasonId": "88000000-0000-0000-0000-000000099999"
+      },
+      {
+        "key": "first",
+        "type": "Episode",
+        "Id": "88000000-0000-0000-0000-000000000037",
+        "Name": "first",
+        "SeriesPresentationUniqueKey": "group",
+        "parent": "season",
+        "ParentIndexNumber": 1,
+        "IndexNumber": 1
+      },
+      {
+        "key": "other",
+        "type": "Episode",
+        "Id": "88000000-0000-0000-0000-000000000038",
+        "Name": "other",
+        "SeriesPresentationUniqueKey": "group",
+        "ParentIndexNumber": 2,
+        "IndexNumber": 1
+      }
+    ],
+    "target": "season",
+    "queryItems": [
+      "second",
+      "first",
+      "other"
+    ]
+  },
+  {
+    "name": "season fallback compares referenced presentation key ordinal ignore case",
+    "items": [
+      {
+        "key": "series",
+        "type": "Series",
+        "Id": "88000000-0000-0000-0000-000000000039",
+        "Name": "series",
+        "PresentationUniqueKey": "group"
+      },
+      {
+        "key": "season",
+        "type": "Season",
+        "Id": "88000000-0000-0000-0000-000000000040",
+        "Name": "season",
+        "parent": "series",
+        "IndexNumber": 1,
+        "PresentationUniqueKey": "group-001"
+      },
+      {
+        "key": "sameKey",
+        "type": "Season",
+        "Id": "88000000-0000-0000-0000-000000000041",
+        "Name": "sameKey",
+        "SeriesPresentationUniqueKey": "group",
+        "parent": "series",
+        "IndexNumber": 3,
+        "PresentationUniqueKey": "GROUP-001"
+      },
+      {
+        "key": "episode",
+        "type": "Episode",
+        "Id": "88000000-0000-0000-0000-000000000042",
+        "Name": "episode",
+        "SeriesPresentationUniqueKey": "group",
+        "parent": "sameKey",
+        "ParentIndexNumber": 3,
+        "IndexNumber": 2
+      },
+      {
+        "key": "missing",
+        "type": "Episode",
+        "Id": "88000000-0000-0000-0000-000000000043",
+        "Name": "missing",
+        "SeriesPresentationUniqueKey": "group",
+        "ParentIndexNumber": 3,
+        "IndexNumber": 1,
+        "SeasonId": "88000000-0000-0000-0000-000000099999"
+      }
+    ],
+    "target": "season",
+    "queryItems": [
+      "missing",
+      "episode"
+    ]
+  },
+  {
+    "name": "specials appear within the target season and use native aired order",
+    "items": [
+      {
+        "key": "series",
+        "type": "Series",
+        "Id": "88000000-0000-0000-0000-000000000044",
+        "Name": "series",
+        "PresentationUniqueKey": "group"
+      },
+      {
+        "key": "season",
+        "type": "Season",
+        "Id": "88000000-0000-0000-0000-000000000045",
+        "Name": "season",
+        "parent": "series",
+        "IndexNumber": 1,
+        "PresentationUniqueKey": "group-001"
+      },
+      {
+        "key": "specialSeason",
+        "type": "Season",
+        "Id": "88000000-0000-0000-0000-000000000046",
+        "Name": "specialSeason",
+        "SeriesPresentationUniqueKey": "group",
+        "parent": "series",
+        "IndexNumber": 0,
+        "PresentationUniqueKey": "group-000"
+      },
+      {
+        "key": "episode2",
+        "type": "Episode",
+        "Id": "88000000-0000-0000-0000-000000000047",
+        "Name": "episode2",
+        "SeriesPresentationUniqueKey": "group",
+        "parent": "season",
+        "ParentIndexNumber": 1,
+        "IndexNumber": 2
+      },
+      {
+        "key": "before",
+        "type": "Episode",
+        "Id": "88000000-0000-0000-0000-000000000048",
+        "Name": "before",
+        "SeriesPresentationUniqueKey": "group",
+        "parent": "specialSeason",
+        "ParentIndexNumber": 0,
+        "IndexNumber": 5,
+        "AirsBeforeSeasonNumber": 1,
+        "AirsBeforeEpisodeNumber": 2
+      },
+      {
+        "key": "after",
+        "type": "Episode",
+        "Id": "88000000-0000-0000-0000-000000000049",
+        "Name": "after",
+        "SeriesPresentationUniqueKey": "group",
+        "parent": "specialSeason",
+        "ParentIndexNumber": 0,
+        "IndexNumber": 1,
+        "AirsAfterSeasonNumber": 1
+      },
+      {
+        "key": "episode1",
+        "type": "Episode",
+        "Id": "88000000-0000-0000-0000-000000000050",
+        "Name": "episode1",
+        "SeriesPresentationUniqueKey": "group",
+        "parent": "season",
+        "ParentIndexNumber": 1,
+        "IndexNumber": 1
+      }
+    ],
+    "target": "season",
+    "queryItems": [
+      "episode2",
+      "before",
+      "after",
+      "episode1"
+    ]
+  },
+  {
+    "name": "disabled specials query uses season presentation-key ancestors",
+    "items": [
+      {
+        "key": "series",
+        "type": "Series",
+        "Id": "88000000-0000-0000-0000-000000000051",
+        "Name": "series",
+        "PresentationUniqueKey": "group"
+      },
+      {
+        "key": "season",
+        "type": "Season",
+        "Id": "88000000-0000-0000-0000-000000000052",
+        "Name": "season",
+        "parent": "series",
+        "IndexNumber": 1,
+        "PresentationUniqueKey": "group-001"
+      },
+      {
+        "key": "episode",
+        "type": "Episode",
+        "Id": "88000000-0000-0000-0000-000000000053",
+        "Name": "episode",
+        "SeriesPresentationUniqueKey": "group",
+        "parent": "season",
+        "ParentIndexNumber": 1,
+        "IndexNumber": 2,
+        "ancestors": [
+          "season"
+        ]
+      },
+      {
+        "key": "notInQuery",
+        "type": "Episode",
+        "Id": "88000000-0000-0000-0000-000000000054",
+        "Name": "notInQuery",
+        "SeriesPresentationUniqueKey": "group",
+        "ParentIndexNumber": 1,
+        "IndexNumber": 1
+      }
+    ],
+    "target": "season",
+    "queryItems": [
+      "episode"
+    ],
+    "displaySpecials": false
+  },
+  {
+    "name": "special season uses original parent numbers and SortName order",
+    "items": [
+      {
+        "key": "series",
+        "type": "Series",
+        "Id": "88000000-0000-0000-0000-000000000055",
+        "Name": "series",
+        "PresentationUniqueKey": "group"
+      },
+      {
+        "key": "season",
+        "type": "Season",
+        "Id": "88000000-0000-0000-0000-000000000056",
+        "Name": "season",
+        "parent": "series",
+        "IndexNumber": 0,
+        "PresentationUniqueKey": "group-000"
+      },
+      {
+        "key": "late",
+        "type": "Episode",
+        "Id": "88000000-0000-0000-0000-000000000057",
+        "Name": "late",
+        "SeriesPresentationUniqueKey": "group",
+        "parent": "season",
+        "ParentIndexNumber": 0,
+        "IndexNumber": 3
+      },
+      {
+        "key": "early",
+        "type": "Episode",
+        "Id": "88000000-0000-0000-0000-000000000058",
+        "Name": "early",
+        "SeriesPresentationUniqueKey": "group",
+        "parent": "season",
+        "ParentIndexNumber": 0,
+        "IndexNumber": 1
+      },
+      {
+        "key": "ordinary",
+        "type": "Episode",
+        "Id": "88000000-0000-0000-0000-000000000059",
+        "Name": "ordinary",
+        "SeriesPresentationUniqueKey": "group",
+        "ParentIndexNumber": 1,
+        "AirsBeforeSeasonNumber": 0,
+        "IndexNumber": 1
+      }
+    ],
+    "target": "season",
+    "queryItems": [
+      "late",
+      "early",
+      "ordinary"
+    ]
+  },
+  {
+    "name": "unknown virtual season accepts unnumbered episodes with no resolved season",
+    "items": [
+      {
+        "key": "series",
+        "type": "Series",
+        "Id": "88000000-0000-0000-0000-000000000060",
+        "Name": "series",
+        "PresentationUniqueKey": "group"
+      },
+      {
+        "key": "season",
+        "type": "Season",
+        "Id": "88000000-0000-0000-0000-000000000061",
+        "Name": "season",
+        "parent": "series",
+        "IndexNumber": null,
+        "PresentationUniqueKey": "group-unknown"
+      },
+      {
+        "key": "missing",
+        "type": "Episode",
+        "Id": "88000000-0000-0000-0000-000000000062",
+        "Name": "missing",
+        "SeriesPresentationUniqueKey": "group",
+        "SeasonId": "88000000-0000-0000-0000-000000099999"
+      },
+      {
+        "key": "orphan",
+        "type": "Episode",
+        "Id": "88000000-0000-0000-0000-000000000063",
+        "Name": "orphan",
+        "SeriesPresentationUniqueKey": "group"
+      },
+      {
+        "key": "physical",
+        "type": "Season",
+        "Id": "88000000-0000-0000-0000-000000000064",
+        "Name": "physical",
+        "SeriesPresentationUniqueKey": "group",
+        "parent": "series",
+        "IndexNumber": 5,
+        "Path": "Z:\\ChildSelection\\Season5",
+        "PresentationUniqueKey": "group-005"
+      },
+      {
+        "key": "physicalEpisode",
+        "type": "Episode",
+        "Id": "88000000-0000-0000-0000-000000000065",
+        "Name": "physicalEpisode",
+        "SeriesPresentationUniqueKey": "group",
+        "parent": "physical"
+      }
+    ],
+    "target": "season",
+    "queryItems": [
+      "missing",
+      "orphan",
+      "physicalEpisode"
+    ]
+  },
+  {
+    "name": "unknown physical season uses presentation-key fallback rather than virtual matching",
+    "items": [
+      {
+        "key": "series",
+        "type": "Series",
+        "Id": "88000000-0000-0000-0000-000000000066",
+        "Name": "series",
+        "PresentationUniqueKey": "group"
+      },
+      {
+        "key": "season",
+        "type": "Season",
+        "Id": "88000000-0000-0000-0000-000000000067",
+        "Name": "season",
+        "parent": "series",
+        "IndexNumber": null,
+        "PresentationUniqueKey": "group-unknown",
+        "Path": "Z:\\ChildSelection\\Unknown"
+      },
+      {
+        "key": "own",
+        "type": "Episode",
+        "Id": "88000000-0000-0000-0000-000000000068",
+        "Name": "own",
+        "SeriesPresentationUniqueKey": "group",
+        "parent": "season"
+      },
+      {
+        "key": "orphan",
+        "type": "Episode",
+        "Id": "88000000-0000-0000-0000-000000000069",
+        "Name": "orphan",
+        "SeriesPresentationUniqueKey": "group"
+      }
+    ],
+    "target": "season",
+    "queryItems": [
+      "own",
+      "orphan"
+    ]
+  },
+  {
+    "name": "season with dangling explicit SeriesId does not query or fall back to physical series",
+    "items": [
+      {
+        "key": "series",
+        "type": "Series",
+        "Id": "88000000-0000-0000-0000-000000000070",
+        "Name": "series",
+        "PresentationUniqueKey": "group"
+      },
+      {
+        "key": "season",
+        "type": "Season",
+        "Id": "88000000-0000-0000-0000-000000000071",
+        "Name": "season",
+        "parent": "series",
+        "IndexNumber": 1,
+        "PresentationUniqueKey": "group-001",
+        "SeriesId": "88000000-0000-0000-0000-000000099999"
+      },
+      {
+        "key": "episode",
+        "type": "Episode",
+        "Id": "88000000-0000-0000-0000-000000000072",
+        "Name": "episode",
+        "SeriesPresentationUniqueKey": "group",
+        "parent": "season",
+        "ParentIndexNumber": 1
+      }
+    ],
+    "target": "season",
+    "queryItems": [
+      "episode"
+    ]
+  },
+  {
+    "name": "season empty series presentation key leaves the repository query unfiltered",
+    "items": [
+      {
+        "key": "series",
+        "type": "Series",
+        "Id": "88000000-0000-0000-0000-000000000073",
+        "Name": "series",
+        "PresentationUniqueKey": ""
+      },
+      {
+        "key": "season",
+        "type": "Season",
+        "Id": "88000000-0000-0000-0000-000000000074",
+        "Name": "season",
+        "parent": "series",
+        "IndexNumber": 1,
+        "PresentationUniqueKey": "group-001"
+      },
+      {
+        "key": "episode",
+        "type": "Episode",
+        "Id": "88000000-0000-0000-0000-000000000075",
+        "Name": "episode",
+        "SeriesPresentationUniqueKey": "other",
+        "ParentIndexNumber": 1
+      }
+    ],
+    "target": "season",
+    "queryItems": [
+      "episode"
+    ]
+  },
+  {
+    "name": "series aggregation recursion differs from stale query ancestors",
+    "items": [
+      {
+        "key": "series",
+        "type": "Series",
+        "Id": "88000000-0000-0000-0000-000000000076",
+        "Name": "series"
+      },
+      {
+        "key": "nested",
+        "type": "Folder",
+        "Id": "88000000-0000-0000-0000-000000000077",
+        "Name": "nested",
+        "parent": "series"
+      },
+      {
+        "key": "episode",
+        "type": "Episode",
+        "Id": "88000000-0000-0000-0000-000000000078",
+        "Name": "episode",
+        "parent": "nested"
+      },
+      {
+        "key": "queryOnly",
+        "type": "Episode",
+        "Id": "88000000-0000-0000-0000-000000000079",
+        "Name": "queryOnly",
+        "ancestors": [
+          "series"
+        ]
+      }
+    ],
+    "target": "series"
+  }
+]

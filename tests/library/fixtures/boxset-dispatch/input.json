@@ -1,0 +1,2466 @@
+{
+  "schemaVersion": 1,
+  "userId": "5c6b5f77-bea9-4a9a-98aa-fae5909892b7",
+  "rootId": "80000000-0000-0000-0000-000000000201",
+  "items": [
+    {
+      "key": "aggregate",
+      "id": "f27caa37-e514-2225-cced-ed48f6553502",
+      "type": "AggregateFolder",
+      "name": "root",
+      "sortName": "root",
+      "parentId": null,
+      "topParentId": null,
+      "ancestorIds": []
+    },
+    {
+      "key": "userRoot",
+      "id": "e9d5075a-555c-1cbc-394e-ec4cef295274",
+      "type": "UserRootFolder",
+      "name": "Media Folders",
+      "sortName": "media folders",
+      "parentId": null,
+      "topParentId": null,
+      "ancestorIds": [],
+      "pathKind": "userRoot",
+      "data": {
+        "IsRoot": true,
+        "PhysicalLocationsList": []
+      }
+    },
+    {
+      "key": "physicalA",
+      "id": "80000000-0000-0000-0000-000000000100",
+      "type": "Folder",
+      "name": "Physical A",
+      "sortName": "physical a",
+      "parentId": "f27caa37-e514-2225-cced-ed48f6553502",
+      "topParentId": "80000000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "physicalA"
+    },
+    {
+      "key": "physicalB",
+      "id": "80000000-0000-0000-0000-000000000150",
+      "type": "Folder",
+      "name": "Physical B",
+      "sortName": "physical b",
+      "parentId": "f27caa37-e514-2225-cced-ed48f6553502",
+      "topParentId": "80000000-0000-0000-0000-000000000150",
+      "ancestorIds": [
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "physicalB"
+    },
+    {
+      "key": "collections",
+      "id": "80000000-0000-0000-0000-000000000200",
+      "type": "Folder",
+      "name": "Collections Physical",
+      "sortName": "collections physical",
+      "parentId": "f27caa37-e514-2225-cced-ed48f6553502",
+      "topParentId": "80000000-0000-0000-0000-000000000200",
+      "ancestorIds": [
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "collections"
+    },
+    {
+      "key": "libraryA",
+      "id": "80000000-0000-0000-0000-000000000101",
+      "type": "CollectionFolder",
+      "name": "Library A",
+      "sortName": "library a",
+      "parentId": "e9d5075a-555c-1cbc-394e-ec4cef295274",
+      "topParentId": "80000000-0000-0000-0000-000000000101",
+      "ancestorIds": [
+        "e9d5075a-555c-1cbc-394e-ec4cef295274"
+      ],
+      "pathKind": "libraryA",
+      "data": {
+        "CollectionType": "movies",
+        "PhysicalFolderIds": [
+          "80000000-0000-0000-0000-000000000100"
+        ],
+        "PhysicalLocationsList": []
+      }
+    },
+    {
+      "key": "libraryB",
+      "id": "80000000-0000-0000-0000-000000000151",
+      "type": "CollectionFolder",
+      "name": "Library B",
+      "sortName": "library b",
+      "parentId": "e9d5075a-555c-1cbc-394e-ec4cef295274",
+      "topParentId": "80000000-0000-0000-0000-000000000151",
+      "ancestorIds": [
+        "e9d5075a-555c-1cbc-394e-ec4cef295274"
+      ],
+      "pathKind": "libraryB",
+      "data": {
+        "CollectionType": "movies",
+        "PhysicalFolderIds": [
+          "80000000-0000-0000-0000-000000000150"
+        ],
+        "PhysicalLocationsList": []
+      }
+    },
+    {
+      "key": "collectionLibrary",
+      "id": "80000000-0000-0000-0000-000000000201",
+      "type": "CollectionFolder",
+      "name": "Collection Library",
+      "sortName": "collection library",
+      "parentId": "e9d5075a-555c-1cbc-394e-ec4cef295274",
+      "topParentId": "80000000-0000-0000-0000-000000000201",
+      "ancestorIds": [
+        "e9d5075a-555c-1cbc-394e-ec4cef295274"
+      ],
+      "pathKind": "collectionLibrary",
+      "data": {
+        "CollectionType": "boxsets",
+        "PhysicalFolderIds": [
+          "80000000-0000-0000-0000-000000000200"
+        ],
+        "PhysicalLocationsList": []
+      }
+    },
+    {
+      "key": "subfolderA",
+      "id": "80000000-0000-0000-0000-000000000110",
+      "type": "Folder",
+      "name": "Subfolder A",
+      "sortName": "subfolder a",
+      "parentId": "80000000-0000-0000-0000-000000000100",
+      "topParentId": "80000000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80000000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "movieA",
+      "id": "80000000-0000-0000-0000-000000000001",
+      "type": "Movie",
+      "name": "Movie A",
+      "sortName": "movie a",
+      "parentId": "80000000-0000-0000-0000-000000000100",
+      "topParentId": "80000000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80000000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "officialRating": "PG",
+      "inheritedParentalRatingValue": 6,
+      "tagsText": "permit"
+    },
+    {
+      "key": "movieARestricted",
+      "id": "80000000-0000-0000-0000-000000000002",
+      "type": "Movie",
+      "name": "Movie A Restricted",
+      "sortName": "movie a restricted",
+      "parentId": "80000000-0000-0000-0000-000000000100",
+      "topParentId": "80000000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80000000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "officialRating": "R",
+      "inheritedParentalRatingValue": 9,
+      "tagsText": "block"
+    },
+    {
+      "key": "movieASub",
+      "id": "80000000-0000-0000-0000-000000000003",
+      "type": "Movie",
+      "name": "Movie A Sub",
+      "sortName": "movie a sub",
+      "parentId": "80000000-0000-0000-0000-000000000110",
+      "topParentId": "80000000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "80000000-0000-0000-0000-000000000110",
+        "80000000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "officialRating": "PG",
+      "inheritedParentalRatingValue": 6
+    },
+    {
+      "key": "movieB",
+      "id": "80000000-0000-0000-0000-000000000004",
+      "type": "Movie",
+      "name": "Movie B",
+      "sortName": "movie b",
+      "parentId": "80000000-0000-0000-0000-000000000150",
+      "topParentId": "80000000-0000-0000-0000-000000000150",
+      "ancestorIds": [
+        "80000000-0000-0000-0000-000000000150",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "officialRating": "PG",
+      "inheritedParentalRatingValue": 6
+    },
+    {
+      "key": "movieBRestricted",
+      "id": "80000000-0000-0000-0000-000000000005",
+      "type": "Movie",
+      "name": "Movie B Restricted",
+      "sortName": "movie b restricted",
+      "parentId": "80000000-0000-0000-0000-000000000150",
+      "topParentId": "80000000-0000-0000-0000-000000000150",
+      "ancestorIds": [
+        "80000000-0000-0000-0000-000000000150",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "officialRating": "R",
+      "inheritedParentalRatingValue": 9
+    },
+    {
+      "key": "movieUnknownLibrary",
+      "id": "80000000-0000-0000-0000-000000000006",
+      "type": "Movie",
+      "name": "Movie Unknown Library",
+      "sortName": "movie unknown library",
+      "parentId": null,
+      "topParentId": null,
+      "ancestorIds": [],
+      "officialRating": "R",
+      "inheritedParentalRatingValue": 9
+    },
+    {
+      "key": "movieStoredLibraryAncestor",
+      "id": "80000000-0000-0000-0000-000000000007",
+      "type": "Movie",
+      "name": "Movie Stored Library Ancestor",
+      "sortName": "movie stored library ancestor",
+      "parentId": "80000000-0000-0000-0000-000000000150",
+      "topParentId": "80000000-0000-0000-0000-000000000150",
+      "ancestorIds": [
+        "80000000-0000-0000-0000-000000000150",
+        "f27caa37-e514-2225-cced-ed48f6553502",
+        "80000000-0000-0000-0000-000000000101"
+      ],
+      "officialRating": "PG",
+      "inheritedParentalRatingValue": 6
+    },
+    {
+      "key": "movieRemote",
+      "id": "80000000-0000-0000-0000-000000000008",
+      "type": "Movie",
+      "name": "Movie Remote",
+      "sortName": "movie remote",
+      "parentId": null,
+      "topParentId": null,
+      "ancestorIds": [],
+      "pathKind": "remote",
+      "officialRating": "PG",
+      "inheritedParentalRatingValue": 6
+    },
+    {
+      "key": "setA",
+      "id": "80000000-0000-0000-0000-000000000020",
+      "type": "BoxSet",
+      "name": "A Collection",
+      "sortName": "a collection",
+      "parentId": "80000000-0000-0000-0000-000000000200",
+      "topParentId": "80000000-0000-0000-0000-000000000200",
+      "ancestorIds": [
+        "80000000-0000-0000-0000-000000000200",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "boxset"
+    },
+    {
+      "key": "setB",
+      "id": "80000000-0000-0000-0000-000000000021",
+      "type": "BoxSet",
+      "name": "B Collection",
+      "sortName": "b collection",
+      "parentId": "80000000-0000-0000-0000-000000000200",
+      "topParentId": "80000000-0000-0000-0000-000000000200",
+      "ancestorIds": [
+        "80000000-0000-0000-0000-000000000200",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "boxset"
+    },
+    {
+      "key": "setMixed",
+      "id": "80000000-0000-0000-0000-000000000022",
+      "type": "BoxSet",
+      "name": "C Mixed",
+      "sortName": "c mixed",
+      "parentId": "80000000-0000-0000-0000-000000000200",
+      "topParentId": "80000000-0000-0000-0000-000000000200",
+      "ancestorIds": [
+        "80000000-0000-0000-0000-000000000200",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "boxset"
+    },
+    {
+      "key": "setRestricted",
+      "id": "80000000-0000-0000-0000-000000000023",
+      "type": "BoxSet",
+      "name": "D Restricted",
+      "sortName": "d restricted",
+      "parentId": "80000000-0000-0000-0000-000000000200",
+      "topParentId": "80000000-0000-0000-0000-000000000200",
+      "ancestorIds": [
+        "80000000-0000-0000-0000-000000000200",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "boxset"
+    },
+    {
+      "key": "setNonmanual",
+      "id": "80000000-0000-0000-0000-000000000024",
+      "type": "BoxSet",
+      "name": "E Nonmanual",
+      "sortName": "e nonmanual",
+      "parentId": "80000000-0000-0000-0000-000000000200",
+      "topParentId": "80000000-0000-0000-0000-000000000200",
+      "ancestorIds": [
+        "80000000-0000-0000-0000-000000000200",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "boxset"
+    },
+    {
+      "key": "setEmpty",
+      "id": "80000000-0000-0000-0000-000000000025",
+      "type": "BoxSet",
+      "name": "F Empty",
+      "sortName": "f empty",
+      "parentId": "80000000-0000-0000-0000-000000000200",
+      "topParentId": "80000000-0000-0000-0000-000000000200",
+      "ancestorIds": [
+        "80000000-0000-0000-0000-000000000200",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "boxset"
+    },
+    {
+      "key": "setUnknown",
+      "id": "80000000-0000-0000-0000-000000000026",
+      "type": "BoxSet",
+      "name": "G Unknown Library",
+      "sortName": "g unknown library",
+      "parentId": "80000000-0000-0000-0000-000000000200",
+      "topParentId": "80000000-0000-0000-0000-000000000200",
+      "ancestorIds": [
+        "80000000-0000-0000-0000-000000000200",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "boxset"
+    },
+    {
+      "key": "setNested",
+      "id": "80000000-0000-0000-0000-000000000027",
+      "type": "BoxSet",
+      "name": "H Nested",
+      "sortName": "h nested",
+      "parentId": "80000000-0000-0000-0000-000000000200",
+      "topParentId": "80000000-0000-0000-0000-000000000200",
+      "ancestorIds": [
+        "80000000-0000-0000-0000-000000000200",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "boxset"
+    },
+    {
+      "key": "setCycleA",
+      "id": "80000000-0000-0000-0000-000000000028",
+      "type": "BoxSet",
+      "name": "I Cycle A",
+      "sortName": "i cycle a",
+      "parentId": "80000000-0000-0000-0000-000000000200",
+      "topParentId": "80000000-0000-0000-0000-000000000200",
+      "ancestorIds": [
+        "80000000-0000-0000-0000-000000000200",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "boxset"
+    },
+    {
+      "key": "setCycleB",
+      "id": "80000000-0000-0000-0000-000000000029",
+      "type": "BoxSet",
+      "name": "J Cycle B",
+      "sortName": "j cycle b",
+      "parentId": "80000000-0000-0000-0000-000000000200",
+      "topParentId": "80000000-0000-0000-0000-000000000200",
+      "ancestorIds": [
+        "80000000-0000-0000-0000-000000000200",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "boxset"
+    },
+    {
+      "key": "setSelfRated",
+      "id": "80000000-0000-0000-0000-000000000030",
+      "type": "BoxSet",
+      "name": "K Self Rated",
+      "sortName": "k self rated",
+      "parentId": "80000000-0000-0000-0000-000000000200",
+      "topParentId": "80000000-0000-0000-0000-000000000200",
+      "ancestorIds": [
+        "80000000-0000-0000-0000-000000000200",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "boxset",
+      "officialRating": "R",
+      "inheritedParentalRatingValue": 9
+    },
+    {
+      "key": "setBlocked",
+      "id": "80000000-0000-0000-0000-000000000031",
+      "type": "BoxSet",
+      "name": "L Blocked",
+      "sortName": "l blocked",
+      "parentId": "80000000-0000-0000-0000-000000000200",
+      "topParentId": "80000000-0000-0000-0000-000000000200",
+      "ancestorIds": [
+        "80000000-0000-0000-0000-000000000200",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "boxset",
+      "tagsText": "block"
+    },
+    {
+      "key": "setAllowed",
+      "id": "80000000-0000-0000-0000-000000000032",
+      "type": "BoxSet",
+      "name": "M Allowed",
+      "sortName": "m allowed",
+      "parentId": "80000000-0000-0000-0000-000000000200",
+      "topParentId": "80000000-0000-0000-0000-000000000200",
+      "ancestorIds": [
+        "80000000-0000-0000-0000-000000000200",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "boxset",
+      "tagsText": "permit"
+    },
+    {
+      "key": "setRemote",
+      "id": "80000000-0000-0000-0000-000000000033",
+      "type": "BoxSet",
+      "name": "N Remote",
+      "sortName": "n remote",
+      "parentId": "80000000-0000-0000-0000-000000000200",
+      "topParentId": "80000000-0000-0000-0000-000000000200",
+      "ancestorIds": [
+        "80000000-0000-0000-0000-000000000200",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "boxset"
+    },
+    {
+      "key": "setStoredLibraryAncestor",
+      "id": "80000000-0000-0000-0000-000000000034",
+      "type": "BoxSet",
+      "name": "O Stored Library Ancestor",
+      "sortName": "o stored library ancestor",
+      "parentId": "80000000-0000-0000-0000-000000000200",
+      "topParentId": "80000000-0000-0000-0000-000000000200",
+      "ancestorIds": [
+        "80000000-0000-0000-0000-000000000200",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "boxset"
+    },
+    {
+      "key": "boxsetView",
+      "id": "80000000-0000-0000-0000-000000000301",
+      "type": "UserView",
+      "name": "Boxsets View",
+      "sortName": "boxsets view",
+      "parentId": null,
+      "topParentId": null,
+      "ancestorIds": [],
+      "pathKind": "view",
+      "data": {
+        "ViewType": "boxsets",
+        "DisplayParentId": "80000000-0000-0000-0000-000000000201"
+      }
+    },
+    {
+      "key": "movieCollectionView",
+      "id": "80000000-0000-0000-0000-000000000302",
+      "type": "UserView",
+      "name": "Movie Collection View",
+      "sortName": "movie collection view",
+      "parentId": null,
+      "topParentId": null,
+      "ancestorIds": [],
+      "pathKind": "view",
+      "data": {
+        "ViewType": "moviecollection",
+        "DisplayParentId": "80000000-0000-0000-0000-000000000101"
+      }
+    }
+  ],
+  "itemValues": [
+    {
+      "key": "permit",
+      "id": "80000000-0000-0000-0000-000000001001",
+      "type": 4,
+      "value": "permit",
+      "cleanValue": "permit"
+    },
+    {
+      "key": "block",
+      "id": "80000000-0000-0000-0000-000000001002",
+      "type": 4,
+      "value": "block",
+      "cleanValue": "block"
+    }
+  ],
+  "itemValueLinks": [
+    {
+      "itemKey": "movieA",
+      "valueKey": "permit"
+    },
+    {
+      "itemKey": "movieARestricted",
+      "valueKey": "block"
+    },
+    {
+      "itemKey": "setBlocked",
+      "valueKey": "block"
+    },
+    {
+      "itemKey": "setAllowed",
+      "valueKey": "permit"
+    }
+  ],
+  "links": [
+    {
+      "parentId": "80000000-0000-0000-0000-000000000020",
+      "childId": "80000000-0000-0000-0000-000000000001",
+      "childType": 0,
+      "sortOrder": 0
+    },
+    {
+      "parentId": "80000000-0000-0000-0000-000000000021",
+      "childId": "80000000-0000-0000-0000-000000000004",
+      "childType": 0,
+      "sortOrder": 0
+    },
+    {
+      "parentId": "80000000-0000-0000-0000-000000000022",
+      "childId": "80000000-0000-0000-0000-000000000001",
+      "childType": 0,
+      "sortOrder": 0
+    },
+    {
+      "parentId": "80000000-0000-0000-0000-000000000022",
+      "childId": "80000000-0000-0000-0000-000000000005",
+      "childType": 0,
+      "sortOrder": 1
+    },
+    {
+      "parentId": "80000000-0000-0000-0000-000000000023",
+      "childId": "80000000-0000-0000-0000-000000000002",
+      "childType": 0,
+      "sortOrder": 0
+    },
+    {
+      "parentId": "80000000-0000-0000-0000-000000000023",
+      "childId": "80000000-0000-0000-0000-000000000005",
+      "childType": 0,
+      "sortOrder": 1
+    },
+    {
+      "parentId": "80000000-0000-0000-0000-000000000024",
+      "childId": "80000000-0000-0000-0000-000000000002",
+      "childType": 2,
+      "sortOrder": 0
+    },
+    {
+      "parentId": "80000000-0000-0000-0000-000000000026",
+      "childId": "80000000-0000-0000-0000-000000000006",
+      "childType": 0,
+      "sortOrder": 0
+    },
+    {
+      "parentId": "80000000-0000-0000-0000-000000000027",
+      "childId": "80000000-0000-0000-0000-000000000021",
+      "childType": 0,
+      "sortOrder": 0
+    },
+    {
+      "parentId": "80000000-0000-0000-0000-000000000028",
+      "childId": "80000000-0000-0000-0000-000000000029",
+      "childType": 0,
+      "sortOrder": 0
+    },
+    {
+      "parentId": "80000000-0000-0000-0000-000000000029",
+      "childId": "80000000-0000-0000-0000-000000000028",
+      "childType": 0,
+      "sortOrder": 0
+    },
+    {
+      "parentId": "80000000-0000-0000-0000-000000000029",
+      "childId": "80000000-0000-0000-0000-000000000004",
+      "childType": 0,
+      "sortOrder": 1
+    },
+    {
+      "parentId": "80000000-0000-0000-0000-000000000030",
+      "childId": "80000000-0000-0000-0000-000000000001",
+      "childType": 0,
+      "sortOrder": 0
+    },
+    {
+      "parentId": "80000000-0000-0000-0000-000000000031",
+      "childId": "80000000-0000-0000-0000-000000000001",
+      "childType": 0,
+      "sortOrder": 0
+    },
+    {
+      "parentId": "80000000-0000-0000-0000-000000000032",
+      "childId": "80000000-0000-0000-0000-000000000001",
+      "childType": 0,
+      "sortOrder": 0
+    },
+    {
+      "parentId": "80000000-0000-0000-0000-000000000033",
+      "childId": "80000000-0000-0000-0000-000000000008",
+      "childType": 0,
+      "sortOrder": 0
+    },
+    {
+      "parentId": "80000000-0000-0000-0000-000000000034",
+      "childId": "80000000-0000-0000-0000-000000000007",
+      "childType": 0,
+      "sortOrder": 0
+    }
+  ],
+  "cases": [
+    {
+      "name": "collection-default-infers-boxsets",
+      "query": "",
+      "scope": [],
+      "parentKey": "collectionLibrary",
+      "recursive": null,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "collection-recursive-empty-types",
+      "query": "",
+      "scope": [],
+      "parentKey": "collectionLibrary",
+      "recursive": true,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "collection-memory-empty-types",
+      "query": "",
+      "scope": [],
+      "parentKey": "collectionLibrary",
+      "recursive": false,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "collection-repository-limit-zero",
+      "query": "Limit=0",
+      "scope": [],
+      "parentKey": "collectionLibrary",
+      "recursive": true,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "collection-memory-limit-zero",
+      "query": "Limit=0",
+      "scope": [],
+      "parentKey": "collectionLibrary",
+      "recursive": false,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "collection-repository-no-total-page",
+      "query": "StartIndex=2&Limit=3&EnableTotalRecordCount=false",
+      "scope": [],
+      "parentKey": "collectionLibrary",
+      "recursive": true,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "collection-memory-no-total-page",
+      "query": "StartIndex=2&Limit=3&EnableTotalRecordCount=false",
+      "scope": [],
+      "parentKey": "collectionLibrary",
+      "recursive": false,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "collection-include-movies",
+      "query": "IncludeItemTypes=Movie",
+      "scope": [],
+      "parentKey": "collectionLibrary",
+      "recursive": true,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "collection-mixed-types",
+      "query": "IncludeItemTypes=Movie,BoxSet",
+      "scope": [],
+      "parentKey": "collectionLibrary",
+      "recursive": true,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "collection-name-boundary",
+      "query": "NameStartsWithOrGreater=H&NameLessThan=M",
+      "scope": [],
+      "parentKey": "collectionLibrary",
+      "recursive": true,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "boxset-view-memory-default",
+      "query": "",
+      "scope": [],
+      "parentKey": "boxsetView",
+      "recursive": false,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "boxset-view-recursive-default",
+      "query": "",
+      "scope": [],
+      "parentKey": "boxsetView",
+      "recursive": true,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "boxset-view-recursive-no-total",
+      "query": "StartIndex=2&Limit=3&EnableTotalRecordCount=false",
+      "scope": [],
+      "parentKey": "boxsetView",
+      "recursive": true,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "moviecollection-view-default",
+      "query": "",
+      "scope": [],
+      "parentKey": "movieCollectionView",
+      "recursive": null,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "moviecollection-view-no-total",
+      "query": "StartIndex=2&Limit=3&EnableTotalRecordCount=false",
+      "scope": [],
+      "parentKey": "movieCollectionView",
+      "recursive": null,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "boxset-selector-physical-a",
+      "query": "IncludeItemTypes=BoxSet",
+      "scope": [],
+      "parentKey": "physicalA",
+      "recursive": true,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "boxset-selector-physical-b",
+      "query": "IncludeItemTypes=BoxSet",
+      "scope": [],
+      "parentKey": "physicalB",
+      "recursive": true,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "boxset-selector-subfolder-a",
+      "query": "IncludeItemTypes=BoxSet",
+      "scope": [],
+      "parentKey": "subfolderA",
+      "recursive": true,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "boxset-selector-library-a",
+      "query": "IncludeItemTypes=BoxSet",
+      "scope": [],
+      "parentKey": "libraryA",
+      "recursive": true,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "boxset-selector-collection-physical",
+      "query": "IncludeItemTypes=BoxSet",
+      "scope": [],
+      "parentKey": "collections",
+      "recursive": true,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "boxset-selector-boxset",
+      "query": "IncludeItemTypes=BoxSet",
+      "scope": [],
+      "parentKey": "setMixed",
+      "recursive": true,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "root-selector-explicit-false",
+      "query": "IncludeItemTypes=BoxSet",
+      "scope": [],
+      "parentKey": "collectionLibrary",
+      "recursive": false,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "omitParentId": true
+    },
+    {
+      "name": "root-selector-api-key-userless",
+      "query": "IncludeItemTypes=BoxSet",
+      "scope": [],
+      "parentKey": "collectionLibrary",
+      "recursive": true,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "omitParentId": true,
+      "auth": "apiKey"
+    },
+    {
+      "name": "root-selector-api-key-explicit-user",
+      "query": "IncludeItemTypes=BoxSet&UserId=5c6b5f77-bea9-4a9a-98aa-fae5909892b7",
+      "scope": [],
+      "parentKey": "collectionLibrary",
+      "recursive": true,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "omitParentId": true,
+      "auth": "apiKey"
+    },
+    {
+      "name": "root-selector-api-key-no-total",
+      "query": "IncludeItemTypes=BoxSet&EnableTotalRecordCount=false",
+      "scope": [],
+      "parentKey": "collectionLibrary",
+      "recursive": true,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "omitParentId": true,
+      "auth": "apiKey"
+    },
+    {
+      "name": "physical-a-selector-nonrecursive",
+      "query": "IncludeItemTypes=BoxSet",
+      "scope": [],
+      "parentKey": "physicalA",
+      "recursive": false,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "collection-selector-ids-no-total",
+      "query": "IncludeItemTypes=BoxSet&EnableTotalRecordCount=false&Limit=2",
+      "scope": [
+        "setA",
+        "setB",
+        "setMixed",
+        "setNonmanual"
+      ],
+      "parentKey": "collectionLibrary",
+      "recursive": true,
+      "omitIds": false,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "physical-a-selector-ids",
+      "query": "IncludeItemTypes=BoxSet",
+      "scope": [
+        "setA",
+        "setB",
+        "setMixed",
+        "setNonmanual"
+      ],
+      "parentKey": "physicalA",
+      "recursive": true,
+      "omitIds": false,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "boxset-memory-linked-children",
+      "query": "",
+      "scope": [],
+      "parentKey": "setMixed",
+      "recursive": false,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "boxset-recursive-linked-children",
+      "query": "",
+      "scope": [],
+      "parentKey": "setMixed",
+      "recursive": true,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "policy-a-and-collections-collection",
+      "query": "",
+      "scope": [],
+      "parentKey": "collectionLibrary",
+      "recursive": true,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": false,
+        "EnabledFolders": [
+          "80000000-0000-0000-0000-000000000101",
+          "80000000-0000-0000-0000-000000000201"
+        ],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "policy-a-and-collections-root",
+      "query": "IncludeItemTypes=BoxSet",
+      "scope": [],
+      "parentKey": "collectionLibrary",
+      "recursive": true,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": false,
+        "EnabledFolders": [
+          "80000000-0000-0000-0000-000000000101",
+          "80000000-0000-0000-0000-000000000201"
+        ],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "omitParentId": true
+    },
+    {
+      "name": "policy-a-and-collections-ids",
+      "query": "IncludeItemTypes=BoxSet",
+      "scope": [
+        "setA",
+        "setB",
+        "setMixed",
+        "setRestricted",
+        "setNonmanual",
+        "setNested",
+        "setSelfRated",
+        "setBlocked",
+        "setAllowed"
+      ],
+      "parentKey": "collectionLibrary",
+      "recursive": true,
+      "omitIds": false,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": false,
+        "EnabledFolders": [
+          "80000000-0000-0000-0000-000000000101",
+          "80000000-0000-0000-0000-000000000201"
+        ],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "policy-a-and-collections-moviecollection-view",
+      "query": "",
+      "scope": [],
+      "parentKey": "movieCollectionView",
+      "recursive": null,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": false,
+        "EnabledFolders": [
+          "80000000-0000-0000-0000-000000000101",
+          "80000000-0000-0000-0000-000000000201"
+        ],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "policy-a-and-collections-memory",
+      "query": "",
+      "scope": [],
+      "parentKey": "setMixed",
+      "recursive": false,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": false,
+        "EnabledFolders": [
+          "80000000-0000-0000-0000-000000000101",
+          "80000000-0000-0000-0000-000000000201"
+        ],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "policy-b-and-collections-collection",
+      "query": "",
+      "scope": [],
+      "parentKey": "collectionLibrary",
+      "recursive": true,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": false,
+        "EnabledFolders": [
+          "80000000-0000-0000-0000-000000000151",
+          "80000000-0000-0000-0000-000000000201"
+        ],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "policy-b-and-collections-root",
+      "query": "IncludeItemTypes=BoxSet",
+      "scope": [],
+      "parentKey": "collectionLibrary",
+      "recursive": true,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": false,
+        "EnabledFolders": [
+          "80000000-0000-0000-0000-000000000151",
+          "80000000-0000-0000-0000-000000000201"
+        ],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "omitParentId": true
+    },
+    {
+      "name": "policy-b-and-collections-ids",
+      "query": "IncludeItemTypes=BoxSet",
+      "scope": [
+        "setA",
+        "setB",
+        "setMixed",
+        "setRestricted",
+        "setNonmanual",
+        "setNested",
+        "setSelfRated",
+        "setBlocked",
+        "setAllowed"
+      ],
+      "parentKey": "collectionLibrary",
+      "recursive": true,
+      "omitIds": false,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": false,
+        "EnabledFolders": [
+          "80000000-0000-0000-0000-000000000151",
+          "80000000-0000-0000-0000-000000000201"
+        ],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "policy-b-and-collections-moviecollection-view",
+      "query": "",
+      "scope": [],
+      "parentKey": "movieCollectionView",
+      "recursive": null,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": false,
+        "EnabledFolders": [
+          "80000000-0000-0000-0000-000000000151",
+          "80000000-0000-0000-0000-000000000201"
+        ],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "policy-b-and-collections-memory",
+      "query": "",
+      "scope": [],
+      "parentKey": "setMixed",
+      "recursive": false,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": false,
+        "EnabledFolders": [
+          "80000000-0000-0000-0000-000000000151",
+          "80000000-0000-0000-0000-000000000201"
+        ],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "policy-a-no-collections-collection",
+      "query": "",
+      "scope": [],
+      "parentKey": "collectionLibrary",
+      "recursive": true,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": false,
+        "EnabledFolders": [
+          "80000000-0000-0000-0000-000000000101"
+        ],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "policy-a-no-collections-root",
+      "query": "IncludeItemTypes=BoxSet",
+      "scope": [],
+      "parentKey": "collectionLibrary",
+      "recursive": true,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": false,
+        "EnabledFolders": [
+          "80000000-0000-0000-0000-000000000101"
+        ],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "omitParentId": true
+    },
+    {
+      "name": "policy-a-no-collections-ids",
+      "query": "IncludeItemTypes=BoxSet",
+      "scope": [
+        "setA",
+        "setB",
+        "setMixed",
+        "setRestricted",
+        "setNonmanual",
+        "setNested",
+        "setSelfRated",
+        "setBlocked",
+        "setAllowed"
+      ],
+      "parentKey": "collectionLibrary",
+      "recursive": true,
+      "omitIds": false,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": false,
+        "EnabledFolders": [
+          "80000000-0000-0000-0000-000000000101"
+        ],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "policy-a-no-collections-moviecollection-view",
+      "query": "",
+      "scope": [],
+      "parentKey": "movieCollectionView",
+      "recursive": null,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": false,
+        "EnabledFolders": [
+          "80000000-0000-0000-0000-000000000101"
+        ],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "policy-a-no-collections-memory",
+      "query": "",
+      "scope": [],
+      "parentKey": "setMixed",
+      "recursive": false,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": false,
+        "EnabledFolders": [
+          "80000000-0000-0000-0000-000000000101"
+        ],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "policy-no-libraries-collection",
+      "query": "",
+      "scope": [],
+      "parentKey": "collectionLibrary",
+      "recursive": true,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": false,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "policy-no-libraries-root",
+      "query": "IncludeItemTypes=BoxSet",
+      "scope": [],
+      "parentKey": "collectionLibrary",
+      "recursive": true,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": false,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "omitParentId": true
+    },
+    {
+      "name": "policy-no-libraries-ids",
+      "query": "IncludeItemTypes=BoxSet",
+      "scope": [
+        "setA",
+        "setB",
+        "setMixed",
+        "setRestricted",
+        "setNonmanual",
+        "setNested",
+        "setSelfRated",
+        "setBlocked",
+        "setAllowed"
+      ],
+      "parentKey": "collectionLibrary",
+      "recursive": true,
+      "omitIds": false,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": false,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "policy-no-libraries-moviecollection-view",
+      "query": "",
+      "scope": [],
+      "parentKey": "movieCollectionView",
+      "recursive": null,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": false,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "policy-no-libraries-memory",
+      "query": "",
+      "scope": [],
+      "parentKey": "setMixed",
+      "recursive": false,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": false,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "policy-blocked-library-a-collection",
+      "query": "",
+      "scope": [],
+      "parentKey": "collectionLibrary",
+      "recursive": true,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [
+          "80000000-0000-0000-0000-000000000101"
+        ],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "policy-blocked-library-a-root",
+      "query": "IncludeItemTypes=BoxSet",
+      "scope": [],
+      "parentKey": "collectionLibrary",
+      "recursive": true,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [
+          "80000000-0000-0000-0000-000000000101"
+        ],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "omitParentId": true
+    },
+    {
+      "name": "policy-blocked-library-a-ids",
+      "query": "IncludeItemTypes=BoxSet",
+      "scope": [
+        "setA",
+        "setB",
+        "setMixed",
+        "setRestricted",
+        "setNonmanual",
+        "setNested",
+        "setSelfRated",
+        "setBlocked",
+        "setAllowed"
+      ],
+      "parentKey": "collectionLibrary",
+      "recursive": true,
+      "omitIds": false,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [
+          "80000000-0000-0000-0000-000000000101"
+        ],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "policy-blocked-library-a-moviecollection-view",
+      "query": "",
+      "scope": [],
+      "parentKey": "movieCollectionView",
+      "recursive": null,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [
+          "80000000-0000-0000-0000-000000000101"
+        ],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "policy-blocked-library-a-memory",
+      "query": "",
+      "scope": [],
+      "parentKey": "setMixed",
+      "recursive": false,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [
+          "80000000-0000-0000-0000-000000000101"
+        ],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "policy-rating-six-collection",
+      "query": "",
+      "scope": [],
+      "parentKey": "collectionLibrary",
+      "recursive": true,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": 6,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "policy-rating-six-root",
+      "query": "IncludeItemTypes=BoxSet",
+      "scope": [],
+      "parentKey": "collectionLibrary",
+      "recursive": true,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": 6,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "omitParentId": true
+    },
+    {
+      "name": "policy-rating-six-ids",
+      "query": "IncludeItemTypes=BoxSet",
+      "scope": [
+        "setA",
+        "setB",
+        "setMixed",
+        "setRestricted",
+        "setNonmanual",
+        "setNested",
+        "setSelfRated",
+        "setBlocked",
+        "setAllowed"
+      ],
+      "parentKey": "collectionLibrary",
+      "recursive": true,
+      "omitIds": false,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": 6,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "policy-rating-six-moviecollection-view",
+      "query": "",
+      "scope": [],
+      "parentKey": "movieCollectionView",
+      "recursive": null,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": 6,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "policy-rating-six-memory",
+      "query": "",
+      "scope": [],
+      "parentKey": "setMixed",
+      "recursive": false,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": 6,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "policy-blocked-child-tag-collection",
+      "query": "",
+      "scope": [],
+      "parentKey": "collectionLibrary",
+      "recursive": true,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [
+          "block"
+        ],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "policy-blocked-child-tag-root",
+      "query": "IncludeItemTypes=BoxSet",
+      "scope": [],
+      "parentKey": "collectionLibrary",
+      "recursive": true,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [
+          "block"
+        ],
+        "AllowedTags": []
+      },
+      "omitParentId": true
+    },
+    {
+      "name": "policy-blocked-child-tag-ids",
+      "query": "IncludeItemTypes=BoxSet",
+      "scope": [
+        "setA",
+        "setB",
+        "setMixed",
+        "setRestricted",
+        "setNonmanual",
+        "setNested",
+        "setSelfRated",
+        "setBlocked",
+        "setAllowed"
+      ],
+      "parentKey": "collectionLibrary",
+      "recursive": true,
+      "omitIds": false,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [
+          "block"
+        ],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "policy-blocked-child-tag-moviecollection-view",
+      "query": "",
+      "scope": [],
+      "parentKey": "movieCollectionView",
+      "recursive": null,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [
+          "block"
+        ],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "policy-blocked-child-tag-memory",
+      "query": "",
+      "scope": [],
+      "parentKey": "setMixed",
+      "recursive": false,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [
+          "block"
+        ],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "policy-allowed-tags-collection",
+      "query": "",
+      "scope": [],
+      "parentKey": "collectionLibrary",
+      "recursive": true,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": [
+          "permit"
+        ]
+      }
+    },
+    {
+      "name": "policy-allowed-tags-root",
+      "query": "IncludeItemTypes=BoxSet",
+      "scope": [],
+      "parentKey": "collectionLibrary",
+      "recursive": true,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": [
+          "permit"
+        ]
+      },
+      "omitParentId": true
+    },
+    {
+      "name": "policy-allowed-tags-ids",
+      "query": "IncludeItemTypes=BoxSet",
+      "scope": [
+        "setA",
+        "setB",
+        "setMixed",
+        "setRestricted",
+        "setNonmanual",
+        "setNested",
+        "setSelfRated",
+        "setBlocked",
+        "setAllowed"
+      ],
+      "parentKey": "collectionLibrary",
+      "recursive": true,
+      "omitIds": false,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": [
+          "permit"
+        ]
+      }
+    },
+    {
+      "name": "policy-allowed-tags-moviecollection-view",
+      "query": "",
+      "scope": [],
+      "parentKey": "movieCollectionView",
+      "recursive": null,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": [
+          "permit"
+        ]
+      }
+    },
+    {
+      "name": "policy-allowed-tags-memory",
+      "query": "",
+      "scope": [],
+      "parentKey": "setMixed",
+      "recursive": false,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": [
+          "permit"
+        ]
+      }
+    },
+    {
+      "name": "policy-unrated-movies-collection",
+      "query": "",
+      "scope": [],
+      "parentKey": "collectionLibrary",
+      "recursive": true,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [
+          "Movie"
+        ],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "policy-unrated-movies-root",
+      "query": "IncludeItemTypes=BoxSet",
+      "scope": [],
+      "parentKey": "collectionLibrary",
+      "recursive": true,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [
+          "Movie"
+        ],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "omitParentId": true
+    },
+    {
+      "name": "policy-unrated-movies-ids",
+      "query": "IncludeItemTypes=BoxSet",
+      "scope": [
+        "setA",
+        "setB",
+        "setMixed",
+        "setRestricted",
+        "setNonmanual",
+        "setNested",
+        "setSelfRated",
+        "setBlocked",
+        "setAllowed"
+      ],
+      "parentKey": "collectionLibrary",
+      "recursive": true,
+      "omitIds": false,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [
+          "Movie"
+        ],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "policy-unrated-movies-moviecollection-view",
+      "query": "",
+      "scope": [],
+      "parentKey": "movieCollectionView",
+      "recursive": null,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [
+          "Movie"
+        ],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "policy-unrated-movies-memory",
+      "query": "",
+      "scope": [],
+      "parentKey": "setMixed",
+      "recursive": false,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [
+          "Movie"
+        ],
+        "BlockedTags": [],
+        "AllowedTags": []
+      }
+    },
+    {
+      "name": "detail-nested-hidden",
+      "query": "",
+      "scope": [],
+      "parentKey": "collectionLibrary",
+      "recursive": true,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": false,
+        "EnabledFolders": [
+          "80000000-0000-0000-0000-000000000101",
+          "80000000-0000-0000-0000-000000000201"
+        ],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "detailKey": "setNested",
+      "endpoints": [
+        "detail"
+      ]
+    },
+    {
+      "name": "detail-nested-visible",
+      "query": "",
+      "scope": [],
+      "parentKey": "collectionLibrary",
+      "recursive": true,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": false,
+        "EnabledFolders": [
+          "80000000-0000-0000-0000-000000000151",
+          "80000000-0000-0000-0000-000000000201"
+        ],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "detailKey": "setNested",
+      "endpoints": [
+        "detail"
+      ]
+    },
+    {
+      "name": "detail-cycle-hidden",
+      "query": "",
+      "scope": [],
+      "parentKey": "collectionLibrary",
+      "recursive": true,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": false,
+        "EnabledFolders": [
+          "80000000-0000-0000-0000-000000000101",
+          "80000000-0000-0000-0000-000000000201"
+        ],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "detailKey": "setCycleA",
+      "endpoints": [
+        "detail"
+      ]
+    },
+    {
+      "name": "detail-cycle-visible",
+      "query": "",
+      "scope": [],
+      "parentKey": "collectionLibrary",
+      "recursive": true,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": false,
+        "EnabledFolders": [
+          "80000000-0000-0000-0000-000000000151",
+          "80000000-0000-0000-0000-000000000201"
+        ],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "detailKey": "setCycleA",
+      "endpoints": [
+        "detail"
+      ]
+    },
+    {
+      "name": "detail-nonmanual-child-rating",
+      "query": "",
+      "scope": [],
+      "parentKey": "collectionLibrary",
+      "recursive": true,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": 6,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "detailKey": "setNonmanual",
+      "endpoints": [
+        "detail"
+      ]
+    },
+    {
+      "name": "detail-restricted-children",
+      "query": "",
+      "scope": [],
+      "parentKey": "collectionLibrary",
+      "recursive": true,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": 6,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "detailKey": "setRestricted",
+      "endpoints": [
+        "detail"
+      ]
+    },
+    {
+      "name": "detail-unknown-affiliation-allowed",
+      "query": "",
+      "scope": [],
+      "parentKey": "collectionLibrary",
+      "recursive": true,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": false,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": 6,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "detailKey": "setUnknown",
+      "endpoints": [
+        "detail"
+      ]
+    },
+    {
+      "name": "detail-empty-block-unrated",
+      "query": "",
+      "scope": [],
+      "parentKey": "collectionLibrary",
+      "recursive": true,
+      "omitIds": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [
+          "Movie"
+        ],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "detailKey": "setEmpty",
+      "endpoints": [
+        "detail"
+      ]
+    }
+  ]
+}

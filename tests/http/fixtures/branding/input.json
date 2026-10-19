@@ -1,0 +1,1187 @@
+{
+  "cases": [
+    {
+      "name": "configuration-defaults",
+      "path": "/Branding/Configuration",
+      "initial": {}
+    },
+    {
+      "name": "configuration-strings",
+      "path": "/Branding/Configuration",
+      "initial": {
+        "LoginDisclaimer": "<b>Unicode café 中文</b>",
+        "CustomCss": "html { color: red; }",
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "custom.png"
+      }
+    },
+    {
+      "name": "configuration-empty-strings",
+      "path": "/Branding/Configuration",
+      "initial": {
+        "LoginDisclaimer": "",
+        "CustomCss": ""
+      }
+    },
+    {
+      "name": "configuration-camel",
+      "path": "/Branding/Configuration",
+      "initial": {
+        "CustomCss": "body{}"
+      },
+      "accept": "application/json; profile=\"CamelCase\""
+    },
+    {
+      "name": "css-default",
+      "path": "/Branding/Css",
+      "initial": {
+        "CustomCss": "html { color: red; }"
+      },
+      "accept": "application/json"
+    },
+    {
+      "name": "css-css",
+      "path": "/Branding/Css",
+      "initial": {
+        "CustomCss": "html { color: red; }"
+      },
+      "accept": "text/css"
+    },
+    {
+      "name": "css-wildcard",
+      "path": "/Branding/Css",
+      "initial": {
+        "CustomCss": "html { color: red; }"
+      },
+      "accept": "*/*"
+    },
+    {
+      "name": "css-plain",
+      "path": "/Branding/Css",
+      "initial": {
+        "CustomCss": "html { color: red; }"
+      },
+      "accept": "text/plain"
+    },
+    {
+      "name": "css-alias-empty",
+      "path": "/Branding/Css.css",
+      "accept": "*/*"
+    },
+    {
+      "name": "css-null",
+      "path": "/Branding/Css",
+      "accept": "text/css"
+    },
+    {
+      "name": "load-directory-config",
+      "path": "/Branding/Configuration",
+      "directoryConfig": true
+    },
+    {
+      "name": "named-anonymous",
+      "path": "/System/Configuration/branding"
+    },
+    {
+      "name": "named-user",
+      "path": "/System/Configuration/BRANDING",
+      "identity": "user",
+      "initial": {
+        "SplashscreenLocation": "custom.png",
+        "SplashscreenEnabled": true
+      }
+    },
+    {
+      "name": "update-normal",
+      "method": "POST",
+      "path": "/System/Configuration/Branding",
+      "identity": "admin",
+      "contentType": "application/json",
+      "initial": {
+        "LoginDisclaimer": "Old disclaimer",
+        "CustomCss": "Old CSS",
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "custom.png"
+      },
+      "body": "{\"LoginDisclaimer\":\"New\",\"CustomCss\":\"html{}\",\"SplashscreenEnabled\":false,\"SplashscreenLocation\":\"ignored\"}"
+    },
+    {
+      "name": "update-defaults",
+      "method": "POST",
+      "path": "/System/Configuration/Branding",
+      "identity": "admin",
+      "contentType": "application/json",
+      "initial": {
+        "LoginDisclaimer": "Old disclaimer",
+        "CustomCss": "Old CSS",
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "custom.png"
+      },
+      "body": "{}"
+    },
+    {
+      "name": "update-case-duplicates",
+      "method": "POST",
+      "path": "/System/Configuration/Branding",
+      "identity": "admin",
+      "contentType": "application/json",
+      "initial": {
+        "LoginDisclaimer": "Old disclaimer",
+        "CustomCss": "Old CSS",
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "custom.png"
+      },
+      "body": "{\"CustomCss\":\"first\",\"customcss\":\"last\",\"Unknown\":{},\"SplashscreenEnabled\":true}"
+    },
+    {
+      "name": "update-numeric-string",
+      "method": "POST",
+      "path": "/System/Configuration/Branding",
+      "identity": "admin",
+      "contentType": "application/json",
+      "initial": {
+        "LoginDisclaimer": "Old disclaimer",
+        "CustomCss": "Old CSS",
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "custom.png"
+      },
+      "body": "{\"LoginDisclaimer\":17,\"CustomCss\":false}"
+    },
+    {
+      "name": "update-boolean-null",
+      "method": "POST",
+      "path": "/System/Configuration/Branding",
+      "identity": "admin",
+      "contentType": "application/json",
+      "initial": {
+        "LoginDisclaimer": "Old disclaimer",
+        "CustomCss": "Old CSS",
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "custom.png"
+      },
+      "body": "{\"SplashscreenEnabled\":null}"
+    },
+    {
+      "name": "update-boolean-string",
+      "method": "POST",
+      "path": "/System/Configuration/Branding",
+      "identity": "admin",
+      "contentType": "application/json",
+      "initial": {
+        "LoginDisclaimer": "Old disclaimer",
+        "CustomCss": "Old CSS",
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "custom.png"
+      },
+      "body": "{\"SplashscreenEnabled\":\"true\"}"
+    },
+    {
+      "name": "update-bad-earlier-duplicate",
+      "method": "POST",
+      "path": "/System/Configuration/Branding",
+      "identity": "admin",
+      "contentType": "application/json",
+      "initial": {
+        "LoginDisclaimer": "Old disclaimer",
+        "CustomCss": "Old CSS",
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "custom.png"
+      },
+      "body": "{\"SplashscreenEnabled\":7,\"SplashscreenEnabled\":true}"
+    },
+    {
+      "name": "update-string-object",
+      "method": "POST",
+      "path": "/System/Configuration/Branding",
+      "identity": "admin",
+      "contentType": "application/json",
+      "initial": {
+        "LoginDisclaimer": "Old disclaimer",
+        "CustomCss": "Old CSS",
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "custom.png"
+      },
+      "body": "{\"LoginDisclaimer\":{}}"
+    },
+    {
+      "name": "update-root-null",
+      "method": "POST",
+      "path": "/System/Configuration/Branding",
+      "identity": "admin",
+      "contentType": "application/json",
+      "initial": {
+        "LoginDisclaimer": "Old disclaimer",
+        "CustomCss": "Old CSS",
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "custom.png"
+      },
+      "body": "null"
+    },
+    {
+      "name": "update-empty-body",
+      "method": "POST",
+      "path": "/System/Configuration/Branding",
+      "identity": "admin",
+      "contentType": "application/json",
+      "initial": {
+        "LoginDisclaimer": "Old disclaimer",
+        "CustomCss": "Old CSS",
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "custom.png"
+      },
+      "body": ""
+    },
+    {
+      "name": "update-malformed",
+      "method": "POST",
+      "path": "/System/Configuration/Branding",
+      "identity": "admin",
+      "contentType": "application/json",
+      "initial": {
+        "LoginDisclaimer": "Old disclaimer",
+        "CustomCss": "Old CSS",
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "custom.png"
+      },
+      "body": "{"
+    },
+    {
+      "name": "update-malformed-open-array",
+      "method": "POST",
+      "path": "/System/Configuration/Branding",
+      "identity": "admin",
+      "contentType": "application/json",
+      "initial": {
+        "LoginDisclaimer": "Old disclaimer",
+        "CustomCss": "Old CSS",
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "custom.png"
+      },
+      "body": "[\n"
+    },
+    {
+      "name": "update-malformed-open-object-whitespace",
+      "method": "POST",
+      "path": "/System/Configuration/Branding",
+      "identity": "admin",
+      "contentType": "application/json",
+      "initial": {
+        "LoginDisclaimer": "Old disclaimer",
+        "CustomCss": "Old CSS",
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "custom.png"
+      },
+      "body": " \t{ \r\n "
+    },
+    {
+      "name": "update-user",
+      "method": "POST",
+      "path": "/System/Configuration/Branding",
+      "identity": "user",
+      "contentType": "application/json",
+      "initial": {
+        "LoginDisclaimer": "Old disclaimer",
+        "CustomCss": "Old CSS",
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "custom.png"
+      },
+      "body": "{}"
+    },
+    {
+      "name": "update-anonymous",
+      "method": "POST",
+      "path": "/System/Configuration/Branding",
+      "identity": "anonymous",
+      "contentType": "application/json",
+      "initial": {
+        "LoginDisclaimer": "Old disclaimer",
+        "CustomCss": "Old CSS",
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "custom.png"
+      },
+      "body": "{}"
+    },
+    {
+      "name": "update-read-only-configuration",
+      "method": "POST",
+      "path": "/System/Configuration/Branding",
+      "identity": "admin",
+      "contentType": "application/json",
+      "initial": {
+        "LoginDisclaimer": "Old disclaimer",
+        "CustomCss": "Old CSS",
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "custom.png"
+      },
+      "body": "{\"CustomCss\":\"Changed live\"}",
+      "readOnlyConfig": true
+    },
+    {
+      "name": "update-unsupported-body",
+      "method": "POST",
+      "path": "/System/Configuration/Branding",
+      "identity": "admin",
+      "contentType": "text/plain",
+      "initial": {
+        "LoginDisclaimer": "Old disclaimer",
+        "CustomCss": "Old CSS",
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "custom.png"
+      },
+      "body": "{}"
+    },
+    {
+      "name": "splash-disabled-anonymous",
+      "path": "/Branding/Splashscreen",
+      "initial": {},
+      "identity": "anonymous",
+      "files": {
+        "splashscreen.png": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+      }
+    },
+    {
+      "name": "splash-disabled-user",
+      "path": "/Branding/Splashscreen",
+      "initial": {},
+      "identity": "user",
+      "files": {
+        "splashscreen.png": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+      }
+    },
+    {
+      "name": "splash-disabled-admin",
+      "path": "/Branding/Splashscreen",
+      "initial": {},
+      "identity": "admin",
+      "files": {
+        "splashscreen.png": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+      }
+    },
+    {
+      "name": "splash-enabled-missing",
+      "path": "/Branding/Splashscreen",
+      "initial": {
+        "SplashscreenEnabled": true
+      },
+      "identity": "anonymous",
+      "files": {}
+    },
+    {
+      "name": "splash-enabled-generated",
+      "path": "/Branding/Splashscreen",
+      "initial": {
+        "SplashscreenEnabled": true
+      },
+      "identity": "anonymous",
+      "files": {
+        "splashscreen.png": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+      }
+    },
+    {
+      "name": "splash-custom",
+      "path": "/Branding/Splashscreen",
+      "initial": {
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "custom.png"
+      },
+      "identity": "anonymous",
+      "files": {
+        "custom.png": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz",
+        "splashscreen.png": "RmFsbGJhY2s="
+      }
+    },
+    {
+      "name": "splash-missing-custom",
+      "path": "/Branding/Splashscreen",
+      "initial": {
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "missing.png"
+      },
+      "identity": "anonymous",
+      "files": {
+        "splashscreen.png": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+      }
+    },
+    {
+      "name": "splash-whitespace-custom",
+      "path": "/Branding/Splashscreen",
+      "initial": {
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": " "
+      },
+      "identity": "anonymous",
+      "files": {
+        "splashscreen.png": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+      }
+    },
+    {
+      "name": "splash-tag",
+      "path": "/Branding/Splashscreen?tag=provided",
+      "initial": {
+        "SplashscreenEnabled": true
+      },
+      "files": {
+        "splashscreen.png": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+      },
+      "headers": {},
+      "accept": "application/json"
+    },
+    {
+      "name": "splash-conditional-tag",
+      "path": "/Branding/Splashscreen?tag=provided",
+      "initial": {
+        "SplashscreenEnabled": true
+      },
+      "files": {
+        "splashscreen.png": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+      },
+      "headers": {
+        "If-None-Match": "\"provided\""
+      },
+      "accept": "*/*"
+    },
+    {
+      "name": "splash-conditional-date",
+      "path": "/Branding/Splashscreen",
+      "initial": {
+        "SplashscreenEnabled": true
+      },
+      "files": {
+        "splashscreen.png": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+      },
+      "headers": {
+        "If-Modified-Since": "Sun, 02 Jun 2024 12:34:56 GMT"
+      },
+      "accept": "*/*"
+    },
+    {
+      "name": "splash-conditional-failed",
+      "path": "/Branding/Splashscreen",
+      "initial": {
+        "SplashscreenEnabled": true
+      },
+      "files": {
+        "splashscreen.png": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+      },
+      "headers": {
+        "If-Unmodified-Since": "Sat, 01 Jun 2024 12:34:56 GMT"
+      },
+      "accept": "*/*"
+    },
+    {
+      "name": "splash-no-cache",
+      "path": "/Branding/Splashscreen?tag=provided",
+      "initial": {
+        "SplashscreenEnabled": true
+      },
+      "files": {
+        "splashscreen.png": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+      },
+      "headers": {
+        "Cache-Control": "no-cache",
+        "If-None-Match": "\"provided\""
+      },
+      "accept": "*/*"
+    },
+    {
+      "name": "splash-webp-accept",
+      "path": "/Branding/Splashscreen",
+      "initial": {
+        "SplashscreenEnabled": true
+      },
+      "files": {
+        "splashscreen.png": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+      },
+      "headers": {},
+      "accept": "image/webp"
+    },
+    {
+      "name": "splash-webp-query",
+      "path": "/Branding/Splashscreen?Accept=Webp",
+      "initial": {
+        "SplashscreenEnabled": true
+      },
+      "files": {
+        "splashscreen.png": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+      },
+      "headers": {},
+      "accept": "*/*"
+    },
+    {
+      "name": "splash-format",
+      "path": "/Branding/Splashscreen?format=Jpg&width=broken&quality=broken",
+      "initial": {
+        "SplashscreenEnabled": true
+      },
+      "files": {
+        "splashscreen.png": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+      },
+      "headers": {},
+      "accept": "*/*"
+    },
+    {
+      "name": "splash-invalid-format",
+      "path": "/Branding/Splashscreen?format=garbage",
+      "initial": {
+        "SplashscreenEnabled": true
+      },
+      "files": {
+        "splashscreen.png": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+      },
+      "headers": {},
+      "accept": "*/*"
+    },
+    {
+      "name": "splash-numeric-format",
+      "path": "/Branding/Splashscreen?format=99",
+      "initial": {
+        "SplashscreenEnabled": true
+      },
+      "files": {
+        "splashscreen.png": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+      },
+      "headers": {},
+      "accept": "*/*"
+    },
+    {
+      "name": "splash-empty-tag",
+      "path": "/Branding/Splashscreen?tag=",
+      "initial": {
+        "SplashscreenEnabled": true
+      },
+      "files": {
+        "splashscreen.png": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+      },
+      "headers": {},
+      "accept": "*/*"
+    },
+    {
+      "name": "upload-valid",
+      "method": "POST",
+      "path": "/Branding/Splashscreen",
+      "identity": "admin",
+      "contentType": "image/png",
+      "files": {
+        "splashscreen.png": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz",
+        "splashscreen-upload.png": "RXhpc3RpbmcgY3VzdG9tIGltYWdl"
+      },
+      "body": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+    },
+    {
+      "name": "upload-empty",
+      "method": "POST",
+      "path": "/Branding/Splashscreen",
+      "identity": "admin",
+      "contentType": "image/png",
+      "files": {
+        "splashscreen.png": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz",
+        "splashscreen-upload.png": "RXhpc3RpbmcgY3VzdG9tIGltYWdl"
+      },
+      "body": ""
+    },
+    {
+      "name": "upload-whitespace",
+      "method": "POST",
+      "path": "/Branding/Splashscreen",
+      "identity": "admin",
+      "contentType": "image/png",
+      "files": {
+        "splashscreen.png": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz",
+        "splashscreen-upload.png": "RXhpc3RpbmcgY3VzdG9tIGltYWdl"
+      },
+      "body": " \t\r\nY Q = = \u000b\f"
+    },
+    {
+      "name": "upload-trailing-one",
+      "method": "POST",
+      "path": "/Branding/Splashscreen",
+      "identity": "admin",
+      "contentType": "image/png",
+      "files": {
+        "splashscreen.png": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz",
+        "splashscreen-upload.png": "RXhpc3RpbmcgY3VzdG9tIGltYWdl"
+      },
+      "body": "YQ==a"
+    },
+    {
+      "name": "upload-trailing-two",
+      "method": "POST",
+      "path": "/Branding/Splashscreen",
+      "identity": "admin",
+      "contentType": "image/png",
+      "files": {
+        "splashscreen.png": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz",
+        "splashscreen-upload.png": "RXhpc3RpbmcgY3VzdG9tIGltYWdl"
+      },
+      "body": "YQ==ab"
+    },
+    {
+      "name": "upload-trailing-three",
+      "method": "POST",
+      "path": "/Branding/Splashscreen",
+      "identity": "admin",
+      "contentType": "image/png",
+      "files": {
+        "splashscreen.png": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz",
+        "splashscreen-upload.png": "RXhpc3RpbmcgY3VzdG9tIGltYWdl"
+      },
+      "body": "YQ==abc"
+    },
+    {
+      "name": "upload-unpadded-two",
+      "method": "POST",
+      "path": "/Branding/Splashscreen",
+      "identity": "admin",
+      "contentType": "image/png",
+      "files": {
+        "splashscreen.png": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz",
+        "splashscreen-upload.png": "RXhpc3RpbmcgY3VzdG9tIGltYWdl"
+      },
+      "body": "YQ"
+    },
+    {
+      "name": "upload-unpadded-three",
+      "method": "POST",
+      "path": "/Branding/Splashscreen",
+      "identity": "admin",
+      "contentType": "image/png",
+      "files": {
+        "splashscreen.png": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz",
+        "splashscreen-upload.png": "RXhpc3RpbmcgY3VzdG9tIGltYWdl"
+      },
+      "body": "YWI"
+    },
+    {
+      "name": "upload-invalid",
+      "method": "POST",
+      "path": "/Branding/Splashscreen",
+      "identity": "admin",
+      "contentType": "image/png",
+      "files": {
+        "splashscreen.png": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz",
+        "splashscreen-upload.png": "RXhpc3RpbmcgY3VzdG9tIGltYWdl"
+      },
+      "body": "!!!!"
+    },
+    {
+      "name": "upload-valid-prefix-invalid",
+      "method": "POST",
+      "path": "/Branding/Splashscreen",
+      "identity": "admin",
+      "contentType": "image/png",
+      "files": {
+        "splashscreen.png": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz",
+        "splashscreen-upload.png": "RXhpc3RpbmcgY3VzdG9tIGltYWdl"
+      },
+      "body": "YWJj!!!!"
+    },
+    {
+      "name": "upload-extra-padding",
+      "method": "POST",
+      "path": "/Branding/Splashscreen",
+      "identity": "admin",
+      "contentType": "image/png",
+      "files": {
+        "splashscreen.png": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz",
+        "splashscreen-upload.png": "RXhpc3RpbmcgY3VzdG9tIGltYWdl"
+      },
+      "body": "YQ==="
+    },
+    {
+      "name": "upload-middle-padding",
+      "method": "POST",
+      "path": "/Branding/Splashscreen",
+      "identity": "admin",
+      "contentType": "image/png",
+      "files": {
+        "splashscreen.png": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz",
+        "splashscreen-upload.png": "RXhpc3RpbmcgY3VzdG9tIGltYWdl"
+      },
+      "body": "Y=Q="
+    },
+    {
+      "name": "upload-two-padded-groups",
+      "method": "POST",
+      "path": "/Branding/Splashscreen",
+      "identity": "admin",
+      "contentType": "image/png",
+      "files": {
+        "splashscreen.png": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz",
+        "splashscreen-upload.png": "RXhpc3RpbmcgY3VzdG9tIGltYWdl"
+      },
+      "body": "YQ==Yg=="
+    },
+    {
+      "name": "upload-pad-bits",
+      "method": "POST",
+      "path": "/Branding/Splashscreen",
+      "identity": "admin",
+      "contentType": "image/png",
+      "files": {
+        "splashscreen.png": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz",
+        "splashscreen-upload.png": "RXhpc3RpbmcgY3VzdG9tIGltYWdl"
+      },
+      "body": "YR=="
+    },
+    {
+      "name": "upload-unicode-whitespace",
+      "method": "POST",
+      "path": "/Branding/Splashscreen",
+      "identity": "admin",
+      "contentType": "image/png",
+      "files": {
+        "splashscreen.png": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz",
+        "splashscreen-upload.png": "RXhpc3RpbmcgY3VzdG9tIGltYWdl"
+      },
+      "body": "Y Q=="
+    },
+    {
+      "name": "upload-body-is-json-string",
+      "method": "POST",
+      "path": "/Branding/Splashscreen",
+      "identity": "admin",
+      "contentType": "image/png",
+      "files": {
+        "splashscreen.png": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz",
+        "splashscreen-upload.png": "RXhpc3RpbmcgY3VzdG9tIGltYWdl"
+      },
+      "body": "\"YQ==\""
+    },
+    {
+      "name": "upload-user",
+      "method": "POST",
+      "path": "/Branding/Splashscreen",
+      "identity": "user",
+      "contentType": "image/png",
+      "files": {
+        "splashscreen.png": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz",
+        "splashscreen-upload.png": "RXhpc3RpbmcgY3VzdG9tIGltYWdl"
+      },
+      "body": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+    },
+    {
+      "name": "upload-anonymous",
+      "method": "POST",
+      "path": "/Branding/Splashscreen",
+      "identity": "anonymous",
+      "contentType": "image/png",
+      "files": {
+        "splashscreen.png": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz",
+        "splashscreen-upload.png": "RXhpc3RpbmcgY3VzdG9tIGltYWdl"
+      },
+      "body": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+    },
+    {
+      "name": "upload-wrong-content-type",
+      "method": "POST",
+      "path": "/Branding/Splashscreen",
+      "identity": "admin",
+      "contentType": "application/json",
+      "files": {
+        "splashscreen.png": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz",
+        "splashscreen-upload.png": "RXhpc3RpbmcgY3VzdG9tIGltYWdl"
+      },
+      "body": "{}"
+    },
+    {
+      "name": "upload-missing-content-type",
+      "method": "POST",
+      "path": "/Branding/Splashscreen",
+      "identity": "admin",
+      "files": {
+        "splashscreen.png": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz",
+        "splashscreen-upload.png": "RXhpc3RpbmcgY3VzdG9tIGltYWdl"
+      },
+      "body": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+    },
+    {
+      "name": "upload-missing-data",
+      "method": "POST",
+      "path": "/Branding/Splashscreen",
+      "identity": "admin",
+      "contentType": "image/png",
+      "files": {
+        "splashscreen.png": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz",
+        "splashscreen-upload.png": "RXhpc3RpbmcgY3VzdG9tIGltYWdl"
+      },
+      "body": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz",
+      "missingData": true
+    },
+    {
+      "name": "upload-directory-output",
+      "method": "POST",
+      "path": "/Branding/Splashscreen",
+      "identity": "admin",
+      "contentType": "image/png",
+      "files": {
+        "splashscreen.png": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+      },
+      "body": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz",
+      "directoryFile": "splashscreen-upload.png"
+    },
+    {
+      "name": "upload-read-only-output",
+      "method": "POST",
+      "path": "/Branding/Splashscreen",
+      "identity": "admin",
+      "contentType": "image/png",
+      "files": {
+        "splashscreen.png": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz",
+        "splashscreen-upload.png": "RXhpc3RpbmcgY3VzdG9tIGltYWdl"
+      },
+      "body": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz",
+      "readOnlyFile": "splashscreen-upload.png"
+    },
+    {
+      "name": "upload-read-only-configuration",
+      "method": "POST",
+      "path": "/Branding/Splashscreen",
+      "identity": "admin",
+      "contentType": "image/png",
+      "files": {
+        "splashscreen.png": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz",
+        "splashscreen-upload.png": "RXhpc3RpbmcgY3VzdG9tIGltYWdl"
+      },
+      "body": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz",
+      "readOnlyConfig": true
+    },
+    {
+      "name": "upload-jpeg-keeps-png",
+      "method": "POST",
+      "path": "/Branding/Splashscreen",
+      "identity": "admin",
+      "contentType": "image/jpeg; charset=\"utf-8\"",
+      "files": {
+        "splashscreen.png": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz",
+        "splashscreen-upload.png": "RXhpc3RpbmcgY3VzdG9tIGltYWdl"
+      },
+      "body": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+    },
+    {
+      "name": "delete-custom",
+      "method": "DELETE",
+      "path": "/Branding/Splashscreen",
+      "identity": "admin",
+      "initial": {
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "custom.png"
+      },
+      "files": {
+        "custom.png": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz",
+        "splashscreen.png": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+      }
+    },
+    {
+      "name": "delete-missing",
+      "method": "DELETE",
+      "path": "/Branding/Splashscreen",
+      "identity": "admin",
+      "initial": {
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "custom.png"
+      }
+    },
+    {
+      "name": "delete-no-location",
+      "method": "DELETE",
+      "path": "/Branding/Splashscreen",
+      "identity": "admin",
+      "initial": {},
+      "files": {
+        "splashscreen.png": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+      }
+    },
+    {
+      "name": "delete-directory",
+      "method": "DELETE",
+      "path": "/Branding/Splashscreen",
+      "identity": "admin",
+      "initial": {
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "custom.png"
+      },
+      "directoryFile": "custom.png"
+    },
+    {
+      "name": "delete-read-only-file",
+      "method": "DELETE",
+      "path": "/Branding/Splashscreen",
+      "identity": "admin",
+      "initial": {
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "custom.png"
+      },
+      "files": {
+        "custom.png": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+      },
+      "readOnlyFile": "custom.png"
+    },
+    {
+      "name": "delete-read-only-configuration",
+      "method": "DELETE",
+      "path": "/Branding/Splashscreen",
+      "identity": "admin",
+      "initial": {
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "custom.png"
+      },
+      "files": {
+        "custom.png": "SW5kZXBlbmRlbnQgb3BhcXVlIGltYWdlIGJ5dGVz"
+      },
+      "readOnlyConfig": true
+    },
+    {
+      "name": "delete-user",
+      "method": "DELETE",
+      "path": "/Branding/Splashscreen",
+      "identity": "user",
+      "initial": {
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "custom.png"
+      }
+    },
+    {
+      "name": "delete-anonymous",
+      "method": "DELETE",
+      "path": "/Branding/Splashscreen",
+      "identity": "anonymous",
+      "initial": {
+        "SplashscreenEnabled": true,
+        "SplashscreenLocation": "custom.png"
+      }
+    },
+    {
+      "name": "load-empty",
+      "path": "/Branding/Configuration",
+      "xml": "<BrandingOptions/>"
+    },
+    {
+      "name": "load-unknown",
+      "path": "/Branding/Configuration",
+      "xml": "<BrandingOptions><Unknown>retained input</Unknown><CustomCss>body{}</CustomCss></BrandingOptions>"
+    },
+    {
+      "name": "load-invalid-boolean",
+      "path": "/Branding/Configuration",
+      "xml": "<BrandingOptions><SplashscreenEnabled>TRUE</SplashscreenEnabled></BrandingOptions>"
+    },
+    {
+      "name": "load-nil-and-empty",
+      "path": "/Branding/Configuration",
+      "xml": "<BrandingOptions xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><LoginDisclaimer xsi:nil=\"true\"/><CustomCss/></BrandingOptions>"
+    },
+    {
+      "name": "load-malformed",
+      "path": "/Branding/Configuration",
+      "xml": "<BrandingOptions>"
+    },
+    {
+      "name": "load-wrong-root",
+      "path": "/Branding/Configuration",
+      "xml": "<Other/>"
+    }
+  ],
+  "contentTypes": [
+    null,
+    "",
+    "image/png",
+    "IMAGE/PNG",
+    " image/png ",
+    "image/png; charset=utf-8",
+    "image/png; invalid",
+    "image/png; charset=\"utf-8\"",
+    "image/png;;",
+    "image/png, image/jpeg",
+    "image/not-real",
+    "application/png",
+    "image/jpeg",
+    "image/jpg",
+    "image/x-png",
+    "image/x-icon",
+    "image/x-3ds",
+    "image/apng",
+    "image/avci",
+    "image/avcs",
+    "image/avif",
+    "image/vnd.airzip.accelerator.azv",
+    "image/vnd.pco.b16",
+    "image/bmp",
+    "image/prs.btif",
+    "image/cgm",
+    "image/x-cmx",
+    "image/vnd.ms-dds",
+    "image/vnd.djvu",
+    "image/dpx",
+    "image/dicom-rle",
+    "image/vnd.dwg",
+    "image/vnd.dxf",
+    "image/emf",
+    "image/aces",
+    "image/vnd.fastbidsheet",
+    "image/x-freehand",
+    "image/fits",
+    "image/vnd.fpx",
+    "image/vnd.fst",
+    "image/g3fax",
+    "image/gif",
+    "image/heic",
+    "image/heic-sequence",
+    "image/heif",
+    "image/heif-sequence",
+    "image/hej2k",
+    "image/hsj2",
+    "image/vnd.microsoft.icon",
+    "image/ief",
+    "image/jphc",
+    "image/jls",
+    "image/x-jng",
+    "image/jp2",
+    "image/jpeg",
+    "image/jpx",
+    "image/jpm",
+    "image/jph",
+    "image/jxr",
+    "image/jxra",
+    "image/jxrs",
+    "image/jxs",
+    "image/jxsc",
+    "image/jxsi",
+    "image/jxss",
+    "image/ktx",
+    "image/ktx2",
+    "image/vnd.ms-modi",
+    "image/vnd.fujixerox.edmics-mmr",
+    "image/vnd.net-fpx",
+    "image/x-portable-bitmap",
+    "image/x-pict",
+    "image/vnd.zbrush.pcx",
+    "image/x-portable-graymap",
+    "image/png",
+    "image/x-portable-anymap",
+    "image/x-portable-pixmap",
+    "image/vnd.adobe.photoshop",
+    "image/prs.pti",
+    "image/x-cmu-raster",
+    "image/x-rgb",
+    "image/vnd.fujixerox.edmics-rlc",
+    "image/sgi",
+    "image/x-mrsid-image",
+    "image/svg+xml",
+    "image/t38",
+    "image/vnd.tencent.tap",
+    "image/tiff-fx",
+    "image/x-tga",
+    "image/tiff",
+    "image/vnd.dece.graphic",
+    "image/vnd.valve.source.texture",
+    "image/vnd.wap.wbmp",
+    "image/vnd.ms-photo",
+    "image/webp",
+    "image/wmf",
+    "image/x-xbitmap",
+    "image/vnd.xiff",
+    "image/x-xpixmap",
+    "image/x-xwindowdump"
+  ],
+  "streams": [
+    {
+      "name": "empty",
+      "chunks": []
+    },
+    {
+      "name": "one-character",
+      "chunks": [
+        "!"
+      ]
+    },
+    {
+      "name": "partial-tail",
+      "chunks": [
+        "YWJj",
+        "de"
+      ]
+    },
+    {
+      "name": "split-quantum",
+      "chunks": [
+        "Y",
+        "Q",
+        "=",
+        "="
+      ]
+    },
+    {
+      "name": "whitespace-split",
+      "chunks": [
+        "Y ",
+        "\tQ\n",
+        "=="
+      ]
+    },
+    {
+      "name": "invalid-after-prefix",
+      "chunks": [
+        "YWJj",
+        "!!!!"
+      ]
+    },
+    {
+      "name": "invalid-in-same-block",
+      "chunks": [
+        "YWJj!!!!"
+      ]
+    },
+    {
+      "name": "padding-across-blocks",
+      "chunks": [
+        "YQ==",
+        "Yg=="
+      ]
+    },
+    {
+      "name": "padding-in-one-block",
+      "chunks": [
+        "YQ==Yg=="
+      ]
+    },
+    {
+      "name": "nonzero-pad-bits",
+      "chunks": [
+        "YR=="
+      ]
+    },
+    {
+      "name": "one-invalid-trailing-character",
+      "chunks": [
+        "YWJj!"
+      ]
+    },
+    {
+      "name": "incomplete-invalid-tail",
+      "chunks": [
+        "YWJj",
+        "!@#"
+      ]
+    },
+    {
+      "name": "padding-tail",
+      "chunks": [
+        "YQ==",
+        "="
+      ]
+    },
+    {
+      "name": "spaces-between-quanta",
+      "chunks": [
+        "YWJj ZGVm"
+      ]
+    },
+    {
+      "name": "valid-split",
+      "chunks": [
+        "YWJj",
+        "ZGVm"
+      ]
+    }
+  ]
+}

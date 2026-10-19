@@ -1,0 +1,1074 @@
+{
+  "cases": [
+    {
+      "name": "single",
+      "items": [
+        {
+          "Type": "Movie",
+          "Id": "A0000000-0000-0000-0000-000000000001",
+          "Name": "Movie",
+          "ForcedSortName": "Movie",
+          "Path": "Z:\\Library\\Movie\\Movie.mkv",
+          "VideoType": "VideoFile"
+        }
+      ],
+      "links": [],
+      "query": "A0000000-0000-0000-0000-000000000001"
+    },
+    {
+      "name": "unlinked-primary-id",
+      "items": [
+        {
+          "Type": "Movie",
+          "Id": "A0000000-0000-0000-0000-000000000001",
+          "Name": "Movie",
+          "ForcedSortName": "Movie",
+          "Path": "Z:\\Library\\Movie\\Movie.mkv",
+          "VideoType": "VideoFile"
+        },
+        {
+          "Type": "Movie",
+          "Id": "A0000000-0000-0000-0000-000000000002",
+          "Name": "Movie - 4K",
+          "ForcedSortName": "Movie - 4K",
+          "Path": "Z:\\Library\\Movie\\Movie - 4K.mkv",
+          "VideoType": "VideoFile",
+          "PrimaryVersionId": "A0000000-0000-0000-0000-000000000001"
+        }
+      ],
+      "links": [],
+      "query": "A0000000-0000-0000-0000-000000000001"
+    },
+    {
+      "name": "local-primary",
+      "items": [
+        {
+          "Type": "Movie",
+          "Id": "A0000000-0000-0000-0000-000000000001",
+          "Name": "Movie",
+          "ForcedSortName": "Movie",
+          "Path": "Z:\\Library\\Movie\\Movie.mkv",
+          "VideoType": "VideoFile"
+        },
+        {
+          "Type": "Movie",
+          "Id": "A0000000-0000-0000-0000-000000000002",
+          "Name": "Movie - 4K",
+          "ForcedSortName": "Movie - 4K",
+          "Path": "Z:\\Library\\Movie\\Movie - 4K.mkv",
+          "VideoType": "VideoFile",
+          "PrimaryVersionId": "A0000000-0000-0000-0000-000000000001"
+        },
+        {
+          "Type": "Movie",
+          "Id": "A0000000-0000-0000-0000-000000000003",
+          "Name": "Movie - HD",
+          "ForcedSortName": "Movie - HD",
+          "Path": "Z:\\Library\\Movie\\Movie - HD.mkv",
+          "VideoType": "VideoFile",
+          "PrimaryVersionId": "A0000000-0000-0000-0000-000000000001"
+        }
+      ],
+      "links": [
+        {
+          "ParentId": "A0000000-0000-0000-0000-000000000001",
+          "ChildId": "A0000000-0000-0000-0000-000000000002",
+          "ChildType": 2
+        },
+        {
+          "ParentId": "A0000000-0000-0000-0000-000000000001",
+          "ChildId": "A0000000-0000-0000-0000-000000000003",
+          "ChildType": 2
+        }
+      ],
+      "query": "A0000000-0000-0000-0000-000000000001"
+    },
+    {
+      "name": "local-alternate",
+      "items": [
+        {
+          "Type": "Movie",
+          "Id": "A0000000-0000-0000-0000-000000000001",
+          "Name": "Movie",
+          "ForcedSortName": "Movie",
+          "Path": "Z:\\Library\\Movie\\Movie.mkv",
+          "VideoType": "VideoFile"
+        },
+        {
+          "Type": "Movie",
+          "Id": "A0000000-0000-0000-0000-000000000002",
+          "Name": "Movie - 4K",
+          "ForcedSortName": "Movie - 4K",
+          "Path": "Z:\\Library\\Movie\\Movie - 4K.mkv",
+          "VideoType": "VideoFile",
+          "PrimaryVersionId": "A0000000-0000-0000-0000-000000000001"
+        },
+        {
+          "Type": "Movie",
+          "Id": "A0000000-0000-0000-0000-000000000003",
+          "Name": "Movie - HD",
+          "ForcedSortName": "Movie - HD",
+          "Path": "Z:\\Library\\Movie\\Movie - HD.mkv",
+          "VideoType": "VideoFile",
+          "PrimaryVersionId": "A0000000-0000-0000-0000-000000000001"
+        }
+      ],
+      "links": [
+        {
+          "ParentId": "A0000000-0000-0000-0000-000000000001",
+          "ChildId": "A0000000-0000-0000-0000-000000000002",
+          "ChildType": 2
+        },
+        {
+          "ParentId": "A0000000-0000-0000-0000-000000000001",
+          "ChildId": "A0000000-0000-0000-0000-000000000003",
+          "ChildType": 2
+        }
+      ],
+      "query": "A0000000-0000-0000-0000-000000000002"
+    },
+    {
+      "name": "group-primary",
+      "items": [
+        {
+          "Type": "Movie",
+          "Id": "A0000000-0000-0000-0000-000000000001",
+          "Name": "Movie",
+          "ForcedSortName": "Movie",
+          "Path": "Z:\\Library\\Movie\\Movie.mkv",
+          "VideoType": "VideoFile"
+        },
+        {
+          "Type": "Movie",
+          "Id": "A0000000-0000-0000-0000-000000000002",
+          "Name": "Movie - 4K",
+          "ForcedSortName": "Movie - 4K",
+          "Path": "Z:\\Library\\Movie\\Movie - 4K.mkv",
+          "VideoType": "VideoFile",
+          "PrimaryVersionId": "A0000000-0000-0000-0000-000000000001"
+        },
+        {
+          "Type": "Movie",
+          "Id": "A0000000-0000-0000-0000-000000000003",
+          "Name": "Movie - HD",
+          "ForcedSortName": "Movie - HD",
+          "Path": "Z:\\Library\\Movie\\Movie - HD.mkv",
+          "VideoType": "VideoFile",
+          "PrimaryVersionId": "A0000000-0000-0000-0000-000000000001"
+        }
+      ],
+      "links": [
+        {
+          "ParentId": "A0000000-0000-0000-0000-000000000001",
+          "ChildId": "A0000000-0000-0000-0000-000000000002",
+          "ChildType": 3
+        },
+        {
+          "ParentId": "A0000000-0000-0000-0000-000000000001",
+          "ChildId": "A0000000-0000-0000-0000-000000000003",
+          "ChildType": 3
+        }
+      ],
+      "query": "A0000000-0000-0000-0000-000000000001"
+    },
+    {
+      "name": "group-alternate",
+      "items": [
+        {
+          "Type": "Movie",
+          "Id": "A0000000-0000-0000-0000-000000000001",
+          "Name": "Movie",
+          "ForcedSortName": "Movie",
+          "Path": "Z:\\Library\\Movie\\Movie.mkv",
+          "VideoType": "VideoFile"
+        },
+        {
+          "Type": "Movie",
+          "Id": "A0000000-0000-0000-0000-000000000002",
+          "Name": "Movie - 4K",
+          "ForcedSortName": "Movie - 4K",
+          "Path": "Z:\\Library\\Movie\\Movie - 4K.mkv",
+          "VideoType": "VideoFile",
+          "PrimaryVersionId": "A0000000-0000-0000-0000-000000000001"
+        },
+        {
+          "Type": "Movie",
+          "Id": "A0000000-0000-0000-0000-000000000003",
+          "Name": "Movie - HD",
+          "ForcedSortName": "Movie - HD",
+          "Path": "Z:\\Library\\Movie\\Movie - HD.mkv",
+          "VideoType": "VideoFile",
+          "PrimaryVersionId": "A0000000-0000-0000-0000-000000000001"
+        }
+      ],
+      "links": [
+        {
+          "ParentId": "A0000000-0000-0000-0000-000000000001",
+          "ChildId": "A0000000-0000-0000-0000-000000000002",
+          "ChildType": 3
+        },
+        {
+          "ParentId": "A0000000-0000-0000-0000-000000000001",
+          "ChildId": "A0000000-0000-0000-0000-000000000003",
+          "ChildType": 3
+        }
+      ],
+      "query": "A0000000-0000-0000-0000-000000000002"
+    },
+    {
+      "name": "grouped-local",
+      "items": [
+        {
+          "Type": "Movie",
+          "Id": "A0000000-0000-0000-0000-000000000001",
+          "Name": "Movie",
+          "ForcedSortName": "Movie",
+          "Path": "Z:\\Library\\Movie\\Movie.mkv",
+          "VideoType": "VideoFile"
+        },
+        {
+          "Type": "Movie",
+          "Id": "A0000000-0000-0000-0000-000000000002",
+          "Name": "Movie - 4K",
+          "ForcedSortName": "Movie - 4K",
+          "Path": "Z:\\Library\\Movie\\Movie - 4K.mkv",
+          "VideoType": "VideoFile",
+          "PrimaryVersionId": "A0000000-0000-0000-0000-000000000001"
+        },
+        {
+          "Type": "Movie",
+          "Id": "A0000000-0000-0000-0000-000000000003",
+          "Name": "Movie - HD",
+          "ForcedSortName": "Movie - HD",
+          "Path": "Z:\\Library\\Movie\\Movie - HD.mkv",
+          "VideoType": "VideoFile",
+          "PrimaryVersionId": "A0000000-0000-0000-0000-000000000001"
+        },
+        {
+          "Type": "Movie",
+          "Id": "A0000000-0000-0000-0000-000000000004",
+          "Name": "Movie - BluRay",
+          "ForcedSortName": "Movie - BluRay",
+          "Path": "Z:\\Library\\Movie\\Movie - BluRay.mkv",
+          "VideoType": "BluRay"
+        },
+        {
+          "Type": "Movie",
+          "Id": "A0000000-0000-0000-0000-000000000005",
+          "Name": "Movie - 3D",
+          "ForcedSortName": "Movie - 3D",
+          "Path": "Z:\\Library\\Movie\\Movie - 3D.mkv",
+          "VideoType": "VideoFile",
+          "Video3DFormat": "FullSideBySide"
+        }
+      ],
+      "links": [
+        {
+          "ParentId": "A0000000-0000-0000-0000-000000000001",
+          "ChildId": "A0000000-0000-0000-0000-000000000002",
+          "ChildType": 3
+        },
+        {
+          "ParentId": "A0000000-0000-0000-0000-000000000001",
+          "ChildId": "A0000000-0000-0000-0000-000000000003",
+          "ChildType": 3
+        },
+        {
+          "ParentId": "A0000000-0000-0000-0000-000000000002",
+          "ChildId": "A0000000-0000-0000-0000-000000000004",
+          "ChildType": 2
+        },
+        {
+          "ParentId": "A0000000-0000-0000-0000-000000000001",
+          "ChildId": "A0000000-0000-0000-0000-000000000005",
+          "ChildType": 2
+        },
+        {
+          "ParentId": "A0000000-0000-0000-0000-000000000001",
+          "ChildId": "A0000000-0000-0000-0000-000000000003",
+          "ChildType": 2
+        }
+      ],
+      "query": "A0000000-0000-0000-0000-000000000001"
+    },
+    {
+      "name": "cycle",
+      "items": [
+        {
+          "Type": "Movie",
+          "Id": "A0000000-0000-0000-0000-000000000001",
+          "Name": "Movie",
+          "ForcedSortName": "Movie",
+          "Path": "Z:\\Library\\Movie\\Movie.mkv",
+          "VideoType": "VideoFile",
+          "PrimaryVersionId": "A0000000-0000-0000-0000-000000000002"
+        },
+        {
+          "Type": "Movie",
+          "Id": "A0000000-0000-0000-0000-000000000002",
+          "Name": "Movie - 4K",
+          "ForcedSortName": "Movie - 4K",
+          "Path": "Z:\\Library\\Movie\\Movie - 4K.mkv",
+          "VideoType": "VideoFile",
+          "PrimaryVersionId": "A0000000-0000-0000-0000-000000000001"
+        }
+      ],
+      "links": [
+        {
+          "ParentId": "A0000000-0000-0000-0000-000000000001",
+          "ChildId": "A0000000-0000-0000-0000-000000000002",
+          "ChildType": 2
+        },
+        {
+          "ParentId": "A0000000-0000-0000-0000-000000000002",
+          "ChildId": "A0000000-0000-0000-0000-000000000001",
+          "ChildType": 2
+        }
+      ],
+      "query": "A0000000-0000-0000-0000-000000000001"
+    },
+    {
+      "name": "dangling",
+      "items": [
+        {
+          "Type": "Movie",
+          "Id": "A0000000-0000-0000-0000-000000000001",
+          "Name": "Movie",
+          "ForcedSortName": "Movie",
+          "Path": "Z:\\Library\\Movie\\Movie.mkv",
+          "VideoType": "VideoFile"
+        }
+      ],
+      "links": [
+        {
+          "ParentId": "A0000000-0000-0000-0000-000000000001",
+          "ChildId": "A0000000-0000-0000-0000-000000000099",
+          "ChildType": 2
+        },
+        {
+          "ParentId": "A0000000-0000-0000-0000-000000000001",
+          "ChildId": "A0000000-0000-0000-0000-000000000098",
+          "ChildType": 3
+        }
+      ],
+      "query": "A0000000-0000-0000-0000-000000000001"
+    },
+    {
+      "name": "urls-Movie",
+      "items": [
+        {
+          "Type": "Movie",
+          "Id": "A0000000-0000-0000-0000-000000000001",
+          "Name": "Item",
+          "ProviderIds": {
+            "Imdb": "Imdb-id",
+            "Tmdb": "Tmdb-id",
+            "ISBN": "ISBN-id",
+            "GoogleBooks": "GoogleBooks-id",
+            "ComicVine": "ComicVine-id",
+            "MusicBrainzAlbum": "MusicBrainzAlbum-id",
+            "MusicBrainzAlbumArtist": "MusicBrainzAlbumArtist-id",
+            "MusicBrainzArtist": "MusicBrainzArtist-id",
+            "MusicBrainzReleaseGroup": "MusicBrainzReleaseGroup-id",
+            "MusicBrainzTrack": "MusicBrainzTrack-id",
+            "AudioDbAlbum": "AudioDbAlbum-id",
+            "AudioDbArtist": "AudioDbArtist-id",
+            "Zap2It": "Zap2It-id"
+          }
+        },
+        {
+          "Type": "Series",
+          "Id": "A0000000-0000-0000-0000-000000000010",
+          "Name": "Show",
+          "ProviderIds": {
+            "Tmdb": "100",
+            "Imdb": "tt100"
+          }
+        },
+        {
+          "Type": "Season",
+          "Id": "A0000000-0000-0000-0000-000000000011",
+          "Name": "Season",
+          "SeriesId": "A0000000-0000-0000-0000-000000000010",
+          "IndexNumber": 2
+        }
+      ],
+      "links": [],
+      "query": "A0000000-0000-0000-0000-000000000001"
+    },
+    {
+      "name": "urls-Series",
+      "items": [
+        {
+          "Type": "Series",
+          "Id": "A0000000-0000-0000-0000-000000000001",
+          "Name": "Item",
+          "ProviderIds": {
+            "Imdb": "Imdb-id",
+            "Tmdb": "Tmdb-id",
+            "ISBN": "ISBN-id",
+            "GoogleBooks": "GoogleBooks-id",
+            "ComicVine": "ComicVine-id",
+            "MusicBrainzAlbum": "MusicBrainzAlbum-id",
+            "MusicBrainzAlbumArtist": "MusicBrainzAlbumArtist-id",
+            "MusicBrainzArtist": "MusicBrainzArtist-id",
+            "MusicBrainzReleaseGroup": "MusicBrainzReleaseGroup-id",
+            "MusicBrainzTrack": "MusicBrainzTrack-id",
+            "AudioDbAlbum": "AudioDbAlbum-id",
+            "AudioDbArtist": "AudioDbArtist-id",
+            "Zap2It": "Zap2It-id"
+          }
+        },
+        {
+          "Type": "Series",
+          "Id": "A0000000-0000-0000-0000-000000000010",
+          "Name": "Show",
+          "ProviderIds": {
+            "Tmdb": "100",
+            "Imdb": "tt100"
+          }
+        },
+        {
+          "Type": "Season",
+          "Id": "A0000000-0000-0000-0000-000000000011",
+          "Name": "Season",
+          "SeriesId": "A0000000-0000-0000-0000-000000000010",
+          "IndexNumber": 2
+        }
+      ],
+      "links": [],
+      "query": "A0000000-0000-0000-0000-000000000001"
+    },
+    {
+      "name": "urls-Season",
+      "items": [
+        {
+          "Type": "Season",
+          "Id": "A0000000-0000-0000-0000-000000000001",
+          "Name": "Item",
+          "ProviderIds": {
+            "Imdb": "Imdb-id",
+            "Tmdb": "Tmdb-id",
+            "ISBN": "ISBN-id",
+            "GoogleBooks": "GoogleBooks-id",
+            "ComicVine": "ComicVine-id",
+            "MusicBrainzAlbum": "MusicBrainzAlbum-id",
+            "MusicBrainzAlbumArtist": "MusicBrainzAlbumArtist-id",
+            "MusicBrainzArtist": "MusicBrainzArtist-id",
+            "MusicBrainzReleaseGroup": "MusicBrainzReleaseGroup-id",
+            "MusicBrainzTrack": "MusicBrainzTrack-id",
+            "AudioDbAlbum": "AudioDbAlbum-id",
+            "AudioDbArtist": "AudioDbArtist-id",
+            "Zap2It": "Zap2It-id"
+          },
+          "SeriesId": "A0000000-0000-0000-0000-000000000010",
+          "IndexNumber": 2
+        },
+        {
+          "Type": "Series",
+          "Id": "A0000000-0000-0000-0000-000000000010",
+          "Name": "Show",
+          "ProviderIds": {
+            "Tmdb": "100",
+            "Imdb": "tt100"
+          }
+        },
+        {
+          "Type": "Season",
+          "Id": "A0000000-0000-0000-0000-000000000011",
+          "Name": "Season",
+          "SeriesId": "A0000000-0000-0000-0000-000000000010",
+          "IndexNumber": 2
+        }
+      ],
+      "links": [],
+      "query": "A0000000-0000-0000-0000-000000000001"
+    },
+    {
+      "name": "urls-Episode",
+      "items": [
+        {
+          "Type": "Episode",
+          "Id": "A0000000-0000-0000-0000-000000000001",
+          "Name": "Item",
+          "ProviderIds": {
+            "Imdb": "Imdb-id",
+            "Tmdb": "Tmdb-id",
+            "ISBN": "ISBN-id",
+            "GoogleBooks": "GoogleBooks-id",
+            "ComicVine": "ComicVine-id",
+            "MusicBrainzAlbum": "MusicBrainzAlbum-id",
+            "MusicBrainzAlbumArtist": "MusicBrainzAlbumArtist-id",
+            "MusicBrainzArtist": "MusicBrainzArtist-id",
+            "MusicBrainzReleaseGroup": "MusicBrainzReleaseGroup-id",
+            "MusicBrainzTrack": "MusicBrainzTrack-id",
+            "AudioDbAlbum": "AudioDbAlbum-id",
+            "AudioDbArtist": "AudioDbArtist-id",
+            "Zap2It": "Zap2It-id"
+          },
+          "SeriesId": "A0000000-0000-0000-0000-000000000010",
+          "SeasonId": "A0000000-0000-0000-0000-000000000011",
+          "IndexNumber": 3
+        },
+        {
+          "Type": "Series",
+          "Id": "A0000000-0000-0000-0000-000000000010",
+          "Name": "Show",
+          "ProviderIds": {
+            "Tmdb": "100",
+            "Imdb": "tt100"
+          }
+        },
+        {
+          "Type": "Season",
+          "Id": "A0000000-0000-0000-0000-000000000011",
+          "Name": "Season",
+          "SeriesId": "A0000000-0000-0000-0000-000000000010",
+          "IndexNumber": 2
+        }
+      ],
+      "links": [],
+      "query": "A0000000-0000-0000-0000-000000000001"
+    },
+    {
+      "name": "urls-Person",
+      "items": [
+        {
+          "Type": "Person",
+          "Id": "A0000000-0000-0000-0000-000000000001",
+          "Name": "Item",
+          "ProviderIds": {
+            "Imdb": "Imdb-id",
+            "Tmdb": "Tmdb-id",
+            "ISBN": "ISBN-id",
+            "GoogleBooks": "GoogleBooks-id",
+            "ComicVine": "ComicVine-id",
+            "MusicBrainzAlbum": "MusicBrainzAlbum-id",
+            "MusicBrainzAlbumArtist": "MusicBrainzAlbumArtist-id",
+            "MusicBrainzArtist": "MusicBrainzArtist-id",
+            "MusicBrainzReleaseGroup": "MusicBrainzReleaseGroup-id",
+            "MusicBrainzTrack": "MusicBrainzTrack-id",
+            "AudioDbAlbum": "AudioDbAlbum-id",
+            "AudioDbArtist": "AudioDbArtist-id",
+            "Zap2It": "Zap2It-id"
+          }
+        },
+        {
+          "Type": "Series",
+          "Id": "A0000000-0000-0000-0000-000000000010",
+          "Name": "Show",
+          "ProviderIds": {
+            "Tmdb": "100",
+            "Imdb": "tt100"
+          }
+        },
+        {
+          "Type": "Season",
+          "Id": "A0000000-0000-0000-0000-000000000011",
+          "Name": "Season",
+          "SeriesId": "A0000000-0000-0000-0000-000000000010",
+          "IndexNumber": 2
+        }
+      ],
+      "links": [],
+      "query": "A0000000-0000-0000-0000-000000000001"
+    },
+    {
+      "name": "urls-BoxSet",
+      "items": [
+        {
+          "Type": "BoxSet",
+          "Id": "A0000000-0000-0000-0000-000000000001",
+          "Name": "Item",
+          "ProviderIds": {
+            "Imdb": "Imdb-id",
+            "Tmdb": "Tmdb-id",
+            "ISBN": "ISBN-id",
+            "GoogleBooks": "GoogleBooks-id",
+            "ComicVine": "ComicVine-id",
+            "MusicBrainzAlbum": "MusicBrainzAlbum-id",
+            "MusicBrainzAlbumArtist": "MusicBrainzAlbumArtist-id",
+            "MusicBrainzArtist": "MusicBrainzArtist-id",
+            "MusicBrainzReleaseGroup": "MusicBrainzReleaseGroup-id",
+            "MusicBrainzTrack": "MusicBrainzTrack-id",
+            "AudioDbAlbum": "AudioDbAlbum-id",
+            "AudioDbArtist": "AudioDbArtist-id",
+            "Zap2It": "Zap2It-id"
+          }
+        },
+        {
+          "Type": "Series",
+          "Id": "A0000000-0000-0000-0000-000000000010",
+          "Name": "Show",
+          "ProviderIds": {
+            "Tmdb": "100",
+            "Imdb": "tt100"
+          }
+        },
+        {
+          "Type": "Season",
+          "Id": "A0000000-0000-0000-0000-000000000011",
+          "Name": "Season",
+          "SeriesId": "A0000000-0000-0000-0000-000000000010",
+          "IndexNumber": 2
+        }
+      ],
+      "links": [],
+      "query": "A0000000-0000-0000-0000-000000000001"
+    },
+    {
+      "name": "urls-Book",
+      "items": [
+        {
+          "Type": "Book",
+          "Id": "A0000000-0000-0000-0000-000000000001",
+          "Name": "Item",
+          "ProviderIds": {
+            "Imdb": "Imdb-id",
+            "Tmdb": "Tmdb-id",
+            "ISBN": "ISBN-id",
+            "GoogleBooks": "GoogleBooks-id",
+            "ComicVine": "ComicVine-id",
+            "MusicBrainzAlbum": "MusicBrainzAlbum-id",
+            "MusicBrainzAlbumArtist": "MusicBrainzAlbumArtist-id",
+            "MusicBrainzArtist": "MusicBrainzArtist-id",
+            "MusicBrainzReleaseGroup": "MusicBrainzReleaseGroup-id",
+            "MusicBrainzTrack": "MusicBrainzTrack-id",
+            "AudioDbAlbum": "AudioDbAlbum-id",
+            "AudioDbArtist": "AudioDbArtist-id",
+            "Zap2It": "Zap2It-id"
+          }
+        },
+        {
+          "Type": "Series",
+          "Id": "A0000000-0000-0000-0000-000000000010",
+          "Name": "Show",
+          "ProviderIds": {
+            "Tmdb": "100",
+            "Imdb": "tt100"
+          }
+        },
+        {
+          "Type": "Season",
+          "Id": "A0000000-0000-0000-0000-000000000011",
+          "Name": "Season",
+          "SeriesId": "A0000000-0000-0000-0000-000000000010",
+          "IndexNumber": 2
+        }
+      ],
+      "links": [],
+      "query": "A0000000-0000-0000-0000-000000000001"
+    },
+    {
+      "name": "urls-MusicArtist",
+      "items": [
+        {
+          "Type": "MusicArtist",
+          "Id": "A0000000-0000-0000-0000-000000000001",
+          "Name": "Item",
+          "ProviderIds": {
+            "Imdb": "Imdb-id",
+            "Tmdb": "Tmdb-id",
+            "ISBN": "ISBN-id",
+            "GoogleBooks": "GoogleBooks-id",
+            "ComicVine": "ComicVine-id",
+            "MusicBrainzAlbum": "MusicBrainzAlbum-id",
+            "MusicBrainzAlbumArtist": "MusicBrainzAlbumArtist-id",
+            "MusicBrainzArtist": "MusicBrainzArtist-id",
+            "MusicBrainzReleaseGroup": "MusicBrainzReleaseGroup-id",
+            "MusicBrainzTrack": "MusicBrainzTrack-id",
+            "AudioDbAlbum": "AudioDbAlbum-id",
+            "AudioDbArtist": "AudioDbArtist-id",
+            "Zap2It": "Zap2It-id"
+          }
+        },
+        {
+          "Type": "Series",
+          "Id": "A0000000-0000-0000-0000-000000000010",
+          "Name": "Show",
+          "ProviderIds": {
+            "Tmdb": "100",
+            "Imdb": "tt100"
+          }
+        },
+        {
+          "Type": "Season",
+          "Id": "A0000000-0000-0000-0000-000000000011",
+          "Name": "Season",
+          "SeriesId": "A0000000-0000-0000-0000-000000000010",
+          "IndexNumber": 2
+        }
+      ],
+      "links": [],
+      "query": "A0000000-0000-0000-0000-000000000001"
+    },
+    {
+      "name": "urls-MusicAlbum",
+      "items": [
+        {
+          "Type": "MusicAlbum",
+          "Id": "A0000000-0000-0000-0000-000000000001",
+          "Name": "Item",
+          "ProviderIds": {
+            "Imdb": "Imdb-id",
+            "Tmdb": "Tmdb-id",
+            "ISBN": "ISBN-id",
+            "GoogleBooks": "GoogleBooks-id",
+            "ComicVine": "ComicVine-id",
+            "MusicBrainzAlbum": "MusicBrainzAlbum-id",
+            "MusicBrainzAlbumArtist": "MusicBrainzAlbumArtist-id",
+            "MusicBrainzArtist": "MusicBrainzArtist-id",
+            "MusicBrainzReleaseGroup": "MusicBrainzReleaseGroup-id",
+            "MusicBrainzTrack": "MusicBrainzTrack-id",
+            "AudioDbAlbum": "AudioDbAlbum-id",
+            "AudioDbArtist": "AudioDbArtist-id",
+            "Zap2It": "Zap2It-id"
+          }
+        },
+        {
+          "Type": "Series",
+          "Id": "A0000000-0000-0000-0000-000000000010",
+          "Name": "Show",
+          "ProviderIds": {
+            "Tmdb": "100",
+            "Imdb": "tt100"
+          }
+        },
+        {
+          "Type": "Season",
+          "Id": "A0000000-0000-0000-0000-000000000011",
+          "Name": "Season",
+          "SeriesId": "A0000000-0000-0000-0000-000000000010",
+          "IndexNumber": 2
+        }
+      ],
+      "links": [],
+      "query": "A0000000-0000-0000-0000-000000000001"
+    },
+    {
+      "name": "urls-Audio",
+      "items": [
+        {
+          "Type": "Audio",
+          "Id": "A0000000-0000-0000-0000-000000000001",
+          "Name": "Item",
+          "ProviderIds": {
+            "Imdb": "Imdb-id",
+            "Tmdb": "Tmdb-id",
+            "ISBN": "ISBN-id",
+            "GoogleBooks": "GoogleBooks-id",
+            "ComicVine": "ComicVine-id",
+            "MusicBrainzAlbum": "MusicBrainzAlbum-id",
+            "MusicBrainzAlbumArtist": "MusicBrainzAlbumArtist-id",
+            "MusicBrainzArtist": "MusicBrainzArtist-id",
+            "MusicBrainzReleaseGroup": "MusicBrainzReleaseGroup-id",
+            "MusicBrainzTrack": "MusicBrainzTrack-id",
+            "AudioDbAlbum": "AudioDbAlbum-id",
+            "AudioDbArtist": "AudioDbArtist-id",
+            "Zap2It": "Zap2It-id"
+          }
+        },
+        {
+          "Type": "Series",
+          "Id": "A0000000-0000-0000-0000-000000000010",
+          "Name": "Show",
+          "ProviderIds": {
+            "Tmdb": "100",
+            "Imdb": "tt100"
+          }
+        },
+        {
+          "Type": "Season",
+          "Id": "A0000000-0000-0000-0000-000000000011",
+          "Name": "Season",
+          "SeriesId": "A0000000-0000-0000-0000-000000000010",
+          "IndexNumber": 2
+        }
+      ],
+      "links": [],
+      "query": "A0000000-0000-0000-0000-000000000001"
+    },
+    {
+      "name": "urls-AudioBook",
+      "items": [
+        {
+          "Type": "AudioBook",
+          "Id": "A0000000-0000-0000-0000-000000000001",
+          "Name": "Item",
+          "ProviderIds": {
+            "Imdb": "Imdb-id",
+            "Tmdb": "Tmdb-id",
+            "ISBN": "ISBN-id",
+            "GoogleBooks": "GoogleBooks-id",
+            "ComicVine": "ComicVine-id",
+            "MusicBrainzAlbum": "MusicBrainzAlbum-id",
+            "MusicBrainzAlbumArtist": "MusicBrainzAlbumArtist-id",
+            "MusicBrainzArtist": "MusicBrainzArtist-id",
+            "MusicBrainzReleaseGroup": "MusicBrainzReleaseGroup-id",
+            "MusicBrainzTrack": "MusicBrainzTrack-id",
+            "AudioDbAlbum": "AudioDbAlbum-id",
+            "AudioDbArtist": "AudioDbArtist-id",
+            "Zap2It": "Zap2It-id"
+          }
+        },
+        {
+          "Type": "Series",
+          "Id": "A0000000-0000-0000-0000-000000000010",
+          "Name": "Show",
+          "ProviderIds": {
+            "Tmdb": "100",
+            "Imdb": "tt100"
+          }
+        },
+        {
+          "Type": "Season",
+          "Id": "A0000000-0000-0000-0000-000000000011",
+          "Name": "Season",
+          "SeriesId": "A0000000-0000-0000-0000-000000000010",
+          "IndexNumber": 2
+        }
+      ],
+      "links": [],
+      "query": "A0000000-0000-0000-0000-000000000001"
+    },
+    {
+      "name": "urls-Video",
+      "items": [
+        {
+          "Type": "Video",
+          "Id": "A0000000-0000-0000-0000-000000000001",
+          "Name": "Item",
+          "ProviderIds": {
+            "Imdb": "Imdb-id",
+            "Tmdb": "Tmdb-id",
+            "ISBN": "ISBN-id",
+            "GoogleBooks": "GoogleBooks-id",
+            "ComicVine": "ComicVine-id",
+            "MusicBrainzAlbum": "MusicBrainzAlbum-id",
+            "MusicBrainzAlbumArtist": "MusicBrainzAlbumArtist-id",
+            "MusicBrainzArtist": "MusicBrainzArtist-id",
+            "MusicBrainzReleaseGroup": "MusicBrainzReleaseGroup-id",
+            "MusicBrainzTrack": "MusicBrainzTrack-id",
+            "AudioDbAlbum": "AudioDbAlbum-id",
+            "AudioDbArtist": "AudioDbArtist-id",
+            "Zap2It": "Zap2It-id"
+          }
+        },
+        {
+          "Type": "Series",
+          "Id": "A0000000-0000-0000-0000-000000000010",
+          "Name": "Show",
+          "ProviderIds": {
+            "Tmdb": "100",
+            "Imdb": "tt100"
+          }
+        },
+        {
+          "Type": "Season",
+          "Id": "A0000000-0000-0000-0000-000000000011",
+          "Name": "Season",
+          "SeriesId": "A0000000-0000-0000-0000-000000000010",
+          "IndexNumber": 2
+        }
+      ],
+      "links": [],
+      "query": "A0000000-0000-0000-0000-000000000001"
+    },
+    {
+      "name": "urls-Trailer",
+      "items": [
+        {
+          "Type": "Trailer",
+          "Id": "A0000000-0000-0000-0000-000000000001",
+          "Name": "Item",
+          "ProviderIds": {
+            "Imdb": "Imdb-id",
+            "Tmdb": "Tmdb-id",
+            "ISBN": "ISBN-id",
+            "GoogleBooks": "GoogleBooks-id",
+            "ComicVine": "ComicVine-id",
+            "MusicBrainzAlbum": "MusicBrainzAlbum-id",
+            "MusicBrainzAlbumArtist": "MusicBrainzAlbumArtist-id",
+            "MusicBrainzArtist": "MusicBrainzArtist-id",
+            "MusicBrainzReleaseGroup": "MusicBrainzReleaseGroup-id",
+            "MusicBrainzTrack": "MusicBrainzTrack-id",
+            "AudioDbAlbum": "AudioDbAlbum-id",
+            "AudioDbArtist": "AudioDbArtist-id",
+            "Zap2It": "Zap2It-id"
+          }
+        },
+        {
+          "Type": "Series",
+          "Id": "A0000000-0000-0000-0000-000000000010",
+          "Name": "Show",
+          "ProviderIds": {
+            "Tmdb": "100",
+            "Imdb": "tt100"
+          }
+        },
+        {
+          "Type": "Season",
+          "Id": "A0000000-0000-0000-0000-000000000011",
+          "Name": "Season",
+          "SeriesId": "A0000000-0000-0000-0000-000000000010",
+          "IndexNumber": 2
+        }
+      ],
+      "links": [],
+      "query": "A0000000-0000-0000-0000-000000000001"
+    },
+    {
+      "name": "urls-case-empty",
+      "items": [
+        {
+          "Type": "Movie",
+          "Id": "A0000000-0000-0000-0000-000000000001",
+          "Name": "Movie",
+          "ForcedSortName": "Movie",
+          "Path": "Z:\\Library\\Movie\\Movie.mkv",
+          "VideoType": "VideoFile",
+          "ProviderIds": {
+            "tMdB": "42",
+            "iMdB": " ",
+            "Zap2It": ""
+          }
+        }
+      ],
+      "links": [],
+      "query": "A0000000-0000-0000-0000-000000000001"
+    },
+    {
+      "name": "urls-custom-server",
+      "items": [
+        {
+          "Type": "MusicAlbum",
+          "Id": "A0000000-0000-0000-0000-000000000001",
+          "Name": "Album",
+          "ProviderIds": {
+            "MusicBrainzAlbum": "release"
+          }
+        }
+      ],
+      "links": [],
+      "query": "A0000000-0000-0000-0000-000000000001",
+      "musicBrainzServer": "https://music.example.test/prefix///"
+    },
+    {
+      "name": "same-path-width",
+      "items": [
+        {
+          "Type": "Movie",
+          "Id": "A0000000-0000-0000-0000-000000000001",
+          "Name": "Movie",
+          "ForcedSortName": "Movie",
+          "Path": "Z:\\Library\\Movie\\Movie.mkv",
+          "VideoType": "VideoFile"
+        },
+        {
+          "Type": "Movie",
+          "Id": "A0000000-0000-0000-0000-000000000002",
+          "Name": "Movie",
+          "ForcedSortName": "Movie",
+          "Path": "Z:\\Library\\Movie\\Movie.mkv",
+          "VideoType": "VideoFile",
+          "MediaStreams": [
+            {
+              "Type": "Video",
+              "Index": 0,
+              "Width": 1280
+            }
+          ]
+        },
+        {
+          "Type": "Movie",
+          "Id": "A0000000-0000-0000-0000-000000000003",
+          "Name": "Movie",
+          "ForcedSortName": "Movie",
+          "Path": "Z:\\Library\\Movie\\Movie.mkv",
+          "VideoType": "VideoFile",
+          "MediaStreams": [
+            {
+              "Type": "Video",
+              "Index": 0,
+              "Width": 3840
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "ParentId": "A0000000-0000-0000-0000-000000000001",
+          "ChildId": "A0000000-0000-0000-0000-000000000002",
+          "ChildType": 2
+        },
+        {
+          "ParentId": "A0000000-0000-0000-0000-000000000001",
+          "ChildId": "A0000000-0000-0000-0000-000000000003",
+          "ChildType": 2
+        }
+      ],
+      "query": "A0000000-0000-0000-0000-000000000001"
+    }
+  ],
+  "prefixes": [
+    [
+      "Movie - 2160p SDR",
+      "Movie - 2160p HDR"
+    ],
+    [
+      "Title Greyscale",
+      "Title Greyish"
+    ],
+    [
+      "Movie",
+      "Movie - 4K"
+    ],
+    [
+      "Movie 1.5",
+      "Movie 1.6"
+    ],
+    [
+      "Movie_4K",
+      "movie_HD"
+    ],
+    [
+      "Movie.2.0",
+      "Movie.3.0"
+    ],
+    [
+      "ABC",
+      "XYZ"
+    ],
+    [
+      "ıtem - a",
+      "Item - b"
+    ],
+    [
+      "i - a",
+      "İ - b"
+    ],
+    [
+      "σ-a",
+      "ς-b"
+    ],
+    [
+      "ẞ-a",
+      "ß-b"
+    ],
+    [
+      "é-a",
+      "É-b"
+    ]
+  ],
+  "folders": [
+    "Name",
+    "Ends...",
+    "  A<>:\"/\\|?*B  ",
+    "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "中中中中中中中中中中中中中中中中中中中中中中中中中中中中中中中中中中中中中中中中中中中中中中中中中中中中中中中中中中中中",
+    "🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂",
+    "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂",
+    "﻿ A"
+  ]
+}

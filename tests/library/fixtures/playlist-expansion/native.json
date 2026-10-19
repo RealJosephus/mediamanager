@@ -1,0 +1,105 @@
+{
+  "results": [
+    "79000000000000000000000000000001",
+    "79000000000000000000000000000002",
+    "79000000000000000000000000000001",
+    "79000000000000000000000000000002",
+    "79000000000000000000000000000001",
+    "79000000000000000000000000000002",
+    "79000000000000000000000000000001",
+    "79000000000000000000000000000001"
+  ],
+  "queries": [
+    {
+      "ParentId": "79000000000000000000000000000004",
+      "Recursive": true,
+      "IsFolder": false,
+      "EnableTotalRecordCount": false,
+      "IncludeItemTypes": [],
+      "MediaTypes": [
+        "Audio",
+        "Video"
+      ],
+      "ArtistIds": [],
+      "GenreIds": [],
+      "OrderBy": []
+    },
+    {
+      "ParentId": "00000000000000000000000000000000",
+      "Recursive": true,
+      "IsFolder": null,
+      "EnableTotalRecordCount": true,
+      "IncludeItemTypes": [
+        "Audio"
+      ],
+      "MediaTypes": [],
+      "ArtistIds": [
+        "79000000000000000000000000000005"
+      ],
+      "GenreIds": [],
+      "OrderBy": [
+        {
+          "Key": "AlbumArtist",
+          "Direction": "Ascending"
+        },
+        {
+          "Key": "Album",
+          "Direction": "Ascending"
+        },
+        {
+          "Key": "SortName",
+          "Direction": "Ascending"
+        }
+      ]
+    },
+    {
+      "ParentId": "00000000000000000000000000000000",
+      "Recursive": true,
+      "IsFolder": null,
+      "EnableTotalRecordCount": true,
+      "IncludeItemTypes": [
+        "Audio"
+      ],
+      "MediaTypes": [],
+      "ArtistIds": [],
+      "GenreIds": [
+        "79000000000000000000000000000006"
+      ],
+      "OrderBy": [
+        {
+          "Key": "AlbumArtist",
+          "Direction": "Ascending"
+        },
+        {
+          "Key": "Album",
+          "Direction": "Ascending"
+        },
+        {
+          "Key": "SortName",
+          "Direction": "Ascending"
+        }
+      ]
+    }
+  ],
+  "sourceBoundary": "Unmodified Playlist.GetPlaylistItems and Folder.GetItemList/QueryRecursive. ILibraryManager.GetItemList returns explicitly supplied candidates; this oracle verifies expansion and query arguments, not database filtering. User is null; user visibility is covered by candidate dual-database tests and existing permission oracles.",
+  "runtime": ".NET 10.0.12",
+  "assemblies": [
+    {
+      "path": "D:\\mediamanager\\.test-output\\recordings-current\\playlist-expansion-20261004-v2\\bin\\Release\\net10.0\\MediaBrowser.Controller.dll",
+      "sha256": "56a527307ef93f810fdadec33ba8380cc8416d38cb1cfea92297b0f65288808e"
+    },
+    {
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Private.CoreLib.dll",
+      "sha256": "1125acc8106c43fc8bad2d203c4c4485df6182d292846c2fff415c1040c54678"
+    }
+  ],
+  "candidateVerified": false,
+  "source": {
+    "oracleFiles": {
+      "Oracle.csproj": "3f2610631c594ffd08dcc82f03d3509abc1c9c9541f159519800df046fc770ee",
+      "Program.cs": "a6afeb19751a0b6913daa06e0028aebe4741561ac4be9e7b631e1c2658b0c41b"
+    },
+    "jellyfinDll": "29c34541350089dc0522c4309ecd617e78fd402774681f32491d089803939c03",
+    "sourceFilesSha256": "49ccd1415bc99324a4d19e3ffba9cb3df130d3a34c605bab59b0eb376710c847"
+  }
+}

@@ -1,0 +1,1286 @@
+{
+  "Provider": {
+    "HasMetadata": true,
+    "ItemId": "00000000-0000-0000-0000-000000000000",
+    "SaveCount": 0,
+    "Played": false,
+    "PlayCount": 7
+  },
+  "Parser": [
+    {
+      "Played": true,
+      "PlayCount": 7,
+      "LastPlayedDate": "2020-01-02T00:00:00.0000000Z",
+      "Reason": "Import"
+    },
+    {
+      "Played": true,
+      "PlayCount": 12,
+      "LastPlayedDate": "2020-01-02T00:00:00.0000000Z",
+      "Reason": "Import"
+    },
+    {
+      "Played": true,
+      "PlayCount": 12,
+      "LastPlayedDate": "2024-04-03T04:13:14.1234567Z",
+      "Reason": "Import"
+    },
+    {
+      "Played": false,
+      "PlayCount": 12,
+      "LastPlayedDate": "2024-04-03T04:13:14.1234567Z",
+      "Reason": "Import"
+    }
+  ],
+  "ImagePaths": [
+    {
+      "Type": "Movie",
+      "Convention": "Legacy",
+      "Local": false,
+      "ImageType": "Primary",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\metadata\\library\\22\\22222222222222222222222222222222\\poster.jpg"
+      ]
+    },
+    {
+      "Type": "Movie",
+      "Convention": "Legacy",
+      "Local": false,
+      "ImageType": "Backdrop",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\metadata\\library\\22\\22222222222222222222222222222222\\backdrop.jpg"
+      ]
+    },
+    {
+      "Type": "Movie",
+      "Convention": "Legacy",
+      "Local": false,
+      "ImageType": "Backdrop",
+      "Index": 1,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\metadata\\library\\22\\22222222222222222222222222222222\\backdrop1.jpg"
+      ]
+    },
+    {
+      "Type": "Movie",
+      "Convention": "Legacy",
+      "Local": false,
+      "ImageType": "Logo",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\metadata\\library\\22\\22222222222222222222222222222222\\logo.jpg"
+      ]
+    },
+    {
+      "Type": "Movie",
+      "Convention": "Legacy",
+      "Local": false,
+      "ImageType": "Disc",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\metadata\\library\\22\\22222222222222222222222222222222\\disc.jpg"
+      ]
+    },
+    {
+      "Type": "Movie",
+      "Convention": "Legacy",
+      "Local": false,
+      "ImageType": "Thumb",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\metadata\\library\\22\\22222222222222222222222222222222\\landscape.jpg"
+      ]
+    },
+    {
+      "Type": "Movie",
+      "Convention": "Legacy",
+      "Local": true,
+      "ImageType": "Primary",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\movie-poster.jpg"
+      ]
+    },
+    {
+      "Type": "Movie",
+      "Convention": "Legacy",
+      "Local": true,
+      "ImageType": "Backdrop",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\movie-backdrop.jpg"
+      ]
+    },
+    {
+      "Type": "Movie",
+      "Convention": "Legacy",
+      "Local": true,
+      "ImageType": "Backdrop",
+      "Index": 1,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\movie-backdrop1.jpg"
+      ]
+    },
+    {
+      "Type": "Movie",
+      "Convention": "Legacy",
+      "Local": true,
+      "ImageType": "Logo",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\movie-logo.jpg"
+      ]
+    },
+    {
+      "Type": "Movie",
+      "Convention": "Legacy",
+      "Local": true,
+      "ImageType": "Disc",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\movie-disc.jpg"
+      ]
+    },
+    {
+      "Type": "Movie",
+      "Convention": "Legacy",
+      "Local": true,
+      "ImageType": "Thumb",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\movie-landscape.jpg"
+      ]
+    },
+    {
+      "Type": "Movie",
+      "Convention": "Compatible",
+      "Local": false,
+      "ImageType": "Primary",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\metadata\\library\\22\\22222222222222222222222222222222\\poster.jpg"
+      ]
+    },
+    {
+      "Type": "Movie",
+      "Convention": "Compatible",
+      "Local": false,
+      "ImageType": "Backdrop",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\metadata\\library\\22\\22222222222222222222222222222222\\backdrop.jpg"
+      ]
+    },
+    {
+      "Type": "Movie",
+      "Convention": "Compatible",
+      "Local": false,
+      "ImageType": "Backdrop",
+      "Index": 1,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\metadata\\library\\22\\22222222222222222222222222222222\\backdrop1.jpg"
+      ]
+    },
+    {
+      "Type": "Movie",
+      "Convention": "Compatible",
+      "Local": false,
+      "ImageType": "Logo",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\metadata\\library\\22\\22222222222222222222222222222222\\logo.jpg"
+      ]
+    },
+    {
+      "Type": "Movie",
+      "Convention": "Compatible",
+      "Local": false,
+      "ImageType": "Disc",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\metadata\\library\\22\\22222222222222222222222222222222\\disc.jpg"
+      ]
+    },
+    {
+      "Type": "Movie",
+      "Convention": "Compatible",
+      "Local": false,
+      "ImageType": "Thumb",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\metadata\\library\\22\\22222222222222222222222222222222\\landscape.jpg"
+      ]
+    },
+    {
+      "Type": "Movie",
+      "Convention": "Compatible",
+      "Local": true,
+      "ImageType": "Primary",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\movie-poster.jpg"
+      ]
+    },
+    {
+      "Type": "Movie",
+      "Convention": "Compatible",
+      "Local": true,
+      "ImageType": "Backdrop",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\movie-fanart.jpg"
+      ]
+    },
+    {
+      "Type": "Movie",
+      "Convention": "Compatible",
+      "Local": true,
+      "ImageType": "Backdrop",
+      "Index": 1,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\movie-fanart1.jpg"
+      ]
+    },
+    {
+      "Type": "Movie",
+      "Convention": "Compatible",
+      "Local": true,
+      "ImageType": "Logo",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\movie-logo.jpg"
+      ]
+    },
+    {
+      "Type": "Movie",
+      "Convention": "Compatible",
+      "Local": true,
+      "ImageType": "Disc",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\movie-disc.jpg"
+      ]
+    },
+    {
+      "Type": "Movie",
+      "Convention": "Compatible",
+      "Local": true,
+      "ImageType": "Thumb",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\movie-landscape.jpg"
+      ]
+    },
+    {
+      "Type": "Episode",
+      "Convention": "Legacy",
+      "Local": false,
+      "ImageType": "Primary",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\metadata\\library\\22\\22222222222222222222222222222222\\poster.jpg"
+      ]
+    },
+    {
+      "Type": "Episode",
+      "Convention": "Legacy",
+      "Local": false,
+      "ImageType": "Backdrop",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\metadata\\library\\22\\22222222222222222222222222222222\\backdrop.jpg"
+      ]
+    },
+    {
+      "Type": "Episode",
+      "Convention": "Legacy",
+      "Local": false,
+      "ImageType": "Backdrop",
+      "Index": 1,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\metadata\\library\\22\\22222222222222222222222222222222\\backdrop1.jpg"
+      ]
+    },
+    {
+      "Type": "Episode",
+      "Convention": "Legacy",
+      "Local": false,
+      "ImageType": "Logo",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\metadata\\library\\22\\22222222222222222222222222222222\\logo.jpg"
+      ]
+    },
+    {
+      "Type": "Episode",
+      "Convention": "Legacy",
+      "Local": false,
+      "ImageType": "Disc",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\metadata\\library\\22\\22222222222222222222222222222222\\disc.jpg"
+      ]
+    },
+    {
+      "Type": "Episode",
+      "Convention": "Legacy",
+      "Local": false,
+      "ImageType": "Thumb",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\metadata\\library\\22\\22222222222222222222222222222222\\landscape.jpg"
+      ]
+    },
+    {
+      "Type": "Episode",
+      "Convention": "Legacy",
+      "Local": true,
+      "ImageType": "Primary",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\movie-thumb.jpg"
+      ]
+    },
+    {
+      "Type": "Episode",
+      "Convention": "Legacy",
+      "Local": true,
+      "ImageType": "Backdrop",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\backdrop.jpg"
+      ]
+    },
+    {
+      "Type": "Episode",
+      "Convention": "Legacy",
+      "Local": true,
+      "ImageType": "Backdrop",
+      "Index": 1,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\backdrop1.jpg"
+      ]
+    },
+    {
+      "Type": "Episode",
+      "Convention": "Legacy",
+      "Local": true,
+      "ImageType": "Logo",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\logo.jpg"
+      ]
+    },
+    {
+      "Type": "Episode",
+      "Convention": "Legacy",
+      "Local": true,
+      "ImageType": "Disc",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\disc.jpg"
+      ]
+    },
+    {
+      "Type": "Episode",
+      "Convention": "Legacy",
+      "Local": true,
+      "ImageType": "Thumb",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\landscape.jpg"
+      ]
+    },
+    {
+      "Type": "Episode",
+      "Convention": "Compatible",
+      "Local": false,
+      "ImageType": "Primary",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\metadata\\library\\22\\22222222222222222222222222222222\\poster.jpg"
+      ]
+    },
+    {
+      "Type": "Episode",
+      "Convention": "Compatible",
+      "Local": false,
+      "ImageType": "Backdrop",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\metadata\\library\\22\\22222222222222222222222222222222\\backdrop.jpg"
+      ]
+    },
+    {
+      "Type": "Episode",
+      "Convention": "Compatible",
+      "Local": false,
+      "ImageType": "Backdrop",
+      "Index": 1,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\metadata\\library\\22\\22222222222222222222222222222222\\backdrop1.jpg"
+      ]
+    },
+    {
+      "Type": "Episode",
+      "Convention": "Compatible",
+      "Local": false,
+      "ImageType": "Logo",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\metadata\\library\\22\\22222222222222222222222222222222\\logo.jpg"
+      ]
+    },
+    {
+      "Type": "Episode",
+      "Convention": "Compatible",
+      "Local": false,
+      "ImageType": "Disc",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\metadata\\library\\22\\22222222222222222222222222222222\\disc.jpg"
+      ]
+    },
+    {
+      "Type": "Episode",
+      "Convention": "Compatible",
+      "Local": false,
+      "ImageType": "Thumb",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\metadata\\library\\22\\22222222222222222222222222222222\\landscape.jpg"
+      ]
+    },
+    {
+      "Type": "Episode",
+      "Convention": "Compatible",
+      "Local": true,
+      "ImageType": "Primary",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\movie-thumb.jpg"
+      ]
+    },
+    {
+      "Type": "Episode",
+      "Convention": "Compatible",
+      "Local": true,
+      "ImageType": "Backdrop",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\fanart.jpg"
+      ]
+    },
+    {
+      "Type": "Episode",
+      "Convention": "Compatible",
+      "Local": true,
+      "ImageType": "Backdrop",
+      "Index": 1,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\extrafanart\\fanart1.jpg",
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\extrathumbs\\thumb1.jpg"
+      ]
+    },
+    {
+      "Type": "Episode",
+      "Convention": "Compatible",
+      "Local": true,
+      "ImageType": "Logo",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\logo.jpg"
+      ]
+    },
+    {
+      "Type": "Episode",
+      "Convention": "Compatible",
+      "Local": true,
+      "ImageType": "Disc",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\disc.jpg"
+      ]
+    },
+    {
+      "Type": "Episode",
+      "Convention": "Compatible",
+      "Local": true,
+      "ImageType": "Thumb",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\landscape.jpg"
+      ]
+    },
+    {
+      "Type": "Season",
+      "Convention": "Legacy",
+      "Local": false,
+      "ImageType": "Primary",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\metadata\\library\\22\\22222222222222222222222222222222\\poster.jpg"
+      ]
+    },
+    {
+      "Type": "Season",
+      "Convention": "Legacy",
+      "Local": false,
+      "ImageType": "Backdrop",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\metadata\\library\\22\\22222222222222222222222222222222\\backdrop.jpg"
+      ]
+    },
+    {
+      "Type": "Season",
+      "Convention": "Legacy",
+      "Local": false,
+      "ImageType": "Backdrop",
+      "Index": 1,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\metadata\\library\\22\\22222222222222222222222222222222\\backdrop1.jpg"
+      ]
+    },
+    {
+      "Type": "Season",
+      "Convention": "Legacy",
+      "Local": false,
+      "ImageType": "Logo",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\metadata\\library\\22\\22222222222222222222222222222222\\logo.jpg"
+      ]
+    },
+    {
+      "Type": "Season",
+      "Convention": "Legacy",
+      "Local": false,
+      "ImageType": "Disc",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\metadata\\library\\22\\22222222222222222222222222222222\\disc.jpg"
+      ]
+    },
+    {
+      "Type": "Season",
+      "Convention": "Legacy",
+      "Local": false,
+      "ImageType": "Thumb",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\metadata\\library\\22\\22222222222222222222222222222222\\landscape.jpg"
+      ]
+    },
+    {
+      "Type": "Season",
+      "Convention": "Legacy",
+      "Local": true,
+      "ImageType": "Primary",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\Series\\season-specials-poster.jpg"
+      ]
+    },
+    {
+      "Type": "Season",
+      "Convention": "Legacy",
+      "Local": true,
+      "ImageType": "Backdrop",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\Series\\season-specials-fanart.jpg"
+      ]
+    },
+    {
+      "Type": "Season",
+      "Convention": "Legacy",
+      "Local": true,
+      "ImageType": "Backdrop",
+      "Index": 1,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\Season\\backdrop1.jpg"
+      ]
+    },
+    {
+      "Type": "Season",
+      "Convention": "Legacy",
+      "Local": true,
+      "ImageType": "Logo",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\Series\\season-specials-logo.jpg"
+      ]
+    },
+    {
+      "Type": "Season",
+      "Convention": "Legacy",
+      "Local": true,
+      "ImageType": "Disc",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\Season\\disc.jpg"
+      ]
+    },
+    {
+      "Type": "Season",
+      "Convention": "Legacy",
+      "Local": true,
+      "ImageType": "Thumb",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\Series\\season-specials-landscape.jpg"
+      ]
+    },
+    {
+      "Type": "Season",
+      "Convention": "Compatible",
+      "Local": false,
+      "ImageType": "Primary",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\metadata\\library\\22\\22222222222222222222222222222222\\poster.jpg"
+      ]
+    },
+    {
+      "Type": "Season",
+      "Convention": "Compatible",
+      "Local": false,
+      "ImageType": "Backdrop",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\metadata\\library\\22\\22222222222222222222222222222222\\backdrop.jpg"
+      ]
+    },
+    {
+      "Type": "Season",
+      "Convention": "Compatible",
+      "Local": false,
+      "ImageType": "Backdrop",
+      "Index": 1,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\metadata\\library\\22\\22222222222222222222222222222222\\backdrop1.jpg"
+      ]
+    },
+    {
+      "Type": "Season",
+      "Convention": "Compatible",
+      "Local": false,
+      "ImageType": "Logo",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\metadata\\library\\22\\22222222222222222222222222222222\\logo.jpg"
+      ]
+    },
+    {
+      "Type": "Season",
+      "Convention": "Compatible",
+      "Local": false,
+      "ImageType": "Disc",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\metadata\\library\\22\\22222222222222222222222222222222\\disc.jpg"
+      ]
+    },
+    {
+      "Type": "Season",
+      "Convention": "Compatible",
+      "Local": false,
+      "ImageType": "Thumb",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\metadata\\library\\22\\22222222222222222222222222222222\\landscape.jpg"
+      ]
+    },
+    {
+      "Type": "Season",
+      "Convention": "Compatible",
+      "Local": true,
+      "ImageType": "Primary",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\Series\\season-specials-poster.jpg"
+      ]
+    },
+    {
+      "Type": "Season",
+      "Convention": "Compatible",
+      "Local": true,
+      "ImageType": "Backdrop",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\Series\\season-specials-fanart.jpg"
+      ]
+    },
+    {
+      "Type": "Season",
+      "Convention": "Compatible",
+      "Local": true,
+      "ImageType": "Backdrop",
+      "Index": 1,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\Season\\extrafanart\\fanart1.jpg",
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\Season\\extrathumbs\\thumb1.jpg"
+      ]
+    },
+    {
+      "Type": "Season",
+      "Convention": "Compatible",
+      "Local": true,
+      "ImageType": "Logo",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\Series\\season-specials-logo.jpg"
+      ]
+    },
+    {
+      "Type": "Season",
+      "Convention": "Compatible",
+      "Local": true,
+      "ImageType": "Disc",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\Season\\disc.jpg"
+      ]
+    },
+    {
+      "Type": "Season",
+      "Convention": "Compatible",
+      "Local": true,
+      "ImageType": "Thumb",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\Series\\season-specials-landscape.jpg"
+      ]
+    },
+    {
+      "Type": "Person",
+      "Convention": "Legacy",
+      "Local": false,
+      "ImageType": "Primary",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\metadata\\library\\22\\22222222222222222222222222222222\\folder.jpg"
+      ]
+    },
+    {
+      "Type": "Person",
+      "Convention": "Legacy",
+      "Local": false,
+      "ImageType": "Backdrop",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\metadata\\library\\22\\22222222222222222222222222222222\\backdrop.jpg"
+      ]
+    },
+    {
+      "Type": "Person",
+      "Convention": "Legacy",
+      "Local": false,
+      "ImageType": "Backdrop",
+      "Index": 1,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\metadata\\library\\22\\22222222222222222222222222222222\\backdrop1.jpg"
+      ]
+    },
+    {
+      "Type": "Person",
+      "Convention": "Legacy",
+      "Local": false,
+      "ImageType": "Logo",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\metadata\\library\\22\\22222222222222222222222222222222\\logo.jpg"
+      ]
+    },
+    {
+      "Type": "Person",
+      "Convention": "Legacy",
+      "Local": false,
+      "ImageType": "Disc",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\metadata\\library\\22\\22222222222222222222222222222222\\disc.jpg"
+      ]
+    },
+    {
+      "Type": "Person",
+      "Convention": "Legacy",
+      "Local": false,
+      "ImageType": "Thumb",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\metadata\\library\\22\\22222222222222222222222222222222\\landscape.jpg"
+      ]
+    },
+    {
+      "Type": "Person",
+      "Convention": "Legacy",
+      "Local": true,
+      "ImageType": "Primary",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\Person\\folder.jpg"
+      ]
+    },
+    {
+      "Type": "Person",
+      "Convention": "Legacy",
+      "Local": true,
+      "ImageType": "Backdrop",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\Person\\backdrop.jpg"
+      ]
+    },
+    {
+      "Type": "Person",
+      "Convention": "Legacy",
+      "Local": true,
+      "ImageType": "Backdrop",
+      "Index": 1,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\Person\\backdrop1.jpg"
+      ]
+    },
+    {
+      "Type": "Person",
+      "Convention": "Legacy",
+      "Local": true,
+      "ImageType": "Logo",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\Person\\logo.jpg"
+      ]
+    },
+    {
+      "Type": "Person",
+      "Convention": "Legacy",
+      "Local": true,
+      "ImageType": "Disc",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\Person\\disc.jpg"
+      ]
+    },
+    {
+      "Type": "Person",
+      "Convention": "Legacy",
+      "Local": true,
+      "ImageType": "Thumb",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\Person\\landscape.jpg"
+      ]
+    },
+    {
+      "Type": "Person",
+      "Convention": "Compatible",
+      "Local": false,
+      "ImageType": "Primary",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\metadata\\library\\22\\22222222222222222222222222222222\\folder.jpg"
+      ]
+    },
+    {
+      "Type": "Person",
+      "Convention": "Compatible",
+      "Local": false,
+      "ImageType": "Backdrop",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\metadata\\library\\22\\22222222222222222222222222222222\\backdrop.jpg"
+      ]
+    },
+    {
+      "Type": "Person",
+      "Convention": "Compatible",
+      "Local": false,
+      "ImageType": "Backdrop",
+      "Index": 1,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\metadata\\library\\22\\22222222222222222222222222222222\\backdrop1.jpg"
+      ]
+    },
+    {
+      "Type": "Person",
+      "Convention": "Compatible",
+      "Local": false,
+      "ImageType": "Logo",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\metadata\\library\\22\\22222222222222222222222222222222\\logo.jpg"
+      ]
+    },
+    {
+      "Type": "Person",
+      "Convention": "Compatible",
+      "Local": false,
+      "ImageType": "Disc",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\metadata\\library\\22\\22222222222222222222222222222222\\disc.jpg"
+      ]
+    },
+    {
+      "Type": "Person",
+      "Convention": "Compatible",
+      "Local": false,
+      "ImageType": "Thumb",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\metadata\\library\\22\\22222222222222222222222222222222\\landscape.jpg"
+      ]
+    },
+    {
+      "Type": "Person",
+      "Convention": "Compatible",
+      "Local": true,
+      "ImageType": "Primary",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\Person\\poster.jpg"
+      ]
+    },
+    {
+      "Type": "Person",
+      "Convention": "Compatible",
+      "Local": true,
+      "ImageType": "Backdrop",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\Person\\fanart.jpg"
+      ]
+    },
+    {
+      "Type": "Person",
+      "Convention": "Compatible",
+      "Local": true,
+      "ImageType": "Backdrop",
+      "Index": 1,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\Person\\extrafanart\\fanart1.jpg",
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\Person\\extrathumbs\\thumb1.jpg"
+      ]
+    },
+    {
+      "Type": "Person",
+      "Convention": "Compatible",
+      "Local": true,
+      "ImageType": "Logo",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\Person\\logo.jpg"
+      ]
+    },
+    {
+      "Type": "Person",
+      "Convention": "Compatible",
+      "Local": true,
+      "ImageType": "Disc",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\Person\\disc.jpg"
+      ]
+    },
+    {
+      "Type": "Person",
+      "Convention": "Compatible",
+      "Local": true,
+      "ImageType": "Thumb",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\Person\\landscape.jpg"
+      ]
+    },
+    {
+      "Type": "MusicAlbum",
+      "Convention": "Legacy",
+      "Local": false,
+      "ImageType": "Primary",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\metadata\\library\\22\\22222222222222222222222222222222\\folder.jpg"
+      ]
+    },
+    {
+      "Type": "MusicAlbum",
+      "Convention": "Legacy",
+      "Local": false,
+      "ImageType": "Backdrop",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\metadata\\library\\22\\22222222222222222222222222222222\\backdrop.jpg"
+      ]
+    },
+    {
+      "Type": "MusicAlbum",
+      "Convention": "Legacy",
+      "Local": false,
+      "ImageType": "Backdrop",
+      "Index": 1,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\metadata\\library\\22\\22222222222222222222222222222222\\backdrop1.jpg"
+      ]
+    },
+    {
+      "Type": "MusicAlbum",
+      "Convention": "Legacy",
+      "Local": false,
+      "ImageType": "Logo",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\metadata\\library\\22\\22222222222222222222222222222222\\logo.jpg"
+      ]
+    },
+    {
+      "Type": "MusicAlbum",
+      "Convention": "Legacy",
+      "Local": false,
+      "ImageType": "Disc",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\metadata\\library\\22\\22222222222222222222222222222222\\cdart.jpg"
+      ]
+    },
+    {
+      "Type": "MusicAlbum",
+      "Convention": "Legacy",
+      "Local": false,
+      "ImageType": "Thumb",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\metadata\\library\\22\\22222222222222222222222222222222\\landscape.jpg"
+      ]
+    },
+    {
+      "Type": "MusicAlbum",
+      "Convention": "Legacy",
+      "Local": true,
+      "ImageType": "Primary",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\MusicAlbum\\folder.jpg"
+      ]
+    },
+    {
+      "Type": "MusicAlbum",
+      "Convention": "Legacy",
+      "Local": true,
+      "ImageType": "Backdrop",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\MusicAlbum\\backdrop.jpg"
+      ]
+    },
+    {
+      "Type": "MusicAlbum",
+      "Convention": "Legacy",
+      "Local": true,
+      "ImageType": "Backdrop",
+      "Index": 1,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\MusicAlbum\\backdrop1.jpg"
+      ]
+    },
+    {
+      "Type": "MusicAlbum",
+      "Convention": "Legacy",
+      "Local": true,
+      "ImageType": "Logo",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\MusicAlbum\\logo.jpg"
+      ]
+    },
+    {
+      "Type": "MusicAlbum",
+      "Convention": "Legacy",
+      "Local": true,
+      "ImageType": "Disc",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\MusicAlbum\\cdart.jpg"
+      ]
+    },
+    {
+      "Type": "MusicAlbum",
+      "Convention": "Legacy",
+      "Local": true,
+      "ImageType": "Thumb",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\MusicAlbum\\landscape.jpg"
+      ]
+    },
+    {
+      "Type": "MusicAlbum",
+      "Convention": "Compatible",
+      "Local": false,
+      "ImageType": "Primary",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\metadata\\library\\22\\22222222222222222222222222222222\\folder.jpg"
+      ]
+    },
+    {
+      "Type": "MusicAlbum",
+      "Convention": "Compatible",
+      "Local": false,
+      "ImageType": "Backdrop",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\metadata\\library\\22\\22222222222222222222222222222222\\backdrop.jpg"
+      ]
+    },
+    {
+      "Type": "MusicAlbum",
+      "Convention": "Compatible",
+      "Local": false,
+      "ImageType": "Backdrop",
+      "Index": 1,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\metadata\\library\\22\\22222222222222222222222222222222\\backdrop1.jpg"
+      ]
+    },
+    {
+      "Type": "MusicAlbum",
+      "Convention": "Compatible",
+      "Local": false,
+      "ImageType": "Logo",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\metadata\\library\\22\\22222222222222222222222222222222\\logo.jpg"
+      ]
+    },
+    {
+      "Type": "MusicAlbum",
+      "Convention": "Compatible",
+      "Local": false,
+      "ImageType": "Disc",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\metadata\\library\\22\\22222222222222222222222222222222\\cdart.jpg"
+      ]
+    },
+    {
+      "Type": "MusicAlbum",
+      "Convention": "Compatible",
+      "Local": false,
+      "ImageType": "Thumb",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\metadata\\library\\22\\22222222222222222222222222222222\\landscape.jpg"
+      ]
+    },
+    {
+      "Type": "MusicAlbum",
+      "Convention": "Compatible",
+      "Local": true,
+      "ImageType": "Primary",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\MusicAlbum\\folder.jpg"
+      ]
+    },
+    {
+      "Type": "MusicAlbum",
+      "Convention": "Compatible",
+      "Local": true,
+      "ImageType": "Backdrop",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\MusicAlbum\\fanart.jpg"
+      ]
+    },
+    {
+      "Type": "MusicAlbum",
+      "Convention": "Compatible",
+      "Local": true,
+      "ImageType": "Backdrop",
+      "Index": 1,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\MusicAlbum\\extrafanart\\fanart1.jpg",
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\MusicAlbum\\extrathumbs\\thumb1.jpg"
+      ]
+    },
+    {
+      "Type": "MusicAlbum",
+      "Convention": "Compatible",
+      "Local": true,
+      "ImageType": "Logo",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\MusicAlbum\\logo.jpg"
+      ]
+    },
+    {
+      "Type": "MusicAlbum",
+      "Convention": "Compatible",
+      "Local": true,
+      "ImageType": "Disc",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\MusicAlbum\\cdart.jpg"
+      ]
+    },
+    {
+      "Type": "MusicAlbum",
+      "Convention": "Compatible",
+      "Local": true,
+      "ImageType": "Thumb",
+      "Index": 0,
+      "Paths": [
+        "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\MusicAlbum\\landscape.jpg"
+      ]
+    }
+  ],
+  "ImageImports": [
+    {
+      "Url": "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\poster.png",
+      "Local": [
+        {
+          "FullName": "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\poster.png",
+          "Type": "Primary"
+        }
+      ],
+      "Remote": []
+    },
+    {
+      "Url": "file:///D:/mediamanager/.agent-docs/evidence/capability-completion-20260926/metadata/native-assets/poster.png",
+      "Local": [],
+      "Remote": []
+    },
+    {
+      "Url": "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\missing.png",
+      "Local": [],
+      "Remote": []
+    },
+    {
+      "Url": "https://fixture/poster.png",
+      "Local": [],
+      "Remote": [
+        {
+          "Url": "https://fixture/poster.png",
+          "Type": "Primary"
+        }
+      ]
+    }
+  ],
+  "Merge": {
+    "Changed": true,
+    "Images": [
+      {
+        "Type": "Primary",
+        "Path": "D:\\mediamanager\\.agent-docs\\evidence\\capability-completion-20260926\\metadata\\native-assets\\poster.png",
+        "DateModified": "2024-01-02T00:00:00.0000000Z",
+        "Width": 0,
+        "Height": 0,
+        "BlurHash": "retained"
+      }
+    ]
+  }
+}

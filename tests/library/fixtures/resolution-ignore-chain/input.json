@@ -1,0 +1,354 @@
+[
+  {
+    "name": "chain-empty-root",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": true,
+    "files": [
+      "Film.mkv"
+    ],
+    "ignoreFiles": [
+      {
+        "path": "media/.ignore",
+        "text": ""
+      }
+    ]
+  },
+  {
+    "name": "chain-named-exclusion",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": true,
+    "files": [
+      "Film.mkv"
+    ],
+    "ignoreFiles": [
+      {
+        "path": "media/.ignore",
+        "text": "Film.mkv"
+      }
+    ]
+  },
+  {
+    "name": "chain-ordered-negation",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": true,
+    "files": [
+      "Film.mkv"
+    ],
+    "ignoreFiles": [
+      {
+        "path": "media/.ignore",
+        "text": "*.mkv\n!Film.mkv"
+      }
+    ]
+  },
+  {
+    "name": "chain-comment-root",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": true,
+    "files": [
+      "Film.mkv"
+    ],
+    "ignoreFiles": [
+      {
+        "path": "media/.ignore",
+        "text": "# controlled\n"
+      }
+    ]
+  },
+  {
+    "name": "chain-ancestor-exclusion",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": true,
+    "files": [
+      "Film.mkv"
+    ],
+    "ignoreFiles": [
+      {
+        "path": ".ignore",
+        "text": "*.mkv"
+      }
+    ]
+  },
+  {
+    "name": "chain-nested-nearest",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": true,
+    "files": [
+      "nested/Film.mkv"
+    ],
+    "ignoreFiles": [
+      {
+        "path": "media/.ignore",
+        "text": ""
+      },
+      {
+        "path": "media/nested/.ignore",
+        "text": "# nearest\n"
+      }
+    ]
+  },
+  {
+    "name": "chain-utf16-exclusion",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": true,
+    "files": [
+      "Film.mkv"
+    ],
+    "ignoreFiles": [
+      {
+        "path": "media/.ignore",
+        "text": "*.mkv",
+        "encoding": "utf16le"
+      }
+    ]
+  },
+  {
+    "name": "chain-all-invalid",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": true,
+    "files": [
+      "Film.mkv"
+    ],
+    "ignoreFiles": [
+      {
+        "path": "media/.ignore",
+        "text": "\\q"
+      }
+    ]
+  },
+  {
+    "name": "chain-core-hidden",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": true,
+    "files": [
+      ".hidden.mkv"
+    ],
+    "ignoreFiles": [
+      {
+        "path": "media/.ignore",
+        "text": "# controlled\n"
+      }
+    ]
+  },
+  {
+    "name": "chain-core-trailer",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": true,
+    "files": [
+      "Film-trailer.mkv"
+    ],
+    "ignoreFiles": [
+      {
+        "path": "media/.ignore",
+        "text": "# controlled\n"
+      }
+    ]
+  },
+  {
+    "name": "chain-no-rules",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "files": [
+      "Film (2025).mkv"
+    ],
+    "ignoreFiles": []
+  },
+  {
+    "name": "chain-alternate-withheld",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "files": [
+      "Film - 1080p.mkv",
+      "Film - 2160p.mkv"
+    ],
+    "ignoreFiles": [
+      {
+        "path": "media/.ignore",
+        "text": "*2160p*"
+      }
+    ]
+  },
+  {
+    "name": "chain-alternate-allowed",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "files": [
+      "Film - 1080p.mkv",
+      "Film - 2160p.mkv"
+    ],
+    "ignoreFiles": [
+      {
+        "path": "media/.ignore",
+        "text": "# comment"
+      }
+    ]
+  },
+  {
+    "name": "chain-part-withheld",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "files": [
+      "Film cd1.mkv",
+      "Film cd2.mkv"
+    ],
+    "ignoreFiles": [
+      {
+        "path": "media/.ignore",
+        "text": "*cd2*"
+      }
+    ]
+  },
+  {
+    "name": "chain-part-allowed",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "files": [
+      "Film cd1.mkv",
+      "Film cd2.mkv"
+    ],
+    "ignoreFiles": [
+      {
+        "path": "media/.ignore",
+        "text": "# comment"
+      }
+    ]
+  },
+  {
+    "name": "chain-mixed-recomputed",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "files": [
+      "Film.mkv",
+      "Other.mkv"
+    ],
+    "ignoreFiles": [
+      {
+        "path": "media/.ignore",
+        "text": "Other.mkv"
+      }
+    ]
+  },
+  {
+    "name": "chain-extra-withheld",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "files": [
+      "Film.mkv",
+      "Film-trailer.mkv"
+    ],
+    "ignoreFiles": [
+      {
+        "path": "media/.ignore",
+        "text": "*trailer*"
+      }
+    ]
+  },
+  {
+    "name": "chain-core-hidden-mixed",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "files": [
+      "Film.mkv",
+      ".Hidden.mkv"
+    ],
+    "ignoreFiles": [
+      {
+        "path": "media/.ignore",
+        "text": "# comment"
+      }
+    ]
+  },
+  {
+    "name": "chain-core-hidden-extra",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "files": [
+      "Film.mkv",
+      ".hidden-trailer.mkv"
+    ],
+    "ignoreFiles": []
+  },
+  {
+    "name": "chain-core-sample-extra",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "files": [
+      "Film.mkv",
+      "Film.sample.mkv"
+    ],
+    "ignoreFiles": []
+  },
+  {
+    "name": "chain-core-theme",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "files": [
+      "Film.mkv",
+      "theme.mp3"
+    ],
+    "ignoreFiles": []
+  }
+]

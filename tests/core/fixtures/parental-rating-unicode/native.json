@@ -1,0 +1,767 @@
+{
+  "InputSha256": "b6961ff6d4a342f8d96aec670513c5e3e51bb3b7c5ea0e2e6dfca2804151d59d",
+  "ActualGetRatingScore": true,
+  "ActualUpdateRatingToItems": true,
+  "ActualEmbeddedRatingResourcesLoaded": true,
+  "IsUnratedPublic": false,
+  "IsUnratedDirectlyInvoked": false,
+  "ConfigurationControlled": true,
+  "MediaOpened": false,
+  "PortOpened": false,
+  "LoadedAssemblies": [
+    {
+      "Type": "Emby.Server.Implementations.Localization.LocalizationManager",
+      "Assembly": "Emby.Server.Implementations, Version=13.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "Filename": "D:\\mediamanager-validation\\20261014-release-rating-closeout-native-1\\bin\\Release\\net10.0\\Emby.Server.Implementations.dll",
+      "Sha256": "8d369435646570958505c58b9cb17da169855dabc105d0e933524361e9b7b1c8"
+    },
+    {
+      "Type": "MediaBrowser.Controller.Entities.BaseItem",
+      "Assembly": "MediaBrowser.Controller, Version=13.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "Filename": "D:\\mediamanager-validation\\20261014-release-rating-closeout-native-1\\bin\\Release\\net10.0\\MediaBrowser.Controller.dll",
+      "Sha256": "051c588a8e85a3a7cdde8dc3d9a1112217fd7e973a86fe2ff90cf765bedb75a8"
+    },
+    {
+      "Type": "MediaBrowser.Controller.Entities.Movies.BoxSet",
+      "Assembly": "MediaBrowser.Controller, Version=13.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "Filename": "D:\\mediamanager-validation\\20261014-release-rating-closeout-native-1\\bin\\Release\\net10.0\\MediaBrowser.Controller.dll",
+      "Sha256": "051c588a8e85a3a7cdde8dc3d9a1112217fd7e973a86fe2ff90cf765bedb75a8"
+    }
+  ],
+  "Scores": [
+    {
+      "Name": "ascii-PG",
+      "Rating": "PG",
+      "Country": "US",
+      "Score": 10,
+      "SubScore": 0,
+      "HasScore": true
+    },
+    {
+      "Name": "ascii-R",
+      "Rating": "R",
+      "Country": "US",
+      "Score": 17,
+      "SubScore": 0,
+      "HasScore": true
+    },
+    {
+      "Name": "ascii-NR",
+      "Rating": "NR",
+      "Country": "US",
+      "Score": null,
+      "SubScore": null,
+      "HasScore": false
+    },
+    {
+      "Name": "ascii-18",
+      "Rating": "18",
+      "Country": "US",
+      "Score": 18,
+      "SubScore": null,
+      "HasScore": true
+    },
+    {
+      "Name": "ascii-18\u002B",
+      "Rating": "18\u002B",
+      "Country": "US",
+      "Score": 18,
+      "SubScore": null,
+      "HasScore": true
+    },
+    {
+      "Name": "ascii-PG / R",
+      "Rating": "PG / R",
+      "Country": "US",
+      "Score": 10,
+      "SubScore": 0,
+      "HasScore": true
+    },
+    {
+      "Name": "ascii-NR / PG",
+      "Rating": "NR / PG",
+      "Country": "US",
+      "Score": 10,
+      "SubScore": 0,
+      "HasScore": true
+    },
+    {
+      "Name": "ascii-US:PG",
+      "Rating": "US:PG",
+      "Country": "US",
+      "Score": 10,
+      "SubScore": 0,
+      "HasScore": true
+    },
+    {
+      "Name": "ascii-US-PG",
+      "Rating": "US-PG",
+      "Country": "US",
+      "Score": 10,
+      "SubScore": 0,
+      "HasScore": true
+    },
+    {
+      "Name": "ascii-Rated PG",
+      "Rating": "Rated PG",
+      "Country": "US",
+      "Score": 10,
+      "SubScore": 0,
+      "HasScore": true
+    },
+    {
+      "Name": "feff-wrapped-PG",
+      "Rating": "\uFEFFPG\uFEFF",
+      "Country": "US",
+      "Score": null,
+      "SubScore": null,
+      "HasScore": false
+    },
+    {
+      "Name": "feff-wrapped-R",
+      "Rating": "\uFEFFR\uFEFF",
+      "Country": "US",
+      "Score": null,
+      "SubScore": null,
+      "HasScore": false
+    },
+    {
+      "Name": "feff-wrapped-NR",
+      "Rating": "\uFEFFNR\uFEFF",
+      "Country": "US",
+      "Score": null,
+      "SubScore": null,
+      "HasScore": false
+    },
+    {
+      "Name": "feff-wrapped-18",
+      "Rating": "\uFEFF18\uFEFF",
+      "Country": "US",
+      "Score": null,
+      "SubScore": null,
+      "HasScore": false
+    },
+    {
+      "Name": "feff-wrapped-18\u002B",
+      "Rating": "\uFEFF18\u002B\uFEFF",
+      "Country": "US",
+      "Score": null,
+      "SubScore": null,
+      "HasScore": false
+    },
+    {
+      "Name": "feff-colon-suffix",
+      "Rating": "US:\uFEFFPG\uFEFF",
+      "Country": "US",
+      "Score": null,
+      "SubScore": null,
+      "HasScore": false
+    },
+    {
+      "Name": "feff-colon-prefix",
+      "Rating": "\uFEFFUS\uFEFF:PG",
+      "Country": "US",
+      "Score": 10,
+      "SubScore": 0,
+      "HasScore": true
+    },
+    {
+      "Name": "feff-hyphen-suffix",
+      "Rating": "US-\uFEFFPG\uFEFF",
+      "Country": "US",
+      "Score": null,
+      "SubScore": null,
+      "HasScore": false
+    },
+    {
+      "Name": "feff-slash-one",
+      "Rating": "NR / \uFEFFPG\uFEFF",
+      "Country": "US",
+      "Score": null,
+      "SubScore": null,
+      "HasScore": false
+    },
+    {
+      "Name": "feff-slash-two",
+      "Rating": "\uFEFFNR\uFEFF / \uFEFFPG\uFEFF",
+      "Country": "US",
+      "Score": null,
+      "SubScore": null,
+      "HasScore": false
+    },
+    {
+      "Name": "feff-rated",
+      "Rating": "Rated \uFEFFPG\uFEFF",
+      "Country": "US",
+      "Score": null,
+      "SubScore": null,
+      "HasScore": false
+    },
+    {
+      "Name": "feff-plus-suffix",
+      "Rating": "18\u002B\uFEFF",
+      "Country": "US",
+      "Score": null,
+      "SubScore": null,
+      "HasScore": false
+    },
+    {
+      "Name": "feff-plus-prefix",
+      "Rating": "\uFEFF18\u002B",
+      "Country": "US",
+      "Score": null,
+      "SubScore": null,
+      "HasScore": false
+    },
+    {
+      "Name": "feff-empty-whitespace",
+      "Rating": "\uFEFF",
+      "Country": "US",
+      "Score": null,
+      "SubScore": null,
+      "HasScore": false
+    },
+    {
+      "Name": "nel-wrapped-PG",
+      "Rating": "\u0085PG\u0085",
+      "Country": "US",
+      "Score": 10,
+      "SubScore": 0,
+      "HasScore": true
+    },
+    {
+      "Name": "nel-wrapped-R",
+      "Rating": "\u0085R\u0085",
+      "Country": "US",
+      "Score": 17,
+      "SubScore": 0,
+      "HasScore": true
+    },
+    {
+      "Name": "nel-wrapped-NR",
+      "Rating": "\u0085NR\u0085",
+      "Country": "US",
+      "Score": null,
+      "SubScore": null,
+      "HasScore": false
+    },
+    {
+      "Name": "nel-wrapped-18",
+      "Rating": "\u008518\u0085",
+      "Country": "US",
+      "Score": 18,
+      "SubScore": null,
+      "HasScore": true
+    },
+    {
+      "Name": "nel-wrapped-18\u002B",
+      "Rating": "\u008518\u002B\u0085",
+      "Country": "US",
+      "Score": 18,
+      "SubScore": 1,
+      "HasScore": true
+    },
+    {
+      "Name": "nel-colon-suffix",
+      "Rating": "US:\u0085PG\u0085",
+      "Country": "US",
+      "Score": 10,
+      "SubScore": 0,
+      "HasScore": true
+    },
+    {
+      "Name": "nel-colon-prefix",
+      "Rating": "\u0085US\u0085:PG",
+      "Country": "US",
+      "Score": 10,
+      "SubScore": 0,
+      "HasScore": true
+    },
+    {
+      "Name": "nel-hyphen-suffix",
+      "Rating": "US-\u0085PG\u0085",
+      "Country": "US",
+      "Score": 10,
+      "SubScore": 0,
+      "HasScore": true
+    },
+    {
+      "Name": "nel-slash-one",
+      "Rating": "NR / \u0085PG\u0085",
+      "Country": "US",
+      "Score": 10,
+      "SubScore": 0,
+      "HasScore": true
+    },
+    {
+      "Name": "nel-slash-two",
+      "Rating": "\u0085NR\u0085 / \u0085PG\u0085",
+      "Country": "US",
+      "Score": 10,
+      "SubScore": 0,
+      "HasScore": true
+    },
+    {
+      "Name": "nel-rated",
+      "Rating": "Rated \u0085PG\u0085",
+      "Country": "US",
+      "Score": 10,
+      "SubScore": 0,
+      "HasScore": true
+    },
+    {
+      "Name": "nel-plus-suffix",
+      "Rating": "18\u002B\u0085",
+      "Country": "US",
+      "Score": 18,
+      "SubScore": 1,
+      "HasScore": true
+    },
+    {
+      "Name": "nel-plus-prefix",
+      "Rating": "\u008518\u002B",
+      "Country": "US",
+      "Score": 18,
+      "SubScore": 1,
+      "HasScore": true
+    },
+    {
+      "Name": "nel-empty-whitespace",
+      "Rating": "\u0085",
+      "Country": "US",
+      "Score": null,
+      "SubScore": null,
+      "HasScore": false
+    },
+    {
+      "Name": "nbsp-numeric",
+      "Rating": "\u00A018\u00A0",
+      "Country": "US",
+      "Score": 18,
+      "SubScore": null,
+      "HasScore": true
+    },
+    {
+      "Name": "nbsp-rating",
+      "Rating": "\u00A0PG\u00A0",
+      "Country": "US",
+      "Score": 10,
+      "SubScore": 0,
+      "HasScore": true
+    },
+    {
+      "Name": "tab-numeric",
+      "Rating": "\t18\r",
+      "Country": "US",
+      "Score": 18,
+      "SubScore": null,
+      "HasScore": true
+    },
+    {
+      "Name": "space-numeric",
+      "Rating": " 18 ",
+      "Country": "US",
+      "Score": 18,
+      "SubScore": null,
+      "HasScore": true
+    },
+    {
+      "Name": "trailing-nul",
+      "Rating": "18\u0000",
+      "Country": "US",
+      "Score": 18,
+      "SubScore": null,
+      "HasScore": true
+    },
+    {
+      "Name": "two-trailing-nul",
+      "Rating": "18\u0000\u0000",
+      "Country": "US",
+      "Score": 18,
+      "SubScore": null,
+      "HasScore": true
+    },
+    {
+      "Name": "nul-before-space",
+      "Rating": "18\u0000 ",
+      "Country": "US",
+      "Score": null,
+      "SubScore": null,
+      "HasScore": false
+    },
+    {
+      "Name": "ascii-number-styles-integer",
+      "Rating": "\t\u000B\f\u002B18\r\n",
+      "Country": "US",
+      "Score": 18,
+      "SubScore": null,
+      "HasScore": true
+    },
+    {
+      "Name": "space-before-nul",
+      "Rating": "18 \u0000",
+      "Country": "US",
+      "Score": 18,
+      "SubScore": null,
+      "HasScore": true
+    },
+    {
+      "Name": "plus-before-nul",
+      "Rating": "18\u002B\u0000",
+      "Country": "US",
+      "Score": null,
+      "SubScore": null,
+      "HasScore": false
+    },
+    {
+      "Name": "nul-before-trailing-plus",
+      "Rating": "18\u0000\u002B",
+      "Country": "US",
+      "Score": 18,
+      "SubScore": null,
+      "HasScore": true
+    },
+    {
+      "Name": "nul-before-digits",
+      "Rating": "\u000018",
+      "Country": "US",
+      "Score": null,
+      "SubScore": null,
+      "HasScore": false
+    },
+    {
+      "Name": "nul-between-digits",
+      "Rating": "1\u00008",
+      "Country": "US",
+      "Score": null,
+      "SubScore": null,
+      "HasScore": false
+    },
+    {
+      "Name": "slash-single-leading",
+      "Rating": "/PG",
+      "Country": "US",
+      "Score": null,
+      "SubScore": null,
+      "HasScore": false
+    },
+    {
+      "Name": "slash-single-trailing",
+      "Rating": "PG/",
+      "Country": "US",
+      "Score": null,
+      "SubScore": null,
+      "HasScore": false
+    },
+    {
+      "Name": "slash-single-both",
+      "Rating": "/PG/",
+      "Country": "US",
+      "Score": null,
+      "SubScore": null,
+      "HasScore": false
+    },
+    {
+      "Name": "slash-single-clr-trim",
+      "Rating": "/ \u0085PG\u0085 /",
+      "Country": "US",
+      "Score": null,
+      "SubScore": null,
+      "HasScore": false
+    },
+    {
+      "Name": "slash-unrated-control",
+      "Rating": "/NR/",
+      "Country": "US",
+      "Score": null,
+      "SubScore": null,
+      "HasScore": false
+    },
+    {
+      "Name": "slash-multiple-after-unrated",
+      "Rating": "/NR/PG/",
+      "Country": "US",
+      "Score": 10,
+      "SubScore": 0,
+      "HasScore": true
+    },
+    {
+      "Name": "slash-multiple-leftmost-control",
+      "Rating": "/PG/R/",
+      "Country": "US",
+      "Score": 10,
+      "SubScore": 0,
+      "HasScore": true
+    },
+    {
+      "Name": "empty-country-hyphen-subscore",
+      "Rating": "-PG-13",
+      "Country": "",
+      "Score": 13,
+      "SubScore": null,
+      "HasScore": true
+    },
+    {
+      "Name": "null-country-hyphen-control",
+      "Rating": "-PG-13",
+      "Country": null,
+      "Score": 13,
+      "SubScore": null,
+      "HasScore": true
+    },
+    {
+      "Name": "null-country-default-prefix-subscore",
+      "Rating": "US-PG-13",
+      "Country": null,
+      "Score": 13,
+      "SubScore": null,
+      "HasScore": true
+    },
+    {
+      "Name": "explicit-country-prefix-control",
+      "Rating": "US-PG-13",
+      "Country": "US",
+      "Score": 13,
+      "SubScore": 0,
+      "HasScore": true
+    },
+    {
+      "Name": "null-country-colon-control",
+      "Rating": "US:PG-13",
+      "Country": null,
+      "Score": 13,
+      "SubScore": 0,
+      "HasScore": true
+    }
+  ],
+  "Pairs": [
+    {
+      "Name": "feff-wrapped-PG-vs-R",
+      "Ratings": [
+        "\uFEFFPG\uFEFF",
+        "R"
+      ],
+      "Country": "US",
+      "Changed": true,
+      "OfficialRating": "R"
+    },
+    {
+      "Name": "nel-wrapped-PG-vs-R",
+      "Ratings": [
+        "\u0085PG\u0085",
+        "R"
+      ],
+      "Country": "US",
+      "Changed": true,
+      "OfficialRating": "\u0085PG\u0085"
+    },
+    {
+      "Name": "feff-colon-suffix-vs-R",
+      "Ratings": [
+        "US:\uFEFFPG\uFEFF",
+        "R"
+      ],
+      "Country": "US",
+      "Changed": true,
+      "OfficialRating": "R"
+    },
+    {
+      "Name": "nel-colon-suffix-vs-R",
+      "Ratings": [
+        "US:\u0085PG\u0085",
+        "R"
+      ],
+      "Country": "US",
+      "Changed": true,
+      "OfficialRating": "US:\u0085PG\u0085"
+    },
+    {
+      "Name": "feff-colon-prefix-vs-R",
+      "Ratings": [
+        "\uFEFFUS\uFEFF:PG",
+        "R"
+      ],
+      "Country": "US",
+      "Changed": true,
+      "OfficialRating": "\uFEFFUS\uFEFF:PG"
+    },
+    {
+      "Name": "nel-colon-prefix-vs-R",
+      "Ratings": [
+        "\u0085US\u0085:PG",
+        "R"
+      ],
+      "Country": "US",
+      "Changed": true,
+      "OfficialRating": "\u0085US\u0085:PG"
+    },
+    {
+      "Name": "feff-slash-two-vs-R",
+      "Ratings": [
+        "\uFEFFNR\uFEFF / \uFEFFPG\uFEFF",
+        "R"
+      ],
+      "Country": "US",
+      "Changed": true,
+      "OfficialRating": "R"
+    },
+    {
+      "Name": "nel-slash-two-vs-R",
+      "Ratings": [
+        "\u0085NR\u0085 / \u0085PG\u0085",
+        "R"
+      ],
+      "Country": "US",
+      "Changed": true,
+      "OfficialRating": "\u0085NR\u0085 / \u0085PG\u0085"
+    },
+    {
+      "Name": "feff-rated-vs-R",
+      "Ratings": [
+        "Rated \uFEFFPG\uFEFF",
+        "R"
+      ],
+      "Country": "US",
+      "Changed": true,
+      "OfficialRating": "R"
+    },
+    {
+      "Name": "nel-rated-vs-R",
+      "Ratings": [
+        "Rated \u0085PG\u0085",
+        "R"
+      ],
+      "Country": "US",
+      "Changed": true,
+      "OfficialRating": "Rated \u0085PG\u0085"
+    },
+    {
+      "Name": "feff-wrapped-18-vs-18",
+      "Ratings": [
+        "\uFEFF18\uFEFF",
+        "18"
+      ],
+      "Country": "US",
+      "Changed": true,
+      "OfficialRating": "18"
+    },
+    {
+      "Name": "nel-wrapped-18-vs-18",
+      "Ratings": [
+        "\u008518\u0085",
+        "18"
+      ],
+      "Country": "US",
+      "Changed": true,
+      "OfficialRating": "\u008518\u0085"
+    },
+    {
+      "Name": "nbsp-numeric-vs-18",
+      "Ratings": [
+        "\u00A018\u00A0",
+        "18"
+      ],
+      "Country": "US",
+      "Changed": true,
+      "OfficialRating": "\u00A018\u00A0"
+    },
+    {
+      "Name": "nel-plus-suffix-vs-18",
+      "Ratings": [
+        "18\u002B\u0085",
+        "18"
+      ],
+      "Country": "US",
+      "Changed": true,
+      "OfficialRating": "18"
+    },
+    {
+      "Name": "nullable-subscore-before-zero",
+      "Ratings": [
+        "R",
+        "17"
+      ],
+      "Country": "US",
+      "Changed": true,
+      "OfficialRating": "17"
+    },
+    {
+      "Name": "rated-null-subscore-before-unresolved",
+      "Ratings": [
+        "unknown-rating",
+        "Banned"
+      ],
+      "Country": "US",
+      "Changed": true,
+      "OfficialRating": "Banned"
+    },
+    {
+      "Name": "ordinal-first-spelling",
+      "Ratings": [
+        "pg",
+        "PG",
+        "TV-PG"
+      ],
+      "Country": "US",
+      "Changed": true,
+      "OfficialRating": "pg"
+    },
+    {
+      "Name": "no-children",
+      "Ratings": [],
+      "Country": "US",
+      "Changed": false,
+      "OfficialRating": "Original"
+    },
+    {
+      "Name": "null-empty-children",
+      "Ratings": [
+        null,
+        ""
+      ],
+      "Country": "US",
+      "Changed": false,
+      "OfficialRating": "Original"
+    },
+    {
+      "Name": "whitespace-is-present-rating",
+      "Ratings": [
+        "\u0085",
+        "\uFEFF"
+      ],
+      "Country": "US",
+      "Changed": true,
+      "OfficialRating": "\u0085"
+    },
+    {
+      "Name": "trailing-nul-vs-19",
+      "Ratings": [
+        "18\u0000",
+        "19"
+      ],
+      "Country": "US",
+      "Changed": true,
+      "OfficialRating": "18\u0000"
+    },
+    {
+      "Name": "slash-single-vs-R",
+      "Ratings": [
+        "/PG",
+        "R"
+      ],
+      "Country": "US",
+      "Changed": true,
+      "OfficialRating": "R"
+    },
+    {
+      "Name": "slash-single-clr-trim-vs-R",
+      "Ratings": [
+        "/ \u0085PG\u0085 /",
+        "R"
+      ],
+      "Country": "US",
+      "Changed": true,
+      "OfficialRating": "R"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "recordedAt": "2026-10-03T13:44:59.095Z",
+  "baseline": {
+    "source": "D:\\jellyfin",
+    "head": "208c278b75abd897aefa1e1175126eac5e4dbfaa",
+    "verifiedFiles": 2620,
+    "contentUnchanged": true,
+    "statusUnchanged": true,
+    "fileDiscoveryUnchanged": true,
+    "contentDigest": "e28a983db179b720c3b16d7416ee4112894a3115c4be6fe43c61c52e0d9a8313"
+  },
+  "sourceInstance": "D:\\mediamanager\\.agent-temp\\reference\\instance-20261003-v3",
+  "dotnet": "D:\\mediamanager\\.tools\\dotnet\\dotnet.exe",
+  "sdkVersion": "10.0.401",
+  "dll": "D:\\mediamanager\\.agent-temp\\reference\\jellyfin-20261003\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\jellyfin.dll",
+  "dllSha256": "5977c2b4a9805a275936f69ea763ae49d1986de3899dd154af149358960d6e22",
+  "pluginDll": "D:\\mediamanager\\.agent-temp\\refresh-http-plugin-build\\RefreshHttpPlugin.dll",
+  "pluginSha256": "d6116c6efbe523af5b7db525b10e8c68b17f91aeba872eb6cf874ef3a0c995cf",
+  "port": 60739,
+  "scope": "Actual isolated native HTTP, controlled Movie custom provider, four prior-refreshed pathless items, native SQLite before/after; no media scan, NFO, image, client, SQL-fault or cross-process native oracle."
+}

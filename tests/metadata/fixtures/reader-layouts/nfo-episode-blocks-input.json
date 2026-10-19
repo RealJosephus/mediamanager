@@ -1,0 +1,803 @@
+[
+  {
+    "name": "empty file is swallowed with initial item state--crlf",
+    "text": "",
+    "initialName": "Initial"
+  },
+  {
+    "name": "empty file is swallowed with initial item state--lf",
+    "text": "",
+    "initialName": "Initial"
+  },
+  {
+    "name": "empty file is swallowed with initial item state--bom-lf",
+    "text": "﻿",
+    "initialName": "Initial"
+  },
+  {
+    "name": "no complete block preserves a parsed scalar prefix--crlf",
+    "text": "<episodedetails>\r\n<episode>3</episode>\r\n<title>Prefix</title>\r\n<plot>Tail</plot>\r\n<broken"
+  },
+  {
+    "name": "no complete block preserves a parsed scalar prefix--lf",
+    "text": "<episodedetails>\n<episode>3</episode>\n<title>Prefix</title>\n<plot>Tail</plot>\n<broken"
+  },
+  {
+    "name": "no complete block preserves a parsed scalar prefix--bom-lf",
+    "text": "﻿<episodedetails>\n<episode>3</episode>\n<title>Prefix</title>\n<plot>Tail</plot>\n<broken"
+  },
+  {
+    "name": "one complete block applies all direct fields--crlf",
+    "text": "<episodedetails>\r\n<season>2</season>\r\n<episode>4</episode>\r\n<title>Only</title>\r\n<showtitle>Series</showtitle>\r\n</episodedetails>"
+  },
+  {
+    "name": "one complete block applies all direct fields--lf",
+    "text": "<episodedetails>\n<season>2</season>\n<episode>4</episode>\n<title>Only</title>\n<showtitle>Series</showtitle>\n</episodedetails>"
+  },
+  {
+    "name": "one complete block applies all direct fields--bom-lf",
+    "text": "﻿<episodedetails>\n<season>2</season>\n<episode>4</episode>\n<title>Only</title>\n<showtitle>Series</showtitle>\n</episodedetails>"
+  },
+  {
+    "name": "one complete block ignores a trailing partial block--crlf",
+    "text": "<episodedetails>\r\n<episode>4</episode>\r\n<title>Complete</title>\r\n</episodedetails>\r\n<episodedetails>\r\n<episode>5</episode>\r\n<title>Ignored"
+  },
+  {
+    "name": "one complete block ignores a trailing partial block--lf",
+    "text": "<episodedetails>\n<episode>4</episode>\n<title>Complete</title>\n</episodedetails>\n<episodedetails>\n<episode>5</episode>\n<title>Ignored"
+  },
+  {
+    "name": "one complete block ignores a trailing partial block--bom-lf",
+    "text": "﻿<episodedetails>\n<episode>4</episode>\n<title>Complete</title>\n</episodedetails>\n<episodedetails>\n<episode>5</episode>\n<title>Ignored"
+  },
+  {
+    "name": "one complete block ignores arbitrary trailing text--crlf",
+    "text": "<episodedetails>\r\n<episode>4</episode>\r\n<title>Complete</title>\r\n</episodedetails>not xml at all"
+  },
+  {
+    "name": "one complete block ignores arbitrary trailing text--lf",
+    "text": "<episodedetails>\n<episode>4</episode>\n<title>Complete</title>\n</episodedetails>not xml at all"
+  },
+  {
+    "name": "one complete block ignores arbitrary trailing text--bom-lf",
+    "text": "﻿<episodedetails>\n<episode>4</episode>\n<title>Complete</title>\n</episodedetails>not xml at all"
+  },
+  {
+    "name": "episode closing tag matching is ordinal ignore case--crlf",
+    "text": "<episodedetails>\r\n<episode>6</episode>\r\n<title>Upper</title>\r\n</EPISODEDETAILS>"
+  },
+  {
+    "name": "episode closing tag matching is ordinal ignore case--lf",
+    "text": "<episodedetails>\n<episode>6</episode>\n<title>Upper</title>\n</EPISODEDETAILS>"
+  },
+  {
+    "name": "episode closing tag matching is ordinal ignore case--bom-lf",
+    "text": "﻿<episodedetails>\n<episode>6</episode>\n<title>Upper</title>\n</EPISODEDETAILS>"
+  },
+  {
+    "name": "empty complete block leaves direct nullable strings unchanged--crlf",
+    "text": "<episodedetails>\r\n</episodedetails>"
+  },
+  {
+    "name": "empty complete block leaves direct nullable strings unchanged--lf",
+    "text": "<episodedetails>\n</episodedetails>"
+  },
+  {
+    "name": "empty complete block leaves direct nullable strings unchanged--bom-lf",
+    "text": "﻿<episodedetails>\n</episodedetails>"
+  },
+  {
+    "name": "two reversed blocks sort before merging--crlf",
+    "text": "<episodedetails>\r\n<episode>2</episode>\r\n<title>Second</title>\r\n</episodedetails>\r\n<episodedetails>\r\n<episode>1</episode>\r\n<title>First</title>\r\n</episodedetails>"
+  },
+  {
+    "name": "two reversed blocks sort before merging--lf",
+    "text": "<episodedetails>\n<episode>2</episode>\n<title>Second</title>\n</episodedetails>\n<episodedetails>\n<episode>1</episode>\n<title>First</title>\n</episodedetails>"
+  },
+  {
+    "name": "two reversed blocks sort before merging--bom-lf",
+    "text": "﻿<episodedetails>\n<episode>2</episode>\n<title>Second</title>\n</episodedetails>\n<episodedetails>\n<episode>1</episode>\n<title>First</title>\n</episodedetails>"
+  },
+  {
+    "name": "three blocks sort and merge in ascending episode order--crlf",
+    "text": "<episodedetails>\r\n<episode>3</episode>\r\n<title>Third</title>\r\n</episodedetails>\r\n<episodedetails>\r\n<episode>1</episode>\r\n<title>First</title>\r\n</episodedetails>\r\n<episodedetails>\r\n<episode>2</episode>\r\n<title>Second</title>\r\n</episodedetails>"
+  },
+  {
+    "name": "three blocks sort and merge in ascending episode order--lf",
+    "text": "<episodedetails>\n<episode>3</episode>\n<title>Third</title>\n</episodedetails>\n<episodedetails>\n<episode>1</episode>\n<title>First</title>\n</episodedetails>\n<episodedetails>\n<episode>2</episode>\n<title>Second</title>\n</episodedetails>"
+  },
+  {
+    "name": "three blocks sort and merge in ascending episode order--bom-lf",
+    "text": "﻿<episodedetails>\n<episode>3</episode>\n<title>Third</title>\n</episodedetails>\n<episodedetails>\n<episode>1</episode>\n<title>First</title>\n</episodedetails>\n<episodedetails>\n<episode>2</episode>\n<title>Second</title>\n</episodedetails>"
+  },
+  {
+    "name": "equal episode numbers retain source order--crlf",
+    "text": "<episodedetails>\r\n<episode>1</episode>\r\n<title>First tie</title>\r\n</episodedetails>\r\n<episodedetails>\r\n<episode>1</episode>\r\n<title>Second tie</title>\r\n</episodedetails>"
+  },
+  {
+    "name": "equal episode numbers retain source order--lf",
+    "text": "<episodedetails>\n<episode>1</episode>\n<title>First tie</title>\n</episodedetails>\n<episodedetails>\n<episode>1</episode>\n<title>Second tie</title>\n</episodedetails>"
+  },
+  {
+    "name": "equal episode numbers retain source order--bom-lf",
+    "text": "﻿<episodedetails>\n<episode>1</episode>\n<title>First tie</title>\n</episodedetails>\n<episodedetails>\n<episode>1</episode>\n<title>Second tie</title>\n</episodedetails>"
+  },
+  {
+    "name": "missing episode number sorts after numbered blocks--crlf",
+    "text": "<episodedetails>\r\n<title>Missing</title>\r\n</episodedetails>\r\n<episodedetails>\r\n<episode>7</episode>\r\n<title>Numbered</title>\r\n</episodedetails>"
+  },
+  {
+    "name": "missing episode number sorts after numbered blocks--lf",
+    "text": "<episodedetails>\n<title>Missing</title>\n</episodedetails>\n<episodedetails>\n<episode>7</episode>\n<title>Numbered</title>\n</episodedetails>"
+  },
+  {
+    "name": "missing episode number sorts after numbered blocks--bom-lf",
+    "text": "﻿<episodedetails>\n<title>Missing</title>\n</episodedetails>\n<episodedetails>\n<episode>7</episode>\n<title>Numbered</title>\n</episodedetails>"
+  },
+  {
+    "name": "negative and zero episode numbers use ordinary ascending order--crlf",
+    "text": "<episodedetails>\r\n<episode>0</episode>\r\n<title>Zero</title>\r\n</episodedetails>\r\n<episodedetails>\r\n<episode>-1</episode>\r\n<title>Negative</title>\r\n</episodedetails>"
+  },
+  {
+    "name": "negative and zero episode numbers use ordinary ascending order--lf",
+    "text": "<episodedetails>\n<episode>0</episode>\n<title>Zero</title>\n</episodedetails>\n<episodedetails>\n<episode>-1</episode>\n<title>Negative</title>\n</episodedetails>"
+  },
+  {
+    "name": "negative and zero episode numbers use ordinary ascending order--bom-lf",
+    "text": "﻿<episodedetails>\n<episode>0</episode>\n<title>Zero</title>\n</episodedetails>\n<episodedetails>\n<episode>-1</episode>\n<title>Negative</title>\n</episodedetails>"
+  },
+  {
+    "name": "malformed later complete block aborts the merge without target replay--crlf",
+    "text": "<episodedetails>\r\n<episode>2</episode>\r\n<title>Valid temporary</title>\r\n</episodedetails>\r\n<episodedetails>\r\n<episode>1</episode>\r\n<title>Broken</bad>\r\n</episodedetails>",
+    "initialName": "Initial"
+  },
+  {
+    "name": "malformed later complete block aborts the merge without target replay--lf",
+    "text": "<episodedetails>\n<episode>2</episode>\n<title>Valid temporary</title>\n</episodedetails>\n<episodedetails>\n<episode>1</episode>\n<title>Broken</bad>\n</episodedetails>",
+    "initialName": "Initial"
+  },
+  {
+    "name": "malformed later complete block aborts the merge without target replay--bom-lf",
+    "text": "﻿<episodedetails>\n<episode>2</episode>\n<title>Valid temporary</title>\n</episodedetails>\n<episodedetails>\n<episode>1</episode>\n<title>Broken</bad>\n</episodedetails>",
+    "initialName": "Initial"
+  },
+  {
+    "name": "malformed first complete block aborts before later blocks--crlf",
+    "text": "<episodedetails>\r\n<episode>2</episode>\r\n<title>Broken</bad>\r\n</episodedetails>\r\n<episodedetails>\r\n<episode>1</episode>\r\n<title>Later</title>\r\n</episodedetails>",
+    "initialName": "Initial"
+  },
+  {
+    "name": "malformed first complete block aborts before later blocks--lf",
+    "text": "<episodedetails>\n<episode>2</episode>\n<title>Broken</bad>\n</episodedetails>\n<episodedetails>\n<episode>1</episode>\n<title>Later</title>\n</episodedetails>",
+    "initialName": "Initial"
+  },
+  {
+    "name": "malformed first complete block aborts before later blocks--bom-lf",
+    "text": "﻿<episodedetails>\n<episode>2</episode>\n<title>Broken</bad>\n</episodedetails>\n<episodedetails>\n<episode>1</episode>\n<title>Later</title>\n</episodedetails>",
+    "initialName": "Initial"
+  },
+  {
+    "name": "malformed residual tail after a complete block is ignored--crlf",
+    "text": "<episodedetails>\r\n<episode>1</episode>\r\n<title>Complete</title>\r\n</episodedetails>\r\n<episodedetails>\r\n<title>Broken</bad>"
+  },
+  {
+    "name": "malformed residual tail after a complete block is ignored--lf",
+    "text": "<episodedetails>\n<episode>1</episode>\n<title>Complete</title>\n</episodedetails>\n<episodedetails>\n<title>Broken</bad>"
+  },
+  {
+    "name": "malformed residual tail after a complete block is ignored--bom-lf",
+    "text": "﻿<episodedetails>\n<episode>1</episode>\n<title>Complete</title>\n</episodedetails>\n<episodedetails>\n<title>Broken</bad>"
+  },
+  {
+    "name": "inter-block garbage belongs to the later block and aborts merge--crlf",
+    "text": "<episodedetails>\r\n<episode>1</episode>\r\n<title>First</title>\r\n</episodedetails>garbage<episodedetails>\r\n<episode>2</episode>\r\n<title>Second</title>\r\n</episodedetails>",
+    "initialName": "Initial"
+  },
+  {
+    "name": "inter-block garbage belongs to the later block and aborts merge--lf",
+    "text": "<episodedetails>\n<episode>1</episode>\n<title>First</title>\n</episodedetails>garbage<episodedetails>\n<episode>2</episode>\n<title>Second</title>\n</episodedetails>",
+    "initialName": "Initial"
+  },
+  {
+    "name": "inter-block garbage belongs to the later block and aborts merge--bom-lf",
+    "text": "﻿<episodedetails>\n<episode>1</episode>\n<title>First</title>\n</episodedetails>garbage<episodedetails>\n<episode>2</episode>\n<title>Second</title>\n</episodedetails>",
+    "initialName": "Initial"
+  },
+  {
+    "name": "episode numbering fields use the winning block--crlf",
+    "text": "<episodedetails>\r\n<season>5</season>\r\n<episode>6</episode>\r\n<episodenumberend>8</episodenumberend>\r\n<airsbefore_episode>9</airsbefore_episode>\r\n<airsafter_season>10</airsafter_season>\r\n<airsbefore_season>11</airsbefore_season>\r\n</episodedetails>"
+  },
+  {
+    "name": "episode numbering fields use the winning block--lf",
+    "text": "<episodedetails>\n<season>5</season>\n<episode>6</episode>\n<episodenumberend>8</episodenumberend>\n<airsbefore_episode>9</airsbefore_episode>\n<airsafter_season>10</airsafter_season>\n<airsbefore_season>11</airsbefore_season>\n</episodedetails>"
+  },
+  {
+    "name": "episode numbering fields use the winning block--bom-lf",
+    "text": "﻿<episodedetails>\n<season>5</season>\n<episode>6</episode>\n<episodenumberend>8</episodenumberend>\n<airsbefore_episode>9</airsbefore_episode>\n<airsafter_season>10</airsafter_season>\n<airsbefore_season>11</airsbefore_season>\n</episodedetails>"
+  },
+  {
+    "name": "display aliases map to the special numbering fields--crlf",
+    "text": "<episodedetails>\r\n<displayepisode>12</displayepisode>\r\n<displayafterseason>13</displayafterseason>\r\n<displayseason>14</displayseason>\r\n</episodedetails>"
+  },
+  {
+    "name": "display aliases map to the special numbering fields--lf",
+    "text": "<episodedetails>\n<displayepisode>12</displayepisode>\n<displayafterseason>13</displayafterseason>\n<displayseason>14</displayseason>\n</episodedetails>"
+  },
+  {
+    "name": "display aliases map to the special numbering fields--bom-lf",
+    "text": "﻿<episodedetails>\n<displayepisode>12</displayepisode>\n<displayafterseason>13</displayafterseason>\n<displayseason>14</displayseason>\n</episodedetails>"
+  },
+  {
+    "name": "duplicate numbering fields commit the last valid value--crlf",
+    "text": "<episodedetails>\r\n<season>1</season>\r\n<season>2</season>\r\n<episode>3</episode>\r\n<episode>4</episode>\r\n<displayepisode>5</displayepisode>\r\n<airsbefore_episode>6</airsbefore_episode>\r\n</episodedetails>"
+  },
+  {
+    "name": "duplicate numbering fields commit the last valid value--lf",
+    "text": "<episodedetails>\n<season>1</season>\n<season>2</season>\n<episode>3</episode>\n<episode>4</episode>\n<displayepisode>5</displayepisode>\n<airsbefore_episode>6</airsbefore_episode>\n</episodedetails>"
+  },
+  {
+    "name": "duplicate numbering fields commit the last valid value--bom-lf",
+    "text": "﻿<episodedetails>\n<season>1</season>\n<season>2</season>\n<episode>3</episode>\n<episode>4</episode>\n<displayepisode>5</displayepisode>\n<airsbefore_episode>6</airsbefore_episode>\n</episodedetails>"
+  },
+  {
+    "name": "invalid numbering fields preserve initial values--crlf",
+    "text": "<episodedetails>\r\n<season>bad</season>\r\n<episode>2147483648</episode>\r\n<episodenumberend>\r\n</episodenumberend>\r\n<displayepisode>1.5</displayepisode>\r\n</episodedetails>",
+    "initialParentIndexNumber": 21,
+    "initialIndexNumber": 22,
+    "initialIndexNumberEnd": 23,
+    "initialAirsBeforeEpisodeNumber": 24
+  },
+  {
+    "name": "invalid numbering fields preserve initial values--lf",
+    "text": "<episodedetails>\n<season>bad</season>\n<episode>2147483648</episode>\n<episodenumberend>\n</episodenumberend>\n<displayepisode>1.5</displayepisode>\n</episodedetails>",
+    "initialParentIndexNumber": 21,
+    "initialIndexNumber": 22,
+    "initialIndexNumberEnd": 23,
+    "initialAirsBeforeEpisodeNumber": 24
+  },
+  {
+    "name": "invalid numbering fields preserve initial values--bom-lf",
+    "text": "﻿<episodedetails>\n<season>bad</season>\n<episode>2147483648</episode>\n<episodenumberend>\n</episodenumberend>\n<displayepisode>1.5</displayepisode>\n</episodedetails>",
+    "initialParentIndexNumber": 21,
+    "initialIndexNumber": 22,
+    "initialIndexNumberEnd": 23,
+    "initialAirsBeforeEpisodeNumber": 24
+  },
+  {
+    "name": "winning explicit episode end survives a lower additional episode--crlf",
+    "text": "<episodedetails>\r\n<episode>1</episode>\r\n<episodenumberend>9</episodenumberend>\r\n<title>First</title>\r\n</episodedetails>\r\n<episodedetails>\r\n<episode>2</episode>\r\n<title>Second</title>\r\n</episodedetails>"
+  },
+  {
+    "name": "winning explicit episode end survives a lower additional episode--lf",
+    "text": "<episodedetails>\n<episode>1</episode>\n<episodenumberend>9</episodenumberend>\n<title>First</title>\n</episodedetails>\n<episodedetails>\n<episode>2</episode>\n<title>Second</title>\n</episodedetails>"
+  },
+  {
+    "name": "winning explicit episode end survives a lower additional episode--bom-lf",
+    "text": "﻿<episodedetails>\n<episode>1</episode>\n<episodenumberend>9</episodenumberend>\n<title>First</title>\n</episodedetails>\n<episodedetails>\n<episode>2</episode>\n<title>Second</title>\n</episodedetails>"
+  },
+  {
+    "name": "higher additional episode raises episode end--crlf",
+    "text": "<episodedetails>\r\n<episode>1</episode>\r\n<episodenumberend>2</episodenumberend>\r\n<title>First</title>\r\n</episodedetails>\r\n<episodedetails>\r\n<episode>7</episode>\r\n<title>Seventh</title>\r\n</episodedetails>"
+  },
+  {
+    "name": "higher additional episode raises episode end--lf",
+    "text": "<episodedetails>\n<episode>1</episode>\n<episodenumberend>2</episodenumberend>\n<title>First</title>\n</episodedetails>\n<episodedetails>\n<episode>7</episode>\n<title>Seventh</title>\n</episodedetails>"
+  },
+  {
+    "name": "higher additional episode raises episode end--bom-lf",
+    "text": "﻿<episodedetails>\n<episode>1</episode>\n<episodenumberend>2</episodenumberend>\n<title>First</title>\n</episodedetails>\n<episodedetails>\n<episode>7</episode>\n<title>Seventh</title>\n</episodedetails>"
+  },
+  {
+    "name": "additional block numbering and display scalars are otherwise discarded--crlf",
+    "text": "<episodedetails>\r\n<episode>1</episode>\r\n<season>2</season>\r\n<showtitle>Winner Series</showtitle>\r\n<displayepisode>3</displayepisode>\r\n</episodedetails>\r\n<episodedetails>\r\n<episode>4</episode>\r\n<season>20</season>\r\n<showtitle>Discarded Series</showtitle>\r\n<displayepisode>30</displayepisode>\r\n</episodedetails>"
+  },
+  {
+    "name": "additional block numbering and display scalars are otherwise discarded--lf",
+    "text": "<episodedetails>\n<episode>1</episode>\n<season>2</season>\n<showtitle>Winner Series</showtitle>\n<displayepisode>3</displayepisode>\n</episodedetails>\n<episodedetails>\n<episode>4</episode>\n<season>20</season>\n<showtitle>Discarded Series</showtitle>\n<displayepisode>30</displayepisode>\n</episodedetails>"
+  },
+  {
+    "name": "additional block numbering and display scalars are otherwise discarded--bom-lf",
+    "text": "﻿<episodedetails>\n<episode>1</episode>\n<season>2</season>\n<showtitle>Winner Series</showtitle>\n<displayepisode>3</displayepisode>\n</episodedetails>\n<episodedetails>\n<episode>4</episode>\n<season>20</season>\n<showtitle>Discarded Series</showtitle>\n<displayepisode>30</displayepisode>\n</episodedetails>"
+  },
+  {
+    "name": "winning block keeps season display and show title scalars--crlf",
+    "text": "<episodedetails>\r\n<episode>5</episode>\r\n<season>6</season>\r\n<showtitle>Winner Series</showtitle>\r\n<displayepisode>7</displayepisode>\r\n<displayafterseason>8</displayafterseason>\r\n<displayseason>9</displayseason>\r\n</episodedetails>\r\n<episodedetails>\r\n<episode>10</episode>\r\n</episodedetails>"
+  },
+  {
+    "name": "winning block keeps season display and show title scalars--lf",
+    "text": "<episodedetails>\n<episode>5</episode>\n<season>6</season>\n<showtitle>Winner Series</showtitle>\n<displayepisode>7</displayepisode>\n<displayafterseason>8</displayafterseason>\n<displayseason>9</displayseason>\n</episodedetails>\n<episodedetails>\n<episode>10</episode>\n</episodedetails>"
+  },
+  {
+    "name": "winning block keeps season display and show title scalars--bom-lf",
+    "text": "﻿<episodedetails>\n<episode>5</episode>\n<season>6</season>\n<showtitle>Winner Series</showtitle>\n<displayepisode>7</displayepisode>\n<displayafterseason>8</displayafterseason>\n<displayseason>9</displayseason>\n</episodedetails>\n<episodedetails>\n<episode>10</episode>\n</episodedetails>"
+  },
+  {
+    "name": "name original title and overview merge independently--crlf",
+    "text": "<episodedetails>\r\n<episode>2</episode>\r\n<title>Second</title>\r\n<originaltitle>Original 2</originaltitle>\r\n<plot>Overview 2</plot>\r\n</episodedetails>\r\n<episodedetails>\r\n<episode>1</episode>\r\n<title>First</title>\r\n<originaltitle>Original 1</originaltitle>\r\n<plot>Overview 1</plot>\r\n</episodedetails>"
+  },
+  {
+    "name": "name original title and overview merge independently--lf",
+    "text": "<episodedetails>\n<episode>2</episode>\n<title>Second</title>\n<originaltitle>Original 2</originaltitle>\n<plot>Overview 2</plot>\n</episodedetails>\n<episodedetails>\n<episode>1</episode>\n<title>First</title>\n<originaltitle>Original 1</originaltitle>\n<plot>Overview 1</plot>\n</episodedetails>"
+  },
+  {
+    "name": "name original title and overview merge independently--bom-lf",
+    "text": "﻿<episodedetails>\n<episode>2</episode>\n<title>Second</title>\n<originaltitle>Original 2</originaltitle>\n<plot>Overview 2</plot>\n</episodedetails>\n<episodedetails>\n<episode>1</episode>\n<title>First</title>\n<originaltitle>Original 1</originaltitle>\n<plot>Overview 1</plot>\n</episodedetails>"
+  },
+  {
+    "name": "missing winning strings still receive leading merge separators--crlf",
+    "text": "<episodedetails>\r\n<episode>1</episode>\r\n</episodedetails>\r\n<episodedetails>\r\n<episode>2</episode>\r\n<title>Second</title>\r\n<originaltitle>Original 2</originaltitle>\r\n<plot>Overview 2</plot>\r\n</episodedetails>"
+  },
+  {
+    "name": "missing winning strings still receive leading merge separators--lf",
+    "text": "<episodedetails>\n<episode>1</episode>\n</episodedetails>\n<episodedetails>\n<episode>2</episode>\n<title>Second</title>\n<originaltitle>Original 2</originaltitle>\n<plot>Overview 2</plot>\n</episodedetails>"
+  },
+  {
+    "name": "missing winning strings still receive leading merge separators--bom-lf",
+    "text": "﻿<episodedetails>\n<episode>1</episode>\n</episodedetails>\n<episodedetails>\n<episode>2</episode>\n<title>Second</title>\n<originaltitle>Original 2</originaltitle>\n<plot>Overview 2</plot>\n</episodedetails>"
+  },
+  {
+    "name": "empty additional strings add no merge separators--crlf",
+    "text": "<episodedetails>\r\n<episode>1</episode>\r\n<title>First</title>\r\n<originaltitle>Original 1</originaltitle>\r\n<plot>Overview 1</plot>\r\n</episodedetails>\r\n<episodedetails>\r\n<episode>2</episode>\r\n</episodedetails>"
+  },
+  {
+    "name": "empty additional strings add no merge separators--lf",
+    "text": "<episodedetails>\n<episode>1</episode>\n<title>First</title>\n<originaltitle>Original 1</originaltitle>\n<plot>Overview 1</plot>\n</episodedetails>\n<episodedetails>\n<episode>2</episode>\n</episodedetails>"
+  },
+  {
+    "name": "empty additional strings add no merge separators--bom-lf",
+    "text": "﻿<episodedetails>\n<episode>1</episode>\n<title>First</title>\n<originaltitle>Original 1</originaltitle>\n<plot>Overview 1</plot>\n</episodedetails>\n<episodedetails>\n<episode>2</episode>\n</episodedetails>"
+  },
+  {
+    "name": "winning fields overwrite initial strings before merge--crlf",
+    "text": "<episodedetails>\r\n<episode>1</episode>\r\n<title>Winner</title>\r\n</episodedetails>\r\n<episodedetails>\r\n<episode>2</episode>\r\n<title>Additional</title>\r\n</episodedetails>",
+    "initialName": "Initial",
+    "initialOriginalTitle": "Initial original",
+    "initialOverview": "Initial overview"
+  },
+  {
+    "name": "winning fields overwrite initial strings before merge--lf",
+    "text": "<episodedetails>\n<episode>1</episode>\n<title>Winner</title>\n</episodedetails>\n<episodedetails>\n<episode>2</episode>\n<title>Additional</title>\n</episodedetails>",
+    "initialName": "Initial",
+    "initialOriginalTitle": "Initial original",
+    "initialOverview": "Initial overview"
+  },
+  {
+    "name": "winning fields overwrite initial strings before merge--bom-lf",
+    "text": "﻿<episodedetails>\n<episode>1</episode>\n<title>Winner</title>\n</episodedetails>\n<episodedetails>\n<episode>2</episode>\n<title>Additional</title>\n</episodedetails>",
+    "initialName": "Initial",
+    "initialOriginalTitle": "Initial original",
+    "initialOverview": "Initial overview"
+  },
+  {
+    "name": "winning block keeps representative scalar metadata--crlf",
+    "text": "<episodedetails>\r\n<episode>1</episode>\r\n<year>2024</year>\r\n<rating>7.5</rating>\r\n<criticrating>81</criticrating>\r\n<runtime>42</runtime>\r\n<mpaa>TV-14</mpaa>\r\n<genre>Drama / Mystery</genre>\r\n<studio>Studio A</studio>\r\n<tag>Tag A</tag>\r\n</episodedetails>\r\n<episodedetails>\r\n<episode>2</episode>\r\n<year>1999</year>\r\n<rating>1</rating>\r\n<runtime>5</runtime>\r\n</episodedetails>"
+  },
+  {
+    "name": "winning block keeps representative scalar metadata--lf",
+    "text": "<episodedetails>\n<episode>1</episode>\n<year>2024</year>\n<rating>7.5</rating>\n<criticrating>81</criticrating>\n<runtime>42</runtime>\n<mpaa>TV-14</mpaa>\n<genre>Drama / Mystery</genre>\n<studio>Studio A</studio>\n<tag>Tag A</tag>\n</episodedetails>\n<episodedetails>\n<episode>2</episode>\n<year>1999</year>\n<rating>1</rating>\n<runtime>5</runtime>\n</episodedetails>"
+  },
+  {
+    "name": "winning block keeps representative scalar metadata--bom-lf",
+    "text": "﻿<episodedetails>\n<episode>1</episode>\n<year>2024</year>\n<rating>7.5</rating>\n<criticrating>81</criticrating>\n<runtime>42</runtime>\n<mpaa>TV-14</mpaa>\n<genre>Drama / Mystery</genre>\n<studio>Studio A</studio>\n<tag>Tag A</tag>\n</episodedetails>\n<episodedetails>\n<episode>2</episode>\n<year>1999</year>\n<rating>1</rating>\n<runtime>5</runtime>\n</episodedetails>"
+  },
+  {
+    "name": "winning provider identifiers are retained--crlf",
+    "text": "<episodedetails>\r\n<episode>1</episode>\r\n<uniqueid type=\"tmdb\">101</uniqueid>\r\n<imdb_id>tt0000101</imdb_id>\r\n</episodedetails>\r\n<episodedetails>\r\n<episode>2</episode>\r\n<uniqueid type=\"tmdb\">202</uniqueid>\r\n<imdb_id>tt0000202</imdb_id>\r\n</episodedetails>"
+  },
+  {
+    "name": "winning provider identifiers are retained--lf",
+    "text": "<episodedetails>\n<episode>1</episode>\n<uniqueid type=\"tmdb\">101</uniqueid>\n<imdb_id>tt0000101</imdb_id>\n</episodedetails>\n<episodedetails>\n<episode>2</episode>\n<uniqueid type=\"tmdb\">202</uniqueid>\n<imdb_id>tt0000202</imdb_id>\n</episodedetails>"
+  },
+  {
+    "name": "winning provider identifiers are retained--bom-lf",
+    "text": "﻿<episodedetails>\n<episode>1</episode>\n<uniqueid type=\"tmdb\">101</uniqueid>\n<imdb_id>tt0000101</imdb_id>\n</episodedetails>\n<episodedetails>\n<episode>2</episode>\n<uniqueid type=\"tmdb\">202</uniqueid>\n<imdb_id>tt0000202</imdb_id>\n</episodedetails>"
+  },
+  {
+    "name": "additional provider identifiers do not merge--crlf",
+    "text": "<episodedetails>\r\n<episode>1</episode>\r\n<uniqueid type=\"tvdb\">303</uniqueid>\r\n</episodedetails>\r\n<episodedetails>\r\n<episode>2</episode>\r\n<uniqueid type=\"tmdb\">404</uniqueid>\r\n</episodedetails>"
+  },
+  {
+    "name": "additional provider identifiers do not merge--lf",
+    "text": "<episodedetails>\n<episode>1</episode>\n<uniqueid type=\"tvdb\">303</uniqueid>\n</episodedetails>\n<episodedetails>\n<episode>2</episode>\n<uniqueid type=\"tmdb\">404</uniqueid>\n</episodedetails>"
+  },
+  {
+    "name": "additional provider identifiers do not merge--bom-lf",
+    "text": "﻿<episodedetails>\n<episode>1</episode>\n<uniqueid type=\"tvdb\">303</uniqueid>\n</episodedetails>\n<episodedetails>\n<episode>2</episode>\n<uniqueid type=\"tmdb\">404</uniqueid>\n</episodedetails>"
+  },
+  {
+    "name": "custom provider identifier survives on the winning block--crlf",
+    "text": "<episodedetails>\r\n<episode>1</episode>\r\n<uniqueid type=\"Custom.Provider\">custom-1</uniqueid>\r\n</episodedetails>\r\n<episodedetails>\r\n<episode>2</episode>\r\n<uniqueid type=\"Custom.Provider\">custom-2</uniqueid>\r\n</episodedetails>"
+  },
+  {
+    "name": "custom provider identifier survives on the winning block--lf",
+    "text": "<episodedetails>\n<episode>1</episode>\n<uniqueid type=\"Custom.Provider\">custom-1</uniqueid>\n</episodedetails>\n<episodedetails>\n<episode>2</episode>\n<uniqueid type=\"Custom.Provider\">custom-2</uniqueid>\n</episodedetails>"
+  },
+  {
+    "name": "custom provider identifier survives on the winning block--bom-lf",
+    "text": "﻿<episodedetails>\n<episode>1</episode>\n<uniqueid type=\"Custom.Provider\">custom-1</uniqueid>\n</episodedetails>\n<episodedetails>\n<episode>2</episode>\n<uniqueid type=\"Custom.Provider\">custom-2</uniqueid>\n</episodedetails>"
+  },
+  {
+    "name": "duplicate provider identifier in the winner keeps the last value--crlf",
+    "text": "<episodedetails>\r\n<episode>1</episode>\r\n<uniqueid type=\"tmdb\">1</uniqueid>\r\n<uniqueid type=\"tmdb\">2</uniqueid>\r\n</episodedetails>\r\n<episodedetails>\r\n<episode>3</episode>\r\n</episodedetails>"
+  },
+  {
+    "name": "duplicate provider identifier in the winner keeps the last value--lf",
+    "text": "<episodedetails>\n<episode>1</episode>\n<uniqueid type=\"tmdb\">1</uniqueid>\n<uniqueid type=\"tmdb\">2</uniqueid>\n</episodedetails>\n<episodedetails>\n<episode>3</episode>\n</episodedetails>"
+  },
+  {
+    "name": "duplicate provider identifier in the winner keeps the last value--bom-lf",
+    "text": "﻿<episodedetails>\n<episode>1</episode>\n<uniqueid type=\"tmdb\">1</uniqueid>\n<uniqueid type=\"tmdb\">2</uniqueid>\n</episodedetails>\n<episodedetails>\n<episode>3</episode>\n</episodedetails>"
+  },
+  {
+    "name": "winner people and remote image survive while additional collections are discarded--crlf",
+    "text": "<episodedetails>\r\n<episode>1</episode>\r\n<actor>\r\n<name>Winner Actor</name>\r\n<role>Lead</role>\r\n</actor>\r\n<thumb>https://example.test/winner.jpg</thumb>\r\n</episodedetails>\r\n<episodedetails>\r\n<episode>2</episode>\r\n<actor>\r\n<name>Discarded Actor</name>\r\n</actor>\r\n<thumb aspect=\"banner\">https://example.test/discarded.jpg</thumb>\r\n</episodedetails>"
+  },
+  {
+    "name": "winner people and remote image survive while additional collections are discarded--lf",
+    "text": "<episodedetails>\n<episode>1</episode>\n<actor>\n<name>Winner Actor</name>\n<role>Lead</role>\n</actor>\n<thumb>https://example.test/winner.jpg</thumb>\n</episodedetails>\n<episodedetails>\n<episode>2</episode>\n<actor>\n<name>Discarded Actor</name>\n</actor>\n<thumb aspect=\"banner\">https://example.test/discarded.jpg</thumb>\n</episodedetails>"
+  },
+  {
+    "name": "winner people and remote image survive while additional collections are discarded--bom-lf",
+    "text": "﻿<episodedetails>\n<episode>1</episode>\n<actor>\n<name>Winner Actor</name>\n<role>Lead</role>\n</actor>\n<thumb>https://example.test/winner.jpg</thumb>\n</episodedetails>\n<episodedetails>\n<episode>2</episode>\n<actor>\n<name>Discarded Actor</name>\n</actor>\n<thumb aspect=\"banner\">https://example.test/discarded.jpg</thumb>\n</episodedetails>"
+  },
+  {
+    "name": "episode fetch resets existing people even for an empty block--crlf",
+    "text": "<episodedetails>\r\n</episodedetails>",
+    "initialPeople": true
+  },
+  {
+    "name": "episode fetch resets existing people even for an empty block--lf",
+    "text": "<episodedetails>\n</episodedetails>",
+    "initialPeople": true
+  },
+  {
+    "name": "episode fetch resets existing people even for an empty block--bom-lf",
+    "text": "﻿<episodedetails>\n</episodedetails>",
+    "initialPeople": true
+  },
+  {
+    "name": "single truncated block keeps earlier scalar but not unfinished scalar--crlf",
+    "text": "<episodedetails>\r\n<title>Committed</title>\r\n<plot>Unfinished</plot>\r\n<broken"
+  },
+  {
+    "name": "single truncated block keeps earlier scalar but not unfinished scalar--lf",
+    "text": "<episodedetails>\n<title>Committed</title>\n<plot>Unfinished</plot>\n<broken"
+  },
+  {
+    "name": "single truncated block keeps earlier scalar but not unfinished scalar--bom-lf",
+    "text": "﻿<episodedetails>\n<title>Committed</title>\n<plot>Unfinished</plot>\n<broken"
+  },
+  {
+    "name": "nested scalar error keeps an earlier direct field--crlf",
+    "text": "<episodedetails>\r\n<episode>3</episode>\r\n<title>\r\n<inner>Invalid</inner>\r\n</title>\r\n</episodedetails>"
+  },
+  {
+    "name": "nested scalar error keeps an earlier direct field--lf",
+    "text": "<episodedetails>\n<episode>3</episode>\n<title>\n<inner>Invalid</inner>\n</title>\n</episodedetails>"
+  },
+  {
+    "name": "nested scalar error keeps an earlier direct field--bom-lf",
+    "text": "﻿<episodedetails>\n<episode>3</episode>\n<title>\n<inner>Invalid</inner>\n</title>\n</episodedetails>"
+  },
+  {
+    "name": "xml failure after temporary userdata keeps its side effect but skips target replay--crlf",
+    "text": "<episodedetails>\r\n<episode>2</episode>\r\n<watched>true</watched>\r\n</episodedetails>\r\n<episodedetails>\r\n<episode>1</episode>\r\n<title>Broken</bad>\r\n</episodedetails>",
+    "existingId": true,
+    "initialName": "Initial"
+  },
+  {
+    "name": "xml failure after temporary userdata keeps its side effect but skips target replay--lf",
+    "text": "<episodedetails>\n<episode>2</episode>\n<watched>true</watched>\n</episodedetails>\n<episodedetails>\n<episode>1</episode>\n<title>Broken</bad>\n</episodedetails>",
+    "existingId": true,
+    "initialName": "Initial"
+  },
+  {
+    "name": "xml failure after temporary userdata keeps its side effect but skips target replay--bom-lf",
+    "text": "﻿<episodedetails>\n<episode>2</episode>\n<watched>true</watched>\n</episodedetails>\n<episodedetails>\n<episode>1</episode>\n<title>Broken</bad>\n</episodedetails>",
+    "existingId": true,
+    "initialName": "Initial"
+  },
+  {
+    "name": "single zero id block performs transient userdata reads only--crlf",
+    "text": "<episodedetails>\r\n<watched>true</watched>\r\n<playcount>2</playcount>\r\n<lastplayed>2025-01-02 03:04:05</lastplayed>\r\n</episodedetails>"
+  },
+  {
+    "name": "single zero id block performs transient userdata reads only--lf",
+    "text": "<episodedetails>\n<watched>true</watched>\n<playcount>2</playcount>\n<lastplayed>2025-01-02 03:04:05</lastplayed>\n</episodedetails>"
+  },
+  {
+    "name": "single zero id block performs transient userdata reads only--bom-lf",
+    "text": "﻿<episodedetails>\n<watched>true</watched>\n<playcount>2</playcount>\n<lastplayed>2025-01-02 03:04:05</lastplayed>\n</episodedetails>"
+  },
+  {
+    "name": "single existing item saves userdata nodes sequentially--crlf",
+    "text": "<episodedetails>\r\n<watched>true</watched>\r\n<playcount>2</playcount>\r\n<lastplayed>2025-01-02 03:04:05</lastplayed>\r\n</episodedetails>",
+    "existingId": true
+  },
+  {
+    "name": "single existing item saves userdata nodes sequentially--lf",
+    "text": "<episodedetails>\n<watched>true</watched>\n<playcount>2</playcount>\n<lastplayed>2025-01-02 03:04:05</lastplayed>\n</episodedetails>",
+    "existingId": true
+  },
+  {
+    "name": "single existing item saves userdata nodes sequentially--bom-lf",
+    "text": "﻿<episodedetails>\n<watched>true</watched>\n<playcount>2</playcount>\n<lastplayed>2025-01-02 03:04:05</lastplayed>\n</episodedetails>",
+    "existingId": true
+  },
+  {
+    "name": "multi block zero id parses every temporary block then winner again--crlf",
+    "text": "<episodedetails>\r\n<episode>2</episode>\r\n<playcount>2</playcount>\r\n</episodedetails>\r\n<episodedetails>\r\n<episode>1</episode>\r\n<watched>true</watched>\r\n</episodedetails>"
+  },
+  {
+    "name": "multi block zero id parses every temporary block then winner again--lf",
+    "text": "<episodedetails>\n<episode>2</episode>\n<playcount>2</playcount>\n</episodedetails>\n<episodedetails>\n<episode>1</episode>\n<watched>true</watched>\n</episodedetails>"
+  },
+  {
+    "name": "multi block zero id parses every temporary block then winner again--bom-lf",
+    "text": "﻿<episodedetails>\n<episode>2</episode>\n<playcount>2</playcount>\n</episodedetails>\n<episodedetails>\n<episode>1</episode>\n<watched>true</watched>\n</episodedetails>"
+  },
+  {
+    "name": "multi block existing item saves only winner after transient passes--crlf",
+    "text": "<episodedetails>\r\n<episode>2</episode>\r\n<playcount>2</playcount>\r\n</episodedetails>\r\n<episodedetails>\r\n<episode>1</episode>\r\n<watched>true</watched>\r\n</episodedetails>",
+    "existingId": true
+  },
+  {
+    "name": "multi block existing item saves only winner after transient passes--lf",
+    "text": "<episodedetails>\n<episode>2</episode>\n<playcount>2</playcount>\n</episodedetails>\n<episodedetails>\n<episode>1</episode>\n<watched>true</watched>\n</episodedetails>",
+    "existingId": true
+  },
+  {
+    "name": "multi block existing item saves only winner after transient passes--bom-lf",
+    "text": "﻿<episodedetails>\n<episode>2</episode>\n<playcount>2</playcount>\n</episodedetails>\n<episodedetails>\n<episode>1</episode>\n<watched>true</watched>\n</episodedetails>",
+    "existingId": true
+  },
+  {
+    "name": "additional temporary userdata mutation is visible in winner persisted snapshot--crlf",
+    "text": "<episodedetails>\r\n<episode>2</episode>\r\n<playcount>9</playcount>\r\n</episodedetails>\r\n<episodedetails>\r\n<episode>1</episode>\r\n<watched>true</watched>\r\n</episodedetails>",
+    "existingId": true
+  },
+  {
+    "name": "additional temporary userdata mutation is visible in winner persisted snapshot--lf",
+    "text": "<episodedetails>\n<episode>2</episode>\n<playcount>9</playcount>\n</episodedetails>\n<episodedetails>\n<episode>1</episode>\n<watched>true</watched>\n</episodedetails>",
+    "existingId": true
+  },
+  {
+    "name": "additional temporary userdata mutation is visible in winner persisted snapshot--bom-lf",
+    "text": "﻿<episodedetails>\n<episode>2</episode>\n<playcount>9</playcount>\n</episodedetails>\n<episodedetails>\n<episode>1</episode>\n<watched>true</watched>\n</episodedetails>",
+    "existingId": true
+  },
+  {
+    "name": "userdata failure in a later temporary block stops before target replay--crlf",
+    "text": "<episodedetails>\r\n<episode>2</episode>\r\n<watched>true</watched>\r\n</episodedetails>\r\n<episodedetails>\r\n<episode>1</episode>\r\n<playcount>2</playcount>\r\n</episodedetails>",
+    "existingId": true,
+    "initialName": "Initial",
+    "failDataAt": 2,
+    "asyncOnly": true
+  },
+  {
+    "name": "userdata failure in a later temporary block stops before target replay--lf",
+    "text": "<episodedetails>\n<episode>2</episode>\n<watched>true</watched>\n</episodedetails>\n<episodedetails>\n<episode>1</episode>\n<playcount>2</playcount>\n</episodedetails>",
+    "existingId": true,
+    "initialName": "Initial",
+    "failDataAt": 2,
+    "asyncOnly": true
+  },
+  {
+    "name": "userdata failure in a later temporary block stops before target replay--bom-lf",
+    "text": "﻿<episodedetails>\n<episode>2</episode>\n<watched>true</watched>\n</episodedetails>\n<episodedetails>\n<episode>1</episode>\n<playcount>2</playcount>\n</episodedetails>",
+    "existingId": true,
+    "initialName": "Initial",
+    "failDataAt": 2,
+    "asyncOnly": true
+  },
+  {
+    "name": "winner save failure preserves its earlier scalar target prefix--crlf",
+    "text": "<episodedetails>\r\n<episode>2</episode>\r\n</episodedetails>\r\n<episodedetails>\r\n<episode>1</episode>\r\n<title>Winner prefix</title>\r\n<watched>true</watched>\r\n<plot>Not reached</plot>\r\n</episodedetails>",
+    "existingId": true,
+    "failSaveAt": 1,
+    "asyncOnly": true
+  },
+  {
+    "name": "winner save failure preserves its earlier scalar target prefix--lf",
+    "text": "<episodedetails>\n<episode>2</episode>\n</episodedetails>\n<episodedetails>\n<episode>1</episode>\n<title>Winner prefix</title>\n<watched>true</watched>\n<plot>Not reached</plot>\n</episodedetails>",
+    "existingId": true,
+    "failSaveAt": 1,
+    "asyncOnly": true
+  },
+  {
+    "name": "winner save failure preserves its earlier scalar target prefix--bom-lf",
+    "text": "﻿<episodedetails>\n<episode>2</episode>\n</episodedetails>\n<episodedetails>\n<episode>1</episode>\n<title>Winner prefix</title>\n<watched>true</watched>\n<plot>Not reached</plot>\n</episodedetails>",
+    "existingId": true,
+    "failSaveAt": 1,
+    "asyncOnly": true
+  },
+  {
+    "name": "pre cancellation propagates before the first episode node--crlf",
+    "text": "<episodedetails>\r\n<episode>1</episode>\r\n<title>Not reached</title>\r\n</episodedetails>",
+    "cancelBefore": true
+  },
+  {
+    "name": "pre cancellation propagates before the first episode node--lf",
+    "text": "<episodedetails>\n<episode>1</episode>\n<title>Not reached</title>\n</episodedetails>",
+    "cancelBefore": true
+  },
+  {
+    "name": "pre cancellation propagates before the first episode node--bom-lf",
+    "text": "﻿<episodedetails>\n<episode>1</episode>\n<title>Not reached</title>\n</episodedetails>",
+    "cancelBefore": true
+  },
+  {
+    "name": "cancellation after temporary userdata is observed at the next block--crlf",
+    "text": "<episodedetails>\r\n<episode>2</episode>\r\n<watched>true</watched>\r\n</episodedetails>\r\n<episodedetails>\r\n<episode>1</episode>\r\n<title>Not reached</title>\r\n</episodedetails>",
+    "existingId": true,
+    "cancelAfterData": 1,
+    "asyncOnly": true
+  },
+  {
+    "name": "cancellation after temporary userdata is observed at the next block--lf",
+    "text": "<episodedetails>\n<episode>2</episode>\n<watched>true</watched>\n</episodedetails>\n<episodedetails>\n<episode>1</episode>\n<title>Not reached</title>\n</episodedetails>",
+    "existingId": true,
+    "cancelAfterData": 1,
+    "asyncOnly": true
+  },
+  {
+    "name": "cancellation after temporary userdata is observed at the next block--bom-lf",
+    "text": "﻿<episodedetails>\n<episode>2</episode>\n<watched>true</watched>\n</episodedetails>\n<episodedetails>\n<episode>1</episode>\n<title>Not reached</title>\n</episodedetails>",
+    "existingId": true,
+    "cancelAfterData": 1,
+    "asyncOnly": true
+  },
+  {
+    "name": "cancellation after winner save preserves the saved prefix--crlf",
+    "text": "<episodedetails>\r\n<episode>2</episode>\r\n</episodedetails>\r\n<episodedetails>\r\n<episode>1</episode>\r\n<watched>true</watched>\r\n<title>Not reached</title>\r\n</episodedetails>",
+    "existingId": true,
+    "cancelAfterSave": 1,
+    "asyncOnly": true
+  },
+  {
+    "name": "cancellation after winner save preserves the saved prefix--lf",
+    "text": "<episodedetails>\n<episode>2</episode>\n</episodedetails>\n<episodedetails>\n<episode>1</episode>\n<watched>true</watched>\n<title>Not reached</title>\n</episodedetails>",
+    "existingId": true,
+    "cancelAfterSave": 1,
+    "asyncOnly": true
+  },
+  {
+    "name": "cancellation after winner save preserves the saved prefix--bom-lf",
+    "text": "﻿<episodedetails>\n<episode>2</episode>\n</episodedetails>\n<episodedetails>\n<episode>1</episode>\n<watched>true</watched>\n<title>Not reached</title>\n</episodedetails>",
+    "existingId": true,
+    "cancelAfterSave": 1,
+    "asyncOnly": true
+  },
+  {
+    "name": "user manager failure is not swallowed as an xml error--crlf",
+    "text": "<episodedetails>\r\n<title>Prefix</title>\r\n<watched>true</watched>\r\n<plot>Not reached</plot>\r\n</episodedetails>",
+    "existingId": true,
+    "failUserAt": 1,
+    "asyncOnly": true
+  },
+  {
+    "name": "user manager failure is not swallowed as an xml error--lf",
+    "text": "<episodedetails>\n<title>Prefix</title>\n<watched>true</watched>\n<plot>Not reached</plot>\n</episodedetails>",
+    "existingId": true,
+    "failUserAt": 1,
+    "asyncOnly": true
+  },
+  {
+    "name": "user manager failure is not swallowed as an xml error--bom-lf",
+    "text": "﻿<episodedetails>\n<title>Prefix</title>\n<watched>true</watched>\n<plot>Not reached</plot>\n</episodedetails>",
+    "existingId": true,
+    "failUserAt": 1,
+    "asyncOnly": true
+  },
+  {
+    "name": "pre cancellation on an empty file is preceded by xml setup--crlf",
+    "text": "",
+    "cancelBefore": true
+  },
+  {
+    "name": "pre cancellation on an empty file is preceded by xml setup--lf",
+    "text": "",
+    "cancelBefore": true
+  },
+  {
+    "name": "pre cancellation on an empty file is preceded by xml setup--bom-lf",
+    "text": "﻿",
+    "cancelBefore": true
+  },
+  {
+    "name": "pre cancellation on a self closing root sees no interactive child--crlf",
+    "text": "<episodedetails/>",
+    "cancelBefore": true
+  },
+  {
+    "name": "pre cancellation on a self closing root sees no interactive child--lf",
+    "text": "<episodedetails/>",
+    "cancelBefore": true
+  },
+  {
+    "name": "pre cancellation on a self closing root sees no interactive child--bom-lf",
+    "text": "﻿<episodedetails/>",
+    "cancelBefore": true
+  },
+  {
+    "name": "pre cancellation on a paired empty root observes the end element--crlf",
+    "text": "<episodedetails>\r\n</episodedetails>",
+    "cancelBefore": true
+  },
+  {
+    "name": "pre cancellation on a paired empty root observes the end element--lf",
+    "text": "<episodedetails>\n</episodedetails>",
+    "cancelBefore": true
+  },
+  {
+    "name": "pre cancellation on a paired empty root observes the end element--bom-lf",
+    "text": "﻿<episodedetails>\n</episodedetails>",
+    "cancelBefore": true
+  },
+  {
+    "name": "pre cancellation on direct root text observes the text node--crlf",
+    "text": "<episodedetails>text</episodedetails>",
+    "cancelBefore": true
+  },
+  {
+    "name": "pre cancellation on direct root text observes the text node--lf",
+    "text": "<episodedetails>text</episodedetails>",
+    "cancelBefore": true
+  },
+  {
+    "name": "pre cancellation on direct root text observes the text node--bom-lf",
+    "text": "﻿<episodedetails>text</episodedetails>",
+    "cancelBefore": true
+  },
+  {
+    "name": "malformed setup xml is swallowed before pre cancellation--crlf",
+    "text": "<",
+    "cancelBefore": true
+  },
+  {
+    "name": "malformed setup xml is swallowed before pre cancellation--lf",
+    "text": "<",
+    "cancelBefore": true
+  },
+  {
+    "name": "malformed setup xml is swallowed before pre cancellation--bom-lf",
+    "text": "﻿<",
+    "cancelBefore": true
+  },
+  {
+    "name": "pre cancellation in a multi block file stops in the first temporary block--crlf",
+    "text": "<episodedetails>\r\n</episodedetails>\r\n<episodedetails>\r\n</episodedetails>",
+    "cancelBefore": true
+  },
+  {
+    "name": "pre cancellation in a multi block file stops in the first temporary block--lf",
+    "text": "<episodedetails>\n</episodedetails>\n<episodedetails>\n</episodedetails>",
+    "cancelBefore": true
+  },
+  {
+    "name": "pre cancellation in a multi block file stops in the first temporary block--bom-lf",
+    "text": "﻿<episodedetails>\n</episodedetails>\n<episodedetails>\n</episodedetails>",
+    "cancelBefore": true
+  },
+  {
+    "name": "cancellation after the final winner save is observed before root completion--crlf",
+    "text": "<episodedetails>\r\n<episode>2</episode>\r\n</episodedetails>\r\n<episodedetails>\r\n<episode>1</episode>\r\n<watched>true</watched>\r\n</episodedetails>",
+    "existingId": true,
+    "cancelAfterSave": 1,
+    "asyncOnly": true
+  },
+  {
+    "name": "cancellation after the final winner save is observed before root completion--lf",
+    "text": "<episodedetails>\n<episode>2</episode>\n</episodedetails>\n<episodedetails>\n<episode>1</episode>\n<watched>true</watched>\n</episodedetails>",
+    "existingId": true,
+    "cancelAfterSave": 1,
+    "asyncOnly": true
+  },
+  {
+    "name": "cancellation after the final winner save is observed before root completion--bom-lf",
+    "text": "﻿<episodedetails>\n<episode>2</episode>\n</episodedetails>\n<episodedetails>\n<episode>1</episode>\n<watched>true</watched>\n</episodedetails>",
+    "existingId": true,
+    "cancelAfterSave": 1,
+    "asyncOnly": true
+  }
+]

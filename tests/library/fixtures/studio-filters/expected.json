@@ -1,0 +1,628 @@
+{
+  "schemaVersion": 1,
+  "discoveryEvidence": ".agent-docs/evidence/studio-filters-native-discovery-v1/native-contract.json",
+  "cases": [
+    {
+      "name": "studios-pipe-or",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "keys": [
+        "jazzBoth",
+        "rockBoth",
+        "rockJazzBoth",
+        "rockMapOnly"
+      ],
+      "orderedKeys": [
+        "rockBoth",
+        "jazzBoth",
+        "rockJazzBoth",
+        "rockMapOnly"
+      ],
+      "totalRecordCount": 4,
+      "startIndex": 0,
+      "problem": null
+    },
+    {
+      "name": "studios-clean-normalization",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "keys": [
+        "sciFiBoth"
+      ],
+      "orderedKeys": [
+        "sciFiBoth"
+      ],
+      "totalRecordCount": 1,
+      "startIndex": 0,
+      "problem": null
+    },
+    {
+      "name": "studios-comma-is-literal",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "keys": [
+        "compositeMapOnly"
+      ],
+      "orderedKeys": [
+        "compositeMapOnly"
+      ],
+      "totalRecordCount": 1,
+      "startIndex": 0,
+      "problem": null
+    },
+    {
+      "name": "studios-repeated-does-not-split",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "keys": [
+        "compositeMapOnly",
+        "jazzBoth",
+        "rockJazzBoth"
+      ],
+      "orderedKeys": [
+        "jazzBoth",
+        "rockJazzBoth",
+        "compositeMapOnly"
+      ],
+      "totalRecordCount": 3,
+      "startIndex": 0,
+      "problem": null
+    },
+    {
+      "name": "studios-single-double-pipe-removes-empty",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "keys": [
+        "jazzBoth",
+        "rockBoth",
+        "rockJazzBoth",
+        "rockMapOnly"
+      ],
+      "orderedKeys": [
+        "rockBoth",
+        "jazzBoth",
+        "rockJazzBoth",
+        "rockMapOnly"
+      ],
+      "totalRecordCount": 4,
+      "startIndex": 0,
+      "problem": null
+    },
+    {
+      "name": "studios-empty-omits-filter",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "keys": [
+        "compositeMapOnly",
+        "jazzBoth",
+        "rockBoth",
+        "rockColumnOnly",
+        "rockColumnStoredMap",
+        "rockJazzBoth",
+        "rockMapOnly",
+        "sciFiBoth"
+      ],
+      "orderedKeys": [
+        "rockBoth",
+        "jazzBoth",
+        "rockJazzBoth",
+        "sciFiBoth",
+        "rockColumnOnly",
+        "rockMapOnly",
+        "rockColumnStoredMap",
+        "compositeMapOnly"
+      ],
+      "totalRecordCount": 8,
+      "startIndex": 0,
+      "problem": null
+    },
+    {
+      "name": "studios-whitespace-is-active-empty",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "keys": [],
+      "orderedKeys": [],
+      "totalRecordCount": 0,
+      "startIndex": 0,
+      "problem": null
+    },
+    {
+      "name": "studios-repeated-empty-is-active",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "keys": [],
+      "orderedKeys": [],
+      "totalRecordCount": 0,
+      "startIndex": 0,
+      "problem": null
+    },
+    {
+      "name": "studio-ids-studio-selector",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "keys": [
+        "rockBoth",
+        "rockJazzBoth",
+        "rockMapOnly"
+      ],
+      "orderedKeys": [
+        "rockBoth",
+        "rockJazzBoth",
+        "rockMapOnly"
+      ],
+      "totalRecordCount": 3,
+      "startIndex": 0,
+      "problem": null
+    },
+    {
+      "name": "studio-ids-musicstudio-selector-api-key-routes",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "keys": [
+        "rockBoth",
+        "rockJazzBoth",
+        "rockMapOnly"
+      ],
+      "orderedKeys": [
+        "rockBoth",
+        "rockJazzBoth",
+        "rockMapOnly"
+      ],
+      "totalRecordCount": 3,
+      "startIndex": 0,
+      "problem": null
+    },
+    {
+      "name": "studio-ids-do-not-validate-selector-type",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "keys": [
+        "rockBoth",
+        "rockJazzBoth",
+        "rockMapOnly"
+      ],
+      "orderedKeys": [
+        "rockBoth",
+        "rockJazzBoth",
+        "rockMapOnly"
+      ],
+      "totalRecordCount": 3,
+      "startIndex": 0,
+      "problem": null
+    },
+    {
+      "name": "studio-ids-repository-uses-selector-clean-name",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "keys": [
+        "rockColumnStoredMap"
+      ],
+      "orderedKeys": [
+        "rockColumnStoredMap"
+      ],
+      "totalRecordCount": 1,
+      "startIndex": 0,
+      "problem": null
+    },
+    {
+      "name": "studio-ids-comma-or",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "keys": [
+        "jazzBoth",
+        "rockBoth",
+        "rockJazzBoth",
+        "rockMapOnly"
+      ],
+      "orderedKeys": [
+        "rockBoth",
+        "jazzBoth",
+        "rockJazzBoth",
+        "rockMapOnly"
+      ],
+      "totalRecordCount": 4,
+      "startIndex": 0,
+      "problem": null
+    },
+    {
+      "name": "studio-ids-invalid-only-omits-filter",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "keys": [
+        "compositeMapOnly",
+        "jazzBoth",
+        "rockBoth",
+        "rockColumnOnly",
+        "rockColumnStoredMap",
+        "rockJazzBoth",
+        "rockMapOnly",
+        "sciFiBoth"
+      ],
+      "orderedKeys": [
+        "rockBoth",
+        "jazzBoth",
+        "rockJazzBoth",
+        "sciFiBoth",
+        "rockColumnOnly",
+        "rockMapOnly",
+        "rockColumnStoredMap",
+        "compositeMapOnly"
+      ],
+      "totalRecordCount": 8,
+      "startIndex": 0,
+      "problem": null
+    },
+    {
+      "name": "studio-ids-invalid-plus-valid-keeps-valid",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "keys": [
+        "rockBoth",
+        "rockJazzBoth",
+        "rockMapOnly"
+      ],
+      "orderedKeys": [
+        "rockBoth",
+        "rockJazzBoth",
+        "rockMapOnly"
+      ],
+      "totalRecordCount": 3,
+      "startIndex": 0,
+      "problem": null
+    },
+    {
+      "name": "studio-ids-empty-omits-filter",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "keys": [
+        "compositeMapOnly",
+        "jazzBoth",
+        "rockBoth",
+        "rockColumnOnly",
+        "rockColumnStoredMap",
+        "rockJazzBoth",
+        "rockMapOnly",
+        "sciFiBoth"
+      ],
+      "orderedKeys": [
+        "rockBoth",
+        "jazzBoth",
+        "rockJazzBoth",
+        "sciFiBoth",
+        "rockColumnOnly",
+        "rockMapOnly",
+        "rockColumnStoredMap",
+        "compositeMapOnly"
+      ],
+      "totalRecordCount": 8,
+      "startIndex": 0,
+      "problem": null
+    },
+    {
+      "name": "studio-ids-empty-guid-repository",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "keys": [
+        "rockBoth",
+        "rockJazzBoth",
+        "rockMapOnly"
+      ],
+      "orderedKeys": [
+        "rockBoth",
+        "rockJazzBoth",
+        "rockMapOnly"
+      ],
+      "totalRecordCount": 3,
+      "startIndex": 0,
+      "problem": null
+    },
+    {
+      "name": "studio-ids-unknown-valid-repository",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "keys": [],
+      "orderedKeys": [],
+      "totalRecordCount": 0,
+      "startIndex": 0,
+      "problem": null
+    },
+    {
+      "name": "studio-ids-pipe-is-invalid",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "keys": [
+        "compositeMapOnly",
+        "jazzBoth",
+        "rockBoth",
+        "rockColumnOnly",
+        "rockColumnStoredMap",
+        "rockJazzBoth",
+        "rockMapOnly",
+        "sciFiBoth"
+      ],
+      "orderedKeys": [
+        "rockBoth",
+        "jazzBoth",
+        "rockJazzBoth",
+        "sciFiBoth",
+        "rockColumnOnly",
+        "rockMapOnly",
+        "rockColumnStoredMap",
+        "compositeMapOnly"
+      ],
+      "totalRecordCount": 8,
+      "startIndex": 0,
+      "problem": null
+    },
+    {
+      "name": "studio-ids-repeated-comma-occurrence-not-split",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "keys": [
+        "jazzBoth",
+        "rockJazzBoth"
+      ],
+      "orderedKeys": [
+        "jazzBoth",
+        "rockJazzBoth"
+      ],
+      "totalRecordCount": 2,
+      "startIndex": 0,
+      "problem": null
+    },
+    {
+      "name": "studio-ids-repeated-valid-occurrences-or",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "keys": [
+        "jazzBoth",
+        "rockBoth",
+        "rockJazzBoth",
+        "rockMapOnly"
+      ],
+      "orderedKeys": [
+        "rockBoth",
+        "jazzBoth",
+        "rockJazzBoth",
+        "rockMapOnly"
+      ],
+      "totalRecordCount": 4,
+      "startIndex": 0,
+      "problem": null
+    },
+    {
+      "name": "studios-and-studio-ids-repository",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "keys": [
+        "jazzBoth",
+        "rockJazzBoth"
+      ],
+      "orderedKeys": [
+        "jazzBoth",
+        "rockJazzBoth"
+      ],
+      "totalRecordCount": 2,
+      "startIndex": 0,
+      "problem": null
+    },
+    {
+      "name": "memory-studios-uses-baseitems-column-api-key-routes",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "keys": [
+        "rockBoth",
+        "rockColumnOnly",
+        "rockColumnStoredMap",
+        "rockEmptySegmentsColumnOnly",
+        "rockJazzBoth"
+      ],
+      "orderedKeys": [
+        "rockBoth",
+        "rockColumnOnly",
+        "rockColumnStoredMap",
+        "rockEmptySegmentsColumnOnly",
+        "rockJazzBoth"
+      ],
+      "totalRecordCount": 5,
+      "startIndex": 0,
+      "problem": null
+    },
+    {
+      "name": "memory-studios-does-not-clean",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "keys": [],
+      "orderedKeys": [],
+      "totalRecordCount": 0,
+      "startIndex": 0,
+      "problem": null
+    },
+    {
+      "name": "memory-studios-raw-punctuation",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "keys": [
+        "sciFiBoth"
+      ],
+      "orderedKeys": [
+        "sciFiBoth"
+      ],
+      "totalRecordCount": 1,
+      "startIndex": 0,
+      "problem": null
+    },
+    {
+      "name": "memory-studio-ids-uses-name-not-clean-name",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "keys": [
+        "rockBoth",
+        "rockColumnOnly",
+        "rockColumnStoredMap",
+        "rockEmptySegmentsColumnOnly",
+        "rockJazzBoth"
+      ],
+      "orderedKeys": [
+        "rockBoth",
+        "rockColumnOnly",
+        "rockColumnStoredMap",
+        "rockEmptySegmentsColumnOnly",
+        "rockJazzBoth"
+      ],
+      "totalRecordCount": 5,
+      "startIndex": 0,
+      "problem": null
+    },
+    {
+      "name": "memory-studio-ids-do-not-use-clean-name",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "keys": [],
+      "orderedKeys": [],
+      "totalRecordCount": 0,
+      "startIndex": 0,
+      "problem": null
+    },
+    {
+      "name": "memory-studio-ids-empty-guid-is-bad-request",
+      "status": 400,
+      "contentType": "text/plain",
+      "keys": [],
+      "orderedKeys": [],
+      "totalRecordCount": null,
+      "startIndex": null,
+      "problem": {
+        "rawBody": "Error processing request."
+      }
+    },
+    {
+      "name": "memory-studios-and-studio-ids",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "keys": [
+        "jazzBoth",
+        "rockJazzBoth"
+      ],
+      "orderedKeys": [
+        "jazzBoth",
+        "rockJazzBoth"
+      ],
+      "totalRecordCount": 2,
+      "startIndex": 0,
+      "problem": null
+    },
+    {
+      "name": "memory-studio-ids-unknown-valid",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "keys": [],
+      "orderedKeys": [],
+      "totalRecordCount": 0,
+      "startIndex": 0,
+      "problem": null
+    },
+    {
+      "name": "memory-studio-ids-empty-guid-empty-folder-short-circuits",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "keys": [],
+      "orderedKeys": [],
+      "totalRecordCount": 0,
+      "startIndex": 0,
+      "problem": null
+    },
+    {
+      "name": "memory-studios-precondition-short-circuits-empty-guid",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "keys": [],
+      "orderedKeys": [],
+      "totalRecordCount": 0,
+      "startIndex": 0,
+      "problem": null
+    },
+    {
+      "name": "memory-studios-whitespace-matches-empty-segment",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "keys": [
+        "rockEmptySegmentsColumnOnly"
+      ],
+      "orderedKeys": [
+        "rockEmptySegmentsColumnOnly"
+      ],
+      "totalRecordCount": 1,
+      "startIndex": 0,
+      "problem": null
+    },
+    {
+      "name": "memory-studios-repeated-empty-matches-empty-segment",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "keys": [
+        "rockEmptySegmentsColumnOnly"
+      ],
+      "orderedKeys": [
+        "rockEmptySegmentsColumnOnly"
+      ],
+      "totalRecordCount": 1,
+      "startIndex": 0,
+      "problem": null
+    }
+  ],
+  "mutations": {
+    "baseItemsAdded": [
+      {
+        "name": "",
+        "cleanName": "",
+        "pathSuffix": "Studio"
+      },
+      {
+        "name": "Jazz",
+        "cleanName": "jazz",
+        "pathSuffix": "Studio/Jazz"
+      },
+      {
+        "name": "Missing",
+        "cleanName": "missing",
+        "pathSuffix": "Studio/Missing"
+      },
+      {
+        "name": "Rock",
+        "cleanName": "rock",
+        "pathSuffix": "Studio/Rock"
+      },
+      {
+        "name": "Rock,Jazz",
+        "cleanName": "rock jazz",
+        "pathSuffix": "Studio/Rock,Jazz"
+      },
+      {
+        "name": "Rock|Jazz",
+        "cleanName": "rock jazz",
+        "pathSuffix": "Studio/Rock Jazz"
+      },
+      {
+        "name": "Sci Fi",
+        "cleanName": "sci fi",
+        "pathSuffix": "Studio/Sci Fi"
+      },
+      {
+        "name": "Sci-Fi",
+        "cleanName": "sci fi",
+        "pathSuffix": "Studio/Sci-Fi"
+      }
+    ],
+    "directoriesAdded": [
+      "Studio",
+      "Studio/Jazz",
+      "Studio/Missing",
+      "Studio/Rock",
+      "Studio/Rock Jazz",
+      "Studio/Rock,Jazz",
+      "Studio/Sci Fi",
+      "Studio/Sci-Fi"
+    ]
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-05T03:23:55.745Z",
+  "candidateVerified": false,
+  "files": {
+    "native": {
+      "path": "tests/metadata/fixtures/audiobook-item-update/native.json",
+      "sha256": "6c7d9df4e28dddb08cb79257577524f82d0f1881f16137b7f3de47f098d49f58"
+    },
+    "input": {
+      "path": "tests/metadata/fixtures/audiobook-item-update/input.json",
+      "sha256": "4c9c3e047adb4b5f147eda07d23eafaf1155c4b52b084434c7d0275122610098"
+    },
+    "oracle": {
+      "path": "tests/metadata/fixtures/audiobook-item-update/Program.cs",
+      "sha256": "35655e7566bfca9c3333720799af25e8c21d4523e46def003a6d0f9b450cf6a0"
+    },
+    "project": {
+      "path": "tests/metadata/fixtures/audiobook-item-update/Oracle.csproj",
+      "sha256": "3f2610631c594ffd08dcc82f03d3509abc1c9c9541f159519800df046fc770ee"
+    },
+    "buildProperties": {
+      "path": "tests/Directory.Build.props",
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    }
+  },
+  "sources": {
+    "Jellyfin.Api/Controllers/ItemUpdateController.cs": "fb91df3010c4f280c3276f00a910f880e1c765efd77ec23b6ca7c97596e136c5",
+    "MediaBrowser.Controller/Entities/AudioBook.cs": "1dc3ad019d579d60fac4b91d80040ebfa09dd266266057e6f4e0a656faec443c",
+    "MediaBrowser.Controller/Entities/Audio/Audio.cs": "fe19004e9d6d59d59fc1750952db7b95a29fd6d9de1398680deacae8dbd383ea",
+    "MediaBrowser.Controller/Entities/Book.cs": "b081cbb2b7fb794d6b3d348e10c547803f4c18a58c79153f3ca3a3f10f552a0b"
+  },
+  "sourceFilesSha256": "bb2caade8bd71cd930a420588e0aa5d817e3d74672081e52d3d2e783a2c7cdea",
+  "nativeRecordSha256": "e0085c44f51ee90d523c5f56d66c25386db23c5fba655d69c5644f2bab05b6c2",
+  "runtime": {
+    "timezone": "Asia/Taipei",
+    "dotnet": {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\dotnet.exe",
+      "available": true,
+      "kind": "file",
+      "bytes": 167208,
+      "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6"
+    },
+    "jellyfinDll": {
+      "filename": "D:/mediamanager/.test-output/reference-20261003/jellyfin-baseline/source/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 506368,
+      "sha256": "29c34541350089dc0522c4309ecd617e78fd402774681f32491d089803939c03"
+    }
+  }
+}

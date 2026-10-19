@@ -1,0 +1,181 @@
+[
+  {
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "files": [
+      "primary-trailer.mkv"
+    ],
+    "name": "new-trailer-first-save"
+  },
+  {
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "files": [
+      "primary-trailer.mkv"
+    ],
+    "name": "new-trailer-cancelled",
+    "cancelled": true,
+    "expectException": "OperationCanceledException"
+  },
+  {
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "files": [
+      "primary-trailer.mkv"
+    ],
+    "name": "new-trailer-insert-failure",
+    "newFailure": "insert"
+  },
+  {
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "files": [
+      "primary-trailer.mkv"
+    ],
+    "name": "new-trailer-update-trigger",
+    "failure": "save"
+  },
+  {
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "files": [
+      "primary-trailer.mkv"
+    ],
+    "name": "rename-existing-trailer",
+    "existingType": true,
+    "oldName": "Provider title"
+  },
+  {
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "files": [
+      "primary-trailer.mkv"
+    ],
+    "name": "existing-update-failure",
+    "existingType": true,
+    "oldName": "Provider title",
+    "failure": "save"
+  },
+  {
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "files": [
+      "primary-trailer.mkv"
+    ],
+    "name": "attached-full-trailer",
+    "existingType": true,
+    "oldName": "Trailer",
+    "attached": true,
+    "fullRefresh": true
+  },
+  {
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "files": [
+      "theme.mp3"
+    ],
+    "name": "new-audio-first-save"
+  },
+  {
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "files": [
+      "extras/some.mkv",
+      "extras/other.mkv"
+    ],
+    "name": "new-videos-first-save"
+  },
+  {
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "files": [
+      "primary-trailer.mkv"
+    ],
+    "name": "new-trailer-saver-file",
+    "saverFile": true
+  },
+  {
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "files": [
+      "primary-trailer.mkv"
+    ],
+    "name": "saver-file-before-insert-failure",
+    "saverFile": true,
+    "newFailure": "insert"
+  },
+  {
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "files": [
+      "primary-trailer.mkv"
+    ],
+    "name": "saver-cancellation-before-insert",
+    "saverFile": true,
+    "cancelDuringSaver": true,
+    "expectException": "OperationCanceledException"
+  },
+  {
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "files": [
+      "primary-trailer.mkv"
+    ],
+    "name": "existing-saver-cancellation",
+    "existingType": true,
+    "oldName": "Provider title",
+    "saverFile": true,
+    "cancelDuringSaver": true,
+    "expectException": "OperationCanceledException"
+  },
+  {
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "files": [
+      "extras/some.mkv",
+      "extras/other.mkv"
+    ],
+    "name": "first-extra-insert-fails-second-commits",
+    "newFailure": "first-insert"
+  },
+  {
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "files": [
+      "extras/some.mkv",
+      "extras/other.mkv"
+    ],
+    "name": "second-extra-insert-fails-first-retained",
+    "newFailure": "second-insert"
+  }
+]

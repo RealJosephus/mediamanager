@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "runtime": "10.0.12",
+  "timezone": "Taipei Standard Time",
+  "caseCount": 1,
+  "cases": [
+    {
+      "Id": "enum-null-videotype",
+      "Kind": "enum",
+      "ValueJson": "null",
+      "Json": "{\u0022Value\u0022:null}",
+      "Success": false,
+      "Value": null,
+      "Reserialized": null,
+      "Error": {
+        "type": "System.Text.Json.JsonException",
+        "Message": "The JSON value could not be converted to MediaBrowser.Model.Entities.VideoType. Path: $.Value | LineNumber: 0 | BytePositionInLine: 13.",
+        "inner": null
+      }
+    }
+  ]
+}

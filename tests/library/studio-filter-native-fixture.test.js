@@ -1,0 +1,640 @@
+import { nativeByNameFilterBinding, verifyNativeByNameFilterRecording, resolveNativeByNameFilterInput } from './native-byname-filter-inputs.js';
+import { validationFileUrl } from '../../tools/validation/paths.js';
+import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
+import { lstat, mkdtemp, readFile, readdir, realpath, rm, symlink, writeFile } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
+import test from 'node:test';
+import { fileURLToPath } from 'node:url';
+
+const recordingBinding = await verifyNativeByNameFilterRecording('studio');
+
+const evidence = '.agent-docs/evidence/byname-filter-inputs/studio-filter-restoration-v1/';
+const inputPath = 'tests/library/fixtures/studio-filters/input.json';
+const expectedPath = 'tests/library/fixtures/studio-filters/expected.json';
+const nativePath = 'tests/library/fixtures/studio-filters/native.json';
+const projectorPath = 'tools/compat/project-studio-filter-fixture.js';
+const integrityTestPath = 'tests/library/studio-filter-native-fixture.test.js';
+const projectionPath = 'tests/library/fixtures/studio-filters/projection.json';
+const contractPath = `${evidence}native-contract.json`;
+const projectionSpec = Object.freeze({
+  id: 'studio-filter-native-v1-contract-projection',
+  version: 1,
+  topLevel: 'Drop only kind and mode; add frozenJellyfin, the exact source path, and its SHA-256; preserve schemaVersion, fixtureInputSha256, endpoints, setup, and cases.',
+  cases: 'Preserve every case, response item, JSON field, and array order verbatim. The authoritative contract excludes all runtime-native ids.',
+  authority: 'The v1 projection is created only from the pinned main native contract and has no predecessor fixture.',
+});
+const root = validationFileUrl('../../', import.meta.url);
+const evidenceRootUrl = validationFileUrl('../../.agent-docs/evidence/byname-filter-inputs/studio-filter-restoration-v1/', import.meta.url);
+const evidenceRoot = fileURLToPath(evidenceRootUrl);
+const currentNativeRoot = path.dirname(nativeByNameFilterBinding.reference.sourceDatabase.filename);
+const currentSourceDatabase = nativeByNameFilterBinding.reference.sourceDatabase.filename;
+const currentRuntimeRoot = nativeByNameFilterBinding.runtimeDirectory.filename;
+const sourceConfigEntriesSha256 = recordingBinding.configuration.sourceEntriesSha256;
+const preparedConfigEntriesSha256 = recordingBinding.configuration.preparedEntriesSha256;
+const finalConfigEntriesSha256 = recordingBinding.configuration.finalEntriesSha256;
+const finalEncodingEntry = Object.freeze(recordingBinding.configuration.finalEncodingEntry);
+const expectedArtifacts = recordingBinding.artifacts;
+const bytes = relative => readFile(validationFileUrl(relative, root));
+const load = async relative => JSON.parse(await bytes(relative));
+const hash = value => createHash('sha256').update(value).digest('hex');
+const idKey = value => String(value).replaceAll('-', '').toLowerCase();
+const responseFields = ['status', 'contentType', 'startIndex', 'totalRecordCount', 'keys', 'orderedKeys', 'items', 'problem'];
+const stableResponse = source => Object.fromEntries(responseFields.map(key => [key, source[key]]));
+
+function assertRuntimeEvidence(summary, nativeHttp, provenance) {
+  const process = summary.process;
+  const { preferredPort, selectedPort } = process;
+  assert.equal(Number.isInteger(preferredPort) && preferredPort >= 1024 && preferredPort <= 65535, true);
+  assert.equal(Number.isInteger(selectedPort) && selectedPort >= 1024 && selectedPort <= 65535, true);
+  assert.equal(typeof process.preferredPortInitiallyAvailable, 'boolean');
+  if (process.preferredPortInitiallyAvailable) {
+    assert.equal(selectedPort, preferredPort);
+  } else {
+    assert.equal(selectedPort > preferredPort, true);
+    assert.equal(selectedPort <= Math.min(65535, preferredPort + 101), true);
+  }
+  assert.equal(process.portInitiallyAvailable, true);
+  assert.equal(process.portFinallyAvailable, true);
+
+  const origin = `http://127.0.0.1:${selectedPort}`;
+  assert.equal(summary.mode, 'main');
+  assert.equal(summary.origin, origin);
+  assert.equal(nativeHttp.mode, summary.mode);
+  assert.equal(nativeHttp.origin, origin);
+  assert.deepEqual(provenance.result.process, process);
+
+  for (const key of ['preferredPort', 'preferredPortInitiallyAvailable', 'selectedPort',
+    'portInitiallyAvailable', 'portFinallyAvailable']) {
+    assert.equal(provenance.isolation[key], process[key], key);
+  }
+  assert.equal(provenance.isolation.loopbackOnly, true);
+  assert.equal(provenance.isolation.autoDiscovery, false);
+  assert.equal(provenance.isolation.frozenInputsWereNotRunInPlace, true);
+
+  const invocation = provenance.recorderInvocation;
+  assert.equal(invocation.length, 5);
+  assert.match(invocation[0].replaceAll('\\', '/'), /(?:^|\/)node(?:\.exe)?$/iu);
+  assert.equal(invocation[1], 'tools/compat/record-studio-filters.js');
+  assert.equal(invocation[2].replaceAll('\\', '/'), recordingBinding.recorderInvocation[2].replaceAll('\\', '/'));
+  assert.equal(invocation[3], String(preferredPort));
+  assert.equal(invocation[4], summary.mode);
+  assert.equal(provenance.recorder.path, invocation[1]);
+  assert.equal(provenance.isolation.clonedInstance.replaceAll('\\', '/'), `${invocation[2].replaceAll('\\', '/')}/reference`);
+}
+
+function isWithin(root, filename) {
+  const relative = path.relative(root, filename);
+  return relative !== '' && relative !== '..' && !relative.startsWith('..' + path.sep) && !path.isAbsolute(relative);
+}
+
+function isSameOrWithin(root, filename) {
+  return path.resolve(root) === path.resolve(filename) || isWithin(root, filename);
+}
+
+async function resolveContainedRegularFile(root, relative) {
+  assert.equal(typeof relative, 'string');
+  const absoluteRoot = path.resolve(root);
+  const filename = path.resolve(absoluteRoot, relative);
+  assert.ok(isWithin(absoluteRoot, filename), `File escapes its logical root: ${relative}`);
+  const [resolvedRoot, resolvedFile, metadata] = await Promise.all([
+    realpath(absoluteRoot), realpath(filename), lstat(filename),
+  ]);
+  assert.equal(metadata.isSymbolicLink(), false, `File cannot be a link: ${relative}`);
+  assert.equal(metadata.isFile(), true, `Expected a regular file: ${relative}`);
+  assert.ok(isWithin(resolvedRoot, resolvedFile), `File escapes its real root: ${relative}`);
+  return { filename, metadata };
+}
+
+async function resolveContainedDirectory(root, relative) {
+  const absoluteRoot = path.resolve(root);
+  const filename = path.resolve(absoluteRoot, relative);
+  assert.ok(isSameOrWithin(absoluteRoot, filename), `Directory escapes its logical root: ${relative}`);
+  const [resolvedRoot, resolvedDirectory, metadata] = await Promise.all([
+    realpath(absoluteRoot), realpath(filename), lstat(filename),
+  ]);
+  assert.equal(metadata.isSymbolicLink(), false, `Directory cannot be a link: ${relative}`);
+  assert.equal(metadata.isDirectory(), true, `Expected a directory: ${relative}`);
+  assert.ok(isSameOrWithin(resolvedRoot, resolvedDirectory), `Directory escapes its real root: ${relative}`);
+  return filename;
+}
+
+async function listRegularFiles(root, relative = '') {
+  const directory = await resolveContainedDirectory(root, relative);
+  const files = [];
+  for (const entry of (await readdir(directory, { withFileTypes: true }))
+    .sort((left, right) => left.name.localeCompare(right.name))) {
+    const child = path.join(relative, entry.name);
+    const metadata = await lstat(path.join(root, child));
+    assert.equal(metadata.isSymbolicLink(), false, `Directory tree cannot contain links: ${child}`);
+    if (metadata.isDirectory()) files.push(...await listRegularFiles(root, child));
+    else {
+      assert.equal(metadata.isFile(), true, `Directory tree entries must be regular files: ${child}`);
+      files.push(child.replaceAll('\\', '/'));
+    }
+  }
+  return files.sort((left, right) => left.localeCompare(right));
+}
+
+const bindArtifactSizes = artifacts => artifacts.map((entry, index) => ({
+  ...entry,
+  size: expectedArtifacts[index]?.size,
+}));
+
+async function verifyArtifactManifest(candidate) {
+  assert.deepEqual(candidate, expectedArtifacts,
+    'Studio evidence artifacts must be the exact canonical path/size/SHA list in recording order.');
+  for (const artifact of candidate) {
+    const { filename, metadata } = await resolveContainedRegularFile(evidenceRoot, artifact.path);
+    const content = await readFile(filename);
+    assert.equal(metadata.size, artifact.size, `${artifact.path}: stat size`);
+    assert.equal(content.length, artifact.size, `${artifact.path}: byte size`);
+    assert.equal(hash(content), artifact.sha256, `${artifact.path}: sha256`);
+  }
+}
+
+function sealRuntimeManifest(candidate) {
+  candidate.fileCount = candidate.entries.length;
+  candidate.dllCount = candidate.entries.filter(entry => entry.path.toLowerCase().endsWith('.dll')).length;
+  candidate.depsJsonCount = candidate.entries.filter(entry => entry.path.toLowerCase().endsWith('.deps.json')).length;
+  candidate.runtimeConfigCount = candidate.entries
+    .filter(entry => entry.path.toLowerCase().endsWith('.runtimeconfig.json')).length;
+  candidate.entriesSha256 = hash(JSON.stringify(candidate.entries));
+  return candidate;
+}
+
+async function verifyRuntimeManifest(candidate, binding) {
+  assert.equal(candidate.root,
+    recordingBinding.runtimeManifestRoot);
+  assert.ok(Array.isArray(candidate.entries) && candidate.entries.length > 0, 'Runtime manifest cannot be empty.');
+  assert.equal(candidate.fileCount, candidate.entries.length);
+  assert.equal(candidate.entriesSha256, hash(JSON.stringify(candidate.entries)));
+  assert.deepEqual({
+    root: binding.root,
+    fileCount: binding.fileCount,
+    dllCount: binding.dllCount,
+    depsJsonCount: binding.depsJsonCount,
+    runtimeConfigCount: binding.runtimeConfigCount,
+    entriesSha256: binding.entriesSha256,
+  }, {
+    root: candidate.root,
+    fileCount: candidate.fileCount,
+    dllCount: candidate.dllCount,
+    depsJsonCount: candidate.depsJsonCount,
+    runtimeConfigCount: candidate.runtimeConfigCount,
+    entriesSha256: candidate.entriesSha256,
+  });
+  const paths = candidate.entries.map(entry => entry.path);
+  assert.equal(new Set(paths).size, paths.length, 'Runtime manifest paths must be unique.');
+  assert.deepEqual(paths, [...paths].sort((left, right) => left.localeCompare(right)),
+    'Runtime manifest must remain in canonical order.');
+  assert.deepEqual(await listRegularFiles(currentRuntimeRoot), paths,
+    'Runtime manifest must be the exact current logical runtime file set.');
+  for (const entry of candidate.entries) {
+    assert.deepEqual(Object.keys(entry).sort(), ['path', 'sha256', 'size']);
+    assert.equal(Number.isSafeInteger(entry.size) && entry.size >= 0, true, `${entry.path}: size`);
+    assert.match(entry.sha256, /^[0-9a-f]{64}$/u, `${entry.path}: sha256`);
+    const { filename, metadata } = await resolveContainedRegularFile(currentRuntimeRoot, entry.path);
+    const content = await readFile(filename);
+    assert.equal(metadata.size, entry.size, `${entry.path}: stat size`);
+    assert.equal(content.length, entry.size, `${entry.path}: byte size`);
+    assert.equal(hash(content), entry.sha256, `${entry.path}: sha256`);
+  }
+}
+
+function resolveBoundInput(filename) {
+  return resolveNativeByNameFilterInput('studio', null, filename);
+}
+
+function verifyDirectoryManifestShape(candidate, expectedEntriesSha256) {
+  assert.deepEqual(Object.keys(candidate).sort(), ['entries', 'entriesSha256', 'exists']);
+  assert.equal(candidate.exists, true);
+  assert.ok(Array.isArray(candidate.entries) && candidate.entries.length > 0);
+  assert.equal(candidate.entriesSha256, hash(JSON.stringify(candidate.entries)));
+  assert.equal(candidate.entriesSha256, expectedEntriesSha256);
+  const paths = candidate.entries.map(entry => entry.path);
+  assert.equal(new Set(paths).size, paths.length);
+  assert.deepEqual(paths, [...paths].sort((left, right) => left.localeCompare(right)));
+  for (const entry of candidate.entries) {
+    assert.deepEqual(Object.keys(entry).sort(), ['path', 'sha256', 'size', 'type']);
+    assert.equal(entry.type, 'file');
+    assert.equal(Number.isSafeInteger(entry.size) && entry.size >= 0, true, `${entry.path}: size`);
+    assert.match(entry.sha256, /^[0-9a-f]{64}$/u, `${entry.path}: sha256`);
+  }
+  return paths;
+}
+
+async function verifyDirectoryManifest(candidate, directory, expectedEntriesSha256) {
+  const paths = verifyDirectoryManifestShape(candidate, expectedEntriesSha256);
+  assert.deepEqual(await listRegularFiles(directory), paths);
+  for (const entry of candidate.entries) {
+    const { filename, metadata } = await resolveContainedRegularFile(directory, entry.path);
+    const content = await readFile(filename);
+    assert.equal(metadata.size, entry.size, `${entry.path}: size`);
+    assert.equal(content.length, entry.size, `${entry.path}: byte size`);
+    assert.equal(hash(content), entry.sha256, `${entry.path}: sha256`);
+  }
+}
+
+function changedConfigPaths(before, after) {
+  assert.deepEqual(after.entries.map(entry => entry.path), before.entries.map(entry => entry.path));
+  return before.entries.flatMap((entry, index) => (
+    JSON.stringify(entry) === JSON.stringify(after.entries[index]) ? [] : [entry.path]
+  ));
+}
+
+function assertConfigTransition(before, after, allowedChanges, message) {
+  assert.deepEqual(changedConfigPaths(before, after), allowedChanges, message);
+}
+
+function finalConfigManifest(preparedConfig, encodingEntry = finalEncodingEntry) {
+  const entries = preparedConfig.entries.map(entry => (
+    entry.path === 'encoding.xml' ? { ...encodingEntry } : { ...entry }
+  ));
+  return { exists: true, entries, entriesSha256: hash(JSON.stringify(entries)) };
+}
+
+async function verifyConfigLifecycle(sourceConfig, preparedConfig) {
+  const sourceRoot = path.join(currentNativeRoot, 'config');
+  const finalRoot = path.join(evidenceRoot, 'reference/config');
+  const sourcePaths = verifyDirectoryManifestShape(sourceConfig, sourceConfigEntriesSha256);
+  const preparedPaths = verifyDirectoryManifestShape(preparedConfig, preparedConfigEntriesSha256);
+  assert.deepEqual(preparedPaths, sourcePaths);
+  assertConfigTransition(sourceConfig, preparedConfig, ['network.xml'],
+    'Preparing the clone must rewrite only network.xml.');
+  await verifyDirectoryManifest(sourceConfig, sourceRoot, sourceConfigEntriesSha256);
+
+  const finalConfig = finalConfigManifest(preparedConfig);
+  assert.equal(finalConfig.entriesSha256, finalConfigEntriesSha256);
+  assertConfigTransition(preparedConfig, finalConfig, ['encoding.xml'],
+    'Starting Jellyfin must rewrite only encoding.xml.');
+  await verifyDirectoryManifest(finalConfig, finalRoot, finalConfigEntriesSha256);
+
+  for (const preparedEntry of preparedConfig.entries) {
+    const preparedRoot = preparedEntry.path === 'network.xml' ? finalRoot : sourceRoot;
+    const { filename: preparedFilename, metadata } = await resolveContainedRegularFile(preparedRoot,
+      preparedEntry.path);
+    const preparedBytes = await readFile(preparedFilename);
+    assert.equal(metadata.size, preparedEntry.size, `${preparedEntry.path}: prepared size`);
+    assert.equal(preparedBytes.length, preparedEntry.size, `${preparedEntry.path}: prepared byte size`);
+    assert.equal(hash(preparedBytes), preparedEntry.sha256, `${preparedEntry.path}: prepared sha256`);
+
+    const { filename: finalFilename } = await resolveContainedRegularFile(finalRoot, preparedEntry.path);
+    const finalBytes = await readFile(finalFilename);
+    if (preparedEntry.path === 'encoding.xml') {
+      assert.notDeepEqual(finalBytes, preparedBytes, 'encoding.xml must contain the recorded lifecycle rewrite.');
+    } else {
+      assert.deepEqual(finalBytes, preparedBytes,
+        `${preparedEntry.path} must remain byte-for-byte identical after startup.`);
+    }
+  }
+  return finalConfig;
+}
+
+async function verifyBoundInputs(provenance, manifest) {
+  assert.equal(provenance.nativeSources.length, 23);
+  assert.equal(provenance.preparedInputs.length, 39);
+  const [sourceConfig, preparedConfig] = await Promise.all([
+    readFile(path.join(evidenceRoot, 'source-config-manifest.json'), 'utf8').then(JSON.parse),
+    readFile(path.join(evidenceRoot, 'prepared-config-manifest.json'), 'utf8').then(JSON.parse),
+  ]);
+  await verifyConfigLifecycle(sourceConfig, preparedConfig);
+  for (const entry of provenance.nativeSources) {
+    const mapped = resolveBoundInput(entry.path);
+    const { filename } = await resolveContainedRegularFile(mapped.root, mapped.relative);
+    assert.equal(hash(await readFile(filename)), entry.sha256, entry.path);
+  }
+  for (const entry of provenance.preparedInputs) {
+    if (entry.kind === 'frozenReleaseRuntimeTree') {
+      const mapped = resolveBoundInput(entry.path);
+      assert.equal(await realpath(path.join(mapped.root, mapped.relative)), await realpath(currentRuntimeRoot));
+      assert.equal(entry.fileCount, manifest.fileCount);
+      assert.equal(entry.entriesSha256, manifest.entriesSha256);
+    } else {
+      assert.match(entry.sha256, /^[0-9a-f]{64}$/u, entry.path);
+      const mapped = resolveBoundInput(entry.path);
+      const { filename } = await resolveContainedRegularFile(mapped.root, mapped.relative);
+      assert.equal(hash(await readFile(filename)), entry.sha256, entry.path);
+    }
+  }
+}
+
+test('studio fixture is an exact hash-bound projection of the independent frozen main recording', async () => {
+  const [inputBytes, expectedBytes, nativeBytes, contractBytes, binding, provenance] = await Promise.all([
+    bytes(inputPath), bytes(expectedPath), bytes(nativePath), bytes(contractPath), load(projectionPath), load(`${evidence}provenance.json`),
+  ]);
+  const input = JSON.parse(inputBytes), expected = JSON.parse(expectedBytes);
+  const native = JSON.parse(nativeBytes), contract = JSON.parse(contractBytes);
+  assert.equal(contract.kind, 'studio-filters-native-contract');
+  assert.equal(contract.mode, 'main');
+  assert.equal(contract.fixtureInputSha256, hash(inputBytes));
+  assert.deepEqual(native, {
+    schemaVersion: contract.schemaVersion,
+    frozenJellyfin: true,
+    sourceEvidence: contractPath,
+    sourceEvidenceSha256: hash(contractBytes),
+    fixtureInputSha256: contract.fixtureInputSha256,
+    endpoints: contract.endpoints,
+    setup: contract.setup,
+    cases: contract.cases,
+  });
+  assert.equal(input.items.length, 21);
+  assert.equal(input.cases.length, 34);
+  assert.equal(native.cases.length, input.cases.length);
+  assert.deepEqual(native.cases.map(entry => entry.name), input.cases.map(entry => entry.name));
+  assert.deepEqual(expected.cases.map(entry => entry.name), input.cases.map(entry => entry.name));
+  for (const [index, entry] of native.cases.entries()) {
+    for (const field of responseFields.filter(name => name !== 'items')) {
+      assert.deepEqual(entry[field], expected.cases[index][field], `${entry.name}:${field}`);
+    }
+    assert.equal(entry.query, input.cases[index].query, entry.name);
+    assert.deepEqual(entry.scope, input.cases[index].scope, entry.name);
+    assert.equal(entry.status, input.cases[index].expectedStatus ?? 200, entry.name);
+    assert.deepEqual(entry.keys, [...entry.orderedKeys].sort(), entry.name);
+    assert.deepEqual(entry.orderedKeys, entry.items.map(item => item.key), entry.name);
+  }
+  assert.deepEqual(binding.projectionLogic.spec, projectionSpec);
+  assert.equal(binding.projectionLogic.sha256, hash(JSON.stringify(projectionSpec)));
+  for (const [field, relative, content] of [
+    ['authoritativeContract', contractPath, contractBytes],
+    ['fixtureInput', inputPath, inputBytes],
+    ['trackedFixture', nativePath, nativeBytes],
+    ['integrityTest', integrityTestPath, await bytes(integrityTestPath)],
+    ['projector', projectorPath, await bytes(projectorPath)],
+  ]) assert.deepEqual(binding[field], { path: relative, sha256: hash(content) });
+  const prepared = new Map(provenance.preparedInputs.map(entry => [entry.kind, entry]));
+  assert.equal(prepared.get('fixtureInput').sha256, hash(inputBytes));
+  assert.equal(prepared.get('pinnedExpectations').sha256, hash(expectedBytes));
+  assert.equal(prepared.get('recorderSource').sha256, hash(await bytes('tools/compat/record-studio-filters.js')));
+});
+
+test('studio native recording proves exact GET mutations and clean process lifecycle', async () => {
+  const [input, expected, summary, stages, filesystem, setup, nativeHttp, provenance, manifest] = await Promise.all([
+    load(inputPath), load(expectedPath), load(`${evidence}summary.json`), load(`${evidence}database-stages.json`),
+    load(`${evidence}filesystem-stages.json`), load(`${evidence}native-setup.json`),
+    load(`${evidence}native-http.json`), load(`${evidence}provenance.json`), load(`${evidence}reference-runtime-manifest.json`),
+  ]);
+  const endpointCases = input.cases.reduce((sum, entry) => sum + (entry.endpoints ?? ['items', 'legacy']).length, 0);
+  assert.equal(summary.passed, true);
+  assert.equal(summary.mode, 'main');
+  assert.equal(summary.fixtureItems, input.items.length);
+  assert.equal(summary.fixtureCases, input.cases.length);
+  assert.equal(summary.contractsRecorded, input.cases.length);
+  assert.equal(summary.endpointCases, endpointCases);
+  assert.equal(summary.httpRecords, endpointCases + 2);
+  assert.equal(summary.databaseUnchangedByReads, false);
+  assert.equal(summary.filesystemUnchangedByReads, false);
+  assert.equal(summary.databaseUnchangedAfterShutdown, true);
+  assert.equal(summary.filesystemUnchangedAfterShutdown, true);
+  assert.equal(summary.mutationMatches, true);
+  assert.equal(summary.foreignKeyCheckPassedAllStages, true);
+  assert.equal(summary.processClean, true);
+  assertRuntimeEvidence(summary, nativeHttp, provenance);
+  assert.equal(summary.process.portFinallyAvailable, true);
+  assert.equal(summary.error, null);
+  for (const stage of Object.values(summary.process.stages)) {
+    assert.equal(stage.code, 0);
+    assert.equal(stage.cleanShutdown, true);
+    assert.equal(stage.pidGone, true);
+    assert.equal(stage.portAvailable, true);
+    assert.equal(stage.error, null);
+  }
+  for (const name of ['beforeProvision', 'afterProvision', 'afterSeed', 'beforeReads', 'afterReads', 'finalAfterShutdown']) {
+    assert.deepEqual(stages[name].foreignKeyCheck, [], name);
+  }
+  assert.deepEqual(stages.finalAfterShutdown, stages.afterReads);
+  assert.deepEqual(filesystem.finalAfterShutdown, filesystem.afterReads);
+  const before = stages.beforeReads.tables, after = stages.afterReads.tables;
+  const originalIds = new Set(before.BaseItems.map(item => idKey(item.Id)));
+  const addedRows = after.BaseItems.filter(item => !originalIds.has(idKey(item.Id)));
+  assert.equal(after.BaseItems.length, before.BaseItems.length + expected.mutations.baseItemsAdded.length);
+  assert.deepEqual(addedRows.map(item => ({
+    name: item.Name,
+    cleanName: item.CleanName,
+    pathSuffix: item.Path.replaceAll('\\', '/').split('/').slice(1).join('/'),
+  })).sort((a, b) => a.name.localeCompare(b.name, 'en')),
+  [...expected.mutations.baseItemsAdded].sort((a, b) => a.name.localeCompare(b.name, 'en')));
+  assert.ok(addedRows.every(item => item.Type === 'MediaBrowser.Controller.Entities.Studio'));
+  for (const table of Object.keys(before).filter(name => name !== 'BaseItems')) {
+    assert.deepEqual(after[table], before[table], table);
+  }
+  for (const domain of Object.keys(filesystem.beforeReads)) {
+    const initial = filesystem.beforeReads[domain].entries;
+    const final = filesystem.afterReads[domain].entries;
+    const initialPaths = new Set(initial.map(entry => entry.path));
+    assert.deepEqual(final.filter(entry => initialPaths.has(entry.path)), initial, domain);
+    assert.deepEqual(final.filter(entry => !initialPaths.has(entry.path)).map(entry => entry.path).sort(),
+      domain === 'metadata' ? [...expected.mutations.directoriesAdded].sort() : [], domain);
+  }
+  assert.deepEqual(setup.graph.invariants, {
+    collectionFolderWasCreatedByApi: true,
+    collectionParentIsUserRoot: true,
+    collectionHasExactlyOnePhysicalFolderId: true,
+    physicalParentIsAggregate: true,
+    physicalPathMatchesRequestedLocation: true,
+  });
+  assert.equal(manifest.entriesSha256, hash(JSON.stringify(manifest.entries)));
+  assert.ok(manifest.fileCount >= 153);
+  assert.equal(provenance.referenceRuntime.entriesSha256, manifest.entriesSha256);
+  await verifyRuntimeManifest(manifest, provenance.referenceRuntime);
+  await verifyBoundInputs(provenance, manifest);
+  await verifyArtifactManifest(bindArtifactSizes(provenance.artifacts));
+  assert.equal(provenance.result.passed, true);
+  assert.equal(provenance.result.mutationMatches, true);
+});
+
+test('studio runtime evidence rejects disconnected port, origin, result, and invocation facts', async () => {
+  const [summary, nativeHttp, provenance] = await Promise.all([
+    load(`${evidence}summary.json`), load(`${evidence}native-http.json`), load(`${evidence}provenance.json`),
+  ]);
+  const fallback = structuredClone({ summary, nativeHttp, provenance });
+  const fallbackPort = fallback.summary.process.preferredPort + 1;
+  for (const process of [fallback.summary.process, fallback.provenance.result.process]) {
+    process.preferredPortInitiallyAvailable = false;
+    process.selectedPort = fallbackPort;
+  }
+  fallback.provenance.isolation.preferredPortInitiallyAvailable = false;
+  fallback.provenance.isolation.selectedPort = fallbackPort;
+  fallback.summary.origin = `http://127.0.0.1:${fallbackPort}`;
+  fallback.nativeHttp.origin = fallback.summary.origin;
+  assert.doesNotThrow(() => assertRuntimeEvidence(fallback.summary, fallback.nativeHttp, fallback.provenance));
+
+  const cases = [
+    ['summary selected port', value => { value.summary.process.selectedPort += 1; }],
+    ['native HTTP origin', value => { value.nativeHttp.origin = 'http://127.0.0.1:1'; }],
+    ['provenance isolation port', value => { value.provenance.isolation.selectedPort += 1; }],
+    ['provenance result process', value => { value.provenance.result.process.selectedPort += 1; }],
+    ['recorder invocation port', value => { value.provenance.recorderInvocation[3] = '65535'; }],
+  ];
+  for (const [name, tamper] of cases) {
+    const value = structuredClone({ summary, nativeHttp, provenance });
+    tamper(value);
+    assert.throws(() => assertRuntimeEvidence(value.summary, value.nativeHttp, value.provenance), {
+      code: 'ERR_ASSERTION',
+    }, name);
+  }
+
+  const invalidFallback = structuredClone(fallback);
+  invalidFallback.summary.process.selectedPort = invalidFallback.summary.process.preferredPort;
+  invalidFallback.provenance.result.process.selectedPort = invalidFallback.summary.process.selectedPort;
+  invalidFallback.provenance.isolation.selectedPort = invalidFallback.summary.process.selectedPort;
+  invalidFallback.summary.origin = `http://127.0.0.1:${invalidFallback.summary.process.selectedPort}`;
+  invalidFallback.nativeHttp.origin = invalidFallback.summary.origin;
+  assert.throws(() => assertRuntimeEvidence(invalidFallback.summary, invalidFallback.nativeHttp,
+    invalidFallback.provenance), { code: 'ERR_ASSERTION' });
+});
+
+test('studio evidence manifests reject omission, insertion, reorder, tampering, and linked-root escape', async () => {
+  const [provenance, manifest] = await Promise.all([
+    load(`${evidence}provenance.json`), load(`${evidence}reference-runtime-manifest.json`),
+  ]);
+  const artifactCases = [
+    value => value.splice(0),
+    value => value.pop(),
+    value => value.push({ ...value[0], path: 'extra.json' }),
+    value => value.reverse(),
+    value => { value[0].sha256 = '0'.repeat(64); },
+    value => { value[0].size += 1; },
+  ];
+  for (const tamper of artifactCases) {
+    const candidate = structuredClone(bindArtifactSizes(provenance.artifacts));
+    tamper(candidate);
+    await assert.rejects(() => verifyArtifactManifest(candidate), assert.AssertionError);
+  }
+
+  const runtimeCases = [
+    value => value.entries.splice(0),
+    value => value.entries.pop(),
+    value => value.entries.push({ ...value.entries[0], path: 'unexpected-runtime-file' }),
+    value => value.entries.reverse(),
+    value => { value.entries[0].sha256 = '0'.repeat(64); },
+    value => { value.entries[0].size += 1; },
+  ];
+  for (const tamper of runtimeCases) {
+    const candidate = structuredClone(manifest);
+    tamper(candidate);
+    sealRuntimeManifest(candidate);
+    const binding = {
+      ...provenance.referenceRuntime,
+      fileCount: candidate.fileCount,
+      dllCount: candidate.dllCount,
+      depsJsonCount: candidate.depsJsonCount,
+      runtimeConfigCount: candidate.runtimeConfigCount,
+      entriesSha256: candidate.entriesSha256,
+    };
+    await assert.rejects(() => verifyRuntimeManifest(candidate, binding), assert.AssertionError);
+  }
+
+  const [sourceConfig, preparedConfig] = await Promise.all([
+    readFile(path.join(evidenceRoot, 'source-config-manifest.json'), 'utf8').then(JSON.parse),
+    readFile(path.join(evidenceRoot, 'prepared-config-manifest.json'), 'utf8').then(JSON.parse),
+  ]);
+  const configManifestCases = [
+    value => value.entries.splice(0),
+    value => value.entries.pop(),
+    value => value.entries.push({ ...value.entries[0], path: 'unexpected.xml' }),
+    value => value.entries.reverse(),
+    value => { value.entries[0].sha256 = '0'.repeat(64); },
+    value => { value.entries[0].size += 1; },
+  ];
+  for (const tamper of configManifestCases) {
+    const candidate = structuredClone(preparedConfig);
+    tamper(candidate);
+    candidate.entriesSha256 = hash(JSON.stringify(candidate.entries));
+    await assert.rejects(() => verifyConfigLifecycle(sourceConfig, candidate), assert.AssertionError);
+  }
+
+  const unexpectedSecondRewrite = finalConfigManifest(preparedConfig);
+  unexpectedSecondRewrite.entries.find(entry => entry.path === 'database.xml').sha256 = '0'.repeat(64);
+  unexpectedSecondRewrite.entriesSha256 = hash(JSON.stringify(unexpectedSecondRewrite.entries));
+  assert.throws(() => assertConfigTransition(preparedConfig, unexpectedSecondRewrite, ['encoding.xml']),
+    assert.AssertionError);
+  for (const tamper of [
+    entry => { entry.sha256 = '0'.repeat(64); },
+    entry => { entry.size += 1; },
+  ]) {
+    const candidate = finalConfigManifest(preparedConfig);
+    tamper(candidate.entries.find(entry => entry.path === 'encoding.xml'));
+    candidate.entriesSha256 = hash(JSON.stringify(candidate.entries));
+    await assert.rejects(() => verifyDirectoryManifest(candidate, path.join(evidenceRoot, 'reference/config'),
+      candidate.entriesSha256), assert.AssertionError);
+  }
+
+  await assert.rejects(() => resolveContainedRegularFile(evidenceRoot, '../outside.json'), assert.AssertionError);
+  assert.throws(() => resolveBoundInput('../outside.json'), assert.AssertionError);
+  const containmentRoot = await mkdtemp(path.join(tmpdir(), 'mediamanager-studio-evidence-root-'));
+  const outsideRoot = await mkdtemp(path.join(tmpdir(), 'mediamanager-studio-evidence-outside-'));
+  try {
+    await writeFile(path.join(outsideRoot, 'outside.json'), '{}');
+    await symlink(outsideRoot, path.join(containmentRoot, 'escape'), process.platform === 'win32' ? 'junction' : 'dir');
+    await assert.rejects(() => resolveContainedRegularFile(containmentRoot, 'escape/outside.json'),
+      assert.AssertionError);
+  } finally {
+    await rm(containmentRoot, { recursive: true, force: true });
+    await rm(outsideRoot, { recursive: true, force: true });
+  }
+});
+
+test('raw Studio HTTP responses independently reproduce every stable contract', async () => {
+  const [input, contract, raw, setup] = await Promise.all([
+    load(inputPath), load(contractPath), load(`${evidence}native-http.json`), load(`${evidence}native-setup.json`),
+  ]);
+  const itemByKey = new Map(input.items.map(item => [item.key, item]));
+  const resolved = new Map(input.items.map(item => [idKey(item.id), item.id]));
+  const keyById = new Map(input.items.map(item => [idKey(item.id), item.key]));
+  for (const [key, mapping] of Object.entries(setup.graph.fixtureKeyMapping)) {
+    assert.equal(idKey(mapping.fixtureId), idKey(itemByKey.get(key).id));
+    resolved.set(idKey(mapping.fixtureId), mapping.actualId);
+    keyById.set(idKey(mapping.actualId), key);
+  }
+  const actualId = id => resolved.get(idKey(id)) ?? id;
+  const routeFor = (endpoint, source) => {
+    const recursive = Object.hasOwn(source, 'recursive') ? source.recursive : true;
+    const parentId = actualId(itemByKey.get(source.parentKey)?.id ?? input.rootId);
+    const scopeIds = source.scope.map(key => actualId(itemByKey.get(key).id)).join(',');
+    const parts = [
+      ...(!source.omitParentId && !source.omitScope ? [`ParentId=${encodeURIComponent(parentId)}`] : []),
+      ...(recursive === null || source.omitScope ? [] : [`Recursive=${recursive}`]),
+      ...(!source.omitIds && !source.omitScope ? [`Ids=${encodeURIComponent(scopeIds)}`] : []),
+      ...(!source.omitSortBy ? ['SortBy=SortName'] : []),
+      'Fields=ParentId', 'EnableImages=false', 'EnableUserData=false', source.query,
+    ];
+    return `${endpoint === 'items' ? '/Items' : `/Users/${input.userId}/Items`}?${parts.filter(Boolean).join('&')}`;
+  };
+  const response = record => {
+    const items = Array.isArray(record.response.bodyJson?.Items) ? record.response.bodyJson.Items : [];
+    const orderedKeys = items.map(item => keyById.get(idKey(item.Id)));
+    assert.ok(orderedKeys.every(Boolean), record.name);
+    return {
+      status: record.response.status,
+      contentType: record.response.headers['content-type'] ?? null,
+      startIndex: record.response.bodyJson?.StartIndex ?? null,
+      totalRecordCount: record.response.bodyJson?.TotalRecordCount ?? null,
+      keys: [...orderedKeys].sort(),
+      orderedKeys,
+      items: items.map((item, index) => ({
+        key: orderedKeys[index], name: item.Name, type: item.Type,
+        parentKey: item.ParentId == null ? null : keyById.get(idKey(item.ParentId)) ?? null,
+      })),
+      problem: record.response.status >= 400
+        ? record.response.bodyJson && typeof record.response.bodyJson === 'object'
+          ? Object.fromEntries(Object.entries(record.response.bodyJson).filter(([key]) => key !== 'traceId'))
+          : { rawBody: record.response.bodyText }
+        : null,
+    };
+  };
+  const recordByName = new Map(raw.records.map(entry => [entry.name, entry]));
+  assert.equal(raw.mode, 'main');
+  assert.equal(raw.records.length, contract.cases.reduce((count, entry) => count + entry.endpoints.length, 2));
+  for (const [index, source] of input.cases.entries()) {
+    const expected = stableResponse(contract.cases[index]);
+    for (const endpoint of source.endpoints ?? ['items', 'legacy']) {
+      const record = recordByName.get(`${source.name}:${endpoint}`);
+      assert.ok(record, `${source.name}:${endpoint}`);
+      assert.equal(record.request.method, 'GET');
+      assert.equal(record.request.route, routeFor(endpoint, source));
+      assert.deepEqual(response(record), expected, `${source.name}:${endpoint}`);
+    }
+  }
+});

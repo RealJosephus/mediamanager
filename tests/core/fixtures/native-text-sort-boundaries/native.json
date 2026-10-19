@@ -1,0 +1,3481 @@
+{
+  "actualNativeSortName": true,
+  "culture": "zh-CN",
+  "SortRemoveWords": [
+    "the",
+    "a",
+    "an"
+  ],
+  "SortRemoveCharacters": [
+    ",",
+    "\u0026",
+    "-",
+    "{",
+    "}",
+    "\u0027"
+  ],
+  "SortReplaceCharacters": [
+    ".",
+    "\u002B",
+    "%"
+  ],
+  "sorts": [
+    {
+      "name": "a\u0000z",
+      "movie": "a\u0000z",
+      "person": "a\u0000z",
+      "alpha": "a\u0000z",
+      "plain": "a\u0000z"
+    },
+    {
+      "name": "a\u0001z",
+      "movie": "a\u0001z",
+      "person": "a\u0001z",
+      "alpha": "a\u0001z",
+      "plain": "a\u0001z"
+    },
+    {
+      "name": "a\u00010z",
+      "movie": "a\u00010000000000z",
+      "person": "a\u00010z",
+      "alpha": "a\u00010000000000z",
+      "plain": "a\u00010z"
+    },
+    {
+      "name": "a0z",
+      "movie": "a0000000000z",
+      "person": "a0z",
+      "alpha": "a0000000000z",
+      "plain": "a0z"
+    },
+    {
+      "name": "the a\u0000b1",
+      "movie": "a\u0000b0000000001",
+      "person": "the a\u0000b1",
+      "alpha": "a\u0000b0000000001",
+      "plain": "the a\u0000b1"
+    },
+    {
+      "name": "a%z",
+      "movie": "a z",
+      "person": "a%z",
+      "alpha": "a z",
+      "plain": "a%z"
+    },
+    {
+      "name": "a_z",
+      "movie": "a_z",
+      "person": "a_z",
+      "alpha": "a_z",
+      "plain": "a_z"
+    },
+    {
+      "name": "a\uD83D\uDE001",
+      "movie": "a\uD83D\uDE000000000001",
+      "person": "a\uD83D\uDE001",
+      "alpha": "a\uD83D\uDE000000000001",
+      "plain": "a\uD83D\uDE001"
+    },
+    {
+      "name": "\uD801\uDC001",
+      "movie": "\uD801\uDC280000000001",
+      "person": "\uD801\uDC001",
+      "alpha": "\uD801\uDC280000000001",
+      "plain": "\uD801\uDC001"
+    },
+    {
+      "name": "A1",
+      "movie": "a0000000001",
+      "person": "A1",
+      "alpha": "a0000000001",
+      "plain": "A1"
+    },
+    {
+      "name": "a2",
+      "movie": "a0000000002",
+      "person": "a2",
+      "alpha": "a0000000002",
+      "plain": "a2"
+    },
+    {
+      "name": "a10",
+      "movie": "a0000000010",
+      "person": "a10",
+      "alpha": "a0000000010",
+      "plain": "a10"
+    },
+    {
+      "name": "\u0085 a1 ",
+      "movie": "a0000000001",
+      "person": "a1 ",
+      "alpha": "a0000000001",
+      "plain": "a1 "
+    },
+    {
+      "name": "\uFEFFa1",
+      "movie": "\uFEFFa0000000001",
+      "person": "\uFEFFa1",
+      "alpha": "\uFEFFa0000000001",
+      "plain": "\uFEFFa1"
+    }
+  ],
+  "comparisons": [
+    {
+      "l": 0,
+      "r": 0,
+      "current": 0,
+      "invariant": 0,
+      "currentIgnoreCase": 0,
+      "invariantIgnoreCase": 0
+    },
+    {
+      "l": 0,
+      "r": 1,
+      "current": 0,
+      "invariant": 0,
+      "currentIgnoreCase": 0,
+      "invariantIgnoreCase": 0
+    },
+    {
+      "l": 0,
+      "r": 2,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 0,
+      "r": 3,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 0,
+      "r": 4,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 0,
+      "r": 5,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 0,
+      "r": 6,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 0,
+      "r": 7,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 0,
+      "r": 8,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 0,
+      "r": 9,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 0,
+      "r": 10,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 0,
+      "r": 11,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 0,
+      "r": 12,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 0,
+      "r": 13,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 1,
+      "r": 0,
+      "current": 0,
+      "invariant": 0,
+      "currentIgnoreCase": 0,
+      "invariantIgnoreCase": 0
+    },
+    {
+      "l": 1,
+      "r": 1,
+      "current": 0,
+      "invariant": 0,
+      "currentIgnoreCase": 0,
+      "invariantIgnoreCase": 0
+    },
+    {
+      "l": 1,
+      "r": 2,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 1,
+      "r": 3,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 1,
+      "r": 4,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 1,
+      "r": 5,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 1,
+      "r": 6,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 1,
+      "r": 7,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 1,
+      "r": 8,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 1,
+      "r": 9,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 1,
+      "r": 10,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 1,
+      "r": 11,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 1,
+      "r": 12,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 1,
+      "r": 13,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 2,
+      "r": 0,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 2,
+      "r": 1,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 2,
+      "r": 2,
+      "current": 0,
+      "invariant": 0,
+      "currentIgnoreCase": 0,
+      "invariantIgnoreCase": 0
+    },
+    {
+      "l": 2,
+      "r": 3,
+      "current": 0,
+      "invariant": 0,
+      "currentIgnoreCase": 0,
+      "invariantIgnoreCase": 0
+    },
+    {
+      "l": 2,
+      "r": 4,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 2,
+      "r": 5,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 2,
+      "r": 6,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 2,
+      "r": 7,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 2,
+      "r": 8,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 2,
+      "r": 9,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 2,
+      "r": 10,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 2,
+      "r": 11,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 2,
+      "r": 12,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 2,
+      "r": 13,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 3,
+      "r": 0,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 3,
+      "r": 1,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 3,
+      "r": 2,
+      "current": 0,
+      "invariant": 0,
+      "currentIgnoreCase": 0,
+      "invariantIgnoreCase": 0
+    },
+    {
+      "l": 3,
+      "r": 3,
+      "current": 0,
+      "invariant": 0,
+      "currentIgnoreCase": 0,
+      "invariantIgnoreCase": 0
+    },
+    {
+      "l": 3,
+      "r": 4,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 3,
+      "r": 5,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 3,
+      "r": 6,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 3,
+      "r": 7,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 3,
+      "r": 8,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 3,
+      "r": 9,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 3,
+      "r": 10,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 3,
+      "r": 11,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 3,
+      "r": 12,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 3,
+      "r": 13,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 4,
+      "r": 0,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 4,
+      "r": 1,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 4,
+      "r": 2,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 4,
+      "r": 3,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 4,
+      "r": 4,
+      "current": 0,
+      "invariant": 0,
+      "currentIgnoreCase": 0,
+      "invariantIgnoreCase": 0
+    },
+    {
+      "l": 4,
+      "r": 5,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 4,
+      "r": 6,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 4,
+      "r": 7,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 4,
+      "r": 8,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 4,
+      "r": 9,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 4,
+      "r": 10,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 4,
+      "r": 11,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 4,
+      "r": 12,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 4,
+      "r": 13,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 5,
+      "r": 0,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 5,
+      "r": 1,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 5,
+      "r": 2,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 5,
+      "r": 3,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 5,
+      "r": 4,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 5,
+      "r": 5,
+      "current": 0,
+      "invariant": 0,
+      "currentIgnoreCase": 0,
+      "invariantIgnoreCase": 0
+    },
+    {
+      "l": 5,
+      "r": 6,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 5,
+      "r": 7,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 5,
+      "r": 8,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 5,
+      "r": 9,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 5,
+      "r": 10,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 5,
+      "r": 11,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 5,
+      "r": 12,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 5,
+      "r": 13,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 6,
+      "r": 0,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 6,
+      "r": 1,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 6,
+      "r": 2,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 6,
+      "r": 3,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 6,
+      "r": 4,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 6,
+      "r": 5,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 6,
+      "r": 6,
+      "current": 0,
+      "invariant": 0,
+      "currentIgnoreCase": 0,
+      "invariantIgnoreCase": 0
+    },
+    {
+      "l": 6,
+      "r": 7,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 6,
+      "r": 8,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 6,
+      "r": 9,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 6,
+      "r": 10,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 6,
+      "r": 11,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 6,
+      "r": 12,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 6,
+      "r": 13,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 7,
+      "r": 0,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 7,
+      "r": 1,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 7,
+      "r": 2,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 7,
+      "r": 3,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 7,
+      "r": 4,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 7,
+      "r": 5,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 7,
+      "r": 6,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 7,
+      "r": 7,
+      "current": 0,
+      "invariant": 0,
+      "currentIgnoreCase": 0,
+      "invariantIgnoreCase": 0
+    },
+    {
+      "l": 7,
+      "r": 8,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 7,
+      "r": 9,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 7,
+      "r": 10,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 7,
+      "r": 11,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 7,
+      "r": 12,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 7,
+      "r": 13,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 8,
+      "r": 0,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 8,
+      "r": 1,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 8,
+      "r": 2,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 8,
+      "r": 3,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 8,
+      "r": 4,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 8,
+      "r": 5,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 8,
+      "r": 6,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 8,
+      "r": 7,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 8,
+      "r": 8,
+      "current": 0,
+      "invariant": 0,
+      "currentIgnoreCase": 0,
+      "invariantIgnoreCase": 0
+    },
+    {
+      "l": 8,
+      "r": 9,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 8,
+      "r": 10,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 8,
+      "r": 11,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 8,
+      "r": 12,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 8,
+      "r": 13,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 9,
+      "r": 0,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 9,
+      "r": 1,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 9,
+      "r": 2,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 9,
+      "r": 3,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 9,
+      "r": 4,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 9,
+      "r": 5,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 9,
+      "r": 6,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 9,
+      "r": 7,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 9,
+      "r": 8,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 9,
+      "r": 9,
+      "current": 0,
+      "invariant": 0,
+      "currentIgnoreCase": 0,
+      "invariantIgnoreCase": 0
+    },
+    {
+      "l": 9,
+      "r": 10,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 9,
+      "r": 11,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 9,
+      "r": 12,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 9,
+      "r": 13,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 0,
+      "invariantIgnoreCase": 0
+    },
+    {
+      "l": 10,
+      "r": 0,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 10,
+      "r": 1,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 10,
+      "r": 2,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 10,
+      "r": 3,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 10,
+      "r": 4,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 10,
+      "r": 5,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 10,
+      "r": 6,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 10,
+      "r": 7,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 10,
+      "r": 8,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 10,
+      "r": 9,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 10,
+      "r": 10,
+      "current": 0,
+      "invariant": 0,
+      "currentIgnoreCase": 0,
+      "invariantIgnoreCase": 0
+    },
+    {
+      "l": 10,
+      "r": 11,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 10,
+      "r": 12,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 10,
+      "r": 13,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 11,
+      "r": 0,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 11,
+      "r": 1,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 11,
+      "r": 2,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 11,
+      "r": 3,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 11,
+      "r": 4,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 11,
+      "r": 5,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 11,
+      "r": 6,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 11,
+      "r": 7,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 11,
+      "r": 8,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 11,
+      "r": 9,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 11,
+      "r": 10,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 11,
+      "r": 11,
+      "current": 0,
+      "invariant": 0,
+      "currentIgnoreCase": 0,
+      "invariantIgnoreCase": 0
+    },
+    {
+      "l": 11,
+      "r": 12,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 11,
+      "r": 13,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 12,
+      "r": 0,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 12,
+      "r": 1,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 12,
+      "r": 2,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 12,
+      "r": 3,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 12,
+      "r": 4,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 12,
+      "r": 5,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 12,
+      "r": 6,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 12,
+      "r": 7,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 12,
+      "r": 8,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 12,
+      "r": 9,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 12,
+      "r": 10,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 12,
+      "r": 11,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 12,
+      "r": 12,
+      "current": 0,
+      "invariant": 0,
+      "currentIgnoreCase": 0,
+      "invariantIgnoreCase": 0
+    },
+    {
+      "l": 12,
+      "r": 13,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 13,
+      "r": 0,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 13,
+      "r": 1,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 13,
+      "r": 2,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 13,
+      "r": 3,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 13,
+      "r": 4,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 13,
+      "r": 5,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 13,
+      "r": 6,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 13,
+      "r": 7,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 13,
+      "r": 8,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 13,
+      "r": 9,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": 0,
+      "invariantIgnoreCase": 0
+    },
+    {
+      "l": 13,
+      "r": 10,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 13,
+      "r": 11,
+      "current": -1,
+      "invariant": -1,
+      "currentIgnoreCase": -1,
+      "invariantIgnoreCase": -1
+    },
+    {
+      "l": 13,
+      "r": 12,
+      "current": 1,
+      "invariant": 1,
+      "currentIgnoreCase": 1,
+      "invariantIgnoreCase": 1
+    },
+    {
+      "l": 13,
+      "r": 13,
+      "current": 0,
+      "invariant": 0,
+      "currentIgnoreCase": 0,
+      "invariantIgnoreCase": 0
+    }
+  ],
+  "sortComparisons": [
+    {
+      "l": 0,
+      "r": 0,
+      "movieCurrent": 0,
+      "movieInvariant": 0,
+      "personCurrent": 0,
+      "personInvariant": 0
+    },
+    {
+      "l": 0,
+      "r": 1,
+      "movieCurrent": 0,
+      "movieInvariant": 0,
+      "personCurrent": 0,
+      "personInvariant": 0
+    },
+    {
+      "l": 0,
+      "r": 2,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 0,
+      "r": 3,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 0,
+      "r": 4,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 0,
+      "r": 5,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 0,
+      "r": 6,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 0,
+      "r": 7,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 0,
+      "r": 8,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 0,
+      "r": 9,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 0,
+      "r": 10,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 0,
+      "r": 11,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 0,
+      "r": 12,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 0,
+      "r": 13,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 1,
+      "r": 0,
+      "movieCurrent": 0,
+      "movieInvariant": 0,
+      "personCurrent": 0,
+      "personInvariant": 0
+    },
+    {
+      "l": 1,
+      "r": 1,
+      "movieCurrent": 0,
+      "movieInvariant": 0,
+      "personCurrent": 0,
+      "personInvariant": 0
+    },
+    {
+      "l": 1,
+      "r": 2,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 1,
+      "r": 3,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 1,
+      "r": 4,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 1,
+      "r": 5,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 1,
+      "r": 6,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 1,
+      "r": 7,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 1,
+      "r": 8,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 1,
+      "r": 9,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 1,
+      "r": 10,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 1,
+      "r": 11,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 1,
+      "r": 12,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 1,
+      "r": 13,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 2,
+      "r": 0,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 2,
+      "r": 1,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 2,
+      "r": 2,
+      "movieCurrent": 0,
+      "movieInvariant": 0,
+      "personCurrent": 0,
+      "personInvariant": 0
+    },
+    {
+      "l": 2,
+      "r": 3,
+      "movieCurrent": 0,
+      "movieInvariant": 0,
+      "personCurrent": 0,
+      "personInvariant": 0
+    },
+    {
+      "l": 2,
+      "r": 4,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 2,
+      "r": 5,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 2,
+      "r": 6,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 2,
+      "r": 7,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 2,
+      "r": 8,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 2,
+      "r": 9,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 2,
+      "r": 10,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 2,
+      "r": 11,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 2,
+      "r": 12,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 2,
+      "r": 13,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 3,
+      "r": 0,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 3,
+      "r": 1,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 3,
+      "r": 2,
+      "movieCurrent": 0,
+      "movieInvariant": 0,
+      "personCurrent": 0,
+      "personInvariant": 0
+    },
+    {
+      "l": 3,
+      "r": 3,
+      "movieCurrent": 0,
+      "movieInvariant": 0,
+      "personCurrent": 0,
+      "personInvariant": 0
+    },
+    {
+      "l": 3,
+      "r": 4,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 3,
+      "r": 5,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 3,
+      "r": 6,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 3,
+      "r": 7,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 3,
+      "r": 8,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 3,
+      "r": 9,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 3,
+      "r": 10,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 3,
+      "r": 11,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 3,
+      "r": 12,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 3,
+      "r": 13,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 4,
+      "r": 0,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 4,
+      "r": 1,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 4,
+      "r": 2,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 4,
+      "r": 3,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 4,
+      "r": 4,
+      "movieCurrent": 0,
+      "movieInvariant": 0,
+      "personCurrent": 0,
+      "personInvariant": 0
+    },
+    {
+      "l": 4,
+      "r": 5,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 4,
+      "r": 6,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 4,
+      "r": 7,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 4,
+      "r": 8,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 4,
+      "r": 9,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 4,
+      "r": 10,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 4,
+      "r": 11,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 4,
+      "r": 12,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 4,
+      "r": 13,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 5,
+      "r": 0,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 5,
+      "r": 1,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 5,
+      "r": 2,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 5,
+      "r": 3,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 5,
+      "r": 4,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 5,
+      "r": 5,
+      "movieCurrent": 0,
+      "movieInvariant": 0,
+      "personCurrent": 0,
+      "personInvariant": 0
+    },
+    {
+      "l": 5,
+      "r": 6,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 5,
+      "r": 7,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 5,
+      "r": 8,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 5,
+      "r": 9,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 5,
+      "r": 10,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 5,
+      "r": 11,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 5,
+      "r": 12,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 5,
+      "r": 13,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 6,
+      "r": 0,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 6,
+      "r": 1,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 6,
+      "r": 2,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 6,
+      "r": 3,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 6,
+      "r": 4,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 6,
+      "r": 5,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 6,
+      "r": 6,
+      "movieCurrent": 0,
+      "movieInvariant": 0,
+      "personCurrent": 0,
+      "personInvariant": 0
+    },
+    {
+      "l": 6,
+      "r": 7,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 6,
+      "r": 8,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 6,
+      "r": 9,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 6,
+      "r": 10,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 6,
+      "r": 11,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 6,
+      "r": 12,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 6,
+      "r": 13,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 7,
+      "r": 0,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 7,
+      "r": 1,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 7,
+      "r": 2,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 7,
+      "r": 3,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 7,
+      "r": 4,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 7,
+      "r": 5,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 7,
+      "r": 6,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 7,
+      "r": 7,
+      "movieCurrent": 0,
+      "movieInvariant": 0,
+      "personCurrent": 0,
+      "personInvariant": 0
+    },
+    {
+      "l": 7,
+      "r": 8,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 7,
+      "r": 9,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 7,
+      "r": 10,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 7,
+      "r": 11,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 7,
+      "r": 12,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 7,
+      "r": 13,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 8,
+      "r": 0,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 8,
+      "r": 1,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 8,
+      "r": 2,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 8,
+      "r": 3,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 8,
+      "r": 4,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 8,
+      "r": 5,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 8,
+      "r": 6,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 8,
+      "r": 7,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 8,
+      "r": 8,
+      "movieCurrent": 0,
+      "movieInvariant": 0,
+      "personCurrent": 0,
+      "personInvariant": 0
+    },
+    {
+      "l": 8,
+      "r": 9,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 8,
+      "r": 10,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 8,
+      "r": 11,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 8,
+      "r": 12,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 8,
+      "r": 13,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 9,
+      "r": 0,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 9,
+      "r": 1,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 9,
+      "r": 2,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 9,
+      "r": 3,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 9,
+      "r": 4,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 9,
+      "r": 5,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 9,
+      "r": 6,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 9,
+      "r": 7,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 9,
+      "r": 8,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 9,
+      "r": 9,
+      "movieCurrent": 0,
+      "movieInvariant": 0,
+      "personCurrent": 0,
+      "personInvariant": 0
+    },
+    {
+      "l": 9,
+      "r": 10,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 9,
+      "r": 11,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 9,
+      "r": 12,
+      "movieCurrent": 0,
+      "movieInvariant": 0,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 9,
+      "r": 13,
+      "movieCurrent": 0,
+      "movieInvariant": 0,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 10,
+      "r": 0,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 10,
+      "r": 1,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 10,
+      "r": 2,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 10,
+      "r": 3,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 10,
+      "r": 4,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 10,
+      "r": 5,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 10,
+      "r": 6,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 10,
+      "r": 7,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 10,
+      "r": 8,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 10,
+      "r": 9,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 10,
+      "r": 10,
+      "movieCurrent": 0,
+      "movieInvariant": 0,
+      "personCurrent": 0,
+      "personInvariant": 0
+    },
+    {
+      "l": 10,
+      "r": 11,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 10,
+      "r": 12,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 10,
+      "r": 13,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 11,
+      "r": 0,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 11,
+      "r": 1,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 11,
+      "r": 2,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 11,
+      "r": 3,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 11,
+      "r": 4,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 11,
+      "r": 5,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 11,
+      "r": 6,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 11,
+      "r": 7,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 11,
+      "r": 8,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 11,
+      "r": 9,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 11,
+      "r": 10,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 11,
+      "r": 11,
+      "movieCurrent": 0,
+      "movieInvariant": 0,
+      "personCurrent": 0,
+      "personInvariant": 0
+    },
+    {
+      "l": 11,
+      "r": 12,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 11,
+      "r": 13,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 12,
+      "r": 0,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 12,
+      "r": 1,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 12,
+      "r": 2,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 12,
+      "r": 3,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 12,
+      "r": 4,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 12,
+      "r": 5,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 12,
+      "r": 6,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 12,
+      "r": 7,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 12,
+      "r": 8,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 12,
+      "r": 9,
+      "movieCurrent": 0,
+      "movieInvariant": 0,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 12,
+      "r": 10,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 12,
+      "r": 11,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 12,
+      "r": 12,
+      "movieCurrent": 0,
+      "movieInvariant": 0,
+      "personCurrent": 0,
+      "personInvariant": 0
+    },
+    {
+      "l": 12,
+      "r": 13,
+      "movieCurrent": 0,
+      "movieInvariant": 0,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 13,
+      "r": 0,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 13,
+      "r": 1,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 13,
+      "r": 2,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 13,
+      "r": 3,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 13,
+      "r": 4,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 13,
+      "r": 5,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 13,
+      "r": 6,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 13,
+      "r": 7,
+      "movieCurrent": 1,
+      "movieInvariant": 1,
+      "personCurrent": 1,
+      "personInvariant": 1
+    },
+    {
+      "l": 13,
+      "r": 8,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 13,
+      "r": 9,
+      "movieCurrent": 0,
+      "movieInvariant": 0,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 13,
+      "r": 10,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 13,
+      "r": 11,
+      "movieCurrent": -1,
+      "movieInvariant": -1,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 13,
+      "r": 12,
+      "movieCurrent": 0,
+      "movieInvariant": 0,
+      "personCurrent": -1,
+      "personInvariant": -1
+    },
+    {
+      "l": 13,
+      "r": 13,
+      "movieCurrent": 0,
+      "movieInvariant": 0,
+      "personCurrent": 0,
+      "personInvariant": 0
+    }
+  ],
+  "movieOrder": [
+    5,
+    6,
+    7,
+    2,
+    3,
+    9,
+    12,
+    13,
+    10,
+    11,
+    4,
+    0,
+    1,
+    8
+  ],
+  "personOrder": [
+    6,
+    5,
+    7,
+    2,
+    3,
+    13,
+    9,
+    12,
+    11,
+    10,
+    0,
+    1,
+    4,
+    8
+  ],
+  "assemblies": [
+    {
+      "name": "Diacritics",
+      "location": "D:\\mediamanager-validation\\20261014-release-native-text-sort-formal-2\\bin\\Release\\net10.0\\Diacritics.dll",
+      "sha256": "893640462f6bfaa8cf5c18698ee655a1777b05d359963c129e95c2ffb94307b0"
+    },
+    {
+      "name": "ICU4N",
+      "location": "D:\\mediamanager-validation\\20261014-release-native-text-sort-formal-2\\bin\\Release\\net10.0\\ICU4N.dll",
+      "sha256": "ba54b8bb8e9785b7a7e83b03c8b9b8407582e07b11c95bb805e930e6c0b0e6af"
+    },
+    {
+      "name": "ICU4N.Transliterator",
+      "location": "D:\\mediamanager-validation\\20261014-release-native-text-sort-formal-2\\bin\\Release\\net10.0\\ICU4N.Transliterator.dll",
+      "sha256": "5a0935d0ddc51d755a32921ea53dbd76c5350f7d0322844bab05f0cd456b2793"
+    },
+    {
+      "name": "J2N",
+      "location": "D:\\mediamanager-validation\\20261014-release-native-text-sort-formal-2\\bin\\Release\\net10.0\\J2N.dll",
+      "sha256": "93afc2ad2a3a7335992791ebe116a57908ebb027571c67c8ac8844fe12696c8c"
+    },
+    {
+      "name": "Jellyfin.Data",
+      "location": "D:\\mediamanager-validation\\20261014-release-native-text-sort-formal-2\\bin\\Release\\net10.0\\Jellyfin.Data.dll",
+      "sha256": "b991153c8e091e6e618b27b47ec2c070c003fc5c4453406a74fe843c43611d7e"
+    },
+    {
+      "name": "Jellyfin.Database.Implementations",
+      "location": "D:\\mediamanager-validation\\20261014-release-native-text-sort-formal-2\\bin\\Release\\net10.0\\Jellyfin.Database.Implementations.dll",
+      "sha256": "5ffd9a90affb635962267da294a36a4cd6972da5f38083b51ecfb4fba4c31ee6"
+    },
+    {
+      "name": "Jellyfin.Extensions",
+      "location": "D:\\mediamanager-validation\\20261014-release-native-text-sort-formal-2\\bin\\Release\\net10.0\\Jellyfin.Extensions.dll",
+      "sha256": "db952e3013a6949ad22db9ac3379be2efdf441c139ddc6919e86f8c2abbc7207"
+    },
+    {
+      "name": "MediaBrowser.Common",
+      "location": "D:\\mediamanager-validation\\20261014-release-native-text-sort-formal-2\\bin\\Release\\net10.0\\MediaBrowser.Common.dll",
+      "sha256": "c86a38f99a78d9d3b9dd5ba5245fb06bf654cfa3e16ec409d3ba77b1e69ed11e"
+    },
+    {
+      "name": "MediaBrowser.Controller",
+      "location": "D:\\mediamanager-validation\\20261014-release-native-text-sort-formal-2\\bin\\Release\\net10.0\\MediaBrowser.Controller.dll",
+      "sha256": "051c588a8e85a3a7cdde8dc3d9a1112217fd7e973a86fe2ff90cf765bedb75a8"
+    },
+    {
+      "name": "MediaBrowser.Model",
+      "location": "D:\\mediamanager-validation\\20261014-release-native-text-sort-formal-2\\bin\\Release\\net10.0\\MediaBrowser.Model.dll",
+      "sha256": "7b2c1b16721cf7747b572e4de3761de635fad4bd12bec346983545bee73fd92c"
+    },
+    {
+      "name": "Microsoft.Extensions.Caching.Abstractions",
+      "location": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Caching.Abstractions.dll",
+      "sha256": "d6c5e46c7c43834235abbbcb9767756f8e210f0fcc4b92137c57a2aa83b81b2e"
+    },
+    {
+      "name": "Microsoft.Extensions.Caching.Memory",
+      "location": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Caching.Memory.dll",
+      "sha256": "50df53585dac029895a6d50a32212424aafbae87b9cc20ac0af5338677492983"
+    },
+    {
+      "name": "Microsoft.Extensions.Logging.Abstractions",
+      "location": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Logging.Abstractions.dll",
+      "sha256": "90c41d68d297e54c4def3cfd38eb620513a744ab01131840ea3e2634cf973be3"
+    },
+    {
+      "name": "Microsoft.Extensions.Options",
+      "location": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Options.dll",
+      "sha256": "02a3cad0e05023f129c0717ba99d171ac524bf5f7c955863e17e3f7441107567"
+    },
+    {
+      "name": "Microsoft.Extensions.Primitives",
+      "location": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Primitives.dll",
+      "sha256": "5b40af41b1b354f88e64e5b04619f70aaefe693ff377ac0bb9bc7f70c4018cc1"
+    },
+    {
+      "name": "netstandard",
+      "location": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\netstandard.dll",
+      "sha256": "3dc81dbc9dacd28261632c94410859eda24c2db50cd6c14309cbb2a434b50c57"
+    },
+    {
+      "name": "Oracle",
+      "location": "D:\\mediamanager-validation\\20261014-release-native-text-sort-formal-2\\bin\\Release\\net10.0\\Oracle.dll",
+      "sha256": "4f80c9c07244702db9505ca2def52eb92944931fa118b8aa4c3f6bfff70dbe36"
+    },
+    {
+      "name": "System.Collections",
+      "location": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Collections.dll",
+      "sha256": "df6f2037eabee28100184e92f7536427ba2f086c1110629804d466b124bc4d54"
+    },
+    {
+      "name": "System.Collections.Concurrent",
+      "location": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Collections.Concurrent.dll",
+      "sha256": "082f4bc0da1141eb65111b6da633d75624adfb7bb067d7ee90c5622c8b30885b"
+    },
+    {
+      "name": "System.Console",
+      "location": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Console.dll",
+      "sha256": "3b85daf02a3d9ed99b84bb1c639fe8b1ced46d8d157fa56f525f6b8c5be43b3e"
+    },
+    {
+      "name": "System.Diagnostics.Process",
+      "location": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Diagnostics.Process.dll",
+      "sha256": "51a57fbe918f8b68930c090792b718fc0850ea12da869d50b97a3796af29a740"
+    },
+    {
+      "name": "System.Linq",
+      "location": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Linq.dll",
+      "sha256": "284d38945b6e92e847129bd28af458b19818d0f2181f79882888ab2003f4c519"
+    },
+    {
+      "name": "System.Memory",
+      "location": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Memory.dll",
+      "sha256": "f8f9d38efd6b0de30954d6bf1f353e9617bfb36d3d245c013a3b12be9f6bd88a"
+    },
+    {
+      "name": "System.Numerics.Vectors",
+      "location": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Numerics.Vectors.dll",
+      "sha256": "a9a980ee33ed0c798a5e1960c4557521f465ac9e0987dfd2c3049d53b1f2fa5a"
+    },
+    {
+      "name": "System.Private.CoreLib",
+      "location": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Private.CoreLib.dll",
+      "sha256": "1125acc8106c43fc8bad2d203c4c4485df6182d292846c2fff415c1040c54678"
+    },
+    {
+      "name": "System.Reflection.DispatchProxy",
+      "location": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Reflection.DispatchProxy.dll",
+      "sha256": "bf93a361c0bba8497889c9f7713add5968ba39394f9e6bda27e86294c6c43560"
+    },
+    {
+      "name": "System.Reflection.Emit",
+      "location": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Reflection.Emit.dll",
+      "sha256": "09059981bbeea0fdc5df589be5d7e3937d57e22bec4d78ceb492c587926fc238"
+    },
+    {
+      "name": "System.Reflection.Emit.ILGeneration",
+      "location": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Reflection.Emit.ILGeneration.dll",
+      "sha256": "6b42ddd05b0ca1c7342d73ea9f401fe588044215d65c67b756deb780f0894a26"
+    },
+    {
+      "name": "System.Reflection.Emit.Lightweight",
+      "location": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Reflection.Emit.Lightweight.dll",
+      "sha256": "d2724a2b7b46146877ec1f6e400c49ea05f84bdd31f3bba52ae139ee68a4f779"
+    },
+    {
+      "name": "System.Reflection.Primitives",
+      "location": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Reflection.Primitives.dll",
+      "sha256": "c2bbd885d03da5e880667c228ac1f56a5f3a72ea37d43f010ada000adc33da28"
+    },
+    {
+      "name": "System.Runtime",
+      "location": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Runtime.dll",
+      "sha256": "76be53624f64b23d0249dfa0bbe85390086de7c44bfd490642ea86c6faaf44af"
+    },
+    {
+      "name": "System.Runtime.InteropServices",
+      "location": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Runtime.InteropServices.dll",
+      "sha256": "e5eb1679f3579c9141e2bb9dbdce62624a623f38d299805cc1de07bacd21841f"
+    },
+    {
+      "name": "System.Runtime.Loader",
+      "location": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Runtime.Loader.dll",
+      "sha256": "9b9b2a4f0358d9146e76178ddb87d019be380c78baa7dac853493d45df089f03"
+    },
+    {
+      "name": "System.Text.Encoding.Extensions",
+      "location": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Text.Encoding.Extensions.dll",
+      "sha256": "8f51b9535db64fe027a40d6076200b1a6b0889bf05f62bb8e68c3eb083c7f113"
+    },
+    {
+      "name": "System.Text.Json",
+      "location": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Text.Json.dll",
+      "sha256": "fa99f413be21ed5f484a09093fe5f0beba7de3062cf9cc9f847dbf8108dba55a"
+    },
+    {
+      "name": "System.Text.RegularExpressions",
+      "location": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Text.RegularExpressions.dll",
+      "sha256": "060bcc88a688e687ff1404b83b5fb5cf17e19ec57f33d5b8a48ab494da83c134"
+    },
+    {
+      "name": "System.Threading",
+      "location": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Threading.dll",
+      "sha256": "6c32ed1bf8067e4169e8feddd15e6489b89d19d1c7aae1520a551b57745d0a60"
+    }
+  ]
+}

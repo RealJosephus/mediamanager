@@ -1,0 +1,3032 @@
+{
+  "inputSha256": "0190e82bc6e1f1d245ff9fe3e807f229fa9816ee3316b3f80526e7de37b30566",
+  "actualManager": true,
+  "actualControllers": true,
+  "actualBinding": true,
+  "actualDefaultAuthorization": true,
+  "sessionManagerControlled": true,
+  "principalControlled": true,
+  "assemblies": [
+    {
+      "name": "Emby.Server.Implementations",
+      "filename": "D:\\mediamanager-validation\\20261014-release-quick-connect-native-7\\bin\\Release\\net10.0\\Emby.Server.Implementations.dll",
+      "sha256": "8d369435646570958505c58b9cb17da169855dabc105d0e933524361e9b7b1c8"
+    },
+    {
+      "name": "jellyfin",
+      "filename": "D:\\mediamanager-validation\\20261014-release-quick-connect-native-7\\bin\\Release\\net10.0\\jellyfin.dll",
+      "sha256": "a43fa24c44677e579fcec79d637789b9f36633d02e5434e76a0e03fa13027767"
+    },
+    {
+      "name": "Jellyfin.Api",
+      "filename": "D:\\mediamanager-validation\\20261014-release-quick-connect-native-7\\bin\\Release\\net10.0\\Jellyfin.Api.dll",
+      "sha256": "d5952a67decf6279096c3ad02df59f63e8f486373b0b63a785b47ac3f9060777"
+    },
+    {
+      "name": "Jellyfin.Data",
+      "filename": "D:\\mediamanager-validation\\20261014-release-quick-connect-native-7\\bin\\Release\\net10.0\\Jellyfin.Data.dll",
+      "sha256": "b991153c8e091e6e618b27b47ec2c070c003fc5c4453406a74fe843c43611d7e"
+    },
+    {
+      "name": "Jellyfin.Database.Implementations",
+      "filename": "D:\\mediamanager-validation\\20261014-release-quick-connect-native-7\\bin\\Release\\net10.0\\Jellyfin.Database.Implementations.dll",
+      "sha256": "5ffd9a90affb635962267da294a36a4cd6972da5f38083b51ecfb4fba4c31ee6"
+    },
+    {
+      "name": "Jellyfin.Extensions",
+      "filename": "D:\\mediamanager-validation\\20261014-release-quick-connect-native-7\\bin\\Release\\net10.0\\Jellyfin.Extensions.dll",
+      "sha256": "db952e3013a6949ad22db9ac3379be2efdf441c139ddc6919e86f8c2abbc7207"
+    },
+    {
+      "name": "Jellyfin.Server.Implementations",
+      "filename": "D:\\mediamanager-validation\\20261014-release-quick-connect-native-7\\bin\\Release\\net10.0\\Jellyfin.Server.Implementations.dll",
+      "sha256": "4da187af02503e82135eb192351d01490484e8ebc8c653d849f7e2900a177672"
+    },
+    {
+      "name": "MediaBrowser.Common",
+      "filename": "D:\\mediamanager-validation\\20261014-release-quick-connect-native-7\\bin\\Release\\net10.0\\MediaBrowser.Common.dll",
+      "sha256": "c86a38f99a78d9d3b9dd5ba5245fb06bf654cfa3e16ec409d3ba77b1e69ed11e"
+    },
+    {
+      "name": "MediaBrowser.Controller",
+      "filename": "D:\\mediamanager-validation\\20261014-release-quick-connect-native-7\\bin\\Release\\net10.0\\MediaBrowser.Controller.dll",
+      "sha256": "051c588a8e85a3a7cdde8dc3d9a1112217fd7e973a86fe2ff90cf765bedb75a8"
+    },
+    {
+      "name": "MediaBrowser.Model",
+      "filename": "D:\\mediamanager-validation\\20261014-release-quick-connect-native-7\\bin\\Release\\net10.0\\MediaBrowser.Model.dll",
+      "sha256": "7b2c1b16721cf7747b572e4de3761de635fad4bd12bec346983545bee73fd92c"
+    },
+    {
+      "name": "Microsoft.AspNetCore",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.dll",
+      "sha256": "3bfd8a9ad4aa79e4cf809fab1cf133e0ceb43c89e80dc6eff47405f27cbf779f"
+    },
+    {
+      "name": "Microsoft.AspNetCore.Antiforgery",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Antiforgery.dll",
+      "sha256": "f417fe903c5fef3ad36cc6e9d73e5e4b9fbcb1bb855c7490aed7de60316419f0"
+    },
+    {
+      "name": "Microsoft.AspNetCore.Authentication",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Authentication.dll",
+      "sha256": "73104deede0ab682e457e393832a9ed0fe25153349c974961f5a370f2ae2ad14"
+    },
+    {
+      "name": "Microsoft.AspNetCore.Authentication.Abstractions",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Authentication.Abstractions.dll",
+      "sha256": "62bfde62231404dc637ce47d5cec6deee338824efffa03a8dde907d8d049ad60"
+    },
+    {
+      "name": "Microsoft.AspNetCore.Authentication.Core",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Authentication.Core.dll",
+      "sha256": "874392660a182a29ad1b5a22e9639293ac327ee9f5e989b8f5d9c87b7cd845f5"
+    },
+    {
+      "name": "Microsoft.AspNetCore.Authorization",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Authorization.dll",
+      "sha256": "b41d6f875d0b1a99179fa65a1c5f92b2d2066047e681706b65906c2dbc23f413"
+    },
+    {
+      "name": "Microsoft.AspNetCore.Authorization.Policy",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Authorization.Policy.dll",
+      "sha256": "4a32fa113253f5d6e999ee96a59e2d147cf712c6a3cab29622f7adcb3da64f40"
+    },
+    {
+      "name": "Microsoft.AspNetCore.Components",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Components.dll",
+      "sha256": "2030bb3a0d8d8fb76084ad4dbc3e31f372078d8111dd1fec6ae9c0ce23c583d7"
+    },
+    {
+      "name": "Microsoft.AspNetCore.Components.Authorization",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Components.Authorization.dll",
+      "sha256": "650717382403fe55378ee0062f40b5d9b093daaea4c398cdfac92b3ef2bc669d"
+    },
+    {
+      "name": "Microsoft.AspNetCore.Components.Endpoints",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Components.Endpoints.dll",
+      "sha256": "6484fdff68008ed2841a6b9f769c6fdb31aee77734131907007e6d601e3795bc"
+    },
+    {
+      "name": "Microsoft.AspNetCore.Components.Web",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Components.Web.dll",
+      "sha256": "c7bfc2c74881b23586c743b7c9963a7bd69906b6d79d52525f2b3ac2fed382db"
+    },
+    {
+      "name": "Microsoft.AspNetCore.Connections.Abstractions",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Connections.Abstractions.dll",
+      "sha256": "50e62c202b6eef678f763d0a96588a1ae4f8040594c06e9934992518bea63eb1"
+    },
+    {
+      "name": "Microsoft.AspNetCore.Cors",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Cors.dll",
+      "sha256": "9fb130ef9b9ea9101a2dec73bdc518add30a1d8e7d8a5d6d2596a6e18e7ec1b8"
+    },
+    {
+      "name": "Microsoft.AspNetCore.Cryptography.Internal",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Cryptography.Internal.dll",
+      "sha256": "c9502c62d7f045da855d64acecabd0dd079869ec6323384468b831e33b13df82"
+    },
+    {
+      "name": "Microsoft.AspNetCore.DataProtection",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.DataProtection.dll",
+      "sha256": "913e251bcea27044f76c39be087f03721346a13d44dcf4a1dc34a19c22ae28fe"
+    },
+    {
+      "name": "Microsoft.AspNetCore.DataProtection.Abstractions",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.DataProtection.Abstractions.dll",
+      "sha256": "3ee8801c29a292734945b38dcdb8a2e4483a5bbe4f74545093830ab55c843c0e"
+    },
+    {
+      "name": "Microsoft.AspNetCore.HostFiltering",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.HostFiltering.dll",
+      "sha256": "f611ece92c3026f3a4c1d18024c0fa704db9718946c441003535bcd5e3dc1b74"
+    },
+    {
+      "name": "Microsoft.AspNetCore.Hosting",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Hosting.dll",
+      "sha256": "917814acfe6637034ad97a7ec6e5716385f9a662b82d7561017dcc410ba31630"
+    },
+    {
+      "name": "Microsoft.AspNetCore.Hosting.Abstractions",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Hosting.Abstractions.dll",
+      "sha256": "50eea9716964d7dfd8b30a286fe577da612cf567eceacf11e248f01d85a7333f"
+    },
+    {
+      "name": "Microsoft.AspNetCore.Hosting.Server.Abstractions",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Hosting.Server.Abstractions.dll",
+      "sha256": "9778d4dfe9956524d4bbc229d52e1de81cdca5f1dfed8a666ff8edbf9941f20f"
+    },
+    {
+      "name": "Microsoft.AspNetCore.Http",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Http.dll",
+      "sha256": "32f6a181eb790eae12d0bbb0d31db74c4abe5841c16f7a1040e8f64ee96fd103"
+    },
+    {
+      "name": "Microsoft.AspNetCore.Http.Abstractions",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Http.Abstractions.dll",
+      "sha256": "1fae7aa024a039a404141ec7846a016e271fd9b8bc53960cb1b17a33ffbc1a89"
+    },
+    {
+      "name": "Microsoft.AspNetCore.Http.Extensions",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Http.Extensions.dll",
+      "sha256": "76a2df901a0031491e8c1e663729117081f165578e7b4617f2a20eaf092d6808"
+    },
+    {
+      "name": "Microsoft.AspNetCore.Http.Features",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Http.Features.dll",
+      "sha256": "d3714725c1f38d791d93c4ce23296747051e6dfdb3ceea453b32408116390d2f"
+    },
+    {
+      "name": "Microsoft.AspNetCore.HttpOverrides",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.HttpOverrides.dll",
+      "sha256": "52312857bc3ff2dbb4df1a006dcfa0c3c2a4302887a24e6f889d5ffe24a5a3a0"
+    },
+    {
+      "name": "Microsoft.AspNetCore.Metadata",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Metadata.dll",
+      "sha256": "99c572500931b719c44a38a8b9bdc7c67cc85d6d3426737f20d4b3b3496d82f3"
+    },
+    {
+      "name": "Microsoft.AspNetCore.Mvc",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Mvc.dll",
+      "sha256": "a6c2e38221b2ee6f09adfc561613ef4370fdb46502720c695660c42a5671de9c"
+    },
+    {
+      "name": "Microsoft.AspNetCore.Mvc.Abstractions",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Mvc.Abstractions.dll",
+      "sha256": "f53787e278fdd13e7755214f3d24082f4b8a9313e72f4a0966ed9ea7a18b1457"
+    },
+    {
+      "name": "Microsoft.AspNetCore.Mvc.ApiExplorer",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Mvc.ApiExplorer.dll",
+      "sha256": "4807ac9cf2783691dc0d0773a8ee8c3e677af291927f6127ab3995fe73c1741e"
+    },
+    {
+      "name": "Microsoft.AspNetCore.Mvc.Core",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Mvc.Core.dll",
+      "sha256": "1356da94b4d872025f64fd7e788e3065bf149a9edb920c892e331cad3dbaa4b6"
+    },
+    {
+      "name": "Microsoft.AspNetCore.Mvc.Cors",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Mvc.Cors.dll",
+      "sha256": "88d6633b8bc7bffa3d0bacceb608d10fe972a52d0c494a4ef7d9fadeaf97eafd"
+    },
+    {
+      "name": "Microsoft.AspNetCore.Mvc.DataAnnotations",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Mvc.DataAnnotations.dll",
+      "sha256": "bb03c333a404d742626ba11cb32039857c694139ba638a9e9ea713b6559eee9a"
+    },
+    {
+      "name": "Microsoft.AspNetCore.Mvc.Razor",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Mvc.Razor.dll",
+      "sha256": "f34e1ebb50fd360586d0ef28af06429df4eea42f8ab7ca1a04ba3a082cbd5478"
+    },
+    {
+      "name": "Microsoft.AspNetCore.Mvc.RazorPages",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Mvc.RazorPages.dll",
+      "sha256": "521e78b18bb474a3b6cb6ccabd6b48fdfc94048bf87c1555f427571dc9b0d353"
+    },
+    {
+      "name": "Microsoft.AspNetCore.Mvc.TagHelpers",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Mvc.TagHelpers.dll",
+      "sha256": "dc3f1bb01059cc9096259943a1c7ccd72b9298fadb3a81390dd76830f173b737"
+    },
+    {
+      "name": "Microsoft.AspNetCore.Mvc.ViewFeatures",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Mvc.ViewFeatures.dll",
+      "sha256": "4da923fa312615a49de69d655dff3b8227ed76116c42d02d33b28dca8b84cc03"
+    },
+    {
+      "name": "Microsoft.AspNetCore.Razor",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Razor.dll",
+      "sha256": "1c7d05cf15cdd03879131a5769861c2632faef8b47861e78ccdeebcd9060afdd"
+    },
+    {
+      "name": "Microsoft.AspNetCore.Razor.Runtime",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Razor.Runtime.dll",
+      "sha256": "4f0eb5dfcc89ab1169a87a86f6379f0370907e6ebdea0de3e700aa68b9a0eec2"
+    },
+    {
+      "name": "Microsoft.AspNetCore.Routing",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Routing.dll",
+      "sha256": "69c76fd9e5cac492d689bc0aad3ae3de047ee4f0c4261f43446d53e8e14fcb16"
+    },
+    {
+      "name": "Microsoft.AspNetCore.Routing.Abstractions",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Routing.Abstractions.dll",
+      "sha256": "ea601c608e0e51ba51136f7755af4eb6b47099cd1c41710faae2f8b096b63194"
+    },
+    {
+      "name": "Microsoft.AspNetCore.Server.IIS",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Server.IIS.dll",
+      "sha256": "00299f6b4354341aa069aa993993be017296c4196d7b2211b822b73558f6e5f1"
+    },
+    {
+      "name": "Microsoft.AspNetCore.Server.IISIntegration",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Server.IISIntegration.dll",
+      "sha256": "e0d3536a9033a48b7d0c4c8695e838c4e7c618eac6436ff454070f5a74296c40"
+    },
+    {
+      "name": "Microsoft.AspNetCore.Server.Kestrel",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Server.Kestrel.dll",
+      "sha256": "f0de796d9d6b05c0f3ce877c2288f836a3f1dd5b5a374babc2af3deda73e94b7"
+    },
+    {
+      "name": "Microsoft.AspNetCore.Server.Kestrel.Core",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Server.Kestrel.Core.dll",
+      "sha256": "62b5ab79f5f896235e4068039450a15a7bcdb5bb4eb73f2f6bdf5a787d4cc239"
+    },
+    {
+      "name": "Microsoft.AspNetCore.Server.Kestrel.Transport.NamedPipes",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Server.Kestrel.Transport.NamedPipes.dll",
+      "sha256": "7ad9ac5286296e71f63d139dc2c4cffd66577874f21aaf0cadf0320ae7a03771"
+    },
+    {
+      "name": "Microsoft.AspNetCore.Server.Kestrel.Transport.Quic",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Server.Kestrel.Transport.Quic.dll",
+      "sha256": "6a6919a866b014e392b18bb0f1bf26ae9ed51a063c77ed584a06cf4a2ab591de"
+    },
+    {
+      "name": "Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.dll",
+      "sha256": "14bb84ef188ffa3d9a40799b04eda941184ab89bc001ef59c03debd8922ed139"
+    },
+    {
+      "name": "Microsoft.AspNetCore.WebUtilities",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.WebUtilities.dll",
+      "sha256": "ee33396c44e552d8623c15e79bb033fdb63281597222575624256fd90213c7cd"
+    },
+    {
+      "name": "Microsoft.EntityFrameworkCore",
+      "filename": "D:\\mediamanager-validation\\20261014-release-quick-connect-native-7\\bin\\Release\\net10.0\\Microsoft.EntityFrameworkCore.dll",
+      "sha256": "9cf183abffc9d6920e8366b75af8388bc502febaaa0e3d9fe41a4906a68d3065"
+    },
+    {
+      "name": "Microsoft.Extensions.Caching.Abstractions",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Caching.Abstractions.dll",
+      "sha256": "d6c5e46c7c43834235abbbcb9767756f8e210f0fcc4b92137c57a2aa83b81b2e"
+    },
+    {
+      "name": "Microsoft.Extensions.Caching.Memory",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Caching.Memory.dll",
+      "sha256": "50df53585dac029895a6d50a32212424aafbae87b9cc20ac0af5338677492983"
+    },
+    {
+      "name": "Microsoft.Extensions.Configuration",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Configuration.dll",
+      "sha256": "b8fb3cee77f703ab623826f5585a9acecfbbd186b98e1912353784b0aa994fb6"
+    },
+    {
+      "name": "Microsoft.Extensions.Configuration.Abstractions",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Configuration.Abstractions.dll",
+      "sha256": "63a89b1becd68c2f5051df9c042b46bdf41fba72393bb1ef29b52b701b155c31"
+    },
+    {
+      "name": "Microsoft.Extensions.Configuration.Binder",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Configuration.Binder.dll",
+      "sha256": "26064491ae0cfb2dad631e672f6307a1a6659faeab3275b16b3f2b029841389e"
+    },
+    {
+      "name": "Microsoft.Extensions.Configuration.EnvironmentVariables",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Configuration.EnvironmentVariables.dll",
+      "sha256": "f44e7a938bb4417e29925aa15dc121ac714157384819bc22e75f7af2e2779230"
+    },
+    {
+      "name": "Microsoft.Extensions.Configuration.FileExtensions",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Configuration.FileExtensions.dll",
+      "sha256": "07b4726e83356d65ddc922ea4cf10da10b90dc8c074b845483786e840b47c17d"
+    },
+    {
+      "name": "Microsoft.Extensions.Configuration.Json",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Configuration.Json.dll",
+      "sha256": "49b6f5405bd45624edd3dd1286e82ccf7265eb5ed3befaa38902194395eff743"
+    },
+    {
+      "name": "Microsoft.Extensions.DependencyInjection",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.DependencyInjection.dll",
+      "sha256": "6424c0b19a1cef1977db79eee164dcaeb3cba6abdaa583d6f5ff6413f7f7244a"
+    },
+    {
+      "name": "Microsoft.Extensions.DependencyInjection.Abstractions",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.DependencyInjection.Abstractions.dll",
+      "sha256": "0e2feec8beaa131967d1f0d70684500183227d1ef58c617b8fadb793c3387e93"
+    },
+    {
+      "name": "Microsoft.Extensions.Diagnostics",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Diagnostics.dll",
+      "sha256": "f2da53517fbd33cf08738dc8a439a3ba662b394fd8328d73107da635bc446f30"
+    },
+    {
+      "name": "Microsoft.Extensions.Diagnostics.Abstractions",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Diagnostics.Abstractions.dll",
+      "sha256": "d99f6143691e8a409b4857bd65829189465c71ad7ef5dff0e63a36c9f8fae002"
+    },
+    {
+      "name": "Microsoft.Extensions.Features",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Features.dll",
+      "sha256": "9a37af53f48d4cbcafd3de646c60cdc5d142a95b49de1f82aade1a919c4aecff"
+    },
+    {
+      "name": "Microsoft.Extensions.FileProviders.Abstractions",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.FileProviders.Abstractions.dll",
+      "sha256": "f39acfb26fe3c3c977283e5efda4f0406418d58f446cfc0d4b1a843777a10651"
+    },
+    {
+      "name": "Microsoft.Extensions.FileProviders.Physical",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.FileProviders.Physical.dll",
+      "sha256": "79d43cd4ac4df4c45bb6d3af3cfa5d4c9218008430122af685cb3877e8737208"
+    },
+    {
+      "name": "Microsoft.Extensions.Hosting",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Hosting.dll",
+      "sha256": "22eb6edfc401db5d4ec30783474a913b7c39de13a76a6607128980c50b6cd521"
+    },
+    {
+      "name": "Microsoft.Extensions.Hosting.Abstractions",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Hosting.Abstractions.dll",
+      "sha256": "95f5e2e5ab0a8fc6c4fd35f1db331b7aa2852ab2cc7ca148be72320289bfedda"
+    },
+    {
+      "name": "Microsoft.Extensions.Localization.Abstractions",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Localization.Abstractions.dll",
+      "sha256": "5d5e96ef35d1fa9da098ce574eb6af3b1ea7e83dddee0a729322746be1e2b90b"
+    },
+    {
+      "name": "Microsoft.Extensions.Logging",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Logging.dll",
+      "sha256": "afd93f320e217561e674f8c6d44ce1f0846d6ae2f26c0263f6b662476d4b570c"
+    },
+    {
+      "name": "Microsoft.Extensions.Logging.Abstractions",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Logging.Abstractions.dll",
+      "sha256": "90c41d68d297e54c4def3cfd38eb620513a744ab01131840ea3e2634cf973be3"
+    },
+    {
+      "name": "Microsoft.Extensions.Logging.Configuration",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Logging.Configuration.dll",
+      "sha256": "c4df0fd6bce42c6293a8fc59c16d21a98e64f90a2f13523cc3b82cfd42ef968c"
+    },
+    {
+      "name": "Microsoft.Extensions.Logging.Console",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Logging.Console.dll",
+      "sha256": "f2a8843474f346cd3d076d352345a6372f199ca11fdb863bdbb246c87bcc9068"
+    },
+    {
+      "name": "Microsoft.Extensions.Logging.Debug",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Logging.Debug.dll",
+      "sha256": "4a261451703385f107746d051041270f46b2fd4272b5b1bc3e98b01677660658"
+    },
+    {
+      "name": "Microsoft.Extensions.Logging.EventLog",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Logging.EventLog.dll",
+      "sha256": "21fa039f689683993894c73c35a1611ed64d46bdcaffae86d8273e0c7a30a0a8"
+    },
+    {
+      "name": "Microsoft.Extensions.Logging.EventSource",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Logging.EventSource.dll",
+      "sha256": "5372914940d40ebb0e05dffc31011901be5a961fddf7e3d6bee4a3a7f6bd285f"
+    },
+    {
+      "name": "Microsoft.Extensions.ObjectPool",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.ObjectPool.dll",
+      "sha256": "e02787c8fb6a7d9dd4e302c4d7f25f5a5c887c3b65f2d356098d473547c5df82"
+    },
+    {
+      "name": "Microsoft.Extensions.Options",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Options.dll",
+      "sha256": "02a3cad0e05023f129c0717ba99d171ac524bf5f7c955863e17e3f7441107567"
+    },
+    {
+      "name": "Microsoft.Extensions.Options.ConfigurationExtensions",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Options.ConfigurationExtensions.dll",
+      "sha256": "1bcd901dbe6c5a148f42f6e1865a8bce598d24e87bd38f62e5a6108454d9a541"
+    },
+    {
+      "name": "Microsoft.Extensions.Primitives",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Primitives.dll",
+      "sha256": "5b40af41b1b354f88e64e5b04619f70aaefe693ff377ac0bb9bc7f70c4018cc1"
+    },
+    {
+      "name": "Microsoft.Extensions.WebEncoders",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.WebEncoders.dll",
+      "sha256": "461ba0dde4de891204588ba5e4ed9174a499366dc93e8a78a04f74d45290b4c2"
+    },
+    {
+      "name": "Microsoft.JSInterop",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.JSInterop.dll",
+      "sha256": "6a283855c4e5e60c7ec9c81e3cad6201178fc232cc0d8dc022ca643d7a9c4138"
+    },
+    {
+      "name": "Microsoft.Net.Http.Headers",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Net.Http.Headers.dll",
+      "sha256": "7b836d9e11acc47222d28cd02a54101f43464b047d84978d157d2d932b97a8e9"
+    },
+    {
+      "name": "Microsoft.Win32.Primitives",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\Microsoft.Win32.Primitives.dll",
+      "sha256": "6c21472b0ae2f9b484a97614fad5485a22f18f9f19ee1adb9ceb3ed8ddb072d7"
+    },
+    {
+      "name": "Microsoft.Win32.Registry",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\Microsoft.Win32.Registry.dll",
+      "sha256": "76849cfde4369f3ae93e28261fe5e1010dbf1332f7da95c98543cba9b03961c0"
+    },
+    {
+      "name": "Oracle",
+      "filename": "D:\\mediamanager-validation\\20261014-release-quick-connect-native-7\\bin\\Release\\net10.0\\Oracle.dll",
+      "sha256": "9e77044b398ed5f695cd5bf3883eb464e86fa8b4a9a549b3445d328f54fcf1d1"
+    },
+    {
+      "name": "System.Collections",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Collections.dll",
+      "sha256": "df6f2037eabee28100184e92f7536427ba2f086c1110629804d466b124bc4d54"
+    },
+    {
+      "name": "System.Collections.Concurrent",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Collections.Concurrent.dll",
+      "sha256": "082f4bc0da1141eb65111b6da633d75624adfb7bb067d7ee90c5622c8b30885b"
+    },
+    {
+      "name": "System.Collections.Immutable",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Collections.Immutable.dll",
+      "sha256": "b527dd7b2beb82c22aa39787298cbeb33f3eac9eb9b83a0f0271353421db28db"
+    },
+    {
+      "name": "System.Collections.NonGeneric",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Collections.NonGeneric.dll",
+      "sha256": "aa4d5216d066c91cb489f63c6cbfcaf1f47b6e74e070db45639d3460454fc60b"
+    },
+    {
+      "name": "System.ComponentModel",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.ComponentModel.dll",
+      "sha256": "e3b6f75864ee944898540937c1f300e04f44a1b2729516f0bbf948589a8b14b2"
+    },
+    {
+      "name": "System.ComponentModel.Annotations",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.ComponentModel.Annotations.dll",
+      "sha256": "e3be2d35d81e6475c64110cfc099895b71df22c8b46a18c2d7c76a913b8ba903"
+    },
+    {
+      "name": "System.ComponentModel.Primitives",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.ComponentModel.Primitives.dll",
+      "sha256": "1e2451184c287409ea25acde3c90f25950bf34d16458a6e52a94ca4292434f62"
+    },
+    {
+      "name": "System.ComponentModel.TypeConverter",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.ComponentModel.TypeConverter.dll",
+      "sha256": "10dae312a6697718f8ce3dfcdb17d6ae4b74687c765d74d50de8a8e69e08f5e7"
+    },
+    {
+      "name": "System.Diagnostics.DiagnosticSource",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Diagnostics.DiagnosticSource.dll",
+      "sha256": "6267c1bd1bdf2bdd4b5748b885b0adcda10f18697adfea8488a19a009ad44fdb"
+    },
+    {
+      "name": "System.Diagnostics.Process",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Diagnostics.Process.dll",
+      "sha256": "51a57fbe918f8b68930c090792b718fc0850ea12da869d50b97a3796af29a740"
+    },
+    {
+      "name": "System.Diagnostics.Tracing",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Diagnostics.Tracing.dll",
+      "sha256": "9563d5eec35f94d13a5e62eaa9535dbe0e9ea474f055da132fb8af46b0b01263"
+    },
+    {
+      "name": "System.IO.FileSystem.Watcher",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.IO.FileSystem.Watcher.dll",
+      "sha256": "8ab1704e4bd171056ec5a11e886d5199d05a641c6d0233c53d4766bf30328dd3"
+    },
+    {
+      "name": "System.IO.Pipelines",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.IO.Pipelines.dll",
+      "sha256": "ee9f0fd6c659f50799afd103c6ed9c5e408967e28dfa059bddf4b0a3fd2557dd"
+    },
+    {
+      "name": "System.IO.Pipes",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.IO.Pipes.dll",
+      "sha256": "3804f9992861122e60990b0765d0b50b33cdc2e4d89d26d9dbf8641d1d0134a2"
+    },
+    {
+      "name": "System.Linq",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Linq.dll",
+      "sha256": "284d38945b6e92e847129bd28af458b19818d0f2181f79882888ab2003f4c519"
+    },
+    {
+      "name": "System.Linq.Expressions",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Linq.Expressions.dll",
+      "sha256": "8830f4a6a6982f53cfbb54f992858ee36b4994a6ff6e6078c39627e77bef282f"
+    },
+    {
+      "name": "System.Linq.Queryable",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Linq.Queryable.dll",
+      "sha256": "b3b3a9c1b87a51dacd46a3f9ec392c5d05e449152d44d6bd495df0994350e2fa"
+    },
+    {
+      "name": "System.Memory",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Memory.dll",
+      "sha256": "f8f9d38efd6b0de30954d6bf1f353e9617bfb36d3d245c013a3b12be9f6bd88a"
+    },
+    {
+      "name": "System.Net.Http",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Net.Http.dll",
+      "sha256": "b98ed0cb80dd54c33fc049f33af5448710752155bbd5cc8cbcd932e01f066801"
+    },
+    {
+      "name": "System.Net.NameResolution",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Net.NameResolution.dll",
+      "sha256": "e786c0940f5322f0ad6e8e34e7b582e5b050df0fb2230329325307e61bfd994c"
+    },
+    {
+      "name": "System.Net.Primitives",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Net.Primitives.dll",
+      "sha256": "4dbb41a178ef013a898327152eccd146228dd2eb83859b9bb36078333b41f0f1"
+    },
+    {
+      "name": "System.Net.Quic",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Net.Quic.dll",
+      "sha256": "af5b52cdee62d014af677c411530a3fde5c1c368adecb8f83dcfe9246e8bbe73"
+    },
+    {
+      "name": "System.Net.Security",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Net.Security.dll",
+      "sha256": "a78bd713e807729f15b0e085c67fd6cbfefa85736a2618512d4ff1212759eba5"
+    },
+    {
+      "name": "System.Net.Sockets",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Net.Sockets.dll",
+      "sha256": "645c56d637ce15976998119e50722a911315682ce141b4aab98874ce1b063f3a"
+    },
+    {
+      "name": "System.Net.WebSockets",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Net.WebSockets.dll",
+      "sha256": "c014a074d408c71011e26eac69be85003a852cfe115e8608bb5d4fd70536eb2e"
+    },
+    {
+      "name": "System.Numerics.Vectors",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Numerics.Vectors.dll",
+      "sha256": "a9a980ee33ed0c798a5e1960c4557521f465ac9e0987dfd2c3049d53b1f2fa5a"
+    },
+    {
+      "name": "System.ObjectModel",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.ObjectModel.dll",
+      "sha256": "2179bb19f335b4fcacd0994ad2ccfdac6840deff09c7889debfe9dbb5b88a3e6"
+    },
+    {
+      "name": "System.Private.CoreLib",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Private.CoreLib.dll",
+      "sha256": "1125acc8106c43fc8bad2d203c4c4485df6182d292846c2fff415c1040c54678"
+    },
+    {
+      "name": "System.Private.Uri",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Private.Uri.dll",
+      "sha256": "b15c84d2120e1ec9612c66ba59bc3d7e67d841e2bce7b7d0478cb212537539b4"
+    },
+    {
+      "name": "System.Private.Xml",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Private.Xml.dll",
+      "sha256": "d71e72a7a9de324352edd281a46466b51bd0bdd2831b1573f8d3bae8bd2dd4a6"
+    },
+    {
+      "name": "System.Private.Xml.Linq",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Private.Xml.Linq.dll",
+      "sha256": "c832b73de9783e6929ca5ff4863fc313e13ef7cfb5965c52587c4f77f6e037a7"
+    },
+    {
+      "name": "System.Reflection.DispatchProxy",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Reflection.DispatchProxy.dll",
+      "sha256": "bf93a361c0bba8497889c9f7713add5968ba39394f9e6bda27e86294c6c43560"
+    },
+    {
+      "name": "System.Reflection.Emit",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Reflection.Emit.dll",
+      "sha256": "09059981bbeea0fdc5df589be5d7e3937d57e22bec4d78ceb492c587926fc238"
+    },
+    {
+      "name": "System.Reflection.Emit.ILGeneration",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Reflection.Emit.ILGeneration.dll",
+      "sha256": "6b42ddd05b0ca1c7342d73ea9f401fe588044215d65c67b756deb780f0894a26"
+    },
+    {
+      "name": "System.Reflection.Emit.Lightweight",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Reflection.Emit.Lightweight.dll",
+      "sha256": "d2724a2b7b46146877ec1f6e400c49ea05f84bdd31f3bba52ae139ee68a4f779"
+    },
+    {
+      "name": "System.Reflection.Primitives",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Reflection.Primitives.dll",
+      "sha256": "c2bbd885d03da5e880667c228ac1f56a5f3a72ea37d43f010ada000adc33da28"
+    },
+    {
+      "name": "System.Runtime",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Runtime.dll",
+      "sha256": "76be53624f64b23d0249dfa0bbe85390086de7c44bfd490642ea86c6faaf44af"
+    },
+    {
+      "name": "System.Runtime.InteropServices",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Runtime.InteropServices.dll",
+      "sha256": "e5eb1679f3579c9141e2bb9dbdce62624a623f38d299805cc1de07bacd21841f"
+    },
+    {
+      "name": "System.Runtime.Intrinsics",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Runtime.Intrinsics.dll",
+      "sha256": "b07694ec91f3a200acf0f8b37c6ce5fcf05126a9198ae156d839fa5ca8439dc5"
+    },
+    {
+      "name": "System.Runtime.Loader",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Runtime.Loader.dll",
+      "sha256": "9b9b2a4f0358d9146e76178ddb87d019be380c78baa7dac853493d45df089f03"
+    },
+    {
+      "name": "System.Runtime.Numerics",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Runtime.Numerics.dll",
+      "sha256": "8ac94fb810c092a9297a903762e79a75ae07d7229d0721540c391f86d3d5d220"
+    },
+    {
+      "name": "System.Security.Claims",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Security.Claims.dll",
+      "sha256": "c53c8a7e95d8296f951872fdd2e6334d11c20bffd4322f1a088773bf9dcaa3c2"
+    },
+    {
+      "name": "System.Security.Cryptography",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Security.Cryptography.dll",
+      "sha256": "e0a839a540e47343b53a936b32d91599a3470005228d50fd0b896f8bbdcc65b0"
+    },
+    {
+      "name": "System.Text.Encoding.Extensions",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Text.Encoding.Extensions.dll",
+      "sha256": "8f51b9535db64fe027a40d6076200b1a6b0889bf05f62bb8e68c3eb083c7f113"
+    },
+    {
+      "name": "System.Text.Encodings.Web",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Text.Encodings.Web.dll",
+      "sha256": "d20431f20d992e71a4e82e5f25c822474e2f4097d8527972d3d78ea1f26e47c3"
+    },
+    {
+      "name": "System.Text.Json",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Text.Json.dll",
+      "sha256": "fa99f413be21ed5f484a09093fe5f0beba7de3062cf9cc9f847dbf8108dba55a"
+    },
+    {
+      "name": "System.Threading",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Threading.dll",
+      "sha256": "6c32ed1bf8067e4169e8feddd15e6489b89d19d1c7aae1520a551b57745d0a60"
+    },
+    {
+      "name": "System.Threading.Overlapped",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Threading.Overlapped.dll",
+      "sha256": "89fde15f8e520c4bcbc6cbfdceba2baed8670cdf52399a4cd7a21c6efb276c1a"
+    },
+    {
+      "name": "System.Threading.Thread",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Threading.Thread.dll",
+      "sha256": "ce71949bb1ea67b686e799128582015ebf8758f1107e59e43f342ece3f662930"
+    },
+    {
+      "name": "System.Threading.ThreadPool",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Threading.ThreadPool.dll",
+      "sha256": "58fbc6c4b9c72087152fd0f0670a527098c00b0c19ba8d0979d3ca5ce07c6936"
+    },
+    {
+      "name": "System.Xml.ReaderWriter",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Xml.ReaderWriter.dll",
+      "sha256": "8e48fed4d12bcffff01e8059caafb564697275797d2f5ec6823fdd82b87fe938"
+    },
+    {
+      "name": "System.Xml.XDocument",
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Xml.XDocument.dll",
+      "sha256": "3ff858607de5146051498a7124ef983bea280d86e165f993516c6c26af81cfb5"
+    }
+  ],
+  "results": [
+    {
+      "name": "enabled",
+      "status": 200,
+      "body": "true",
+      "json": true,
+      "contentType": "application/json; charset=utf-8",
+      "allow": "",
+      "started": "2026-10-14T14:53:39.0936342Z",
+      "finished": "2026-10-14T14:53:39.2029424Z",
+      "issued": null,
+      "calls": [],
+      "pending": [],
+      "authorizedCount": 0
+    },
+    {
+      "name": "disabled",
+      "status": 200,
+      "body": "false",
+      "json": false,
+      "contentType": "application/json; charset=utf-8",
+      "allow": "",
+      "started": "2026-10-14T14:53:39.2041447Z",
+      "finished": "2026-10-14T14:53:39.2089631Z",
+      "issued": null,
+      "calls": [],
+      "pending": [],
+      "authorizedCount": 0
+    },
+    {
+      "name": "initiate",
+      "status": 200,
+      "body": "{\u0022Authenticated\u0022:false,\u0022Secret\u0022:\u00224A6B702A804566EACACD265EF8187204AB3A25F95AE8C64A72C7FE5130BEE104\u0022,\u0022Code\u0022:\u0022744499\u0022,\u0022DeviceId\u0022:\u0022target-device\u0022,\u0022DeviceName\u0022:\u0022Target\u0022,\u0022AppName\u0022:\u0022Target app\u0022,\u0022AppVersion\u0022:\u00221.2\u0022,\u0022DateAdded\u0022:\u00222026-10-14T14:53:39.2238222Z\u0022}",
+      "json": {
+        "Authenticated": false,
+        "Secret": "4A6B702A804566EACACD265EF8187204AB3A25F95AE8C64A72C7FE5130BEE104",
+        "Code": "744499",
+        "DeviceId": "target-device",
+        "DeviceName": "Target",
+        "AppName": "Target app",
+        "AppVersion": "1.2",
+        "DateAdded": "2026-10-14T14:53:39.2238222Z"
+      },
+      "contentType": "application/json; charset=utf-8",
+      "allow": "",
+      "started": "2026-10-14T14:53:39.2090033Z",
+      "finished": "2026-10-14T14:53:39.2352946Z",
+      "issued": {
+        "Authenticated": false,
+        "Secret": "4A6B702A804566EACACD265EF8187204AB3A25F95AE8C64A72C7FE5130BEE104",
+        "Code": "744499",
+        "DeviceId": "target-device",
+        "DeviceName": "Target",
+        "AppName": "Target app",
+        "AppVersion": "1.2",
+        "DateAdded": "2026-10-14T14:53:39.2238222Z"
+      },
+      "calls": [],
+      "pending": [
+        {
+          "Authenticated": false,
+          "Secret": "4A6B702A804566EACACD265EF8187204AB3A25F95AE8C64A72C7FE5130BEE104",
+          "Code": "744499",
+          "DeviceId": "target-device",
+          "DeviceName": "Target",
+          "AppName": "Target app",
+          "AppVersion": "1.2",
+          "DateAdded": "2026-10-14T14:53:39.2238222Z"
+        }
+      ],
+      "authorizedCount": 0
+    },
+    {
+      "name": "initiate-disabled",
+      "status": 401,
+      "body": "\u0022Quick connect is disabled\u0022",
+      "json": "Quick connect is disabled",
+      "contentType": "application/json; charset=utf-8",
+      "allow": "",
+      "started": "2026-10-14T14:53:39.2353474Z",
+      "finished": "2026-10-14T14:53:39.2363632Z",
+      "issued": null,
+      "calls": [],
+      "pending": [],
+      "authorizedCount": 0
+    },
+    {
+      "name": "initiate-DeviceId-null",
+      "status": 400,
+      "body": "Error processing request.",
+      "json": null,
+      "contentType": "text/plain",
+      "allow": "",
+      "started": "2026-10-14T14:53:39.2363716Z",
+      "finished": "2026-10-14T14:53:39.2401195Z",
+      "issued": null,
+      "calls": [],
+      "pending": [],
+      "authorizedCount": 0
+    },
+    {
+      "name": "initiate-DeviceId-",
+      "status": 400,
+      "body": "Error processing request.",
+      "json": null,
+      "contentType": "text/plain",
+      "allow": "",
+      "started": "2026-10-14T14:53:39.2401276Z",
+      "finished": "2026-10-14T14:53:39.2408268Z",
+      "issued": null,
+      "calls": [],
+      "pending": [],
+      "authorizedCount": 0
+    },
+    {
+      "name": "initiate-Device-null",
+      "status": 400,
+      "body": "Error processing request.",
+      "json": null,
+      "contentType": "text/plain",
+      "allow": "",
+      "started": "2026-10-14T14:53:39.2408325Z",
+      "finished": "2026-10-14T14:53:39.2413627Z",
+      "issued": null,
+      "calls": [],
+      "pending": [],
+      "authorizedCount": 0
+    },
+    {
+      "name": "initiate-Device-",
+      "status": 400,
+      "body": "Error processing request.",
+      "json": null,
+      "contentType": "text/plain",
+      "allow": "",
+      "started": "2026-10-14T14:53:39.2413694Z",
+      "finished": "2026-10-14T14:53:39.2419944Z",
+      "issued": null,
+      "calls": [],
+      "pending": [],
+      "authorizedCount": 0
+    },
+    {
+      "name": "initiate-Client-null",
+      "status": 400,
+      "body": "Error processing request.",
+      "json": null,
+      "contentType": "text/plain",
+      "allow": "",
+      "started": "2026-10-14T14:53:39.2420009Z",
+      "finished": "2026-10-14T14:53:39.2424751Z",
+      "issued": null,
+      "calls": [],
+      "pending": [],
+      "authorizedCount": 0
+    },
+    {
+      "name": "initiate-Client-",
+      "status": 400,
+      "body": "Error processing request.",
+      "json": null,
+      "contentType": "text/plain",
+      "allow": "",
+      "started": "2026-10-14T14:53:39.2424825Z",
+      "finished": "2026-10-14T14:53:39.242965Z",
+      "issued": null,
+      "calls": [],
+      "pending": [],
+      "authorizedCount": 0
+    },
+    {
+      "name": "initiate-Version-null",
+      "status": 400,
+      "body": "Error processing request.",
+      "json": null,
+      "contentType": "text/plain",
+      "allow": "",
+      "started": "2026-10-14T14:53:39.2429706Z",
+      "finished": "2026-10-14T14:53:39.2434301Z",
+      "issued": null,
+      "calls": [],
+      "pending": [],
+      "authorizedCount": 0
+    },
+    {
+      "name": "initiate-Version-",
+      "status": 400,
+      "body": "Error processing request.",
+      "json": null,
+      "contentType": "text/plain",
+      "allow": "",
+      "started": "2026-10-14T14:53:39.2434367Z",
+      "finished": "2026-10-14T14:53:39.24394Z",
+      "issued": null,
+      "calls": [],
+      "pending": [],
+      "authorizedCount": 0
+    },
+    {
+      "name": "initiate-whitespace",
+      "status": 200,
+      "body": "{\u0022Authenticated\u0022:false,\u0022Secret\u0022:\u002225006A04D395376102B213B686C3441FB6282FCAE2A3516AED0B4EBFE131EF75\u0022,\u0022Code\u0022:\u0022231335\u0022,\u0022DeviceId\u0022:\u0022 \u0022,\u0022DeviceName\u0022:\u0022 \u0022,\u0022AppName\u0022:\u0022 \u0022,\u0022AppVersion\u0022:\u0022 \u0022,\u0022DateAdded\u0022:\u00222026-10-14T14:53:39.2444843Z\u0022}",
+      "json": {
+        "Authenticated": false,
+        "Secret": "25006A04D395376102B213B686C3441FB6282FCAE2A3516AED0B4EBFE131EF75",
+        "Code": "231335",
+        "DeviceId": " ",
+        "DeviceName": " ",
+        "AppName": " ",
+        "AppVersion": " ",
+        "DateAdded": "2026-10-14T14:53:39.2444843Z"
+      },
+      "contentType": "application/json; charset=utf-8",
+      "allow": "",
+      "started": "2026-10-14T14:53:39.2439456Z",
+      "finished": "2026-10-14T14:53:39.2446829Z",
+      "issued": {
+        "Authenticated": false,
+        "Secret": "25006A04D395376102B213B686C3441FB6282FCAE2A3516AED0B4EBFE131EF75",
+        "Code": "231335",
+        "DeviceId": " ",
+        "DeviceName": " ",
+        "AppName": " ",
+        "AppVersion": " ",
+        "DateAdded": "2026-10-14T14:53:39.2444843Z"
+      },
+      "calls": [],
+      "pending": [
+        {
+          "Authenticated": false,
+          "Secret": "25006A04D395376102B213B686C3441FB6282FCAE2A3516AED0B4EBFE131EF75",
+          "Code": "231335",
+          "DeviceId": " ",
+          "DeviceName": " ",
+          "AppName": " ",
+          "AppVersion": " ",
+          "DateAdded": "2026-10-14T14:53:39.2444843Z"
+        }
+      ],
+      "authorizedCount": 0
+    },
+    {
+      "name": "connect-pending",
+      "status": 200,
+      "body": "{\u0022Authenticated\u0022:false,\u0022Secret\u0022:\u0022BEAF159D517FC5866296335913F0FAA9354EAC292FB2FA735731CABB8D6C5D49\u0022,\u0022Code\u0022:\u0022316105\u0022,\u0022DeviceId\u0022:\u0022target-device\u0022,\u0022DeviceName\u0022:\u0022Target\u0022,\u0022AppName\u0022:\u0022Target app\u0022,\u0022AppVersion\u0022:\u00221.2\u0022,\u0022DateAdded\u0022:\u00222026-10-14T14:53:39.2447234Z\u0022}",
+      "json": {
+        "Authenticated": false,
+        "Secret": "BEAF159D517FC5866296335913F0FAA9354EAC292FB2FA735731CABB8D6C5D49",
+        "Code": "316105",
+        "DeviceId": "target-device",
+        "DeviceName": "Target",
+        "AppName": "Target app",
+        "AppVersion": "1.2",
+        "DateAdded": "2026-10-14T14:53:39.2447234Z"
+      },
+      "contentType": "application/json; charset=utf-8",
+      "allow": "",
+      "started": "2026-10-14T14:53:39.2446999Z",
+      "finished": "2026-10-14T14:53:39.2613407Z",
+      "issued": {
+        "Authenticated": false,
+        "Secret": "BEAF159D517FC5866296335913F0FAA9354EAC292FB2FA735731CABB8D6C5D49",
+        "Code": "316105",
+        "DeviceId": "target-device",
+        "DeviceName": "Target",
+        "AppName": "Target app",
+        "AppVersion": "1.2",
+        "DateAdded": "2026-10-14T14:53:39.2447234Z"
+      },
+      "calls": [],
+      "pending": [
+        {
+          "Authenticated": false,
+          "Secret": "BEAF159D517FC5866296335913F0FAA9354EAC292FB2FA735731CABB8D6C5D49",
+          "Code": "316105",
+          "DeviceId": "target-device",
+          "DeviceName": "Target",
+          "AppName": "Target app",
+          "AppVersion": "1.2",
+          "DateAdded": "2026-10-14T14:53:39.2447234Z"
+        }
+      ],
+      "authorizedCount": 0
+    },
+    {
+      "name": "connect-authorized",
+      "status": 200,
+      "body": "{\u0022Authenticated\u0022:true,\u0022Secret\u0022:\u00220CCB2D96AF25CA239316C4C0B5FB52F4B8964290CB1C784653975992EB595B7D\u0022,\u0022Code\u0022:\u0022644203\u0022,\u0022DeviceId\u0022:\u0022target-device\u0022,\u0022DeviceName\u0022:\u0022Target\u0022,\u0022AppName\u0022:\u0022Target app\u0022,\u0022AppVersion\u0022:\u00221.2\u0022,\u0022DateAdded\u0022:\u00222026-10-14T14:54:39.2622894Z\u0022}",
+      "json": {
+        "Authenticated": true,
+        "Secret": "0CCB2D96AF25CA239316C4C0B5FB52F4B8964290CB1C784653975992EB595B7D",
+        "Code": "644203",
+        "DeviceId": "target-device",
+        "DeviceName": "Target",
+        "AppName": "Target app",
+        "AppVersion": "1.2",
+        "DateAdded": "2026-10-14T14:54:39.2622894Z"
+      },
+      "contentType": "application/json; charset=utf-8",
+      "allow": "",
+      "started": "2026-10-14T14:53:39.2613569Z",
+      "finished": "2026-10-14T14:53:39.2655828Z",
+      "issued": {
+        "Authenticated": true,
+        "Secret": "0CCB2D96AF25CA239316C4C0B5FB52F4B8964290CB1C784653975992EB595B7D",
+        "Code": "644203",
+        "DeviceId": "target-device",
+        "DeviceName": "Target",
+        "AppName": "Target app",
+        "AppVersion": "1.2",
+        "DateAdded": "2026-10-14T14:54:39.2622894Z"
+      },
+      "calls": [
+        {
+          "userId": "ce100000000000000000000000000001",
+          "DeviceId": "target-device",
+          "DeviceName": "Target",
+          "App": "Target app",
+          "AppVersion": "1.2",
+          "RemoteEndPoint": null
+        }
+      ],
+      "pending": [
+        {
+          "Authenticated": true,
+          "Secret": "0CCB2D96AF25CA239316C4C0B5FB52F4B8964290CB1C784653975992EB595B7D",
+          "Code": "644203",
+          "DeviceId": "target-device",
+          "DeviceName": "Target",
+          "AppName": "Target app",
+          "AppVersion": "1.2",
+          "DateAdded": "2026-10-14T14:54:39.2622894Z"
+        }
+      ],
+      "authorizedCount": 1
+    },
+    {
+      "name": "connect-lower-secret",
+      "status": 404,
+      "body": "\u0022Unknown secret\u0022",
+      "json": "Unknown secret",
+      "contentType": "application/json; charset=utf-8",
+      "allow": "",
+      "started": "2026-10-14T14:53:39.2656396Z",
+      "finished": "2026-10-14T14:53:39.2667374Z",
+      "issued": {
+        "Authenticated": false,
+        "Secret": "E41CE6481D1F212E3F008B653352F13B77290CF404F8132B971AB878A35D727F",
+        "Code": "416686",
+        "DeviceId": "target-device",
+        "DeviceName": "Target",
+        "AppName": "Target app",
+        "AppVersion": "1.2",
+        "DateAdded": "2026-10-14T14:53:39.2656856Z"
+      },
+      "calls": [],
+      "pending": [
+        {
+          "Authenticated": false,
+          "Secret": "E41CE6481D1F212E3F008B653352F13B77290CF404F8132B971AB878A35D727F",
+          "Code": "416686",
+          "DeviceId": "target-device",
+          "DeviceName": "Target",
+          "AppName": "Target app",
+          "AppVersion": "1.2",
+          "DateAdded": "2026-10-14T14:53:39.2656856Z"
+        }
+      ],
+      "authorizedCount": 0
+    },
+    {
+      "name": "connect-unknown",
+      "status": 404,
+      "body": "\u0022Unknown secret\u0022",
+      "json": "Unknown secret",
+      "contentType": "application/json; charset=utf-8",
+      "allow": "",
+      "started": "2026-10-14T14:53:39.2667529Z",
+      "finished": "2026-10-14T14:53:39.2672317Z",
+      "issued": null,
+      "calls": [],
+      "pending": [],
+      "authorizedCount": 0
+    },
+    {
+      "name": "connect-expired",
+      "status": 404,
+      "body": "\u0022Unknown secret\u0022",
+      "json": "Unknown secret",
+      "contentType": "application/json; charset=utf-8",
+      "allow": "",
+      "started": "2026-10-14T14:53:39.2672402Z",
+      "finished": "2026-10-14T14:53:39.2676991Z",
+      "issued": {
+        "Authenticated": false,
+        "Secret": "DD9CBB1AD27DAD01EB185F7BA845B64FF062FB2710243AD0C871AED1E046666B",
+        "Code": "255928",
+        "DeviceId": "target-device",
+        "DeviceName": "Target",
+        "AppName": "Target app",
+        "AppVersion": "1.2",
+        "DateAdded": "1970-01-01T00:00:00Z"
+      },
+      "calls": [],
+      "pending": [],
+      "authorizedCount": 0
+    },
+    {
+      "name": "connect-disabled",
+      "status": 401,
+      "body": "\u0022Quick connect is disabled\u0022",
+      "json": "Quick connect is disabled",
+      "contentType": "application/json; charset=utf-8",
+      "allow": "",
+      "started": "2026-10-14T14:53:39.2677048Z",
+      "finished": "2026-10-14T14:53:39.2680579Z",
+      "issued": null,
+      "calls": [],
+      "pending": [],
+      "authorizedCount": 0
+    },
+    {
+      "name": "connect-missing",
+      "status": 400,
+      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022secret\u0022:[\u0022The secret field is required.\u0022]},\u0022traceId\u0022:\u00220HNPA0BN9KN1H:00000014\u0022}",
+      "json": {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "errors": {
+          "secret": [
+            "The secret field is required."
+          ]
+        },
+        "traceId": "0HNPA0BN9KN1H:00000014"
+      },
+      "contentType": "application/json; charset=utf-8",
+      "allow": "",
+      "started": "2026-10-14T14:53:39.2680648Z",
+      "finished": "2026-10-14T14:53:39.287233Z",
+      "issued": null,
+      "calls": [],
+      "pending": [],
+      "authorizedCount": 0
+    },
+    {
+      "name": "connect-empty",
+      "status": 400,
+      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022secret\u0022:[\u0022The secret field is required.\u0022]},\u0022traceId\u0022:\u00220HNPA0BN9KN1H:00000015\u0022}",
+      "json": {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "errors": {
+          "secret": [
+            "The secret field is required."
+          ]
+        },
+        "traceId": "0HNPA0BN9KN1H:00000015"
+      },
+      "contentType": "application/json; charset=utf-8",
+      "allow": "",
+      "started": "2026-10-14T14:53:39.2872496Z",
+      "finished": "2026-10-14T14:53:39.288147Z",
+      "issued": null,
+      "calls": [],
+      "pending": [],
+      "authorizedCount": 0
+    },
+    {
+      "name": "connect-whitespace",
+      "status": 400,
+      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022secret\u0022:[\u0022The secret field is required.\u0022]},\u0022traceId\u0022:\u00220HNPA0BN9KN1H:00000016\u0022}",
+      "json": {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "errors": {
+          "secret": [
+            "The secret field is required."
+          ]
+        },
+        "traceId": "0HNPA0BN9KN1H:00000016"
+      },
+      "contentType": "application/json; charset=utf-8",
+      "allow": "",
+      "started": "2026-10-14T14:53:39.2881574Z",
+      "finished": "2026-10-14T14:53:39.2894654Z",
+      "issued": null,
+      "calls": [],
+      "pending": [],
+      "authorizedCount": 0
+    },
+    {
+      "name": "connect-unicode-space",
+      "status": 400,
+      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022secret\u0022:[\u0022The secret field is required.\u0022]},\u0022traceId\u0022:\u00220HNPA0BN9KN1H:00000017\u0022}",
+      "json": {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "errors": {
+          "secret": [
+            "The secret field is required."
+          ]
+        },
+        "traceId": "0HNPA0BN9KN1H:00000017"
+      },
+      "contentType": "application/json; charset=utf-8",
+      "allow": "",
+      "started": "2026-10-14T14:53:39.2894748Z",
+      "finished": "2026-10-14T14:53:39.2900674Z",
+      "issued": null,
+      "calls": [],
+      "pending": [],
+      "authorizedCount": 0
+    },
+    {
+      "name": "connect-bom",
+      "status": 404,
+      "body": "\u0022Unknown secret\u0022",
+      "json": "Unknown secret",
+      "contentType": "application/json; charset=utf-8",
+      "allow": "",
+      "started": "2026-10-14T14:53:39.2900754Z",
+      "finished": "2026-10-14T14:53:39.2907215Z",
+      "issued": null,
+      "calls": [],
+      "pending": [],
+      "authorizedCount": 0
+    },
+    {
+      "name": "connect-repeated",
+      "status": 200,
+      "body": "{\u0022Authenticated\u0022:false,\u0022Secret\u0022:\u00221912ACA33A6E9FA2C2480AD755A9E444BC10D7C54E472872CC9145CB99CD7949\u0022,\u0022Code\u0022:\u0022454164\u0022,\u0022DeviceId\u0022:\u0022target-device\u0022,\u0022DeviceName\u0022:\u0022Target\u0022,\u0022AppName\u0022:\u0022Target app\u0022,\u0022AppVersion\u0022:\u00221.2\u0022,\u0022DateAdded\u0022:\u00222026-10-14T14:53:39.2907501Z\u0022}",
+      "json": {
+        "Authenticated": false,
+        "Secret": "1912ACA33A6E9FA2C2480AD755A9E444BC10D7C54E472872CC9145CB99CD7949",
+        "Code": "454164",
+        "DeviceId": "target-device",
+        "DeviceName": "Target",
+        "AppName": "Target app",
+        "AppVersion": "1.2",
+        "DateAdded": "2026-10-14T14:53:39.2907501Z"
+      },
+      "contentType": "application/json; charset=utf-8",
+      "allow": "",
+      "started": "2026-10-14T14:53:39.2907282Z",
+      "finished": "2026-10-14T14:53:39.2914933Z",
+      "issued": {
+        "Authenticated": false,
+        "Secret": "1912ACA33A6E9FA2C2480AD755A9E444BC10D7C54E472872CC9145CB99CD7949",
+        "Code": "454164",
+        "DeviceId": "target-device",
+        "DeviceName": "Target",
+        "AppName": "Target app",
+        "AppVersion": "1.2",
+        "DateAdded": "2026-10-14T14:53:39.2907501Z"
+      },
+      "calls": [],
+      "pending": [
+        {
+          "Authenticated": false,
+          "Secret": "1912ACA33A6E9FA2C2480AD755A9E444BC10D7C54E472872CC9145CB99CD7949",
+          "Code": "454164",
+          "DeviceId": "target-device",
+          "DeviceName": "Target",
+          "AppName": "Target app",
+          "AppVersion": "1.2",
+          "DateAdded": "2026-10-14T14:53:39.2907501Z"
+        }
+      ],
+      "authorizedCount": 0
+    },
+    {
+      "name": "connect-auth-expired-only",
+      "status": 200,
+      "body": "{\u0022Authenticated\u0022:true,\u0022Secret\u0022:\u00228098F92248D8BCA44E9759D76B259E4D002B8B900AFF4B176B4471A11941D8BE\u0022,\u0022Code\u0022:\u0022399758\u0022,\u0022DeviceId\u0022:\u0022target-device\u0022,\u0022DeviceName\u0022:\u0022Target\u0022,\u0022AppName\u0022:\u0022Target app\u0022,\u0022AppVersion\u0022:\u00221.2\u0022,\u0022DateAdded\u0022:\u00222026-10-14T14:54:39.2915267Z\u0022}",
+      "json": {
+        "Authenticated": true,
+        "Secret": "8098F92248D8BCA44E9759D76B259E4D002B8B900AFF4B176B4471A11941D8BE",
+        "Code": "399758",
+        "DeviceId": "target-device",
+        "DeviceName": "Target",
+        "AppName": "Target app",
+        "AppVersion": "1.2",
+        "DateAdded": "2026-10-14T14:54:39.2915267Z"
+      },
+      "contentType": "application/json; charset=utf-8",
+      "allow": "",
+      "started": "2026-10-14T14:53:39.2915007Z",
+      "finished": "2026-10-14T14:53:39.2932918Z",
+      "issued": {
+        "Authenticated": true,
+        "Secret": "8098F92248D8BCA44E9759D76B259E4D002B8B900AFF4B176B4471A11941D8BE",
+        "Code": "399758",
+        "DeviceId": "target-device",
+        "DeviceName": "Target",
+        "AppName": "Target app",
+        "AppVersion": "1.2",
+        "DateAdded": "2026-10-14T14:54:39.2915267Z"
+      },
+      "calls": [
+        {
+          "userId": "ce100000000000000000000000000001",
+          "DeviceId": "target-device",
+          "DeviceName": "Target",
+          "App": "Target app",
+          "AppVersion": "1.2",
+          "RemoteEndPoint": null
+        }
+      ],
+      "pending": [
+        {
+          "Authenticated": true,
+          "Secret": "8098F92248D8BCA44E9759D76B259E4D002B8B900AFF4B176B4471A11941D8BE",
+          "Code": "399758",
+          "DeviceId": "target-device",
+          "DeviceName": "Target",
+          "AppName": "Target app",
+          "AppVersion": "1.2",
+          "DateAdded": "2026-10-14T14:54:39.2915267Z"
+        }
+      ],
+      "authorizedCount": 0
+    },
+    {
+      "name": "authorize-ordinary",
+      "status": 200,
+      "body": "true",
+      "json": true,
+      "contentType": "application/json; charset=utf-8",
+      "allow": "",
+      "started": "2026-10-14T14:53:39.2933161Z",
+      "finished": "2026-10-14T14:53:39.3041123Z",
+      "issued": {
+        "Authenticated": true,
+        "Secret": "AA8422BB2AC20202F9CA975C793FC3ED11726F567DCD651EF8193C01EB60813D",
+        "Code": "376622",
+        "DeviceId": "target-device",
+        "DeviceName": "Target",
+        "AppName": "Target app",
+        "AppVersion": "1.2",
+        "DateAdded": "2026-10-14T14:54:39.3036185Z"
+      },
+      "calls": [
+        {
+          "userId": "ce100000000000000000000000000001",
+          "DeviceId": "target-device",
+          "DeviceName": "Target",
+          "App": "Target app",
+          "AppVersion": "1.2",
+          "RemoteEndPoint": null
+        }
+      ],
+      "pending": [
+        {
+          "Authenticated": true,
+          "Secret": "AA8422BB2AC20202F9CA975C793FC3ED11726F567DCD651EF8193C01EB60813D",
+          "Code": "376622",
+          "DeviceId": "target-device",
+          "DeviceName": "Target",
+          "AppName": "Target app",
+          "AppVersion": "1.2",
+          "DateAdded": "2026-10-14T14:54:39.3036185Z"
+        }
+      ],
+      "authorizedCount": 1
+    },
+    {
+      "name": "authorize-admin-other",
+      "status": 200,
+      "body": "true",
+      "json": true,
+      "contentType": "application/json; charset=utf-8",
+      "allow": "",
+      "started": "2026-10-14T14:53:39.3041282Z",
+      "finished": "2026-10-14T14:53:39.3065844Z",
+      "issued": {
+        "Authenticated": true,
+        "Secret": "20127B6481752E7A3CF187E4B5EAD56F7D241D9B5D1C1BF9B0F98ACC555917EC",
+        "Code": "542826",
+        "DeviceId": "target-device",
+        "DeviceName": "Target",
+        "AppName": "Target app",
+        "AppVersion": "1.2",
+        "DateAdded": "2026-10-14T14:54:39.3063791Z"
+      },
+      "calls": [
+        {
+          "userId": "ce100000000000000000000000000002",
+          "DeviceId": "target-device",
+          "DeviceName": "Target",
+          "App": "Target app",
+          "AppVersion": "1.2",
+          "RemoteEndPoint": null
+        }
+      ],
+      "pending": [
+        {
+          "Authenticated": true,
+          "Secret": "20127B6481752E7A3CF187E4B5EAD56F7D241D9B5D1C1BF9B0F98ACC555917EC",
+          "Code": "542826",
+          "DeviceId": "target-device",
+          "DeviceName": "Target",
+          "AppName": "Target app",
+          "AppVersion": "1.2",
+          "DateAdded": "2026-10-14T14:54:39.3063791Z"
+        }
+      ],
+      "authorizedCount": 1
+    },
+    {
+      "name": "authorize-ordinary-other",
+      "status": 403,
+      "body": "Error processing request.",
+      "json": null,
+      "contentType": "text/plain",
+      "allow": "",
+      "started": "2026-10-14T14:53:39.306595Z",
+      "finished": "2026-10-14T14:53:39.308674Z",
+      "issued": {
+        "Authenticated": false,
+        "Secret": "97E1E75A851F8AF6E6FF85F481CB97EBA2A3C2118C59F1390D0B5FA9CEFAF6F7",
+        "Code": "756434",
+        "DeviceId": "target-device",
+        "DeviceName": "Target",
+        "AppName": "Target app",
+        "AppVersion": "1.2",
+        "DateAdded": "2026-10-14T14:53:39.3066297Z"
+      },
+      "calls": [],
+      "pending": [
+        {
+          "Authenticated": false,
+          "Secret": "97E1E75A851F8AF6E6FF85F481CB97EBA2A3C2118C59F1390D0B5FA9CEFAF6F7",
+          "Code": "756434",
+          "DeviceId": "target-device",
+          "DeviceName": "Target",
+          "AppName": "Target app",
+          "AppVersion": "1.2",
+          "DateAdded": "2026-10-14T14:53:39.3066297Z"
+        }
+      ],
+      "authorizedCount": 0
+    },
+    {
+      "name": "authorize-api-key-empty",
+      "status": 200,
+      "body": "true",
+      "json": true,
+      "contentType": "application/json; charset=utf-8",
+      "allow": "",
+      "started": "2026-10-14T14:53:39.3086829Z",
+      "finished": "2026-10-14T14:53:39.3091518Z",
+      "issued": {
+        "Authenticated": true,
+        "Secret": "BE08D0E3754C4F83DFAA21499AE4155B46B98C880521C897F953DE30DB1A1293",
+        "Code": "422789",
+        "DeviceId": "target-device",
+        "DeviceName": "Target",
+        "AppName": "Target app",
+        "AppVersion": "1.2",
+        "DateAdded": "2026-10-14T14:54:39.3089582Z"
+      },
+      "calls": [
+        {
+          "userId": "00000000000000000000000000000000",
+          "DeviceId": "target-device",
+          "DeviceName": "Target",
+          "App": "Target app",
+          "AppVersion": "1.2",
+          "RemoteEndPoint": null
+        }
+      ],
+      "pending": [
+        {
+          "Authenticated": true,
+          "Secret": "BE08D0E3754C4F83DFAA21499AE4155B46B98C880521C897F953DE30DB1A1293",
+          "Code": "422789",
+          "DeviceId": "target-device",
+          "DeviceName": "Target",
+          "AppName": "Target app",
+          "AppVersion": "1.2",
+          "DateAdded": "2026-10-14T14:54:39.3089582Z"
+        }
+      ],
+      "authorizedCount": 1
+    },
+    {
+      "name": "authorize-api-key-user",
+      "status": 200,
+      "body": "true",
+      "json": true,
+      "contentType": "application/json; charset=utf-8",
+      "allow": "",
+      "started": "2026-10-14T14:53:39.3091596Z",
+      "finished": "2026-10-14T14:53:39.3095589Z",
+      "issued": {
+        "Authenticated": true,
+        "Secret": "F87818BFAB16473A1D96C9DB9216C65C57598155017A023B2A4B145EF46C19CA",
+        "Code": "617967",
+        "DeviceId": "target-device",
+        "DeviceName": "Target",
+        "AppName": "Target app",
+        "AppVersion": "1.2",
+        "DateAdded": "2026-10-14T14:54:39.3094133Z"
+      },
+      "calls": [
+        {
+          "userId": "ce100000000000000000000000000002",
+          "DeviceId": "target-device",
+          "DeviceName": "Target",
+          "App": "Target app",
+          "AppVersion": "1.2",
+          "RemoteEndPoint": null
+        }
+      ],
+      "pending": [
+        {
+          "Authenticated": true,
+          "Secret": "F87818BFAB16473A1D96C9DB9216C65C57598155017A023B2A4B145EF46C19CA",
+          "Code": "617967",
+          "DeviceId": "target-device",
+          "DeviceName": "Target",
+          "AppName": "Target app",
+          "AppVersion": "1.2",
+          "DateAdded": "2026-10-14T14:54:39.3094133Z"
+        }
+      ],
+      "authorizedCount": 1
+    },
+    {
+      "name": "authorize-empty-user",
+      "status": 200,
+      "body": "true",
+      "json": true,
+      "contentType": "application/json; charset=utf-8",
+      "allow": "",
+      "started": "2026-10-14T14:53:39.3095662Z",
+      "finished": "2026-10-14T14:53:39.3099585Z",
+      "issued": {
+        "Authenticated": true,
+        "Secret": "B45AD18604F49CDD9E86D2D23F7B11E3A68B1D978D8887E2738838B1A58179AA",
+        "Code": "938352",
+        "DeviceId": "target-device",
+        "DeviceName": "Target",
+        "AppName": "Target app",
+        "AppVersion": "1.2",
+        "DateAdded": "2026-10-14T14:54:39.3098138Z"
+      },
+      "calls": [
+        {
+          "userId": "ce100000000000000000000000000001",
+          "DeviceId": "target-device",
+          "DeviceName": "Target",
+          "App": "Target app",
+          "AppVersion": "1.2",
+          "RemoteEndPoint": null
+        }
+      ],
+      "pending": [
+        {
+          "Authenticated": true,
+          "Secret": "B45AD18604F49CDD9E86D2D23F7B11E3A68B1D978D8887E2738838B1A58179AA",
+          "Code": "938352",
+          "DeviceId": "target-device",
+          "DeviceName": "Target",
+          "AppName": "Target app",
+          "AppVersion": "1.2",
+          "DateAdded": "2026-10-14T14:54:39.3098138Z"
+        }
+      ],
+      "authorizedCount": 1
+    },
+    {
+      "name": "authorize-anonymous",
+      "status": 401,
+      "body": "",
+      "json": null,
+      "contentType": null,
+      "allow": "",
+      "started": "2026-10-14T14:53:39.3099667Z",
+      "finished": "2026-10-14T14:53:39.3117118Z",
+      "issued": {
+        "Authenticated": false,
+        "Secret": "506384675EF4C68A5FD0ECF14326FDDC9F8FFBA66164FA4EECE899E85C916F1D",
+        "Code": "686804",
+        "DeviceId": "target-device",
+        "DeviceName": "Target",
+        "AppName": "Target app",
+        "AppVersion": "1.2",
+        "DateAdded": "2026-10-14T14:53:39.3099927Z"
+      },
+      "calls": [],
+      "pending": [
+        {
+          "Authenticated": false,
+          "Secret": "506384675EF4C68A5FD0ECF14326FDDC9F8FFBA66164FA4EECE899E85C916F1D",
+          "Code": "686804",
+          "DeviceId": "target-device",
+          "DeviceName": "Target",
+          "AppName": "Target app",
+          "AppVersion": "1.2",
+          "DateAdded": "2026-10-14T14:53:39.3099927Z"
+        }
+      ],
+      "authorizedCount": 0
+    },
+    {
+      "name": "authorize-anonymous-invalid",
+      "status": 401,
+      "body": "",
+      "json": null,
+      "contentType": null,
+      "allow": "",
+      "started": "2026-10-14T14:53:39.3117206Z",
+      "finished": "2026-10-14T14:53:39.3121064Z",
+      "issued": null,
+      "calls": [],
+      "pending": [],
+      "authorizedCount": 0
+    },
+    {
+      "name": "authorize-already",
+      "status": 500,
+      "body": "Error processing request.",
+      "json": null,
+      "contentType": "text/plain",
+      "allow": "",
+      "started": "2026-10-14T14:53:39.312113Z",
+      "finished": "2026-10-14T14:53:39.3126116Z",
+      "issued": {
+        "Authenticated": true,
+        "Secret": "17DD78241218ECB6B625FC259D496B936C9A544B39EF4603674928FD514A7C1E",
+        "Code": "538942",
+        "DeviceId": "target-device",
+        "DeviceName": "Target",
+        "AppName": "Target app",
+        "AppVersion": "1.2",
+        "DateAdded": "2026-10-14T14:54:39.3121368Z"
+      },
+      "calls": [
+        {
+          "userId": "ce100000000000000000000000000001",
+          "DeviceId": "target-device",
+          "DeviceName": "Target",
+          "App": "Target app",
+          "AppVersion": "1.2",
+          "RemoteEndPoint": null
+        }
+      ],
+      "pending": [
+        {
+          "Authenticated": true,
+          "Secret": "17DD78241218ECB6B625FC259D496B936C9A544B39EF4603674928FD514A7C1E",
+          "Code": "538942",
+          "DeviceId": "target-device",
+          "DeviceName": "Target",
+          "AppName": "Target app",
+          "AppVersion": "1.2",
+          "DateAdded": "2026-10-14T14:54:39.3121368Z"
+        }
+      ],
+      "authorizedCount": 1
+    },
+    {
+      "name": "authorize-unknown",
+      "status": 404,
+      "body": "Error processing request.",
+      "json": null,
+      "contentType": "text/plain",
+      "allow": "",
+      "started": "2026-10-14T14:53:39.3126179Z",
+      "finished": "2026-10-14T14:53:39.3130882Z",
+      "issued": null,
+      "calls": [],
+      "pending": [],
+      "authorizedCount": 0
+    },
+    {
+      "name": "authorize-disabled",
+      "status": 401,
+      "body": "\u0022Quick connect is disabled\u0022",
+      "json": "Quick connect is disabled",
+      "contentType": "application/json; charset=utf-8",
+      "allow": "",
+      "started": "2026-10-14T14:53:39.3130946Z",
+      "finished": "2026-10-14T14:53:39.3137513Z",
+      "issued": {
+        "Authenticated": false,
+        "Secret": "CD87AA8047184BFDDD5571373EC3AE6522BF7E9118D7D7CFF21208A3DA0ABFCE",
+        "Code": "641046",
+        "DeviceId": "target-device",
+        "DeviceName": "Target",
+        "AppName": "Target app",
+        "AppVersion": "1.2",
+        "DateAdded": "2026-10-14T14:53:39.31312Z"
+      },
+      "calls": [],
+      "pending": [
+        {
+          "Authenticated": false,
+          "Secret": "CD87AA8047184BFDDD5571373EC3AE6522BF7E9118D7D7CFF21208A3DA0ABFCE",
+          "Code": "641046",
+          "DeviceId": "target-device",
+          "DeviceName": "Target",
+          "AppName": "Target app",
+          "AppVersion": "1.2",
+          "DateAdded": "2026-10-14T14:53:39.31312Z"
+        }
+      ],
+      "authorizedCount": 0
+    },
+    {
+      "name": "authorize-fail",
+      "status": 401,
+      "body": "\u0022Quick connect is disabled\u0022",
+      "json": "Quick connect is disabled",
+      "contentType": "application/json; charset=utf-8",
+      "allow": "",
+      "started": "2026-10-14T14:53:39.3137581Z",
+      "finished": "2026-10-14T14:53:39.3141582Z",
+      "issued": {
+        "Authenticated": false,
+        "Secret": "204D5C2F9C5A872DCA263E2869899186AE5EA86BC2880471B9A24D155B2250C8",
+        "Code": "729319",
+        "DeviceId": "target-device",
+        "DeviceName": "Target",
+        "AppName": "Target app",
+        "AppVersion": "1.2",
+        "DateAdded": "2026-10-14T14:54:39.313984Z"
+      },
+      "calls": [
+        {
+          "userId": "ce100000000000000000000000000001",
+          "DeviceId": "target-device",
+          "DeviceName": "Target",
+          "App": "Target app",
+          "AppVersion": "1.2",
+          "RemoteEndPoint": null
+        }
+      ],
+      "pending": [
+        {
+          "Authenticated": false,
+          "Secret": "204D5C2F9C5A872DCA263E2869899186AE5EA86BC2880471B9A24D155B2250C8",
+          "Code": "729319",
+          "DeviceId": "target-device",
+          "DeviceName": "Target",
+          "AppName": "Target app",
+          "AppVersion": "1.2",
+          "DateAdded": "2026-10-14T14:54:39.313984Z"
+        }
+      ],
+      "authorizedCount": 0
+    },
+    {
+      "name": "authorize-missing",
+      "status": 400,
+      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022code\u0022:[\u0022The code field is required.\u0022]},\u0022traceId\u0022:\u00220HNPA0BN9KN1H:00000027\u0022}",
+      "json": {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "errors": {
+          "code": [
+            "The code field is required."
+          ]
+        },
+        "traceId": "0HNPA0BN9KN1H:00000027"
+      },
+      "contentType": "application/json; charset=utf-8",
+      "allow": "",
+      "started": "2026-10-14T14:53:39.3141645Z",
+      "finished": "2026-10-14T14:53:39.3145945Z",
+      "issued": null,
+      "calls": [],
+      "pending": [],
+      "authorizedCount": 0
+    },
+    {
+      "name": "authorize-blank",
+      "status": 400,
+      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022code\u0022:[\u0022The code field is required.\u0022]},\u0022traceId\u0022:\u00220HNPA0BN9KN1H:00000028\u0022}",
+      "json": {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "errors": {
+          "code": [
+            "The code field is required."
+          ]
+        },
+        "traceId": "0HNPA0BN9KN1H:00000028"
+      },
+      "contentType": "application/json; charset=utf-8",
+      "allow": "",
+      "started": "2026-10-14T14:53:39.3146017Z",
+      "finished": "2026-10-14T14:53:39.3150114Z",
+      "issued": null,
+      "calls": [],
+      "pending": [],
+      "authorizedCount": 0
+    },
+    {
+      "name": "authorize-both-invalid",
+      "status": 400,
+      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022code\u0022:[\u0022The code field is required.\u0022],\u0022userId\u0022:[\u0022The value \\u0027bad\\u0027 is not valid.\u0022]},\u0022traceId\u0022:\u00220HNPA0BN9KN1H:00000029\u0022}",
+      "json": {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "errors": {
+          "code": [
+            "The code field is required."
+          ],
+          "userId": [
+            "The value \u0027bad\u0027 is not valid."
+          ]
+        },
+        "traceId": "0HNPA0BN9KN1H:00000029"
+      },
+      "contentType": "application/json; charset=utf-8",
+      "allow": "",
+      "started": "2026-10-14T14:53:39.3150167Z",
+      "finished": "2026-10-14T14:53:39.3158842Z",
+      "issued": null,
+      "calls": [],
+      "pending": [],
+      "authorizedCount": 0
+    },
+    {
+      "name": "authorize-space-code",
+      "status": 404,
+      "body": "Error processing request.",
+      "json": null,
+      "contentType": "text/plain",
+      "allow": "",
+      "started": "2026-10-14T14:53:39.31589Z",
+      "finished": "2026-10-14T14:53:39.3163988Z",
+      "issued": {
+        "Authenticated": false,
+        "Secret": "4EC0B570CD84094583A3FDA39BFAD1DF24F306CE222214C0DBD1FE1BC787F69C",
+        "Code": "851161",
+        "DeviceId": "target-device",
+        "DeviceName": "Target",
+        "AppName": "Target app",
+        "AppVersion": "1.2",
+        "DateAdded": "2026-10-14T14:53:39.3159123Z"
+      },
+      "calls": [],
+      "pending": [
+        {
+          "Authenticated": false,
+          "Secret": "4EC0B570CD84094583A3FDA39BFAD1DF24F306CE222214C0DBD1FE1BC787F69C",
+          "Code": "851161",
+          "DeviceId": "target-device",
+          "DeviceName": "Target",
+          "AppName": "Target app",
+          "AppVersion": "1.2",
+          "DateAdded": "2026-10-14T14:53:39.3159123Z"
+        }
+      ],
+      "authorizedCount": 0
+    },
+    {
+      "name": "authorize-repeated-code",
+      "status": 200,
+      "body": "true",
+      "json": true,
+      "contentType": "application/json; charset=utf-8",
+      "allow": "",
+      "started": "2026-10-14T14:53:39.3164061Z",
+      "finished": "2026-10-14T14:53:39.3167976Z",
+      "issued": {
+        "Authenticated": true,
+        "Secret": "D40DFE0846087CF4402F113E4E932FF5C005B024A053B6309CBA83D421D22517",
+        "Code": "432836",
+        "DeviceId": "target-device",
+        "DeviceName": "Target",
+        "AppName": "Target app",
+        "AppVersion": "1.2",
+        "DateAdded": "2026-10-14T14:54:39.3166681Z"
+      },
+      "calls": [
+        {
+          "userId": "ce100000000000000000000000000001",
+          "DeviceId": "target-device",
+          "DeviceName": "Target",
+          "App": "Target app",
+          "AppVersion": "1.2",
+          "RemoteEndPoint": null
+        }
+      ],
+      "pending": [
+        {
+          "Authenticated": true,
+          "Secret": "D40DFE0846087CF4402F113E4E932FF5C005B024A053B6309CBA83D421D22517",
+          "Code": "432836",
+          "DeviceId": "target-device",
+          "DeviceName": "Target",
+          "AppName": "Target app",
+          "AppVersion": "1.2",
+          "DateAdded": "2026-10-14T14:54:39.3166681Z"
+        }
+      ],
+      "authorizedCount": 1
+    },
+    {
+      "name": "authorize-expired",
+      "status": 404,
+      "body": "Error processing request.",
+      "json": null,
+      "contentType": "text/plain",
+      "allow": "",
+      "started": "2026-10-14T14:53:39.316804Z",
+      "finished": "2026-10-14T14:53:39.3172802Z",
+      "issued": {
+        "Authenticated": false,
+        "Secret": "EE35544B4411DB73B03515DEF378B7D4A0C1BABC35B54C051758D11FF0E700FF",
+        "Code": "911049",
+        "DeviceId": "target-device",
+        "DeviceName": "Target",
+        "AppName": "Target app",
+        "AppVersion": "1.2",
+        "DateAdded": "1970-01-01T00:00:00Z"
+      },
+      "calls": [],
+      "pending": [],
+      "authorizedCount": 0
+    },
+    {
+      "name": "authorize-invalid-user",
+      "status": 400,
+      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022userId\u0022:[\u0022The value \\u0027bad\\u0027 is not valid.\u0022]},\u0022traceId\u0022:\u00220HNPA0BN9KN1H:0000002D\u0022}",
+      "json": {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "errors": {
+          "userId": [
+            "The value \u0027bad\u0027 is not valid."
+          ]
+        },
+        "traceId": "0HNPA0BN9KN1H:0000002D"
+      },
+      "contentType": "application/json; charset=utf-8",
+      "allow": "",
+      "started": "2026-10-14T14:53:39.3172866Z",
+      "finished": "2026-10-14T14:53:39.3177308Z",
+      "issued": {
+        "Authenticated": false,
+        "Secret": "6644A470925EEC83511B8A7F486FAD6E0BB66760FD7E0C033CF5DE02E39FDA31",
+        "Code": "405413",
+        "DeviceId": "target-device",
+        "DeviceName": "Target",
+        "AppName": "Target app",
+        "AppVersion": "1.2",
+        "DateAdded": "2026-10-14T14:53:39.3173101Z"
+      },
+      "calls": [],
+      "pending": [
+        {
+          "Authenticated": false,
+          "Secret": "6644A470925EEC83511B8A7F486FAD6E0BB66760FD7E0C033CF5DE02E39FDA31",
+          "Code": "405413",
+          "DeviceId": "target-device",
+          "DeviceName": "Target",
+          "AppName": "Target app",
+          "AppVersion": "1.2",
+          "DateAdded": "2026-10-14T14:53:39.3173101Z"
+        }
+      ],
+      "authorizedCount": 0
+    },
+    {
+      "name": "authenticate-authorized",
+      "status": 200,
+      "body": "{\u0022AccessToken\u0022:\u0022fixture-token\u0022,\u0022ServerId\u0022:\u0022fixture-server\u0022}",
+      "json": {
+        "AccessToken": "fixture-token",
+        "ServerId": "fixture-server"
+      },
+      "contentType": "application/json; charset=utf-8",
+      "allow": "",
+      "started": "2026-10-14T14:53:39.3177377Z",
+      "finished": "2026-10-14T14:53:39.5360118Z",
+      "issued": {
+        "Authenticated": true,
+        "Secret": "2DBBC30A88F670C50FCC1259E9BFEBC52D19280E8BE8C3D8D7A90FC6F88B9BCC",
+        "Code": "290052",
+        "DeviceId": "target-device",
+        "DeviceName": "Target",
+        "AppName": "Target app",
+        "AppVersion": "1.2",
+        "DateAdded": "2026-10-14T14:54:39.3177632Z"
+      },
+      "calls": [
+        {
+          "userId": "ce100000000000000000000000000001",
+          "DeviceId": "target-device",
+          "DeviceName": "Target",
+          "App": "Target app",
+          "AppVersion": "1.2",
+          "RemoteEndPoint": null
+        }
+      ],
+      "pending": [
+        {
+          "Authenticated": true,
+          "Secret": "2DBBC30A88F670C50FCC1259E9BFEBC52D19280E8BE8C3D8D7A90FC6F88B9BCC",
+          "Code": "290052",
+          "DeviceId": "target-device",
+          "DeviceName": "Target",
+          "AppName": "Target app",
+          "AppVersion": "1.2",
+          "DateAdded": "2026-10-14T14:54:39.3177632Z"
+        }
+      ],
+      "authorizedCount": 1
+    },
+    {
+      "name": "authenticate-pending",
+      "status": 404,
+      "body": "Error processing request.",
+      "json": null,
+      "contentType": "text/plain",
+      "allow": "",
+      "started": "2026-10-14T14:53:39.5360546Z",
+      "finished": "2026-10-14T14:53:39.5380701Z",
+      "issued": {
+        "Authenticated": false,
+        "Secret": "8C17D45E9BD1A64D709F96D6518D23F65DF383ACBEE672CED2A68B668930F129",
+        "Code": "315826",
+        "DeviceId": "target-device",
+        "DeviceName": "Target",
+        "AppName": "Target app",
+        "AppVersion": "1.2",
+        "DateAdded": "2026-10-14T14:53:39.5360919Z"
+      },
+      "calls": [],
+      "pending": [
+        {
+          "Authenticated": false,
+          "Secret": "8C17D45E9BD1A64D709F96D6518D23F65DF383ACBEE672CED2A68B668930F129",
+          "Code": "315826",
+          "DeviceId": "target-device",
+          "DeviceName": "Target",
+          "AppName": "Target app",
+          "AppVersion": "1.2",
+          "DateAdded": "2026-10-14T14:53:39.5360919Z"
+        }
+      ],
+      "authorizedCount": 0
+    },
+    {
+      "name": "authenticate-expired",
+      "status": 404,
+      "body": "Error processing request.",
+      "json": null,
+      "contentType": "text/plain",
+      "allow": "",
+      "started": "2026-10-14T14:53:39.538079Z",
+      "finished": "2026-10-14T14:53:39.5391265Z",
+      "issued": {
+        "Authenticated": true,
+        "Secret": "54543A62912700BAB94A0857D0BFDAC82A66FA35A6184E018BDD50F765A91690",
+        "Code": "205674",
+        "DeviceId": "target-device",
+        "DeviceName": "Target",
+        "AppName": "Target app",
+        "AppVersion": "1.2",
+        "DateAdded": "2026-10-14T14:54:39.538106Z"
+      },
+      "calls": [
+        {
+          "userId": "ce100000000000000000000000000001",
+          "DeviceId": "target-device",
+          "DeviceName": "Target",
+          "App": "Target app",
+          "AppVersion": "1.2",
+          "RemoteEndPoint": null
+        }
+      ],
+      "pending": [
+        {
+          "Authenticated": true,
+          "Secret": "54543A62912700BAB94A0857D0BFDAC82A66FA35A6184E018BDD50F765A91690",
+          "Code": "205674",
+          "DeviceId": "target-device",
+          "DeviceName": "Target",
+          "AppName": "Target app",
+          "AppVersion": "1.2",
+          "DateAdded": "2026-10-14T14:54:39.538106Z"
+        }
+      ],
+      "authorizedCount": 0
+    },
+    {
+      "name": "authenticate-both-expired",
+      "status": 404,
+      "body": "Error processing request.",
+      "json": null,
+      "contentType": "text/plain",
+      "allow": "",
+      "started": "2026-10-14T14:53:39.5391328Z",
+      "finished": "2026-10-14T14:53:39.5396828Z",
+      "issued": {
+        "Authenticated": true,
+        "Secret": "F7046DA1B822231AFF5D8DC5FE4A676A477F27F467AA3D1ADEC95F43CA3F8F9E",
+        "Code": "360454",
+        "DeviceId": "target-device",
+        "DeviceName": "Target",
+        "AppName": "Target app",
+        "AppVersion": "1.2",
+        "DateAdded": "1970-01-01T00:00:00Z"
+      },
+      "calls": [
+        {
+          "userId": "ce100000000000000000000000000001",
+          "DeviceId": "target-device",
+          "DeviceName": "Target",
+          "App": "Target app",
+          "AppVersion": "1.2",
+          "RemoteEndPoint": null
+        }
+      ],
+      "pending": [],
+      "authorizedCount": 0
+    },
+    {
+      "name": "authenticate-disabled",
+      "status": 401,
+      "body": "Error processing request.",
+      "json": null,
+      "contentType": "text/plain",
+      "allow": "",
+      "started": "2026-10-14T14:53:39.5396911Z",
+      "finished": "2026-10-14T14:53:39.5401459Z",
+      "issued": {
+        "Authenticated": true,
+        "Secret": "D8AFBDB436E710426E597FB381D1E05866F068A634F8EA69B258CA9EF2F461B4",
+        "Code": "992590",
+        "DeviceId": "target-device",
+        "DeviceName": "Target",
+        "AppName": "Target app",
+        "AppVersion": "1.2",
+        "DateAdded": "2026-10-14T14:54:39.5397124Z"
+      },
+      "calls": [
+        {
+          "userId": "ce100000000000000000000000000001",
+          "DeviceId": "target-device",
+          "DeviceName": "Target",
+          "App": "Target app",
+          "AppVersion": "1.2",
+          "RemoteEndPoint": null
+        }
+      ],
+      "pending": [
+        {
+          "Authenticated": true,
+          "Secret": "D8AFBDB436E710426E597FB381D1E05866F068A634F8EA69B258CA9EF2F461B4",
+          "Code": "992590",
+          "DeviceId": "target-device",
+          "DeviceName": "Target",
+          "AppName": "Target app",
+          "AppVersion": "1.2",
+          "DateAdded": "2026-10-14T14:54:39.5397124Z"
+        }
+      ],
+      "authorizedCount": 1
+    },
+    {
+      "name": "authenticate-lower",
+      "status": 404,
+      "body": "Error processing request.",
+      "json": null,
+      "contentType": "text/plain",
+      "allow": "",
+      "started": "2026-10-14T14:53:39.5401526Z",
+      "finished": "2026-10-14T14:53:39.5406585Z",
+      "issued": {
+        "Authenticated": true,
+        "Secret": "B550F9D3D250616FCDE0FD487454A2B7E4A566EBEA2AF391476B71A9DC12F357",
+        "Code": "467502",
+        "DeviceId": "target-device",
+        "DeviceName": "Target",
+        "AppName": "Target app",
+        "AppVersion": "1.2",
+        "DateAdded": "2026-10-14T14:54:39.5401708Z"
+      },
+      "calls": [
+        {
+          "userId": "ce100000000000000000000000000001",
+          "DeviceId": "target-device",
+          "DeviceName": "Target",
+          "App": "Target app",
+          "AppVersion": "1.2",
+          "RemoteEndPoint": null
+        }
+      ],
+      "pending": [
+        {
+          "Authenticated": true,
+          "Secret": "B550F9D3D250616FCDE0FD487454A2B7E4A566EBEA2AF391476B71A9DC12F357",
+          "Code": "467502",
+          "DeviceId": "target-device",
+          "DeviceName": "Target",
+          "AppName": "Target app",
+          "AppVersion": "1.2",
+          "DateAdded": "2026-10-14T14:54:39.5401708Z"
+        }
+      ],
+      "authorizedCount": 1
+    },
+    {
+      "name": "authenticate-unknown",
+      "status": 404,
+      "body": "Error processing request.",
+      "json": null,
+      "contentType": "text/plain",
+      "allow": "",
+      "started": "2026-10-14T14:53:39.5406664Z",
+      "finished": "2026-10-14T14:53:39.5411396Z",
+      "issued": null,
+      "calls": [],
+      "pending": [],
+      "authorizedCount": 0
+    },
+    {
+      "name": "authenticate-empty",
+      "status": 400,
+      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022Secret\u0022:[\u0022The Secret field is required.\u0022]},\u0022traceId\u0022:\u00220HNPA0BN9KN1H:00000035\u0022}",
+      "json": {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "errors": {
+          "Secret": [
+            "The Secret field is required."
+          ]
+        },
+        "traceId": "0HNPA0BN9KN1H:00000035"
+      },
+      "contentType": "application/json; charset=utf-8",
+      "allow": "",
+      "started": "2026-10-14T14:53:39.5411452Z",
+      "finished": "2026-10-14T14:53:39.5417261Z",
+      "issued": null,
+      "calls": [],
+      "pending": [],
+      "authorizedCount": 0
+    },
+    {
+      "name": "authenticate-null",
+      "status": 400,
+      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022\u0022:[\u0022A non-empty request body is required.\u0022],\u0022request\u0022:[\u0022The request field is required.\u0022]},\u0022traceId\u0022:\u00220HNPA0BN9KN1H:00000036\u0022}",
+      "json": {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "errors": {
+          "": [
+            "A non-empty request body is required."
+          ],
+          "request": [
+            "The request field is required."
+          ]
+        },
+        "traceId": "0HNPA0BN9KN1H:00000036"
+      },
+      "contentType": "application/json; charset=utf-8",
+      "allow": "",
+      "started": "2026-10-14T14:53:39.5417315Z",
+      "finished": "2026-10-14T14:53:39.5422822Z",
+      "issued": null,
+      "calls": [],
+      "pending": [],
+      "authorizedCount": 0
+    },
+    {
+      "name": "authenticate-empty-secret",
+      "status": 400,
+      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022Secret\u0022:[\u0022The Secret field is required.\u0022]},\u0022traceId\u0022:\u00220HNPA0BN9KN1H:00000037\u0022}",
+      "json": {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "errors": {
+          "Secret": [
+            "The Secret field is required."
+          ]
+        },
+        "traceId": "0HNPA0BN9KN1H:00000037"
+      },
+      "contentType": "application/json; charset=utf-8",
+      "allow": "",
+      "started": "2026-10-14T14:53:39.5422887Z",
+      "finished": "2026-10-14T14:53:39.5427532Z",
+      "issued": null,
+      "calls": [],
+      "pending": [],
+      "authorizedCount": 0
+    },
+    {
+      "name": "authenticate-null-secret",
+      "status": 400,
+      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022Secret\u0022:[\u0022The Secret field is required.\u0022]},\u0022traceId\u0022:\u00220HNPA0BN9KN1H:00000038\u0022}",
+      "json": {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "errors": {
+          "Secret": [
+            "The Secret field is required."
+          ]
+        },
+        "traceId": "0HNPA0BN9KN1H:00000038"
+      },
+      "contentType": "application/json; charset=utf-8",
+      "allow": "",
+      "started": "2026-10-14T14:53:39.5427595Z",
+      "finished": "2026-10-14T14:53:39.5433002Z",
+      "issued": null,
+      "calls": [],
+      "pending": [],
+      "authorizedCount": 0
+    },
+    {
+      "name": "authenticate-space-secret",
+      "status": 400,
+      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022Secret\u0022:[\u0022The Secret field is required.\u0022]},\u0022traceId\u0022:\u00220HNPA0BN9KN1H:00000039\u0022}",
+      "json": {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "errors": {
+          "Secret": [
+            "The Secret field is required."
+          ]
+        },
+        "traceId": "0HNPA0BN9KN1H:00000039"
+      },
+      "contentType": "application/json; charset=utf-8",
+      "allow": "",
+      "started": "2026-10-14T14:53:39.5433065Z",
+      "finished": "2026-10-14T14:53:39.543757Z",
+      "issued": null,
+      "calls": [],
+      "pending": [],
+      "authorizedCount": 0
+    },
+    {
+      "name": "authenticate-unicode-space",
+      "status": 400,
+      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022Secret\u0022:[\u0022The Secret field is required.\u0022]},\u0022traceId\u0022:\u00220HNPA0BN9KN1H:0000003A\u0022}",
+      "json": {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "errors": {
+          "Secret": [
+            "The Secret field is required."
+          ]
+        },
+        "traceId": "0HNPA0BN9KN1H:0000003A"
+      },
+      "contentType": "application/json; charset=utf-8",
+      "allow": "",
+      "started": "2026-10-14T14:53:39.5437639Z",
+      "finished": "2026-10-14T14:53:39.5442438Z",
+      "issued": null,
+      "calls": [],
+      "pending": [],
+      "authorizedCount": 0
+    },
+    {
+      "name": "authenticate-bom",
+      "status": 404,
+      "body": "Error processing request.",
+      "json": null,
+      "contentType": "text/plain",
+      "allow": "",
+      "started": "2026-10-14T14:53:39.5442501Z",
+      "finished": "2026-10-14T14:53:39.5447102Z",
+      "issued": null,
+      "calls": [],
+      "pending": [],
+      "authorizedCount": 0
+    },
+    {
+      "name": "authenticate-number",
+      "status": 404,
+      "body": "Error processing request.",
+      "json": null,
+      "contentType": "text/plain",
+      "allow": "",
+      "started": "2026-10-14T14:53:39.5447173Z",
+      "finished": "2026-10-14T14:53:39.5453836Z",
+      "issued": null,
+      "calls": [],
+      "pending": [],
+      "authorizedCount": 0
+    },
+    {
+      "name": "authenticate-boolean",
+      "status": 404,
+      "body": "Error processing request.",
+      "json": null,
+      "contentType": "text/plain",
+      "allow": "",
+      "started": "2026-10-14T14:53:39.5453891Z",
+      "finished": "2026-10-14T14:53:39.5458418Z",
+      "issued": null,
+      "calls": [],
+      "pending": [],
+      "authorizedCount": 0
+    },
+    {
+      "name": "authenticate-first-invalid",
+      "status": 400,
+      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022request\u0022:[\u0022The request field is required.\u0022],\u0022$.Secret\u0022:[\u0022The converter \\u0027Jellyfin.Extensions.Json.Converters.JsonStringConverter\\u0027 read too much or not enough. Path: $.Secret | LineNumber: 0 | BytePositionInLine: 11.\u0022]},\u0022traceId\u0022:\u00220HNPA0BN9KN1H:0000003E\u0022}",
+      "json": {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "errors": {
+          "request": [
+            "The request field is required."
+          ],
+          "$.Secret": [
+            "The converter \u0027Jellyfin.Extensions.Json.Converters.JsonStringConverter\u0027 read too much or not enough. Path: $.Secret | LineNumber: 0 | BytePositionInLine: 11."
+          ]
+        },
+        "traceId": "0HNPA0BN9KN1H:0000003E"
+      },
+      "contentType": "application/json; charset=utf-8",
+      "allow": "",
+      "started": "2026-10-14T14:53:39.5458474Z",
+      "finished": "2026-10-14T14:53:39.5467096Z",
+      "issued": {
+        "Authenticated": true,
+        "Secret": "9E54100EF5FF06043866D8E424223CAA0E46AD5BD703F5ADE82D19F021109989",
+        "Code": "567932",
+        "DeviceId": "target-device",
+        "DeviceName": "Target",
+        "AppName": "Target app",
+        "AppVersion": "1.2",
+        "DateAdded": "2026-10-14T14:54:39.5458676Z"
+      },
+      "calls": [
+        {
+          "userId": "ce100000000000000000000000000001",
+          "DeviceId": "target-device",
+          "DeviceName": "Target",
+          "App": "Target app",
+          "AppVersion": "1.2",
+          "RemoteEndPoint": null
+        }
+      ],
+      "pending": [
+        {
+          "Authenticated": true,
+          "Secret": "9E54100EF5FF06043866D8E424223CAA0E46AD5BD703F5ADE82D19F021109989",
+          "Code": "567932",
+          "DeviceId": "target-device",
+          "DeviceName": "Target",
+          "AppName": "Target app",
+          "AppVersion": "1.2",
+          "DateAdded": "2026-10-14T14:54:39.5458676Z"
+        }
+      ],
+      "authorizedCount": 1
+    },
+    {
+      "name": "authenticate-last-valid",
+      "status": 200,
+      "body": "{\u0022AccessToken\u0022:\u0022fixture-token\u0022,\u0022ServerId\u0022:\u0022fixture-server\u0022}",
+      "json": {
+        "AccessToken": "fixture-token",
+        "ServerId": "fixture-server"
+      },
+      "contentType": "application/json; charset=utf-8",
+      "allow": "",
+      "started": "2026-10-14T14:53:39.5467175Z",
+      "finished": "2026-10-14T14:53:39.5471767Z",
+      "issued": {
+        "Authenticated": true,
+        "Secret": "1D4BE320E3C841672F5E699113D21B62C5664936E8D00292261D8E64CCA8F8DA",
+        "Code": "842129",
+        "DeviceId": "target-device",
+        "DeviceName": "Target",
+        "AppName": "Target app",
+        "AppVersion": "1.2",
+        "DateAdded": "2026-10-14T14:54:39.5467396Z"
+      },
+      "calls": [
+        {
+          "userId": "ce100000000000000000000000000001",
+          "DeviceId": "target-device",
+          "DeviceName": "Target",
+          "App": "Target app",
+          "AppVersion": "1.2",
+          "RemoteEndPoint": null
+        }
+      ],
+      "pending": [
+        {
+          "Authenticated": true,
+          "Secret": "1D4BE320E3C841672F5E699113D21B62C5664936E8D00292261D8E64CCA8F8DA",
+          "Code": "842129",
+          "DeviceId": "target-device",
+          "DeviceName": "Target",
+          "AppName": "Target app",
+          "AppVersion": "1.2",
+          "DateAdded": "2026-10-14T14:54:39.5467396Z"
+        }
+      ],
+      "authorizedCount": 1
+    },
+    {
+      "name": "authenticate-array",
+      "status": 400,
+      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022$\u0022:[\u0022The JSON value could not be converted to Jellyfin.Api.Models.UserDtos.QuickConnectDto. Path: $ | LineNumber: 0 | BytePositionInLine: 1.\u0022],\u0022request\u0022:[\u0022The request field is required.\u0022]},\u0022traceId\u0022:\u00220HNPA0BN9KN1H:00000040\u0022}",
+      "json": {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "errors": {
+          "$": [
+            "The JSON value could not be converted to Jellyfin.Api.Models.UserDtos.QuickConnectDto. Path: $ | LineNumber: 0 | BytePositionInLine: 1."
+          ],
+          "request": [
+            "The request field is required."
+          ]
+        },
+        "traceId": "0HNPA0BN9KN1H:00000040"
+      },
+      "contentType": "application/json; charset=utf-8",
+      "allow": "",
+      "started": "2026-10-14T14:53:39.5471846Z",
+      "finished": "2026-10-14T14:53:39.5478358Z",
+      "issued": null,
+      "calls": [],
+      "pending": [],
+      "authorizedCount": 0
+    },
+    {
+      "name": "authenticate-open",
+      "status": 400,
+      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022$\u0022:[\u0022Expected depth to be zero at the end of the JSON payload. There is an open JSON object or array that should be closed. Path: $ | LineNumber: 0 | BytePositionInLine: 1.\u0022],\u0022request\u0022:[\u0022The request field is required.\u0022]},\u0022traceId\u0022:\u00220HNPA0BN9KN1H:00000041\u0022}",
+      "json": {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "errors": {
+          "$": [
+            "Expected depth to be zero at the end of the JSON payload. There is an open JSON object or array that should be closed. Path: $ | LineNumber: 0 | BytePositionInLine: 1."
+          ],
+          "request": [
+            "The request field is required."
+          ]
+        },
+        "traceId": "0HNPA0BN9KN1H:00000041"
+      },
+      "contentType": "application/json; charset=utf-8",
+      "allow": "",
+      "started": "2026-10-14T14:53:39.5478422Z",
+      "finished": "2026-10-14T14:53:39.5482789Z",
+      "issued": null,
+      "calls": [],
+      "pending": [],
+      "authorizedCount": 0
+    },
+    {
+      "name": "authenticate-object-secret",
+      "status": 400,
+      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022request\u0022:[\u0022The request field is required.\u0022],\u0022$.Secret\u0022:[\u0022The converter \\u0027Jellyfin.Extensions.Json.Converters.JsonStringConverter\\u0027 read too much or not enough. Path: $.Secret | LineNumber: 0 | BytePositionInLine: 11.\u0022]},\u0022traceId\u0022:\u00220HNPA0BN9KN1H:00000042\u0022}",
+      "json": {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "errors": {
+          "request": [
+            "The request field is required."
+          ],
+          "$.Secret": [
+            "The converter \u0027Jellyfin.Extensions.Json.Converters.JsonStringConverter\u0027 read too much or not enough. Path: $.Secret | LineNumber: 0 | BytePositionInLine: 11."
+          ]
+        },
+        "traceId": "0HNPA0BN9KN1H:00000042"
+      },
+      "contentType": "application/json; charset=utf-8",
+      "allow": "",
+      "started": "2026-10-14T14:53:39.5482848Z",
+      "finished": "2026-10-14T14:53:39.548678Z",
+      "issued": null,
+      "calls": [],
+      "pending": [],
+      "authorizedCount": 0
+    },
+    {
+      "name": "authenticate-unsupported",
+      "status": 415,
+      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.16\u0022,\u0022title\u0022:\u0022Unsupported Media Type\u0022,\u0022status\u0022:415,\u0022traceId\u0022:\u00220HNPA0BN9KN1H:00000043\u0022}",
+      "json": {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.16",
+        "title": "Unsupported Media Type",
+        "status": 415,
+        "traceId": "0HNPA0BN9KN1H:00000043"
+      },
+      "contentType": "application/json; charset=utf-8",
+      "allow": "",
+      "started": "2026-10-14T14:53:39.5486832Z",
+      "finished": "2026-10-14T14:53:39.5496584Z",
+      "issued": null,
+      "calls": [],
+      "pending": [],
+      "authorizedCount": 0
+    },
+    {
+      "name": "authenticate-missing-body",
+      "status": 415,
+      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.16\u0022,\u0022title\u0022:\u0022Unsupported Media Type\u0022,\u0022status\u0022:415,\u0022traceId\u0022:\u00220HNPA0BN9KN1H:00000044\u0022}",
+      "json": {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.16",
+        "title": "Unsupported Media Type",
+        "status": 415,
+        "traceId": "0HNPA0BN9KN1H:00000044"
+      },
+      "contentType": "application/json; charset=utf-8",
+      "allow": "",
+      "started": "2026-10-14T14:53:39.5496636Z",
+      "finished": "2026-10-14T14:53:39.5499941Z",
+      "issued": null,
+      "calls": [],
+      "pending": [],
+      "authorizedCount": 0
+    },
+    {
+      "name": "authorize-space-user",
+      "status": 200,
+      "body": "true",
+      "json": true,
+      "contentType": "application/json; charset=utf-8",
+      "allow": "",
+      "started": "2026-10-14T14:53:39.5499994Z",
+      "finished": "2026-10-14T14:53:39.5503969Z",
+      "issued": {
+        "Authenticated": true,
+        "Secret": "508972B0EFA69DAE41058F91566866A1A5886AC83B07D30BEBF4AC8D52155086",
+        "Code": "581968",
+        "DeviceId": "target-device",
+        "DeviceName": "Target",
+        "AppName": "Target app",
+        "AppVersion": "1.2",
+        "DateAdded": "2026-10-14T14:54:39.5502443Z"
+      },
+      "calls": [
+        {
+          "userId": "ce100000000000000000000000000001",
+          "DeviceId": "target-device",
+          "DeviceName": "Target",
+          "App": "Target app",
+          "AppVersion": "1.2",
+          "RemoteEndPoint": null
+        }
+      ],
+      "pending": [
+        {
+          "Authenticated": true,
+          "Secret": "508972B0EFA69DAE41058F91566866A1A5886AC83B07D30BEBF4AC8D52155086",
+          "Code": "581968",
+          "DeviceId": "target-device",
+          "DeviceName": "Target",
+          "AppName": "Target app",
+          "AppVersion": "1.2",
+          "DateAdded": "2026-10-14T14:54:39.5502443Z"
+        }
+      ],
+      "authorizedCount": 1
+    },
+    {
+      "name": "authorize-unicode-space-user",
+      "status": 200,
+      "body": "true",
+      "json": true,
+      "contentType": "application/json; charset=utf-8",
+      "allow": "",
+      "started": "2026-10-14T14:53:39.5504038Z",
+      "finished": "2026-10-14T14:53:39.5507656Z",
+      "issued": {
+        "Authenticated": true,
+        "Secret": "00E763E27A372331ADF1B8127A1BA6000F2C4BA515D1D703C7D6DFE88C439C83",
+        "Code": "523602",
+        "DeviceId": "target-device",
+        "DeviceName": "Target",
+        "AppName": "Target app",
+        "AppVersion": "1.2",
+        "DateAdded": "2026-10-14T14:54:39.5506365Z"
+      },
+      "calls": [
+        {
+          "userId": "ce100000000000000000000000000001",
+          "DeviceId": "target-device",
+          "DeviceName": "Target",
+          "App": "Target app",
+          "AppVersion": "1.2",
+          "RemoteEndPoint": null
+        }
+      ],
+      "pending": [
+        {
+          "Authenticated": true,
+          "Secret": "00E763E27A372331ADF1B8127A1BA6000F2C4BA515D1D703C7D6DFE88C439C83",
+          "Code": "523602",
+          "DeviceId": "target-device",
+          "DeviceName": "Target",
+          "AppName": "Target app",
+          "AppVersion": "1.2",
+          "DateAdded": "2026-10-14T14:54:39.5506365Z"
+        }
+      ],
+      "authorizedCount": 1
+    },
+    {
+      "name": "authorize-bom-user",
+      "status": 400,
+      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022userId\u0022:[\u0022The value \\u0027\\uFEFF\\u0027 is not valid.\u0022]},\u0022traceId\u0022:\u00220HNPA0BN9KN1H:00000047\u0022}",
+      "json": {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "errors": {
+          "userId": [
+            "The value \u0027\uFEFF\u0027 is not valid."
+          ]
+        },
+        "traceId": "0HNPA0BN9KN1H:00000047"
+      },
+      "contentType": "application/json; charset=utf-8",
+      "allow": "",
+      "started": "2026-10-14T14:53:39.5507733Z",
+      "finished": "2026-10-14T14:53:39.5512618Z",
+      "issued": {
+        "Authenticated": false,
+        "Secret": "C493CFAEDC247C5DC212F76F0450E1717EACECAD8EA4F90A0E85D0A20409B8A0",
+        "Code": "100253",
+        "DeviceId": "target-device",
+        "DeviceName": "Target",
+        "AppName": "Target app",
+        "AppVersion": "1.2",
+        "DateAdded": "2026-10-14T14:53:39.5507895Z"
+      },
+      "calls": [],
+      "pending": [
+        {
+          "Authenticated": false,
+          "Secret": "C493CFAEDC247C5DC212F76F0450E1717EACECAD8EA4F90A0E85D0A20409B8A0",
+          "Code": "100253",
+          "DeviceId": "target-device",
+          "DeviceName": "Target",
+          "AppName": "Target app",
+          "AppVersion": "1.2",
+          "DateAdded": "2026-10-14T14:53:39.5507895Z"
+        }
+      ],
+      "authorizedCount": 0
+    },
+    {
+      "name": "enabled-head",
+      "status": 405,
+      "body": "",
+      "json": null,
+      "contentType": null,
+      "allow": "GET",
+      "started": "2026-10-14T14:53:39.5512678Z",
+      "finished": "2026-10-14T14:53:39.5517959Z",
+      "issued": null,
+      "calls": [],
+      "pending": [],
+      "authorizedCount": 0
+    },
+    {
+      "name": "connect-head",
+      "status": 405,
+      "body": "",
+      "json": null,
+      "contentType": null,
+      "allow": "GET",
+      "started": "2026-10-14T14:53:39.55182Z",
+      "finished": "2026-10-14T14:53:39.5521825Z",
+      "issued": {
+        "Authenticated": false,
+        "Secret": "957C10942692A6999148C1405A316B295795C2E14D3283BFA6AFDCD927C73D1B",
+        "Code": "768048",
+        "DeviceId": "target-device",
+        "DeviceName": "Target",
+        "AppName": "Target app",
+        "AppVersion": "1.2",
+        "DateAdded": "2026-10-14T14:53:39.55184Z"
+      },
+      "calls": [],
+      "pending": [
+        {
+          "Authenticated": false,
+          "Secret": "957C10942692A6999148C1405A316B295795C2E14D3283BFA6AFDCD927C73D1B",
+          "Code": "768048",
+          "DeviceId": "target-device",
+          "DeviceName": "Target",
+          "AppName": "Target app",
+          "AppVersion": "1.2",
+          "DateAdded": "2026-10-14T14:53:39.55184Z"
+        }
+      ],
+      "authorizedCount": 0
+    },
+    {
+      "name": "initiate-get",
+      "status": 405,
+      "body": "",
+      "json": null,
+      "contentType": null,
+      "allow": "POST",
+      "started": "2026-10-14T14:53:39.5521892Z",
+      "finished": "2026-10-14T14:53:39.55248Z",
+      "issued": null,
+      "calls": [],
+      "pending": [],
+      "authorizedCount": 0
+    }
+  ],
+  "directResults": [
+    {
+      "name": "success",
+      "status": 200,
+      "error": null,
+      "calls": [
+        "device-check",
+        "delete-token",
+        "create-token",
+        "user-activity"
+      ],
+      "session": {
+        "DeviceId": "target-device",
+        "DeviceName": "Target",
+        "Client": "Target app",
+        "ApplicationVersion": "1.2",
+        "RemoteEndPoint": null
+      },
+      "deviceCount": 1,
+      "oldTokenRetained": false,
+      "loginUnchanged": true,
+      "InvalidLoginAttemptCount": 4
+    },
+    {
+      "name": "disabled-user",
+      "status": 200,
+      "error": null,
+      "calls": [
+        "device-check",
+        "delete-token",
+        "create-token",
+        "user-activity"
+      ],
+      "session": {
+        "DeviceId": "target-device",
+        "DeviceName": "Target",
+        "Client": "Target app",
+        "ApplicationVersion": "1.2",
+        "RemoteEndPoint": null
+      },
+      "deviceCount": 1,
+      "oldTokenRetained": false,
+      "loginUnchanged": true,
+      "InvalidLoginAttemptCount": 4
+    },
+    {
+      "name": "remote-denied-user",
+      "status": 200,
+      "error": null,
+      "calls": [
+        "device-check",
+        "delete-token",
+        "create-token",
+        "user-activity"
+      ],
+      "session": {
+        "DeviceId": "target-device",
+        "DeviceName": "Target",
+        "Client": "Target app",
+        "ApplicationVersion": "1.2",
+        "RemoteEndPoint": null
+      },
+      "deviceCount": 1,
+      "oldTokenRetained": false,
+      "loginUnchanged": true,
+      "InvalidLoginAttemptCount": 4
+    },
+    {
+      "name": "empty-user",
+      "status": 400,
+      "error": "ArgumentException",
+      "calls": [
+        "username-fallback"
+      ],
+      "session": null,
+      "deviceCount": 1,
+      "oldTokenRetained": true,
+      "loginUnchanged": true,
+      "InvalidLoginAttemptCount": 4
+    },
+    {
+      "name": "missing-user",
+      "status": 400,
+      "error": "ArgumentException",
+      "calls": [
+        "username-fallback"
+      ],
+      "session": null,
+      "deviceCount": 1,
+      "oldTokenRetained": true,
+      "loginUnchanged": true,
+      "InvalidLoginAttemptCount": 4
+    },
+    {
+      "name": "device-denied",
+      "status": 403,
+      "error": "SecurityException",
+      "calls": [
+        "device-check"
+      ],
+      "session": null,
+      "deviceCount": 1,
+      "oldTokenRetained": true,
+      "loginUnchanged": true,
+      "InvalidLoginAttemptCount": 4
+    },
+    {
+      "name": "session-limit",
+      "status": 403,
+      "error": "SecurityException",
+      "calls": [
+        "device-check"
+      ],
+      "session": null,
+      "deviceCount": 1,
+      "oldTokenRetained": true,
+      "loginUnchanged": true,
+      "InvalidLoginAttemptCount": 4
+    },
+    {
+      "name": "insert-failure",
+      "status": 500,
+      "error": "IOException",
+      "calls": [
+        "device-check",
+        "delete-token",
+        "create-token"
+      ],
+      "session": null,
+      "deviceCount": 0,
+      "oldTokenRetained": false,
+      "loginUnchanged": true,
+      "InvalidLoginAttemptCount": 4
+    },
+    {
+      "name": "delete-failure",
+      "status": 200,
+      "error": null,
+      "calls": [
+        "device-check",
+        "delete-token",
+        "create-token",
+        "user-activity"
+      ],
+      "session": {
+        "DeviceId": "target-device",
+        "DeviceName": "Target",
+        "Client": "Target app",
+        "ApplicationVersion": "1.2",
+        "RemoteEndPoint": null
+      },
+      "deviceCount": 2,
+      "oldTokenRetained": true,
+      "loginUnchanged": true,
+      "InvalidLoginAttemptCount": 4
+    }
+  ]
+}

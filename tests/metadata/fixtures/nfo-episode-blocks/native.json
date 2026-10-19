@@ -1,0 +1,3647 @@
+{
+  "schemaVersion": 1,
+  "candidateVerified": false,
+  "frozenJellyfinHead": "208c278b75abd897aefa1e1175126eac5e4dbfaa",
+  "inputSha256": "a7a0b537cda84c819e5d869c39b57d0988ce6c7295bd0687d4d0949557fcb2cd",
+  "environment": {
+    "os": "Microsoft Windows NT 10.0.26300.0",
+    "isWindows": true,
+    "culture": "zh-CN",
+    "uiCulture": "zh-CN"
+  },
+  "boundary": "Actual EpisodeNfoParser over exact UTF-8 temporary files. Controlled IUserManager and IUserDataManager proxies preserve zero-id temporary block reads, existing-item saves, cancellation and injected non-XML failures. Item, people, images, calls and shared user-data state remain observable after parser return or exception.",
+  "uncovered": [
+    "non-UTF-8 decoding already frozen by the nfo-partial-reader fixture",
+    "local image filesystem behavior already frozen by the nfo-local-images fixture",
+    "real user-data database transactions and events already frozen by the nfo-userdata-persistence fixture",
+    "Episode scalar, date, external-id and XML combinations outside the declared matrix",
+    "provider file discovery and downstream metadata refresh persistence"
+  ],
+  "results": [
+    {
+      "name": "empty file is swallowed with initial item state",
+      "raw": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "base64": ""
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": "Initial",
+        "OriginalTitle": null,
+        "Overview": null,
+        "IndexNumber": null,
+        "IndexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "AirsBeforeEpisodeNumber": null,
+        "AirsAfterSeasonNumber": null,
+        "AirsBeforeSeasonNumber": null,
+        "SeriesName": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "premiereDate": null,
+        "endDate": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "Tagline": null,
+        "IsLocked": false,
+        "lockedFields": [],
+        "productionLocations": [],
+        "genres": [],
+        "studios": [],
+        "tags": [],
+        "AspectRatio": null,
+        "Width": 0,
+        "Height": 0,
+        "HasSubtitles": false,
+        "providers": {}
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "no complete block preserves a parsed scalar prefix",
+      "raw": {
+        "bytes": 81,
+        "sha256": "312b8cfbc77a9108740f622aca0bef951b2db1262c950f2b7f29b894d12c6fc5",
+        "base64": "PGVwaXNvZGVkZXRhaWxzPjxlcGlzb2RlPjM8L2VwaXNvZGU\u002BPHRpdGxlPlByZWZpeDwvdGl0bGU\u002BPHBsb3Q\u002BVGFpbDwvcGxvdD48YnJva2Vu"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": "Prefix",
+        "OriginalTitle": null,
+        "Overview": null,
+        "IndexNumber": 3,
+        "IndexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "AirsBeforeEpisodeNumber": null,
+        "AirsAfterSeasonNumber": null,
+        "AirsBeforeSeasonNumber": null,
+        "SeriesName": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "premiereDate": null,
+        "endDate": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "Tagline": null,
+        "IsLocked": false,
+        "lockedFields": [],
+        "productionLocations": [],
+        "genres": [],
+        "studios": [],
+        "tags": [],
+        "AspectRatio": null,
+        "Width": 0,
+        "Height": 0,
+        "HasSubtitles": false,
+        "providers": {}
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "one complete block applies all direct fields",
+      "raw": {
+        "bytes": 119,
+        "sha256": "e6d8149091f3157068e56f8ac1ca9bc4d386eadc919017a37c5d528361567264",
+        "base64": "PGVwaXNvZGVkZXRhaWxzPjxzZWFzb24\u002BMjwvc2Vhc29uPjxlcGlzb2RlPjQ8L2VwaXNvZGU\u002BPHRpdGxlPk9ubHk8L3RpdGxlPjxzaG93dGl0bGU\u002BU2VyaWVzPC9zaG93dGl0bGU\u002BPC9lcGlzb2RlZGV0YWlscz4="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": "Only",
+        "OriginalTitle": null,
+        "Overview": null,
+        "IndexNumber": 4,
+        "IndexNumberEnd": null,
+        "ParentIndexNumber": 2,
+        "AirsBeforeEpisodeNumber": null,
+        "AirsAfterSeasonNumber": null,
+        "AirsBeforeSeasonNumber": null,
+        "SeriesName": "Series",
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "premiereDate": null,
+        "endDate": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "Tagline": null,
+        "IsLocked": false,
+        "lockedFields": [],
+        "productionLocations": [],
+        "genres": [],
+        "studios": [],
+        "tags": [],
+        "AspectRatio": null,
+        "Width": 0,
+        "Height": 0,
+        "HasSubtitles": false,
+        "providers": {}
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "one complete block ignores a trailing partial block",
+      "raw": {
+        "bytes": 126,
+        "sha256": "f0802a38f3e5ec202784af34401f8c952e41e543a3747d2ac55c50ab351c03b0",
+        "base64": "PGVwaXNvZGVkZXRhaWxzPjxlcGlzb2RlPjQ8L2VwaXNvZGU\u002BPHRpdGxlPkNvbXBsZXRlPC90aXRsZT48L2VwaXNvZGVkZXRhaWxzPjxlcGlzb2RlZGV0YWlscz48ZXBpc29kZT41PC9lcGlzb2RlPjx0aXRsZT5JZ25vcmVk"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": "Complete",
+        "OriginalTitle": null,
+        "Overview": null,
+        "IndexNumber": 4,
+        "IndexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "AirsBeforeEpisodeNumber": null,
+        "AirsAfterSeasonNumber": null,
+        "AirsBeforeSeasonNumber": null,
+        "SeriesName": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "premiereDate": null,
+        "endDate": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "Tagline": null,
+        "IsLocked": false,
+        "lockedFields": [],
+        "productionLocations": [],
+        "genres": [],
+        "studios": [],
+        "tags": [],
+        "AspectRatio": null,
+        "Width": 0,
+        "Height": 0,
+        "HasSubtitles": false,
+        "providers": {}
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "one complete block ignores arbitrary trailing text",
+      "raw": {
+        "bytes": 90,
+        "sha256": "b5d64991926be49527d528b5c17134943f4b3bf47163ea910ae3a47ea5052d0c",
+        "base64": "PGVwaXNvZGVkZXRhaWxzPjxlcGlzb2RlPjQ8L2VwaXNvZGU\u002BPHRpdGxlPkNvbXBsZXRlPC90aXRsZT48L2VwaXNvZGVkZXRhaWxzPm5vdCB4bWwgYXQgYWxs"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": "Complete",
+        "OriginalTitle": null,
+        "Overview": null,
+        "IndexNumber": 4,
+        "IndexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "AirsBeforeEpisodeNumber": null,
+        "AirsAfterSeasonNumber": null,
+        "AirsBeforeSeasonNumber": null,
+        "SeriesName": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "premiereDate": null,
+        "endDate": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "Tagline": null,
+        "IsLocked": false,
+        "lockedFields": [],
+        "productionLocations": [],
+        "genres": [],
+        "studios": [],
+        "tags": [],
+        "AspectRatio": null,
+        "Width": 0,
+        "Height": 0,
+        "HasSubtitles": false,
+        "providers": {}
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "episode closing tag matching is ordinal ignore case",
+      "raw": {
+        "bytes": 73,
+        "sha256": "c0d07e622207bfb55e8980033f0d21a890e5067b380aca48e3b89905a7928767",
+        "base64": "PGVwaXNvZGVkZXRhaWxzPjxlcGlzb2RlPjY8L2VwaXNvZGU\u002BPHRpdGxlPlVwcGVyPC90aXRsZT48L0VQSVNPREVERVRBSUxTPg=="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": null,
+        "OriginalTitle": null,
+        "Overview": null,
+        "IndexNumber": 6,
+        "IndexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "AirsBeforeEpisodeNumber": null,
+        "AirsAfterSeasonNumber": null,
+        "AirsBeforeSeasonNumber": null,
+        "SeriesName": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "premiereDate": null,
+        "endDate": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "Tagline": null,
+        "IsLocked": false,
+        "lockedFields": [],
+        "productionLocations": [],
+        "genres": [],
+        "studios": [],
+        "tags": [],
+        "AspectRatio": null,
+        "Width": 0,
+        "Height": 0,
+        "HasSubtitles": false,
+        "providers": {}
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "empty complete block leaves direct nullable strings unchanged",
+      "raw": {
+        "bytes": 33,
+        "sha256": "83a2d8ace141c3920223e8e4d7f6134f04f0ebfdd5e3c981557bbae02864a99f",
+        "base64": "PGVwaXNvZGVkZXRhaWxzPjwvZXBpc29kZWRldGFpbHM\u002B"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": null,
+        "OriginalTitle": null,
+        "Overview": null,
+        "IndexNumber": null,
+        "IndexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "AirsBeforeEpisodeNumber": null,
+        "AirsAfterSeasonNumber": null,
+        "AirsBeforeSeasonNumber": null,
+        "SeriesName": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "premiereDate": null,
+        "endDate": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "Tagline": null,
+        "IsLocked": false,
+        "lockedFields": [],
+        "productionLocations": [],
+        "genres": [],
+        "studios": [],
+        "tags": [],
+        "AspectRatio": null,
+        "Width": 0,
+        "Height": 0,
+        "HasSubtitles": false,
+        "providers": {}
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "two reversed blocks sort before merging",
+      "raw": {
+        "bytes": 147,
+        "sha256": "c67be1d495bc0efb64aa3c2180c6e07e43f923d03b3158900ba27e09cb9ee38d",
+        "base64": "PGVwaXNvZGVkZXRhaWxzPjxlcGlzb2RlPjI8L2VwaXNvZGU\u002BPHRpdGxlPlNlY29uZDwvdGl0bGU\u002BPC9lcGlzb2RlZGV0YWlscz48ZXBpc29kZWRldGFpbHM\u002BPGVwaXNvZGU\u002BMTwvZXBpc29kZT48dGl0bGU\u002BRmlyc3Q8L3RpdGxlPjwvZXBpc29kZWRldGFpbHM\u002B"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": "First / Second",
+        "OriginalTitle": "",
+        "Overview": "",
+        "IndexNumber": 1,
+        "IndexNumberEnd": 2,
+        "ParentIndexNumber": null,
+        "AirsBeforeEpisodeNumber": null,
+        "AirsAfterSeasonNumber": null,
+        "AirsBeforeSeasonNumber": null,
+        "SeriesName": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "premiereDate": null,
+        "endDate": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "Tagline": null,
+        "IsLocked": false,
+        "lockedFields": [],
+        "productionLocations": [],
+        "genres": [],
+        "studios": [],
+        "tags": [],
+        "AspectRatio": null,
+        "Width": 0,
+        "Height": 0,
+        "HasSubtitles": false,
+        "providers": {}
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "three blocks sort and merge in ascending episode order",
+      "raw": {
+        "bytes": 220,
+        "sha256": "b713fe4555204bc8b640efe8fbc67db83d2cb642dd27c8343397336ff8c56fde",
+        "base64": "PGVwaXNvZGVkZXRhaWxzPjxlcGlzb2RlPjM8L2VwaXNvZGU\u002BPHRpdGxlPlRoaXJkPC90aXRsZT48L2VwaXNvZGVkZXRhaWxzPjxlcGlzb2RlZGV0YWlscz48ZXBpc29kZT4xPC9lcGlzb2RlPjx0aXRsZT5GaXJzdDwvdGl0bGU\u002BPC9lcGlzb2RlZGV0YWlscz48ZXBpc29kZWRldGFpbHM\u002BPGVwaXNvZGU\u002BMjwvZXBpc29kZT48dGl0bGU\u002BU2Vjb25kPC90aXRsZT48L2VwaXNvZGVkZXRhaWxzPg=="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": "First / Second / Third",
+        "OriginalTitle": "",
+        "Overview": "",
+        "IndexNumber": 1,
+        "IndexNumberEnd": 3,
+        "ParentIndexNumber": null,
+        "AirsBeforeEpisodeNumber": null,
+        "AirsAfterSeasonNumber": null,
+        "AirsBeforeSeasonNumber": null,
+        "SeriesName": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "premiereDate": null,
+        "endDate": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "Tagline": null,
+        "IsLocked": false,
+        "lockedFields": [],
+        "productionLocations": [],
+        "genres": [],
+        "studios": [],
+        "tags": [],
+        "AspectRatio": null,
+        "Width": 0,
+        "Height": 0,
+        "HasSubtitles": false,
+        "providers": {}
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "equal episode numbers retain source order",
+      "raw": {
+        "bytes": 155,
+        "sha256": "384466f4a52d7adb445bbef6295dd0e31df88ffd940de2cacc3b837b5463b1bd",
+        "base64": "PGVwaXNvZGVkZXRhaWxzPjxlcGlzb2RlPjE8L2VwaXNvZGU\u002BPHRpdGxlPkZpcnN0IHRpZTwvdGl0bGU\u002BPC9lcGlzb2RlZGV0YWlscz48ZXBpc29kZWRldGFpbHM\u002BPGVwaXNvZGU\u002BMTwvZXBpc29kZT48dGl0bGU\u002BU2Vjb25kIHRpZTwvdGl0bGU\u002BPC9lcGlzb2RlZGV0YWlscz4="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": "First tie / Second tie",
+        "OriginalTitle": "",
+        "Overview": "",
+        "IndexNumber": 1,
+        "IndexNumberEnd": 1,
+        "ParentIndexNumber": null,
+        "AirsBeforeEpisodeNumber": null,
+        "AirsAfterSeasonNumber": null,
+        "AirsBeforeSeasonNumber": null,
+        "SeriesName": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "premiereDate": null,
+        "endDate": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "Tagline": null,
+        "IsLocked": false,
+        "lockedFields": [],
+        "productionLocations": [],
+        "genres": [],
+        "studios": [],
+        "tags": [],
+        "AspectRatio": null,
+        "Width": 0,
+        "Height": 0,
+        "HasSubtitles": false,
+        "providers": {}
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "missing episode number sorts after numbered blocks",
+      "raw": {
+        "bytes": 131,
+        "sha256": "0de6b0f8fd416c1e54eeb37393503fae6e5bf0ea0f6c5b75e6741bb5a2269b0d",
+        "base64": "PGVwaXNvZGVkZXRhaWxzPjx0aXRsZT5NaXNzaW5nPC90aXRsZT48L2VwaXNvZGVkZXRhaWxzPjxlcGlzb2RlZGV0YWlscz48ZXBpc29kZT43PC9lcGlzb2RlPjx0aXRsZT5OdW1iZXJlZDwvdGl0bGU\u002BPC9lcGlzb2RlZGV0YWlscz4="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": "Numbered / Missing",
+        "OriginalTitle": "",
+        "Overview": "",
+        "IndexNumber": 7,
+        "IndexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "AirsBeforeEpisodeNumber": null,
+        "AirsAfterSeasonNumber": null,
+        "AirsBeforeSeasonNumber": null,
+        "SeriesName": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "premiereDate": null,
+        "endDate": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "Tagline": null,
+        "IsLocked": false,
+        "lockedFields": [],
+        "productionLocations": [],
+        "genres": [],
+        "studios": [],
+        "tags": [],
+        "AspectRatio": null,
+        "Width": 0,
+        "Height": 0,
+        "HasSubtitles": false,
+        "providers": {}
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "negative and zero episode numbers use ordinary ascending order",
+      "raw": {
+        "bytes": 149,
+        "sha256": "c3edab9295dd58bad9583afc341e56fe3ced21153f5161df068f039565b7ad01",
+        "base64": "PGVwaXNvZGVkZXRhaWxzPjxlcGlzb2RlPjA8L2VwaXNvZGU\u002BPHRpdGxlPlplcm88L3RpdGxlPjwvZXBpc29kZWRldGFpbHM\u002BPGVwaXNvZGVkZXRhaWxzPjxlcGlzb2RlPi0xPC9lcGlzb2RlPjx0aXRsZT5OZWdhdGl2ZTwvdGl0bGU\u002BPC9lcGlzb2RlZGV0YWlscz4="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": "Negative / Zero",
+        "OriginalTitle": "",
+        "Overview": "",
+        "IndexNumber": -1,
+        "IndexNumberEnd": 0,
+        "ParentIndexNumber": null,
+        "AirsBeforeEpisodeNumber": null,
+        "AirsAfterSeasonNumber": null,
+        "AirsBeforeSeasonNumber": null,
+        "SeriesName": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "premiereDate": null,
+        "endDate": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "Tagline": null,
+        "IsLocked": false,
+        "lockedFields": [],
+        "productionLocations": [],
+        "genres": [],
+        "studios": [],
+        "tags": [],
+        "AspectRatio": null,
+        "Width": 0,
+        "Height": 0,
+        "HasSubtitles": false,
+        "providers": {}
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "malformed later complete block aborts the merge without target replay",
+      "raw": {
+        "bytes": 155,
+        "sha256": "d15d7a39ed31bb89bfe616cf86b3ab4c9a7f034d51d3fae6347fe55d11a6cb17",
+        "base64": "PGVwaXNvZGVkZXRhaWxzPjxlcGlzb2RlPjI8L2VwaXNvZGU\u002BPHRpdGxlPlZhbGlkIHRlbXBvcmFyeTwvdGl0bGU\u002BPC9lcGlzb2RlZGV0YWlscz48ZXBpc29kZWRldGFpbHM\u002BPGVwaXNvZGU\u002BMTwvZXBpc29kZT48dGl0bGU\u002BQnJva2VuPC9iYWQ\u002BPC9lcGlzb2RlZGV0YWlscz4="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": "Initial",
+        "OriginalTitle": null,
+        "Overview": null,
+        "IndexNumber": null,
+        "IndexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "AirsBeforeEpisodeNumber": null,
+        "AirsAfterSeasonNumber": null,
+        "AirsBeforeSeasonNumber": null,
+        "SeriesName": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "premiereDate": null,
+        "endDate": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "Tagline": null,
+        "IsLocked": false,
+        "lockedFields": [],
+        "productionLocations": [],
+        "genres": [],
+        "studios": [],
+        "tags": [],
+        "AspectRatio": null,
+        "Width": 0,
+        "Height": 0,
+        "HasSubtitles": false,
+        "providers": {}
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "malformed first complete block aborts before later blocks",
+      "raw": {
+        "bytes": 145,
+        "sha256": "ce092fa59122866159c48d5d51fd59747cd344753492ce95a820ceaf41b71ba8",
+        "base64": "PGVwaXNvZGVkZXRhaWxzPjxlcGlzb2RlPjI8L2VwaXNvZGU\u002BPHRpdGxlPkJyb2tlbjwvYmFkPjwvZXBpc29kZWRldGFpbHM\u002BPGVwaXNvZGVkZXRhaWxzPjxlcGlzb2RlPjE8L2VwaXNvZGU\u002BPHRpdGxlPkxhdGVyPC90aXRsZT48L2VwaXNvZGVkZXRhaWxzPg=="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": "Initial",
+        "OriginalTitle": null,
+        "Overview": null,
+        "IndexNumber": null,
+        "IndexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "AirsBeforeEpisodeNumber": null,
+        "AirsAfterSeasonNumber": null,
+        "AirsBeforeSeasonNumber": null,
+        "SeriesName": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "premiereDate": null,
+        "endDate": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "Tagline": null,
+        "IsLocked": false,
+        "lockedFields": [],
+        "productionLocations": [],
+        "genres": [],
+        "studios": [],
+        "tags": [],
+        "AspectRatio": null,
+        "Width": 0,
+        "Height": 0,
+        "HasSubtitles": false,
+        "providers": {}
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "malformed residual tail after a complete block is ignored",
+      "raw": {
+        "bytes": 111,
+        "sha256": "aa850ed1347629235511f056e7a48e140ec9e54429360b204c1bd1b931daa6c9",
+        "base64": "PGVwaXNvZGVkZXRhaWxzPjxlcGlzb2RlPjE8L2VwaXNvZGU\u002BPHRpdGxlPkNvbXBsZXRlPC90aXRsZT48L2VwaXNvZGVkZXRhaWxzPjxlcGlzb2RlZGV0YWlscz48dGl0bGU\u002BQnJva2VuPC9iYWQ\u002B"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": "Complete",
+        "OriginalTitle": null,
+        "Overview": null,
+        "IndexNumber": 1,
+        "IndexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "AirsBeforeEpisodeNumber": null,
+        "AirsAfterSeasonNumber": null,
+        "AirsBeforeSeasonNumber": null,
+        "SeriesName": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "premiereDate": null,
+        "endDate": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "Tagline": null,
+        "IsLocked": false,
+        "lockedFields": [],
+        "productionLocations": [],
+        "genres": [],
+        "studios": [],
+        "tags": [],
+        "AspectRatio": null,
+        "Width": 0,
+        "Height": 0,
+        "HasSubtitles": false,
+        "providers": {}
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "inter-block garbage belongs to the later block and aborts merge",
+      "raw": {
+        "bytes": 154,
+        "sha256": "5ba0a3e282003f7c4b5f572db233ee15c411de72787a533c9b1b61ecd39e1925",
+        "base64": "PGVwaXNvZGVkZXRhaWxzPjxlcGlzb2RlPjE8L2VwaXNvZGU\u002BPHRpdGxlPkZpcnN0PC90aXRsZT48L2VwaXNvZGVkZXRhaWxzPmdhcmJhZ2U8ZXBpc29kZWRldGFpbHM\u002BPGVwaXNvZGU\u002BMjwvZXBpc29kZT48dGl0bGU\u002BU2Vjb25kPC90aXRsZT48L2VwaXNvZGVkZXRhaWxzPg=="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": "Initial",
+        "OriginalTitle": null,
+        "Overview": null,
+        "IndexNumber": null,
+        "IndexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "AirsBeforeEpisodeNumber": null,
+        "AirsAfterSeasonNumber": null,
+        "AirsBeforeSeasonNumber": null,
+        "SeriesName": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "premiereDate": null,
+        "endDate": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "Tagline": null,
+        "IsLocked": false,
+        "lockedFields": [],
+        "productionLocations": [],
+        "genres": [],
+        "studios": [],
+        "tags": [],
+        "AspectRatio": null,
+        "Width": 0,
+        "Height": 0,
+        "HasSubtitles": false,
+        "providers": {}
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "episode numbering fields use the winning block",
+      "raw": {
+        "bytes": 231,
+        "sha256": "8fda2c334660017ecafc7feefb512c711069d66d5cc2951943ead92d8ec3cbe8",
+        "base64": "PGVwaXNvZGVkZXRhaWxzPjxzZWFzb24\u002BNTwvc2Vhc29uPjxlcGlzb2RlPjY8L2VwaXNvZGU\u002BPGVwaXNvZGVudW1iZXJlbmQ\u002BODwvZXBpc29kZW51bWJlcmVuZD48YWlyc2JlZm9yZV9lcGlzb2RlPjk8L2FpcnNiZWZvcmVfZXBpc29kZT48YWlyc2FmdGVyX3NlYXNvbj4xMDwvYWlyc2FmdGVyX3NlYXNvbj48YWlyc2JlZm9yZV9zZWFzb24\u002BMTE8L2FpcnNiZWZvcmVfc2Vhc29uPjwvZXBpc29kZWRldGFpbHM\u002B"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": null,
+        "OriginalTitle": null,
+        "Overview": null,
+        "IndexNumber": 6,
+        "IndexNumberEnd": 8,
+        "ParentIndexNumber": 5,
+        "AirsBeforeEpisodeNumber": 9,
+        "AirsAfterSeasonNumber": 10,
+        "AirsBeforeSeasonNumber": 11,
+        "SeriesName": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "premiereDate": null,
+        "endDate": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "Tagline": null,
+        "IsLocked": false,
+        "lockedFields": [],
+        "productionLocations": [],
+        "genres": [],
+        "studios": [],
+        "tags": [],
+        "AspectRatio": null,
+        "Width": 0,
+        "Height": 0,
+        "HasSubtitles": false,
+        "providers": {}
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "display aliases map to the special numbering fields",
+      "raw": {
+        "bytes": 144,
+        "sha256": "0c7ff613c73e4301d0a62d32f3c3b864fa6111c7c12bd91fd0bf735d57bbf30f",
+        "base64": "PGVwaXNvZGVkZXRhaWxzPjxkaXNwbGF5ZXBpc29kZT4xMjwvZGlzcGxheWVwaXNvZGU\u002BPGRpc3BsYXlhZnRlcnNlYXNvbj4xMzwvZGlzcGxheWFmdGVyc2Vhc29uPjxkaXNwbGF5c2Vhc29uPjE0PC9kaXNwbGF5c2Vhc29uPjwvZXBpc29kZWRldGFpbHM\u002B"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": null,
+        "OriginalTitle": null,
+        "Overview": null,
+        "IndexNumber": null,
+        "IndexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "AirsBeforeEpisodeNumber": 12,
+        "AirsAfterSeasonNumber": 13,
+        "AirsBeforeSeasonNumber": 14,
+        "SeriesName": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "premiereDate": null,
+        "endDate": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "Tagline": null,
+        "IsLocked": false,
+        "lockedFields": [],
+        "productionLocations": [],
+        "genres": [],
+        "studios": [],
+        "tags": [],
+        "AspectRatio": null,
+        "Width": 0,
+        "Height": 0,
+        "HasSubtitles": false,
+        "providers": {}
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "duplicate numbering fields commit the last valid value",
+      "raw": {
+        "bytes": 185,
+        "sha256": "27c5df5fcd07a810544b6bbfba26e0a5e9a2ff7e8f4a5a3e35d2502684e7e891",
+        "base64": "PGVwaXNvZGVkZXRhaWxzPjxzZWFzb24\u002BMTwvc2Vhc29uPjxzZWFzb24\u002BMjwvc2Vhc29uPjxlcGlzb2RlPjM8L2VwaXNvZGU\u002BPGVwaXNvZGU\u002BNDwvZXBpc29kZT48ZGlzcGxheWVwaXNvZGU\u002BNTwvZGlzcGxheWVwaXNvZGU\u002BPGFpcnNiZWZvcmVfZXBpc29kZT42PC9haXJzYmVmb3JlX2VwaXNvZGU\u002BPC9lcGlzb2RlZGV0YWlscz4="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": null,
+        "OriginalTitle": null,
+        "Overview": null,
+        "IndexNumber": 4,
+        "IndexNumberEnd": null,
+        "ParentIndexNumber": 2,
+        "AirsBeforeEpisodeNumber": 6,
+        "AirsAfterSeasonNumber": null,
+        "AirsBeforeSeasonNumber": null,
+        "SeriesName": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "premiereDate": null,
+        "endDate": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "Tagline": null,
+        "IsLocked": false,
+        "lockedFields": [],
+        "productionLocations": [],
+        "genres": [],
+        "studios": [],
+        "tags": [],
+        "AspectRatio": null,
+        "Width": 0,
+        "Height": 0,
+        "HasSubtitles": false,
+        "providers": {}
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "invalid numbering fields preserve initial values",
+      "raw": {
+        "bytes": 155,
+        "sha256": "d2c8611d1a97c723b57a6906b0325356427cb408d159d0a5a107561a4f0d1a7f",
+        "base64": "PGVwaXNvZGVkZXRhaWxzPjxzZWFzb24\u002BYmFkPC9zZWFzb24\u002BPGVwaXNvZGU\u002BMjE0NzQ4MzY0ODwvZXBpc29kZT48ZXBpc29kZW51bWJlcmVuZD48L2VwaXNvZGVudW1iZXJlbmQ\u002BPGRpc3BsYXllcGlzb2RlPjEuNTwvZGlzcGxheWVwaXNvZGU\u002BPC9lcGlzb2RlZGV0YWlscz4="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": null,
+        "OriginalTitle": null,
+        "Overview": null,
+        "IndexNumber": 22,
+        "IndexNumberEnd": 23,
+        "ParentIndexNumber": 21,
+        "AirsBeforeEpisodeNumber": 24,
+        "AirsAfterSeasonNumber": null,
+        "AirsBeforeSeasonNumber": null,
+        "SeriesName": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "premiereDate": null,
+        "endDate": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "Tagline": null,
+        "IsLocked": false,
+        "lockedFields": [],
+        "productionLocations": [],
+        "genres": [],
+        "studios": [],
+        "tags": [],
+        "AspectRatio": null,
+        "Width": 0,
+        "Height": 0,
+        "HasSubtitles": false,
+        "providers": {}
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "winning explicit episode end survives a lower additional episode",
+      "raw": {
+        "bytes": 185,
+        "sha256": "c676f0b7448a668fa4a775f91808f115a294e66a932235ff8a6086795cacdb09",
+        "base64": "PGVwaXNvZGVkZXRhaWxzPjxlcGlzb2RlPjE8L2VwaXNvZGU\u002BPGVwaXNvZGVudW1iZXJlbmQ\u002BOTwvZXBpc29kZW51bWJlcmVuZD48dGl0bGU\u002BRmlyc3Q8L3RpdGxlPjwvZXBpc29kZWRldGFpbHM\u002BPGVwaXNvZGVkZXRhaWxzPjxlcGlzb2RlPjI8L2VwaXNvZGU\u002BPHRpdGxlPlNlY29uZDwvdGl0bGU\u002BPC9lcGlzb2RlZGV0YWlscz4="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": "First / Second",
+        "OriginalTitle": "",
+        "Overview": "",
+        "IndexNumber": 1,
+        "IndexNumberEnd": 9,
+        "ParentIndexNumber": null,
+        "AirsBeforeEpisodeNumber": null,
+        "AirsAfterSeasonNumber": null,
+        "AirsBeforeSeasonNumber": null,
+        "SeriesName": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "premiereDate": null,
+        "endDate": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "Tagline": null,
+        "IsLocked": false,
+        "lockedFields": [],
+        "productionLocations": [],
+        "genres": [],
+        "studios": [],
+        "tags": [],
+        "AspectRatio": null,
+        "Width": 0,
+        "Height": 0,
+        "HasSubtitles": false,
+        "providers": {}
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "higher additional episode raises episode end",
+      "raw": {
+        "bytes": 186,
+        "sha256": "71f67cdaa68f2b43643c496604fa2361df67873e29e50adb92f219ac7ea494a9",
+        "base64": "PGVwaXNvZGVkZXRhaWxzPjxlcGlzb2RlPjE8L2VwaXNvZGU\u002BPGVwaXNvZGVudW1iZXJlbmQ\u002BMjwvZXBpc29kZW51bWJlcmVuZD48dGl0bGU\u002BRmlyc3Q8L3RpdGxlPjwvZXBpc29kZWRldGFpbHM\u002BPGVwaXNvZGVkZXRhaWxzPjxlcGlzb2RlPjc8L2VwaXNvZGU\u002BPHRpdGxlPlNldmVudGg8L3RpdGxlPjwvZXBpc29kZWRldGFpbHM\u002B"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": "First / Seventh",
+        "OriginalTitle": "",
+        "Overview": "",
+        "IndexNumber": 1,
+        "IndexNumberEnd": 7,
+        "ParentIndexNumber": null,
+        "AirsBeforeEpisodeNumber": null,
+        "AirsAfterSeasonNumber": null,
+        "AirsBeforeSeasonNumber": null,
+        "SeriesName": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "premiereDate": null,
+        "endDate": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "Tagline": null,
+        "IsLocked": false,
+        "lockedFields": [],
+        "productionLocations": [],
+        "genres": [],
+        "studios": [],
+        "tags": [],
+        "AspectRatio": null,
+        "Width": 0,
+        "Height": 0,
+        "HasSubtitles": false,
+        "providers": {}
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "additional block numbering and display scalars are otherwise discarded",
+      "raw": {
+        "bytes": 287,
+        "sha256": "4bd01871e2b98eb33d843181aec606f49de4c48e6cf7bbf5de7494ecb245d34b",
+        "base64": "PGVwaXNvZGVkZXRhaWxzPjxlcGlzb2RlPjE8L2VwaXNvZGU\u002BPHNlYXNvbj4yPC9zZWFzb24\u002BPHNob3d0aXRsZT5XaW5uZXIgU2VyaWVzPC9zaG93dGl0bGU\u002BPGRpc3BsYXllcGlzb2RlPjM8L2Rpc3BsYXllcGlzb2RlPjwvZXBpc29kZWRldGFpbHM\u002BPGVwaXNvZGVkZXRhaWxzPjxlcGlzb2RlPjQ8L2VwaXNvZGU\u002BPHNlYXNvbj4yMDwvc2Vhc29uPjxzaG93dGl0bGU\u002BRGlzY2FyZGVkIFNlcmllczwvc2hvd3RpdGxlPjxkaXNwbGF5ZXBpc29kZT4zMDwvZGlzcGxheWVwaXNvZGU\u002BPC9lcGlzb2RlZGV0YWlscz4="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": "",
+        "OriginalTitle": "",
+        "Overview": "",
+        "IndexNumber": 1,
+        "IndexNumberEnd": 4,
+        "ParentIndexNumber": 2,
+        "AirsBeforeEpisodeNumber": 3,
+        "AirsAfterSeasonNumber": null,
+        "AirsBeforeSeasonNumber": null,
+        "SeriesName": "Winner Series",
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "premiereDate": null,
+        "endDate": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "Tagline": null,
+        "IsLocked": false,
+        "lockedFields": [],
+        "productionLocations": [],
+        "genres": [],
+        "studios": [],
+        "tags": [],
+        "AspectRatio": null,
+        "Width": 0,
+        "Height": 0,
+        "HasSubtitles": false,
+        "providers": {}
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "winning block keeps season display and show title scalars",
+      "raw": {
+        "bytes": 269,
+        "sha256": "c6ee854de6975af2c7a9335c8ab54be502a9b31afa283ae31594de951b0b6050",
+        "base64": "PGVwaXNvZGVkZXRhaWxzPjxlcGlzb2RlPjU8L2VwaXNvZGU\u002BPHNlYXNvbj42PC9zZWFzb24\u002BPHNob3d0aXRsZT5XaW5uZXIgU2VyaWVzPC9zaG93dGl0bGU\u002BPGRpc3BsYXllcGlzb2RlPjc8L2Rpc3BsYXllcGlzb2RlPjxkaXNwbGF5YWZ0ZXJzZWFzb24\u002BODwvZGlzcGxheWFmdGVyc2Vhc29uPjxkaXNwbGF5c2Vhc29uPjk8L2Rpc3BsYXlzZWFzb24\u002BPC9lcGlzb2RlZGV0YWlscz48ZXBpc29kZWRldGFpbHM\u002BPGVwaXNvZGU\u002BMTA8L2VwaXNvZGU\u002BPC9lcGlzb2RlZGV0YWlscz4="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": "",
+        "OriginalTitle": "",
+        "Overview": "",
+        "IndexNumber": 5,
+        "IndexNumberEnd": 10,
+        "ParentIndexNumber": 6,
+        "AirsBeforeEpisodeNumber": 7,
+        "AirsAfterSeasonNumber": 8,
+        "AirsBeforeSeasonNumber": 9,
+        "SeriesName": "Winner Series",
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "premiereDate": null,
+        "endDate": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "Tagline": null,
+        "IsLocked": false,
+        "lockedFields": [],
+        "productionLocations": [],
+        "genres": [],
+        "studios": [],
+        "tags": [],
+        "AspectRatio": null,
+        "Width": 0,
+        "Height": 0,
+        "HasSubtitles": false,
+        "providers": {}
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "name original title and overview merge independently",
+      "raw": {
+        "bytes": 275,
+        "sha256": "24395f711e73fbbbbd85f026fd5f7bf10565393779d10e7169627f744e088fde",
+        "base64": "PGVwaXNvZGVkZXRhaWxzPjxlcGlzb2RlPjI8L2VwaXNvZGU\u002BPHRpdGxlPlNlY29uZDwvdGl0bGU\u002BPG9yaWdpbmFsdGl0bGU\u002BT3JpZ2luYWwgMjwvb3JpZ2luYWx0aXRsZT48cGxvdD5PdmVydmlldyAyPC9wbG90PjwvZXBpc29kZWRldGFpbHM\u002BPGVwaXNvZGVkZXRhaWxzPjxlcGlzb2RlPjE8L2VwaXNvZGU\u002BPHRpdGxlPkZpcnN0PC90aXRsZT48b3JpZ2luYWx0aXRsZT5PcmlnaW5hbCAxPC9vcmlnaW5hbHRpdGxlPjxwbG90Pk92ZXJ2aWV3IDE8L3Bsb3Q\u002BPC9lcGlzb2RlZGV0YWlscz4="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": "First / Second",
+        "OriginalTitle": "Original 1 / Original 2",
+        "Overview": "Overview 1 / Overview 2",
+        "IndexNumber": 1,
+        "IndexNumberEnd": 2,
+        "ParentIndexNumber": null,
+        "AirsBeforeEpisodeNumber": null,
+        "AirsAfterSeasonNumber": null,
+        "AirsBeforeSeasonNumber": null,
+        "SeriesName": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "premiereDate": null,
+        "endDate": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "Tagline": null,
+        "IsLocked": false,
+        "lockedFields": [],
+        "productionLocations": [],
+        "genres": [],
+        "studios": [],
+        "tags": [],
+        "AspectRatio": null,
+        "Width": 0,
+        "Height": 0,
+        "HasSubtitles": false,
+        "providers": {}
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "missing winning strings still receive leading merge separators",
+      "raw": {
+        "bytes": 191,
+        "sha256": "2ddb8caf1dee5e59b02843e7832288713d65136432854b367ab49a8d22159716",
+        "base64": "PGVwaXNvZGVkZXRhaWxzPjxlcGlzb2RlPjE8L2VwaXNvZGU\u002BPC9lcGlzb2RlZGV0YWlscz48ZXBpc29kZWRldGFpbHM\u002BPGVwaXNvZGU\u002BMjwvZXBpc29kZT48dGl0bGU\u002BU2Vjb25kPC90aXRsZT48b3JpZ2luYWx0aXRsZT5PcmlnaW5hbCAyPC9vcmlnaW5hbHRpdGxlPjxwbG90Pk92ZXJ2aWV3IDI8L3Bsb3Q\u002BPC9lcGlzb2RlZGV0YWlscz4="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": " / Second",
+        "OriginalTitle": " / Original 2",
+        "Overview": " / Overview 2",
+        "IndexNumber": 1,
+        "IndexNumberEnd": 2,
+        "ParentIndexNumber": null,
+        "AirsBeforeEpisodeNumber": null,
+        "AirsAfterSeasonNumber": null,
+        "AirsBeforeSeasonNumber": null,
+        "SeriesName": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "premiereDate": null,
+        "endDate": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "Tagline": null,
+        "IsLocked": false,
+        "lockedFields": [],
+        "productionLocations": [],
+        "genres": [],
+        "studios": [],
+        "tags": [],
+        "AspectRatio": null,
+        "Width": 0,
+        "Height": 0,
+        "HasSubtitles": false,
+        "providers": {}
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "empty additional strings add no merge separators",
+      "raw": {
+        "bytes": 190,
+        "sha256": "ba05959a521d6a3a362df8c3249ba87a7abaeaa1c05a623cd040cb725e04304b",
+        "base64": "PGVwaXNvZGVkZXRhaWxzPjxlcGlzb2RlPjE8L2VwaXNvZGU\u002BPHRpdGxlPkZpcnN0PC90aXRsZT48b3JpZ2luYWx0aXRsZT5PcmlnaW5hbCAxPC9vcmlnaW5hbHRpdGxlPjxwbG90Pk92ZXJ2aWV3IDE8L3Bsb3Q\u002BPC9lcGlzb2RlZGV0YWlscz48ZXBpc29kZWRldGFpbHM\u002BPGVwaXNvZGU\u002BMjwvZXBpc29kZT48L2VwaXNvZGVkZXRhaWxzPg=="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": "First",
+        "OriginalTitle": "Original 1",
+        "Overview": "Overview 1",
+        "IndexNumber": 1,
+        "IndexNumberEnd": 2,
+        "ParentIndexNumber": null,
+        "AirsBeforeEpisodeNumber": null,
+        "AirsAfterSeasonNumber": null,
+        "AirsBeforeSeasonNumber": null,
+        "SeriesName": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "premiereDate": null,
+        "endDate": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "Tagline": null,
+        "IsLocked": false,
+        "lockedFields": [],
+        "productionLocations": [],
+        "genres": [],
+        "studios": [],
+        "tags": [],
+        "AspectRatio": null,
+        "Width": 0,
+        "Height": 0,
+        "HasSubtitles": false,
+        "providers": {}
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "winning fields overwrite initial strings before merge",
+      "raw": {
+        "bytes": 152,
+        "sha256": "994dfb592fe0568ced80cb098909dae5c8c5aeecedf3946792b34a7d42045562",
+        "base64": "PGVwaXNvZGVkZXRhaWxzPjxlcGlzb2RlPjE8L2VwaXNvZGU\u002BPHRpdGxlPldpbm5lcjwvdGl0bGU\u002BPC9lcGlzb2RlZGV0YWlscz48ZXBpc29kZWRldGFpbHM\u002BPGVwaXNvZGU\u002BMjwvZXBpc29kZT48dGl0bGU\u002BQWRkaXRpb25hbDwvdGl0bGU\u002BPC9lcGlzb2RlZGV0YWlscz4="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": "Winner / Additional",
+        "OriginalTitle": "Initial original",
+        "Overview": "Initial overview",
+        "IndexNumber": 1,
+        "IndexNumberEnd": 2,
+        "ParentIndexNumber": null,
+        "AirsBeforeEpisodeNumber": null,
+        "AirsAfterSeasonNumber": null,
+        "AirsBeforeSeasonNumber": null,
+        "SeriesName": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "premiereDate": null,
+        "endDate": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "Tagline": null,
+        "IsLocked": false,
+        "lockedFields": [],
+        "productionLocations": [],
+        "genres": [],
+        "studios": [],
+        "tags": [],
+        "AspectRatio": null,
+        "Width": 0,
+        "Height": 0,
+        "HasSubtitles": false,
+        "providers": {}
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "winning block keeps representative scalar metadata",
+      "raw": {
+        "bytes": 339,
+        "sha256": "278a867f15094f33ec5700bacab3b50e7e7ad72d0340d6af665230fd77d6d516",
+        "base64": "PGVwaXNvZGVkZXRhaWxzPjxlcGlzb2RlPjE8L2VwaXNvZGU\u002BPHllYXI\u002BMjAyNDwveWVhcj48cmF0aW5nPjcuNTwvcmF0aW5nPjxjcml0aWNyYXRpbmc\u002BODE8L2NyaXRpY3JhdGluZz48cnVudGltZT40MjwvcnVudGltZT48bXBhYT5UVi0xNDwvbXBhYT48Z2VucmU\u002BRHJhbWEgLyBNeXN0ZXJ5PC9nZW5yZT48c3R1ZGlvPlN0dWRpbyBBPC9zdHVkaW8\u002BPHRhZz5UYWcgQTwvdGFnPjwvZXBpc29kZWRldGFpbHM\u002BPGVwaXNvZGVkZXRhaWxzPjxlcGlzb2RlPjI8L2VwaXNvZGU\u002BPHllYXI\u002BMTk5OTwveWVhcj48cmF0aW5nPjE8L3JhdGluZz48cnVudGltZT41PC9ydW50aW1lPjwvZXBpc29kZWRldGFpbHM\u002B"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": "",
+        "OriginalTitle": "",
+        "Overview": "",
+        "IndexNumber": 1,
+        "IndexNumberEnd": 2,
+        "ParentIndexNumber": null,
+        "AirsBeforeEpisodeNumber": null,
+        "AirsAfterSeasonNumber": null,
+        "AirsBeforeSeasonNumber": null,
+        "SeriesName": null,
+        "ProductionYear": 2024,
+        "CommunityRating": 7.5,
+        "CriticRating": 81,
+        "runTimeTicks": "25200000000",
+        "premiereDate": null,
+        "endDate": null,
+        "OfficialRating": "TV-14",
+        "CustomRating": null,
+        "Tagline": null,
+        "IsLocked": false,
+        "lockedFields": [],
+        "productionLocations": [],
+        "genres": [
+          "Drama",
+          "Mystery"
+        ],
+        "studios": [
+          "Studio A"
+        ],
+        "tags": [
+          "Tag A"
+        ],
+        "AspectRatio": null,
+        "Width": 0,
+        "Height": 0,
+        "HasSubtitles": false,
+        "providers": {}
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "winning provider identifiers are retained",
+      "raw": {
+        "bytes": 234,
+        "sha256": "1c3653da36b9ae9f4db1d5cd6c35b598cfc9651129451a593ada053ccd476df0",
+        "base64": "PGVwaXNvZGVkZXRhaWxzPjxlcGlzb2RlPjE8L2VwaXNvZGU\u002BPHVuaXF1ZWlkIHR5cGU9InRtZGIiPjEwMTwvdW5pcXVlaWQ\u002BPGltZGJfaWQ\u002BdHQwMDAwMTAxPC9pbWRiX2lkPjwvZXBpc29kZWRldGFpbHM\u002BPGVwaXNvZGVkZXRhaWxzPjxlcGlzb2RlPjI8L2VwaXNvZGU\u002BPHVuaXF1ZWlkIHR5cGU9InRtZGIiPjIwMjwvdW5pcXVlaWQ\u002BPGltZGJfaWQ\u002BdHQwMDAwMjAyPC9pbWRiX2lkPjwvZXBpc29kZWRldGFpbHM\u002B"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": "",
+        "OriginalTitle": "",
+        "Overview": "",
+        "IndexNumber": 1,
+        "IndexNumberEnd": 2,
+        "ParentIndexNumber": null,
+        "AirsBeforeEpisodeNumber": null,
+        "AirsAfterSeasonNumber": null,
+        "AirsBeforeSeasonNumber": null,
+        "SeriesName": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "premiereDate": null,
+        "endDate": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "Tagline": null,
+        "IsLocked": false,
+        "lockedFields": [],
+        "productionLocations": [],
+        "genres": [],
+        "studios": [],
+        "tags": [],
+        "AspectRatio": null,
+        "Width": 0,
+        "Height": 0,
+        "HasSubtitles": false,
+        "providers": {
+          "Imdb": "tt0000101",
+          "Tmdb": "101"
+        }
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "additional provider identifiers do not merge",
+      "raw": {
+        "bytes": 178,
+        "sha256": "0eabaf801fb39af00769ab3172e7360eccb38dde9a3db017cebf02256894dfcb",
+        "base64": "PGVwaXNvZGVkZXRhaWxzPjxlcGlzb2RlPjE8L2VwaXNvZGU\u002BPHVuaXF1ZWlkIHR5cGU9InR2ZGIiPjMwMzwvdW5pcXVlaWQ\u002BPC9lcGlzb2RlZGV0YWlscz48ZXBpc29kZWRldGFpbHM\u002BPGVwaXNvZGU\u002BMjwvZXBpc29kZT48dW5pcXVlaWQgdHlwZT0idG1kYiI\u002BNDA0PC91bmlxdWVpZD48L2VwaXNvZGVkZXRhaWxzPg=="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": "",
+        "OriginalTitle": "",
+        "Overview": "",
+        "IndexNumber": 1,
+        "IndexNumberEnd": 2,
+        "ParentIndexNumber": null,
+        "AirsBeforeEpisodeNumber": null,
+        "AirsAfterSeasonNumber": null,
+        "AirsBeforeSeasonNumber": null,
+        "SeriesName": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "premiereDate": null,
+        "endDate": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "Tagline": null,
+        "IsLocked": false,
+        "lockedFields": [],
+        "productionLocations": [],
+        "genres": [],
+        "studios": [],
+        "tags": [],
+        "AspectRatio": null,
+        "Width": 0,
+        "Height": 0,
+        "HasSubtitles": false,
+        "providers": {
+          "Tvdb": "303"
+        }
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "custom provider identifier survives on the winning block",
+      "raw": {
+        "bytes": 210,
+        "sha256": "c4aa433e32e0619f2d8c274cec4db258f4bd6df579286e04c58e606215e48f4e",
+        "base64": "PGVwaXNvZGVkZXRhaWxzPjxlcGlzb2RlPjE8L2VwaXNvZGU\u002BPHVuaXF1ZWlkIHR5cGU9IkN1c3RvbS5Qcm92aWRlciI\u002BY3VzdG9tLTE8L3VuaXF1ZWlkPjwvZXBpc29kZWRldGFpbHM\u002BPGVwaXNvZGVkZXRhaWxzPjxlcGlzb2RlPjI8L2VwaXNvZGU\u002BPHVuaXF1ZWlkIHR5cGU9IkN1c3RvbS5Qcm92aWRlciI\u002BY3VzdG9tLTI8L3VuaXF1ZWlkPjwvZXBpc29kZWRldGFpbHM\u002B"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": "",
+        "OriginalTitle": "",
+        "Overview": "",
+        "IndexNumber": 1,
+        "IndexNumberEnd": 2,
+        "ParentIndexNumber": null,
+        "AirsBeforeEpisodeNumber": null,
+        "AirsAfterSeasonNumber": null,
+        "AirsBeforeSeasonNumber": null,
+        "SeriesName": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "premiereDate": null,
+        "endDate": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "Tagline": null,
+        "IsLocked": false,
+        "lockedFields": [],
+        "productionLocations": [],
+        "genres": [],
+        "studios": [],
+        "tags": [],
+        "AspectRatio": null,
+        "Width": 0,
+        "Height": 0,
+        "HasSubtitles": false,
+        "providers": {
+          "Custom.Provider": "custom-1"
+        }
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "duplicate provider identifier in the winner keeps the last value",
+      "raw": {
+        "bytes": 174,
+        "sha256": "0e9cedb67830855f6bffb6bd1150d5bf94c14986bfe16eca06d6742c9f863ee7",
+        "base64": "PGVwaXNvZGVkZXRhaWxzPjxlcGlzb2RlPjE8L2VwaXNvZGU\u002BPHVuaXF1ZWlkIHR5cGU9InRtZGIiPjE8L3VuaXF1ZWlkPjx1bmlxdWVpZCB0eXBlPSJ0bWRiIj4yPC91bmlxdWVpZD48L2VwaXNvZGVkZXRhaWxzPjxlcGlzb2RlZGV0YWlscz48ZXBpc29kZT4zPC9lcGlzb2RlPjwvZXBpc29kZWRldGFpbHM\u002B"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": "",
+        "OriginalTitle": "",
+        "Overview": "",
+        "IndexNumber": 1,
+        "IndexNumberEnd": 3,
+        "ParentIndexNumber": null,
+        "AirsBeforeEpisodeNumber": null,
+        "AirsAfterSeasonNumber": null,
+        "AirsBeforeSeasonNumber": null,
+        "SeriesName": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "premiereDate": null,
+        "endDate": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "Tagline": null,
+        "IsLocked": false,
+        "lockedFields": [],
+        "productionLocations": [],
+        "genres": [],
+        "studios": [],
+        "tags": [],
+        "AspectRatio": null,
+        "Width": 0,
+        "Height": 0,
+        "HasSubtitles": false,
+        "providers": {
+          "Tmdb": "2"
+        }
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "winner people and remote image survive while additional collections are discarded",
+      "raw": {
+        "bytes": 317,
+        "sha256": "6b5759d0dc791bf20a494771a4cc9aa18ca14204dbfce614ca92983fbbaf6041",
+        "base64": "PGVwaXNvZGVkZXRhaWxzPjxlcGlzb2RlPjE8L2VwaXNvZGU\u002BPGFjdG9yPjxuYW1lPldpbm5lciBBY3RvcjwvbmFtZT48cm9sZT5MZWFkPC9yb2xlPjwvYWN0b3I\u002BPHRodW1iPmh0dHBzOi8vZXhhbXBsZS50ZXN0L3dpbm5lci5qcGc8L3RodW1iPjwvZXBpc29kZWRldGFpbHM\u002BPGVwaXNvZGVkZXRhaWxzPjxlcGlzb2RlPjI8L2VwaXNvZGU\u002BPGFjdG9yPjxuYW1lPkRpc2NhcmRlZCBBY3RvcjwvbmFtZT48L2FjdG9yPjx0aHVtYiBhc3BlY3Q9ImJhbm5lciI\u002BaHR0cHM6Ly9leGFtcGxlLnRlc3QvZGlzY2FyZGVkLmpwZzwvdGh1bWI\u002BPC9lcGlzb2RlZGV0YWlscz4="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": "",
+        "OriginalTitle": "",
+        "Overview": "",
+        "IndexNumber": 1,
+        "IndexNumberEnd": 2,
+        "ParentIndexNumber": null,
+        "AirsBeforeEpisodeNumber": null,
+        "AirsAfterSeasonNumber": null,
+        "AirsBeforeSeasonNumber": null,
+        "SeriesName": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "premiereDate": null,
+        "endDate": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "Tagline": null,
+        "IsLocked": false,
+        "lockedFields": [],
+        "productionLocations": [],
+        "genres": [],
+        "studios": [],
+        "tags": [],
+        "AspectRatio": null,
+        "Width": 0,
+        "Height": 0,
+        "HasSubtitles": false,
+        "providers": {}
+      },
+      "people": [
+        {
+          "Name": "Winner Actor",
+          "Type": "Actor",
+          "Role": "Lead",
+          "SortOrder": null,
+          "ImageUrl": null
+        }
+      ],
+      "remoteImages": [
+        {
+          "Url": "https://example.test/winner.jpg",
+          "Type": "Primary"
+        }
+      ],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "episode fetch resets existing people even for an empty block",
+      "raw": {
+        "bytes": 33,
+        "sha256": "83a2d8ace141c3920223e8e4d7f6134f04f0ebfdd5e3c981557bbae02864a99f",
+        "base64": "PGVwaXNvZGVkZXRhaWxzPjwvZXBpc29kZWRldGFpbHM\u002B"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": null,
+        "OriginalTitle": null,
+        "Overview": null,
+        "IndexNumber": null,
+        "IndexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "AirsBeforeEpisodeNumber": null,
+        "AirsAfterSeasonNumber": null,
+        "AirsBeforeSeasonNumber": null,
+        "SeriesName": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "premiereDate": null,
+        "endDate": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "Tagline": null,
+        "IsLocked": false,
+        "lockedFields": [],
+        "productionLocations": [],
+        "genres": [],
+        "studios": [],
+        "tags": [],
+        "AspectRatio": null,
+        "Width": 0,
+        "Height": 0,
+        "HasSubtitles": false,
+        "providers": {}
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "single truncated block keeps earlier scalar but not unfinished scalar",
+      "raw": {
+        "bytes": 70,
+        "sha256": "f40524f79e19d47d9ea807ef64a8bd7b0f10ae68aef4758b6999b8923e3b34de",
+        "base64": "PGVwaXNvZGVkZXRhaWxzPjx0aXRsZT5Db21taXR0ZWQ8L3RpdGxlPjxwbG90PlVuZmluaXNoZWQ8L3Bsb3Q\u002BPGJyb2tlbg=="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": "Committed",
+        "OriginalTitle": null,
+        "Overview": null,
+        "IndexNumber": null,
+        "IndexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "AirsBeforeEpisodeNumber": null,
+        "AirsAfterSeasonNumber": null,
+        "AirsBeforeSeasonNumber": null,
+        "SeriesName": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "premiereDate": null,
+        "endDate": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "Tagline": null,
+        "IsLocked": false,
+        "lockedFields": [],
+        "productionLocations": [],
+        "genres": [],
+        "studios": [],
+        "tags": [],
+        "AspectRatio": null,
+        "Width": 0,
+        "Height": 0,
+        "HasSubtitles": false,
+        "providers": {}
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "nested scalar error keeps an earlier direct field",
+      "raw": {
+        "bytes": 90,
+        "sha256": "b33ab050d19a283437b37b0cacee642d48fe67edc7778550ac10084fcdae9b80",
+        "base64": "PGVwaXNvZGVkZXRhaWxzPjxlcGlzb2RlPjM8L2VwaXNvZGU\u002BPHRpdGxlPjxpbm5lcj5JbnZhbGlkPC9pbm5lcj48L3RpdGxlPjwvZXBpc29kZWRldGFpbHM\u002B"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": null,
+        "OriginalTitle": null,
+        "Overview": null,
+        "IndexNumber": 3,
+        "IndexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "AirsBeforeEpisodeNumber": null,
+        "AirsAfterSeasonNumber": null,
+        "AirsBeforeSeasonNumber": null,
+        "SeriesName": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "premiereDate": null,
+        "endDate": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "Tagline": null,
+        "IsLocked": false,
+        "lockedFields": [],
+        "productionLocations": [],
+        "genres": [],
+        "studios": [],
+        "tags": [],
+        "AspectRatio": null,
+        "Width": 0,
+        "Height": 0,
+        "HasSubtitles": false,
+        "providers": {}
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "xml failure after temporary userdata keeps its side effect but skips target replay",
+      "raw": {
+        "bytes": 148,
+        "sha256": "66f5591bcbac7a12ab07ae40234c5a6dcc76635e7ae491c23353b0d3f4f625d6",
+        "base64": "PGVwaXNvZGVkZXRhaWxzPjxlcGlzb2RlPjI8L2VwaXNvZGU\u002BPHdhdGNoZWQ\u002BdHJ1ZTwvd2F0Y2hlZD48L2VwaXNvZGVkZXRhaWxzPjxlcGlzb2RlZGV0YWlscz48ZXBpc29kZT4xPC9lcGlzb2RlPjx0aXRsZT5Ccm9rZW48L2JhZD48L2VwaXNvZGVkZXRhaWxzPg=="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "id": "20000000-0000-0000-0000-000000000001",
+        "Name": "Initial",
+        "OriginalTitle": null,
+        "Overview": null,
+        "IndexNumber": null,
+        "IndexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "AirsBeforeEpisodeNumber": null,
+        "AirsAfterSeasonNumber": null,
+        "AirsBeforeSeasonNumber": null,
+        "SeriesName": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "premiereDate": null,
+        "endDate": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "Tagline": null,
+        "IsLocked": false,
+        "lockedFields": [],
+        "productionLocations": [],
+        "genres": [],
+        "studios": [],
+        "tags": [],
+        "AspectRatio": null,
+        "Width": 0,
+        "Height": 0,
+        "HasSubtitles": false,
+        "providers": {}
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [
+        {
+          "action": "user",
+          "attempt": 1,
+          "id": "10000000-0000-0000-0000-000000000001"
+        },
+        {
+          "action": "data",
+          "attempt": 1,
+          "itemId": "00000000-0000-0000-0000-000000000000",
+          "value": {
+            "Played": false,
+            "PlayCount": 0,
+            "lastPlayedDate": null
+          }
+        }
+      ],
+      "userData": {
+        "current": {
+          "Played": true,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "single zero id block performs transient userdata reads only",
+      "raw": {
+        "bytes": 124,
+        "sha256": "22c79b1f64be95f2f1df169d09f2a503becde14de7a5f413876e40087183b709",
+        "base64": "PGVwaXNvZGVkZXRhaWxzPjx3YXRjaGVkPnRydWU8L3dhdGNoZWQ\u002BPHBsYXljb3VudD4yPC9wbGF5Y291bnQ\u002BPGxhc3RwbGF5ZWQ\u002BMjAyNS0wMS0wMiAwMzowNDowNTwvbGFzdHBsYXllZD48L2VwaXNvZGVkZXRhaWxzPg=="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": null,
+        "OriginalTitle": null,
+        "Overview": null,
+        "IndexNumber": null,
+        "IndexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "AirsBeforeEpisodeNumber": null,
+        "AirsAfterSeasonNumber": null,
+        "AirsBeforeSeasonNumber": null,
+        "SeriesName": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "premiereDate": null,
+        "endDate": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "Tagline": null,
+        "IsLocked": false,
+        "lockedFields": [],
+        "productionLocations": [],
+        "genres": [],
+        "studios": [],
+        "tags": [],
+        "AspectRatio": null,
+        "Width": 0,
+        "Height": 0,
+        "HasSubtitles": false,
+        "providers": {}
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [
+        {
+          "action": "user",
+          "attempt": 1,
+          "id": "10000000-0000-0000-0000-000000000001"
+        },
+        {
+          "action": "data",
+          "attempt": 1,
+          "itemId": "00000000-0000-0000-0000-000000000000",
+          "value": {
+            "Played": false,
+            "PlayCount": 0,
+            "lastPlayedDate": null
+          }
+        },
+        {
+          "action": "user",
+          "attempt": 2,
+          "id": "10000000-0000-0000-0000-000000000001"
+        },
+        {
+          "action": "data",
+          "attempt": 2,
+          "itemId": "00000000-0000-0000-0000-000000000000",
+          "value": {
+            "Played": true,
+            "PlayCount": 0,
+            "lastPlayedDate": null
+          }
+        },
+        {
+          "action": "user",
+          "attempt": 3,
+          "id": "10000000-0000-0000-0000-000000000001"
+        },
+        {
+          "action": "data",
+          "attempt": 3,
+          "itemId": "00000000-0000-0000-0000-000000000000",
+          "value": {
+            "Played": true,
+            "PlayCount": 2,
+            "lastPlayedDate": null
+          }
+        }
+      ],
+      "userData": {
+        "current": {
+          "Played": true,
+          "PlayCount": 2,
+          "lastPlayedDate": "2025-01-02T03:04:05.0000000Z"
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "single existing item saves userdata nodes sequentially",
+      "raw": {
+        "bytes": 124,
+        "sha256": "22c79b1f64be95f2f1df169d09f2a503becde14de7a5f413876e40087183b709",
+        "base64": "PGVwaXNvZGVkZXRhaWxzPjx3YXRjaGVkPnRydWU8L3dhdGNoZWQ\u002BPHBsYXljb3VudD4yPC9wbGF5Y291bnQ\u002BPGxhc3RwbGF5ZWQ\u002BMjAyNS0wMS0wMiAwMzowNDowNTwvbGFzdHBsYXllZD48L2VwaXNvZGVkZXRhaWxzPg=="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "id": "20000000-0000-0000-0000-000000000001",
+        "Name": null,
+        "OriginalTitle": null,
+        "Overview": null,
+        "IndexNumber": null,
+        "IndexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "AirsBeforeEpisodeNumber": null,
+        "AirsAfterSeasonNumber": null,
+        "AirsBeforeSeasonNumber": null,
+        "SeriesName": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "premiereDate": null,
+        "endDate": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "Tagline": null,
+        "IsLocked": false,
+        "lockedFields": [],
+        "productionLocations": [],
+        "genres": [],
+        "studios": [],
+        "tags": [],
+        "AspectRatio": null,
+        "Width": 0,
+        "Height": 0,
+        "HasSubtitles": false,
+        "providers": {}
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [
+        {
+          "action": "user",
+          "attempt": 1,
+          "id": "10000000-0000-0000-0000-000000000001"
+        },
+        {
+          "action": "data",
+          "attempt": 1,
+          "itemId": "20000000-0000-0000-0000-000000000001",
+          "value": {
+            "Played": false,
+            "PlayCount": 0,
+            "lastPlayedDate": null
+          }
+        },
+        {
+          "action": "save",
+          "attempt": 1,
+          "itemId": "20000000-0000-0000-0000-000000000001",
+          "reason": "Import",
+          "tokenCanBeCanceled": false,
+          "tokenIsCancellationRequested": false,
+          "value": {
+            "Played": true,
+            "PlayCount": 0,
+            "lastPlayedDate": null
+          }
+        },
+        {
+          "action": "user",
+          "attempt": 2,
+          "id": "10000000-0000-0000-0000-000000000001"
+        },
+        {
+          "action": "data",
+          "attempt": 2,
+          "itemId": "20000000-0000-0000-0000-000000000001",
+          "value": {
+            "Played": true,
+            "PlayCount": 0,
+            "lastPlayedDate": null
+          }
+        },
+        {
+          "action": "save",
+          "attempt": 2,
+          "itemId": "20000000-0000-0000-0000-000000000001",
+          "reason": "Import",
+          "tokenCanBeCanceled": false,
+          "tokenIsCancellationRequested": false,
+          "value": {
+            "Played": true,
+            "PlayCount": 2,
+            "lastPlayedDate": null
+          }
+        },
+        {
+          "action": "user",
+          "attempt": 3,
+          "id": "10000000-0000-0000-0000-000000000001"
+        },
+        {
+          "action": "data",
+          "attempt": 3,
+          "itemId": "20000000-0000-0000-0000-000000000001",
+          "value": {
+            "Played": true,
+            "PlayCount": 2,
+            "lastPlayedDate": null
+          }
+        },
+        {
+          "action": "save",
+          "attempt": 3,
+          "itemId": "20000000-0000-0000-0000-000000000001",
+          "reason": "Import",
+          "tokenCanBeCanceled": false,
+          "tokenIsCancellationRequested": false,
+          "value": {
+            "Played": true,
+            "PlayCount": 2,
+            "lastPlayedDate": "2025-01-02T03:04:05.0000000Z"
+          }
+        }
+      ],
+      "userData": {
+        "current": {
+          "Played": true,
+          "PlayCount": 2,
+          "lastPlayedDate": "2025-01-02T03:04:05.0000000Z"
+        },
+        "persisted": {
+          "Played": true,
+          "PlayCount": 2,
+          "lastPlayedDate": "2025-01-02T03:04:05.0000000Z"
+        }
+      }
+    },
+    {
+      "name": "multi block zero id parses every temporary block then winner again",
+      "raw": {
+        "bytes": 153,
+        "sha256": "b88197db94cc0992b6da895772a60bf4d675510c2e645ab771d4bebc8d2cbd36",
+        "base64": "PGVwaXNvZGVkZXRhaWxzPjxlcGlzb2RlPjI8L2VwaXNvZGU\u002BPHBsYXljb3VudD4yPC9wbGF5Y291bnQ\u002BPC9lcGlzb2RlZGV0YWlscz48ZXBpc29kZWRldGFpbHM\u002BPGVwaXNvZGU\u002BMTwvZXBpc29kZT48d2F0Y2hlZD50cnVlPC93YXRjaGVkPjwvZXBpc29kZWRldGFpbHM\u002B"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": "",
+        "OriginalTitle": "",
+        "Overview": "",
+        "IndexNumber": 1,
+        "IndexNumberEnd": 2,
+        "ParentIndexNumber": null,
+        "AirsBeforeEpisodeNumber": null,
+        "AirsAfterSeasonNumber": null,
+        "AirsBeforeSeasonNumber": null,
+        "SeriesName": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "premiereDate": null,
+        "endDate": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "Tagline": null,
+        "IsLocked": false,
+        "lockedFields": [],
+        "productionLocations": [],
+        "genres": [],
+        "studios": [],
+        "tags": [],
+        "AspectRatio": null,
+        "Width": 0,
+        "Height": 0,
+        "HasSubtitles": false,
+        "providers": {}
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [
+        {
+          "action": "user",
+          "attempt": 1,
+          "id": "10000000-0000-0000-0000-000000000001"
+        },
+        {
+          "action": "data",
+          "attempt": 1,
+          "itemId": "00000000-0000-0000-0000-000000000000",
+          "value": {
+            "Played": false,
+            "PlayCount": 0,
+            "lastPlayedDate": null
+          }
+        },
+        {
+          "action": "user",
+          "attempt": 2,
+          "id": "10000000-0000-0000-0000-000000000001"
+        },
+        {
+          "action": "data",
+          "attempt": 2,
+          "itemId": "00000000-0000-0000-0000-000000000000",
+          "value": {
+            "Played": false,
+            "PlayCount": 2,
+            "lastPlayedDate": null
+          }
+        },
+        {
+          "action": "user",
+          "attempt": 3,
+          "id": "10000000-0000-0000-0000-000000000001"
+        },
+        {
+          "action": "data",
+          "attempt": 3,
+          "itemId": "00000000-0000-0000-0000-000000000000",
+          "value": {
+            "Played": true,
+            "PlayCount": 2,
+            "lastPlayedDate": null
+          }
+        }
+      ],
+      "userData": {
+        "current": {
+          "Played": true,
+          "PlayCount": 2,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "multi block existing item saves only winner after transient passes",
+      "raw": {
+        "bytes": 153,
+        "sha256": "b88197db94cc0992b6da895772a60bf4d675510c2e645ab771d4bebc8d2cbd36",
+        "base64": "PGVwaXNvZGVkZXRhaWxzPjxlcGlzb2RlPjI8L2VwaXNvZGU\u002BPHBsYXljb3VudD4yPC9wbGF5Y291bnQ\u002BPC9lcGlzb2RlZGV0YWlscz48ZXBpc29kZWRldGFpbHM\u002BPGVwaXNvZGU\u002BMTwvZXBpc29kZT48d2F0Y2hlZD50cnVlPC93YXRjaGVkPjwvZXBpc29kZWRldGFpbHM\u002B"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "id": "20000000-0000-0000-0000-000000000001",
+        "Name": "",
+        "OriginalTitle": "",
+        "Overview": "",
+        "IndexNumber": 1,
+        "IndexNumberEnd": 2,
+        "ParentIndexNumber": null,
+        "AirsBeforeEpisodeNumber": null,
+        "AirsAfterSeasonNumber": null,
+        "AirsBeforeSeasonNumber": null,
+        "SeriesName": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "premiereDate": null,
+        "endDate": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "Tagline": null,
+        "IsLocked": false,
+        "lockedFields": [],
+        "productionLocations": [],
+        "genres": [],
+        "studios": [],
+        "tags": [],
+        "AspectRatio": null,
+        "Width": 0,
+        "Height": 0,
+        "HasSubtitles": false,
+        "providers": {}
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [
+        {
+          "action": "user",
+          "attempt": 1,
+          "id": "10000000-0000-0000-0000-000000000001"
+        },
+        {
+          "action": "data",
+          "attempt": 1,
+          "itemId": "00000000-0000-0000-0000-000000000000",
+          "value": {
+            "Played": false,
+            "PlayCount": 0,
+            "lastPlayedDate": null
+          }
+        },
+        {
+          "action": "user",
+          "attempt": 2,
+          "id": "10000000-0000-0000-0000-000000000001"
+        },
+        {
+          "action": "data",
+          "attempt": 2,
+          "itemId": "00000000-0000-0000-0000-000000000000",
+          "value": {
+            "Played": false,
+            "PlayCount": 2,
+            "lastPlayedDate": null
+          }
+        },
+        {
+          "action": "user",
+          "attempt": 3,
+          "id": "10000000-0000-0000-0000-000000000001"
+        },
+        {
+          "action": "data",
+          "attempt": 3,
+          "itemId": "20000000-0000-0000-0000-000000000001",
+          "value": {
+            "Played": true,
+            "PlayCount": 2,
+            "lastPlayedDate": null
+          }
+        },
+        {
+          "action": "save",
+          "attempt": 1,
+          "itemId": "20000000-0000-0000-0000-000000000001",
+          "reason": "Import",
+          "tokenCanBeCanceled": false,
+          "tokenIsCancellationRequested": false,
+          "value": {
+            "Played": true,
+            "PlayCount": 2,
+            "lastPlayedDate": null
+          }
+        }
+      ],
+      "userData": {
+        "current": {
+          "Played": true,
+          "PlayCount": 2,
+          "lastPlayedDate": null
+        },
+        "persisted": {
+          "Played": true,
+          "PlayCount": 2,
+          "lastPlayedDate": null
+        }
+      }
+    },
+    {
+      "name": "additional temporary userdata mutation is visible in winner persisted snapshot",
+      "raw": {
+        "bytes": 153,
+        "sha256": "5f2c953c8e33cbbf60246aa64d8512e0b8ced688cb9afb88e57e41e29d841e22",
+        "base64": "PGVwaXNvZGVkZXRhaWxzPjxlcGlzb2RlPjI8L2VwaXNvZGU\u002BPHBsYXljb3VudD45PC9wbGF5Y291bnQ\u002BPC9lcGlzb2RlZGV0YWlscz48ZXBpc29kZWRldGFpbHM\u002BPGVwaXNvZGU\u002BMTwvZXBpc29kZT48d2F0Y2hlZD50cnVlPC93YXRjaGVkPjwvZXBpc29kZWRldGFpbHM\u002B"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "id": "20000000-0000-0000-0000-000000000001",
+        "Name": "",
+        "OriginalTitle": "",
+        "Overview": "",
+        "IndexNumber": 1,
+        "IndexNumberEnd": 2,
+        "ParentIndexNumber": null,
+        "AirsBeforeEpisodeNumber": null,
+        "AirsAfterSeasonNumber": null,
+        "AirsBeforeSeasonNumber": null,
+        "SeriesName": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "premiereDate": null,
+        "endDate": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "Tagline": null,
+        "IsLocked": false,
+        "lockedFields": [],
+        "productionLocations": [],
+        "genres": [],
+        "studios": [],
+        "tags": [],
+        "AspectRatio": null,
+        "Width": 0,
+        "Height": 0,
+        "HasSubtitles": false,
+        "providers": {}
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [
+        {
+          "action": "user",
+          "attempt": 1,
+          "id": "10000000-0000-0000-0000-000000000001"
+        },
+        {
+          "action": "data",
+          "attempt": 1,
+          "itemId": "00000000-0000-0000-0000-000000000000",
+          "value": {
+            "Played": false,
+            "PlayCount": 0,
+            "lastPlayedDate": null
+          }
+        },
+        {
+          "action": "user",
+          "attempt": 2,
+          "id": "10000000-0000-0000-0000-000000000001"
+        },
+        {
+          "action": "data",
+          "attempt": 2,
+          "itemId": "00000000-0000-0000-0000-000000000000",
+          "value": {
+            "Played": false,
+            "PlayCount": 9,
+            "lastPlayedDate": null
+          }
+        },
+        {
+          "action": "user",
+          "attempt": 3,
+          "id": "10000000-0000-0000-0000-000000000001"
+        },
+        {
+          "action": "data",
+          "attempt": 3,
+          "itemId": "20000000-0000-0000-0000-000000000001",
+          "value": {
+            "Played": true,
+            "PlayCount": 9,
+            "lastPlayedDate": null
+          }
+        },
+        {
+          "action": "save",
+          "attempt": 1,
+          "itemId": "20000000-0000-0000-0000-000000000001",
+          "reason": "Import",
+          "tokenCanBeCanceled": false,
+          "tokenIsCancellationRequested": false,
+          "value": {
+            "Played": true,
+            "PlayCount": 9,
+            "lastPlayedDate": null
+          }
+        }
+      ],
+      "userData": {
+        "current": {
+          "Played": true,
+          "PlayCount": 9,
+          "lastPlayedDate": null
+        },
+        "persisted": {
+          "Played": true,
+          "PlayCount": 9,
+          "lastPlayedDate": null
+        }
+      }
+    },
+    {
+      "name": "userdata failure in a later temporary block stops before target replay",
+      "raw": {
+        "bytes": 153,
+        "sha256": "aca2f8933040ba52e68c3053bc50132bcba7d176255bdf245e8c1918d766990c",
+        "base64": "PGVwaXNvZGVkZXRhaWxzPjxlcGlzb2RlPjI8L2VwaXNvZGU\u002BPHdhdGNoZWQ\u002BdHJ1ZTwvd2F0Y2hlZD48L2VwaXNvZGVkZXRhaWxzPjxlcGlzb2RlZGV0YWlscz48ZXBpc29kZT4xPC9lcGlzb2RlPjxwbGF5Y291bnQ\u002BMjwvcGxheWNvdW50PjwvZXBpc29kZWRldGFpbHM\u002B"
+      },
+      "exception": "IOException",
+      "hasMetadata": false,
+      "item": {
+        "id": "20000000-0000-0000-0000-000000000001",
+        "Name": "Initial",
+        "OriginalTitle": null,
+        "Overview": null,
+        "IndexNumber": null,
+        "IndexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "AirsBeforeEpisodeNumber": null,
+        "AirsAfterSeasonNumber": null,
+        "AirsBeforeSeasonNumber": null,
+        "SeriesName": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "premiereDate": null,
+        "endDate": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "Tagline": null,
+        "IsLocked": false,
+        "lockedFields": [],
+        "productionLocations": [],
+        "genres": [],
+        "studios": [],
+        "tags": [],
+        "AspectRatio": null,
+        "Width": 0,
+        "Height": 0,
+        "HasSubtitles": false,
+        "providers": {}
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [
+        {
+          "action": "user",
+          "attempt": 1,
+          "id": "10000000-0000-0000-0000-000000000001"
+        },
+        {
+          "action": "data",
+          "attempt": 1,
+          "itemId": "00000000-0000-0000-0000-000000000000",
+          "value": {
+            "Played": false,
+            "PlayCount": 0,
+            "lastPlayedDate": null
+          }
+        },
+        {
+          "action": "user",
+          "attempt": 2,
+          "id": "10000000-0000-0000-0000-000000000001"
+        },
+        {
+          "action": "data",
+          "attempt": 2,
+          "itemId": "00000000-0000-0000-0000-000000000000",
+          "value": {
+            "Played": true,
+            "PlayCount": 0,
+            "lastPlayedDate": null
+          }
+        }
+      ],
+      "userData": {
+        "current": {
+          "Played": true,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "winner save failure preserves its earlier scalar target prefix",
+      "raw": {
+        "bytes": 181,
+        "sha256": "d7bcb655df02a285c68c603fd8fd04627155817a68c744e1841c282f25533cda",
+        "base64": "PGVwaXNvZGVkZXRhaWxzPjxlcGlzb2RlPjI8L2VwaXNvZGU\u002BPC9lcGlzb2RlZGV0YWlscz48ZXBpc29kZWRldGFpbHM\u002BPGVwaXNvZGU\u002BMTwvZXBpc29kZT48dGl0bGU\u002BV2lubmVyIHByZWZpeDwvdGl0bGU\u002BPHdhdGNoZWQ\u002BdHJ1ZTwvd2F0Y2hlZD48cGxvdD5Ob3QgcmVhY2hlZDwvcGxvdD48L2VwaXNvZGVkZXRhaWxzPg=="
+      },
+      "exception": "IOException",
+      "hasMetadata": false,
+      "item": {
+        "id": "20000000-0000-0000-0000-000000000001",
+        "Name": "Winner prefix",
+        "OriginalTitle": null,
+        "Overview": null,
+        "IndexNumber": 1,
+        "IndexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "AirsBeforeEpisodeNumber": null,
+        "AirsAfterSeasonNumber": null,
+        "AirsBeforeSeasonNumber": null,
+        "SeriesName": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "premiereDate": null,
+        "endDate": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "Tagline": null,
+        "IsLocked": false,
+        "lockedFields": [],
+        "productionLocations": [],
+        "genres": [],
+        "studios": [],
+        "tags": [],
+        "AspectRatio": null,
+        "Width": 0,
+        "Height": 0,
+        "HasSubtitles": false,
+        "providers": {}
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [
+        {
+          "action": "user",
+          "attempt": 1,
+          "id": "10000000-0000-0000-0000-000000000001"
+        },
+        {
+          "action": "data",
+          "attempt": 1,
+          "itemId": "00000000-0000-0000-0000-000000000000",
+          "value": {
+            "Played": false,
+            "PlayCount": 0,
+            "lastPlayedDate": null
+          }
+        },
+        {
+          "action": "user",
+          "attempt": 2,
+          "id": "10000000-0000-0000-0000-000000000001"
+        },
+        {
+          "action": "data",
+          "attempt": 2,
+          "itemId": "20000000-0000-0000-0000-000000000001",
+          "value": {
+            "Played": true,
+            "PlayCount": 0,
+            "lastPlayedDate": null
+          }
+        },
+        {
+          "action": "save",
+          "attempt": 1,
+          "itemId": "20000000-0000-0000-0000-000000000001",
+          "reason": "Import",
+          "tokenCanBeCanceled": false,
+          "tokenIsCancellationRequested": false,
+          "value": {
+            "Played": true,
+            "PlayCount": 0,
+            "lastPlayedDate": null
+          }
+        }
+      ],
+      "userData": {
+        "current": {
+          "Played": true,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "pre cancellation propagates before the first episode node",
+      "raw": {
+        "bytes": 79,
+        "sha256": "abbe5e50a195602477eea8a6ce0b78ce0feba2c1c8006e8829ebc48d9930a42f",
+        "base64": "PGVwaXNvZGVkZXRhaWxzPjxlcGlzb2RlPjE8L2VwaXNvZGU\u002BPHRpdGxlPk5vdCByZWFjaGVkPC90aXRsZT48L2VwaXNvZGVkZXRhaWxzPg=="
+      },
+      "exception": "OperationCanceledException",
+      "hasMetadata": false,
+      "item": {
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": null,
+        "OriginalTitle": null,
+        "Overview": null,
+        "IndexNumber": null,
+        "IndexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "AirsBeforeEpisodeNumber": null,
+        "AirsAfterSeasonNumber": null,
+        "AirsBeforeSeasonNumber": null,
+        "SeriesName": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "premiereDate": null,
+        "endDate": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "Tagline": null,
+        "IsLocked": false,
+        "lockedFields": [],
+        "productionLocations": [],
+        "genres": [],
+        "studios": [],
+        "tags": [],
+        "AspectRatio": null,
+        "Width": 0,
+        "Height": 0,
+        "HasSubtitles": false,
+        "providers": {}
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "cancellation after temporary userdata is observed at the next block",
+      "raw": {
+        "bytes": 155,
+        "sha256": "c81ebd99a43b937f9a89ca4e15e3a75b4fc94d8bdaff47ac4795a14145d2f9ea",
+        "base64": "PGVwaXNvZGVkZXRhaWxzPjxlcGlzb2RlPjI8L2VwaXNvZGU\u002BPHdhdGNoZWQ\u002BdHJ1ZTwvd2F0Y2hlZD48L2VwaXNvZGVkZXRhaWxzPjxlcGlzb2RlZGV0YWlscz48ZXBpc29kZT4xPC9lcGlzb2RlPjx0aXRsZT5Ob3QgcmVhY2hlZDwvdGl0bGU\u002BPC9lcGlzb2RlZGV0YWlscz4="
+      },
+      "exception": "OperationCanceledException",
+      "hasMetadata": false,
+      "item": {
+        "id": "20000000-0000-0000-0000-000000000001",
+        "Name": null,
+        "OriginalTitle": null,
+        "Overview": null,
+        "IndexNumber": null,
+        "IndexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "AirsBeforeEpisodeNumber": null,
+        "AirsAfterSeasonNumber": null,
+        "AirsBeforeSeasonNumber": null,
+        "SeriesName": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "premiereDate": null,
+        "endDate": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "Tagline": null,
+        "IsLocked": false,
+        "lockedFields": [],
+        "productionLocations": [],
+        "genres": [],
+        "studios": [],
+        "tags": [],
+        "AspectRatio": null,
+        "Width": 0,
+        "Height": 0,
+        "HasSubtitles": false,
+        "providers": {}
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [
+        {
+          "action": "user",
+          "attempt": 1,
+          "id": "10000000-0000-0000-0000-000000000001"
+        },
+        {
+          "action": "data",
+          "attempt": 1,
+          "itemId": "00000000-0000-0000-0000-000000000000",
+          "value": {
+            "Played": false,
+            "PlayCount": 0,
+            "lastPlayedDate": null
+          }
+        }
+      ],
+      "userData": {
+        "current": {
+          "Played": true,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "cancellation after winner save preserves the saved prefix",
+      "raw": {
+        "bytes": 155,
+        "sha256": "48683f5929b337b7bac7c7ad19646652bcc1161353d67f8be23da502239213f6",
+        "base64": "PGVwaXNvZGVkZXRhaWxzPjxlcGlzb2RlPjI8L2VwaXNvZGU\u002BPC9lcGlzb2RlZGV0YWlscz48ZXBpc29kZWRldGFpbHM\u002BPGVwaXNvZGU\u002BMTwvZXBpc29kZT48d2F0Y2hlZD50cnVlPC93YXRjaGVkPjx0aXRsZT5Ob3QgcmVhY2hlZDwvdGl0bGU\u002BPC9lcGlzb2RlZGV0YWlscz4="
+      },
+      "exception": "OperationCanceledException",
+      "hasMetadata": false,
+      "item": {
+        "id": "20000000-0000-0000-0000-000000000001",
+        "Name": null,
+        "OriginalTitle": null,
+        "Overview": null,
+        "IndexNumber": 1,
+        "IndexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "AirsBeforeEpisodeNumber": null,
+        "AirsAfterSeasonNumber": null,
+        "AirsBeforeSeasonNumber": null,
+        "SeriesName": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "premiereDate": null,
+        "endDate": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "Tagline": null,
+        "IsLocked": false,
+        "lockedFields": [],
+        "productionLocations": [],
+        "genres": [],
+        "studios": [],
+        "tags": [],
+        "AspectRatio": null,
+        "Width": 0,
+        "Height": 0,
+        "HasSubtitles": false,
+        "providers": {}
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [
+        {
+          "action": "user",
+          "attempt": 1,
+          "id": "10000000-0000-0000-0000-000000000001"
+        },
+        {
+          "action": "data",
+          "attempt": 1,
+          "itemId": "00000000-0000-0000-0000-000000000000",
+          "value": {
+            "Played": false,
+            "PlayCount": 0,
+            "lastPlayedDate": null
+          }
+        },
+        {
+          "action": "user",
+          "attempt": 2,
+          "id": "10000000-0000-0000-0000-000000000001"
+        },
+        {
+          "action": "data",
+          "attempt": 2,
+          "itemId": "20000000-0000-0000-0000-000000000001",
+          "value": {
+            "Played": true,
+            "PlayCount": 0,
+            "lastPlayedDate": null
+          }
+        },
+        {
+          "action": "save",
+          "attempt": 1,
+          "itemId": "20000000-0000-0000-0000-000000000001",
+          "reason": "Import",
+          "tokenCanBeCanceled": false,
+          "tokenIsCancellationRequested": false,
+          "value": {
+            "Played": true,
+            "PlayCount": 0,
+            "lastPlayedDate": null
+          }
+        }
+      ],
+      "userData": {
+        "current": {
+          "Played": true,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": {
+          "Played": true,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        }
+      }
+    },
+    {
+      "name": "user manager failure is not swallowed as an xml error",
+      "raw": {
+        "bytes": 101,
+        "sha256": "fb2dd2c05d22aabde08e496add45941a2df532f35af0a43eb9906b24609e9fe4",
+        "base64": "PGVwaXNvZGVkZXRhaWxzPjx0aXRsZT5QcmVmaXg8L3RpdGxlPjx3YXRjaGVkPnRydWU8L3dhdGNoZWQ\u002BPHBsb3Q\u002BTm90IHJlYWNoZWQ8L3Bsb3Q\u002BPC9lcGlzb2RlZGV0YWlscz4="
+      },
+      "exception": "IOException",
+      "hasMetadata": false,
+      "item": {
+        "id": "20000000-0000-0000-0000-000000000001",
+        "Name": "Prefix",
+        "OriginalTitle": null,
+        "Overview": null,
+        "IndexNumber": null,
+        "IndexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "AirsBeforeEpisodeNumber": null,
+        "AirsAfterSeasonNumber": null,
+        "AirsBeforeSeasonNumber": null,
+        "SeriesName": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "premiereDate": null,
+        "endDate": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "Tagline": null,
+        "IsLocked": false,
+        "lockedFields": [],
+        "productionLocations": [],
+        "genres": [],
+        "studios": [],
+        "tags": [],
+        "AspectRatio": null,
+        "Width": 0,
+        "Height": 0,
+        "HasSubtitles": false,
+        "providers": {}
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [
+        {
+          "action": "user",
+          "attempt": 1,
+          "id": "10000000-0000-0000-0000-000000000001"
+        }
+      ],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "pre cancellation on an empty file is preceded by xml setup",
+      "raw": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "base64": ""
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": null,
+        "OriginalTitle": null,
+        "Overview": null,
+        "IndexNumber": null,
+        "IndexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "AirsBeforeEpisodeNumber": null,
+        "AirsAfterSeasonNumber": null,
+        "AirsBeforeSeasonNumber": null,
+        "SeriesName": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "premiereDate": null,
+        "endDate": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "Tagline": null,
+        "IsLocked": false,
+        "lockedFields": [],
+        "productionLocations": [],
+        "genres": [],
+        "studios": [],
+        "tags": [],
+        "AspectRatio": null,
+        "Width": 0,
+        "Height": 0,
+        "HasSubtitles": false,
+        "providers": {}
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "pre cancellation on a self closing root sees no interactive child",
+      "raw": {
+        "bytes": 17,
+        "sha256": "ebf170d8a66651dbcd6dcdad100868caab38297760a27a29718a021086b934ca",
+        "base64": "PGVwaXNvZGVkZXRhaWxzLz4="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": null,
+        "OriginalTitle": null,
+        "Overview": null,
+        "IndexNumber": null,
+        "IndexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "AirsBeforeEpisodeNumber": null,
+        "AirsAfterSeasonNumber": null,
+        "AirsBeforeSeasonNumber": null,
+        "SeriesName": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "premiereDate": null,
+        "endDate": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "Tagline": null,
+        "IsLocked": false,
+        "lockedFields": [],
+        "productionLocations": [],
+        "genres": [],
+        "studios": [],
+        "tags": [],
+        "AspectRatio": null,
+        "Width": 0,
+        "Height": 0,
+        "HasSubtitles": false,
+        "providers": {}
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "pre cancellation on a paired empty root observes the end element",
+      "raw": {
+        "bytes": 33,
+        "sha256": "83a2d8ace141c3920223e8e4d7f6134f04f0ebfdd5e3c981557bbae02864a99f",
+        "base64": "PGVwaXNvZGVkZXRhaWxzPjwvZXBpc29kZWRldGFpbHM\u002B"
+      },
+      "exception": "OperationCanceledException",
+      "hasMetadata": false,
+      "item": {
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": null,
+        "OriginalTitle": null,
+        "Overview": null,
+        "IndexNumber": null,
+        "IndexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "AirsBeforeEpisodeNumber": null,
+        "AirsAfterSeasonNumber": null,
+        "AirsBeforeSeasonNumber": null,
+        "SeriesName": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "premiereDate": null,
+        "endDate": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "Tagline": null,
+        "IsLocked": false,
+        "lockedFields": [],
+        "productionLocations": [],
+        "genres": [],
+        "studios": [],
+        "tags": [],
+        "AspectRatio": null,
+        "Width": 0,
+        "Height": 0,
+        "HasSubtitles": false,
+        "providers": {}
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "pre cancellation on direct root text observes the text node",
+      "raw": {
+        "bytes": 37,
+        "sha256": "0ddaf104a57846ebcd8624cc562f65eb35928e1f85c18f21732e569903a1e072",
+        "base64": "PGVwaXNvZGVkZXRhaWxzPnRleHQ8L2VwaXNvZGVkZXRhaWxzPg=="
+      },
+      "exception": "OperationCanceledException",
+      "hasMetadata": false,
+      "item": {
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": null,
+        "OriginalTitle": null,
+        "Overview": null,
+        "IndexNumber": null,
+        "IndexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "AirsBeforeEpisodeNumber": null,
+        "AirsAfterSeasonNumber": null,
+        "AirsBeforeSeasonNumber": null,
+        "SeriesName": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "premiereDate": null,
+        "endDate": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "Tagline": null,
+        "IsLocked": false,
+        "lockedFields": [],
+        "productionLocations": [],
+        "genres": [],
+        "studios": [],
+        "tags": [],
+        "AspectRatio": null,
+        "Width": 0,
+        "Height": 0,
+        "HasSubtitles": false,
+        "providers": {}
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "malformed setup xml is swallowed before pre cancellation",
+      "raw": {
+        "bytes": 1,
+        "sha256": "dabd3aff769f07eb2965401eb029974ebba3407afd02b26ddb564ea5f8efae72",
+        "base64": "PA=="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": null,
+        "OriginalTitle": null,
+        "Overview": null,
+        "IndexNumber": null,
+        "IndexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "AirsBeforeEpisodeNumber": null,
+        "AirsAfterSeasonNumber": null,
+        "AirsBeforeSeasonNumber": null,
+        "SeriesName": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "premiereDate": null,
+        "endDate": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "Tagline": null,
+        "IsLocked": false,
+        "lockedFields": [],
+        "productionLocations": [],
+        "genres": [],
+        "studios": [],
+        "tags": [],
+        "AspectRatio": null,
+        "Width": 0,
+        "Height": 0,
+        "HasSubtitles": false,
+        "providers": {}
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "pre cancellation in a multi block file stops in the first temporary block",
+      "raw": {
+        "bytes": 66,
+        "sha256": "5798dc3f7b8673dbd722829298118e4a0921a0032ed41d30ae6565ada8c15723",
+        "base64": "PGVwaXNvZGVkZXRhaWxzPjwvZXBpc29kZWRldGFpbHM\u002BPGVwaXNvZGVkZXRhaWxzPjwvZXBpc29kZWRldGFpbHM\u002B"
+      },
+      "exception": "OperationCanceledException",
+      "hasMetadata": false,
+      "item": {
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": null,
+        "OriginalTitle": null,
+        "Overview": null,
+        "IndexNumber": null,
+        "IndexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "AirsBeforeEpisodeNumber": null,
+        "AirsAfterSeasonNumber": null,
+        "AirsBeforeSeasonNumber": null,
+        "SeriesName": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "premiereDate": null,
+        "endDate": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "Tagline": null,
+        "IsLocked": false,
+        "lockedFields": [],
+        "productionLocations": [],
+        "genres": [],
+        "studios": [],
+        "tags": [],
+        "AspectRatio": null,
+        "Width": 0,
+        "Height": 0,
+        "HasSubtitles": false,
+        "providers": {}
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "cancellation after the final winner save is observed before root completion",
+      "raw": {
+        "bytes": 129,
+        "sha256": "84bee962ce707ecbeb6b805252b7c215313cb3f482a95883822627c67c73dbfe",
+        "base64": "PGVwaXNvZGVkZXRhaWxzPjxlcGlzb2RlPjI8L2VwaXNvZGU\u002BPC9lcGlzb2RlZGV0YWlscz48ZXBpc29kZWRldGFpbHM\u002BPGVwaXNvZGU\u002BMTwvZXBpc29kZT48d2F0Y2hlZD50cnVlPC93YXRjaGVkPjwvZXBpc29kZWRldGFpbHM\u002B"
+      },
+      "exception": "OperationCanceledException",
+      "hasMetadata": false,
+      "item": {
+        "id": "20000000-0000-0000-0000-000000000001",
+        "Name": null,
+        "OriginalTitle": null,
+        "Overview": null,
+        "IndexNumber": 1,
+        "IndexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "AirsBeforeEpisodeNumber": null,
+        "AirsAfterSeasonNumber": null,
+        "AirsBeforeSeasonNumber": null,
+        "SeriesName": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "premiereDate": null,
+        "endDate": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "Tagline": null,
+        "IsLocked": false,
+        "lockedFields": [],
+        "productionLocations": [],
+        "genres": [],
+        "studios": [],
+        "tags": [],
+        "AspectRatio": null,
+        "Width": 0,
+        "Height": 0,
+        "HasSubtitles": false,
+        "providers": {}
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [
+        {
+          "action": "user",
+          "attempt": 1,
+          "id": "10000000-0000-0000-0000-000000000001"
+        },
+        {
+          "action": "data",
+          "attempt": 1,
+          "itemId": "00000000-0000-0000-0000-000000000000",
+          "value": {
+            "Played": false,
+            "PlayCount": 0,
+            "lastPlayedDate": null
+          }
+        },
+        {
+          "action": "user",
+          "attempt": 2,
+          "id": "10000000-0000-0000-0000-000000000001"
+        },
+        {
+          "action": "data",
+          "attempt": 2,
+          "itemId": "20000000-0000-0000-0000-000000000001",
+          "value": {
+            "Played": true,
+            "PlayCount": 0,
+            "lastPlayedDate": null
+          }
+        },
+        {
+          "action": "save",
+          "attempt": 1,
+          "itemId": "20000000-0000-0000-0000-000000000001",
+          "reason": "Import",
+          "tokenCanBeCanceled": false,
+          "tokenIsCancellationRequested": false,
+          "value": {
+            "Played": true,
+            "PlayCount": 0,
+            "lastPlayedDate": null
+          }
+        }
+      ],
+      "userData": {
+        "current": {
+          "Played": true,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": {
+          "Played": true,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        }
+      }
+    }
+  ]
+}

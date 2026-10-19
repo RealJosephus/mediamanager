@@ -1,0 +1,914 @@
+{
+  "recordedAt": "2026-10-13T18:53:16.269Z",
+  "buildSource": "D:/mediamanager-validation/20261005/jellyfin-baseline/source",
+  "designatedSource": "D:/jellyfin",
+  "inputSha256": "b6961ff6d4a342f8d96aec670513c5e3e51bb3b7c5ea0e2e6dfca2804151d59d",
+  "nativeSha256": "28b3fad7ba75204adc77ce8beff55160664b6b9bb2683a6500433b2c6fd93507",
+  "sources": [
+    {
+      "path": "Emby.Server.Implementations/Localization/LocalizationManager.cs",
+      "sha256": "1a8e48946bac6d1bade0598ceeaee330856b3204b8ac112ecae9a1a8f0e0abcc",
+      "designatedSourceMatchesOracleBuildCopy": true,
+      "designated": {
+        "filename": "D:\\jellyfin\\Emby.Server.Implementations\\Localization\\LocalizationManager.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 30451,
+        "sha256": "1a8e48946bac6d1bade0598ceeaee330856b3204b8ac112ecae9a1a8f0e0abcc"
+      },
+      "isolated": {
+        "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Emby.Server.Implementations\\Localization\\LocalizationManager.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 30451,
+        "sha256": "1a8e48946bac6d1bade0598ceeaee330856b3204b8ac112ecae9a1a8f0e0abcc"
+      }
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/BaseItem.cs",
+      "sha256": "9dc7b96a93c9fbe874cdcededdca395b5aa2df6070f5cfc9c8959539dcd76469",
+      "designatedSourceMatchesOracleBuildCopy": true,
+      "designated": {
+        "filename": "D:\\jellyfin\\MediaBrowser.Controller\\Entities\\BaseItem.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 105800,
+        "sha256": "9dc7b96a93c9fbe874cdcededdca395b5aa2df6070f5cfc9c8959539dcd76469"
+      },
+      "isolated": {
+        "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\MediaBrowser.Controller\\Entities\\BaseItem.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 105800,
+        "sha256": "9dc7b96a93c9fbe874cdcededdca395b5aa2df6070f5cfc9c8959539dcd76469"
+      }
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/Movies/BoxSet.cs",
+      "sha256": "c7777732f29cf43b7470ece2b17eda5d67f6e43f4bbd9f4192bafd5891738df6",
+      "designatedSourceMatchesOracleBuildCopy": true,
+      "designated": {
+        "filename": "D:\\jellyfin\\MediaBrowser.Controller\\Entities\\Movies\\BoxSet.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 9007,
+        "sha256": "c7777732f29cf43b7470ece2b17eda5d67f6e43f4bbd9f4192bafd5891738df6"
+      },
+      "isolated": {
+        "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\MediaBrowser.Controller\\Entities\\Movies\\BoxSet.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 9007,
+        "sha256": "c7777732f29cf43b7470ece2b17eda5d67f6e43f4bbd9f4192bafd5891738df6"
+      }
+    }
+  ],
+  "oracleSources": [
+    {
+      "name": "Oracle.csproj",
+      "sha256": "e21b6718889dadbf4dbb13a4a07c09a5b2fc53b18bb5a8419ad1afac5ff957f1"
+    },
+    {
+      "name": "Program.cs",
+      "sha256": "2f2f17f4b2f10e8b9ff95715b687e4194fc5ea2388a5efd15f730ca470d52c14"
+    },
+    {
+      "name": "Directory.Build.props",
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    }
+  ],
+  "oracleAssembly": {
+    "filename": "D:\\mediamanager-validation\\20261014-release-rating-closeout-native-1\\bin\\Release\\net10.0\\Oracle.dll",
+    "available": true,
+    "kind": "file",
+    "bytes": 22016,
+    "sha256": "f3331e5ab1c74e73fd28c52e0b529dd522454746a5e58701b59e0ae32ee6dedd"
+  },
+  "jellyfinDll": {
+    "filename": "D:/mediamanager-validation/20261005/jellyfin-baseline/source/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll",
+    "available": true,
+    "kind": "file",
+    "bytes": 506368,
+    "sha256": "a43fa24c44677e579fcec79d637789b9f36633d02e5434e76a0e03fa13027767"
+  },
+  "dotnet": {
+    "filename": "D:\\mediamanager\\.tools\\dotnet\\dotnet.exe",
+    "available": true,
+    "kind": "file",
+    "bytes": 167208,
+    "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6"
+  },
+  "build": {
+    "args": [
+      "build",
+      "D:\\mediamanager-validation\\20261014-release-rating-closeout-native-1\\project\\Oracle.csproj",
+      "-c",
+      "Release",
+      "--nologo",
+      "-v",
+      "minimal",
+      "-p:BaseOutputPath=D:\\mediamanager-validation\\20261014-release-rating-closeout-native-1\\bin\\",
+      "-p:BaseIntermediateOutputPath=D:\\mediamanager-validation\\20261014-release-rating-closeout-native-1\\obj\\"
+    ],
+    "status": 0,
+    "signal": null
+  },
+  "process": {
+    "args": [
+      "D:\\mediamanager-validation\\20261014-release-rating-closeout-native-1\\bin\\Release\\net10.0\\Oracle.dll",
+      "D:\\mediamanager\\tests\\core\\fixtures\\parental-rating-unicode\\input.json",
+      "D:\\mediamanager-validation\\20261014-release-rating-closeout-native-1/native.json"
+    ],
+    "status": 0,
+    "signal": null
+  },
+  "dependencies": [
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\ATL.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 686080,
+      "sha256": "9ade8f1b5b6b2193447c2931890f21888c96b0bba69037ad610d5dc0d0a6c38e"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\AsyncKeyedLock.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 147968,
+      "sha256": "e9ae58a8c68db178ad4ec944626036fa6eca814947c64fbb8ec74c29b2ed0b36"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\BDInfo.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 120832,
+      "sha256": "e9766558f835a3dcdfc24e02cc88a11992f73e463afe289cb81db90a122ecf3f"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\BitFaster.Caching.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 195584,
+      "sha256": "a58275640773dc3ff06ceafad752fd399e4ed7cef93039354b7eb06a126590ff"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\BlurHashSharp.SkiaSharp.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 7168,
+      "sha256": "934aa821abf5c8808ad184b814cd9e99e19bbdae85a689a5769f6c2ca506ef7f"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\BlurHashSharp.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 11776,
+      "sha256": "a49914606d6785f13c82481ff6fea946c39a82188b31f38046fa872ae11ad292"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\CommandLine.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 225280,
+      "sha256": "8a55501cd1a1590a4bd93a17c6fdd2c01a0ed5bff1aea9036bdc78d98c9a3fad"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Diacritics.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 30720,
+      "sha256": "893640462f6bfaa8cf5c18698ee655a1777b05d359963c129e95c2ffb94307b0"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\DiscUtils.Core.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 176128,
+      "sha256": "f69c5091f7b43b00e8affca8fba08684507164050e0dfe6a854b400274ee8afe"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\DiscUtils.Iso9660.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 51200,
+      "sha256": "6664411665a23ff62339c865ab36a55a539c4c5585f5dad3fb42bf29b0497af6"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\DiscUtils.Streams.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 79360,
+      "sha256": "9de71c017c45c4dba0bc3806d56e26f9eea99391beff0f084de61686f9d917c7"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\DiscUtils.Udf.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 36352,
+      "sha256": "24a6b7135c505b2d87157185b239c6e6c951277b7a5adf46a3b7f22781d142bd"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\DotNet.Glob.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 35328,
+      "sha256": "2ab2c4dcda2649b078ad11cbefd7a29b38743ad076b37dced42f7546c92ead80"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Emby.Naming.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 105984,
+      "sha256": "55085cf14d1e58a7a1e99e0ffc37bde0545bbe85f7f09995388a6e465cca3a45"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Emby.Photos.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 10240,
+      "sha256": "ec6c92997c421c2d7d20e4cfd64ce63060a107503e4a5cee2f1865b8631cd7f1"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Emby.Server.Implementations.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 1673728,
+      "sha256": "8d369435646570958505c58b9cb17da169855dabc105d0e933524361e9b7b1c8"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\ExCSS.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 347136,
+      "sha256": "6b166e638181eba3150f0d10379d1cc8362af6dfd518e9e9e194aa9a746293c2"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\HarfBuzzSharp.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 122720,
+      "sha256": "072715d79f7f4a9160fc14f1085eb24a0beccfe02871f04184eaf7c94e9a1061"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\ICU4N.Transliterator.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 687616,
+      "sha256": "5a0935d0ddc51d755a32921ea53dbd76c5350f7d0322844bab05f0cd456b2793"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\ICU4N.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 13657600,
+      "sha256": "ba54b8bb8e9785b7a7e83b03c8b9b8407582e07b11c95bb805e930e6c0b0e6af"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Ignore.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 27136,
+      "sha256": "e362b92af4a52f6bfd5b94f2692acdf3a1f3491477a12ce2ea5394cde369de2e"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\J2N.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 590848,
+      "sha256": "93afc2ad2a3a7335992791ebe116a57908ebb027571c67c8ac8844fe12696c8c"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Jellyfin.Api.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 683008,
+      "sha256": "d5952a67decf6279096c3ad02df59f63e8f486373b0b63a785b47ac3f9060777"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Jellyfin.Data.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 18432,
+      "sha256": "b991153c8e091e6e618b27b47ec2c070c003fc5c4453406a74fe843c43611d7e"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Jellyfin.Database.Implementations.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 249344,
+      "sha256": "5ffd9a90affb635962267da294a36a4cd6972da5f38083b51ecfb4fba4c31ee6"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Jellyfin.Database.Providers.Sqlite.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 1109504,
+      "sha256": "c3be3a64502dae5f458c4ed71a0a81b7b03c8d25ae7681fc90e849eccdcae3a9"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Jellyfin.Drawing.Skia.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 37376,
+      "sha256": "8ae59def042aeac9ac8dcf2c8d5e707154039ed1e8d58197de54ba5ac592ef8a"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Jellyfin.Drawing.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 18944,
+      "sha256": "b50f9ba4ae146a38cf26f7d4b9e4af2aac99268f98f1800039ed0b9bbe5ac1ae"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Jellyfin.Extensions.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 37888,
+      "sha256": "db952e3013a6949ad22db9ac3379be2efdf441c139ddc6919e86f8c2abbc7207"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Jellyfin.LiveTv.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 428544,
+      "sha256": "ee323574bfad36dd4f99d167a482f5264f7164a6e0c25c8cef129c338c4060d3"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Jellyfin.MediaEncoding.Hls.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 17408,
+      "sha256": "467cd5ff23971382b8da183e2cef244aa9a7eb6320adc3e44df0b34b641c9c3d"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Jellyfin.MediaEncoding.Keyframes.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 11776,
+      "sha256": "3c9c634f06b02cd60f3f847f777e9f44cb1b817ac03dd9b5ef64d3285cf7c4af"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Jellyfin.Networking.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 46592,
+      "sha256": "4dd01e1255f0802702d35e1149e118f639ab1df6a799e9cc7b9e4bbf5fedc955"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Jellyfin.Server.Implementations.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 664064,
+      "sha256": "4da187af02503e82135eb192351d01490484e8ebc8c653d849f7e2900a177672"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Jellyfin.XmlTv.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 38912,
+      "sha256": "fe5a138772607a01397642745a5c4e686953cd24122ee2fdbba3ae3809f9ea62"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\LrcParser.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 40960,
+      "sha256": "2595f3b12c97bafc4917bfde3552a58e5d0c14ee43b46cdd65fc070aa4baab3d"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\MediaBrowser.Common.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 48640,
+      "sha256": "c86a38f99a78d9d3b9dd5ba5245fb06bf654cfa3e16ec409d3ba77b1e69ed11e"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\MediaBrowser.Controller.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 655872,
+      "sha256": "051c588a8e85a3a7cdde8dc3d9a1112217fd7e973a86fe2ff90cf765bedb75a8"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\MediaBrowser.LocalMetadata.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 57344,
+      "sha256": "f2a102fe8490aa1d39551b1fbb6d9a99654d82bd65186c15a180e7a603e46868"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\MediaBrowser.MediaEncoding.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 215552,
+      "sha256": "f59e104ce2391b4781345d7d61ed92b8be20afffd675308fe1f8057fcf357cac"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\MediaBrowser.Model.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 489472,
+      "sha256": "7b2c1b16721cf7747b572e4de3761de635fad4bd12bec346983545bee73fd92c"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\MediaBrowser.Providers.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 1030656,
+      "sha256": "1afa73573e3bda071db199cf76b4a3e1ca62381eef3a0d3311bca56cb68f2423"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\MediaBrowser.XbmcMetadata.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 84992,
+      "sha256": "82ddd82082f44faf43284258609ba4efce9a94759d24e0f7161ebf5c7d18558e"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\MetaBrainz.Common.Json.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 31232,
+      "sha256": "0abef4d3cd0a8f3b312d2661cc6c9e851d7ea9de9fa28516e4a9a3a7b98470d4"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\MetaBrainz.Common.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 18432,
+      "sha256": "dd0b78005cce58be00d2934e1148251b958ea72de3d6d2bed3e417f2d0e7e7b3"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\MetaBrainz.MusicBrainz.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 285184,
+      "sha256": "06decf86fd4d12209d0b6c20bbfa66eec8e7280bf5b32f09162baf3e92f62a6b"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Microsoft.Data.Sqlite.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 177504,
+      "sha256": "4abd9c2a61e580eb853e93ca8953a3cef2c05714ae28d2d1859d4dbc5e5700bc"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Microsoft.EntityFrameworkCore.Abstractions.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 34616,
+      "sha256": "6c6401703d480f3fb49ca47ea746c46557779c7ac4406e29f8a8956b151877d2"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Microsoft.EntityFrameworkCore.Relational.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 2194784,
+      "sha256": "301f57f6e6a919b139307ed0b0820e74cedb1ccace5cb234470f35ff4600d7c4"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Microsoft.EntityFrameworkCore.Sqlite.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 311648,
+      "sha256": "6c1737c1f1ba7b32c2a39d838b8ab5f5dbcc1639ca2fdf1aa6699d01444e0210"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Microsoft.EntityFrameworkCore.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 2829112,
+      "sha256": "9cf183abffc9d6920e8366b75af8388bc502febaaa0e3d9fe41a4906a68d3065"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Microsoft.Extensions.DependencyModel.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 84816,
+      "sha256": "9237596e7cf66d2d93163fae81dc29ed5942d6376e9bcfde85bbf6f0c8186766"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 21800,
+      "sha256": "9791edf3b328bb50dce4570290e3602f65e2fe4be0061b4398d08c9ebcff2022"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Microsoft.OpenApi.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 486752,
+      "sha256": "64497b0a954493014d15494bb89f09dbed059b13efe64cdf008d5f0f6bf197e5"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Microsoft.Win32.SystemEvents.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 27416,
+      "sha256": "a606ed156f527d4cadadcff1f23987b87daec6f41738d5b0c4b10a722116a1db"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Morestachio.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 609792,
+      "sha256": "008dc0205293bb5ef51f157de0102cbacdc107cf2d99ca6813097da5b604d0bb"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\NEbml.Core.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 24576,
+      "sha256": "9352adc0f9fe1efeda6b7715a37fc8ea7d28b76aa016698955e5dc5867ed8468"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Newtonsoft.Json.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 723368,
+      "sha256": "a28c251dfe36d881e9e2462e171441b8b0ec156fe3f452602c9149b1b9efe05b"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\PDFtoImage.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 96096,
+      "sha256": "bebf1ed3ef86674d2eec07b74de88e7bff679f3d4fb00a896b69cd70aa0cb4a3"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\PlaylistsNET.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 47104,
+      "sha256": "5aa82f779725f5a70be2082118e797e6d84c8b6f174f6e9c10b08fe5a427afea"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Polly.Core.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 223136,
+      "sha256": "f7f50017ca9f457b854498358ae595c2a8ab69c1fd8b915139d22bed8f7e4f2a"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Polly.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 288160,
+      "sha256": "cecb78ee944fd7cd1889c21602cc905df8f72af06a3798fb0fd75d96d436891e"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Prometheus.AspNetCore.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 47104,
+      "sha256": "04fad5a2ff2c62da5bf31fe1e17978056162e57e8cdf266d89d28c4a36f61dbd"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Prometheus.NetStandard.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 197632,
+      "sha256": "87f007a4e95ded1e9a8b0b0cd0dca43e89822c926b8d93c15ec69a3e520f3620"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\SQLitePCLRaw.batteries_v2.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 5120,
+      "sha256": "815ce410c9eab531dd219318e3ba16c5e38e83d361cfbbdbb4bbca222c497b0b"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\SQLitePCLRaw.core.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 51200,
+      "sha256": "af340ac9eb9195795660d7fc1114f486b6ab63998f33176e2f24c8e0acb9aa84"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\SQLitePCLRaw.provider.e_sqlite3.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 36864,
+      "sha256": "df996bcae63c2cabcfe8d4b9c5110eb39a2a4706178b07d875665391c6eb3995"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Serilog.AspNetCore.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 17920,
+      "sha256": "a550c57df7a04edbed00da036fc14be12acd0d425b7401855975fb628e3dbada"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Serilog.Enrichers.Thread.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 6656,
+      "sha256": "74b88ad495b8699fb214d83f7ea371f3470ece05948111c99e72ddd5f3f1d852"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Serilog.Expressions.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 200704,
+      "sha256": "e3fc0c1c14ab4221ce55f6b926f1a6bb33654009242d3527526064995f70b9e8"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Serilog.Extensions.Hosting.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 35840,
+      "sha256": "3e6d0284179ee0e1c197568fd79b58f869d15298fff8ecb8447322fe87d44f47"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Serilog.Extensions.Logging.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 28672,
+      "sha256": "80d3edbe3e3ac0b4c5bc764474220e7da11df8d285e0098f3dc1b65a734c8507"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Serilog.Formatting.Compact.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 9728,
+      "sha256": "319fbcefc2161dd50ccdd8d60b30edee48a09f794aedb28421a23f35ddd670d9"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Serilog.Settings.Configuration.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 71680,
+      "sha256": "de6fb7b6ee3229e0b0b9356ecdbbd05767d6490aaf0c34e9e49dbd7fe1e974a0"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Serilog.Sinks.Async.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 14848,
+      "sha256": "1031cd50ee3f0d62bbfdad3e07de0e953f26b90edac475e1b06fc65d2b42619c"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Serilog.Sinks.Console.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 38400,
+      "sha256": "dc88002ddd9f5fd0ffec9a6568ef89954671f60f2c9161593ee78932538c1e3e"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Serilog.Sinks.Debug.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 7168,
+      "sha256": "df543d3df8bd00d72e5eb2b9b2a15e67a6e4d10c13834de4cedbf500b8793e01"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Serilog.Sinks.File.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 36864,
+      "sha256": "4f4282671c2ac68284b4dc99f7a76eac9cbd4e659978cef642cff9e6c01b676d"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Serilog.Sinks.Graylog.Core.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 33792,
+      "sha256": "1aa458c5ec4d0bee8be25900d0103e345b28ac1da2c356a81641954bd5d67e19"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Serilog.Sinks.Graylog.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 10240,
+      "sha256": "1acb2f796c01331bc185cdf3ffd81fbaa3dd131335eda6a8341f1cbeb325e514"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Serilog.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 161792,
+      "sha256": "9fbf7441a9bdc9459652dc66e18f008040651f14cb8d7a7bb806ac4a8b722d10"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\SharpCompress.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 2461696,
+      "sha256": "f59f7159bc053f656f59ee15144f123de5d4b798c337083f3bfc6b0d30e846fd"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\ShimSkiaSharp.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 189952,
+      "sha256": "81605037e7c1b6515c40ac2a20cee7dcc2ec6fab2de448661ab19dcda421feb9"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\SkiaSharp.HarfBuzz.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 23904,
+      "sha256": "a3395e68c225d9fbe950312117e50ba475240a4b6b1deb8feb3c27dfcf6a767a"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\SkiaSharp.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 489824,
+      "sha256": "aaaaa18c68ba1f3a3408b00dff28b11d5705198e17ba9d3aa59222bfd35407c8"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Svg.Custom.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 737792,
+      "sha256": "70f43c2be9911d1999cffbba95135d9b045e9d98326bd2aee2f82272c2e1445d"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Svg.Model.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 187392,
+      "sha256": "11d47f250c0afcd4d6d8a72bb7173a1c9d9e0fcfda764156f74dcbcfb02dbd82"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Svg.Skia.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 94208,
+      "sha256": "1879c178d0adc1438638421407f1241175905da2a0854d30198b45bc11ed56b1"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Swashbuckle.AspNetCore.ReDoc.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 386560,
+      "sha256": "b9eeab4c8d2f697cbf0a71da1a25fff537dc95040436b198aaa3961001abd728"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Swashbuckle.AspNetCore.Swagger.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 23040,
+      "sha256": "846276be474e07728eee6c60f586959c4d13f40df730c3645107d3ff115c622b"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Swashbuckle.AspNetCore.SwaggerGen.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 157696,
+      "sha256": "5c28c464b321683a220364e1aafc9d07d38dcc3ff4e361e0e41c5176ccee23d9"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Swashbuckle.AspNetCore.SwaggerUI.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 727552,
+      "sha256": "2b986a27c1ce3bf2508eb100e4971380833bd52319f6b7b769016efe8e138e73"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\System.Drawing.Common.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 485664,
+      "sha256": "a998ea518f11dc6bc85d76abab2b99a79de3f06580fc409af8c3b344c9d8b30a"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\System.Private.Windows.Core.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 854808,
+      "sha256": "2cae44600028d3181b068421317c35faaee4f2e6eb990cb06a3ab60d587d5f50"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\TMDbLib.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 401920,
+      "sha256": "30af00d4ab894b91c50e36b78ee11c3d5e34fb1a6c32540405b8b4008d10c794"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\TagLibSharp.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 500224,
+      "sha256": "dad93b152d55cf6a58b2037bcf9dd34b45d87761fe5ed61a232b3d4641d2a5d3"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Ude.NetStandard.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 164864,
+      "sha256": "98d4b00f323dcff984c2eff193df5947f69653be13c6de98bc232a1f701c3963"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\UtfUnknown.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 256512,
+      "sha256": "83df6c4ef2be11436c4d3aa9bf9b70d34d9bb372f82585e423fa2b2d140b10a0"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\jellyfin.deps.json",
+      "available": true,
+      "kind": "file",
+      "bytes": 82867,
+      "sha256": "3cbb9d8f4818e24ae3774a20615ece9f20868700c5feda3aa3dbd856397bc91b"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\jellyfin.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 506368,
+      "sha256": "a43fa24c44677e579fcec79d637789b9f36633d02e5434e76a0e03fa13027767"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\jellyfin.runtimeconfig.json",
+      "available": true,
+      "kind": "file",
+      "bytes": 561,
+      "sha256": "0156465df0494a56e95076f537786ee0190a878149d4716821c4c37861cfae1f"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\jellyfin.staticwebassets.endpoints.json",
+      "available": true,
+      "kind": "file",
+      "bytes": 12275,
+      "sha256": "de305941e562ec1229078f8a373a1c849843aa0d637b5b82c1bde37a68163478"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\jellyfin.staticwebassets.runtime.json",
+      "available": true,
+      "kind": "file",
+      "bytes": 1240,
+      "sha256": "8dd86ffa4f8452a93075e1d7fe611107bf04386ed67517d7ca64eed559bbfee9"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\libse.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 2984448,
+      "sha256": "d435c3c4b3cb15331c8b2bf596c9db414e159db6b082b6e404e9738faa505903"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\prometheus-net.DotNetRuntime.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 94720,
+      "sha256": "5c9ba723966ff7f28305ebd9f8e4a2176c748dec03a1253b9894c942cd4e991d"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\zlib.net.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 56320,
+      "sha256": "1645161b61e85fd7b76f6b6d53f88c3006b718f25cbd2ade3dcd11a2a73f0dd4"
+    }
+  ],
+  "actualLoadedAssemblies": [
+    {
+      "Type": "Emby.Server.Implementations.Localization.LocalizationManager",
+      "Assembly": "Emby.Server.Implementations, Version=13.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "Filename": "D:\\mediamanager-validation\\20261014-release-rating-closeout-native-1\\bin\\Release\\net10.0\\Emby.Server.Implementations.dll",
+      "Sha256": "8d369435646570958505c58b9cb17da169855dabc105d0e933524361e9b7b1c8"
+    },
+    {
+      "Type": "MediaBrowser.Controller.Entities.BaseItem",
+      "Assembly": "MediaBrowser.Controller, Version=13.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "Filename": "D:\\mediamanager-validation\\20261014-release-rating-closeout-native-1\\bin\\Release\\net10.0\\MediaBrowser.Controller.dll",
+      "Sha256": "051c588a8e85a3a7cdde8dc3d9a1112217fd7e973a86fe2ff90cf765bedb75a8"
+    },
+    {
+      "Type": "MediaBrowser.Controller.Entities.Movies.BoxSet",
+      "Assembly": "MediaBrowser.Controller, Version=13.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "Filename": "D:\\mediamanager-validation\\20261014-release-rating-closeout-native-1\\bin\\Release\\net10.0\\MediaBrowser.Controller.dll",
+      "Sha256": "051c588a8e85a3a7cdde8dc3d9a1112217fd7e973a86fe2ff90cf765bedb75a8"
+    }
+  ],
+  "rawRecording": {
+    "filename": "D:\\mediamanager-validation\\20261014-release-rating-closeout-native-1\\native.json",
+    "available": true,
+    "kind": "file",
+    "bytes": 17589,
+    "sha256": "28b3fad7ba75204adc77ce8beff55160664b6b9bb2683a6500433b2c6fd93507"
+  },
+  "record": {
+    "filename": "D:\\mediamanager-validation\\20261014-release-rating-closeout-native-1\\record.json",
+    "available": true,
+    "kind": "file",
+    "bytes": 4150,
+    "sha256": "08a6a45e30cb1ec83479cd6f49d92bdc0da492abef091d15dd274457d9e3eaea"
+  },
+  "recorder": {
+    "filename": "D:\\mediamanager\\tools\\compat\\record-parental-rating-unicode.mjs",
+    "available": true,
+    "kind": "file",
+    "bytes": 4443,
+    "sha256": "3effd18fa13f0b4b83e88a9016cac290690f1d3ff93966e1246fe0bc915f6f7d"
+  },
+  "sourceInputsStable": true,
+  "candidateVerified": false,
+  "completeBuildInputClosure": false,
+  "phaseAcceptance": false
+}

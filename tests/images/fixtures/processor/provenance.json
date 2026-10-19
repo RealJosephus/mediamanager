@@ -1,0 +1,202 @@
+{
+  "recording": ".agent-docs/evidence/image-hls-lifecycle-20260926/images-processing/native-verified/native.json",
+  "assemblies": [
+    {
+      "path": "Jellyfin.Drawing.dll",
+      "sha256": "cd4201fae065a9396c1cf757af479f2f68020dbdb05bc5e1a89db733039b5fbb"
+    },
+    {
+      "path": "Jellyfin.Drawing.Skia.dll",
+      "sha256": "e29fabfb76106beb78f30d05eae08f35c33a4c02e0a919a5890fd8a921349097"
+    },
+    {
+      "path": "MediaBrowser.Controller.dll",
+      "sha256": "0b7bd01db6605bb54658d07e8b7d5d70615a7f741cfdd6615b0cfa628f0d1644"
+    },
+    {
+      "path": "Emby.Server.Implementations.dll",
+      "sha256": "c63a43b6d4dc0c82f59b1d5a1c71788738f3629fdf60e01993de606b83559b1a"
+    },
+    {
+      "path": "SkiaSharp.dll",
+      "sha256": "aaaaa18c68ba1f3a3408b00dff28b11d5705198e17ba9d3aa59222bfd35407c8"
+    },
+    {
+      "path": "BlurHashSharp.dll",
+      "sha256": "a49914606d6785f13c82481ff6fea946c39a82188b31f38046fa872ae11ad292"
+    },
+    {
+      "path": "BlurHashSharp.SkiaSharp.dll",
+      "sha256": "934aa821abf5c8808ad184b814cd9e99e19bbdae85a689a5769f6c2ca506ef7f"
+    },
+    {
+      "path": "runtimes/win-x64/native/libSkiaSharp.dll",
+      "sha256": "7dec3ba900ab353491e6446f0083739924c6f8dd668832e2f09d38ebffdbbe1c"
+    }
+  ],
+  "sourceHashes": [
+    {
+      "path": "Emby.Server.Implementations/Library/LibraryManager.cs",
+      "currentSha256": "4729de97560262702a44c5829bf93bbc5deec379e9b3018b231aaa6d65643c44",
+      "frozenSha256": "4729de97560262702a44c5829bf93bbc5deec379e9b3018b231aaa6d65643c44",
+      "equal": true
+    },
+    {
+      "path": "MediaBrowser.Providers/Manager/MetadataService.cs",
+      "currentSha256": "6e08f11ce31d47be3e09787ebe2c1edff9bda5684d4444c2444f399e4b2dd7d5",
+      "frozenSha256": "6e08f11ce31d47be3e09787ebe2c1edff9bda5684d4444c2444f399e4b2dd7d5",
+      "equal": true
+    },
+    {
+      "path": "MediaBrowser.Providers/Manager/ImageSaver.cs",
+      "currentSha256": "b3f51c08b91ffd4062945c840493b0133f39aed7cfea01e9d8cc79b950851e53",
+      "frozenSha256": "b3f51c08b91ffd4062945c840493b0133f39aed7cfea01e9d8cc79b950851e53",
+      "equal": true
+    },
+    {
+      "path": "MediaBrowser.Providers/Manager/ProviderManager.cs",
+      "currentSha256": "ce45e7c317afeddb32166eea4387b187fc9a6d0f3e9f59c33cdf949c220d6c55",
+      "frozenSha256": "ce45e7c317afeddb32166eea4387b187fc9a6d0f3e9f59c33cdf949c220d6c55",
+      "equal": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/BaseItem.cs",
+      "currentSha256": "9dc7b96a93c9fbe874cdcededdca395b5aa2df6070f5cfc9c8959539dcd76469",
+      "frozenSha256": "9dc7b96a93c9fbe874cdcededdca395b5aa2df6070f5cfc9c8959539dcd76469",
+      "equal": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/Person.cs",
+      "currentSha256": "964033d4f43f7c7885c300207e36ecb70e36140ce41b61b3f1cc1111344f750b",
+      "frozenSha256": "964033d4f43f7c7885c300207e36ecb70e36140ce41b61b3f1cc1111344f750b",
+      "equal": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/Audio/MusicArtist.cs",
+      "currentSha256": "18e77575002cd30efed46ffb870209100c15ed34c76254712746f6817c0f3ffa",
+      "frozenSha256": "18e77575002cd30efed46ffb870209100c15ed34c76254712746f6817c0f3ffa",
+      "equal": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Drawing/ImageProcessingOptions.cs",
+      "currentSha256": "915c9fe4eccfdd1e3c7d8265b6f6241f9b22e90565d9513ebe9123c58d169b73",
+      "frozenSha256": "915c9fe4eccfdd1e3c7d8265b6f6241f9b22e90565d9513ebe9123c58d169b73",
+      "equal": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Drawing/ImageHelper.cs",
+      "currentSha256": "088e72389633c2cb1aa2cb4e20338c09428a502f50386b545edcbd010cb3da12",
+      "frozenSha256": "088e72389633c2cb1aa2cb4e20338c09428a502f50386b545edcbd010cb3da12",
+      "equal": true
+    },
+    {
+      "path": "MediaBrowser.Model/Drawing/DrawingUtils.cs",
+      "currentSha256": "1228d2d45b0bbaff44872c775ebc6e595a927598696ae79ddaad036e74fc1742",
+      "frozenSha256": "1228d2d45b0bbaff44872c775ebc6e595a927598696ae79ddaad036e74fc1742",
+      "equal": true
+    },
+    {
+      "path": "src/Jellyfin.Drawing/ImageProcessor.cs",
+      "currentSha256": "1bcb1ce0922820316b892f7947f706f960bdc6790f46add7d3bb08ec7e59f7a5",
+      "frozenSha256": "1bcb1ce0922820316b892f7947f706f960bdc6790f46add7d3bb08ec7e59f7a5",
+      "equal": true
+    },
+    {
+      "path": "src/Jellyfin.Drawing.Skia/SkiaEncoder.cs",
+      "currentSha256": "8c3c61b8be155b57460374c2bb7c7fba3cdddf8d3db4c75e4f8f9e113c4c83bc",
+      "frozenSha256": "8c3c61b8be155b57460374c2bb7c7fba3cdddf8d3db4c75e4f8f9e113c4c83bc",
+      "equal": true
+    },
+    {
+      "path": "src/Jellyfin.Drawing.Skia/SvgSecurityValidator.cs",
+      "currentSha256": "29e64acb3f359ca2b7d788476c121fff2a869d6a2c85d6981049118644374d5a",
+      "frozenSha256": "29e64acb3f359ca2b7d788476c121fff2a869d6a2c85d6981049118644374d5a",
+      "equal": true
+    },
+    {
+      "path": "Jellyfin.Api/Controllers/ImageController.cs",
+      "currentSha256": "4b979f3fca700e8b8ab0a8b3680cbb46b358fea60a59f1090f2e65912c8ee8c5",
+      "frozenSha256": "4b979f3fca700e8b8ab0a8b3680cbb46b358fea60a59f1090f2e65912c8ee8c5",
+      "equal": true
+    }
+  ],
+  "fixtures": [
+    {
+      "path": "single.png",
+      "sha256": "7ce78e46a0340f336b19b46c5ae401650bd9ef87073dc096b22d8f523c8e9ca3"
+    },
+    {
+      "path": "single.jpg",
+      "sha256": "094ed184b669c0a3454218c0c5910152b8ee63b55cf2f30a1d22ebdec5395e03"
+    },
+    {
+      "path": "single.webp",
+      "sha256": "69e3fa438596fdb60d6dee6aea10a92ebe2f19d50c4b069a8aaa97aa06b1a255"
+    },
+    {
+      "path": "grid.png",
+      "sha256": "dae6cccb9c43213b28013b3877bc48ae64c8613d8dfbde6efabdb4529ba7cd1e"
+    },
+    {
+      "path": "grid.jpg",
+      "sha256": "318a52b0c019458fe8b9f040aab6460e5aeace2ad5e2af5401992b2df04d3c80"
+    },
+    {
+      "path": "grid.webp",
+      "sha256": "bb216d49953766a73ab81285af1ccbde71e9cc22a0212a3702b51d095e8c8326"
+    },
+    {
+      "path": "alpha.png",
+      "sha256": "b04975532fcc7f145d5575b8876960cd338f45a7d1dca5ad3481598d6f2abe4e"
+    },
+    {
+      "path": "alpha.jpg",
+      "sha256": "a4e6756ef0b03f4fac3c9aa4658958a7bb864d92636b851c315bae67cdb7acc1"
+    },
+    {
+      "path": "alpha.webp",
+      "sha256": "4997b0f87aa1b047112d5149d191083884ed91666dc5e50ece1f0a8cf7c474d4"
+    },
+    {
+      "path": "large.png",
+      "sha256": "b49ee9b701533148ae845834d0793f6fa11791ca92871617ece302735bbe450e"
+    },
+    {
+      "path": "large.jpg",
+      "sha256": "836cd5dc667004fdd62546b348533c581a92d235902b39e1d27ab2b38bd774f7"
+    },
+    {
+      "path": "large.webp",
+      "sha256": "16473b85d90c7303613c7aa5ad93be608f206f72a3c40468ebd1b2bcca14cdaa"
+    },
+    {
+      "path": "wide.png",
+      "sha256": "c8f1c42f2ea5da52244f5da98472b280832e20d8e7b0e5fe9e4cebc51590469e"
+    },
+    {
+      "path": "wide.jpg",
+      "sha256": "dbbfdc198a408f7629a87810895c264c377dc1d30d3a6bcba0b344021fefd9bd"
+    },
+    {
+      "path": "wide.webp",
+      "sha256": "4089ca7dbda7873c387457baa0bac8f56166dacf9899c8962efa8234b0d7daa7"
+    },
+    {
+      "path": "original-http.png",
+      "sha256": "9827c0a80d2e1fd8b86664dfe1be25995b4a9d1259de36500cb0e988c87948a2"
+    },
+    {
+      "path": "empty.png",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "broken.png",
+      "sha256": "f526795c95399cea27c055c842c3d6ab018ed0fa4f66f701c28ab22dec28237b"
+    },
+    {
+      "path": "vector.svg",
+      "sha256": "5c246ce300c3cddc3b13809adf5d4bbaf84a18df5ec1bd1de6fc9e52dc543480"
+    }
+  ],
+  "scope": "Exact expected values come from frozen native DLLs, with a real SkiaEncoder; host/config dependencies are isolated stubs. Original SVG raster dimensions are taken from the separate actual GetImageDimensions result."
+}

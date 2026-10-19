@@ -1,0 +1,816 @@
+{
+  "programDataPath": "D:\\isolated-dto-details",
+  "cases": [
+    {
+      "name": "people-canonical-and-missing",
+      "kind": "people",
+      "entities": [
+        {
+          "Type": "Person",
+          "Name": "Present"
+        }
+      ],
+      "people": [
+        {
+          "Name": "Present",
+          "Type": "Actor"
+        },
+        {
+          "Name": "Missing",
+          "Type": "Actor"
+        }
+      ]
+    },
+    {
+      "name": "people-same-name-wrong-id",
+      "kind": "people",
+      "entities": [
+        {
+          "Type": "Person",
+          "Name": "Actor",
+          "Canonical": false,
+          "Id": "20000000-0000-0000-0000-000000000001"
+        }
+      ],
+      "people": [
+        {
+          "Name": "Actor",
+          "Type": "Actor"
+        }
+      ]
+    },
+    {
+      "name": "people-wrong-id-and-canonical",
+      "kind": "people",
+      "entities": [
+        {
+          "Type": "Person",
+          "Name": "Actor",
+          "Canonical": false,
+          "Id": "20000000-0000-0000-0000-000000000001"
+        },
+        {
+          "Type": "Person",
+          "Name": "Actor"
+        }
+      ],
+      "people": [
+        {
+          "Name": "Actor",
+          "Type": "Actor"
+        }
+      ]
+    },
+    {
+      "name": "people-role-empty-null",
+      "kind": "people",
+      "entities": [
+        {
+          "Type": "Person",
+          "Name": "Actor"
+        }
+      ],
+      "people": [
+        {
+          "Name": "Actor",
+          "Type": "Actor",
+          "Role": ""
+        },
+        {
+          "Name": "Actor",
+          "Type": "Director",
+          "Role": null
+        }
+      ]
+    },
+    {
+      "name": "people-type-stable-order",
+      "kind": "people",
+      "entities": [
+        {
+          "Type": "Person",
+          "Name": "Other"
+        },
+        {
+          "Type": "Person",
+          "Name": "Composer"
+        },
+        {
+          "Type": "Person",
+          "Name": "Producer"
+        },
+        {
+          "Type": "Person",
+          "Name": "Writer"
+        },
+        {
+          "Type": "Person",
+          "Name": "Director"
+        },
+        {
+          "Type": "Person",
+          "Name": "Guest"
+        },
+        {
+          "Type": "Person",
+          "Name": "Actor"
+        },
+        {
+          "Type": "Person",
+          "Name": "Artist"
+        },
+        {
+          "Type": "Person",
+          "Name": "Author"
+        }
+      ],
+      "people": [
+        {
+          "Name": "Other",
+          "Type": "Unknown"
+        },
+        {
+          "Name": "Composer",
+          "Type": "Composer"
+        },
+        {
+          "Name": "Producer",
+          "Type": "Producer"
+        },
+        {
+          "Name": "Writer",
+          "Type": "Writer"
+        },
+        {
+          "Name": "Director",
+          "Type": "Director"
+        },
+        {
+          "Name": "Guest",
+          "Type": "GuestStar"
+        },
+        {
+          "Name": "Actor",
+          "Type": "Actor"
+        },
+        {
+          "Name": "Artist",
+          "Type": "Artist"
+        },
+        {
+          "Name": "Author",
+          "Type": "Author"
+        }
+      ]
+    },
+    {
+      "name": "people-explicit-order",
+      "kind": "people",
+      "entities": [
+        {
+          "Type": "Person",
+          "Name": "Actor"
+        },
+        {
+          "Type": "Person",
+          "Name": "Director"
+        },
+        {
+          "Type": "Person",
+          "Name": "Writer"
+        },
+        {
+          "Type": "Person",
+          "Name": "Producer"
+        }
+      ],
+      "people": [
+        {
+          "Name": "Actor",
+          "Type": "Actor",
+          "SortOrder": 2147483647
+        },
+        {
+          "Name": "Director",
+          "Type": "Director",
+          "SortOrder": -1
+        },
+        {
+          "Name": "Writer",
+          "Type": "Writer",
+          "SortOrder": 0
+        },
+        {
+          "Name": "Producer",
+          "Type": "Producer",
+          "SortOrder": null
+        }
+      ]
+    },
+    {
+      "name": "people-max-and-null-stable",
+      "kind": "people",
+      "entities": [
+        {
+          "Type": "Person",
+          "Name": "Max"
+        },
+        {
+          "Type": "Person",
+          "Name": "Null"
+        }
+      ],
+      "people": [
+        {
+          "Name": "Max",
+          "Type": "Composer",
+          "SortOrder": 2147483647
+        },
+        {
+          "Name": "Null",
+          "Type": "Producer",
+          "SortOrder": null
+        }
+      ]
+    },
+    {
+      "name": "people-case-insensitive-credit-names",
+      "kind": "people",
+      "entities": [
+        {
+          "Type": "Person",
+          "Name": "Actor"
+        }
+      ],
+      "people": [
+        {
+          "Name": "aCTOR",
+          "Type": "Actor",
+          "Role": "one"
+        },
+        {
+          "Name": "Actor",
+          "Type": "Director",
+          "Role": "two"
+        }
+      ]
+    },
+    {
+      "name": "people-blocked-tags",
+      "kind": "people",
+      "entities": [
+        {
+          "Type": "Person",
+          "Name": "Hidden",
+          "Tags": [
+            "SPOILER"
+          ]
+        },
+        {
+          "Type": "Person",
+          "Name": "Visible"
+        }
+      ],
+      "people": [
+        {
+          "Name": "Hidden",
+          "Type": "Actor"
+        },
+        {
+          "Name": "Visible",
+          "Type": "Actor"
+        }
+      ],
+      "user": {
+        "BlockedTags": [
+          "spoiler"
+        ]
+      }
+    },
+    {
+      "name": "people-allowed-tags-exempt",
+      "kind": "people",
+      "entities": [
+        {
+          "Type": "Person",
+          "Name": "Actor"
+        }
+      ],
+      "people": [
+        {
+          "Name": "Actor",
+          "Type": "Actor"
+        }
+      ],
+      "user": {
+        "AllowedTags": [
+          "allowed"
+        ]
+      }
+    },
+    {
+      "name": "people-block-unrated-exempt",
+      "kind": "people",
+      "entities": [
+        {
+          "Type": "Person",
+          "Name": "Actor"
+        }
+      ],
+      "people": [
+        {
+          "Name": "Actor",
+          "Type": "Actor"
+        }
+      ],
+      "user": {
+        "BlockUnratedItems": [
+          "Other"
+        ]
+      }
+    },
+    {
+      "name": "people-no-related-media-exempt",
+      "kind": "people",
+      "entities": [
+        {
+          "Type": "Person",
+          "Name": "Actor"
+        }
+      ],
+      "people": [
+        {
+          "Name": "Actor",
+          "Type": "Actor"
+        }
+      ],
+      "user": {
+        "EnabledFolders": [
+          "40000000-0000-0000-0000-000000000001"
+        ]
+      }
+    },
+    {
+      "name": "people-image-hashes",
+      "kind": "people",
+      "entities": [
+        {
+          "Type": "Person",
+          "Name": "No image"
+        },
+        {
+          "Type": "Person",
+          "Name": "First",
+          "Image": {
+            "Path": "D:\\synthetic\\first.jpg",
+            "Type": "Primary",
+            "DateModified": "2026-09-26T00:00:00Z",
+            "BlurHash": "blur-first",
+            "Width": 2,
+            "Height": 3
+          }
+        },
+        {
+          "Type": "Person",
+          "Name": "Second",
+          "Image": {
+            "Path": "D:\\synthetic\\second.jpg",
+            "Type": "Primary",
+            "DateModified": "2026-09-26T00:00:00Z",
+            "BlurHash": "blur-second",
+            "Width": 2,
+            "Height": 3
+          }
+        },
+        {
+          "Type": "Person",
+          "Name": "Last"
+        }
+      ],
+      "people": [
+        {
+          "Name": "No image",
+          "Type": "Actor"
+        },
+        {
+          "Name": "First",
+          "Type": "Actor"
+        },
+        {
+          "Name": "Second",
+          "Type": "Actor"
+        },
+        {
+          "Name": "Last",
+          "Type": "Actor"
+        }
+      ]
+    },
+    {
+      "name": "people-image-without-blurhash",
+      "kind": "people",
+      "entities": [
+        {
+          "Type": "Person",
+          "Name": "Actor",
+          "Image": {
+            "Path": "D:\\synthetic\\actor.jpg",
+            "Type": "Primary",
+            "DateModified": "2026-09-26T00:00:00Z",
+            "BlurHash": null,
+            "Width": 2,
+            "Height": 3
+          }
+        }
+      ],
+      "people": [
+        {
+          "Name": "Actor",
+          "Type": "Actor"
+        }
+      ]
+    },
+    {
+      "name": "names-Movie",
+      "kind": "names",
+      "item": {
+        "Type": "Movie",
+        "Name": "Synthetic",
+        "Genres": [
+          "Rock",
+          "A:B",
+          ""
+        ],
+        "Studios": [
+          "Studio",
+          "A:B",
+          ""
+        ]
+      }
+    },
+    {
+      "name": "names-Video",
+      "kind": "names",
+      "item": {
+        "Type": "Video",
+        "Name": "Synthetic",
+        "Genres": [
+          "Rock",
+          "A:B",
+          ""
+        ],
+        "Studios": [
+          "Studio",
+          "A:B",
+          ""
+        ]
+      }
+    },
+    {
+      "name": "names-MusicVideo",
+      "kind": "names",
+      "item": {
+        "Type": "MusicVideo",
+        "Name": "Synthetic",
+        "Genres": [
+          "Rock",
+          "A:B",
+          ""
+        ],
+        "Studios": [
+          "Studio",
+          "A:B",
+          ""
+        ]
+      }
+    },
+    {
+      "name": "names-Audio",
+      "kind": "names",
+      "item": {
+        "Type": "Audio",
+        "Name": "Synthetic",
+        "Genres": [
+          "Rock",
+          "A:B",
+          ""
+        ],
+        "Studios": [
+          "Studio",
+          "A:B",
+          ""
+        ]
+      }
+    },
+    {
+      "name": "names-AudioBook",
+      "kind": "names",
+      "item": {
+        "Type": "AudioBook",
+        "Name": "Synthetic",
+        "Genres": [
+          "Rock",
+          "A:B",
+          ""
+        ],
+        "Studios": [
+          "Studio",
+          "A:B",
+          ""
+        ]
+      }
+    },
+    {
+      "name": "names-MusicAlbum",
+      "kind": "names",
+      "item": {
+        "Type": "MusicAlbum",
+        "Name": "Synthetic",
+        "Genres": [
+          "Rock",
+          "A:B",
+          ""
+        ],
+        "Studios": [
+          "Studio",
+          "A:B",
+          ""
+        ]
+      }
+    },
+    {
+      "name": "names-MusicArtist",
+      "kind": "names",
+      "item": {
+        "Type": "MusicArtist",
+        "Name": "Synthetic",
+        "Genres": [
+          "Rock",
+          "A:B",
+          ""
+        ],
+        "Studios": [
+          "Studio",
+          "A:B",
+          ""
+        ]
+      }
+    },
+    {
+      "name": "names-Book",
+      "kind": "names",
+      "item": {
+        "Type": "Book",
+        "Name": "Synthetic",
+        "Genres": [
+          "Rock",
+          "A:B",
+          ""
+        ],
+        "Studios": [
+          "Studio",
+          "A:B",
+          ""
+        ]
+      }
+    },
+    {
+      "name": "names-Person",
+      "kind": "names",
+      "item": {
+        "Type": "Person",
+        "Name": "Synthetic",
+        "Genres": [
+          "Rock",
+          "A:B",
+          ""
+        ],
+        "Studios": [
+          "Studio",
+          "A:B",
+          ""
+        ]
+      }
+    },
+    {
+      "name": "float-scalar-ratings-gain",
+      "kind": "float",
+      "query": "10000000-0000-0000-0000-000000000001",
+      "items": [
+        {
+          "Type": "Movie",
+          "Id": "10000000-0000-0000-0000-000000000001",
+          "Name": "Synthetic",
+          "CriticRating": 7.1,
+          "CommunityRating": 8.2,
+          "NormalizationGain": 0.1
+        }
+      ]
+    },
+    {
+      "name": "float-lufs-overrides-gain",
+      "kind": "float",
+      "query": "10000000-0000-0000-0000-000000000001",
+      "items": [
+        {
+          "Type": "Movie",
+          "Id": "10000000-0000-0000-0000-000000000001",
+          "Name": "Synthetic",
+          "CriticRating": 0.1,
+          "CommunityRating": 0,
+          "NormalizationGain": 0.1,
+          "LUFS": -18.1
+        }
+      ]
+    },
+    {
+      "name": "float-negative-zero",
+      "kind": "float",
+      "query": "10000000-0000-0000-0000-000000000001",
+      "items": [
+        {
+          "Type": "Movie",
+          "Id": "10000000-0000-0000-0000-000000000001",
+          "Name": "Synthetic",
+          "CriticRating": -0,
+          "CommunityRating": -0.1,
+          "NormalizationGain": -0
+        }
+      ]
+    },
+    {
+      "name": "float-audio-album-gain",
+      "kind": "float",
+      "query": "10000000-0000-0000-0000-000000000001",
+      "items": [
+        {
+          "Type": "MusicAlbum",
+          "Id": "10000000-0000-0000-0000-000000000002",
+          "Name": "Synthetic Album",
+          "NormalizationGain": 0.2
+        },
+        {
+          "Type": "Audio",
+          "Id": "10000000-0000-0000-0000-000000000001",
+          "Name": "Synthetic",
+          "ParentId": "10000000-0000-0000-0000-000000000002",
+          "CriticRating": 7.1,
+          "CommunityRating": 8.2,
+          "NormalizationGain": 0.1
+        }
+      ]
+    },
+    {
+      "name": "float-audio-nested-album-lufs",
+      "kind": "float",
+      "query": "10000000-0000-0000-0000-000000000001",
+      "items": [
+        {
+          "Type": "MusicAlbum",
+          "Id": "10000000-0000-0000-0000-000000000002",
+          "Name": "Synthetic Album",
+          "NormalizationGain": 0.2,
+          "LUFS": -20.3
+        },
+        {
+          "Type": "Folder",
+          "Id": "10000000-0000-0000-0000-000000000003",
+          "Name": "CD1",
+          "ParentId": "10000000-0000-0000-0000-000000000002"
+        },
+        {
+          "Type": "Audio",
+          "Id": "10000000-0000-0000-0000-000000000001",
+          "Name": "Synthetic",
+          "ParentId": "10000000-0000-0000-0000-000000000003",
+          "CriticRating": 7.1,
+          "CommunityRating": 8.2,
+          "LUFS": -18.1
+        }
+      ]
+    },
+    {
+      "name": "float-audiobook-album-gain",
+      "kind": "float",
+      "query": "10000000-0000-0000-0000-000000000001",
+      "items": [
+        {
+          "Type": "MusicAlbum",
+          "Id": "10000000-0000-0000-0000-000000000002",
+          "Name": "Synthetic Album",
+          "NormalizationGain": 0.2
+        },
+        {
+          "Type": "AudioBook",
+          "Id": "10000000-0000-0000-0000-000000000001",
+          "Name": "Synthetic",
+          "ParentId": "10000000-0000-0000-0000-000000000002",
+          "NormalizationGain": 0.1
+        }
+      ]
+    },
+    {
+      "name": "float-null-fields",
+      "kind": "float",
+      "query": "10000000-0000-0000-0000-000000000001",
+      "items": [
+        {
+          "Type": "Movie",
+          "Id": "10000000-0000-0000-0000-000000000001",
+          "Name": "Synthetic",
+          "CriticRating": null,
+          "CommunityRating": null,
+          "NormalizationGain": null,
+          "LUFS": null
+        }
+      ]
+    },
+    {
+      "name": "people-role-participates-in-type-rank",
+      "kind": "people",
+      "entities": [
+        {
+          "Type": "Person",
+          "Name": "Director as Actor"
+        },
+        {
+          "Type": "Person",
+          "Name": "Actor as Writer"
+        },
+        {
+          "Type": "Person",
+          "Name": "Director"
+        }
+      ],
+      "people": [
+        {
+          "Name": "Director",
+          "Type": "Director"
+        },
+        {
+          "Name": "Director as Actor",
+          "Type": "Director",
+          "Role": "aCtOr"
+        },
+        {
+          "Name": "Actor as Writer",
+          "Type": "Actor",
+          "Role": "Writer"
+        }
+      ]
+    },
+    {
+      "name": "people-database-enum-parsing",
+      "kind": "people",
+      "entities": [
+        {
+          "Type": "Person",
+          "Name": "Lowercase"
+        },
+        {
+          "Type": "Person",
+          "Name": "NumberKnown"
+        },
+        {
+          "Type": "Person",
+          "Name": "NumberUnknown"
+        },
+        {
+          "Type": "Person",
+          "Name": "Composite"
+        },
+        {
+          "Type": "Person",
+          "Name": "Invalid"
+        }
+      ],
+      "people": [
+        {
+          "Name": "Lowercase",
+          "Type": "Unknown",
+          "PersistedPersonType": "actor"
+        },
+        {
+          "Name": "NumberKnown",
+          "Type": "Unknown",
+          "PersistedPersonType": "1"
+        },
+        {
+          "Name": "NumberUnknown",
+          "Type": "Unknown",
+          "PersistedPersonType": "99"
+        },
+        {
+          "Name": "Composite",
+          "Type": "Unknown",
+          "PersistedPersonType": "Actor, Director"
+        },
+        {
+          "Name": "Invalid",
+          "Type": "Unknown",
+          "PersistedPersonType": "Invalid Native Type"
+        }
+      ]
+    }
+  ]
+}

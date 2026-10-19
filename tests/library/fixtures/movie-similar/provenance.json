@@ -1,0 +1,221 @@
+{
+  "schemaVersion": 1,
+  "candidateVerified": false,
+  "recordedAt": "2026-10-09T11:18:21.064Z",
+  "jellyfin": {
+    "source": "D:/mediamanager-validation/20261008/jellyfin-pinned-208c278/source",
+    "commit": "208c278b75abd897aefa1e1175126eac5e4dbfaa",
+    "sources": [
+      {
+        "name": "Emby.Server.Implementations/Library/SimilarItems/MovieSimilarItemsProvider.cs",
+        "filename": "D:\\mediamanager-validation\\20261008\\jellyfin-pinned-208c278\\source\\Emby.Server.Implementations\\Library\\SimilarItems\\MovieSimilarItemsProvider.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 14761,
+        "sha256": "24037dd93bb9705fc1bd25e8304268c87f716cb9b8cb42377af69849cef0db36"
+      },
+      {
+        "name": "Emby.Server.Implementations/Library/SimilarItems/LiveTvProgramSimilarItemsProvider.cs",
+        "filename": "D:\\mediamanager-validation\\20261008\\jellyfin-pinned-208c278\\source\\Emby.Server.Implementations\\Library\\SimilarItems\\LiveTvProgramSimilarItemsProvider.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 3393,
+        "sha256": "bd70ba8d4fc0413fea293e6c584bfed0bc0d811762f38b31b34914da49d68da4"
+      },
+      {
+        "name": "Emby.Server.Implementations/Library/SimilarItems/SimilarItemsManager.cs",
+        "filename": "D:\\mediamanager-validation\\20261008\\jellyfin-pinned-208c278\\source\\Emby.Server.Implementations\\Library\\SimilarItems\\SimilarItemsManager.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 29570,
+        "sha256": "19956f09afdd685444695341c3bc7dc5d1093c2004560727f323da32efd910e3"
+      },
+      {
+        "name": "MediaBrowser.Providers/Plugins/Tmdb/Movies/TmdbMovieSimilarProvider.cs",
+        "filename": "D:\\mediamanager-validation\\20261008\\jellyfin-pinned-208c278\\source\\MediaBrowser.Providers\\Plugins\\Tmdb\\Movies\\TmdbMovieSimilarProvider.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 3218,
+        "sha256": "4da7b0db56e4f81e6d663b17be22ff24de5024d4d9a2d14650827517cbf0f62d"
+      },
+      {
+        "name": "Jellyfin.Server.Implementations/Item/BaseItemRepository.cs",
+        "filename": "D:\\mediamanager-validation\\20261008\\jellyfin-pinned-208c278\\source\\Jellyfin.Server.Implementations\\Item\\BaseItemRepository.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 9940,
+        "sha256": "05c7bab92d023931d165d462a244701980d0c2b7c1f12fb9129f2e55a5487798"
+      },
+      {
+        "name": "Jellyfin.Server.Implementations/Item/BaseItemRepository.QueryBuilding.cs",
+        "filename": "D:\\mediamanager-validation\\20261008\\jellyfin-pinned-208c278\\source\\Jellyfin.Server.Implementations\\Item\\BaseItemRepository.QueryBuilding.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 31527,
+        "sha256": "b4c3ddd5a657ac4d9308131bfb5bf490df11d5f56c3df50d0a1b6645d282bdb2"
+      },
+      {
+        "name": "Jellyfin.Server.Implementations/Item/BaseItemRepository.TranslateQuery.cs",
+        "filename": "D:\\mediamanager-validation\\20261008\\jellyfin-pinned-208c278\\source\\Jellyfin.Server.Implementations\\Item\\BaseItemRepository.TranslateQuery.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 58978,
+        "sha256": "0b2d4aba6f4d73c224315c1a0abd82b3c65ba2a42683381e1e73c00b01019c06"
+      },
+      {
+        "name": "Jellyfin.Server.Implementations/Item/BaseItemRepository.Querying.cs",
+        "filename": "D:\\mediamanager-validation\\20261008\\jellyfin-pinned-208c278\\source\\Jellyfin.Server.Implementations\\Item\\BaseItemRepository.Querying.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 27043,
+        "sha256": "c34fe8a47769180d7e0792d16fc535c83f76d66189a56af13c5071b4bfa2c013"
+      },
+      {
+        "name": "Jellyfin.Server.Implementations/Item/BaseItemMapper.cs",
+        "filename": "D:\\mediamanager-validation\\20261008\\jellyfin-pinned-208c278\\source\\Jellyfin.Server.Implementations\\Item\\BaseItemMapper.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 21359,
+        "sha256": "eea80de6656ccd8f988c610b48c69a93dae9e48fffbbb7a2c568a963b3451e92"
+      },
+      {
+        "name": "MediaBrowser.Controller/Entities/InternalItemsQuery.cs",
+        "filename": "D:\\mediamanager-validation\\20261008\\jellyfin-pinned-208c278\\source\\MediaBrowser.Controller\\Entities\\InternalItemsQuery.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 20315,
+        "sha256": "d3002a8af3e88fba82a46a1541620518968677425694978c3e967e325106e964"
+      },
+      {
+        "name": "MediaBrowser.Controller/Library/SimilarItemsQuery.cs",
+        "filename": "D:\\mediamanager-validation\\20261008\\jellyfin-pinned-208c278\\source\\MediaBrowser.Controller\\Library\\SimilarItemsQuery.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 980,
+        "sha256": "211eb8ea4e81637ecac95792d8759fb00ebe4b1bfbe5027f5f224af3a4825d6a"
+      },
+      {
+        "name": "MediaBrowser.Model/Configuration/ServerConfiguration.cs",
+        "filename": "D:\\mediamanager-validation\\20261008\\jellyfin-pinned-208c278\\source\\MediaBrowser.Model\\Configuration\\ServerConfiguration.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 10765,
+        "sha256": "9639d51fb6934c87a32b74f68d33d38369d4029bcfcebd100673334ef68785a3"
+      },
+      {
+        "name": "Emby.Server.Implementations/Data/ItemTypeLookup.cs",
+        "filename": "D:\\mediamanager-validation\\20261008\\jellyfin-pinned-208c278\\source\\Emby.Server.Implementations\\Data\\ItemTypeLookup.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 3138,
+        "sha256": "0e0d8322b53251df4556bd7c8b209505efcf5235ad7e767fa361f81704088aa4"
+      },
+      {
+        "name": "MediaBrowser.Controller/LiveTv/LiveTvProgram.cs",
+        "filename": "D:\\mediamanager-validation\\20261008\\jellyfin-pinned-208c278\\source\\MediaBrowser.Controller\\LiveTv\\LiveTvProgram.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 8014,
+        "sha256": "48f6333cfb57716701e39e7f48f2989aa4d6ba944f4adbb3247808d602eec094"
+      },
+      {
+        "name": "MediaBrowser.Controller/Entities/BaseItem.cs",
+        "filename": "D:\\mediamanager-validation\\20261008\\jellyfin-pinned-208c278\\source\\MediaBrowser.Controller\\Entities\\BaseItem.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 105800,
+        "sha256": "9dc7b96a93c9fbe874cdcededdca395b5aa2df6070f5cfc9c8959539dcd76469"
+      },
+      {
+        "name": "src/Jellyfin.Database/Jellyfin.Database.Implementations/JellyfinQueryHelperExtensions.cs",
+        "filename": "D:\\mediamanager-validation\\20261008\\jellyfin-pinned-208c278\\source\\src\\Jellyfin.Database\\Jellyfin.Database.Implementations\\JellyfinQueryHelperExtensions.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 14209,
+        "sha256": "9d2cd70f1ecd60e9073c4d8efc01656dd0c6a8de58597e0e366608ed8539940e"
+      }
+    ]
+  },
+  "record": {
+    "filename": "D:\\mediamanager-validation\\20261009\\results\\movie-similar-v10\\record.json",
+    "available": true,
+    "kind": "file",
+    "bytes": 4349,
+    "sha256": "3494bc91756729838c15adf6fdeeed66628ec9b03fc8d3d4f058a23f093042c1"
+  },
+  "raw": {
+    "filename": "D:\\mediamanager-validation\\20261009\\results\\movie-similar-v10\\native.raw.json",
+    "available": true,
+    "kind": "file",
+    "bytes": 32386,
+    "sha256": "1ad2689d50ac8d4ee99ff40145520fe61d279fced1251c28314b2bbb862f9ce8"
+  },
+  "native": {
+    "filename": "tests/library/fixtures/movie-similar/native.json",
+    "available": true,
+    "kind": "file",
+    "bytes": 31552,
+    "sha256": "bf9949376bb9c599fc1fe44c6061a88c2a4a264bc06d01847873dacc6f3870fb"
+  },
+  "files": [
+    {
+      "filename": "tests\\library\\fixtures\\movie-similar\\input.json",
+      "available": true,
+      "kind": "file",
+      "bytes": 5602,
+      "sha256": "755b9b4e2917f28e5567941eb970fa50de91b558e98278c6d1728d90d8983cc1"
+    },
+    {
+      "filename": "tests\\library\\fixtures\\movie-similar\\Program.cs",
+      "available": true,
+      "kind": "file",
+      "bytes": 17457,
+      "sha256": "a82098eb9d5cfde2090597a37231442d2cb7b75a926a0c59e9f8ae26a08819a9"
+    },
+    {
+      "filename": "tests\\library\\fixtures\\movie-similar\\Oracle.csproj",
+      "available": true,
+      "kind": "file",
+      "bytes": 601,
+      "sha256": "0b9d3e600bbf152d421f8a0ca199b075aa18811d2141e3f44f42533440e3320c"
+    },
+    {
+      "filename": "tests\\library\\fixtures\\movie-similar\\README.md",
+      "available": true,
+      "kind": "file",
+      "bytes": 2021,
+      "sha256": "ae233fe56543b7a366e0a17c617f9b961e4570ee38fc71fd7b40857fe42e7f85"
+    }
+  ],
+  "resolution": [
+    {
+      "filename": "D:\\mediamanager-validation\\20261009\\results\\movie-similar-v10\\bin\\Release\\net10.0\\Oracle.deps.json",
+      "available": true,
+      "kind": "file",
+      "bytes": 40164,
+      "sha256": "20e9e98589666d91627d4334e59310535a3caa4a8fb89e30196561465a01802f"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261009\\results\\movie-similar-v10\\bin\\Release\\net10.0\\Oracle.runtimeconfig.json",
+      "available": true,
+      "kind": "file",
+      "bytes": 458,
+      "sha256": "b4aad84277c120c025a443649c4e09ca20b08725acc12ef60940786bfb8c024f"
+    }
+  ],
+  "dotnet": {
+    "filename": "D:\\mediamanager\\.tools\\dotnet\\dotnet.exe",
+    "available": true,
+    "kind": "file",
+    "bytes": 167208,
+    "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6"
+  },
+  "jellyfinDll": {
+    "filename": "D:\\mediamanager-validation\\20261008\\jellyfin-pinned-208c278\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\jellyfin.dll",
+    "available": true,
+    "kind": "file",
+    "bytes": 514560,
+    "sha256": "14a821378e554f3a1476610b02ef7ad3795fbb4050872413180ee423bd612d01"
+  },
+  "runtimeScope": "Runtime-loaded managed assemblies plus the native SQLite library; not a complete build-input dependency closure."
+}

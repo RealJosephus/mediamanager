@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "environment": {
+    "TZ": "Asia/Taipei",
+    "MEDIAMANAGER_VALIDATION_INPUT_ROOT": "D:/isolated-validation/inputs",
+    "MEDIAMANAGER_VALIDATION_OUTPUT_ROOT": "D:/isolated-validation/results",
+    "MEDIAMANAGER_VALIDATION_JELLYFIN_ROOT": "D:/isolated-validation/jellyfin-baseline",
+    "MEDIAMANAGER_VALIDATION_REFERENCE_ROOT": "D:/isolated-validation/http-reference",
+    "MEDIAMANAGER_TEST_POSTGRES": "postgresql://validation@127.0.0.1:15439/postgres",
+    "MEDIAMANAGER_TEST_NATIVE_INSTANCE": "D:/isolated-validation/stopped-instance",
+    "MEDIAMANAGER_TEST_NATIVE_SQLITE": "D:/isolated-validation/query-recording/initial.db",
+    "MEDIAMANAGER_JELLYFIN_DLL": "D:/isolated-validation/jellyfin-baseline/source/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll",
+    "MEDIAMANAGER_DOTNET": "D:/isolated-validation/dotnet/dotnet.exe",
+    "MEDIAMANAGER_ALIST_EXECUTABLE": "D:/isolated-validation/alist/alist.exe",
+    "MEDIAMANAGER_WEBDAV_EXECUTABLE": "D:/isolated-validation/rclone/rclone.exe",
+    "MEDIAMANAGER_FFMPEG": "D:/isolated-validation/media-tools/ffmpeg.exe",
+    "MEDIAMANAGER_FFPROBE": "D:/isolated-validation/media-tools/ffprobe.exe"
+  }
+}

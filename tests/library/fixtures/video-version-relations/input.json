@@ -1,0 +1,751 @@
+{
+  "schemaVersion": 1,
+  "common": {
+    "item": {
+      "Id": "a7180000-0000-0000-0000-000000000001",
+      "Type": "Movie",
+      "Name": "Saved owner",
+      "Path": "Z:\\Versions\\Film.mkv",
+      "PresentationUniqueKey": "owner-saved-key",
+      "LocalAlternateVersions": [],
+      "LinkedAlternateVersions": []
+    },
+    "rows": [
+      {
+        "Id": "a7180000-0000-0000-0000-000000000001",
+        "Type": "MediaBrowser.Controller.Entities.Movies.Movie",
+        "Name": "Seed owner",
+        "Path": "Z:\\Versions\\Film.mkv"
+      },
+      {
+        "Id": "a7180000-0000-0000-0000-000000000004",
+        "Type": "MediaBrowser.Controller.Entities.Movies.Movie",
+        "Name": "Foreign owner",
+        "Path": "Z:\\Other\\Foreign.mkv"
+      },
+      {
+        "Id": "a7180000-0000-0000-0000-000000000002",
+        "Type": "MediaBrowser.Controller.Entities.Movies.Movie",
+        "Name": "Seed alternate A",
+        "Path": "Z:\\Versions\\Film 1080p.mkv",
+        "RunTimeTicks": "9007199254740995"
+      },
+      {
+        "Id": "a7180000-0000-0000-0000-000000000003",
+        "Type": "MediaBrowser.Controller.Entities.Movies.Movie",
+        "Name": "Seed alternate B",
+        "Path": "Z:\\Versions\\Film 720p.mkv"
+      }
+    ]
+  },
+  "cases": [
+    {
+      "name": "empty-family"
+    },
+    {
+      "name": "local-order-empty-unresolved",
+      "item": {
+        "LocalAlternateVersions": [
+          "Z:\\Versions\\Film 720p.mkv",
+          "",
+          null,
+          "Z:\\Missing.mkv",
+          "Z:\\Versions\\Film 1080p.mkv"
+        ]
+      }
+    },
+    {
+      "name": "linked-order-empty-unresolved",
+      "item": {
+        "LinkedAlternateVersions": [
+          {
+            "ItemId": "a7180000-0000-0000-0000-000000000003"
+          },
+          {
+            "ItemId": null
+          },
+          {
+            "ItemId": "00000000-0000-0000-0000-000000000000"
+          },
+          {
+            "ItemId": "a7180000-0000-0000-0000-000000000099"
+          },
+          {
+            "ItemId": "a7180000-0000-0000-0000-000000000002"
+          }
+        ]
+      }
+    },
+    {
+      "name": "local-priority-and-dedup",
+      "item": {
+        "LocalAlternateVersions": [
+          "Z:\\Versions\\Film 720p.mkv",
+          "Z:\\Versions\\Film 720p.mkv",
+          "Z:\\Versions\\Film 1080p.mkv"
+        ],
+        "LinkedAlternateVersions": [
+          {
+            "ItemId": "a7180000-0000-0000-0000-000000000002"
+          },
+          {
+            "ItemId": "a7180000-0000-0000-0000-000000000003"
+          },
+          {
+            "ItemId": "a7180000-0000-0000-0000-000000000002"
+          }
+        ]
+      }
+    },
+    {
+      "name": "unrelated-parent-links-survive",
+      "item": {
+        "LocalAlternateVersions": [
+          "Z:\\Versions\\Film 1080p.mkv",
+          "Z:\\Versions\\Film 720p.mkv"
+        ]
+      },
+      "links": [
+        {
+          "ParentId": "a7180000-0000-0000-0000-000000000001",
+          "ChildId": "a7180000-0000-0000-0000-000000000004",
+          "ChildType": 0,
+          "SortOrder": 10
+        },
+        {
+          "ParentId": "a7180000-0000-0000-0000-000000000001",
+          "ChildId": "a7180000-0000-0000-0000-000000000003",
+          "ChildType": 1,
+          "SortOrder": 11
+        },
+        {
+          "ParentId": "a7180000-0000-0000-0000-000000000001",
+          "ChildId": "a7180000-0000-0000-0000-000000000002",
+          "ChildType": 2,
+          "SortOrder": 12
+        },
+        {
+          "ParentId": "a7180000-0000-0000-0000-000000000001",
+          "ChildId": "a7180000-0000-0000-0000-000000000003",
+          "ChildType": 3,
+          "SortOrder": 13
+        }
+      ]
+    },
+    {
+      "name": "removed-owned-local-is-deleted",
+      "links": [
+        {
+          "ParentId": "a7180000-0000-0000-0000-000000000001",
+          "ChildId": "a7180000-0000-0000-0000-000000000002",
+          "ChildType": 2,
+          "SortOrder": 0
+        },
+        {
+          "ParentId": "a7180000-0000-0000-0000-000000000001",
+          "ChildId": "a7180000-0000-0000-0000-000000000003",
+          "ChildType": 3,
+          "SortOrder": 1
+        }
+      ],
+      "rows": [
+        {
+          "Id": "a7180000-0000-0000-0000-000000000002",
+          "OwnerId": "a7180000-0000-0000-0000-000000000001",
+          "PrimaryVersionId": "a7180000-0000-0000-0000-000000000001"
+        },
+        {
+          "Id": "a7180000-0000-0000-0000-000000000003",
+          "PrimaryVersionId": "a7180000-0000-0000-0000-000000000001"
+        }
+      ]
+    },
+    {
+      "name": "removed-unowned-local-survives",
+      "links": [
+        {
+          "ParentId": "a7180000-0000-0000-0000-000000000001",
+          "ChildId": "a7180000-0000-0000-0000-000000000002",
+          "ChildType": 2,
+          "SortOrder": 0
+        }
+      ]
+    },
+    {
+      "name": "removed-foreign-owned-local-survives",
+      "links": [
+        {
+          "ParentId": "a7180000-0000-0000-0000-000000000001",
+          "ChildId": "a7180000-0000-0000-0000-000000000002",
+          "ChildType": 2,
+          "SortOrder": 0
+        }
+      ],
+      "rows": [
+        {
+          "Id": "a7180000-0000-0000-0000-000000000002",
+          "OwnerId": "a7180000-0000-0000-0000-000000000004",
+          "PrimaryVersionId": "a7180000-0000-0000-0000-000000000004"
+        }
+      ]
+    },
+    {
+      "name": "local-becomes-linked-retains-owned-row",
+      "item": {
+        "LinkedAlternateVersions": [
+          {
+            "ItemId": "a7180000-0000-0000-0000-000000000002"
+          }
+        ]
+      },
+      "links": [
+        {
+          "ParentId": "a7180000-0000-0000-0000-000000000001",
+          "ChildId": "a7180000-0000-0000-0000-000000000002",
+          "ChildType": 2,
+          "SortOrder": 0
+        }
+      ],
+      "rows": [
+        {
+          "Id": "a7180000-0000-0000-0000-000000000002",
+          "OwnerId": "a7180000-0000-0000-0000-000000000001",
+          "PrimaryVersionId": "a7180000-0000-0000-0000-000000000001"
+        }
+      ]
+    },
+    {
+      "name": "linked-becomes-local",
+      "item": {
+        "LocalAlternateVersions": [
+          "Z:\\Versions\\Film 1080p.mkv"
+        ]
+      },
+      "links": [
+        {
+          "ParentId": "a7180000-0000-0000-0000-000000000001",
+          "ChildId": "a7180000-0000-0000-0000-000000000002",
+          "ChildType": 3,
+          "SortOrder": 0
+        }
+      ]
+    },
+    {
+      "name": "self-and-own-primary-not-demoted",
+      "item": {
+        "LocalAlternateVersions": [
+          "Z:\\Versions\\Film.mkv",
+          "Z:\\Other\\Foreign.mkv",
+          "Z:\\Versions\\Film 1080p.mkv"
+        ],
+        "PrimaryVersionId": "a7180000-0000-0000-0000-000000000004"
+      }
+    },
+    {
+      "name": "existing-primary-keeps-existing-key",
+      "item": {
+        "LocalAlternateVersions": [
+          "Z:\\Versions\\Film 1080p.mkv"
+        ]
+      },
+      "rows": [
+        {
+          "Id": "a7180000-0000-0000-0000-000000000002",
+          "PrimaryVersionId": "a7180000-0000-0000-0000-000000000001",
+          "PresentationUniqueKey": "preexisting-key"
+        }
+      ]
+    },
+    {
+      "name": "foreign-primary-is-demoted",
+      "item": {
+        "LinkedAlternateVersions": [
+          {
+            "ItemId": "a7180000-0000-0000-0000-000000000002"
+          }
+        ]
+      },
+      "rows": [
+        {
+          "Id": "a7180000-0000-0000-0000-000000000002",
+          "PrimaryVersionId": "a7180000-0000-0000-0000-000000000004",
+          "PresentationUniqueKey": "foreign-key"
+        }
+      ]
+    },
+    {
+      "name": "non-video-child-is-not-filtered",
+      "item": {
+        "LocalAlternateVersions": [
+          "Z:\\Versions\\Film 1080p.mkv"
+        ]
+      },
+      "rows": [
+        {
+          "Id": "a7180000-0000-0000-0000-000000000002",
+          "Type": "MediaBrowser.Controller.Entities.Audio.Audio"
+        }
+      ]
+    },
+    {
+      "name": "literal-case-sensitive-path-resolution",
+      "item": {
+        "LocalAlternateVersions": [
+          "z:\\versions\\film 1080p.mkv",
+          "Z:/Versions/Film 1080p.mkv"
+        ]
+      }
+    },
+    {
+      "name": "repeat-rebuild-is-stable",
+      "item": {
+        "LocalAlternateVersions": [
+          "Z:\\Versions\\Film 1080p.mkv",
+          "Z:\\Versions\\Film 720p.mkv"
+        ],
+        "LinkedAlternateVersions": [
+          {
+            "ItemId": "a7180000-0000-0000-0000-000000000002"
+          }
+        ]
+      },
+      "repeat": 2
+    },
+    {
+      "name": "non-video-owner-leaves-links",
+      "item": {
+        "Type": "Audio"
+      },
+      "links": [
+        {
+          "ParentId": "a7180000-0000-0000-0000-000000000001",
+          "ChildId": "a7180000-0000-0000-0000-000000000002",
+          "ChildType": 2,
+          "SortOrder": 0
+        },
+        {
+          "ParentId": "a7180000-0000-0000-0000-000000000001",
+          "ChildId": "a7180000-0000-0000-0000-000000000003",
+          "ChildType": 3,
+          "SortOrder": 1
+        }
+      ],
+      "rows": [
+        {
+          "Id": "a7180000-0000-0000-0000-000000000001",
+          "PrimaryVersionId": "a7180000-0000-0000-0000-000000000004"
+        }
+      ]
+    },
+    {
+      "name": "direct-orphan-fk-and-non-fk-boundary",
+      "links": [
+        {
+          "ParentId": "a7180000-0000-0000-0000-000000000001",
+          "ChildId": "a7180000-0000-0000-0000-000000000002",
+          "ChildType": 2,
+          "SortOrder": 0
+        }
+      ],
+      "rows": [
+        {
+          "Id": "a7180000-0000-0000-0000-000000000002",
+          "OwnerId": "a7180000-0000-0000-0000-000000000001",
+          "PrimaryVersionId": "a7180000-0000-0000-0000-000000000001"
+        }
+      ],
+      "tables": [
+        {
+          "name": "Users",
+          "rows": [
+            {
+              "Id": "a7180000-0000-0000-0000-000000000010",
+              "Username": "Oracle user"
+            }
+          ],
+          "projection": [
+            "Id"
+          ]
+        },
+        {
+          "name": "Peoples",
+          "rows": [
+            {
+              "Id": "a7180000-0000-0000-0000-000000000011",
+              "Name": "Oracle actor",
+              "PersonType": "Actor"
+            }
+          ],
+          "projection": [
+            "Id"
+          ]
+        },
+        {
+          "name": "ItemValues",
+          "rows": [
+            {
+              "ItemValueId": "a7180000-0000-0000-0000-000000000012",
+              "Type": 2,
+              "Value": "Orphan genre",
+              "CleanValue": "orphan genre"
+            }
+          ],
+          "projection": [
+            "ItemValueId"
+          ]
+        },
+        {
+          "name": "AncestorIds",
+          "rows": [
+            {
+              "ItemId": "a7180000-0000-0000-0000-000000000002",
+              "ParentItemId": "a7180000-0000-0000-0000-000000000001"
+            },
+            {
+              "ItemId": "a7180000-0000-0000-0000-000000000003",
+              "ParentItemId": "a7180000-0000-0000-0000-000000000002"
+            }
+          ],
+          "projection": [
+            "ItemId",
+            "ParentItemId"
+          ]
+        },
+        {
+          "name": "BaseItemProviders",
+          "rows": [
+            {
+              "ItemId": "a7180000-0000-0000-0000-000000000002",
+              "ProviderId": "Tmdb",
+              "ProviderValue": "100"
+            }
+          ],
+          "projection": [
+            "ItemId"
+          ]
+        },
+        {
+          "name": "BaseItemMetadataFields",
+          "rows": [
+            {
+              "ItemId": "a7180000-0000-0000-0000-000000000002",
+              "Id": 6
+            }
+          ],
+          "projection": [
+            "ItemId"
+          ]
+        },
+        {
+          "name": "BaseItemImageInfos",
+          "rows": [
+            {
+              "Id": "a7180000-0000-0000-0000-000000000013",
+              "ItemId": "a7180000-0000-0000-0000-000000000002",
+              "ImageType": 0,
+              "Path": "Z:\\Versions\\poster.png"
+            }
+          ],
+          "projection": [
+            "ItemId"
+          ]
+        },
+        {
+          "name": "BaseItemTrailerTypes",
+          "rows": [
+            {
+              "ItemId": "a7180000-0000-0000-0000-000000000002",
+              "Id": 0
+            }
+          ],
+          "projection": [
+            "ItemId"
+          ]
+        },
+        {
+          "name": "AttachmentStreamInfos",
+          "rows": [
+            {
+              "ItemId": "a7180000-0000-0000-0000-000000000002",
+              "Index": 0
+            }
+          ],
+          "projection": [
+            "ItemId"
+          ]
+        },
+        {
+          "name": "Chapters",
+          "rows": [
+            {
+              "ItemId": "a7180000-0000-0000-0000-000000000002",
+              "ChapterIndex": 0
+            }
+          ],
+          "projection": [
+            "ItemId"
+          ]
+        },
+        {
+          "name": "ItemValuesMap",
+          "rows": [
+            {
+              "ItemId": "a7180000-0000-0000-0000-000000000002",
+              "ItemValueId": "a7180000-0000-0000-0000-000000000012"
+            }
+          ],
+          "projection": [
+            "ItemId"
+          ]
+        },
+        {
+          "name": "KeyframeData",
+          "rows": [
+            {
+              "ItemId": "a7180000-0000-0000-0000-000000000002",
+              "KeyframeTicks": []
+            }
+          ],
+          "projection": [
+            "ItemId"
+          ]
+        },
+        {
+          "name": "MediaStreamInfos",
+          "rows": [
+            {
+              "ItemId": "a7180000-0000-0000-0000-000000000002",
+              "StreamIndex": 0
+            }
+          ],
+          "projection": [
+            "ItemId"
+          ]
+        },
+        {
+          "name": "PeopleBaseItemMap",
+          "rows": [
+            {
+              "ItemId": "a7180000-0000-0000-0000-000000000002",
+              "PeopleId": "a7180000-0000-0000-0000-000000000011",
+              "Role": "Actor"
+            }
+          ],
+          "projection": [
+            "ItemId"
+          ]
+        },
+        {
+          "name": "UserData",
+          "rows": [
+            {
+              "ItemId": "a7180000-0000-0000-0000-000000000002",
+              "UserId": "a7180000-0000-0000-0000-000000000010",
+              "CustomDataKey": "Orphan"
+            }
+          ],
+          "projection": [
+            "ItemId"
+          ]
+        },
+        {
+          "name": "MediaSegments",
+          "rows": [
+            {
+              "Id": "a7180000-0000-0000-0000-000000000014",
+              "ItemId": "a7180000-0000-0000-0000-000000000002"
+            }
+          ],
+          "projection": [
+            "ItemId"
+          ]
+        },
+        {
+          "name": "TrickplayInfos",
+          "rows": [
+            {
+              "ItemId": "a7180000-0000-0000-0000-000000000002",
+              "Width": 320
+            }
+          ],
+          "projection": [
+            "ItemId"
+          ]
+        },
+        {
+          "name": "CustomItemDisplayPreferences",
+          "rows": [
+            {
+              "ItemId": "a7180000-0000-0000-0000-000000000002",
+              "UserId": "a7180000-0000-0000-0000-000000000010",
+              "Client": "Oracle",
+              "Key": "Layout",
+              "Value": "Grid"
+            }
+          ],
+          "projection": [
+            "ItemId"
+          ]
+        },
+        {
+          "name": "DisplayPreferences",
+          "rows": [
+            {
+              "ItemId": "a7180000-0000-0000-0000-000000000002",
+              "UserId": "a7180000-0000-0000-0000-000000000010",
+              "Client": "Oracle"
+            }
+          ],
+          "projection": [
+            "ItemId"
+          ]
+        },
+        {
+          "name": "ItemDisplayPreferences",
+          "rows": [
+            {
+              "ItemId": "a7180000-0000-0000-0000-000000000002",
+              "UserId": "a7180000-0000-0000-0000-000000000010",
+              "Client": "Oracle"
+            }
+          ],
+          "projection": [
+            "ItemId"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "owned-extra-blocks-direct-orphan-delete",
+      "links": [
+        {
+          "ParentId": "a7180000-0000-0000-0000-000000000001",
+          "ChildId": "a7180000-0000-0000-0000-000000000002",
+          "ChildType": 2,
+          "SortOrder": 0
+        }
+      ],
+      "rows": [
+        {
+          "Id": "a7180000-0000-0000-0000-000000000002",
+          "OwnerId": "a7180000-0000-0000-0000-000000000001"
+        },
+        {
+          "Id": "a7180000-0000-0000-0000-000000000005",
+          "Type": "MediaBrowser.Controller.Entities.Video",
+          "Name": "Owned extra",
+          "OwnerId": "a7180000-0000-0000-0000-000000000002"
+        }
+      ],
+      "expectException": "DbUpdateException"
+    },
+    {
+      "name": "foreign-link-blocks-direct-orphan-delete",
+      "links": [
+        {
+          "ParentId": "a7180000-0000-0000-0000-000000000001",
+          "ChildId": "a7180000-0000-0000-0000-000000000002",
+          "ChildType": 2,
+          "SortOrder": 0
+        },
+        {
+          "ParentId": "a7180000-0000-0000-0000-000000000004",
+          "ChildId": "a7180000-0000-0000-0000-000000000002",
+          "ChildType": 0,
+          "SortOrder": 0
+        }
+      ],
+      "rows": [
+        {
+          "Id": "a7180000-0000-0000-0000-000000000002",
+          "OwnerId": "a7180000-0000-0000-0000-000000000001"
+        }
+      ],
+      "expectException": "DbUpdateException"
+    },
+    {
+      "name": "manual-sort-collision-rolls-back",
+      "item": {
+        "LocalAlternateVersions": [
+          "Z:\\Versions\\Film 1080p.mkv"
+        ]
+      },
+      "links": [
+        {
+          "ParentId": "a7180000-0000-0000-0000-000000000001",
+          "ChildId": "a7180000-0000-0000-0000-000000000003",
+          "ChildType": 0,
+          "SortOrder": 0
+        }
+      ],
+      "expectException": "InvalidOperationException"
+    },
+    {
+      "name": "failure-delete-links",
+      "links": [
+        {
+          "ParentId": "a7180000-0000-0000-0000-000000000001",
+          "ChildId": "a7180000-0000-0000-0000-000000000003",
+          "ChildType": 2,
+          "SortOrder": 3
+        }
+      ],
+      "item": {
+        "LocalAlternateVersions": [
+          "Z:\\Versions\\Film 1080p.mkv"
+        ]
+      },
+      "trigger": "CREATE TRIGGER fail_save AFTER DELETE ON LinkedChildren WHEN OLD.ParentId = 'A7180000-0000-0000-0000-000000000001' BEGIN SELECT RAISE(ABORT, 'Controlled version relation failure'); END",
+      "expectException": "DbUpdateException"
+    },
+    {
+      "name": "failure-insert-links",
+      "item": {
+        "LocalAlternateVersions": [
+          "Z:\\Versions\\Film 1080p.mkv"
+        ]
+      },
+      "trigger": "CREATE TRIGGER fail_save AFTER INSERT ON LinkedChildren WHEN NEW.ParentId = 'A7180000-0000-0000-0000-000000000001' BEGIN SELECT RAISE(ABORT, 'Controlled version relation failure'); END",
+      "expectException": "DbUpdateException"
+    },
+    {
+      "name": "failure-demotion",
+      "item": {
+        "LocalAlternateVersions": [
+          "Z:\\Versions\\Film 1080p.mkv"
+        ]
+      },
+      "trigger": "CREATE TRIGGER fail_save AFTER UPDATE OF PrimaryVersionId ON BaseItems WHEN NEW.Id = 'A7180000-0000-0000-0000-000000000002' AND NEW.PrimaryVersionId = 'A7180000-0000-0000-0000-000000000001' BEGIN SELECT RAISE(ABORT, 'Controlled version relation failure'); END",
+      "expectException": "DbUpdateException"
+    },
+    {
+      "name": "failure-orphan-delete",
+      "links": [
+        {
+          "ParentId": "a7180000-0000-0000-0000-000000000001",
+          "ChildId": "a7180000-0000-0000-0000-000000000002",
+          "ChildType": 2,
+          "SortOrder": 0
+        }
+      ],
+      "rows": [
+        {
+          "Id": "a7180000-0000-0000-0000-000000000002",
+          "OwnerId": "a7180000-0000-0000-0000-000000000001"
+        }
+      ],
+      "trigger": "CREATE TRIGGER fail_save AFTER DELETE ON BaseItems WHEN OLD.Id = 'A7180000-0000-0000-0000-000000000002' BEGIN SELECT RAISE(ABORT, 'Controlled version relation failure'); END",
+      "expectException": "DbUpdateException"
+    },
+    {
+      "name": "already-cancelled",
+      "item": {
+        "LocalAlternateVersions": [
+          "Z:\\Versions\\Film 1080p.mkv"
+        ]
+      },
+      "cancelled": true,
+      "expectException": "OperationCanceledException"
+    }
+  ]
+}

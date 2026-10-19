@@ -1,0 +1,164 @@
+[
+  {
+    "Name": "empty"
+  },
+  {
+    "Name": "two dead names",
+    "DeadCount": 2
+  },
+  {
+    "Name": "dead movie",
+    "DeadCount": 1,
+    "Movie": true
+  },
+  {
+    "Name": "existing file playlist",
+    "Playlists": [
+      "present"
+    ]
+  },
+  {
+    "Name": "missing file playlist",
+    "Playlists": [
+      "missing"
+    ]
+  },
+  {
+    "Name": "playlist directory with file extension",
+    "Playlists": [
+      "directory"
+    ]
+  },
+  {
+    "Name": "missing playlist with arbitrary extension",
+    "Playlists": [
+      "xml"
+    ]
+  },
+  {
+    "Name": "playlist without extension",
+    "Playlists": [
+      "no-extension"
+    ]
+  },
+  {
+    "Name": "playlist with trailing dot",
+    "Playlists": [
+      "trailing-dot"
+    ]
+  },
+  {
+    "Name": "playlist with null path",
+    "Playlists": [
+      "null"
+    ]
+  },
+  {
+    "Name": "playlist with empty path",
+    "Playlists": [
+      "empty"
+    ]
+  },
+  {
+    "Name": "nested missing file playlists",
+    "Playlists": [
+      "missing",
+      "missing"
+    ],
+    "NestedPlaylists": true
+  },
+  {
+    "Name": "dead items then file playlists",
+    "DeadCount": 2,
+    "Playlists": [
+      "missing",
+      "present"
+    ]
+  },
+  {
+    "Name": "empty pre-cancelled",
+    "CancelInitial": true
+  },
+  {
+    "Name": "dead pre-cancelled",
+    "DeadCount": 2,
+    "CancelInitial": true
+  },
+  {
+    "Name": "cancel after first deletion",
+    "DeadCount": 2,
+    "CancelAfterDelete": true
+  },
+  {
+    "Name": "selection failure",
+    "DeadCount": 2,
+    "FailSelection": true
+  },
+  {
+    "Name": "lookup failure",
+    "DeadCount": 2,
+    "FailLookup": true
+  },
+  {
+    "Name": "null lookup",
+    "DeadCount": 2,
+    "NullLookup": true
+  },
+  {
+    "Name": "delete failure",
+    "DeadCount": 2,
+    "FailDelete": true
+  },
+  {
+    "Name": "extracted path failure",
+    "DeadCount": 1,
+    "Movie": true,
+    "FailExtracted": true
+  },
+  {
+    "Name": "ordinary delete values failure",
+    "DeadCount": 2,
+    "FailValues": true
+  },
+  {
+    "Name": "values transaction failure",
+    "Playlists": [
+      "missing"
+    ],
+    "FailValues": true
+  },
+  {
+    "Name": "playlist pre-cancelled",
+    "Playlists": [
+      "missing"
+    ],
+    "CancelInitial": true
+  },
+  {
+    "Name": "playlist cancellation after deletion",
+    "Playlists": [
+      "missing",
+      "missing"
+    ],
+    "CancelAfterDelete": true
+  },
+  {
+    "Name": "playlist selection failure",
+    "Playlists": [
+      "missing"
+    ],
+    "FailPlaylists": true
+  },
+  {
+    "Name": "cancel after values progress",
+    "Playlists": [
+      "missing"
+    ],
+    "CancelValuesProgress": true
+  },
+  {
+    "Name": "dead membership frozen before next parent changes",
+    "DeadCount": 2,
+    "ChangeNextParent": true
+  }
+]

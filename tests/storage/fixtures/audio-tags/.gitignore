@@ -1,0 +1,4 @@
+bin/
+obj/
+fixture.wav
+observed.json

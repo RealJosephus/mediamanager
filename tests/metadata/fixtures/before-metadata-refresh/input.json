@@ -1,0 +1,2791 @@
+[
+  {
+    "name": "Folder fills an empty name and clears a warmed cache",
+    "mode": "before",
+    "warm": true,
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Folder",
+      "Name": "",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": "Z:\\ChildrenMetadata\\Fresh.Title.mkv",
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "IsLocked": true,
+      "LockedFields": [
+        "Name"
+      ]
+    }
+  },
+  {
+    "name": "Movie fills an empty name and clears a warmed cache",
+    "mode": "before",
+    "warm": true,
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Movies.Movie",
+      "Name": "",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": "Z:\\ChildrenMetadata\\Fresh.Title.mkv",
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "IsLocked": true,
+      "LockedFields": [
+        "Name"
+      ]
+    }
+  },
+  {
+    "name": "Video fills an empty name and clears a warmed cache",
+    "mode": "before",
+    "warm": true,
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Video",
+      "Name": "",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": "Z:\\ChildrenMetadata\\Fresh.Title.mkv",
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "IsLocked": true,
+      "LockedFields": [
+        "Name"
+      ]
+    }
+  },
+  {
+    "name": "MusicVideo fills an empty name and clears a warmed cache",
+    "mode": "before",
+    "warm": true,
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.MusicVideo",
+      "Name": "",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": "Z:\\ChildrenMetadata\\Fresh.Title.mkv",
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "IsLocked": true,
+      "LockedFields": [
+        "Name"
+      ]
+    }
+  },
+  {
+    "name": "Trailer fills an empty name and clears a warmed cache",
+    "mode": "before",
+    "warm": true,
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Trailer",
+      "Name": "",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": "Z:\\ChildrenMetadata\\Fresh.Title.mkv",
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "IsLocked": true,
+      "LockedFields": [
+        "Name"
+      ]
+    }
+  },
+  {
+    "name": "Series fills an empty name and clears a warmed cache",
+    "mode": "before",
+    "warm": true,
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.TV.Series",
+      "Name": "",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": "Z:\\ChildrenMetadata\\Fresh.Title.mkv",
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "IsLocked": true,
+      "LockedFields": [
+        "Name"
+      ]
+    }
+  },
+  {
+    "name": "Season fills an empty name and clears a warmed cache",
+    "mode": "before",
+    "warm": true,
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.TV.Season",
+      "Name": "",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": "Z:\\ChildrenMetadata\\Fresh.Title.mkv",
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "IsLocked": true,
+      "LockedFields": [
+        "Name"
+      ]
+    }
+  },
+  {
+    "name": "Episode fills an empty name and clears a warmed cache",
+    "mode": "before",
+    "warm": true,
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.TV.Episode",
+      "Name": "",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": "Z:\\ChildrenMetadata\\Fresh.Title.mkv",
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "IsLocked": true,
+      "LockedFields": [
+        "Name"
+      ]
+    }
+  },
+  {
+    "name": "Audio fills an empty name and clears a warmed cache",
+    "mode": "before",
+    "warm": true,
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "Name": "",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": "Z:\\ChildrenMetadata\\Fresh.Title.mkv",
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "IsLocked": true,
+      "LockedFields": [
+        "Name"
+      ]
+    }
+  },
+  {
+    "name": "AudioBook fills an empty name and clears a warmed cache",
+    "mode": "before",
+    "warm": true,
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.AudioBook",
+      "Name": "",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": "Z:\\ChildrenMetadata\\Fresh.Title.mkv",
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "IsLocked": true,
+      "LockedFields": [
+        "Name"
+      ]
+    }
+  },
+  {
+    "name": "MusicAlbum fills an empty name and clears a warmed cache",
+    "mode": "before",
+    "warm": true,
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Audio.MusicAlbum",
+      "Name": "",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": "Z:\\ChildrenMetadata\\Fresh.Title.mkv",
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "IsLocked": true,
+      "LockedFields": [
+        "Name"
+      ]
+    }
+  },
+  {
+    "name": "BoxSet fills an empty name and clears a warmed cache",
+    "mode": "before",
+    "warm": true,
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Movies.BoxSet",
+      "Name": "",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": "Z:\\ChildrenMetadata\\Fresh.Title.mkv",
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "IsLocked": true,
+      "LockedFields": [
+        "Name"
+      ]
+    }
+  },
+  {
+    "name": "UserView fills an empty name and clears a warmed cache",
+    "mode": "before",
+    "warm": true,
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.UserView",
+      "Name": "",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": "Z:\\ChildrenMetadata\\Fresh.Title.mkv",
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "IsLocked": true,
+      "LockedFields": [
+        "Name"
+      ]
+    }
+  },
+  {
+    "name": "null name",
+    "mode": "before",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Folder",
+      "Name": null,
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": "Z:\\ChildrenMetadata\\name.mkv",
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001"
+    }
+  },
+  {
+    "name": "whitespace name remains",
+    "mode": "before",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Folder",
+      "Name": "  ",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": "Z:\\ChildrenMetadata\\name.mkv",
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001"
+    }
+  },
+  {
+    "name": "no path leaves null name",
+    "mode": "before",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Folder",
+      "Name": null,
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": null,
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001"
+    }
+  },
+  {
+    "name": "empty path leaves empty name",
+    "mode": "before",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Folder",
+      "Name": "",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": "",
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001"
+    }
+  },
+  {
+    "name": "trailing separator yields empty name",
+    "mode": "before",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Folder",
+      "Name": "",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": "Z:\\ChildrenMetadata\\Folder\\",
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001"
+    }
+  },
+  {
+    "name": "dotfile yields empty name",
+    "mode": "before",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Folder",
+      "Name": "",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": "Z:\\ChildrenMetadata\\.hidden",
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001"
+    }
+  },
+  {
+    "name": "trailing dot is stripped",
+    "mode": "before",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Folder",
+      "Name": "",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": "Z:\\ChildrenMetadata\\name.",
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001"
+    }
+  },
+  {
+    "name": "forward slash identity",
+    "mode": "before",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Folder",
+      "Name": "",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": "/fixture/aggregate/Fresh.Title.mkv",
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001"
+    }
+  },
+  {
+    "name": "remote URL basename",
+    "mode": "before",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Folder",
+      "Name": "",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": "https://media.test/Feature.mp4",
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001"
+    }
+  },
+  {
+    "name": "path contains consecutive separators",
+    "mode": "before",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Folder",
+      "Name": "",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": "Z:\\ChildrenMetadata\\\\Feature.mkv",
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001"
+    }
+  },
+  {
+    "name": "Movie: year in name",
+    "mode": "before",
+    "replace": true,
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Movies.Movie",
+      "Name": "Feature (2022)",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": null,
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001"
+    }
+  },
+  {
+    "name": "Movie: zero year is retained",
+    "mode": "before",
+    "replace": true,
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Movies.Movie",
+      "Name": "Feature (2022)",
+      "ProductionYear": 0,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": null,
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001"
+    }
+  },
+  {
+    "name": "Movie: existing year is retained",
+    "mode": "before",
+    "replace": true,
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Movies.Movie",
+      "Name": "Feature (2022)",
+      "ProductionYear": 2001,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": null,
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001"
+    }
+  },
+  {
+    "name": "Movie: locks do not suppress inferred year",
+    "mode": "before",
+    "replace": true,
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Movies.Movie",
+      "Name": "Feature (2022)",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": null,
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "IsLocked": true,
+      "LockedFields": [
+        "Name"
+      ]
+    }
+  },
+  {
+    "name": "Movie: path supplies name and year",
+    "mode": "before",
+    "replace": true,
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Movies.Movie",
+      "Name": "",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": "Z:\\ChildrenMetadata\\Feature (2022).mkv",
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001"
+    }
+  },
+  {
+    "name": "MusicVideo: year in name",
+    "mode": "before",
+    "replace": true,
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.MusicVideo",
+      "Name": "Feature (2022)",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": null,
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001"
+    }
+  },
+  {
+    "name": "MusicVideo: zero year is retained",
+    "mode": "before",
+    "replace": true,
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.MusicVideo",
+      "Name": "Feature (2022)",
+      "ProductionYear": 0,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": null,
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001"
+    }
+  },
+  {
+    "name": "MusicVideo: existing year is retained",
+    "mode": "before",
+    "replace": true,
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.MusicVideo",
+      "Name": "Feature (2022)",
+      "ProductionYear": 2001,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": null,
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001"
+    }
+  },
+  {
+    "name": "MusicVideo: locks do not suppress inferred year",
+    "mode": "before",
+    "replace": true,
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.MusicVideo",
+      "Name": "Feature (2022)",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": null,
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "IsLocked": true,
+      "LockedFields": [
+        "Name"
+      ]
+    }
+  },
+  {
+    "name": "MusicVideo: path supplies name and year",
+    "mode": "before",
+    "replace": true,
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.MusicVideo",
+      "Name": "",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": "Z:\\ChildrenMetadata\\Feature (2022).mkv",
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001"
+    }
+  },
+  {
+    "name": "Trailer: year in name",
+    "mode": "before",
+    "replace": true,
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Trailer",
+      "Name": "Feature (2022)",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": null,
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001"
+    }
+  },
+  {
+    "name": "Trailer: zero year is retained",
+    "mode": "before",
+    "replace": true,
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Trailer",
+      "Name": "Feature (2022)",
+      "ProductionYear": 0,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": null,
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001"
+    }
+  },
+  {
+    "name": "Trailer: existing year is retained",
+    "mode": "before",
+    "replace": true,
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Trailer",
+      "Name": "Feature (2022)",
+      "ProductionYear": 2001,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": null,
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001"
+    }
+  },
+  {
+    "name": "Trailer: locks do not suppress inferred year",
+    "mode": "before",
+    "replace": true,
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Trailer",
+      "Name": "Feature (2022)",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": null,
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "IsLocked": true,
+      "LockedFields": [
+        "Name"
+      ]
+    }
+  },
+  {
+    "name": "Trailer: path supplies name and year",
+    "mode": "before",
+    "replace": true,
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Trailer",
+      "Name": "",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": "Z:\\ChildrenMetadata\\Feature (2022).mkv",
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001"
+    }
+  },
+  {
+    "name": "Series: year in name",
+    "mode": "before",
+    "replace": true,
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.TV.Series",
+      "Name": "Feature (2022)",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": null,
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001"
+    }
+  },
+  {
+    "name": "Series: zero year is retained",
+    "mode": "before",
+    "replace": true,
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.TV.Series",
+      "Name": "Feature (2022)",
+      "ProductionYear": 0,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": null,
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001"
+    }
+  },
+  {
+    "name": "Series: existing year is retained",
+    "mode": "before",
+    "replace": true,
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.TV.Series",
+      "Name": "Feature (2022)",
+      "ProductionYear": 2001,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": null,
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001"
+    }
+  },
+  {
+    "name": "Series: locks do not suppress inferred year",
+    "mode": "before",
+    "replace": true,
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.TV.Series",
+      "Name": "Feature (2022)",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": null,
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "IsLocked": true,
+      "LockedFields": [
+        "Name"
+      ]
+    }
+  },
+  {
+    "name": "Series: path supplies name and year",
+    "mode": "before",
+    "replace": true,
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.TV.Series",
+      "Name": "",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": "Z:\\ChildrenMetadata\\Feature (2022).mkv",
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001"
+    }
+  },
+  {
+    "name": "Movie: folder year fallback",
+    "mode": "before",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Movies.Movie",
+      "Name": "Feature",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": "Z:\\ChildrenMetadata\\Folder (2024)\\file.mkv",
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "VideoType": "VideoFile"
+    }
+  },
+  {
+    "name": "Movie: mixed folder skips fallback",
+    "mode": "before",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Movies.Movie",
+      "Name": "Feature",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": "Z:\\ChildrenMetadata\\Folder (2024)\\file.mkv",
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "VideoType": "VideoFile",
+      "IsInMixedFolder": true
+    }
+  },
+  {
+    "name": "Movie: name year precedes folder",
+    "mode": "before",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Movies.Movie",
+      "Name": "Feature (2021)",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": "Z:\\ChildrenMetadata\\Folder (2024)\\file.mkv",
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "VideoType": "VideoFile"
+    }
+  },
+  {
+    "name": "Movie: DVD folder uses its own year",
+    "mode": "before",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Movies.Movie",
+      "Name": "Feature",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": "Z:\\ChildrenMetadata\\Feature (2023)",
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "VideoType": "Dvd"
+    }
+  },
+  {
+    "name": "Movie: stacked DVD uses parent year",
+    "mode": "before",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Movies.Movie",
+      "Name": "Feature",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": "Z:\\ChildrenMetadata\\Folder (2024)\\Disc (2023)",
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "VideoType": "Dvd",
+      "AdditionalParts": [
+        "second"
+      ]
+    }
+  },
+  {
+    "name": "Movie: placeholder DVD uses parent year",
+    "mode": "before",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Movies.Movie",
+      "Name": "Feature",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": "Z:\\ChildrenMetadata\\Folder (2024)\\Disc (2023)",
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "VideoType": "Dvd",
+      "IsPlaceHolder": true
+    }
+  },
+  {
+    "name": "Movie: trailing directory separator remains observable",
+    "mode": "before",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Movies.Movie",
+      "Name": "Feature",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": "Z:\\ChildrenMetadata\\Folder (2024)\\file.mkv\\",
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "VideoType": "VideoFile"
+    }
+  },
+  {
+    "name": "MusicVideo: folder year fallback",
+    "mode": "before",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.MusicVideo",
+      "Name": "Feature",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": "Z:\\ChildrenMetadata\\Folder (2024)\\file.mkv",
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "VideoType": "VideoFile"
+    }
+  },
+  {
+    "name": "MusicVideo: mixed folder skips fallback",
+    "mode": "before",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.MusicVideo",
+      "Name": "Feature",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": "Z:\\ChildrenMetadata\\Folder (2024)\\file.mkv",
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "VideoType": "VideoFile",
+      "IsInMixedFolder": true
+    }
+  },
+  {
+    "name": "MusicVideo: name year precedes folder",
+    "mode": "before",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.MusicVideo",
+      "Name": "Feature (2021)",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": "Z:\\ChildrenMetadata\\Folder (2024)\\file.mkv",
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "VideoType": "VideoFile"
+    }
+  },
+  {
+    "name": "MusicVideo: DVD folder uses its own year",
+    "mode": "before",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.MusicVideo",
+      "Name": "Feature",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": "Z:\\ChildrenMetadata\\Feature (2023)",
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "VideoType": "Dvd"
+    }
+  },
+  {
+    "name": "MusicVideo: stacked DVD uses parent year",
+    "mode": "before",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.MusicVideo",
+      "Name": "Feature",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": "Z:\\ChildrenMetadata\\Folder (2024)\\Disc (2023)",
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "VideoType": "Dvd",
+      "AdditionalParts": [
+        "second"
+      ]
+    }
+  },
+  {
+    "name": "MusicVideo: placeholder DVD uses parent year",
+    "mode": "before",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.MusicVideo",
+      "Name": "Feature",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": "Z:\\ChildrenMetadata\\Folder (2024)\\Disc (2023)",
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "VideoType": "Dvd",
+      "IsPlaceHolder": true
+    }
+  },
+  {
+    "name": "MusicVideo: trailing directory separator remains observable",
+    "mode": "before",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.MusicVideo",
+      "Name": "Feature",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": "Z:\\ChildrenMetadata\\Folder (2024)\\file.mkv\\",
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "VideoType": "VideoFile"
+    }
+  },
+  {
+    "name": "Trailer: folder year fallback",
+    "mode": "before",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Trailer",
+      "Name": "Feature",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": "Z:\\ChildrenMetadata\\Folder (2024)\\file.mkv",
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "VideoType": "VideoFile"
+    }
+  },
+  {
+    "name": "Trailer: mixed folder skips fallback",
+    "mode": "before",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Trailer",
+      "Name": "Feature",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": "Z:\\ChildrenMetadata\\Folder (2024)\\file.mkv",
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "VideoType": "VideoFile",
+      "IsInMixedFolder": true
+    }
+  },
+  {
+    "name": "Trailer: name year precedes folder",
+    "mode": "before",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Trailer",
+      "Name": "Feature (2021)",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": "Z:\\ChildrenMetadata\\Folder (2024)\\file.mkv",
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "VideoType": "VideoFile"
+    }
+  },
+  {
+    "name": "Trailer: DVD folder uses its own year",
+    "mode": "before",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Trailer",
+      "Name": "Feature",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": "Z:\\ChildrenMetadata\\Feature (2023)",
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "VideoType": "Dvd"
+    }
+  },
+  {
+    "name": "Trailer: stacked DVD uses parent year",
+    "mode": "before",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Trailer",
+      "Name": "Feature",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": "Z:\\ChildrenMetadata\\Folder (2024)\\Disc (2023)",
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "VideoType": "Dvd",
+      "AdditionalParts": [
+        "second"
+      ]
+    }
+  },
+  {
+    "name": "Trailer: placeholder DVD uses parent year",
+    "mode": "before",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Trailer",
+      "Name": "Feature",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": "Z:\\ChildrenMetadata\\Folder (2024)\\Disc (2023)",
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "VideoType": "Dvd",
+      "IsPlaceHolder": true
+    }
+  },
+  {
+    "name": "Trailer: trailing directory separator remains observable",
+    "mode": "before",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Trailer",
+      "Name": "Feature",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": "Z:\\ChildrenMetadata\\Folder (2024)\\file.mkv\\",
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "VideoType": "VideoFile"
+    }
+  },
+  {
+    "name": "Season: keyword season",
+    "mode": "before",
+    "parent": {
+      "Id": "8b000000-0000-0000-0000-000000000002",
+      "Type": "MediaBrowser.Controller.Entities.TV.Series",
+      "Name": "The Show",
+      "Path": "Z:\\ChildrenMetadata\\The.Show",
+      "ProductionYear": 2020
+    },
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.TV.Season",
+      "Name": "Feature",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": "Z:\\ChildrenMetadata\\The.Show\\Season 2",
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001"
+    }
+  },
+  {
+    "name": "Season: number preserved",
+    "mode": "before",
+    "parent": {
+      "Id": "8b000000-0000-0000-0000-000000000002",
+      "Type": "MediaBrowser.Controller.Entities.TV.Series",
+      "Name": "The Show",
+      "Path": "Z:\\ChildrenMetadata\\The.Show",
+      "ProductionYear": 2020
+    },
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.TV.Season",
+      "Name": "Feature",
+      "ProductionYear": null,
+      "IndexNumber": 0,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": "Z:\\ChildrenMetadata\\The.Show\\Season 2",
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001"
+    }
+  },
+  {
+    "name": "Season: special alias",
+    "mode": "before",
+    "parent": {
+      "Id": "8b000000-0000-0000-0000-000000000002",
+      "Type": "MediaBrowser.Controller.Entities.TV.Series",
+      "Name": "The Show",
+      "Path": "Z:\\ChildrenMetadata\\The.Show",
+      "ProductionYear": 2020
+    },
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.TV.Season",
+      "Name": "Feature",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": "Z:\\ChildrenMetadata\\The.Show\\Specials",
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001"
+    }
+  },
+  {
+    "name": "Season: parent name removed",
+    "mode": "before",
+    "parent": {
+      "Id": "8b000000-0000-0000-0000-000000000002",
+      "Type": "MediaBrowser.Controller.Entities.TV.Series",
+      "Name": "The Show",
+      "Path": "Z:\\ChildrenMetadata\\The.Show",
+      "ProductionYear": 2020
+    },
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.TV.Season",
+      "Name": "Feature",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": "Z:\\ChildrenMetadata\\The.Show\\The.Show.Season.3",
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001"
+    }
+  },
+  {
+    "name": "Season: prefix season",
+    "mode": "before",
+    "parent": {
+      "Id": "8b000000-0000-0000-0000-000000000002",
+      "Type": "MediaBrowser.Controller.Entities.TV.Series",
+      "Name": "The Show",
+      "Path": "Z:\\ChildrenMetadata\\The.Show",
+      "ProductionYear": 2020
+    },
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.TV.Season",
+      "Name": "Feature",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": "Z:\\ChildrenMetadata\\The.Show\\The Show S04",
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001"
+    }
+  },
+  {
+    "name": "Season: unrecognized season",
+    "mode": "before",
+    "parent": {
+      "Id": "8b000000-0000-0000-0000-000000000002",
+      "Type": "MediaBrowser.Controller.Entities.TV.Series",
+      "Name": "The Show",
+      "Path": "Z:\\ChildrenMetadata\\The.Show",
+      "ProductionYear": 2020
+    },
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.TV.Season",
+      "Name": "Feature",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": "Z:\\ChildrenMetadata\\The.Show\\Winter",
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001"
+    }
+  },
+  {
+    "name": "Season: trailing season separator",
+    "mode": "before",
+    "parent": {
+      "Id": "8b000000-0000-0000-0000-000000000002",
+      "Type": "MediaBrowser.Controller.Entities.TV.Series",
+      "Name": "The Show",
+      "Path": "Z:\\ChildrenMetadata\\The.Show",
+      "ProductionYear": 2020
+    },
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.TV.Season",
+      "Name": "Feature",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": "Z:\\ChildrenMetadata\\The.Show\\Season 2\\",
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001"
+    }
+  },
+  {
+    "name": "season parser: \"Season 1\"",
+    "mode": "seasonPath",
+    "path": "Z:\\ChildrenMetadata\\Season 1"
+  },
+  {
+    "name": "season parser: \"SEASON_02\"",
+    "mode": "seasonPath",
+    "path": "Z:\\ChildrenMetadata\\SEASON_02"
+  },
+  {
+    "name": "season parser: \"S03\"",
+    "mode": "seasonPath",
+    "path": "Z:\\ChildrenMetadata\\S03"
+  },
+  {
+    "name": "season parser: \"Show S1234\"",
+    "mode": "seasonPath",
+    "path": "Z:\\ChildrenMetadata\\Show S1234"
+  },
+  {
+    "name": "season parser: \"S12345\"",
+    "mode": "seasonPath",
+    "path": "Z:\\ChildrenMetadata\\S12345"
+  },
+  {
+    "name": "season parser: \"S02E03\"",
+    "mode": "seasonPath",
+    "path": "Z:\\ChildrenMetadata\\S02E03"
+  },
+  {
+    "name": "season parser: \"02\"",
+    "mode": "seasonPath",
+    "path": "Z:\\ChildrenMetadata\\02"
+  },
+  {
+    "name": "season parser: \"0\"",
+    "mode": "seasonPath",
+    "path": "Z:\\ChildrenMetadata\\0"
+  },
+  {
+    "name": "season parser: \"-1\"",
+    "mode": "seasonPath",
+    "path": "Z:\\ChildrenMetadata\\-1"
+  },
+  {
+    "name": "season parser: \"+1\"",
+    "mode": "seasonPath",
+    "path": "Z:\\ChildrenMetadata\\+1"
+  },
+  {
+    "name": "season parser: \"2147483647\"",
+    "mode": "seasonPath",
+    "path": "Z:\\ChildrenMetadata\\2147483647"
+  },
+  {
+    "name": "season parser: \"2147483648\"",
+    "mode": "seasonPath",
+    "path": "Z:\\ChildrenMetadata\\2147483648"
+  },
+  {
+    "name": "season parser: \"Specials\"",
+    "mode": "seasonPath",
+    "path": "Z:\\ChildrenMetadata\\Specials"
+  },
+  {
+    "name": "season parser: \"Ex.tras\"",
+    "mode": "seasonPath",
+    "path": "Z:\\ChildrenMetadata\\Ex.tras"
+  },
+  {
+    "name": "season parser: \"1st Season\"",
+    "mode": "seasonPath",
+    "path": "Z:\\ChildrenMetadata\\1st Season"
+  },
+  {
+    "name": "season parser: \"02nd staffel\"",
+    "mode": "seasonPath",
+    "path": "Z:\\ChildrenMetadata\\02nd staffel"
+  },
+  {
+    "name": "season parser: \"season1201080p\"",
+    "mode": "seasonPath",
+    "path": "Z:\\ChildrenMetadata\\season1201080p"
+  },
+  {
+    "name": "season parser: \"season120720p\"",
+    "mode": "seasonPath",
+    "path": "Z:\\ChildrenMetadata\\season120720p"
+  },
+  {
+    "name": "season parser: \"season1E02\"",
+    "mode": "seasonPath",
+    "path": "Z:\\ChildrenMetadata\\season1E02"
+  },
+  {
+    "name": "season parser: \"S01.E02\"",
+    "mode": "seasonPath",
+    "path": "Z:\\ChildrenMetadata\\S01.E02"
+  },
+  {
+    "name": "season parser: \"시즌 7\"",
+    "mode": "seasonPath",
+    "path": "Z:\\ChildrenMetadata\\시즌 7"
+  },
+  {
+    "name": "season parser: \"シーズン 8\"",
+    "mode": "seasonPath",
+    "path": "Z:\\ChildrenMetadata\\シーズン 8"
+  },
+  {
+    "name": "season parser: \"сезон 9\"",
+    "mode": "seasonPath",
+    "path": "Z:\\ChildrenMetadata\\сезон 9"
+  },
+  {
+    "name": "season parser: \"Sæson 10\"",
+    "mode": "seasonPath",
+    "path": "Z:\\ChildrenMetadata\\Sæson 10"
+  },
+  {
+    "name": "season parser: \"Saison 11\"",
+    "mode": "seasonPath",
+    "path": "Z:\\ChildrenMetadata\\Saison 11"
+  },
+  {
+    "name": "season parser: \"Staffel 12\"",
+    "mode": "seasonPath",
+    "path": "Z:\\ChildrenMetadata\\Staffel 12"
+  },
+  {
+    "name": "season parser: \"Series 13\"",
+    "mode": "seasonPath",
+    "path": "Z:\\ChildrenMetadata\\Series 13"
+  },
+  {
+    "name": "season parser: \"Stagione 14\"",
+    "mode": "seasonPath",
+    "path": "Z:\\ChildrenMetadata\\Stagione 14"
+  },
+  {
+    "name": "season parser: \"Säsong 15\"",
+    "mode": "seasonPath",
+    "path": "Z:\\ChildrenMetadata\\Säsong 15"
+  },
+  {
+    "name": "season parser: \"Seizoen 16\"",
+    "mode": "seasonPath",
+    "path": "Z:\\ChildrenMetadata\\Seizoen 16"
+  },
+  {
+    "name": "season parser: \"Seasong 17\"",
+    "mode": "seasonPath",
+    "path": "Z:\\ChildrenMetadata\\Seasong 17"
+  },
+  {
+    "name": "season parser: \"Sezon 18\"",
+    "mode": "seasonPath",
+    "path": "Z:\\ChildrenMetadata\\Sezon 18"
+  },
+  {
+    "name": "season parser: \"Sezona 19\"",
+    "mode": "seasonPath",
+    "path": "Z:\\ChildrenMetadata\\Sezona 19"
+  },
+  {
+    "name": "season parser: \"Sezóna 20\"",
+    "mode": "seasonPath",
+    "path": "Z:\\ChildrenMetadata\\Sezóna 20"
+  },
+  {
+    "name": "season parser: \"Sezonul 21\"",
+    "mode": "seasonPath",
+    "path": "Z:\\ChildrenMetadata\\Sezonul 21"
+  },
+  {
+    "name": "season parser: \"Série 22\"",
+    "mode": "seasonPath",
+    "path": "Z:\\ChildrenMetadata\\Série 22"
+  },
+  {
+    "name": "season parser: \"Séria 23\"",
+    "mode": "seasonPath",
+    "path": "Z:\\ChildrenMetadata\\Séria 23"
+  },
+  {
+    "name": "season parser: \"Serie 24\"",
+    "mode": "seasonPath",
+    "path": "Z:\\ChildrenMetadata\\Serie 24"
+  },
+  {
+    "name": "season parser: \"Seria 25\"",
+    "mode": "seasonPath",
+    "path": "Z:\\ChildrenMetadata\\Seria 25"
+  },
+  {
+    "name": "season parser: \"Temporada 26\"",
+    "mode": "seasonPath",
+    "path": "Z:\\ChildrenMetadata\\Temporada 26"
+  },
+  {
+    "name": "season parser: \"Kausi 27\"",
+    "mode": "seasonPath",
+    "path": "Z:\\ChildrenMetadata\\Kausi 27"
+  },
+  {
+    "name": "season parser: \"Season ١\"",
+    "mode": "seasonPath",
+    "path": "Z:\\ChildrenMetadata\\Season ١"
+  },
+  {
+    "name": "season parser: \"S１\"",
+    "mode": "seasonPath",
+    "path": "Z:\\ChildrenMetadata\\S１"
+  },
+  {
+    "name": "season parser: \"Seas\\non 2\"",
+    "mode": "seasonPath",
+    "path": "Z:\\ChildrenMetadata\\Seas\non 2"
+  },
+  {
+    "name": "season parser: \"1 Season\\nnotes\"",
+    "mode": "seasonPath",
+    "path": "Z:\\ChildrenMetadata\\1 Season\nnotes"
+  },
+  {
+    "name": "season parser: \"Season\\t4\"",
+    "mode": "seasonPath",
+    "path": "Z:\\ChildrenMetadata\\Season\t4"
+  },
+  {
+    "name": "season parser: \"Season 5\"",
+    "mode": "seasonPath",
+    "path": "Z:\\ChildrenMetadata\\Season 5"
+  },
+  {
+    "name": "season parser: \"1.e2Season\"",
+    "mode": "seasonPath",
+    "path": "Z:\\ChildrenMetadata\\1.e2Season"
+  },
+  {
+    "name": "season parser: \"Season 2\\\\\"",
+    "mode": "seasonPath",
+    "path": "Z:\\ChildrenMetadata\\Season 2\\"
+  },
+  {
+    "name": "season flags {\"aliases\":false,\"numeric\":true} 03",
+    "mode": "seasonPath",
+    "path": "Z:\\ChildrenMetadata\\03",
+    "aliases": false,
+    "numeric": true
+  },
+  {
+    "name": "season flags {\"aliases\":false,\"numeric\":true} Specials",
+    "mode": "seasonPath",
+    "path": "Z:\\ChildrenMetadata\\Specials",
+    "aliases": false,
+    "numeric": true
+  },
+  {
+    "name": "season flags {\"aliases\":false,\"numeric\":true} Season 3",
+    "mode": "seasonPath",
+    "path": "Z:\\ChildrenMetadata\\Season 3",
+    "aliases": false,
+    "numeric": true
+  },
+  {
+    "name": "season flags {\"aliases\":false,\"numeric\":true} S03",
+    "mode": "seasonPath",
+    "path": "Z:\\ChildrenMetadata\\S03",
+    "aliases": false,
+    "numeric": true
+  },
+  {
+    "name": "season flags {\"aliases\":false,\"numeric\":true} S.e.a.s.o.n.3",
+    "mode": "seasonPath",
+    "path": "Z:\\ChildrenMetadata\\S.e.a.s.o.n.3",
+    "aliases": false,
+    "numeric": true
+  },
+  {
+    "name": "season flags {\"aliases\":true,\"numeric\":false} 03",
+    "mode": "seasonPath",
+    "path": "Z:\\ChildrenMetadata\\03",
+    "aliases": true,
+    "numeric": false
+  },
+  {
+    "name": "season flags {\"aliases\":true,\"numeric\":false} Specials",
+    "mode": "seasonPath",
+    "path": "Z:\\ChildrenMetadata\\Specials",
+    "aliases": true,
+    "numeric": false
+  },
+  {
+    "name": "season flags {\"aliases\":true,\"numeric\":false} Season 3",
+    "mode": "seasonPath",
+    "path": "Z:\\ChildrenMetadata\\Season 3",
+    "aliases": true,
+    "numeric": false
+  },
+  {
+    "name": "season flags {\"aliases\":true,\"numeric\":false} S03",
+    "mode": "seasonPath",
+    "path": "Z:\\ChildrenMetadata\\S03",
+    "aliases": true,
+    "numeric": false
+  },
+  {
+    "name": "season flags {\"aliases\":true,\"numeric\":false} S.e.a.s.o.n.3",
+    "mode": "seasonPath",
+    "path": "Z:\\ChildrenMetadata\\S.e.a.s.o.n.3",
+    "aliases": true,
+    "numeric": false
+  },
+  {
+    "name": "season flags {\"aliases\":false,\"numeric\":false} 03",
+    "mode": "seasonPath",
+    "path": "Z:\\ChildrenMetadata\\03",
+    "aliases": false,
+    "numeric": false
+  },
+  {
+    "name": "season flags {\"aliases\":false,\"numeric\":false} Specials",
+    "mode": "seasonPath",
+    "path": "Z:\\ChildrenMetadata\\Specials",
+    "aliases": false,
+    "numeric": false
+  },
+  {
+    "name": "season flags {\"aliases\":false,\"numeric\":false} Season 3",
+    "mode": "seasonPath",
+    "path": "Z:\\ChildrenMetadata\\Season 3",
+    "aliases": false,
+    "numeric": false
+  },
+  {
+    "name": "season flags {\"aliases\":false,\"numeric\":false} S03",
+    "mode": "seasonPath",
+    "path": "Z:\\ChildrenMetadata\\S03",
+    "aliases": false,
+    "numeric": false
+  },
+  {
+    "name": "season flags {\"aliases\":false,\"numeric\":false} S.e.a.s.o.n.3",
+    "mode": "seasonPath",
+    "path": "Z:\\ChildrenMetadata\\S.e.a.s.o.n.3",
+    "aliases": false,
+    "numeric": false
+  },
+  {
+    "name": "season parent spelling is removed repeatedly",
+    "mode": "seasonPath",
+    "path": "Z:\\The.Show\\THE.SHOW.The.Show.Season.3",
+    "parentPath": "Z:\\The.Show"
+  },
+  {
+    "name": "season parent trailing separator",
+    "mode": "seasonPath",
+    "path": "Z:\\The.Show\\The.Show.Season.3",
+    "parentPath": "Z:\\The.Show\\"
+  },
+  {
+    "name": "empty normalized parent throws",
+    "mode": "seasonPath",
+    "path": "Z:\\---\\Season 3",
+    "parentPath": "Z:\\---",
+    "expectException": "ArgumentException"
+  },
+  {
+    "name": "prefix parse bypasses empty normalized parent",
+    "mode": "seasonPath",
+    "path": "Z:\\---\\S03",
+    "parentPath": "Z:\\---"
+  },
+  {
+    "name": "null season path throws",
+    "mode": "seasonPath",
+    "path": null,
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "Episode cache: indices retain a warm cache until After",
+    "mode": "cache",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.TV.Episode",
+      "Name": "Track",
+      "ProductionYear": null,
+      "IndexNumber": 1,
+      "ParentIndexNumber": 1,
+      "ForcedSortName": null,
+      "Path": null,
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "IsLocked": true
+    },
+    "actions": [
+      {
+        "op": "read"
+      },
+      {
+        "op": "change",
+        "fields": {
+          "IndexNumber": 9,
+          "ParentIndexNumber": 3
+        }
+      },
+      {
+        "op": "map"
+      },
+      {
+        "op": "after"
+      },
+      {
+        "op": "map"
+      }
+    ]
+  },
+  {
+    "name": "Episode cache: Before clears a warm cache",
+    "mode": "cache",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.TV.Episode",
+      "Name": "Track",
+      "ProductionYear": null,
+      "IndexNumber": 1,
+      "ParentIndexNumber": 1,
+      "ForcedSortName": null,
+      "Path": null,
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "IsLocked": true
+    },
+    "actions": [
+      {
+        "op": "read"
+      },
+      {
+        "op": "change",
+        "fields": {
+          "IndexNumber": 9
+        }
+      },
+      {
+        "op": "before"
+      },
+      {
+        "op": "map"
+      }
+    ]
+  },
+  {
+    "name": "Episode cache: same Name setter clears a warm cache",
+    "mode": "cache",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.TV.Episode",
+      "Name": "Track",
+      "ProductionYear": null,
+      "IndexNumber": 1,
+      "ParentIndexNumber": 1,
+      "ForcedSortName": null,
+      "Path": null,
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "IsLocked": true
+    },
+    "actions": [
+      {
+        "op": "read"
+      },
+      {
+        "op": "change",
+        "fields": {
+          "IndexNumber": 9,
+          "Name": "Track"
+        }
+      },
+      {
+        "op": "map"
+      }
+    ]
+  },
+  {
+    "name": "Episode cache: same ForcedSortName setter clears a warm cache",
+    "mode": "cache",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.TV.Episode",
+      "Name": "Track",
+      "ProductionYear": null,
+      "IndexNumber": 1,
+      "ParentIndexNumber": 1,
+      "ForcedSortName": null,
+      "Path": null,
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "IsLocked": true
+    },
+    "actions": [
+      {
+        "op": "read"
+      },
+      {
+        "op": "change",
+        "fields": {
+          "IndexNumber": 9,
+          "ForcedSortName": null
+        }
+      },
+      {
+        "op": "map"
+      }
+    ]
+  },
+  {
+    "name": "Audio cache: indices retain a warm cache until After",
+    "mode": "cache",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "Name": "Track",
+      "ProductionYear": null,
+      "IndexNumber": 1,
+      "ParentIndexNumber": 1,
+      "ForcedSortName": null,
+      "Path": null,
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "IsLocked": true
+    },
+    "actions": [
+      {
+        "op": "read"
+      },
+      {
+        "op": "change",
+        "fields": {
+          "IndexNumber": 9,
+          "ParentIndexNumber": 3
+        }
+      },
+      {
+        "op": "map"
+      },
+      {
+        "op": "after"
+      },
+      {
+        "op": "map"
+      }
+    ]
+  },
+  {
+    "name": "Audio cache: Before clears a warm cache",
+    "mode": "cache",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "Name": "Track",
+      "ProductionYear": null,
+      "IndexNumber": 1,
+      "ParentIndexNumber": 1,
+      "ForcedSortName": null,
+      "Path": null,
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "IsLocked": true
+    },
+    "actions": [
+      {
+        "op": "read"
+      },
+      {
+        "op": "change",
+        "fields": {
+          "IndexNumber": 9
+        }
+      },
+      {
+        "op": "before"
+      },
+      {
+        "op": "map"
+      }
+    ]
+  },
+  {
+    "name": "Audio cache: same Name setter clears a warm cache",
+    "mode": "cache",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "Name": "Track",
+      "ProductionYear": null,
+      "IndexNumber": 1,
+      "ParentIndexNumber": 1,
+      "ForcedSortName": null,
+      "Path": null,
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "IsLocked": true
+    },
+    "actions": [
+      {
+        "op": "read"
+      },
+      {
+        "op": "change",
+        "fields": {
+          "IndexNumber": 9,
+          "Name": "Track"
+        }
+      },
+      {
+        "op": "map"
+      }
+    ]
+  },
+  {
+    "name": "Audio cache: same ForcedSortName setter clears a warm cache",
+    "mode": "cache",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "Name": "Track",
+      "ProductionYear": null,
+      "IndexNumber": 1,
+      "ParentIndexNumber": 1,
+      "ForcedSortName": null,
+      "Path": null,
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "IsLocked": true
+    },
+    "actions": [
+      {
+        "op": "read"
+      },
+      {
+        "op": "change",
+        "fields": {
+          "IndexNumber": 9,
+          "ForcedSortName": null
+        }
+      },
+      {
+        "op": "map"
+      }
+    ]
+  },
+  {
+    "name": "AudioBook cache: indices retain a warm cache until After",
+    "mode": "cache",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.AudioBook",
+      "Name": "Track",
+      "ProductionYear": null,
+      "IndexNumber": 1,
+      "ParentIndexNumber": 1,
+      "ForcedSortName": null,
+      "Path": null,
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "IsLocked": true
+    },
+    "actions": [
+      {
+        "op": "read"
+      },
+      {
+        "op": "change",
+        "fields": {
+          "IndexNumber": 9,
+          "ParentIndexNumber": 3
+        }
+      },
+      {
+        "op": "map"
+      },
+      {
+        "op": "after"
+      },
+      {
+        "op": "map"
+      }
+    ]
+  },
+  {
+    "name": "AudioBook cache: Before clears a warm cache",
+    "mode": "cache",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.AudioBook",
+      "Name": "Track",
+      "ProductionYear": null,
+      "IndexNumber": 1,
+      "ParentIndexNumber": 1,
+      "ForcedSortName": null,
+      "Path": null,
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "IsLocked": true
+    },
+    "actions": [
+      {
+        "op": "read"
+      },
+      {
+        "op": "change",
+        "fields": {
+          "IndexNumber": 9
+        }
+      },
+      {
+        "op": "before"
+      },
+      {
+        "op": "map"
+      }
+    ]
+  },
+  {
+    "name": "AudioBook cache: same Name setter clears a warm cache",
+    "mode": "cache",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.AudioBook",
+      "Name": "Track",
+      "ProductionYear": null,
+      "IndexNumber": 1,
+      "ParentIndexNumber": 1,
+      "ForcedSortName": null,
+      "Path": null,
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "IsLocked": true
+    },
+    "actions": [
+      {
+        "op": "read"
+      },
+      {
+        "op": "change",
+        "fields": {
+          "IndexNumber": 9,
+          "Name": "Track"
+        }
+      },
+      {
+        "op": "map"
+      }
+    ]
+  },
+  {
+    "name": "AudioBook cache: same ForcedSortName setter clears a warm cache",
+    "mode": "cache",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.AudioBook",
+      "Name": "Track",
+      "ProductionYear": null,
+      "IndexNumber": 1,
+      "ParentIndexNumber": 1,
+      "ForcedSortName": null,
+      "Path": null,
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "IsLocked": true
+    },
+    "actions": [
+      {
+        "op": "read"
+      },
+      {
+        "op": "change",
+        "fields": {
+          "IndexNumber": 9,
+          "ForcedSortName": null
+        }
+      },
+      {
+        "op": "map"
+      }
+    ]
+  },
+  {
+    "name": "Season cache: indices retain a warm cache until After",
+    "mode": "cache",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.TV.Season",
+      "Name": "Track",
+      "ProductionYear": null,
+      "IndexNumber": 1,
+      "ParentIndexNumber": 1,
+      "ForcedSortName": null,
+      "Path": null,
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "IsLocked": true
+    },
+    "actions": [
+      {
+        "op": "read"
+      },
+      {
+        "op": "change",
+        "fields": {
+          "IndexNumber": 9,
+          "ParentIndexNumber": 3
+        }
+      },
+      {
+        "op": "map"
+      },
+      {
+        "op": "after"
+      },
+      {
+        "op": "map"
+      }
+    ]
+  },
+  {
+    "name": "Season cache: Before clears a warm cache",
+    "mode": "cache",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.TV.Season",
+      "Name": "Track",
+      "ProductionYear": null,
+      "IndexNumber": 1,
+      "ParentIndexNumber": 1,
+      "ForcedSortName": null,
+      "Path": null,
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "IsLocked": true
+    },
+    "actions": [
+      {
+        "op": "read"
+      },
+      {
+        "op": "change",
+        "fields": {
+          "IndexNumber": 9
+        }
+      },
+      {
+        "op": "before"
+      },
+      {
+        "op": "map"
+      }
+    ]
+  },
+  {
+    "name": "Season cache: same Name setter clears a warm cache",
+    "mode": "cache",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.TV.Season",
+      "Name": "Track",
+      "ProductionYear": null,
+      "IndexNumber": 1,
+      "ParentIndexNumber": 1,
+      "ForcedSortName": null,
+      "Path": null,
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "IsLocked": true
+    },
+    "actions": [
+      {
+        "op": "read"
+      },
+      {
+        "op": "change",
+        "fields": {
+          "IndexNumber": 9,
+          "Name": "Track"
+        }
+      },
+      {
+        "op": "map"
+      }
+    ]
+  },
+  {
+    "name": "Season cache: same ForcedSortName setter clears a warm cache",
+    "mode": "cache",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.TV.Season",
+      "Name": "Track",
+      "ProductionYear": null,
+      "IndexNumber": 1,
+      "ParentIndexNumber": 1,
+      "ForcedSortName": null,
+      "Path": null,
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "IsLocked": true
+    },
+    "actions": [
+      {
+        "op": "read"
+      },
+      {
+        "op": "change",
+        "fields": {
+          "IndexNumber": 9,
+          "ForcedSortName": null
+        }
+      },
+      {
+        "op": "map"
+      }
+    ]
+  },
+  {
+    "name": "requires: missing path short circuits",
+    "mode": "requires",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Movies.Movie",
+      "Name": "Feature",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": null,
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001"
+    },
+    "file": {
+      "Exists": true,
+      "LastWriteTimeUtc": "2026-01-01T00:00:00Z"
+    }
+  },
+  {
+    "name": "requires: minimum date short circuits",
+    "mode": "requires",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Movies.Movie",
+      "Name": "Feature",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": "Z:\\file.mkv",
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001"
+    },
+    "file": {
+      "Exists": true,
+      "LastWriteTimeUtc": "2026-01-01T00:00:00Z"
+    }
+  },
+  {
+    "name": "requires: exactly one second is unchanged",
+    "mode": "requires",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Movies.Movie",
+      "Name": "Feature",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": "Z:\\file.mkv",
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "DateModified": "2025-01-01T00:00:00Z"
+    },
+    "file": {
+      "Exists": true,
+      "LastWriteTimeUtc": "2025-01-01T00:00:01Z"
+    }
+  },
+  {
+    "name": "requires: one second and one tick changes",
+    "mode": "requires",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Movies.Movie",
+      "Name": "Feature",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": "Z:\\file.mkv",
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "DateModified": "2025-01-01T00:00:00Z"
+    },
+    "file": {
+      "Exists": true,
+      "LastWriteTimeUtc": "2025-01-01T00:00:01.0000001Z"
+    }
+  },
+  {
+    "name": "requires: earlier file date changes",
+    "mode": "requires",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Movies.Movie",
+      "Name": "Feature",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": "Z:\\file.mkv",
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "DateModified": "2025-01-01T00:00:02Z"
+    },
+    "file": {
+      "Exists": true,
+      "LastWriteTimeUtc": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "name": "requires: missing file remains unchanged",
+    "mode": "requires",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Movies.Movie",
+      "Name": "Feature",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": "Z:\\file.mkv",
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "DateModified": "2025-01-01T00:00:00Z"
+    },
+    "file": {
+      "Exists": false,
+      "LastWriteTimeUtc": "2026-01-01T00:00:00Z"
+    }
+  },
+  {
+    "name": "requires: ordinary folder missing runtime does not refresh",
+    "mode": "requires",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Folder",
+      "Name": "Feature",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": null,
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001"
+    },
+    "file": {}
+  },
+  {
+    "name": "requires: album missing runtime requires refresh",
+    "mode": "requires",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Audio.MusicAlbum",
+      "Name": "Feature",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": null,
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001"
+    },
+    "file": {}
+  },
+  {
+    "name": "requires: album zero runtime remains",
+    "mode": "requires",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Audio.MusicAlbum",
+      "Name": "Feature",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": null,
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "RunTimeTicks": 0
+    },
+    "file": {}
+  },
+  {
+    "name": "requires: physical artist missing runtime requires refresh",
+    "mode": "requires",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Audio.MusicArtist",
+      "Name": "Feature",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": null,
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "ParentId": "8b000000-0000-0000-0000-000000000002"
+    },
+    "file": {}
+  },
+  {
+    "name": "refresh: FullRefresh selected provider",
+    "mode": "refresh",
+    "metadataMode": "FullRefresh",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Movies.Movie",
+      "Name": "Feature (2022)",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": null,
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "IsInMixedFolder": true,
+      "IsLocked": false
+    }
+  },
+  {
+    "name": "refresh: Default changed provider",
+    "mode": "refresh",
+    "metadataMode": "Default",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Movies.Movie",
+      "Name": "Feature (2022)",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": null,
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "IsInMixedFolder": true,
+      "IsLocked": false
+    }
+  },
+  {
+    "name": "refresh: Default unchanged provider skips Before",
+    "mode": "refresh",
+    "metadataMode": "Default",
+    "providerChanged": false,
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Movies.Movie",
+      "Name": "Feature (2022)",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": null,
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "IsInMixedFolder": true,
+      "IsLocked": false
+    }
+  },
+  {
+    "name": "refresh: ValidationOnly remote change is filtered",
+    "mode": "refresh",
+    "metadataMode": "ValidationOnly",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Movies.Movie",
+      "Name": "Feature (2022)",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": null,
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "IsInMixedFolder": true,
+      "IsLocked": false
+    }
+  },
+  {
+    "name": "refresh: None first save skips Before",
+    "mode": "refresh",
+    "metadataMode": "None",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Movies.Movie",
+      "Name": "Feature (2022)",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": null,
+      "DateLastRefreshed": "0001-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "IsInMixedFolder": true,
+      "IsLocked": false
+    }
+  },
+  {
+    "name": "refresh: Default first refresh with no provider calls Before",
+    "mode": "refresh",
+    "metadataMode": "Default",
+    "noProvider": true,
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Movies.Movie",
+      "Name": "Feature (2022)",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": null,
+      "DateLastRefreshed": "0001-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "IsInMixedFolder": true,
+      "IsLocked": false
+    }
+  },
+  {
+    "name": "refresh: FullRefresh no provider existing item skips Before",
+    "mode": "refresh",
+    "metadataMode": "FullRefresh",
+    "noProvider": true,
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Movies.Movie",
+      "Name": "Feature (2022)",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": null,
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "IsInMixedFolder": true,
+      "IsLocked": false
+    }
+  },
+  {
+    "name": "refresh: ForceSave no provider skips Before",
+    "mode": "refresh",
+    "metadataMode": "Default",
+    "noProvider": true,
+    "force": true,
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Movies.Movie",
+      "Name": "Feature (2022)",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": null,
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "IsInMixedFolder": true,
+      "IsLocked": false
+    }
+  },
+  {
+    "name": "refresh: locked first refresh still calls Before",
+    "mode": "refresh",
+    "metadataMode": "Default",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Movies.Movie",
+      "Name": "Feature (2022)",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": null,
+      "DateLastRefreshed": "0001-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "IsInMixedFolder": true,
+      "IsLocked": true
+    }
+  },
+  {
+    "name": "refresh: first save cancellation retains pre-hook database state",
+    "mode": "refresh",
+    "metadataMode": "Default",
+    "cancel": true,
+    "expectException": "OperationCanceledException",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Movies.Movie",
+      "Name": "Feature (2022)",
+      "ProductionYear": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null,
+      "ForcedSortName": null,
+      "Path": null,
+      "DateLastRefreshed": "0001-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "IsInMixedFolder": true,
+      "IsLocked": false
+    }
+  },
+  {
+    "name": "episode refresh: unreported ValidationOnly index runs After without saving",
+    "mode": "episodeRefresh",
+    "metadataMode": "ValidationOnly",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.TV.Episode",
+      "Name": "Track",
+      "ProductionYear": null,
+      "IndexNumber": 1,
+      "ParentIndexNumber": 1,
+      "ForcedSortName": null,
+      "Path": null,
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "IsLocked": false,
+      "SeasonName": "Season 1",
+      "SeriesName": null,
+      "SeriesId": "00000000-0000-0000-0000-000000000000",
+      "SeasonId": "00000000-0000-0000-0000-000000000000",
+      "SeriesPresentationUniqueKey": null,
+      "SortName": "001 - 0001 - Track"
+    }
+  },
+  {
+    "name": "episode refresh: reported index saves a warm value then clears After",
+    "mode": "episodeRefresh",
+    "metadataMode": "Default",
+    "providerUpdate": 2,
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.TV.Episode",
+      "Name": "Track",
+      "ProductionYear": null,
+      "IndexNumber": 1,
+      "ParentIndexNumber": 1,
+      "ForcedSortName": null,
+      "Path": null,
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "IsLocked": false,
+      "SeasonName": "Season 1",
+      "SeriesName": null,
+      "SeriesId": "00000000-0000-0000-0000-000000000000",
+      "SeasonId": "00000000-0000-0000-0000-000000000000",
+      "SeriesPresentationUniqueKey": null,
+      "SortName": "001 - 0001 - Track"
+    }
+  },
+  {
+    "name": "episode refresh: force save retains a warm value until After",
+    "mode": "episodeRefresh",
+    "metadataMode": "ValidationOnly",
+    "force": true,
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.TV.Episode",
+      "Name": "Track",
+      "ProductionYear": null,
+      "IndexNumber": 1,
+      "ParentIndexNumber": 1,
+      "ForcedSortName": null,
+      "Path": null,
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "IsLocked": false,
+      "SeasonName": "Season 1",
+      "SeriesName": null,
+      "SeriesId": "00000000-0000-0000-0000-000000000000",
+      "SeasonId": "00000000-0000-0000-0000-000000000000",
+      "SeriesPresentationUniqueKey": null,
+      "SortName": "001 - 0001 - Track"
+    }
+  },
+  {
+    "name": "episode refresh: same Name setter saves the new index sort",
+    "mode": "episodeRefresh",
+    "metadataMode": "Default",
+    "providerUpdate": 2,
+    "sameName": true,
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.TV.Episode",
+      "Name": "Track",
+      "ProductionYear": null,
+      "IndexNumber": 1,
+      "ParentIndexNumber": 1,
+      "ForcedSortName": null,
+      "Path": null,
+      "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "IsLocked": false,
+      "SeasonName": "Season 1",
+      "SeriesName": null,
+      "SeriesId": "00000000-0000-0000-0000-000000000000",
+      "SeasonId": "00000000-0000-0000-0000-000000000000",
+      "SeriesPresentationUniqueKey": null,
+      "SortName": "001 - 0001 - Track"
+    }
+  },
+  {
+    "name": "episode refresh: first save occurs before the warm index mutation",
+    "mode": "episodeRefresh",
+    "metadataMode": "Default",
+    "providerUpdate": 2,
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.TV.Episode",
+      "Name": "Track",
+      "ProductionYear": null,
+      "IndexNumber": 1,
+      "ParentIndexNumber": 1,
+      "ForcedSortName": null,
+      "Path": null,
+      "DateLastRefreshed": "0001-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "IsLocked": false,
+      "SeasonName": "Season 1",
+      "SeriesName": null,
+      "SeriesId": "00000000-0000-0000-0000-000000000000",
+      "SeasonId": "00000000-0000-0000-0000-000000000000",
+      "SeriesPresentationUniqueKey": null,
+      "SortName": "001 - 0001 - Track"
+    }
+  },
+  {
+    "name": "episode refresh: cancellation leaves a warm runtime cache and first save",
+    "mode": "episodeRefresh",
+    "metadataMode": "Default",
+    "cancel": true,
+    "expectException": "OperationCanceledException",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.TV.Episode",
+      "Name": "Track",
+      "ProductionYear": null,
+      "IndexNumber": 1,
+      "ParentIndexNumber": 1,
+      "ForcedSortName": null,
+      "Path": null,
+      "DateLastRefreshed": "0001-01-01T00:00:00.0000000Z",
+      "PresentationUniqueKey": "8b000000000000000000000000000001",
+      "IsLocked": false,
+      "SeasonName": "Season 1",
+      "SeriesName": null,
+      "SeriesId": "00000000-0000-0000-0000-000000000000",
+      "SeasonId": "00000000-0000-0000-0000-000000000000",
+      "SeriesPresentationUniqueKey": null,
+      "SortName": "001 - 0001 - Track"
+    }
+  }
+]

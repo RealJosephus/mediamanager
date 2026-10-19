@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-10-07T12:32:57.1348931Z",
+  "scope": "Nine actual pinned JsonDefaults deserializations of duplicate known scalar properties. Int32, nonnullable VideoType and DateTime each exercise invalid-first, invalid-last and valid-last-wins; the first invalid occurrence must throw even when a later value is valid.",
+  "caseCount": 9,
+  "runtime": "10.0.12",
+  "timezone": "Taipei Standard Time",
+  "execution": {
+    "command": "D:/mediamanager/.tools/dotnet/dotnet.exe D:/mediamanager-validation/20261005/results/native-item-json-boundaries-source-20261007/bin/Release/net10.0/Oracle.dll D:/mediamanager-validation/20261005/results/native-item-json-duplicate-properties-source-20261007/input.json D:/mediamanager-validation/20261005/results/native-item-json-duplicate-properties-source-20261007/native.json",
+    "exitCode": 0,
+    "rebuilt": false,
+    "sourceProject": "D:/mediamanager-validation/20261005/results/native-item-json-boundaries-source-20261007/project",
+    "candidateBeforeFixSha256": "76f915370b3a07d4e086221ca90517a7ef102b963bd60901f59fef98a971902c",
+    "candidateBeforeFix": "The independent compare.mjs traversal found exactly three success/fallback differences: int-invalid-first, enum-invalid-first and date-invalid-first. The six invalid-last/valid-last-wins outcomes agreed. This diagnostic does not assert semantic or serialization equivalence; the repository comparison must additionally compare every successful semantic value and exact reserialized scalar bytes. An initial inline JavaScript comparison failed from PowerShell quoting after the native capture had succeeded; the retained compare.mjs corrected only that diagnostic invocation."
+  },
+  "artifacts": [
+    { "path": "input.json", "bytes": 901, "sha256": "b6ddf3d7d06afb35bacd1d5b729a516764b6d674ce75a14c2db6bae1396f4887" },
+    { "path": "native.json", "bytes": 5495, "sha256": "fc3953414e007808a1ef3baf3c3e1c725ed8031925b6393a02db0b703c0f6438" },
+    { "path": "../native-item-json-boundaries-source-20261007/project/Program.cs", "bytes": 3438, "sha256": "4ae1985cc792ba009d27105c0f073d93fddaa8bddf44751289028b6bb23d68af" },
+    { "path": "../native-item-json-boundaries-source-20261007/project/Oracle.csproj", "bytes": 554, "sha256": "da74f4379bb99743f3eac06f27d8b674e8d7877829ea971625344302503b2661" },
+    { "path": "../native-item-json-boundaries-source-20261007/bin/Release/net10.0/Oracle.dll", "bytes": 22016, "sha256": "90792bf8b19fc6723f311f8e08d4108a1aaaeF15a816a723c96d0a0f98ab325f" }
+  ]
+}

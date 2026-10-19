@@ -1,0 +1,7 @@
+# Native nullable list mapping and saves
+
+Twelve controls use concrete Audio items with one independently null or varied list in Genres, Studios, Tags, Artists, AlbumArtists or ProductionLocations. Each varied array includes null/empty/blank values, case variants, zero-width space and nonbreaking space. The actual BaseItemMapper preview is recorded separately from LibraryManager.CreateItems and EF SaveItems.
+
+Genres=null fails the mapper with ArgumentNullException(source). Complete saving also rejects null Studios/Artists/AlbumArtists with the source parameter and null Tags with the collection parameter. ProductionLocations=null persists NULL; its varied values exclude CLR whitespace before OrdinalIgnoreCase distinct serialization. Value maps retain exact case variants and reject CLR blank values. Generated value GUIDs are projected by Type/Value identity.
+
+The candidate compares mapper columns and SQLite/real PostgreSQL metadata persistence and resolver/scanner creation. Failing cases check the unchanged database and absence of added events; successful cases compare six columns and all recorded values/maps/ancestors, then repeat the scan. Parent/owner lookup, user-root child list, library options and path reversal remain native recorder controls. This is a projection of independent field cases, not complete JSON bytes, combined-null precedence, full ValidateChildren or complete library acceptance. candidateVerified remains false in the oracle.

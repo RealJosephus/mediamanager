@@ -1,0 +1,1529 @@
+{
+  "actualSkiaEncoder": true,
+  "actualSplashscreenBuilder": true,
+  "actualSkiaHelper": true,
+  "actualTransform": true,
+  "mediaOpened": false,
+  "portOpened": false,
+  "inputSha256": "e72547c122c48d708bfb0dfe63cf8e8c246709f91a3bb1eeae0ce3d3cb666a17",
+  "assets": [
+    {
+      "name": "alpha.dat",
+      "snapshot": {
+        "path": "D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6\\assets\\alpha.dat",
+        "bytes": 99933,
+        "sha256": "121a32f2a4a55ff0d9d3a1372d00737b5f0d226cac8832ceec96bfbadf3ece39",
+        "Width": 240,
+        "Height": 360,
+        "pixelHash": "5d810c984a7cff6bef17da90b4d2a56650f75744f8d901da7ba63a7be1ce16b3",
+        "decodeFailure": null
+      }
+    },
+    {
+      "name": "alpha.png",
+      "snapshot": {
+        "path": "D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6\\assets\\alpha.png",
+        "bytes": 99933,
+        "sha256": "121a32f2a4a55ff0d9d3a1372d00737b5f0d226cac8832ceec96bfbadf3ece39",
+        "Width": 240,
+        "Height": 360,
+        "pixelHash": "5d810c984a7cff6bef17da90b4d2a56650f75744f8d901da7ba63a7be1ce16b3",
+        "decodeFailure": null
+      }
+    },
+    {
+      "name": "broken.png",
+      "snapshot": {
+        "path": "D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6\\assets\\broken.png",
+        "bytes": 12,
+        "sha256": "1d1e52aec62f238197b0504a8d803cdf34fc98a89831c105040bcf18cab3fbb7",
+        "Width": null,
+        "Height": null,
+        "pixelHash": null,
+        "decodeFailure": {
+          "type": "ArgumentNullException",
+          "Message": "Value cannot be null. (Parameter \u0027codec\u0027)"
+        }
+      }
+    },
+    {
+      "name": "content.dat",
+      "snapshot": {
+        "path": "D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6\\assets\\content.dat",
+        "bytes": 8787,
+        "sha256": "f56b8c908ee572720fdfc3f6550be78a9fce29d850b9a38d945b08bf56a5c7af",
+        "Width": 240,
+        "Height": 360,
+        "pixelHash": "f3e3fb46665651b227dae4618e1a3726dbd913f4ec056cd4253c7ecbe166c206",
+        "decodeFailure": null
+      }
+    },
+    {
+      "name": "empty.png",
+      "snapshot": {
+        "path": "D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6\\assets\\empty.png",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "Width": null,
+        "Height": null,
+        "pixelHash": null,
+        "decodeFailure": {
+          "type": "ArgumentNullException",
+          "Message": "Value cannot be null. (Parameter \u0027codec\u0027)"
+        }
+      }
+    },
+    {
+      "name": "landscape.png",
+      "snapshot": {
+        "path": "D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6\\assets\\landscape.png",
+        "bytes": 14223,
+        "sha256": "74bac627d946e32b4028284395cc39bebf1de71f56b38a0af32ea0d6482854ce",
+        "Width": 480,
+        "Height": 360,
+        "pixelHash": "52f14920cc1797acf10348f038fcf495f16f2aa304fff903f8b365946762e82c",
+        "decodeFailure": null
+      }
+    },
+    {
+      "name": "large.png",
+      "snapshot": {
+        "path": "D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6\\assets\\large.png",
+        "bytes": 91560,
+        "sha256": "ea378a46a7e33102d6848bba2153f1177267f3556cc511bd0539507df9166a40",
+        "Width": 960,
+        "Height": 1440,
+        "pixelHash": "d6cd81728fb4e8e0f00ea39adf147e4de30fd8195ff8a9e78e1536b5c90a2670",
+        "decodeFailure": null
+      }
+    },
+    {
+      "name": "portrait.jpg",
+      "snapshot": {
+        "path": "D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6\\assets\\portrait.jpg",
+        "bytes": 58678,
+        "sha256": "06d6d19fa38d5eb72a97c843ee747d7fd434ee3859c4bee4b63051468b76c0e5",
+        "Width": 240,
+        "Height": 360,
+        "pixelHash": "e7306ce14ab114112a47932861b66eb5ec7e151d1eeecbe1c7520caa2bc54999",
+        "decodeFailure": null
+      }
+    },
+    {
+      "name": "portrait.png",
+      "snapshot": {
+        "path": "D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6\\assets\\portrait.png",
+        "bytes": 8787,
+        "sha256": "f56b8c908ee572720fdfc3f6550be78a9fce29d850b9a38d945b08bf56a5c7af",
+        "Width": 240,
+        "Height": 360,
+        "pixelHash": "f3e3fb46665651b227dae4618e1a3726dbd913f4ec056cd4253c7ecbe166c206",
+        "decodeFailure": null
+      }
+    },
+    {
+      "name": "portrait.webp",
+      "snapshot": {
+        "path": "D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6\\assets\\portrait.webp",
+        "bytes": 46238,
+        "sha256": "aa24e2e1bcb7879ec57af0b44bd38be74a438561ffa30c4c4d5977e2bdf7f931",
+        "Width": 240,
+        "Height": 360,
+        "pixelHash": "3bc400fb4af9a2a08a6a16f3609406a4d96708a4e8b31ebe9358c7d48e5c90c3",
+        "decodeFailure": null
+      }
+    },
+    {
+      "name": "small.png",
+      "snapshot": {
+        "path": "D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6\\assets\\small.png",
+        "bytes": 174,
+        "sha256": "855e7dbabdf7866b13ae4f359eac64301dbcc4d14dc0bae448132f74caa7f28d",
+        "Width": 16,
+        "Height": 24,
+        "pixelHash": "8f6e151524c0ffad727c899bc19e239569ea5bf79f332b09e9004df07a8ee121",
+        "decodeFailure": null
+      }
+    },
+    {
+      "name": "static.gif",
+      "snapshot": {
+        "path": "D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6\\assets\\static.gif",
+        "bytes": 42,
+        "sha256": "ef1955ae757c8b966c83248350331bd3a30f658ced11f387f8ebf05ab3368629",
+        "Width": 1,
+        "Height": 1,
+        "pixelHash": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119",
+        "decodeFailure": null
+      }
+    },
+    {
+      "name": "tall.png",
+      "snapshot": {
+        "path": "D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6\\assets\\tall.png",
+        "bytes": 127,
+        "sha256": "213002219a96109c5286e0156d1f41d8e50bba703c7bdf47040c1068ba0ac0cc",
+        "Width": 1,
+        "Height": 1440,
+        "pixelHash": "eb97e4d0d4ec15011a98b0702fbfa92532381c98e72f7c5203e236c93ef46919",
+        "decodeFailure": null
+      }
+    },
+    {
+      "name": "vector.svg",
+      "snapshot": {
+        "path": "D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6\\assets\\vector.svg",
+        "bytes": 106,
+        "sha256": "2b36b562413e78d2bf954425e66ce11a735fc3879965d8120a9818dd1caec9de",
+        "Width": null,
+        "Height": null,
+        "pixelHash": null,
+        "decodeFailure": {
+          "type": "ArgumentNullException",
+          "Message": "Value cannot be null. (Parameter \u0027codec\u0027)"
+        }
+      }
+    }
+  ],
+  "results": [
+    {
+      "sample": {
+        "Name": "empty-retains-existing",
+        "Posters": [],
+        "Backdrops": [],
+        "Existing": true,
+        "MissingDataDirectory": false,
+        "Repeat": false,
+        "DirectoryOutput": false,
+        "ReadOnlyOutput": false
+      },
+      "before": {
+        "path": "D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6\\cases\\empty-retains-existing\\data\\splashscreen.png",
+        "bytes": 8787,
+        "sha256": "f56b8c908ee572720fdfc3f6550be78a9fce29d850b9a38d945b08bf56a5c7af",
+        "Width": 240,
+        "Height": 360,
+        "pixelHash": "f3e3fb46665651b227dae4618e1a3726dbd913f4ec056cd4253c7ecbe166c206",
+        "decodeFailure": null
+      },
+      "after": {
+        "path": "D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6\\cases\\empty-retains-existing\\data\\splashscreen.png",
+        "bytes": 8787,
+        "sha256": "f56b8c908ee572720fdfc3f6550be78a9fce29d850b9a38d945b08bf56a5c7af",
+        "Width": 240,
+        "Height": 360,
+        "pixelHash": "f3e3fb46665651b227dae4618e1a3726dbd913f4ec056cd4253c7ecbe166c206",
+        "decodeFailure": null
+      },
+      "wall": null,
+      "repeated": null,
+      "logs": [],
+      "failure": null
+    },
+    {
+      "sample": {
+        "Name": "poster-only-retains-existing",
+        "Posters": [
+          "portrait.png"
+        ],
+        "Backdrops": [],
+        "Existing": true,
+        "MissingDataDirectory": false,
+        "Repeat": false,
+        "DirectoryOutput": false,
+        "ReadOnlyOutput": false
+      },
+      "before": {
+        "path": "D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6\\cases\\poster-only-retains-existing\\data\\splashscreen.png",
+        "bytes": 8787,
+        "sha256": "f56b8c908ee572720fdfc3f6550be78a9fce29d850b9a38d945b08bf56a5c7af",
+        "Width": 240,
+        "Height": 360,
+        "pixelHash": "f3e3fb46665651b227dae4618e1a3726dbd913f4ec056cd4253c7ecbe166c206",
+        "decodeFailure": null
+      },
+      "after": {
+        "path": "D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6\\cases\\poster-only-retains-existing\\data\\splashscreen.png",
+        "bytes": 8787,
+        "sha256": "f56b8c908ee572720fdfc3f6550be78a9fce29d850b9a38d945b08bf56a5c7af",
+        "Width": 240,
+        "Height": 360,
+        "pixelHash": "f3e3fb46665651b227dae4618e1a3726dbd913f4ec056cd4253c7ecbe166c206",
+        "decodeFailure": null
+      },
+      "wall": null,
+      "repeated": null,
+      "logs": [],
+      "failure": null
+    },
+    {
+      "sample": {
+        "Name": "backdrop-only-retains-existing",
+        "Posters": [],
+        "Backdrops": [
+          "landscape.png"
+        ],
+        "Existing": true,
+        "MissingDataDirectory": false,
+        "Repeat": false,
+        "DirectoryOutput": false,
+        "ReadOnlyOutput": false
+      },
+      "before": {
+        "path": "D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6\\cases\\backdrop-only-retains-existing\\data\\splashscreen.png",
+        "bytes": 8787,
+        "sha256": "f56b8c908ee572720fdfc3f6550be78a9fce29d850b9a38d945b08bf56a5c7af",
+        "Width": 240,
+        "Height": 360,
+        "pixelHash": "f3e3fb46665651b227dae4618e1a3726dbd913f4ec056cd4253c7ecbe166c206",
+        "decodeFailure": null
+      },
+      "after": {
+        "path": "D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6\\cases\\backdrop-only-retains-existing\\data\\splashscreen.png",
+        "bytes": 8787,
+        "sha256": "f56b8c908ee572720fdfc3f6550be78a9fce29d850b9a38d945b08bf56a5c7af",
+        "Width": 240,
+        "Height": 360,
+        "pixelHash": "f3e3fb46665651b227dae4618e1a3726dbd913f4ec056cd4253c7ecbe166c206",
+        "decodeFailure": null
+      },
+      "wall": null,
+      "repeated": null,
+      "logs": [],
+      "failure": null
+    },
+    {
+      "sample": {
+        "Name": "same-input-portrait-png",
+        "Posters": [
+          "portrait.png"
+        ],
+        "Backdrops": [
+          "portrait.png"
+        ],
+        "Existing": false,
+        "MissingDataDirectory": false,
+        "Repeat": false,
+        "DirectoryOutput": false,
+        "ReadOnlyOutput": false
+      },
+      "before": null,
+      "after": {
+        "path": "D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6\\cases\\same-input-portrait-png\\data\\splashscreen.png",
+        "bytes": 2182726,
+        "sha256": "4673cd5ef0235f2b832640f40c81946995fe7ccd246831c586d985577b93fb86",
+        "Width": 1920,
+        "Height": 1080,
+        "pixelHash": "2cfa6c6fede564428b4042c321b037c14e68645f2e9e4393d78450e780048186",
+        "decodeFailure": null
+      },
+      "wall": {
+        "Width": 5760,
+        "Height": 2160,
+        "pixelHash": "133106446cefbf879f7649f018dbed14cbfa141a34bfc941f874035edb3f6441",
+        "file": {
+          "path": "D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6\\cases\\same-input-portrait-png\\wall.png",
+          "bytes": 567162,
+          "sha256": "44859767689d8989e1896bce10697b5446aaa2ff0f5d3b090d8ae73b574b9446",
+          "Width": 5760,
+          "Height": 2160,
+          "pixelHash": "133106446cefbf879f7649f018dbed14cbfa141a34bfc941f874035edb3f6441",
+          "decodeFailure": null
+        }
+      },
+      "repeated": null,
+      "logs": [],
+      "failure": null
+    },
+    {
+      "sample": {
+        "Name": "same-input-landscape-png",
+        "Posters": [
+          "landscape.png"
+        ],
+        "Backdrops": [
+          "landscape.png"
+        ],
+        "Existing": false,
+        "MissingDataDirectory": false,
+        "Repeat": false,
+        "DirectoryOutput": false,
+        "ReadOnlyOutput": false
+      },
+      "before": null,
+      "after": {
+        "path": "D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6\\cases\\same-input-landscape-png\\data\\splashscreen.png",
+        "bytes": 2188648,
+        "sha256": "632aadb8db06eb03a3f1bd2e6d8388ecee4aeca6f549ad0d5f5d475c6e460451",
+        "Width": 1920,
+        "Height": 1080,
+        "pixelHash": "4e7c2bf7edecd9cb79fcdb7d9686df4ec1e63813dc5110f84637a1881c795306",
+        "decodeFailure": null
+      },
+      "wall": {
+        "Width": 5760,
+        "Height": 2160,
+        "pixelHash": "524f59001458150d349cbd912033e7e3c6cfe568f91947ba23b306a66516a8b1",
+        "file": {
+          "path": "D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6\\cases\\same-input-landscape-png\\wall.png",
+          "bytes": 660821,
+          "sha256": "839d52be5af917587842a3eb33697211d90fa2543ea270b48de6a84d7e8b74e2",
+          "Width": 5760,
+          "Height": 2160,
+          "pixelHash": "524f59001458150d349cbd912033e7e3c6cfe568f91947ba23b306a66516a8b1",
+          "decodeFailure": null
+        }
+      },
+      "repeated": null,
+      "logs": [],
+      "failure": null
+    },
+    {
+      "sample": {
+        "Name": "same-input-small-png",
+        "Posters": [
+          "small.png"
+        ],
+        "Backdrops": [
+          "small.png"
+        ],
+        "Existing": false,
+        "MissingDataDirectory": false,
+        "Repeat": false,
+        "DirectoryOutput": false,
+        "ReadOnlyOutput": false
+      },
+      "before": null,
+      "after": {
+        "path": "D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6\\cases\\same-input-small-png\\data\\splashscreen.png",
+        "bytes": 2054005,
+        "sha256": "a6019f9172b294f69f414bcd72b016447fb9edc3e1eccd5589d4babec5774b38",
+        "Width": 1920,
+        "Height": 1080,
+        "pixelHash": "f1ff03a8caace925bb5487f4236d69ed2e297d754e487d0b620fe4a7c65c41b2",
+        "decodeFailure": null
+      },
+      "wall": {
+        "Width": 5760,
+        "Height": 2160,
+        "pixelHash": "db531746f13e089ed62439dc2535f99b11b22150e2401fe363e2e5e4ee7b8d30",
+        "file": {
+          "path": "D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6\\cases\\same-input-small-png\\wall.png",
+          "bytes": 586833,
+          "sha256": "c2f67dcb378e00c4edca76b00caa6d9ef8d574c9da1024c8bf4dd764aff3d564",
+          "Width": 5760,
+          "Height": 2160,
+          "pixelHash": "db531746f13e089ed62439dc2535f99b11b22150e2401fe363e2e5e4ee7b8d30",
+          "decodeFailure": null
+        }
+      },
+      "repeated": null,
+      "logs": [],
+      "failure": null
+    },
+    {
+      "sample": {
+        "Name": "same-input-large-png",
+        "Posters": [
+          "large.png"
+        ],
+        "Backdrops": [
+          "large.png"
+        ],
+        "Existing": false,
+        "MissingDataDirectory": false,
+        "Repeat": false,
+        "DirectoryOutput": false,
+        "ReadOnlyOutput": false
+      },
+      "before": null,
+      "after": {
+        "path": "D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6\\cases\\same-input-large-png\\data\\splashscreen.png",
+        "bytes": 2623876,
+        "sha256": "d066c84d4d4c8ff59376aad02d1102322909ea168d2dd8b26d19bc0d252d5f09",
+        "Width": 1920,
+        "Height": 1080,
+        "pixelHash": "5a7082830765af4c5d91a49d6163ceabeb565fbc4a5989e02e0f7dd800d0acaa",
+        "decodeFailure": null
+      },
+      "wall": {
+        "Width": 5760,
+        "Height": 2160,
+        "pixelHash": "23d9cea47cd82cda8034eb220492ae5382a55f60a95e957986a6d5a345e055b3",
+        "file": {
+          "path": "D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6\\cases\\same-input-large-png\\wall.png",
+          "bytes": 500857,
+          "sha256": "c1999d33a0c81b131fa352cb5845c0708c00fa078817bad0eadadb5041a9c026",
+          "Width": 5760,
+          "Height": 2160,
+          "pixelHash": "23d9cea47cd82cda8034eb220492ae5382a55f60a95e957986a6d5a345e055b3",
+          "decodeFailure": null
+        }
+      },
+      "repeated": null,
+      "logs": [],
+      "failure": null
+    },
+    {
+      "sample": {
+        "Name": "same-input-alpha-png",
+        "Posters": [
+          "alpha.png"
+        ],
+        "Backdrops": [
+          "alpha.png"
+        ],
+        "Existing": false,
+        "MissingDataDirectory": false,
+        "Repeat": false,
+        "DirectoryOutput": false,
+        "ReadOnlyOutput": false
+      },
+      "before": null,
+      "after": {
+        "path": "D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6\\cases\\same-input-alpha-png\\data\\splashscreen.png",
+        "bytes": 3898766,
+        "sha256": "660736273b653138bae9ddc0c84a1facf1481c9c5cfbc65854afce28b7d2dc6f",
+        "Width": 1920,
+        "Height": 1080,
+        "pixelHash": "49417b45c53bed3c47f75203f2366a749a09d07a5be1db508d771af33c560e87",
+        "decodeFailure": null
+      },
+      "wall": {
+        "Width": 5760,
+        "Height": 2160,
+        "pixelHash": "4b25ba4cd8bca2d7b6f34e19d07bd3c713f615588698ad46f19bf2bbeee02ec4",
+        "file": {
+          "path": "D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6\\cases\\same-input-alpha-png\\wall.png",
+          "bytes": 965754,
+          "sha256": "baa1bc5f061e1f66131b674a577b33dd5a63c161348cf59f08d0e502f6cf99bc",
+          "Width": 5760,
+          "Height": 2160,
+          "pixelHash": "4b25ba4cd8bca2d7b6f34e19d07bd3c713f615588698ad46f19bf2bbeee02ec4",
+          "decodeFailure": null
+        }
+      },
+      "repeated": null,
+      "logs": [],
+      "failure": null
+    },
+    {
+      "sample": {
+        "Name": "same-input-portrait-jpg",
+        "Posters": [
+          "portrait.jpg"
+        ],
+        "Backdrops": [
+          "portrait.jpg"
+        ],
+        "Existing": false,
+        "MissingDataDirectory": false,
+        "Repeat": false,
+        "DirectoryOutput": false,
+        "ReadOnlyOutput": false
+      },
+      "before": null,
+      "after": {
+        "path": "D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6\\cases\\same-input-portrait-jpg\\data\\splashscreen.png",
+        "bytes": 5466612,
+        "sha256": "92d30f17c1a0a6be204b8630eec16ac6dfe99ef94a350d6b919bb071e2cdf14b",
+        "Width": 1920,
+        "Height": 1080,
+        "pixelHash": "a9e45493c14299cee823c0f300e8d952032b16869a1d7dd0f4994766475d73a5",
+        "decodeFailure": null
+      },
+      "wall": {
+        "Width": 5760,
+        "Height": 2160,
+        "pixelHash": "1cfcde07fe4c5df9e0eec632e4ffe92dfae8c56ecf8f4c64a61c32fb3a8ac96f",
+        "file": {
+          "path": "D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6\\cases\\same-input-portrait-jpg\\wall.png",
+          "bytes": 1608670,
+          "sha256": "cb54daa2e0d35e48df18475b8acb261ca8c79dfbfca9c76cfc31bdc810244659",
+          "Width": 5760,
+          "Height": 2160,
+          "pixelHash": "1cfcde07fe4c5df9e0eec632e4ffe92dfae8c56ecf8f4c64a61c32fb3a8ac96f",
+          "decodeFailure": null
+        }
+      },
+      "repeated": null,
+      "logs": [],
+      "failure": null
+    },
+    {
+      "sample": {
+        "Name": "same-input-portrait-webp",
+        "Posters": [
+          "portrait.webp"
+        ],
+        "Backdrops": [
+          "portrait.webp"
+        ],
+        "Existing": false,
+        "MissingDataDirectory": false,
+        "Repeat": false,
+        "DirectoryOutput": false,
+        "ReadOnlyOutput": false
+      },
+      "before": null,
+      "after": {
+        "path": "D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6\\cases\\same-input-portrait-webp\\data\\splashscreen.png",
+        "bytes": 5446472,
+        "sha256": "aabec651bad23349e00977da9375a62c70d01518f070e3e397fcb4794d0c0c55",
+        "Width": 1920,
+        "Height": 1080,
+        "pixelHash": "9f3a4593f9b991230810127a067b21ce0f931a601ef0889145778c7e417ceb7b",
+        "decodeFailure": null
+      },
+      "wall": {
+        "Width": 5760,
+        "Height": 2160,
+        "pixelHash": "18f9fb2e91253df28124f3769f6df4c97ccf65c971dc1485fefaa072e0f26879",
+        "file": {
+          "path": "D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6\\cases\\same-input-portrait-webp\\wall.png",
+          "bytes": 1577431,
+          "sha256": "a66f0a259305d29ccac5f0a37dcae1e64ac3c172d92c312defdd57c02eb66568",
+          "Width": 5760,
+          "Height": 2160,
+          "pixelHash": "18f9fb2e91253df28124f3769f6df4c97ccf65c971dc1485fefaa072e0f26879",
+          "decodeFailure": null
+        }
+      },
+      "repeated": null,
+      "logs": [],
+      "failure": null
+    },
+    {
+      "sample": {
+        "Name": "same-input-content-dat",
+        "Posters": [
+          "content.dat"
+        ],
+        "Backdrops": [
+          "content.dat"
+        ],
+        "Existing": false,
+        "MissingDataDirectory": false,
+        "Repeat": false,
+        "DirectoryOutput": false,
+        "ReadOnlyOutput": false
+      },
+      "before": null,
+      "after": {
+        "path": "D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6\\cases\\same-input-content-dat\\data\\splashscreen.png",
+        "bytes": 2182726,
+        "sha256": "4673cd5ef0235f2b832640f40c81946995fe7ccd246831c586d985577b93fb86",
+        "Width": 1920,
+        "Height": 1080,
+        "pixelHash": "2cfa6c6fede564428b4042c321b037c14e68645f2e9e4393d78450e780048186",
+        "decodeFailure": null
+      },
+      "wall": {
+        "Width": 5760,
+        "Height": 2160,
+        "pixelHash": "133106446cefbf879f7649f018dbed14cbfa141a34bfc941f874035edb3f6441",
+        "file": {
+          "path": "D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6\\cases\\same-input-content-dat\\wall.png",
+          "bytes": 567162,
+          "sha256": "44859767689d8989e1896bce10697b5446aaa2ff0f5d3b090d8ae73b574b9446",
+          "Width": 5760,
+          "Height": 2160,
+          "pixelHash": "133106446cefbf879f7649f018dbed14cbfa141a34bfc941f874035edb3f6441",
+          "decodeFailure": null
+        }
+      },
+      "repeated": null,
+      "logs": [],
+      "failure": null
+    },
+    {
+      "sample": {
+        "Name": "same-input-alpha-dat",
+        "Posters": [
+          "alpha.dat"
+        ],
+        "Backdrops": [
+          "alpha.dat"
+        ],
+        "Existing": false,
+        "MissingDataDirectory": false,
+        "Repeat": false,
+        "DirectoryOutput": false,
+        "ReadOnlyOutput": false
+      },
+      "before": null,
+      "after": {
+        "path": "D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6\\cases\\same-input-alpha-dat\\data\\splashscreen.png",
+        "bytes": 3898766,
+        "sha256": "660736273b653138bae9ddc0c84a1facf1481c9c5cfbc65854afce28b7d2dc6f",
+        "Width": 1920,
+        "Height": 1080,
+        "pixelHash": "49417b45c53bed3c47f75203f2366a749a09d07a5be1db508d771af33c560e87",
+        "decodeFailure": null
+      },
+      "wall": {
+        "Width": 5760,
+        "Height": 2160,
+        "pixelHash": "4b25ba4cd8bca2d7b6f34e19d07bd3c713f615588698ad46f19bf2bbeee02ec4",
+        "file": {
+          "path": "D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6\\cases\\same-input-alpha-dat\\wall.png",
+          "bytes": 965754,
+          "sha256": "baa1bc5f061e1f66131b674a577b33dd5a63c161348cf59f08d0e502f6cf99bc",
+          "Width": 5760,
+          "Height": 2160,
+          "pixelHash": "4b25ba4cd8bca2d7b6f34e19d07bd3c713f615588698ad46f19bf2bbeee02ec4",
+          "decodeFailure": null
+        }
+      },
+      "repeated": null,
+      "logs": [],
+      "failure": null
+    },
+    {
+      "sample": {
+        "Name": "invalid-then-valid",
+        "Posters": [
+          "missing.png",
+          "broken.png",
+          "portrait.png"
+        ],
+        "Backdrops": [
+          "missing.png",
+          "empty.png",
+          "portrait.png"
+        ],
+        "Existing": false,
+        "MissingDataDirectory": false,
+        "Repeat": false,
+        "DirectoryOutput": false,
+        "ReadOnlyOutput": false
+      },
+      "before": null,
+      "after": {
+        "path": "D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6\\cases\\invalid-then-valid\\data\\splashscreen.png",
+        "bytes": 2182726,
+        "sha256": "4673cd5ef0235f2b832640f40c81946995fe7ccd246831c586d985577b93fb86",
+        "Width": 1920,
+        "Height": 1080,
+        "pixelHash": "2cfa6c6fede564428b4042c321b037c14e68645f2e9e4393d78450e780048186",
+        "decodeFailure": null
+      },
+      "wall": {
+        "Width": 5760,
+        "Height": 2160,
+        "pixelHash": "133106446cefbf879f7649f018dbed14cbfa141a34bfc941f874035edb3f6441",
+        "file": {
+          "path": "D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6\\cases\\invalid-then-valid\\wall.png",
+          "bytes": 567162,
+          "sha256": "44859767689d8989e1896bce10697b5446aaa2ff0f5d3b090d8ae73b574b9446",
+          "Width": 5760,
+          "Height": 2160,
+          "pixelHash": "133106446cefbf879f7649f018dbed14cbfa141a34bfc941f874035edb3f6441",
+          "decodeFailure": null
+        }
+      },
+      "repeated": null,
+      "logs": [],
+      "failure": null
+    },
+    {
+      "sample": {
+        "Name": "missing-posters",
+        "Posters": [
+          "missing.png"
+        ],
+        "Backdrops": [
+          "portrait.png"
+        ],
+        "Existing": true,
+        "MissingDataDirectory": false,
+        "Repeat": false,
+        "DirectoryOutput": false,
+        "ReadOnlyOutput": false
+      },
+      "before": {
+        "path": "D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6\\cases\\missing-posters\\data\\splashscreen.png",
+        "bytes": 8787,
+        "sha256": "f56b8c908ee572720fdfc3f6550be78a9fce29d850b9a38d945b08bf56a5c7af",
+        "Width": 240,
+        "Height": 360,
+        "pixelHash": "f3e3fb46665651b227dae4618e1a3726dbd913f4ec056cd4253c7ecbe166c206",
+        "decodeFailure": null
+      },
+      "after": {
+        "path": "D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6\\cases\\missing-posters\\data\\splashscreen.png",
+        "bytes": 8787,
+        "sha256": "f56b8c908ee572720fdfc3f6550be78a9fce29d850b9a38d945b08bf56a5c7af",
+        "Width": 240,
+        "Height": 360,
+        "pixelHash": "f3e3fb46665651b227dae4618e1a3726dbd913f4ec056cd4253c7ecbe166c206",
+        "decodeFailure": null
+      },
+      "wall": null,
+      "repeated": null,
+      "logs": [
+        {
+          "level": "Error",
+          "message": "Detected intermediary error creating splashscreen image"
+        }
+      ],
+      "failure": {
+        "type": "ArgumentException",
+        "Message": "Not enough valid pictures provided to create a splashscreen!"
+      }
+    },
+    {
+      "sample": {
+        "Name": "broken-landscapes",
+        "Posters": [
+          "portrait.png"
+        ],
+        "Backdrops": [
+          "broken.png"
+        ],
+        "Existing": true,
+        "MissingDataDirectory": false,
+        "Repeat": false,
+        "DirectoryOutput": false,
+        "ReadOnlyOutput": false
+      },
+      "before": {
+        "path": "D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6\\cases\\broken-landscapes\\data\\splashscreen.png",
+        "bytes": 8787,
+        "sha256": "f56b8c908ee572720fdfc3f6550be78a9fce29d850b9a38d945b08bf56a5c7af",
+        "Width": 240,
+        "Height": 360,
+        "pixelHash": "f3e3fb46665651b227dae4618e1a3726dbd913f4ec056cd4253c7ecbe166c206",
+        "decodeFailure": null
+      },
+      "after": {
+        "path": "D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6\\cases\\broken-landscapes\\data\\splashscreen.png",
+        "bytes": 8787,
+        "sha256": "f56b8c908ee572720fdfc3f6550be78a9fce29d850b9a38d945b08bf56a5c7af",
+        "Width": 240,
+        "Height": 360,
+        "pixelHash": "f3e3fb46665651b227dae4618e1a3726dbd913f4ec056cd4253c7ecbe166c206",
+        "decodeFailure": null
+      },
+      "wall": null,
+      "repeated": null,
+      "logs": [
+        {
+          "level": "Error",
+          "message": "Detected intermediary error creating splashscreen image"
+        }
+      ],
+      "failure": {
+        "type": "ArgumentException",
+        "Message": "Not enough valid pictures provided to create a splashscreen!"
+      }
+    },
+    {
+      "sample": {
+        "Name": "directory-first",
+        "Posters": [
+          "directory.png",
+          "portrait.png"
+        ],
+        "Backdrops": [
+          "portrait.png"
+        ],
+        "Existing": false,
+        "MissingDataDirectory": false,
+        "Repeat": false,
+        "DirectoryOutput": false,
+        "ReadOnlyOutput": false
+      },
+      "before": null,
+      "after": null,
+      "wall": null,
+      "repeated": null,
+      "logs": [
+        {
+          "level": "Error",
+          "message": "Detected intermediary error creating splashscreen image"
+        }
+      ],
+      "failure": {
+        "type": "FileNotFoundException",
+        "Message": "File not found"
+      }
+    },
+    {
+      "sample": {
+        "Name": "missing-output-directory",
+        "Posters": [
+          "portrait.png"
+        ],
+        "Backdrops": [
+          "portrait.png"
+        ],
+        "Existing": false,
+        "MissingDataDirectory": true,
+        "Repeat": false,
+        "DirectoryOutput": false,
+        "ReadOnlyOutput": false
+      },
+      "before": null,
+      "after": null,
+      "wall": {
+        "Width": 5760,
+        "Height": 2160,
+        "pixelHash": "133106446cefbf879f7649f018dbed14cbfa141a34bfc941f874035edb3f6441",
+        "file": {
+          "path": "D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6\\cases\\missing-output-directory\\wall.png",
+          "bytes": 567162,
+          "sha256": "44859767689d8989e1896bce10697b5446aaa2ff0f5d3b090d8ae73b574b9446",
+          "Width": 5760,
+          "Height": 2160,
+          "pixelHash": "133106446cefbf879f7649f018dbed14cbfa141a34bfc941f874035edb3f6441",
+          "decodeFailure": null
+        }
+      },
+      "repeated": null,
+      "logs": [],
+      "failure": null
+    },
+    {
+      "sample": {
+        "Name": "random-mixed-composition",
+        "Posters": [
+          "portrait.png",
+          "landscape.png"
+        ],
+        "Backdrops": [
+          "small.png",
+          "landscape.png"
+        ],
+        "Existing": false,
+        "MissingDataDirectory": false,
+        "Repeat": true,
+        "DirectoryOutput": false,
+        "ReadOnlyOutput": false
+      },
+      "before": null,
+      "after": {
+        "path": "D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6\\cases\\random-mixed-composition\\first-splashscreen.png",
+        "bytes": 2228260,
+        "sha256": "0b9a5574a13173a8b38da366f14dc9f34cf070965ff4e50d0891fc5cacb40234",
+        "Width": 1920,
+        "Height": 1080,
+        "pixelHash": "5f257da75bda879e9678f9270637fbf42dde822a3abf5081d748b9beb6b8f3f8",
+        "decodeFailure": null
+      },
+      "wall": null,
+      "repeated": {
+        "path": "D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6\\cases\\random-mixed-composition\\data\\splashscreen.png",
+        "bytes": 2225463,
+        "sha256": "c6dd4931084f5ae95955407c0bc744b74e530afd39d4cd0ed9157aac525d7423",
+        "Width": 1920,
+        "Height": 1080,
+        "pixelHash": "b7e74d0f3b3b4ac7f35e188fdc73544b0e5ae746feab75f0c6b7e34caf77eac0",
+        "decodeFailure": null
+      },
+      "logs": [],
+      "failure": null
+    },
+    {
+      "sample": {
+        "Name": "gif-reports-frame-count",
+        "Posters": [
+          "static.gif"
+        ],
+        "Backdrops": [
+          "portrait.png"
+        ],
+        "Existing": true,
+        "MissingDataDirectory": false,
+        "Repeat": false,
+        "DirectoryOutput": false,
+        "ReadOnlyOutput": false
+      },
+      "before": {
+        "path": "D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6\\cases\\gif-reports-frame-count\\data\\splashscreen.png",
+        "bytes": 8787,
+        "sha256": "f56b8c908ee572720fdfc3f6550be78a9fce29d850b9a38d945b08bf56a5c7af",
+        "Width": 240,
+        "Height": 360,
+        "pixelHash": "f3e3fb46665651b227dae4618e1a3726dbd913f4ec056cd4253c7ecbe166c206",
+        "decodeFailure": null
+      },
+      "after": {
+        "path": "D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6\\cases\\gif-reports-frame-count\\data\\splashscreen.png",
+        "bytes": 8787,
+        "sha256": "f56b8c908ee572720fdfc3f6550be78a9fce29d850b9a38d945b08bf56a5c7af",
+        "Width": 240,
+        "Height": 360,
+        "pixelHash": "f3e3fb46665651b227dae4618e1a3726dbd913f4ec056cd4253c7ecbe166c206",
+        "decodeFailure": null
+      },
+      "wall": null,
+      "repeated": null,
+      "logs": [
+        {
+          "level": "Error",
+          "message": "Detected intermediary error creating splashscreen image"
+        }
+      ],
+      "failure": {
+        "type": "ArgumentException",
+        "Message": "Cannot decode images with multiple frames"
+      }
+    },
+    {
+      "sample": {
+        "Name": "svg-is-not-a-bitmap",
+        "Posters": [
+          "vector.svg"
+        ],
+        "Backdrops": [
+          "portrait.png"
+        ],
+        "Existing": true,
+        "MissingDataDirectory": false,
+        "Repeat": false,
+        "DirectoryOutput": false,
+        "ReadOnlyOutput": false
+      },
+      "before": {
+        "path": "D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6\\cases\\svg-is-not-a-bitmap\\data\\splashscreen.png",
+        "bytes": 8787,
+        "sha256": "f56b8c908ee572720fdfc3f6550be78a9fce29d850b9a38d945b08bf56a5c7af",
+        "Width": 240,
+        "Height": 360,
+        "pixelHash": "f3e3fb46665651b227dae4618e1a3726dbd913f4ec056cd4253c7ecbe166c206",
+        "decodeFailure": null
+      },
+      "after": {
+        "path": "D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6\\cases\\svg-is-not-a-bitmap\\data\\splashscreen.png",
+        "bytes": 8787,
+        "sha256": "f56b8c908ee572720fdfc3f6550be78a9fce29d850b9a38d945b08bf56a5c7af",
+        "Width": 240,
+        "Height": 360,
+        "pixelHash": "f3e3fb46665651b227dae4618e1a3726dbd913f4ec056cd4253c7ecbe166c206",
+        "decodeFailure": null
+      },
+      "wall": null,
+      "repeated": null,
+      "logs": [
+        {
+          "level": "Error",
+          "message": "Detected intermediary error creating splashscreen image"
+        }
+      ],
+      "failure": {
+        "type": "ArgumentException",
+        "Message": "Not enough valid pictures provided to create a splashscreen!"
+      }
+    },
+    {
+      "sample": {
+        "Name": "zero-tile-width",
+        "Posters": [
+          "tall.png"
+        ],
+        "Backdrops": [
+          "tall.png"
+        ],
+        "Existing": false,
+        "MissingDataDirectory": false,
+        "Repeat": false,
+        "DirectoryOutput": false,
+        "ReadOnlyOutput": false
+      },
+      "before": null,
+      "after": null,
+      "wall": null,
+      "repeated": null,
+      "logs": [
+        {
+          "level": "Error",
+          "message": "Detected intermediary error creating splashscreen image"
+        }
+      ],
+      "failure": {
+        "type": "ArgumentNullException",
+        "Message": "Value cannot be null. (Parameter \u0027image\u0027)"
+      }
+    },
+    {
+      "sample": {
+        "Name": "output-is-directory",
+        "Posters": [
+          "portrait.png"
+        ],
+        "Backdrops": [
+          "portrait.png"
+        ],
+        "Existing": false,
+        "MissingDataDirectory": false,
+        "Repeat": false,
+        "DirectoryOutput": true,
+        "ReadOnlyOutput": false
+      },
+      "before": null,
+      "after": null,
+      "wall": {
+        "Width": 5760,
+        "Height": 2160,
+        "pixelHash": "133106446cefbf879f7649f018dbed14cbfa141a34bfc941f874035edb3f6441",
+        "file": {
+          "path": "D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6\\cases\\output-is-directory\\wall.png",
+          "bytes": 567162,
+          "sha256": "44859767689d8989e1896bce10697b5446aaa2ff0f5d3b090d8ae73b574b9446",
+          "Width": 5760,
+          "Height": 2160,
+          "pixelHash": "133106446cefbf879f7649f018dbed14cbfa141a34bfc941f874035edb3f6441",
+          "decodeFailure": null
+        }
+      },
+      "repeated": null,
+      "logs": [],
+      "failure": null
+    },
+    {
+      "sample": {
+        "Name": "output-is-read-only",
+        "Posters": [
+          "portrait.png"
+        ],
+        "Backdrops": [
+          "portrait.png"
+        ],
+        "Existing": true,
+        "MissingDataDirectory": false,
+        "Repeat": false,
+        "DirectoryOutput": false,
+        "ReadOnlyOutput": true
+      },
+      "before": {
+        "path": "D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6\\cases\\output-is-read-only\\data\\splashscreen.png",
+        "bytes": 8787,
+        "sha256": "f56b8c908ee572720fdfc3f6550be78a9fce29d850b9a38d945b08bf56a5c7af",
+        "Width": 240,
+        "Height": 360,
+        "pixelHash": "f3e3fb46665651b227dae4618e1a3726dbd913f4ec056cd4253c7ecbe166c206",
+        "decodeFailure": null
+      },
+      "after": {
+        "path": "D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6\\cases\\output-is-read-only\\data\\splashscreen.png",
+        "bytes": 8787,
+        "sha256": "f56b8c908ee572720fdfc3f6550be78a9fce29d850b9a38d945b08bf56a5c7af",
+        "Width": 240,
+        "Height": 360,
+        "pixelHash": "f3e3fb46665651b227dae4618e1a3726dbd913f4ec056cd4253c7ecbe166c206",
+        "decodeFailure": null
+      },
+      "wall": {
+        "Width": 5760,
+        "Height": 2160,
+        "pixelHash": "133106446cefbf879f7649f018dbed14cbfa141a34bfc941f874035edb3f6441",
+        "file": {
+          "path": "D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6\\cases\\output-is-read-only\\wall.png",
+          "bytes": 567162,
+          "sha256": "44859767689d8989e1896bce10697b5446aaa2ff0f5d3b090d8ae73b574b9446",
+          "Width": 5760,
+          "Height": 2160,
+          "pixelHash": "133106446cefbf879f7649f018dbed14cbfa141a34bfc941f874035edb3f6441",
+          "decodeFailure": null
+        }
+      },
+      "repeated": null,
+      "logs": [],
+      "failure": null
+    }
+  ],
+  "transforms": [
+    {
+      "name": "gradient",
+      "input": {
+        "path": "D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6\\transforms\\gradient-wall.png",
+        "bytes": 594938,
+        "sha256": "4209c85e5610bc101ae37309804bddc6f8592b8a434c4bf1f2f43d799eb16844",
+        "Width": 5760,
+        "Height": 2160,
+        "pixelHash": "904d8257394e87fc89e7b7b372f4c7f2cc2e92a7eb4c9c1c92cc0c7f47a4fb03",
+        "decodeFailure": null
+      },
+      "output": {
+        "path": "D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6\\transforms\\gradient.png",
+        "bytes": 1037576,
+        "sha256": "35347b75fe333b2d964ffa15f89cb7e06208688b5cf2a8737e4c6e1f5000a83e",
+        "Width": 1920,
+        "Height": 1080,
+        "pixelHash": "c7fddd7685a883da643e8d902da00e0a7322dc7eeeb0d110036bc3f06d2827a9",
+        "decodeFailure": null
+      },
+      "logs": []
+    },
+    {
+      "name": "alpha",
+      "input": {
+        "path": "D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6\\transforms\\alpha-wall.png",
+        "bytes": 14147323,
+        "sha256": "e7e4f1b7776243eb604438f9dfb6843e543a3260fdecd939d1dec380a5705f08",
+        "Width": 5760,
+        "Height": 2160,
+        "pixelHash": "3429cc413f25dcef6b3d85a3faa7f53fd19735bc0737084527b1a6d0cd2d7403",
+        "decodeFailure": null
+      },
+      "output": {
+        "path": "D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6\\transforms\\alpha.png",
+        "bytes": 3974966,
+        "sha256": "6167ed53a05fa211442a4d035ad995ee0517db946285ec215d1d3a5266a66566",
+        "Width": 1920,
+        "Height": 1080,
+        "pixelHash": "0412fecdbc05ed1a6e313ba38b67a8882747ceb1c91c248e438bcdb401f38948",
+        "decodeFailure": null
+      },
+      "logs": []
+    },
+    {
+      "name": "solid",
+      "input": {
+        "path": "D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6\\transforms\\solid-wall.png",
+        "bytes": 53831,
+        "sha256": "1a7f76c57ebbcc2f35f2318a51eeba073abcfd06e39a25e6baaee367b26be44d",
+        "Width": 5760,
+        "Height": 2160,
+        "pixelHash": "353f8cb849123b18ed17f96788c175742defcb813590a2be78635606b05f22df",
+        "decodeFailure": null
+      },
+      "output": {
+        "path": "D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6\\transforms\\solid.png",
+        "bytes": 10694,
+        "sha256": "7ae9cf1fe2b0b6cef2ce8596ffda60e2f7a607d6c194a1640f93506a690c2146",
+        "Width": 1920,
+        "Height": 1080,
+        "pixelHash": "eb856b5ac770c6bbdf2b449ab6b80ba52e2fefea5ad59ee19704c8e8cc08c6c5",
+        "decodeFailure": null
+      },
+      "logs": []
+    },
+    {
+      "name": "coordinates",
+      "input": {
+        "path": "D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6\\transforms\\coordinates-wall.png",
+        "bytes": 149899,
+        "sha256": "b577022cb43a1271e2a8c07a0eb0576607ddd7aa80888d72bd4adc931d9d2600",
+        "Width": 5760,
+        "Height": 2160,
+        "pixelHash": "6091b8a8c03aefe1944522e8d751f3b70ea04cc1a99a0dddf0ea3d6d826d9482",
+        "decodeFailure": null
+      },
+      "output": {
+        "path": "D:\\mediamanager-validation\\20261013-release-splashscreen-images-native-6\\transforms\\coordinates.png",
+        "bytes": 627301,
+        "sha256": "911c234b0ba92748792d4db2c43facef1b2d5c9397b9954d61a1473f16c802e7",
+        "Width": 1920,
+        "Height": 1080,
+        "pixelHash": "f854d396cb55f3ecd1a9739872e1b7a3dc24693ef2f2c0e4d4ad83030616310a",
+        "decodeFailure": null
+      },
+      "logs": []
+    }
+  ],
+  "helper": [
+    {
+      "definition": {
+        "Paths": [
+          "missing.png",
+          "broken.png",
+          "portrait.png"
+        ],
+        "Start": 0
+      },
+      "index": 3,
+      "bitmap": {
+        "Width": 240,
+        "Height": 360,
+        "pixelHash": "f3e3fb46665651b227dae4618e1a3726dbd913f4ec056cd4253c7ecbe166c206"
+      },
+      "logs": [],
+      "failure": null
+    },
+    {
+      "definition": {
+        "Paths": [
+          "missing.png",
+          "broken.png",
+          "portrait.png"
+        ],
+        "Start": 3
+      },
+      "index": 3,
+      "bitmap": {
+        "Width": 240,
+        "Height": 360,
+        "pixelHash": "f3e3fb46665651b227dae4618e1a3726dbd913f4ec056cd4253c7ecbe166c206"
+      },
+      "logs": [],
+      "failure": null
+    },
+    {
+      "definition": {
+        "Paths": [
+          "missing.png",
+          "broken.png"
+        ],
+        "Start": 1
+      },
+      "index": 1,
+      "bitmap": null,
+      "logs": [],
+      "failure": null
+    },
+    {
+      "definition": {
+        "Paths": [],
+        "Start": 4
+      },
+      "index": 4,
+      "bitmap": null,
+      "logs": [],
+      "failure": null
+    },
+    {
+      "definition": {
+        "Paths": [
+          "directory.png",
+          "portrait.png"
+        ],
+        "Start": 0
+      },
+      "index": -1,
+      "bitmap": null,
+      "logs": [],
+      "failure": {
+        "type": "FileNotFoundException",
+        "Message": "File not found"
+      }
+    },
+    {
+      "definition": {
+        "Paths": [
+          "content.dat"
+        ],
+        "Start": 0
+      },
+      "index": 1,
+      "bitmap": {
+        "Width": 240,
+        "Height": 360,
+        "pixelHash": "f3e3fb46665651b227dae4618e1a3726dbd913f4ec056cd4253c7ecbe166c206"
+      },
+      "logs": [],
+      "failure": null
+    },
+    {
+      "definition": {
+        "Paths": [
+          "alpha.png"
+        ],
+        "Start": 0
+      },
+      "index": 1,
+      "bitmap": {
+        "Width": 240,
+        "Height": 360,
+        "pixelHash": "5d810c984a7cff6bef17da90b4d2a56650f75744f8d901da7ba63a7be1ce16b3"
+      },
+      "logs": [],
+      "failure": null
+    },
+    {
+      "definition": {
+        "Paths": [
+          "alpha.dat"
+        ],
+        "Start": 0
+      },
+      "index": 1,
+      "bitmap": {
+        "Width": 240,
+        "Height": 360,
+        "pixelHash": "5d810c984a7cff6bef17da90b4d2a56650f75744f8d901da7ba63a7be1ce16b3"
+      },
+      "logs": [],
+      "failure": null
+    },
+    {
+      "definition": {
+        "Paths": [
+          "portrait.jpg"
+        ],
+        "Start": 0
+      },
+      "index": 1,
+      "bitmap": {
+        "Width": 240,
+        "Height": 360,
+        "pixelHash": "e7306ce14ab114112a47932861b66eb5ec7e151d1eeecbe1c7520caa2bc54999"
+      },
+      "logs": [],
+      "failure": null
+    },
+    {
+      "definition": {
+        "Paths": [
+          "portrait.webp"
+        ],
+        "Start": 0
+      },
+      "index": 1,
+      "bitmap": {
+        "Width": 240,
+        "Height": 360,
+        "pixelHash": "3bc400fb4af9a2a08a6a16f3609406a4d96708a4e8b31ebe9358c7d48e5c90c3"
+      },
+      "logs": [],
+      "failure": null
+    }
+  ],
+  "assemblies": [
+    {
+      "name": "Diacritics",
+      "sha256": "893640462f6bfaa8cf5c18698ee655a1777b05d359963c129e95c2ffb94307b0"
+    },
+    {
+      "name": "Jellyfin.Drawing.Skia",
+      "sha256": "8ae59def042aeac9ac8dcf2c8d5e707154039ed1e8d58197de54ba5ac592ef8a"
+    },
+    {
+      "name": "Jellyfin.Extensions",
+      "sha256": "db952e3013a6949ad22db9ac3379be2efdf441c139ddc6919e86f8c2abbc7207"
+    },
+    {
+      "name": "MediaBrowser.Common",
+      "sha256": "c86a38f99a78d9d3b9dd5ba5245fb06bf654cfa3e16ec409d3ba77b1e69ed11e"
+    },
+    {
+      "name": "MediaBrowser.Controller",
+      "sha256": "051c588a8e85a3a7cdde8dc3d9a1112217fd7e973a86fe2ff90cf765bedb75a8"
+    },
+    {
+      "name": "MediaBrowser.Model",
+      "sha256": "7b2c1b16721cf7747b572e4de3761de635fad4bd12bec346983545bee73fd92c"
+    },
+    {
+      "name": "Microsoft.Extensions.Logging.Abstractions",
+      "sha256": "90c41d68d297e54c4def3cfd38eb620513a744ab01131840ea3e2634cf973be3"
+    },
+    {
+      "name": "Oracle",
+      "sha256": "cc26b2d2654a737797d266496d32442b45953474678d2956d198236819cf114a"
+    },
+    {
+      "name": "SkiaSharp",
+      "sha256": "aaaaa18c68ba1f3a3408b00dff28b11d5705198e17ba9d3aa59222bfd35407c8"
+    },
+    {
+      "name": "Svg.Custom",
+      "sha256": "70f43c2be9911d1999cffbba95135d9b045e9d98326bd2aee2f82272c2e1445d"
+    },
+    {
+      "name": "System.Collections",
+      "sha256": "df6f2037eabee28100184e92f7536427ba2f086c1110629804d466b124bc4d54"
+    },
+    {
+      "name": "System.Collections.Concurrent",
+      "sha256": "082f4bc0da1141eb65111b6da633d75624adfb7bb067d7ee90c5622c8b30885b"
+    },
+    {
+      "name": "System.ComponentModel",
+      "sha256": "e3b6f75864ee944898540937c1f300e04f44a1b2729516f0bbf948589a8b14b2"
+    },
+    {
+      "name": "System.ComponentModel.Primitives",
+      "sha256": "1e2451184c287409ea25acde3c90f25950bf34d16458a6e52a94ca4292434f62"
+    },
+    {
+      "name": "System.ComponentModel.TypeConverter",
+      "sha256": "10dae312a6697718f8ce3dfcdb17d6ae4b74687c765d74d50de8a8e69e08f5e7"
+    },
+    {
+      "name": "System.Console",
+      "sha256": "3b85daf02a3d9ed99b84bb1c639fe8b1ced46d8d157fa56f525f6b8c5be43b3e"
+    },
+    {
+      "name": "System.IO.Pipelines",
+      "sha256": "ee9f0fd6c659f50799afd103c6ed9c5e408967e28dfa059bddf4b0a3fd2557dd"
+    },
+    {
+      "name": "System.Linq",
+      "sha256": "284d38945b6e92e847129bd28af458b19818d0f2181f79882888ab2003f4c519"
+    },
+    {
+      "name": "System.Memory",
+      "sha256": "f8f9d38efd6b0de30954d6bf1f353e9617bfb36d3d245c013a3b12be9f6bd88a"
+    },
+    {
+      "name": "System.Numerics.Vectors",
+      "sha256": "a9a980ee33ed0c798a5e1960c4557521f465ac9e0987dfd2c3049d53b1f2fa5a"
+    },
+    {
+      "name": "System.Private.CoreLib",
+      "sha256": "1125acc8106c43fc8bad2d203c4c4485df6182d292846c2fff415c1040c54678"
+    },
+    {
+      "name": "System.Private.Uri",
+      "sha256": "b15c84d2120e1ec9612c66ba59bc3d7e67d841e2bce7b7d0478cb212537539b4"
+    },
+    {
+      "name": "System.Reflection.DispatchProxy",
+      "sha256": "bf93a361c0bba8497889c9f7713add5968ba39394f9e6bda27e86294c6c43560"
+    },
+    {
+      "name": "System.Reflection.Emit",
+      "sha256": "09059981bbeea0fdc5df589be5d7e3937d57e22bec4d78ceb492c587926fc238"
+    },
+    {
+      "name": "System.Reflection.Emit.ILGeneration",
+      "sha256": "6b42ddd05b0ca1c7342d73ea9f401fe588044215d65c67b756deb780f0894a26"
+    },
+    {
+      "name": "System.Reflection.Emit.Lightweight",
+      "sha256": "d2724a2b7b46146877ec1f6e400c49ea05f84bdd31f3bba52ae139ee68a4f779"
+    },
+    {
+      "name": "System.Reflection.Primitives",
+      "sha256": "c2bbd885d03da5e880667c228ac1f56a5f3a72ea37d43f010ada000adc33da28"
+    },
+    {
+      "name": "System.Runtime",
+      "sha256": "76be53624f64b23d0249dfa0bbe85390086de7c44bfd490642ea86c6faaf44af"
+    },
+    {
+      "name": "System.Runtime.InteropServices",
+      "sha256": "e5eb1679f3579c9141e2bb9dbdce62624a623f38d299805cc1de07bacd21841f"
+    },
+    {
+      "name": "System.Runtime.Loader",
+      "sha256": "9b9b2a4f0358d9146e76178ddb87d019be380c78baa7dac853493d45df089f03"
+    },
+    {
+      "name": "System.Security.Cryptography",
+      "sha256": "e0a839a540e47343b53a936b32d91599a3470005228d50fd0b896f8bbdcc65b0"
+    },
+    {
+      "name": "System.Text.Encoding.Extensions",
+      "sha256": "8f51b9535db64fe027a40d6076200b1a6b0889bf05f62bb8e68c3eb083c7f113"
+    },
+    {
+      "name": "System.Text.Encodings.Web",
+      "sha256": "d20431f20d992e71a4e82e5f25c822474e2f4097d8527972d3d78ea1f26e47c3"
+    },
+    {
+      "name": "System.Text.Json",
+      "sha256": "fa99f413be21ed5f484a09093fe5f0beba7de3062cf9cc9f847dbf8108dba55a"
+    },
+    {
+      "name": "System.Text.RegularExpressions",
+      "sha256": "060bcc88a688e687ff1404b83b5fb5cf17e19ec57f33d5b8a48ab494da83c134"
+    },
+    {
+      "name": "System.Threading",
+      "sha256": "6c32ed1bf8067e4169e8feddd15e6489b89d19d1c7aae1520a551b57745d0a60"
+    }
+  ]
+}

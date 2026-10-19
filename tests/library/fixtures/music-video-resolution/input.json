@@ -1,0 +1,1871 @@
+[
+  {
+    "name": "resolve-raw-year-name",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert (2025).MKV"
+    ],
+    "files": [
+      "Concert (2025).MKV"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "resolveOnly": true
+  },
+  {
+    "name": "validate-raw-year-name",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert (2025).MKV"
+    ],
+    "files": [
+      "Concert (2025).MKV"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "resolveOnly": false
+  },
+  {
+    "name": "resolve-unicode-name",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "夜曲.Live.2025.mp4"
+    ],
+    "files": [
+      "夜曲.Live.2025.mp4"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "resolveOnly": true
+  },
+  {
+    "name": "validate-unicode-name",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "夜曲.Live.2025.mp4"
+    ],
+    "files": [
+      "夜曲.Live.2025.mp4"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "resolveOnly": false
+  },
+  {
+    "name": "resolve-multiple-independent",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "One (2025).mkv",
+      "Two (2026).mp4"
+    ],
+    "files": [
+      "One (2025).mkv",
+      "Two (2026).mp4"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "resolveOnly": true
+  },
+  {
+    "name": "validate-multiple-independent",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "One (2025).mkv",
+      "Two (2026).mp4"
+    ],
+    "files": [
+      "One (2025).mkv",
+      "Two (2026).mp4"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "resolveOnly": false
+  },
+  {
+    "name": "resolve-file-stack-numeric",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert (2025) cd2.mkv",
+      "Concert (2025) cd1.mkv"
+    ],
+    "files": [
+      "Concert (2025) cd2.mkv",
+      "Concert (2025) cd1.mkv"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "resolveOnly": true
+  },
+  {
+    "name": "validate-file-stack-numeric",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert (2025) cd2.mkv",
+      "Concert (2025) cd1.mkv"
+    ],
+    "files": [
+      "Concert (2025) cd2.mkv",
+      "Concert (2025) cd1.mkv"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "resolveOnly": false
+  },
+  {
+    "name": "resolve-file-stack-ordinal",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert cd2.mkv",
+      "Concert cd10.mkv",
+      "Concert cd1.mkv"
+    ],
+    "files": [
+      "Concert cd2.mkv",
+      "Concert cd10.mkv",
+      "Concert cd1.mkv"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "resolveOnly": true
+  },
+  {
+    "name": "validate-file-stack-ordinal",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert cd2.mkv",
+      "Concert cd10.mkv",
+      "Concert cd1.mkv"
+    ],
+    "files": [
+      "Concert cd2.mkv",
+      "Concert cd10.mkv",
+      "Concert cd1.mkv"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "resolveOnly": false
+  },
+  {
+    "name": "resolve-file-stack-alpha",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert disc b.mp4",
+      "Concert disc a.mp4"
+    ],
+    "files": [
+      "Concert disc b.mp4",
+      "Concert disc a.mp4"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "resolveOnly": true
+  },
+  {
+    "name": "validate-file-stack-alpha",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert disc b.mp4",
+      "Concert disc a.mp4"
+    ],
+    "files": [
+      "Concert disc b.mp4",
+      "Concert disc a.mp4"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "resolveOnly": false
+  },
+  {
+    "name": "resolve-file-stack-mixed-tokens",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert cd1.mkv",
+      "Concert disc2.mkv"
+    ],
+    "files": [
+      "Concert cd1.mkv",
+      "Concert disc2.mkv"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "resolveOnly": true
+  },
+  {
+    "name": "validate-file-stack-mixed-tokens",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert cd1.mkv",
+      "Concert disc2.mkv"
+    ],
+    "files": [
+      "Concert cd1.mkv",
+      "Concert disc2.mkv"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "resolveOnly": false
+  },
+  {
+    "name": "resolve-directory-single-raw-name",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert"
+    ],
+    "files": [
+      "Concert/Performance (2025).mkv"
+    ],
+    "directories": [
+      "Concert"
+    ],
+    "ignoreFiles": [],
+    "resolveOnly": true
+  },
+  {
+    "name": "validate-directory-single-raw-name",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert"
+    ],
+    "files": [
+      "Concert/Performance (2025).mkv"
+    ],
+    "directories": [
+      "Concert"
+    ],
+    "ignoreFiles": [],
+    "resolveOnly": false
+  },
+  {
+    "name": "resolve-directory-qualified-raw-name",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert"
+    ],
+    "files": [
+      "Concert/Concert (2025).mkv"
+    ],
+    "directories": [
+      "Concert"
+    ],
+    "ignoreFiles": [],
+    "resolveOnly": true
+  },
+  {
+    "name": "validate-directory-qualified-raw-name",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert"
+    ],
+    "files": [
+      "Concert/Concert (2025).mkv"
+    ],
+    "directories": [
+      "Concert"
+    ],
+    "ignoreFiles": [],
+    "resolveOnly": false
+  },
+  {
+    "name": "resolve-directory-versions-exact",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert"
+    ],
+    "files": [
+      "Concert/Concert.mkv",
+      "Concert/Concert - 1080p.mp4",
+      "Concert/Concert - 2160p.mkv"
+    ],
+    "directories": [
+      "Concert"
+    ],
+    "ignoreFiles": [],
+    "resolveOnly": true
+  },
+  {
+    "name": "validate-directory-versions-exact",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert"
+    ],
+    "files": [
+      "Concert/Concert.mkv",
+      "Concert/Concert - 1080p.mp4",
+      "Concert/Concert - 2160p.mkv"
+    ],
+    "directories": [
+      "Concert"
+    ],
+    "ignoreFiles": [],
+    "resolveOnly": false
+  },
+  {
+    "name": "resolve-directory-versions-different-years",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert"
+    ],
+    "files": [
+      "Concert/Concert (2024).mkv",
+      "Concert/Concert - Cut (2025).mp4"
+    ],
+    "directories": [
+      "Concert"
+    ],
+    "ignoreFiles": [],
+    "resolveOnly": true
+  },
+  {
+    "name": "validate-directory-versions-different-years",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert"
+    ],
+    "files": [
+      "Concert/Concert (2024).mkv",
+      "Concert/Concert - Cut (2025).mp4"
+    ],
+    "directories": [
+      "Concert"
+    ],
+    "ignoreFiles": [],
+    "resolveOnly": false
+  },
+  {
+    "name": "resolve-directory-versions-no-exact",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert"
+    ],
+    "files": [
+      "Concert/Concert - Cut2.mp4",
+      "Concert/Concert - Cut10.mkv"
+    ],
+    "directories": [
+      "Concert"
+    ],
+    "ignoreFiles": [],
+    "resolveOnly": true
+  },
+  {
+    "name": "validate-directory-versions-no-exact",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert"
+    ],
+    "files": [
+      "Concert/Concert - Cut2.mp4",
+      "Concert/Concert - Cut10.mkv"
+    ],
+    "directories": [
+      "Concert"
+    ],
+    "ignoreFiles": [],
+    "resolveOnly": false
+  },
+  {
+    "name": "resolve-directory-versions-brackets",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert"
+    ],
+    "files": [
+      "Concert/Concert [Live].mkv",
+      "Concert/Concert [Studio].mp4"
+    ],
+    "directories": [
+      "Concert"
+    ],
+    "ignoreFiles": [],
+    "resolveOnly": true
+  },
+  {
+    "name": "validate-directory-versions-brackets",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert"
+    ],
+    "files": [
+      "Concert/Concert [Live].mkv",
+      "Concert/Concert [Studio].mp4"
+    ],
+    "directories": [
+      "Concert"
+    ],
+    "ignoreFiles": [],
+    "resolveOnly": false
+  },
+  {
+    "name": "resolve-directory-stack",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert"
+    ],
+    "files": [
+      "Concert/Concert cd1.mkv",
+      "Concert/Concert cd2.mkv"
+    ],
+    "directories": [
+      "Concert"
+    ],
+    "ignoreFiles": [],
+    "resolveOnly": true
+  },
+  {
+    "name": "validate-directory-stack",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert"
+    ],
+    "files": [
+      "Concert/Concert cd1.mkv",
+      "Concert/Concert cd2.mkv"
+    ],
+    "directories": [
+      "Concert"
+    ],
+    "ignoreFiles": [],
+    "resolveOnly": false
+  },
+  {
+    "name": "resolve-directory-stack-versions",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert"
+    ],
+    "files": [
+      "Concert/Concert - 1080p cd1.mkv",
+      "Concert/Concert - 1080p cd2.mkv",
+      "Concert/Concert - 2160p.mkv"
+    ],
+    "directories": [
+      "Concert"
+    ],
+    "ignoreFiles": [],
+    "resolveOnly": true
+  },
+  {
+    "name": "validate-directory-stack-versions",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert"
+    ],
+    "files": [
+      "Concert/Concert - 1080p cd1.mkv",
+      "Concert/Concert - 1080p cd2.mkv",
+      "Concert/Concert - 2160p.mkv"
+    ],
+    "directories": [
+      "Concert"
+    ],
+    "ignoreFiles": [],
+    "resolveOnly": false
+  },
+  {
+    "name": "resolve-directory-independent-fallback",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert"
+    ],
+    "files": [
+      "Concert/One.mkv",
+      "Concert/Two.mp4"
+    ],
+    "directories": [
+      "Concert"
+    ],
+    "ignoreFiles": [],
+    "resolveOnly": true
+  },
+  {
+    "name": "validate-directory-independent-fallback",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert"
+    ],
+    "files": [
+      "Concert/One.mkv",
+      "Concert/Two.mp4"
+    ],
+    "directories": [
+      "Concert"
+    ],
+    "ignoreFiles": [],
+    "resolveOnly": false
+  },
+  {
+    "name": "resolve-directory-subfolder-fallback",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert"
+    ],
+    "files": [
+      "Concert/One.mkv",
+      "Concert/Bonus/readme.txt"
+    ],
+    "directories": [
+      "Concert",
+      "Concert/Bonus"
+    ],
+    "ignoreFiles": [],
+    "resolveOnly": true
+  },
+  {
+    "name": "validate-directory-subfolder-fallback",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert"
+    ],
+    "files": [
+      "Concert/One.mkv",
+      "Concert/Bonus/readme.txt"
+    ],
+    "directories": [
+      "Concert",
+      "Concert/Bonus"
+    ],
+    "ignoreFiles": [],
+    "resolveOnly": false
+  },
+  {
+    "name": "resolve-directory-extras",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert"
+    ],
+    "files": [
+      "Concert/Performance.mkv",
+      "Concert/trailer.mkv",
+      "Concert/extras/Interview.mkv"
+    ],
+    "directories": [
+      "Concert",
+      "Concert/extras"
+    ],
+    "ignoreFiles": [],
+    "resolveOnly": true
+  },
+  {
+    "name": "validate-directory-extras",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert"
+    ],
+    "files": [
+      "Concert/Performance.mkv",
+      "Concert/trailer.mkv",
+      "Concert/extras/Interview.mkv"
+    ],
+    "directories": [
+      "Concert",
+      "Concert/extras"
+    ],
+    "ignoreFiles": [],
+    "resolveOnly": false
+  },
+  {
+    "name": "resolve-sample-handoff",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert.mkv",
+      "Concert.sample.mp4"
+    ],
+    "files": [
+      "Concert.mkv",
+      "Concert.sample.mp4"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "resolveOnly": true
+  },
+  {
+    "name": "validate-sample-handoff",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert.mkv",
+      "Concert.sample.mp4"
+    ],
+    "files": [
+      "Concert.mkv",
+      "Concert.sample.mp4"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "resolveOnly": false
+  },
+  {
+    "name": "resolve-ignore-file-member",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert.mkv",
+      "Hidden.mkv"
+    ],
+    "files": [
+      "Concert.mkv",
+      "Hidden.mkv"
+    ],
+    "directories": [],
+    "ignoreFiles": [
+      {
+        "path": "media/.ignore",
+        "text": "*Hidden*"
+      }
+    ],
+    "resolveOnly": true
+  },
+  {
+    "name": "validate-ignore-file-member",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert.mkv",
+      "Hidden.mkv"
+    ],
+    "files": [
+      "Concert.mkv",
+      "Hidden.mkv"
+    ],
+    "directories": [],
+    "ignoreFiles": [
+      {
+        "path": "media/.ignore",
+        "text": "*Hidden*"
+      }
+    ],
+    "resolveOnly": false
+  },
+  {
+    "name": "resolve-directory-ignored-member",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert"
+    ],
+    "files": [
+      "Concert/Performance.mkv",
+      "Concert/Hidden.mkv"
+    ],
+    "directories": [
+      "Concert"
+    ],
+    "ignoreFiles": [
+      {
+        "path": "media/Concert/.ignore",
+        "text": "*Hidden*"
+      }
+    ],
+    "resolveOnly": true
+  },
+  {
+    "name": "validate-directory-ignored-member",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert"
+    ],
+    "files": [
+      "Concert/Performance.mkv",
+      "Concert/Hidden.mkv"
+    ],
+    "directories": [
+      "Concert"
+    ],
+    "ignoreFiles": [
+      {
+        "path": "media/Concert/.ignore",
+        "text": "*Hidden*"
+      }
+    ],
+    "resolveOnly": false
+  },
+  {
+    "name": "resolve-provider-mixed-file",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert [tmdbid=42] [tvdb=17] [imdbid=tt1234567].mkv",
+      "Other.mp4"
+    ],
+    "files": [
+      "Concert [tmdbid=42] [tvdb=17] [imdbid=tt1234567].mkv",
+      "Other.mp4"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "resolveOnly": true
+  },
+  {
+    "name": "validate-provider-mixed-file",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert [tmdbid=42] [tvdb=17] [imdbid=tt1234567].mkv",
+      "Other.mp4"
+    ],
+    "files": [
+      "Concert [tmdbid=42] [tvdb=17] [imdbid=tt1234567].mkv",
+      "Other.mp4"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "resolveOnly": false
+  },
+  {
+    "name": "resolve-provider-directory-priority",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert [tmdbid=42] [tvdbid=17]"
+    ],
+    "files": [
+      "Concert [tmdbid=42] [tvdbid=17]/Performance [tmdbid=99] [imdbid=tt1234567].mkv"
+    ],
+    "directories": [
+      "Concert [tmdbid=42] [tvdbid=17]"
+    ],
+    "ignoreFiles": [],
+    "resolveOnly": true
+  },
+  {
+    "name": "validate-provider-directory-priority",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert [tmdbid=42] [tvdbid=17]"
+    ],
+    "files": [
+      "Concert [tmdbid=42] [tvdbid=17]/Performance [tmdbid=99] [imdbid=tt1234567].mkv"
+    ],
+    "directories": [
+      "Concert [tmdbid=42] [tvdbid=17]"
+    ],
+    "ignoreFiles": [],
+    "resolveOnly": false
+  },
+  {
+    "name": "resolve-provider-file-fallback",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert"
+    ],
+    "files": [
+      "Concert/Performance [tmdb=42] [tvdbid=17].mkv"
+    ],
+    "directories": [
+      "Concert"
+    ],
+    "ignoreFiles": [],
+    "resolveOnly": true
+  },
+  {
+    "name": "validate-provider-file-fallback",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert"
+    ],
+    "files": [
+      "Concert/Performance [tmdb=42] [tvdbid=17].mkv"
+    ],
+    "directories": [
+      "Concert"
+    ],
+    "ignoreFiles": [],
+    "resolveOnly": false
+  },
+  {
+    "name": "resolve-parent-lock",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert"
+    ],
+    "files": [
+      "Concert/Performance.mkv"
+    ],
+    "directories": [
+      "Concert"
+    ],
+    "ignoreFiles": [],
+    "parentLocked": true,
+    "resolveOnly": true
+  },
+  {
+    "name": "validate-parent-lock",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert"
+    ],
+    "files": [
+      "Concert/Performance.mkv"
+    ],
+    "directories": [
+      "Concert"
+    ],
+    "ignoreFiles": [],
+    "parentLocked": true,
+    "resolveOnly": false
+  },
+  {
+    "name": "resolve-resolve-date-added",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert"
+    ],
+    "files": [
+      "Concert/Performance.mkv"
+    ],
+    "directories": [
+      "Concert"
+    ],
+    "ignoreFiles": [],
+    "useResolveTime": true,
+    "resolveOnly": true
+  },
+  {
+    "name": "validate-resolve-date-added",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert"
+    ],
+    "files": [
+      "Concert/Performance.mkv"
+    ],
+    "directories": [
+      "Concert"
+    ],
+    "ignoreFiles": [],
+    "useResolveTime": true,
+    "resolveOnly": false
+  },
+  {
+    "name": "resolve-root-provider-path",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert [tmdb=42].mkv"
+    ],
+    "files": [
+      "Concert [tmdb=42].mkv"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "aggregateParent": true,
+    "resolveOnly": true
+  },
+  {
+    "name": "validate-root-provider-path",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert [tmdb=42].mkv"
+    ],
+    "files": [
+      "Concert [tmdb=42].mkv"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "aggregateParent": true,
+    "resolveOnly": false
+  },
+  {
+    "name": "validate-repeat-single",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert"
+    ],
+    "files": [
+      "Concert/Performance.mkv"
+    ],
+    "directories": [
+      "Concert"
+    ],
+    "ignoreFiles": [],
+    "repeatValidation": true,
+    "resolveOnly": false
+  },
+  {
+    "name": "validate-repeat-versions",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert"
+    ],
+    "files": [
+      "Concert/Concert.mkv",
+      "Concert/Concert - 1080p.mp4"
+    ],
+    "directories": [
+      "Concert"
+    ],
+    "ignoreFiles": [],
+    "repeatValidation": true,
+    "resolveOnly": false
+  },
+  {
+    "name": "validate-cancel-before-enumeration",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert.mkv"
+    ],
+    "files": [
+      "Concert.mkv"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "cancelled": true,
+    "expectException": "OperationCanceledException",
+    "resolveOnly": false
+  },
+  {
+    "name": "validate-fail-insert",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert.mkv"
+    ],
+    "files": [
+      "Concert.mkv"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "failInsert": true,
+    "expectException": "DbUpdateException",
+    "resolveOnly": false
+  },
+  {
+    "name": "validate-fail-alternate-insert",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert"
+    ],
+    "files": [
+      "Concert/Concert.mkv",
+      "Concert/Concert - 1080p.mp4"
+    ],
+    "directories": [
+      "Concert"
+    ],
+    "ignoreFiles": [],
+    "failInsertAlternate": true,
+    "expectException": "DbUpdateException",
+    "resolveOnly": false
+  },
+  {
+    "name": "validate-fail-link-insert",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert"
+    ],
+    "files": [
+      "Concert/Concert.mkv",
+      "Concert/Concert - 1080p.mp4"
+    ],
+    "directories": [
+      "Concert"
+    ],
+    "ignoreFiles": [],
+    "failLinks": true,
+    "expectException": "DbUpdateException",
+    "resolveOnly": false
+  },
+  {
+    "name": "resolve-format-fsbs",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert.3d.fsbs.mkv"
+    ],
+    "files": [
+      "Concert.3d.fsbs.mkv"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "resolveOnly": true
+  },
+  {
+    "name": "validate-format-fsbs",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert.3d.fsbs.mkv"
+    ],
+    "files": [
+      "Concert.3d.fsbs.mkv"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "resolveOnly": false
+  },
+  {
+    "name": "resolve-format-ftab",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert.3d.ftab.mkv"
+    ],
+    "files": [
+      "Concert.3d.ftab.mkv"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "resolveOnly": true
+  },
+  {
+    "name": "validate-format-ftab",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert.3d.ftab.mkv"
+    ],
+    "files": [
+      "Concert.3d.ftab.mkv"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "resolveOnly": false
+  },
+  {
+    "name": "resolve-format-hsbs",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert.3d.hsbs.mkv"
+    ],
+    "files": [
+      "Concert.3d.hsbs.mkv"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "resolveOnly": true
+  },
+  {
+    "name": "validate-format-hsbs",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert.3d.hsbs.mkv"
+    ],
+    "files": [
+      "Concert.3d.hsbs.mkv"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "resolveOnly": false
+  },
+  {
+    "name": "resolve-format-htab",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert.3d.htab.mkv"
+    ],
+    "files": [
+      "Concert.3d.htab.mkv"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "resolveOnly": true
+  },
+  {
+    "name": "validate-format-htab",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert.3d.htab.mkv"
+    ],
+    "files": [
+      "Concert.3d.htab.mkv"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "resolveOnly": false
+  },
+  {
+    "name": "resolve-format-sbs",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert.3d.sbs.mkv"
+    ],
+    "files": [
+      "Concert.3d.sbs.mkv"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "resolveOnly": true
+  },
+  {
+    "name": "validate-format-sbs",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert.3d.sbs.mkv"
+    ],
+    "files": [
+      "Concert.3d.sbs.mkv"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "resolveOnly": false
+  },
+  {
+    "name": "resolve-format-tab",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert.3d.tab.mkv"
+    ],
+    "files": [
+      "Concert.3d.tab.mkv"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "resolveOnly": true
+  },
+  {
+    "name": "validate-format-tab",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert.3d.tab.mkv"
+    ],
+    "files": [
+      "Concert.3d.tab.mkv"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "resolveOnly": false
+  },
+  {
+    "name": "resolve-format-sbs3d",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert.3d.sbs3d.mkv"
+    ],
+    "files": [
+      "Concert.3d.sbs3d.mkv"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "resolveOnly": true
+  },
+  {
+    "name": "validate-format-sbs3d",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert.3d.sbs3d.mkv"
+    ],
+    "files": [
+      "Concert.3d.sbs3d.mkv"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "resolveOnly": false
+  },
+  {
+    "name": "resolve-format-mvc",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert.3d.mvc.mkv"
+    ],
+    "files": [
+      "Concert.3d.mvc.mkv"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "resolveOnly": true
+  },
+  {
+    "name": "validate-format-mvc",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert.3d.mvc.mkv"
+    ],
+    "files": [
+      "Concert.3d.mvc.mkv"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "resolveOnly": false
+  },
+  {
+    "name": "resolve-format-rule-priority",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert.3d.tab.fsbs.mkv"
+    ],
+    "files": [
+      "Concert.3d.tab.fsbs.mkv"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "resolveOnly": true
+  },
+  {
+    "name": "validate-format-rule-priority",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert.3d.tab.fsbs.mkv"
+    ],
+    "files": [
+      "Concert.3d.tab.fsbs.mkv"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "resolveOnly": false
+  },
+  {
+    "name": "resolve-format-path-control",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert.mvc"
+    ],
+    "files": [
+      "Concert.mvc/Performance.mkv"
+    ],
+    "directories": [
+      "Concert.mvc"
+    ],
+    "ignoreFiles": [],
+    "resolveOnly": true
+  },
+  {
+    "name": "validate-format-path-control",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert.mvc"
+    ],
+    "files": [
+      "Concert.mvc/Performance.mkv"
+    ],
+    "directories": [
+      "Concert.mvc"
+    ],
+    "ignoreFiles": [],
+    "resolveOnly": false
+  },
+  {
+    "name": "resolve-format-undelimited",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concertfsbs.mkv"
+    ],
+    "files": [
+      "Concertfsbs.mkv"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "resolveOnly": true
+  },
+  {
+    "name": "validate-format-undelimited",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concertfsbs.mkv"
+    ],
+    "files": [
+      "Concertfsbs.mkv"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "resolveOnly": false
+  },
+  {
+    "name": "resolve-directory-version-formats",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert"
+    ],
+    "files": [
+      "Concert/Concert.mkv",
+      "Concert/Concert - 1080p.hsbs.mp4",
+      "Concert/Concert - 2160p.mvc.mkv"
+    ],
+    "directories": [
+      "Concert"
+    ],
+    "ignoreFiles": [],
+    "resolveOnly": true
+  },
+  {
+    "name": "validate-directory-version-formats",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert"
+    ],
+    "files": [
+      "Concert/Concert.mkv",
+      "Concert/Concert - 1080p.hsbs.mp4",
+      "Concert/Concert - 2160p.mvc.mkv"
+    ],
+    "directories": [
+      "Concert"
+    ],
+    "ignoreFiles": [],
+    "resolveOnly": false
+  },
+  {
+    "name": "resolve-directory-format-stack-version",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert"
+    ],
+    "files": [
+      "Concert/Concert - 1080p.hsbs cd1.mkv",
+      "Concert/Concert - 1080p.hsbs cd2.mkv",
+      "Concert/Concert - 2160p.mvc.mkv"
+    ],
+    "directories": [
+      "Concert"
+    ],
+    "ignoreFiles": [],
+    "resolveOnly": true
+  },
+  {
+    "name": "validate-directory-format-stack-version",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert"
+    ],
+    "files": [
+      "Concert/Concert - 1080p.hsbs cd1.mkv",
+      "Concert/Concert - 1080p.hsbs cd2.mkv",
+      "Concert/Concert - 2160p.mvc.mkv"
+    ],
+    "directories": [
+      "Concert"
+    ],
+    "ignoreFiles": [],
+    "resolveOnly": false
+  },
+  {
+    "name": "resolve-raw-format-version-selection",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert"
+    ],
+    "files": [
+      "Concert/Concert - Theatrical.fsbs.mkv",
+      "Concert/Concert - Director.ftab.mp4"
+    ],
+    "directories": [
+      "Concert"
+    ],
+    "ignoreFiles": [],
+    "resolveOnly": true
+  },
+  {
+    "name": "validate-raw-format-version-selection",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert"
+    ],
+    "files": [
+      "Concert/Concert - Theatrical.fsbs.mkv",
+      "Concert/Concert - Director.ftab.mp4"
+    ],
+    "directories": [
+      "Concert"
+    ],
+    "ignoreFiles": [],
+    "resolveOnly": false
+  },
+  {
+    "name": "resolve-bracket-format-provider",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert"
+    ],
+    "files": [
+      "Concert/Concert [MVC] [tmdb=42].mkv"
+    ],
+    "directories": [
+      "Concert"
+    ],
+    "ignoreFiles": [],
+    "resolveOnly": true
+  },
+  {
+    "name": "validate-bracket-format-provider",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Concert"
+    ],
+    "files": [
+      "Concert/Concert [MVC] [tmdb=42].mkv"
+    ],
+    "directories": [
+      "Concert"
+    ],
+    "ignoreFiles": [],
+    "resolveOnly": false
+  },
+  {
+    "name": "resolve-unicode-version-prefix",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "夜曲"
+    ],
+    "files": [
+      "夜曲/夜曲.mkv",
+      "夜曲/夜曲 - 1080p.mp4"
+    ],
+    "directories": [
+      "夜曲"
+    ],
+    "ignoreFiles": [],
+    "resolveOnly": true
+  },
+  {
+    "name": "validate-unicode-version-prefix",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "夜曲"
+    ],
+    "files": [
+      "夜曲/夜曲.mkv",
+      "夜曲/夜曲 - 1080p.mp4"
+    ],
+    "directories": [
+      "夜曲"
+    ],
+    "ignoreFiles": [],
+    "resolveOnly": false
+  }
+]

@@ -1,0 +1,101 @@
+[
+  {
+    "name": "nested-single-movie",
+    "collectionType": "movies",
+    "files": [
+      "Film.mkv"
+    ]
+  },
+  {
+    "name": "nested-two-movies",
+    "collectionType": "movies",
+    "files": [
+      "Film.mkv",
+      "Other.mkv"
+    ]
+  },
+  {
+    "name": "nested-year-movie",
+    "collectionType": "movies",
+    "files": [
+      "Film (2020).mkv"
+    ]
+  },
+  {
+    "name": "nested-home-video",
+    "collectionType": "homevideos",
+    "files": [
+      "Film.mkv"
+    ]
+  },
+  {
+    "name": "nested-unrelated-music",
+    "collectionType": "music",
+    "files": [
+      "Film.mkv"
+    ]
+  },
+  {
+    "name": "alternate-exact-primary",
+    "parentName": "Film",
+    "collectionType": "movies",
+    "files": [
+      "Film - 1080p.mkv",
+      "Film.mkv",
+      "Film - 2160p.mkv"
+    ]
+  },
+  {
+    "name": "alternate-resolution-primary",
+    "parentName": "Film",
+    "collectionType": "movies",
+    "files": [
+      "Film - 1080p.mkv",
+      "Film - 2160p.mkv"
+    ]
+  },
+  {
+    "name": "alternate-lexical-primary",
+    "parentName": "Film",
+    "collectionType": "movies",
+    "files": [
+      "Film - Theatrical.mkv",
+      "Film - Director.mkv"
+    ]
+  },
+  {
+    "name": "alternate-bracket-order",
+    "parentName": "Film",
+    "collectionType": "movies",
+    "files": [
+      "Film [1080p].mkv",
+      "Film [2160p].mkv"
+    ]
+  },
+  {
+    "name": "alternate-different-years-remain-separate",
+    "parentName": "Film",
+    "collectionType": "movies",
+    "files": [
+      "Film (2020).mkv",
+      "Film (2021).mkv"
+    ]
+  },
+  {
+    "name": "alternate-unrelated-file-prevents-grouping",
+    "parentName": "Film",
+    "collectionType": "movies",
+    "files": [
+      "Film - 1080p.mkv",
+      "Other.mkv"
+    ]
+  },
+  {
+    "name": "alternate-single-eligible-name",
+    "parentName": "Film",
+    "collectionType": "movies",
+    "files": [
+      "Film - 2160p.mkv"
+    ]
+  }
+]

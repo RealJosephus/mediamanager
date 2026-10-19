@@ -1,0 +1,99 @@
+[
+  {
+    "name": "before-copy",
+    "status": 204,
+    "PlayState": {
+      "PositionTicks": 10000000,
+      "CanSeek": false,
+      "IsPaused": false,
+      "IsMuted": false,
+      "MediaSourceId": "22222222222222222222222222222222",
+      "PlayMethod": "DirectPlay",
+      "RepeatMode": "RepeatNone",
+      "PlaybackOrder": "Default"
+    }
+  },
+  {
+    "name": "after-copy",
+    "status": 204,
+    "PlayState": {
+      "PositionTicks": 10000000,
+      "CanSeek": false,
+      "IsPaused": false,
+      "IsMuted": false,
+      "MediaSourceId": "22222222222222222222222222222222",
+      "PlayMethod": "Transcode",
+      "RepeatMode": "RepeatNone",
+      "PlaybackOrder": "Default"
+    },
+    "TranscodingInfo": {
+      "AudioCodec": "aac",
+      "VideoCodec": "h264",
+      "Container": "ts",
+      "IsVideoDirect": true,
+      "IsAudioDirect": true,
+      "Bitrate": 1464232,
+      "Width": 320,
+      "Height": 240,
+      "AudioChannels": 2,
+      "HardwareAccelerationType": "none",
+      "TranscodeReasons": [
+        "ContainerNotSupported"
+      ]
+    }
+  },
+  {
+    "name": "pause",
+    "status": 204,
+    "PlayState": {
+      "PositionTicks": 10000000,
+      "CanSeek": false,
+      "IsPaused": true,
+      "IsMuted": false,
+      "MediaSourceId": "22222222222222222222222222222222",
+      "PlayMethod": "Transcode",
+      "RepeatMode": "RepeatNone",
+      "PlaybackOrder": "Default"
+    },
+    "TranscodingInfo": {
+      "AudioCodec": "aac",
+      "VideoCodec": "h264",
+      "Container": "ts",
+      "IsVideoDirect": true,
+      "IsAudioDirect": true,
+      "Bitrate": 1464232,
+      "Width": 320,
+      "Height": 240,
+      "AudioChannels": 2,
+      "HardwareAccelerationType": "none",
+      "TranscodeReasons": [
+        "ContainerNotSupported"
+      ]
+    }
+  },
+  {
+    "name": "stop",
+    "status": 204,
+    "PlayState": {
+      "CanSeek": false,
+      "IsPaused": false,
+      "IsMuted": false,
+      "RepeatMode": "RepeatNone",
+      "PlaybackOrder": "Default"
+    }
+  },
+  {
+    "name": "after-stop",
+    "status": 204,
+    "PlayState": {
+      "PositionTicks": 10000000,
+      "CanSeek": false,
+      "IsPaused": false,
+      "IsMuted": false,
+      "MediaSourceId": "22222222222222222222222222222222",
+      "PlayMethod": "DirectPlay",
+      "RepeatMode": "RepeatNone",
+      "PlaybackOrder": "Default"
+    }
+  }
+]

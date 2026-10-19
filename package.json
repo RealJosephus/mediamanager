@@ -1,0 +1,40 @@
+{
+  "name": "mediamanager",
+  "version": "0.1.0-dev.0",
+  "private": true,
+  "type": "module",
+  "license": "GPL-2.0-only",
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "scripts": {
+    "test": "node tools/validation/run.js --profile full",
+    "test:core": "node --test tests/core/*.test.js tests/compat/*.test.js tests/users/*.test.js tests/library/*.test.js tests/playback/*.test.js tests/sessions/*.test.js tests/http/*.test.js tests/database/domain-store.test.js",
+    "start": "node src/main.js",
+    "plugins": "node tools/plugins.js",
+    "test:startup": "node --test tests/core/main.test.js",
+    "db:import": "node tools/database/import-jellyfin.js",
+    "db:export": "node tools/database/export-jellyfin.js",
+    "db:validate-reference": "node tools/database/validate-reference.js",
+    "test:database-cli": "node --test tests/migration/database-cli.test.js",
+    "baseline:capture": "node tools/compat/capture-baseline.js",
+    "baseline:inventory": "node tools/compat/inventory.js",
+    "check": "node tools/check.js",
+    "validate": "node tools/validation/run.js"
+  },
+  "dependencies": {
+    "@napi-rs/canvas": "1.0.9",
+    "fast-xml-parser": "^5.11.1",
+    "pg": "^8.23.0",
+    "sharp": "0.35.4",
+    "transliteration": "2.6.1",
+    "ws": "^8.21.3"
+  },
+  "devDependencies": {
+    "acorn": "8.15.0"
+  },
+  "workspaces": [
+    "packages/*",
+    "plugins/*"
+  ]
+}

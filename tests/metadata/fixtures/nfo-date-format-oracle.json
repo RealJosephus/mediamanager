@@ -1,0 +1,860 @@
+[
+  {
+    "format": "yyyy-MM-dd",
+    "source": "2024-02-29T23:04:05.1234567Z",
+    "text": "2024-02-29",
+    "accepted": true,
+    "parsed": "2024-02-29T00:00:00.0000000Z"
+  },
+  {
+    "format": "yyyy-MM-dd",
+    "source": "2005-01-02T03:04:05.0000000Z",
+    "text": "2005-01-02",
+    "accepted": true,
+    "parsed": "2005-01-02T00:00:00.0000000Z"
+  },
+  {
+    "format": "yyyy-MM-dd",
+    "source": "0029-12-31T00:00:00.0000000Z",
+    "text": "0029-12-31",
+    "accepted": true,
+    "parsed": "0029-12-31T00:00:00.0000000Z"
+  },
+  {
+    "format": "dd/MM/yyyy",
+    "source": "2024-02-29T23:04:05.1234567Z",
+    "text": "29/02/2024",
+    "accepted": true,
+    "parsed": "2024-02-29T00:00:00.0000000Z"
+  },
+  {
+    "format": "dd/MM/yyyy",
+    "source": "2005-01-02T03:04:05.0000000Z",
+    "text": "02/01/2005",
+    "accepted": true,
+    "parsed": "2005-01-02T00:00:00.0000000Z"
+  },
+  {
+    "format": "dd/MM/yyyy",
+    "source": "0029-12-31T00:00:00.0000000Z",
+    "text": "31/12/0029",
+    "accepted": true,
+    "parsed": "0029-12-31T00:00:00.0000000Z"
+  },
+  {
+    "format": "MM.dd.yyyy",
+    "source": "2024-02-29T23:04:05.1234567Z",
+    "text": "02.29.2024",
+    "accepted": true,
+    "parsed": "2024-02-29T00:00:00.0000000Z"
+  },
+  {
+    "format": "MM.dd.yyyy",
+    "source": "2005-01-02T03:04:05.0000000Z",
+    "text": "01.02.2005",
+    "accepted": true,
+    "parsed": "2005-01-02T00:00:00.0000000Z"
+  },
+  {
+    "format": "MM.dd.yyyy",
+    "source": "0029-12-31T00:00:00.0000000Z",
+    "text": "12.31.0029",
+    "accepted": true,
+    "parsed": "0029-12-31T00:00:00.0000000Z"
+  },
+  {
+    "format": "yyyyMMdd",
+    "source": "2024-02-29T23:04:05.1234567Z",
+    "text": "20240229",
+    "accepted": true,
+    "parsed": "2024-02-29T00:00:00.0000000Z"
+  },
+  {
+    "format": "yyyyMMdd",
+    "source": "2005-01-02T03:04:05.0000000Z",
+    "text": "20050102",
+    "accepted": true,
+    "parsed": "2005-01-02T00:00:00.0000000Z"
+  },
+  {
+    "format": "yyyyMMdd",
+    "source": "0029-12-31T00:00:00.0000000Z",
+    "text": "00291231",
+    "accepted": true,
+    "parsed": "0029-12-31T00:00:00.0000000Z"
+  },
+  {
+    "format": "d MMM yyyy",
+    "source": "2024-02-29T23:04:05.1234567Z",
+    "text": "29 Feb 2024",
+    "accepted": true,
+    "parsed": "2024-02-29T00:00:00.0000000Z"
+  },
+  {
+    "format": "d MMM yyyy",
+    "source": "2005-01-02T03:04:05.0000000Z",
+    "text": "2 Jan 2005",
+    "accepted": true,
+    "parsed": "2005-01-02T00:00:00.0000000Z"
+  },
+  {
+    "format": "d MMM yyyy",
+    "source": "0029-12-31T00:00:00.0000000Z",
+    "text": "31 Dec 0029",
+    "accepted": true,
+    "parsed": "0029-12-31T00:00:00.0000000Z"
+  },
+  {
+    "format": "dd MMMM yyyy",
+    "source": "2024-02-29T23:04:05.1234567Z",
+    "text": "29 February 2024",
+    "accepted": true,
+    "parsed": "2024-02-29T00:00:00.0000000Z"
+  },
+  {
+    "format": "dd MMMM yyyy",
+    "source": "2005-01-02T03:04:05.0000000Z",
+    "text": "02 January 2005",
+    "accepted": true,
+    "parsed": "2005-01-02T00:00:00.0000000Z"
+  },
+  {
+    "format": "dd MMMM yyyy",
+    "source": "0029-12-31T00:00:00.0000000Z",
+    "text": "31 December 0029",
+    "accepted": true,
+    "parsed": "0029-12-31T00:00:00.0000000Z"
+  },
+  {
+    "format": "yyyy-MM-ddTHH:mm:ss",
+    "source": "2024-02-29T23:04:05.1234567Z",
+    "text": "2024-02-29T23:04:05",
+    "accepted": true,
+    "parsed": "2024-02-29T23:04:05.0000000Z"
+  },
+  {
+    "format": "yyyy-MM-ddTHH:mm:ss",
+    "source": "2005-01-02T03:04:05.0000000Z",
+    "text": "2005-01-02T03:04:05",
+    "accepted": true,
+    "parsed": "2005-01-02T03:04:05.0000000Z"
+  },
+  {
+    "format": "yyyy-MM-ddTHH:mm:ss",
+    "source": "0029-12-31T00:00:00.0000000Z",
+    "text": "0029-12-31T00:00:00",
+    "accepted": true,
+    "parsed": "0029-12-31T00:00:00.0000000Z"
+  },
+  {
+    "format": "yyyy-MM-dd HH:mm:ss.fffffff",
+    "source": "2024-02-29T23:04:05.1234567Z",
+    "text": "2024-02-29 23:04:05.1234567",
+    "accepted": true,
+    "parsed": "2024-02-29T23:04:05.1234567Z"
+  },
+  {
+    "format": "yyyy-MM-dd HH:mm:ss.fffffff",
+    "source": "2005-01-02T03:04:05.0000000Z",
+    "text": "2005-01-02 03:04:05.0000000",
+    "accepted": true,
+    "parsed": "2005-01-02T03:04:05.0000000Z"
+  },
+  {
+    "format": "yyyy-MM-dd HH:mm:ss.fffffff",
+    "source": "0029-12-31T00:00:00.0000000Z",
+    "text": "0029-12-31 00:00:00.0000000",
+    "accepted": true,
+    "parsed": "0029-12-31T00:00:00.0000000Z"
+  },
+  {
+    "format": "yyyy-MM-dd HH:mm:ss.FFFFFFF",
+    "source": "2024-02-29T23:04:05.1234567Z",
+    "text": "2024-02-29 23:04:05.1234567",
+    "accepted": true,
+    "parsed": "2024-02-29T23:04:05.1234567Z"
+  },
+  {
+    "format": "yyyy-MM-dd HH:mm:ss.FFFFFFF",
+    "source": "2005-01-02T03:04:05.0000000Z",
+    "text": "2005-01-02 03:04:05",
+    "accepted": true,
+    "parsed": "2005-01-02T03:04:05.0000000Z"
+  },
+  {
+    "format": "yyyy-MM-dd HH:mm:ss.FFFFFFF",
+    "source": "0029-12-31T00:00:00.0000000Z",
+    "text": "0029-12-31 00:00:00",
+    "accepted": true,
+    "parsed": "0029-12-31T00:00:00.0000000Z"
+  },
+  {
+    "format": "yyyy\u0027\u5E74\u0027MM\u0027\u6708\u0027dd\u0027\u65E5\u0027",
+    "source": "2024-02-29T23:04:05.1234567Z",
+    "text": "2024\u5E7402\u670829\u65E5",
+    "accepted": true,
+    "parsed": "2024-02-29T00:00:00.0000000Z"
+  },
+  {
+    "format": "yyyy\u0027\u5E74\u0027MM\u0027\u6708\u0027dd\u0027\u65E5\u0027",
+    "source": "2005-01-02T03:04:05.0000000Z",
+    "text": "2005\u5E7401\u670802\u65E5",
+    "accepted": true,
+    "parsed": "2005-01-02T00:00:00.0000000Z"
+  },
+  {
+    "format": "yyyy\u0027\u5E74\u0027MM\u0027\u6708\u0027dd\u0027\u65E5\u0027",
+    "source": "0029-12-31T00:00:00.0000000Z",
+    "text": "0029\u5E7412\u670831\u65E5",
+    "accepted": true,
+    "parsed": "0029-12-31T00:00:00.0000000Z"
+  },
+  {
+    "format": "yyyy\\-MM\\-dd",
+    "source": "2024-02-29T23:04:05.1234567Z",
+    "text": "2024-02-29",
+    "accepted": true,
+    "parsed": "2024-02-29T00:00:00.0000000Z"
+  },
+  {
+    "format": "yyyy\\-MM\\-dd",
+    "source": "2005-01-02T03:04:05.0000000Z",
+    "text": "2005-01-02",
+    "accepted": true,
+    "parsed": "2005-01-02T00:00:00.0000000Z"
+  },
+  {
+    "format": "yyyy\\-MM\\-dd",
+    "source": "0029-12-31T00:00:00.0000000Z",
+    "text": "0029-12-31",
+    "accepted": true,
+    "parsed": "0029-12-31T00:00:00.0000000Z"
+  },
+  {
+    "format": "%M/%d/yyyy",
+    "source": "2024-02-29T23:04:05.1234567Z",
+    "text": "2/29/2024",
+    "accepted": true,
+    "parsed": "2024-02-29T00:00:00.0000000Z"
+  },
+  {
+    "format": "%M/%d/yyyy",
+    "source": "2005-01-02T03:04:05.0000000Z",
+    "text": "1/2/2005",
+    "accepted": true,
+    "parsed": "2005-01-02T00:00:00.0000000Z"
+  },
+  {
+    "format": "%M/%d/yyyy",
+    "source": "0029-12-31T00:00:00.0000000Z",
+    "text": "12/31/0029",
+    "accepted": true,
+    "parsed": "0029-12-31T00:00:00.0000000Z"
+  },
+  {
+    "format": "ddd, dd MMM yyyy",
+    "source": "2024-02-29T23:04:05.1234567Z",
+    "text": "Thu, 29 Feb 2024",
+    "accepted": true,
+    "parsed": "2024-02-29T00:00:00.0000000Z"
+  },
+  {
+    "format": "ddd, dd MMM yyyy",
+    "source": "2005-01-02T03:04:05.0000000Z",
+    "text": "Sun, 02 Jan 2005",
+    "accepted": true,
+    "parsed": "2005-01-02T00:00:00.0000000Z"
+  },
+  {
+    "format": "ddd, dd MMM yyyy",
+    "source": "0029-12-31T00:00:00.0000000Z",
+    "text": "Mon, 31 Dec 0029",
+    "accepted": true,
+    "parsed": "0029-12-31T00:00:00.0000000Z"
+  },
+  {
+    "format": "yyyy-MM-ddK",
+    "source": "2024-02-29T23:04:05.1234567Z",
+    "text": "2024-02-29Z",
+    "accepted": true,
+    "parsed": "2024-02-29T00:00:00.0000000Z"
+  },
+  {
+    "format": "yyyy-MM-ddK",
+    "source": "2005-01-02T03:04:05.0000000Z",
+    "text": "2005-01-02Z",
+    "accepted": true,
+    "parsed": "2005-01-02T00:00:00.0000000Z"
+  },
+  {
+    "format": "yyyy-MM-ddK",
+    "source": "0029-12-31T00:00:00.0000000Z",
+    "text": "0029-12-31Z",
+    "accepted": true,
+    "parsed": "0029-12-31T00:00:00.0000000Z"
+  },
+  {
+    "format": "yyyy-MM-dd zzz",
+    "source": "2024-02-29T23:04:05.1234567Z",
+    "text": "2024-02-29 \u002B00:00",
+    "accepted": true,
+    "parsed": "2024-02-29T00:00:00.0000000Z"
+  },
+  {
+    "format": "yyyy-MM-dd zzz",
+    "source": "2005-01-02T03:04:05.0000000Z",
+    "text": "2005-01-02 \u002B00:00",
+    "accepted": true,
+    "parsed": "2005-01-02T00:00:00.0000000Z"
+  },
+  {
+    "format": "yyyy-MM-dd zzz",
+    "source": "0029-12-31T00:00:00.0000000Z",
+    "text": "0029-12-31 \u002B00:00",
+    "accepted": true,
+    "parsed": "0029-12-31T00:00:00.0000000Z"
+  },
+  {
+    "format": "hh:mm:ss tt",
+    "source": "2024-02-29T23:04:05.1234567Z",
+    "text": "11:04:05 PM",
+    "accepted": true,
+    "parsed": "2026-09-26T23:04:05.0000000Z"
+  },
+  {
+    "format": "hh:mm:ss tt",
+    "source": "2005-01-02T03:04:05.0000000Z",
+    "text": "03:04:05 AM",
+    "accepted": true,
+    "parsed": "2026-09-26T03:04:05.0000000Z"
+  },
+  {
+    "format": "hh:mm:ss tt",
+    "source": "0029-12-31T00:00:00.0000000Z",
+    "text": "12:00:00 AM",
+    "accepted": true,
+    "parsed": "2026-09-26T00:00:00.0000000Z"
+  },
+  {
+    "format": "o",
+    "source": "2024-02-29T23:04:05.1234567Z",
+    "text": "2024-02-29T23:04:05.1234567Z",
+    "accepted": true,
+    "parsed": "2024-02-29T23:04:05.1234567Z"
+  },
+  {
+    "format": "o",
+    "source": "2005-01-02T03:04:05.0000000Z",
+    "text": "2005-01-02T03:04:05.0000000Z",
+    "accepted": true,
+    "parsed": "2005-01-02T03:04:05.0000000Z"
+  },
+  {
+    "format": "o",
+    "source": "0029-12-31T00:00:00.0000000Z",
+    "text": "0029-12-31T00:00:00.0000000Z",
+    "accepted": true,
+    "parsed": "0029-12-31T00:00:00.0000000Z"
+  },
+  {
+    "format": "s",
+    "source": "2024-02-29T23:04:05.1234567Z",
+    "text": "2024-02-29T23:04:05",
+    "accepted": true,
+    "parsed": "2024-02-29T23:04:05.0000000Z"
+  },
+  {
+    "format": "s",
+    "source": "2005-01-02T03:04:05.0000000Z",
+    "text": "2005-01-02T03:04:05",
+    "accepted": true,
+    "parsed": "2005-01-02T03:04:05.0000000Z"
+  },
+  {
+    "format": "s",
+    "source": "0029-12-31T00:00:00.0000000Z",
+    "text": "0029-12-31T00:00:00",
+    "accepted": true,
+    "parsed": "0029-12-31T00:00:00.0000000Z"
+  },
+  {
+    "format": "d",
+    "source": "2024-02-29T23:04:05.1234567Z",
+    "text": "02/29/2024",
+    "accepted": true,
+    "parsed": "2024-02-29T00:00:00.0000000Z"
+  },
+  {
+    "format": "d",
+    "source": "2005-01-02T03:04:05.0000000Z",
+    "text": "01/02/2005",
+    "accepted": true,
+    "parsed": "2005-01-02T00:00:00.0000000Z"
+  },
+  {
+    "format": "d",
+    "source": "0029-12-31T00:00:00.0000000Z",
+    "text": "12/31/0029",
+    "accepted": true,
+    "parsed": "0029-12-31T00:00:00.0000000Z"
+  },
+  {
+    "format": "D",
+    "source": "2024-02-29T23:04:05.1234567Z",
+    "text": "Thursday, 29 February 2024",
+    "accepted": true,
+    "parsed": "2024-02-29T00:00:00.0000000Z"
+  },
+  {
+    "format": "D",
+    "source": "2005-01-02T03:04:05.0000000Z",
+    "text": "Sunday, 02 January 2005",
+    "accepted": true,
+    "parsed": "2005-01-02T00:00:00.0000000Z"
+  },
+  {
+    "format": "D",
+    "source": "0029-12-31T00:00:00.0000000Z",
+    "text": "Monday, 31 December 0029",
+    "accepted": true,
+    "parsed": "0029-12-31T00:00:00.0000000Z"
+  },
+  {
+    "format": "f",
+    "source": "2024-02-29T23:04:05.1234567Z",
+    "text": "Thursday, 29 February 2024 23:04",
+    "accepted": true,
+    "parsed": "2024-02-29T23:04:00.0000000Z"
+  },
+  {
+    "format": "f",
+    "source": "2005-01-02T03:04:05.0000000Z",
+    "text": "Sunday, 02 January 2005 03:04",
+    "accepted": true,
+    "parsed": "2005-01-02T03:04:00.0000000Z"
+  },
+  {
+    "format": "f",
+    "source": "0029-12-31T00:00:00.0000000Z",
+    "text": "Monday, 31 December 0029 00:00",
+    "accepted": true,
+    "parsed": "0029-12-31T00:00:00.0000000Z"
+  },
+  {
+    "format": "F",
+    "source": "2024-02-29T23:04:05.1234567Z",
+    "text": "Thursday, 29 February 2024 23:04:05",
+    "accepted": true,
+    "parsed": "2024-02-29T23:04:05.0000000Z"
+  },
+  {
+    "format": "F",
+    "source": "2005-01-02T03:04:05.0000000Z",
+    "text": "Sunday, 02 January 2005 03:04:05",
+    "accepted": true,
+    "parsed": "2005-01-02T03:04:05.0000000Z"
+  },
+  {
+    "format": "F",
+    "source": "0029-12-31T00:00:00.0000000Z",
+    "text": "Monday, 31 December 0029 00:00:00",
+    "accepted": true,
+    "parsed": "0029-12-31T00:00:00.0000000Z"
+  },
+  {
+    "format": "g",
+    "source": "2024-02-29T23:04:05.1234567Z",
+    "text": "02/29/2024 23:04",
+    "accepted": true,
+    "parsed": "2024-02-29T23:04:00.0000000Z"
+  },
+  {
+    "format": "g",
+    "source": "2005-01-02T03:04:05.0000000Z",
+    "text": "01/02/2005 03:04",
+    "accepted": true,
+    "parsed": "2005-01-02T03:04:00.0000000Z"
+  },
+  {
+    "format": "g",
+    "source": "0029-12-31T00:00:00.0000000Z",
+    "text": "12/31/0029 00:00",
+    "accepted": true,
+    "parsed": "0029-12-31T00:00:00.0000000Z"
+  },
+  {
+    "format": "G",
+    "source": "2024-02-29T23:04:05.1234567Z",
+    "text": "02/29/2024 23:04:05",
+    "accepted": true,
+    "parsed": "2024-02-29T23:04:05.0000000Z"
+  },
+  {
+    "format": "G",
+    "source": "2005-01-02T03:04:05.0000000Z",
+    "text": "01/02/2005 03:04:05",
+    "accepted": true,
+    "parsed": "2005-01-02T03:04:05.0000000Z"
+  },
+  {
+    "format": "G",
+    "source": "0029-12-31T00:00:00.0000000Z",
+    "text": "12/31/0029 00:00:00",
+    "accepted": true,
+    "parsed": "0029-12-31T00:00:00.0000000Z"
+  },
+  {
+    "format": "M",
+    "source": "2024-02-29T23:04:05.1234567Z",
+    "text": "February 29",
+    "accepted": false,
+    "parsed": null
+  },
+  {
+    "format": "M",
+    "source": "2005-01-02T03:04:05.0000000Z",
+    "text": "January 02",
+    "accepted": true,
+    "parsed": "2026-01-02T00:00:00.0000000Z"
+  },
+  {
+    "format": "M",
+    "source": "0029-12-31T00:00:00.0000000Z",
+    "text": "December 31",
+    "accepted": true,
+    "parsed": "2026-12-31T00:00:00.0000000Z"
+  },
+  {
+    "format": "R",
+    "source": "2024-02-29T23:04:05.1234567Z",
+    "text": "Thu, 29 Feb 2024 23:04:05 GMT",
+    "accepted": true,
+    "parsed": "2024-02-29T23:04:05.0000000Z"
+  },
+  {
+    "format": "R",
+    "source": "2005-01-02T03:04:05.0000000Z",
+    "text": "Sun, 02 Jan 2005 03:04:05 GMT",
+    "accepted": true,
+    "parsed": "2005-01-02T03:04:05.0000000Z"
+  },
+  {
+    "format": "R",
+    "source": "0029-12-31T00:00:00.0000000Z",
+    "text": "Mon, 31 Dec 0029 00:00:00 GMT",
+    "accepted": true,
+    "parsed": "0029-12-31T00:00:00.0000000Z"
+  },
+  {
+    "format": "t",
+    "source": "2024-02-29T23:04:05.1234567Z",
+    "text": "23:04",
+    "accepted": true,
+    "parsed": "2026-09-26T23:04:00.0000000Z"
+  },
+  {
+    "format": "t",
+    "source": "2005-01-02T03:04:05.0000000Z",
+    "text": "03:04",
+    "accepted": true,
+    "parsed": "2026-09-26T03:04:00.0000000Z"
+  },
+  {
+    "format": "t",
+    "source": "0029-12-31T00:00:00.0000000Z",
+    "text": "00:00",
+    "accepted": true,
+    "parsed": "2026-09-26T00:00:00.0000000Z"
+  },
+  {
+    "format": "T",
+    "source": "2024-02-29T23:04:05.1234567Z",
+    "text": "23:04:05",
+    "accepted": true,
+    "parsed": "2026-09-26T23:04:05.0000000Z"
+  },
+  {
+    "format": "T",
+    "source": "2005-01-02T03:04:05.0000000Z",
+    "text": "03:04:05",
+    "accepted": true,
+    "parsed": "2026-09-26T03:04:05.0000000Z"
+  },
+  {
+    "format": "T",
+    "source": "0029-12-31T00:00:00.0000000Z",
+    "text": "00:00:00",
+    "accepted": true,
+    "parsed": "2026-09-26T00:00:00.0000000Z"
+  },
+  {
+    "format": "u",
+    "source": "2024-02-29T23:04:05.1234567Z",
+    "text": "2024-02-29 23:04:05Z",
+    "accepted": true,
+    "parsed": "2024-02-29T23:04:05.0000000Z"
+  },
+  {
+    "format": "u",
+    "source": "2005-01-02T03:04:05.0000000Z",
+    "text": "2005-01-02 03:04:05Z",
+    "accepted": true,
+    "parsed": "2005-01-02T03:04:05.0000000Z"
+  },
+  {
+    "format": "u",
+    "source": "0029-12-31T00:00:00.0000000Z",
+    "text": "0029-12-31 00:00:00Z",
+    "accepted": true,
+    "parsed": "0029-12-31T00:00:00.0000000Z"
+  },
+  {
+    "format": "U",
+    "source": "2024-02-29T23:04:05.1234567Z",
+    "text": "Thursday, 29 February 2024 23:04:05",
+    "accepted": true,
+    "parsed": "2024-02-29T23:04:05.0000000Z"
+  },
+  {
+    "format": "U",
+    "source": "2005-01-02T03:04:05.0000000Z",
+    "text": "Sunday, 02 January 2005 03:04:05",
+    "accepted": true,
+    "parsed": "2005-01-02T03:04:05.0000000Z"
+  },
+  {
+    "format": "U",
+    "source": "0029-12-31T00:00:00.0000000Z",
+    "text": "Monday, 31 December 0029 00:00:00",
+    "accepted": true,
+    "parsed": "0029-12-31T00:00:00.0000000Z"
+  },
+  {
+    "format": "Y",
+    "source": "2024-02-29T23:04:05.1234567Z",
+    "text": "2024 February",
+    "accepted": true,
+    "parsed": "2024-02-01T00:00:00.0000000Z"
+  },
+  {
+    "format": "Y",
+    "source": "2005-01-02T03:04:05.0000000Z",
+    "text": "2005 January",
+    "accepted": true,
+    "parsed": "2005-01-01T00:00:00.0000000Z"
+  },
+  {
+    "format": "Y",
+    "source": "0029-12-31T00:00:00.0000000Z",
+    "text": "0029 December",
+    "accepted": true,
+    "parsed": "0029-12-01T00:00:00.0000000Z"
+  },
+  {
+    "format": "",
+    "source": "2024-02-29T23:04:05.1234567Z",
+    "text": "02/29/2024 23:04:05",
+    "accepted": false,
+    "parsed": null
+  },
+  {
+    "format": "",
+    "source": "2005-01-02T03:04:05.0000000Z",
+    "text": "01/02/2005 03:04:05",
+    "accepted": false,
+    "parsed": null
+  },
+  {
+    "format": "",
+    "source": "0029-12-31T00:00:00.0000000Z",
+    "text": "12/31/0029 00:00:00",
+    "accepted": false,
+    "parsed": null
+  },
+  {
+    "format": "broken q",
+    "source": "2024-02-29T23:04:05.1234567Z",
+    "text": "broken q",
+    "accepted": true,
+    "parsed": "2026-09-26T00:00:00.0000000Z"
+  },
+  {
+    "format": "broken q",
+    "source": "2005-01-02T03:04:05.0000000Z",
+    "text": "broken q",
+    "accepted": true,
+    "parsed": "2026-09-26T00:00:00.0000000Z"
+  },
+  {
+    "format": "broken q",
+    "source": "0029-12-31T00:00:00.0000000Z",
+    "text": "broken q",
+    "accepted": true,
+    "parsed": "2026-09-26T00:00:00.0000000Z"
+  },
+  {
+    "format": "q",
+    "source": "2024-02-29T23:04:05.1234567Z",
+    "error": "FormatException"
+  },
+  {
+    "format": "q",
+    "source": "2005-01-02T03:04:05.0000000Z",
+    "error": "FormatException"
+  },
+  {
+    "format": "q",
+    "source": "0029-12-31T00:00:00.0000000Z",
+    "error": "FormatException"
+  },
+  {
+    "format": "%",
+    "source": "2024-02-29T23:04:05.1234567Z",
+    "error": "FormatException"
+  },
+  {
+    "format": "%",
+    "source": "2005-01-02T03:04:05.0000000Z",
+    "error": "FormatException"
+  },
+  {
+    "format": "%",
+    "source": "0029-12-31T00:00:00.0000000Z",
+    "error": "FormatException"
+  },
+  {
+    "format": "yyyy-MM-dd \u0027",
+    "source": "2024-02-29T23:04:05.1234567Z",
+    "error": "FormatException"
+  },
+  {
+    "format": "yyyy-MM-dd \u0027",
+    "source": "2005-01-02T03:04:05.0000000Z",
+    "error": "FormatException"
+  },
+  {
+    "format": "yyyy-MM-dd \u0027",
+    "source": "0029-12-31T00:00:00.0000000Z",
+    "error": "FormatException"
+  },
+  {
+    "format": "ffffffff",
+    "source": "2024-02-29T23:04:05.1234567Z",
+    "error": "FormatException"
+  },
+  {
+    "format": "ffffffff",
+    "source": "2005-01-02T03:04:05.0000000Z",
+    "error": "FormatException"
+  },
+  {
+    "format": "ffffffff",
+    "source": "0029-12-31T00:00:00.0000000Z",
+    "error": "FormatException"
+  },
+  {
+    "format": "KK",
+    "source": "2024-02-29T23:04:05.1234567Z",
+    "text": "ZZ",
+    "accepted": true,
+    "parsed": "2026-09-26T00:00:00.0000000Z"
+  },
+  {
+    "format": "KK",
+    "source": "2005-01-02T03:04:05.0000000Z",
+    "text": "ZZ",
+    "accepted": true,
+    "parsed": "2026-09-26T00:00:00.0000000Z"
+  },
+  {
+    "format": "KK",
+    "source": "0029-12-31T00:00:00.0000000Z",
+    "text": "ZZ",
+    "accepted": true,
+    "parsed": "2026-09-26T00:00:00.0000000Z"
+  },
+  {
+    "format": "ttt",
+    "source": "2024-02-29T23:04:05.1234567Z",
+    "text": "PM",
+    "accepted": false,
+    "parsed": null
+  },
+  {
+    "format": "ttt",
+    "source": "2005-01-02T03:04:05.0000000Z",
+    "text": "AM",
+    "accepted": true,
+    "parsed": "2026-09-26T00:00:00.0000000Z"
+  },
+  {
+    "format": "ttt",
+    "source": "0029-12-31T00:00:00.0000000Z",
+    "text": "AM",
+    "accepted": true,
+    "parsed": "2026-09-26T00:00:00.0000000Z"
+  },
+  {
+    "format": "ddddd",
+    "source": "2024-02-29T23:04:05.1234567Z",
+    "text": "Thursday",
+    "accepted": false,
+    "parsed": null
+  },
+  {
+    "format": "ddddd",
+    "source": "2005-01-02T03:04:05.0000000Z",
+    "text": "Sunday",
+    "accepted": false,
+    "parsed": null
+  },
+  {
+    "format": "ddddd",
+    "source": "0029-12-31T00:00:00.0000000Z",
+    "text": "Monday",
+    "accepted": false,
+    "parsed": null
+  },
+  {
+    "format": "MMMMM",
+    "source": "2024-02-29T23:04:05.1234567Z",
+    "text": "February",
+    "accepted": true,
+    "parsed": "2026-02-01T00:00:00.0000000Z"
+  },
+  {
+    "format": "MMMMM",
+    "source": "2005-01-02T03:04:05.0000000Z",
+    "text": "January",
+    "accepted": true,
+    "parsed": "2026-01-01T00:00:00.0000000Z"
+  },
+  {
+    "format": "MMMMM",
+    "source": "0029-12-31T00:00:00.0000000Z",
+    "text": "December",
+    "accepted": true,
+    "parsed": "2026-12-01T00:00:00.0000000Z"
+  },
+  {
+    "format": "yyyyyyyy",
+    "source": "2024-02-29T23:04:05.1234567Z",
+    "text": "00002024",
+    "accepted": true,
+    "parsed": "2024-01-01T00:00:00.0000000Z"
+  },
+  {
+    "format": "yyyyyyyy",
+    "source": "2005-01-02T03:04:05.0000000Z",
+    "text": "00002005",
+    "accepted": true,
+    "parsed": "2005-01-01T00:00:00.0000000Z"
+  },
+  {
+    "format": "yyyyyyyy",
+    "source": "0029-12-31T00:00:00.0000000Z",
+    "text": "00000029",
+    "accepted": true,
+    "parsed": "0029-01-01T00:00:00.0000000Z"
+  }
+]

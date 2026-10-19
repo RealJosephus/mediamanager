@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "license": "MIT",
+  "sourceVersion": "dotnet/runtime v10.0.0",
+  "oracleRuntime": "Microsoft.NETCore.App 10.0.12",
+  "implementation": "src/core/native-sort.js",
+  "scope": "Stable original-index map, CompareAnyKeys sign handling and Comparison<T> IntrospectiveSort; used by media source, aired Episode and in-memory library ordering. Scope is verified by separate actual Jellyfin DLL and HTTP fixtures, not by source provenance alone.",
+  "sources": [
+    {
+      "name": "OrderedEnumerable.cs",
+      "url": "https://raw.githubusercontent.com/dotnet/runtime/v10.0.0/src/libraries/System.Linq/src/System/Linq/OrderedEnumerable.cs",
+      "bytes": 24762,
+      "sha256": "4817c5d839b1649092392976ffc78249bae487708894b487ab71316f062827d6"
+    },
+    {
+      "name": "ArraySortHelper.cs",
+      "url": "https://raw.githubusercontent.com/dotnet/runtime/v10.0.0/src/libraries/System.Private.CoreLib/src/System/Collections/Generic/ArraySortHelper.cs",
+      "bytes": 43933,
+      "sha256": "a279fd7188065f0276af1f75b41ecb9b8982a6ca60db2a0cb54144d580dacdfe"
+    },
+    {
+      "name": "Array.cs",
+      "url": "https://raw.githubusercontent.com/dotnet/runtime/v10.0.0/src/libraries/System.Private.CoreLib/src/System/Array.cs",
+      "bytes": 130520,
+      "sha256": "3beb7a940a8ff7b4949141fa8934167c346c047b776a6b250426ba04fc34aae3"
+    }
+  ]
+}

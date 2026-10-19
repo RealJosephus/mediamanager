@@ -1,0 +1,115 @@
+[
+  {
+    "name": "n-lower",
+    "bytes": "ZTU5MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDE="
+  },
+  {
+    "name": "n-upper",
+    "bytes": "RTU5MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDE="
+  },
+  {
+    "name": "d",
+    "bytes": "ZTU5MDAwMDAtMDAwMC0wMDAwLTAwMDAtMDAwMDAwMDAwMDAx"
+  },
+  {
+    "name": "b-spaces",
+    "bytes": "IAl7RTU5MDAwMDAtMDAwMC0wMDAwLTAwMDAtMDAwMDAwMDAwMDAxfQ0K"
+  },
+  {
+    "name": "p",
+    "bytes": "KGU1OTAwMDAwLTAwMDAtMDAwMC0wMDAwLTAwMDAwMDAwMDAwMSk="
+  },
+  {
+    "name": "x",
+    "bytes": "ezB4ZTU5MDAwMDAsMHgwMDAwLDB4MDAwMCx7MHgwMCwweDAwLDB4MDAsMHgwMCwweDAwLDB4MDAsMHgwMCwweDAxfX0="
+  },
+  {
+    "name": "empty-guid",
+    "bytes": "MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA="
+  },
+  {
+    "name": "nbsp",
+    "bytes": "wqBlNTkwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMcKg"
+  },
+  {
+    "name": "bom-character",
+    "bytes": "77u/ZTU5MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDE="
+  },
+  {
+    "name": "empty",
+    "bytes": ""
+  },
+  {
+    "name": "spaces",
+    "bytes": "IAkNCg=="
+  },
+  {
+    "name": "invalid",
+    "bytes": "bm90LWEtZ3VpZA=="
+  },
+  {
+    "name": "trailing-nul",
+    "bytes": "ZTU5MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDEA"
+  },
+  {
+    "name": "double-id",
+    "bytes": "ZTU5MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDFlNTkwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMQ=="
+  },
+  {
+    "name": "utf8-bom",
+    "bytes": "77u/ZTU5MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDE="
+  },
+  {
+    "name": "utf16le",
+    "bytes": "//4gAAkAewBFADUAOQAwADAAMAAwADAALQAwADAAMAAwAC0AMAAwADAAMAAtADAAMAAwADAALQAwADAAMAAwADAAMAAwADAAMAAwADAAMQB9AA0ACgA="
+  },
+  {
+    "name": "utf16be",
+    "bytes": "/v8AZQA1ADkAMAAwADAAMAAwAC0AMAAwADAAMAAtADAAMAAwADAALQAwADAAMAAwAC0AMAAwADAAMAAwADAAMAAwADAAMAAwADE="
+  },
+  {
+    "name": "utf32le",
+    "bytes": "//4AAGUAAAA1AAAAOQAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAxAAAA"
+  },
+  {
+    "name": "utf32be",
+    "bytes": "AAD+/wAAAGUAAAA1AAAAOQAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAx"
+  },
+  {
+    "name": "missing"
+  },
+  {
+    "name": "directory",
+    "directory": true
+  },
+  {
+    "name": "n-upper-readonly",
+    "bytes": "RTU5MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDE=",
+    "readOnly": true
+  },
+  {
+    "name": "n-upper-locked-read",
+    "bytes": "RTU5MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDE=",
+    "lock": "read"
+  },
+  {
+    "name": "n-upper-locked-none",
+    "bytes": "RTU5MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDE=",
+    "lock": "none"
+  },
+  {
+    "name": "invalid-readonly",
+    "bytes": "bm90LWEtZ3VpZA==",
+    "readOnly": true
+  },
+  {
+    "name": "invalid-locked-read",
+    "bytes": "bm90LWEtZ3VpZA==",
+    "lock": "read"
+  },
+  {
+    "name": "invalid-locked-none",
+    "bytes": "bm90LWEtZ3VpZA==",
+    "lock": "none"
+  }
+]

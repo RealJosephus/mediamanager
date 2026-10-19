@@ -1,0 +1,734 @@
+{
+  "schemaVersion": 1,
+  "sourceBindings": [
+    {
+      "path": ".agent-docs/evidence/refresh-progress-native-v3/Program.cs",
+      "sha256": "5a9e46adfb859bff8244adb0ef4bedcd780507fb7ba37fb271bc03752eeeef5d",
+      "bytes": 8427
+    },
+    {
+      "path": ".agent-docs/evidence/refresh-progress-native-v3/Oracle.csproj",
+      "sha256": "f5aceeed752306180d41685b345fbab2f4faf42aa817aa3f8407882ea78a52e3",
+      "bytes": 394
+    },
+    {
+      "path": ".agent-docs/evidence/refresh-progress-native-v3/stdout.txt",
+      "sha256": "e70837ef94ad4ad924011dadef4ee7ab087f6ae4c90a549ab0eb8eace7d2445b",
+      "bytes": 17582
+    },
+    {
+      "path": ".agent-docs/evidence/refresh-progress-native-v3/exit.json",
+      "sha256": "b090cfe157469df39753ec6dc0cace3d02b50536d79114f8033b92497e8f2748",
+      "bytes": 51
+    },
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/MediaBrowser.Controller/Entities/Folder.cs",
+      "sha256": "d5f227d462ce3c2df0d5a45d912778427f87321fc9d6e13d863ec28bb639e0c1",
+      "bytes": 83390
+    },
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/MediaBrowser.Controller/Entities/CollectionFolder.cs",
+      "sha256": "6250b085fafa9adbaa153063ef2abccbde20a2b04f372dbbc8fa80ee73151487",
+      "bytes": 13354
+    },
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/MediaBrowser.Controller/Entities/BaseItem.cs",
+      "sha256": "9dc7b96a93c9fbe874cdcededdca395b5aa2df6070f5cfc9c8959539dcd76469",
+      "bytes": 105800
+    },
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/MediaBrowser.Controller/Entities/UserRootFolder.cs",
+      "sha256": "7c0349155c4959d5e6fb95d613739f88991cad85c7e3019104a0f76c80e48d4c",
+      "bytes": 5120
+    },
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/MediaBrowser.Controller/Entities/InternalItemsQuery.cs",
+      "sha256": "d3002a8af3e88fba82a46a1541620518968677425694978c3e967e325106e964",
+      "bytes": 20315
+    },
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/Emby.Server.Implementations/Library/LibraryManager.cs",
+      "sha256": "4729de97560262702a44c5829bf93bbc5deec379e9b3018b231aaa6d65643c44",
+      "bytes": 157087
+    },
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/Emby.Server.Implementations/EntryPoints/LibraryChangedNotifier.cs",
+      "sha256": "5206ba2be93afbb306b9fc698c1d07611a20fcde6dae333a76c321bd9688fe89",
+      "bytes": 15429
+    },
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/Jellyfin.Server.Implementations/Item/BaseItemRepository.TranslateQuery.cs",
+      "sha256": "0b2d4aba6f4d73c224315c1a0abd82b3c65ba2a42683381e1e73c00b01019c06",
+      "bytes": 58978
+    },
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/Jellyfin.Server/bin/Release/net10.0/MediaBrowser.Controller.dll",
+      "sha256": "0b7bd01db6605bb54658d07e8b7d5d70615a7f741cfdd6615b0cfa628f0d1644",
+      "bytes": 655872
+    },
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/Jellyfin.Server/bin/Release/net10.0/MediaBrowser.Model.dll",
+      "sha256": "991b3ca08b544ea91feff5c05d8dbb1d8b6ca3392f90753073cc09e353395946",
+      "bytes": 489472
+    },
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/Jellyfin.Server/bin/Release/net10.0/Jellyfin.Server.Implementations.dll",
+      "sha256": "eb3e6e24a44d691a70122a68feb8452420df94e93f85f2ca3b8a860bf1a42a2e",
+      "bytes": 664064
+    },
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/Jellyfin.Server/bin/Release/net10.0/Jellyfin.Database.Implementations.dll",
+      "sha256": "987e24d22a0f54a0eb2c459f9073fc6721bcbed98763da7e23e85e19e3e62ed1",
+      "bytes": 249344
+    },
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/Jellyfin.Server/bin/Release/net10.0/Jellyfin.Extensions.dll",
+      "sha256": "857e4a37f69c65f1b66cd281fe735a75caf3ae76ae878726eaf20130755cabde",
+      "bytes": 37888
+    },
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/Jellyfin.Server/bin/Release/net10.0/Emby.Server.Implementations.dll",
+      "sha256": "c63a43b6d4dc0c82f59b1d5a1c71788738f3629fdf60e01993de606b83559b1a",
+      "bytes": 1673728
+    }
+  ],
+  "oracleSourceSha256": "5a9e46adfb859bff8244adb0ef4bedcd780507fb7ba37fb271bc03752eeeef5d",
+  "nativeProcessExit": 0,
+  "raw": {
+    "actualFrozenLibraryManagerMembership": true,
+    "actualFrozenCollectionRefreshProgress": true,
+    "actualFrozenNotifier": true,
+    "dependenciesControlled": true,
+    "actualWebSocketTransportInvoked": false,
+    "databaseOpened": false,
+    "inputs": [
+      {
+        "Id": "d1000000-0000-0000-0000-000000000001",
+        "ParentId": "00000000-0000-0000-0000-000000000000",
+        "Path": "D:\\Oracle\\root\\default",
+        "type": "UserRootFolder",
+        "physicalLocationsList": null,
+        "physicalFolderIds": null,
+        "serializedData": null
+      },
+      {
+        "Id": "d1000000-0000-0000-0000-000000000002",
+        "ParentId": "00000000-0000-0000-0000-000000000000",
+        "Path": "Z:\\",
+        "type": "AggregateFolder",
+        "physicalLocationsList": null,
+        "physicalFolderIds": null,
+        "serializedData": null
+      },
+      {
+        "Id": "d1000000-0000-0000-0000-000000000003",
+        "ParentId": "d1000000-0000-0000-0000-000000000002",
+        "Path": "Z:\\Refresh",
+        "type": "Folder",
+        "physicalLocationsList": null,
+        "physicalFolderIds": null,
+        "serializedData": null
+      },
+      {
+        "Id": "d1000000-0000-0000-0000-000000000006",
+        "ParentId": "d1000000-0000-0000-0000-000000000002",
+        "Path": "/Media/Shows",
+        "type": "Folder",
+        "physicalLocationsList": null,
+        "physicalFolderIds": null,
+        "serializedData": null
+      },
+      {
+        "Id": "d1000000-0000-0000-0000-000000000011",
+        "ParentId": "d1000000-0000-0000-0000-000000000002",
+        "Path": "Z:\\Second",
+        "type": "Folder",
+        "physicalLocationsList": null,
+        "physicalFolderIds": null,
+        "serializedData": null
+      },
+      {
+        "Id": "d1000000-0000-0000-0000-000000000004",
+        "ParentId": "d1000000-0000-0000-0000-000000000001",
+        "Path": "D:\\Oracle\\root\\default\\4",
+        "type": "CollectionFolder",
+        "physicalLocationsList": [
+          "z:\\refresh"
+        ],
+        "physicalFolderIds": [],
+        "serializedData": null
+      },
+      {
+        "Id": "d1000000-0000-0000-0000-000000000005",
+        "ParentId": "d1000000-0000-0000-0000-000000000002",
+        "Path": "D:\\Oracle\\root\\default\\5",
+        "type": "CollectionFolder",
+        "physicalLocationsList": [
+          "Z:\\Refresh"
+        ],
+        "physicalFolderIds": [],
+        "serializedData": null
+      },
+      {
+        "Id": "d1000000-0000-0000-0000-000000000007",
+        "ParentId": "d1000000-0000-0000-0000-000000000001",
+        "Path": "D:\\Oracle\\root\\default\\7",
+        "type": "CollectionFolder",
+        "physicalLocationsList": [
+          "/Media/Shows/"
+        ],
+        "physicalFolderIds": [],
+        "serializedData": null
+      },
+      {
+        "Id": "d1000000-0000-0000-0000-000000000008",
+        "ParentId": "d1000000-0000-0000-0000-000000000001",
+        "Path": "D:\\Oracle\\root\\default\\8",
+        "type": "CollectionFolder",
+        "physicalLocationsList": [
+          "/media/shows"
+        ],
+        "physicalFolderIds": [
+          "d1000000-0000-0000-0000-000000000006"
+        ],
+        "serializedData": null
+      },
+      {
+        "Id": "d1000000-0000-0000-0000-000000000009",
+        "ParentId": "d1000000-0000-0000-0000-000000000001",
+        "Path": "D:\\Oracle\\root\\default\\9",
+        "type": "CollectionFolder",
+        "physicalLocationsList": [
+          "Z:\\Refresh",
+          "Z:\\Second"
+        ],
+        "physicalFolderIds": [
+          "d1000000-0000-0000-0000-000000000003",
+          "d1000000-0000-0000-0000-000000000011"
+        ],
+        "serializedData": null
+      },
+      {
+        "Id": "d1000000-0000-0000-0000-000000000010",
+        "ParentId": "d1000000-0000-0000-0000-000000000001",
+        "Path": "D:\\Oracle\\root\\default\\10",
+        "type": "CollectionFolder",
+        "physicalLocationsList": [
+          "z:/refresh/"
+        ],
+        "physicalFolderIds": [
+          "d1000000-0000-0000-0000-000000000003"
+        ],
+        "serializedData": null
+      },
+      {
+        "Id": "d1000000-0000-0000-0000-000000000012",
+        "ParentId": "d1000000-0000-0000-0000-000000000001",
+        "Path": "D:\\Oracle\\root\\default\\12",
+        "type": "CollectionFolder",
+        "physicalLocationsList": [],
+        "physicalFolderIds": [],
+        "serializedData": "{\"PhysicalLocations\":[\"Z:\\\\Refresh\"]}"
+      }
+    ],
+    "rootChildIds": [
+      "d1000000-0000-0000-0000-000000000004",
+      "d1000000-0000-0000-0000-000000000007",
+      "d1000000-0000-0000-0000-000000000008",
+      "d1000000-0000-0000-0000-000000000009",
+      "d1000000-0000-0000-0000-000000000010",
+      "d1000000-0000-0000-0000-000000000012"
+    ],
+    "windowsCollectionIds": [
+      "d1000000-0000-0000-0000-000000000004",
+      "d1000000-0000-0000-0000-000000000009"
+    ],
+    "posixCollectionIds": [
+      "d1000000-0000-0000-0000-000000000008"
+    ],
+    "ignoredAlias": {
+      "PhysicalLocationsList": [],
+      "PhysicalLocations": [],
+      "PhysicalFolderIds": []
+    },
+    "output": [
+      {
+        "phase": "first-started",
+        "itemId": "d1000000-0000-0000-0000-000000000003",
+        "progress": 0,
+        "first": 0,
+        "second": null,
+        "own": null,
+        "ownProducerMessages": [],
+        "isRoot": false,
+        "isTopParent": true,
+        "active": [
+          {
+            "id": "d1000000-0000-0000-0000-000000000003",
+            "progress": 0
+          }
+        ],
+        "getters": [
+          {
+            "Id": "d1000000-0000-0000-0000-000000000004",
+            "progress": null
+          },
+          {
+            "Id": "d1000000-0000-0000-0000-000000000005",
+            "progress": null
+          },
+          {
+            "Id": "d1000000-0000-0000-0000-000000000007",
+            "progress": null
+          },
+          {
+            "Id": "d1000000-0000-0000-0000-000000000008",
+            "progress": null
+          },
+          {
+            "Id": "d1000000-0000-0000-0000-000000000009",
+            "progress": 0
+          },
+          {
+            "Id": "d1000000-0000-0000-0000-000000000010",
+            "progress": 0
+          },
+          {
+            "Id": "d1000000-0000-0000-0000-000000000012",
+            "progress": null
+          }
+        ],
+        "messages": [
+          {
+            "messageType": "RefreshProgress",
+            "data": {
+              "ItemId": "d1000000000000000000000000000003",
+              "Progress": "0"
+            }
+          },
+          {
+            "messageType": "RefreshProgress",
+            "data": {
+              "ItemId": "d1000000000000000000000000000004",
+              "Progress": "0"
+            }
+          },
+          {
+            "messageType": "RefreshProgress",
+            "data": {
+              "ItemId": "d1000000000000000000000000000009",
+              "Progress": "0"
+            }
+          }
+        ]
+      },
+      {
+        "phase": "first-progress",
+        "itemId": "d1000000-0000-0000-0000-000000000003",
+        "progress": 40,
+        "first": 40,
+        "second": null,
+        "own": null,
+        "ownProducerMessages": [],
+        "isRoot": false,
+        "isTopParent": true,
+        "active": [
+          {
+            "id": "d1000000-0000-0000-0000-000000000003",
+            "progress": 40
+          }
+        ],
+        "getters": [
+          {
+            "Id": "d1000000-0000-0000-0000-000000000004",
+            "progress": null
+          },
+          {
+            "Id": "d1000000-0000-0000-0000-000000000005",
+            "progress": null
+          },
+          {
+            "Id": "d1000000-0000-0000-0000-000000000007",
+            "progress": null
+          },
+          {
+            "Id": "d1000000-0000-0000-0000-000000000008",
+            "progress": null
+          },
+          {
+            "Id": "d1000000-0000-0000-0000-000000000009",
+            "progress": 40
+          },
+          {
+            "Id": "d1000000-0000-0000-0000-000000000010",
+            "progress": 40
+          },
+          {
+            "Id": "d1000000-0000-0000-0000-000000000012",
+            "progress": null
+          }
+        ],
+        "messages": [
+          {
+            "messageType": "RefreshProgress",
+            "data": {
+              "ItemId": "d1000000000000000000000000000003",
+              "Progress": "40"
+            }
+          },
+          {
+            "messageType": "RefreshProgress",
+            "data": {
+              "ItemId": "d1000000000000000000000000000004",
+              "Progress": "0"
+            }
+          },
+          {
+            "messageType": "RefreshProgress",
+            "data": {
+              "ItemId": "d1000000000000000000000000000009",
+              "Progress": "40"
+            }
+          }
+        ]
+      },
+      {
+        "phase": "own-active-collection",
+        "itemId": "d1000000-0000-0000-0000-000000000003",
+        "progress": 40,
+        "first": 40,
+        "second": null,
+        "own": 66,
+        "ownProducerMessages": [],
+        "isRoot": false,
+        "isTopParent": true,
+        "active": [
+          {
+            "id": "d1000000-0000-0000-0000-000000000003",
+            "progress": 40
+          },
+          {
+            "id": "d1000000-0000-0000-0000-000000000004",
+            "progress": 66
+          }
+        ],
+        "getters": [
+          {
+            "Id": "d1000000-0000-0000-0000-000000000004",
+            "progress": null
+          },
+          {
+            "Id": "d1000000-0000-0000-0000-000000000005",
+            "progress": null
+          },
+          {
+            "Id": "d1000000-0000-0000-0000-000000000007",
+            "progress": null
+          },
+          {
+            "Id": "d1000000-0000-0000-0000-000000000008",
+            "progress": null
+          },
+          {
+            "Id": "d1000000-0000-0000-0000-000000000009",
+            "progress": 40
+          },
+          {
+            "Id": "d1000000-0000-0000-0000-000000000010",
+            "progress": 40
+          },
+          {
+            "Id": "d1000000-0000-0000-0000-000000000012",
+            "progress": null
+          }
+        ],
+        "messages": [
+          {
+            "messageType": "RefreshProgress",
+            "data": {
+              "ItemId": "d1000000000000000000000000000003",
+              "Progress": "40"
+            }
+          },
+          {
+            "messageType": "RefreshProgress",
+            "data": {
+              "ItemId": "d1000000000000000000000000000004",
+              "Progress": "0"
+            }
+          },
+          {
+            "messageType": "RefreshProgress",
+            "data": {
+              "ItemId": "d1000000000000000000000000000009",
+              "Progress": "40"
+            }
+          }
+        ]
+      },
+      {
+        "phase": "second-started",
+        "itemId": "d1000000-0000-0000-0000-000000000011",
+        "progress": 0,
+        "first": 40,
+        "second": 0,
+        "own": null,
+        "ownProducerMessages": [],
+        "isRoot": false,
+        "isTopParent": true,
+        "active": [
+          {
+            "id": "d1000000-0000-0000-0000-000000000003",
+            "progress": 40
+          },
+          {
+            "id": "d1000000-0000-0000-0000-000000000011",
+            "progress": 0
+          }
+        ],
+        "getters": [
+          {
+            "Id": "d1000000-0000-0000-0000-000000000004",
+            "progress": null
+          },
+          {
+            "Id": "d1000000-0000-0000-0000-000000000005",
+            "progress": null
+          },
+          {
+            "Id": "d1000000-0000-0000-0000-000000000007",
+            "progress": null
+          },
+          {
+            "Id": "d1000000-0000-0000-0000-000000000008",
+            "progress": null
+          },
+          {
+            "Id": "d1000000-0000-0000-0000-000000000009",
+            "progress": 20
+          },
+          {
+            "Id": "d1000000-0000-0000-0000-000000000010",
+            "progress": 40
+          },
+          {
+            "Id": "d1000000-0000-0000-0000-000000000012",
+            "progress": null
+          }
+        ],
+        "messages": [
+          {
+            "messageType": "RefreshProgress",
+            "data": {
+              "ItemId": "d1000000000000000000000000000011",
+              "Progress": "0"
+            }
+          },
+          {
+            "messageType": "RefreshProgress",
+            "data": {
+              "ItemId": "d1000000000000000000000000000009",
+              "Progress": "20"
+            }
+          }
+        ]
+      },
+      {
+        "phase": "first-completed",
+        "itemId": "d1000000-0000-0000-0000-000000000003",
+        "progress": 100,
+        "first": null,
+        "second": 0,
+        "own": null,
+        "ownProducerMessages": [],
+        "isRoot": false,
+        "isTopParent": true,
+        "active": [
+          {
+            "id": "d1000000-0000-0000-0000-000000000011",
+            "progress": 0
+          }
+        ],
+        "getters": [
+          {
+            "Id": "d1000000-0000-0000-0000-000000000004",
+            "progress": null
+          },
+          {
+            "Id": "d1000000-0000-0000-0000-000000000005",
+            "progress": null
+          },
+          {
+            "Id": "d1000000-0000-0000-0000-000000000007",
+            "progress": null
+          },
+          {
+            "Id": "d1000000-0000-0000-0000-000000000008",
+            "progress": null
+          },
+          {
+            "Id": "d1000000-0000-0000-0000-000000000009",
+            "progress": 0
+          },
+          {
+            "Id": "d1000000-0000-0000-0000-000000000010",
+            "progress": null
+          },
+          {
+            "Id": "d1000000-0000-0000-0000-000000000012",
+            "progress": null
+          }
+        ],
+        "messages": [
+          {
+            "messageType": "RefreshProgress",
+            "data": {
+              "ItemId": "d1000000000000000000000000000003",
+              "Progress": "100"
+            }
+          },
+          {
+            "messageType": "RefreshProgress",
+            "data": {
+              "ItemId": "d1000000000000000000000000000004",
+              "Progress": "0"
+            }
+          },
+          {
+            "messageType": "RefreshProgress",
+            "data": {
+              "ItemId": "d1000000000000000000000000000009",
+              "Progress": "0"
+            }
+          }
+        ]
+      },
+      {
+        "phase": "second-completed",
+        "itemId": "d1000000-0000-0000-0000-000000000011",
+        "progress": 100,
+        "first": null,
+        "second": null,
+        "own": null,
+        "ownProducerMessages": [],
+        "isRoot": false,
+        "isTopParent": true,
+        "active": [],
+        "getters": [
+          {
+            "Id": "d1000000-0000-0000-0000-000000000004",
+            "progress": null
+          },
+          {
+            "Id": "d1000000-0000-0000-0000-000000000005",
+            "progress": null
+          },
+          {
+            "Id": "d1000000-0000-0000-0000-000000000007",
+            "progress": null
+          },
+          {
+            "Id": "d1000000-0000-0000-0000-000000000008",
+            "progress": null
+          },
+          {
+            "Id": "d1000000-0000-0000-0000-000000000009",
+            "progress": null
+          },
+          {
+            "Id": "d1000000-0000-0000-0000-000000000010",
+            "progress": null
+          },
+          {
+            "Id": "d1000000-0000-0000-0000-000000000012",
+            "progress": null
+          }
+        ],
+        "messages": [
+          {
+            "messageType": "RefreshProgress",
+            "data": {
+              "ItemId": "d1000000000000000000000000000011",
+              "Progress": "100"
+            }
+          },
+          {
+            "messageType": "RefreshProgress",
+            "data": {
+              "ItemId": "d1000000000000000000000000000009",
+              "Progress": "0"
+            }
+          }
+        ]
+      }
+    ],
+    "calls": [
+      "GetItemById",
+      "GetCollectionFolders",
+      "GetItemById",
+      "GetItemById",
+      "GetItemById",
+      "GetItemById",
+      "GetItemById",
+      "GetItemById",
+      "GetItemById",
+      "GetItemById",
+      "GetItemById",
+      "GetCollectionFolders",
+      "GetItemById",
+      "GetItemById",
+      "GetItemById",
+      "GetItemById",
+      "GetItemById",
+      "GetItemById",
+      "GetItemById",
+      "GetItemById",
+      "GetItemById",
+      "GetItemById",
+      "GetCollectionFolders",
+      "GetItemById",
+      "GetItemById",
+      "GetItemById",
+      "GetItemById",
+      "GetItemById",
+      "GetItemById",
+      "GetItemById",
+      "GetItemById",
+      "GetItemById",
+      "GetCollectionFolders",
+      "GetItemById",
+      "GetItemById",
+      "GetItemById",
+      "GetItemById",
+      "GetItemById",
+      "GetItemById",
+      "GetItemById",
+      "GetItemById",
+      "GetItemById",
+      "GetCollectionFolders",
+      "GetItemById",
+      "GetItemById",
+      "GetItemById",
+      "GetItemById",
+      "GetItemById",
+      "GetItemById",
+      "GetItemById",
+      "GetItemById",
+      "GetItemById",
+      "GetCollectionFolders",
+      "GetItemById",
+      "GetItemById",
+      "GetItemById",
+      "GetItemById",
+      "GetItemById",
+      "GetItemById",
+      "GetItemById",
+      "GetItemById",
+      "GetItemById",
+      "GetItemById"
+    ],
+    "sourceBoundary": "Actual frozen LibraryManager.GetCollectionFolders(item,allUserRootChildren), CollectionFolder.GetRefreshProgress/GetPhysicalFolders(true), and private LibraryChangedNotifier.OnProviderRefreshProgress run unmodified. Explicit root.Children contains only folders whose ParentId is root. Entity lookup, provider active-progress dictionary, configuration, user and session interfaces are controlled via DispatchProxy. Session send captures complete native MessageType/Data; native WebSocket envelopes, SQL query, live provider lifecycle and throttle timing are not invoked. Each progress observation uses a fresh notifier so intermediate values are not suppressed by time. No membership/getter/notification payload result is mocked.",
+    "phaseAcceptance": false
+  },
+  "limitations": "Actual frozen LibraryManager.GetCollectionFolders(item,allUserRootChildren), CollectionFolder.GetRefreshProgress/GetPhysicalFolders(true), and private LibraryChangedNotifier.OnProviderRefreshProgress run unmodified. Explicit root.Children contains only folders whose ParentId is root. Entity lookup, provider active-progress dictionary, configuration, user and session interfaces are controlled via DispatchProxy. Session send captures complete native MessageType/Data; native WebSocket envelopes, SQL query, live provider lifecycle and throttle timing are not invoked. Each progress observation uses a fresh notifier so intermediate values are not suppressed by time. No membership/getter/notification payload result is mocked."
+}

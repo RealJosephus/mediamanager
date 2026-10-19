@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-04T09:56:05.999Z",
+  "candidateVerified": false,
+  "files": {
+    "native": {
+      "path": "tests/metadata/fixtures/item-update/native.json",
+      "sha256": "5d0d00268e02ede471847e0c38bb6054d343e884b8d2b700d38f63047d8abfaf"
+    },
+    "input": {
+      "path": "tests/metadata/fixtures/item-update/input.json",
+      "sha256": "1a88f5068b1fe0aeb056e3a166ee758fc86e9d8ce171ee3ca160266b978cf955"
+    },
+    "schema": {
+      "path": "src/http/resources/item-update-schema.json",
+      "sha256": "6c9075d24ed5544a69a54ce8f8f7feb19a79874db88b8130e111a02730d7ae75"
+    },
+    "oracle": {
+      "path": "tests/metadata/fixtures/item-update/Program.cs",
+      "sha256": "f02f3faa39556031947502a547c6898b85b8286659ea7403edfb9edc4b824560"
+    },
+    "project": {
+      "path": "tests/metadata/fixtures/item-update/Oracle.csproj",
+      "sha256": "3f2610631c594ffd08dcc82f03d3509abc1c9c9541f159519800df046fc770ee"
+    },
+    "buildProperties": {
+      "path": "tests/Directory.Build.props",
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    }
+  },
+  "sourceFilesSha256": "2e3fbaca07b01aed70c98822bfcf87bbb8816de120e06051a322ef9c8810a1eb",
+  "schemaSourceFilesSha256": "2e3fbaca07b01aed70c98822bfcf87bbb8816de120e06051a322ef9c8810a1eb",
+  "runtime": {
+    "timezone": "Asia/Taipei",
+    "dotnet": {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\dotnet.exe",
+      "available": true,
+      "kind": "file",
+      "bytes": 167208,
+      "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6"
+    },
+    "jellyfinDll": {
+      "filename": "D:/mediamanager/.test-output/reference-20261003/jellyfin-baseline/source/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 506368,
+      "sha256": "29c34541350089dc0522c4309ecd617e78fd402774681f32491d089803939c03"
+    }
+  },
+  "nativeRecordSha256": "06bc6b3fb14370d1be5c7289c65868d62ed856541eda951551c0a9748ce04023",
+  "schemaRecordSha256": "0144d94e7acec5de45c28200f2b3d1b924c40be2275762942824f9e959fb4992"
+}

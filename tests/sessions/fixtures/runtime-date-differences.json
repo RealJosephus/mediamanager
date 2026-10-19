@@ -1,0 +1,130 @@
+{
+  "policy": "Use standard JavaScript local time conversion. Preserve these differences from the frozen Windows CLR without a runtime workaround.",
+  "environment": {
+    "node": "v24.16.0",
+    "platform": "win32",
+    "timeZone": "Asia/Shanghai"
+  },
+  "userDataDto": {
+    "date-295": {
+      "source": "{\"LastPlayedDate\":\"1990-07-01T12:00:00+00:00\"}",
+      "reference": {
+        "Rating": null,
+        "PlayedPercentage": null,
+        "UnplayedItemCount": null,
+        "PlaybackPositionTicks": null,
+        "PlayCount": null,
+        "IsFavorite": null,
+        "Likes": null,
+        "LastPlayedDate": {
+          "ticks": "627824592000000000",
+          "kind": "Local",
+          "utcTicks": "627824304000000000",
+          "stored": "1990-07-01 12:00:00"
+        },
+        "Played": null,
+        "Key": null,
+        "ItemId": null
+      },
+      "candidate": {
+        "Rating": null,
+        "PlayedPercentage": null,
+        "UnplayedItemCount": null,
+        "PlaybackPositionTicks": null,
+        "PlayCount": null,
+        "IsFavorite": null,
+        "Likes": null,
+        "LastPlayedDate": {
+          "ticks": "627824628000000000",
+          "kind": "Local",
+          "utcTicks": "627824304000000000",
+          "stored": "1990-07-01 12:00:00"
+        },
+        "Played": null,
+        "Key": null,
+        "ItemId": null
+      }
+    },
+    "date-296": {
+      "source": "{\"LastPlayedDate\":\"1900-01-01T12:00:00\"}",
+      "reference": {
+        "Rating": null,
+        "PlayedPercentage": null,
+        "UnplayedItemCount": null,
+        "PlaybackPositionTicks": null,
+        "PlayCount": null,
+        "IsFavorite": null,
+        "Likes": null,
+        "LastPlayedDate": {
+          "ticks": "599266512000000000",
+          "kind": "Unspecified",
+          "utcTicks": "599266224000000000",
+          "stored": "1900-01-01 04:00:00"
+        },
+        "Played": null,
+        "Key": null,
+        "ItemId": null
+      },
+      "candidate": {
+        "Rating": null,
+        "PlayedPercentage": null,
+        "UnplayedItemCount": null,
+        "PlaybackPositionTicks": null,
+        "PlayCount": null,
+        "IsFavorite": null,
+        "Likes": null,
+        "LastPlayedDate": {
+          "ticks": "599266512000000000",
+          "kind": "Unspecified",
+          "utcTicks": "599266220570000000",
+          "stored": "1900-01-01 03:54:17"
+        },
+        "Played": null,
+        "Key": null,
+        "ItemId": null
+      }
+    }
+  },
+  "syncplay": {
+    "\"1900-01-01T00:00:00+08:00\"": {
+      "reference": {
+        "ticks": "599266080000000000",
+        "kind": "Local"
+      },
+      "candidate": {
+        "ticks": "599266083430000000",
+        "kind": "Local"
+      }
+    },
+    "\"1990-06-01T00:00:00+08:00\"": {
+      "reference": {
+        "ticks": "627797952000000000",
+        "kind": "Local"
+      },
+      "candidate": {
+        "ticks": "627797988000000000",
+        "kind": "Local"
+      }
+    },
+    "\"0001-01-01T00:00:00-14:00\"": {
+      "reference": {
+        "ticks": "792000000000",
+        "kind": "Local"
+      },
+      "candidate": {
+        "ticks": "795430000000",
+        "kind": "Local"
+      }
+    },
+    "\"0001-01-01T00:00:00+00:00\"": {
+      "reference": {
+        "ticks": "288000000000",
+        "kind": "Local"
+      },
+      "candidate": {
+        "ticks": "291430000000",
+        "kind": "Local"
+      }
+    }
+  }
+}

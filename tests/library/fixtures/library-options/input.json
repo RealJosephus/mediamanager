@@ -1,0 +1,429 @@
+[
+  {
+    "name": "default save",
+    "options": {}
+  },
+  {
+    "name": "all scalars",
+    "options": {
+      "Enabled": false,
+      "EnablePhotos": false,
+      "EnableRealtimeMonitor": true,
+      "EnableLUFSScan": true,
+      "EnableChapterImageExtraction": true,
+      "ExtractChapterImagesDuringLibraryScan": true,
+      "EnableTrickplayImageExtraction": true,
+      "ExtractTrickplayImagesDuringLibraryScan": true,
+      "SaveLocalMetadata": true,
+      "EnableInternetProviders": true,
+      "EnableAutomaticSeriesGrouping": false,
+      "EnableEmbeddedTitles": true,
+      "EnableEmbeddedExtrasTitles": true,
+      "EnableEmbeddedEpisodeInfos": true,
+      "AutomaticRefreshIntervalDays": -2147483648,
+      "PreferredMetadataLanguage": "zh-TW",
+      "MetadataCountryCode": "TW",
+      "SeasonZeroDisplayName": "A < café 中文",
+      "SkipSubtitlesIfEmbeddedSubtitlesPresent": true,
+      "SkipSubtitlesIfAudioTrackMatches": false,
+      "RequirePerfectSubtitleMatch": false,
+      "SaveSubtitlesWithMedia": false,
+      "SaveLyricsWithMedia": true,
+      "SaveTrickplayWithMedia": true,
+      "PreferNonstandardArtistsTag": true,
+      "UseCustomTagDelimiters": true,
+      "AutomaticallyAddToCollection": true,
+      "AllowEmbeddedSubtitles": "AllowImage"
+    }
+  },
+  {
+    "name": "arrays and type options",
+    "options": {
+      "MetadataSavers": [
+        "Nfo",
+        "Xml"
+      ],
+      "DisabledLocalMetadataReaders": [
+        "X",
+        "X",
+        ""
+      ],
+      "LocalMetadataReaderOrder": [],
+      "DisabledSubtitleFetchers": [
+        "A"
+      ],
+      "SubtitleFetcherOrder": [
+        "B"
+      ],
+      "DisabledMediaSegmentProviders": [
+        "C"
+      ],
+      "MediaSegmentProviderOrder": [
+        "D"
+      ],
+      "SubtitleDownloadLanguages": [
+        "zh",
+        "en"
+      ],
+      "DisabledLyricFetchers": [
+        "E"
+      ],
+      "LyricFetcherOrder": [
+        "F"
+      ],
+      "CustomTagDelimiters": [
+        "/",
+        "|"
+      ],
+      "DelimiterWhitelist": [
+        "AC/DC"
+      ],
+      "TypeOptions": [
+        {
+          "Type": "Movie",
+          "MetadataFetchers": [
+            "Tmdb"
+          ],
+          "MetadataFetcherOrder": [
+            "Tmdb",
+            "X"
+          ],
+          "ImageFetchers": [
+            "Y"
+          ],
+          "ImageFetcherOrder": [
+            "Y"
+          ],
+          "SimilarItemProviders": [
+            "S"
+          ],
+          "SimilarItemProviderOrder": [
+            "S"
+          ],
+          "ImageOptions": [
+            {
+              "Type": "Backdrop",
+              "Limit": -1,
+              "MinWidth": 2147483647
+            },
+            {
+              "Type": "Primary"
+            }
+          ]
+        },
+        {}
+      ]
+    }
+  },
+  {
+    "name": "empty arrays",
+    "options": {
+      "MetadataSavers": [],
+      "LocalMetadataReaderOrder": [],
+      "SubtitleDownloadLanguages": [],
+      "CustomTagDelimiters": [],
+      "TypeOptions": [],
+      "PathInfos": []
+    }
+  },
+  {
+    "name": "null arrays",
+    "options": {
+      "MetadataSavers": null,
+      "DisabledLocalMetadataReaders": null,
+      "LocalMetadataReaderOrder": null,
+      "DisabledSubtitleFetchers": null,
+      "SubtitleFetcherOrder": null,
+      "DisabledMediaSegmentProviders": null,
+      "MediaSegmentProviderOrder": null,
+      "SubtitleDownloadLanguages": null,
+      "DisabledLyricFetchers": null,
+      "LyricFetcherOrder": null,
+      "CustomTagDelimiters": null,
+      "DelimiterWhitelist": null,
+      "TypeOptions": null
+    }
+  },
+  {
+    "name": "null strings",
+    "options": {
+      "PreferredMetadataLanguage": null,
+      "MetadataCountryCode": null,
+      "SeasonZeroDisplayName": null
+    }
+  },
+  {
+    "name": "empty strings",
+    "options": {
+      "PreferredMetadataLanguage": "",
+      "MetadataCountryCode": "",
+      "SeasonZeroDisplayName": ""
+    }
+  },
+  {
+    "name": "reverse paths",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{data}\\collections"
+        },
+        {
+          "Path": "{metadata}\\People"
+        },
+        {
+          "Path": "Z:\\Video"
+        },
+        {
+          "Path": ""
+        },
+        {
+          "Path": null
+        }
+      ]
+    }
+  },
+  {
+    "name": "paths substrings and case",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "Prefix{data}Suffix{metadata}"
+        },
+        {
+          "Path": "{data}\\collections\\{data}"
+        }
+      ]
+    }
+  },
+  {
+    "name": "null PathInfos",
+    "options": {
+      "PathInfos": null
+    }
+  },
+  {
+    "name": "null path entry",
+    "options": {
+      "PathInfos": [
+        null
+      ]
+    }
+  },
+  {
+    "name": "null type entry",
+    "options": {
+      "TypeOptions": [
+        null
+      ]
+    }
+  },
+  {
+    "name": "null image entry",
+    "options": {
+      "TypeOptions": [
+        {
+          "Type": "Movie",
+          "ImageOptions": [
+            null
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "null array entries",
+    "options": {
+      "MetadataSavers": [
+        "Nfo",
+        null,
+        ""
+      ],
+      "TypeOptions": [
+        {
+          "Type": "Movie",
+          "ImageFetchers": [
+            "A",
+            null,
+            ""
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "invalid XML scalar",
+    "options": {
+      "SeasonZeroDisplayName": "A\u0001B"
+    }
+  },
+  {
+    "name": "invalid image enum",
+    "options": {
+      "TypeOptions": [
+        {
+          "Type": "Movie",
+          "ImageOptions": [
+            {
+              "Type": 99
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "reverse failure",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{data}\\collections"
+        }
+      ]
+    },
+    "reverseFailure": true
+  },
+  {
+    "name": "missing directory",
+    "options": {
+      "SaveLocalMetadata": true
+    },
+    "missingDirectory": true
+  },
+  {
+    "name": "readonly file",
+    "xml": "<LibraryOptions><SeasonZeroDisplayName>Prior</SeasonZeroDisplayName></LibraryOptions>",
+    "options": {
+      "SaveLocalMetadata": true
+    },
+    "readOnly": true
+  },
+  {
+    "name": "directory instead of file",
+    "options": {
+      "SaveLocalMetadata": true
+    },
+    "directoryFile": true
+  },
+  {
+    "name": "event failure after write",
+    "options": {
+      "AutomaticallyAddToCollection": true
+    },
+    "eventFailure": true
+  },
+  {
+    "name": "missing file load"
+  },
+  {
+    "name": "invalid XML load",
+    "xml": "<LibraryOptions><Enabled>wrong</Enabled></LibraryOptions>"
+  },
+  {
+    "name": "wrong namespace load",
+    "xml": "<LibraryOptions xmlns=\"urn:foreign\"><Enabled>false</Enabled></LibraryOptions>"
+  },
+  {
+    "name": "duplicate first scalar load",
+    "xml": "<LibraryOptions><SeasonZeroDisplayName>First</SeasonZeroDisplayName><SeasonZeroDisplayName>Second</SeasonZeroDisplayName></LibraryOptions>"
+  },
+  {
+    "name": "nil strings load",
+    "xml": "<LibraryOptions xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><SeasonZeroDisplayName xsi:nil=\"true\"/><MetadataCountryCode xsi:nil=\"true\"/></LibraryOptions>"
+  },
+  {
+    "name": "nil arrays load",
+    "xml": "<LibraryOptions xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><MetadataSavers xsi:nil=\"true\"/><CustomTagDelimiters xsi:nil=\"true\"/><TypeOptions xsi:nil=\"true\"/></LibraryOptions>"
+  },
+  {
+    "name": "nil PathInfos load",
+    "xml": "<LibraryOptions xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><PathInfos xsi:nil=\"true\"/></LibraryOptions>"
+  },
+  {
+    "name": "expanded paths load",
+    "xml": "<LibraryOptions><PathInfos><MediaPathInfo><Path>%AppDataPath%\\collections</Path></MediaPathInfo><MediaPathInfo><Path>%MetadataPath%\\People</Path></MediaPathInfo></PathInfos></LibraryOptions>"
+  },
+  {
+    "name": "nil nested arrays",
+    "options": {
+      "TypeOptions": [
+        {
+          "Type": "Movie",
+          "ImageOptions": null,
+          "ImageFetchers": null,
+          "SimilarItemProviders": null
+        }
+      ]
+    }
+  },
+  {
+    "name": "duplicate array elements load",
+    "xml": "<LibraryOptions><MetadataSavers><string>First</string></MetadataSavers><MetadataSavers><string>Second</string></MetadataSavers></LibraryOptions>"
+  },
+  {
+    "name": "foreign scalar ignored load",
+    "xml": "<LibraryOptions xmlns:f=\"urn:foreign\"><f:Enabled>false</f:Enabled><Enabled>true</Enabled></LibraryOptions>"
+  },
+  {
+    "name": "wrong nil namespace load",
+    "xml": "<LibraryOptions xmlns:x=\"urn:foreign\"><TypeOptions><TypeOptions x:nil=\"true\"/></TypeOptions></LibraryOptions>"
+  },
+  {
+    "name": "nil path entry load",
+    "xml": "<LibraryOptions xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><PathInfos><MediaPathInfo xsi:nil=\"true\"/></PathInfos></LibraryOptions>"
+  },
+  {
+    "name": "null path property load",
+    "xml": "<LibraryOptions xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><PathInfos><MediaPathInfo><Path xsi:nil=\"true\"/></MediaPathInfo></PathInfos></LibraryOptions>"
+  },
+  {
+    "name": "newline and escaped strings",
+    "options": {
+      "SeasonZeroDisplayName": "A\rB\r\nC\nD\t&lt;",
+      "MetadataSavers": [
+        " A ",
+        "a\rb"
+      ]
+    }
+  },
+  {
+    "name": "nil array whitespace load",
+    "xml": "<LibraryOptions xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><CustomTagDelimiters xsi:nil=\" true \"/><TypeOptions><TypeOptions xsi:nil=\" 1 \"/></TypeOptions></LibraryOptions>"
+  },
+  {
+    "name": "invalid subtitle enum",
+    "options": {
+      "AllowEmbeddedSubtitles": 99
+    }
+  },
+  {
+    "name": "duplicate array followed by nil load",
+    "xml": "<LibraryOptions xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><CustomTagDelimiters><string>A</string></CustomTagDelimiters><CustomTagDelimiters xsi:nil=\"true\"/></LibraryOptions>"
+  },
+  {
+    "name": "duplicate type and path arrays load",
+    "xml": "<LibraryOptions><TypeOptions><TypeOptions><Type>First</Type></TypeOptions></TypeOptions><TypeOptions><TypeOptions><Type>Second</Type></TypeOptions></TypeOptions><PathInfos><MediaPathInfo><Path>First</Path></MediaPathInfo></PathInfos><PathInfos><MediaPathInfo><Path>Second</Path></MediaPathInfo></PathInfos></LibraryOptions>"
+  },
+  {
+    "name": "duplicate nested arrays load",
+    "xml": "<LibraryOptions><TypeOptions><TypeOptions><ImageFetchers><string>First</string></ImageFetchers><ImageFetchers><string>Second</string></ImageFetchers><ImageOptions><ImageOption><Limit>2</Limit></ImageOption></ImageOptions><ImageOptions><ImageOption><Limit>3</Limit></ImageOption></ImageOptions></TypeOptions></TypeOptions></LibraryOptions>"
+  },
+  {
+    "name": "duplicate nested scalars load",
+    "xml": "<LibraryOptions><TypeOptions><TypeOptions><Type>First</Type><Type>Second</Type><ImageOptions><ImageOption><Type>Backdrop</Type><Type>Primary</Type><Limit>2</Limit><Limit>3</Limit></ImageOption></ImageOptions></TypeOptions></TypeOptions></LibraryOptions>"
+  },
+  {
+    "name": "nil array with child load",
+    "xml": "<LibraryOptions xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><CustomTagDelimiters xsi:nil=\"true\"><string>A</string></CustomTagDelimiters></LibraryOptions>"
+  },
+  {
+    "name": "parent directory is a file load",
+    "parentFile": true
+  },
+  {
+    "name": "parent directory is a file save",
+    "parentFile": true,
+    "options": {
+      "SaveLocalMetadata": true
+    }
+  }
+]

@@ -1,0 +1,5 @@
+# Native nested ordinary movie files
+
+Twelve controls call the actual frozen MovieResolver.ResolveMultiple, VideoListResolver and SetInitialItemValues under a three-Folder parent chain. They record one/two ordinary Movie files, parsed year, home video, an unrelated music type, exact-name/resolution/lexical/bracket local-version ordering, different-year and unrelated-file rejection, and the single eligible version name override. File metadata, parent lookups and an empty directory service are controls. The recording does not execute a native scanner, repository saves, folder collapse, stacked versions, alternate database ownership or complete-library acceptance.
+
+The candidate compares the item type, name, path, year, mixed-folder flag, part/version lists, VideoType and extra paths. It rejects mutated missing media, mixed flags, names and years. The adjacent scan-context test also exercises recursive SQLite/real PostgreSQL scanner integration with controlled Folder generation. These candidate scanner cases are not native scanner differential evidence. The original oracle remains candidateVerified=false.

@@ -1,0 +1,117 @@
+{
+  "record": "D:/mediamanager-validation/20261013-release-collection-manager-native-9/record.json",
+  "recordSha256": "b7d8c2238ea664321bc2f9284bfd7e24f0390261c77ebbb47148c878883217fa",
+  "fixtureSha256": {
+    "input.json": "65370ad3df113b42d9cea1c38968c0ee5c052f83d0e97d3d2442dc461f7b14f8",
+    "native.json": "89c3e00cedf118056757e8ea7c6f3bd8bd55e4834398556f27c75ef22cb86bab",
+    "Program.cs": "0bf44d512ef1e3b195679255e26c6ac88a33a6906a1f40d414382e748a73ff56",
+    "Oracle.csproj": "8b40b0302a14f2ed73eabfb41e34acaa83807ab772da63ff8d0645880b688cca"
+  },
+  "sharedBuildPropsSha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd",
+  "sourceFiles": [
+    {
+      "path": "Emby.Server.Implementations/Collections/CollectionManager.cs",
+      "sha256": "32ed12ef23ccedcb7893f429661db5576e2016e78e9922d73626d193119a36c8",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "Emby.Server.Implementations/Library/LibraryManager.cs",
+      "sha256": "4729de97560262702a44c5829bf93bbc5deec379e9b3018b231aaa6d65643c44",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/Folder.cs",
+      "sha256": "d5f227d462ce3c2df0d5a45d912778427f87321fc9d6e13d863ec28bb639e0c1",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/BaseItem.cs",
+      "sha256": "9dc7b96a93c9fbe874cdcededdca395b5aa2df6070f5cfc9c8959539dcd76469",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/Movies/BoxSet.cs",
+      "sha256": "c7777732f29cf43b7470ece2b17eda5d67f6e43f4bbd9f4192bafd5891738df6",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/LinkedChild.cs",
+      "sha256": "156fff3ce8a385fa5d38e3460a6c7e27a7a41442a1e8a0fd508e0042c7b7c0e4",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "Emby.Server.Implementations/IO/ManagedFileSystem.cs",
+      "sha256": "280ea08cf13065d8cd3790edf551b28ddfc9f352f4758d4fe0e62a55dbe0b14e",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "Jellyfin.Api/Controllers/CollectionController.cs",
+      "sha256": "fb4a7f9cf99ca0fdb0899fd40e0d3b422c035a9756414567b389d7082108732f",
+      "designatedSourceMatchesOracleBuildCopy": true
+    }
+  ],
+  "actualAssemblyBinding": [
+    {
+      "name": "Emby.Server.Implementations",
+      "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\bin\\Release\\net10.0\\Emby.Server.Implementations.dll",
+      "sha256": "8d369435646570958505c58b9cb17da169855dabc105d0e933524361e9b7b1c8"
+    },
+    {
+      "name": "MediaBrowser.Controller",
+      "path": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\bin\\Release\\net10.0\\MediaBrowser.Controller.dll",
+      "sha256": "051c588a8e85a3a7cdde8dc3d9a1112217fd7e973a86fe2ff90cf765bedb75a8"
+    },
+    {
+      "name": "System.Private.CoreLib",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Private.CoreLib.dll",
+      "sha256": "1125acc8106c43fc8bad2d203c4c4485df6182d292846c2fff415c1040c54678"
+    }
+  ],
+  "oracleAssembly": {
+    "filename": "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\bin\\Release\\net10.0\\Oracle.dll",
+    "available": true,
+    "kind": "file",
+    "bytes": 50176,
+    "sha256": "49ce4379124584e9cf97529b1415590cc6052825bd0fdba5a7b34743087ba3d9"
+  },
+  "dotnet": {
+    "filename": "D:\\mediamanager\\.tools\\dotnet\\dotnet.exe",
+    "available": true,
+    "kind": "file",
+    "bytes": 167208,
+    "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6"
+  },
+  "jellyfinDll": {
+    "filename": "D:/mediamanager-validation/20261005/jellyfin-baseline/source/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll",
+    "available": true,
+    "kind": "file",
+    "bytes": 506368,
+    "sha256": "a43fa24c44677e579fcec79d637789b9f36633d02e5434e76a0e03fa13027767"
+  },
+  "build": {
+    "args": [
+      "build",
+      "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\project\\Oracle.csproj",
+      "-c",
+      "Release",
+      "--nologo",
+      "-v",
+      "minimal",
+      "-p:BaseOutputPath=D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\bin\\",
+      "-p:BaseIntermediateOutputPath=D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\obj\\"
+    ],
+    "status": 0,
+    "signal": null
+  },
+  "process": {
+    "args": [
+      "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9\\bin\\Release\\net10.0\\Oracle.dll",
+      "D:/mediamanager/tests/library/fixtures/collection-manager/input.json",
+      "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9/states",
+      "D:\\mediamanager-validation\\20261013-release-collection-manager-native-9/native.json"
+    ],
+    "status": 0,
+    "signal": null
+  },
+  "candidateVerified": false
+}

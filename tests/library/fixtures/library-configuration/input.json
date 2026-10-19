@@ -1,0 +1,526 @@
+[
+  {
+    "directories": [],
+    "name": "Collections",
+    "collectionType": "boxsets",
+    "key": "default-empty-library"
+  },
+  {
+    "directories": [
+      "{media}/Movies"
+    ],
+    "name": "Collections",
+    "collectionType": "boxsets",
+    "key": "one-media-path",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\Movies"
+        }
+      ],
+      "SaveLocalMetadata": true
+    }
+  },
+  {
+    "directories": [
+      "{media}/A/Movies",
+      "{media}/B/Movies"
+    ],
+    "name": "Collections",
+    "collectionType": "boxsets",
+    "key": "two-paths-with-same-name",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\A\\Movies"
+        },
+        {
+          "Path": "{media}\\B\\Movies"
+        }
+      ]
+    }
+  },
+  {
+    "directories": [
+      "{media}/Movies"
+    ],
+    "name": "Collections",
+    "collectionType": "boxsets",
+    "key": "duplicate-paths-are-not-deduplicated",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\Movies"
+        },
+        {
+          "Path": "{media}\\Movies"
+        },
+        {
+          "Path": "{media}\\Movies"
+        }
+      ]
+    }
+  },
+  {
+    "directories": [
+      "{views}/Collections",
+      "{views}/Collections2"
+    ],
+    "name": "Collections",
+    "collectionType": "boxsets",
+    "key": "existing-library-names"
+  },
+  {
+    "directories": [],
+    "name": "Collections",
+    "collectionType": "boxsets",
+    "key": "file-instead-of-library-directory",
+    "files": {
+      "{views}/Collections": "Prior file"
+    }
+  },
+  {
+    "directories": [],
+    "name": "  Collection 中文  ",
+    "collectionType": "boxsets",
+    "key": "trim-name"
+  },
+  {
+    "directories": [],
+    "name": "Series <A> : B / C \\ D",
+    "collectionType": "boxsets",
+    "key": "sanitize-name"
+  },
+  {
+    "directories": [],
+    "name": null,
+    "collectionType": "boxsets",
+    "key": "null-name"
+  },
+  {
+    "directories": [],
+    "name": "",
+    "collectionType": "boxsets",
+    "key": "empty-name"
+  },
+  {
+    "directories": [],
+    "name": " \t  ",
+    "collectionType": "boxsets",
+    "key": "whitespace-name"
+  },
+  {
+    "directories": [],
+    "name": "Collections",
+    "collectionType": null,
+    "key": "no-collection-type"
+  },
+  {
+    "directories": [],
+    "name": "Collections",
+    "collectionType": 99,
+    "key": "numeric-collection-type"
+  },
+  {
+    "directories": [],
+    "name": "Collections",
+    "collectionType": "boxsets",
+    "key": "null-path-array",
+    "options": {
+      "PathInfos": null
+    }
+  },
+  {
+    "directories": [],
+    "name": "Collections",
+    "collectionType": "boxsets",
+    "key": "null-path-entry",
+    "options": {
+      "PathInfos": [
+        null
+      ]
+    }
+  },
+  {
+    "directories": [],
+    "name": "Collections",
+    "collectionType": "boxsets",
+    "key": "missing-media-directory",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\Absent"
+        }
+      ]
+    }
+  },
+  {
+    "directories": [],
+    "name": "Collections",
+    "collectionType": "boxsets",
+    "key": "empty-media-path",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": ""
+        }
+      ]
+    }
+  },
+  {
+    "directories": [],
+    "name": "Collections",
+    "collectionType": "boxsets",
+    "key": "refresh-queues-library-scan",
+    "refreshLibrary": true
+  },
+  {
+    "directories": [],
+    "name": "Collections",
+    "collectionType": "boxsets",
+    "key": "active-scan-drops-extra-queue",
+    "refreshLibrary": true,
+    "scanRunning": true
+  },
+  {
+    "directories": [],
+    "name": "Collections",
+    "collectionType": "boxsets",
+    "key": "monitor-stop-failure",
+    "failure": "monitor-stop"
+  },
+  {
+    "directories": [],
+    "name": "Collections",
+    "collectionType": "boxsets",
+    "key": "monitor-start-failure",
+    "failure": "monitor-start"
+  },
+  {
+    "directories": [],
+    "name": "Collections",
+    "collectionType": "boxsets",
+    "key": "aggregate-refresh-failure",
+    "failure": "refresh-aggregate"
+  },
+  {
+    "directories": [],
+    "name": "Collections",
+    "collectionType": "boxsets",
+    "key": "aggregate-validation-failure",
+    "failure": "validate-aggregate"
+  },
+  {
+    "directories": [],
+    "name": "Collections",
+    "collectionType": "boxsets",
+    "key": "user-root-validation-failure",
+    "failure": "validate-user-root"
+  },
+  {
+    "directories": [
+      "{media}/Movies"
+    ],
+    "name": "Collections",
+    "collectionType": "boxsets",
+    "key": "options-event-failure-before-shortcuts",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\Movies"
+        }
+      ]
+    },
+    "failure": "options-updated"
+  },
+  {
+    "directories": [
+      "{media}/A",
+      "{media}/B"
+    ],
+    "name": "Collections",
+    "collectionType": "boxsets",
+    "key": "second-shortcut-failure-retains-first",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\A"
+        },
+        {
+          "Path": "{media}\\B"
+        }
+      ]
+    },
+    "failShortcut": 2
+  },
+  {
+    "directories": [
+      "{media}/Movies"
+    ],
+    "name": "Collections",
+    "collectionType": "boxsets",
+    "key": "content-types-cleanup",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\Movies"
+        }
+      ]
+    },
+    "contentTypes": [
+      {
+        "Name": null,
+        "Value": "null"
+      },
+      {
+        "Name": "",
+        "Value": "empty"
+      },
+      {
+        "Name": "{media}",
+        "Value": "movies"
+      },
+      {
+        "Name": "{media}\\Movies",
+        "Value": "homevideos"
+      },
+      {
+        "Name": "{media}\\Movies\\Child",
+        "Value": "tvshows"
+      },
+      {
+        "Name": "{media}Suffix",
+        "Value": "books"
+      }
+    ]
+  },
+  {
+    "directories": [
+      "{media}/Movies"
+    ],
+    "name": "Collections",
+    "collectionType": "boxsets",
+    "key": "configuration-save-failure-retains-shortcut",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\Movies"
+        }
+      ]
+    },
+    "contentTypes": [
+      {
+        "Name": "{media}\\Movies\\Child",
+        "Value": "movies"
+      }
+    ],
+    "failure": "configuration-save"
+  },
+  {
+    "directories": [],
+    "name": "Collections",
+    "collectionType": "boxsets",
+    "key": "options-enum-failure-prefix",
+    "options": {
+      "AllowEmbeddedSubtitles": 99
+    }
+  },
+  {
+    "directories": [
+      "{media}/A",
+      "{media}/B"
+    ],
+    "name": "Collections",
+    "collectionType": "boxsets",
+    "key": "validation-error-replaces-shortcut-error",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\A"
+        },
+        {
+          "Path": "{media}\\B"
+        }
+      ]
+    },
+    "failShortcut": 2,
+    "failure": "validate-aggregate"
+  },
+  {
+    "directories": [
+      "{media}/Movies.Library"
+    ],
+    "name": "Collections",
+    "collectionType": "boxsets",
+    "key": "extension-in-directory-name",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\Movies.Library"
+        }
+      ]
+    }
+  },
+  {
+    "directories": [
+      "{media}/Movies"
+    ],
+    "name": "Collections",
+    "collectionType": "boxsets",
+    "key": "media-path-trailing-separator",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\Movies\\"
+        }
+      ]
+    }
+  },
+  {
+    "directories": [
+      "{data}/collections"
+    ],
+    "name": "Collections",
+    "collectionType": "boxsets",
+    "key": "media-path-under-app-data",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{data}\\collections"
+        }
+      ]
+    }
+  },
+  {
+    "directories": [],
+    "name": "Collections",
+    "collectionType": "boxsets",
+    "key": "media-path-null",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": null
+        }
+      ]
+    }
+  },
+  {
+    "directories": [],
+    "name": ".",
+    "collectionType": "boxsets",
+    "key": "dot-name"
+  },
+  {
+    "directories": [],
+    "name": "..",
+    "collectionType": "boxsets",
+    "key": "dot-dot-name"
+  },
+  {
+    "directories": [],
+    "name": "Library.",
+    "collectionType": "boxsets",
+    "key": "trailing-dot-name"
+  },
+  {
+    "directories": [],
+    "name": "Library?",
+    "collectionType": "boxsets",
+    "key": "trailing-space-after-sanitization"
+  },
+  {
+    "directories": [],
+    "name": "/?",
+    "collectionType": "boxsets",
+    "key": "all-invalid-name"
+  },
+  {
+    "directories": [],
+    "name": "﻿",
+    "collectionType": "boxsets",
+    "key": "zero-width-no-break-name"
+  },
+  {
+    "directories": [],
+    "name": "Library",
+    "collectionType": "boxsets",
+    "key": "next-line-trim-name"
+  },
+  {
+    "directories": [
+      "{media}/Movies"
+    ],
+    "name": "Collections",
+    "collectionType": "boxsets",
+    "key": "null-content-types-retains-shortcut",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\Movies"
+        }
+      ]
+    },
+    "contentTypes": null
+  },
+  {
+    "directories": [
+      "{media}/Movies"
+    ],
+    "name": "Collections",
+    "collectionType": "boxsets",
+    "key": "null-content-type-entry-retains-shortcut",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\Movies"
+        }
+      ]
+    },
+    "contentTypes": [
+      null
+    ]
+  },
+  {
+    "directories": [
+      "{media}/Z",
+      "{media}/a",
+      "{media}/Á",
+      "{media}/中文",
+      "{media}/ß",
+      "{media}/２",
+      "{media}/_a",
+      "{media}/-a"
+    ],
+    "name": "Collections",
+    "collectionType": "boxsets",
+    "key": "unicode-location-order",
+    "options": {
+      "PathInfos": [
+        {
+          "Path": "{media}\\Z"
+        },
+        {
+          "Path": "{media}\\a"
+        },
+        {
+          "Path": "{media}\\Á"
+        },
+        {
+          "Path": "{media}\\中文"
+        },
+        {
+          "Path": "{media}\\ß"
+        },
+        {
+          "Path": "{media}\\２"
+        },
+        {
+          "Path": "{media}\\_a"
+        },
+        {
+          "Path": "{media}\\-a"
+        }
+      ]
+    }
+  }
+]

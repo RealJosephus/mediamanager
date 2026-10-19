@@ -1,0 +1,5 @@
+# Native internal folder refresh hooks
+
+Thirty-seven controls invoke actual AggregateFolder, UserRootFolder, CollectionFolder and PlaylistsFolder BeforeMetadataRefresh/RequiresRefresh hooks. Initial entity saves use real EF SQLite; the compared projection is live state rather than a stored-row snapshot. DirectoryService and ManagedFileSystem are actual, while configuration, physical-root children, parent/collection lookup and refreshed ID cache initialization are explicit controls. Captures names, paths, flags, physical lists and cache clearing, including default/empty names and matched/stale lists. The native direct cases warm only the private ID cache; the candidate warms a real empty repository list and compares nullness only.
+
+The original recorder remains candidateVerified=false. The candidate replays the declared projection through actual context/hooks and SQLite/real PostgreSQL. These controls do not establish full JSON/scalar bytes, complete physical-media resolution, network snapshots, ValidateChildren, production monitor/post-scan tasks or complete-library/release acceptance.

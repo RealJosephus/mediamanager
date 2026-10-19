@@ -1,0 +1,24 @@
+[
+  {
+    "Name": "reverse physical batch",
+    "Names": [
+      "Rock"
+    ],
+    "Existing": [
+      "Rock"
+    ],
+    "Physical": true,
+    "PhysicalTwin": true,
+    "ReverseBatch": true
+  },
+  {
+    "Name": "reverse owner batch",
+    "Names": [
+      "Rock"
+    ],
+    "InitialLookup": "Rock",
+    "InitialName": "Rock",
+    "InitialOwner": true,
+    "ReverseBatch": true
+  }
+]

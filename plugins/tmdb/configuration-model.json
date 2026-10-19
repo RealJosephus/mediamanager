@@ -1,0 +1,275 @@
+{
+  "roots": {
+    "tmdb": {
+      "type": {
+        "kind": "object",
+        "reference": "tmdbOptions"
+      },
+      "element": "PluginConfiguration",
+      "defaults": {
+        "TmdbApiKey": "",
+        "IncludeAdult": false,
+        "ExcludeTagsSeries": false,
+        "ExcludeTagsMovies": false,
+        "ImportSeasonName": false,
+        "ImportUnairedEpisodes": false,
+        "ImportMissingEpisodes": false,
+        "ImportSpecials": false,
+        "EnabledMissingEpisodeLibraries": [],
+        "MissingEpisodeRefreshIntervalDays": 7,
+        "UpcomingEpisodeGracePeriodDays": 7,
+        "MaxCastMembers": 15,
+        "MaxCrewMembers": 15,
+        "HideMissingCastMembers": false,
+        "HideMissingCrewMembers": false,
+        "PosterSize": null,
+        "BackdropSize": null,
+        "LogoSize": null,
+        "ProfileSize": null,
+        "StillSize": null,
+        "SimilarItemsCacheDays": 90
+      }
+    }
+  },
+  "definitions": {
+    "tmdbOptions": {
+      "xmlType": "PluginConfiguration",
+      "fields": {
+        "TmdbApiKey": {
+          "type": {
+            "kind": "string"
+          },
+          "element": "TmdbApiKey",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "IncludeAdult": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "IncludeAdult",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "ExcludeTagsSeries": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "ExcludeTagsSeries",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "ExcludeTagsMovies": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "ExcludeTagsMovies",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "ImportSeasonName": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "ImportSeasonName",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "ImportUnairedEpisodes": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "ImportUnairedEpisodes",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "ImportMissingEpisodes": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "ImportMissingEpisodes",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "ImportSpecials": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "ImportSpecials",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "EnabledMissingEpisodeLibraries": {
+          "type": {
+            "kind": "array",
+            "item": {
+              "kind": "string"
+            },
+            "element": "string",
+            "nullableItem": true
+          },
+          "element": "EnabledMissingEpisodeLibraries",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "MissingEpisodeRefreshIntervalDays": {
+          "type": {
+            "kind": "integer",
+            "bits": 32,
+            "signed": true,
+            "nullable": false
+          },
+          "element": "MissingEpisodeRefreshIntervalDays",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "UpcomingEpisodeGracePeriodDays": {
+          "type": {
+            "kind": "integer",
+            "bits": 32,
+            "signed": true,
+            "nullable": false
+          },
+          "element": "UpcomingEpisodeGracePeriodDays",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "MaxCastMembers": {
+          "type": {
+            "kind": "integer",
+            "bits": 32,
+            "signed": true,
+            "nullable": false
+          },
+          "element": "MaxCastMembers",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "MaxCrewMembers": {
+          "type": {
+            "kind": "integer",
+            "bits": 32,
+            "signed": true,
+            "nullable": false
+          },
+          "element": "MaxCrewMembers",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "HideMissingCastMembers": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "HideMissingCastMembers",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "HideMissingCrewMembers": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "HideMissingCrewMembers",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "PosterSize": {
+          "type": {
+            "kind": "string"
+          },
+          "element": "PosterSize",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "BackdropSize": {
+          "type": {
+            "kind": "string"
+          },
+          "element": "BackdropSize",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "LogoSize": {
+          "type": {
+            "kind": "string"
+          },
+          "element": "LogoSize",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "ProfileSize": {
+          "type": {
+            "kind": "string"
+          },
+          "element": "ProfileSize",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "StillSize": {
+          "type": {
+            "kind": "string"
+          },
+          "element": "StillSize",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "SimilarItemsCacheDays": {
+          "type": {
+            "kind": "integer",
+            "bits": 32,
+            "signed": true,
+            "nullable": false
+          },
+          "element": "SimilarItemsCacheDays",
+          "nullable": false,
+          "defaultValue": null
+        }
+      },
+      "order": [
+        "TmdbApiKey",
+        "IncludeAdult",
+        "ExcludeTagsSeries",
+        "ExcludeTagsMovies",
+        "ImportSeasonName",
+        "ImportUnairedEpisodes",
+        "ImportMissingEpisodes",
+        "ImportSpecials",
+        "EnabledMissingEpisodeLibraries",
+        "MissingEpisodeRefreshIntervalDays",
+        "UpcomingEpisodeGracePeriodDays",
+        "MaxCastMembers",
+        "MaxCrewMembers",
+        "HideMissingCastMembers",
+        "HideMissingCrewMembers",
+        "PosterSize",
+        "BackdropSize",
+        "LogoSize",
+        "ProfileSize",
+        "StillSize",
+        "SimilarItemsCacheDays"
+      ],
+      "defaults": {
+        "TmdbApiKey": "",
+        "IncludeAdult": false,
+        "ExcludeTagsSeries": false,
+        "ExcludeTagsMovies": false,
+        "ImportSeasonName": false,
+        "ImportUnairedEpisodes": false,
+        "ImportMissingEpisodes": false,
+        "ImportSpecials": false,
+        "EnabledMissingEpisodeLibraries": [],
+        "MissingEpisodeRefreshIntervalDays": 7,
+        "UpcomingEpisodeGracePeriodDays": 7,
+        "MaxCastMembers": 15,
+        "MaxCrewMembers": 15,
+        "HideMissingCastMembers": false,
+        "HideMissingCrewMembers": false,
+        "PosterSize": null,
+        "BackdropSize": null,
+        "LogoSize": null,
+        "ProfileSize": null,
+        "StillSize": null,
+        "SimilarItemsCacheDays": 90
+      }
+    }
+  }
+}

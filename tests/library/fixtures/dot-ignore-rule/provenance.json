@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-10-07T00:46:50.844Z",
+  "fixtureFiles": [
+    {
+      "path": "tests/library/fixtures/dot-ignore-rule/input.json",
+      "sha256": "f8ae3681db0404ec5b8829c5418e2b87c52bbf37acd9b42de78105ad022dcabe"
+    },
+    {
+      "path": "tests/library/fixtures/dot-ignore-rule/Program.cs",
+      "sha256": "d5496ca1eb5cbcbcd7befe8b4a2f4f323c5cb768a9c4871faeed688936e204bc"
+    },
+    {
+      "path": "tests/library/fixtures/dot-ignore-rule/Oracle.csproj",
+      "sha256": "3f2610631c594ffd08dcc82f03d3509abc1c9c9541f159519800df046fc770ee"
+    },
+    {
+      "path": "tests/library/fixtures/dot-ignore-rule/native.json",
+      "sha256": "94725c75a85c616eb6c5422822332cacd85e5abde3fe23e72d9ea36503b6cd7e"
+    },
+    {
+      "path": "tests/Directory.Build.props",
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    },
+    {
+      "path": "src/core/resources/native-ignore-regex.json",
+      "sha256": "b1b40f209985a055fe2c538889f96d2f95c783e7c30e5b5062f65807688d8c02"
+    }
+  ],
+  "scope": "Actual frozen DotIgnoreIgnoreRule.CheckIgnoreRules and ShouldIgnore/ClearDirectoryCache over real files, plus the bound .NET Regex runtime's BMP case equivalences, Unicode categories and block data. Rules include full paths, separators, directories, comment/empty/invalid handling, ordered negation, globstars, character classes/subtraction, category/block escapes, case/hex escapes, Unicode boundaries, octal escapes and backreferences. Sequential actual BitFaster FastConcurrentLru operations also cover configured capacities, warm-up, eviction, updates, removal and clear. Files cover nearest ancestor selection, directory start, cached absence/parent results, timestamp/length invalidation, deletion/clear and UTF-8/16/32 BOM decoding. Does not execute native FindExtras/scanning, symlinks, network failure paths, concurrent access, all .NET regex syntax, HTTP/WS or release acceptance.",
+  "assemblies": [
+    {
+      "name": "Emby.Server.Implementations",
+      "sha256": "8d369435646570958505c58b9cb17da169855dabc105d0e933524361e9b7b1c8"
+    },
+    {
+      "name": "Ignore",
+      "sha256": "e362b92af4a52f6bfd5b94f2692acdf3a1f3491477a12ce2ea5394cde369de2e"
+    },
+    {
+      "name": "System.Text.RegularExpressions",
+      "sha256": "060bcc88a688e687ff1404b83b5fb5cf17e19ec57f33d5b8a48ab494da83c134"
+    },
+    {
+      "name": "BitFaster.Caching",
+      "sha256": "a58275640773dc3ff06ceafad752fd399e4ed7cef93039354b7eb06a126590ff"
+    }
+  ],
+  "reference": {
+    "head": "208c278b75abd897aefa1e1175126eac5e4dbfaa",
+    "contentDigest": "e28a983db179b720c3b16d7416ee4112894a3115c4be6fe43c61c52e0d9a8313"
+  },
+  "capture": {
+    "record": "D:/mediamanager-validation/20261005/results/dot-ignore-oracle-20261007-9/record.json",
+    "sourceFilesSha256": "92058a2efb5c52b86530795b94e98c32a08839766a1ac767224fffaae8fff3d5"
+  },
+  "dependencies": [
+    {
+      "name": "Ignore",
+      "version": "0.2.1",
+      "commit": "f7c6f07d66d0e1043d901a2ab2f58daca1862066",
+      "source": "https://github.com/goelhardik/ignore",
+      "license": "MIT"
+    },
+    {
+      "name": "BitFaster.Caching",
+      "version": "2.6.1",
+      "commit": "a71bec32a6b7f621af7a9d2b1d7c4edd0209b289",
+      "source": "https://github.com/bitfaster/BitFaster.Caching",
+      "license": "MIT"
+    }
+  ],
+  "candidateVerified": true,
+  "candidateComparison": "All 67 rule groups (263 checks), 24 native real-file groups and five actual sequential TU-Q groups (2298 operations, complete entries and queue counts) are compared by the production rule compiler, VFS ignore cache and native cache policy. The candidate uses Memory VFS only as a fixture backend with a declared known ancestor namespace. Unmapped ancestors remain incomplete. The comparison also checks sealed runtime character facts; it does not prove FindExtras/scanner integration, network, symlinks, concurrent native access, every CLR regex construct or release acceptance."
+}

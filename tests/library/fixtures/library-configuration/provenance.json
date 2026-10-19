@@ -1,0 +1,110 @@
+{
+  "inputSha256": "60560d4736eebb12c0042c79a383167fd9a0f448efbd8cb863e1c8b193033f6e",
+  "nativeSha256": "8205b5e6fd16c254bfb5eb7b151462264225ed14f4b3cc527e135d8fe93a8fdf",
+  "sources": [
+    {
+      "path": "Emby.Server.Implementations/Library/LibraryManager.cs",
+      "sha256": "4729de97560262702a44c5829bf93bbc5deec379e9b3018b231aaa6d65643c44",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "Emby.Server.Implementations/IO/ManagedFileSystem.cs",
+      "sha256": "280ea08cf13065d8cd3790edf551b28ddfc9f352f4758d4fe0e62a55dbe0b14e",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "Emby.Server.Implementations/IO/MblinkShortcutHandler.cs",
+      "sha256": "f1b08e5d84e036d0d2b58959e080745e8049e0e0233134fdc1113da58a522afd",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "MediaBrowser.Controller/IO/FileSystemHelper.cs",
+      "sha256": "e7b5d9270aa97804205be0f2e01c711cd3d456465d976b098891e57287e954c7",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "src/Jellyfin.Extensions/FileHelper.cs",
+      "sha256": "1887b25000e9d2b15ec3dc22405ffd704ee76d234db7e13325f0c77eceb2d754",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/CollectionFolder.cs",
+      "sha256": "6250b085fafa9adbaa153063ef2abccbde20a2b04f372dbbc8fa80ee73151487",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "MediaBrowser.Model/Configuration/LibraryOptions.cs",
+      "sha256": "3ff1fb33e789316703201d46285ba9509fe67085484ed809e788566a42d5cb36",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "Jellyfin.Api/Controllers/LibraryStructureController.cs",
+      "sha256": "9d71cf4be8fbb7e378852977cdc01da8a8a6bf61d0a85b8823c60089ce407426",
+      "designatedSourceMatchesOracleBuildCopy": true
+    }
+  ],
+  "oracleSources": [
+    {
+      "name": "Oracle.csproj",
+      "sha256": "8b40b0302a14f2ed73eabfb41e34acaa83807ab772da63ff8d0645880b688cca"
+    },
+    {
+      "name": "Directory.Build.props",
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    },
+    {
+      "name": "Program.cs",
+      "sha256": "2f2ba0f5f3df81a379af069f49b67e807e43ba5e23bbd09c750d04fdeec6d11d"
+    }
+  ],
+  "oracleAssembly": {
+    "filename": "D:\\mediamanager-validation\\20261013-release-library-configuration-native-5\\native\\bin\\Release\\net10.0\\Oracle.dll",
+    "available": true,
+    "kind": "file",
+    "bytes": 38912,
+    "sha256": "a6a5c461ce6c89497a6b888a45f6b77c828baabf5c10299cbcc57c6187622c10"
+  },
+  "jellyfinDll": {
+    "filename": "D:/mediamanager-validation/20261005/jellyfin-baseline/source/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll",
+    "available": true,
+    "kind": "file",
+    "bytes": 506368,
+    "sha256": "a43fa24c44677e579fcec79d637789b9f36633d02e5434e76a0e03fa13027767"
+  },
+  "dotnet": {
+    "filename": "D:\\mediamanager\\.tools\\dotnet\\dotnet.exe",
+    "available": true,
+    "kind": "file",
+    "bytes": 167208,
+    "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6"
+  },
+  "build": {
+    "args": [
+      "build",
+      "D:\\mediamanager-validation\\20261013-release-library-configuration-native-5\\native\\project\\Oracle.csproj",
+      "-c",
+      "Release",
+      "--nologo",
+      "-v",
+      "minimal",
+      "-p:BaseOutputPath=D:\\mediamanager-validation\\20261013-release-library-configuration-native-5\\native\\bin\\",
+      "-p:BaseIntermediateOutputPath=D:\\mediamanager-validation\\20261013-release-library-configuration-native-5\\native\\obj\\"
+    ],
+    "status": 0,
+    "signal": null
+  },
+  "process": {
+    "args": [
+      "D:\\mediamanager-validation\\20261013-release-library-configuration-native-5\\native\\bin\\Release\\net10.0\\Oracle.dll",
+      "D:\\mediamanager-validation\\20261013-release-library-configuration-native-5/input.json",
+      "D:\\mediamanager-validation\\20261013-release-library-configuration-native-5/state",
+      "D:\\mediamanager-validation\\20261013-release-library-configuration-native-5\\native/native.json"
+    ],
+    "status": 0,
+    "signal": null
+  },
+  "actualLibraryManager": true,
+  "candidateVerified": false,
+  "completeBuildInputClosure": false,
+  "phaseAcceptance": false
+}

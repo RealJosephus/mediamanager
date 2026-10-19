@@ -1,0 +1,152 @@
+{
+  "current": "D:/mediamanager-validation/20261011/results/jellyfin-designated-workspace-controlled-v2",
+  "manifest": "D:\\mediamanager-validation\\20261011\\results\\jellyfin-designated-workspace-controlled-v2\\manifest.json",
+  "verified": {
+    "source": "D:\\jellyfin",
+    "head": "208c278b75abd897aefa1e1175126eac5e4dbfaa",
+    "verifiedFiles": 2620,
+    "contentUnchanged": true,
+    "statusUnchanged": true,
+    "fileDiscoveryUnchanged": true,
+    "contentDigest": "e28a983db179b720c3b16d7416ee4112894a3115c4be6fe43c61c52e0d9a8313"
+  },
+  "record": {
+    "schemaVersion": 1,
+    "recordedAt": "2026-10-11T17:13:49.554Z",
+    "project": "D:\\mediamanager\\tests\\r23\\fixtures\\readers\\Oracle.csproj",
+    "dotnet": {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\dotnet.exe",
+      "available": true,
+      "kind": "file",
+      "bytes": 167208,
+      "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6"
+    },
+    "node": "v24.16.0",
+    "timezone": "Asia/Taipei",
+    "jellyfinDll": {
+      "filename": "D:/mediamanager-validation/20261011/results/jellyfin-designated-workspace-controlled-v2/source/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 506368,
+      "sha256": "13e667fa6caad2e20728946c59ca459f6ce439b200caad4c0fab76b29a9a9488"
+    },
+    "sourceFiles": [
+      {
+        "filename": "D:\\mediamanager\\tests\\r23\\fixtures\\readers\\Oracle.csproj",
+        "available": true,
+        "kind": "file",
+        "bytes": 453,
+        "sha256": "56e42cc99a5305248cb523db75850ab8bce9868f3a283101fa0a208332829234"
+      },
+      {
+        "filename": "D:\\mediamanager\\tests\\Directory.Build.props",
+        "available": true,
+        "kind": "file",
+        "bytes": 780,
+        "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+      },
+      {
+        "filename": "D:\\mediamanager\\tests\\r23\\fixtures\\readers\\Program.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 7356,
+        "sha256": "49507f4767ff90425a68b95b6a1d39830a65a1aa7db9c4c2ff18f4cc95fddb54"
+      }
+    ],
+    "sourceFilesSha256": "f33afea726839a660c68dc4df62fbfcc52a2b95be5916b06fb2b1a779b24c96a",
+    "build": {
+      "args": [
+        "build",
+        "D:\\mediamanager-validation\\20261012-r23-readers-v4\\native\\project\\Oracle.csproj",
+        "-c",
+        "Release",
+        "--nologo",
+        "-v",
+        "minimal",
+        "-p:BaseOutputPath=D:\\mediamanager-validation\\20261012-r23-readers-v4\\native\\bin\\",
+        "-p:BaseIntermediateOutputPath=D:\\mediamanager-validation\\20261012-r23-readers-v4\\native\\obj\\"
+      ],
+      "status": 0,
+      "signal": null
+    },
+    "process": {
+      "args": [
+        "D:\\mediamanager-validation\\20261012-r23-readers-v4\\native\\bin\\Release\\net10.0\\Oracle.dll",
+        "D:\\mediamanager-validation\\20261012-r23-readers-v4\\input.json",
+        "D:\\mediamanager-validation\\20261012-r23-readers-v4\\native/native.json"
+      ],
+      "status": 0,
+      "signal": null
+    },
+    "outputs": [
+      {
+        "filename": "D:\\mediamanager-validation\\20261012-r23-readers-v4\\native\\build.stderr.txt",
+        "available": true,
+        "kind": "file",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261012-r23-readers-v4\\native\\build.stdout.txt",
+        "available": true,
+        "kind": "file",
+        "bytes": 338,
+        "sha256": "183e7f4f05a40e18a08860ab51615ade15d36ac68cf77331b71992b19b2a3795"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261012-r23-readers-v4\\native\\native.json",
+        "available": true,
+        "kind": "file",
+        "bytes": 275857,
+        "sha256": "42d795b7b978b5ff41f25b161ba1e012deb6c7f12e9c30d0aae1958a4968486e"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261012-r23-readers-v4\\native\\stderr.txt",
+        "available": true,
+        "kind": "file",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261012-r23-readers-v4\\native\\stdout.txt",
+        "available": true,
+        "kind": "file",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    ],
+    "oracleAssembly": {
+      "filename": "D:\\mediamanager-validation\\20261012-r23-readers-v4\\native\\bin\\Release\\net10.0\\Oracle.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 36352,
+      "sha256": "39e6544d885e205a9626620221d7a375691288dbc28c03bb96d1a5b2656d69ef"
+    },
+    "passed": true
+  },
+  "bindings": [
+    {
+      "filename": "src/core/password.js",
+      "sha256": "081854f29cf8f2742076e4adcc7222197d376f5a3d8558abe4600fd2b87e99e6"
+    },
+    {
+      "filename": "src/core/json.js",
+      "sha256": "507c30f3617abb8dc98688b90b37acb8a7813101f668210e67d548491b1faaf3"
+    },
+    {
+      "filename": "src/playback/subtitles.js",
+      "sha256": "d5ee419bf9588ee260c6a191394019a336bee4b5647d29f4cf184da51e6a4a5c"
+    },
+    {
+      "filename": "src/tasks/scheduled-task-store.js",
+      "sha256": "fe001edfa564ad0fad5903d93a0d53d946407a5abb36f3f855dac568e6f246a2"
+    },
+    {
+      "filename": "src/core/server-configuration-store.js",
+      "sha256": "c6f9be3a3e9495f567518836fcb905b493659d598ff9cbd4554be7cd8179bdd4"
+    }
+  ],
+  "phaseAcceptance": false,
+  "fullInstanceTakeover": false,
+  "boundary": "Real native password verifier, task DTO parser/writer, configuration XML serializer, SubtitleEdit reader. New inputs include actual candidate output; no expected-row substitution."
+}

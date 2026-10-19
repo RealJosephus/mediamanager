@@ -1,0 +1,7661 @@
+[
+  {
+    "name": "null-Genres",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": [],
+      "Genres": null,
+      "Studios": [],
+      "Artists": [],
+      "AlbumArtists": [],
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": []
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "null-Studios",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": [],
+      "Genres": [],
+      "Studios": null,
+      "Artists": [],
+      "AlbumArtists": [],
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": []
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "null-Genres-Studios",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": [],
+      "Genres": null,
+      "Studios": null,
+      "Artists": [],
+      "AlbumArtists": [],
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": []
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "null-Tags",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": null,
+      "Genres": [],
+      "Studios": [],
+      "Artists": [],
+      "AlbumArtists": [],
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": []
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "null-Genres-Tags",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": null,
+      "Genres": null,
+      "Studios": [],
+      "Artists": [],
+      "AlbumArtists": [],
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": []
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "null-Studios-Tags",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": null,
+      "Genres": [],
+      "Studios": null,
+      "Artists": [],
+      "AlbumArtists": [],
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": []
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "null-Genres-Studios-Tags",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": null,
+      "Genres": null,
+      "Studios": null,
+      "Artists": [],
+      "AlbumArtists": [],
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": []
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "null-Artists",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": [],
+      "Genres": [],
+      "Studios": [],
+      "Artists": null,
+      "AlbumArtists": [],
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": []
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "null-Genres-Artists",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": [],
+      "Genres": null,
+      "Studios": [],
+      "Artists": null,
+      "AlbumArtists": [],
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": []
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "null-Studios-Artists",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": [],
+      "Genres": [],
+      "Studios": null,
+      "Artists": null,
+      "AlbumArtists": [],
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": []
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "null-Genres-Studios-Artists",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": [],
+      "Genres": null,
+      "Studios": null,
+      "Artists": null,
+      "AlbumArtists": [],
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": []
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "null-Tags-Artists",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": null,
+      "Genres": [],
+      "Studios": [],
+      "Artists": null,
+      "AlbumArtists": [],
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": []
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "null-Genres-Tags-Artists",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": null,
+      "Genres": null,
+      "Studios": [],
+      "Artists": null,
+      "AlbumArtists": [],
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": []
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "null-Studios-Tags-Artists",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": null,
+      "Genres": [],
+      "Studios": null,
+      "Artists": null,
+      "AlbumArtists": [],
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": []
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "null-Genres-Studios-Tags-Artists",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": null,
+      "Genres": null,
+      "Studios": null,
+      "Artists": null,
+      "AlbumArtists": [],
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": []
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "null-AlbumArtists",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": [],
+      "Genres": [],
+      "Studios": [],
+      "Artists": [],
+      "AlbumArtists": null,
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": []
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "null-Genres-AlbumArtists",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": [],
+      "Genres": null,
+      "Studios": [],
+      "Artists": [],
+      "AlbumArtists": null,
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": []
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "null-Studios-AlbumArtists",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": [],
+      "Genres": [],
+      "Studios": null,
+      "Artists": [],
+      "AlbumArtists": null,
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": []
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "null-Genres-Studios-AlbumArtists",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": [],
+      "Genres": null,
+      "Studios": null,
+      "Artists": [],
+      "AlbumArtists": null,
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": []
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "null-Tags-AlbumArtists",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": null,
+      "Genres": [],
+      "Studios": [],
+      "Artists": [],
+      "AlbumArtists": null,
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": []
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "null-Genres-Tags-AlbumArtists",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": null,
+      "Genres": null,
+      "Studios": [],
+      "Artists": [],
+      "AlbumArtists": null,
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": []
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "null-Studios-Tags-AlbumArtists",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": null,
+      "Genres": [],
+      "Studios": null,
+      "Artists": [],
+      "AlbumArtists": null,
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": []
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "null-Genres-Studios-Tags-AlbumArtists",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": null,
+      "Genres": null,
+      "Studios": null,
+      "Artists": [],
+      "AlbumArtists": null,
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": []
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "null-Artists-AlbumArtists",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": [],
+      "Genres": [],
+      "Studios": [],
+      "Artists": null,
+      "AlbumArtists": null,
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": []
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "null-Genres-Artists-AlbumArtists",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": [],
+      "Genres": null,
+      "Studios": [],
+      "Artists": null,
+      "AlbumArtists": null,
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": []
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "null-Studios-Artists-AlbumArtists",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": [],
+      "Genres": [],
+      "Studios": null,
+      "Artists": null,
+      "AlbumArtists": null,
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": []
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "null-Genres-Studios-Artists-AlbumArtists",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": [],
+      "Genres": null,
+      "Studios": null,
+      "Artists": null,
+      "AlbumArtists": null,
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": []
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "null-Tags-Artists-AlbumArtists",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": null,
+      "Genres": [],
+      "Studios": [],
+      "Artists": null,
+      "AlbumArtists": null,
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": []
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "null-Genres-Tags-Artists-AlbumArtists",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": null,
+      "Genres": null,
+      "Studios": [],
+      "Artists": null,
+      "AlbumArtists": null,
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": []
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "null-Studios-Tags-Artists-AlbumArtists",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": null,
+      "Genres": [],
+      "Studios": null,
+      "Artists": null,
+      "AlbumArtists": null,
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": []
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "null-Genres-Studios-Tags-Artists-AlbumArtists",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": null,
+      "Genres": null,
+      "Studios": null,
+      "Artists": null,
+      "AlbumArtists": null,
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": []
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "null-ProductionLocations",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": [],
+      "Genres": [],
+      "Studios": [],
+      "Artists": [],
+      "AlbumArtists": [],
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": null
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": null
+  },
+  {
+    "name": "null-Genres-ProductionLocations",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": [],
+      "Genres": null,
+      "Studios": [],
+      "Artists": [],
+      "AlbumArtists": [],
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": null
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "null-Studios-ProductionLocations",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": [],
+      "Genres": [],
+      "Studios": null,
+      "Artists": [],
+      "AlbumArtists": [],
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": null
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "null-Genres-Studios-ProductionLocations",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": [],
+      "Genres": null,
+      "Studios": null,
+      "Artists": [],
+      "AlbumArtists": [],
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": null
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "null-Tags-ProductionLocations",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": null,
+      "Genres": [],
+      "Studios": [],
+      "Artists": [],
+      "AlbumArtists": [],
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": null
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "null-Genres-Tags-ProductionLocations",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": null,
+      "Genres": null,
+      "Studios": [],
+      "Artists": [],
+      "AlbumArtists": [],
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": null
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "null-Studios-Tags-ProductionLocations",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": null,
+      "Genres": [],
+      "Studios": null,
+      "Artists": [],
+      "AlbumArtists": [],
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": null
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "null-Genres-Studios-Tags-ProductionLocations",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": null,
+      "Genres": null,
+      "Studios": null,
+      "Artists": [],
+      "AlbumArtists": [],
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": null
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "null-Artists-ProductionLocations",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": [],
+      "Genres": [],
+      "Studios": [],
+      "Artists": null,
+      "AlbumArtists": [],
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": null
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "null-Genres-Artists-ProductionLocations",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": [],
+      "Genres": null,
+      "Studios": [],
+      "Artists": null,
+      "AlbumArtists": [],
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": null
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "null-Studios-Artists-ProductionLocations",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": [],
+      "Genres": [],
+      "Studios": null,
+      "Artists": null,
+      "AlbumArtists": [],
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": null
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "null-Genres-Studios-Artists-ProductionLocations",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": [],
+      "Genres": null,
+      "Studios": null,
+      "Artists": null,
+      "AlbumArtists": [],
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": null
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "null-Tags-Artists-ProductionLocations",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": null,
+      "Genres": [],
+      "Studios": [],
+      "Artists": null,
+      "AlbumArtists": [],
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": null
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "null-Genres-Tags-Artists-ProductionLocations",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": null,
+      "Genres": null,
+      "Studios": [],
+      "Artists": null,
+      "AlbumArtists": [],
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": null
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "null-Studios-Tags-Artists-ProductionLocations",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": null,
+      "Genres": [],
+      "Studios": null,
+      "Artists": null,
+      "AlbumArtists": [],
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": null
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "null-Genres-Studios-Tags-Artists-ProductionLocations",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": null,
+      "Genres": null,
+      "Studios": null,
+      "Artists": null,
+      "AlbumArtists": [],
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": null
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "null-AlbumArtists-ProductionLocations",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": [],
+      "Genres": [],
+      "Studios": [],
+      "Artists": [],
+      "AlbumArtists": null,
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": null
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "null-Genres-AlbumArtists-ProductionLocations",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": [],
+      "Genres": null,
+      "Studios": [],
+      "Artists": [],
+      "AlbumArtists": null,
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": null
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "null-Studios-AlbumArtists-ProductionLocations",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": [],
+      "Genres": [],
+      "Studios": null,
+      "Artists": [],
+      "AlbumArtists": null,
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": null
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "null-Genres-Studios-AlbumArtists-ProductionLocations",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": [],
+      "Genres": null,
+      "Studios": null,
+      "Artists": [],
+      "AlbumArtists": null,
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": null
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "null-Tags-AlbumArtists-ProductionLocations",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": null,
+      "Genres": [],
+      "Studios": [],
+      "Artists": [],
+      "AlbumArtists": null,
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": null
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "null-Genres-Tags-AlbumArtists-ProductionLocations",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": null,
+      "Genres": null,
+      "Studios": [],
+      "Artists": [],
+      "AlbumArtists": null,
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": null
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "null-Studios-Tags-AlbumArtists-ProductionLocations",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": null,
+      "Genres": [],
+      "Studios": null,
+      "Artists": [],
+      "AlbumArtists": null,
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": null
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "null-Genres-Studios-Tags-AlbumArtists-ProductionLocations",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": null,
+      "Genres": null,
+      "Studios": null,
+      "Artists": [],
+      "AlbumArtists": null,
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": null
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "null-Artists-AlbumArtists-ProductionLocations",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": [],
+      "Genres": [],
+      "Studios": [],
+      "Artists": null,
+      "AlbumArtists": null,
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": null
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "null-Genres-Artists-AlbumArtists-ProductionLocations",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": [],
+      "Genres": null,
+      "Studios": [],
+      "Artists": null,
+      "AlbumArtists": null,
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": null
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "null-Studios-Artists-AlbumArtists-ProductionLocations",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": [],
+      "Genres": [],
+      "Studios": null,
+      "Artists": null,
+      "AlbumArtists": null,
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": null
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "null-Genres-Studios-Artists-AlbumArtists-ProductionLocations",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": [],
+      "Genres": null,
+      "Studios": null,
+      "Artists": null,
+      "AlbumArtists": null,
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": null
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "null-Tags-Artists-AlbumArtists-ProductionLocations",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": null,
+      "Genres": [],
+      "Studios": [],
+      "Artists": null,
+      "AlbumArtists": null,
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": null
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "null-Genres-Tags-Artists-AlbumArtists-ProductionLocations",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": null,
+      "Genres": null,
+      "Studios": [],
+      "Artists": null,
+      "AlbumArtists": null,
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": null
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "null-Studios-Tags-Artists-AlbumArtists-ProductionLocations",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": null,
+      "Genres": [],
+      "Studios": null,
+      "Artists": null,
+      "AlbumArtists": null,
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": null
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "null-Genres-Studios-Tags-Artists-AlbumArtists-ProductionLocations",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": null,
+      "Genres": null,
+      "Studios": null,
+      "Artists": null,
+      "AlbumArtists": null,
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": null
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "parent-tags-null-album-false-genres-false",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": [],
+      "Genres": [],
+      "Studios": [],
+      "Artists": [],
+      "AlbumArtists": [],
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": []
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": null
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "parent-tags-null-album-false-genres-true",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": [],
+      "Genres": null,
+      "Studios": [],
+      "Artists": [],
+      "AlbumArtists": [],
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": []
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": null
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "parent-tags-null-album-true-genres-false",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": [],
+      "Genres": [],
+      "Studios": [],
+      "Artists": [],
+      "AlbumArtists": null,
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": []
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": null
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "parent-tags-null-album-true-genres-true",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": [],
+      "Genres": null,
+      "Studios": [],
+      "Artists": [],
+      "AlbumArtists": null,
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": []
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": null
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "root-tags-null-album-false-genres-false",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": [],
+      "Genres": [],
+      "Studios": [],
+      "Artists": [],
+      "AlbumArtists": [],
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": []
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": null
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "root-tags-null-album-false-genres-true",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": [],
+      "Genres": null,
+      "Studios": [],
+      "Artists": [],
+      "AlbumArtists": [],
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": []
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": null
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "root-tags-null-album-true-genres-false",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": [],
+      "Genres": [],
+      "Studios": [],
+      "Artists": [],
+      "AlbumArtists": null,
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": []
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": null
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "root-tags-null-album-true-genres-true",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": [],
+      "Genres": null,
+      "Studios": [],
+      "Artists": [],
+      "AlbumArtists": null,
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": []
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": null
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "collection-tags-null-album-false-genres-false",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": [],
+      "Genres": [],
+      "Studios": [],
+      "Artists": [],
+      "AlbumArtists": [],
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": []
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": null
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "collection-tags-null-album-false-genres-true",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": [],
+      "Genres": null,
+      "Studios": [],
+      "Artists": [],
+      "AlbumArtists": [],
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": []
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": null
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "collection-tags-null-album-true-genres-false",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": [],
+      "Genres": [],
+      "Studios": [],
+      "Artists": [],
+      "AlbumArtists": null,
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": []
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": null
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "collection-tags-null-album-true-genres-true",
+    "item": {
+      "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+      "type": "Audio",
+      "Path": "Z:\\Library\\Child",
+      "Tags": [],
+      "Genres": null,
+      "Studios": [],
+      "Artists": [],
+      "AlbumArtists": null,
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": []
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": null
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "AudioBook-null-AlbumArtists-Tags",
+    "item": {
+      "id": "3a53ed8d-b759-7c85-761c-b22aa7505faf",
+      "type": "AudioBook",
+      "Path": "Z:\\Library\\Child",
+      "Tags": null,
+      "Genres": [],
+      "Studios": [],
+      "Artists": [],
+      "AlbumArtists": null,
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": []
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "AudioBook-null-Tags-Genres",
+    "item": {
+      "id": "3a53ed8d-b759-7c85-761c-b22aa7505faf",
+      "type": "AudioBook",
+      "Path": "Z:\\Library\\Child",
+      "Tags": null,
+      "Genres": null,
+      "Studios": [],
+      "Artists": [],
+      "AlbumArtists": [],
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": []
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "AudioBook-null-Artists",
+    "item": {
+      "id": "3a53ed8d-b759-7c85-761c-b22aa7505faf",
+      "type": "AudioBook",
+      "Path": "Z:\\Library\\Child",
+      "Tags": [],
+      "Genres": [],
+      "Studios": [],
+      "Artists": null,
+      "AlbumArtists": [],
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": []
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "MusicAlbum-null-AlbumArtists-Tags",
+    "item": {
+      "id": "678594dc-e884-ccac-e404-c924e6dc55cd",
+      "type": "MusicAlbum",
+      "Path": "Z:\\Library\\Child",
+      "Tags": null,
+      "Genres": [],
+      "Studios": [],
+      "Artists": [],
+      "AlbumArtists": null,
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": []
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "MusicAlbum-null-Tags-Genres",
+    "item": {
+      "id": "678594dc-e884-ccac-e404-c924e6dc55cd",
+      "type": "MusicAlbum",
+      "Path": "Z:\\Library\\Child",
+      "Tags": null,
+      "Genres": null,
+      "Studios": [],
+      "Artists": [],
+      "AlbumArtists": [],
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": []
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "MusicAlbum-null-Artists",
+    "item": {
+      "id": "678594dc-e884-ccac-e404-c924e6dc55cd",
+      "type": "MusicAlbum",
+      "Path": "Z:\\Library\\Child",
+      "Tags": [],
+      "Genres": [],
+      "Studios": [],
+      "Artists": null,
+      "AlbumArtists": [],
+      "SeasonId": "97b00000-0000-0000-0000-000000000007",
+      "ProductionLocations": []
+    },
+    "parents": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002",
+        "type": "Folder",
+        "Path": "Z:\\Library",
+        "Tags": [
+          "PERMIT",
+          "Parent"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003",
+        "type": "AggregateFolder",
+        "Path": "D:\\state\\root",
+        "Tags": [
+          "parent",
+          "Root"
+        ]
+      }
+    ],
+    "collections": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000004",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\movies",
+        "PhysicalLocationsList": [
+          "z:\\library"
+        ],
+        "Tags": [
+          "ROOT",
+          "Collection"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\other",
+        "PhysicalFolderIds": [
+          "97b00000-0000-0000-0000-000000000002"
+        ],
+        "PhysicalLocationsList": [],
+        "Tags": [
+          "Wrong ID match"
+        ]
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Path": "D:\\state\\root\\default\\slash",
+        "PhysicalLocationsList": [
+          "z:/library/"
+        ],
+        "Tags": [
+          "Wrong normalized path"
+        ]
+      }
+    ],
+    "persistedItems": [
+      {
+        "id": "97b00000-0000-0000-0000-000000000002"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000003"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000004"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000005"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000006"
+      },
+      {
+        "id": "97b00000-0000-0000-0000-000000000007"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "expectException": "ArgumentNullException"
+  }
+]

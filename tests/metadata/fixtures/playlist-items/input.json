@@ -1,0 +1,592 @@
+{
+  "files": [
+    "Library/SongA.mp3",
+    "Library/Song B.mp3",
+    "Library/Song+A.mp3",
+    "Library/Song&A.mp3",
+    "Library/Música épica/Canción.mp3",
+    "Library/中文歌曲.mp3",
+    "Library/日本語の歌.mp3",
+    "LibraryToo/Prefix.mp3",
+    "Other/Outside.mp3"
+  ],
+  "providerCases": [
+    {
+      "name": "m3u-plain-duplicates",
+      "path": "Library/lists/plain.m3u",
+      "bytes": "Li4vU29uZ0EubXAzCiMgY29tbWVudAouLi9Tb25nIEIubXAzCi4uL1NvbmdBLm1wMwouLi9taXNzaW5nLm1wMwo="
+    },
+    {
+      "name": "m3u-extended-url-decoding",
+      "path": "Library/lists/extended.M3U",
+      "bytes": "I0VYVE0zVQojRVhUSU5GOjEsU29uZwouLi9Tb25nJTIwQi5tcDMKLi4vU29uZytBLm1wMwouLi9Tb25nJTJiQS5tcDMK"
+    },
+    {
+      "name": "m3u-plain-does-not-url-decode",
+      "path": "Library/lists/plain.m3u",
+      "bytes": "Li4vU29uZyUyMEIubXAzCi4uL1NvbmcrQS5tcDMK"
+    },
+    {
+      "name": "m3u8-unicode",
+      "path": "Library/lists/unicode.M3U8",
+      "bytes": "I0VYVE0zVQouLi9Nw7pzaWNhIMOpcGljYS9DYW5jacOzbi5tcDMK"
+    },
+    {
+      "name": "m3u-utf8-bom",
+      "path": "Library/lists/utf8.m3u",
+      "bytes": "77u/I0VYVE0zVQouLi9Nw7pzaWNhIMOpcGljYS9DYW5jacOzbi5tcDMK"
+    },
+    {
+      "name": "m3u-utf16le-bom",
+      "path": "Library/lists/utf16.m3u",
+      "bytes": "//4jAEUAWABUAE0AMwBVAAoALgAuAC8ATQD6AHMAaQBjAGEAIADpAHAAaQBjAGEALwBDAGEAbgBjAGkA8wBuAC4AbQBwADMACgA="
+    },
+    {
+      "name": "m3u-utf16be-bom",
+      "path": "Library/lists/utf16.m3u",
+      "bytes": "/v8AIwBFAFgAVABNADMAVQAKAC4ALgAvAE0A+gBzAGkAYwBhACAA6QBwAGkAYwBhAC8AQwBhAG4AYwBpAPMAbgAuAG0AcAAzAAo="
+    },
+    {
+      "name": "m3u-utf32le-bom",
+      "path": "Library/lists/utf32.m3u",
+      "bytes": "//4AACMAAABFAAAAWAAAAFQAAABNAAAAMwAAAFUAAAAKAAAALgAAAC4AAAAvAAAATQAAAPoAAABzAAAAaQAAAGMAAABhAAAAIAAAAOkAAABwAAAAaQAAAGMAAABhAAAALwAAAEMAAABhAAAAbgAAAGMAAABpAAAA8wAAAG4AAAAuAAAAbQAAAHAAAAAzAAAACgAAAA=="
+    },
+    {
+      "name": "m3u-windows1252",
+      "path": "Library/lists/legacy.m3u",
+      "bytes": "I0VYVE0zVQojRVhUSU5GOjEsQ2FuY2nzbgouLi9N+nNpY2Eg6XBpY2EvQ2FuY2nzbi5tcDMK"
+    },
+    {
+      "name": "m3u-big5",
+      "path": "Library/lists/big5.m3u",
+      "bytes": "I0VYVE0zVQouLi+kpKTlunGmsS5tcDMKLi4vpKSk5bpxprEubXAzCg=="
+    },
+    {
+      "name": "m3u-shiftjis",
+      "path": "Library/lists/japanese.m3u",
+      "bytes": "I0VYVE0zVQouLi+T+pZ7jOqCzInMLm1wMwouLi+T+pZ7jOqCzInMLm1wMwo="
+    },
+    {
+      "name": "m3u-nfd-normalization",
+      "path": "Library/lists/decomposed.m3u",
+      "bytes": "I0VYVE0zVQouLi9NdcyBc2ljYSBlzIFwaWNhL0NhbmNpb8yBbi5tcDMK"
+    },
+    {
+      "name": "m3u-root-prefix-not-containment",
+      "path": "Library/lists/prefix.m3u",
+      "bytes": "Li4vLi4vTGlicmFyeVRvby9QcmVmaXgubXAzCi4uLy4uL090aGVyL091dHNpZGUubXAzCg=="
+    },
+    {
+      "name": "m3u-absolute-and-missing-db",
+      "path": "Library/lists/absolute.m3u",
+      "bytes": "RDpcbWVkaWFtYW5hZ2VyLXZhbGlkYXRpb25cMjAyNjEwMTBccmVzdWx0c1xwbGF5bGlzdC1pdGVtcy12M1xzdGF0ZVxtM3UtYWJzb2x1dGUtYW5kLW1pc3NpbmctZGJcbWVkaWEvTGlicmFyeS9Tb25nQS5tcDMKRDpcbWVkaWFtYW5hZ2VyLXZhbGlkYXRpb25cMjAyNjEwMTBccmVzdWx0c1xwbGF5bGlzdC1pdGVtcy12M1xzdGF0ZVxtM3UtYWJzb2x1dGUtYW5kLW1pc3NpbmctZGJcbWVkaWEvTGlicmFyeS9Tb25nIEIubXAzCg=="
+    },
+    {
+      "name": "m3u-ignored-collections",
+      "path": "Library/lists/ignored.m3u",
+      "bytes": "Li4vU29uZ0EubXAzCg==",
+      "collections": [
+        {
+          "type": "livetv",
+          "roots": [
+            "Library"
+          ]
+        },
+        {
+          "type": "boxsets",
+          "roots": [
+            "Library"
+          ]
+        },
+        {
+          "type": "playlists",
+          "roots": [
+            "Library"
+          ]
+        },
+        {
+          "type": null,
+          "roots": [
+            "Library"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "m3u-duplicate-roots",
+      "path": "Library/lists/roots.m3u",
+      "bytes": "Li4vU29uZ0EubXAzCg==",
+      "collections": [
+        {
+          "type": "music",
+          "roots": [
+            "Library",
+            "Library"
+          ]
+        },
+        {
+          "type": "movies",
+          "roots": [
+            "Library"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "m3u-empty",
+      "path": "Library/lists/empty.m3u",
+      "bytes": ""
+    },
+    {
+      "name": "m3u-header-only",
+      "path": "Library/lists/empty.m3u",
+      "bytes": "I0VYVE0zVQo="
+    },
+    {
+      "name": "m3u-whitespace-lines",
+      "path": "Library/lists/blank.m3u",
+      "bytes": "IA0KCQouLi9Tb25nQS5tcDMK"
+    },
+    {
+      "name": "m3u-hls-one-digit",
+      "path": "Library/lists/hls.m3u8",
+      "bytes": "I0VYVE0zVQojRVhULVgtVkVSU0lPTjozCi4uL1NvbmdBLm1wMwo="
+    },
+    {
+      "name": "m3u-hls-two-digit-is-not-detected",
+      "path": "Library/lists/hls.m3u8",
+      "bytes": "I0VYVE0zVQojRVhULVgtVkVSU0lPTjoxMAouLi9Tb25nQS5tcDMK"
+    },
+    {
+      "name": "m3u-duplicate-custom-property",
+      "path": "Library/lists/custom.m3u",
+      "bytes": "I0VYVE0zVQojRVhURk9POm9uZQojRVhURk9POnR3bwouLi9Tb25nQS5tcDMK"
+    },
+    {
+      "name": "pls-number-order-and-replacement",
+      "path": "Library/lists/ordered.PLS",
+      "bytes": "W3BsYXlsaXN0XQpGaWxlMj0uLi9Tb25nQS5tcDMKVGl0bGUxPVRpdGxlIGZpcnN0Ckxlbmd0aDM9MgpGaWxlMT0uLi9Tb25nIEIubXAzCkZpbGUyPS4uL1NvbmcrQS5tcDMKRmlsZTM9Li4vU29uZ0EubXAzCk51bWJlck9mRW50cmllcz0zMDAKVmVyc2lvbj0yCg=="
+    },
+    {
+      "name": "pls-header-case",
+      "path": "Library/lists/wrong.pls",
+      "bytes": "W1BsYXlsaXN0XQpGaWxlMT0uLi9Tb25nQS5tcDMK"
+    },
+    {
+      "name": "pls-invalid-number-minus-one",
+      "path": "Library/lists/number.pls",
+      "bytes": "W3BsYXlsaXN0XQpGaWxleD0uLi9Tb25nQS5tcDMKRmlsZTI9Li4vU29uZyBCLm1wMwo="
+    },
+    {
+      "name": "pls-null-title-only-path",
+      "path": "Library/lists/null.pls",
+      "bytes": "W3BsYXlsaXN0XQpUaXRsZTE9Tm8gcGF0aApGaWxlMj0uLi9Tb25nQS5tcDMK"
+    },
+    {
+      "name": "wpl-direct-media-and-double-unescape",
+      "path": "Library/lists/windows.WPL",
+      "bytes": "PD93cGwgdmVyc2lvbj0iMS4wIj8+PHNtaWw+PGhlYWQ+PHRpdGxlPk5ldXRyYWw8L3RpdGxlPjwvaGVhZD48Ym9keT48c2VxPjxtZWRpYSBzcmM9Ii4uL1NvbmdBLm1wMyIvPjxtZWRpYSBzcmM9Ii4uL1NvbmcmYW1wO2FtcDtBLm1wMyIvPjxzZXE+PG1lZGlhIHNyYz0iLi4vU29uZyBCLm1wMyIvPjwvc2VxPjwvc2VxPjwvYm9keT48L3NtaWw+"
+    },
+    {
+      "name": "zpl-direct-media",
+      "path": "Library/lists/zune.zpl",
+      "bytes": "PD96cGwgdmVyc2lvbj0iMi4wIj8+PHNtaWw+PGhlYWQvPjxib2R5PjxzZXE+PG1lZGlhIHNyYz0iLi4vU29uZyBCLm1wMyIvPjxtZWRpYSBzcmM9Ii4uL1NvbmcgQi5tcDMiLz48L3NlcT48L2JvZHk+PC9zbWlsPg=="
+    },
+    {
+      "name": "wpl-missing-head",
+      "path": "Library/lists/invalid.wpl",
+      "bytes": "PHNtaWw+PGJvZHk+PHNlcT48bWVkaWEgc3JjPSIuLi9Tb25nQS5tcDMiLz48L3NlcT48L2JvZHk+PC9zbWlsPg=="
+    },
+    {
+      "name": "wpl-namespace-root",
+      "path": "Library/lists/invalid.wpl",
+      "bytes": "PHNtaWwgeG1sbnM9InVybjpuZXV0cmFsIj48aGVhZC8+PGJvZHk+PHNlcT48bWVkaWEgc3JjPSIuLi9Tb25nQS5tcDMiLz48L3NlcT48L2JvZHk+PC9zbWlsPg=="
+    },
+    {
+      "name": "wpl-internal-entity",
+      "path": "Library/lists/entity.wpl",
+      "bytes": "PCFET0NUWVBFIHNtaWwgWzwhRU5USVRZIHNvbmcgIi4uL1NvbmdBLm1wMyI+XT48c21pbD48aGVhZC8+PGJvZHk+PHNlcT48bWVkaWEgc3JjPSImc29uZzsiLz48L3NlcT48L2JvZHk+PC9zbWlsPg=="
+    },
+    {
+      "name": "wpl-no-src",
+      "path": "Library/lists/no-src.wpl",
+      "bytes": "PHNtaWw+PGhlYWQvPjxib2R5PjxzZXE+PG1lZGlhLz48L3NlcT48L2JvZHk+PC9zbWlsPg=="
+    },
+    {
+      "name": "playlist-directory-with-extension",
+      "path": "Library/lists/logical.m3u",
+      "kind": "directory"
+    },
+    {
+      "name": "playlist-unsupported-extension",
+      "path": "Library/lists/unsupported.xspf",
+      "bytes": "Li4vU29uZ0EubXAzCg=="
+    },
+    {
+      "name": "playlist-file-missing",
+      "path": "Library/lists/missing.m3u",
+      "kind": "absent"
+    },
+    {
+      "name": "playlist-null-path",
+      "path": null
+    }
+  ],
+  "mergeCases": [
+    {
+      "name": "external-replace",
+      "source": {
+        "mediaType": "Audio",
+        "links": [
+          {
+            "id": 1
+          },
+          {
+            "id": 1
+          },
+          {
+            "id": 2
+          }
+        ],
+        "shares": []
+      },
+      "target": {
+        "path": "$STATE/media/list.m3u",
+        "links": [
+          {
+            "id": 2
+          }
+        ],
+        "shares": []
+      },
+      "replaceData": true
+    },
+    {
+      "name": "external-empty-target-keeps-duplicates",
+      "source": {
+        "mediaType": "Video",
+        "links": [
+          {
+            "id": 1
+          },
+          {
+            "id": 1
+          }
+        ],
+        "shares": []
+      },
+      "target": {
+        "path": "$STATE/media/list.m3u",
+        "links": [],
+        "shares": []
+      }
+    },
+    {
+      "name": "external-merge-new-first-id-dedup",
+      "source": {
+        "mediaType": "Audio",
+        "links": [
+          {
+            "id": 2
+          },
+          {
+            "id": 1
+          },
+          {
+            "id": 1
+          }
+        ],
+        "shares": []
+      },
+      "target": {
+        "path": "$STATE/media/list.m3u",
+        "links": [
+          {
+            "id": 2
+          },
+          {
+            "id": 3
+          }
+        ],
+        "shares": []
+      }
+    },
+    {
+      "name": "external-empty-source-preserves-old",
+      "source": {
+        "links": [],
+        "shares": []
+      },
+      "target": {
+        "path": "$STATE/media/list.m3u",
+        "links": [
+          {
+            "id": 1
+          },
+          {
+            "id": 1
+          },
+          {
+            "id": 2
+          }
+        ],
+        "shares": []
+      }
+    },
+    {
+      "name": "external-empty-source-replace-clears",
+      "source": {
+        "links": [],
+        "shares": []
+      },
+      "target": {
+        "path": "$STATE/media/list.m3u",
+        "links": [
+          {
+            "id": 1
+          }
+        ],
+        "shares": []
+      },
+      "replaceData": true
+    },
+    {
+      "name": "managed-keeps-database-links",
+      "source": {
+        "mediaType": "Audio",
+        "links": [
+          {
+            "id": 1
+          }
+        ],
+        "shares": []
+      },
+      "target": {
+        "path": "$STATE/data/playlists/Managed",
+        "links": [
+          {
+            "id": 2
+          }
+        ],
+        "shares": []
+      },
+      "replaceData": true
+    },
+    {
+      "name": "managed-case-insensitive-prefix",
+      "source": {
+        "links": [
+          {
+            "id": 1
+          }
+        ],
+        "shares": []
+      },
+      "target": {
+        "path": "$STATE/DATA/playlists/Managed",
+        "links": [
+          {
+            "id": 2
+          }
+        ],
+        "shares": []
+      },
+      "replaceData": true
+    },
+    {
+      "name": "equal-data-root-is-not-contained",
+      "source": {
+        "links": [
+          {
+            "id": 1
+          }
+        ],
+        "shares": []
+      },
+      "target": {
+        "path": "$STATE/data",
+        "links": [
+          {
+            "id": 2
+          }
+        ],
+        "shares": []
+      },
+      "replaceData": true
+    },
+    {
+      "name": "unrelated-data-name-is-external",
+      "source": {
+        "links": [
+          {
+            "id": 1
+          }
+        ],
+        "shares": []
+      },
+      "target": {
+        "path": "$STATE/database/list.m3u",
+        "links": [
+          {
+            "id": 2
+          }
+        ],
+        "shares": []
+      },
+      "replaceData": true
+    },
+    {
+      "name": "null-target-path-keeps-links",
+      "source": {
+        "links": [
+          {
+            "id": 1
+          }
+        ],
+        "shares": []
+      },
+      "target": {
+        "links": [
+          {
+            "id": 2
+          }
+        ],
+        "shares": []
+      }
+    },
+    {
+      "name": "settings-disabled-keeps-playlist-state",
+      "source": {
+        "mediaType": "Audio",
+        "links": [
+          {
+            "id": 1
+          }
+        ],
+        "shares": [
+          {
+            "user": 2,
+            "edit": true
+          }
+        ]
+      },
+      "target": {
+        "path": "$STATE/media/list.m3u",
+        "mediaType": "Video",
+        "links": [
+          {
+            "id": 2
+          }
+        ],
+        "shares": [
+          {
+            "user": 1,
+            "edit": false
+          }
+        ]
+      },
+      "mergeMetadataSettings": false
+    },
+    {
+      "name": "shares-new-first-dedup",
+      "source": {
+        "links": [],
+        "shares": [
+          {
+            "user": 2,
+            "edit": true
+          },
+          {
+            "user": 1,
+            "edit": false
+          },
+          {
+            "user": 1,
+            "edit": true
+          }
+        ]
+      },
+      "target": {
+        "path": "$STATE/media/list.m3u",
+        "links": [],
+        "shares": [
+          {
+            "user": 2,
+            "edit": false
+          },
+          {
+            "user": 3,
+            "edit": false
+          }
+        ]
+      }
+    },
+    {
+      "name": "shares-empty-target-keeps-duplicates",
+      "source": {
+        "links": [],
+        "shares": [
+          {
+            "user": 1,
+            "edit": false
+          },
+          {
+            "user": 1,
+            "edit": true
+          }
+        ]
+      },
+      "target": {
+        "path": "$STATE/media/list.m3u",
+        "links": [],
+        "shares": []
+      }
+    },
+    {
+      "name": "links-zero-id-falls-back-to-path",
+      "source": {
+        "links": [
+          {
+            "path": "A"
+          },
+          {
+            "path": "a"
+          },
+          {},
+          {
+            "id": 0
+          }
+        ],
+        "shares": []
+      },
+      "target": {
+        "path": "$STATE/media/list.m3u",
+        "links": [
+          {
+            "id": 0,
+            "path": "A"
+          },
+          {
+            "path": "a"
+          }
+        ],
+        "shares": []
+      }
+    },
+    {
+      "name": "owner-and-open-access-not-merged",
+      "source": {
+        "owner": 1,
+        "links": [],
+        "shares": []
+      },
+      "target": {
+        "path": "$STATE/media/list.m3u",
+        "owner": 2,
+        "open": true,
+        "links": [],
+        "shares": []
+      }
+    }
+  ]
+}

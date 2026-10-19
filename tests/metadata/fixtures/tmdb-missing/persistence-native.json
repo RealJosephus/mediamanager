@@ -1,0 +1,157 @@
+{
+  "started": "2026-10-03T14:08:46.1712234Z",
+  "ended": "2026-10-03T14:08:47.8670636Z",
+  "tables": {
+    "BaseItems": [
+      {
+        "Id": "F3333333-3333-3333-3333-000000000001",
+        "Name": "series"
+      },
+      {
+        "Id": "F3333333-3333-3333-3333-000000000002",
+        "Name": "season"
+      },
+      {
+        "Id": "F3333333-3333-3333-3333-000000000007",
+        "Name": "associated"
+      },
+      {
+        "Id": "F3333333-3333-3333-3333-000000000008",
+        "Name": "outside"
+      },
+      {
+        "Id": "00000000-0000-0000-0000-000000000001",
+        "Name": "PLACEHOLDER"
+      }
+    ],
+    "AncestorIds": [
+      {
+        "ItemId": "F3333333-3333-3333-3333-000000000008",
+        "ParentItemId": "F3333333-3333-3333-3333-000000000001"
+      }
+    ],
+    "LinkedChildren": [],
+    "UserData": [
+      {
+        "ItemId": "00000000-0000-0000-0000-000000000001",
+        "UserId": "F3333333-3333-3333-3333-000000000009",
+        "CustomDataKey": "shared",
+        "AudioStreamIndex": null,
+        "IsFavorite": true,
+        "LastPlayedDate": "2026-09-02T00:00:00Z",
+        "Likes": null,
+        "PlayCount": 8,
+        "PlaybackPositionTicks": "9007199254740997",
+        "Played": true,
+        "Rating": null,
+        "RetentionDate": "2026-10-03T14:08:47.2473559Z",
+        "SubtitleStreamIndex": null
+      },
+      {
+        "ItemId": "00000000-0000-0000-0000-000000000001",
+        "UserId": "F3333333-3333-3333-3333-000000000009",
+        "CustomDataKey": "unique",
+        "AudioStreamIndex": null,
+        "IsFavorite": true,
+        "LastPlayedDate": null,
+        "Likes": null,
+        "PlayCount": 2,
+        "PlaybackPositionTicks": "33",
+        "Played": true,
+        "Rating": null,
+        "RetentionDate": "2026-10-03T14:08:47.2473559Z",
+        "SubtitleStreamIndex": null
+      },
+      {
+        "ItemId": "00000000-0000-0000-0000-000000000001",
+        "UserId": "F3333333-3333-3333-3333-000000000009",
+        "CustomDataKey": "unrelated",
+        "AudioStreamIndex": null,
+        "IsFavorite": true,
+        "LastPlayedDate": null,
+        "Likes": null,
+        "PlayCount": 4,
+        "PlaybackPositionTicks": "44",
+        "Played": true,
+        "Rating": null,
+        "RetentionDate": null,
+        "SubtitleStreamIndex": null
+      }
+    ],
+    "Peoples": [
+      {
+        "Id": "F3333333-3333-3333-3333-000000000011",
+        "Name": "sharedPerson"
+      },
+      {
+        "Id": "F3333333-3333-3333-3333-000000000012",
+        "Name": "orphanPerson"
+      }
+    ],
+    "PeopleBaseItemMap": [
+      {
+        "ItemId": "F3333333-3333-3333-3333-000000000007",
+        "PeopleId": "F3333333-3333-3333-3333-000000000011",
+        "Role": "role",
+        "ListOrder": null,
+        "SortOrder": null
+      }
+    ],
+    "ItemValues": [
+      {
+        "ItemValueId": "F3333333-3333-3333-3333-000000000013",
+        "Value": "value"
+      }
+    ],
+    "ItemValuesMap": [],
+    "CustomItemDisplayPreferences": [
+      {
+        "Id": 4,
+        "Client": "Fixture",
+        "ItemId": "F3333333-3333-3333-3333-000000000007",
+        "Key": "Layout",
+        "UserId": "F3333333-3333-3333-3333-000000000009",
+        "Value": "List"
+      }
+    ],
+    "ItemDisplayPreferences": [
+      {
+        "Id": 4,
+        "Client": "Fixture",
+        "IndexBy": null,
+        "ItemId": "F3333333-3333-3333-3333-000000000007",
+        "RememberIndexing": false,
+        "RememberSorting": true,
+        "SortBy": "Name",
+        "SortOrder": 0,
+        "UserId": "F3333333-3333-3333-3333-000000000009",
+        "ViewType": 0
+      }
+    ],
+    "MediaSegments": [
+      {
+        "Id": "F3333333-3333-3333-3333-000000000007",
+        "EndTicks": "20",
+        "ItemId": "F3333333-3333-3333-3333-000000000007",
+        "SegmentProviderId": "Fixture",
+        "StartTicks": "10",
+        "Type": 1
+      }
+    ],
+    "TrickplayInfos": [
+      {
+        "ItemId": "F3333333-3333-3333-3333-000000000007",
+        "Width": 320,
+        "Bandwidth": 0,
+        "Height": 180,
+        "Interval": 10000,
+        "ThumbnailCount": 1,
+        "TileHeight": 10,
+        "TileWidth": 10
+      }
+    ]
+  },
+  "sourceBoundary": "Actual ItemPersistenceService.DeleteItem executes EF SQLite SQL against an isolated synthetic current-schema database. This is not LibraryManager.DeleteItem: alternate promotion, external assets and notifications are outside this recording.",
+  "assemblySha256": "aa009dca56edcd138a829c9c5c13ae96a7eb4f67ca462f252f99078e6f124b10",
+  "phaseAcceptance": false
+}

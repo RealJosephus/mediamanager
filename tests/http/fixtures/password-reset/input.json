@@ -1,0 +1,788 @@
+[
+  {
+    "name": "local",
+    "path": "/Users/ForgotPassword",
+    "method": "POST",
+    "body": "{\"EnteredUsername\":\"Alpha\"}"
+  },
+  {
+    "name": "anonymous-local",
+    "path": "/Users/ForgotPassword",
+    "method": "POST",
+    "body": "{\"EnteredUsername\":\"Alpha\"}",
+    "anonymous": true
+  },
+  {
+    "name": "unknown",
+    "path": "/Users/ForgotPassword",
+    "method": "POST",
+    "body": "{\"EnteredUsername\":\"Unknown\"}"
+  },
+  {
+    "name": "remote",
+    "path": "/Users/ForgotPassword",
+    "method": "POST",
+    "body": "{\"EnteredUsername\":\"Alpha\"}",
+    "remote": true
+  },
+  {
+    "name": "same-address",
+    "path": "/Users/ForgotPassword",
+    "method": "POST",
+    "body": "{\"EnteredUsername\":\"Alpha\"}",
+    "remote": true,
+    "sameAddress": true
+  },
+  {
+    "name": "case-name",
+    "path": "/Users/ForgotPassword",
+    "method": "POST",
+    "body": "{\"EnteredUsername\":\"aLPHa\"}"
+  },
+  {
+    "name": "unicode-name",
+    "path": "/Users/ForgotPassword",
+    "method": "POST",
+    "body": "{\"EnteredUsername\":\"ß中文 café\"}",
+    "username": "ß中文 café"
+  },
+  {
+    "name": "unknown-reset-provider",
+    "path": "/Users/ForgotPassword",
+    "method": "POST",
+    "body": "{\"EnteredUsername\":\"Alpha\"}",
+    "resetProvider": "Example.UninstalledResetProvider"
+  },
+  {
+    "name": "empty-reset-provider",
+    "path": "/Users/ForgotPassword",
+    "method": "POST",
+    "body": "{\"EnteredUsername\":\"Alpha\"}",
+    "resetProvider": ""
+  },
+  {
+    "name": "with-schedules",
+    "path": "/Users/ForgotPassword",
+    "method": "POST",
+    "body": "{\"EnteredUsername\":\"Alpha\"}",
+    "schedules": true
+  },
+  {
+    "name": "save-user-failure",
+    "path": "/Users/ForgotPassword",
+    "method": "POST",
+    "body": "{\"EnteredUsername\":\"Alpha\"}",
+    "schedules": true,
+    "fail": "save-user"
+  },
+  {
+    "name": "missing-root",
+    "path": "/Users/ForgotPassword",
+    "method": "POST",
+    "body": "{\"EnteredUsername\":\"Alpha\"}",
+    "missingRoot": true
+  },
+  {
+    "name": "unknown-missing-root",
+    "path": "/Users/ForgotPassword",
+    "method": "POST",
+    "body": "{\"EnteredUsername\":\"Missing\"}",
+    "missingRoot": true
+  },
+  {
+    "name": "target-directory",
+    "path": "/Users/ForgotPassword",
+    "method": "POST",
+    "body": "{\"EnteredUsername\":\"Alpha\"}",
+    "targetDirectory": true
+  },
+  {
+    "name": "binding-start-missing",
+    "path": "/Users/ForgotPassword",
+    "method": "POST",
+    "body": "{}"
+  },
+  {
+    "name": "binding-start-null",
+    "path": "/Users/ForgotPassword",
+    "method": "POST",
+    "body": "null"
+  },
+  {
+    "name": "binding-start-null-field",
+    "path": "/Users/ForgotPassword",
+    "method": "POST",
+    "body": "{\"EnteredUsername\":null}"
+  },
+  {
+    "name": "binding-start-empty",
+    "path": "/Users/ForgotPassword",
+    "method": "POST",
+    "body": "{\"EnteredUsername\":\"\"}"
+  },
+  {
+    "name": "binding-start-whitespace",
+    "path": "/Users/ForgotPassword",
+    "method": "POST",
+    "body": "{\"EnteredUsername\":\" \"}"
+  },
+  {
+    "name": "binding-start-unicode-space",
+    "path": "/Users/ForgotPassword",
+    "method": "POST",
+    "body": "{\"EnteredUsername\":\"\\u0085\"}"
+  },
+  {
+    "name": "binding-start-bom",
+    "path": "/Users/ForgotPassword",
+    "method": "POST",
+    "body": "{\"EnteredUsername\":\"\\ufeff\"}"
+  },
+  {
+    "name": "binding-start-number",
+    "path": "/Users/ForgotPassword",
+    "method": "POST",
+    "body": "{\"EnteredUsername\":123}"
+  },
+  {
+    "name": "binding-start-boolean",
+    "path": "/Users/ForgotPassword",
+    "method": "POST",
+    "body": "{\"EnteredUsername\":true}"
+  },
+  {
+    "name": "binding-start-object",
+    "path": "/Users/ForgotPassword",
+    "method": "POST",
+    "body": "{\"EnteredUsername\":{}}"
+  },
+  {
+    "name": "binding-start-array",
+    "path": "/Users/ForgotPassword",
+    "method": "POST",
+    "body": "[]"
+  },
+  {
+    "name": "binding-start-open",
+    "path": "/Users/ForgotPassword",
+    "method": "POST",
+    "body": "{"
+  },
+  {
+    "name": "binding-start-duplicate-valid",
+    "path": "/Users/ForgotPassword",
+    "method": "POST",
+    "body": "{\"EnteredUsername\":null,\"enteredUsername\":\"Alpha\"}"
+  },
+  {
+    "name": "binding-start-duplicate-invalid",
+    "path": "/Users/ForgotPassword",
+    "method": "POST",
+    "body": "{\"EnteredUsername\":[],\"enteredUsername\":\"Alpha\"}"
+  },
+  {
+    "name": "start-no-body",
+    "path": "/Users/ForgotPassword",
+    "method": "POST"
+  },
+  {
+    "name": "start-wrong-content",
+    "path": "/Users/ForgotPassword",
+    "method": "POST",
+    "body": "{}",
+    "contentType": "text/plain"
+  },
+  {
+    "name": "start-wrong-method",
+    "path": "/Users/ForgotPassword",
+    "method": "GET"
+  },
+  {
+    "name": "normal",
+    "path": "/Users/ForgotPassword/Pin",
+    "method": "POST",
+    "body": "{\"Pin\":\"AB-CD-EF-01\"}",
+    "files": [
+      {
+        "name": "passwordresetone.json",
+        "text": "{\"PinFile\":\"ignored value\",\"ExpirationDate\":\"2040-01-02T03:04:05.1234567Z\",\"Pin\":\"AB-CD-EF-01\",\"UserName\":\"Alpha\"}"
+      }
+    ]
+  },
+  {
+    "name": "compact",
+    "path": "/Users/ForgotPassword/Pin",
+    "method": "POST",
+    "body": "{\"Pin\":\"ABCDEF01\"}",
+    "files": [
+      {
+        "name": "passwordresetone.json",
+        "text": "{\"PinFile\":\"ignored value\",\"ExpirationDate\":\"2040-01-02T03:04:05.1234567Z\",\"Pin\":\"AB-CD-EF-01\",\"UserName\":\"Alpha\"}"
+      }
+    ]
+  },
+  {
+    "name": "arbitrary-hyphens",
+    "path": "/Users/ForgotPassword/Pin",
+    "method": "POST",
+    "body": "{\"Pin\":\"-A-B-C-D-E-F-0-1-\"}",
+    "files": [
+      {
+        "name": "passwordresetone.json",
+        "text": "{\"PinFile\":\"ignored value\",\"ExpirationDate\":\"2040-01-02T03:04:05.1234567Z\",\"Pin\":\"AB-CD-EF-01\",\"UserName\":\"Alpha\"}"
+      }
+    ]
+  },
+  {
+    "name": "wrong-case",
+    "path": "/Users/ForgotPassword/Pin",
+    "method": "POST",
+    "body": "{\"Pin\":\"ab-cd-ef-01\"}",
+    "files": [
+      {
+        "name": "passwordresetone.json",
+        "text": "{\"PinFile\":\"ignored value\",\"ExpirationDate\":\"2040-01-02T03:04:05.1234567Z\",\"Pin\":\"AB-CD-EF-01\",\"UserName\":\"Alpha\"}"
+      }
+    ]
+  },
+  {
+    "name": "unknown-pin",
+    "path": "/Users/ForgotPassword/Pin",
+    "method": "POST",
+    "body": "{\"Pin\":\"12-34-56-78\"}",
+    "files": [
+      {
+        "name": "passwordresetone.json",
+        "text": "{\"PinFile\":\"ignored value\",\"ExpirationDate\":\"2040-01-02T03:04:05.1234567Z\",\"Pin\":\"AB-CD-EF-01\",\"UserName\":\"Alpha\"}"
+      }
+    ]
+  },
+  {
+    "name": "no-files",
+    "path": "/Users/ForgotPassword/Pin",
+    "method": "POST",
+    "body": "{\"Pin\":\"AB-CD-EF-01\"}"
+  },
+  {
+    "name": "missing-root-redeem",
+    "path": "/Users/ForgotPassword/Pin",
+    "method": "POST",
+    "body": "{\"Pin\":\"AB-CD-EF-01\"}",
+    "missingRoot": true
+  },
+  {
+    "name": "two-users",
+    "path": "/Users/ForgotPassword/Pin",
+    "method": "POST",
+    "body": "{\"Pin\":\"AB-CD-EF-01\"}",
+    "files": [
+      {
+        "name": "passwordresetone.json",
+        "text": "{\"PinFile\":\"ignored value\",\"ExpirationDate\":\"2040-01-02T03:04:05.1234567Z\",\"Pin\":\"AB-CD-EF-01\",\"UserName\":\"Alpha\"}"
+      },
+      {
+        "name": "passwordresettwo.json",
+        "text": "{\"PinFile\":\"ignored value\",\"ExpirationDate\":\"2040-01-02T03:04:05.1234567Z\",\"Pin\":\"AB-CD-EF-01\",\"UserName\":\"Beta\"}"
+      }
+    ]
+  },
+  {
+    "name": "duplicate-user",
+    "path": "/Users/ForgotPassword/Pin",
+    "method": "POST",
+    "body": "{\"Pin\":\"AB-CD-EF-01\"}",
+    "files": [
+      {
+        "name": "passwordresetone.json",
+        "text": "{\"PinFile\":\"ignored value\",\"ExpirationDate\":\"2040-01-02T03:04:05.1234567Z\",\"Pin\":\"AB-CD-EF-01\",\"UserName\":\"Alpha\"}"
+      },
+      {
+        "name": "passwordresettwo.json",
+        "text": "{\"PinFile\":\"ignored value\",\"ExpirationDate\":\"2040-01-02T03:04:05.1234567Z\",\"Pin\":\"AB-CD-EF-01\",\"UserName\":\"Alpha\"}"
+      }
+    ]
+  },
+  {
+    "name": "expired-only",
+    "path": "/Users/ForgotPassword/Pin",
+    "method": "POST",
+    "body": "{\"Pin\":\"AB-CD-EF-01\"}",
+    "files": [
+      {
+        "name": "passwordresetone.json",
+        "text": "{\"PinFile\":\"ignored value\",\"ExpirationDate\":\"2000-01-01T00:00:00Z\",\"Pin\":\"AB-CD-EF-01\",\"UserName\":\"Alpha\"}"
+      }
+    ]
+  },
+  {
+    "name": "expired-then-success",
+    "path": "/Users/ForgotPassword/Pin",
+    "method": "POST",
+    "body": "{\"Pin\":\"AB-CD-EF-01\"}",
+    "files": [
+      {
+        "name": "passwordresetone.json",
+        "text": "{\"PinFile\":\"ignored value\",\"ExpirationDate\":\"2000-01-01T00:00:00Z\",\"Pin\":\"AB-CD-EF-01\",\"UserName\":\"Alpha\"}"
+      },
+      {
+        "name": "passwordresettwo.json",
+        "text": "{\"PinFile\":\"ignored value\",\"ExpirationDate\":\"2040-01-02T03:04:05.1234567Z\",\"Pin\":\"AB-CD-EF-01\",\"UserName\":\"Alpha\"}"
+      }
+    ]
+  },
+  {
+    "name": "success-then-malformed",
+    "path": "/Users/ForgotPassword/Pin",
+    "method": "POST",
+    "body": "{\"Pin\":\"AB-CD-EF-01\"}",
+    "files": [
+      {
+        "name": "passwordresetone.json",
+        "text": "{\"PinFile\":\"ignored value\",\"ExpirationDate\":\"2040-01-02T03:04:05.1234567Z\",\"Pin\":\"AB-CD-EF-01\",\"UserName\":\"Alpha\"}"
+      },
+      {
+        "name": "passwordresettwo.json",
+        "text": "{"
+      }
+    ]
+  },
+  {
+    "name": "missing-user",
+    "path": "/Users/ForgotPassword/Pin",
+    "method": "POST",
+    "body": "{\"Pin\":\"AB-CD-EF-01\"}",
+    "files": [
+      {
+        "name": "passwordresetone.json",
+        "text": "{\"PinFile\":\"ignored value\",\"ExpirationDate\":\"2040-01-02T03:04:05.1234567Z\",\"Pin\":\"AB-CD-EF-01\",\"UserName\":\"Gone\"}"
+      }
+    ]
+  },
+  {
+    "name": "success-then-missing-user",
+    "path": "/Users/ForgotPassword/Pin",
+    "method": "POST",
+    "body": "{\"Pin\":\"AB-CD-EF-01\"}",
+    "files": [
+      {
+        "name": "passwordresetone.json",
+        "text": "{\"PinFile\":\"ignored value\",\"ExpirationDate\":\"2040-01-02T03:04:05.1234567Z\",\"Pin\":\"AB-CD-EF-01\",\"UserName\":\"Alpha\"}"
+      },
+      {
+        "name": "passwordresettwo.json",
+        "text": "{\"PinFile\":\"ignored value\",\"ExpirationDate\":\"2040-01-02T03:04:05.1234567Z\",\"Pin\":\"AB-CD-EF-01\",\"UserName\":\"Gone\"}"
+      }
+    ]
+  },
+  {
+    "name": "null-user",
+    "path": "/Users/ForgotPassword/Pin",
+    "method": "POST",
+    "body": "{\"Pin\":\"AB-CD-EF-01\"}",
+    "files": [
+      {
+        "name": "passwordresetone.json",
+        "text": "{\"PinFile\":\"ignored value\",\"ExpirationDate\":\"2040-01-02T03:04:05.1234567Z\",\"Pin\":\"AB-CD-EF-01\",\"UserName\":null}"
+      }
+    ]
+  },
+  {
+    "name": "unknown-auth-provider",
+    "path": "/Users/ForgotPassword/Pin",
+    "method": "POST",
+    "body": "{\"Pin\":\"AB-CD-EF-01\"}",
+    "authProvider": "Example.UninstalledAuthentication",
+    "files": [
+      {
+        "name": "passwordresetone.json",
+        "text": "{\"PinFile\":\"ignored value\",\"ExpirationDate\":\"2040-01-02T03:04:05.1234567Z\",\"Pin\":\"AB-CD-EF-01\",\"UserName\":\"Alpha\"}"
+      }
+    ]
+  },
+  {
+    "name": "empty-auth-provider",
+    "path": "/Users/ForgotPassword/Pin",
+    "method": "POST",
+    "body": "{\"Pin\":\"AB-CD-EF-01\"}",
+    "authProvider": "",
+    "files": [
+      {
+        "name": "passwordresetone.json",
+        "text": "{\"PinFile\":\"ignored value\",\"ExpirationDate\":\"2040-01-02T03:04:05.1234567Z\",\"Pin\":\"AB-CD-EF-01\",\"UserName\":\"Alpha\"}"
+      }
+    ]
+  },
+  {
+    "name": "change-password-failure",
+    "path": "/Users/ForgotPassword/Pin",
+    "method": "POST",
+    "body": "{\"Pin\":\"AB-CD-EF-01\"}",
+    "fail": "change-password",
+    "files": [
+      {
+        "name": "passwordresetone.json",
+        "text": "{\"PinFile\":\"ignored value\",\"ExpirationDate\":\"2040-01-02T03:04:05.1234567Z\",\"Pin\":\"AB-CD-EF-01\",\"UserName\":\"Alpha\"}"
+      }
+    ]
+  },
+  {
+    "name": "password-event-failure",
+    "path": "/Users/ForgotPassword/Pin",
+    "method": "POST",
+    "body": "{\"Pin\":\"AB-CD-EF-01\"}",
+    "fail": "password-event",
+    "files": [
+      {
+        "name": "passwordresetone.json",
+        "text": "{\"PinFile\":\"ignored value\",\"ExpirationDate\":\"2040-01-02T03:04:05.1234567Z\",\"Pin\":\"AB-CD-EF-01\",\"UserName\":\"Alpha\"}"
+      }
+    ]
+  },
+  {
+    "name": "delete-file-failure",
+    "path": "/Users/ForgotPassword/Pin",
+    "method": "POST",
+    "body": "{\"Pin\":\"AB-CD-EF-01\"}",
+    "files": [
+      {
+        "name": "passwordresetone.json",
+        "text": "{\"PinFile\":\"ignored value\",\"ExpirationDate\":\"2040-01-02T03:04:05.1234567Z\",\"Pin\":\"AB-CD-EF-01\",\"UserName\":\"Alpha\"}",
+        "readOnly": true
+      }
+    ]
+  },
+  {
+    "name": "prefix-file-and-directory",
+    "path": "/Users/ForgotPassword/Pin",
+    "method": "POST",
+    "body": "{\"Pin\":\"AB-CD-EF-01\"}",
+    "files": [
+      {
+        "name": "passwordreset.anything",
+        "text": "{\"PinFile\":\"ignored value\",\"ExpirationDate\":\"2040-01-02T03:04:05.1234567Z\",\"Pin\":\"AB-CD-EF-01\",\"UserName\":\"Alpha\"}"
+      },
+      {
+        "name": "passwordresetdirectory",
+        "directory": true
+      },
+      {
+        "name": "passwordresetUPPER.JSON",
+        "text": "{\"PinFile\":\"ignored value\",\"ExpirationDate\":\"2040-01-02T03:04:05.1234567Z\",\"Pin\":\"AB-CD-EF-01\",\"UserName\":\"Alpha\"}"
+      },
+      {
+        "name": "ignored.json",
+        "text": "{"
+      }
+    ]
+  },
+  {
+    "name": "file-null",
+    "path": "/Users/ForgotPassword/Pin",
+    "method": "POST",
+    "body": "{\"Pin\":\"AB-CD-EF-01\"}",
+    "files": [
+      {
+        "name": "passwordresetone.json",
+        "text": "null"
+      }
+    ]
+  },
+  {
+    "name": "file-array",
+    "path": "/Users/ForgotPassword/Pin",
+    "method": "POST",
+    "body": "{\"Pin\":\"AB-CD-EF-01\"}",
+    "files": [
+      {
+        "name": "passwordresetone.json",
+        "text": "[]"
+      }
+    ]
+  },
+  {
+    "name": "file-wrong-case",
+    "path": "/Users/ForgotPassword/Pin",
+    "method": "POST",
+    "body": "{\"Pin\":\"AB-CD-EF-01\"}",
+    "files": [
+      {
+        "name": "passwordresetone.json",
+        "text": "{\"expirationDate\":\"2040-01-01T00:00:00Z\",\"pin\":\"AB-CD-EF-01\",\"userName\":\"Alpha\"}"
+      }
+    ]
+  },
+  {
+    "name": "file-null-pin",
+    "path": "/Users/ForgotPassword/Pin",
+    "method": "POST",
+    "body": "{\"Pin\":\"AB-CD-EF-01\"}",
+    "files": [
+      {
+        "name": "passwordresetone.json",
+        "text": "{\"PinFile\":\"ignored value\",\"ExpirationDate\":\"2040-01-02T03:04:05.1234567Z\",\"Pin\":null,\"UserName\":\"Alpha\"}"
+      }
+    ]
+  },
+  {
+    "name": "file-number-pin",
+    "path": "/Users/ForgotPassword/Pin",
+    "method": "POST",
+    "body": "{\"Pin\":\"AB-CD-EF-01\"}",
+    "files": [
+      {
+        "name": "passwordresetone.json",
+        "text": "{\"PinFile\":\"ignored value\",\"ExpirationDate\":\"2040-01-02T03:04:05.1234567Z\",\"Pin\":123,\"UserName\":\"Alpha\"}"
+      }
+    ]
+  },
+  {
+    "name": "file-null-date",
+    "path": "/Users/ForgotPassword/Pin",
+    "method": "POST",
+    "body": "{\"Pin\":\"AB-CD-EF-01\"}",
+    "files": [
+      {
+        "name": "passwordresetone.json",
+        "text": "{\"PinFile\":\"ignored value\",\"ExpirationDate\":null,\"Pin\":\"AB-CD-EF-01\",\"UserName\":\"Alpha\"}"
+      }
+    ]
+  },
+  {
+    "name": "file-bad-date",
+    "path": "/Users/ForgotPassword/Pin",
+    "method": "POST",
+    "body": "{\"Pin\":\"AB-CD-EF-01\"}",
+    "files": [
+      {
+        "name": "passwordresetone.json",
+        "text": "{\"PinFile\":\"ignored value\",\"ExpirationDate\":\"not a date\",\"Pin\":\"AB-CD-EF-01\",\"UserName\":\"Alpha\"}"
+      }
+    ]
+  },
+  {
+    "name": "file-duplicate-date",
+    "path": "/Users/ForgotPassword/Pin",
+    "method": "POST",
+    "body": "{\"Pin\":\"AB-CD-EF-01\"}",
+    "files": [
+      {
+        "name": "passwordresetone.json",
+        "text": "{\"ExpirationDate\":\"bad\",\"ExpirationDate\":\"2040-01-01T00:00:00Z\"}"
+      }
+    ]
+  },
+  {
+    "name": "file-unknown-values",
+    "path": "/Users/ForgotPassword/Pin",
+    "method": "POST",
+    "body": "{\"Pin\":\"AB-CD-EF-01\"}",
+    "files": [
+      {
+        "name": "passwordresetone.json",
+        "text": "{\"PinFile\":\"ignored value\",\"ExpirationDate\":\"2040-01-02T03:04:05.1234567Z\",\"Pin\":\"AB-CD-EF-01\",\"UserName\":\"Alpha\",\"Unknown\":{\"nested\":[\"value\"]}}"
+      }
+    ]
+  },
+  {
+    "name": "file-missing-date",
+    "path": "/Users/ForgotPassword/Pin",
+    "method": "POST",
+    "body": "{\"Pin\":\"AB-CD-EF-01\"}",
+    "files": [
+      {
+        "name": "passwordresetone.json",
+        "text": "{\"Pin\":\"AB-CD-EF-01\",\"UserName\":\"Alpha\"}"
+      }
+    ]
+  },
+  {
+    "name": "file-bom",
+    "path": "/Users/ForgotPassword/Pin",
+    "method": "POST",
+    "body": "{\"Pin\":\"AB-CD-EF-01\"}",
+    "files": [
+      {
+        "name": "passwordresetone.json",
+        "text": "﻿{\"PinFile\":\"ignored value\",\"ExpirationDate\":\"2040-01-02T03:04:05.1234567Z\",\"Pin\":\"AB-CD-EF-01\",\"UserName\":\"Alpha\"}"
+      }
+    ]
+  },
+  {
+    "name": "file-unicode-pin",
+    "path": "/Users/ForgotPassword/Pin",
+    "method": "POST",
+    "body": "{\"Pin\":\"AB-CD-EF-01\"}",
+    "files": [
+      {
+        "name": "passwordresetone.json",
+        "text": "{\"PinFile\":\"ignored value\",\"ExpirationDate\":\"2040-01-02T03:04:05.1234567Z\",\"Pin\":\"\\ud800\",\"UserName\":\"Alpha\"}"
+      }
+    ]
+  },
+  {
+    "name": "file-invalid-string-escape",
+    "path": "/Users/ForgotPassword/Pin",
+    "method": "POST",
+    "body": "{\"Pin\":\"AB-CD-EF-01\"}",
+    "files": [
+      {
+        "name": "passwordresetone.json",
+        "text": "{\"Pin\":\"\\uD800\",\"ExpirationDate\":\"2040-01-01T00:00:00Z\",\"UserName\":\"Alpha\"}"
+      }
+    ]
+  },
+  {
+    "name": "binding-pin-missing",
+    "path": "/Users/ForgotPassword/Pin",
+    "method": "POST",
+    "body": "{}"
+  },
+  {
+    "name": "binding-pin-null",
+    "path": "/Users/ForgotPassword/Pin",
+    "method": "POST",
+    "body": "null"
+  },
+  {
+    "name": "binding-pin-null-field",
+    "path": "/Users/ForgotPassword/Pin",
+    "method": "POST",
+    "body": "{\"Pin\":null}"
+  },
+  {
+    "name": "binding-pin-empty",
+    "path": "/Users/ForgotPassword/Pin",
+    "method": "POST",
+    "body": "{\"Pin\":\"\"}"
+  },
+  {
+    "name": "binding-pin-whitespace",
+    "path": "/Users/ForgotPassword/Pin",
+    "method": "POST",
+    "body": "{\"Pin\":\" \"}"
+  },
+  {
+    "name": "binding-pin-unicode-space",
+    "path": "/Users/ForgotPassword/Pin",
+    "method": "POST",
+    "body": "{\"Pin\":\"\\u0085\"}"
+  },
+  {
+    "name": "binding-pin-bom",
+    "path": "/Users/ForgotPassword/Pin",
+    "method": "POST",
+    "body": "{\"Pin\":\"\\ufeff\"}"
+  },
+  {
+    "name": "binding-pin-number",
+    "path": "/Users/ForgotPassword/Pin",
+    "method": "POST",
+    "body": "{\"Pin\":123}"
+  },
+  {
+    "name": "binding-pin-object",
+    "path": "/Users/ForgotPassword/Pin",
+    "method": "POST",
+    "body": "{\"Pin\":{}}"
+  },
+  {
+    "name": "binding-pin-array",
+    "path": "/Users/ForgotPassword/Pin",
+    "method": "POST",
+    "body": "[]"
+  },
+  {
+    "name": "binding-pin-open",
+    "path": "/Users/ForgotPassword/Pin",
+    "method": "POST",
+    "body": "{"
+  },
+  {
+    "name": "generated-pin-flow",
+    "steps": [
+      {
+        "path": "/Users/ForgotPassword",
+        "method": "POST",
+        "body": "{\"EnteredUsername\":\"Alpha\"}"
+      },
+      {
+        "path": "/Users/ForgotPassword/Pin",
+        "method": "POST",
+        "body": "{\"Pin\":\"$pinCompact\"}"
+      }
+    ]
+  },
+  {
+    "name": "provider-catalog",
+    "path": "/Auth/PasswordResetProviders",
+    "method": "GET"
+  },
+  {
+    "name": "auth-catalog",
+    "path": "/Auth/Providers",
+    "method": "GET"
+  },
+  {
+    "name": "start-existing-readonly",
+    "path": "/Users/ForgotPassword",
+    "method": "POST",
+    "body": "{\"EnteredUsername\":\"Alpha\"}",
+    "files": [
+      {
+        "name": "passwordreset27bbd60a2f0f3033c1915e22523c8dd7.json",
+        "text": "{\"PinFile\":\"ignored value\",\"ExpirationDate\":\"2040-01-02T03:04:05.1234567Z\",\"Pin\":\"AB-CD-EF-01\",\"UserName\":\"Alpha\"}",
+        "readOnly": true
+      }
+    ]
+  },
+  {
+    "name": "expired-readonly",
+    "path": "/Users/ForgotPassword/Pin",
+    "method": "POST",
+    "body": "{\"Pin\":\"AB-CD-EF-01\"}",
+    "files": [
+      {
+        "name": "passwordresetexpired.json",
+        "text": "{\"PinFile\":\"ignored value\",\"ExpirationDate\":\"2000-01-01T00:00:00Z\",\"Pin\":\"AB-CD-EF-01\",\"UserName\":\"Alpha\"}",
+        "readOnly": true
+      }
+    ]
+  },
+  {
+    "name": "start-head",
+    "path": "/Users/ForgotPassword",
+    "method": "HEAD"
+  },
+  {
+    "name": "pin-head",
+    "path": "/Users/ForgotPassword/Pin",
+    "method": "HEAD"
+  },
+  {
+    "name": "snapshot-stable",
+    "schedules": true,
+    "mode": "snapshot"
+  },
+  {
+    "name": "snapshot-stale",
+    "schedules": true,
+    "freshChange": true,
+    "mode": "snapshot"
+  },
+  {
+    "name": "snapshot-fields",
+    "sourceFields": true,
+    "mode": "snapshot"
+  },
+  {
+    "name": "snapshot-image",
+    "sourceImage": true,
+    "mode": "snapshot"
+  },
+  {
+    "name": "snapshot-rollback",
+    "sourceFields": true,
+    "fail": "snapshot",
+    "mode": "snapshot"
+  }
+]

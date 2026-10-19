@@ -1,0 +1,268 @@
+{
+  "results": [
+    {
+      "name": "replace-file-directory",
+      "status": 204,
+      "itemName": "Original",
+      "containingFolder": "Z:\\EditMedia",
+      "contentTypes": [
+        {
+          "Name": "Z:\\Other",
+          "Value": "music"
+        },
+        {
+          "Name": "Z:\\EditMedia",
+          "Value": "tvshows"
+        }
+      ],
+      "configurationSaves": 1,
+      "calls": []
+    },
+    {
+      "name": "folder-path",
+      "status": 204,
+      "itemName": "Original",
+      "containingFolder": "Z:\\EditMedia\\Show",
+      "contentTypes": [
+        {
+          "Name": "Z:\\EditMedia\\Show",
+          "Value": "movies"
+        }
+      ],
+      "configurationSaves": 1,
+      "calls": []
+    },
+    {
+      "name": "dvd-folder",
+      "status": 204,
+      "itemName": "Original",
+      "containingFolder": "Z:\\EditMedia\\Disc",
+      "contentTypes": [
+        {
+          "Name": "Z:\\EditMedia\\Disc",
+          "Value": "movies"
+        }
+      ],
+      "configurationSaves": 1,
+      "calls": []
+    },
+    {
+      "name": "stacked-dvd",
+      "status": 204,
+      "itemName": "Original",
+      "containingFolder": "Z:\\EditMedia",
+      "contentTypes": [
+        {
+          "Name": "Z:\\EditMedia",
+          "Value": "movies"
+        }
+      ],
+      "configurationSaves": 1,
+      "calls": []
+    },
+    {
+      "name": "placeholder-bluray",
+      "status": 204,
+      "itemName": "Original",
+      "containingFolder": "Z:\\EditMedia",
+      "contentTypes": [
+        {
+          "Name": "Z:\\EditMedia",
+          "Value": "movies"
+        }
+      ],
+      "configurationSaves": 1,
+      "calls": []
+    },
+    {
+      "name": "remove-missing-query",
+      "status": 204,
+      "itemName": "Original",
+      "containingFolder": "Z:\\EditMedia",
+      "contentTypes": [
+        {
+          "Name": "Z:\\Other",
+          "Value": "music"
+        }
+      ],
+      "configurationSaves": 1,
+      "calls": []
+    },
+    {
+      "name": "remove-whitespace-query",
+      "status": 204,
+      "itemName": "Original",
+      "containingFolder": "Z:\\EditMedia",
+      "contentTypes": [],
+      "configurationSaves": 1,
+      "calls": []
+    },
+    {
+      "name": "preserve-bom-query",
+      "status": 204,
+      "itemName": "Original",
+      "containingFolder": "Z:\\EditMedia",
+      "contentTypes": [
+        {
+          "Name": "Z:\\EditMedia",
+          "Value": "\uFEFF"
+        }
+      ],
+      "configurationSaves": 1,
+      "calls": []
+    },
+    {
+      "name": "arbitrary-type-text",
+      "status": 204,
+      "itemName": "Original",
+      "containingFolder": "Z:\\EditMedia",
+      "contentTypes": [
+        {
+          "Name": "Z:\\Other",
+          "Value": "music"
+        },
+        {
+          "Name": "Z:\\EditMedia",
+          "Value": " Custom\u0026Mixed "
+        }
+      ],
+      "configurationSaves": 1,
+      "calls": []
+    },
+    {
+      "name": "missing-item",
+      "status": 404,
+      "itemName": "Original",
+      "containingFolder": "Z:\\EditMedia",
+      "contentTypes": [],
+      "configurationSaves": 0,
+      "calls": []
+    },
+    {
+      "name": "save-configuration-failure",
+      "error": {
+        "type": "IOException",
+        "Message": "Injected configuration save failure"
+      },
+      "itemName": "Original",
+      "containingFolder": "Z:\\EditMedia",
+      "contentTypes": [
+        {
+          "Name": "Z:\\EditMedia",
+          "Value": "tvshows"
+        }
+      ],
+      "configurationSaves": 1,
+      "calls": []
+    },
+    {
+      "name": "null-path",
+      "status": 204,
+      "itemName": "Original",
+      "contentTypes": [
+        {
+          "Value": "tvshows"
+        }
+      ],
+      "configurationSaves": 1,
+      "calls": []
+    },
+    {
+      "name": "people-before-invalid-status",
+      "error": {
+        "type": "ArgumentException",
+        "Message": "Requested value \u0027Returning\u0027 was not found."
+      },
+      "itemName": "Attempt",
+      "contentTypes": [],
+      "configurationSaves": 0,
+      "calls": [
+        "People"
+      ],
+      "credits": [
+        {
+          "Name": "Actor",
+          "Type": "Actor",
+          "Role": "Hero",
+          "ListOrder": 0
+        }
+      ]
+    },
+    {
+      "name": "people-before-item-failure",
+      "error": {
+        "type": "IOException",
+        "Message": "Injected item save failure"
+      },
+      "itemName": "Attempt",
+      "contentTypes": [],
+      "configurationSaves": 0,
+      "calls": [
+        "People",
+        "Item"
+      ],
+      "credits": [
+        {
+          "Name": "Actor",
+          "Type": "Actor",
+          "Role": "Hero",
+          "ListOrder": 0
+        },
+        {
+          "Name": "Actor",
+          "Type": "Writer",
+          "Role": "Novel",
+          "ListOrder": 1
+        }
+      ]
+    },
+    {
+      "name": "people-unsupported-folder",
+      "status": 204,
+      "itemName": "Attempt",
+      "contentTypes": [],
+      "configurationSaves": 0,
+      "calls": [
+        "People",
+        "Item"
+      ],
+      "credits": []
+    },
+    {
+      "name": "people-success",
+      "status": 204,
+      "itemName": "Attempt",
+      "contentTypes": [],
+      "configurationSaves": 0,
+      "calls": [
+        "People",
+        "Item"
+      ],
+      "credits": [
+        {
+          "Name": "Actor",
+          "Type": "Actor",
+          "Role": "",
+          "ListOrder": 0
+        }
+      ]
+    }
+  ],
+  "candidateVerified": false,
+  "sourceBoundary": "Actual ItemUpdateController entry points, BaseItem/Video.ContainingFolderPath and native JSON converters. PeopleRepository.UpdatePeople writes an isolated native EF SQLite database; the library proxy checks actual SupportsPeople. SavePeopleMetadataAsync and person entity creation are excluded. Item persistence and configuration save are controlled callbacks, including explicit failure injection. No native HTTP or NFO file save is executed.",
+  "inputSha256": "6ecdfe51dd3abce0f57ad51574356814faa5ba5a2c5e3ee66232b2ab04dc7a84",
+  "assemblies": [
+    {
+      "path": "D:\\mediamanager\\.test-output\\recordings-current\\editor-lifecycle-4-20261004\\bin\\Release\\net10.0\\Jellyfin.Api.dll",
+      "sha256": "f0bbaba2c4564bf7f04329d728df65a7a3ef54c96936374292db0beb311c87c5"
+    },
+    {
+      "path": "D:\\mediamanager\\.test-output\\recordings-current\\editor-lifecycle-4-20261004\\bin\\Release\\net10.0\\Jellyfin.Server.Implementations.dll",
+      "sha256": "b91a6797f81f8563b8896c3da3e5cd4e9d11c61eb084578bf7b81108c3c3e2e6"
+    },
+    {
+      "path": "D:\\mediamanager\\.test-output\\recordings-current\\editor-lifecycle-4-20261004\\bin\\Release\\net10.0\\Jellyfin.Database.Implementations.dll",
+      "sha256": "21648ea8e6eec045789c66c199b30c68b1b00f6e15918ac66347c19244b5670b"
+    }
+  ]
+}

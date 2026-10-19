@@ -1,0 +1,1872 @@
+{
+  "results": [
+    {
+      "name": "empty rating and empty scores remain unchanged",
+      "steps": [
+        {
+          "Name": "target",
+          "OfficialRating": null,
+          "CustomRating": null,
+          "PreferredMetadataCountryCode": null,
+          "IsLocked": false,
+          "InheritedParentalRatingValue": null,
+          "InheritedParentalRatingSubValue": null,
+          "updateType": 1
+        },
+        {
+          "Name": "target",
+          "OfficialRating": null,
+          "CustomRating": null,
+          "PreferredMetadataCountryCode": null,
+          "IsLocked": false,
+          "InheritedParentalRatingValue": null,
+          "InheritedParentalRatingSubValue": null,
+          "updateType": 1
+        }
+      ],
+      "calls": [],
+      "exception": null,
+      "refresh": null,
+      "items": [
+        {
+          "key": "target",
+          "result": {
+            "Name": "target",
+            "OfficialRating": null,
+            "CustomRating": null,
+            "PreferredMetadataCountryCode": null,
+            "IsLocked": false,
+            "InheritedParentalRatingValue": null,
+            "InheritedParentalRatingSubValue": null,
+            "updateType": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "empty rating retains a stale subscore when the main score is null",
+      "steps": [
+        {
+          "Name": "target",
+          "OfficialRating": null,
+          "CustomRating": null,
+          "PreferredMetadataCountryCode": null,
+          "IsLocked": false,
+          "InheritedParentalRatingValue": null,
+          "InheritedParentalRatingSubValue": 9,
+          "updateType": 1
+        },
+        {
+          "Name": "target",
+          "OfficialRating": null,
+          "CustomRating": null,
+          "PreferredMetadataCountryCode": null,
+          "IsLocked": false,
+          "InheritedParentalRatingValue": null,
+          "InheritedParentalRatingSubValue": 9,
+          "updateType": 1
+        }
+      ],
+      "calls": [],
+      "exception": null,
+      "refresh": null,
+      "items": [
+        {
+          "key": "target",
+          "result": {
+            "Name": "target",
+            "OfficialRating": null,
+            "CustomRating": null,
+            "PreferredMetadataCountryCode": null,
+            "IsLocked": false,
+            "InheritedParentalRatingValue": null,
+            "InheritedParentalRatingSubValue": 9,
+            "updateType": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "empty rating clears both scores when the main score exists",
+      "steps": [
+        {
+          "Name": "target",
+          "OfficialRating": null,
+          "CustomRating": null,
+          "PreferredMetadataCountryCode": null,
+          "IsLocked": false,
+          "InheritedParentalRatingValue": null,
+          "InheritedParentalRatingSubValue": null,
+          "updateType": 3
+        },
+        {
+          "Name": "target",
+          "OfficialRating": null,
+          "CustomRating": null,
+          "PreferredMetadataCountryCode": null,
+          "IsLocked": false,
+          "InheritedParentalRatingValue": null,
+          "InheritedParentalRatingSubValue": null,
+          "updateType": 1
+        }
+      ],
+      "calls": [],
+      "exception": null,
+      "refresh": null,
+      "items": [
+        {
+          "key": "target",
+          "result": {
+            "Name": "target",
+            "OfficialRating": null,
+            "CustomRating": null,
+            "PreferredMetadataCountryCode": null,
+            "IsLocked": false,
+            "InheritedParentalRatingValue": null,
+            "InheritedParentalRatingSubValue": null,
+            "updateType": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "unknown rating clears an existing main score",
+      "steps": [
+        {
+          "Name": "target",
+          "OfficialRating": "Unknown Rating",
+          "CustomRating": null,
+          "PreferredMetadataCountryCode": null,
+          "IsLocked": false,
+          "InheritedParentalRatingValue": null,
+          "InheritedParentalRatingSubValue": null,
+          "updateType": 3
+        },
+        {
+          "Name": "target",
+          "OfficialRating": "Unknown Rating",
+          "CustomRating": null,
+          "PreferredMetadataCountryCode": null,
+          "IsLocked": false,
+          "InheritedParentalRatingValue": null,
+          "InheritedParentalRatingSubValue": null,
+          "updateType": 1
+        }
+      ],
+      "calls": [],
+      "exception": null,
+      "refresh": null,
+      "items": [
+        {
+          "key": "target",
+          "result": {
+            "Name": "target",
+            "OfficialRating": "Unknown Rating",
+            "CustomRating": null,
+            "PreferredMetadataCountryCode": null,
+            "IsLocked": false,
+            "InheritedParentalRatingValue": null,
+            "InheritedParentalRatingSubValue": null,
+            "updateType": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "unknown rating preserves a lone subscore",
+      "steps": [
+        {
+          "Name": "target",
+          "OfficialRating": "Unknown Rating",
+          "CustomRating": null,
+          "PreferredMetadataCountryCode": null,
+          "IsLocked": false,
+          "InheritedParentalRatingValue": null,
+          "InheritedParentalRatingSubValue": 9,
+          "updateType": 1
+        },
+        {
+          "Name": "target",
+          "OfficialRating": "Unknown Rating",
+          "CustomRating": null,
+          "PreferredMetadataCountryCode": null,
+          "IsLocked": false,
+          "InheritedParentalRatingValue": null,
+          "InheritedParentalRatingSubValue": 9,
+          "updateType": 1
+        }
+      ],
+      "calls": [],
+      "exception": null,
+      "refresh": null,
+      "items": [
+        {
+          "key": "target",
+          "result": {
+            "Name": "target",
+            "OfficialRating": "Unknown Rating",
+            "CustomRating": null,
+            "PreferredMetadataCountryCode": null,
+            "IsLocked": false,
+            "InheritedParentalRatingValue": null,
+            "InheritedParentalRatingSubValue": 9,
+            "updateType": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "unrated custom rating blocks a known official rating",
+      "steps": [
+        {
+          "Name": "target",
+          "OfficialRating": "PG",
+          "CustomRating": "NR",
+          "PreferredMetadataCountryCode": null,
+          "IsLocked": false,
+          "InheritedParentalRatingValue": null,
+          "InheritedParentalRatingSubValue": null,
+          "updateType": 3
+        },
+        {
+          "Name": "target",
+          "OfficialRating": "PG",
+          "CustomRating": "NR",
+          "PreferredMetadataCountryCode": null,
+          "IsLocked": false,
+          "InheritedParentalRatingValue": null,
+          "InheritedParentalRatingSubValue": null,
+          "updateType": 1
+        }
+      ],
+      "calls": [],
+      "exception": null,
+      "refresh": null,
+      "items": [
+        {
+          "key": "target",
+          "result": {
+            "Name": "target",
+            "OfficialRating": "PG",
+            "CustomRating": "NR",
+            "PreferredMetadataCountryCode": null,
+            "IsLocked": false,
+            "InheritedParentalRatingValue": null,
+            "InheritedParentalRatingSubValue": null,
+            "updateType": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "whitespace custom rating blocks official fallback",
+      "steps": [
+        {
+          "Name": "target",
+          "OfficialRating": "PG",
+          "CustomRating": " ",
+          "PreferredMetadataCountryCode": null,
+          "IsLocked": false,
+          "InheritedParentalRatingValue": null,
+          "InheritedParentalRatingSubValue": 1,
+          "updateType": 1
+        },
+        {
+          "Name": "target",
+          "OfficialRating": "PG",
+          "CustomRating": " ",
+          "PreferredMetadataCountryCode": null,
+          "IsLocked": false,
+          "InheritedParentalRatingValue": null,
+          "InheritedParentalRatingSubValue": 1,
+          "updateType": 1
+        }
+      ],
+      "calls": [],
+      "exception": null,
+      "refresh": null,
+      "items": [
+        {
+          "key": "target",
+          "result": {
+            "Name": "target",
+            "OfficialRating": "PG",
+            "CustomRating": " ",
+            "PreferredMetadataCountryCode": null,
+            "IsLocked": false,
+            "InheritedParentalRatingValue": null,
+            "InheritedParentalRatingSubValue": 1,
+            "updateType": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "US G initializes both zero scores",
+      "steps": [
+        {
+          "Name": "target",
+          "OfficialRating": "G",
+          "CustomRating": null,
+          "PreferredMetadataCountryCode": null,
+          "IsLocked": false,
+          "InheritedParentalRatingValue": 0,
+          "InheritedParentalRatingSubValue": 0,
+          "updateType": 3
+        },
+        {
+          "Name": "target",
+          "OfficialRating": "G",
+          "CustomRating": null,
+          "PreferredMetadataCountryCode": null,
+          "IsLocked": false,
+          "InheritedParentalRatingValue": 0,
+          "InheritedParentalRatingSubValue": 0,
+          "updateType": 1
+        }
+      ],
+      "calls": [],
+      "exception": null,
+      "refresh": null,
+      "items": [
+        {
+          "key": "target",
+          "result": {
+            "Name": "target",
+            "OfficialRating": "G",
+            "CustomRating": null,
+            "PreferredMetadataCountryCode": null,
+            "IsLocked": false,
+            "InheritedParentalRatingValue": 0,
+            "InheritedParentalRatingSubValue": 0,
+            "updateType": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "US PG initializes both scores",
+      "steps": [
+        {
+          "Name": "target",
+          "OfficialRating": "PG",
+          "CustomRating": null,
+          "PreferredMetadataCountryCode": null,
+          "IsLocked": false,
+          "InheritedParentalRatingValue": 10,
+          "InheritedParentalRatingSubValue": 0,
+          "updateType": 3
+        },
+        {
+          "Name": "target",
+          "OfficialRating": "PG",
+          "CustomRating": null,
+          "PreferredMetadataCountryCode": null,
+          "IsLocked": false,
+          "InheritedParentalRatingValue": 10,
+          "InheritedParentalRatingSubValue": 0,
+          "updateType": 1
+        }
+      ],
+      "calls": [],
+      "exception": null,
+      "refresh": null,
+      "items": [
+        {
+          "key": "target",
+          "result": {
+            "Name": "target",
+            "OfficialRating": "PG",
+            "CustomRating": null,
+            "PreferredMetadataCountryCode": null,
+            "IsLocked": false,
+            "InheritedParentalRatingValue": 10,
+            "InheritedParentalRatingSubValue": 0,
+            "updateType": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "unchanged PG scores produce None",
+      "steps": [
+        {
+          "Name": "target",
+          "OfficialRating": "PG",
+          "CustomRating": null,
+          "PreferredMetadataCountryCode": null,
+          "IsLocked": false,
+          "InheritedParentalRatingValue": 10,
+          "InheritedParentalRatingSubValue": 0,
+          "updateType": 1
+        },
+        {
+          "Name": "target",
+          "OfficialRating": "PG",
+          "CustomRating": null,
+          "PreferredMetadataCountryCode": null,
+          "IsLocked": false,
+          "InheritedParentalRatingValue": 10,
+          "InheritedParentalRatingSubValue": 0,
+          "updateType": 1
+        }
+      ],
+      "calls": [],
+      "exception": null,
+      "refresh": null,
+      "items": [
+        {
+          "key": "target",
+          "result": {
+            "Name": "target",
+            "OfficialRating": "PG",
+            "CustomRating": null,
+            "PreferredMetadataCountryCode": null,
+            "IsLocked": false,
+            "InheritedParentalRatingValue": 10,
+            "InheritedParentalRatingSubValue": 0,
+            "updateType": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "changed PG subscore alone produces Import",
+      "steps": [
+        {
+          "Name": "target",
+          "OfficialRating": "PG",
+          "CustomRating": null,
+          "PreferredMetadataCountryCode": null,
+          "IsLocked": false,
+          "InheritedParentalRatingValue": 10,
+          "InheritedParentalRatingSubValue": 0,
+          "updateType": 3
+        },
+        {
+          "Name": "target",
+          "OfficialRating": "PG",
+          "CustomRating": null,
+          "PreferredMetadataCountryCode": null,
+          "IsLocked": false,
+          "InheritedParentalRatingValue": 10,
+          "InheritedParentalRatingSubValue": 0,
+          "updateType": 1
+        }
+      ],
+      "calls": [],
+      "exception": null,
+      "refresh": null,
+      "items": [
+        {
+          "key": "target",
+          "result": {
+            "Name": "target",
+            "OfficialRating": "PG",
+            "CustomRating": null,
+            "PreferredMetadataCountryCode": null,
+            "IsLocked": false,
+            "InheritedParentalRatingValue": 10,
+            "InheritedParentalRatingSubValue": 0,
+            "updateType": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "missing PG main score alone produces Import",
+      "steps": [
+        {
+          "Name": "target",
+          "OfficialRating": "PG",
+          "CustomRating": null,
+          "PreferredMetadataCountryCode": null,
+          "IsLocked": false,
+          "InheritedParentalRatingValue": 10,
+          "InheritedParentalRatingSubValue": 0,
+          "updateType": 3
+        },
+        {
+          "Name": "target",
+          "OfficialRating": "PG",
+          "CustomRating": null,
+          "PreferredMetadataCountryCode": null,
+          "IsLocked": false,
+          "InheritedParentalRatingValue": 10,
+          "InheritedParentalRatingSubValue": 0,
+          "updateType": 1
+        }
+      ],
+      "calls": [],
+      "exception": null,
+      "refresh": null,
+      "items": [
+        {
+          "key": "target",
+          "result": {
+            "Name": "target",
+            "OfficialRating": "PG",
+            "CustomRating": null,
+            "PreferredMetadataCountryCode": null,
+            "IsLocked": false,
+            "InheritedParentalRatingValue": 10,
+            "InheritedParentalRatingSubValue": 0,
+            "updateType": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "missing PG subscore alone produces Import",
+      "steps": [
+        {
+          "Name": "target",
+          "OfficialRating": "PG",
+          "CustomRating": null,
+          "PreferredMetadataCountryCode": null,
+          "IsLocked": false,
+          "InheritedParentalRatingValue": 10,
+          "InheritedParentalRatingSubValue": 0,
+          "updateType": 3
+        },
+        {
+          "Name": "target",
+          "OfficialRating": "PG",
+          "CustomRating": null,
+          "PreferredMetadataCountryCode": null,
+          "IsLocked": false,
+          "InheritedParentalRatingValue": 10,
+          "InheritedParentalRatingSubValue": 0,
+          "updateType": 1
+        }
+      ],
+      "calls": [],
+      "exception": null,
+      "refresh": null,
+      "items": [
+        {
+          "key": "target",
+          "result": {
+            "Name": "target",
+            "OfficialRating": "PG",
+            "CustomRating": null,
+            "PreferredMetadataCountryCode": null,
+            "IsLocked": false,
+            "InheritedParentalRatingValue": 10,
+            "InheritedParentalRatingSubValue": 0,
+            "updateType": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "US TV-MA includes its nonzero subscore",
+      "steps": [
+        {
+          "Name": "target",
+          "OfficialRating": "TV-MA",
+          "CustomRating": null,
+          "PreferredMetadataCountryCode": null,
+          "IsLocked": false,
+          "InheritedParentalRatingValue": 17,
+          "InheritedParentalRatingSubValue": 1,
+          "updateType": 3
+        },
+        {
+          "Name": "target",
+          "OfficialRating": "TV-MA",
+          "CustomRating": null,
+          "PreferredMetadataCountryCode": null,
+          "IsLocked": false,
+          "InheritedParentalRatingValue": 17,
+          "InheritedParentalRatingSubValue": 1,
+          "updateType": 1
+        }
+      ],
+      "calls": [],
+      "exception": null,
+      "refresh": null,
+      "items": [
+        {
+          "key": "target",
+          "result": {
+            "Name": "target",
+            "OfficialRating": "TV-MA",
+            "CustomRating": null,
+            "PreferredMetadataCountryCode": null,
+            "IsLocked": false,
+            "InheritedParentalRatingValue": 17,
+            "InheritedParentalRatingSubValue": 1,
+            "updateType": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "numeric rating has a null subscore",
+      "steps": [
+        {
+          "Name": "target",
+          "OfficialRating": "12\u002B",
+          "CustomRating": null,
+          "PreferredMetadataCountryCode": null,
+          "IsLocked": false,
+          "InheritedParentalRatingValue": 12,
+          "InheritedParentalRatingSubValue": null,
+          "updateType": 3
+        },
+        {
+          "Name": "target",
+          "OfficialRating": "12\u002B",
+          "CustomRating": null,
+          "PreferredMetadataCountryCode": null,
+          "IsLocked": false,
+          "InheritedParentalRatingValue": 12,
+          "InheritedParentalRatingSubValue": null,
+          "updateType": 1
+        }
+      ],
+      "calls": [],
+      "exception": null,
+      "refresh": null,
+      "items": [
+        {
+          "key": "target",
+          "result": {
+            "Name": "target",
+            "OfficialRating": "12\u002B",
+            "CustomRating": null,
+            "PreferredMetadataCountryCode": null,
+            "IsLocked": false,
+            "InheritedParentalRatingValue": 12,
+            "InheritedParentalRatingSubValue": null,
+            "updateType": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "numeric rating clears only the stale subscore",
+      "steps": [
+        {
+          "Name": "target",
+          "OfficialRating": "12",
+          "CustomRating": null,
+          "PreferredMetadataCountryCode": null,
+          "IsLocked": false,
+          "InheritedParentalRatingValue": 12,
+          "InheritedParentalRatingSubValue": null,
+          "updateType": 3
+        },
+        {
+          "Name": "target",
+          "OfficialRating": "12",
+          "CustomRating": null,
+          "PreferredMetadataCountryCode": null,
+          "IsLocked": false,
+          "InheritedParentalRatingValue": 12,
+          "InheritedParentalRatingSubValue": null,
+          "updateType": 1
+        }
+      ],
+      "calls": [],
+      "exception": null,
+      "refresh": null,
+      "items": [
+        {
+          "key": "target",
+          "result": {
+            "Name": "target",
+            "OfficialRating": "12",
+            "CustomRating": null,
+            "PreferredMetadataCountryCode": null,
+            "IsLocked": false,
+            "InheritedParentalRatingValue": 12,
+            "InheritedParentalRatingSubValue": null,
+            "updateType": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "custom rating takes priority over the item official rating",
+      "steps": [
+        {
+          "Name": "target",
+          "OfficialRating": "G",
+          "CustomRating": "R",
+          "PreferredMetadataCountryCode": null,
+          "IsLocked": false,
+          "InheritedParentalRatingValue": 17,
+          "InheritedParentalRatingSubValue": 0,
+          "updateType": 3
+        },
+        {
+          "Name": "target",
+          "OfficialRating": "G",
+          "CustomRating": "R",
+          "PreferredMetadataCountryCode": null,
+          "IsLocked": false,
+          "InheritedParentalRatingValue": 17,
+          "InheritedParentalRatingSubValue": 0,
+          "updateType": 1
+        }
+      ],
+      "calls": [],
+      "exception": null,
+      "refresh": null,
+      "items": [
+        {
+          "key": "target",
+          "result": {
+            "Name": "target",
+            "OfficialRating": "G",
+            "CustomRating": "R",
+            "PreferredMetadataCountryCode": null,
+            "IsLocked": false,
+            "InheritedParentalRatingValue": 17,
+            "InheritedParentalRatingSubValue": 0,
+            "updateType": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "locks do not prevent inherited rating updates",
+      "steps": [
+        {
+          "Name": "target",
+          "OfficialRating": "PG",
+          "CustomRating": null,
+          "PreferredMetadataCountryCode": null,
+          "IsLocked": true,
+          "InheritedParentalRatingValue": 10,
+          "InheritedParentalRatingSubValue": 0,
+          "updateType": 3
+        },
+        {
+          "Name": "target",
+          "OfficialRating": "PG",
+          "CustomRating": null,
+          "PreferredMetadataCountryCode": null,
+          "IsLocked": true,
+          "InheritedParentalRatingValue": 10,
+          "InheritedParentalRatingSubValue": 0,
+          "updateType": 1
+        }
+      ],
+      "calls": [],
+      "exception": null,
+      "refresh": null,
+      "items": [
+        {
+          "key": "target",
+          "result": {
+            "Name": "target",
+            "OfficialRating": "PG",
+            "CustomRating": null,
+            "PreferredMetadataCountryCode": null,
+            "IsLocked": true,
+            "InheritedParentalRatingValue": 10,
+            "InheritedParentalRatingSubValue": 0,
+            "updateType": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "preferred country precedes the global country",
+      "steps": [
+        {
+          "Name": "target",
+          "OfficialRating": "PG",
+          "CustomRating": null,
+          "PreferredMetadataCountryCode": "AU",
+          "IsLocked": false,
+          "InheritedParentalRatingValue": 15,
+          "InheritedParentalRatingSubValue": 1,
+          "updateType": 3
+        },
+        {
+          "Name": "target",
+          "OfficialRating": "PG",
+          "CustomRating": null,
+          "PreferredMetadataCountryCode": "AU",
+          "IsLocked": false,
+          "InheritedParentalRatingValue": 15,
+          "InheritedParentalRatingSubValue": 1,
+          "updateType": 1
+        }
+      ],
+      "calls": [],
+      "exception": null,
+      "refresh": null,
+      "items": [
+        {
+          "key": "target",
+          "result": {
+            "Name": "target",
+            "OfficialRating": "PG",
+            "CustomRating": null,
+            "PreferredMetadataCountryCode": "AU",
+            "IsLocked": false,
+            "InheritedParentalRatingValue": 15,
+            "InheritedParentalRatingSubValue": 1,
+            "updateType": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "unknown country falls back to the US rating system",
+      "steps": [
+        {
+          "Name": "target",
+          "OfficialRating": "PG",
+          "CustomRating": null,
+          "PreferredMetadataCountryCode": "Unknown Country",
+          "IsLocked": false,
+          "InheritedParentalRatingValue": 10,
+          "InheritedParentalRatingSubValue": 0,
+          "updateType": 3
+        },
+        {
+          "Name": "target",
+          "OfficialRating": "PG",
+          "CustomRating": null,
+          "PreferredMetadataCountryCode": "Unknown Country",
+          "IsLocked": false,
+          "InheritedParentalRatingValue": 10,
+          "InheritedParentalRatingSubValue": 0,
+          "updateType": 1
+        }
+      ],
+      "calls": [],
+      "exception": null,
+      "refresh": null,
+      "items": [
+        {
+          "key": "target",
+          "result": {
+            "Name": "target",
+            "OfficialRating": "PG",
+            "CustomRating": null,
+            "PreferredMetadataCountryCode": "Unknown Country",
+            "IsLocked": false,
+            "InheritedParentalRatingValue": 10,
+            "InheritedParentalRatingSubValue": 0,
+            "updateType": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "null global country fails before mutating scores",
+      "steps": [],
+      "calls": [],
+      "exception": "ArgumentNullException",
+      "refresh": null,
+      "items": [
+        {
+          "key": "target",
+          "result": {
+            "Name": "target",
+            "OfficialRating": "PG",
+            "CustomRating": null,
+            "PreferredMetadataCountryCode": null,
+            "IsLocked": false,
+            "InheritedParentalRatingValue": 14,
+            "InheritedParentalRatingSubValue": 1,
+            "updateType": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "unrated value returns before null country lookup",
+      "steps": [
+        {
+          "Name": "target",
+          "OfficialRating": null,
+          "CustomRating": "NR",
+          "PreferredMetadataCountryCode": null,
+          "IsLocked": false,
+          "InheritedParentalRatingValue": null,
+          "InheritedParentalRatingSubValue": 9,
+          "updateType": 1
+        },
+        {
+          "Name": "target",
+          "OfficialRating": null,
+          "CustomRating": "NR",
+          "PreferredMetadataCountryCode": null,
+          "IsLocked": false,
+          "InheritedParentalRatingValue": null,
+          "InheritedParentalRatingSubValue": 9,
+          "updateType": 1
+        }
+      ],
+      "calls": [],
+      "exception": null,
+      "refresh": null,
+      "items": [
+        {
+          "key": "target",
+          "result": {
+            "Name": "target",
+            "OfficialRating": null,
+            "CustomRating": "NR",
+            "PreferredMetadataCountryCode": null,
+            "IsLocked": false,
+            "InheritedParentalRatingValue": null,
+            "InheritedParentalRatingSubValue": 9,
+            "updateType": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "a later provider rating replaces previously inherited scores",
+      "steps": [
+        {
+          "Name": "target",
+          "OfficialRating": "PG",
+          "CustomRating": null,
+          "PreferredMetadataCountryCode": null,
+          "IsLocked": false,
+          "InheritedParentalRatingValue": 10,
+          "InheritedParentalRatingSubValue": 0,
+          "updateType": 3
+        },
+        {
+          "Name": "target",
+          "OfficialRating": "R",
+          "CustomRating": null,
+          "PreferredMetadataCountryCode": null,
+          "IsLocked": false,
+          "InheritedParentalRatingValue": 17,
+          "InheritedParentalRatingSubValue": 0,
+          "updateType": 3
+        }
+      ],
+      "calls": [],
+      "exception": null,
+      "refresh": null,
+      "items": [
+        {
+          "key": "target",
+          "result": {
+            "Name": "target",
+            "OfficialRating": "R",
+            "CustomRating": null,
+            "PreferredMetadataCountryCode": null,
+            "IsLocked": false,
+            "InheritedParentalRatingValue": 17,
+            "InheritedParentalRatingSubValue": 0,
+            "updateType": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "removing a rating on the second call clears both scores",
+      "steps": [
+        {
+          "Name": "target",
+          "OfficialRating": "PG",
+          "CustomRating": null,
+          "PreferredMetadataCountryCode": null,
+          "IsLocked": false,
+          "InheritedParentalRatingValue": 10,
+          "InheritedParentalRatingSubValue": 0,
+          "updateType": 3
+        },
+        {
+          "Name": "target",
+          "OfficialRating": null,
+          "CustomRating": null,
+          "PreferredMetadataCountryCode": null,
+          "IsLocked": false,
+          "InheritedParentalRatingValue": null,
+          "InheritedParentalRatingSubValue": null,
+          "updateType": 3
+        }
+      ],
+      "calls": [],
+      "exception": null,
+      "refresh": null,
+      "items": [
+        {
+          "key": "target",
+          "result": {
+            "Name": "target",
+            "OfficialRating": null,
+            "CustomRating": null,
+            "PreferredMetadataCountryCode": null,
+            "IsLocked": false,
+            "InheritedParentalRatingValue": null,
+            "InheritedParentalRatingSubValue": null,
+            "updateType": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "a new rating replaces a lone stale subscore",
+      "steps": [
+        {
+          "Name": "target",
+          "OfficialRating": null,
+          "CustomRating": null,
+          "PreferredMetadataCountryCode": null,
+          "IsLocked": false,
+          "InheritedParentalRatingValue": null,
+          "InheritedParentalRatingSubValue": 9,
+          "updateType": 1
+        },
+        {
+          "Name": "target",
+          "OfficialRating": "PG",
+          "CustomRating": null,
+          "PreferredMetadataCountryCode": null,
+          "IsLocked": false,
+          "InheritedParentalRatingValue": 10,
+          "InheritedParentalRatingSubValue": 0,
+          "updateType": 3
+        }
+      ],
+      "calls": [],
+      "exception": null,
+      "refresh": null,
+      "items": [
+        {
+          "key": "target",
+          "result": {
+            "Name": "target",
+            "OfficialRating": "PG",
+            "CustomRating": null,
+            "PreferredMetadataCountryCode": null,
+            "IsLocked": false,
+            "InheritedParentalRatingValue": 10,
+            "InheritedParentalRatingSubValue": 0,
+            "updateType": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "unknown custom rating prevents an official score until cleared",
+      "steps": [
+        {
+          "Name": "target",
+          "OfficialRating": "TV-MA",
+          "CustomRating": "unknown",
+          "PreferredMetadataCountryCode": null,
+          "IsLocked": false,
+          "InheritedParentalRatingValue": null,
+          "InheritedParentalRatingSubValue": null,
+          "updateType": 1
+        },
+        {
+          "Name": "target",
+          "OfficialRating": "TV-MA",
+          "CustomRating": "",
+          "PreferredMetadataCountryCode": null,
+          "IsLocked": false,
+          "InheritedParentalRatingValue": 17,
+          "InheritedParentalRatingSubValue": 1,
+          "updateType": 3
+        }
+      ],
+      "calls": [],
+      "exception": null,
+      "refresh": null,
+      "items": [
+        {
+          "key": "target",
+          "result": {
+            "Name": "target",
+            "OfficialRating": "TV-MA",
+            "CustomRating": "",
+            "PreferredMetadataCountryCode": null,
+            "IsLocked": false,
+            "InheritedParentalRatingValue": 17,
+            "InheritedParentalRatingSubValue": 1,
+            "updateType": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "inherited custom rating precedes the item official rating",
+      "steps": [
+        {
+          "Name": "target",
+          "OfficialRating": "G",
+          "CustomRating": null,
+          "PreferredMetadataCountryCode": null,
+          "IsLocked": false,
+          "InheritedParentalRatingValue": 17,
+          "InheritedParentalRatingSubValue": 0,
+          "updateType": 3
+        },
+        {
+          "Name": "target",
+          "OfficialRating": "G",
+          "CustomRating": null,
+          "PreferredMetadataCountryCode": null,
+          "IsLocked": false,
+          "InheritedParentalRatingValue": 17,
+          "InheritedParentalRatingSubValue": 0,
+          "updateType": 1
+        }
+      ],
+      "calls": [],
+      "exception": null,
+      "refresh": null,
+      "items": [
+        {
+          "key": "parent",
+          "result": {
+            "Name": "parent",
+            "OfficialRating": null,
+            "CustomRating": "R",
+            "PreferredMetadataCountryCode": null,
+            "IsLocked": false,
+            "InheritedParentalRatingValue": null,
+            "InheritedParentalRatingSubValue": null,
+            "updateType": null
+          }
+        },
+        {
+          "key": "target",
+          "result": {
+            "Name": "target",
+            "OfficialRating": "G",
+            "CustomRating": null,
+            "PreferredMetadataCountryCode": null,
+            "IsLocked": false,
+            "InheritedParentalRatingValue": 17,
+            "InheritedParentalRatingSubValue": 0,
+            "updateType": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "physical parent supplies an absent movie official rating",
+      "steps": [
+        {
+          "Name": "target",
+          "OfficialRating": null,
+          "CustomRating": null,
+          "PreferredMetadataCountryCode": null,
+          "IsLocked": false,
+          "InheritedParentalRatingValue": 10,
+          "InheritedParentalRatingSubValue": 0,
+          "updateType": 3
+        },
+        {
+          "Name": "target",
+          "OfficialRating": null,
+          "CustomRating": null,
+          "PreferredMetadataCountryCode": null,
+          "IsLocked": false,
+          "InheritedParentalRatingValue": 10,
+          "InheritedParentalRatingSubValue": 0,
+          "updateType": 1
+        }
+      ],
+      "calls": [],
+      "exception": null,
+      "refresh": null,
+      "items": [
+        {
+          "key": "parent",
+          "result": {
+            "Name": "parent",
+            "OfficialRating": "PG",
+            "CustomRating": null,
+            "PreferredMetadataCountryCode": null,
+            "IsLocked": false,
+            "InheritedParentalRatingValue": null,
+            "InheritedParentalRatingSubValue": null,
+            "updateType": null
+          }
+        },
+        {
+          "key": "target",
+          "result": {
+            "Name": "target",
+            "OfficialRating": null,
+            "CustomRating": null,
+            "PreferredMetadataCountryCode": null,
+            "IsLocked": false,
+            "InheritedParentalRatingValue": 10,
+            "InheritedParentalRatingSubValue": 0,
+            "updateType": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "episode rating uses its display season rather than its physical parent",
+      "steps": [
+        {
+          "Name": "target",
+          "OfficialRating": null,
+          "CustomRating": null,
+          "PreferredMetadataCountryCode": null,
+          "IsLocked": false,
+          "InheritedParentalRatingValue": 17,
+          "InheritedParentalRatingSubValue": 1,
+          "updateType": 3
+        },
+        {
+          "Name": "target",
+          "OfficialRating": null,
+          "CustomRating": null,
+          "PreferredMetadataCountryCode": null,
+          "IsLocked": false,
+          "InheritedParentalRatingValue": 17,
+          "InheritedParentalRatingSubValue": 1,
+          "updateType": 1
+        }
+      ],
+      "calls": [],
+      "exception": null,
+      "refresh": null,
+      "items": [
+        {
+          "key": "physical",
+          "result": {
+            "Name": "physical",
+            "OfficialRating": "G",
+            "CustomRating": null,
+            "PreferredMetadataCountryCode": null,
+            "IsLocked": false,
+            "InheritedParentalRatingValue": null,
+            "InheritedParentalRatingSubValue": null,
+            "updateType": null
+          }
+        },
+        {
+          "key": "display",
+          "result": {
+            "Name": "display",
+            "OfficialRating": "TV-MA",
+            "CustomRating": null,
+            "PreferredMetadataCountryCode": null,
+            "IsLocked": false,
+            "InheritedParentalRatingValue": null,
+            "InheritedParentalRatingSubValue": null,
+            "updateType": null
+          }
+        },
+        {
+          "key": "target",
+          "result": {
+            "Name": "target",
+            "OfficialRating": null,
+            "CustomRating": null,
+            "PreferredMetadataCountryCode": null,
+            "IsLocked": false,
+            "InheritedParentalRatingValue": 17,
+            "InheritedParentalRatingSubValue": 1,
+            "updateType": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "season rating uses its display series rather than its physical parent",
+      "steps": [
+        {
+          "Name": "target",
+          "OfficialRating": null,
+          "CustomRating": null,
+          "PreferredMetadataCountryCode": null,
+          "IsLocked": false,
+          "InheritedParentalRatingValue": 17,
+          "InheritedParentalRatingSubValue": 0,
+          "updateType": 3
+        },
+        {
+          "Name": "target",
+          "OfficialRating": null,
+          "CustomRating": null,
+          "PreferredMetadataCountryCode": null,
+          "IsLocked": false,
+          "InheritedParentalRatingValue": 17,
+          "InheritedParentalRatingSubValue": 0,
+          "updateType": 1
+        }
+      ],
+      "calls": [],
+      "exception": null,
+      "refresh": null,
+      "items": [
+        {
+          "key": "physical",
+          "result": {
+            "Name": "physical",
+            "OfficialRating": "G",
+            "CustomRating": null,
+            "PreferredMetadataCountryCode": null,
+            "IsLocked": false,
+            "InheritedParentalRatingValue": null,
+            "InheritedParentalRatingSubValue": null,
+            "updateType": null
+          }
+        },
+        {
+          "key": "display",
+          "result": {
+            "Name": "display",
+            "OfficialRating": null,
+            "CustomRating": "R",
+            "PreferredMetadataCountryCode": null,
+            "IsLocked": false,
+            "InheritedParentalRatingValue": null,
+            "InheritedParentalRatingSubValue": null,
+            "updateType": null
+          }
+        },
+        {
+          "key": "target",
+          "result": {
+            "Name": "target",
+            "OfficialRating": null,
+            "CustomRating": null,
+            "PreferredMetadataCountryCode": null,
+            "IsLocked": false,
+            "InheritedParentalRatingValue": 17,
+            "InheritedParentalRatingSubValue": 0,
+            "updateType": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "country inheritance uses the physical parent of an episode",
+      "steps": [
+        {
+          "Name": "target",
+          "OfficialRating": null,
+          "CustomRating": null,
+          "PreferredMetadataCountryCode": null,
+          "IsLocked": false,
+          "InheritedParentalRatingValue": 15,
+          "InheritedParentalRatingSubValue": 1,
+          "updateType": 3
+        },
+        {
+          "Name": "target",
+          "OfficialRating": null,
+          "CustomRating": null,
+          "PreferredMetadataCountryCode": null,
+          "IsLocked": false,
+          "InheritedParentalRatingValue": 15,
+          "InheritedParentalRatingSubValue": 1,
+          "updateType": 1
+        }
+      ],
+      "calls": [],
+      "exception": null,
+      "refresh": null,
+      "items": [
+        {
+          "key": "physical",
+          "result": {
+            "Name": "physical",
+            "OfficialRating": null,
+            "CustomRating": null,
+            "PreferredMetadataCountryCode": "AU",
+            "IsLocked": false,
+            "InheritedParentalRatingValue": null,
+            "InheritedParentalRatingSubValue": null,
+            "updateType": null
+          }
+        },
+        {
+          "key": "display",
+          "result": {
+            "Name": "display",
+            "OfficialRating": "PG",
+            "CustomRating": null,
+            "PreferredMetadataCountryCode": "US",
+            "IsLocked": false,
+            "InheritedParentalRatingValue": null,
+            "InheritedParentalRatingSubValue": null,
+            "updateType": null
+          }
+        },
+        {
+          "key": "target",
+          "result": {
+            "Name": "target",
+            "OfficialRating": null,
+            "CustomRating": null,
+            "PreferredMetadataCountryCode": null,
+            "IsLocked": false,
+            "InheritedParentalRatingValue": 15,
+            "InheritedParentalRatingSubValue": 1,
+            "updateType": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "editing no rating retains a lone stale subscore",
+      "steps": [],
+      "calls": [
+        {
+          "Id": "8a000000-0000-0000-0000-000000000001",
+          "Name": "Edited",
+          "OfficialRating": null,
+          "CustomRating": null,
+          "PreferredMetadataCountryCode": null,
+          "IsLocked": false,
+          "InheritedParentalRatingValue": null,
+          "InheritedParentalRatingSubValue": 9,
+          "updateReason": 16
+        }
+      ],
+      "exception": null,
+      "refresh": null,
+      "items": [
+        {
+          "key": "target",
+          "result": {
+            "Name": "Edited",
+            "OfficialRating": null,
+            "CustomRating": null,
+            "PreferredMetadataCountryCode": null,
+            "IsLocked": false,
+            "InheritedParentalRatingValue": null,
+            "InheritedParentalRatingSubValue": 9,
+            "updateType": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "editing PG changes the inherited subscore before repository update",
+      "steps": [],
+      "calls": [
+        {
+          "Id": "8a000000-0000-0000-0000-000000000001",
+          "Name": "Edited",
+          "OfficialRating": "PG",
+          "CustomRating": null,
+          "PreferredMetadataCountryCode": null,
+          "IsLocked": false,
+          "InheritedParentalRatingValue": 10,
+          "InheritedParentalRatingSubValue": 0,
+          "updateReason": 16
+        }
+      ],
+      "exception": null,
+      "refresh": null,
+      "items": [
+        {
+          "key": "target",
+          "result": {
+            "Name": "Edited",
+            "OfficialRating": "PG",
+            "CustomRating": null,
+            "PreferredMetadataCountryCode": null,
+            "IsLocked": false,
+            "InheritedParentalRatingValue": 10,
+            "InheritedParentalRatingSubValue": 0,
+            "updateType": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "album propagation retains a track lone subscore after rating removal",
+      "steps": [],
+      "calls": [
+        {
+          "Id": "8a000000-0000-0000-0000-000000000002",
+          "Name": "track",
+          "OfficialRating": null,
+          "CustomRating": null,
+          "PreferredMetadataCountryCode": null,
+          "IsLocked": false,
+          "InheritedParentalRatingValue": null,
+          "InheritedParentalRatingSubValue": 9,
+          "updateReason": 16
+        },
+        {
+          "Id": "8a000000-0000-0000-0000-000000000001",
+          "Name": "Edited",
+          "OfficialRating": null,
+          "CustomRating": null,
+          "PreferredMetadataCountryCode": null,
+          "IsLocked": false,
+          "InheritedParentalRatingValue": null,
+          "InheritedParentalRatingSubValue": null,
+          "updateReason": 16
+        }
+      ],
+      "exception": null,
+      "refresh": null,
+      "items": [
+        {
+          "key": "target",
+          "result": {
+            "Name": "Edited",
+            "OfficialRating": null,
+            "CustomRating": null,
+            "PreferredMetadataCountryCode": null,
+            "IsLocked": false,
+            "InheritedParentalRatingValue": null,
+            "InheritedParentalRatingSubValue": null,
+            "updateType": null
+          }
+        },
+        {
+          "key": "track",
+          "result": {
+            "Name": "track",
+            "OfficialRating": null,
+            "CustomRating": null,
+            "PreferredMetadataCountryCode": null,
+            "IsLocked": false,
+            "InheritedParentalRatingValue": null,
+            "InheritedParentalRatingSubValue": 9,
+            "updateType": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "series child ratings observe edited parent fields before its later country assignment",
+      "steps": [],
+      "calls": [
+        {
+          "Id": "8a000000-0000-0000-0000-000000000002",
+          "Name": "season",
+          "OfficialRating": null,
+          "CustomRating": null,
+          "PreferredMetadataCountryCode": null,
+          "IsLocked": false,
+          "InheritedParentalRatingValue": 10,
+          "InheritedParentalRatingSubValue": 0,
+          "updateReason": 16
+        },
+        {
+          "Id": "8a000000-0000-0000-0000-000000000003",
+          "Name": "episode",
+          "OfficialRating": null,
+          "CustomRating": null,
+          "PreferredMetadataCountryCode": null,
+          "IsLocked": false,
+          "InheritedParentalRatingValue": 10,
+          "InheritedParentalRatingSubValue": 0,
+          "updateReason": 16
+        },
+        {
+          "Id": "8a000000-0000-0000-0000-000000000001",
+          "Name": "Edited",
+          "OfficialRating": "PG",
+          "CustomRating": null,
+          "PreferredMetadataCountryCode": "AU",
+          "IsLocked": true,
+          "InheritedParentalRatingValue": 15,
+          "InheritedParentalRatingSubValue": 1,
+          "updateReason": 16
+        },
+        {
+          "Id": "8a000000-0000-0000-0000-000000000002",
+          "Name": "season",
+          "OfficialRating": null,
+          "CustomRating": null,
+          "PreferredMetadataCountryCode": null,
+          "IsLocked": true,
+          "InheritedParentalRatingValue": 10,
+          "InheritedParentalRatingSubValue": 0,
+          "updateReason": 16
+        },
+        {
+          "Id": "8a000000-0000-0000-0000-000000000003",
+          "Name": "episode",
+          "OfficialRating": null,
+          "CustomRating": null,
+          "PreferredMetadataCountryCode": null,
+          "IsLocked": true,
+          "InheritedParentalRatingValue": 10,
+          "InheritedParentalRatingSubValue": 0,
+          "updateReason": 16
+        },
+        {
+          "Id": "8a000000-0000-0000-0000-000000000004",
+          "Name": "unrelated",
+          "OfficialRating": null,
+          "CustomRating": null,
+          "PreferredMetadataCountryCode": null,
+          "IsLocked": true,
+          "InheritedParentalRatingValue": 17,
+          "InheritedParentalRatingSubValue": 1,
+          "updateReason": 16
+        }
+      ],
+      "exception": null,
+      "refresh": null,
+      "items": [
+        {
+          "key": "target",
+          "result": {
+            "Name": "Edited",
+            "OfficialRating": "PG",
+            "CustomRating": null,
+            "PreferredMetadataCountryCode": "AU",
+            "IsLocked": true,
+            "InheritedParentalRatingValue": 15,
+            "InheritedParentalRatingSubValue": 1,
+            "updateType": null
+          }
+        },
+        {
+          "key": "season",
+          "result": {
+            "Name": "season",
+            "OfficialRating": null,
+            "CustomRating": null,
+            "PreferredMetadataCountryCode": null,
+            "IsLocked": true,
+            "InheritedParentalRatingValue": 10,
+            "InheritedParentalRatingSubValue": 0,
+            "updateType": null
+          }
+        },
+        {
+          "key": "episode",
+          "result": {
+            "Name": "episode",
+            "OfficialRating": null,
+            "CustomRating": null,
+            "PreferredMetadataCountryCode": null,
+            "IsLocked": true,
+            "InheritedParentalRatingValue": 10,
+            "InheritedParentalRatingSubValue": 0,
+            "updateType": null
+          }
+        },
+        {
+          "key": "unrelated",
+          "result": {
+            "Name": "unrelated",
+            "OfficialRating": null,
+            "CustomRating": null,
+            "PreferredMetadataCountryCode": null,
+            "IsLocked": true,
+            "InheritedParentalRatingValue": 17,
+            "InheritedParentalRatingSubValue": 1,
+            "updateType": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "successful Default runs the second rating call and saves an unreported provider rating",
+      "steps": [],
+      "calls": [
+        {
+          "Id": "8a000000-0000-0000-0000-000000000001",
+          "Name": "target",
+          "OfficialRating": "R",
+          "CustomRating": null,
+          "PreferredMetadataCountryCode": null,
+          "IsLocked": false,
+          "InheritedParentalRatingValue": 17,
+          "InheritedParentalRatingSubValue": 0,
+          "updateReason": 3
+        }
+      ],
+      "exception": null,
+      "refresh": {
+        "updateType": 3,
+        "saved": true,
+        "stampChanged": true,
+        "rawDateLastRefreshed": "2026-10-04T13:09:14.9352443Z"
+      },
+      "items": [
+        {
+          "key": "target",
+          "result": {
+            "Name": "target",
+            "OfficialRating": "R",
+            "CustomRating": null,
+            "PreferredMetadataCountryCode": null,
+            "IsLocked": false,
+            "InheritedParentalRatingValue": 17,
+            "InheritedParentalRatingSubValue": 0,
+            "updateType": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "ValidationOnly force save retains scores from the first rating call",
+      "steps": [],
+      "calls": [
+        {
+          "Id": "8a000000-0000-0000-0000-000000000001",
+          "Name": "target",
+          "OfficialRating": "R",
+          "CustomRating": null,
+          "PreferredMetadataCountryCode": null,
+          "IsLocked": false,
+          "InheritedParentalRatingValue": 10,
+          "InheritedParentalRatingSubValue": 0,
+          "updateReason": 9
+        }
+      ],
+      "exception": null,
+      "refresh": {
+        "updateType": 9,
+        "saved": true,
+        "stampChanged": false,
+        "rawDateLastRefreshed": "2025-01-01T00:00:00.0000000Z"
+      },
+      "items": [
+        {
+          "key": "target",
+          "result": {
+            "Name": "target",
+            "OfficialRating": "R",
+            "CustomRating": null,
+            "PreferredMetadataCountryCode": null,
+            "IsLocked": false,
+            "InheritedParentalRatingValue": 10,
+            "InheritedParentalRatingSubValue": 0,
+            "updateType": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "provider failure suppresses the second rating call even with force save",
+      "steps": [],
+      "calls": [
+        {
+          "Id": "8a000000-0000-0000-0000-000000000001",
+          "Name": "target",
+          "OfficialRating": "R",
+          "CustomRating": null,
+          "PreferredMetadataCountryCode": null,
+          "IsLocked": false,
+          "InheritedParentalRatingValue": 10,
+          "InheritedParentalRatingSubValue": 0,
+          "updateReason": 9
+        }
+      ],
+      "exception": null,
+      "refresh": {
+        "updateType": 9,
+        "saved": true,
+        "stampChanged": false,
+        "rawDateLastRefreshed": "2025-01-01T00:00:00.0000000Z"
+      },
+      "items": [
+        {
+          "key": "target",
+          "result": {
+            "Name": "target",
+            "OfficialRating": "R",
+            "CustomRating": null,
+            "PreferredMetadataCountryCode": null,
+            "IsLocked": false,
+            "InheritedParentalRatingValue": 10,
+            "InheritedParentalRatingSubValue": 0,
+            "updateType": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "local image failure suppresses the second rating call",
+      "steps": [],
+      "calls": [
+        {
+          "Id": "8a000000-0000-0000-0000-000000000001",
+          "Name": "target",
+          "OfficialRating": "R",
+          "CustomRating": null,
+          "PreferredMetadataCountryCode": null,
+          "IsLocked": false,
+          "InheritedParentalRatingValue": 10,
+          "InheritedParentalRatingSubValue": 0,
+          "updateReason": 3
+        }
+      ],
+      "exception": null,
+      "refresh": {
+        "updateType": 3,
+        "saved": true,
+        "stampChanged": false,
+        "rawDateLastRefreshed": "2025-01-01T00:00:00.0000000Z"
+      },
+      "items": [
+        {
+          "key": "target",
+          "result": {
+            "Name": "target",
+            "OfficialRating": "R",
+            "CustomRating": null,
+            "PreferredMetadataCountryCode": null,
+            "IsLocked": false,
+            "InheritedParentalRatingValue": 10,
+            "InheritedParentalRatingSubValue": 0,
+            "updateType": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "first save includes inherited ratings before provider cancellation",
+      "steps": [],
+      "calls": [
+        {
+          "Id": "8a000000-0000-0000-0000-000000000001",
+          "Name": "target",
+          "OfficialRating": "PG",
+          "CustomRating": null,
+          "PreferredMetadataCountryCode": null,
+          "IsLocked": false,
+          "InheritedParentalRatingValue": 10,
+          "InheritedParentalRatingSubValue": 0,
+          "updateReason": 2
+        }
+      ],
+      "exception": "OperationCanceledException",
+      "refresh": {
+        "updateType": null,
+        "saved": true,
+        "stampChanged": false,
+        "rawDateLastRefreshed": "0001-01-01T00:00:00.0000000Z"
+      },
+      "items": [
+        {
+          "key": "target",
+          "result": {
+            "Name": "target",
+            "OfficialRating": "PG",
+            "CustomRating": null,
+            "PreferredMetadataCountryCode": null,
+            "IsLocked": false,
+            "InheritedParentalRatingValue": 10,
+            "InheritedParentalRatingSubValue": 0,
+            "updateType": null
+          }
+        }
+      ]
+    }
+  ],
+  "candidateVerified": false,
+  "inputSha256": "f7e447d5cece4c42d91a2a84c7d74e03d387604dd65090292676c7ae20f578c6",
+  "boundary": "Actual BaseItem.OnMetadataChanged, rating inheritance and LocalizationManager resources; repeated explicit calls, actual ItemUpdateController save order and five pathless MovieMetadataService refresh controls. Parent entities, library options, collection folders, custom/image providers and repository callbacks are controlled. HTTP, native repository writes, NFO, media file operations and person creation are excluded."
+}

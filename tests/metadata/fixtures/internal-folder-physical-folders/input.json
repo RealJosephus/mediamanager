@@ -1,0 +1,700 @@
+[
+  {
+    "item": {
+      "type": "CollectionFolder",
+      "id": "97d10000-0000-0000-0000-000000000001",
+      "Path": "Z:\\Views\\A",
+      "PhysicalLocationsList": [
+        "Z:\\Media"
+      ],
+      "PhysicalFolderIds": []
+    },
+    "parents": [],
+    "collections": [
+      {
+        "type": "Folder",
+        "id": "97d10000-0000-0000-0000-000000000002",
+        "Path": "Z:\\Media",
+        "Name": "Folder 2",
+        "DateCreated": "2026-10-04T12:00:00Z"
+      }
+    ],
+    "rootChildren": [
+      "97d10000-0000-0000-0000-000000000002"
+    ],
+    "enableCache": false,
+    "name": "root-direct"
+  },
+  {
+    "item": {
+      "type": "CollectionFolder",
+      "id": "97d10000-0000-0000-0000-000000000001",
+      "Path": "Z:\\Views\\A",
+      "PhysicalLocationsList": [],
+      "PhysicalFolderIds": []
+    },
+    "parents": [],
+    "collections": [
+      {
+        "type": "Folder",
+        "id": "97d10000-0000-0000-0000-000000000002",
+        "Path": "Z:\\Media",
+        "Name": "Folder 2",
+        "DateCreated": "2026-10-04T12:00:00Z"
+      }
+    ],
+    "rootChildren": [
+      "97d10000-0000-0000-0000-000000000002"
+    ],
+    "enableCache": false,
+    "name": "empty-locations"
+  },
+  {
+    "item": {
+      "type": "CollectionFolder",
+      "id": "97d10000-0000-0000-0000-000000000001",
+      "Path": "Z:\\Media",
+      "PhysicalLocationsList": [
+        "Z:\\Media"
+      ],
+      "PhysicalFolderIds": []
+    },
+    "parents": [],
+    "collections": [
+      {
+        "type": "Folder",
+        "id": "97d10000-0000-0000-0000-000000000002",
+        "Path": "Z:\\Media",
+        "Name": "Folder 2",
+        "DateCreated": "2026-10-04T12:00:00Z"
+      }
+    ],
+    "rootChildren": [
+      "97d10000-0000-0000-0000-000000000002"
+    ],
+    "enableCache": false,
+    "name": "exclude-own-path"
+  },
+  {
+    "item": {
+      "type": "CollectionFolder",
+      "id": "97d10000-0000-0000-0000-000000000001",
+      "Path": "Z:\\Views\\A",
+      "PhysicalLocationsList": [
+        "z:\\media"
+      ],
+      "PhysicalFolderIds": []
+    },
+    "parents": [],
+    "collections": [
+      {
+        "type": "Folder",
+        "id": "97d10000-0000-0000-0000-000000000002",
+        "Path": "Z:\\Media",
+        "Name": "Folder 2",
+        "DateCreated": "2026-10-04T12:00:00Z"
+      }
+    ],
+    "rootChildren": [
+      "97d10000-0000-0000-0000-000000000002"
+    ],
+    "enableCache": false,
+    "name": "root-path-case"
+  },
+  {
+    "item": {
+      "type": "CollectionFolder",
+      "id": "97d10000-0000-0000-0000-000000000001",
+      "Path": "Z:\\Views\\A",
+      "PhysicalLocationsList": [
+        "Z:\\Media\\"
+      ],
+      "PhysicalFolderIds": []
+    },
+    "parents": [],
+    "collections": [
+      {
+        "type": "Folder",
+        "id": "97d10000-0000-0000-0000-000000000002",
+        "Path": "Z:\\Media",
+        "Name": "Folder 2",
+        "DateCreated": "2026-10-04T12:00:00Z"
+      }
+    ],
+    "rootChildren": [
+      "97d10000-0000-0000-0000-000000000002"
+    ],
+    "enableCache": false,
+    "name": "root-path-trailing"
+  },
+  {
+    "item": {
+      "type": "CollectionFolder",
+      "id": "97d10000-0000-0000-0000-000000000001",
+      "Path": "Z:\\Views\\A",
+      "PhysicalLocationsList": [
+        "Z:/Media"
+      ],
+      "PhysicalFolderIds": []
+    },
+    "parents": [],
+    "collections": [
+      {
+        "type": "Folder",
+        "id": "97d10000-0000-0000-0000-000000000002",
+        "Path": "Z:\\Media",
+        "Name": "Folder 2",
+        "DateCreated": "2026-10-04T12:00:00Z"
+      }
+    ],
+    "rootChildren": [
+      "97d10000-0000-0000-0000-000000000002"
+    ],
+    "enableCache": false,
+    "name": "root-path-slash"
+  },
+  {
+    "item": {
+      "type": "CollectionFolder",
+      "id": "97d10000-0000-0000-0000-000000000001",
+      "Path": "Z:\\Views\\A",
+      "PhysicalLocationsList": [
+        "Z:\\Media\\Child"
+      ],
+      "PhysicalFolderIds": []
+    },
+    "parents": [],
+    "collections": [
+      {
+        "type": "Folder",
+        "id": "97d10000-0000-0000-0000-000000000002",
+        "Path": "Z:\\Media",
+        "Name": "Folder 2",
+        "DateCreated": "2026-10-04T12:00:00Z"
+      }
+    ],
+    "rootChildren": [
+      "97d10000-0000-0000-0000-000000000002"
+    ],
+    "enableCache": false,
+    "name": "root-path-nested"
+  },
+  {
+    "item": {
+      "type": "CollectionFolder",
+      "id": "97d10000-0000-0000-0000-000000000001",
+      "Path": "Z:\\Views\\A",
+      "PhysicalLocationsList": [
+        "Z:\\Missing"
+      ],
+      "PhysicalFolderIds": []
+    },
+    "parents": [],
+    "collections": [
+      {
+        "type": "Folder",
+        "id": "97d10000-0000-0000-0000-000000000002",
+        "Path": "Z:\\Media",
+        "Name": "Folder 2",
+        "DateCreated": "2026-10-04T12:00:00Z"
+      }
+    ],
+    "rootChildren": [
+      "97d10000-0000-0000-0000-000000000002"
+    ],
+    "enableCache": false,
+    "name": "root-path-missing"
+  },
+  {
+    "item": {
+      "type": "CollectionFolder",
+      "id": "97d10000-0000-0000-0000-000000000001",
+      "Path": "Z:\\Views\\A",
+      "PhysicalLocationsList": [
+        "Z:\\Media",
+        "Z:\\Media"
+      ],
+      "PhysicalFolderIds": []
+    },
+    "parents": [],
+    "collections": [
+      {
+        "type": "Folder",
+        "id": "97d10000-0000-0000-0000-000000000002",
+        "Path": "Z:\\Media",
+        "Name": "Folder 2",
+        "DateCreated": "2026-10-04T12:00:00Z"
+      },
+      {
+        "type": "Folder",
+        "id": "97d10000-0000-0000-0000-000000000003",
+        "Path": "Z:\\Media",
+        "Name": "Folder 3",
+        "DateCreated": "2026-10-04T12:00:00Z"
+      }
+    ],
+    "rootChildren": [
+      "97d10000-0000-0000-0000-000000000003",
+      "97d10000-0000-0000-0000-000000000002"
+    ],
+    "enableCache": false,
+    "name": "root-duplicate-order"
+  },
+  {
+    "item": {
+      "type": "CollectionFolder",
+      "id": "97d10000-0000-0000-0000-000000000001",
+      "Path": "Z:\\Views\\A",
+      "PhysicalLocationsList": [
+        "Z:\\Media"
+      ],
+      "PhysicalFolderIds": []
+    },
+    "parents": [],
+    "collections": [
+      {
+        "type": "Folder",
+        "id": "97d10000-0000-0000-0000-000000000002",
+        "Path": "Z:\\Media",
+        "Name": "Folder 2",
+        "DateCreated": "2026-10-04T12:00:00Z"
+      }
+    ],
+    "rootChildren": [],
+    "enableCache": false,
+    "name": "fallback-plain"
+  },
+  {
+    "item": {
+      "type": "CollectionFolder",
+      "id": "97d10000-0000-0000-0000-000000000001",
+      "Path": "Z:\\Views\\A",
+      "PhysicalLocationsList": [
+        "Z:\\Media"
+      ],
+      "PhysicalFolderIds": []
+    },
+    "parents": [],
+    "collections": [
+      {
+        "type": "Folder",
+        "id": "97d10000-0000-0000-0000-000000000002",
+        "Path": "Z:\\Media",
+        "Name": "Folder 2",
+        "DateCreated": "2026-10-04T12:00:00Z"
+      },
+      {
+        "type": "Folder",
+        "id": "97d10000-0000-0000-0000-000000000003",
+        "Path": "Z:\\Media",
+        "Name": "Folder 3",
+        "DateCreated": "2026-10-05T12:00:00Z"
+      }
+    ],
+    "rootChildren": [],
+    "enableCache": false,
+    "name": "fallback-newest"
+  },
+  {
+    "item": {
+      "type": "CollectionFolder",
+      "id": "97d10000-0000-0000-0000-000000000001",
+      "Path": "Z:\\Views\\A",
+      "PhysicalLocationsList": [
+        "z:\\media"
+      ],
+      "PhysicalFolderIds": []
+    },
+    "parents": [],
+    "collections": [
+      {
+        "type": "Folder",
+        "id": "97d10000-0000-0000-0000-000000000002",
+        "Path": "Z:\\Media",
+        "Name": "Folder 2",
+        "DateCreated": "2026-10-04T12:00:00Z"
+      }
+    ],
+    "rootChildren": [],
+    "enableCache": false,
+    "name": "fallback-case"
+  },
+  {
+    "item": {
+      "type": "CollectionFolder",
+      "id": "97d10000-0000-0000-0000-000000000001",
+      "Path": "Z:\\Views\\A",
+      "PhysicalLocationsList": [
+        "Z:\\Media\\"
+      ],
+      "PhysicalFolderIds": []
+    },
+    "parents": [],
+    "collections": [
+      {
+        "type": "Folder",
+        "id": "97d10000-0000-0000-0000-000000000002",
+        "Path": "Z:\\Media",
+        "Name": "Folder 2",
+        "DateCreated": "2026-10-04T12:00:00Z"
+      }
+    ],
+    "rootChildren": [],
+    "enableCache": false,
+    "name": "fallback-trailing"
+  },
+  {
+    "item": {
+      "type": "CollectionFolder",
+      "id": "97d10000-0000-0000-0000-000000000001",
+      "Path": "Z:\\Views\\A",
+      "PhysicalLocationsList": [
+        "Z:/Media"
+      ],
+      "PhysicalFolderIds": []
+    },
+    "parents": [],
+    "collections": [
+      {
+        "type": "Folder",
+        "id": "97d10000-0000-0000-0000-000000000002",
+        "Path": "Z:\\Media",
+        "Name": "Folder 2",
+        "DateCreated": "2026-10-04T12:00:00Z"
+      }
+    ],
+    "rootChildren": [],
+    "enableCache": false,
+    "name": "fallback-slash"
+  },
+  {
+    "item": {
+      "type": "CollectionFolder",
+      "id": "97d10000-0000-0000-0000-000000000001",
+      "Path": "Z:\\Views\\A",
+      "PhysicalLocationsList": [
+        "Z:\\Media"
+      ],
+      "PhysicalFolderIds": []
+    },
+    "parents": [],
+    "collections": [
+      {
+        "type": "Movie",
+        "id": "97d10000-0000-0000-0000-000000000002",
+        "Path": "Z:\\Media",
+        "Name": "File"
+      }
+    ],
+    "rootChildren": [],
+    "enableCache": false,
+    "name": "fallback-file-is-not-folder"
+  },
+  {
+    "item": {
+      "type": "CollectionFolder",
+      "id": "97d10000-0000-0000-0000-000000000001",
+      "Path": "Z:\\Views\\A",
+      "PhysicalLocationsList": [
+        "Z:\\Media"
+      ],
+      "PhysicalFolderIds": []
+    },
+    "parents": [],
+    "collections": [
+      {
+        "type": "Folder",
+        "id": "97d10000-0000-0000-0000-000000000004",
+        "Path": "Z:\\Owner",
+        "Name": "Folder 4",
+        "DateCreated": "2026-10-04T12:00:00Z"
+      },
+      {
+        "type": "Folder",
+        "id": "97d10000-0000-0000-0000-000000000002",
+        "Path": "Z:\\Media",
+        "Name": "Folder 2",
+        "DateCreated": "2026-10-04T12:00:00Z"
+      },
+      {
+        "type": "Folder",
+        "id": "97d10000-0000-0000-0000-000000000003",
+        "Path": "Z:\\Media",
+        "Name": "Folder 3",
+        "DateCreated": "2026-10-05T12:00:00Z",
+        "OwnerId": "97d10000-0000-0000-0000-000000000004"
+      }
+    ],
+    "rootChildren": [],
+    "enableCache": false,
+    "name": "fallback-owned"
+  },
+  {
+    "item": {
+      "type": "CollectionFolder",
+      "id": "97d10000-0000-0000-0000-000000000001",
+      "Path": "Z:\\Views\\A",
+      "PhysicalLocationsList": [
+        "Z:\\Media"
+      ],
+      "PhysicalFolderIds": []
+    },
+    "parents": [],
+    "collections": [
+      {
+        "type": "Folder",
+        "id": "97d10000-0000-0000-0000-000000000004",
+        "Path": "Z:\\Owner",
+        "Name": "Folder 4",
+        "DateCreated": "2026-10-04T12:00:00Z"
+      },
+      {
+        "type": "Folder",
+        "id": "97d10000-0000-0000-0000-000000000002",
+        "Path": "Z:\\Media",
+        "Name": "Folder 2",
+        "DateCreated": "2026-10-04T12:00:00Z"
+      },
+      {
+        "type": "Folder",
+        "id": "97d10000-0000-0000-0000-000000000003",
+        "Path": "Z:\\Media",
+        "Name": "Folder 3",
+        "DateCreated": "2026-10-05T12:00:00Z",
+        "OwnerId": "97d10000-0000-0000-0000-000000000004",
+        "ExtraType": "Trailer"
+      }
+    ],
+    "rootChildren": [],
+    "enableCache": false,
+    "name": "fallback-extra-owned"
+  },
+  {
+    "item": {
+      "type": "CollectionFolder",
+      "id": "97d10000-0000-0000-0000-000000000001",
+      "Path": "Z:\\Views\\A",
+      "PhysicalLocationsList": [
+        "Z:\\Media"
+      ],
+      "PhysicalFolderIds": [
+        "97d10000-0000-0000-0000-000000000002"
+      ]
+    },
+    "parents": [],
+    "collections": [
+      {
+        "type": "Movie",
+        "id": "97d10000-0000-0000-0000-000000000002",
+        "Path": "Z:\\Media",
+        "Name": "File"
+      }
+    ],
+    "rootChildren": [
+      "97d10000-0000-0000-0000-000000000002"
+    ],
+    "enableCache": true,
+    "name": "cached-file-is-not-folder"
+  },
+  {
+    "item": {
+      "type": "CollectionFolder",
+      "id": "97d10000-0000-0000-0000-000000000001",
+      "Path": "Z:\\Views\\A",
+      "PhysicalLocationsList": [
+        null
+      ],
+      "PhysicalFolderIds": []
+    },
+    "parents": [],
+    "collections": [
+      {
+        "type": "Folder",
+        "id": "97d10000-0000-0000-0000-000000000002",
+        "Path": "Z:\\Media",
+        "Name": "Folder 2",
+        "DateCreated": "2026-10-04T12:00:00Z"
+      }
+    ],
+    "rootChildren": [
+      "97d10000-0000-0000-0000-000000000002"
+    ],
+    "enableCache": false,
+    "name": "invalid-location-null",
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "item": {
+      "type": "CollectionFolder",
+      "id": "97d10000-0000-0000-0000-000000000001",
+      "Path": "Z:\\Views\\A",
+      "PhysicalLocationsList": [
+        ""
+      ],
+      "PhysicalFolderIds": []
+    },
+    "parents": [],
+    "collections": [
+      {
+        "type": "Folder",
+        "id": "97d10000-0000-0000-0000-000000000002",
+        "Path": "Z:\\Media",
+        "Name": "Folder 2",
+        "DateCreated": "2026-10-04T12:00:00Z"
+      }
+    ],
+    "rootChildren": [
+      "97d10000-0000-0000-0000-000000000002"
+    ],
+    "enableCache": false,
+    "name": "invalid-location-empty",
+    "expectException": "ArgumentException"
+  },
+  {
+    "item": {
+      "type": "CollectionFolder",
+      "id": "97d10000-0000-0000-0000-000000000001",
+      "Path": "Z:\\Views\\A",
+      "PhysicalLocationsList": null,
+      "PhysicalFolderIds": []
+    },
+    "parents": [],
+    "collections": [
+      {
+        "type": "Folder",
+        "id": "97d10000-0000-0000-0000-000000000002",
+        "Path": "Z:\\Media",
+        "Name": "Folder 2",
+        "DateCreated": "2026-10-04T12:00:00Z"
+      }
+    ],
+    "rootChildren": [
+      "97d10000-0000-0000-0000-000000000002"
+    ],
+    "enableCache": false,
+    "name": "null-location-list",
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "item": {
+      "type": "CollectionFolder",
+      "id": "97d10000-0000-0000-0000-000000000001",
+      "Path": "Z:\\Views\\A",
+      "PhysicalLocationsList": [
+        "Z:\\Media"
+      ],
+      "PhysicalFolderIds": [
+        "97d10000-0000-0000-0000-000000000003",
+        "97d10000-0000-0000-0000-000000000002",
+        "97d10000-0000-0000-0000-000000000003"
+      ]
+    },
+    "parents": [],
+    "collections": [
+      {
+        "type": "Folder",
+        "id": "97d10000-0000-0000-0000-000000000002",
+        "Path": "Z:\\Media",
+        "Name": "Folder 2",
+        "DateCreated": "2026-10-04T12:00:00Z"
+      },
+      {
+        "type": "Folder",
+        "id": "97d10000-0000-0000-0000-000000000003",
+        "Path": "Z:\\Media",
+        "Name": "Folder 3",
+        "DateCreated": "2026-10-04T12:00:00Z"
+      }
+    ],
+    "rootChildren": [
+      "97d10000-0000-0000-0000-000000000002"
+    ],
+    "enableCache": true,
+    "name": "cached-ids-order"
+  },
+  {
+    "item": {
+      "type": "CollectionFolder",
+      "id": "97d10000-0000-0000-0000-000000000001",
+      "Path": "Z:\\Views\\A",
+      "PhysicalLocationsList": [
+        "Z:\\Media"
+      ],
+      "PhysicalFolderIds": [
+        "97d10000-0000-0000-0000-000000000088",
+        "97d10000-0000-0000-0000-000000000002"
+      ]
+    },
+    "parents": [],
+    "collections": [
+      {
+        "type": "Folder",
+        "id": "97d10000-0000-0000-0000-000000000002",
+        "Path": "Z:\\Media",
+        "Name": "Folder 2",
+        "DateCreated": "2026-10-04T12:00:00Z"
+      }
+    ],
+    "rootChildren": [
+      "97d10000-0000-0000-0000-000000000002"
+    ],
+    "enableCache": true,
+    "name": "cached-missing-id"
+  },
+  {
+    "item": {
+      "type": "CollectionFolder",
+      "id": "97d10000-0000-0000-0000-000000000001",
+      "Path": "Z:\\Views\\A",
+      "PhysicalLocationsList": [
+        "Z:\\Media"
+      ],
+      "PhysicalFolderIds": null
+    },
+    "parents": [],
+    "collections": [
+      {
+        "type": "Folder",
+        "id": "97d10000-0000-0000-0000-000000000002",
+        "Path": "Z:\\Media",
+        "Name": "Folder 2",
+        "DateCreated": "2026-10-04T12:00:00Z"
+      }
+    ],
+    "rootChildren": [
+      "97d10000-0000-0000-0000-000000000002"
+    ],
+    "enableCache": true,
+    "name": "cached-null-ids",
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "item": {
+      "type": "CollectionFolder",
+      "id": "97d10000-0000-0000-0000-000000000001",
+      "Path": "Z:\\Views\\A",
+      "PhysicalLocationsList": [
+        "Z:\\Media"
+      ],
+      "PhysicalFolderIds": [
+        "00000000-0000-0000-0000-000000000000"
+      ]
+    },
+    "parents": [],
+    "collections": [
+      {
+        "type": "Folder",
+        "id": "97d10000-0000-0000-0000-000000000002",
+        "Path": "Z:\\Media",
+        "Name": "Folder 2",
+        "DateCreated": "2026-10-04T12:00:00Z"
+      }
+    ],
+    "rootChildren": [
+      "97d10000-0000-0000-0000-000000000002"
+    ],
+    "enableCache": true,
+    "name": "cached-empty-guid",
+    "expectException": "ArgumentException"
+  }
+]

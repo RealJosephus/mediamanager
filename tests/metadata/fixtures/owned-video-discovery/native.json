@@ -1,0 +1,3414 @@
+{
+  "actualFrozenOwnedVideoDiscovery": true,
+  "inputSha256": "e087e4b5da3bb44498572fbe2162a7e25f83fe176eceb9a6c14328bab476e9f1",
+  "results": [
+    {
+      "name": "create-coerced-part",
+      "exception": null,
+      "liveOwner": {
+        "id": "98c00000-0000-0000-0000-000000000001",
+        "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+        "name": "Updated owner",
+        "path": "$STATE\\media\\primary.mkv",
+        "parentId": "98c00000-0000-0000-0000-000000000002",
+        "ownerId": "00000000-0000-0000-0000-000000000000",
+        "primaryVersionId": null,
+        "mixed": true,
+        "locked": false,
+        "productionYear": null,
+        "size": null,
+        "runTimeTicks": null,
+        "dateCreated": "0001-01-01T00:00:00.0000000Z",
+        "dateModified": "0001-01-01T00:00:00.0000000Z",
+        "dateLastSavedSet": false,
+        "videoType": "VideoFile",
+        "extraType": null,
+        "parts": [
+          "$STATE\\media\\part 2025.mkv"
+        ],
+        "alternates": [],
+        "genres": [
+          "Owner genre"
+        ],
+        "overview": "Owner overview"
+      },
+      "calls": [
+        {
+          "action": "resolve",
+          "path": "$STATE\\media\\part 2025.mkv"
+        },
+        {
+          "action": "save",
+          "items": [
+            {
+              "id": "6d846e43-2285-2d18-6b61-4202b20ada71",
+              "type": "MediaBrowser.Controller.Entities.Video",
+              "name": "part",
+              "path": "$STATE\\media\\part 2025.mkv",
+              "parentId": "00000000-0000-0000-0000-000000000000",
+              "ownerId": "98c00000-0000-0000-0000-000000000001",
+              "primaryVersionId": null,
+              "mixed": true,
+              "locked": false,
+              "productionYear": 2025,
+              "size": null,
+              "runTimeTicks": null,
+              "dateCreated": "0001-01-01T00:00:00.0000000Z",
+              "dateModified": "0001-01-01T00:00:00.0000000Z",
+              "dateLastSavedSet": false,
+              "videoType": "VideoFile",
+              "extraType": null,
+              "parts": [],
+              "alternates": [],
+              "genres": [],
+              "overview": null
+            }
+          ],
+          "cancellable": false
+        },
+        {
+          "action": "event",
+          "kind": "added",
+          "id": "6d846e43-2285-2d18-6b61-4202b20ada71"
+        },
+        {
+          "action": "refresh",
+          "item": {
+            "id": "6d846e43-2285-2d18-6b61-4202b20ada71",
+            "type": "MediaBrowser.Controller.Entities.Video",
+            "name": "part",
+            "path": "$STATE\\media\\part 2025.mkv",
+            "parentId": "00000000-0000-0000-0000-000000000000",
+            "ownerId": "98c00000-0000-0000-0000-000000000001",
+            "primaryVersionId": null,
+            "mixed": true,
+            "locked": false,
+            "productionYear": 2025,
+            "size": null,
+            "runTimeTicks": null,
+            "dateCreated": "0001-01-01T00:00:00.0000000Z",
+            "dateModified": "0001-01-01T00:00:00.0000000Z",
+            "dateLastSavedSet": false,
+            "videoType": "VideoFile",
+            "extraType": null,
+            "parts": [],
+            "alternates": [],
+            "genres": [
+              "Owner genre"
+            ],
+            "overview": "Owner overview"
+          },
+          "forceSave": true,
+          "hasSearchResult": false,
+          "cancellationRequested": false
+        },
+        {
+          "action": "refresh",
+          "item": {
+            "id": "98c00000-0000-0000-0000-000000000001",
+            "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+            "name": "Updated owner",
+            "path": "$STATE\\media\\primary.mkv",
+            "parentId": "98c00000-0000-0000-0000-000000000002",
+            "ownerId": "00000000-0000-0000-0000-000000000000",
+            "primaryVersionId": null,
+            "mixed": true,
+            "locked": false,
+            "productionYear": null,
+            "size": null,
+            "runTimeTicks": null,
+            "dateCreated": "0001-01-01T00:00:00.0000000Z",
+            "dateModified": "0001-01-01T00:00:00.0000000Z",
+            "dateLastSavedSet": false,
+            "videoType": "VideoFile",
+            "extraType": null,
+            "parts": [
+              "$STATE\\media\\part 2025.mkv"
+            ],
+            "alternates": [],
+            "genres": [
+              "Owner genre"
+            ],
+            "overview": "Owner overview"
+          },
+          "forceSave": false,
+          "hasSearchResult": true,
+          "cancellationRequested": false
+        }
+      ],
+      "rows": [
+        {
+          "id": "6d846e43-2285-2d18-6b61-4202b20ada71",
+          "type": "MediaBrowser.Controller.Entities.Video",
+          "name": "part",
+          "path": "$STATE\\media\\part 2025.mkv",
+          "parentId": null,
+          "topParentId": null,
+          "ownerId": "98c00000-0000-0000-0000-000000000001",
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "mixed": true,
+          "locked": false,
+          "productionYear": 2025,
+          "size": null,
+          "runTimeTicks": null,
+          "dateCreated": null,
+          "dateModified": null,
+          "dateLastSavedSet": false,
+          "data": {
+            "AdditionalParts": [],
+            "LocalAlternateVersions": [],
+            "LinkedAlternateVersions": [],
+            "SubtitleFiles": [],
+            "AudioFiles": [],
+            "HasSubtitles": false,
+            "IsPlaceHolder": false,
+            "VideoType": "VideoFile",
+            "IsHD": false,
+            "IsShortcut": false,
+            "Width": 0,
+            "Height": 0,
+            "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+            "RemoteTrailers": []
+          }
+        },
+        {
+          "id": "98c00000-0000-0000-0000-000000000001",
+          "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+          "name": "Stored owner",
+          "path": "$STATE\\media\\primary.mkv",
+          "parentId": "98c00000-0000-0000-0000-000000000002",
+          "topParentId": null,
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "mixed": true,
+          "locked": false,
+          "productionYear": null,
+          "size": null,
+          "runTimeTicks": null,
+          "dateCreated": null,
+          "dateModified": null,
+          "dateLastSavedSet": false,
+          "data": {
+            "AdditionalParts": [],
+            "LocalAlternateVersions": [],
+            "LinkedAlternateVersions": [],
+            "SubtitleFiles": [],
+            "AudioFiles": [],
+            "HasSubtitles": false,
+            "IsPlaceHolder": false,
+            "VideoType": "VideoFile",
+            "IsHD": false,
+            "IsShortcut": false,
+            "Width": 0,
+            "Height": 0,
+            "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+            "RemoteTrailers": []
+          }
+        },
+        {
+          "id": "98c00000-0000-0000-0000-000000000002",
+          "type": "MediaBrowser.Controller.Entities.Folder",
+          "name": "Parent",
+          "path": "$STATE\\media",
+          "parentId": null,
+          "topParentId": null,
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "mixed": false,
+          "locked": false,
+          "productionYear": null,
+          "size": null,
+          "runTimeTicks": null,
+          "dateCreated": null,
+          "dateModified": null,
+          "dateLastSavedSet": false,
+          "data": {
+            "IsRoot": false,
+            "IsHD": false,
+            "IsShortcut": false,
+            "Width": 0,
+            "Height": 0,
+            "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+            "RemoteTrailers": []
+          }
+        }
+      ],
+      "links": [],
+      "files": [
+        {
+          "path": "$STATE\\media\\part 2025.mkv",
+          "sha256": "20d135778ff4bce6a02da7101c78d3c81af427a9134fe9a68cb2e83983069438"
+        },
+        {
+          "path": "$STATE\\media\\primary.mkv",
+          "sha256": "efc6fc578b2bde66195463684cd6933af46c4856a14606d7a14bf1a481ce57b5"
+        }
+      ],
+      "parentChildrenCleared": true,
+      "parentUserDataCleared": true,
+      "oldLookupName": null
+    },
+    {
+      "name": "create-same-type-part",
+      "exception": null,
+      "liveOwner": {
+        "id": "98c00000-0000-0000-0000-000000000001",
+        "type": "MediaBrowser.Controller.Entities.Video",
+        "name": "Updated owner",
+        "path": "$STATE\\media\\primary.mkv",
+        "parentId": "98c00000-0000-0000-0000-000000000002",
+        "ownerId": "00000000-0000-0000-0000-000000000000",
+        "primaryVersionId": null,
+        "mixed": true,
+        "locked": false,
+        "productionYear": null,
+        "size": null,
+        "runTimeTicks": null,
+        "dateCreated": "0001-01-01T00:00:00.0000000Z",
+        "dateModified": "0001-01-01T00:00:00.0000000Z",
+        "dateLastSavedSet": false,
+        "videoType": "VideoFile",
+        "extraType": null,
+        "parts": [
+          "$STATE\\media\\part 2025.mkv"
+        ],
+        "alternates": [],
+        "genres": [
+          "Owner genre"
+        ],
+        "overview": "Owner overview"
+      },
+      "calls": [
+        {
+          "action": "resolve",
+          "path": "$STATE\\media\\part 2025.mkv"
+        },
+        {
+          "action": "save",
+          "items": [
+            {
+              "id": "6d846e43-2285-2d18-6b61-4202b20ada71",
+              "type": "MediaBrowser.Controller.Entities.Video",
+              "name": "part 2025",
+              "path": "$STATE\\media\\part 2025.mkv",
+              "parentId": "98c00000-0000-0000-0000-000000000002",
+              "ownerId": "98c00000-0000-0000-0000-000000000001",
+              "primaryVersionId": null,
+              "mixed": true,
+              "locked": false,
+              "productionYear": null,
+              "size": 16,
+              "runTimeTicks": null,
+              "dateCreated": "2025-01-02T03:04:05.0000000Z",
+              "dateModified": "2025-01-03T04:05:06.0000000Z",
+              "dateLastSavedSet": false,
+              "videoType": "VideoFile",
+              "extraType": null,
+              "parts": [],
+              "alternates": [],
+              "genres": [],
+              "overview": null
+            }
+          ],
+          "cancellable": false
+        },
+        {
+          "action": "event",
+          "kind": "added",
+          "id": "6d846e43-2285-2d18-6b61-4202b20ada71"
+        },
+        {
+          "action": "refresh",
+          "item": {
+            "id": "6d846e43-2285-2d18-6b61-4202b20ada71",
+            "type": "MediaBrowser.Controller.Entities.Video",
+            "name": "part 2025",
+            "path": "$STATE\\media\\part 2025.mkv",
+            "parentId": "98c00000-0000-0000-0000-000000000002",
+            "ownerId": "98c00000-0000-0000-0000-000000000001",
+            "primaryVersionId": null,
+            "mixed": true,
+            "locked": false,
+            "productionYear": null,
+            "size": 16,
+            "runTimeTicks": null,
+            "dateCreated": "2025-01-02T03:04:05.0000000Z",
+            "dateModified": "2025-01-03T04:05:06.0000000Z",
+            "dateLastSavedSet": false,
+            "videoType": "VideoFile",
+            "extraType": null,
+            "parts": [],
+            "alternates": [],
+            "genres": [
+              "Owner genre"
+            ],
+            "overview": "Owner overview"
+          },
+          "forceSave": true,
+          "hasSearchResult": false,
+          "cancellationRequested": false
+        },
+        {
+          "action": "refresh",
+          "item": {
+            "id": "98c00000-0000-0000-0000-000000000001",
+            "type": "MediaBrowser.Controller.Entities.Video",
+            "name": "Updated owner",
+            "path": "$STATE\\media\\primary.mkv",
+            "parentId": "98c00000-0000-0000-0000-000000000002",
+            "ownerId": "00000000-0000-0000-0000-000000000000",
+            "primaryVersionId": null,
+            "mixed": true,
+            "locked": false,
+            "productionYear": null,
+            "size": null,
+            "runTimeTicks": null,
+            "dateCreated": "0001-01-01T00:00:00.0000000Z",
+            "dateModified": "0001-01-01T00:00:00.0000000Z",
+            "dateLastSavedSet": false,
+            "videoType": "VideoFile",
+            "extraType": null,
+            "parts": [
+              "$STATE\\media\\part 2025.mkv"
+            ],
+            "alternates": [],
+            "genres": [
+              "Owner genre"
+            ],
+            "overview": "Owner overview"
+          },
+          "forceSave": false,
+          "hasSearchResult": true,
+          "cancellationRequested": false
+        }
+      ],
+      "rows": [
+        {
+          "id": "6d846e43-2285-2d18-6b61-4202b20ada71",
+          "type": "MediaBrowser.Controller.Entities.Video",
+          "name": "part 2025",
+          "path": "$STATE\\media\\part 2025.mkv",
+          "parentId": "98c00000-0000-0000-0000-000000000002",
+          "topParentId": null,
+          "ownerId": "98c00000-0000-0000-0000-000000000001",
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "mixed": true,
+          "locked": false,
+          "productionYear": null,
+          "size": 16,
+          "runTimeTicks": null,
+          "dateCreated": "2025-01-02T03:04:05.0000000Z",
+          "dateModified": "2025-01-03T04:05:06.0000000Z",
+          "dateLastSavedSet": false,
+          "data": {
+            "AdditionalParts": [],
+            "LocalAlternateVersions": [],
+            "LinkedAlternateVersions": [],
+            "SubtitleFiles": [],
+            "AudioFiles": [],
+            "HasSubtitles": false,
+            "IsPlaceHolder": false,
+            "VideoType": "VideoFile",
+            "Size": 16,
+            "IsHD": false,
+            "IsShortcut": false,
+            "Width": 0,
+            "Height": 0,
+            "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+            "RemoteTrailers": []
+          }
+        },
+        {
+          "id": "98c00000-0000-0000-0000-000000000001",
+          "type": "MediaBrowser.Controller.Entities.Video",
+          "name": "Stored owner",
+          "path": "$STATE\\media\\primary.mkv",
+          "parentId": "98c00000-0000-0000-0000-000000000002",
+          "topParentId": null,
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "mixed": true,
+          "locked": false,
+          "productionYear": null,
+          "size": null,
+          "runTimeTicks": null,
+          "dateCreated": null,
+          "dateModified": null,
+          "dateLastSavedSet": false,
+          "data": {
+            "AdditionalParts": [],
+            "LocalAlternateVersions": [],
+            "LinkedAlternateVersions": [],
+            "SubtitleFiles": [],
+            "AudioFiles": [],
+            "HasSubtitles": false,
+            "IsPlaceHolder": false,
+            "VideoType": "VideoFile",
+            "IsHD": false,
+            "IsShortcut": false,
+            "Width": 0,
+            "Height": 0,
+            "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+            "RemoteTrailers": []
+          }
+        },
+        {
+          "id": "98c00000-0000-0000-0000-000000000002",
+          "type": "MediaBrowser.Controller.Entities.Folder",
+          "name": "Parent",
+          "path": "$STATE\\media",
+          "parentId": null,
+          "topParentId": null,
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "mixed": false,
+          "locked": false,
+          "productionYear": null,
+          "size": null,
+          "runTimeTicks": null,
+          "dateCreated": null,
+          "dateModified": null,
+          "dateLastSavedSet": false,
+          "data": {
+            "IsRoot": false,
+            "IsHD": false,
+            "IsShortcut": false,
+            "Width": 0,
+            "Height": 0,
+            "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+            "RemoteTrailers": []
+          }
+        }
+      ],
+      "links": [],
+      "files": [
+        {
+          "path": "$STATE\\media\\part 2025.mkv",
+          "sha256": "20d135778ff4bce6a02da7101c78d3c81af427a9134fe9a68cb2e83983069438"
+        },
+        {
+          "path": "$STATE\\media\\primary.mkv",
+          "sha256": "efc6fc578b2bde66195463684cd6933af46c4856a14606d7a14bf1a481ce57b5"
+        }
+      ],
+      "parentChildrenCleared": true,
+      "parentUserDataCleared": true,
+      "oldLookupName": null
+    },
+    {
+      "name": "create-typed-alternate",
+      "exception": null,
+      "liveOwner": {
+        "id": "98c00000-0000-0000-0000-000000000001",
+        "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+        "name": "Updated owner",
+        "path": "$STATE\\media\\primary.mkv",
+        "parentId": "98c00000-0000-0000-0000-000000000002",
+        "ownerId": "00000000-0000-0000-0000-000000000000",
+        "primaryVersionId": null,
+        "mixed": true,
+        "locked": false,
+        "productionYear": null,
+        "size": null,
+        "runTimeTicks": null,
+        "dateCreated": "0001-01-01T00:00:00.0000000Z",
+        "dateModified": "0001-01-01T00:00:00.0000000Z",
+        "dateLastSavedSet": false,
+        "videoType": "VideoFile",
+        "extraType": null,
+        "parts": [],
+        "alternates": [
+          "$STATE\\media\\part 2025.mkv"
+        ],
+        "genres": [
+          "Owner genre"
+        ],
+        "overview": "Owner overview"
+      },
+      "calls": [
+        {
+          "action": "resolve",
+          "path": "$STATE\\media\\part 2025.mkv"
+        },
+        {
+          "action": "save",
+          "items": [
+            {
+              "id": "7b0d957f-726f-60a7-858f-34982bcad9dc",
+              "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+              "name": "part",
+              "path": "$STATE\\media\\part 2025.mkv",
+              "parentId": "98c00000-0000-0000-0000-000000000002",
+              "ownerId": "98c00000-0000-0000-0000-000000000001",
+              "primaryVersionId": "98c00000-0000-0000-0000-000000000001",
+              "mixed": true,
+              "locked": false,
+              "productionYear": 2025,
+              "size": 16,
+              "runTimeTicks": null,
+              "dateCreated": "2025-01-02T03:04:05.0000000Z",
+              "dateModified": "2025-01-03T04:05:06.0000000Z",
+              "dateLastSavedSet": false,
+              "videoType": "VideoFile",
+              "extraType": null,
+              "parts": [],
+              "alternates": [],
+              "genres": [],
+              "overview": null
+            }
+          ],
+          "cancellable": false
+        },
+        {
+          "action": "event",
+          "kind": "added",
+          "id": "7b0d957f-726f-60a7-858f-34982bcad9dc"
+        },
+        {
+          "action": "refresh",
+          "item": {
+            "id": "7b0d957f-726f-60a7-858f-34982bcad9dc",
+            "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+            "name": "part",
+            "path": "$STATE\\media\\part 2025.mkv",
+            "parentId": "98c00000-0000-0000-0000-000000000002",
+            "ownerId": "98c00000-0000-0000-0000-000000000001",
+            "primaryVersionId": "98c00000-0000-0000-0000-000000000001",
+            "mixed": true,
+            "locked": false,
+            "productionYear": 2025,
+            "size": 16,
+            "runTimeTicks": null,
+            "dateCreated": "2025-01-02T03:04:05.0000000Z",
+            "dateModified": "2025-01-03T04:05:06.0000000Z",
+            "dateLastSavedSet": false,
+            "videoType": "VideoFile",
+            "extraType": null,
+            "parts": [],
+            "alternates": [],
+            "genres": [],
+            "overview": null
+          },
+          "forceSave": false,
+          "hasSearchResult": false,
+          "cancellationRequested": false
+        },
+        {
+          "action": "refresh",
+          "item": {
+            "id": "98c00000-0000-0000-0000-000000000001",
+            "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+            "name": "Updated owner",
+            "path": "$STATE\\media\\primary.mkv",
+            "parentId": "98c00000-0000-0000-0000-000000000002",
+            "ownerId": "00000000-0000-0000-0000-000000000000",
+            "primaryVersionId": null,
+            "mixed": true,
+            "locked": false,
+            "productionYear": null,
+            "size": null,
+            "runTimeTicks": null,
+            "dateCreated": "0001-01-01T00:00:00.0000000Z",
+            "dateModified": "0001-01-01T00:00:00.0000000Z",
+            "dateLastSavedSet": false,
+            "videoType": "VideoFile",
+            "extraType": null,
+            "parts": [],
+            "alternates": [
+              "$STATE\\media\\part 2025.mkv"
+            ],
+            "genres": [
+              "Owner genre"
+            ],
+            "overview": "Owner overview"
+          },
+          "forceSave": true,
+          "hasSearchResult": true,
+          "cancellationRequested": false
+        }
+      ],
+      "rows": [
+        {
+          "id": "7b0d957f-726f-60a7-858f-34982bcad9dc",
+          "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+          "name": "part",
+          "path": "$STATE\\media\\part 2025.mkv",
+          "parentId": "98c00000-0000-0000-0000-000000000002",
+          "topParentId": null,
+          "ownerId": "98c00000-0000-0000-0000-000000000001",
+          "primaryVersionId": "98c00000-0000-0000-0000-000000000001",
+          "presentationUniqueKey": "98c00000000000000000000000000001",
+          "mixed": true,
+          "locked": false,
+          "productionYear": 2025,
+          "size": 16,
+          "runTimeTicks": null,
+          "dateCreated": "2025-01-02T03:04:05.0000000Z",
+          "dateModified": "2025-01-03T04:05:06.0000000Z",
+          "dateLastSavedSet": false,
+          "data": {
+            "AdditionalParts": [],
+            "LocalAlternateVersions": [],
+            "LinkedAlternateVersions": [],
+            "SubtitleFiles": [],
+            "AudioFiles": [],
+            "HasSubtitles": false,
+            "IsPlaceHolder": false,
+            "VideoType": "VideoFile",
+            "Size": 16,
+            "IsHD": false,
+            "IsShortcut": false,
+            "Width": 0,
+            "Height": 0,
+            "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+            "RemoteTrailers": []
+          }
+        },
+        {
+          "id": "98c00000-0000-0000-0000-000000000001",
+          "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+          "name": "Stored owner",
+          "path": "$STATE\\media\\primary.mkv",
+          "parentId": "98c00000-0000-0000-0000-000000000002",
+          "topParentId": null,
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "mixed": true,
+          "locked": false,
+          "productionYear": null,
+          "size": null,
+          "runTimeTicks": null,
+          "dateCreated": null,
+          "dateModified": null,
+          "dateLastSavedSet": false,
+          "data": {
+            "AdditionalParts": [],
+            "LocalAlternateVersions": [],
+            "LinkedAlternateVersions": [],
+            "SubtitleFiles": [],
+            "AudioFiles": [],
+            "HasSubtitles": false,
+            "IsPlaceHolder": false,
+            "VideoType": "VideoFile",
+            "IsHD": false,
+            "IsShortcut": false,
+            "Width": 0,
+            "Height": 0,
+            "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+            "RemoteTrailers": []
+          }
+        },
+        {
+          "id": "98c00000-0000-0000-0000-000000000002",
+          "type": "MediaBrowser.Controller.Entities.Folder",
+          "name": "Parent",
+          "path": "$STATE\\media",
+          "parentId": null,
+          "topParentId": null,
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "mixed": false,
+          "locked": false,
+          "productionYear": null,
+          "size": null,
+          "runTimeTicks": null,
+          "dateCreated": null,
+          "dateModified": null,
+          "dateLastSavedSet": false,
+          "data": {
+            "IsRoot": false,
+            "IsHD": false,
+            "IsShortcut": false,
+            "Width": 0,
+            "Height": 0,
+            "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+            "RemoteTrailers": []
+          }
+        }
+      ],
+      "links": [
+        {
+          "parentId": "98c00000-0000-0000-0000-000000000001",
+          "childId": "7b0d957f-726f-60a7-858f-34982bcad9dc",
+          "childType": 2,
+          "sortOrder": 0
+        }
+      ],
+      "files": [
+        {
+          "path": "$STATE\\media\\part 2025.mkv",
+          "sha256": "20d135778ff4bce6a02da7101c78d3c81af427a9134fe9a68cb2e83983069438"
+        },
+        {
+          "path": "$STATE\\media\\primary.mkv",
+          "sha256": "efc6fc578b2bde66195463684cd6933af46c4856a14606d7a14bf1a481ce57b5"
+        }
+      ],
+      "parentChildrenCleared": true,
+      "parentUserDataCleared": true,
+      "oldLookupName": null
+    },
+    {
+      "name": "create-coerced-alternate",
+      "exception": null,
+      "liveOwner": {
+        "id": "98c00000-0000-0000-0000-000000000001",
+        "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+        "name": "Updated owner",
+        "path": "$STATE\\media\\primary.mkv",
+        "parentId": "98c00000-0000-0000-0000-000000000002",
+        "ownerId": "00000000-0000-0000-0000-000000000000",
+        "primaryVersionId": null,
+        "mixed": true,
+        "locked": false,
+        "productionYear": null,
+        "size": null,
+        "runTimeTicks": null,
+        "dateCreated": "0001-01-01T00:00:00.0000000Z",
+        "dateModified": "0001-01-01T00:00:00.0000000Z",
+        "dateLastSavedSet": false,
+        "videoType": "VideoFile",
+        "extraType": null,
+        "parts": [],
+        "alternates": [
+          "$STATE\\media\\part 2025.mkv"
+        ],
+        "genres": [
+          "Owner genre"
+        ],
+        "overview": "Owner overview"
+      },
+      "calls": [
+        {
+          "action": "resolve",
+          "path": "$STATE\\media\\part 2025.mkv"
+        },
+        {
+          "action": "save",
+          "items": [
+            {
+              "id": "7b0d957f-726f-60a7-858f-34982bcad9dc",
+              "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+              "name": "part 2025",
+              "path": "$STATE\\media\\part 2025.mkv",
+              "parentId": "00000000-0000-0000-0000-000000000000",
+              "ownerId": "98c00000-0000-0000-0000-000000000001",
+              "primaryVersionId": "98c00000-0000-0000-0000-000000000001",
+              "mixed": true,
+              "locked": false,
+              "productionYear": null,
+              "size": null,
+              "runTimeTicks": null,
+              "dateCreated": "0001-01-01T00:00:00.0000000Z",
+              "dateModified": "0001-01-01T00:00:00.0000000Z",
+              "dateLastSavedSet": false,
+              "videoType": "VideoFile",
+              "extraType": null,
+              "parts": [],
+              "alternates": [],
+              "genres": [],
+              "overview": null
+            }
+          ],
+          "cancellable": false
+        },
+        {
+          "action": "event",
+          "kind": "added",
+          "id": "7b0d957f-726f-60a7-858f-34982bcad9dc"
+        },
+        {
+          "action": "refresh",
+          "item": {
+            "id": "7b0d957f-726f-60a7-858f-34982bcad9dc",
+            "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+            "name": "part 2025",
+            "path": "$STATE\\media\\part 2025.mkv",
+            "parentId": "00000000-0000-0000-0000-000000000000",
+            "ownerId": "98c00000-0000-0000-0000-000000000001",
+            "primaryVersionId": "98c00000-0000-0000-0000-000000000001",
+            "mixed": true,
+            "locked": false,
+            "productionYear": null,
+            "size": null,
+            "runTimeTicks": null,
+            "dateCreated": "0001-01-01T00:00:00.0000000Z",
+            "dateModified": "0001-01-01T00:00:00.0000000Z",
+            "dateLastSavedSet": false,
+            "videoType": "VideoFile",
+            "extraType": null,
+            "parts": [],
+            "alternates": [],
+            "genres": [],
+            "overview": null
+          },
+          "forceSave": false,
+          "hasSearchResult": false,
+          "cancellationRequested": false
+        },
+        {
+          "action": "refresh",
+          "item": {
+            "id": "98c00000-0000-0000-0000-000000000001",
+            "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+            "name": "Updated owner",
+            "path": "$STATE\\media\\primary.mkv",
+            "parentId": "98c00000-0000-0000-0000-000000000002",
+            "ownerId": "00000000-0000-0000-0000-000000000000",
+            "primaryVersionId": null,
+            "mixed": true,
+            "locked": false,
+            "productionYear": null,
+            "size": null,
+            "runTimeTicks": null,
+            "dateCreated": "0001-01-01T00:00:00.0000000Z",
+            "dateModified": "0001-01-01T00:00:00.0000000Z",
+            "dateLastSavedSet": false,
+            "videoType": "VideoFile",
+            "extraType": null,
+            "parts": [],
+            "alternates": [
+              "$STATE\\media\\part 2025.mkv"
+            ],
+            "genres": [
+              "Owner genre"
+            ],
+            "overview": "Owner overview"
+          },
+          "forceSave": true,
+          "hasSearchResult": true,
+          "cancellationRequested": false
+        }
+      ],
+      "rows": [
+        {
+          "id": "7b0d957f-726f-60a7-858f-34982bcad9dc",
+          "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+          "name": "part 2025",
+          "path": "$STATE\\media\\part 2025.mkv",
+          "parentId": null,
+          "topParentId": null,
+          "ownerId": "98c00000-0000-0000-0000-000000000001",
+          "primaryVersionId": "98c00000-0000-0000-0000-000000000001",
+          "presentationUniqueKey": "98c00000000000000000000000000001",
+          "mixed": true,
+          "locked": false,
+          "productionYear": null,
+          "size": null,
+          "runTimeTicks": null,
+          "dateCreated": null,
+          "dateModified": null,
+          "dateLastSavedSet": false,
+          "data": {
+            "AdditionalParts": [],
+            "LocalAlternateVersions": [],
+            "LinkedAlternateVersions": [],
+            "SubtitleFiles": [],
+            "AudioFiles": [],
+            "HasSubtitles": false,
+            "IsPlaceHolder": false,
+            "VideoType": "VideoFile",
+            "IsHD": false,
+            "IsShortcut": false,
+            "Width": 0,
+            "Height": 0,
+            "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+            "RemoteTrailers": []
+          }
+        },
+        {
+          "id": "98c00000-0000-0000-0000-000000000001",
+          "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+          "name": "Stored owner",
+          "path": "$STATE\\media\\primary.mkv",
+          "parentId": "98c00000-0000-0000-0000-000000000002",
+          "topParentId": null,
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "mixed": true,
+          "locked": false,
+          "productionYear": null,
+          "size": null,
+          "runTimeTicks": null,
+          "dateCreated": null,
+          "dateModified": null,
+          "dateLastSavedSet": false,
+          "data": {
+            "AdditionalParts": [],
+            "LocalAlternateVersions": [],
+            "LinkedAlternateVersions": [],
+            "SubtitleFiles": [],
+            "AudioFiles": [],
+            "HasSubtitles": false,
+            "IsPlaceHolder": false,
+            "VideoType": "VideoFile",
+            "IsHD": false,
+            "IsShortcut": false,
+            "Width": 0,
+            "Height": 0,
+            "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+            "RemoteTrailers": []
+          }
+        },
+        {
+          "id": "98c00000-0000-0000-0000-000000000002",
+          "type": "MediaBrowser.Controller.Entities.Folder",
+          "name": "Parent",
+          "path": "$STATE\\media",
+          "parentId": null,
+          "topParentId": null,
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "mixed": false,
+          "locked": false,
+          "productionYear": null,
+          "size": null,
+          "runTimeTicks": null,
+          "dateCreated": null,
+          "dateModified": null,
+          "dateLastSavedSet": false,
+          "data": {
+            "IsRoot": false,
+            "IsHD": false,
+            "IsShortcut": false,
+            "Width": 0,
+            "Height": 0,
+            "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+            "RemoteTrailers": []
+          }
+        }
+      ],
+      "links": [
+        {
+          "parentId": "98c00000-0000-0000-0000-000000000001",
+          "childId": "7b0d957f-726f-60a7-858f-34982bcad9dc",
+          "childType": 2,
+          "sortOrder": 0
+        }
+      ],
+      "files": [
+        {
+          "path": "$STATE\\media\\part 2025.mkv",
+          "sha256": "20d135778ff4bce6a02da7101c78d3c81af427a9134fe9a68cb2e83983069438"
+        },
+        {
+          "path": "$STATE\\media\\primary.mkv",
+          "sha256": "efc6fc578b2bde66195463684cd6933af46c4856a14606d7a14bf1a481ce57b5"
+        }
+      ],
+      "parentChildrenCleared": true,
+      "parentUserDataCleared": true,
+      "oldLookupName": null
+    },
+    {
+      "name": "create-after-cancellation",
+      "exception": "OperationCanceledException",
+      "liveOwner": {
+        "id": "98c00000-0000-0000-0000-000000000001",
+        "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+        "name": "Updated owner",
+        "path": "$STATE\\media\\primary.mkv",
+        "parentId": "98c00000-0000-0000-0000-000000000002",
+        "ownerId": "00000000-0000-0000-0000-000000000000",
+        "primaryVersionId": null,
+        "mixed": true,
+        "locked": false,
+        "productionYear": null,
+        "size": null,
+        "runTimeTicks": null,
+        "dateCreated": "0001-01-01T00:00:00.0000000Z",
+        "dateModified": "0001-01-01T00:00:00.0000000Z",
+        "dateLastSavedSet": false,
+        "videoType": "VideoFile",
+        "extraType": null,
+        "parts": [
+          "$STATE\\media\\part 2025.mkv"
+        ],
+        "alternates": [],
+        "genres": [
+          "Owner genre"
+        ],
+        "overview": "Owner overview"
+      },
+      "calls": [
+        {
+          "action": "resolve",
+          "path": "$STATE\\media\\part 2025.mkv"
+        },
+        {
+          "action": "save",
+          "items": [
+            {
+              "id": "6d846e43-2285-2d18-6b61-4202b20ada71",
+              "type": "MediaBrowser.Controller.Entities.Video",
+              "name": "part",
+              "path": "$STATE\\media\\part 2025.mkv",
+              "parentId": "00000000-0000-0000-0000-000000000000",
+              "ownerId": "98c00000-0000-0000-0000-000000000001",
+              "primaryVersionId": null,
+              "mixed": true,
+              "locked": false,
+              "productionYear": 2025,
+              "size": null,
+              "runTimeTicks": null,
+              "dateCreated": "0001-01-01T00:00:00.0000000Z",
+              "dateModified": "0001-01-01T00:00:00.0000000Z",
+              "dateLastSavedSet": false,
+              "videoType": "VideoFile",
+              "extraType": null,
+              "parts": [],
+              "alternates": [],
+              "genres": [],
+              "overview": null
+            }
+          ],
+          "cancellable": false
+        },
+        {
+          "action": "event",
+          "kind": "added",
+          "id": "6d846e43-2285-2d18-6b61-4202b20ada71"
+        },
+        {
+          "action": "refresh",
+          "item": {
+            "id": "6d846e43-2285-2d18-6b61-4202b20ada71",
+            "type": "MediaBrowser.Controller.Entities.Video",
+            "name": "part",
+            "path": "$STATE\\media\\part 2025.mkv",
+            "parentId": "00000000-0000-0000-0000-000000000000",
+            "ownerId": "98c00000-0000-0000-0000-000000000001",
+            "primaryVersionId": null,
+            "mixed": true,
+            "locked": false,
+            "productionYear": 2025,
+            "size": null,
+            "runTimeTicks": null,
+            "dateCreated": "0001-01-01T00:00:00.0000000Z",
+            "dateModified": "0001-01-01T00:00:00.0000000Z",
+            "dateLastSavedSet": false,
+            "videoType": "VideoFile",
+            "extraType": null,
+            "parts": [],
+            "alternates": [],
+            "genres": [
+              "Owner genre"
+            ],
+            "overview": "Owner overview"
+          },
+          "forceSave": true,
+          "hasSearchResult": false,
+          "cancellationRequested": true
+        },
+        {
+          "action": "refresh",
+          "item": {
+            "id": "98c00000-0000-0000-0000-000000000001",
+            "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+            "name": "Updated owner",
+            "path": "$STATE\\media\\primary.mkv",
+            "parentId": "98c00000-0000-0000-0000-000000000002",
+            "ownerId": "00000000-0000-0000-0000-000000000000",
+            "primaryVersionId": null,
+            "mixed": true,
+            "locked": false,
+            "productionYear": null,
+            "size": null,
+            "runTimeTicks": null,
+            "dateCreated": "0001-01-01T00:00:00.0000000Z",
+            "dateModified": "0001-01-01T00:00:00.0000000Z",
+            "dateLastSavedSet": false,
+            "videoType": "VideoFile",
+            "extraType": null,
+            "parts": [
+              "$STATE\\media\\part 2025.mkv"
+            ],
+            "alternates": [],
+            "genres": [
+              "Owner genre"
+            ],
+            "overview": "Owner overview"
+          },
+          "forceSave": false,
+          "hasSearchResult": true,
+          "cancellationRequested": true
+        }
+      ],
+      "rows": [
+        {
+          "id": "6d846e43-2285-2d18-6b61-4202b20ada71",
+          "type": "MediaBrowser.Controller.Entities.Video",
+          "name": "part",
+          "path": "$STATE\\media\\part 2025.mkv",
+          "parentId": null,
+          "topParentId": null,
+          "ownerId": "98c00000-0000-0000-0000-000000000001",
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "mixed": true,
+          "locked": false,
+          "productionYear": 2025,
+          "size": null,
+          "runTimeTicks": null,
+          "dateCreated": null,
+          "dateModified": null,
+          "dateLastSavedSet": false,
+          "data": {
+            "AdditionalParts": [],
+            "LocalAlternateVersions": [],
+            "LinkedAlternateVersions": [],
+            "SubtitleFiles": [],
+            "AudioFiles": [],
+            "HasSubtitles": false,
+            "IsPlaceHolder": false,
+            "VideoType": "VideoFile",
+            "IsHD": false,
+            "IsShortcut": false,
+            "Width": 0,
+            "Height": 0,
+            "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+            "RemoteTrailers": []
+          }
+        },
+        {
+          "id": "98c00000-0000-0000-0000-000000000001",
+          "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+          "name": "Stored owner",
+          "path": "$STATE\\media\\primary.mkv",
+          "parentId": "98c00000-0000-0000-0000-000000000002",
+          "topParentId": null,
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "mixed": true,
+          "locked": false,
+          "productionYear": null,
+          "size": null,
+          "runTimeTicks": null,
+          "dateCreated": null,
+          "dateModified": null,
+          "dateLastSavedSet": false,
+          "data": {
+            "AdditionalParts": [],
+            "LocalAlternateVersions": [],
+            "LinkedAlternateVersions": [],
+            "SubtitleFiles": [],
+            "AudioFiles": [],
+            "HasSubtitles": false,
+            "IsPlaceHolder": false,
+            "VideoType": "VideoFile",
+            "IsHD": false,
+            "IsShortcut": false,
+            "Width": 0,
+            "Height": 0,
+            "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+            "RemoteTrailers": []
+          }
+        },
+        {
+          "id": "98c00000-0000-0000-0000-000000000002",
+          "type": "MediaBrowser.Controller.Entities.Folder",
+          "name": "Parent",
+          "path": "$STATE\\media",
+          "parentId": null,
+          "topParentId": null,
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "mixed": false,
+          "locked": false,
+          "productionYear": null,
+          "size": null,
+          "runTimeTicks": null,
+          "dateCreated": null,
+          "dateModified": null,
+          "dateLastSavedSet": false,
+          "data": {
+            "IsRoot": false,
+            "IsHD": false,
+            "IsShortcut": false,
+            "Width": 0,
+            "Height": 0,
+            "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+            "RemoteTrailers": []
+          }
+        }
+      ],
+      "links": [],
+      "files": [
+        {
+          "path": "$STATE\\media\\part 2025.mkv",
+          "sha256": "20d135778ff4bce6a02da7101c78d3c81af427a9134fe9a68cb2e83983069438"
+        },
+        {
+          "path": "$STATE\\media\\primary.mkv",
+          "sha256": "efc6fc578b2bde66195463684cd6933af46c4856a14606d7a14bf1a481ce57b5"
+        }
+      ],
+      "parentChildrenCleared": true,
+      "parentUserDataCleared": true,
+      "oldLookupName": null
+    },
+    {
+      "name": "alternate-after-cancellation",
+      "exception": "OperationCanceledException",
+      "liveOwner": {
+        "id": "98c00000-0000-0000-0000-000000000001",
+        "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+        "name": "Updated owner",
+        "path": "$STATE\\media\\primary.mkv",
+        "parentId": "98c00000-0000-0000-0000-000000000002",
+        "ownerId": "00000000-0000-0000-0000-000000000000",
+        "primaryVersionId": null,
+        "mixed": true,
+        "locked": false,
+        "productionYear": null,
+        "size": null,
+        "runTimeTicks": null,
+        "dateCreated": "0001-01-01T00:00:00.0000000Z",
+        "dateModified": "0001-01-01T00:00:00.0000000Z",
+        "dateLastSavedSet": false,
+        "videoType": "VideoFile",
+        "extraType": null,
+        "parts": [],
+        "alternates": [
+          "$STATE\\media\\part 2025.mkv"
+        ],
+        "genres": [
+          "Owner genre"
+        ],
+        "overview": "Owner overview"
+      },
+      "calls": [
+        {
+          "action": "resolve",
+          "path": "$STATE\\media\\part 2025.mkv"
+        },
+        {
+          "action": "save",
+          "items": [
+            {
+              "id": "7b0d957f-726f-60a7-858f-34982bcad9dc",
+              "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+              "name": "part",
+              "path": "$STATE\\media\\part 2025.mkv",
+              "parentId": "98c00000-0000-0000-0000-000000000002",
+              "ownerId": "98c00000-0000-0000-0000-000000000001",
+              "primaryVersionId": "98c00000-0000-0000-0000-000000000001",
+              "mixed": true,
+              "locked": false,
+              "productionYear": 2025,
+              "size": 16,
+              "runTimeTicks": null,
+              "dateCreated": "2025-01-02T03:04:05.0000000Z",
+              "dateModified": "2025-01-03T04:05:06.0000000Z",
+              "dateLastSavedSet": false,
+              "videoType": "VideoFile",
+              "extraType": null,
+              "parts": [],
+              "alternates": [],
+              "genres": [],
+              "overview": null
+            }
+          ],
+          "cancellable": false
+        },
+        {
+          "action": "event",
+          "kind": "added",
+          "id": "7b0d957f-726f-60a7-858f-34982bcad9dc"
+        },
+        {
+          "action": "refresh",
+          "item": {
+            "id": "7b0d957f-726f-60a7-858f-34982bcad9dc",
+            "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+            "name": "part",
+            "path": "$STATE\\media\\part 2025.mkv",
+            "parentId": "98c00000-0000-0000-0000-000000000002",
+            "ownerId": "98c00000-0000-0000-0000-000000000001",
+            "primaryVersionId": "98c00000-0000-0000-0000-000000000001",
+            "mixed": true,
+            "locked": false,
+            "productionYear": 2025,
+            "size": 16,
+            "runTimeTicks": null,
+            "dateCreated": "2025-01-02T03:04:05.0000000Z",
+            "dateModified": "2025-01-03T04:05:06.0000000Z",
+            "dateLastSavedSet": false,
+            "videoType": "VideoFile",
+            "extraType": null,
+            "parts": [],
+            "alternates": [],
+            "genres": [],
+            "overview": null
+          },
+          "forceSave": false,
+          "hasSearchResult": false,
+          "cancellationRequested": true
+        },
+        {
+          "action": "refresh",
+          "item": {
+            "id": "98c00000-0000-0000-0000-000000000001",
+            "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+            "name": "Updated owner",
+            "path": "$STATE\\media\\primary.mkv",
+            "parentId": "98c00000-0000-0000-0000-000000000002",
+            "ownerId": "00000000-0000-0000-0000-000000000000",
+            "primaryVersionId": null,
+            "mixed": true,
+            "locked": false,
+            "productionYear": null,
+            "size": null,
+            "runTimeTicks": null,
+            "dateCreated": "0001-01-01T00:00:00.0000000Z",
+            "dateModified": "0001-01-01T00:00:00.0000000Z",
+            "dateLastSavedSet": false,
+            "videoType": "VideoFile",
+            "extraType": null,
+            "parts": [],
+            "alternates": [
+              "$STATE\\media\\part 2025.mkv"
+            ],
+            "genres": [
+              "Owner genre"
+            ],
+            "overview": "Owner overview"
+          },
+          "forceSave": false,
+          "hasSearchResult": true,
+          "cancellationRequested": true
+        }
+      ],
+      "rows": [
+        {
+          "id": "7b0d957f-726f-60a7-858f-34982bcad9dc",
+          "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+          "name": "part",
+          "path": "$STATE\\media\\part 2025.mkv",
+          "parentId": "98c00000-0000-0000-0000-000000000002",
+          "topParentId": null,
+          "ownerId": "98c00000-0000-0000-0000-000000000001",
+          "primaryVersionId": "98c00000-0000-0000-0000-000000000001",
+          "presentationUniqueKey": "98c00000000000000000000000000001",
+          "mixed": true,
+          "locked": false,
+          "productionYear": 2025,
+          "size": 16,
+          "runTimeTicks": null,
+          "dateCreated": "2025-01-02T03:04:05.0000000Z",
+          "dateModified": "2025-01-03T04:05:06.0000000Z",
+          "dateLastSavedSet": false,
+          "data": {
+            "AdditionalParts": [],
+            "LocalAlternateVersions": [],
+            "LinkedAlternateVersions": [],
+            "SubtitleFiles": [],
+            "AudioFiles": [],
+            "HasSubtitles": false,
+            "IsPlaceHolder": false,
+            "VideoType": "VideoFile",
+            "Size": 16,
+            "IsHD": false,
+            "IsShortcut": false,
+            "Width": 0,
+            "Height": 0,
+            "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+            "RemoteTrailers": []
+          }
+        },
+        {
+          "id": "98c00000-0000-0000-0000-000000000001",
+          "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+          "name": "Stored owner",
+          "path": "$STATE\\media\\primary.mkv",
+          "parentId": "98c00000-0000-0000-0000-000000000002",
+          "topParentId": null,
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "mixed": true,
+          "locked": false,
+          "productionYear": null,
+          "size": null,
+          "runTimeTicks": null,
+          "dateCreated": null,
+          "dateModified": null,
+          "dateLastSavedSet": false,
+          "data": {
+            "AdditionalParts": [],
+            "LocalAlternateVersions": [],
+            "LinkedAlternateVersions": [],
+            "SubtitleFiles": [],
+            "AudioFiles": [],
+            "HasSubtitles": false,
+            "IsPlaceHolder": false,
+            "VideoType": "VideoFile",
+            "IsHD": false,
+            "IsShortcut": false,
+            "Width": 0,
+            "Height": 0,
+            "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+            "RemoteTrailers": []
+          }
+        },
+        {
+          "id": "98c00000-0000-0000-0000-000000000002",
+          "type": "MediaBrowser.Controller.Entities.Folder",
+          "name": "Parent",
+          "path": "$STATE\\media",
+          "parentId": null,
+          "topParentId": null,
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "mixed": false,
+          "locked": false,
+          "productionYear": null,
+          "size": null,
+          "runTimeTicks": null,
+          "dateCreated": null,
+          "dateModified": null,
+          "dateLastSavedSet": false,
+          "data": {
+            "IsRoot": false,
+            "IsHD": false,
+            "IsShortcut": false,
+            "Width": 0,
+            "Height": 0,
+            "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+            "RemoteTrailers": []
+          }
+        }
+      ],
+      "links": [],
+      "files": [
+        {
+          "path": "$STATE\\media\\part 2025.mkv",
+          "sha256": "20d135778ff4bce6a02da7101c78d3c81af427a9134fe9a68cb2e83983069438"
+        },
+        {
+          "path": "$STATE\\media\\primary.mkv",
+          "sha256": "efc6fc578b2bde66195463684cd6933af46c4856a14606d7a14bf1a481ce57b5"
+        }
+      ],
+      "parentChildrenCleared": true,
+      "parentUserDataCleared": true,
+      "oldLookupName": null
+    },
+    {
+      "name": "wrong-type-alternate",
+      "exception": null,
+      "liveOwner": {
+        "id": "98c00000-0000-0000-0000-000000000001",
+        "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+        "name": "Updated owner",
+        "path": "$STATE\\media\\primary.mkv",
+        "parentId": "98c00000-0000-0000-0000-000000000002",
+        "ownerId": "00000000-0000-0000-0000-000000000000",
+        "primaryVersionId": null,
+        "mixed": true,
+        "locked": false,
+        "productionYear": null,
+        "size": null,
+        "runTimeTicks": null,
+        "dateCreated": "0001-01-01T00:00:00.0000000Z",
+        "dateModified": "0001-01-01T00:00:00.0000000Z",
+        "dateLastSavedSet": false,
+        "videoType": "VideoFile",
+        "extraType": null,
+        "parts": [],
+        "alternates": [
+          "$STATE\\media\\part 2025.mkv"
+        ],
+        "genres": [
+          "Owner genre"
+        ],
+        "overview": "Owner overview"
+      },
+      "calls": [
+        {
+          "action": "external-files",
+          "id": "6d846e43-2285-2d18-6b61-4202b20ada71"
+        },
+        {
+          "action": "delete",
+          "ids": [
+            "6d846e43-2285-2d18-6b61-4202b20ada71"
+          ]
+        },
+        {
+          "action": "event",
+          "kind": "removed",
+          "id": "6d846e43-2285-2d18-6b61-4202b20ada71"
+        },
+        {
+          "action": "resolve",
+          "path": "$STATE\\media\\part 2025.mkv"
+        },
+        {
+          "action": "save",
+          "items": [
+            {
+              "id": "7b0d957f-726f-60a7-858f-34982bcad9dc",
+              "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+              "name": "part",
+              "path": "$STATE\\media\\part 2025.mkv",
+              "parentId": "98c00000-0000-0000-0000-000000000002",
+              "ownerId": "98c00000-0000-0000-0000-000000000001",
+              "primaryVersionId": "98c00000-0000-0000-0000-000000000001",
+              "mixed": true,
+              "locked": false,
+              "productionYear": 2025,
+              "size": 16,
+              "runTimeTicks": null,
+              "dateCreated": "2025-01-02T03:04:05.0000000Z",
+              "dateModified": "2025-01-03T04:05:06.0000000Z",
+              "dateLastSavedSet": false,
+              "videoType": "VideoFile",
+              "extraType": null,
+              "parts": [],
+              "alternates": [],
+              "genres": [],
+              "overview": null
+            }
+          ],
+          "cancellable": false
+        },
+        {
+          "action": "event",
+          "kind": "added",
+          "id": "7b0d957f-726f-60a7-858f-34982bcad9dc"
+        },
+        {
+          "action": "refresh",
+          "item": {
+            "id": "7b0d957f-726f-60a7-858f-34982bcad9dc",
+            "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+            "name": "part",
+            "path": "$STATE\\media\\part 2025.mkv",
+            "parentId": "98c00000-0000-0000-0000-000000000002",
+            "ownerId": "98c00000-0000-0000-0000-000000000001",
+            "primaryVersionId": "98c00000-0000-0000-0000-000000000001",
+            "mixed": true,
+            "locked": false,
+            "productionYear": 2025,
+            "size": 16,
+            "runTimeTicks": null,
+            "dateCreated": "2025-01-02T03:04:05.0000000Z",
+            "dateModified": "2025-01-03T04:05:06.0000000Z",
+            "dateLastSavedSet": false,
+            "videoType": "VideoFile",
+            "extraType": null,
+            "parts": [],
+            "alternates": [],
+            "genres": [],
+            "overview": null
+          },
+          "forceSave": false,
+          "hasSearchResult": false,
+          "cancellationRequested": false
+        },
+        {
+          "action": "refresh",
+          "item": {
+            "id": "98c00000-0000-0000-0000-000000000001",
+            "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+            "name": "Updated owner",
+            "path": "$STATE\\media\\primary.mkv",
+            "parentId": "98c00000-0000-0000-0000-000000000002",
+            "ownerId": "00000000-0000-0000-0000-000000000000",
+            "primaryVersionId": null,
+            "mixed": true,
+            "locked": false,
+            "productionYear": null,
+            "size": null,
+            "runTimeTicks": null,
+            "dateCreated": "0001-01-01T00:00:00.0000000Z",
+            "dateModified": "0001-01-01T00:00:00.0000000Z",
+            "dateLastSavedSet": false,
+            "videoType": "VideoFile",
+            "extraType": null,
+            "parts": [],
+            "alternates": [
+              "$STATE\\media\\part 2025.mkv"
+            ],
+            "genres": [
+              "Owner genre"
+            ],
+            "overview": "Owner overview"
+          },
+          "forceSave": true,
+          "hasSearchResult": true,
+          "cancellationRequested": false
+        }
+      ],
+      "rows": [
+        {
+          "id": "7b0d957f-726f-60a7-858f-34982bcad9dc",
+          "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+          "name": "part",
+          "path": "$STATE\\media\\part 2025.mkv",
+          "parentId": "98c00000-0000-0000-0000-000000000002",
+          "topParentId": null,
+          "ownerId": "98c00000-0000-0000-0000-000000000001",
+          "primaryVersionId": "98c00000-0000-0000-0000-000000000001",
+          "presentationUniqueKey": "98c00000000000000000000000000001",
+          "mixed": true,
+          "locked": false,
+          "productionYear": 2025,
+          "size": 16,
+          "runTimeTicks": null,
+          "dateCreated": "2025-01-02T03:04:05.0000000Z",
+          "dateModified": "2025-01-03T04:05:06.0000000Z",
+          "dateLastSavedSet": false,
+          "data": {
+            "AdditionalParts": [],
+            "LocalAlternateVersions": [],
+            "LinkedAlternateVersions": [],
+            "SubtitleFiles": [],
+            "AudioFiles": [],
+            "HasSubtitles": false,
+            "IsPlaceHolder": false,
+            "VideoType": "VideoFile",
+            "Size": 16,
+            "IsHD": false,
+            "IsShortcut": false,
+            "Width": 0,
+            "Height": 0,
+            "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+            "RemoteTrailers": []
+          }
+        },
+        {
+          "id": "98c00000-0000-0000-0000-000000000001",
+          "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+          "name": "Stored owner",
+          "path": "$STATE\\media\\primary.mkv",
+          "parentId": "98c00000-0000-0000-0000-000000000002",
+          "topParentId": null,
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "mixed": true,
+          "locked": false,
+          "productionYear": null,
+          "size": null,
+          "runTimeTicks": null,
+          "dateCreated": null,
+          "dateModified": null,
+          "dateLastSavedSet": false,
+          "data": {
+            "AdditionalParts": [],
+            "LocalAlternateVersions": [],
+            "LinkedAlternateVersions": [],
+            "SubtitleFiles": [],
+            "AudioFiles": [],
+            "HasSubtitles": false,
+            "IsPlaceHolder": false,
+            "VideoType": "VideoFile",
+            "IsHD": false,
+            "IsShortcut": false,
+            "Width": 0,
+            "Height": 0,
+            "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+            "RemoteTrailers": []
+          }
+        },
+        {
+          "id": "98c00000-0000-0000-0000-000000000002",
+          "type": "MediaBrowser.Controller.Entities.Folder",
+          "name": "Parent",
+          "path": "$STATE\\media",
+          "parentId": null,
+          "topParentId": null,
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "mixed": false,
+          "locked": false,
+          "productionYear": null,
+          "size": null,
+          "runTimeTicks": null,
+          "dateCreated": null,
+          "dateModified": null,
+          "dateLastSavedSet": false,
+          "data": {
+            "IsRoot": false,
+            "IsHD": false,
+            "IsShortcut": false,
+            "Width": 0,
+            "Height": 0,
+            "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+            "RemoteTrailers": []
+          }
+        }
+      ],
+      "links": [
+        {
+          "parentId": "98c00000-0000-0000-0000-000000000001",
+          "childId": "7b0d957f-726f-60a7-858f-34982bcad9dc",
+          "childType": 2,
+          "sortOrder": 0
+        }
+      ],
+      "files": [
+        {
+          "path": "$STATE\\media\\part 2025.mkv",
+          "sha256": "20d135778ff4bce6a02da7101c78d3c81af427a9134fe9a68cb2e83983069438"
+        },
+        {
+          "path": "$STATE\\media\\primary.mkv",
+          "sha256": "efc6fc578b2bde66195463684cd6933af46c4856a14606d7a14bf1a481ce57b5"
+        }
+      ],
+      "parentChildrenCleared": true,
+      "parentUserDataCleared": true,
+      "oldLookupName": null
+    },
+    {
+      "name": "create-part-fails",
+      "exception": null,
+      "liveOwner": {
+        "id": "98c00000-0000-0000-0000-000000000001",
+        "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+        "name": "Updated owner",
+        "path": "$STATE\\media\\primary.mkv",
+        "parentId": "98c00000-0000-0000-0000-000000000002",
+        "ownerId": "00000000-0000-0000-0000-000000000000",
+        "primaryVersionId": null,
+        "mixed": true,
+        "locked": false,
+        "productionYear": null,
+        "size": null,
+        "runTimeTicks": null,
+        "dateCreated": "0001-01-01T00:00:00.0000000Z",
+        "dateModified": "0001-01-01T00:00:00.0000000Z",
+        "dateLastSavedSet": false,
+        "videoType": "VideoFile",
+        "extraType": null,
+        "parts": [
+          "$STATE\\media\\part 2025.mkv"
+        ],
+        "alternates": [],
+        "genres": [
+          "Owner genre"
+        ],
+        "overview": "Owner overview"
+      },
+      "calls": [
+        {
+          "action": "resolve",
+          "path": "$STATE\\media\\part 2025.mkv"
+        },
+        {
+          "action": "save",
+          "items": [
+            {
+              "id": "6d846e43-2285-2d18-6b61-4202b20ada71",
+              "type": "MediaBrowser.Controller.Entities.Video",
+              "name": "part",
+              "path": "$STATE\\media\\part 2025.mkv",
+              "parentId": "00000000-0000-0000-0000-000000000000",
+              "ownerId": "98c00000-0000-0000-0000-000000000001",
+              "primaryVersionId": null,
+              "mixed": true,
+              "locked": false,
+              "productionYear": 2025,
+              "size": null,
+              "runTimeTicks": null,
+              "dateCreated": "0001-01-01T00:00:00.0000000Z",
+              "dateModified": "0001-01-01T00:00:00.0000000Z",
+              "dateLastSavedSet": false,
+              "videoType": "VideoFile",
+              "extraType": null,
+              "parts": [],
+              "alternates": [],
+              "genres": [],
+              "overview": null
+            }
+          ],
+          "cancellable": false
+        },
+        {
+          "action": "refresh",
+          "item": {
+            "id": "98c00000-0000-0000-0000-000000000001",
+            "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+            "name": "Updated owner",
+            "path": "$STATE\\media\\primary.mkv",
+            "parentId": "98c00000-0000-0000-0000-000000000002",
+            "ownerId": "00000000-0000-0000-0000-000000000000",
+            "primaryVersionId": null,
+            "mixed": true,
+            "locked": false,
+            "productionYear": null,
+            "size": null,
+            "runTimeTicks": null,
+            "dateCreated": "0001-01-01T00:00:00.0000000Z",
+            "dateModified": "0001-01-01T00:00:00.0000000Z",
+            "dateLastSavedSet": false,
+            "videoType": "VideoFile",
+            "extraType": null,
+            "parts": [
+              "$STATE\\media\\part 2025.mkv"
+            ],
+            "alternates": [],
+            "genres": [
+              "Owner genre"
+            ],
+            "overview": "Owner overview"
+          },
+          "forceSave": false,
+          "hasSearchResult": true,
+          "cancellationRequested": false
+        }
+      ],
+      "rows": [
+        {
+          "id": "98c00000-0000-0000-0000-000000000001",
+          "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+          "name": "Stored owner",
+          "path": "$STATE\\media\\primary.mkv",
+          "parentId": "98c00000-0000-0000-0000-000000000002",
+          "topParentId": null,
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "mixed": true,
+          "locked": false,
+          "productionYear": null,
+          "size": null,
+          "runTimeTicks": null,
+          "dateCreated": null,
+          "dateModified": null,
+          "dateLastSavedSet": false,
+          "data": {
+            "AdditionalParts": [],
+            "LocalAlternateVersions": [],
+            "LinkedAlternateVersions": [],
+            "SubtitleFiles": [],
+            "AudioFiles": [],
+            "HasSubtitles": false,
+            "IsPlaceHolder": false,
+            "VideoType": "VideoFile",
+            "IsHD": false,
+            "IsShortcut": false,
+            "Width": 0,
+            "Height": 0,
+            "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+            "RemoteTrailers": []
+          }
+        },
+        {
+          "id": "98c00000-0000-0000-0000-000000000002",
+          "type": "MediaBrowser.Controller.Entities.Folder",
+          "name": "Parent",
+          "path": "$STATE\\media",
+          "parentId": null,
+          "topParentId": null,
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "mixed": false,
+          "locked": false,
+          "productionYear": null,
+          "size": null,
+          "runTimeTicks": null,
+          "dateCreated": null,
+          "dateModified": null,
+          "dateLastSavedSet": false,
+          "data": {
+            "IsRoot": false,
+            "IsHD": false,
+            "IsShortcut": false,
+            "Width": 0,
+            "Height": 0,
+            "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+            "RemoteTrailers": []
+          }
+        }
+      ],
+      "links": [],
+      "files": [
+        {
+          "path": "$STATE\\media\\part 2025.mkv",
+          "sha256": "20d135778ff4bce6a02da7101c78d3c81af427a9134fe9a68cb2e83983069438"
+        },
+        {
+          "path": "$STATE\\media\\primary.mkv",
+          "sha256": "efc6fc578b2bde66195463684cd6933af46c4856a14606d7a14bf1a481ce57b5"
+        }
+      ],
+      "parentChildrenCleared": false,
+      "parentUserDataCleared": false,
+      "oldLookupName": null
+    },
+    {
+      "name": "missing-part",
+      "exception": null,
+      "liveOwner": {
+        "id": "98c00000-0000-0000-0000-000000000001",
+        "type": "MediaBrowser.Controller.Entities.Video",
+        "name": "Updated owner",
+        "path": "$STATE\\media\\primary.mkv",
+        "parentId": "98c00000-0000-0000-0000-000000000002",
+        "ownerId": "00000000-0000-0000-0000-000000000000",
+        "primaryVersionId": null,
+        "mixed": true,
+        "locked": false,
+        "productionYear": null,
+        "size": null,
+        "runTimeTicks": null,
+        "dateCreated": "0001-01-01T00:00:00.0000000Z",
+        "dateModified": "0001-01-01T00:00:00.0000000Z",
+        "dateLastSavedSet": false,
+        "videoType": "VideoFile",
+        "extraType": null,
+        "parts": [
+          "$STATE\\media\\part 2025.mkv"
+        ],
+        "alternates": [],
+        "genres": [
+          "Owner genre"
+        ],
+        "overview": "Owner overview"
+      },
+      "calls": [
+        {
+          "action": "external-files",
+          "id": "6d846e43-2285-2d18-6b61-4202b20ada71"
+        },
+        {
+          "action": "delete",
+          "ids": [
+            "6d846e43-2285-2d18-6b61-4202b20ada71"
+          ]
+        },
+        {
+          "action": "event",
+          "kind": "removed",
+          "id": "6d846e43-2285-2d18-6b61-4202b20ada71"
+        },
+        {
+          "action": "refresh",
+          "item": {
+            "id": "98c00000-0000-0000-0000-000000000001",
+            "type": "MediaBrowser.Controller.Entities.Video",
+            "name": "Updated owner",
+            "path": "$STATE\\media\\primary.mkv",
+            "parentId": "98c00000-0000-0000-0000-000000000002",
+            "ownerId": "00000000-0000-0000-0000-000000000000",
+            "primaryVersionId": null,
+            "mixed": true,
+            "locked": false,
+            "productionYear": null,
+            "size": null,
+            "runTimeTicks": null,
+            "dateCreated": "0001-01-01T00:00:00.0000000Z",
+            "dateModified": "0001-01-01T00:00:00.0000000Z",
+            "dateLastSavedSet": false,
+            "videoType": "VideoFile",
+            "extraType": null,
+            "parts": [
+              "$STATE\\media\\part 2025.mkv"
+            ],
+            "alternates": [],
+            "genres": [
+              "Owner genre"
+            ],
+            "overview": "Owner overview"
+          },
+          "forceSave": false,
+          "hasSearchResult": true,
+          "cancellationRequested": false
+        }
+      ],
+      "rows": [
+        {
+          "id": "98c00000-0000-0000-0000-000000000001",
+          "type": "MediaBrowser.Controller.Entities.Video",
+          "name": "Stored owner",
+          "path": "$STATE\\media\\primary.mkv",
+          "parentId": "98c00000-0000-0000-0000-000000000002",
+          "topParentId": null,
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "mixed": true,
+          "locked": false,
+          "productionYear": null,
+          "size": null,
+          "runTimeTicks": null,
+          "dateCreated": null,
+          "dateModified": null,
+          "dateLastSavedSet": false,
+          "data": {
+            "AdditionalParts": [],
+            "LocalAlternateVersions": [],
+            "LinkedAlternateVersions": [],
+            "SubtitleFiles": [],
+            "AudioFiles": [],
+            "HasSubtitles": false,
+            "IsPlaceHolder": false,
+            "VideoType": "VideoFile",
+            "IsHD": false,
+            "IsShortcut": false,
+            "Width": 0,
+            "Height": 0,
+            "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+            "RemoteTrailers": []
+          }
+        },
+        {
+          "id": "98c00000-0000-0000-0000-000000000002",
+          "type": "MediaBrowser.Controller.Entities.Folder",
+          "name": "Parent",
+          "path": "$STATE\\media",
+          "parentId": null,
+          "topParentId": null,
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "mixed": false,
+          "locked": false,
+          "productionYear": null,
+          "size": null,
+          "runTimeTicks": null,
+          "dateCreated": null,
+          "dateModified": null,
+          "dateLastSavedSet": false,
+          "data": {
+            "IsRoot": false,
+            "IsHD": false,
+            "IsShortcut": false,
+            "Width": 0,
+            "Height": 0,
+            "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+            "RemoteTrailers": []
+          }
+        }
+      ],
+      "links": [],
+      "files": [
+        {
+          "path": "$STATE\\media\\primary.mkv",
+          "sha256": "efc6fc578b2bde66195463684cd6933af46c4856a14606d7a14bf1a481ce57b5"
+        }
+      ],
+      "parentChildrenCleared": false,
+      "parentUserDataCleared": false,
+      "oldLookupName": null
+    },
+    {
+      "name": "missing-part-after-cancellation",
+      "exception": "OperationCanceledException",
+      "liveOwner": {
+        "id": "98c00000-0000-0000-0000-000000000001",
+        "type": "MediaBrowser.Controller.Entities.Video",
+        "name": "Updated owner",
+        "path": "$STATE\\media\\primary.mkv",
+        "parentId": "98c00000-0000-0000-0000-000000000002",
+        "ownerId": "00000000-0000-0000-0000-000000000000",
+        "primaryVersionId": null,
+        "mixed": true,
+        "locked": false,
+        "productionYear": null,
+        "size": null,
+        "runTimeTicks": null,
+        "dateCreated": "0001-01-01T00:00:00.0000000Z",
+        "dateModified": "0001-01-01T00:00:00.0000000Z",
+        "dateLastSavedSet": false,
+        "videoType": "VideoFile",
+        "extraType": null,
+        "parts": [
+          "$STATE\\media\\part 2025.mkv"
+        ],
+        "alternates": [],
+        "genres": [
+          "Owner genre"
+        ],
+        "overview": "Owner overview"
+      },
+      "calls": [
+        {
+          "action": "external-files",
+          "id": "6d846e43-2285-2d18-6b61-4202b20ada71"
+        },
+        {
+          "action": "delete",
+          "ids": [
+            "6d846e43-2285-2d18-6b61-4202b20ada71"
+          ]
+        },
+        {
+          "action": "event",
+          "kind": "removed",
+          "id": "6d846e43-2285-2d18-6b61-4202b20ada71"
+        },
+        {
+          "action": "refresh",
+          "item": {
+            "id": "98c00000-0000-0000-0000-000000000001",
+            "type": "MediaBrowser.Controller.Entities.Video",
+            "name": "Updated owner",
+            "path": "$STATE\\media\\primary.mkv",
+            "parentId": "98c00000-0000-0000-0000-000000000002",
+            "ownerId": "00000000-0000-0000-0000-000000000000",
+            "primaryVersionId": null,
+            "mixed": true,
+            "locked": false,
+            "productionYear": null,
+            "size": null,
+            "runTimeTicks": null,
+            "dateCreated": "0001-01-01T00:00:00.0000000Z",
+            "dateModified": "0001-01-01T00:00:00.0000000Z",
+            "dateLastSavedSet": false,
+            "videoType": "VideoFile",
+            "extraType": null,
+            "parts": [
+              "$STATE\\media\\part 2025.mkv"
+            ],
+            "alternates": [],
+            "genres": [
+              "Owner genre"
+            ],
+            "overview": "Owner overview"
+          },
+          "forceSave": false,
+          "hasSearchResult": true,
+          "cancellationRequested": true
+        }
+      ],
+      "rows": [
+        {
+          "id": "98c00000-0000-0000-0000-000000000001",
+          "type": "MediaBrowser.Controller.Entities.Video",
+          "name": "Stored owner",
+          "path": "$STATE\\media\\primary.mkv",
+          "parentId": "98c00000-0000-0000-0000-000000000002",
+          "topParentId": null,
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "mixed": true,
+          "locked": false,
+          "productionYear": null,
+          "size": null,
+          "runTimeTicks": null,
+          "dateCreated": null,
+          "dateModified": null,
+          "dateLastSavedSet": false,
+          "data": {
+            "AdditionalParts": [],
+            "LocalAlternateVersions": [],
+            "LinkedAlternateVersions": [],
+            "SubtitleFiles": [],
+            "AudioFiles": [],
+            "HasSubtitles": false,
+            "IsPlaceHolder": false,
+            "VideoType": "VideoFile",
+            "IsHD": false,
+            "IsShortcut": false,
+            "Width": 0,
+            "Height": 0,
+            "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+            "RemoteTrailers": []
+          }
+        },
+        {
+          "id": "98c00000-0000-0000-0000-000000000002",
+          "type": "MediaBrowser.Controller.Entities.Folder",
+          "name": "Parent",
+          "path": "$STATE\\media",
+          "parentId": null,
+          "topParentId": null,
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "mixed": false,
+          "locked": false,
+          "productionYear": null,
+          "size": null,
+          "runTimeTicks": null,
+          "dateCreated": null,
+          "dateModified": null,
+          "dateLastSavedSet": false,
+          "data": {
+            "IsRoot": false,
+            "IsHD": false,
+            "IsShortcut": false,
+            "Width": 0,
+            "Height": 0,
+            "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+            "RemoteTrailers": []
+          }
+        }
+      ],
+      "links": [],
+      "files": [
+        {
+          "path": "$STATE\\media\\primary.mkv",
+          "sha256": "efc6fc578b2bde66195463684cd6933af46c4856a14606d7a14bf1a481ce57b5"
+        }
+      ],
+      "parentChildrenCleared": false,
+      "parentUserDataCleared": false,
+      "oldLookupName": null
+    },
+    {
+      "name": "missing-part-delete-fails",
+      "exception": null,
+      "liveOwner": {
+        "id": "98c00000-0000-0000-0000-000000000001",
+        "type": "MediaBrowser.Controller.Entities.Video",
+        "name": "Updated owner",
+        "path": "$STATE\\media\\primary.mkv",
+        "parentId": "98c00000-0000-0000-0000-000000000002",
+        "ownerId": "00000000-0000-0000-0000-000000000000",
+        "primaryVersionId": null,
+        "mixed": true,
+        "locked": false,
+        "productionYear": null,
+        "size": null,
+        "runTimeTicks": null,
+        "dateCreated": "0001-01-01T00:00:00.0000000Z",
+        "dateModified": "0001-01-01T00:00:00.0000000Z",
+        "dateLastSavedSet": false,
+        "videoType": "VideoFile",
+        "extraType": null,
+        "parts": [
+          "$STATE\\media\\part 2025.mkv"
+        ],
+        "alternates": [],
+        "genres": [
+          "Owner genre"
+        ],
+        "overview": "Owner overview"
+      },
+      "calls": [
+        {
+          "action": "external-files",
+          "id": "6d846e43-2285-2d18-6b61-4202b20ada71"
+        },
+        {
+          "action": "delete",
+          "ids": [
+            "6d846e43-2285-2d18-6b61-4202b20ada71"
+          ]
+        },
+        {
+          "action": "refresh",
+          "item": {
+            "id": "98c00000-0000-0000-0000-000000000001",
+            "type": "MediaBrowser.Controller.Entities.Video",
+            "name": "Updated owner",
+            "path": "$STATE\\media\\primary.mkv",
+            "parentId": "98c00000-0000-0000-0000-000000000002",
+            "ownerId": "00000000-0000-0000-0000-000000000000",
+            "primaryVersionId": null,
+            "mixed": true,
+            "locked": false,
+            "productionYear": null,
+            "size": null,
+            "runTimeTicks": null,
+            "dateCreated": "0001-01-01T00:00:00.0000000Z",
+            "dateModified": "0001-01-01T00:00:00.0000000Z",
+            "dateLastSavedSet": false,
+            "videoType": "VideoFile",
+            "extraType": null,
+            "parts": [
+              "$STATE\\media\\part 2025.mkv"
+            ],
+            "alternates": [],
+            "genres": [
+              "Owner genre"
+            ],
+            "overview": "Owner overview"
+          },
+          "forceSave": false,
+          "hasSearchResult": true,
+          "cancellationRequested": false
+        }
+      ],
+      "rows": [
+        {
+          "id": "6d846e43-2285-2d18-6b61-4202b20ada71",
+          "type": "MediaBrowser.Controller.Entities.Video",
+          "name": "Old version",
+          "path": "$STATE\\media\\part 2025.mkv",
+          "parentId": "98c00000-0000-0000-0000-000000000002",
+          "topParentId": null,
+          "ownerId": "98c00000-0000-0000-0000-000000000001",
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "mixed": false,
+          "locked": false,
+          "productionYear": null,
+          "size": null,
+          "runTimeTicks": null,
+          "dateCreated": null,
+          "dateModified": null,
+          "dateLastSavedSet": false,
+          "data": {
+            "AdditionalParts": [],
+            "LocalAlternateVersions": [],
+            "LinkedAlternateVersions": [],
+            "SubtitleFiles": [],
+            "AudioFiles": [],
+            "HasSubtitles": false,
+            "IsPlaceHolder": false,
+            "VideoType": "VideoFile",
+            "IsHD": false,
+            "IsShortcut": false,
+            "Width": 0,
+            "Height": 0,
+            "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+            "RemoteTrailers": []
+          }
+        },
+        {
+          "id": "98c00000-0000-0000-0000-000000000001",
+          "type": "MediaBrowser.Controller.Entities.Video",
+          "name": "Stored owner",
+          "path": "$STATE\\media\\primary.mkv",
+          "parentId": "98c00000-0000-0000-0000-000000000002",
+          "topParentId": null,
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "mixed": true,
+          "locked": false,
+          "productionYear": null,
+          "size": null,
+          "runTimeTicks": null,
+          "dateCreated": null,
+          "dateModified": null,
+          "dateLastSavedSet": false,
+          "data": {
+            "AdditionalParts": [],
+            "LocalAlternateVersions": [],
+            "LinkedAlternateVersions": [],
+            "SubtitleFiles": [],
+            "AudioFiles": [],
+            "HasSubtitles": false,
+            "IsPlaceHolder": false,
+            "VideoType": "VideoFile",
+            "IsHD": false,
+            "IsShortcut": false,
+            "Width": 0,
+            "Height": 0,
+            "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+            "RemoteTrailers": []
+          }
+        },
+        {
+          "id": "98c00000-0000-0000-0000-000000000002",
+          "type": "MediaBrowser.Controller.Entities.Folder",
+          "name": "Parent",
+          "path": "$STATE\\media",
+          "parentId": null,
+          "topParentId": null,
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "mixed": false,
+          "locked": false,
+          "productionYear": null,
+          "size": null,
+          "runTimeTicks": null,
+          "dateCreated": null,
+          "dateModified": null,
+          "dateLastSavedSet": false,
+          "data": {
+            "IsRoot": false,
+            "IsHD": false,
+            "IsShortcut": false,
+            "Width": 0,
+            "Height": 0,
+            "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+            "RemoteTrailers": []
+          }
+        }
+      ],
+      "links": [],
+      "files": [
+        {
+          "path": "$STATE\\media\\primary.mkv",
+          "sha256": "efc6fc578b2bde66195463684cd6933af46c4856a14606d7a14bf1a481ce57b5"
+        }
+      ],
+      "parentChildrenCleared": false,
+      "parentUserDataCleared": false,
+      "oldLookupName": "Old version"
+    },
+    {
+      "name": "missing-alternate",
+      "exception": null,
+      "liveOwner": {
+        "id": "98c00000-0000-0000-0000-000000000001",
+        "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+        "name": "Updated owner",
+        "path": "$STATE\\media\\primary.mkv",
+        "parentId": "98c00000-0000-0000-0000-000000000002",
+        "ownerId": "00000000-0000-0000-0000-000000000000",
+        "primaryVersionId": null,
+        "mixed": true,
+        "locked": false,
+        "productionYear": null,
+        "size": null,
+        "runTimeTicks": null,
+        "dateCreated": "0001-01-01T00:00:00.0000000Z",
+        "dateModified": "0001-01-01T00:00:00.0000000Z",
+        "dateLastSavedSet": false,
+        "videoType": "VideoFile",
+        "extraType": null,
+        "parts": [],
+        "alternates": [],
+        "genres": [
+          "Owner genre"
+        ],
+        "overview": "Owner overview"
+      },
+      "calls": [
+        {
+          "action": "refresh",
+          "item": {
+            "id": "98c00000-0000-0000-0000-000000000001",
+            "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+            "name": "Updated owner",
+            "path": "$STATE\\media\\primary.mkv",
+            "parentId": "98c00000-0000-0000-0000-000000000002",
+            "ownerId": "00000000-0000-0000-0000-000000000000",
+            "primaryVersionId": null,
+            "mixed": true,
+            "locked": false,
+            "productionYear": null,
+            "size": null,
+            "runTimeTicks": null,
+            "dateCreated": "0001-01-01T00:00:00.0000000Z",
+            "dateModified": "0001-01-01T00:00:00.0000000Z",
+            "dateLastSavedSet": false,
+            "videoType": "VideoFile",
+            "extraType": null,
+            "parts": [],
+            "alternates": [],
+            "genres": [
+              "Owner genre"
+            ],
+            "overview": "Owner overview"
+          },
+          "forceSave": true,
+          "hasSearchResult": true,
+          "cancellationRequested": false
+        }
+      ],
+      "rows": [
+        {
+          "id": "7b0d957f-726f-60a7-858f-34982bcad9dc",
+          "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+          "name": "Old version",
+          "path": "$STATE\\media\\part 2025.mkv",
+          "parentId": "98c00000-0000-0000-0000-000000000002",
+          "topParentId": null,
+          "ownerId": "98c00000-0000-0000-0000-000000000001",
+          "primaryVersionId": "98c00000-0000-0000-0000-000000000001",
+          "presentationUniqueKey": "98c00000000000000000000000000001",
+          "mixed": false,
+          "locked": false,
+          "productionYear": null,
+          "size": null,
+          "runTimeTicks": null,
+          "dateCreated": null,
+          "dateModified": null,
+          "dateLastSavedSet": false,
+          "data": {
+            "AdditionalParts": [],
+            "LocalAlternateVersions": [],
+            "LinkedAlternateVersions": [],
+            "SubtitleFiles": [],
+            "AudioFiles": [],
+            "HasSubtitles": false,
+            "IsPlaceHolder": false,
+            "VideoType": "VideoFile",
+            "IsHD": false,
+            "IsShortcut": false,
+            "Width": 0,
+            "Height": 0,
+            "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+            "RemoteTrailers": []
+          }
+        },
+        {
+          "id": "98c00000-0000-0000-0000-000000000001",
+          "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+          "name": "Stored owner",
+          "path": "$STATE\\media\\primary.mkv",
+          "parentId": "98c00000-0000-0000-0000-000000000002",
+          "topParentId": null,
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "mixed": true,
+          "locked": false,
+          "productionYear": null,
+          "size": null,
+          "runTimeTicks": null,
+          "dateCreated": null,
+          "dateModified": null,
+          "dateLastSavedSet": false,
+          "data": {
+            "AdditionalParts": [],
+            "LocalAlternateVersions": [],
+            "LinkedAlternateVersions": [],
+            "SubtitleFiles": [],
+            "AudioFiles": [],
+            "HasSubtitles": false,
+            "IsPlaceHolder": false,
+            "VideoType": "VideoFile",
+            "IsHD": false,
+            "IsShortcut": false,
+            "Width": 0,
+            "Height": 0,
+            "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+            "RemoteTrailers": []
+          }
+        },
+        {
+          "id": "98c00000-0000-0000-0000-000000000002",
+          "type": "MediaBrowser.Controller.Entities.Folder",
+          "name": "Parent",
+          "path": "$STATE\\media",
+          "parentId": null,
+          "topParentId": null,
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "mixed": false,
+          "locked": false,
+          "productionYear": null,
+          "size": null,
+          "runTimeTicks": null,
+          "dateCreated": null,
+          "dateModified": null,
+          "dateLastSavedSet": false,
+          "data": {
+            "IsRoot": false,
+            "IsHD": false,
+            "IsShortcut": false,
+            "Width": 0,
+            "Height": 0,
+            "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+            "RemoteTrailers": []
+          }
+        }
+      ],
+      "links": [],
+      "files": [
+        {
+          "path": "$STATE\\data\\attachments\\7b\\7b0d957f-726f-60a7-858f-34982bcad9dc\\marker.txt",
+          "sha256": "4815547772613cd151e390cadc5dd40443961f93b37f8934636002d6e69ead20"
+        },
+        {
+          "path": "$STATE\\data\\subtitles\\7b\\7b0d957f-726f-60a7-858f-34982bcad9dc\\marker.txt",
+          "sha256": "4815547772613cd151e390cadc5dd40443961f93b37f8934636002d6e69ead20"
+        },
+        {
+          "path": "$STATE\\data\\trickplay\\7b\\7b0d957f-726f-60a7-858f-34982bcad9dc\\marker.txt",
+          "sha256": "4815547772613cd151e390cadc5dd40443961f93b37f8934636002d6e69ead20"
+        },
+        {
+          "path": "$STATE\\media\\part 2025.trickplay\\marker.txt",
+          "sha256": "4815547772613cd151e390cadc5dd40443961f93b37f8934636002d6e69ead20"
+        },
+        {
+          "path": "$STATE\\media\\primary.mkv",
+          "sha256": "efc6fc578b2bde66195463684cd6933af46c4856a14606d7a14bf1a481ce57b5"
+        },
+        {
+          "path": "$STATE\\metadata\\library\\7b\\7b0d957f726f60a7858f34982bcad9dc\\chapters\\marker.txt",
+          "sha256": "4815547772613cd151e390cadc5dd40443961f93b37f8934636002d6e69ead20"
+        },
+        {
+          "path": "$STATE\\metadata\\library\\7b\\7b0d957f726f60a7858f34982bcad9dc\\marker.txt",
+          "sha256": "4815547772613cd151e390cadc5dd40443961f93b37f8934636002d6e69ead20"
+        }
+      ],
+      "parentChildrenCleared": false,
+      "parentUserDataCleared": false,
+      "oldLookupName": "Old version"
+    },
+    {
+      "name": "duplicate-part-paths",
+      "exception": null,
+      "liveOwner": {
+        "id": "98c00000-0000-0000-0000-000000000001",
+        "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+        "name": "Updated owner",
+        "path": "$STATE\\media\\primary.mkv",
+        "parentId": "98c00000-0000-0000-0000-000000000002",
+        "ownerId": "00000000-0000-0000-0000-000000000000",
+        "primaryVersionId": null,
+        "mixed": true,
+        "locked": false,
+        "productionYear": null,
+        "size": null,
+        "runTimeTicks": null,
+        "dateCreated": "0001-01-01T00:00:00.0000000Z",
+        "dateModified": "0001-01-01T00:00:00.0000000Z",
+        "dateLastSavedSet": false,
+        "videoType": "VideoFile",
+        "extraType": null,
+        "parts": [
+          "$STATE\\media\\part 2025.mkv",
+          "$STATE\\media\\part 2025.mkv"
+        ],
+        "alternates": [],
+        "genres": [
+          "Owner genre"
+        ],
+        "overview": "Owner overview"
+      },
+      "calls": [
+        {
+          "action": "resolve",
+          "path": "$STATE\\media\\part 2025.mkv"
+        },
+        {
+          "action": "save",
+          "items": [
+            {
+              "id": "6d846e43-2285-2d18-6b61-4202b20ada71",
+              "type": "MediaBrowser.Controller.Entities.Video",
+              "name": "part",
+              "path": "$STATE\\media\\part 2025.mkv",
+              "parentId": "00000000-0000-0000-0000-000000000000",
+              "ownerId": "98c00000-0000-0000-0000-000000000001",
+              "primaryVersionId": null,
+              "mixed": true,
+              "locked": false,
+              "productionYear": 2025,
+              "size": null,
+              "runTimeTicks": null,
+              "dateCreated": "0001-01-01T00:00:00.0000000Z",
+              "dateModified": "0001-01-01T00:00:00.0000000Z",
+              "dateLastSavedSet": false,
+              "videoType": "VideoFile",
+              "extraType": null,
+              "parts": [],
+              "alternates": [],
+              "genres": [],
+              "overview": null
+            }
+          ],
+          "cancellable": false
+        },
+        {
+          "action": "event",
+          "kind": "added",
+          "id": "6d846e43-2285-2d18-6b61-4202b20ada71"
+        },
+        {
+          "action": "refresh",
+          "item": {
+            "id": "6d846e43-2285-2d18-6b61-4202b20ada71",
+            "type": "MediaBrowser.Controller.Entities.Video",
+            "name": "part",
+            "path": "$STATE\\media\\part 2025.mkv",
+            "parentId": "00000000-0000-0000-0000-000000000000",
+            "ownerId": "98c00000-0000-0000-0000-000000000001",
+            "primaryVersionId": null,
+            "mixed": true,
+            "locked": false,
+            "productionYear": 2025,
+            "size": null,
+            "runTimeTicks": null,
+            "dateCreated": "0001-01-01T00:00:00.0000000Z",
+            "dateModified": "0001-01-01T00:00:00.0000000Z",
+            "dateLastSavedSet": false,
+            "videoType": "VideoFile",
+            "extraType": null,
+            "parts": [],
+            "alternates": [],
+            "genres": [
+              "Owner genre"
+            ],
+            "overview": "Owner overview"
+          },
+          "forceSave": true,
+          "hasSearchResult": false,
+          "cancellationRequested": false
+        },
+        {
+          "action": "refresh",
+          "item": {
+            "id": "6d846e43-2285-2d18-6b61-4202b20ada71",
+            "type": "MediaBrowser.Controller.Entities.Video",
+            "name": "part",
+            "path": "$STATE\\media\\part 2025.mkv",
+            "parentId": "00000000-0000-0000-0000-000000000000",
+            "ownerId": "98c00000-0000-0000-0000-000000000001",
+            "primaryVersionId": null,
+            "mixed": true,
+            "locked": false,
+            "productionYear": 2025,
+            "size": null,
+            "runTimeTicks": null,
+            "dateCreated": "0001-01-01T00:00:00.0000000Z",
+            "dateModified": "0001-01-01T00:00:00.0000000Z",
+            "dateLastSavedSet": false,
+            "videoType": "VideoFile",
+            "extraType": null,
+            "parts": [],
+            "alternates": [],
+            "genres": [
+              "Owner genre"
+            ],
+            "overview": "Owner overview"
+          },
+          "forceSave": false,
+          "hasSearchResult": false,
+          "cancellationRequested": false
+        },
+        {
+          "action": "refresh",
+          "item": {
+            "id": "98c00000-0000-0000-0000-000000000001",
+            "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+            "name": "Updated owner",
+            "path": "$STATE\\media\\primary.mkv",
+            "parentId": "98c00000-0000-0000-0000-000000000002",
+            "ownerId": "00000000-0000-0000-0000-000000000000",
+            "primaryVersionId": null,
+            "mixed": true,
+            "locked": false,
+            "productionYear": null,
+            "size": null,
+            "runTimeTicks": null,
+            "dateCreated": "0001-01-01T00:00:00.0000000Z",
+            "dateModified": "0001-01-01T00:00:00.0000000Z",
+            "dateLastSavedSet": false,
+            "videoType": "VideoFile",
+            "extraType": null,
+            "parts": [
+              "$STATE\\media\\part 2025.mkv",
+              "$STATE\\media\\part 2025.mkv"
+            ],
+            "alternates": [],
+            "genres": [
+              "Owner genre"
+            ],
+            "overview": "Owner overview"
+          },
+          "forceSave": false,
+          "hasSearchResult": true,
+          "cancellationRequested": false
+        }
+      ],
+      "rows": [
+        {
+          "id": "6d846e43-2285-2d18-6b61-4202b20ada71",
+          "type": "MediaBrowser.Controller.Entities.Video",
+          "name": "part",
+          "path": "$STATE\\media\\part 2025.mkv",
+          "parentId": null,
+          "topParentId": null,
+          "ownerId": "98c00000-0000-0000-0000-000000000001",
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "mixed": true,
+          "locked": false,
+          "productionYear": 2025,
+          "size": null,
+          "runTimeTicks": null,
+          "dateCreated": null,
+          "dateModified": null,
+          "dateLastSavedSet": false,
+          "data": {
+            "AdditionalParts": [],
+            "LocalAlternateVersions": [],
+            "LinkedAlternateVersions": [],
+            "SubtitleFiles": [],
+            "AudioFiles": [],
+            "HasSubtitles": false,
+            "IsPlaceHolder": false,
+            "VideoType": "VideoFile",
+            "IsHD": false,
+            "IsShortcut": false,
+            "Width": 0,
+            "Height": 0,
+            "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+            "RemoteTrailers": []
+          }
+        },
+        {
+          "id": "98c00000-0000-0000-0000-000000000001",
+          "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+          "name": "Stored owner",
+          "path": "$STATE\\media\\primary.mkv",
+          "parentId": "98c00000-0000-0000-0000-000000000002",
+          "topParentId": null,
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "mixed": true,
+          "locked": false,
+          "productionYear": null,
+          "size": null,
+          "runTimeTicks": null,
+          "dateCreated": null,
+          "dateModified": null,
+          "dateLastSavedSet": false,
+          "data": {
+            "AdditionalParts": [],
+            "LocalAlternateVersions": [],
+            "LinkedAlternateVersions": [],
+            "SubtitleFiles": [],
+            "AudioFiles": [],
+            "HasSubtitles": false,
+            "IsPlaceHolder": false,
+            "VideoType": "VideoFile",
+            "IsHD": false,
+            "IsShortcut": false,
+            "Width": 0,
+            "Height": 0,
+            "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+            "RemoteTrailers": []
+          }
+        },
+        {
+          "id": "98c00000-0000-0000-0000-000000000002",
+          "type": "MediaBrowser.Controller.Entities.Folder",
+          "name": "Parent",
+          "path": "$STATE\\media",
+          "parentId": null,
+          "topParentId": null,
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "mixed": false,
+          "locked": false,
+          "productionYear": null,
+          "size": null,
+          "runTimeTicks": null,
+          "dateCreated": null,
+          "dateModified": null,
+          "dateLastSavedSet": false,
+          "data": {
+            "IsRoot": false,
+            "IsHD": false,
+            "IsShortcut": false,
+            "Width": 0,
+            "Height": 0,
+            "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+            "RemoteTrailers": []
+          }
+        }
+      ],
+      "links": [],
+      "files": [
+        {
+          "path": "$STATE\\media\\part 2025.mkv",
+          "sha256": "20d135778ff4bce6a02da7101c78d3c81af427a9134fe9a68cb2e83983069438"
+        },
+        {
+          "path": "$STATE\\media\\primary.mkv",
+          "sha256": "efc6fc578b2bde66195463684cd6933af46c4856a14606d7a14bf1a481ce57b5"
+        }
+      ],
+      "parentChildrenCleared": true,
+      "parentUserDataCleared": true,
+      "oldLookupName": null
+    },
+    {
+      "name": "duplicate-alternate-paths",
+      "exception": null,
+      "liveOwner": {
+        "id": "98c00000-0000-0000-0000-000000000001",
+        "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+        "name": "Updated owner",
+        "path": "$STATE\\media\\primary.mkv",
+        "parentId": "98c00000-0000-0000-0000-000000000002",
+        "ownerId": "00000000-0000-0000-0000-000000000000",
+        "primaryVersionId": null,
+        "mixed": true,
+        "locked": false,
+        "productionYear": null,
+        "size": null,
+        "runTimeTicks": null,
+        "dateCreated": "0001-01-01T00:00:00.0000000Z",
+        "dateModified": "0001-01-01T00:00:00.0000000Z",
+        "dateLastSavedSet": false,
+        "videoType": "VideoFile",
+        "extraType": null,
+        "parts": [],
+        "alternates": [
+          "$STATE\\media\\part 2025.mkv",
+          "$STATE\\media\\part 2025.mkv"
+        ],
+        "genres": [
+          "Owner genre"
+        ],
+        "overview": "Owner overview"
+      },
+      "calls": [
+        {
+          "action": "resolve",
+          "path": "$STATE\\media\\part 2025.mkv"
+        },
+        {
+          "action": "save",
+          "items": [
+            {
+              "id": "7b0d957f-726f-60a7-858f-34982bcad9dc",
+              "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+              "name": "part",
+              "path": "$STATE\\media\\part 2025.mkv",
+              "parentId": "98c00000-0000-0000-0000-000000000002",
+              "ownerId": "98c00000-0000-0000-0000-000000000001",
+              "primaryVersionId": "98c00000-0000-0000-0000-000000000001",
+              "mixed": true,
+              "locked": false,
+              "productionYear": 2025,
+              "size": 16,
+              "runTimeTicks": null,
+              "dateCreated": "2025-01-02T03:04:05.0000000Z",
+              "dateModified": "2025-01-03T04:05:06.0000000Z",
+              "dateLastSavedSet": false,
+              "videoType": "VideoFile",
+              "extraType": null,
+              "parts": [],
+              "alternates": [],
+              "genres": [],
+              "overview": null
+            }
+          ],
+          "cancellable": false
+        },
+        {
+          "action": "event",
+          "kind": "added",
+          "id": "7b0d957f-726f-60a7-858f-34982bcad9dc"
+        },
+        {
+          "action": "refresh",
+          "item": {
+            "id": "7b0d957f-726f-60a7-858f-34982bcad9dc",
+            "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+            "name": "part",
+            "path": "$STATE\\media\\part 2025.mkv",
+            "parentId": "98c00000-0000-0000-0000-000000000002",
+            "ownerId": "98c00000-0000-0000-0000-000000000001",
+            "primaryVersionId": "98c00000-0000-0000-0000-000000000001",
+            "mixed": true,
+            "locked": false,
+            "productionYear": 2025,
+            "size": 16,
+            "runTimeTicks": null,
+            "dateCreated": "2025-01-02T03:04:05.0000000Z",
+            "dateModified": "2025-01-03T04:05:06.0000000Z",
+            "dateLastSavedSet": false,
+            "videoType": "VideoFile",
+            "extraType": null,
+            "parts": [],
+            "alternates": [],
+            "genres": [],
+            "overview": null
+          },
+          "forceSave": false,
+          "hasSearchResult": false,
+          "cancellationRequested": false
+        },
+        {
+          "action": "refresh",
+          "item": {
+            "id": "7b0d957f-726f-60a7-858f-34982bcad9dc",
+            "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+            "name": "part",
+            "path": "$STATE\\media\\part 2025.mkv",
+            "parentId": "98c00000-0000-0000-0000-000000000002",
+            "ownerId": "98c00000-0000-0000-0000-000000000001",
+            "primaryVersionId": "98c00000-0000-0000-0000-000000000001",
+            "mixed": true,
+            "locked": false,
+            "productionYear": 2025,
+            "size": 16,
+            "runTimeTicks": null,
+            "dateCreated": "2025-01-02T03:04:05.0000000Z",
+            "dateModified": "2025-01-03T04:05:06.0000000Z",
+            "dateLastSavedSet": false,
+            "videoType": "VideoFile",
+            "extraType": null,
+            "parts": [],
+            "alternates": [],
+            "genres": [],
+            "overview": null
+          },
+          "forceSave": false,
+          "hasSearchResult": false,
+          "cancellationRequested": false
+        },
+        {
+          "action": "refresh",
+          "item": {
+            "id": "98c00000-0000-0000-0000-000000000001",
+            "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+            "name": "Updated owner",
+            "path": "$STATE\\media\\primary.mkv",
+            "parentId": "98c00000-0000-0000-0000-000000000002",
+            "ownerId": "00000000-0000-0000-0000-000000000000",
+            "primaryVersionId": null,
+            "mixed": true,
+            "locked": false,
+            "productionYear": null,
+            "size": null,
+            "runTimeTicks": null,
+            "dateCreated": "0001-01-01T00:00:00.0000000Z",
+            "dateModified": "0001-01-01T00:00:00.0000000Z",
+            "dateLastSavedSet": false,
+            "videoType": "VideoFile",
+            "extraType": null,
+            "parts": [],
+            "alternates": [
+              "$STATE\\media\\part 2025.mkv",
+              "$STATE\\media\\part 2025.mkv"
+            ],
+            "genres": [
+              "Owner genre"
+            ],
+            "overview": "Owner overview"
+          },
+          "forceSave": true,
+          "hasSearchResult": true,
+          "cancellationRequested": false
+        }
+      ],
+      "rows": [
+        {
+          "id": "7b0d957f-726f-60a7-858f-34982bcad9dc",
+          "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+          "name": "part",
+          "path": "$STATE\\media\\part 2025.mkv",
+          "parentId": "98c00000-0000-0000-0000-000000000002",
+          "topParentId": null,
+          "ownerId": "98c00000-0000-0000-0000-000000000001",
+          "primaryVersionId": "98c00000-0000-0000-0000-000000000001",
+          "presentationUniqueKey": "98c00000000000000000000000000001",
+          "mixed": true,
+          "locked": false,
+          "productionYear": 2025,
+          "size": 16,
+          "runTimeTicks": null,
+          "dateCreated": "2025-01-02T03:04:05.0000000Z",
+          "dateModified": "2025-01-03T04:05:06.0000000Z",
+          "dateLastSavedSet": false,
+          "data": {
+            "AdditionalParts": [],
+            "LocalAlternateVersions": [],
+            "LinkedAlternateVersions": [],
+            "SubtitleFiles": [],
+            "AudioFiles": [],
+            "HasSubtitles": false,
+            "IsPlaceHolder": false,
+            "VideoType": "VideoFile",
+            "Size": 16,
+            "IsHD": false,
+            "IsShortcut": false,
+            "Width": 0,
+            "Height": 0,
+            "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+            "RemoteTrailers": []
+          }
+        },
+        {
+          "id": "98c00000-0000-0000-0000-000000000001",
+          "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+          "name": "Stored owner",
+          "path": "$STATE\\media\\primary.mkv",
+          "parentId": "98c00000-0000-0000-0000-000000000002",
+          "topParentId": null,
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "mixed": true,
+          "locked": false,
+          "productionYear": null,
+          "size": null,
+          "runTimeTicks": null,
+          "dateCreated": null,
+          "dateModified": null,
+          "dateLastSavedSet": false,
+          "data": {
+            "AdditionalParts": [],
+            "LocalAlternateVersions": [],
+            "LinkedAlternateVersions": [],
+            "SubtitleFiles": [],
+            "AudioFiles": [],
+            "HasSubtitles": false,
+            "IsPlaceHolder": false,
+            "VideoType": "VideoFile",
+            "IsHD": false,
+            "IsShortcut": false,
+            "Width": 0,
+            "Height": 0,
+            "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+            "RemoteTrailers": []
+          }
+        },
+        {
+          "id": "98c00000-0000-0000-0000-000000000002",
+          "type": "MediaBrowser.Controller.Entities.Folder",
+          "name": "Parent",
+          "path": "$STATE\\media",
+          "parentId": null,
+          "topParentId": null,
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "mixed": false,
+          "locked": false,
+          "productionYear": null,
+          "size": null,
+          "runTimeTicks": null,
+          "dateCreated": null,
+          "dateModified": null,
+          "dateLastSavedSet": false,
+          "data": {
+            "IsRoot": false,
+            "IsHD": false,
+            "IsShortcut": false,
+            "Width": 0,
+            "Height": 0,
+            "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+            "RemoteTrailers": []
+          }
+        }
+      ],
+      "links": [
+        {
+          "parentId": "98c00000-0000-0000-0000-000000000001",
+          "childId": "7b0d957f-726f-60a7-858f-34982bcad9dc",
+          "childType": 2,
+          "sortOrder": 0
+        }
+      ],
+      "files": [
+        {
+          "path": "$STATE\\media\\part 2025.mkv",
+          "sha256": "20d135778ff4bce6a02da7101c78d3c81af427a9134fe9a68cb2e83983069438"
+        },
+        {
+          "path": "$STATE\\media\\primary.mkv",
+          "sha256": "efc6fc578b2bde66195463684cd6933af46c4856a14606d7a14bf1a481ce57b5"
+        }
+      ],
+      "parentChildrenCleared": true,
+      "parentUserDataCleared": true,
+      "oldLookupName": null
+    },
+    {
+      "name": "cancelled-part-create-fails",
+      "exception": "OperationCanceledException",
+      "liveOwner": {
+        "id": "98c00000-0000-0000-0000-000000000001",
+        "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+        "name": "Updated owner",
+        "path": "$STATE\\media\\primary.mkv",
+        "parentId": "98c00000-0000-0000-0000-000000000002",
+        "ownerId": "00000000-0000-0000-0000-000000000000",
+        "primaryVersionId": null,
+        "mixed": true,
+        "locked": false,
+        "productionYear": null,
+        "size": null,
+        "runTimeTicks": null,
+        "dateCreated": "0001-01-01T00:00:00.0000000Z",
+        "dateModified": "0001-01-01T00:00:00.0000000Z",
+        "dateLastSavedSet": false,
+        "videoType": "VideoFile",
+        "extraType": null,
+        "parts": [
+          "$STATE\\media\\part 2025.mkv"
+        ],
+        "alternates": [],
+        "genres": [
+          "Owner genre"
+        ],
+        "overview": "Owner overview"
+      },
+      "calls": [
+        {
+          "action": "resolve",
+          "path": "$STATE\\media\\part 2025.mkv"
+        },
+        {
+          "action": "save",
+          "items": [
+            {
+              "id": "6d846e43-2285-2d18-6b61-4202b20ada71",
+              "type": "MediaBrowser.Controller.Entities.Video",
+              "name": "part",
+              "path": "$STATE\\media\\part 2025.mkv",
+              "parentId": "00000000-0000-0000-0000-000000000000",
+              "ownerId": "98c00000-0000-0000-0000-000000000001",
+              "primaryVersionId": null,
+              "mixed": true,
+              "locked": false,
+              "productionYear": 2025,
+              "size": null,
+              "runTimeTicks": null,
+              "dateCreated": "0001-01-01T00:00:00.0000000Z",
+              "dateModified": "0001-01-01T00:00:00.0000000Z",
+              "dateLastSavedSet": false,
+              "videoType": "VideoFile",
+              "extraType": null,
+              "parts": [],
+              "alternates": [],
+              "genres": [],
+              "overview": null
+            }
+          ],
+          "cancellable": false
+        },
+        {
+          "action": "refresh",
+          "item": {
+            "id": "98c00000-0000-0000-0000-000000000001",
+            "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+            "name": "Updated owner",
+            "path": "$STATE\\media\\primary.mkv",
+            "parentId": "98c00000-0000-0000-0000-000000000002",
+            "ownerId": "00000000-0000-0000-0000-000000000000",
+            "primaryVersionId": null,
+            "mixed": true,
+            "locked": false,
+            "productionYear": null,
+            "size": null,
+            "runTimeTicks": null,
+            "dateCreated": "0001-01-01T00:00:00.0000000Z",
+            "dateModified": "0001-01-01T00:00:00.0000000Z",
+            "dateLastSavedSet": false,
+            "videoType": "VideoFile",
+            "extraType": null,
+            "parts": [
+              "$STATE\\media\\part 2025.mkv"
+            ],
+            "alternates": [],
+            "genres": [
+              "Owner genre"
+            ],
+            "overview": "Owner overview"
+          },
+          "forceSave": false,
+          "hasSearchResult": true,
+          "cancellationRequested": true
+        }
+      ],
+      "rows": [
+        {
+          "id": "98c00000-0000-0000-0000-000000000001",
+          "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+          "name": "Stored owner",
+          "path": "$STATE\\media\\primary.mkv",
+          "parentId": "98c00000-0000-0000-0000-000000000002",
+          "topParentId": null,
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "mixed": true,
+          "locked": false,
+          "productionYear": null,
+          "size": null,
+          "runTimeTicks": null,
+          "dateCreated": null,
+          "dateModified": null,
+          "dateLastSavedSet": false,
+          "data": {
+            "AdditionalParts": [],
+            "LocalAlternateVersions": [],
+            "LinkedAlternateVersions": [],
+            "SubtitleFiles": [],
+            "AudioFiles": [],
+            "HasSubtitles": false,
+            "IsPlaceHolder": false,
+            "VideoType": "VideoFile",
+            "IsHD": false,
+            "IsShortcut": false,
+            "Width": 0,
+            "Height": 0,
+            "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+            "RemoteTrailers": []
+          }
+        },
+        {
+          "id": "98c00000-0000-0000-0000-000000000002",
+          "type": "MediaBrowser.Controller.Entities.Folder",
+          "name": "Parent",
+          "path": "$STATE\\media",
+          "parentId": null,
+          "topParentId": null,
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "mixed": false,
+          "locked": false,
+          "productionYear": null,
+          "size": null,
+          "runTimeTicks": null,
+          "dateCreated": null,
+          "dateModified": null,
+          "dateLastSavedSet": false,
+          "data": {
+            "IsRoot": false,
+            "IsHD": false,
+            "IsShortcut": false,
+            "Width": 0,
+            "Height": 0,
+            "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+            "RemoteTrailers": []
+          }
+        }
+      ],
+      "links": [],
+      "files": [
+        {
+          "path": "$STATE\\media\\part 2025.mkv",
+          "sha256": "20d135778ff4bce6a02da7101c78d3c81af427a9134fe9a68cb2e83983069438"
+        },
+        {
+          "path": "$STATE\\media\\primary.mkv",
+          "sha256": "efc6fc578b2bde66195463684cd6933af46c4856a14606d7a14bf1a481ce57b5"
+        }
+      ],
+      "parentChildrenCleared": false,
+      "parentUserDataCleared": false,
+      "oldLookupName": null
+    }
+  ],
+  "assemblies": [
+    {
+      "name": "MediaBrowser.Controller",
+      "sha256": "051c588a8e85a3a7cdde8dc3d9a1112217fd7e973a86fe2ff90cf765bedb75a8"
+    },
+    {
+      "name": "Emby.Server.Implementations",
+      "sha256": "8d369435646570958505c58b9cb17da169855dabc105d0e933524361e9b7b1c8"
+    },
+    {
+      "name": "Jellyfin.Server.Implementations",
+      "sha256": "4da187af02503e82135eb192351d01490484e8ebc8c653d849f7e2900a177672"
+    }
+  ],
+  "scope": "Actual frozen BaseItem.RefreshMetadata/Video.RefreshedOwnedItems, ordinary file resolution/coercion, LibraryManager.CreateItem/DeleteItem/fast wrong-type cleanup and ItemPersistenceService/EF SQLite over actual files. Records independent create/delete, cancellation and SQL boundaries, selected columns, complete stored Data, provider dispatch, cache and events. Single-item provider performs no save, collection membership, savers, media-source list and external-file dispatch are controls. Mixed owners skip FindExtras. No complete scanner, network, provider save or release acceptance."
+}

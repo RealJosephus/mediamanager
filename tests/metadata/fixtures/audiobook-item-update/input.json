@@ -1,0 +1,52 @@
+[
+  {
+    "name": "AudioBook-empty",
+    "type": "AudioBook",
+    "json": "{}"
+  },
+  {
+    "name": "AudioBook-artists",
+    "type": "AudioBook",
+    "json": "{\"Name\":\"Book\",\"Album\":\"Series\",\"ArtistItems\":[{\"Name\":\" Artist \"},{\"Name\":\"ARTIST\"},{\"Name\":\"Second\"}],\"AlbumArtists\":[{\"Name\":\" Album artist \"},{\"Name\":\"ALBUM ARTIST\"}]}"
+  },
+  {
+    "name": "AudioBook-null",
+    "type": "AudioBook",
+    "json": "{\"Name\":\"Book\",\"ArtistItems\":null,\"AlbumArtists\":null}"
+  },
+  {
+    "name": "AudioBook-clear",
+    "type": "AudioBook",
+    "json": "{\"Name\":\"Book\",\"ArtistItems\":[],\"AlbumArtists\":[]}"
+  },
+  {
+    "name": "AudioBook-null-element-name",
+    "type": "AudioBook",
+    "json": "{\"Name\":\"Book\",\"ArtistItems\":[{\"Name\":null},{\"Name\":\" Artist \"}],\"AlbumArtists\":[{\"Name\":null},{\"Name\":\" Album artist \"}]}"
+  },
+  {
+    "name": "Book-empty",
+    "type": "Book",
+    "json": "{}"
+  },
+  {
+    "name": "Book-artists",
+    "type": "Book",
+    "json": "{\"Name\":\"Book\",\"Album\":\"Series\",\"ArtistItems\":[{\"Name\":\" Artist \"},{\"Name\":\"ARTIST\"},{\"Name\":\"Second\"}],\"AlbumArtists\":[{\"Name\":\" Album artist \"},{\"Name\":\"ALBUM ARTIST\"}]}"
+  },
+  {
+    "name": "Book-null",
+    "type": "Book",
+    "json": "{\"Name\":\"Book\",\"ArtistItems\":null,\"AlbumArtists\":null}"
+  },
+  {
+    "name": "Book-clear",
+    "type": "Book",
+    "json": "{\"Name\":\"Book\",\"ArtistItems\":[],\"AlbumArtists\":[]}"
+  },
+  {
+    "name": "Book-null-element-name",
+    "type": "Book",
+    "json": "{\"Name\":\"Book\",\"ArtistItems\":[{\"Name\":null},{\"Name\":\" Artist \"}],\"AlbumArtists\":[{\"Name\":null},{\"Name\":\" Album artist \"}]}"
+  }
+]

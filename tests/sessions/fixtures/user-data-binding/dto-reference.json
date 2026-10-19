@@ -1,0 +1,4589 @@
+{
+  "environment": {
+    "platform": "win32",
+    "timeZone": "Asia/Shanghai"
+  },
+  "cases": [
+    {
+      "name": "empty-object",
+      "source": "{}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "null-root",
+      "source": "null",
+      "expected": {
+        "value": null
+      }
+    },
+    {
+      "name": "array-root",
+      "source": "[]",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to MediaBrowser.Model.Dto.UpdateUserItemDataDto. Path: $ | LineNumber: 0 | BytePositionInLine: 1.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 1
+      }
+    },
+    {
+      "name": "number-root",
+      "source": "1",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to MediaBrowser.Model.Dto.UpdateUserItemDataDto. Path: $ | LineNumber: 0 | BytePositionInLine: 1.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 1
+      }
+    },
+    {
+      "name": "string-root",
+      "source": "\"text\"",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to MediaBrowser.Model.Dto.UpdateUserItemDataDto. Path: $ | LineNumber: 0 | BytePositionInLine: 6.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 6
+      }
+    },
+    {
+      "name": "unknown-fields",
+      "source": "{\"Unknown\":{\"PlayCount\":false},\"Other\":[null,{}]}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "all-fields",
+      "source": "{\"Rating\":8.5,\"PlayedPercentage\":15.25,\"UnplayedItemCount\":3,\"PlaybackPositionTicks\":9007199254740993,\"PlayCount\":2,\"IsFavorite\":true,\"Likes\":false,\"LastPlayedDate\":\"2026-09-27T12:34:56.1234567+05:30\",\"Played\":true,\"Key\":1e3,\"ItemId\":false}",
+      "expected": {
+        "value": {
+          "Rating": 8.5,
+          "PlayedPercentage": 15.25,
+          "UnplayedItemCount": 3,
+          "PlaybackPositionTicks": {
+            "$integer": "9007199254740993"
+          },
+          "PlayCount": 2,
+          "IsFavorite": true,
+          "Likes": false,
+          "LastPlayedDate": {
+            "ticks": "639261182961234567",
+            "kind": "Local",
+            "utcTicks": "639260894961234567",
+            "stored": "2026-09-27 07:04:56.1234567"
+          },
+          "Played": true,
+          "Key": "1e3",
+          "ItemId": "false"
+        }
+      }
+    },
+    {
+      "name": "duplicate-invalid-first",
+      "source": "{\"PlayCount\":false,\"playCount\":1}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Int32. Path: $ | LineNumber: 0 | BytePositionInLine: 5.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 5
+      }
+    },
+    {
+      "name": "duplicate-valid-last",
+      "source": "{\"PlayCount\":1,\"playCount\":2}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": 2,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "escaped-property",
+      "source": "{\"Play\\u0043ount\":\"3\"}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": 3,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "utf8-error",
+      "source": "{\"ignored\":\"中文\",\"PlayCount\":false}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Int32. Path: $ | LineNumber: 0 | BytePositionInLine: 5.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 5
+      }
+    },
+    {
+      "name": "Rating-0",
+      "source": "{\"Rating\":null}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "Rating-1",
+      "source": "{\"Rating\":\"\"}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "Rating-2",
+      "source": "{\"Rating\":\" \"}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Double. Path: $ | LineNumber: 0 | BytePositionInLine: 3.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 3
+      }
+    },
+    {
+      "name": "Rating-3",
+      "source": "{\"Rating\":true}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Double. Path: $ | LineNumber: 0 | BytePositionInLine: 4.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 4
+      }
+    },
+    {
+      "name": "Rating-4",
+      "source": "{\"Rating\":false}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Double. Path: $ | LineNumber: 0 | BytePositionInLine: 5.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 5
+      }
+    },
+    {
+      "name": "Rating-5",
+      "source": "{\"Rating\":0}",
+      "expected": {
+        "value": {
+          "Rating": 0,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "Rating-6",
+      "source": "{\"Rating\":1}",
+      "expected": {
+        "value": {
+          "Rating": 1,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "Rating-7",
+      "source": "{\"Rating\":-1}",
+      "expected": {
+        "value": {
+          "Rating": -1,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "Rating-8",
+      "source": "{\"Rating\":1.5}",
+      "expected": {
+        "value": {
+          "Rating": 1.5,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "Rating-9",
+      "source": "{\"Rating\":1e2}",
+      "expected": {
+        "value": {
+          "Rating": 100,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "Rating-10",
+      "source": "{\"Rating\":\"2\"}",
+      "expected": {
+        "value": {
+          "Rating": 2,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "Rating-11",
+      "source": "{\"Rating\":\"+2\"}",
+      "expected": {
+        "value": {
+          "Rating": 2,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "Rating-12",
+      "source": "{\"Rating\":\" 2 \"}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Double. Path: $ | LineNumber: 0 | BytePositionInLine: 5.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 5
+      }
+    },
+    {
+      "name": "Rating-13",
+      "source": "{\"Rating\":\"true\"}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Double. Path: $ | LineNumber: 0 | BytePositionInLine: 6.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 6
+      }
+    },
+    {
+      "name": "Rating-14",
+      "source": "{\"Rating\":\"NaN\"}",
+      "expected": {
+        "value": {
+          "Rating": {
+            "$float": "NaN"
+          },
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "Rating-15",
+      "source": "{\"Rating\":\"Infinity\"}",
+      "expected": {
+        "value": {
+          "Rating": {
+            "$float": "Infinity"
+          },
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "Rating-16",
+      "source": "{\"Rating\":{}}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Double. Path: $ | LineNumber: 0 | BytePositionInLine: 1.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 1
+      }
+    },
+    {
+      "name": "Rating-17",
+      "source": "{\"Rating\":[]}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Double. Path: $ | LineNumber: 0 | BytePositionInLine: 1.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 1
+      }
+    },
+    {
+      "name": "PlayedPercentage-0",
+      "source": "{\"PlayedPercentage\":null}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "PlayedPercentage-1",
+      "source": "{\"PlayedPercentage\":\"\"}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "PlayedPercentage-2",
+      "source": "{\"PlayedPercentage\":\" \"}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Double. Path: $ | LineNumber: 0 | BytePositionInLine: 3.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 3
+      }
+    },
+    {
+      "name": "PlayedPercentage-3",
+      "source": "{\"PlayedPercentage\":true}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Double. Path: $ | LineNumber: 0 | BytePositionInLine: 4.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 4
+      }
+    },
+    {
+      "name": "PlayedPercentage-4",
+      "source": "{\"PlayedPercentage\":false}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Double. Path: $ | LineNumber: 0 | BytePositionInLine: 5.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 5
+      }
+    },
+    {
+      "name": "PlayedPercentage-5",
+      "source": "{\"PlayedPercentage\":0}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": 0,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "PlayedPercentage-6",
+      "source": "{\"PlayedPercentage\":1}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": 1,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "PlayedPercentage-7",
+      "source": "{\"PlayedPercentage\":-1}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": -1,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "PlayedPercentage-8",
+      "source": "{\"PlayedPercentage\":1.5}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": 1.5,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "PlayedPercentage-9",
+      "source": "{\"PlayedPercentage\":1e2}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": 100,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "PlayedPercentage-10",
+      "source": "{\"PlayedPercentage\":\"2\"}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": 2,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "PlayedPercentage-11",
+      "source": "{\"PlayedPercentage\":\"+2\"}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": 2,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "PlayedPercentage-12",
+      "source": "{\"PlayedPercentage\":\" 2 \"}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Double. Path: $ | LineNumber: 0 | BytePositionInLine: 5.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 5
+      }
+    },
+    {
+      "name": "PlayedPercentage-13",
+      "source": "{\"PlayedPercentage\":\"true\"}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Double. Path: $ | LineNumber: 0 | BytePositionInLine: 6.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 6
+      }
+    },
+    {
+      "name": "PlayedPercentage-14",
+      "source": "{\"PlayedPercentage\":\"NaN\"}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": {
+            "$float": "NaN"
+          },
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "PlayedPercentage-15",
+      "source": "{\"PlayedPercentage\":\"Infinity\"}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": {
+            "$float": "Infinity"
+          },
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "PlayedPercentage-16",
+      "source": "{\"PlayedPercentage\":{}}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Double. Path: $ | LineNumber: 0 | BytePositionInLine: 1.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 1
+      }
+    },
+    {
+      "name": "PlayedPercentage-17",
+      "source": "{\"PlayedPercentage\":[]}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Double. Path: $ | LineNumber: 0 | BytePositionInLine: 1.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 1
+      }
+    },
+    {
+      "name": "UnplayedItemCount-0",
+      "source": "{\"UnplayedItemCount\":null}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "UnplayedItemCount-1",
+      "source": "{\"UnplayedItemCount\":\"\"}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "UnplayedItemCount-2",
+      "source": "{\"UnplayedItemCount\":\" \"}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Int32. Path: $ | LineNumber: 0 | BytePositionInLine: 3.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 3
+      }
+    },
+    {
+      "name": "UnplayedItemCount-3",
+      "source": "{\"UnplayedItemCount\":true}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Int32. Path: $ | LineNumber: 0 | BytePositionInLine: 4.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 4
+      }
+    },
+    {
+      "name": "UnplayedItemCount-4",
+      "source": "{\"UnplayedItemCount\":false}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Int32. Path: $ | LineNumber: 0 | BytePositionInLine: 5.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 5
+      }
+    },
+    {
+      "name": "UnplayedItemCount-5",
+      "source": "{\"UnplayedItemCount\":0}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": 0,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "UnplayedItemCount-6",
+      "source": "{\"UnplayedItemCount\":1}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": 1,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "UnplayedItemCount-7",
+      "source": "{\"UnplayedItemCount\":-1}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": -1,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "UnplayedItemCount-8",
+      "source": "{\"UnplayedItemCount\":1.5}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Int32. Path: $ | LineNumber: 0 | BytePositionInLine: 3.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 3
+      }
+    },
+    {
+      "name": "UnplayedItemCount-9",
+      "source": "{\"UnplayedItemCount\":1e2}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Int32. Path: $ | LineNumber: 0 | BytePositionInLine: 3.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 3
+      }
+    },
+    {
+      "name": "UnplayedItemCount-10",
+      "source": "{\"UnplayedItemCount\":\"2\"}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": 2,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "UnplayedItemCount-11",
+      "source": "{\"UnplayedItemCount\":\"+2\"}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": 2,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "UnplayedItemCount-12",
+      "source": "{\"UnplayedItemCount\":\" 2 \"}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Int32. Path: $ | LineNumber: 0 | BytePositionInLine: 5.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 5
+      }
+    },
+    {
+      "name": "UnplayedItemCount-13",
+      "source": "{\"UnplayedItemCount\":\"true\"}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Int32. Path: $ | LineNumber: 0 | BytePositionInLine: 6.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 6
+      }
+    },
+    {
+      "name": "UnplayedItemCount-14",
+      "source": "{\"UnplayedItemCount\":\"NaN\"}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Int32. Path: $ | LineNumber: 0 | BytePositionInLine: 5.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 5
+      }
+    },
+    {
+      "name": "UnplayedItemCount-15",
+      "source": "{\"UnplayedItemCount\":\"Infinity\"}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Int32. Path: $ | LineNumber: 0 | BytePositionInLine: 10.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 10
+      }
+    },
+    {
+      "name": "UnplayedItemCount-16",
+      "source": "{\"UnplayedItemCount\":{}}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Int32. Path: $ | LineNumber: 0 | BytePositionInLine: 1.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 1
+      }
+    },
+    {
+      "name": "UnplayedItemCount-17",
+      "source": "{\"UnplayedItemCount\":[]}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Int32. Path: $ | LineNumber: 0 | BytePositionInLine: 1.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 1
+      }
+    },
+    {
+      "name": "PlaybackPositionTicks-0",
+      "source": "{\"PlaybackPositionTicks\":null}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "PlaybackPositionTicks-1",
+      "source": "{\"PlaybackPositionTicks\":\"\"}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "PlaybackPositionTicks-2",
+      "source": "{\"PlaybackPositionTicks\":\" \"}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Int64. Path: $ | LineNumber: 0 | BytePositionInLine: 3.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 3
+      }
+    },
+    {
+      "name": "PlaybackPositionTicks-3",
+      "source": "{\"PlaybackPositionTicks\":true}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Int64. Path: $ | LineNumber: 0 | BytePositionInLine: 4.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 4
+      }
+    },
+    {
+      "name": "PlaybackPositionTicks-4",
+      "source": "{\"PlaybackPositionTicks\":false}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Int64. Path: $ | LineNumber: 0 | BytePositionInLine: 5.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 5
+      }
+    },
+    {
+      "name": "PlaybackPositionTicks-5",
+      "source": "{\"PlaybackPositionTicks\":0}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": {
+            "$integer": "0"
+          },
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "PlaybackPositionTicks-6",
+      "source": "{\"PlaybackPositionTicks\":1}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": {
+            "$integer": "1"
+          },
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "PlaybackPositionTicks-7",
+      "source": "{\"PlaybackPositionTicks\":-1}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": {
+            "$integer": "-1"
+          },
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "PlaybackPositionTicks-8",
+      "source": "{\"PlaybackPositionTicks\":1.5}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Int64. Path: $ | LineNumber: 0 | BytePositionInLine: 3.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 3
+      }
+    },
+    {
+      "name": "PlaybackPositionTicks-9",
+      "source": "{\"PlaybackPositionTicks\":1e2}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Int64. Path: $ | LineNumber: 0 | BytePositionInLine: 3.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 3
+      }
+    },
+    {
+      "name": "PlaybackPositionTicks-10",
+      "source": "{\"PlaybackPositionTicks\":\"2\"}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": {
+            "$integer": "2"
+          },
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "PlaybackPositionTicks-11",
+      "source": "{\"PlaybackPositionTicks\":\"+2\"}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": {
+            "$integer": "2"
+          },
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "PlaybackPositionTicks-12",
+      "source": "{\"PlaybackPositionTicks\":\" 2 \"}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Int64. Path: $ | LineNumber: 0 | BytePositionInLine: 5.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 5
+      }
+    },
+    {
+      "name": "PlaybackPositionTicks-13",
+      "source": "{\"PlaybackPositionTicks\":\"true\"}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Int64. Path: $ | LineNumber: 0 | BytePositionInLine: 6.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 6
+      }
+    },
+    {
+      "name": "PlaybackPositionTicks-14",
+      "source": "{\"PlaybackPositionTicks\":\"NaN\"}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Int64. Path: $ | LineNumber: 0 | BytePositionInLine: 5.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 5
+      }
+    },
+    {
+      "name": "PlaybackPositionTicks-15",
+      "source": "{\"PlaybackPositionTicks\":\"Infinity\"}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Int64. Path: $ | LineNumber: 0 | BytePositionInLine: 10.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 10
+      }
+    },
+    {
+      "name": "PlaybackPositionTicks-16",
+      "source": "{\"PlaybackPositionTicks\":{}}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Int64. Path: $ | LineNumber: 0 | BytePositionInLine: 1.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 1
+      }
+    },
+    {
+      "name": "PlaybackPositionTicks-17",
+      "source": "{\"PlaybackPositionTicks\":[]}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Int64. Path: $ | LineNumber: 0 | BytePositionInLine: 1.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 1
+      }
+    },
+    {
+      "name": "PlayCount-0",
+      "source": "{\"PlayCount\":null}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "PlayCount-1",
+      "source": "{\"PlayCount\":\"\"}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "PlayCount-2",
+      "source": "{\"PlayCount\":\" \"}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Int32. Path: $ | LineNumber: 0 | BytePositionInLine: 3.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 3
+      }
+    },
+    {
+      "name": "PlayCount-3",
+      "source": "{\"PlayCount\":true}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Int32. Path: $ | LineNumber: 0 | BytePositionInLine: 4.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 4
+      }
+    },
+    {
+      "name": "PlayCount-4",
+      "source": "{\"PlayCount\":false}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Int32. Path: $ | LineNumber: 0 | BytePositionInLine: 5.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 5
+      }
+    },
+    {
+      "name": "PlayCount-5",
+      "source": "{\"PlayCount\":0}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": 0,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "PlayCount-6",
+      "source": "{\"PlayCount\":1}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": 1,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "PlayCount-7",
+      "source": "{\"PlayCount\":-1}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": -1,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "PlayCount-8",
+      "source": "{\"PlayCount\":1.5}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Int32. Path: $ | LineNumber: 0 | BytePositionInLine: 3.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 3
+      }
+    },
+    {
+      "name": "PlayCount-9",
+      "source": "{\"PlayCount\":1e2}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Int32. Path: $ | LineNumber: 0 | BytePositionInLine: 3.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 3
+      }
+    },
+    {
+      "name": "PlayCount-10",
+      "source": "{\"PlayCount\":\"2\"}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": 2,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "PlayCount-11",
+      "source": "{\"PlayCount\":\"+2\"}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": 2,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "PlayCount-12",
+      "source": "{\"PlayCount\":\" 2 \"}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Int32. Path: $ | LineNumber: 0 | BytePositionInLine: 5.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 5
+      }
+    },
+    {
+      "name": "PlayCount-13",
+      "source": "{\"PlayCount\":\"true\"}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Int32. Path: $ | LineNumber: 0 | BytePositionInLine: 6.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 6
+      }
+    },
+    {
+      "name": "PlayCount-14",
+      "source": "{\"PlayCount\":\"NaN\"}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Int32. Path: $ | LineNumber: 0 | BytePositionInLine: 5.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 5
+      }
+    },
+    {
+      "name": "PlayCount-15",
+      "source": "{\"PlayCount\":\"Infinity\"}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Int32. Path: $ | LineNumber: 0 | BytePositionInLine: 10.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 10
+      }
+    },
+    {
+      "name": "PlayCount-16",
+      "source": "{\"PlayCount\":{}}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Int32. Path: $ | LineNumber: 0 | BytePositionInLine: 1.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 1
+      }
+    },
+    {
+      "name": "PlayCount-17",
+      "source": "{\"PlayCount\":[]}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Int32. Path: $ | LineNumber: 0 | BytePositionInLine: 1.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 1
+      }
+    },
+    {
+      "name": "IsFavorite-0",
+      "source": "{\"IsFavorite\":null}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "IsFavorite-1",
+      "source": "{\"IsFavorite\":\"\"}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "IsFavorite-2",
+      "source": "{\"IsFavorite\":\" \"}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Boolean. Path: $ | LineNumber: 0 | BytePositionInLine: 3.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 3
+      }
+    },
+    {
+      "name": "IsFavorite-3",
+      "source": "{\"IsFavorite\":true}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": true,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "IsFavorite-4",
+      "source": "{\"IsFavorite\":false}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": false,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "IsFavorite-5",
+      "source": "{\"IsFavorite\":0}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Boolean. Path: $ | LineNumber: 0 | BytePositionInLine: 1.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 1
+      }
+    },
+    {
+      "name": "IsFavorite-6",
+      "source": "{\"IsFavorite\":1}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Boolean. Path: $ | LineNumber: 0 | BytePositionInLine: 1.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 1
+      }
+    },
+    {
+      "name": "IsFavorite-7",
+      "source": "{\"IsFavorite\":-1}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Boolean. Path: $ | LineNumber: 0 | BytePositionInLine: 2.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 2
+      }
+    },
+    {
+      "name": "IsFavorite-8",
+      "source": "{\"IsFavorite\":1.5}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Boolean. Path: $ | LineNumber: 0 | BytePositionInLine: 3.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 3
+      }
+    },
+    {
+      "name": "IsFavorite-9",
+      "source": "{\"IsFavorite\":1e2}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Boolean. Path: $ | LineNumber: 0 | BytePositionInLine: 3.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 3
+      }
+    },
+    {
+      "name": "IsFavorite-10",
+      "source": "{\"IsFavorite\":\"2\"}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Boolean. Path: $ | LineNumber: 0 | BytePositionInLine: 3.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 3
+      }
+    },
+    {
+      "name": "IsFavorite-11",
+      "source": "{\"IsFavorite\":\"+2\"}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Boolean. Path: $ | LineNumber: 0 | BytePositionInLine: 4.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 4
+      }
+    },
+    {
+      "name": "IsFavorite-12",
+      "source": "{\"IsFavorite\":\" 2 \"}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Boolean. Path: $ | LineNumber: 0 | BytePositionInLine: 5.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 5
+      }
+    },
+    {
+      "name": "IsFavorite-13",
+      "source": "{\"IsFavorite\":\"true\"}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Boolean. Path: $ | LineNumber: 0 | BytePositionInLine: 6.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 6
+      }
+    },
+    {
+      "name": "IsFavorite-14",
+      "source": "{\"IsFavorite\":\"NaN\"}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Boolean. Path: $ | LineNumber: 0 | BytePositionInLine: 5.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 5
+      }
+    },
+    {
+      "name": "IsFavorite-15",
+      "source": "{\"IsFavorite\":\"Infinity\"}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Boolean. Path: $ | LineNumber: 0 | BytePositionInLine: 10.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 10
+      }
+    },
+    {
+      "name": "IsFavorite-16",
+      "source": "{\"IsFavorite\":{}}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Boolean. Path: $ | LineNumber: 0 | BytePositionInLine: 1.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 1
+      }
+    },
+    {
+      "name": "IsFavorite-17",
+      "source": "{\"IsFavorite\":[]}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Boolean. Path: $ | LineNumber: 0 | BytePositionInLine: 1.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 1
+      }
+    },
+    {
+      "name": "Likes-0",
+      "source": "{\"Likes\":null}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "Likes-1",
+      "source": "{\"Likes\":\"\"}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "Likes-2",
+      "source": "{\"Likes\":\" \"}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Boolean. Path: $ | LineNumber: 0 | BytePositionInLine: 3.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 3
+      }
+    },
+    {
+      "name": "Likes-3",
+      "source": "{\"Likes\":true}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": true,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "Likes-4",
+      "source": "{\"Likes\":false}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": false,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "Likes-5",
+      "source": "{\"Likes\":0}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Boolean. Path: $ | LineNumber: 0 | BytePositionInLine: 1.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 1
+      }
+    },
+    {
+      "name": "Likes-6",
+      "source": "{\"Likes\":1}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Boolean. Path: $ | LineNumber: 0 | BytePositionInLine: 1.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 1
+      }
+    },
+    {
+      "name": "Likes-7",
+      "source": "{\"Likes\":-1}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Boolean. Path: $ | LineNumber: 0 | BytePositionInLine: 2.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 2
+      }
+    },
+    {
+      "name": "Likes-8",
+      "source": "{\"Likes\":1.5}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Boolean. Path: $ | LineNumber: 0 | BytePositionInLine: 3.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 3
+      }
+    },
+    {
+      "name": "Likes-9",
+      "source": "{\"Likes\":1e2}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Boolean. Path: $ | LineNumber: 0 | BytePositionInLine: 3.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 3
+      }
+    },
+    {
+      "name": "Likes-10",
+      "source": "{\"Likes\":\"2\"}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Boolean. Path: $ | LineNumber: 0 | BytePositionInLine: 3.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 3
+      }
+    },
+    {
+      "name": "Likes-11",
+      "source": "{\"Likes\":\"+2\"}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Boolean. Path: $ | LineNumber: 0 | BytePositionInLine: 4.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 4
+      }
+    },
+    {
+      "name": "Likes-12",
+      "source": "{\"Likes\":\" 2 \"}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Boolean. Path: $ | LineNumber: 0 | BytePositionInLine: 5.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 5
+      }
+    },
+    {
+      "name": "Likes-13",
+      "source": "{\"Likes\":\"true\"}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Boolean. Path: $ | LineNumber: 0 | BytePositionInLine: 6.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 6
+      }
+    },
+    {
+      "name": "Likes-14",
+      "source": "{\"Likes\":\"NaN\"}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Boolean. Path: $ | LineNumber: 0 | BytePositionInLine: 5.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 5
+      }
+    },
+    {
+      "name": "Likes-15",
+      "source": "{\"Likes\":\"Infinity\"}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Boolean. Path: $ | LineNumber: 0 | BytePositionInLine: 10.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 10
+      }
+    },
+    {
+      "name": "Likes-16",
+      "source": "{\"Likes\":{}}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Boolean. Path: $ | LineNumber: 0 | BytePositionInLine: 1.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 1
+      }
+    },
+    {
+      "name": "Likes-17",
+      "source": "{\"Likes\":[]}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Boolean. Path: $ | LineNumber: 0 | BytePositionInLine: 1.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 1
+      }
+    },
+    {
+      "name": "LastPlayedDate-0",
+      "source": "{\"LastPlayedDate\":null}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "LastPlayedDate-1",
+      "source": "{\"LastPlayedDate\":\"\"}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "LastPlayedDate-2",
+      "source": "{\"LastPlayedDate\":\" \"}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.DateTime. Path: $ | LineNumber: 0 | BytePositionInLine: 3.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 3
+      }
+    },
+    {
+      "name": "LastPlayedDate-3",
+      "source": "{\"LastPlayedDate\":true}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.DateTime. Path: $ | LineNumber: 0 | BytePositionInLine: 4.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 4
+      }
+    },
+    {
+      "name": "LastPlayedDate-4",
+      "source": "{\"LastPlayedDate\":false}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.DateTime. Path: $ | LineNumber: 0 | BytePositionInLine: 5.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 5
+      }
+    },
+    {
+      "name": "LastPlayedDate-5",
+      "source": "{\"LastPlayedDate\":0}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.DateTime. Path: $ | LineNumber: 0 | BytePositionInLine: 1.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 1
+      }
+    },
+    {
+      "name": "LastPlayedDate-6",
+      "source": "{\"LastPlayedDate\":1}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.DateTime. Path: $ | LineNumber: 0 | BytePositionInLine: 1.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 1
+      }
+    },
+    {
+      "name": "LastPlayedDate-7",
+      "source": "{\"LastPlayedDate\":-1}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.DateTime. Path: $ | LineNumber: 0 | BytePositionInLine: 2.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 2
+      }
+    },
+    {
+      "name": "LastPlayedDate-8",
+      "source": "{\"LastPlayedDate\":1.5}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.DateTime. Path: $ | LineNumber: 0 | BytePositionInLine: 3.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 3
+      }
+    },
+    {
+      "name": "LastPlayedDate-9",
+      "source": "{\"LastPlayedDate\":1e2}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.DateTime. Path: $ | LineNumber: 0 | BytePositionInLine: 3.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 3
+      }
+    },
+    {
+      "name": "LastPlayedDate-10",
+      "source": "{\"LastPlayedDate\":\"2\"}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.DateTime. Path: $ | LineNumber: 0 | BytePositionInLine: 3.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 3
+      }
+    },
+    {
+      "name": "LastPlayedDate-11",
+      "source": "{\"LastPlayedDate\":\"+2\"}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.DateTime. Path: $ | LineNumber: 0 | BytePositionInLine: 4.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 4
+      }
+    },
+    {
+      "name": "LastPlayedDate-12",
+      "source": "{\"LastPlayedDate\":\" 2 \"}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.DateTime. Path: $ | LineNumber: 0 | BytePositionInLine: 5.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 5
+      }
+    },
+    {
+      "name": "LastPlayedDate-13",
+      "source": "{\"LastPlayedDate\":\"true\"}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.DateTime. Path: $ | LineNumber: 0 | BytePositionInLine: 6.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 6
+      }
+    },
+    {
+      "name": "LastPlayedDate-14",
+      "source": "{\"LastPlayedDate\":\"NaN\"}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.DateTime. Path: $ | LineNumber: 0 | BytePositionInLine: 5.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 5
+      }
+    },
+    {
+      "name": "LastPlayedDate-15",
+      "source": "{\"LastPlayedDate\":\"Infinity\"}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.DateTime. Path: $ | LineNumber: 0 | BytePositionInLine: 10.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 10
+      }
+    },
+    {
+      "name": "LastPlayedDate-16",
+      "source": "{\"LastPlayedDate\":{}}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.DateTime. Path: $ | LineNumber: 0 | BytePositionInLine: 1.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 1
+      }
+    },
+    {
+      "name": "LastPlayedDate-17",
+      "source": "{\"LastPlayedDate\":[]}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.DateTime. Path: $ | LineNumber: 0 | BytePositionInLine: 1.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 1
+      }
+    },
+    {
+      "name": "Played-0",
+      "source": "{\"Played\":null}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "Played-1",
+      "source": "{\"Played\":\"\"}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "Played-2",
+      "source": "{\"Played\":\" \"}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Boolean. Path: $ | LineNumber: 0 | BytePositionInLine: 3.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 3
+      }
+    },
+    {
+      "name": "Played-3",
+      "source": "{\"Played\":true}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": true,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "Played-4",
+      "source": "{\"Played\":false}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": false,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "Played-5",
+      "source": "{\"Played\":0}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Boolean. Path: $ | LineNumber: 0 | BytePositionInLine: 1.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 1
+      }
+    },
+    {
+      "name": "Played-6",
+      "source": "{\"Played\":1}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Boolean. Path: $ | LineNumber: 0 | BytePositionInLine: 1.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 1
+      }
+    },
+    {
+      "name": "Played-7",
+      "source": "{\"Played\":-1}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Boolean. Path: $ | LineNumber: 0 | BytePositionInLine: 2.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 2
+      }
+    },
+    {
+      "name": "Played-8",
+      "source": "{\"Played\":1.5}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Boolean. Path: $ | LineNumber: 0 | BytePositionInLine: 3.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 3
+      }
+    },
+    {
+      "name": "Played-9",
+      "source": "{\"Played\":1e2}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Boolean. Path: $ | LineNumber: 0 | BytePositionInLine: 3.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 3
+      }
+    },
+    {
+      "name": "Played-10",
+      "source": "{\"Played\":\"2\"}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Boolean. Path: $ | LineNumber: 0 | BytePositionInLine: 3.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 3
+      }
+    },
+    {
+      "name": "Played-11",
+      "source": "{\"Played\":\"+2\"}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Boolean. Path: $ | LineNumber: 0 | BytePositionInLine: 4.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 4
+      }
+    },
+    {
+      "name": "Played-12",
+      "source": "{\"Played\":\" 2 \"}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Boolean. Path: $ | LineNumber: 0 | BytePositionInLine: 5.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 5
+      }
+    },
+    {
+      "name": "Played-13",
+      "source": "{\"Played\":\"true\"}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Boolean. Path: $ | LineNumber: 0 | BytePositionInLine: 6.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 6
+      }
+    },
+    {
+      "name": "Played-14",
+      "source": "{\"Played\":\"NaN\"}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Boolean. Path: $ | LineNumber: 0 | BytePositionInLine: 5.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 5
+      }
+    },
+    {
+      "name": "Played-15",
+      "source": "{\"Played\":\"Infinity\"}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Boolean. Path: $ | LineNumber: 0 | BytePositionInLine: 10.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 10
+      }
+    },
+    {
+      "name": "Played-16",
+      "source": "{\"Played\":{}}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Boolean. Path: $ | LineNumber: 0 | BytePositionInLine: 1.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 1
+      }
+    },
+    {
+      "name": "Played-17",
+      "source": "{\"Played\":[]}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Boolean. Path: $ | LineNumber: 0 | BytePositionInLine: 1.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 1
+      }
+    },
+    {
+      "name": "Key-0",
+      "source": "{\"Key\":null}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "Key-1",
+      "source": "{\"Key\":\"\"}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": "",
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "Key-2",
+      "source": "{\"Key\":\" \"}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": " ",
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "Key-3",
+      "source": "{\"Key\":true}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": "true",
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "Key-4",
+      "source": "{\"Key\":false}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": "false",
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "Key-5",
+      "source": "{\"Key\":0}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": "0",
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "Key-6",
+      "source": "{\"Key\":1}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": "1",
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "Key-7",
+      "source": "{\"Key\":-1}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": "-1",
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "Key-8",
+      "source": "{\"Key\":1.5}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": "1.5",
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "Key-9",
+      "source": "{\"Key\":1e2}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": "1e2",
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "Key-10",
+      "source": "{\"Key\":\"2\"}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": "2",
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "Key-11",
+      "source": "{\"Key\":\"+2\"}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": "+2",
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "Key-12",
+      "source": "{\"Key\":\" 2 \"}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": " 2 ",
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "Key-13",
+      "source": "{\"Key\":\"true\"}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": "true",
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "Key-14",
+      "source": "{\"Key\":\"NaN\"}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": "NaN",
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "Key-15",
+      "source": "{\"Key\":\"Infinity\"}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": "Infinity",
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "Key-16",
+      "source": "{\"Key\":{}}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The converter 'Jellyfin.Extensions.Json.Converters.JsonStringConverter' read too much or not enough. Path: $.Key | LineNumber: 0 | BytePositionInLine: 8.",
+        "Path": "$.Key",
+        "LineNumber": 0,
+        "BytePositionInLine": 8
+      }
+    },
+    {
+      "name": "Key-17",
+      "source": "{\"Key\":[]}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The converter 'Jellyfin.Extensions.Json.Converters.JsonStringConverter' read too much or not enough. Path: $.Key | LineNumber: 0 | BytePositionInLine: 8.",
+        "Path": "$.Key",
+        "LineNumber": 0,
+        "BytePositionInLine": 8
+      }
+    },
+    {
+      "name": "ItemId-0",
+      "source": "{\"ItemId\":null}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "ItemId-1",
+      "source": "{\"ItemId\":\"\"}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": ""
+        }
+      }
+    },
+    {
+      "name": "ItemId-2",
+      "source": "{\"ItemId\":\" \"}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": " "
+        }
+      }
+    },
+    {
+      "name": "ItemId-3",
+      "source": "{\"ItemId\":true}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": "true"
+        }
+      }
+    },
+    {
+      "name": "ItemId-4",
+      "source": "{\"ItemId\":false}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": "false"
+        }
+      }
+    },
+    {
+      "name": "ItemId-5",
+      "source": "{\"ItemId\":0}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": "0"
+        }
+      }
+    },
+    {
+      "name": "ItemId-6",
+      "source": "{\"ItemId\":1}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": "1"
+        }
+      }
+    },
+    {
+      "name": "ItemId-7",
+      "source": "{\"ItemId\":-1}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": "-1"
+        }
+      }
+    },
+    {
+      "name": "ItemId-8",
+      "source": "{\"ItemId\":1.5}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": "1.5"
+        }
+      }
+    },
+    {
+      "name": "ItemId-9",
+      "source": "{\"ItemId\":1e2}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": "1e2"
+        }
+      }
+    },
+    {
+      "name": "ItemId-10",
+      "source": "{\"ItemId\":\"2\"}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": "2"
+        }
+      }
+    },
+    {
+      "name": "ItemId-11",
+      "source": "{\"ItemId\":\"+2\"}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": "+2"
+        }
+      }
+    },
+    {
+      "name": "ItemId-12",
+      "source": "{\"ItemId\":\" 2 \"}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": " 2 "
+        }
+      }
+    },
+    {
+      "name": "ItemId-13",
+      "source": "{\"ItemId\":\"true\"}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": "true"
+        }
+      }
+    },
+    {
+      "name": "ItemId-14",
+      "source": "{\"ItemId\":\"NaN\"}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": "NaN"
+        }
+      }
+    },
+    {
+      "name": "ItemId-15",
+      "source": "{\"ItemId\":\"Infinity\"}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": "Infinity"
+        }
+      }
+    },
+    {
+      "name": "ItemId-16",
+      "source": "{\"ItemId\":{}}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The converter 'Jellyfin.Extensions.Json.Converters.JsonStringConverter' read too much or not enough. Path: $.ItemId | LineNumber: 0 | BytePositionInLine: 11.",
+        "Path": "$.ItemId",
+        "LineNumber": 0,
+        "BytePositionInLine": 11
+      }
+    },
+    {
+      "name": "ItemId-17",
+      "source": "{\"ItemId\":[]}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The converter 'Jellyfin.Extensions.Json.Converters.JsonStringConverter' read too much or not enough. Path: $.ItemId | LineNumber: 0 | BytePositionInLine: 11.",
+        "Path": "$.ItemId",
+        "LineNumber": 0,
+        "BytePositionInLine": 11
+      }
+    },
+    {
+      "name": "Rating-boundary-209",
+      "source": "{\"Rating\":1e309}",
+      "expected": {
+        "value": {
+          "Rating": {
+            "$float": "Infinity"
+          },
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "Rating-boundary-210",
+      "source": "{\"Rating\":-1e309}",
+      "expected": {
+        "value": {
+          "Rating": {
+            "$float": "-Infinity"
+          },
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "Rating-boundary-211",
+      "source": "{\"Rating\":\"1e309\"}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Double. Path: $ | LineNumber: 0 | BytePositionInLine: 7.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 7
+      }
+    },
+    {
+      "name": "Rating-boundary-212",
+      "source": "{\"Rating\":\"-Infinity\"}",
+      "expected": {
+        "value": {
+          "Rating": {
+            "$float": "-Infinity"
+          },
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "Rating-boundary-213",
+      "source": "{\"Rating\":\"nan\"}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Double. Path: $ | LineNumber: 0 | BytePositionInLine: 5.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 5
+      }
+    },
+    {
+      "name": "Rating-boundary-214",
+      "source": "{\"Rating\":\"+1.5\"}",
+      "expected": {
+        "value": {
+          "Rating": 1.5,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "Rating-boundary-215",
+      "source": "{\"Rating\":\"01.5\"}",
+      "expected": {
+        "value": {
+          "Rating": 1.5,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "Rating-boundary-216",
+      "source": "{\"Rating\":\"1.\"}",
+      "expected": {
+        "value": {
+          "Rating": 1,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "Rating-boundary-217",
+      "source": "{\"Rating\":\".5\"}",
+      "expected": {
+        "value": {
+          "Rating": 0.5,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "Rating-boundary-218",
+      "source": "{\"Rating\":\"0x10\"}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Double. Path: $ | LineNumber: 0 | BytePositionInLine: 6.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 6
+      }
+    },
+    {
+      "name": "Rating-boundary-219",
+      "source": "{\"Rating\":\" 1.5\"}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Double. Path: $ | LineNumber: 0 | BytePositionInLine: 6.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 6
+      }
+    },
+    {
+      "name": "Rating-boundary-220",
+      "source": "{\"Rating\":\"1.5 \"}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Double. Path: $ | LineNumber: 0 | BytePositionInLine: 6.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 6
+      }
+    },
+    {
+      "name": "Rating-boundary-221",
+      "source": "{\"Rating\":-0}",
+      "expected": {
+        "value": {
+          "Rating": 0,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "Rating-boundary-222",
+      "source": "{\"Rating\":\"-0\"}",
+      "expected": {
+        "value": {
+          "Rating": 0,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "Rating-boundary-223",
+      "source": "{\"Rating\":5e-324}",
+      "expected": {
+        "value": {
+          "Rating": 5e-324,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "Rating-boundary-224",
+      "source": "{\"Rating\":2.2250738585072014e-308}",
+      "expected": {
+        "value": {
+          "Rating": 2.2250738585072014e-308,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "Rating-boundary-225",
+      "source": "{\"Rating\":\"1e-4000\"}",
+      "expected": {
+        "value": {
+          "Rating": 0,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "PlayedPercentage-boundary-226",
+      "source": "{\"PlayedPercentage\":1e309}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": {
+            "$float": "Infinity"
+          },
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "PlayedPercentage-boundary-227",
+      "source": "{\"PlayedPercentage\":-1e309}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": {
+            "$float": "-Infinity"
+          },
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "PlayedPercentage-boundary-228",
+      "source": "{\"PlayedPercentage\":\"1e309\"}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Double. Path: $ | LineNumber: 0 | BytePositionInLine: 7.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 7
+      }
+    },
+    {
+      "name": "PlayedPercentage-boundary-229",
+      "source": "{\"PlayedPercentage\":\"-Infinity\"}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": {
+            "$float": "-Infinity"
+          },
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "PlayedPercentage-boundary-230",
+      "source": "{\"PlayedPercentage\":\"nan\"}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Double. Path: $ | LineNumber: 0 | BytePositionInLine: 5.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 5
+      }
+    },
+    {
+      "name": "PlayedPercentage-boundary-231",
+      "source": "{\"PlayedPercentage\":\"+1.5\"}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": 1.5,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "PlayedPercentage-boundary-232",
+      "source": "{\"PlayedPercentage\":\"01.5\"}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": 1.5,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "PlayedPercentage-boundary-233",
+      "source": "{\"PlayedPercentage\":\"1.\"}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": 1,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "PlayedPercentage-boundary-234",
+      "source": "{\"PlayedPercentage\":\".5\"}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": 0.5,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "PlayedPercentage-boundary-235",
+      "source": "{\"PlayedPercentage\":\"0x10\"}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Double. Path: $ | LineNumber: 0 | BytePositionInLine: 6.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 6
+      }
+    },
+    {
+      "name": "PlayedPercentage-boundary-236",
+      "source": "{\"PlayedPercentage\":\" 1.5\"}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Double. Path: $ | LineNumber: 0 | BytePositionInLine: 6.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 6
+      }
+    },
+    {
+      "name": "PlayedPercentage-boundary-237",
+      "source": "{\"PlayedPercentage\":\"1.5 \"}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Double. Path: $ | LineNumber: 0 | BytePositionInLine: 6.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 6
+      }
+    },
+    {
+      "name": "PlayedPercentage-boundary-238",
+      "source": "{\"PlayedPercentage\":-0}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": 0,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "PlayedPercentage-boundary-239",
+      "source": "{\"PlayedPercentage\":\"-0\"}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": 0,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "PlayedPercentage-boundary-240",
+      "source": "{\"PlayedPercentage\":5e-324}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": 5e-324,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "PlayedPercentage-boundary-241",
+      "source": "{\"PlayedPercentage\":2.2250738585072014e-308}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": 2.2250738585072014e-308,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "PlayedPercentage-boundary-242",
+      "source": "{\"PlayedPercentage\":\"1e-4000\"}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": 0,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "PlayCount-boundary-243",
+      "source": "{\"PlayCount\":2147483647}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": 2147483647,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "PlayCount-boundary-244",
+      "source": "{\"PlayCount\":2147483648}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Int32. Path: $ | LineNumber: 0 | BytePositionInLine: 10.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 10
+      }
+    },
+    {
+      "name": "PlayCount-boundary-245",
+      "source": "{\"PlayCount\":-2147483648}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": -2147483648,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "PlayCount-boundary-246",
+      "source": "{\"PlayCount\":-2147483649}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Int32. Path: $ | LineNumber: 0 | BytePositionInLine: 11.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 11
+      }
+    },
+    {
+      "name": "PlayCount-boundary-247",
+      "source": "{\"PlayCount\":9223372036854775807}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Int32. Path: $ | LineNumber: 0 | BytePositionInLine: 19.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 19
+      }
+    },
+    {
+      "name": "PlayCount-boundary-248",
+      "source": "{\"PlayCount\":9223372036854775808}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Int32. Path: $ | LineNumber: 0 | BytePositionInLine: 19.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 19
+      }
+    },
+    {
+      "name": "PlayCount-boundary-249",
+      "source": "{\"PlayCount\":-9223372036854775808}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Int32. Path: $ | LineNumber: 0 | BytePositionInLine: 20.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 20
+      }
+    },
+    {
+      "name": "PlayCount-boundary-250",
+      "source": "{\"PlayCount\":-9223372036854775809}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Int32. Path: $ | LineNumber: 0 | BytePositionInLine: 20.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 20
+      }
+    },
+    {
+      "name": "PlayCount-boundary-251",
+      "source": "{\"PlayCount\":\"01\"}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": 1,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "PlayCount-boundary-252",
+      "source": "{\"PlayCount\":\"+1\"}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": 1,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "PlayCount-boundary-253",
+      "source": "{\"PlayCount\":\"1e2\"}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Int32. Path: $ | LineNumber: 0 | BytePositionInLine: 5.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 5
+      }
+    },
+    {
+      "name": "UnplayedItemCount-boundary-254",
+      "source": "{\"UnplayedItemCount\":2147483647}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": 2147483647,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "UnplayedItemCount-boundary-255",
+      "source": "{\"UnplayedItemCount\":2147483648}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Int32. Path: $ | LineNumber: 0 | BytePositionInLine: 10.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 10
+      }
+    },
+    {
+      "name": "UnplayedItemCount-boundary-256",
+      "source": "{\"UnplayedItemCount\":-2147483648}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": -2147483648,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "UnplayedItemCount-boundary-257",
+      "source": "{\"UnplayedItemCount\":-2147483649}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Int32. Path: $ | LineNumber: 0 | BytePositionInLine: 11.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 11
+      }
+    },
+    {
+      "name": "UnplayedItemCount-boundary-258",
+      "source": "{\"UnplayedItemCount\":9223372036854775807}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Int32. Path: $ | LineNumber: 0 | BytePositionInLine: 19.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 19
+      }
+    },
+    {
+      "name": "UnplayedItemCount-boundary-259",
+      "source": "{\"UnplayedItemCount\":9223372036854775808}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Int32. Path: $ | LineNumber: 0 | BytePositionInLine: 19.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 19
+      }
+    },
+    {
+      "name": "UnplayedItemCount-boundary-260",
+      "source": "{\"UnplayedItemCount\":-9223372036854775808}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Int32. Path: $ | LineNumber: 0 | BytePositionInLine: 20.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 20
+      }
+    },
+    {
+      "name": "UnplayedItemCount-boundary-261",
+      "source": "{\"UnplayedItemCount\":-9223372036854775809}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Int32. Path: $ | LineNumber: 0 | BytePositionInLine: 20.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 20
+      }
+    },
+    {
+      "name": "UnplayedItemCount-boundary-262",
+      "source": "{\"UnplayedItemCount\":\"01\"}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": 1,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "UnplayedItemCount-boundary-263",
+      "source": "{\"UnplayedItemCount\":\"+1\"}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": 1,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "UnplayedItemCount-boundary-264",
+      "source": "{\"UnplayedItemCount\":\"1e2\"}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Int32. Path: $ | LineNumber: 0 | BytePositionInLine: 5.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 5
+      }
+    },
+    {
+      "name": "PlaybackPositionTicks-boundary-265",
+      "source": "{\"PlaybackPositionTicks\":2147483647}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": {
+            "$integer": "2147483647"
+          },
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "PlaybackPositionTicks-boundary-266",
+      "source": "{\"PlaybackPositionTicks\":2147483648}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": {
+            "$integer": "2147483648"
+          },
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "PlaybackPositionTicks-boundary-267",
+      "source": "{\"PlaybackPositionTicks\":-2147483648}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": {
+            "$integer": "-2147483648"
+          },
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "PlaybackPositionTicks-boundary-268",
+      "source": "{\"PlaybackPositionTicks\":-2147483649}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": {
+            "$integer": "-2147483649"
+          },
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "PlaybackPositionTicks-boundary-269",
+      "source": "{\"PlaybackPositionTicks\":9223372036854775807}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": {
+            "$integer": "9223372036854775807"
+          },
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "PlaybackPositionTicks-boundary-270",
+      "source": "{\"PlaybackPositionTicks\":9223372036854775808}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Int64. Path: $ | LineNumber: 0 | BytePositionInLine: 19.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 19
+      }
+    },
+    {
+      "name": "PlaybackPositionTicks-boundary-271",
+      "source": "{\"PlaybackPositionTicks\":-9223372036854775808}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": {
+            "$integer": "-9223372036854775808"
+          },
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "PlaybackPositionTicks-boundary-272",
+      "source": "{\"PlaybackPositionTicks\":-9223372036854775809}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Int64. Path: $ | LineNumber: 0 | BytePositionInLine: 20.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 20
+      }
+    },
+    {
+      "name": "PlaybackPositionTicks-boundary-273",
+      "source": "{\"PlaybackPositionTicks\":\"01\"}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": {
+            "$integer": "1"
+          },
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "PlaybackPositionTicks-boundary-274",
+      "source": "{\"PlaybackPositionTicks\":\"+1\"}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": {
+            "$integer": "1"
+          },
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": null,
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "PlaybackPositionTicks-boundary-275",
+      "source": "{\"PlaybackPositionTicks\":\"1e2\"}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.Int64. Path: $ | LineNumber: 0 | BytePositionInLine: 5.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 5
+      }
+    },
+    {
+      "name": "date-276",
+      "source": "{\"LastPlayedDate\":\"2026-09-27\"}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": {
+            "ticks": "639260640000000000",
+            "kind": "Unspecified",
+            "utcTicks": "639260352000000000",
+            "stored": "2026-09-26 16:00:00"
+          },
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "date-277",
+      "source": "{\"LastPlayedDate\":\"2026-09-27T12:34\"}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": {
+            "ticks": "639261092400000000",
+            "kind": "Unspecified",
+            "utcTicks": "639260804400000000",
+            "stored": "2026-09-27 04:34:00"
+          },
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "date-278",
+      "source": "{\"LastPlayedDate\":\"2026-09-27T12:34:56\"}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": {
+            "ticks": "639261092960000000",
+            "kind": "Unspecified",
+            "utcTicks": "639260804960000000",
+            "stored": "2026-09-27 04:34:56"
+          },
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "date-279",
+      "source": "{\"LastPlayedDate\":\"2026-09-27T12:34:56.0000001\"}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": {
+            "ticks": "639261092960000001",
+            "kind": "Unspecified",
+            "utcTicks": "639260804960000001",
+            "stored": "2026-09-27 04:34:56.0000001"
+          },
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "date-280",
+      "source": "{\"LastPlayedDate\":\"2026-09-27T12:34:56.1234567890123456Z\"}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": {
+            "ticks": "639261092961234567",
+            "kind": "Utc",
+            "utcTicks": "639261092961234567",
+            "stored": "2026-09-27 12:34:56.1234567"
+          },
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "date-281",
+      "source": "{\"LastPlayedDate\":\"2026-09-27T12:34:56.12345678901234567Z\"}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.DateTime. Path: $ | LineNumber: 0 | BytePositionInLine: 40.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 40
+      }
+    },
+    {
+      "name": "date-282",
+      "source": "{\"LastPlayedDate\":\"2026-09-27T12:34:56.Z\"}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": {
+            "ticks": "639261092960000000",
+            "kind": "Utc",
+            "utcTicks": "639261092960000000",
+            "stored": "2026-09-27 12:34:56"
+          },
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "date-283",
+      "source": "{\"LastPlayedDate\":\"2026-09-27T12:34:56+08\"}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": {
+            "ticks": "639261092960000000",
+            "kind": "Local",
+            "utcTicks": "639260804960000000",
+            "stored": "2026-09-27 04:34:56"
+          },
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "date-284",
+      "source": "{\"LastPlayedDate\":\"2026-09-27T12:34:56.1234567-05:30\"}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": {
+            "ticks": "639261578961234567",
+            "kind": "Local",
+            "utcTicks": "639261290961234567",
+            "stored": "2026-09-27 18:04:56.1234567"
+          },
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "date-285",
+      "source": "{\"LastPlayedDate\":\"2026-02-30T00:00:00Z\"}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.DateTime. Path: $ | LineNumber: 0 | BytePositionInLine: 22.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 22
+      }
+    },
+    {
+      "name": "date-286",
+      "source": "{\"LastPlayedDate\":\"2026-09-27t12:34:56Z\"}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.DateTime. Path: $ | LineNumber: 0 | BytePositionInLine: 22.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 22
+      }
+    },
+    {
+      "name": "date-287",
+      "source": "{\"LastPlayedDate\":\"2026-09-27 12:34:56\"}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.DateTime. Path: $ | LineNumber: 0 | BytePositionInLine: 21.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 21
+      }
+    },
+    {
+      "name": "date-288",
+      "source": "{\"LastPlayedDate\":\"2026-09-27T24:00:00Z\"}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.DateTime. Path: $ | LineNumber: 0 | BytePositionInLine: 22.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 22
+      }
+    },
+    {
+      "name": "date-289",
+      "source": "{\"LastPlayedDate\":\"2026-09-27T12:34:56+14:01\"}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.DateTime. Path: $ | LineNumber: 0 | BytePositionInLine: 27.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 27
+      }
+    },
+    {
+      "name": "date-290",
+      "source": "{\"LastPlayedDate\":\"0001-01-01T00:00:00\"}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": {
+            "ticks": "0",
+            "kind": "Unspecified",
+            "utcTicks": "0",
+            "stored": "0001-01-01 00:00:00"
+          },
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "date-291",
+      "source": "{\"LastPlayedDate\":\"0001-01-01T00:00:00Z\"}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": {
+            "ticks": "0",
+            "kind": "Utc",
+            "utcTicks": "0",
+            "stored": "0001-01-01 00:00:00"
+          },
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "date-292",
+      "source": "{\"LastPlayedDate\":\"0001-01-01T00:00:00+14:00\"}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.DateTime. Path: $ | LineNumber: 0 | BytePositionInLine: 27.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 27
+      }
+    },
+    {
+      "name": "date-293",
+      "source": "{\"LastPlayedDate\":\"9999-12-31T23:59:59.9999999Z\"}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": {
+            "ticks": "3155378975999999999",
+            "kind": "Utc",
+            "utcTicks": "3155378975999999999",
+            "stored": "9999-12-31 23:59:59.9999999"
+          },
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "date-294",
+      "source": "{\"LastPlayedDate\":\"9999-12-31T23:59:59.9999999+00:00\"}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": {
+            "ticks": "3155378975999999999",
+            "kind": "Local",
+            "utcTicks": "3155378687999999999",
+            "stored": "9999-12-31 15:59:59.9999999"
+          },
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "date-295",
+      "source": "{\"LastPlayedDate\":\"1990-07-01T12:00:00+00:00\"}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": {
+            "ticks": "627824592000000000",
+            "kind": "Local",
+            "utcTicks": "627824304000000000",
+            "stored": "1990-07-01 12:00:00"
+          },
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "date-296",
+      "source": "{\"LastPlayedDate\":\"1900-01-01T12:00:00\"}",
+      "expected": {
+        "value": {
+          "Rating": null,
+          "PlayedPercentage": null,
+          "UnplayedItemCount": null,
+          "PlaybackPositionTicks": null,
+          "PlayCount": null,
+          "IsFavorite": null,
+          "Likes": null,
+          "LastPlayedDate": {
+            "ticks": "599266512000000000",
+            "kind": "Unspecified",
+            "utcTicks": "599266224000000000",
+            "stored": "1900-01-01 04:00:00"
+          },
+          "Played": null,
+          "Key": null,
+          "ItemId": null
+        }
+      }
+    },
+    {
+      "name": "date-297",
+      "source": "{\"LastPlayedDate\":\"bad\"}",
+      "expected": {
+        "error": "JsonException",
+        "Message": "The JSON value could not be converted to System.DateTime. Path: $ | LineNumber: 0 | BytePositionInLine: 5.",
+        "Path": "$",
+        "LineNumber": 0,
+        "BytePositionInLine": 5
+      }
+    }
+  ]
+}

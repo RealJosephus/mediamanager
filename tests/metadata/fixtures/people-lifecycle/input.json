@@ -1,0 +1,428 @@
+[
+  {
+    "name": "new-person",
+    "people": [
+      {
+        "Name": "New Person",
+        "Type": "Actor"
+      }
+    ]
+  },
+  {
+    "name": "trimmed-person",
+    "people": [
+      {
+        "Name": "  New Person  ",
+        "Type": "Actor",
+        "Role": "  Lead  "
+      }
+    ]
+  },
+  {
+    "name": "two-persons",
+    "people": [
+      {
+        "Name": "First",
+        "Type": "Actor"
+      },
+      {
+        "Name": "Second",
+        "Type": "Director"
+      }
+    ]
+  },
+  {
+    "name": "empty-clears-credits",
+    "people": []
+  },
+  {
+    "name": "null-preserves-credits",
+    "people": null
+  },
+  {
+    "name": "null-member-filtered",
+    "people": [
+      null,
+      {
+        "Name": "First",
+        "Type": "Actor"
+      },
+      null
+    ]
+  },
+  {
+    "name": "unsupported-person",
+    "unsupported": true,
+    "people": [
+      {
+        "Name": "First",
+        "Type": "Actor"
+      }
+    ]
+  },
+  {
+    "name": "existing-unchanged",
+    "existing": [
+      {
+        "Name": "Existing"
+      }
+    ],
+    "people": [
+      {
+        "Name": "Existing",
+        "Type": "Actor"
+      }
+    ]
+  },
+  {
+    "name": "existing-provider-equal",
+    "existing": [
+      {
+        "Name": "Existing",
+        "ProviderIds": {
+          "Custom": "ABC"
+        }
+      }
+    ],
+    "people": [
+      {
+        "Name": "Existing",
+        "Type": "Actor",
+        "ProviderIds": {
+          "custom": "abc"
+        }
+      }
+    ]
+  },
+  {
+    "name": "existing-provider-changed",
+    "existing": [
+      {
+        "Name": "Existing",
+        "ProviderIds": {
+          "Custom": "ABC"
+        }
+      }
+    ],
+    "people": [
+      {
+        "Name": "Existing",
+        "Type": "Actor",
+        "ProviderIds": {
+          "Custom": "DEF"
+        }
+      }
+    ]
+  },
+  {
+    "name": "new-provider-values",
+    "people": [
+      {
+        "Name": "New Person",
+        "Type": "Actor",
+        "ProviderIds": {
+          " tmdb ": " 0123 ",
+          "Imdb": "nm1234",
+          "Custom": " ABC "
+        }
+      }
+    ]
+  },
+  {
+    "name": "invalid-known-provider-still-saves",
+    "existing": [
+      {
+        "Name": "Existing"
+      }
+    ],
+    "people": [
+      {
+        "Name": "Existing",
+        "Type": "Actor",
+        "ProviderIds": {
+          "Tmdb": "nm1234"
+        }
+      }
+    ]
+  },
+  {
+    "name": "empty-provider-throws-after-create",
+    "people": [
+      {
+        "Name": "New Person",
+        "Type": "Actor",
+        "ProviderIds": {
+          "Tmdb": ""
+        }
+      }
+    ],
+    "expectException": "ArgumentException"
+  },
+  {
+    "name": "invalid-provider-key-throws-after-create",
+    "people": [
+      {
+        "Name": "New Person",
+        "Type": "Actor",
+        "ProviderIds": {
+          "bad=key": "abc"
+        }
+      }
+    ],
+    "expectException": "ArgumentException"
+  },
+  {
+    "name": "case-shared-entity",
+    "people": [
+      {
+        "Name": "New Person",
+        "Type": "Actor"
+      },
+      {
+        "Name": "NEW PERSON",
+        "Type": "Director",
+        "ProviderIds": {
+          "Custom": "abc"
+        }
+      }
+    ]
+  },
+  {
+    "name": "same-name-two-roles",
+    "people": [
+      {
+        "Name": "New Person",
+        "Type": "Actor",
+        "Role": "Lead"
+      },
+      {
+        "Name": "New Person",
+        "Type": "Actor",
+        "Role": "Other"
+      }
+    ]
+  },
+  {
+    "name": "same-name-duplicate-credit",
+    "people": [
+      {
+        "Name": "New Person",
+        "Type": "Actor",
+        "Role": "Lead"
+      },
+      {
+        "Name": "new person",
+        "Type": "Actor",
+        "Role": "lead"
+      }
+    ]
+  },
+  {
+    "name": "punctuation-path-collision",
+    "people": [
+      {
+        "Name": "A:B",
+        "Type": "Actor"
+      },
+      {
+        "Name": "A?B",
+        "Type": "Director"
+      }
+    ]
+  },
+  {
+    "name": "non-ascii-name",
+    "people": [
+      {
+        "Name": "Élodie",
+        "Type": "Actor"
+      },
+      {
+        "Name": "台灣",
+        "Type": "Actor"
+      }
+    ]
+  },
+  {
+    "name": "overlong-name",
+    "people": [
+      {
+        "Name": "名名名名名名名名名名名名名名名名名名名名名名名名名名名名名名名名名名名名名名名名名名名名名名名名名名名名名名名名名名名名名名名名名名名名名名",
+        "Type": "Actor"
+      }
+    ]
+  },
+  {
+    "name": "case-sensitive-normalized",
+    "caseSensitive": true,
+    "normalized": true,
+    "people": [
+      {
+        "Name": "Name",
+        "Type": "Actor"
+      },
+      {
+        "Name": "NAME",
+        "Type": "Director"
+      }
+    ]
+  },
+  {
+    "name": "case-sensitive-non-normalized",
+    "caseSensitive": true,
+    "normalized": false,
+    "people": [
+      {
+        "Name": "Name",
+        "Type": "Actor"
+      },
+      {
+        "Name": "NAME",
+        "Type": "Director"
+      }
+    ]
+  },
+  {
+    "name": "directory-failure-continues",
+    "directoryFailure": "Blocked",
+    "people": [
+      {
+        "Name": "Blocked",
+        "Type": "Actor"
+      },
+      {
+        "Name": "Second",
+        "Type": "Actor"
+      }
+    ]
+  },
+  {
+    "name": "initial-person-save-failure-continues",
+    "failure": "person",
+    "failureAt": 1,
+    "people": [
+      {
+        "Name": "First",
+        "Type": "Actor"
+      },
+      {
+        "Name": "Second",
+        "Type": "Actor"
+      }
+    ]
+  },
+  {
+    "name": "final-person-save-failure-retains-initial",
+    "failure": "person",
+    "failureAt": 2,
+    "people": [
+      {
+        "Name": "First",
+        "Type": "Actor"
+      },
+      {
+        "Name": "Second",
+        "Type": "Actor"
+      }
+    ],
+    "expectException": "IOException"
+  },
+  {
+    "name": "credits-failure-no-person",
+    "failure": "credits",
+    "people": [
+      {
+        "Name": "First",
+        "Type": "Actor"
+      }
+    ],
+    "expectException": "IOException"
+  },
+  {
+    "name": "cancel-before-person-after-credits",
+    "cancelled": true,
+    "people": [
+      {
+        "Name": "First",
+        "Type": "Actor"
+      }
+    ],
+    "expectException": "OperationCanceledException"
+  },
+  {
+    "name": "cancel-added-finishes-current-person",
+    "cancelOnAdded": true,
+    "people": [
+      {
+        "Name": "First",
+        "Type": "Actor"
+      },
+      {
+        "Name": "Second",
+        "Type": "Actor"
+      }
+    ],
+    "expectException": "OperationCanceledException"
+  },
+  {
+    "name": "throwing-added-event-continues",
+    "eventThrows": true,
+    "people": [
+      {
+        "Name": "First",
+        "Type": "Actor"
+      },
+      {
+        "Name": "Second",
+        "Type": "Actor"
+      }
+    ]
+  },
+  {
+    "name": "save-item-before-credits",
+    "mode": "save-item",
+    "people": [
+      {
+        "Name": "First",
+        "Type": "Actor"
+      }
+    ]
+  },
+  {
+    "name": "save-item-credits-failure-retains-parent",
+    "mode": "save-item",
+    "failure": "credits",
+    "people": [
+      {
+        "Name": "First",
+        "Type": "Actor"
+      }
+    ],
+    "expectException": "IOException"
+  },
+  {
+    "name": "save-item-person-failure-retains-parent-credits",
+    "mode": "save-item",
+    "failure": "person",
+    "failureAt": 2,
+    "people": [
+      {
+        "Name": "First",
+        "Type": "Actor"
+      }
+    ],
+    "expectException": "IOException"
+  },
+  {
+    "name": "save-item-parent-failure-skips-people",
+    "mode": "save-item",
+    "failure": "parent",
+    "people": [
+      {
+        "Name": "First",
+        "Type": "Actor"
+      }
+    ],
+    "expectException": "IOException"
+  }
+]

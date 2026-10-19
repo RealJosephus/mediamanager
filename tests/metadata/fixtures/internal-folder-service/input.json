@@ -1,0 +1,534 @@
+[
+  {
+    "name": "AggregateFolder-default-None-false-false",
+    "type": "AggregateFolder",
+    "itemName": "default",
+    "path": "$STATE/root",
+    "mode": "full",
+    "metadataMode": "None",
+    "force": false,
+    "first": false
+  },
+  {
+    "name": "AggregateFolder-default-None-true-false",
+    "type": "AggregateFolder",
+    "itemName": "default",
+    "path": "$STATE/root",
+    "mode": "full",
+    "metadataMode": "None",
+    "force": true,
+    "first": false
+  },
+  {
+    "name": "AggregateFolder-default-ValidationOnly-false-false",
+    "type": "AggregateFolder",
+    "itemName": "default",
+    "path": "$STATE/root",
+    "mode": "full",
+    "metadataMode": "ValidationOnly",
+    "force": false,
+    "first": false
+  },
+  {
+    "name": "AggregateFolder-default-Default-false-false",
+    "type": "AggregateFolder",
+    "itemName": "default",
+    "path": "$STATE/root",
+    "mode": "full",
+    "metadataMode": "Default",
+    "force": false,
+    "first": false
+  },
+  {
+    "name": "AggregateFolder-default-FullRefresh-false-false",
+    "type": "AggregateFolder",
+    "itemName": "default",
+    "path": "$STATE/root",
+    "mode": "full",
+    "metadataMode": "FullRefresh",
+    "force": false,
+    "first": false
+  },
+  {
+    "name": "AggregateFolder-default-FullRefresh-false-true",
+    "type": "AggregateFolder",
+    "itemName": "default",
+    "path": "$STATE/root",
+    "mode": "full",
+    "metadataMode": "FullRefresh",
+    "force": false,
+    "first": true
+  },
+  {
+    "name": "AggregateFolder-empty-None-false-false",
+    "type": "AggregateFolder",
+    "itemName": "",
+    "path": "$STATE/root",
+    "mode": "full",
+    "metadataMode": "None",
+    "force": false,
+    "first": false
+  },
+  {
+    "name": "AggregateFolder-empty-None-true-false",
+    "type": "AggregateFolder",
+    "itemName": "",
+    "path": "$STATE/root",
+    "mode": "full",
+    "metadataMode": "None",
+    "force": true,
+    "first": false
+  },
+  {
+    "name": "AggregateFolder-empty-ValidationOnly-false-false",
+    "type": "AggregateFolder",
+    "itemName": "",
+    "path": "$STATE/root",
+    "mode": "full",
+    "metadataMode": "ValidationOnly",
+    "force": false,
+    "first": false
+  },
+  {
+    "name": "AggregateFolder-empty-Default-false-false",
+    "type": "AggregateFolder",
+    "itemName": "",
+    "path": "$STATE/root",
+    "mode": "full",
+    "metadataMode": "Default",
+    "force": false,
+    "first": false
+  },
+  {
+    "name": "AggregateFolder-empty-FullRefresh-false-false",
+    "type": "AggregateFolder",
+    "itemName": "",
+    "path": "$STATE/root",
+    "mode": "full",
+    "metadataMode": "FullRefresh",
+    "force": false,
+    "first": false
+  },
+  {
+    "name": "AggregateFolder-empty-FullRefresh-false-true",
+    "type": "AggregateFolder",
+    "itemName": "",
+    "path": "$STATE/root",
+    "mode": "full",
+    "metadataMode": "FullRefresh",
+    "force": false,
+    "first": true
+  },
+  {
+    "name": "AggregateFolder-matched-resolve",
+    "type": "AggregateFolder",
+    "itemName": "Named",
+    "path": "$STATE/root",
+    "mode": "full",
+    "metadataMode": "Default",
+    "useResolvedLocations": true
+  },
+  {
+    "name": "AggregateFolder-stale-location",
+    "type": "AggregateFolder",
+    "itemName": "Named",
+    "path": "$STATE/root",
+    "mode": "full",
+    "metadataMode": "Default",
+    "locations": [
+      "$STATE/old"
+    ]
+  },
+  {
+    "name": "UserRootFolder-default-None-false-false",
+    "type": "UserRootFolder",
+    "itemName": "default",
+    "path": "$STATE/root/default",
+    "mode": "full",
+    "metadataMode": "None",
+    "force": false,
+    "first": false
+  },
+  {
+    "name": "UserRootFolder-default-None-true-false",
+    "type": "UserRootFolder",
+    "itemName": "default",
+    "path": "$STATE/root/default",
+    "mode": "full",
+    "metadataMode": "None",
+    "force": true,
+    "first": false
+  },
+  {
+    "name": "UserRootFolder-default-ValidationOnly-false-false",
+    "type": "UserRootFolder",
+    "itemName": "default",
+    "path": "$STATE/root/default",
+    "mode": "full",
+    "metadataMode": "ValidationOnly",
+    "force": false,
+    "first": false
+  },
+  {
+    "name": "UserRootFolder-default-Default-false-false",
+    "type": "UserRootFolder",
+    "itemName": "default",
+    "path": "$STATE/root/default",
+    "mode": "full",
+    "metadataMode": "Default",
+    "force": false,
+    "first": false
+  },
+  {
+    "name": "UserRootFolder-default-FullRefresh-false-false",
+    "type": "UserRootFolder",
+    "itemName": "default",
+    "path": "$STATE/root/default",
+    "mode": "full",
+    "metadataMode": "FullRefresh",
+    "force": false,
+    "first": false
+  },
+  {
+    "name": "UserRootFolder-default-FullRefresh-false-true",
+    "type": "UserRootFolder",
+    "itemName": "default",
+    "path": "$STATE/root/default",
+    "mode": "full",
+    "metadataMode": "FullRefresh",
+    "force": false,
+    "first": true
+  },
+  {
+    "name": "UserRootFolder-empty-None-false-false",
+    "type": "UserRootFolder",
+    "itemName": "",
+    "path": "$STATE/root/default",
+    "mode": "full",
+    "metadataMode": "None",
+    "force": false,
+    "first": false
+  },
+  {
+    "name": "UserRootFolder-empty-None-true-false",
+    "type": "UserRootFolder",
+    "itemName": "",
+    "path": "$STATE/root/default",
+    "mode": "full",
+    "metadataMode": "None",
+    "force": true,
+    "first": false
+  },
+  {
+    "name": "UserRootFolder-empty-ValidationOnly-false-false",
+    "type": "UserRootFolder",
+    "itemName": "",
+    "path": "$STATE/root/default",
+    "mode": "full",
+    "metadataMode": "ValidationOnly",
+    "force": false,
+    "first": false
+  },
+  {
+    "name": "UserRootFolder-empty-Default-false-false",
+    "type": "UserRootFolder",
+    "itemName": "",
+    "path": "$STATE/root/default",
+    "mode": "full",
+    "metadataMode": "Default",
+    "force": false,
+    "first": false
+  },
+  {
+    "name": "UserRootFolder-empty-FullRefresh-false-false",
+    "type": "UserRootFolder",
+    "itemName": "",
+    "path": "$STATE/root/default",
+    "mode": "full",
+    "metadataMode": "FullRefresh",
+    "force": false,
+    "first": false
+  },
+  {
+    "name": "UserRootFolder-empty-FullRefresh-false-true",
+    "type": "UserRootFolder",
+    "itemName": "",
+    "path": "$STATE/root/default",
+    "mode": "full",
+    "metadataMode": "FullRefresh",
+    "force": false,
+    "first": true
+  },
+  {
+    "name": "CollectionFolder-default-None-false-false",
+    "type": "CollectionFolder",
+    "itemName": "default",
+    "path": "$STATE/root/default/library",
+    "mode": "full",
+    "metadataMode": "None",
+    "force": false,
+    "first": false
+  },
+  {
+    "name": "CollectionFolder-default-None-true-false",
+    "type": "CollectionFolder",
+    "itemName": "default",
+    "path": "$STATE/root/default/library",
+    "mode": "full",
+    "metadataMode": "None",
+    "force": true,
+    "first": false
+  },
+  {
+    "name": "CollectionFolder-default-ValidationOnly-false-false",
+    "type": "CollectionFolder",
+    "itemName": "default",
+    "path": "$STATE/root/default/library",
+    "mode": "full",
+    "metadataMode": "ValidationOnly",
+    "force": false,
+    "first": false
+  },
+  {
+    "name": "CollectionFolder-default-Default-false-false",
+    "type": "CollectionFolder",
+    "itemName": "default",
+    "path": "$STATE/root/default/library",
+    "mode": "full",
+    "metadataMode": "Default",
+    "force": false,
+    "first": false
+  },
+  {
+    "name": "CollectionFolder-default-FullRefresh-false-false",
+    "type": "CollectionFolder",
+    "itemName": "default",
+    "path": "$STATE/root/default/library",
+    "mode": "full",
+    "metadataMode": "FullRefresh",
+    "force": false,
+    "first": false
+  },
+  {
+    "name": "CollectionFolder-default-FullRefresh-false-true",
+    "type": "CollectionFolder",
+    "itemName": "default",
+    "path": "$STATE/root/default/library",
+    "mode": "full",
+    "metadataMode": "FullRefresh",
+    "force": false,
+    "first": true
+  },
+  {
+    "name": "CollectionFolder-empty-None-false-false",
+    "type": "CollectionFolder",
+    "itemName": "",
+    "path": "$STATE/root/default/library",
+    "mode": "full",
+    "metadataMode": "None",
+    "force": false,
+    "first": false
+  },
+  {
+    "name": "CollectionFolder-empty-None-true-false",
+    "type": "CollectionFolder",
+    "itemName": "",
+    "path": "$STATE/root/default/library",
+    "mode": "full",
+    "metadataMode": "None",
+    "force": true,
+    "first": false
+  },
+  {
+    "name": "CollectionFolder-empty-ValidationOnly-false-false",
+    "type": "CollectionFolder",
+    "itemName": "",
+    "path": "$STATE/root/default/library",
+    "mode": "full",
+    "metadataMode": "ValidationOnly",
+    "force": false,
+    "first": false
+  },
+  {
+    "name": "CollectionFolder-empty-Default-false-false",
+    "type": "CollectionFolder",
+    "itemName": "",
+    "path": "$STATE/root/default/library",
+    "mode": "full",
+    "metadataMode": "Default",
+    "force": false,
+    "first": false
+  },
+  {
+    "name": "CollectionFolder-empty-FullRefresh-false-false",
+    "type": "CollectionFolder",
+    "itemName": "",
+    "path": "$STATE/root/default/library",
+    "mode": "full",
+    "metadataMode": "FullRefresh",
+    "force": false,
+    "first": false
+  },
+  {
+    "name": "CollectionFolder-empty-FullRefresh-false-true",
+    "type": "CollectionFolder",
+    "itemName": "",
+    "path": "$STATE/root/default/library",
+    "mode": "full",
+    "metadataMode": "FullRefresh",
+    "force": false,
+    "first": true
+  },
+  {
+    "name": "CollectionFolder-matched-resolve",
+    "type": "CollectionFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "full",
+    "metadataMode": "Default",
+    "useResolvedLocations": true
+  },
+  {
+    "name": "CollectionFolder-stale-location",
+    "type": "CollectionFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "full",
+    "metadataMode": "Default",
+    "locations": [
+      "$STATE/old"
+    ]
+  },
+  {
+    "name": "CollectionFolder-stale-physical-id",
+    "type": "CollectionFolder",
+    "itemName": "Named",
+    "path": "$STATE/root/default/library",
+    "mode": "full",
+    "metadataMode": "Default",
+    "useResolvedLocations": true,
+    "physicalIds": [
+      "97c00000-0000-0000-0000-000000000099"
+    ]
+  },
+  {
+    "name": "PlaylistsFolder-default-None-false-false",
+    "type": "PlaylistsFolder",
+    "itemName": "default",
+    "path": "$STATE/root/default/library",
+    "mode": "full",
+    "metadataMode": "None",
+    "force": false,
+    "first": false
+  },
+  {
+    "name": "PlaylistsFolder-default-None-true-false",
+    "type": "PlaylistsFolder",
+    "itemName": "default",
+    "path": "$STATE/root/default/library",
+    "mode": "full",
+    "metadataMode": "None",
+    "force": true,
+    "first": false
+  },
+  {
+    "name": "PlaylistsFolder-default-ValidationOnly-false-false",
+    "type": "PlaylistsFolder",
+    "itemName": "default",
+    "path": "$STATE/root/default/library",
+    "mode": "full",
+    "metadataMode": "ValidationOnly",
+    "force": false,
+    "first": false
+  },
+  {
+    "name": "PlaylistsFolder-default-Default-false-false",
+    "type": "PlaylistsFolder",
+    "itemName": "default",
+    "path": "$STATE/root/default/library",
+    "mode": "full",
+    "metadataMode": "Default",
+    "force": false,
+    "first": false
+  },
+  {
+    "name": "PlaylistsFolder-default-FullRefresh-false-false",
+    "type": "PlaylistsFolder",
+    "itemName": "default",
+    "path": "$STATE/root/default/library",
+    "mode": "full",
+    "metadataMode": "FullRefresh",
+    "force": false,
+    "first": false
+  },
+  {
+    "name": "PlaylistsFolder-default-FullRefresh-false-true",
+    "type": "PlaylistsFolder",
+    "itemName": "default",
+    "path": "$STATE/root/default/library",
+    "mode": "full",
+    "metadataMode": "FullRefresh",
+    "force": false,
+    "first": true
+  },
+  {
+    "name": "PlaylistsFolder-empty-None-false-false",
+    "type": "PlaylistsFolder",
+    "itemName": "",
+    "path": "$STATE/root/default/library",
+    "mode": "full",
+    "metadataMode": "None",
+    "force": false,
+    "first": false
+  },
+  {
+    "name": "PlaylistsFolder-empty-None-true-false",
+    "type": "PlaylistsFolder",
+    "itemName": "",
+    "path": "$STATE/root/default/library",
+    "mode": "full",
+    "metadataMode": "None",
+    "force": true,
+    "first": false
+  },
+  {
+    "name": "PlaylistsFolder-empty-ValidationOnly-false-false",
+    "type": "PlaylistsFolder",
+    "itemName": "",
+    "path": "$STATE/root/default/library",
+    "mode": "full",
+    "metadataMode": "ValidationOnly",
+    "force": false,
+    "first": false
+  },
+  {
+    "name": "PlaylistsFolder-empty-Default-false-false",
+    "type": "PlaylistsFolder",
+    "itemName": "",
+    "path": "$STATE/root/default/library",
+    "mode": "full",
+    "metadataMode": "Default",
+    "force": false,
+    "first": false
+  },
+  {
+    "name": "PlaylistsFolder-empty-FullRefresh-false-false",
+    "type": "PlaylistsFolder",
+    "itemName": "",
+    "path": "$STATE/root/default/library",
+    "mode": "full",
+    "metadataMode": "FullRefresh",
+    "force": false,
+    "first": false
+  },
+  {
+    "name": "PlaylistsFolder-empty-FullRefresh-false-true",
+    "type": "PlaylistsFolder",
+    "itemName": "",
+    "path": "$STATE/root/default/library",
+    "mode": "full",
+    "metadataMode": "FullRefresh",
+    "force": false,
+    "first": true
+  }
+]

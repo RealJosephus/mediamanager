@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-08T03:20:24.710Z",
+  "candidateVerified": false,
+  "matrix": {
+    "inputs": 69,
+    "candidateModes": ["sync", "async"],
+    "exactComparisons": 138,
+    "historicalDifferenceRecords": 50,
+    "historicalDifferenceScenarios": 25
+  },
+  "files": {
+    "native": {
+      "path": "tests/metadata/fixtures/nfo-scalar-provider/native.json",
+      "sha256": "aeac70d1e851f0bc5093b47cbaa078705174823325869bdd3a2ee0c195925d26"
+    },
+    "input": {
+      "path": "tests/metadata/fixtures/nfo-scalar-provider/input.json",
+      "sha256": "bdf318fe942f07f980e3b176166ce39f4ddef523fa648aa0bb55951013eaaa85"
+    },
+    "oracle": {
+      "path": "tests/metadata/fixtures/nfo-scalar-provider/Program.cs",
+      "sha256": "97d29f0f3864cb5439a5d84f585b3ae6a02e0a6a82882ecc420e627e75fa7bb5"
+    },
+    "project": {
+      "path": "tests/metadata/fixtures/nfo-scalar-provider/Oracle.csproj",
+      "sha256": "56e42cc99a5305248cb523db75850ab8bce9868f3a283101fa0a208332829234"
+    },
+    "candidateDifferences": {
+      "path": "tests/metadata/fixtures/nfo-scalar-provider/candidate-differences.json",
+      "sha256": "e34d3fe43ae58c550b390d54fe2eb520703284f4c4b364d5dfae8f120975874b"
+    },
+    "readme": {
+      "path": "tests/metadata/fixtures/nfo-scalar-provider/README.md",
+      "sha256": "ab02ab26ee2df2617d56d7982094adb5026f881f4d72f80b93ca48e700a34f0b"
+    },
+    "buildProperties": {
+      "path": "tests/Directory.Build.props",
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    }
+  },
+  "jellyfin": {
+    "root": "D:/jellyfin",
+    "dllSourceRoot": "D:/mediamanager-validation/20261005/jellyfin-baseline/source",
+    "head": "208c278b75abd897aefa1e1175126eac5e4dbfaa",
+    "relevantSourceFilesMatchHead": true,
+    "sources": {
+      "MediaBrowser.XbmcMetadata/Parsers/BaseNfoParser.cs": "f50fd3439d423330b0bc1c40ab5b413a2c2b3811a14a0955ecd9fbb63b32c152",
+      "MediaBrowser.XbmcMetadata/Parsers/MovieNfoParser.cs": "a48429be9a2e059be6dbde858cb9c423cbe594ba81f24bca661ab541c5778663",
+      "MediaBrowser.XbmcMetadata/Parsers/EpisodeNfoParser.cs": "db512780a4880eba3d5a86de035164e8f7dc3bc63719d8eb5a50e906cb8c2105",
+      "MediaBrowser.XbmcMetadata/Parsers/SeriesNfoParser.cs": "bfb4d17795f296e50977d8dba66b99be559ff08cea39a5e09439f4476c7a4e9c",
+      "MediaBrowser.XbmcMetadata/Parsers/SeasonNfoParser.cs": "6c12264bc60daff7fa29fb071ae958ddbee8aeaa636002b457679b157d6c89bb",
+      "MediaBrowser.XbmcMetadata/Parsers/SeriesNfoSeasonParser.cs": "663250683c0a2c01305829df490143f717890feb42a4a79db1ffea52ce4e6193",
+      "MediaBrowser.Controller/Extensions/XmlReaderExtensions.cs": "45e5ecd70806044d4d803f2d7b9a2b9c370d9ba21c232234f2d7de61f7ca446c",
+      "MediaBrowser.Model/Entities/ProviderIdsExtensions.cs": "207b7be1a46d73caf5d84e4f95db19c3fb15de7346478b166edb12b4d54aeecf",
+      "MediaBrowser.Common/Providers/ProviderIdParsers.cs": "a179ab843caf505f9f28c34e5a0f13b3c3b215e85c74eea3687f61b99a1c36c9",
+      "Jellyfin.Data/Enums/PersonKind.cs": "7093de961e828fed21be6705dc0d8ab33b5a79fe9d526771e9536dd839dfb198",
+      "MediaBrowser.Controller/Library/TVUtils.cs": "8f3d729864bcd835e511a840063d5fdb80b001b449e40ca33d1201b794808fb6",
+      "Emby.Naming/TV/TvParserHelpers.cs": "16960262b8a541eaa729f15cf1ffc7721c15a4836c0ae6461516abf2f27526d2",
+      "MediaBrowser.Model/Configuration/XbmcMetadataOptions.cs": "586e5643ea73b6b235afdf6486aa22a97cee58551181cec6c54ba5cf3241229a"
+    }
+  },
+  "runtime": {
+    "timezone": "Asia/Taipei",
+    "node": "v24.16.0",
+    "dotnet": {
+      "path": "D:/mediamanager/.tools/dotnet/dotnet.exe",
+      "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6"
+    },
+    "jellyfinDll": {
+      "path": "D:/mediamanager-validation/20261005/jellyfin-baseline/source/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll",
+      "bytes": 506368,
+      "sha256": "a43fa24c44677e579fcec79d637789b9f36633d02e5434e76a0e03fa13027767"
+    },
+    "assemblies": {
+      "MediaBrowser.XbmcMetadata.dll": {
+        "bytes": 84992,
+        "sha256": "82ddd82082f44faf43284258609ba4efce9a94759d24e0f7161ebf5c7d18558e"
+      },
+      "MediaBrowser.Controller.dll": {
+        "bytes": 655872,
+        "sha256": "051c588a8e85a3a7cdde8dc3d9a1112217fd7e973a86fe2ff90cf765bedb75a8"
+      },
+      "MediaBrowser.Common.dll": {
+        "bytes": 48640,
+        "sha256": "c86a38f99a78d9d3b9dd5ba5245fb06bf654cfa3e16ec409d3ba77b1e69ed11e"
+      },
+      "MediaBrowser.Model.dll": {
+        "bytes": 489472,
+        "sha256": "7b2c1b16721cf7747b572e4de3761de635fad4bd12bec346983545bee73fd92c"
+      },
+      "Jellyfin.Data.dll": {
+        "bytes": 18432,
+        "sha256": "b991153c8e091e6e618b27b47ec2c070c003fc5c4453406a74fe843c43611d7e"
+      },
+      "Emby.Naming.dll": {
+        "bytes": 105984,
+        "sha256": "55085cf14d1e58a7a1e99e0ffc37bde0545bbe85f7f09995388a6e465cca3a45"
+      },
+      "Jellyfin.Extensions.dll": {
+        "bytes": 37888,
+        "sha256": "db952e3013a6949ad22db9ac3379be2efdf441c139ddc6919e86f8c2abbc7207"
+      }
+    }
+  },
+  "record": {
+    "path": "D:/mediamanager-validation/20261005/results/nfo-scalar-provider-20261008-v6/record.json",
+    "sha256": "db1ef1fce0aeef1d1c2f8f0a6e72bdfec983de13d6e28c140ac11823c9f4bbfb",
+    "sourceFilesSha256": "c69072458797c8d55c8a551efbf0abd0cb589617bcfc4ac3933aaac7c8011dc6",
+    "oracleAssemblySha256": "c9536b6cbef0461aeb7e0b52fcbc854ec756f7b63355a2082006c1a0bdbbc761",
+    "buildStatus": 0,
+    "processStatus": 0
+  },
+  "command": "node tools/validation/oracle.js tests/metadata/fixtures/nfo-scalar-provider/Oracle.csproj D:/mediamanager-validation/20261005/results/nfo-scalar-provider-20261008-v6 tests/metadata/fixtures/nfo-scalar-provider/input.json {output}/native.json"
+}

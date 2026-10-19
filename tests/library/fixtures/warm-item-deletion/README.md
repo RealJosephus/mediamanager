@@ -1,0 +1,11 @@
+# Warm item deletion oracle
+
+This fixture independently executes the designated captured Jellyfin runtime's actual LibraryManager, ItemPersistenceService, repository mapper and real EF/SQLite persistence over isolated Windows files. Sixteen neutral cases delete a Playlist's persistence-only owned Audio, Video, Folder or physical MusicArtist, then attempt a second core deletion with and without source removal. Eight additional cases first create/register that owned entity through actual LibraryManager.CreateItem. Hydrated and newly saved warm entities therefore have independent evidence.
+
+Initial and first/final frames include all 72 BaseItems columns, linked children, file hashes, cache lookups, provider/persistence ordering and Removed events. A cold persistence-only row is not pre-hydrated. Native warm Video/Folder/MusicArtist remain after their SQL rows disappear; a later logical deletion runs their files/provider/event lifecycle and evicts them. Audio does not enter the native cache. No tombstone, restored SQL row or outer compensation is introduced.
+
+Application paths, path reversal, collection-folder lookup, external-cleanup markers and selected static collaborators are explicit controls. Source roots are projected to the driver's own $STATE namespace. Data is parsed and re-emitted by that native path projector; these frames do not claim raw SQLite TEXT-byte equality. Candidate tests use separate PostgreSQL/VFS state, verify the initial frame before mutation, and exercise actual CreateItems/SaveItems for created variants.
+
+provenance.json binds input, driver, project, README, loaded DLLs, SDK host, designated source capture/build audit and independent byte-identical raw repetitions. Repeat with a fresh isolated output directory: build Oracle.csproj, then invoke Oracle.dll with input.json, a new native.raw.json path and a new state directory. Never overwrite a prior run or an existing fixture.
+
+Jellyfin-derived behavior is GPL-2.0-only. This is not native HTTP/authentication, complete provider/refresh/save/scanner coverage, POSIX, two-client or native-instance exchange acceptance. The complete designated build-input closure remains unproven; candidateVerified=false and completeBuildInputClosure=false are intentional.

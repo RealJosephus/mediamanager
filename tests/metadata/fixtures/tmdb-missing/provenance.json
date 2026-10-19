@@ -1,0 +1,35 @@
+{
+  "processes": {
+    "build": {
+      "exitCode": 0,
+      "signal": null
+    },
+    "entities": {
+      "exitCode": 0,
+      "signal": null
+    },
+    "persistence": {
+      "exitCode": 0,
+      "signal": null
+    }
+  },
+  "oracleFiles": {
+    "Oracle.cs": "3479d2354ac5ea660b8f66199462bf0756140e68644f1b8baf53a8dc2cdc00a2",
+    "Oracle.csproj": "5f9e8f09300c987865a93ee643d1a58907ba65a5671999a688efdd4221b4f1b7",
+    "input.json": "66bb218f57ed1629e9c61744d8a52d36f78f44dc35d7c58b9820276b657c3217",
+    "persistence-input.mjs": "043138ea3b5fbc26a27288c05cc8c5270fd791c84640b5bd7ee0f2707d3bc8eb"
+  },
+  "recorderSha256": "94d08a9dc0b9ff2223dc47320f82924d9ac7daa1716c7887d66bdeecd89326a5",
+  "nativeModelSha256": "942796bb521d2adb04951cd184ffad4988664ea7f6371e2c378b1c207903dbe6",
+  "reference": {
+    "manifestSha256": "779885e632e0d6614ca883191d883d6a11e1d02e6e8b2f849370469e227e57eb",
+    "head": "208c278b75abd897aefa1e1175126eac5e4dbfaa",
+    "aggregateSha256": "e28a983db179b720c3b16d7416ee4112894a3115c4be6fe43c61c52e0d9a8313"
+  },
+  "sqliteNativeSha256": "b7385d722c83fb52142a00477a726723745916d22a555711ee89834c1111fb2e",
+  "databaseSha256Before": "987386ddae9ce414b0a9a4619f73d4552c2e6b1690df6fa2b6755a8a45eae18d",
+  "databaseSha256After": "aafe39bdf7f6d8135c94ff6e03fa3db29b75c465b2fa41cb6545f6a6998b1678",
+  "nativeSha256": "3d03a41687719b4eaafff3e3e106e52f2dd2185b92ef4ebd075ea643117c2dab",
+  "persistenceNativeSha256": "2ad02e78e7200fc021eb9133a7524435bbdebf0394e708e2867cc6cef0d0ea6e",
+  "phaseAcceptance": false
+}

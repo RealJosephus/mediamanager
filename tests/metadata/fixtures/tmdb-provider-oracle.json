@@ -1,0 +1,1862 @@
+{
+  "TimeZone": "China Standard Time",
+  "NfoEncodings": [
+    {
+      "Name": "utf8",
+      "Bytes": "PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz48bW92aWU\u002BPHRpdGxlPkVuY29kaW5nIOS4reaWhyDwnYSePC90aXRsZT48cGxvdD5Vbmljb2RlIG92ZXJ2aWV3PC9wbG90PjwvbW92aWU\u002B",
+      "Title": "Encoding \u4E2D\u6587 \uD834\uDD1E",
+      "Overview": "Unicode overview"
+    },
+    {
+      "Name": "utf8-bom",
+      "Bytes": "77u/PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz48bW92aWU\u002BPHRpdGxlPkVuY29kaW5nIOS4reaWhyDwnYSePC90aXRsZT48cGxvdD5Vbmljb2RlIG92ZXJ2aWV3PC9wbG90PjwvbW92aWU\u002B",
+      "Title": "Encoding \u4E2D\u6587 \uD834\uDD1E",
+      "Overview": "Unicode overview"
+    },
+    {
+      "Name": "utf16-le",
+      "Bytes": "//48AD8AeABtAGwAIAB2AGUAcgBzAGkAbwBuAD0AIgAxAC4AMAAiACAAZQBuAGMAbwBkAGkAbgBnAD0AIgB1AHQAZgAtADgAIgA/AD4APABtAG8AdgBpAGUAPgA8AHQAaQB0AGwAZQA\u002BAEUAbgBjAG8AZABpAG4AZwAgAC1Oh2UgADTYHt08AC8AdABpAHQAbABlAD4APABwAGwAbwB0AD4AVQBuAGkAYwBvAGQAZQAgAG8AdgBlAHIAdgBpAGUAdwA8AC8AcABsAG8AdAA\u002BADwALwBtAG8AdgBpAGUAPgA=",
+      "Title": "Encoding \u4E2D\u6587 \uD834\uDD1E",
+      "Overview": "Unicode overview"
+    },
+    {
+      "Name": "utf16-be",
+      "Bytes": "/v8APAA/AHgAbQBsACAAdgBlAHIAcwBpAG8AbgA9ACIAMQAuADAAIgAgAGUAbgBjAG8AZABpAG4AZwA9ACIAdQB0AGYALQA4ACIAPwA\u002BADwAbQBvAHYAaQBlAD4APAB0AGkAdABsAGUAPgBFAG4AYwBvAGQAaQBuAGcAIE4tZYcAINg03R4APAAvAHQAaQB0AGwAZQA\u002BADwAcABsAG8AdAA\u002BAFUAbgBpAGMAbwBkAGUAIABvAHYAZQByAHYAaQBlAHcAPAAvAHAAbABvAHQAPgA8AC8AbQBvAHYAaQBlAD4=",
+      "Title": "Encoding \u4E2D\u6587 \uD834\uDD1E",
+      "Overview": "Unicode overview"
+    },
+    {
+      "Name": "utf32-le",
+      "Bytes": "//4AADwAAAA/AAAAeAAAAG0AAABsAAAAIAAAAHYAAABlAAAAcgAAAHMAAABpAAAAbwAAAG4AAAA9AAAAIgAAADEAAAAuAAAAMAAAACIAAAAgAAAAZQAAAG4AAABjAAAAbwAAAGQAAABpAAAAbgAAAGcAAAA9AAAAIgAAAHUAAAB0AAAAZgAAAC0AAAA4AAAAIgAAAD8AAAA\u002BAAAAPAAAAG0AAABvAAAAdgAAAGkAAABlAAAAPgAAADwAAAB0AAAAaQAAAHQAAABsAAAAZQAAAD4AAABFAAAAbgAAAGMAAABvAAAAZAAAAGkAAABuAAAAZwAAACAAAAAtTgAAh2UAACAAAAAe0QEAPAAAAC8AAAB0AAAAaQAAAHQAAABsAAAAZQAAAD4AAAA8AAAAcAAAAGwAAABvAAAAdAAAAD4AAABVAAAAbgAAAGkAAABjAAAAbwAAAGQAAABlAAAAIAAAAG8AAAB2AAAAZQAAAHIAAAB2AAAAaQAAAGUAAAB3AAAAPAAAAC8AAABwAAAAbAAAAG8AAAB0AAAAPgAAADwAAAAvAAAAbQAAAG8AAAB2AAAAaQAAAGUAAAA\u002BAAAA",
+      "Title": "Encoding \u4E2D\u6587 \uD834\uDD1E",
+      "Overview": "Unicode overview"
+    },
+    {
+      "Name": "utf32-be",
+      "Bytes": "AAD\u002B/wAAADwAAAA/AAAAeAAAAG0AAABsAAAAIAAAAHYAAABlAAAAcgAAAHMAAABpAAAAbwAAAG4AAAA9AAAAIgAAADEAAAAuAAAAMAAAACIAAAAgAAAAZQAAAG4AAABjAAAAbwAAAGQAAABpAAAAbgAAAGcAAAA9AAAAIgAAAHUAAAB0AAAAZgAAAC0AAAA4AAAAIgAAAD8AAAA\u002BAAAAPAAAAG0AAABvAAAAdgAAAGkAAABlAAAAPgAAADwAAAB0AAAAaQAAAHQAAABsAAAAZQAAAD4AAABFAAAAbgAAAGMAAABvAAAAZAAAAGkAAABuAAAAZwAAACAAAE4tAABlhwAAACAAAdEeAAAAPAAAAC8AAAB0AAAAaQAAAHQAAABsAAAAZQAAAD4AAAA8AAAAcAAAAGwAAABvAAAAdAAAAD4AAABVAAAAbgAAAGkAAABjAAAAbwAAAGQAAABlAAAAIAAAAG8AAAB2AAAAZQAAAHIAAAB2AAAAaQAAAGUAAAB3AAAAPAAAAC8AAABwAAAAbAAAAG8AAAB0AAAAPgAAADwAAAAvAAAAbQAAAG8AAAB2AAAAaQAAAGUAAAA\u002B",
+      "Title": "Encoding \u4E2D\u6587 \uD834\uDD1E",
+      "Overview": "Unicode overview"
+    }
+  ],
+  "Cases": [
+    {
+      "Name": "series-details",
+      "Result": {
+        "HasMetadata": true,
+        "QueriedById": false,
+        "ResultLanguage": "en-US",
+        "Item": {
+          "Type": "Series",
+          "Name": "Fixture",
+          "OriginalTitle": "Original Fixture",
+          "Overview": "Series\n\nOverview",
+          "CommunityRating": 8.4,
+          "Studios": [
+            "Network",
+            "Studio"
+          ],
+          "Genres": [
+            "Drama",
+            "Drama"
+          ],
+          "Tags": [
+            "Tag"
+          ],
+          "HomePageUrl": "https://series.invalid/",
+          "RunTimeTicks": "27000000000",
+          "EndDate": "2026-01-01T00:00:00",
+          "PremiereDate": "2020-01-02T00:00:00",
+          "ProductionYear": 2020,
+          "ProviderIds": {
+            "Tmdb": "10",
+            "Imdb": "tt1234567",
+            "TvRage": "456",
+            "Tvdb": "123"
+          },
+          "OfficialRating": "FSK-12",
+          "RemoteTrailers": [
+            {
+              "Url": "https://www.youtube.com/watch?v=trailer",
+              "Name": "Trailer"
+            },
+            {
+              "Url": "https://www.youtube.com/watch?v=tease",
+              "Name": "Teaser"
+            }
+          ],
+          "OriginalLanguage": "fr",
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "IndexNumberEnd": null,
+          "Status": "Continuing"
+        },
+        "People": [
+          {
+            "Name": "Ada",
+            "Role": "Major",
+            "Type": "Actor",
+            "SortOrder": 1,
+            "ImageUrl": "https://images.invalid/original/ada.jpg",
+            "ProviderIds": {
+              "Tmdb": "31"
+            }
+          },
+          {
+            "Name": "Ada",
+            "Role": "Minor",
+            "Type": "Actor",
+            "SortOrder": 1,
+            "ImageUrl": "https://images.invalid/original/ada.jpg",
+            "ProviderIds": {
+              "Tmdb": "31"
+            }
+          },
+          {
+            "Name": "Cee",
+            "Role": "Director",
+            "Type": "Director",
+            "SortOrder": null,
+            "ImageUrl": "https://images.invalid/original/cee.jpg",
+            "ProviderIds": {
+              "Tmdb": "33"
+            }
+          },
+          {
+            "Name": "Dee",
+            "Role": null,
+            "Type": "Creator",
+            "SortOrder": null,
+            "ImageUrl": "https://images.invalid/original/dee.jpg",
+            "ProviderIds": {
+              "Tmdb": "34"
+            }
+          }
+        ]
+      },
+      "Requests": [
+        "/3/configuration?api_key=[fixture-key]",
+        "/3/tv/10?language=en-US\u0026include_image_language=en-US%2Cnull%2Cen\u0026append_to_response=credits%2Cimages%2Cexternal_ids%2Ccontent_ratings%2Ckeywords%2Cvideos%2Cepisode_groups%2Caggregate_credits\u0026api_key=[fixture-key]"
+      ]
+    },
+    {
+      "Name": "series-language-fallback",
+      "Result": {
+        "HasMetadata": true,
+        "QueriedById": false,
+        "ResultLanguage": "fr",
+        "Item": {
+          "Type": "Series",
+          "Name": "Fixture",
+          "OriginalTitle": "Original Fixture",
+          "Overview": "Series\n\nOverview",
+          "CommunityRating": 8.4,
+          "Studios": [
+            "Network",
+            "Studio"
+          ],
+          "Genres": [
+            "Drama",
+            "Drama"
+          ],
+          "Tags": [
+            "Tag"
+          ],
+          "HomePageUrl": "https://series.invalid/",
+          "RunTimeTicks": "27000000000",
+          "EndDate": "2026-01-01T00:00:00",
+          "PremiereDate": "2020-01-02T00:00:00",
+          "ProductionYear": 2020,
+          "ProviderIds": {
+            "Tmdb": "10",
+            "Imdb": "tt1234567",
+            "TvRage": "456",
+            "Tvdb": "123"
+          },
+          "OfficialRating": "TV-14",
+          "RemoteTrailers": [
+            {
+              "Url": "https://www.youtube.com/watch?v=trailer",
+              "Name": "Trailer"
+            },
+            {
+              "Url": "https://www.youtube.com/watch?v=tease",
+              "Name": "Teaser"
+            }
+          ],
+          "OriginalLanguage": "fr",
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "IndexNumberEnd": null,
+          "Status": "Continuing"
+        },
+        "People": [
+          {
+            "Name": "Ada",
+            "Role": "Major",
+            "Type": "Actor",
+            "SortOrder": 1,
+            "ImageUrl": "https://images.invalid/original/ada.jpg",
+            "ProviderIds": {
+              "Tmdb": "31"
+            }
+          },
+          {
+            "Name": "Ada",
+            "Role": "Minor",
+            "Type": "Actor",
+            "SortOrder": 1,
+            "ImageUrl": "https://images.invalid/original/ada.jpg",
+            "ProviderIds": {
+              "Tmdb": "31"
+            }
+          },
+          {
+            "Name": "Cee",
+            "Role": "Director",
+            "Type": "Director",
+            "SortOrder": null,
+            "ImageUrl": "https://images.invalid/original/cee.jpg",
+            "ProviderIds": {
+              "Tmdb": "33"
+            }
+          },
+          {
+            "Name": "Dee",
+            "Role": null,
+            "Type": "Creator",
+            "SortOrder": null,
+            "ImageUrl": "https://images.invalid/original/dee.jpg",
+            "ProviderIds": {
+              "Tmdb": "34"
+            }
+          }
+        ]
+      },
+      "Requests": [
+        "/3/configuration?api_key=[fixture-key]",
+        "/3/tv/10?include_image_language=null%2Cen\u0026append_to_response=credits%2Cimages%2Cexternal_ids%2Ccontent_ratings%2Ckeywords%2Cvideos%2Cepisode_groups%2Caggregate_credits\u0026api_key=[fixture-key]"
+      ]
+    },
+    {
+      "Name": "series-id-search",
+      "Result": [
+        {
+          "Name": "Fixture",
+          "SearchProviderName": "TheMovieDb",
+          "ImageUrl": null,
+          "Overview": "Series\n\nOverview",
+          "PremiereDate": "2020-01-01T16:00:00Z",
+          "ProductionYear": 2020,
+          "ProviderIds": {
+            "Tmdb": "10",
+            "Imdb": "tt1234567",
+            "Tvdb": "123"
+          },
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "IndexNumberEnd": null
+        }
+      ],
+      "Requests": [
+        "/3/configuration?api_key=[fixture-key]",
+        "/3/tv/10?language=en-US\u0026include_image_language=en-US\u0026append_to_response=credits%2Cimages%2Cexternal_ids%2Ccontent_ratings%2Ckeywords%2Cvideos%2Cepisode_groups%2Caggregate_credits\u0026api_key=[fixture-key]"
+      ]
+    },
+    {
+      "Name": "series-imdb-search",
+      "Result": [
+        {
+          "Name": "Fixture",
+          "SearchProviderName": "TheMovieDb",
+          "ImageUrl": "https://images.invalid/original/poster.jpg",
+          "Overview": "Series\n\nOverview",
+          "PremiereDate": "2020-01-01T16:00:00Z",
+          "ProductionYear": 2020,
+          "ProviderIds": {
+            "Tmdb": "10",
+            "Imdb": "tt1234567"
+          },
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "IndexNumberEnd": null
+        }
+      ],
+      "Requests": [
+        "/3/configuration?api_key=[fixture-key]",
+        "/3/find/tt1234567?external_source=imdb_id\u0026language=en-US\u0026api_key=[fixture-key]"
+      ]
+    },
+    {
+      "Name": "series-tvdb-empty",
+      "Result": [],
+      "Requests": [
+        "/3/configuration?api_key=[fixture-key]",
+        "/3/find/123?external_source=tvdb_id\u0026language=en-US\u0026api_key=[fixture-key]"
+      ]
+    },
+    {
+      "Name": "series-name-search",
+      "Result": [
+        {
+          "Name": "Fixture",
+          "SearchProviderName": "TheMovieDb",
+          "ImageUrl": "https://images.invalid/original/poster.jpg",
+          "Overview": "Series\n\nOverview",
+          "PremiereDate": "2020-01-01T16:00:00Z",
+          "ProductionYear": 2020,
+          "ProviderIds": {
+            "Tmdb": "10"
+          },
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "IndexNumberEnd": null
+        }
+      ],
+      "Requests": [
+        "/3/configuration?api_key=[fixture-key]",
+        "/3/search/tv?query=Fixture\u0026language=en-US\u0026include_adult=false\u0026api_key=[fixture-key]"
+      ]
+    },
+    {
+      "Name": "series-invalid-id",
+      "Result": {
+        "HasMetadata": false,
+        "QueriedById": true,
+        "ResultLanguage": null,
+        "Item": null,
+        "People": null
+      },
+      "Requests": []
+    },
+    {
+      "Name": "episode-details",
+      "Result": {
+        "HasMetadata": true,
+        "QueriedById": true,
+        "ResultLanguage": "en-US",
+        "Item": {
+          "Type": "Episode",
+          "Name": "Episode one",
+          "OriginalTitle": null,
+          "Overview": "Overview one",
+          "CommunityRating": 7.4,
+          "Studios": [],
+          "Genres": [],
+          "Tags": [],
+          "HomePageUrl": null,
+          "RunTimeTicks": null,
+          "EndDate": null,
+          "PremiereDate": "2020-01-01T16:00:00Z",
+          "ProductionYear": 2020,
+          "ProviderIds": {
+            "Tvdb": "501",
+            "Imdb": "tt7654321",
+            "TvRage": "601"
+          },
+          "OfficialRating": null,
+          "RemoteTrailers": [
+            {
+              "Url": "https://www.youtube.com/watch?v=episode",
+              "Name": null
+            }
+          ],
+          "OriginalLanguage": null,
+          "IndexNumber": 1,
+          "ParentIndexNumber": 1,
+          "IndexNumberEnd": null,
+          "Status": null
+        },
+        "People": [
+          {
+            "Name": "Bea",
+            "Role": "Self",
+            "Type": "Actor",
+            "SortOrder": 0,
+            "ImageUrl": null,
+            "ProviderIds": {
+              "Tmdb": "32"
+            }
+          },
+          {
+            "Name": "Ada",
+            "Role": "Hero",
+            "Type": "GuestStar",
+            "SortOrder": 1,
+            "ImageUrl": "https://images.invalid/original/ada.jpg",
+            "ProviderIds": {
+              "Tmdb": "31"
+            }
+          },
+          {
+            "Name": "Cee",
+            "Role": "Director",
+            "Type": "Director",
+            "SortOrder": null,
+            "ImageUrl": "https://images.invalid/original/cee.jpg",
+            "ProviderIds": {
+              "Tmdb": "33"
+            }
+          }
+        ]
+      },
+      "Requests": [
+        "/3/configuration?api_key=[fixture-key]",
+        "/3/tv/10/season/1/episode/1?language=en-US\u0026include_image_language=en-US%2Cnull%2Cen\u0026append_to_response=credits%2Cimages%2Cexternal_ids%2Cvideos\u0026api_key=[fixture-key]"
+      ]
+    },
+    {
+      "Name": "episode-combined",
+      "Result": {
+        "HasMetadata": true,
+        "QueriedById": true,
+        "ResultLanguage": "en-US",
+        "Item": {
+          "Type": "Episode",
+          "Name": "Episode one / Episode three",
+          "OriginalTitle": null,
+          "Overview": "Overview one / Overview three",
+          "CommunityRating": 7.4,
+          "Studios": [],
+          "Genres": [],
+          "Tags": [],
+          "HomePageUrl": null,
+          "RunTimeTicks": null,
+          "EndDate": null,
+          "PremiereDate": "2020-01-01T16:00:00Z",
+          "ProductionYear": 2020,
+          "ProviderIds": {
+            "Tvdb": "501",
+            "Imdb": "tt7654321",
+            "TvRage": "601"
+          },
+          "OfficialRating": null,
+          "RemoteTrailers": [
+            {
+              "Url": "https://www.youtube.com/watch?v=episode",
+              "Name": null
+            }
+          ],
+          "OriginalLanguage": null,
+          "IndexNumber": 1,
+          "ParentIndexNumber": 1,
+          "IndexNumberEnd": 3,
+          "Status": null
+        },
+        "People": [
+          {
+            "Name": "Bea",
+            "Role": "Self",
+            "Type": "Actor",
+            "SortOrder": 0,
+            "ImageUrl": null,
+            "ProviderIds": {
+              "Tmdb": "32"
+            }
+          },
+          {
+            "Name": "Ada",
+            "Role": "Hero",
+            "Type": "GuestStar",
+            "SortOrder": 1,
+            "ImageUrl": "https://images.invalid/original/ada.jpg",
+            "ProviderIds": {
+              "Tmdb": "31"
+            }
+          },
+          {
+            "Name": "Cee",
+            "Role": "Director",
+            "Type": "Director",
+            "SortOrder": null,
+            "ImageUrl": "https://images.invalid/original/cee.jpg",
+            "ProviderIds": {
+              "Tmdb": "33"
+            }
+          }
+        ]
+      },
+      "Requests": [
+        "/3/configuration?api_key=[fixture-key]",
+        "/3/tv/10/season/1/episode/1?language=en-US\u0026include_image_language=en-US%2Cnull%2Cen\u0026append_to_response=credits%2Cimages%2Cexternal_ids%2Cvideos\u0026api_key=[fixture-key]",
+        "/3/tv/10/season/1/episode/2?language=en-US\u0026include_image_language=en-US%2Cnull%2Cen\u0026append_to_response=credits%2Cimages%2Cexternal_ids%2Cvideos\u0026api_key=[fixture-key]",
+        "/3/tv/10/season/1/episode/3?language=en-US\u0026include_image_language=en-US%2Cnull%2Cen\u0026append_to_response=credits%2Cimages%2Cexternal_ids%2Cvideos\u0026api_key=[fixture-key]"
+      ]
+    },
+    {
+      "Name": "episode-search",
+      "Result": [
+        {
+          "Name": "Episode one",
+          "SearchProviderName": "TheMovieDb",
+          "ImageUrl": null,
+          "Overview": null,
+          "PremiereDate": "2020-01-01T16:00:00Z",
+          "ProductionYear": 2020,
+          "ProviderIds": {
+            "Tvdb": "501",
+            "Imdb": "tt7654321",
+            "TvRage": "601"
+          },
+          "IndexNumber": 1,
+          "ParentIndexNumber": 1,
+          "IndexNumberEnd": null
+        }
+      ],
+      "Requests": [
+        "/3/configuration?api_key=[fixture-key]",
+        "/3/tv/10/season/1/episode/1?language=en-US\u0026include_image_language=en-US%2Cnull%2Cen\u0026append_to_response=credits%2Cimages%2Cexternal_ids%2Cvideos\u0026api_key=[fixture-key]"
+      ]
+    },
+    {
+      "Name": "episode-missing",
+      "Result": {
+        "HasMetadata": false,
+        "QueriedById": false,
+        "ResultLanguage": null,
+        "Item": null,
+        "People": null
+      },
+      "Requests": []
+    },
+    {
+      "Name": "episode-no-number",
+      "Result": [],
+      "Requests": []
+    },
+    {
+      "Name": "collection-details",
+      "Result": {
+        "HasMetadata": true,
+        "QueriedById": false,
+        "ResultLanguage": "en-US",
+        "Item": {
+          "Type": "BoxSet",
+          "Name": "Fixture collection",
+          "OriginalTitle": null,
+          "Overview": "Collection overview",
+          "CommunityRating": null,
+          "Studios": [],
+          "Genres": [],
+          "Tags": [],
+          "HomePageUrl": null,
+          "RunTimeTicks": null,
+          "EndDate": null,
+          "PremiereDate": null,
+          "ProductionYear": null,
+          "ProviderIds": {
+            "Tmdb": "20"
+          },
+          "OfficialRating": null,
+          "RemoteTrailers": [],
+          "OriginalLanguage": null,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "IndexNumberEnd": null,
+          "Status": null
+        },
+        "People": null
+      },
+      "Requests": [
+        "/3/configuration?api_key=[fixture-key]",
+        "/3/collection/20?language=en-US\u0026include_image_language=en-US%2Cnull%2Cen\u0026append_to_response=images\u0026api_key=[fixture-key]"
+      ]
+    },
+    {
+      "Name": "collection-id-search",
+      "Result": [
+        {
+          "Name": "Fixture collection",
+          "SearchProviderName": "TheMovieDb",
+          "ImageUrl": "https://images.invalid/original/collection.jpg",
+          "Overview": null,
+          "PremiereDate": null,
+          "ProductionYear": null,
+          "ProviderIds": {
+            "Tmdb": "20"
+          },
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "IndexNumberEnd": null
+        }
+      ],
+      "Requests": [
+        "/3/configuration?api_key=[fixture-key]",
+        "/3/collection/20?language=en-US\u0026include_image_language=en-US%2Cnull%2Cen\u0026append_to_response=images\u0026api_key=[fixture-key]"
+      ]
+    },
+    {
+      "Name": "collection-name-search",
+      "Result": [
+        {
+          "Name": "Fixture collection",
+          "SearchProviderName": "TheMovieDb",
+          "ImageUrl": "https://images.invalid/original/collection.jpg",
+          "Overview": null,
+          "PremiereDate": null,
+          "ProductionYear": null,
+          "ProviderIds": {
+            "Tmdb": "20"
+          },
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "IndexNumberEnd": null
+        }
+      ],
+      "Requests": [
+        "/3/configuration?api_key=[fixture-key]",
+        "/3/search/collection?query=Fixture\u0026language=en-US\u0026api_key=[fixture-key]"
+      ]
+    },
+    {
+      "Name": "Movie-images",
+      "Result": [
+        {
+          "ProviderName": "TheMovieDb",
+          "Url": "https://images.invalid/original/poster.jpg",
+          "ThumbnailUrl": "https://images.invalid/w500/poster.jpg",
+          "Height": 1080,
+          "Width": 1920,
+          "CommunityRating": 7.25,
+          "VoteCount": 4,
+          "Language": "en-US",
+          "Type": "Primary",
+          "RatingType": "Score"
+        },
+        {
+          "ProviderName": "TheMovieDb",
+          "Url": "https://images.invalid/original/backdrop.jpg",
+          "ThumbnailUrl": "https://images.invalid/w780/backdrop.jpg",
+          "Height": 1080,
+          "Width": 1920,
+          "CommunityRating": 7.25,
+          "VoteCount": 4,
+          "Language": "",
+          "Type": "Backdrop",
+          "RatingType": "Score"
+        },
+        {
+          "ProviderName": "TheMovieDb",
+          "Url": "https://images.invalid/original/thumb.jpg",
+          "ThumbnailUrl": "https://images.invalid/w780/thumb.jpg",
+          "Height": 1080,
+          "Width": 1920,
+          "CommunityRating": 7.25,
+          "VoteCount": 4,
+          "Language": "en-US",
+          "Type": "Thumb",
+          "RatingType": "Score"
+        },
+        {
+          "ProviderName": "TheMovieDb",
+          "Url": "https://images.invalid/original/logo.png",
+          "ThumbnailUrl": "https://images.invalid/w500/logo.png",
+          "Height": 1080,
+          "Width": 1920,
+          "CommunityRating": 7.25,
+          "VoteCount": 4,
+          "Language": "",
+          "Type": "Logo",
+          "RatingType": "Score"
+        }
+      ],
+      "Requests": [
+        "/3/configuration?api_key=[fixture-key]",
+        "/3/movie/40?append_to_response=credits%2Cimages%2Ckeywords%2Creleases%2Cvideos\u0026api_key=[fixture-key]"
+      ]
+    },
+    {
+      "Name": "Series-images",
+      "Result": [
+        {
+          "ProviderName": "TheMovieDb",
+          "Url": "https://images.invalid/original/poster.jpg",
+          "ThumbnailUrl": "https://images.invalid/w500/poster.jpg",
+          "Height": 1080,
+          "Width": 1920,
+          "CommunityRating": 7.25,
+          "VoteCount": 4,
+          "Language": "en-US",
+          "Type": "Primary",
+          "RatingType": "Score"
+        },
+        {
+          "ProviderName": "TheMovieDb",
+          "Url": "https://images.invalid/original/backdrop.jpg",
+          "ThumbnailUrl": "https://images.invalid/w780/backdrop.jpg",
+          "Height": 1080,
+          "Width": 1920,
+          "CommunityRating": 7.25,
+          "VoteCount": 4,
+          "Language": "",
+          "Type": "Backdrop",
+          "RatingType": "Score"
+        },
+        {
+          "ProviderName": "TheMovieDb",
+          "Url": "https://images.invalid/original/thumb.jpg",
+          "ThumbnailUrl": "https://images.invalid/w780/thumb.jpg",
+          "Height": 1080,
+          "Width": 1920,
+          "CommunityRating": 7.25,
+          "VoteCount": 4,
+          "Language": "en-US",
+          "Type": "Thumb",
+          "RatingType": "Score"
+        },
+        {
+          "ProviderName": "TheMovieDb",
+          "Url": "https://images.invalid/original/logo.png",
+          "ThumbnailUrl": "https://images.invalid/w500/logo.png",
+          "Height": 1080,
+          "Width": 1920,
+          "CommunityRating": 7.25,
+          "VoteCount": 4,
+          "Language": "",
+          "Type": "Logo",
+          "RatingType": "Score"
+        }
+      ],
+      "Requests": [
+        "/3/configuration?api_key=[fixture-key]",
+        "/3/tv/10?append_to_response=credits%2Cimages%2Cexternal_ids%2Ccontent_ratings%2Ckeywords%2Cvideos%2Cepisode_groups%2Caggregate_credits\u0026api_key=[fixture-key]"
+      ]
+    },
+    {
+      "Name": "Season-images",
+      "Result": [
+        {
+          "ProviderName": "TheMovieDb",
+          "Url": "https://images.invalid/original/poster.jpg",
+          "ThumbnailUrl": "https://images.invalid/w500/poster.jpg",
+          "Height": 1080,
+          "Width": 1920,
+          "CommunityRating": 7.25,
+          "VoteCount": 4,
+          "Language": "en-US",
+          "Type": "Primary",
+          "RatingType": "Score"
+        }
+      ],
+      "Requests": [
+        "/3/configuration?api_key=[fixture-key]",
+        "/3/tv/10/season/1?append_to_response=credits%2Cimages%2Cexternal_ids%2Cvideos\u0026api_key=[fixture-key]"
+      ]
+    },
+    {
+      "Name": "Episode-images",
+      "Result": [
+        {
+          "ProviderName": "TheMovieDb",
+          "Url": "https://images.invalid/original/still.jpg",
+          "ThumbnailUrl": "https://images.invalid/w500/still.jpg",
+          "Height": 1080,
+          "Width": 1920,
+          "CommunityRating": 7.25,
+          "VoteCount": 4,
+          "Language": "en-US",
+          "Type": "Primary",
+          "RatingType": "Score"
+        }
+      ],
+      "Requests": [
+        "/3/configuration?api_key=[fixture-key]",
+        "/3/tv/10/season/1/episode/1?append_to_response=credits%2Cimages%2Cexternal_ids%2Cvideos\u0026api_key=[fixture-key]"
+      ]
+    },
+    {
+      "Name": "Person-images",
+      "Result": [
+        {
+          "ProviderName": "TheMovieDb",
+          "Url": "https://images.invalid/original/ada.jpg",
+          "ThumbnailUrl": "https://images.invalid/w500/ada.jpg",
+          "Height": 1080,
+          "Width": 1920,
+          "CommunityRating": 7.25,
+          "VoteCount": 4,
+          "Language": "",
+          "Type": "Primary",
+          "RatingType": "Score"
+        }
+      ],
+      "Requests": [
+        "/3/configuration?api_key=[fixture-key]",
+        "/3/person/31?language=en-US\u0026append_to_response=external_ids%2Cimages\u0026api_key=[fixture-key]"
+      ]
+    },
+    {
+      "Name": "BoxSet-images",
+      "Result": [
+        {
+          "ProviderName": "TheMovieDb",
+          "Url": "https://images.invalid/original/poster.jpg",
+          "ThumbnailUrl": "https://images.invalid/w500/poster.jpg",
+          "Height": 1080,
+          "Width": 1920,
+          "CommunityRating": 7.25,
+          "VoteCount": 4,
+          "Language": "en-US",
+          "Type": "Primary",
+          "RatingType": "Score"
+        },
+        {
+          "ProviderName": "TheMovieDb",
+          "Url": "https://images.invalid/original/backdrop.jpg",
+          "ThumbnailUrl": "https://images.invalid/w780/backdrop.jpg",
+          "Height": 1080,
+          "Width": 1920,
+          "CommunityRating": 7.25,
+          "VoteCount": 4,
+          "Language": "",
+          "Type": "Backdrop",
+          "RatingType": "Score"
+        },
+        {
+          "ProviderName": "TheMovieDb",
+          "Url": "https://images.invalid/original/thumb.jpg",
+          "ThumbnailUrl": "https://images.invalid/w780/thumb.jpg",
+          "Height": 1080,
+          "Width": 1920,
+          "CommunityRating": 7.25,
+          "VoteCount": 4,
+          "Language": "en-US",
+          "Type": "Thumb",
+          "RatingType": "Score"
+        }
+      ],
+      "Requests": [
+        "/3/configuration?api_key=[fixture-key]",
+        "/3/collection/20?append_to_response=images\u0026api_key=[fixture-key]"
+      ]
+    },
+    {
+      "Name": "series-flat-cast",
+      "Result": {
+        "HasMetadata": true,
+        "QueriedById": false,
+        "ResultLanguage": "en-US",
+        "Item": {
+          "Type": "Series",
+          "Name": "Fixture",
+          "OriginalTitle": "Original Fixture",
+          "Overview": "Series\n\nOverview",
+          "CommunityRating": 8.4,
+          "Studios": [
+            "Network",
+            "Studio"
+          ],
+          "Genres": [
+            "Drama",
+            "Drama"
+          ],
+          "Tags": [
+            "Tag"
+          ],
+          "HomePageUrl": "https://series.invalid/",
+          "RunTimeTicks": "27000000000",
+          "EndDate": "2026-01-01T00:00:00",
+          "PremiereDate": "2020-01-02T00:00:00",
+          "ProductionYear": 2020,
+          "ProviderIds": {
+            "Tmdb": "10",
+            "Imdb": "tt1234567",
+            "TvRage": "456",
+            "Tvdb": "123"
+          },
+          "OfficialRating": "FSK-12",
+          "RemoteTrailers": [
+            {
+              "Url": "https://www.youtube.com/watch?v=trailer",
+              "Name": "Trailer"
+            },
+            {
+              "Url": "https://www.youtube.com/watch?v=tease",
+              "Name": "Teaser"
+            }
+          ],
+          "OriginalLanguage": "fr",
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "IndexNumberEnd": null,
+          "Status": "Continuing"
+        },
+        "People": [
+          {
+            "Name": "Bea",
+            "Role": "Self",
+            "Type": "Actor",
+            "SortOrder": 0,
+            "ImageUrl": null,
+            "ProviderIds": {
+              "Tmdb": "32"
+            }
+          },
+          {
+            "Name": "Ada",
+            "Role": "Hero",
+            "Type": "Actor",
+            "SortOrder": 1,
+            "ImageUrl": "https://images.invalid/original/ada.jpg",
+            "ProviderIds": {
+              "Tmdb": "31"
+            }
+          },
+          {
+            "Name": "Cee",
+            "Role": "Director",
+            "Type": "Director",
+            "SortOrder": null,
+            "ImageUrl": "https://images.invalid/original/cee.jpg",
+            "ProviderIds": {
+              "Tmdb": "33"
+            }
+          },
+          {
+            "Name": "Dee",
+            "Role": null,
+            "Type": "Creator",
+            "SortOrder": null,
+            "ImageUrl": "https://images.invalid/original/dee.jpg",
+            "ProviderIds": {
+              "Tmdb": "34"
+            }
+          }
+        ]
+      },
+      "Requests": [
+        "/3/configuration?api_key=[fixture-key]",
+        "/3/tv/10?language=en-US\u0026include_image_language=en-US%2Cnull%2Cen\u0026append_to_response=credits%2Cimages%2Cexternal_ids%2Ccontent_ratings%2Ckeywords%2Cvideos%2Cepisode_groups%2Caggregate_credits\u0026api_key=[fixture-key]"
+      ]
+    },
+    {
+      "Name": "series-no-credits",
+      "Result": {
+        "HasMetadata": true,
+        "QueriedById": false,
+        "ResultLanguage": "en-US",
+        "Item": {
+          "Type": "Series",
+          "Name": "Sparse",
+          "OriginalTitle": null,
+          "Overview": null,
+          "CommunityRating": 0,
+          "Studios": [],
+          "Genres": [],
+          "Tags": [],
+          "HomePageUrl": null,
+          "RunTimeTicks": "0",
+          "EndDate": null,
+          "PremiereDate": null,
+          "ProductionYear": null,
+          "ProviderIds": {
+            "Tmdb": "10"
+          },
+          "OfficialRating": null,
+          "RemoteTrailers": [],
+          "OriginalLanguage": "ja",
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "IndexNumberEnd": null,
+          "Status": null
+        },
+        "People": null
+      },
+      "Requests": [
+        "/3/configuration?api_key=[fixture-key]",
+        "/3/tv/10?language=en-US\u0026include_image_language=en-US%2Cnull%2Cen\u0026append_to_response=credits%2Cimages%2Cexternal_ids%2Ccontent_ratings%2Ckeywords%2Cvideos%2Cepisode_groups%2Caggregate_credits\u0026api_key=[fixture-key]"
+      ]
+    },
+    {
+      "Name": "series-imdb-metadata",
+      "Result": {
+        "HasMetadata": true,
+        "QueriedById": false,
+        "ResultLanguage": "en-US",
+        "Item": {
+          "Type": "Series",
+          "Name": "Fixture",
+          "OriginalTitle": "Original Fixture",
+          "Overview": "Series\n\nOverview",
+          "CommunityRating": 8.4,
+          "Studios": [
+            "Network",
+            "Studio"
+          ],
+          "Genres": [
+            "Drama",
+            "Drama"
+          ],
+          "Tags": [
+            "Tag"
+          ],
+          "HomePageUrl": "https://series.invalid/",
+          "RunTimeTicks": "27000000000",
+          "EndDate": "2026-01-01T00:00:00",
+          "PremiereDate": "2020-01-02T00:00:00",
+          "ProductionYear": 2020,
+          "ProviderIds": {
+            "Tmdb": "10",
+            "Imdb": "tt1234567",
+            "TvRage": "456",
+            "Tvdb": "123"
+          },
+          "OfficialRating": "FSK-12",
+          "RemoteTrailers": [
+            {
+              "Url": "https://www.youtube.com/watch?v=trailer",
+              "Name": "Trailer"
+            },
+            {
+              "Url": "https://www.youtube.com/watch?v=tease",
+              "Name": "Teaser"
+            }
+          ],
+          "OriginalLanguage": "fr",
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "IndexNumberEnd": null,
+          "Status": "Continuing"
+        },
+        "People": [
+          {
+            "Name": "Ada",
+            "Role": "Major",
+            "Type": "Actor",
+            "SortOrder": 1,
+            "ImageUrl": "https://images.invalid/original/ada.jpg",
+            "ProviderIds": {
+              "Tmdb": "31"
+            }
+          },
+          {
+            "Name": "Ada",
+            "Role": "Minor",
+            "Type": "Actor",
+            "SortOrder": 1,
+            "ImageUrl": "https://images.invalid/original/ada.jpg",
+            "ProviderIds": {
+              "Tmdb": "31"
+            }
+          },
+          {
+            "Name": "Cee",
+            "Role": "Director",
+            "Type": "Director",
+            "SortOrder": null,
+            "ImageUrl": "https://images.invalid/original/cee.jpg",
+            "ProviderIds": {
+              "Tmdb": "33"
+            }
+          },
+          {
+            "Name": "Dee",
+            "Role": null,
+            "Type": "Creator",
+            "SortOrder": null,
+            "ImageUrl": "https://images.invalid/original/dee.jpg",
+            "ProviderIds": {
+              "Tmdb": "34"
+            }
+          }
+        ]
+      },
+      "Requests": [
+        "/3/configuration?api_key=[fixture-key]",
+        "/3/find/tt1234567?external_source=imdb_id\u0026language=en-US\u0026api_key=[fixture-key]",
+        "/3/tv/10?language=en-US\u0026include_image_language=en-US%2Cnull%2Cen\u0026append_to_response=credits%2Cimages%2Cexternal_ids%2Ccontent_ratings%2Ckeywords%2Cvideos%2Cepisode_groups%2Caggregate_credits\u0026api_key=[fixture-key]"
+      ]
+    },
+    {
+      "Name": "series-no-name-match",
+      "Result": {
+        "HasMetadata": false,
+        "QueriedById": false,
+        "ResultLanguage": null,
+        "Item": null,
+        "People": null
+      },
+      "Requests": [
+        "/3/configuration?api_key=[fixture-key]",
+        "/3/search/tv?query=Fixture\u0026language=en-US\u0026include_adult=false\u0026api_key=[fixture-key]"
+      ]
+    },
+    {
+      "Name": "series-name-match",
+      "Result": {
+        "HasMetadata": true,
+        "QueriedById": false,
+        "ResultLanguage": "en-US",
+        "Item": {
+          "Type": "Series",
+          "Name": "Fixture",
+          "OriginalTitle": "Original Fixture",
+          "Overview": "Series\n\nOverview",
+          "CommunityRating": 8.4,
+          "Studios": [
+            "Network",
+            "Studio"
+          ],
+          "Genres": [
+            "Drama",
+            "Drama"
+          ],
+          "Tags": [
+            "Tag"
+          ],
+          "HomePageUrl": "https://series.invalid/",
+          "RunTimeTicks": "27000000000",
+          "EndDate": "2026-01-01T00:00:00",
+          "PremiereDate": "2020-01-02T00:00:00",
+          "ProductionYear": 2020,
+          "ProviderIds": {
+            "Tmdb": "10",
+            "Imdb": "tt1234567",
+            "TvRage": "456",
+            "Tvdb": "123"
+          },
+          "OfficialRating": "FSK-12",
+          "RemoteTrailers": [
+            {
+              "Url": "https://www.youtube.com/watch?v=trailer",
+              "Name": "Trailer"
+            },
+            {
+              "Url": "https://www.youtube.com/watch?v=tease",
+              "Name": "Teaser"
+            }
+          ],
+          "OriginalLanguage": "fr",
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "IndexNumberEnd": null,
+          "Status": "Continuing"
+        },
+        "People": [
+          {
+            "Name": "Ada",
+            "Role": "Major",
+            "Type": "Actor",
+            "SortOrder": 1,
+            "ImageUrl": "https://images.invalid/original/ada.jpg",
+            "ProviderIds": {
+              "Tmdb": "31"
+            }
+          },
+          {
+            "Name": "Ada",
+            "Role": "Minor",
+            "Type": "Actor",
+            "SortOrder": 1,
+            "ImageUrl": "https://images.invalid/original/ada.jpg",
+            "ProviderIds": {
+              "Tmdb": "31"
+            }
+          },
+          {
+            "Name": "Cee",
+            "Role": "Director",
+            "Type": "Director",
+            "SortOrder": null,
+            "ImageUrl": "https://images.invalid/original/cee.jpg",
+            "ProviderIds": {
+              "Tmdb": "33"
+            }
+          },
+          {
+            "Name": "Dee",
+            "Role": null,
+            "Type": "Creator",
+            "SortOrder": null,
+            "ImageUrl": "https://images.invalid/original/dee.jpg",
+            "ProviderIds": {
+              "Tmdb": "34"
+            }
+          }
+        ]
+      },
+      "Requests": [
+        "/3/configuration?api_key=[fixture-key]",
+        "/3/search/tv?query=Fixture\u0026language=en-US\u0026include_adult=false\u0026first_air_date_year=2020\u0026api_key=[fixture-key]",
+        "/3/tv/10?language=en-US\u0026include_image_language=en-US%2Cnull%2Cen\u0026append_to_response=credits%2Cimages%2Cexternal_ids%2Ccontent_ratings%2Ckeywords%2Cvideos%2Cepisode_groups%2Caggregate_credits\u0026api_key=[fixture-key]"
+      ]
+    },
+    {
+      "Name": "episode-no-overview",
+      "Result": {
+        "HasMetadata": true,
+        "QueriedById": true,
+        "ResultLanguage": null,
+        "Item": {
+          "Type": "Episode",
+          "Name": "Sparse",
+          "OriginalTitle": null,
+          "Overview": "",
+          "CommunityRating": 0,
+          "Studios": [],
+          "Genres": [],
+          "Tags": [],
+          "HomePageUrl": null,
+          "RunTimeTicks": null,
+          "EndDate": null,
+          "PremiereDate": null,
+          "ProductionYear": null,
+          "ProviderIds": {},
+          "OfficialRating": null,
+          "RemoteTrailers": [],
+          "OriginalLanguage": null,
+          "IndexNumber": 1,
+          "ParentIndexNumber": 1,
+          "IndexNumberEnd": null,
+          "Status": null
+        },
+        "People": null
+      },
+      "Requests": [
+        "/3/configuration?api_key=[fixture-key]",
+        "/3/tv/10/season/1/episode/1?language=en-US\u0026include_image_language=en-US%2Cnull%2Cen\u0026append_to_response=credits%2Cimages%2Cexternal_ids%2Cvideos\u0026api_key=[fixture-key]"
+      ]
+    },
+    {
+      "Name": "episode-reversed-range",
+      "Result": {
+        "HasMetadata": false,
+        "QueriedById": false,
+        "ResultLanguage": null,
+        "Item": null,
+        "People": null
+      },
+      "Requests": []
+    },
+    {
+      "Name": "episode-invalid-series-id",
+      "Result": {
+        "HasMetadata": false,
+        "QueriedById": false,
+        "ResultLanguage": null,
+        "Item": null,
+        "People": null
+      },
+      "Requests": []
+    },
+    {
+      "Name": "episode-cast-filter",
+      "Result": {
+        "HasMetadata": true,
+        "QueriedById": true,
+        "ResultLanguage": "en-US",
+        "Item": {
+          "Type": "Episode",
+          "Name": "Episode one",
+          "OriginalTitle": null,
+          "Overview": "Overview one",
+          "CommunityRating": 7.4,
+          "Studios": [],
+          "Genres": [],
+          "Tags": [],
+          "HomePageUrl": null,
+          "RunTimeTicks": null,
+          "EndDate": null,
+          "PremiereDate": "2020-01-01T16:00:00Z",
+          "ProductionYear": 2020,
+          "ProviderIds": {
+            "Tvdb": "501",
+            "Imdb": "tt7654321",
+            "TvRage": "601"
+          },
+          "OfficialRating": null,
+          "RemoteTrailers": [
+            {
+              "Url": "https://www.youtube.com/watch?v=episode",
+              "Name": null
+            }
+          ],
+          "OriginalLanguage": null,
+          "IndexNumber": 1,
+          "ParentIndexNumber": 1,
+          "IndexNumberEnd": null,
+          "Status": null
+        },
+        "People": [
+          {
+            "Name": "Ada",
+            "Role": "Hero",
+            "Type": "GuestStar",
+            "SortOrder": 1,
+            "ImageUrl": "https://images.invalid/original/ada.jpg",
+            "ProviderIds": {
+              "Tmdb": "31"
+            }
+          },
+          {
+            "Name": "Cee",
+            "Role": "Director",
+            "Type": "Director",
+            "SortOrder": null,
+            "ImageUrl": "https://images.invalid/original/cee.jpg",
+            "ProviderIds": {
+              "Tmdb": "33"
+            }
+          }
+        ]
+      },
+      "Requests": [
+        "/3/configuration?api_key=[fixture-key]",
+        "/3/tv/10/season/1/episode/1?language=en-US\u0026include_image_language=en-US%2Cnull%2Cen\u0026append_to_response=credits%2Cimages%2Cexternal_ids%2Cvideos\u0026api_key=[fixture-key]"
+      ]
+    },
+    {
+      "Name": "collection-name-match",
+      "Result": {
+        "HasMetadata": true,
+        "QueriedById": false,
+        "ResultLanguage": "en-US",
+        "Item": {
+          "Type": "BoxSet",
+          "Name": "Fixture collection",
+          "OriginalTitle": null,
+          "Overview": "Collection overview",
+          "CommunityRating": null,
+          "Studios": [],
+          "Genres": [],
+          "Tags": [],
+          "HomePageUrl": null,
+          "RunTimeTicks": null,
+          "EndDate": null,
+          "PremiereDate": null,
+          "ProductionYear": null,
+          "ProviderIds": {
+            "Tmdb": "20"
+          },
+          "OfficialRating": null,
+          "RemoteTrailers": [],
+          "OriginalLanguage": null,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "IndexNumberEnd": null,
+          "Status": null
+        },
+        "People": null
+      },
+      "Requests": [
+        "/3/configuration?api_key=[fixture-key]",
+        "/3/search/collection?query=Fixture\u0026language=en-US\u0026api_key=[fixture-key]",
+        "/3/collection/20?language=en-US\u0026include_image_language=en-US%2Cnull%2Cen\u0026append_to_response=images\u0026api_key=[fixture-key]"
+      ]
+    },
+    {
+      "Name": "collection-id-404",
+      "Result": [],
+      "Requests": [
+        "/3/configuration?api_key=[fixture-key]",
+        "/3/collection/20?language=en-US\u0026include_image_language=en-US%2Cnull%2Cen\u0026append_to_response=images\u0026api_key=[fixture-key]"
+      ]
+    },
+    {
+      "Name": "collection-id-no-images",
+      "Result": [
+        {
+          "Name": "No image",
+          "SearchProviderName": "TheMovieDb",
+          "ImageUrl": null,
+          "Overview": null,
+          "PremiereDate": null,
+          "ProductionYear": null,
+          "ProviderIds": {
+            "Tmdb": "20"
+          },
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "IndexNumberEnd": null
+        }
+      ],
+      "Requests": [
+        "/3/configuration?api_key=[fixture-key]",
+        "/3/collection/20?language=en-US\u0026include_image_language=en-US%2Cnull%2Cen\u0026append_to_response=images\u0026api_key=[fixture-key]"
+      ]
+    },
+    {
+      "Name": "trailer-images",
+      "Result": [
+        {
+          "ProviderName": "TheMovieDb",
+          "Url": "https://images.invalid/original/poster.jpg",
+          "ThumbnailUrl": "https://images.invalid/w500/poster.jpg",
+          "Height": 1080,
+          "Width": 1920,
+          "CommunityRating": 7.25,
+          "VoteCount": 4,
+          "Language": "en-US",
+          "Type": "Primary",
+          "RatingType": "Score"
+        },
+        {
+          "ProviderName": "TheMovieDb",
+          "Url": "https://images.invalid/original/backdrop.jpg",
+          "ThumbnailUrl": "https://images.invalid/w780/backdrop.jpg",
+          "Height": 1080,
+          "Width": 1920,
+          "CommunityRating": 7.25,
+          "VoteCount": 4,
+          "Language": "",
+          "Type": "Backdrop",
+          "RatingType": "Score"
+        },
+        {
+          "ProviderName": "TheMovieDb",
+          "Url": "https://images.invalid/original/thumb.jpg",
+          "ThumbnailUrl": "https://images.invalid/w780/thumb.jpg",
+          "Height": 1080,
+          "Width": 1920,
+          "CommunityRating": 7.25,
+          "VoteCount": 4,
+          "Language": "en-US",
+          "Type": "Thumb",
+          "RatingType": "Score"
+        },
+        {
+          "ProviderName": "TheMovieDb",
+          "Url": "https://images.invalid/original/logo.png",
+          "ThumbnailUrl": "https://images.invalid/w500/logo.png",
+          "Height": 1080,
+          "Width": 1920,
+          "CommunityRating": 7.25,
+          "VoteCount": 4,
+          "Language": "",
+          "Type": "Logo",
+          "RatingType": "Score"
+        }
+      ],
+      "Requests": [
+        "/3/configuration?api_key=[fixture-key]",
+        "/3/movie/40?append_to_response=credits%2Cimages%2Ckeywords%2Creleases%2Cvideos\u0026api_key=[fixture-key]"
+      ]
+    },
+    {
+      "Name": "movie-imdb-images",
+      "Result": [
+        {
+          "ProviderName": "TheMovieDb",
+          "Url": "https://images.invalid/original/poster.jpg",
+          "ThumbnailUrl": "https://images.invalid/w500/poster.jpg",
+          "Height": 1080,
+          "Width": 1920,
+          "CommunityRating": 7.25,
+          "VoteCount": 4,
+          "Language": "en-US",
+          "Type": "Primary",
+          "RatingType": "Score"
+        },
+        {
+          "ProviderName": "TheMovieDb",
+          "Url": "https://images.invalid/original/backdrop.jpg",
+          "ThumbnailUrl": "https://images.invalid/w780/backdrop.jpg",
+          "Height": 1080,
+          "Width": 1920,
+          "CommunityRating": 7.25,
+          "VoteCount": 4,
+          "Language": "",
+          "Type": "Backdrop",
+          "RatingType": "Score"
+        },
+        {
+          "ProviderName": "TheMovieDb",
+          "Url": "https://images.invalid/original/thumb.jpg",
+          "ThumbnailUrl": "https://images.invalid/w780/thumb.jpg",
+          "Height": 1080,
+          "Width": 1920,
+          "CommunityRating": 7.25,
+          "VoteCount": 4,
+          "Language": "en-US",
+          "Type": "Thumb",
+          "RatingType": "Score"
+        },
+        {
+          "ProviderName": "TheMovieDb",
+          "Url": "https://images.invalid/original/logo.png",
+          "ThumbnailUrl": "https://images.invalid/w500/logo.png",
+          "Height": 1080,
+          "Width": 1920,
+          "CommunityRating": 7.25,
+          "VoteCount": 4,
+          "Language": "",
+          "Type": "Logo",
+          "RatingType": "Score"
+        }
+      ],
+      "Requests": [
+        "/3/configuration?api_key=[fixture-key]",
+        "/3/find/tt1234567?external_source=imdb_id\u0026language=en-US\u0026api_key=[fixture-key]",
+        "/3/movie/40?append_to_response=credits%2Cimages%2Ckeywords%2Creleases%2Cvideos\u0026api_key=[fixture-key]"
+      ]
+    },
+    {
+      "Name": "movie-empty-images",
+      "Result": [],
+      "Requests": []
+    },
+    {
+      "Name": "series-scaled-images",
+      "Result": [
+        {
+          "ProviderName": "TheMovieDb",
+          "Url": "https://images.invalid/w500/poster.jpg",
+          "ThumbnailUrl": "https://images.invalid/w500/poster.jpg",
+          "Height": null,
+          "Width": null,
+          "CommunityRating": 7.25,
+          "VoteCount": 4,
+          "Language": "en-US",
+          "Type": "Primary",
+          "RatingType": "Score"
+        },
+        {
+          "ProviderName": "TheMovieDb",
+          "Url": "https://images.invalid/w780/backdrop.jpg",
+          "ThumbnailUrl": "https://images.invalid/w780/backdrop.jpg",
+          "Height": null,
+          "Width": null,
+          "CommunityRating": 7.25,
+          "VoteCount": 4,
+          "Language": "",
+          "Type": "Backdrop",
+          "RatingType": "Score"
+        },
+        {
+          "ProviderName": "TheMovieDb",
+          "Url": "https://images.invalid/w780/thumb.jpg",
+          "ThumbnailUrl": "https://images.invalid/w780/thumb.jpg",
+          "Height": null,
+          "Width": null,
+          "CommunityRating": 7.25,
+          "VoteCount": 4,
+          "Language": "en-US",
+          "Type": "Thumb",
+          "RatingType": "Score"
+        },
+        {
+          "ProviderName": "TheMovieDb",
+          "Url": "https://images.invalid/w500/logo.png",
+          "ThumbnailUrl": "https://images.invalid/w500/logo.png",
+          "Height": null,
+          "Width": null,
+          "CommunityRating": 7.25,
+          "VoteCount": 4,
+          "Language": "",
+          "Type": "Logo",
+          "RatingType": "Score"
+        }
+      ],
+      "Requests": [
+        "/3/configuration?api_key=[fixture-key]",
+        "/3/tv/10?append_to_response=credits%2Cimages%2Cexternal_ids%2Ccontent_ratings%2Ckeywords%2Cvideos%2Cepisode_groups%2Caggregate_credits\u0026api_key=[fixture-key]"
+      ]
+    },
+    {
+      "Name": "person-scaled-images",
+      "Result": [
+        {
+          "ProviderName": "TheMovieDb",
+          "Url": "https://images.invalid/w185/ada.jpg",
+          "ThumbnailUrl": "https://images.invalid/w500/ada.jpg",
+          "Height": null,
+          "Width": null,
+          "CommunityRating": 7.25,
+          "VoteCount": 4,
+          "Language": "",
+          "Type": "Primary",
+          "RatingType": "Score"
+        }
+      ],
+      "Requests": [
+        "/3/configuration?api_key=[fixture-key]",
+        "/3/person/31?language=en-US\u0026append_to_response=external_ids%2Cimages\u0026api_key=[fixture-key]"
+      ]
+    },
+    {
+      "Name": "episode-scaled-images",
+      "Result": [
+        {
+          "ProviderName": "TheMovieDb",
+          "Url": "https://images.invalid/w300/still.jpg",
+          "ThumbnailUrl": "https://images.invalid/w500/still.jpg",
+          "Height": null,
+          "Width": null,
+          "CommunityRating": 7.25,
+          "VoteCount": 4,
+          "Language": "en-US",
+          "Type": "Primary",
+          "RatingType": "Score"
+        }
+      ],
+      "Requests": [
+        "/3/configuration?api_key=[fixture-key]",
+        "/3/tv/10/season/1/episode/1?append_to_response=credits%2Cimages%2Cexternal_ids%2Cvideos\u0026api_key=[fixture-key]"
+      ]
+    },
+    {
+      "Name": "season-no-number-images",
+      "Result": [],
+      "Requests": []
+    }
+  ],
+  "ExternalUrls": [
+    {
+      "DisplayOrder": null,
+      "Season": [
+        "https://www.themoviedb.org/tv/10/season/2"
+      ],
+      "Episode": [
+        "https://www.themoviedb.org/tv/10/season/2/episode/3"
+      ]
+    },
+    {
+      "DisplayOrder": "",
+      "Season": [
+        "https://www.themoviedb.org/tv/10/season/2"
+      ],
+      "Episode": [
+        "https://www.themoviedb.org/tv/10/season/2/episode/3"
+      ]
+    },
+    {
+      "DisplayOrder": "OriginalAirDate",
+      "Season": [
+        "https://www.themoviedb.org/tv/10/season/2"
+      ],
+      "Episode": [
+        "https://www.themoviedb.org/tv/10/season/2/episode/3"
+      ]
+    },
+    {
+      "DisplayOrder": "originalAirDate",
+      "Season": [],
+      "Episode": []
+    },
+    {
+      "DisplayOrder": "1",
+      "Season": [
+        "https://www.themoviedb.org/tv/10/season/2"
+      ],
+      "Episode": [
+        "https://www.themoviedb.org/tv/10/season/2/episode/3"
+      ]
+    },
+    {
+      "DisplayOrder": "\u002B01",
+      "Season": [
+        "https://www.themoviedb.org/tv/10/season/2"
+      ],
+      "Episode": [
+        "https://www.themoviedb.org/tv/10/season/2/episode/3"
+      ]
+    },
+    {
+      "DisplayOrder": " OriginalAirDate ",
+      "Season": [
+        "https://www.themoviedb.org/tv/10/season/2"
+      ],
+      "Episode": [
+        "https://www.themoviedb.org/tv/10/season/2/episode/3"
+      ]
+    },
+    {
+      "DisplayOrder": "OriginalAirDate, OriginalAirDate",
+      "Season": [
+        "https://www.themoviedb.org/tv/10/season/2"
+      ],
+      "Episode": [
+        "https://www.themoviedb.org/tv/10/season/2/episode/3"
+      ]
+    },
+    {
+      "DisplayOrder": "dvd",
+      "Season": [],
+      "Episode": []
+    },
+    {
+      "DisplayOrder": "DVD",
+      "Season": [],
+      "Episode": []
+    },
+    {
+      "DisplayOrder": "0",
+      "Season": [],
+      "Episode": []
+    },
+    {
+      "DisplayOrder": "-1",
+      "Season": [],
+      "Episode": []
+    }
+  ],
+  "ExternalIds": [
+    {
+      "Id": "TmdbBoxSetExternalId",
+      "ProviderName": "TheMovieDb",
+      "Key": "TmdbCollection",
+      "Type": "BoxSet",
+      "Supported": [
+        "Movie",
+        "MusicVideo",
+        "Trailer"
+      ]
+    },
+    {
+      "Id": "TmdbEpisodeExternalId",
+      "ProviderName": "TheMovieDb",
+      "Key": "Tmdb",
+      "Type": "Episode",
+      "Supported": [
+        "Episode"
+      ]
+    },
+    {
+      "Id": "TmdbMovieExternalId",
+      "ProviderName": "TheMovieDb",
+      "Key": "Tmdb",
+      "Type": "Movie",
+      "Supported": [
+        "Movie"
+      ]
+    },
+    {
+      "Id": "TmdbPersonExternalId",
+      "ProviderName": "TheMovieDb",
+      "Key": "Tmdb",
+      "Type": "Person",
+      "Supported": [
+        "Person"
+      ]
+    },
+    {
+      "Id": "TmdbSeasonExternalId",
+      "ProviderName": "TheMovieDb",
+      "Key": "Tmdb",
+      "Type": "Season",
+      "Supported": [
+        "Season"
+      ]
+    },
+    {
+      "Id": "TmdbSeriesExternalId",
+      "ProviderName": "TheMovieDb",
+      "Key": "Tmdb",
+      "Type": "Series",
+      "Supported": [
+        "Series"
+      ]
+    }
+  ],
+  "Statuses": [
+    {
+      "Input": "Ended",
+      "Output": "Ended"
+    },
+    {
+      "Input": "Unreleased",
+      "Output": "Unreleased"
+    },
+    {
+      "Input": "Pilot",
+      "Output": "Continuing"
+    },
+    {
+      "Input": "Returning",
+      "Output": "Continuing"
+    },
+    {
+      "Input": "Cancelled",
+      "Output": "Ended"
+    },
+    {
+      "Input": "Canceled",
+      "Output": "Ended"
+    },
+    {
+      "Input": "Returning Series",
+      "Output": "Continuing"
+    },
+    {
+      "Input": " Returning ",
+      "Output": null
+    },
+    {
+      "Input": "2",
+      "Output": "Unreleased"
+    },
+    {
+      "Input": "17",
+      "Output": 17
+    },
+    {
+      "Input": "Continuing, Ended",
+      "Output": "Ended"
+    },
+    {
+      "Input": "invalid",
+      "Output": null
+    }
+  ],
+  "AirDays": [
+    {
+      "Input": "Daily",
+      "Output": [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday"
+      ]
+    },
+    {
+      "Input": "daily",
+      "Output": [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday"
+      ]
+    },
+    {
+      "Input": " Daily ",
+      "Output": []
+    },
+    {
+      "Input": "Monday",
+      "Output": [
+        "Monday"
+      ]
+    },
+    {
+      "Input": "monday, Wednesday",
+      "Output": [
+        "Wednesday"
+      ]
+    },
+    {
+      "Input": "",
+      "Output": null
+    },
+    {
+      "Input": "-1",
+      "Output": [
+        -1
+      ]
+    },
+    {
+      "Input": "8",
+      "Output": [
+        8
+      ]
+    },
+    {
+      "Input": "invalid",
+      "Output": []
+    }
+  ]
+}

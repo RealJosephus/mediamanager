@@ -1,0 +1,769 @@
+[
+  {
+    "name": "Genre-before-rebase",
+    "type": "Genre",
+    "itemName": "Different Name",
+    "mode": "before",
+    "path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+    "metadataMode": "Default"
+  },
+  {
+    "name": "Genre-before-current",
+    "type": "Genre",
+    "itemName": "Different Name",
+    "mode": "before",
+    "path": "$STATE\\metadata\\Genre\\Leaf.Name",
+    "metadataMode": "Default"
+  },
+  {
+    "name": "Genre-requires-rebase",
+    "type": "Genre",
+    "itemName": "Different Name",
+    "mode": "requires",
+    "path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+    "metadataMode": "Default"
+  },
+  {
+    "name": "Genre-requires-current",
+    "type": "Genre",
+    "itemName": "Different Name",
+    "mode": "requires",
+    "path": "$STATE\\metadata\\Genre\\Leaf.Name",
+    "metadataMode": "Default"
+  },
+  {
+    "name": "Genre-refresh-rebase",
+    "type": "Genre",
+    "itemName": "Different Name",
+    "mode": "refresh",
+    "path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+    "metadataMode": "Default"
+  },
+  {
+    "name": "Genre-refresh-current",
+    "type": "Genre",
+    "itemName": "Different Name",
+    "mode": "refresh",
+    "path": "$STATE\\metadata\\Genre\\Leaf.Name",
+    "metadataMode": "Default"
+  },
+  {
+    "name": "Genre-first-None",
+    "type": "Genre",
+    "mode": "refresh",
+    "first": true,
+    "itemName": "Different Name",
+    "path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+    "metadataMode": "None"
+  },
+  {
+    "name": "Genre-first-ValidationOnly",
+    "type": "Genre",
+    "mode": "refresh",
+    "first": true,
+    "itemName": "Different Name",
+    "path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+    "metadataMode": "ValidationOnly"
+  },
+  {
+    "name": "Genre-first-Default",
+    "type": "Genre",
+    "mode": "refresh",
+    "first": true,
+    "itemName": "Different Name",
+    "path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+    "metadataMode": "Default"
+  },
+  {
+    "name": "Genre-first-FullRefresh",
+    "type": "Genre",
+    "mode": "refresh",
+    "first": true,
+    "itemName": "Different Name",
+    "path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+    "metadataMode": "FullRefresh"
+  },
+  {
+    "name": "Genre-none-force",
+    "type": "Genre",
+    "mode": "refresh",
+    "force": true,
+    "itemName": "Different Name",
+    "path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+    "metadataMode": "None"
+  },
+  {
+    "name": "MusicGenre-before-rebase",
+    "type": "MusicGenre",
+    "itemName": "Different Name",
+    "mode": "before",
+    "path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+    "metadataMode": "Default"
+  },
+  {
+    "name": "MusicGenre-before-current",
+    "type": "MusicGenre",
+    "itemName": "Different Name",
+    "mode": "before",
+    "path": "$STATE\\metadata\\MusicGenre\\Leaf.Name",
+    "metadataMode": "Default"
+  },
+  {
+    "name": "MusicGenre-requires-rebase",
+    "type": "MusicGenre",
+    "itemName": "Different Name",
+    "mode": "requires",
+    "path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+    "metadataMode": "Default"
+  },
+  {
+    "name": "MusicGenre-requires-current",
+    "type": "MusicGenre",
+    "itemName": "Different Name",
+    "mode": "requires",
+    "path": "$STATE\\metadata\\MusicGenre\\Leaf.Name",
+    "metadataMode": "Default"
+  },
+  {
+    "name": "MusicGenre-refresh-rebase",
+    "type": "MusicGenre",
+    "itemName": "Different Name",
+    "mode": "refresh",
+    "path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+    "metadataMode": "Default"
+  },
+  {
+    "name": "MusicGenre-refresh-current",
+    "type": "MusicGenre",
+    "itemName": "Different Name",
+    "mode": "refresh",
+    "path": "$STATE\\metadata\\MusicGenre\\Leaf.Name",
+    "metadataMode": "Default"
+  },
+  {
+    "name": "MusicGenre-first-None",
+    "type": "MusicGenre",
+    "mode": "refresh",
+    "first": true,
+    "itemName": "Different Name",
+    "path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+    "metadataMode": "None"
+  },
+  {
+    "name": "MusicGenre-first-ValidationOnly",
+    "type": "MusicGenre",
+    "mode": "refresh",
+    "first": true,
+    "itemName": "Different Name",
+    "path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+    "metadataMode": "ValidationOnly"
+  },
+  {
+    "name": "MusicGenre-first-Default",
+    "type": "MusicGenre",
+    "mode": "refresh",
+    "first": true,
+    "itemName": "Different Name",
+    "path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+    "metadataMode": "Default"
+  },
+  {
+    "name": "MusicGenre-first-FullRefresh",
+    "type": "MusicGenre",
+    "mode": "refresh",
+    "first": true,
+    "itemName": "Different Name",
+    "path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+    "metadataMode": "FullRefresh"
+  },
+  {
+    "name": "MusicGenre-none-force",
+    "type": "MusicGenre",
+    "mode": "refresh",
+    "force": true,
+    "itemName": "Different Name",
+    "path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+    "metadataMode": "None"
+  },
+  {
+    "name": "Studio-before-rebase",
+    "type": "Studio",
+    "itemName": "Different Name",
+    "mode": "before",
+    "path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+    "metadataMode": "Default"
+  },
+  {
+    "name": "Studio-before-current",
+    "type": "Studio",
+    "itemName": "Different Name",
+    "mode": "before",
+    "path": "$STATE\\metadata\\Studio\\Leaf.Name",
+    "metadataMode": "Default"
+  },
+  {
+    "name": "Studio-requires-rebase",
+    "type": "Studio",
+    "itemName": "Different Name",
+    "mode": "requires",
+    "path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+    "metadataMode": "Default"
+  },
+  {
+    "name": "Studio-requires-current",
+    "type": "Studio",
+    "itemName": "Different Name",
+    "mode": "requires",
+    "path": "$STATE\\metadata\\Studio\\Leaf.Name",
+    "metadataMode": "Default"
+  },
+  {
+    "name": "Studio-refresh-rebase",
+    "type": "Studio",
+    "itemName": "Different Name",
+    "mode": "refresh",
+    "path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+    "metadataMode": "Default"
+  },
+  {
+    "name": "Studio-refresh-current",
+    "type": "Studio",
+    "itemName": "Different Name",
+    "mode": "refresh",
+    "path": "$STATE\\metadata\\Studio\\Leaf.Name",
+    "metadataMode": "Default"
+  },
+  {
+    "name": "Studio-first-None",
+    "type": "Studio",
+    "mode": "refresh",
+    "first": true,
+    "itemName": "Different Name",
+    "path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+    "metadataMode": "None"
+  },
+  {
+    "name": "Studio-first-ValidationOnly",
+    "type": "Studio",
+    "mode": "refresh",
+    "first": true,
+    "itemName": "Different Name",
+    "path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+    "metadataMode": "ValidationOnly"
+  },
+  {
+    "name": "Studio-first-Default",
+    "type": "Studio",
+    "mode": "refresh",
+    "first": true,
+    "itemName": "Different Name",
+    "path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+    "metadataMode": "Default"
+  },
+  {
+    "name": "Studio-first-FullRefresh",
+    "type": "Studio",
+    "mode": "refresh",
+    "first": true,
+    "itemName": "Different Name",
+    "path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+    "metadataMode": "FullRefresh"
+  },
+  {
+    "name": "Studio-none-force",
+    "type": "Studio",
+    "mode": "refresh",
+    "force": true,
+    "itemName": "Different Name",
+    "path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+    "metadataMode": "None"
+  },
+  {
+    "name": "Year-before-rebase",
+    "type": "Year",
+    "itemName": "Different Name",
+    "mode": "before",
+    "path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+    "metadataMode": "Default"
+  },
+  {
+    "name": "Year-before-current",
+    "type": "Year",
+    "itemName": "Different Name",
+    "mode": "before",
+    "path": "$STATE\\metadata\\Year\\Leaf.Name",
+    "metadataMode": "Default"
+  },
+  {
+    "name": "Year-requires-rebase",
+    "type": "Year",
+    "itemName": "Different Name",
+    "mode": "requires",
+    "path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+    "metadataMode": "Default"
+  },
+  {
+    "name": "Year-requires-current",
+    "type": "Year",
+    "itemName": "Different Name",
+    "mode": "requires",
+    "path": "$STATE\\metadata\\Year\\Leaf.Name",
+    "metadataMode": "Default"
+  },
+  {
+    "name": "Year-refresh-rebase",
+    "type": "Year",
+    "itemName": "Different Name",
+    "mode": "refresh",
+    "path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+    "metadataMode": "Default"
+  },
+  {
+    "name": "Year-refresh-current",
+    "type": "Year",
+    "itemName": "Different Name",
+    "mode": "refresh",
+    "path": "$STATE\\metadata\\Year\\Leaf.Name",
+    "metadataMode": "Default"
+  },
+  {
+    "name": "Year-first-None",
+    "type": "Year",
+    "mode": "refresh",
+    "first": true,
+    "itemName": "Different Name",
+    "path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+    "metadataMode": "None"
+  },
+  {
+    "name": "Year-first-ValidationOnly",
+    "type": "Year",
+    "mode": "refresh",
+    "first": true,
+    "itemName": "Different Name",
+    "path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+    "metadataMode": "ValidationOnly"
+  },
+  {
+    "name": "Year-first-Default",
+    "type": "Year",
+    "mode": "refresh",
+    "first": true,
+    "itemName": "Different Name",
+    "path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+    "metadataMode": "Default"
+  },
+  {
+    "name": "Year-first-FullRefresh",
+    "type": "Year",
+    "mode": "refresh",
+    "first": true,
+    "itemName": "Different Name",
+    "path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+    "metadataMode": "FullRefresh"
+  },
+  {
+    "name": "Year-none-force",
+    "type": "Year",
+    "mode": "refresh",
+    "force": true,
+    "itemName": "Different Name",
+    "path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+    "metadataMode": "None"
+  },
+  {
+    "name": "Person-before-rebase",
+    "type": "Person",
+    "itemName": "Different Name",
+    "mode": "before",
+    "path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+    "metadataMode": "Default"
+  },
+  {
+    "name": "Person-before-current",
+    "type": "Person",
+    "itemName": "Different Name",
+    "mode": "before",
+    "path": "$STATE\\metadata\\People\\L\\Leaf.Name",
+    "metadataMode": "Default"
+  },
+  {
+    "name": "Person-requires-rebase",
+    "type": "Person",
+    "itemName": "Different Name",
+    "mode": "requires",
+    "path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+    "metadataMode": "Default"
+  },
+  {
+    "name": "Person-requires-current",
+    "type": "Person",
+    "itemName": "Different Name",
+    "mode": "requires",
+    "path": "$STATE\\metadata\\People\\L\\Leaf.Name",
+    "metadataMode": "Default"
+  },
+  {
+    "name": "Person-refresh-rebase",
+    "type": "Person",
+    "itemName": "Different Name",
+    "mode": "refresh",
+    "path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+    "metadataMode": "Default"
+  },
+  {
+    "name": "Person-refresh-current",
+    "type": "Person",
+    "itemName": "Different Name",
+    "mode": "refresh",
+    "path": "$STATE\\metadata\\People\\L\\Leaf.Name",
+    "metadataMode": "Default"
+  },
+  {
+    "name": "Person-first-None",
+    "type": "Person",
+    "mode": "refresh",
+    "first": true,
+    "itemName": "Different Name",
+    "path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+    "metadataMode": "None"
+  },
+  {
+    "name": "Person-first-ValidationOnly",
+    "type": "Person",
+    "mode": "refresh",
+    "first": true,
+    "itemName": "Different Name",
+    "path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+    "metadataMode": "ValidationOnly"
+  },
+  {
+    "name": "Person-first-Default",
+    "type": "Person",
+    "mode": "refresh",
+    "first": true,
+    "itemName": "Different Name",
+    "path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+    "metadataMode": "Default"
+  },
+  {
+    "name": "Person-first-FullRefresh",
+    "type": "Person",
+    "mode": "refresh",
+    "first": true,
+    "itemName": "Different Name",
+    "path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+    "metadataMode": "FullRefresh"
+  },
+  {
+    "name": "Person-none-force",
+    "type": "Person",
+    "mode": "refresh",
+    "force": true,
+    "itemName": "Different Name",
+    "path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+    "metadataMode": "None"
+  },
+  {
+    "name": "MusicArtist-before-rebase",
+    "type": "MusicArtist",
+    "itemName": "Different Name",
+    "mode": "before",
+    "path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+    "metadataMode": "Default"
+  },
+  {
+    "name": "MusicArtist-before-current",
+    "type": "MusicArtist",
+    "itemName": "Different Name",
+    "mode": "before",
+    "path": "$STATE\\metadata\\artists\\Leaf.Name",
+    "metadataMode": "Default"
+  },
+  {
+    "name": "MusicArtist-requires-rebase",
+    "type": "MusicArtist",
+    "itemName": "Different Name",
+    "mode": "requires",
+    "path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+    "metadataMode": "Default"
+  },
+  {
+    "name": "MusicArtist-requires-current",
+    "type": "MusicArtist",
+    "itemName": "Different Name",
+    "mode": "requires",
+    "path": "$STATE\\metadata\\artists\\Leaf.Name",
+    "metadataMode": "Default"
+  },
+  {
+    "name": "MusicArtist-refresh-rebase",
+    "type": "MusicArtist",
+    "itemName": "Different Name",
+    "mode": "refresh",
+    "path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+    "metadataMode": "Default"
+  },
+  {
+    "name": "MusicArtist-refresh-current",
+    "type": "MusicArtist",
+    "itemName": "Different Name",
+    "mode": "refresh",
+    "path": "$STATE\\metadata\\artists\\Leaf.Name",
+    "metadataMode": "Default"
+  },
+  {
+    "name": "MusicArtist-first-None",
+    "type": "MusicArtist",
+    "mode": "refresh",
+    "first": true,
+    "itemName": "Different Name",
+    "path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+    "metadataMode": "None"
+  },
+  {
+    "name": "MusicArtist-first-ValidationOnly",
+    "type": "MusicArtist",
+    "mode": "refresh",
+    "first": true,
+    "itemName": "Different Name",
+    "path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+    "metadataMode": "ValidationOnly"
+  },
+  {
+    "name": "MusicArtist-first-Default",
+    "type": "MusicArtist",
+    "mode": "refresh",
+    "first": true,
+    "itemName": "Different Name",
+    "path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+    "metadataMode": "Default"
+  },
+  {
+    "name": "MusicArtist-first-FullRefresh",
+    "type": "MusicArtist",
+    "mode": "refresh",
+    "first": true,
+    "itemName": "Different Name",
+    "path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+    "metadataMode": "FullRefresh"
+  },
+  {
+    "name": "MusicArtist-none-force",
+    "type": "MusicArtist",
+    "mode": "refresh",
+    "force": true,
+    "itemName": "Different Name",
+    "path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+    "metadataMode": "None"
+  },
+  {
+    "name": "physical-artist-keeps-path",
+    "type": "MusicArtist",
+    "mode": "before",
+    "physicalArtist": true,
+    "itemName": "Different Name",
+    "path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+    "metadataMode": "Default"
+  },
+  {
+    "name": "Genre-before-case-only",
+    "type": "Genre",
+    "itemName": "Different Name",
+    "mode": "before",
+    "path": "$STATE\\metadata\\genre\\Leaf.Name",
+    "metadataMode": "Default"
+  },
+  {
+    "name": "Genre-requires-case-only",
+    "type": "Genre",
+    "itemName": "Different Name",
+    "mode": "requires",
+    "path": "$STATE\\metadata\\genre\\Leaf.Name",
+    "metadataMode": "Default"
+  },
+  {
+    "name": "Genre-refresh-case-only",
+    "type": "Genre",
+    "itemName": "Different Name",
+    "mode": "refresh",
+    "path": "$STATE\\metadata\\genre\\Leaf.Name",
+    "metadataMode": "Default"
+  },
+  {
+    "name": "MusicGenre-before-case-only",
+    "type": "MusicGenre",
+    "itemName": "Different Name",
+    "mode": "before",
+    "path": "$STATE\\metadata\\musicgenre\\Leaf.Name",
+    "metadataMode": "Default"
+  },
+  {
+    "name": "MusicGenre-requires-case-only",
+    "type": "MusicGenre",
+    "itemName": "Different Name",
+    "mode": "requires",
+    "path": "$STATE\\metadata\\musicgenre\\Leaf.Name",
+    "metadataMode": "Default"
+  },
+  {
+    "name": "MusicGenre-refresh-case-only",
+    "type": "MusicGenre",
+    "itemName": "Different Name",
+    "mode": "refresh",
+    "path": "$STATE\\metadata\\musicgenre\\Leaf.Name",
+    "metadataMode": "Default"
+  },
+  {
+    "name": "Studio-before-case-only",
+    "type": "Studio",
+    "itemName": "Different Name",
+    "mode": "before",
+    "path": "$STATE\\metadata\\studio\\Leaf.Name",
+    "metadataMode": "Default"
+  },
+  {
+    "name": "Studio-requires-case-only",
+    "type": "Studio",
+    "itemName": "Different Name",
+    "mode": "requires",
+    "path": "$STATE\\metadata\\studio\\Leaf.Name",
+    "metadataMode": "Default"
+  },
+  {
+    "name": "Studio-refresh-case-only",
+    "type": "Studio",
+    "itemName": "Different Name",
+    "mode": "refresh",
+    "path": "$STATE\\metadata\\studio\\Leaf.Name",
+    "metadataMode": "Default"
+  },
+  {
+    "name": "Year-before-case-only",
+    "type": "Year",
+    "itemName": "Different Name",
+    "mode": "before",
+    "path": "$STATE\\metadata\\year\\Leaf.Name",
+    "metadataMode": "Default"
+  },
+  {
+    "name": "Year-requires-case-only",
+    "type": "Year",
+    "itemName": "Different Name",
+    "mode": "requires",
+    "path": "$STATE\\metadata\\year\\Leaf.Name",
+    "metadataMode": "Default"
+  },
+  {
+    "name": "Year-refresh-case-only",
+    "type": "Year",
+    "itemName": "Different Name",
+    "mode": "refresh",
+    "path": "$STATE\\metadata\\year\\Leaf.Name",
+    "metadataMode": "Default"
+  },
+  {
+    "name": "Person-before-case-only",
+    "type": "Person",
+    "itemName": "Different Name",
+    "mode": "before",
+    "path": "$STATE\\metadata\\people\\l\\Leaf.Name",
+    "metadataMode": "Default"
+  },
+  {
+    "name": "Person-requires-case-only",
+    "type": "Person",
+    "itemName": "Different Name",
+    "mode": "requires",
+    "path": "$STATE\\metadata\\people\\l\\Leaf.Name",
+    "metadataMode": "Default"
+  },
+  {
+    "name": "Person-refresh-case-only",
+    "type": "Person",
+    "itemName": "Different Name",
+    "mode": "refresh",
+    "path": "$STATE\\metadata\\people\\l\\Leaf.Name",
+    "metadataMode": "Default"
+  },
+  {
+    "name": "MusicArtist-before-case-only",
+    "type": "MusicArtist",
+    "itemName": "Different Name",
+    "mode": "before",
+    "path": "$STATE\\metadata\\ARTISTS\\Leaf.Name",
+    "metadataMode": "Default"
+  },
+  {
+    "name": "MusicArtist-requires-case-only",
+    "type": "MusicArtist",
+    "itemName": "Different Name",
+    "mode": "requires",
+    "path": "$STATE\\metadata\\ARTISTS\\Leaf.Name",
+    "metadataMode": "Default"
+  },
+  {
+    "name": "MusicArtist-refresh-case-only",
+    "type": "MusicArtist",
+    "itemName": "Different Name",
+    "mode": "refresh",
+    "path": "$STATE\\metadata\\ARTISTS\\Leaf.Name",
+    "metadataMode": "Default"
+  },
+  {
+    "name": "person-leaf-85",
+    "type": "Person",
+    "mode": "before",
+    "itemName": "Different Name",
+    "path": "$STATE\\metadata\\old-scope\\--! Leaf.Name",
+    "metadataMode": "Default"
+  },
+  {
+    "name": "person-leaf-86",
+    "type": "Person",
+    "mode": "before",
+    "itemName": "Different Name",
+    "path": "$STATE\\metadata\\old-scope\\éclair",
+    "metadataMode": "Default"
+  },
+  {
+    "name": "person-leaf-87",
+    "type": "Person",
+    "mode": "before",
+    "itemName": "Different Name",
+    "path": "$STATE\\metadata\\old-scope\\😀人名",
+    "metadataMode": "Default"
+  },
+  {
+    "name": "person-leaf-88",
+    "type": "Person",
+    "mode": "before",
+    "itemName": "Different Name",
+    "path": "$STATE\\metadata\\old-scope\\  Leading.Name",
+    "metadataMode": "Default"
+  },
+  {
+    "name": "person-leaf-89",
+    "type": "Person",
+    "mode": "before",
+    "itemName": "Different Name",
+    "path": "$STATE\\metadata\\old-scope\\Leaf.Name\\",
+    "metadataMode": "Default"
+  },
+  {
+    "name": "genre-empty-name-before",
+    "type": "Genre",
+    "itemName": "",
+    "mode": "before",
+    "path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+    "metadataMode": "Default"
+  },
+  {
+    "name": "genre-empty-name-refresh",
+    "type": "Genre",
+    "itemName": "",
+    "mode": "refresh",
+    "path": "$STATE\\metadata\\old-scope\\Leaf.Name",
+    "metadataMode": "Default"
+  }
+]

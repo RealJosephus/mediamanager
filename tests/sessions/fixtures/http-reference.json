@@ -1,0 +1,132 @@
+{
+  "source": "D:/jellyfin current workspace 208c278b75abd897aefa1e1175126eac5e4dbfaa isolated reference core-flow-20260926",
+  "cases": [
+    {
+      "name": "sessions",
+      "status": 200,
+      "body": [
+        {
+          "PlayState": {
+            "CanSeek": false,
+            "IsPaused": false,
+            "IsMuted": false,
+            "RepeatMode": "RepeatNone",
+            "PlaybackOrder": "Default"
+          },
+          "AdditionalUsers": [],
+          "Capabilities": {
+            "PlayableMediaTypes": [],
+            "SupportedCommands": [],
+            "SupportsMediaControl": false,
+            "SupportsPersistentIdentifier": true
+          },
+          "RemoteEndPoint": "127.0.0.1",
+          "PlayableMediaTypes": [],
+          "Id": "c702f9d5269e4bd1be9946568d818edb",
+          "UserId": "5c6b5f77bea94a9a98aafae5909892b7",
+          "UserName": "CoreFlowAdmin",
+          "Client": "CoreFlow",
+          "LastActivityDate": "2026-09-26T12:32:19.1502029Z",
+          "LastPlaybackCheckIn": "0001-01-01T00:00:00.0000000Z",
+          "DeviceName": "IsolatedTest",
+          "DeviceId": "core-flow-device",
+          "ApplicationVersion": "1.0",
+          "IsActive": true,
+          "SupportsMediaControl": false,
+          "SupportsRemoteControl": false,
+          "NowPlayingQueue": [],
+          "HasCustomDeviceName": false,
+          "ServerId": "416cfae20a6b4e638e02a01114c7c4b5",
+          "SupportedCommands": []
+        }
+      ]
+    },
+    {
+      "name": "sessions-capabilities",
+      "status": 200,
+      "body": [
+        {
+          "PlayState": {
+            "CanSeek": false,
+            "IsPaused": false,
+            "IsMuted": false,
+            "RepeatMode": "RepeatNone",
+            "PlaybackOrder": "Default"
+          },
+          "AdditionalUsers": [],
+          "Capabilities": {
+            "PlayableMediaTypes": [
+              "Video"
+            ],
+            "SupportedCommands": [
+              "SetVolume"
+            ],
+            "SupportsMediaControl": true,
+            "SupportsPersistentIdentifier": true
+          },
+          "RemoteEndPoint": "127.0.0.1",
+          "PlayableMediaTypes": [
+            "Video"
+          ],
+          "Id": "c702f9d5269e4bd1be9946568d818edb",
+          "UserId": "5c6b5f77bea94a9a98aafae5909892b7",
+          "UserName": "CoreFlowAdmin",
+          "Client": "CoreFlow",
+          "LastActivityDate": "2026-09-26T12:32:19.6411847Z",
+          "LastPlaybackCheckIn": "0001-01-01T00:00:00.0000000Z",
+          "DeviceName": "IsolatedTest",
+          "DeviceId": "core-flow-device",
+          "ApplicationVersion": "1.0",
+          "IsActive": true,
+          "SupportsMediaControl": false,
+          "SupportsRemoteControl": false,
+          "NowPlayingQueue": [],
+          "HasCustomDeviceName": false,
+          "ServerId": "416cfae20a6b4e638e02a01114c7c4b5",
+          "SupportedCommands": [
+            "SetVolume"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "userdata-favorite",
+      "status": 200,
+      "body": {
+        "PlaybackPositionTicks": 0,
+        "PlayCount": 0,
+        "IsFavorite": true,
+        "Played": false,
+        "Key": "22222222-2222-2222-2222-222222222222",
+        "ItemId": "22222222222222222222222222222222"
+      }
+    },
+    {
+      "name": "userdata-progress",
+      "status": 200,
+      "body": {
+        "PlayedPercentage": 50,
+        "PlaybackPositionTicks": 36000000000,
+        "PlayCount": 1,
+        "IsFavorite": true,
+        "LastPlayedDate": "2026-09-26T12:32:21.8509657Z",
+        "Played": false,
+        "Key": "22222222-2222-2222-2222-222222222222",
+        "ItemId": "22222222222222222222222222222222"
+      }
+    },
+    {
+      "name": "userdata-stopped",
+      "status": 200,
+      "body": {
+        "PlaybackPositionTicks": 0,
+        "PlayCount": 1,
+        "IsFavorite": true,
+        "LastPlayedDate": "2026-09-26T12:32:21.8509657Z",
+        "Played": true,
+        "Key": "22222222-2222-2222-2222-222222222222",
+        "ItemId": "22222222222222222222222222222222"
+      }
+    }
+  ]
+}

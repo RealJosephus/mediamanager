@@ -1,0 +1,765 @@
+{
+  "schemaVersion": 1,
+  "summary": {
+    "nativeVerified": true,
+    "phaseAcceptance": false,
+    "processResult": {
+      "code": 0,
+      "signal": null
+    },
+    "nullableCases": 36,
+    "librarySeedCases": 16,
+    "portsStarted": 0
+  },
+  "source": {
+    "oracleFiles": {
+      "Oracle.cs": "a7b1d168d01072d0bc1a717f2abdcab49507dc7d1a1c8677889dca70b6e93bfe",
+      "Oracle.csproj": "c30d8f1aff8c88b044e3e51db47fe9551cb138fd48de2d13f84e70a7e41d7d17",
+      "../../../Directory.Build.props": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    },
+    "rawNativeSha256": "e8c32de0bd7c6765f8267d8af6b0a5db25c9a0027787b1d0a23c7099ede7b5c3",
+    "frozenSource": {
+      "Emby.Server.Implementations/Library/LibraryManager.cs": "4729de97560262702a44c5829bf93bbc5deec379e9b3018b231aaa6d65643c44",
+      "MediaBrowser.Controller/Entities/UserRootFolder.cs": "7c0349155c4959d5e6fb95d613739f88991cad85c7e3019104a0f76c80e48d4c",
+      "MediaBrowser.Controller/Entities/Folder.cs": "d5f227d462ce3c2df0d5a45d912778427f87321fc9d6e13d863ec28bb639e0c1",
+      "MediaBrowser.Controller/Entities/InternalItemsQuery.cs": "d3002a8af3e88fba82a46a1541620518968677425694978c3e967e325106e964",
+      "Jellyfin.Server.Implementations/Item/BaseItemRepository.TranslateQuery.cs": "0b2d4aba6f4d73c224315c1a0abd82b3c65ba2a42683381e1e73c00b01019c06",
+      "MediaBrowser.Controller/Entities/CollectionFolder.cs": "6250b085fafa9adbaa153063ef2abccbde20a2b04f372dbbc8fa80ee73151487",
+      "src/Jellyfin.Extensions/EnumerableExtensions.cs": "27808c1a2970e6c9df96291e527aa201a32a221b2de8578e26c816dbe8ba1a9a"
+    },
+    "assemblies": [
+      {
+        "name": "Emby.Server.Implementations",
+        "loadedSha256": "c518bc18c0f70168405721f5f89ab6ba4c4ceeb704552e146c2f9e366bf31c9d",
+        "frozenSha256": "c518bc18c0f70168405721f5f89ab6ba4c4ceeb704552e146c2f9e366bf31c9d"
+      },
+      {
+        "name": "MediaBrowser.Controller",
+        "loadedSha256": "a8939bae7bda1a470d7d9ec420d84b9647e74a9b308a669f81a1d72ce8a6a98f",
+        "frozenSha256": "a8939bae7bda1a470d7d9ec420d84b9647e74a9b308a669f81a1d72ce8a6a98f"
+      },
+      {
+        "name": "Jellyfin.Database.Implementations",
+        "loadedSha256": "a4cc37b4d3db9e364904c83a6c17b47ad34cf37023bf1bdcfc6ce2770b766ddc",
+        "frozenSha256": "a4cc37b4d3db9e364904c83a6c17b47ad34cf37023bf1bdcfc6ce2770b766ddc"
+      },
+      {
+        "name": "Jellyfin.Extensions",
+        "loadedSha256": "3ca9d4009111672ba069b1076c396e92cc2ffb913a5ebd5715eaa0870510bd23",
+        "frozenSha256": "3ca9d4009111672ba069b1076c396e92cc2ffb913a5ebd5715eaa0870510bd23"
+      }
+    ],
+    "boundary": "Actual frozen GetCollectionFolders/string+span comparer and standalone visibility. Entity lookup and explicit root children are supplied; no membership/visibility result mocked. Library seed inputs copied from current tests, cache IDs untouched; only PhysicalLocationsList intervention. Root child ParentId selection is separately pinned source inference, not an actual repository read.",
+    "replay": {
+      "recordedAt": "2026-10-03T13:44:54.398Z",
+      "rawNativeSha256": "e8c32de0bd7c6765f8267d8af6b0a5db25c9a0027787b1d0a23c7099ede7b5c3",
+      "priorTrackedSha256": "ceb7744d91953b7ae8f76f925724ab0e901d4418e0bc416051d32e073941e01c",
+      "comparedFields": [
+        "nullable",
+        "scope",
+        "alias",
+        "librarySeed"
+      ],
+      "semanticFieldsEqual": true,
+      "normalization": "Only runtime assembly paths and process identity are outside the semantic comparison; all selected result arrays and field values remain exact.",
+      "rawEvidence": ".test-output/validation/oracle-rebind-20261003/membership-boundaries/native.json",
+      "processRecordSha256": "6eb5c0235fed315c62aaf1bf4fe28274c1bb313e0ac5ad7926dd9e416cf0fe52",
+      "sources": [
+        {
+          "path": "Emby.Server.Implementations/Library/LibraryManager.cs",
+          "sha256": "4729de97560262702a44c5829bf93bbc5deec379e9b3018b231aaa6d65643c44"
+        },
+        {
+          "path": "MediaBrowser.Controller/Entities/UserRootFolder.cs",
+          "sha256": "7c0349155c4959d5e6fb95d613739f88991cad85c7e3019104a0f76c80e48d4c"
+        },
+        {
+          "path": "MediaBrowser.Controller/Entities/Folder.cs",
+          "sha256": "d5f227d462ce3c2df0d5a45d912778427f87321fc9d6e13d863ec28bb639e0c1"
+        },
+        {
+          "path": "MediaBrowser.Controller/Entities/InternalItemsQuery.cs",
+          "sha256": "d3002a8af3e88fba82a46a1541620518968677425694978c3e967e325106e964"
+        },
+        {
+          "path": "Jellyfin.Server.Implementations/Item/BaseItemRepository.TranslateQuery.cs",
+          "sha256": "0b2d4aba6f4d73c224315c1a0abd82b3c65ba2a42683381e1e73c00b01019c06"
+        },
+        {
+          "path": "MediaBrowser.Controller/Entities/CollectionFolder.cs",
+          "sha256": "6250b085fafa9adbaa153063ef2abccbde20a2b04f372dbbc8fa80ee73151487"
+        },
+        {
+          "path": "src/Jellyfin.Extensions/EnumerableExtensions.cs",
+          "sha256": "27808c1a2970e6c9df96291e527aa201a32a221b2de8578e26c816dbe8ba1a9a"
+        }
+      ]
+    }
+  },
+  "runtime": ".NET 10.0.12",
+  "nullable": [
+    {
+      "rootPath": null,
+      "collectionPath": null,
+      "locations": [],
+      "rootPathReadback": null,
+      "collectionPathReadback": null,
+      "locationsReadback": [],
+      "collectionFolders": [
+        "84000000-0000-0000-0000-000000000003"
+      ]
+    },
+    {
+      "rootPath": null,
+      "collectionPath": null,
+      "locations": [
+        null
+      ],
+      "rootPathReadback": null,
+      "collectionPathReadback": null,
+      "locationsReadback": [
+        null
+      ],
+      "collectionFolders": [
+        "84000000-0000-0000-0000-000000000003"
+      ]
+    },
+    {
+      "rootPath": null,
+      "collectionPath": null,
+      "locations": [
+        ""
+      ],
+      "rootPathReadback": null,
+      "collectionPathReadback": null,
+      "locationsReadback": [
+        ""
+      ],
+      "collectionFolders": [
+        "84000000-0000-0000-0000-000000000003"
+      ]
+    },
+    {
+      "rootPath": null,
+      "collectionPath": null,
+      "locations": [
+        "Z:\\Movies"
+      ],
+      "rootPathReadback": null,
+      "collectionPathReadback": null,
+      "locationsReadback": [
+        "Z:\\Movies"
+      ],
+      "collectionFolders": [
+        "84000000-0000-0000-0000-000000000003"
+      ]
+    },
+    {
+      "rootPath": null,
+      "collectionPath": "",
+      "locations": [],
+      "rootPathReadback": null,
+      "collectionPathReadback": "",
+      "locationsReadback": [],
+      "collectionFolders": []
+    },
+    {
+      "rootPath": null,
+      "collectionPath": "",
+      "locations": [
+        null
+      ],
+      "rootPathReadback": null,
+      "collectionPathReadback": "",
+      "locationsReadback": [
+        null
+      ],
+      "collectionFolders": [
+        "84000000-0000-0000-0000-000000000003"
+      ]
+    },
+    {
+      "rootPath": null,
+      "collectionPath": "",
+      "locations": [
+        ""
+      ],
+      "rootPathReadback": null,
+      "collectionPathReadback": "",
+      "locationsReadback": [
+        ""
+      ],
+      "collectionFolders": [
+        "84000000-0000-0000-0000-000000000003"
+      ]
+    },
+    {
+      "rootPath": null,
+      "collectionPath": "",
+      "locations": [
+        "Z:\\Movies"
+      ],
+      "rootPathReadback": null,
+      "collectionPathReadback": "",
+      "locationsReadback": [
+        "Z:\\Movies"
+      ],
+      "collectionFolders": []
+    },
+    {
+      "rootPath": null,
+      "collectionPath": "Z:\\Library",
+      "locations": [],
+      "rootPathReadback": null,
+      "collectionPathReadback": "Z:\\Library",
+      "locationsReadback": [],
+      "collectionFolders": []
+    },
+    {
+      "rootPath": null,
+      "collectionPath": "Z:\\Library",
+      "locations": [
+        null
+      ],
+      "rootPathReadback": null,
+      "collectionPathReadback": "Z:\\Library",
+      "locationsReadback": [
+        null
+      ],
+      "collectionFolders": [
+        "84000000-0000-0000-0000-000000000003"
+      ]
+    },
+    {
+      "rootPath": null,
+      "collectionPath": "Z:\\Library",
+      "locations": [
+        ""
+      ],
+      "rootPathReadback": null,
+      "collectionPathReadback": "Z:\\Library",
+      "locationsReadback": [
+        ""
+      ],
+      "collectionFolders": [
+        "84000000-0000-0000-0000-000000000003"
+      ]
+    },
+    {
+      "rootPath": null,
+      "collectionPath": "Z:\\Library",
+      "locations": [
+        "Z:\\Movies"
+      ],
+      "rootPathReadback": null,
+      "collectionPathReadback": "Z:\\Library",
+      "locationsReadback": [
+        "Z:\\Movies"
+      ],
+      "collectionFolders": []
+    },
+    {
+      "rootPath": "",
+      "collectionPath": null,
+      "locations": [],
+      "rootPathReadback": "",
+      "collectionPathReadback": null,
+      "locationsReadback": [],
+      "collectionFolders": []
+    },
+    {
+      "rootPath": "",
+      "collectionPath": null,
+      "locations": [
+        null
+      ],
+      "rootPathReadback": "",
+      "collectionPathReadback": null,
+      "locationsReadback": [
+        null
+      ],
+      "collectionFolders": [
+        "84000000-0000-0000-0000-000000000003"
+      ]
+    },
+    {
+      "rootPath": "",
+      "collectionPath": null,
+      "locations": [
+        ""
+      ],
+      "rootPathReadback": "",
+      "collectionPathReadback": null,
+      "locationsReadback": [
+        ""
+      ],
+      "collectionFolders": [
+        "84000000-0000-0000-0000-000000000003"
+      ]
+    },
+    {
+      "rootPath": "",
+      "collectionPath": null,
+      "locations": [
+        "Z:\\Movies"
+      ],
+      "rootPathReadback": "",
+      "collectionPathReadback": null,
+      "locationsReadback": [
+        "Z:\\Movies"
+      ],
+      "collectionFolders": []
+    },
+    {
+      "rootPath": "",
+      "collectionPath": "",
+      "locations": [],
+      "rootPathReadback": "",
+      "collectionPathReadback": "",
+      "locationsReadback": [],
+      "collectionFolders": [
+        "84000000-0000-0000-0000-000000000003"
+      ]
+    },
+    {
+      "rootPath": "",
+      "collectionPath": "",
+      "locations": [
+        null
+      ],
+      "rootPathReadback": "",
+      "collectionPathReadback": "",
+      "locationsReadback": [
+        null
+      ],
+      "collectionFolders": [
+        "84000000-0000-0000-0000-000000000003"
+      ]
+    },
+    {
+      "rootPath": "",
+      "collectionPath": "",
+      "locations": [
+        ""
+      ],
+      "rootPathReadback": "",
+      "collectionPathReadback": "",
+      "locationsReadback": [
+        ""
+      ],
+      "collectionFolders": [
+        "84000000-0000-0000-0000-000000000003"
+      ]
+    },
+    {
+      "rootPath": "",
+      "collectionPath": "",
+      "locations": [
+        "Z:\\Movies"
+      ],
+      "rootPathReadback": "",
+      "collectionPathReadback": "",
+      "locationsReadback": [
+        "Z:\\Movies"
+      ],
+      "collectionFolders": [
+        "84000000-0000-0000-0000-000000000003"
+      ]
+    },
+    {
+      "rootPath": "",
+      "collectionPath": "Z:\\Library",
+      "locations": [],
+      "rootPathReadback": "",
+      "collectionPathReadback": "Z:\\Library",
+      "locationsReadback": [],
+      "collectionFolders": []
+    },
+    {
+      "rootPath": "",
+      "collectionPath": "Z:\\Library",
+      "locations": [
+        null
+      ],
+      "rootPathReadback": "",
+      "collectionPathReadback": "Z:\\Library",
+      "locationsReadback": [
+        null
+      ],
+      "collectionFolders": [
+        "84000000-0000-0000-0000-000000000003"
+      ]
+    },
+    {
+      "rootPath": "",
+      "collectionPath": "Z:\\Library",
+      "locations": [
+        ""
+      ],
+      "rootPathReadback": "",
+      "collectionPathReadback": "Z:\\Library",
+      "locationsReadback": [
+        ""
+      ],
+      "collectionFolders": [
+        "84000000-0000-0000-0000-000000000003"
+      ]
+    },
+    {
+      "rootPath": "",
+      "collectionPath": "Z:\\Library",
+      "locations": [
+        "Z:\\Movies"
+      ],
+      "rootPathReadback": "",
+      "collectionPathReadback": "Z:\\Library",
+      "locationsReadback": [
+        "Z:\\Movies"
+      ],
+      "collectionFolders": []
+    },
+    {
+      "rootPath": "Z:\\Movies",
+      "collectionPath": null,
+      "locations": [],
+      "rootPathReadback": "Z:\\Movies",
+      "collectionPathReadback": null,
+      "locationsReadback": [],
+      "collectionFolders": []
+    },
+    {
+      "rootPath": "Z:\\Movies",
+      "collectionPath": null,
+      "locations": [
+        null
+      ],
+      "rootPathReadback": "Z:\\Movies",
+      "collectionPathReadback": null,
+      "locationsReadback": [
+        null
+      ],
+      "collectionFolders": []
+    },
+    {
+      "rootPath": "Z:\\Movies",
+      "collectionPath": null,
+      "locations": [
+        ""
+      ],
+      "rootPathReadback": "Z:\\Movies",
+      "collectionPathReadback": null,
+      "locationsReadback": [
+        ""
+      ],
+      "collectionFolders": []
+    },
+    {
+      "rootPath": "Z:\\Movies",
+      "collectionPath": null,
+      "locations": [
+        "Z:\\Movies"
+      ],
+      "rootPathReadback": "Z:\\Movies",
+      "collectionPathReadback": null,
+      "locationsReadback": [
+        "Z:\\Movies"
+      ],
+      "collectionFolders": [
+        "84000000-0000-0000-0000-000000000003"
+      ]
+    },
+    {
+      "rootPath": "Z:\\Movies",
+      "collectionPath": "",
+      "locations": [],
+      "rootPathReadback": "Z:\\Movies",
+      "collectionPathReadback": "",
+      "locationsReadback": [],
+      "collectionFolders": []
+    },
+    {
+      "rootPath": "Z:\\Movies",
+      "collectionPath": "",
+      "locations": [
+        null
+      ],
+      "rootPathReadback": "Z:\\Movies",
+      "collectionPathReadback": "",
+      "locationsReadback": [
+        null
+      ],
+      "collectionFolders": []
+    },
+    {
+      "rootPath": "Z:\\Movies",
+      "collectionPath": "",
+      "locations": [
+        ""
+      ],
+      "rootPathReadback": "Z:\\Movies",
+      "collectionPathReadback": "",
+      "locationsReadback": [
+        ""
+      ],
+      "collectionFolders": []
+    },
+    {
+      "rootPath": "Z:\\Movies",
+      "collectionPath": "",
+      "locations": [
+        "Z:\\Movies"
+      ],
+      "rootPathReadback": "Z:\\Movies",
+      "collectionPathReadback": "",
+      "locationsReadback": [
+        "Z:\\Movies"
+      ],
+      "collectionFolders": [
+        "84000000-0000-0000-0000-000000000003"
+      ]
+    },
+    {
+      "rootPath": "Z:\\Movies",
+      "collectionPath": "Z:\\Library",
+      "locations": [],
+      "rootPathReadback": "Z:\\Movies",
+      "collectionPathReadback": "Z:\\Library",
+      "locationsReadback": [],
+      "collectionFolders": []
+    },
+    {
+      "rootPath": "Z:\\Movies",
+      "collectionPath": "Z:\\Library",
+      "locations": [
+        null
+      ],
+      "rootPathReadback": "Z:\\Movies",
+      "collectionPathReadback": "Z:\\Library",
+      "locationsReadback": [
+        null
+      ],
+      "collectionFolders": []
+    },
+    {
+      "rootPath": "Z:\\Movies",
+      "collectionPath": "Z:\\Library",
+      "locations": [
+        ""
+      ],
+      "rootPathReadback": "Z:\\Movies",
+      "collectionPathReadback": "Z:\\Library",
+      "locationsReadback": [
+        ""
+      ],
+      "collectionFolders": []
+    },
+    {
+      "rootPath": "Z:\\Movies",
+      "collectionPath": "Z:\\Library",
+      "locations": [
+        "Z:\\Movies"
+      ],
+      "rootPathReadback": "Z:\\Movies",
+      "collectionPathReadback": "Z:\\Library",
+      "locationsReadback": [
+        "Z:\\Movies"
+      ],
+      "collectionFolders": [
+        "84000000-0000-0000-0000-000000000003"
+      ]
+    }
+  ],
+  "scope": {
+    "rootChildren": [
+      "84000000-0000-0000-0000-000000000014"
+    ],
+    "rootChildMembership": [],
+    "explicitlyIncludingNested": [
+      "84000000-0000-0000-0000-000000000015"
+    ]
+  },
+  "alias": {
+    "json": "{\"PhysicalLocations\":[\"Z:\\\\Movies\"]}",
+    "physicalLocations": [],
+    "physicalLocationsList": [],
+    "collectionFolders": []
+  },
+  "librarySeed": [
+    {
+      "scenario": "library-changed",
+      "stage": "original-preparation",
+      "name": "firstFolder",
+      "Id": "c2222222-2222-2222-2222-000000000003",
+      "Path": "Z:\\First",
+      "ParentId": "00000000-0000-0000-0000-000000000000",
+      "collectionFolders": [],
+      "visibleStandalone": true
+    },
+    {
+      "scenario": "library-changed",
+      "stage": "original-preparation",
+      "name": "hiddenFolder",
+      "Id": "c2222222-2222-2222-2222-000000000007",
+      "Path": "Z:\\Hidden",
+      "ParentId": "00000000-0000-0000-0000-000000000000",
+      "collectionFolders": [],
+      "visibleStandalone": true
+    },
+    {
+      "scenario": "library-changed",
+      "stage": "original-preparation",
+      "name": "visibleAdded",
+      "Id": "c2222222-2222-2222-2222-000000000009",
+      "Path": "Z:\\First\\added.mkv",
+      "ParentId": "c2222222-2222-2222-2222-000000000003",
+      "collectionFolders": [],
+      "visibleStandalone": true
+    },
+    {
+      "scenario": "library-changed",
+      "stage": "original-preparation",
+      "name": "hiddenAdded",
+      "Id": "c2222222-2222-2222-2222-000000000010",
+      "Path": "Z:\\Hidden\\added.mkv",
+      "ParentId": "c2222222-2222-2222-2222-000000000007",
+      "collectionFolders": [],
+      "visibleStandalone": true
+    },
+    {
+      "scenario": "library-changed",
+      "stage": "original-preparation",
+      "name": "visibleUpdated",
+      "Id": "c2222222-2222-2222-2222-000000000011",
+      "Path": "Z:\\First\\updated.mkv",
+      "ParentId": "c2222222-2222-2222-2222-000000000003",
+      "collectionFolders": [],
+      "visibleStandalone": true
+    },
+    {
+      "scenario": "library-changed",
+      "stage": "original-preparation",
+      "name": "hiddenUpdated",
+      "Id": "c2222222-2222-2222-2222-000000000012",
+      "Path": "Z:\\Hidden\\updated.mkv",
+      "ParentId": "c2222222-2222-2222-2222-000000000007",
+      "collectionFolders": [],
+      "visibleStandalone": true
+    },
+    {
+      "scenario": "library-changed",
+      "stage": "physical-locations-only",
+      "name": "firstFolder",
+      "Id": "c2222222-2222-2222-2222-000000000003",
+      "Path": "Z:\\First",
+      "ParentId": "00000000-0000-0000-0000-000000000000",
+      "collectionFolders": [
+        "c2222222-2222-2222-2222-000000000002"
+      ],
+      "visibleStandalone": true
+    },
+    {
+      "scenario": "library-changed",
+      "stage": "physical-locations-only",
+      "name": "hiddenFolder",
+      "Id": "c2222222-2222-2222-2222-000000000007",
+      "Path": "Z:\\Hidden",
+      "ParentId": "00000000-0000-0000-0000-000000000000",
+      "collectionFolders": [
+        "c2222222-2222-2222-2222-000000000006"
+      ],
+      "visibleStandalone": false
+    },
+    {
+      "scenario": "library-changed",
+      "stage": "physical-locations-only",
+      "name": "visibleAdded",
+      "Id": "c2222222-2222-2222-2222-000000000009",
+      "Path": "Z:\\First\\added.mkv",
+      "ParentId": "c2222222-2222-2222-2222-000000000003",
+      "collectionFolders": [
+        "c2222222-2222-2222-2222-000000000002"
+      ],
+      "visibleStandalone": true
+    },
+    {
+      "scenario": "library-changed",
+      "stage": "physical-locations-only",
+      "name": "hiddenAdded",
+      "Id": "c2222222-2222-2222-2222-000000000010",
+      "Path": "Z:\\Hidden\\added.mkv",
+      "ParentId": "c2222222-2222-2222-2222-000000000007",
+      "collectionFolders": [
+        "c2222222-2222-2222-2222-000000000006"
+      ],
+      "visibleStandalone": false
+    },
+    {
+      "scenario": "library-changed",
+      "stage": "physical-locations-only",
+      "name": "visibleUpdated",
+      "Id": "c2222222-2222-2222-2222-000000000011",
+      "Path": "Z:\\First\\updated.mkv",
+      "ParentId": "c2222222-2222-2222-2222-000000000003",
+      "collectionFolders": [
+        "c2222222-2222-2222-2222-000000000002"
+      ],
+      "visibleStandalone": true
+    },
+    {
+      "scenario": "library-changed",
+      "stage": "physical-locations-only",
+      "name": "hiddenUpdated",
+      "Id": "c2222222-2222-2222-2222-000000000012",
+      "Path": "Z:\\Hidden\\updated.mkv",
+      "ParentId": "c2222222-2222-2222-2222-000000000007",
+      "collectionFolders": [
+        "c2222222-2222-2222-2222-000000000006"
+      ],
+      "visibleStandalone": false
+    },
+    {
+      "scenario": "library",
+      "stage": "original-preparation",
+      "name": "physical",
+      "Id": "a1111111-1111-1111-1111-000000000003",
+      "Path": "Z:\\Movies",
+      "ParentId": "00000000-0000-0000-0000-000000000000",
+      "collectionFolders": [],
+      "visibleStandalone": true
+    },
+    {
+      "scenario": "library",
+      "stage": "original-preparation",
+      "name": "movie",
+      "Id": "a1111111-1111-1111-1111-000000000004",
+      "Path": "Z:\\Movies\\Alpha 中文.mkv",
+      "ParentId": "a1111111-1111-1111-1111-000000000003",
+      "collectionFolders": [],
+      "visibleStandalone": true
+    },
+    {
+      "scenario": "library",
+      "stage": "physical-locations-only",
+      "name": "physical",
+      "Id": "a1111111-1111-1111-1111-000000000003",
+      "Path": "Z:\\Movies",
+      "ParentId": "00000000-0000-0000-0000-000000000000",
+      "collectionFolders": [
+        "a1111111-1111-1111-1111-000000000002"
+      ],
+      "visibleStandalone": false
+    },
+    {
+      "scenario": "library",
+      "stage": "physical-locations-only",
+      "name": "movie",
+      "Id": "a1111111-1111-1111-1111-000000000004",
+      "Path": "Z:\\Movies\\Alpha 中文.mkv",
+      "ParentId": "a1111111-1111-1111-1111-000000000003",
+      "collectionFolders": [
+        "a1111111-1111-1111-1111-000000000002"
+      ],
+      "visibleStandalone": false
+    }
+  ]
+}

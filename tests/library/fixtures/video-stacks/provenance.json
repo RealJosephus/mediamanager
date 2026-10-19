@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-06T16:37:55.392Z",
+  "frozenJellyfin": {
+    "commit": "208c278b75abd897aefa1e1175126eac5e4dbfaa",
+    "workspaceContentDigest": "e28a983db179b720c3b16d7416ee4112894a3115c4be6fe43c61c52e0d9a8313"
+  },
+  "fixtureFiles": [
+    {
+      "path": "tests/library/fixtures/video-stacks/input.json",
+      "sha256": "9d25a115455b38868496d27f9451c6f1b4b2f8b7f4917db04adcc8aa53e982c1"
+    },
+    {
+      "path": "tests/library/fixtures/video-stacks/Program.cs",
+      "sha256": "687cdc56c914997f4b1d3bd8e25f21a8451160c3db526d496fe9eb4f7fc01247"
+    },
+    {
+      "path": "tests/library/fixtures/video-stacks/Oracle.csproj",
+      "sha256": "cbe1a514da582cbf55a443ee14c93f731f84816d10e7672fb713045ac5d78efe"
+    },
+    {
+      "path": "tests/Directory.Build.props",
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    },
+    {
+      "path": "tests/library/fixtures/video-stacks/native.json",
+      "sha256": "f7aed979fb6307906e5aaff7686a76717d99eb5e6682e4a94d53c01d2795c443"
+    }
+  ],
+  "sourceFiles": [
+    {
+      "path": "Emby.Naming/Common/NamingOptions.cs",
+      "sha256": "4fc386ee2a335da97314845fcac71d2ffa534fbc37d772d44ae30e2dd4b07c02"
+    },
+    {
+      "path": "Emby.Naming/Video/StackResolver.cs",
+      "sha256": "cf7031594406d71878f821f39903352e0081616925e7049392696e0575a249c6"
+    },
+    {
+      "path": "Emby.Naming/Video/VideoListResolver.cs",
+      "sha256": "5cf1e54f677781c0206dcb38ba90cb191cc3165411d1d9eb9d9ea0757560f165"
+    },
+    {
+      "path": "Emby.Server.Implementations/Library/Resolvers/Movies/MovieResolver.cs",
+      "sha256": "0a74d2079340fcfc85c9d72839112d42dbafe4285b286ceab137c0092c3f6e15"
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/Video.cs",
+      "sha256": "03df015992ee4e95e175c499b36a7b21d9facc4f391cfd89235ad652d2eb0b11"
+    }
+  ],
+  "assemblies": [
+    {
+      "name": "jellyfin.dll",
+      "sha256": "a43fa24c44677e579fcec79d637789b9f36633d02e5434e76a0e03fa13027767"
+    },
+    {
+      "name": "MediaBrowser.Controller.dll",
+      "sha256": "051c588a8e85a3a7cdde8dc3d9a1112217fd7e973a86fe2ff90cf765bedb75a8"
+    },
+    {
+      "name": "Emby.Server.Implementations.dll",
+      "sha256": "8d369435646570958505c58b9cb17da169855dabc105d0e933524361e9b7b1c8"
+    },
+    {
+      "name": "Emby.Naming.dll",
+      "sha256": "55085cf14d1e58a7a1e99e0ffc37bde0545bbe85f7f09995388a6e465cca3a45"
+    }
+  ],
+  "recording": {
+    "passed": true,
+    "sourceFilesSha256": "4c34d05deaa58e5fc74d3a4e646e638cbefa137cbc6305cdc8a7cb16d6ccd1f0",
+    "originalNativeSha256": "5b4b68f39bfac4951477cd58594176a9a439347cac6474c1de7d3fceb0bb4f51",
+    "portableNativeLineEndings": "LF"
+  },
+  "scope": "Actual frozen MovieResolver.ResolveMultiple, VideoListResolver, StackResolver, VideoResolver and initial item values for file stacks and stack/alternate interaction under a real three-Folder parent chain. Parent lookup, file metadata and empty directory service are controls. Directory stacks, native scanner, owned-part refresh/persistence, deletion and complete library acceptance are outside this oracle."
+}

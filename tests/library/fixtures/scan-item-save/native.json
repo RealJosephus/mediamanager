@@ -1,0 +1,3106 @@
+{
+  "actualFrozenScanItemSave": true,
+  "results": [
+    {
+      "name": "type-Folder",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Folder",
+      "storedDataIsNull": false,
+      "calls": [
+        {
+          "action": "added",
+          "id": "f3b8cadd-2e31-fba9-6a85-bbe56ef60988",
+          "parentId": "97b00000-0000-0000-0000-000000000002"
+        }
+      ],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": false,
+      "hasAlbumArtist": false,
+      "values": [
+        {
+          "id": "$NEW/2/Drama",
+          "type": 2,
+          "value": "Drama",
+          "cleanValue": "drama"
+        },
+        {
+          "id": "$NEW/2/drama",
+          "type": 2,
+          "value": "drama",
+          "cleanValue": "drama"
+        },
+        {
+          "id": "$NEW/3/Studio",
+          "type": 3,
+          "value": "Studio",
+          "cleanValue": "studio"
+        },
+        {
+          "id": "$NEW/4/Permit",
+          "type": 4,
+          "value": "Permit",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/4/permit",
+          "type": 4,
+          "value": "permit",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/6/Collection",
+          "type": 6,
+          "value": "Collection",
+          "cleanValue": "collection"
+        },
+        {
+          "id": "$NEW/6/Parent",
+          "type": 6,
+          "value": "Parent",
+          "cleanValue": "parent"
+        },
+        {
+          "id": "$NEW/6/Permit",
+          "type": 6,
+          "value": "Permit",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/6/Root",
+          "type": 6,
+          "value": "Root",
+          "cleanValue": "root"
+        }
+      ],
+      "maps": [
+        {
+          "itemId": "f3b8cadd-2e31-fba9-6a85-bbe56ef60988",
+          "valueId": "$NEW/2/Drama"
+        },
+        {
+          "itemId": "f3b8cadd-2e31-fba9-6a85-bbe56ef60988",
+          "valueId": "$NEW/2/drama"
+        },
+        {
+          "itemId": "f3b8cadd-2e31-fba9-6a85-bbe56ef60988",
+          "valueId": "$NEW/3/Studio"
+        },
+        {
+          "itemId": "f3b8cadd-2e31-fba9-6a85-bbe56ef60988",
+          "valueId": "$NEW/4/Permit"
+        },
+        {
+          "itemId": "f3b8cadd-2e31-fba9-6a85-bbe56ef60988",
+          "valueId": "$NEW/4/permit"
+        },
+        {
+          "itemId": "f3b8cadd-2e31-fba9-6a85-bbe56ef60988",
+          "valueId": "$NEW/6/Collection"
+        },
+        {
+          "itemId": "f3b8cadd-2e31-fba9-6a85-bbe56ef60988",
+          "valueId": "$NEW/6/Parent"
+        },
+        {
+          "itemId": "f3b8cadd-2e31-fba9-6a85-bbe56ef60988",
+          "valueId": "$NEW/6/Permit"
+        },
+        {
+          "itemId": "f3b8cadd-2e31-fba9-6a85-bbe56ef60988",
+          "valueId": "$NEW/6/Root"
+        }
+      ],
+      "ancestors": [
+        {
+          "itemId": "f3b8cadd-2e31-fba9-6a85-bbe56ef60988",
+          "parentId": "97b00000-0000-0000-0000-000000000002"
+        },
+        {
+          "itemId": "f3b8cadd-2e31-fba9-6a85-bbe56ef60988",
+          "parentId": "97b00000-0000-0000-0000-000000000003"
+        },
+        {
+          "itemId": "f3b8cadd-2e31-fba9-6a85-bbe56ef60988",
+          "parentId": "97b00000-0000-0000-0000-000000000004"
+        }
+      ],
+      "columns": {
+        "Artists": null,
+        "AlbumArtists": null,
+        "Genres": "Drama",
+        "Studios": "Studio",
+        "Tags": "Permit"
+      }
+    },
+    {
+      "name": "type-Movie",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Movies.Movie",
+      "storedDataIsNull": false,
+      "calls": [
+        {
+          "action": "added",
+          "id": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "parentId": "97b00000-0000-0000-0000-000000000002"
+        }
+      ],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": false,
+      "hasAlbumArtist": false,
+      "values": [
+        {
+          "id": "$NEW/2/Drama",
+          "type": 2,
+          "value": "Drama",
+          "cleanValue": "drama"
+        },
+        {
+          "id": "$NEW/2/drama",
+          "type": 2,
+          "value": "drama",
+          "cleanValue": "drama"
+        },
+        {
+          "id": "$NEW/3/Studio",
+          "type": 3,
+          "value": "Studio",
+          "cleanValue": "studio"
+        },
+        {
+          "id": "$NEW/4/Permit",
+          "type": 4,
+          "value": "Permit",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/4/permit",
+          "type": 4,
+          "value": "permit",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/6/Collection",
+          "type": 6,
+          "value": "Collection",
+          "cleanValue": "collection"
+        },
+        {
+          "id": "$NEW/6/Parent",
+          "type": 6,
+          "value": "Parent",
+          "cleanValue": "parent"
+        },
+        {
+          "id": "$NEW/6/Permit",
+          "type": 6,
+          "value": "Permit",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/6/Root",
+          "type": 6,
+          "value": "Root",
+          "cleanValue": "root"
+        }
+      ],
+      "maps": [
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "valueId": "$NEW/2/Drama"
+        },
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "valueId": "$NEW/2/drama"
+        },
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "valueId": "$NEW/3/Studio"
+        },
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "valueId": "$NEW/4/Permit"
+        },
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "valueId": "$NEW/4/permit"
+        },
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "valueId": "$NEW/6/Collection"
+        },
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "valueId": "$NEW/6/Parent"
+        },
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "valueId": "$NEW/6/Permit"
+        },
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "valueId": "$NEW/6/Root"
+        }
+      ],
+      "ancestors": [
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "parentId": "97b00000-0000-0000-0000-000000000002"
+        },
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "parentId": "97b00000-0000-0000-0000-000000000003"
+        },
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "parentId": "97b00000-0000-0000-0000-000000000004"
+        }
+      ],
+      "columns": {
+        "Artists": null,
+        "AlbumArtists": null,
+        "Genres": "Drama",
+        "Studios": "Studio",
+        "Tags": "Permit"
+      }
+    },
+    {
+      "name": "type-Video",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Video",
+      "storedDataIsNull": false,
+      "calls": [
+        {
+          "action": "added",
+          "id": "3bca00b0-cb81-1662-c9d5-eb09de031fea",
+          "parentId": "97b00000-0000-0000-0000-000000000002"
+        }
+      ],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": false,
+      "hasAlbumArtist": false,
+      "values": [
+        {
+          "id": "$NEW/2/Drama",
+          "type": 2,
+          "value": "Drama",
+          "cleanValue": "drama"
+        },
+        {
+          "id": "$NEW/2/drama",
+          "type": 2,
+          "value": "drama",
+          "cleanValue": "drama"
+        },
+        {
+          "id": "$NEW/3/Studio",
+          "type": 3,
+          "value": "Studio",
+          "cleanValue": "studio"
+        },
+        {
+          "id": "$NEW/4/Permit",
+          "type": 4,
+          "value": "Permit",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/4/permit",
+          "type": 4,
+          "value": "permit",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/6/Collection",
+          "type": 6,
+          "value": "Collection",
+          "cleanValue": "collection"
+        },
+        {
+          "id": "$NEW/6/Parent",
+          "type": 6,
+          "value": "Parent",
+          "cleanValue": "parent"
+        },
+        {
+          "id": "$NEW/6/Permit",
+          "type": 6,
+          "value": "Permit",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/6/Root",
+          "type": 6,
+          "value": "Root",
+          "cleanValue": "root"
+        }
+      ],
+      "maps": [
+        {
+          "itemId": "3bca00b0-cb81-1662-c9d5-eb09de031fea",
+          "valueId": "$NEW/2/Drama"
+        },
+        {
+          "itemId": "3bca00b0-cb81-1662-c9d5-eb09de031fea",
+          "valueId": "$NEW/2/drama"
+        },
+        {
+          "itemId": "3bca00b0-cb81-1662-c9d5-eb09de031fea",
+          "valueId": "$NEW/3/Studio"
+        },
+        {
+          "itemId": "3bca00b0-cb81-1662-c9d5-eb09de031fea",
+          "valueId": "$NEW/4/Permit"
+        },
+        {
+          "itemId": "3bca00b0-cb81-1662-c9d5-eb09de031fea",
+          "valueId": "$NEW/4/permit"
+        },
+        {
+          "itemId": "3bca00b0-cb81-1662-c9d5-eb09de031fea",
+          "valueId": "$NEW/6/Collection"
+        },
+        {
+          "itemId": "3bca00b0-cb81-1662-c9d5-eb09de031fea",
+          "valueId": "$NEW/6/Parent"
+        },
+        {
+          "itemId": "3bca00b0-cb81-1662-c9d5-eb09de031fea",
+          "valueId": "$NEW/6/Permit"
+        },
+        {
+          "itemId": "3bca00b0-cb81-1662-c9d5-eb09de031fea",
+          "valueId": "$NEW/6/Root"
+        }
+      ],
+      "ancestors": [
+        {
+          "itemId": "3bca00b0-cb81-1662-c9d5-eb09de031fea",
+          "parentId": "97b00000-0000-0000-0000-000000000002"
+        },
+        {
+          "itemId": "3bca00b0-cb81-1662-c9d5-eb09de031fea",
+          "parentId": "97b00000-0000-0000-0000-000000000003"
+        },
+        {
+          "itemId": "3bca00b0-cb81-1662-c9d5-eb09de031fea",
+          "parentId": "97b00000-0000-0000-0000-000000000004"
+        }
+      ],
+      "columns": {
+        "Artists": null,
+        "AlbumArtists": null,
+        "Genres": "Drama",
+        "Studios": "Studio",
+        "Tags": "Permit"
+      }
+    },
+    {
+      "name": "type-Series",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.TV.Series",
+      "storedDataIsNull": false,
+      "calls": [
+        {
+          "action": "added",
+          "id": "64c296de-8b6a-e278-2273-697ea9b18090",
+          "parentId": "97b00000-0000-0000-0000-000000000002"
+        }
+      ],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": false,
+      "hasAlbumArtist": false,
+      "values": [
+        {
+          "id": "$NEW/2/Drama",
+          "type": 2,
+          "value": "Drama",
+          "cleanValue": "drama"
+        },
+        {
+          "id": "$NEW/2/drama",
+          "type": 2,
+          "value": "drama",
+          "cleanValue": "drama"
+        },
+        {
+          "id": "$NEW/3/Studio",
+          "type": 3,
+          "value": "Studio",
+          "cleanValue": "studio"
+        },
+        {
+          "id": "$NEW/4/Permit",
+          "type": 4,
+          "value": "Permit",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/4/permit",
+          "type": 4,
+          "value": "permit",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/6/Collection",
+          "type": 6,
+          "value": "Collection",
+          "cleanValue": "collection"
+        },
+        {
+          "id": "$NEW/6/Parent",
+          "type": 6,
+          "value": "Parent",
+          "cleanValue": "parent"
+        },
+        {
+          "id": "$NEW/6/Permit",
+          "type": 6,
+          "value": "Permit",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/6/Root",
+          "type": 6,
+          "value": "Root",
+          "cleanValue": "root"
+        }
+      ],
+      "maps": [
+        {
+          "itemId": "64c296de-8b6a-e278-2273-697ea9b18090",
+          "valueId": "$NEW/2/Drama"
+        },
+        {
+          "itemId": "64c296de-8b6a-e278-2273-697ea9b18090",
+          "valueId": "$NEW/2/drama"
+        },
+        {
+          "itemId": "64c296de-8b6a-e278-2273-697ea9b18090",
+          "valueId": "$NEW/3/Studio"
+        },
+        {
+          "itemId": "64c296de-8b6a-e278-2273-697ea9b18090",
+          "valueId": "$NEW/4/Permit"
+        },
+        {
+          "itemId": "64c296de-8b6a-e278-2273-697ea9b18090",
+          "valueId": "$NEW/4/permit"
+        },
+        {
+          "itemId": "64c296de-8b6a-e278-2273-697ea9b18090",
+          "valueId": "$NEW/6/Collection"
+        },
+        {
+          "itemId": "64c296de-8b6a-e278-2273-697ea9b18090",
+          "valueId": "$NEW/6/Parent"
+        },
+        {
+          "itemId": "64c296de-8b6a-e278-2273-697ea9b18090",
+          "valueId": "$NEW/6/Permit"
+        },
+        {
+          "itemId": "64c296de-8b6a-e278-2273-697ea9b18090",
+          "valueId": "$NEW/6/Root"
+        }
+      ],
+      "ancestors": [
+        {
+          "itemId": "64c296de-8b6a-e278-2273-697ea9b18090",
+          "parentId": "97b00000-0000-0000-0000-000000000002"
+        },
+        {
+          "itemId": "64c296de-8b6a-e278-2273-697ea9b18090",
+          "parentId": "97b00000-0000-0000-0000-000000000003"
+        },
+        {
+          "itemId": "64c296de-8b6a-e278-2273-697ea9b18090",
+          "parentId": "97b00000-0000-0000-0000-000000000004"
+        }
+      ],
+      "columns": {
+        "Artists": null,
+        "AlbumArtists": null,
+        "Genres": "Drama",
+        "Studios": "Studio",
+        "Tags": "Permit"
+      }
+    },
+    {
+      "name": "type-Season",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.TV.Season",
+      "storedDataIsNull": true,
+      "calls": [
+        {
+          "action": "added",
+          "id": "e1a01341-c49f-c460-4b33-37648c5ede66",
+          "parentId": "97b00000-0000-0000-0000-000000000002"
+        }
+      ],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": false,
+      "hasAlbumArtist": false,
+      "values": [
+        {
+          "id": "$NEW/2/Drama",
+          "type": 2,
+          "value": "Drama",
+          "cleanValue": "drama"
+        },
+        {
+          "id": "$NEW/2/drama",
+          "type": 2,
+          "value": "drama",
+          "cleanValue": "drama"
+        },
+        {
+          "id": "$NEW/3/Studio",
+          "type": 3,
+          "value": "Studio",
+          "cleanValue": "studio"
+        },
+        {
+          "id": "$NEW/4/Permit",
+          "type": 4,
+          "value": "Permit",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/4/permit",
+          "type": 4,
+          "value": "permit",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/6/Collection",
+          "type": 6,
+          "value": "Collection",
+          "cleanValue": "collection"
+        },
+        {
+          "id": "$NEW/6/Parent",
+          "type": 6,
+          "value": "Parent",
+          "cleanValue": "parent"
+        },
+        {
+          "id": "$NEW/6/Permit",
+          "type": 6,
+          "value": "Permit",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/6/Root",
+          "type": 6,
+          "value": "Root",
+          "cleanValue": "root"
+        }
+      ],
+      "maps": [
+        {
+          "itemId": "e1a01341-c49f-c460-4b33-37648c5ede66",
+          "valueId": "$NEW/2/Drama"
+        },
+        {
+          "itemId": "e1a01341-c49f-c460-4b33-37648c5ede66",
+          "valueId": "$NEW/2/drama"
+        },
+        {
+          "itemId": "e1a01341-c49f-c460-4b33-37648c5ede66",
+          "valueId": "$NEW/3/Studio"
+        },
+        {
+          "itemId": "e1a01341-c49f-c460-4b33-37648c5ede66",
+          "valueId": "$NEW/4/Permit"
+        },
+        {
+          "itemId": "e1a01341-c49f-c460-4b33-37648c5ede66",
+          "valueId": "$NEW/4/permit"
+        },
+        {
+          "itemId": "e1a01341-c49f-c460-4b33-37648c5ede66",
+          "valueId": "$NEW/6/Collection"
+        },
+        {
+          "itemId": "e1a01341-c49f-c460-4b33-37648c5ede66",
+          "valueId": "$NEW/6/Parent"
+        },
+        {
+          "itemId": "e1a01341-c49f-c460-4b33-37648c5ede66",
+          "valueId": "$NEW/6/Permit"
+        },
+        {
+          "itemId": "e1a01341-c49f-c460-4b33-37648c5ede66",
+          "valueId": "$NEW/6/Root"
+        }
+      ],
+      "ancestors": [
+        {
+          "itemId": "e1a01341-c49f-c460-4b33-37648c5ede66",
+          "parentId": "97b00000-0000-0000-0000-000000000002"
+        },
+        {
+          "itemId": "e1a01341-c49f-c460-4b33-37648c5ede66",
+          "parentId": "97b00000-0000-0000-0000-000000000003"
+        },
+        {
+          "itemId": "e1a01341-c49f-c460-4b33-37648c5ede66",
+          "parentId": "97b00000-0000-0000-0000-000000000004"
+        }
+      ],
+      "columns": {
+        "Artists": null,
+        "AlbumArtists": null,
+        "Genres": "Drama",
+        "Studios": "Studio",
+        "Tags": "Permit"
+      }
+    },
+    {
+      "name": "type-Episode",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.TV.Episode",
+      "storedDataIsNull": false,
+      "calls": [
+        {
+          "action": "added",
+          "id": "6a5dd902-5e50-79d2-b27d-a754609b1511",
+          "parentId": "97b00000-0000-0000-0000-000000000002"
+        }
+      ],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": false,
+      "hasAlbumArtist": false,
+      "values": [
+        {
+          "id": "$NEW/2/Drama",
+          "type": 2,
+          "value": "Drama",
+          "cleanValue": "drama"
+        },
+        {
+          "id": "$NEW/2/drama",
+          "type": 2,
+          "value": "drama",
+          "cleanValue": "drama"
+        },
+        {
+          "id": "$NEW/3/Studio",
+          "type": 3,
+          "value": "Studio",
+          "cleanValue": "studio"
+        },
+        {
+          "id": "$NEW/4/Permit",
+          "type": 4,
+          "value": "Permit",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/4/permit",
+          "type": 4,
+          "value": "permit",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/6/Collection",
+          "type": 6,
+          "value": "Collection",
+          "cleanValue": "collection"
+        },
+        {
+          "id": "$NEW/6/Parent",
+          "type": 6,
+          "value": "Parent",
+          "cleanValue": "parent"
+        },
+        {
+          "id": "$NEW/6/Permit",
+          "type": 6,
+          "value": "Permit",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/6/Root",
+          "type": 6,
+          "value": "Root",
+          "cleanValue": "root"
+        }
+      ],
+      "maps": [
+        {
+          "itemId": "6a5dd902-5e50-79d2-b27d-a754609b1511",
+          "valueId": "$NEW/2/Drama"
+        },
+        {
+          "itemId": "6a5dd902-5e50-79d2-b27d-a754609b1511",
+          "valueId": "$NEW/2/drama"
+        },
+        {
+          "itemId": "6a5dd902-5e50-79d2-b27d-a754609b1511",
+          "valueId": "$NEW/3/Studio"
+        },
+        {
+          "itemId": "6a5dd902-5e50-79d2-b27d-a754609b1511",
+          "valueId": "$NEW/4/Permit"
+        },
+        {
+          "itemId": "6a5dd902-5e50-79d2-b27d-a754609b1511",
+          "valueId": "$NEW/4/permit"
+        },
+        {
+          "itemId": "6a5dd902-5e50-79d2-b27d-a754609b1511",
+          "valueId": "$NEW/6/Collection"
+        },
+        {
+          "itemId": "6a5dd902-5e50-79d2-b27d-a754609b1511",
+          "valueId": "$NEW/6/Parent"
+        },
+        {
+          "itemId": "6a5dd902-5e50-79d2-b27d-a754609b1511",
+          "valueId": "$NEW/6/Permit"
+        },
+        {
+          "itemId": "6a5dd902-5e50-79d2-b27d-a754609b1511",
+          "valueId": "$NEW/6/Root"
+        }
+      ],
+      "ancestors": [
+        {
+          "itemId": "6a5dd902-5e50-79d2-b27d-a754609b1511",
+          "parentId": "97b00000-0000-0000-0000-000000000002"
+        },
+        {
+          "itemId": "6a5dd902-5e50-79d2-b27d-a754609b1511",
+          "parentId": "97b00000-0000-0000-0000-000000000003"
+        },
+        {
+          "itemId": "6a5dd902-5e50-79d2-b27d-a754609b1511",
+          "parentId": "97b00000-0000-0000-0000-000000000004"
+        },
+        {
+          "itemId": "6a5dd902-5e50-79d2-b27d-a754609b1511",
+          "parentId": "97b00000-0000-0000-0000-000000000007"
+        }
+      ],
+      "columns": {
+        "Artists": null,
+        "AlbumArtists": null,
+        "Genres": "Drama",
+        "Studios": "Studio",
+        "Tags": "Permit"
+      }
+    },
+    {
+      "name": "type-MusicArtist",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.MusicArtist",
+      "storedDataIsNull": true,
+      "calls": [
+        {
+          "action": "added",
+          "id": "fbf85d2f-809e-91d8-4ea5-aa82d3afc36d",
+          "parentId": "97b00000-0000-0000-0000-000000000002"
+        }
+      ],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": false,
+      "hasAlbumArtist": false,
+      "values": [
+        {
+          "id": "$NEW/2/Drama",
+          "type": 2,
+          "value": "Drama",
+          "cleanValue": "drama"
+        },
+        {
+          "id": "$NEW/2/drama",
+          "type": 2,
+          "value": "drama",
+          "cleanValue": "drama"
+        },
+        {
+          "id": "$NEW/3/Studio",
+          "type": 3,
+          "value": "Studio",
+          "cleanValue": "studio"
+        },
+        {
+          "id": "$NEW/4/Permit",
+          "type": 4,
+          "value": "Permit",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/4/permit",
+          "type": 4,
+          "value": "permit",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/6/Collection",
+          "type": 6,
+          "value": "Collection",
+          "cleanValue": "collection"
+        },
+        {
+          "id": "$NEW/6/Parent",
+          "type": 6,
+          "value": "Parent",
+          "cleanValue": "parent"
+        },
+        {
+          "id": "$NEW/6/Permit",
+          "type": 6,
+          "value": "Permit",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/6/Root",
+          "type": 6,
+          "value": "Root",
+          "cleanValue": "root"
+        }
+      ],
+      "maps": [
+        {
+          "itemId": "fbf85d2f-809e-91d8-4ea5-aa82d3afc36d",
+          "valueId": "$NEW/2/Drama"
+        },
+        {
+          "itemId": "fbf85d2f-809e-91d8-4ea5-aa82d3afc36d",
+          "valueId": "$NEW/2/drama"
+        },
+        {
+          "itemId": "fbf85d2f-809e-91d8-4ea5-aa82d3afc36d",
+          "valueId": "$NEW/3/Studio"
+        },
+        {
+          "itemId": "fbf85d2f-809e-91d8-4ea5-aa82d3afc36d",
+          "valueId": "$NEW/4/Permit"
+        },
+        {
+          "itemId": "fbf85d2f-809e-91d8-4ea5-aa82d3afc36d",
+          "valueId": "$NEW/4/permit"
+        },
+        {
+          "itemId": "fbf85d2f-809e-91d8-4ea5-aa82d3afc36d",
+          "valueId": "$NEW/6/Collection"
+        },
+        {
+          "itemId": "fbf85d2f-809e-91d8-4ea5-aa82d3afc36d",
+          "valueId": "$NEW/6/Parent"
+        },
+        {
+          "itemId": "fbf85d2f-809e-91d8-4ea5-aa82d3afc36d",
+          "valueId": "$NEW/6/Permit"
+        },
+        {
+          "itemId": "fbf85d2f-809e-91d8-4ea5-aa82d3afc36d",
+          "valueId": "$NEW/6/Root"
+        }
+      ],
+      "ancestors": [
+        {
+          "itemId": "fbf85d2f-809e-91d8-4ea5-aa82d3afc36d",
+          "parentId": "97b00000-0000-0000-0000-000000000002"
+        },
+        {
+          "itemId": "fbf85d2f-809e-91d8-4ea5-aa82d3afc36d",
+          "parentId": "97b00000-0000-0000-0000-000000000003"
+        },
+        {
+          "itemId": "fbf85d2f-809e-91d8-4ea5-aa82d3afc36d",
+          "parentId": "97b00000-0000-0000-0000-000000000004"
+        }
+      ],
+      "columns": {
+        "Artists": null,
+        "AlbumArtists": null,
+        "Genres": "Drama",
+        "Studios": "Studio",
+        "Tags": "Permit"
+      }
+    },
+    {
+      "name": "type-MusicAlbum",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.MusicAlbum",
+      "storedDataIsNull": true,
+      "calls": [
+        {
+          "action": "added",
+          "id": "678594dc-e884-ccac-e404-c924e6dc55cd",
+          "parentId": "97b00000-0000-0000-0000-000000000002"
+        }
+      ],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [
+        {
+          "id": "$NEW/0/Artist",
+          "type": 0,
+          "value": "Artist",
+          "cleanValue": "artist"
+        },
+        {
+          "id": "$NEW/1/Album Artist",
+          "type": 1,
+          "value": "Album Artist",
+          "cleanValue": "album artist"
+        },
+        {
+          "id": "$NEW/2/Drama",
+          "type": 2,
+          "value": "Drama",
+          "cleanValue": "drama"
+        },
+        {
+          "id": "$NEW/2/drama",
+          "type": 2,
+          "value": "drama",
+          "cleanValue": "drama"
+        },
+        {
+          "id": "$NEW/3/Studio",
+          "type": 3,
+          "value": "Studio",
+          "cleanValue": "studio"
+        },
+        {
+          "id": "$NEW/4/Permit",
+          "type": 4,
+          "value": "Permit",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/4/permit",
+          "type": 4,
+          "value": "permit",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/6/Collection",
+          "type": 6,
+          "value": "Collection",
+          "cleanValue": "collection"
+        },
+        {
+          "id": "$NEW/6/Parent",
+          "type": 6,
+          "value": "Parent",
+          "cleanValue": "parent"
+        },
+        {
+          "id": "$NEW/6/Permit",
+          "type": 6,
+          "value": "Permit",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/6/Root",
+          "type": 6,
+          "value": "Root",
+          "cleanValue": "root"
+        }
+      ],
+      "maps": [
+        {
+          "itemId": "678594dc-e884-ccac-e404-c924e6dc55cd",
+          "valueId": "$NEW/0/Artist"
+        },
+        {
+          "itemId": "678594dc-e884-ccac-e404-c924e6dc55cd",
+          "valueId": "$NEW/1/Album Artist"
+        },
+        {
+          "itemId": "678594dc-e884-ccac-e404-c924e6dc55cd",
+          "valueId": "$NEW/2/Drama"
+        },
+        {
+          "itemId": "678594dc-e884-ccac-e404-c924e6dc55cd",
+          "valueId": "$NEW/2/drama"
+        },
+        {
+          "itemId": "678594dc-e884-ccac-e404-c924e6dc55cd",
+          "valueId": "$NEW/3/Studio"
+        },
+        {
+          "itemId": "678594dc-e884-ccac-e404-c924e6dc55cd",
+          "valueId": "$NEW/4/Permit"
+        },
+        {
+          "itemId": "678594dc-e884-ccac-e404-c924e6dc55cd",
+          "valueId": "$NEW/4/permit"
+        },
+        {
+          "itemId": "678594dc-e884-ccac-e404-c924e6dc55cd",
+          "valueId": "$NEW/6/Collection"
+        },
+        {
+          "itemId": "678594dc-e884-ccac-e404-c924e6dc55cd",
+          "valueId": "$NEW/6/Parent"
+        },
+        {
+          "itemId": "678594dc-e884-ccac-e404-c924e6dc55cd",
+          "valueId": "$NEW/6/Permit"
+        },
+        {
+          "itemId": "678594dc-e884-ccac-e404-c924e6dc55cd",
+          "valueId": "$NEW/6/Root"
+        }
+      ],
+      "ancestors": [
+        {
+          "itemId": "678594dc-e884-ccac-e404-c924e6dc55cd",
+          "parentId": "97b00000-0000-0000-0000-000000000002"
+        },
+        {
+          "itemId": "678594dc-e884-ccac-e404-c924e6dc55cd",
+          "parentId": "97b00000-0000-0000-0000-000000000003"
+        },
+        {
+          "itemId": "678594dc-e884-ccac-e404-c924e6dc55cd",
+          "parentId": "97b00000-0000-0000-0000-000000000004"
+        }
+      ],
+      "columns": {
+        "Artists": "Artist",
+        "AlbumArtists": "Album Artist",
+        "Genres": "Drama",
+        "Studios": "Studio",
+        "Tags": "Permit"
+      }
+    },
+    {
+      "name": "type-Audio",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": false,
+      "calls": [
+        {
+          "action": "added",
+          "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "parentId": "97b00000-0000-0000-0000-000000000002"
+        }
+      ],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [
+        {
+          "id": "$NEW/0/Artist",
+          "type": 0,
+          "value": "Artist",
+          "cleanValue": "artist"
+        },
+        {
+          "id": "$NEW/1/Album Artist",
+          "type": 1,
+          "value": "Album Artist",
+          "cleanValue": "album artist"
+        },
+        {
+          "id": "$NEW/2/Drama",
+          "type": 2,
+          "value": "Drama",
+          "cleanValue": "drama"
+        },
+        {
+          "id": "$NEW/2/drama",
+          "type": 2,
+          "value": "drama",
+          "cleanValue": "drama"
+        },
+        {
+          "id": "$NEW/3/Studio",
+          "type": 3,
+          "value": "Studio",
+          "cleanValue": "studio"
+        },
+        {
+          "id": "$NEW/4/Permit",
+          "type": 4,
+          "value": "Permit",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/4/permit",
+          "type": 4,
+          "value": "permit",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/6/Collection",
+          "type": 6,
+          "value": "Collection",
+          "cleanValue": "collection"
+        },
+        {
+          "id": "$NEW/6/Parent",
+          "type": 6,
+          "value": "Parent",
+          "cleanValue": "parent"
+        },
+        {
+          "id": "$NEW/6/Permit",
+          "type": 6,
+          "value": "Permit",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/6/Root",
+          "type": 6,
+          "value": "Root",
+          "cleanValue": "root"
+        }
+      ],
+      "maps": [
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/0/Artist"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/1/Album Artist"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/2/Drama"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/2/drama"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/3/Studio"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/4/Permit"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/4/permit"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/6/Collection"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/6/Parent"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/6/Permit"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/6/Root"
+        }
+      ],
+      "ancestors": [
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "parentId": "97b00000-0000-0000-0000-000000000002"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "parentId": "97b00000-0000-0000-0000-000000000003"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "parentId": "97b00000-0000-0000-0000-000000000004"
+        }
+      ],
+      "columns": {
+        "Artists": "Artist",
+        "AlbumArtists": "Album Artist",
+        "Genres": "Drama",
+        "Studios": "Studio",
+        "Tags": "Permit"
+      }
+    },
+    {
+      "name": "type-AudioBook",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.AudioBook",
+      "storedDataIsNull": true,
+      "calls": [
+        {
+          "action": "added",
+          "id": "3a53ed8d-b759-7c85-761c-b22aa7505faf",
+          "parentId": "97b00000-0000-0000-0000-000000000002"
+        }
+      ],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [
+        {
+          "id": "$NEW/0/Artist",
+          "type": 0,
+          "value": "Artist",
+          "cleanValue": "artist"
+        },
+        {
+          "id": "$NEW/1/Album Artist",
+          "type": 1,
+          "value": "Album Artist",
+          "cleanValue": "album artist"
+        },
+        {
+          "id": "$NEW/2/Drama",
+          "type": 2,
+          "value": "Drama",
+          "cleanValue": "drama"
+        },
+        {
+          "id": "$NEW/2/drama",
+          "type": 2,
+          "value": "drama",
+          "cleanValue": "drama"
+        },
+        {
+          "id": "$NEW/3/Studio",
+          "type": 3,
+          "value": "Studio",
+          "cleanValue": "studio"
+        },
+        {
+          "id": "$NEW/4/Permit",
+          "type": 4,
+          "value": "Permit",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/4/permit",
+          "type": 4,
+          "value": "permit",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/6/Collection",
+          "type": 6,
+          "value": "Collection",
+          "cleanValue": "collection"
+        },
+        {
+          "id": "$NEW/6/Parent",
+          "type": 6,
+          "value": "Parent",
+          "cleanValue": "parent"
+        },
+        {
+          "id": "$NEW/6/Permit",
+          "type": 6,
+          "value": "Permit",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/6/Root",
+          "type": 6,
+          "value": "Root",
+          "cleanValue": "root"
+        }
+      ],
+      "maps": [
+        {
+          "itemId": "3a53ed8d-b759-7c85-761c-b22aa7505faf",
+          "valueId": "$NEW/0/Artist"
+        },
+        {
+          "itemId": "3a53ed8d-b759-7c85-761c-b22aa7505faf",
+          "valueId": "$NEW/1/Album Artist"
+        },
+        {
+          "itemId": "3a53ed8d-b759-7c85-761c-b22aa7505faf",
+          "valueId": "$NEW/2/Drama"
+        },
+        {
+          "itemId": "3a53ed8d-b759-7c85-761c-b22aa7505faf",
+          "valueId": "$NEW/2/drama"
+        },
+        {
+          "itemId": "3a53ed8d-b759-7c85-761c-b22aa7505faf",
+          "valueId": "$NEW/3/Studio"
+        },
+        {
+          "itemId": "3a53ed8d-b759-7c85-761c-b22aa7505faf",
+          "valueId": "$NEW/4/Permit"
+        },
+        {
+          "itemId": "3a53ed8d-b759-7c85-761c-b22aa7505faf",
+          "valueId": "$NEW/4/permit"
+        },
+        {
+          "itemId": "3a53ed8d-b759-7c85-761c-b22aa7505faf",
+          "valueId": "$NEW/6/Collection"
+        },
+        {
+          "itemId": "3a53ed8d-b759-7c85-761c-b22aa7505faf",
+          "valueId": "$NEW/6/Parent"
+        },
+        {
+          "itemId": "3a53ed8d-b759-7c85-761c-b22aa7505faf",
+          "valueId": "$NEW/6/Permit"
+        },
+        {
+          "itemId": "3a53ed8d-b759-7c85-761c-b22aa7505faf",
+          "valueId": "$NEW/6/Root"
+        }
+      ],
+      "ancestors": [
+        {
+          "itemId": "3a53ed8d-b759-7c85-761c-b22aa7505faf",
+          "parentId": "97b00000-0000-0000-0000-000000000002"
+        },
+        {
+          "itemId": "3a53ed8d-b759-7c85-761c-b22aa7505faf",
+          "parentId": "97b00000-0000-0000-0000-000000000003"
+        },
+        {
+          "itemId": "3a53ed8d-b759-7c85-761c-b22aa7505faf",
+          "parentId": "97b00000-0000-0000-0000-000000000004"
+        }
+      ],
+      "columns": {
+        "Artists": "Artist",
+        "AlbumArtists": "Album Artist",
+        "Genres": "Drama",
+        "Studios": "Studio",
+        "Tags": "Permit"
+      }
+    },
+    {
+      "name": "type-Book",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Book",
+      "storedDataIsNull": true,
+      "calls": [
+        {
+          "action": "added",
+          "id": "e5d433e0-a4f0-a857-3c24-b76ce75c4dd5",
+          "parentId": "97b00000-0000-0000-0000-000000000002"
+        }
+      ],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": false,
+      "hasAlbumArtist": false,
+      "values": [
+        {
+          "id": "$NEW/2/Drama",
+          "type": 2,
+          "value": "Drama",
+          "cleanValue": "drama"
+        },
+        {
+          "id": "$NEW/2/drama",
+          "type": 2,
+          "value": "drama",
+          "cleanValue": "drama"
+        },
+        {
+          "id": "$NEW/3/Studio",
+          "type": 3,
+          "value": "Studio",
+          "cleanValue": "studio"
+        },
+        {
+          "id": "$NEW/4/Permit",
+          "type": 4,
+          "value": "Permit",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/4/permit",
+          "type": 4,
+          "value": "permit",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/6/Collection",
+          "type": 6,
+          "value": "Collection",
+          "cleanValue": "collection"
+        },
+        {
+          "id": "$NEW/6/Parent",
+          "type": 6,
+          "value": "Parent",
+          "cleanValue": "parent"
+        },
+        {
+          "id": "$NEW/6/Permit",
+          "type": 6,
+          "value": "Permit",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/6/Root",
+          "type": 6,
+          "value": "Root",
+          "cleanValue": "root"
+        }
+      ],
+      "maps": [
+        {
+          "itemId": "e5d433e0-a4f0-a857-3c24-b76ce75c4dd5",
+          "valueId": "$NEW/2/Drama"
+        },
+        {
+          "itemId": "e5d433e0-a4f0-a857-3c24-b76ce75c4dd5",
+          "valueId": "$NEW/2/drama"
+        },
+        {
+          "itemId": "e5d433e0-a4f0-a857-3c24-b76ce75c4dd5",
+          "valueId": "$NEW/3/Studio"
+        },
+        {
+          "itemId": "e5d433e0-a4f0-a857-3c24-b76ce75c4dd5",
+          "valueId": "$NEW/4/Permit"
+        },
+        {
+          "itemId": "e5d433e0-a4f0-a857-3c24-b76ce75c4dd5",
+          "valueId": "$NEW/4/permit"
+        },
+        {
+          "itemId": "e5d433e0-a4f0-a857-3c24-b76ce75c4dd5",
+          "valueId": "$NEW/6/Collection"
+        },
+        {
+          "itemId": "e5d433e0-a4f0-a857-3c24-b76ce75c4dd5",
+          "valueId": "$NEW/6/Parent"
+        },
+        {
+          "itemId": "e5d433e0-a4f0-a857-3c24-b76ce75c4dd5",
+          "valueId": "$NEW/6/Permit"
+        },
+        {
+          "itemId": "e5d433e0-a4f0-a857-3c24-b76ce75c4dd5",
+          "valueId": "$NEW/6/Root"
+        }
+      ],
+      "ancestors": [
+        {
+          "itemId": "e5d433e0-a4f0-a857-3c24-b76ce75c4dd5",
+          "parentId": "97b00000-0000-0000-0000-000000000002"
+        },
+        {
+          "itemId": "e5d433e0-a4f0-a857-3c24-b76ce75c4dd5",
+          "parentId": "97b00000-0000-0000-0000-000000000003"
+        },
+        {
+          "itemId": "e5d433e0-a4f0-a857-3c24-b76ce75c4dd5",
+          "parentId": "97b00000-0000-0000-0000-000000000004"
+        }
+      ],
+      "columns": {
+        "Artists": null,
+        "AlbumArtists": null,
+        "Genres": "Drama",
+        "Studios": "Studio",
+        "Tags": "Permit"
+      }
+    },
+    {
+      "name": "type-Photo",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Photo",
+      "storedDataIsNull": false,
+      "calls": [
+        {
+          "action": "added",
+          "id": "3b137d53-acfc-7284-b7d5-84f32da9754c",
+          "parentId": "97b00000-0000-0000-0000-000000000002"
+        }
+      ],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": false,
+      "hasAlbumArtist": false,
+      "values": [
+        {
+          "id": "$NEW/2/Drama",
+          "type": 2,
+          "value": "Drama",
+          "cleanValue": "drama"
+        },
+        {
+          "id": "$NEW/2/drama",
+          "type": 2,
+          "value": "drama",
+          "cleanValue": "drama"
+        },
+        {
+          "id": "$NEW/3/Studio",
+          "type": 3,
+          "value": "Studio",
+          "cleanValue": "studio"
+        },
+        {
+          "id": "$NEW/4/Permit",
+          "type": 4,
+          "value": "Permit",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/4/permit",
+          "type": 4,
+          "value": "permit",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/6/Collection",
+          "type": 6,
+          "value": "Collection",
+          "cleanValue": "collection"
+        },
+        {
+          "id": "$NEW/6/Parent",
+          "type": 6,
+          "value": "Parent",
+          "cleanValue": "parent"
+        },
+        {
+          "id": "$NEW/6/Permit",
+          "type": 6,
+          "value": "Permit",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/6/Root",
+          "type": 6,
+          "value": "Root",
+          "cleanValue": "root"
+        }
+      ],
+      "maps": [
+        {
+          "itemId": "3b137d53-acfc-7284-b7d5-84f32da9754c",
+          "valueId": "$NEW/2/Drama"
+        },
+        {
+          "itemId": "3b137d53-acfc-7284-b7d5-84f32da9754c",
+          "valueId": "$NEW/2/drama"
+        },
+        {
+          "itemId": "3b137d53-acfc-7284-b7d5-84f32da9754c",
+          "valueId": "$NEW/3/Studio"
+        },
+        {
+          "itemId": "3b137d53-acfc-7284-b7d5-84f32da9754c",
+          "valueId": "$NEW/4/Permit"
+        },
+        {
+          "itemId": "3b137d53-acfc-7284-b7d5-84f32da9754c",
+          "valueId": "$NEW/4/permit"
+        },
+        {
+          "itemId": "3b137d53-acfc-7284-b7d5-84f32da9754c",
+          "valueId": "$NEW/6/Collection"
+        },
+        {
+          "itemId": "3b137d53-acfc-7284-b7d5-84f32da9754c",
+          "valueId": "$NEW/6/Parent"
+        },
+        {
+          "itemId": "3b137d53-acfc-7284-b7d5-84f32da9754c",
+          "valueId": "$NEW/6/Permit"
+        },
+        {
+          "itemId": "3b137d53-acfc-7284-b7d5-84f32da9754c",
+          "valueId": "$NEW/6/Root"
+        }
+      ],
+      "ancestors": [
+        {
+          "itemId": "3b137d53-acfc-7284-b7d5-84f32da9754c",
+          "parentId": "97b00000-0000-0000-0000-000000000002"
+        },
+        {
+          "itemId": "3b137d53-acfc-7284-b7d5-84f32da9754c",
+          "parentId": "97b00000-0000-0000-0000-000000000003"
+        },
+        {
+          "itemId": "3b137d53-acfc-7284-b7d5-84f32da9754c",
+          "parentId": "97b00000-0000-0000-0000-000000000004"
+        }
+      ],
+      "columns": {
+        "Artists": null,
+        "AlbumArtists": null,
+        "Genres": "Drama",
+        "Studios": "Studio",
+        "Tags": "Permit"
+      }
+    },
+    {
+      "name": "type-PhotoAlbum",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.PhotoAlbum",
+      "storedDataIsNull": true,
+      "calls": [
+        {
+          "action": "added",
+          "id": "cc4b2b4e-2d6b-fd8a-84a1-0daa32a73d24",
+          "parentId": "97b00000-0000-0000-0000-000000000002"
+        }
+      ],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": false,
+      "hasAlbumArtist": false,
+      "values": [
+        {
+          "id": "$NEW/2/Drama",
+          "type": 2,
+          "value": "Drama",
+          "cleanValue": "drama"
+        },
+        {
+          "id": "$NEW/2/drama",
+          "type": 2,
+          "value": "drama",
+          "cleanValue": "drama"
+        },
+        {
+          "id": "$NEW/3/Studio",
+          "type": 3,
+          "value": "Studio",
+          "cleanValue": "studio"
+        },
+        {
+          "id": "$NEW/4/Permit",
+          "type": 4,
+          "value": "Permit",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/4/permit",
+          "type": 4,
+          "value": "permit",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/6/Collection",
+          "type": 6,
+          "value": "Collection",
+          "cleanValue": "collection"
+        },
+        {
+          "id": "$NEW/6/Parent",
+          "type": 6,
+          "value": "Parent",
+          "cleanValue": "parent"
+        },
+        {
+          "id": "$NEW/6/Permit",
+          "type": 6,
+          "value": "Permit",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/6/Root",
+          "type": 6,
+          "value": "Root",
+          "cleanValue": "root"
+        }
+      ],
+      "maps": [
+        {
+          "itemId": "cc4b2b4e-2d6b-fd8a-84a1-0daa32a73d24",
+          "valueId": "$NEW/2/Drama"
+        },
+        {
+          "itemId": "cc4b2b4e-2d6b-fd8a-84a1-0daa32a73d24",
+          "valueId": "$NEW/2/drama"
+        },
+        {
+          "itemId": "cc4b2b4e-2d6b-fd8a-84a1-0daa32a73d24",
+          "valueId": "$NEW/3/Studio"
+        },
+        {
+          "itemId": "cc4b2b4e-2d6b-fd8a-84a1-0daa32a73d24",
+          "valueId": "$NEW/4/Permit"
+        },
+        {
+          "itemId": "cc4b2b4e-2d6b-fd8a-84a1-0daa32a73d24",
+          "valueId": "$NEW/4/permit"
+        },
+        {
+          "itemId": "cc4b2b4e-2d6b-fd8a-84a1-0daa32a73d24",
+          "valueId": "$NEW/6/Collection"
+        },
+        {
+          "itemId": "cc4b2b4e-2d6b-fd8a-84a1-0daa32a73d24",
+          "valueId": "$NEW/6/Parent"
+        },
+        {
+          "itemId": "cc4b2b4e-2d6b-fd8a-84a1-0daa32a73d24",
+          "valueId": "$NEW/6/Permit"
+        },
+        {
+          "itemId": "cc4b2b4e-2d6b-fd8a-84a1-0daa32a73d24",
+          "valueId": "$NEW/6/Root"
+        }
+      ],
+      "ancestors": [
+        {
+          "itemId": "cc4b2b4e-2d6b-fd8a-84a1-0daa32a73d24",
+          "parentId": "97b00000-0000-0000-0000-000000000002"
+        },
+        {
+          "itemId": "cc4b2b4e-2d6b-fd8a-84a1-0daa32a73d24",
+          "parentId": "97b00000-0000-0000-0000-000000000003"
+        },
+        {
+          "itemId": "cc4b2b4e-2d6b-fd8a-84a1-0daa32a73d24",
+          "parentId": "97b00000-0000-0000-0000-000000000004"
+        }
+      ],
+      "columns": {
+        "Artists": null,
+        "AlbumArtists": null,
+        "Genres": "Drama",
+        "Studios": "Studio",
+        "Tags": "Permit"
+      }
+    },
+    {
+      "name": "case-sensitive-Folder",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Folder",
+      "storedDataIsNull": false,
+      "calls": [
+        {
+          "action": "added",
+          "id": "a64bea11-71f0-e4c2-cc68-7767fa9abe8e",
+          "parentId": "97b00000-0000-0000-0000-000000000002"
+        }
+      ],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": false,
+      "hasAlbumArtist": false,
+      "values": [
+        {
+          "id": "$NEW/2/Drama",
+          "type": 2,
+          "value": "Drama",
+          "cleanValue": "drama"
+        },
+        {
+          "id": "$NEW/2/drama",
+          "type": 2,
+          "value": "drama",
+          "cleanValue": "drama"
+        },
+        {
+          "id": "$NEW/3/Studio",
+          "type": 3,
+          "value": "Studio",
+          "cleanValue": "studio"
+        },
+        {
+          "id": "$NEW/4/Permit",
+          "type": 4,
+          "value": "Permit",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/4/permit",
+          "type": 4,
+          "value": "permit",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/6/Collection",
+          "type": 6,
+          "value": "Collection",
+          "cleanValue": "collection"
+        },
+        {
+          "id": "$NEW/6/Parent",
+          "type": 6,
+          "value": "Parent",
+          "cleanValue": "parent"
+        },
+        {
+          "id": "$NEW/6/Permit",
+          "type": 6,
+          "value": "Permit",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/6/Root",
+          "type": 6,
+          "value": "Root",
+          "cleanValue": "root"
+        }
+      ],
+      "maps": [
+        {
+          "itemId": "a64bea11-71f0-e4c2-cc68-7767fa9abe8e",
+          "valueId": "$NEW/2/Drama"
+        },
+        {
+          "itemId": "a64bea11-71f0-e4c2-cc68-7767fa9abe8e",
+          "valueId": "$NEW/2/drama"
+        },
+        {
+          "itemId": "a64bea11-71f0-e4c2-cc68-7767fa9abe8e",
+          "valueId": "$NEW/3/Studio"
+        },
+        {
+          "itemId": "a64bea11-71f0-e4c2-cc68-7767fa9abe8e",
+          "valueId": "$NEW/4/Permit"
+        },
+        {
+          "itemId": "a64bea11-71f0-e4c2-cc68-7767fa9abe8e",
+          "valueId": "$NEW/4/permit"
+        },
+        {
+          "itemId": "a64bea11-71f0-e4c2-cc68-7767fa9abe8e",
+          "valueId": "$NEW/6/Collection"
+        },
+        {
+          "itemId": "a64bea11-71f0-e4c2-cc68-7767fa9abe8e",
+          "valueId": "$NEW/6/Parent"
+        },
+        {
+          "itemId": "a64bea11-71f0-e4c2-cc68-7767fa9abe8e",
+          "valueId": "$NEW/6/Permit"
+        },
+        {
+          "itemId": "a64bea11-71f0-e4c2-cc68-7767fa9abe8e",
+          "valueId": "$NEW/6/Root"
+        }
+      ],
+      "ancestors": [
+        {
+          "itemId": "a64bea11-71f0-e4c2-cc68-7767fa9abe8e",
+          "parentId": "97b00000-0000-0000-0000-000000000002"
+        },
+        {
+          "itemId": "a64bea11-71f0-e4c2-cc68-7767fa9abe8e",
+          "parentId": "97b00000-0000-0000-0000-000000000003"
+        },
+        {
+          "itemId": "a64bea11-71f0-e4c2-cc68-7767fa9abe8e",
+          "parentId": "97b00000-0000-0000-0000-000000000004"
+        }
+      ],
+      "columns": {
+        "Artists": null,
+        "AlbumArtists": null,
+        "Genres": "Drama",
+        "Studios": "Studio",
+        "Tags": "Permit"
+      }
+    },
+    {
+      "name": "case-sensitive-Movie",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Movies.Movie",
+      "storedDataIsNull": false,
+      "calls": [
+        {
+          "action": "added",
+          "id": "012bcee6-c10b-d82d-91ed-25959ad2c693",
+          "parentId": "97b00000-0000-0000-0000-000000000002"
+        }
+      ],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": false,
+      "hasAlbumArtist": false,
+      "values": [
+        {
+          "id": "$NEW/2/Drama",
+          "type": 2,
+          "value": "Drama",
+          "cleanValue": "drama"
+        },
+        {
+          "id": "$NEW/2/drama",
+          "type": 2,
+          "value": "drama",
+          "cleanValue": "drama"
+        },
+        {
+          "id": "$NEW/3/Studio",
+          "type": 3,
+          "value": "Studio",
+          "cleanValue": "studio"
+        },
+        {
+          "id": "$NEW/4/Permit",
+          "type": 4,
+          "value": "Permit",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/4/permit",
+          "type": 4,
+          "value": "permit",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/6/Collection",
+          "type": 6,
+          "value": "Collection",
+          "cleanValue": "collection"
+        },
+        {
+          "id": "$NEW/6/Parent",
+          "type": 6,
+          "value": "Parent",
+          "cleanValue": "parent"
+        },
+        {
+          "id": "$NEW/6/Permit",
+          "type": 6,
+          "value": "Permit",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/6/Root",
+          "type": 6,
+          "value": "Root",
+          "cleanValue": "root"
+        }
+      ],
+      "maps": [
+        {
+          "itemId": "012bcee6-c10b-d82d-91ed-25959ad2c693",
+          "valueId": "$NEW/2/Drama"
+        },
+        {
+          "itemId": "012bcee6-c10b-d82d-91ed-25959ad2c693",
+          "valueId": "$NEW/2/drama"
+        },
+        {
+          "itemId": "012bcee6-c10b-d82d-91ed-25959ad2c693",
+          "valueId": "$NEW/3/Studio"
+        },
+        {
+          "itemId": "012bcee6-c10b-d82d-91ed-25959ad2c693",
+          "valueId": "$NEW/4/Permit"
+        },
+        {
+          "itemId": "012bcee6-c10b-d82d-91ed-25959ad2c693",
+          "valueId": "$NEW/4/permit"
+        },
+        {
+          "itemId": "012bcee6-c10b-d82d-91ed-25959ad2c693",
+          "valueId": "$NEW/6/Collection"
+        },
+        {
+          "itemId": "012bcee6-c10b-d82d-91ed-25959ad2c693",
+          "valueId": "$NEW/6/Parent"
+        },
+        {
+          "itemId": "012bcee6-c10b-d82d-91ed-25959ad2c693",
+          "valueId": "$NEW/6/Permit"
+        },
+        {
+          "itemId": "012bcee6-c10b-d82d-91ed-25959ad2c693",
+          "valueId": "$NEW/6/Root"
+        }
+      ],
+      "ancestors": [
+        {
+          "itemId": "012bcee6-c10b-d82d-91ed-25959ad2c693",
+          "parentId": "97b00000-0000-0000-0000-000000000002"
+        },
+        {
+          "itemId": "012bcee6-c10b-d82d-91ed-25959ad2c693",
+          "parentId": "97b00000-0000-0000-0000-000000000003"
+        },
+        {
+          "itemId": "012bcee6-c10b-d82d-91ed-25959ad2c693",
+          "parentId": "97b00000-0000-0000-0000-000000000004"
+        }
+      ],
+      "columns": {
+        "Artists": null,
+        "AlbumArtists": null,
+        "Genres": "Drama",
+        "Studios": "Studio",
+        "Tags": "Permit"
+      }
+    },
+    {
+      "name": "physical-id-without-path",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Movies.Movie",
+      "storedDataIsNull": false,
+      "calls": [
+        {
+          "action": "added",
+          "id": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "parentId": "97b00000-0000-0000-0000-000000000002"
+        }
+      ],
+      "collectionIds": [],
+      "supportsAncestors": true,
+      "hasArtist": false,
+      "hasAlbumArtist": false,
+      "values": [
+        {
+          "id": "$NEW/2/Drama",
+          "type": 2,
+          "value": "Drama",
+          "cleanValue": "drama"
+        },
+        {
+          "id": "$NEW/2/drama",
+          "type": 2,
+          "value": "drama",
+          "cleanValue": "drama"
+        },
+        {
+          "id": "$NEW/3/Studio",
+          "type": 3,
+          "value": "Studio",
+          "cleanValue": "studio"
+        },
+        {
+          "id": "$NEW/4/Permit",
+          "type": 4,
+          "value": "Permit",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/4/permit",
+          "type": 4,
+          "value": "permit",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/6/Parent",
+          "type": 6,
+          "value": "Parent",
+          "cleanValue": "parent"
+        },
+        {
+          "id": "$NEW/6/Permit",
+          "type": 6,
+          "value": "Permit",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/6/Root",
+          "type": 6,
+          "value": "Root",
+          "cleanValue": "root"
+        }
+      ],
+      "maps": [
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "valueId": "$NEW/2/Drama"
+        },
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "valueId": "$NEW/2/drama"
+        },
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "valueId": "$NEW/3/Studio"
+        },
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "valueId": "$NEW/4/Permit"
+        },
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "valueId": "$NEW/4/permit"
+        },
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "valueId": "$NEW/6/Parent"
+        },
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "valueId": "$NEW/6/Permit"
+        },
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "valueId": "$NEW/6/Root"
+        }
+      ],
+      "ancestors": [
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "parentId": "97b00000-0000-0000-0000-000000000002"
+        },
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "parentId": "97b00000-0000-0000-0000-000000000003"
+        }
+      ],
+      "columns": {
+        "Artists": null,
+        "AlbumArtists": null,
+        "Genres": "Drama",
+        "Studios": "Studio",
+        "Tags": "Permit"
+      }
+    },
+    {
+      "name": "normalized-path-without-literal-match",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Movies.Movie",
+      "storedDataIsNull": false,
+      "calls": [
+        {
+          "action": "added",
+          "id": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "parentId": "97b00000-0000-0000-0000-000000000002"
+        }
+      ],
+      "collectionIds": [],
+      "supportsAncestors": true,
+      "hasArtist": false,
+      "hasAlbumArtist": false,
+      "values": [
+        {
+          "id": "$NEW/2/Drama",
+          "type": 2,
+          "value": "Drama",
+          "cleanValue": "drama"
+        },
+        {
+          "id": "$NEW/2/drama",
+          "type": 2,
+          "value": "drama",
+          "cleanValue": "drama"
+        },
+        {
+          "id": "$NEW/3/Studio",
+          "type": 3,
+          "value": "Studio",
+          "cleanValue": "studio"
+        },
+        {
+          "id": "$NEW/4/Permit",
+          "type": 4,
+          "value": "Permit",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/4/permit",
+          "type": 4,
+          "value": "permit",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/6/Parent",
+          "type": 6,
+          "value": "Parent",
+          "cleanValue": "parent"
+        },
+        {
+          "id": "$NEW/6/Permit",
+          "type": 6,
+          "value": "Permit",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/6/Root",
+          "type": 6,
+          "value": "Root",
+          "cleanValue": "root"
+        }
+      ],
+      "maps": [
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "valueId": "$NEW/2/Drama"
+        },
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "valueId": "$NEW/2/drama"
+        },
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "valueId": "$NEW/3/Studio"
+        },
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "valueId": "$NEW/4/Permit"
+        },
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "valueId": "$NEW/4/permit"
+        },
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "valueId": "$NEW/6/Parent"
+        },
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "valueId": "$NEW/6/Permit"
+        },
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "valueId": "$NEW/6/Root"
+        }
+      ],
+      "ancestors": [
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "parentId": "97b00000-0000-0000-0000-000000000002"
+        },
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "parentId": "97b00000-0000-0000-0000-000000000003"
+        }
+      ],
+      "columns": {
+        "Artists": null,
+        "AlbumArtists": null,
+        "Genres": "Drama",
+        "Studios": "Studio",
+        "Tags": "Permit"
+      }
+    },
+    {
+      "name": "no-user-root-children",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Movies.Movie",
+      "storedDataIsNull": false,
+      "calls": [
+        {
+          "action": "added",
+          "id": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "parentId": "97b00000-0000-0000-0000-000000000002"
+        }
+      ],
+      "collectionIds": [],
+      "supportsAncestors": true,
+      "hasArtist": false,
+      "hasAlbumArtist": false,
+      "values": [
+        {
+          "id": "$NEW/2/Drama",
+          "type": 2,
+          "value": "Drama",
+          "cleanValue": "drama"
+        },
+        {
+          "id": "$NEW/2/drama",
+          "type": 2,
+          "value": "drama",
+          "cleanValue": "drama"
+        },
+        {
+          "id": "$NEW/3/Studio",
+          "type": 3,
+          "value": "Studio",
+          "cleanValue": "studio"
+        },
+        {
+          "id": "$NEW/4/Permit",
+          "type": 4,
+          "value": "Permit",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/4/permit",
+          "type": 4,
+          "value": "permit",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/6/Parent",
+          "type": 6,
+          "value": "Parent",
+          "cleanValue": "parent"
+        },
+        {
+          "id": "$NEW/6/Permit",
+          "type": 6,
+          "value": "Permit",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/6/Root",
+          "type": 6,
+          "value": "Root",
+          "cleanValue": "root"
+        }
+      ],
+      "maps": [
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "valueId": "$NEW/2/Drama"
+        },
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "valueId": "$NEW/2/drama"
+        },
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "valueId": "$NEW/3/Studio"
+        },
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "valueId": "$NEW/4/Permit"
+        },
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "valueId": "$NEW/4/permit"
+        },
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "valueId": "$NEW/6/Parent"
+        },
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "valueId": "$NEW/6/Permit"
+        },
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "valueId": "$NEW/6/Root"
+        }
+      ],
+      "ancestors": [
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "parentId": "97b00000-0000-0000-0000-000000000002"
+        },
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "parentId": "97b00000-0000-0000-0000-000000000003"
+        }
+      ],
+      "columns": {
+        "Artists": null,
+        "AlbumArtists": null,
+        "Genres": "Drama",
+        "Studios": "Studio",
+        "Tags": "Permit"
+      }
+    },
+    {
+      "name": "ordinary-folder-path",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Movies.Movie",
+      "storedDataIsNull": false,
+      "calls": [
+        {
+          "action": "added",
+          "id": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "parentId": "97b00000-0000-0000-0000-000000000002"
+        }
+      ],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": false,
+      "hasAlbumArtist": false,
+      "values": [
+        {
+          "id": "$NEW/2/Drama",
+          "type": 2,
+          "value": "Drama",
+          "cleanValue": "drama"
+        },
+        {
+          "id": "$NEW/2/drama",
+          "type": 2,
+          "value": "drama",
+          "cleanValue": "drama"
+        },
+        {
+          "id": "$NEW/3/Studio",
+          "type": 3,
+          "value": "Studio",
+          "cleanValue": "studio"
+        },
+        {
+          "id": "$NEW/4/Permit",
+          "type": 4,
+          "value": "Permit",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/4/permit",
+          "type": 4,
+          "value": "permit",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/6/Folder collection",
+          "type": 6,
+          "value": "Folder collection",
+          "cleanValue": "folder collection"
+        },
+        {
+          "id": "$NEW/6/Parent",
+          "type": 6,
+          "value": "Parent",
+          "cleanValue": "parent"
+        },
+        {
+          "id": "$NEW/6/Permit",
+          "type": 6,
+          "value": "Permit",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/6/Root",
+          "type": 6,
+          "value": "Root",
+          "cleanValue": "root"
+        }
+      ],
+      "maps": [
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "valueId": "$NEW/2/Drama"
+        },
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "valueId": "$NEW/2/drama"
+        },
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "valueId": "$NEW/3/Studio"
+        },
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "valueId": "$NEW/4/Permit"
+        },
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "valueId": "$NEW/4/permit"
+        },
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "valueId": "$NEW/6/Folder collection"
+        },
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "valueId": "$NEW/6/Parent"
+        },
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "valueId": "$NEW/6/Permit"
+        },
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "valueId": "$NEW/6/Root"
+        }
+      ],
+      "ancestors": [
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "parentId": "97b00000-0000-0000-0000-000000000002"
+        },
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "parentId": "97b00000-0000-0000-0000-000000000003"
+        },
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "parentId": "97b00000-0000-0000-0000-000000000004"
+        }
+      ],
+      "columns": {
+        "Artists": null,
+        "AlbumArtists": null,
+        "Genres": "Drama",
+        "Studios": "Studio",
+        "Tags": "Permit"
+      }
+    },
+    {
+      "name": "owner-root",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Movies.Movie",
+      "storedDataIsNull": false,
+      "calls": [
+        {
+          "action": "added",
+          "id": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "parentId": null
+        }
+      ],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004",
+        "97b00000-0000-0000-0000-000000000002"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": false,
+      "hasAlbumArtist": false,
+      "values": [
+        {
+          "id": "$NEW/2/Drama",
+          "type": 2,
+          "value": "Drama",
+          "cleanValue": "drama"
+        },
+        {
+          "id": "$NEW/2/drama",
+          "type": 2,
+          "value": "drama",
+          "cleanValue": "drama"
+        },
+        {
+          "id": "$NEW/3/Studio",
+          "type": 3,
+          "value": "Studio",
+          "cleanValue": "studio"
+        },
+        {
+          "id": "$NEW/4/Permit",
+          "type": 4,
+          "value": "Permit",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/4/permit",
+          "type": 4,
+          "value": "permit",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/6/Collection",
+          "type": 6,
+          "value": "Collection",
+          "cleanValue": "collection"
+        },
+        {
+          "id": "$NEW/6/Owner",
+          "type": 6,
+          "value": "Owner",
+          "cleanValue": "owner"
+        },
+        {
+          "id": "$NEW/6/Permit",
+          "type": 6,
+          "value": "Permit",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/6/ROOT",
+          "type": 6,
+          "value": "ROOT",
+          "cleanValue": "root"
+        }
+      ],
+      "maps": [
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "valueId": "$NEW/2/Drama"
+        },
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "valueId": "$NEW/2/drama"
+        },
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "valueId": "$NEW/3/Studio"
+        },
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "valueId": "$NEW/4/Permit"
+        },
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "valueId": "$NEW/4/permit"
+        },
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "valueId": "$NEW/6/Collection"
+        },
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "valueId": "$NEW/6/Owner"
+        },
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "valueId": "$NEW/6/Permit"
+        },
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "valueId": "$NEW/6/ROOT"
+        }
+      ],
+      "ancestors": [
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "parentId": "97b00000-0000-0000-0000-000000000002"
+        },
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "parentId": "97b00000-0000-0000-0000-000000000004"
+        }
+      ],
+      "columns": {
+        "Artists": null,
+        "AlbumArtists": null,
+        "Genres": "Drama",
+        "Studios": "Studio",
+        "Tags": "Permit"
+      }
+    },
+    {
+      "name": "stale-persisted-ancestor",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Movies.Movie",
+      "storedDataIsNull": false,
+      "calls": [
+        {
+          "action": "added",
+          "id": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "parentId": "97b00000-0000-0000-0000-000000000002"
+        }
+      ],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": false,
+      "hasAlbumArtist": false,
+      "values": [
+        {
+          "id": "$NEW/2/Drama",
+          "type": 2,
+          "value": "Drama",
+          "cleanValue": "drama"
+        },
+        {
+          "id": "$NEW/2/drama",
+          "type": 2,
+          "value": "drama",
+          "cleanValue": "drama"
+        },
+        {
+          "id": "$NEW/3/Studio",
+          "type": 3,
+          "value": "Studio",
+          "cleanValue": "studio"
+        },
+        {
+          "id": "$NEW/4/Permit",
+          "type": 4,
+          "value": "Permit",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/4/permit",
+          "type": 4,
+          "value": "permit",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/6/Collection",
+          "type": 6,
+          "value": "Collection",
+          "cleanValue": "collection"
+        },
+        {
+          "id": "$NEW/6/Parent",
+          "type": 6,
+          "value": "Parent",
+          "cleanValue": "parent"
+        },
+        {
+          "id": "$NEW/6/Permit",
+          "type": 6,
+          "value": "Permit",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/6/Root",
+          "type": 6,
+          "value": "Root",
+          "cleanValue": "root"
+        }
+      ],
+      "maps": [
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "valueId": "$NEW/2/Drama"
+        },
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "valueId": "$NEW/2/drama"
+        },
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "valueId": "$NEW/3/Studio"
+        },
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "valueId": "$NEW/4/Permit"
+        },
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "valueId": "$NEW/4/permit"
+        },
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "valueId": "$NEW/6/Collection"
+        },
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "valueId": "$NEW/6/Parent"
+        },
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "valueId": "$NEW/6/Permit"
+        },
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "valueId": "$NEW/6/Root"
+        }
+      ],
+      "ancestors": [
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "parentId": "97b00000-0000-0000-0000-000000000002"
+        },
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "parentId": "97b00000-0000-0000-0000-000000000003"
+        },
+        {
+          "itemId": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "parentId": "97b00000-0000-0000-0000-000000000004"
+        }
+      ],
+      "columns": {
+        "Artists": null,
+        "AlbumArtists": null,
+        "Genres": "Drama",
+        "Studios": "Studio",
+        "Tags": "Permit"
+      }
+    },
+    {
+      "name": "repeat-create",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": false,
+      "calls": [
+        {
+          "action": "added",
+          "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "parentId": "97b00000-0000-0000-0000-000000000002"
+        },
+        {
+          "action": "added",
+          "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "parentId": "97b00000-0000-0000-0000-000000000002"
+        }
+      ],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [
+        {
+          "id": "$NEW/0/Artist",
+          "type": 0,
+          "value": "Artist",
+          "cleanValue": "artist"
+        },
+        {
+          "id": "$NEW/1/Album Artist",
+          "type": 1,
+          "value": "Album Artist",
+          "cleanValue": "album artist"
+        },
+        {
+          "id": "$NEW/2/Drama",
+          "type": 2,
+          "value": "Drama",
+          "cleanValue": "drama"
+        },
+        {
+          "id": "$NEW/2/drama",
+          "type": 2,
+          "value": "drama",
+          "cleanValue": "drama"
+        },
+        {
+          "id": "$NEW/3/Studio",
+          "type": 3,
+          "value": "Studio",
+          "cleanValue": "studio"
+        },
+        {
+          "id": "$NEW/4/Permit",
+          "type": 4,
+          "value": "Permit",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/4/permit",
+          "type": 4,
+          "value": "permit",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/6/Collection",
+          "type": 6,
+          "value": "Collection",
+          "cleanValue": "collection"
+        },
+        {
+          "id": "$NEW/6/Parent",
+          "type": 6,
+          "value": "Parent",
+          "cleanValue": "parent"
+        },
+        {
+          "id": "$NEW/6/Permit",
+          "type": 6,
+          "value": "Permit",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/6/Root",
+          "type": 6,
+          "value": "Root",
+          "cleanValue": "root"
+        }
+      ],
+      "maps": [
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/0/Artist"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/1/Album Artist"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/2/Drama"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/2/drama"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/3/Studio"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/4/Permit"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/4/permit"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/6/Collection"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/6/Parent"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/6/Permit"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/6/Root"
+        }
+      ],
+      "ancestors": [
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "parentId": "97b00000-0000-0000-0000-000000000002"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "parentId": "97b00000-0000-0000-0000-000000000003"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "parentId": "97b00000-0000-0000-0000-000000000004"
+        }
+      ],
+      "columns": {
+        "Artists": "Artist",
+        "AlbumArtists": "Album Artist",
+        "Genres": "Drama",
+        "Studios": "Studio",
+        "Tags": "Permit"
+      }
+    },
+    {
+      "name": "clear-Movie",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Movies.Movie",
+      "storedDataIsNull": false,
+      "calls": [
+        {
+          "action": "added",
+          "id": "3f490c72-9691-0bec-bfab-099230eed57b",
+          "parentId": null
+        }
+      ],
+      "collectionIds": [],
+      "supportsAncestors": true,
+      "hasArtist": false,
+      "hasAlbumArtist": false,
+      "values": [
+        {
+          "id": "97b00000-0000-0000-0000-000000000100",
+          "type": 7,
+          "value": "Old unknown",
+          "cleanValue": "sealed"
+        }
+      ],
+      "maps": [
+        {
+          "itemId": "97b00000-0000-0000-0000-000000000005",
+          "valueId": "97b00000-0000-0000-0000-000000000100"
+        }
+      ],
+      "ancestors": [],
+      "columns": {
+        "Artists": null,
+        "AlbumArtists": null,
+        "Genres": "",
+        "Studios": "",
+        "Tags": ""
+      }
+    },
+    {
+      "name": "clear-Person",
+      "exception": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Person",
+      "storedDataIsNull": true,
+      "calls": [
+        {
+          "action": "added",
+          "id": "14f6709d-5eff-2e3e-6e4a-d75110771394",
+          "parentId": null
+        }
+      ],
+      "collectionIds": [],
+      "supportsAncestors": false,
+      "hasArtist": false,
+      "hasAlbumArtist": false,
+      "values": [
+        {
+          "id": "97b00000-0000-0000-0000-000000000100",
+          "type": 7,
+          "value": "Old unknown",
+          "cleanValue": "sealed"
+        }
+      ],
+      "maps": [
+        {
+          "itemId": "97b00000-0000-0000-0000-000000000005",
+          "valueId": "97b00000-0000-0000-0000-000000000100"
+        }
+      ],
+      "ancestors": [
+        {
+          "itemId": "14f6709d-5eff-2e3e-6e4a-d75110771394",
+          "parentId": "97b00000-0000-0000-0000-000000000005"
+        }
+      ],
+      "columns": {
+        "Artists": null,
+        "AlbumArtists": null,
+        "Genres": "",
+        "Studios": "",
+        "Tags": ""
+      }
+    }
+  ],
+  "assemblies": [
+    {
+      "name": "MediaBrowser.Controller",
+      "path": "D:\\mediamanager\\.test-output\\validation\\scan-item-save-oracle-20261005-4\\bin\\Release\\net10.0\\MediaBrowser.Controller.dll",
+      "sha256": "56a527307ef93f810fdadec33ba8380cc8416d38cb1cfea92297b0f65288808e"
+    },
+    {
+      "name": "Jellyfin.Server.Implementations",
+      "path": "D:\\mediamanager\\.test-output\\validation\\scan-item-save-oracle-20261005-4\\bin\\Release\\net10.0\\Jellyfin.Server.Implementations.dll",
+      "sha256": "b91a6797f81f8563b8896c3da3e5cd4e9d11c61eb084578bf7b81108c3c3e2e6"
+    },
+    {
+      "name": "Emby.Server.Implementations",
+      "path": "D:\\mediamanager\\.test-output\\validation\\scan-item-save-oracle-20261005-4\\bin\\Release\\net10.0\\Emby.Server.Implementations.dll",
+      "sha256": "ccff8514100a65508b65882d5881463fe4ff73ea07eb4d2b2d98e234d7b4ac99"
+    },
+    {
+      "name": "Jellyfin.Database.Implementations",
+      "path": "D:\\mediamanager\\.test-output\\validation\\scan-item-save-oracle-20261005-4\\bin\\Release\\net10.0\\Jellyfin.Database.Implementations.dll",
+      "sha256": "21648ea8e6eec045789c66c199b30c68b1b00f6e15918ac66347c19244b5670b"
+    },
+    {
+      "name": "Jellyfin.Database.Providers.Sqlite",
+      "path": "D:\\mediamanager\\.test-output\\validation\\scan-item-save-oracle-20261005-4\\bin\\Release\\net10.0\\Jellyfin.Database.Providers.Sqlite.dll",
+      "sha256": "eefedf49a1c6c62c7eab9b4347c0bca377c3e059ec61ef26a08148de7bba94bb"
+    }
+  ],
+  "scope": "Actual LibraryManager.CreateItems, GetCollectionFolders overload, SaveItems, relation getters and real EF SQLite. Parent/owner lookup, the supplied user-root child list, library options, active recording and virtual path expansion are controls. CreateItems receives a null explicit parent while entity ParentId remains real. Compares creation events, Data nullness, collection IDs, all ItemValues/ItemValuesMap/AncestorIds and five display-list columns. Excludes filesystem enumeration, content-type resolution, alternate versions, other scalar mapping, other owned tables and full ValidateChildren.",
+  "schemaVersion": 1,
+  "candidateVerified": false,
+  "inputSha256": "5aba450609a43408aeb7769047bc0b3c15d85575a8aa12290e4dddbfad8961c3",
+  "sourceFilesSha256": "e3d437fc3e79a74a406b3a55e421ac4f6a6db8379bcb2a547a2b7f17a40c451a"
+}

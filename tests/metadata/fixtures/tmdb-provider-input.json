@@ -1,0 +1,1740 @@
+{
+  "configuration": {
+    "HideMissingCastMembers": false,
+    "HideMissingCrewMembers": false
+  },
+  "routes": {
+    "/3/configuration": {
+      "images": {
+        "secure_base_url": "https://images.invalid/",
+        "base_url": "http://images.invalid/",
+        "poster_sizes": [
+          "w500",
+          "original"
+        ],
+        "backdrop_sizes": [
+          "w780",
+          "original"
+        ],
+        "logo_sizes": [
+          "w500",
+          "original"
+        ],
+        "profile_sizes": [
+          "w185",
+          "original"
+        ],
+        "still_sizes": [
+          "w300",
+          "original"
+        ]
+      }
+    },
+    "/3/tv/10": {
+      "id": 10,
+      "name": "Fixture",
+      "original_name": "Original Fixture",
+      "original_language": "fr",
+      "overview": "Series\n\nOverview",
+      "homepage": "https://series.invalid/",
+      "vote_average": 8.4,
+      "networks": [
+        {
+          "name": "Network"
+        }
+      ],
+      "production_companies": [
+        {
+          "name": "network"
+        },
+        {
+          "name": "Studio"
+        }
+      ],
+      "genres": [
+        {
+          "name": "Drama"
+        },
+        {
+          "name": "Drama"
+        }
+      ],
+      "keywords": {
+        "results": [
+          {
+            "name": " Tag "
+          },
+          {
+            "name": "tag"
+          }
+        ]
+      },
+      "episode_run_time": [
+        45,
+        60
+      ],
+      "status": "Returning",
+      "last_air_date": "2026-01-01",
+      "first_air_date": "2020-01-02",
+      "external_ids": {
+        "imdb_id": "tt1234567",
+        "tvdb_id": 123,
+        "tvrage_id": 456
+      },
+      "content_ratings": {
+        "results": [
+          {
+            "iso_3166_1": "DE",
+            "rating": "12"
+          },
+          {
+            "iso_3166_1": "US",
+            "rating": "TV-14"
+          }
+        ]
+      },
+      "videos": {
+        "results": [
+          {
+            "type": "Teaser",
+            "site": "YouTube",
+            "key": "tease",
+            "name": "Teaser"
+          },
+          {
+            "type": "Trailer",
+            "site": "YouTube",
+            "key": "trailer",
+            "name": "Trailer"
+          }
+        ]
+      },
+      "credits": {
+        "cast": [
+          {
+            "id": 31,
+            "name": " Ada ",
+            "character": " Hero ",
+            "order": 1,
+            "profile_path": "/ada.jpg"
+          },
+          {
+            "id": 32,
+            "name": "Bea",
+            "character": "Self",
+            "order": 0,
+            "profile_path": null
+          }
+        ],
+        "crew": [
+          {
+            "id": 33,
+            "name": " Cee ",
+            "department": "Directing",
+            "job": "Director",
+            "profile_path": "/cee.jpg"
+          }
+        ]
+      },
+      "aggregate_credits": {
+        "cast": [
+          {
+            "id": 31,
+            "name": " Ada ",
+            "character": " Hero ",
+            "order": 1,
+            "profile_path": "/ada.jpg",
+            "roles": [
+              {
+                "character": "Minor",
+                "episode_count": 1
+              },
+              {
+                "character": "Major",
+                "episode_count": 10
+              }
+            ]
+          }
+        ]
+      },
+      "created_by": [
+        {
+          "id": 34,
+          "name": " Dee ",
+          "profile_path": "/dee.jpg"
+        }
+      ],
+      "images": {
+        "posters": [
+          {
+            "file_path": "/poster.jpg",
+            "iso_639_1": "en",
+            "width": 1920,
+            "height": 1080,
+            "vote_average": 7.25,
+            "vote_count": 4
+          }
+        ],
+        "backdrops": [
+          {
+            "file_path": "/backdrop.jpg",
+            "iso_639_1": null,
+            "width": 1920,
+            "height": 1080,
+            "vote_average": 7.25,
+            "vote_count": 4
+          },
+          {
+            "file_path": "/thumb.jpg",
+            "iso_639_1": "en",
+            "width": 1920,
+            "height": 1080,
+            "vote_average": 7.25,
+            "vote_count": 4
+          }
+        ],
+        "logos": [
+          {
+            "file_path": "/logo.png",
+            "iso_639_1": "xx",
+            "width": 1920,
+            "height": 1080,
+            "vote_average": 7.25,
+            "vote_count": 4
+          }
+        ]
+      }
+    },
+    "/3/tv/10/season/1/episode/1": {
+      "id": 101,
+      "name": "Episode one",
+      "overview": "Overview one",
+      "air_date": "2020-01-02",
+      "vote_average": 7.4,
+      "external_ids": {
+        "imdb_id": "tt7654321",
+        "tvdb_id": 501,
+        "tvrage_id": 601
+      },
+      "videos": {
+        "results": [
+          {
+            "type": "Trailer",
+            "site": "YouTube",
+            "key": "episode",
+            "name": "Episode trailer"
+          }
+        ]
+      },
+      "credits": {
+        "cast": [
+          {
+            "id": 31,
+            "name": " Ada ",
+            "character": " Hero ",
+            "order": 1,
+            "profile_path": "/ada.jpg"
+          },
+          {
+            "id": 32,
+            "name": "Bea",
+            "character": "Self",
+            "order": 0,
+            "profile_path": null
+          }
+        ],
+        "crew": [
+          {
+            "id": 33,
+            "name": " Cee ",
+            "department": "Directing",
+            "job": "Director",
+            "profile_path": "/cee.jpg"
+          }
+        ],
+        "guest_stars": [
+          {
+            "id": 31,
+            "name": " Ada ",
+            "character": " Hero ",
+            "order": 1,
+            "profile_path": "/ada.jpg"
+          }
+        ]
+      },
+      "images": {
+        "stills": [
+          {
+            "file_path": "/still.jpg",
+            "iso_639_1": "en",
+            "width": 1920,
+            "height": 1080,
+            "vote_average": 7.25,
+            "vote_count": 4
+          }
+        ]
+      }
+    },
+    "/3/tv/10/season/1/episode/2": null,
+    "/3/tv/10/season/1/episode/3": {
+      "id": 101,
+      "name": "Episode three",
+      "overview": "Overview three",
+      "air_date": "2020-01-02",
+      "vote_average": 7.4,
+      "external_ids": {
+        "imdb_id": "tt7654321",
+        "tvdb_id": 501,
+        "tvrage_id": 601
+      },
+      "videos": {
+        "results": [
+          {
+            "type": "Trailer",
+            "site": "YouTube",
+            "key": "episode",
+            "name": "Episode trailer"
+          }
+        ]
+      },
+      "credits": {
+        "cast": [
+          {
+            "id": 31,
+            "name": " Ada ",
+            "character": " Hero ",
+            "order": 1,
+            "profile_path": "/ada.jpg"
+          },
+          {
+            "id": 32,
+            "name": "Bea",
+            "character": "Self",
+            "order": 0,
+            "profile_path": null
+          }
+        ],
+        "crew": [
+          {
+            "id": 33,
+            "name": " Cee ",
+            "department": "Directing",
+            "job": "Director",
+            "profile_path": "/cee.jpg"
+          }
+        ],
+        "guest_stars": [
+          {
+            "id": 31,
+            "name": " Ada ",
+            "character": " Hero ",
+            "order": 1,
+            "profile_path": "/ada.jpg"
+          }
+        ]
+      },
+      "images": {
+        "stills": [
+          {
+            "file_path": "/still.jpg",
+            "iso_639_1": "en",
+            "width": 1920,
+            "height": 1080,
+            "vote_average": 7.25,
+            "vote_count": 4
+          }
+        ]
+      }
+    },
+    "/3/tv/10/season/1": {
+      "id": 100,
+      "images": {
+        "posters": [
+          {
+            "file_path": "/poster.jpg",
+            "iso_639_1": "en",
+            "width": 1920,
+            "height": 1080,
+            "vote_average": 7.25,
+            "vote_count": 4
+          }
+        ],
+        "backdrops": [
+          {
+            "file_path": "/backdrop.jpg",
+            "iso_639_1": null,
+            "width": 1920,
+            "height": 1080,
+            "vote_average": 7.25,
+            "vote_count": 4
+          },
+          {
+            "file_path": "/thumb.jpg",
+            "iso_639_1": "en",
+            "width": 1920,
+            "height": 1080,
+            "vote_average": 7.25,
+            "vote_count": 4
+          }
+        ],
+        "logos": [
+          {
+            "file_path": "/logo.png",
+            "iso_639_1": "xx",
+            "width": 1920,
+            "height": 1080,
+            "vote_average": 7.25,
+            "vote_count": 4
+          }
+        ]
+      }
+    },
+    "/3/collection/20": {
+      "id": 20,
+      "name": "Fixture collection",
+      "overview": "Collection overview",
+      "poster_path": "/collection.jpg",
+      "images": {
+        "posters": [
+          {
+            "file_path": "/poster.jpg",
+            "iso_639_1": "en",
+            "width": 1920,
+            "height": 1080,
+            "vote_average": 7.25,
+            "vote_count": 4
+          }
+        ],
+        "backdrops": [
+          {
+            "file_path": "/backdrop.jpg",
+            "iso_639_1": null,
+            "width": 1920,
+            "height": 1080,
+            "vote_average": 7.25,
+            "vote_count": 4
+          },
+          {
+            "file_path": "/thumb.jpg",
+            "iso_639_1": "en",
+            "width": 1920,
+            "height": 1080,
+            "vote_average": 7.25,
+            "vote_count": 4
+          }
+        ],
+        "logos": [
+          {
+            "file_path": "/logo.png",
+            "iso_639_1": "xx",
+            "width": 1920,
+            "height": 1080,
+            "vote_average": 7.25,
+            "vote_count": 4
+          }
+        ]
+      }
+    },
+    "/3/person/31": {
+      "id": 31,
+      "name": "Ada",
+      "images": {
+        "profiles": [
+          {
+            "file_path": "/ada.jpg",
+            "iso_639_1": null,
+            "width": 1920,
+            "height": 1080,
+            "vote_average": 7.25,
+            "vote_count": 4
+          }
+        ]
+      }
+    },
+    "/3/movie/40": {
+      "id": 40,
+      "images": {
+        "posters": [
+          {
+            "file_path": "/poster.jpg",
+            "iso_639_1": "en",
+            "width": 1920,
+            "height": 1080,
+            "vote_average": 7.25,
+            "vote_count": 4
+          }
+        ],
+        "backdrops": [
+          {
+            "file_path": "/backdrop.jpg",
+            "iso_639_1": null,
+            "width": 1920,
+            "height": 1080,
+            "vote_average": 7.25,
+            "vote_count": 4
+          },
+          {
+            "file_path": "/thumb.jpg",
+            "iso_639_1": "en",
+            "width": 1920,
+            "height": 1080,
+            "vote_average": 7.25,
+            "vote_count": 4
+          }
+        ],
+        "logos": [
+          {
+            "file_path": "/logo.png",
+            "iso_639_1": "xx",
+            "width": 1920,
+            "height": 1080,
+            "vote_average": 7.25,
+            "vote_count": 4
+          }
+        ]
+      }
+    },
+    "/3/find/tt1234567": {
+      "tv_results": [
+        {
+          "id": 10,
+          "name": "Fixture",
+          "original_name": "Original Fixture",
+          "original_language": "fr",
+          "overview": "Series\n\nOverview",
+          "homepage": "https://series.invalid/",
+          "vote_average": 8.4,
+          "networks": [
+            {
+              "name": "Network"
+            }
+          ],
+          "production_companies": [
+            {
+              "name": "network"
+            },
+            {
+              "name": "Studio"
+            }
+          ],
+          "genres": [
+            {
+              "name": "Drama"
+            },
+            {
+              "name": "Drama"
+            }
+          ],
+          "keywords": {
+            "results": [
+              {
+                "name": " Tag "
+              },
+              {
+                "name": "tag"
+              }
+            ]
+          },
+          "episode_run_time": [
+            45,
+            60
+          ],
+          "status": "Returning",
+          "last_air_date": "2026-01-01",
+          "first_air_date": "2020-01-02",
+          "external_ids": {
+            "imdb_id": "tt1234567",
+            "tvdb_id": 123,
+            "tvrage_id": 456
+          },
+          "content_ratings": {
+            "results": [
+              {
+                "iso_3166_1": "DE",
+                "rating": "12"
+              },
+              {
+                "iso_3166_1": "US",
+                "rating": "TV-14"
+              }
+            ]
+          },
+          "videos": {
+            "results": [
+              {
+                "type": "Teaser",
+                "site": "YouTube",
+                "key": "tease",
+                "name": "Teaser"
+              },
+              {
+                "type": "Trailer",
+                "site": "YouTube",
+                "key": "trailer",
+                "name": "Trailer"
+              }
+            ]
+          },
+          "credits": {
+            "cast": [
+              {
+                "id": 31,
+                "name": " Ada ",
+                "character": " Hero ",
+                "order": 1,
+                "profile_path": "/ada.jpg"
+              },
+              {
+                "id": 32,
+                "name": "Bea",
+                "character": "Self",
+                "order": 0,
+                "profile_path": null
+              }
+            ],
+            "crew": [
+              {
+                "id": 33,
+                "name": " Cee ",
+                "department": "Directing",
+                "job": "Director",
+                "profile_path": "/cee.jpg"
+              }
+            ]
+          },
+          "aggregate_credits": {
+            "cast": [
+              {
+                "id": 31,
+                "name": " Ada ",
+                "character": " Hero ",
+                "order": 1,
+                "profile_path": "/ada.jpg",
+                "roles": [
+                  {
+                    "character": "Minor",
+                    "episode_count": 1
+                  },
+                  {
+                    "character": "Major",
+                    "episode_count": 10
+                  }
+                ]
+              }
+            ]
+          },
+          "created_by": [
+            {
+              "id": 34,
+              "name": " Dee ",
+              "profile_path": "/dee.jpg"
+            }
+          ],
+          "images": {
+            "posters": [
+              {
+                "file_path": "/poster.jpg",
+                "iso_639_1": "en",
+                "width": 1920,
+                "height": 1080,
+                "vote_average": 7.25,
+                "vote_count": 4
+              }
+            ],
+            "backdrops": [
+              {
+                "file_path": "/backdrop.jpg",
+                "iso_639_1": null,
+                "width": 1920,
+                "height": 1080,
+                "vote_average": 7.25,
+                "vote_count": 4
+              },
+              {
+                "file_path": "/thumb.jpg",
+                "iso_639_1": "en",
+                "width": 1920,
+                "height": 1080,
+                "vote_average": 7.25,
+                "vote_count": 4
+              }
+            ],
+            "logos": [
+              {
+                "file_path": "/logo.png",
+                "iso_639_1": "xx",
+                "width": 1920,
+                "height": 1080,
+                "vote_average": 7.25,
+                "vote_count": 4
+              }
+            ]
+          },
+          "poster_path": "/poster.jpg"
+        }
+      ],
+      "movie_results": [
+        {
+          "id": 40
+        }
+      ]
+    },
+    "/3/find/123": {
+      "tv_results": []
+    },
+    "/3/search/tv": {
+      "results": [
+        {
+          "id": 10,
+          "name": "Fixture",
+          "original_name": "Original Fixture",
+          "original_language": "fr",
+          "overview": "Series\n\nOverview",
+          "homepage": "https://series.invalid/",
+          "vote_average": 8.4,
+          "networks": [
+            {
+              "name": "Network"
+            }
+          ],
+          "production_companies": [
+            {
+              "name": "network"
+            },
+            {
+              "name": "Studio"
+            }
+          ],
+          "genres": [
+            {
+              "name": "Drama"
+            },
+            {
+              "name": "Drama"
+            }
+          ],
+          "keywords": {
+            "results": [
+              {
+                "name": " Tag "
+              },
+              {
+                "name": "tag"
+              }
+            ]
+          },
+          "episode_run_time": [
+            45,
+            60
+          ],
+          "status": "Returning",
+          "last_air_date": "2026-01-01",
+          "first_air_date": "2020-01-02",
+          "external_ids": {
+            "imdb_id": "tt1234567",
+            "tvdb_id": 123,
+            "tvrage_id": 456
+          },
+          "content_ratings": {
+            "results": [
+              {
+                "iso_3166_1": "DE",
+                "rating": "12"
+              },
+              {
+                "iso_3166_1": "US",
+                "rating": "TV-14"
+              }
+            ]
+          },
+          "videos": {
+            "results": [
+              {
+                "type": "Teaser",
+                "site": "YouTube",
+                "key": "tease",
+                "name": "Teaser"
+              },
+              {
+                "type": "Trailer",
+                "site": "YouTube",
+                "key": "trailer",
+                "name": "Trailer"
+              }
+            ]
+          },
+          "credits": {
+            "cast": [
+              {
+                "id": 31,
+                "name": " Ada ",
+                "character": " Hero ",
+                "order": 1,
+                "profile_path": "/ada.jpg"
+              },
+              {
+                "id": 32,
+                "name": "Bea",
+                "character": "Self",
+                "order": 0,
+                "profile_path": null
+              }
+            ],
+            "crew": [
+              {
+                "id": 33,
+                "name": " Cee ",
+                "department": "Directing",
+                "job": "Director",
+                "profile_path": "/cee.jpg"
+              }
+            ]
+          },
+          "aggregate_credits": {
+            "cast": [
+              {
+                "id": 31,
+                "name": " Ada ",
+                "character": " Hero ",
+                "order": 1,
+                "profile_path": "/ada.jpg",
+                "roles": [
+                  {
+                    "character": "Minor",
+                    "episode_count": 1
+                  },
+                  {
+                    "character": "Major",
+                    "episode_count": 10
+                  }
+                ]
+              }
+            ]
+          },
+          "created_by": [
+            {
+              "id": 34,
+              "name": " Dee ",
+              "profile_path": "/dee.jpg"
+            }
+          ],
+          "images": {
+            "posters": [
+              {
+                "file_path": "/poster.jpg",
+                "iso_639_1": "en",
+                "width": 1920,
+                "height": 1080,
+                "vote_average": 7.25,
+                "vote_count": 4
+              }
+            ],
+            "backdrops": [
+              {
+                "file_path": "/backdrop.jpg",
+                "iso_639_1": null,
+                "width": 1920,
+                "height": 1080,
+                "vote_average": 7.25,
+                "vote_count": 4
+              },
+              {
+                "file_path": "/thumb.jpg",
+                "iso_639_1": "en",
+                "width": 1920,
+                "height": 1080,
+                "vote_average": 7.25,
+                "vote_count": 4
+              }
+            ],
+            "logos": [
+              {
+                "file_path": "/logo.png",
+                "iso_639_1": "xx",
+                "width": 1920,
+                "height": 1080,
+                "vote_average": 7.25,
+                "vote_count": 4
+              }
+            ]
+          },
+          "poster_path": "/poster.jpg"
+        }
+      ]
+    },
+    "/3/search/collection": {
+      "results": [
+        {
+          "id": 20,
+          "name": "Fixture collection",
+          "overview": "Collection overview",
+          "poster_path": "/collection.jpg",
+          "images": {
+            "posters": [
+              {
+                "file_path": "/poster.jpg",
+                "iso_639_1": "en",
+                "width": 1920,
+                "height": 1080,
+                "vote_average": 7.25,
+                "vote_count": 4
+              }
+            ],
+            "backdrops": [
+              {
+                "file_path": "/backdrop.jpg",
+                "iso_639_1": null,
+                "width": 1920,
+                "height": 1080,
+                "vote_average": 7.25,
+                "vote_count": 4
+              },
+              {
+                "file_path": "/thumb.jpg",
+                "iso_639_1": "en",
+                "width": 1920,
+                "height": 1080,
+                "vote_average": 7.25,
+                "vote_count": 4
+              }
+            ],
+            "logos": [
+              {
+                "file_path": "/logo.png",
+                "iso_639_1": "xx",
+                "width": 1920,
+                "height": 1080,
+                "vote_average": 7.25,
+                "vote_count": 4
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "cases": [
+    {
+      "name": "series-details",
+      "provider": "TmdbSeriesProvider",
+      "operation": "getMetadata",
+      "info": {
+        "Name": "Fixture",
+        "ProviderIds": {
+          "Tmdb": "10"
+        },
+        "MetadataLanguage": "en-US",
+        "MetadataCountryCode": "DE"
+      }
+    },
+    {
+      "name": "series-language-fallback",
+      "provider": "TmdbSeriesProvider",
+      "operation": "getMetadata",
+      "info": {
+        "Name": "Fixture",
+        "ProviderIds": {
+          "Tmdb": "10"
+        },
+        "MetadataLanguage": null,
+        "MetadataCountryCode": "ZZ"
+      }
+    },
+    {
+      "name": "series-id-search",
+      "provider": "TmdbSeriesProvider",
+      "operation": "search",
+      "info": {
+        "Name": "Fixture",
+        "ProviderIds": {
+          "Tmdb": "10"
+        },
+        "MetadataLanguage": "en-US",
+        "MetadataCountryCode": "DE"
+      }
+    },
+    {
+      "name": "series-imdb-search",
+      "provider": "TmdbSeriesProvider",
+      "operation": "search",
+      "info": {
+        "Name": "Fixture",
+        "ProviderIds": {
+          "Imdb": "tt1234567"
+        },
+        "MetadataLanguage": "en-US",
+        "MetadataCountryCode": "DE"
+      }
+    },
+    {
+      "name": "series-tvdb-empty",
+      "provider": "TmdbSeriesProvider",
+      "operation": "search",
+      "info": {
+        "Name": "Fixture",
+        "ProviderIds": {
+          "Tvdb": "123"
+        },
+        "MetadataLanguage": "en-US",
+        "MetadataCountryCode": "DE"
+      }
+    },
+    {
+      "name": "series-name-search",
+      "provider": "TmdbSeriesProvider",
+      "operation": "search",
+      "info": {
+        "Name": "Fixture",
+        "ProviderIds": {},
+        "MetadataLanguage": "en-US",
+        "MetadataCountryCode": "DE",
+        "Year": 1900
+      }
+    },
+    {
+      "name": "series-invalid-id",
+      "provider": "TmdbSeriesProvider",
+      "operation": "getMetadata",
+      "info": {
+        "Name": "Fixture",
+        "ProviderIds": {
+          "Tmdb": "not-an-id"
+        },
+        "MetadataLanguage": "en-US",
+        "MetadataCountryCode": "DE"
+      }
+    },
+    {
+      "name": "episode-details",
+      "provider": "TmdbEpisodeProvider",
+      "operation": "getMetadata",
+      "info": {
+        "Name": "Fixture",
+        "ProviderIds": {},
+        "MetadataLanguage": "en-US",
+        "MetadataCountryCode": "DE",
+        "SeriesProviderIds": {
+          "Tmdb": "10"
+        },
+        "IndexNumber": 1,
+        "ParentIndexNumber": 1
+      }
+    },
+    {
+      "name": "episode-combined",
+      "provider": "TmdbEpisodeProvider",
+      "operation": "getMetadata",
+      "info": {
+        "Name": "Fixture",
+        "ProviderIds": {},
+        "MetadataLanguage": "en-US",
+        "MetadataCountryCode": "DE",
+        "SeriesProviderIds": {
+          "Tmdb": "10"
+        },
+        "IndexNumber": 1,
+        "ParentIndexNumber": 1,
+        "IndexNumberEnd": 3
+      }
+    },
+    {
+      "name": "episode-search",
+      "provider": "TmdbEpisodeProvider",
+      "operation": "search",
+      "info": {
+        "Name": "Fixture",
+        "ProviderIds": {},
+        "MetadataLanguage": "en-US",
+        "MetadataCountryCode": "DE",
+        "SeriesProviderIds": {
+          "Tmdb": "10"
+        },
+        "IndexNumber": 1,
+        "ParentIndexNumber": 1
+      }
+    },
+    {
+      "name": "episode-missing",
+      "provider": "TmdbEpisodeProvider",
+      "operation": "getMetadata",
+      "info": {
+        "Name": "Fixture",
+        "ProviderIds": {},
+        "MetadataLanguage": "en-US",
+        "MetadataCountryCode": "DE",
+        "SeriesProviderIds": {
+          "Tmdb": "10"
+        },
+        "IndexNumber": 1,
+        "ParentIndexNumber": 1,
+        "IsMissingEpisode": true
+      }
+    },
+    {
+      "name": "episode-no-number",
+      "provider": "TmdbEpisodeProvider",
+      "operation": "search",
+      "info": {
+        "Name": "Fixture",
+        "ProviderIds": {},
+        "MetadataLanguage": "en-US",
+        "MetadataCountryCode": "DE",
+        "SeriesProviderIds": {
+          "Tmdb": "10"
+        },
+        "IndexNumber": null,
+        "ParentIndexNumber": 1
+      }
+    },
+    {
+      "name": "collection-details",
+      "provider": "TmdbBoxSetProvider",
+      "operation": "getMetadata",
+      "info": {
+        "Name": "Fixture",
+        "ProviderIds": {
+          "Tmdb": "20"
+        },
+        "MetadataLanguage": "en-US",
+        "MetadataCountryCode": "DE"
+      }
+    },
+    {
+      "name": "collection-id-search",
+      "provider": "TmdbBoxSetProvider",
+      "operation": "search",
+      "info": {
+        "Name": "Fixture",
+        "ProviderIds": {
+          "Tmdb": "20"
+        },
+        "MetadataLanguage": "en-US",
+        "MetadataCountryCode": "DE"
+      }
+    },
+    {
+      "name": "collection-name-search",
+      "provider": "TmdbBoxSetProvider",
+      "operation": "search",
+      "info": {
+        "Name": "Fixture",
+        "ProviderIds": {},
+        "MetadataLanguage": "en-US",
+        "MetadataCountryCode": "DE"
+      }
+    },
+    {
+      "name": "Movie-images",
+      "provider": "TmdbMovieImageProvider",
+      "operation": "getImages",
+      "info": {
+        "Name": "Fixture",
+        "ProviderIds": {
+          "Tmdb": "40"
+        },
+        "MetadataLanguage": "en-US",
+        "MetadataCountryCode": "DE",
+        "Type": "Movie",
+        "SeriesProviderIds": {
+          "Tmdb": "10"
+        },
+        "IndexNumber": 1,
+        "ParentIndexNumber": 1
+      }
+    },
+    {
+      "name": "Series-images",
+      "provider": "TmdbSeriesImageProvider",
+      "operation": "getImages",
+      "info": {
+        "Name": "Fixture",
+        "ProviderIds": {
+          "Tmdb": "10"
+        },
+        "MetadataLanguage": "en-US",
+        "MetadataCountryCode": "DE",
+        "Type": "Series",
+        "SeriesProviderIds": {
+          "Tmdb": "10"
+        },
+        "IndexNumber": 1,
+        "ParentIndexNumber": 1
+      }
+    },
+    {
+      "name": "Season-images",
+      "provider": "TmdbSeasonImageProvider",
+      "operation": "getImages",
+      "info": {
+        "Name": "Fixture",
+        "ProviderIds": {
+          "Tmdb": "100"
+        },
+        "MetadataLanguage": "en-US",
+        "MetadataCountryCode": "DE",
+        "Type": "Season",
+        "SeriesProviderIds": {
+          "Tmdb": "10"
+        },
+        "IndexNumber": 1,
+        "ParentIndexNumber": 1
+      }
+    },
+    {
+      "name": "Episode-images",
+      "provider": "TmdbEpisodeImageProvider",
+      "operation": "getImages",
+      "info": {
+        "Name": "Fixture",
+        "ProviderIds": {
+          "Tmdb": "101"
+        },
+        "MetadataLanguage": "en-US",
+        "MetadataCountryCode": "DE",
+        "Type": "Episode",
+        "SeriesProviderIds": {
+          "Tmdb": "10"
+        },
+        "IndexNumber": 1,
+        "ParentIndexNumber": 1
+      }
+    },
+    {
+      "name": "Person-images",
+      "provider": "TmdbPersonImageProvider",
+      "operation": "getImages",
+      "info": {
+        "Name": "Fixture",
+        "ProviderIds": {
+          "Tmdb": "31"
+        },
+        "MetadataLanguage": "en-US",
+        "MetadataCountryCode": "DE",
+        "Type": "Person",
+        "SeriesProviderIds": {
+          "Tmdb": "10"
+        },
+        "IndexNumber": 1,
+        "ParentIndexNumber": 1
+      }
+    },
+    {
+      "name": "BoxSet-images",
+      "provider": "TmdbBoxSetImageProvider",
+      "operation": "getImages",
+      "info": {
+        "Name": "Fixture",
+        "ProviderIds": {
+          "Tmdb": "20"
+        },
+        "MetadataLanguage": "en-US",
+        "MetadataCountryCode": "DE",
+        "Type": "BoxSet",
+        "SeriesProviderIds": {
+          "Tmdb": "10"
+        },
+        "IndexNumber": 1,
+        "ParentIndexNumber": 1
+      }
+    },
+    {
+      "name": "series-flat-cast",
+      "provider": "TmdbSeriesProvider",
+      "operation": "getMetadata",
+      "info": {
+        "Name": "Fixture",
+        "ProviderIds": {
+          "Tmdb": "10"
+        },
+        "MetadataLanguage": "en-US",
+        "MetadataCountryCode": "DE"
+      },
+      "routes": {
+        "/3/tv/10": {
+          "id": 10,
+          "name": "Fixture",
+          "original_name": "Original Fixture",
+          "original_language": "fr",
+          "overview": "Series\n\nOverview",
+          "homepage": "https://series.invalid/",
+          "vote_average": 8.4,
+          "networks": [
+            {
+              "name": "Network"
+            }
+          ],
+          "production_companies": [
+            {
+              "name": "network"
+            },
+            {
+              "name": "Studio"
+            }
+          ],
+          "genres": [
+            {
+              "name": "Drama"
+            },
+            {
+              "name": "Drama"
+            }
+          ],
+          "keywords": {
+            "results": [
+              {
+                "name": " Tag "
+              },
+              {
+                "name": "tag"
+              }
+            ]
+          },
+          "episode_run_time": [
+            45,
+            60
+          ],
+          "status": "Returning",
+          "last_air_date": "2026-01-01",
+          "first_air_date": "2020-01-02",
+          "external_ids": {
+            "imdb_id": "tt1234567",
+            "tvdb_id": 123,
+            "tvrage_id": 456
+          },
+          "content_ratings": {
+            "results": [
+              {
+                "iso_3166_1": "DE",
+                "rating": "12"
+              },
+              {
+                "iso_3166_1": "US",
+                "rating": "TV-14"
+              }
+            ]
+          },
+          "videos": {
+            "results": [
+              {
+                "type": "Teaser",
+                "site": "YouTube",
+                "key": "tease",
+                "name": "Teaser"
+              },
+              {
+                "type": "Trailer",
+                "site": "YouTube",
+                "key": "trailer",
+                "name": "Trailer"
+              }
+            ]
+          },
+          "credits": {
+            "cast": [
+              {
+                "id": 31,
+                "name": " Ada ",
+                "character": " Hero ",
+                "order": 1,
+                "profile_path": "/ada.jpg"
+              },
+              {
+                "id": 32,
+                "name": "Bea",
+                "character": "Self",
+                "order": 0,
+                "profile_path": null
+              }
+            ],
+            "crew": [
+              {
+                "id": 33,
+                "name": " Cee ",
+                "department": "Directing",
+                "job": "Director",
+                "profile_path": "/cee.jpg"
+              }
+            ]
+          },
+          "aggregate_credits": null,
+          "created_by": [
+            {
+              "id": 34,
+              "name": " Dee ",
+              "profile_path": "/dee.jpg"
+            }
+          ],
+          "images": {
+            "posters": [
+              {
+                "file_path": "/poster.jpg",
+                "iso_639_1": "en",
+                "width": 1920,
+                "height": 1080,
+                "vote_average": 7.25,
+                "vote_count": 4
+              }
+            ],
+            "backdrops": [
+              {
+                "file_path": "/backdrop.jpg",
+                "iso_639_1": null,
+                "width": 1920,
+                "height": 1080,
+                "vote_average": 7.25,
+                "vote_count": 4
+              },
+              {
+                "file_path": "/thumb.jpg",
+                "iso_639_1": "en",
+                "width": 1920,
+                "height": 1080,
+                "vote_average": 7.25,
+                "vote_count": 4
+              }
+            ],
+            "logos": [
+              {
+                "file_path": "/logo.png",
+                "iso_639_1": "xx",
+                "width": 1920,
+                "height": 1080,
+                "vote_average": 7.25,
+                "vote_count": 4
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "series-no-credits",
+      "provider": "TmdbSeriesProvider",
+      "operation": "getMetadata",
+      "info": {
+        "Name": "Fixture",
+        "ProviderIds": {
+          "Tmdb": "10"
+        },
+        "MetadataLanguage": "en-US",
+        "MetadataCountryCode": "DE"
+      },
+      "routes": {
+        "/3/tv/10": {
+          "id": 10,
+          "name": "Sparse",
+          "original_language": "ja",
+          "episode_run_time": []
+        }
+      }
+    },
+    {
+      "name": "series-imdb-metadata",
+      "provider": "TmdbSeriesProvider",
+      "operation": "getMetadata",
+      "info": {
+        "Name": "Fixture",
+        "ProviderIds": {
+          "Imdb": "tt1234567"
+        },
+        "MetadataLanguage": "en-US",
+        "MetadataCountryCode": "DE"
+      }
+    },
+    {
+      "name": "series-no-name-match",
+      "provider": "TmdbSeriesProvider",
+      "operation": "getMetadata",
+      "info": {
+        "Name": "Fixture",
+        "ProviderIds": {},
+        "MetadataLanguage": "en-US",
+        "MetadataCountryCode": "DE"
+      },
+      "routes": {
+        "/3/search/tv": {
+          "results": []
+        }
+      }
+    },
+    {
+      "name": "series-name-match",
+      "provider": "TmdbSeriesProvider",
+      "operation": "getMetadata",
+      "info": {
+        "Name": "Fixture",
+        "ProviderIds": {},
+        "MetadataLanguage": "en-US",
+        "MetadataCountryCode": "DE",
+        "Year": 2020
+      }
+    },
+    {
+      "name": "episode-no-overview",
+      "provider": "TmdbEpisodeProvider",
+      "operation": "getMetadata",
+      "info": {
+        "Name": "Fixture",
+        "ProviderIds": {},
+        "MetadataLanguage": "en-US",
+        "MetadataCountryCode": "DE",
+        "SeriesProviderIds": {
+          "Tmdb": "10"
+        },
+        "IndexNumber": 1,
+        "ParentIndexNumber": 1
+      },
+      "routes": {
+        "/3/tv/10/season/1/episode/1": {
+          "id": 101,
+          "name": "Sparse",
+          "air_date": null,
+          "overview": ""
+        }
+      }
+    },
+    {
+      "name": "episode-reversed-range",
+      "provider": "TmdbEpisodeProvider",
+      "operation": "getMetadata",
+      "info": {
+        "Name": "Fixture",
+        "ProviderIds": {},
+        "MetadataLanguage": "en-US",
+        "MetadataCountryCode": "DE",
+        "SeriesProviderIds": {
+          "Tmdb": "10"
+        },
+        "IndexNumber": 1,
+        "ParentIndexNumber": 1,
+        "IndexNumberEnd": 0
+      }
+    },
+    {
+      "name": "episode-invalid-series-id",
+      "provider": "TmdbEpisodeProvider",
+      "operation": "getMetadata",
+      "info": {
+        "Name": "Fixture",
+        "ProviderIds": {},
+        "MetadataLanguage": "en-US",
+        "MetadataCountryCode": "DE",
+        "SeriesProviderIds": {
+          "Tmdb": "+10"
+        },
+        "IndexNumber": 1,
+        "ParentIndexNumber": 1
+      }
+    },
+    {
+      "name": "episode-cast-filter",
+      "provider": "TmdbEpisodeProvider",
+      "operation": "getMetadata",
+      "info": {
+        "Name": "Fixture",
+        "ProviderIds": {},
+        "MetadataLanguage": "en-US",
+        "MetadataCountryCode": "DE",
+        "SeriesProviderIds": {
+          "Tmdb": "10"
+        },
+        "IndexNumber": 1,
+        "ParentIndexNumber": 1
+      },
+      "configuration": {
+        "HideMissingCastMembers": true,
+        "HideMissingCrewMembers": true,
+        "MaxCastMembers": 1
+      }
+    },
+    {
+      "name": "collection-name-match",
+      "provider": "TmdbBoxSetProvider",
+      "operation": "getMetadata",
+      "info": {
+        "Name": "Fixture",
+        "ProviderIds": {},
+        "MetadataLanguage": "en-US",
+        "MetadataCountryCode": "DE"
+      }
+    },
+    {
+      "name": "collection-id-404",
+      "provider": "TmdbBoxSetProvider",
+      "operation": "search",
+      "info": {
+        "Name": "Fixture",
+        "ProviderIds": {
+          "Tmdb": "20"
+        },
+        "MetadataLanguage": "en-US",
+        "MetadataCountryCode": "DE"
+      },
+      "routes": {
+        "/3/collection/20": null
+      }
+    },
+    {
+      "name": "collection-id-no-images",
+      "provider": "TmdbBoxSetProvider",
+      "operation": "search",
+      "info": {
+        "Name": "Fixture",
+        "ProviderIds": {
+          "Tmdb": "20"
+        },
+        "MetadataLanguage": "en-US",
+        "MetadataCountryCode": "DE"
+      },
+      "routes": {
+        "/3/collection/20": {
+          "id": 20,
+          "name": "No image",
+          "poster_path": "/poster.jpg"
+        }
+      }
+    },
+    {
+      "name": "trailer-images",
+      "provider": "TmdbMovieImageProvider",
+      "operation": "getImages",
+      "info": {
+        "Name": "Fixture",
+        "ProviderIds": {
+          "Tmdb": "40"
+        },
+        "MetadataLanguage": "en-US",
+        "MetadataCountryCode": "DE",
+        "Type": "Trailer",
+        "SeriesProviderIds": {
+          "Tmdb": "10"
+        },
+        "IndexNumber": 1,
+        "ParentIndexNumber": 1
+      }
+    },
+    {
+      "name": "movie-imdb-images",
+      "provider": "TmdbMovieImageProvider",
+      "operation": "getImages",
+      "info": {
+        "Name": "Fixture",
+        "ProviderIds": {
+          "Imdb": "tt1234567"
+        },
+        "MetadataLanguage": "en-US",
+        "MetadataCountryCode": "DE",
+        "Type": "Movie",
+        "SeriesProviderIds": {
+          "Tmdb": "10"
+        },
+        "IndexNumber": 1,
+        "ParentIndexNumber": 1
+      }
+    },
+    {
+      "name": "movie-empty-images",
+      "provider": "TmdbMovieImageProvider",
+      "operation": "getImages",
+      "info": {
+        "Name": "Fixture",
+        "ProviderIds": {},
+        "MetadataLanguage": "en-US",
+        "MetadataCountryCode": "DE",
+        "Type": "Movie",
+        "SeriesProviderIds": {
+          "Tmdb": "10"
+        },
+        "IndexNumber": 1,
+        "ParentIndexNumber": 1
+      }
+    },
+    {
+      "name": "series-scaled-images",
+      "provider": "TmdbSeriesImageProvider",
+      "operation": "getImages",
+      "info": {
+        "Name": "Fixture",
+        "ProviderIds": {
+          "Tmdb": "10"
+        },
+        "MetadataLanguage": "en-US",
+        "MetadataCountryCode": "DE",
+        "Type": "Series",
+        "SeriesProviderIds": {
+          "Tmdb": "10"
+        },
+        "IndexNumber": 1,
+        "ParentIndexNumber": 1
+      },
+      "configuration": {
+        "PosterSize": "w500",
+        "BackdropSize": "w780",
+        "LogoSize": "w500"
+      }
+    },
+    {
+      "name": "person-scaled-images",
+      "provider": "TmdbPersonImageProvider",
+      "operation": "getImages",
+      "info": {
+        "Name": "Fixture",
+        "ProviderIds": {
+          "Tmdb": "31"
+        },
+        "MetadataLanguage": "en-US",
+        "MetadataCountryCode": "DE",
+        "Type": "Person",
+        "SeriesProviderIds": {
+          "Tmdb": "10"
+        },
+        "IndexNumber": 1,
+        "ParentIndexNumber": 1
+      },
+      "configuration": {
+        "ProfileSize": "w185"
+      }
+    },
+    {
+      "name": "episode-scaled-images",
+      "provider": "TmdbEpisodeImageProvider",
+      "operation": "getImages",
+      "info": {
+        "Name": "Fixture",
+        "ProviderIds": {
+          "Tmdb": "101"
+        },
+        "MetadataLanguage": "en-US",
+        "MetadataCountryCode": "DE",
+        "Type": "Episode",
+        "SeriesProviderIds": {
+          "Tmdb": "10"
+        },
+        "IndexNumber": 1,
+        "ParentIndexNumber": 1
+      },
+      "configuration": {
+        "StillSize": "w300"
+      }
+    },
+    {
+      "name": "season-no-number-images",
+      "provider": "TmdbSeasonImageProvider",
+      "operation": "getImages",
+      "info": {
+        "Name": "Fixture",
+        "ProviderIds": {
+          "Tmdb": "100"
+        },
+        "MetadataLanguage": "en-US",
+        "MetadataCountryCode": "DE",
+        "Type": "Season",
+        "SeriesProviderIds": {
+          "Tmdb": "10"
+        },
+        "IndexNumber": null,
+        "ParentIndexNumber": 1
+      }
+    }
+  ]
+}

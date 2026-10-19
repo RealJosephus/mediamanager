@@ -1,0 +1,1010 @@
+[
+  {
+    "name": "empty file is swallowed with initial item state--crlf",
+    "type": null,
+    "originalName": "empty file is swallowed with initial item state",
+    "equivalent": true
+  },
+  {
+    "name": "empty file is swallowed with initial item state--lf",
+    "type": null,
+    "originalName": "empty file is swallowed with initial item state",
+    "equivalent": true
+  },
+  {
+    "name": "empty file is swallowed with initial item state--bom-lf",
+    "type": null,
+    "originalName": "empty file is swallowed with initial item state",
+    "equivalent": true
+  },
+  {
+    "name": "no complete block preserves a parsed scalar prefix--crlf",
+    "type": null,
+    "originalName": "no complete block preserves a parsed scalar prefix",
+    "equivalent": false
+  },
+  {
+    "name": "no complete block preserves a parsed scalar prefix--lf",
+    "type": null,
+    "originalName": "no complete block preserves a parsed scalar prefix",
+    "equivalent": false
+  },
+  {
+    "name": "no complete block preserves a parsed scalar prefix--bom-lf",
+    "type": null,
+    "originalName": "no complete block preserves a parsed scalar prefix",
+    "equivalent": false
+  },
+  {
+    "name": "one complete block applies all direct fields--crlf",
+    "type": null,
+    "originalName": "one complete block applies all direct fields",
+    "equivalent": true
+  },
+  {
+    "name": "one complete block applies all direct fields--lf",
+    "type": null,
+    "originalName": "one complete block applies all direct fields",
+    "equivalent": true
+  },
+  {
+    "name": "one complete block applies all direct fields--bom-lf",
+    "type": null,
+    "originalName": "one complete block applies all direct fields",
+    "equivalent": true
+  },
+  {
+    "name": "one complete block ignores a trailing partial block--crlf",
+    "type": null,
+    "originalName": "one complete block ignores a trailing partial block",
+    "equivalent": true
+  },
+  {
+    "name": "one complete block ignores a trailing partial block--lf",
+    "type": null,
+    "originalName": "one complete block ignores a trailing partial block",
+    "equivalent": true
+  },
+  {
+    "name": "one complete block ignores a trailing partial block--bom-lf",
+    "type": null,
+    "originalName": "one complete block ignores a trailing partial block",
+    "equivalent": true
+  },
+  {
+    "name": "one complete block ignores arbitrary trailing text--crlf",
+    "type": null,
+    "originalName": "one complete block ignores arbitrary trailing text",
+    "equivalent": true
+  },
+  {
+    "name": "one complete block ignores arbitrary trailing text--lf",
+    "type": null,
+    "originalName": "one complete block ignores arbitrary trailing text",
+    "equivalent": true
+  },
+  {
+    "name": "one complete block ignores arbitrary trailing text--bom-lf",
+    "type": null,
+    "originalName": "one complete block ignores arbitrary trailing text",
+    "equivalent": true
+  },
+  {
+    "name": "episode closing tag matching is ordinal ignore case--crlf",
+    "type": null,
+    "originalName": "episode closing tag matching is ordinal ignore case",
+    "equivalent": false
+  },
+  {
+    "name": "episode closing tag matching is ordinal ignore case--lf",
+    "type": null,
+    "originalName": "episode closing tag matching is ordinal ignore case",
+    "equivalent": false
+  },
+  {
+    "name": "episode closing tag matching is ordinal ignore case--bom-lf",
+    "type": null,
+    "originalName": "episode closing tag matching is ordinal ignore case",
+    "equivalent": false
+  },
+  {
+    "name": "empty complete block leaves direct nullable strings unchanged--crlf",
+    "type": null,
+    "originalName": "empty complete block leaves direct nullable strings unchanged",
+    "equivalent": true
+  },
+  {
+    "name": "empty complete block leaves direct nullable strings unchanged--lf",
+    "type": null,
+    "originalName": "empty complete block leaves direct nullable strings unchanged",
+    "equivalent": true
+  },
+  {
+    "name": "empty complete block leaves direct nullable strings unchanged--bom-lf",
+    "type": null,
+    "originalName": "empty complete block leaves direct nullable strings unchanged",
+    "equivalent": true
+  },
+  {
+    "name": "two reversed blocks sort before merging--crlf",
+    "type": null,
+    "originalName": "two reversed blocks sort before merging",
+    "equivalent": true
+  },
+  {
+    "name": "two reversed blocks sort before merging--lf",
+    "type": null,
+    "originalName": "two reversed blocks sort before merging",
+    "equivalent": true
+  },
+  {
+    "name": "two reversed blocks sort before merging--bom-lf",
+    "type": null,
+    "originalName": "two reversed blocks sort before merging",
+    "equivalent": true
+  },
+  {
+    "name": "three blocks sort and merge in ascending episode order--crlf",
+    "type": null,
+    "originalName": "three blocks sort and merge in ascending episode order",
+    "equivalent": true
+  },
+  {
+    "name": "three blocks sort and merge in ascending episode order--lf",
+    "type": null,
+    "originalName": "three blocks sort and merge in ascending episode order",
+    "equivalent": true
+  },
+  {
+    "name": "three blocks sort and merge in ascending episode order--bom-lf",
+    "type": null,
+    "originalName": "three blocks sort and merge in ascending episode order",
+    "equivalent": true
+  },
+  {
+    "name": "equal episode numbers retain source order--crlf",
+    "type": null,
+    "originalName": "equal episode numbers retain source order",
+    "equivalent": true
+  },
+  {
+    "name": "equal episode numbers retain source order--lf",
+    "type": null,
+    "originalName": "equal episode numbers retain source order",
+    "equivalent": true
+  },
+  {
+    "name": "equal episode numbers retain source order--bom-lf",
+    "type": null,
+    "originalName": "equal episode numbers retain source order",
+    "equivalent": true
+  },
+  {
+    "name": "missing episode number sorts after numbered blocks--crlf",
+    "type": null,
+    "originalName": "missing episode number sorts after numbered blocks",
+    "equivalent": true
+  },
+  {
+    "name": "missing episode number sorts after numbered blocks--lf",
+    "type": null,
+    "originalName": "missing episode number sorts after numbered blocks",
+    "equivalent": true
+  },
+  {
+    "name": "missing episode number sorts after numbered blocks--bom-lf",
+    "type": null,
+    "originalName": "missing episode number sorts after numbered blocks",
+    "equivalent": true
+  },
+  {
+    "name": "negative and zero episode numbers use ordinary ascending order--crlf",
+    "type": null,
+    "originalName": "negative and zero episode numbers use ordinary ascending order",
+    "equivalent": true
+  },
+  {
+    "name": "negative and zero episode numbers use ordinary ascending order--lf",
+    "type": null,
+    "originalName": "negative and zero episode numbers use ordinary ascending order",
+    "equivalent": true
+  },
+  {
+    "name": "negative and zero episode numbers use ordinary ascending order--bom-lf",
+    "type": null,
+    "originalName": "negative and zero episode numbers use ordinary ascending order",
+    "equivalent": true
+  },
+  {
+    "name": "malformed later complete block aborts the merge without target replay--crlf",
+    "type": null,
+    "originalName": "malformed later complete block aborts the merge without target replay",
+    "equivalent": true
+  },
+  {
+    "name": "malformed later complete block aborts the merge without target replay--lf",
+    "type": null,
+    "originalName": "malformed later complete block aborts the merge without target replay",
+    "equivalent": true
+  },
+  {
+    "name": "malformed later complete block aborts the merge without target replay--bom-lf",
+    "type": null,
+    "originalName": "malformed later complete block aborts the merge without target replay",
+    "equivalent": true
+  },
+  {
+    "name": "malformed first complete block aborts before later blocks--crlf",
+    "type": null,
+    "originalName": "malformed first complete block aborts before later blocks",
+    "equivalent": true
+  },
+  {
+    "name": "malformed first complete block aborts before later blocks--lf",
+    "type": null,
+    "originalName": "malformed first complete block aborts before later blocks",
+    "equivalent": true
+  },
+  {
+    "name": "malformed first complete block aborts before later blocks--bom-lf",
+    "type": null,
+    "originalName": "malformed first complete block aborts before later blocks",
+    "equivalent": true
+  },
+  {
+    "name": "malformed residual tail after a complete block is ignored--crlf",
+    "type": null,
+    "originalName": "malformed residual tail after a complete block is ignored",
+    "equivalent": true
+  },
+  {
+    "name": "malformed residual tail after a complete block is ignored--lf",
+    "type": null,
+    "originalName": "malformed residual tail after a complete block is ignored",
+    "equivalent": true
+  },
+  {
+    "name": "malformed residual tail after a complete block is ignored--bom-lf",
+    "type": null,
+    "originalName": "malformed residual tail after a complete block is ignored",
+    "equivalent": true
+  },
+  {
+    "name": "inter-block garbage belongs to the later block and aborts merge--crlf",
+    "type": null,
+    "originalName": "inter-block garbage belongs to the later block and aborts merge",
+    "equivalent": true
+  },
+  {
+    "name": "inter-block garbage belongs to the later block and aborts merge--lf",
+    "type": null,
+    "originalName": "inter-block garbage belongs to the later block and aborts merge",
+    "equivalent": true
+  },
+  {
+    "name": "inter-block garbage belongs to the later block and aborts merge--bom-lf",
+    "type": null,
+    "originalName": "inter-block garbage belongs to the later block and aborts merge",
+    "equivalent": true
+  },
+  {
+    "name": "episode numbering fields use the winning block--crlf",
+    "type": null,
+    "originalName": "episode numbering fields use the winning block",
+    "equivalent": true
+  },
+  {
+    "name": "episode numbering fields use the winning block--lf",
+    "type": null,
+    "originalName": "episode numbering fields use the winning block",
+    "equivalent": true
+  },
+  {
+    "name": "episode numbering fields use the winning block--bom-lf",
+    "type": null,
+    "originalName": "episode numbering fields use the winning block",
+    "equivalent": true
+  },
+  {
+    "name": "display aliases map to the special numbering fields--crlf",
+    "type": null,
+    "originalName": "display aliases map to the special numbering fields",
+    "equivalent": true
+  },
+  {
+    "name": "display aliases map to the special numbering fields--lf",
+    "type": null,
+    "originalName": "display aliases map to the special numbering fields",
+    "equivalent": true
+  },
+  {
+    "name": "display aliases map to the special numbering fields--bom-lf",
+    "type": null,
+    "originalName": "display aliases map to the special numbering fields",
+    "equivalent": true
+  },
+  {
+    "name": "duplicate numbering fields commit the last valid value--crlf",
+    "type": null,
+    "originalName": "duplicate numbering fields commit the last valid value",
+    "equivalent": true
+  },
+  {
+    "name": "duplicate numbering fields commit the last valid value--lf",
+    "type": null,
+    "originalName": "duplicate numbering fields commit the last valid value",
+    "equivalent": true
+  },
+  {
+    "name": "duplicate numbering fields commit the last valid value--bom-lf",
+    "type": null,
+    "originalName": "duplicate numbering fields commit the last valid value",
+    "equivalent": true
+  },
+  {
+    "name": "invalid numbering fields preserve initial values--crlf",
+    "type": null,
+    "originalName": "invalid numbering fields preserve initial values",
+    "equivalent": true
+  },
+  {
+    "name": "invalid numbering fields preserve initial values--lf",
+    "type": null,
+    "originalName": "invalid numbering fields preserve initial values",
+    "equivalent": true
+  },
+  {
+    "name": "invalid numbering fields preserve initial values--bom-lf",
+    "type": null,
+    "originalName": "invalid numbering fields preserve initial values",
+    "equivalent": true
+  },
+  {
+    "name": "winning explicit episode end survives a lower additional episode--crlf",
+    "type": null,
+    "originalName": "winning explicit episode end survives a lower additional episode",
+    "equivalent": true
+  },
+  {
+    "name": "winning explicit episode end survives a lower additional episode--lf",
+    "type": null,
+    "originalName": "winning explicit episode end survives a lower additional episode",
+    "equivalent": true
+  },
+  {
+    "name": "winning explicit episode end survives a lower additional episode--bom-lf",
+    "type": null,
+    "originalName": "winning explicit episode end survives a lower additional episode",
+    "equivalent": true
+  },
+  {
+    "name": "higher additional episode raises episode end--crlf",
+    "type": null,
+    "originalName": "higher additional episode raises episode end",
+    "equivalent": true
+  },
+  {
+    "name": "higher additional episode raises episode end--lf",
+    "type": null,
+    "originalName": "higher additional episode raises episode end",
+    "equivalent": true
+  },
+  {
+    "name": "higher additional episode raises episode end--bom-lf",
+    "type": null,
+    "originalName": "higher additional episode raises episode end",
+    "equivalent": true
+  },
+  {
+    "name": "additional block numbering and display scalars are otherwise discarded--crlf",
+    "type": null,
+    "originalName": "additional block numbering and display scalars are otherwise discarded",
+    "equivalent": true
+  },
+  {
+    "name": "additional block numbering and display scalars are otherwise discarded--lf",
+    "type": null,
+    "originalName": "additional block numbering and display scalars are otherwise discarded",
+    "equivalent": true
+  },
+  {
+    "name": "additional block numbering and display scalars are otherwise discarded--bom-lf",
+    "type": null,
+    "originalName": "additional block numbering and display scalars are otherwise discarded",
+    "equivalent": true
+  },
+  {
+    "name": "winning block keeps season display and show title scalars--crlf",
+    "type": null,
+    "originalName": "winning block keeps season display and show title scalars",
+    "equivalent": true
+  },
+  {
+    "name": "winning block keeps season display and show title scalars--lf",
+    "type": null,
+    "originalName": "winning block keeps season display and show title scalars",
+    "equivalent": true
+  },
+  {
+    "name": "winning block keeps season display and show title scalars--bom-lf",
+    "type": null,
+    "originalName": "winning block keeps season display and show title scalars",
+    "equivalent": true
+  },
+  {
+    "name": "name original title and overview merge independently--crlf",
+    "type": null,
+    "originalName": "name original title and overview merge independently",
+    "equivalent": true
+  },
+  {
+    "name": "name original title and overview merge independently--lf",
+    "type": null,
+    "originalName": "name original title and overview merge independently",
+    "equivalent": true
+  },
+  {
+    "name": "name original title and overview merge independently--bom-lf",
+    "type": null,
+    "originalName": "name original title and overview merge independently",
+    "equivalent": true
+  },
+  {
+    "name": "missing winning strings still receive leading merge separators--crlf",
+    "type": null,
+    "originalName": "missing winning strings still receive leading merge separators",
+    "equivalent": true
+  },
+  {
+    "name": "missing winning strings still receive leading merge separators--lf",
+    "type": null,
+    "originalName": "missing winning strings still receive leading merge separators",
+    "equivalent": true
+  },
+  {
+    "name": "missing winning strings still receive leading merge separators--bom-lf",
+    "type": null,
+    "originalName": "missing winning strings still receive leading merge separators",
+    "equivalent": true
+  },
+  {
+    "name": "empty additional strings add no merge separators--crlf",
+    "type": null,
+    "originalName": "empty additional strings add no merge separators",
+    "equivalent": true
+  },
+  {
+    "name": "empty additional strings add no merge separators--lf",
+    "type": null,
+    "originalName": "empty additional strings add no merge separators",
+    "equivalent": true
+  },
+  {
+    "name": "empty additional strings add no merge separators--bom-lf",
+    "type": null,
+    "originalName": "empty additional strings add no merge separators",
+    "equivalent": true
+  },
+  {
+    "name": "winning fields overwrite initial strings before merge--crlf",
+    "type": null,
+    "originalName": "winning fields overwrite initial strings before merge",
+    "equivalent": true
+  },
+  {
+    "name": "winning fields overwrite initial strings before merge--lf",
+    "type": null,
+    "originalName": "winning fields overwrite initial strings before merge",
+    "equivalent": true
+  },
+  {
+    "name": "winning fields overwrite initial strings before merge--bom-lf",
+    "type": null,
+    "originalName": "winning fields overwrite initial strings before merge",
+    "equivalent": true
+  },
+  {
+    "name": "winning block keeps representative scalar metadata--crlf",
+    "type": null,
+    "originalName": "winning block keeps representative scalar metadata",
+    "equivalent": true
+  },
+  {
+    "name": "winning block keeps representative scalar metadata--lf",
+    "type": null,
+    "originalName": "winning block keeps representative scalar metadata",
+    "equivalent": true
+  },
+  {
+    "name": "winning block keeps representative scalar metadata--bom-lf",
+    "type": null,
+    "originalName": "winning block keeps representative scalar metadata",
+    "equivalent": true
+  },
+  {
+    "name": "winning provider identifiers are retained--crlf",
+    "type": null,
+    "originalName": "winning provider identifiers are retained",
+    "equivalent": true
+  },
+  {
+    "name": "winning provider identifiers are retained--lf",
+    "type": null,
+    "originalName": "winning provider identifiers are retained",
+    "equivalent": true
+  },
+  {
+    "name": "winning provider identifiers are retained--bom-lf",
+    "type": null,
+    "originalName": "winning provider identifiers are retained",
+    "equivalent": true
+  },
+  {
+    "name": "additional provider identifiers do not merge--crlf",
+    "type": null,
+    "originalName": "additional provider identifiers do not merge",
+    "equivalent": true
+  },
+  {
+    "name": "additional provider identifiers do not merge--lf",
+    "type": null,
+    "originalName": "additional provider identifiers do not merge",
+    "equivalent": true
+  },
+  {
+    "name": "additional provider identifiers do not merge--bom-lf",
+    "type": null,
+    "originalName": "additional provider identifiers do not merge",
+    "equivalent": true
+  },
+  {
+    "name": "custom provider identifier survives on the winning block--crlf",
+    "type": null,
+    "originalName": "custom provider identifier survives on the winning block",
+    "equivalent": true
+  },
+  {
+    "name": "custom provider identifier survives on the winning block--lf",
+    "type": null,
+    "originalName": "custom provider identifier survives on the winning block",
+    "equivalent": true
+  },
+  {
+    "name": "custom provider identifier survives on the winning block--bom-lf",
+    "type": null,
+    "originalName": "custom provider identifier survives on the winning block",
+    "equivalent": true
+  },
+  {
+    "name": "duplicate provider identifier in the winner keeps the last value--crlf",
+    "type": null,
+    "originalName": "duplicate provider identifier in the winner keeps the last value",
+    "equivalent": true
+  },
+  {
+    "name": "duplicate provider identifier in the winner keeps the last value--lf",
+    "type": null,
+    "originalName": "duplicate provider identifier in the winner keeps the last value",
+    "equivalent": true
+  },
+  {
+    "name": "duplicate provider identifier in the winner keeps the last value--bom-lf",
+    "type": null,
+    "originalName": "duplicate provider identifier in the winner keeps the last value",
+    "equivalent": true
+  },
+  {
+    "name": "winner people and remote image survive while additional collections are discarded--crlf",
+    "type": null,
+    "originalName": "winner people and remote image survive while additional collections are discarded",
+    "equivalent": true
+  },
+  {
+    "name": "winner people and remote image survive while additional collections are discarded--lf",
+    "type": null,
+    "originalName": "winner people and remote image survive while additional collections are discarded",
+    "equivalent": true
+  },
+  {
+    "name": "winner people and remote image survive while additional collections are discarded--bom-lf",
+    "type": null,
+    "originalName": "winner people and remote image survive while additional collections are discarded",
+    "equivalent": true
+  },
+  {
+    "name": "episode fetch resets existing people even for an empty block--crlf",
+    "type": null,
+    "originalName": "episode fetch resets existing people even for an empty block",
+    "equivalent": true
+  },
+  {
+    "name": "episode fetch resets existing people even for an empty block--lf",
+    "type": null,
+    "originalName": "episode fetch resets existing people even for an empty block",
+    "equivalent": true
+  },
+  {
+    "name": "episode fetch resets existing people even for an empty block--bom-lf",
+    "type": null,
+    "originalName": "episode fetch resets existing people even for an empty block",
+    "equivalent": true
+  },
+  {
+    "name": "single truncated block keeps earlier scalar but not unfinished scalar--crlf",
+    "type": null,
+    "originalName": "single truncated block keeps earlier scalar but not unfinished scalar",
+    "equivalent": false
+  },
+  {
+    "name": "single truncated block keeps earlier scalar but not unfinished scalar--lf",
+    "type": null,
+    "originalName": "single truncated block keeps earlier scalar but not unfinished scalar",
+    "equivalent": false
+  },
+  {
+    "name": "single truncated block keeps earlier scalar but not unfinished scalar--bom-lf",
+    "type": null,
+    "originalName": "single truncated block keeps earlier scalar but not unfinished scalar",
+    "equivalent": false
+  },
+  {
+    "name": "nested scalar error keeps an earlier direct field--crlf",
+    "type": null,
+    "originalName": "nested scalar error keeps an earlier direct field",
+    "equivalent": true
+  },
+  {
+    "name": "nested scalar error keeps an earlier direct field--lf",
+    "type": null,
+    "originalName": "nested scalar error keeps an earlier direct field",
+    "equivalent": true
+  },
+  {
+    "name": "nested scalar error keeps an earlier direct field--bom-lf",
+    "type": null,
+    "originalName": "nested scalar error keeps an earlier direct field",
+    "equivalent": true
+  },
+  {
+    "name": "xml failure after temporary userdata keeps its side effect but skips target replay--crlf",
+    "type": null,
+    "originalName": "xml failure after temporary userdata keeps its side effect but skips target replay",
+    "equivalent": true
+  },
+  {
+    "name": "xml failure after temporary userdata keeps its side effect but skips target replay--lf",
+    "type": null,
+    "originalName": "xml failure after temporary userdata keeps its side effect but skips target replay",
+    "equivalent": true
+  },
+  {
+    "name": "xml failure after temporary userdata keeps its side effect but skips target replay--bom-lf",
+    "type": null,
+    "originalName": "xml failure after temporary userdata keeps its side effect but skips target replay",
+    "equivalent": true
+  },
+  {
+    "name": "single zero id block performs transient userdata reads only--crlf",
+    "type": null,
+    "originalName": "single zero id block performs transient userdata reads only",
+    "equivalent": true
+  },
+  {
+    "name": "single zero id block performs transient userdata reads only--lf",
+    "type": null,
+    "originalName": "single zero id block performs transient userdata reads only",
+    "equivalent": true
+  },
+  {
+    "name": "single zero id block performs transient userdata reads only--bom-lf",
+    "type": null,
+    "originalName": "single zero id block performs transient userdata reads only",
+    "equivalent": true
+  },
+  {
+    "name": "single existing item saves userdata nodes sequentially--crlf",
+    "type": null,
+    "originalName": "single existing item saves userdata nodes sequentially",
+    "equivalent": true
+  },
+  {
+    "name": "single existing item saves userdata nodes sequentially--lf",
+    "type": null,
+    "originalName": "single existing item saves userdata nodes sequentially",
+    "equivalent": true
+  },
+  {
+    "name": "single existing item saves userdata nodes sequentially--bom-lf",
+    "type": null,
+    "originalName": "single existing item saves userdata nodes sequentially",
+    "equivalent": true
+  },
+  {
+    "name": "multi block zero id parses every temporary block then winner again--crlf",
+    "type": null,
+    "originalName": "multi block zero id parses every temporary block then winner again",
+    "equivalent": true
+  },
+  {
+    "name": "multi block zero id parses every temporary block then winner again--lf",
+    "type": null,
+    "originalName": "multi block zero id parses every temporary block then winner again",
+    "equivalent": true
+  },
+  {
+    "name": "multi block zero id parses every temporary block then winner again--bom-lf",
+    "type": null,
+    "originalName": "multi block zero id parses every temporary block then winner again",
+    "equivalent": true
+  },
+  {
+    "name": "multi block existing item saves only winner after transient passes--crlf",
+    "type": null,
+    "originalName": "multi block existing item saves only winner after transient passes",
+    "equivalent": true
+  },
+  {
+    "name": "multi block existing item saves only winner after transient passes--lf",
+    "type": null,
+    "originalName": "multi block existing item saves only winner after transient passes",
+    "equivalent": true
+  },
+  {
+    "name": "multi block existing item saves only winner after transient passes--bom-lf",
+    "type": null,
+    "originalName": "multi block existing item saves only winner after transient passes",
+    "equivalent": true
+  },
+  {
+    "name": "additional temporary userdata mutation is visible in winner persisted snapshot--crlf",
+    "type": null,
+    "originalName": "additional temporary userdata mutation is visible in winner persisted snapshot",
+    "equivalent": true
+  },
+  {
+    "name": "additional temporary userdata mutation is visible in winner persisted snapshot--lf",
+    "type": null,
+    "originalName": "additional temporary userdata mutation is visible in winner persisted snapshot",
+    "equivalent": true
+  },
+  {
+    "name": "additional temporary userdata mutation is visible in winner persisted snapshot--bom-lf",
+    "type": null,
+    "originalName": "additional temporary userdata mutation is visible in winner persisted snapshot",
+    "equivalent": true
+  },
+  {
+    "name": "userdata failure in a later temporary block stops before target replay--crlf",
+    "type": null,
+    "originalName": "userdata failure in a later temporary block stops before target replay",
+    "equivalent": true
+  },
+  {
+    "name": "userdata failure in a later temporary block stops before target replay--lf",
+    "type": null,
+    "originalName": "userdata failure in a later temporary block stops before target replay",
+    "equivalent": true
+  },
+  {
+    "name": "userdata failure in a later temporary block stops before target replay--bom-lf",
+    "type": null,
+    "originalName": "userdata failure in a later temporary block stops before target replay",
+    "equivalent": true
+  },
+  {
+    "name": "winner save failure preserves its earlier scalar target prefix--crlf",
+    "type": null,
+    "originalName": "winner save failure preserves its earlier scalar target prefix",
+    "equivalent": true
+  },
+  {
+    "name": "winner save failure preserves its earlier scalar target prefix--lf",
+    "type": null,
+    "originalName": "winner save failure preserves its earlier scalar target prefix",
+    "equivalent": true
+  },
+  {
+    "name": "winner save failure preserves its earlier scalar target prefix--bom-lf",
+    "type": null,
+    "originalName": "winner save failure preserves its earlier scalar target prefix",
+    "equivalent": true
+  },
+  {
+    "name": "pre cancellation propagates before the first episode node--crlf",
+    "type": null,
+    "originalName": "pre cancellation propagates before the first episode node",
+    "equivalent": true
+  },
+  {
+    "name": "pre cancellation propagates before the first episode node--lf",
+    "type": null,
+    "originalName": "pre cancellation propagates before the first episode node",
+    "equivalent": true
+  },
+  {
+    "name": "pre cancellation propagates before the first episode node--bom-lf",
+    "type": null,
+    "originalName": "pre cancellation propagates before the first episode node",
+    "equivalent": true
+  },
+  {
+    "name": "cancellation after temporary userdata is observed at the next block--crlf",
+    "type": null,
+    "originalName": "cancellation after temporary userdata is observed at the next block",
+    "equivalent": true
+  },
+  {
+    "name": "cancellation after temporary userdata is observed at the next block--lf",
+    "type": null,
+    "originalName": "cancellation after temporary userdata is observed at the next block",
+    "equivalent": true
+  },
+  {
+    "name": "cancellation after temporary userdata is observed at the next block--bom-lf",
+    "type": null,
+    "originalName": "cancellation after temporary userdata is observed at the next block",
+    "equivalent": true
+  },
+  {
+    "name": "cancellation after winner save preserves the saved prefix--crlf",
+    "type": null,
+    "originalName": "cancellation after winner save preserves the saved prefix",
+    "equivalent": true
+  },
+  {
+    "name": "cancellation after winner save preserves the saved prefix--lf",
+    "type": null,
+    "originalName": "cancellation after winner save preserves the saved prefix",
+    "equivalent": true
+  },
+  {
+    "name": "cancellation after winner save preserves the saved prefix--bom-lf",
+    "type": null,
+    "originalName": "cancellation after winner save preserves the saved prefix",
+    "equivalent": true
+  },
+  {
+    "name": "user manager failure is not swallowed as an xml error--crlf",
+    "type": null,
+    "originalName": "user manager failure is not swallowed as an xml error",
+    "equivalent": true
+  },
+  {
+    "name": "user manager failure is not swallowed as an xml error--lf",
+    "type": null,
+    "originalName": "user manager failure is not swallowed as an xml error",
+    "equivalent": true
+  },
+  {
+    "name": "user manager failure is not swallowed as an xml error--bom-lf",
+    "type": null,
+    "originalName": "user manager failure is not swallowed as an xml error",
+    "equivalent": true
+  },
+  {
+    "name": "pre cancellation on an empty file is preceded by xml setup--crlf",
+    "type": null,
+    "originalName": "pre cancellation on an empty file is preceded by xml setup",
+    "equivalent": true
+  },
+  {
+    "name": "pre cancellation on an empty file is preceded by xml setup--lf",
+    "type": null,
+    "originalName": "pre cancellation on an empty file is preceded by xml setup",
+    "equivalent": true
+  },
+  {
+    "name": "pre cancellation on an empty file is preceded by xml setup--bom-lf",
+    "type": null,
+    "originalName": "pre cancellation on an empty file is preceded by xml setup",
+    "equivalent": true
+  },
+  {
+    "name": "pre cancellation on a self closing root sees no interactive child--crlf",
+    "type": null,
+    "originalName": "pre cancellation on a self closing root sees no interactive child",
+    "equivalent": true
+  },
+  {
+    "name": "pre cancellation on a self closing root sees no interactive child--lf",
+    "type": null,
+    "originalName": "pre cancellation on a self closing root sees no interactive child",
+    "equivalent": true
+  },
+  {
+    "name": "pre cancellation on a self closing root sees no interactive child--bom-lf",
+    "type": null,
+    "originalName": "pre cancellation on a self closing root sees no interactive child",
+    "equivalent": true
+  },
+  {
+    "name": "pre cancellation on a paired empty root observes the end element--crlf",
+    "type": null,
+    "originalName": "pre cancellation on a paired empty root observes the end element",
+    "equivalent": true
+  },
+  {
+    "name": "pre cancellation on a paired empty root observes the end element--lf",
+    "type": null,
+    "originalName": "pre cancellation on a paired empty root observes the end element",
+    "equivalent": true
+  },
+  {
+    "name": "pre cancellation on a paired empty root observes the end element--bom-lf",
+    "type": null,
+    "originalName": "pre cancellation on a paired empty root observes the end element",
+    "equivalent": true
+  },
+  {
+    "name": "pre cancellation on direct root text observes the text node--crlf",
+    "type": null,
+    "originalName": "pre cancellation on direct root text observes the text node",
+    "equivalent": true
+  },
+  {
+    "name": "pre cancellation on direct root text observes the text node--lf",
+    "type": null,
+    "originalName": "pre cancellation on direct root text observes the text node",
+    "equivalent": true
+  },
+  {
+    "name": "pre cancellation on direct root text observes the text node--bom-lf",
+    "type": null,
+    "originalName": "pre cancellation on direct root text observes the text node",
+    "equivalent": true
+  },
+  {
+    "name": "malformed setup xml is swallowed before pre cancellation--crlf",
+    "type": null,
+    "originalName": "malformed setup xml is swallowed before pre cancellation",
+    "equivalent": true
+  },
+  {
+    "name": "malformed setup xml is swallowed before pre cancellation--lf",
+    "type": null,
+    "originalName": "malformed setup xml is swallowed before pre cancellation",
+    "equivalent": true
+  },
+  {
+    "name": "malformed setup xml is swallowed before pre cancellation--bom-lf",
+    "type": null,
+    "originalName": "malformed setup xml is swallowed before pre cancellation",
+    "equivalent": true
+  },
+  {
+    "name": "pre cancellation in a multi block file stops in the first temporary block--crlf",
+    "type": null,
+    "originalName": "pre cancellation in a multi block file stops in the first temporary block",
+    "equivalent": true
+  },
+  {
+    "name": "pre cancellation in a multi block file stops in the first temporary block--lf",
+    "type": null,
+    "originalName": "pre cancellation in a multi block file stops in the first temporary block",
+    "equivalent": true
+  },
+  {
+    "name": "pre cancellation in a multi block file stops in the first temporary block--bom-lf",
+    "type": null,
+    "originalName": "pre cancellation in a multi block file stops in the first temporary block",
+    "equivalent": true
+  },
+  {
+    "name": "cancellation after the final winner save is observed before root completion--crlf",
+    "type": null,
+    "originalName": "cancellation after the final winner save is observed before root completion",
+    "equivalent": true
+  },
+  {
+    "name": "cancellation after the final winner save is observed before root completion--lf",
+    "type": null,
+    "originalName": "cancellation after the final winner save is observed before root completion",
+    "equivalent": true
+  },
+  {
+    "name": "cancellation after the final winner save is observed before root completion--bom-lf",
+    "type": null,
+    "originalName": "cancellation after the final winner save is observed before root completion",
+    "equivalent": true
+  }
+]

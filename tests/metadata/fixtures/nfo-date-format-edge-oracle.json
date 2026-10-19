@@ -1,0 +1,978 @@
+{
+  "framework": "10.0.12",
+  "formatResults": [
+    {
+      "format": "%q",
+      "source": "2024-02-29T23:04:05.1234567Z",
+      "text": "q",
+      "accepted": true,
+      "parsed": "2026-09-26T00:00:00.0000000Z",
+      "formatError": null,
+      "parseError": null
+    },
+    {
+      "format": "%%",
+      "source": "2024-02-29T23:04:05.1234567Z",
+      "text": null,
+      "accepted": null,
+      "parsed": null,
+      "formatError": "FormatException",
+      "parseError": null
+    },
+    {
+      "format": "%/",
+      "source": "2024-02-29T23:04:05.1234567Z",
+      "text": "/",
+      "accepted": true,
+      "parsed": "2026-09-26T00:00:00.0000000Z",
+      "formatError": null,
+      "parseError": null
+    },
+    {
+      "format": "%:",
+      "source": "2024-02-29T23:04:05.1234567Z",
+      "text": ":",
+      "accepted": true,
+      "parsed": "2026-09-26T00:00:00.0000000Z",
+      "formatError": null,
+      "parseError": null
+    },
+    {
+      "format": "%K",
+      "source": "2024-02-29T23:04:05.1234567Z",
+      "text": "Z",
+      "accepted": true,
+      "parsed": "2026-09-26T00:00:00.0000000Z",
+      "formatError": null,
+      "parseError": null
+    },
+    {
+      "format": "%g",
+      "source": "2024-02-29T23:04:05.1234567Z",
+      "text": "A.D.",
+      "accepted": true,
+      "parsed": "2026-09-26T00:00:00.0000000Z",
+      "formatError": null,
+      "parseError": null
+    },
+    {
+      "format": "%z",
+      "source": "2024-02-29T23:04:05.1234567Z",
+      "text": "\u002B0",
+      "accepted": true,
+      "parsed": "2026-09-26T00:00:00.0000000Z",
+      "formatError": null,
+      "parseError": null
+    },
+    {
+      "format": "%d",
+      "source": "2024-02-29T23:04:05.1234567Z",
+      "text": "29",
+      "accepted": true,
+      "parsed": "2026-01-29T00:00:00.0000000Z",
+      "formatError": null,
+      "parseError": null
+    },
+    {
+      "format": "%\\q",
+      "source": "2024-02-29T23:04:05.1234567Z",
+      "text": null,
+      "accepted": null,
+      "parsed": null,
+      "formatError": "FormatException",
+      "parseError": null
+    },
+    {
+      "format": "%%%d",
+      "source": "2024-02-29T23:04:05.1234567Z",
+      "text": null,
+      "accepted": null,
+      "parsed": null,
+      "formatError": "FormatException",
+      "parseError": null
+    },
+    {
+      "format": "yyyy yyyy",
+      "source": "2024-02-29T23:04:05.1234567Z",
+      "text": "2024 2024",
+      "accepted": true,
+      "parsed": "2024-01-01T00:00:00.0000000Z",
+      "formatError": null,
+      "parseError": null
+    },
+    {
+      "format": "MM MM",
+      "source": "2024-02-29T23:04:05.1234567Z",
+      "text": "02 02",
+      "accepted": true,
+      "parsed": "2026-02-01T00:00:00.0000000Z",
+      "formatError": null,
+      "parseError": null
+    },
+    {
+      "format": "dd dd",
+      "source": "2024-02-29T23:04:05.1234567Z",
+      "text": "29 29",
+      "accepted": true,
+      "parsed": "2026-01-29T00:00:00.0000000Z",
+      "formatError": null,
+      "parseError": null
+    },
+    {
+      "format": "HH HH",
+      "source": "2024-02-29T23:04:05.1234567Z",
+      "text": "23 23",
+      "accepted": true,
+      "parsed": "2026-09-26T23:00:00.0000000Z",
+      "formatError": null,
+      "parseError": null
+    },
+    {
+      "format": "hh hh tt",
+      "source": "2024-02-29T23:04:05.1234567Z",
+      "text": "11 11 PM",
+      "accepted": true,
+      "parsed": "2026-09-26T23:00:00.0000000Z",
+      "formatError": null,
+      "parseError": null
+    },
+    {
+      "format": "mm mm",
+      "source": "2024-02-29T23:04:05.1234567Z",
+      "text": "04 04",
+      "accepted": true,
+      "parsed": "2026-09-26T00:04:00.0000000Z",
+      "formatError": null,
+      "parseError": null
+    },
+    {
+      "format": "ss ss",
+      "source": "2024-02-29T23:04:05.1234567Z",
+      "text": "05 05",
+      "accepted": true,
+      "parsed": "2026-09-26T00:00:05.0000000Z",
+      "formatError": null,
+      "parseError": null
+    },
+    {
+      "format": "fffffff f",
+      "source": "2024-02-29T23:04:05.1234567Z",
+      "text": "1234567 1",
+      "accepted": false,
+      "parsed": null,
+      "formatError": null,
+      "parseError": null
+    },
+    {
+      "format": "tt tt",
+      "source": "2024-02-29T23:04:05.1234567Z",
+      "text": "PM PM",
+      "accepted": false,
+      "parsed": null,
+      "formatError": null,
+      "parseError": null
+    },
+    {
+      "format": "g g",
+      "source": "2024-02-29T23:04:05.1234567Z",
+      "text": "A.D. A.D.",
+      "accepted": true,
+      "parsed": "2026-09-26T00:00:00.0000000Z",
+      "formatError": null,
+      "parseError": null
+    },
+    {
+      "format": "zzz zzz",
+      "source": "2024-02-29T23:04:05.1234567Z",
+      "text": "\u002B00:00 \u002B00:00",
+      "accepted": true,
+      "parsed": "2026-09-26T00:00:00.0000000Z",
+      "formatError": null,
+      "parseError": null
+    },
+    {
+      "format": "K K",
+      "source": "2024-02-29T23:04:05.1234567Z",
+      "text": "Z Z",
+      "accepted": true,
+      "parsed": "2026-09-26T00:00:00.0000000Z",
+      "formatError": null,
+      "parseError": null
+    },
+    {
+      "format": "yyyy g",
+      "source": "2024-02-29T23:04:05.1234567Z",
+      "text": "2024 A.D.",
+      "accepted": true,
+      "parsed": "2024-01-01T00:00:00.0000000Z",
+      "formatError": null,
+      "parseError": null
+    },
+    {
+      "format": "gg",
+      "source": "2024-02-29T23:04:05.1234567Z",
+      "text": "A.D.",
+      "accepted": true,
+      "parsed": "2026-09-26T00:00:00.0000000Z",
+      "formatError": null,
+      "parseError": null
+    },
+    {
+      "format": "gggg",
+      "source": "2024-02-29T23:04:05.1234567Z",
+      "text": "A.D.",
+      "accepted": true,
+      "parsed": "2026-09-26T00:00:00.0000000Z",
+      "formatError": null,
+      "parseError": null
+    },
+    {
+      "format": "HHH",
+      "source": "2024-02-29T23:04:05.1234567Z",
+      "text": "23",
+      "accepted": true,
+      "parsed": "2026-09-26T23:00:00.0000000Z",
+      "formatError": null,
+      "parseError": null
+    },
+    {
+      "format": "hhh",
+      "source": "2024-02-29T23:04:05.1234567Z",
+      "text": "11",
+      "accepted": true,
+      "parsed": "2026-09-26T11:00:00.0000000Z",
+      "formatError": null,
+      "parseError": null
+    },
+    {
+      "format": "mmm",
+      "source": "2024-02-29T23:04:05.1234567Z",
+      "text": "04",
+      "accepted": true,
+      "parsed": "2026-09-26T00:04:00.0000000Z",
+      "formatError": null,
+      "parseError": null
+    },
+    {
+      "format": "sss",
+      "source": "2024-02-29T23:04:05.1234567Z",
+      "text": "05",
+      "accepted": true,
+      "parsed": "2026-09-26T00:00:05.0000000Z",
+      "formatError": null,
+      "parseError": null
+    },
+    {
+      "format": "zzzz",
+      "source": "2024-02-29T23:04:05.1234567Z",
+      "text": "\u002B00:00",
+      "accepted": true,
+      "parsed": "2026-09-26T00:00:00.0000000Z",
+      "formatError": null,
+      "parseError": null
+    },
+    {
+      "format": "ggg",
+      "source": "2024-02-29T23:04:05.1234567Z",
+      "text": "A.D.",
+      "accepted": true,
+      "parsed": "2026-09-26T00:00:00.0000000Z",
+      "formatError": null,
+      "parseError": null
+    },
+    {
+      "format": "KKK",
+      "source": "2024-02-29T23:04:05.1234567Z",
+      "text": "ZZZ",
+      "accepted": true,
+      "parsed": "2026-09-26T00:00:00.0000000Z",
+      "formatError": null,
+      "parseError": null
+    },
+    {
+      "format": "ttt",
+      "source": "2024-02-29T23:04:05.1234567Z",
+      "text": "PM",
+      "accepted": false,
+      "parsed": null,
+      "formatError": null,
+      "parseError": null
+    },
+    {
+      "format": "yyyy-MM-dd HH:mm:ss.fffffffK",
+      "source": "0001-01-01T00:00:00.0000000Z",
+      "text": "0001-01-01 00:00:00.0000000Z",
+      "accepted": true,
+      "parsed": "0001-01-01T00:00:00.0000000Z",
+      "formatError": null,
+      "parseError": null
+    },
+    {
+      "format": "yyyy-MM-dd HH:mm:ss.fffffffK",
+      "source": "9999-12-31T23:59:59.9999999Z",
+      "text": "9999-12-31 23:59:59.9999999Z",
+      "accepted": true,
+      "parsed": "9999-12-31T23:59:59.9999999Z",
+      "formatError": null,
+      "parseError": null
+    }
+  ],
+  "parseResults": [
+    {
+      "name": "month-lower-full",
+      "value": "29 february 2024",
+      "format": "dd MMMM yyyy",
+      "accepted": true,
+      "parsed": "2024-02-29T00:00:00.0000000Z",
+      "error": null
+    },
+    {
+      "name": "month-upper-short",
+      "value": "29 FEB 2024",
+      "format": "dd MMM yyyy",
+      "accepted": true,
+      "parsed": "2024-02-29T00:00:00.0000000Z",
+      "error": null
+    },
+    {
+      "name": "weekday-lower",
+      "value": "thu, 29 Feb 2024",
+      "format": "ddd, dd MMM yyyy",
+      "accepted": true,
+      "parsed": "2024-02-29T00:00:00.0000000Z",
+      "error": null
+    },
+    {
+      "name": "weekday-upper",
+      "value": "THURSDAY, 29 February 2024",
+      "format": "dddd, dd MMMM yyyy",
+      "accepted": true,
+      "parsed": "2024-02-29T00:00:00.0000000Z",
+      "error": null
+    },
+    {
+      "name": "literal-t-lower",
+      "value": "2024-02-29t23:04:05",
+      "format": "yyyy-MM-ddTHH:mm:ss",
+      "accepted": false,
+      "parsed": null,
+      "error": null
+    },
+    {
+      "name": "quoted-literal-lower",
+      "value": "2024-02-29 utc",
+      "format": "yyyy-MM-dd \u0027UTC\u0027",
+      "accepted": false,
+      "parsed": null,
+      "error": null
+    },
+    {
+      "name": "meridiem-lower",
+      "value": "2024-02-29 11:04 pm",
+      "format": "yyyy-MM-dd hh:mm tt",
+      "accepted": true,
+      "parsed": "2024-02-29T23:04:00.0000000Z",
+      "error": null
+    },
+    {
+      "name": "meridiem-mixed",
+      "value": "2024-02-29 11:04 pM",
+      "format": "yyyy-MM-dd hh:mm tt",
+      "accepted": true,
+      "parsed": "2024-02-29T23:04:00.0000000Z",
+      "error": null
+    },
+    {
+      "name": "era-standard",
+      "value": "2024 A.D.",
+      "format": "yyyy g",
+      "accepted": true,
+      "parsed": "2024-01-01T00:00:00.0000000Z",
+      "error": null
+    },
+    {
+      "name": "era-lower",
+      "value": "2024 a.d.",
+      "format": "yyyy g",
+      "accepted": true,
+      "parsed": "2024-01-01T00:00:00.0000000Z",
+      "error": null
+    },
+    {
+      "name": "era-ad",
+      "value": "2024 AD",
+      "format": "yyyy g",
+      "accepted": true,
+      "parsed": "2024-01-01T00:00:00.0000000Z",
+      "error": null
+    },
+    {
+      "name": "era-invalid",
+      "value": "2024 BC",
+      "format": "yyyy g",
+      "accepted": false,
+      "parsed": null,
+      "error": null
+    },
+    {
+      "name": "duplicate-year-same",
+      "value": "2024 2024-02-29",
+      "format": "yyyy yyyy-MM-dd",
+      "accepted": true,
+      "parsed": "2024-02-29T00:00:00.0000000Z",
+      "error": null
+    },
+    {
+      "name": "duplicate-year-conflict",
+      "value": "2024 2023-02-29",
+      "format": "yyyy yyyy-MM-dd",
+      "accepted": false,
+      "parsed": null,
+      "error": null
+    },
+    {
+      "name": "duplicate-month-same",
+      "value": "02 02 29 2024",
+      "format": "MM MM dd yyyy",
+      "accepted": true,
+      "parsed": "2024-02-29T00:00:00.0000000Z",
+      "error": null
+    },
+    {
+      "name": "duplicate-month-conflict",
+      "value": "02 03 29 2024",
+      "format": "MM MM dd yyyy",
+      "accepted": false,
+      "parsed": null,
+      "error": null
+    },
+    {
+      "name": "duplicate-day-same",
+      "value": "29 29 02 2024",
+      "format": "dd dd MM yyyy",
+      "accepted": true,
+      "parsed": "2024-02-29T00:00:00.0000000Z",
+      "error": null
+    },
+    {
+      "name": "duplicate-day-conflict",
+      "value": "29 28 02 2024",
+      "format": "dd dd MM yyyy",
+      "accepted": false,
+      "parsed": null,
+      "error": null
+    },
+    {
+      "name": "duplicate-hour-same",
+      "value": "23 23 2024-02-29",
+      "format": "HH HH yyyy-MM-dd",
+      "accepted": true,
+      "parsed": "2024-02-29T23:00:00.0000000Z",
+      "error": null
+    },
+    {
+      "name": "duplicate-hour-conflict",
+      "value": "23 22 2024-02-29",
+      "format": "HH HH yyyy-MM-dd",
+      "accepted": false,
+      "parsed": null,
+      "error": null
+    },
+    {
+      "name": "duplicate-minute-same",
+      "value": "04 04 2024-02-29",
+      "format": "mm mm yyyy-MM-dd",
+      "accepted": true,
+      "parsed": "2024-02-29T00:04:00.0000000Z",
+      "error": null
+    },
+    {
+      "name": "duplicate-minute-conflict",
+      "value": "04 05 2024-02-29",
+      "format": "mm mm yyyy-MM-dd",
+      "accepted": false,
+      "parsed": null,
+      "error": null
+    },
+    {
+      "name": "duplicate-second-same",
+      "value": "05 05 2024-02-29",
+      "format": "ss ss yyyy-MM-dd",
+      "accepted": true,
+      "parsed": "2024-02-29T00:00:05.0000000Z",
+      "error": null
+    },
+    {
+      "name": "duplicate-second-conflict",
+      "value": "05 06 2024-02-29",
+      "format": "ss ss yyyy-MM-dd",
+      "accepted": false,
+      "parsed": null,
+      "error": null
+    },
+    {
+      "name": "duplicate-fraction-same",
+      "value": "1234567 1234567 2024-02-29",
+      "format": "fffffff fffffff yyyy-MM-dd",
+      "accepted": true,
+      "parsed": "2024-02-29T00:00:00.1234567Z",
+      "error": null
+    },
+    {
+      "name": "duplicate-fraction-conflict",
+      "value": "1234567 1234566 2024-02-29",
+      "format": "fffffff fffffff yyyy-MM-dd",
+      "accepted": false,
+      "parsed": null,
+      "error": null
+    },
+    {
+      "name": "duplicate-meridiem-same",
+      "value": "11 PM PM 2024-02-29",
+      "format": "hh tt tt yyyy-MM-dd",
+      "accepted": true,
+      "parsed": "2024-02-29T23:00:00.0000000Z",
+      "error": null
+    },
+    {
+      "name": "duplicate-meridiem-conflict",
+      "value": "11 AM PM 2024-02-29",
+      "format": "hh tt tt yyyy-MM-dd",
+      "accepted": false,
+      "parsed": null,
+      "error": null
+    },
+    {
+      "name": "duplicate-zone-same",
+      "value": "12:00 \u002B01:00 \u002B01:00 2024-02-29",
+      "format": "HH:mm zzz zzz yyyy-MM-dd",
+      "accepted": true,
+      "parsed": "2024-02-29T11:00:00.0000000Z",
+      "error": null
+    },
+    {
+      "name": "duplicate-zone-conflict",
+      "value": "12:00 \u002B01:00 \u002B02:00 2024-02-29",
+      "format": "HH:mm zzz zzz yyyy-MM-dd",
+      "accepted": false,
+      "parsed": null,
+      "error": null
+    },
+    {
+      "name": "duplicate-weekday-same",
+      "value": "Thu Thursday, 29 Feb 2024",
+      "format": "ddd dddd, dd MMM yyyy",
+      "accepted": true,
+      "parsed": "2024-02-29T00:00:00.0000000Z",
+      "error": null
+    },
+    {
+      "name": "duplicate-weekday-conflict",
+      "value": "Thu Friday, 29 Feb 2024",
+      "format": "ddd dddd, dd MMM yyyy",
+      "accepted": false,
+      "parsed": null,
+      "error": null
+    },
+    {
+      "name": "duplicate-month-mixed-same",
+      "value": "02 February 29 2024",
+      "format": "MM MMMM dd yyyy",
+      "accepted": true,
+      "parsed": "2024-02-29T00:00:00.0000000Z",
+      "error": null
+    },
+    {
+      "name": "duplicate-month-mixed-conflict",
+      "value": "02 March 29 2024",
+      "format": "MM MMMM dd yyyy",
+      "accepted": false,
+      "parsed": null,
+      "error": null
+    },
+    {
+      "name": "hour12-hour24-same",
+      "value": "11 PM 23 2024-02-29",
+      "format": "hh tt HH yyyy-MM-dd",
+      "accepted": false,
+      "parsed": null,
+      "error": null
+    },
+    {
+      "name": "hour12-hour24-conflict",
+      "value": "11 AM 23 2024-02-29",
+      "format": "hh tt HH yyyy-MM-dd",
+      "accepted": false,
+      "parsed": null,
+      "error": null
+    },
+    {
+      "name": "zone-z-plus14",
+      "value": "2024-02-29 12:00 \u002B14",
+      "format": "yyyy-MM-dd HH:mm z",
+      "accepted": true,
+      "parsed": "2024-02-28T22:00:00.0000000Z",
+      "error": null
+    },
+    {
+      "name": "zone-z-minus14",
+      "value": "2024-02-29 12:00 -14",
+      "format": "yyyy-MM-dd HH:mm z",
+      "accepted": true,
+      "parsed": "2024-03-01T02:00:00.0000000Z",
+      "error": null
+    },
+    {
+      "name": "zone-zz-plus14",
+      "value": "2024-02-29 12:00 \u002B14",
+      "format": "yyyy-MM-dd HH:mm zz",
+      "accepted": true,
+      "parsed": "2024-02-28T22:00:00.0000000Z",
+      "error": null
+    },
+    {
+      "name": "zone-zzz-plus14",
+      "value": "2024-02-29 12:00 \u002B14:00",
+      "format": "yyyy-MM-dd HH:mm zzz",
+      "accepted": true,
+      "parsed": "2024-02-28T22:00:00.0000000Z",
+      "error": null
+    },
+    {
+      "name": "zone-zzz-minus14",
+      "value": "2024-02-29 12:00 -14:00",
+      "format": "yyyy-MM-dd HH:mm zzz",
+      "accepted": true,
+      "parsed": "2024-03-01T02:00:00.0000000Z",
+      "error": null
+    },
+    {
+      "name": "zone-zzz-plus1401",
+      "value": "2024-02-29 12:00 \u002B14:01",
+      "format": "yyyy-MM-dd HH:mm zzz",
+      "accepted": false,
+      "parsed": null,
+      "error": null
+    },
+    {
+      "name": "zone-zzz-minus1401",
+      "value": "2024-02-29 12:00 -14:01",
+      "format": "yyyy-MM-dd HH:mm zzz",
+      "accepted": false,
+      "parsed": null,
+      "error": null
+    },
+    {
+      "name": "zone-zzz-plus1359",
+      "value": "2024-02-29 12:00 \u002B13:59",
+      "format": "yyyy-MM-dd HH:mm zzz",
+      "accepted": true,
+      "parsed": "2024-02-28T22:01:00.0000000Z",
+      "error": null
+    },
+    {
+      "name": "zone-zzz-minute60",
+      "value": "2024-02-29 12:00 \u002B00:60",
+      "format": "yyyy-MM-dd HH:mm zzz",
+      "accepted": false,
+      "parsed": null,
+      "error": null
+    },
+    {
+      "name": "zone-k-z",
+      "value": "2024-02-29T12:00:00Z",
+      "format": "yyyy-MM-ddTHH:mm:ssK",
+      "accepted": true,
+      "parsed": "2024-02-29T12:00:00.0000000Z",
+      "error": null
+    },
+    {
+      "name": "zone-k-lower-z",
+      "value": "2024-02-29T12:00:00z",
+      "format": "yyyy-MM-ddTHH:mm:ssK",
+      "accepted": false,
+      "parsed": null,
+      "error": null
+    },
+    {
+      "name": "zone-k-empty",
+      "value": "2024-02-29T12:00:00",
+      "format": "yyyy-MM-ddTHH:mm:ssK",
+      "accepted": true,
+      "parsed": "2024-02-29T12:00:00.0000000Z",
+      "error": null
+    },
+    {
+      "name": "zone-k-offset",
+      "value": "2024-02-29T12:00:00\u002B13:59",
+      "format": "yyyy-MM-ddTHH:mm:ssK",
+      "accepted": true,
+      "parsed": "2024-02-28T22:01:00.0000000Z",
+      "error": null
+    },
+    {
+      "name": "zone-k-invalid-offset",
+      "value": "2024-02-29T12:00:00\u002B14:01",
+      "format": "yyyy-MM-ddTHH:mm:ssK",
+      "accepted": false,
+      "parsed": null,
+      "error": null
+    },
+    {
+      "name": "year-zero",
+      "value": "0000-01-01",
+      "format": "yyyy-MM-dd",
+      "accepted": false,
+      "parsed": null,
+      "error": null
+    },
+    {
+      "name": "year-min",
+      "value": "0001-01-01",
+      "format": "yyyy-MM-dd",
+      "accepted": true,
+      "parsed": "0001-01-01T00:00:00.0000000Z",
+      "error": null
+    },
+    {
+      "name": "year-max",
+      "value": "9999-12-31",
+      "format": "yyyy-MM-dd",
+      "accepted": true,
+      "parsed": "9999-12-31T00:00:00.0000000Z",
+      "error": null
+    },
+    {
+      "name": "year-five-digit",
+      "value": "10000-01-01",
+      "format": "yyyyy-MM-dd",
+      "accepted": false,
+      "parsed": null,
+      "error": null
+    },
+    {
+      "name": "min-underflow",
+      "value": "0001-01-01 00:00 \u002B14:00",
+      "format": "yyyy-MM-dd HH:mm zzz",
+      "accepted": true,
+      "parsed": "0001-01-01T10:00:00.0000000Z",
+      "error": null
+    },
+    {
+      "name": "min-underflow-minute",
+      "value": "0001-01-01 00:00 \u002B00:01",
+      "format": "yyyy-MM-dd HH:mm zzz",
+      "accepted": true,
+      "parsed": "0001-01-01T23:59:00.0000000Z",
+      "error": null
+    },
+    {
+      "name": "min-underflow-1359",
+      "value": "0001-01-01 00:00 \u002B13:59",
+      "format": "yyyy-MM-dd HH:mm zzz",
+      "accepted": true,
+      "parsed": "0001-01-01T10:01:00.0000000Z",
+      "error": null
+    },
+    {
+      "name": "min-no-underflow",
+      "value": "0001-01-01 14:00 \u002B14:00",
+      "format": "yyyy-MM-dd HH:mm zzz",
+      "accepted": true,
+      "parsed": "0001-01-01T00:00:00.0000000Z",
+      "error": null
+    },
+    {
+      "name": "max-overflow",
+      "value": "9999-12-31 23:59 -14:00",
+      "format": "yyyy-MM-dd HH:mm zzz",
+      "accepted": false,
+      "parsed": null,
+      "error": null
+    },
+    {
+      "name": "max-overflow-minute",
+      "value": "9999-12-31 23:59 -00:01",
+      "format": "yyyy-MM-dd HH:mm zzz",
+      "accepted": false,
+      "parsed": null,
+      "error": null
+    },
+    {
+      "name": "max-overflow-1359",
+      "value": "9999-12-31 23:59 -13:59",
+      "format": "yyyy-MM-dd HH:mm zzz",
+      "accepted": false,
+      "parsed": null,
+      "error": null
+    },
+    {
+      "name": "max-no-overflow",
+      "value": "9999-12-31 09:59 -14:00",
+      "format": "yyyy-MM-dd HH:mm zzz",
+      "accepted": true,
+      "parsed": "9999-12-31T23:59:00.0000000Z",
+      "error": null
+    },
+    {
+      "name": "leap-2000",
+      "value": "2000-02-29",
+      "format": "yyyy-MM-dd",
+      "accepted": true,
+      "parsed": "2000-02-29T00:00:00.0000000Z",
+      "error": null
+    },
+    {
+      "name": "leap-1900",
+      "value": "1900-02-29",
+      "format": "yyyy-MM-dd",
+      "accepted": false,
+      "parsed": null,
+      "error": null
+    },
+    {
+      "name": "hour-24",
+      "value": "2024-02-29 24:00:00",
+      "format": "yyyy-MM-dd HH:mm:ss",
+      "accepted": false,
+      "parsed": null,
+      "error": null
+    },
+    {
+      "name": "minute-60",
+      "value": "2024-02-29 23:60:00",
+      "format": "yyyy-MM-dd HH:mm:ss",
+      "accepted": false,
+      "parsed": null,
+      "error": null
+    },
+    {
+      "name": "second-60",
+      "value": "2024-02-29 23:59:60",
+      "format": "yyyy-MM-dd HH:mm:ss",
+      "accepted": false,
+      "parsed": null,
+      "error": null
+    },
+    {
+      "name": "format-percent-q",
+      "value": "q",
+      "format": "%q",
+      "accepted": true,
+      "parsed": "2026-09-26T00:00:00.0000000Z",
+      "error": null
+    },
+    {
+      "name": "format-percent-percent",
+      "value": "%",
+      "format": "%%",
+      "accepted": false,
+      "parsed": null,
+      "error": null
+    },
+    {
+      "name": "invalid-single-q",
+      "value": "q",
+      "format": "q",
+      "accepted": null,
+      "parsed": null,
+      "error": "FormatException"
+    },
+    {
+      "name": "invalid-single-percent",
+      "value": "",
+      "format": "%",
+      "accepted": false,
+      "parsed": null,
+      "error": null
+    },
+    {
+      "name": "invalid-unclosed-quote",
+      "value": "2024-02-29 ",
+      "format": "yyyy-MM-dd \u0027",
+      "accepted": false,
+      "parsed": null,
+      "error": null
+    },
+    {
+      "name": "invalid-trailing-escape",
+      "value": "2024-02-29 ",
+      "format": "yyyy-MM-dd \\",
+      "accepted": false,
+      "parsed": null,
+      "error": null
+    },
+    {
+      "name": "invalid-eight-f",
+      "value": "12345678",
+      "format": "ffffffff",
+      "accepted": false,
+      "parsed": null,
+      "error": null
+    },
+    {
+      "name": "invalid-eight-F",
+      "value": "12345678",
+      "format": "FFFFFFFF",
+      "accepted": false,
+      "parsed": null,
+      "error": null
+    },
+    {
+      "name": "percent-escaped-backslash",
+      "value": "q",
+      "format": "%\\q",
+      "accepted": true,
+      "parsed": "2026-09-26T00:00:00.0000000Z",
+      "error": null
+    },
+    {
+      "name": "literal-z-lower",
+      "value": "2024-02-29z",
+      "format": "yyyy-MM-dd\u0027Z\u0027",
+      "accepted": false,
+      "parsed": null,
+      "error": null
+    },
+    {
+      "name": "literal-z-upper",
+      "value": "2024-02-29Z",
+      "format": "yyyy-MM-dd\u0027Z\u0027",
+      "accepted": true,
+      "parsed": "2024-02-29T00:00:00.0000000Z",
+      "error": null
+    },
+    {
+      "name": "standard-u-lower-z",
+      "value": "2024-02-29 12:00:00z",
+      "format": "u",
+      "accepted": false,
+      "parsed": null,
+      "error": null
+    },
+    {
+      "name": "standard-r-lower-gmt",
+      "value": "Thu, 29 Feb 2024 12:00:00 gmt",
+      "format": "R",
+      "accepted": false,
+      "parsed": null,
+      "error": null
+    },
+    {
+      "name": "format-duplicate-year",
+      "value": "2024 2024",
+      "format": "yyyy yyyy",
+      "accepted": true,
+      "parsed": "2024-01-01T00:00:00.0000000Z",
+      "error": null
+    },
+    {
+      "name": "format-duplicate-zone",
+      "value": "\u002B00:00 \u002B00:00",
+      "format": "zzz zzz",
+      "accepted": true,
+      "parsed": "2026-09-26T00:00:00.0000000Z",
+      "error": null
+    }
+  ]
+}

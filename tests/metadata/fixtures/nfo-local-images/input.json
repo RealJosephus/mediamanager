@@ -1,0 +1,909 @@
+[
+  {
+    "name": "existing absolute Windows path adds a primary local image",
+    "xml": "<movie><thumb>{{PRESENT}}</thumb></movie>"
+  },
+  {
+    "name": "missing absolute Windows path is ignored",
+    "xml": "<movie><thumb>{{MISSING}}</thumb></movie>"
+  },
+  {
+    "name": "absolute Windows directory path is ignored",
+    "xml": "<movie><thumb>{{DIRECTORY}}</thumb></movie>"
+  },
+  {
+    "name": "existing absolute file URI is passed literally to the Windows filesystem",
+    "xml": "<movie><thumb>{{PRESENT_URI}}</thumb></movie>"
+  },
+  {
+    "name": "missing absolute file URI is ignored",
+    "xml": "<movie><thumb>{{MISSING_URI}}</thumb></movie>"
+  },
+  {
+    "name": "relative image path is rejected without a filesystem lookup",
+    "xml": "<movie><thumb>relative/poster.jpg</thumb></movie>"
+  },
+  {
+    "name": "POSIX rooted path is not an absolute URI on Windows",
+    "xml": "<movie><thumb>/nfo-local-posix-root.jpg</thumb></movie>"
+  },
+  {
+    "name": "drive-relative Windows path is invalid without a filesystem lookup",
+    "xml": "<movie><thumb>C:poster.jpg</thumb></movie>"
+  },
+  {
+    "name": "forward-slash UNC path is local and keeps its literal lookup",
+    "xml": "<movie><thumb>//server/share/poster.jpg</thumb></movie>"
+  },
+  {
+    "name": "invalid absolute URI is rejected without a filesystem lookup",
+    "xml": "<movie><thumb>http://[invalid</thumb></movie>"
+  },
+  {
+    "name": "remote absolute URI is normalized and accepted",
+    "xml": "<movie><thumb>HTTPS://Example.TEST:443/a/../poster%20one.jpg?x=1#frag</thumb></movie>"
+  },
+  {
+    "name": "remote encoded brackets stay escaped",
+    "xml": "<movie><thumb>https://example.test/a%5Bb%5D.jpg</thumb></movie>"
+  },
+  {
+    "name": "remote encoded percent stays escaped",
+    "xml": "<movie><thumb>https://example.test/rate%25.jpg</thumb></movie>"
+  },
+  {
+    "name": "remote encoded space becomes a literal space",
+    "xml": "<movie><thumb>https://example.test/poster%20one.jpg</thumb></movie>"
+  },
+  {
+    "name": "remote raw space remains a literal space",
+    "xml": "<movie><thumb>https://example.test/poster one.jpg</thumb></movie>"
+  },
+  {
+    "name": "remote Unicode path stays decoded",
+    "xml": "<movie><thumb>https://example.test/圖像-İ.jpg</thumb></movie>"
+  },
+  {
+    "name": "remote escaped slash and hash stay escaped",
+    "xml": "<movie><thumb>https://example.test/a%2Fb%23c.jpg</thumb></movie>"
+  },
+  {
+    "name": "remote escaped ASCII unreserved characters decode",
+    "xml": "<movie><thumb>https://example.test/a%41%7E%2D%2E%5F.jpg</thumb></movie>"
+  },
+  {
+    "name": "remote escaped ASCII reserved characters stay escaped",
+    "xml": "<movie><thumb>https://example.test/%3A%40%21%24%26%27%28%29%2A%2B%2C%3B%3D</thumb></movie>"
+  },
+  {
+    "name": "remote escaped null stays escaped",
+    "xml": "<movie><thumb>https://example.test/a%00b.jpg</thumb></movie>"
+  },
+  {
+    "name": "remote lowercase escaped slash preserves escape casing",
+    "xml": "<movie><thumb>https://example.test/a%2fb.jpg</thumb></movie>"
+  },
+  {
+    "name": "remote query escapes stay encoded",
+    "xml": "<movie><thumb>https://example.test/query.jpg?brackets=%5Bvalue%5D&amp;percent=%25&amp;space=%20&amp;unicode=%E5%9C%96%E5%83%8F&amp;slash=%2F&amp;hash=%23</thumb></movie>"
+  },
+  {
+    "name": "remote Unicode host uses its U-label",
+    "xml": "<movie><thumb>https://例子.测试/海報.jpg</thumb></movie>"
+  },
+  {
+    "name": "hierarchical URI preserves an explicit empty query delimiter",
+    "xml": "<movie><thumb>https://example.test/path?</thumb></movie>"
+  },
+  {
+    "name": "hierarchical URI preserves an explicit empty fragment delimiter",
+    "xml": "<movie><thumb>https://example.test/path#</thumb></movie>"
+  },
+  {
+    "name": "hierarchical URI preserves explicit empty query and fragment delimiters",
+    "xml": "<movie><thumb>https://example.test/path?#</thumb></movie>"
+  },
+  {
+    "name": "hierarchical userinfo displays unreserved and UTF8 while retaining space and at escapes",
+    "xml": "<movie><thumb>https://u%41%E5%9C%96:p%7E%E5%83%8F%20%40@example.test/path.jpg</thumb></movie>"
+  },
+  {
+    "name": "hierarchical userinfo preserves an explicit empty password delimiter",
+    "xml": "<movie><thumb>https://user:@example.test/a</thumb></movie>"
+  },
+  {
+    "name": "hierarchical authority preserves explicit empty userinfo",
+    "xml": "<movie><thumb>https://@example.test/a</thumb></movie>"
+  },
+  {
+    "name": "hierarchical authority preserves explicit empty username and password",
+    "xml": "<movie><thumb>https://:@example.test/a</thumb></movie>"
+  },
+  {
+    "name": "mailto opaque path uses URI display escaping",
+    "xml": "<movie><thumb>mailto:user%41%E5%9C%96%20%40@example.test</thumb></movie>"
+  },
+  {
+    "name": "urn opaque path uses URI display escaping",
+    "xml": "<movie><thumb>urn:example:a%41%E5%9C%96%20%2F</thumb></movie>"
+  },
+  {
+    "name": "IPv6 authority removes the default HTTPS port",
+    "xml": "<movie><thumb>HTTPS://[2001:0DB8:0:0:0:0:0:1]:443/path.jpg</thumb></movie>"
+  },
+  {
+    "name": "IPv6 authority retains a nondefault HTTPS port",
+    "xml": "<movie><thumb>https://[2001:0DB8:0:0:0:0:0:1]:8443/path.jpg</thumb></movie>"
+  },
+  {
+    "name": "non HTTP absolute URI is still a remote image",
+    "xml": "<movie><thumb aspect=\"banner\">ftp://example.test/banner.jpg</thumb></movie>"
+  },
+  {
+    "name": "remote duplicates keep the first image of a type",
+    "xml": "<movie><thumb>https://example.test/first.jpg</thumb><thumb>https://example.test/second.jpg</thumb></movie>"
+  },
+  {
+    "name": "local duplicates keep the first image and skip the second lookup",
+    "xml": "<movie><thumb>{{PRESENT}}</thumb><thumb>{{SECOND}}</thumb></movie>"
+  },
+  {
+    "name": "missing local does not block a later existing image of the same type",
+    "xml": "<movie><thumb>{{MISSING}}</thumb><thumb>{{SECOND}}</thumb></movie>"
+  },
+  {
+    "name": "directory local does not block a later existing image of the same type",
+    "xml": "<movie><thumb>{{DIRECTORY}}</thumb><thumb>{{SECOND}}</thumb></movie>"
+  },
+  {
+    "name": "local and remote images of the same type are independent",
+    "xml": "<movie><thumb>{{PRESENT}}</thumb><thumb>https://example.test/remote.jpg</thumb></movie>"
+  },
+  {
+    "name": "remote then local images of the same type are independent",
+    "xml": "<movie><thumb>https://example.test/remote.jpg</thumb><thumb>{{PRESENT}}</thumb></movie>"
+  },
+  {
+    "name": "preexisting local primary blocks new local but not remote primary",
+    "xml": "<movie><thumb>{{PRESENT}}</thumb><thumb>https://example.test/remote.jpg</thumb></movie>",
+    "existingLocal": ["Primary"]
+  },
+  {
+    "name": "preexisting remote primary blocks new remote but not local primary",
+    "xml": "<movie><thumb>https://example.test/new.jpg</thumb><thumb>{{PRESENT}}</thumb></movie>",
+    "existingRemote": ["Primary"]
+  },
+  {
+    "name": "fanart existing local backdrop blocks local descendant lookup",
+    "xml": "<movie><fanart><wrapper><thumb>{{PRESENT}}</thumb></wrapper></fanart><thumb>https://example.test/poster.jpg</thumb></movie>",
+    "existingLocal": ["Backdrop"]
+  },
+  {
+    "name": "fanart local descendant defaults to backdrop",
+    "xml": "<movie><fanart><wrapper><thumb>{{PRESENT}}</thumb></wrapper></fanart></movie>"
+  },
+  {
+    "name": "fanart remote descendant and flat thumb use independent types",
+    "xml": "<movie><fanart><thumb>https://example.test/backdrop.jpg</thumb></fanart><thumb>https://example.test/poster.jpg</thumb></movie>"
+  },
+  {
+    "name": "fanart explicit landscape preserves thumb type",
+    "xml": "<movie><fanart><thumb aspect=\"landscape\">{{PRESENT}}</thumb></fanart></movie>"
+  },
+  {
+    "name": "dotted aspect skips a local lookup and does not block primary",
+    "xml": "<movie><thumb aspect=\"season.poster\">{{PRESENT}}</thumb><thumb>{{SECOND}}</thumb></movie>"
+  },
+  {
+    "name": "all seven local image types accept only their first existing file",
+    "xml": "<movie><thumb aspect=\"poster\">{{PRESENT}}</thumb><thumb aspect=\"poster\">{{SECOND}}</thumb><thumb aspect=\"banner\">{{PRESENT}}</thumb><thumb aspect=\"banner\">{{SECOND}}</thumb><thumb aspect=\"clearlogo\">{{PRESENT}}</thumb><thumb aspect=\"clearlogo\">{{SECOND}}</thumb><thumb aspect=\"discart\">{{PRESENT}}</thumb><thumb aspect=\"discart\">{{SECOND}}</thumb><thumb aspect=\"landscape\">{{PRESENT}}</thumb><thumb aspect=\"landscape\">{{SECOND}}</thumb><thumb aspect=\"clearart\">{{PRESENT}}</thumb><thumb aspect=\"clearart\">{{SECOND}}</thumb><thumb aspect=\"fanart\">{{PRESENT}}</thumb><thumb aspect=\"fanart\">{{SECOND}}</thumb></movie>"
+  },
+  {
+    "name": "same local file can fill different image types",
+    "xml": "<movie><thumb aspect=\"poster\">{{PRESENT}}</thumb><thumb aspect=\"banner\">{{PRESENT}}</thumb></movie>"
+  },
+  {
+    "name": "aspect matching is ordinal and case sensitive",
+    "xml": "<movie><thumb aspect=\"FanArt\">{{PRESENT}}</thumb><thumb aspect=\"fanart\">{{SECOND}}</thumb></movie>"
+  },
+  {
+    "name": "unicode Windows file path is accepted without culture folding",
+    "xml": "<movie><thumb>{{UNICODE}}</thumb></movie>"
+  },
+  {
+    "name": "malformed immediate sibling prevents local image commit and lookup",
+    "xml": "<movie><thumb>{{PRESENT}}</thumb><broken</movie>"
+  },
+  {
+    "name": "later malformed XML preserves an earlier local image",
+    "xml": "<movie><thumb>{{PRESENT}}</thumb><title>Committed</title><broken"
+  },
+  {
+    "name": "second local filesystem failure preserves the first local prefix",
+    "xml": "<movie><thumb aspect=\"poster\">{{PRESENT}}</thumb><thumb aspect=\"banner\">{{SECOND}}</thumb></movie>",
+    "failLookupAt": 2
+  },
+  {
+    "name": "pre-cancellation prevents the first image lookup",
+    "xml": "<movie><thumb>{{PRESENT}}</thumb></movie>",
+    "cancelBefore": true
+  },
+  {
+    "name": "cancellation after a local lookup preserves that image prefix",
+    "xml": "<movie><thumb>{{PRESENT}}</thumb><title>Not reached</title><thumb aspect=\"banner\">{{SECOND}}</thumb></movie>",
+    "cancelAfterLookup": 1
+  },
+  {
+    "name": "runtime provider starts fresh image collections despite caller images",
+    "xml": "<movie><thumb>{{PRESENT}}</thumb><thumb>https://example.test/new-primary.jpg</thumb></movie>",
+    "providerRuntime": true,
+    "existingLocal": ["Primary"],
+    "existingRemote": ["Primary"],
+    "existingCandidates": ["Primary"]
+  },
+  {
+    "name": "edge-000",
+    "xml": "<movie><thumb>http:foo</thumb></movie>"
+  },
+  {
+    "name": "edge-001",
+    "xml": "<movie><thumb>http:/foo</thumb></movie>"
+  },
+  {
+    "name": "edge-002",
+    "xml": "<movie><thumb>http:///foo</thumb></movie>"
+  },
+  {
+    "name": "edge-003",
+    "xml": "<movie><thumb>https:example.com/a</thumb></movie>"
+  },
+  {
+    "name": "edge-004",
+    "xml": "<movie><thumb>https:/example.com</thumb></movie>"
+  },
+  {
+    "name": "edge-005",
+    "xml": "<movie><thumb>ftp:foo</thumb></movie>"
+  },
+  {
+    "name": "edge-006",
+    "xml": "<movie><thumb>ws:foo</thumb></movie>"
+  },
+  {
+    "name": "edge-007",
+    "xml": "<movie><thumb>file:foo</thumb></movie>"
+  },
+  {
+    "name": "edge-008",
+    "xml": "<movie><thumb>custom:foo</thumb></movie>"
+  },
+  {
+    "name": "edge-009",
+    "xml": "<movie><thumb>custom:/foo</thumb></movie>"
+  },
+  {
+    "name": "edge-010",
+    "xml": "<movie><thumb>urn:example:test</thumb></movie>"
+  },
+  {
+    "name": "edge-011",
+    "xml": "<movie><thumb>mailto:user@example.com</thumb></movie>"
+  },
+  {
+    "name": "edge-012",
+    "xml": "<movie><thumb>data:text/plain,hi</thumb></movie>"
+  },
+  {
+    "name": "edge-013",
+    "xml": "<movie><thumb>http:\\example.com\\a</thumb></movie>"
+  },
+  {
+    "name": "edge-014",
+    "xml": "<movie><thumb>http:\\\\example.com\\a</thumb></movie>"
+  },
+  {
+    "name": "edge-015",
+    "xml": "<movie><thumb>http://example.com\\a</thumb></movie>"
+  },
+  {
+    "name": "edge-016",
+    "xml": "<movie><thumb>http://example.com/a\\b</thumb></movie>"
+  },
+  {
+    "name": "edge-017",
+    "xml": "<movie><thumb>ftp:\\\\example.com\\a</thumb></movie>"
+  },
+  {
+    "name": "edge-018",
+    "xml": "<movie><thumb>custom:\\\\example.com\\a</thumb></movie>"
+  },
+  {
+    "name": "edge-019",
+    "xml": "<movie><thumb>//</thumb></movie>"
+  },
+  {
+    "name": "edge-020",
+    "xml": "<movie><thumb>///</thumb></movie>"
+  },
+  {
+    "name": "edge-021",
+    "xml": "<movie><thumb>////</thumb></movie>"
+  },
+  {
+    "name": "edge-022",
+    "xml": "<movie><thumb>//?</thumb></movie>"
+  },
+  {
+    "name": "edge-023",
+    "xml": "<movie><thumb>//?/</thumb></movie>"
+  },
+  {
+    "name": "edge-024",
+    "xml": "<movie><thumb>//./C:/foo</thumb></movie>"
+  },
+  {
+    "name": "edge-025",
+    "xml": "<movie><thumb>\\\\</thumb></movie>"
+  },
+  {
+    "name": "edge-026",
+    "xml": "<movie><thumb>\\\\\\</thumb></movie>"
+  },
+  {
+    "name": "edge-027",
+    "xml": "<movie><thumb>\\\\\\\\</thumb></movie>"
+  },
+  {
+    "name": "edge-028",
+    "xml": "<movie><thumb>\\\\?\\</thumb></movie>"
+  },
+  {
+    "name": "edge-029",
+    "xml": "<movie><thumb>\\\\?\\C:\\foo</thumb></movie>"
+  },
+  {
+    "name": "edge-030",
+    "xml": "<movie><thumb>\\\\.\\</thumb></movie>"
+  },
+  {
+    "name": "edge-031",
+    "xml": "<movie><thumb>\\\\.\\C:\\foo</thumb></movie>"
+  },
+  {
+    "name": "edge-032",
+    "xml": "<movie><thumb>//server</thumb></movie>"
+  },
+  {
+    "name": "edge-033",
+    "xml": "<movie><thumb>//server/share</thumb></movie>"
+  },
+  {
+    "name": "edge-034",
+    "xml": "<movie><thumb>////server/share</thumb></movie>"
+  },
+  {
+    "name": "edge-035",
+    "xml": "<movie><thumb>\\\\server</thumb></movie>"
+  },
+  {
+    "name": "edge-036",
+    "xml": "<movie><thumb>\\\\server\\share</thumb></movie>"
+  },
+  {
+    "name": "edge-037",
+    "xml": "<movie><thumb>\\\\\\\\server\\share</thumb></movie>"
+  },
+  {
+    "name": "edge-038",
+    "xml": "<movie><thumb>C:</thumb></movie>"
+  },
+  {
+    "name": "edge-039",
+    "xml": "<movie><thumb>C:foo</thumb></movie>"
+  },
+  {
+    "name": "edge-040",
+    "xml": "<movie><thumb>C:\\</thumb></movie>"
+  },
+  {
+    "name": "edge-041",
+    "xml": "<movie><thumb>C:\\foo</thumb></movie>"
+  },
+  {
+    "name": "edge-042",
+    "xml": "<movie><thumb>http://example.com/%</thumb></movie>"
+  },
+  {
+    "name": "edge-043",
+    "xml": "<movie><thumb>http://example.com/%2</thumb></movie>"
+  },
+  {
+    "name": "edge-044",
+    "xml": "<movie><thumb>http://example.com/%zz</thumb></movie>"
+  },
+  {
+    "name": "edge-045",
+    "xml": "<movie><thumb>http://example.com/%2G</thumb></movie>"
+  },
+  {
+    "name": "edge-046",
+    "xml": "<movie><thumb>custom:foo%zz</thumb></movie>"
+  },
+  {
+    "name": "edge-047",
+    "xml": "<movie><thumb>http://u%zz@example.com/a</thumb></movie>"
+  },
+  {
+    "name": "edge-048",
+    "xml": "<movie><thumb>http://example.com/a?x=%zz</thumb></movie>"
+  },
+  {
+    "name": "edge-049",
+    "xml": "<movie><thumb>http://example.com/a#%zz</thumb></movie>"
+  },
+  {
+    "name": "edge-050",
+    "xml": "<movie><thumb>https://example.com/%C2%80</thumb></movie>"
+  },
+  {
+    "name": "edge-051",
+    "xml": "<movie><thumb>https://example.com/%C2%9F</thumb></movie>"
+  },
+  {
+    "name": "edge-052",
+    "xml": "<movie><thumb>https://example.com/%EE%80%80</thumb></movie>"
+  },
+  {
+    "name": "edge-053",
+    "xml": "<movie><thumb>https://example.com/%EF%B7%90</thumb></movie>"
+  },
+  {
+    "name": "edge-054",
+    "xml": "<movie><thumb>https://example.com/%EF%BF%BE</thumb></movie>"
+  },
+  {
+    "name": "edge-055",
+    "xml": "<movie><thumb>https://example.com/%EF%BF%BF</thumb></movie>"
+  },
+  {
+    "name": "edge-056",
+    "xml": "<movie><thumb>https://example.com/%F0%9F%BF%BE</thumb></movie>"
+  },
+  {
+    "name": "edge-057",
+    "xml": "<movie><thumb>https://example.com/%ED%A0%80</thumb></movie>"
+  },
+  {
+    "name": "edge-058",
+    "xml": "<movie><thumb>https://example.com/%C0%AF</thumb></movie>"
+  },
+  {
+    "name": "edge-059",
+    "xml": "<movie><thumb>https://example.com/%80</thumb></movie>"
+  },
+  {
+    "name": "edge-060",
+    "xml": "<movie><thumb>https://example.com/%E2%82</thumb></movie>"
+  },
+  {
+    "name": "edge-061",
+    "xml": "<movie><thumb>https://example.com/%EF%BF%BD</thumb></movie>"
+  },
+  {
+    "name": "edge-062",
+    "xml": "<movie><thumb>https://example.com/%E2%80%A8</thumb></movie>"
+  },
+  {
+    "name": "edge-063",
+    "xml": "<movie><thumb>https://example.com/%E2%80%AE</thumb></movie>"
+  },
+  {
+    "name": "edge-064",
+    "xml": "<movie><thumb>http://example.com/{a}</thumb></movie>"
+  },
+  {
+    "name": "edge-065",
+    "xml": "<movie><thumb>http://example.com/a%7Bb</thumb></movie>"
+  },
+  {
+    "name": "edge-066",
+    "xml": "<movie><thumb>http://example.com/^a</thumb></movie>"
+  },
+  {
+    "name": "edge-067",
+    "xml": "<movie><thumb>http://example.com/a%5Eb</thumb></movie>"
+  },
+  {
+    "name": "edge-068",
+    "xml": "<movie><thumb>http://example.com/`a</thumb></movie>"
+  },
+  {
+    "name": "edge-069",
+    "xml": "<movie><thumb>http://example.com/a%60b</thumb></movie>"
+  },
+  {
+    "name": "edge-070",
+    "xml": "<movie><thumb>http://example.com/&quot;a&quot;</thumb></movie>"
+  },
+  {
+    "name": "edge-071",
+    "xml": "<movie><thumb>http://example.com/a%22b</thumb></movie>"
+  },
+  {
+    "name": "edge-072",
+    "xml": "<movie><thumb>http://example.com/&lt;a&gt;</thumb></movie>"
+  },
+  {
+    "name": "edge-073",
+    "xml": "<movie><thumb>http://example.com/a%3Cb%3E</thumb></movie>"
+  },
+  {
+    "name": "opaque URI normalizes a bare percent escape",
+    "xml": "<movie><thumb>custom:foo%</thumb></movie>"
+  },
+  {
+    "name": "opaque URI normalizes a short percent escape",
+    "xml": "<movie><thumb>custom:foo%2</thumb></movie>"
+  },
+  {
+    "name": "opaque URI normalizes a nonhex percent escape",
+    "xml": "<movie><thumb>custom:foo%2G</thumb></movie>"
+  },
+  {
+    "name": "userinfo preserves a bare percent escape",
+    "xml": "<movie><thumb>http://u%@example.com/a</thumb></movie>"
+  },
+  {
+    "name": "userinfo preserves a short percent escape",
+    "xml": "<movie><thumb>http://u%2@example.com/a</thumb></movie>"
+  },
+  {
+    "name": "userinfo preserves a nonhex percent escape",
+    "xml": "<movie><thumb>http://u%2G@example.com/a</thumb></movie>"
+  },
+  {
+    "name": "query normalizes a bare percent escape",
+    "xml": "<movie><thumb>http://example.com/a?x=%</thumb></movie>"
+  },
+  {
+    "name": "query normalizes a short percent escape",
+    "xml": "<movie><thumb>http://example.com/a?x=%2</thumb></movie>"
+  },
+  {
+    "name": "query normalizes a nonhex percent escape",
+    "xml": "<movie><thumb>http://example.com/a?x=%2G</thumb></movie>"
+  },
+  {
+    "name": "fragment normalizes a bare percent escape",
+    "xml": "<movie><thumb>http://example.com/a#%</thumb></movie>"
+  },
+  {
+    "name": "fragment normalizes a short percent escape",
+    "xml": "<movie><thumb>http://example.com/a#%2</thumb></movie>"
+  },
+  {
+    "name": "fragment normalizes a nonhex percent escape",
+    "xml": "<movie><thumb>http://example.com/a#%2G</thumb></movie>"
+  },
+  {
+    "name": "opaque URI applies the ASCII display escape matrix",
+    "xml": "<movie><thumb>custom:%41%7E%20%22%3C%3E%5E%60%7B%7C%7D%25%40%2F%23</thumb></movie>"
+  },
+  {
+    "name": "query applies the ASCII display escape matrix",
+    "xml": "<movie><thumb>http://example.com/a?x=%41%7E%20%22%3C%3E%5E%60%7B%7C%7D%25%40%2F%23</thumb></movie>"
+  },
+  {
+    "name": "fragment applies the ASCII display escape matrix",
+    "xml": "<movie><thumb>http://example.com/a#%41%7E%20%22%3C%3E%5E%60%7B%7C%7D%25%40%2F%23</thumb></movie>"
+  },
+  {
+    "name": "userinfo applies its ASCII display escape matrix",
+    "xml": "<movie><thumb>http://u%41%7E%20%22%3C%3E%5E%60%7B%7C%7D%25%40:p%41%7E%20%40@example.com/a</thumb></movie>"
+  },
+  {
+    "name": "opaque URI applies its IRI code point matrix",
+    "xml": "<movie><thumb>custom:%E2%80%A8-%EE%80%80-%EF%BF%BE-%EF%BF%BD-%F0%90%80%80</thumb></movie>"
+  },
+  {
+    "name": "query applies its IRI code point matrix",
+    "xml": "<movie><thumb>http://example.com/a?x=%E2%80%A8-%EE%80%80-%EF%BF%BE-%EF%BF%BD-%F0%90%80%80</thumb></movie>"
+  },
+  {
+    "name": "fragment applies its IRI code point matrix",
+    "xml": "<movie><thumb>http://example.com/a#%E2%80%A8-%EE%80%80-%EF%BF%BE-%EF%BF%BD-%F0%90%80%80</thumb></movie>"
+  },
+  {
+    "name": "userinfo applies its IRI code point matrix",
+    "xml": "<movie><thumb>http://u%E2%80%A8-%EE%80%80-%EF%BF%BE-%EF%BF%BD-%F0%90%80%80@example.com/a</thumb></movie>"
+  },
+  {
+    "name": "userinfo standalone encoded space stays escaped",
+    "xml": "<movie><thumb>http://u%20@example.com/a</thumb></movie>"
+  },
+  {
+    "name": "userinfo ASCII run before encoded space stays component specific",
+    "xml": "<movie><thumb>http://u%41%20@example.com/a</thumb></movie>"
+  },
+  {
+    "name": "userinfo Unicode run before encoded space uses stateful display decoding",
+    "xml": "<movie><thumb>http://u%E5%9C%96%20@example.com/a</thumb></movie>"
+  },
+  {
+    "name": "userinfo encoded space before Unicode uses stateful display decoding",
+    "xml": "<movie><thumb>http://u%20%E5%9C%96@example.com/a</thumb></movie>"
+  },
+  {
+    "name": "userinfo Unicode run retains an encoded at delimiter",
+    "xml": "<movie><thumb>http://u%E5%9C%96%40@example.com/a</thumb></movie>"
+  },
+  {
+    "name": "userinfo malformed percent before Unicode keeps component state",
+    "xml": "<movie><thumb>http://u%zz%E5%9C%96@example.com/a</thumb></movie>"
+  },
+  {
+    "name": "opaque URI preserves and displays raw ASCII display characters",
+    "xml": "<movie><thumb>custom:A~ &quot;&lt;&gt;^`{|}</thumb></movie>"
+  },
+  {
+    "name": "query preserves and displays raw ASCII display characters",
+    "xml": "<movie><thumb>http://example.com/a?x=A~%20&quot;&lt;&gt;^`{|}</thumb></movie>"
+  },
+  {
+    "name": "fragment preserves and displays raw ASCII display characters",
+    "xml": "<movie><thumb>http://example.com/a#A~%20&quot;&lt;&gt;^`{|}</thumb></movie>"
+  },
+  {
+    "name": "userinfo standalone encoded quote stays escaped",
+    "xml": "<movie><thumb>http://u%22@example.com/a</thumb></movie>"
+  },
+  {
+    "name": "userinfo display escape before unreserved escape shares run state",
+    "xml": "<movie><thumb>http://u%22%41@example.com/a</thumb></movie>"
+  },
+  {
+    "name": "userinfo raw separator resets percent run state",
+    "xml": "<movie><thumb>http://u%20x%41@example.com/a</thumb></movie>"
+  },
+  {
+    "name": "userinfo display and reserved escapes without an anchor stay escaped",
+    "xml": "<movie><thumb>http://u%20%40@example.com/a</thumb></movie>"
+  },
+  {
+    "name": "userinfo password standalone encoded space stays escaped",
+    "xml": "<movie><thumb>http://user:p%20@example.com/a</thumb></movie>"
+  },
+  {
+    "name": "userinfo raw unreserved text does not anchor an encoded space",
+    "xml": "<movie><thumb>http://u%20x@example.com/a</thumb></movie>"
+  },
+  {
+    "name": "file URI drive path without slashes is local and keeps its literal lookup",
+    "xml": "<movie><thumb>file:C:/x</thumb></movie>",
+    "failLookupAt": 1
+  },
+  {
+    "name": "file URI drive path with one slash is local and keeps its literal lookup",
+    "xml": "<movie><thumb>file:/C:/x</thumb></movie>",
+    "failLookupAt": 1
+  },
+  {
+    "name": "file URI drive path with three slashes is local and keeps its literal lookup",
+    "xml": "<movie><thumb>file:///C:/x</thumb></movie>",
+    "failLookupAt": 1
+  },
+  {
+    "name": "file URI drive authority form is local and keeps its literal lookup",
+    "xml": "<movie><thumb>file://C:/x</thumb></movie>",
+    "failLookupAt": 1
+  },
+  {
+    "name": "file URI drive backslash path is local and keeps its literal lookup",
+    "xml": "<movie><thumb>file:C:\\x</thumb></movie>",
+    "failLookupAt": 1
+  },
+  {
+    "name": "file URI rooted drive backslash path is local and keeps its literal lookup",
+    "xml": "<movie><thumb>file:\\C:\\x</thumb></movie>",
+    "failLookupAt": 1
+  },
+  {
+    "name": "file URI backslash UNC is local and keeps its literal lookup",
+    "xml": "<movie><thumb>file:\\\\server\\share\\x</thumb></movie>",
+    "failLookupAt": 1
+  },
+  {
+    "name": "file URI authority UNC is local and keeps its literal lookup",
+    "xml": "<movie><thumb>file://server/share/x</thumb></movie>",
+    "failLookupAt": 1
+  },
+  {
+    "name": "file URI four-slash UNC is local and keeps its literal lookup",
+    "xml": "<movie><thumb>file:////server/share/x</thumb></movie>",
+    "failLookupAt": 1
+  },
+  {
+    "name": "empty file URI authority is local and keeps its literal lookup",
+    "xml": "<movie><thumb>file://</thumb></movie>",
+    "failLookupAt": 1
+  },
+  {
+    "name": "empty file URI path is local and keeps its literal lookup",
+    "xml": "<movie><thumb>file:///</thumb></movie>",
+    "failLookupAt": 1
+  },
+  {
+    "name": "empty file URI path with query is local and keeps its literal lookup",
+    "xml": "<movie><thumb>file:///?q</thumb></movie>",
+    "failLookupAt": 1
+  },
+  {
+    "name": "file URI drive path with query and fragment keeps its literal lookup",
+    "xml": "<movie><thumb>file:///C:/x?q#f</thumb></movie>",
+    "failLookupAt": 1
+  },
+  {
+    "name": "file URI single-slash server path is invalid without lookup",
+    "xml": "<movie><thumb>file:/server/share/x</thumb></movie>",
+    "failLookupAt": 1
+  },
+  {
+    "name": "file URI drive-relative path is invalid without lookup",
+    "xml": "<movie><thumb>file:C:relative.jpg</thumb></movie>",
+    "failLookupAt": 1
+  },
+  {
+    "name": "uppercase file URI drive form is local and keeps its literal lookup",
+    "xml": "<movie><thumb>FILE:C:/x</thumb></movie>",
+    "failLookupAt": 1
+  },
+  {
+    "name": "file URI localhost drive form is local and keeps its literal lookup",
+    "xml": "<movie><thumb>file://localhost/C:/x</thumb></movie>",
+    "failLookupAt": 1
+  },
+  {
+    "name": "file URI mixed authority backslashes follow native classification",
+    "xml": "<movie><thumb>file://server\\share\\x</thumb></movie>",
+    "failLookupAt": 1
+  },
+  {
+    "name": "file URI slash-backslash UNC follows native classification",
+    "xml": "<movie><thumb>file:/\\server\\share\\x</thumb></movie>",
+    "failLookupAt": 1
+  },
+  {
+    "name": "file URI drive path with query keeps its literal lookup",
+    "xml": "<movie><thumb>file:C:/x?q</thumb></movie>",
+    "failLookupAt": 1
+  },
+  {
+    "name": "file URI drive path with fragment keeps its literal lookup",
+    "xml": "<movie><thumb>file:C:/x#f</thumb></movie>",
+    "failLookupAt": 1
+  },
+  {
+    "name": "file URI backslash UNC with query and fragment keeps its literal lookup",
+    "xml": "<movie><thumb>file:\\\\server\\share\\x?q#f</thumb></movie>",
+    "failLookupAt": 1
+  },
+  {
+    "name": "file URI authority UNC with query and fragment keeps its literal lookup",
+    "xml": "<movie><thumb>file://server/share/x?q#f</thumb></movie>",
+    "failLookupAt": 1
+  },
+  {
+    "name": "file scheme without a path is invalid without lookup",
+    "xml": "<movie><thumb>file:</thumb></movie>",
+    "failLookupAt": 1
+  },
+  {
+    "name": "file scheme with only a query is invalid without lookup",
+    "xml": "<movie><thumb>file:?q</thumb></movie>",
+    "failLookupAt": 1
+  },
+  {
+    "name": "file scheme with only a fragment is invalid without lookup",
+    "xml": "<movie><thumb>file:#f</thumb></movie>",
+    "failLookupAt": 1
+  },
+  {
+    "name": "file URI drive designator without a separator follows native classification",
+    "xml": "<movie><thumb>file:C:</thumb></movie>",
+    "failLookupAt": 1
+  },
+  {
+    "name": "file URI slash drive designator without a separator follows native classification",
+    "xml": "<movie><thumb>file:/C:</thumb></movie>",
+    "failLookupAt": 1
+  },
+  {
+    "name": "file URI authority drive designator without a separator follows native classification",
+    "xml": "<movie><thumb>file://C:</thumb></movie>",
+    "failLookupAt": 1
+  },
+  {
+    "name": "file URI single forward root follows native classification",
+    "xml": "<movie><thumb>file:/</thumb></movie>",
+    "failLookupAt": 1
+  },
+  {
+    "name": "file URI single backslash root follows native classification",
+    "xml": "<movie><thumb>file:\\</thumb></movie>",
+    "failLookupAt": 1
+  },
+  {
+    "name": "file URI single backslash server path follows native classification",
+    "xml": "<movie><thumb>file:\\server\\share</thumb></movie>",
+    "failLookupAt": 1
+  },
+  {
+    "name": "file URI empty backslash authority follows native classification",
+    "xml": "<movie><thumb>file:\\\\</thumb></movie>",
+    "failLookupAt": 1
+  },
+  {
+    "name": "file URI empty four-slash path follows native classification",
+    "xml": "<movie><thumb>file:////</thumb></movie>",
+    "failLookupAt": 1
+  },
+  {
+    "name": "file URI empty mixed-slash authority follows native classification",
+    "xml": "<movie><thumb>file:/\\</thumb></movie>",
+    "failLookupAt": 1
+  },
+  {
+    "name": "empty file URI authority with query and fragment keeps its literal lookup",
+    "xml": "<movie><thumb>file://?q#f</thumb></movie>",
+    "failLookupAt": 1
+  },
+  {
+    "name": "file URI percent-encoded drive letter follows native classification",
+    "xml": "<movie><thumb>file:%43:/x</thumb></movie>",
+    "failLookupAt": 1
+  },
+  {
+    "name": "file URI legacy drive separator follows native classification",
+    "xml": "<movie><thumb>file:C|/x</thumb></movie>",
+    "failLookupAt": 1
+  },
+  {
+    "name": "file URI rooted legacy drive separator follows native classification",
+    "xml": "<movie><thumb>file:///C|/x</thumb></movie>",
+    "failLookupAt": 1
+  },
+  {
+    "name": "file URI authority host without share keeps its literal lookup",
+    "xml": "<movie><thumb>file://server</thumb></movie>",
+    "failLookupAt": 1
+  },
+  {
+    "name": "file URI backslash host without share keeps its literal lookup",
+    "xml": "<movie><thumb>file:\\\\server</thumb></movie>",
+    "failLookupAt": 1
+  },
+  {
+    "name": "runtime provider preserves a file URI lookup failure",
+    "xml": "<movie><thumb>file:C:/x</thumb></movie>",
+    "providerRuntime": true,
+    "failLookupAt": 2
+  },
+  {
+    "name": "runtime provider rejects a relative file URI without an image lookup",
+    "xml": "<movie><thumb>file:foo</thumb></movie>",
+    "providerRuntime": true,
+    "failLookupAt": 2
+  },
+  {
+    "name": "runtime provider file URI failure retains an earlier local image prefix",
+    "xml": "<movie><thumb>{{PRESENT}}</thumb><thumb aspect=\"clearlogo\">file:C:/x</thumb></movie>",
+    "providerRuntime": true,
+    "failLookupAt": 3
+  },
+  {
+    "name": "mapped runtime treats a literal file URI as a missing native path",
+    "xml": "<movie><thumb>file:C:/missing.jpg</thumb></movie>",
+    "providerRuntime": true,
+    "mappedRuntime": true
+  }
+]

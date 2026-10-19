@@ -1,0 +1,695 @@
+[
+  {
+    "name": "Movie-parent-file",
+    "items": [
+      {
+        "key": "target",
+        "type": "Movie",
+        "Id": "97d70000-0000-0000-0000-000000000001",
+        "Path": "Z:\\Owned\\media.mkv",
+        "ParentId": "97d70000-0000-0000-0000-000000000099"
+      }
+    ],
+    "links": []
+  },
+  {
+    "name": "Movie-root-file",
+    "items": [
+      {
+        "key": "target",
+        "type": "Movie",
+        "Id": "97d70000-0000-0000-0000-000000000001",
+        "Path": "Z:\\Owned\\media.mkv"
+      }
+    ],
+    "links": []
+  },
+  {
+    "name": "Movie-parent-remote",
+    "items": [
+      {
+        "key": "target",
+        "type": "Movie",
+        "Id": "97d70000-0000-0000-0000-000000000001",
+        "Path": "https://example.invalid/media.mkv",
+        "ParentId": "97d70000-0000-0000-0000-000000000099"
+      }
+    ],
+    "links": []
+  },
+  {
+    "name": "Movie-parent-virtual",
+    "items": [
+      {
+        "key": "target",
+        "type": "Movie",
+        "Id": "97d70000-0000-0000-0000-000000000001",
+        "ParentId": "97d70000-0000-0000-0000-000000000099"
+      }
+    ],
+    "links": []
+  },
+  {
+    "name": "Video-parent-file",
+    "items": [
+      {
+        "key": "target",
+        "type": "Video",
+        "Id": "97d70000-0000-0000-0000-000000000001",
+        "Path": "Z:\\Owned\\media.mkv",
+        "ParentId": "97d70000-0000-0000-0000-000000000099"
+      }
+    ],
+    "links": []
+  },
+  {
+    "name": "Video-root-file",
+    "items": [
+      {
+        "key": "target",
+        "type": "Video",
+        "Id": "97d70000-0000-0000-0000-000000000001",
+        "Path": "Z:\\Owned\\media.mkv"
+      }
+    ],
+    "links": []
+  },
+  {
+    "name": "Video-parent-remote",
+    "items": [
+      {
+        "key": "target",
+        "type": "Video",
+        "Id": "97d70000-0000-0000-0000-000000000001",
+        "Path": "https://example.invalid/media.mkv",
+        "ParentId": "97d70000-0000-0000-0000-000000000099"
+      }
+    ],
+    "links": []
+  },
+  {
+    "name": "Video-parent-virtual",
+    "items": [
+      {
+        "key": "target",
+        "type": "Video",
+        "Id": "97d70000-0000-0000-0000-000000000001",
+        "ParentId": "97d70000-0000-0000-0000-000000000099"
+      }
+    ],
+    "links": []
+  },
+  {
+    "name": "Episode-parent-file",
+    "items": [
+      {
+        "key": "target",
+        "type": "Episode",
+        "Id": "97d70000-0000-0000-0000-000000000001",
+        "Path": "Z:\\Owned\\media.mkv",
+        "ParentId": "97d70000-0000-0000-0000-000000000099"
+      }
+    ],
+    "links": []
+  },
+  {
+    "name": "Episode-root-file",
+    "items": [
+      {
+        "key": "target",
+        "type": "Episode",
+        "Id": "97d70000-0000-0000-0000-000000000001",
+        "Path": "Z:\\Owned\\media.mkv"
+      }
+    ],
+    "links": []
+  },
+  {
+    "name": "Episode-parent-remote",
+    "items": [
+      {
+        "key": "target",
+        "type": "Episode",
+        "Id": "97d70000-0000-0000-0000-000000000001",
+        "Path": "https://example.invalid/media.mkv",
+        "ParentId": "97d70000-0000-0000-0000-000000000099"
+      }
+    ],
+    "links": []
+  },
+  {
+    "name": "Episode-parent-virtual",
+    "items": [
+      {
+        "key": "target",
+        "type": "Episode",
+        "Id": "97d70000-0000-0000-0000-000000000001",
+        "ParentId": "97d70000-0000-0000-0000-000000000099"
+      }
+    ],
+    "links": []
+  },
+  {
+    "name": "Audio-parent-file",
+    "items": [
+      {
+        "key": "target",
+        "type": "Audio",
+        "Id": "97d70000-0000-0000-0000-000000000001",
+        "Path": "Z:\\Owned\\media.mkv",
+        "ParentId": "97d70000-0000-0000-0000-000000000099"
+      }
+    ],
+    "links": []
+  },
+  {
+    "name": "Audio-root-file",
+    "items": [
+      {
+        "key": "target",
+        "type": "Audio",
+        "Id": "97d70000-0000-0000-0000-000000000001",
+        "Path": "Z:\\Owned\\media.mkv"
+      }
+    ],
+    "links": []
+  },
+  {
+    "name": "Audio-parent-remote",
+    "items": [
+      {
+        "key": "target",
+        "type": "Audio",
+        "Id": "97d70000-0000-0000-0000-000000000001",
+        "Path": "https://example.invalid/media.mkv",
+        "ParentId": "97d70000-0000-0000-0000-000000000099"
+      }
+    ],
+    "links": []
+  },
+  {
+    "name": "Audio-parent-virtual",
+    "items": [
+      {
+        "key": "target",
+        "type": "Audio",
+        "Id": "97d70000-0000-0000-0000-000000000001",
+        "ParentId": "97d70000-0000-0000-0000-000000000099"
+      }
+    ],
+    "links": []
+  },
+  {
+    "name": "AudioBook-parent-file",
+    "items": [
+      {
+        "key": "target",
+        "type": "AudioBook",
+        "Id": "97d70000-0000-0000-0000-000000000001",
+        "Path": "Z:\\Owned\\media.mkv",
+        "ParentId": "97d70000-0000-0000-0000-000000000099"
+      }
+    ],
+    "links": []
+  },
+  {
+    "name": "AudioBook-root-file",
+    "items": [
+      {
+        "key": "target",
+        "type": "AudioBook",
+        "Id": "97d70000-0000-0000-0000-000000000001",
+        "Path": "Z:\\Owned\\media.mkv"
+      }
+    ],
+    "links": []
+  },
+  {
+    "name": "AudioBook-parent-remote",
+    "items": [
+      {
+        "key": "target",
+        "type": "AudioBook",
+        "Id": "97d70000-0000-0000-0000-000000000001",
+        "Path": "https://example.invalid/media.mkv",
+        "ParentId": "97d70000-0000-0000-0000-000000000099"
+      }
+    ],
+    "links": []
+  },
+  {
+    "name": "AudioBook-parent-virtual",
+    "items": [
+      {
+        "key": "target",
+        "type": "AudioBook",
+        "Id": "97d70000-0000-0000-0000-000000000001",
+        "ParentId": "97d70000-0000-0000-0000-000000000099"
+      }
+    ],
+    "links": []
+  },
+  {
+    "name": "Folder-parent-file",
+    "items": [
+      {
+        "key": "target",
+        "type": "Folder",
+        "Id": "97d70000-0000-0000-0000-000000000001",
+        "Path": "Z:\\Owned\\media.mkv",
+        "ParentId": "97d70000-0000-0000-0000-000000000099"
+      }
+    ],
+    "links": []
+  },
+  {
+    "name": "Folder-root-file",
+    "items": [
+      {
+        "key": "target",
+        "type": "Folder",
+        "Id": "97d70000-0000-0000-0000-000000000001",
+        "Path": "Z:\\Owned\\media.mkv"
+      }
+    ],
+    "links": []
+  },
+  {
+    "name": "Folder-parent-remote",
+    "items": [
+      {
+        "key": "target",
+        "type": "Folder",
+        "Id": "97d70000-0000-0000-0000-000000000001",
+        "Path": "https://example.invalid/media.mkv",
+        "ParentId": "97d70000-0000-0000-0000-000000000099"
+      }
+    ],
+    "links": []
+  },
+  {
+    "name": "Folder-parent-virtual",
+    "items": [
+      {
+        "key": "target",
+        "type": "Folder",
+        "Id": "97d70000-0000-0000-0000-000000000001",
+        "ParentId": "97d70000-0000-0000-0000-000000000099"
+      }
+    ],
+    "links": []
+  },
+  {
+    "name": "Season-parent-file",
+    "items": [
+      {
+        "key": "target",
+        "type": "Season",
+        "Id": "97d70000-0000-0000-0000-000000000001",
+        "Path": "Z:\\Owned\\media.mkv",
+        "ParentId": "97d70000-0000-0000-0000-000000000099"
+      }
+    ],
+    "links": []
+  },
+  {
+    "name": "Season-root-file",
+    "items": [
+      {
+        "key": "target",
+        "type": "Season",
+        "Id": "97d70000-0000-0000-0000-000000000001",
+        "Path": "Z:\\Owned\\media.mkv"
+      }
+    ],
+    "links": []
+  },
+  {
+    "name": "Season-parent-remote",
+    "items": [
+      {
+        "key": "target",
+        "type": "Season",
+        "Id": "97d70000-0000-0000-0000-000000000001",
+        "Path": "https://example.invalid/media.mkv",
+        "ParentId": "97d70000-0000-0000-0000-000000000099"
+      }
+    ],
+    "links": []
+  },
+  {
+    "name": "Season-parent-virtual",
+    "items": [
+      {
+        "key": "target",
+        "type": "Season",
+        "Id": "97d70000-0000-0000-0000-000000000001",
+        "ParentId": "97d70000-0000-0000-0000-000000000099"
+      }
+    ],
+    "links": []
+  },
+  {
+    "name": "UserRootFolder-parent-file",
+    "items": [
+      {
+        "key": "target",
+        "type": "UserRootFolder",
+        "Id": "97d70000-0000-0000-0000-000000000001",
+        "Path": "Z:\\Owned\\media.mkv",
+        "ParentId": "97d70000-0000-0000-0000-000000000099"
+      }
+    ],
+    "links": []
+  },
+  {
+    "name": "UserRootFolder-root-file",
+    "items": [
+      {
+        "key": "target",
+        "type": "UserRootFolder",
+        "Id": "97d70000-0000-0000-0000-000000000001",
+        "Path": "Z:\\Owned\\media.mkv"
+      }
+    ],
+    "links": []
+  },
+  {
+    "name": "UserRootFolder-parent-remote",
+    "items": [
+      {
+        "key": "target",
+        "type": "UserRootFolder",
+        "Id": "97d70000-0000-0000-0000-000000000001",
+        "Path": "https://example.invalid/media.mkv",
+        "ParentId": "97d70000-0000-0000-0000-000000000099"
+      }
+    ],
+    "links": []
+  },
+  {
+    "name": "UserRootFolder-parent-virtual",
+    "items": [
+      {
+        "key": "target",
+        "type": "UserRootFolder",
+        "Id": "97d70000-0000-0000-0000-000000000001",
+        "ParentId": "97d70000-0000-0000-0000-000000000099"
+      }
+    ],
+    "links": []
+  },
+  {
+    "name": "AggregateFolder-parent-file",
+    "items": [
+      {
+        "key": "target",
+        "type": "AggregateFolder",
+        "Id": "97d70000-0000-0000-0000-000000000001",
+        "Path": "Z:\\Owned\\media.mkv",
+        "ParentId": "97d70000-0000-0000-0000-000000000099"
+      }
+    ],
+    "links": []
+  },
+  {
+    "name": "AggregateFolder-root-file",
+    "items": [
+      {
+        "key": "target",
+        "type": "AggregateFolder",
+        "Id": "97d70000-0000-0000-0000-000000000001",
+        "Path": "Z:\\Owned\\media.mkv"
+      }
+    ],
+    "links": []
+  },
+  {
+    "name": "AggregateFolder-parent-remote",
+    "items": [
+      {
+        "key": "target",
+        "type": "AggregateFolder",
+        "Id": "97d70000-0000-0000-0000-000000000001",
+        "Path": "https://example.invalid/media.mkv",
+        "ParentId": "97d70000-0000-0000-0000-000000000099"
+      }
+    ],
+    "links": []
+  },
+  {
+    "name": "AggregateFolder-parent-virtual",
+    "items": [
+      {
+        "key": "target",
+        "type": "AggregateFolder",
+        "Id": "97d70000-0000-0000-0000-000000000001",
+        "ParentId": "97d70000-0000-0000-0000-000000000099"
+      }
+    ],
+    "links": []
+  },
+  {
+    "name": "CollectionFolder-parent-file",
+    "items": [
+      {
+        "key": "target",
+        "type": "CollectionFolder",
+        "Id": "97d70000-0000-0000-0000-000000000001",
+        "Path": "Z:\\Owned\\media.mkv",
+        "ParentId": "97d70000-0000-0000-0000-000000000099"
+      }
+    ],
+    "links": []
+  },
+  {
+    "name": "CollectionFolder-root-file",
+    "items": [
+      {
+        "key": "target",
+        "type": "CollectionFolder",
+        "Id": "97d70000-0000-0000-0000-000000000001",
+        "Path": "Z:\\Owned\\media.mkv"
+      }
+    ],
+    "links": []
+  },
+  {
+    "name": "CollectionFolder-parent-remote",
+    "items": [
+      {
+        "key": "target",
+        "type": "CollectionFolder",
+        "Id": "97d70000-0000-0000-0000-000000000001",
+        "Path": "https://example.invalid/media.mkv",
+        "ParentId": "97d70000-0000-0000-0000-000000000099"
+      }
+    ],
+    "links": []
+  },
+  {
+    "name": "CollectionFolder-parent-virtual",
+    "items": [
+      {
+        "key": "target",
+        "type": "CollectionFolder",
+        "Id": "97d70000-0000-0000-0000-000000000001",
+        "ParentId": "97d70000-0000-0000-0000-000000000099"
+      }
+    ],
+    "links": []
+  },
+  {
+    "name": "Movie-parent-file-mixed",
+    "items": [
+      {
+        "key": "target",
+        "type": "Movie",
+        "Id": "97d70000-0000-0000-0000-000000000001",
+        "Path": "Z:\\Owned\\media.mkv",
+        "ParentId": "97d70000-0000-0000-0000-000000000099",
+        "IsInMixedFolder": true
+      }
+    ],
+    "links": []
+  },
+  {
+    "name": "Episode-stack-with-parent",
+    "items": [
+      {
+        "key": "target",
+        "type": "Episode",
+        "Id": "97d70000-0000-0000-0000-000000000001",
+        "Path": "Z:\\Owned\\episode.mkv",
+        "ParentId": "97d70000-0000-0000-0000-000000000099",
+        "AdditionalParts": [
+          "Z:\\Owned\\part.mkv"
+        ]
+      }
+    ],
+    "links": []
+  },
+  {
+    "name": "Episode-stack-without-parent",
+    "items": [
+      {
+        "key": "target",
+        "type": "Episode",
+        "Id": "97d70000-0000-0000-0000-000000000001",
+        "Path": "Z:\\Owned\\episode.mkv",
+        "AdditionalParts": [
+          "Z:\\Owned\\part.mkv"
+        ]
+      }
+    ],
+    "links": []
+  },
+  {
+    "name": "Episode-local-array-without-parent",
+    "items": [
+      {
+        "key": "target",
+        "type": "Episode",
+        "Id": "97d70000-0000-0000-0000-000000000001",
+        "Path": "Z:\\Owned\\episode.mkv",
+        "LocalAlternateVersions": [
+          "Z:\\Owned\\alt.mkv"
+        ]
+      }
+    ],
+    "links": []
+  },
+  {
+    "name": "Episode-local-link",
+    "items": [
+      {
+        "key": "target",
+        "type": "Episode",
+        "Id": "97d70000-0000-0000-0000-000000000001",
+        "Path": "Z:\\Owned\\episode.mkv",
+        "ParentId": "97d70000-0000-0000-0000-000000000099"
+      },
+      {
+        "key": "alternate",
+        "type": "Episode",
+        "Id": "97d70000-0000-0000-0000-000000000002",
+        "Path": "Z:\\Owned\\alt.mkv",
+        "ParentId": "97d70000-0000-0000-0000-000000000099"
+      }
+    ],
+    "links": [
+      {
+        "parent": "target",
+        "child": "alternate",
+        "childType": 2
+      }
+    ]
+  },
+  {
+    "name": "Episode-group-link",
+    "items": [
+      {
+        "key": "target",
+        "type": "Episode",
+        "Id": "97d70000-0000-0000-0000-000000000001",
+        "Path": "Z:\\Owned\\episode.mkv",
+        "ParentId": "97d70000-0000-0000-0000-000000000099"
+      },
+      {
+        "key": "alternate",
+        "type": "Episode",
+        "Id": "97d70000-0000-0000-0000-000000000002",
+        "Path": "Z:\\Owned\\alt.mkv",
+        "ParentId": "97d70000-0000-0000-0000-000000000099"
+      }
+    ],
+    "links": [
+      {
+        "parent": "target",
+        "child": "alternate",
+        "childType": 3
+      }
+    ]
+  },
+  {
+    "name": "Episode-alternate-follows-primary-count",
+    "items": [
+      {
+        "key": "target",
+        "type": "Episode",
+        "Id": "97d70000-0000-0000-0000-000000000001",
+        "Path": "Z:\\Owned\\episode.mkv",
+        "ParentId": "97d70000-0000-0000-0000-000000000099",
+        "PrimaryVersionId": "97d70000-0000-0000-0000-000000000002"
+      },
+      {
+        "key": "alternate",
+        "type": "Episode",
+        "Id": "97d70000-0000-0000-0000-000000000002",
+        "Path": "Z:\\Owned\\alt.mkv",
+        "ParentId": "97d70000-0000-0000-0000-000000000099"
+      }
+    ],
+    "links": [
+      {
+        "parent": "alternate",
+        "child": "target",
+        "childType": 2
+      }
+    ]
+  },
+  {
+    "name": "Episode-primary-cycle-count",
+    "items": [
+      {
+        "key": "target",
+        "type": "Episode",
+        "Id": "97d70000-0000-0000-0000-000000000001",
+        "Path": "Z:\\Owned\\episode.mkv",
+        "ParentId": "97d70000-0000-0000-0000-000000000099",
+        "PrimaryVersionId": "97d70000-0000-0000-0000-000000000002"
+      },
+      {
+        "key": "alternate",
+        "type": "Episode",
+        "Id": "97d70000-0000-0000-0000-000000000002",
+        "Path": "Z:\\Owned\\alt.mkv",
+        "ParentId": "97d70000-0000-0000-0000-000000000099",
+        "PrimaryVersionId": "97d70000-0000-0000-0000-000000000001"
+      }
+    ],
+    "links": [
+      {
+        "parent": "alternate",
+        "child": "target",
+        "childType": 2
+      }
+    ]
+  },
+  {
+    "name": "Episode-remote-group-still-supports-owned",
+    "items": [
+      {
+        "key": "target",
+        "type": "Episode",
+        "Id": "97d70000-0000-0000-0000-000000000001",
+        "Path": "https://example.invalid/episode.mkv",
+        "ParentId": "97d70000-0000-0000-0000-000000000099"
+      },
+      {
+        "key": "alternate",
+        "type": "Episode",
+        "Id": "97d70000-0000-0000-0000-000000000002",
+        "Path": "Z:\\Owned\\alt.mkv",
+        "ParentId": "97d70000-0000-0000-0000-000000000099"
+      }
+    ],
+    "links": [
+      {
+        "parent": "target",
+        "child": "alternate",
+        "childType": 3
+      }
+    ]
+  }
+]

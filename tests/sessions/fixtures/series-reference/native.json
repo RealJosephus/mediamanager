@@ -1,0 +1,1064 @@
+{
+  "schemaVersion": 1,
+  "sourceBindings": [
+    {
+      "path": ".agent-docs/evidence/series-reference-native-v2/Program.cs",
+      "sha256": "31ec94f3b6d839db8ca1acc6a1d3bc93807fb166137f1c84fb9896cad4cd2139",
+      "bytes": 9401
+    },
+    {
+      "path": ".agent-docs/evidence/series-reference-native-v2/Oracle.csproj",
+      "sha256": "28359bb35df966a78a33ce6dbcd5dcbd11c1a8d93a8ae330c93d56dae89a2569",
+      "bytes": 588
+    },
+    {
+      "path": ".agent-docs/evidence/series-reference-native-v2/stdout.txt",
+      "sha256": "4da8b66a1f259e5f98cc70d38b65681b2c9d183a1e33c326e2ad5fe86825f200",
+      "bytes": 68443
+    },
+    {
+      "path": ".agent-docs/evidence/series-reference-native-v2/exit.json",
+      "sha256": "de0dca3ab132eb3dc5377fde81cba8315ebf5097e055fa3533624e4f5bbda4cf",
+      "bytes": 51
+    },
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/MediaBrowser.Controller/Entities/BaseItem.cs",
+      "sha256": "9dc7b96a93c9fbe874cdcededdca395b5aa2df6070f5cfc9c8959539dcd76469",
+      "bytes": 105800
+    },
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/MediaBrowser.Controller/Entities/Video.cs",
+      "sha256": "03df015992ee4e95e175c499b36a7b21d9facc4f391cfd89235ad652d2eb0b11",
+      "bytes": 32932
+    },
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/MediaBrowser.Controller/Entities/TV/Episode.cs",
+      "sha256": "9944d6d777c8309ceedc66b2ded3d1de29cbd8a514b1bfa7d9698e04bda33a96",
+      "bytes": 12020
+    },
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/MediaBrowser.Controller/Entities/TV/Season.cs",
+      "sha256": "3d49550fc03cfd556999e04a63bb4f692fbb574a37e946ab0b200fc9cc19ec04",
+      "bytes": 9041
+    },
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/MediaBrowser.Controller/Entities/TV/Series.cs",
+      "sha256": "46d1748fd41a051fbcd4be50ef24b1814b7402265bdb37a735ced8c0235e460f",
+      "bytes": 20088
+    },
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/Jellyfin.Server.Implementations/Item/OrderMapper.cs",
+      "sha256": "06ef5f3d55e08690824c24a1c3c6c037fbcdca6dda75a036fbe8b72d508c046e",
+      "bytes": 7323
+    },
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/Jellyfin.Server.Implementations/Item/BaseItemRepository.QueryBuilding.cs",
+      "sha256": "b4c3ddd5a657ac4d9308131bfb5bf490df11d5f56c3df50d0a1b6645d282bdb2",
+      "bytes": 31527
+    },
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/Jellyfin.Api/Helpers/RequestHelpers.cs",
+      "sha256": "213a922281289ea49aacd9b45a9302beeb4995160f66a8d575e7432b58d6e5e6",
+      "bytes": 6857
+    },
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/src/Jellyfin.Database/Jellyfin.Database.Implementations/JellyfinDbContext.cs",
+      "sha256": "4c5878bef65e68dbf4215a622f893fe0e98290740cc398b84a331a81b5fe9c41",
+      "bytes": 12022
+    },
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/src/Jellyfin.Database/Jellyfin.Database.Providers.Sqlite/SqliteDatabaseProvider.cs",
+      "sha256": "9b3c7b23e1d282fc106d17486d1ee23583e78186a420c78cefa5630a1df03966",
+      "bytes": 15341
+    },
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/Jellyfin.Server/bin/Release/net10.0/MediaBrowser.Controller.dll",
+      "sha256": "0b7bd01db6605bb54658d07e8b7d5d70615a7f741cfdd6615b0cfa628f0d1644",
+      "bytes": 655872
+    },
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/Jellyfin.Server/bin/Release/net10.0/MediaBrowser.Model.dll",
+      "sha256": "991b3ca08b544ea91feff5c05d8dbb1d8b6ca3392f90753073cc09e353395946",
+      "bytes": 489472
+    },
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/Jellyfin.Server/bin/Release/net10.0/Jellyfin.Server.Implementations.dll",
+      "sha256": "eb3e6e24a44d691a70122a68feb8452420df94e93f85f2ca3b8a860bf1a42a2e",
+      "bytes": 664064
+    },
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/Jellyfin.Server/bin/Release/net10.0/Jellyfin.Database.Implementations.dll",
+      "sha256": "987e24d22a0f54a0eb2c459f9073fc6721bcbed98763da7e23e85e19e3e62ed1",
+      "bytes": 249344
+    },
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/Jellyfin.Server/bin/Release/net10.0/Jellyfin.Database.Providers.Sqlite.dll",
+      "sha256": "a5c69219419c67798a51e7b40a5bbd8031dbf88cf2f0fee1312f333bde7108fc",
+      "bytes": 1109504
+    },
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/Jellyfin.Server/bin/Release/net10.0/Jellyfin.Extensions.dll",
+      "sha256": "857e4a37f69c65f1b66cd281fe735a75caf3ae76ae878726eaf20130755cabde",
+      "bytes": 37888
+    },
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/Jellyfin.Server/bin/Release/net10.0/Jellyfin.Data.dll",
+      "sha256": "8a4364a16982ff1497aba328f736886f423f9a0f81f91bbdab76199bb2d98751",
+      "bytes": 18432
+    },
+    {
+      "path": ".agent-docs/baselines/jellyfin-current/source/Jellyfin.Server/bin/Release/net10.0/runtimes/win-x64/native/e_sqlite3.dll",
+      "sha256": "b7385d722c83fb52142a00477a726723745916d22a555711ee89834c1111fb2e",
+      "bytes": 1978880
+    }
+  ],
+  "oracleSourceSha256": "31ec94f3b6d839db8ca1acc6a1d3bc93807fb166137f1c84fb9896cad4cd2139",
+  "nativeProcessExit": 0,
+  "raw": {
+    "actualFrozenEpisodeSeasonGetters": true,
+    "actualFrozenApplyOrderSqlTranslation": true,
+    "dependenciesControlled": true,
+    "databaseOpened": false,
+    "sharedPostgresUsed": false,
+    "portOpened": false,
+    "parentItems": [
+      {
+        "Id": "a9400000-0000-0000-0000-000000000001",
+        "ParentId": "00000000-0000-0000-0000-000000000000",
+        "type": "Series",
+        "Name": "First actual parent",
+        "SortName": "anativeparent",
+        "indexNumber": null,
+        "ProviderIds": {
+          "Tvdb": "first-series-key"
+        }
+      },
+      {
+        "Id": "a9400000-0000-0000-0000-000000000002",
+        "ParentId": "00000000-0000-0000-0000-000000000000",
+        "type": "Series",
+        "Name": "Unrelated saved ancestor",
+        "SortName": "znativeunrelated",
+        "indexNumber": null,
+        "ProviderIds": {
+          "Tvdb": "other-series-key"
+        }
+      },
+      {
+        "Id": "a9400000-0000-0000-0000-000000000003",
+        "ParentId": "a9400000-0000-0000-0000-000000000001",
+        "type": "Season",
+        "Name": "Actual season",
+        "SortName": "0010",
+        "indexNumber": 10,
+        "ProviderIds": {}
+      },
+      {
+        "Id": "a9400000-0000-0000-0000-000000000004",
+        "ParentId": "a9400000-0000-0000-0000-000000000001",
+        "type": "Folder",
+        "Name": "Wrong type ID",
+        "SortName": "wrong type id",
+        "indexNumber": null,
+        "ProviderIds": {}
+      },
+      {
+        "Id": "a9400000-0000-0000-0000-000000000005",
+        "ParentId": "00000000-0000-0000-0000-000000000000",
+        "type": "Folder",
+        "Name": "Unrelated parent",
+        "SortName": "unrelated parent",
+        "indexNumber": null,
+        "ProviderIds": {}
+      }
+    ],
+    "getters": [
+      {
+        "type": "Episode",
+        "mode": "explicit-actual",
+        "Id": "a9400000-0000-0000-0000-000000000010",
+        "ParentId": "a9400000-0000-0000-0000-000000000003",
+        "SeriesId": "a9400000-0000-0000-0000-000000000001",
+        "SeriesName": "serialized-series-name-fallback",
+        "savedAncestorIds": [
+          "a9400000-0000-0000-0000-000000000002",
+          "a9400000-0000-0000-0000-000000000001"
+        ],
+        "ParentIndexNumber": 1,
+        "IndexNumber": 2,
+        "userDataKeys": [
+          "first-series-key001002",
+          "a9400000-0000-0000-0000-000000000010"
+        ],
+        "actualSeriesId": "a9400000-0000-0000-0000-000000000001",
+        "actualSeriesSortName": "anativeparent",
+        "foundParentSeriesId": "a9400000-0000-0000-0000-000000000001",
+        "seriesSortName": "anativeparent",
+        "parents": [
+          "a9400000-0000-0000-0000-000000000003",
+          "a9400000-0000-0000-0000-000000000001"
+        ],
+        "lookupIds": [
+          "a9400000-0000-0000-0000-000000000001",
+          "a9400000-0000-0000-0000-000000000003",
+          "a9400000-0000-0000-0000-000000000001",
+          "a9400000-0000-0000-0000-000000000001",
+          "a9400000-0000-0000-0000-000000000001",
+          "a9400000-0000-0000-0000-000000000003",
+          "a9400000-0000-0000-0000-000000000001"
+        ],
+        "airedSeasonNumber": 1
+      },
+      {
+        "type": "Episode",
+        "mode": "explicit-other",
+        "Id": "a9400000-0000-0000-0000-000000000010",
+        "ParentId": "a9400000-0000-0000-0000-000000000003",
+        "SeriesId": "a9400000-0000-0000-0000-000000000002",
+        "SeriesName": "serialized-series-name-fallback",
+        "savedAncestorIds": [
+          "a9400000-0000-0000-0000-000000000002",
+          "a9400000-0000-0000-0000-000000000001"
+        ],
+        "ParentIndexNumber": 1,
+        "IndexNumber": 2,
+        "userDataKeys": [
+          "other-series-key001002",
+          "a9400000-0000-0000-0000-000000000010"
+        ],
+        "actualSeriesId": "a9400000-0000-0000-0000-000000000002",
+        "actualSeriesSortName": "znativeunrelated",
+        "foundParentSeriesId": "a9400000-0000-0000-0000-000000000001",
+        "seriesSortName": "znativeunrelated",
+        "parents": [
+          "a9400000-0000-0000-0000-000000000003",
+          "a9400000-0000-0000-0000-000000000001"
+        ],
+        "lookupIds": [
+          "a9400000-0000-0000-0000-000000000002",
+          "a9400000-0000-0000-0000-000000000003",
+          "a9400000-0000-0000-0000-000000000001",
+          "a9400000-0000-0000-0000-000000000002",
+          "a9400000-0000-0000-0000-000000000002",
+          "a9400000-0000-0000-0000-000000000003",
+          "a9400000-0000-0000-0000-000000000001"
+        ],
+        "airedSeasonNumber": 1
+      },
+      {
+        "type": "Episode",
+        "mode": "empty-real-chain",
+        "Id": "a9400000-0000-0000-0000-000000000010",
+        "ParentId": "a9400000-0000-0000-0000-000000000003",
+        "SeriesId": "00000000-0000-0000-0000-000000000000",
+        "SeriesName": "serialized-series-name-fallback",
+        "savedAncestorIds": [
+          "a9400000-0000-0000-0000-000000000002",
+          "a9400000-0000-0000-0000-000000000001"
+        ],
+        "ParentIndexNumber": 1,
+        "IndexNumber": 2,
+        "userDataKeys": [
+          "first-series-key001002",
+          "a9400000-0000-0000-0000-000000000010"
+        ],
+        "actualSeriesId": "a9400000-0000-0000-0000-000000000001",
+        "actualSeriesSortName": "anativeparent",
+        "foundParentSeriesId": "a9400000-0000-0000-0000-000000000001",
+        "seriesSortName": "anativeparent",
+        "parents": [
+          "a9400000-0000-0000-0000-000000000003",
+          "a9400000-0000-0000-0000-000000000001"
+        ],
+        "lookupIds": [
+          "a9400000-0000-0000-0000-000000000003",
+          "a9400000-0000-0000-0000-000000000001",
+          "a9400000-0000-0000-0000-000000000001",
+          "a9400000-0000-0000-0000-000000000003",
+          "a9400000-0000-0000-0000-000000000001",
+          "a9400000-0000-0000-0000-000000000003",
+          "a9400000-0000-0000-0000-000000000001",
+          "a9400000-0000-0000-0000-000000000001",
+          "a9400000-0000-0000-0000-000000000003",
+          "a9400000-0000-0000-0000-000000000001",
+          "a9400000-0000-0000-0000-000000000001",
+          "a9400000-0000-0000-0000-000000000003",
+          "a9400000-0000-0000-0000-000000000001"
+        ],
+        "airedSeasonNumber": 1
+      },
+      {
+        "type": "Episode",
+        "mode": "missing-explicit",
+        "Id": "a9400000-0000-0000-0000-000000000010",
+        "ParentId": "a9400000-0000-0000-0000-000000000003",
+        "SeriesId": "a9400000-0000-0000-0000-000000000099",
+        "SeriesName": "serialized-series-name-fallback",
+        "savedAncestorIds": [
+          "a9400000-0000-0000-0000-000000000002",
+          "a9400000-0000-0000-0000-000000000001"
+        ],
+        "ParentIndexNumber": 1,
+        "IndexNumber": 2,
+        "userDataKeys": [
+          "a9400000-0000-0000-0000-000000000010"
+        ],
+        "actualSeriesId": null,
+        "actualSeriesSortName": null,
+        "foundParentSeriesId": "a9400000-0000-0000-0000-000000000001",
+        "seriesSortName": "serialized-series-name-fallback",
+        "parents": [
+          "a9400000-0000-0000-0000-000000000003",
+          "a9400000-0000-0000-0000-000000000001"
+        ],
+        "lookupIds": [
+          "a9400000-0000-0000-0000-000000000099",
+          "a9400000-0000-0000-0000-000000000003",
+          "a9400000-0000-0000-0000-000000000001",
+          "a9400000-0000-0000-0000-000000000099",
+          "a9400000-0000-0000-0000-000000000099",
+          "a9400000-0000-0000-0000-000000000003",
+          "a9400000-0000-0000-0000-000000000001"
+        ],
+        "airedSeasonNumber": 1
+      },
+      {
+        "type": "Episode",
+        "mode": "wrong-type-explicit",
+        "Id": "a9400000-0000-0000-0000-000000000010",
+        "ParentId": "a9400000-0000-0000-0000-000000000003",
+        "SeriesId": "a9400000-0000-0000-0000-000000000004",
+        "SeriesName": "serialized-series-name-fallback",
+        "savedAncestorIds": [
+          "a9400000-0000-0000-0000-000000000002",
+          "a9400000-0000-0000-0000-000000000001"
+        ],
+        "ParentIndexNumber": 1,
+        "IndexNumber": 2,
+        "userDataKeys": [
+          "a9400000-0000-0000-0000-000000000010"
+        ],
+        "actualSeriesId": null,
+        "actualSeriesSortName": null,
+        "foundParentSeriesId": "a9400000-0000-0000-0000-000000000001",
+        "seriesSortName": "serialized-series-name-fallback",
+        "parents": [
+          "a9400000-0000-0000-0000-000000000003",
+          "a9400000-0000-0000-0000-000000000001"
+        ],
+        "lookupIds": [
+          "a9400000-0000-0000-0000-000000000004",
+          "a9400000-0000-0000-0000-000000000003",
+          "a9400000-0000-0000-0000-000000000001",
+          "a9400000-0000-0000-0000-000000000004",
+          "a9400000-0000-0000-0000-000000000004",
+          "a9400000-0000-0000-0000-000000000003",
+          "a9400000-0000-0000-0000-000000000001"
+        ],
+        "airedSeasonNumber": 1
+      },
+      {
+        "type": "Episode",
+        "mode": "empty-unrelated-chain",
+        "Id": "a9400000-0000-0000-0000-000000000010",
+        "ParentId": "a9400000-0000-0000-0000-000000000005",
+        "SeriesId": "00000000-0000-0000-0000-000000000000",
+        "SeriesName": "serialized-series-name-fallback",
+        "savedAncestorIds": [
+          "a9400000-0000-0000-0000-000000000002",
+          "a9400000-0000-0000-0000-000000000001"
+        ],
+        "ParentIndexNumber": 1,
+        "IndexNumber": 2,
+        "userDataKeys": [
+          "a9400000-0000-0000-0000-000000000010"
+        ],
+        "actualSeriesId": null,
+        "actualSeriesSortName": null,
+        "foundParentSeriesId": "00000000-0000-0000-0000-000000000000",
+        "seriesSortName": "serialized-series-name-fallback",
+        "parents": [
+          "a9400000-0000-0000-0000-000000000005"
+        ],
+        "lookupIds": [
+          "a9400000-0000-0000-0000-000000000005",
+          "a9400000-0000-0000-0000-000000000005",
+          "a9400000-0000-0000-0000-000000000005",
+          "a9400000-0000-0000-0000-000000000005",
+          "a9400000-0000-0000-0000-000000000005"
+        ],
+        "airedSeasonNumber": 1
+      },
+      {
+        "type": "Season",
+        "mode": "explicit-actual",
+        "Id": "a9400000-0000-0000-0000-000000000011",
+        "ParentId": "a9400000-0000-0000-0000-000000000001",
+        "SeriesId": "a9400000-0000-0000-0000-000000000001",
+        "SeriesName": "serialized-series-name-fallback",
+        "savedAncestorIds": [
+          "a9400000-0000-0000-0000-000000000002",
+          "a9400000-0000-0000-0000-000000000001"
+        ],
+        "ParentIndexNumber": null,
+        "IndexNumber": null,
+        "userDataKeys": [
+          "first-series-key000",
+          "a9400000-0000-0000-0000-000000000001000",
+          "a9400000-0000-0000-0000-000000000011"
+        ],
+        "actualSeriesId": "a9400000-0000-0000-0000-000000000001",
+        "actualSeriesSortName": "anativeparent",
+        "foundParentSeriesId": "a9400000-0000-0000-0000-000000000001",
+        "seriesSortName": "anativeparent",
+        "parents": [
+          "a9400000-0000-0000-0000-000000000001"
+        ],
+        "lookupIds": [
+          "a9400000-0000-0000-0000-000000000001",
+          "a9400000-0000-0000-0000-000000000001",
+          "a9400000-0000-0000-0000-000000000001",
+          "a9400000-0000-0000-0000-000000000001",
+          "a9400000-0000-0000-0000-000000000001"
+        ],
+        "airedSeasonNumber": null
+      },
+      {
+        "type": "Season",
+        "mode": "explicit-other",
+        "Id": "a9400000-0000-0000-0000-000000000011",
+        "ParentId": "a9400000-0000-0000-0000-000000000001",
+        "SeriesId": "a9400000-0000-0000-0000-000000000002",
+        "SeriesName": "serialized-series-name-fallback",
+        "savedAncestorIds": [
+          "a9400000-0000-0000-0000-000000000002",
+          "a9400000-0000-0000-0000-000000000001"
+        ],
+        "ParentIndexNumber": null,
+        "IndexNumber": null,
+        "userDataKeys": [
+          "other-series-key000",
+          "a9400000-0000-0000-0000-000000000002000",
+          "a9400000-0000-0000-0000-000000000011"
+        ],
+        "actualSeriesId": "a9400000-0000-0000-0000-000000000002",
+        "actualSeriesSortName": "znativeunrelated",
+        "foundParentSeriesId": "a9400000-0000-0000-0000-000000000001",
+        "seriesSortName": "znativeunrelated",
+        "parents": [
+          "a9400000-0000-0000-0000-000000000001"
+        ],
+        "lookupIds": [
+          "a9400000-0000-0000-0000-000000000002",
+          "a9400000-0000-0000-0000-000000000001",
+          "a9400000-0000-0000-0000-000000000002",
+          "a9400000-0000-0000-0000-000000000002",
+          "a9400000-0000-0000-0000-000000000001"
+        ],
+        "airedSeasonNumber": null
+      },
+      {
+        "type": "Season",
+        "mode": "empty-real-chain",
+        "Id": "a9400000-0000-0000-0000-000000000011",
+        "ParentId": "a9400000-0000-0000-0000-000000000001",
+        "SeriesId": "00000000-0000-0000-0000-000000000000",
+        "SeriesName": "serialized-series-name-fallback",
+        "savedAncestorIds": [
+          "a9400000-0000-0000-0000-000000000002",
+          "a9400000-0000-0000-0000-000000000001"
+        ],
+        "ParentIndexNumber": null,
+        "IndexNumber": null,
+        "userDataKeys": [
+          "first-series-key000",
+          "a9400000-0000-0000-0000-000000000001000",
+          "a9400000-0000-0000-0000-000000000011"
+        ],
+        "actualSeriesId": "a9400000-0000-0000-0000-000000000001",
+        "actualSeriesSortName": "anativeparent",
+        "foundParentSeriesId": "a9400000-0000-0000-0000-000000000001",
+        "seriesSortName": "anativeparent",
+        "parents": [
+          "a9400000-0000-0000-0000-000000000001"
+        ],
+        "lookupIds": [
+          "a9400000-0000-0000-0000-000000000001",
+          "a9400000-0000-0000-0000-000000000001",
+          "a9400000-0000-0000-0000-000000000001",
+          "a9400000-0000-0000-0000-000000000001",
+          "a9400000-0000-0000-0000-000000000001",
+          "a9400000-0000-0000-0000-000000000001",
+          "a9400000-0000-0000-0000-000000000001",
+          "a9400000-0000-0000-0000-000000000001"
+        ],
+        "airedSeasonNumber": null
+      },
+      {
+        "type": "Season",
+        "mode": "missing-explicit",
+        "Id": "a9400000-0000-0000-0000-000000000011",
+        "ParentId": "a9400000-0000-0000-0000-000000000001",
+        "SeriesId": "a9400000-0000-0000-0000-000000000099",
+        "SeriesName": "serialized-series-name-fallback",
+        "savedAncestorIds": [
+          "a9400000-0000-0000-0000-000000000002",
+          "a9400000-0000-0000-0000-000000000001"
+        ],
+        "ParentIndexNumber": null,
+        "IndexNumber": null,
+        "userDataKeys": [
+          "a9400000-0000-0000-0000-000000000011"
+        ],
+        "actualSeriesId": null,
+        "actualSeriesSortName": null,
+        "foundParentSeriesId": "a9400000-0000-0000-0000-000000000001",
+        "seriesSortName": "serialized-series-name-fallback",
+        "parents": [
+          "a9400000-0000-0000-0000-000000000001"
+        ],
+        "lookupIds": [
+          "a9400000-0000-0000-0000-000000000099",
+          "a9400000-0000-0000-0000-000000000001",
+          "a9400000-0000-0000-0000-000000000099",
+          "a9400000-0000-0000-0000-000000000099",
+          "a9400000-0000-0000-0000-000000000001"
+        ],
+        "airedSeasonNumber": null
+      },
+      {
+        "type": "Season",
+        "mode": "wrong-type-explicit",
+        "Id": "a9400000-0000-0000-0000-000000000011",
+        "ParentId": "a9400000-0000-0000-0000-000000000001",
+        "SeriesId": "a9400000-0000-0000-0000-000000000004",
+        "SeriesName": "serialized-series-name-fallback",
+        "savedAncestorIds": [
+          "a9400000-0000-0000-0000-000000000002",
+          "a9400000-0000-0000-0000-000000000001"
+        ],
+        "ParentIndexNumber": null,
+        "IndexNumber": null,
+        "userDataKeys": [
+          "a9400000-0000-0000-0000-000000000011"
+        ],
+        "actualSeriesId": null,
+        "actualSeriesSortName": null,
+        "foundParentSeriesId": "a9400000-0000-0000-0000-000000000001",
+        "seriesSortName": "serialized-series-name-fallback",
+        "parents": [
+          "a9400000-0000-0000-0000-000000000001"
+        ],
+        "lookupIds": [
+          "a9400000-0000-0000-0000-000000000004",
+          "a9400000-0000-0000-0000-000000000001",
+          "a9400000-0000-0000-0000-000000000004",
+          "a9400000-0000-0000-0000-000000000004",
+          "a9400000-0000-0000-0000-000000000001"
+        ],
+        "airedSeasonNumber": null
+      },
+      {
+        "type": "Season",
+        "mode": "empty-unrelated-chain",
+        "Id": "a9400000-0000-0000-0000-000000000011",
+        "ParentId": "a9400000-0000-0000-0000-000000000005",
+        "SeriesId": "00000000-0000-0000-0000-000000000000",
+        "SeriesName": "serialized-series-name-fallback",
+        "savedAncestorIds": [
+          "a9400000-0000-0000-0000-000000000002",
+          "a9400000-0000-0000-0000-000000000001"
+        ],
+        "ParentIndexNumber": null,
+        "IndexNumber": null,
+        "userDataKeys": [
+          "a9400000-0000-0000-0000-000000000011"
+        ],
+        "actualSeriesId": null,
+        "actualSeriesSortName": null,
+        "foundParentSeriesId": "00000000-0000-0000-0000-000000000000",
+        "seriesSortName": "serialized-series-name-fallback",
+        "parents": [
+          "a9400000-0000-0000-0000-000000000005"
+        ],
+        "lookupIds": [
+          "a9400000-0000-0000-0000-000000000005",
+          "a9400000-0000-0000-0000-000000000005",
+          "a9400000-0000-0000-0000-000000000005",
+          "a9400000-0000-0000-0000-000000000005",
+          "a9400000-0000-0000-0000-000000000005"
+        ],
+        "airedSeasonNumber": null
+      }
+    ],
+    "ignoredAlias": {
+      "serializedData": "{\"Series\":{\"Id\":\"a9400000-0000-0000-0000-000000000002\",\"Type\":\"Series\",\"ProviderIds\":{\"Tvdb\":\"serialized-fake-key\"}},\"SeriesId\":\"a9400000-0000-0000-0000-000000000002\"}",
+      "Id": "a9400000-0000-0000-0000-000000000012",
+      "ParentId": "a9400000-0000-0000-0000-000000000003",
+      "SeriesId": "00000000-0000-0000-0000-000000000000",
+      "ParentIndexNumber": 1,
+      "IndexNumber": 2,
+      "actualSeriesId": "a9400000-0000-0000-0000-000000000001",
+      "userDataKeys": [
+        "first-series-key001002",
+        "a9400000-0000-0000-0000-000000000012"
+      ]
+    },
+    "sql": [
+      {
+        "search": null,
+        "withUser": false,
+        "queryOrder": [
+          {
+            "name": "Name",
+            "sign": "Descending"
+          },
+          {
+            "name": "SeriesDatePlayed",
+            "sign": "Descending"
+          },
+          {
+            "name": "Studio",
+            "sign": "Descending"
+          }
+        ],
+        "actualSql": "SELECT \"b\".\"Id\", \"b\".\"Album\", \"b\".\"AlbumArtists\", \"b\".\"Artists\", \"b\".\"Audio\", \"b\".\"ChannelId\", \"b\".\"CleanName\", \"b\".\"CommunityRating\", \"b\".\"CriticRating\", \"b\".\"CustomRating\", \"b\".\"Data\", \"b\".\"DateCreated\", \"b\".\"DateLastMediaAdded\", \"b\".\"DateLastRefreshed\", \"b\".\"DateLastSaved\", \"b\".\"DateModified\", \"b\".\"EndDate\", \"b\".\"EpisodeTitle\", \"b\".\"ExternalId\", \"b\".\"ExternalSeriesId\", \"b\".\"ExternalServiceId\", \"b\".\"ExtraType\", \"b\".\"ForcedSortName\", \"b\".\"Genres\", \"b\".\"Height\", \"b\".\"IndexNumber\", \"b\".\"InheritedParentalRatingSubValue\", \"b\".\"InheritedParentalRatingValue\", \"b\".\"IsFolder\", \"b\".\"IsInMixedFolder\", \"b\".\"IsLocked\", \"b\".\"IsMovie\", \"b\".\"IsRepeat\", \"b\".\"IsSeries\", \"b\".\"IsVirtualItem\", \"b\".\"LUFS\", \"b\".\"MediaType\", \"b\".\"Name\", \"b\".\"NormalizationGain\", \"b\".\"OfficialRating\", \"b\".\"OriginalLanguage\", \"b\".\"OriginalTitle\", \"b\".\"Overview\", \"b\".\"OwnerId\", \"b\".\"ParentId\", \"b\".\"ParentIndexNumber\", \"b\".\"Path\", \"b\".\"PreferredMetadataCountryCode\", \"b\".\"PreferredMetadataLanguage\", \"b\".\"PremiereDate\", \"b\".\"PresentationUniqueKey\", \"b\".\"PrimaryVersionId\", \"b\".\"ProductionLocations\", \"b\".\"ProductionYear\", \"b\".\"RunTimeTicks\", \"b\".\"SeasonId\", \"b\".\"SeasonName\", \"b\".\"SeriesId\", \"b\".\"SeriesName\", \"b\".\"SeriesPresentationUniqueKey\", \"b\".\"ShowId\", \"b\".\"Size\", \"b\".\"SortName\", \"b\".\"StartDate\", \"b\".\"Studios\", \"b\".\"Tagline\", \"b\".\"Tags\", \"b\".\"TopParentId\", \"b\".\"TotalBitrate\", \"b\".\"Type\", \"b\".\"UnratedType\", \"b\".\"Width\"\r\nFROM \"BaseItems\" AS \"b\"\r\nLEFT JOIN (\r\n    SELECT \"b0\".\"SeriesPresentationUniqueKey\" AS \"SeriesKey\", MAX(\"u\".\"LastPlayedDate\") AS \"MaxDate\"\r\n    FROM \"UserData\" AS \"u\"\r\n    INNER JOIN \"BaseItems\" AS \"b0\" ON \"u\".\"ItemId\" = \"b0\".\"Id\"\r\n    WHERE \"u\".\"Played\" AND \"b0\".\"SeriesPresentationUniqueKey\" IS NOT NULL\r\n    GROUP BY \"b0\".\"SeriesPresentationUniqueKey\"\r\n) AS \"s\" ON \"b\".\"PresentationUniqueKey\" = \"s\".\"SeriesKey\"\r\nORDER BY \"s\".\"MaxDate\" DESC, \"b\".\"SortName\""
+      },
+      {
+        "search": null,
+        "withUser": true,
+        "queryOrder": [
+          {
+            "name": "Name",
+            "sign": "Descending"
+          },
+          {
+            "name": "SeriesDatePlayed",
+            "sign": "Descending"
+          },
+          {
+            "name": "Studio",
+            "sign": "Descending"
+          }
+        ],
+        "actualSql": ".param set @filter_User_Id 'A9400000-0000-0000-0000-000000000098'\r\n\r\nSELECT \"b\".\"Id\", \"b\".\"Album\", \"b\".\"AlbumArtists\", \"b\".\"Artists\", \"b\".\"Audio\", \"b\".\"ChannelId\", \"b\".\"CleanName\", \"b\".\"CommunityRating\", \"b\".\"CriticRating\", \"b\".\"CustomRating\", \"b\".\"Data\", \"b\".\"DateCreated\", \"b\".\"DateLastMediaAdded\", \"b\".\"DateLastRefreshed\", \"b\".\"DateLastSaved\", \"b\".\"DateModified\", \"b\".\"EndDate\", \"b\".\"EpisodeTitle\", \"b\".\"ExternalId\", \"b\".\"ExternalSeriesId\", \"b\".\"ExternalServiceId\", \"b\".\"ExtraType\", \"b\".\"ForcedSortName\", \"b\".\"Genres\", \"b\".\"Height\", \"b\".\"IndexNumber\", \"b\".\"InheritedParentalRatingSubValue\", \"b\".\"InheritedParentalRatingValue\", \"b\".\"IsFolder\", \"b\".\"IsInMixedFolder\", \"b\".\"IsLocked\", \"b\".\"IsMovie\", \"b\".\"IsRepeat\", \"b\".\"IsSeries\", \"b\".\"IsVirtualItem\", \"b\".\"LUFS\", \"b\".\"MediaType\", \"b\".\"Name\", \"b\".\"NormalizationGain\", \"b\".\"OfficialRating\", \"b\".\"OriginalLanguage\", \"b\".\"OriginalTitle\", \"b\".\"Overview\", \"b\".\"OwnerId\", \"b\".\"ParentId\", \"b\".\"ParentIndexNumber\", \"b\".\"Path\", \"b\".\"PreferredMetadataCountryCode\", \"b\".\"PreferredMetadataLanguage\", \"b\".\"PremiereDate\", \"b\".\"PresentationUniqueKey\", \"b\".\"PrimaryVersionId\", \"b\".\"ProductionLocations\", \"b\".\"ProductionYear\", \"b\".\"RunTimeTicks\", \"b\".\"SeasonId\", \"b\".\"SeasonName\", \"b\".\"SeriesId\", \"b\".\"SeriesName\", \"b\".\"SeriesPresentationUniqueKey\", \"b\".\"ShowId\", \"b\".\"Size\", \"b\".\"SortName\", \"b\".\"StartDate\", \"b\".\"Studios\", \"b\".\"Tagline\", \"b\".\"Tags\", \"b\".\"TopParentId\", \"b\".\"TotalBitrate\", \"b\".\"Type\", \"b\".\"UnratedType\", \"b\".\"Width\"\r\nFROM \"BaseItems\" AS \"b\"\r\nLEFT JOIN (\r\n    SELECT \"b0\".\"SeriesPresentationUniqueKey\" AS \"SeriesKey\", MAX(\"u\".\"LastPlayedDate\") AS \"MaxDate\"\r\n    FROM \"UserData\" AS \"u\"\r\n    INNER JOIN \"BaseItems\" AS \"b0\" ON \"u\".\"ItemId\" = \"b0\".\"Id\"\r\n    WHERE \"u\".\"UserId\" = @filter_User_Id AND \"u\".\"Played\" AND \"b0\".\"SeriesPresentationUniqueKey\" IS NOT NULL\r\n    GROUP BY \"b0\".\"SeriesPresentationUniqueKey\"\r\n) AS \"s\" ON \"b\".\"PresentationUniqueKey\" = \"s\".\"SeriesKey\"\r\nORDER BY \"s\".\"MaxDate\" DESC, \"b\".\"SortName\""
+      },
+      {
+        "search": "x",
+        "withUser": false,
+        "queryOrder": [
+          {
+            "name": "Name",
+            "sign": "Descending"
+          },
+          {
+            "name": "SeriesDatePlayed",
+            "sign": "Descending"
+          },
+          {
+            "name": "Studio",
+            "sign": "Descending"
+          }
+        ],
+        "actualSql": ".param set @cleanSearchTerm 'x'\r\n.param set @originalSearchLower 'x'\r\n.param set @searchPrefix_startswith 'x %'\r\n.param set @originalSearchPrefix_startswith 'x %'\r\n.param set @cleanSearchTerm_startswith 'x%'\r\n.param set @originalSearchLower_startswith 'x%'\r\n\r\nSELECT \"b\".\"Id\", \"b\".\"Album\", \"b\".\"AlbumArtists\", \"b\".\"Artists\", \"b\".\"Audio\", \"b\".\"ChannelId\", \"b\".\"CleanName\", \"b\".\"CommunityRating\", \"b\".\"CriticRating\", \"b\".\"CustomRating\", \"b\".\"Data\", \"b\".\"DateCreated\", \"b\".\"DateLastMediaAdded\", \"b\".\"DateLastRefreshed\", \"b\".\"DateLastSaved\", \"b\".\"DateModified\", \"b\".\"EndDate\", \"b\".\"EpisodeTitle\", \"b\".\"ExternalId\", \"b\".\"ExternalSeriesId\", \"b\".\"ExternalServiceId\", \"b\".\"ExtraType\", \"b\".\"ForcedSortName\", \"b\".\"Genres\", \"b\".\"Height\", \"b\".\"IndexNumber\", \"b\".\"InheritedParentalRatingSubValue\", \"b\".\"InheritedParentalRatingValue\", \"b\".\"IsFolder\", \"b\".\"IsInMixedFolder\", \"b\".\"IsLocked\", \"b\".\"IsMovie\", \"b\".\"IsRepeat\", \"b\".\"IsSeries\", \"b\".\"IsVirtualItem\", \"b\".\"LUFS\", \"b\".\"MediaType\", \"b\".\"Name\", \"b\".\"NormalizationGain\", \"b\".\"OfficialRating\", \"b\".\"OriginalLanguage\", \"b\".\"OriginalTitle\", \"b\".\"Overview\", \"b\".\"OwnerId\", \"b\".\"ParentId\", \"b\".\"ParentIndexNumber\", \"b\".\"Path\", \"b\".\"PreferredMetadataCountryCode\", \"b\".\"PreferredMetadataLanguage\", \"b\".\"PremiereDate\", \"b\".\"PresentationUniqueKey\", \"b\".\"PrimaryVersionId\", \"b\".\"ProductionLocations\", \"b\".\"ProductionYear\", \"b\".\"RunTimeTicks\", \"b\".\"SeasonId\", \"b\".\"SeasonName\", \"b\".\"SeriesId\", \"b\".\"SeriesName\", \"b\".\"SeriesPresentationUniqueKey\", \"b\".\"ShowId\", \"b\".\"Size\", \"b\".\"SortName\", \"b\".\"StartDate\", \"b\".\"Studios\", \"b\".\"Tagline\", \"b\".\"Tags\", \"b\".\"TopParentId\", \"b\".\"TotalBitrate\", \"b\".\"Type\", \"b\".\"UnratedType\", \"b\".\"Width\"\r\nFROM \"BaseItems\" AS \"b\"\r\nORDER BY CASE\r\n    WHEN \"b\".\"CleanName\" = @cleanSearchTerm OR (\"b\".\"OriginalTitle\" IS NOT NULL AND lower(\"b\".\"OriginalTitle\") = @originalSearchLower) THEN 0\r\n    WHEN \"b\".\"CleanName\" LIKE @searchPrefix_startswith ESCAPE '\\' OR (\"b\".\"OriginalTitle\" IS NOT NULL AND lower(\"b\".\"OriginalTitle\") LIKE @originalSearchPrefix_startswith ESCAPE '\\') THEN 1\r\n    WHEN \"b\".\"CleanName\" LIKE @cleanSearchTerm_startswith ESCAPE '\\' OR (\"b\".\"OriginalTitle\" IS NOT NULL AND lower(\"b\".\"OriginalTitle\") LIKE @originalSearchLower_startswith ESCAPE '\\') THEN 2\r\n    ELSE 3\r\nEND, \"b\".\"CleanName\" DESC, (\r\n    SELECT MAX(\"u\".\"LastPlayedDate\")\r\n    FROM \"UserData\" AS \"u\"\r\n    INNER JOIN \"BaseItems\" AS \"b0\" ON \"u\".\"ItemId\" = \"b0\".\"Id\"\r\n    WHERE \"u\".\"Played\" AND (\"b0\".\"SeriesPresentationUniqueKey\" = \"b\".\"PresentationUniqueKey\" OR (\"b0\".\"SeriesPresentationUniqueKey\" IS NULL AND \"b\".\"PresentationUniqueKey\" IS NULL))) DESC, (\r\n    SELECT \"i0\".\"CleanValue\"\r\n    FROM \"ItemValuesMap\" AS \"i\"\r\n    INNER JOIN \"ItemValues\" AS \"i0\" ON \"i\".\"ItemValueId\" = \"i0\".\"ItemValueId\"\r\n    WHERE \"b\".\"Id\" = \"i\".\"ItemId\" AND \"i0\".\"Type\" = 3\r\n    ORDER BY \"i0\".\"CleanValue\"\r\n    LIMIT 1) DESC"
+      },
+      {
+        "search": "x",
+        "withUser": true,
+        "queryOrder": [
+          {
+            "name": "Name",
+            "sign": "Descending"
+          },
+          {
+            "name": "SeriesDatePlayed",
+            "sign": "Descending"
+          },
+          {
+            "name": "Studio",
+            "sign": "Descending"
+          }
+        ],
+        "actualSql": ".param set @cleanSearchTerm 'x'\r\n.param set @originalSearchLower 'x'\r\n.param set @searchPrefix_startswith 'x %'\r\n.param set @originalSearchPrefix_startswith 'x %'\r\n.param set @cleanSearchTerm_startswith 'x%'\r\n.param set @originalSearchLower_startswith 'x%'\r\n.param set @query_User_Id 'A9400000-0000-0000-0000-000000000098'\r\n\r\nSELECT \"b\".\"Id\", \"b\".\"Album\", \"b\".\"AlbumArtists\", \"b\".\"Artists\", \"b\".\"Audio\", \"b\".\"ChannelId\", \"b\".\"CleanName\", \"b\".\"CommunityRating\", \"b\".\"CriticRating\", \"b\".\"CustomRating\", \"b\".\"Data\", \"b\".\"DateCreated\", \"b\".\"DateLastMediaAdded\", \"b\".\"DateLastRefreshed\", \"b\".\"DateLastSaved\", \"b\".\"DateModified\", \"b\".\"EndDate\", \"b\".\"EpisodeTitle\", \"b\".\"ExternalId\", \"b\".\"ExternalSeriesId\", \"b\".\"ExternalServiceId\", \"b\".\"ExtraType\", \"b\".\"ForcedSortName\", \"b\".\"Genres\", \"b\".\"Height\", \"b\".\"IndexNumber\", \"b\".\"InheritedParentalRatingSubValue\", \"b\".\"InheritedParentalRatingValue\", \"b\".\"IsFolder\", \"b\".\"IsInMixedFolder\", \"b\".\"IsLocked\", \"b\".\"IsMovie\", \"b\".\"IsRepeat\", \"b\".\"IsSeries\", \"b\".\"IsVirtualItem\", \"b\".\"LUFS\", \"b\".\"MediaType\", \"b\".\"Name\", \"b\".\"NormalizationGain\", \"b\".\"OfficialRating\", \"b\".\"OriginalLanguage\", \"b\".\"OriginalTitle\", \"b\".\"Overview\", \"b\".\"OwnerId\", \"b\".\"ParentId\", \"b\".\"ParentIndexNumber\", \"b\".\"Path\", \"b\".\"PreferredMetadataCountryCode\", \"b\".\"PreferredMetadataLanguage\", \"b\".\"PremiereDate\", \"b\".\"PresentationUniqueKey\", \"b\".\"PrimaryVersionId\", \"b\".\"ProductionLocations\", \"b\".\"ProductionYear\", \"b\".\"RunTimeTicks\", \"b\".\"SeasonId\", \"b\".\"SeasonName\", \"b\".\"SeriesId\", \"b\".\"SeriesName\", \"b\".\"SeriesPresentationUniqueKey\", \"b\".\"ShowId\", \"b\".\"Size\", \"b\".\"SortName\", \"b\".\"StartDate\", \"b\".\"Studios\", \"b\".\"Tagline\", \"b\".\"Tags\", \"b\".\"TopParentId\", \"b\".\"TotalBitrate\", \"b\".\"Type\", \"b\".\"UnratedType\", \"b\".\"Width\"\r\nFROM \"BaseItems\" AS \"b\"\r\nORDER BY CASE\r\n    WHEN \"b\".\"CleanName\" = @cleanSearchTerm OR (\"b\".\"OriginalTitle\" IS NOT NULL AND lower(\"b\".\"OriginalTitle\") = @originalSearchLower) THEN 0\r\n    WHEN \"b\".\"CleanName\" LIKE @searchPrefix_startswith ESCAPE '\\' OR (\"b\".\"OriginalTitle\" IS NOT NULL AND lower(\"b\".\"OriginalTitle\") LIKE @originalSearchPrefix_startswith ESCAPE '\\') THEN 1\r\n    WHEN \"b\".\"CleanName\" LIKE @cleanSearchTerm_startswith ESCAPE '\\' OR (\"b\".\"OriginalTitle\" IS NOT NULL AND lower(\"b\".\"OriginalTitle\") LIKE @originalSearchLower_startswith ESCAPE '\\') THEN 2\r\n    ELSE 3\r\nEND, \"b\".\"CleanName\" DESC, (\r\n    SELECT MAX(\"u\".\"LastPlayedDate\")\r\n    FROM \"UserData\" AS \"u\"\r\n    INNER JOIN \"BaseItems\" AS \"b0\" ON \"u\".\"ItemId\" = \"b0\".\"Id\"\r\n    WHERE \"u\".\"UserId\" = @query_User_Id AND \"u\".\"Played\" AND (\"b0\".\"SeriesPresentationUniqueKey\" = \"b\".\"PresentationUniqueKey\" OR (\"b0\".\"SeriesPresentationUniqueKey\" IS NULL AND \"b\".\"PresentationUniqueKey\" IS NULL))) DESC, (\r\n    SELECT \"i0\".\"CleanValue\"\r\n    FROM \"ItemValuesMap\" AS \"i\"\r\n    INNER JOIN \"ItemValues\" AS \"i0\" ON \"i\".\"ItemValueId\" = \"i0\".\"ItemValueId\"\r\n    WHERE \"b\".\"Id\" = \"i\".\"ItemId\" AND \"i0\".\"Type\" = 3\r\n    ORDER BY \"i0\".\"CleanValue\"\r\n    LIMIT 1) DESC"
+      },
+      {
+        "mode": "default-and-name",
+        "queryOrder": [
+          {
+            "name": "Default",
+            "sign": "Descending"
+          },
+          {
+            "name": "Name",
+            "sign": "Ascending"
+          }
+        ],
+        "actualSql": "SELECT \"b\".\"Id\", \"b\".\"Album\", \"b\".\"AlbumArtists\", \"b\".\"Artists\", \"b\".\"Audio\", \"b\".\"ChannelId\", \"b\".\"CleanName\", \"b\".\"CommunityRating\", \"b\".\"CriticRating\", \"b\".\"CustomRating\", \"b\".\"Data\", \"b\".\"DateCreated\", \"b\".\"DateLastMediaAdded\", \"b\".\"DateLastRefreshed\", \"b\".\"DateLastSaved\", \"b\".\"DateModified\", \"b\".\"EndDate\", \"b\".\"EpisodeTitle\", \"b\".\"ExternalId\", \"b\".\"ExternalSeriesId\", \"b\".\"ExternalServiceId\", \"b\".\"ExtraType\", \"b\".\"ForcedSortName\", \"b\".\"Genres\", \"b\".\"Height\", \"b\".\"IndexNumber\", \"b\".\"InheritedParentalRatingSubValue\", \"b\".\"InheritedParentalRatingValue\", \"b\".\"IsFolder\", \"b\".\"IsInMixedFolder\", \"b\".\"IsLocked\", \"b\".\"IsMovie\", \"b\".\"IsRepeat\", \"b\".\"IsSeries\", \"b\".\"IsVirtualItem\", \"b\".\"LUFS\", \"b\".\"MediaType\", \"b\".\"Name\", \"b\".\"NormalizationGain\", \"b\".\"OfficialRating\", \"b\".\"OriginalLanguage\", \"b\".\"OriginalTitle\", \"b\".\"Overview\", \"b\".\"OwnerId\", \"b\".\"ParentId\", \"b\".\"ParentIndexNumber\", \"b\".\"Path\", \"b\".\"PreferredMetadataCountryCode\", \"b\".\"PreferredMetadataLanguage\", \"b\".\"PremiereDate\", \"b\".\"PresentationUniqueKey\", \"b\".\"PrimaryVersionId\", \"b\".\"ProductionLocations\", \"b\".\"ProductionYear\", \"b\".\"RunTimeTicks\", \"b\".\"SeasonId\", \"b\".\"SeasonName\", \"b\".\"SeriesId\", \"b\".\"SeriesName\", \"b\".\"SeriesPresentationUniqueKey\", \"b\".\"ShowId\", \"b\".\"Size\", \"b\".\"SortName\", \"b\".\"StartDate\", \"b\".\"Studios\", \"b\".\"Tagline\", \"b\".\"Tags\", \"b\".\"TopParentId\", \"b\".\"TotalBitrate\", \"b\".\"Type\", \"b\".\"UnratedType\", \"b\".\"Width\"\r\nFROM \"BaseItems\" AS \"b\"\r\nORDER BY \"b\".\"CleanName\""
+      },
+      {
+        "mode": "default-only-search",
+        "queryOrder": [
+          {
+            "name": "Default",
+            "sign": "Descending"
+          }
+        ],
+        "actualSql": ".param set @cleanSearchTerm 'x'\r\n.param set @originalSearchLower 'x'\r\n.param set @searchPrefix_startswith 'x %'\r\n.param set @originalSearchPrefix_startswith 'x %'\r\n.param set @cleanSearchTerm_startswith 'x%'\r\n.param set @originalSearchLower_startswith 'x%'\r\n\r\nSELECT \"b\".\"Id\", \"b\".\"Album\", \"b\".\"AlbumArtists\", \"b\".\"Artists\", \"b\".\"Audio\", \"b\".\"ChannelId\", \"b\".\"CleanName\", \"b\".\"CommunityRating\", \"b\".\"CriticRating\", \"b\".\"CustomRating\", \"b\".\"Data\", \"b\".\"DateCreated\", \"b\".\"DateLastMediaAdded\", \"b\".\"DateLastRefreshed\", \"b\".\"DateLastSaved\", \"b\".\"DateModified\", \"b\".\"EndDate\", \"b\".\"EpisodeTitle\", \"b\".\"ExternalId\", \"b\".\"ExternalSeriesId\", \"b\".\"ExternalServiceId\", \"b\".\"ExtraType\", \"b\".\"ForcedSortName\", \"b\".\"Genres\", \"b\".\"Height\", \"b\".\"IndexNumber\", \"b\".\"InheritedParentalRatingSubValue\", \"b\".\"InheritedParentalRatingValue\", \"b\".\"IsFolder\", \"b\".\"IsInMixedFolder\", \"b\".\"IsLocked\", \"b\".\"IsMovie\", \"b\".\"IsRepeat\", \"b\".\"IsSeries\", \"b\".\"IsVirtualItem\", \"b\".\"LUFS\", \"b\".\"MediaType\", \"b\".\"Name\", \"b\".\"NormalizationGain\", \"b\".\"OfficialRating\", \"b\".\"OriginalLanguage\", \"b\".\"OriginalTitle\", \"b\".\"Overview\", \"b\".\"OwnerId\", \"b\".\"ParentId\", \"b\".\"ParentIndexNumber\", \"b\".\"Path\", \"b\".\"PreferredMetadataCountryCode\", \"b\".\"PreferredMetadataLanguage\", \"b\".\"PremiereDate\", \"b\".\"PresentationUniqueKey\", \"b\".\"PrimaryVersionId\", \"b\".\"ProductionLocations\", \"b\".\"ProductionYear\", \"b\".\"RunTimeTicks\", \"b\".\"SeasonId\", \"b\".\"SeasonName\", \"b\".\"SeriesId\", \"b\".\"SeriesName\", \"b\".\"SeriesPresentationUniqueKey\", \"b\".\"ShowId\", \"b\".\"Size\", \"b\".\"SortName\", \"b\".\"StartDate\", \"b\".\"Studios\", \"b\".\"Tagline\", \"b\".\"Tags\", \"b\".\"TopParentId\", \"b\".\"TotalBitrate\", \"b\".\"Type\", \"b\".\"UnratedType\", \"b\".\"Width\"\r\nFROM \"BaseItems\" AS \"b\"\r\nORDER BY CASE\r\n    WHEN \"b\".\"CleanName\" = @cleanSearchTerm OR (\"b\".\"OriginalTitle\" IS NOT NULL AND lower(\"b\".\"OriginalTitle\") = @originalSearchLower) THEN 0\r\n    WHEN \"b\".\"CleanName\" LIKE @searchPrefix_startswith ESCAPE '\\' OR (\"b\".\"OriginalTitle\" IS NOT NULL AND lower(\"b\".\"OriginalTitle\") LIKE @originalSearchPrefix_startswith ESCAPE '\\') THEN 1\r\n    WHEN \"b\".\"CleanName\" LIKE @cleanSearchTerm_startswith ESCAPE '\\' OR (\"b\".\"OriginalTitle\" IS NOT NULL AND lower(\"b\".\"OriginalTitle\") LIKE @originalSearchLower_startswith ESCAPE '\\') THEN 2\r\n    ELSE 3\r\nEND"
+      },
+      {
+        "mode": "empty-search",
+        "queryOrder": [],
+        "actualSql": ".param set @cleanSearchTerm 'x'\r\n.param set @originalSearchLower 'x'\r\n.param set @searchPrefix_startswith 'x %'\r\n.param set @originalSearchPrefix_startswith 'x %'\r\n.param set @cleanSearchTerm_startswith 'x%'\r\n.param set @originalSearchLower_startswith 'x%'\r\n\r\nSELECT \"b\".\"Id\", \"b\".\"Album\", \"b\".\"AlbumArtists\", \"b\".\"Artists\", \"b\".\"Audio\", \"b\".\"ChannelId\", \"b\".\"CleanName\", \"b\".\"CommunityRating\", \"b\".\"CriticRating\", \"b\".\"CustomRating\", \"b\".\"Data\", \"b\".\"DateCreated\", \"b\".\"DateLastMediaAdded\", \"b\".\"DateLastRefreshed\", \"b\".\"DateLastSaved\", \"b\".\"DateModified\", \"b\".\"EndDate\", \"b\".\"EpisodeTitle\", \"b\".\"ExternalId\", \"b\".\"ExternalSeriesId\", \"b\".\"ExternalServiceId\", \"b\".\"ExtraType\", \"b\".\"ForcedSortName\", \"b\".\"Genres\", \"b\".\"Height\", \"b\".\"IndexNumber\", \"b\".\"InheritedParentalRatingSubValue\", \"b\".\"InheritedParentalRatingValue\", \"b\".\"IsFolder\", \"b\".\"IsInMixedFolder\", \"b\".\"IsLocked\", \"b\".\"IsMovie\", \"b\".\"IsRepeat\", \"b\".\"IsSeries\", \"b\".\"IsVirtualItem\", \"b\".\"LUFS\", \"b\".\"MediaType\", \"b\".\"Name\", \"b\".\"NormalizationGain\", \"b\".\"OfficialRating\", \"b\".\"OriginalLanguage\", \"b\".\"OriginalTitle\", \"b\".\"Overview\", \"b\".\"OwnerId\", \"b\".\"ParentId\", \"b\".\"ParentIndexNumber\", \"b\".\"Path\", \"b\".\"PreferredMetadataCountryCode\", \"b\".\"PreferredMetadataLanguage\", \"b\".\"PremiereDate\", \"b\".\"PresentationUniqueKey\", \"b\".\"PrimaryVersionId\", \"b\".\"ProductionLocations\", \"b\".\"ProductionYear\", \"b\".\"RunTimeTicks\", \"b\".\"SeasonId\", \"b\".\"SeasonName\", \"b\".\"SeriesId\", \"b\".\"SeriesName\", \"b\".\"SeriesPresentationUniqueKey\", \"b\".\"ShowId\", \"b\".\"Size\", \"b\".\"SortName\", \"b\".\"StartDate\", \"b\".\"Studios\", \"b\".\"Tagline\", \"b\".\"Tags\", \"b\".\"TopParentId\", \"b\".\"TotalBitrate\", \"b\".\"Type\", \"b\".\"UnratedType\", \"b\".\"Width\"\r\nFROM \"BaseItems\" AS \"b\"\r\nORDER BY CASE\r\n    WHEN \"b\".\"CleanName\" = @cleanSearchTerm OR (\"b\".\"OriginalTitle\" IS NOT NULL AND lower(\"b\".\"OriginalTitle\") = @originalSearchLower) THEN 0\r\n    WHEN \"b\".\"CleanName\" LIKE @searchPrefix_startswith ESCAPE '\\' OR (\"b\".\"OriginalTitle\" IS NOT NULL AND lower(\"b\".\"OriginalTitle\") LIKE @originalSearchPrefix_startswith ESCAPE '\\') THEN 1\r\n    WHEN \"b\".\"CleanName\" LIKE @cleanSearchTerm_startswith ESCAPE '\\' OR (\"b\".\"OriginalTitle\" IS NOT NULL AND lower(\"b\".\"OriginalTitle\") LIKE @originalSearchLower_startswith ESCAPE '\\') THEN 2\r\n    ELSE 3\r\nEND"
+      }
+    ],
+    "loadedAssemblies": [
+      {
+        "name": "Diacritics",
+        "path": "D:\\mediamanager\\.agent-docs\\evidence\\series-reference-native-v2\\bin\\Release\\net10.0\\Diacritics.dll",
+        "sha256": "893640462f6bfaa8cf5c18698ee655a1777b05d359963c129e95c2ffb94307b0"
+      },
+      {
+        "name": "Jellyfin.Data",
+        "path": "D:\\mediamanager\\.agent-docs\\evidence\\series-reference-native-v2\\bin\\Release\\net10.0\\Jellyfin.Data.dll",
+        "sha256": "8a4364a16982ff1497aba328f736886f423f9a0f81f91bbdab76199bb2d98751"
+      },
+      {
+        "name": "Jellyfin.Database.Implementations",
+        "path": "D:\\mediamanager\\.agent-docs\\evidence\\series-reference-native-v2\\bin\\Release\\net10.0\\Jellyfin.Database.Implementations.dll",
+        "sha256": "987e24d22a0f54a0eb2c459f9073fc6721bcbed98763da7e23e85e19e3e62ed1"
+      },
+      {
+        "name": "Jellyfin.Database.Providers.Sqlite",
+        "path": "D:\\mediamanager\\.agent-docs\\evidence\\series-reference-native-v2\\bin\\Release\\net10.0\\Jellyfin.Database.Providers.Sqlite.dll",
+        "sha256": "a5c69219419c67798a51e7b40a5bbd8031dbf88cf2f0fee1312f333bde7108fc"
+      },
+      {
+        "name": "Jellyfin.Extensions",
+        "path": "D:\\mediamanager\\.agent-docs\\evidence\\series-reference-native-v2\\bin\\Release\\net10.0\\Jellyfin.Extensions.dll",
+        "sha256": "857e4a37f69c65f1b66cd281fe735a75caf3ae76ae878726eaf20130755cabde"
+      },
+      {
+        "name": "Jellyfin.Server.Implementations",
+        "path": "D:\\mediamanager\\.agent-docs\\evidence\\series-reference-native-v2\\bin\\Release\\net10.0\\Jellyfin.Server.Implementations.dll",
+        "sha256": "eb3e6e24a44d691a70122a68feb8452420df94e93f85f2ca3b8a860bf1a42a2e"
+      },
+      {
+        "name": "MediaBrowser.Common",
+        "path": "D:\\mediamanager\\.agent-docs\\evidence\\series-reference-native-v2\\bin\\Release\\net10.0\\MediaBrowser.Common.dll",
+        "sha256": "c26f4b04b829d85aa2d97401235d245923e5702ffa6021a90a1e27c49399ae87"
+      },
+      {
+        "name": "MediaBrowser.Controller",
+        "path": "D:\\mediamanager\\.agent-docs\\evidence\\series-reference-native-v2\\bin\\Release\\net10.0\\MediaBrowser.Controller.dll",
+        "sha256": "0b7bd01db6605bb54658d07e8b7d5d70615a7f741cfdd6615b0cfa628f0d1644"
+      },
+      {
+        "name": "MediaBrowser.Model",
+        "path": "D:\\mediamanager\\.agent-docs\\evidence\\series-reference-native-v2\\bin\\Release\\net10.0\\MediaBrowser.Model.dll",
+        "sha256": "991b3ca08b544ea91feff5c05d8dbb1d8b6ca3392f90753073cc09e353395946"
+      },
+      {
+        "name": "Microsoft.Data.Sqlite",
+        "path": "D:\\mediamanager\\.agent-docs\\evidence\\series-reference-native-v2\\bin\\Release\\net10.0\\Microsoft.Data.Sqlite.dll",
+        "sha256": "4abd9c2a61e580eb853e93ca8953a3cef2c05714ae28d2d1859d4dbc5e5700bc"
+      },
+      {
+        "name": "Microsoft.EntityFrameworkCore",
+        "path": "D:\\mediamanager\\.agent-docs\\evidence\\series-reference-native-v2\\bin\\Release\\net10.0\\Microsoft.EntityFrameworkCore.dll",
+        "sha256": "9cf183abffc9d6920e8366b75af8388bc502febaaa0e3d9fe41a4906a68d3065"
+      },
+      {
+        "name": "Microsoft.EntityFrameworkCore.Abstractions",
+        "path": "D:\\mediamanager\\.agent-docs\\evidence\\series-reference-native-v2\\bin\\Release\\net10.0\\Microsoft.EntityFrameworkCore.Abstractions.dll",
+        "sha256": "6c6401703d480f3fb49ca47ea746c46557779c7ac4406e29f8a8956b151877d2"
+      },
+      {
+        "name": "Microsoft.EntityFrameworkCore.Relational",
+        "path": "D:\\mediamanager\\.agent-docs\\evidence\\series-reference-native-v2\\bin\\Release\\net10.0\\Microsoft.EntityFrameworkCore.Relational.dll",
+        "sha256": "301f57f6e6a919b139307ed0b0820e74cedb1ccace5cb234470f35ff4600d7c4"
+      },
+      {
+        "name": "Microsoft.EntityFrameworkCore.Sqlite",
+        "path": "D:\\mediamanager\\.agent-docs\\evidence\\series-reference-native-v2\\bin\\Release\\net10.0\\Microsoft.EntityFrameworkCore.Sqlite.dll",
+        "sha256": "6c1737c1f1ba7b32c2a39d838b8ab5f5dbcc1639ca2fdf1aa6699d01444e0210"
+      },
+      {
+        "name": "Microsoft.Extensions.Caching.Abstractions",
+        "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Caching.Abstractions.dll",
+        "sha256": "d6c5e46c7c43834235abbbcb9767756f8e210f0fcc4b92137c57a2aa83b81b2e"
+      },
+      {
+        "name": "Microsoft.Extensions.Caching.Memory",
+        "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Caching.Memory.dll",
+        "sha256": "50df53585dac029895a6d50a32212424aafbae87b9cc20ac0af5338677492983"
+      },
+      {
+        "name": "Microsoft.Extensions.Configuration.Abstractions",
+        "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Configuration.Abstractions.dll",
+        "sha256": "63a89b1becd68c2f5051df9c042b46bdf41fba72393bb1ef29b52b701b155c31"
+      },
+      {
+        "name": "Microsoft.Extensions.DependencyInjection",
+        "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.DependencyInjection.dll",
+        "sha256": "6424c0b19a1cef1977db79eee164dcaeb3cba6abdaa583d6f5ff6413f7f7244a"
+      },
+      {
+        "name": "Microsoft.Extensions.DependencyInjection.Abstractions",
+        "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.DependencyInjection.Abstractions.dll",
+        "sha256": "0e2feec8beaa131967d1f0d70684500183227d1ef58c617b8fadb793c3387e93"
+      },
+      {
+        "name": "Microsoft.Extensions.Logging",
+        "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Logging.dll",
+        "sha256": "afd93f320e217561e674f8c6d44ce1f0846d6ae2f26c0263f6b662476d4b570c"
+      },
+      {
+        "name": "Microsoft.Extensions.Logging.Abstractions",
+        "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Logging.Abstractions.dll",
+        "sha256": "90c41d68d297e54c4def3cfd38eb620513a744ab01131840ea3e2634cf973be3"
+      },
+      {
+        "name": "Microsoft.Extensions.Options",
+        "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Options.dll",
+        "sha256": "02a3cad0e05023f129c0717ba99d171ac524bf5f7c955863e17e3f7441107567"
+      },
+      {
+        "name": "Microsoft.Extensions.Primitives",
+        "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Primitives.dll",
+        "sha256": "5b40af41b1b354f88e64e5b04619f70aaefe693ff377ac0bb9bc7f70c4018cc1"
+      },
+      {
+        "name": "netstandard",
+        "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\netstandard.dll",
+        "sha256": "3dc81dbc9dacd28261632c94410859eda24c2db50cd6c14309cbb2a434b50c57"
+      },
+      {
+        "name": "Oracle",
+        "path": "D:\\mediamanager\\.agent-docs\\evidence\\series-reference-native-v2\\bin\\Release\\net10.0\\Oracle.dll",
+        "sha256": "2bc3aa1a79d7764259bd46e86ecea4b2ef3aedfe295d2dae62448858675f537d"
+      },
+      {
+        "name": "Polly",
+        "path": "D:\\mediamanager\\.agent-docs\\evidence\\series-reference-native-v2\\bin\\Release\\net10.0\\Polly.dll",
+        "sha256": "cecb78ee944fd7cd1889c21602cc905df8f72af06a3798fb0fd75d96d436891e"
+      },
+      {
+        "name": "SQLitePCLRaw.batteries_v2",
+        "path": "D:\\mediamanager\\.agent-docs\\evidence\\series-reference-native-v2\\bin\\Release\\net10.0\\SQLitePCLRaw.batteries_v2.dll",
+        "sha256": "815ce410c9eab531dd219318e3ba16c5e38e83d361cfbbdbb4bbca222c497b0b"
+      },
+      {
+        "name": "SQLitePCLRaw.core",
+        "path": "D:\\mediamanager\\.agent-docs\\evidence\\series-reference-native-v2\\bin\\Release\\net10.0\\SQLitePCLRaw.core.dll",
+        "sha256": "af340ac9eb9195795660d7fc1114f486b6ab63998f33176e2f24c8e0acb9aa84"
+      },
+      {
+        "name": "SQLitePCLRaw.provider.e_sqlite3",
+        "path": "D:\\mediamanager\\.agent-docs\\evidence\\series-reference-native-v2\\bin\\Release\\net10.0\\SQLitePCLRaw.provider.e_sqlite3.dll",
+        "sha256": "df996bcae63c2cabcfe8d4b9c5110eb39a2a4706178b07d875665391c6eb3995"
+      },
+      {
+        "name": "System.Collections",
+        "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Collections.dll",
+        "sha256": "df6f2037eabee28100184e92f7536427ba2f086c1110629804d466b124bc4d54"
+      },
+      {
+        "name": "System.Collections.Concurrent",
+        "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Collections.Concurrent.dll",
+        "sha256": "082f4bc0da1141eb65111b6da633d75624adfb7bb067d7ee90c5622c8b30885b"
+      },
+      {
+        "name": "System.Collections.Immutable",
+        "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Collections.Immutable.dll",
+        "sha256": "b527dd7b2beb82c22aa39787298cbeb33f3eac9eb9b83a0f0271353421db28db"
+      },
+      {
+        "name": "System.ComponentModel",
+        "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.ComponentModel.dll",
+        "sha256": "e3b6f75864ee944898540937c1f300e04f44a1b2729516f0bbf948589a8b14b2"
+      },
+      {
+        "name": "System.ComponentModel.Annotations",
+        "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.ComponentModel.Annotations.dll",
+        "sha256": "e3be2d35d81e6475c64110cfc099895b71df22c8b46a18c2d7c76a913b8ba903"
+      },
+      {
+        "name": "System.ComponentModel.Primitives",
+        "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.ComponentModel.Primitives.dll",
+        "sha256": "1e2451184c287409ea25acde3c90f25950bf34d16458a6e52a94ca4292434f62"
+      },
+      {
+        "name": "System.ComponentModel.TypeConverter",
+        "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.ComponentModel.TypeConverter.dll",
+        "sha256": "10dae312a6697718f8ce3dfcdb17d6ae4b74687c765d74d50de8a8e69e08f5e7"
+      },
+      {
+        "name": "System.Console",
+        "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Console.dll",
+        "sha256": "3b85daf02a3d9ed99b84bb1c639fe8b1ced46d8d157fa56f525f6b8c5be43b3e"
+      },
+      {
+        "name": "System.Data.Common",
+        "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Data.Common.dll",
+        "sha256": "66bdd62047ee460e2ce2c33d15dd1173ac97997b2745864a905179594f821acc"
+      },
+      {
+        "name": "System.Diagnostics.DiagnosticSource",
+        "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Diagnostics.DiagnosticSource.dll",
+        "sha256": "6267c1bd1bdf2bdd4b5748b885b0adcda10f18697adfea8488a19a009ad44fdb"
+      },
+      {
+        "name": "System.Diagnostics.Process",
+        "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Diagnostics.Process.dll",
+        "sha256": "51a57fbe918f8b68930c090792b718fc0850ea12da869d50b97a3796af29a740"
+      },
+      {
+        "name": "System.Diagnostics.Tracing",
+        "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Diagnostics.Tracing.dll",
+        "sha256": "9563d5eec35f94d13a5e62eaa9535dbe0e9ea474f055da132fb8af46b0b01263"
+      },
+      {
+        "name": "System.Linq",
+        "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Linq.dll",
+        "sha256": "284d38945b6e92e847129bd28af458b19818d0f2181f79882888ab2003f4c519"
+      },
+      {
+        "name": "System.Linq.Expressions",
+        "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Linq.Expressions.dll",
+        "sha256": "8830f4a6a6982f53cfbb54f992858ee36b4994a6ff6e6078c39627e77bef282f"
+      },
+      {
+        "name": "System.Linq.Queryable",
+        "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Linq.Queryable.dll",
+        "sha256": "b3b3a9c1b87a51dacd46a3f9ec392c5d05e449152d44d6bd495df0994350e2fa"
+      },
+      {
+        "name": "System.Memory",
+        "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Memory.dll",
+        "sha256": "f8f9d38efd6b0de30954d6bf1f353e9617bfb36d3d245c013a3b12be9f6bd88a"
+      },
+      {
+        "name": "System.Net.NetworkInformation",
+        "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Net.NetworkInformation.dll",
+        "sha256": "7e8791833eb2d0aea77b119fed3cab8bf501f6a553155cc1c4e5b1c02f65593b"
+      },
+      {
+        "name": "System.Net.Primitives",
+        "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Net.Primitives.dll",
+        "sha256": "4dbb41a178ef013a898327152eccd146228dd2eb83859b9bb36078333b41f0f1"
+      },
+      {
+        "name": "System.Numerics.Vectors",
+        "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Numerics.Vectors.dll",
+        "sha256": "a9a980ee33ed0c798a5e1960c4557521f465ac9e0987dfd2c3049d53b1f2fa5a"
+      },
+      {
+        "name": "System.ObjectModel",
+        "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.ObjectModel.dll",
+        "sha256": "2179bb19f335b4fcacd0994ad2ccfdac6840deff09c7889debfe9dbb5b88a3e6"
+      },
+      {
+        "name": "System.Private.CoreLib",
+        "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Private.CoreLib.dll",
+        "sha256": "1125acc8106c43fc8bad2d203c4c4485df6182d292846c2fff415c1040c54678"
+      },
+      {
+        "name": "System.Private.Uri",
+        "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Private.Uri.dll",
+        "sha256": "b15c84d2120e1ec9612c66ba59bc3d7e67d841e2bce7b7d0478cb212537539b4"
+      },
+      {
+        "name": "System.Private.Xml",
+        "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Private.Xml.dll",
+        "sha256": "d71e72a7a9de324352edd281a46466b51bd0bdd2831b1573f8d3bae8bd2dd4a6"
+      },
+      {
+        "name": "System.Reflection.DispatchProxy",
+        "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Reflection.DispatchProxy.dll",
+        "sha256": "bf93a361c0bba8497889c9f7713add5968ba39394f9e6bda27e86294c6c43560"
+      },
+      {
+        "name": "System.Reflection.Emit",
+        "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Reflection.Emit.dll",
+        "sha256": "09059981bbeea0fdc5df589be5d7e3937d57e22bec4d78ceb492c587926fc238"
+      },
+      {
+        "name": "System.Reflection.Emit.ILGeneration",
+        "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Reflection.Emit.ILGeneration.dll",
+        "sha256": "6b42ddd05b0ca1c7342d73ea9f401fe588044215d65c67b756deb780f0894a26"
+      },
+      {
+        "name": "System.Reflection.Emit.Lightweight",
+        "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Reflection.Emit.Lightweight.dll",
+        "sha256": "d2724a2b7b46146877ec1f6e400c49ea05f84bdd31f3bba52ae139ee68a4f779"
+      },
+      {
+        "name": "System.Reflection.Primitives",
+        "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Reflection.Primitives.dll",
+        "sha256": "c2bbd885d03da5e880667c228ac1f56a5f3a72ea37d43f010ada000adc33da28"
+      },
+      {
+        "name": "System.Runtime",
+        "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Runtime.dll",
+        "sha256": "76be53624f64b23d0249dfa0bbe85390086de7c44bfd490642ea86c6faaf44af"
+      },
+      {
+        "name": "System.Runtime.InteropServices",
+        "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Runtime.InteropServices.dll",
+        "sha256": "e5eb1679f3579c9141e2bb9dbdce62624a623f38d299805cc1de07bacd21841f"
+      },
+      {
+        "name": "System.Runtime.Intrinsics",
+        "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Runtime.Intrinsics.dll",
+        "sha256": "b07694ec91f3a200acf0f8b37c6ce5fcf05126a9198ae156d839fa5ca8439dc5"
+      },
+      {
+        "name": "System.Runtime.Loader",
+        "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Runtime.Loader.dll",
+        "sha256": "9b9b2a4f0358d9146e76178ddb87d019be380c78baa7dac853493d45df089f03"
+      },
+      {
+        "name": "System.Text.Encoding.Extensions",
+        "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Text.Encoding.Extensions.dll",
+        "sha256": "8f51b9535db64fe027a40d6076200b1a6b0889bf05f62bb8e68c3eb083c7f113"
+      },
+      {
+        "name": "System.Text.Encodings.Web",
+        "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Text.Encodings.Web.dll",
+        "sha256": "d20431f20d992e71a4e82e5f25c822474e2f4097d8527972d3d78ea1f26e47c3"
+      },
+      {
+        "name": "System.Text.Json",
+        "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Text.Json.dll",
+        "sha256": "fa99f413be21ed5f484a09093fe5f0beba7de3062cf9cc9f847dbf8108dba55a"
+      },
+      {
+        "name": "System.Text.RegularExpressions",
+        "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Text.RegularExpressions.dll",
+        "sha256": "060bcc88a688e687ff1404b83b5fb5cf17e19ec57f33d5b8a48ab494da83c134"
+      },
+      {
+        "name": "System.Threading",
+        "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Threading.dll",
+        "sha256": "6c32ed1bf8067e4169e8feddd15e6489b89d19d1c7aae1520a551b57745d0a60"
+      },
+      {
+        "name": "System.Threading.ThreadPool",
+        "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Threading.ThreadPool.dll",
+        "sha256": "58fbc6c4b9c72087152fd0f0670a527098c00b0c19ba8d0979d3ca5ce07c6936"
+      },
+      {
+        "name": "System.Transactions.Local",
+        "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Transactions.Local.dll",
+        "sha256": "8d0283a311a16333ffb6f966d9765e4d8b866777ad99291a93b30db349a15bc4"
+      },
+      {
+        "name": "System.Xml.ReaderWriter",
+        "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Xml.ReaderWriter.dll",
+        "sha256": "8e48fed4d12bcffff01e8059caafb564697275797d2f5ec6823fdd82b87fe938"
+      }
+    ],
+    "sourceBoundary": "Actual frozen Episode/Season Series, FindSeriesId, FindSeriesSortName, Episode.AiredSeasonNumber, GetUserDataKeys and BaseItem.GetParents getters. Lookup stub only resolves explicit IDs; default ServerConfiguration is controlled for real SortName getter. savedAncestorIds are deliberately contradictory evidence inputs; getters never receive or query them. Alias Episode is actually deserialized with System.Text.Json then explicit ignored fields are assigned; its serialized Series and SeriesId are ignored. Actual frozen BaseItemRepository.ApplyOrder/ApplySeriesDatePlayedOrder and OrderMapper run against actual JellyfinDbContext/SQLite provider to produce EF SQL with ToQueryString; no database connection/query/HTTP request is executed. Entity lookup, default configuration and unused locking interfaces are controlled. No production files or existing matrices are edited by this oracle."
+  },
+  "limitations": "Actual frozen Episode/Season Series, FindSeriesId, FindSeriesSortName, Episode.AiredSeasonNumber, GetUserDataKeys and BaseItem.GetParents getters. Lookup stub only resolves explicit IDs; default ServerConfiguration is controlled for real SortName getter. savedAncestorIds are deliberately contradictory evidence inputs; getters never receive or query them. Alias Episode is actually deserialized with System.Text.Json then explicit ignored fields are assigned; its serialized Series and SeriesId are ignored. Actual frozen BaseItemRepository.ApplyOrder/ApplySeriesDatePlayedOrder and OrderMapper run against actual JellyfinDbContext/SQLite provider to produce EF SQL with ToQueryString; no database connection/query/HTTP request is executed. Entity lookup, default configuration and unused locking interfaces are controlled. No production files or existing matrices are edited by this oracle. Video.RecordingsManager is an empty controlled interface; recordings branches are outside this matrix."
+}

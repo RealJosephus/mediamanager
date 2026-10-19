@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "environment": {
+    "nodeTimezone": "Asia/Taipei",
+    "native": {
+      "type": "environment",
+      "runtime": ".NET 10.0.12",
+      "operatingSystem": "Microsoft Windows 10.0.26300",
+      "timezoneId": "Taipei Standard Time",
+      "baseUtcOffset": "08:00:00",
+      "pid": 4616,
+      "assemblies": [
+        {
+          "name": "Jellyfin.Extensions",
+          "path": "D:\\mediamanager\\.agent-temp\\reference\\jellyfin-20261003\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Jellyfin.Extensions.dll",
+          "sha256": "3ca9d4009111672ba069b1076c396e92cc2ffb913a5ebd5715eaa0870510bd23"
+        },
+        {
+          "name": "MediaBrowser.Model",
+          "path": "D:\\mediamanager\\.agent-temp\\reference\\jellyfin-20261003\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\MediaBrowser.Model.dll",
+          "sha256": "5c81667394bb661075cffb58c071655651e407fd1ceb1fe0f7f426430c780737"
+        }
+      ]
+    }
+  },
+  "cases": [
+    {
+      "name": "date-295",
+      "source": "{\"LastPlayedDate\":\"1990-07-01T12:00:00+00:00\"}",
+      "expected": {
+        "ticks": "627824592000000000",
+        "kind": "Local",
+        "utcTicks": "627824304000000000",
+        "stored": "1990-07-01 12:00:00"
+      }
+    },
+    {
+      "name": "date-296",
+      "source": "{\"LastPlayedDate\":\"1900-01-01T12:00:00\"}",
+      "expected": {
+        "ticks": "599266512000000000",
+        "kind": "Unspecified",
+        "utcTicks": "599266224000000000",
+        "stored": "1900-01-01 04:00:00"
+      }
+    }
+  ]
+}
