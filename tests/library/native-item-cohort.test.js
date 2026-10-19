@@ -7,7 +7,7 @@ import {newNativeItemEntity,cloneNativeItemEntity,releaseNativeItemLinks} from '
 import {createNativeItemCohort} from '../../src/library/native-item-cohort.js';
 
 test('postgres: typed slots preserve repeated captured values, observer mutations and event retention after TEMP disposal',{skip:!process.env.MEDIAMANAGER_TEST_POSTGRES},async()=>{
- const schema='native_cohort_'+randomUUID().replaceAll('-','').slice(0,20),database=await PostgresDatabase.open({connectionString:process.env.MEDIAMANAGER_TEST_POSTGRES,schema,create:true,maxPoolSize:1}),links=new PostgresLinkedChildrenStore({database});
+ const schema='native_cohort_'+randomUUID().replaceAll('-','').slice(0,20),database=await PostgresDatabase.open({connectionString:process.env.MEDIAMANAGER_TEST_POSTGRES,schema,create:true,max:1}),links=new PostgresLinkedChildrenStore({database});
  let cohort,event,retained,page;
  try{
   await links.initialize();const movie=newNativeItemEntity('MediaBrowser.Controller.Entities.Movies.Movie');movie.Id='10000000000000000000000000000001';movie.Name='captured';movie.OfficialRating='PG';movie.Tags=['one'];movie.ProviderIds={Tmdb:'old'};

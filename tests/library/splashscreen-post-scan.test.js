@@ -27,7 +27,7 @@ test('splashscreen encoder failures retain the scan lifecycle continuation and i
   const task = new SplashscreenPostScanTask({ library: { async getSplashscreenImagePaths() { return ['image.png']; } },
     imageGenerator: { async createSplashscreen() { calls.push('encoder'); throw failure; } } });
   const required = ['getAggregateFolder', 'getUserRootFolder', 'clearIgnoreRuleCache', 'invalidateChildren',
-    'refreshMetadata', 'validateChildren', 'getChildren', 'collectionDirectoryExists', 'deleteCollections'];
+    'refreshMetadata', 'validateChildren', 'withChildren', 'collectionDirectoryExists'];
   const host = Object.fromEntries(required.map(name => [name, async () => {}]));
   host.updateInheritedValues = async () => calls.push('inherited');
   const lifecycle = new LibraryScanLifecycle({ host, monitor: { start() {}, stop() {} },

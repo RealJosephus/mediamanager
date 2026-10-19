@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import path from 'node:path';
 import { mkdir, writeFile, utimes } from 'node:fs/promises';
 import * as libraryModule from '../../src/library/index.js';
+import { LibraryTaskScheduler } from '../../src/library/library-task-scheduler.js';
 import { DirectoryItemResolverPipeline, folderNativeType } from '../../src/library/directory-item-resolver.js';
 import { createVideoFileResolver, resolveOrdinaryVideoFile } from '../../src/library/video-file-resolver.js';
 import { ItemCreationService } from '../../src/library/item-creation-service.js';
@@ -161,8 +162,12 @@ export async function assertDirectoryValidation(t, dialect, sample, expected, {
   const resolverPipeline = new DirectoryItemResolverPipeline({ resolvers: [resolver, folder],
     programDataPath: fixture.stateRoot, configuration: fixture.configuration,
     onError: error => resolverErrors.push(error) });
-  if (typeof metadataScanner === 'function') metadataScanner = metadataScanner({ fixture, loaded, calls, creator });
+  const scheduler = new LibraryTaskScheduler({ configuration: fixture.configuration,
+    runWorker: operation => fixture.store.runDetached(() => fixture.loadContext.withDetachedScope(operation)) });
+  t.after(() => scheduler.close());
+  if (typeof metadataScanner === 'function') metadataScanner = metadataScanner({ fixture, loaded, calls, creator, scheduler });
   const validation = new FolderValidationService({
+    scheduler,
     store: fixture.store,
     library: fixture.library,
     itemCreation: creator,
@@ -397,6 +402,7 @@ export async function assertDirectoryValidation(t, dialect, sample, expected, {
   assert.deepEqual(actual, expected);
   assert.equal(resolverErrors.length, sample.resolverFailure
     || (sample.recursive && (sample.failDirectory || sample.cancelFromSaver)) ? 1 : 0);
+  return { fixture, validation, loaded, creator };
 }
 
 const databaseFault = error => error.code === 'P0001';

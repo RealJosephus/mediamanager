@@ -87,6 +87,17 @@ function propertyKeyName(property) {
   return staticString(property.key);
 }
 
+function patternBinds(pattern, name) {
+  if (!pattern) return false;
+  if (pattern.type === 'Identifier') return pattern.name === name;
+  if (pattern.type === 'AssignmentPattern') return patternBinds(pattern.left, name);
+  if (pattern.type === 'RestElement') return patternBinds(pattern.argument, name);
+  if (pattern.type === 'ArrayPattern') return pattern.elements.some(element => patternBinds(element, name));
+  if (pattern.type === 'ObjectPattern') return pattern.properties.some(property =>
+    patternBinds(property.type === 'RestElement' ? property.argument : property.value, name));
+  return false;
+}
+
 function localSpecifier(specifier) {
   return specifier.startsWith('@mediamanager/plugin-sdk/') || /^(?:\.{1,2}[\\/]|[\\/]|[A-Za-z]:[\\/]|file:)/u.test(specifier);
 }
@@ -128,6 +139,22 @@ export function analyzeJavaScriptDependencies(source) {
   const environmentVariables = new Set();
   const nodes = [];
   walkSyntax(syntax, (node, parent, ancestors) => nodes.push({ node, parent, ancestors }));
+  const shadowedUrl = nodes.some(({ node }) =>
+    node.type === 'VariableDeclarator' && patternBinds(node.id, 'URL')
+    || ['FunctionDeclaration', 'FunctionExpression', 'ArrowFunctionExpression'].includes(node.type)
+      && (patternBinds(node.id, 'URL') || node.params.some(parameter => patternBinds(parameter, 'URL')))
+    || ['ClassDeclaration', 'ClassExpression'].includes(node.type) && patternBinds(node.id, 'URL')
+    || node.type === 'CatchClause' && patternBinds(node.param, 'URL')
+    || ['ImportSpecifier', 'ImportDefaultSpecifier', 'ImportNamespaceSpecifier'].includes(node.type) && node.local.name === 'URL'
+    || ['AssignmentExpression', 'UpdateExpression'].includes(node.type) && (
+      patternBinds(node.left ?? node.argument, 'URL') || (node.left ?? node.argument)?.type === 'MemberExpression'
+        && (node.left ?? node.argument).object?.type === 'Identifier' && (node.left ?? node.argument).object.name === 'globalThis'
+        && memberName(node.left ?? node.argument) === 'URL')
+    || node.type === 'VariableDeclarator' && node.init?.type === 'MetaProperty' && node.init.meta?.name === 'import'
+    || node.type === 'CallExpression' && node.arguments.some(argument => argument.type === 'MetaProperty' && argument.meta?.name === 'import')
+    || ['AssignmentExpression', 'UpdateExpression'].includes(node.type)
+      && (node.left ?? node.argument)?.type === 'MemberExpression' && (node.left ?? node.argument).object?.type === 'MetaProperty'
+      && (node.left ?? node.argument).object.meta?.name === 'import');
   const declarationLists = new Map();
   for (const { node, parent } of nodes) {
     if (node.type !== 'VariableDeclarator' || node.id.type !== 'Identifier' || parent?.type !== 'VariableDeclaration'
@@ -141,11 +168,17 @@ export function analyzeJavaScriptDependencies(source) {
   const childProcessNamespaces = new Set();
   const unsupportedExecutionNames = new Set();
   const unsafeRuntimeLoads = [];
+  const workerNames = new Set();
   const validationExecutableNames = new Set(['validationExecutable']);
   for (const { node } of nodes) {
     if (node.type !== 'ImportDeclaration') continue;
     const moduleName = String(node.source.value).replace(/^node:/u, '');
-    if (['worker_threads', 'cluster', 'vm', 'inspector', 'repl'].includes(moduleName)) unsafeRuntimeLoads.push(node);
+    if (['cluster', 'vm', 'inspector', 'repl'].includes(moduleName)) unsafeRuntimeLoads.push(node);
+    if (moduleName === 'worker_threads') {
+      if (node.specifiers.some(specifier => specifier.type !== 'ImportSpecifier'
+        || !['Worker', 'parentPort', 'workerData', 'isMainThread', 'threadId'].includes(specifier.imported.name))) unsafeRuntimeLoads.push(node);
+      for (const specifier of node.specifiers) if (specifier.type === 'ImportSpecifier' && specifier.imported.name === 'Worker') workerNames.add(specifier.local.name);
+    }
     for (const specifier of node.specifiers) {
       if (moduleName === 'module' && specifier.type === 'ImportSpecifier' && specifier.imported.name === 'createRequire') {
         createRequireNames.add(specifier.local.name);
@@ -285,6 +318,10 @@ export function analyzeJavaScriptDependencies(source) {
   }
   const addSource = (sourceNode, kind, node) => {
     const specifier = staticSpecifier(sourceNode);
+    if (specifier && specifier.replace(/^node:/u, '') === 'worker_threads' && node.type !== 'ImportDeclaration') {
+      unresolved.set(`worker-load:${node.start}:${node.end}`, { kind: 'worker', reason: 'unsupported-worker-module-load', start: node.start, end: node.end });
+      return;
+    }
     if (specifier === null) {
       const value = { kind, reason: 'non-static-specifier', start: node.start, end: node.end };
       unresolved.set(`${kind}:${node.start}:${node.end}`, value);
@@ -359,11 +396,12 @@ export function analyzeJavaScriptDependencies(source) {
       if (!binding) unresolvedExecutables.set(`unsupported-name:${node.start}:${node.end}`,
         { reason: 'unsupported-execution-capability', start: node.start, end: node.end });
     }
-    if (node.type === 'Identifier' && node.name === 'Worker') {
+    if (node.type === 'Identifier' && (workerNames.has(node.name) || node.name === 'Worker')) {
       const propertyKey = parent?.type === 'Property' && parent.key === node && parent.value !== node && !parent.computed
         || parent?.type === 'MemberExpression' && parent.property === node && !parent.computed;
       const binding = parent?.type === 'ImportSpecifier' || parent?.type === 'VariableDeclarator' && parent.id === node;
-      if (!propertyKey && !binding) unresolvedExecutables.set(`worker:${node.start}:${node.end}`,
+      const construction = workerNames.has(node.name) && parent?.type === 'NewExpression' && parent.callee === node;
+      if (!propertyKey && !binding && !construction) unresolvedExecutables.set(`worker:${node.start}:${node.end}`,
         { reason: 'unsupported-worker-entry', start: node.start, end: node.end });
     }
     if (node.type === 'Identifier' && requireNames.has(node.name)) {
@@ -459,6 +497,31 @@ export function analyzeJavaScriptDependencies(source) {
     return { resolved: false, tools: [] };
   };
   for (const { node } of nodes) {
+    if (node.type === 'NewExpression' && node.callee?.type === 'Identifier' && node.callee.name === 'URL'
+      && node.arguments.length === 2) {
+      const specifier = staticSpecifier(node.arguments[0]), base = node.arguments[1];
+      if (specifier && /\.wasm$/u.test(specifier)) {
+        if (!shadowedUrl && !/^(?:[A-Za-z][A-Za-z0-9+.-]*:|[\\/])/u.test(specifier)
+          && base?.type === 'MemberExpression' && !base.computed
+          && base.object?.type === 'MetaProperty' && base.object.meta?.name === 'import' && base.object.property?.name === 'meta'
+          && base.property?.name === 'url') imports.set(`asset:${specifier}`, { kind: 'asset', specifier });
+        else unresolvedCapability('wasm', node, 'unbound-wasm-asset-url');
+      }
+    }
+    if (node.type === 'NewExpression' && node.callee?.type === 'Identifier' && workerNames.has(node.callee.name)) {
+      const entry = node.arguments[0], base = entry?.arguments?.[1];
+      const specifier = !shadowedUrl && entry?.type === 'NewExpression' && entry.callee?.type === 'Identifier' && entry.callee.name === 'URL'
+        && entry.arguments.length === 2 && base?.type === 'MemberExpression' && !base.computed
+        && base.object?.type === 'MetaProperty' && base.object.meta?.name === 'import' && base.object.property?.name === 'meta'
+        && base.property?.name === 'url' ? staticSpecifier(entry.arguments[0]) : null;
+      const options = node.arguments[1];
+      const safeOptions = !options || options.type === 'ObjectExpression' && options.properties.every(property =>
+        property.type === 'Property' && property.kind === 'init' && !property.method && !property.computed
+        && ['workerData', 'trackUnmanagedFds', 'name', 'resourceLimits', 'stdout', 'stderr'].includes(propertyKeyName(property)));
+      if (!specifier || !/^\.{1,2}\//u.test(specifier) || !/\.(?:js|mjs|cjs)$/u.test(specifier)
+        || !safeOptions || node.arguments.length > 2) unresolvedCapability('worker', node, 'unbound-worker-entry-or-options');
+      else imports.set(`module:${specifier}`, { kind: 'module', specifier });
+    }
     if (node.type === 'CallExpression' && node.callee?.type === 'Identifier'
       && validationExecutableNames.has(node.callee.name)) {
       const configured = staticString(node.arguments[0]);
@@ -594,7 +657,7 @@ export async function resolveLocalImport(importer, dependency, {
     if (path.relative(knownRealPath, targetRealPath) !== '') return { error: 'known-source-realpath-mismatch' };
     return { imported: known };
   }
-  return path.extname(relative).toLowerCase() === '.json'
+  return path.extname(relative).toLowerCase() === '.json' || dependency.kind === 'asset' && path.extname(relative).toLowerCase() === '.wasm'
     ? { importedFile: relative } : { error: 'local-target-unsupported-extension' };
 }
 

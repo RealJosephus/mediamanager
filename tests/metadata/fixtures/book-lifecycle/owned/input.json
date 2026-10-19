@@ -1,0 +1,178 @@
+[
+  {
+    "name": "Book-primary-epub",
+    "expectedType": "Book",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "ownerPath": "primary.epub",
+    "files": [
+      "primary-trailer.mkv"
+    ]
+  },
+  {
+    "name": "Book-primary-pdf",
+    "expectedType": "Book",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "ownerPath": "primary.pdf",
+    "files": [
+      "primary-trailer.mkv"
+    ]
+  },
+  {
+    "name": "Book-primary-cbz",
+    "expectedType": "Book",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "ownerPath": "primary.cbz",
+    "files": [
+      "primary-trailer.mkv"
+    ]
+  },
+  {
+    "name": "Book-primary-mkv",
+    "expectedType": "Book",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "ownerPath": "primary.mkv",
+    "files": [
+      "primary-trailer.mkv"
+    ]
+  },
+  {
+    "name": "Photo-primary-jpg",
+    "expectedType": "Photo",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "ownerPath": "primary.jpg",
+    "files": [
+      "primary-trailer.mkv"
+    ]
+  },
+  {
+    "name": "Photo-primary-png",
+    "expectedType": "Photo",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "ownerPath": "primary.png",
+    "files": [
+      "primary-trailer.mkv"
+    ]
+  },
+  {
+    "name": "Photo-primary-mkv",
+    "expectedType": "Photo",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "ownerPath": "primary.mkv",
+    "files": [
+      "primary-trailer.mkv"
+    ]
+  },
+  {
+    "name": "PhotoAlbum-directory",
+    "expectedType": "PhotoAlbum",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "ownerPath": "album",
+    "files": [
+      "album/primary-trailer.mkv"
+    ]
+  },
+  {
+    "name": "Folder-directory",
+    "expectedType": "Folder",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "ownerPath": "album",
+    "files": [
+      "album/primary-trailer.mkv"
+    ]
+  },
+  {
+    "name": "Book-primary-disc",
+    "expectedType": "Book",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "ownerPath": "primary.disc",
+    "files": [
+      "primary-trailer.mkv"
+    ]
+  },
+  {
+    "name": "Book-primary-dvd-disc",
+    "expectedType": "Book",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "ownerPath": "primary.dvd.disc",
+    "files": [
+      "primary-trailer.mkv"
+    ]
+  },
+  {
+    "name": "Book-primary-iso",
+    "expectedType": "Book",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "ownerPath": "primary.iso",
+    "files": [
+      "primary-trailer.mkv"
+    ]
+  },
+  {
+    "name": "Book-primary-strm",
+    "expectedType": "Book",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "ownerPath": "primary.strm",
+    "files": [
+      "primary-trailer.mkv"
+    ]
+  },
+  {
+    "name": "Book-primary-img",
+    "expectedType": "Book",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "ownerPath": "primary.img",
+    "files": [
+      "primary-trailer.mkv"
+    ]
+  },
+  {
+    "name": "Book-primary-unknown",
+    "expectedType": "Book",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "ownerPath": "primary.unknown",
+    "files": [
+      "primary-trailer.mkv"
+    ]
+  },
+  {
+    "name": "Book--mkv",
+    "expectedType": "Book",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "ownerPath": ".mkv",
+    "files": [
+      "primary-trailer.mkv"
+    ]
+  }
+]

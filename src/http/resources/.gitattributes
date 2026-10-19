@@ -1,0 +1,4 @@
+mime-types.json -text
+mime-types-provenance.json -text
+mime-types-license.txt -text
+mime-types-notice.txt -text

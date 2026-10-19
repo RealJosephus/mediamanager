@@ -52,7 +52,7 @@ const extraTypes = ['Unknown', 'Clip', 'Trailer', 'BehindTheScenes', 'DeletedSce
 
 export { nativePersonIdentity } from './identity.js';
 
-export function metadataLookup(item) {
+export function metadataLookup(item, parents = []) {
   const lookup = Object.fromEntries(['Path', 'Name', 'OriginalTitle', 'ProviderIds', 'IndexNumber', 'ParentIndexNumber', 'PremiereDate',
     'MetadataCountryCode', 'MetadataLanguage', 'SeriesProviderIds', 'SeasonProviderIds', 'SeriesDisplayOrder', 'IsMissingEpisode',
     'IndexNumberEnd'].map(key => [key, cloneNativeItemValue(item[key])]).concat([['Year', item.ProductionYear]]));
@@ -61,6 +61,8 @@ export function metadataLookup(item) {
     if (['VideoFile', 'Iso'].includes(item.VideoType) && ordinalIgnoreCaseEquals(name, nativeFileName(item.Path))) name = nativeFileNameWithoutExtension(name);
     lookup.Name = name;
   }
+  if (item.Type === 'Book') lookup.SeriesName = item.SeriesName == null || item.SeriesName === ''
+    ? parents[0]?.Name ?? null : item.SeriesName;
   return lookup;
 }
 
@@ -244,10 +246,10 @@ export function createMetadataContextLoader({ store, library, fileSystem = libra
       } else if (item.IsFileProtocol) {
         context.accessPath = access(item);
       }
-      return { accessPath: context.accessPath, localPath: context.localPath,
-        imageAssets: stateLocalItem && context.localPath ? localStateAssets
-          : internalFolderTypes.includes(item.Type) ? internalAssets : item.Type === 'UserView' ? userViewAssets
-            : context.accessPath ? imageAssets.forItem(item, context.accessPath) : imageAssets };
+      context.imageAssets = stateLocalItem && context.localPath ? localStateAssets
+        : internalFolderTypes.includes(item.Type) ? internalAssets : item.Type === 'UserView' ? userViewAssets
+          : context.accessPath ? imageAssets.forItem(item, context.accessPath) : imageAssets;
+      return { accessPath: context.accessPath, localPath: context.localPath, imageAssets: context.imageAssets };
     };
     await refreshMetadataPathContext();
     if (item.Type === 'Playlist') {
@@ -266,7 +268,7 @@ export function createMetadataContextLoader({ store, library, fileSystem = libra
       value.SeriesProviderIds = series?.ProviderIds ?? {};
       value.SeriesDisplayOrder = series?.DisplayOrder;
       value.SeasonProviderIds = season?.ProviderIds ?? {};
-      return { series, season, lookup: metadataLookup(value), context: { ...context,
+      return { series, season, lookup: metadataLookup(value, loaded?.parents ?? parents), context: { ...context,
         seriesPath: value.Type === 'Season' && series?.Path ? access(series) : undefined } };
     };
     const peopleLinks = (await db.rows('PeopleBaseItemMap', { where: { ItemId: item.Id } }))
@@ -351,6 +353,7 @@ export function createMetadataContextLoader({ store, library, fileSystem = libra
           modified: MIN_DATE, created: MIN_DATE, size: 0n };
       }
     };
+    context.fileSystemMetadata = fileSystemMetadata;
     const findMetadataItemByPath = async (identityPath, isFolder) => {
       if (identityPath == null || identityPath === '') throw Object.assign(new TypeError("Invalid path. (Parameter 'path')"),
         { nativeException: identityPath == null ? 'ArgumentNullException' : 'ArgumentException', parameterName: 'path', status: 500 });
@@ -426,7 +429,7 @@ export function createMetadataContextLoader({ store, library, fileSystem = libra
         itemOwner.release(); await state.dispose();
         await linkedChildren.flushReleases();
       }, logger, libraryOptions, globalOptions: configuration, metadataConfiguration, saveLocalMetadataEnabled, exists, relationships, versionLinks, fileSystemMetadata,
-      lookup: metadataLookup(item), lookupFor: value => metadataLookup(value), parents, parent: parents[0], collectionFolders, series, season,
+      lookup: metadataLookup(item, parents), lookupFor: value => metadataLookup(value, loaded?.parents ?? parents), parents, parent: parents[0], collectionFolders, series, season,
       resolveSeries: resolveItemSeries, resolveSeason: resolveItemSeason, refreshPreferredMetadata, refreshTvContext, requiresRefresh, reversePath, refreshMetadataPathContext, rootFolderResolveArgs, physicalFolders, findMetadataItemByPath,
       sortName: value => metadataSortName(value, library.options),
       metadataChildren:value=>childrenSource.children(value),
@@ -467,9 +470,7 @@ export function createMetadataContextLoader({ store, library, fileSystem = libra
         return itemParentalRating(value, { ...state, byId, items: state.items.map(entry => byId.get(idKey(entry.Id))) }, library.options);
       },
       personIdentity, reloadMetadataContext: loadContext,
-      imageAssets: stateLocalItem && context.localPath ? localStateAssets
-        : internalFolderTypes.includes(item.Type) ? internalAssets : item.Type === 'UserView' ? userViewAssets
-          : context.accessPath ? imageAssets.forItem(item, context.accessPath) : imageAssets,
+      imageAssets: context.imageAssets,
       dataPath, metadataPath, fileSystem,
       videoVersionDiscovery, versionItemCache, adoptVersionItem:value=>state.adoptItem(value), loadDraftContext: value => loadContext(value.Id, { draft: value }),
       findOwnedExtras: (currentState, options) => (context.localPath && stateLocalXmlTypes.has(item.Type)

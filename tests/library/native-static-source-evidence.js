@@ -1,3 +1,4 @@
+import { readNativeQueryRecorderSource } from './native-query-inputs.js';
 import { readFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { pathToFileURL } from 'node:url';
@@ -27,7 +28,7 @@ export async function readNativeStaticSourcePermissionEvidence() {
   const audit = await boundJson(binding.independentAudit);
   assert.equal(audit.passed, true); assert.equal(audit.allSourceAndArtifactHashesVerified, true);
   assert.equal(audit.completeNativeHttpBodiesByteEqual, true); assert.equal(audit.candidateFullDetailBodiesEqual, true);
-  const original = await readFile(new URL('../../tools/compat/record-item-filter-native.mjs', import.meta.url), 'utf8');
+  const original = await readNativeQueryRecorderSource();
   const declaration = parse(original, { sourceType: 'module', ecmaVersion: 'latest' }).body
     .flatMap(node => node.declarations ?? []).find(node => node.id.name === 'RATING_PERMISSION_CASES');
   assert.ok(declaration?.init);

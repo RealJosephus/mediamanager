@@ -1,0 +1,138 @@
+{
+  "files": [
+    {
+      "filename": "mime-types.json",
+      "bytes": 85328,
+      "sha256": "ac147f5b9b3e79c7df8be9f48041889d9564dceeb1917fdba5edc2eeba31d1d3"
+    },
+    {
+      "filename": "mime-types-license.txt",
+      "bytes": 11358,
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+    },
+    {
+      "filename": "mime-types-notice.txt",
+      "bytes": 555,
+      "sha256": "077087f3c63a74534ea675bbee133e7e41eb34bfdb946c3d39f5c29f61342322"
+    }
+  ],
+  "sources": [
+    {
+      "filename": "D:/jellyfin/MediaBrowser.Model/Net/MimeTypes.cs",
+      "available": true,
+      "kind": "file",
+      "bytes": 6995,
+      "sha256": "b39d95d05558262c7561b38206340afe61b62b9b14b4f8e0067ef05cbd0fab9a",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Model/Net/MimeTypes.cs",
+      "available": true,
+      "kind": "file",
+      "bytes": 6995,
+      "sha256": "b39d95d05558262c7561b38206340afe61b62b9b14b4f8e0067ef05cbd0fab9a",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/src/Jellyfin.Extensions/StringExtensions.cs",
+      "available": true,
+      "kind": "file",
+      "bytes": 8094,
+      "sha256": "d7bb65df4a0f7be86d2862a139e8f9264722e100e35973eab8df1a0347dd27e3",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/src/Jellyfin.Extensions/StringExtensions.cs",
+      "available": true,
+      "kind": "file",
+      "bytes": 8094,
+      "sha256": "d7bb65df4a0f7be86d2862a139e8f9264722e100e35973eab8df1a0347dd27e3",
+      "required": true
+    }
+  ],
+  "assemblies": [
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/MediaBrowser.Model.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 489472,
+      "sha256": "5e5db1a105d41d913eb36d7bd9e1aeb62d3ae4809b00c12023f2eb99f019d372",
+      "required": true,
+      "name": "MediaBrowser.Model",
+      "observed": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/Jellyfin.Extensions.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 37888,
+      "sha256": "0ded3efa5eb05eb48ffc2e32a48a1a51da78a1d9b05f5b87904cf4f1ee697716",
+      "required": true,
+      "name": "Jellyfin.Extensions",
+      "observed": false
+    }
+  ],
+  "package": {
+    "name": "MimeTypes",
+    "version": "2.5.2",
+    "license": "Apache-2.0",
+    "copyright": "Copyright © Kristian Hellang 2024",
+    "inputs": {
+      "archive": {
+        "filename": "D:/mediamanager-validation/20261016-native-build-closure/nuget-packages/mimetypes/2.5.2/mimetypes.2.5.2.nupkg",
+        "available": true,
+        "kind": "file",
+        "bytes": 89121,
+        "sha256": "4b76984c15dcffb422ef908ef7eda206b239b5116474ce50dd5079aba32d850a",
+        "required": true
+      },
+      "manifest": {
+        "filename": "D:/mediamanager-validation/20261016-native-build-closure/nuget-packages/mimetypes/2.5.2/mimetypes.nuspec",
+        "available": true,
+        "kind": "file",
+        "bytes": 1161,
+        "sha256": "9518e4b5a93fb8d46697ec80a2c8d7740021784cd727fcf680ae825beddb4453",
+        "required": true
+      },
+      "template": {
+        "filename": "D:/mediamanager-validation/20261016-native-build-closure/nuget-packages/mimetypes/2.5.2/contentFiles/cs/net5.0/MimeTypes.Nullable.cs.pp",
+        "available": true,
+        "kind": "file",
+        "bytes": 68622,
+        "sha256": "bd20b96b8041e07264be0ab5077993280bf80101d22e6a3edab42cd05eca661b",
+        "required": true
+      },
+      "generatedSource": {
+        "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Model/obj/Release/net10.0/NuGet/17C0E3646C19DD22/MimeTypes/2.5.2/MimeTypes.Nullable.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 68622,
+        "sha256": "6c7a5b3b3758a6bba4447f5c47979c6bb2047505009c79add7e7e1ffa14e7348",
+        "required": true
+      }
+    }
+  },
+  "sourceBuild": {
+    "filename": "D:/mediamanager-validation/20261016-native-build-closure/final-build-receipt.json",
+    "available": true,
+    "kind": "file",
+    "bytes": 14246,
+    "sha256": "44711dacc1c4e65d2f36202267423d3212c3577c41383696643ff04ebe8c49d2",
+    "required": true
+  },
+  "record": {
+    "filename": "D:/mediamanager-validation/20261016-photo-stage/results/mime-types-native-1/record.json",
+    "available": true,
+    "kind": "file",
+    "bytes": 4138,
+    "sha256": "5628438176fb81ac09fc1ddf7c5d4dc69e8278a5083095e15a0d4824d3d9ac18",
+    "required": true
+  },
+  "sourceFilesSha256": "b751b41590efb7aa3bbeba4e835b1f332350946d30a4b411ee032785daaf3158",
+  "inventory": {
+    "packageEntries": 1180,
+    "extensionCount": 1202,
+    "mimeCount": 963
+  },
+  "licenseSource": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+}

@@ -100,6 +100,37 @@ class NativeItemCohort {
     return new NativeItemCohort(this.entry,id);
   }
   async count(){active(this);await flush(this.entry);return this.entry.scope.run(async session=>BigInt((await session.client.query(`SELECT count(*) AS count FROM ${this.entry.rows} WHERE view_id=$1`,[this.id])).rows[0].count));}
+  /** Read a captured slot at its consumption boundary, including observations
+   * made by earlier callbacks. This never reloads the native repository row. */
+  async withSlot(slot, operation) {
+    active(this);
+    if (typeof slot !== 'string' || typeof operation !== 'function') throw new TypeError('An owned slot and callback are required.');
+    const retained = this.retain(), entry = this.entry;
+    let owner, failure;
+    try {
+      await flush(entry);
+      const item = await entry.scope.run(async session => {
+        const row = (await session.client.query(`SELECT state FROM ${entry.states} WHERE scope_id=$1 AND slot_id=$2`, [entry.id, slot])).rows[0];
+        if (!row) throw new TypeError('The slot belongs to a different or released cohort.');
+        const state = deserialize(row.state), live = entry.resolveLiveItem?.(state.values.Id);
+        const reused = live && entry.slots.get(live) === slot;
+        const value = reused ? live : await restoreNativeItemState(state, {}, { linkedChildren: entry.links, session });
+        owner = acquireNativeItemLinkOwner(value);
+        entry.slots.set(value, slot);
+        if (!reused) observe(entry, value, slot);
+        return value;
+      });
+      return await operation(item);
+    } catch (error) { failure = error; throw error; }
+    finally {
+      const errors = [];
+      for (const cleanup of [() => owner?.release(), () => entry.links.flushReleases(), () => retained.release()]) {
+        try { await cleanup(); } catch (error) { errors.push(error); }
+      }
+      if (errors.length) throw new AggregateError(failure ? [failure, ...errors] : errors,
+        failure?.message ?? 'Typed slot ownership cleanup failed.', failure ? { cause: failure } : undefined);
+    }
+  }
   async page({after=0n,limit=128}={}) {
     active(this);if(typeof after!=='bigint'||after<0n||!Number.isInteger(limit)||limit<1||limit>128)throw new TypeError('Typed pages require a bigint cursor and limit from 1 to 128.');
     const retained=this.retain(),entry=this.entry,owners=[];
@@ -135,8 +166,9 @@ class NativeItemCohort {
     if(failures.length)throw new AggregateError(failures,'Typed cohort release failed.');
   }
 }
-export async function createNativeItemCohort({linkedChildren}) {
-  const entry={id:randomUUID(),links:linkedChildren,scope:linkedChildren.admitScope(),slots:new WeakMap(),tail:Promise.resolve(),references:0,error:null,
+export async function createNativeItemCohort({linkedChildren,resolveLiveItem}) {
+  if(resolveLiveItem!==undefined&&typeof resolveLiveItem!=='function')throw new TypeError('A live slot resolver must be a function.');
+  const entry={id:randomUUID(),links:linkedChildren,resolveLiveItem,scope:linkedChildren.admitScope(),slots:new WeakMap(),tail:Promise.resolve(),references:0,error:null,
     states:`${q(linkedChildren.schemaName)}.item_states`,rows:`${q(linkedChildren.schemaName)}.item_cohorts`};
   return new NativeItemCohort(entry);
 }

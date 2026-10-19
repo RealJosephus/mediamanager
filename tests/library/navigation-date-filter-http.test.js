@@ -5,20 +5,41 @@ import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 import { idKey } from '../../src/library/records.js';
 import { recordItemFilterCandidate } from './item-filter-http-scenario.js';
-import { verifyNativeItemFilterEvidence } from './native-item-filter-evidence.js';
-import { seedNativeFilterInput } from './native-filter-input.js';
-import { assertCompleteFilterHttpResponses, writeCompleteFilterHttpEvidence } from './full-filter-wire.js';
-import { readNativeQueryServerId } from './native-query-inputs.js';
+import { assertCompleteFilterHttpResponses, assertCompleteNativeFilterHttpRepeat, writeCompleteFilterHttpEvidence } from './full-filter-wire.js';
+import { pathToFileURL } from 'node:url';
 
-const evidence = validationFileUrl('../../.agent-docs/evidence/item-filter-inputs/navigation-date-filters-native-v1/native-run/', import.meta.url);
+// This new profile is selected before any historical external input is read.
+const provenanceUrl = validationFileUrl('./fixtures/navigation-date-filters/provenance.json', import.meta.url);
+const provenance = JSON.parse(await readFile(provenanceUrl, 'utf8'));
+assert.equal(provenance.kind, 'new-designated-source-navigation-date-http');
+assert.equal(provenance.historicalMissingEvidenceAccepted, false);
+assert.equal(provenance.recordings.length, 2);
+assert.equal(new Set(provenance.recordings.map(recording => recording.evidenceRoot)).size, 2);
+assert.ok(provenance.profile.recordedRecorder);
+assert.ok(provenance.profile.sourceBuildReceipt);
+assert.equal(provenance.profile.executionInputs.length, 2);
+const { createNativeQueryInputs, readNativeQueryBoundFile } = await import('./native-query-inputs.js');
+const inputs = createNativeQueryInputs(provenance.profile);
+for (const descriptor of provenance.requiredInputs) {
+  assert.equal(descriptor.required, true);
+  await readNativeQueryBoundFile(descriptor);
+}
+const { verifyNativeItemFilterEvidence } = await import('./native-item-filter-evidence.js');
+const { seedNativeFilterInput } = await import('./native-filter-input.js');
 const fixtureUrl = validationFileUrl('./fixtures/navigation-date-filters/input.json', import.meta.url);
 const fixture = JSON.parse(await readFile(fixtureUrl, 'utf8'));
-await verifyNativeItemFilterEvidence({ evidence, fixtureUrl, scenario: 'navigation-date',
-  runDirectory: 'native-run', expectedRecords: 40 });
-const nativeHttp = JSON.parse(await readFile(validationFileUrl('native-http.json', evidence), 'utf8'));
-const nativeServerId = await readNativeQueryServerId();
-const nativeStages = JSON.parse(await readFile(validationFileUrl('stages.json', evidence), 'utf8'));
-const nativeSummary = JSON.parse(await readFile(validationFileUrl('summary.json', evidence), 'utf8'));
+const runs = [];
+for (const recording of provenance.recordings) runs.push(await verifyNativeItemFilterEvidence({
+  evidence: pathToFileURL(recording.evidenceRoot + '/native-run/'), fixtureUrl, scenario: 'navigation-date',
+  runDirectory: 'native-run', expectedRecords: 40, inputs,
+}));
+const nativeServerId = await inputs.readServerId();
+assertCompleteNativeFilterHttpRepeat(runs[0].nativeHttp, runs[1].nativeHttp,
+  { leftServerId: nativeServerId, rightServerId: nativeServerId });
+assert.equal(runs[0].summary.scenarioDefinitionSha256, runs[1].summary.scenarioDefinitionSha256);
+const nativeHttp = runs[0].nativeHttp, nativeSummary = runs[0].summary;
+const evidence = pathToFileURL(provenance.recordings[0].evidenceRoot + '/native-run/');
+const nativeStages = JSON.parse(await readFile(new URL('stages.json', evidence), 'utf8'));
 const sha256 = bytes => createHash('sha256').update(bytes).digest('hex');
 const normalizeProblem = value => Array.isArray(value) ? value.map(normalizeProblem)
   : value && typeof value === 'object'
@@ -61,12 +82,12 @@ const dialects = process.env.MEDIAMANAGER_NAVIGATION_DATE_FILTER_DIALECT
 if (dialects.some(dialect => !['postgres'].includes(dialect))) throw new Error('Invalid navigation/date filter dialect.');
 
 for (const dialect of dialects) {
-  test(`${dialect}: 20 navigation/date filter cases match 40 frozen HTTP responses`, {
+  test(`${dialect}: 20 navigation/date filter cases match 40 actual native HTTP responses`, {
     skip: dialect === 'postgres' && !process.env.MEDIAMANAGER_TEST_POSTGRES,
   }, async () => {
     const actual = await recordItemFilterCandidate({
       captureResponseBodies: true,
-      prepareScenario: context => seedNativeFilterInput(context, "navigation-date"),
+      prepareScenario: context => seedNativeFilterInput(context, 'navigation-date', inputs),
       dialect,
       fixture: scenario,
       connectionString: process.env.MEDIAMANAGER_TEST_POSTGRES,

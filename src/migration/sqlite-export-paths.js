@@ -39,6 +39,11 @@ const dataPathArrays = new Set([
   'SubtitleFiles',
 ]);
 
+const selfLocatedFolderTypes = new Set([
+  'MediaBrowser.Controller.Entities.AggregateFolder',
+  'MediaBrowser.Controller.Entities.CollectionFolder',
+]);
+
 const nonzeroGuidPattern = /^(?!00000000-0000-0000-0000-000000000000$)[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/iu;
 
 function directPathOptions(tableName, column, row) {
@@ -99,10 +104,10 @@ function propertyNodes(node, name) {
   return node?.properties?.filter(([key]) => key === name).map(([, value]) => value) ?? [];
 }
 
-function stringNode(node, label, project, replacements, { nullable = true, protocolPolicy = 'none' } = {}) {
+function stringNode(node, label, project, replacements, { nullable = true, ...options } = {}) {
   if (node.value === null && nullable) return;
   if (typeof node.value !== 'string') throw new Error(`${label} is not a string path`);
-  const replacement = project(node.value, label, { protocolPolicy });
+  const replacement = project(node.value, label, options);
   if (replacement !== node.value) replacements.push({ start: node.start, end: node.end, value: JSON.stringify(replacement) });
 }
 
@@ -111,7 +116,7 @@ function projectImagePath(value, label, project, options) {
   return value.split('|').map((candidate, index) => project(candidate, `${label}[${index}]`, options)).join('|');
 }
 
-function projectBaseItemData(value, project, label) {
+function projectBaseItemData(value, project, label, { physicalLocationOwnerPath, instanceRoots } = {}) {
   if (value == null) return value;
   if (typeof value !== 'string') throw new TypeError(`${label} must be JSON text`);
   let root;
@@ -125,7 +130,16 @@ function projectBaseItemData(value, project, label) {
   for (const property of dataPathArrays) for (const node of propertyNodes(root, property)) {
     if (node.value === null) continue;
     if (!node.items) throw new Error(`${label}.${property} is not a path array`);
-    for (const [index, item] of node.items.entries()) stringNode(item, `${label}.${property}[${index}]`, project, replacements);
+    for (const [index, item] of node.items.entries()) {
+      // Root folder resolution includes its own configuration directory alongside
+      // the media targets read from its shortcuts. Only that exact owner path
+      // belongs to instance state; every other location still needs a mount.
+      const owner = property === 'PhysicalLocationsList' && typeof physicalLocationOwnerPath === 'string'
+        && typeof item.value === 'string'
+        && virtualInstanceStatePath(item.value, instanceRoots) === virtualInstanceStatePath(physicalLocationOwnerPath, instanceRoots);
+      stringNode(item, `${label}.${property}[${index}]`, project, replacements,
+        owner ? { instanceState: true, allowInternalPath: true } : {});
+    }
   }
   for (const node of propertyNodes(root, 'LinkedAlternateVersions')) {
     if (node.value === null) continue;
@@ -184,7 +198,10 @@ export function createSqliteExportPathProjector({ sourceContract = null, targetC
         : project(row[column], label, options));
     }
     if (tableName === 'BaseItems') {
-      assign('Data', projectBaseItemData(row.Data, project, 'BaseItems.Data'));
+      assign('Data', projectBaseItemData(row.Data, project, 'BaseItems.Data', {
+        physicalLocationOwnerPath: selfLocatedFolderTypes.has(row.Type) ? row.Path : undefined,
+        instanceRoots,
+      }));
     }
     return result;
   };

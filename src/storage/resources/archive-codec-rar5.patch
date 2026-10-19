@@ -1,0 +1,98 @@
+diff --git a/libarchive/archive_read_support_format_rar5.c b/libarchive/archive_read_support_format_rar5.c
+index 1cf5112..360c5b3 100644
+--- a/libarchive/archive_read_support_format_rar5.c
++++ b/libarchive/archive_read_support_format_rar5.c
+@@ -331,6 +331,8 @@ struct multivolume {
+ 
+ /* Main context structure. */
+ struct rar5 {
++	/* Fresh async selected-entry streams start with no prior file history. */
++	int independent_entries;
+ 	int header_initialized;
+ 
+ 	/* Set to 1 if current file is positioned AFTER the magic value
+@@ -886,7 +888,7 @@ static void reset_file_context(struct rar5 *rar5) {
+ 	memset(&rar5->file, 0, sizeof(rar5->file));
+ 	blake2sp_init(&rar5->file.b2state, 32);
+ 
+-	if(rar5->main.solid) {
++	if(rar5->main.solid && !rar5->independent_entries) {
+ 		rar5->cstate.solid_offset += rar5->cstate.write_ptr;
+ 	} else {
+ 		rar5->cstate.solid_offset = 0;
+@@ -1219,11 +1221,13 @@ static int rar5_bid(struct archive_read* a, int best_bid) {
+ 
+ static int rar5_options(struct archive_read *a, const char *key,
+     const char *val) {
+-	(void) a;
+-	(void) key;
+-	(void) val;
++	struct rar5 *rar5 = a->format->data;
++	if(strcmp(key, "independent-entry") == 0) {
++		rar5->independent_entries = val != NULL && val[0] != 0;
++		return ARCHIVE_OK;
++	}
+ 
+-	/* No options supported in this version. Return the ARCHIVE_WARN code
++	/* No other options supported in this version. Return the ARCHIVE_WARN code
+ 	 * to signal the options supervisor that the unpacker didn't handle
+ 	 * setting this option. */
+ 
+@@ -1964,7 +1968,7 @@ static int process_head_file(struct archive_read* a, struct rar5 *rar5,
+ 	 * buffer first are invalid, unless previous data was encrypted, in
+ 	 * which case we may never have had the chance */
+ 
+-	if(rar5->file.solid > 0 && rar5->cstate.data_encrypted == 0 &&
++	if(!rar5->independent_entries && rar5->file.solid > 0 && rar5->cstate.data_encrypted == 0 &&
+ 	    rar5->cstate.window_buf == NULL) {
+ 		archive_set_error(&a->archive, ARCHIVE_ERRNO_FILE_FORMAT,
+ 				  "Declared solid file, but no window buffer "
+@@ -2723,6 +2727,11 @@ static int rar5_read_header(struct archive_read *a,
+ }
+ 
+ static int init_unpack(struct rar5 *rar5) {
++	if(rar5->independent_entries) {
++		rar5->cstate.solid_offset = 0;
++		rar5->cstate.last_len = 0;
++		memset(rar5->cstate.dist_cache, 0, sizeof(rar5->cstate.dist_cache));
++	}
+ 	rar5->file.calculated_crc32 = 0;
+ 	init_window_mask(rar5);
+ 
+@@ -2756,6 +2765,7 @@ static int init_unpack(struct rar5 *rar5) {
+ }
+ 
+ static void update_crc(struct rar5 *rar5, const uint8_t* p, size_t to_read) {
++	if(rar5->independent_entries) return;
+     int verify_crc;
+ 
+ 	if(rar5->skip_mode) {
+@@ -4105,7 +4115,7 @@ static int do_uncompress_file(struct archive_read* a) {
+ 	if(!rar5->cstate.initialized) {
+ 		/* Don't perform full context reinitialization if we're
+ 		 * processing a solid archive. */
+-		if(!rar5->main.solid || !rar5->cstate.window_buf) {
++		if(rar5->independent_entries || !rar5->main.solid || !rar5->cstate.window_buf) {
+ 			if((ret = init_unpack(rar5)) != ARCHIVE_OK)
+ 				return ret;
+ 		}
+@@ -4338,6 +4348,7 @@ static int do_unpack(struct archive_read* a, struct rar5 *rar5,
+ 
+ static int verify_checksums(struct archive_read* a) {
+ 	struct rar5 *rar5 = a->format->data;
++	if(rar5->independent_entries) return ARCHIVE_OK;
+ 	int verify_crc;
+ 
+ 	/* Check checksums only when actually unpacking the data. There's no
+@@ -4525,6 +4536,11 @@ static int rar5_read_data(struct archive_read *a, const void **buff,
+ 
+ static int rar5_read_data_skip(struct archive_read *a) {
+ 	struct rar5 *rar5 = a->format->data;
++	if(rar5->independent_entries) {
++		if(ARCHIVE_OK != consume(a, rar5->file.bytes_remaining)) return ARCHIVE_FATAL;
++		rar5->file.bytes_remaining = 0;
++		return ARCHIVE_OK;
++	}
+ 
+ 	if(rar5->main.solid && (rar5->cstate.data_encrypted == 0)) {
+ 		/* In solid archives, instead of skipping the data, we need to

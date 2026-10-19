@@ -1,0 +1,1095 @@
+{
+  "inputSha256": "25f7e1c691df1b1701872a7a537d897a11c5b53f3e50b7e62b5fc1f764e7cf9c",
+  "results": [
+    {
+      "name": "first-dynamic",
+      "selected": [
+        "A",
+        "B"
+      ],
+      "eligible": [
+        "A",
+        "B"
+      ],
+      "calls": [
+        "A:Primary"
+      ],
+      "saves": [
+        {
+          "mimeType": "image/png",
+          "type": "Primary",
+          "bytes": "QQ=="
+        }
+      ],
+      "changed": true,
+      "failures": 0,
+      "errorMessage": null,
+      "exception": null,
+      "images": [
+        {
+          "type": "Primary",
+          "path": "$STATE/metadata/library/db/db120000000000000000000000000001/poster.png",
+          "Width": 0,
+          "Height": 0,
+          "BlurHash": null,
+          "bytes": "QQ=="
+        }
+      ],
+      "files": [
+        {
+          "path": "$STATE/metadata/library/db/db120000000000000000000000000001/poster.png",
+          "bytes": "QQ=="
+        }
+      ],
+      "streams": [
+        true
+      ]
+    },
+    {
+      "name": "first-empty",
+      "selected": [
+        "A",
+        "B"
+      ],
+      "eligible": [
+        "A",
+        "B"
+      ],
+      "calls": [
+        "A:Primary",
+        "B:Primary"
+      ],
+      "saves": [],
+      "changed": false,
+      "failures": 0,
+      "errorMessage": null,
+      "exception": null,
+      "images": [],
+      "files": [],
+      "streams": []
+    },
+    {
+      "name": "existing-default",
+      "selected": [
+        "A",
+        "B"
+      ],
+      "eligible": [],
+      "calls": [],
+      "saves": [],
+      "changed": false,
+      "failures": 0,
+      "errorMessage": null,
+      "exception": null,
+      "images": [
+        {
+          "type": "Primary",
+          "path": "$STATE/metadata/library/db/db120000000000000000000000000001/old.jpg",
+          "Width": 4,
+          "Height": 3,
+          "BlurHash": "old-hash",
+          "bytes": "T0xE"
+        }
+      ],
+      "files": [
+        {
+          "path": "$STATE/metadata/library/db/db120000000000000000000000000001/old.jpg",
+          "bytes": "T0xE"
+        }
+      ],
+      "streams": []
+    },
+    {
+      "name": "nonfirst-default",
+      "selected": [
+        "A",
+        "B"
+      ],
+      "eligible": [],
+      "calls": [],
+      "saves": [],
+      "changed": false,
+      "failures": 0,
+      "errorMessage": null,
+      "exception": null,
+      "images": [],
+      "files": [],
+      "streams": []
+    },
+    {
+      "name": "existing-full-retain",
+      "selected": [
+        "A",
+        "B"
+      ],
+      "eligible": [
+        "A",
+        "B"
+      ],
+      "calls": [],
+      "saves": [],
+      "changed": false,
+      "failures": 0,
+      "errorMessage": null,
+      "exception": null,
+      "images": [
+        {
+          "type": "Primary",
+          "path": "$STATE/metadata/library/db/db120000000000000000000000000001/old.jpg",
+          "Width": 4,
+          "Height": 3,
+          "BlurHash": "old-hash",
+          "bytes": "T0xE"
+        }
+      ],
+      "files": [
+        {
+          "path": "$STATE/metadata/library/db/db120000000000000000000000000001/old.jpg",
+          "bytes": "T0xE"
+        }
+      ],
+      "streams": []
+    },
+    {
+      "name": "existing-full-replace",
+      "selected": [
+        "A",
+        "B"
+      ],
+      "eligible": [
+        "A",
+        "B"
+      ],
+      "calls": [
+        "A:Primary"
+      ],
+      "saves": [
+        {
+          "mimeType": "image/png",
+          "type": "Primary",
+          "bytes": "QQ=="
+        }
+      ],
+      "changed": true,
+      "failures": 0,
+      "errorMessage": null,
+      "exception": null,
+      "images": [
+        {
+          "type": "Primary",
+          "path": "$STATE/metadata/library/db/db120000000000000000000000000001/poster.png",
+          "Width": 0,
+          "Height": 0,
+          "BlurHash": "old-hash",
+          "bytes": "QQ=="
+        }
+      ],
+      "files": [
+        {
+          "path": "$STATE/metadata/library/db/db120000000000000000000000000001/poster.png",
+          "bytes": "QQ=="
+        }
+      ],
+      "streams": [
+        true
+      ]
+    },
+    {
+      "name": "empty-then-success",
+      "selected": [
+        "A",
+        "B"
+      ],
+      "eligible": [
+        "A",
+        "B"
+      ],
+      "calls": [
+        "A:Primary",
+        "B:Primary"
+      ],
+      "saves": [
+        {
+          "mimeType": "image/png",
+          "type": "Primary",
+          "bytes": "Qg=="
+        }
+      ],
+      "changed": true,
+      "failures": 0,
+      "errorMessage": null,
+      "exception": null,
+      "images": [
+        {
+          "type": "Primary",
+          "path": "$STATE/metadata/library/db/db120000000000000000000000000001/poster.png",
+          "Width": 0,
+          "Height": 0,
+          "BlurHash": null,
+          "bytes": "Qg=="
+        }
+      ],
+      "files": [
+        {
+          "path": "$STATE/metadata/library/db/db120000000000000000000000000001/poster.png",
+          "bytes": "Qg=="
+        }
+      ],
+      "streams": [
+        true
+      ]
+    },
+    {
+      "name": "failure-then-success",
+      "selected": [
+        "A",
+        "B"
+      ],
+      "eligible": [
+        "A",
+        "B"
+      ],
+      "calls": [
+        "A:Primary",
+        "B:Primary"
+      ],
+      "saves": [
+        {
+          "mimeType": "image/png",
+          "type": "Primary",
+          "bytes": "Qg=="
+        }
+      ],
+      "changed": true,
+      "failures": 1,
+      "errorMessage": "Controlled provider failure",
+      "exception": null,
+      "images": [
+        {
+          "type": "Primary",
+          "path": "$STATE/metadata/library/db/db120000000000000000000000000001/poster.png",
+          "Width": 0,
+          "Height": 0,
+          "BlurHash": null,
+          "bytes": "Qg=="
+        }
+      ],
+      "files": [
+        {
+          "path": "$STATE/metadata/library/db/db120000000000000000000000000001/poster.png",
+          "bytes": "Qg=="
+        }
+      ],
+      "streams": [
+        true
+      ]
+    },
+    {
+      "name": "provider-cancel",
+      "selected": [
+        "A",
+        "B"
+      ],
+      "eligible": [
+        "A",
+        "B"
+      ],
+      "calls": [
+        "A:Primary"
+      ],
+      "saves": [],
+      "changed": false,
+      "failures": null,
+      "errorMessage": null,
+      "exception": "cancelled",
+      "images": [],
+      "files": [],
+      "streams": []
+    },
+    {
+      "name": "cancel-before-save",
+      "selected": [
+        "A",
+        "B"
+      ],
+      "eligible": [
+        "A",
+        "B"
+      ],
+      "calls": [
+        "A:Primary"
+      ],
+      "saves": [
+        {
+          "mimeType": "image/png",
+          "type": "Primary",
+          "bytes": "QQ=="
+        }
+      ],
+      "changed": false,
+      "failures": null,
+      "errorMessage": null,
+      "exception": "cancelled",
+      "images": [],
+      "files": [
+        {
+          "path": "$STATE/metadata/library/db/db120000000000000000000000000001/poster.png",
+          "bytes": ""
+        }
+      ],
+      "streams": [
+        true
+      ]
+    },
+    {
+      "name": "cancel-before-replace",
+      "selected": [
+        "A",
+        "B"
+      ],
+      "eligible": [
+        "A",
+        "B"
+      ],
+      "calls": [
+        "A:Primary"
+      ],
+      "saves": [
+        {
+          "mimeType": "image/png",
+          "type": "Primary",
+          "bytes": "QQ=="
+        }
+      ],
+      "changed": false,
+      "failures": null,
+      "errorMessage": null,
+      "exception": "cancelled",
+      "images": [
+        {
+          "type": "Primary",
+          "path": "$STATE/metadata/library/db/db120000000000000000000000000001/old.jpg",
+          "Width": 4,
+          "Height": 3,
+          "BlurHash": "old-hash",
+          "bytes": "T0xE"
+        }
+      ],
+      "files": [
+        {
+          "path": "$STATE/metadata/library/db/db120000000000000000000000000001/old.jpg",
+          "bytes": "T0xE"
+        },
+        {
+          "path": "$STATE/metadata/library/db/db120000000000000000000000000001/poster.png",
+          "bytes": ""
+        }
+      ],
+      "streams": [
+        true
+      ]
+    },
+    {
+      "name": "save-failure",
+      "selected": [
+        "A",
+        "B"
+      ],
+      "eligible": [
+        "A",
+        "B"
+      ],
+      "calls": [
+        "A:Primary",
+        "B:Primary"
+      ],
+      "saves": [
+        {
+          "mimeType": "image/png",
+          "type": "Primary",
+          "bytes": "QQ=="
+        },
+        {
+          "mimeType": "image/png",
+          "type": "Primary",
+          "bytes": "Qg=="
+        }
+      ],
+      "changed": false,
+      "failures": 2,
+      "errorMessage": "Controlled image write failure",
+      "exception": null,
+      "images": [],
+      "files": [],
+      "streams": [
+        true,
+        true
+      ]
+    },
+    {
+      "name": "delete-failure",
+      "selected": [
+        "A",
+        "B"
+      ],
+      "eligible": [
+        "A",
+        "B"
+      ],
+      "calls": [
+        "A:Primary",
+        "B:Primary"
+      ],
+      "saves": [
+        {
+          "mimeType": "image/png",
+          "type": "Primary",
+          "bytes": "QQ=="
+        },
+        {
+          "mimeType": "image/png",
+          "type": "Primary",
+          "bytes": "Qg=="
+        }
+      ],
+      "changed": true,
+      "failures": 1,
+      "errorMessage": "Controlled previous image deletion failure",
+      "exception": null,
+      "images": [
+        {
+          "type": "Primary",
+          "path": "$STATE/metadata/library/db/db120000000000000000000000000001/poster.png",
+          "Width": 0,
+          "Height": 0,
+          "BlurHash": "old-hash",
+          "bytes": "Qg=="
+        }
+      ],
+      "files": [
+        {
+          "path": "$STATE/metadata/library/db/db120000000000000000000000000001/old.jpg",
+          "bytes": "T0xE"
+        },
+        {
+          "path": "$STATE/metadata/library/db/db120000000000000000000000000001/poster.png",
+          "bytes": "Qg=="
+        }
+      ],
+      "streams": [
+        true,
+        true
+      ]
+    },
+    {
+      "name": "primary-disabled",
+      "selected": [
+        "A",
+        "B"
+      ],
+      "eligible": [
+        "A",
+        "B"
+      ],
+      "calls": [],
+      "saves": [],
+      "changed": false,
+      "failures": 0,
+      "errorMessage": null,
+      "exception": null,
+      "images": [],
+      "files": [],
+      "streams": []
+    },
+    {
+      "name": "dynamic-ignores-minwidth",
+      "selected": [
+        "A",
+        "B"
+      ],
+      "eligible": [
+        "A",
+        "B"
+      ],
+      "calls": [
+        "A:Primary"
+      ],
+      "saves": [
+        {
+          "mimeType": "image/png",
+          "type": "Primary",
+          "bytes": "QQ=="
+        }
+      ],
+      "changed": true,
+      "failures": 0,
+      "errorMessage": null,
+      "exception": null,
+      "images": [
+        {
+          "type": "Primary",
+          "path": "$STATE/metadata/library/db/db120000000000000000000000000001/poster.png",
+          "Width": 0,
+          "Height": 0,
+          "BlurHash": null,
+          "bytes": "QQ=="
+        }
+      ],
+      "files": [
+        {
+          "path": "$STATE/metadata/library/db/db120000000000000000000000000001/poster.png",
+          "bytes": "QQ=="
+        }
+      ],
+      "streams": [
+        true
+      ]
+    },
+    {
+      "name": "locked-default",
+      "selected": [],
+      "eligible": [],
+      "calls": [],
+      "saves": [],
+      "changed": false,
+      "failures": 0,
+      "errorMessage": null,
+      "exception": null,
+      "images": [],
+      "files": [],
+      "streams": []
+    },
+    {
+      "name": "locked-full",
+      "selected": [
+        "A",
+        "B"
+      ],
+      "eligible": [
+        "A",
+        "B"
+      ],
+      "calls": [
+        "A:Primary"
+      ],
+      "saves": [
+        {
+          "mimeType": "image/png",
+          "type": "Primary",
+          "bytes": "QQ=="
+        }
+      ],
+      "changed": true,
+      "failures": 0,
+      "errorMessage": null,
+      "exception": null,
+      "images": [
+        {
+          "type": "Primary",
+          "path": "$STATE/metadata/library/db/db120000000000000000000000000001/poster.png",
+          "Width": 0,
+          "Height": 0,
+          "BlurHash": null,
+          "bytes": "QQ=="
+        }
+      ],
+      "files": [
+        {
+          "path": "$STATE/metadata/library/db/db120000000000000000000000000001/poster.png",
+          "bytes": "QQ=="
+        }
+      ],
+      "streams": [
+        true
+      ]
+    },
+    {
+      "name": "extra-dynamic",
+      "selected": [
+        "A"
+      ],
+      "eligible": [
+        "A"
+      ],
+      "calls": [
+        "A:Primary"
+      ],
+      "saves": [
+        {
+          "mimeType": "image/png",
+          "type": "Primary",
+          "bytes": "QQ=="
+        }
+      ],
+      "changed": true,
+      "failures": 0,
+      "errorMessage": null,
+      "exception": null,
+      "images": [
+        {
+          "type": "Primary",
+          "path": "$STATE/metadata/library/db/db120000000000000000000000000001/poster.png",
+          "Width": 0,
+          "Height": 0,
+          "BlurHash": null,
+          "bytes": "QQ=="
+        }
+      ],
+      "files": [
+        {
+          "path": "$STATE/metadata/library/db/db120000000000000000000000000001/poster.png",
+          "bytes": "QQ=="
+        }
+      ],
+      "streams": [
+        true
+      ]
+    },
+    {
+      "name": "extra-remote",
+      "selected": [],
+      "eligible": [],
+      "calls": [],
+      "saves": [],
+      "changed": false,
+      "failures": 0,
+      "errorMessage": null,
+      "exception": null,
+      "images": [],
+      "files": [],
+      "streams": []
+    },
+    {
+      "name": "disabled-dynamic",
+      "selected": [
+        "B"
+      ],
+      "eligible": [
+        "B"
+      ],
+      "calls": [
+        "B:Primary"
+      ],
+      "saves": [
+        {
+          "mimeType": "image/png",
+          "type": "Primary",
+          "bytes": "Qg=="
+        }
+      ],
+      "changed": true,
+      "failures": 0,
+      "errorMessage": null,
+      "exception": null,
+      "images": [
+        {
+          "type": "Primary",
+          "path": "$STATE/metadata/library/db/db120000000000000000000000000001/poster.png",
+          "Width": 0,
+          "Height": 0,
+          "BlurHash": null,
+          "bytes": "Qg=="
+        }
+      ],
+      "files": [
+        {
+          "path": "$STATE/metadata/library/db/db120000000000000000000000000001/poster.png",
+          "bytes": "Qg=="
+        }
+      ],
+      "streams": [
+        true
+      ]
+    },
+    {
+      "name": "global-disabled",
+      "selected": [
+        "B"
+      ],
+      "eligible": [
+        "B"
+      ],
+      "calls": [
+        "B:Primary"
+      ],
+      "saves": [
+        {
+          "mimeType": "image/png",
+          "type": "Primary",
+          "bytes": "Qg=="
+        }
+      ],
+      "changed": true,
+      "failures": 0,
+      "errorMessage": null,
+      "exception": null,
+      "images": [
+        {
+          "type": "Primary",
+          "path": "$STATE/metadata/library/db/db120000000000000000000000000001/poster.png",
+          "Width": 0,
+          "Height": 0,
+          "BlurHash": null,
+          "bytes": "Qg=="
+        }
+      ],
+      "files": [
+        {
+          "path": "$STATE/metadata/library/db/db120000000000000000000000000001/poster.png",
+          "bytes": "Qg=="
+        }
+      ],
+      "streams": [
+        true
+      ]
+    },
+    {
+      "name": "configured-order",
+      "selected": [
+        "B",
+        "A"
+      ],
+      "eligible": [
+        "B",
+        "A"
+      ],
+      "calls": [
+        "B:Primary"
+      ],
+      "saves": [
+        {
+          "mimeType": "image/png",
+          "type": "Primary",
+          "bytes": "Qg=="
+        }
+      ],
+      "changed": true,
+      "failures": 0,
+      "errorMessage": null,
+      "exception": null,
+      "images": [
+        {
+          "type": "Primary",
+          "path": "$STATE/metadata/library/db/db120000000000000000000000000001/poster.png",
+          "Width": 0,
+          "Height": 0,
+          "BlurHash": null,
+          "bytes": "Qg=="
+        }
+      ],
+      "files": [
+        {
+          "path": "$STATE/metadata/library/db/db120000000000000000000000000001/poster.png",
+          "bytes": "Qg=="
+        }
+      ],
+      "streams": [
+        true
+      ]
+    },
+    {
+      "name": "search-first",
+      "selected": [
+        "A",
+        "B"
+      ],
+      "eligible": [
+        "B",
+        "A"
+      ],
+      "calls": [
+        "B:Primary"
+      ],
+      "saves": [
+        {
+          "mimeType": "image/png",
+          "type": "Primary",
+          "bytes": "Qg=="
+        }
+      ],
+      "changed": true,
+      "failures": 0,
+      "errorMessage": null,
+      "exception": null,
+      "images": [
+        {
+          "type": "Primary",
+          "path": "$STATE/metadata/library/db/db120000000000000000000000000001/poster.png",
+          "Width": 0,
+          "Height": 0,
+          "BlurHash": null,
+          "bytes": "Qg=="
+        }
+      ],
+      "files": [
+        {
+          "path": "$STATE/metadata/library/db/db120000000000000000000000000001/poster.png",
+          "bytes": "Qg=="
+        }
+      ],
+      "streams": [
+        true
+      ]
+    },
+    {
+      "name": "remote-first",
+      "selected": [
+        "R",
+        "A"
+      ],
+      "eligible": [
+        "R",
+        "A"
+      ],
+      "calls": [
+        "R:list"
+      ],
+      "saves": [
+        {
+          "mimeType": "image/png",
+          "type": "Primary",
+          "bytes": "Ug=="
+        }
+      ],
+      "changed": true,
+      "failures": 0,
+      "errorMessage": null,
+      "exception": null,
+      "images": [
+        {
+          "type": "Primary",
+          "path": "$STATE/metadata/library/db/db120000000000000000000000000001/poster.png",
+          "Width": 0,
+          "Height": 0,
+          "BlurHash": "old-hash",
+          "bytes": "Ug=="
+        }
+      ],
+      "files": [
+        {
+          "path": "$STATE/metadata/library/db/db120000000000000000000000000001/poster.png",
+          "bytes": "Ug=="
+        }
+      ],
+      "streams": []
+    },
+    {
+      "name": "dynamic-first",
+      "selected": [
+        "A",
+        "R"
+      ],
+      "eligible": [
+        "A",
+        "R"
+      ],
+      "calls": [
+        "A:Primary",
+        "R:list"
+      ],
+      "saves": [
+        {
+          "mimeType": "image/png",
+          "type": "Primary",
+          "bytes": "QQ=="
+        }
+      ],
+      "changed": true,
+      "failures": 0,
+      "errorMessage": null,
+      "exception": null,
+      "images": [
+        {
+          "type": "Primary",
+          "path": "$STATE/metadata/library/db/db120000000000000000000000000001/poster.png",
+          "Width": 0,
+          "Height": 0,
+          "BlurHash": "old-hash",
+          "bytes": "QQ=="
+        }
+      ],
+      "files": [
+        {
+          "path": "$STATE/metadata/library/db/db120000000000000000000000000001/poster.png",
+          "bytes": "QQ=="
+        }
+      ],
+      "streams": [
+        true
+      ]
+    },
+    {
+      "name": "empty-dynamic-remote",
+      "selected": [
+        "A",
+        "R"
+      ],
+      "eligible": [
+        "A",
+        "R"
+      ],
+      "calls": [
+        "A:Primary",
+        "R:list"
+      ],
+      "saves": [
+        {
+          "mimeType": "image/png",
+          "type": "Primary",
+          "bytes": "Ug=="
+        }
+      ],
+      "changed": true,
+      "failures": 0,
+      "errorMessage": null,
+      "exception": null,
+      "images": [
+        {
+          "type": "Primary",
+          "path": "$STATE/metadata/library/db/db120000000000000000000000000001/poster.png",
+          "Width": 0,
+          "Height": 0,
+          "BlurHash": null,
+          "bytes": "Ug=="
+        }
+      ],
+      "files": [
+        {
+          "path": "$STATE/metadata/library/db/db120000000000000000000000000001/poster.png",
+          "bytes": "Ug=="
+        }
+      ],
+      "streams": []
+    },
+    {
+      "name": "local-save",
+      "selected": [
+        "A",
+        "B"
+      ],
+      "eligible": [
+        "A",
+        "B"
+      ],
+      "calls": [
+        "A:Primary"
+      ],
+      "saves": [
+        {
+          "mimeType": "image/png",
+          "type": "Primary",
+          "bytes": "QQ=="
+        }
+      ],
+      "changed": true,
+      "failures": 0,
+      "errorMessage": null,
+      "exception": null,
+      "images": [
+        {
+          "type": "Primary",
+          "path": "$STATE/media/poster.png",
+          "Width": 0,
+          "Height": 0,
+          "BlurHash": null,
+          "bytes": "QQ=="
+        }
+      ],
+      "files": [],
+      "streams": [
+        true
+      ]
+    },
+    {
+      "name": "cancelled-empty-response",
+      "selected": [
+        "A"
+      ],
+      "eligible": [
+        "A"
+      ],
+      "calls": [
+        "A:Primary"
+      ],
+      "saves": [],
+      "changed": false,
+      "failures": 0,
+      "errorMessage": null,
+      "exception": null,
+      "images": [],
+      "files": [],
+      "streams": []
+    },
+    {
+      "name": "cancelled-ordinary-failure",
+      "selected": [
+        "A"
+      ],
+      "eligible": [
+        "A"
+      ],
+      "calls": [
+        "A:Primary"
+      ],
+      "saves": [],
+      "changed": false,
+      "failures": 1,
+      "errorMessage": "Controlled provider failure",
+      "exception": null,
+      "images": [],
+      "files": [],
+      "streams": []
+    },
+    {
+      "name": "cancelled-failure-then-save",
+      "selected": [
+        "A",
+        "B"
+      ],
+      "eligible": [
+        "A",
+        "B"
+      ],
+      "calls": [
+        "A:Primary",
+        "B:Primary"
+      ],
+      "saves": [
+        {
+          "mimeType": "image/png",
+          "type": "Primary",
+          "bytes": "Qg=="
+        }
+      ],
+      "changed": false,
+      "failures": null,
+      "errorMessage": null,
+      "exception": "cancelled",
+      "images": [],
+      "files": [
+        {
+          "path": "$STATE/metadata/library/db/db120000000000000000000000000001/poster.png",
+          "bytes": ""
+        }
+      ],
+      "streams": [
+        true
+      ]
+    }
+  ],
+  "scope": "Actual ProviderManager image selection and BaseItemManager enablement, BookMetadataService.GetNonLocalImageProviders and ItemImageProvider.RefreshImages. Actual ProviderManager stream SaveImage and ImageSaver operate real isolated files. Dynamic/remote provider payloads, logger/config/library interfaces are controlled seams; no book archive decoding, SQL or HTTP is claimed.",
+  "assemblies": [
+    {
+      "name": "MediaBrowser.Controller",
+      "sha256": "e4f1e201e43c9e22fd07cbd0ed2c52c427b0bdaa2dfe0ed5e5ab7ee604b537cf"
+    },
+    {
+      "name": "MediaBrowser.Providers",
+      "sha256": "4aa9ca407da2bb0db21ef0a7da5bdef162260fd9c5873f06cfb239780ccc4e3e"
+    },
+    {
+      "name": "Emby.Server.Implementations",
+      "sha256": "9c732ba80d1b1980c36d2d64780da28d64c0a8d503bf044c89bc35285eab219e"
+    }
+  ]
+}

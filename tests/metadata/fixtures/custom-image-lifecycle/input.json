@@ -1,0 +1,104 @@
+[
+  {
+    "name": "first-append",
+    "first": true,
+    "operation": "append"
+  },
+  {
+    "name": "first-replace",
+    "first": true,
+    "operation": "replace"
+  },
+  {
+    "name": "first-remove",
+    "first": true,
+    "operation": "remove"
+  },
+  {
+    "name": "first-sequential",
+    "first": true,
+    "operation": "sequential"
+  },
+  {
+    "name": "first-provider",
+    "first": true,
+    "operation": "append",
+    "failure": "provider"
+  },
+  {
+    "name": "first-cancel",
+    "first": true,
+    "operation": "append",
+    "failure": "cancel"
+  },
+  {
+    "name": "first-images",
+    "first": true,
+    "operation": "append",
+    "failure": "images"
+  },
+  {
+    "name": "first-probe-reload",
+    "first": true,
+    "operation": "append",
+    "probe": true
+  },
+  {
+    "name": "first-probe-cancel",
+    "first": true,
+    "operation": "append",
+    "probe": true,
+    "failure": "cancel"
+  },
+  {
+    "name": "existing-append",
+    "first": false,
+    "operation": "append"
+  },
+  {
+    "name": "existing-replace",
+    "first": false,
+    "operation": "replace"
+  },
+  {
+    "name": "existing-remove",
+    "first": false,
+    "operation": "remove"
+  },
+  {
+    "name": "existing-sequential",
+    "first": false,
+    "operation": "sequential"
+  },
+  {
+    "name": "existing-provider",
+    "first": false,
+    "operation": "append",
+    "failure": "provider"
+  },
+  {
+    "name": "existing-cancel",
+    "first": false,
+    "operation": "append",
+    "failure": "cancel"
+  },
+  {
+    "name": "existing-images",
+    "first": false,
+    "operation": "append",
+    "failure": "images"
+  },
+  {
+    "name": "existing-probe-reload",
+    "first": false,
+    "operation": "append",
+    "probe": true
+  },
+  {
+    "name": "existing-probe-cancel",
+    "first": false,
+    "operation": "append",
+    "probe": true,
+    "failure": "cancel"
+  }
+]

@@ -1,0 +1,8 @@
+{
+  "cases": [
+    {
+      "name": "corrupt-unicode-user-comment",
+      "file": "unicode-comment.jpg"
+    }
+  ]
+}

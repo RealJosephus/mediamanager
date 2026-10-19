@@ -1,0 +1,96 @@
+{
+  "scope": "Node runtime integration using separately sealed native provider, DTO, album and repository contracts.",
+  "sources": [
+    {
+      "filename": "D:/jellyfin/Jellyfin.Server.Implementations/Item/BaseItemMapper.cs",
+      "available": true,
+      "kind": "file",
+      "bytes": 21359,
+      "sha256": "eea80de6656ccd8f988c610b48c69a93dae9e48fffbbb7a2c568a963b3451e92",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server.Implementations/Item/BaseItemMapper.cs",
+      "available": true,
+      "kind": "file",
+      "bytes": 21359,
+      "sha256": "eea80de6656ccd8f988c610b48c69a93dae9e48fffbbb7a2c568a963b3451e92",
+      "required": true
+    }
+  ],
+  "files": [
+    {
+      "filename": "D:/mediamanager/tests/metadata/fixtures/photo-runtime/README.md",
+      "available": true,
+      "kind": "file",
+      "bytes": 1259,
+      "sha256": "451d4be122849b4323098cbbe28c795c9cf56e5d125614733f010392f68b5657"
+    }
+  ],
+  "tagReaderAttribution": {
+    "upstreamCommit": "b5ae84f2e84087bf160bb0471420200dd2b5d809",
+    "sourceRoot": "D:/mediamanager-validation/20261016-photo-stage/taglib-source/taglib-sharp-b5ae84f2e84087bf160bb0471420200dd2b5d809",
+    "sources": [
+      {
+        "filename": "D:/mediamanager-validation/20261016-photo-stage/taglib-source/taglib-sharp-b5ae84f2e84087bf160bb0471420200dd2b5d809/src/TaglibSharp/Image/CombinedImageTag.cs",
+        "bytes": 15507,
+        "sha256": "4d747da31e6c61b9c2f0a7de400d82e6bc558f9960f92f1a51414c355662ab7c",
+        "required": true
+      },
+      {
+        "filename": "D:/mediamanager-validation/20261016-photo-stage/taglib-source/taglib-sharp-b5ae84f2e84087bf160bb0471420200dd2b5d809/src/TaglibSharp/IFD/IFDTag.cs",
+        "bytes": 17558,
+        "sha256": "2d22b8ae9cc17f9e120e0f3b8c53888fe2536b797f52d746ca793b6557c6b3e1",
+        "required": true
+      },
+      {
+        "filename": "D:/mediamanager-validation/20261016-photo-stage/taglib-source/taglib-sharp-b5ae84f2e84087bf160bb0471420200dd2b5d809/src/TaglibSharp/IFD/IFDReader.cs",
+        "bytes": 32217,
+        "sha256": "b8cd80401d7277c759da09c5a51dae4834bb1bf377071e8b9717d8b621fdff7a",
+        "required": true
+      },
+      {
+        "filename": "D:/mediamanager-validation/20261016-photo-stage/taglib-source/taglib-sharp-b5ae84f2e84087bf160bb0471420200dd2b5d809/src/TaglibSharp/Xmp/XmpTag.cs",
+        "bytes": 41432,
+        "sha256": "add3d67973b78ea6de9902aeddb8e6f0526e4f9627e8624c49fa02c7fc557252",
+        "required": true
+      },
+      {
+        "filename": "D:/mediamanager-validation/20261016-photo-stage/taglib-source/taglib-sharp-b5ae84f2e84087bf160bb0471420200dd2b5d809/src/TaglibSharp/Png/File.cs",
+        "bytes": 26599,
+        "sha256": "9c90fdb1228d704e8fc29d4ed36a11966b55a013d2b04e915634d18b2ecf9dcc",
+        "required": true
+      },
+      {
+        "filename": "D:/mediamanager-validation/20261016-photo-stage/taglib-source/taglib-sharp-b5ae84f2e84087bf160bb0471420200dd2b5d809/src/TaglibSharp/IIM/IIMReader.cs",
+        "bytes": 2710,
+        "sha256": "95ee85339189246cb9fcead99724b5dea01517d128c3b7d5463dd9c115c2095a",
+        "required": true
+      },
+      {
+        "filename": "D:/mediamanager-validation/20261016-photo-stage/taglib-source/taglib-sharp-b5ae84f2e84087bf160bb0471420200dd2b5d809/src/TaglibSharp/IFD/Entries/UserCommentIFDEntry.cs",
+        "bytes": 6137,
+        "sha256": "03819588d6008ad4aea238aa0216a9845918282d95636d1c9b097d8b9ed385a4",
+        "required": true
+      },
+      {
+        "filename": "D:/mediamanager-validation/20261016-photo-stage/taglib-source/taglib-sharp-b5ae84f2e84087bf160bb0471420200dd2b5d809/COPYING",
+        "bytes": 26432,
+        "sha256": "6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3",
+        "required": true
+      }
+    ],
+    "files": [
+      {
+        "filename": "D:\\mediamanager\\src\\metadata\\resources\\photo-tags-license.txt",
+        "bytes": 26432,
+        "sha256": "6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3"
+      },
+      {
+        "filename": "D:\\mediamanager\\src\\metadata\\resources\\photo-tags-notice.txt",
+        "bytes": 1077,
+        "sha256": "b01844aed9c3636e2822ab8c0c90f3ad8fae7e007c27112777817c801f1cef1c"
+      }
+    ]
+  }
+}

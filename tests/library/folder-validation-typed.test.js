@@ -6,6 +6,7 @@ import { getNewItemId } from '../../src/core/identity.js';
 import { createMetadataContextLoader } from '../../src/library/metadata-context.js';
 import { DirectoryItemResolverPipeline } from '../../src/library/directory-item-resolver.js';
 import { FolderValidationService } from '../../src/library/folder-validation-service.js';
+import { LibraryTaskScheduler } from '../../src/library/library-task-scheduler.js';
 import { ItemCreationService } from '../../src/library/item-creation-service.js';
 import { ResolvedItemLifecycleHost } from '../../src/library/resolved-item-lifecycle.js';
 import { ProviderRefreshService } from '../../src/metadata/provider-refresh-service.js';
@@ -148,6 +149,7 @@ async function typedValidationFixture(t, dialect, collectionType, resolver) {
     configuration: fixture.configuration
   });
   const validation = new FolderValidationService({
+    scheduler: new LibraryTaskScheduler({ configuration: fixture.configuration }),
     store: fixture.store,
     library: fixture.library,
     itemCreation: creator,

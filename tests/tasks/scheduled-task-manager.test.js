@@ -480,11 +480,9 @@ test('completed observer requeue cannot steal a successor from the task it start
 test('task and scanner owners can be signalled together when the task waits behind an older queue generation', async () => {
   const entered = Promise.withResolvers();
   const scannerService = new LibraryScanService({
-    library: { getPhysicalScanRoots: async () => [{ Id: 'blocking' }] },
-    folderScanner: {
-      supports: () => true,
-      scan(root, { signal }) {
-        entered.resolve(root);
+    lifecycle: {
+      run({ signal }) {
+        entered.resolve();
         return new Promise((resolve, reject) => signal.addEventListener('abort', () => {
           reject(new StorageError('cancelled', 'scanner closed'));
         }, { once: true }));
@@ -545,8 +543,7 @@ test('three serialized scan-owner layers drain when every owner is signalled tog
   const olderRejected = assert.rejects(older, error => error.code === 'cancelled');
   await olderEntered.promise;
   const scannerService = new LibraryScanService({
-    library: { getPhysicalScanRoots: async () => [{ Id: 'library-root' }] },
-    folderScanner: folderOwner
+    lifecycle: { run: options => folderOwner.scan({ Id: 'library-root' }, options) }
   });
   const queued = scannerService.queue();
   await libraryFolderRegistered.promise;

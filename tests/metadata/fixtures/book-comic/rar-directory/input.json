@@ -1,0 +1,217 @@
+{
+  "culture": "en-US",
+  "metadataCases": [],
+  "languages": [],
+  "coverCases": [
+    {
+      "name": "rar4-separator-collision",
+      "extension": ".cbr",
+      "format": "asset",
+      "assetPath": "D:/mediamanager-validation/20261016-book-stage/inputs/comic-rar-paths-2/rar4-separator-collision.cbr",
+      "entries": []
+    },
+    {
+      "name": "rar4-separator-collision-reversed",
+      "extension": ".cbr",
+      "format": "asset",
+      "assetPath": "D:/mediamanager-validation/20261016-book-stage/inputs/comic-rar-paths-2/rar4-separator-collision-reversed.cbr",
+      "entries": []
+    },
+    {
+      "name": "rar4-dash-order",
+      "extension": ".cbr",
+      "format": "asset",
+      "assetPath": "D:/mediamanager-validation/20261016-book-stage/inputs/comic-rar-paths-2/rar4-dash-order.cbr",
+      "entries": []
+    },
+    {
+      "name": "rar4-backslash-dash-duplicate",
+      "extension": ".cbr",
+      "format": "asset",
+      "assetPath": "D:/mediamanager-validation/20261016-book-stage/inputs/comic-rar-paths-2/rar4-backslash-dash-duplicate.cbr",
+      "entries": []
+    },
+    {
+      "name": "rar4-directory-before-file",
+      "extension": ".cbr",
+      "format": "asset",
+      "assetPath": "D:/mediamanager-validation/20261016-book-stage/inputs/comic-rar-paths-2/rar4-directory-before-file.cbr",
+      "entries": []
+    },
+    {
+      "name": "rar4-directory-cover",
+      "extension": ".cbr",
+      "format": "asset",
+      "assetPath": "D:/mediamanager-validation/20261016-book-stage/inputs/comic-rar-paths-2/rar4-directory-cover.cbr",
+      "entries": []
+    },
+    {
+      "name": "rar4-directory-slash",
+      "extension": ".cbr",
+      "format": "asset",
+      "assetPath": "D:/mediamanager-validation/20261016-book-stage/inputs/comic-rar-paths-2/rar4-directory-slash.cbr",
+      "entries": []
+    },
+    {
+      "name": "rar4-trailing-directory-slash",
+      "extension": ".cbr",
+      "format": "asset",
+      "assetPath": "D:/mediamanager-validation/20261016-book-stage/inputs/comic-rar-paths-2/rar4-trailing-directory-slash.cbr",
+      "entries": []
+    },
+    {
+      "name": "rar4-dots",
+      "extension": ".cbr",
+      "format": "asset",
+      "assetPath": "D:/mediamanager-validation/20261016-book-stage/inputs/comic-rar-paths-2/rar4-dots.cbr",
+      "entries": []
+    },
+    {
+      "name": "rar4-duplicate-first",
+      "extension": ".cbr",
+      "format": "asset",
+      "assetPath": "D:/mediamanager-validation/20261016-book-stage/inputs/comic-rar-paths-2/rar4-duplicate-first.cbr",
+      "entries": []
+    },
+    {
+      "name": "rar4-unicode-mode2",
+      "extension": ".cbr",
+      "format": "asset",
+      "assetPath": "D:/mediamanager-validation/20261016-book-stage/inputs/comic-rar-paths-2/rar4-unicode-mode2.cbr",
+      "entries": []
+    },
+    {
+      "name": "rar4-unicode-mode0",
+      "extension": ".cbr",
+      "format": "asset",
+      "assetPath": "D:/mediamanager-validation/20261016-book-stage/inputs/comic-rar-paths-2/rar4-unicode-mode0.cbr",
+      "entries": []
+    },
+    {
+      "name": "rar4-unicode-mode1",
+      "extension": ".cbr",
+      "format": "asset",
+      "assetPath": "D:/mediamanager-validation/20261016-book-stage/inputs/comic-rar-paths-2/rar4-unicode-mode1.cbr",
+      "entries": []
+    },
+    {
+      "name": "rar4-unicode-copy",
+      "extension": ".cbr",
+      "format": "asset",
+      "assetPath": "D:/mediamanager-validation/20261016-book-stage/inputs/comic-rar-paths-2/rar4-unicode-copy.cbr",
+      "entries": []
+    },
+    {
+      "name": "rar4-unicode-correction",
+      "extension": ".cbr",
+      "format": "asset",
+      "assetPath": "D:/mediamanager-validation/20261016-book-stage/inputs/comic-rar-paths-2/rar4-unicode-correction.cbr",
+      "entries": []
+    },
+    {
+      "name": "rar4-unicode-no-nul",
+      "extension": ".cbr",
+      "format": "asset",
+      "assetPath": "D:/mediamanager-validation/20261016-book-stage/inputs/comic-rar-paths-2/rar4-unicode-no-nul.cbr",
+      "entries": []
+    },
+    {
+      "name": "rar4-invalid-utf8",
+      "extension": ".cbr",
+      "format": "asset",
+      "assetPath": "D:/mediamanager-validation/20261016-book-stage/inputs/comic-rar-paths-2/rar4-invalid-utf8.cbr",
+      "entries": []
+    },
+    {
+      "name": "rar4-unicode-truncated",
+      "extension": ".cbr",
+      "format": "asset",
+      "assetPath": "D:/mediamanager-validation/20261016-book-stage/inputs/comic-rar-paths-2/rar4-unicode-truncated.cbr",
+      "entries": []
+    },
+    {
+      "name": "rar5-separator-collision",
+      "extension": ".cbr",
+      "format": "asset",
+      "assetPath": "D:/mediamanager-validation/20261016-book-stage/inputs/comic-rar-paths-2/rar5-separator-collision.cbr",
+      "entries": []
+    },
+    {
+      "name": "rar5-separator-collision-reversed",
+      "extension": ".cbr",
+      "format": "asset",
+      "assetPath": "D:/mediamanager-validation/20261016-book-stage/inputs/comic-rar-paths-2/rar5-separator-collision-reversed.cbr",
+      "entries": []
+    },
+    {
+      "name": "rar5-dash-order",
+      "extension": ".cbr",
+      "format": "asset",
+      "assetPath": "D:/mediamanager-validation/20261016-book-stage/inputs/comic-rar-paths-2/rar5-dash-order.cbr",
+      "entries": []
+    },
+    {
+      "name": "rar5-backslash-dash-duplicate",
+      "extension": ".cbr",
+      "format": "asset",
+      "assetPath": "D:/mediamanager-validation/20261016-book-stage/inputs/comic-rar-paths-2/rar5-backslash-dash-duplicate.cbr",
+      "entries": []
+    },
+    {
+      "name": "rar5-directory-before-file",
+      "extension": ".cbr",
+      "format": "asset",
+      "assetPath": "D:/mediamanager-validation/20261016-book-stage/inputs/comic-rar-paths-2/rar5-directory-before-file.cbr",
+      "entries": []
+    },
+    {
+      "name": "rar5-directory-cover",
+      "extension": ".cbr",
+      "format": "asset",
+      "assetPath": "D:/mediamanager-validation/20261016-book-stage/inputs/comic-rar-paths-2/rar5-directory-cover.cbr",
+      "entries": []
+    },
+    {
+      "name": "rar5-directory-slash",
+      "extension": ".cbr",
+      "format": "asset",
+      "assetPath": "D:/mediamanager-validation/20261016-book-stage/inputs/comic-rar-paths-2/rar5-directory-slash.cbr",
+      "entries": []
+    },
+    {
+      "name": "rar5-trailing-directory-slash",
+      "extension": ".cbr",
+      "format": "asset",
+      "assetPath": "D:/mediamanager-validation/20261016-book-stage/inputs/comic-rar-paths-2/rar5-trailing-directory-slash.cbr",
+      "entries": []
+    },
+    {
+      "name": "rar5-dots",
+      "extension": ".cbr",
+      "format": "asset",
+      "assetPath": "D:/mediamanager-validation/20261016-book-stage/inputs/comic-rar-paths-2/rar5-dots.cbr",
+      "entries": []
+    },
+    {
+      "name": "rar5-duplicate-first",
+      "extension": ".cbr",
+      "format": "asset",
+      "assetPath": "D:/mediamanager-validation/20261016-book-stage/inputs/comic-rar-paths-2/rar5-duplicate-first.cbr",
+      "entries": []
+    },
+    {
+      "name": "rar4-full-upstream-catalog",
+      "extension": ".cbr",
+      "format": "asset",
+      "assetPath": "D:/mediamanager-validation/20261016-book-stage/inputs/comic-upstream-1/Rar.rar",
+      "entries": []
+    },
+    {
+      "name": "rar5-full-upstream-catalog",
+      "extension": ".cbr",
+      "format": "asset",
+      "assetPath": "D:/mediamanager-validation/20261016-book-stage/inputs/comic-upstream-1/Rar5.rar",
+      "entries": []
+    }
+  ]
+}

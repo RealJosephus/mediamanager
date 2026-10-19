@@ -1,0 +1,141 @@
+{
+  "exports": [
+    {
+      "Name": "Comic Provider",
+      "type": "MediaBrowser.Providers.Books.ComicProvider"
+    },
+    {
+      "Name": "EPUB Metadata",
+      "type": "MediaBrowser.Providers.Books.OpenPackagingFormat.EpubProvider"
+    },
+    {
+      "Name": "Open Packaging Format",
+      "type": "MediaBrowser.Providers.Books.OpenPackagingFormat.OpfProvider"
+    }
+  ],
+  "observed": [
+    {
+      "name": "default",
+      "providers": [
+        {
+          "Name": "Comic Provider",
+          "type": "MediaBrowser.Providers.Books.ComicProvider",
+          "defaultOrder": 50
+        },
+        {
+          "Name": "EPUB Metadata",
+          "type": "MediaBrowser.Providers.Books.OpenPackagingFormat.EpubProvider",
+          "defaultOrder": 50
+        },
+        {
+          "Name": "Open Packaging Format",
+          "type": "MediaBrowser.Providers.Books.OpenPackagingFormat.OpfProvider",
+          "defaultOrder": 50
+        }
+      ]
+    },
+    {
+      "name": "global-order",
+      "providers": [
+        {
+          "Name": "Open Packaging Format",
+          "type": "MediaBrowser.Providers.Books.OpenPackagingFormat.OpfProvider",
+          "defaultOrder": 50
+        },
+        {
+          "Name": "Comic Provider",
+          "type": "MediaBrowser.Providers.Books.ComicProvider",
+          "defaultOrder": 50
+        },
+        {
+          "Name": "EPUB Metadata",
+          "type": "MediaBrowser.Providers.Books.OpenPackagingFormat.EpubProvider",
+          "defaultOrder": 50
+        }
+      ]
+    },
+    {
+      "name": "library-order",
+      "providers": [
+        {
+          "Name": "EPUB Metadata",
+          "type": "MediaBrowser.Providers.Books.OpenPackagingFormat.EpubProvider",
+          "defaultOrder": 50
+        },
+        {
+          "Name": "Comic Provider",
+          "type": "MediaBrowser.Providers.Books.ComicProvider",
+          "defaultOrder": 50
+        },
+        {
+          "Name": "Open Packaging Format",
+          "type": "MediaBrowser.Providers.Books.OpenPackagingFormat.OpfProvider",
+          "defaultOrder": 50
+        }
+      ]
+    }
+  ],
+  "assemblies": [
+    {
+      "name": "MediaBrowser.Model",
+      "sha256": "5e5db1a105d41d913eb36d7bd9e1aeb62d3ae4809b00c12023f2eb99f019d372"
+    },
+    {
+      "name": "MediaBrowser.Common",
+      "sha256": "da09560f84366fe4f2667391ce443b6e1d67d9ab891e8d230acb96d54e9ce12b"
+    },
+    {
+      "name": "MediaBrowser.Controller",
+      "sha256": "e4f1e201e43c9e22fd07cbd0ed2c52c427b0bdaa2dfe0ed5e5ab7ee604b537cf"
+    },
+    {
+      "name": "MediaBrowser.Providers",
+      "sha256": "4aa9ca407da2bb0db21ef0a7da5bdef162260fd9c5873f06cfb239780ccc4e3e"
+    },
+    {
+      "name": "Emby.Photos",
+      "sha256": "ea702e040524dc0aeaef127012d4f4900d7a90c48caa09e0a55b4b2c7ebaac1e"
+    },
+    {
+      "name": "Emby.Server.Implementations",
+      "sha256": "9c732ba80d1b1980c36d2d64780da28d64c0a8d503bf044c89bc35285eab219e"
+    },
+    {
+      "name": "MediaBrowser.MediaEncoding",
+      "sha256": "b4301e181cdfc0b803bb5e715f4b7fd3f30606d881381d087a517a3f93c51a38"
+    },
+    {
+      "name": "MediaBrowser.LocalMetadata",
+      "sha256": "d87ddd8d1fe866f1d87980220a9e0d1c760a8dcb6d232855684281769f3d4c65"
+    },
+    {
+      "name": "MediaBrowser.XbmcMetadata",
+      "sha256": "3f75a7fe29586a69b98e13b61b73752cf859d322298ec760e668990cf6ddfe67"
+    },
+    {
+      "name": "Jellyfin.Networking",
+      "sha256": "ab0375f70fbed9d95678bdf21d1cc85e2952d33963fa10d13fdc2468e948baff"
+    },
+    {
+      "name": "Jellyfin.MediaEncoding.Hls",
+      "sha256": "77b083f4bf52719b793ae42352baa85ff0c86c65b6eee9a50e93a5337c47592e"
+    },
+    {
+      "name": "jellyfin",
+      "sha256": "474c7c638fe93cc61f1a588849fb93c81a2927388f6f4cf19953b3a76e9deb26"
+    },
+    {
+      "name": "Jellyfin.Database.Implementations",
+      "sha256": "28803e21ebd1ebaf0cc3189e4f5b1ad5b476cab0f08327b9be09c235b3da169f"
+    },
+    {
+      "name": "Jellyfin.Server.Implementations",
+      "sha256": "f163fb6064b99bf6c240264e7bed0263da272d6380756c19c3f94dbf6c4365c1"
+    },
+    {
+      "name": "Jellyfin.LiveTv",
+      "sha256": "8b745072fa22685aea5deac3742fabb2ee3d09a81ba50dae9e46a046a34d1bbc"
+    }
+  ],
+  "scope": "Actual CoreAppHost.GetComposablePartAssemblies/DiscoverTypes/GetExports\u003CILocalMetadataProvider\u003CBook\u003E\u003E and ProviderManager.AddParts/GetMetadataProviders. Native built-in assembly/export order is retained, with no installed plugins. CoreAppHost is uninitialized except the native empty PluginManager/logger/DI needed by discovery; provider filesystem/logger dependencies are controlled and no readers run. This is not full server startup or externally installed plugin ordering."
+}

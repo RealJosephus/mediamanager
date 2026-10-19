@@ -17,6 +17,7 @@ import { ItemUpdateType } from '../metadata/save-manager.js';
 import { nativeDate } from '../sessions/user-data.js';
 import { readItemImageRows } from '../library/image-order.js';
 import { insertNativeImageBatch } from '../database/native-relation-order.js';
+import { isFileProtocol } from '../library/owned-items.js';
 
 const remote = image => /^http/i.test(image.Path);
 const missing = () => Object.assign(new Error('Image item not found.'), { status: 404, code: 'image-item-missing' });
@@ -90,12 +91,25 @@ export class ImageService {
     const parentRow = nonemptyId(item.ParentId) ? await this.store.run(async db => (await db.rows('BaseItems', { where: { Id: item.ParentId } }))[0]) : undefined;
     const expand = this.library.options.expandPath ?? (value => value);
     let accessPath;
-    if (this.mediaIdentityMap && item.Path) try { accessPath = this.mediaIdentityMap.resolve({ itemId: item.Id, identityPath: item.Path, style: /^[A-Za-z]:[\\/]|^\\\\/.test(item.Path) ? 'windows' : 'posix' }); }
+    if (this.mediaIdentityMap && isFileProtocol(item)) try { accessPath = this.mediaIdentityMap.resolve({ itemId: item.Id, identityPath: item.Path, style: /^[A-Za-z]:[\\/]|^\\\\/.test(item.Path) ? 'windows' : 'posix' }); }
     catch (error) { if (error.code !== 'not-found') throw error; }
     return { item, parent: parentRow && mapRecord(parentRow), images: ordered.map(row => ({ ...row, Type: imageTypes[row.ImageType], Path: expand(row.Path) })), rows,
       imageAssets: this.assets.forItem(item, accessPath), metadataPath: this.metadataPath, globalOptions: this.library.options.configuration,
       saveLocalMetadataEnabled: false, extraImagePaths: undefined };
   }
+  getImageDimensions(item, image) { return this.#track(async () => {
+    if (image.Width > 0 && image.Height > 0) return { Width: image.Width, Height: image.Height };
+    let accessPath;
+    if (this.mediaIdentityMap && isFileProtocol(item)) try {
+      accessPath = this.mediaIdentityMap.resolve({ itemId: item.Id, identityPath: item.Path,
+        style: /^[A-Za-z]:[\\/]|^\\\\/.test(item.Path) ? 'windows' : 'posix' });
+    } catch (error) { if (error.code !== 'not-found') throw error; }
+    const filename = (this.library.options.expandPath ?? (value => value))(image.Path);
+    const bytes = await this.assets.forItem(item, accessPath).read(filename, { signal: this.#lifetime.signal });
+    const size = await this.processor.getImageSize(bytes, filename, { signal: this.#lifetime.signal });
+    image.Width = size.Width; image.Height = size.Height;
+    return size;
+  }); }
   async persist(loaded, { dateLastSaved, context, newVersions = [], signal } = {}) {
     return this.store.serializeWrites(async () => {
       const rows = await this.store.transaction(async db => {

@@ -15,6 +15,7 @@ import { UnsafeItemDeletionService } from '../../src/library/unsafe-item-deletio
 import { ExternalDataManager } from '../../src/library/external-data.js';
 import { createMetadataContextLoader } from '../../src/library/metadata-context.js';
 import { LibraryMetadataScanService, metadataScanOptions } from '../../src/library/metadata-scan-service.js';
+import { LibraryTaskScheduler } from '../../src/library/library-task-scheduler.js';
 import { isNativeItemEntity, acquireNativeItemLinkOwner } from '../../src/library/native-item-entity.js';
 import { EMPTY_NATIVE_LINKS } from '../../src/library/postgres-linked-children.js';
 import { persistFolderLinks } from '../../src/metadata/persistence.js';
@@ -310,7 +311,7 @@ test('postgres: Artist maintenance sends its captured entity through the real me
     try { return await operation(loaded); } finally { await loaded.dispose(); }
   };
   host.loadContext = controlledContext;
-  const errors = [], scanner = new LibraryMetadataScanService({ library, metadata: host });
+  const errors = [], scanner = new LibraryMetadataScanService({ library, metadata: host, scheduler: new LibraryTaskScheduler() });
   const task = new ArtistsPostScanTask({ store, library, linkedChildren, metadataScanner: scanner, logger: { error: error => errors.push(error) } });
   await task.run(); assert.deepEqual(errors, []); assert.equal(seen.length, 1);
   const Id = nativeGuid(recording.before.rows.find(row => row.Type.endsWith('.MusicArtist')).Id);
@@ -411,7 +412,7 @@ test('postgres: native partial Artist refresh preserves unknown links while cold
     });
     // The native FindArtists batch omits LinkedChildEntities, and native SaveItems
     // skips that unknown branch. Run the same real refresh/save host as above.
-    await new LibraryMetadataScanService({ library, metadata: host }).refreshLiveItem(draft);
+    await new LibraryMetadataScanService({ library, metadata: host, scheduler: new LibraryTaskScheduler() }).refreshLiveItem(draft);
     assert.equal(draft.LinkedChildrenLoaded, false);
     assert.deepEqual(await storedLinks(), before, 'The real metadata save retains both original link rows and their order.');
 

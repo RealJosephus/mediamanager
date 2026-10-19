@@ -59,7 +59,7 @@ test('provider setter and metadata merge retain literal own provider keys', asyn
 
 test('postgres: cold provider hydration preserves the literal __proto__ provider key',
   { skip: !process.env.MEDIAMANAGER_TEST_POSTGRES }, async t => {
-    const database = await createPostgresTestDatabase(t, 'provider_own', { maxPoolSize: 1 });
+    const database = await createPostgresTestDatabase(t, 'provider_own', { max: 1 });
     const id = '95500000000000000000000000000099';
     await database.insert('BaseItems', postgresTestRow('BaseItems', { Id: id,
       Type: 'MediaBrowser.Controller.Entities.Movies.Movie', Data: '{}' }));

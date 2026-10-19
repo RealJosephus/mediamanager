@@ -2460,7 +2460,8 @@ export class FolderScanService {
           || !identityWithin(target.identityPath, replacementPath)
           || samePath(target.identityPath, replacementPath)
           || !supportsCollapsedItemType(collectionContext, target.nativeType) || target.draft.IsFolder !== false
-          || target.entry?.kind !== 'file' && !(target.entry?.kind === 'directory' && target.directoryParts.length > 0)
+          || target.entry?.kind !== 'file' && !(target.entry?.kind === 'directory'
+            && (target.directoryParts.length > 0 || target.nativeType === 'MediaBrowser.Controller.Entities.Book'))
           || !scope?.deletionSafe || !scope.observedPaths.has(pathKey(target.identityPath))) {
           throw new StorageError('invalid-response', 'The storage plan contains an invalid replacement path.');
         }

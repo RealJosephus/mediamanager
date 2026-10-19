@@ -230,6 +230,10 @@ const jellyfinDll = process.env.MEDIAMANAGER_JELLYFIN_DLL
   ? path.resolve(repoRoot, process.env.MEDIAMANAGER_JELLYFIN_DLL)
   : validationPath(path.join(repoRoot, '.agent-docs/baselines/jellyfin-current/source/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll'));
 const dotnet = validationExecutable('dotnet');
+const ffmpeg = validationExecutable('ffmpeg');
+assert.ok(path.isAbsolute(ffmpeg), 'An explicit resolved FFmpeg input is required.');
+assert.match(path.basename(ffmpeg), /^ffmpeg(?:\.exe)?$/iu);
+const ffprobe = path.join(path.dirname(ffmpeg), path.basename(ffmpeg).replace(/^ffmpeg/iu, 'ffprobe'));
 const recorderPath = fileURLToPath(import.meta.url);
 const recordedSourcePath = path.join(evidenceRoot, 'record-native.mjs');
 const fixturePath = validationPath(path.join(repoRoot, descriptor.fixture));
@@ -707,7 +711,7 @@ function startReference(port) {
     '--configdir', path.join(referenceRoot, 'config'),
     '--cachedir', path.join(referenceRoot, 'cache'),
     '--logdir', path.join(referenceRoot, 'log'),
-    '--nowebclient'], {
+    '--nowebclient', '--nonetchange', '--ffmpeg', ffmpeg], {
     cwd: repoRoot,
     windowsHide: true,
     stdio: ['ignore', stdout, stderr],
@@ -717,6 +721,9 @@ function startReference(port) {
     child.once('exit', (code, signal) => resolve({ code, signal }));
   });
   return {
+    command: [dotnet, jellyfinDll, '--datadir', path.join(referenceRoot, 'data'),
+      '--configdir', path.join(referenceRoot, 'config'), '--cachedir', path.join(referenceRoot, 'cache'),
+      '--logdir', path.join(referenceRoot, 'log'), '--nowebclient', '--nonetchange', '--ffmpeg', ffmpeg],
     child,
     completion,
     closeDescriptors() { closeSync(stdout); closeSync(stderr); },
@@ -823,6 +830,17 @@ const preparation = await captureFilterReferencePreparation({
   repoRoot,
   fixtureUserId: fixture.userId,
 });
+async function executionInputs() {
+  const result = [];
+  for (const [kind, filename] of [['ffmpeg', ffmpeg], ['ffprobe', ffprobe]]) {
+    const metadata = await stat(filename);
+    assert.equal(metadata.isFile(), true);
+    const bytes = await readFile(filename);
+    result.push({ kind, filename, bytes: bytes.length, sha256: sha256Bytes(bytes) });
+  }
+  return result;
+}
+const nativeLaunch = { command: null, before: await executionInputs(), after: null };
 const sourceSummary = {
   initializedFromEmpty: preparation.initializedFromEmpty,
   createdThroughNativeApi: preparation.createdThroughNativeApi,
@@ -854,6 +872,7 @@ let lifecycle = { shutdownStatus: null, processResult: { code: null, signal: nul
 let outcomeError;
 try {
   instance = startReference(selectedPort);
+  nativeLaunch.command = instance.command;
   readiness = await waitForReady(instance, origin);
   const login = await request(origin, '/Users/AuthenticateByName', {
     method: 'POST',
@@ -864,6 +883,21 @@ try {
   const userId = login.bodyJson.User.Id;
   assert.equal(idKey(userId), idKey(fixture.userId));
   basePolicy = login.bodyJson.User.Policy;
+  const configRead = await request(origin, '/System/Configuration', { token });
+  assert.equal(configRead.status, 200);
+  assert.deepEqual(configRead.bodyJson.PluginRepositories, []);
+  const taskRead = await request(origin, '/ScheduledTasks', { token });
+  assert.equal(taskRead.status, 200);
+  assert.ok(taskRead.bodyJson.length >= 20);
+  assert.ok(taskRead.bodyJson.every(task => task.State === 'Idle' && task.Triggers?.length === 0));
+  const networkRead = await request(origin, '/System/Configuration/network', { token });
+  assert.equal(networkRead.status, 200);
+  assert.deepEqual(networkRead.bodyJson.LocalNetworkAddresses, ['127.0.0.1']);
+  assert.equal(networkRead.bodyJson.AutoDiscovery, false);
+  assert.equal(networkRead.bodyJson.EnableUPnP, false);
+  assert.equal(networkRead.bodyJson.EnableRemoteAccess, false);
+  setupRecords.push({ kind: 'actual-isolation-readback', configuration: configRead,
+    tasks: taskRead, network: networkRead });
   stages.before = { database: selectedDatabaseSnapshot() };
   baselineDatabaseBytes = serializeDatabase();
   fullDatabaseBaseline = completeDatabaseSnapshot();
@@ -958,6 +992,8 @@ try {
   catch (error) { outcomeError ??= error; }
 }
 
+nativeLaunch.after = await executionInputs();
+const executionInputsUnchanged = stable(nativeLaunch.before) === stable(nativeLaunch.after);
 const recorderSha256 = await sha256File(recordedSourcePath);
 const fixtureSha256 = sha256Bytes(fixtureBytes);
 const scenarioDefinitionSha256 = sha256Bytes(Buffer.from(stable({
@@ -1024,6 +1060,7 @@ const summary = {
     && lifecycle.processResult?.signal == null
     && lifecycle.pidGone && lifecycle.portAvailable && lifecycle.databaseUnlocked
     && sourceUnchanged
+    && executionInputsUnchanged
     && negativeControlsPassed,
   invocation,
   scenario: scenarioName,
@@ -1058,6 +1095,8 @@ const summary = {
   scenarioDefinitionSha256,
   sourceSummary,
   sourceUnchanged,
+  nativeLaunch,
+  executionInputsUnchanged,
   boundArtifacts,
   negativeControls,
   error: outcomeError ? { name: outcomeError.name, message: outcomeError.message, stack: outcomeError.stack } : null,
@@ -1073,6 +1112,8 @@ await writeFile(provenancePath, json({
   runDirectory: descriptor.runDirectory,
   sourceSummary,
   sourceUnchanged,
+  nativeLaunch,
+  executionInputsUnchanged,
   preparedInputs: preparation.inputs,
   fixture: { path: descriptor.fixture, sha256: fixtureSha256 },
   recorder: { path: 'record-native.mjs', sha256: recorderSha256 },
@@ -1095,6 +1136,8 @@ await writeFile(path.join(evidenceRoot, 'oracle-validation.json'), json({
   fixtureSha256,
   scenarioDefinitionSha256,
   sourceSummary,
+  nativeLaunch,
+  executionInputsUnchanged,
   negativeControls,
   artifacts: finalArtifacts,
 }), { flag: 'wx' });

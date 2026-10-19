@@ -1,6 +1,8 @@
 import { releaseCachedFolderChildren } from './folder-cache.js';
-import { deletePersistedItems, updateInheritedValues } from './item-persistence.js';
-import { idKey, sameId, nonemptyId, libraryError } from './records.js';
+import { updateInheritedValues } from './item-persistence.js';
+import { ItemDeletionScope } from './item-deletion-scope.js';
+import { createMetadataChildren } from './metadata-children.js';
+import { idKey, nonemptyId, libraryError } from './records.js';
 import { sameNativePath } from './native-path.js';
 import path from 'node:path';
 import { getNewItemId } from '../core/identity.js';
@@ -13,10 +15,18 @@ import { nativeTextBytes } from '../database/native-text.js';
 import { nativeTextSql } from '../database/native-text-sql.js';
 import { randomUUID } from 'node:crypto';
 import { mapRecord } from './records.js';
-import { loadPostgresNavigationRows, loadPostgresPageGraph,
-  loadPostgresRowsByIds } from './postgres-library-query.js';
+import { loadPostgresPageGraph, loadPostgresRowsByIds } from './postgres-library-query.js';
 
 const itemType = item => String(item?.NativeType ?? item?.Type ?? '').split('.').at(-1);
+
+async function releaseResources(primary, operations) {
+  const errors = [];
+  for (const operation of operations) {
+    try { await operation(); } catch (error) { errors.push(error); }
+  }
+  if (errors.length) throw new AggregateError(primary ? [primary, ...errors] : errors,
+    primary?.message ?? 'Library child cleanup failed.', primary ? { cause: primary } : undefined);
+}
 
 /** Concrete host for the native library-scan lifecycle. */
 export class LibraryScanHost {
@@ -28,6 +38,9 @@ export class LibraryScanHost {
     }
     Object.assign(this, { store, library, itemCreation, metadataScanner, topLevelValidation, ignoreRule, now });
     this.capabilities = Object.freeze({
+      resolvesProductionMediaFiles: library.folderValidation?.resolverPipeline?.capabilities.resolvesProductionMediaFiles === true,
+      productionMediaScopes: library.folderValidation?.resolverPipeline?.capabilities.productionMediaScopes ?? Object.freeze([]),
+      runsMetadataProbeRefresh: typeof metadataScanner.refreshAccessibleChildren === 'function',
       reconcilesTopLevelConfiguration: topLevelValidation.capabilities?.reconcilesTopLevelConfiguration === true,
       runsPostScanTasks: false
     });
@@ -65,10 +78,31 @@ export class LibraryScanHost {
       if (type === 'UserRootFolder' && !resolved.persisted) {
         await this.itemCreation.saveItems([resolved.item], { creationIntent: 'library-save' });
       }
-      if (this.#roots.has(type)) { resolved.owner.release(); return this.#roots.get(type).item; }
+      if (type === 'AggregateFolder') {
+        const dataPath = this.library.options.dataPath ?? path.join(this.library.options.programDataPath, 'data');
+        const playlistPath = path.join(dataPath, 'playlists');
+        const playlistId = nativeGuid(getNewItemId(playlistPath, 'Emby.Server.Implementations.Playlists.PlaylistsFolder', {
+          programDataPath: path.resolve(this.library.options.programDataPath),
+          enableCaseSensitiveItemIds: this.library.options.configuration?.EnableCaseSensitiveItemIds
+        }));
+        const playlist = await this.itemCreation.getItemById(playlistId);
+        if (!playlist || itemType(playlist) !== 'PlaylistsFolder' || !sameNativePath(playlist.Path, playlistPath)) {
+          throw new Error('The registered playlists folder is not initialized.');
+        }
+        const playlistOwner = this.itemCreation.retainItem(playlist);
+        resolved.virtualOwners = [playlistOwner];
+        resolved.item.VirtualChildren.splice(0, resolved.item.VirtualChildren.length, playlist);
+      }
+      if (this.#roots.has(type)) {
+        for (const owner of resolved.virtualOwners ?? []) owner.release();
+        resolved.owner.release(); return this.#roots.get(type).item;
+      }
       this.#roots.set(type, resolved);
       return resolved.item;
-    } catch (error) { resolved.owner.release(); await this.itemCreation.linkedChildren.flushReleases(); throw error; }
+    } catch (error) {
+      for (const owner of resolved.virtualOwners ?? []) owner.release();
+      resolved.owner.release(); await this.itemCreation.linkedChildren.flushReleases(); throw error;
+    }
   }
 
   getAggregateFolder() { return this.#root('AggregateFolder'); }
@@ -103,7 +137,7 @@ export class LibraryScanHost {
 
   invalidateChildren(item) { releaseCachedFolderChildren(item); }
 
-  refreshMetadata(item, options) { return this.metadataScanner.refreshItem(item.Id, options); }
+  refreshMetadata(item, options) { return this.metadataScanner.refreshLiveItem(item, options); }
 
   validateChildren(item, options) {
     return this.topLevelValidation.supports(item)
@@ -111,30 +145,61 @@ export class LibraryScanHost {
       : this.library.validateChildren(item, options);
   }
 
-  async getChildren(parent) {
-    return this.store.run(async db => {
-      const navigationRows = await loadPostgresNavigationRows(db, parent.Id);
-      const childRows = await db.rows('BaseItems', { where: { ParentId: parent.Id },
-        orderBy: [{ column: 'SortName', direction: 'ASC' }] });
-      const graphRows = await loadPostgresPageGraph(db,
-        [...await loadPostgresRowsByIds(db, [parent.Id]), ...childRows], navigationRows);
-      const state = await this.library.load(db, null, { includeUserData: false, baseRows: graphRows });
-      try { return state.items.filter(item => sameId(item.ParentId, parent.Id)); }
-      finally { await state.dispose({ session: db }); }
-    }, { readOnly: true, lockTimeoutMs: 250 });
+  async withChildSnapshot(parent, operation, { includeItemTypes } = {}) {
+    // Capture every typed child before refreshing any of them. The cohort
+    // keeps membership and mutable entity state in SQL, with owned pages.
+    const children = await createMetadataChildren({ store: this.store, library: this.library,
+      linkedChildren: this.itemCreation.linkedChildren,
+      configuration: this.library.options.configuration }).physical(parent, { preserveDuplicates: true, includeItemTypes });
+    let failure;
+    try {
+      return await operation(children);
+    } catch (error) { failure = error; throw error; }
+    finally { await releaseResources(failure, [() => children.close()]); }
   }
 
-  async getCachedChildren(parent) {
-    return this.store.run(async db => {
-      // Folder.Children uses the repository's default owned and alternate
-      // selection, before CollectionPosterVerify filters collection types.
-      const children = await queryPostgresItemPage(db, {}, { scope: { parentId: parent.Id }, groupByPresentationKey: false });
-      const graph = await loadPostgresPageGraph(db, [...await loadPostgresRowsByIds(db, [parent.Id]), ...children.rows],
-        await loadPostgresNavigationRows(db, parent.Id));
-      const state = await this.library.load(db, null, { includeUserData: false, baseRows: graph });
-      try { return children.rows.map(row => state.byId.get(idKey(row.Id))).filter(Boolean); }
-      finally { await state.dispose({ session: db }); }
-    }, { readOnly: true, lockTimeoutMs: 250 });
+  async withChildren(parent, operation) {
+    return this.withChildSnapshot(parent, children => this.store.run(async db => {
+      const pending = q('mm_scan_missing_' + randomUUID().replaceAll('-', ''));
+      const deletion = new ItemDeletionScope({ store: this.store, database: db });
+      let active = true, deleted = false, callbackFailure;
+      const assertActive = () => { if (!active) throw new Error('The library child scope has been released.'); };
+      try {
+        await db.client.query(`CREATE TEMP TABLE ${pending}("Key" text PRIMARY KEY)`);
+        return await operation(Object.freeze({
+          pages: children.pages,
+          markForDeletion: async id => {
+            assertActive();
+            if (deleted) throw new Error('Library child deletions have already completed.');
+            if (!nonemptyId(id)) throw new TypeError('A nonempty library child ID is required.');
+            await db.client.query(`INSERT INTO ${pending}("Key") VALUES($1) ON CONFLICT DO NOTHING`, [idKey(id)]);
+          },
+          deleteMarked: async () => {
+            assertActive();
+            if (deleted) throw new Error('Library child deletions have already completed.');
+            deleted = true;
+            if (!(await db.client.query(`SELECT EXISTS(SELECT 1 FROM ${pending}) AS present`)).rows[0].present) return;
+            const plan = { text: `SELECT "Key" FROM ${pending}`, values: [] };
+            await this.store.ensureSerializedWrites(async () => {
+              await deletion.capturePlan(plan);
+              await deletion.persistPlan(plan, { now: this.now, publishDeletedPage: page => {
+                for (const row of page) this.itemCreation.unregisterItem(row.Key);
+              } });
+            });
+          }
+        }));
+      } catch (error) { callbackFailure = error; throw error; }
+      finally {
+        active = false;
+        const cleanupSql = async operation => {
+          if (db.connectionReleaseError) return;
+          try { await operation(); }
+          catch (error) { db.discardConnection(error); throw error; }
+        };
+        await releaseResources(callbackFailure, [() => cleanupSql(() => deletion.close()),
+          () => cleanupSql(() => db.client.query(`DROP TABLE IF EXISTS ${pending}`))]);
+      }
+    }));
   }
 
   async getCachedChildrenPage(parent, { startIndex = 0, limit = 128 } = {}) {
@@ -205,15 +270,12 @@ export class LibraryScanHost {
     }
   }
 
-  async deleteCollections(ids) {
-    if (!ids.length) return;
-    const deleted = await deletePersistedItems(this.store, ids, { now: this.now });
-    for (const id of deleted) this.itemCreation.unregisterItem(id);
-  }
-
   updateInheritedValues() { return updateInheritedValues(this.store); }
   async close() {
-    for (const root of this.#roots.values()) root.owner.release();
+    for (const root of this.#roots.values()) {
+      for (const owner of root.virtualOwners ?? []) owner.release();
+      root.owner.release();
+    }
     this.#roots.clear();
     await this.itemCreation.linkedChildren.flushReleases();
   }

@@ -8,7 +8,7 @@ export function createImageProviders(client) {
     ['Person', ['Person'], 0, ['Primary']], ['BoxSet', ['BoxSet'], 0, ['Primary', 'Backdrop', 'Thumb']],
   ];
   return definitions.map(([type, itemTypes, order, imageTypes]) => ({
-    id: `Tmdb${type}ImageProvider`, name: PROVIDER_NAME, kind: 'image', itemTypes, order, imageTypes,
+    id: `Tmdb${type}ImageProvider`, name: PROVIDER_NAME, kind: 'image', imageSource: 'remote', itemTypes, order, imageTypes,
     async getImages(item, options = {}) {
       const language = item.MetadataLanguage; const country = item.MetadataCountryCode;
       let id = parseTmdbId(item.ProviderIds?.Tmdb); let remote;

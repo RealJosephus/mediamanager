@@ -1,123 +1,123 @@
 {
   "inputSha256": "e09375fb33591f0d3d2f9b3841a154daf385582afcd269c5ab77d33c4641aad9",
-  "nativeSha256": "dcf6647624021a883c19b9577dab294f99edf95ecd6ad3225ec66010f7875e6c",
-  "rawRecording": "D:\\mediamanager-validation\\20261014-release-library-structure-native-6\\native.json",
-  "record": "D:\\mediamanager-validation\\20261014-release-library-structure-native-6\\record.json",
+  "nativeSha256": "d92498257789a7d649244fd5fdefcda9722aef56526740d2ea1ec75aa3d993f4",
+  "rawRecording": "D:/mediamanager-validation/20261016-release-validation/results/library-structure-native-2/native.json",
+  "record": "D:/mediamanager-validation/20261016-release-validation/results/library-structure-native-2/record.json",
   "sources": [
     {
       "filename": "Jellyfin.Api/Controllers/LibraryStructureController.cs",
       "sha256": "9d71cf4be8fbb7e378852977cdc01da8a8a6bf61d0a85b8823c60089ce407426",
-      "designatedSourceMatchesOracleBuildCopy": true
+      "designatedSourceMatchesRecoveredCopy": true
     },
     {
       "filename": "Jellyfin.Api/ModelBinders/CommaDelimitedCollectionModelBinder.cs",
       "sha256": "64e906ad9d1c3c3f2c360ccf4bb5a28e6e1bea34578ee8429fb1959ab021c5eb",
-      "designatedSourceMatchesOracleBuildCopy": true
+      "designatedSourceMatchesRecoveredCopy": true
     },
     {
       "filename": "Jellyfin.Api/ModelBinders/NullableEnumModelBinder.cs",
       "sha256": "e7e9ce5e7635c198e1c56311d620d2390c6289a23c31b8df63209202f0be30a3",
-      "designatedSourceMatchesOracleBuildCopy": true
+      "designatedSourceMatchesRecoveredCopy": true
     },
     {
       "filename": "Jellyfin.Api/Auth/CustomAuthenticationHandler.cs",
       "sha256": "21dadc73cf464458215c9ff15bd9baa7a229107da23c562bde9060075d1d28c8",
-      "designatedSourceMatchesOracleBuildCopy": true
+      "designatedSourceMatchesRecoveredCopy": true
     },
     {
       "filename": "MediaBrowser.Model/Entities/CollectionTypeOptions.cs",
       "sha256": "27a851ecc7aa4e39e4596a257287244b068f64f9b3bc1060bdc8af500e53aae0",
-      "designatedSourceMatchesOracleBuildCopy": true
+      "designatedSourceMatchesRecoveredCopy": true
     },
     {
       "filename": "Jellyfin.Api/Models/LibraryStructureDto/AddVirtualFolderDto.cs",
       "sha256": "9479129caef9797a6576f617cd05ef01fafa1a35afc4babf7d5900de49d4a375",
-      "designatedSourceMatchesOracleBuildCopy": true
+      "designatedSourceMatchesRecoveredCopy": true
     },
     {
       "filename": "Jellyfin.Api/Models/LibraryStructureDto/MediaPathDto.cs",
       "sha256": "0c8fb7021e7b87139125797d47da92cf38cf6cf8f82e4326a0301f95584383dd",
-      "designatedSourceMatchesOracleBuildCopy": true
+      "designatedSourceMatchesRecoveredCopy": true
     },
     {
       "filename": "Jellyfin.Api/Models/LibraryStructureDto/UpdateMediaPathRequestDto.cs",
       "sha256": "cde5983f1ed6711c519eb1c25639e52db036d0b33ec86d98f107a3801e1eba6d",
-      "designatedSourceMatchesOracleBuildCopy": true
+      "designatedSourceMatchesRecoveredCopy": true
     },
     {
       "filename": "Jellyfin.Api/Models/LibraryStructureDto/UpdateLibraryOptionsDto.cs",
       "sha256": "eb9b5c7c9858bb5e5ce966ed73b5d8ad5fe2eb045e3233ffb625fc8f679ef31d",
-      "designatedSourceMatchesOracleBuildCopy": true
+      "designatedSourceMatchesRecoveredCopy": true
     },
     {
       "filename": "Jellyfin.Api/Auth/DefaultAuthorizationPolicy/DefaultAuthorizationHandler.cs",
       "sha256": "f2cf45b2e511042a1bc358fd7924cdf4e6cb92c782129e5d13623ec73e546806",
-      "designatedSourceMatchesOracleBuildCopy": true
+      "designatedSourceMatchesRecoveredCopy": true
     },
     {
       "filename": "Jellyfin.Api/Auth/FirstTimeSetupPolicy/FirstTimeSetupHandler.cs",
       "sha256": "097d2d43d7a92df55b1152bf273459b5f71a57fd8d92c0ea180a417be303dcbe",
-      "designatedSourceMatchesOracleBuildCopy": true
+      "designatedSourceMatchesRecoveredCopy": true
     },
     {
       "filename": "Jellyfin.Api/Auth/FirstTimeSetupPolicy/FirstTimeSetupRequirement.cs",
       "sha256": "4d1fe966e388aac52f9cc230d02c0e3788cb8fc24846c72e9a4f35597649fca2",
-      "designatedSourceMatchesOracleBuildCopy": true
+      "designatedSourceMatchesRecoveredCopy": true
     },
     {
       "filename": "Jellyfin.Api/Middleware/ExceptionMiddleware.cs",
       "sha256": "1c48cc816bf2899acbfeff9f30e9ce687c8ba689bff78e5cf1d8925d011a78b4",
-      "designatedSourceMatchesOracleBuildCopy": true
+      "designatedSourceMatchesRecoveredCopy": true
     },
     {
       "filename": "Jellyfin.Server/Extensions/ApiServiceCollectionExtensions.cs",
       "sha256": "1935e128e152be8aa8baf236a3c5d84e0095f301878b8831b21b2849087a0e52",
-      "designatedSourceMatchesOracleBuildCopy": true
+      "designatedSourceMatchesRecoveredCopy": true
     },
     {
       "filename": "MediaBrowser.Controller/IO/FileSystemHelper.cs",
       "sha256": "e7b5d9270aa97804205be0f2e01c711cd3d456465d976b098891e57287e954c7",
-      "designatedSourceMatchesOracleBuildCopy": true
+      "designatedSourceMatchesRecoveredCopy": true
     },
     {
       "filename": "MediaBrowser.Controller/Entities/CollectionFolder.cs",
       "sha256": "6250b085fafa9adbaa153063ef2abccbde20a2b04f372dbbc8fa80ee73151487",
-      "designatedSourceMatchesOracleBuildCopy": true
+      "designatedSourceMatchesRecoveredCopy": true
     },
     {
       "filename": "MediaBrowser.Model/Configuration/LibraryOptions.cs",
       "sha256": "3ff1fb33e789316703201d46285ba9509fe67085484ed809e788566a42d5cb36",
-      "designatedSourceMatchesOracleBuildCopy": true
+      "designatedSourceMatchesRecoveredCopy": true
     },
     {
       "filename": "MediaBrowser.Controller/Entities/BaseItem.cs",
       "sha256": "9dc7b96a93c9fbe874cdcededdca395b5aa2df6070f5cfc9c8959539dcd76469",
-      "designatedSourceMatchesOracleBuildCopy": true
+      "designatedSourceMatchesRecoveredCopy": true
     },
     {
       "filename": "MediaBrowser.Controller/Entities/Folder.cs",
       "sha256": "d5f227d462ce3c2df0d5a45d912778427f87321fc9d6e13d863ec28bb639e0c1",
-      "designatedSourceMatchesOracleBuildCopy": true
+      "designatedSourceMatchesRecoveredCopy": true
     },
     {
       "filename": "MediaBrowser.Controller/Providers/MetadataRefreshOptions.cs",
       "sha256": "a3c8c714480d398e284f730d88bbedccdc27f123f9bdf3a704d61ad98e5b7f10",
-      "designatedSourceMatchesOracleBuildCopy": true
+      "designatedSourceMatchesRecoveredCopy": true
     },
     {
       "filename": "MediaBrowser.Controller/Providers/ImageRefreshOptions.cs",
       "sha256": "291d2b4da3abecb0baab439ed869891dfaa7906a85666906d254637d21e2743d",
-      "designatedSourceMatchesOracleBuildCopy": true
+      "designatedSourceMatchesRecoveredCopy": true
     },
     {
       "filename": "MediaBrowser.Model/Configuration/MediaPathInfo.cs",
       "sha256": "53ce43a894920067671a5d79e763374d973836ac6fdcb1465ae5909e960a99b4",
-      "designatedSourceMatchesOracleBuildCopy": true
+      "designatedSourceMatchesRecoveredCopy": true
     },
     {
       "filename": "MediaBrowser.Model/Configuration/TypeOptions.cs",
       "sha256": "abdbd27e598a434411570b8d771e1e879c726d1daf8ebcbcbdf02000a722ccd3",
-      "designatedSourceMatchesOracleBuildCopy": true
+      "designatedSourceMatchesRecoveredCopy": true
     }
   ],
   "sourcesStable": true,
@@ -138,23 +138,23 @@
   "build": {
     "args": [
       "build",
-      "D:\\mediamanager-validation\\20261014-release-library-structure-native-6\\project\\Oracle.csproj",
+      "D:\\mediamanager-validation\\20261016-release-validation\\results\\library-structure-native-2\\project\\Oracle.csproj",
       "-c",
       "Release",
       "--nologo",
       "-v",
       "minimal",
-      "-p:BaseOutputPath=D:\\mediamanager-validation\\20261014-release-library-structure-native-6\\bin\\",
-      "-p:BaseIntermediateOutputPath=D:\\mediamanager-validation\\20261014-release-library-structure-native-6\\obj\\"
+      "-p:BaseOutputPath=D:\\mediamanager-validation\\20261016-release-validation\\results\\library-structure-native-2\\bin\\",
+      "-p:BaseIntermediateOutputPath=D:\\mediamanager-validation\\20261016-release-validation\\results\\library-structure-native-2\\obj\\"
     ],
     "status": 0,
     "signal": null
   },
   "process": {
     "args": [
-      "D:\\mediamanager-validation\\20261014-release-library-structure-native-6\\bin\\Release\\net10.0\\Oracle.dll",
-      "D:\\mediamanager\\tests\\http\\fixtures\\library-structure\\input.json",
-      "D:\\mediamanager-validation\\20261014-release-library-structure-native-6/native.json"
+      "D:\\mediamanager-validation\\20261016-release-validation\\results\\library-structure-native-2\\bin\\Release\\net10.0\\Oracle.dll",
+      "D:/mediamanager/tests/http/fixtures/library-structure/input.json",
+      "D:\\mediamanager-validation\\20261016-release-validation\\results\\library-structure-native-2/native.json"
     ],
     "status": 0,
     "signal": null
@@ -162,47 +162,47 @@
   "assemblies": [
     {
       "name": "Emby.Server.Implementations",
-      "filename": "D:\\mediamanager-validation\\20261014-release-library-structure-native-6\\bin\\Release\\net10.0\\Emby.Server.Implementations.dll",
+      "filename": "D:\\mediamanager-validation\\20261016-release-validation\\results\\library-structure-native-2\\bin\\Release\\net10.0\\Emby.Server.Implementations.dll",
       "sha256": "8d369435646570958505c58b9cb17da169855dabc105d0e933524361e9b7b1c8"
     },
     {
       "name": "jellyfin",
-      "filename": "D:\\mediamanager-validation\\20261014-release-library-structure-native-6\\bin\\Release\\net10.0\\jellyfin.dll",
+      "filename": "D:\\mediamanager-validation\\20261016-release-validation\\results\\library-structure-native-2\\bin\\Release\\net10.0\\jellyfin.dll",
       "sha256": "a43fa24c44677e579fcec79d637789b9f36633d02e5434e76a0e03fa13027767"
     },
     {
       "name": "Jellyfin.Api",
-      "filename": "D:\\mediamanager-validation\\20261014-release-library-structure-native-6\\bin\\Release\\net10.0\\Jellyfin.Api.dll",
+      "filename": "D:\\mediamanager-validation\\20261016-release-validation\\results\\library-structure-native-2\\bin\\Release\\net10.0\\Jellyfin.Api.dll",
       "sha256": "d5952a67decf6279096c3ad02df59f63e8f486373b0b63a785b47ac3f9060777"
     },
     {
       "name": "Jellyfin.Data",
-      "filename": "D:\\mediamanager-validation\\20261014-release-library-structure-native-6\\bin\\Release\\net10.0\\Jellyfin.Data.dll",
+      "filename": "D:\\mediamanager-validation\\20261016-release-validation\\results\\library-structure-native-2\\bin\\Release\\net10.0\\Jellyfin.Data.dll",
       "sha256": "b991153c8e091e6e618b27b47ec2c070c003fc5c4453406a74fe843c43611d7e"
     },
     {
       "name": "Jellyfin.Database.Implementations",
-      "filename": "D:\\mediamanager-validation\\20261014-release-library-structure-native-6\\bin\\Release\\net10.0\\Jellyfin.Database.Implementations.dll",
+      "filename": "D:\\mediamanager-validation\\20261016-release-validation\\results\\library-structure-native-2\\bin\\Release\\net10.0\\Jellyfin.Database.Implementations.dll",
       "sha256": "5ffd9a90affb635962267da294a36a4cd6972da5f38083b51ecfb4fba4c31ee6"
     },
     {
       "name": "Jellyfin.Extensions",
-      "filename": "D:\\mediamanager-validation\\20261014-release-library-structure-native-6\\bin\\Release\\net10.0\\Jellyfin.Extensions.dll",
+      "filename": "D:\\mediamanager-validation\\20261016-release-validation\\results\\library-structure-native-2\\bin\\Release\\net10.0\\Jellyfin.Extensions.dll",
       "sha256": "db952e3013a6949ad22db9ac3379be2efdf441c139ddc6919e86f8c2abbc7207"
     },
     {
       "name": "MediaBrowser.Common",
-      "filename": "D:\\mediamanager-validation\\20261014-release-library-structure-native-6\\bin\\Release\\net10.0\\MediaBrowser.Common.dll",
+      "filename": "D:\\mediamanager-validation\\20261016-release-validation\\results\\library-structure-native-2\\bin\\Release\\net10.0\\MediaBrowser.Common.dll",
       "sha256": "c86a38f99a78d9d3b9dd5ba5245fb06bf654cfa3e16ec409d3ba77b1e69ed11e"
     },
     {
       "name": "MediaBrowser.Controller",
-      "filename": "D:\\mediamanager-validation\\20261014-release-library-structure-native-6\\bin\\Release\\net10.0\\MediaBrowser.Controller.dll",
+      "filename": "D:\\mediamanager-validation\\20261016-release-validation\\results\\library-structure-native-2\\bin\\Release\\net10.0\\MediaBrowser.Controller.dll",
       "sha256": "051c588a8e85a3a7cdde8dc3d9a1112217fd7e973a86fe2ff90cf765bedb75a8"
     },
     {
       "name": "MediaBrowser.Model",
-      "filename": "D:\\mediamanager-validation\\20261014-release-library-structure-native-6\\bin\\Release\\net10.0\\MediaBrowser.Model.dll",
+      "filename": "D:\\mediamanager-validation\\20261016-release-validation\\results\\library-structure-native-2\\bin\\Release\\net10.0\\MediaBrowser.Model.dll",
       "sha256": "7b2c1b16721cf7747b572e4de3761de635fad4bd12bec346983545bee73fd92c"
     },
     {
@@ -617,8 +617,8 @@
     },
     {
       "name": "Oracle",
-      "filename": "D:\\mediamanager-validation\\20261014-release-library-structure-native-6\\bin\\Release\\net10.0\\Oracle.dll",
-      "sha256": "1d216a6adf5049dde809d0b0b929419f09e96c9d33e67f5c129451f42a2c2be0"
+      "filename": "D:\\mediamanager-validation\\20261016-release-validation\\results\\library-structure-native-2\\bin\\Release\\net10.0\\Oracle.dll",
+      "sha256": "445882616433c17f54e60cc7a669ce7135039cc35c6d7ec43faf679a05a86fad"
     },
     {
       "name": "System.Collections",
@@ -902,15 +902,42 @@
     }
   ],
   "jellyfin": {
-    "dll": "D:/mediamanager-validation/20261005/jellyfin-baseline/source/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll",
-    "buildSource": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source"
+    "dll": "D:\\mediamanager-validation\\20261016-release-validation\\inputs\\native-oracle-runtime\\jellyfin.dll",
+    "buildSource": "D:\\mediamanager-validation\\20261016-release-validation\\inputs\\library-structure-source\\source",
+    "sourceCopyRole": "Recovered designated source evidence, verified against the prior recorded source digests. This copy did not produce the retained native server DLL."
   },
   "candidateVerified": false,
   "completeBuildInputClosure": false,
   "phaseAcceptance": false,
   "repeat": {
-    "filename": "D:\\mediamanager-validation\\20261014-release-library-structure-native-5\\native.json",
-    "sha256": "809bf0d4a258c20d76bffd78adb9583db1df2df94b3d02abf753ab2e468963ab",
+    "filename": "D:/mediamanager-validation/20261016-release-validation/results/library-structure-native-1/native.json",
+    "sha256": "f911f8e5cfc45df2b56f1d5c221ae8db88719e7c4de7b99f4d693ad0bc1aba1e",
     "sameInputAndOracleSources": true
+  },
+  "sourceRecovery": {
+    "recordedAt": "2026-10-15T17:00:43.909Z",
+    "fullNativeBuildPerformed": false,
+    "priorRawRecording": "D:\\mediamanager-validation\\20261014-release-library-structure-native-6\\native.json",
+    "priorRecordingSha256": "dcf6647624021a883c19b9577dab294f99edf95ecd6ad3225ec66010f7875e6c",
+    "priorNativeCopy": "D:/mediamanager-validation/20261016-release-validation/inputs/library-structure-source/prior-native.json",
+    "priorProvenanceCopy": "D:/mediamanager-validation/20261016-release-validation/inputs/library-structure-source/prior-provenance.json",
+    "priorProvenanceSha256": "4dad9950dffb45024de8af87f289aa322071d1c8cfac1dd89fa340a4ad9c367c",
+    "nativeRuntimeRecovery": "D:/mediamanager-validation/20261016-release-validation/recovered-native-oracle-inputs.json",
+    "functionalObservationsMatchPriorRecording": true,
+    "independentFreshExecutions": 2,
+    "sourceCopy": {
+      "root": "D:\\mediamanager-validation\\20261016-release-validation\\inputs\\library-structure-source\\source",
+      "entriesSha256": "39a2869a4b1203d275d701858413dce507b8c7645fca5d3ea6a7493193155fe7"
+    },
+    "rawRecordings": [
+      {
+        "filename": "D:/mediamanager-validation/20261016-release-validation/results/library-structure-native-1/native.json",
+        "sha256": "f911f8e5cfc45df2b56f1d5c221ae8db88719e7c4de7b99f4d693ad0bc1aba1e"
+      },
+      {
+        "filename": "D:/mediamanager-validation/20261016-release-validation/results/library-structure-native-2/native.json",
+        "sha256": "d92498257789a7d649244fd5fdefcda9722aef56526740d2ea1ec75aa3d993f4"
+      }
+    ]
   }
 }

@@ -1,0 +1,1238 @@
+{
+  "inputSha256": "c982533cfb7b48582834dd92fe14d135dd63123efc214d10fa22de1671b8d7d3",
+  "imageSha256": "027fdfbfbf3aff9228a80bccd129561b567c393a4be0b7236230465df271bab3",
+  "results": [
+    {
+      "name": "first-append",
+      "exception": null,
+      "updateType": 7,
+      "calls": [
+        {
+          "provider": "first",
+          "images": [
+            "old.png"
+          ]
+        },
+        {
+          "provider": "second",
+          "images": [
+            "old.png",
+            "new.png"
+          ]
+        }
+      ],
+      "saves": [
+        {
+          "reason": 2,
+          "Overview": null,
+          "images": [
+            {
+              "path": "old.png",
+              "type": "Primary",
+              "width": 8,
+              "height": 6,
+              "blurhash": "controlled"
+            }
+          ]
+        },
+        {
+          "reason": 7,
+          "Overview": "Custom overview",
+          "images": [
+            {
+              "path": "new.png",
+              "type": "Backdrop",
+              "width": 8,
+              "height": 6,
+              "blurhash": "controlled"
+            },
+            {
+              "path": "old.png",
+              "type": "Primary",
+              "width": 8,
+              "height": 6,
+              "blurhash": "controlled"
+            }
+          ]
+        }
+      ],
+      "Overview": "Custom overview",
+      "storedImages": [
+        {
+          "path": "new.png",
+          "type": "Backdrop",
+          "width": 8,
+          "height": 6,
+          "blurhash": "controlled"
+        },
+        {
+          "path": "old.png",
+          "type": "Primary",
+          "width": 8,
+          "height": 6,
+          "blurhash": "controlled"
+        }
+      ],
+      "stampChanged": true,
+      "liveImages": [
+        {
+          "path": "new.png",
+          "type": "Backdrop",
+          "width": 8,
+          "height": 6,
+          "blurhash": "controlled"
+        },
+        {
+          "path": "old.png",
+          "type": "Primary",
+          "width": 8,
+          "height": 6,
+          "blurhash": "controlled"
+        }
+      ]
+    },
+    {
+      "name": "first-replace",
+      "exception": null,
+      "updateType": 7,
+      "calls": [
+        {
+          "provider": "first",
+          "images": [
+            "old.png"
+          ]
+        },
+        {
+          "provider": "second",
+          "images": [
+            "new.png"
+          ]
+        }
+      ],
+      "saves": [
+        {
+          "reason": 2,
+          "Overview": null,
+          "images": [
+            {
+              "path": "old.png",
+              "type": "Primary",
+              "width": 8,
+              "height": 6,
+              "blurhash": "controlled"
+            }
+          ]
+        },
+        {
+          "reason": 7,
+          "Overview": "Custom overview",
+          "images": [
+            {
+              "path": "new.png",
+              "type": "Primary",
+              "width": 8,
+              "height": 6,
+              "blurhash": "controlled"
+            }
+          ]
+        }
+      ],
+      "Overview": "Custom overview",
+      "storedImages": [
+        {
+          "path": "new.png",
+          "type": "Primary",
+          "width": 8,
+          "height": 6,
+          "blurhash": "controlled"
+        }
+      ],
+      "stampChanged": true,
+      "liveImages": [
+        {
+          "path": "new.png",
+          "type": "Primary",
+          "width": 8,
+          "height": 6,
+          "blurhash": "controlled"
+        }
+      ]
+    },
+    {
+      "name": "first-remove",
+      "exception": null,
+      "updateType": 7,
+      "calls": [
+        {
+          "provider": "first",
+          "images": [
+            "old.png"
+          ]
+        },
+        {
+          "provider": "second",
+          "images": []
+        }
+      ],
+      "saves": [
+        {
+          "reason": 2,
+          "Overview": null,
+          "images": [
+            {
+              "path": "old.png",
+              "type": "Primary",
+              "width": 8,
+              "height": 6,
+              "blurhash": "controlled"
+            }
+          ]
+        },
+        {
+          "reason": 7,
+          "Overview": "Custom overview",
+          "images": []
+        }
+      ],
+      "Overview": "Custom overview",
+      "storedImages": [],
+      "stampChanged": true,
+      "liveImages": []
+    },
+    {
+      "name": "first-sequential",
+      "exception": null,
+      "updateType": 7,
+      "calls": [
+        {
+          "provider": "first",
+          "images": [
+            "old.png"
+          ]
+        },
+        {
+          "provider": "second",
+          "images": [
+            "old.png",
+            "new.png"
+          ]
+        }
+      ],
+      "saves": [
+        {
+          "reason": 2,
+          "Overview": null,
+          "images": [
+            {
+              "path": "old.png",
+              "type": "Primary",
+              "width": 8,
+              "height": 6,
+              "blurhash": "controlled"
+            }
+          ]
+        },
+        {
+          "reason": 7,
+          "Overview": "Custom overview",
+          "images": [
+            {
+              "path": "new.png",
+              "type": "Backdrop",
+              "width": 8,
+              "height": 6,
+              "blurhash": "controlled"
+            },
+            {
+              "path": "second.png",
+              "type": "Primary",
+              "width": 8,
+              "height": 6,
+              "blurhash": "controlled"
+            }
+          ]
+        }
+      ],
+      "Overview": "Custom overview",
+      "storedImages": [
+        {
+          "path": "new.png",
+          "type": "Backdrop",
+          "width": 8,
+          "height": 6,
+          "blurhash": "controlled"
+        },
+        {
+          "path": "second.png",
+          "type": "Primary",
+          "width": 8,
+          "height": 6,
+          "blurhash": "controlled"
+        }
+      ],
+      "stampChanged": true,
+      "liveImages": [
+        {
+          "path": "new.png",
+          "type": "Backdrop",
+          "width": 8,
+          "height": 6,
+          "blurhash": "controlled"
+        },
+        {
+          "path": "second.png",
+          "type": "Primary",
+          "width": 8,
+          "height": 6,
+          "blurhash": "controlled"
+        }
+      ]
+    },
+    {
+      "name": "first-provider",
+      "exception": null,
+      "updateType": 3,
+      "calls": [
+        {
+          "provider": "first",
+          "images": [
+            "old.png"
+          ]
+        },
+        {
+          "provider": "second",
+          "images": [
+            "old.png",
+            "new.png"
+          ]
+        }
+      ],
+      "saves": [
+        {
+          "reason": 2,
+          "Overview": null,
+          "images": [
+            {
+              "path": "old.png",
+              "type": "Primary",
+              "width": 8,
+              "height": 6,
+              "blurhash": "controlled"
+            }
+          ]
+        },
+        {
+          "reason": 3,
+          "Overview": "Custom overview",
+          "images": [
+            {
+              "path": "new.png",
+              "type": "Backdrop",
+              "width": 8,
+              "height": 6,
+              "blurhash": "controlled"
+            },
+            {
+              "path": "old.png",
+              "type": "Primary",
+              "width": 8,
+              "height": 6,
+              "blurhash": "controlled"
+            }
+          ]
+        }
+      ],
+      "Overview": "Custom overview",
+      "storedImages": [
+        {
+          "path": "new.png",
+          "type": "Backdrop",
+          "width": 8,
+          "height": 6,
+          "blurhash": "controlled"
+        },
+        {
+          "path": "old.png",
+          "type": "Primary",
+          "width": 8,
+          "height": 6,
+          "blurhash": "controlled"
+        }
+      ],
+      "stampChanged": false,
+      "liveImages": [
+        {
+          "path": "new.png",
+          "type": "Backdrop",
+          "width": 8,
+          "height": 6,
+          "blurhash": "controlled"
+        },
+        {
+          "path": "old.png",
+          "type": "Primary",
+          "width": 8,
+          "height": 6,
+          "blurhash": "controlled"
+        }
+      ]
+    },
+    {
+      "name": "first-cancel",
+      "exception": "OperationCanceledException",
+      "updateType": null,
+      "calls": [
+        {
+          "provider": "first",
+          "images": [
+            "old.png"
+          ]
+        }
+      ],
+      "saves": [
+        {
+          "reason": 2,
+          "Overview": null,
+          "images": [
+            {
+              "path": "old.png",
+              "type": "Primary",
+              "width": 8,
+              "height": 6,
+              "blurhash": "controlled"
+            }
+          ]
+        }
+      ],
+      "Overview": null,
+      "storedImages": [
+        {
+          "path": "old.png",
+          "type": "Primary",
+          "width": 8,
+          "height": 6,
+          "blurhash": "controlled"
+        }
+      ],
+      "stampChanged": false,
+      "liveImages": [
+        {
+          "path": "new.png",
+          "type": "Backdrop",
+          "width": 0,
+          "height": 0,
+          "blurhash": null
+        },
+        {
+          "path": "old.png",
+          "type": "Primary",
+          "width": 8,
+          "height": 6,
+          "blurhash": "controlled"
+        }
+      ]
+    },
+    {
+      "name": "first-images",
+      "exception": "DbUpdateException",
+      "updateType": null,
+      "calls": [
+        {
+          "provider": "first",
+          "images": [
+            "old.png"
+          ]
+        },
+        {
+          "provider": "second",
+          "images": [
+            "old.png",
+            "new.png"
+          ]
+        }
+      ],
+      "saves": [
+        {
+          "reason": 2,
+          "Overview": null,
+          "images": [
+            {
+              "path": "old.png",
+              "type": "Primary",
+              "width": 8,
+              "height": 6,
+              "blurhash": "controlled"
+            }
+          ]
+        }
+      ],
+      "Overview": null,
+      "storedImages": [],
+      "stampChanged": false,
+      "liveImages": [
+        {
+          "path": "new.png",
+          "type": "Backdrop",
+          "width": 8,
+          "height": 6,
+          "blurhash": "controlled"
+        },
+        {
+          "path": "old.png",
+          "type": "Primary",
+          "width": 8,
+          "height": 6,
+          "blurhash": "controlled"
+        }
+      ]
+    },
+    {
+      "name": "first-probe-reload",
+      "exception": null,
+      "updateType": 7,
+      "calls": [
+        {
+          "provider": "probe",
+          "images": [
+            "old.png"
+          ]
+        },
+        {
+          "provider": "first",
+          "images": [
+            "probe.png"
+          ]
+        },
+        {
+          "provider": "second",
+          "images": [
+            "probe.png",
+            "new.png"
+          ]
+        }
+      ],
+      "saves": [
+        {
+          "reason": 2,
+          "Overview": null,
+          "images": [
+            {
+              "path": "old.png",
+              "type": "Primary",
+              "width": 8,
+              "height": 6,
+              "blurhash": "controlled"
+            }
+          ]
+        },
+        {
+          "reason": 4,
+          "Overview": null,
+          "images": [
+            {
+              "path": "probe.png",
+              "type": "Primary",
+              "width": 8,
+              "height": 6,
+              "blurhash": "controlled"
+            }
+          ]
+        },
+        {
+          "reason": 7,
+          "Overview": "Custom overview",
+          "images": [
+            {
+              "path": "new.png",
+              "type": "Backdrop",
+              "width": 8,
+              "height": 6,
+              "blurhash": "controlled"
+            },
+            {
+              "path": "probe.png",
+              "type": "Primary",
+              "width": 8,
+              "height": 6,
+              "blurhash": "controlled"
+            }
+          ]
+        }
+      ],
+      "Overview": "Custom overview",
+      "storedImages": [
+        {
+          "path": "new.png",
+          "type": "Backdrop",
+          "width": 8,
+          "height": 6,
+          "blurhash": "controlled"
+        },
+        {
+          "path": "probe.png",
+          "type": "Primary",
+          "width": 8,
+          "height": 6,
+          "blurhash": "controlled"
+        }
+      ],
+      "stampChanged": true,
+      "liveImages": [
+        {
+          "path": "new.png",
+          "type": "Backdrop",
+          "width": 8,
+          "height": 6,
+          "blurhash": "controlled"
+        },
+        {
+          "path": "probe.png",
+          "type": "Primary",
+          "width": 8,
+          "height": 6,
+          "blurhash": "controlled"
+        }
+      ]
+    },
+    {
+      "name": "first-probe-cancel",
+      "exception": "OperationCanceledException",
+      "updateType": null,
+      "calls": [
+        {
+          "provider": "probe",
+          "images": [
+            "old.png"
+          ]
+        },
+        {
+          "provider": "first",
+          "images": [
+            "probe.png"
+          ]
+        }
+      ],
+      "saves": [
+        {
+          "reason": 2,
+          "Overview": null,
+          "images": [
+            {
+              "path": "old.png",
+              "type": "Primary",
+              "width": 8,
+              "height": 6,
+              "blurhash": "controlled"
+            }
+          ]
+        },
+        {
+          "reason": 4,
+          "Overview": null,
+          "images": [
+            {
+              "path": "probe.png",
+              "type": "Primary",
+              "width": 8,
+              "height": 6,
+              "blurhash": "controlled"
+            }
+          ]
+        }
+      ],
+      "Overview": null,
+      "storedImages": [
+        {
+          "path": "probe.png",
+          "type": "Primary",
+          "width": 8,
+          "height": 6,
+          "blurhash": "controlled"
+        }
+      ],
+      "stampChanged": false,
+      "liveImages": [
+        {
+          "path": "new.png",
+          "type": "Backdrop",
+          "width": 0,
+          "height": 0,
+          "blurhash": null
+        },
+        {
+          "path": "probe.png",
+          "type": "Primary",
+          "width": 8,
+          "height": 6,
+          "blurhash": "controlled"
+        }
+      ]
+    },
+    {
+      "name": "existing-append",
+      "exception": null,
+      "updateType": 7,
+      "calls": [
+        {
+          "provider": "first",
+          "images": [
+            "old.png"
+          ]
+        },
+        {
+          "provider": "second",
+          "images": [
+            "old.png",
+            "new.png"
+          ]
+        }
+      ],
+      "saves": [
+        {
+          "reason": 7,
+          "Overview": "Custom overview",
+          "images": [
+            {
+              "path": "new.png",
+              "type": "Backdrop",
+              "width": 8,
+              "height": 6,
+              "blurhash": "controlled"
+            },
+            {
+              "path": "old.png",
+              "type": "Primary",
+              "width": 8,
+              "height": 6,
+              "blurhash": "controlled"
+            }
+          ]
+        }
+      ],
+      "Overview": "Custom overview",
+      "storedImages": [
+        {
+          "path": "new.png",
+          "type": "Backdrop",
+          "width": 8,
+          "height": 6,
+          "blurhash": "controlled"
+        },
+        {
+          "path": "old.png",
+          "type": "Primary",
+          "width": 8,
+          "height": 6,
+          "blurhash": "controlled"
+        }
+      ],
+      "stampChanged": true,
+      "liveImages": [
+        {
+          "path": "new.png",
+          "type": "Backdrop",
+          "width": 8,
+          "height": 6,
+          "blurhash": "controlled"
+        },
+        {
+          "path": "old.png",
+          "type": "Primary",
+          "width": 8,
+          "height": 6,
+          "blurhash": "controlled"
+        }
+      ]
+    },
+    {
+      "name": "existing-replace",
+      "exception": null,
+      "updateType": 7,
+      "calls": [
+        {
+          "provider": "first",
+          "images": [
+            "old.png"
+          ]
+        },
+        {
+          "provider": "second",
+          "images": [
+            "new.png"
+          ]
+        }
+      ],
+      "saves": [
+        {
+          "reason": 7,
+          "Overview": "Custom overview",
+          "images": [
+            {
+              "path": "new.png",
+              "type": "Primary",
+              "width": 8,
+              "height": 6,
+              "blurhash": "controlled"
+            }
+          ]
+        }
+      ],
+      "Overview": "Custom overview",
+      "storedImages": [
+        {
+          "path": "new.png",
+          "type": "Primary",
+          "width": 8,
+          "height": 6,
+          "blurhash": "controlled"
+        }
+      ],
+      "stampChanged": true,
+      "liveImages": [
+        {
+          "path": "new.png",
+          "type": "Primary",
+          "width": 8,
+          "height": 6,
+          "blurhash": "controlled"
+        }
+      ]
+    },
+    {
+      "name": "existing-remove",
+      "exception": null,
+      "updateType": 7,
+      "calls": [
+        {
+          "provider": "first",
+          "images": [
+            "old.png"
+          ]
+        },
+        {
+          "provider": "second",
+          "images": []
+        }
+      ],
+      "saves": [
+        {
+          "reason": 7,
+          "Overview": "Custom overview",
+          "images": []
+        }
+      ],
+      "Overview": "Custom overview",
+      "storedImages": [],
+      "stampChanged": true,
+      "liveImages": []
+    },
+    {
+      "name": "existing-sequential",
+      "exception": null,
+      "updateType": 7,
+      "calls": [
+        {
+          "provider": "first",
+          "images": [
+            "old.png"
+          ]
+        },
+        {
+          "provider": "second",
+          "images": [
+            "old.png",
+            "new.png"
+          ]
+        }
+      ],
+      "saves": [
+        {
+          "reason": 7,
+          "Overview": "Custom overview",
+          "images": [
+            {
+              "path": "new.png",
+              "type": "Backdrop",
+              "width": 8,
+              "height": 6,
+              "blurhash": "controlled"
+            },
+            {
+              "path": "second.png",
+              "type": "Primary",
+              "width": 8,
+              "height": 6,
+              "blurhash": "controlled"
+            }
+          ]
+        }
+      ],
+      "Overview": "Custom overview",
+      "storedImages": [
+        {
+          "path": "new.png",
+          "type": "Backdrop",
+          "width": 8,
+          "height": 6,
+          "blurhash": "controlled"
+        },
+        {
+          "path": "second.png",
+          "type": "Primary",
+          "width": 8,
+          "height": 6,
+          "blurhash": "controlled"
+        }
+      ],
+      "stampChanged": true,
+      "liveImages": [
+        {
+          "path": "new.png",
+          "type": "Backdrop",
+          "width": 8,
+          "height": 6,
+          "blurhash": "controlled"
+        },
+        {
+          "path": "second.png",
+          "type": "Primary",
+          "width": 8,
+          "height": 6,
+          "blurhash": "controlled"
+        }
+      ]
+    },
+    {
+      "name": "existing-provider",
+      "exception": null,
+      "updateType": 3,
+      "calls": [
+        {
+          "provider": "first",
+          "images": [
+            "old.png"
+          ]
+        },
+        {
+          "provider": "second",
+          "images": [
+            "old.png",
+            "new.png"
+          ]
+        }
+      ],
+      "saves": [
+        {
+          "reason": 3,
+          "Overview": "Custom overview",
+          "images": [
+            {
+              "path": "new.png",
+              "type": "Backdrop",
+              "width": 8,
+              "height": 6,
+              "blurhash": "controlled"
+            },
+            {
+              "path": "old.png",
+              "type": "Primary",
+              "width": 8,
+              "height": 6,
+              "blurhash": "controlled"
+            }
+          ]
+        }
+      ],
+      "Overview": "Custom overview",
+      "storedImages": [
+        {
+          "path": "new.png",
+          "type": "Backdrop",
+          "width": 8,
+          "height": 6,
+          "blurhash": "controlled"
+        },
+        {
+          "path": "old.png",
+          "type": "Primary",
+          "width": 8,
+          "height": 6,
+          "blurhash": "controlled"
+        }
+      ],
+      "stampChanged": false,
+      "liveImages": [
+        {
+          "path": "new.png",
+          "type": "Backdrop",
+          "width": 8,
+          "height": 6,
+          "blurhash": "controlled"
+        },
+        {
+          "path": "old.png",
+          "type": "Primary",
+          "width": 8,
+          "height": 6,
+          "blurhash": "controlled"
+        }
+      ]
+    },
+    {
+      "name": "existing-cancel",
+      "exception": "OperationCanceledException",
+      "updateType": null,
+      "calls": [
+        {
+          "provider": "first",
+          "images": [
+            "old.png"
+          ]
+        }
+      ],
+      "saves": [],
+      "Overview": null,
+      "storedImages": [
+        {
+          "path": "old.png",
+          "type": "Primary",
+          "width": 8,
+          "height": 6,
+          "blurhash": "controlled"
+        }
+      ],
+      "stampChanged": false,
+      "liveImages": [
+        {
+          "path": "new.png",
+          "type": "Backdrop",
+          "width": 0,
+          "height": 0,
+          "blurhash": null
+        },
+        {
+          "path": "old.png",
+          "type": "Primary",
+          "width": 8,
+          "height": 6,
+          "blurhash": "controlled"
+        }
+      ]
+    },
+    {
+      "name": "existing-images",
+      "exception": "DbUpdateException",
+      "updateType": null,
+      "calls": [
+        {
+          "provider": "first",
+          "images": [
+            "old.png"
+          ]
+        },
+        {
+          "provider": "second",
+          "images": [
+            "old.png",
+            "new.png"
+          ]
+        }
+      ],
+      "saves": [],
+      "Overview": null,
+      "storedImages": [],
+      "stampChanged": false,
+      "liveImages": [
+        {
+          "path": "new.png",
+          "type": "Backdrop",
+          "width": 8,
+          "height": 6,
+          "blurhash": "controlled"
+        },
+        {
+          "path": "old.png",
+          "type": "Primary",
+          "width": 8,
+          "height": 6,
+          "blurhash": "controlled"
+        }
+      ]
+    },
+    {
+      "name": "existing-probe-reload",
+      "exception": null,
+      "updateType": 7,
+      "calls": [
+        {
+          "provider": "probe",
+          "images": [
+            "old.png"
+          ]
+        },
+        {
+          "provider": "first",
+          "images": [
+            "probe.png"
+          ]
+        },
+        {
+          "provider": "second",
+          "images": [
+            "probe.png",
+            "new.png"
+          ]
+        }
+      ],
+      "saves": [
+        {
+          "reason": 4,
+          "Overview": null,
+          "images": [
+            {
+              "path": "probe.png",
+              "type": "Primary",
+              "width": 8,
+              "height": 6,
+              "blurhash": "controlled"
+            }
+          ]
+        },
+        {
+          "reason": 7,
+          "Overview": "Custom overview",
+          "images": [
+            {
+              "path": "new.png",
+              "type": "Backdrop",
+              "width": 8,
+              "height": 6,
+              "blurhash": "controlled"
+            },
+            {
+              "path": "probe.png",
+              "type": "Primary",
+              "width": 8,
+              "height": 6,
+              "blurhash": "controlled"
+            }
+          ]
+        }
+      ],
+      "Overview": "Custom overview",
+      "storedImages": [
+        {
+          "path": "new.png",
+          "type": "Backdrop",
+          "width": 8,
+          "height": 6,
+          "blurhash": "controlled"
+        },
+        {
+          "path": "probe.png",
+          "type": "Primary",
+          "width": 8,
+          "height": 6,
+          "blurhash": "controlled"
+        }
+      ],
+      "stampChanged": true,
+      "liveImages": [
+        {
+          "path": "new.png",
+          "type": "Backdrop",
+          "width": 8,
+          "height": 6,
+          "blurhash": "controlled"
+        },
+        {
+          "path": "probe.png",
+          "type": "Primary",
+          "width": 8,
+          "height": 6,
+          "blurhash": "controlled"
+        }
+      ]
+    },
+    {
+      "name": "existing-probe-cancel",
+      "exception": "OperationCanceledException",
+      "updateType": null,
+      "calls": [
+        {
+          "provider": "probe",
+          "images": [
+            "old.png"
+          ]
+        },
+        {
+          "provider": "first",
+          "images": [
+            "probe.png"
+          ]
+        }
+      ],
+      "saves": [
+        {
+          "reason": 4,
+          "Overview": null,
+          "images": [
+            {
+              "path": "probe.png",
+              "type": "Primary",
+              "width": 8,
+              "height": 6,
+              "blurhash": "controlled"
+            }
+          ]
+        }
+      ],
+      "Overview": null,
+      "storedImages": [
+        {
+          "path": "probe.png",
+          "type": "Primary",
+          "width": 8,
+          "height": 6,
+          "blurhash": "controlled"
+        }
+      ],
+      "stampChanged": false,
+      "liveImages": [
+        {
+          "path": "new.png",
+          "type": "Backdrop",
+          "width": 0,
+          "height": 0,
+          "blurhash": null
+        },
+        {
+          "path": "probe.png",
+          "type": "Primary",
+          "width": 8,
+          "height": 6,
+          "blurhash": "controlled"
+        }
+      ]
+    }
+  ],
+  "scope": "Actual BookMetadataService.RefreshMetadata, ProviderManager selection and sequential custom mutation, LibraryManager saver/image/repository lifecycle, ItemPersistenceService and EF SQLite. Real local image files and real SQL insertion failure. Custom metadata actions, pre-refresh probe stand-in and image dimensions/BlurHash are controlled. No production photo decoding, native full server or external network is claimed.",
+  "assemblies": [
+    {
+      "name": "MediaBrowser.Controller",
+      "sha256": "e4f1e201e43c9e22fd07cbd0ed2c52c427b0bdaa2dfe0ed5e5ab7ee604b537cf"
+    },
+    {
+      "name": "MediaBrowser.Providers",
+      "sha256": "4aa9ca407da2bb0db21ef0a7da5bdef162260fd9c5873f06cfb239780ccc4e3e"
+    },
+    {
+      "name": "Emby.Server.Implementations",
+      "sha256": "9c732ba80d1b1980c36d2d64780da28d64c0a8d503bf044c89bc35285eab219e"
+    },
+    {
+      "name": "Jellyfin.Server.Implementations",
+      "sha256": "f163fb6064b99bf6c240264e7bed0263da272d6380756c19c3f94dbf6c4365c1"
+    }
+  ]
+}

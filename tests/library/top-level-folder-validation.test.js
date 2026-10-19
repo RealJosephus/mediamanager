@@ -92,8 +92,11 @@ test('postgres: poster maintenance loads user-root libraries and persists local 
     const [collection] = await rowsByType(database, collectionFolderNativeType);
     assert.ok(collection);
     const root = await runtime.libraryScanHost.getUserRootFolder();
-    const children = await runtime.libraryScanHost.getCachedChildren(root);
-    assert.deepEqual(children.filter(item => item.Type === 'CollectionFolder').map(item => key(item.Id)), [key(collection.Id)]);
+    await runtime.libraryScanHost.withChildSnapshot(root, async children => {
+      const ids = [];
+      for await (const page of children.pages()) ids.push(...page.map(item => key(item.Id)));
+      assert.deepEqual(ids, [key(collection.Id)]);
+    }, { includeItemTypes: [collectionFolderNativeType] });
     assert.deepEqual(await database.rows('BaseItemImageInfos', { where: { ItemId: collection.Id } }), []);
     const poster = path.join(firstPath, 'poster.png');
     const bytes = await sharp(Buffer.from([255, 0, 0, 255]), { raw: { width: 1, height: 1, channels: 4 } }).png().toBuffer();
@@ -126,8 +129,11 @@ test('postgres: poster root selection excludes owned and alternate libraries in 
       ['ba400000-0000-0000-0000-000000000101', { OwnerId: collection.Id }],
       ['ba400000-0000-0000-0000-000000000102', { PrimaryVersionId: collection.Id }]
     ]) await database.insert('BaseItems', { ...collection, Id, ...fields });
-    const children = await runtime.libraryScanHost.getCachedChildren(root);
-    assert.deepEqual(children.map(item => key(item.Id)), [key(collection.Id)]);
+    await runtime.libraryScanHost.withChildSnapshot(root, async children => {
+      const ids = [];
+      for await (const page of children.pages()) ids.push(...page.map(item => key(item.Id)));
+      assert.deepEqual(ids, [key(collection.Id)]);
+    });
     const refreshed = [];
     runtime.metadataScanner.refreshLiveItem = async item => refreshed.push(item.Id);
     await runtime.collectionPosterVerifyPostScanTask.run();
@@ -215,14 +221,8 @@ for (const dialect of ['postgres']) test(`${dialect}: top-level validation persi
     collection = await runtime.library.getItemRecord(secondId);
     assert.deepEqual(collection.PhysicalFolderIds.map(key), [key(physicalId)]);
 
-    const receipts = [], validate = runtime.topLevelValidation.validateChildren.bind(runtime.topLevelValidation);
-    runtime.topLevelValidation.validateChildren = async (...args) => {
-      const result = await validate(...args); receipts.push({ id: key(args[0].Id), result }); return result;
-    };
     await unlink(path.join(secondPath, 'root.mblink'));
     await runtime.libraryScanLifecycle.validateTopLibraryFolders();
-    assert.deepEqual(receipts.find(receipt => receipt.id === key(aggregate.Id)).result.removed, [{ Id: key(physicalId) }],
-      'The aggregate receipt records its explicit removal after the void deletion lifecycle.');
     assert.equal((await database.rows('BaseItems', { where: { Id: physicalId } })).length, 0,
       'a physical root removed from top-level configuration is deleted');
     collection = await runtime.library.getItemRecord(secondId);

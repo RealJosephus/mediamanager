@@ -66,10 +66,18 @@ export function publishNativeImageInfos(item, images) {
 export class MetadataImages {
   #cache = new Map();
   #requests = new Map();
+  #operations = new Set();
   #cacheTimer;
   #lifetime = new AbortController();
   constructor({ fetch = globalThis.fetch, now = () => Date.now(), logger = { error() {} }, processor = new ImageProcessor({ logger }) } = {}) { Object.assign(this, { fetch, now, logger, processor }); }
   get cacheEntryCount() { return this.#cache.size; }
+  #runOperation(signal, operation) {
+    this.#lifetime.signal.throwIfAborted();
+    const task = operation(signal ? AbortSignal.any([signal, this.#lifetime.signal]) : this.#lifetime.signal);
+    this.#operations.add(task);
+    task.then(() => this.#operations.delete(task), () => this.#operations.delete(task));
+    return task;
+  }
   #expireCache() {
     clearTimeout(this.#cacheTimer); this.#cacheTimer = undefined;
     const now = this.now(); let expires = Infinity;
@@ -179,7 +187,10 @@ export class MetadataImages {
     await this.#cleanupEpisodeMetadataDirectory(loaded, signal);
     return changed;
   }
-  async refreshRemoteProviders(loaded, images, providers, options = {}) {
+  refreshProviders(loaded, images, providers, options = {}) {
+    return this.#runOperation(options.signal, signal => this.#refreshProviders(loaded, images, providers, { ...options, signal }));
+  }
+  async #refreshProviders(loaded, images, providers, options) {
     const { item } = loaded; const signal = options.signal;
     const replacing = type => options.ImageRefreshMode === 'FullRefresh' && Boolean(options.ReplaceAllImages || options.ReplaceImages?.includes(type));
     const oldBackdrops = replacing('Backdrop') ? images.filter(image => image.Type === 'Backdrop') : [];
@@ -198,6 +209,17 @@ export class MetadataImages {
     };
     for (const provider of providers) {
       try {
+        if (provider.imageSource === 'dynamic') {
+          for (const type of provider.imageTypes) {
+            if (imageOption(loaded, type).limit <= 0 || images.some(image => image.Type === type) && (!replacing(type) || downloaded.has(type))) continue;
+            const source = await provider.getImage(item, { ...loaded.context, type, signal });
+            if (source == null) continue;
+            await this.saveImage(loaded, images, { ...source, Type: type }, { signal });
+            downloaded.add(type); changed = true;
+          }
+          continue;
+        }
+        if (provider.imageSource !== 'remote') throw new TypeError('An image provider must declare its remote or dynamic source.');
         signal?.throwIfAborted();
         if (!supportsDownload) continue;
         const supported = provider.imageTypes ?? [];
@@ -258,7 +280,7 @@ export class MetadataImages {
           }
         }
       } catch (error) {
-        if (signal?.aborted || error.name === 'AbortError') throw error;
+        if (error.name === 'AbortError' || error === signal?.reason || provider.imageSource === 'remote' && signal?.aborted) throw error;
         failures++; errorMessage = error.message; this.logger.error(error, `Error in ${provider.name} image provider`);
       }
     }
@@ -325,7 +347,7 @@ export class MetadataImages {
   }
   async close() {
     this.#lifetime.abort(); clearTimeout(this.#cacheTimer); this.#cacheTimer = undefined; this.#cache.clear();
-    await Promise.allSettled(this.#requests.values());
+    await Promise.allSettled([...this.#requests.values(), ...this.#operations]);
   }
   async #readResponse(response, url, signal) {
     try {
@@ -346,8 +368,16 @@ export class MetadataImages {
     return this.#readResponse(response, url, signal);
   }
   async saveRemote(loaded, images, image, { signal, index, download, beforeWrite } = {}) {
+    const source = await (download ? download(image.Url, signal) : this.download(image.Url, signal));
+    return this.#saveImage(loaded, images, { ...source, Type: image.Type }, { signal, index, beforeWrite, createBeforeCopy: false });
+  }
+  saveImage(loaded, images, image, { signal, index, beforeWrite } = {}) {
+    return this.#runOperation(signal, activeSignal => this.#saveImage(loaded, images, image, { signal: activeSignal, index, beforeWrite, createBeforeCopy: true }));
+  }
+  async #saveImage(loaded, images, image, { signal, index, beforeWrite, createBeforeCopy }) {
     const { item, imageAssets: assets } = loaded;
-    const { bytes, mimeType } = await (download ? download(image.Url, signal) : this.download(image.Url, signal));
+    const { bytes, mimeType } = image;
+    if (createBeforeCopy && !(bytes instanceof Uint8Array)) throw new TypeError('An image source must contain owned bytes.');
     let saveLocally = item.SupportsLocalMetadata && loaded.saveLocalMetadataEnabled && item.ExtraType == null && item.Type !== 'Audio';
     if (item.Type === 'Episode' && image.Type !== 'Primary') saveLocally = false;
     if (!item.IsFileProtocol) saveLocally = item.Type === 'Season' && loaded.series?.Path && loaded.saveLocalMetadataEnabled;
@@ -359,8 +389,13 @@ export class MetadataImages {
     beforeWrite?.();
     for (const [i, path] of paths.entries()) {
       let file;
-      try { file = await assets.write(path, bytes, { signal }); }
-      catch (error) { if (!['permission-denied', 'unavailable', 'not-supported'].includes(error.code) || paths.length !== retries.length || same(path, retries[i])) throw error; file = await assets.write(retries[i], bytes, { signal }); }
+      const write = async filename => {
+        // ImageSaver opens FileMode.Create before the cancellation-aware copy.
+        if (createBeforeCopy) await assets.write(filename, Buffer.alloc(0));
+        return assets.write(filename, bytes, { signal });
+      };
+      try { file = await write(path); }
+      catch (error) { if (!['permission-denied', 'unavailable', 'not-supported'].includes(error.code) || paths.length !== retries.length || same(path, retries[i])) throw error; file = await write(retries[i]); }
       saved.push(file);
     }
     if (old) Object.assign(old, { Path: saved[0].Path, DateModified: modified(saved[0]), Width: 0, Height: 0 }); else images.push(row(saved[0], image.Type));

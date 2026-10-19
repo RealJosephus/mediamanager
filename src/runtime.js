@@ -1,4 +1,5 @@
 import { PluginHost } from './plugins/host.js';
+import { LibraryTaskScheduler } from './library/library-task-scheduler.js';
 import { createConfiguredStorage } from './storage-bootstrap.js';
 import { DomainStore } from './database/domain-store.js';
 import { UserService, AuthenticationService, ApiKeyService, DeviceService, QuickConnectService, PasswordResetService, createNetworkClassifier } from './users/index.js';
@@ -34,6 +35,12 @@ import { loadMetadataConfiguration } from './metadata/configuration-loader.js';
 import { loadExternalUrlConfiguration } from './library/external-urls.js';
 import { loadEncodingConfiguration, serverFriendlyName } from './configuration.js';
 import { createBuiltinExternalUrlPlugin } from './metadata/external-url-providers.js';
+import { createPhotoMetadataPlugin } from './metadata/photo-provider.js';
+import { createPhotoAlbumImagePlugin } from './metadata/photo-album-provider.js';
+import { createBookOpfPlugin } from './metadata/book-opf-provider.js';
+import { createBookEpubPlugin } from './metadata/book-epub-provider.js';
+import { createBookComicPlugin } from './metadata/book-comic-provider.js';
+import { BookArchiveService } from './storage/archive-reader.js';
 import { SyncPlayService } from './syncplay/service.js';
 import { UserViewService } from './library/user-view-service.js';
 import { initializeLibraryRoot } from './library/root-initialization.js';
@@ -111,6 +118,9 @@ export async function createRuntime({ database, configuration, serverId, serverN
   const spoolStateRoot = dataPath ?? metadataPath;
   const spoolRoot = spoolStateRoot && path.join(spoolStateRoot, 'metadata-spool');
   fileSystem.spoolRoot = spoolRoot;
+  const bookArchives = new BookArchiveService({ vfs, identityMap,
+    spoolPath: programDataPath && path.join(programDataPath, 'cache', 'book-archives') });
+  rollback.push(() => bookArchives.close());
   const initializeStorageRoots = async () => {
     await initializeLibraryRoot({ fileSystem, store, programDataPath, dataPath, metadataPath, configuration });
     if (!spoolRoot) return;
@@ -226,6 +236,14 @@ export async function createRuntime({ database, configuration, serverId, serverN
       .map(provider => provider.getExternalIdInfo()) }));
     registry.register(createPlaylistItemsPlugin({ fileSystem, vfs, linkedChildren, spoolRoot }));
     registry.register(createBuiltinExternalUrlPlugin());
+    registry.register(createPhotoMetadataPlugin({ imageProcessor, logger }));
+    registry.register(createPhotoAlbumImagePlugin({ store, fileSystem, vfs, identityMap, metadataIdentityMap,
+      metadataPath, tempPath: programDataPath && path.join(programDataPath, 'cache', 'temp'), images: metadataImages,
+      configuration, expandPath: library.options.expandPath, logger }));
+    registry.register(createBookComicPlugin({ fileSystem, openArchive: bookArchives.openArchive, logger,
+      culture: () => configuration.UICulture || 'en-US' }));
+    registry.register(createBookEpubPlugin({ openArchive: bookArchives.openArchive, logger }));
+    registry.register(createBookOpfPlugin({ fileSystem, logger }));
     library.options.externalUrlRegistry = registry;
     loadContext = createMetadataContextLoader({ fileSystem, store, library, linkedChildren, spoolRoot, vfs, identityMap, metadataIdentityMap, configuration, contextExtensions: () => plugins.entries('context'),
       metadataConfiguration: metadataOptions.metadataConfiguration ?? metadataSettings.metadata, ignoreRule, externalData, logger });
@@ -245,18 +263,21 @@ export async function createRuntime({ database, configuration, serverId, serverN
       itemCreation, refresh: (reference, options) => metadata.refresh(reference, options), logger, now: metadataNow });
     metadata = new MetadataRefreshHost({ registry, loadContext, store, linkedChildren, vfs, logger, userData, probe, externalData,
       images: metadataImages, updates: metadataUpdates, seriesLifecycle, now: metadataNow });
-    rollback.push(() => metadata.close());
+    rollback.push(async () => { await bookArchives.close(); await metadata.close(); });
     Object.assign(metadata, { saver });
   }
   library.itemCreation = itemCreation;
   const linkedChildReferences = itemCreation && metadataUpdates
     ? new LinkedChildReferenceService({ store, linkedChildren, itemCreation, loadContext, updates: metadataUpdates })
     : undefined;
-  const metadataScanner = metadata ? new LibraryMetadataScanService({ library, metadata, configuration, logger }) : undefined;
+  const libraryTaskScheduler = loadContext ? new LibraryTaskScheduler({ configuration,
+    runWorker: operation => store.runDetached(() => loadContext.withDetachedScope(operation)), onError }) : undefined;
+  if (libraryTaskScheduler) rollback.push(() => libraryTaskScheduler.close());
+  const metadataScanner = metadata ? new LibraryMetadataScanService({ library, metadata, configuration, logger, scheduler: libraryTaskScheduler }) : undefined;
   const folderValidation = itemCreation && resolverPipeline ? new FolderValidationService({ store, library, itemCreation,
     resolvedItemLifecycle, vfs, identityMap, ignoreRule, resolverPipeline, loadContext, programDataPath, configurationDirectoryPath,
     metadataConfiguration: metadataOptions.metadataConfiguration ?? metadataSettings.metadata, configuration, refreshes,
-    linkedChildReferences, metadataScanner, onError }) : undefined;
+    linkedChildReferences, metadataScanner, scheduler: libraryTaskScheduler, onError }) : undefined;
   library.folderValidation = folderValidation;
   const itemDeletion = itemCreation ? new ItemDeletionService({ store, library, loadContext, itemCreation,
     updates: metadataUpdates, externalData, linkedChildReferences, vfs, metadataVfs, logger }) : undefined;
@@ -292,8 +313,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
   const libraryMonitor = new InertLibraryDirectoryMonitor();
   const libraryScanLifecycle = libraryScanHost ? new LibraryScanLifecycle({ host: libraryScanHost,
     monitor: libraryMonitor, postScanTasks: [splashscreenPostScanTask, artistsPostScanTask, collectionPosterVerifyPostScanTask, genresPostScanTask, musicGenresPostScanTask, studiosPostScanTask, cleanDatabasePostScanTask], logger }) : undefined;
-  const libraryScanner = folderScanner ? new LibraryScanService({ library, folderScanner,
-    lifecycle: libraryScanLifecycle, onError }) : undefined;
+  const libraryScanner = libraryScanLifecycle ? new LibraryScanService({ lifecycle: libraryScanLifecycle, onError }) : undefined;
   if (libraryScanner) rollback.push(() => libraryScanner.close());
   const tasks = new ScheduledTaskManager({ scanner: libraryScanner, localization, onError, programDataPath, configurationDirectoryPath, dataPath });
   await plugins.bind('task', extension => tasks.register(extension));
@@ -318,6 +338,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
   if (collections) rollback.push(() => collections.close());
   const images = new ImageService({ fileSystem, store, library, vfs, identityMap:metadataIdentityMap, mediaIdentityMap:identityMap, processor: imageProcessor, metadataImages, metadataUpdates, loadContext, metadataPath, logger,
     userImagePath: imageOptions.userImagePath ?? (programDataPath && path.join(componentConfigurationPath, 'users')) });
+  library.options.getImageDimensions = (item, image) => images.getImageDimensions(item, image);
   rollback.push(() => images.close());
   const brandingStore = new BrandingConfigurationStore({ configurationDirectoryPath, onError });
   rollback.push(() => brandingStore.close());
@@ -355,6 +376,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
   services.linkedChildren = linkedChildren;
   services.runWithContext = loadContext && (operation => loadContext.withScope(operation));
   services.libraryMonitor = libraryMonitor;
+  services.libraryTaskScheduler = libraryTaskScheduler;
   services.quickConnect = quickConnect;
   services.passwordResets = passwordResets;
   services.displayPreferences = displayPreferences;
@@ -424,9 +446,11 @@ export async function createRuntime({ database, configuration, serverId, serverN
         attempt(() => folderScanner?.close()),
         attempt(() => playlists?.close()),
         attempt(() => metadataEditor.close()),
-        attempt(() => itemUpdates.close())
+        attempt(() => itemUpdates.close()),
+        attempt(() => bookArchives.close())
       ]);
       await attempt(() => application.drainRequests());
+      await attempt(() => libraryTaskScheduler?.close());
       await attempt(() => metadata?.saver.stop());
       await attempt(() => metadata?.close());
       await attempt(() => metadata?.saver.dispose());

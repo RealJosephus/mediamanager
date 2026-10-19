@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import { mkdir, mkdtemp, readFile, rm, stat, utimes, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { describeFile } from '../../tools/validation/inventory.js';
@@ -157,4 +158,89 @@ test('validation binds absolute prepared inputs and source chains without treati
   await writeFile(database, 'native database before');
   await writeFile(script, 'bootstrap implementation changed');
   assert.equal(outcome(inputsUnchanged(before, await captureInputIdentity(options))), 'incomplete');
+});
+
+test('validation rejects missing or changed required helper inputs before execution', async t => {
+  const directory = await temporaryInputs(t), fixtures = path.join(directory, 'fixtures'), helpers = path.join(directory, 'helpers');
+  await mkdir(fixtures); await mkdir(helpers);
+  const manifest = path.join(fixtures, 'provenance.json'), helper = path.join(helpers, 'Oracle.dll');
+  const original = 'pinned native helper', digest = createHash('sha256').update(original).digest('hex');
+  await writeFile(manifest, JSON.stringify({ helper: { filename: helper, sha256: digest, required: true },
+    historicalSource: { filename: path.join(helpers, 'missing.cs'), sha256: 'a'.repeat(64) } }));
+  const options = { selected: ['tests/controlled.test.js'], dependencies: { entries: [{ path: 'tests/controlled.test.js',
+    declaredReferences: [], fixtureReferences: [await describeFile(manifest)] }] },
+  preflight: { ready: true, tools: [], services: [] }, environment: {} };
+  const missing = await captureInputIdentity(options);
+  assert.equal(missing.ready, false, 'a dynamic required helper must exist before the runner executes tests');
+  assert.equal(missing.entries.find(entry => entry.filename === helper).required, true);
+  await writeFile(helper, original);
+  const valid = await captureInputIdentity(options);
+  assert.equal(valid.ready, true, 'missing historical source descriptions remain optional');
+  assert.equal(valid.entries.find(entry => entry.filename === helper).expectedDigestMatched, true);
+  await writeFile(helper, 'different native helper');
+  const changed = await captureInputIdentity(options), unchanged = await captureInputIdentity(options);
+  assert.equal(inputsUnchanged(changed, unchanged), true, 'stable bytes do not prove that the pinned helper was used');
+  assert.equal(changed.ready, false);
+  assert.equal(changed.entries.find(entry => entry.filename === helper).expectedDigestMatched, false);
+  assert.equal(resultOutcome(0, counts, { candidateUnchanged: true, inputUnchanged: true, preflightReady: changed.ready }), 'incomplete');
+});
+
+test('validation preserves required pins across duplicate and transitive manifest references', async t => {
+  const directory = await temporaryInputs(t), fixtures = path.join(directory, 'fixtures'), helpers = path.join(directory, 'helpers');
+  await mkdir(fixtures); await mkdir(helpers);
+  const manifest = path.join(fixtures, 'provenance.json'), helperManifest = path.join(helpers, 'helper.json');
+  const helper = path.join(helpers, 'Oracle.dll'), original = 'required through a manifest';
+  const digest = createHash('sha256').update(original).digest('hex');
+  const content = { helper: { filename: helper, sha256: digest, required: true },
+    description: { filename: helper, sha256: 'b'.repeat(64), required: false } };
+  await writeFile(helper, original); await writeFile(helperManifest, JSON.stringify(content));
+  await writeFile(manifest, JSON.stringify({ helperManifest: { filename: helperManifest,
+    sha256: createHash('sha256').update(await readFile(helperManifest)).digest('hex'), required: true } }));
+  const options = { selected: ['tests/controlled.test.js'], dependencies: { entries: [{ path: 'tests/controlled.test.js',
+    declaredReferences: [], fixtureReferences: [await describeFile(manifest)] }] },
+  preflight: { ready: true, tools: [], services: [] }, environment: {} };
+  const valid = await captureInputIdentity(options), entry = valid.entries.find(entry => entry.filename === helper);
+  assert.equal(valid.ready, true); assert.equal(entry.required, true);
+  assert.deepEqual(entry.expectedDigests, [digest], 'optional descriptions cannot downgrade or add mandatory pins');
+  content.conflict = { filename: helper, sha256: 'c'.repeat(64), required: true };
+  await writeFile(helperManifest, JSON.stringify(content));
+  await writeFile(manifest, JSON.stringify({ helperManifest: { filename: helperManifest,
+    sha256: createHash('sha256').update(await readFile(helperManifest)).digest('hex'), required: true } }));
+  const conflicting = await captureInputIdentity(options);
+  assert.equal(conflicting.ready, false, 'every required pin must agree with the bytes used');
+  assert.equal(conflicting.entries.find(entry => entry.filename === helper).expectedDigests.length, 2);
+});
+
+test('validation rejects malformed explicit required pins while ignoring ordinary DTO paths', async t => {
+  const directory = await temporaryInputs(t), fixtures = path.join(directory, 'fixtures'), helpers = path.join(directory, 'helpers');
+  await mkdir(fixtures); await mkdir(helpers);
+  const manifest = path.join(fixtures, 'provenance.json'), helper = path.join(helpers, 'Oracle.dll');
+  const mediaPath = path.join(directory, 'unread-media.mkv');
+  await writeFile(helper, 'existing helper whose declared pin is malformed');
+  const validDigest = createHash('sha256').update(await readFile(helper)).digest('hex');
+  await writeFile(manifest, '{}');
+  const options = { selected: ['tests/controlled.test.js'], dependencies: { entries: [{ path: 'tests/controlled.test.js',
+    declaredReferences: [], fixtureReferences: [await describeFile(manifest)] }] },
+  preflight: { ready: true, tools: [], services: [] }, environment: {} };
+  for (const digest of ['a'.repeat(63), 'g'.repeat(64), '', null, 123]) {
+    await writeFile(manifest, JSON.stringify({ helper: { filename: helper, sha256: digest, required: true },
+      validDuplicate: { filename: helper, sha256: validDigest, required: true },
+      historical: { filename: path.join(helpers, 'missing.cs'), sha256: 'historical malformed description' },
+      items: [{ Path: mediaPath, required: true }, { path: mediaPath, required: true }] }));
+    const identity = await captureInputIdentity(options), entry = identity.entries.find(value => value.filename === helper);
+    assert.equal(identity.ready, false); assert.equal(entry.required, true);
+    assert.equal(entry.invalidExpectedDigest, true); assert.equal(entry.expectedDigestMatched, false);
+    assert.equal(identity.entries.some(value => value.filename === mediaPath), false);
+  }
+  await writeFile(manifest, JSON.stringify({ helper: { filename: helper, entriesSha256: 'invalid', required: true } }));
+  assert.equal((await captureInputIdentity(options)).ready, false);
+  for (const secondary of ['', 'b'.repeat(64)]) {
+    await writeFile(manifest, JSON.stringify({ helper: { filename: helper, sha256: validDigest,
+      entriesSha256: secondary, required: true } }));
+    assert.equal((await captureInputIdentity(options)).ready, false, 'a valid first pin cannot hide another invalid or conflicting declaration');
+  }
+  await writeFile(manifest, JSON.stringify({ items: [{ Path: mediaPath, required: true }, { path: mediaPath, required: true }],
+    historical: { filename: path.join(helpers, 'missing.cs'), sha256: 'historical malformed description' } }));
+  const ordinary = await captureInputIdentity(options);
+  assert.equal(ordinary.ready, true); assert.equal(ordinary.entries.some(value => value.filename === mediaPath), false);
 });

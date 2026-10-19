@@ -1,0 +1,11 @@
+using System.Reflection;using System.Text.Json;using Emby.Photos;using MediaBrowser.Controller.Drawing;using MediaBrowser.Controller.Entities;using MediaBrowser.Controller.Providers;using MediaBrowser.Model.Entities;using MediaBrowser.Model.IO;using Microsoft.Extensions.Logging.Abstractions;
+var results=new List<object>();
+foreach(var source in new[]{"Z:\\Photos\\photo.raw","https://images.invalid/photo.raw","HTTP://images.invalid/photo.raw"}){
+ var statCalls=0;BaseItem.FileSystem=Stub.Make<IFileSystem>((method,values)=>{if(method.Name=="GetFileInfo"){statCalls++;return new FileSystemMetadata{FullName=(string)values![0]!,Exists=true,LastWriteTimeUtc=new DateTime(2026,10,1,1,2,3,DateTimeKind.Utc)};}return method.Name=="GetLastWriteTimeUtc"?new DateTime(2026,10,1,1,2,3,DateTimeKind.Utc):Stub.Default(method.ReturnType);});
+ var item=new Photo{Path=source,Name="Stored photo",Width=4,Height=3};item.SetImage(new ItemImageInfo{Type=ImageType.Primary,Path="old-primary.jpg",Width=40,Height=30,BlurHash="old-blurhash",DateModified=new DateTime(2000,1,1)},0);
+ var provider=new PhotoProvider(NullLogger<PhotoProvider>.Instance,Stub.Make<IImageProcessor>((method,_)=>throw new Exception("No fallback expected.")));
+ var update=await provider.FetchAsync(item,new MetadataRefreshOptions((IDirectoryService)null!),CancellationToken.None);
+ results.Add(new{source,update=(int)update,statCalls,images=item.ImageInfos.Select(image=>new{image.Path,image.Width,image.Height,image.BlurHash,dateModified=image.DateModified.ToString("o")})});
+}
+File.WriteAllText(args[0],JsonSerializer.Serialize(new{scope="Actual PhotoProvider original-primary replacement over an unsupported extension with retained positive dimensions; no file, tag, network or decoder reads. Filesystem timestamp is controlled.",results},new JsonSerializerOptions{WriteIndented=true})+"\n");
+public class Stub:DispatchProxy{public Func<MethodInfo,object?[]?,object?> Handler=null!;protected override object? Invoke(MethodInfo? method,object?[]? values)=>Handler(method!,values);public static T Make<T>(Func<MethodInfo,object?[]?,object?> handler)where T:class{var value=Create<T,Stub>();((Stub)(object)value).Handler=handler;return value;}public static object? Default(Type type)=>type==typeof(void)?null:type.IsValueType?Activator.CreateInstance(type):null;}

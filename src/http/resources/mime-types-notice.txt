@@ -1,0 +1,10 @@
+MIME lookup data includes MimeTypes.cs 2.5.2 by Kristian Hellang.
+Copyright © Kristian Hellang 2024
+Licensed under Apache-2.0; see mime-types-license.txt.
+Project: https://github.com/khellang/MimeTypes
+
+MediaManager transformed the actual compiled source-package lookup data into
+JSON and applied the designated Jellyfin MimeTypes wrapper overrides. The
+wrapper source remains subject to the repository's GPL license. Exact native
+assembly, source, source-package archive, generated source and output bindings
+are recorded in mime-types-provenance.json.

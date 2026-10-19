@@ -1,0 +1,45 @@
+[
+  {
+    "Name": "outer-candidate-children-io",
+    "Libraries": [],
+    "Directories": [
+      "parent/Before",
+      "parent/Broken/VIDEO_TS",
+      "parent/After"
+    ],
+    "Fault": {
+      "Kind": "enumeration",
+      "Path": "parent/Broken",
+      "AtOccurrence": 1
+    }
+  },
+  {
+    "Name": "nested-video-ts-files-io",
+    "Libraries": [],
+    "Directories": [
+      "parent/Before",
+      "parent/Broken/VIDEO_TS",
+      "parent/After"
+    ],
+    "Fault": {
+      "Kind": "nested-file-paths",
+      "Path": "parent/Broken/VIDEO_TS",
+      "AtOccurrence": 1
+    }
+  },
+  {
+    "Name": "outer-candidate-children-io-with-actual-aggregate-parent",
+    "Libraries": [],
+    "Directories": [
+      "parent/Before",
+      "parent/Broken/VIDEO_TS",
+      "parent/After"
+    ],
+    "Fault": {
+      "Kind": "enumeration",
+      "Path": "parent/Broken",
+      "AtOccurrence": 1
+    },
+    "UseAggregateParent": true
+  }
+]

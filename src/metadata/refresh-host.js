@@ -4,7 +4,8 @@ import { saveMetadataItem } from './save-item.js';
 import { mergeMetadata } from './merge.js';
 import { newNativeItemEntity, acquireNativeItemLinkOwner } from '../library/native-item-entity.js';
 import { MetadataUpdateHost } from './update-host.js';
-import { isValidProviderId } from './provider-ids.js';
+import { isValidProviderId, trySetProviderId } from './provider-ids.js';
+import { ordinalIgnoreCaseEquals } from '../storage/ordinal-comparer.js';
 import { MetadataImages } from './images.js';
 import { scanLocalImages } from './local-images.js';
 import { ExternalDataManager } from '../library/external-data.js';
@@ -33,7 +34,7 @@ import { validateCollectionLocations } from './internal-folder-refresh.js';
 import { isNativeItemEntity } from '../library/native-item-entity.js';
 
 const modes = { None: 0, ValidationOnly: 1, Default: 2, FullRefresh: 3 };
-const supported = ['AggregateFolder', 'UserRootFolder', 'CollectionFolder', 'PlaylistsFolder', 'Folder', 'Movie', 'Video', 'MusicVideo', 'Trailer', 'Series', 'Season', 'Episode', 'BoxSet', 'Playlist', 'Person', 'MusicAlbum', 'MusicArtist', 'UserView', 'Genre', 'MusicGenre', 'Studio', 'Year'];
+const supported = ['AggregateFolder', 'UserRootFolder', 'CollectionFolder', 'PlaylistsFolder', 'Folder', 'Movie', 'Video', 'MusicVideo', 'Trailer', 'Series', 'Season', 'Episode', 'BoxSet', 'Playlist', 'Person', 'MusicAlbum', 'MusicArtist', 'UserView', 'Genre', 'MusicGenre', 'Studio', 'Year', 'Book', 'Photo', 'PhotoAlbum'];
 const validId = isValidProviderId;
 const languageMatches = (actual, preferred) => !actual || !preferred || actual.split('-')[0].toLowerCase() === preferred.split('-')[0].toLowerCase();
 const ownerMetadataRefresh = Symbol('owner metadata refresh');
@@ -42,6 +43,22 @@ const liveSeriesParent = Symbol('live series parent');
 const liveMetadataItem = Symbol('live metadata item');
 const snapshotFields = snapshot => ({ ...(itemRequiresJson(snapshot)
   ? typeof snapshot?.Data === 'string' ? parseLosslessJson(snapshot.Data) : snapshot?.Data : {}), ...snapshot });
+
+function applySearchResult(lookup, itemType, result) {
+  lookup.ProviderIds = {};
+  if (itemType === 'Episode' || itemType === 'Season') {
+    lookup.SeriesProviderIds = {};
+    for (const [name, value] of Object.entries(result.ProviderIds ?? {})) {
+      if (!validId(name, value)) continue;
+      const key = Object.keys(lookup.SeriesProviderIds).find(key => ordinalIgnoreCaseEquals(key, name)) ?? name;
+      Object.defineProperty(lookup.SeriesProviderIds, key, { value, enumerable: true, writable: true, configurable: true });
+    }
+  } else {
+    for (const [name, value] of Object.entries(result.ProviderIds ?? {})) trySetProviderId(lookup, name, value);
+    lookup.Name = result.Name ?? null;
+    lookup.Year = result.ProductionYear ?? null;
+  }
+}
 
 function applyLiveSeriesParent(loaded, series) {
   if (!series) return loaded;
@@ -329,7 +346,7 @@ export class MetadataRefreshHost {
     const collectionFolderUpdate = options[validateCollectionLocations]
       ? await refreshCollectionFolderLocations(loaded) : ItemUpdateType.None;
     // Native MetadataResult starts with null People: null leaves stored credits.
-    const metadata = { Item: null, People: null, Images: cloneNativeItemValue(loaded.context.images) };
+    const metadata = { Item: null, People: null, Images: loaded.context.images };
     let imageChanged = false, imagesFailed = false;
     try {
       if (options.RemoveOldMetadata && options.ReplaceAllImages) imageChanged = await this.images.removeForRefresh(loaded, metadata.Images, signal);
@@ -371,7 +388,6 @@ export class MetadataRefreshHost {
     if (firstRefresh) {
       await saveMetadataItem(this.updates, loaded, metadata, ItemUpdateType.MetadataImport, { signal });
       initialItem.DateLastSaved = item.DateLastSaved;
-      loaded.context = { ...loaded.context, images: metadata.Images };
     }
     let selected = this.registry.discover({ ...loaded, kind: 'local' });
     let remote = this.registry.discover({ ...loaded, kind: 'remote' });
@@ -430,6 +446,7 @@ export class MetadataRefreshHost {
           const previousLoaded = loaded;
           loaded = applyLiveSeriesParent(await this.loadContext(reference), options[liveSeriesParent]);
           ownership.contexts.add(loaded);
+          loaded.context = { ...loaded.context, images: metadata.Images };
           item = metadata.Item = loaded.item;
           const previousSnapshot = snapshotFields(previousLoaded.snapshot), currentSnapshot = snapshotFields(loaded.snapshot);
           // Keep hook mutations when the probe did not write those columns.
@@ -493,7 +510,8 @@ export class MetadataRefreshHost {
     }
     const localLocked = temp.Item.IsLocked;
     const lookup = cloneNativeItemValue(loaded.lookup);
-    if (options.SearchResult) Object.assign(lookup, options.SearchResult, { ProviderIds: { ...lookup.ProviderIds, ...options.SearchResult.ProviderIds } });
+    if (options.SearchResult) applySearchResult(lookup, item.Type, options.SearchResult);
+    lookup.IsAutomated = options.IsAutomated ?? false;
     const mergeLookupIds = () => {
       for (const [key, value] of Object.entries(temp.Item.ProviderIds ?? {})) if (validId(key, value) && !validId(key, lookup.ProviderIds?.[key])) (lookup.ProviderIds ??= {})[key] = value;
     };
@@ -538,7 +556,7 @@ export class MetadataRefreshHost {
       }
     }
     if (runImageProviders) {
-      const result = await this.images.refreshRemoteProviders({ ...loaded, item }, metadata.Images, imageProviders, options);
+      const result = await this.images.refreshProviders({ ...loaded, item }, metadata.Images, imageProviders, options);
       if (result.changed) updateType |= ItemUpdateType.ImageUpdate;
       failures += result.failures;
       errorMessage = result.errorMessage ?? errorMessage;

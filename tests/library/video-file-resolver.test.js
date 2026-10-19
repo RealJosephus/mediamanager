@@ -336,17 +336,19 @@ test('ordinary movie directories collapse or fall back while unsupported shapes 
     assert.deepEqual(result.withheldPaths, [directory.identityPath]);
   });
 
-  await t.test('a failed VIDEO_TS observation propagates instead of creating a Folder', async () => {
+  await t.test('a failed VIDEO_TS observation recovers through the native Folder fallback', async () => {
     const directory = candidate('The Film', { kind: 'directory' });
     const videoTs = candidate('VIDEO_TS', { directory: directory.identityPath, kind: 'directory' });
     const failure = Object.assign(new Error('controlled VIDEO_TS observation failure'), { code: 'io' });
-    await assert.rejects(resolve([directory], {
+    const result = await resolve([directory], {
       context,
       peekDirectory: async current => {
         if (current === directory) return directorySnapshot([videoTs]);
         throw failure;
       }
-    }), error => error === failure);
+    });
+    assert.deepEqual(result.claims.map(claim => [claim.nativeType, claim.identityPath]), [[folderNativeType, directory.identityPath]]);
+    assert.deepEqual(result.withheldPaths, []);
   });
 
   await t.test('a direct ordinary movie plus a non-extra subdirectory does not partially collapse', async () => {

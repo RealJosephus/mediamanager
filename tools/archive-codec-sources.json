@@ -1,0 +1,113 @@
+{
+  "schemaVersion": 1,
+  "sourceArchives": [
+    {
+      "name": "libarchive",
+      "version": "3.8.10",
+      "archiveName": "libarchive-3.8.10.tar.gz",
+      "directory": "libarchive-3.8.10",
+      "url": "https://github.com/libarchive/libarchive/releases/download/v3.8.10/libarchive-3.8.10.tar.gz",
+      "bytes": 9301407,
+      "sha256": "a1bffbe5152cfe869751179e7b16648c87c461cb8c46eee75062efbe164cc57c"
+    },
+    {
+      "name": "xz",
+      "version": "5.8.2",
+      "archiveName": "xz-5.8.2.tar.gz",
+      "directory": "xz-5.8.2",
+      "url": "https://github.com/tukaani-project/xz/releases/download/v5.8.2/xz-5.8.2.tar.gz",
+      "bytes": 2693526,
+      "sha256": "ce09c50a5962786b83e5da389c90dd2c15ecd0980a258dd01f70f9e7ce58a8f1"
+    },
+    {
+      "name": "zlib",
+      "version": "1.3.1",
+      "archiveName": "zlib-1.3.1.tar.gz",
+      "directory": "zlib-1.3.1",
+      "url": "https://zlib.net/fossils/zlib-1.3.1.tar.gz",
+      "bytes": 1512791,
+      "sha256": "9a93b2b7dfdac77ceba5a558a580e74667dd6fede4585b91eefb60f03b72df23"
+    },
+    {
+      "name": "bzip2",
+      "version": "1.0.8",
+      "archiveName": "bzip2-1.0.8.tar.gz",
+      "directory": "bzip2-1.0.8",
+      "url": "https://sourceware.org/pub/bzip2/bzip2-1.0.8.tar.gz",
+      "bytes": 810029,
+      "sha256": "ab5a03176ee106d3f0fa90e381da478ddae405918153cca248e682cd0c4a2269"
+    }
+  ],
+  "files": [
+    {
+      "filename": "../src/storage/resources/archive-codec.c",
+      "bytes": 4913,
+      "sha256": "77aa09a3ac7204241c9154e5aa2cca929978a83a2b48df6190e56b927fc80e5e"
+    },
+    {
+      "filename": "../src/storage/resources/archive-codec-rar4.patch",
+      "bytes": 5083,
+      "sha256": "574ddc52f53375d813ee1a86561d5aafd25f2519a4ed2f506452940fbdcab7e0"
+    },
+    {
+      "filename": "../src/storage/resources/archive-codec-rar5.patch",
+      "bytes": 3881,
+      "sha256": "0c46ee71f8b1b8b7036ed2e16e43cb8bab7810b477e569d91c6c467a483b05ca"
+    },
+    {
+      "filename": "archive-codec-zlib.patch",
+      "bytes": 415,
+      "sha256": "3d61fa2660e029a46f86ccd9170c98bee9e21e93b149752f4f1f6972a99b1d65"
+    }
+  ],
+  "patches": [
+    {
+      "component": "zlib",
+      "filename": "archive-codec-zlib.patch",
+      "member": "CMakeLists.txt",
+      "originalSha256": "ab5f3afca6fe38983dc30a28da4877706e3a690a564eda3d4929fff39dab190e",
+      "patchedSha256": "f04f81c5ab9c0f7bc151b62236de7692fcbf1811a65c232c57e6264ab76578e1"
+    },
+    {
+      "component": "libarchive",
+      "filename": "../src/storage/resources/archive-codec-rar4.patch",
+      "member": "libarchive/archive_read_support_format_rar.c",
+      "originalSha256": "9624cd814097eb5df426dccd28b529be36a1d5b62fd0bcb73f2932e245ef666d",
+      "patchedSha256": "d35aa635e300f947d89ab94edf0fcf55e04ef310b2414bbf62d966a74ceaefe8"
+    },
+    {
+      "component": "libarchive",
+      "filename": "../src/storage/resources/archive-codec-rar5.patch",
+      "member": "libarchive/archive_read_support_format_rar5.c",
+      "originalSha256": "0a21cc37ef7ae0f83bbffdac1b08414380787ddf1cddae7b8539985e4b28e3ab",
+      "patchedSha256": "accd665e38fd253c4b6b89ee0fb686c2eb117daac9bfeab4d7ae97b62db7010d"
+    }
+  ],
+  "bridge": {
+    "filename": "../src/storage/resources/archive-codec.c",
+    "bytes": 4913,
+    "sha256": "77aa09a3ac7204241c9154e5aa2cca929978a83a2b48df6190e56b927fc80e5e"
+  },
+  "buildPlan": {
+    "dependencyOrder": [
+      "zlib",
+      "xz",
+      "bzip2",
+      "libarchive",
+      "C bridge"
+    ],
+    "configuration": "Fresh out-of-tree CMake/Ninja Release static libraries; direct seven-source BZip2 compilation.",
+    "bridgeOptions": [
+      "-O3",
+      "-sMODULARIZE=1",
+      "-sEXPORT_ES6=1",
+      "-sENVIRONMENT=node",
+      "-sFILESYSTEM=0",
+      "-sALLOW_MEMORY_GROWTH=1",
+      "-sINITIAL_MEMORY=4194304",
+      "-sEXPORTED_FUNCTIONS=[\"_malloc\",\"_free\",\"_mm_rar4_independent\"]",
+      "-sEXPORTED_RUNTIME_METHODS=[\"UTF8ToString\",\"HEAPU8\"]"
+    ],
+    "sourcePolicy": "Only the exact SHA256-bound official release archives are accepted. No prior build cache, source checkout or compiled library is substituted in full-build mode. Relink mode is explicitly labeled and records the supplied compiled inputs."
+  }
+}

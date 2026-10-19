@@ -60,7 +60,7 @@ function extension(name) {
 }
 
 function isBook(candidate) {
-  return candidate?.entry?.kind === 'file' && bookExtensions.has(extension(candidate.entry.name));
+  return ['file', 'directory'].includes(candidate?.entry?.kind) && bookExtensions.has(extension(candidate.entry.name));
 }
 
 function bookDraft(parsed, fallbackName, seriesName, mixed) {
@@ -88,7 +88,7 @@ export function createBookItemResolver() {
     productionMediaScope: 'book-files-and-single-file-directories',
     nativeTypes: { [bookNativeType]: { isFolder: false } },
     resolveFile({ collectionContext, candidate }) {
-      if (!bookContext(collectionContext) || !isBook(candidate)) return null;
+      if (!bookContext(collectionContext) || candidate?.entry?.kind !== 'file' || !isBook(candidate)) return null;
       const stem = nativeFileNameWithoutExtension(candidate.entry.name);
       const directory = nativeFileName(nativeDirectoryName(candidate.identityPath)) ?? '';
       return {

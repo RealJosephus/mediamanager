@@ -25,8 +25,17 @@ to record Int32 ID gating, two pages, empty-page stop, transport failure and
 cache duration. These probes do not claim deterministic Random ordering or
 public-network acceptance.
 
-Record with the isolated pinned baseline DLL directory and bundled .NET, then
-seal with `tools/compat/record-movie-similar.mjs NEW_OUTPUT_DIRECTORY`. It records
-the raw result, input, oracle sources, runtime assemblies, dependency
-resolution files, and relevant pinned source files. Do not rewrite existing
-Shows golden results to claim these branches are covered.
+The current observation uses the independently closed designated source build
+whose main DLL starts with SHA-256 `474c7c`. Its full source, runtime and SDK
+trees were checked before and after the fresh native helper execution. The
+provenance binds the actual record and raw output, loaded assemblies, native
+SQLite, dependency resolution files, helper inputs, relevant source files and
+full build receipt. No old Git working directory is required by this profile.
+
+The previous fixture and its source declarations remain byte-exact in the
+external historical snapshot. All sixteen historical Git source blobs match
+their recorded hashes, but the missing old native run and runtime have not
+been recovered. The new observation has its own identity and is not a seal of
+that old execution. Its fourteen movie results, four Live TV branches and
+controlled TMDb observations equal the retained projection. No existing Shows
+golden result is rewritten to claim coverage for these branches.

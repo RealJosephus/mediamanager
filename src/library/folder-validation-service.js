@@ -1,10 +1,9 @@
 import { AsyncLocalStorage } from 'node:async_hooks';
-import { availableParallelism } from 'node:os';
 import path from 'node:path';
 import { StorageError } from '../storage/errors.js';
 import { joinPath } from '../storage/paths.js';
 import { EMPTY_ID, VIDEO_TYPES, idKey, nonemptyId, repositoryTopParentId } from './records.js';
-import { compareNativePaths, nativeFileNameWithoutExtension, nativePathKey, sameNativePath } from './native-path.js';
+import { compareNativePaths, nativeFileName, nativeFileNameWithoutExtension, nativePathKey, sameNativePath } from './native-path.js';
 import { filterResolutionCandidates } from './resolution-ignore.js';
 import { createResolvedItemEntity } from './resolved-item-entity.js';
 import { releaseCachedFolderChildren } from './folder-cache.js';
@@ -13,20 +12,21 @@ import { buildScanCollectionContext } from './scan-context.js';
 import { itemTopParentId } from './item-save-tuple.js';
 import { resolvedItemStructuralSnapshot } from './resolved-item-lifecycle.js';
 import { isFileProtocol } from './owned-items.js';
-import { ordinalIgnoreCaseKey } from '../storage/ordinal-comparer.js';
 import { setPrimaryVersion } from './live-item-repository.js';
-import { userDataKeys } from '../sessions/user-data.js';
 import { reattachUserData } from '../metadata/persistence.js';
 import { loadPostgresNavigationRows, loadPostgresPageGraph,
-  loadPostgresRowsByIds, queryPostgresValidationChildren } from './postgres-library-query.js';
+  loadPostgresRowsByIds } from './postgres-library-query.js';
 import { createNativeItemCohort } from './native-item-cohort.js';
-import { metadataChildSequence } from './metadata-child-sequence.js';
+import { withFolderValidationScope } from './folder-validation-scope.js';
 import { nativeTextSql } from '../database/native-text-sql.js';
 import { quoteIdentifier as q } from '../database/model.js';
+import { getNewItemId } from '../core/identity.js';
+import { nativeGuid } from '../users/native.js';
+import { DotIgnoreRule } from './dot-ignore-rule.js';
+import { stateIgnoreFileAccess, stateOwnedFiles } from './state-owned-files.js';
 
 const pathStyle = value => /^(?:[A-Za-z]:[\\/]|[\\/]{2}[^\\/]+[\\/][^\\/]+)/u.test(value) ? 'windows' : 'posix';
 const itemType = item => String(item?.NativeType ?? item?.Type ?? '').split('.').at(-1);
-const validationWorkContext = new AsyncLocalStorage();
 
 function throwIfAborted(signal) {
   signal?.throwIfAborted();
@@ -57,7 +57,7 @@ export class FolderValidationService {
   }
   constructor({ store, library, itemCreation, resolvedItemLifecycle, vfs, identityMap, ignoreRule, resolverPipeline, loadContext,
     programDataPath, configurationDirectoryPath, metadataConfiguration = { UseFileCreationTimeForDateAdded: true },
-    configuration = library?.options?.configuration ?? {}, refreshes, linkedChildReferences, metadataScanner, processors = availableParallelism,
+    configuration = library?.options?.configuration ?? {}, refreshes, linkedChildReferences, metadataScanner, scheduler,
     clock = () => new Date(), onError = () => {}, reattach = reattachUserData } = {}) {
     if (!store || !library || !itemCreation || !vfs || !identityMap || !ignoreRule
       || !resolverPipeline || typeof resolverPipeline.resolve !== 'function' || typeof loadContext !== 'function') {
@@ -79,14 +79,14 @@ export class FolderValidationService {
       || typeof metadataScanner.refreshContainer !== 'function') {
       throw new TypeError('Folder validation requires child metadata traversal.');
     }
-    if (typeof processors !== 'function') throw new TypeError('Folder validation processor discovery must be a function.');
+    if (!scheduler || typeof scheduler.enqueue !== 'function') throw new TypeError('Folder validation requires the shared library scheduler.');
     if (!resolvedItemLifecycle || typeof resolvedItemLifecycle.apply !== 'function'
       || typeof resolvedItemLifecycle.updateRepository !== 'function') {
       throw new TypeError('Folder validation requires the existing-item repository lifecycle.');
     }
     Object.assign(this, { store, library, itemCreation, resolvedItemLifecycle, vfs, identityMap, ignoreRule, resolverPipeline, loadContext,
       programDataPath, configurationDirectoryPath, metadataConfiguration, configuration, refreshes, linkedChildReferences,
-      metadataScanner, processors, clock, onError, reattach });
+      metadataScanner, scheduler, clock, onError, reattach });
     const nativePath = pathStyle(programDataPath) === 'windows' ? path.win32 : path.posix;
     this.applicationRootPath = nativePath.join(programDataPath, 'root');
   }
@@ -152,23 +152,7 @@ export class FolderValidationService {
     return { ...snapshot, candidates };
   }
 
-  async #currentChildren(parent, signal) {
-    return this.store.run(async db => {
-      const navigationRows = await loadPostgresNavigationRows(db, parent.Id);
-      const childRows = await queryPostgresValidationChildren(db, parent.Id);
-      const childIds = childRows.map(row => idKey(row.Id));
-      const graphRows = await loadPostgresPageGraph(db,
-        [...await loadPostgresRowsByIds(db, [parent.Id]), ...childRows], navigationRows);
-      const state = await this.#state(db, null, { includeUserData: false, baseRows: graphRows });
-      const persisted = state.byId.get(idKey(parent.Id));
-      if (!persisted || !persisted.IsFolder || itemType(persisted) !== itemType(parent)) {
-        throw Object.assign(new Error('Folder not found.'), { status: 404, statusCode: 404 });
-      }
-      return childIds.map(id => state.byId.get(id)).filter(Boolean);
-    }, { signal, readOnly: true, lockTimeoutMs: 250 });
-  }
-
-  async #collectionContext(parent, collectionType, signal) {
+  async #collectionContext(parent, collectionType) {
     return this.store.run(async db => {
       const navigationRows = await loadPostgresNavigationRows(db, parent.Id);
       const targetRows = await loadPostgresRowsByIds(db, [parent.Id]);
@@ -191,37 +175,37 @@ export class FolderValidationService {
         root,
         collectionContext: collectionType === undefined ? context : Object.freeze({ ...context, collectionType })
       };
-    }, { signal, readOnly: true, lockTimeoutMs: 250 });
+    }, { readOnly: true, lockTimeoutMs: 250 });
   }
 
-  async #resolve(parent, root, collectionContext, signal) {
+  async #resolve(parent, root, collectionContext, onEnumerationReady) {
+    if (itemType(parent) === 'AggregateFolder') return this.#resolveAggregate(parent, onEnumerationReady);
+    if (itemType(parent) === 'PlaylistsFolder') return this.#resolveInstanceFolder(parent, root, collectionContext, onEnumerationReady);
     const accessPath = this.#accessPath(parent);
-    const listing = await this.vfs.list(accessPath, { signal });
-    throwIfAborted(signal);
+    const listing = await this.vfs.list(accessPath);
     if (root && idKey(root.Id) === idKey(parent.Id) && itemType(parent) !== 'BoxSet'
       && nativeFileNameWithoutExtension(parent.Path)?.toLowerCase() !== 'collections' && listing.entries.length === 0) return null;
     const raw = { listing, ...this.#classifyEntries(accessPath, listing.entries) };
-    const filtered = await this.#filterCandidates(raw, parent, root, signal);
+    const filtered = await this.#filterCandidates(raw, parent, root);
     const directorySnapshots = new Map();
     const peekDirectory = (candidate, { forExtras = false } = {}) => {
       if (candidate?.entry?.kind !== 'directory') throw new TypeError('Only directory candidates can be enumerated.');
       const key = nativePathKey(candidate.identityPath);
       if (!directorySnapshots.has(key)) directorySnapshots.set(key, { raw: (async () => {
-        const childListing = await this.vfs.list(candidate.accessPath, { signal });
-        throwIfAborted(signal);
+        const childListing = await this.vfs.list(candidate.accessPath);
         return { listing: childListing, ...this.#classifyEntries(candidate.accessPath, childListing.entries) };
       })() });
       const snapshots = directorySnapshots.get(key);
       if (forExtras) return snapshots.raw;
-      snapshots.filtered ??= snapshots.raw.then(snapshot => this.#filterCandidates(snapshot, parent, root, signal));
+      snapshots.filtered ??= snapshots.raw.then(snapshot => this.#filterCandidates(snapshot, parent, root));
       return snapshots.filtered;
     };
     let rootExtraSnapshot;
     const getExtraCandidates = candidate => {
-      if (candidate == null) return rootExtraSnapshot ??= this.#filterExtraCandidates(raw, signal);
+      if (candidate == null) return rootExtraSnapshot ??= this.#filterExtraCandidates(raw);
       const snapshot = peekDirectory(candidate, { forExtras: true });
       const snapshots = directorySnapshots.get(nativePathKey(candidate.identityPath));
-      return snapshots.extras ??= snapshot.then(value => this.#filterExtraCandidates(value, signal));
+      return snapshots.extras ??= snapshot.then(value => this.#filterExtraCandidates(value));
     };
     const resolution = await this.resolverPipeline.resolve({
       parent,
@@ -232,19 +216,92 @@ export class FolderValidationService {
       getExtraCandidates,
       resolveExtra: async ({ candidate }) => (await filterResolutionCandidates([candidate], {
         ignoreRule: this.ignoreRule,
-        applicationRootPath: this.applicationRootPath,
-        signal
+        applicationRootPath: this.applicationRootPath
       })).length > 0,
       deletionSafe: listing.deletionSafe === true,
-      signal
+      onEnumerationReady
     });
     return Object.freeze({ ...resolution, deletionSafe: listing.deletionSafe === true });
   }
 
-  async #isAccessibleTopParent(parent, allowRemoveRoot) {
-    if (parent.IsTopParent !== true && idKey(repositoryTopParentId(parent)) !== idKey(parent.Id)) return true;
+  async #resolveAggregate(parent, onEnumerationReady) {
+    const loaded = await this.#context(parent.Id, { draft: parent });
+    // AggregateFolder.GetFileSystemChildren updates the live location list.
+    // A later metadata save persists that state, including across scans.
+    const resolution = await loaded.rootFolderResolveArgs(true);
+    onEnumerationReady();
+    const claims = [];
+    for (const file of resolution.files) if (file.IsDirectory && file.Exists !== false) {
+      const nativeType = 'MediaBrowser.Controller.Entities.Folder';
+      claims.push(Object.freeze({
+        Id: nativeGuid(getNewItemId(file.Path, nativeType, {
+          programDataPath: this.programDataPath,
+          enableCaseSensitiveItemIds: this.configuration.EnableCaseSensitiveItemIds
+        })),
+        nativeType, identityPath: file.Path,
+        entry: { kind: 'directory', name: file.Name ?? nativeFileName(file.Path) },
+        draft: { Name: file.Name ?? nativeFileName(file.Path), IsFolder: true, MediaType: 'Unknown', SourceType: 'Library' }
+      }));
+    }
+    // CreateRootFolder appends its registered plug-in entities after resolving
+    // physical locations. They are live entities, not resolver constructions.
+    for (const item of parent.VirtualChildren) claims.push(Object.freeze({
+      Id: item.Id, nativeType: item.NativeType, identityPath: item.Path,
+      entry: { kind: 'directory', name: nativeFileName(item.Path) },
+      draft: { Name: item.Name, IsFolder: true, MediaType: item.MediaType, SourceType: item.SourceType },
+      resolvedEntity: item
+    }));
+    return Object.freeze({ claims: Object.freeze(claims), withheldPaths: Object.freeze([]), deletionSafe: true });
+  }
+
+  async #resolveInstanceFolder(parent, root, collectionContext, onEnumerationReady) {
+    const loaded = await this.#context(parent.Id, { draft: parent });
+    const assets = loaded.context.imageAssets, files = stateOwnedFiles(assets);
+    const ignoreRule = new DotIgnoreRule({ fileAccess: stateIgnoreFileAccess(assets, this.ignoreRule.fileAccess) });
+    const snapshots = new Map();
+    const snapshot = identityPath => {
+      const key = nativePathKey(identityPath);
+      if (!snapshots.has(key)) snapshots.set(key, (async () => {
+        const listing = await files.list(identityPath);
+        // This namespace is used only for direct-child provenance checks;
+        // every actual read is through the confined instance asset source.
+        const candidates = listing.entries.map(entry => ({ identityPath: entry.Path,
+          accessPath: entry.Path.replaceAll('\\', '/'), entry }));
+        return { listing, candidates };
+      })());
+      return snapshots.get(key);
+    };
+    const filter = async raw => ({ ...raw, candidates: await filterResolutionCandidates(raw.candidates, {
+      ignoreRule, parent, root, applicationRootPath: this.applicationRootPath }) });
+    const initial = await filter(await snapshot(parent.Path));
+    const resolution = await this.resolverPipeline.resolve({ parent, root, collectionContext,
+      candidates: initial.candidates, deletionSafe: true, onEnumerationReady,
+      peekDirectory: async (candidate, { forExtras = false } = {}) => {
+        const raw = await snapshot(candidate.identityPath);
+        return forExtras ? raw : filter(raw);
+      },
+      getExtraCandidates: async candidate => {
+        const raw = await snapshot(candidate?.identityPath ?? parent.Path);
+        return filter(raw);
+      },
+      resolveExtra: async ({ candidate }) => (await filterResolutionCandidates([candidate], {
+        ignoreRule, applicationRootPath: this.applicationRootPath })).length > 0 });
+    return Object.freeze({ ...resolution, deletionSafe: true });
+  }
+
+  async #isAccessibleTopParent(parent, allowRemoveRoot, resolvedParent) {
+    if (itemType(parent) !== 'PlaylistsFolder' && itemType(resolvedParent) !== 'AggregateFolder'
+      && parent.IsTopParent !== true && idKey(repositoryTopParentId(parent)) !== idKey(parent.Id)) return true;
     if (!allowRemoveRoot && (itemType(parent) === 'BoxSet'
       || nativeFileNameWithoutExtension(parent.Path)?.toLowerCase() === 'collections')) return true;
+    if (itemType(parent) === 'PlaylistsFolder') {
+      const loaded = await this.#context(parent.Id, { draft: parent });
+      try { return (await loaded.rootFolderResolveArgs(false)).files.length > 0; }
+      catch (error) {
+        if (['not-found', 'not-directory', 'permission-denied', 'authentication-required'].includes(error?.code)) return false;
+        throw error;
+      }
+    }
     const accessPath = this.#accessPath(parent);
     try { return (await this.vfs.list(accessPath)).entries.length > 0; }
     catch (error) {
@@ -310,24 +367,6 @@ export class FolderValidationService {
     } });
   }
 
-  async #reattachRemovedUserData(removed, valid, signal) {
-    if (removed.size === 0) return;
-    const matching = await this.store.run(async db => {
-      const removedKeys = new Set();
-      for (const item of removed.values()) {
-        for (const key of await userDataKeys(db, item)) removedKeys.add(key);
-      }
-      const children = [];
-      for (const child of valid.values()) {
-        if ((await userDataKeys(db, child)).some(key => removedKeys.has(key))) children.push(child);
-      }
-      return children;
-    }, { signal, readOnly: true, lockTimeoutMs: 250 });
-    // Native reattaches each valid child independently. A later failure or
-    // cancellation therefore retains deletions, creation and earlier moves.
-    for (const child of matching) await this.reattach(this.store, child, { signal });
-  }
-
   async #assertAcyclic(parent) {
     await this.store.run(async db => {
       const navigationRows = await loadPostgresNavigationRows(db, parent.Id);
@@ -355,51 +394,121 @@ export class FolderValidationService {
     catch { /* A progress observer cannot replace folder validation. */ }
   }
 
-  async #validateSubFolders(children, { collectionType, signal, reportProgress }) {
-    const folders = children.filter(child => child?.IsFolder === true);
-    if (!folders.length || signal?.aborted) {
-      this.#progress(reportProgress, 100);
-      return;
-    }
-    const requested = this.configuration.LibraryScanFanoutConcurrency ?? 0;
-    const limit = requested > 0 ? requested : Math.max(1, this.processors() - 3);
-    const current = validationWorkContext.getStore();
-    const nested = current?.owner === this && current.active === true;
-    const concurrency = nested ? 1 : Math.min(folders.length, limit);
-    const progress = Array(folders.length).fill(0);
-    const updateProgress = (index, value) => {
-      const rounded = Math.round(value);
-      if (progress[index] === rounded) return;
-      progress[index] = rounded;
-      this.#progress(reportProgress, progress.reduce((total, current) => total + current, 0) / folders.length);
-    };
-    let next = 0;
-    const worker = async () => {
-      while (next < folders.length) {
-        const index = next++, folder = folders[index];
-        if (signal?.aborted) {
-          updateProgress(index, 100);
-          continue;
+  async #reconcileChildren(parent, resolution, { signal, allowRemoveRoot, progress, needsChildren }) {
+    return this.store.run(session => withFolderValidationScope({
+      session, store: this.store, library: this.library,
+      linkedChildren: this.loadContext.linkedChildren, parent
+    }, async scope => {
+      progress(7);
+      throwIfAborted(signal);
+      const loaded = await this.#context(parent.Id, { draft: parent });
+      const entities = new Map(resolution.claims.map(claim => [idKey(claim.Id), this.#retain(claim.resolvedEntity ?? createResolvedItemEntity(claim, {
+        parent,
+        parents: loaded.parents,
+        metadataConfiguration: this.metadataConfiguration,
+        clock: this.clock
+      }))]));
+      await scope.checkClaims(resolution.claims, resolution.deletionSafe);
+      const created = [];
+      let processedChildren = 0;
+      const childProcessed = () => {
+        processedChildren++;
+        if (processedChildren % 25 === 0 || processedChildren === resolution.claims.length) {
+          progress(7 + processedChildren / resolution.claims.length);
         }
-        const work = { owner: this, active: true };
-        try {
-          await validationWorkContext.run(work, () => this.validateChildren(folder, {
-            collectionType,
-            signal,
-            recursive: true,
-            refreshChildMetadata: false,
-            allowRemoveRoot: false,
-            reportProgress: value => updateProgress(index, value)
-          }));
-        } catch (error) {
-          this.#report(error);
-        } finally {
-          work.active = false;
-          updateProgress(index, 100);
-        }
+      };
+      // Native lifecycles and same-path type replacement run in resolver order;
+      // remaining removals then precede the single new-sibling CreateItems batch.
+      for (const claim of resolution.claims) {
+        const entity = entities.get(idKey(claim.Id));
+        const ordinal = BigInt(processedChildren + 1);
+        await scope.withCurrent(claim.Id, async item => {
+          if (!await this.#isAccessibleTopParent(entity, allowRemoveRoot, parent)) {
+            if (item) await scope.valid(item, ordinal, false);
+            return;
+          }
+          if (item) {
+            await this.resolvedItemLifecycle.apply(item.Id, {
+              resolved: entity,
+              expected: resolvedItemStructuralSnapshot(item),
+              parent,
+              signal
+            });
+            await this.itemCreation.withItem(item.Id, refreshed => scope.valid(refreshed, ordinal, true));
+            return;
+          }
+          await scope.withPath(claim.identityPath, async replaced => {
+            if (replaced && idKey(replaced.Id) !== idKey(claim.Id)) {
+              await scope.forget(replaced);
+              replaced.ParentId = EMPTY_ID;
+              await this.library.deleteItem(replaced, { DeleteFileLocation: false }, parent, false);
+              await scope.removed(replaced);
+            }
+          });
+          created.push(entity);
+          await scope.valid(entity, ordinal, true);
+        });
+        childProcessed();
       }
-    };
-    await Promise.all(Array.from({ length: concurrency }, worker));
+      progress(8);
+      await scope.captureAlternatePaths();
+      await scope.eachRemoval(async item => {
+        if (item.CanDelete === false || item.IsRoot) return;
+        if (VIDEO_TYPES.has(item.Type)) {
+          if (item.Path && await scope.hasAlternate(item.Path)) return;
+          if (item.PrimaryVersionId == null && !nonemptyId(item.OwnerId)) {
+            const deferred = await scope.primaryFor(item.LocalAlternateVersions ?? [], async (_primary, slot) => {
+              item.ParentId = EMPTY_ID;
+              await scope.defer(item, slot);
+              return true;
+            });
+            if (deferred) return;
+          }
+        }
+        if (isFileProtocol(item)) {
+          await scope.removed(item); item.ParentId = EMPTY_ID;
+          await this.library.deleteItem(item, { DeleteFileLocation: false }, parent, false);
+        }
+      });
+      if (created.length) await this.library.createItems(created, parent, { signal });
+      await scope.eachDeferred(async (oldPrimary, newPrimary) => {
+        await this.#promoteVersion(newPrimary, signal);
+        await this.linkedChildReferences.reroute(oldPrimary.Id, newPrimary.Id);
+        await this.#transferVersions(oldPrimary, newPrimary, signal);
+        oldPrimary.LocalAlternateVersions = []; oldPrimary.LinkedAlternateVersions = [];
+        // DeleteItem consults persisted links even after these live arrays are
+        // cleared. Its independent promotion/save may therefore fail here.
+        await this.library.deleteItem(oldPrimary, { DeleteFileLocation: false }, parent, false);
+      });
+      await scope.eachDemotion(async oldPrimary => {
+        if (!VIDEO_TYPES.has(oldPrimary.Type) || nonemptyId(oldPrimary.OwnerId) || !oldPrimary.Path) return;
+        await scope.primaryFor([oldPrimary.Path], async newPrimary => {
+          await this.#promoteVersion(newPrimary, signal);
+          // Transfer owned versions first so clearing the old arrays cannot
+          // orphan-delete their rows from under the new primary.
+          await this.#transferVersions(oldPrimary, newPrimary, signal);
+          oldPrimary.LocalAlternateVersions = []; oldPrimary.LinkedAlternateVersions = [];
+          setPrimaryVersion(oldPrimary, newPrimary.Id); oldPrimary.OwnerId = newPrimary.Id;
+          await this.#updateVersion(oldPrimary, signal);
+          await this.linkedChildReferences.reroute(oldPrimary.Id, newPrimary.Id);
+        });
+      });
+      await scope.reattach(this.reattach, signal);
+      progress(9);
+      progress(10);
+      throwIfAborted(signal);
+      const children = needsChildren ? await scope.accessible() : null;
+      if (children) this.#ownership.getStore().push(() => children.close());
+      return { created, children };
+    }));
+  }
+
+  async #validateSubFolders(children, { collectionType, signal, reportProgress }) {
+    await this.scheduler.enqueue(children, (folder, progress) => this.validateChildren(folder, {
+      collectionType, signal, recursive: true, refreshChildMetadata: false, allowRemoveRoot: false,
+      reportProgress: progress
+    }), { signal, reportProgress: value => this.#progress(reportProgress, value),
+      predicate: child => child?.IsFolder === true, onError: error => this.#report(error) });
   }
 
   async validateChildren(parent, { collectionType, signal, recursive = false,
@@ -422,10 +531,10 @@ export class FolderValidationService {
 
   async #validateChildren(parent, { collectionType, signal, recursive,
     refreshChildMetadata, allowRemoveRoot, reportProgress, ...metadataRefreshOptions }) {
-    // Playlist overrides ValidateChildrenInternal with Task.CompletedTask.
+    // Playlist and CollectionFolder override validation with a completed task.
     // The outer Folder wrapper still clears children, without touching the
     // filesystem, persistence, refresh lifecycle, progress or cancellation.
-    if (itemType(parent) === 'Playlist' && parent?.IsFolder === true) {
+    if (['Playlist', 'CollectionFolder'].includes(itemType(parent)) && parent?.IsFolder === true) {
       releaseCachedFolderChildren(parent);
       return Object.freeze({ created: Object.freeze([]), resolved: Object.freeze([]), skipped: false });
     }
@@ -439,6 +548,10 @@ export class FolderValidationService {
     }
     if (typeof reportProgress !== 'function') throw new TypeError('Folder validation progress reporting must be a function.');
     if (signal !== undefined) metadataRefreshOptions.signal = signal;
+    const progress = value => {
+      this.#progress(reportProgress, value);
+      if (recursive) this.refreshes.reportProgress(parent, value);
+    };
     if (recursive) this.refreshes.reportStarted(parent);
     try {
       if (recursive) await this.#assertAcyclic(parent);
@@ -449,135 +562,30 @@ export class FolderValidationService {
         return Object.freeze({ created: Object.freeze([]), resolved: Object.freeze([]), skipped: true });
       }
       throwIfAborted(signal);
-      // Native ResolvePaths is fully materialized before current children are
-      // read, so a resolver/listing failure cannot observe a partially applied
-      // child set or start a persistence transaction.
+      // Native completes resolution and reads current children without the
+      // request token, then observes cancellation after reporting phase 7.
+      // Retrieval failures return before that second cancellation boundary.
       let resolution;
       try {
-        const { root, collectionContext } = await this.#collectionContext(parent, collectionType, signal);
-        resolution = await this.#resolve(parent, root, collectionContext, signal);
+        const { root, collectionContext } = await this.#collectionContext(parent, collectionType);
+        resolution = await this.#resolve(parent, root, collectionContext, () => {
+          progress(5);
+          progress(5.5);
+        });
+        if (resolution != null) progress(6);
       }
       catch (error) {
-        throwIfAborted(signal);
         this.#report(error);
         return Object.freeze({ created: Object.freeze([]), resolved: Object.freeze([]), skipped: true });
       }
-      throwIfAborted(signal);
       if (resolution == null) return Object.freeze({ created: Object.freeze([]), resolved: Object.freeze([]), skipped: true });
       if (resolution.withheldPaths.length > 0) {
         throw new StorageError('not-supported', 'Folder validation cannot persist a partial sibling batch with withheld paths.');
       }
-      const current = await this.#currentChildren(parent, signal);
-      const claims = new Map(resolution.claims.map(claim => [idKey(claim.Id), claim]));
-      const loaded = await this.#context(parent.Id, { draft: parent });
-      const entities = new Map(resolution.claims.map(claim => [idKey(claim.Id), this.#retain(createResolvedItemEntity(claim, {
-        parent,
-        parents: loaded.parents,
-        metadataConfiguration: this.metadataConfiguration,
-        clock: this.clock
-      }))]));
-      for (const item of current) {
-        const claim = claims.get(idKey(item.Id));
-        if (claim && (item.NativeType !== claim.nativeType || !sameNativePath(item.Path, claim.identityPath))) {
-          throw new StorageError('not-supported', 'Changing an existing folder child requires structural reconciliation.');
-        }
-      }
-      const currentById = new Map(current.map(item => [idKey(item.Id), item]));
-      const currentByPath = new Map();
-      for (const item of current) if (item.Path && !currentByPath.has(ordinalIgnoreCaseKey(item.Path))) currentByPath.set(ordinalIgnoreCaseKey(item.Path), item);
-      const stale = current.filter(item => !claims.has(idKey(item.Id)));
-      if (stale.some(item => isFileProtocol(item) && item.CanDelete !== false && !item.IsRoot) && !resolution.deletionSafe) {
-        throw new StorageError('not-supported', 'Removing folder children requires a strong complete directory snapshot.');
-      }
-      const created = [], valid = new Map(), accessible = new Map(), actuallyRemoved = new Map();
-      // Native lifecycles and same-path type replacement run in resolver order;
-      // remaining removals then precede the single new-sibling CreateItems batch.
-      for (const claim of resolution.claims) {
-        const item = currentById.get(idKey(claim.Id));
-        const entity = entities.get(idKey(claim.Id));
-        if (!await this.#isAccessibleTopParent(entity, allowRemoveRoot)) {
-          if (item) valid.set(idKey(item.Id), item);
-          continue;
-        }
-        if (item) {
-          await this.resolvedItemLifecycle.apply(item.Id, {
-            resolved: entity,
-            expected: resolvedItemStructuralSnapshot(item),
-            parent,
-            signal
-          });
-          const refreshed = this.#retain(await this.itemCreation.getItemById(item.Id));
-          valid.set(idKey(item.Id), refreshed);
-          accessible.set(idKey(item.Id), refreshed);
-          continue;
-        }
-        const replaced = currentByPath.get(ordinalIgnoreCaseKey(claim.identityPath));
-        if (replaced && idKey(replaced.Id) !== idKey(claim.Id)) {
-          currentById.delete(idKey(replaced.Id));
-          currentByPath.delete(ordinalIgnoreCaseKey(replaced.Path));
-          replaced.ParentId = EMPTY_ID;
-          await this.library.deleteItem(replaced, { DeleteFileLocation: false }, parent, false);
-          actuallyRemoved.set(idKey(replaced.Id), replaced);
-        }
-        created.push(entity);
-        valid.set(idKey(claim.Id), entity);
-        accessible.set(idKey(claim.Id), entity);
-      }
-      const validVideos = [...valid.values()].filter(item => VIDEO_TYPES.has(item.Type));
-      const alternatePaths = new Set(validVideos.flatMap(item => item.LocalAlternateVersions ?? [])
-        .filter(Boolean).map(ordinalIgnoreCaseKey));
-      const removed = [...currentById.values()].filter(item => !valid.has(idKey(item.Id))), replacedPrimaries = [];
-      for (const item of removed) {
-        if (item.CanDelete === false || item.IsRoot) continue;
-        if (VIDEO_TYPES.has(item.Type)) {
-          if (item.Path && alternatePaths.has(ordinalIgnoreCaseKey(item.Path))) continue;
-          const oldPaths = new Set((item.LocalAlternateVersions ?? []).filter(Boolean).map(ordinalIgnoreCaseKey));
-          if (item.PrimaryVersionId == null && !nonemptyId(item.OwnerId)
-            && [...oldPaths].some(value => alternatePaths.has(value))) {
-            const primary = validVideos.find(video => (video.LocalAlternateVersions ?? [])
-              .some(value => value && oldPaths.has(ordinalIgnoreCaseKey(value))));
-            if (primary) {
-              replacedPrimaries.push([item, primary]); actuallyRemoved.set(idKey(item.Id), item);
-              item.ParentId = EMPTY_ID;
-              continue;
-            }
-          }
-        }
-        if (isFileProtocol(item)) {
-          actuallyRemoved.set(idKey(item.Id), item); item.ParentId = EMPTY_ID;
-          await this.library.deleteItem(item, { DeleteFileLocation: false }, parent, false);
-        }
-      }
-      if (created.length) await this.library.createItems(created, parent, { signal });
-      for (const [oldPrimary, newPrimary] of replacedPrimaries) {
-        await this.#promoteVersion(newPrimary, signal);
-        await this.linkedChildReferences.reroute(oldPrimary.Id, newPrimary.Id);
-        await this.#transferVersions(oldPrimary, newPrimary, signal);
-        oldPrimary.LocalAlternateVersions = []; oldPrimary.LinkedAlternateVersions = [];
-        // DeleteItem consults persisted links even after these live arrays are
-        // cleared. Its independent promotion/save may therefore fail here.
-        await this.library.deleteItem(oldPrimary, { DeleteFileLocation: false }, parent, false);
-      }
-      for (const oldPrimary of removed) {
-        if (actuallyRemoved.has(idKey(oldPrimary.Id)) || !VIDEO_TYPES.has(oldPrimary.Type)
-          || nonemptyId(oldPrimary.OwnerId) || !oldPrimary.Path || !alternatePaths.has(ordinalIgnoreCaseKey(oldPrimary.Path))) continue;
-        const newPrimary = validVideos.find(item => (item.LocalAlternateVersions ?? [])
-          .some(value => value && ordinalIgnoreCaseKey(value) === ordinalIgnoreCaseKey(oldPrimary.Path)));
-        if (!newPrimary) continue;
-        await this.#promoteVersion(newPrimary, signal);
-        // Transfer owned versions first so clearing the old arrays cannot
-        // orphan-delete their rows from under the new primary.
-        await this.#transferVersions(oldPrimary, newPrimary, signal);
-        oldPrimary.LocalAlternateVersions = []; oldPrimary.LinkedAlternateVersions = [];
-        setPrimaryVersion(oldPrimary, newPrimary.Id); oldPrimary.OwnerId = newPrimary.Id;
-        await this.#updateVersion(oldPrimary, signal);
-        await this.linkedChildReferences.reroute(oldPrimary.Id, newPrimary.Id);
-      }
-      await this.#reattachRemovedUserData(actuallyRemoved, valid, signal);
-      this.#progress(reportProgress, 10);
-      if (recursive) this.refreshes.reportProgress(parent, 10);
-      throwIfAborted(signal);
-      if (recursive) await this.#validateSubFolders([...accessible.values()], {
+      const container = ['Series', 'MusicAlbum'].includes(itemType(parent));
+      const { created, children } = await this.#reconcileChildren(parent, resolution, { signal, allowRemoveRoot, progress,
+        needsChildren: recursive || refreshChildMetadata && !container });
+      if (recursive) await this.#validateSubFolders(children, {
         collectionType,
         signal,
         reportProgress: progress => {
@@ -594,16 +602,11 @@ export class FolderValidationService {
           this.#progress(reportProgress, value);
           if (recursive) this.refreshes.reportProgress(parent, value);
         };
-        if (['Series', 'MusicAlbum'].includes(itemType(parent))) {
+        if (container) {
           await this.metadataScanner.refreshContainer(parent.Id, metadataRefreshOptions, { reportProgress: progress });
         } else {
-          const cohort=await createNativeItemCohort({linkedChildren:this.loadContext.linkedChildren});
-          try {
-            let ordinal=0n;for(const child of accessible.values())await cohort.capture(child,{ordinal:++ordinal});
-            const sequence=metadataChildSequence(cohort,this.loadContext.linkedChildren,this.store);
-            try {await this.metadataScanner.refreshAccessibleChildren(sequence,metadataRefreshOptions,
-              {recursive,reportProgress:progress});} finally {await sequence.close();}
-          } finally {await cohort.release();}
+          await this.metadataScanner.refreshAccessibleChildren(children, metadataRefreshOptions,
+            { recursive, reportProgress: progress });
         }
       }
       return Object.freeze({ created: Object.freeze(created), resolved: resolution.claims });

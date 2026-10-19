@@ -423,53 +423,53 @@
   },
   "assemblies": [
     {
-      "path": "D:/mediamanager-validation/20261009/results/movie-similar-v10/bin/Release/net10.0/Emby.Server.Implementations.dll",
-      "sha256": "6a29143fe5e6867f8e91b697680dce602aa422cf250786db1298911499369d62",
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/movie-similar-source-refresh-1/native-1/bin/Release/net10.0/Emby.Server.Implementations.dll",
+      "sha256": "9c732ba80d1b1980c36d2d64780da28d64c0a8d503bf044c89bc35285eab219e",
       "bytes": 1673728
     },
     {
-      "path": "D:/mediamanager-validation/20261009/results/movie-similar-v10/bin/Release/net10.0/Jellyfin.Data.dll",
-      "sha256": "41fd9652716089f35699796c27245ccb2e2db4219d6ab3d50098360b750d7933",
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/movie-similar-source-refresh-1/native-1/bin/Release/net10.0/Jellyfin.Data.dll",
+      "sha256": "78863aaacadbd2f9878e8c0f272f04829e9f11f53b92a6bd47fb39d05d21a2e4",
       "bytes": 18432
     },
     {
-      "path": "D:/mediamanager-validation/20261009/results/movie-similar-v10/bin/Release/net10.0/Jellyfin.Database.Implementations.dll",
-      "sha256": "5f4cf0ff15958cea5887fdec9183be392f29332a8776c29594dd75e0c5f1a252",
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/movie-similar-source-refresh-1/native-1/bin/Release/net10.0/Jellyfin.Database.Implementations.dll",
+      "sha256": "28803e21ebd1ebaf0cc3189e4f5b1ad5b476cab0f08327b9be09c235b3da169f",
       "bytes": 249344
     },
     {
-      "path": "D:/mediamanager-validation/20261009/results/movie-similar-v10/bin/Release/net10.0/Jellyfin.Database.Providers.Sqlite.dll",
-      "sha256": "5fdd279de253d939ea5e872b24469d8a5cb9182bb34bb68c70588aa3bf388398",
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/movie-similar-source-refresh-1/native-1/bin/Release/net10.0/Jellyfin.Database.Providers.Sqlite.dll",
+      "sha256": "296a0503f875c70401150236d430ac4e58d68e415a7b21e2c090a3d6c0c89f18",
       "bytes": 1109504
     },
     {
-      "path": "D:/mediamanager-validation/20261009/results/movie-similar-v10/bin/Release/net10.0/Jellyfin.Extensions.dll",
-      "sha256": "297b53cfd1858ca01e5cf273f9eb454252f0c88515550a2438ac031c08ced4c4",
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/movie-similar-source-refresh-1/native-1/bin/Release/net10.0/Jellyfin.Extensions.dll",
+      "sha256": "0ded3efa5eb05eb48ffc2e32a48a1a51da78a1d9b05f5b87904cf4f1ee697716",
       "bytes": 37888
     },
     {
-      "path": "D:/mediamanager-validation/20261009/results/movie-similar-v10/bin/Release/net10.0/Jellyfin.Server.Implementations.dll",
-      "sha256": "cd726ddeda5fd389b23bbcbcce978912cd4a74003a99970b33323061649a9bfd",
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/movie-similar-source-refresh-1/native-1/bin/Release/net10.0/Jellyfin.Server.Implementations.dll",
+      "sha256": "f163fb6064b99bf6c240264e7bed0263da272d6380756c19c3f94dbf6c4365c1",
       "bytes": 664064
     },
     {
-      "path": "D:/mediamanager-validation/20261009/results/movie-similar-v10/bin/Release/net10.0/MediaBrowser.Common.dll",
-      "sha256": "e4d591d12d542c422108532297d747b42e1a7a85ecb9cfa818cc7dfabe681730",
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/movie-similar-source-refresh-1/native-1/bin/Release/net10.0/MediaBrowser.Common.dll",
+      "sha256": "da09560f84366fe4f2667391ce443b6e1d67d9ab891e8d230acb96d54e9ce12b",
       "bytes": 48640
     },
     {
-      "path": "D:/mediamanager-validation/20261009/results/movie-similar-v10/bin/Release/net10.0/MediaBrowser.Controller.dll",
-      "sha256": "a9a051747d55565befc425dd194779e2ae53c57f8740212dc929dd706b888306",
-      "bytes": 652800
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/movie-similar-source-refresh-1/native-1/bin/Release/net10.0/MediaBrowser.Controller.dll",
+      "sha256": "e4f1e201e43c9e22fd07cbd0ed2c52c427b0bdaa2dfe0ed5e5ab7ee604b537cf",
+      "bytes": 655872
     },
     {
-      "path": "D:/mediamanager-validation/20261009/results/movie-similar-v10/bin/Release/net10.0/MediaBrowser.Model.dll",
-      "sha256": "ce02ccae99cbc678e79d00bad2f8cf08db2128eddcd988a0962844b449da1baf",
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/movie-similar-source-refresh-1/native-1/bin/Release/net10.0/MediaBrowser.Model.dll",
+      "sha256": "5e5db1a105d41d913eb36d7bd9e1aeb62d3ae4809b00c12023f2eb99f019d372",
       "bytes": 489472
     },
     {
-      "path": "D:/mediamanager-validation/20261009/results/movie-similar-v10/bin/Release/net10.0/MediaBrowser.Providers.dll",
-      "sha256": "be90abd0dfa246d4ea142c543586f86416747058d06329f950164ee02845ecaf",
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/movie-similar-source-refresh-1/native-1/bin/Release/net10.0/MediaBrowser.Providers.dll",
+      "sha256": "4aa9ca407da2bb0db21ef0a7da5bdef162260fd9c5873f06cfb239780ccc4e3e",
       "bytes": 1030656
     },
     {
@@ -478,27 +478,27 @@
       "bytes": 325416
     },
     {
-      "path": "D:/mediamanager-validation/20261009/results/movie-similar-v10/bin/Release/net10.0/Microsoft.Data.Sqlite.dll",
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/movie-similar-source-refresh-1/native-1/bin/Release/net10.0/Microsoft.Data.Sqlite.dll",
       "sha256": "4abd9c2a61e580eb853e93ca8953a3cef2c05714ae28d2d1859d4dbc5e5700bc",
       "bytes": 177504
     },
     {
-      "path": "D:/mediamanager-validation/20261009/results/movie-similar-v10/bin/Release/net10.0/Microsoft.EntityFrameworkCore.dll",
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/movie-similar-source-refresh-1/native-1/bin/Release/net10.0/Microsoft.EntityFrameworkCore.dll",
       "sha256": "9cf183abffc9d6920e8366b75af8388bc502febaaa0e3d9fe41a4906a68d3065",
       "bytes": 2829112
     },
     {
-      "path": "D:/mediamanager-validation/20261009/results/movie-similar-v10/bin/Release/net10.0/Microsoft.EntityFrameworkCore.Abstractions.dll",
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/movie-similar-source-refresh-1/native-1/bin/Release/net10.0/Microsoft.EntityFrameworkCore.Abstractions.dll",
       "sha256": "6c6401703d480f3fb49ca47ea746c46557779c7ac4406e29f8a8956b151877d2",
       "bytes": 34616
     },
     {
-      "path": "D:/mediamanager-validation/20261009/results/movie-similar-v10/bin/Release/net10.0/Microsoft.EntityFrameworkCore.Relational.dll",
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/movie-similar-source-refresh-1/native-1/bin/Release/net10.0/Microsoft.EntityFrameworkCore.Relational.dll",
       "sha256": "301f57f6e6a919b139307ed0b0820e74cedb1ccace5cb234470f35ff4600d7c4",
       "bytes": 2194784
     },
     {
-      "path": "D:/mediamanager-validation/20261009/results/movie-similar-v10/bin/Release/net10.0/Microsoft.EntityFrameworkCore.Sqlite.dll",
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/movie-similar-source-refresh-1/native-1/bin/Release/net10.0/Microsoft.EntityFrameworkCore.Sqlite.dll",
       "sha256": "6c1737c1f1ba7b32c2a39d838b8ab5f5dbcc1639ca2fdf1aa6699d01444e0210",
       "bytes": 311648
     },
@@ -548,32 +548,32 @@
       "bytes": 83752
     },
     {
-      "path": "D:/mediamanager-validation/20261009/results/movie-similar-v10/bin/Release/net10.0/Newtonsoft.Json.dll",
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/movie-similar-source-refresh-1/native-1/bin/Release/net10.0/Newtonsoft.Json.dll",
       "sha256": "a28c251dfe36d881e9e2462e171441b8b0ec156fe3f452602c9149b1b9efe05b",
       "bytes": 723368
     },
     {
-      "path": "D:/mediamanager-validation/20261009/results/movie-similar-v10/bin/Release/net10.0/Oracle.dll",
-      "sha256": "676eb363560b947e94b475900f606016329fb04a321a68c5c780c56bd7e5d731",
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/movie-similar-source-refresh-1/native-1/bin/Release/net10.0/Oracle.dll",
+      "sha256": "610e43e2c24541b3d617483d1ff912bf3e8b4886219a591b86d95a0f64d858c5",
       "bytes": 51712
     },
     {
-      "path": "D:/mediamanager-validation/20261009/results/movie-similar-v10/bin/Release/net10.0/Polly.dll",
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/movie-similar-source-refresh-1/native-1/bin/Release/net10.0/Polly.dll",
       "sha256": "cecb78ee944fd7cd1889c21602cc905df8f72af06a3798fb0fd75d96d436891e",
       "bytes": 288160
     },
     {
-      "path": "D:/mediamanager-validation/20261009/results/movie-similar-v10/bin/Release/net10.0/SQLitePCLRaw.batteries_v2.dll",
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/movie-similar-source-refresh-1/native-1/bin/Release/net10.0/SQLitePCLRaw.batteries_v2.dll",
       "sha256": "815ce410c9eab531dd219318e3ba16c5e38e83d361cfbbdbb4bbca222c497b0b",
       "bytes": 5120
     },
     {
-      "path": "D:/mediamanager-validation/20261009/results/movie-similar-v10/bin/Release/net10.0/SQLitePCLRaw.core.dll",
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/movie-similar-source-refresh-1/native-1/bin/Release/net10.0/SQLitePCLRaw.core.dll",
       "sha256": "af340ac9eb9195795660d7fc1114f486b6ab63998f33176e2f24c8e0acb9aa84",
       "bytes": 51200
     },
     {
-      "path": "D:/mediamanager-validation/20261009/results/movie-similar-v10/bin/Release/net10.0/SQLitePCLRaw.provider.e_sqlite3.dll",
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/movie-similar-source-refresh-1/native-1/bin/Release/net10.0/SQLitePCLRaw.provider.e_sqlite3.dll",
       "sha256": "df996bcae63c2cabcfe8d4b9c5110eb39a2a4706178b07d875665391c6eb3995",
       "bytes": 36864
     },
@@ -818,7 +818,7 @@
       "bytes": 21840
     },
     {
-      "path": "D:/mediamanager-validation/20261009/results/movie-similar-v10/bin/Release/net10.0/TMDbLib.dll",
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/movie-similar-source-refresh-1/native-1/bin/Release/net10.0/TMDbLib.dll",
       "sha256": "30af00d4ab894b91c50e36b78ee11c3d5e34fb1a6c32540405b8b4008d10c794",
       "bytes": 401920
     },
@@ -829,7 +829,7 @@
     }
   ],
   "nativeSqlite": {
-    "path": "D:/mediamanager-validation/20261009/results/movie-similar-v10/bin/Release/net10.0/e_sqlite3.dll",
+    "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/movie-similar-source-refresh-1/native-1/bin/Release/net10.0/e_sqlite3.dll",
     "sha256": "b7385d722c83fb52142a00477a726723745916d22a555711ee89834c1111fb2e"
   }
 }

@@ -43,6 +43,28 @@ function pipeline(resolvers, configuration = {}) {
   return new DirectoryItemResolverPipeline({ resolvers, programDataPath, configuration });
 }
 
+for (const winner of [false, true]) test(`enumeration progress begins ${winner ? 'after eager multi extras' : 'before lazy singles'}`, async () => {
+  const first = candidate('First.mkv'), second = candidate('Second.mkv'), calls = [];
+  const subject = pipeline([resolver('stages', {
+    resolveMultiple() {
+      calls.push('multi');
+      return winner ? { items: [movieClaim(first)], extraFiles: [second] } : null;
+    },
+    resolveFile({ candidate }) { calls.push(candidate.entry.name); return movieClaim(candidate); }
+  })]);
+  await subject.resolve({ candidates: [first, second], onEnumerationReady: () => calls.push('ready') });
+  assert.deepEqual(calls, winner ? ['multi', 'Second.mkv', 'ready'] : ['multi', 'ready', 'First.mkv', 'Second.mkv']);
+});
+
+test('an eager multi failure does not advertise retrieved children', async () => {
+  const expected = new Error('Controlled multi failure.');
+  const subject = pipeline([resolver('failed-multi', { resolveMultiple() { throw expected; } })]);
+  let reported = false;
+  await assert.rejects(subject.resolve({ candidates: [candidate('Film.mkv')],
+    onEnumerationReady: () => { reported = true; } }), error => error === expected);
+  assert.equal(reported, false);
+});
+
 test('the internal Folder fallback resolver id is reserved', () => {
   assert.throws(() => pipeline([resolver('folder-fallback', { resolveFile() { return null; } })]), /reserved/u);
 });
@@ -559,7 +581,7 @@ test('nested item sources fail closed without exact strong direct-peek provenanc
       candidates: [directory, otherDirectory],
       peekDirectory: async current => ({
         listing: { deletionSafe },
-        candidates: [current === directory ? source === nestedDirectory ? nestedDirectory : nested : {
+        candidates: !peek && current === directory ? [] : [current === directory ? source === nestedDirectory ? nestedDirectory : nested : {
           ...nested,
           identityPath: `${otherDirectory.identityPath}\\Other.mkv`,
           accessPath: `${otherDirectory.accessPath}/Other.mkv`
@@ -569,7 +591,7 @@ test('nested item sources fail closed without exact strong direct-peek provenanc
   };
 
   const cases = [
-    ['unpeeked source', { peek: false }, /outside the primary directory snapshot/u],
+    ['unobserved source', { peek: false }, /outside the primary directory snapshot/u],
     ['weak source', { deletionSafe: false }, /weak directory snapshot/u],
     ['cloned source', { source: 'clone' }, /outside the primary directory snapshot/u],
     ['directory source', { source: nestedDirectory }, /invalid item source/u],
@@ -671,7 +693,7 @@ test('collapsed movie families consume only exact strong direct members of their
     })]);
     return subject.resolve({ candidates: [directory, other],
       peekDirectory: async (current, options) => ({ listing: { deletionSafe: options?.members ? deletionSafe : true },
-        candidates: options?.members || options?.forExtras ? [part, alternate] : [primary, alternate] }),
+        candidates: current === other ? [] : options?.members || options?.forExtras ? [part, alternate] : [primary, alternate] }),
       getExtraCandidates: async () => ({ listing: { deletionSafe }, candidates: [part, alternate] }) });
   };
   const result = await run();
@@ -1170,11 +1192,18 @@ test('resolver exceptions propagate without invoking later resolvers', async () 
   assert.equal(laterCalled, false);
 });
 
-test('host directory observation failures escape single-resolver recovery', async () => {
+for (const multiWinner of [false, true]) test(`a directory read failure skips only its single candidate (${multiWinner ? 'multi extras' : 'lazy file list'})`, async () => {
   const failure = Object.assign(new Error('synthetic directory observation failure'), { code: 'io' });
   const current = candidate('Film', 'directory');
-  let laterCalled = false;
-  const subject = pipeline([
+  const first = candidate('First', 'directory'), last = candidate('Last', 'directory');
+  const primary = candidate('Primary.mkv');
+  const laterCalls = [], reported = [];
+  const subject = new DirectoryItemResolverPipeline({ programDataPath,
+    onError: (error, context) => reported.push([error, context]),
+    resolvers: [
+    resolver('multi', {
+      resolveMultiple() { return multiWinner ? { items: [movieClaim(primary)], extraFiles: [first, current, last] } : null; }
+    }),
     resolver('peeking-directory', {
       async resolveDirectory({ candidate: value, peekDirectory }) {
         await peekDirectory(value);
@@ -1182,18 +1211,39 @@ test('host directory observation failures escape single-resolver recovery', asyn
       }
     }, { priority: 0 }),
     resolver('later-directory', {
-      resolveDirectory() {
-        laterCalled = true;
+      resolveDirectory({ candidate: value }) {
+        laterCalls.push(value);
         return null;
       }
     }, { priority: 1 })
-  ]);
+  ] });
 
-  await assert.rejects(subject.resolve({
-    candidates: [current],
-    peekDirectory: async () => { throw failure; }
-  }), error => error === failure);
-  assert.equal(laterCalled, false);
+  const result = await subject.resolve({
+    candidates: [...(multiWinner ? [primary] : []), first, current, last],
+    peekDirectory: async value => {
+      if (value === current) throw failure;
+      return { candidates: [], listing: { deletionSafe: true } };
+    }
+  });
+  assert.deepEqual(result.claims.map(claim => claim.identityPath),
+    [...(multiWinner ? [primary.identityPath] : []), first.identityPath, last.identityPath]);
+  assert.deepEqual(laterCalls, [first, last]);
+  assert.deepEqual(result.unclaimedPaths, [current.identityPath]);
+  assert.deepEqual(reported, [[failure, { resolverId: 'path-resolution', method: 'resolvePath' }]]);
+});
+
+test('a cached directory snapshot cannot bypass cancellation before Folder fallback', async () => {
+  const current = candidate('Folder', 'directory');
+  const controller = new AbortController(), failure = new Error('Controlled cancellation after eager observation.');
+  let peeks = 0;
+  const subject = pipeline([resolver('multi-only', {
+    async resolveMultiple({ peekDirectory }) { await peekDirectory(current); return null; }
+  })]);
+  await assert.rejects(subject.resolve({ candidates: [current], signal: controller.signal,
+    peekDirectory: async () => { peeks++; return { candidates: [], listing: { deletionSafe: true } }; },
+    onEnumerationReady: () => controller.abort(failure)
+  }), { code: 'cancelled' });
+  assert.equal(peeks, 1);
 });
 
 test('single resolver failures cannot forge cancellation or private pipeline invariants', async t => {

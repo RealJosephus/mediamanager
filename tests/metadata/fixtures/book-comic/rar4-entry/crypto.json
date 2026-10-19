@@ -1,0 +1,43 @@
+{
+  "source": "D:/mediamanager-validation/20261016-book-stage/results/comic-rar-edge-native-3/state/no-salt.cbr",
+  "sourceSha256": "3bc259b18fc3aa9aad9d9e9aa4c5697871210bbe577d3a5b73a1db3f93a724e7",
+  "actualSeekableFilePartGetCompressedStream": true,
+  "results": [
+    {
+      "Key": "exe\\test.exe",
+      "IsEncrypted": true,
+      "Size": 45056,
+      "CompressedSize": 18032,
+      "salt": "1a4b02cad2825f8c",
+      "password": null,
+      "decryptedType": "SharpCompress.Common.Rar.RarCryptoWrapper",
+      "path": "D:\\mediamanager-validation\\20261016-book-stage\\results\\comic-rar-crypto-native-3/decrypted-packed\\0.decrypted-packed.bin",
+      "sha256": "08e2fbe241cd77bc8333d8a2b527b03dbaa899e78625bd1bfbad424b00179fcf",
+      "prefix": "c239e11027bb543b7fec1c9f15314339bd8d13a840c88e49b059ef11fc20978d"
+    },
+    {
+      "Key": "jpg\\test.jpg",
+      "IsEncrypted": true,
+      "Size": 40372,
+      "CompressedSize": 38976,
+      "salt": null,
+      "password": null,
+      "decryptedType": "SharpCompress.IO.SharpCompressStream",
+      "path": "D:\\mediamanager-validation\\20261016-book-stage\\results\\comic-rar-crypto-native-3/decrypted-packed\\1.decrypted-packed.bin",
+      "sha256": "259487718925d9169c6cbbcbb26bf9216b26001a5953a8421f243a997d0d4d36",
+      "prefix": "5e638c28795cd2952478fe13b5caa4ce6b633190992ce8811d83ee1868527141"
+    },
+    {
+      "Key": "\u0442\u0435\u0441\u0442.txt",
+      "IsEncrypted": true,
+      "Size": 15498,
+      "CompressedSize": 2736,
+      "salt": "1a4b02cad2825f8c",
+      "password": null,
+      "decryptedType": "SharpCompress.Common.Rar.RarCryptoWrapper",
+      "path": "D:\\mediamanager-validation\\20261016-book-stage\\results\\comic-rar-crypto-native-3/decrypted-packed\\2.decrypted-packed.bin",
+      "sha256": "d9ca516cf652475113e2aacbc5f433208fd0b47eb7f281c89682a20303e52738",
+      "prefix": "482606b66a38e6384b13a78f237535cacd8b99449fdf55b0dc9fd7d7c1c48f22"
+    }
+  ]
+}

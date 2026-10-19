@@ -1,0 +1,2324 @@
+{
+  "scope": "Fresh real compound Book/Photo native global pipeline, 14 cases and 61 scans. Semantic projection only, not full release acceptance.",
+  "rawRecording": {
+    "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/native.json",
+    "bytes": 50498175,
+    "sha256": "d996894924383f11a3b19317d6f8647bc650d25f1b409e1913b7f6928ef03a6c",
+    "required": true
+  },
+  "input": {
+    "path": "D:/mediamanager/tests/library/fixtures/book-photo-global/input.json",
+    "bytes": 19361,
+    "sha256": "737b6af781128153b75229c41e83eb4fec76d6e98ac25a06c50ff8f11b807be0",
+    "required": true
+  },
+  "native": {
+    "path": "D:/mediamanager/tests/library/fixtures/book-photo-global/native.json",
+    "bytes": 119858,
+    "sha256": "665b824cbbbdf62ee78c229864cdee766e4c39b7df65a2aeb91a7d656cbe5a00",
+    "required": true
+  },
+  "receipt": {
+    "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-seal-2/receipt.json",
+    "bytes": 105285,
+    "sha256": "a81fd1deebc1c18eb4ed0d9458773e298f9449ff524a6008c94e866400024941",
+    "required": true
+  },
+  "requiredInputs": [
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-seal-2/receipt.json",
+      "bytes": 105285,
+      "sha256": "a81fd1deebc1c18eb4ed0d9458773e298f9449ff524a6008c94e866400024941",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/native.json",
+      "bytes": 50498175,
+      "sha256": "d996894924383f11a3b19317d6f8647bc650d25f1b409e1913b7f6928ef03a6c",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/record.json",
+      "bytes": 5109,
+      "sha256": "1f7a143a1173c9885c1eb0516676d09b0b4c72c483c7c62ad444f3b0c61eaaaa",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/build.stdout.txt",
+      "bytes": 382,
+      "sha256": "75ba5bbcbb32deaaa3dee01e452f4c9b3fe392d90536a9b7dc01e544ed2a97f4",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/build.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/stdout.txt",
+      "bytes": 122,
+      "sha256": "519432d97a35d3e840f71e0e6228eddb177b98e52b0ea6135a5286c4865d101b",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/project/Oracle.csproj",
+      "bytes": 1008,
+      "sha256": "637150aa6013c23c2c66248d8013915268c6b5c8253b1aafb0cd0fb5ed301d58",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/tests/library/fixtures/book-photo-global/Oracle.csproj",
+      "bytes": 1008,
+      "sha256": "637150aa6013c23c2c66248d8013915268c6b5c8253b1aafb0cd0fb5ed301d58",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/project/Directory.Build.props",
+      "bytes": 780,
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/tests/library/fixtures/book-photo-global/Directory.Build.props",
+      "bytes": 780,
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/project/BookPhotoProviders.cs",
+      "bytes": 4823,
+      "sha256": "018b7f1e0ad2f9531c5d467a2ea302803b6a9569821c861ba3e1b4d860ff3d7b",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/tests/library/fixtures/book-photo-global/BookPhotoProviders.cs",
+      "bytes": 4823,
+      "sha256": "018b7f1e0ad2f9531c5d467a2ea302803b6a9569821c861ba3e1b4d860ff3d7b",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/project/Program.cs",
+      "bytes": 10510,
+      "sha256": "a0173ae400cf9df3800ed386b3142ed8de3bf49b0a9c3971a7d2c608e4cd4a00",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/tests/library/fixtures/book-photo-global/Program.cs",
+      "bytes": 10510,
+      "sha256": "a0173ae400cf9df3800ed386b3142ed8de3bf49b0a9c3971a7d2c608e4cd4a00",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/project/NativeScanHost.cs",
+      "bytes": 32232,
+      "sha256": "7b2e629fac51b99f0a86883cc540a9fdf82db4ea116d6692191506751585f157",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/tests/library/fixtures/book-photo-global/NativeScanHost.cs",
+      "bytes": 32232,
+      "sha256": "7b2e629fac51b99f0a86883cc540a9fdf82db4ea116d6692191506751585f157",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/Emby.Photos/PhotoProvider.cs",
+      "bytes": 6622,
+      "sha256": "4c8561f0b08a663224937759c1cd1135e9987a6b6d7c476419bd7f906c0730f5",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Emby.Photos/PhotoProvider.cs",
+      "bytes": 6622,
+      "sha256": "4c8561f0b08a663224937759c1cd1135e9987a6b6d7c476419bd7f906c0730f5",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/Emby.Photos/Properties/AssemblyInfo.cs",
+      "bytes": 960,
+      "sha256": "9096315971f6f9592869de5d6ffb8370a061271e2dd870449796d0930fa94900",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Emby.Photos/Properties/AssemblyInfo.cs",
+      "bytes": 960,
+      "sha256": "9096315971f6f9592869de5d6ffb8370a061271e2dd870449796d0930fa94900",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/Emby.Server.Implementations/ApplicationHost.cs",
+      "bytes": 42960,
+      "sha256": "11119ed0761ae8fdf4e0fa6f9cae175c969ff0b1f563a43f4dc013617fc9c5ef",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Emby.Server.Implementations/ApplicationHost.cs",
+      "bytes": 42960,
+      "sha256": "11119ed0761ae8fdf4e0fa6f9cae175c969ff0b1f563a43f4dc013617fc9c5ef",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/Emby.Server.Implementations/IO/ManagedFileSystem.cs",
+      "bytes": 27461,
+      "sha256": "280ea08cf13065d8cd3790edf551b28ddfc9f352f4758d4fe0e62a55dbe0b14e",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Emby.Server.Implementations/IO/ManagedFileSystem.cs",
+      "bytes": 27461,
+      "sha256": "280ea08cf13065d8cd3790edf551b28ddfc9f352f4758d4fe0e62a55dbe0b14e",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/Emby.Server.Implementations/IO/MbLinkShortcutHandler.cs",
+      "bytes": 954,
+      "sha256": "f1b08e5d84e036d0d2b58959e080745e8049e0e0233134fdc1113da58a522afd",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Emby.Server.Implementations/IO/MbLinkShortcutHandler.cs",
+      "bytes": 954,
+      "sha256": "f1b08e5d84e036d0d2b58959e080745e8049e0e0233134fdc1113da58a522afd",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/Emby.Server.Implementations/Images/BaseDynamicImageProvider.cs",
+      "bytes": 11108,
+      "sha256": "5ae8c13987a0f86202ed4c501f2d07a5a37a69a625d8eb1ad24c7e80327b4da7",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Emby.Server.Implementations/Images/BaseDynamicImageProvider.cs",
+      "bytes": 11108,
+      "sha256": "5ae8c13987a0f86202ed4c501f2d07a5a37a69a625d8eb1ad24c7e80327b4da7",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/Emby.Server.Implementations/Images/BaseFolderImageProvider.cs",
+      "bytes": 2323,
+      "sha256": "a1e8b6934ba7f334898928cce6c81b9f118a0ac92a52c357be378a2b649d1f17",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Emby.Server.Implementations/Images/BaseFolderImageProvider.cs",
+      "bytes": 2323,
+      "sha256": "a1e8b6934ba7f334898928cce6c81b9f118a0ac92a52c357be378a2b649d1f17",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/Emby.Server.Implementations/Images/PhotoAlbumImageProvider.cs",
+      "bytes": 717,
+      "sha256": "27838d005c4c38721087c5c3cdf4621db2e172b7f1195cd53f42c3f432cfaa71",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Emby.Server.Implementations/Images/PhotoAlbumImageProvider.cs",
+      "bytes": 717,
+      "sha256": "27838d005c4c38721087c5c3cdf4621db2e172b7f1195cd53f42c3f432cfaa71",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/Emby.Server.Implementations/Library/LibraryManager.cs",
+      "bytes": 157087,
+      "sha256": "4729de97560262702a44c5829bf93bbc5deec379e9b3018b231aaa6d65643c44",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Emby.Server.Implementations/Library/LibraryManager.cs",
+      "bytes": 157087,
+      "sha256": "4729de97560262702a44c5829bf93bbc5deec379e9b3018b231aaa6d65643c44",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/Emby.Server.Implementations/Library/Resolvers/Books/BookResolver.cs",
+      "bytes": 2875,
+      "sha256": "3d4eb7f09a9f208ad53ea9d182f8c15ce7dfda435c07cc7219829745a6015453",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Emby.Server.Implementations/Library/Resolvers/Books/BookResolver.cs",
+      "bytes": 2875,
+      "sha256": "3d4eb7f09a9f208ad53ea9d182f8c15ce7dfda435c07cc7219829745a6015453",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/Emby.Server.Implementations/Library/Resolvers/PhotoAlbumResolver.cs",
+      "bytes": 3077,
+      "sha256": "6d32be589ad7806712a1495e3e8659dc2918232ac1ad7e07d97831630643b6c6",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Emby.Server.Implementations/Library/Resolvers/PhotoAlbumResolver.cs",
+      "bytes": 3077,
+      "sha256": "6d32be589ad7806712a1495e3e8659dc2918232ac1ad7e07d97831630643b6c6",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/Emby.Server.Implementations/Library/Resolvers/PhotoResolver.cs",
+      "bytes": 4405,
+      "sha256": "488461be2dd8d2199a05e17c5a252f08cdb9522f65715b531430887119ef02b3",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Emby.Server.Implementations/Library/Resolvers/PhotoResolver.cs",
+      "bytes": 4405,
+      "sha256": "488461be2dd8d2199a05e17c5a252f08cdb9522f65715b531430887119ef02b3",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/Jellyfin.Server.Implementations/Item/BaseItemRepository.cs",
+      "bytes": 9940,
+      "sha256": "05c7bab92d023931d165d462a244701980d0c2b7c1f12fb9129f2e55a5487798",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server.Implementations/Item/BaseItemRepository.cs",
+      "bytes": 9940,
+      "sha256": "05c7bab92d023931d165d462a244701980d0c2b7c1f12fb9129f2e55a5487798",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/Jellyfin.Server.Implementations/Item/ItemPersistenceService.cs",
+      "bytes": 33110,
+      "sha256": "df64ede4e72fca107cb86127e44b4c81321b3cf560ea3b7f0eccf4462f148d14",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server.Implementations/Item/ItemPersistenceService.cs",
+      "bytes": 33110,
+      "sha256": "df64ede4e72fca107cb86127e44b4c81321b3cf560ea3b7f0eccf4462f148d14",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/Jellyfin.Server/CoreAppHost.cs",
+      "bytes": 5682,
+      "sha256": "4bfe4b08ba183d83b02b887c50e011ee27ab2b15a7364c20fb1dc57b64766c4d",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/CoreAppHost.cs",
+      "bytes": 5682,
+      "sha256": "4bfe4b08ba183d83b02b887c50e011ee27ab2b15a7364c20fb1dc57b64766c4d",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/MediaBrowser.Controller/Entities/AggregateFolder.cs",
+      "bytes": 7278,
+      "sha256": "94f28ac08c6542de3541e8490d53381131d223826fbfadb43dd67a3a5afa08aa",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Controller/Entities/AggregateFolder.cs",
+      "bytes": 7278,
+      "sha256": "94f28ac08c6542de3541e8490d53381131d223826fbfadb43dd67a3a5afa08aa",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/MediaBrowser.Controller/Entities/BaseItem.cs",
+      "bytes": 105800,
+      "sha256": "9dc7b96a93c9fbe874cdcededdca395b5aa2df6070f5cfc9c8959539dcd76469",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Controller/Entities/BaseItem.cs",
+      "bytes": 105800,
+      "sha256": "9dc7b96a93c9fbe874cdcededdca395b5aa2df6070f5cfc9c8959539dcd76469",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/MediaBrowser.Controller/Entities/CollectionFolder.cs",
+      "bytes": 13354,
+      "sha256": "6250b085fafa9adbaa153063ef2abccbde20a2b04f372dbbc8fa80ee73151487",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Controller/Entities/CollectionFolder.cs",
+      "bytes": 13354,
+      "sha256": "6250b085fafa9adbaa153063ef2abccbde20a2b04f372dbbc8fa80ee73151487",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/MediaBrowser.Controller/Entities/Folder.cs",
+      "bytes": 83390,
+      "sha256": "d5f227d462ce3c2df0d5a45d912778427f87321fc9d6e13d863ec28bb639e0c1",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Controller/Entities/Folder.cs",
+      "bytes": 83390,
+      "sha256": "d5f227d462ce3c2df0d5a45d912778427f87321fc9d6e13d863ec28bb639e0c1",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/MediaBrowser.Controller/Entities/UserRootFolder.cs",
+      "bytes": 5120,
+      "sha256": "7c0349155c4959d5e6fb95d613739f88991cad85c7e3019104a0f76c80e48d4c",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Controller/Entities/UserRootFolder.cs",
+      "bytes": 5120,
+      "sha256": "7c0349155c4959d5e6fb95d613739f88991cad85c7e3019104a0f76c80e48d4c",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/MediaBrowser.Controller/IO/FileData.cs",
+      "bytes": 4160,
+      "sha256": "0df3e4678a1ef3ed21e7e74b1f3f7d828fc62104d6d394d2c3ca555fcdb41184",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Controller/IO/FileData.cs",
+      "bytes": 4160,
+      "sha256": "0df3e4678a1ef3ed21e7e74b1f3f7d828fc62104d6d394d2c3ca555fcdb41184",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/MediaBrowser.Controller/Library/ItemResolveArgs.cs",
+      "bytes": 10009,
+      "sha256": "6ccba267faebc220fbe374550eed30921a57587831c2b18d5484364e28032a25",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Controller/Library/ItemResolveArgs.cs",
+      "bytes": 10009,
+      "sha256": "6ccba267faebc220fbe374550eed30921a57587831c2b18d5484364e28032a25",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/MediaBrowser.Controller/LibraryTaskScheduler/LimitedConcurrencyLibraryScheduler.cs",
+      "bytes": 14480,
+      "sha256": "6f12fba06b37eafd31b1f50e02b9c01e0c2459771e8246c11a0fe7c1cfc46ba8",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Controller/LibraryTaskScheduler/LimitedConcurrencyLibraryScheduler.cs",
+      "bytes": 14480,
+      "sha256": "6f12fba06b37eafd31b1f50e02b9c01e0c2459771e8246c11a0fe7c1cfc46ba8",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/MediaBrowser.Controller/Providers/DirectoryService.cs",
+      "bytes": 6936,
+      "sha256": "46d8feb177e5eeb9332d1bd5d355c33e592fb41ae0ebccf83e7150548ad0b711",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Controller/Providers/DirectoryService.cs",
+      "bytes": 6936,
+      "sha256": "46d8feb177e5eeb9332d1bd5d355c33e592fb41ae0ebccf83e7150548ad0b711",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/MediaBrowser.Providers/Books/AudioBookMetadataService.cs",
+      "bytes": 2610,
+      "sha256": "297af9113d4c3d72826576643a0f47c9f2805233b3ecc2e609f17b036bb8f663",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Providers/Books/AudioBookMetadataService.cs",
+      "bytes": 2610,
+      "sha256": "297af9113d4c3d72826576643a0f47c9f2805233b3ecc2e609f17b036bb8f663",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/MediaBrowser.Providers/Books/BookMetadataService.cs",
+      "bytes": 2338,
+      "sha256": "39aa2a318535814ad94d88be202fa20f12515caca6a3f9ea85b3ff957fd659bc",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Providers/Books/BookMetadataService.cs",
+      "bytes": 2338,
+      "sha256": "39aa2a318535814ad94d88be202fa20f12515caca6a3f9ea85b3ff957fd659bc",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/MediaBrowser.Providers/Books/ComicBookInfo/ComicBookInfoProvider.cs",
+      "bytes": 8222,
+      "sha256": "f23c7bef9f88beac6308a31095e830fd2b11fa6b3e4fe4e93c3fe6f95e0341ef",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Providers/Books/ComicBookInfo/ComicBookInfoProvider.cs",
+      "bytes": 8222,
+      "sha256": "f23c7bef9f88beac6308a31095e830fd2b11fa6b3e4fe4e93c3fe6f95e0341ef",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/MediaBrowser.Providers/Books/ComicBookInfo/Models/ComicBookInfoCredit.cs",
+      "bytes": 479,
+      "sha256": "912de633fb485a5c27dbe96c6881595b5709910fcb34ae6b41de4286fb8ad6df",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Providers/Books/ComicBookInfo/Models/ComicBookInfoCredit.cs",
+      "bytes": 479,
+      "sha256": "912de633fb485a5c27dbe96c6881595b5709910fcb34ae6b41de4286fb8ad6df",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/MediaBrowser.Providers/Books/ComicBookInfo/Models/ComicBookInfoFormat.cs",
+      "bytes": 681,
+      "sha256": "09f821234407f38a7e6184acc89ad7f9795ab1ab1af3c4edd207d539d3380ab5",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Providers/Books/ComicBookInfo/Models/ComicBookInfoFormat.cs",
+      "bytes": 681,
+      "sha256": "09f821234407f38a7e6184acc89ad7f9795ab1ab1af3c4edd207d539d3380ab5",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/MediaBrowser.Providers/Books/ComicBookInfo/Models/ComicBookInfoMetadata.cs",
+      "bytes": 2787,
+      "sha256": "d4853e920e4373cefaf655254b6325de67a7c36e53b700b2cb124a4185f9b98f",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Providers/Books/ComicBookInfo/Models/ComicBookInfoMetadata.cs",
+      "bytes": 2787,
+      "sha256": "d4853e920e4373cefaf655254b6325de67a7c36e53b700b2cb124a4185f9b98f",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/MediaBrowser.Providers/Books/ComicImageProvider.cs",
+      "bytes": 5794,
+      "sha256": "1bd032fe8eed1a7a2105202cb688b5243d872acd856087f0123d19a776a0c524",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Providers/Books/ComicImageProvider.cs",
+      "bytes": 5794,
+      "sha256": "1bd032fe8eed1a7a2105202cb688b5243d872acd856087f0123d19a776a0c524",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/MediaBrowser.Providers/Books/ComicInfo/ComicInfoReader.cs",
+      "bytes": 7881,
+      "sha256": "8ce2e1c66f5d94569b4ac88b427c24c7414609a93bd09283f3244d93bb01b276",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Providers/Books/ComicInfo/ComicInfoReader.cs",
+      "bytes": 7881,
+      "sha256": "8ce2e1c66f5d94569b4ac88b427c24c7414609a93bd09283f3244d93bb01b276",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/MediaBrowser.Providers/Books/ComicInfo/ExternalComicInfoProvider.cs",
+      "bytes": 3663,
+      "sha256": "cd842858aa5b525cdbf7923abbfcf75058874356165d8dffbfc46c6f8776af50",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Providers/Books/ComicInfo/ExternalComicInfoProvider.cs",
+      "bytes": 3663,
+      "sha256": "cd842858aa5b525cdbf7923abbfcf75058874356165d8dffbfc46c6f8776af50",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/MediaBrowser.Providers/Books/ComicInfo/InternalComicInfoProvider.cs",
+      "bytes": 4029,
+      "sha256": "02e77427e33b0c38c2ff2ff4477631e44b06ec0c251d9ebb8c67b8050dc0fe6d",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Providers/Books/ComicInfo/InternalComicInfoProvider.cs",
+      "bytes": 4029,
+      "sha256": "02e77427e33b0c38c2ff2ff4477631e44b06ec0c251d9ebb8c67b8050dc0fe6d",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/MediaBrowser.Providers/Books/ComicProvider.cs",
+      "bytes": 1742,
+      "sha256": "bb9269af54017549a4fe0220d5cb5fd985365215e3778cfee4b7802ca8015eff",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Providers/Books/ComicProvider.cs",
+      "bytes": 1742,
+      "sha256": "bb9269af54017549a4fe0220d5cb5fd985365215e3778cfee4b7802ca8015eff",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/MediaBrowser.Providers/Books/ComicVine/ComicVineExternalId.cs",
+      "bytes": 615,
+      "sha256": "82f9167609e2f978b37413364b84c79f6adab524c6e1c87e5ed31aea716bbfa7",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Providers/Books/ComicVine/ComicVineExternalId.cs",
+      "bytes": 615,
+      "sha256": "82f9167609e2f978b37413364b84c79f6adab524c6e1c87e5ed31aea716bbfa7",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/MediaBrowser.Providers/Books/ComicVine/ComicVineExternalUrlProvider.cs",
+      "bytes": 755,
+      "sha256": "2c3c6e131d52b7c4589954d1988c94d0350b886db20cb982ab42fdb320738c49",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Providers/Books/ComicVine/ComicVineExternalUrlProvider.cs",
+      "bytes": 755,
+      "sha256": "2c3c6e131d52b7c4589954d1988c94d0350b886db20cb982ab42fdb320738c49",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/MediaBrowser.Providers/Books/ComicVine/ComicVinePersonExternalId.cs",
+      "bytes": 645,
+      "sha256": "9f48dfce6f10763562b35f87dde0077e40e214661e64a2da960cb4d6bcd82bb6",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Providers/Books/ComicVine/ComicVinePersonExternalId.cs",
+      "bytes": 645,
+      "sha256": "9f48dfce6f10763562b35f87dde0077e40e214661e64a2da960cb4d6bcd82bb6",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/MediaBrowser.Providers/Books/GoogleBooks/GoogleBooksExternalId.cs",
+      "bytes": 623,
+      "sha256": "7550acb0b2a06973b2cabef51e623bc6a5bff24927cf58235fbbb4b920ec1fd4",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Providers/Books/GoogleBooks/GoogleBooksExternalId.cs",
+      "bytes": 623,
+      "sha256": "7550acb0b2a06973b2cabef51e623bc6a5bff24927cf58235fbbb4b920ec1fd4",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/MediaBrowser.Providers/Books/GoogleBooks/GoogleBooksExternalUrlProvider.cs",
+      "bytes": 684,
+      "sha256": "807299fc9702e89184aab1b2143d0d0f7870481d4bd23723d345b45c5e9c66aa",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Providers/Books/GoogleBooks/GoogleBooksExternalUrlProvider.cs",
+      "bytes": 684,
+      "sha256": "807299fc9702e89184aab1b2143d0d0f7870481d4bd23723d345b45c5e9c66aa",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/MediaBrowser.Providers/Books/IComicProvider.cs",
+      "bytes": 980,
+      "sha256": "2d216b695c229746108d74ebdf54fe5d5001d2511a9ea432371ad08ea488b5e6",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Providers/Books/IComicProvider.cs",
+      "bytes": 980,
+      "sha256": "2d216b695c229746108d74ebdf54fe5d5001d2511a9ea432371ad08ea488b5e6",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/MediaBrowser.Providers/Books/Isbn/ISBNExternalId.cs",
+      "bytes": 594,
+      "sha256": "6ba0f946bcb41d333ccf0a68e264da788bf214e16d9af6508559181489f50700",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Providers/Books/Isbn/ISBNExternalId.cs",
+      "bytes": 594,
+      "sha256": "6ba0f946bcb41d333ccf0a68e264da788bf214e16d9af6508559181489f50700",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/MediaBrowser.Providers/Books/Isbn/ISBNExternalUrlProvider.cs",
+      "bytes": 660,
+      "sha256": "09720c587ff4ec23d52576bf6119bca446babac8fa84e1c354d4d00185dbd139",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Providers/Books/Isbn/ISBNExternalUrlProvider.cs",
+      "bytes": 660,
+      "sha256": "09720c587ff4ec23d52576bf6119bca446babac8fa84e1c354d4d00185dbd139",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/MediaBrowser.Providers/Books/OpenPackagingFormat/EpubImageProvider.cs",
+      "bytes": 4216,
+      "sha256": "78671dbef0d358e85a0fd5d2a0088fcffc938f1025c8935d9597b2d0e7315137",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Providers/Books/OpenPackagingFormat/EpubImageProvider.cs",
+      "bytes": 4216,
+      "sha256": "78671dbef0d358e85a0fd5d2a0088fcffc938f1025c8935d9597b2d0e7315137",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/MediaBrowser.Providers/Books/OpenPackagingFormat/EpubProvider.cs",
+      "bytes": 3101,
+      "sha256": "52bd9ea94f92b6b466b179e3ad426a6446768d6daea9a5c08b3beb4c0519db83",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Providers/Books/OpenPackagingFormat/EpubProvider.cs",
+      "bytes": 3101,
+      "sha256": "52bd9ea94f92b6b466b179e3ad426a6446768d6daea9a5c08b3beb4c0519db83",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/MediaBrowser.Providers/Books/OpenPackagingFormat/EpubUtils.cs",
+      "bytes": 1134,
+      "sha256": "499e3d7fd76a345663ac16399c0b24ae96047d0c208fbe8060bc172f757d4b6c",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Providers/Books/OpenPackagingFormat/EpubUtils.cs",
+      "bytes": 1134,
+      "sha256": "499e3d7fd76a345663ac16399c0b24ae96047d0c208fbe8060bc172f757d4b6c",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/MediaBrowser.Providers/Books/OpenPackagingFormat/OpfProvider.cs",
+      "bytes": 3646,
+      "sha256": "606238b16c2515fa8a4f6511bf8d663e91fcc675f770aae5cf2c3e9f6686049d",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Providers/Books/OpenPackagingFormat/OpfProvider.cs",
+      "bytes": 3646,
+      "sha256": "606238b16c2515fa8a4f6511bf8d663e91fcc675f770aae5cf2c3e9f6686049d",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/MediaBrowser.Providers/Books/OpenPackagingFormat/OpfReader.cs",
+      "bytes": 13824,
+      "sha256": "d00ffa71989d38d87b0f89f1a64a9aafe567a59463ba1849ac1babd4bd406756",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Providers/Books/OpenPackagingFormat/OpfReader.cs",
+      "bytes": 13824,
+      "sha256": "d00ffa71989d38d87b0f89f1a64a9aafe567a59463ba1849ac1babd4bd406756",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/MediaBrowser.Providers/Folders/CollectionFolderMetadataService.cs",
+      "bytes": 1931,
+      "sha256": "0c88bd596cf8077a5fb0278cda989e364501a4530172712ed72ade80777fe337",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Providers/Folders/CollectionFolderMetadataService.cs",
+      "bytes": 1931,
+      "sha256": "0c88bd596cf8077a5fb0278cda989e364501a4530172712ed72ade80777fe337",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/MediaBrowser.Providers/Folders/FolderMetadataService.cs",
+      "bytes": 1992,
+      "sha256": "a3bf9c0c0e652dc00244b56f1a2ef7d02ac5b5746ae0b45652e05322fc452640",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Providers/Folders/FolderMetadataService.cs",
+      "bytes": 1992,
+      "sha256": "a3bf9c0c0e652dc00244b56f1a2ef7d02ac5b5746ae0b45652e05322fc452640",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/MediaBrowser.Providers/Manager/ImageSaver.cs",
+      "bytes": 27917,
+      "sha256": "b3f51c08b91ffd4062945c840493b0133f39aed7cfea01e9d8cc79b950851e53",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Providers/Manager/ImageSaver.cs",
+      "bytes": 27917,
+      "sha256": "b3f51c08b91ffd4062945c840493b0133f39aed7cfea01e9d8cc79b950851e53",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/MediaBrowser.Providers/Manager/MetadataService.cs",
+      "bytes": 61028,
+      "sha256": "6e08f11ce31d47be3e09787ebe2c1edff9bda5684d4444c2444f399e4b2dd7d5",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Providers/Manager/MetadataService.cs",
+      "bytes": 61028,
+      "sha256": "6e08f11ce31d47be3e09787ebe2c1edff9bda5684d4444c2444f399e4b2dd7d5",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/MediaBrowser.Providers/Manager/ProviderManager.cs",
+      "bytes": 55938,
+      "sha256": "ce45e7c317afeddb32166eea4387b187fc9a6d0f3e9f59c33cdf949c220d6c55",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Providers/Manager/ProviderManager.cs",
+      "bytes": 55938,
+      "sha256": "ce45e7c317afeddb32166eea4387b187fc9a6d0f3e9f59c33cdf949c220d6c55",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/MediaBrowser.Providers/Photos/PhotoAlbumMetadataService.cs",
+      "bytes": 1894,
+      "sha256": "62ce3dbfb99241573bb6047fc04721139742d1347deeff95d17e1f07b21f4bef",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Providers/Photos/PhotoAlbumMetadataService.cs",
+      "bytes": 1894,
+      "sha256": "62ce3dbfb99241573bb6047fc04721139742d1347deeff95d17e1f07b21f4bef",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/MediaBrowser.Providers/Photos/PhotoMetadataService.cs",
+      "bytes": 1863,
+      "sha256": "773090cb3ea8ddc5f061a84fea6747c49da6f009d22924adb651ab3eafe96d03",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Providers/Photos/PhotoMetadataService.cs",
+      "bytes": 1863,
+      "sha256": "773090cb3ea8ddc5f061a84fea6747c49da6f009d22924adb651ab3eafe96d03",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/src/Jellyfin.Drawing.Skia/PercentPlayedDrawer.cs",
+      "bytes": 1270,
+      "sha256": "e18d20ec74eb11b7817346a6f5c669fb31cdcc12ff91d307bc5cda5fc6dfdd42",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/src/Jellyfin.Drawing.Skia/PercentPlayedDrawer.cs",
+      "bytes": 1270,
+      "sha256": "e18d20ec74eb11b7817346a6f5c669fb31cdcc12ff91d307bc5cda5fc6dfdd42",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/src/Jellyfin.Drawing.Skia/Properties/AssemblyInfo.cs",
+      "bytes": 970,
+      "sha256": "eb8da92edbe91039e769d8491ea6743b1396c7d5b57e8b12231f5cb6479f8b60",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/src/Jellyfin.Drawing.Skia/Properties/AssemblyInfo.cs",
+      "bytes": 970,
+      "sha256": "eb8da92edbe91039e769d8491ea6743b1396c7d5b57e8b12231f5cb6479f8b60",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/src/Jellyfin.Drawing.Skia/SkiaEncoder.cs",
+      "bytes": 34013,
+      "sha256": "8c3c61b8be155b57460374c2bb7c7fba3cdddf8d3db4c75e4f8f9e113c4c83bc",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/src/Jellyfin.Drawing.Skia/SkiaEncoder.cs",
+      "bytes": 34013,
+      "sha256": "8c3c61b8be155b57460374c2bb7c7fba3cdddf8d3db4c75e4f8f9e113c4c83bc",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/src/Jellyfin.Drawing.Skia/SkiaExtensions.cs",
+      "bytes": 2763,
+      "sha256": "bbc78789fd31ba284ed1ac73d7eed8c3309dbb8a921c0e50fa8077c4357e3323",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/src/Jellyfin.Drawing.Skia/SkiaExtensions.cs",
+      "bytes": 2763,
+      "sha256": "bbc78789fd31ba284ed1ac73d7eed8c3309dbb8a921c0e50fa8077c4357e3323",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/src/Jellyfin.Drawing.Skia/SkiaHelper.cs",
+      "bytes": 1539,
+      "sha256": "04fab405c909ed6a4e4525607ab976afc57348dcd3a84649dda1513ac9af5362",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/src/Jellyfin.Drawing.Skia/SkiaHelper.cs",
+      "bytes": 1539,
+      "sha256": "04fab405c909ed6a4e4525607ab976afc57348dcd3a84649dda1513ac9af5362",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/src/Jellyfin.Drawing.Skia/SplashscreenBuilder.cs",
+      "bytes": 6337,
+      "sha256": "de2f83bc756e226bb69c729a6e79059095883f00b716989555b9bc1f12e258cf",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/src/Jellyfin.Drawing.Skia/SplashscreenBuilder.cs",
+      "bytes": 6337,
+      "sha256": "de2f83bc756e226bb69c729a6e79059095883f00b716989555b9bc1f12e258cf",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/src/Jellyfin.Drawing.Skia/StripCollageBuilder.cs",
+      "bytes": 13239,
+      "sha256": "1478548f7646c5f437d9b3a7fd8e96e3d30d7743b60b9b1a02469d3f2f45b840",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/src/Jellyfin.Drawing.Skia/StripCollageBuilder.cs",
+      "bytes": 13239,
+      "sha256": "1478548f7646c5f437d9b3a7fd8e96e3d30d7743b60b9b1a02469d3f2f45b840",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/src/Jellyfin.Drawing.Skia/SvgSecurityValidator.cs",
+      "bytes": 11483,
+      "sha256": "29e64acb3f359ca2b7d788476c121fff2a869d6a2c85d6981049118644374d5a",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/src/Jellyfin.Drawing.Skia/SvgSecurityValidator.cs",
+      "bytes": 11483,
+      "sha256": "29e64acb3f359ca2b7d788476c121fff2a869d6a2c85d6981049118644374d5a",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/src/Jellyfin.Drawing.Skia/UnplayedCountIndicator.cs",
+      "bytes": 1833,
+      "sha256": "3997e9ec13f6a66c425edbb390c67ca1c737c6a630f7d96bb13dfbe7ebafcc2b",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/src/Jellyfin.Drawing.Skia/UnplayedCountIndicator.cs",
+      "bytes": 1833,
+      "sha256": "3997e9ec13f6a66c425edbb390c67ca1c737c6a630f7d96bb13dfbe7ebafcc2b",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/src/Jellyfin.Drawing/ImageProcessor.cs",
+      "bytes": 18272,
+      "sha256": "1bcb1ce0922820316b892f7947f706f960bdc6790f46add7d3bb08ec7e59f7a5",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/src/Jellyfin.Drawing/ImageProcessor.cs",
+      "bytes": 18272,
+      "sha256": "1bcb1ce0922820316b892f7947f706f960bdc6790f46add7d3bb08ec7e59f7a5",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/src/Jellyfin.Drawing/NullImageEncoder.cs",
+      "bytes": 1958,
+      "sha256": "2d13a5dc88d36ed98181cc3cc637aac0fe08d5960616a682731b76af8ec78e56",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/src/Jellyfin.Drawing/NullImageEncoder.cs",
+      "bytes": 1958,
+      "sha256": "2d13a5dc88d36ed98181cc3cc637aac0fe08d5960616a682731b76af8ec78e56",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/src/Jellyfin.Drawing/Properties/AssemblyInfo.cs",
+      "bytes": 1315,
+      "sha256": "7a8a88c13f3fcddf7f27d053f8269b6537145aa69534b37ab686fe4f9dd24274",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/src/Jellyfin.Drawing/Properties/AssemblyInfo.cs",
+      "bytes": 1315,
+      "sha256": "7a8a88c13f3fcddf7f27d053f8269b6537145aa69534b37ab686fe4f9dd24274",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Private.CoreLib.dll",
+      "bytes": 16033576,
+      "sha256": "1125acc8106c43fc8bad2d203c4c4485df6182d292846c2fff415c1040c54678",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/bin/Release/net10.0/Oracle.dll",
+      "bytes": 119296,
+      "sha256": "199cf2e1a6b85740a38b4677a90d5c4578f078f2cafc3494f428a4b824bfdf83",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Runtime.dll",
+      "bytes": 44840,
+      "sha256": "76be53624f64b23d0249dfa0bbe85390086de7c44bfd490642ea86c6faaf44af",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Collections.dll",
+      "bytes": 296744,
+      "sha256": "df6f2037eabee28100184e92f7536427ba2f086c1110629804d466b124bc4d54",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Text.Json.dll",
+      "bytes": 1890128,
+      "sha256": "fa99f413be21ed5f484a09093fe5f0beba7de3062cf9cc9f847dbf8108dba55a",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Linq.dll",
+      "bytes": 698192,
+      "sha256": "284d38945b6e92e847129bd28af458b19818d0f2181f79882888ab2003f4c519",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/bin/Release/net10.0/MediaBrowser.Controller.dll",
+      "bytes": 655872,
+      "sha256": "e4f1e201e43c9e22fd07cbd0ed2c52c427b0bdaa2dfe0ed5e5ab7ee604b537cf",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/bin/Release/net10.0/MediaBrowser.Common.dll",
+      "bytes": 48640,
+      "sha256": "da09560f84366fe4f2667391ce443b6e1d67d9ab891e8d230acb96d54e9ce12b",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/bin/Release/net10.0/MediaBrowser.Model.dll",
+      "bytes": 489472,
+      "sha256": "5e5db1a105d41d913eb36d7bd9e1aeb62d3ae4809b00c12023f2eb99f019d372",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Console.dll",
+      "bytes": 169808,
+      "sha256": "3b85daf02a3d9ed99b84bb1c639fe8b1ced46d8d157fa56f525f6b8c5be43b3e",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Memory.dll",
+      "bytes": 161576,
+      "sha256": "f8f9d38efd6b0de30954d6bf1f353e9617bfb36d3d245c013a3b12be9f6bd88a",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Text.Encoding.Extensions.dll",
+      "bytes": 15656,
+      "sha256": "8f51b9535db64fe027a40d6076200b1a6b0889bf05f62bb8e68c3eb083c7f113",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Text.Encodings.Web.dll",
+      "bytes": 124752,
+      "sha256": "d20431f20d992e71a4e82e5f25c822474e2f4097d8527972d3d78ea1f26e47c3",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Numerics.Vectors.dll",
+      "bytes": 15656,
+      "sha256": "a9a980ee33ed0c798a5e1960c4557521f465ac9e0987dfd2c3049d53b1f2fa5a",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Threading.dll",
+      "bytes": 83792,
+      "sha256": "6c32ed1bf8067e4169e8feddd15e6489b89d19d1c7aae1520a551b57745d0a60",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Collections.Concurrent.dll",
+      "bytes": 231248,
+      "sha256": "082f4bc0da1141eb65111b6da633d75624adfb7bb067d7ee90c5622c8b30885b",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Private.Uri.dll",
+      "bytes": 255824,
+      "sha256": "b15c84d2120e1ec9612c66ba59bc3d7e67d841e2bce7b7d0478cb212537539b4",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Reflection.Emit.Lightweight.dll",
+      "bytes": 15656,
+      "sha256": "d2724a2b7b46146877ec1f6e400c49ea05f84bdd31f3bba52ae139ee68a4f779",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Reflection.Primitives.dll",
+      "bytes": 15656,
+      "sha256": "c2bbd885d03da5e880667c228ac1f56a5f3a72ea37d43f010ada000adc33da28",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Reflection.Emit.ILGeneration.dll",
+      "bytes": 15656,
+      "sha256": "6b42ddd05b0ca1c7342d73ea9f401fe588044215d65c67b756deb780f0894a26",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Runtime.InteropServices.dll",
+      "bytes": 112464,
+      "sha256": "e5eb1679f3579c9141e2bb9dbdce62624a623f38d299805cc1de07bacd21841f",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Security.Cryptography.dll",
+      "bytes": 2549544,
+      "sha256": "e0a839a540e47343b53a936b32d91599a3470005228d50fd0b896f8bbdcc65b0",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.Extensions.Hosting.Abstractions.dll",
+      "bytes": 79656,
+      "sha256": "95f5e2e5ab0a8fc6c4fd35f1db331b7aa2852ab2cc7ca148be72320289bfedda",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.Extensions.Caching.Memory.dll",
+      "bytes": 100136,
+      "sha256": "50df53585dac029895a6d50a32212424aafbae87b9cc20ac0af5338677492983",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.Extensions.Options.dll",
+      "bytes": 141096,
+      "sha256": "02a3cad0e05023f129c0717ba99d171ac524bf5f7c955863e17e3f7441107567",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.Extensions.Caching.Abstractions.dll",
+      "bytes": 75560,
+      "sha256": "d6c5e46c7c43834235abbbcb9767756f8e210f0fcc4b92137c57a2aa83b81b2e",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.Extensions.Logging.Abstractions.dll",
+      "bytes": 153424,
+      "sha256": "90c41d68d297e54c4def3cfd38eb620513a744ab01131840ea3e2634cf973be3",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.Extensions.Primitives.dll",
+      "bytes": 83752,
+      "sha256": "5b40af41b1b354f88e64e5b04619f70aaefe693ff377ac0bb9bc7f70c4018cc1",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/bin/Release/net10.0/Emby.Server.Implementations.dll",
+      "bytes": 1673728,
+      "sha256": "9c732ba80d1b1980c36d2d64780da28d64c0a8d503bf044c89bc35285eab219e",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Collections.Immutable.dll",
+      "bytes": 976680,
+      "sha256": "b527dd7b2beb82c22aa39787298cbeb33f3eac9eb9b83a0f0271353421db28db",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/bin/Release/net10.0/Emby.Naming.dll",
+      "bytes": 105984,
+      "sha256": "860fd6bd1d790f51a0f0c7bccbdf4ef37cab75a797417588d28d6f327cdfb106",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.Extensions.DependencyInjection.Abstractions.dll",
+      "bytes": 141096,
+      "sha256": "0e2feec8beaa131967d1f0d70684500183227d1ef58c617b8fadb793c3387e93",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/bin/Release/net10.0/jellyfin.dll",
+      "bytes": 506368,
+      "sha256": "474c7c638fe93cc61f1a588849fb93c81a2927388f6f4cf19953b3a76e9deb26",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.AspNetCore.Http.Abstractions.dll",
+      "bytes": 325416,
+      "sha256": "1fae7aa024a039a404141ec7846a016e271fd9b8bc53960cb1b17a33ffbc1a89",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Net.Primitives.dll",
+      "bytes": 210728,
+      "sha256": "4dbb41a178ef013a898327152eccd146228dd2eb83859b9bb36078333b41f0f1",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.ComponentModel.dll",
+      "bytes": 30544,
+      "sha256": "e3b6f75864ee944898540937c1f300e04f44a1b2729516f0bbf948589a8b14b2",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/bin/Release/net10.0/Jellyfin.Database.Implementations.dll",
+      "bytes": 249344,
+      "sha256": "28803e21ebd1ebaf0cc3189e4f5b1ad5b476cab0f08327b9be09c235b3da169f",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/bin/Release/net10.0/Microsoft.EntityFrameworkCore.dll",
+      "bytes": 2829112,
+      "sha256": "9cf183abffc9d6920e8366b75af8388bc502febaaa0e3d9fe41a4906a68d3065",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/bin/Release/net10.0/SQLitePCLRaw.batteries_v2.dll",
+      "bytes": 5120,
+      "sha256": "815ce410c9eab531dd219318e3ba16c5e38e83d361cfbbdbb4bbca222c497b0b",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/netstandard.dll",
+      "bytes": 100648,
+      "sha256": "3dc81dbc9dacd28261632c94410859eda24c2db50cd6c14309cbb2a434b50c57",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Reflection.DispatchProxy.dll",
+      "bytes": 75600,
+      "sha256": "bf93a361c0bba8497889c9f7713add5968ba39394f9e6bda27e86294c6c43560",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/bin/Release/net10.0/Jellyfin.Data.dll",
+      "bytes": 18432,
+      "sha256": "78863aaacadbd2f9878e8c0f272f04829e9f11f53b92a6bd47fb39d05d21a2e4",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/bin/Release/net10.0/Jellyfin.Server.Implementations.dll",
+      "bytes": 664064,
+      "sha256": "f163fb6064b99bf6c240264e7bed0263da272d6380756c19c3f94dbf6c4365c1",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Linq.Expressions.dll",
+      "bytes": 3639080,
+      "sha256": "8830f4a6a6982f53cfbb54f992858ee36b4994a6ff6e6078c39627e77bef282f",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/bin/Release/net10.0/MediaBrowser.Providers.dll",
+      "bytes": 1030656,
+      "sha256": "4aa9ca407da2bb0db21ef0a7da5bdef162260fd9c5873f06cfb239780ccc4e3e",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.Extensions.Http.dll",
+      "bytes": 198440,
+      "sha256": "2cd8cf43d2b12b0c167e35fc6218945537f484899607279af8de23147755b695",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.Extensions.Logging.dll",
+      "bytes": 100176,
+      "sha256": "afd93f320e217561e674f8c6d44ce1f0846d6ae2f26c0263f6b662476d4b570c",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.Extensions.DependencyInjection.dll",
+      "bytes": 227152,
+      "sha256": "6424c0b19a1cef1977db79eee164dcaeb3cba6abdaa583d6f5ff6413f7f7244a",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/bin/Release/net10.0/SQLitePCLRaw.provider.e_sqlite3.dll",
+      "bytes": 36864,
+      "sha256": "df996bcae63c2cabcfe8d4b9c5110eb39a2a4706178b07d875665391c6eb3995",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/bin/Release/net10.0/SQLitePCLRaw.core.dll",
+      "bytes": 51200,
+      "sha256": "af340ac9eb9195795660d7fc1114f486b6ab63998f33176e2f24c8e0acb9aa84",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Runtime.Loader.dll",
+      "bytes": 15656,
+      "sha256": "9b9b2a4f0358d9146e76178ddb87d019be380c78baa7dac853493d45df089f03",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Reflection.Emit.dll",
+      "bytes": 309032,
+      "sha256": "09059981bbeea0fdc5df589be5d7e3937d57e22bec4d78ceb492c587926fc238",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Diagnostics.Process.dll",
+      "bytes": 329552,
+      "sha256": "51a57fbe918f8b68930c090792b718fc0850ea12da869d50b97a3796af29a740",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/bin/Release/net10.0/Jellyfin.Drawing.dll",
+      "bytes": 18944,
+      "sha256": "842750d9d64969910b6d4aedd1cefbf2a10c4af4f2bc07717596d84a5f69c3de",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/bin/Release/net10.0/Jellyfin.Drawing.Skia.dll",
+      "bytes": 37376,
+      "sha256": "4177bf7f1b889c109d4b042e0e22097678ce0ffbd06f14ed9dd877b79fa98886",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/bin/Release/net10.0/SkiaSharp.dll",
+      "bytes": 489824,
+      "sha256": "aaaaa18c68ba1f3a3408b00dff28b11d5705198e17ba9d3aa59222bfd35407c8",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/bin/Release/net10.0/Svg.Custom.dll",
+      "bytes": 737792,
+      "sha256": "70f43c2be9911d1999cffbba95135d9b045e9d98326bd2aee2f82272c2e1445d",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.ComponentModel.TypeConverter.dll",
+      "bytes": 767784,
+      "sha256": "10dae312a6697718f8ce3dfcdb17d6ae4b74687c765d74d50de8a8e69e08f5e7",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.ComponentModel.Primitives.dll",
+      "bytes": 79656,
+      "sha256": "1e2451184c287409ea25acde3c90f25950bf34d16458a6e52a94ca4292434f62",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/bin/Release/net10.0/AsyncKeyedLock.dll",
+      "bytes": 147968,
+      "sha256": "e9ae58a8c68db178ad4ec944626036fa6eca814947c64fbb8ec74c29b2ed0b36",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/bin/Release/net10.0/Microsoft.EntityFrameworkCore.Sqlite.dll",
+      "bytes": 311648,
+      "sha256": "6c1737c1f1ba7b32c2a39d838b8ab5f5dbcc1639ca2fdf1aa6699d01444e0210",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/bin/Release/net10.0/Jellyfin.Database.Providers.Sqlite.dll",
+      "bytes": 1109504,
+      "sha256": "296a0503f875c70401150236d430ac4e58d68e415a7b21e2c090a3d6c0c89f18",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/bin/Release/net10.0/Microsoft.EntityFrameworkCore.Relational.dll",
+      "bytes": 2194784,
+      "sha256": "301f57f6e6a919b139307ed0b0820e74cedb1ccace5cb234470f35ff4600d7c4",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Data.Common.dll",
+      "bytes": 2770728,
+      "sha256": "66bdd62047ee460e2ce2c33d15dd1173ac97997b2745864a905179594f821acc",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Diagnostics.DiagnosticSource.dll",
+      "bytes": 501544,
+      "sha256": "6267c1bd1bdf2bdd4b5748b885b0adcda10f18697adfea8488a19a009ad44fdb",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/bin/Release/net10.0/Microsoft.EntityFrameworkCore.Abstractions.dll",
+      "bytes": 34616,
+      "sha256": "6c6401703d480f3fb49ca47ea746c46557779c7ac4406e29f8a8956b151877d2",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Transactions.Local.dll",
+      "bytes": 640808,
+      "sha256": "8d0283a311a16333ffb6f966d9765e4d8b866777ad99291a93b30db349a15bc4",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Diagnostics.Tracing.dll",
+      "bytes": 16208,
+      "sha256": "9563d5eec35f94d13a5e62eaa9535dbe0e9ea474f055da132fb8af46b0b01263",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Threading.ThreadPool.dll",
+      "bytes": 15656,
+      "sha256": "58fbc6c4b9c72087152fd0f0670a527098c00b0c19ba8d0979d3ca5ce07c6936",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.Extensions.Configuration.Abstractions.dll",
+      "bytes": 46888,
+      "sha256": "63a89b1becd68c2f5051df9c042b46bdf41fba72393bb1ef29b52b701b155c31",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/bin/Release/net10.0/Microsoft.Data.Sqlite.dll",
+      "bytes": 177504,
+      "sha256": "4abd9c2a61e580eb853e93ca8953a3cef2c05714ae28d2d1859d4dbc5e5700bc",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.ComponentModel.Annotations.dll",
+      "bytes": 198480,
+      "sha256": "e3be2d35d81e6475c64110cfc099895b71df22c8b46a18c2d7c76a913b8ba903",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Xml.ReaderWriter.dll",
+      "bytes": 21840,
+      "sha256": "8e48fed4d12bcffff01e8059caafb564697275797d2f5ec6823fdd82b87fe938",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Private.Xml.dll",
+      "bytes": 7788328,
+      "sha256": "d71e72a7a9de324352edd281a46466b51bd0bdd2831b1573f8d3bae8bd2dd4a6",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Net.NetworkInformation.dll",
+      "bytes": 157520,
+      "sha256": "7e8791833eb2d0aea77b119fed3cab8bf501f6a553155cc1c4e5b1c02f65593b",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Runtime.Intrinsics.dll",
+      "bytes": 17192,
+      "sha256": "b07694ec91f3a200acf0f8b37c6ce5fcf05126a9198ae156d839fa5ca8439dc5",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.ObjectModel.dll",
+      "bytes": 79656,
+      "sha256": "2179bb19f335b4fcacd0994ad2ccfdac6840deff09c7889debfe9dbb5b88a3e6",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/bin/Release/net10.0/Polly.dll",
+      "bytes": 288160,
+      "sha256": "cecb78ee944fd7cd1889c21602cc905df8f72af06a3798fb0fd75d96d436891e",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Threading.Thread.dll",
+      "bytes": 15696,
+      "sha256": "ce71949bb1ea67b686e799128582015ebf8758f1107e59e43f342ece3f662930",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Text.RegularExpressions.dll",
+      "bytes": 1034064,
+      "sha256": "060bcc88a688e687ff1404b83b5fb5cf17e19ec57f33d5b8a48ab494da83c134",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Threading.Channels.dll",
+      "bytes": 157480,
+      "sha256": "afc5deb3c32b3f64bced2025d0b01b316d41b691ebc6ccb1a2ec445ad4c15e39",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/bin/Release/net10.0/Jellyfin.Extensions.dll",
+      "bytes": 37888,
+      "sha256": "0ded3efa5eb05eb48ffc2e32a48a1a51da78a1d9b05f5b87904cf4f1ee697716",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/bin/Release/net10.0/BitFaster.Caching.dll",
+      "bytes": 195584,
+      "sha256": "a58275640773dc3ff06ceafad752fd399e4ed7cef93039354b7eb06a126590ff",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Xml.XmlSerializer.dll",
+      "bytes": 17744,
+      "sha256": "0b7d057c2b5b2272e8d4096a755edfd96f3cf03ab9aaa3fef54b462bf48d517e",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/bin/Release/net10.0/Jellyfin.MediaEncoding.Hls.dll",
+      "bytes": 17920,
+      "sha256": "77b083f4bf52719b793ae42352baa85ff0c86c65b6eee9a50e93a5337c47592e",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/bin/Release/net10.0/Jellyfin.Networking.dll",
+      "bytes": 46592,
+      "sha256": "ab0375f70fbed9d95678bdf21d1cc85e2952d33963fa10d13fdc2468e948baff",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/bin/Release/net10.0/MediaBrowser.XbmcMetadata.dll",
+      "bytes": 84992,
+      "sha256": "3f75a7fe29586a69b98e13b61b73752cf859d322298ec760e668990cf6ddfe67",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/bin/Release/net10.0/MediaBrowser.LocalMetadata.dll",
+      "bytes": 57344,
+      "sha256": "d87ddd8d1fe866f1d87980220a9e0d1c760a8dcb6d232855684281769f3d4c65",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/bin/Release/net10.0/MediaBrowser.MediaEncoding.dll",
+      "bytes": 215552,
+      "sha256": "b4301e181cdfc0b803bb5e715f4b7fd3f30606d881381d087a517a3f93c51a38",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/bin/Release/net10.0/Emby.Photos.dll",
+      "bytes": 10240,
+      "sha256": "ea702e040524dc0aeaef127012d4f4900d7a90c48caa09e0a55b4b2c7ebaac1e",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Net.WebSockets.dll",
+      "bytes": 243496,
+      "sha256": "c014a074d408c71011e26eac69be85003a852cfe115e8608bb5d4fd70536eb2e",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Net.Http.dll",
+      "bytes": 1746768,
+      "sha256": "b98ed0cb80dd54c33fc049f33af5448710752155bbd5cc8cbcd932e01f066801",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.AspNetCore.Mvc.Core.dll",
+      "bytes": 1931088,
+      "sha256": "1356da94b4d872025f64fd7e788e3065bf149a9edb920c892e331cad3dbaa4b6",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/bin/Release/net10.0/Jellyfin.MediaEncoding.Keyframes.dll",
+      "bytes": 11776,
+      "sha256": "88669ac070abfd6b7378ae6db21d6cab69846df39af0bee0dddb6a3b017985d9",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/bin/Release/net10.0/libse.dll",
+      "bytes": 2984448,
+      "sha256": "d435c3c4b3cb15331c8b2bf596c9db414e159db6b082b6e404e9738faa505903",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/bin/Release/net10.0/BDInfo.dll",
+      "bytes": 120832,
+      "sha256": "e9766558f835a3dcdfc24e02cc88a11992f73e463afe289cb81db90a122ecf3f",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Net.Sockets.dll",
+      "bytes": 530216,
+      "sha256": "645c56d637ce15976998119e50722a911315682ce141b4aab98874ce1b063f3a",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/bin/Release/net10.0/Jellyfin.LiveTv.dll",
+      "bytes": 428544,
+      "sha256": "8b745072fa22685aea5deac3742fabb2ee3d09a81ba50dae9e46a046a34d1bbc",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions.dll",
+      "bytes": 42792,
+      "sha256": "3df995e75029f967a5fc9b30523c0655fc70682495a2cb08e15a7aaaaee5a6af",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/bin/Release/net10.0/Swashbuckle.AspNetCore.SwaggerGen.dll",
+      "bytes": 157696,
+      "sha256": "5c28c464b321683a220364e1aafc9d07d38dcc3ff4e361e0e41c5176ccee23d9",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/bin/Release/net10.0/Microsoft.OpenApi.dll",
+      "bytes": 486752,
+      "sha256": "64497b0a954493014d15494bb89f09dbed059b13efe64cdf008d5f0f6bf197e5",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.AspNetCore.Cors.dll",
+      "bytes": 91944,
+      "sha256": "9fb130ef9b9ea9101a2dec73bdc518add30a1d8e7d8a5d6d2596a6e18e7ec1b8",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.IO.Pipelines.dll",
+      "bytes": 190248,
+      "sha256": "ee9f0fd6c659f50799afd103c6ed9c5e408967e28dfa059bddf4b0a3fd2557dd",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Collections.NonGeneric.dll",
+      "bytes": 104232,
+      "sha256": "aa4d5216d066c91cb489f63c6cbfcaf1f47b6e74e070db45639d3460454fc60b",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Diagnostics.TraceSource.dll",
+      "bytes": 141096,
+      "sha256": "8445c7f1bbaae6cffde60e2c9a8753faaa5100255fbe31d0a1927d9d9bb7f194",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Collections.Specialized.dll",
+      "bytes": 104272,
+      "sha256": "e31af1f866e880844e027be59f545b9a6b34108e0b0680ebe3fbc19a53070819",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Linq.Queryable.dll",
+      "bytes": 182056,
+      "sha256": "b3b3a9c1b87a51dacd46a3f9ec392c5d05e449152d44d6bd495df0994350e2fa",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/bin/Release/net10.0/Ignore.dll",
+      "bytes": 27136,
+      "sha256": "e362b92af4a52f6bfd5b94f2692acdf3a1f3491477a12ce2ea5394cde369de2e",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/bin/Release/net10.0/DotNet.Glob.dll",
+      "bytes": 35328,
+      "sha256": "2ab2c4dcda2649b078ad11cbefd7a29b38743ad076b37dced42f7546c92ead80",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Runtime.Extensions.dll",
+      "bytes": 17704,
+      "sha256": "3d7b517d4fd89ee58c53e0f642cc9be42e7a8669b51a85e861dafe118067cbfd",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/bin/Release/net10.0/Diacritics.dll",
+      "bytes": 30720,
+      "sha256": "893640462f6bfaa8cf5c18698ee655a1777b05d359963c129e95c2ffb94307b0",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Diagnostics.StackTrace.dll",
+      "bytes": 46888,
+      "sha256": "8f6397c1e2ba9b8b8bfa317962151b5035049ce8d6b3575e5027a0d0eeacc797",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Threading.Tasks.Parallel.dll",
+      "bytes": 132904,
+      "sha256": "6fa359bdbebb56be96339f244ed41658afcead5e010074da470df1115d1e7699",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/bin/Release/net10.0/J2N.dll",
+      "bytes": 590848,
+      "sha256": "93afc2ad2a3a7335992791ebe116a57908ebb027571c67c8ac8844fe12696c8c",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.IO.Compression.dll",
+      "bytes": 419624,
+      "sha256": "c942747f84b730887090f5e0cf86d164c0ee402e524dce2750e06a6df48513fb",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Xml.XDocument.dll",
+      "bytes": 15696,
+      "sha256": "3ff858607de5146051498a7124ef983bea280d86e165f993516c6c26af81cfb5",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Private.Xml.Linq.dll",
+      "bytes": 390952,
+      "sha256": "c832b73de9783e6929ca5ff4863fc313e13ef7cfb5965c52587c4f77f6e037a7",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.IO.Compression.ZipFile.dll",
+      "bytes": 100176,
+      "sha256": "2da76eb281740be485b5637da8c60fe0ce12bc2848d1a1a81ce144fa74313e18",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Xml.XPath.XDocument.dll",
+      "bytes": 30504,
+      "sha256": "5bcd27a7e93515b745993f6dda51391033883cb8a1a8a2e3dad5caed3548f0da",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/bin/Release/net10.0/SharpCompress.dll",
+      "bytes": 2461696,
+      "sha256": "f59f7159bc053f656f59ee15144f123de5d4b798c337083f3bfc6b0d30e846fd",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Linq.AsyncEnumerable.dll",
+      "bytes": 1292072,
+      "sha256": "925208e8ac40ac3f7b988aba6ccbbb58adac38ad1876a7d97ee137be6c21a653",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Text.Encoding.CodePages.dll",
+      "bytes": 862032,
+      "sha256": "226e216e33c94ef7594bdffe670ba4dc5907151c113cb41ac9e9d570227e1765",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/bin/Release/net10.0/Svg.Skia.dll",
+      "bytes": 94208,
+      "sha256": "1879c178d0adc1438638421407f1241175905da2a0854d30198b45bc11ed56b1",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/bin/Release/net10.0/Svg.Model.dll",
+      "bytes": 187392,
+      "sha256": "11d47f250c0afcd4d6d8a72bb7173a1c9d9e0fcfda764156f74dcbcfb02dbd82",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/bin/Release/net10.0/BlurHashSharp.SkiaSharp.dll",
+      "bytes": 7168,
+      "sha256": "934aa821abf5c8808ad184b814cd9e99e19bbdae85a689a5769f6c2ca506ef7f",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/bin/Release/net10.0/BlurHashSharp.dll",
+      "bytes": 11776,
+      "sha256": "a49914606d6785f13c82481ff6fea946c39a82188b31f38046fa872ae11ad292",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/bin/Release/net10.0/TagLibSharp.dll",
+      "bytes": 500224,
+      "sha256": "dad93b152d55cf6a58b2037bcf9dd34b45d87761fe5ed61a232b3d4641d2a5d3",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Runtime.Serialization.Formatters.dll",
+      "bytes": 124712,
+      "sha256": "5e8e957c6b7a63132555ede5bcf5fe6a59934c83300e28074ec6e9845ecdd17f",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Reflection.Metadata.dll",
+      "bytes": 1156904,
+      "sha256": "82973e772017944a0548e445f30757595d95fe99e1f5c4a446df8c4db04b1c18",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/bin/Release/net10.0/ICU4N.Transliterator.dll",
+      "bytes": 687616,
+      "sha256": "5a0935d0ddc51d755a32921ea53dbd76c5350f7d0322844bab05f0cd456b2793",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/bin/Release/net10.0/ICU4N.dll",
+      "bytes": 13657600,
+      "sha256": "ba54b8bb8e9785b7a7e83b03c8b9b8407582e07b11c95bb805e930e6c0b0e6af",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/book-collapse-expand/media/Subjects/Novel/edition.epub",
+      "bytes": 1119,
+      "sha256": "de9955fc668dbda33334d579d3560c24940c3aa384ec5b63606d6f6fd93d1228",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/book-collapse-expand/native.db",
+      "bytes": 516096,
+      "sha256": "4e62b8ec632a9fd11e81b5298eb20f30bd36ae5d12826f768c4daa26c90300f2",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/book-collapse-expand/program/metadata/library/77/77efb6555a0bf13eff7a25fca6607ec9/poster.png",
+      "bytes": 95,
+      "sha256": "95cfaeba3dde34423ea3e89d30ee8fb41d9331d5aef6c520b8cbd4521c91cd1d",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/book-collapse-expand/program/root/default/Subjects/books.collection",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/book-collapse-expand/program/root/default/Subjects/location-00.mblink",
+      "bytes": 121,
+      "sha256": "f1ae1db96582b0eb1e4e8ad6c65fc08f512ae8176d3e1d8159e49f8584746fd9",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/book-collapse-expand/program/root/default/Subjects/options.xml",
+      "bytes": 2003,
+      "sha256": "816463f3fa5b96142f3327e301558b9b42847e0347698e618cf47cc3089406e7",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/book-comic-internal/media/Subjects/Story.cbz",
+      "bytes": 9005,
+      "sha256": "204677c9426f360c4ae3d3cf2078cdd09a35896a518a33fec2d7a6cd9f0ed5bc",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/book-comic-internal/native.db",
+      "bytes": 516096,
+      "sha256": "5b4d9e2408de3b2b2287d561313c7ad2666bf3a55e3cca45966b12469c9b685f",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/book-comic-internal/program/metadata/library/52/52af837d591381ef9fe75cf39de3e429/poster.png",
+      "bytes": 8787,
+      "sha256": "f56b8c908ee572720fdfc3f6550be78a9fce29d850b9a38d945b08bf56a5c7af",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/book-comic-internal/program/root/default/Subjects/books.collection",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/book-comic-internal/program/root/default/Subjects/location-00.mblink",
+      "bytes": 120,
+      "sha256": "c6c83b25cf7ae08991a747867c6abef23db0e81bb15d767f690e66d997aa9e2a",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/book-comic-internal/program/root/default/Subjects/options.xml",
+      "bytes": 2003,
+      "sha256": "816463f3fa5b96142f3327e301558b9b42847e0347698e618cf47cc3089406e7",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/book-comic-local-cover/media/Subjects/Story-poster.png",
+      "bytes": 8787,
+      "sha256": "f56b8c908ee572720fdfc3f6550be78a9fce29d850b9a38d945b08bf56a5c7af",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/book-comic-local-cover/media/Subjects/Story.cbz",
+      "bytes": 9006,
+      "sha256": "bf5413fcafdf1858b31a8ee309bb98f632642c3e899f4789c19d4710c019967f",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/book-comic-local-cover/native.db",
+      "bytes": 516096,
+      "sha256": "25e5cbcc0944b882c838c6ee033375b71b7fcbd03e95baa8fc90e13c0c838d37",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/book-comic-local-cover/program/root/default/Subjects/books.collection",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/book-comic-local-cover/program/root/default/Subjects/location-00.mblink",
+      "bytes": 123,
+      "sha256": "2211a55a41df68830da562a8105e9a2bc5b85483ac035bcb583bdcf8c84e0cf8",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/book-comic-local-cover/program/root/default/Subjects/options.xml",
+      "bytes": 2002,
+      "sha256": "853b33ed6d8c4fa8fd9a84889a239bc3fe0db36d043fb3bbc9f6f975b218a265",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/book-corrupt-epub/media/Subjects/Broken.epub",
+      "bytes": 1119,
+      "sha256": "de9955fc668dbda33334d579d3560c24940c3aa384ec5b63606d6f6fd93d1228",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/book-corrupt-epub/native.db",
+      "bytes": 516096,
+      "sha256": "a484242c8998cbdebecc35dfad13f6974796be53b19b6efb9a7aa01b64d24128",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/book-corrupt-epub/program/metadata/library/ae/ae150708e47054c52c63dc420673d356/poster.png",
+      "bytes": 95,
+      "sha256": "95cfaeba3dde34423ea3e89d30ee8fb41d9331d5aef6c520b8cbd4521c91cd1d",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/book-corrupt-epub/program/root/default/Subjects/books.collection",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/book-corrupt-epub/program/root/default/Subjects/location-00.mblink",
+      "bytes": 118,
+      "sha256": "fbc19024c50f4e14be9ee15dfd9ac9f9dac3d6cedf71e68cd52d5d63b2a50316",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/book-corrupt-epub/program/root/default/Subjects/options.xml",
+      "bytes": 2003,
+      "sha256": "816463f3fa5b96142f3327e301558b9b42847e0347698e618cf47cc3089406e7",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/book-epub-positive/native.db",
+      "bytes": 516096,
+      "sha256": "f35e1fd3b4d8737db97780c41bbf97eaa5b0127bd66a661a12dcbd015df49ee7",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/book-epub-positive/program/metadata/library/0e/0e674a0bb9c1da59b8a6ae3041d11fe8/poster.png",
+      "bytes": 95,
+      "sha256": "95cfaeba3dde34423ea3e89d30ee8fb41d9331d5aef6c520b8cbd4521c91cd1d",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/book-epub-positive/program/root/default/Subjects/books.collection",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/book-epub-positive/program/root/default/Subjects/location-00.mblink",
+      "bytes": 119,
+      "sha256": "2ed4d2ce875be9160f5089de1c84a80bdcd0bbb8e5ca7c7c246b7d4448c48c37",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/book-epub-positive/program/root/default/Subjects/options.xml",
+      "bytes": 2003,
+      "sha256": "816463f3fa5b96142f3327e301558b9b42847e0347698e618cf47cc3089406e7",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/book-epub-separator-control/media/Subjects/Story.epub",
+      "bytes": 735,
+      "sha256": "8f00f74fcdc3f47bd23ff590b8f206f2375120be8233a4f259f2412cbc5d4311",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/book-epub-separator-control/native.db",
+      "bytes": 516096,
+      "sha256": "551375478e62fb0c97c5770bfbdf00f83e9a10cc786ed9da30cb11ba4b2c5130",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/book-epub-separator-control/program/root/default/Subjects/books.collection",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/book-epub-separator-control/program/root/default/Subjects/location-00.mblink",
+      "bytes": 128,
+      "sha256": "d3f44c4a48451f7e6cf70f8e8f86d7e337a77914f0f8d0c5bfc4dad6e0f69377",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/book-epub-separator-control/program/root/default/Subjects/options.xml",
+      "bytes": 2003,
+      "sha256": "816463f3fa5b96142f3327e301558b9b42847e0347698e618cf47cc3089406e7",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/book-extension-directory-plus-book/native.db",
+      "bytes": 516096,
+      "sha256": "e833ea1eb30c12bee2e74047a9cb16f35e329beadae8b6fb758b9362bee36f43",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/book-extension-directory-plus-book/program/root/default/Subjects/books.collection",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/book-extension-directory-plus-book/program/root/default/Subjects/location-00.mblink",
+      "bytes": 135,
+      "sha256": "9116629d2bd65ac878af1253d56d42249c140e937524ba6b3f5afa6ef4916a36",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/book-extension-directory-plus-book/program/root/default/Subjects/options.xml",
+      "bytes": 2003,
+      "sha256": "816463f3fa5b96142f3327e301558b9b42847e0347698e618cf47cc3089406e7",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/book-extension-named-directory/media/Subjects/Novel/chapter.epub",
+      "bytes": 1119,
+      "sha256": "de9955fc668dbda33334d579d3560c24940c3aa384ec5b63606d6f6fd93d1228",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/book-extension-named-directory/native.db",
+      "bytes": 516096,
+      "sha256": "4da991abaecebdc0c6266afcf93dcd7a2d5aa6fe70a6f3d0bab8a0756da340af",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/book-extension-named-directory/program/metadata/library/2a/2a1d5dd72daf875f8010181444441742/poster.png",
+      "bytes": 95,
+      "sha256": "95cfaeba3dde34423ea3e89d30ee8fb41d9331d5aef6c520b8cbd4521c91cd1d",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/book-extension-named-directory/program/root/default/Subjects/books.collection",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/book-extension-named-directory/program/root/default/Subjects/location-00.mblink",
+      "bytes": 131,
+      "sha256": "d494465790b4172dacd8ef51a4b25e56b7d3e1f923f3f1cdb0eb31ea934c1c0a",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/book-extension-named-directory/program/root/default/Subjects/options.xml",
+      "bytes": 2003,
+      "sha256": "816463f3fa5b96142f3327e301558b9b42847e0347698e618cf47cc3089406e7",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/book-local-reader-precedence/media/Subjects/Story.cbz",
+      "bytes": 9003,
+      "sha256": "835d1c6b1721175d746765a3eb961b8f9ab61007358bd5857339c05a5bd94e6f",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/book-local-reader-precedence/media/Subjects/Story.opf",
+      "bytes": 277,
+      "sha256": "d5db300ebb6b8f1f1ed40c88d0d505cf0921942c1a1408ec0ee75961741e3c7d",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/book-local-reader-precedence/native.db",
+      "bytes": 516096,
+      "sha256": "ec34984a8ab079cba9f97fde5f34291220d82a645ef3515553485e3e1157f81b",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/book-local-reader-precedence/program/metadata/library/08/0862d950f4fde7e9b26e130c32481256/poster.png",
+      "bytes": 8787,
+      "sha256": "f56b8c908ee572720fdfc3f6550be78a9fce29d850b9a38d945b08bf56a5c7af",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/book-local-reader-precedence/program/root/default/Subjects/books.collection",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/book-local-reader-precedence/program/root/default/Subjects/location-00.mblink",
+      "bytes": 129,
+      "sha256": "cbdb831e92abfc85817cf3015c7a732a5ebd5034f545ebf051cfc9b0a4af6138",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/book-local-reader-precedence/program/root/default/Subjects/options.xml",
+      "bytes": 2003,
+      "sha256": "816463f3fa5b96142f3327e301558b9b42847e0347698e618cf47cc3089406e7",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/photo-and-book-parser-failures/media/Subjects/Album/Bad.jpg",
+      "bytes": 1840,
+      "sha256": "6999f5a213f39a41fba09ee9d1f5a987bbe80dc5e9651abb8744bc971cf2398a",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/photo-and-book-parser-failures/native.db",
+      "bytes": 516096,
+      "sha256": "e77cdd9cde86a73854d1df516537e8829fb57db868db7278b79772588908cdec",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/photo-and-book-parser-failures/program/metadata/library/2b/2b3c5bc0538e99b54c6e13ccae1a20cc/folder.jpg",
+      "bytes": 13,
+      "sha256": "44275f51235c3c76d7349f2e74a03a36e664db90550072d1a79942302f3739ef",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/photo-and-book-parser-failures/program/root/default/Subjects/location-00.mblink",
+      "bytes": 131,
+      "sha256": "115b3c5638ec8071d3e2b62875775ff08146a758aa668ae13acc023b199ea597",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/photo-and-book-parser-failures/program/root/default/Subjects/options.xml",
+      "bytes": 2003,
+      "sha256": "816463f3fa5b96142f3327e301558b9b42847e0347698e618cf47cc3089406e7",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/photo-and-book-parser-failures/program/root/default/Subjects/photos.collection",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/photo-folder-album-folder/media/Subjects/Changing/readme.txt",
+      "bytes": 27,
+      "sha256": "fecb11102912edd573851b3f5ec7ccd0a5dfb3f5797d38395b189be8b6ef38b5",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/photo-folder-album-folder/native.db",
+      "bytes": 516096,
+      "sha256": "38cc40791139162104d462cfd2b83549566c1402f3f83a59b20f3ce2b490d6b5",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/photo-folder-album-folder/program/root/default/Subjects/location-00.mblink",
+      "bytes": 126,
+      "sha256": "b990efded40e0f6df953341c370dd0f0cf14c0bc604c8674095208561e595df2",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/photo-folder-album-folder/program/root/default/Subjects/options.xml",
+      "bytes": 2003,
+      "sha256": "816463f3fa5b96142f3327e301558b9b42847e0347698e618cf47cc3089406e7",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/photo-folder-album-folder/program/root/default/Subjects/photos.collection",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/photo-fresh-nested-album/media/Subjects/Outer/Inner/AA.jpg",
+      "bytes": 268,
+      "sha256": "a729b8340d27546ad6280e36b9cbe69b739c8f261e6c9fd09dc169ec386d9fb9",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/photo-fresh-nested-album/native.db",
+      "bytes": 516096,
+      "sha256": "ecadefbbd7457e48f9e0261f91e09a3a5a8f36b767ae0cb0adafeb389422bd5a",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/photo-fresh-nested-album/program/metadata/library/cb/cbe1216ec8460889a458ffdf8c7be652/folder.jpg",
+      "bytes": 1840,
+      "sha256": "6999f5a213f39a41fba09ee9d1f5a987bbe80dc5e9651abb8744bc971cf2398a",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/photo-fresh-nested-album/program/root/default/Subjects/location-00.mblink",
+      "bytes": 125,
+      "sha256": "6c38659a8a796bfb0d7060fe192cf5b01d58983b6701abaa53c4ba4c3521bbf3",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/photo-fresh-nested-album/program/root/default/Subjects/options.xml",
+      "bytes": 2003,
+      "sha256": "816463f3fa5b96142f3327e301558b9b42847e0347698e618cf47cc3089406e7",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/photo-fresh-nested-album/program/root/default/Subjects/photos.collection",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/photo-local-cover/media/Subjects/Album/AA.jpg",
+      "bytes": 268,
+      "sha256": "a729b8340d27546ad6280e36b9cbe69b739c8f261e6c9fd09dc169ec386d9fb9",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/photo-local-cover/media/Subjects/Album/Photo.jpg",
+      "bytes": 1840,
+      "sha256": "6999f5a213f39a41fba09ee9d1f5a987bbe80dc5e9651abb8744bc971cf2398a",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/photo-local-cover/native.db",
+      "bytes": 516096,
+      "sha256": "71cfc275453137765abd8f830dd4003466877472df1197bcce01edc7e13b7eb3",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/photo-local-cover/program/metadata/library/28/2818fccc0ad5cffa3731b9fed7f21ec0/folder.jpg",
+      "bytes": 1840,
+      "sha256": "6999f5a213f39a41fba09ee9d1f5a987bbe80dc5e9651abb8744bc971cf2398a",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/photo-local-cover/program/root/default/Subjects/location-00.mblink",
+      "bytes": 118,
+      "sha256": "9fbb8fe7616ff3f1baa9da832d9c2c85f6713965874c117e2c32eb2691e15eed",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/photo-local-cover/program/root/default/Subjects/options.xml",
+      "bytes": 2002,
+      "sha256": "853b33ed6d8c4fa8fd9a84889a239bc3fe0db36d043fb3bbc9f6f975b218a265",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/photo-local-cover/program/root/default/Subjects/photos.collection",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/photo-order-and-metadata/media/Subjects/Album/a-name.jpg",
+      "bytes": 268,
+      "sha256": "a729b8340d27546ad6280e36b9cbe69b739c8f261e6c9fd09dc169ec386d9fb9",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/photo-order-and-metadata/media/Subjects/Album/z-name.jpg",
+      "bytes": 1840,
+      "sha256": "6999f5a213f39a41fba09ee9d1f5a987bbe80dc5e9651abb8744bc971cf2398a",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/photo-order-and-metadata/native.db",
+      "bytes": 516096,
+      "sha256": "6e18d2b43222578c9da3491f6664ec56440211b6e9df6815819606b3475722b1",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/photo-order-and-metadata/program/metadata/library/37/371e55be4a93ffa562e24ee8e9a6f238/folder.jpg",
+      "bytes": 316,
+      "sha256": "3ea14c8406697c22d53839e51ec96631fa87f3e515868775c65ead0b2754db48",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/photo-order-and-metadata/program/root/default/Subjects/location-00.mblink",
+      "bytes": 125,
+      "sha256": "193c8b5102c22c5fc7cdabc28a82337a0342c8a02daee5ab9aeba113126f3153",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/photo-order-and-metadata/program/root/default/Subjects/options.xml",
+      "bytes": 2003,
+      "sha256": "816463f3fa5b96142f3327e301558b9b42847e0347698e618cf47cc3089406e7",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-2/state/photo-order-and-metadata/program/root/default/Subjects/photos.collection",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-seal-2/final-files.json",
+      "bytes": 25416,
+      "sha256": "80df2b4a86e586af1ee2767de2eae72644dd935954089b6ab506ce507442cbaf",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-seal-2/source-bindings.json",
+      "bytes": 43599,
+      "sha256": "66c45711d2a88fded2676d0a8622f85d9631da5a5ba9b75a8139f74047a14b89",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-seal-2/runtime.json",
+      "bytes": 35242,
+      "sha256": "8ecfbab31f50bd14ab18d917a23eb5f120da4a2dad73fb71e716f5ce074dd99f",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/preparation/book-photo-native-1/assets/cover.png",
+      "bytes": 8787,
+      "sha256": "f56b8c908ee572720fdfc3f6550be78a9fce29d850b9a38d945b08bf56a5c7af",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/preparation/book-photo-native-1/assets/plain-photo.jpg",
+      "bytes": 268,
+      "sha256": "a729b8340d27546ad6280e36b9cbe69b739c8f261e6c9fd09dc169ec386d9fb9",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/preparation/book-photo-native-1/assets/rich-photo.jpg",
+      "bytes": 1840,
+      "sha256": "6999f5a213f39a41fba09ee9d1f5a987bbe80dc5e9651abb8744bc971cf2398a",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/preparation/book-photo-native-1/assets/oriented-photo.jpg",
+      "bytes": 316,
+      "sha256": "3ea14c8406697c22d53839e51ec96631fa87f3e515868775c65ead0b2754db48",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/preparation/book-photo-native-1/assets/invalid-photo.jpg",
+      "bytes": 13,
+      "sha256": "44275f51235c3c76d7349f2e74a03a36e664db90550072d1a79942302f3739ef",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/preparation/book-photo-native-1/assets/epub-positive.epub",
+      "bytes": 1119,
+      "sha256": "de9955fc668dbda33334d579d3560c24940c3aa384ec5b63606d6f6fd93d1228",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/preparation/book-photo-native-1/assets/epub-standard-slashes.epub",
+      "bytes": 735,
+      "sha256": "8f00f74fcdc3f47bd23ff590b8f206f2375120be8233a4f259f2412cbc5d4311",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/preparation/book-photo-native-1/assets/epub-malformed.epub",
+      "bytes": 17,
+      "sha256": "4405d141e06d03ca972fc90ad9d61db24399ef5e48269da27b1852124d0029be",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-seal-2/full-build-binding.json",
+      "bytes": 1661,
+      "sha256": "bad43858b5aaab38c8c5505ee366aee5012157a5cef6f2b51131291725eaf8da",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-seal-2/prior-attempts.json",
+      "bytes": 54158,
+      "sha256": "28c9ca0e53f7afe2eaec5702af3b41246b89b34bf8ecae78c948ab0b77005bdb",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-seal-2/oracle-build-closure.json",
+      "bytes": 51469,
+      "sha256": "5ee9da79b5310e14885b98009027b224edcc4263165ec2e0bc8b640565a05e3c",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-seal-2/case-summary.json",
+      "bytes": 16811,
+      "sha256": "23ce33c84135c7bd70cc6c5cfae6c52b5518c14bb77845c944d4dafc76306bcc",
+      "required": true
+    }
+  ],
+  "qualification": [
+    "Real LibraryManager/Folder traversal, local providers, EF SQLite and ImageProcessor/Skia. Shared posttasks are two sentinels; external-data cleanup is a controlled no-op. Not complete posttask or generic cleanup acceptance.",
+    "ProviderLog is cumulative for the whole native process; later cases can contain earlier errors. Raw retained unchanged.",
+    "Preparation-only comments in exact compiled helper snapshots describe their original authoring state. This independent receipt records actual later compilation/execution.",
+    "Comic ZIP container bytes are independently generated with identical entry names/XML/image content; this is logical-input differential, not an identical compressed-byte claim."
+  ],
+  "declaredSeams": [
+    "Shared NativeScanHost owns actual CoreAppHost resolver discovery, concrete LibraryManager, real root/default/{library} .mblink discovery, actual Folder/global traversal, EF SQLite and native persistence. No traversal or provider response is synthesized.",
+    "LibrarySeed writes actual CollectionFolder library options. SaveLocalMetadata and EnablePhotos are controlled input configuration, not ILibraryManager return-value proxies.",
+    "BookPhotoProviders appends real native local providers/services and actual LocalImageProvider/ImageProcessor/Skia. Equal-priority local Book order follows retained actual CoreAppHost discovery evidence: Comic, EPUB, OPF.",
+    "No Internet metadata providers, plugin downloads or hosted HTTP are installed in this first compound. Shared host must reject every outbound HTTP attempt. Network denial must not become a successful provider response.",
+    "Shared S1 posttasks may be two declared sentinels. Their presence is not full posttask acceptance. Watcher/timers and startup tasks stay under shared-host explicit qualification.",
+    "Input file bytes, names, timestamps and mutations are controlled only inside a fresh case media root. Media and internal metadata roots remain physically separate. Future candidate validation must map original media and metadata sidecars independently.",
+    "This preparation has no native output or acceptance counts. Fresh actual execution, full source/build closure, raw stdout/stderr/receipt, loaded assemblies, files and SQLite hashes must be bound later before candidate comparison."
+  ],
+  "sourceBuildClosure": {
+    "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-photo-native-seal-2/full-build-binding.json",
+    "bytes": 1661,
+    "sha256": "bad43858b5aaab38c8c5505ee366aee5012157a5cef6f2b51131291725eaf8da",
+    "required": true
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "parser": [],
+  "resolvers": [
+    {
+      "name": "matching-extension-directory-only",
+      "resolver": "book",
+      "collectionType": "books",
+      "target": "Novel",
+      "directories": [
+        "Novel",
+        "Novel/chapter.epub"
+      ],
+      "files": []
+    },
+    {
+      "name": "matching-extension-directory-plus-file",
+      "resolver": "book",
+      "collectionType": "books",
+      "target": "Novel",
+      "directories": [
+        "Novel",
+        "Novel/chapter.epub"
+      ],
+      "files": [
+        "Novel/story.pdf"
+      ]
+    },
+    {
+      "name": "ordinary-file-control",
+      "resolver": "book",
+      "collectionType": "books",
+      "target": "Novel",
+      "directories": [
+        "Novel"
+      ],
+      "files": [
+        "Novel/story.epub"
+      ]
+    }
+  ]
+}

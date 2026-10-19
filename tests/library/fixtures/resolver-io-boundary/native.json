@@ -1,0 +1,1235 @@
+{
+  "scope": "Actual native CoreAppHost resolver discovery and LibraryManager.ResolvePaths over ordinary Folder and actual manager AggregateFolder parents, real outer directory entries and real VIDEO_TS structure. A forwarding IFileSystem seam throws IOException exactly at either outer GetFileSystemEntries or nested GetFilePaths. Actual return items/errors/stacks are observed, without expected resolver or fallback results supplied to the native host. No item save, recursive scan, metadata or release acceptance.",
+  "inputSha256": "7816e20a42e2501103bb7d2ac261928afefa721538d86c0843262f86a691751c",
+  "results": [
+    {
+      "Name": "outer-candidate-children-io",
+      "parentId": "84734455-7603-d143-a345-333b45fd0c7b",
+      "parentType": "MediaBrowser.Controller.Entities.Folder",
+      "parentPath": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\resolver-io-boundary-native-2\\cases\\outer-candidate-children-io\\media\\parent",
+      "parentIsPhysicalRoot": false,
+      "parentIsRoot": false,
+      "ResolverTypes": [
+        "Emby.Server.Implementations.Library.Resolvers.FolderResolver",
+        "Emby.Server.Implementations.Library.Resolvers.PhotoAlbumResolver",
+        "Emby.Server.Implementations.Library.Resolvers.PhotoResolver",
+        "Emby.Server.Implementations.Library.Resolvers.PlaylistResolver",
+        "Emby.Server.Implementations.Library.Resolvers.SpecialFolderResolver",
+        "Emby.Server.Implementations.Library.Resolvers.TV.EpisodeResolver",
+        "Emby.Server.Implementations.Library.Resolvers.TV.SeasonResolver",
+        "Emby.Server.Implementations.Library.Resolvers.TV.SeriesResolver",
+        "Emby.Server.Implementations.Library.Resolvers.Movies.BoxSetResolver",
+        "Emby.Server.Implementations.Library.Resolvers.Movies.MovieResolver",
+        "Emby.Server.Implementations.Library.Resolvers.Books.BookResolver",
+        "Emby.Server.Implementations.Library.Resolvers.Audio.AudioResolver",
+        "Emby.Server.Implementations.Library.Resolvers.Audio.MusicAlbumResolver",
+        "Emby.Server.Implementations.Library.Resolvers.Audio.MusicArtistResolver"
+      ],
+      "items": [
+        {
+          "Id": "dd017b00-92fe-3314-d18b-e39ae228af26",
+          "type": "MediaBrowser.Controller.Entities.Folder",
+          "Name": "Before",
+          "Path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\resolver-io-boundary-native-2\\cases\\outer-candidate-children-io\\media\\parent\\Before",
+          "IsFolder": true,
+          "videoType": null
+        },
+        {
+          "Id": "6e46d0d1-517e-959f-8606-3ff38172345f",
+          "type": "MediaBrowser.Controller.Entities.Folder",
+          "Name": "After",
+          "Path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\resolver-io-boundary-native-2\\cases\\outer-candidate-children-io\\media\\parent\\After",
+          "IsFolder": true,
+          "videoType": null
+        }
+      ],
+      "exception": null,
+      "trace": [
+        {
+          "ordinal": 1,
+          "action": "log",
+          "detail": {
+            "category": "Emby.Server.Implementations.ApplicationHost",
+            "level": "Information",
+            "message": "Loading assemblies",
+            "exception": null
+          },
+          "scanRunning": false
+        },
+        {
+          "ordinal": 2,
+          "action": "updated",
+          "detail": {
+            "item": {
+              "id": "f27caa37-e514-2225-cced-ed48f6553502",
+              "type": "MediaBrowser.Controller.Entities.AggregateFolder",
+              "Name": "root",
+              "path": "program/root",
+              "ParentId": "00000000-0000-0000-0000-000000000000",
+              "OwnerId": "00000000-0000-0000-0000-000000000000",
+              "IsFolder": true,
+              "isRoot": true,
+              "DateCreated": "2026-10-15T22:49:38.2701186Z",
+              "DateModified": "0001-01-01T00:00:00",
+              "DateLastSaved": "2026-10-15T22:49:38.538718Z",
+              "DateLastRefreshed": "0001-01-01T00:00:00",
+              "physicalLocations": []
+            },
+            "parent": null
+          },
+          "scanRunning": false
+        },
+        {
+          "ordinal": 3,
+          "action": "updated",
+          "detail": {
+            "item": {
+              "id": "1071671e-7bff-a053-2e93-0debee501d2e",
+              "type": "Emby.Server.Implementations.Playlists.PlaylistsFolder",
+              "Name": "Playlists",
+              "path": "program/data/playlists",
+              "ParentId": "f27caa37-e514-2225-cced-ed48f6553502",
+              "OwnerId": "00000000-0000-0000-0000-000000000000",
+              "IsFolder": true,
+              "isRoot": false,
+              "DateCreated": "2026-10-15T22:49:38.4924589Z",
+              "DateModified": "2026-10-15T22:49:38.4924589Z",
+              "DateLastSaved": "2026-10-15T22:49:38.924127Z",
+              "DateLastRefreshed": "0001-01-01T00:00:00",
+              "physicalLocations": [
+                "program/data/playlists"
+              ]
+            },
+            "parent": "f27caa37-e514-2225-cced-ed48f6553502"
+          },
+          "scanRunning": false
+        },
+        {
+          "ordinal": 4,
+          "action": "created-real-roots",
+          "detail": {
+            "aggregate": {
+              "id": "f27caa37-e514-2225-cced-ed48f6553502",
+              "type": "MediaBrowser.Controller.Entities.AggregateFolder",
+              "Name": "root",
+              "path": "program/root",
+              "ParentId": "00000000-0000-0000-0000-000000000000",
+              "OwnerId": "00000000-0000-0000-0000-000000000000",
+              "IsFolder": true,
+              "isRoot": true,
+              "DateCreated": "2026-10-15T22:49:38.2701186Z",
+              "DateModified": "0001-01-01T00:00:00",
+              "DateLastSaved": "2026-10-15T22:49:38.538718Z",
+              "DateLastRefreshed": "0001-01-01T00:00:00",
+              "physicalLocations": []
+            },
+            "userRoot": {
+              "id": "e9d5075a-555c-1cbc-394e-ec4cef295274",
+              "type": "MediaBrowser.Controller.Entities.UserRootFolder",
+              "Name": "default",
+              "path": "program/root/default",
+              "ParentId": "00000000-0000-0000-0000-000000000000",
+              "OwnerId": "00000000-0000-0000-0000-000000000000",
+              "IsFolder": true,
+              "isRoot": true,
+              "DateCreated": "2026-10-15T22:49:38.5221157Z",
+              "DateModified": "0001-01-01T00:00:00",
+              "DateLastSaved": "0001-01-01T00:00:00",
+              "DateLastRefreshed": "0001-01-01T00:00:00",
+              "physicalLocations": [
+                "program/root/default"
+              ]
+            }
+          },
+          "scanRunning": false
+        },
+        {
+          "ordinal": 5,
+          "action": "added",
+          "detail": {
+            "item": {
+              "id": "84734455-7603-d143-a345-333b45fd0c7b",
+              "type": "MediaBrowser.Controller.Entities.Folder",
+              "Name": "Parent",
+              "path": "media/parent",
+              "ParentId": "00000000-0000-0000-0000-000000000000",
+              "OwnerId": "00000000-0000-0000-0000-000000000000",
+              "IsFolder": true,
+              "isRoot": false,
+              "DateCreated": "0001-01-01T00:00:00",
+              "DateModified": "0001-01-01T00:00:00",
+              "DateLastSaved": "0001-01-01T00:00:00",
+              "DateLastRefreshed": "0001-01-01T00:00:00",
+              "physicalLocations": [
+                "media/parent"
+              ]
+            },
+            "parent": null
+          },
+          "scanRunning": false
+        },
+        {
+          "ordinal": 6,
+          "action": "enumerate",
+          "detail": {
+            "path": "media/parent/Before"
+          },
+          "scanRunning": false
+        },
+        {
+          "ordinal": 7,
+          "action": "enumerate",
+          "detail": {
+            "path": "media/parent/Broken"
+          },
+          "scanRunning": false
+        },
+        {
+          "ordinal": 8,
+          "action": "injected-fault",
+          "detail": {
+            "kind": "enumeration",
+            "path": "media/parent/Broken",
+            "occurrence": 1,
+            "actualFrames": [
+              "NativeScanHost.MaybeFault",
+              "NativeScanHost\u002B\u003C\u003Ec__DisplayClass102_0.\u003CInitialize\u003Eb__3",
+              "ForwardProxy.Invoke",
+              "generatedProxy_4.GetFileSystemEntries",
+              "MediaBrowser.Controller.Providers.DirectoryService\u002B\u003C\u003Ec.\u003CGetFileSystemEntries\u003Eb__10_0",
+              "System.Collections.Concurrent.ConcurrentDictionary\u00602.GetOrAdd",
+              "MediaBrowser.Controller.Providers.DirectoryService.GetFileSystemEntries",
+              "MediaBrowser.Controller.IO.FileData.GetFilteredFileSystemEntries",
+              "Emby.Server.Implementations.Library.LibraryManager.ResolvePath",
+              "Emby.Server.Implementations.Library.LibraryManager\u002B\u003CResolveFileList\u003Ed__103.MoveNext",
+              "System.Linq.Enumerable\u002BIEnumerableSelectIterator\u00602.ToArray",
+              "Program\u002B\u003C\u003CMain\u003E$\u003Ed__0.MoveNext",
+              "System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start",
+              "System.Runtime.CompilerServices.AsyncTaskMethodBuilder.Start",
+              "Program.\u003CMain\u003E$",
+              "Program.\u003CMain\u003E"
+            ]
+          },
+          "scanRunning": false
+        },
+        {
+          "ordinal": 9,
+          "action": "log",
+          "detail": {
+            "category": "Emby.Server.Implementations.Library.LibraryManager",
+            "level": "Error",
+            "message": "Error resolving path D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\resolver-io-boundary-native-2\\cases\\outer-candidate-children-io\\media\\parent\\Broken",
+            "exception": "System.IO.IOException"
+          },
+          "scanRunning": false
+        },
+        {
+          "ordinal": 10,
+          "action": "enumerate",
+          "detail": {
+            "path": "media/parent/After"
+          },
+          "scanRunning": false
+        }
+      ]
+    },
+    {
+      "Name": "nested-video-ts-files-io",
+      "parentId": "a4c56aa5-dc4f-32d7-fe0f-c8b356e1a89c",
+      "parentType": "MediaBrowser.Controller.Entities.Folder",
+      "parentPath": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\resolver-io-boundary-native-2\\cases\\nested-video-ts-files-io\\media\\parent",
+      "parentIsPhysicalRoot": false,
+      "parentIsRoot": false,
+      "ResolverTypes": [
+        "Emby.Server.Implementations.Library.Resolvers.FolderResolver",
+        "Emby.Server.Implementations.Library.Resolvers.PhotoAlbumResolver",
+        "Emby.Server.Implementations.Library.Resolvers.PhotoResolver",
+        "Emby.Server.Implementations.Library.Resolvers.PlaylistResolver",
+        "Emby.Server.Implementations.Library.Resolvers.SpecialFolderResolver",
+        "Emby.Server.Implementations.Library.Resolvers.TV.EpisodeResolver",
+        "Emby.Server.Implementations.Library.Resolvers.TV.SeasonResolver",
+        "Emby.Server.Implementations.Library.Resolvers.TV.SeriesResolver",
+        "Emby.Server.Implementations.Library.Resolvers.Movies.BoxSetResolver",
+        "Emby.Server.Implementations.Library.Resolvers.Movies.MovieResolver",
+        "Emby.Server.Implementations.Library.Resolvers.Books.BookResolver",
+        "Emby.Server.Implementations.Library.Resolvers.Audio.AudioResolver",
+        "Emby.Server.Implementations.Library.Resolvers.Audio.MusicAlbumResolver",
+        "Emby.Server.Implementations.Library.Resolvers.Audio.MusicArtistResolver"
+      ],
+      "items": [
+        {
+          "Id": "b6f48d0b-4275-8256-5d07-30a45965d224",
+          "type": "MediaBrowser.Controller.Entities.Folder",
+          "Name": "Before",
+          "Path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\resolver-io-boundary-native-2\\cases\\nested-video-ts-files-io\\media\\parent\\Before",
+          "IsFolder": true,
+          "videoType": null
+        },
+        {
+          "Id": "966c2c47-0895-3d8a-6f90-655f251ddecf",
+          "type": "MediaBrowser.Controller.Entities.Folder",
+          "Name": "Broken",
+          "Path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\resolver-io-boundary-native-2\\cases\\nested-video-ts-files-io\\media\\parent\\Broken",
+          "IsFolder": true,
+          "videoType": null
+        },
+        {
+          "Id": "8b98ed46-cde0-83cf-ef4b-36c08303399a",
+          "type": "MediaBrowser.Controller.Entities.Folder",
+          "Name": "After",
+          "Path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\resolver-io-boundary-native-2\\cases\\nested-video-ts-files-io\\media\\parent\\After",
+          "IsFolder": true,
+          "videoType": null
+        }
+      ],
+      "exception": null,
+      "trace": [
+        {
+          "ordinal": 1,
+          "action": "log",
+          "detail": {
+            "category": "Emby.Server.Implementations.ApplicationHost",
+            "level": "Information",
+            "message": "Loading assemblies",
+            "exception": null
+          },
+          "scanRunning": false
+        },
+        {
+          "ordinal": 2,
+          "action": "updated",
+          "detail": {
+            "item": {
+              "id": "f27caa37-e514-2225-cced-ed48f6553502",
+              "type": "MediaBrowser.Controller.Entities.AggregateFolder",
+              "Name": "root",
+              "path": "program/root",
+              "ParentId": "00000000-0000-0000-0000-000000000000",
+              "OwnerId": "00000000-0000-0000-0000-000000000000",
+              "IsFolder": true,
+              "isRoot": true,
+              "DateCreated": "2026-10-15T22:49:39.2606698Z",
+              "DateModified": "0001-01-01T00:00:00",
+              "DateLastSaved": "2026-10-15T22:49:39.2859613Z",
+              "DateLastRefreshed": "0001-01-01T00:00:00",
+              "physicalLocations": []
+            },
+            "parent": null
+          },
+          "scanRunning": false
+        },
+        {
+          "ordinal": 3,
+          "action": "updated",
+          "detail": {
+            "item": {
+              "id": "1071671e-7bff-a053-2e93-0debee501d2e",
+              "type": "Emby.Server.Implementations.Playlists.PlaylistsFolder",
+              "Name": "Playlists",
+              "path": "program/data/playlists",
+              "ParentId": "f27caa37-e514-2225-cced-ed48f6553502",
+              "OwnerId": "00000000-0000-0000-0000-000000000000",
+              "IsFolder": true,
+              "isRoot": false,
+              "DateCreated": "2026-10-15T22:49:39.2688597Z",
+              "DateModified": "2026-10-15T22:49:39.2688597Z",
+              "DateLastSaved": "2026-10-15T22:49:39.2998849Z",
+              "DateLastRefreshed": "0001-01-01T00:00:00",
+              "physicalLocations": [
+                "program/data/playlists"
+              ]
+            },
+            "parent": "f27caa37-e514-2225-cced-ed48f6553502"
+          },
+          "scanRunning": false
+        },
+        {
+          "ordinal": 4,
+          "action": "created-real-roots",
+          "detail": {
+            "aggregate": {
+              "id": "f27caa37-e514-2225-cced-ed48f6553502",
+              "type": "MediaBrowser.Controller.Entities.AggregateFolder",
+              "Name": "root",
+              "path": "program/root",
+              "ParentId": "00000000-0000-0000-0000-000000000000",
+              "OwnerId": "00000000-0000-0000-0000-000000000000",
+              "IsFolder": true,
+              "isRoot": true,
+              "DateCreated": "2026-10-15T22:49:39.2606698Z",
+              "DateModified": "0001-01-01T00:00:00",
+              "DateLastSaved": "2026-10-15T22:49:39.2859613Z",
+              "DateLastRefreshed": "0001-01-01T00:00:00",
+              "physicalLocations": []
+            },
+            "userRoot": {
+              "id": "e9d5075a-555c-1cbc-394e-ec4cef295274",
+              "type": "MediaBrowser.Controller.Entities.UserRootFolder",
+              "Name": "default",
+              "path": "program/root/default",
+              "ParentId": "00000000-0000-0000-0000-000000000000",
+              "OwnerId": "00000000-0000-0000-0000-000000000000",
+              "IsFolder": true,
+              "isRoot": true,
+              "DateCreated": "2026-10-15T22:49:39.2809577Z",
+              "DateModified": "0001-01-01T00:00:00",
+              "DateLastSaved": "0001-01-01T00:00:00",
+              "DateLastRefreshed": "0001-01-01T00:00:00",
+              "physicalLocations": [
+                "program/root/default"
+              ]
+            }
+          },
+          "scanRunning": false
+        },
+        {
+          "ordinal": 5,
+          "action": "added",
+          "detail": {
+            "item": {
+              "id": "a4c56aa5-dc4f-32d7-fe0f-c8b356e1a89c",
+              "type": "MediaBrowser.Controller.Entities.Folder",
+              "Name": "Parent",
+              "path": "media/parent",
+              "ParentId": "00000000-0000-0000-0000-000000000000",
+              "OwnerId": "00000000-0000-0000-0000-000000000000",
+              "IsFolder": true,
+              "isRoot": false,
+              "DateCreated": "0001-01-01T00:00:00",
+              "DateModified": "0001-01-01T00:00:00",
+              "DateLastSaved": "0001-01-01T00:00:00",
+              "DateLastRefreshed": "0001-01-01T00:00:00",
+              "physicalLocations": [
+                "media/parent"
+              ]
+            },
+            "parent": null
+          },
+          "scanRunning": false
+        },
+        {
+          "ordinal": 6,
+          "action": "enumerate",
+          "detail": {
+            "path": "media/parent/Before"
+          },
+          "scanRunning": false
+        },
+        {
+          "ordinal": 7,
+          "action": "enumerate",
+          "detail": {
+            "path": "media/parent/Broken"
+          },
+          "scanRunning": false
+        },
+        {
+          "ordinal": 8,
+          "action": "nested-file-paths-read",
+          "detail": {
+            "path": "media/parent/Broken/VIDEO_TS"
+          },
+          "scanRunning": false
+        },
+        {
+          "ordinal": 9,
+          "action": "injected-fault",
+          "detail": {
+            "kind": "nested-file-paths",
+            "path": "media/parent/Broken/VIDEO_TS",
+            "occurrence": 1,
+            "actualFrames": [
+              "NativeScanHost.MaybeFault",
+              "NativeScanHost\u002B\u003C\u003Ec__DisplayClass102_0.\u003CInitialize\u003Eb__3",
+              "ForwardProxy.Invoke",
+              "generatedProxy_4.GetFilePaths",
+              "MediaBrowser.Controller.Providers.DirectoryService\u002B\u003C\u003Ec.\u003CGetFilePaths\u003Eb__17_0",
+              "System.Collections.Concurrent.ConcurrentDictionary\u00602.GetOrAdd",
+              "MediaBrowser.Controller.Providers.DirectoryService.GetFilePaths",
+              "MediaBrowser.Controller.Providers.DirectoryService.GetFilePaths",
+              "Emby.Server.Implementations.Library.Resolvers.BaseVideoResolver\u00601.IsDvdDirectory",
+              "Emby.Server.Implementations.Library.Resolvers.Movies.MovieResolver.FindMovie",
+              "Emby.Server.Implementations.Library.Resolvers.Movies.MovieResolver.Resolve",
+              "MediaBrowser.Controller.Resolvers.ItemResolver\u00601.ResolvePath",
+              "Emby.Server.Implementations.Library.LibraryManager.Resolve",
+              "Emby.Server.Implementations.Library.LibraryManager\u002B\u003C\u003Ec__DisplayClass91_0.\u003CResolveItem\u003Eb__0",
+              "System.Linq.Enumerable\u002BArraySelectIterator\u00602.MoveNext",
+              "System.Linq.Enumerable.TryGetFirst",
+              "System.Linq.Enumerable.FirstOrDefault",
+              "Emby.Server.Implementations.Library.LibraryManager.ResolveItem",
+              "Emby.Server.Implementations.Library.LibraryManager.ResolvePath",
+              "Emby.Server.Implementations.Library.LibraryManager\u002B\u003CResolveFileList\u003Ed__103.MoveNext",
+              "System.Linq.Enumerable\u002BIEnumerableSelectIterator\u00602.ToArray",
+              "Program\u002B\u003C\u003CMain\u003E$\u003Ed__0.MoveNext",
+              "System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start",
+              "System.Runtime.CompilerServices.AsyncTaskMethodBuilder.Start",
+              "Program.\u003CMain\u003E$",
+              "Program.\u003CMain\u003E"
+            ]
+          },
+          "scanRunning": false
+        },
+        {
+          "ordinal": 10,
+          "action": "log",
+          "detail": {
+            "category": "Emby.Server.Implementations.Library.LibraryManager",
+            "level": "Error",
+            "message": "Error in MovieResolver resolving D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\resolver-io-boundary-native-2\\cases\\nested-video-ts-files-io\\media\\parent\\Broken",
+            "exception": "System.IO.IOException"
+          },
+          "scanRunning": false
+        },
+        {
+          "ordinal": 11,
+          "action": "enumerate",
+          "detail": {
+            "path": "media/parent/After"
+          },
+          "scanRunning": false
+        }
+      ]
+    },
+    {
+      "Name": "outer-candidate-children-io-with-actual-aggregate-parent",
+      "parentId": "f27caa37-e514-2225-cced-ed48f6553502",
+      "parentType": "MediaBrowser.Controller.Entities.AggregateFolder",
+      "parentPath": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\resolver-io-boundary-native-2\\cases\\outer-candidate-children-io-with-actual-aggregate-parent\\program\\root",
+      "parentIsPhysicalRoot": true,
+      "parentIsRoot": true,
+      "ResolverTypes": [
+        "Emby.Server.Implementations.Library.Resolvers.FolderResolver",
+        "Emby.Server.Implementations.Library.Resolvers.PhotoAlbumResolver",
+        "Emby.Server.Implementations.Library.Resolvers.PhotoResolver",
+        "Emby.Server.Implementations.Library.Resolvers.PlaylistResolver",
+        "Emby.Server.Implementations.Library.Resolvers.SpecialFolderResolver",
+        "Emby.Server.Implementations.Library.Resolvers.TV.EpisodeResolver",
+        "Emby.Server.Implementations.Library.Resolvers.TV.SeasonResolver",
+        "Emby.Server.Implementations.Library.Resolvers.TV.SeriesResolver",
+        "Emby.Server.Implementations.Library.Resolvers.Movies.BoxSetResolver",
+        "Emby.Server.Implementations.Library.Resolvers.Movies.MovieResolver",
+        "Emby.Server.Implementations.Library.Resolvers.Books.BookResolver",
+        "Emby.Server.Implementations.Library.Resolvers.Audio.AudioResolver",
+        "Emby.Server.Implementations.Library.Resolvers.Audio.MusicAlbumResolver",
+        "Emby.Server.Implementations.Library.Resolvers.Audio.MusicArtistResolver"
+      ],
+      "items": [
+        {
+          "Id": "920d0f20-03fd-c3e1-508b-5ee578ca077b",
+          "type": "MediaBrowser.Controller.Entities.Folder",
+          "Name": "Before",
+          "Path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\resolver-io-boundary-native-2\\cases\\outer-candidate-children-io-with-actual-aggregate-parent\\media\\parent\\Before",
+          "IsFolder": true,
+          "videoType": null
+        },
+        {
+          "Id": "3006f83e-c8c2-4169-3d2e-b2926abe54fe",
+          "type": "MediaBrowser.Controller.Entities.Folder",
+          "Name": "Broken",
+          "Path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\resolver-io-boundary-native-2\\cases\\outer-candidate-children-io-with-actual-aggregate-parent\\media\\parent\\Broken",
+          "IsFolder": true,
+          "videoType": null
+        },
+        {
+          "Id": "7588bf06-c580-5ddd-04c3-95dda41f0f40",
+          "type": "MediaBrowser.Controller.Entities.Folder",
+          "Name": "After",
+          "Path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\resolver-io-boundary-native-2\\cases\\outer-candidate-children-io-with-actual-aggregate-parent\\media\\parent\\After",
+          "IsFolder": true,
+          "videoType": null
+        }
+      ],
+      "exception": null,
+      "trace": [
+        {
+          "ordinal": 1,
+          "action": "log",
+          "detail": {
+            "category": "Emby.Server.Implementations.ApplicationHost",
+            "level": "Information",
+            "message": "Loading assemblies",
+            "exception": null
+          },
+          "scanRunning": false
+        },
+        {
+          "ordinal": 2,
+          "action": "updated",
+          "detail": {
+            "item": {
+              "id": "f27caa37-e514-2225-cced-ed48f6553502",
+              "type": "MediaBrowser.Controller.Entities.AggregateFolder",
+              "Name": "root",
+              "path": "program/root",
+              "ParentId": "00000000-0000-0000-0000-000000000000",
+              "OwnerId": "00000000-0000-0000-0000-000000000000",
+              "IsFolder": true,
+              "isRoot": true,
+              "DateCreated": "2026-10-15T22:49:39.5735453Z",
+              "DateModified": "0001-01-01T00:00:00",
+              "DateLastSaved": "2026-10-15T22:49:39.6036811Z",
+              "DateLastRefreshed": "0001-01-01T00:00:00",
+              "physicalLocations": []
+            },
+            "parent": null
+          },
+          "scanRunning": false
+        },
+        {
+          "ordinal": 3,
+          "action": "updated",
+          "detail": {
+            "item": {
+              "id": "1071671e-7bff-a053-2e93-0debee501d2e",
+              "type": "Emby.Server.Implementations.Playlists.PlaylistsFolder",
+              "Name": "Playlists",
+              "path": "program/data/playlists",
+              "ParentId": "f27caa37-e514-2225-cced-ed48f6553502",
+              "OwnerId": "00000000-0000-0000-0000-000000000000",
+              "IsFolder": true,
+              "isRoot": false,
+              "DateCreated": "2026-10-15T22:49:39.5838982Z",
+              "DateModified": "2026-10-15T22:49:39.5838982Z",
+              "DateLastSaved": "2026-10-15T22:49:39.6200941Z",
+              "DateLastRefreshed": "0001-01-01T00:00:00",
+              "physicalLocations": [
+                "program/data/playlists"
+              ]
+            },
+            "parent": "f27caa37-e514-2225-cced-ed48f6553502"
+          },
+          "scanRunning": false
+        },
+        {
+          "ordinal": 4,
+          "action": "created-real-roots",
+          "detail": {
+            "aggregate": {
+              "id": "f27caa37-e514-2225-cced-ed48f6553502",
+              "type": "MediaBrowser.Controller.Entities.AggregateFolder",
+              "Name": "root",
+              "path": "program/root",
+              "ParentId": "00000000-0000-0000-0000-000000000000",
+              "OwnerId": "00000000-0000-0000-0000-000000000000",
+              "IsFolder": true,
+              "isRoot": true,
+              "DateCreated": "2026-10-15T22:49:39.5735453Z",
+              "DateModified": "0001-01-01T00:00:00",
+              "DateLastSaved": "2026-10-15T22:49:39.6036811Z",
+              "DateLastRefreshed": "0001-01-01T00:00:00",
+              "physicalLocations": []
+            },
+            "userRoot": {
+              "id": "e9d5075a-555c-1cbc-394e-ec4cef295274",
+              "type": "MediaBrowser.Controller.Entities.UserRootFolder",
+              "Name": "default",
+              "path": "program/root/default",
+              "ParentId": "00000000-0000-0000-0000-000000000000",
+              "OwnerId": "00000000-0000-0000-0000-000000000000",
+              "IsFolder": true,
+              "isRoot": true,
+              "DateCreated": "2026-10-15T22:49:39.5968741Z",
+              "DateModified": "0001-01-01T00:00:00",
+              "DateLastSaved": "0001-01-01T00:00:00",
+              "DateLastRefreshed": "0001-01-01T00:00:00",
+              "physicalLocations": [
+                "program/root/default"
+              ]
+            }
+          },
+          "scanRunning": false
+        },
+        {
+          "ordinal": 5,
+          "action": "enumerate",
+          "detail": {
+            "path": "media/parent/Before"
+          },
+          "scanRunning": false
+        },
+        {
+          "ordinal": 6,
+          "action": "enumerate",
+          "detail": {
+            "path": "media/parent/Broken"
+          },
+          "scanRunning": false
+        },
+        {
+          "ordinal": 7,
+          "action": "injected-fault",
+          "detail": {
+            "kind": "enumeration",
+            "path": "media/parent/Broken",
+            "occurrence": 1,
+            "actualFrames": [
+              "NativeScanHost.MaybeFault",
+              "NativeScanHost\u002B\u003C\u003Ec__DisplayClass102_0.\u003CInitialize\u003Eb__3",
+              "ForwardProxy.Invoke",
+              "generatedProxy_4.GetFileSystemEntries",
+              "MediaBrowser.Controller.Providers.DirectoryService\u002B\u003C\u003Ec.\u003CGetFileSystemEntries\u003Eb__10_0",
+              "System.Collections.Concurrent.ConcurrentDictionary\u00602.GetOrAdd",
+              "MediaBrowser.Controller.Providers.DirectoryService.GetFileSystemEntries",
+              "MediaBrowser.Controller.IO.FileData.GetFilteredFileSystemEntries",
+              "Emby.Server.Implementations.Library.LibraryManager.ResolvePath",
+              "Emby.Server.Implementations.Library.LibraryManager\u002B\u003CResolveFileList\u003Ed__103.MoveNext",
+              "System.Linq.Enumerable\u002BIEnumerableSelectIterator\u00602.ToArray",
+              "Program\u002B\u003C\u003CMain\u003E$\u003Ed__0.MoveNext",
+              "System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start",
+              "System.Runtime.CompilerServices.AsyncTaskMethodBuilder.Start",
+              "Program.\u003CMain\u003E$",
+              "Program.\u003CMain\u003E"
+            ]
+          },
+          "scanRunning": false
+        },
+        {
+          "ordinal": 8,
+          "action": "log",
+          "detail": {
+            "category": "Emby.Server.Implementations.Library.LibraryManager",
+            "level": "Error",
+            "message": "Error in GetFilteredFileSystemEntries isPhysicalRoot: False IsVf: False",
+            "exception": "System.IO.IOException"
+          },
+          "scanRunning": false
+        },
+        {
+          "ordinal": 9,
+          "action": "enumerate",
+          "detail": {
+            "path": "media/parent/After"
+          },
+          "scanRunning": false
+        }
+      ]
+    }
+  ],
+  "assemblies": [
+    {
+      "name": "AsyncKeyedLock",
+      "path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\resolver-io-boundary-native-2\\bin\\Release\\net10.0\\AsyncKeyedLock.dll",
+      "sha256": "e9ae58a8c68db178ad4ec944626036fa6eca814947c64fbb8ec74c29b2ed0b36"
+    },
+    {
+      "name": "BDInfo",
+      "path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\resolver-io-boundary-native-2\\bin\\Release\\net10.0\\BDInfo.dll",
+      "sha256": "e9766558f835a3dcdfc24e02cc88a11992f73e463afe289cb81db90a122ecf3f"
+    },
+    {
+      "name": "BitFaster.Caching",
+      "path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\resolver-io-boundary-native-2\\bin\\Release\\net10.0\\BitFaster.Caching.dll",
+      "sha256": "a58275640773dc3ff06ceafad752fd399e4ed7cef93039354b7eb06a126590ff"
+    },
+    {
+      "name": "Diacritics",
+      "path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\resolver-io-boundary-native-2\\bin\\Release\\net10.0\\Diacritics.dll",
+      "sha256": "893640462f6bfaa8cf5c18698ee655a1777b05d359963c129e95c2ffb94307b0"
+    },
+    {
+      "name": "DotNet.Glob",
+      "path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\resolver-io-boundary-native-2\\bin\\Release\\net10.0\\DotNet.Glob.dll",
+      "sha256": "2ab2c4dcda2649b078ad11cbefd7a29b38743ad076b37dced42f7546c92ead80"
+    },
+    {
+      "name": "Emby.Naming",
+      "path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\resolver-io-boundary-native-2\\bin\\Release\\net10.0\\Emby.Naming.dll",
+      "sha256": "860fd6bd1d790f51a0f0c7bccbdf4ef37cab75a797417588d28d6f327cdfb106"
+    },
+    {
+      "name": "Emby.Photos",
+      "path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\resolver-io-boundary-native-2\\bin\\Release\\net10.0\\Emby.Photos.dll",
+      "sha256": "ea702e040524dc0aeaef127012d4f4900d7a90c48caa09e0a55b4b2c7ebaac1e"
+    },
+    {
+      "name": "Emby.Server.Implementations",
+      "path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\resolver-io-boundary-native-2\\bin\\Release\\net10.0\\Emby.Server.Implementations.dll",
+      "sha256": "9c732ba80d1b1980c36d2d64780da28d64c0a8d503bf044c89bc35285eab219e"
+    },
+    {
+      "name": "Ignore",
+      "path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\resolver-io-boundary-native-2\\bin\\Release\\net10.0\\Ignore.dll",
+      "sha256": "e362b92af4a52f6bfd5b94f2692acdf3a1f3491477a12ce2ea5394cde369de2e"
+    },
+    {
+      "name": "Jellyfin.Data",
+      "path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\resolver-io-boundary-native-2\\bin\\Release\\net10.0\\Jellyfin.Data.dll",
+      "sha256": "78863aaacadbd2f9878e8c0f272f04829e9f11f53b92a6bd47fb39d05d21a2e4"
+    },
+    {
+      "name": "Jellyfin.Database.Implementations",
+      "path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\resolver-io-boundary-native-2\\bin\\Release\\net10.0\\Jellyfin.Database.Implementations.dll",
+      "sha256": "28803e21ebd1ebaf0cc3189e4f5b1ad5b476cab0f08327b9be09c235b3da169f"
+    },
+    {
+      "name": "Jellyfin.Database.Providers.Sqlite",
+      "path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\resolver-io-boundary-native-2\\bin\\Release\\net10.0\\Jellyfin.Database.Providers.Sqlite.dll",
+      "sha256": "296a0503f875c70401150236d430ac4e58d68e415a7b21e2c090a3d6c0c89f18"
+    },
+    {
+      "name": "Jellyfin.Extensions",
+      "path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\resolver-io-boundary-native-2\\bin\\Release\\net10.0\\Jellyfin.Extensions.dll",
+      "sha256": "0ded3efa5eb05eb48ffc2e32a48a1a51da78a1d9b05f5b87904cf4f1ee697716"
+    },
+    {
+      "name": "Jellyfin.LiveTv",
+      "path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\resolver-io-boundary-native-2\\bin\\Release\\net10.0\\Jellyfin.LiveTv.dll",
+      "sha256": "8b745072fa22685aea5deac3742fabb2ee3d09a81ba50dae9e46a046a34d1bbc"
+    },
+    {
+      "name": "Jellyfin.MediaEncoding.Hls",
+      "path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\resolver-io-boundary-native-2\\bin\\Release\\net10.0\\Jellyfin.MediaEncoding.Hls.dll",
+      "sha256": "77b083f4bf52719b793ae42352baa85ff0c86c65b6eee9a50e93a5337c47592e"
+    },
+    {
+      "name": "Jellyfin.MediaEncoding.Keyframes",
+      "path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\resolver-io-boundary-native-2\\bin\\Release\\net10.0\\Jellyfin.MediaEncoding.Keyframes.dll",
+      "sha256": "88669ac070abfd6b7378ae6db21d6cab69846df39af0bee0dddb6a3b017985d9"
+    },
+    {
+      "name": "Jellyfin.Networking",
+      "path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\resolver-io-boundary-native-2\\bin\\Release\\net10.0\\Jellyfin.Networking.dll",
+      "sha256": "ab0375f70fbed9d95678bdf21d1cc85e2952d33963fa10d13fdc2468e948baff"
+    },
+    {
+      "name": "Jellyfin.Server.Implementations",
+      "path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\resolver-io-boundary-native-2\\bin\\Release\\net10.0\\Jellyfin.Server.Implementations.dll",
+      "sha256": "f163fb6064b99bf6c240264e7bed0263da272d6380756c19c3f94dbf6c4365c1"
+    },
+    {
+      "name": "MediaBrowser.Common",
+      "path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\resolver-io-boundary-native-2\\bin\\Release\\net10.0\\MediaBrowser.Common.dll",
+      "sha256": "da09560f84366fe4f2667391ce443b6e1d67d9ab891e8d230acb96d54e9ce12b"
+    },
+    {
+      "name": "MediaBrowser.Controller",
+      "path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\resolver-io-boundary-native-2\\bin\\Release\\net10.0\\MediaBrowser.Controller.dll",
+      "sha256": "e4f1e201e43c9e22fd07cbd0ed2c52c427b0bdaa2dfe0ed5e5ab7ee604b537cf"
+    },
+    {
+      "name": "MediaBrowser.LocalMetadata",
+      "path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\resolver-io-boundary-native-2\\bin\\Release\\net10.0\\MediaBrowser.LocalMetadata.dll",
+      "sha256": "d87ddd8d1fe866f1d87980220a9e0d1c760a8dcb6d232855684281769f3d4c65"
+    },
+    {
+      "name": "MediaBrowser.MediaEncoding",
+      "path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\resolver-io-boundary-native-2\\bin\\Release\\net10.0\\MediaBrowser.MediaEncoding.dll",
+      "sha256": "b4301e181cdfc0b803bb5e715f4b7fd3f30606d881381d087a517a3f93c51a38"
+    },
+    {
+      "name": "MediaBrowser.Model",
+      "path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\resolver-io-boundary-native-2\\bin\\Release\\net10.0\\MediaBrowser.Model.dll",
+      "sha256": "5e5db1a105d41d913eb36d7bd9e1aeb62d3ae4809b00c12023f2eb99f019d372"
+    },
+    {
+      "name": "MediaBrowser.Providers",
+      "path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\resolver-io-boundary-native-2\\bin\\Release\\net10.0\\MediaBrowser.Providers.dll",
+      "sha256": "4aa9ca407da2bb0db21ef0a7da5bdef162260fd9c5873f06cfb239780ccc4e3e"
+    },
+    {
+      "name": "MediaBrowser.XbmcMetadata",
+      "path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\resolver-io-boundary-native-2\\bin\\Release\\net10.0\\MediaBrowser.XbmcMetadata.dll",
+      "sha256": "3f75a7fe29586a69b98e13b61b73752cf859d322298ec760e668990cf6ddfe67"
+    },
+    {
+      "name": "Microsoft.AspNetCore.Cors",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Cors.dll",
+      "sha256": "9fb130ef9b9ea9101a2dec73bdc518add30a1d8e7d8a5d6d2596a6e18e7ec1b8"
+    },
+    {
+      "name": "Microsoft.AspNetCore.Http.Abstractions",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Http.Abstractions.dll",
+      "sha256": "1fae7aa024a039a404141ec7846a016e271fd9b8bc53960cb1b17a33ffbc1a89"
+    },
+    {
+      "name": "Microsoft.AspNetCore.Mvc.Core",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Mvc.Core.dll",
+      "sha256": "1356da94b4d872025f64fd7e788e3065bf149a9edb920c892e331cad3dbaa4b6"
+    },
+    {
+      "name": "Microsoft.Data.Sqlite",
+      "path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\resolver-io-boundary-native-2\\bin\\Release\\net10.0\\Microsoft.Data.Sqlite.dll",
+      "sha256": "4abd9c2a61e580eb853e93ca8953a3cef2c05714ae28d2d1859d4dbc5e5700bc"
+    },
+    {
+      "name": "Microsoft.EntityFrameworkCore",
+      "path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\resolver-io-boundary-native-2\\bin\\Release\\net10.0\\Microsoft.EntityFrameworkCore.dll",
+      "sha256": "9cf183abffc9d6920e8366b75af8388bc502febaaa0e3d9fe41a4906a68d3065"
+    },
+    {
+      "name": "Microsoft.EntityFrameworkCore.Abstractions",
+      "path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\resolver-io-boundary-native-2\\bin\\Release\\net10.0\\Microsoft.EntityFrameworkCore.Abstractions.dll",
+      "sha256": "6c6401703d480f3fb49ca47ea746c46557779c7ac4406e29f8a8956b151877d2"
+    },
+    {
+      "name": "Microsoft.EntityFrameworkCore.Relational",
+      "path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\resolver-io-boundary-native-2\\bin\\Release\\net10.0\\Microsoft.EntityFrameworkCore.Relational.dll",
+      "sha256": "301f57f6e6a919b139307ed0b0820e74cedb1ccace5cb234470f35ff4600d7c4"
+    },
+    {
+      "name": "Microsoft.EntityFrameworkCore.Sqlite",
+      "path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\resolver-io-boundary-native-2\\bin\\Release\\net10.0\\Microsoft.EntityFrameworkCore.Sqlite.dll",
+      "sha256": "6c1737c1f1ba7b32c2a39d838b8ab5f5dbcc1639ca2fdf1aa6699d01444e0210"
+    },
+    {
+      "name": "Microsoft.Extensions.Caching.Abstractions",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Caching.Abstractions.dll",
+      "sha256": "d6c5e46c7c43834235abbbcb9767756f8e210f0fcc4b92137c57a2aa83b81b2e"
+    },
+    {
+      "name": "Microsoft.Extensions.Caching.Memory",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Caching.Memory.dll",
+      "sha256": "50df53585dac029895a6d50a32212424aafbae87b9cc20ac0af5338677492983"
+    },
+    {
+      "name": "Microsoft.Extensions.Configuration.Abstractions",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Configuration.Abstractions.dll",
+      "sha256": "63a89b1becd68c2f5051df9c042b46bdf41fba72393bb1ef29b52b701b155c31"
+    },
+    {
+      "name": "Microsoft.Extensions.DependencyInjection",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.DependencyInjection.dll",
+      "sha256": "6424c0b19a1cef1977db79eee164dcaeb3cba6abdaa583d6f5ff6413f7f7244a"
+    },
+    {
+      "name": "Microsoft.Extensions.DependencyInjection.Abstractions",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.DependencyInjection.Abstractions.dll",
+      "sha256": "0e2feec8beaa131967d1f0d70684500183227d1ef58c617b8fadb793c3387e93"
+    },
+    {
+      "name": "Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions.dll",
+      "sha256": "3df995e75029f967a5fc9b30523c0655fc70682495a2cb08e15a7aaaaee5a6af"
+    },
+    {
+      "name": "Microsoft.Extensions.Hosting.Abstractions",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Hosting.Abstractions.dll",
+      "sha256": "95f5e2e5ab0a8fc6c4fd35f1db331b7aa2852ab2cc7ca148be72320289bfedda"
+    },
+    {
+      "name": "Microsoft.Extensions.Http",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Http.dll",
+      "sha256": "2cd8cf43d2b12b0c167e35fc6218945537f484899607279af8de23147755b695"
+    },
+    {
+      "name": "Microsoft.Extensions.Logging",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Logging.dll",
+      "sha256": "afd93f320e217561e674f8c6d44ce1f0846d6ae2f26c0263f6b662476d4b570c"
+    },
+    {
+      "name": "Microsoft.Extensions.Logging.Abstractions",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Logging.Abstractions.dll",
+      "sha256": "90c41d68d297e54c4def3cfd38eb620513a744ab01131840ea3e2634cf973be3"
+    },
+    {
+      "name": "Microsoft.Extensions.Options",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Options.dll",
+      "sha256": "02a3cad0e05023f129c0717ba99d171ac524bf5f7c955863e17e3f7441107567"
+    },
+    {
+      "name": "Microsoft.Extensions.Primitives",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Primitives.dll",
+      "sha256": "5b40af41b1b354f88e64e5b04619f70aaefe693ff377ac0bb9bc7f70c4018cc1"
+    },
+    {
+      "name": "Microsoft.OpenApi",
+      "path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\resolver-io-boundary-native-2\\bin\\Release\\net10.0\\Microsoft.OpenApi.dll",
+      "sha256": "64497b0a954493014d15494bb89f09dbed059b13efe64cdf008d5f0f6bf197e5"
+    },
+    {
+      "name": "Oracle",
+      "path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\resolver-io-boundary-native-2\\bin\\Release\\net10.0\\Oracle.dll",
+      "sha256": "2218078afbef3b76285e6f0b3c87d94bc2de7a255c5cd114a08d07abcc3b3402"
+    },
+    {
+      "name": "Polly",
+      "path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\resolver-io-boundary-native-2\\bin\\Release\\net10.0\\Polly.dll",
+      "sha256": "cecb78ee944fd7cd1889c21602cc905df8f72af06a3798fb0fd75d96d436891e"
+    },
+    {
+      "name": "SQLitePCLRaw.batteries_v2",
+      "path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\resolver-io-boundary-native-2\\bin\\Release\\net10.0\\SQLitePCLRaw.batteries_v2.dll",
+      "sha256": "815ce410c9eab531dd219318e3ba16c5e38e83d361cfbbdbb4bbca222c497b0b"
+    },
+    {
+      "name": "SQLitePCLRaw.core",
+      "path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\resolver-io-boundary-native-2\\bin\\Release\\net10.0\\SQLitePCLRaw.core.dll",
+      "sha256": "af340ac9eb9195795660d7fc1114f486b6ab63998f33176e2f24c8e0acb9aa84"
+    },
+    {
+      "name": "SQLitePCLRaw.provider.e_sqlite3",
+      "path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\resolver-io-boundary-native-2\\bin\\Release\\net10.0\\SQLitePCLRaw.provider.e_sqlite3.dll",
+      "sha256": "df996bcae63c2cabcfe8d4b9c5110eb39a2a4706178b07d875665391c6eb3995"
+    },
+    {
+      "name": "Swashbuckle.AspNetCore.SwaggerGen",
+      "path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\resolver-io-boundary-native-2\\bin\\Release\\net10.0\\Swashbuckle.AspNetCore.SwaggerGen.dll",
+      "sha256": "5c28c464b321683a220364e1aafc9d07d38dcc3ff4e361e0e41c5176ccee23d9"
+    },
+    {
+      "name": "System.Collections",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Collections.dll",
+      "sha256": "df6f2037eabee28100184e92f7536427ba2f086c1110629804d466b124bc4d54"
+    },
+    {
+      "name": "System.Collections.Concurrent",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Collections.Concurrent.dll",
+      "sha256": "082f4bc0da1141eb65111b6da633d75624adfb7bb067d7ee90c5622c8b30885b"
+    },
+    {
+      "name": "System.Collections.Immutable",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Collections.Immutable.dll",
+      "sha256": "b527dd7b2beb82c22aa39787298cbeb33f3eac9eb9b83a0f0271353421db28db"
+    },
+    {
+      "name": "System.ComponentModel",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.ComponentModel.dll",
+      "sha256": "e3b6f75864ee944898540937c1f300e04f44a1b2729516f0bbf948589a8b14b2"
+    },
+    {
+      "name": "System.ComponentModel.Annotations",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.ComponentModel.Annotations.dll",
+      "sha256": "e3be2d35d81e6475c64110cfc099895b71df22c8b46a18c2d7c76a913b8ba903"
+    },
+    {
+      "name": "System.ComponentModel.Primitives",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.ComponentModel.Primitives.dll",
+      "sha256": "1e2451184c287409ea25acde3c90f25950bf34d16458a6e52a94ca4292434f62"
+    },
+    {
+      "name": "System.ComponentModel.TypeConverter",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.ComponentModel.TypeConverter.dll",
+      "sha256": "10dae312a6697718f8ce3dfcdb17d6ae4b74687c765d74d50de8a8e69e08f5e7"
+    },
+    {
+      "name": "System.Data.Common",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Data.Common.dll",
+      "sha256": "66bdd62047ee460e2ce2c33d15dd1173ac97997b2745864a905179594f821acc"
+    },
+    {
+      "name": "System.Diagnostics.DiagnosticSource",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Diagnostics.DiagnosticSource.dll",
+      "sha256": "6267c1bd1bdf2bdd4b5748b885b0adcda10f18697adfea8488a19a009ad44fdb"
+    },
+    {
+      "name": "System.Diagnostics.Process",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Diagnostics.Process.dll",
+      "sha256": "51a57fbe918f8b68930c090792b718fc0850ea12da869d50b97a3796af29a740"
+    },
+    {
+      "name": "System.Diagnostics.StackTrace",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Diagnostics.StackTrace.dll",
+      "sha256": "8f6397c1e2ba9b8b8bfa317962151b5035049ce8d6b3575e5027a0d0eeacc797"
+    },
+    {
+      "name": "System.Diagnostics.Tracing",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Diagnostics.Tracing.dll",
+      "sha256": "9563d5eec35f94d13a5e62eaa9535dbe0e9ea474f055da132fb8af46b0b01263"
+    },
+    {
+      "name": "System.IO.Pipelines",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.IO.Pipelines.dll",
+      "sha256": "ee9f0fd6c659f50799afd103c6ed9c5e408967e28dfa059bddf4b0a3fd2557dd"
+    },
+    {
+      "name": "System.Linq",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Linq.dll",
+      "sha256": "284d38945b6e92e847129bd28af458b19818d0f2181f79882888ab2003f4c519"
+    },
+    {
+      "name": "System.Linq.Expressions",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Linq.Expressions.dll",
+      "sha256": "8830f4a6a6982f53cfbb54f992858ee36b4994a6ff6e6078c39627e77bef282f"
+    },
+    {
+      "name": "System.Linq.Queryable",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Linq.Queryable.dll",
+      "sha256": "b3b3a9c1b87a51dacd46a3f9ec392c5d05e449152d44d6bd495df0994350e2fa"
+    },
+    {
+      "name": "System.Memory",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Memory.dll",
+      "sha256": "f8f9d38efd6b0de30954d6bf1f353e9617bfb36d3d245c013a3b12be9f6bd88a"
+    },
+    {
+      "name": "System.Net.Http",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Net.Http.dll",
+      "sha256": "b98ed0cb80dd54c33fc049f33af5448710752155bbd5cc8cbcd932e01f066801"
+    },
+    {
+      "name": "System.Net.NetworkInformation",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Net.NetworkInformation.dll",
+      "sha256": "7e8791833eb2d0aea77b119fed3cab8bf501f6a553155cc1c4e5b1c02f65593b"
+    },
+    {
+      "name": "System.Net.Primitives",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Net.Primitives.dll",
+      "sha256": "4dbb41a178ef013a898327152eccd146228dd2eb83859b9bb36078333b41f0f1"
+    },
+    {
+      "name": "System.Net.Sockets",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Net.Sockets.dll",
+      "sha256": "645c56d637ce15976998119e50722a911315682ce141b4aab98874ce1b063f3a"
+    },
+    {
+      "name": "System.Net.WebSockets",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Net.WebSockets.dll",
+      "sha256": "c014a074d408c71011e26eac69be85003a852cfe115e8608bb5d4fd70536eb2e"
+    },
+    {
+      "name": "System.Numerics.Vectors",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Numerics.Vectors.dll",
+      "sha256": "a9a980ee33ed0c798a5e1960c4557521f465ac9e0987dfd2c3049d53b1f2fa5a"
+    },
+    {
+      "name": "System.ObjectModel",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.ObjectModel.dll",
+      "sha256": "2179bb19f335b4fcacd0994ad2ccfdac6840deff09c7889debfe9dbb5b88a3e6"
+    },
+    {
+      "name": "System.Private.CoreLib",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Private.CoreLib.dll",
+      "sha256": "1125acc8106c43fc8bad2d203c4c4485df6182d292846c2fff415c1040c54678"
+    },
+    {
+      "name": "System.Private.Uri",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Private.Uri.dll",
+      "sha256": "b15c84d2120e1ec9612c66ba59bc3d7e67d841e2bce7b7d0478cb212537539b4"
+    },
+    {
+      "name": "System.Private.Xml",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Private.Xml.dll",
+      "sha256": "d71e72a7a9de324352edd281a46466b51bd0bdd2831b1573f8d3bae8bd2dd4a6"
+    },
+    {
+      "name": "System.Reflection.DispatchProxy",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Reflection.DispatchProxy.dll",
+      "sha256": "bf93a361c0bba8497889c9f7713add5968ba39394f9e6bda27e86294c6c43560"
+    },
+    {
+      "name": "System.Reflection.Emit",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Reflection.Emit.dll",
+      "sha256": "09059981bbeea0fdc5df589be5d7e3937d57e22bec4d78ceb492c587926fc238"
+    },
+    {
+      "name": "System.Reflection.Emit.ILGeneration",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Reflection.Emit.ILGeneration.dll",
+      "sha256": "6b42ddd05b0ca1c7342d73ea9f401fe588044215d65c67b756deb780f0894a26"
+    },
+    {
+      "name": "System.Reflection.Emit.Lightweight",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Reflection.Emit.Lightweight.dll",
+      "sha256": "d2724a2b7b46146877ec1f6e400c49ea05f84bdd31f3bba52ae139ee68a4f779"
+    },
+    {
+      "name": "System.Reflection.Primitives",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Reflection.Primitives.dll",
+      "sha256": "c2bbd885d03da5e880667c228ac1f56a5f3a72ea37d43f010ada000adc33da28"
+    },
+    {
+      "name": "System.Runtime",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Runtime.dll",
+      "sha256": "76be53624f64b23d0249dfa0bbe85390086de7c44bfd490642ea86c6faaf44af"
+    },
+    {
+      "name": "System.Runtime.Extensions",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Runtime.Extensions.dll",
+      "sha256": "3d7b517d4fd89ee58c53e0f642cc9be42e7a8669b51a85e861dafe118067cbfd"
+    },
+    {
+      "name": "System.Runtime.InteropServices",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Runtime.InteropServices.dll",
+      "sha256": "e5eb1679f3579c9141e2bb9dbdce62624a623f38d299805cc1de07bacd21841f"
+    },
+    {
+      "name": "System.Runtime.Intrinsics",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Runtime.Intrinsics.dll",
+      "sha256": "b07694ec91f3a200acf0f8b37c6ce5fcf05126a9198ae156d839fa5ca8439dc5"
+    },
+    {
+      "name": "System.Runtime.Loader",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Runtime.Loader.dll",
+      "sha256": "9b9b2a4f0358d9146e76178ddb87d019be380c78baa7dac853493d45df089f03"
+    },
+    {
+      "name": "System.Security.Cryptography",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Security.Cryptography.dll",
+      "sha256": "e0a839a540e47343b53a936b32d91599a3470005228d50fd0b896f8bbdcc65b0"
+    },
+    {
+      "name": "System.Text.Encoding.Extensions",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Text.Encoding.Extensions.dll",
+      "sha256": "8f51b9535db64fe027a40d6076200b1a6b0889bf05f62bb8e68c3eb083c7f113"
+    },
+    {
+      "name": "System.Text.Encodings.Web",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Text.Encodings.Web.dll",
+      "sha256": "d20431f20d992e71a4e82e5f25c822474e2f4097d8527972d3d78ea1f26e47c3"
+    },
+    {
+      "name": "System.Text.Json",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Text.Json.dll",
+      "sha256": "fa99f413be21ed5f484a09093fe5f0beba7de3062cf9cc9f847dbf8108dba55a"
+    },
+    {
+      "name": "System.Text.RegularExpressions",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Text.RegularExpressions.dll",
+      "sha256": "060bcc88a688e687ff1404b83b5fb5cf17e19ec57f33d5b8a48ab494da83c134"
+    },
+    {
+      "name": "System.Threading",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Threading.dll",
+      "sha256": "6c32ed1bf8067e4169e8feddd15e6489b89d19d1c7aae1520a551b57745d0a60"
+    },
+    {
+      "name": "System.Threading.Channels",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Threading.Channels.dll",
+      "sha256": "afc5deb3c32b3f64bced2025d0b01b316d41b691ebc6ccb1a2ec445ad4c15e39"
+    },
+    {
+      "name": "System.Threading.Tasks.Parallel",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Threading.Tasks.Parallel.dll",
+      "sha256": "6fa359bdbebb56be96339f244ed41658afcead5e010074da470df1115d1e7699"
+    },
+    {
+      "name": "System.Threading.Thread",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Threading.Thread.dll",
+      "sha256": "ce71949bb1ea67b686e799128582015ebf8758f1107e59e43f342ece3f662930"
+    },
+    {
+      "name": "System.Threading.ThreadPool",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Threading.ThreadPool.dll",
+      "sha256": "58fbc6c4b9c72087152fd0f0670a527098c00b0c19ba8d0979d3ca5ce07c6936"
+    },
+    {
+      "name": "System.Transactions.Local",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Transactions.Local.dll",
+      "sha256": "8d0283a311a16333ffb6f966d9765e4d8b866777ad99291a93b30db349a15bc4"
+    },
+    {
+      "name": "System.Xml.ReaderWriter",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Xml.ReaderWriter.dll",
+      "sha256": "8e48fed4d12bcffff01e8059caafb564697275797d2f5ec6823fdd82b87fe938"
+    },
+    {
+      "name": "System.Xml.XmlSerializer",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Xml.XmlSerializer.dll",
+      "sha256": "0b7d057c2b5b2272e8d4096a755edfd96f3cf03ab9aaa3fef54b462bf48d517e"
+    },
+    {
+      "name": "jellyfin",
+      "path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\resolver-io-boundary-native-2\\bin\\Release\\net10.0\\jellyfin.dll",
+      "sha256": "474c7c638fe93cc61f1a588849fb93c81a2927388f6f4cf19953b3a76e9deb26"
+    },
+    {
+      "name": "libse",
+      "path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\resolver-io-boundary-native-2\\bin\\Release\\net10.0\\libse.dll",
+      "sha256": "d435c3c4b3cb15331c8b2bf596c9db414e159db6b082b6e404e9738faa505903"
+    },
+    {
+      "name": "netstandard",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\netstandard.dll",
+      "sha256": "3dc81dbc9dacd28261632c94410859eda24c2db50cd6c14309cbb2a434b50c57"
+    }
+  ]
+}

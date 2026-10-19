@@ -35,6 +35,7 @@ export { LibraryScanHost, InertLibraryDirectoryMonitor } from './library-scan-ho
 export { TopLevelFolderValidationService, refreshCollectionFolderLocations,
   physicalFolderNativeType, collectionFolderNativeType } from './top-level-folder-validation.js';
 export { LibraryMetadataScanService, metadataScanOptions } from './metadata-scan-service.js';
+export { LibraryTaskScheduler } from './library-task-scheduler.js';
 export { PlaylistService, playlistNativeType } from './playlist-service.js';
 export { CollectionService } from './collection-service.js';
 export { SimilarItemsManager, similarCachePath,

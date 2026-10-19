@@ -87,47 +87,47 @@
   "assemblies": [
     {
       "name": "Emby.Server.Implementations",
-      "filename": "D:\\mediamanager-validation\\20261014-release-library-structure-native-6\\bin\\Release\\net10.0\\Emby.Server.Implementations.dll",
+      "filename": "D:\\mediamanager-validation\\20261016-release-validation\\results\\library-structure-native-2\\bin\\Release\\net10.0\\Emby.Server.Implementations.dll",
       "sha256": "8d369435646570958505c58b9cb17da169855dabc105d0e933524361e9b7b1c8"
     },
     {
       "name": "jellyfin",
-      "filename": "D:\\mediamanager-validation\\20261014-release-library-structure-native-6\\bin\\Release\\net10.0\\jellyfin.dll",
+      "filename": "D:\\mediamanager-validation\\20261016-release-validation\\results\\library-structure-native-2\\bin\\Release\\net10.0\\jellyfin.dll",
       "sha256": "a43fa24c44677e579fcec79d637789b9f36633d02e5434e76a0e03fa13027767"
     },
     {
       "name": "Jellyfin.Api",
-      "filename": "D:\\mediamanager-validation\\20261014-release-library-structure-native-6\\bin\\Release\\net10.0\\Jellyfin.Api.dll",
+      "filename": "D:\\mediamanager-validation\\20261016-release-validation\\results\\library-structure-native-2\\bin\\Release\\net10.0\\Jellyfin.Api.dll",
       "sha256": "d5952a67decf6279096c3ad02df59f63e8f486373b0b63a785b47ac3f9060777"
     },
     {
       "name": "Jellyfin.Data",
-      "filename": "D:\\mediamanager-validation\\20261014-release-library-structure-native-6\\bin\\Release\\net10.0\\Jellyfin.Data.dll",
+      "filename": "D:\\mediamanager-validation\\20261016-release-validation\\results\\library-structure-native-2\\bin\\Release\\net10.0\\Jellyfin.Data.dll",
       "sha256": "b991153c8e091e6e618b27b47ec2c070c003fc5c4453406a74fe843c43611d7e"
     },
     {
       "name": "Jellyfin.Database.Implementations",
-      "filename": "D:\\mediamanager-validation\\20261014-release-library-structure-native-6\\bin\\Release\\net10.0\\Jellyfin.Database.Implementations.dll",
+      "filename": "D:\\mediamanager-validation\\20261016-release-validation\\results\\library-structure-native-2\\bin\\Release\\net10.0\\Jellyfin.Database.Implementations.dll",
       "sha256": "5ffd9a90affb635962267da294a36a4cd6972da5f38083b51ecfb4fba4c31ee6"
     },
     {
       "name": "Jellyfin.Extensions",
-      "filename": "D:\\mediamanager-validation\\20261014-release-library-structure-native-6\\bin\\Release\\net10.0\\Jellyfin.Extensions.dll",
+      "filename": "D:\\mediamanager-validation\\20261016-release-validation\\results\\library-structure-native-2\\bin\\Release\\net10.0\\Jellyfin.Extensions.dll",
       "sha256": "db952e3013a6949ad22db9ac3379be2efdf441c139ddc6919e86f8c2abbc7207"
     },
     {
       "name": "MediaBrowser.Common",
-      "filename": "D:\\mediamanager-validation\\20261014-release-library-structure-native-6\\bin\\Release\\net10.0\\MediaBrowser.Common.dll",
+      "filename": "D:\\mediamanager-validation\\20261016-release-validation\\results\\library-structure-native-2\\bin\\Release\\net10.0\\MediaBrowser.Common.dll",
       "sha256": "c86a38f99a78d9d3b9dd5ba5245fb06bf654cfa3e16ec409d3ba77b1e69ed11e"
     },
     {
       "name": "MediaBrowser.Controller",
-      "filename": "D:\\mediamanager-validation\\20261014-release-library-structure-native-6\\bin\\Release\\net10.0\\MediaBrowser.Controller.dll",
+      "filename": "D:\\mediamanager-validation\\20261016-release-validation\\results\\library-structure-native-2\\bin\\Release\\net10.0\\MediaBrowser.Controller.dll",
       "sha256": "051c588a8e85a3a7cdde8dc3d9a1112217fd7e973a86fe2ff90cf765bedb75a8"
     },
     {
       "name": "MediaBrowser.Model",
-      "filename": "D:\\mediamanager-validation\\20261014-release-library-structure-native-6\\bin\\Release\\net10.0\\MediaBrowser.Model.dll",
+      "filename": "D:\\mediamanager-validation\\20261016-release-validation\\results\\library-structure-native-2\\bin\\Release\\net10.0\\MediaBrowser.Model.dll",
       "sha256": "7b2c1b16721cf7747b572e4de3761de635fad4bd12bec346983545bee73fd92c"
     },
     {
@@ -542,8 +542,8 @@
     },
     {
       "name": "Oracle",
-      "filename": "D:\\mediamanager-validation\\20261014-release-library-structure-native-6\\bin\\Release\\net10.0\\Oracle.dll",
-      "sha256": "1d216a6adf5049dde809d0b0b929419f09e96c9d33e67f5c129451f42a2c2be0"
+      "filename": "D:\\mediamanager-validation\\20261016-release-validation\\results\\library-structure-native-2\\bin\\Release\\net10.0\\Oracle.dll",
+      "sha256": "445882616433c17f54e60cc7a669ce7135039cc35c6d7ec43faf679a05a86fad"
     },
     {
       "name": "System.Collections",
@@ -1480,7 +1480,7 @@
       "status": 400,
       "contentType": "application/json; charset=utf-8",
       "allow": "",
-      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022LibraryOptions.PathInfos\u0022:[\u0022The PathInfos field is required.\u0022],\u0022LibraryOptions.TypeOptions\u0022:[\u0022The TypeOptions field is required.\u0022]},\u0022traceId\u0022:\u00220HNP9ODN32GR1:00000012\u0022}",
+      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022LibraryOptions.PathInfos\u0022:[\u0022The PathInfos field is required.\u0022],\u0022LibraryOptions.TypeOptions\u0022:[\u0022The TypeOptions field is required.\u0022]},\u0022traceId\u0022:\u00220HNPARN92SV9Q:00000012\u0022}",
       "jsonBody": {
         "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
         "title": "One or more validation errors occurred.",
@@ -1493,7 +1493,7 @@
             "The TypeOptions field is required."
           ]
         },
-        "traceId": "0HNP9ODN32GR1:00000012"
+        "traceId": "0HNPARN92SV9Q:00000012"
       },
       "calls": [],
       "files": [
@@ -1668,7 +1668,7 @@
       "status": 400,
       "contentType": "application/json; charset=utf-8",
       "allow": "",
-      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022name\u0022:[\u0022The name field is required.\u0022]},\u0022traceId\u0022:\u00220HNP9ODN32GR1:00000015\u0022}",
+      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022name\u0022:[\u0022The name field is required.\u0022]},\u0022traceId\u0022:\u00220HNPARN92SV9Q:00000015\u0022}",
       "jsonBody": {
         "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
         "title": "One or more validation errors occurred.",
@@ -1678,7 +1678,7 @@
             "The name field is required."
           ]
         },
-        "traceId": "0HNP9ODN32GR1:00000015"
+        "traceId": "0HNPARN92SV9Q:00000015"
       },
       "calls": [],
       "files": [
@@ -1692,7 +1692,7 @@
       "status": 400,
       "contentType": "application/json; charset=utf-8",
       "allow": "",
-      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022name\u0022:[\u0022The name field is required.\u0022]},\u0022traceId\u0022:\u00220HNP9ODN32GR1:00000016\u0022}",
+      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022name\u0022:[\u0022The name field is required.\u0022]},\u0022traceId\u0022:\u00220HNPARN92SV9Q:00000016\u0022}",
       "jsonBody": {
         "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
         "title": "One or more validation errors occurred.",
@@ -1702,7 +1702,7 @@
             "The name field is required."
           ]
         },
-        "traceId": "0HNP9ODN32GR1:00000016"
+        "traceId": "0HNPARN92SV9Q:00000016"
       },
       "calls": [],
       "files": [
@@ -1716,7 +1716,7 @@
       "status": 400,
       "contentType": "application/json; charset=utf-8",
       "allow": "",
-      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022name\u0022:[\u0022Library name cannot be empty or have leading/trailing spaces.\u0022]},\u0022traceId\u0022:\u00220HNP9ODN32GR1:00000017\u0022}",
+      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022name\u0022:[\u0022Library name cannot be empty or have leading/trailing spaces.\u0022]},\u0022traceId\u0022:\u00220HNPARN92SV9Q:00000017\u0022}",
       "jsonBody": {
         "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
         "title": "One or more validation errors occurred.",
@@ -1726,7 +1726,7 @@
             "Library name cannot be empty or have leading/trailing spaces."
           ]
         },
-        "traceId": "0HNP9ODN32GR1:00000017"
+        "traceId": "0HNPARN92SV9Q:00000017"
       },
       "calls": [],
       "files": [
@@ -1740,7 +1740,7 @@
       "status": 400,
       "contentType": "application/json; charset=utf-8",
       "allow": "",
-      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022name\u0022:[\u0022Library name cannot be empty or have leading/trailing spaces.\u0022]},\u0022traceId\u0022:\u00220HNP9ODN32GR1:00000018\u0022}",
+      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022name\u0022:[\u0022Library name cannot be empty or have leading/trailing spaces.\u0022]},\u0022traceId\u0022:\u00220HNPARN92SV9Q:00000018\u0022}",
       "jsonBody": {
         "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
         "title": "One or more validation errors occurred.",
@@ -1750,7 +1750,7 @@
             "Library name cannot be empty or have leading/trailing spaces."
           ]
         },
-        "traceId": "0HNP9ODN32GR1:00000018"
+        "traceId": "0HNPARN92SV9Q:00000018"
       },
       "calls": [],
       "files": [
@@ -1764,7 +1764,7 @@
       "status": 400,
       "contentType": "application/json; charset=utf-8",
       "allow": "",
-      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022name\u0022:[\u0022Library name cannot be empty or have leading/trailing spaces.\u0022]},\u0022traceId\u0022:\u00220HNP9ODN32GR1:00000019\u0022}",
+      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022name\u0022:[\u0022Library name cannot be empty or have leading/trailing spaces.\u0022]},\u0022traceId\u0022:\u00220HNPARN92SV9Q:00000019\u0022}",
       "jsonBody": {
         "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
         "title": "One or more validation errors occurred.",
@@ -1774,7 +1774,7 @@
             "Library name cannot be empty or have leading/trailing spaces."
           ]
         },
-        "traceId": "0HNP9ODN32GR1:00000019"
+        "traceId": "0HNPARN92SV9Q:00000019"
       },
       "calls": [],
       "files": [
@@ -1860,7 +1860,7 @@
       "status": 400,
       "contentType": "application/json; charset=utf-8",
       "allow": "",
-      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022name\u0022:[\u0022Library name cannot be empty or have leading/trailing spaces.\u0022]},\u0022traceId\u0022:\u00220HNP9ODN32GR1:0000001B\u0022}",
+      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022name\u0022:[\u0022Library name cannot be empty or have leading/trailing spaces.\u0022]},\u0022traceId\u0022:\u00220HNPARN92SV9Q:0000001B\u0022}",
       "jsonBody": {
         "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
         "title": "One or more validation errors occurred.",
@@ -1870,7 +1870,7 @@
             "Library name cannot be empty or have leading/trailing spaces."
           ]
         },
-        "traceId": "0HNP9ODN32GR1:0000001B"
+        "traceId": "0HNPARN92SV9Q:0000001B"
       },
       "calls": [],
       "files": [
@@ -1884,7 +1884,7 @@
       "status": 400,
       "contentType": "application/json; charset=utf-8",
       "allow": "",
-      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022name\u0022:[\u0022The name field is required.\u0022]},\u0022traceId\u0022:\u00220HNP9ODN32GR1:0000001C\u0022}",
+      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022name\u0022:[\u0022The name field is required.\u0022]},\u0022traceId\u0022:\u00220HNPARN92SV9Q:0000001C\u0022}",
       "jsonBody": {
         "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
         "title": "One or more validation errors occurred.",
@@ -1894,7 +1894,7 @@
             "The name field is required."
           ]
         },
-        "traceId": "0HNP9ODN32GR1:0000001C"
+        "traceId": "0HNPARN92SV9Q:0000001C"
       },
       "calls": [],
       "files": [
@@ -2052,7 +2052,7 @@
       "status": 400,
       "contentType": "application/json; charset=utf-8",
       "allow": "",
-      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022refreshLibrary\u0022:[\u0022The value \\u0027\\u0027 is invalid.\u0022]},\u0022traceId\u0022:\u00220HNP9ODN32GR1:0000001F\u0022}",
+      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022refreshLibrary\u0022:[\u0022The value \\u0027\\u0027 is invalid.\u0022]},\u0022traceId\u0022:\u00220HNPARN92SV9Q:0000001F\u0022}",
       "jsonBody": {
         "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
         "title": "One or more validation errors occurred.",
@@ -2062,7 +2062,7 @@
             "The value \u0027\u0027 is invalid."
           ]
         },
-        "traceId": "0HNP9ODN32GR1:0000001F"
+        "traceId": "0HNPARN92SV9Q:0000001F"
       },
       "calls": [],
       "files": [
@@ -2076,7 +2076,7 @@
       "status": 400,
       "contentType": "application/json; charset=utf-8",
       "allow": "",
-      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022refreshLibrary\u0022:[\u0022The value \\u0027 \\u0027 is invalid.\u0022]},\u0022traceId\u0022:\u00220HNP9ODN32GR1:00000020\u0022}",
+      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022refreshLibrary\u0022:[\u0022The value \\u0027 \\u0027 is invalid.\u0022]},\u0022traceId\u0022:\u00220HNPARN92SV9Q:00000020\u0022}",
       "jsonBody": {
         "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
         "title": "One or more validation errors occurred.",
@@ -2086,7 +2086,7 @@
             "The value \u0027 \u0027 is invalid."
           ]
         },
-        "traceId": "0HNP9ODN32GR1:00000020"
+        "traceId": "0HNPARN92SV9Q:00000020"
       },
       "calls": [],
       "files": [
@@ -2100,7 +2100,7 @@
       "status": 400,
       "contentType": "application/json; charset=utf-8",
       "allow": "",
-      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022refreshLibrary\u0022:[\u0022The value \\u0027yes\\u0027 is not valid.\u0022]},\u0022traceId\u0022:\u00220HNP9ODN32GR1:00000021\u0022}",
+      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022refreshLibrary\u0022:[\u0022The value \\u0027yes\\u0027 is not valid.\u0022]},\u0022traceId\u0022:\u00220HNPARN92SV9Q:00000021\u0022}",
       "jsonBody": {
         "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
         "title": "One or more validation errors occurred.",
@@ -2110,7 +2110,7 @@
             "The value \u0027yes\u0027 is not valid."
           ]
         },
-        "traceId": "0HNP9ODN32GR1:00000021"
+        "traceId": "0HNPARN92SV9Q:00000021"
       },
       "calls": [],
       "files": [
@@ -2124,7 +2124,7 @@
       "status": 400,
       "contentType": "application/json; charset=utf-8",
       "allow": "",
-      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022$.LibraryOptions.Enabled\u0022:[\u0022The JSON value could not be converted to System.Boolean. Path: $.LibraryOptions.Enabled | LineNumber: 0 | BytePositionInLine: 33.\u0022]},\u0022traceId\u0022:\u00220HNP9ODN32GR1:00000022\u0022}",
+      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022$.LibraryOptions.Enabled\u0022:[\u0022The JSON value could not be converted to System.Boolean. Path: $.LibraryOptions.Enabled | LineNumber: 0 | BytePositionInLine: 33.\u0022]},\u0022traceId\u0022:\u00220HNPARN92SV9Q:00000022\u0022}",
       "jsonBody": {
         "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
         "title": "One or more validation errors occurred.",
@@ -2134,7 +2134,7 @@
             "The JSON value could not be converted to System.Boolean. Path: $.LibraryOptions.Enabled | LineNumber: 0 | BytePositionInLine: 33."
           ]
         },
-        "traceId": "0HNP9ODN32GR1:00000022"
+        "traceId": "0HNPARN92SV9Q:00000022"
       },
       "calls": [],
       "files": [
@@ -2148,7 +2148,7 @@
       "status": 400,
       "contentType": "application/json; charset=utf-8",
       "allow": "",
-      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022$.LibraryOptions.Enabled\u0022:[\u0022The JSON value could not be converted to System.Boolean. Path: $.LibraryOptions.Enabled | LineNumber: 0 | BytePositionInLine: 34.\u0022]},\u0022traceId\u0022:\u00220HNP9ODN32GR1:00000023\u0022}",
+      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022$.LibraryOptions.Enabled\u0022:[\u0022The JSON value could not be converted to System.Boolean. Path: $.LibraryOptions.Enabled | LineNumber: 0 | BytePositionInLine: 34.\u0022]},\u0022traceId\u0022:\u00220HNPARN92SV9Q:00000023\u0022}",
       "jsonBody": {
         "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
         "title": "One or more validation errors occurred.",
@@ -2158,7 +2158,7 @@
             "The JSON value could not be converted to System.Boolean. Path: $.LibraryOptions.Enabled | LineNumber: 0 | BytePositionInLine: 34."
           ]
         },
-        "traceId": "0HNP9ODN32GR1:00000023"
+        "traceId": "0HNPARN92SV9Q:00000023"
       },
       "calls": [],
       "files": [
@@ -2244,7 +2244,7 @@
       "status": 400,
       "contentType": "application/json; charset=utf-8",
       "allow": "",
-      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022LibraryOptions.PathInfos[1].Path\u0022:[\u0022The Path field is required.\u0022]},\u0022traceId\u0022:\u00220HNP9ODN32GR1:00000025\u0022}",
+      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022LibraryOptions.PathInfos[1].Path\u0022:[\u0022The Path field is required.\u0022]},\u0022traceId\u0022:\u00220HNPARN92SV9Q:00000025\u0022}",
       "jsonBody": {
         "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
         "title": "One or more validation errors occurred.",
@@ -2254,7 +2254,7 @@
             "The Path field is required."
           ]
         },
-        "traceId": "0HNP9ODN32GR1:00000025"
+        "traceId": "0HNPARN92SV9Q:00000025"
       },
       "calls": [],
       "files": [
@@ -2268,7 +2268,7 @@
       "status": 400,
       "contentType": "application/json; charset=utf-8",
       "allow": "",
-      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022$\u0022:[\u0022Expected depth to be zero at the end of the JSON payload. There is an open JSON object or array that should be closed. Path: $ | LineNumber: 0 | BytePositionInLine: 1.\u0022]},\u0022traceId\u0022:\u00220HNP9ODN32GR1:00000026\u0022}",
+      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022$\u0022:[\u0022Expected depth to be zero at the end of the JSON payload. There is an open JSON object or array that should be closed. Path: $ | LineNumber: 0 | BytePositionInLine: 1.\u0022]},\u0022traceId\u0022:\u00220HNPARN92SV9Q:00000026\u0022}",
       "jsonBody": {
         "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
         "title": "One or more validation errors occurred.",
@@ -2278,7 +2278,7 @@
             "Expected depth to be zero at the end of the JSON payload. There is an open JSON object or array that should be closed. Path: $ | LineNumber: 0 | BytePositionInLine: 1."
           ]
         },
-        "traceId": "0HNP9ODN32GR1:00000026"
+        "traceId": "0HNPARN92SV9Q:00000026"
       },
       "calls": [],
       "files": [
@@ -2292,7 +2292,7 @@
       "status": 400,
       "contentType": "application/json; charset=utf-8",
       "allow": "",
-      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022$\u0022:[\u0022The JSON value could not be converted to Jellyfin.Api.Models.LibraryStructureDto.AddVirtualFolderDto. Path: $ | LineNumber: 0 | BytePositionInLine: 1.\u0022]},\u0022traceId\u0022:\u00220HNP9ODN32GR1:00000027\u0022}",
+      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022$\u0022:[\u0022The JSON value could not be converted to Jellyfin.Api.Models.LibraryStructureDto.AddVirtualFolderDto. Path: $ | LineNumber: 0 | BytePositionInLine: 1.\u0022]},\u0022traceId\u0022:\u00220HNPARN92SV9Q:00000027\u0022}",
       "jsonBody": {
         "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
         "title": "One or more validation errors occurred.",
@@ -2302,7 +2302,7 @@
             "The JSON value could not be converted to Jellyfin.Api.Models.LibraryStructureDto.AddVirtualFolderDto. Path: $ | LineNumber: 0 | BytePositionInLine: 1."
           ]
         },
-        "traceId": "0HNP9ODN32GR1:00000027"
+        "traceId": "0HNPARN92SV9Q:00000027"
       },
       "calls": [],
       "files": [
@@ -2424,7 +2424,7 @@
       "status": 400,
       "contentType": "application/json; charset=utf-8",
       "allow": "",
-      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022name\u0022:[\u0022The name field is required.\u0022]},\u0022traceId\u0022:\u00220HNP9ODN32GR1:0000002B\u0022}",
+      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022name\u0022:[\u0022The name field is required.\u0022]},\u0022traceId\u0022:\u00220HNPARN92SV9Q:0000002B\u0022}",
       "jsonBody": {
         "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
         "title": "One or more validation errors occurred.",
@@ -2434,7 +2434,7 @@
             "The name field is required."
           ]
         },
-        "traceId": "0HNP9ODN32GR1:0000002B"
+        "traceId": "0HNPARN92SV9Q:0000002B"
       },
       "calls": [],
       "files": [
@@ -2448,7 +2448,7 @@
       "status": 400,
       "contentType": "application/json; charset=utf-8",
       "allow": "",
-      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022refreshLibrary\u0022:[\u0022The value \\u0027no\\u0027 is not valid.\u0022]},\u0022traceId\u0022:\u00220HNP9ODN32GR1:0000002C\u0022}",
+      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022refreshLibrary\u0022:[\u0022The value \\u0027no\\u0027 is not valid.\u0022]},\u0022traceId\u0022:\u00220HNPARN92SV9Q:0000002C\u0022}",
       "jsonBody": {
         "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
         "title": "One or more validation errors occurred.",
@@ -2458,7 +2458,7 @@
             "The value \u0027no\u0027 is not valid."
           ]
         },
-        "traceId": "0HNP9ODN32GR1:0000002C"
+        "traceId": "0HNPARN92SV9Q:0000002C"
       },
       "calls": [],
       "files": [
@@ -2504,8 +2504,8 @@
         {
           "action": "move",
           "value": {
-            "from": "D:\\mediamanager-validation\\20261014-release-library-structure-native-6\\states\\rename\\root\\default\\Library",
-            "to": "D:\\mediamanager-validation\\20261014-release-library-structure-native-6\\states\\rename\\root\\default\\Renamed"
+            "from": "D:\\mediamanager-validation\\20261016-release-validation\\results\\library-structure-native-2\\states\\rename\\root\\default\\Library",
+            "to": "D:\\mediamanager-validation\\20261016-release-validation\\results\\library-structure-native-2\\states\\rename\\root\\default\\Renamed"
           }
         },
         {
@@ -2534,15 +2534,15 @@
         {
           "action": "move",
           "value": {
-            "from": "D:\\mediamanager-validation\\20261014-release-library-structure-native-6\\states\\rename-case\\root\\default\\Library",
-            "to": "D:\\mediamanager-validation\\20261014-release-library-structure-native-6\\states\\rename-case\\root\\default\\0a18f2a0e0684e0d98460c116d4175b5"
+            "from": "D:\\mediamanager-validation\\20261016-release-validation\\results\\library-structure-native-2\\states\\rename-case\\root\\default\\Library",
+            "to": "D:\\mediamanager-validation\\20261016-release-validation\\results\\library-structure-native-2\\states\\rename-case\\root\\default\\1a4be22d8d414064afb675ba2e556678"
           }
         },
         {
           "action": "move",
           "value": {
-            "from": "D:\\mediamanager-validation\\20261014-release-library-structure-native-6\\states\\rename-case\\root\\default\\0a18f2a0e0684e0d98460c116d4175b5",
-            "to": "D:\\mediamanager-validation\\20261014-release-library-structure-native-6\\states\\rename-case\\root\\default\\library"
+            "from": "D:\\mediamanager-validation\\20261016-release-validation\\results\\library-structure-native-2\\states\\rename-case\\root\\default\\1a4be22d8d414064afb675ba2e556678",
+            "to": "D:\\mediamanager-validation\\20261016-release-validation\\results\\library-structure-native-2\\states\\rename-case\\root\\default\\library"
           }
         },
         {
@@ -2571,15 +2571,15 @@
         {
           "action": "move",
           "value": {
-            "from": "D:\\mediamanager-validation\\20261014-release-library-structure-native-6\\states\\rename-same\\root\\default\\Library",
-            "to": "D:\\mediamanager-validation\\20261014-release-library-structure-native-6\\states\\rename-same\\root\\default\\bbfb864fb63347babd8409fd245df0e6"
+            "from": "D:\\mediamanager-validation\\20261016-release-validation\\results\\library-structure-native-2\\states\\rename-same\\root\\default\\Library",
+            "to": "D:\\mediamanager-validation\\20261016-release-validation\\results\\library-structure-native-2\\states\\rename-same\\root\\default\\2b4685ee544c4fc1a01efd88a1002d4d"
           }
         },
         {
           "action": "move",
           "value": {
-            "from": "D:\\mediamanager-validation\\20261014-release-library-structure-native-6\\states\\rename-same\\root\\default\\bbfb864fb63347babd8409fd245df0e6",
-            "to": "D:\\mediamanager-validation\\20261014-release-library-structure-native-6\\states\\rename-same\\root\\default\\Library"
+            "from": "D:\\mediamanager-validation\\20261016-release-validation\\results\\library-structure-native-2\\states\\rename-same\\root\\default\\2b4685ee544c4fc1a01efd88a1002d4d",
+            "to": "D:\\mediamanager-validation\\20261016-release-validation\\results\\library-structure-native-2\\states\\rename-same\\root\\default\\Library"
           }
         },
         {
@@ -2608,8 +2608,8 @@
         {
           "action": "move",
           "value": {
-            "from": "D:\\mediamanager-validation\\20261014-release-library-structure-native-6\\states\\rename-refresh\\root\\default\\Library",
-            "to": "D:\\mediamanager-validation\\20261014-release-library-structure-native-6\\states\\rename-refresh\\root\\default\\Renamed"
+            "from": "D:\\mediamanager-validation\\20261016-release-validation\\results\\library-structure-native-2\\states\\rename-refresh\\root\\default\\Library",
+            "to": "D:\\mediamanager-validation\\20261016-release-validation\\results\\library-structure-native-2\\states\\rename-refresh\\root\\default\\Renamed"
           }
         },
         {
@@ -2644,8 +2644,8 @@
       "status": 409,
       "contentType": "application/json; charset=utf-8",
       "allow": "",
-      "body": "\u0022The media library already exists at D:\\\\mediamanager-validation\\\\20261014-release-library-structure-native-6\\\\states\\\\rename-conflict\\\\root\\\\default\\\\Taken.\u0022",
-      "jsonBody": "The media library already exists at D:\\mediamanager-validation\\20261014-release-library-structure-native-6\\states\\rename-conflict\\root\\default\\Taken.",
+      "body": "\u0022The media library already exists at D:\\\\mediamanager-validation\\\\20261016-release-validation\\\\results\\\\library-structure-native-2\\\\states\\\\rename-conflict\\\\root\\\\default\\\\Taken.\u0022",
+      "jsonBody": "The media library already exists at D:\\mediamanager-validation\\20261016-release-validation\\results\\library-structure-native-2\\states\\rename-conflict\\root\\default\\Taken.",
       "calls": [],
       "files": [
         "Library\\movies.collection",
@@ -2850,8 +2850,8 @@
         {
           "action": "move",
           "value": {
-            "from": "D:\\mediamanager-validation\\20261014-release-library-structure-native-6\\states\\rename-move-failure\\root\\default\\Library",
-            "to": "D:\\mediamanager-validation\\20261014-release-library-structure-native-6\\states\\rename-move-failure\\root\\default\\Renamed"
+            "from": "D:\\mediamanager-validation\\20261016-release-validation\\results\\library-structure-native-2\\states\\rename-move-failure\\root\\default\\Library",
+            "to": "D:\\mediamanager-validation\\20261016-release-validation\\results\\library-structure-native-2\\states\\rename-move-failure\\root\\default\\Renamed"
           }
         },
         {
@@ -3008,7 +3008,7 @@
       "status": 400,
       "contentType": "application/json; charset=utf-8",
       "allow": "",
-      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022$\u0022:[\u0022JSON deserialization for type \\u0027Jellyfin.Api.Models.LibraryStructureDto.MediaPathDto\\u0027 was missing required properties including: \\u0027Name\\u0027.\u0022],\u0022mediaPathDto\u0022:[\u0022The mediaPathDto field is required.\u0022]},\u0022traceId\u0022:\u00220HNP9ODN32GR1:00000046\u0022}",
+      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022$\u0022:[\u0022JSON deserialization for type \\u0027Jellyfin.Api.Models.LibraryStructureDto.MediaPathDto\\u0027 was missing required properties including: \\u0027Name\\u0027.\u0022],\u0022mediaPathDto\u0022:[\u0022The mediaPathDto field is required.\u0022]},\u0022traceId\u0022:\u00220HNPARN92SV9Q:00000046\u0022}",
       "jsonBody": {
         "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
         "title": "One or more validation errors occurred.",
@@ -3021,7 +3021,7 @@
             "The mediaPathDto field is required."
           ]
         },
-        "traceId": "0HNP9ODN32GR1:00000046"
+        "traceId": "0HNPARN92SV9Q:00000046"
       },
       "calls": [],
       "files": [
@@ -3035,7 +3035,7 @@
       "status": 400,
       "contentType": "application/json; charset=utf-8",
       "allow": "",
-      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022Name\u0022:[\u0022The Name field is required.\u0022]},\u0022traceId\u0022:\u00220HNP9ODN32GR1:00000047\u0022}",
+      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022Name\u0022:[\u0022The Name field is required.\u0022]},\u0022traceId\u0022:\u00220HNPARN92SV9Q:00000047\u0022}",
       "jsonBody": {
         "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
         "title": "One or more validation errors occurred.",
@@ -3045,7 +3045,7 @@
             "The Name field is required."
           ]
         },
-        "traceId": "0HNP9ODN32GR1:00000047"
+        "traceId": "0HNPARN92SV9Q:00000047"
       },
       "calls": [],
       "files": [
@@ -3059,12 +3059,12 @@
       "status": 415,
       "contentType": "application/json; charset=utf-8",
       "allow": "",
-      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.16\u0022,\u0022title\u0022:\u0022Unsupported Media Type\u0022,\u0022status\u0022:415,\u0022traceId\u0022:\u00220HNP9ODN32GR1:00000048\u0022}",
+      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.16\u0022,\u0022title\u0022:\u0022Unsupported Media Type\u0022,\u0022status\u0022:415,\u0022traceId\u0022:\u00220HNPARN92SV9Q:00000048\u0022}",
       "jsonBody": {
         "type": "https://tools.ietf.org/html/rfc9110#section-15.5.16",
         "title": "Unsupported Media Type",
         "status": 415,
-        "traceId": "0HNP9ODN32GR1:00000048"
+        "traceId": "0HNPARN92SV9Q:00000048"
       },
       "calls": [],
       "files": [
@@ -3078,7 +3078,7 @@
       "status": 400,
       "contentType": "application/json; charset=utf-8",
       "allow": "",
-      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022\u0022:[\u0022A non-empty request body is required.\u0022],\u0022mediaPathDto\u0022:[\u0022The mediaPathDto field is required.\u0022]},\u0022traceId\u0022:\u00220HNP9ODN32GR1:00000049\u0022}",
+      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022\u0022:[\u0022A non-empty request body is required.\u0022],\u0022mediaPathDto\u0022:[\u0022The mediaPathDto field is required.\u0022]},\u0022traceId\u0022:\u00220HNPARN92SV9Q:00000049\u0022}",
       "jsonBody": {
         "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
         "title": "One or more validation errors occurred.",
@@ -3091,7 +3091,7 @@
             "The mediaPathDto field is required."
           ]
         },
-        "traceId": "0HNP9ODN32GR1:00000049"
+        "traceId": "0HNPARN92SV9Q:00000049"
       },
       "calls": [],
       "files": [
@@ -3105,7 +3105,7 @@
       "status": 400,
       "contentType": "application/json; charset=utf-8",
       "allow": "",
-      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022$\u0022:[\u0022The JSON value could not be converted to Jellyfin.Api.Models.LibraryStructureDto.MediaPathDto. Path: $ | LineNumber: 0 | BytePositionInLine: 1.\u0022],\u0022mediaPathDto\u0022:[\u0022The mediaPathDto field is required.\u0022]},\u0022traceId\u0022:\u00220HNP9ODN32GR1:0000004A\u0022}",
+      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022$\u0022:[\u0022The JSON value could not be converted to Jellyfin.Api.Models.LibraryStructureDto.MediaPathDto. Path: $ | LineNumber: 0 | BytePositionInLine: 1.\u0022],\u0022mediaPathDto\u0022:[\u0022The mediaPathDto field is required.\u0022]},\u0022traceId\u0022:\u00220HNPARN92SV9Q:0000004A\u0022}",
       "jsonBody": {
         "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
         "title": "One or more validation errors occurred.",
@@ -3118,7 +3118,7 @@
             "The mediaPathDto field is required."
           ]
         },
-        "traceId": "0HNP9ODN32GR1:0000004A"
+        "traceId": "0HNPARN92SV9Q:0000004A"
       },
       "calls": [],
       "files": [
@@ -3132,7 +3132,7 @@
       "status": 400,
       "contentType": "application/json; charset=utf-8",
       "allow": "",
-      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022mediaPathDto\u0022:[\u0022The mediaPathDto field is required.\u0022],\u0022$.PathInfo.Path\u0022:[\u0022The converter \\u0027Jellyfin.Extensions.Json.Converters.JsonStringConverter\\u0027 read too much or not enough. Path: $.PathInfo.Path | LineNumber: 0 | BytePositionInLine: 38.\u0022]},\u0022traceId\u0022:\u00220HNP9ODN32GR1:0000004B\u0022}",
+      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022mediaPathDto\u0022:[\u0022The mediaPathDto field is required.\u0022],\u0022$.PathInfo.Path\u0022:[\u0022The converter \\u0027Jellyfin.Extensions.Json.Converters.JsonStringConverter\\u0027 read too much or not enough. Path: $.PathInfo.Path | LineNumber: 0 | BytePositionInLine: 38.\u0022]},\u0022traceId\u0022:\u00220HNPARN92SV9Q:0000004B\u0022}",
       "jsonBody": {
         "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
         "title": "One or more validation errors occurred.",
@@ -3145,7 +3145,7 @@
             "The converter \u0027Jellyfin.Extensions.Json.Converters.JsonStringConverter\u0027 read too much or not enough. Path: $.PathInfo.Path | LineNumber: 0 | BytePositionInLine: 38."
           ]
         },
-        "traceId": "0HNP9ODN32GR1:0000004B"
+        "traceId": "0HNPARN92SV9Q:0000004B"
       },
       "calls": [],
       "files": [
@@ -3234,7 +3234,7 @@
       "status": 400,
       "contentType": "application/json; charset=utf-8",
       "allow": "",
-      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022Name\u0022:[\u0022The Name field is required.\u0022]},\u0022traceId\u0022:\u00220HNP9ODN32GR1:0000004F\u0022}",
+      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022Name\u0022:[\u0022The Name field is required.\u0022]},\u0022traceId\u0022:\u00220HNPARN92SV9Q:0000004F\u0022}",
       "jsonBody": {
         "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
         "title": "One or more validation errors occurred.",
@@ -3244,7 +3244,7 @@
             "The Name field is required."
           ]
         },
-        "traceId": "0HNP9ODN32GR1:0000004F"
+        "traceId": "0HNPARN92SV9Q:0000004F"
       },
       "calls": [],
       "files": [
@@ -3258,7 +3258,7 @@
       "status": 400,
       "contentType": "application/json; charset=utf-8",
       "allow": "",
-      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022PathInfo\u0022:[\u0022The PathInfo field is required.\u0022]},\u0022traceId\u0022:\u00220HNP9ODN32GR1:00000050\u0022}",
+      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022PathInfo\u0022:[\u0022The PathInfo field is required.\u0022]},\u0022traceId\u0022:\u00220HNPARN92SV9Q:00000050\u0022}",
       "jsonBody": {
         "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
         "title": "One or more validation errors occurred.",
@@ -3268,7 +3268,7 @@
             "The PathInfo field is required."
           ]
         },
-        "traceId": "0HNP9ODN32GR1:00000050"
+        "traceId": "0HNPARN92SV9Q:00000050"
       },
       "calls": [],
       "files": [
@@ -3282,7 +3282,7 @@
       "status": 400,
       "contentType": "application/json; charset=utf-8",
       "allow": "",
-      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022Name\u0022:[\u0022The Name field is required.\u0022]},\u0022traceId\u0022:\u00220HNP9ODN32GR1:00000051\u0022}",
+      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022Name\u0022:[\u0022The Name field is required.\u0022]},\u0022traceId\u0022:\u00220HNPARN92SV9Q:00000051\u0022}",
       "jsonBody": {
         "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
         "title": "One or more validation errors occurred.",
@@ -3292,7 +3292,7 @@
             "The Name field is required."
           ]
         },
-        "traceId": "0HNP9ODN32GR1:00000051"
+        "traceId": "0HNPARN92SV9Q:00000051"
       },
       "calls": [],
       "files": [
@@ -3366,7 +3366,7 @@
       "status": 400,
       "contentType": "application/json; charset=utf-8",
       "allow": "",
-      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022path\u0022:[\u0022The path field is required.\u0022]},\u0022traceId\u0022:\u00220HNP9ODN32GR1:00000054\u0022}",
+      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022path\u0022:[\u0022The path field is required.\u0022]},\u0022traceId\u0022:\u00220HNPARN92SV9Q:00000054\u0022}",
       "jsonBody": {
         "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
         "title": "One or more validation errors occurred.",
@@ -3376,7 +3376,7 @@
             "The path field is required."
           ]
         },
-        "traceId": "0HNP9ODN32GR1:00000054"
+        "traceId": "0HNPARN92SV9Q:00000054"
       },
       "calls": [],
       "files": [
@@ -3390,7 +3390,7 @@
       "status": 400,
       "contentType": "application/json; charset=utf-8",
       "allow": "",
-      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022path\u0022:[\u0022The path field is required.\u0022]},\u0022traceId\u0022:\u00220HNP9ODN32GR1:00000055\u0022}",
+      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022path\u0022:[\u0022The path field is required.\u0022]},\u0022traceId\u0022:\u00220HNPARN92SV9Q:00000055\u0022}",
       "jsonBody": {
         "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
         "title": "One or more validation errors occurred.",
@@ -3400,7 +3400,7 @@
             "The path field is required."
           ]
         },
-        "traceId": "0HNP9ODN32GR1:00000055"
+        "traceId": "0HNPARN92SV9Q:00000055"
       },
       "calls": [],
       "files": [
@@ -3574,7 +3574,7 @@
         {
           "action": "shortcut",
           "value": {
-            "directory": "D:\\mediamanager-validation\\20261014-release-library-structure-native-6\\states\\options-paths\\root\\default\\Library",
+            "directory": "D:\\mediamanager-validation\\20261016-release-validation\\results\\library-structure-native-2\\states\\options-paths\\root\\default\\Library",
             "info": {
               "Path": "new"
             }
@@ -3583,7 +3583,7 @@
         {
           "action": "shortcut",
           "value": {
-            "directory": "D:\\mediamanager-validation\\20261014-release-library-structure-native-6\\states\\options-paths\\root\\default\\Library",
+            "directory": "D:\\mediamanager-validation\\20261016-release-validation\\results\\library-structure-native-2\\states\\options-paths\\root\\default\\Library",
             "info": {
               "Path": "new"
             }
@@ -3735,7 +3735,7 @@
       "status": 400,
       "contentType": "application/json; charset=utf-8",
       "allow": "",
-      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022LibraryOptions.PathInfos\u0022:[\u0022The PathInfos field is required.\u0022]},\u0022traceId\u0022:\u00220HNP9ODN32GR1:0000005A\u0022}",
+      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022LibraryOptions.PathInfos\u0022:[\u0022The PathInfos field is required.\u0022]},\u0022traceId\u0022:\u00220HNPARN92SV9Q:0000005A\u0022}",
       "jsonBody": {
         "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
         "title": "One or more validation errors occurred.",
@@ -3745,7 +3745,7 @@
             "The PathInfos field is required."
           ]
         },
-        "traceId": "0HNP9ODN32GR1:0000005A"
+        "traceId": "0HNPARN92SV9Q:0000005A"
       },
       "calls": [],
       "files": [
@@ -3769,7 +3769,7 @@
         {
           "action": "shortcut",
           "value": {
-            "directory": "D:\\mediamanager-validation\\20261014-release-library-structure-native-6\\states\\options-null-path-item\\root\\default\\Library",
+            "directory": "D:\\mediamanager-validation\\20261016-release-validation\\results\\library-structure-native-2\\states\\options-null-path-item\\root\\default\\Library",
             "info": null
           }
         }
@@ -3905,7 +3905,7 @@
       "status": 400,
       "contentType": "application/json; charset=utf-8",
       "allow": "",
-      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022\u0022:[\u0022The supplied value is invalid.\u0022],\u0022request\u0022:[\u0022The request field is required.\u0022]},\u0022traceId\u0022:\u00220HNP9ODN32GR1:0000005D\u0022}",
+      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022\u0022:[\u0022The supplied value is invalid.\u0022],\u0022request\u0022:[\u0022The request field is required.\u0022]},\u0022traceId\u0022:\u00220HNPARN92SV9Q:0000005D\u0022}",
       "jsonBody": {
         "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
         "title": "One or more validation errors occurred.",
@@ -3918,7 +3918,7 @@
             "The request field is required."
           ]
         },
-        "traceId": "0HNP9ODN32GR1:0000005D"
+        "traceId": "0HNPARN92SV9Q:0000005D"
       },
       "calls": [],
       "files": [
@@ -3932,12 +3932,12 @@
       "status": 404,
       "contentType": "application/json; charset=utf-8",
       "allow": "",
-      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.5\u0022,\u0022title\u0022:\u0022Not Found\u0022,\u0022status\u0022:404,\u0022traceId\u0022:\u00220HNP9ODN32GR1:0000005E\u0022}",
+      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.5\u0022,\u0022title\u0022:\u0022Not Found\u0022,\u0022status\u0022:404,\u0022traceId\u0022:\u00220HNPARN92SV9Q:0000005E\u0022}",
       "jsonBody": {
         "type": "https://tools.ietf.org/html/rfc9110#section-15.5.5",
         "title": "Not Found",
         "status": 404,
-        "traceId": "0HNP9ODN32GR1:0000005E"
+        "traceId": "0HNPARN92SV9Q:0000005E"
       },
       "calls": [
         {
@@ -3966,7 +3966,7 @@
         {
           "action": "shortcut",
           "value": {
-            "directory": "D:\\mediamanager-validation\\20261014-release-library-structure-native-6\\states\\options-shortcut-failure\\root\\default\\Library",
+            "directory": "D:\\mediamanager-validation\\20261016-release-validation\\results\\library-structure-native-2\\states\\options-shortcut-failure\\root\\default\\Library",
             "info": {
               "Path": "new"
             }
@@ -3994,15 +3994,15 @@
         {
           "action": "move",
           "value": {
-            "from": "D:\\mediamanager-validation\\20261014-release-library-structure-native-6\\states\\rename-case-second-move-failure\\root\\default\\Library",
-            "to": "D:\\mediamanager-validation\\20261014-release-library-structure-native-6\\states\\rename-case-second-move-failure\\root\\default\\e1d543eff4ba4504b3eaec3e06592bcd"
+            "from": "D:\\mediamanager-validation\\20261016-release-validation\\results\\library-structure-native-2\\states\\rename-case-second-move-failure\\root\\default\\Library",
+            "to": "D:\\mediamanager-validation\\20261016-release-validation\\results\\library-structure-native-2\\states\\rename-case-second-move-failure\\root\\default\\ac445ecf677e406e9d1a45596f0d79ab"
           }
         },
         {
           "action": "move",
           "value": {
-            "from": "D:\\mediamanager-validation\\20261014-release-library-structure-native-6\\states\\rename-case-second-move-failure\\root\\default\\e1d543eff4ba4504b3eaec3e06592bcd",
-            "to": "D:\\mediamanager-validation\\20261014-release-library-structure-native-6\\states\\rename-case-second-move-failure\\root\\default\\library"
+            "from": "D:\\mediamanager-validation\\20261016-release-validation\\results\\library-structure-native-2\\states\\rename-case-second-move-failure\\root\\default\\ac445ecf677e406e9d1a45596f0d79ab",
+            "to": "D:\\mediamanager-validation\\20261016-release-validation\\results\\library-structure-native-2\\states\\rename-case-second-move-failure\\root\\default\\library"
           }
         },
         {
@@ -4012,7 +4012,7 @@
       ],
       "files": [
         "Taken\\movies.collection",
-        "e1d543eff4ba4504b3eaec3e06592bcd\\movies.collection"
+        "ac445ecf677e406e9d1a45596f0d79ab\\movies.collection"
       ],
       "savedOptions": null
     },
@@ -4031,8 +4031,8 @@
         {
           "action": "move",
           "value": {
-            "from": "D:\\mediamanager-validation\\20261014-release-library-structure-native-6\\states\\rename-refresh-physical\\root\\default\\Library",
-            "to": "D:\\mediamanager-validation\\20261014-release-library-structure-native-6\\states\\rename-refresh-physical\\root\\default\\Renamed"
+            "from": "D:\\mediamanager-validation\\20261016-release-validation\\results\\library-structure-native-2\\states\\rename-refresh-physical\\root\\default\\Library",
+            "to": "D:\\mediamanager-validation\\20261016-release-validation\\results\\library-structure-native-2\\states\\rename-refresh-physical\\root\\default\\Renamed"
           }
         },
         {
@@ -4117,7 +4117,7 @@
       "status": 400,
       "contentType": "application/json; charset=utf-8",
       "allow": "",
-      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022name\u0022:[\u0022The name field is required.\u0022],\u0022refreshLibrary\u0022:[\u0022The value \\u0027bad\\u0027 is not valid.\u0022],\u0022$.LibraryOptions.Enabled\u0022:[\u0022The JSON value could not be converted to System.Boolean. Path: $.LibraryOptions.Enabled | LineNumber: 0 | BytePositionInLine: 33.\u0022]},\u0022traceId\u0022:\u00220HNP9ODN32GR1:00000062\u0022}",
+      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022name\u0022:[\u0022The name field is required.\u0022],\u0022refreshLibrary\u0022:[\u0022The value \\u0027bad\\u0027 is not valid.\u0022],\u0022$.LibraryOptions.Enabled\u0022:[\u0022The JSON value could not be converted to System.Boolean. Path: $.LibraryOptions.Enabled | LineNumber: 0 | BytePositionInLine: 33.\u0022]},\u0022traceId\u0022:\u00220HNPARN92SV9Q:00000062\u0022}",
       "jsonBody": {
         "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
         "title": "One or more validation errors occurred.",
@@ -4133,7 +4133,7 @@
             "The JSON value could not be converted to System.Boolean. Path: $.LibraryOptions.Enabled | LineNumber: 0 | BytePositionInLine: 33."
           ]
         },
-        "traceId": "0HNP9ODN32GR1:00000062"
+        "traceId": "0HNPARN92SV9Q:00000062"
       },
       "calls": [],
       "files": [
@@ -4147,7 +4147,7 @@
       "status": 400,
       "contentType": "application/json; charset=utf-8",
       "allow": "",
-      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022name\u0022:[\u0022Library name cannot be empty or have leading/trailing spaces.\u0022],\u0022refreshLibrary\u0022:[\u0022The value \\u0027bad\\u0027 is not valid.\u0022],\u0022LibraryOptions.PathInfos\u0022:[\u0022The PathInfos field is required.\u0022]},\u0022traceId\u0022:\u00220HNP9ODN32GR1:00000063\u0022}",
+      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022name\u0022:[\u0022Library name cannot be empty or have leading/trailing spaces.\u0022],\u0022refreshLibrary\u0022:[\u0022The value \\u0027bad\\u0027 is not valid.\u0022],\u0022LibraryOptions.PathInfos\u0022:[\u0022The PathInfos field is required.\u0022]},\u0022traceId\u0022:\u00220HNPARN92SV9Q:00000063\u0022}",
       "jsonBody": {
         "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
         "title": "One or more validation errors occurred.",
@@ -4163,7 +4163,7 @@
             "The PathInfos field is required."
           ]
         },
-        "traceId": "0HNP9ODN32GR1:00000063"
+        "traceId": "0HNPARN92SV9Q:00000063"
       },
       "calls": [],
       "files": [
@@ -4177,12 +4177,12 @@
       "status": 415,
       "contentType": "application/json; charset=utf-8",
       "allow": "",
-      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.16\u0022,\u0022title\u0022:\u0022Unsupported Media Type\u0022,\u0022status\u0022:415,\u0022traceId\u0022:\u00220HNP9ODN32GR1:00000064\u0022}",
+      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.16\u0022,\u0022title\u0022:\u0022Unsupported Media Type\u0022,\u0022status\u0022:415,\u0022traceId\u0022:\u00220HNPARN92SV9Q:00000064\u0022}",
       "jsonBody": {
         "type": "https://tools.ietf.org/html/rfc9110#section-15.5.16",
         "title": "Unsupported Media Type",
         "status": 415,
-        "traceId": "0HNP9ODN32GR1:00000064"
+        "traceId": "0HNPARN92SV9Q:00000064"
       },
       "calls": [],
       "files": [
@@ -4196,7 +4196,7 @@
       "status": 400,
       "contentType": "application/json; charset=utf-8",
       "allow": "",
-      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022$\u0022:[\u0022JSON deserialization for type \\u0027Jellyfin.Api.Models.LibraryStructureDto.MediaPathDto\\u0027 was missing required properties including: \\u0027Name\\u0027.\u0022],\u0022mediaPathDto\u0022:[\u0022The mediaPathDto field is required.\u0022],\u0022refreshLibrary\u0022:[\u0022The value \\u0027bad\\u0027 is not valid.\u0022]},\u0022traceId\u0022:\u00220HNP9ODN32GR1:00000065\u0022}",
+      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022$\u0022:[\u0022JSON deserialization for type \\u0027Jellyfin.Api.Models.LibraryStructureDto.MediaPathDto\\u0027 was missing required properties including: \\u0027Name\\u0027.\u0022],\u0022mediaPathDto\u0022:[\u0022The mediaPathDto field is required.\u0022],\u0022refreshLibrary\u0022:[\u0022The value \\u0027bad\\u0027 is not valid.\u0022]},\u0022traceId\u0022:\u00220HNPARN92SV9Q:00000065\u0022}",
       "jsonBody": {
         "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
         "title": "One or more validation errors occurred.",
@@ -4212,7 +4212,7 @@
             "The value \u0027bad\u0027 is not valid."
           ]
         },
-        "traceId": "0HNP9ODN32GR1:00000065"
+        "traceId": "0HNPARN92SV9Q:00000065"
       },
       "calls": [],
       "files": [
@@ -4226,7 +4226,7 @@
       "status": 400,
       "contentType": "application/json; charset=utf-8",
       "allow": "",
-      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022Name\u0022:[\u0022The Name field is required.\u0022],\u0022refreshLibrary\u0022:[\u0022The value \\u0027bad\\u0027 is not valid.\u0022]},\u0022traceId\u0022:\u00220HNP9ODN32GR1:00000066\u0022}",
+      "body": "{\u0022type\u0022:\u0022https://tools.ietf.org/html/rfc9110#section-15.5.1\u0022,\u0022title\u0022:\u0022One or more validation errors occurred.\u0022,\u0022status\u0022:400,\u0022errors\u0022:{\u0022Name\u0022:[\u0022The Name field is required.\u0022],\u0022refreshLibrary\u0022:[\u0022The value \\u0027bad\\u0027 is not valid.\u0022]},\u0022traceId\u0022:\u00220HNPARN92SV9Q:00000066\u0022}",
       "jsonBody": {
         "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
         "title": "One or more validation errors occurred.",
@@ -4239,7 +4239,7 @@
             "The value \u0027bad\u0027 is not valid."
           ]
         },
-        "traceId": "0HNP9ODN32GR1:00000066"
+        "traceId": "0HNPARN92SV9Q:00000066"
       },
       "calls": [],
       "files": [

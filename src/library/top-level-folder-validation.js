@@ -2,11 +2,10 @@ import { getNewItemId } from '../core/identity.js';
 import { ItemUpdateType } from '../metadata/save-manager.js';
 import { validateCollectionLocations } from '../metadata/internal-folder-refresh.js';
 import { nativeGuid } from '../users/native.js';
-import { EMPTY_ID, idKey, nonemptyId, sameId } from './records.js';
+import { idKey, nonemptyId, sameId } from './records.js';
 import { newNativeItemEntity } from './native-item-entity.js';
 import { setResolverInitialValues } from './resolver-initial-values.js';
 import { nativeFileName, nativeFileNameWithoutExtension, nativePathKey, sameNativePath } from './native-path.js';
-import { isFileProtocol } from './owned-items.js';
 import { parseNativeCollectionType } from './scan-context.js';
 import { loadPostgresNavigationRows } from './postgres-library-query.js';
 import { ordinalIgnoreCaseEquals } from '../storage/ordinal-comparer.js';
@@ -18,8 +17,6 @@ export const physicalFolderNativeType = 'MediaBrowser.Controller.Entities.Folder
 export const collectionFolderNativeType = 'MediaBrowser.Controller.Entities.CollectionFolder';
 
 const itemType = item => String(item?.NativeType ?? item?.Type ?? '').split('.').at(-1);
-const inaccessible = error => ['not-found', 'unmapped-path', 'invalid-path', 'not-directory', 'ENOTDIR',
-  'permission-denied', 'authentication-required'].includes(error?.code);
 const immutable = values => Object.freeze(values.map(value => Object.freeze(value)));
 
 export function collectionTypeFromMarkers(files) {
@@ -30,9 +27,9 @@ export function collectionTypeFromMarkers(files) {
 }
 
 /**
- * Reconciles the two special root levels that ordinary media resolvers must
- * never claim: configured CollectionFolder directories below UserRootFolder,
- * and their shared physical Folder targets below AggregateFolder.
+ * Reconciles configured CollectionFolder directories below UserRootFolder.
+ * AggregateFolder uses the same independently committed child validation
+ * and recursive traversal as ordinary folders.
  */
 export class TopLevelFolderValidationService {
   #ownership = new AsyncLocalStorage();
@@ -80,19 +77,6 @@ export class TopLevelFolderValidationService {
     });
   }
 
-  async #directoryHasContent(item, signal, allowRemoveRoot) {
-    if (!allowRemoveRoot && ordinalIgnoreCaseEquals(nativeFileNameWithoutExtension(item.Path), 'collections')) return true;
-    try {
-      const loaded = await this.loadContext(item.Id, { draft: item });
-      const info = await loaded.fileSystemMetadata(signal);
-      if (!info?.exists || info.kind !== 'directory') return false;
-      return (await loaded.rootFolderResolveArgs(false)).files.length > 0;
-    } catch (error) {
-      if (inaccessible(error)) return false;
-      throw error;
-    }
-  }
-
   async #refreshChildren(children, options) {
     if (!options.refreshChildMetadata || !children.length || !this.metadataScanner) return null;
     const { recursive, refreshChildMetadata, allowRemoveRoot, reportProgress, ...metadataOptions } = options;
@@ -107,56 +91,6 @@ export class TopLevelFolderValidationService {
         ...metadataOptions,[validateCollectionLocations]:true
       }, {recursive:false,reportProgress});} finally {await sequence.close();}
     } finally {await cohort.release();await this.loadContext.linkedChildren.flushReleases();}
-  }
-
-  async #validateAggregate(parent, options) {
-    options.signal?.throwIfAborted();
-    const loaded = await this.loadContext(parent.Id, { draft: parent });
-    const resolution = await loaded.rootFolderResolveArgs(false);
-    const candidates = new Map();
-    for (const file of resolution.files) if (file.IsDirectory && file.Exists !== false) {
-      candidates.set(nativePathKey(file.Path), file);
-    }
-    const current = (await this.#directChildren(parent, options.signal)).filter(item => itemType(item) === 'Folder');
-    const currentById = new Map(current.map(item => [idKey(item.Id), item]));
-    const currentByPath = new Map(current.map(item => [nativePathKey(item.Path), item]));
-    const created = [], accessible = [], retained = [], removed = [];
-    const matched = new Set();
-    for (const file of candidates.values()) {
-      options.signal?.throwIfAborted();
-      const draft = this.#newItem(physicalFolderNativeType, file, parent, loaded.parents);
-      const existing = currentById.get(idKey(draft.Id)) ?? currentByPath.get(nativePathKey(file.Path));
-      if (existing) {
-        if (itemType(existing) !== 'Folder' || !sameNativePath(existing.Path, file.Path)) {
-          throw Object.assign(new Error('A configured physical library path has conflicting persisted ownership.'), {
-            code: 'metadata-conflict', status: 409
-          });
-        }
-        matched.add(idKey(existing.Id));
-        retained.push(existing);
-        if (await this.#directoryHasContent(existing, options.signal, options.allowRemoveRoot)) accessible.push(existing);
-        continue;
-      }
-      if (!await this.#directoryHasContent(draft, options.signal, options.allowRemoveRoot)) continue;
-      created.push(draft);
-      accessible.push(draft);
-    }
-    for (const item of current) {
-      options.signal?.throwIfAborted();
-      if (matched.has(idKey(item.Id)) || item.CanDelete === false || item.IsRoot
-        || !isFileProtocol(item) || !item.Path) continue;
-      item.ParentId = EMPTY_ID;
-      await this.library.deleteItem(item, { DeleteFileLocation: false }, parent, false);
-      removed.push(idKey(item.Id));
-    }
-    if (created.length) await this.itemCreation.createItems(created, parent, { signal: options.signal });
-    const refresh = await this.#refreshChildren(accessible, options);
-    return Object.freeze({
-      created: immutable(created.map(item => ({ Id: item.Id, Path: item.Path, Type: item.Type }))),
-      retained: immutable(retained.map(item => ({ Id: item.Id, Path: item.Path, Type: item.Type }))),
-      removed: immutable([...new Set(removed)].map(Id => ({ Id }))),
-      refresh
-    });
   }
 
   async #prepareCollection(file, parent, parents, signal) {
@@ -243,16 +177,15 @@ export class TopLevelFolderValidationService {
       || typeof parent.Path !== 'string' || !parent.Path) {
       throw new TypeError('Top-level validation requires an AggregateFolder or UserRootFolder.');
     }
-    if (options.recursive === true) throw new TypeError('Top-level folder validation is nonrecursive.');
+    if (itemType(parent) === 'AggregateFolder') return this.library.validateChildren(parent, options);
+    if (options.recursive === true) throw new TypeError('User root folder validation is nonrecursive.');
     const normalized = {
       ...options,
       recursive: false,
       refreshChildMetadata: options.refreshChildMetadata !== false,
       reportProgress: options.reportProgress ?? (() => {})
     };
-    const result = itemType(parent) === 'AggregateFolder'
-      ? await this.#validateAggregate(parent, normalized)
-      : await this.#validateUserRoot(parent, normalized);
+    const result = await this.#validateUserRoot(parent, normalized);
     normalized.reportProgress(100);
     return result;
   }

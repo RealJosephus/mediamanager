@@ -20,6 +20,11 @@ const makeItem = row => Object.assign(newNativeItemEntity(nativeType(row.type)),
   ImageInfos: row.images.map(image => ({ Type: image.type, Path: image.Path })) });
 const snapshot = children => children.map(item => ({ Id: guid(item.Id), Name: item.Name, type: item.Type, path: item.Path,
   images: item.ImageInfos.map(image => ({ type: image.Type, Path: image.Path })) }));
+const withChildSnapshot = children => async (_root, operation, { includeItemTypes }) => {
+  const captured = children.filter(item => includeItemTypes.includes(item.NativeType));
+  return operation({ count: async () => BigInt(captured.length),
+    withItemAtOrdinal: async (ordinal, callback) => callback(captured[Number(ordinal - 1n)]) });
+};
 
 test('Library poster fixtures preserve actual task and BaseItem refresh observations', async () => {
   assert.equal(hash(nativeBytes), provenance.nativeSha256); assert.equal(hash(inputBytes), provenance.inputSha256);
@@ -48,7 +53,7 @@ for (const recording of native.results) test(`native library poster maintenance:
     host: { async getUserRootFolder() {
       if (sample.FailRoot) throw new Error('Controlled root failure');
       return { Id: 'ba400000-0000-0000-0000-000000000999' };
-    }, getCachedChildren: async () => children },
+    }, withChildSnapshot: withChildSnapshot(children) },
     logger: { debug: message => logs.push({ level: 'Debug', message }) },
     metadataScanner: { async refreshLiveItem(item, options) {
       assert.equal(isNativeItemEntity(item), true);
@@ -93,12 +98,12 @@ for (const recording of native.results) test(`native library poster maintenance:
 
 test('Library scan continues later tasks after poster failure and propagates cancellation', async () => {
   const calls = [], required = ['getAggregateFolder', 'getUserRootFolder', 'clearIgnoreRuleCache', 'invalidateChildren',
-    'refreshMetadata', 'validateChildren', 'getChildren', 'collectionDirectoryExists', 'deleteCollections'];
+    'refreshMetadata', 'validateChildren', 'withChildren', 'collectionDirectoryExists'];
   const host = Object.fromEntries(required.map(name => [name, async () => {}]));
   host.updateInheritedValues = async () => calls.push('inherit');
   const poster = new CollectionPosterVerifyPostScanTask({ host: { getUserRootFolder: async () => ({}),
-    getCachedChildren: async () => [makeItem({ type: 'CollectionFolder', Id: 'ba400000-0000-0000-0000-000000000001',
-      Name: 'Library', path: null, images: [] })] },
+    withChildSnapshot: withChildSnapshot([makeItem({ type: 'CollectionFolder', Id: 'ba400000-0000-0000-0000-000000000001',
+      Name: 'Library', path: null, images: [] })]) },
     metadataScanner: { refreshLiveItem: async () => { throw new Error('Controlled provider failure'); } } });
   const lifecycle = new LibraryScanLifecycle({ host, monitor: { start() {}, stop() {} }, postScanTasks: [poster,
     { name: 'Following task', run: async () => calls.push('following') }], logger: { error: (error, message) => calls.push(message) } });

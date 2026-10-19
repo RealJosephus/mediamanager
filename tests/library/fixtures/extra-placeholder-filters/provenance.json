@@ -1,0 +1,3060 @@
+{
+  "schemaVersion": 1,
+  "kind": "new-designated-source-extra-placeholder-http",
+  "historicalEvidenceReplaced": false,
+  "historicalMissingEvidenceAccepted": false,
+  "releaseAcceptance": false,
+  "recordings": [
+    {
+      "evidenceRoot": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\extra-placeholder-filters-native-v1"
+    },
+    {
+      "evidenceRoot": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\extra-placeholder-filters-native-v1"
+    }
+  ],
+  "requiredInputs": [
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\recording-receipt.json",
+      "bytes": 8556,
+      "sha256": "79544fca091eaa4439f0f0a6ed5b138f230bccb641120024a79a5b52dc4cad30",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\runtime-before.json",
+      "bytes": 70316,
+      "sha256": "fb3650219ba8913e9587201238fe1bb9c21ea1dbb1186c49ab17e481aea84cf3",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\runtime-after.json",
+      "bytes": 70316,
+      "sha256": "fb3650219ba8913e9587201238fe1bb9c21ea1dbb1186c49ab17e481aea84cf3",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\dotnet-before.json",
+      "bytes": 2331261,
+      "sha256": "29e3d6ff2af554d02b46e57c9198791f60f2e5a077afe6f4bcf9cfa8f6544a60",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\dotnet-after.json",
+      "bytes": 2331261,
+      "sha256": "29e3d6ff2af554d02b46e57c9198791f60f2e5a077afe6f4bcf9cfa8f6544a60",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\stopped-source-before.json",
+      "bytes": 16004,
+      "sha256": "143c485950b3012b6b5d72beeec152e40d89a3461dd144eeb7adf9b5d59b6cd8",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\stopped-source-after.json",
+      "bytes": 16004,
+      "sha256": "143c485950b3012b6b5d72beeec152e40d89a3461dd144eeb7adf9b5d59b6cd8",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\bindings-pre-audit.json",
+      "bytes": 10549,
+      "sha256": "9e65e1cd5f6d790950aad92b2a9e771ee136c23a2792f7c6e040d0df3eba27fb",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\inputs\\native-prepared-1\\bootstrap.json",
+      "bytes": 116964,
+      "sha256": "394f4b66eec768f63fdd0beebea4a231e334902cbf388877b5fa165146b9dcfd",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\tools\\compat\\filter-reference-inputs.mjs",
+      "bytes": 4092,
+      "sha256": "91de1f092df29d5144282b780dacc64255cc7779bdcf77f1202fe235aa791ace",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\tools\\compat\\prepare-http-filter-reference.mjs",
+      "bytes": 22491,
+      "sha256": "2332fe70915f7c8f996825a75bbda9e5520eab8f05645200ae6ddd8fb718c6f2",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\tools\\compat\\verify-baseline.js",
+      "bytes": 3428,
+      "sha256": "46991bed271e61663c6f262ff4fda0a25c7bd6f19d4c63749e6848774375c54c",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\tools\\compat\\reference-inputs.js",
+      "bytes": 1954,
+      "sha256": "11ed62001527e2a77e07ed1eec65c52b7906b4684a5d7c0b54fbc0a6cbca4b38",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\inputs\\native-prepared-1\\bootstrap.log",
+      "bytes": 18415,
+      "sha256": "7df37503baef16f2d842528191148626d5dead8014412439c27897f5c3b836e4",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-native-build-closure\\baseline\\manifest.json",
+      "bytes": 513264,
+      "sha256": "2012abc83017dfd2a107a49b701531a0dad08c763bc721dc75726342002c8f5c",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\src\\database\\native-model.json",
+      "bytes": 126505,
+      "sha256": "942796bb521d2adb04951cd184ffad4988664ea7f6371e2c378b1c207903dbe6",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\dotnet.exe",
+      "bytes": 167208,
+      "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-native-build-closure\\baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\jellyfin.dll",
+      "bytes": 506368,
+      "sha256": "474c7c638fe93cc61f1a588849fb93c81a2927388f6f4cf19953b3a76e9deb26",
+      "required": true
+    },
+    {
+      "filename": "C:\\ProgramData\\chocolatey\\lib\\ffmpeg\\tools\\ffmpeg\\bin\\ffmpeg.exe",
+      "bytes": 101457920,
+      "sha256": "228d7a8556258de907fdb55f36850078ebc7680b84ec30d84ea02e99bec1d1eb",
+      "required": true
+    },
+    {
+      "filename": "C:\\ProgramData\\chocolatey\\lib\\ffmpeg\\tools\\ffmpeg\\bin\\ffprobe.exe",
+      "bytes": 101251072,
+      "sha256": "0fde260f5abd35c9cafd96f594cc76365a780c1b73a90e35b6a3409ea1db1bf0",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\inputs\\native-prepared-1\\initial.db",
+      "bytes": 548864,
+      "sha256": "52ac3f8f915b7f5fde1b4a9d7671eb86b24032d5d16f9ece20178575cbfb48a4",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/final-build-receipt.json",
+      "bytes": 14246,
+      "sha256": "44711dacc1c4e65d2f36202267423d3212c3577c41383696643ff04ebe8c49d2",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\inputs\\native-prepared-1\\source-before-guid-remap.db",
+      "bytes": 548864,
+      "sha256": "2634c8bf49180e5f9fe55d53d2854960e49f3dc17f37737c61b6467cf9aa2be7",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\tests\\library\\fixtures\\classification-filters\\input.json",
+      "bytes": 5947,
+      "sha256": "2b623e64866f7efc1b75dca450affaccecd156cd74a86f64e6ba4f80900515fa",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\tests\\library\\fixtures\\extra-placeholder-filters\\input.json",
+      "bytes": 6850,
+      "sha256": "83fcda1f9645645bc40ef53b24dcc9b469e897d54773ed42fab9ddbd1ef5b30f",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\tests\\library\\fixtures\\navigation-date-filters\\input.json",
+      "bytes": 5636,
+      "sha256": "7a31cbe579ea036391a6e701ecc868d3bc17cacf5844610700cd27176512ed53",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\preparation\\selected-profiles.json",
+      "bytes": 513,
+      "sha256": "74425144e8aad62e112709f155119bbc1e0224dfe083e0d555983c7ed666e7de",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\preparation\\current-file-pins.json",
+      "bytes": 2635,
+      "sha256": "ff188d007f79bfcd7a0a3c8b4314bf860c5a85941d97705d00c6828de6df8f4b",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\preparation\\record-three-filter-profiles.mjs",
+      "bytes": 10654,
+      "sha256": "982840f456bc4e46c802d3b2371e9c0f1889e1fe6d69031f846737f53367c10d",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\preparation\\create-group-tools.mjs",
+      "bytes": 7594,
+      "sha256": "62b518fd3acb8ccca6b90ff921422bc6875dd0a33c2f8a33ed6b484f815e0fee",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\current-files-after.json",
+      "bytes": 2774,
+      "sha256": "e9fbd6a437bd7c33f771ea4978a49d5fa8cb9797d7094f6968ebcc06c7f7e075",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-native-build-closure\\baseline\\source\\Emby.Server.Implementations\\ScheduledTasks\\Tasks\\AudioNormalizationTask.cs",
+      "bytes": 11562,
+      "sha256": "b98c5ebff850fadc70f12919b234feb6535b67cfb35c7e75c87afc81e4956eec",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-native-build-closure\\baseline\\source\\Emby.Server.Implementations\\ScheduledTasks\\Tasks\\ChapterImagesTask.cs",
+      "bytes": 5852,
+      "sha256": "b922708f493b264a9e65747f4579eef6d3d94bef7f02310ef78ad3e5e9fe79b9",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-native-build-closure\\baseline\\source\\Emby.Server.Implementations\\ScheduledTasks\\Tasks\\CleanActivityLogTask.cs",
+      "bytes": 2726,
+      "sha256": "d00d3749c7f78ae4a93b292a6dd36dd32995f40cef71641991dc96ffdf13fff8",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-native-build-closure\\baseline\\source\\Emby.Server.Implementations\\ScheduledTasks\\Tasks\\CleanupUserDataTask.cs",
+      "bytes": 2894,
+      "sha256": "42be43be401fa839f41d4403a6c59c5728101268b97198669030620fd18869dd",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-native-build-closure\\baseline\\source\\Emby.Server.Implementations\\ScheduledTasks\\Tasks\\DeleteCacheFileTask.cs",
+      "bytes": 4646,
+      "sha256": "e42bc466cf2fee3180a7677aa106b11a685d3f16c7a1d181d82307d96ca89846",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-native-build-closure\\baseline\\source\\Emby.Server.Implementations\\ScheduledTasks\\Tasks\\DeleteLogFileTask.cs",
+      "bytes": 3446,
+      "sha256": "e0e5cde8e7ea76be781a7c0ab2e613f8d65332cc1a47f03329ef2745444e5e15",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-native-build-closure\\baseline\\source\\Emby.Server.Implementations\\ScheduledTasks\\Tasks\\DeleteTranscodeFileTask.cs",
+      "bytes": 4290,
+      "sha256": "eca13969720316688d71dbe693bc714e5e074f2a07eef588225dd71f554a93b2",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-native-build-closure\\baseline\\source\\Emby.Server.Implementations\\ScheduledTasks\\Tasks\\MediaSegmentExtractionTask.cs",
+      "bytes": 4141,
+      "sha256": "5222e01d7726b49c812322b34eb0e77da012ed947162531a21b7816b40024715",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-native-build-closure\\baseline\\source\\Emby.Server.Implementations\\ScheduledTasks\\Tasks\\OptimizeDatabaseTask.cs",
+      "bytes": 3606,
+      "sha256": "38021ee29727b44f282de84c2672b6349dcd033706e882f3930833b9b435e0fa",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-native-build-closure\\baseline\\source\\Emby.Server.Implementations\\ScheduledTasks\\Tasks\\PeopleValidationTask.cs",
+      "bytes": 10998,
+      "sha256": "acc972f1b42a5b2f0d0117d196121c96ee475ea5cd173a1eab59e3ad970dc70c",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-native-build-closure\\baseline\\source\\Emby.Server.Implementations\\ScheduledTasks\\Tasks\\PluginUpdateTask.cs",
+      "bytes": 4232,
+      "sha256": "756dcfba22ea6534c8cb5a0639d50441b1b6e6f42e3bb18d7d037bd90b71b217",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-native-build-closure\\baseline\\source\\Emby.Server.Implementations\\ScheduledTasks\\Tasks\\RefreshMediaLibraryTask.cs",
+      "bytes": 2179,
+      "sha256": "6918770982710525d21a113a4e82544fd7d0fde81019808d15530cbd203175ef",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-native-build-closure\\baseline\\source\\MediaBrowser.Providers\\Lyric\\LyricScheduledTask.cs",
+      "bytes": 6735,
+      "sha256": "252f562ae685ed6ebf3cd70000324411f4c0ad1932346441ed177baeacaa8744",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-native-build-closure\\baseline\\source\\MediaBrowser.Providers\\MediaInfo\\SubtitleScheduledTask.cs",
+      "bytes": 8159,
+      "sha256": "1c8d1b6d547eadfd787280aa83cda3d3bb6d0f6a1b92dcb4f8a40033efab2aa4",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-native-build-closure\\baseline\\source\\MediaBrowser.Providers\\Plugins\\Tmdb\\TV\\TmdbUpcomingEpisodesTask.cs",
+      "bytes": 8599,
+      "sha256": "34dfe0041b4be1aa72c112683d54330110c60de82ed9a1fdb59ea2629eef8f00",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-native-build-closure\\baseline\\source\\MediaBrowser.Providers\\Trickplay\\TrickplayImagesTask.cs",
+      "bytes": 3833,
+      "sha256": "fa0bf436a332eaf9acd86b09bbf01cfed5b7078e89ccd00ab6d557e8692eb2b3",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-native-build-closure\\baseline\\source\\MediaBrowser.Providers\\Trickplay\\TrickplayMoveImagesTask.cs",
+      "bytes": 4334,
+      "sha256": "e816e8e2e6d2ab33f71528d4b7ca43f41787bf7161cb5c539cd0d550d790faff",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-native-build-closure\\baseline\\source\\src\\Jellyfin.LiveTv\\Channels\\RefreshChannelsScheduledTask.cs",
+      "bytes": 3162,
+      "sha256": "c67ed901f1847a6fda45ea649061af83b49b644b569cb364418e9ca6c9750682",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-native-build-closure\\baseline\\source\\src\\Jellyfin.LiveTv\\Guide\\RefreshGuideScheduledTask.cs",
+      "bytes": 2260,
+      "sha256": "7491541c56473a3bb6ac038acf56e72fe372ffb8eb9c815f54afcb2646e2350d",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-native-build-closure\\baseline\\source\\src\\Jellyfin.MediaEncoding.Hls\\ScheduledTasks\\KeyframeExtractionScheduledTask.cs",
+      "bytes": 3942,
+      "sha256": "c1269c0ea78a0aaa942269931c5e89970ec5f5eb524f19f4d8786cb3ac09c632",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\inputs\\native-prepared-1\\cache\\.jellyfin-cache",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\inputs\\native-prepared-1\\cache\\CACHEDIR.TAG",
+      "bytes": 184,
+      "sha256": "3aa406bbcda8ced73b0c0cbfa901a63ef787b9764da0e61c4a85d286fb64cc01",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\inputs\\native-prepared-1\\cache\\transcodes\\.jellyfin-transcode",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\inputs\\native-prepared-1\\config\\.jellyfin-config",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\inputs\\native-prepared-1\\config\\database.xml",
+      "bytes": 295,
+      "sha256": "838f400177c714e142a5acfeb32586e363b158622099f6a39013069f54e5c89d",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\inputs\\native-prepared-1\\config\\encoding.xml",
+      "bytes": 2807,
+      "sha256": "3b709a5f818fb179f9ecbfbe7ca00cd6afb1a3aca92744749866d08395ba5a5d",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\inputs\\native-prepared-1\\config\\logging.default.json",
+      "bytes": 1366,
+      "sha256": "ed6c9137a777896fa7ce8365d7f71ce37e424eef6c7fe2e67645b7c56b9465ca",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\inputs\\native-prepared-1\\config\\network.xml",
+      "bytes": 494,
+      "sha256": "976e3de2b41cf9fc6b300e612b0d47e561f5461dc88dc2cc838435b46f41c151",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\inputs\\native-prepared-1\\config\\ScheduledTasks\\0c9ee3a8-8fc1-5547-c685-2205480da1fd.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\inputs\\native-prepared-1\\config\\ScheduledTasks\\1c8ede62-c521-bea0-bf85-1344f5b8ca40.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\inputs\\native-prepared-1\\config\\ScheduledTasks\\1ee23a5d-d39f-b422-5715-375c91bc2990.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\inputs\\native-prepared-1\\config\\ScheduledTasks\\241d4fcb-19a1-d557-ee62-428e411da609.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\inputs\\native-prepared-1\\config\\ScheduledTasks\\26649fe0-aad5-7557-2453-51f220da916c.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\inputs\\native-prepared-1\\config\\ScheduledTasks\\2c66a88b-ca43-e565-d7f8-099f825478f1.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\inputs\\native-prepared-1\\config\\ScheduledTasks\\31de9ce8-3b92-23d3-38c7-7b1a635e144b.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\inputs\\native-prepared-1\\config\\ScheduledTasks\\4e6637c8-32ed-644d-1af3-370a2506e80a.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\inputs\\native-prepared-1\\config\\ScheduledTasks\\64f5f44c-d30d-c273-cb98-90205473bbcc.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\inputs\\native-prepared-1\\config\\ScheduledTasks\\7738148f-fcd0-7979-c7ce-b148e06b3aed.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\inputs\\native-prepared-1\\config\\ScheduledTasks\\7d8088c1-0902-f1bf-4072-ded42437bcfb.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\inputs\\native-prepared-1\\config\\ScheduledTasks\\8240e309-407d-bbf4-3c99-d30a6cbd239e.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\inputs\\native-prepared-1\\config\\ScheduledTasks\\866456ed-0d44-e154-6812-4ce33d85961e.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\inputs\\native-prepared-1\\config\\ScheduledTasks\\b461ef91-8ab2-8520-9281-83e794350e3c.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\inputs\\native-prepared-1\\config\\ScheduledTasks\\bea9b218-c97b-bf98-c5dc-1303bdb9a0ca.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\inputs\\native-prepared-1\\config\\ScheduledTasks\\ebb6e58c-4e9a-8f5d-1f77-ab6ddefb3143.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\inputs\\native-prepared-1\\config\\ScheduledTasks\\ec2f221f-d8e7-706b-3d3a-fd2c4591b4d7.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\inputs\\native-prepared-1\\config\\ScheduledTasks\\f302d80f-31bc-acf7-6f97-9d277d448581.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\inputs\\native-prepared-1\\config\\ScheduledTasks\\f861734d-d71b-37f9-482b-52a820e39013.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\inputs\\native-prepared-1\\config\\ScheduledTasks\\f9b057c0-54e9-e6da-ee4a-88ffd146a403.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\inputs\\native-prepared-1\\config\\system.xml",
+      "bytes": 6914,
+      "sha256": "a0ee0f274acbe8a6a4600ec8354b4331775f2df6b70faa4f2285fcba791b387b",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\inputs\\native-prepared-1\\data\\.jellyfin-data",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\inputs\\native-prepared-1\\data\\data\\.jellyfin-data",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\inputs\\native-prepared-1\\data\\data\\device.txt",
+      "bytes": 35,
+      "sha256": "247d225f842ea11f6115e717cc9f574840b0abc2f31ce710635819edcf35ff71",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\inputs\\native-prepared-1\\data\\data\\jellyfin.db",
+      "bytes": 548864,
+      "sha256": "4f3f13acc4c58f7bcd94837a135f318cef433f6640334e13d245591b30ed71a0",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\inputs\\native-prepared-1\\data\\data\\ScheduledTasks\\7738148f-fcd0-7979-c7ce-b148e06b3aed.js",
+      "bytes": 203,
+      "sha256": "d3a172391205b7cea47b74f7630d68f047399d3f2695b7758bad60230afde666",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\inputs\\native-prepared-1\\data\\plugins\\.jellyfin-plugin",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\inputs\\native-prepared-1\\data\\plugins\\configurations\\Jellyfin.Plugin.MusicBrainz.xml",
+      "bytes": 304,
+      "sha256": "12ad1cb5d54d2f612a5fd72468950ad5fde999e5071e4f51f55d2aeb2e2bcb41",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\inputs\\native-prepared-1\\data\\plugins\\configurations\\Jellyfin.Plugin.Tmdb.xml",
+      "bytes": 967,
+      "sha256": "b3fe029f00935e026f9b757a34bef55fe7df358e2b09143be0458cc23f221275",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\inputs\\native-prepared-1\\data\\root\\.jellyfin-root",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\inputs\\native-prepared-1\\initial.db-shm",
+      "bytes": 32768,
+      "sha256": "fd4c9fda9cd3f9ae7c962b0ddf37232294d55580e1aa165aa06129b8549389eb",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\inputs\\native-prepared-1\\initial.db-wal",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\inputs\\native-prepared-1\\isolation-preparation.json",
+      "bytes": 15444,
+      "sha256": "d380af5a588a191a8ff4f3ea2e8935c095d7a6b40af3f7da202952906d509380",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\inputs\\native-prepared-1\\log\\.jellyfin-log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\inputs\\native-prepared-1\\log\\log_20261016.log",
+      "bytes": 59228,
+      "sha256": "81d8b252a6380dda0a4fc488ba65dbb4dc832a5ec2b71a60dc2fcd9b6c9e0833",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\inputs\\native-prepared-1\\migration-process.json",
+      "bytes": 998,
+      "sha256": "a5a7964aecdecaf61e5874394436364435b3b48d4fdccadf5f7782697993fa1b",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\inputs\\native-prepared-1\\migration-stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\inputs\\native-prepared-1\\migration-stdout.log",
+      "bytes": 33903,
+      "sha256": "d58ca2c6f374eda2993807eeb570f9815a7c35f3286cfbcabb37ac61cbabd6f2",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\inputs\\native-prepared-1\\source-before-guid-remap.db-shm",
+      "bytes": 32768,
+      "sha256": "fd4c9fda9cd3f9ae7c962b0ddf37232294d55580e1aa165aa06129b8549389eb",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\inputs\\native-prepared-1\\source-before-guid-remap.db-wal",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\inputs\\native-prepared-1\\system-after-native-migration.xml",
+      "bytes": 7121,
+      "sha256": "effd601fdd0805b03c1df582ba779da0835a31556b10bb9b9675bcf757073a41",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\classification-filters-native-v1\\native-run\\native-http.json",
+      "bytes": 170617,
+      "sha256": "544afab8b7c6530df7171e10f74273faf20542e9925393c028bd05cabb0e0fdb",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\classification-filters-native-v1\\native-run\\provenance.json",
+      "bytes": 8216,
+      "sha256": "73ae4a20b82911b3c72a7e689c29a12756a0fce1ac217057432af66c8c732bf0",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\classification-filters-native-v1\\native-run\\reference\\bootstrap.json",
+      "bytes": 118068,
+      "sha256": "3094ebbc6a8186b9738937176ea2f8f3faee5ed004c4c36abadfc8190365c8ad",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\classification-filters-native-v1\\native-run\\reference\\bootstrap.log",
+      "bytes": 18415,
+      "sha256": "7df37503baef16f2d842528191148626d5dead8014412439c27897f5c3b836e4",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\classification-filters-native-v1\\native-run\\reference\\cache\\.jellyfin-cache",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\classification-filters-native-v1\\native-run\\reference\\cache\\CACHEDIR.TAG",
+      "bytes": 184,
+      "sha256": "3aa406bbcda8ced73b0c0cbfa901a63ef787b9764da0e61c4a85d286fb64cc01",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\classification-filters-native-v1\\native-run\\reference\\cache\\transcodes\\.jellyfin-transcode",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\classification-filters-native-v1\\native-run\\reference\\config\\.jellyfin-config",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\classification-filters-native-v1\\native-run\\reference\\config\\database.xml",
+      "bytes": 295,
+      "sha256": "838f400177c714e142a5acfeb32586e363b158622099f6a39013069f54e5c89d",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\classification-filters-native-v1\\native-run\\reference\\config\\encoding.xml",
+      "bytes": 2807,
+      "sha256": "693620ec74391226978d5cb0e011cc300751636a9923e2e4a722cc224290f8bb",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\classification-filters-native-v1\\native-run\\reference\\config\\logging.default.json",
+      "bytes": 1366,
+      "sha256": "ed6c9137a777896fa7ce8365d7f71ce37e424eef6c7fe2e67645b7c56b9465ca",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\classification-filters-native-v1\\native-run\\reference\\config\\network.xml",
+      "bytes": 494,
+      "sha256": "c60aa61e5ba47a3d408588886785cad6d5be6f0a0b4b34c6681a961d03703726",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\classification-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\0c9ee3a8-8fc1-5547-c685-2205480da1fd.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\classification-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\1c8ede62-c521-bea0-bf85-1344f5b8ca40.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\classification-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\1ee23a5d-d39f-b422-5715-375c91bc2990.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\classification-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\241d4fcb-19a1-d557-ee62-428e411da609.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\classification-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\26649fe0-aad5-7557-2453-51f220da916c.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\classification-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\2c66a88b-ca43-e565-d7f8-099f825478f1.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\classification-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\31de9ce8-3b92-23d3-38c7-7b1a635e144b.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\classification-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\4e6637c8-32ed-644d-1af3-370a2506e80a.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\classification-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\64f5f44c-d30d-c273-cb98-90205473bbcc.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\classification-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\7738148f-fcd0-7979-c7ce-b148e06b3aed.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\classification-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\7d8088c1-0902-f1bf-4072-ded42437bcfb.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\classification-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\8240e309-407d-bbf4-3c99-d30a6cbd239e.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\classification-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\866456ed-0d44-e154-6812-4ce33d85961e.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\classification-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\b461ef91-8ab2-8520-9281-83e794350e3c.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\classification-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\bea9b218-c97b-bf98-c5dc-1303bdb9a0ca.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\classification-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\ebb6e58c-4e9a-8f5d-1f77-ab6ddefb3143.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\classification-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\ec2f221f-d8e7-706b-3d3a-fd2c4591b4d7.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\classification-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\f302d80f-31bc-acf7-6f97-9d277d448581.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\classification-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\f861734d-d71b-37f9-482b-52a820e39013.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\classification-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\f9b057c0-54e9-e6da-ee4a-88ffd146a403.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\classification-filters-native-v1\\native-run\\reference\\config\\system.xml",
+      "bytes": 6914,
+      "sha256": "a0ee0f274acbe8a6a4600ec8354b4331775f2df6b70faa4f2285fcba791b387b",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\classification-filters-native-v1\\native-run\\reference\\data\\.jellyfin-data",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\classification-filters-native-v1\\native-run\\reference\\data\\data\\.jellyfin-data",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\classification-filters-native-v1\\native-run\\reference\\data\\data\\device.txt",
+      "bytes": 35,
+      "sha256": "247d225f842ea11f6115e717cc9f574840b0abc2f31ce710635819edcf35ff71",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\classification-filters-native-v1\\native-run\\reference\\data\\data\\jellyfin.db",
+      "bytes": 557056,
+      "sha256": "0dfc23d61413146fc87d24b9001e5a0ac38e82077cd9999fc63a52cc6d0ab61d",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\classification-filters-native-v1\\native-run\\reference\\data\\data\\jellyfin.db-shm",
+      "bytes": 32768,
+      "sha256": "fd4c9fda9cd3f9ae7c962b0ddf37232294d55580e1aa165aa06129b8549389eb",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\classification-filters-native-v1\\native-run\\reference\\data\\data\\jellyfin.db-wal",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\classification-filters-native-v1\\native-run\\reference\\data\\data\\ScheduledTasks\\7738148f-fcd0-7979-c7ce-b148e06b3aed.js",
+      "bytes": 203,
+      "sha256": "d3a172391205b7cea47b74f7630d68f047399d3f2695b7758bad60230afde666",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\classification-filters-native-v1\\native-run\\reference\\data\\plugins\\.jellyfin-plugin",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\classification-filters-native-v1\\native-run\\reference\\data\\plugins\\configurations\\Jellyfin.Plugin.MusicBrainz.xml",
+      "bytes": 304,
+      "sha256": "12ad1cb5d54d2f612a5fd72468950ad5fde999e5071e4f51f55d2aeb2e2bcb41",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\classification-filters-native-v1\\native-run\\reference\\data\\plugins\\configurations\\Jellyfin.Plugin.Tmdb.xml",
+      "bytes": 967,
+      "sha256": "b3fe029f00935e026f9b757a34bef55fe7df358e2b09143be0458cc23f221275",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\classification-filters-native-v1\\native-run\\reference\\data\\root\\.jellyfin-root",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\classification-filters-native-v1\\native-run\\reference\\initial.db",
+      "bytes": 548864,
+      "sha256": "52ac3f8f915b7f5fde1b4a9d7671eb86b24032d5d16f9ece20178575cbfb48a4",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\classification-filters-native-v1\\native-run\\reference\\isolation-preparation.json",
+      "bytes": 16404,
+      "sha256": "43cb4d0c79b9134929dd5fd9b2ba830b1fec3af492f0d68927208e74c6e5a50e",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\classification-filters-native-v1\\native-run\\reference\\log\\.jellyfin-log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\classification-filters-native-v1\\native-run\\reference\\log\\log_20261016.log",
+      "bytes": 14210,
+      "sha256": "7f52783a34c6f3b1019b2ec44d40bdb8a05252cbc1f15dba6e9370f37618be0c",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\classification-filters-native-v1\\native-run\\reference\\migration-process.json",
+      "bytes": 1190,
+      "sha256": "3fe731290b4a467f52d3810a2877b377be07b276d432601504d2ad6f85337e2f",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\classification-filters-native-v1\\native-run\\reference\\migration-stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\classification-filters-native-v1\\native-run\\reference\\migration-stdout.log",
+      "bytes": 33903,
+      "sha256": "d58ca2c6f374eda2993807eeb570f9815a7c35f3286cfbcabb37ac61cbabd6f2",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\classification-filters-native-v1\\native-run\\reference\\source-before-guid-remap.db",
+      "bytes": 548864,
+      "sha256": "2634c8bf49180e5f9fe55d53d2854960e49f3dc17f37737c61b6467cf9aa2be7",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\classification-filters-native-v1\\native-run\\reference\\system-after-native-migration.xml",
+      "bytes": 7121,
+      "sha256": "effd601fdd0805b03c1df582ba779da0835a31556b10bb9b9675bcf757073a41",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\classification-filters-native-v1\\native-run\\reference-preparation.json",
+      "bytes": 3555,
+      "sha256": "43dde561cb975d457354e31c504ac38b01545c7807c873836cd34b9a82491b69",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\classification-filters-native-v1\\native-run\\reference-stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\classification-filters-native-v1\\native-run\\reference-stdout.log",
+      "bytes": 12848,
+      "sha256": "f9f85cff5f264336f40573388a9dbb027d3e042326149b3c39e83be0c8e259d4",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\classification-filters-native-v1\\native-run\\setup-http.json",
+      "bytes": 27045,
+      "sha256": "a7ca6cbc8daf45f607bf72b7166d665647f5ed0ef5f1383fcf1f7f8915469d1e",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\classification-filters-native-v1\\native-run\\stages.json",
+      "bytes": 18190,
+      "sha256": "142586f55d0b4ec19b40ec880c1d7c47d8e66877fd4c1248bf9c5e99a2248ad0",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\classification-filters-native-v1\\native-run\\summary.json",
+      "bytes": 13802,
+      "sha256": "03bf1799ca3dd53e9d75e67f00d5dcf9c368f4035e04ae9e454639cae9250569",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\classification-filters-native-v1\\oracle-validation.json",
+      "bytes": 5346,
+      "sha256": "5ad8ce3c54d03b38f4e3cc18432dc25519602f380b203053ab72d94c82e4c8d7",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\classification-filters-native-v1\\record-native.mjs",
+      "bytes": 57182,
+      "sha256": "6607726c37cae3964410e27a541580b693c10ebdbe9d2526cef8fae863ccaa91",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\extra-placeholder-filters-native-v1\\native-run\\native-http.json",
+      "bytes": 188968,
+      "sha256": "8caaadd8ac3f31bec1f56e49cd729a15855d861181adaab23d05d3af0b29023a",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\extra-placeholder-filters-native-v1\\native-run\\provenance.json",
+      "bytes": 8243,
+      "sha256": "7ef9a4db12ef52a5a8cd57919b961fc45f9d02ecc3899ae62d78ae0dd68cc9d7",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\extra-placeholder-filters-native-v1\\native-run\\reference\\bootstrap.json",
+      "bytes": 118137,
+      "sha256": "718fe81baa5388fb2c77e5c01e34fc582d764dae247e4971099889ffbb6cd6d0",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\extra-placeholder-filters-native-v1\\native-run\\reference\\bootstrap.log",
+      "bytes": 18415,
+      "sha256": "7df37503baef16f2d842528191148626d5dead8014412439c27897f5c3b836e4",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\extra-placeholder-filters-native-v1\\native-run\\reference\\cache\\.jellyfin-cache",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\extra-placeholder-filters-native-v1\\native-run\\reference\\cache\\CACHEDIR.TAG",
+      "bytes": 184,
+      "sha256": "3aa406bbcda8ced73b0c0cbfa901a63ef787b9764da0e61c4a85d286fb64cc01",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\extra-placeholder-filters-native-v1\\native-run\\reference\\cache\\transcodes\\.jellyfin-transcode",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\extra-placeholder-filters-native-v1\\native-run\\reference\\config\\.jellyfin-config",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\extra-placeholder-filters-native-v1\\native-run\\reference\\config\\database.xml",
+      "bytes": 295,
+      "sha256": "838f400177c714e142a5acfeb32586e363b158622099f6a39013069f54e5c89d",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\extra-placeholder-filters-native-v1\\native-run\\reference\\config\\encoding.xml",
+      "bytes": 2807,
+      "sha256": "693620ec74391226978d5cb0e011cc300751636a9923e2e4a722cc224290f8bb",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\extra-placeholder-filters-native-v1\\native-run\\reference\\config\\logging.default.json",
+      "bytes": 1366,
+      "sha256": "ed6c9137a777896fa7ce8365d7f71ce37e424eef6c7fe2e67645b7c56b9465ca",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\extra-placeholder-filters-native-v1\\native-run\\reference\\config\\network.xml",
+      "bytes": 494,
+      "sha256": "ad467dfb27faeb28aec78f5ae328573bc009342c373d0d3351fdc322903890f3",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\extra-placeholder-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\0c9ee3a8-8fc1-5547-c685-2205480da1fd.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\extra-placeholder-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\1c8ede62-c521-bea0-bf85-1344f5b8ca40.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\extra-placeholder-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\1ee23a5d-d39f-b422-5715-375c91bc2990.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\extra-placeholder-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\241d4fcb-19a1-d557-ee62-428e411da609.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\extra-placeholder-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\26649fe0-aad5-7557-2453-51f220da916c.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\extra-placeholder-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\2c66a88b-ca43-e565-d7f8-099f825478f1.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\extra-placeholder-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\31de9ce8-3b92-23d3-38c7-7b1a635e144b.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\extra-placeholder-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\4e6637c8-32ed-644d-1af3-370a2506e80a.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\extra-placeholder-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\64f5f44c-d30d-c273-cb98-90205473bbcc.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\extra-placeholder-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\7738148f-fcd0-7979-c7ce-b148e06b3aed.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\extra-placeholder-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\7d8088c1-0902-f1bf-4072-ded42437bcfb.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\extra-placeholder-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\8240e309-407d-bbf4-3c99-d30a6cbd239e.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\extra-placeholder-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\866456ed-0d44-e154-6812-4ce33d85961e.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\extra-placeholder-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\b461ef91-8ab2-8520-9281-83e794350e3c.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\extra-placeholder-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\bea9b218-c97b-bf98-c5dc-1303bdb9a0ca.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\extra-placeholder-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\ebb6e58c-4e9a-8f5d-1f77-ab6ddefb3143.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\extra-placeholder-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\ec2f221f-d8e7-706b-3d3a-fd2c4591b4d7.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\extra-placeholder-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\f302d80f-31bc-acf7-6f97-9d277d448581.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\extra-placeholder-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\f861734d-d71b-37f9-482b-52a820e39013.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\extra-placeholder-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\f9b057c0-54e9-e6da-ee4a-88ffd146a403.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\extra-placeholder-filters-native-v1\\native-run\\reference\\config\\system.xml",
+      "bytes": 6914,
+      "sha256": "a0ee0f274acbe8a6a4600ec8354b4331775f2df6b70faa4f2285fcba791b387b",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\extra-placeholder-filters-native-v1\\native-run\\reference\\data\\.jellyfin-data",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\extra-placeholder-filters-native-v1\\native-run\\reference\\data\\data\\.jellyfin-data",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\extra-placeholder-filters-native-v1\\native-run\\reference\\data\\data\\device.txt",
+      "bytes": 35,
+      "sha256": "247d225f842ea11f6115e717cc9f574840b0abc2f31ce710635819edcf35ff71",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\extra-placeholder-filters-native-v1\\native-run\\reference\\data\\data\\jellyfin.db",
+      "bytes": 561152,
+      "sha256": "192a097a502d933db83ccaf91ca79067d3348020c34c2a8598e449afdfde5880",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\extra-placeholder-filters-native-v1\\native-run\\reference\\data\\data\\jellyfin.db-shm",
+      "bytes": 32768,
+      "sha256": "fd4c9fda9cd3f9ae7c962b0ddf37232294d55580e1aa165aa06129b8549389eb",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\extra-placeholder-filters-native-v1\\native-run\\reference\\data\\data\\jellyfin.db-wal",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\extra-placeholder-filters-native-v1\\native-run\\reference\\data\\data\\ScheduledTasks\\7738148f-fcd0-7979-c7ce-b148e06b3aed.js",
+      "bytes": 203,
+      "sha256": "d3a172391205b7cea47b74f7630d68f047399d3f2695b7758bad60230afde666",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\extra-placeholder-filters-native-v1\\native-run\\reference\\data\\plugins\\.jellyfin-plugin",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\extra-placeholder-filters-native-v1\\native-run\\reference\\data\\plugins\\configurations\\Jellyfin.Plugin.MusicBrainz.xml",
+      "bytes": 304,
+      "sha256": "12ad1cb5d54d2f612a5fd72468950ad5fde999e5071e4f51f55d2aeb2e2bcb41",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\extra-placeholder-filters-native-v1\\native-run\\reference\\data\\plugins\\configurations\\Jellyfin.Plugin.Tmdb.xml",
+      "bytes": 967,
+      "sha256": "b3fe029f00935e026f9b757a34bef55fe7df358e2b09143be0458cc23f221275",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\extra-placeholder-filters-native-v1\\native-run\\reference\\data\\root\\.jellyfin-root",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\extra-placeholder-filters-native-v1\\native-run\\reference\\initial.db",
+      "bytes": 548864,
+      "sha256": "52ac3f8f915b7f5fde1b4a9d7671eb86b24032d5d16f9ece20178575cbfb48a4",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\extra-placeholder-filters-native-v1\\native-run\\reference\\isolation-preparation.json",
+      "bytes": 16464,
+      "sha256": "d32b367add3657dd273caf97940d631f3a29097864d8e0b8547b44a3d4a2626f",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\extra-placeholder-filters-native-v1\\native-run\\reference\\log\\.jellyfin-log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\extra-placeholder-filters-native-v1\\native-run\\reference\\log\\log_20261016.log",
+      "bytes": 14264,
+      "sha256": "6405698d07fddd6dc62d4f6d45b8a7f1619fd1c36228c2635ddd6a2520ad8300",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\extra-placeholder-filters-native-v1\\native-run\\reference\\migration-process.json",
+      "bytes": 1202,
+      "sha256": "0beabf246cefe8bdb50eb489b9b4639906f520fb8540220af956d8774c297f25",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\extra-placeholder-filters-native-v1\\native-run\\reference\\migration-stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\extra-placeholder-filters-native-v1\\native-run\\reference\\migration-stdout.log",
+      "bytes": 33903,
+      "sha256": "d58ca2c6f374eda2993807eeb570f9815a7c35f3286cfbcabb37ac61cbabd6f2",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\extra-placeholder-filters-native-v1\\native-run\\reference\\source-before-guid-remap.db",
+      "bytes": 548864,
+      "sha256": "2634c8bf49180e5f9fe55d53d2854960e49f3dc17f37737c61b6467cf9aa2be7",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\extra-placeholder-filters-native-v1\\native-run\\reference\\system-after-native-migration.xml",
+      "bytes": 7121,
+      "sha256": "effd601fdd0805b03c1df582ba779da0835a31556b10bb9b9675bcf757073a41",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\extra-placeholder-filters-native-v1\\native-run\\reference-preparation.json",
+      "bytes": 3555,
+      "sha256": "43dde561cb975d457354e31c504ac38b01545c7807c873836cd34b9a82491b69",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\extra-placeholder-filters-native-v1\\native-run\\reference-stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\extra-placeholder-filters-native-v1\\native-run\\reference-stdout.log",
+      "bytes": 12902,
+      "sha256": "23c5d9c101054e2f3106c09db9716598ece4d3688d9f54a9367317d029ef792c",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\extra-placeholder-filters-native-v1\\native-run\\setup-http.json",
+      "bytes": 27054,
+      "sha256": "4d7af27020e4103260da10a3a25c27ad03341c122c61c8908000818040c25be9",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\extra-placeholder-filters-native-v1\\native-run\\stages.json",
+      "bytes": 22060,
+      "sha256": "615b50eb9187417061b3bee5902da70c953a59f7d6454111338c5848bb8d6219",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\extra-placeholder-filters-native-v1\\native-run\\summary.json",
+      "bytes": 12000,
+      "sha256": "b9664d03ed6a56b0ddf9a12511335a20b169351baf0421e1cde8e3e24b305476",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\extra-placeholder-filters-native-v1\\oracle-validation.json",
+      "bytes": 5367,
+      "sha256": "5c30a55499994f956701f0fd4acbd5b4d5bb215b0438aa4ea9c7d3d2ca55ce3a",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\extra-placeholder-filters-native-v1\\record-native.mjs",
+      "bytes": 57182,
+      "sha256": "6607726c37cae3964410e27a541580b693c10ebdbe9d2526cef8fae863ccaa91",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\navigation-date-filters-native-v1\\native-run\\native-http.json",
+      "bytes": 117362,
+      "sha256": "7b4c29f1ccdf088598d4f0cff0608b389592f00773c5d036277e9673f0e851c7",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\navigation-date-filters-native-v1\\native-run\\provenance.json",
+      "bytes": 8225,
+      "sha256": "6f3fc578a000eb20c5c48ace8cafe8c7c53ef460b60baf96b96ad1fac81afa06",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\navigation-date-filters-native-v1\\native-run\\reference\\bootstrap.json",
+      "bytes": 118091,
+      "sha256": "6b7ec9a287aa8cb3d4359ad92c6f5b39a4670e39eca6596e88f36c091e8a0548",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\navigation-date-filters-native-v1\\native-run\\reference\\bootstrap.log",
+      "bytes": 18415,
+      "sha256": "7df37503baef16f2d842528191148626d5dead8014412439c27897f5c3b836e4",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\navigation-date-filters-native-v1\\native-run\\reference\\cache\\.jellyfin-cache",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\navigation-date-filters-native-v1\\native-run\\reference\\cache\\CACHEDIR.TAG",
+      "bytes": 184,
+      "sha256": "3aa406bbcda8ced73b0c0cbfa901a63ef787b9764da0e61c4a85d286fb64cc01",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\navigation-date-filters-native-v1\\native-run\\reference\\cache\\transcodes\\.jellyfin-transcode",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\navigation-date-filters-native-v1\\native-run\\reference\\config\\.jellyfin-config",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\navigation-date-filters-native-v1\\native-run\\reference\\config\\database.xml",
+      "bytes": 295,
+      "sha256": "838f400177c714e142a5acfeb32586e363b158622099f6a39013069f54e5c89d",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\navigation-date-filters-native-v1\\native-run\\reference\\config\\encoding.xml",
+      "bytes": 2807,
+      "sha256": "693620ec74391226978d5cb0e011cc300751636a9923e2e4a722cc224290f8bb",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\navigation-date-filters-native-v1\\native-run\\reference\\config\\logging.default.json",
+      "bytes": 1366,
+      "sha256": "ed6c9137a777896fa7ce8365d7f71ce37e424eef6c7fe2e67645b7c56b9465ca",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\navigation-date-filters-native-v1\\native-run\\reference\\config\\network.xml",
+      "bytes": 494,
+      "sha256": "75dc0327ff534cb2e0307eed31f8b178e2eb96882eb044a2470d0125a7734422",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\navigation-date-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\0c9ee3a8-8fc1-5547-c685-2205480da1fd.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\navigation-date-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\1c8ede62-c521-bea0-bf85-1344f5b8ca40.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\navigation-date-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\1ee23a5d-d39f-b422-5715-375c91bc2990.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\navigation-date-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\241d4fcb-19a1-d557-ee62-428e411da609.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\navigation-date-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\26649fe0-aad5-7557-2453-51f220da916c.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\navigation-date-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\2c66a88b-ca43-e565-d7f8-099f825478f1.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\navigation-date-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\31de9ce8-3b92-23d3-38c7-7b1a635e144b.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\navigation-date-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\4e6637c8-32ed-644d-1af3-370a2506e80a.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\navigation-date-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\64f5f44c-d30d-c273-cb98-90205473bbcc.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\navigation-date-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\7738148f-fcd0-7979-c7ce-b148e06b3aed.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\navigation-date-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\7d8088c1-0902-f1bf-4072-ded42437bcfb.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\navigation-date-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\8240e309-407d-bbf4-3c99-d30a6cbd239e.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\navigation-date-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\866456ed-0d44-e154-6812-4ce33d85961e.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\navigation-date-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\b461ef91-8ab2-8520-9281-83e794350e3c.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\navigation-date-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\bea9b218-c97b-bf98-c5dc-1303bdb9a0ca.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\navigation-date-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\ebb6e58c-4e9a-8f5d-1f77-ab6ddefb3143.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\navigation-date-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\ec2f221f-d8e7-706b-3d3a-fd2c4591b4d7.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\navigation-date-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\f302d80f-31bc-acf7-6f97-9d277d448581.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\navigation-date-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\f861734d-d71b-37f9-482b-52a820e39013.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\navigation-date-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\f9b057c0-54e9-e6da-ee4a-88ffd146a403.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\navigation-date-filters-native-v1\\native-run\\reference\\config\\system.xml",
+      "bytes": 6914,
+      "sha256": "a0ee0f274acbe8a6a4600ec8354b4331775f2df6b70faa4f2285fcba791b387b",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\navigation-date-filters-native-v1\\native-run\\reference\\data\\.jellyfin-data",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\navigation-date-filters-native-v1\\native-run\\reference\\data\\data\\.jellyfin-data",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\navigation-date-filters-native-v1\\native-run\\reference\\data\\data\\device.txt",
+      "bytes": 35,
+      "sha256": "247d225f842ea11f6115e717cc9f574840b0abc2f31ce710635819edcf35ff71",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\navigation-date-filters-native-v1\\native-run\\reference\\data\\data\\jellyfin.db",
+      "bytes": 557056,
+      "sha256": "ed41f8c66d61abc10dee15981b03fab27c7b909fe38a447ed987d8206dee2f62",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\navigation-date-filters-native-v1\\native-run\\reference\\data\\data\\jellyfin.db-shm",
+      "bytes": 32768,
+      "sha256": "fd4c9fda9cd3f9ae7c962b0ddf37232294d55580e1aa165aa06129b8549389eb",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\navigation-date-filters-native-v1\\native-run\\reference\\data\\data\\jellyfin.db-wal",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\navigation-date-filters-native-v1\\native-run\\reference\\data\\data\\ScheduledTasks\\7738148f-fcd0-7979-c7ce-b148e06b3aed.js",
+      "bytes": 203,
+      "sha256": "d3a172391205b7cea47b74f7630d68f047399d3f2695b7758bad60230afde666",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\navigation-date-filters-native-v1\\native-run\\reference\\data\\plugins\\.jellyfin-plugin",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\navigation-date-filters-native-v1\\native-run\\reference\\data\\plugins\\configurations\\Jellyfin.Plugin.MusicBrainz.xml",
+      "bytes": 304,
+      "sha256": "12ad1cb5d54d2f612a5fd72468950ad5fde999e5071e4f51f55d2aeb2e2bcb41",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\navigation-date-filters-native-v1\\native-run\\reference\\data\\plugins\\configurations\\Jellyfin.Plugin.Tmdb.xml",
+      "bytes": 967,
+      "sha256": "b3fe029f00935e026f9b757a34bef55fe7df358e2b09143be0458cc23f221275",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\navigation-date-filters-native-v1\\native-run\\reference\\data\\root\\.jellyfin-root",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\navigation-date-filters-native-v1\\native-run\\reference\\initial.db",
+      "bytes": 548864,
+      "sha256": "52ac3f8f915b7f5fde1b4a9d7671eb86b24032d5d16f9ece20178575cbfb48a4",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\navigation-date-filters-native-v1\\native-run\\reference\\isolation-preparation.json",
+      "bytes": 16424,
+      "sha256": "0392e620b7409fa63bbff2af65bc091f0b37f6c8f846ccf95714b5577a6f948c",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\navigation-date-filters-native-v1\\native-run\\reference\\log\\.jellyfin-log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\navigation-date-filters-native-v1\\native-run\\reference\\log\\log_20261016.log",
+      "bytes": 14209,
+      "sha256": "7485830074504c4e37e9217339bb89940ee22ff7da01274f41e882a40562286a",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\navigation-date-filters-native-v1\\native-run\\reference\\migration-process.json",
+      "bytes": 1194,
+      "sha256": "ecf17d02e3a41d5d03fb88d033e26b8fccbd7dfe18a694f4fac91e033734e57f",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\navigation-date-filters-native-v1\\native-run\\reference\\migration-stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\navigation-date-filters-native-v1\\native-run\\reference\\migration-stdout.log",
+      "bytes": 33903,
+      "sha256": "d58ca2c6f374eda2993807eeb570f9815a7c35f3286cfbcabb37ac61cbabd6f2",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\navigation-date-filters-native-v1\\native-run\\reference\\source-before-guid-remap.db",
+      "bytes": 548864,
+      "sha256": "2634c8bf49180e5f9fe55d53d2854960e49f3dc17f37737c61b6467cf9aa2be7",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\navigation-date-filters-native-v1\\native-run\\reference\\system-after-native-migration.xml",
+      "bytes": 7121,
+      "sha256": "effd601fdd0805b03c1df582ba779da0835a31556b10bb9b9675bcf757073a41",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\navigation-date-filters-native-v1\\native-run\\reference-preparation.json",
+      "bytes": 3555,
+      "sha256": "43dde561cb975d457354e31c504ac38b01545c7807c873836cd34b9a82491b69",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\navigation-date-filters-native-v1\\native-run\\reference-stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\navigation-date-filters-native-v1\\native-run\\reference-stdout.log",
+      "bytes": 12847,
+      "sha256": "4a5c4db8df5559c2b03a2d6839e99b0384e0cfd7b55223d74aebb940aaf0beb2",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\navigation-date-filters-native-v1\\native-run\\setup-http.json",
+      "bytes": 27048,
+      "sha256": "18e988cf8dd50f66c4f8749a2cf1fe20156941c0b567126c43616285417f4ccc",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\navigation-date-filters-native-v1\\native-run\\stages.json",
+      "bytes": 13582,
+      "sha256": "4727f25ef187c29400ce309678c87688db933c4d8dc7ddf5ad8299a303195720",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\navigation-date-filters-native-v1\\native-run\\summary.json",
+      "bytes": 12603,
+      "sha256": "e36b7dd5ef1f81f58332892c181a4ccd12f9d8676f38a562750869d9471d8479",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\navigation-date-filters-native-v1\\oracle-validation.json",
+      "bytes": 5353,
+      "sha256": "89a8e72be5350dc08788c59c6a40a84915a1b3947801d51c84c649a2acdeee34",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\navigation-date-filters-native-v1\\record-native.mjs",
+      "bytes": 57182,
+      "sha256": "6607726c37cae3964410e27a541580b693c10ebdbe9d2526cef8fae863ccaa91",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\classification-filters-native-v1\\native-run\\native-http.json",
+      "bytes": 170617,
+      "sha256": "37ce06170323ee305e2605669d21b1cd7c23e8c108d26c050a86a0a647ee0e4a",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\classification-filters-native-v1\\native-run\\provenance.json",
+      "bytes": 8216,
+      "sha256": "0842f0e2c9cd4323a2e34299791779354a8783aa0653bba62b4343b6f5616195",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\classification-filters-native-v1\\native-run\\reference\\bootstrap.json",
+      "bytes": 118068,
+      "sha256": "87babe768cef66e7c4bf674c8fb82fcfa99b2c21b7f83d252044401b04204274",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\classification-filters-native-v1\\native-run\\reference\\bootstrap.log",
+      "bytes": 18415,
+      "sha256": "7df37503baef16f2d842528191148626d5dead8014412439c27897f5c3b836e4",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\classification-filters-native-v1\\native-run\\reference\\cache\\.jellyfin-cache",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\classification-filters-native-v1\\native-run\\reference\\cache\\CACHEDIR.TAG",
+      "bytes": 184,
+      "sha256": "3aa406bbcda8ced73b0c0cbfa901a63ef787b9764da0e61c4a85d286fb64cc01",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\classification-filters-native-v1\\native-run\\reference\\cache\\transcodes\\.jellyfin-transcode",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\classification-filters-native-v1\\native-run\\reference\\config\\.jellyfin-config",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\classification-filters-native-v1\\native-run\\reference\\config\\database.xml",
+      "bytes": 295,
+      "sha256": "838f400177c714e142a5acfeb32586e363b158622099f6a39013069f54e5c89d",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\classification-filters-native-v1\\native-run\\reference\\config\\encoding.xml",
+      "bytes": 2807,
+      "sha256": "693620ec74391226978d5cb0e011cc300751636a9923e2e4a722cc224290f8bb",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\classification-filters-native-v1\\native-run\\reference\\config\\logging.default.json",
+      "bytes": 1366,
+      "sha256": "ed6c9137a777896fa7ce8365d7f71ce37e424eef6c7fe2e67645b7c56b9465ca",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\classification-filters-native-v1\\native-run\\reference\\config\\network.xml",
+      "bytes": 494,
+      "sha256": "b01b59a3613037fbbd3a858d06cf68f9c0936cf7c0bbc8df6f91730952c39ada",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\classification-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\0c9ee3a8-8fc1-5547-c685-2205480da1fd.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\classification-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\1c8ede62-c521-bea0-bf85-1344f5b8ca40.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\classification-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\1ee23a5d-d39f-b422-5715-375c91bc2990.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\classification-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\241d4fcb-19a1-d557-ee62-428e411da609.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\classification-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\26649fe0-aad5-7557-2453-51f220da916c.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\classification-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\2c66a88b-ca43-e565-d7f8-099f825478f1.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\classification-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\31de9ce8-3b92-23d3-38c7-7b1a635e144b.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\classification-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\4e6637c8-32ed-644d-1af3-370a2506e80a.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\classification-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\64f5f44c-d30d-c273-cb98-90205473bbcc.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\classification-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\7738148f-fcd0-7979-c7ce-b148e06b3aed.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\classification-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\7d8088c1-0902-f1bf-4072-ded42437bcfb.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\classification-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\8240e309-407d-bbf4-3c99-d30a6cbd239e.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\classification-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\866456ed-0d44-e154-6812-4ce33d85961e.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\classification-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\b461ef91-8ab2-8520-9281-83e794350e3c.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\classification-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\bea9b218-c97b-bf98-c5dc-1303bdb9a0ca.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\classification-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\ebb6e58c-4e9a-8f5d-1f77-ab6ddefb3143.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\classification-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\ec2f221f-d8e7-706b-3d3a-fd2c4591b4d7.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\classification-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\f302d80f-31bc-acf7-6f97-9d277d448581.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\classification-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\f861734d-d71b-37f9-482b-52a820e39013.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\classification-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\f9b057c0-54e9-e6da-ee4a-88ffd146a403.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\classification-filters-native-v1\\native-run\\reference\\config\\system.xml",
+      "bytes": 6914,
+      "sha256": "a0ee0f274acbe8a6a4600ec8354b4331775f2df6b70faa4f2285fcba791b387b",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\classification-filters-native-v1\\native-run\\reference\\data\\.jellyfin-data",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\classification-filters-native-v1\\native-run\\reference\\data\\data\\.jellyfin-data",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\classification-filters-native-v1\\native-run\\reference\\data\\data\\device.txt",
+      "bytes": 35,
+      "sha256": "247d225f842ea11f6115e717cc9f574840b0abc2f31ce710635819edcf35ff71",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\classification-filters-native-v1\\native-run\\reference\\data\\data\\jellyfin.db",
+      "bytes": 557056,
+      "sha256": "53e3ccc119ccd70cf4e72f1a5d61ca55ced73c48b79d8480d2723e2bc79fb5ab",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\classification-filters-native-v1\\native-run\\reference\\data\\data\\jellyfin.db-shm",
+      "bytes": 32768,
+      "sha256": "fd4c9fda9cd3f9ae7c962b0ddf37232294d55580e1aa165aa06129b8549389eb",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\classification-filters-native-v1\\native-run\\reference\\data\\data\\jellyfin.db-wal",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\classification-filters-native-v1\\native-run\\reference\\data\\data\\ScheduledTasks\\7738148f-fcd0-7979-c7ce-b148e06b3aed.js",
+      "bytes": 203,
+      "sha256": "d3a172391205b7cea47b74f7630d68f047399d3f2695b7758bad60230afde666",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\classification-filters-native-v1\\native-run\\reference\\data\\plugins\\.jellyfin-plugin",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\classification-filters-native-v1\\native-run\\reference\\data\\plugins\\configurations\\Jellyfin.Plugin.MusicBrainz.xml",
+      "bytes": 304,
+      "sha256": "12ad1cb5d54d2f612a5fd72468950ad5fde999e5071e4f51f55d2aeb2e2bcb41",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\classification-filters-native-v1\\native-run\\reference\\data\\plugins\\configurations\\Jellyfin.Plugin.Tmdb.xml",
+      "bytes": 967,
+      "sha256": "b3fe029f00935e026f9b757a34bef55fe7df358e2b09143be0458cc23f221275",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\classification-filters-native-v1\\native-run\\reference\\data\\root\\.jellyfin-root",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\classification-filters-native-v1\\native-run\\reference\\initial.db",
+      "bytes": 548864,
+      "sha256": "52ac3f8f915b7f5fde1b4a9d7671eb86b24032d5d16f9ece20178575cbfb48a4",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\classification-filters-native-v1\\native-run\\reference\\isolation-preparation.json",
+      "bytes": 16404,
+      "sha256": "44c869b501adf4e2095b5fe0e54f3bdbb26b8f61120576496c1045c6fd133fda",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\classification-filters-native-v1\\native-run\\reference\\log\\.jellyfin-log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\classification-filters-native-v1\\native-run\\reference\\log\\log_20261016.log",
+      "bytes": 14206,
+      "sha256": "c4bfa853ce35833b8146116d7cabd5c2fae330d54d6dc83214a916cee0fcd90a",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\classification-filters-native-v1\\native-run\\reference\\migration-process.json",
+      "bytes": 1190,
+      "sha256": "5526d34e59221581357711a988a2097dc58ca9f2502a781b7f899667e8452c28",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\classification-filters-native-v1\\native-run\\reference\\migration-stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\classification-filters-native-v1\\native-run\\reference\\migration-stdout.log",
+      "bytes": 33903,
+      "sha256": "d58ca2c6f374eda2993807eeb570f9815a7c35f3286cfbcabb37ac61cbabd6f2",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\classification-filters-native-v1\\native-run\\reference\\source-before-guid-remap.db",
+      "bytes": 548864,
+      "sha256": "2634c8bf49180e5f9fe55d53d2854960e49f3dc17f37737c61b6467cf9aa2be7",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\classification-filters-native-v1\\native-run\\reference\\system-after-native-migration.xml",
+      "bytes": 7121,
+      "sha256": "effd601fdd0805b03c1df582ba779da0835a31556b10bb9b9675bcf757073a41",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\classification-filters-native-v1\\native-run\\reference-preparation.json",
+      "bytes": 3555,
+      "sha256": "43dde561cb975d457354e31c504ac38b01545c7807c873836cd34b9a82491b69",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\classification-filters-native-v1\\native-run\\reference-stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\classification-filters-native-v1\\native-run\\reference-stdout.log",
+      "bytes": 12844,
+      "sha256": "55aeb4592ca5ed25015629f762b94a26546f5c9a2ca65bfff7153de353af649c",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\classification-filters-native-v1\\native-run\\setup-http.json",
+      "bytes": 27045,
+      "sha256": "576a3672608462f4cff45a139ec3ac598d0206a365753793cd41986040006ce0",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\classification-filters-native-v1\\native-run\\stages.json",
+      "bytes": 18190,
+      "sha256": "64ea46fe3cc550eabe2dc997fc91aaef543919274890153ae84e60b091dec358",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\classification-filters-native-v1\\native-run\\summary.json",
+      "bytes": 13802,
+      "sha256": "291e20e22589fa55a51991e5b97c8a8433292360ca03d8f3948823304ed08bc3",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\classification-filters-native-v1\\oracle-validation.json",
+      "bytes": 5346,
+      "sha256": "d0261a69bae6c9bc09a1a8f5b2111de78a055b60b0a896463501896583874e8a",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\classification-filters-native-v1\\record-native.mjs",
+      "bytes": 57182,
+      "sha256": "6607726c37cae3964410e27a541580b693c10ebdbe9d2526cef8fae863ccaa91",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\extra-placeholder-filters-native-v1\\native-run\\native-http.json",
+      "bytes": 188968,
+      "sha256": "86d012e27baec3233fa98abf776eca557bac07c699d24e75b3f323ddad1035e5",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\extra-placeholder-filters-native-v1\\native-run\\provenance.json",
+      "bytes": 8243,
+      "sha256": "66c959dcf529fcdcdba96aa130a01091cae5f3905d33f52966ee157c410c8a3f",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\extra-placeholder-filters-native-v1\\native-run\\reference\\bootstrap.json",
+      "bytes": 118137,
+      "sha256": "32863b0b15beb01659fcd22e709295466e9a0d3c3bf58edf485d196acc637ef7",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\extra-placeholder-filters-native-v1\\native-run\\reference\\bootstrap.log",
+      "bytes": 18415,
+      "sha256": "7df37503baef16f2d842528191148626d5dead8014412439c27897f5c3b836e4",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\extra-placeholder-filters-native-v1\\native-run\\reference\\cache\\.jellyfin-cache",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\extra-placeholder-filters-native-v1\\native-run\\reference\\cache\\CACHEDIR.TAG",
+      "bytes": 184,
+      "sha256": "3aa406bbcda8ced73b0c0cbfa901a63ef787b9764da0e61c4a85d286fb64cc01",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\extra-placeholder-filters-native-v1\\native-run\\reference\\cache\\transcodes\\.jellyfin-transcode",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\extra-placeholder-filters-native-v1\\native-run\\reference\\config\\.jellyfin-config",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\extra-placeholder-filters-native-v1\\native-run\\reference\\config\\database.xml",
+      "bytes": 295,
+      "sha256": "838f400177c714e142a5acfeb32586e363b158622099f6a39013069f54e5c89d",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\extra-placeholder-filters-native-v1\\native-run\\reference\\config\\encoding.xml",
+      "bytes": 2807,
+      "sha256": "693620ec74391226978d5cb0e011cc300751636a9923e2e4a722cc224290f8bb",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\extra-placeholder-filters-native-v1\\native-run\\reference\\config\\logging.default.json",
+      "bytes": 1366,
+      "sha256": "ed6c9137a777896fa7ce8365d7f71ce37e424eef6c7fe2e67645b7c56b9465ca",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\extra-placeholder-filters-native-v1\\native-run\\reference\\config\\network.xml",
+      "bytes": 494,
+      "sha256": "ce6a350c70c726cc20d1cd2a48e3f04ef9154d9fc4764611092b8082b9c83244",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\extra-placeholder-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\0c9ee3a8-8fc1-5547-c685-2205480da1fd.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\extra-placeholder-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\1c8ede62-c521-bea0-bf85-1344f5b8ca40.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\extra-placeholder-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\1ee23a5d-d39f-b422-5715-375c91bc2990.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\extra-placeholder-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\241d4fcb-19a1-d557-ee62-428e411da609.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\extra-placeholder-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\26649fe0-aad5-7557-2453-51f220da916c.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\extra-placeholder-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\2c66a88b-ca43-e565-d7f8-099f825478f1.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\extra-placeholder-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\31de9ce8-3b92-23d3-38c7-7b1a635e144b.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\extra-placeholder-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\4e6637c8-32ed-644d-1af3-370a2506e80a.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\extra-placeholder-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\64f5f44c-d30d-c273-cb98-90205473bbcc.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\extra-placeholder-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\7738148f-fcd0-7979-c7ce-b148e06b3aed.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\extra-placeholder-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\7d8088c1-0902-f1bf-4072-ded42437bcfb.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\extra-placeholder-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\8240e309-407d-bbf4-3c99-d30a6cbd239e.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\extra-placeholder-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\866456ed-0d44-e154-6812-4ce33d85961e.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\extra-placeholder-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\b461ef91-8ab2-8520-9281-83e794350e3c.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\extra-placeholder-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\bea9b218-c97b-bf98-c5dc-1303bdb9a0ca.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\extra-placeholder-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\ebb6e58c-4e9a-8f5d-1f77-ab6ddefb3143.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\extra-placeholder-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\ec2f221f-d8e7-706b-3d3a-fd2c4591b4d7.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\extra-placeholder-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\f302d80f-31bc-acf7-6f97-9d277d448581.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\extra-placeholder-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\f861734d-d71b-37f9-482b-52a820e39013.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\extra-placeholder-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\f9b057c0-54e9-e6da-ee4a-88ffd146a403.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\extra-placeholder-filters-native-v1\\native-run\\reference\\config\\system.xml",
+      "bytes": 6914,
+      "sha256": "a0ee0f274acbe8a6a4600ec8354b4331775f2df6b70faa4f2285fcba791b387b",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\extra-placeholder-filters-native-v1\\native-run\\reference\\data\\.jellyfin-data",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\extra-placeholder-filters-native-v1\\native-run\\reference\\data\\data\\.jellyfin-data",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\extra-placeholder-filters-native-v1\\native-run\\reference\\data\\data\\device.txt",
+      "bytes": 35,
+      "sha256": "247d225f842ea11f6115e717cc9f574840b0abc2f31ce710635819edcf35ff71",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\extra-placeholder-filters-native-v1\\native-run\\reference\\data\\data\\jellyfin.db",
+      "bytes": 561152,
+      "sha256": "99dc463cf8ca4e9f698ef264d3896825df138c2fc428ac24eb1f4efb8d25cc18",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\extra-placeholder-filters-native-v1\\native-run\\reference\\data\\data\\jellyfin.db-shm",
+      "bytes": 32768,
+      "sha256": "fd4c9fda9cd3f9ae7c962b0ddf37232294d55580e1aa165aa06129b8549389eb",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\extra-placeholder-filters-native-v1\\native-run\\reference\\data\\data\\jellyfin.db-wal",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\extra-placeholder-filters-native-v1\\native-run\\reference\\data\\data\\ScheduledTasks\\7738148f-fcd0-7979-c7ce-b148e06b3aed.js",
+      "bytes": 203,
+      "sha256": "d3a172391205b7cea47b74f7630d68f047399d3f2695b7758bad60230afde666",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\extra-placeholder-filters-native-v1\\native-run\\reference\\data\\plugins\\.jellyfin-plugin",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\extra-placeholder-filters-native-v1\\native-run\\reference\\data\\plugins\\configurations\\Jellyfin.Plugin.MusicBrainz.xml",
+      "bytes": 304,
+      "sha256": "12ad1cb5d54d2f612a5fd72468950ad5fde999e5071e4f51f55d2aeb2e2bcb41",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\extra-placeholder-filters-native-v1\\native-run\\reference\\data\\plugins\\configurations\\Jellyfin.Plugin.Tmdb.xml",
+      "bytes": 967,
+      "sha256": "b3fe029f00935e026f9b757a34bef55fe7df358e2b09143be0458cc23f221275",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\extra-placeholder-filters-native-v1\\native-run\\reference\\data\\root\\.jellyfin-root",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\extra-placeholder-filters-native-v1\\native-run\\reference\\initial.db",
+      "bytes": 548864,
+      "sha256": "52ac3f8f915b7f5fde1b4a9d7671eb86b24032d5d16f9ece20178575cbfb48a4",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\extra-placeholder-filters-native-v1\\native-run\\reference\\isolation-preparation.json",
+      "bytes": 16464,
+      "sha256": "b2d149f4eb4917d53747b9a5ad454ae6fb68d490fdc69589d8eae38a657977d6",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\extra-placeholder-filters-native-v1\\native-run\\reference\\log\\.jellyfin-log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\extra-placeholder-filters-native-v1\\native-run\\reference\\log\\log_20261016.log",
+      "bytes": 14222,
+      "sha256": "0c0673808bf02da10a815cdd283b09677c2fbbbb2019a16b284e481c08a78850",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\extra-placeholder-filters-native-v1\\native-run\\reference\\migration-process.json",
+      "bytes": 1202,
+      "sha256": "c34dfd483cef059683d16c936512eee7cc1808771f09e061e9dbbc2550d6a321",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\extra-placeholder-filters-native-v1\\native-run\\reference\\migration-stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\extra-placeholder-filters-native-v1\\native-run\\reference\\migration-stdout.log",
+      "bytes": 33903,
+      "sha256": "d58ca2c6f374eda2993807eeb570f9815a7c35f3286cfbcabb37ac61cbabd6f2",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\extra-placeholder-filters-native-v1\\native-run\\reference\\source-before-guid-remap.db",
+      "bytes": 548864,
+      "sha256": "2634c8bf49180e5f9fe55d53d2854960e49f3dc17f37737c61b6467cf9aa2be7",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\extra-placeholder-filters-native-v1\\native-run\\reference\\system-after-native-migration.xml",
+      "bytes": 7121,
+      "sha256": "effd601fdd0805b03c1df582ba779da0835a31556b10bb9b9675bcf757073a41",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\extra-placeholder-filters-native-v1\\native-run\\reference-preparation.json",
+      "bytes": 3555,
+      "sha256": "43dde561cb975d457354e31c504ac38b01545c7807c873836cd34b9a82491b69",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\extra-placeholder-filters-native-v1\\native-run\\reference-stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\extra-placeholder-filters-native-v1\\native-run\\reference-stdout.log",
+      "bytes": 12860,
+      "sha256": "c6c11b5b2d4528fc945e08ea9d31d12d4446be131069576d9b0a82471e1b8c7f",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\extra-placeholder-filters-native-v1\\native-run\\setup-http.json",
+      "bytes": 27054,
+      "sha256": "c660d7d8ac801346c5d246780dae05b45e00975b45651bb42e64c114b8752294",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\extra-placeholder-filters-native-v1\\native-run\\stages.json",
+      "bytes": 22060,
+      "sha256": "4978ea6433647590e3e079567a194f2b3d30505e13348dab2671aac5eaac1376",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\extra-placeholder-filters-native-v1\\native-run\\summary.json",
+      "bytes": 12000,
+      "sha256": "41f7acbd4290e9de73bed6a17157ebaf49fa8299932d7b2f61b8dda8573d4c65",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\extra-placeholder-filters-native-v1\\oracle-validation.json",
+      "bytes": 5367,
+      "sha256": "f1e72853f2839566196863e222a4c2d372baf635acd4dcaa024792ff5abb08e7",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\extra-placeholder-filters-native-v1\\record-native.mjs",
+      "bytes": 57182,
+      "sha256": "6607726c37cae3964410e27a541580b693c10ebdbe9d2526cef8fae863ccaa91",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\navigation-date-filters-native-v1\\native-run\\native-http.json",
+      "bytes": 117362,
+      "sha256": "a50de835a8cc4357ca1ba064d56b9d009dcda067ee2901e71b95005c55cb775f",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\navigation-date-filters-native-v1\\native-run\\provenance.json",
+      "bytes": 8225,
+      "sha256": "2b148601aa2cf06fe3145ef4fdb97b9ebf3d77f3ef149c33e396768c21480510",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\navigation-date-filters-native-v1\\native-run\\reference\\bootstrap.json",
+      "bytes": 118091,
+      "sha256": "5595096715125a47d580cba0175d7a58d179cbe6a5272358d5439d0bf8221717",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\navigation-date-filters-native-v1\\native-run\\reference\\bootstrap.log",
+      "bytes": 18415,
+      "sha256": "7df37503baef16f2d842528191148626d5dead8014412439c27897f5c3b836e4",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\navigation-date-filters-native-v1\\native-run\\reference\\cache\\.jellyfin-cache",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\navigation-date-filters-native-v1\\native-run\\reference\\cache\\CACHEDIR.TAG",
+      "bytes": 184,
+      "sha256": "3aa406bbcda8ced73b0c0cbfa901a63ef787b9764da0e61c4a85d286fb64cc01",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\navigation-date-filters-native-v1\\native-run\\reference\\cache\\transcodes\\.jellyfin-transcode",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\navigation-date-filters-native-v1\\native-run\\reference\\config\\.jellyfin-config",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\navigation-date-filters-native-v1\\native-run\\reference\\config\\database.xml",
+      "bytes": 295,
+      "sha256": "838f400177c714e142a5acfeb32586e363b158622099f6a39013069f54e5c89d",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\navigation-date-filters-native-v1\\native-run\\reference\\config\\encoding.xml",
+      "bytes": 2807,
+      "sha256": "693620ec74391226978d5cb0e011cc300751636a9923e2e4a722cc224290f8bb",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\navigation-date-filters-native-v1\\native-run\\reference\\config\\logging.default.json",
+      "bytes": 1366,
+      "sha256": "ed6c9137a777896fa7ce8365d7f71ce37e424eef6c7fe2e67645b7c56b9465ca",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\navigation-date-filters-native-v1\\native-run\\reference\\config\\network.xml",
+      "bytes": 494,
+      "sha256": "d24f857f2eedca24f3433c23abcb49d06c18e71005d8c0da9c7bb92d3305ecd1",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\navigation-date-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\0c9ee3a8-8fc1-5547-c685-2205480da1fd.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\navigation-date-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\1c8ede62-c521-bea0-bf85-1344f5b8ca40.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\navigation-date-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\1ee23a5d-d39f-b422-5715-375c91bc2990.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\navigation-date-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\241d4fcb-19a1-d557-ee62-428e411da609.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\navigation-date-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\26649fe0-aad5-7557-2453-51f220da916c.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\navigation-date-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\2c66a88b-ca43-e565-d7f8-099f825478f1.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\navigation-date-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\31de9ce8-3b92-23d3-38c7-7b1a635e144b.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\navigation-date-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\4e6637c8-32ed-644d-1af3-370a2506e80a.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\navigation-date-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\64f5f44c-d30d-c273-cb98-90205473bbcc.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\navigation-date-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\7738148f-fcd0-7979-c7ce-b148e06b3aed.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\navigation-date-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\7d8088c1-0902-f1bf-4072-ded42437bcfb.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\navigation-date-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\8240e309-407d-bbf4-3c99-d30a6cbd239e.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\navigation-date-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\866456ed-0d44-e154-6812-4ce33d85961e.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\navigation-date-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\b461ef91-8ab2-8520-9281-83e794350e3c.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\navigation-date-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\bea9b218-c97b-bf98-c5dc-1303bdb9a0ca.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\navigation-date-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\ebb6e58c-4e9a-8f5d-1f77-ab6ddefb3143.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\navigation-date-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\ec2f221f-d8e7-706b-3d3a-fd2c4591b4d7.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\navigation-date-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\f302d80f-31bc-acf7-6f97-9d277d448581.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\navigation-date-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\f861734d-d71b-37f9-482b-52a820e39013.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\navigation-date-filters-native-v1\\native-run\\reference\\config\\ScheduledTasks\\f9b057c0-54e9-e6da-ee4a-88ffd146a403.js",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\navigation-date-filters-native-v1\\native-run\\reference\\config\\system.xml",
+      "bytes": 6914,
+      "sha256": "a0ee0f274acbe8a6a4600ec8354b4331775f2df6b70faa4f2285fcba791b387b",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\navigation-date-filters-native-v1\\native-run\\reference\\data\\.jellyfin-data",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\navigation-date-filters-native-v1\\native-run\\reference\\data\\data\\.jellyfin-data",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\navigation-date-filters-native-v1\\native-run\\reference\\data\\data\\device.txt",
+      "bytes": 35,
+      "sha256": "247d225f842ea11f6115e717cc9f574840b0abc2f31ce710635819edcf35ff71",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\navigation-date-filters-native-v1\\native-run\\reference\\data\\data\\jellyfin.db",
+      "bytes": 557056,
+      "sha256": "3579d0055487f625a336a25b4652f001abd5add61b937829e708613f43ae0088",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\navigation-date-filters-native-v1\\native-run\\reference\\data\\data\\jellyfin.db-shm",
+      "bytes": 32768,
+      "sha256": "fd4c9fda9cd3f9ae7c962b0ddf37232294d55580e1aa165aa06129b8549389eb",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\navigation-date-filters-native-v1\\native-run\\reference\\data\\data\\jellyfin.db-wal",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\navigation-date-filters-native-v1\\native-run\\reference\\data\\data\\ScheduledTasks\\7738148f-fcd0-7979-c7ce-b148e06b3aed.js",
+      "bytes": 203,
+      "sha256": "d3a172391205b7cea47b74f7630d68f047399d3f2695b7758bad60230afde666",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\navigation-date-filters-native-v1\\native-run\\reference\\data\\plugins\\.jellyfin-plugin",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\navigation-date-filters-native-v1\\native-run\\reference\\data\\plugins\\configurations\\Jellyfin.Plugin.MusicBrainz.xml",
+      "bytes": 304,
+      "sha256": "12ad1cb5d54d2f612a5fd72468950ad5fde999e5071e4f51f55d2aeb2e2bcb41",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\navigation-date-filters-native-v1\\native-run\\reference\\data\\plugins\\configurations\\Jellyfin.Plugin.Tmdb.xml",
+      "bytes": 967,
+      "sha256": "b3fe029f00935e026f9b757a34bef55fe7df358e2b09143be0458cc23f221275",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\navigation-date-filters-native-v1\\native-run\\reference\\data\\root\\.jellyfin-root",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\navigation-date-filters-native-v1\\native-run\\reference\\initial.db",
+      "bytes": 548864,
+      "sha256": "52ac3f8f915b7f5fde1b4a9d7671eb86b24032d5d16f9ece20178575cbfb48a4",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\navigation-date-filters-native-v1\\native-run\\reference\\isolation-preparation.json",
+      "bytes": 16424,
+      "sha256": "4189b75fec22c15ac9170796d3071f53b4ffdb50daabe451fc6d5139c48ff9a9",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\navigation-date-filters-native-v1\\native-run\\reference\\log\\.jellyfin-log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\navigation-date-filters-native-v1\\native-run\\reference\\log\\log_20261016.log",
+      "bytes": 14215,
+      "sha256": "064920660c3c0b9cae45f683f94f4b3c6ab674cdb8794bde4065822ad8ded784",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\navigation-date-filters-native-v1\\native-run\\reference\\migration-process.json",
+      "bytes": 1194,
+      "sha256": "073a3c728670a7131f8c39f0db5b6ad4121d0573881c6d9a94699e47c2832940",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\navigation-date-filters-native-v1\\native-run\\reference\\migration-stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\navigation-date-filters-native-v1\\native-run\\reference\\migration-stdout.log",
+      "bytes": 33903,
+      "sha256": "d58ca2c6f374eda2993807eeb570f9815a7c35f3286cfbcabb37ac61cbabd6f2",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\navigation-date-filters-native-v1\\native-run\\reference\\source-before-guid-remap.db",
+      "bytes": 548864,
+      "sha256": "2634c8bf49180e5f9fe55d53d2854960e49f3dc17f37737c61b6467cf9aa2be7",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\navigation-date-filters-native-v1\\native-run\\reference\\system-after-native-migration.xml",
+      "bytes": 7121,
+      "sha256": "effd601fdd0805b03c1df582ba779da0835a31556b10bb9b9675bcf757073a41",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\navigation-date-filters-native-v1\\native-run\\reference-preparation.json",
+      "bytes": 3555,
+      "sha256": "43dde561cb975d457354e31c504ac38b01545c7807c873836cd34b9a82491b69",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\navigation-date-filters-native-v1\\native-run\\reference-stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\navigation-date-filters-native-v1\\native-run\\reference-stdout.log",
+      "bytes": 12853,
+      "sha256": "b6b63eb09959b697c9befeb3923587645ce957670836456a0f47b60c2ec6916b",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\navigation-date-filters-native-v1\\native-run\\setup-http.json",
+      "bytes": 27048,
+      "sha256": "736b10187c69a4bfa3aec2af3910f9ca40c0444db0368742c7c94563f890f42d",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\navigation-date-filters-native-v1\\native-run\\stages.json",
+      "bytes": 13582,
+      "sha256": "7204bc2042f52fa0d5df29032eca114c4391c4049c8fe54591df6b93fa95a830",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\navigation-date-filters-native-v1\\native-run\\summary.json",
+      "bytes": 12603,
+      "sha256": "8a8abcf8d23ce68bcbc2655f1af9a7d74b49e5a83447715050968baa0742fbaf",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\navigation-date-filters-native-v1\\oracle-validation.json",
+      "bytes": 5353,
+      "sha256": "cff05bfea66bee484b61c451d630e3cc66af10697aa3c80010e814b7241f7f57",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-2\\navigation-date-filters-native-v1\\record-native.mjs",
+      "bytes": 57182,
+      "sha256": "6607726c37cae3964410e27a541580b693c10ebdbe9d2526cef8fae863ccaa91",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\preparation\\audit-three-filter-profiles.mjs",
+      "bytes": 11459,
+      "sha256": "9a5237d01e10e8b77d0bea85b1f3a5d51e04ff24f2f7b137b6893f81ce52b2a8",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\independent-native-audit.json",
+      "bytes": 173378,
+      "sha256": "0991c8c105c94af01c04c7a5805d8c8cf9c09eb4cfa2dd6a2e9fb9c82fd4ed50",
+      "required": true,
+      "acceptanceField": "passed"
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-filter-http-restoration-stage/execution-1/sealed/provenance.json",
+      "bytes": 173245,
+      "sha256": "9f04e4afbbc9b5ed117ab9d24b9417bb03a83bf0ebf777daafac2fb6b784f82f",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/tests/library/fixtures/extra-placeholder-filters/README.md",
+      "bytes": 1839,
+      "sha256": "30ca88187975bc53aa6d01ddd99028200721978d01ef50a63ddc212d0bf711e5",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\preparation\\profile-bindings-1\\publish-profiles.mjs",
+      "bytes": 9137,
+      "sha256": "0530c22736a915a5f229931e5c7cc8de2b095c3afe826ec026a77f77103c4034",
+      "required": true
+    }
+  ],
+  "profile": {
+    "reference": {
+      "sourceDatabase": {
+        "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\inputs\\native-prepared-1\\initial.db",
+        "bytes": 548864,
+        "sha256": "52ac3f8f915b7f5fde1b4a9d7671eb86b24032d5d16f9ece20178575cbfb48a4",
+        "required": true
+      },
+      "preparationInputs": [
+        [
+          "nativeReferencePreparation",
+          "../mediamanager-validation/20261016-filter-http-restoration-stage/execution-1/inputs/native-prepared-1/bootstrap.json"
+        ],
+        [
+          "referencePreparationVerifier",
+          "tools/compat/filter-reference-inputs.mjs"
+        ],
+        [
+          "referenceBootstrapScript",
+          "tools/compat/prepare-http-filter-reference.mjs"
+        ],
+        [
+          "referencePreparationVerificationTool",
+          "tools/compat/verify-baseline.js"
+        ],
+        [
+          "referencePreparationVerificationTool",
+          "tools/compat/reference-inputs.js"
+        ],
+        [
+          "nativeReferenceBootstrapLog",
+          "../mediamanager-validation/20261016-filter-http-restoration-stage/execution-1/inputs/native-prepared-1/bootstrap.log"
+        ],
+        [
+          "nativeReferenceBaselineManifest",
+          "../mediamanager-validation/20261016-native-build-closure/baseline/manifest.json"
+        ],
+        [
+          "nativeReferenceModel",
+          "src/database/native-model.json"
+        ],
+        [
+          "nativeReferencePreparationExecutable",
+          ".tools/dotnet/dotnet.exe"
+        ],
+        [
+          "nativeReferencePreparationExecutable",
+          "../mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll"
+        ],
+        [
+          "nativeReferencePreparationExecutable",
+          "C:/ProgramData/chocolatey/lib/ffmpeg/tools/ffmpeg/bin/ffmpeg.exe"
+        ]
+      ]
+    },
+    "recordedFilterOutputRoot": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results",
+    "preparationInputFiles": [
+      {
+        "kind": "nativeReferencePreparation",
+        "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\inputs\\native-prepared-1\\bootstrap.json",
+        "bytes": 116964,
+        "sha256": "394f4b66eec768f63fdd0beebea4a231e334902cbf388877b5fa165146b9dcfd",
+        "required": true
+      },
+      {
+        "kind": "referencePreparationVerifier",
+        "filename": "D:\\mediamanager\\tools\\compat\\filter-reference-inputs.mjs",
+        "bytes": 4092,
+        "sha256": "91de1f092df29d5144282b780dacc64255cc7779bdcf77f1202fe235aa791ace",
+        "required": true
+      },
+      {
+        "kind": "referenceBootstrapScript",
+        "filename": "D:\\mediamanager\\tools\\compat\\prepare-http-filter-reference.mjs",
+        "bytes": 22491,
+        "sha256": "2332fe70915f7c8f996825a75bbda9e5520eab8f05645200ae6ddd8fb718c6f2",
+        "required": true
+      },
+      {
+        "kind": "referencePreparationVerificationTool",
+        "filename": "D:\\mediamanager\\tools\\compat\\verify-baseline.js",
+        "bytes": 3428,
+        "sha256": "46991bed271e61663c6f262ff4fda0a25c7bd6f19d4c63749e6848774375c54c",
+        "required": true
+      },
+      {
+        "kind": "referencePreparationVerificationTool",
+        "filename": "D:\\mediamanager\\tools\\compat\\reference-inputs.js",
+        "bytes": 1954,
+        "sha256": "11ed62001527e2a77e07ed1eec65c52b7906b4684a5d7c0b54fbc0a6cbca4b38",
+        "required": true
+      },
+      {
+        "kind": "nativeReferenceBootstrapLog",
+        "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\inputs\\native-prepared-1\\bootstrap.log",
+        "bytes": 18415,
+        "sha256": "7df37503baef16f2d842528191148626d5dead8014412439c27897f5c3b836e4",
+        "required": true
+      },
+      {
+        "kind": "nativeReferenceBaselineManifest",
+        "filename": "D:\\mediamanager-validation\\20261016-native-build-closure\\baseline\\manifest.json",
+        "bytes": 513264,
+        "sha256": "2012abc83017dfd2a107a49b701531a0dad08c763bc721dc75726342002c8f5c",
+        "required": true
+      },
+      {
+        "kind": "nativeReferenceModel",
+        "filename": "D:\\mediamanager\\src\\database\\native-model.json",
+        "bytes": 126505,
+        "sha256": "942796bb521d2adb04951cd184ffad4988664ea7f6371e2c378b1c207903dbe6",
+        "required": true
+      },
+      {
+        "kind": "nativeReferencePreparationExecutable",
+        "filename": "D:\\mediamanager\\.tools\\dotnet\\dotnet.exe",
+        "bytes": 167208,
+        "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6",
+        "required": true
+      },
+      {
+        "kind": "nativeReferencePreparationExecutable",
+        "filename": "D:\\mediamanager-validation\\20261016-native-build-closure\\baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\jellyfin.dll",
+        "bytes": 506368,
+        "sha256": "474c7c638fe93cc61f1a588849fb93c81a2927388f6f4cf19953b3a76e9deb26",
+        "required": true
+      },
+      {
+        "kind": "nativeReferencePreparationExecutable",
+        "filename": "C:\\ProgramData\\chocolatey\\lib\\ffmpeg\\tools\\ffmpeg\\bin\\ffmpeg.exe",
+        "bytes": 101457920,
+        "sha256": "228d7a8556258de907fdb55f36850078ebc7680b84ec30d84ea02e99bec1d1eb",
+        "required": true
+      }
+    ],
+    "independentNativeAudits": [
+      {
+        "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\independent-native-audit.json",
+        "bytes": 173378,
+        "sha256": "0991c8c105c94af01c04c7a5805d8c8cf9c09eb4cfa2dd6a2e9fb9c82fd4ed50",
+        "required": true,
+        "acceptanceField": "passed"
+      }
+    ],
+    "recordedRecorder": {
+      "filename": "D:\\mediamanager-validation\\20261016-filter-http-restoration-stage\\execution-1\\results\\native-repeat-1\\classification-filters-native-v1\\record-native.mjs",
+      "bytes": 57182,
+      "sha256": "6607726c37cae3964410e27a541580b693c10ebdbe9d2526cef8fae863ccaa91",
+      "required": true
+    },
+    "expectedChangedReferences": [
+      {
+        "table": "ActivityLogs",
+        "column": "UserId",
+        "count": 4
+      },
+      {
+        "table": "Devices",
+        "column": "UserId",
+        "count": 1
+      },
+      {
+        "table": "Permissions",
+        "column": "UserId",
+        "count": 24
+      },
+      {
+        "table": "Preferences",
+        "column": "UserId",
+        "count": 13
+      },
+      {
+        "table": "Users",
+        "column": "Id",
+        "count": 1
+      }
+    ],
+    "executionInputs": [
+      {
+        "kind": "ffmpeg",
+        "filename": "C:\\ProgramData\\chocolatey\\lib\\ffmpeg\\tools\\ffmpeg\\bin\\ffmpeg.exe",
+        "bytes": 101457920,
+        "sha256": "228d7a8556258de907fdb55f36850078ebc7680b84ec30d84ea02e99bec1d1eb",
+        "required": true
+      },
+      {
+        "kind": "ffprobe",
+        "filename": "C:\\ProgramData\\chocolatey\\lib\\ffmpeg\\tools\\ffmpeg\\bin\\ffprobe.exe",
+        "bytes": 101251072,
+        "sha256": "0fde260f5abd35c9cafd96f594cc76365a780c1b73a90e35b6a3409ea1db1bf0",
+        "required": true
+      }
+    ],
+    "sourceBuildReceipt": {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/final-build-receipt.json",
+      "bytes": 14246,
+      "sha256": "44711dacc1c4e65d2f36202267423d3212c3577c41383696643ff04ebe8c49d2",
+      "required": true
+    },
+    "runtimeDirectory": {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0",
+      "entriesSha256": "47d595bfb840e4f9f34677246ee49b3e9d403298ff21b834f171229419adf0b8",
+      "required": true
+    },
+    "dotnetDirectory": {
+      "path": "D:/mediamanager/.tools/dotnet",
+      "entriesSha256": "5b289d693d7a381abdc43016ca8cfe9b75232dce26e06c2a8cb2a7bd17d46340",
+      "required": true
+    }
+  },
+  "nativeObservationManifest": {
+    "filename": "D:/mediamanager-validation/20261016-filter-http-restoration-stage/execution-1/sealed/provenance.json",
+    "bytes": 173245,
+    "sha256": "9f04e4afbbc9b5ed117ab9d24b9417bb03a83bf0ebf777daafac2fb6b784f82f",
+    "required": true
+  }
+}

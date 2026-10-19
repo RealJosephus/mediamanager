@@ -1,0 +1,29 @@
+{
+  "controls": {
+    "DOTNET_PROCESSOR_COUNT": "3"
+  },
+  "sourceFilesSha256": "e75e5a452f3c856cd18d653ebee4bd9e639568765162afbdd09065fd0166e275",
+  "referenceSources": [
+    {
+      "path": "D:/jellyfin/MediaBrowser.Controller/LibraryTaskScheduler/LimitedConcurrencyLibraryScheduler.cs",
+      "bytes": 14480,
+      "sha256": "6f12fba06b37eafd31b1f50e02b9c01e0c2459771e8246c11a0fe7c1cfc46ba8"
+    },
+    {
+      "path": "D:/jellyfin/MediaBrowser.Controller/LibraryTaskScheduler/ILimitedConcurrencyLibraryScheduler.cs",
+      "bytes": 1018,
+      "sha256": "948ed9cdb18f10570d5fb2685a48e0f78fcd5beee1b0a485be8313e19602912c"
+    },
+    {
+      "path": "D:/jellyfin/MediaBrowser.Controller/Entities/Folder.cs",
+      "bytes": 83390,
+      "sha256": "d5f227d462ce3c2df0d5a45d912778427f87321fc9d6e13d863ec28bb639e0c1"
+    },
+    {
+      "path": "D:/jellyfin/Emby.Server.Implementations/ApplicationHost.cs",
+      "bytes": 42960,
+      "sha256": "11119ed0761ae8fdf4e0fa6f9cae175c969ff0b1f563a43f4dc013617fc9c5ef"
+    }
+  ],
+  "limitation": "Reviewed source files and actual loaded assembly bytes are bound; full original build-input closure is not established."
+}

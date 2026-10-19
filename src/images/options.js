@@ -1,5 +1,5 @@
 import path from 'node:path';
-export const imageMime = value => ({ '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.tbn': 'image/jpeg', '.png': 'image/png', '.gif': 'image/gif', '.webp': 'image/webp', '.svg': 'image/svg+xml', '.bmp': 'image/bmp', '.ico': 'image/x-icon', '.avif': 'image/avif', '.tif': 'image/tiff', '.tiff': 'image/tiff' })[path.extname(value).toLowerCase()] ?? 'application/octet-stream';
+export { getMimeType as imageMime } from '../http/mime-types.js';
 export function imageExtension(value) {
   const extension = ({ Jpg: '.jpg', Png: '.png', Webp: '.webp', Gif: '.gif', Bmp: '.bmp', Svg: '.svg' })[value];
   if (extension == null) throw Object.assign(new RangeError('Invalid image output format.'), { status: 400 });

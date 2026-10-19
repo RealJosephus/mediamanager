@@ -4,8 +4,8 @@ import { StorageError, checkAbort } from '../storage/errors.js';
 const scanContext = new AsyncLocalStorage();
 
 export const libraryScanCapabilities = Object.freeze({
-  scope: 'physical-folder-root-coordination',
-  structuralCompletenessProof: true,
+  scope: 'aggregate-folder-validation',
+  structuralCompletenessProof: false,
   directStructuralRoots: false,
   completeLibraryScan: false,
   scansMediaFiles: false,
@@ -17,7 +17,8 @@ export const libraryScanCapabilities = Object.freeze({
   productionMediaScopes: Object.freeze([]),
   reconcilesTopLevelConfiguration: false,
   runsMetadataProbeRefresh: false,
-  runsPostScanTasks: false
+  runsPostScanTasks: false,
+  watchesLibraryDirectories: false
 });
 
 function closedError() {
@@ -55,60 +56,6 @@ function immutable(value) {
   return freeze(clone);
 }
 
-function rootReference(root, index) {
-  return Object.freeze({
-    index,
-    itemId: typeof root?.Id === 'string' ? root.Id : null,
-    path: typeof root?.Path === 'string' ? root.Path : null
-  });
-}
-
-function structurallyComplete(result) {
-  const reasons = field(result, 'incompleteReasons');
-  return field(result, 'structurallyComplete') === true && Array.isArray(reasons) && reasons.length === 0;
-}
-
-function operationResult(rootCount, completed) {
-  const incompleteRoots = Object.freeze(completed
-    .filter(root => !structurallyComplete(root.result))
-    .map(root => Object.freeze({
-      index: root.index,
-      itemId: root.itemId,
-      path: root.path,
-      incompleteReasons: Array.isArray(field(root.result, 'incompleteReasons'))
-        ? field(root.result, 'incompleteReasons') : Object.freeze([])
-    })));
-  return Object.freeze({
-    rootCount,
-    completedRootCount: completed.length,
-    roots: Object.freeze([...completed]),
-    structurallyComplete: completed.length === rootCount && incompleteRoots.length === 0,
-    incompleteRoots
-  });
-}
-
-function incompleteRootError(reference, result, partialResult) {
-  const reasons = field(result, 'incompleteReasons');
-  const error = new StorageError('incomplete-library-scan',
-    `Physical library root ${reference.path ?? reference.itemId ?? reference.index} was not structurally complete.`, {
-      root: reference,
-      incompleteReasons: Array.isArray(reasons) ? reasons : Object.freeze([])
-    });
-  error.partialResult = partialResult;
-  return error;
-}
-
-function incompleteLibraryError(errors, partialResult) {
-  const incompleteRoots = Object.freeze(errors.map(error => field(field(error, 'details'), 'root')));
-  const error = new StorageError('incomplete-library-scan',
-    `${errors.length} physical library root${errors.length === 1 ? '' : 's'} did not produce a structural completeness proof.`, {
-      scanErrors: Object.freeze([...errors]),
-      incompleteRoots
-    });
-  error.partialResult = partialResult;
-  return error;
-}
-
 function cancellationReceipt(generation, message) {
   return Object.freeze({
     generation,
@@ -134,13 +81,6 @@ function failureReceipt(generation, error) {
       code: typeof code === 'string' && code ? code : null,
       message: errorMessage(error)
     })
-  });
-}
-
-function cancellationWithFailures(error, errors) {
-  if (!errors.length) return error;
-  return new StorageError('cancelled', errorMessage(error, 'Library scanning was cancelled.'), {
-    scanErrors: Object.freeze([...errors])
   });
 }
 
@@ -198,32 +138,21 @@ export class LibraryScanService {
   #generations = new Map();
   #closed = false;
 
-  constructor({ library, folderScanner, lifecycle, onError = () => {} }) {
-    if (!library || !folderScanner) throw new TypeError('Library scanning requires library and physical folder scan services.');
-    if (lifecycle != null && typeof lifecycle.run !== 'function') throw new TypeError('Library scan lifecycle must expose its run operation.');
-    Object.assign(this, { library, folderScanner, lifecycle, onError });
-    const folderCapabilities = folderScanner.capabilities ?? {};
-    const productionMediaScopes = Array.isArray(folderCapabilities.productionMediaScopes)
-      ? Object.freeze([...folderCapabilities.productionMediaScopes]) : Object.freeze([]);
-    const lifecycleCapabilities = lifecycle?.capabilities ?? {};
-    const stages = {
-      structuralCompletenessProof: libraryScanCapabilities.structuralCompletenessProof === true
-        && folderCapabilities.structuralCompletenessProof === true,
-      directStructuralRoots: folderCapabilities.directStructuralRoots === true,
-      scansMediaFiles: folderCapabilities.scansMediaFiles === true,
-      typeReclassification: folderCapabilities.typeReclassification === true,
-      secondaryOwnershipTransfer: folderCapabilities.secondaryOwnershipTransfer === true,
-      groupedOwnership: folderCapabilities.groupedOwnership === true,
-      relationshipRows: folderCapabilities.relationshipRows === true,
-      resolvesProductionMediaFiles: folderCapabilities.resolvesProductionMediaFiles === true,
-      reconcilesTopLevelConfiguration: lifecycleCapabilities.reconcilesTopLevelConfiguration === true,
-      runsMetadataProbeRefresh: folderCapabilities.runsMetadataProbeRefresh === true,
-      runsPostScanTasks: lifecycleCapabilities.runsPostScanTasks === true
-    };
+  constructor({ lifecycle, onError = () => {} } = {}) {
+    if (!lifecycle || typeof lifecycle.run !== 'function') {
+      throw new TypeError('Library scanning requires the aggregate folder validation lifecycle.');
+    }
+    if (typeof onError !== 'function') throw new TypeError('Library scan error reporting must be a function.');
+    Object.assign(this, { lifecycle, onError });
+    const declared = lifecycle.capabilities ?? {};
+    const stages = Object.fromEntries(Object.keys(libraryScanCapabilities)
+      .filter(key => !['scope', 'completeLibraryScan', 'productionMediaScopes'].includes(key))
+      .map(key => [key, declared[key] === true]));
     this.capabilities = Object.freeze({
       ...libraryScanCapabilities,
       ...stages,
-      productionMediaScopes,
+      productionMediaScopes: Object.freeze(Array.isArray(declared.productionMediaScopes)
+        ? [...declared.productionMediaScopes] : []),
       completeLibraryScan: Object.values(stages).every(value => value === true)
     });
   }
@@ -273,7 +202,7 @@ export class LibraryScanService {
       this.#current = current;
       const signal = AbortSignal.any([controller.signal, this.#lifetime.signal]);
       try {
-        const result = await this.#startScan({ signal }, true);
+        const result = await this.#startScan({ signal });
         record.state = 'completed';
         record.resolve(Object.freeze({ generation, status: 'completed', result }));
       } catch (error) {
@@ -310,12 +239,12 @@ export class LibraryScanService {
   runCompleteScan(options = {}) {
     if (this.#closed) return Promise.reject(closedError());
     if (reentrant(this)) return Promise.reject(reentrantError('A nested complete scan'));
-    return this.#startScan(options, false);
+    return this.#startScan(options);
   }
 
-  #startScan(options, continueOnError) {
+  #startScan(options) {
     const context = { owner: this, active: true, parent: activeParent() };
-    const run = () => scanContext.run(context, () => this.#scanOperation(options, continueOnError));
+    const run = () => scanContext.run(context, () => this.#scanOperation(options));
     const task = this.#scanTail.then(run, run);
     this.#scanTail = task.catch(() => {});
     this.#active.add(task);
@@ -333,91 +262,22 @@ export class LibraryScanService {
     catch (error) { this.#report(error); }
   }
 
-  async #scanOperation({ signal, reportProgress } = {}, continueOnError) {
+  async #scanOperation({ signal, reportProgress } = {}) {
     if (reportProgress != null && typeof reportProgress !== 'function') {
       throw new TypeError('Library scan progress reporter must be a function.');
     }
     const combined = signal ? AbortSignal.any([signal, this.#lifetime.signal]) : this.#lifetime.signal;
     checkAbort(combined);
-    if (this.lifecycle) {
-      let progress = 0;
-      return this.lifecycle.run({ signal: combined,
-        reportProgress: (value, detail) => {
-          // Task observers use the existing monotonic 0-99 contract; the
-          // lifecycle itself retains native 0-100 phase arithmetic.
-          if (Number.isFinite(value)) progress = Math.max(progress, Math.min(99, Math.max(0, value)));
-          this.#progress(reportProgress, progress, detail);
-        },
-        scan: options => this.#scanRoots(options, continueOnError) });
-    }
-    this.folderScanner.ignoreRule?.clearDirectoryCache();
-    try {
-      return await this.#scanRoots({ signal: combined, reportProgress }, continueOnError);
-    } finally {
-      this.folderScanner.ignoreRule?.clearDirectoryCache();
-    }
-  }
-
-  async #scanRoots({ signal: combined, reportProgress }, continueOnError) {
-    const roots = await this.library.getPhysicalScanRoots({ signal: combined });
-    if (!Array.isArray(roots)) throw new StorageError('invalid-response', 'Physical library scan roots must be an array.');
+    let progress = 0;
+    const result = await this.lifecycle.run({ signal: combined,
+      reportProgress: (value, detail) => {
+        // Scheduled task observers retain their monotonic 0-99 contract;
+        // the lifecycle owns native 0-100 phase arithmetic and traversal.
+        if (Number.isFinite(value)) progress = Math.max(progress, Math.min(99, Math.max(0, value)));
+        this.#progress(reportProgress, progress, detail);
+      } });
     checkAbort(combined);
-    const completed = [];
-    const errors = [];
-    this.#progress(reportProgress, 0, Object.freeze({ rootCount: roots.length, completedRootCount: 0, root: null }));
-    checkAbort(combined);
-    for (let index = 0; index < roots.length; index++) {
-      const root = roots[index];
-      const reference = rootReference(root, index);
-      let result;
-      try {
-        checkAbort(combined);
-        if (!this.folderScanner.supports(root)) {
-          throw new StorageError('invalid-response', 'A library scan root is not a supported physical folder.');
-        }
-        result = await this.folderScanner.scan(root, { signal: combined });
-        checkAbort(combined);
-      } catch (error) {
-        if (cancelled(error)) throw cancellationWithFailures(error, errors);
-        if (!continueOnError) throw error;
-        errors.push(error);
-        continue;
-      }
-      const frozenResult = immutable(result);
-      completed.push(Object.freeze({ ...reference, result: frozenResult }));
-      const value = roots.length ? (this.lifecycle ? 100 : 99) * completed.length / roots.length : 0;
-      this.#progress(reportProgress, value, Object.freeze({
-        rootCount: roots.length,
-        completedRootCount: completed.length,
-        root: reference
-      }));
-      if (!structurallyComplete(frozenResult)) {
-        const incomplete = incompleteRootError(reference, frozenResult, operationResult(roots.length, completed));
-        if (!continueOnError) throw incomplete;
-        errors.push(incomplete);
-      }
-      if (frozenResult.metadataComplete === false) {
-        const failure = new StorageError('metadata-scan-failed', 'The physical library root did not complete metadata refresh.', {
-          root: reference, metadata: frozenResult.metadata
-        });
-        failure.partialResult = operationResult(roots.length, completed);
-        if (!continueOnError) throw failure;
-        errors.push(failure);
-      }
-      try { checkAbort(combined); }
-      catch (error) { throw cancellationWithFailures(error, errors); }
-    }
-    const result = operationResult(roots.length, completed);
-    if (errors.length) {
-      if (errors.every(error => field(error, 'code') === 'incomplete-library-scan')) {
-        throw incompleteLibraryError(errors, result);
-      }
-      const error = new AggregateError(errors, `${errors.length} physical library root${errors.length === 1 ? '' : 's'} failed to scan.`);
-      error.code = 'library-scan-failed';
-      error.partialResult = result;
-      throw error;
-    }
-    return result;
+    return immutable(result);
   }
 
   #report(error) {

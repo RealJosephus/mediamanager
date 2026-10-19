@@ -1,0 +1,3867 @@
+{
+  "readerResults": [
+    {
+      "name": "rich",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": " zh-TW ",
+        "item": {
+          "Name": " Rich title ",
+          "ForcedSortName": " Sort title ",
+          "Overview": "Overview nested tail \u0026 value",
+          "Studios": [
+            " Publisher "
+          ],
+          "ProviderIds": {
+            "Amazon": "A1",
+            "GoogleBooks": "g1",
+            "ISBN": "978-123"
+          },
+          "Genres": [
+            "Fiction",
+            "History",
+            "Art",
+            "Science",
+            "Adventure",
+            "Fantasy"
+          ],
+          "IndexNumber": 2,
+          "CommunityRating": 4,
+          "communityRatingDouble": 4,
+          "communityRatingBits": 1082130432,
+          "SeriesName": " Series ",
+          "ProductionYear": 2024,
+          "premiereDate": "2024-03-03T00:00:00.0000000\u002B08:00",
+          "premiereTicks": "638450208000000000",
+          "premiereKind": "Local"
+        },
+        "people": [
+          {
+            "Name": "J. R. R. Tolkien",
+            "type": "Author",
+            "Role": null,
+            "ProviderIds": {}
+          },
+          {
+            "Name": "Other Author",
+            "type": "Author",
+            "Role": null,
+            "ProviderIds": {}
+          },
+          {
+            "Name": "Artist",
+            "type": "Illustrator",
+            "Role": null,
+            "ProviderIds": {}
+          }
+        ]
+      },
+      "error": null,
+      "logs": []
+    },
+    {
+      "name": "empty",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": null,
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "logs": []
+    },
+    {
+      "name": "wrong-namespace",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": null,
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "logs": []
+    },
+    {
+      "name": "alternate-prefix",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "Alias",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {
+            "ISBN": "123"
+          },
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": null,
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": [
+          {
+            "Name": "Alice Editor",
+            "type": "Author",
+            "Role": null,
+            "ProviderIds": {}
+          }
+        ]
+      },
+      "error": null,
+      "logs": []
+    },
+    {
+      "name": "last-main-first-sort",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "Two",
+          "ForcedSortName": "Sort One",
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": null,
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "logs": []
+    },
+    {
+      "name": "empty-main-fallback",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "Fallback",
+          "ForcedSortName": "Calibre sort",
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": null,
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "logs": []
+    },
+    {
+      "name": "creator-roles",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": null,
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": [
+          {
+            "Name": "A. B. Last0",
+            "type": "Arranger",
+            "Role": null,
+            "ProviderIds": {}
+          },
+          {
+            "Name": "A. B. Last1",
+            "type": "Artist",
+            "Role": null,
+            "ProviderIds": {}
+          },
+          {
+            "Name": "A. B. Last2",
+            "type": "Author",
+            "Role": null,
+            "ProviderIds": {}
+          },
+          {
+            "Name": "A. B. Last3",
+            "type": "Author",
+            "Role": null,
+            "ProviderIds": {}
+          },
+          {
+            "Name": "A. B. Last4",
+            "type": "Author",
+            "Role": null,
+            "ProviderIds": {}
+          },
+          {
+            "Name": "A. B. Last5",
+            "type": "Author",
+            "Role": null,
+            "ProviderIds": {}
+          },
+          {
+            "Name": "A. B. Last6",
+            "type": "Editor",
+            "Role": null,
+            "ProviderIds": {}
+          },
+          {
+            "Name": "A. B. Last7",
+            "type": "Illustrator",
+            "Role": null,
+            "ProviderIds": {}
+          },
+          {
+            "Name": "A. B. Last8",
+            "type": "Lyricist",
+            "Role": null,
+            "ProviderIds": {}
+          },
+          {
+            "Name": "A. B. Last9",
+            "type": "AlbumArtist",
+            "Role": null,
+            "ProviderIds": {}
+          },
+          {
+            "Name": "A. B. Last10",
+            "type": "Narrator",
+            "Role": null,
+            "ProviderIds": {}
+          },
+          {
+            "Name": "A. B. Last11",
+            "type": "Unknown",
+            "Role": null,
+            "ProviderIds": {}
+          },
+          {
+            "Name": "A. B. Last12",
+            "type": "Translator",
+            "Role": null,
+            "ProviderIds": {}
+          },
+          {
+            "Name": "A. B. Last13",
+            "type": "Author",
+            "Role": null,
+            "ProviderIds": {}
+          },
+          {
+            "Name": "A. B. Last14",
+            "type": "Author",
+            "Role": null,
+            "ProviderIds": {}
+          },
+          {
+            "Name": "\uD835\uDD04.B.",
+            "type": "Author",
+            "Role": null,
+            "ProviderIds": {}
+          },
+          {
+            "Name": "\u00C9. F.",
+            "type": "Author",
+            "Role": null,
+            "ProviderIds": {}
+          },
+          {
+            "Name": "John",
+            "type": "Author",
+            "Role": null,
+            "ProviderIds": {}
+          },
+          {
+            "Name": "Jane Doe",
+            "type": "Author",
+            "Role": null,
+            "ProviderIds": {}
+          }
+        ]
+      },
+      "error": null,
+      "logs": []
+    },
+    {
+      "name": "first-whitespace",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [
+            "x",
+            "a",
+            "b"
+          ],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": null,
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "logs": []
+    },
+    {
+      "name": "ids-case-duplicate",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {
+            "ISBN": "first"
+          },
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": null,
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "logs": []
+    },
+    {
+      "name": "numbers-0",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": 2,
+          "CommunityRating": 2,
+          "communityRatingDouble": 2,
+          "communityRatingBits": 1073741824,
+          "SeriesName": " ",
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "logs": []
+    },
+    {
+      "name": "numbers-1",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": 4,
+          "CommunityRating": 4,
+          "communityRatingDouble": 4,
+          "communityRatingBits": 1082130432,
+          "SeriesName": " ",
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "logs": []
+    },
+    {
+      "name": "numbers-2",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": -2,
+          "CommunityRating": -2,
+          "communityRatingDouble": -2,
+          "communityRatingBits": -1073741824,
+          "SeriesName": " ",
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "logs": []
+    },
+    {
+      "name": "numbers-3",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": -4,
+          "CommunityRating": -4,
+          "communityRatingDouble": -4,
+          "communityRatingBits": -1065353216,
+          "SeriesName": " ",
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "logs": []
+    },
+    {
+      "name": "numbers-4",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": 3,
+          "CommunityRating": 3,
+          "communityRatingDouble": 3,
+          "communityRatingBits": 1077936128,
+          "SeriesName": " ",
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "logs": []
+    },
+    {
+      "name": "numbers-5",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": " ",
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "logs": [
+        "OverflowException",
+        "OverflowException"
+      ]
+    },
+    {
+      "name": "numbers-6",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": " ",
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "logs": [
+        "OverflowException",
+        "OverflowException"
+      ]
+    },
+    {
+      "name": "numbers-7",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": 2147483647,
+          "CommunityRating": 2.1474836E+09,
+          "communityRatingDouble": 2147483648,
+          "communityRatingBits": 1325400064,
+          "SeriesName": " ",
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "logs": []
+    },
+    {
+      "name": "numbers-8",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": " ",
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "logs": [
+        "OverflowException",
+        "OverflowException"
+      ]
+    },
+    {
+      "name": "numbers-9",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": -2147483648,
+          "CommunityRating": -2.1474836E+09,
+          "communityRatingDouble": -2147483648,
+          "communityRatingBits": -822083584,
+          "SeriesName": " ",
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "logs": []
+    },
+    {
+      "name": "numbers-10",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": 100,
+          "CommunityRating": 100,
+          "communityRatingDouble": 100,
+          "communityRatingBits": 1120403456,
+          "SeriesName": " ",
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "logs": []
+    },
+    {
+      "name": "numbers-11",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": 15,
+          "CommunityRating": 15,
+          "communityRatingDouble": 15,
+          "communityRatingBits": 1097859072,
+          "SeriesName": " ",
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "logs": []
+    },
+    {
+      "name": "numbers-12",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": " ",
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "logs": [
+        "FormatException",
+        "FormatException"
+      ]
+    },
+    {
+      "name": "numbers-13",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": " ",
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "logs": []
+    },
+    {
+      "name": "date-0",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": null,
+          "ProductionYear": 2024,
+          "premiereDate": "2024-03-02T00:00:00.0000000",
+          "premiereTicks": "638449344000000000",
+          "premiereKind": "Unspecified"
+        },
+        "people": null
+      },
+      "error": null,
+      "logs": []
+    },
+    {
+      "name": "date-1",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": null,
+          "ProductionYear": 2024,
+          "premiereDate": "2024-03-03T00:00:00.0000000\u002B08:00",
+          "premiereTicks": "638450208000000000",
+          "premiereKind": "Local"
+        },
+        "people": null
+      },
+      "error": null,
+      "logs": []
+    },
+    {
+      "name": "date-2",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": null,
+          "ProductionYear": 2024,
+          "premiereDate": "2024-03-01T00:00:00.0000000\u002B08:00",
+          "premiereTicks": "638448480000000000",
+          "premiereKind": "Local"
+        },
+        "people": null
+      },
+      "error": null,
+      "logs": []
+    },
+    {
+      "name": "date-3",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": null,
+          "ProductionYear": 1,
+          "premiereDate": "0001-01-01T00:00:00.0000000",
+          "premiereTicks": "0",
+          "premiereKind": "Unspecified"
+        },
+        "people": null
+      },
+      "error": null,
+      "logs": []
+    },
+    {
+      "name": "date-4",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": null,
+          "ProductionYear": 9999,
+          "premiereDate": "9999-12-31T00:00:00.0000000",
+          "premiereTicks": "3155378112000000000",
+          "premiereKind": "Unspecified"
+        },
+        "people": null
+      },
+      "error": null,
+      "logs": []
+    },
+    {
+      "name": "date-5",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": null,
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "logs": []
+    },
+    {
+      "name": "date-6",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": null,
+          "ProductionYear": 2024,
+          "premiereDate": "2024-03-01T00:00:00.0000000",
+          "premiereTicks": "638448480000000000",
+          "premiereKind": "Unspecified"
+        },
+        "people": null
+      },
+      "error": null,
+      "logs": []
+    },
+    {
+      "name": "date-7",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": null,
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "logs": []
+    },
+    {
+      "name": "date-8",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": null,
+          "ProductionYear": 2024,
+          "premiereDate": "2024-03-03T00:00:00.0000000\u002B08:00",
+          "premiereTicks": "638450208000000000",
+          "premiereKind": "Local"
+        },
+        "people": null
+      },
+      "error": null,
+      "logs": []
+    },
+    {
+      "name": "refinement-apostrophe",
+      "result": null,
+      "error": "XPathException",
+      "logs": []
+    },
+    {
+      "name": "malformed",
+      "result": null,
+      "error": "XmlException",
+      "logs": []
+    },
+    {
+      "name": "internal-dtd",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "Entity title",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": null,
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "logs": []
+    },
+    {
+      "name": "external-dtd",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "Title",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": null,
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "logs": []
+    },
+    {
+      "name": "invalid-character",
+      "result": null,
+      "error": "XmlException",
+      "logs": []
+    },
+    {
+      "name": "utf8-bom",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "\u4E2D\u6587 Caf\u00E9",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": null,
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "logs": []
+    },
+    {
+      "name": "utf16le-bom",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "\u4E2D\u6587 Caf\u00E9",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": null,
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "logs": []
+    },
+    {
+      "name": "utf16be-bom",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "\u4E2D\u6587 Caf\u00E9",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": null,
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "logs": []
+    },
+    {
+      "name": "utf16le-no-bom",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "No BOM \u4E2D\u6587",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": null,
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "logs": []
+    },
+    {
+      "name": "latin1-declaration",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "Caf\u00E9 \u00A9",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": null,
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "logs": []
+    },
+    {
+      "name": "cp1252-declaration",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "\u20AC \u201Cquoted\u201D",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": null,
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "logs": []
+    },
+    {
+      "name": "invalid-utf8",
+      "result": null,
+      "error": "XmlException",
+      "logs": []
+    },
+    {
+      "name": "cancelled-valid",
+      "result": null,
+      "error": "OperationCanceledException",
+      "logs": []
+    },
+    {
+      "name": "cancelled-malformed",
+      "result": null,
+      "error": "XmlException",
+      "logs": []
+    },
+    {
+      "name": "unknown-entity",
+      "result": null,
+      "error": "XmlException",
+      "logs": []
+    },
+    {
+      "name": "external-entity",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "beforeafter",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": null,
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "logs": []
+    },
+    {
+      "name": "cdata-comments",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "A\u003CB\u003E C",
+          "ForcedSortName": null,
+          "Overview": "onetwo",
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": null,
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "logs": []
+    },
+    {
+      "name": "numeric-references",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "A\u4E2D\tZ",
+          "ForcedSortName": null,
+          "Overview": "\u0000",
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": null,
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "logs": []
+    },
+    {
+      "name": "unbound-prefix",
+      "result": null,
+      "error": "XmlException",
+      "logs": []
+    },
+    {
+      "name": "attribute-whitespace",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": "a\t\nb",
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": [
+          {
+            "Name": "First Last",
+            "type": "Author",
+            "Role": null,
+            "ProviderIds": {}
+          }
+        ]
+      },
+      "error": null,
+      "logs": []
+    },
+    {
+      "name": "utf32le-bom",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "\u4E2D\u6587 \uD83D\uDE00",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": null,
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "logs": []
+    },
+    {
+      "name": "utf32be-bom",
+      "result": null,
+      "error": "XmlException",
+      "logs": []
+    },
+    {
+      "name": "utf16be-no-bom",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "No BOM \u4E2D\u6587",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": null,
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "logs": []
+    },
+    {
+      "name": "bom-declaration-conflict",
+      "result": null,
+      "error": "XmlException",
+      "logs": []
+    },
+    {
+      "name": "reference-null",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "\u0000",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": null,
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "logs": []
+    },
+    {
+      "name": "reference-control",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "\u0001",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": null,
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "logs": []
+    },
+    {
+      "name": "reference-noncharacter",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "\uFFFF",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": null,
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "logs": []
+    },
+    {
+      "name": "reference-surrogate",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "\uFFFD",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": null,
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "logs": []
+    },
+    {
+      "name": "reference-too-large",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "\uFFFD\uFFFD",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": null,
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "logs": []
+    },
+    {
+      "name": "utf32be-explicit",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "BE explicit",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": null,
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "logs": []
+    },
+    {
+      "name": "xml-space-preserve",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "",
+          "ForcedSortName": null,
+          "Overview": "one two",
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": null,
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "logs": []
+    },
+    {
+      "name": "xml-space-cdata",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "",
+          "ForcedSortName": null,
+          "Overview": "one two",
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": null,
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "logs": []
+    },
+    {
+      "name": "external-entity-attribute",
+      "result": null,
+      "error": "XmlException",
+      "logs": []
+    },
+    {
+      "name": "literal-crlf",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "one\r\ntwo",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": "a\r\nb",
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "logs": []
+    },
+    {
+      "name": "literal-cr",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "",
+          "ForcedSortName": null,
+          "Overview": "one\rtwo",
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": null,
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "logs": []
+    },
+    {
+      "name": "nested-entity",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "Book title",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": null,
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "logs": []
+    }
+  ],
+  "providerResults": [
+    {
+      "name": "specific-first",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "Specific",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": null,
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "changed": true,
+      "selected": "book.opf",
+      "modifiedTicks": "639264133230000001",
+      "logs": []
+    },
+    {
+      "name": "content-second",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "Content",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": null,
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "changed": true,
+      "selected": "content.opf",
+      "modifiedTicks": "639264133230000001",
+      "logs": []
+    },
+    {
+      "name": "metadata-last",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "Calibre",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": null,
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "changed": true,
+      "selected": "metadata.opf",
+      "modifiedTicks": "639264133230000001",
+      "logs": []
+    },
+    {
+      "name": "directory-specific",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "Directory",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": null,
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "changed": true,
+      "selected": "Volume.opf",
+      "modifiedTicks": "639264133230000001",
+      "logs": []
+    },
+    {
+      "name": "missing-all",
+      "result": {
+        "HasMetadata": false,
+        "ResultLanguage": null,
+        "item": null,
+        "people": null
+      },
+      "error": null,
+      "changed": false,
+      "selected": null,
+      "modifiedTicks": null,
+      "logs": []
+    },
+    {
+      "name": "missing-parent-source",
+      "result": null,
+      "error": "DirectoryNotFoundException",
+      "changed": false,
+      "selected": null,
+      "modifiedTicks": null,
+      "logs": []
+    },
+    {
+      "name": "malformed-specific",
+      "result": null,
+      "error": "XmlException",
+      "changed": true,
+      "selected": "book.opf",
+      "modifiedTicks": "639264133230000001",
+      "logs": []
+    },
+    {
+      "name": "cancelled-existing",
+      "result": null,
+      "error": "OperationCanceledException",
+      "changed": true,
+      "selected": "book.opf",
+      "modifiedTicks": "639264133230000001",
+      "logs": []
+    },
+    {
+      "name": "cancelled-missing",
+      "result": null,
+      "error": "OperationCanceledException",
+      "changed": false,
+      "selected": null,
+      "modifiedTicks": null,
+      "logs": []
+    },
+    {
+      "name": "locked-selected",
+      "result": null,
+      "error": "IOException",
+      "changed": true,
+      "selected": "book.opf",
+      "modifiedTicks": "639264133230000001",
+      "logs": []
+    },
+    {
+      "name": "mtime--1",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": " zh-TW ",
+        "item": {
+          "Name": " Rich title ",
+          "ForcedSortName": " Sort title ",
+          "Overview": "Overview nested tail \u0026 value",
+          "Studios": [
+            " Publisher "
+          ],
+          "ProviderIds": {
+            "Amazon": "A1",
+            "GoogleBooks": "g1",
+            "ISBN": "978-123"
+          },
+          "Genres": [
+            "Fiction",
+            "History",
+            "Art",
+            "Science",
+            "Adventure",
+            "Fantasy"
+          ],
+          "IndexNumber": 2,
+          "CommunityRating": 4,
+          "communityRatingDouble": 4,
+          "communityRatingBits": 1082130432,
+          "SeriesName": " Series ",
+          "ProductionYear": 2024,
+          "premiereDate": "2024-03-03T00:00:00.0000000\u002B08:00",
+          "premiereTicks": "638450208000000000",
+          "premiereKind": "Local"
+        },
+        "people": [
+          {
+            "Name": "J. R. R. Tolkien",
+            "type": "Author",
+            "Role": null,
+            "ProviderIds": {}
+          },
+          {
+            "Name": "Other Author",
+            "type": "Author",
+            "Role": null,
+            "ProviderIds": {}
+          },
+          {
+            "Name": "Artist",
+            "type": "Illustrator",
+            "Role": null,
+            "ProviderIds": {}
+          }
+        ]
+      },
+      "error": null,
+      "changed": false,
+      "selected": "book.opf",
+      "modifiedTicks": "639264133229999999",
+      "logs": []
+    },
+    {
+      "name": "mtime-0",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": " zh-TW ",
+        "item": {
+          "Name": " Rich title ",
+          "ForcedSortName": " Sort title ",
+          "Overview": "Overview nested tail \u0026 value",
+          "Studios": [
+            " Publisher "
+          ],
+          "ProviderIds": {
+            "Amazon": "A1",
+            "GoogleBooks": "g1",
+            "ISBN": "978-123"
+          },
+          "Genres": [
+            "Fiction",
+            "History",
+            "Art",
+            "Science",
+            "Adventure",
+            "Fantasy"
+          ],
+          "IndexNumber": 2,
+          "CommunityRating": 4,
+          "communityRatingDouble": 4,
+          "communityRatingBits": 1082130432,
+          "SeriesName": " Series ",
+          "ProductionYear": 2024,
+          "premiereDate": "2024-03-03T00:00:00.0000000\u002B08:00",
+          "premiereTicks": "638450208000000000",
+          "premiereKind": "Local"
+        },
+        "people": [
+          {
+            "Name": "J. R. R. Tolkien",
+            "type": "Author",
+            "Role": null,
+            "ProviderIds": {}
+          },
+          {
+            "Name": "Other Author",
+            "type": "Author",
+            "Role": null,
+            "ProviderIds": {}
+          },
+          {
+            "Name": "Artist",
+            "type": "Illustrator",
+            "Role": null,
+            "ProviderIds": {}
+          }
+        ]
+      },
+      "error": null,
+      "changed": false,
+      "selected": "book.opf",
+      "modifiedTicks": "639264133230000000",
+      "logs": []
+    },
+    {
+      "name": "mtime-1",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": " zh-TW ",
+        "item": {
+          "Name": " Rich title ",
+          "ForcedSortName": " Sort title ",
+          "Overview": "Overview nested tail \u0026 value",
+          "Studios": [
+            " Publisher "
+          ],
+          "ProviderIds": {
+            "Amazon": "A1",
+            "GoogleBooks": "g1",
+            "ISBN": "978-123"
+          },
+          "Genres": [
+            "Fiction",
+            "History",
+            "Art",
+            "Science",
+            "Adventure",
+            "Fantasy"
+          ],
+          "IndexNumber": 2,
+          "CommunityRating": 4,
+          "communityRatingDouble": 4,
+          "communityRatingBits": 1082130432,
+          "SeriesName": " Series ",
+          "ProductionYear": 2024,
+          "premiereDate": "2024-03-03T00:00:00.0000000\u002B08:00",
+          "premiereTicks": "638450208000000000",
+          "premiereKind": "Local"
+        },
+        "people": [
+          {
+            "Name": "J. R. R. Tolkien",
+            "type": "Author",
+            "Role": null,
+            "ProviderIds": {}
+          },
+          {
+            "Name": "Other Author",
+            "type": "Author",
+            "Role": null,
+            "ProviderIds": {}
+          },
+          {
+            "Name": "Artist",
+            "type": "Illustrator",
+            "Role": null,
+            "ProviderIds": {}
+          }
+        ]
+      },
+      "error": null,
+      "changed": true,
+      "selected": "book.opf",
+      "modifiedTicks": "639264133230000001",
+      "logs": []
+    }
+  ],
+  "epubResults": [
+    {
+      "name": "standard-slashes",
+      "result": {
+        "HasMetadata": false,
+        "ResultLanguage": null,
+        "item": null,
+        "people": null
+      },
+      "error": null,
+      "hasCover": false,
+      "coverError": null,
+      "coverSha": null,
+      "coverFormat": null,
+      "contentPath": null,
+      "coverPath": null,
+      "logs": []
+    },
+    {
+      "name": "back-container-slash-cover",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "Embedded title",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": null,
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "hasCover": false,
+      "coverError": null,
+      "coverSha": null,
+      "coverFormat": null,
+      "contentPath": "OPS/package.opf",
+      "coverPath": "OPS\\cover.png",
+      "logs": []
+    },
+    {
+      "name": "back-container-back-cover",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "Embedded title",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": null,
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "hasCover": true,
+      "coverError": null,
+      "coverSha": "95cfaeba3dde34423ea3e89d30ee8fb41d9331d5aef6c520b8cbd4521c91cd1d",
+      "coverFormat": "Png",
+      "contentPath": "OPS/package.opf",
+      "coverPath": "OPS\\cover.png",
+      "logs": []
+    },
+    {
+      "name": "all-backslashes",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "Embedded title",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": null,
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "hasCover": true,
+      "coverError": null,
+      "coverSha": "95cfaeba3dde34423ea3e89d30ee8fb41d9331d5aef6c520b8cbd4521c91cd1d",
+      "coverFormat": "Png",
+      "contentPath": "OPS\\package.opf",
+      "coverPath": "OPS\\cover.png",
+      "logs": []
+    },
+    {
+      "name": "root-opf",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "Embedded title",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": null,
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "hasCover": true,
+      "coverError": null,
+      "coverSha": "95cfaeba3dde34423ea3e89d30ee8fb41d9331d5aef6c520b8cbd4521c91cd1d",
+      "coverFormat": "Png",
+      "contentPath": "package.opf",
+      "coverPath": "cover.png",
+      "logs": []
+    },
+    {
+      "name": "missing-container",
+      "result": {
+        "HasMetadata": false,
+        "ResultLanguage": null,
+        "item": null,
+        "people": null
+      },
+      "error": null,
+      "hasCover": false,
+      "coverError": null,
+      "coverSha": null,
+      "coverFormat": null,
+      "contentPath": null,
+      "coverPath": null,
+      "logs": []
+    },
+    {
+      "name": "wrong-container-namespace",
+      "result": {
+        "HasMetadata": false,
+        "ResultLanguage": null,
+        "item": null,
+        "people": null
+      },
+      "error": null,
+      "hasCover": false,
+      "coverError": null,
+      "coverSha": null,
+      "coverFormat": null,
+      "contentPath": null,
+      "coverPath": null,
+      "logs": []
+    },
+    {
+      "name": "first-rootfile-missing",
+      "result": {
+        "HasMetadata": false,
+        "ResultLanguage": null,
+        "item": null,
+        "people": null
+      },
+      "error": null,
+      "hasCover": false,
+      "coverError": null,
+      "coverSha": null,
+      "coverFormat": null,
+      "contentPath": "missing.opf",
+      "coverPath": null,
+      "logs": []
+    },
+    {
+      "name": "missing-opf",
+      "result": {
+        "HasMetadata": false,
+        "ResultLanguage": null,
+        "item": null,
+        "people": null
+      },
+      "error": null,
+      "hasCover": false,
+      "coverError": null,
+      "coverSha": null,
+      "coverFormat": null,
+      "contentPath": "missing.opf",
+      "coverPath": null,
+      "logs": []
+    },
+    {
+      "name": "empty-root-path",
+      "result": {
+        "HasMetadata": false,
+        "ResultLanguage": null,
+        "item": null,
+        "people": null
+      },
+      "error": null,
+      "hasCover": false,
+      "coverError": null,
+      "coverSha": null,
+      "coverFormat": null,
+      "contentPath": "",
+      "coverPath": null,
+      "logs": []
+    },
+    {
+      "name": "malformed-container",
+      "result": null,
+      "error": "XmlException",
+      "hasCover": null,
+      "coverError": "XmlException",
+      "coverSha": null,
+      "coverFormat": null,
+      "contentPath": null,
+      "coverPath": null,
+      "logs": []
+    },
+    {
+      "name": "malformed-opf",
+      "result": null,
+      "error": "XmlException",
+      "hasCover": null,
+      "coverError": "XmlException",
+      "coverSha": null,
+      "coverFormat": null,
+      "contentPath": "OPS/package.opf",
+      "coverPath": null,
+      "logs": []
+    },
+    {
+      "name": "corrupt-zip",
+      "result": null,
+      "error": "InvalidDataException",
+      "hasCover": null,
+      "coverError": "InvalidDataException",
+      "coverSha": null,
+      "coverFormat": null,
+      "contentPath": null,
+      "coverPath": null,
+      "logs": []
+    },
+    {
+      "name": "wrong-extension",
+      "result": {
+        "HasMetadata": false,
+        "ResultLanguage": null,
+        "item": null,
+        "people": null
+      },
+      "error": null,
+      "hasCover": false,
+      "coverError": null,
+      "coverSha": null,
+      "coverFormat": null,
+      "contentPath": "OPS/package.opf",
+      "coverPath": "OPS\\cover.png",
+      "logs": []
+    },
+    {
+      "name": "upper-extension",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "Embedded title",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": null,
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "hasCover": true,
+      "coverError": null,
+      "coverSha": "95cfaeba3dde34423ea3e89d30ee8fb41d9331d5aef6c520b8cbd4521c91cd1d",
+      "coverFormat": "Png",
+      "contentPath": "OPS/package.opf",
+      "coverPath": "OPS\\cover.png",
+      "logs": []
+    },
+    {
+      "name": "directory",
+      "result": {
+        "HasMetadata": false,
+        "ResultLanguage": null,
+        "item": null,
+        "people": null
+      },
+      "error": null,
+      "hasCover": null,
+      "coverError": "UnauthorizedAccessException",
+      "coverSha": null,
+      "coverFormat": null,
+      "contentPath": null,
+      "coverPath": null,
+      "logs": []
+    },
+    {
+      "name": "cancelled-valid",
+      "result": null,
+      "error": "OperationCanceledException",
+      "hasCover": null,
+      "coverError": "OperationCanceledException",
+      "coverSha": null,
+      "coverFormat": null,
+      "contentPath": "OPS/package.opf",
+      "coverPath": "OPS\\cover.png",
+      "logs": []
+    },
+    {
+      "name": "cancelled-missing-container",
+      "result": {
+        "HasMetadata": false,
+        "ResultLanguage": null,
+        "item": null,
+        "people": null
+      },
+      "error": null,
+      "hasCover": null,
+      "coverError": "OperationCanceledException",
+      "coverSha": null,
+      "coverFormat": null,
+      "contentPath": null,
+      "coverPath": null,
+      "logs": []
+    },
+    {
+      "name": "cancelled-malformed-opf",
+      "result": null,
+      "error": "XmlException",
+      "hasCover": null,
+      "coverError": "OperationCanceledException",
+      "coverSha": null,
+      "coverFormat": null,
+      "contentPath": "OPS/package.opf",
+      "coverPath": null,
+      "logs": []
+    },
+    {
+      "name": "duplicate-container",
+      "result": {
+        "HasMetadata": false,
+        "ResultLanguage": null,
+        "item": null,
+        "people": null
+      },
+      "error": null,
+      "hasCover": false,
+      "coverError": null,
+      "coverSha": null,
+      "coverFormat": null,
+      "contentPath": "missing.opf",
+      "coverPath": null,
+      "logs": []
+    },
+    {
+      "name": "cover-tokens",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "Cover case",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": null,
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "hasCover": false,
+      "coverError": null,
+      "coverSha": null,
+      "coverFormat": null,
+      "contentPath": "OPS/package.opf",
+      "coverPath": null,
+      "logs": []
+    },
+    {
+      "name": "cover-literal-star",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "Cover case",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": null,
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "hasCover": true,
+      "coverError": null,
+      "coverSha": "95cfaeba3dde34423ea3e89d30ee8fb41d9331d5aef6c520b8cbd4521c91cd1d",
+      "coverFormat": "Png",
+      "contentPath": "OPS/package.opf",
+      "coverPath": "OPS\\cover.png",
+      "logs": []
+    },
+    {
+      "name": "cover-id-cover-real-mime",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "Cover case",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": null,
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "hasCover": false,
+      "coverError": null,
+      "coverSha": null,
+      "coverFormat": null,
+      "contentPath": "OPS/package.opf",
+      "coverPath": null,
+      "logs": []
+    },
+    {
+      "name": "cover-id-cover-wild-mime",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "Cover case",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": null,
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "hasCover": false,
+      "coverError": null,
+      "coverSha": null,
+      "coverFormat": null,
+      "contentPath": "OPS/package.opf",
+      "coverPath": null,
+      "logs": []
+    },
+    {
+      "name": "cover-meta-id",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "Cover case",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": null,
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "hasCover": true,
+      "coverError": null,
+      "coverSha": "95cfaeba3dde34423ea3e89d30ee8fb41d9331d5aef6c520b8cbd4521c91cd1d",
+      "coverFormat": "Png",
+      "contentPath": "OPS/package.opf",
+      "coverPath": "OPS\\cover.png",
+      "logs": []
+    },
+    {
+      "name": "cover-webp-mime",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "Cover case",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": null,
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "hasCover": true,
+      "coverError": null,
+      "coverSha": "95cfaeba3dde34423ea3e89d30ee8fb41d9331d5aef6c520b8cbd4521c91cd1d",
+      "coverFormat": "Jpg",
+      "contentPath": "OPS/package.opf",
+      "coverPath": "OPS\\cover.png",
+      "logs": []
+    },
+    {
+      "name": "cover-plain-mime",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "Cover case",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": null,
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "hasCover": true,
+      "coverError": null,
+      "coverSha": "95cfaeba3dde34423ea3e89d30ee8fb41d9331d5aef6c520b8cbd4521c91cd1d",
+      "coverFormat": "Jpg",
+      "contentPath": "OPS/package.opf",
+      "coverPath": "OPS\\cover.png",
+      "logs": []
+    },
+    {
+      "name": "cover-unknown-mime",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "Cover case",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": null,
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "hasCover": false,
+      "coverError": null,
+      "coverSha": null,
+      "coverFormat": null,
+      "contentPath": "OPS/package.opf",
+      "coverPath": null,
+      "logs": []
+    },
+    {
+      "name": "cover-first-invalid",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "Cover case",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": null,
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "hasCover": false,
+      "coverError": null,
+      "coverSha": null,
+      "coverFormat": null,
+      "contentPath": "OPS/package.opf",
+      "coverPath": null,
+      "logs": []
+    },
+    {
+      "name": "cover-apostrophe",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "Cover case",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": null,
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "hasCover": null,
+      "coverError": "XPathException",
+      "coverSha": null,
+      "coverFormat": null,
+      "contentPath": "OPS/package.opf",
+      "coverPath": null,
+      "logs": []
+    },
+    {
+      "name": "cover-href-dot",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "Cover case",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": null,
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "hasCover": false,
+      "coverError": null,
+      "coverSha": null,
+      "coverFormat": null,
+      "contentPath": "OPS/package.opf",
+      "coverPath": "OPS\\./cover.png",
+      "logs": []
+    },
+    {
+      "name": "cover-href-percent",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "Cover case",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": null,
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "hasCover": false,
+      "coverError": null,
+      "coverSha": null,
+      "coverFormat": null,
+      "contentPath": "OPS/package.opf",
+      "coverPath": "OPS\\cover%20image.png",
+      "logs": []
+    },
+    {
+      "name": "cover-format-gif",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": null,
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "hasCover": true,
+      "coverError": null,
+      "coverSha": "95cfaeba3dde34423ea3e89d30ee8fb41d9331d5aef6c520b8cbd4521c91cd1d",
+      "coverFormat": "Gif",
+      "contentPath": "OPS/package.opf",
+      "coverPath": "OPS\\cover.png",
+      "logs": []
+    },
+    {
+      "name": "cover-format-bmp",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": null,
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "hasCover": true,
+      "coverError": null,
+      "coverSha": "95cfaeba3dde34423ea3e89d30ee8fb41d9331d5aef6c520b8cbd4521c91cd1d",
+      "coverFormat": "Bmp",
+      "contentPath": "OPS/package.opf",
+      "coverPath": "OPS\\cover.png",
+      "logs": []
+    },
+    {
+      "name": "cover-format-jpeg",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": null,
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "hasCover": true,
+      "coverError": null,
+      "coverSha": "95cfaeba3dde34423ea3e89d30ee8fb41d9331d5aef6c520b8cbd4521c91cd1d",
+      "coverFormat": "Jpg",
+      "contentPath": "OPS/package.opf",
+      "coverPath": "OPS\\cover.png",
+      "logs": []
+    },
+    {
+      "name": "cover-format-png-parameters",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": null,
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "hasCover": true,
+      "coverError": null,
+      "coverSha": "95cfaeba3dde34423ea3e89d30ee8fb41d9331d5aef6c520b8cbd4521c91cd1d",
+      "coverFormat": "Jpg",
+      "contentPath": "OPS/package.opf",
+      "coverPath": "OPS\\cover.png",
+      "logs": []
+    },
+    {
+      "name": "nested-opf-directory",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": null,
+        "item": {
+          "Name": "Embedded title",
+          "ForcedSortName": null,
+          "Overview": null,
+          "Studios": [],
+          "ProviderIds": {},
+          "Genres": [],
+          "IndexNumber": null,
+          "CommunityRating": null,
+          "communityRatingDouble": null,
+          "communityRatingBits": null,
+          "SeriesName": null,
+          "ProductionYear": null,
+          "premiereDate": null,
+          "premiereTicks": null,
+          "premiereKind": null
+        },
+        "people": null
+      },
+      "error": null,
+      "hasCover": true,
+      "coverError": null,
+      "coverSha": "95cfaeba3dde34423ea3e89d30ee8fb41d9331d5aef6c520b8cbd4521c91cd1d",
+      "coverFormat": "Png",
+      "contentPath": "OPS/Inner/package.opf",
+      "coverPath": "OPS\\Inner\\cover.png",
+      "logs": []
+    },
+    {
+      "name": "rich-with-cover",
+      "result": {
+        "HasMetadata": true,
+        "ResultLanguage": " zh-TW ",
+        "item": {
+          "Name": " Rich title ",
+          "ForcedSortName": " Sort title ",
+          "Overview": "Overview nested tail \u0026 value",
+          "Studios": [
+            " Publisher "
+          ],
+          "ProviderIds": {
+            "Amazon": "A1",
+            "GoogleBooks": "g1",
+            "ISBN": "978-123"
+          },
+          "Genres": [
+            "Fiction",
+            "History",
+            "Art",
+            "Science",
+            "Adventure",
+            "Fantasy"
+          ],
+          "IndexNumber": 2,
+          "CommunityRating": 4,
+          "communityRatingDouble": 4,
+          "communityRatingBits": 1082130432,
+          "SeriesName": " Series ",
+          "ProductionYear": 2024,
+          "premiereDate": "2024-03-03T00:00:00.0000000\u002B08:00",
+          "premiereTicks": "638450208000000000",
+          "premiereKind": "Local"
+        },
+        "people": [
+          {
+            "Name": "J. R. R. Tolkien",
+            "type": "Author",
+            "Role": null,
+            "ProviderIds": {}
+          },
+          {
+            "Name": "Other Author",
+            "type": "Author",
+            "Role": null,
+            "ProviderIds": {}
+          },
+          {
+            "Name": "Artist",
+            "type": "Illustrator",
+            "Role": null,
+            "ProviderIds": {}
+          }
+        ]
+      },
+      "error": null,
+      "hasCover": true,
+      "coverError": null,
+      "coverSha": "95cfaeba3dde34423ea3e89d30ee8fb41d9331d5aef6c520b8cbd4521c91cd1d",
+      "coverFormat": "Png",
+      "contentPath": "OPS/package.opf",
+      "coverPath": "OPS\\cover.png",
+      "logs": []
+    }
+  ],
+  "archiveResults": [
+    {
+      "name": "non-utf8-byte",
+      "entries": [
+        {
+          "FullName": "\uFFFD.opf",
+          "Length": 6
+        }
+      ],
+      "queries": [
+        {
+          "key": "\uFFFD.opf",
+          "found": true,
+          "sha": "c49fea7425fa7f8699897a97c159c6690267d9003bb78c53fafa8fc15c325d84",
+          "error": null
+        },
+        {
+          "key": "\u00E9.opf",
+          "found": false,
+          "sha": null,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "non-utf8-valid-utf8",
+      "entries": [
+        {
+          "FullName": "\u00E9.opf",
+          "Length": 4
+        }
+      ],
+      "queries": [
+        {
+          "key": "\u00E9.opf",
+          "found": true,
+          "sha": "941b7ecd47e5a3d6066847def67a662f539afe44c5bdf95d962f9dc785dd96f3",
+          "error": null
+        },
+        {
+          "key": "\u251C\u2310.opf",
+          "found": false,
+          "sha": null,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "unicode-path-extra",
+      "entries": [
+        {
+          "FullName": "old.opf",
+          "Length": 5
+        }
+      ],
+      "queries": [
+        {
+          "key": "old.opf",
+          "found": true,
+          "sha": "c8dee78f8c7b466c881847accc196998bad00e2b96c5ef913dfbe454d3807c96",
+          "error": null
+        },
+        {
+          "key": "new.opf",
+          "found": false,
+          "sha": null,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "duplicate-reversed-central",
+      "entries": [
+        {
+          "FullName": "same.opf",
+          "Length": 15
+        },
+        {
+          "FullName": "same.opf",
+          "Length": 14
+        }
+      ],
+      "queries": [
+        {
+          "key": "same.opf",
+          "found": true,
+          "sha": "9c8da5843568fb8075f6f601f63e32af11c4f6c6266229e43e20e0537a53a49d",
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "local-central-name-mismatch",
+      "entries": [
+        {
+          "FullName": "central.opf",
+          "Length": 8
+        }
+      ],
+      "queries": [
+        {
+          "key": "central.opf",
+          "found": true,
+          "sha": "5acbfff1b086e0f920c5857527976199018afe0cbf16e28d42c7eb9c683508e5",
+          "error": null
+        },
+        {
+          "key": "local.opf",
+          "found": false,
+          "sha": null,
+          "error": null
+        }
+      ]
+    }
+  ],
+  "assemblies": [
+    {
+      "name": "MediaBrowser.Providers",
+      "sha256": "4aa9ca407da2bb0db21ef0a7da5bdef162260fd9c5873f06cfb239780ccc4e3e"
+    },
+    {
+      "name": "MediaBrowser.Controller",
+      "sha256": "e4f1e201e43c9e22fd07cbd0ed2c52c427b0bdaa2dfe0ed5e5ab7ee604b537cf"
+    },
+    {
+      "name": "Emby.Server.Implementations",
+      "sha256": "9c732ba80d1b1980c36d2d64780da28d64c0a8d503bf044c89bc35285eab219e"
+    }
+  ],
+  "assetFiles": [
+    {
+      "path": "archive/duplicate-reversed-central.zip",
+      "sha256": "9086e3eae8f69b1b0834023eb584cd59c69214d0283ee98bbc512a5d7ac2d99e"
+    },
+    {
+      "path": "archive/local-central-name-mismatch.zip",
+      "sha256": "fa7031a1fdcf958c41653823ed068937ad4dab2ef3eb820af8306e7d4be77fe7"
+    },
+    {
+      "path": "archive/non-utf8-byte.zip",
+      "sha256": "b4821975c0b37dd80b073f2cfb303408e5bb89b8e15f937cde76b8e11d45d643"
+    },
+    {
+      "path": "archive/non-utf8-valid-utf8.zip",
+      "sha256": "59be18d144860dd9e42b66f09b15fe0254b432c9e1e52ad6adb267bdceccc8e6"
+    },
+    {
+      "path": "archive/unicode-path-extra.zip",
+      "sha256": "37ec08c360b0524c561de00cd27b597c41fafe01ff67dc8dca1f5133ecc02d5a"
+    },
+    {
+      "path": "cover.png",
+      "sha256": "95cfaeba3dde34423ea3e89d30ee8fb41d9331d5aef6c520b8cbd4521c91cd1d"
+    },
+    {
+      "path": "epub/all-backslashes.epub",
+      "sha256": "8efd97728a6a242903f06dd54fa012fe48a094cf21a04ba1b0cea68c609c631a"
+    },
+    {
+      "path": "epub/back-container-back-cover.epub",
+      "sha256": "9ca236eb216ce09991b55221c6f401c3f1f34300f1d315053581d8f9712c6d04"
+    },
+    {
+      "path": "epub/back-container-slash-cover.epub",
+      "sha256": "efb0034600a15c1ceaaef76c0e91bf007cfc54712663fa24469c774fb3b0275b"
+    },
+    {
+      "path": "epub/cancelled-malformed-opf.epub",
+      "sha256": "e63065c0473b5370e33cf1b5566bbaa1b4fce88833e662f61edcff95a4212b0a"
+    },
+    {
+      "path": "epub/cancelled-missing-container.epub",
+      "sha256": "8739c76e681f900923b900c9df0ef75cf421d39cabb54650c4b9ad19b6a76d85"
+    },
+    {
+      "path": "epub/cancelled-valid.epub",
+      "sha256": "9ca236eb216ce09991b55221c6f401c3f1f34300f1d315053581d8f9712c6d04"
+    },
+    {
+      "path": "epub/corrupt-zip.epub",
+      "sha256": "4405d141e06d03ca972fc90ad9d61db24399ef5e48269da27b1852124d0029be"
+    },
+    {
+      "path": "epub/cover-apostrophe.epub",
+      "sha256": "f9ff2d207416c350835f2941bba46b048d0210ab9de9535ba1115b38ddbb46b7"
+    },
+    {
+      "path": "epub/cover-first-invalid.epub",
+      "sha256": "c95efca46a853be49ad606645b85121839a3623782c43d085f503350095c78fd"
+    },
+    {
+      "path": "epub/cover-format-bmp.epub",
+      "sha256": "8ccb63ed263312cf9cc0ce978a7c4ef8480ade1729949b21a7dc1d376ad1a007"
+    },
+    {
+      "path": "epub/cover-format-gif.epub",
+      "sha256": "b252b356e96045a263cc61ff279029829b48409bf8f499c4cac1a38513aa39b1"
+    },
+    {
+      "path": "epub/cover-format-jpeg.epub",
+      "sha256": "c062f852f81a36d2cf9352ab9799b6f4e2d180ef5c8e31981783d2da208bdac4"
+    },
+    {
+      "path": "epub/cover-format-png-parameters.epub",
+      "sha256": "ce46abcfa4b75e19ccb825cd70a4eadca0f86ea9716d11d10c27ced3f589e983"
+    },
+    {
+      "path": "epub/cover-href-dot.epub",
+      "sha256": "3a8be76235fafd9a2754b3efd2330f22584e58d3562ac2f4524ae681aed7068b"
+    },
+    {
+      "path": "epub/cover-href-percent.epub",
+      "sha256": "a8fad01e41560b8a339a9955b10af63d81a3049bd65bc68ab4e1b3f66fa0b73a"
+    },
+    {
+      "path": "epub/cover-id-cover-real-mime.epub",
+      "sha256": "13484f0c6a477041836299a07340c140a8db7aa78d2dc7be25476332ba07cdff"
+    },
+    {
+      "path": "epub/cover-id-cover-wild-mime.epub",
+      "sha256": "99db142b8e31776d64f198b738b46efbe7473267e83341ac948e7f7391fbba06"
+    },
+    {
+      "path": "epub/cover-literal-star.epub",
+      "sha256": "0b3a90fafa05c822d8b030f0219438f84ee532ac83f5d4c413e09b24a6d3817e"
+    },
+    {
+      "path": "epub/cover-meta-id.epub",
+      "sha256": "aa0aebb126cc940d4fe7891f512c5e1e64fbebf110be1a57f0cec2e2e452bc25"
+    },
+    {
+      "path": "epub/cover-plain-mime.epub",
+      "sha256": "581785aa2f3aa9b411707831c70c4e057439ad4750263e0c676fa11bbc6f5e2f"
+    },
+    {
+      "path": "epub/cover-tokens.epub",
+      "sha256": "b8090b4715f0d8d676576559768aba66db72b9b94b25b6f7b64103864e42fc6d"
+    },
+    {
+      "path": "epub/cover-unknown-mime.epub",
+      "sha256": "9d9610731505f40b11d280390a5a8856bbfbaf5344e472f1251727a417b13e0f"
+    },
+    {
+      "path": "epub/cover-webp-mime.epub",
+      "sha256": "2d7e39ca5f251c74961d36aaabf6d631350f763b1c889332872e6801ddceb988"
+    },
+    {
+      "path": "epub/duplicate-container.epub",
+      "sha256": "7c163b706c1196ec148626e708f093c7670b63012bd03730a6d9550edc4fef1a"
+    },
+    {
+      "path": "epub/empty-root-path.epub",
+      "sha256": "e547dd6ea5a4f0d51628a2353d1ad738011f9bcd9bd39c95f7a991d3d5e0ce28"
+    },
+    {
+      "path": "epub/first-rootfile-missing.epub",
+      "sha256": "e2ab23ab2650364043e5206c8d560402f054bda1d22a4cd266d718af3f73143a"
+    },
+    {
+      "path": "epub/malformed-container.epub",
+      "sha256": "12f0c43abb3a57b9bb135a1a99bef498a3bbf1b760ab7e3cf9d9e477030f756f"
+    },
+    {
+      "path": "epub/malformed-opf.epub",
+      "sha256": "e63065c0473b5370e33cf1b5566bbaa1b4fce88833e662f61edcff95a4212b0a"
+    },
+    {
+      "path": "epub/missing-container.epub",
+      "sha256": "fd1ac75091641cf98c31604ee4f3c13f9c78cd988076e4ccb1f034ee0d74838a"
+    },
+    {
+      "path": "epub/missing-opf.epub",
+      "sha256": "c8f69ceae58021cce9f652cf2bb0d998a9fe1a9b7c37e5635eb614850a7cf3c6"
+    },
+    {
+      "path": "epub/nested-opf-directory.epub",
+      "sha256": "e31308bed775cb513b384f002b5169fd998cdca9cebb8ee00a6cd7b1ab1508cc"
+    },
+    {
+      "path": "epub/rich-with-cover.epub",
+      "sha256": "de9955fc668dbda33334d579d3560c24940c3aa384ec5b63606d6f6fd93d1228"
+    },
+    {
+      "path": "epub/root-opf.epub",
+      "sha256": "7f64e0786a69f1c3a8e4769351c66b750e1b5ffd892b254ca4cab46d1aa6e28c"
+    },
+    {
+      "path": "epub/standard-slashes.epub",
+      "sha256": "8f00f74fcdc3f47bd23ff590b8f206f2375120be8233a4f259f2412cbc5d4311"
+    },
+    {
+      "path": "epub/upper-extension.EPUB",
+      "sha256": "9ca236eb216ce09991b55221c6f401c3f1f34300f1d315053581d8f9712c6d04"
+    },
+    {
+      "path": "epub/wrong-container-namespace.epub",
+      "sha256": "6e10f004be717aadf9d046fddc625a5451f37083433407ab7c459056ab54e28f"
+    },
+    {
+      "path": "epub/wrong-extension.zip",
+      "sha256": "9ca236eb216ce09991b55221c6f401c3f1f34300f1d315053581d8f9712c6d04"
+    },
+    {
+      "path": "opf/cancelled-existing/book.epub",
+      "sha256": "224acdcf3636e42d27cbbc8b3dfae417ddf78b10d3aec5952cd5baffe2a56dae"
+    },
+    {
+      "path": "opf/cancelled-existing/book.opf",
+      "sha256": "087c1661cb3679b1833725de0dd7eae8a1dd5fb5f471b93bc086030fc84c899b"
+    },
+    {
+      "path": "opf/cancelled-missing/book.epub",
+      "sha256": "224acdcf3636e42d27cbbc8b3dfae417ddf78b10d3aec5952cd5baffe2a56dae"
+    },
+    {
+      "path": "opf/content-second/book.epub",
+      "sha256": "224acdcf3636e42d27cbbc8b3dfae417ddf78b10d3aec5952cd5baffe2a56dae"
+    },
+    {
+      "path": "opf/content-second/content.opf",
+      "sha256": "60e6e6e95a2a0da3e4a465c5ce26deca07bf6ec02f019739f73b914adaf7ac58"
+    },
+    {
+      "path": "opf/content-second/metadata.opf",
+      "sha256": "087c1661cb3679b1833725de0dd7eae8a1dd5fb5f471b93bc086030fc84c899b"
+    },
+    {
+      "path": "opf/directory-specific/Volume/Volume.opf",
+      "sha256": "8c222bd4803688a60e0a744ed3f6e55c1fbf701636fa8409a84cb50155cc6b41"
+    },
+    {
+      "path": "opf/directory-specific/Volume/content.opf",
+      "sha256": "087c1661cb3679b1833725de0dd7eae8a1dd5fb5f471b93bc086030fc84c899b"
+    },
+    {
+      "path": "opf/locked-selected/book.epub",
+      "sha256": "224acdcf3636e42d27cbbc8b3dfae417ddf78b10d3aec5952cd5baffe2a56dae"
+    },
+    {
+      "path": "opf/locked-selected/book.opf",
+      "sha256": "087c1661cb3679b1833725de0dd7eae8a1dd5fb5f471b93bc086030fc84c899b"
+    },
+    {
+      "path": "opf/malformed-specific/book.epub",
+      "sha256": "224acdcf3636e42d27cbbc8b3dfae417ddf78b10d3aec5952cd5baffe2a56dae"
+    },
+    {
+      "path": "opf/malformed-specific/book.opf",
+      "sha256": "88de8e6e97a972c5e01968eef2e8c871e6ef8229cbd6505591b3bf3c31fc5b82"
+    },
+    {
+      "path": "opf/malformed-specific/content.opf",
+      "sha256": "087c1661cb3679b1833725de0dd7eae8a1dd5fb5f471b93bc086030fc84c899b"
+    },
+    {
+      "path": "opf/metadata-last/book.epub",
+      "sha256": "224acdcf3636e42d27cbbc8b3dfae417ddf78b10d3aec5952cd5baffe2a56dae"
+    },
+    {
+      "path": "opf/metadata-last/metadata.opf",
+      "sha256": "cccd46ab19955ef70652b0cc6401d10afdf16b9ffabf0acb87515fe43f23cdff"
+    },
+    {
+      "path": "opf/missing-all/book.epub",
+      "sha256": "224acdcf3636e42d27cbbc8b3dfae417ddf78b10d3aec5952cd5baffe2a56dae"
+    },
+    {
+      "path": "opf/missing-parent-source/book.opf",
+      "sha256": "087c1661cb3679b1833725de0dd7eae8a1dd5fb5f471b93bc086030fc84c899b"
+    },
+    {
+      "path": "opf/mtime--1/book.epub",
+      "sha256": "224acdcf3636e42d27cbbc8b3dfae417ddf78b10d3aec5952cd5baffe2a56dae"
+    },
+    {
+      "path": "opf/mtime--1/book.opf",
+      "sha256": "087c1661cb3679b1833725de0dd7eae8a1dd5fb5f471b93bc086030fc84c899b"
+    },
+    {
+      "path": "opf/mtime-0/book.epub",
+      "sha256": "224acdcf3636e42d27cbbc8b3dfae417ddf78b10d3aec5952cd5baffe2a56dae"
+    },
+    {
+      "path": "opf/mtime-0/book.opf",
+      "sha256": "087c1661cb3679b1833725de0dd7eae8a1dd5fb5f471b93bc086030fc84c899b"
+    },
+    {
+      "path": "opf/mtime-1/book.epub",
+      "sha256": "224acdcf3636e42d27cbbc8b3dfae417ddf78b10d3aec5952cd5baffe2a56dae"
+    },
+    {
+      "path": "opf/mtime-1/book.opf",
+      "sha256": "087c1661cb3679b1833725de0dd7eae8a1dd5fb5f471b93bc086030fc84c899b"
+    },
+    {
+      "path": "opf/specific-first/book.epub",
+      "sha256": "224acdcf3636e42d27cbbc8b3dfae417ddf78b10d3aec5952cd5baffe2a56dae"
+    },
+    {
+      "path": "opf/specific-first/book.opf",
+      "sha256": "19af7cc5dd1c2db350ba00b97e5ca97c467696ffffadf682be5dfc1b52e318bc"
+    },
+    {
+      "path": "opf/specific-first/content.opf",
+      "sha256": "087c1661cb3679b1833725de0dd7eae8a1dd5fb5f471b93bc086030fc84c899b"
+    },
+    {
+      "path": "opf/specific-first/metadata.opf",
+      "sha256": "087c1661cb3679b1833725de0dd7eae8a1dd5fb5f471b93bc086030fc84c899b"
+    },
+    {
+      "path": "reader/alternate-prefix.opf",
+      "sha256": "717aea180950efe7c3eacdae23a5da3d91c0dc70d80277795409427c96021d56"
+    },
+    {
+      "path": "reader/attribute-whitespace.opf",
+      "sha256": "8a16ed0a53d33680ce4f2b3f54cf72528c6a82423ad7b44bdeff2393353367d4"
+    },
+    {
+      "path": "reader/bom-declaration-conflict.opf",
+      "sha256": "1b437eb9f5ac875fa7d24817f8196cc2b4f60def842af02b4b788fe035c07c5f"
+    },
+    {
+      "path": "reader/cancelled-malformed.opf",
+      "sha256": "88de8e6e97a972c5e01968eef2e8c871e6ef8229cbd6505591b3bf3c31fc5b82"
+    },
+    {
+      "path": "reader/cancelled-valid.opf",
+      "sha256": "087c1661cb3679b1833725de0dd7eae8a1dd5fb5f471b93bc086030fc84c899b"
+    },
+    {
+      "path": "reader/cdata-comments.opf",
+      "sha256": "6c0ed497784efec9adbff505a9a57a1413ac4f22ef8d1baa0c7ef1888ef09391"
+    },
+    {
+      "path": "reader/cp1252-declaration.opf",
+      "sha256": "2dea144e29f6dd44e5bbee34c3e36d473ea78f359fe556fe773affb0f0e046f3"
+    },
+    {
+      "path": "reader/creator-roles.opf",
+      "sha256": "9e8a26c4361adade2d19422da6137b61b3733aa77b20e24ea3b3841edc383fc1"
+    },
+    {
+      "path": "reader/date-0.opf",
+      "sha256": "978aa9dd8d1e2ec71614ac3b0c6b78af5bf06b9666fe7ef5ce316b5f620caea7"
+    },
+    {
+      "path": "reader/date-1.opf",
+      "sha256": "f429ca54169d2fff63b220d2a4181db6f156ad1253d097b22b566c73f9f4336a"
+    },
+    {
+      "path": "reader/date-2.opf",
+      "sha256": "067711fef582585ba476ba7b98a61090167b5682d3729fb3c1b4d214c490c401"
+    },
+    {
+      "path": "reader/date-3.opf",
+      "sha256": "2cc995a8c7ac7c571edeb7ab7c34467b2ad3cb98015e0785c948f742bcd7cb8d"
+    },
+    {
+      "path": "reader/date-4.opf",
+      "sha256": "55c97dad150c27c9ae7356f4539bcc23ac4c78a14248b46f941c597536e42753"
+    },
+    {
+      "path": "reader/date-5.opf",
+      "sha256": "565a7636bfc5a9492afb66d8ab4743ced75de6738d83aa4f45f365a1ffc7f78a"
+    },
+    {
+      "path": "reader/date-6.opf",
+      "sha256": "0d902865c671ae51a24cd9c73231c5e273fc96491a67cb7b7638cbeb6a566eb7"
+    },
+    {
+      "path": "reader/date-7.opf",
+      "sha256": "34369231d851b240f747560ffaaafa51f6f540645a94fbab24f2b27b1a43fe8a"
+    },
+    {
+      "path": "reader/date-8.opf",
+      "sha256": "bc212090dbefd4394d2f7271a061dd3f4166c9ca9079c51d9085eb6b0451b0ad"
+    },
+    {
+      "path": "reader/empty-main-fallback.opf",
+      "sha256": "81edf2f3b5d774d69a133e35078cb993772635462920831b805a4aec95f93429"
+    },
+    {
+      "path": "reader/empty.opf",
+      "sha256": "7dce060dfa286d6c10a2f73103995027f58a1bf02bd89b81320b4677e03b0c4d"
+    },
+    {
+      "path": "reader/external-dtd.opf",
+      "sha256": "8604c37b5d7d642333e79f5c8be896b89f0b24940e39be8396e7f5da34f0822e"
+    },
+    {
+      "path": "reader/external-entity-attribute.opf",
+      "sha256": "092fc3d9ae3a1ae694ce6464e9719360d05b15b48cd8ae23fef6fd5690615f20"
+    },
+    {
+      "path": "reader/external-entity.opf",
+      "sha256": "d698aa6f321669e78cf0d78e7d8fac99587131fd38533b4b66653bbea07b4347"
+    },
+    {
+      "path": "reader/first-whitespace.opf",
+      "sha256": "5f83ac170b880a6fa79af1ba3d1b331e4220fa82f9cc2ca44db2a1202db1430f"
+    },
+    {
+      "path": "reader/ids-case-duplicate.opf",
+      "sha256": "b5548dc72edbb749037bb83a39cb209f7aaec8d522ff4fd2ccdaf9a43ec3bd6b"
+    },
+    {
+      "path": "reader/internal-dtd.opf",
+      "sha256": "0bd146525b3dceb4da13e05b185ff3f8febaca44f22130d5e6e8f8c7174d4f86"
+    },
+    {
+      "path": "reader/invalid-character.opf",
+      "sha256": "ca84f67e787a9c5bfd5fbe86240de177c792c865c3e9afaf3d331593d5a213cf"
+    },
+    {
+      "path": "reader/invalid-utf8.opf",
+      "sha256": "0988e2747ae046a8b56e0044333d4cb2bf315aaeaf457e770ab6390e3ca62602"
+    },
+    {
+      "path": "reader/last-main-first-sort.opf",
+      "sha256": "0442c61c2b92c8101358c1d7a5b591cca854449dec0e6a1b39b1fd32d78844a1"
+    },
+    {
+      "path": "reader/latin1-declaration.opf",
+      "sha256": "812c2da063de81af5141e8b499b8666a35f87619163dbb8c4bfca0dcaa496492"
+    },
+    {
+      "path": "reader/literal-cr.opf",
+      "sha256": "90672703334715f35ddb9cc8b055b259e814c78194dbc091ee4b222f4cfcff82"
+    },
+    {
+      "path": "reader/literal-crlf.opf",
+      "sha256": "a58a11363b4c4b3f8144588eb7f4e42e077954178bd86f83d419189209f1b2dd"
+    },
+    {
+      "path": "reader/malformed.opf",
+      "sha256": "0aeeb62763cee61c581810061679b13ba905399acaea389b0821abb3930e02b4"
+    },
+    {
+      "path": "reader/nested-entity.opf",
+      "sha256": "70bbd7f0400eea737019bf266cad74c5606f53b4edeef6589275140202720d26"
+    },
+    {
+      "path": "reader/numbers-0.opf",
+      "sha256": "9cca99fb33771bf653209ceec8348de95008739c772a53abe70abd0ab0d06ca5"
+    },
+    {
+      "path": "reader/numbers-1.opf",
+      "sha256": "6514fe25cfc9b9564d56ea9a0856d16619890f13acef97345f41605a8f6a7fd2"
+    },
+    {
+      "path": "reader/numbers-10.opf",
+      "sha256": "aea11bee366a09d28f3c801b6ea625a5459b83627c5c5a9906d2e619bd1c4320"
+    },
+    {
+      "path": "reader/numbers-11.opf",
+      "sha256": "34760e5cff4566a62bd71ebb61cb76f8963f9c9d76c23105dd6fb38181845b2a"
+    },
+    {
+      "path": "reader/numbers-12.opf",
+      "sha256": "4c3076205c64abe52429d2b33bbc9193bddfc72b2e694b5683daabb5d4818f4f"
+    },
+    {
+      "path": "reader/numbers-13.opf",
+      "sha256": "2b0a7619fb005eae8cc3c263ba1fd31a4c874f4bb7a78feb9f752f8310170ad1"
+    },
+    {
+      "path": "reader/numbers-2.opf",
+      "sha256": "bfcecd186790ac4e921c1c1507bc4ca8de73c517aac07adb43cd2d2e5b0a5ef1"
+    },
+    {
+      "path": "reader/numbers-3.opf",
+      "sha256": "ec177f5b56391354367b18f279eab23ada7e369fc9b3e958074c99f114688b76"
+    },
+    {
+      "path": "reader/numbers-4.opf",
+      "sha256": "0d75f03112e2b07c56dbc823b46e38ef4daf5ac02030a3875231c7325efebd29"
+    },
+    {
+      "path": "reader/numbers-5.opf",
+      "sha256": "08cd18cd7b51a3434e185ab058efbd8996bbec7a41fcc2dd868ef851e7c0645a"
+    },
+    {
+      "path": "reader/numbers-6.opf",
+      "sha256": "bd9d6fa43fdd1ef2f5c963b66d2160f2874b07ab8b5fa0e83b76e2a7a99bc5c3"
+    },
+    {
+      "path": "reader/numbers-7.opf",
+      "sha256": "d91d481845eb674ce452ec9b9d8daec9e68b8263127fa3581c01be1d79baaa8b"
+    },
+    {
+      "path": "reader/numbers-8.opf",
+      "sha256": "ef8236d5af7bb4c047869038a128f6fec50ccdea231d2063f99e9f9e8d9e1b20"
+    },
+    {
+      "path": "reader/numbers-9.opf",
+      "sha256": "e22c6130044bc7dcd78a9d2d27e658d824b4a7d6c02a81cf27a8afad15087ede"
+    },
+    {
+      "path": "reader/numeric-references.opf",
+      "sha256": "de246851cadf03cb92dc1b48226cb5b08db1304d4daa148b5d60cb79cfcf1223"
+    },
+    {
+      "path": "reader/reference-control.opf",
+      "sha256": "8f3b113c9c099ed402579b76cc08f50a960100e2ee9047c9f0b0134ebca4819f"
+    },
+    {
+      "path": "reader/reference-noncharacter.opf",
+      "sha256": "688b6e01fdeda7fc7ea578f50daa7b51d0d57da21afc88489eaa2ee4bb09b3f3"
+    },
+    {
+      "path": "reader/reference-null.opf",
+      "sha256": "a7d55fa44cb7a6ac56ec1324d3eaa93f46645805ba5604362fd7cedcc62c5b02"
+    },
+    {
+      "path": "reader/reference-surrogate.opf",
+      "sha256": "e728c3ed2c3b5f4026bfc631b29dc469433ab622ed27ddbcef909d5ae200e8ae"
+    },
+    {
+      "path": "reader/reference-too-large.opf",
+      "sha256": "038f0d02658d3b4058759c1fb5cec01d7fdaff7acaf57318f4dd39effb8f9170"
+    },
+    {
+      "path": "reader/refinement-apostrophe.opf",
+      "sha256": "0553b65109550749e17a7d9e13e5bce129994b117c0ec633c5901772d6cb4cc9"
+    },
+    {
+      "path": "reader/rich.opf",
+      "sha256": "087c1661cb3679b1833725de0dd7eae8a1dd5fb5f471b93bc086030fc84c899b"
+    },
+    {
+      "path": "reader/unbound-prefix.opf",
+      "sha256": "f0c86bef1107db4bd27579eca6d4edbdbc1a7a6345ebc0c4f301752ee01f6c61"
+    },
+    {
+      "path": "reader/unknown-entity.opf",
+      "sha256": "66dc5eb00e0288e512762d587ea12cadd99de5e65d9f1978245d47cc5e0f78ab"
+    },
+    {
+      "path": "reader/utf16be-bom.opf",
+      "sha256": "76de87a4201e133feb1d4001af23463d821a9ad36bd67f0038822586195e0276"
+    },
+    {
+      "path": "reader/utf16be-no-bom.opf",
+      "sha256": "7480aa4899b5dc59d299e963122fcf26e6ced7d0c564d2189b780704def4554b"
+    },
+    {
+      "path": "reader/utf16le-bom.opf",
+      "sha256": "39f102176a07152dcc19f622fc54be9712384a6692c37cbb3e27bd2ad4c3abd1"
+    },
+    {
+      "path": "reader/utf16le-no-bom.opf",
+      "sha256": "176bbcb56054e5d0e281ffee60f6f49c73fe3ee3c21d74bb8dc5484f97c9fc6a"
+    },
+    {
+      "path": "reader/utf32be-bom.opf",
+      "sha256": "70e2b160c36edb438ae2fda3afe3813cd9eb2c47749c016c6bcf27d5a2cb2e99"
+    },
+    {
+      "path": "reader/utf32be-explicit.opf",
+      "sha256": "2ce933af962d6e8f0c31af7cdbc9323b7fd322661764c70ab5d302702497b394"
+    },
+    {
+      "path": "reader/utf32le-bom.opf",
+      "sha256": "474b0d3eeeed31c072b6410ba9a79ccb4cb59264d98730c41d44a1788915334e"
+    },
+    {
+      "path": "reader/utf8-bom.opf",
+      "sha256": "d1fb6935c160a18dae3a59df61f709d42101f8a40572cd4b75879ca4bf1ee2dd"
+    },
+    {
+      "path": "reader/wrong-namespace.opf",
+      "sha256": "0f75408a31beec7951f0434c6757f0d43f6d9dc50cd2f1a5ad5135b07416eac2"
+    },
+    {
+      "path": "reader/xml-space-cdata.opf",
+      "sha256": "72c6ea12ecc56517af181ab00e5aea99b08344bfb00253bb5f932e1f6b108d5a"
+    },
+    {
+      "path": "reader/xml-space-preserve.opf",
+      "sha256": "773512b19de484bf003904682ba9bafed5b315cc130a953c037eecca5c7edba1"
+    }
+  ],
+  "inputSha256": "cd3a3f5a4641d2b1e9c6b820cc9100c9ee7e78666c37ba08fc3e20d2e87f4d87",
+  "localUtcOffset": "08:00:00",
+  "localTimeZone": "Taipei Standard Time",
+  "scope": "Actual OPF reader/provider, EPUB metadata/cover and .NET ZipArchive over bound physical XML/ZIP files; actual ManagedFileSystem lookup/mtime; controlled logger and IApplicationPaths temp only. No generic metadata host, SQL, HTTP or release acceptance."
+}

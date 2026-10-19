@@ -6,22 +6,24 @@ import { tableDefinition } from '../../src/database/model.js';
 import { decodeValue } from '../../src/database/values.js';
 import { nativeTextBytes } from '../../src/database/native-text.js';
 import { idKey } from '../../src/library/records.js';
-import { nativeQueryReference } from './native-query-inputs.js';
+import { nativeQueryInputs } from './native-query-inputs.js';
 
 // Test-only assembly from the declared, stopped neutral exchange database.
 // These are the recorder's input templates, never an expected HTTP response.
-const sourceDescriptor = nativeQueryReference.sourceDatabase;
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
-assert.equal(sha(await readFile(sourceDescriptor.filename)), sourceDescriptor.sha256);
-const source = new DatabaseSync(sourceDescriptor.filename, { readOnly: true });
-let folderTemplate, movieTemplate;
-try {
-  const statement = source.prepare('SELECT * FROM "BaseItems" WHERE "Id" = ?');
-  statement.setReadBigInts(true);
-  folderTemplate = statement.get('11111111-1111-1111-1111-111111111111');
-  movieTemplate = statement.get('22222222-2222-2222-2222-222222222222');
-  assert.ok(folderTemplate && movieTemplate);
-} finally { source.close(); }
+async function readTemplates(inputs) {
+  const sourceDescriptor = inputs.reference.sourceDatabase;
+  assert.equal(sha(await readFile(sourceDescriptor.filename)), sourceDescriptor.sha256);
+  const source = new DatabaseSync(sourceDescriptor.filename, { readOnly: true });
+  try {
+    const statement = source.prepare('SELECT * FROM "BaseItems" WHERE "Id" = ?');
+    statement.setReadBigInts(true);
+    const folderTemplate = statement.get('11111111-1111-1111-1111-111111111111');
+    const movieTemplate = statement.get('22222222-2222-2222-2222-222222222222');
+    assert.ok(folderTemplate && movieTemplate);
+    return { sourceDescriptor, folderTemplate, movieTemplate };
+  } finally { source.close(); }
+}
 
 const upperId = value => {
   const key = idKey(value);
@@ -38,7 +40,8 @@ function typedRow(table, row) {
   }));
 }
 
-export async function seedNativeFilterInput({ database, fixture }, scenarioName) {
+export async function seedNativeFilterInput({ database, fixture }, scenarioName, inputs = nativeQueryInputs) {
+  const { sourceDescriptor, folderTemplate, movieTemplate } = await readTemplates(inputs);
   assert.match(scenarioName, /^[a-z-]+$/u);
   const nativeTypes = { Folder: 'MediaBrowser.Controller.Entities.Folder', Movie: 'MediaBrowser.Controller.Entities.Movies.Movie',
     BoxSet: 'MediaBrowser.Controller.Entities.Movies.BoxSet', Audio: 'MediaBrowser.Controller.Entities.Audio.Audio' };

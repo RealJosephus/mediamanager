@@ -4,7 +4,7 @@ import { md5Guid } from '../core/identity.js';
 import { dateTicks } from '../library/records.js';
 import { encodeBlurhash, blurhashComponents } from './blurhash.js';
 import { hasDefaultImageOptions, imageMime, imageExtension, newImageSize, roundEven } from './options.js';
-import { renderPixels, stripCanvasColorProfile } from './renderer.js';
+import { renderPixels, resizeNearestPixels, stripCanvasColorProfile } from './renderer.js';
 
 const supported = new Set(['jpeg', 'jpg', 'png', 'dng', 'webp', 'gif', 'bmp', 'ico', 'astc', 'ktx', 'pkm', 'wbmp', 'cr2', 'nef', 'arw', 'svg']);
 const extension = value => path.extname(value).slice(1).toLowerCase();
@@ -21,14 +21,6 @@ async function run(pipeline, signal) {
   signal?.addEventListener('abort', abort, { once: true });
   try { const result = await pipeline.toBuffer({ resolveWithObject: true }); signal?.throwIfAborted(); return result; }
   finally { signal?.removeEventListener('abort', abort); }
-}
-function nearest(data, width, height, targetWidth, targetHeight) {
-  const result = Buffer.alloc(targetWidth * targetHeight * 4);
-  for (let y = 0; y < targetHeight; y++) for (let x = 0; x < targetWidth; x++) {
-    const source = (Math.max(0, Math.min(height - 1, Math.floor((y + 0.5) * height / targetHeight - 0.5))) * width + Math.max(0, Math.min(width - 1, Math.floor((x + 0.5) * width / targetWidth - 0.5)))) * 4;
-    data.copy(result, (y * targetWidth + x) * 4, source, source + 4);
-  }
-  return result;
 }
 export class ImageProcessor {
   #pending = new Set();
@@ -50,7 +42,7 @@ export class ImageProcessor {
     let pixels = data, width = info.width, height = info.height;
     if (size.Width > 128 || size.Height > 128) {
       const targetWidth = roundEven(Math.fround(width * scale)), targetHeight = roundEven(Math.fround(height * scale));
-      pixels = nearest(pixels, width, height, targetWidth, targetHeight); width = targetWidth; height = targetHeight;
+      pixels = resizeNearestPixels(pixels, width, height, targetWidth, targetHeight); width = targetWidth; height = targetHeight;
     }
     return encodeBlurhash(pixels, width, height, ...blurhashComponents(size.Width, size.Height));
   }

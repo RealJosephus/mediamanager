@@ -1,6 +1,20 @@
 # Native JSON fixtures are sealed by raw SHA-256; keep checkout bytes intact.
 tests/metadata/fixtures/nfo-scalar-provider/README.md text eol=lf
 tests/metadata/fixtures/nfo-userdata-persistence/README.md text eol=lf
+tests/library/fixtures/library-task-scheduler/README.md text eol=lf
+tests/metadata/fixtures/book-lifecycle/README.md text eol=lf
+tests/metadata/fixtures/custom-image-lifecycle/README.md text eol=lf
+tests/metadata/fixtures/photo-provider/README.md text eol=lf
+tests/metadata/fixtures/photo-provider/create-assets.mjs text eol=lf
+tests/metadata/fixtures/photo-album-cover/README.md text eol=lf
+tests/metadata/fixtures/photo-runtime/README.md text eol=lf
+tests/library/fixtures/photo-dto/README.md text eol=lf
+tests/http/fixtures/mime-types/README.md text eol=lf
+tests/metadata/fixtures/photo-album-cover/native.json whitespace=cr-at-eol
+tests/metadata/fixtures/photo-album-cover-paths/native.json whitespace=cr-at-eol
+tests/metadata/fixtures/photo-album-cover-paths/README.md text eol=lf
+src/metadata/resources/photo-tags-license.txt -text
+src/metadata/resources/photo-tags-notice.txt -text
 tests/http/fixtures/shows-api/native.json whitespace=cr-at-eol
 tests/http/fixtures/quick-connect/native.json whitespace=cr-at-eol
 tests/http/fixtures/branding/Oracle.csproj -text
@@ -255,3 +269,60 @@ src/core/resources/native-charset-models.json -text whitespace=cr-at-eol
 /src/core/resources/configuration-model-provenance.json -text
 /tests/core/fixtures/server-identity/observations.js -text
 /tests/core/fixtures/server-identity/native.json whitespace=cr-at-eol
+/tests/library/fixtures/folder-validation-progress/native.json whitespace=cr-at-eol
+/tests/http/fixtures/library-structure/native.json whitespace=cr-at-eol
+
+/tests/metadata/fixtures/book-opf-epub/assets/** -text
+/tests/metadata/fixtures/book-opf-epub/README.md text eol=lf
+/tests/metadata/fixtures/book-opf-epub/create-assets.mjs text eol=lf
+/tests/metadata/fixtures/book-opf-epub/native.json whitespace=cr-at-eol
+/tests/metadata/fixtures/book-comic/native.json whitespace=cr-at-eol
+/tests/metadata/fixtures/book-comic/assets/** -text
+/tests/metadata/fixtures/book-opf-xml-edges/assets/** -text
+/tests/metadata/fixtures/book-opf-xml-edges/README.md text eol=lf
+/tests/metadata/fixtures/book-opf-xml-edges/create-assets.mjs text eol=lf
+/tests/metadata/fixtures/book-opf-xml-edges/scalars/README.md text eol=lf
+/tests/metadata/fixtures/book-opf-xml-edges/scalars/create-assets.mjs text eol=lf
+/tests/metadata/fixtures/book-opf-xml-edges/resources/README.md text eol=lf
+/tests/metadata/fixtures/book-opf-xml-edges/resources/create-assets.mjs text eol=lf
+/tests/metadata/fixtures/book-opf-xml-edges/scalars/assets/** -text
+/tests/metadata/fixtures/book-opf-xml-edges/resources/assets/** -text
+/tests/metadata/fixtures/book-comic/README.md text eol=lf
+/tests/storage/fixtures/archive-codec/README.md text eol=lf
+/tests/metadata/fixtures/book-provider-order/README.md text eol=lf
+/tests/metadata/fixtures/dynamic-image-host/README.md text eol=lf
+/tests/storage/fixtures/deflate64-archives/README.md text eol=lf
+/tests/storage/fixtures/deflate64-archives/generate.mjs text eol=lf
+/tests/storage/fixtures/deflate64-archives/LICENSE-SharpCompress.txt -text
+/tests/storage/fixtures/deflate64-archives/assets/** -text
+src/metadata/resources/comic-culture-language.json -text
+/tests/metadata/fixtures/book-comic/rar-directory/README.md text eol=lf
+/tests/metadata/fixtures/book-comic/rar-directory/native.json whitespace=cr-at-eol
+/tests/library/fixtures/image-type-filters/README.md text eol=lf
+/tests/images/fixtures/blurhash-resampling/README.md text eol=lf
+/tests/images/fixtures/blurhash-resampling/inputs/** -text
+/tests/images/fixtures/blurhash-resampling/*.rgba.gz -text
+/tests/library/fixtures/book-photo-global/README.md text eol=lf
+/tests/library/fixtures/book-directory-source/README.md text eol=lf
+/tests/library/fixtures/book-directory-source/native.json whitespace=cr-at-eol
+/tests/library/fixtures/book-photo-global/*.png -text
+/tests/library/fixtures/book-photo-global/*.jpg -text
+/tests/library/fixtures/book-photo-global/*.epub -text
+/tests/library/fixtures/book-photo-global/Directory.Build.props -text
+/tests/library/fixtures/global-scan/README.md text eol=lf
+/tests/images/fixtures/blurhash-resampling/Directory.Build.props -text
+/tests/images/fixtures/blurhash-resampling/native.json whitespace=cr-at-eol
+/tests/library/fixtures/global-scan/reader-native.json whitespace=cr-at-eol
+/tests/library/fixtures/movie-similar/README.md text eol=lf
+/tests/library/fixtures/movie-similar/native.json whitespace=cr-at-eol
+/tests/library/fixtures/resolver-io-boundary/README.md text eol=lf
+/tests/library/fixtures/resolver-io-boundary/native.json whitespace=cr-at-eol
+/tests/library/fixtures/resolver-io-boundary/NuGet.Config -text
+/tests/library/fixtures/classification-filters/README.md text eol=lf
+/tests/library/fixtures/extra-placeholder-filters/README.md text eol=lf
+/tests/library/fixtures/navigation-date-filters/README.md text eol=lf
+/tests/library/fixtures/official-rating-filters/README.md text eol=lf
+/tests/library/fixtures/official-rating-range/README.md text eol=lf
+/tests/library/fixtures/tag-filters/README.md text eol=lf
+/tests/library/fixtures/rating-permissions/README.md text eol=lf
+/tests/library/fixtures/tag-permissions/README.md text eol=lf

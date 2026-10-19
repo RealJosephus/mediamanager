@@ -1,0 +1,457 @@
+{
+  "files": [
+    {
+      "filename": "Oracle.csproj",
+      "bytes": 211,
+      "sha256": "38e201f047792df530db8c7d157c2b6b19d1ed2e4134dba5da5c59e97d3b0da2"
+    },
+    {
+      "filename": "Program.cs",
+      "bytes": 2011,
+      "sha256": "8adf7d2947b0b892bb35ed430530516d898c4a2629f5385270b338e2fe573bcc"
+    },
+    {
+      "filename": "generate.mjs",
+      "bytes": 10418,
+      "sha256": "deb6b0aec4f0d060e3a629c5aea63a641869be07aa7ba510e11ae65da5af44d3"
+    },
+    {
+      "filename": "generated-inputs.json",
+      "bytes": 4719,
+      "sha256": "1df75357822365405838ba1be76cce204c1b8c424af8226fff1cc33cbf6e5e80"
+    },
+    {
+      "filename": "native.json",
+      "bytes": 12544,
+      "sha256": "9fe84174c9d5d6f48fe7fad40f1b65ee701be7126835b454ee80ed16d0b31dc6"
+    },
+    {
+      "filename": "README.md",
+      "bytes": 2837,
+      "sha256": "d8f1910aa337d93fbd4840a3cd444f52d9997b441660a5a5fe56c661eb445ade"
+    },
+    {
+      "filename": "LICENSE-SharpCompress.txt",
+      "bytes": 1081,
+      "sha256": "b7ca2b6174cee11afe41d78b48527e3d7659a4435c25019a4a5e072299a2f8ed"
+    },
+    {
+      "filename": ".gitattributes",
+      "bytes": 130,
+      "sha256": "2f08bde7296d75fc92486d5840c21c6dbf1e969ddfed3415295d78374c271862"
+    },
+    {
+      "filename": "../../../Directory.Build.props",
+      "bytes": 780,
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    },
+    {
+      "filename": "assets/generated-boundaries.zip",
+      "bytes": 560653,
+      "sha256": "074518bfe9feb1234861884620091e1288346763e093b514351be021253a6a1f"
+    },
+    {
+      "filename": "assets/method-12.zip",
+      "bytes": 103,
+      "sha256": "717b167a224e1af6608264a4b9329948c64356a029cddc1b7fdb852becd1d696"
+    },
+    {
+      "filename": "assets/method-14.zip",
+      "bytes": 103,
+      "sha256": "34c370497b89a2bb96ce513f2b6a5df1023978fe71741c3a4f12ddd419656418"
+    },
+    {
+      "filename": "assets/method-8.zip",
+      "bytes": 103,
+      "sha256": "60692d910ca3f9b9ec772d487e3ca7738427272a7a4fda3383df52548a2604e4"
+    },
+    {
+      "filename": "assets/method-9.zip",
+      "bytes": 103,
+      "sha256": "0d3a275798118b7815a5653daa0a59fda48037dd5f13ac0f9a3cde009cf93a35"
+    },
+    {
+      "filename": "assets/method-93.zip",
+      "bytes": 103,
+      "sha256": "1ded6a129c6d51ec2ea9f3169b78b16251f3cb699c1c2b1415ebda89caee0c02"
+    },
+    {
+      "filename": "assets/method-95.zip",
+      "bytes": 103,
+      "sha256": "06792f179ca60f8f3434b502cbb95a6b9d0d2ec1c7fd1c48a2639670b0864568"
+    },
+    {
+      "filename": "assets/method-98.zip",
+      "bytes": 103,
+      "sha256": "fcf13ea32d748031681377195580130d345c4ce3cf9a47dbadd3ee519ec62cb3"
+    },
+    {
+      "filename": "assets/Zip.deflate64.zip",
+      "bytes": 60747,
+      "sha256": "f5c77a3014606c711777e8e683b97816a90171aedbacb54dc381fa1cacc0248f"
+    }
+  ],
+  "requiredInputs": [
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/dotnet.exe",
+      "available": true,
+      "kind": "file",
+      "bytes": 167208,
+      "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.IO.Compression.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 419624,
+      "sha256": "c942747f84b730887090f5e0cf86d164c0ee402e524dce2750e06a6df48513fb",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.IO.Compression.ZipFile.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 100176,
+      "sha256": "2da76eb281740be485b5637da8c60fe0ce12bc2848d1a1a81ce144fa74313e18",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.IO.Compression.FileSystem.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 15184,
+      "sha256": "4aeec2c0189f73ba8122f05c0d759008ddae1a8873b167cc8a558d53f2af80e1",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.IO.Compression.Native.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 937256,
+      "sha256": "4d174b78aa8b3516c7e3cec0355dfe9ae570894055c377d2e5565d077a9a7a1e",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Private.CoreLib.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 16033576,
+      "sha256": "1125acc8106c43fc8bad2d203c4c4485df6182d292846c2fff415c1040c54678",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/.version",
+      "available": true,
+      "kind": "file",
+      "bytes": 51,
+      "sha256": "5821d4886ce8720fea8a95a798a003e0a31197de1efc4fd22fa6a008eecfa3a8",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 506368,
+      "sha256": "474c7c638fe93cc61f1a588849fb93c81a2927388f6f4cf19953b3a76e9deb26",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/MediaBrowser.Providers.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 1030656,
+      "sha256": "4aa9ca407da2bb0db21ef0a7da5bdef162260fd9c5873f06cfb239780ccc4e3e",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/final-build-receipt.json",
+      "available": true,
+      "kind": "file",
+      "bytes": 14246,
+      "sha256": "44711dacc1c4e65d2f36202267423d3212c3577c41383696643ff04ebe8c49d2",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-book-stage/inputs/archive-review-deflate64-upstream-1/Zip.deflate64.zip",
+      "available": true,
+      "kind": "file",
+      "bytes": 60747,
+      "sha256": "f5c77a3014606c711777e8e683b97816a90171aedbacb54dc381fa1cacc0248f",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-book-stage/inputs/archive-review-deflate64-upstream-1/manifest.json",
+      "available": true,
+      "kind": "file",
+      "bytes": 919,
+      "sha256": "d594dfcd745557e00291ecfd395e2770ed2cd1790e2a66be36c460d3b37a84f9",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-book-stage/inputs/archive-review-deflate64-upstream-1/tree.json",
+      "available": true,
+      "kind": "file",
+      "bytes": 426829,
+      "sha256": "b2fcc83ec23383434c37440bbceff02ee86c79e65dc63ae8bf898121be01feed",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-book-stage/inputs/comic-upstream-1/LICENSE.txt",
+      "available": true,
+      "kind": "file",
+      "bytes": 1081,
+      "sha256": "b7ca2b6174cee11afe41d78b48527e3d7659a4435c25019a4a5e072299a2f8ed",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/nuget/sharpcompress/0.50.4/sharpcompress.nuspec",
+      "available": true,
+      "kind": "file",
+      "bytes": 2096,
+      "sha256": "ad4a81230c8994e9af32397570415eec6827ad5b22b758eddc58e91a8b9977d9",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/MediaBrowser.Providers/Books/OpenPackagingFormat/EpubProvider.cs",
+      "available": true,
+      "kind": "file",
+      "bytes": 3101,
+      "sha256": "52bd9ea94f92b6b466b179e3ad426a6446768d6daea9a5c08b3beb4c0519db83",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Providers/Books/OpenPackagingFormat/EpubProvider.cs",
+      "available": true,
+      "kind": "file",
+      "bytes": 3101,
+      "sha256": "52bd9ea94f92b6b466b179e3ad426a6446768d6daea9a5c08b3beb4c0519db83",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/MediaBrowser.Providers/Books/OpenPackagingFormat/EpubImageProvider.cs",
+      "available": true,
+      "kind": "file",
+      "bytes": 4216,
+      "sha256": "78671dbef0d358e85a0fd5d2a0088fcffc938f1025c8935d9597b2d0e7315137",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Providers/Books/OpenPackagingFormat/EpubImageProvider.cs",
+      "available": true,
+      "kind": "file",
+      "bytes": 4216,
+      "sha256": "78671dbef0d358e85a0fd5d2a0088fcffc938f1025c8935d9597b2d0e7315137",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/MediaBrowser.Providers/Books/OpenPackagingFormat/EpubUtils.cs",
+      "available": true,
+      "kind": "file",
+      "bytes": 1134,
+      "sha256": "499e3d7fd76a345663ac16399c0b24ae96047d0c208fbe8060bc172f757d4b6c",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Providers/Books/OpenPackagingFormat/EpubUtils.cs",
+      "available": true,
+      "kind": "file",
+      "bytes": 1134,
+      "sha256": "499e3d7fd76a345663ac16399c0b24ae96047d0c208fbe8060bc172f757d4b6c",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/MediaBrowser.Providers/Books/ComicInfo/InternalComicInfoProvider.cs",
+      "available": true,
+      "kind": "file",
+      "bytes": 4029,
+      "sha256": "02e77427e33b0c38c2ff2ff4477631e44b06ec0c251d9ebb8c67b8050dc0fe6d",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Providers/Books/ComicInfo/InternalComicInfoProvider.cs",
+      "available": true,
+      "kind": "file",
+      "bytes": 4029,
+      "sha256": "02e77427e33b0c38c2ff2ff4477631e44b06ec0c251d9ebb8c67b8050dc0fe6d",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/MediaBrowser.Providers/Books/ComicBookInfo/ComicBookInfoProvider.cs",
+      "available": true,
+      "kind": "file",
+      "bytes": 8222,
+      "sha256": "f23c7bef9f88beac6308a31095e830fd2b11fa6b3e4fe4e93c3fe6f95e0341ef",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Providers/Books/ComicBookInfo/ComicBookInfoProvider.cs",
+      "available": true,
+      "kind": "file",
+      "bytes": 8222,
+      "sha256": "f23c7bef9f88beac6308a31095e830fd2b11fa6b3e4fe4e93c3fe6f95e0341ef",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-book-stage/results/deflate64-native-3/inputs/Zip.deflate64.zip",
+      "available": true,
+      "kind": "file",
+      "bytes": 60747,
+      "sha256": "f5c77a3014606c711777e8e683b97816a90171aedbacb54dc381fa1cacc0248f",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-book-stage/results/deflate64-native-3/inputs/generated-boundaries.zip",
+      "available": true,
+      "kind": "file",
+      "bytes": 560653,
+      "sha256": "074518bfe9feb1234861884620091e1288346763e093b514351be021253a6a1f",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-book-stage/results/deflate64-native-3/inputs/method-12.zip",
+      "available": true,
+      "kind": "file",
+      "bytes": 103,
+      "sha256": "717b167a224e1af6608264a4b9329948c64356a029cddc1b7fdb852becd1d696",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-book-stage/results/deflate64-native-3/inputs/method-14.zip",
+      "available": true,
+      "kind": "file",
+      "bytes": 103,
+      "sha256": "34c370497b89a2bb96ce513f2b6a5df1023978fe71741c3a4f12ddd419656418",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-book-stage/results/deflate64-native-3/inputs/method-8.zip",
+      "available": true,
+      "kind": "file",
+      "bytes": 103,
+      "sha256": "60692d910ca3f9b9ec772d487e3ca7738427272a7a4fda3383df52548a2604e4",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-book-stage/results/deflate64-native-3/inputs/method-9.zip",
+      "available": true,
+      "kind": "file",
+      "bytes": 103,
+      "sha256": "0d3a275798118b7815a5653daa0a59fda48037dd5f13ac0f9a3cde009cf93a35",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-book-stage/results/deflate64-native-3/inputs/method-93.zip",
+      "available": true,
+      "kind": "file",
+      "bytes": 103,
+      "sha256": "1ded6a129c6d51ec2ea9f3169b78b16251f3cb699c1c2b1415ebda89caee0c02",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-book-stage/results/deflate64-native-3/inputs/method-95.zip",
+      "available": true,
+      "kind": "file",
+      "bytes": 103,
+      "sha256": "06792f179ca60f8f3434b502cbb95a6b9d0d2ec1c7fd1c48a2639670b0864568",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-book-stage/results/deflate64-native-3/inputs/method-98.zip",
+      "available": true,
+      "kind": "file",
+      "bytes": 103,
+      "sha256": "fcf13ea32d748031681377195580130d345c4ce3cf9a47dbadd3ee519ec62cb3",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-book-stage/results/deflate64-native-3/record.json",
+      "available": true,
+      "kind": "file",
+      "bytes": 7251,
+      "sha256": "24fc5afbc7dda087800cd4df0aab4f169a84ec2eaefbdd2f57ea3178e192e855",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-book-stage/results/deflate64-native-3/before-pins.json",
+      "available": true,
+      "kind": "file",
+      "bytes": 12037,
+      "sha256": "bf7dd596f2a4122cd3c2c755a2589e1fb6676c8c9519b316b5ada6cd41497d97",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-book-stage/results/deflate64-native-3/native.json",
+      "available": true,
+      "kind": "file",
+      "bytes": 12544,
+      "sha256": "9fe84174c9d5d6f48fe7fad40f1b65ee701be7126835b454ee80ed16d0b31dc6",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-book-stage/results/deflate64-native-3/stdout.txt",
+      "available": true,
+      "kind": "file",
+      "bytes": 8408,
+      "sha256": "2edc17ec2916e1c698d587bd11ffbc56ec3f205459ce97035caa1f5efc6b8ead",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-book-stage/results/deflate64-native-3/stderr.txt",
+      "available": true,
+      "kind": "file",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-book-stage/results/deflate64-native-3/build.stdout.txt",
+      "available": true,
+      "kind": "file",
+      "bytes": 272,
+      "sha256": "f796ec0eadd856a507a42d3fc309e91e74507b314d5526ea43e2b5ff86f773a0",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-book-stage/results/deflate64-native-3/build.stderr.txt",
+      "available": true,
+      "kind": "file",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    }
+  ],
+  "record": {
+    "filename": "D:/mediamanager-validation/20261016-book-stage/results/deflate64-native-3/record.json",
+    "available": true,
+    "kind": "file",
+    "bytes": 7251,
+    "sha256": "24fc5afbc7dda087800cd4df0aab4f169a84ec2eaefbdd2f57ea3178e192e855",
+    "required": true
+  },
+  "rawNative": {
+    "filename": "D:/mediamanager-validation/20261016-book-stage/results/deflate64-native-3/native.json",
+    "available": true,
+    "kind": "file",
+    "bytes": 12544,
+    "sha256": "9fe84174c9d5d6f48fe7fad40f1b65ee701be7126835b454ee80ed16d0b31dc6",
+    "required": true
+  },
+  "sourceFilesSha256": "5950a0bcdb09891b2054dfec7732d04041535c5a269b9adcccf7f042d094666b",
+  "upstream": {
+    "commit": "c083c6efd843a844b0c8f7878787360e815be781",
+    "sourcePath": "tests/TestArchives/Archives/Zip.deflate64.zip",
+    "url": "https://raw.githubusercontent.com/adamhathcock/sharpcompress/c083c6efd843a844b0c8f7878787360e815be781/tests/TestArchives/Archives/Zip.deflate64.zip",
+    "treeUrl": "https://api.github.com/repos/adamhathcock/sharpcompress/git/trees/c083c6efd843a844b0c8f7878787360e815be781?recursive=1",
+    "gitBlobSha1": "2c2e89050361492e81b3404258348bf0a742c853",
+    "size": 60747,
+    "sha256": "f5c77a3014606c711777e8e683b97816a90171aedbacb54dc381fa1cacc0248f",
+    "filename": "D:/mediamanager-validation/20261016-book-stage/inputs/archive-review-deflate64-upstream-1/Zip.deflate64.zip",
+    "tree": {
+      "filename": "D:/mediamanager-validation/20261016-book-stage/inputs/archive-review-deflate64-upstream-1/tree.json",
+      "sha256": "b2fcc83ec23383434c37440bbceff02ee86c79e65dc63ae8bf898121be01feed"
+    }
+  },
+  "licenseGitBlobSha1": "94e2f5bc83ac404584fd92c25cfcc305ea2f8942",
+  "scope": "Actual designated .NET10.0.12 ZipArchive and selected entry stream reads. The independent bit encoder creates inputs; real native observations determine expected values. No native server, archive provider, SQL, or Node decoder is executed by this recording."
+}
