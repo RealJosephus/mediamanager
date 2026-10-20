@@ -410,7 +410,7 @@ export async function projectUserData(item, state, user, ownData = null) {
       }
     }
   }
-  if (supportsUserDataFromChildren(item)) {
+  if (supportsUserDataFromChildren(item) && supportsPlayed(item)) {
     const sqlStats = state.folderStats?.get(idKey(item.Id));
     if (sqlStats) {
       dto.UnplayedItemCount = sqlStats.UnplayedItemCount;
@@ -419,12 +419,10 @@ export async function projectUserData(item, state, user, ownData = null) {
       return dto;
     }
     const children = userDataLeaves(item, state);
-    if (supportsPlayed(item)) {
-      const played = children.filter(entry => state.isPlayed(entry)).length;
-      dto.UnplayedItemCount = children.length - played;
-      dto.Played = played === children.length;
-      if (children.length) dto.PlayedPercentage = played / children.length * 100;
-    }
+    const played = children.filter(entry => state.isPlayed(entry)).length;
+    dto.UnplayedItemCount = children.length - played;
+    dto.Played = played === children.length;
+    if (children.length) dto.PlayedPercentage = played / children.length * 100;
   }
   return dto;
 }

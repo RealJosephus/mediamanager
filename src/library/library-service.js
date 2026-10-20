@@ -42,6 +42,7 @@ import { loadPostgresItemGraph, loadPostgresNavigationRows, loadPostgresPageGrap
 import { NativeItemJsonError } from './native-item-data.js';
 import { postgresUpcomingScope, queryPostgresSeriesSeasonPage, queryPostgresUpcomingEpisodePage } from './postgres-shows-query.js';
 import { queryPostgresNextUpPage } from './postgres-next-up-query.js';
+import { queryPostgresLatestItems } from './postgres-latest-items-query.js';
 import { queryPostgresExternalViewPresence, queryPostgresUserViewChildPresence } from './postgres-user-views-query.js';
 import { queryPostgresBuiltInSearch, resolvePostgresSearchCollation, releasePostgresSearchCollation } from './postgres-search-provider.js';
 import { matchesPostgresUserViewGenre, queryPostgresUserViewGenrePage } from './postgres-user-view-genre-query.js';
@@ -640,6 +641,9 @@ export class LibraryService extends EventEmitter {
   }
 
   async #prefetchPostgresDtos(items, state, user, selected) {
+    // A latest-media page may project the same item more than once. Prefetch
+    // caches by identity; repeated requests must not multiply its child counts.
+    items = [...new Map(items.map(item => [idKey(item.Id), item])).values()];
     await prefetchPostgresDtoRelations(items, state, user, selected, this.options);
     if (!user) return;
     const implicitCountItems = items.filter(item => item.IsFolder
@@ -829,6 +833,90 @@ export class LibraryService extends EventEmitter {
       const dtos = [];
       for (const item of projectionItems) dtos.push(await projectItem(item, state, user, options, this.options));
       return { Items: dtos, TotalRecordCount: dtos.length, StartIndex: startIndex };
+    });
+  }
+
+  async queryLatestItems(input = {}, { user } = {}) {
+    return this.#runWithStates(async db => {
+      const requestedRows = nonemptyId(input.parentId) ? await loadPostgresRowsByIds(db, [input.parentId]) : [];
+      const navigationRows = await loadPostgresNavigationRows(db, input.parentId);
+      const navigationGraph = await loadPostgresPageGraph(db, requestedRows, navigationRows);
+      const navigation = await this.load(db, user, { includeUserData: false, baseRows: navigationGraph });
+      const parent = navigation.byId.get(idKey(input.parentId));
+      if (parent?.Type === 'Channel') throw unsupported('Channel latest media');
+      let parents = parent?.IsFolder ? [parent] : [];
+      let isPlayed = input.isPlayed ?? (user.Configuration.HidePlayedInLatest ? false : undefined);
+      // The source clears the played filter only for an explicit music collection,
+      // before it falls back to the user root's authorized folders.
+      if (parents.some(item => item.Type === 'CollectionFolder' && collectionType(item) === 'music')) isPlayed = undefined;
+      const rootFolders = this.rootChildren(navigation, user);
+      const isCollection = item => ['CollectionFolder', 'PlaylistsFolder', 'BasePluginFolder'].includes(item.Type);
+      if (!parents.length) parents = rootFolders.filter(item => item.IsFolder
+        && !user.Configuration.LatestItemsExcludes.some(id => sameId(id, item.Id)));
+      if (!parents.length) return [];
+
+      let includeItemTypes = input.includeItemTypes ?? [];
+      if (!includeItemTypes.length) {
+        const views = parents.filter(item => item.Type === 'UserView');
+        if (views.length && views.every(item => collectionType(item) === 'movies')) includeItemTypes = ['Movie'];
+        else if (views.length && views.every(item => collectionType(item) === 'tvshows')) includeItemTypes = ['Episode'];
+      }
+      const mediaTypes = includeItemTypes.length ? [] : [...new Set(parents
+        .filter(isCollection).flatMap(item => {
+          switch (collectionType(item)) {
+            case 'books': return ['Book', 'Audio'];
+            case 'music': return ['Audio'];
+            case 'photos': case 'homevideos': return ['Photo', 'Video'];
+            default: return ['Video'];
+          }
+        }))];
+      const query = {
+        includeitemtypes: includeItemTypes,
+        mediatypes: mediaTypes,
+        ...(includeItemTypes.length ? {} : { isfolder: false }),
+        ...(!includeItemTypes.length && !mediaTypes.length
+          ? { excludeitemtypes: ['Person', 'Studio', 'Year', 'MusicGenre', 'Genre'] } : {}),
+        ismissing: false,
+        ...(isPlayed === undefined ? {} : { isplayed: isPlayed }),
+        sortby: ['DateCreated', 'SortName', 'ProductionYear'],
+        sortorder: ['Descending', 'Descending', 'Descending'],
+      };
+      const ancestorIds = () => parents.map(item => item.Type === 'UserView'
+        ? nonemptyId(item.DisplayParentId) ? item.DisplayParentId : nonemptyId(item.ParentId) ? item.ParentId : item.Id
+        : item.Id);
+      let scope;
+      if (parents.every(item => isCollection(item) || item.Type === 'UserView')) {
+        const topParentIds = [...new Map(parents.flatMap(item => item.Type === 'PlaylistsFolder'
+          ? [item.Id] : queryTopParentIds(item, navigation, user, rootFolders))
+          .map(id => [idKey(id), id])).values()];
+        scope = topParentIds.length ? { topParentIds } : { ancestorIds: ancestorIds() };
+      } else if (parents.length === 1 && ['BoxSet', 'Playlist'].includes(parents[0].Type)
+        && (await db.rows('LinkedChildren', { where: { ParentId: parents[0].Id }, columns: ['ParentId'], limit: 1 })).length) {
+        scope = { boxSetRepositoryId: parents[0].Id };
+      } else scope = { ancestorIds: ancestorIds() };
+      const parentType = parents.filter(item => isCollection(item) || item.Type === 'UserView')
+        .map(item => collectionType(item) || null).find(type => type != null) ?? null;
+      const { topParentIds: _topParentIds, libraryTopParentIds: _libraryTopParentIds,
+        ...visibility } = this.#postgresVisibility(navigation, user);
+      const page = await queryPostgresLatestItems(db, { query, scope, userId: user.Id, visibility,
+        collectionType: parentType, groupItems: input.groupItems !== false, limit: input.limit ?? 20 });
+      const graphRows = await loadPostgresPageGraph(db, page.rows, navigationGraph);
+      const state = await this.load(db, user, { baseRows: graphRows });
+      state.folderStats = await queryPostgresFolderStats(db,
+        page.rows.filter(row => row.IsFolder).map(row => row.Id), user.Id);
+      const options = dtoOptions(input);
+      if (user.Policy.AllowedTags?.length) options.fields.add('tags');
+      const selections = page.rows.map((row, index) => ({
+        item: state.byId.get(idKey(row.Id)), childCount: page.childCounts[index],
+      })).filter(entry => entry.item);
+      await this.#prefetchPostgresDtos(selections.map(entry => entry.item), state, user, options);
+      const dtos = [];
+      for (const { item, childCount } of selections) {
+        const dto = await projectItem(item, state, user, options, this.options);
+        if (childCount > 0) dto.ChildCount = childCount;
+        dtos.push(dto);
+      }
+      return dtos;
     });
   }
 

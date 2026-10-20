@@ -33,6 +33,13 @@ const scenarios = {
     expectedCases: 260,
     menuLifecycle: false,
   },
+  'latest-media': {
+    fixture: 'tests/library/fixtures/latest-media/input.json',
+    expectedCases: 130,
+    responseArray: true,
+    libraryTypeMarkers: true,
+    menuLifecycle: false,
+  },
 };
 
 export async function recordUserViewHttp(scenarioName, outputArgument, portArgument) {
@@ -108,6 +115,7 @@ const nativeTypes = {
   Episode: 'MediaBrowser.Controller.Entities.TV.Episode',
   Folder: 'MediaBrowser.Controller.Entities.Folder',
   Movie: 'MediaBrowser.Controller.Entities.Movies.Movie',
+  MusicAlbum: 'MediaBrowser.Controller.Entities.Audio.MusicAlbum',
   PlaylistsFolder: 'Emby.Server.Implementations.Playlists.PlaylistsFolder',
   Season: 'MediaBrowser.Controller.Entities.TV.Season',
   Series: 'MediaBrowser.Controller.Entities.TV.Series',
@@ -258,6 +266,8 @@ function upsertBaseItem(database, template, item) {
     IndexNumber: item.indexNumber ?? null,
     ParentIndexNumber: item.parentIndexNumber ?? null,
     SeriesId: item.seriesId == null ? null : upperId(item.seriesId),
+    ...(Object.hasOwn(item, 'seasonId') ? { SeasonId: item.seasonId == null ? null : upperId(item.seasonId) } : {}),
+    ...(Object.hasOwn(item, 'seriesName') ? { SeriesName: item.seriesName } : {}),
     SeriesPresentationUniqueKey: item.seriesPresentationUniqueKey ?? null,
     OwnerId: item.ownerId == null ? null : upperId(item.ownerId),
     ExtraType: item.extraType ?? null,
@@ -459,6 +469,16 @@ async function prepareReference() {
   assert.equal(fixture.rootId, rootId, 'Library A remains the query root; only actual instance identities are rebound.');
   indexFixture();
   for (const directory of Object.values(paths)) await mkdir(directory, { recursive: true });
+  if (scenario.libraryTypeMarkers) {
+    for (const item of fixture.items.filter(item => item.type === 'CollectionFolder')) {
+      const type = item.data?.CollectionType;
+      if (type == null) continue;
+      assert.match(type, /^[a-z]+$/u);
+      // CollectionFolder is resolved from the real native .collection marker;
+      // a Data member alone is replaced by that resolver at startup.
+      await writeFile(path.join(itemPath(item), `${type}.collection`), '', { flag: 'wx' });
+    }
+  }
   seedDatabase();
   const seededDatabase = new DatabaseSync(databasePath, { readOnly: true });
   let seededUserRoot;
@@ -543,7 +563,8 @@ function routeFor(endpoint, testCase, userId) {
   common.push(`Fields=${encodeURIComponent(testCase.fields ?? 'SortName')}`, 'EnableImages=false',
     `EnableUserData=${testCase.enableUserData === true ? 'true' : 'false'}`,
     testCase.query.replaceAll(fixture.userId, userId));
-  const prefix = endpoint === 'items' ? '/Items' : `/Users/${userId}/Items`;
+  const prefix = (endpoint === 'items' ? '/Items' : `/Users/${userId}/Items`)
+    + (testCase.action === 'latest' ? '/Latest' : '');
   return `${prefix}?${common.join('&')}`;
 }
 
@@ -611,7 +632,12 @@ function responseContractFailures(records) {
     }
     if (expectedStatus === 200) {
       const body = response.bodyJson;
-      if (response.contentType !== 'application/json; charset=utf-8'
+      if (scenario.responseArray) {
+        if (response.contentType !== 'application/json; charset=utf-8' || !Array.isArray(body)
+          || body.some(item => !item || typeof item.Id !== 'string' || typeof item.Type !== 'string')) {
+          failures.push(`${label} successful array JSON shape is invalid`);
+        }
+      } else if (response.contentType !== 'application/json; charset=utf-8'
         || !body || typeof body !== 'object' || Array.isArray(body)
         || stable(Object.keys(body).sort()) !== stable(['Items', 'StartIndex', 'TotalRecordCount'].sort())
         || !Array.isArray(body.Items) || !Number.isInteger(body.StartIndex) || body.StartIndex < 0
@@ -622,6 +648,11 @@ function responseContractFailures(records) {
       if (response.contentType !== 'application/json; charset=utf-8'
         || typeof response.bodyJson !== 'string' || response.bodyJson.length === 0) {
         failures.push(`${label} authorization error JSON shape is invalid`);
+      }
+    } else if (scenario.responseArray && expectedStatus === 400 && testCase.bindingError) {
+      if (response.contentType !== 'application/json; charset=utf-8'
+        || response.bodyJson?.status !== 400 || !response.bodyJson.errors) {
+        failures.push(`${label} native binding-error shape is invalid`);
       }
     } else if ([400, 500].includes(expectedStatus)) {
       if (response.contentType !== 'text/plain' || Object.hasOwn(response, 'bodyJson')

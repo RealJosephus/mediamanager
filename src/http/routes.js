@@ -7,7 +7,7 @@ import { bindSessionsQuery } from './session-management-binding.js';
 import { bindDevicesUserId, requiredDeviceId, deviceIds, validateDeviceOptionsBody } from './device-binding.js';
 import { bindUserDataBody } from './user-data-binding.js';
 import { bindUserViewPresets } from './user-view-binding.js';
-import { enumName, generalCommands, mediaTypes } from '../sessions/binding.js';
+import { enumName, generalCommands, mediaTypes, itemKinds } from '../sessions/binding.js';
 import { AUTHENTICATION_PROVIDER, PASSWORD_RESET_PROVIDER } from '../users/native.js';
 import { itemFields, itemImageTypes } from '../library/dto.js';
 import { embyTextResponse } from './client-protocol.js';
@@ -339,6 +339,19 @@ export function registerDomainRoutes(add, { configuration, authentication, users
     genreName: requireMember(context.params, 'name'),
   }));
   add('GET', ['/Artists/InstantMix', '/MusicGenres/InstantMix'], context => instantMix(context, { queryId: true }));
+  add('GET', ['/Items/Latest', '/Users/{userId}/Items/Latest'], async context => {
+    const input = {
+      ...controllerDtoOptions(context),
+      parentId: guid(context, 'parentId'),
+      includeItemTypes: commaEnums(context, 'includeItemTypes', itemKinds).map(String),
+      isPlayed: boolean(context, 'isPlayed'),
+      limit: integer(context, 'limit', 20),
+      groupItems: boolean(context, 'groupItems', true),
+    };
+    const user = await requestUser(context);
+    requireSupportedDtoFields(input, 'Latest media');
+    return library.queryLatestItems(input, { user });
+  });
   add('GET', ['/UserItems/Resume', '/Users/{userId}/Items/Resume'], async context => {
     const user = await requestUser(context);
     const excludeActiveSessions = boolean(context, 'excludeActiveSessions', false);

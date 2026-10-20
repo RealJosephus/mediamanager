@@ -68,7 +68,7 @@ function uniqueMap(entries, { kind, key, normalize = value => value }) {
   return result;
 }
 
-function validateFixture(fixture) {
+export function validateFixture(fixture) {
   if (!fixture || typeof fixture !== 'object') throw new TypeError('Fixture must be an object.');
   if (!Array.isArray(fixture.items) || fixture.items.length === 0) throw new TypeError('Fixture items must be a non-empty array.');
   if (!Array.isArray(fixture.cases)) throw new TypeError('Fixture cases must be an array.');
@@ -598,7 +598,8 @@ function routeFor(endpoint, testCase, fixture, userId, fields) {
   }
   if (!testCase.omitSortBy) common.push(`SortBy=${encodeURIComponent(testCase.sortBy ?? 'SortName')}`);
   common.push(`Fields=${encodeURIComponent(testCase.fields ?? fields)}`, 'EnableImages=false', `EnableUserData=${testCase.enableUserData === true ? 'true' : 'false'}`, testCase.query);
-  const prefix = endpoint === 'items' ? '/Items' : `/Users/${userId}/Items`;
+  const prefix = (endpoint === 'items' ? '/Items' : `/Users/${userId}/Items`)
+    + (testCase.action === 'latest' ? '/Latest' : '');
   // Frozen fixtures refer to the reference account id. Candidate users are
   // created afresh, so only substitute that runtime identity in the wire query.
   const scenarioQuery = testCase.query.replaceAll(fixture.userId, userId);
@@ -618,7 +619,7 @@ function responseContract(response, keyById, {
     name: response.body?.Name ?? null,
     tags: response.body?.Tags ?? null,
   };
-  const items = Array.isArray(response.body?.Items) ? response.body.Items : [];
+  const items = Array.isArray(response.body) ? response.body : Array.isArray(response.body?.Items) ? response.body.Items : [];
   const orderedIds = items.map(item => idKey(item.Id));
   const orderedKeys = orderedIds.map((id, index) => keyById.get(id) ?? `unknown:${items[index].Id}`);
   return {
