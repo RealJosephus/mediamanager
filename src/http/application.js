@@ -10,6 +10,8 @@ import { BinaryResult } from './binary-result.js';
 import { registerClientNetworkRoutes } from './client-network-routes.js';
 import { registerClientDiscoveryRoutes } from './client-discovery-routes.js';
 import { registerClientConfigurationPages } from './client-configuration-pages.js';
+import { isEmbyClient as detectEmbyClient } from './client-protocol.js';
+import { registerUserDataCopyRoutes } from './user-data-copy-routes.js';
 import { registerConfigurationRoutes } from './configuration-routes.js';
 import { registerSessionControlRoutes } from './session-control-routes.js';
 import { registerMetadataRoutes } from './metadata-routes.js';
@@ -80,15 +82,7 @@ export async function createApplication(services = {}) {
     }
   }
   for (const method of ['GET', 'POST']) add(method, '/System/Ping', () => new HttpResult(200, 'MediaManager', { text: true }), { public: true });
-  const isEmbyClient = context => {
-    const declared = authentication.read?.(context.request)?.Client || context.request.headers['x-emby-client'];
-    const client = String(declared || context.auth.Client || '');
-    if (/jellyfin/iu.test(client)) return false;
-    // The hosted Emby client accepts server API versions from 4.7.14 through
-    // 8.0, rejecting the Jellyfin protocol's 13.x version before authentication.
-    const authorization = context.request.headers.authorization || context.request.headers['x-emby-authorization'] || '';
-    return /emby/iu.test(client) || context.embyPath || /^Emby(?:\s|$)/iu.test(authorization);
-  };
+  const isEmbyClient = context => detectEmbyClient(authentication, context);
   const clientSystemVersion = context => isEmbyClient(context) ? '4.9.5.0' : serverVersion;
   const publicSystemInfo = context => ({ LocalAddress: configuration.PublicAddress || `http://${context.request.headers.host}${configuration.BaseUrl || ''}`,
     ServerName: serverFriendlyName(configuration, serverName), Version: clientSystemVersion(context), ProductName: 'MediaManager', Id: serverId,
@@ -124,6 +118,7 @@ export async function createApplication(services = {}) {
   registerDisplayPreferencesRoutes(add, services);
   registerStartupRoutes(add, services);
   registerApiKeyRoutes(add, services);
+  registerUserDataCopyRoutes(add, services);
   registerPluginRoutes(add, services);
   registerDomainRoutes(add, services);
   registerPlaybackRoutes(add, services);

@@ -1,6 +1,7 @@
 import { BinaryResult } from './binary-result.js';
 import { BindingError, HttpResult, booleanValue, guidValue, queryValue } from './binding.js';
 import { ordinalIgnoreCaseEquals } from '../storage/ordinal-comparer.js';
+import { embyTextResponse } from './client-protocol.js';
 
 export function registerClientConfigurationPages(add, { plugins }) {
   const pages = new Map();
@@ -9,20 +10,19 @@ export function registerClientConfigurationPages(add, { plugins }) {
     return [...pages].filter(([extension]) => active.has(extension)).map(([, page]) => page);
   };
   add('GET', '/web/ConfigurationPages', context => {
-    const boolean = name => {
-      const value = queryValue(context.query, name);
-      try { return booleanValue(value, name); }
-      catch (error) {
-        if (!(error instanceof BindingError) || !context.embyClient) throw error;
-        throw new HttpResult(500, `String '${value}' was not recognized as a valid Boolean.`, { text: true });
-      }
-    };
-    const main = boolean('enableInMainMenu');
-    const userMenu = context.embyClient ? boolean('enableInUserMenu') : undefined;
+    let main, userMenu;
+    try {
+      main = booleanValue(queryValue(context.query, 'enableInMainMenu'), 'enableInMainMenu');
+      if (context.embyClient) userMenu = booleanValue(queryValue(context.query, 'enableInUserMenu'), 'enableInUserMenu');
+    } catch (error) {
+      if (!(error instanceof BindingError) || !context.embyClient) throw error;
+      const value = queryValue(context.query, Object.keys(error.errors)[0]);
+      return embyTextResponse(500, `String '${value}' was not recognized as a valid Boolean.`);
+    }
     if (context.embyClient) try { guidValue(queryValue(context.query, 'userId'), 'userId'); }
     catch (error) {
       if (!(error instanceof BindingError)) throw error;
-      throw new HttpResult(500, 'Unrecognized Guid format.', { text: true });
+      return embyTextResponse(500, 'Unrecognized Guid format.');
     }
     // Emby exposes page metadata to authenticated readers, including another
     // user's menu. Configuration changes are authorized by the plugin's API.

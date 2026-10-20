@@ -6,6 +6,7 @@ import { int64, sameGuid } from '../sessions/user-data.js';
 import { UserDataChangeNotifier } from '../sessions/user-data-notifier.js';
 import { LibraryChangedNotifier } from '../sessions/library-changed-notifier.js';
 import { RefreshProgressNotifier } from '../sessions/refresh-progress-notifier.js';
+import { isEmbyClient } from './client-protocol.js';
 
 const messageTypes = ['ForceKeepAlive', 'GeneralCommand', 'UserDataChanged', 'Sessions', 'Play', 'SyncPlayCommand', 'SyncPlayGroupUpdate', 'Playstate', 'RestartRequired', 'ServerShuttingDown', 'ServerRestarting', 'LibraryChanged', 'UserDeleted', 'UserUpdated', 'SeriesTimerCreated', 'TimerCreated', 'SeriesTimerCancelled', 'TimerCancelled', 'RefreshProgress', 'ScheduledTaskEnded', 'PackageInstallationCancelled', 'PackageInstallationFailed', 'PackageInstallationCompleted', 'PackageInstalling', 'PackageUninstalled', 'ActivityLogEntry', 'ScheduledTasksInfo', 'ActivityLogEntryStart', 'ActivityLogEntryStop', 'SessionsStart', 'SessionsStop', 'ScheduledTasksInfoStart', 'ScheduledTasksInfoStop', 'KeepAlive'];
 const eventForces = { SessionStarted: true, SessionEnded: true, PlaybackStart: true, PlaybackStopped: true, PlaybackProgress: event => !event.IsAutomated, CapabilitiesChanged: true, SessionActivity: false };
@@ -134,7 +135,10 @@ export function attachWebSocketServer(server, { authentication, sessions, tasks,
   watch.unref();
 
   async function connected(socket, request, auth, locale) {
-    const connection = { socket, auth, locale, lastActivity: clock(), lastKeepAlive: clock(),
+    const prefix = configuration.BaseUrl?.replace(/\/$/, '') ?? '';
+    const pathname = new URL(request.url, 'http://localhost').pathname.slice(prefix.length);
+    const embyClient = isEmbyClient(authentication, { request, auth, embyPath: /^\/(?:emby|mediabrowser)(?:\/|$)/iu.test(pathname) });
+    const connection = { socket, auth, locale, embyClient, lastActivity: clock(), lastKeepAlive: clock(),
       sessionSubscriptions: [], taskSubscriptions: [] };
     connections.add(connection);
     socket.on('error', report);
@@ -155,9 +159,9 @@ export function attachWebSocketServer(server, { authentication, sessions, tasks,
         controller = { connections: new Set(),
           isActive() { return [...this.connections].some(value => value.socket.readyState === WebSocket.OPEN); },
           get supportsMediaControl() { return this.isActive(); },
-          async sendMessage(type, id, data) {
+          async sendMessage(type, id, data, { embyMessageType } = {}) {
             const target = [...this.connections].filter(value => value.socket.readyState === WebSocket.OPEN).sort((a, b) => b.lastActivity - a.lastActivity)[0];
-            if (target) await localization.run(target.locale, () => send(target, type, data, id));
+            if (target) await localization.run(target.locale, () => send(target, target.embyClient && embyMessageType || type, data, id));
           }
         };
         controllers.set(session.Id, controller);

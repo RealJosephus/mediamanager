@@ -83,10 +83,12 @@ test('actual route plugins publish configuration pages with client permissions a
   assert.deepEqual((await request('/emby/web/ConfigurationPages', emby)).body,
     [publicPage, adminPage].map(embyPage));
   assert.deepEqual((await request(userMenu.replace(user.Id, other.Id), emby)).body, [embyPage(publicPage)]);
-  const invalidUser = await request(userMenu.replace(user.Id, 'invalid'), emby);
+  const invalidUser = await request(userMenu.replace(user.Id, 'invalid'), { ...emby, Accept: 'application/json' });
   assert.equal(invalidUser.status, 500); assert.equal(invalidUser.text, 'Unrecognized Guid format.');
-  const invalidFlag = await request('/emby/web/ConfigurationPages?EnableInUserMenu=invalid', emby);
+  assert.equal(invalidUser.headers.get('content-type'), 'text/plain');
+  const invalidFlag = await request('/emby/web/ConfigurationPages?EnableInUserMenu=invalid', { ...emby, Accept: 'application/json' });
   assert.equal(invalidFlag.status, 500); assert.equal(invalidFlag.text, "String 'invalid' was not recognized as a valid Boolean.");
+  assert.equal(invalidFlag.headers.get('content-type'), 'text/plain');
   assert.deepEqual((await request(userMenu.replace(user.Id, other.Id), auth(adminToken, 'Emby Web'))).body,
     [embyPage(publicPage)]);
   for (const page of [publicPage, adminPage]) {

@@ -85,13 +85,13 @@ export class SessionService extends EventEmitter {
     const messageId = randomUUID().replaceAll('-', '');
     for (const controller of session.Controllers) await controller.sendMessage(messageType, messageId, data);
   }
-  async sendMessageToUserSessions(userIds, messageType, data) {
+  async sendMessageToUserSessions(userIds, messageType, data, options) {
     const normalized = userIds.map(guidN);
     const targets = [...this.#sessions.values()].filter(session => normalized.some(userId => this.#contains(session, userId)));
     if (!targets.length) return;
     const payload = typeof data === 'function' ? await data() : data;
     const messageId = randomUUID().replaceAll('-', '');
-    await Promise.all(targets.flatMap(session => session.Controllers.map(controller => controller.sendMessage(messageType, messageId, payload))));
+    await Promise.all(targets.flatMap(session => session.Controllers.map(controller => controller.sendMessage(messageType, messageId, payload, options))));
   }
   sendMessageToAdminSessions(messageType, data) {
     const candidates = [...this.#sessions.values()].map(session => ({

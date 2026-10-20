@@ -55,9 +55,9 @@ const report = { kind: 'actual-emby-http-reference', version: input.version, inp
   mediaTools: await Promise.all(['MEDIAMANAGER_FFMPEG', 'MEDIAMANAGER_FFPROBE'].map(async name => ({ name,
     path: process.env[name], ...await describe(process.env[name]) }))),
   runtimeBefore: { shared: await inventory(path.join(dotnetRoot, 'shared')), host: await inventory(path.join(dotnetRoot, 'host')) },
-  requests: [], processes: [], outcome: 'started', candidateCompatibilityValidated: false,
+  requests: [], processes: [], sockets: [], outcome: 'started', candidateCompatibilityValidated: false,
   limitations: ['Isolated official Emby API observations, not a candidate compatibility test or production migration acceptance.'] };
-const secrets = new Set(), password = randomBytes(32).toString('base64url');
+const secrets = new Set(), tokenDevices = new Map(), password = randomBytes(32).toString('base64url');
 secrets.add(password);
 const redact = value => {
   for (const secret of secrets) if (secret) value = value.replaceAll(secret, '[isolated credential redacted]');
@@ -110,19 +110,38 @@ async function ready() {
   }
   throw new Error('Official Emby did not become ready: ' + redact(output.slice(-6000)));
 }
-async function call(label, route, { token = adminToken, method = 'GET', body, form = false } = {}) {
+async function call(label, route, { token = adminToken, method = 'GET', body, form = false,
+  deviceId = tokenDevices.get(token) ?? 'emby-contracts-admin' } = {}) {
   const response = await fetch(origin + '/emby' + route, { method, signal: AbortSignal.timeout(15000),
     headers: { Accept: 'application/json', 'Content-Type': form ? 'application/x-www-form-urlencoded' : 'application/json',
-      Authorization: `Emby Client="Compatibility research", Device="Isolated CI", DeviceId="emby-contracts", Version="1.0"${token ? `, Token="${token}"` : ''}` },
+      Authorization: `Emby Client="Compatibility research", Device="Isolated CI", DeviceId="${deviceId}", Version="1.0"${token ? `, Token="${token}"` : ''}` },
     ...(body === undefined ? {} : { body: form ? new URLSearchParams(body).toString() : JSON.stringify(body) }) });
   const bodyText = await response.text();
   let bodyJson;
   try { bodyJson = JSON.parse(bodyText); } catch {}
-  if (bodyJson?.AccessToken) secrets.add(bodyJson.AccessToken);
+  if (bodyJson?.AccessToken) { secrets.add(bodyJson.AccessToken); tokenDevices.set(bodyJson.AccessToken, deviceId); }
   const record = { label, method, route, authenticated: Boolean(token), ...(body === undefined ? {} : { requestBody: body }),
     status: response.status, contentType: response.headers.get('content-type'), bodyText, ...(bodyJson === undefined ? {} : { bodyJson }) };
   report.requests.push(record);
   return record;
+}
+async function connect(userId, token) {
+  const observation = { userId, messages: [], errors: [] };
+  report.sockets.push(observation);
+  const socket = new WebSocket(`${origin.replace(/^http/u, 'ws')}/emby?api_key=${encodeURIComponent(token)}&deviceId=${encodeURIComponent(tokenDevices.get(token))}`);
+  socket.addEventListener('message', event => {
+    try { observation.messages.push(JSON.parse(String(event.data))); }
+    catch (error) { observation.errors.push(error.message); }
+  });
+  socket.addEventListener('close', () => { observation.closed = true; });
+  socket.addEventListener('error', event => observation.errors.push(event.message ?? 'Websocket error'));
+  let timeout;
+  try {
+    await Promise.race([new Promise((resolve, reject) => {
+      socket.addEventListener('open', resolve, { once: true }); socket.addEventListener('error', reject, { once: true });
+    }), new Promise((_, reject) => { timeout = setTimeout(() => reject(new Error('Official websocket did not connect.')), 10000); })]);
+  } finally { clearTimeout(timeout); }
+  return observation;
 }
 const successful = response => {
   assert.ok(response.status >= 200 && response.status < 300, `${response.label}: ${response.status} ${redact(response.bodyText).slice(0, 1200)}`);
@@ -150,8 +169,11 @@ try {
   successful(await call('actual-private-info', '/System/Info'));
   const reader = successful(await call('create-reader', '/Users/New', { method: 'POST', body: { Name: 'Controlled reader' }, form: true }));
   const other = successful(await call('create-other-reader', '/Users/New', { method: 'POST', body: { Name: 'Other controlled reader' }, form: true }));
-  const readerLogin = successful(await call('reader-login', '/Users/AuthenticateByName', { method: 'POST', body: { Username: reader.Name, Pw: '' } }));
+  const readerLogin = successful(await call('reader-login', '/Users/AuthenticateByName', { method: 'POST', deviceId: 'emby-contracts-reader', body: { Username: reader.Name, Pw: '' } }));
+  const otherLogin = successful(await call('other-reader-login', '/Users/AuthenticateByName', { method: 'POST', deviceId: 'emby-contracts-other', body: { Username: other.Name, Pw: '' } }));
   const token = readerLogin.AccessToken, user = `/Users/${reader.Id}`;
+  await connect(reader.Id, token);
+  const targetSocket = await connect(other.Id, otherLogin.AccessToken);
   report.identities = { administrator: login.User.Id, reader: reader.Id, other: other.Id };
   const media = path.join(instance, 'controlled-music');
   await mkdir(media);
@@ -160,8 +182,9 @@ try {
   wave.writeUInt32LE(16, 16); wave.writeUInt16LE(1, 20); wave.writeUInt16LE(1, 22);
   wave.writeUInt32LE(8000, 24); wave.writeUInt32LE(16000, 28); wave.writeUInt16LE(2, 32); wave.writeUInt16LE(16, 34);
   wave.write('data', 36); wave.writeUInt32LE(16000, 40);
-  await writeFile(path.join(media, 'Controlled audio.wav'), wave);
-  report.mediaSeed = { name: 'Controlled audio.wav', bytes: wave.length, sha256: sha(wave), encoding: 'One second of mono PCM silence at 8000 Hz, 16 bits.' };
+  const names = ['Controlled audio A.wav', 'Controlled audio B.wav', 'Controlled audio C.wav'];
+  for (const name of names) await writeFile(path.join(media, name), wave);
+  report.mediaSeed = { names, bytesEach: wave.length, sha256Each: sha(wave), encoding: 'One second of mono PCM silence at 8000 Hz, 16 bits.' };
   successful(await call('add-controlled-library', '/Library/VirtualFolders?name=Controlled%20music&collectionType=music&refreshLibrary=true', {
     method: 'POST', body: { LibraryOptions: { PathInfos: [{ Path: media }], EnableRealtimeMonitor: false,
       EnableInternetProviders: false, SaveLocalMetadata: false, MetadataSavers: [],
@@ -171,7 +194,7 @@ try {
   let libraryItems;
   while (true) {
     libraryItems = successful(await call('await-controlled-audio', user + '/Items?Recursive=true&IncludeItemTypes=Audio&Fields=Path&Limit=4', { token }));
-    if (libraryItems.Items?.length) break;
+    if (libraryItems.Items?.length === names.length) break;
     assert.ok(Date.now() < libraryDeadline, 'The official server did not scan the actual controlled audio file.');
     await delay(500);
   }
@@ -210,7 +233,7 @@ try {
   report.identities.items = ids;
   const recent = user + '/Items?Recursive=true&WasSearched=true&SortBy=DateLastSearched&SortOrder=Descending&Fields=BasicSyncInfo,DateLastSearched&Limit=10';
   await call('recent-initial', recent, { token });
-  for (const id of ids) {
+  for (const id of ids.slice(0, 2)) {
     await call('mark-searched-' + id, user + '/SearchedItems', { token, method: 'POST', body: { Ids: [id], WasSearched: true } });
     await call('items-with-sync-field-' + id, user + '/Items?Ids=' + id + '&Fields=BasicSyncInfo,CanDownload', { token });
     await call('items-without-sync-field-' + id, user + '/Items?Ids=' + id + '&Fields=CanDownload', { token });
@@ -226,13 +249,31 @@ try {
   await call('copy-user-settings', user + '/CopyData', { method: 'POST', body: { ToUserIds: [other.Id], CopyOptions: settingsOptions } });
   await call('other-settings-after-copy', `/UserSettings/${other.Id}`);
   await call('other-user-after-copy', `/Users/${other.Id}`);
+  await call('other-home-after-configuration-copy', `/Users/${other.Id}/HomeSections?IsEditMode=true`);
+  await call('copy-with-empty-options', user + '/CopyData', { method: 'POST', body: { ToUserIds: [other.Id], CopyOptions: [] } });
+  await call('copy-with-unknown-option', user + '/CopyData', { method: 'POST', body: { ToUserIds: [other.Id], CopyOptions: ['unknown-option'] } });
+  await call('copy-with-missing-target', user + '/CopyData', { method: 'POST', body: { ToUserIds: ['00000000000000000000000000001234'], CopyOptions: ['userconfiguration'] } });
   if (ids.length) {
     await call('favorite-source-item', user + '/FavoriteItems/' + ids[0], { token, method: 'POST' });
     await call('played-source-item', user + '/PlayedItems/' + ids[0], { token, method: 'POST' });
+    await call('favorite-target-overlap', `/Users/${other.Id}/FavoriteItems/${ids[1]}`, { method: 'POST' });
+    await call('favorite-target-only', `/Users/${other.Id}/FavoriteItems/${ids[2]}`, { method: 'POST' });
+    await delay(800);
+    report.targetMessagesBeforeCopy = targetSocket.messages.length;
     await call('copy-playback-data', user + '/CopyData', { method: 'POST', body: { ToUserIds: [other.Id], CopyOptions: ['userdata'] } });
+    await delay(800);
+    report.targetMessagesAfterCopy = targetSocket.messages.length;
     await call('source-item-user-data', user + '/Items/' + ids[0], { token });
     await call('target-item-user-data', `/Users/${other.Id}/Items/${ids[0]}`);
+    await call('target-overlap-after-copy', `/Users/${other.Id}/Items/${ids[1]}`);
+    await call('target-only-after-copy', `/Users/${other.Id}/Items/${ids[2]}`);
+    await call('target-recent-after-copy', recent.replace(reader.Id, other.Id));
   }
+  await call('update-source-policy', user + '/Policy', { method: 'POST', body: {
+    ...reader.Policy, EnableContentDownloading: false, EnableLiveTvAccess: false, RemoteClientBitrateLimit: 1234000,
+  } });
+  await call('copy-user-policy', user + '/CopyData', { method: 'POST', body: { ToUserIds: [other.Id], CopyOptions: ['userpolicy'] } });
+  await call('target-policy-after-copy', `/Users/${other.Id}`);
   await call('copy-user-settings-as-reader', user + '/CopyData', { token, method: 'POST', body: { ToUserIds: [other.Id], CopyOptions: ['userconfiguration'] } });
   if (ids.length) await call('unmark-searched', user + '/SearchedItems', { token, method: 'POST', body: { Ids: [ids[0]], WasSearched: false } });
   await call('recent-after-unmark', recent, { token });
