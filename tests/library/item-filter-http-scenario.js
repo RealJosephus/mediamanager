@@ -33,6 +33,7 @@ const typeNames = {
   PlaylistsFolder: 'Emby.Server.Implementations.Playlists.PlaylistsFolder',
   UserRootFolder: 'MediaBrowser.Controller.Entities.UserRootFolder',
   UserView: 'MediaBrowser.Controller.Entities.UserView',
+  Year: 'MediaBrowser.Controller.Entities.Year',
 };
 
 const itemValueTypes = {
@@ -579,6 +580,10 @@ function authorization(token) {
 }
 
 function routeFor(endpoint, testCase, fixture, userId, fields) {
+  if (testCase.action === 'dto-detail') return `${endpoint === 'legacy' ? '/Users/' + userId : ''}/Items/${fixture.items.find(item => item.key === testCase.detailKey).id}?${testCase.query.replaceAll(fixture.userId, userId)}`;
+  if (testCase.action === 'named-list' || testCase.action === 'named-detail') return `/${testCase.namedRoute}${testCase.action === 'named-detail' ? '/' + encodeURIComponent(testCase.itemName) : ''}?${testCase.query.replaceAll(fixture.userId, userId)}`;
+  if (['filters', 'filters2'].includes(testCase.action)) return `/Items/${testCase.action === 'filters' ? 'Filters' : 'Filters2'}?${testCase.query.replaceAll(fixture.userId, userId)}`;
+  if (testCase.action === 'studio-name') return `/Studios/${encodeURIComponent(testCase.studioName)}?${testCase.query}`;
   const itemByKey = new Map(fixture.items.map(item => [item.key, item]));
   if (endpoint === 'detail') return `/Items/${itemByKey.get(testCase.detailKey).id}`;
   const common = [];
@@ -598,7 +603,7 @@ function routeFor(endpoint, testCase, fixture, userId, fields) {
   }
   if (!testCase.omitSortBy) common.push(`SortBy=${encodeURIComponent(testCase.sortBy ?? 'SortName')}`);
   common.push(`Fields=${encodeURIComponent(testCase.fields ?? fields)}`, 'EnableImages=false', `EnableUserData=${testCase.enableUserData === true ? 'true' : 'false'}`, testCase.query);
-  const prefix = (endpoint === 'items' ? '/Items' : `/Users/${userId}/Items`)
+  const prefix = (testCase.action === 'studios' ? '/Studios' : endpoint === 'items' ? '/Items' : `/Users/${userId}/Items`)
     + (testCase.action === 'latest' ? '/Latest' : '');
   // Frozen fixtures refer to the reference account id. Candidate users are
   // created afresh, so only substitute that runtime identity in the wire query.
@@ -704,7 +709,8 @@ export async function recordItemFilterCandidate({ dialect, fixture, connectionSt
   captureStartIndex = false, captureTags = false, captureOfficialRatings = false, captureSortNames = false,
   captureErrorText = false, captureResponseBodies = false, captureCaseRuntimeErrors = false, trackUserData = false,
   trackFilesystem = false, trackSideEffectCase = null,
-  prepareScenario = null, prepareCase = null, afterEndpoint = null, captureCaseStages = false, captureEndpointStages = false, captureFilesystemDomains = false,
+  prepareScenario = null, prepareCase = null, afterEndpoint = null, captureCaseStages = false, captureEndpointStages = false,
+  captureShutdownState = false, captureFilesystemDomains = false,
   requestTimeoutMs = 15000 }) {
   if (!['postgres'].includes(dialect)) throw new Error(`Unknown database dialect: ${dialect}.`);
   if (typeof fields !== 'string') throw new TypeError('fields must be a string.');
@@ -726,6 +732,7 @@ export async function recordItemFilterCandidate({ dialect, fixture, connectionSt
   if (typeof captureEndpointStages !== 'boolean' || (captureEndpointStages && !trackFilesystem)) {
     throw new TypeError('Endpoint-stage capture requires filesystem tracking.');
   }
+  if (typeof captureShutdownState !== 'boolean') throw new TypeError('Shutdown-state capture must be a boolean.');
   if (typeof captureFilesystemDomains !== 'boolean' || (captureFilesystemDomains && !trackFilesystem)) {
     throw new TypeError('Filesystem-domain capture requires filesystem tracking.');
   }
@@ -764,7 +771,7 @@ export async function recordItemFilterCandidate({ dialect, fixture, connectionSt
       programDataPath: programDataDirectory,
       onError: error => runtimeErrors.push({ name: error.name, message: error.message }),
     });
-    if (captureEndpointStages) {
+    if (captureEndpointStages || captureShutdownState) {
       const closeStore = runtime.store.close.bind(runtime.store);
       runtime.store.close = async () => {
         // Capture shutdown after HTTP and all background hosts have stopped,
@@ -824,6 +831,20 @@ export async function recordItemFilterCandidate({ dialect, fixture, connectionSt
     const apiKey = listedKeys.body.Items.find(item => item.AppName === appName)?.AccessToken;
     if (!apiKey) throw new Error('Candidate API key was not returned by /Auth/Keys.');
 
+    let warmUserViews = null;
+    if (fixture.warmUserViews) {
+      for (const [field, suffix] of [['configuration', 'Configuration'], ['policy', 'Policy']]) {
+        const updated = await request('/Users/' + user.Id + '/' + suffix, { method: 'POST', token: apiKey,
+          body: { ...login.body.User[suffix], ...fixture.warmUserViews[field] } });
+        assert.equal(updated.status, 204, updated.bodyText);
+      }
+      const route = '/UserViews?UserId=' + user.Id + '&IncludeHidden=true';
+      const response = await request(route, { token: userToken });
+      assert.equal(response.status, 200, response.bodyText);
+      assert.ok(Array.isArray(response.body?.Items));
+      await runtime.library.userViews.drain();
+      warmUserViews = { route, response, refreshQueueDrained: true };
+    }
     const beforeReads = await targetSnapshot(database);
     const userDataBeforeReads = trackUserData ? stableRows(await database.rows('UserData')) : null;
     const filesystemBeforeReads = trackFilesystem
@@ -952,6 +973,7 @@ export async function recordItemFilterCandidate({ dialect, fixture, connectionSt
     if (sideEffect && !sideEffect.afterFirst) throw new Error(`Side-effect case not run: ${trackSideEffectCase}.`);
     result = { dialect, schema: dialect === 'postgres' ? schema : null, programDataDirectory, userId: user.Id, cases, httpCases,
       beforeReads, afterReads, filesystemBeforeReads, filesystemAfterReads,
+      ...(warmUserViews ? { warmUserViews } : {}),
       ...(trackUserData ? { userDataBeforeReads, userDataAfterReads } : {}),
       ...(captureFilesystemDomains ? { filesystemDomainsBeforeReads, filesystemDomainsAfterReads } : {}),
       sideEffect, caseStages, runtimeErrors, handledExpectedRuntimeErrors, cleanup };

@@ -31,7 +31,7 @@ const nativeDateTextKey = expression => `CASE WHEN ${expression} IS NULL THEN NU
 
 const SUPPORTED_FILTERS = new Set([
   'ids', 'excludeitemids', 'includeitemtypes', 'excludeitemtypes', 'mediatypes', 'years',
-  'indexnumber', 'parentindexnumber', 'islocked', 'isseries', 'isfolder', 'ismovie',
+  'indexnumber', 'parentindexnumber', 'islocked', 'isseries', 'isfolder', 'ismovie', 'isairing',
   'hasdeadparentid', 'isdeadgenre', 'isdeadstudio',
   'mincommunityrating', 'mincriticrating', 'minpremieredate', 'maxpremieredate',
   'mindatelastsaved', 'mindatelastsavedforuser', 'hasoverview', 'hasimdbid', 'hastmdbid',
@@ -182,6 +182,7 @@ export function buildPostgresItemPageQuery(database, query, {
   memoryPresort = null,
   memorySourceOrder = null,
   memoryFolderPlayback = false,
+  repositoryFolderPlayback = resumableMode === 'repository',
   memoryUserViewFilter = false,
   itemIdsPlan = null,
   genreIdsPlan = null,
@@ -697,6 +698,13 @@ export function buildPostgresItemPageQuery(database, query, {
   for (const [key, column] of [['islocked', 'IsLocked'], ['isseries', 'IsSeries'], ['isfolder', 'IsFolder']]) {
     if (query[key] !== undefined) predicates.push(`i.${q(column)} IS ${query[key] ? 'TRUE' : 'FALSE'}`);
   }
+  if (query.isairing !== undefined) {
+    const now = bind(new Date().toISOString().replace(/Z$/u, '0000Z'));
+    const start = nativeDateKey('i."StartDate"'), end = nativeDateKey('i."EndDate"');
+    predicates.push(query.isairing
+      ? `(${start} <= ${now} AND ${end} >= ${now})`
+      : `(${start} > ${now} OR ${end} < ${now})`);
+  }
   if (query.hasdeadparentid === true) {
     // The detached-user-data placeholder satisfies the FK but cannot keep a
     // child alive. Only the immediate physical parent participates here.
@@ -1147,8 +1155,43 @@ export function buildPostgresItemPageQuery(database, query, {
     const activeIds = bindTextArray(excludeVersionFamilyIds.map(idKey), 'excludeVersionFamilyIds');
     predicates.push(`(i."IsFolder" IS TRUE OR ${familyExpression('i')} NOT IN (SELECT ${familyExpression('active_item')} FROM ${baseItems} active_item WHERE replace(${nativeTextSql(database.schemaName).guidLower("active_item.\"Id\"")}, '-', '') = ANY(${activeIds})))`);
   }
+  let repositoryPlayedLeaves, repositoryPlaybackUser;
+  const repositoryLeafPlayed = alias => {
+    if (userId == null) return 'FALSE';
+    repositoryPlaybackUser ??= bind(idKey(userId));
+    const same = (a, b) => `${normalizedId(a)} = ${normalizedId(b)}`;
+    return `EXISTS (SELECT 1 FROM ${userData} native_played_data WHERE ${normalizedId('native_played_data."UserId"')} = ${repositoryPlaybackUser}
+      AND native_played_data."Played" IS TRUE AND (${same('native_played_data."ItemId"', `${alias}."Id"`)}
+        OR ${normalizedId('native_played_data."ItemId"')} IN (SELECT ${normalizedId('played_version."Id"')} FROM ${baseItems} played_version
+          WHERE ${same('played_version."PrimaryVersionId"', `${alias}."Id"`)})
+        OR ${alias}."PrimaryVersionId" IS NOT NULL AND (${same('native_played_data."ItemId"', `${alias}."PrimaryVersionId"`)}
+          OR ${normalizedId('native_played_data."ItemId"')} IN (SELECT ${normalizedId('played_sibling."Id"')} FROM ${baseItems} played_sibling
+            WHERE ${same('played_sibling."PrimaryVersionId"', `${alias}."PrimaryVersionId"`)}))))`;
+  };
+  const repositoryPlayed = alias => {
+    if (userId == null) return 'FALSE';
+    if (!repositoryPlayedLeaves) {
+      const { topParentIds: _topParentIds, libraryTopParentIds: _libraryTopParentIds, ...leafVisibility } = visibility ?? {};
+      const plan = buildPostgresItemPageQuery(database, { isfolder: false, ismissing: false }, {
+        userId, visibility: leafVisibility,
+      });
+      repositoryPlayedLeaves = plan.text.replace(/\$(\d+)/gu, (_, index) => `$${Number(index) + values.length}`);
+      values.push(...plan.values);
+    }
+    const same = (a, b) => `${normalizedId(a)} = ${normalizedId(b)}`;
+    const descendant = `EXISTS (SELECT 1 FROM ${ancestors} played_ancestor
+        WHERE ${same('played_ancestor."ParentItemId"', `${alias}."Id"`)} AND ${same('played_ancestor."ItemId"', 'played_leaf."Id"')})
+      OR EXISTS (SELECT 1 FROM ${links} played_link WHERE ${same('played_link."ParentId"', `${alias}."Id"`)}
+        AND (${same('played_link."ChildId"', 'played_leaf."Id"')} OR EXISTS (SELECT 1 FROM ${ancestors} played_link_ancestor
+          WHERE ${same('played_link_ancestor."ParentItemId"', 'played_link."ChildId"')}
+            AND ${same('played_link_ancestor."ItemId"', 'played_leaf."Id"')})))`;
+    return `((${alias}."IsFolder" IS TRUE AND NOT EXISTS (SELECT 1 FROM ${baseItems} played_leaf
+      WHERE played_leaf."Id" IN (SELECT "Id" FROM (${repositoryPlayedLeaves}) played_access)
+        AND (${descendant}) AND NOT ${repositoryLeafPlayed('played_leaf')}))
+      OR (${alias}."IsFolder" IS FALSE AND ${repositoryLeafPlayed(alias)}))`;
+  };
   if (query.isplayed !== undefined) {
-    const played = resumableMode === 'memory' && memoryFolderPlayback
+    const played = repositoryFolderPlayback ? repositoryPlayed('i') : resumableMode === 'memory' && memoryFolderPlayback
       ? memoryPlayed('i')
       : userId == null ? 'FALSE' : `EXISTS (SELECT 1 FROM ${userData} played_data WHERE ${normalizedId('played_data."UserId"')} = ${bind(idKey(userId))} AND played_data."Played" IS TRUE AND (${nativeTextSql(database.schemaName).guidLower("played_data.\"ItemId\"")} = ${nativeTextSql(database.schemaName).guidLower("i.\"Id\"")} OR ${normalizedId('played_data."ItemId"')} IN (SELECT ${normalizedId('version."Id"')} FROM ${baseItems} version WHERE ${normalizedId('version."PrimaryVersionId"')} = ${normalizedId('i."Id"')}) OR i."PrimaryVersionId" IS NOT NULL AND (${normalizedId('played_data."ItemId"')} = ${normalizedId('i."PrimaryVersionId"')} OR ${normalizedId('played_data."ItemId"')} IN (SELECT ${normalizedId('sibling."Id"')} FROM ${baseItems} sibling WHERE ${normalizedId('sibling."PrimaryVersionId"')} = ${normalizedId('i."PrimaryVersionId"')}))))`;
     predicates.push(query.isplayed ? played : `NOT ${played}`);
@@ -1593,7 +1636,9 @@ export function buildPostgresItemPageQuery(database, query, {
     if (['dateplayed', 'playcount', 'isplayed', 'isunplayed', 'isfavoriteorliked'].includes(name)) {
       if (!userId && !searchScores?.length && name !== 'dateplayed'
         && !(resumableMode === 'memory' && name === 'isplayed')) throw new Error(`Sort key ${name} requires a user.`);
-      if (name === 'isunplayed') expression = `NOT (${memoryPlayed('i')})`;
+      if (repositoryFolderPlayback && ['isplayed', 'isunplayed'].includes(name)) {
+        expression = name === 'isplayed' ? repositoryPlayed('i') : `NOT (${repositoryPlayed('i')})`;
+      } else if (name === 'isunplayed') expression = `NOT (${memoryPlayed('i')})`;
       else {
         const column = { dateplayed: 'LastPlayedDate', playcount: 'PlayCount', isplayed: 'Played', isfavoriteorliked: 'IsFavorite' }[name];
         const aggregate = ['isplayed', 'isfavoriteorliked'].includes(name) ? 'bool_or' : 'max';

@@ -10,6 +10,7 @@ import { bindUserViewPresets } from './user-view-binding.js';
 import { enumName, generalCommands, mediaTypes, itemKinds } from '../sessions/binding.js';
 import { AUTHENTICATION_PROVIDER, PASSWORD_RESET_PROVIDER } from '../users/native.js';
 import { itemFields, itemImageTypes } from '../library/dto.js';
+import { parseQuery } from '../library/query.js';
 import { embyTextResponse } from './client-protocol.js';
 
 const itemSortNames = ['Default', 'AiredEpisodeOrder', 'Album', 'AlbumArtist', 'Artist', 'DateCreated',
@@ -84,7 +85,7 @@ export function registerDomainRoutes(add, { configuration, authentication, users
     if (id && id !== context.auth.UserId && !context.auth.IsAdministrator) throw httpError(403, 'Forbidden');
     return id && !/^0{32}$/.test(id) ? await users.getUser(id) : null;
   }
-  const controllerDtoOptions = context => {
+  const controllerDtoOptions = (context, { userData = true } = {}) => {
     const enableImageTypes = commaEnums(context, 'enableImageTypes', itemImageTypes).map(String);
     const requestedFields = commaEnums(context, 'fields', controllerItemFields).filter(value => typeof value === 'string');
     return {
@@ -92,11 +93,11 @@ export function registerDomainRoutes(add, { configuration, authentication, users
       enableimages: boolean(context, 'enableImages'),
       imagetypelimit: integer(context, 'imageTypeLimit'),
       enableimagetypes: enableImageTypes.length ? enableImageTypes : undefined,
-      enableuserdata: boolean(context, 'enableUserData'),
+      enableuserdata: userData ? boolean(context, 'enableUserData') : false,
     };
   };
-  const requireSupportedDtoFields = (options, controller = 'Shows') => {
-    const supported = new Set(itemFields.map(value => value.toLowerCase()));
+  const requireSupportedDtoFields = (options, controller = 'Shows', additionalFields = []) => {
+    const supported = new Set([...itemFields, ...additionalFields].map(value => value.toLowerCase()));
     const missing = options.fields.find(value => !supported.has(value.toLowerCase()));
     if (missing) throw httpError(501, `${controller} item field '${missing}' is not implemented.`);
   };
@@ -339,6 +340,94 @@ export function registerDomainRoutes(add, { configuration, authentication, users
     genreName: requireMember(context.params, 'name'),
   }));
   add('GET', ['/Artists/InstantMix', '/MusicGenres/InstantMix'], context => instantMix(context, { queryId: true }));
+  add('GET', '/Items/Filters', async context => {
+    const input = {
+      parentId: guid(context, 'parentId'),
+      includeItemTypes: commaEnums(context, 'includeItemTypes', itemKinds).map(String),
+      mediaTypes: commaEnums(context, 'mediaTypes', mediaTypes).map(String),
+    };
+    return library.queryItemFilters(input, { user: await optionalRequestUser(context), legacy: true });
+  });
+  add('GET', '/Items/Filters2', async context => {
+    const input = {
+      parentId: guid(context, 'parentId'),
+      includeItemTypes: commaEnums(context, 'includeItemTypes', itemKinds).map(String),
+      recursive: boolean(context, 'recursive'),
+    };
+    for (const name of ['isAiring', 'isMovie', 'isSports', 'isKids', 'isNews', 'isSeries']) {
+      input[name] = boolean(context, name);
+    }
+    return library.queryItemFilters(input, { user: await optionalRequestUser(context) });
+  });
+  add('GET', '/Studios', async context => {
+    const input = {
+      ...controllerDtoOptions(context),
+      parentId: guid(context, 'parentId'),
+      startIndex: integer(context, 'startIndex'), limit: integer(context, 'limit'),
+      includeItemTypes: commaEnums(context, 'includeItemTypes', itemKinds).map(String),
+      excludeItemTypes: commaEnums(context, 'excludeItemTypes', itemKinds).map(String),
+      isFavorite: boolean(context, 'isFavorite'), searchTerm: query(context, 'searchTerm'),
+      nameStartsWith: query(context, 'nameStartsWith'),
+      nameStartsWithOrGreater: query(context, 'nameStartsWithOrGreater'), nameLessThan: query(context, 'nameLessThan'),
+      enableTotalRecordCount: boolean(context, 'enableTotalRecordCount', true),
+    };
+    if (input.includeItemTypes.length && !input.fields.includes('ItemCounts')) input.fields.push('ItemCounts');
+    const user = await optionalRequestUser(context);
+    requireSupportedDtoFields(input, 'Studios', ['ItemCounts']);
+    return library.queryNamedItems('Studio', input, { user });
+  });
+  add('GET', '/Studios/{name}', async context => library.getStudioDto(context.params.name,
+    { user: await optionalRequestUser(context) }));
+  const namedList = async (context, kind, { artist = false, albumArtists = false, autoMusicGenre = false } = {}) => {
+    const input = {
+      ...controllerDtoOptions(context, { userData: artist }),
+      parentId: guid(context, 'parentId'), startIndex: integer(context, 'startIndex'), limit: integer(context, 'limit'),
+      includeItemTypes: commaEnums(context, 'includeItemTypes', itemKinds).map(String),
+      excludeItemTypes: commaEnums(context, 'excludeItemTypes', itemKinds).map(String),
+      isFavorite: boolean(context, 'isFavorite'), searchTerm: query(context, 'searchTerm'),
+      nameStartsWith: query(context, 'nameStartsWith'), nameStartsWithOrGreater: query(context, 'nameStartsWithOrGreater'),
+      nameLessThan: query(context, 'nameLessThan'), enableTotalRecordCount: boolean(context, 'enableTotalRecordCount', true),
+    };
+    const allowed = new Set(['sortby', 'sortorder', ...(artist ? ['mincommunityrating', 'genres', 'genreids',
+      'officialratings', 'tags', 'person', 'personids', 'persontypes', 'studios', 'studioids'] : [])]);
+    try {
+      input.namedQuery = parseQuery(new URLSearchParams([...context.query].filter(([key]) => allowed.has(key.toLowerCase()))),
+        { allowNegativePaging: true });
+      if (artist) {
+        const filterNames = ['None', 'IsFolder', 'IsNotFolder', 'IsUnplayed', 'IsPlayed', 'IsFavorite', 'Unused',
+          'IsResumable', 'Likes', 'Dislikes', 'IsFavoriteOrLikes'];
+        const filters = commaEnums(context, 'filters', filterNames).map(String)
+          .filter(name => !['None', 'Unused'].includes(name) && filterNames.includes(name));
+        Object.assign(input.namedQuery, parseQuery({ filters }, { allowNegativePaging: true }));
+        input.namedQuery.mediatypes = commaEnums(context, 'mediaTypes', mediaTypes).map(String);
+        const values = [...context.query].filter(([key]) => key.toLowerCase() === 'years').map(([, value]) => value);
+        input.namedQuery.years = (values.length > 1 ? values : values[0]?.split(',').filter(Boolean) ?? []).map(value => {
+          try {
+            const year = integerValue(value, 'years');
+            if (year !== undefined) return year;
+          } catch { /* Int32Converter wraps invalid values outside the binder's FormatException catch. */ }
+          throw httpError(400, 'Error processing request.');
+        });
+      }
+    } catch (error) {
+      if (error instanceof BindingError) throw error;
+      if (error.status === 400) throw httpError(400, 'Error processing request.');
+      throw error;
+    }
+    if (input.includeItemTypes.length && !input.fields.includes('ItemCounts')) input.fields.push('ItemCounts');
+    const user = await optionalRequestUser(context);
+    requireSupportedDtoFields(input, 'Named items', ['ItemCounts']);
+    return library.queryNamedItems(kind, input, { user, autoMusicGenre,
+      ...(artist ? { itemValueTypes: albumArtists ? [1] : [0] } : {}) });
+  };
+  add('GET', '/Genres', context => namedList(context, 'Genre', { autoMusicGenre: true }));
+  add('GET', '/MusicGenres', context => namedList(context, 'MusicGenre'));
+  add('GET', '/Artists', context => namedList(context, 'MusicArtist', { artist: true }));
+  add('GET', '/Artists/AlbumArtists', context => namedList(context, 'MusicArtist', { artist: true, albumArtists: true }));
+  for (const [route, kind] of [['Genres', 'Genre'], ['MusicGenres', 'MusicGenre'], ['Artists', 'MusicArtist']]) {
+    add('GET', `/${route}/{name}`, async context => await library.getNamedItemDto(kind, context.params.name,
+      { user: await optionalRequestUser(context) }) ?? notFound());
+  }
   add('GET', ['/Items/Latest', '/Users/{userId}/Items/Latest'], async context => {
     const input = {
       ...controllerDtoOptions(context),
@@ -374,7 +463,8 @@ export function registerDomainRoutes(add, { configuration, authentication, users
   });
   add('GET', ['/Items/{itemId}', '/Users/{userId}/Items/{itemId}'], async context => {
     try {
-      const itemId = guid(context, 'itemId'), user = await requestUser(context);
+      const itemId = guid(context, 'itemId'), user = await requestUser(context, { required: false });
+      if (!user) throw httpError(400, 'Error processing request.');
       return /^0{32}$/.test(itemId) ? await library.getRoot({ user }) : await library.getItem(itemId, { user });
     } catch (error) { if (error.status === 404) return notFound(); throw error; }
   });

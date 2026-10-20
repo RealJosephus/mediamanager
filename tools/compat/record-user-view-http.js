@@ -40,6 +40,33 @@ const scenarios = {
     libraryTypeMarkers: true,
     menuLifecycle: false,
   },
+  'studios-http': {
+    fixture: 'tests/library/fixtures/studios-http/input.json',
+    expectedCases: 44,
+    libraryTypeMarkers: true,
+    menuLifecycle: false,
+  },
+  'item-filters-http': {
+    fixture: 'tests/library/fixtures/item-filters-http/input.json',
+    expectedCases: 81,
+    responseFacets: true,
+    libraryTypeMarkers: true,
+    menuLifecycle: false,
+  },
+  'named-items-http': {
+    fixture: 'tests/library/fixtures/named-items-http/input.json',
+    expectedCases: 153,
+    namedMetadataPaths: true,
+    libraryTypeMarkers: true,
+    menuLifecycle: false,
+  },
+  'dto-item-counts-http': {
+    fixture: 'tests/library/fixtures/dto-item-counts-http/input.json',
+    expectedCases: 114,
+    namedMetadataPaths: true,
+    libraryTypeMarkers: true,
+    menuLifecycle: false,
+  },
 };
 
 export async function recordUserViewHttp(scenarioName, outputArgument, portArgument) {
@@ -114,8 +141,14 @@ const nativeTypes = {
   CollectionFolder: 'MediaBrowser.Controller.Entities.CollectionFolder',
   Episode: 'MediaBrowser.Controller.Entities.TV.Episode',
   Folder: 'MediaBrowser.Controller.Entities.Folder',
+  Genre: 'MediaBrowser.Controller.Entities.Genre',
   Movie: 'MediaBrowser.Controller.Entities.Movies.Movie',
   MusicAlbum: 'MediaBrowser.Controller.Entities.Audio.MusicAlbum',
+  MusicArtist: 'MediaBrowser.Controller.Entities.Audio.MusicArtist',
+  MusicGenre: 'MediaBrowser.Controller.Entities.Audio.MusicGenre',
+  Person: 'MediaBrowser.Controller.Entities.Person',
+  Year: 'MediaBrowser.Controller.Entities.Year',
+  Studio: 'MediaBrowser.Controller.Entities.Studio',
   PlaylistsFolder: 'Emby.Server.Implementations.Playlists.PlaylistsFolder',
   Season: 'MediaBrowser.Controller.Entities.TV.Season',
   Series: 'MediaBrowser.Controller.Entities.TV.Series',
@@ -127,8 +160,12 @@ const json = value => JSON.stringify(value, (_key, item) => typeof item === 'big
 const stable = value => JSON.stringify(value, (_key, item) => typeof item === 'bigint' ? item.toString() : item);
 const delay = milliseconds => new Promise(resolve => setTimeout(resolve, milliseconds));
 const quote = name => `"${String(name).replaceAll('"', '""')}"`;
+let seedClock;
 
 function itemPath(item) {
+  if (item.pathKind === 'named') return path.join(referenceRoot, 'data/metadata',
+    item.type === 'MusicArtist' ? 'artists' : item.type, item.metadataFolder ?? item.name);
+  if (item.pathKind === 'studio') return path.join(referenceRoot, 'data/metadata/Studio', item.name);
   if (paths[item.pathKind]) return paths[item.pathKind];
   if (item.pathKind === 'view') return path.join(referenceRoot, 'data/metadata/views', idKey(item.id));
   if (item.pathKind === 'noPath') return null;
@@ -244,7 +281,7 @@ function databaseSnapshot() {
 
 function upsertBaseItem(database, template, item) {
   const existing = database.prepare('SELECT * FROM "BaseItems" WHERE "Id" = ?').get(upperId(item.id));
-  const isFolder = !['Movie', 'Audio', 'AudioBook', 'Book', 'Episode'].includes(item.type);
+  const isFolder = !['Movie', 'Audio', 'AudioBook', 'Book', 'Episode', 'Studio', 'Genre', 'MusicGenre', 'Person', 'Year'].includes(item.type);
   const row = {
     ...(existing ?? template),
     Id: upperId(item.id),
@@ -252,7 +289,7 @@ function upsertBaseItem(database, template, item) {
     ParentId: item.parentId == null ? null : upperId(item.parentId),
     TopParentId: item.topParentId == null ? null : upperId(item.topParentId),
     Name: item.name,
-    CleanName: item.cleanName ?? item.name.toLowerCase(),
+    CleanName: Object.hasOwn(item, 'cleanName') ? item.cleanName : item.name?.toLowerCase() ?? null,
     SortName: item.sortName,
     Path: itemPath(item),
     IsFolder: isFolder ? 1 : 0,
@@ -280,9 +317,15 @@ function upsertBaseItem(database, template, item) {
     UnratedType: item.type === 'Movie' ? 'Movie'
       : ['Series', 'Season', 'Episode'].includes(item.type) ? 'Series'
         : ['Audio', 'AudioBook'].includes(item.type) ? 'Music' : item.type === 'Book' ? 'Book' : 'Other',
-    PresentationUniqueKey: item.presentationUniqueKey ?? idKey(item.id),
+    PresentationUniqueKey: ['studios-http', 'item-filters-http', 'named-items-http', 'dto-item-counts-http'].includes(scenarioName) && Object.hasOwn(item, 'presentationUniqueKey')
+      ? item.presentationUniqueKey : item.presentationUniqueKey ?? idKey(item.id),
     PremiereDate: item.premiereDate ?? null,
     ProductionYear: item.productionYear ?? null,
+    ...(Object.hasOwn(item, 'dateLastRefreshed') ? {
+      DateLastRefreshed: item.dateLastRefreshed === '$seed-clock' ? seedClock : item.dateLastRefreshed,
+    } : {}),
+    ...(Object.hasOwn(item, 'startDate') ? { StartDate: item.startDate } : {}),
+    ...(Object.hasOwn(item, 'endDate') ? { EndDate: item.endDate } : {}),
     DateCreated: item.dateCreated ?? '2026-09-29 12:00:00',
     DateModified: '2026-09-29 12:00:00',
     DateLastSaved: '2026-09-29 12:00:00',
@@ -300,6 +343,9 @@ function upsertBaseItem(database, template, item) {
 }
 
 function seedDatabase() {
+  if (fixture.items.some(item => item.dateLastRefreshed === '$seed-clock')) {
+    seedClock = new Date().toISOString().replace('T', ' ').replace('Z', '');
+  }
   const database = new DatabaseSync(databasePath);
   const templateDatabase = new DatabaseSync(bundledSourceDatabase, { readOnly: true });
   database.exec('PRAGMA busy_timeout=5000');
@@ -373,6 +419,16 @@ function seedDatabase() {
         database.prepare('INSERT INTO "ItemValuesMap" ("ItemId", "ItemValueId") VALUES (?, ?)')
           .run(upperId(itemByKey.get(link.itemKey).id), upperId(valueByKey.get(link.valueKey).id));
       }
+      const personByKey = new Map((fixture.people ?? []).map(person => [person.key, person]));
+      for (const person of fixture.people ?? []) {
+        database.prepare('INSERT INTO "Peoples" ("Id", "Name", "PersonType") VALUES (?, ?, ?)')
+          .run(upperId(person.id), person.name, person.personType ?? null);
+      }
+      for (const [index, link] of (fixture.peopleLinks ?? []).entries()) {
+        database.prepare('INSERT INTO "PeopleBaseItemMap" ("ItemId", "PeopleId", "Role", "ListOrder", "SortOrder") VALUES (?, ?, ?, ?, ?)')
+          .run(upperId(itemByKey.get(link.itemKey).id), upperId(personByKey.get(link.personKey).id),
+            link.role ?? '', link.listOrder ?? index, link.sortOrder ?? null);
+      }
       for (const stream of fixture.mediaStreams ?? []) {
         const row = Object.fromEntries(tableDefinition('MediaStreamInfos').columns.map(column => [column.name,
           column.clrType.replace('?', '') === 'bool' ? 0 : null]));
@@ -394,7 +450,8 @@ function seedDatabase() {
           "LastPlayedDate", "Likes", "PlayCount", "PlaybackPositionTicks", "Played", "Rating", "RetentionDate", "SubtitleStreamIndex")
           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`).run(
           upperId(item.id), upperId(fixture.userId), item.id, null, data.isFavorite ? 1 : 0,
-          data.lastPlayedDate, null, data.played ? 1 : 0, Number(data.positionTicks), data.played ? 1 : 0, null, null, null);
+          data.lastPlayedDate, data.likes == null ? null : data.likes ? 1 : 0,
+          data.played ? 1 : 0, Number(data.positionTicks), data.played ? 1 : 0, null, null, null);
       }
       database.exec('COMMIT');
     } catch (error) {
@@ -479,6 +536,9 @@ async function prepareReference() {
       await writeFile(path.join(itemPath(item), `${type}.collection`), '', { flag: 'wx' });
     }
   }
+  if (scenario.namedMetadataPaths) for (const item of fixture.items.filter(item => item.pathKind === 'named')) {
+    await mkdir(itemPath(item), { recursive: true });
+  }
   seedDatabase();
   const seededDatabase = new DatabaseSync(databasePath, { readOnly: true });
   let seededUserRoot;
@@ -501,7 +561,7 @@ async function prepareReference() {
   };
   assert.equal(copyBindings.recorderSha256, inputHashes.recorderSha256);
   assert.equal(copyBindings.fixtureSha256, inputHashes.fixtureSha256);
-  const result = { ...current.preparation, copyBindings, bindings,
+  const result = { ...current.preparation, copyBindings, bindings, ...(seedClock ? { seedClock } : {}),
     userRootDiscovery: { route: '/Items/Root', response: rootResponse, process: discoveryOutcome } };
   await writeFile(path.join(runRoot, 'reference-preparation.json'), json(result), { flag: 'wx' });
   return result;
@@ -547,6 +607,10 @@ async function stopReference(instance, token) {
     pidGone: result.pidGone, portAvailable: result.portAvailable };
 }
 function routeFor(endpoint, testCase, userId) {
+  if (testCase.action === 'dto-detail') return `${endpoint === 'legacy' ? '/Users/' + userId : ''}/Items/${itemByKey.get(testCase.detailKey).id}?${testCase.query.replaceAll(fixture.userId, userId)}`;
+  if (testCase.action === 'named-list' || testCase.action === 'named-detail') return `/${testCase.namedRoute}${testCase.action === 'named-detail' ? '/' + encodeURIComponent(testCase.itemName) : ''}?${testCase.query.replaceAll(fixture.userId, userId)}`;
+  if (['filters', 'filters2'].includes(testCase.action)) return `/Items/${testCase.action === 'filters' ? 'Filters' : 'Filters2'}?${testCase.query.replaceAll(fixture.userId, userId)}`;
+  if (testCase.action === 'studio-name') return `/Studios/${encodeURIComponent(testCase.studioName)}?${testCase.query}`;
   if (endpoint === 'detail') return `/Items/${itemByKey.get(testCase.detailKey).id}`;
   const common = [];
   const omitParentId = testCase.omitScope === true || testCase.omitParentId === true;
@@ -563,7 +627,7 @@ function routeFor(endpoint, testCase, userId) {
   common.push(`Fields=${encodeURIComponent(testCase.fields ?? 'SortName')}`, 'EnableImages=false',
     `EnableUserData=${testCase.enableUserData === true ? 'true' : 'false'}`,
     testCase.query.replaceAll(fixture.userId, userId));
-  const prefix = (endpoint === 'items' ? '/Items' : `/Users/${userId}/Items`)
+  const prefix = (testCase.action === 'studios' ? '/Studios' : endpoint === 'items' ? '/Items' : `/Users/${userId}/Items`)
     + (testCase.action === 'latest' ? '/Latest' : '');
   return `${prefix}?${common.join('&')}`;
 }
@@ -591,6 +655,9 @@ function expectedSetupRecords() {
     kind: 'server-configuration',
     values: { EnableGroupingMoviesIntoCollections: false, EnableGroupingShowsIntoCollections: false },
   }];
+  if (fixture.warmUserViews) for (const [field, kind] of [
+    ['configuration', 'warm-user-configuration'], ['policy', 'warm-policy'],
+  ]) expected.push({ kind, values: fixture.warmUserViews[field] });
   for (const testCase of fixture.cases) {
     if (testCase.serverConfiguration) expected.push({
       kind: 'case-server-configuration', name: testCase.name, values: testCase.serverConfiguration,
@@ -632,7 +699,19 @@ function responseContractFailures(records) {
     }
     if (expectedStatus === 200) {
       const body = response.bodyJson;
-      if (scenario.responseArray) {
+      if (scenario.responseFacets) {
+        const fields = testCase.action === 'filters' ? ['Genres', 'Tags', 'OfficialRatings', 'Years']
+          : ['Genres', 'Tags', 'AudioLanguages', 'SubtitleLanguages'];
+        if (response.contentType !== 'application/json; charset=utf-8' || !body
+          || stable(Object.keys(body).sort()) !== stable(fields.sort())
+          || fields.some(field => !Array.isArray(body[field]))) failures.push(`${label} facet JSON shape is invalid`);
+      } else if (testCase.action === 'named-detail' || testCase.action === 'dto-detail') {
+        if (response.contentType !== 'application/json; charset=utf-8' || !body
+          || typeof body.Id !== 'string' || body.Type !== testCase.itemType) failures.push(`${label} named detail JSON shape is invalid`);
+      } else if (testCase.action === 'studio-name') {
+        if (response.contentType !== 'application/json; charset=utf-8' || !body
+          || typeof body.Id !== 'string' || body.Type !== 'Studio') failures.push(`${label} studio JSON shape is invalid`);
+      } else if (scenario.responseArray) {
         if (response.contentType !== 'application/json; charset=utf-8' || !Array.isArray(body)
           || body.some(item => !item || typeof item.Id !== 'string' || typeof item.Type !== 'string')) {
           failures.push(`${label} successful array JSON shape is invalid`);
@@ -640,16 +719,21 @@ function responseContractFailures(records) {
       } else if (response.contentType !== 'application/json; charset=utf-8'
         || !body || typeof body !== 'object' || Array.isArray(body)
         || stable(Object.keys(body).sort()) !== stable(['Items', 'StartIndex', 'TotalRecordCount'].sort())
-        || !Array.isArray(body.Items) || !Number.isInteger(body.StartIndex) || body.StartIndex < 0
+        || !Array.isArray(body.Items) || !Number.isInteger(body.StartIndex)
+        || body.StartIndex < 0 && !['studios-http', 'named-items-http'].includes(scenarioName)
         || !Number.isInteger(body.TotalRecordCount) || body.TotalRecordCount < 0) {
         failures.push(`${label} successful list JSON shape is invalid`);
+      }
+    } else if (expectedStatus === 404) {
+      if (response.contentType !== 'application/json; charset=utf-8' || response.bodyJson?.status !== 404) {
+        failures.push(`${label} not-found JSON shape is invalid`);
       }
     } else if (expectedStatus === 401) {
       if (response.contentType !== 'application/json; charset=utf-8'
         || typeof response.bodyJson !== 'string' || response.bodyJson.length === 0) {
         failures.push(`${label} authorization error JSON shape is invalid`);
       }
-    } else if (scenario.responseArray && expectedStatus === 400 && testCase.bindingError) {
+    } else if (expectedStatus === 400 && testCase.bindingError) {
       if (response.contentType !== 'application/json; charset=utf-8'
         || response.bodyJson?.status !== 400 || !response.bodyJson.errors) {
         failures.push(`${label} native binding-error shape is invalid`);
@@ -784,6 +868,24 @@ try {
   assert.equal(configure.status, 204, configure.bodyText);
   setupRecords.push({ kind: 'server-configuration', status: configure.status,
     values: { EnableGroupingMoviesIntoCollections: false, EnableGroupingShowsIntoCollections: false } });
+  if (fixture.warmUserViews) {
+    for (const [field, suffix, kind] of [['configuration', 'Configuration', 'warm-user-configuration'],
+      ['policy', 'Policy', 'warm-policy']]) {
+      const values = fixture.warmUserViews[field];
+      const update = await request('/Users/' + userId + '/' + suffix, {
+        method: 'POST', token: apiKey, body: { ...login.bodyJson[suffix], ...values },
+      });
+      assert.equal(update.status, 204, update.bodyText);
+      setupRecords.push({ kind, values, status: update.status });
+    }
+    // GetUserViews creates persistent grouped views on its first use. Keep
+    // that declared setup observation, then assert steady-state facet reads.
+    const route = '/UserViews?UserId=' + userId + '&IncludeHidden=true';
+    const response = await request(route, { token: userToken });
+    assert.equal(response.status, 200, response.bodyText);
+    assert.ok(Array.isArray(response.bodyJson?.Items));
+    preparation.warmUserViews = { route, response };
+  }
   stages.before = { database: databaseSnapshot(), filesystem: await filesystemSnapshot() };
 
   for (const testCase of fixture.cases) {

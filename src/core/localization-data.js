@@ -128,6 +128,7 @@ async function createLocalizationData() {
       .map(([name, score]) => [name, [score.score, score.subScore]]));
   }
   const resolverLanguages = {};
+  const languageAliases = [], languageDisplayNames = [];
   for (const culture of cultures) {
     const aliases = [culture.DisplayName, culture.Name,
       ...culture.ThreeLetterISOLanguageNames, culture.TwoLetterISOLanguageName];
@@ -136,6 +137,8 @@ async function createLocalizationData() {
       // findLanguage returns the first culture in the frozen resource order.
       if (!Object.hasOwn(resolverLanguages, key)) {
         resolverLanguages[key] = ordinalIgnoreCaseKey(culture.TwoLetterISOLanguageName);
+        languageAliases.push(alias);
+        languageDisplayNames.push(culture.DisplayName);
       }
     }
   }
@@ -143,6 +146,9 @@ async function createLocalizationData() {
     systems: Object.freeze(resolverSystems),
     order: Object.freeze(resolverOrder),
     languages: Object.freeze(resolverLanguages),
+  });
+  const languageResolverData = Object.freeze({
+    aliases: Object.freeze(languageAliases), displayNames: Object.freeze(languageDisplayNames),
   });
   const resolver = country => {
     const key = country == null ? country : ordinalIgnoreCaseKey(country);
@@ -157,6 +163,9 @@ async function createLocalizationData() {
         || ordinalIgnoreCaseEquals(language, culture.Name)
         || culture.ThreeLetterISOLanguageNames.some(name => ordinalIgnoreCaseEquals(language, name))
         || ordinalIgnoreCaseEquals(language, culture.TwoLetterISOLanguageName)) ?? null;
+    },
+    languageResolverData() {
+      return languageResolverData;
     },
     cultures(culture = 'en-US') {
       const unique = new Map();

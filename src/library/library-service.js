@@ -43,6 +43,10 @@ import { NativeItemJsonError } from './native-item-data.js';
 import { postgresUpcomingScope, queryPostgresSeriesSeasonPage, queryPostgresUpcomingEpisodePage } from './postgres-shows-query.js';
 import { queryPostgresNextUpPage } from './postgres-next-up-query.js';
 import { queryPostgresLatestItems } from './postgres-latest-items-query.js';
+import { queryPostgresNamedItemPage, queryPostgresNamedItemCounts, queryPostgresNamedSlug } from './postgres-named-items-query.js';
+import { dtoItemCountKinds, queryPostgresDtoItemCounts } from './postgres-dto-item-counts-query.js';
+import { queryPostgresItemFilters } from './postgres-item-filters-query.js';
+import { loadLocalizationData } from '../core/localization-data.js';
 import { queryPostgresExternalViewPresence, queryPostgresUserViewChildPresence } from './postgres-user-views-query.js';
 import { queryPostgresBuiltInSearch, resolvePostgresSearchCollation, releasePostgresSearchCollation } from './postgres-search-provider.js';
 import { matchesPostgresUserViewGenre, queryPostgresUserViewGenrePage } from './postgres-user-view-genre-query.js';
@@ -316,6 +320,11 @@ export class LibraryService extends EventEmitter {
     state.now = dateText(this.clock().toISOString());
     state.visible = item => visibleItem(item, user, state, this.options);
     state.getChildCount = item => this.getDtoChildCount(item, state, user);
+    state.getItemCounts = async item => {
+      if (!Object.hasOwn(dtoItemCountKinds, item.Type)) return undefined;
+      await this.#prefetchItemCounts([item], state, user);
+      return state.dtoItemCounts.get(idKey(item.Id));
+    };
     state.newUserView = item => this.#userViews?.createdInThisInstance(item.Id) === true;
     const scopedIds = state.items
       .filter(item => item !== state.transientUserRoot).map(item => item.Id);
@@ -531,8 +540,9 @@ export class LibraryService extends EventEmitter {
     } catch(error) { await state.dispose({session:db}); throw error; }
   }
 
-  async #loadPostgresItemState(db, ids, user, { includeUserData = true } = {}) {
-    const graphRows = await loadPostgresItemGraph(db, ids);
+  async #loadPostgresItemState(db, ids, user, { includeUserData = true, navigationRows = [] } = {}) {
+    const loaded = await loadPostgresItemGraph(db, ids);
+    const graphRows = [...new Map([...navigationRows, ...loaded].map(row => [idKey(row.Id), row])).values()];
     const requestedIds = new Set(ids.map(idKey));
     const itemRows = graphRows.filter(row => requestedIds.has(idKey(row.Id)));
     const state = await this.load(db, user, { includeUserData, baseRows: graphRows });
@@ -640,11 +650,23 @@ export class LibraryService extends EventEmitter {
     };
   }
 
+  async #prefetchItemCounts(items, state, user) {
+    const missing = items.filter(item => Object.hasOwn(dtoItemCountKinds, item.Type)
+      && !state.dtoItemCounts?.has(idKey(item.Id)));
+    if (!missing.length) return;
+    state.dtoItemCountContext ??= this.#namedQueryContext(state.db, user);
+    const context = await state.dtoItemCountContext;
+    const counts = await queryPostgresDtoItemCounts(state.db, missing, { ...context, userId: user?.Id });
+    state.dtoItemCounts ??= new Map();
+    for (const [id, value] of counts) state.dtoItemCounts.set(id, value);
+  }
+
   async #prefetchPostgresDtos(items, state, user, selected) {
     // A latest-media page may project the same item more than once. Prefetch
     // caches by identity; repeated requests must not multiply its child counts.
     items = [...new Map(items.map(item => [idKey(item.Id), item])).values()];
     await prefetchPostgresDtoRelations(items, state, user, selected, this.options);
+    if (selected.fields.has('itemcounts')) await this.#prefetchItemCounts(items, state, user);
     if (!user) return;
     const implicitCountItems = items.filter(item => item.IsFolder
       && ['MusicAlbum', 'Season', 'Playlist'].includes(item.Type)
@@ -833,6 +855,178 @@ export class LibraryService extends EventEmitter {
       const dtos = [];
       for (const item of projectionItems) dtos.push(await projectItem(item, state, user, options, this.options));
       return { Items: dtos, TotalRecordCount: dtos.length, StartIndex: startIndex };
+    });
+  }
+
+  async #namedQueryContext(db, user, parentId) {
+    const requested = parentId === undefined ? [] : await loadPostgresRowsByIds(db, [parentId]);
+    const navigation = await loadPostgresPageGraph(db, requested, await loadPostgresNavigationRows(db, parentId));
+    const state = await this.load(db, user, { includeUserData: false, baseRows: navigation });
+    const rootFolders = this.rootChildren(state, user);
+    const topIds = item => item.Type === 'PlaylistsFolder' ? [item.Id]
+      : queryTopParentIds(item, state, user, rootFolders);
+    let scope = {};
+    let topParentIds = [];
+    if (parentId !== undefined) {
+      const parent = state.byId.get(idKey(parentId));
+      if (!nonemptyId(parentId) || !parent) throw libraryError(400, 'Error processing request.');
+      if (!parent.IsFolder) scope = { ids: [parent.Id] };
+      else if (['CollectionFolder', 'UserView', 'PlaylistsFolder', 'BasePluginFolder'].includes(parent.Type)) {
+        topParentIds = topIds(parent);
+        scope = topParentIds.length ? { topParentIds } : { ancestorId: parent.Type === 'UserView'
+          ? nonemptyId(parent.DisplayParentId) ? parent.DisplayParentId : nonemptyId(parent.ParentId) ? parent.ParentId : parent.Id
+          : parent.Id };
+      } else scope = { ancestorId: parent.Id };
+    } else if (user) {
+      const views = await this.userViews.views(state, user, { includeHidden: true });
+      topParentIds = [...new Map(views.flatMap(topIds).map(id => [idKey(id), id])).values()];
+      scope = { topParentIds };
+    }
+    const { topParentIds: _topParentIds, libraryTopParentIds: _libraryTopParentIds,
+      ...visibility } = this.#postgresVisibility(state, user) ?? {};
+    const parent = parentId === undefined ? null : state.byId.get(idKey(parentId));
+    return { scope, topParentIds, visibility: user ? visibility : undefined, navigation,
+      musicGenreParent: parent?.Type === 'CollectionFolder' && ['music', 'musicvideos'].includes(collectionType(parent)) };
+  }
+
+  async #filterQueryContext(db, user, input, legacy) {
+    const requested = input.parentId === undefined ? [] : await loadPostgresRowsByIds(db, [input.parentId]);
+    const navigation = await loadPostgresPageGraph(db, requested, await loadPostgresNavigationRows(db, input.parentId));
+    const state = await this.load(db, user, { includeUserData: false, baseRows: navigation });
+    let parent;
+    if (input.parentId !== undefined) {
+      if (!nonemptyId(input.parentId)) throw libraryError(400, 'Error processing request.');
+      parent = state.byId.get(idKey(input.parentId));
+      if (!parent && legacy) throw libraryError(400, 'Error processing request.');
+    } else if (legacy) {
+      parent = user ? state.byId.get(idKey(this.options.userRoot?.Id))
+        : state.items.find(item => item.Type === 'AggregateFolder');
+    }
+    if (legacy && !parent?.IsFolder) return { empty: true };
+    const rootFolders = this.rootChildren(state, user);
+    const topIds = item => queryTopParentIds(item, state, user, rootFolders);
+    let scope = {}, topParentIds = [];
+    if (parent) {
+      if (legacy || input.recursive !== false || ['UserView', 'CollectionFolder'].includes(parent.Type)) {
+        if (['UserView', 'CollectionFolder'].includes(parent.Type)) topParentIds = topIds(parent);
+        scope = topParentIds.length ? { topParentIds } : { ancestorId: parent.Id };
+      } else scope = { parentId: parent.Id };
+    } else if (user) {
+      const views = await this.userViews.views(state, user, { includeHidden: true });
+      topParentIds = [...new Map(views.flatMap(topIds).map(id => [idKey(id), id])).values()];
+      scope = { topParentIds };
+    }
+    const { topParentIds: _topParentIds, libraryTopParentIds: _libraryTopParentIds,
+      ...visibility } = this.#postgresVisibility(state, user) ?? {};
+    return { scope, topParentIds, visibility: user ? visibility : undefined };
+  }
+
+  async queryItemFilters(input = {}, { user = null, legacy = false } = {}) {
+    const types = input.includeItemTypes ?? [];
+    const bypassParent = types.length === 1 && ['Trailer', 'Program'].includes(types[0]);
+    if (legacy && bypassParent) return { Genres: [], Tags: [], OfficialRatings: [], Years: [] };
+    return this.#runWithStates(async db => {
+      const context = await this.#filterQueryContext(db, user,
+        bypassParent ? { ...input, parentId: undefined } : input, legacy);
+      if (context.empty) return { Genres: [], Tags: [], OfficialRatings: [], Years: [] };
+      const query = { includeitemtypes: types };
+      if (legacy) query.mediatypes = input.mediaTypes ?? [];
+      else for (const name of ['isAiring', 'isMovie', 'isSports', 'isKids', 'isNews', 'isSeries']) {
+        if (input[name] !== undefined) query[name.toLowerCase()] = input[name];
+      }
+      const streamQuery = { ...query };
+      if ((types.includes('Series') || types.includes('Season')) && !types.includes('Episode')) {
+        streamQuery.includeitemtypes = [...types, 'Episode'];
+      }
+      const facets = await queryPostgresItemFilters(db, { query, streamQuery, ...context, userId: user?.Id,
+        legacy, includeLanguages: types.some(type => ['Movie', 'Series', 'Season', 'Episode'].includes(type)),
+        languageResolver: loadLocalizationData().languageResolverData() });
+      if (legacy) return facets;
+      const kind = types.length === 1 && ['MusicAlbum', 'MusicVideo', 'MusicArtist', 'Audio'].includes(types[0])
+        ? 'MusicGenre' : 'Genre';
+      const genres = await queryPostgresNamedItemPage(db, { kind, mediaQuery: query, ...context, userId: user?.Id });
+      return { Genres: genres.rows.map(row => ({ Name: row.Name ?? '', Id: idKey(row.Id) })), ...facets };
+    });
+  }
+
+  async queryNamedItems(kind, input = {}, { user = null, autoMusicGenre = false, itemValueTypes } = {}) {
+    return this.#runWithStates(async db => {
+      const context = await this.#namedQueryContext(db, user, input.parentId);
+      if (autoMusicGenre && context.musicGenreParent) kind = 'MusicGenre';
+      const extra = { ...input.namedQuery };
+      if (extra.studios?.length) {
+        const ids = [];
+        for (const name of extra.studios) {
+          try { ids.push((await this.getStudio(name)).Id); } catch { /* A failed native selector is dropped. */ }
+        }
+        extra.studioids = ids;
+      }
+      const mediaQuery = { includeitemtypes: input.includeItemTypes ?? [], excludeitemtypes: input.excludeItemTypes ?? [],
+        mediatypes: extra.mediatypes ?? [] };
+      const nameQuery = {
+        ...Object.fromEntries(['tags', 'officialratings', 'genres', 'genreids', 'studioids', 'years', 'isplayed',
+          'isfavorite', 'likes', 'favoriteorlikes', 'sortby', 'sortorder'].filter(key => extra[key] !== undefined
+            && (user || !['isplayed', 'isfavorite', 'likes', 'favoriteorlikes'].includes(key))).map(key => [key, extra[key]])),
+        ...(user && input.isFavorite !== undefined ? { isfavorite: input.isFavorite } : {}),
+        ...(input.searchTerm ? { searchterm: input.searchTerm } : {}),
+        ...(input.nameStartsWith !== undefined ? { namestartswith: input.nameStartsWith } : {}),
+        ...(input.nameStartsWithOrGreater !== undefined ? { namestartswithorgreater: input.nameStartsWithOrGreater } : {}),
+        ...(input.nameLessThan !== undefined ? { namelessthan: input.nameLessThan } : {}),
+      };
+      if (extra.isfavorite !== undefined && user) nameQuery.isfavorite = extra.isfavorite;
+      const page = await queryPostgresNamedItemPage(db, { kind, mediaQuery, nameQuery, ...context, userId: user?.Id,
+        ...(itemValueTypes ? { itemValueTypes } : {}),
+        startIndex: input.startIndex ?? 0, limit: input.limit, enableTotalRecordCount: input.enableTotalRecordCount !== false });
+      const state = await this.load(db, user, { baseRows: await loadPostgresPageGraph(db, page.rows, context.navigation) });
+      // Named-query counts have their own scope and inheritance rules, so this
+      // controller projects them after the ordinary DTO fields.
+      const includeCounts = input.fields?.some(field => field.toLowerCase() === 'itemcounts');
+      const options = dtoOptions({ ...input,
+        fields: input.fields?.filter(field => field.toLowerCase() !== 'itemcounts') });
+      const items = page.rows.map(row => state.byId.get(idKey(row.Id))).filter(Boolean);
+      await this.#prefetchPostgresDtos(items, state, user, options);
+      const counts = includeCounts ? await queryPostgresNamedItemCounts(db, {
+        kind, ids: items.map(item => item.Id), query: { excludeitemtypes: mediaQuery.excludeitemtypes,
+          mediatypes: mediaQuery.mediatypes, ...(nameQuery.isplayed === undefined ? {} : { isplayed: nameQuery.isplayed }) },
+        ...context, userId: user?.Id,
+        ...(itemValueTypes ? { itemValueTypes } : {}),
+      }) : new Map();
+      const dtos = [];
+      for (const item of items) {
+        const dto = await projectItem(item, state, user, options, this.options);
+        if (counts.has(idKey(item.Id))) Object.assign(dto, counts.get(idKey(item.Id)));
+        dtos.push(dto);
+      }
+      return { Items: dtos, TotalRecordCount: page.total, StartIndex: page.startIndex };
+    });
+  }
+
+  async getStudioDto(name, { user = null } = {}) {
+    return this.getNamedItemDto('Studio', name, { user });
+  }
+
+  async getNamedItemDto(kind, name, { user = null } = {}) {
+    const factories = { Studio: 'getStudio', Genre: 'getGenre', MusicGenre: 'getMusicGenre', MusicArtist: 'getArtist' };
+    if (!Object.hasOwn(factories, kind)) throw new TypeError('Unsupported named item kind.');
+    let named;
+    if (['Genre', 'MusicGenre'].includes(kind) && name.includes('-')) {
+      const row = await this.#runWithStates(db => queryPostgresNamedSlug(db, kind, name));
+      if (row) named = mapRecord(row);
+      else if (kind === 'MusicGenre') return null;
+      else {
+        named = newNativeItemEntity('MediaBrowser.Controller.Entities.Genre');
+        named.LocationType = 'Virtual';
+      }
+    } else named = await this[factories[kind]](name);
+    return this.#runWithStates(async db => {
+      const context = await this.#namedQueryContext(db, user);
+      const state = await this.#loadPostgresItemState(db, nonemptyId(named.Id) ? [named.Id] : [], user,
+        { navigationRows: context.navigation });
+      const item = state.byId.get(idKey(named.Id)) ?? named;
+      if (!state.byId.has(idKey(item.Id))) { state.adoptItem(item); state.byId.set(idKey(item.Id), item); state.items.push(item); }
+      const options = dtoOptions({}, true);
+      await this.#prefetchPostgresDtos([item], state, user, options);
+      return projectItem(item, state, user, options, this.options);
     });
   }
 
@@ -1620,8 +1814,11 @@ export class LibraryService extends EventEmitter {
       }
     }
     const repositoryNeedsLibraryScope = isUserRoot || ['UserView', 'BoxSet'].includes(parent?.Type);
-    if (visibility && !searchProviderOrdering && repositoryQuery && !repositoryNeedsLibraryScope
-      && (!visibility.boxSetStandalone || parent?.Type === 'PlaylistsFolder')) {
+    if (visibility && !searchProviderOrdering && repositoryQuery
+      && (query.ids?.length || !repositoryNeedsLibraryScope
+        && (!visibility.boxSetStandalone || parent?.Type === 'PlaylistsFolder'))) {
+      // AddUserToQuery does not derive a library scope for explicit ItemIds.
+      // The repository still applies the user's rating and tag restrictions.
       const { topParentIds: _repositoryScope, ...directVisibility } = visibility;
       visibility = directVisibility;
     }

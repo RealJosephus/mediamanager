@@ -24,6 +24,7 @@ import { queryPostgresFolderStats } from '../../src/library/postgres-library-que
 import { queryPostgresNextUpPage } from '../../src/library/postgres-next-up-query.js';
 import { idKey } from '../../src/library/records.js';
 import { clrWhitespaceCharacters } from '../../src/metadata/whitespace.js';
+import { createPostgresTestDatabase } from './postgres-fixture.js';
 
 const database = {
   dialect: 'postgres',
@@ -756,6 +757,57 @@ test('real PostgreSQL repository parental-rating branches honor native HasParent
     ...query, hasparentalrating: false, minparentalrating: { score: 5 },
   });
   assert.deepEqual(ranged.rows.map(row => row.Id), ids, 'an explicit range takes precedence over Has=false');
+});
+
+test('real PostgreSQL played ordering derives folder state before counting and paging', {
+  skip: !process.env.MEDIAMANAGER_TEST_POSTGRES,
+}, async t => {
+  const postgres = await createPostgresTestDatabase(t, 'played_order');
+  const userId = '20df0000-0000-0000-0000-000000000001';
+  await postgres.insert('Users', { ...blank('Users'), Id: userId, Username: 'played-order-user' });
+  const ids = [1, 2, 3, 4].map(value => `20df0000-0000-0000-0001-${String(value).padStart(12, '0')}`);
+  for (const [index, id] of ids.entries()) {
+    await postgres.insert('BaseItems', item(id, index === 3 ? 'Movies.BoxSet' : 'TV.Series', {
+      IsFolder: true, Name: String(index), CleanName: String(index), SortName: String(index),
+    }));
+    // These stored flags deliberately contradict the descendants. Folder
+    // playback is derived even when an old imported folder row has UserData.
+    await postgres.insert('UserData', {
+      ...blank('UserData'), ItemId: id, UserId: userId, CustomDataKey: id, Played: index === 1,
+    });
+  }
+  const leaves = [[0, true], [1, true], [1, false], [3, true]];
+  for (const [index, [parent, played]] of leaves.entries()) {
+    const id = `20df0000-0000-0000-0002-${String(index).padStart(12, '0')}`;
+    await postgres.insert('BaseItems', item(id, parent === 3 ? 'Movies.Movie' : 'TV.Episode', {
+      ParentId: parent === 3 ? null : ids[parent], MediaType: 'Video',
+    }));
+    if (parent === 3) await postgres.insert('LinkedChildren', { ParentId: ids[parent], ChildId: id, ChildType: 0, SortOrder: 0 });
+    else await postgres.insert('AncestorIds', { ItemId: id, ParentItemId: ids[parent] });
+    if (played) await postgres.insert('UserData', {
+      ...blank('UserData'), ItemId: id, UserId: userId, CustomDataKey: id, Played: true,
+    });
+  }
+  const playedFirst = [ids[0], ids[2], ids[3], ids[1]], unplayedFirst = [ids[1], ids[0], ids[2], ids[3]];
+  for (const [sort, direction, expected] of [
+    ['IsPlayed', 'Ascending', unplayedFirst], ['IsPlayed', 'Descending', playedFirst],
+    ['IsUnplayed', 'Ascending', playedFirst], ['IsUnplayed', 'Descending', unplayedFirst],
+  ]) {
+    const actual = [];
+    for (const startindex of [0, 2]) {
+      const page = await queryPostgresItemPage(postgres, {
+        ids, sortby: [sort, 'Name'], sortorder: [direction, 'Ascending'], startindex, limit: 2,
+      }, { userId });
+      assert.equal(page.total, 4);
+      actual.push(...page.rows.map(row => row.Id));
+    }
+    assert.deepEqual(actual, expected, `${sort} ${direction}`);
+  }
+  for (const [isplayed, expected] of [[true, ids.filter((_, index) => index !== 1)], [false, [ids[1]]]]) {
+    const page = await queryPostgresItemPage(postgres, { ids, isplayed, sortby: ['Name'], limit: 4 }, { userId });
+    assert.equal(page.total, expected.length);
+    assert.deepEqual(page.rows.map(row => row.Id), expected);
+  }
 });
 
 test('real PostgreSQL version families unify D-format ids with N-format primary ids', {

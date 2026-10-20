@@ -19,7 +19,7 @@ import { canDeleteItem } from './delete-permission.js';
 import { loadPostgresRowsByIds } from './postgres-library-query.js';
 
 export const itemFields = ['CanDelete', 'CanDownload', 'Chapters', 'Trickplay', 'ChildCount', 'CumulativeRunTimeTicks',
-  'CustomRating', 'DateCreated', 'DateLastMediaAdded', 'DisplayPreferencesId', 'Etag', 'ExternalUrls', 'Genres',
+  'CustomRating', 'DateCreated', 'DateLastMediaAdded', 'DisplayPreferencesId', 'Etag', 'ExternalUrls', 'Genres', 'ItemCounts',
   'MediaSourceCount', 'MediaSources', 'OriginalTitle', 'Overview', 'ParentId', 'Path', 'People', 'PlayAccess',
   'ProductionLocations', 'ProductionYear', 'ProviderIds', 'PrimaryImageAspectRatio', 'RecursiveItemCount', 'Settings',
   'SortName', 'SpecialEpisodeNumbers', 'Studios', 'Taglines', 'Tags', 'RemoteTrailers', 'MediaStreams',
@@ -608,6 +608,10 @@ export async function projectItem(item, state, user, selected, options) {
           ? undefined : item.DateLastMediaAdded ?? MIN_DATE);
       }
     }
+  }
+  if (has('ItemCounts')) {
+    const counts = state.dtoItemCounts?.get(idKey(item.Id)) ?? await state.getItemCounts?.(item);
+    if (counts) Object.assign(dto, counts);
   }
   withNativeFloats(dto, ['CriticRating', 'CommunityRating', 'NormalizationGain', 'AlbumNormalizationGain']);
   return withNativeNulls(dto, ['ChannelId', ...(has('ParentId') ? ['ParentId'] : []),
