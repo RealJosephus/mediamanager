@@ -78,10 +78,11 @@ export function requireMember(object, name) {
   return value;
 }
 
-export async function readBody(request, { allowForm = false, optional = false, bind, objectType } = {}) {
+export async function readBody(request, { allowForm = false, allowTextJson = false, optional = false, bind, objectType } = {}) {
   if (optional && !request.headers['transfer-encoding'] && !(Number(request.headers['content-length']) > 0)) return {};
   const type = (request.headers['content-type'] ?? '').split(';')[0].trim().toLowerCase();
-  if (type !== 'application/json' && !type.endsWith('+json') && !(allowForm && type === 'application/x-www-form-urlencoded')) throw unsupportedMediaType();
+  if (type !== 'application/json' && !type.endsWith('+json') && !(allowForm && type === 'application/x-www-form-urlencoded')
+    && !(allowTextJson && type === 'text/plain')) throw unsupportedMediaType();
   const chunks = [];
   let size = 0;
   for await (const chunk of request) {

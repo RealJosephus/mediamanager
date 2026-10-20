@@ -20,6 +20,12 @@ const schema = { definitions: { DisplayPreferencesDto: {
     SortOrder: enumRule('SortOrder'), ShowSidebar: boolean, Client: string }
 } } };
 const root = { type: 'object', reference: 'DisplayPreferencesDto', clrType: 'MediaBrowser.Model.Dto.DisplayPreferencesDto' };
+const settingsRoot = { type: 'dictionary', clrType: 'System.Collections.Generic.Dictionary`2[System.String,System.String]',
+  nullable: false, item: string };
+function bindUserSettings(body, source) {
+  if (body == null) throw new BindingError('', 'A non-empty request body is required.');
+  return bindJsonModel(body, { schema, root: settingsRoot, source });
+}
 function bindBody(body, source) {
   if (body == null) throw new BindingError('', 'A non-empty request body is required.');
   const result = bindJsonModel(body, { schema, root, source });
@@ -38,6 +44,16 @@ function bindQuery(query, params) {
 }
 export function registerDisplayPreferencesRoutes(add, { displayPreferences }) {
   if (!displayPreferences) return;
+  for (const [method, suffix] of [['GET', ''], ['POST', ''], ['POST', '/Partial']]) {
+    add(method, '/UserSettings/{userId}' + suffix, async context => {
+      const userId = context.queryInput;
+      if (userId !== context.auth.UserId && !context.auth.IsAdministrator) throw httpError(403, 'Forbidden');
+      if (method === 'GET') return displayPreferences.getUserSettings(userId);
+      await displayPreferences.updateUserSettings(userId, context.body, { partial: Boolean(suffix) });
+      return noContent();
+    }, { bindQuery: (_query, params) => guidValue(params.userId, 'userId'),
+      ...(method === 'POST' && { body: true, bindBody: bindUserSettings, bodyType: settingsRoot.clrType }) });
+  }
   for (const method of ['GET', 'POST']) add(method, '/DisplayPreferences/{displayPreferencesId}', async context => {
     const { userId, client } = context.queryInput;
     const target = userId && !/^0{32}$/u.test(userId) ? userId : context.auth.UserId ?? '00000000000000000000000000000000';

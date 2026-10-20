@@ -867,9 +867,9 @@ test('WebSocket authorization, cross-user control, subscription visibility and h
     });
     assert.equal(await responseCode(origin.replace('http', 'ws') + '/socket'), 403);
     assert.equal(await responseCode(origin.replace('http', 'ws') + '/socket?ApiKey=invalid'), 403);
-    assert.equal(await responseCode(origin.replace('http', 'ws') + `/socket?api_key=${first.AccessToken}`), 403);
-    const connected = async (token, language) => {
-      const ws = new WebSocket(origin.replace('http', 'ws') + `/socket?ApiKey=${token}`, { headers: { 'Accept-Language': language } });
+    assert.equal(await responseCode(origin.replace('http', 'ws') + '/socket?api_key=invalid'), 403);
+    const connected = async (token, language, tokenParameter = 'ApiKey') => {
+      const ws = new WebSocket(origin.replace('http', 'ws') + `/socket?${tokenParameter}=${token}`, { headers: { 'Accept-Language': language } });
       sockets.push(ws);
       const messages = [];
       ws.on('message', bytes => messages.push(parseLosslessJson(bytes.toString())));
@@ -879,7 +879,7 @@ test('WebSocket authorization, cross-user control, subscription visibility and h
       return { ws, messages };
     };
     const english = await connected(first.AccessToken, 'en-US');
-    const chinese = await connected(other.AccessToken, 'zh-CN');
+    const chinese = await connected(other.AccessToken, 'zh-CN', 'api_key');
     await delay(30);
     const observed = [];
     const getSessions = runtime.sessions.getSessions.bind(runtime.sessions);

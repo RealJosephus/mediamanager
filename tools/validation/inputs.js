@@ -9,6 +9,7 @@ import { nativeBuildInputs } from './native-build-inputs.js';
 import { nativeInstanceInputs } from './native-instance-inputs.js';
 import { currentNativeSqliteInputs } from './current-native-sqlite-inputs.js';
 import { jellyfinWebInputs } from './jellyfin-web-inputs.js';
+import { embyWebInputs } from './emby-web-inputs.js';
 import { browserInputs } from './browser-inputs.js';
 
 const isDigest = value => typeof value === 'string' && /^[a-f0-9]{64}$/iu.test(value);
@@ -478,7 +479,12 @@ export async function captureInputIdentity({ selected, dependencies, preflight, 
       add(input.filename, 'runtime:native-instance', true, [input.sha256]);
     }
   }
-  if (environment.MEDIAMANAGER_CI_WEB_CLIENTS === 'true') {
+  if (environment.MEDIAMANAGER_CI_EMBY_WEB === 'true' && closure.some(entry => entry.services?.includes('embyWeb'))) {
+    for (const input of (await embyWebInputs(environment)).inputs) {
+      add(input.filename, 'runtime:emby-web', true, [input.sha256]);
+    }
+  }
+  if (environment.MEDIAMANAGER_CI_WEB_CLIENTS === 'true' || environment.MEDIAMANAGER_CI_EMBY_WEB === 'true') {
     if (closure.some(entry => entry.services?.includes('jellyfinWeb'))) {
       for (const input of (await jellyfinWebInputs(environment)).inputs) {
         add(input.filename, 'runtime:jellyfin-web', true, [input.sha256]);

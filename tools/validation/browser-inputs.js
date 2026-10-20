@@ -11,7 +11,8 @@ const browserVersion = '156.0.8078.4';
 export async function browserInputs(environment = process.env) {
   const root = environment.PLAYWRIGHT_BROWSERS_PATH;
   const executable = environment.MEDIAMANAGER_BROWSER_EXECUTABLE;
-  if (environment.MEDIAMANAGER_CI_WEB_CLIENTS !== 'true' || !root || !path.isAbsolute(root)
+  if (environment.MEDIAMANAGER_CI_WEB_CLIENTS !== 'true' && environment.MEDIAMANAGER_CI_EMBY_WEB !== 'true'
+    || !root || !path.isAbsolute(root)
     || !executable || !path.isAbsolute(executable)) {
     throw new Error('Web acceptance requires explicit browser provisioning and absolute installation paths.');
   }

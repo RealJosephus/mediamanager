@@ -194,7 +194,9 @@ export async function createRuntime({ database, configuration, serverId, serverN
     onError
   }) : undefined;
   const authentication = new AuthenticationService({ store, users, sessions, serverId, serverName, serverVersion,
-    isLocalNetwork, enableLegacyAuthorization: configuration.EnableLegacyAuthorization ?? false });
+    // Both supported client protocols remain available independently of the
+    // source server's switch for its older authorization transports.
+    isLocalNetwork, enableLegacyAuthorization: true });
   Object.defineProperty(authentication, 'serverName', { get: () => serverFriendlyName(configuration, serverName) });
   const apiKeys = new ApiKeyService({ store });
   rollback.push(() => apiKeys.close());

@@ -1885,7 +1885,11 @@ export class LibraryService extends EventEmitter {
 
   async queryResumeItems(input = {}, { user, activeItemIds = [] } = {}) {
     if (!user) throw libraryError(400, 'userId is required');
-    const query = parseQuery(input);
+    // Resume is inherently recursive. Neither native controller binds a
+    // Recursive argument, including malformed values sent by generic clients.
+    const entries = [...(input instanceof URLSearchParams ? input : Object.entries(input))]
+      .filter(([name]) => name.toLowerCase() !== 'recursive');
+    const query = parseQuery(input instanceof URLSearchParams ? new URLSearchParams(entries) : Object.fromEntries(entries));
     for (const key of Object.keys(query)) {
       if (!resumeQueryKeys.has(key)) unsupported(`Resume query parameter '${key}' is not implemented.`);
     }

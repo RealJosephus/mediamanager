@@ -3,11 +3,13 @@ import { MIMEType } from 'node:util';
 import { createCoreLocalization } from '../core/i18n.js';
 import { loadLocalizationData } from '../core/localization-data.js';
 import { stringifyNativeJson } from '../core/json.js';
-import { HttpResult, BindingError, readBody } from './binding.js';
+import { HttpResult, BindingError, readBody, queryValue } from './binding.js';
 import { registerDomainRoutes } from './routes.js';
 import { registerPlaybackRoutes } from './playback-routes.js';
 import { BinaryResult } from './binary-result.js';
 import { registerClientNetworkRoutes } from './client-network-routes.js';
+import { registerClientDiscoveryRoutes } from './client-discovery-routes.js';
+import { registerClientConfigurationPages } from './client-configuration-pages.js';
 import { registerConfigurationRoutes } from './configuration-routes.js';
 import { registerSessionControlRoutes } from './session-control-routes.js';
 import { registerMetadataRoutes } from './metadata-routes.js';
@@ -78,11 +80,23 @@ export async function createApplication(services = {}) {
     }
   }
   for (const method of ['GET', 'POST']) add(method, '/System/Ping', () => new HttpResult(200, 'MediaManager', { text: true }), { public: true });
+  const isEmbyClient = context => {
+    const declared = authentication.read?.(context.request)?.Client || context.request.headers['x-emby-client'];
+    const client = String(declared || context.auth.Client || '');
+    if (/jellyfin/iu.test(client)) return false;
+    // The hosted Emby client accepts server API versions from 4.7.14 through
+    // 8.0, rejecting the Jellyfin protocol's 13.x version before authentication.
+    const authorization = context.request.headers.authorization || context.request.headers['x-emby-authorization'] || '';
+    return /emby/iu.test(client) || context.embyPath || /^Emby(?:\s|$)/iu.test(authorization);
+  };
+  const clientSystemVersion = context => isEmbyClient(context) ? '4.9.5.0' : serverVersion;
   const publicSystemInfo = context => ({ LocalAddress: configuration.PublicAddress || `http://${context.request.headers.host}${configuration.BaseUrl || ''}`,
-    ServerName: serverFriendlyName(configuration, serverName), Version: serverVersion, ProductName: 'MediaManager', Id: serverId,
+    ServerName: serverFriendlyName(configuration, serverName), Version: clientSystemVersion(context), ProductName: 'MediaManager', Id: serverId,
     StartupWizardCompleted: Boolean(configuration.IsStartupWizardCompleted) });
   add('GET', '/System/Info/Public', publicSystemInfo, { public: true });
   registerClientNetworkRoutes(add, services);
+  registerClientDiscoveryRoutes(add, services);
+  const configurationPages = registerClientConfigurationPages(add, services);
   // SystemController.GetSystemInfo permits session validation outside parental
   // schedules. Its SystemManager DTO reports the current application's state.
   add('GET', '/System/Info', context => ({ ...publicSystemInfo(context),
@@ -130,10 +144,14 @@ export async function createApplication(services = {}) {
       || routes.some(route => route.method === extension.method && route.path.toLowerCase().replace(/\{[^}]+\}/g,'{}') === extension.path.toLowerCase().replace(/\{[^}]+\}/g,'{}'))) {
       throw new TypeError('Invalid or conflicting plugin HTTP route.');
     }
+    const removePage = configurationPages.install(extension);
     const first = routes.length;
     add(extension.method, extension.path, context => extension.handle(context), { policy: extension.policy ?? 'Default', body: extension.body === true });
     const registered = routes.slice(first);
-    return () => { for (const route of registered) { const index=routes.indexOf(route); if(index>=0)routes.splice(index,1); } };
+    return () => {
+      removePage();
+      for (const route of registered) { const index=routes.indexOf(route); if(index>=0)routes.splice(index,1); }
+    };
   });
   let closing = false;
   let activeRequests = 0;
@@ -174,7 +192,12 @@ export async function createApplication(services = {}) {
           if (path.toLowerCase() !== prefix.toLowerCase() && !path.toLowerCase().startsWith(`${prefix.toLowerCase()}/`)) { send(new HttpResult(404)); return; }
           path = path.slice(prefix.length) || '/';
         }
+        const embyPath = /^\/(?:emby|mediabrowser)(?=\/|$)/iu.test(path);
+        path = path.replace(/^\/(?:emby|mediabrowser)(?=\/|$)/iu, '') || '/';
         if (applyCors(request, response, configuration)) return;
+        if (/^\/System\/Info(?:\/Public)?\/?$/iu.test(path)) {
+          response.appendHeader('Vary', 'Authorization, X-Emby-Authorization, X-Emby-Client, X-Emby-Token, X-MediaBrowser-Token');
+        }
         const matching = routes.filter(route => {
           const match = route.pattern.exec(path);
           return match && route.names.every((name, index) => !route.constraints[name] || route.constraints[name](decodeRouteValue(match[index + 1])));
@@ -190,9 +213,13 @@ export async function createApplication(services = {}) {
         let auth;
         try { auth = await authentication.authenticate(request); }
         catch (error) { if (error.status !== 401) throw error; auth = { ...authentication.read(request), IsAuthenticated: false }; }
+        const embyClient = isEmbyClient({ request, auth, embyPath });
         const isPublic = typeof route.isPublic === 'function' ? route.isPublic({ request, query: url.searchParams, params }) : route.isPublic;
         if (!isPublic) {
-          try { authentication.authorize(auth, { policy: route.policy, remoteEndPoint, startupWizardCompleted: Boolean(configuration.IsStartupWizardCompleted) }); }
+          try {
+            const policy = typeof route.policy === 'function' ? route.policy({ request, auth, embyClient, url, params }) : route.policy;
+            authentication.authorize(auth, { policy, remoteEndPoint, startupWizardCompleted: Boolean(configuration.IsStartupWizardCompleted) });
+          }
           catch (error) { if (![401, 403].includes(error.status)) throw error; send(new HttpResult(error.status)); return; }
         }
         let body, queryInput, queryError;
@@ -203,7 +230,12 @@ export async function createApplication(services = {}) {
         if (route.body) {
           const abortBody = () => request.destroy();
           shutdown.signal.addEventListener('abort', abortBody, { once:true });
-          try { shutdown.signal.throwIfAborted(); body = await readBody(request, { allowForm: route.allowForm, optional: route.optionalBody, bind: route.bindBody, objectType: route.bodyType }); }
+          try {
+            shutdown.signal.throwIfAborted();
+            body = await readBody(request, { allowForm: route.allowForm, optional: route.optionalBody,
+              bind: route.bindBody && ((body, source) => route.bindBody(body, source, { embyClient })), objectType: route.bodyType,
+              allowTextJson: embyClient && /^json$/iu.test(queryValue(url.searchParams, 'reqformat') ?? '') });
+          }
           catch (error) {
             if (route.bodyParameter && error instanceof BindingError && !error.modelValidated && !Object.hasOwn(error.errors, route.bodyParameter)) {
               error.errors[route.bodyParameter] = [`The ${route.bodyParameter} field is required.`];
@@ -214,7 +246,7 @@ export async function createApplication(services = {}) {
           finally { shutdown.signal.removeEventListener('abort', abortBody); }
         }
         if (queryError) throw queryError;
-        const result = await route.run({ request, url, query: url.searchParams, queryInput, params, auth, remoteEndPoint, body, signal: shutdown.signal });
+        const result = await route.run({ request, url, query: url.searchParams, queryInput, params, auth, embyPath, embyClient, remoteEndPoint, body, signal: shutdown.signal });
         if (result instanceof BinaryResult) {
           const abortStream = () => response.destroy();
           shutdown.signal.addEventListener('abort', abortStream, { once:true });

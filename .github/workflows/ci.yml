@@ -39,6 +39,11 @@ on:
         type: boolean
         required: false
         default: false
+      emby_web:
+        description: Capture the designated hosted Emby Web and use fixed Chromium (requires native_sqlite)
+        type: boolean
+        required: false
+        default: false
       alist_reference:
         description: Build the designated AList Go source with the controlled API-only test frontend (Web UI unvalidated)
         type: boolean
@@ -85,6 +90,7 @@ jobs:
       MEDIAMANAGER_CI_NATIVE_INSTANCE: ${{ inputs.native_instance && 'true' || 'false' }}
       MEDIAMANAGER_CI_NATIVE_SQLITE: ${{ inputs.native_sqlite && 'true' || 'false' }}
       MEDIAMANAGER_CI_WEB_CLIENTS: ${{ inputs.web_clients && 'true' || 'false' }}
+      MEDIAMANAGER_CI_EMBY_WEB: ${{ inputs.emby_web && 'true' || 'false' }}
       MEDIAMANAGER_CI_ALIST_REFERENCE: ${{ inputs.alist_reference && 'true' || 'false' }}
       DOTNET_CLI_TELEMETRY_OPTOUT: '1'
       DOTNET_NOLOGO: '1'
@@ -123,8 +129,8 @@ jobs:
           if ($env:MEDIAMANAGER_CI_NATIVE_SQLITE -eq 'true' -and $env:MEDIAMANAGER_CI_NATIVE_INSTANCE -ne 'true') {
             throw 'native_sqlite requires native_instance.'
           }
-          if ($env:MEDIAMANAGER_CI_WEB_CLIENTS -eq 'true' -and $env:MEDIAMANAGER_CI_NATIVE_SQLITE -ne 'true') {
-            throw 'web_clients requires native_sqlite.'
+          if (($env:MEDIAMANAGER_CI_WEB_CLIENTS -eq 'true' -or $env:MEDIAMANAGER_CI_EMBY_WEB -eq 'true') -and $env:MEDIAMANAGER_CI_NATIVE_SQLITE -ne 'true') {
+            throw 'Web client validation requires native_sqlite.'
           }
           $trackedFiles = git ls-files -- tests
           if ($LASTEXITCODE -ne 0) { throw 'Cannot list candidate test files.' }
@@ -258,7 +264,7 @@ jobs:
         timeout-minutes: 25
         run: ./tools/ci/build-jellyfin-web.ps1
       - name: Install the fixed browser for actual Web interaction
-        if: inputs.web_clients == true
+        if: inputs.web_clients == true || inputs.emby_web == true
         shell: pwsh
         timeout-minutes: 10
         run: |
@@ -284,6 +290,10 @@ jobs:
               webInteractionValidated: false }, null, 2) + '\n', { flag: 'wx' });
           '@ | node --input-type=module
           if ($LASTEXITCODE -ne 0) { throw 'Browser installation receipt failed.' }
+      - name: Capture the unmodified designated hosted Emby Web client
+        if: inputs.emby_web == true
+        timeout-minutes: 15
+        run: node tools/ci/fetch-emby-web.js
       - name: Record runner and database identity
         id: environment
         run: node tools/ci/environment.js capture
@@ -368,4 +378,12 @@ jobs:
             ${{ runner.temp }}/mediamanager-jellyfin-web/source-offer
           if-no-files-found: error
           include-hidden-files: true
+          retention-days: 14
+      - name: Preserve hosted Emby resource identities without redistributing client assets
+        if: always() && inputs.emby_web == true
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: emby-web-input-${{ matrix.os }}-shard-${{ matrix.shard }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/mediamanager-emby-web/receipts
+          if-no-files-found: error
           retention-days: 14

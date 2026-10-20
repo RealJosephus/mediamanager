@@ -31,7 +31,8 @@ export function ciExecutionArguments(scope, output) {
 }
 
 export const provisionedServicesFor = environment => {
-  if (environment.MEDIAMANAGER_CI_WEB_CLIENTS === 'true' && environment.MEDIAMANAGER_CI_NATIVE_SQLITE !== 'true') {
+  if ((environment.MEDIAMANAGER_CI_WEB_CLIENTS === 'true' || environment.MEDIAMANAGER_CI_EMBY_WEB === 'true')
+    && environment.MEDIAMANAGER_CI_NATIVE_SQLITE !== 'true') {
     throw new Error('Web client validation requires current native SQLite provisioning.');
   }
   if (environment.MEDIAMANAGER_CI_NATIVE_SQLITE === 'true' && environment.MEDIAMANAGER_CI_NATIVE_INSTANCE !== 'true') {
@@ -44,7 +45,9 @@ export const provisionedServicesFor = environment => {
     ...(environment.MEDIAMANAGER_CI_NATIVE_REFERENCE === 'true' ? ['jellyfinDll'] : []),
     ...(environment.MEDIAMANAGER_CI_NATIVE_INSTANCE === 'true' ? ['nativeInstance'] : []),
     ...(environment.MEDIAMANAGER_CI_NATIVE_SQLITE === 'true' ? ['currentNativeSqlite'] : []),
-    ...(environment.MEDIAMANAGER_CI_WEB_CLIENTS === 'true' ? ['jellyfinWeb', 'browser'] : []),
+    ...(environment.MEDIAMANAGER_CI_WEB_CLIENTS === 'true' ? ['jellyfinWeb'] : []),
+    ...(environment.MEDIAMANAGER_CI_EMBY_WEB === 'true' ? ['embyWeb'] : []),
+    ...(environment.MEDIAMANAGER_CI_WEB_CLIENTS === 'true' || environment.MEDIAMANAGER_CI_EMBY_WEB === 'true' ? ['browser'] : []),
     ...(environment.MEDIAMANAGER_CI_ALIST_REFERENCE === 'true' ? ['alist'] : []),
     ...(typeof environment.MEDIAMANAGER_WEBDAV_EXECUTABLE === 'string'
       && path.isAbsolute(environment.MEDIAMANAGER_WEBDAV_EXECUTABLE) ? ['webdav'] : [])];
@@ -158,6 +161,7 @@ export async function classify({ dependencies, tracked, environment, platform = 
       MEDIAMANAGER_TEST_CURRENT_NATIVE_SQLITE_MOUNT_CONTRACT_JSON: environment.MEDIAMANAGER_TEST_CURRENT_NATIVE_SQLITE_MOUNT_CONTRACT_JSON || '<provisioned>',
     } : {}),
     ...(services.includes('jellyfinWeb') ? { MEDIAMANAGER_JELLYFIN_WEB_ROOT: environment.MEDIAMANAGER_JELLYFIN_WEB_ROOT || '<provisioned>' } : {}),
+    ...(services.includes('embyWeb') ? { MEDIAMANAGER_EMBY_WEB_ROOT: environment.MEDIAMANAGER_EMBY_WEB_ROOT || '<provisioned>' } : {}),
     ...(services.includes('browser') ? { MEDIAMANAGER_BROWSER_EXECUTABLE: environment.MEDIAMANAGER_BROWSER_EXECUTABLE || '<provisioned>' } : {}),
     ...(services.includes('jellyfinDll') ? { MEDIAMANAGER_JELLYFIN_DLL: environment.MEDIAMANAGER_JELLYFIN_DLL || '<provisioned>' } : {}) };
   const shipped = filename => {

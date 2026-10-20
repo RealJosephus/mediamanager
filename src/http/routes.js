@@ -51,7 +51,15 @@ export function registerDomainRoutes(add, { configuration, authentication, users
     'hasnointernalsubtitletrackwithlanguage', 'hasnoexternalsubtitletrackwithlanguage',
     'haschapterimages',
   ]);
-  const itemQuery = context => new URLSearchParams([...context.query].filter(([name]) => {
+  const bindItemFields = (context, input) => {
+    // CommaDelimitedCollectionModelBinder drops unknown enum names. The DTO
+    // layer must only see fields the controller actually bound.
+    const result = new URLSearchParams([...input].filter(([name]) => name.toLowerCase() !== 'fields'));
+    const fields = commaEnums(context, 'fields', controllerItemFields).filter(value => typeof value === 'string');
+    if (fields.length) result.set('fields', fields.join(','));
+    return result;
+  };
+  const itemQuery = context => bindItemFields(context, [...context.query].filter(([name]) => {
     const key = name.toLowerCase();
     // These are InternalItemsQuery-only properties and are not controller
     // parameters, so ASP.NET ignores them instead of exposing a public filter.
@@ -329,7 +337,7 @@ export function registerDomainRoutes(add, { configuration, authentication, users
         .filter(session => String(session.UserId ?? '').replaceAll('-', '').toLowerCase() === target)
         .map(session => session.NowPlayingItem?.Id).filter(Boolean);
     }
-    const resumeQuery = new URLSearchParams([...context.query.entries()].filter(([name]) => name.toLowerCase() !== 'excludeactivesessions'));
+    const resumeQuery = bindItemFields(context, [...context.query.entries()].filter(([name]) => name.toLowerCase() !== 'excludeactivesessions'));
     return library.queryResumeItems(resumeQuery, { user, activeItemIds });
   });
   add('GET', ['/UserViews', '/Users/{userId}/Views'], async context => library.getViews({ includeHidden: boolean(context, 'includeHidden', false),
@@ -378,15 +386,16 @@ export function registerDomainRoutes(add, { configuration, authentication, users
   add('POST', '/Sessions/Capabilities/Full', async context => {
     const currentId = await currentSession(context);
     const requestedId = query(context, 'id');
-    await sessions.reportCapabilities(requestedId?.trim() ? requestedId : currentId, context.body, { controllingSessionId: currentId });
+    await sessions.reportCapabilities(requestedId?.trim() ? requestedId : currentId, context.body, { controllingSessionId: currentId, embyClient: context.embyClient });
     return noContent();
   }, { body: true, bindBody: validateClientCapabilitiesDto });
   add('POST', '/Sessions/Capabilities', async context => {
     const currentId = await currentSession(context);
     const requestedId = query(context, 'id');
-    await sessions.reportCapabilities(requestedId?.trim() ? requestedId : currentId, { PlayableMediaTypes: commaEnums(context, 'playableMediaTypes', mediaTypes),
-      SupportedCommands: commaEnums(context, 'supportedCommands', generalCommands), SupportsMediaControl: boolean(context, 'supportsMediaControl', false),
-      SupportsPersistentIdentifier: boolean(context, 'supportsPersistentIdentifier', true) }, { controllingSessionId: currentId });
+    const list = (name, names) => context.embyClient ? query(context, name)?.split(',').filter(Boolean) ?? [] : commaEnums(context, name, names);
+    await sessions.reportCapabilities(requestedId?.trim() ? requestedId : currentId, { PlayableMediaTypes: list('playableMediaTypes', mediaTypes),
+      SupportedCommands: list('supportedCommands', generalCommands), SupportsMediaControl: boolean(context, 'supportsMediaControl', false),
+      SupportsPersistentIdentifier: boolean(context, 'supportsPersistentIdentifier', true) }, { controllingSessionId: currentId, embyClient: context.embyClient });
     return noContent();
   });
   add('POST', '/Sessions/Logout', async context => { await authentication.logout(context.auth.Token); return noContent(); });

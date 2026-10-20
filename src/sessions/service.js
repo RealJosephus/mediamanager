@@ -217,10 +217,10 @@ export class SessionService extends EventEmitter {
     if (controlling.UserId === emptyGuid || target.UserId === emptyGuid || this.#contains(target, controlling.UserId)) return;
     if (!(await this.#user(controlling.UserId))?.Policy?.EnableRemoteControlOfOtherUsers) throw failure(403, 'The current user does not have permission to remote control other users.');
   }
-  async reportCapabilities(sessionId, capabilities, { controllingSessionId } = {}) {
+  async reportCapabilities(sessionId, capabilities, { controllingSessionId, embyClient = false } = {}) {
     const session = this.#session(sessionId);
     await this.#assertControl(session, controllingSessionId);
-    session.Capabilities = bindCapabilities(capabilities);
+    session.Capabilities = bindCapabilities(capabilities, { embyClient });
     this.#capabilities.set(session.DeviceId, structuredClone(session.Capabilities));
     this.emit('CapabilitiesChanged', { SessionInfo: this.#dto(session) });
   }

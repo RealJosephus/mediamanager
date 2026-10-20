@@ -45,6 +45,11 @@ test('postgres: display preference API writes export to real native EF/controlle
   const write = await fetch(url, { method: 'POST', headers, body: JSON.stringify({ SortBy: 'DateCreated', SortOrder: 'Descending',
     IndexBy: 'ProductionYear', ShowSidebar: true, CustomPrefs: { foo: 'Node\0write', homesection0: 'Resume', homesection4: 'LatestMedia', unknown: null } }) });
   assert.equal(write.status, 204); const current = await fetch(url, { headers }); assert.equal(current.status, 200); const before = await current.json();
+  const embySettings = JSON.parse('{"enableNextVideoInfoOverlay":"false","__proto__":"kept","unknown":"Emby\\u0000write","nullable":null,"字幕":"設定"}');
+  const settingsUrl = `http://127.0.0.1:${runtime.server.address().port}/emby/usersettings/${owner.Id}?reqformat=json`;
+  assert.equal((await fetch(settingsUrl, { method: 'POST', headers: { ...headers, 'Content-Type': 'text/plain' }, body: JSON.stringify(embySettings) })).status, 204);
+  const settingsRead = await fetch(settingsUrl, { headers }); assert.equal(settingsRead.status, 200);
+  assert.deepEqual(await settingsRead.json(), embySettings);
   const originalRows = Object.fromEntries(await Promise.all(preferenceTables.map(async table => [table, await database.rows(table)])));
   const exported = path.join(root, 'returned.db'); const exportResult = await exportCurrentSqlite(database, exported);
   assert.equal(exportResult.verified, true); const exportedSha256 = hash(await fs.readFile(exported));
@@ -64,6 +69,7 @@ test('postgres: display preference API writes export to real native EF/controlle
     assert.deepEqual(native.after, dto({ ...after, CustomPrefs: Object.fromEntries(after.CustomPrefs) }));
     assert.equal(after.SortBy, 'Name'); assert.equal(after.CustomPrefs.get('foo'), 'native\0write');
     assert.equal(after.CustomPrefs.get('homesection0'), 'librarybuttons'); assert.equal(after.CustomPrefs.get('homesection4'), 'latestmedia');
+    assert.deepEqual(Object.fromEntries(await importedRuntime.displayPreferences.getUserSettings(owner.Id)), embySettings);
   } finally { await importedRuntime.close(); }
   assert.equal(hash(await fs.readFile(process.env.MEDIAMANAGER_TEST_CURRENT_NATIVE_SQLITE)), sourceHash);
   await fs.writeFile(path.join(root, 'proof.json'), JSON.stringify({ sourceHash, exportedSha256, exportResult, nativeRecording: recording,

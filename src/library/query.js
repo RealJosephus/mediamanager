@@ -20,6 +20,7 @@ const strings = new Set(['parentid', 'userid', 'adjacentto', 'searchterm', 'name
 // IsFolder is not a public ItemsController argument; ASP.NET leaves that
 // unknown query parameter unbound. Filters=IsFolder is the supported selector.
 const transport = new Set(['api_key', 'apikey', 'x-emby-token', 'x-mediabrowser-token', 'culture', 'ui-culture', 'isfolder',
+  'x-emby-client', 'x-emby-device-name', 'x-emby-device-id', 'x-emby-client-version', 'x-emby-language', 'reqformat',
   'enableresumable', 'enablerewatching', 'nextupdatecutoff', 'minindexnumber']);
 const sorts = new Map(Object.entries({ Default: 'SortName', AiredEpisodeOrder: 'SortName', AlbumArtist: 'repository:AlbumArtist', Artist: 'repository:Artist', Random: 'Random', Studio: 'repository:Studio', SeriesDatePlayed: 'repository:SeriesDatePlayed', SortName: 'SortName', Name: 'CleanName', Album: 'Album', DateCreated: 'DateCreated', OfficialRating: 'InheritedParentalRatingValue', PremiereDate: 'PremiereDate', StartDate: 'StartDate', Runtime: 'RunTimeTicks', CommunityRating: 'CommunityRating', ProductionYear: 'ProductionYear', CriticRating: 'CriticRating', IsFolder: 'IsFolder', SeriesSortName: 'SeriesName', VideoBitRate: 'TotalBitrate', AirTime: 'SortName', DateLastContentAdded: 'DateLastMediaAdded', ParentIndexNumber: 'ParentIndexNumber', IndexNumber: 'IndexNumber', DatePlayed: '@LastPlayedDate', PlayCount: '@PlayCount', IsPlayed: '@Played', IsUnplayed: '@Unplayed', IsFavoriteOrLiked: '@IsFavorite' }).map(([key, value]) => [key.toLowerCase(), value]));
 const scalarNames = {

@@ -30,6 +30,11 @@ const schema = {
   }
 };
 const generalRoot = { type: 'object', clrType: 'MediaBrowser.Model.Session.GeneralCommand', reference: 'GeneralCommand', nullable: true };
+const embySchema = { definitions: { ...schema.definitions, GeneralCommand: {
+  ...schema.definitions.GeneralCommand,
+  defaults: { ...schema.definitions.GeneralCommand.defaults, Name: null },
+  fields: { ...schema.definitions.GeneralCommand.fields, Name: { type: 'string', clrType: 'System.String', nullable: true } }
+} } };
 const messageRoot = { type: 'object', clrType: 'MediaBrowser.Model.Session.MessageCommand', reference: 'MessageCommand', nullable: true };
 
 function bodyRequired(name) {
@@ -49,12 +54,12 @@ function withRootRequired(name, bind) {
   }
 }
 
-export function bindGeneralCommandDto(body, source) {
-  return bindJsonModel(body, { schema, root: generalRoot, source });
+export function bindGeneralCommandDto(body, source, { embyClient = false } = {}) {
+  return bindJsonModel(body, { schema: embyClient ? embySchema : schema, root: generalRoot, source });
 }
 
-export function validateGeneralCommandBody(body, source) {
-  return withRootRequired('command', () => bindGeneralCommandDto(body, source));
+export function validateGeneralCommandBody(body, source, options) {
+  return withRootRequired('command', () => bindGeneralCommandDto(body, source, options));
 }
 
 export function bindMessageCommandDto(body, source) {

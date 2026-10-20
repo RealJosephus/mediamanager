@@ -1,6 +1,6 @@
 # Actual Web consumers
 
-These tests serve the designated, unmodified Jellyfin Web production build on a
+The Jellyfin tests serve the designated, unmodified production build on a
 separate HTTP origin and use the pinned Chromium executable. Source/build,
 dependency and browser identities are verified by the validation input loaders.
 Neither client authentication nor responses are injected. A new browser logs in
@@ -60,3 +60,30 @@ networks, Emby Web, external TMDB, large libraries or production migration. A CI
 run establishes only its explicitly selected consumers and platforms. Run on
 GitHub Actions with `native_reference`, `native_instance`, `native_sqlite` and
 `web_clients` enabled; do not execute local validation.
+
+`emby-auth-info.test.js` uses the original hosted Emby Web 26.0.37 entry,
+service worker and its 858-resource catalog, plus the entry/manifest links.
+The startup ebook/PDF plugin modules omitted from that catalog are captured
+from the original `app.js` dependency paths. The actual Cast sender scripts
+are also frozen; the browser's real external script responses must match those
+bytes and hashes. No network interception supplies replacement responses.
+The CI capture pins the published entry/catalog SHA-256, records every actual
+resource hash and retains the worker's declared checksums separately. Hosted
+entry substitutions can differ from the worker checksum; no client bytes are
+rewritten. The same-run input loader binds the producer, receipts and complete
+served tree before and after the consumer. CI artifacts retain identities and
+observations without redistributing the third-party client resource bundle.
+
+A fresh touch-capable Chromium context uses the visible connection wizard,
+selects the actual server at its `/emby` address, and enters the real password.
+The production fixture preserves `EnableLegacyAuthorization=false`. Discovery
+resources, private Info, the authenticated WebSocket, the persisted PG device,
+and saved-token Info/socket reconnection after reload must all be observed. The
+real public policy API disables live TV access for this regular user; channel
+providers and live TV playback are outside this consumer. Emby's capability
+strings must survive session readback. A visible display toggle saves through
+the original client, persists in PostgreSQL, and reads back after a page reload.
+Authentication, local storage, responses and client code are not injected.
+This consumer establishes auth/info interaction only; it does not establish
+Emby browsing, editing or playback. Supply `emby_web=true` with the three native
+input flags. It does not require the Jellyfin Web build.

@@ -42,13 +42,17 @@ function integer(value) {
   return Number(result);
 }
 
-export function bindCapabilities(value) {
+export function bindCapabilities(value, { embyClient = false } = {}) {
   const result = normalizeMembers(value, defaultCapabilities());
   for (const key of ['SupportsMediaControl', 'SupportsPersistentIdentifier']) result[key] = boolean(result[key]);
   for (const [key, names] of [['PlayableMediaTypes', mediaTypes], ['SupportedCommands', commands]]) {
     if (result[key] == null) continue;
     if (!Array.isArray(result[key])) throw domainError(400, 'An array is required.');
-    result[key] = result[key].map(entry => enumName(entry, names));
+    result[key] = result[key].map(entry => {
+      if (!embyClient) return enumName(entry, names);
+      if (entry === null || typeof entry === 'string') return entry;
+      throw domainError(400, 'A string is required.');
+    });
   }
   if (result.DeviceProfile != null) result.DeviceProfile = bindDeviceProfile(result.DeviceProfile);
   return result;

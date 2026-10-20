@@ -31,14 +31,24 @@ const schema = {
     }
   }
 };
+// Emby ClientCapabilities declares string[] for both lists. Its command names
+// include client and plugin extensions outside Jellyfin's closed enums.
+const embySchema = { definitions: { ...schema.definitions, [reference]: {
+  ...schema.definitions[reference], fields: { ...schema.definitions[reference].fields,
+    ...Object.fromEntries(['PlayableMediaTypes', 'SupportedCommands'].map(name => [name, {
+      type: 'array', nullable: true, clrType: 'System.String[]',
+      item: { type: 'string', nullable: true, clrType: 'System.String' }
+    }]))
+  }
+} } };
 
-export function bindClientCapabilitiesDto(body, source) {
-  return bindJsonModel(body, { schema, root, source });
+export function bindClientCapabilitiesDto(body, source, { embyClient = false } = {}) {
+  return bindJsonModel(body, { schema: embyClient ? embySchema : schema, root, source });
 }
 
-export function validateClientCapabilitiesDto(body, source) {
+export function validateClientCapabilitiesDto(body, source, options) {
   try {
-    const result = bindClientCapabilitiesDto(body, source);
+    const result = bindClientCapabilitiesDto(body, source, options);
     if (result != null) return result;
     const error = new BindingError('capabilities', 'The capabilities field is required.');
     throw error;

@@ -11,6 +11,7 @@ export const dependencyVariables = Object.freeze({
   nativeSqlite: 'MEDIAMANAGER_TEST_NATIVE_SQLITE',
   currentNativeSqlite: 'MEDIAMANAGER_TEST_CURRENT_NATIVE_SQLITE',
   jellyfinWeb: 'MEDIAMANAGER_JELLYFIN_WEB_ROOT',
+  embyWeb: 'MEDIAMANAGER_EMBY_WEB_ROOT',
   browser: 'MEDIAMANAGER_BROWSER_EXECUTABLE',
   nativeInstance: 'MEDIAMANAGER_TEST_NATIVE_INSTANCE',
   jellyfinDll: 'MEDIAMANAGER_JELLYFIN_DLL',

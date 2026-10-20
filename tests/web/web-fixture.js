@@ -54,7 +54,7 @@ export async function serveWebClient(root) {
 }
 
 /** Import the current native database, then use the production entry and public APIs. */
-export async function createWebServerFixture({ populated = false, resumePlayback = false, preparation = {} } = {}) {
+export async function createWebServerFixture({ populated = false, resumePlayback = false, legacyAuthorization = true, preparation = {} } = {}) {
   const supplied = await currentNativeSqliteInputs();
   const directory = await realpath(await mkdtemp(path.join(os.tmpdir(), 'mediamanager-web-')));
   const instanceDirectory = path.join(directory, 'instance');
@@ -87,7 +87,7 @@ export async function createWebServerFixture({ populated = false, resumePlayback
     await mkdir(path.join(instanceDirectory, 'data/data'), { recursive: true });
     const resumePolicy = resumePlayback ? { MinResumePct: 1, MaxResumePct: 90, MinResumeDurationSeconds: 30 } : null;
     const resumeXml = Object.entries(resumePolicy ?? {}).map(([name, value]) => `<${name}>${value}</${name}>`).join('');
-    await writeFile(path.join(instanceDirectory, 'config/system.xml'), `<ServerConfiguration><IsStartupWizardCompleted>true</IsStartupWizardCompleted><EnableLegacyAuthorization>true</EnableLegacyAuthorization><UICulture>en-US</UICulture><ServerName>Web acceptance</ServerName>${resumeXml}</ServerConfiguration>`);
+    await writeFile(path.join(instanceDirectory, 'config/system.xml'), `<ServerConfiguration><IsStartupWizardCompleted>true</IsStartupWizardCompleted><EnableLegacyAuthorization>${legacyAuthorization}</EnableLegacyAuthorization><UICulture>en-US</UICulture><ServerName>Web acceptance</ServerName>${resumeXml}</ServerConfiguration>`);
     await writeFile(path.join(instanceDirectory, 'config/network.xml'), '<NetworkConfiguration><AutoDiscovery>false</AutoDiscovery></NetworkConfiguration>');
     await writeFile(path.join(instanceDirectory, 'data/data/device.txt'), serverId);
     const mediaRoot = path.join(directory, 'media');

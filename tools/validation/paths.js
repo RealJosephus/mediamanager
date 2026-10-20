@@ -166,6 +166,7 @@ export function assertIsolatedOutput(filename, environment = process.env) {
     environment.MEDIAMANAGER_TEST_NATIVE_SQLITE && path.dirname(environment.MEDIAMANAGER_TEST_NATIVE_SQLITE),
     environment.MEDIAMANAGER_TEST_CURRENT_NATIVE_SQLITE && path.dirname(environment.MEDIAMANAGER_TEST_CURRENT_NATIVE_SQLITE),
     environment.MEDIAMANAGER_JELLYFIN_WEB_BUILD_ROOT,
+    environment.MEDIAMANAGER_EMBY_WEB_INPUT_ROOT,
     environment.PLAYWRIGHT_BROWSERS_PATH,
     environment.MEDIAMANAGER_VALIDATION_REFERENCE_ROOT,
     environment.MEDIAMANAGER_DOTNET_ROOT,

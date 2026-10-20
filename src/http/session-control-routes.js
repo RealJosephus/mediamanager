@@ -56,7 +56,7 @@ export function registerSessionControlRoutes(add, { sessions, hls }) {
     return noContent();
   });
   for (const path of ['/Sessions/{sessionId}/Command/{command}', '/Sessions/{sessionId}/System/{command}']) add('POST', path, async context => {
-    const name = enumeration(context.params.command, 'command', generalCommands);
+    const name = context.embyClient ? context.params.command : enumeration(context.params.command, 'command', generalCommands);
     const controller = await current(context);
     await sessions.sendCommand(context.params.sessionId, 'GeneralCommand', nativeController({ Name: name, Arguments: new Map() }, controller.UserId), { controllingSessionId: controller.Id });
     return noContent();

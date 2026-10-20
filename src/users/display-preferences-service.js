@@ -32,6 +32,19 @@ function itemIdentity(value) {
   try { return nativeGuid(value); } catch { return nativeGuid(md5Guid(value)); }
 }
 
+// Emby's flat dictionary has no DisplayPreferencesDto defaults or enum coercion.
+// A separate client scope keeps its arbitrary keys and nullable strings intact
+// in the native exchange tables, including settings unknown to Jellyfin.
+function userSettingsIdentity(userId) {
+  return { UserId: nativeGuid(userId), ItemId: itemIdentity('usersettings'), Client: 'emby-usersettings' };
+}
+
+async function requireSettingsUser(database, userId) {
+  if (!(await database.rows('Users', { where: { Id: userId }, columns: ['Id'], limit: 1 })).length) {
+    throw domainError(404, 'User not found');
+  }
+}
+
 async function* pages(database, table, where) {
   let after;
   while (true) {
@@ -114,6 +127,30 @@ export class DisplayPreferencesService {
         ShowBackdrop: display.ShowBackdrop, RememberSorting: item.RememberSorting,
         SortOrder: enumName(item.SortOrder, displayPreferenceEnums.SortOrder), ShowSidebar: display.ShowSidebar, Client: display.Client };
     });
+  }
+
+  getUserSettings(userId) {
+    const where = userSettingsIdentity(userId);
+    return this.#run(database => database.transaction(async database => {
+      await requireSettingsUser(database, where.UserId);
+      const settings = new Map();
+      for await (const entry of pages(database, 'CustomItemDisplayPreferences', where)) settings.set(entry.Key, entry.Value);
+      return settings;
+    }, { readOnly: true, isolation: 'repeatable-read' }));
+  }
+
+  updateUserSettings(userId, settings, { partial = false } = {}) {
+    const where = userSettingsIdentity(userId);
+    return this.#run(() => this.store.transaction(async database => {
+      await requireSettingsUser(database, where.UserId);
+      if (!partial) await database.deleteWhere('CustomItemDisplayPreferences', where);
+      for (const [Key, Value] of settings) {
+        const key = { ...where, Key };
+        const current = partial && (await database.rows('CustomItemDisplayPreferences', { where: key, columns: ['Id'], limit: 1 }))[0];
+        if (current) await database.update('CustomItemDisplayPreferences', { Id: current.Id }, { Value });
+        else await database.insert('CustomItemDisplayPreferences', { ...key, Value });
+      }
+    }));
   }
 
   update(displayPreferencesId, userId, client, input) {

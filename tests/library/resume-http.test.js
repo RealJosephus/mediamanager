@@ -172,6 +172,17 @@ resumeTest('Resume HTTP routes enforce user scope and return resumable real vers
   assert.equal(legacy.data.Items[0].UserData.PlaybackPositionTicks, 1000);
   assert.equal(legacy.data.Items.some(item => item.Name === 'Virtual'), false);
   assert.equal(legacy.data.Items.some(item => item.Name === 'Excluded movie'), false);
+  for (const recursive of ['true', 'false', 'invalid']) {
+    const unbound = await request(`/Users/${viewer.Id}/Items/Resume?IncludeItemTypes=Movie&MediaTypes=Video&Recursive=${recursive}`, { token });
+    assert.equal(unbound.status, 200);
+    assert.deepEqual(unbound.data, legacy.data, 'Resume ignores an argument absent from both native actions.');
+  }
+  const withPath = await request('/UserItems/Resume?IncludeItemTypes=Movie&MediaTypes=Video&Fields=Path', { token });
+  assert.equal(withPath.status, 200);
+  assert.ok(withPath.data.Items.every(item => item.Path));
+  const unknownField = await request('/UserItems/Resume?IncludeItemTypes=Movie&MediaTypes=Video&Fields=BasicSyncInfo,Path,UnknownClientField', { token });
+  assert.equal(unknownField.status, 200);
+  assert.deepEqual(unknownField.data, withPath.data);
 
   const audio = await request('/UserItems/Resume?MediaTypes=Audio', { token });
   assert.equal(audio.status, 200);

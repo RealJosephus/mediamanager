@@ -281,6 +281,25 @@ test('CI Web consumers require explicit browser and client supply without hiding
     preflight: { ready: true, services: [], tools: [] } }), /requires an explicit same-run build root and runtime/u);
 });
 
+test('CI hosted Emby supply selects its own consumer and retains missing-input failures', async () => {
+  const dependencies = { entries: [entry(ownPath, { services: ['embyWeb', 'browser'] }),
+    entry(otherPath, { services: ['jellyfinWeb', 'browser'] })] };
+  const tracked = new Set([ownPath, otherPath]);
+  assert.throws(() => provisionedServicesFor({ MEDIAMANAGER_CI_EMBY_WEB: 'true' }), /requires current native SQLite/u);
+  const environment = { MEDIAMANAGER_CI_NATIVE_REFERENCE: 'true', MEDIAMANAGER_CI_NATIVE_INSTANCE: 'true',
+    MEDIAMANAGER_CI_NATIVE_SQLITE: 'true', MEDIAMANAGER_CI_EMBY_WEB: 'true' };
+  const promised = await classify({ dependencies, tracked, environment });
+  assert.equal(promised.records.find(record => record.path === ownPath).selected, true);
+  assert.equal(promised.records.find(record => record.path === otherPath).selected, false);
+  const filename = path.join(repositoryRoot, '.test-output', 'missing-emby-web');
+  const errors = applyInputIdentity(promised, { entries: [{ filename, required: true, available: false,
+    reasons: ['service:embyWeb'], requiredReasons: ['service:embyWeb'] }] }, tracked);
+  assert.equal(errors[0].code, 'input-unavailable');
+  assert.equal(promised.records.find(record => record.path === ownPath).selected, true);
+  await assert.rejects(captureInputIdentity({ dependencies, selected: [ownPath], environment,
+    preflight: { ready: true, services: [], tools: [] } }), /Emby Web requires its same-run input root/u);
+});
+
 test('CI binds same-run native receipts, source offer and runtime only for selected native consumers', async t => {
   const output = path.join(repositoryRoot, '.test-output'); await mkdir(output, { recursive: true });
   const root = await mkdtemp(path.join(output, 'ci-native-inputs-'));
