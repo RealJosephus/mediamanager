@@ -231,74 +231,43 @@ test('reference discovery binds actual reads without treating assertion identiti
 
 test('inventory includes shared native evidence verifiers in the selected input closure', async () => {
   const dependencies = await inventory();
-  const identity = dependencyClosure(dependencies, ['tests/library/artist-concurrency-http.test.js']);
-  assert.ok(identity.some(entry => entry.path === 'tests/library/native-identity-evidence.js'));
-  assert.ok(identity.some(entry => entry.path === 'tests/library/native-identity-inputs.js'));
-  const identityFixture = identity.flatMap(entry => entry.fixtureReferences)
-    .find(reference => reference.relativePath === ['.', 'fixtures', 'native-identity-inputs', 'binding.json'].join('/'));
-  assert.ok(identityFixture, 'the exact identity source binding must be discoverable');
-  const identityBinding = JSON.parse(await readFile(identityFixture.filename, 'utf8'));
-  assert.equal(identityBinding.reference.preparationInputs.length, 11);
-  assert.equal(identityBinding.preparationInputFiles.length, 11);
-  // These immutable bindings describe the Windows workspace that recorded them,
-  // not the current runner checkout or a relocated executable/input mapping.
-  const recordedRepositoryRoot = 'D:/mediamanager';
-  for (const [index, descriptor] of identityBinding.preparationInputFiles.entries()) {
-    assert.ok(path.win32.isAbsolute(descriptor.filename));
-    assert.equal(path.win32.normalize(descriptor.filename),
-      path.win32.resolve(recordedRepositoryRoot, identityBinding.reference.preparationInputs[index][1]));
-    assert.match(descriptor.sha256, /^[a-f0-9]{64}$/u);
-  }
-  assert.ok(identityBinding.preparationInputFiles[9].filename.endsWith('/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll'));
-  assert.equal(identityBinding.independentNativeAudits.length, 2);
-  assert.equal(identityBinding.recordings.length, 5);
-  for (const directory of [identityBinding.runtimeDirectory, identityBinding.sdkDirectory,
-    ...identityBinding.recordings.flatMap(recording => recording.repetitions)]) {
-    assert.ok(path.win32.isAbsolute(directory.filename));
-    assert.match(directory.entriesSha256, /^[a-f0-9]{64}$/u);
-  }
+  const identity = dependencyClosure(dependencies, ['tests/library/current-identity-http.test.js']);
+  assert.ok(identity.some(entry => entry.path === 'tests/helpers/current-identity-scenario.js'));
+  assert.ok(identity.some(entry => entry.path === 'tools/compat/record-current-identities.js'));
+  assert.ok(identity.some(entry => entry.path === 'tools/compat/identity-side-effect-input.js'));
+  assert.ok(identity.some(entry => entry.path === 'tools/compat/current-native-reference.js'));
+  assert.ok(identity.flatMap(entry => entry.services).includes('nativeInstance'));
   assert.equal(identity.flatMap(entry => entry.declaredReferences)
     .some(reference => reference.required && reference.logicalPath.startsWith('.agent-docs/evidence/core-flow-20260926/')), false,
   'new identity evidence must not inherit unavailable historical preparation inputs');
-  assert.ok(identity.flatMap(entry => entry.variables).includes('MEDIAMANAGER_IDENTITY_WIRE_EVIDENCE'));
+  assert.ok(!identity.some(entry => entry.path === 'tests/library/native-identity-inputs.js'),
+    'current identities must not depend on unavailable historical recordings');
 
-  const byName = dependencyClosure(dependencies, ['tests/library/album-filter-http.test.js',
-    'tests/library/artist-filter-http.test.js', 'tests/library/genre-studio-filter-http.test.js']);
-  assert.ok(byName.some(entry => entry.path === 'tests/library/native-byname-filter-inputs.js'));
-  assert.ok(byName.some(entry => entry.path === 'tests/library/native-byname-filter-scenario.js'));
+  const byName = dependencyClosure(dependencies, ['tests/library/current-byname-filter-http.test.js',
+    'tests/library/current-artist-filter-side-http.test.js']);
+  assert.ok(byName.some(entry => entry.path === 'tests/helpers/current-byname-filter-scenario.js'));
+  assert.ok(byName.some(entry => entry.path === 'tools/compat/artist-filter-input.js'));
+  assert.ok(byName.some(entry => entry.path === 'tools/compat/current-native-reference.js'));
   const byNameFixture = byName.flatMap(entry => entry.fixtureReferences)
-    .find(reference => reference.relativePath === ['.', 'fixtures', 'native-byname-filter-inputs', 'binding.json'].join('/'));
-  assert.ok(byNameFixture, 'all sixteen native recordings must be discoverable through the exact binding');
+    .find(reference => reference.relativePath === ['.', 'fixtures', 'current-byname-filters', 'input-identities.json'].join('/'));
+  assert.ok(byNameFixture, 'the original controlled by-name inputs must retain their exact byte bindings');
   const byNameBinding = JSON.parse(await readFile(byNameFixture.filename, 'utf8'));
-  assert.equal(byNameBinding.recordings.length, 8);
-  assert.equal(byNameBinding.preparationInputFiles.length, 11);
-  assert.equal(byNameBinding.recordings.reduce((total, recording) => total + recording.endpoints, 0), 351);
-  for (const recording of byNameBinding.recordings) {
-    assert.equal(recording.repetitions.length, 2);
-    for (const descriptor of recording.repetitions) {
-      assert.ok(path.win32.isAbsolute(descriptor.filename));
-      assert.match(descriptor.entriesSha256, /^[a-f0-9]{64}$/u);
-    }
-  }
-  assert.ok(byName.flatMap(entry => entry.variables).includes('MEDIAMANAGER_BYNAME_FILTER_WIRE_EVIDENCE'));
+  assert.equal(Object.keys(byNameBinding).length, 5);
+  assert.ok(Object.values(byNameBinding).every(value => /^[a-f0-9]{64}$/u.test(value)));
+  assert.ok(byName.flatMap(entry => entry.services).includes('nativeInstance'));
+  assert.ok(!byName.flatMap(entry => entry.declaredReferences).some(reference => reference.required
+    && reference.logicalPath.startsWith('.agent-docs/')), 'current comparisons must not inherit historical recording requirements');
 
-  const conflicts = dependencyClosure(dependencies, ['tests/library/artist-conflicts-http.test.js',
-    'tests/library/studio-conflicts-http.test.js']);
-  assert.ok(conflicts.some(entry => entry.path === 'tests/library/native-conflict-inputs.js'));
-  assert.ok(conflicts.some(entry => entry.path === 'tests/library/native-conflict-scenario.js'));
-  const conflictFixture = conflicts.flatMap(entry => entry.fixtureReferences)
-    .find(reference => reference.relativePath === ['.', 'fixtures', 'native-conflict-inputs', 'binding.json'].join('/'));
-  assert.ok(conflictFixture, 'the measured conflict identities and both native repetitions must be discoverable');
-  const conflictBinding = JSON.parse(await readFile(conflictFixture.filename, 'utf8'));
-  assert.deepEqual(conflictBinding.recordings.map(entry => entry.kind), ['artist', 'studio']);
-  for (const recording of conflictBinding.recordings) {
-    assert.equal(recording.repetitions.length, 2);
-    assert.equal(recording.currentPhysicalTables.length, 33);
-    assert.equal(recording.nativeMeasuredIdentities.Shadow.Id.length, 36);
+  const conflicts = dependencyClosure(dependencies, ['tests/library/current-identity-conflicts-http.test.js']);
+  for (const filename of ['tests/helpers/current-conflict-scenario.js', 'tests/helpers/current-identity-scenario.js',
+    'tools/compat/record-current-identities.js', 'tools/compat/identity-side-effect-input.js',
+    'tools/compat/current-native-reference.js', 'tools/validation/native-instance-inputs.js']) {
+    assert.ok(conflicts.some(entry => entry.path === filename), filename);
   }
-  assert.equal(conflicts.flatMap(entry => entry.declaredReferences)
-    .some(reference => reference.required && /(?:artist|studio)-conflicts-native-v1/u.test(reference.logicalPath)), false);
-  assert.ok(conflicts.flatMap(entry => entry.variables).includes('MEDIAMANAGER_CONFLICT_EVIDENCE'));
+  assert.ok(conflicts.flatMap(entry => entry.services).includes('nativeInstance'));
+  assert.equal(conflicts.some(entry => entry.path === 'tests/library/native-conflict-inputs.js'), false);
+  assert.ok(!conflicts.flatMap(entry => entry.declaredReferences).some(reference => reference.required
+    && reference.logicalPath.startsWith('.agent-docs/')), 'current conflict inputs come from independent same-run discovery');
 
   const syncPlayDate = dependencyClosure(dependencies, ['tests/sessions/syncplay-date-impact-http.test.js']);
   for (const filename of ['tools/compat/record-syncplay-date-impact.mjs', 'tools/compat/current-native-reference.js',

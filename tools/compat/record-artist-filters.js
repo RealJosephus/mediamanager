@@ -1,6 +1,7 @@
 import { validationExecutable, validationOutputRoot, validationPath } from '../validation/paths.js';
 import { currentNativeReference } from './current-native-reference.js';
 import { createPrivateFilterOutput } from './filter-reference-output.js';
+import { artistFilterInput } from './artist-filter-input.js';
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
@@ -35,7 +36,7 @@ const outputRoot = privateOutput.root;
 let failure;
 try {
 const fixtureInputPath = fileURLToPath(new URL('../../tests/library/fixtures/current-byname-filters/artist-input.json', import.meta.url));
-const fixture = JSON.parse(await readFile(fixtureInputPath, 'utf8'));
+const fixture = artistFilterInput(JSON.parse(await readFile(fixtureInputPath, 'utf8')), modeArgument);
 const fixtureUserId = fixture.userId;
 const current = await currentNativeReference({ fixtureUserId });
 privateOutput.addSecret(current.accessToken);
@@ -211,14 +212,7 @@ function seedDatabase() {
       MusicAlbum: 'MediaBrowser.Controller.Entities.Audio.MusicAlbum'
     };
     const fixedDate = '2026-09-28 02:00:00';
-    const isolatedOrderSeedKeys = modeArgument === 'probe-request-order'
-      ? new Set(['root', 'requestOrderByNameBobSelector', 'artistAlice', 'artistBob'])
-      : modeArgument === 'probe-bom-order'
-        ? new Set(['root', 'requestOrderByNameBobSelector', 'bomEmptyCleanOrphanCredit', 'artistBob'])
-        : null;
-    const seedItems = isolatedOrderSeedKeys
-      ? fixture.items.filter(item => isolatedOrderSeedKeys.has(item.key))
-      : fixture.items;
+    const seedItems = fixture.items;
     const seedItemKeys = new Set(seedItems.map(item => item.key));
     const seedItemValueLinks = fixture.itemValueLinks.filter(link => seedItemKeys.has(link.itemKey));
     const seedValueKeys = new Set(seedItemValueLinks.map(link => link.valueKey));
@@ -389,28 +383,6 @@ const expected = {
 const expectedTotalCounts = { 'user-artist-group-count-before-page': 2 };
 const expectedOrders = { 'music-album-artist-default-order': ['albumAlpha2025', 'albumZeta2025', 'albumBeta2024'] };
 const discoveryOnly = modeArgument === 'discover' ? new Set(fixture.cases.map(testCase => testCase.name)) : new Set();
-const probeCases = {
-  'probe-unknown-credit': [{
-    name: 'artists-unknown-name-creates-selector-and-matches-orphan-credit',
-    query: 'ArtistIds=73000000-0000-0000-0000-000000000002&Artists=NativeMissingArtist',
-    scope: ['unknownNameOrphanCredit', 'artistBob', 'noCredit']
-  }],
-  'probe-bom-credit': [{
-    name: 'artists-bom-name-creates-empty-clean-selector-and-matches-orphan-credit',
-    query: 'Artists=%EF%BB%BF',
-    scope: ['bomEmptyCleanOrphanCredit', 'artistAlice', 'noCredit']
-  }],
-  'probe-request-order': [{
-    name: 'artists-repeated-name-then-whitespace-observes-request-local-created-selector',
-    query: 'Artists=Alice&Artists=%20%20',
-    scope: ['artistAlice', 'artistBob']
-  }],
-  'probe-bom-order': [{
-    name: 'artists-bom-then-whitespace-observes-created-selector-but-prefers-bob-sort',
-    query: 'Artists=%EF%BB%BF&Artists=%20%20',
-    scope: ['bomEmptyCleanOrphanCredit', 'artistBob']
-  }]
-};
 const probeExpectation = {
   'probe-unknown-credit': {
     responseKeys: ['unknownNameOrphanCredit'],
@@ -438,7 +410,7 @@ const probeExpectation = {
     requireOnlyByNameArtistBeforeRead: true
   }
 }[modeArgument];
-const runCases = probeCases[modeArgument] ?? fixture.cases;
+const runCases = fixture.cases;
 const isMainRun = modeArgument === 'main' || modeArgument === 'discover';
 
 const sourcePaths = [

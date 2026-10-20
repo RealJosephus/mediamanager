@@ -1,0 +1,20 @@
+[
+  {
+    "path": "tests/library/artist-conflicts-http.test.js",
+    "sourceCommit": "d250d14f1fac9d9119629827cfe4fb7d0c8aa920",
+    "bytes": 1472,
+    "sha256": "29e419ac3698a03bd3209a4919cf21b9457c2c79c45f4f310b669267d068df67"
+  },
+  {
+    "path": "tests/library/studio-conflicts-http.test.js",
+    "sourceCommit": "d250d14f1fac9d9119629827cfe4fb7d0c8aa920",
+    "bytes": 605,
+    "sha256": "5a68fcd8aabff6e205dfcdd372a7f8d62ee035bee65f67bda913632558072e1a"
+  },
+  {
+    "path": "tests/library/native-conflict-inputs.test.js",
+    "sourceCommit": "d250d14f1fac9d9119629827cfe4fb7d0c8aa920",
+    "bytes": 3374,
+    "sha256": "370236e0a51759eb16ad03c6e5d23385b34d91ac395d75c8b855b03d3402cdf7"
+  }
+]

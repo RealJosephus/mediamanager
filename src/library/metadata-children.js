@@ -325,6 +325,7 @@ export function createMetadataChildren({ store, library, linkedChildren, configu
     children: item => selected(item, item.Type === 'BoxSet' ? 'linked' : item.Type === 'Season' ? 'season'
       : item.Type === 'MusicArtist' && !nonemptyId(item.ParentId) ? 'artist-by-name' : item.Type === 'MusicAlbum' ? 'tracks' : 'children'),
     physical: (item, options) => selected(item, 'physical', options), recursive: (item,options) => selected(item, 'recursive',options),
+    linked: item => selected(item, 'linked'),
     seasonEpisodes: (item, options) => selected(item, 'season', options), seriesEpisodes: item => selected(item, 'series'),
     tracks: item => selected(item, 'tracks'), albums: item => selected(item, 'albums'), libraryFolderIds
   });

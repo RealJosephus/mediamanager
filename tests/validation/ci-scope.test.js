@@ -110,7 +110,7 @@ test('input capture wires the real consumer manifest to required ownership while
 });
 
 test('by-name execution inputs distinguish full selected recordings from the files actually read in other kinds', () => {
-  const contract = executionManifestContract('tests/library/genre-studio-filter-http.test.js');
+  const contract = { kind: 'byname', manifest: 'tests/library/fixtures/native-byname-filter-inputs/binding.json' };
   const filename = path.join(repositoryRoot, contract.manifest), sha256 = digest('native file');
   const root = path.join(repositoryRoot, '.test-output', 'byname-recording');
   const recordings = ['genre', 'studio', 'album'].map(kind => ({ kind,
@@ -381,6 +381,23 @@ test('CI attributes a recursive required input to every required consumer while 
   assert.ok(!absent.requiredReasons.some(reason => reason.startsWith(unrelatedPath + ':')), 'an unrelated requirement must not promote optional ownership');
   assert.deepEqual(applyInputIdentity(classification, { entries: [absent] }, tracked), []);
   assert.deepEqual(classification.records.map(record => record.selected), [false, false, true]);
+});
+
+test('CI binds direct source JSON reads without inheriting unrelated sibling provenance', async () => {
+  const resources = path.join(repositoryRoot, 'src', 'http', 'resources');
+  const schema = path.join(resources, 'item-update-schema.json');
+  const mimeManifest = path.join(resources, 'mime-types-provenance.json');
+  const capture = filename => captureInputIdentity({ selected: [ownPath],
+    dependencies: { entries: [entry(ownPath, { fixtureReferences: [description(filename)] })] },
+    preflight: { ready: true, services: [], tools: [] }, environment: {} });
+  const resource = await capture(schema);
+  assert.ok(resource.entries.some(value => value.filename === schema && value.required));
+  assert.equal(resource.entries.some(value => value.filename === mimeManifest), false);
+  assert.equal(resource.entries.some(value => value.requiredReasons?.some(reason => reason.includes(':manifest-reference:'))), false);
+  const explicit = await capture(mimeManifest);
+  assert.ok(explicit.entries.some(value => value.filename === mimeManifest && value.required));
+  assert.ok(explicit.entries.some(value => value.requiredReasons?.some(reason => reason.includes(':manifest-reference:'))),
+    'explicitly reading a source manifest must still bind its required source and executable descriptors');
 });
 
 test('CI refuses a required digest mismatch without removing the failing consumer from the frozen scope', async () => {

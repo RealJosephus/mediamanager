@@ -1,6 +1,5 @@
 import { validationFileUrl } from '../../tools/validation/paths.js';
 import assert from 'node:assert/strict';
-import { nativeQueryExecutables } from './native-query-default-inputs.js';
 import { createHash } from 'node:crypto';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
@@ -9,65 +8,12 @@ import { getNewItemId } from '../../src/core/identity.js';
 import { tableDefinition } from '../../src/database/model.js';
 import { dateText, dateTicks, idKey } from '../../src/library/records.js';
 import { recordItemFilterCandidate } from './item-filter-http-scenario.js';
-import { assertUserViewEvidenceProvenance, assertUserViewNativeEvidence,
-  candidateCasesFromTrackedInput } from './user-view-native-evidence.js';
 
-const evidenceRoot = validationFileUrl('../../.agent-docs/evidence/user-view-inputs/user-view-menu-native-v1/', import.meta.url);
-const evidence = validationFileUrl('native-run/', evidenceRoot);
-const fixtureBytes = await readFile(validationFileUrl('./fixtures/user-view-menu/input.json', import.meta.url));
-const fixture = JSON.parse(fixtureBytes.toString('utf8'));
-const http = JSON.parse(await readFile(validationFileUrl('native-http.json', evidence), 'utf8'));
-const setup = JSON.parse(await readFile(validationFileUrl('setup-http.json', evidence), 'utf8'));
-const stages = JSON.parse(await readFile(validationFileUrl('stages.json', evidence), 'utf8'));
-const nativeCaseStages = JSON.parse(await readFile(validationFileUrl('case-stages.json', evidence), 'utf8'));
-const summary = JSON.parse(await readFile(validationFileUrl('summary.json', evidence), 'utf8'));
+import { currentUserViewScenario, candidateCasesFromTrackedInput, userViewEvidenceJson } from '../helpers/current-user-view-scenario.js';
+
+const fixtureBytes = await readFile(new URL('./fixtures/user-view-menu/input.json', import.meta.url));
+const fixture = JSON.parse(fixtureBytes);
 const sha256 = bytes => createHash('sha256').update(bytes).digest('hex');
-assert.equal(summary.passed, true);
-assert.equal(summary.candidateVerified, false);
-assert.equal(summary.cases, 196);
-assert.equal(summary.snapshots, 196);
-assert.deepEqual(summary.processResult, { code: 0, signal: null });
-assert.equal(summary.portAvailable, true);
-assert.equal(sha256(await readFile(validationFileUrl('../record-native.mjs', evidence))), summary.recorderSha256);
-assert.equal(sha256(fixtureBytes), summary.fixtureSha256);
-assert.deepEqual(fixtureBytes, await readFile(validationFileUrl('input.json', evidence)));
-assert.equal(JSON.parse(await readFile(validationFileUrl('../oracle-validation.json', evidence), 'utf8')).passed, true);
-assert.deepEqual(stages.afterReads, stages.afterShutdown);
-assert.deepEqual(stages.before.database.foreignKeyCheck, []);
-assert.equal(stages.before.database.baseItems.length, 124);
-assert.equal(stages.before.database.userData.length, 61);
-assert.equal(nativeCaseStages.length, 196);
-const nativeOriginalIds = new Set(stages.before.database.baseItems.map(row => idKey(row.Id)));
-const nativeNewRows = rows => rows.filter(row => !nativeOriginalIds.has(idKey(row.Id)));
-assert.equal(nativeNewRows(stages.afterReads.database.baseItems).length, 28);
-await assertUserViewEvidenceProvenance({
-  evidence,
-  scenario: 'user-view-menu',
-  sourceRecorder: validationFileUrl('../../tools/compat/record-user-view-http.js', import.meta.url),
-  jellyfinDll: nativeQueryExecutables.jellyfinDll,
-  fixtureUserId: fixture.userId,
-});
-assertUserViewNativeEvidence({ fixture, http, setup, stages, caseStages: nativeCaseStages, menuLifecycle: true });
-
-test('user-view-menu evidence gate rejects corrupted status, body, and lifecycle controls', () => {
-  const first = http.records[0];
-  const status = first.response.status;
-  first.response.status = 500;
-  assert.throws(() => assertUserViewNativeEvidence({ fixture, http, setup, stages,
-    caseStages: nativeCaseStages, menuLifecycle: true }), /status comes from tracked input/u);
-  first.response.status = status;
-  const total = first.response.bodyJson.TotalRecordCount;
-  first.response.bodyJson.TotalRecordCount = -1;
-  assert.throws(() => assertUserViewNativeEvidence({ fixture, http, setup, stages,
-    caseStages: nativeCaseStages, menuLifecycle: true }), /TotalRecordCount/u);
-  first.response.bodyJson.TotalRecordCount = total;
-  const endpoint = nativeCaseStages[0].endpoint;
-  nativeCaseStages[0].endpoint = 'legacy';
-  assert.throws(() => assertUserViewNativeEvidence({ fixture, http, setup, stages,
-    caseStages: nativeCaseStages, menuLifecycle: true }), /case stage identity/u);
-  nativeCaseStages[0].endpoint = endpoint;
-});
-
 const dialects = process.env.MEDIAMANAGER_USER_VIEW_MENU_DIALECT
   ? [process.env.MEDIAMANAGER_USER_VIEW_MENU_DIALECT] : ['postgres'];
 if (dialects.some(dialect => !['postgres'].includes(dialect))) throw new Error('Invalid UserView menu dialect.');
@@ -106,8 +52,13 @@ function rowContract(row, userId, userViewIds, final) {
 
 for (const dialect of dialects) {
   test(`${dialect}: nonrecursive movie/TV menus match 196 full HTTP responses and 28 persisted view lifecycles`, {
-    skip: dialect === 'postgres' && !process.env.MEDIAMANAGER_TEST_POSTGRES,
+    skip: !process.env.MEDIAMANAGER_TEST_POSTGRES || !process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE, timeout: 300000,
   }, async () => {
+    const { http, stages, caseStages: nativeCaseStages, summary, root: nativeEvidenceRoot } = await currentUserViewScenario('user-view-menu', fixtureBytes);
+    const nativeOriginalIds = new Set(stages.before.database.baseItems.map(row => idKey(row.Id)));
+    const nativeNewRows = rows => rows.filter(row => !nativeOriginalIds.has(idKey(row.Id)));
+    assert.equal(nativeNewRows(stages.afterReads.database.baseItems).length, 28);
+
     let actual;
     try {
       actual = await recordItemFilterCandidate({
@@ -164,8 +115,8 @@ for (const dialect of dialects) {
         },
       });
     } catch (error) {
-      if (process.env.MEDIAMANAGER_USER_VIEW_MENU_EVIDENCE) {
-        const output = path.resolve(process.env.MEDIAMANAGER_USER_VIEW_MENU_EVIDENCE);
+      if (nativeEvidenceRoot) {
+        const output = process.env.MEDIAMANAGER_USER_VIEW_MENU_EVIDENCE ? path.resolve(process.env.MEDIAMANAGER_USER_VIEW_MENU_EVIDENCE) : nativeEvidenceRoot;
         await mkdir(output, { recursive: true });
         await writeFile(path.join(output, `${dialect}-failure.json`), JSON.stringify({
           passed: false, phaseAcceptance: false, completeResponsesCaptured: false, dialect,
@@ -256,10 +207,10 @@ for (const dialect of dialects) {
       assert.deepEqual(actual.runtimeErrors, []);
       assert.deepEqual(actual.handledExpectedRuntimeErrors, []);
     });
-    if (process.env.MEDIAMANAGER_USER_VIEW_MENU_EVIDENCE) {
-      const output = path.resolve(process.env.MEDIAMANAGER_USER_VIEW_MENU_EVIDENCE);
+    if (nativeEvidenceRoot) {
+      const output = process.env.MEDIAMANAGER_USER_VIEW_MENU_EVIDENCE ? path.resolve(process.env.MEDIAMANAGER_USER_VIEW_MENU_EVIDENCE) : nativeEvidenceRoot;
       await mkdir(output, { recursive: true });
-      const json = value => JSON.stringify(value, (_key, entry) => typeof entry === 'bigint' ? entry.toString() : entry, 2) + '\n';
+      const json = userViewEvidenceJson;
       await writeFile(path.join(output, `${dialect}.json`), json(actual), { flag: 'wx' });
       await writeFile(path.join(output, `${dialect}-comparison.json`), json({
         passed: differences.length === 0, phaseAcceptance: false, dialect, responses: 196, endpointSnapshots: 196,

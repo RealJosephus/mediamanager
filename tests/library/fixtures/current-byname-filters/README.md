@@ -27,7 +27,12 @@ and relationships, filesystem changes, and cleanup. Per-instance user/view IDs
 and newly generated creation timestamps are projected explicitly. Raw outputs
 are retained before comparison.
 
-Scope: Artist 49 cases / 95 responses, Studio 34 / 68, Genre 34 / 68, Album 59 /
-112. The four historical Artist side recordings are not part of this initial
-current-profile entry. Execution requires the workflow's `nativeInstance`,
-native build, tools, and PostgreSQL services and occurs only in GitHub Actions.
+Scope: Artist main 49 cases / 95 responses, Studio 34 / 68, Genre 34 / 68, Album
+59 / 112. Four separate Artist probes add eight responses: unknown name, BOM
+name, repeated name followed by whitespace, and BOM followed by whitespace.
+Their controlled requests and reduced initial graphs are defined in
+`tools/compat/artist-filter-input.js`, independently of native output. Each probe
+compares every created column, existing rows and relationships, directory
+creation, and the repeat endpoint's preservation of the first materialization.
+Execution requires the workflow's `nativeInstance`, native build, tools, and
+PostgreSQL services and occurs only in GitHub Actions.

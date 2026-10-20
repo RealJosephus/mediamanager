@@ -94,6 +94,17 @@ jobs:
         run: |
           printf 'MEDIAMANAGER_VALIDATION_OUTPUT_ROOT=%s\n' "$RUNNER_TEMP/mediamanager-results" >> "$GITHUB_ENV"
           printf 'DOTNET_INSTALL_DIR=%s\n' "$RUNNER_TEMP/mediamanager-dotnet" >> "$GITHUB_ENV"
+      - name: Align Windows system timezone with the declared runtime timezone
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          Set-TimeZone -Id 'Taipei Standard Time'
+          $zone = Get-TimeZone
+          if ($zone.Id -ne 'Taipei Standard Time' -or $zone.BaseUtcOffset.TotalHours -ne 8) {
+            throw 'The native Windows timezone does not match TZ=Asia/Taipei.'
+          }
+          New-Item -ItemType Directory -Path $env:MEDIAMANAGER_VALIDATION_OUTPUT_ROOT -Force | Out-Null
+          $zone | Select-Object Id, BaseUtcOffset | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $env:MEDIAMANAGER_VALIDATION_OUTPUT_ROOT 'system-timezone.json') -Encoding utf8
       - name: Check out exact candidate
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:

@@ -23,9 +23,6 @@ const executionManifests = new Map([
   ['tests/metadata/playlist-items.test.js', ['consumer', 'playlist-layouts']],
   ...['local-xml-provider', 'nfo-episode-blocks', 'nfo-scalar-provider']
     .map(kind => [`tests/metadata/${kind}.test.js`, ['reader-layout', kind]]),
-  ['tests/library/genre-studio-filter-http.test.js', ['byname']],
-  ...['native-byname-filter-inputs', 'native-byname-filter-wire']
-    .map(name => [`tests/library/${name}.test.js`, ['byname', 'all']]),
 ]);
 const sealedExecutionManifests = new Map([
   ['tests/metadata/search-lookup.test.js', ['search-lookup-sources', 'tests/metadata/fixtures/metadata-search-lookup/provenance.json']],
@@ -37,7 +34,6 @@ const sealedExecutionManifests = new Map([
   ['tests/images/splashscreen.test.js', ['splashscreen-sources', 'tests/images/fixtures/splashscreen/files.json']],
   ['tests/library/collection-playlist-resolution.test.js', ['sealed-collection-playlist', 'tests/library/fixtures/collection-playlist-resolution/provenance.json']],
   ['tests/library/collection-post-scan.test.js', ['collection-task-sources', 'tests/library/fixtures/collection-post-scan/provenance.json']],
-  ['tests/library/native-conflict-inputs.js', ['conflict', 'tests/library/fixtures/native-conflict-inputs/binding.json']],
   ['tests/core/native-charset.test.js', ['sealed-charset', 'tests/core/fixtures/native-charset/provenance.json']],
   ['tests/core/native-json-encoder.test.js', ['sealed-json', 'tests/core/fixtures/native-json-encoder/provenance.json']],
   ['tests/http/item-deletion.test.js', ['sealed-http-delete', 'tests/http/fixtures/item-deletion/provenance.json']],
@@ -306,6 +302,10 @@ export async function captureInputIdentity({ selected, dependencies, preflight, 
   // per consumer so every transitive input retains its actual dependency owners.
   const inspectedManifests = new Map(), inspectedDirectories = new Map();
   const directoryFiles = new Map(), manifestContents = new Map();
+  function sharedSourceResource(filename) {
+    const relative = path.relative(repositoryRoot, filename).replaceAll('\\', '/');
+    return /^(?:src|packages|plugins)\//u.test(relative) && !relative.split('/').includes('fixtures');
+  }
   function alreadyInspected(cache, filename, reason) {
     if (!cache.has(filename)) cache.set(filename, new Set());
     const consumers = cache.get(filename);
@@ -435,7 +435,7 @@ export async function captureInputIdentity({ selected, dependencies, preflight, 
       if (!reference.dynamic) {
         add(reference.filename, `${entry.path}:${reference.logicalPath}`);
         // A fixture's manifest may reference sibling files whose paths are constructed dynamically.
-        if (reference.kind === 'file') {
+        if (reference.kind === 'file' && !sharedSourceResource(reference.filename)) {
           add(path.dirname(reference.filename), `${entry.path}:fixture-directory`);
           await bindDirectoryManifests(path.dirname(reference.filename), entry.path, true);
         }
@@ -449,8 +449,13 @@ export async function captureInputIdentity({ selected, dependencies, preflight, 
     }
     for (const fixture of entry.fixtureReferences || []) {
       add(fixture.filename, `${entry.path}:local-fixture`);
-      add(path.dirname(fixture.filename), `${entry.path}:local-fixture-directory`);
-      await bindDirectoryManifests(path.dirname(fixture.filename), entry.path, true);
+      // A direct source resource read binds that file. Its directory can also
+      // hold unrelated generated resources with their own required provenance.
+      // An explicitly read manifest still binds its descriptors below.
+      if (!sharedSourceResource(fixture.filename)) {
+        add(path.dirname(fixture.filename), `${entry.path}:local-fixture-directory`);
+        await bindDirectoryManifests(path.dirname(fixture.filename), entry.path, true);
+      }
       await bindManifestReferences(fixture.filename, entry.path);
     }
   }

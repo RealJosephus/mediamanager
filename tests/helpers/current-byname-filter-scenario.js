@@ -12,7 +12,8 @@ import { filterEvidenceJson } from '../../tools/compat/filter-reference-output.j
 const digest = bytes => createHash('sha256').update(bytes).digest('hex');
 const json = value => JSON.stringify(value, (_, entry) => typeof entry === 'bigint' ? entry.toString() : entry, 2) + '\n';
 
-export async function loadCurrentByNameScenario(kind, root, fixtureBytes, executionInterval) {
+export async function loadCurrentByNameScenario(kind, root, fixtureBytes, executionInterval,
+  { fixture = JSON.parse(fixtureBytes), mode = 'main' } = {}) {
   const load = async name => JSON.parse(await readFile(path.join(root, name), 'utf8'));
   const provenance = await load('provenance.json');
   for (const artifact of provenance.artifacts) {
@@ -31,7 +32,7 @@ export async function loadCurrentByNameScenario(kind, root, fixtureBytes, execut
   assert.equal(cleanup.privateInstanceRemoved, true);
   assert.equal(cleanup.publicFilesAreReportsOnly, true);
   assert.equal(contract.fixtureInputSha256, digest(fixtureBytes));
-  const fixture = JSON.parse(fixtureBytes);
+  assert.equal(contract.mode, mode);
   assert.equal(contract.cases.length, fixture.cases.length);
   assert.deepEqual(contract.cases.map(entry => entry.name), fixture.cases.map(entry => entry.name));
   const setup = kind === 'artist' ? null : await load('native-setup.json');
@@ -61,7 +62,7 @@ export async function loadCurrentByNameScenario(kind, root, fixtureBytes, execut
     return { name, endpoint, request: record.request, response };
   });
   assert.equal(records.length, fixture.cases.reduce((sum, entry) => sum + (entry.endpoints ?? ['items', 'legacy']).length, 0));
-  return { kind, root, fixture, profile, http, records, stages, filesystem, contract, mapping, identifiers, executionInterval,
+  return { kind, mode, root, fixture, profile, http, records, stages, filesystem, contract, mapping, identifiers, executionInterval,
     nativeServerId: profile.nativeServerId };
 }
 
@@ -127,7 +128,10 @@ function assertMutations(actual, scenario, candidateInterval) {
   for (const row of nativeRows) assert.deepEqual(project(candidateByKey.get(key(row)), new Map(), candidateInterval),
     project(row, ids, scenario.executionInterval), key(row));
   const nativeFilesystem = scenario.kind === 'artist'
-    ? ['beforeReads', 'afterReads', 'finalAfterShutdown'].map(name => scenario.filesystem[name].entries.map(entry => ({ ...entry, path: 'artists/' + entry.path })))
+    ? ['beforeReads', 'afterReads', 'finalAfterShutdown'].map(name => [
+      ...(scenario.filesystem[name].exists ? [{ path: 'artists', type: 'directory' }] : []),
+      ...scenario.filesystem[name].entries.map(entry => ({ ...entry, path: 'artists/' + entry.path })),
+    ])
     : ['beforeReads', 'afterReads', 'finalAfterShutdown'].map(name => scenario.filesystem[name].metadata.entries);
   const mapEntries = entries => entries.map(entry => {
     const match = /^views\/([a-f0-9]{32})$/iu.exec(entry.path);
@@ -137,11 +141,11 @@ function assertMutations(actual, scenario, candidateInterval) {
   assert.deepEqual(actual.filesystemAfterReads, mapEntries(nativeFilesystem[1]));
   assert.deepEqual(actual.filesystemAfterShutdown, mapEntries(nativeFilesystem[2]));
   assert.deepEqual(actual.afterShutdown, actual.afterReads, 'Background completion and shutdown preserve the observed database.');
-  if (scenario.kind === 'album') {
+  if (scenario.kind === 'album' || scenario.mode !== 'main') {
     const stages = actual.sideEffect;
-    assert.deepEqual(stages.before, actual.beforeReads, 'No filter writes before the UserView trigger.');
+    assert.deepEqual(stages.before, actual.beforeReads, 'No filter writes before the materialization trigger.');
     assert.deepEqual(stages.filesystemBefore, actual.filesystemBeforeReads);
-    assert.deepEqual(stages.afterRepeat, stages.afterFirst, 'The repeat endpoint preserves the created UserView.');
+    assert.deepEqual(stages.afterRepeat, stages.afterFirst, 'The repeat endpoint preserves the created item.');
     assert.deepEqual(actual.afterReads, stages.afterFirst, 'Later reads preserve the first materialization.');
     assert.deepEqual(stages.filesystemAfterRepeat, stages.filesystemAfterFirst);
     assert.deepEqual(actual.filesystemAfterReads, stages.filesystemAfterFirst);
@@ -150,7 +154,7 @@ function assertMutations(actual, scenario, candidateInterval) {
 }
 
 export async function compareCurrentByNameCandidate(scenario) {
-  const scenarioName = `current-${scenario.kind}-filter`;
+  const scenarioName = `current-${scenario.kind}-filter${scenario.mode === 'main' ? '' : '-' + scenario.mode.slice(6)}`;
   const fixture = projectNativeByNameCandidateInput(scenario.fixture);
   const candidateInterval = { startedAt: new Date().toISOString() };
   const actual = await recordItemFilterCandidate({
@@ -158,7 +162,8 @@ export async function compareCurrentByNameCandidate(scenario) {
     fields: scenario.kind === 'artist' ? 'ProductionYear' : 'ParentId', captureResponseBodies: true,
     captureOrder: true, captureParentItems: scenario.kind !== 'artist', captureStartIndex: scenario.kind !== 'artist',
     trackFilesystem: true, captureEndpointStages: true,
-    trackSideEffectCase: scenario.kind === 'album' ? 'user-root-album-filter-dispatches-repository-query' : null,
+    trackSideEffectCase: scenario.kind === 'album' ? 'user-root-album-filter-dispatches-repository-query'
+      : scenario.mode === 'main' ? null : fixture.cases[0].name,
     prepareScenario: context => seedNativeByNameFilterInput(context, { ...scenario,
       identifiers: new Map([...scenario.identifiers, [idKey(scenario.profile.actualUserId), context.user.Id]]) }),
     afterEndpoint: async ({ testCase, runtime }) => {

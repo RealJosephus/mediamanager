@@ -66,5 +66,5 @@ export async function nativeInstanceInputs(environment = process.env) {
   await bind(initialization.root, initialization.instanceEntriesSha256);
   await bind(seed.destination, seed.instanceEntriesSha256);
   for (const descriptor of initialization.executables.flatMap(value => [value, ...value.dispatch])) await bind(descriptor.filename, descriptor.sha256);
-  return { root, initialization, seed, inputs };
+  return { root, initialization, seed, inputs, build };
 }

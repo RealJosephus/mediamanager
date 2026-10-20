@@ -1,110 +1,18 @@
 import { validationFileUrl } from '../../tools/validation/paths.js';
 import assert from 'node:assert/strict';
-import { nativeQueryExecutables } from './native-query-default-inputs.js';
 import { createHash } from 'node:crypto';
-import { mkdir, mkdtemp, readFile, rm, symlink, writeFile } from 'node:fs/promises';
-import os from 'node:os';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import test from 'node:test';
 import { tableDefinition } from '../../src/database/model.js';
 import { idKey } from '../../src/library/records.js';
 import { recordItemFilterCandidate } from './item-filter-http-scenario.js';
-import { assertUserViewArtifactManifest, assertUserViewEvidenceProvenance, assertUserViewNativeEvidence,
-  candidateCasesFromTrackedInput, userViewArtifactPaths } from './user-view-native-evidence.js';
 
-const evidenceRoot = validationFileUrl('../../.agent-docs/evidence/user-view-inputs/user-root-visibility-native-v1/', import.meta.url);
-const evidence = validationFileUrl('native-run-v4/', evidenceRoot);
-const fixtureUrl = validationFileUrl('./fixtures/user-root-visibility/input.json', import.meta.url);
-const fixtureBytes = await readFile(fixtureUrl);
-const fixture = JSON.parse(fixtureBytes.toString('utf8'));
-const http = JSON.parse(await readFile(validationFileUrl('native-http.json', evidence), 'utf8'));
-const setup = JSON.parse(await readFile(validationFileUrl('setup-http.json', evidence), 'utf8'));
-const stages = JSON.parse(await readFile(validationFileUrl('stages.json', evidence), 'utf8'));
-const caseStages = JSON.parse(await readFile(validationFileUrl('case-stages.json', evidence), 'utf8'));
-const summary = JSON.parse(await readFile(validationFileUrl('summary.json', evidence), 'utf8'));
+import { currentUserViewScenario, candidateCasesFromTrackedInput, userViewEvidenceJson } from '../helpers/current-user-view-scenario.js';
+
+const fixtureBytes = await readFile(new URL('./fixtures/user-root-visibility/input.json', import.meta.url));
+const fixture = JSON.parse(fixtureBytes);
 const sha256 = bytes => createHash('sha256').update(bytes).digest('hex');
-assert.equal(summary.passed, true);
-assert.equal(summary.cases, 256);
-assert.deepEqual(summary.processResult, { code: 0, signal: null });
-assert.equal(summary.portAvailable, true);
-assert.equal(sha256(await readFile(validationFileUrl('../record-native.mjs', evidence))), summary.recorderSha256);
-assert.equal(sha256(fixtureBytes), summary.fixtureSha256);
-assert.deepEqual(fixtureBytes, await readFile(validationFileUrl('input.json', evidence)));
-const oracleValidation = JSON.parse(await readFile(validationFileUrl('../oracle-validation.json', evidence), 'utf8'));
-assert.equal(oracleValidation.passed, true);
-assert.equal(oracleValidation.candidateVerified, false);
-assert.equal(stages.before.database.baseItems.length, 120);
-assert.equal(stages.before.database.itemValues.length, 4);
-assert.deepEqual(stages.before, stages.afterReads);
-assert.deepEqual(stages.before, stages.afterShutdown);
-assert.deepEqual(stages.before.database.foreignKeyCheck, []);
-assert.equal(stages.before.database.userData.length, fixture.userData.length);
-const userRootProvenance = await assertUserViewEvidenceProvenance({
-  evidence,
-  scenario: 'user-root-visibility',
-  sourceRecorder: validationFileUrl('../../tools/compat/record-user-view-http.js', import.meta.url),
-  jellyfinDll: nativeQueryExecutables.jellyfinDll,
-  fixtureUserId: fixture.userId,
-});
-assertUserViewNativeEvidence({ fixture, http, setup, stages, caseStages, menuLifecycle: false });
-
-test('UserView artifact gate rejects noncanonical manifests and linked-root escapes', async t => {
-  const mutations = [
-    candidate => { candidate.artifacts = []; },
-    candidate => { candidate.artifacts.pop(); },
-    candidate => { candidate.artifacts.push(structuredClone(candidate.artifacts[0])); },
-    candidate => { [candidate.artifacts[0], candidate.artifacts[1]] = [candidate.artifacts[1], candidate.artifacts[0]]; },
-    candidate => { candidate.artifacts[0].path = '../record-native.mjs'; },
-    candidate => { candidate.artifacts[0].sha256 = '0'.repeat(64); },
-    candidate => { candidate.artifacts[0].bytes += 1; },
-  ];
-  for (const mutate of mutations) {
-    const corrupted = structuredClone(userRootProvenance);
-    mutate(corrupted);
-    await assert.rejects(() => assertUserViewArtifactManifest({
-      outputRoot: new URL('../', evidence), scenario: 'user-root-visibility', provenance: corrupted,
-    }), assert.AssertionError);
-  }
-
-  const temporary = await mkdtemp(path.join(os.tmpdir(), 'mediamanager-user-view-artifacts-'));
-  t.after(async () => { await rm(temporary, { recursive: true, force: true }); });
-  const outputRoot = path.join(temporary, 'evidence');
-  const outsideRun = path.join(temporary, 'outside-run');
-  await Promise.all([mkdir(outputRoot), mkdir(outsideRun)]);
-  const paths = userViewArtifactPaths('user-root-visibility');
-  const runName = paths.find(relative => relative.includes('/')).split('/')[0];
-  const artifacts = [];
-  for (const relative of paths) {
-    const inRun = relative.startsWith(runName + '/');
-    const filename = path.join(inRun ? outsideRun : outputRoot, inRun ? relative.slice(runName.length + 1) : relative);
-    await mkdir(path.dirname(filename), { recursive: true });
-    const bytes = Buffer.from(`artifact:${relative}`);
-    await writeFile(filename, bytes);
-    artifacts.push({ path: relative, bytes: bytes.length, sha256: sha256(bytes) });
-  }
-  await symlink(outsideRun, path.join(outputRoot, runName), process.platform === 'win32' ? 'junction' : 'dir');
-  await assert.rejects(() => assertUserViewArtifactManifest({
-    outputRoot, scenario: 'user-root-visibility',
-    provenance: { scenario: 'user-root-visibility', artifacts },
-  }), /escapes its real root/u);
-});
-
-test('user-root evidence gate rejects corrupted status, body, and setup controls', () => {
-  const first = http.records[0];
-  const status = first.response.status;
-  first.response.status = 500;
-  assert.throws(() => assertUserViewNativeEvidence({ fixture, http, setup, stages, caseStages, menuLifecycle: false }), /status comes from tracked input/u);
-  first.response.status = status;
-  const items = first.response.bodyJson.Items;
-  first.response.bodyJson.Items = {};
-  assert.throws(() => assertUserViewNativeEvidence({ fixture, http, setup, stages, caseStages, menuLifecycle: false }), /Items must be an array/u);
-  first.response.bodyJson.Items = items;
-  const controlStatus = setup.records[0].status;
-  setup.records[0].status = 200;
-  assert.throws(() => assertUserViewNativeEvidence({ fixture, http, setup, stages, caseStages, menuLifecycle: false }), /setup\/control/u);
-  setup.records[0].status = controlStatus;
-});
-
 const dialects = process.env.MEDIAMANAGER_USER_ROOT_VISIBILITY_DIALECT
   ? [process.env.MEDIAMANAGER_USER_ROOT_VISIBILITY_DIALECT] : ['postgres'];
 if (dialects.some(dialect => !['postgres'].includes(dialect))) throw new Error('Invalid Library-own visibility and ordinary-user query dialect.');
@@ -120,9 +28,11 @@ const cases = candidateCasesFromTrackedInput(fixture).map(item => {
 });
 
 for (const dialect of dialects) {
-  test(`${dialect}: Library-own visibility and ordinary-user query dispatch matches 256 frozen full HTTP list responses`, {
-    skip: dialect === 'postgres' && !process.env.MEDIAMANAGER_TEST_POSTGRES,
+  test(`${dialect}: Library-own visibility and ordinary-user query dispatch matches 256 current native full HTTP list responses`, {
+    skip: !process.env.MEDIAMANAGER_TEST_POSTGRES || !process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE, timeout: 300000,
   }, async () => {
+    const { http, stages, caseStages: nativeCaseStages, summary, root: nativeEvidenceRoot } = await currentUserViewScenario('user-root-visibility', fixtureBytes);
+
     let actual;
     try { actual = await recordItemFilterCandidate({
       dialect, fixture: { ...fixture, cases }, connectionString: process.env.MEDIAMANAGER_TEST_POSTGRES,
@@ -169,8 +79,8 @@ for (const dialect of dialects) {
       },
     });
     } catch (error) {
-      if (process.env.MEDIAMANAGER_USER_ROOT_VISIBILITY_EVIDENCE) {
-        const output = path.resolve(process.env.MEDIAMANAGER_USER_ROOT_VISIBILITY_EVIDENCE);
+      if (nativeEvidenceRoot) {
+        const output = process.env.MEDIAMANAGER_USER_ROOT_VISIBILITY_EVIDENCE ? path.resolve(process.env.MEDIAMANAGER_USER_ROOT_VISIBILITY_EVIDENCE) : nativeEvidenceRoot;
         await mkdir(output, { recursive: true });
         await writeFile(path.join(output, `${dialect}-failure.json`), JSON.stringify({
           passed: false, phaseAcceptance: false, completeResponsesCaptured: false, dialect,
@@ -201,10 +111,10 @@ for (const dialect of dialects) {
         } catch (error) { differences.push({ name: item.name, endpoint: endpoint.endpoint, message: error.message }); }
       }
     }
-    if (process.env.MEDIAMANAGER_USER_ROOT_VISIBILITY_EVIDENCE) {
-      const output = path.resolve(process.env.MEDIAMANAGER_USER_ROOT_VISIBILITY_EVIDENCE);
+    if (nativeEvidenceRoot) {
+      const output = process.env.MEDIAMANAGER_USER_ROOT_VISIBILITY_EVIDENCE ? path.resolve(process.env.MEDIAMANAGER_USER_ROOT_VISIBILITY_EVIDENCE) : nativeEvidenceRoot;
       await mkdir(output, { recursive: true });
-      const json = value => JSON.stringify(value, (_key, entry) => typeof entry === 'bigint' ? entry.toString() : entry, 2) + '\n';
+      const json = userViewEvidenceJson;
       await writeFile(path.join(output, `${dialect}.json`), json(actual), { flag: 'wx' });
       await writeFile(path.join(output, `${dialect}-comparison.json`), json({
         passed: differences.length === 0, phaseAcceptance: false, dialect, responses: http.records.length,

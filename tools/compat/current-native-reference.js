@@ -6,7 +6,6 @@ import path from 'node:path';
 import { tmpdir } from 'node:os';
 import { DatabaseSync } from 'node:sqlite';
 import { nativeInstanceInputs } from '../validation/native-instance-inputs.js';
-import { verifyNativeBuild } from '../validation/native-build-inputs.js';
 import { describeFile } from '../validation/inventory.js';
 import { validationExecutable } from '../validation/paths.js';
 import { prepareNativeApplicationData, resolveNativeTools, verifyNativeProcessInputs } from './native-process-inputs.js';
@@ -16,7 +15,7 @@ import { stopNativeReference } from './native-shutdown.js';
 export async function currentNativeReference({ fixtureUserId } = {}) {
   // The environment variable also declares the real service to inventory.
   assert.ok(process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE);
-  const instance = await nativeInstanceInputs(), build = await verifyNativeBuild();
+  const instance = await nativeInstanceInputs(), build = instance.build;
   const tools = await resolveNativeTools();
   const sourceRoot = instance.seed.destination;
   const sourceDatabase = path.join(sourceRoot, 'data', 'data', 'jellyfin.db');
@@ -138,7 +137,7 @@ export async function currentNativeReference({ fixtureUserId } = {}) {
       await verifyNativeProcessInputs({ executables: tools.executables, ...applicationData });
       const after = await nativeInstanceInputs();
       assert.deepEqual(after.inputs, instance.inputs, 'The current stopped input instance is immutable.');
-      assert.equal((await verifyNativeBuild()).identitySha256, build.identitySha256);
+      assert.equal(after.build.identitySha256, build.identitySha256);
     },
   };
 }

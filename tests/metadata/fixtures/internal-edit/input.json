@@ -1,0 +1,27 @@
+{
+  "types": ["AggregateFolder", "UserRootFolder", "CollectionFolder", "UserView", "PlaylistsFolder", "Playlist", "Series"],
+  "nodes": [
+    { "key": "subject", "type": "$subject", "parent": null },
+    { "key": "physical1", "type": "Folder", "parent": null },
+    { "key": "physical2", "type": "Folder", "parent": null },
+    { "key": "branch", "type": "Folder", "parent": "$children" },
+    { "key": "branchLeaf", "type": "Movie", "parent": "branch" },
+    { "key": "directLeaf", "type": "Movie", "parent": "$second" },
+    { "key": "nestedCollection", "type": "CollectionFolder", "parent": "$children", "physical": ["nestedPhysical"] },
+    { "key": "nestedPhysical", "type": "Folder", "parent": null },
+    { "key": "nestedLeaf", "type": "Movie", "parent": "nestedPhysical" },
+    { "key": "nestedPlaylist", "type": "Playlist", "parent": "$children", "linked": ["nestedLink"] },
+    { "key": "phantomChild", "type": "Movie", "parent": "nestedPlaylist" },
+    { "key": "nestedLink", "type": "Movie", "parent": null },
+    { "key": "rootLink", "type": "Season", "parent": null },
+    { "key": "rootLinkChild", "type": "Movie", "parent": "rootLink" },
+    { "key": "virtualChild", "type": "Movie", "parent": null }
+  ],
+  "subjectPhysical": ["physical2", "physical1", "physical2", "missing", "directLeaf"],
+  "subjectLinked": ["rootLink", "branch"],
+  "requests": [
+    { "Name": "Edited internal folder", "ForcedSortName": "Forced internal", "Overview": "Edited overview", "Genres": ["Drama", "DRAMA"], "Tags": [" Edited ", "edited"], "ProviderIds": {"Tmdb": " 42 ", "UnknownProvider": " preserved "}, "LockedFields": ["Name", "Tags"], "DateCreated": "2024-01-02T03:04:05.1234567Z", "PreferredMetadataLanguage": "en", "LockData": true },
+    { "Name": "Unlocked internal folder", "Tags": ["Final"], "LockData": false },
+    { "Name": "Same lock state", "Tags": ["Final"], "LockData": false }
+  ]
+}

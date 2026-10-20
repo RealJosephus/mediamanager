@@ -1,0 +1,38 @@
+[
+  {
+    "path": "tests/library/artist-concurrency-http.test.js",
+    "sourceCommit": "ec3333ccc75299697afe4f4830d7988012159a4a",
+    "bytes": 7046,
+    "sha256": "764cf02e3d0a98db6d5b111da1d824555dd3574ad78071ac8b49e588379a909c"
+  },
+  {
+    "path": "tests/library/studio-concurrency-http.test.js",
+    "sourceCommit": "ec3333ccc75299697afe4f4830d7988012159a4a",
+    "bytes": 6894,
+    "sha256": "04f86a2a7f262d3ace43dec0651610552963e5c0ea996878fdc3f4a54ea850ae"
+  },
+  {
+    "path": "tests/library/artist-unicode-sortname-http.test.js",
+    "sourceCommit": "ec3333ccc75299697afe4f4830d7988012159a4a",
+    "bytes": 7436,
+    "sha256": "6164336505826e08a164a57effb0776d7b92ee112852572d21b856a2ed14c12c"
+  },
+  {
+    "path": "tests/library/studio-unicode-sortname-http.test.js",
+    "sourceCommit": "ec3333ccc75299697afe4f4830d7988012159a4a",
+    "bytes": 7428,
+    "sha256": "6fce546c41fb639788a3cce9c50bcabbaf61dd603201f5ad870397ce3e0a013f"
+  },
+  {
+    "path": "tests/library/artist-path-race-http.test.js",
+    "sourceCommit": "ec3333ccc75299697afe4f4830d7988012159a4a",
+    "bytes": 8523,
+    "sha256": "477c4ad19a78c3a60a7c33c031e64a980cbe3c6273361fd328f4ecef6e01c5d5"
+  },
+  {
+    "path": "tests/library/studio-path-race-http.test.js",
+    "sourceCommit": "ec3333ccc75299697afe4f4830d7988012159a4a",
+    "bytes": 8453,
+    "sha256": "5d3e22e4068d822f623244ff92f952ade6027d566e1d81bd682ae8650154bf1e"
+  }
+]

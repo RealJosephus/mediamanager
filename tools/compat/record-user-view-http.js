@@ -2,9 +2,8 @@
 // The recorder never reads candidate expectations; all wire and persistence evidence
 // comes from the native process and its copied SQLite database.
 import assert from 'node:assert/strict';
-import { spawn, spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { closeSync, existsSync, openSync } from 'node:fs';
+import { existsSync } from 'node:fs';
 import { cp, mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
 import { createServer } from 'node:net';
 import path from 'node:path';
@@ -12,81 +11,74 @@ import { DatabaseSync } from 'node:sqlite';
 import { fileURLToPath } from 'node:url';
 
 import { tableDefinition } from '../../src/database/model.js';
-import { assertValidationOutputChild, validationExecutable, validationPath } from '../validation/paths.js';
-import { captureFilterReferencePreparation } from './filter-reference-inputs.mjs';
+import { assertValidationOutputChild } from '../validation/paths.js';
+import { currentNativeReference } from './current-native-reference.js';
+import { createPrivateFilterOutput } from './filter-reference-output.js';
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const scenarios = {
   'user-root-visibility': {
-    evidenceName: 'user-root-visibility-native-v1',
     fixture: 'tests/library/fixtures/user-root-visibility/input.json',
-    runName: 'native-run-v4',
     expectedCases: 256,
-    queryInputExtraLf: false,
     menuLifecycle: false,
   },
   'user-view-menu': {
-    evidenceName: 'user-view-menu-native-v1',
     fixture: 'tests/library/fixtures/user-view-menu/input.json',
-    runName: 'native-run',
     expectedCases: 196,
     expectedDynamicMenuViews: 28,
-    queryInputExtraLf: false,
     menuLifecycle: true,
   },
   'user-view-query': {
-    evidenceName: 'user-view-query-native-v1',
     fixture: 'tests/library/fixtures/user-view-query/input.json',
-    runName: 'native-run-v4',
     expectedCases: 260,
-    queryInputExtraLf: true,
     menuLifecycle: false,
   },
 };
 
-const [scenarioName, outputArgument, portArgument] = process.argv.slice(2);
+export async function recordUserViewHttp(scenarioName, outputArgument, portArgument) {
 const scenario = scenarios[scenarioName];
 if (!scenario || !outputArgument || !portArgument) {
   throw new Error('Usage: node tools/compat/record-user-view-http.js <user-root-visibility|user-view-menu|user-view-query> <new-evidence-root> <loopback-port>');
 }
-const outputRoot = assertValidationOutputChild(path.resolve(repoRoot, outputArgument));
-if (existsSync(outputRoot)) {
+const publicOutputRoot = assertValidationOutputChild(path.resolve(repoRoot, outputArgument));
+if (existsSync(publicOutputRoot)) {
   throw new Error('Evidence root must be a new child of the configured validation output root.');
 }
-assert.equal(path.basename(outputRoot), scenario.evidenceName,
-  `Evidence root must be named ${scenario.evidenceName}.`);
 const port = Number(portArgument);
 if (!Number.isInteger(port) || port < 1024 || port > 65535) throw new Error('Invalid loopback port.');
 
-const runRoot = path.join(outputRoot, scenario.runName);
+const privateOutput = await createPrivateFilterOutput(publicOutputRoot);
+const outputRoot = privateOutput.root, runRoot = outputRoot;
+let failure;
+try {
 const referenceRoot = path.join(runRoot, 'reference');
 const databasePath = path.join(referenceRoot, 'data/data/jellyfin.db');
 const bundledSourceDatabase = path.join(outputRoot, 'source-initial.db');
-const bundledSourceBootstrap = path.join(outputRoot, 'source-bootstrap.json');
-const bundledSourceBootstrapLog = path.join(outputRoot, 'source-bootstrap.log');
-const sourceRoot = validationPath(path.join(repoRoot, '.agent-docs/evidence/core-flow-20260926/reference'));
-const sourceDatabase = validationPath(path.join(repoRoot, '.agent-docs/evidence/core-flow-20260926/initial.db'));
 const fixturePath = path.join(repoRoot, scenario.fixture);
-const jellyfinDll = validationPath(path.join(repoRoot,
-  '.agent-docs/baselines/jellyfin-current/source/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll'));
-const dotnetPath = validationExecutable('dotnet');
-const ffmpegPath = validationExecutable('ffmpeg');
 const origin = `http://127.0.0.1:${port}`;
-const password = 'isolated-core-flow-password';
 const recorderPath = fileURLToPath(import.meta.url);
 const recorderBytes = await readFile(recorderPath);
 const sourceFixtureBytes = await readFile(fixturePath);
-const recordedFixtureBytes = scenario.queryInputExtraLf
-  ? Buffer.concat([sourceFixtureBytes, Buffer.from('\n')]) : sourceFixtureBytes;
-const fixture = JSON.parse(sourceFixtureBytes.toString('utf8'));
+const recordedFixtureBytes = sourceFixtureBytes;
+let fixture = JSON.parse(sourceFixtureBytes.toString('utf8'));
+const current = await currentNativeReference({ fixtureUserId: fixture.userId });
+privateOutput.addSecret(current.accessToken);
+const { sourceRoot, sourceDatabase, jellyfinDll, dotnet: dotnetPath, ffmpeg: ffmpegPath } = current;
 const idKey = value => String(value).replaceAll('-', '').toLowerCase();
-const upperId = value => String(value).toUpperCase();
-const itemByKey = new Map(fixture.items.map(item => [item.key, item]));
-const itemById = new Map(fixture.items.map(item => [idKey(item.id), item]));
-const valueByKey = new Map(fixture.itemValues.map(item => [item.key, item]));
-const fixtureItemIds = new Set(fixture.items.map(item => idKey(item.id)));
-const visibleFixtureItemIds = new Set(fixture.items.filter(item => item.type !== 'AggregateFolder').map(item => idKey(item.id)));
-const fixtureValueIds = new Set(fixture.itemValues.map(item => idKey(item.id)));
+const upperId = value => {
+  const id = idKey(value);
+  assert.match(id, /^[a-f0-9]{32}$/u);
+  return `${id.slice(0, 8)}-${id.slice(8, 12)}-${id.slice(12, 16)}-${id.slice(16, 20)}-${id.slice(20)}`.toUpperCase();
+};
+let itemByKey, itemById, valueByKey, fixtureItemIds, visibleFixtureItemIds, fixtureValueIds;
+function indexFixture() {
+  itemByKey = new Map(fixture.items.map(item => [item.key, item]));
+  itemById = new Map(fixture.items.map(item => [idKey(item.id), item]));
+  valueByKey = new Map(fixture.itemValues.map(item => [item.key, item]));
+  fixtureItemIds = new Set(fixture.items.map(item => idKey(item.id)));
+  visibleFixtureItemIds = new Set(fixture.items.filter(item => item.type !== 'AggregateFolder').map(item => idKey(item.id)));
+  fixtureValueIds = new Set(fixture.itemValues.map(item => idKey(item.id)));
+}
 const collectionsPath = path.join(referenceRoot, 'data/data/collections');
 const paths = {
   aggregate: path.join(referenceRoot, 'data/root'),
@@ -161,17 +153,6 @@ async function portAvailable() {
     server.once('error', () => resolve(false));
     server.listen({ host: '127.0.0.1', port, exclusive: true }, () => server.close(() => resolve(true)));
   });
-}
-
-async function walk(directory) {
-  if (!existsSync(directory)) return [];
-  const files = [];
-  for (const entry of await readdir(directory, { withFileTypes: true })) {
-    const target = path.join(directory, entry.name);
-    if (entry.isDirectory()) files.push(...await walk(target));
-    else files.push(target);
-  }
-  return files;
 }
 
 async function filesystemSnapshot() {
@@ -310,7 +291,7 @@ function upsertBaseItem(database, template, item) {
 
 function seedDatabase() {
   const database = new DatabaseSync(databasePath);
-  const templateDatabase = new DatabaseSync(sourceDatabase, { readOnly: true });
+  const templateDatabase = new DatabaseSync(bundledSourceDatabase, { readOnly: true });
   database.exec('PRAGMA busy_timeout=5000');
   try {
     const folderTemplate = templateDatabase.prepare('SELECT * FROM "BaseItems" WHERE "Id" = ?')
@@ -418,21 +399,11 @@ function seedDatabase() {
 }
 
 async function prepareReference() {
-  const preparation = await captureFilterReferencePreparation({
-    sourceRoot,
-    sourceDatabase,
-    repoRoot,
-    fixtureUserId: fixture.userId,
-  });
   await mkdir(outputRoot);
-  await mkdir(runRoot);
-  await writeFile(path.join(outputRoot, 'record-native.mjs'), recorderBytes, { flag: 'wx' });
   await writeFile(path.join(runRoot, 'input.json'), recordedFixtureBytes, { flag: 'wx' });
   await cp(sourceDatabase, bundledSourceDatabase, { force: false, errorOnExist: true });
-  await cp(path.join(sourceRoot, 'bootstrap.json'), bundledSourceBootstrap, { force: false, errorOnExist: true });
-  await cp(path.join(sourceRoot, 'bootstrap.log'), bundledSourceBootstrapLog, { force: false, errorOnExist: true });
   const bundledSourceDatabaseSha256 = sha256(await readFile(bundledSourceDatabase));
-  assert.equal(bundledSourceDatabaseSha256, preparation.sourceDatabaseSha256,
+  assert.equal(bundledSourceDatabaseSha256, inputHashes.sourceDatabaseSha256,
     'The bundled source database must be an exact copy of the stopped source database.');
   await cp(sourceRoot, referenceRoot, {
     recursive: true,
@@ -444,20 +415,49 @@ async function prepareReference() {
   await mkdir(path.join(referenceRoot, 'log'), { recursive: true });
   await cp(bundledSourceDatabase, databasePath, { force: false, errorOnExist: true });
   const databaseBeforeSeedSha256 = sha256(await readFile(databasePath));
-  assert.equal(databaseBeforeSeedSha256, preparation.sourceDatabaseSha256,
+  assert.equal(databaseBeforeSeedSha256, inputHashes.sourceDatabaseSha256,
     'The working database must begin as an exact source-database copy.');
-  const sourceForms = [sourceRoot, sourceRoot.replaceAll('\\', '/'), sourceRoot.replaceAll('\\', '\\\\')];
-  for (const file of await walk(referenceRoot)) {
-    if (!/\.(?:json|xml)$/u.test(file)) continue;
-    let content = await readFile(file, 'utf8');
-    for (const source of sourceForms) content = content.replaceAll(source, referenceRoot);
-    if (path.basename(file).toLowerCase() === 'network.xml') {
-      content = content.replace(/<(InternalHttpPort|PublicHttpPort)>\d+<\/\1>/gu,
-        (_match, name) => `<${name}>${port}</${name}>`);
-      content = content.replace(/<AutoDiscovery>true<\/AutoDiscovery>/gu, '<AutoDiscovery>false</AutoDiscovery>');
-    }
-    await writeFile(file, content);
+  await current.prepareClone(referenceRoot, port);
+  // Resolve the real UserRoot through HTTP before introducing synthetic rows.
+  // Startup scanning must never be allowed to remove the controlled graph.
+  const discovery = current.start({ referenceRoot, outputRoot, label: 'discovery', origin });
+  let rootResponse, discoveryOutcome;
+  try {
+    await discovery.ready();
+    rootResponse = await request('/Items/Root', { token: current.accessToken });
+    assert.equal(rootResponse.status, 200, rootResponse.bodyText);
+    assert.equal(rootResponse.bodyJson.Type, 'UserRootFolder');
+  } finally {
+    discoveryOutcome = await discovery.stop(async () => (await request('/System/Shutdown',
+      { method: 'POST', token: current.accessToken })).status, portAvailable);
+    assert.equal(discoveryOutcome.cleanShutdown, true);
+    assert.equal(discoveryOutcome.code, 0);
+    assert.equal(discoveryOutcome.pidGone, true);
+    assert.equal(discoveryOutcome.portAvailable, true);
   }
+  const stopped = new DatabaseSync(databasePath, { readOnly: true });
+  let aggregate;
+  try {
+    const rows = stopped.prepare('SELECT "Id" FROM "BaseItems" WHERE "Type" = ?').all(nativeTypes.AggregateFolder);
+    assert.equal(rows.length, 1);
+    aggregate = rows[0];
+  } finally { stopped.close(); }
+  const bindings = [
+    { kind: 'user', fixtureId: fixture.userId, actualId: upperId(current.userId) },
+    { kind: 'AggregateFolder', fixtureId: fixture.items.find(item => item.type === 'AggregateFolder').id, actualId: aggregate.Id },
+    { kind: 'UserRootFolder', fixtureId: fixture.items.find(item => item.type === 'UserRootFolder').id, actualId: upperId(rootResponse.bodyJson.Id) },
+  ];
+  const replaceIdentity = value => {
+    if (Array.isArray(value)) return value.map(replaceIdentity);
+    if (value && typeof value === 'object') return Object.fromEntries(Object.entries(value).map(([key, child]) => [key, replaceIdentity(child)]));
+    if (typeof value !== 'string') return value;
+    for (const binding of bindings) value = value.replaceAll(binding.fixtureId, binding.actualId);
+    return value;
+  };
+  const rootId = fixture.rootId;
+  fixture = replaceIdentity(fixture);
+  assert.equal(fixture.rootId, rootId, 'Library A remains the query root; only actual instance identities are rebound.');
+  indexFixture();
   for (const directory of Object.values(paths)) await mkdir(directory, { recursive: true });
   seedDatabase();
   const seededDatabase = new DatabaseSync(databasePath, { readOnly: true });
@@ -473,21 +473,16 @@ async function prepareReference() {
     seededDatabase.close();
   }
   const copyBindings = {
-    recorderSha256: sha256(await readFile(path.join(outputRoot, 'record-native.mjs'))),
+    recorderSha256: sha256(recorderBytes),
     fixtureSha256: sha256(await readFile(path.join(runRoot, 'input.json'))),
     sourceDatabase: { path: 'source-initial.db', sha256: bundledSourceDatabaseSha256 },
-    sourcePreparation: {
-      bootstrap: { path: 'source-bootstrap.json', sha256: sha256(await readFile(bundledSourceBootstrap)) },
-      log: { path: 'source-bootstrap.log', sha256: sha256(await readFile(bundledSourceBootstrapLog)) },
-    },
     databaseBeforeSeedSha256,
     seededUserRoot,
   };
   assert.equal(copyBindings.recorderSha256, inputHashes.recorderSha256);
   assert.equal(copyBindings.fixtureSha256, inputHashes.fixtureSha256);
-  assert.equal(copyBindings.sourcePreparation.bootstrap.sha256, preparation.inputs[0].sha256);
-  assert.equal(copyBindings.sourcePreparation.log.sha256, preparation.inputs[5].sha256);
-  const result = { ...preparation, copyBindings };
+  const result = { ...current.preparation, copyBindings, bindings,
+    userRootDiscovery: { route: '/Items/Root', response: rootResponse, process: discoveryOutcome } };
   await writeFile(path.join(runRoot, 'reference-preparation.json'), json(result), { flag: 'wx' });
   return result;
 }
@@ -520,106 +515,17 @@ async function request(route, { method = 'GET', token, body } = {}) {
 }
 
 function startReference() {
-  const stdoutDescriptor = openSync(path.join(runRoot, 'reference-stdout.log'), 'wx');
-  const stderrDescriptor = openSync(path.join(runRoot, 'reference-stderr.log'), 'wx');
-  const args = [jellyfinDll,
-    '--datadir', path.join(referenceRoot, 'data'), '--configdir', path.join(referenceRoot, 'config'),
-    '--cachedir', path.join(referenceRoot, 'cache'), '--logdir', path.join(referenceRoot, 'log'),
-    '--ffmpeg', ffmpegPath, '--nowebclient'];
-  const child = spawn(dotnetPath, args, { cwd: repoRoot, windowsHide: true, stdio: ['ignore', stdoutDescriptor, stderrDescriptor] });
-  let spawnError;
-  const completion = new Promise(resolve => {
-    child.once('error', error => {
-      spawnError = error;
-      resolve({ code: null, signal: null, error: { name: error.name, message: error.message } });
-    });
-    child.once('exit', (code, signal) => resolve({ code, signal }));
-  });
-  return { child, completion, command: [dotnetPath, ...args],
-    get spawnError() { return spawnError; }, stdoutDescriptor, stderrDescriptor };
+  const instance = current.start({ referenceRoot, outputRoot, label: 'reference', origin });
+  return { ...instance, command: [dotnetPath, ...instance.arguments] };
 }
 
-async function waitForReady(instance) {
-  let consecutiveSuccesses = 0;
-  for (let attempt = 0; attempt < 120; attempt++) {
-    if (instance.spawnError) throw instance.spawnError;
-    if (instance.child.exitCode !== null || instance.child.signalCode !== null) {
-      throw new Error(`Frozen reference exited before readiness: ${instance.child.exitCode}/${instance.child.signalCode}.`);
-    }
-    try {
-      const startupLog = await readFile(path.join(runRoot, 'reference-stdout.log'), 'utf8');
-      const response = await fetch(origin + '/System/Info/Public', { signal: AbortSignal.timeout(1_000) });
-      consecutiveSuccesses = response.ok && startupLog.includes('Main: Startup complete')
-        ? consecutiveSuccesses + 1 : 0;
-      await response.body?.cancel();
-      if (consecutiveSuccesses >= 3) return;
-    } catch {
-      consecutiveSuccesses = 0;
-    }
-    await delay(500);
-  }
-  throw new Error('Frozen reference did not become ready within 60 seconds.');
-}
-
-function processIsGone(pid) {
-  if (!Number.isInteger(pid) || pid <= 0) return true;
-  try { process.kill(pid, 0); return false; }
-  catch (error) { return error?.code === 'ESRCH'; }
-}
-
-async function completionWithin(completion, milliseconds) {
-  let timer;
-  try {
-    return await Promise.race([completion, new Promise(resolve => { timer = setTimeout(() => resolve(null), milliseconds); })]);
-  } finally {
-    clearTimeout(timer);
-  }
-}
-
-async function waitForCondition(operation, milliseconds) {
-  const deadline = Date.now() + milliseconds;
-  do {
-    if (await operation()) return true;
-    await delay(100);
-  } while (Date.now() < deadline);
-  return await operation();
-}
+async function waitForReady(instance) { await instance.ready(); }
 
 async function stopReference(instance, token) {
-  let shutdownStatus = null;
-  let result;
-  if (instance.child.exitCode === null && instance.child.signalCode === null && token) {
-    try { shutdownStatus = (await request('/System/Shutdown', { method: 'POST', token })).status; }
-    catch { shutdownStatus = null; }
-  }
-  if (instance.child.exitCode === null && instance.child.signalCode === null) {
-    result = await completionWithin(instance.completion, 20_000);
-    if (result === null) {
-      instance.child.kill();
-      result = await completionWithin(instance.completion, 10_000);
-    }
-    if (result === null && instance.child.pid) {
-      spawnSync('taskkill', ['/PID', String(instance.child.pid), '/T', '/F'], {
-        cwd: repoRoot, windowsHide: true, encoding: 'utf8', timeout: 10_000,
-      });
-      result = await completionWithin(instance.completion, 10_000);
-    }
-  } else {
-    result = await instance.completion;
-  }
-  for (const descriptor of [instance.stdoutDescriptor, instance.stderrDescriptor]) {
-    try { closeSync(descriptor); } catch { /* The process already released it. */ }
-  }
-  const pidGone = await waitForCondition(() => processIsGone(instance.child.pid), 10_000);
-  const released = await waitForCondition(portAvailable, 10_000);
-  return {
-    result: result ?? { code: null, signal: null },
-    shutdownStatus,
-    pidGone,
-    portAvailable: released,
-  };
+  const result = await instance.stop(async () => (await request('/System/Shutdown', { method: 'POST', token })).status, portAvailable);
+  return { result: { code: result.code, signal: result.signal }, shutdownStatus: result.cleanShutdown ? 204 : null,
+    pidGone: result.pidGone, portAvailable: result.portAvailable };
 }
-
 function routeFor(endpoint, testCase, userId) {
   if (endpoint === 'detail') return `/Items/${itemByKey.get(testCase.detailKey).id}`;
   const common = [];
@@ -804,78 +710,47 @@ assert.equal(await portAvailable(), true, 'Loopback port is occupied.');
 const inputHashes = {
   recorderSha256: sha256(recorderBytes),
   fixtureSha256: sha256(recordedFixtureBytes),
-  trackedFixtureSha256: sha256(sourceFixtureBytes),
   sourceDatabaseSha256: sha256(await readFile(sourceDatabase)),
   dllSha256: sha256(await readFile(jellyfinDll)),
   dotnetSha256: sha256(await readFile(dotnetPath)),
   ffmpegSha256: sha256(await readFile(ffmpegPath)),
-  sourceBootstrapSha256: sha256(await readFile(path.join(sourceRoot, 'bootstrap.json'))),
-  sourceBootstrapLogSha256: sha256(await readFile(path.join(sourceRoot, 'bootstrap.log'))),
 };
 const expectedMatrixCount = fixture.cases.reduce((count, item) => count + (item.endpoints?.length ?? 2), 0);
 assert.equal(expectedMatrixCount, scenario.expectedCases, 'Fixture endpoint matrix changed.');
 
-let preparation;
-try {
-  preparation = await prepareReference();
-} catch (error) {
-  await mkdir(outputRoot, { recursive: true });
-  await writeFile(path.join(outputRoot, 'preparation-failure.json'), json({
-    passed: false,
-    candidateVerified: false,
-    ...inputHashes,
-    error: { name: error.name, message: error.message, stack: error.stack },
-  }), { flag: 'wx' });
-  throw error;
-}
-
-const stages = {};
-const records = [];
-const setupRecords = [];
-const caseStages = [];
-let instance;
-let userToken;
-let apiKey;
-let outcomeError;
-let launchDllSha256 = null;
-let launchBound = false;
+const preparation = await prepareReference();
+const stages = {}, records = [], setupRecords = [], caseStages = [];
+let instance, userToken = current.accessToken, apiKey, outcomeError;
 let lifecycle = { result: { code: null, signal: null }, shutdownStatus: null, pidGone: false, portAvailable: false };
 try {
-  launchDllSha256 = sha256(await readFile(jellyfinDll));
-  assert.equal(launchDllSha256, inputHashes.dllSha256,
-    'The Jellyfin DLL changed between input capture and process launch.');
   instance = startReference();
-  const ffmpegIndex = instance.command.indexOf('--ffmpeg');
-  launchBound = path.resolve(instance.command[0]) === path.resolve(dotnetPath)
-    && path.resolve(instance.command[1]) === path.resolve(jellyfinDll)
-    && ffmpegIndex > 1 && path.resolve(instance.command[ffmpegIndex + 1]) === path.resolve(ffmpegPath);
-  assert.equal(launchBound, true, 'The frozen process must launch the captured dotnet, Jellyfin DLL and ffmpeg.');
   await waitForReady(instance);
-  const login = await request('/Users/AuthenticateByName', {
-    method: 'POST', body: { Username: 'CoreFlowAdmin', Pw: password },
-  });
-  assert.equal(login.status, 200, `Frozen admin login failed: ${login.bodyText}`);
-  userToken = login.bodyJson.AccessToken;
-  const userId = login.bodyJson.User.Id;
+  const login = await request('/Users/Me', { token: userToken });
+  assert.equal(login.status, 200, login.bodyText);
+  preparation.actualUserName = login.bodyJson.Name;
+  const userId = login.bodyJson.Id;
   assert.equal(idKey(userId), idKey(fixture.userId));
-  const appName = `${scenarioName} HTTP Oracle`;
-  const createKey = await request(`/Auth/Keys?app=${encodeURIComponent(appName)}`, { method: 'POST', token: userToken });
-  assert.equal(createKey.status, 204, `API key creation failed: ${createKey.bodyText}`);
+  const appName = scenarioName + ' HTTP Oracle';
+  const createKey = await request('/Auth/Keys?app=' + encodeURIComponent(appName), { method: 'POST', token: userToken });
+  assert.equal(createKey.status, 204, createKey.bodyText);
   const keys = await request('/Auth/Keys', { token: userToken });
-  assert.equal(keys.status, 200, `API key listing failed: ${keys.bodyText}`);
+  assert.equal(keys.status, 200, keys.bodyText);
   apiKey = keys.bodyJson.Items.find(item => item.AppName === appName)?.AccessToken;
-  assert.ok(apiKey, 'Native API key was not returned by /Auth/Keys.');
-  const serverConfiguration = await request('/System/Configuration', { token: apiKey });
-  assert.equal(serverConfiguration.status, 200, `Server configuration read failed: ${serverConfiguration.bodyText}`);
-  const stableServerConfiguration = {
-    ...serverConfiguration.bodyJson,
-    EnableGroupingMoviesIntoCollections: false,
-    EnableGroupingShowsIntoCollections: false,
-  };
-  const configure = await request('/System/Configuration', {
-    method: 'POST', token: apiKey, body: stableServerConfiguration,
+  assert.ok(apiKey);
+  privateOutput.addSecret(apiKey);
+  // Demotion scenarios retain a separate administrator, just as the historical seed did.
+  const control = await request('/Users/New', { method: 'POST', token: apiKey, body: { Name: 'OracleControlAdmin' } });
+  assert.equal(control.status, 200, control.bodyText);
+  const controlPolicy = await request('/Users/' + control.bodyJson.Id + '/Policy', {
+    method: 'POST', token: apiKey, body: { ...control.bodyJson.Policy, IsAdministrator: true },
   });
-  assert.equal(configure.status, 204, `Server configuration update failed: ${configure.bodyText}`);
+  assert.equal(controlPolicy.status, 204, controlPolicy.bodyText);
+  const serverConfiguration = await request('/System/Configuration', { token: apiKey });
+  assert.equal(serverConfiguration.status, 200, serverConfiguration.bodyText);
+  const stableServerConfiguration = { ...serverConfiguration.bodyJson,
+    EnableGroupingMoviesIntoCollections: false, EnableGroupingShowsIntoCollections: false };
+  const configure = await request('/System/Configuration', { method: 'POST', token: apiKey, body: stableServerConfiguration });
+  assert.equal(configure.status, 204, configure.bodyText);
   setupRecords.push({ kind: 'server-configuration', status: configure.status,
     values: { EnableGroupingMoviesIntoCollections: false, EnableGroupingShowsIntoCollections: false } });
   stages.before = { database: databaseSnapshot(), filesystem: await filesystemSnapshot() };
@@ -885,168 +760,60 @@ try {
       const update = await request('/System/Configuration', {
         method: 'POST', token: apiKey, body: { ...stableServerConfiguration, ...testCase.serverConfiguration },
       });
-      assert.equal(update.status, 204, `Server configuration update failed for ${testCase.name}: ${update.bodyText}`);
+      assert.equal(update.status, 204, testCase.name + ': ' + update.bodyText);
       setupRecords.push({ kind: 'case-server-configuration', name: testCase.name,
         values: testCase.serverConfiguration, status: update.status });
     }
-    if (testCase.configuration) {
-      const update = await request(`/Users/${userId}/Configuration`, {
-        method: 'POST', token: apiKey, body: { ...login.bodyJson.User.Configuration, ...testCase.configuration },
+    for (const [field, suffix, kind] of [['configuration', 'Configuration', 'user-configuration'], ['policy', 'Policy', 'policy']]) {
+      if (!testCase[field]) continue;
+      const update = await request('/Users/' + userId + '/' + suffix, {
+        method: 'POST', token: apiKey, body: { ...login.bodyJson[suffix], ...testCase[field] },
       });
-      assert.equal(update.status, 204, `User configuration update failed for ${testCase.name}: ${update.bodyText}`);
-      setupRecords.push({ kind: 'user-configuration', name: testCase.name,
-        values: testCase.configuration, status: update.status });
-    }
-    if (testCase.policy) {
-      const update = await request(`/Users/${userId}/Policy`, {
-        method: 'POST', token: apiKey, body: { ...login.bodyJson.User.Policy, ...testCase.policy },
-      });
-      assert.equal(update.status, 204, `Policy update failed for ${testCase.name}: ${update.bodyText}`);
-      setupRecords.push({ kind: 'policy', name: testCase.name, values: testCase.policy, status: update.status });
+      assert.equal(update.status, 204, testCase.name + ': ' + update.bodyText);
+      setupRecords.push({ kind, name: testCase.name, values: testCase[field], status: update.status });
     }
     for (const endpoint of testCase.endpoints ?? ['items', 'legacy']) {
-      const before = scenario.menuLifecycle
-        ? { database: databaseSnapshot(), filesystem: await filesystemSnapshot() } : null;
+      const before = scenario.menuLifecycle ? { database: databaseSnapshot(), filesystem: await filesystemSnapshot() } : null;
       const route = routeFor(endpoint, testCase, userId);
       const response = await request(route, { token: testCase.auth === 'apiKey' ? apiKey : userToken });
-      records.push({ name: testCase.name, query: testCase.query, scope: testCase.scope,
-        endpoint, route, response });
-      caseStages.push(scenario.menuLifecycle
-        ? { name: testCase.name, endpoint, before,
-          after: { database: databaseSnapshot(), filesystem: await filesystemSnapshot() } }
-        : { name: testCase.name, endpoint });
-      if (records.length % 50 === 0) {
-        console.log(JSON.stringify({ scenario: scenarioName, recorded: records.length, total: expectedMatrixCount }));
-      }
+      records.push({ name: testCase.name, query: testCase.query, scope: testCase.scope, endpoint, route, response });
+      caseStages.push(scenario.menuLifecycle ? { name: testCase.name, endpoint, before,
+        after: { database: databaseSnapshot(), filesystem: await filesystemSnapshot() } } : { name: testCase.name, endpoint });
+      if (records.length % 50 === 0) console.log(JSON.stringify({ scenario: scenarioName, recorded: records.length, total: expectedMatrixCount }));
     }
   }
   stages.afterReads = { database: databaseSnapshot(), filesystem: await filesystemSnapshot() };
-} catch (error) {
-  outcomeError = error;
-} finally {
+} catch (error) { outcomeError = error; }
+finally {
   if (instance) lifecycle = await stopReference(instance, apiKey ?? userToken);
   try { stages.afterShutdown = { database: databaseSnapshot(), filesystem: await filesystemSnapshot() }; }
   catch (error) { outcomeError ??= error; }
+}
 
-  await writeFile(path.join(runRoot, 'native-http.json'), json({ origin, records }), { flag: 'wx' });
-  await writeFile(path.join(runRoot, 'setup-http.json'), json({ origin, records: setupRecords }), { flag: 'wx' });
-  await writeFile(path.join(runRoot, 'stages.json'), json({
-    schemaVersion: 1,
-    targetKeys: fixture.items.filter(item => item.type !== 'AggregateFolder').map(item => item.key),
-    ...stages,
-  }), { flag: 'wx' });
-  await writeFile(path.join(runRoot, 'case-stages.json'), json(caseStages), { flag: 'wx' });
+await writeFile(path.join(outputRoot, 'native-http.json'), json({ origin, records }), { flag: 'wx' });
+await writeFile(path.join(outputRoot, 'setup-http.json'), json({ origin, records: setupRecords }), { flag: 'wx' });
+await writeFile(path.join(outputRoot, 'stages.json'), json(stages), { flag: 'wx' });
+await writeFile(path.join(outputRoot, 'case-stages.json'), json(caseStages), { flag: 'wx' });
+const contract = captureContract(records, setupRecords, caseStages, stages);
+const checks = Object.fromEntries(Object.entries(contract).filter(([, value]) => typeof value === 'boolean'));
+await current.finish();
+const passed = !outcomeError && Object.values(checks).every(Boolean)
+  && lifecycle.shutdownStatus === 204 && lifecycle.result.code === 0 && lifecycle.result.signal === null
+  && lifecycle.pidGone && lifecycle.portAvailable;
+const summary = { passed, candidateVerified: false, cases: records.length, snapshots: caseStages.length,
+  processResult: lifecycle.result, portAvailable: lifecycle.portAvailable, pidGone: lifecycle.pidGone,
+  cleanShutdown: lifecycle.shutdownStatus === 204, ...inputHashes, checks, contractFailures: contract.responseFailures,
+  error: outcomeError ? { name: outcomeError.name, message: outcomeError.message, stack: outcomeError.stack } : null };
+await writeFile(path.join(outputRoot, 'summary.json'), json(summary), { flag: 'wx' });
+await writeFile(path.join(outputRoot, 'provenance.json'), json({ scenario: scenarioName, preparation,
+  historicalEvidenceReplaced: false, inputs: inputHashes, artifacts: [] }), { flag: 'wx' });
+if (!passed) throw new Error('Native ' + scenarioName + ' recording failed: ' + JSON.stringify(summary.error ?? summary.checks));
+return { outputRoot: publicOutputRoot, summary };
+} catch (error) { failure = error; }
+finally { await privateOutput.publishAndClose(); }
+throw privateOutput.publicError(failure);
+}
 
-  const contract = captureContract(records, setupRecords, caseStages, stages);
-  const contractChecks = Object.fromEntries(Object.entries(contract).filter(([, value]) => typeof value === 'boolean'));
-  const sourceInputsAfter = {
-    recorderSha256: sha256(await readFile(recorderPath)),
-    sourceDatabaseSha256: sha256(await readFile(sourceDatabase)),
-    dllSha256: sha256(await readFile(jellyfinDll)),
-    dotnetSha256: sha256(await readFile(dotnetPath)),
-    ffmpegSha256: sha256(await readFile(ffmpegPath)),
-    sourceBootstrapSha256: sha256(await readFile(path.join(sourceRoot, 'bootstrap.json'))),
-    sourceBootstrapLogSha256: sha256(await readFile(path.join(sourceRoot, 'bootstrap.log'))),
-  };
-  const sourceInputsUnchanged = sourceInputsAfter.recorderSha256 === inputHashes.recorderSha256
-    && sourceInputsAfter.sourceDatabaseSha256 === inputHashes.sourceDatabaseSha256
-    && sourceInputsAfter.dllSha256 === inputHashes.dllSha256
-    && sourceInputsAfter.dotnetSha256 === inputHashes.dotnetSha256
-    && sourceInputsAfter.ffmpegSha256 === inputHashes.ffmpegSha256
-    && sourceInputsAfter.sourceBootstrapSha256 === inputHashes.sourceBootstrapSha256
-    && sourceInputsAfter.sourceBootstrapLogSha256 === inputHashes.sourceBootstrapLogSha256;
-  const copiesBound = preparation?.copyBindings?.recorderSha256 === inputHashes.recorderSha256
-    && preparation?.copyBindings?.fixtureSha256 === inputHashes.fixtureSha256
-    && preparation?.copyBindings?.sourceDatabase?.path === 'source-initial.db'
-    && preparation?.copyBindings?.sourceDatabase?.sha256 === inputHashes.sourceDatabaseSha256
-    && preparation?.copyBindings?.sourcePreparation?.bootstrap?.path === 'source-bootstrap.json'
-    && preparation?.copyBindings?.sourcePreparation?.bootstrap?.sha256 === preparation?.inputs?.[0]?.sha256
-    && preparation?.copyBindings?.sourcePreparation?.log?.path === 'source-bootstrap.log'
-    && preparation?.copyBindings?.sourcePreparation?.log?.sha256 === preparation?.inputs?.[5]?.sha256
-    && preparation?.copyBindings?.databaseBeforeSeedSha256 === inputHashes.sourceDatabaseSha256;
-  const passed = !outcomeError && preparation?.initializedFromEmpty === true
-    && Object.values(contractChecks).every(Boolean)
-    && lifecycle.shutdownStatus === 204 && lifecycle.result?.code === 0 && lifecycle.result?.signal === null
-    && lifecycle.pidGone && lifecycle.portAvailable && sourceInputsUnchanged && copiesBound && launchBound;
-  const summary = {
-    passed,
-    candidateVerified: false,
-    cases: records.length,
-    snapshots: caseStages.length,
-    processResult: { code: lifecycle.result?.code ?? null, signal: lifecycle.result?.signal ?? null },
-    portAvailable: lifecycle.portAvailable,
-    pidGone: lifecycle.pidGone,
-    cleanShutdown: lifecycle.shutdownStatus === 204,
-    ...inputHashes,
-    checks: { ...contractChecks, preparedNativeInstance: preparation?.initializedFromEmpty === true,
-      sourceInputsUnchanged, copiesBound, launchBound },
-    contractFailures: contract.responseFailures,
-    error: outcomeError ? { name: outcomeError.name, message: outcomeError.message, stack: outcomeError.stack } : null,
-  };
-  await writeFile(path.join(runRoot, 'summary.json'), json(summary), { flag: 'wx' });
-  const oracleValidation = {
-    passed,
-    candidateVerified: false,
-    scenario: scenarioName,
-    nativeRun: scenario.runName,
-    responses: records.length,
-    snapshots: caseStages.length,
-    source: 'Prepared empty-instance Jellyfin baseline copied while stopped; fixture rows seeded offline; all observations recorded from native HTTP and SQLite.',
-    checks: summary.checks,
-    recorderSha256: inputHashes.recorderSha256,
-    fixtureSha256: inputHashes.fixtureSha256,
-  };
-  await writeFile(path.join(outputRoot, 'oracle-validation.json'), json(oracleValidation), { flag: 'wx' });
-  const artifactNames = [
-    'record-native.mjs',
-    'source-initial.db',
-    'source-bootstrap.json',
-    'source-bootstrap.log',
-    `${scenario.runName}/input.json`,
-    `${scenario.runName}/reference-preparation.json`,
-    `${scenario.runName}/native-http.json`,
-    `${scenario.runName}/setup-http.json`,
-    `${scenario.runName}/stages.json`,
-    `${scenario.runName}/case-stages.json`,
-    `${scenario.runName}/summary.json`,
-    `${scenario.runName}/reference-stdout.log`,
-    `${scenario.runName}/reference-stderr.log`,
-    `${scenario.runName}/reference/data/data/jellyfin.db`,
-    'oracle-validation.json',
-  ];
-  const artifacts = [];
-  for (const name of artifactNames) {
-    const bytes = await readFile(path.join(outputRoot, name));
-    artifacts.push({ path: name.replaceAll('\\', '/'), bytes: bytes.length, sha256: sha256(bytes) });
-  }
-  await writeFile(path.join(outputRoot, 'provenance.json'), json({
-    schemaVersion: 1,
-    scenario: scenarioName,
-    sourceInputs: {
-      paths: { recorder: recorderPath, sourceDatabase, dll: jellyfinDll, dotnet: dotnetPath,
-        ffmpeg: ffmpegPath, sourceBootstrap: path.join(sourceRoot, 'bootstrap.json'),
-        sourceBootstrapLog: path.join(sourceRoot, 'bootstrap.log') },
-      before: {
-        recorderSha256: inputHashes.recorderSha256,
-        sourceDatabaseSha256: inputHashes.sourceDatabaseSha256,
-        dllSha256: inputHashes.dllSha256,
-        dotnetSha256: inputHashes.dotnetSha256,
-        ffmpegSha256: inputHashes.ffmpegSha256,
-        sourceBootstrapSha256: inputHashes.sourceBootstrapSha256,
-        sourceBootstrapLogSha256: inputHashes.sourceBootstrapLogSha256,
-      },
-      after: sourceInputsAfter,
-      trackedFixtureSha256: inputHashes.trackedFixtureSha256,
-      recordedFixtureSha256: inputHashes.fixtureSha256,
-    },
-    copies: preparation?.copyBindings ?? null,
-    launch: { command: instance?.command ?? null, dllSha256: launchDllSha256,
-      dotnetSha256: inputHashes.dotnetSha256, ffmpegSha256: inputHashes.ffmpegSha256 },
-    checks: { sourceInputsUnchanged, copiesBound, launchBound },
-    artifacts,
-  }), { flag: 'wx' });
-  if (!passed) throw new Error(`Native ${scenarioName} recording failed: ${JSON.stringify(summary.error ?? summary.checks)}`);
-  console.log(JSON.stringify({ evidence: path.relative(repoRoot, outputRoot).replaceAll('\\', '/'),
-    run: scenario.runName, cases: records.length, snapshots: caseStages.length,
-    processResult: summary.processResult, portAvailable: summary.portAvailable }));
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  await recordUserViewHttp(...process.argv.slice(2));
 }
