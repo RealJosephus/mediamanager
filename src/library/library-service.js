@@ -37,6 +37,7 @@ import { buildPostgresItemPageQuery, queryPostgresDtoChildCounts, queryPostgresI
 import { loadPostgresItemGraph, loadPostgresNavigationRows, loadPostgresPageGraph, loadPostgresRowsByIds, queryPostgresFolderStats,
   countPostgresNullVideoTypeRows, queryPostgresAlbumSelectorIds, queryPostgresArtistSelectorId,
   queryPostgresArtistSelectorIds,
+  queryPostgresAncestorIds,
   queryPostgresLinkTypes, queryPostgresLinkedChildCounts } from './postgres-library-query.js';
 import { NativeItemJsonError } from './native-item-data.js';
 import { postgresUpcomingScope, queryPostgresSeriesSeasonPage, queryPostgresUpcomingEpisodePage } from './postgres-shows-query.js';
@@ -2111,6 +2112,36 @@ export class LibraryService extends EventEmitter {
 
   async getItemDto(item, { user = null, ...query } = {}) {
     return this.getItem(item.Id, { user, ...query });
+  }
+
+  async getAncestors(id, { user = null } = {}) {
+    const normalized = guid(id);
+    if (!nonemptyId(normalized)) throw libraryError(400, "Guid can't be empty (Parameter 'id')");
+    return this.#runWithStates(async db => {
+      const state = await this.#loadPostgresItemState(db, [normalized], user);
+      const item = state.byId.get(idKey(normalized));
+      if (!item || user && !await this.#postgresStandaloneVisible(db, item, user, state)) {
+        throw libraryError(404, 'Item not found.');
+      }
+      const translations = [];
+      if (user) {
+        const children = this.rootChildren(state, user);
+        for (const physical of state.items) {
+          if (state.byId.get(idKey(physical.ParentId))?.Type !== 'AggregateFolder') continue;
+          const translated = children.find(child => child.PhysicalLocations.includes(physical.Path));
+          translations.push({ source: idKey(physical.Id), target: translated ? idKey(translated.Id) : null });
+        }
+      }
+      const ids = await queryPostgresAncestorIds(db, normalized, translations);
+      const parents = ids.map(parentId => state.byId.get(idKey(parentId)));
+      if (user) state.folderStats = await queryPostgresFolderStats(db,
+        parents.filter(parent => parent.IsFolder).map(parent => parent.Id), user.Id);
+      const selected = dtoOptions({}, true);
+      await this.#prefetchPostgresDtos(parents, state, user, selected);
+      const result = [];
+      for (const parent of parents) result.push(await projectItem(parent, state, user, selected, this.options));
+      return result;
+    });
   }
 
   async getUserDataList(references, { user } = {}) {

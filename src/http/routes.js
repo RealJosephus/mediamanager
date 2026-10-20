@@ -335,6 +335,10 @@ export function registerDomainRoutes(add, { configuration, authentication, users
   add('GET', ['/UserViews', '/Users/{userId}/Views'], async context => library.getViews({ includeHidden: boolean(context, 'includeHidden', false),
     includeExternalContent: boolean(context, 'includeExternalContent'), presetViews: bindUserViewPresets(context.query) }, { user: await requestUser(context) }));
   add('GET', ['/Items/Root', '/Users/{userId}/Items/Root'], async context => library.getRoot({ user: await requestUser(context) }));
+  add('GET', '/Items/{itemId}/Ancestors', async context => {
+    try { return await library.getAncestors(guid(context, 'itemId'), { user: await optionalRequestUser(context) }); }
+    catch (error) { if (error.status === 404) return notFound(); throw error; }
+  });
   add('GET', ['/Items/{itemId}', '/Users/{userId}/Items/{itemId}'], async context => {
     try {
       const itemId = guid(context, 'itemId'), user = await requestUser(context);

@@ -515,8 +515,10 @@ export async function captureInputIdentity({ selected, dependencies, preflight, 
   add(process.execPath, 'runtime:node');
   add(path.join(repositoryRoot, 'node_modules'), 'runtime:node-modules');
   const entries = [];
+  const browserRoot = typeof environment.PLAYWRIGHT_BROWSERS_PATH === 'string' ? path.resolve(environment.PLAYWRIGHT_BROWSERS_PATH) : null;
   for (const [filename, { reasons, requiredReasons, expectedDigests, invalidDigest }] of [...targets].sort(([left], [right]) => left.localeCompare(right))) {
-    const description = await describeFile(filename, {workspaceLinks:filename===path.join(repositoryRoot,'node_modules')});
+    const description = await describeFile(filename, { workspaceLinks: filename === path.join(repositoryRoot, 'node_modules'),
+      containedLinks: filename === browserRoot && reasons.has('runtime:browser') ? browserRoot : undefined });
     const expected = [...expectedDigests].sort();
     entries.push({ reasons: [...reasons].sort(), requiredReasons: [...requiredReasons].sort(), required: requiredReasons.size > 0, ...description,
       ...(invalidDigest ? { invalidExpectedDigest: true } : {}),

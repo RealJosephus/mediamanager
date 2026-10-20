@@ -66,6 +66,32 @@ export async function loadPostgresRowsByIds(database, ids) {
   return stored.length ? database.rows('BaseItems', { whereIn: { Id: stored } }) : [];
 }
 
+/** Follow entity ParentId, including the user's physical-root translation.
+ * AncestorIds and TopParentId are repository selectors, not this parent chain. */
+export async function queryPostgresAncestorIds(database, id, translations = []) {
+  const items = qualified(database, 'BaseItems');
+  const key = alias => `replace(${nativeTextSql(database.schemaName).guidLower(`${alias}."Id"`)}, '-', '')`;
+  return itemIds(database, `/* item-ancestors */
+    WITH RECURSIVE translations AS (
+      SELECT * FROM jsonb_to_recordset($2::jsonb) AS mapping(source text, target text)
+    ), chain("Id", depth, visited) AS (
+      SELECT seed."Id", 0, ARRAY[${key('seed')}]
+      FROM ${items} seed WHERE ${key('seed')} = $1
+      UNION ALL
+      SELECT parent."Id", chain.depth + 1, chain.visited || ${key('parent')}
+      FROM chain
+      JOIN ${items} current ON current."Id" = chain."Id"
+      JOIN ${items} physical ON ${key('physical')}
+        = replace(${nativeTextSql(database.schemaName).guidLower('current."ParentId"')}, '-', '')
+      LEFT JOIN translations mapping ON mapping.source = ${key('physical')}
+      JOIN ${items} parent ON ${key('parent')}
+        = CASE WHEN mapping.source IS NULL THEN ${key('physical')} ELSE mapping.target END
+      WHERE NOT (${key('parent')} = ANY(chain.visited))
+    )
+    SELECT "Id" FROM chain WHERE depth > 0 ORDER BY depth`,
+  [idKey(id), JSON.stringify(translations)]);
+}
+
 /** Load only direct CollectionFolder children of a UserRootFolder for the
  * external-playlist provider. The JSON projection remains bounded to those
  * navigation rows; media descendants never cross the database boundary. */

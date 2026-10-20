@@ -3,6 +3,7 @@ import { isDeepStrictEqual } from 'node:util';
 import { md5Guid } from '../core/identity.js';
 import { EMPTY_ID, MIN_DATE, guid, nonemptyId } from './records.js';
 import { sortName as deriveSortName } from './dto.js';
+import { hasFileProtocol } from './delete-permission.js';
 
 const EMPTY_STRINGS = Object.freeze([]);
 const EMPTY_GUIDS = Object.freeze([]);
@@ -230,7 +231,7 @@ function addDerivedGetters(item, descriptor) {
   if (descriptor.type === 'PlaylistsFolder') defineGetter(item, 'CollectionType', () => 'playlists');
   if (['AggregateFolder', 'CollectionFolder'].includes(descriptor.type)) {
     defineGetter(item, 'PhysicalLocations', () => item.PhysicalLocationsList);
-  }
+  } else defineGetter(item, 'PhysicalLocations', () => hasFileProtocol(item) ? [item.Path] : EMPTY_STRINGS);
   const displayPreferencesId = guid(md5Guid(descriptor.nativeType));
   defineGetter(item, 'DisplayPreferencesId', ['Folder', 'CollectionFolder'].includes(descriptor.type)
     ? () => item.Id : () => displayPreferencesId);

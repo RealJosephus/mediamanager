@@ -122,6 +122,11 @@ test('all constructors retain pinned base defaults and independent mutable state
 
 test('type-specific constructor defaults match the pinned native constructors', () => {
   const folder = newNativeItemEntity(byName.Folder);
+  assert.deepEqual(folder.PhysicalLocations, []);
+  folder.Path = '/media/library';
+  assert.deepEqual(folder.PhysicalLocations, ['/media/library']);
+  folder.Path = 'https://media.example/library';
+  assert.deepEqual(folder.PhysicalLocations, []);
   assert.deepEqual([folder.IsRoot, folder.DateLastMediaAdded, folder.LinkedChildrenLoaded, Number(folder.LinkedChildren===EMPTY_NATIVE_LINKS?0:NaN)],
     [false, null, false, 0]);
   assert.equal(newNativeItemEntity(byName.UserRootFolder).IsRoot, true);

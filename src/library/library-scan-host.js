@@ -49,8 +49,11 @@ export class LibraryScanHost {
   async #root(type) {
     if (this.#roots.has(type)) return this.#roots.get(type).item;
     const resolved = await this.store.run(async db => {
-      const canonicalPath = type === 'AggregateFolder' && this.library.options.programDataPath
-        ? path.join(path.resolve(this.library.options.programDataPath), 'root') : null;
+      const programDataPath = this.library.options.programDataPath;
+      const canonicalPath = type === 'UserRootFolder'
+        ? this.library.options.userRoot?.Path ?? this.library.options.userRootPath
+          ?? (programDataPath ? path.join(path.resolve(programDataPath), 'root', 'default') : null)
+        : type === 'AggregateFolder' && programDataPath ? path.join(path.resolve(programDataPath), 'root') : null;
       const canonicalId = type === 'UserRootFolder' ? this.library.options.userRoot?.Id
         : canonicalPath && nativeGuid(getNewItemId(canonicalPath, 'MediaBrowser.Controller.Entities.AggregateFolder', {
           programDataPath: path.resolve(this.library.options.programDataPath),
@@ -66,6 +69,10 @@ export class LibraryScanHost {
         : state.items.find(value => itemType(value) === type
           && (canonicalPath == null || sameNativePath(value.Path, canonicalPath)));
       if (!item) throw Object.assign(new Error(`${type} is not initialized.`), { status: 500 });
+      // LibraryManager.CreateRootFolder/GetUserRootFolder reset the registered
+      // root Path after moving program data. Reusing an existing row or an
+      // already parented playlists child does not suppress that live reset.
+      if (canonicalPath && itemType(item) === type) item.Path = canonicalPath;
       const owner = this.itemCreation.retainItem(item);
       try { return { item, owner, persisted: (await db.rows('BaseItems', { where: { Id: item.Id } })).length > 0 }; }
       catch (error) { owner.release(); throw error; }

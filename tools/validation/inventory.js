@@ -706,10 +706,22 @@ export function dependencyClosure(dependencies, selected) {
   return dependencies.entries.filter(entry => paths.has(entry.path));
 }
 
-export async function describeFile(filename, { recursive = true, workspaceLinks = false } = {}) {
+export async function describeFile(filename, { recursive = true, workspaceLinks = false, containedLinks } = {}) {
   try {
     const info = await lstat(filename);
     if (info.isSymbolicLink()) {
+      if (containedLinks && path.resolve(filename) !== path.resolve(containedLinks)) {
+        const target = await realpath(filename), boundary = await realpath(containedLinks);
+        const relative = path.relative(boundary, target);
+        if (relative && relative !== '..' && !relative.startsWith(`..${path.sep}`) && !path.isAbsolute(relative)) {
+          const targetInfo = await lstat(target);
+          if (targetInfo.isFile() || targetInfo.isDirectory()) return {
+            filename, available: true, kind: 'runtime-link', target: await readlink(filename),
+            resolvedTarget: relative.replaceAll('\\', '/'), targetKind: targetInfo.isFile() ? 'file' : 'directory',
+            ...(targetInfo.isFile() ? { targetSha256: sha256(await readFile(target)) } : {})
+          };
+        }
+      }
       if (workspaceLinks) {
         const target = await realpath(filename), relative = path.relative(repositoryRoot, target).replaceAll('\\','/');
         const name = path.relative(path.join(repositoryRoot,'node_modules'), filename).replaceAll('\\','/');
@@ -728,7 +740,7 @@ export async function describeFile(filename, { recursive = true, workspaceLinks 
     if (info.isDirectory() && recursive) {
       const entries = [];
       for (const name of (await readdir(filename)).sort()) {
-        const { filename: ignored, ...description } = await describeFile(path.join(filename, name),{workspaceLinks});
+        const { filename: ignored, ...description } = await describeFile(path.join(filename, name),{workspaceLinks,containedLinks});
         entries.push({ name, ...description });
       }
       return { filename, available: entries.every(entry => entry.available), kind: 'directory', entries,

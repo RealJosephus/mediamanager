@@ -7,6 +7,8 @@ import { HttpResult, BindingError, readBody } from './binding.js';
 import { registerDomainRoutes } from './routes.js';
 import { registerPlaybackRoutes } from './playback-routes.js';
 import { BinaryResult } from './binary-result.js';
+import { registerClientNetworkRoutes } from './client-network-routes.js';
+import { registerConfigurationRoutes } from './configuration-routes.js';
 import { registerSessionControlRoutes } from './session-control-routes.js';
 import { registerMetadataRoutes } from './metadata-routes.js';
 import { registerImageRoutes } from './image-routes.js';
@@ -80,6 +82,7 @@ export async function createApplication(services = {}) {
     ServerName: serverFriendlyName(configuration, serverName), Version: serverVersion, ProductName: 'MediaManager', Id: serverId,
     StartupWizardCompleted: Boolean(configuration.IsStartupWizardCompleted) });
   add('GET', '/System/Info/Public', publicSystemInfo, { public: true });
+  registerClientNetworkRoutes(add, services);
   // SystemController.GetSystemInfo permits session validation outside parental
   // schedules. Its SystemManager DTO reports the current application's state.
   add('GET', '/System/Info', context => ({ ...publicSystemInfo(context),
@@ -102,6 +105,7 @@ export async function createApplication(services = {}) {
     add('GET', `/Localization/${name}`, run, { policy: 'FirstTimeSetupOrDefault' });
   }
   registerQuickConnectRoutes(add, services);
+  registerConfigurationRoutes(add, services);
   registerPasswordResetRoutes(add, services);
   registerDisplayPreferencesRoutes(add, services);
   registerStartupRoutes(add, services);

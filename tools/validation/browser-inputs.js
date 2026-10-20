@@ -46,12 +46,16 @@ export async function browserInputs(environment = process.env) {
     || await realpath(executable) !== path.resolve(executable)) {
     throw new Error('Chromium must be an ordinary file in its explicitly supplied revision directory.');
   }
-  const tree = await describeFile(root);
+  // Signed macOS framework bundles contain internal version links. Bind the
+  // link text and resolved target while retaining every ordinary target file;
+  // links outside this exact runtime tree and linked roots remain forbidden.
+  const tree = await describeFile(root, { containedLinks: root });
   if (!tree.available || tree.kind !== 'directory') throw new Error('The browser installation is incomplete or contains unsupported links.');
   inputs.push({ filename: root, sha256: tree.entriesSha256 });
   const visit = (entry, filename) => {
     if (entry.kind === 'directory') for (const child of entry.entries) visit(child, path.join(filename, child.name));
     else if (entry.kind === 'file' && entry.sha256) inputs.push({ filename, sha256: entry.sha256 });
+    else if (entry.kind === 'runtime-link' && entry.available) return;
     else throw new Error('The browser installation contains an unsupported member.');
   };
   visit(tree, root);
