@@ -10,9 +10,10 @@ import { BinaryResult } from './binary-result.js';
 import { registerClientNetworkRoutes } from './client-network-routes.js';
 import { registerClientDiscoveryRoutes } from './client-discovery-routes.js';
 import { registerClientConfigurationPages } from './client-configuration-pages.js';
-import { isEmbyClient as detectEmbyClient } from './client-protocol.js';
+import { embyTextResponse, isEmbyClient as detectEmbyClient } from './client-protocol.js';
 import { registerUserDataCopyRoutes } from './user-data-copy-routes.js';
 import { registerSearchHistoryRoutes } from './search-history-routes.js';
+import { registerEmbyHomeSectionRoutes } from './emby-home-section-routes.js';
 import { registerConfigurationRoutes } from './configuration-routes.js';
 import { registerSessionControlRoutes } from './session-control-routes.js';
 import { registerMetadataRoutes } from './metadata-routes.js';
@@ -121,6 +122,7 @@ export async function createApplication(services = {}) {
   registerApiKeyRoutes(add, services);
   registerUserDataCopyRoutes(add, services);
   registerSearchHistoryRoutes(add, services);
+  registerEmbyHomeSectionRoutes(add, services);
   registerPluginRoutes(add, services);
   registerDomainRoutes(add, services);
   registerPlaybackRoutes(add, services);
@@ -217,7 +219,12 @@ export async function createApplication(services = {}) {
             const policy = typeof route.policy === 'function' ? route.policy({ request, auth, embyClient, url, params }) : route.policy;
             authentication.authorize(auth, { policy, remoteEndPoint, startupWizardCompleted: Boolean(configuration.IsStartupWizardCompleted) });
           }
-          catch (error) { if (![401, 403].includes(error.status)) throw error; send(new HttpResult(error.status)); return; }
+          catch (error) {
+            if (![401, 403].includes(error.status)) throw error;
+            if (embyClient && error.status === 401) await embyTextResponse(401, 'Access token is invalid or expired.').send(request, response);
+            else send(new HttpResult(error.status));
+            return;
+          }
         }
         let body, queryInput, queryError;
         if (route.bindQuery) {

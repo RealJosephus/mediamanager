@@ -34,7 +34,11 @@ export function bindJsonModel(body, { schema, root, source = body?.[Symbol.for('
       if (typeof value === 'string' && !value.isWellFormed()) return failure();
       return typeof value === 'string' ? value : source.slice(node.start,node.end);
     }
-    if (rule.type === 'boolean') return typeof value === 'boolean' ? value : failure();
+    if (rule.type === 'boolean') {
+      if (typeof value === 'boolean') return value;
+      if (rule.allowString && typeof value === 'string' && /^(?:true|false)$/iu.test(clrTrim(value))) return clrTrim(value).toLowerCase() === 'true';
+      return failure();
+    }
     if (rule.type === 'datetime') {
       try { return parseJsonDateTime(value); }
       catch (error) { if (error instanceof RangeError || error instanceof TypeError) return failure(); throw error; }

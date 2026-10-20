@@ -12,6 +12,8 @@ on:
           - search-history
           - search-order
           - home-sections
+          - home-model
+          - section-items
 
 permissions:
   contents: read
@@ -48,6 +50,7 @@ jobs:
           node --check tools/compat/capture-emby-contracts.mjs
           node --check tools/compat/emby-search-history-scenario.mjs
           node --check tools/compat/emby-home-sections-scenario.mjs
+          node --check tools/compat/emby-section-items-scenario.mjs
       - name: Fetch unchanged official release
         shell: pwsh
         run: ./tools/ci/fetch-emby-server.ps1

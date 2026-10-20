@@ -1,5 +1,36 @@
 import assert from 'node:assert/strict';
 
+export async function captureHomeModel({ call, reader, token, report, restart }) {
+  const user = '/Users/' + reader.Id;
+  const save = (label, body) => call(label, user + '/HomeSections', { method: 'POST', token, body });
+  const read = label => call(label, user + '/HomeSections?IsEditMode=true', { token });
+  const initial = await read('model-default');
+  assert.equal(initial.status, 200);
+  const body = { SectionType: 'items', CustomName: 'Controlled model', ItemTypes: ['Audio'], SortBy: 'SortName',
+    SortOrder: 'descending', RefreshInterval: 1234, CardSizeOffset: -2, Monitor: ['controlled'],
+    PremiumFeature: 'controlled', PremiumMessage: 'Controlled feature message',
+    TextInfo: { Id: 'controlled', Name: 'Controlled text', Text: 'Unicode 設定\0text', Level: 0 },
+    Query: { IsRepeat: true, IsKids: true, HasSubtitles: true, IsMovie: false, IsNews: false,
+      IsSports: true, IsSeries: false, IsResumable: true, IsFavorite: true, IsPlayed: false,
+      StudioIds: [], TagIds: [], GenreIds: [], CollectionTypes: ['music'], UnknownFilter: 'unbound' },
+    UnknownProperty: 'unbound' };
+  const created = await save('model-create', body);
+  assert.equal(created.status, 204);
+  const after = await read('model-after-create'), section = after.bodyJson.find(section => section.CustomName === body.CustomName);
+  assert.ok(section?.Id);
+  report.identities.modelSectionId = section.Id;
+  const update = { ...body, Id: section.Id };
+  for (const [label, values] of [['model-string-sort-order', { SortOrder: 'controlled-order' }],
+    ['model-number-sort-order', { SortOrder: 2 }], ['model-string-boolean', { Query: { IsFavorite: 'true' } }]]) {
+    await save(label, { ...update, ...values });
+    await read(label + '-readback');
+  }
+  await save('model-reset-valid', update);
+  await read('model-before-restart');
+  await restart();
+  await read('model-after-restart');
+}
+
 export async function captureHomeSections({ call, reader, other, token, otherToken, items, report, restart }) {
   const user = '/Users/' + reader.Id, target = '/Users/' + other.Id;
   const read = (label, suffix = '?IsEditMode=true', options = {}) => call(label, user + '/HomeSections' + suffix, { token, ...options });

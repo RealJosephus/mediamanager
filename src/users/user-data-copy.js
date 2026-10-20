@@ -2,6 +2,7 @@ import { nativeTextBytes } from '../database/native-text.js';
 import { quoteIdentifier as q, tableDefinition } from '../database/model.js';
 import { nativeGuid, domainError } from './native.js';
 import { searchHistoryClient, searchHistoryKey } from '../sessions/search-history.js';
+import { copyHomeSections } from './emby-home-sections.js';
 
 export const userDataCopyOptions = Object.freeze([
   { Name: 'User Policy (library and feature access, parental controls, etc.)', Id: 'userpolicy' },
@@ -46,6 +47,7 @@ export async function copyUserData({ store, users, displayPreferences, sessions,
       if (selected.has('userconfiguration')) {
         await users.updateConfiguration(target, original.Configuration);
         await displayPreferences.updateUserSettings(target, settings);
+        await store.transaction(database => copyHomeSections(database, source, target));
         const updated = await users.getUser(target);
         users.emit('UserUpdated', updated);
         notifications.push({ target, data: users.getUserDto(updated), type: 'UserConfigurationUpdated' });

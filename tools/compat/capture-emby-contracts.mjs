@@ -9,11 +9,12 @@ import path from 'node:path';
 import { setTimeout as delay } from 'node:timers/promises';
 import { fileURLToPath } from 'node:url';
 import { captureSearchHistory, captureSearchOrder } from './emby-search-history-scenario.mjs';
-import { captureHomeSections } from './emby-home-sections-scenario.mjs';
+import { captureHomeModel, captureHomeSections } from './emby-home-sections-scenario.mjs';
+import { captureSectionItems } from './emby-section-items-scenario.mjs';
 
 assert.equal(process.env.GITHUB_ACTIONS, 'true', 'Official reference capture requires an isolated CI runner.');
 const scenario = process.env.MEDIAMANAGER_EMBY_CAPTURE_SCENARIO || 'user-copy';
-assert.ok(['user-copy', 'search-history', 'search-order', 'home-sections'].includes(scenario));
+assert.ok(['user-copy', 'search-history', 'search-order', 'home-sections', 'home-model', 'section-items'].includes(scenario));
 const root = await realpath(process.env.MEDIAMANAGER_EMBY_REFERENCE_ROOT);
 const temporary = await realpath(process.env.RUNNER_TEMP);
 assert.equal(path.dirname(root), temporary);
@@ -55,8 +56,8 @@ assert.equal(archive.sha256, input.expectedSha256);
 assert.equal(archive.bytes, input.expectedBytes);
 const report = { kind: 'actual-emby-http-reference', version: input.version, scenario, input, archive,
   producer: { path: fileURLToPath(import.meta.url), ...await describe(fileURLToPath(import.meta.url)) },
-  scenarioProducer: { ...await describe(fileURLToPath(new URL(scenario === 'home-sections'
-    ? './emby-home-sections-scenario.mjs' : './emby-search-history-scenario.mjs', import.meta.url))) },
+  scenarioProducer: { ...await describe(fileURLToPath(new URL(scenario === 'section-items' ? './emby-section-items-scenario.mjs'
+    : scenario.startsWith('home-') ? './emby-home-sections-scenario.mjs' : './emby-search-history-scenario.mjs', import.meta.url))) },
   dotnet: { path: dotnet, ...await describe(dotnet) }, referenceBefore: await inventory(packageRoot),
   mediaTools: await Promise.all(['MEDIAMANAGER_FFMPEG', 'MEDIAMANAGER_FFPROBE'].map(async name => ({ name,
     path: process.env[name], ...await describe(process.env[name]) }))),
@@ -205,8 +206,9 @@ try {
     await delay(500);
   }
   await call('actual-library-options', '/Library/VirtualFolders/Query');
-  if (scenario.startsWith('search-') || scenario === 'home-sections') {
-    const capture = scenario === 'home-sections' ? captureHomeSections : scenario === 'search-order' ? captureSearchOrder : captureSearchHistory;
+  if (scenario.startsWith('search-') || scenario.startsWith('home-') || scenario === 'section-items') {
+    const capture = scenario === 'section-items' ? captureSectionItems : scenario === 'home-model' ? captureHomeModel : scenario === 'home-sections' ? captureHomeSections
+      : scenario === 'search-order' ? captureSearchOrder : captureSearchHistory;
     await capture({ call, reader, other, token, otherToken: otherLogin.AccessToken,
       items: libraryItems.Items, report, instance, restart: async () => { await stop(); launch(); await ready(); } });
     await stop();

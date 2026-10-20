@@ -85,7 +85,10 @@ for (const baseUrl of ['', '/media']) test(`Jellyfin and Emby auth/info coexist 
       assert.equal(publicInfo.body.ServerName, configuration.ServerName);
       assert.equal(publicInfo.body.Version, prefix ? '4.9.5.0' : '13.0.0');
       assert.equal((await request(`${prefix}/System/Info/Public`, { headers: jellyfin() })).body.Version, '13.0.0');
-      assert.equal((await request(`${prefix}/System/Info`)).status, 401);
+      const anonymous = await request(`${prefix}/System/Info`, { headers: { Accept: 'application/json' } });
+      assert.equal(anonymous.status, 401);
+      assert.equal(anonymous.text, prefix ? 'Access token is invalid or expired.' : '');
+      if (prefix) assert.match(anonymous.type, /^text\/plain/u);
       assert.equal((await request(`${prefix}/System/Info?api_key=${encodeURIComponent(embyLogin.body.AccessToken)}`)).status, 200);
       assert.equal((await request(`${prefix}/System/Info?X-Emby-Token=invalid-client-token`)).status, 401);
       const header = { 'X-Emby-Authorization': `Emby Client="Emby Web", Device="Browser", DeviceId="emby-device", Version="26.0.37", Token="${embyLogin.body.AccessToken}"` };
@@ -109,7 +112,8 @@ for (const baseUrl of ['', '/media']) test(`Jellyfin and Emby auth/info coexist 
     assert.equal((await request('/emby/System/Info?X-Emby-Token=invalid-query-token', {
       headers: jellyfin(login.body.AccessToken),
     })).status, 200, 'An explicit valid Jellyfin token retains precedence.');
-    assert.equal((await request(`/emby/System/Info?${fields}`, { headers: jellyfin('invalid-header-token') })).status, 401);
+    const invalidJellyfin = await request(`/emby/System/Info?${fields}`, { headers: jellyfin('invalid-header-token') });
+    assert.equal(invalidJellyfin.status, 401); assert.equal(invalidJellyfin.text, '');
     const capabilitiesUrl = `/emby/Sessions/Capabilities/Full?${fields}`;
     const commands = ['RefreshMediaSource', 'TriggerTranscodingFallback', 'SetSubtitleOffset', 'SetPlaybackRate', 'PluginAction'];
     const capabilities = JSON.stringify({ PlayableMediaTypes: ['Audio', 'Video'], SupportedCommands: commands, SupportsMediaControl: true });

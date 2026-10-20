@@ -6,6 +6,7 @@ import { createHash } from 'node:crypto';
 import { createRuntime } from '../../src/runtime.js';
 import { nativeGuid } from '../../src/users/native.js';
 import { searchHistoryClient, searchHistoryKey } from '../../src/sessions/search-history.js';
+import { getHomeSections, homeSectionItemId } from '../../src/users/emby-home-sections.js';
 import { SqliteDatabase } from '../../src/database/sqlite.js';
 import { nativeModel, quoteIdentifier } from '../../src/database/model.js';
 import { transferDatabase, exportCurrentSqlite, databaseDigest } from '../../src/migration/database-transfer.js';
@@ -56,6 +57,10 @@ test('postgres: display preference API writes export to real native EF/controlle
   assert.equal((await fetch(settingsUrl, { method: 'POST', headers: { ...headers, 'Content-Type': 'text/plain' }, body: JSON.stringify(embySettings) })).status, 204);
   const settingsRead = await fetch(settingsUrl, { headers }); assert.equal(settingsRead.status, 200);
   assert.deepEqual(await settingsRead.json(), embySettings);
+  const homeUrl = `http://127.0.0.1:${runtime.server.address().port}/emby/Users/${owner.Id}/HomeSections`;
+  assert.equal((await fetch(homeUrl, { method: 'POST', headers, body: JSON.stringify({
+    SectionType: 'items', ItemTypes: ['Audio'], CustomName: 'Exchange home 設定\0', Query: { IsFavorite: true },
+  }) })).status, 204);
   const markUrl = `http://127.0.0.1:${runtime.server.address().port}/emby/Users/${owner.Id}/SearchedItems`;
   assert.equal((await fetch(markUrl, { method: 'POST', headers, body: JSON.stringify({ Ids: [historyItem] }) })).status, 204);
   const historyWhere = { UserId: nativeGuid(owner.Id), ItemId: historyItem, Client: searchHistoryClient };
@@ -64,13 +69,15 @@ test('postgres: display preference API writes export to real native EF/controlle
   const originalRows = Object.fromEntries(await Promise.all(preferenceTables.map(async table => [table, await database.rows(table)])));
   const exported = path.join(root, 'returned.db'); const exportResult = await exportCurrentSqlite(database, exported);
   assert.equal(exportResult.verified, true); const exportedSha256 = hash(await fs.readFile(exported));
-  const recording = await recordOracle({ project: 'tests/http/fixtures/display-preferences/consumer/Oracle.csproj', output: path.join(root, 'native'), args: [exported, owner.Id, '{output}/reading.json', historyItem] });
+  const recording = await recordOracle({ project: 'tests/http/fixtures/display-preferences/consumer/Oracle.csproj', output: path.join(root, 'native'), args: [exported, owner.Id, '{output}/reading.json', historyItem, homeSectionItemId] });
   assert.equal(recording.passed, true); const native = JSON.parse(await fs.readFile(path.join(root, 'native/reading.json')));
   assert.equal(native.actualController, true); assert.equal(native.actualManager, true); assert.equal(native.actualEfSqlite, true); assert.equal(native.originalSha256, exportedSha256);
   assert.deepEqual(native.before, dto(before)); assert.deepEqual(normalizePreferenceState(native.beforeRows), normalizePreferenceState(originalRows));
   assert.deepEqual(native.historyBefore, { [searchHistoryKey]: nodeHistory.Value });
   assert.equal(native.historyAfter[searchHistoryKey], String(BigInt(nodeHistory.Value) + 2n));
   assert.equal(native.historyAfter.external, 'native\0history');
+  assert.ok(JSON.parse(native.homeBefore.layout).some(section => section.CustomName === 'Exchange home 設定\0'));
+  assert.ok(JSON.parse(native.homeAfter.layout).some(section => section.CustomName === 'native home\0write'));
   returned = new SqliteDatabase(exported, { readOnly: true, requireMigrationHistory: true });
   const afterNative = Object.fromEntries(await Promise.all(preferenceTables.map(async table => [table, await returned.rows(table)])));
   assert.deepEqual(normalizePreferenceState(afterNative), normalizePreferenceState(native.afterRows));
@@ -90,10 +97,12 @@ test('postgres: display preference API writes export to real native EF/controlle
       { user: await importedRuntime.users.getUser(owner.Id), embyClient: true });
     assert.equal(historyQuery.TotalRecordCount, 1);
     assert.equal(historyQuery.Items[0].Id, historyItem.replaceAll('-', '').toLowerCase());
+    const home = (await getHomeSections(importedRuntime, owner.Id, { isEditMode: true })).find(section => section.CustomName === 'native home\0write');
+    assert.equal(home.Name, 'native home\0write'); assert.equal(home.Query.IsFavorite, true); assert.deepEqual(home.ItemTypes, ['Audio']);
   } finally { await importedRuntime.close(); }
   assert.equal(hash(await fs.readFile(process.env.MEDIAMANAGER_TEST_CURRENT_NATIVE_SQLITE)), sourceHash);
   await fs.writeFile(path.join(root, 'proof.json'), JSON.stringify({ sourceHash, exportedSha256, exportResult, nativeRecording: recording,
-    allTablesRoundTrip: true, actualNativeReadAndWrite: true, searchHistoryReadWrite: true,
+    allTablesRoundTrip: true, actualNativeReadAndWrite: true, searchHistoryReadWrite: true, homeSectionsReadWrite: true,
     fullInstanceVerified: false, completeBuildInputClosure: false, phaseAcceptance: false },
     (_key, value) => typeof value === 'bigint' ? JSON.rawJSON(value.toString()) : value, 2) + '\n');
 });
