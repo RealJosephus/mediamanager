@@ -20,9 +20,11 @@ export const exportJellyfinUsage = `
 Usage:
   npm run db:export -- (--postgres-url <url> | --postgres-url-env <name>) --schema <schema> --output <new-jellyfin.db> [--target-mount-contract <contract.json>]
 
-The output must be a new file. Export uses the portable mount contract persisted
-in PostgreSQL. An optional target contract may explicitly retarget identity paths
-between Windows and POSIX without changing mount IDs or VFS access roots.
+An existing output is accepted only after verification against the current
+PostgreSQL snapshot. Export never replaces an existing file. Export uses the
+portable mount contract persisted in PostgreSQL. An optional target contract may
+explicitly retarget identity paths between Windows and POSIX without changing
+mount IDs or VFS access roots.
 `;
 
 export async function exportJellyfinSqlite(argv, {
