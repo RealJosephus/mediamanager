@@ -7,6 +7,7 @@ import { bindSessionsQuery } from './session-management-binding.js';
 import { bindDevicesUserId, requiredDeviceId, deviceIds, validateDeviceOptionsBody } from './device-binding.js';
 import { bindUserDataBody } from './user-data-binding.js';
 import { bindUserViewPresets } from './user-view-binding.js';
+import { refreshItemDetail } from './item-detail-refresh.js';
 import { enumName, generalCommands, mediaTypes, itemKinds } from '../sessions/binding.js';
 import { AUTHENTICATION_PROVIDER, PASSWORD_RESET_PROVIDER } from '../users/native.js';
 import { itemFields, itemImageTypes } from '../library/dto.js';
@@ -27,7 +28,7 @@ const controllerItemFields = ['AirTime', 'CanDelete', 'CanDownload', 'ChannelInf
   'ChannelImage', 'EnableMediaSourceDisplay', 'Width', 'Height', 'ExtraIds', 'LocalTrailerCount', 'IsHD',
   'SpecialFeatureCount'];
 
-export function registerDomainRoutes(add, { configuration, authentication, users, devices, library, playlists, sessions, userData, hls }) {
+export function registerDomainRoutes(add, { configuration, authentication, users, devices, library, playlists, sessions, userData, hls, metadata, onError }) {
   const query = (context, name) => queryValue(context.query, name);
   const boolean = (context, name, fallback) => booleanValue(query(context, name), name, fallback);
   const integer = (context, name, fallback) => integerValue(query(context, name), name, fallback);
@@ -465,7 +466,22 @@ export function registerDomainRoutes(add, { configuration, authentication, users
     try {
       const itemId = guid(context, 'itemId'), user = await requestUser(context, { required: false });
       if (!user) throw httpError(400, 'Error processing request.');
-      return /^0{32}$/.test(itemId) ? await library.getRoot({ user }) : await library.getItem(itemId, { user });
+        if (/^0{32}$/.test(itemId)) return await library.getRoot({ user });
+        const cancelled = new AbortController();
+        const abort = () => cancelled.abort();
+        context.request.once('aborted', abort);
+        context.request.socket.once('close', abort);
+        context.signal?.addEventListener('abort', abort, { once: true });
+        try {
+          if (context.request.aborted || context.request.socket.destroyed || context.signal?.aborted) abort();
+          const item = await library.getItemRecord(itemId, { user });
+          await refreshItemDetail(item, { metadata, signal: cancelled.signal, clock: library.clock, onError });
+          return await library.getItem(itemId, { user });
+        } finally {
+          context.request.removeListener('aborted', abort);
+          context.request.socket.removeListener('close', abort);
+          context.signal?.removeEventListener('abort', abort);
+        }
     } catch (error) { if (error.status === 404) return notFound(); throw error; }
   });
   for (const method of ['GET', 'POST']) add(method, ['/UserItems/{itemId}/UserData', '/Users/{userId}/Items/{itemId}/UserData'], async context => {

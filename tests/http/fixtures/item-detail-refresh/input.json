@@ -1,0 +1,17 @@
+[
+  { "name": "ordinary media", "type": "Movie", "ageSeconds": 345600 },
+  { "name": "recent incomplete person", "type": "Person", "ageSeconds": 172800 },
+  { "name": "future refresh date", "type": "Person", "ageSeconds": -60 },
+  { "name": "complete old person", "type": "Person", "ageSeconds": 345600, "overview": "Biography", "primary": true },
+  { "name": "BOM is not CLR whitespace", "type": "Person", "ageSeconds": 345600, "overview": "\ufeff", "primary": true },
+  { "name": "CLR whitespace overview", "type": "Person", "ageSeconds": 345600, "overview": "\u0085\u3000", "primary": true },
+  { "name": "overview without primary", "type": "Person", "ageSeconds": 345600, "overview": "Biography" },
+  { "name": "primary without overview", "type": "Person", "ageSeconds": 345600, "primary": true },
+  { "name": "exact three days", "type": "Person", "ageSeconds": 259200 },
+  { "name": "just inside refresh window", "type": "Person", "ageSeconds": 259140 },
+  { "name": "never refreshed", "type": "Person", "minimumDate": true },
+  { "name": "provider failure", "type": "Person", "ageSeconds": 345600, "behavior": "failure" },
+  { "name": "provider cancellation retries", "type": "Person", "ageSeconds": 345600, "behavior": "cancel" },
+  { "name": "timeout retries", "type": "Person", "ageSeconds": 345600, "behavior": "timeout" },
+  { "name": "request cancellation propagates", "type": "Person", "ageSeconds": 345600, "behavior": "request-cancel" }
+]
