@@ -140,7 +140,9 @@ for (const baseUrl of ['', '/media']) test(`Jellyfin and Emby auth/info coexist 
       const nativeResponse = await request(`/Users/${user.Id}/${action}`, { headers: jellyfin(login.body.AccessToken) });
       assert.equal(response.status, 200, 'Client authentication metadata must not become an item filter.');
       assert.equal(nativeResponse.status, 200);
-      assert.deepEqual(response.body, nativeResponse.body);
+      const expected = { ...nativeResponse.body };
+      if (action.startsWith('Items?')) delete expected.StartIndex;
+      assert.deepEqual(response.body, expected);
     }
     for (const action of ['Items?Recursive=true', 'Items/Resume?MediaTypes=Video']) {
       const bound = await request(`/Users/${user.Id}/${action}&Fields=Path`, { headers: jellyfin(login.body.AccessToken) });
@@ -148,7 +150,9 @@ for (const baseUrl of ['', '/media']) test(`Jellyfin and Emby auth/info coexist 
       for (const headers of [jellyfin(login.body.AccessToken), { 'X-Emby-Token': embyLogin.body.AccessToken, 'X-Emby-Client': 'Emby Web' }]) {
         const unbound = await request(`/Users/${user.Id}/${action}&Fields=BasicSyncInfo,Path,UnknownClientField`, { headers });
         assert.equal(unbound.status, 200);
-        assert.deepEqual(unbound.body, bound.body, 'Unknown enum fields do not hide a valid requested field.');
+        const expected = { ...bound.body };
+        if (action.startsWith('Items?') && headers['X-Emby-Client']) delete expected.StartIndex;
+        assert.deepEqual(unbound.body, expected, 'Unknown enum fields do not hide a valid requested field.');
       }
     }
     const devices = await runtime.store.run(db => db.rows('Devices', { where: { UserId: nativeGuid(user.Id) } }));

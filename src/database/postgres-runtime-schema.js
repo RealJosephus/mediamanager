@@ -797,6 +797,8 @@ export const postgresRuntimeIndexes = Object.freeze([
     '"Type", "CleanValue", (mm_native_guid_lower("ItemValueId"))'),
   index('mm_runtime_user_data_item_user_rating_lower_idx', 'UserData',
     '(mm_native_guid_lower("ItemId")), (mm_native_guid_lower("UserId")), "Rating"'),
+  index('mm_runtime_search_history_user_item_idx', 'CustomItemDisplayPreferences',
+    '"Client", "Key", (mm_native_guid_lower("UserId")), (mm_native_guid_lower("ItemId"))'),
   index('mm_runtime_user_data_user_resume_item_lower_idx', 'UserData',
     '(mm_native_guid_lower("UserId")), (mm_native_guid_lower("ItemId")), "LastPlayedDate" DESC NULLS LAST', '"PlaybackPositionTicks" > 0'),
   index('mm_runtime_user_data_user_played_item_lower_idx', 'UserData',

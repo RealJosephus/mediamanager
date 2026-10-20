@@ -10,6 +10,7 @@ import { bindUserViewPresets } from './user-view-binding.js';
 import { enumName, generalCommands, mediaTypes } from '../sessions/binding.js';
 import { AUTHENTICATION_PROVIDER, PASSWORD_RESET_PROVIDER } from '../users/native.js';
 import { itemFields, itemImageTypes } from '../library/dto.js';
+import { embyTextResponse } from './client-protocol.js';
 
 const itemSortNames = ['Default', 'AiredEpisodeOrder', 'Album', 'AlbumArtist', 'Artist', 'DateCreated',
   'OfficialRating', 'DatePlayed', 'PremiereDate', 'StartDate', 'SortName', 'Name', 'Random', 'Runtime',
@@ -64,11 +65,13 @@ export function registerDomainRoutes(add, { configuration, authentication, users
     // These are InternalItemsQuery-only properties and are not controller
     // parameters, so ASP.NET ignores them instead of exposing a public filter.
     if (privateItemQueryNames.has(key)) return false;
+    if (!context.embyClient && key === 'wassearched') return false;
     // The obsolete user-scoped action predates the two language parameters.
     return !context.params.userId || !['audiolanguages', 'subtitlelanguages'].includes(key);
   }));
-  async function requestUser(context, { required = true } = {}) {
+  async function requestUser(context, { required = true, currentEmbyUser = false } = {}) {
     let id = guid(context, 'userId', context.auth.UserId);
+    if (currentEmbyUser && context.embyClient && !context.auth.IsAdministrator) id = context.auth.UserId;
     if (/^0{32}$/.test(id ?? '')) id = context.auth.UserId;
     if (id && id !== context.auth.UserId && !context.auth.IsAdministrator) throw httpError(403, 'Forbidden');
     const user = id && !/^0{32}$/.test(id) ? await users.getUser(id) : null;
@@ -209,10 +212,19 @@ export function registerDomainRoutes(add, { configuration, authentication, users
 
   add('GET', ['/Items', '/Users/{userId}/Items'], async context => {
     try {
-      return await library.queryItems(itemQuery(context), {
-        user: await requestUser(context, { required: false }), isApiKey: context.auth.IsApiKey,
+      const result = await library.queryItems(itemQuery(context), {
+        user: await requestUser(context, { required: false, currentEmbyUser: true }), isApiKey: context.auth.IsApiKey,
+        embyClient: context.embyClient,
       });
+      if (context.embyClient) {
+        delete result.StartIndex;
+        if (boolean(context, 'enableTotalRecordCount') === false) result.TotalRecordCount = 0;
+      }
+      return result;
     } catch (error) {
+      if (context.embyClient && error instanceof BindingError && Object.hasOwn(error.errors, 'wassearched')) {
+        return embyTextResponse(500, `String '${query(context, 'wasSearched')}' was not recognized as a valid Boolean.`);
+      }
       if (error.status === 401 && error.message.includes(' is not permitted to access Library ')) return new HttpResult(401, error.message);
       throw error;
     }

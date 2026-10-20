@@ -15,6 +15,7 @@ import {
 import { lowerInvariant } from '../core/identity.js';
 import { cleanValue, idKey } from '../library/records.js';
 import { ordinalIgnoreCaseKey } from '../storage/ordinal-comparer.js';
+import { searchHistoryClient, searchHistoryKey } from '../sessions/search-history.js';
 import { postgresPlaylistSharingPredicate } from '../library/postgres-playlist-query.js';
 import {
   clrTrim as clrTrimValue,
@@ -46,7 +47,7 @@ const SUPPORTED_FILTERS = new Set([
   'minparentalrating', 'maxparentalrating', 'minindexnumber', 'seriesstatuses', 'imagetypes', 'person',
   'personids', 'persontypes', 'artistids', 'artistcleannames', 'albumartistids',
   'contributingartistids', 'excludeartistids', 'genreids', 'studioids', 'studionames',
-  'studiocleannames', 'adjacentto'
+  'studiocleannames', 'adjacentto', 'wassearched'
 ]);
 
 const SORT_COLUMNS = new Map(Object.entries({
@@ -154,7 +155,7 @@ export function supportsPostgresItemQuery(query, { userId, repository = true, al
   const userSorts = repository
     ? ['PlayCount', 'IsPlayed', 'IsUnplayed', 'IsFavoriteOrLiked']
     : ['DatePlayed', 'PlayCount', 'IsUnplayed', 'IsFavoriteOrLiked'];
-  if ((query.isfavorite !== undefined || query.likes !== undefined || query.favoriteorlikes || query.isresumable)
+  if ((query.isfavorite !== undefined || query.likes !== undefined || query.favoriteorlikes || query.isresumable || query.wassearched !== undefined)
     && !userId) return false;
   if (!allowMissingUserSorts && query.sortby?.some(value => userSorts.includes(value)) && !userId) return false;
   return true;
@@ -308,6 +309,13 @@ export function buildPostgresItemPageQuery(database, query, {
   const itemValues = table(database, 'ItemValues');
   const itemValuesMap = table(database, 'ItemValuesMap');
   const userData = table(database, 'UserData');
+  const searchHistory = (alias, column) => userId == null ? 'NULL' : `(SELECT history.${q(column)}
+    FROM ${table(database, 'CustomItemDisplayPreferences')} history
+    WHERE history."Client" = ${bindNativeText(searchHistoryClient)} AND history."Key" = ${bindNativeText(searchHistoryKey)}
+      AND ${normalizedId('history."UserId"')} = ${bind(idKey(userId))}
+      AND ${normalizedId('history."ItemId"')} = ${normalizedId(`${alias}."Id"`)} LIMIT 1)`;
+  const searchDate = alias => `(${project(searchHistory(alias, 'Value'))})::bigint`;
+  if (query.wassearched !== undefined) predicates.push(`${searchHistory('i', 'Value')} IS ${query.wassearched ? 'NOT ' : ''}NULL`);
   const links = table(database, 'LinkedChildren');
   const peopleMap = table(database, 'PeopleBaseItemMap');
   const people = table(database, 'Peoples');
@@ -1467,6 +1475,7 @@ export function buildPostgresItemPageQuery(database, query, {
       case 'isfolder': return [`CASE WHEN ${alias}."IsFolder" IS TRUE THEN 0 ELSE 1 END`];
       case 'datecreated': return [`COALESCE(${storedDateOrder(`${alias}."DateCreated"`)}, ${minDate})`];
       case 'dateplayed': return [`COALESCE(${storedDateOrder(memoryUserValue(alias, 'LastPlayedDate'))}, ${minDate})`];
+      case 'datelastsearched': return [searchDate(alias), searchHistory(alias, 'Id')];
       case 'datelastcontentadded': return [`CASE WHEN ${alias}."IsFolder" IS TRUE
         THEN COALESCE(${storedDateOrder(`${alias}."DateLastMediaAdded"`)}, ${minDate}) ELSE ${minDate} END`];
       case 'startdate': return [`CASE WHEN ${type} = 'LiveTvProgram'
@@ -1577,6 +1586,10 @@ export function buildPostgresItemPageQuery(database, query, {
     let dir = direction(query, index);
     if (name === 'random') { order.push('random()'); continue; }
     let expression = SORT_COLUMNS.get(name);
+    if (name === 'datelastsearched') {
+      order.push(`${searchDate('i')} ${dir} ${nulls(dir)}`, `${searchHistory('i', 'Id')} ${dir}`);
+      continue;
+    }
     if (['dateplayed', 'playcount', 'isplayed', 'isunplayed', 'isfavoriteorliked'].includes(name)) {
       if (!userId && !searchScores?.length && name !== 'dateplayed'
         && !(resumableMode === 'memory' && name === 'isplayed')) throw new Error(`Sort key ${name} requires a user.`);

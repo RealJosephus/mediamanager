@@ -4,12 +4,14 @@ import * as fs from 'node:fs/promises';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { createRuntime } from '../../src/runtime.js';
+import { nativeGuid } from '../../src/users/native.js';
+import { searchHistoryClient, searchHistoryKey } from '../../src/sessions/search-history.js';
 import { SqliteDatabase } from '../../src/database/sqlite.js';
 import { nativeModel, quoteIdentifier } from '../../src/database/model.js';
 import { transferDatabase, exportCurrentSqlite, databaseDigest } from '../../src/migration/database-transfer.js';
 import { recordOracle } from '../../tools/validation/oracle.js';
 import { validationOutputRoot } from '../../tools/validation/paths.js';
-import { createPostgresTestDatabase, dropPostgresTestDatabase, postgresTestConnectionString } from '../database/postgres-fixture.js';
+import { createPostgresTestDatabase, dropPostgresTestDatabase, postgresTestConnectionString, postgresTestRow } from '../database/postgres-fixture.js';
 import { normalizePreferenceState, preferenceTables } from './fixtures/display-preferences/observations.js';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -40,6 +42,10 @@ test('postgres: display preference API writes export to real native EF/controlle
   runtime = await createRuntime({ database, configuration: { IsStartupWizardCompleted: true }, serverId });
   await new Promise(resolve => runtime.server.listen(0, '127.0.0.1', resolve));
   const owner = await runtime.users.createUser({ Name: 'Exchange', Password: 'Native preference exchange password' });
+  const historyItem = 'DE150000-0000-0000-0000-000000000002';
+  await database.insert('BaseItems', postgresTestRow('BaseItems', { Id: historyItem, Type: 'MediaBrowser.Controller.Entities.Audio.Audio',
+    Name: 'Exchange history audio', SortName: 'exchange history audio', CleanName: 'exchange history audio',
+    MediaType: 'Audio', IsFolder: false, PresentationUniqueKey: historyItem, Data: '{}', RunTimeTicks: 10000000n }));
   const key = await runtime.apiKeys.create('Preference exchange'), url = `http://127.0.0.1:${runtime.server.address().port}/DisplayPreferences/usersettings?client=emby&userId=${owner.Id}`;
   const headers = { Accept: 'application/json', Authorization: `MediaBrowser Token="${key.AccessToken}"`, 'Content-Type': 'application/json' };
   const write = await fetch(url, { method: 'POST', headers, body: JSON.stringify({ SortBy: 'DateCreated', SortOrder: 'Descending',
@@ -50,13 +56,21 @@ test('postgres: display preference API writes export to real native EF/controlle
   assert.equal((await fetch(settingsUrl, { method: 'POST', headers: { ...headers, 'Content-Type': 'text/plain' }, body: JSON.stringify(embySettings) })).status, 204);
   const settingsRead = await fetch(settingsUrl, { headers }); assert.equal(settingsRead.status, 200);
   assert.deepEqual(await settingsRead.json(), embySettings);
+  const markUrl = `http://127.0.0.1:${runtime.server.address().port}/emby/Users/${owner.Id}/SearchedItems`;
+  assert.equal((await fetch(markUrl, { method: 'POST', headers, body: JSON.stringify({ Ids: [historyItem] }) })).status, 204);
+  const historyWhere = { UserId: nativeGuid(owner.Id), ItemId: historyItem, Client: searchHistoryClient };
+  const nodeHistory = (await database.rows('CustomItemDisplayPreferences', { where: { ...historyWhere, Key: searchHistoryKey } }))[0];
+  assert.match(nodeHistory.Value, /^\d{10}$/u);
   const originalRows = Object.fromEntries(await Promise.all(preferenceTables.map(async table => [table, await database.rows(table)])));
   const exported = path.join(root, 'returned.db'); const exportResult = await exportCurrentSqlite(database, exported);
   assert.equal(exportResult.verified, true); const exportedSha256 = hash(await fs.readFile(exported));
-  const recording = await recordOracle({ project: 'tests/http/fixtures/display-preferences/consumer/Oracle.csproj', output: path.join(root, 'native'), args: [exported, owner.Id, '{output}/reading.json'] });
+  const recording = await recordOracle({ project: 'tests/http/fixtures/display-preferences/consumer/Oracle.csproj', output: path.join(root, 'native'), args: [exported, owner.Id, '{output}/reading.json', historyItem] });
   assert.equal(recording.passed, true); const native = JSON.parse(await fs.readFile(path.join(root, 'native/reading.json')));
   assert.equal(native.actualController, true); assert.equal(native.actualManager, true); assert.equal(native.actualEfSqlite, true); assert.equal(native.originalSha256, exportedSha256);
   assert.deepEqual(native.before, dto(before)); assert.deepEqual(normalizePreferenceState(native.beforeRows), normalizePreferenceState(originalRows));
+  assert.deepEqual(native.historyBefore, { [searchHistoryKey]: nodeHistory.Value });
+  assert.equal(native.historyAfter[searchHistoryKey], String(BigInt(nodeHistory.Value) + 2n));
+  assert.equal(native.historyAfter.external, 'native\0history');
   returned = new SqliteDatabase(exported, { readOnly: true, requireMigrationHistory: true });
   const afterNative = Object.fromEntries(await Promise.all(preferenceTables.map(async table => [table, await returned.rows(table)])));
   assert.deepEqual(normalizePreferenceState(afterNative), normalizePreferenceState(native.afterRows));
@@ -70,9 +84,16 @@ test('postgres: display preference API writes export to real native EF/controlle
     assert.equal(after.SortBy, 'Name'); assert.equal(after.CustomPrefs.get('foo'), 'native\0write');
     assert.equal(after.CustomPrefs.get('homesection0'), 'librarybuttons'); assert.equal(after.CustomPrefs.get('homesection4'), 'latestmedia');
     assert.deepEqual(Object.fromEntries(await importedRuntime.displayPreferences.getUserSettings(owner.Id)), embySettings);
+    const history = await reimported.rows('CustomItemDisplayPreferences', { where: historyWhere });
+    assert.deepEqual(Object.fromEntries(history.map(row => [row.Key, row.Value])), native.historyAfter);
+    const historyQuery = await importedRuntime.library.queryItems({ Ids: [historyItem], WasSearched: true, SortBy: 'DateLastSearched' },
+      { user: await importedRuntime.users.getUser(owner.Id), embyClient: true });
+    assert.equal(historyQuery.TotalRecordCount, 1);
+    assert.equal(historyQuery.Items[0].Id, historyItem.replaceAll('-', '').toLowerCase());
   } finally { await importedRuntime.close(); }
   assert.equal(hash(await fs.readFile(process.env.MEDIAMANAGER_TEST_CURRENT_NATIVE_SQLITE)), sourceHash);
   await fs.writeFile(path.join(root, 'proof.json'), JSON.stringify({ sourceHash, exportedSha256, exportResult, nativeRecording: recording,
-    allTablesRoundTrip: true, actualNativeReadAndWrite: true, fullInstanceVerified: false, completeBuildInputClosure: false, phaseAcceptance: false },
+    allTablesRoundTrip: true, actualNativeReadAndWrite: true, searchHistoryReadWrite: true,
+    fullInstanceVerified: false, completeBuildInputClosure: false, phaseAcceptance: false },
     (_key, value) => typeof value === 'bigint' ? JSON.rawJSON(value.toString()) : value, 2) + '\n');
 });

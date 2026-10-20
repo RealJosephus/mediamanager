@@ -12,6 +12,7 @@ import { registerClientDiscoveryRoutes } from './client-discovery-routes.js';
 import { registerClientConfigurationPages } from './client-configuration-pages.js';
 import { isEmbyClient as detectEmbyClient } from './client-protocol.js';
 import { registerUserDataCopyRoutes } from './user-data-copy-routes.js';
+import { registerSearchHistoryRoutes } from './search-history-routes.js';
 import { registerConfigurationRoutes } from './configuration-routes.js';
 import { registerSessionControlRoutes } from './session-control-routes.js';
 import { registerMetadataRoutes } from './metadata-routes.js';
@@ -119,6 +120,7 @@ export async function createApplication(services = {}) {
   registerStartupRoutes(add, services);
   registerApiKeyRoutes(add, services);
   registerUserDataCopyRoutes(add, services);
+  registerSearchHistoryRoutes(add, services);
   registerPluginRoutes(add, services);
   registerDomainRoutes(add, services);
   registerPlaybackRoutes(add, services);

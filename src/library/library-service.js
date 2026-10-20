@@ -781,8 +781,8 @@ export class LibraryService extends EventEmitter {
     return items.filter(item => visible.has(idKey(item.Id)));
   }
 
-  async queryItems(input = {}, { user = null, isApiKey = false, fromUserViewChildren = false } = {}) {
-    return this.#queryItems(input, { user, isApiKey, fromUserViewChildren }, true);
+  async queryItems(input = {}, { user = null, isApiKey = false, fromUserViewChildren = false, embyClient = false } = {}) {
+    return this.#queryItems(input, { user, isApiKey, fromUserViewChildren, embyClient }, true);
   }
 
   async queryUpcomingEpisodes(input = {}, { user = null } = {}) {
@@ -1225,9 +1225,9 @@ export class LibraryService extends EventEmitter {
   }
 
   async #queryItems(input, {
-    user = null, isApiKey = false, fromUserViewChildren = false, playedFolderScope = null, checkParentAccess = true,
+    user = null, isApiKey = false, fromUserViewChildren = false, playedFolderScope = null, checkParentAccess = true, embyClient = false,
   }, project) {
-    const query = resolveOfficialRatingRanges(parseQuery(input, { allowNegativePaging: true }), this.options.configuration);
+    const query = resolveOfficialRatingRanges(parseQuery(input, { allowNegativePaging: true, embyClient }), this.options.configuration);
     return this.#runWithStates(db => this.#queryItemsPostgres(db, query,
       { user, isApiKey, fromUserViewChildren, playedFolderScope, checkParentAccess, project }));
   }

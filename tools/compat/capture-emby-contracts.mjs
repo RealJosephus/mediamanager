@@ -8,8 +8,12 @@ import net from 'node:net';
 import path from 'node:path';
 import { setTimeout as delay } from 'node:timers/promises';
 import { fileURLToPath } from 'node:url';
+import { captureSearchHistory, captureSearchOrder } from './emby-search-history-scenario.mjs';
+import { captureHomeSections } from './emby-home-sections-scenario.mjs';
 
 assert.equal(process.env.GITHUB_ACTIONS, 'true', 'Official reference capture requires an isolated CI runner.');
+const scenario = process.env.MEDIAMANAGER_EMBY_CAPTURE_SCENARIO || 'user-copy';
+assert.ok(['user-copy', 'search-history', 'search-order', 'home-sections'].includes(scenario));
 const root = await realpath(process.env.MEDIAMANAGER_EMBY_REFERENCE_ROOT);
 const temporary = await realpath(process.env.RUNNER_TEMP);
 assert.equal(path.dirname(root), temporary);
@@ -49,8 +53,10 @@ async function inventory(directory) {
 const archive = await describe(path.join(root, 'release.zip'));
 assert.equal(archive.sha256, input.expectedSha256);
 assert.equal(archive.bytes, input.expectedBytes);
-const report = { kind: 'actual-emby-http-reference', version: input.version, input, archive,
+const report = { kind: 'actual-emby-http-reference', version: input.version, scenario, input, archive,
   producer: { path: fileURLToPath(import.meta.url), ...await describe(fileURLToPath(import.meta.url)) },
+  scenarioProducer: { ...await describe(fileURLToPath(new URL(scenario === 'home-sections'
+    ? './emby-home-sections-scenario.mjs' : './emby-search-history-scenario.mjs', import.meta.url))) },
   dotnet: { path: dotnet, ...await describe(dotnet) }, referenceBefore: await inventory(packageRoot),
   mediaTools: await Promise.all(['MEDIAMANAGER_FFMPEG', 'MEDIAMANAGER_FFPROBE'].map(async name => ({ name,
     path: process.env[name], ...await describe(process.env[name]) }))),
@@ -199,92 +205,99 @@ try {
     await delay(500);
   }
   await call('actual-library-options', '/Library/VirtualFolders/Query');
-  await call('configuration-user-menu', `/web/ConfigurationPages?EnableInUserMenu=true&UserId=${reader.Id}`, { token });
-  await call('configuration-reader-unfiltered', '/web/ConfigurationPages', { token });
-  await call('configuration-reader-other-user', `/web/ConfigurationPages?EnableInUserMenu=true&UserId=${other.Id}`, { token });
-  await call('configuration-reader-invalid-user', '/web/ConfigurationPages?EnableInUserMenu=true&UserId=invalid', { token });
-  await call('configuration-reader-invalid-flag', '/web/ConfigurationPages?EnableInUserMenu=invalid', { token });
-  const copyOptions = await call('copy-options-admin', '/Users/CopyDataOptions');
-  await call('copy-options-reader', '/Users/CopyDataOptions', { token });
-  await call('copy-options-anonymous', '/Users/CopyDataOptions', { token: null });
-  const sections = await call('home-edit-defaults', user + '/HomeSections?IsEditMode=true', { token });
-  for (const mode of ['mobile,desktop', 'tv']) await call('home-display-' + mode, user + '/HomeSections?DisplayMode=' + mode, { token });
-  await call('home-other-user-reader', `/Users/${other.Id}/HomeSections`, { token });
-  await call('home-anonymous', user + '/HomeSections', { token: null });
-  if (sections.status === 200 && Array.isArray(sections.bodyJson)) {
-    for (const section of sections.bodyJson.slice(0, 12)) {
-      await call('section-items-' + section.Id, user + `/Sections/${section.Id}/Items?Limit=4&RandomSeed=1234567&Fields=BasicSyncInfo,CanDownload,PrimaryImageAspectRatio`, { token });
+  if (scenario.startsWith('search-') || scenario === 'home-sections') {
+    const capture = scenario === 'home-sections' ? captureHomeSections : scenario === 'search-order' ? captureSearchOrder : captureSearchHistory;
+    await capture({ call, reader, other, token, otherToken: otherLogin.AccessToken,
+      items: libraryItems.Items, report, instance, restart: async () => { await stop(); launch(); await ready(); } });
+    await stop();
+  } else {
+    await call('configuration-user-menu', `/web/ConfigurationPages?EnableInUserMenu=true&UserId=${reader.Id}`, { token });
+    await call('configuration-reader-unfiltered', '/web/ConfigurationPages', { token });
+    await call('configuration-reader-other-user', `/web/ConfigurationPages?EnableInUserMenu=true&UserId=${other.Id}`, { token });
+    await call('configuration-reader-invalid-user', '/web/ConfigurationPages?EnableInUserMenu=true&UserId=invalid', { token });
+    await call('configuration-reader-invalid-flag', '/web/ConfigurationPages?EnableInUserMenu=invalid', { token });
+    const copyOptions = await call('copy-options-admin', '/Users/CopyDataOptions');
+    await call('copy-options-reader', '/Users/CopyDataOptions', { token });
+    await call('copy-options-anonymous', '/Users/CopyDataOptions', { token: null });
+    const sections = await call('home-edit-defaults', user + '/HomeSections?IsEditMode=true', { token });
+    for (const mode of ['mobile,desktop', 'tv']) await call('home-display-' + mode, user + '/HomeSections?DisplayMode=' + mode, { token });
+    await call('home-other-user-reader', `/Users/${other.Id}/HomeSections`, { token });
+    await call('home-anonymous', user + '/HomeSections', { token: null });
+    if (sections.status === 200 && Array.isArray(sections.bodyJson)) {
+      for (const section of sections.bodyJson.slice(0, 12)) {
+        await call('section-items-' + section.Id, user + `/Sections/${section.Id}/Items?Limit=4&RandomSeed=1234567&Fields=BasicSyncInfo,CanDownload,PrimaryImageAspectRatio`, { token });
+      }
+      if (sections.bodyJson.length) {
+        const first = sections.bodyJson[0];
+        await call('save-custom-home-name', user + '/HomeSections', { token, method: 'POST', body: { ...first, CustomName: 'Controlled custom name', Subtitle: 'Controlled subtitle' } });
+        await call('home-after-save', user + '/HomeSections?IsEditMode=true', { token });
+        await call('move-home-section', user + '/HomeSections/Move', { token, method: 'POST', body: { Ids: [sections.bodyJson.at(-1).Id], NewIndex: 0 } });
+        await call('home-after-move', user + '/HomeSections?IsEditMode=true', { token });
+        await call('delete-home-section', user + '/HomeSections/Delete', { token, method: 'POST', body: { Ids: [first.Id] } });
+        await call('home-after-delete', user + '/HomeSections?IsEditMode=true', { token });
+      }
     }
-    if (sections.bodyJson.length) {
-      const first = sections.bodyJson[0];
-      await call('save-custom-home-name', user + '/HomeSections', { token, method: 'POST', body: { ...first, CustomName: 'Controlled custom name', Subtitle: 'Controlled subtitle' } });
-      await call('home-after-save', user + '/HomeSections?IsEditMode=true', { token });
-      await call('move-home-section', user + '/HomeSections/Move', { token, method: 'POST', body: { Ids: [sections.bodyJson.at(-1).Id], NewIndex: 0 } });
-      await call('home-after-move', user + '/HomeSections?IsEditMode=true', { token });
-      await call('delete-home-section', user + '/HomeSections/Delete', { token, method: 'POST', body: { Ids: [first.Id] } });
-      await call('home-after-delete', user + '/HomeSections?IsEditMode=true', { token });
+    const ids = libraryItems.Items.map(item => item.Id);
+    for (const name of ['Controlled collection A', 'Controlled collection B']) {
+      const response = await call('create-' + name, '/Collections?Name=' + encodeURIComponent(name), { method: 'POST' });
+      if (response.status === 200 && response.bodyJson?.Id) ids.push(response.bodyJson.Id);
     }
+    report.identities.items = ids;
+    const recent = user + '/Items?Recursive=true&WasSearched=true&SortBy=DateLastSearched&SortOrder=Descending&Fields=BasicSyncInfo,DateLastSearched&Limit=10';
+    await call('recent-initial', recent, { token });
+    for (const id of ids.slice(0, 2)) {
+      await call('mark-searched-' + id, user + '/SearchedItems', { token, method: 'POST', body: { Ids: [id], WasSearched: true } });
+      await call('items-with-sync-field-' + id, user + '/Items?Ids=' + id + '&Fields=BasicSyncInfo,CanDownload', { token });
+      await call('items-without-sync-field-' + id, user + '/Items?Ids=' + id + '&Fields=CanDownload', { token });
+    }
+    await call('recent-after-mark', recent, { token });
+    await call('update-reader-settings', `/UserSettings/${reader.Id}/Partial`, { token, method: 'POST', body: { enableAutoFolderJumpThrough: 'false', customUnknownKey: 'Controlled copy value' } });
+    await call('update-target-settings-before-copy', `/UserSettings/${other.Id}/Partial`, { method: 'POST', body: { targetOnlyKey: 'Target value', customUnknownKey: 'Old target value' } });
+    await call('update-reader-configuration', user + '/Configuration', { method: 'POST', body: {
+      ...reader.Configuration, AudioLanguagePreference: 'zh-CN', SubtitleLanguagePreference: 'ja',
+    } });
+    const settingsOptions = (copyOptions.bodyJson?.DataOptions ?? []).map(option => option.Id)
+      .filter(id => /settings|configuration|home/iu.test(id));
+    await call('copy-user-settings', user + '/CopyData', { method: 'POST', body: { ToUserIds: [other.Id], CopyOptions: settingsOptions } });
+    await call('other-settings-after-copy', `/UserSettings/${other.Id}`);
+    await call('other-user-after-copy', `/Users/${other.Id}`);
+    await call('other-home-after-configuration-copy', `/Users/${other.Id}/HomeSections?IsEditMode=true`);
+    await call('copy-with-empty-options', user + '/CopyData', { method: 'POST', body: { ToUserIds: [other.Id], CopyOptions: [] } });
+    await call('copy-with-unknown-option', user + '/CopyData', { method: 'POST', body: { ToUserIds: [other.Id], CopyOptions: ['unknown-option'] } });
+    await call('copy-with-missing-target', user + '/CopyData', { method: 'POST', body: { ToUserIds: ['00000000000000000000000000001234'], CopyOptions: ['userconfiguration'] } });
+    if (ids.length) {
+      await call('favorite-source-item', user + '/FavoriteItems/' + ids[0], { token, method: 'POST' });
+      await call('played-source-item', user + '/PlayedItems/' + ids[0], { token, method: 'POST' });
+      await call('favorite-target-overlap', `/Users/${other.Id}/FavoriteItems/${ids[1]}`, { method: 'POST' });
+      await call('favorite-target-only', `/Users/${other.Id}/FavoriteItems/${ids[2]}`, { method: 'POST' });
+      await delay(800);
+      report.targetMessagesBeforeCopy = targetSocket.messages.length;
+      await call('copy-playback-data', user + '/CopyData', { method: 'POST', body: { ToUserIds: [other.Id], CopyOptions: ['userdata'] } });
+      await delay(800);
+      report.targetMessagesAfterCopy = targetSocket.messages.length;
+      await call('source-item-user-data', user + '/Items/' + ids[0], { token });
+      await call('target-item-user-data', `/Users/${other.Id}/Items/${ids[0]}`);
+      await call('target-overlap-after-copy', `/Users/${other.Id}/Items/${ids[1]}`);
+      await call('target-only-after-copy', `/Users/${other.Id}/Items/${ids[2]}`);
+      await call('target-recent-after-copy', recent.replace(reader.Id, other.Id));
+    }
+    await call('update-source-policy', user + '/Policy', { method: 'POST', body: {
+      ...reader.Policy, EnableContentDownloading: false, EnableLiveTvAccess: false, RemoteClientBitrateLimit: 1234000,
+    } });
+    await call('copy-user-policy', user + '/CopyData', { method: 'POST', body: { ToUserIds: [other.Id], CopyOptions: ['userpolicy'] } });
+    await call('target-policy-after-copy', `/Users/${other.Id}`);
+    await call('copy-user-settings-as-reader', user + '/CopyData', { token, method: 'POST', body: { ToUserIds: [other.Id], CopyOptions: ['userconfiguration'] } });
+    if (ids.length) await call('unmark-searched', user + '/SearchedItems', { token, method: 'POST', body: { Ids: [ids[0]], WasSearched: false } });
+    await call('recent-after-unmark', recent, { token });
+    await call('clear-searched', user + '/RecentlySearched/Delete', { token, method: 'POST' });
+    await call('recent-after-clear', recent, { token });
+    await stop();
+    launch();
+    await ready();
+    await call('home-after-restart', user + '/HomeSections?IsEditMode=true', { token });
+    await call('recent-after-restart', recent, { token });
+    await stop();
   }
-  const ids = libraryItems.Items.map(item => item.Id);
-  for (const name of ['Controlled collection A', 'Controlled collection B']) {
-    const response = await call('create-' + name, '/Collections?Name=' + encodeURIComponent(name), { method: 'POST' });
-    if (response.status === 200 && response.bodyJson?.Id) ids.push(response.bodyJson.Id);
-  }
-  report.identities.items = ids;
-  const recent = user + '/Items?Recursive=true&WasSearched=true&SortBy=DateLastSearched&SortOrder=Descending&Fields=BasicSyncInfo,DateLastSearched&Limit=10';
-  await call('recent-initial', recent, { token });
-  for (const id of ids.slice(0, 2)) {
-    await call('mark-searched-' + id, user + '/SearchedItems', { token, method: 'POST', body: { Ids: [id], WasSearched: true } });
-    await call('items-with-sync-field-' + id, user + '/Items?Ids=' + id + '&Fields=BasicSyncInfo,CanDownload', { token });
-    await call('items-without-sync-field-' + id, user + '/Items?Ids=' + id + '&Fields=CanDownload', { token });
-  }
-  await call('recent-after-mark', recent, { token });
-  await call('update-reader-settings', `/UserSettings/${reader.Id}/Partial`, { token, method: 'POST', body: { enableAutoFolderJumpThrough: 'false', customUnknownKey: 'Controlled copy value' } });
-  await call('update-target-settings-before-copy', `/UserSettings/${other.Id}/Partial`, { method: 'POST', body: { targetOnlyKey: 'Target value', customUnknownKey: 'Old target value' } });
-  await call('update-reader-configuration', user + '/Configuration', { method: 'POST', body: {
-    ...reader.Configuration, AudioLanguagePreference: 'zh-CN', SubtitleLanguagePreference: 'ja',
-  } });
-  const settingsOptions = (copyOptions.bodyJson?.DataOptions ?? []).map(option => option.Id)
-    .filter(id => /settings|configuration|home/iu.test(id));
-  await call('copy-user-settings', user + '/CopyData', { method: 'POST', body: { ToUserIds: [other.Id], CopyOptions: settingsOptions } });
-  await call('other-settings-after-copy', `/UserSettings/${other.Id}`);
-  await call('other-user-after-copy', `/Users/${other.Id}`);
-  await call('other-home-after-configuration-copy', `/Users/${other.Id}/HomeSections?IsEditMode=true`);
-  await call('copy-with-empty-options', user + '/CopyData', { method: 'POST', body: { ToUserIds: [other.Id], CopyOptions: [] } });
-  await call('copy-with-unknown-option', user + '/CopyData', { method: 'POST', body: { ToUserIds: [other.Id], CopyOptions: ['unknown-option'] } });
-  await call('copy-with-missing-target', user + '/CopyData', { method: 'POST', body: { ToUserIds: ['00000000000000000000000000001234'], CopyOptions: ['userconfiguration'] } });
-  if (ids.length) {
-    await call('favorite-source-item', user + '/FavoriteItems/' + ids[0], { token, method: 'POST' });
-    await call('played-source-item', user + '/PlayedItems/' + ids[0], { token, method: 'POST' });
-    await call('favorite-target-overlap', `/Users/${other.Id}/FavoriteItems/${ids[1]}`, { method: 'POST' });
-    await call('favorite-target-only', `/Users/${other.Id}/FavoriteItems/${ids[2]}`, { method: 'POST' });
-    await delay(800);
-    report.targetMessagesBeforeCopy = targetSocket.messages.length;
-    await call('copy-playback-data', user + '/CopyData', { method: 'POST', body: { ToUserIds: [other.Id], CopyOptions: ['userdata'] } });
-    await delay(800);
-    report.targetMessagesAfterCopy = targetSocket.messages.length;
-    await call('source-item-user-data', user + '/Items/' + ids[0], { token });
-    await call('target-item-user-data', `/Users/${other.Id}/Items/${ids[0]}`);
-    await call('target-overlap-after-copy', `/Users/${other.Id}/Items/${ids[1]}`);
-    await call('target-only-after-copy', `/Users/${other.Id}/Items/${ids[2]}`);
-    await call('target-recent-after-copy', recent.replace(reader.Id, other.Id));
-  }
-  await call('update-source-policy', user + '/Policy', { method: 'POST', body: {
-    ...reader.Policy, EnableContentDownloading: false, EnableLiveTvAccess: false, RemoteClientBitrateLimit: 1234000,
-  } });
-  await call('copy-user-policy', user + '/CopyData', { method: 'POST', body: { ToUserIds: [other.Id], CopyOptions: ['userpolicy'] } });
-  await call('target-policy-after-copy', `/Users/${other.Id}`);
-  await call('copy-user-settings-as-reader', user + '/CopyData', { token, method: 'POST', body: { ToUserIds: [other.Id], CopyOptions: ['userconfiguration'] } });
-  if (ids.length) await call('unmark-searched', user + '/SearchedItems', { token, method: 'POST', body: { Ids: [ids[0]], WasSearched: false } });
-  await call('recent-after-unmark', recent, { token });
-  await call('clear-searched', user + '/RecentlySearched/Delete', { token, method: 'POST' });
-  await call('recent-after-clear', recent, { token });
-  await stop();
-  launch();
-  await ready();
-  await call('home-after-restart', user + '/HomeSections?IsEditMode=true', { token });
-  await call('recent-after-restart', recent, { token });
-  await stop();
   report.referenceAfter = await inventory(packageRoot);
   assert.equal(report.referenceAfter.entriesSha256, report.referenceBefore.entriesSha256, 'The original server package changed during capture.');
   report.runtimeAfter = { shared: await inventory(path.join(dotnetRoot, 'shared')), host: await inventory(path.join(dotnetRoot, 'host')) };

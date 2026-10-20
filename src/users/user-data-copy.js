@@ -1,6 +1,7 @@
 import { nativeTextBytes } from '../database/native-text.js';
 import { quoteIdentifier as q, tableDefinition } from '../database/model.js';
 import { nativeGuid, domainError } from './native.js';
+import { searchHistoryClient, searchHistoryKey } from '../sessions/search-history.js';
 
 export const userDataCopyOptions = Object.freeze([
   { Name: 'User Policy (library and feature access, parental controls, etc.)', Id: 'userpolicy' },
@@ -20,6 +21,11 @@ async function copyPlaybackData(database, sourceId, targetId) {
     ON CONFLICT (${table.primaryKey.map(q).join(', ')}) DO UPDATE SET
     ${changed.map(column => `${q(column.name)} = EXCLUDED.${q(column.name)}`).join(', ')}`,
   [nativeTextBytes(sourceId), nativeTextBytes(targetId)]);
+  await database.client.query(`INSERT INTO ${q(database.schemaName)}."CustomItemDisplayPreferences" ("UserId", "ItemId", "Client", "Key", "Value")
+    SELECT $2::bytea, "ItemId", "Client", "Key", "Value" FROM ${q(database.schemaName)}."CustomItemDisplayPreferences"
+    WHERE "UserId" = $1::bytea AND "Client" = $3::bytea AND "Key" = $4::bytea
+    ON CONFLICT ("UserId", "ItemId", "Client", "Key") DO UPDATE SET "Value" = EXCLUDED."Value"`,
+  [nativeTextBytes(sourceId), nativeTextBytes(targetId), nativeTextBytes(searchHistoryClient), nativeTextBytes(searchHistoryKey)]);
 }
 
 export async function copyUserData({ store, users, displayPreferences, sessions, onError = () => {} }, sourceId, targetIds, options) {

@@ -203,10 +203,11 @@ function int32Value(value) {
   return number >= -2147483648n && number <= 2147483647n ? Number(number) : undefined;
 }
 
-export function parseQuery(input = {}, { allowNegativePaging = false } = {}) {
+export function parseQuery(input = {}, { allowNegativePaging = false, embyClient = false } = {}) {
   const query = {};
   const entries = [...(input instanceof URLSearchParams ? input.entries() : Object.entries(input))];
-  for (const [key, names] of [['sortby', itemSortNames], ['sortorder', sortOrderNames]]) {
+  const boolNames = embyClient ? new Set([...bools, 'wassearched']) : bools;
+  for (const [key, names] of [['sortby', embyClient ? [...itemSortNames, 'DateLastSearched'] : itemSortNames], ['sortorder', sortOrderNames]]) {
     const values = enumCollection(entries, key, names);
     if (values.length) query[key] = values;
   }
@@ -272,7 +273,7 @@ export function parseQuery(input = {}, { allowNegativePaging = false } = {}) {
   const scalarValues = new Map();
   for (const [name, raw] of entries) {
     const key = name.toLowerCase();
-    if (!bools.has(key) && !integers.has(key) && !doubles.has(key) && !strings.has(key)) continue;
+    if (!boolNames.has(key) && !integers.has(key) && !doubles.has(key) && !strings.has(key)) continue;
     if (!scalarValues.has(key)) scalarValues.set(key, []);
     scalarValues.get(key).push(...(Array.isArray(raw) ? raw : [raw]));
   }
@@ -291,7 +292,7 @@ export function parseQuery(input = {}, { allowNegativePaging = false } = {}) {
     if (key in arrays) {
       if (raw == null || raw === '') continue;
       query[key] = [...query[key] ?? [], ...(Array.isArray(raw) ? raw : String(raw).split(arrays[key]))].filter(value => value !== '');
-    } else if (bools.has(key)) {
+    } else if (boolNames.has(key)) {
       if (seenScalars.has(key)) continue;
       seenScalars.add(key);
       const value = Array.isArray(raw) ? raw[0] : raw;

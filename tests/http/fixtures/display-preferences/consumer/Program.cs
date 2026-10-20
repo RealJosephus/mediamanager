@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using System.Security.Cryptography;
+using System.Globalization;
 using System.Text.Json;
 using Jellyfin.Api.Constants;
 using Jellyfin.Api.Controllers;
@@ -37,15 +38,23 @@ object Snapshot() {
 }
 var originalSha256 = Convert.ToHexStringLower(SHA256.HashData(File.ReadAllBytes(filename)));
 var before = Read(); var beforeRows = Snapshot();
+var historyItemId = Guid.Parse(args[3]);
+var historyBefore = manager.ListCustomItemDisplayPreferences(userId, historyItemId, "emby-search-history");
 controller.UpdateDisplayPreferences("usersettings", userId, "emby", new DisplayPreferencesDto {
     SortBy = "Name", CustomPrefs = new() { ["foo"] = "native\0write", ["homesection0"] = "LibraryButtons", ["unknown"] = null }
 });
+var historyEdit = new Dictionary<string, string?>(historyBefore) {
+    ["DateLastSearched"] = (long.Parse(historyBefore["DateLastSearched"]!, CultureInfo.InvariantCulture) + 2).ToString(CultureInfo.InvariantCulture),
+    ["external"] = "native\0history"
+};
+manager.SetCustomItemDisplayPreferences(userId, historyItemId, "emby-search-history", historyEdit);
+var historyAfter = manager.ListCustomItemDisplayPreferences(userId, historyItemId, "emby-search-history");
 var after = Read(); var afterRows = Snapshot();
 var assemblies = AppDomain.CurrentDomain.GetAssemblies().Where(a => !a.IsDynamic && !string.IsNullOrEmpty(a.Location)).Select(a => new {
     name = a.GetName().Name, filename = a.Location, sha256 = Convert.ToHexStringLower(SHA256.HashData(File.ReadAllBytes(a.Location))) }).OrderBy(a => a.name).ToArray();
 var nativeLibraries = System.Diagnostics.Process.GetCurrentProcess().Modules.Cast<System.Diagnostics.ProcessModule>().Where(m => m.ModuleName.Equals("e_sqlite3.dll", StringComparison.OrdinalIgnoreCase)).Select(m => new { filename = m.FileName, sha256 = Convert.ToHexStringLower(SHA256.HashData(File.ReadAllBytes(m.FileName))) }).ToArray();
 File.WriteAllText(args[2], JsonSerializer.Serialize(new { originalSha256, actualController = true, actualManager = true, actualEfSqlite = true,
-    before, beforeRows, after, afterRows, assemblies, nativeLibraries }, new JsonSerializerOptions { WriteIndented = true }) + "\n");
+    before, beforeRows, after, afterRows, historyBefore, historyAfter, assemblies, nativeLibraries }, new JsonSerializerOptions { WriteIndented = true }) + "\n");
 
 public class Factory(string filename) : IDbContextFactory<JellyfinDbContext> {
     public JellyfinDbContext CreateDbContext() => new(new DbContextOptionsBuilder<JellyfinDbContext>().UseSqlite($"Data Source={filename};Pooling=False").Options,

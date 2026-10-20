@@ -2,6 +2,16 @@ name: Capture official Emby API contracts
 
 on:
   workflow_dispatch:
+    inputs:
+      scenario:
+        description: Exact interoperability scenario to capture
+        type: choice
+        default: user-copy
+        options:
+          - user-copy
+          - search-history
+          - search-order
+          - home-sections
 
 permissions:
   contents: read
@@ -14,6 +24,7 @@ jobs:
       TZ: Asia/Taipei
       DOTNET_NOLOGO: '1'
       DOTNET_CLI_TELEMETRY_OPTOUT: '1'
+      MEDIAMANAGER_EMBY_CAPTURE_SCENARIO: ${{ inputs.scenario || 'user-copy' }}
     steps:
       - name: Check out exact capture producer
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -33,7 +44,10 @@ jobs:
         with:
           dotnet-version: 8.0.426
       - name: Check capture producer syntax
-        run: node --check tools/compat/capture-emby-contracts.mjs
+        run: |
+          node --check tools/compat/capture-emby-contracts.mjs
+          node --check tools/compat/emby-search-history-scenario.mjs
+          node --check tools/compat/emby-home-sections-scenario.mjs
       - name: Fetch unchanged official release
         shell: pwsh
         run: ./tools/ci/fetch-emby-server.ps1
