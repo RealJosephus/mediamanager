@@ -237,6 +237,20 @@ export function registerDomainRoutes(add, { configuration, authentication, users
       throw error;
     }
   });
+  add('GET', '/LiveTv/Programs/Recommended', async context => {
+    const input = {
+      ...controllerDtoOptions(context),
+      startindex: integer(context, 'startIndex'), limit: integer(context, 'limit'),
+      genreids: commaGuids(context, 'genreIds'),
+      enabletotalrecordcount: boolean(context, 'enableTotalRecordCount', true),
+    };
+    for (const name of ['isAiring', 'hasAired', 'isSeries', 'isMovie', 'isNews', 'isKids', 'isSports']) {
+      input[name.toLowerCase()] = boolean(context, name);
+    }
+    const user = await optionalRequestUser(context);
+    requireSupportedDtoFields(input, 'Live TV');
+    return library.queryRecommendedPrograms(input, { user });
+  }, { policy: 'LiveTvAccess' });
   add('GET', '/Shows/Upcoming', async context => {
     const input = {
       ...controllerDtoOptions(context),

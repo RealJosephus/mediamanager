@@ -101,6 +101,14 @@ const scenarios = {
     libraryTypeMarkers: true,
     menuLifecycle: false,
   },
+  'live-tv-recommended-http': {
+    fixture: 'tests/library/fixtures/live-tv-recommended-http/input.json',
+    expectedCases: 64,
+    includeAggregateSnapshot: true,
+    libraryTypeMarkers: true,
+    liveTvView: true,
+    menuLifecycle: false,
+  },
 };
 
 export async function recordUserViewHttp(scenarioName, outputArgument, portArgument) {
@@ -176,6 +184,8 @@ const nativeTypes = {
   Episode: 'MediaBrowser.Controller.Entities.TV.Episode',
   Folder: 'MediaBrowser.Controller.Entities.Folder',
   Genre: 'MediaBrowser.Controller.Entities.Genre',
+  LiveTvChannel: 'MediaBrowser.Controller.LiveTv.LiveTvChannel',
+  LiveTvProgram: 'MediaBrowser.Controller.LiveTv.LiveTvProgram',
   Movie: 'MediaBrowser.Controller.Entities.Movies.Movie',
   Video: 'MediaBrowser.Controller.Entities.Video',
   MusicAlbum: 'MediaBrowser.Controller.Entities.Audio.MusicAlbum',
@@ -199,6 +209,7 @@ let seedClock;
 
 function itemPath(item) {
   if (Object.hasOwn(item, 'path')) return item.path;
+  if (item.pathKind === 'liveTvRoot') return path.join(referenceRoot, 'data/metadata/views/livetv');
   if (item.pathKind === 'owned') return path.join(path.dirname(itemPath(itemById.get(idKey(item.ownerId)))),
     'theme-media', item.key + (item.type === 'Audio' ? '.mp3' : '.mkv'));
   if (item.pathKind === 'named') return path.join(referenceRoot, 'data/metadata',
@@ -335,8 +346,13 @@ function upsertBaseItem(database, template, item) {
     SortName: item.sortName,
     Path: itemPath(item),
     IsFolder: isFolder ? 1 : 0,
-    IsMovie: item.type === 'Movie' ? 1 : 0,
-    IsSeries: item.type === 'Series' ? 1 : 0,
+    IsMovie: (item.isMovie ?? item.type === 'Movie') ? 1 : 0,
+    IsSeries: (item.isSeries ?? item.type === 'Series') ? 1 : 0,
+    ...(Object.hasOwn(item, 'isRepeat') ? { IsRepeat: item.isRepeat ? 1 : 0 } : {}),
+    ...(Object.hasOwn(item, 'episodeTitle') ? { EpisodeTitle: item.episodeTitle } : {}),
+    ...(Object.hasOwn(item, 'channelId') ? { ChannelId: item.channelId == null ? null : upperId(item.channelId) } : {}),
+    ...(Object.hasOwn(item, 'externalId') ? { ExternalId: item.externalId } : {}),
+    ...(Object.hasOwn(item, 'externalSeriesId') ? { ExternalSeriesId: item.externalSeriesId } : {}),
     Overview: item.overview ?? null,
     ...(Object.hasOwn(item, 'communityRating') ? { CommunityRating: item.communityRating } : {}),
     Genres: item.genresText ?? null,
@@ -503,9 +519,9 @@ function seedDatabase() {
         database.prepare(`INSERT INTO "UserData" ("ItemId", "UserId", "CustomDataKey", "AudioStreamIndex", "IsFavorite",
           "LastPlayedDate", "Likes", "PlayCount", "PlaybackPositionTicks", "Played", "Rating", "RetentionDate", "SubtitleStreamIndex")
           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`).run(
-          upperId(item.id), upperId(fixture.userId), item.id, null, data.isFavorite ? 1 : 0,
+          upperId(item.id), upperId(fixture.userId), data.customDataKey ?? item.id, null, data.isFavorite ? 1 : 0,
           data.lastPlayedDate, data.likes == null ? null : data.likes ? 1 : 0,
-          data.played ? 1 : 0, Number(data.positionTicks), data.played ? 1 : 0, null, null, null);
+          data.playCount ?? (data.played ? 1 : 0), Number(data.positionTicks), data.played ? 1 : 0, data.rating ?? null, null, null);
       }
       database.exec('COMMIT');
     } catch (error) {
@@ -542,12 +558,16 @@ async function prepareReference() {
   // Resolve the real UserRoot through HTTP before introducing synthetic rows.
   // Startup scanning must never be allowed to remove the controlled graph.
   const discovery = current.start({ referenceRoot, outputRoot, label: 'discovery', origin });
-  let rootResponse, discoveryOutcome;
+  let rootResponse, discoveryOutcome, liveTvResponse, liveTvView;
   try {
     await discovery.ready();
     rootResponse = await request('/Items/Root', { token: current.accessToken });
     assert.equal(rootResponse.status, 200, rootResponse.bodyText);
     assert.equal(rootResponse.bodyJson.Type, 'UserRootFolder');
+    if (scenario.liveTvView) {
+      liveTvResponse = await request('/LiveTv/Programs/Recommended?limit=1', { token: current.accessToken });
+      assert.equal(liveTvResponse.status, 200, liveTvResponse.bodyText);
+    }
   } finally {
     discoveryOutcome = await discovery.stop(async () => (await request('/System/Shutdown',
       { method: 'POST', token: current.accessToken })).status, portAvailable);
@@ -562,6 +582,13 @@ async function prepareReference() {
     const rows = stopped.prepare('SELECT "Id" FROM "BaseItems" WHERE "Type" = ?').all(nativeTypes.AggregateFolder);
     assert.equal(rows.length, 1);
     aggregate = rows[0];
+    if (scenario.liveTvView) {
+      const views = stopped.prepare('SELECT "Id", "Path", "Data" FROM "BaseItems" WHERE "Type" = ?')
+        .all(nativeTypes.UserView).filter(row => JSON.parse(row.Data ?? '{}').ViewType === 'livetv');
+      assert.equal(views.length, 1);
+      liveTvView = { fixtureId: fixture.items.find(item => item.key === 'liveTvRoot').id,
+        actualId: views[0].Id, storedPath: views[0].Path, response: liveTvResponse };
+    }
   } finally { stopped.close(); }
   const bindings = [
     { kind: 'user', fixtureId: fixture.userId, actualId: upperId(current.userId) },
@@ -572,7 +599,7 @@ async function prepareReference() {
     if (Array.isArray(value)) return value.map(replaceIdentity);
     if (value && typeof value === 'object') return Object.fromEntries(Object.entries(value).map(([key, child]) => [key, replaceIdentity(child)]));
     if (typeof value !== 'string') return value;
-    for (const binding of bindings) value = value.replaceAll(binding.fixtureId, binding.actualId);
+    for (const binding of [...bindings, ...(liveTvView ? [liveTvView] : [])]) value = value.replaceAll(binding.fixtureId, binding.actualId);
     return value;
   };
   const rootId = fixture.rootId;
@@ -616,6 +643,7 @@ async function prepareReference() {
   assert.equal(copyBindings.recorderSha256, inputHashes.recorderSha256);
   assert.equal(copyBindings.fixtureSha256, inputHashes.fixtureSha256);
   const result = { ...current.preparation, copyBindings, bindings, ...(seedClock ? { seedClock } : {}),
+    ...(liveTvView ? { liveTvViewDiscovery: liveTvView } : {}),
     userRootDiscovery: { route: '/Items/Root', response: rootResponse, process: discoveryOutcome } };
   await writeFile(path.join(runRoot, 'reference-preparation.json'), json(result), { flag: 'wx' });
   return result;
@@ -661,6 +689,7 @@ async function stopReference(instance, token) {
     pidGone: result.pidGone, portAvailable: result.portAvailable };
 }
 function routeFor(endpoint, testCase, userId) {
+  if (testCase.action === 'live-tv-recommended') return '/LiveTv/Programs/Recommended?' + testCase.query.replaceAll(fixture.userId, userId);
   if (testCase.action === 'playback-info') return `/Items/${itemByKey.get(testCase.detailKey).id}/PlaybackInfo?${testCase.query.replaceAll(fixture.userId, userId)}`;
   if (testCase.action === 'intros') return `${endpoint === 'legacy' ? '/Users/' + (testCase.introUserId ?? userId) : ''}/Items/${testCase.introItemId ?? itemByKey.get(testCase.detailKey).id}/Intros?${testCase.query.replaceAll(fixture.userId, userId)}`;
   if (testCase.action === 'theme') return `/Items/${testCase.themeItemId ?? itemByKey.get(testCase.detailKey).id}/${testCase.themeRoute}?${testCase.query.replaceAll(fixture.userId, userId)}`;
@@ -798,6 +827,8 @@ function responseContractFailures(records) {
       if (response.contentType !== 'application/json; charset=utf-8' || response.bodyJson?.status !== 404) {
         failures.push(`${label} not-found JSON shape is invalid`);
       }
+    } else if (expectedStatus === 403 && testCase.action === 'live-tv-recommended') {
+      if (response.bodyText !== '' || response.contentType != null) failures.push(`${label} forbidden response is not empty`);
     } else if (expectedStatus === 401) {
       if (response.contentType !== 'application/json; charset=utf-8'
         || typeof response.bodyJson !== 'string' || response.bodyJson.length === 0) {

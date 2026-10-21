@@ -20,6 +20,8 @@ const typeNames = {
   CollectionFolder: 'MediaBrowser.Controller.Entities.CollectionFolder',
   Folder: 'MediaBrowser.Controller.Entities.Folder',
   Genre: 'MediaBrowser.Controller.Entities.Genre',
+  LiveTvChannel: 'MediaBrowser.Controller.LiveTv.LiveTvChannel',
+  LiveTvProgram: 'MediaBrowser.Controller.LiveTv.LiveTvProgram',
   BoxSet: 'MediaBrowser.Controller.Entities.Movies.BoxSet',
   Movie: 'MediaBrowser.Controller.Entities.Movies.Movie',
   Series: 'MediaBrowser.Controller.Entities.TV.Series',
@@ -581,6 +583,7 @@ function authorization(token) {
 }
 
 function routeFor(endpoint, testCase, fixture, userId, fields) {
+  if (testCase.action === 'live-tv-recommended') return `/LiveTv/Programs/Recommended?${testCase.query.replaceAll(fixture.userId, userId)}`;
   if (testCase.action === 'playback-info') return `/Items/${fixture.items.find(item => item.key === testCase.detailKey).id}/PlaybackInfo?${testCase.query.replaceAll(fixture.userId, userId)}`;
   if (testCase.action === 'intros') return `${endpoint === 'legacy' ? '/Users/' + (testCase.introUserId ?? userId) : ''}/Items/${testCase.introItemId ?? fixture.items.find(item => item.key === testCase.detailKey).id}/Intros?${testCase.query.replaceAll(fixture.userId, userId)}`;
   if (testCase.action === 'theme') return `/Items/${testCase.themeItemId ?? fixture.items.find(item => item.key === testCase.detailKey).id}/${testCase.themeRoute}?${testCase.query.replaceAll(fixture.userId, userId)}`;
@@ -901,7 +904,7 @@ export async function recordItemFilterCandidate({ dialect, fixture, connectionSt
           : Array.from({ length: testCase.parallelRequests ?? 1 },
             () => routeFor(endpoint, testCase, fixture, user.Id, fields));
         const responses = await Promise.all(routes.map(route => request(route, { token })));
-        if (afterEndpoint) await afterEndpoint({ testCase, endpoint, runtime, database, user });
+        if (afterEndpoint) await afterEndpoint({ testCase, endpoint, responses, runtime, database, user });
         for (const response of responses) {
           if (endpoint === 'detail' && testCase.detailExpectedStatus !== undefined
             && response.status !== testCase.detailExpectedStatus) {

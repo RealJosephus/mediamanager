@@ -31,7 +31,7 @@ const nativeDateTextKey = expression => `CASE WHEN ${expression} IS NULL THEN NU
 
 const SUPPORTED_FILTERS = new Set([
   'ids', 'excludeitemids', 'includeitemtypes', 'excludeitemtypes', 'mediatypes', 'years',
-  'indexnumber', 'parentindexnumber', 'islocked', 'isseries', 'isfolder', 'ismovie', 'isairing',
+  'indexnumber', 'parentindexnumber', 'islocked', 'isseries', 'isfolder', 'ismovie', 'isairing', 'hasaired',
   'hasdeadparentid', 'isdeadgenre', 'isdeadstudio',
   'mincommunityrating', 'mincriticrating', 'minpremieredate', 'maxpremieredate',
   'mindatelastsaved', 'mindatelastsavedforuser', 'hasoverview', 'hasimdbid', 'hastmdbid',
@@ -704,6 +704,10 @@ export function buildPostgresItemPageQuery(database, query, {
     predicates.push(query.isairing
       ? `(${start} <= ${now} AND ${end} >= ${now})`
       : `(${start} > ${now} OR ${end} < ${now})`);
+  }
+  if (query.hasaired !== undefined) {
+    const now = bind(new Date().toISOString().replace(/Z$/u, '0000Z'));
+    predicates.push(`${nativeDateKey('i."EndDate"')} ${query.hasaired ? '<=' : '>='} ${now}`);
   }
   if (query.hasdeadparentid === true) {
     // The detached-user-data placeholder satisfies the FK but cannot keep a
@@ -1415,9 +1419,12 @@ export function buildPostgresItemPageQuery(database, query, {
       }
     }
     if (visibility.blockUnratedTypes?.length && !(resumableMode === 'repository' && query.hasparentalrating === true)) {
-      const unratedType = visibility.boxSetStandalone
+      const storedUnratedType = visibility.boxSetStandalone
         ? `CASE WHEN ${leafType('i')} = 'BoxSet' THEN 'Movie' ELSE i."UnratedType" END`
         : 'i."UnratedType"';
+      const unratedType = standaloneItemVisibility
+        ? `CASE WHEN ${leafType('i')} IN ('LiveTvProgram', 'LiveTvChannel')
+          THEN ${fromProject(leafType('i'))} ELSE ${storedUnratedType} END` : storedUnratedType;
       if (standaloneItemVisibility) {
         const direct = standaloneRating();
         const blocksUnrated = `(i."IsFolder" IS NOT TRUE

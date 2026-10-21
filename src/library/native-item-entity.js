@@ -4,6 +4,7 @@ import { md5Guid } from '../core/identity.js';
 import { EMPTY_ID, MIN_DATE, guid, nonemptyId } from './records.js';
 import { sortName as deriveSortName } from './dto.js';
 import { hasFileProtocol } from './delete-permission.js';
+import { ordinalIgnoreCaseKey } from '../storage/ordinal-comparer.js';
 
 const EMPTY_STRINGS = Object.freeze([]);
 const EMPTY_GUIDS = Object.freeze([]);
@@ -37,7 +38,8 @@ const definitions = [
   ['MediaBrowser.Controller.Entities.AudioBook', 'AudioBook', 'audio', false, 'Audio', 'Book', true],
   ['MediaBrowser.Controller.Entities.MusicVideo', 'MusicVideo', 'video', true, 'Video', 'Music', true],
   ['MediaBrowser.Controller.Entities.Trailer', 'Trailer', 'video', true, 'Video', 'Trailer', true],
-  ['MediaBrowser.Controller.LiveTv.LiveTvProgram', 'LiveTvProgram', 'base', true, 'Unknown', 'LiveTvProgram', false],
+  ['MediaBrowser.Controller.LiveTv.LiveTvProgram', 'LiveTvProgram', 'base', false, 'Unknown', 'LiveTvProgram', false],
+  ['MediaBrowser.Controller.LiveTv.LiveTvChannel', 'LiveTvChannel', 'base', true, 'Video', 'LiveTvChannel', false],
   ['MediaBrowser.Controller.Entities.Audio.MusicAlbum', 'MusicAlbum', 'folder', false, 'Unknown', 'Music', true],
   ['MediaBrowser.Controller.Entities.Audio.MusicArtist', 'MusicArtist', 'folder', false, 'Unknown', 'Music', true],
   ['MediaBrowser.Controller.Entities.Person', 'Person', 'base', false, 'Unknown', 'Other', false],
@@ -51,7 +53,7 @@ const definitions = [
 ];
 
 const fixedUnratedTypes = new Set(['Movie', 'Episode', 'Series', 'Season', 'BoxSet', 'AudioBook',
-  'MusicVideo', 'Trailer', 'LiveTvProgram', 'MusicAlbum', 'MusicArtist', 'Book']);
+  'MusicVideo', 'Trailer', 'LiveTvProgram', 'LiveTvChannel', 'MusicAlbum', 'MusicArtist', 'Book']);
 const artistTypes = new Set(['Audio', 'AudioBook', 'MusicVideo', 'MusicAlbum']);
 const albumArtistTypes = new Set(['Audio', 'AudioBook', 'MusicAlbum']);
 const seriesTypes = new Set(['Episode', 'Season', 'AudioBook', 'Book']);
@@ -215,9 +217,10 @@ export function clearNativeItemSortCache(item) {
 
 function addDerivedGetters(item, descriptor) {
   defineGetter(item, 'IsHD', () => Number(item.Height ?? 0) >= 720);
-  defineGetter(item, 'SourceType', () => descriptor.type === 'LiveTvProgram'
+  defineGetter(item, 'SourceType', () => ['LiveTvProgram', 'LiveTvChannel'].includes(descriptor.type)
     ? 'LiveTV' : nonemptyId(item.ChannelId) ? 'Channel' : 'Library');
-  defineGetter(item, 'MediaType', () => descriptor.type === 'Playlist' ? item.PlaylistMediaType : descriptor.mediaType);
+  defineGetter(item, 'MediaType', () => descriptor.type === 'Playlist' ? item.PlaylistMediaType
+    : descriptor.type === 'LiveTvChannel' ? item.ChannelType === 'Radio' ? 'Audio' : 'Video' : descriptor.mediaType);
   defineGetter(item, 'UnratedType', () => descriptor.sourceAwareUnrated && item.SourceType === 'Channel'
     ? 'ChannelContent' : descriptor.unratedType);
   defineGetter(item, 'IsFolder', () => descriptor.dynamicFolder ? Boolean(nonemptyId(item.ParentId)) : descriptor.isFolder);
@@ -275,7 +278,19 @@ function addTypeDefaults(item, descriptor) {
     case 'Series': Object.assign(item, { AirDays: EMPTY_AIR_DAYS, AirTime: null, DisplayOrder: null, Status: null }); break;
     case 'BoxSet': Object.assign(item, { DisplayOrder: 'PremiereDate', LibraryFolderIds: null }); break;
     case 'Trailer': item.TrailerTypes = EMPTY_TRAILER_TYPES; break;
-    case 'LiveTvProgram': item.IsVirtualItem = true; break;
+    case 'LiveTvProgram':
+      Object.assign(item, { IsVirtualItem: true, StartDate: MIN_DATE, SeriesName: null, ShowId: null });
+      for (const [name, tag] of [['IsLive', 'Live'], ['IsNews', 'News'], ['IsKids', 'Kids'],
+        ['IsSports', 'Sports'], ['IsPremiere', 'Premiere']]) {
+        defineGetter(item, name, () => item.Tags.some(value => value != null && ordinalIgnoreCaseKey(value) === ordinalIgnoreCaseKey(tag)));
+      }
+      Object.assign(item, { IsMovie: false, IsSeries: false, IsRepeat: false, EpisodeTitle: null });
+      break;
+    case 'LiveTvChannel':
+      Object.assign(item, { Number: null, ChannelType: 'TV', ServiceName: null, IsMovie: false,
+        IsSeries: false, IsRepeat: false, IsNews: false, IsSports: false, EpisodeTitle: null });
+      defineGetter(item, 'IsKids', () => item.Tags.some(value => value != null && ordinalIgnoreCaseKey(value) === ordinalIgnoreCaseKey('Kids')));
+      break;
     case 'Photo': Object.assign(item, { CameraMake: null, CameraModel: null, Software: null, ExposureTime: null,
       FocalLength: null, Orientation: null, Aperture: null, ShutterSpeed: null, Latitude: null, Longitude: null,
       Altitude: null, IsoSpeedRating: null }); break;

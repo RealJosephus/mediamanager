@@ -90,6 +90,10 @@ function userDataKeysWithContext(item, providers, seriesKeys) {
     for (const name of extra != null ? ['Tmdb', 'Imdb'] : ['Imdb', 'Tmdb']) if (providers[name]) {
       keys.unshift(extra == null ? providers[name] : `${providers[name]}-${extra.toLowerCase()}${item.RunTimeTicks == null ? '' : `-${item.RunTimeTicks}`}`);
     }
+  } else if (type === 'LiveTvProgram') {
+    if (!item.IsSeries) {
+      for (const name of ['Imdb', 'Tmdb']) if (providers[name]) keys.unshift(providers[name]);
+    } else if (item.EpisodeTitle) keys.unshift(`Program-${item.Name ?? ''}${item.EpisodeTitle}`);
   } else if (type === 'Series') {
     for (const name of ['Imdb', 'Tvdb', 'Custom']) if (providers[name]) keys.unshift(providers[name]);
   } else if ((type === 'Episode' || type === 'Season') && seriesKeys) {

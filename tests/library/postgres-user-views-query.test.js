@@ -16,7 +16,7 @@ test('PostgreSQL UserViews probes external content with a relational EXISTS', ()
   assert.match(plan.text, /SELECT EXISTS/u);
   assert.match(plan.text, /FROM "user_views_shape"\."BaseItems" item/u);
   assert.match(plan.text, /substring\([^\n]+mm_bytes_text_projection[^\n]+item\."Type"[^\n]+ = ANY\(\$1::text\[\]\)/u);
-  assert.deepEqual(plan.values, [['Channel', 'LiveTvChannel', 'LiveTvProgram']]);
+  assert.deepEqual(plan.values, [['Channel']]);
   assert.doesNotMatch(plan.text, /LiveTvChannel/u, 'item types remain bound parameters');
 });
 

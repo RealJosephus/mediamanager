@@ -26,7 +26,7 @@ export const itemFields = ['CanDelete', 'CanDownload', 'Chapters', 'Trickplay', 
   'ProductionLocations', 'ProductionYear', 'ProviderIds', 'PrimaryImageAspectRatio', 'RecursiveItemCount', 'Settings',
   'SortName', 'SpecialEpisodeNumbers', 'Studios', 'Taglines', 'Tags', 'RemoteTrailers', 'MediaStreams',
   'DateLastRefreshed', 'DateLastSaved', 'EnableMediaSourceDisplay', 'Width', 'Height', 'LocalTrailerCount', 'IsHD',
-  'SpecialFeatureCount', 'AirTime', 'SeriesStudio'];
+  'SpecialFeatureCount', 'AirTime', 'SeriesStudio', 'ChannelInfo', 'ChannelImage'];
 const fieldSet = new Set(itemFields.map(field => field.toLowerCase()));
 export const itemImageTypes = ['Primary', 'Art', 'Backdrop', 'Banner', 'Logo', 'Thumb', 'Disc', 'Box', 'Screenshot', 'Menu', 'Chapter', 'BoxRear', 'Profile'];
 const extraTypes = ['Unknown', 'Clip', 'Trailer', 'BehindTheScenes', 'DeletedScene', 'Interview', 'Scene', 'Sample', 'ThemeSong', 'ThemeVideo', 'Featurette', 'Short'];
@@ -208,6 +208,8 @@ export async function prefetchPostgresDtoRelations(items, state, user, selected,
 
   const imageItems = [];
   if (selected.enableImages || fields.has('primaryimageaspectratio')) imageItems.push(...projected);
+  if (fields.has('channelimage')) imageItems.push(...projected.filter(item => item.Type === 'LiveTvProgram')
+    .map(item => state.byId.get(idKey(item.ChannelId))).filter(item => item?.Type === 'LiveTvChannel'));
   for (const item of projected.filter(item => ['Audio', 'AudioBook'].includes(item.Type))) {
     let parent = state.byId.get(idKey(item.ParentId));
     const visited = new Set([idKey(item.Id)]);
@@ -439,6 +441,25 @@ export async function projectItem(item, state, user, selected, options) {
       : item.Type === 'LiveTvProgram' ? 'Program' : item.Type,
     ImageBlurHashes: new Map(), ChannelId: nonemptyId(item.ChannelId) ? dtoId(item.ChannelId) : null };
   if (item.Type !== 'LiveTvProgram') dto.LocationType = item.LocationType;
+  if (item.Type === 'LiveTvProgram') {
+    dto.StartDate = dateText(item.StartDate);
+    dto.EpisodeTitle = item.EpisodeTitle;
+    for (const field of ['IsRepeat', 'IsMovie', 'IsSeries', 'IsSports', 'IsLive', 'IsNews', 'IsKids', 'IsPremiere']) {
+      if (item[field]) dto[field] = true;
+    }
+    if (has('ChannelInfo') || has('ChannelImage')) {
+      const channel = state.byId.get(idKey(item.ChannelId));
+      if (channel?.Type === 'LiveTvChannel') {
+        dto.ChannelName = channel.Name;
+        dto.ChannelNumber = channel.Number;
+        dto.MediaType = channel.MediaType;
+        if (has('ChannelImage')) {
+          const primary = (await itemImageRows(state, channel)).find(row => row.ImageType === 0);
+          if (primary) dto.ChannelPrimaryImageTag = md5Guid(`${channel.Path ?? ''}${dateTicks(primary.DateModified)}`);
+        }
+      }
+    }
+  }
   if (item.IsFolder || VIDEO_TYPES.has(item.Type) || ['Audio', 'AudioBook', 'Photo'].includes(item.Type)) dto.IsFolder = item.IsFolder;
   if (item.SourceType === 'Channel') dto.SourceType = item.SourceType;
   if (item.Audio != null) dto.Audio = ['Mono', 'Stereo', 'Dolby', 'DolbyDigital', 'Thx', 'Atmos'][item.Audio] ?? item.Audio;

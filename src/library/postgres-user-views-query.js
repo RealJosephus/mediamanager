@@ -16,7 +16,9 @@ export function buildPostgresExternalViewPresenceQuery(database) {
       FROM ${qualified(database, 'BaseItems')} item
       WHERE substring(${nativeTextSql(database.schemaName).projection("item.\"Type\"")} from '[^.]+$') = ANY($1::text[])
     ) AS "Present"`,
-    values: Object.freeze([Object.freeze(['Channel', 'LiveTvChannel', 'LiveTvProgram'])]),
+    // Cached guide rows do not enable Live TV. Native menu availability uses
+    // live services and configured tuners, independently of these records.
+    values: Object.freeze([Object.freeze(['Channel'])]),
   });
 }
 

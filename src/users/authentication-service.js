@@ -89,6 +89,7 @@ export class AuthenticationService extends EventEmitter {
     }
     if (auth.IsApiKey) return true;
     this.checkUserAccess(auth.User, { remoteEndPoint, ignoreParentalControl: firstTimeSetup || policy.includes('IgnoreParentalControl') });
+    if (policy === 'LiveTvAccess' && !auth.IsAdministrator && !auth.User.Policy.EnableLiveTvAccess) throw domainError(403, '');
     if (policy === 'CollectionManagement' && !auth.IsAdministrator && !auth.User.Policy.EnableCollectionManagement) throw domainError(403, '');
     if (policy === 'FirstTimeSetupOrElevated' && !auth.IsAdministrator) throw domainError(403, '');
     if (requiredPermission && !auth.User.Permissions.some(permission => permission.Value && permission.Kind === requiredPermission)) throw domainError(403, '');

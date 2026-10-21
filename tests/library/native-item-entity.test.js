@@ -44,7 +44,8 @@ const types = [
   ['MediaBrowser.Controller.Entities.AudioBook', 'AudioBook', 'audio', false, 'Audio', 'Book', true, false, false, false],
   ['MediaBrowser.Controller.Entities.MusicVideo', 'MusicVideo', 'video', true, 'Video', 'Music', true, false, false, false],
   ['MediaBrowser.Controller.Entities.Trailer', 'Trailer', 'video', true, 'Video', 'Trailer', true, false, false, false],
-  ['MediaBrowser.Controller.LiveTv.LiveTvProgram', 'LiveTvProgram', 'base', true, 'Unknown', 'LiveTvProgram', false, false, false, false],
+  ['MediaBrowser.Controller.LiveTv.LiveTvProgram', 'LiveTvProgram', 'base', false, 'Unknown', 'LiveTvProgram', false, false, false, false],
+  ['MediaBrowser.Controller.LiveTv.LiveTvChannel', 'LiveTvChannel', 'base', true, 'Video', 'LiveTvChannel', false, false, false, false],
   ['MediaBrowser.Controller.Entities.Audio.MusicAlbum', 'MusicAlbum', 'folder', false, 'Unknown', 'Music', true, true, false, true],
   ['MediaBrowser.Controller.Entities.Audio.MusicArtist', 'MusicArtist', 'folder', false, 'Unknown', 'Music', true, false, false, true],
   ['MediaBrowser.Controller.Entities.Person', 'Person', 'base', false, 'Unknown', 'Other', false, false, false, false],
@@ -58,10 +59,10 @@ const types = [
 ];
 const byName = Object.fromEntries(types.map(([nativeType, type]) => [type, nativeType]));
 const fixedUnrated = new Set(['Movie', 'Episode', 'Series', 'Season', 'BoxSet', 'AudioBook',
-  'MusicVideo', 'Trailer', 'LiveTvProgram', 'MusicAlbum', 'MusicArtist', 'Book']);
+  'MusicVideo', 'Trailer', 'LiveTvProgram', 'LiveTvChannel', 'MusicAlbum', 'MusicArtist', 'Book']);
 
-test('native factory exposes the exact full-28 registry and rejects discriminator guesses', () => {
-  assert.equal(types.length, 28);
+test('native factory exposes the exact full-29 registry and rejects discriminator guesses', () => {
+  assert.equal(types.length, 29);
   for (const [nativeType, type, family, requiresJson, mediaType, unratedType, resolverCreation,
     isFolder, isHidden, isDisplayedAsFolder] of types) {
     assert.deepEqual(nativeItemDescriptor(nativeType), {
@@ -189,7 +190,7 @@ test('derived native traits follow their authoritative dependencies', () => {
     item.Height = 719; assert.equal(item.IsHD, false, type);
     item.Height = 720; assert.equal(item.IsHD, true, type);
     item.ChannelId = '95500000-0000-0000-0001-000000000001';
-    assert.equal(item.SourceType, type === 'LiveTvProgram' ? 'LiveTV' : 'Channel', type);
+    assert.equal(item.SourceType, ['LiveTvProgram', 'LiveTvChannel'].includes(type) ? 'LiveTV' : 'Channel', type);
     assert.equal(item.UnratedType, fixedUnrated.has(type) ? unratedType : 'ChannelContent', type);
     assert.equal(item.MediaType, mediaType, type);
   }

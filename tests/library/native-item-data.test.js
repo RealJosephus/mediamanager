@@ -10,6 +10,22 @@ const movie = 'MediaBrowser.Controller.Entities.Movies.Movie';
 const season = 'MediaBrowser.Controller.Entities.TV.Season';
 const id = '95600000-0000-0000-0000-000000000001';
 
+test('guide programs ignore source JSON while channels hydrate their number and radio kind', () => {
+  const program = mapRecord({ Type: 'MediaBrowser.Controller.LiveTv.LiveTvProgram', Data: 'malformed{',
+    Id: id, StartDate: '2026-10-21 12:00:00.1234567', IsSeries: true, IsMovie: false, IsRepeat: false,
+    EpisodeTitle: 'Chapter', Tags: 'lIvE|NEWS|Kids|SPORTS|premiere' });
+  assert.equal(program.StartDate, '2026-10-21T12:00:00.1234567Z');
+  assert.deepEqual([program.IsLive, program.IsNews, program.IsKids, program.IsSports, program.IsPremiere],
+    [true, true, true, true, true]);
+  assert.equal(program.IsSeries, true);
+  const channel = mapRecord({ Type: 'MediaBrowser.Controller.LiveTv.LiveTvChannel', Id: id,
+    Data: '{"Number":"2.5","ChannelType":"Radio"}', ExternalServiceId: 'Guide', Path: null,
+    IsSeries: false, IsMovie: true, IsRepeat: false });
+  assert.deepEqual([channel.Number, channel.ChannelType, channel.MediaType, channel.SourceType, channel.LocationType,
+    channel.ServiceName, channel.IsMovie, channel.UnratedType],
+  ['2.5', 'Radio', 'Audio', 'LiveTV', 'Remote', 'Guide', true, 'LiveTvChannel']);
+});
+
 test('unknown exact discriminators are skipped and diagnosed before parsing Data', () => {
   for (const skip of [false, true]) {
     const unknown = [], json = [];

@@ -196,6 +196,12 @@ export class UserViewService {
     return items;
   }
 
+  async global(viewType, name, db, state) {
+    this.#assertOpen();
+    return this.#named(nativeRootUserViewIdentity(viewType, this.library.options),
+      { name, parentId: EMPTY_ID, viewType, forcedSortName: name, mode: 'root' }, db, state);
+  }
+
   async *genreMenu(type, parent, sourceItems, db, state) {
     this.#assertOpen();
     const seen = new Set();

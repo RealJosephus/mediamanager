@@ -36,6 +36,7 @@ const enumValues = {
   TrailerType: [null, 'ComingSoonToTheaters', 'ComingSoonToDvd', 'ComingSoonToStreaming', 'Archive', 'LocalTrailer'],
   LinkedChildType: ['Manual', 'Shortcut', 'LocalAlternateVersion', 'LinkedAlternateVersion'],
   MediaType: ['Unknown', 'Video', 'Audio', 'Photo', 'Book'],
+  ChannelType: ['TV', 'Radio'],
   Orientation: [null, 'TopLeft', 'TopRight', 'BottomRight', 'BottomLeft', 'LeftTop', 'RightTop', 'RightBottom', 'LeftBottom'],
   CollectionType: Object.assign(['unknown', 'movies', 'tvshows', 'music', 'musicvideos', 'trailers', 'homevideos',
     'boxsets', 'books', 'photos', 'livetv', 'playlists', 'folders'], {
@@ -64,6 +65,8 @@ export function nativeItemJsonContract(nativeType) {
     case 'BoxSet': prefix = [field('DisplayOrder', 'string', true), field('LibraryFolderIds', 'guid[]', true), ...folderFields]; break;
     case 'MusicAlbum': prefix = [field('AlbumArtists', 'string[]', true), field('Artists', 'string[]', true), ...folderFields]; break;
     case 'Photo': prefix = photoFields; break;
+    case 'LiveTvChannel': prefix = [field('Number', 'string', true), field('ChannelType', 'ChannelType')]; break;
+    case 'LiveTvProgram': prefix = [field('SeriesName', 'string', true)]; break;
     case 'Book': prefix = [field('SupportsPlayedStatus', 'bool', false, true), field('SupportsPositionTicksResume', 'bool', false, true)]; break;
     default: prefix = descriptor.family === 'video' ? videoFields : descriptor.family === 'audio' ? audioFields
       : descriptor.family === 'folder' ? folderFields : [];

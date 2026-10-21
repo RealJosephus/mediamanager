@@ -69,7 +69,7 @@ export async function currentUserViewScenario(scenario, fixtureBytes) {
       assert.equal(typeof provenance.preparation.actualUserName, 'string');
       record.response.bodyJson = record.response.bodyJson.replaceAll(provenance.preparation.actualUserName, 'CoreFlowAdmin');
     }
-    if (record.response.bodyJson !== undefined) record.response.bodyText = JSON.stringify(record.response.bodyJson);
+    if (record.response.bodyText !== '' && record.response.bodyJson !== undefined) record.response.bodyText = JSON.stringify(record.response.bodyJson);
   }
   const result = { root, http, stages: project(stages), caseStages: project(await load('case-stages.json')), summary };
   const inputRoot = fixture.items.find(item => item.key === 'libraryA');

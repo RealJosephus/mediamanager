@@ -44,6 +44,7 @@ import { NativeItemJsonError } from './native-item-data.js';
 import { postgresUpcomingScope, queryPostgresSeriesSeasonPage, queryPostgresUpcomingEpisodePage } from './postgres-shows-query.js';
 import { queryPostgresNextUpPage } from './postgres-next-up-query.js';
 import { queryPostgresLatestItems } from './postgres-latest-items-query.js';
+import { queryPostgresRecommendedPrograms } from './postgres-live-tv-query.js';
 import { queryPostgresNamedItemPage, queryPostgresNamedItemCounts, queryPostgresNamedSlug } from './postgres-named-items-query.js';
 import { dtoItemCountKinds, queryPostgresDtoItemCounts } from './postgres-dto-item-counts-query.js';
 import { queryPostgresItemFilters } from './postgres-item-filters-query.js';
@@ -841,6 +842,38 @@ export class LibraryService extends EventEmitter {
 
   async queryItems(input = {}, { user = null, isApiKey = false, fromUserViewChildren = false, embyClient = false } = {}) {
     return this.#queryItems(input, { user, isApiKey, fromUserViewChildren, embyClient }, true);
+  }
+
+  async queryRecommendedPrograms(input = {}, { user = null } = {}) {
+    return this.#runWithStates(async db => {
+      const navigationRows = await loadPostgresNavigationRows(db);
+      const navigation = await this.load(db, user, { includeUserData: false, baseRows: navigationRows });
+      const root = await this.userViews.global('livetv', this.options.localization?.text('HeaderLiveTV') ?? 'Live TV', db, navigation);
+      const { topParentIds: _topParentIds, libraryTopParentIds: _libraryTopParentIds,
+        ...visibility } = this.#postgresVisibility(navigation, user) ?? {};
+      const page = await queryPostgresRecommendedPrograms(db, input, {
+        rootId: root.Id, userId: user?.Id, visibility, configuration: this.options.configuration,
+      });
+      const rows = page.rows ?? await loadPostgresRowsByIds(db, page.ids);
+      const byId = new Map(rows.map(row => [idKey(row.Id), row]));
+      const orderedRows = page.ids ? page.ids.map(id => byId.get(idKey(id))).filter(Boolean) : rows;
+      const channels = await loadPostgresRowsByIds(db, [...new Set(orderedRows.map(row => row.ChannelId).filter(nonemptyId))]);
+      const state = await this.load(db, user, {
+        baseRows: await loadPostgresPageGraph(db, orderedRows, [...navigationRows, ...channels]),
+      });
+      const options = dtoOptions(input);
+      for (const field of ['candelete', 'candownload', 'displaypreferencesid', 'etag']) options.fields.delete(field);
+      if (user?.Policy.AllowedTags?.length) options.fields.add('tags');
+      const selected = orderedRows.map(row => state.byId.get(idKey(row.Id))).filter(Boolean);
+      // Native DTO visibility follows the manager's recommendation Take. Its
+      // result can be smaller than the repository window without changing count.
+      const visible = await this.#filterPostgresStandalonePage(db, selected, user, state);
+      await this.#prefetchPostgresDtos(visible, state, user, options);
+      const items = [];
+      for (const item of visible) items.push(await projectItem(item, state, user, options, this.options));
+      return { Items: items, TotalRecordCount: input.isairing !== true && input.enabletotalrecordcount === false
+        ? orderedRows.length : page.total, StartIndex: input.startindex ?? 0 };
+    });
   }
 
   async queryUpcomingEpisodes(input = {}, { user = null } = {}) {

@@ -111,6 +111,10 @@ export function mapRecord(row, { skipDeserialization = false, onJsonError, onUnk
     // BaseItemMapper overwrites IHasProgramAttributes from stored columns,
     // including when serialized Data contains different flag values.
     for (const key of ['IsMovie', 'IsSeries', 'EpisodeTitle', 'IsRepeat']) item[key] = row[key];
+    if (descriptor.type === 'LiveTvProgram') {
+      item.StartDate = row.StartDate == null ? MIN_DATE : dateText(row.StartDate);
+      item.ShowId = row.ShowId ?? null;
+    } else item.ServiceName = row.ExternalServiceId ?? null;
   }
   if (descriptor.hasSeries) {
     item.SeriesId = row.SeriesId ?? EMPTY_ID;
@@ -142,7 +146,8 @@ export function mapRecord(row, { skipDeserialization = false, onJsonError, onUnk
   // BaseItemMapper.Split('|') retains Studio empty segments for in-memory
   // StudioIds filtering; AttachStudios drops them only when building DTOs.
   item.Studios = typeof row.Studios === 'string' ? row.Studios.split('|') : [];
-  item.LocationType = !item.Path ? (item.SourceType === 'Channel' ? 'Remote' : 'Virtual') : /^[a-z][a-z\d+.-]*:\/\//i.test(item.Path) ? 'Remote' : 'FileSystem';
+  item.LocationType = descriptor.type === 'LiveTvChannel' ? 'Remote'
+    : !item.Path ? (item.SourceType === 'Channel' ? 'Remote' : 'Virtual') : /^[a-z][a-z\d+.-]*:\/\//i.test(item.Path) ? 'Remote' : 'FileSystem';
   return item;
 }
 
