@@ -1,6 +1,7 @@
 import { PluginHost } from './plugins/host.js';
 import { IntroProviderManager } from './library/intro-providers.js';
 import { initializeLiveTvState } from './database/live-tv-state-import.js';
+import { LiveTvService } from './library/live-tv-service.js';
 import { createIntroPathResolver } from './library/intro-path-resolver.js';
 import { guid, nonemptyId, libraryError } from './library/records.js';
 import { LibraryTaskScheduler } from './library/library-task-scheduler.js';
@@ -112,6 +113,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
   const localization = await createCoreLocalization({ serverCulture: configuration.UICulture || 'en-US' });
   const isLocalNetwork = createNetworkClassifier(configuration.NetworkConfiguration ?? {});
   const users = new UserService({ store, serverId, isLocalNetwork, castReceiverApplications: configuration.CastReceiverApplications ?? [] });
+  const liveTv = new LiveTvService({ users, configurationDirectoryPath, onError });
   const startup = new StartupService({ users, configuration, configurationStore });
   rollback.push(() => startup.close());
   const displayPreferences = new DisplayPreferencesService({ store, onError });
@@ -412,6 +414,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
   rollback.push(stopStorageObserver);
   const services = { storage: configuredStorage, storageReadiness, fileSystem, configuration, store, users, devices, library, itemCreation, itemDeletion, unsafeItemDeletion, folderValidation, linkedChildReferences, playlists, topLevelValidation, libraryScanHost, libraryScanLifecycle, libraryScanner, metadataScanner, artistsPostScanTask, genresPostScanTask, musicGenresPostScanTask, studiosPostScanTask, tasks, userData, sessions, syncPlay, refreshes, authentication, localization, playback, probe, externalData, extraction, remux, hls, images, imageProcessor, metadata, metadataUpdates, resolvedItemLifecycle, metadataEditor, itemUpdates, plugins, similarItems, ignoreRule, serverId, serverName, serverVersion };
   services.collectionPosterVerifyPostScanTask = collectionPosterVerifyPostScanTask;
+  services.liveTv = liveTv;
   services.cleanDatabasePostScanTask = cleanDatabasePostScanTask;
   services.splashscreen = splashscreen;
   services.branding = branding;

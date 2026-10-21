@@ -30,7 +30,7 @@ const controllerItemFields = ['AirTime', 'CanDelete', 'CanDownload', 'ChannelInf
   'ChannelImage', 'EnableMediaSourceDisplay', 'Width', 'Height', 'ExtraIds', 'LocalTrailerCount', 'IsHD',
   'SpecialFeatureCount'];
 
-export function registerDomainRoutes(add, { configuration, authentication, users, devices, library, playlists, sessions, userData, hls, metadata, onError }) {
+export function registerDomainRoutes(add, { configuration, authentication, users, devices, library, liveTv, playlists, sessions, userData, hls, metadata, onError }) {
   const query = (context, name) => queryValue(context.query, name);
   const boolean = (context, name, fallback) => booleanValue(query(context, name), name, fallback);
   const integer = (context, name, fallback) => integerValue(query(context, name), name, fallback);
@@ -237,6 +237,8 @@ export function registerDomainRoutes(add, { configuration, authentication, users
       throw error;
     }
   });
+  add('GET', '/LiveTv/Info', () => liveTv.getInfo(), { policy: 'LiveTvAccess' });
+  add('GET', '/LiveTv/GuideInfo', () => liveTv.getGuideInfo(), { policy: 'LiveTvAccess' });
   add('GET', '/LiveTv/Programs/Recommended', async context => {
     const input = {
       ...controllerDtoOptions(context),

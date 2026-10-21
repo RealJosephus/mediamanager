@@ -297,6 +297,15 @@ export class UserService extends EventEmitter {
     });
   }
 
+  async getLiveTvUserIds() {
+    return this.store.run(async database => {
+      const result = await database.client.query(`SELECT u."Id" FROM "Users" u
+        WHERE EXISTS (SELECT 1 FROM "Permissions" p WHERE p."UserId" = u."Id" AND p."Kind" = $1 AND p."Value" = TRUE)
+        ORDER BY u."Id"`, [permissionNames.indexOf('EnableLiveTvAccess')]);
+      return result.rows.map(row => wireGuid(decodeNativeTextBytes(row.Id)));
+    });
+  }
+
   async createUser(request) {
     const { Name, Password } = normalizeMembers(request, { Name: null, Password: null });
     validateUsername(Name);
