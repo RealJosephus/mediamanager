@@ -113,7 +113,7 @@ export function registerDomainRoutes(add, { configuration, authentication, users
     const value = query(context, name);
     if (value === undefined || value === '') return undefined;
     try { return enumName(value, names); }
-    catch { throw new BindingError(name, `The value '${value}' is not valid.`); }
+    catch { return undefined; }
   };
   const dateTime = (context, name, { repositoryUtc = false } = {}) => {
     const value = query(context, name);
@@ -250,6 +250,24 @@ export function registerDomainRoutes(add, { configuration, authentication, users
     const user = await optionalRequestUser(context);
     requireSupportedDtoFields(input, 'Live TV');
     return library.queryRecommendedPrograms(input, { user });
+  }, { policy: 'LiveTvAccess' });
+  add('GET', '/LiveTv/Channels', async context => {
+    // These two values are bound by the controller but not forwarded by the native manager.
+    nullableEnum(context, 'type', ['TV', 'Radio']); boolean(context, 'isDisliked');
+    const input = { ...controllerDtoOptions(context), startindex: integer(context, 'startIndex'), limit: integer(context, 'limit'),
+      sortby: commaEnums(context, 'sortBy', itemSortNames).map(String),
+      sortorder: [String(nullableEnum(context, 'sortOrder', ['Ascending', 'Descending']) ?? 'Ascending')],
+      isfavorite: boolean(context, 'isFavorite'), likes: boolean(context, 'isLiked'),
+      enablefavoritesorting: boolean(context, 'enableFavoriteSorting', false), addcurrentprogram: boolean(context, 'addCurrentProgram', true) };
+    for (const name of ['isMovie', 'isSeries', 'isNews', 'isKids', 'isSports']) input[name.toLowerCase()] = boolean(context, name);
+    const user = await optionalRequestUser(context);
+    requireSupportedDtoFields(input, 'Live TV');
+    return library.queryLiveTvChannels(input, { user });
+  }, { policy: 'LiveTvAccess' });
+  add('GET', '/LiveTv/Channels/{channelId}', async context => {
+    const id = guid(context, 'channelId');
+    try { return await library.getItem(id, { user: await optionalRequestUser(context) }); }
+    catch (error) { if (error.status === 404) return notFound(); throw error; }
   }, { policy: 'LiveTvAccess' });
   add('GET', '/LiveTv/Programs', async context => {
     const input = { ...controllerDtoOptions(context), channelids: commaGuids(context, 'channelIds'),

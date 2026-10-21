@@ -1,0 +1,169 @@
+{
+  "cases": [
+    {
+      "key": "number-0",
+      "number": null,
+      "name": "Channel 2"
+    },
+    {
+      "key": "number-1",
+      "number": "",
+      "name": "Channel 2"
+    },
+    {
+      "key": "number-2",
+      "number": "ABC",
+      "name": "Channel 2"
+    },
+    {
+      "key": "number-3",
+      "number": "A12",
+      "name": "Channel 2"
+    },
+    {
+      "key": "number-4",
+      "number": "1",
+      "name": "Channel 2"
+    },
+    {
+      "key": "number-5",
+      "number": "2.5",
+      "name": "Channel 2"
+    },
+    {
+      "key": "number-6",
+      "number": " 1.25 ",
+      "name": "Channel 2"
+    },
+    {
+      "key": "number-7",
+      "number": "1,234.5",
+      "name": "Channel 2"
+    },
+    {
+      "key": "number-8",
+      "number": "1,,,2",
+      "name": "Channel 2"
+    },
+    {
+      "key": "number-9",
+      "number": "1e2",
+      "name": "Channel 2"
+    },
+    {
+      "key": "number-10",
+      "number": ".000005",
+      "name": "Channel 2"
+    },
+    {
+      "key": "number-11",
+      "number": "-.000005",
+      "name": "Channel 2"
+    },
+    {
+      "key": "number-12",
+      "number": "1.234565",
+      "name": "Channel 2"
+    },
+    {
+      "key": "number-13",
+      "number": "1.234564",
+      "name": "Channel 2"
+    },
+    {
+      "key": "number-14",
+      "number": "-0",
+      "name": "Channel 2"
+    },
+    {
+      "key": "number-15",
+      "number": "-0.0000001",
+      "name": "Channel 2"
+    },
+    {
+      "key": "number-16",
+      "number": "1234567890.123456",
+      "name": "Channel 2"
+    },
+    {
+      "key": "number-17",
+      "number": "1.2345678901234567e22",
+      "name": "Channel 2"
+    },
+    {
+      "key": "number-18",
+      "number": "1e300",
+      "name": "Channel 2"
+    },
+    {
+      "key": "number-19",
+      "number": "1e-300",
+      "name": "Channel 2"
+    },
+    {
+      "key": "number-20",
+      "number": "NaN",
+      "name": "Channel 2"
+    },
+    {
+      "key": "number-21",
+      "number": "+NaN",
+      "name": "Channel 2"
+    },
+    {
+      "key": "number-22",
+      "number": "-NaN",
+      "name": "Channel 2"
+    },
+    {
+      "key": "number-23",
+      "number": "Infinity",
+      "name": "Channel 2"
+    },
+    {
+      "key": "number-24",
+      "number": "-Infinity",
+      "name": "Channel 2"
+    },
+    {
+      "key": "number-25",
+      "number": "+Infinity",
+      "name": "Channel 2"
+    },
+    {
+      "key": "number-26",
+      "number": "1e500",
+      "name": "Channel 2"
+    },
+    {
+      "key": "number-27",
+      "number": "1",
+      "name": "Channel 2"
+    },
+    {
+      "key": "number-28",
+      "number": " NaN ",
+      "name": "Channel 2"
+    },
+    {
+      "key": "number-29",
+      "number": "﻿1",
+      "name": "Channel 2"
+    },
+    {
+      "key": "number-30",
+      "number": "1\u0000\u0000",
+      "name": "Channel 2"
+    },
+    {
+      "key": "number-31",
+      "number": "1\u0000x",
+      "name": "Channel 2"
+    },
+    {
+      "key": "null-name",
+      "number": null,
+      "name": null
+    }
+  ]
+}

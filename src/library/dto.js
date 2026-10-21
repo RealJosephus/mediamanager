@@ -28,6 +28,8 @@ export const itemFields = ['CanDelete', 'CanDownload', 'Chapters', 'Trickplay', 
   'DateLastRefreshed', 'DateLastSaved', 'EnableMediaSourceDisplay', 'Width', 'Height', 'LocalTrailerCount', 'IsHD',
   'SpecialFeatureCount', 'AirTime', 'SeriesStudio', 'ChannelInfo', 'ChannelImage'];
 const fieldSet = new Set(itemFields.map(field => field.toLowerCase()));
+const channelNumberFormat = new Intl.NumberFormat('en-US', { useGrouping: false, minimumIntegerDigits: 10,
+  minimumFractionDigits: 5, maximumFractionDigits: 5, roundingMode: 'halfExpand' });
 export const itemImageTypes = ['Primary', 'Art', 'Backdrop', 'Banner', 'Logo', 'Thumb', 'Disc', 'Box', 'Screenshot', 'Menu', 'Chapter', 'BoxRear', 'Profile'];
 const extraTypes = ['Unknown', 'Clip', 'Trailer', 'BehindTheScenes', 'DeletedScene', 'Interview', 'Scene', 'Sample', 'ThemeSong', 'ThemeVideo', 'Featurette', 'Short'];
 const extraType = item => extraTypes[item.ExtraType] ?? item.ExtraType;
@@ -51,7 +53,7 @@ function personKind(raw) {
 export function dtoOptions(query = {}, allFields = false) {
   const requested = query.fields ?? (allFields ? itemFields : []);
   for (const field of requested) if (!fieldSet.has(field.toLowerCase())) unsupported(`Item field '${field}' is not implemented.`);
-  return { fields: new Set(requested.map(field => field.toLowerCase())), enableImages: query.enableimages !== false, enableUserData: query.enableuserdata !== false, imageTypeLimit: query.imagetypelimit ?? 2147483647, imageTypes: query.enableimagetypes ?? itemImageTypes };
+  return { fields: new Set(requested.map(field => field.toLowerCase())), enableImages: query.enableimages !== false, enableUserData: query.enableuserdata !== false, imageTypeLimit: query.imagetypelimit ?? 2147483647, imageTypes: query.enableimagetypes ?? itemImageTypes, addCurrentProgram: query.addcurrentprogram !== false };
 }
 
 const nativeDigit = /\p{Nd}/u;
@@ -79,6 +81,16 @@ export function sortName(item, { configuration = {} } = {}) {
   const type = String(item.Type ?? '').split('.').at(-1);
   const numbered = (value, width) => value == null ? ''
     : `${value < 0 ? '-' : ''}${String(Math.abs(value)).padStart(width, '0')}`;
+  if (type === 'LiveTvChannel' && !item.ForcedSortName) {
+    const text = (item.Number ?? '').replace(/\0+$/u, '').replace(/^[\x09-\x0d ]+|[\x09-\x0d ]+$/gu, '');
+    const special = clrTrim(item.Number ?? '');
+    const number = /^[+-]?(?:\d[\d,]*(?:\.\d*)?|\.\d+)(?:e[+-]?\d+)?$/iu.test(text)
+      ? Number(text.replaceAll(',', '')) : /^[+-]?(?:NaN|Infinity)$/iu.test(special)
+        ? /nan/iu.test(special) ? NaN : special.startsWith('-') ? -Infinity : Infinity : undefined;
+    const prefix = number === undefined ? item.Number ?? '' : !Number.isFinite(number) ? String(number)
+      : channelNumberFormat.format(Object.is(number, -0) ? '-0' : number.toPrecision(15));
+    return prefix + '-' + (item.Name ?? '');
+  }
   if (type === 'Season' && !item.ForcedSortName) return item.IndexNumber == null ? item.Name : numbered(item.IndexNumber, 4);
   if (type === 'Episode' && !item.ForcedSortName) return (item.ParentIndexNumber == null ? '' : numbered(item.ParentIndexNumber, 3) + ' - ')
     + (item.IndexNumber == null ? '' : numbered(item.IndexNumber, 4) + ' - ') + (item.Name ?? '');
@@ -355,6 +367,24 @@ async function mediaSource(item, queriedItem, type, prefix, state, user, options
 }
 
 export async function mediaSources(item, state, user, options, enablePathSubstitution = false) {
+  if (item.Type === 'LiveTvChannel') {
+    const protocol = ['Rtsp', 'Rtmp', 'Http', 'Rtp', 'Ftp', 'Udp'].find(value =>
+      (item.Path ?? '').slice(0, value.length).toLowerCase() === value.toLowerCase())
+      ?? (!item.Path || hasFileProtocol(item) ? 'File' : 'Http');
+    const source = {
+      Protocol: protocol, Id: dtoId(item.Id), Path: item.Path, Type: 'Placeholder', Name: item.Name,
+      RunTimeTicks: item.RunTimeTicks, IsRemote: false, ReadAtNativeFramerate: false, IgnoreDts: false, IgnoreIndex: false,
+      GenPtsInput: false, SupportsTranscoding: !user || (item.MediaType === 'Audio'
+        ? user.Policy.EnableAudioPlaybackTranscoding : user.Policy.EnableVideoPlaybackTranscoding) === true,
+      SupportsDirectStream: !user || item.MediaType !== 'Video' || user.Policy.EnablePlaybackRemuxing === true,
+      SupportsDirectPlay: true, IsInfiniteStream: item.RunTimeTicks == null, UseMostCompatibleTranscodingProfile: false,
+      RequiresOpening: false, RequiresClosing: false, RequiresLooping: false, SupportsProbing: true,
+      MediaStreams: [], MediaAttachments: [], Formats: [], RequiredHttpHeaders: new Map(), TranscodingSubProtocol: 'http', HasSegments: false,
+    };
+    if (user) selectDefaultTracks(source, item, user, state.userData?.get(idKey(item.Id))
+      ?? await readUserData(state.db, user.Id, item), item.OriginalLanguage);
+    return [source];
+  }
   const versions = mediaVersions(item, state);
   const names = versions.map(entry => entry.item).filter(entry => isFileSource(entry) && entry.Path).map(sourceFileName);
   const prefix = names.length > 1 ? commonVersionPrefix(names) : null;
@@ -438,7 +468,7 @@ export async function projectItem(item, state, user, selected, options) {
     MediaType: item.MediaType, CriticRating: item.CriticRating, OfficialRating: item.OfficialRating, OriginalLanguage: item.OriginalLanguage,
     PremiereDate: dateText(item.PremiereDate), ProductionYear: item.ProductionYear, RunTimeTicks: item.RunTimeTicks,
     Type: item.Type === 'PlaylistsFolder' ? 'ManualPlaylistsFolder'
-      : item.Type === 'LiveTvProgram' ? 'Program' : item.Type,
+      : item.Type === 'LiveTvProgram' ? 'Program' : item.Type === 'LiveTvChannel' ? 'TvChannel' : item.Type,
     ImageBlurHashes: new Map(), ChannelId: nonemptyId(item.ChannelId) ? dtoId(item.ChannelId) : null };
   if (item.Type !== 'LiveTvProgram') dto.LocationType = item.LocationType;
   if (item.Type === 'LiveTvProgram') {
@@ -461,7 +491,11 @@ export async function projectItem(item, state, user, selected, options) {
       }
     }
   }
-  if (item.IsFolder || VIDEO_TYPES.has(item.Type) || ['Audio', 'AudioBook', 'Photo'].includes(item.Type)) dto.IsFolder = item.IsFolder;
+  if (item.Type === 'LiveTvChannel') {
+    dto.Number = item.Number; dto.ChannelNumber = item.Number; dto.ChannelType = item.ChannelType;
+    if (selected.addCurrentProgram !== false) dto.CurrentProgram = state.dtoCurrentPrograms?.get(idKey(item.Id));
+  }
+  if (item.IsFolder || VIDEO_TYPES.has(item.Type) || ['Audio', 'AudioBook', 'Photo', 'LiveTvChannel'].includes(item.Type)) dto.IsFolder = item.IsFolder;
   if (item.SourceType === 'Channel') dto.SourceType = item.SourceType;
   if (item.Audio != null) dto.Audio = ['Mono', 'Stereo', 'Dolby', 'DolbyDigital', 'Thx', 'Atmos'][item.Audio] ?? item.Audio;
   if (item.CommunityRating > 0) dto.CommunityRating = item.CommunityRating;
@@ -520,8 +554,9 @@ export async function projectItem(item, state, user, selected, options) {
   });
   if (has('CanDownload')) dto.CanDownload = (VIDEO_TYPES.has(item.Type) || ['Audio', 'AudioBook', 'Book', 'Photo'].includes(item.Type)) && item.LocationType === 'FileSystem' && !['Dvd', 'BluRay'].includes(item.VideoType) && (!user || user.Policy.EnableContentDownloading === true);
   if (has('EnableMediaSourceDisplay')) dto.EnableMediaSourceDisplay = item.EnableMediaSourceDisplay ?? true;
-  if (has('MediaSources') && (VIDEO_TYPES.has(item.Type) || ['Audio', 'AudioBook'].includes(item.Type))) dto.MediaSources = await mediaSources(item, state, user, options, true);
-  if (has('MediaStreams') && (VIDEO_TYPES.has(item.Type) || ['Audio', 'AudioBook'].includes(item.Type))) dto.MediaStreams = dto.MediaSources?.find(source => sameId(source.Id, item.Id))?.MediaStreams ?? await projectedStreams(state, item, options);
+  if (has('MediaSources') && (VIDEO_TYPES.has(item.Type) || ['Audio', 'AudioBook', 'LiveTvChannel'].includes(item.Type))) dto.MediaSources = await mediaSources(item, state, user, options, true);
+  if (has('MediaStreams') && item.Type === 'LiveTvChannel') dto.MediaStreams = [];
+  else if (has('MediaStreams') && (VIDEO_TYPES.has(item.Type) || ['Audio', 'AudioBook'].includes(item.Type))) dto.MediaStreams = dto.MediaSources?.find(source => sameId(source.Id, item.Id))?.MediaStreams ?? await projectedStreams(state, item, options);
   if (VIDEO_TYPES.has(item.Type)) {
     Object.assign(dto, { VideoType: item.VideoType ?? 'VideoFile', Video3DFormat: item.Video3DFormat, IsoType: item.IsoType, ExtraType: extraType(item), AspectRatio: item.AspectRatio });
     if (item.AdditionalParts?.length) dto.PartCount = item.AdditionalParts.length + 1;

@@ -1654,6 +1654,12 @@ export function buildPostgresItemPageQuery(database, query, {
         && !(resumableMode === 'memory' && name === 'isplayed')) throw new Error(`Sort key ${name} requires a user.`);
       if (repositoryFolderPlayback && ['isplayed', 'isunplayed'].includes(name)) {
         expression = name === 'isplayed' ? repositoryPlayed('i') : `NOT (${repositoryPlayed('i')})`;
+      } else if (resumableMode === 'repository' && name !== 'dateplayed') {
+        const column = { playcount: 'PlayCount', isplayed: 'Played', isunplayed: 'Played', isfavoriteorliked: 'IsFavorite' }[name];
+        expression = `(SELECT u.${q(column)} FROM ${userData} u WHERE ${nativeTextSql(database.schemaName).guidLower('u."ItemId"')} = ${nativeTextSql(database.schemaName).guidLower('i."Id"')}
+          AND ${normalizedId('u."UserId"')} = ${bind(idKey(userId))} ORDER BY u."CustomDataKey" LIMIT 1)`;
+        if (name === 'isfavoriteorliked') expression = `COALESCE(${expression}, FALSE)`;
+        if (name === 'isunplayed') expression = `NOT (${expression})`;
       } else if (name === 'isunplayed') expression = `NOT (${memoryPlayed('i')})`;
       else {
         const column = { dateplayed: 'LastPlayedDate', playcount: 'PlayCount', isplayed: 'Played', isfavoriteorliked: 'IsFavorite' }[name];

@@ -1340,10 +1340,15 @@ test('PostgreSQL: Shows Upcoming, NextUp, Episodes, Seasons and Similar preserve
   assert.equal(response.status, expected.status);
   assert.equal(await response.json(), expected.error.replace('91000000-0000-0000-0000-000000000098', '00000000-0000-0000-0000-000000000099'));
   for (const route of [`/Shows/${ids.series}/Episodes?Season=x`, `/Shows/${ids.series}/Episodes?IsMissing=x`,
-    `/Shows/${ids.series}/Episodes?SortBy=NoSuchSort`, `/Shows/not-a-guid/Episodes`, '/Shows/Upcoming?Limit=x',
+    `/Shows/not-a-guid/Episodes`, '/Shows/Upcoming?Limit=x',
     '/Shows/NextUp?EnableRewatching=x', '/Shows/NextUp?NextUpDateCutoff=not-a-date',
     `/Shows/${ids.series}/Seasons?IsSpecialSeason=x`, '/Shows/not-a-guid/Seasons']) {
     response = await fixture.request(route); assert.equal(response.status, 400, route);
   }
+  response = await fixture.request(`/Shows/${ids.series}/Episodes?EnableImages=false`);
+  const defaultEpisodes = await response.json();
+  response = await fixture.request(`/Shows/${ids.series}/Episodes?SortBy=NoSuchSort&EnableImages=false`);
+  assert.equal(response.status, 200);
+  assert.deepEqual(await response.json(), defaultEpisodes);
   assert.deepEqual(fixture.errors, []);
 });

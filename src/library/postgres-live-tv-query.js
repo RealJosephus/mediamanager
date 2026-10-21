@@ -13,6 +13,34 @@ export async function queryPostgresPrograms(database, query, { rootId, userId, v
   });
 }
 
+export async function queryPostgresChannels(database, query, { rootId, userId, visibility } = {}) {
+  const sortby = [...(query.sortby ?? [])], sortorder = sortby.map(() => query.sortorder?.[0] ?? 'Ascending');
+  if (query.enablefavoritesorting) { sortby.unshift('IsFavoriteOrLiked'); sortorder.unshift('Descending'); }
+  sortby.push('SortName'); sortorder.push('Ascending');
+  const { enablefavoritesorting: _favoriteSorting, addcurrentprogram: _currentProgram, ...filters } = query;
+  return queryPostgresItemPage(database, { ...filters, includeitemtypes: ['LiveTvChannel'],
+    startindex: Math.max(0, query.startindex ?? 0), sortby, sortorder }, {
+    scope: { topParentIds: [rootId] }, userId, visibility, includeOwnedItems: true, includeAlternateVersions: true,
+  });
+}
+
+/** The native manager limits one global program window before selecting each channel's first item. */
+export async function queryPostgresCurrentPrograms(database, channelIds, { rootId, userId, visibility } = {}) {
+  if (!channelIds.length) return [];
+  const now = new Date().toISOString().replace(/Z$/u, '0000Z');
+  const window = buildPostgresItemPageQuery(database, { includeitemtypes: ['LiveTvProgram'], channelids: channelIds,
+    minenddate: now, maxstartdate: now, sortby: ['StartDate'], sortorder: ['Ascending'], limit: channelIds.length }, {
+    scope: { topParentIds: [rootId] }, userId, visibility, includeOwnedItems: true, includeAlternateVersions: true, includeOrdinal: true,
+  });
+  const sql = nativeTextSql(database.schemaName);
+  const result = await database.client.query({ text: `WITH candidates AS (${window.text}), first_programs AS (
+    SELECT item."Id", item."ChannelId", row_number() OVER (PARTITION BY ${sql.guidKey('item."ChannelId"')}
+      ORDER BY candidates."__ordinal") AS ordinal FROM candidates
+    JOIN ${q(database.schemaName)}.${q('BaseItems')} item ON item."Id" = candidates."Id"
+  ) SELECT "Id", "ChannelId" FROM first_programs WHERE ordinal = 1`, values: window.values });
+  return result.rows.map(row => ({ id: decodeNativeTextBytes(row.Id), channelId: decodeNativeTextBytes(row.ChannelId) }));
+}
+
 /** The repository window and recommendation manager's stable scoring stay in SQL. */
 export async function queryPostgresRecommendedPrograms(database, query, {
   rootId, userId, visibility, configuration = {},

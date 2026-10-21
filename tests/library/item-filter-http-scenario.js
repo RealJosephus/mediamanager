@@ -589,6 +589,9 @@ function routeFor(endpoint, testCase, fixture, userId, fields) {
   if (testCase.action === 'live-tv-recommended') return `/LiveTv/Programs/Recommended?${testCase.query.replaceAll(fixture.userId, userId)}`;
   if (testCase.action === 'live-tv-programs') return `/LiveTv/Programs?${testCase.query.replaceAll(fixture.userId, userId)}`;
   if (testCase.action === 'live-tv-program') return `/LiveTv/Programs/${encodeURIComponent(testCase.programId)}?${testCase.query.replaceAll(fixture.userId, userId)}`;
+  if (testCase.action === 'live-tv-channels') return `/LiveTv/Channels?${testCase.query.replaceAll(fixture.userId, userId)}`;
+  if (testCase.action === 'live-tv-channel') return `/LiveTv/Channels/${encodeURIComponent(testCase.channelId)}?${testCase.query.replaceAll(fixture.userId, userId)}`;
+  if (testCase.action === 'shows-episodes') return `/Shows/${encodeURIComponent(testCase.seriesId)}/Episodes?${testCase.query.replaceAll(fixture.userId, userId)}`;
   if (testCase.action === 'playback-info') return `/Items/${fixture.items.find(item => item.key === testCase.detailKey).id}/PlaybackInfo?${testCase.query.replaceAll(fixture.userId, userId)}`;
   if (testCase.action === 'intros') return `${endpoint === 'legacy' ? '/Users/' + (testCase.introUserId ?? userId) : ''}/Items/${testCase.introItemId ?? fixture.items.find(item => item.key === testCase.detailKey).id}/Intros?${testCase.query.replaceAll(fixture.userId, userId)}`;
   if (testCase.action === 'theme') return `/Items/${testCase.themeItemId ?? fixture.items.find(item => item.key === testCase.detailKey).id}/${testCase.themeRoute}?${testCase.query.replaceAll(fixture.userId, userId)}`;
@@ -936,7 +939,8 @@ export async function recordItemFilterCandidate({ dialect, fixture, connectionSt
           }
           endpointContracts.push({
             endpoint,
-            ...(testCase.action?.startsWith('live-tv-program') ? { request: requestDescription } : {}),
+            ...(testCase.action?.startsWith('live-tv-program') || testCase.action?.startsWith('live-tv-channel') || testCase.action === 'shows-episodes'
+              ? { request: requestDescription } : {}),
             ...(captureResponseBodies ? { response } : {}),
             ...(captureCaseRuntimeErrors ? { runtimeErrors: runtimeErrors.splice(runtimeErrorStart) } : {}),
             contract: responseContract(response, keyById, {

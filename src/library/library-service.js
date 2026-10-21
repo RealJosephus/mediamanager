@@ -44,7 +44,7 @@ import { NativeItemJsonError } from './native-item-data.js';
 import { postgresUpcomingScope, queryPostgresSeriesSeasonPage, queryPostgresUpcomingEpisodePage } from './postgres-shows-query.js';
 import { queryPostgresNextUpPage } from './postgres-next-up-query.js';
 import { queryPostgresLatestItems } from './postgres-latest-items-query.js';
-import { queryPostgresRecommendedPrograms, queryPostgresPrograms } from './postgres-live-tv-query.js';
+import { queryPostgresRecommendedPrograms, queryPostgresPrograms, queryPostgresChannels, queryPostgresCurrentPrograms } from './postgres-live-tv-query.js';
 import { queryPostgresProgramRecordingInfo, queryPostgresSeriesTimerProgramFilter } from './postgres-live-tv-state-query.js';
 import { queryPostgresNamedItemPage, queryPostgresNamedItemCounts, queryPostgresNamedSlug } from './postgres-named-items-query.js';
 import { dtoItemCountKinds, queryPostgresDtoItemCounts } from './postgres-dto-item-counts-query.js';
@@ -571,6 +571,10 @@ export class LibraryService extends EventEmitter {
 
   async #loadPostgresItemState(db, ids, user, { includeUserData = true, navigationRows = [] } = {}) {
     const loaded = await loadPostgresItemGraph(db, ids);
+    const existing = new Set(loaded.map(row => idKey(row.Id)));
+    const channels = [...new Set(loaded.filter(row => row.Type === 'MediaBrowser.Controller.LiveTv.LiveTvProgram'
+      && nonemptyId(row.ChannelId) && !existing.has(idKey(row.ChannelId))).map(row => row.ChannelId))];
+    if (channels.length) loaded.push(...await loadPostgresItemGraph(db, channels));
     const graphRows = [...new Map([...navigationRows, ...loaded].map(row => [idKey(row.Id), row])).values()];
     const requestedIds = new Set(ids.map(idKey));
     const itemRows = graphRows.filter(row => requestedIds.has(idKey(row.Id)));
@@ -614,6 +618,9 @@ export class LibraryService extends EventEmitter {
   async #postgresStandaloneVisible(db, item, user, state, { checkStandaloneParents = true } = {}) {
     if (!item) return false;
     if (!user) return true;
+    if (['LiveTvChannel', 'LiveTvProgram'].includes(item.Type)) {
+      return (await this.#filterPostgresStandalonePage(db, [item], user, state)).length === 1;
+    }
     if (item.Type === 'Playlist') {
       const dataPath = this.options.dataPath
         ?? (this.options.programDataPath && path.join(this.options.programDataPath, 'data'));
@@ -696,6 +703,10 @@ export class LibraryService extends EventEmitter {
     items = [...new Map(items.map(item => [idKey(item.Id), item])).values()];
     const programs = items.filter(item => item.Type === 'LiveTvProgram');
     if (programs.length) state.dtoProgramRecordingInfo = await queryPostgresProgramRecordingInfo(state.db, programs.map(item => item.Id));
+    const channels = items.filter(item => item.Type === 'LiveTvChannel');
+    if (channels.length && selected.addCurrentProgram !== false) {
+      await this.#prefetchCurrentProgramDtos(channels, state, user, selected);
+    }
     if (artistBatch) {
       const names = [...new Set(items.flatMap(item => ['Audio', 'AudioBook', 'MusicAlbum', 'MusicVideo'].includes(item.Type)
         ? [...(item.Artists ?? []), ...(item.AlbumArtists ?? [])].filter(name => name != null && clrTrim(name)) : []))];
@@ -849,6 +860,43 @@ export class LibraryService extends EventEmitter {
 
   async queryRecommendedPrograms(input = {}, { user = null } = {}) {
     return this.#queryLiveTvPrograms(input, { user, recommended: true });
+  }
+
+  async #prefetchCurrentProgramDtos(channels, state, user, selected) {
+    const db = state.db, navigationRows = await loadPostgresNavigationRows(db);
+    const navigation = await this.load(db, user, { includeUserData: false, baseRows: navigationRows });
+    const root = await this.userViews.global('livetv', this.options.localization?.text('HeaderLiveTV') ?? 'Live TV', db, navigation);
+    const { topParentIds: _topParents, libraryTopParentIds: _libraries, ...visibility } = this.#postgresVisibility(navigation, user) ?? {};
+    const winners = await queryPostgresCurrentPrograms(db, channels.map(item => item.Id), { rootId: root.Id, userId: user?.Id, visibility });
+    state.dtoCurrentPrograms = new Map();
+    if (!winners.length) return;
+    const programState = await this.#loadPostgresItemState(db, [...winners.map(item => item.id), ...channels.map(item => item.Id)], user,
+      { navigationRows });
+    const candidates = winners.map(item => programState.byId.get(idKey(item.id))).filter(Boolean);
+    const visible = await this.#filterPostgresStandalonePage(db, candidates, user, programState);
+    const options = { ...selected, fields: new Set(selected.fields) };
+    for (const field of ['candelete', 'candownload', 'displaypreferencesid', 'etag']) options.fields.delete(field);
+    await this.#prefetchPostgresDtos(visible, programState, user, options);
+    for (const item of visible) state.dtoCurrentPrograms.set(idKey(item.ChannelId), await projectItem(item, programState, user, options, this.options));
+  }
+
+  async queryLiveTvChannels(input = {}, { user = null } = {}) {
+    return this.#runWithStates(async db => {
+      const navigationRows = await loadPostgresNavigationRows(db);
+      const navigation = await this.load(db, user, { includeUserData: false, baseRows: navigationRows });
+      const root = await this.userViews.global('livetv', this.options.localization?.text('HeaderLiveTV') ?? 'Live TV', db, navigation);
+      const { topParentIds: _topParents, libraryTopParentIds: _libraries, ...visibility } = this.#postgresVisibility(navigation, user) ?? {};
+      const page = await queryPostgresChannels(db, input, { rootId: root.Id, userId: user?.Id, visibility });
+      const state = await this.load(db, user, { baseRows: await loadPostgresPageGraph(db, page.rows, navigationRows) });
+      const selected = page.rows.map(row => state.byId.get(idKey(row.Id))).filter(Boolean);
+      const visible = await this.#filterPostgresStandalonePage(db, selected, user, state);
+      const options = dtoOptions(input);
+      for (const field of ['candelete', 'candownload', 'displaypreferencesid', 'etag']) options.fields.delete(field);
+      await this.#prefetchPostgresDtos(visible, state, user, options);
+      const items = [];
+      for (const item of visible) items.push(await projectItem(item, state, user, options, this.options));
+      return { Items: items, TotalRecordCount: page.total, StartIndex: input.startindex ?? 0 };
+    });
   }
 
   async queryLiveTvPrograms(input = {}, { user = null } = {}) {
@@ -2505,7 +2553,9 @@ export class LibraryService extends EventEmitter {
       const item = nonemptyId(normalized) ? state.byId.get(idKey(normalized)) : state.items.find(item => item.Type === 'UserRootFolder');
       const visible = item && (!user || await this.#postgresStandaloneVisible(db, item, user, state));
       if (!visible) throw libraryError(404, 'Item not found.');
-      return projectItem(item, state, user, dtoOptions(parseQuery(query), true), this.options);
+      const options = dtoOptions(parseQuery(query), true);
+      if (['LiveTvChannel', 'LiveTvProgram'].includes(item.Type)) await this.#prefetchPostgresDtos([item], state, user, options);
+      return projectItem(item, state, user, options, this.options);
     });
   }
 
