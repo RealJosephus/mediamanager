@@ -16,6 +16,7 @@ import { acquireOperationLease } from './operation-lease.js';
 import { assertPortableMountRetarget, canonicalPortableMountContract,
   projectPortableJellyfinPath } from '../storage/portable-mount-contract.js';
 import { createSqliteExportPathProjector } from './sqlite-export-paths.js';
+import { captureLiveTvState, validateLiveTvState } from './live-tv-state.js';
 
 const sha256Value = value => createHash('sha256').update(value).digest('hex');
 const normalizeThrown = (value, label) => value instanceof Error ? value : new Error(`${label}: ${String(value)}`, { cause: value });
@@ -757,6 +758,7 @@ async function captureSourceIdentity(database, instanceState, remotePlan,
       // The persisted envelope proves provenance, while PostgreSQL sequence
       // high-water is live source state and must be captured with the rows.
       nativeEnvelope: nativeEnvelopeIdentity(await getNativeEnvelope(current)),
+      liveTvState: await captureLiveTvState(current),
     };
   };
   if (database.dialect === 'postgres') databaseState = await database.transaction(capture, { readOnly: true });
@@ -775,6 +777,7 @@ async function captureSourceIdentity(database, instanceState, remotePlan,
       instanceBinding: databaseState.instanceBinding,
       portableMountContract: databaseState.portableMountContract,
       nativeEnvelope: databaseState.nativeEnvelope,
+      liveTvState: databaseState.liveTvState,
       tables: databaseState.tables,
       projectedTables: databaseState.projectedTables,
       pathProjection: databaseState.pathProjection,
@@ -862,7 +865,7 @@ function validateCapturedSource(source, instanceState, manifest) {
     || source.instanceIdentityDigest !== instanceState.identity.digest
     || canonicalJson(source.stateGeneration) !== canonicalJson(instanceState.identity.stateGeneration)
     || !source.database || typeof source.database !== 'object' || Array.isArray(source.database)
-    || Object.keys(source.database).sort().join(',') !== 'dialect,instanceBinding,nativeEnvelope,pathProjection,portableMountContract,projectedTables,schema,tables'
+    || Object.keys(source.database).sort().join(',') !== 'dialect,instanceBinding,liveTvState,nativeEnvelope,pathProjection,portableMountContract,projectedTables,schema,tables'
     || !['sqlite', 'postgres'].includes(source.database.dialect)
     || (source.database.dialect === 'sqlite' && (source.database.schema !== null || source.database.instanceBinding !== null
       || source.database.portableMountContract !== null))
@@ -871,6 +874,7 @@ function validateCapturedSource(source, instanceState, manifest) {
     throw new Error('State package captured source identity is invalid');
   }
   const nativeEnvelope = validateNativeEnvelopeIdentity(source.database.nativeEnvelope);
+  validateLiveTvState(source.database.liveTvState, manifest.instanceFiles, source.database.dialect);
   if (nativeEnvelope.fingerprint !== manifest.database.nativeSchemaFingerprint) {
     throw new Error('State package source native database envelope differs from its exported database');
   }
@@ -1107,6 +1111,7 @@ async function createStatePackageOwned(options, lease) {
           atime: dateFromNanoseconds(metadata.atimeNs), mtime: dateFromNanoseconds(metadata.mtimeNs) });
       }
     }
+    validateLiveTvState(sourceIdentity.database.liveTvState, manifest.instanceFiles, database.dialect);
     manifest.directories.sort((left, right) => left.path.localeCompare(right.path, 'en'));
     const plannedRemotePaths = remotePlan?.assets.map(asset => `remote-assets/${asset.restorePath}`) ?? [];
     const allowedCaptureDirectories = new Set(manifest.directories.map(entry => entry.path));

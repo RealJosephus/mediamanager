@@ -1,5 +1,6 @@
 import { PluginHost } from './plugins/host.js';
 import { IntroProviderManager } from './library/intro-providers.js';
+import { initializeLiveTvState } from './database/live-tv-state-import.js';
 import { createIntroPathResolver } from './library/intro-path-resolver.js';
 import { guid, nonemptyId, libraryError } from './library/records.js';
 import { LibraryTaskScheduler } from './library/library-task-scheduler.js';
@@ -95,6 +96,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
   configurationDirectoryPath ??= programDataPath && path.resolve(programDataPath, '..', 'config');
   dataPath ??= programDataPath && path.join(programDataPath, 'data');
   metadataPath ??= programDataPath && path.join(programDataPath, 'metadata');
+  await store.transaction(database => initializeLiveTvState(database, { dataPath, logger }));
   plugins = await PluginHost.open({ programDataPath, configurationDirectoryPath, dataPath, metadataPath, cachePath: imageOptions.cachePath, onError, ...pluginOptions });
   rollback.push(() => plugins.close());
   configuredStorage = await createConfiguredStorage(storageConfiguration, { plugins, environment, portableMountContract });

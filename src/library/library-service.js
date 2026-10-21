@@ -45,6 +45,7 @@ import { postgresUpcomingScope, queryPostgresSeriesSeasonPage, queryPostgresUpco
 import { queryPostgresNextUpPage } from './postgres-next-up-query.js';
 import { queryPostgresLatestItems } from './postgres-latest-items-query.js';
 import { queryPostgresRecommendedPrograms } from './postgres-live-tv-query.js';
+import { queryPostgresProgramRecordingInfo } from './postgres-live-tv-state-query.js';
 import { queryPostgresNamedItemPage, queryPostgresNamedItemCounts, queryPostgresNamedSlug } from './postgres-named-items-query.js';
 import { dtoItemCountKinds, queryPostgresDtoItemCounts } from './postgres-dto-item-counts-query.js';
 import { queryPostgresItemFilters } from './postgres-item-filters-query.js';
@@ -693,6 +694,8 @@ export class LibraryService extends EventEmitter {
     // A latest-media page may project the same item more than once. Prefetch
     // caches by identity; repeated requests must not multiply its child counts.
     items = [...new Map(items.map(item => [idKey(item.Id), item])).values()];
+    const programs = items.filter(item => item.Type === 'LiveTvProgram');
+    if (programs.length) state.dtoProgramRecordingInfo = await queryPostgresProgramRecordingInfo(state.db, programs.map(item => item.Id));
     if (artistBatch) {
       const names = [...new Set(items.flatMap(item => ['Audio', 'AudioBook', 'MusicAlbum', 'MusicVideo'].includes(item.Type)
         ? [...(item.Artists ?? []), ...(item.AlbumArtists ?? [])].filter(name => name != null && clrTrim(name)) : []))];

@@ -1,0 +1,346 @@
+{
+  "documents": [
+    {
+      "name": "valid UTF-8",
+      "kind": "timers",
+      "bytesHex": "5b7b224964223a22627974652d74696d6572222c2250726f6772616d4964223a2270726f6265222c224e616d65223a22e88a82e79bae20f09f8eac227d5d"
+    },
+    {
+      "name": "valid replacement character",
+      "kind": "timers",
+      "bytesHex": "5b7b224964223a22627974652d74696d6572222c2250726f6772616d4964223a2270726f6265222c224e616d65223a22efbfbd227d5d"
+    },
+    {
+      "name": "invalid known name",
+      "kind": "timers",
+      "bytesHex": "5b7b224964223a22627974652d74696d6572222c2250726f6772616d4964223a2270726f6265222c224e616d65223a22ff227d5d"
+    },
+    {
+      "name": "invalid known id",
+      "kind": "timers",
+      "bytesHex": "5b7b224964223a22ff222c2250726f6772616d4964223a2270726f6265227d5d"
+    },
+    {
+      "name": "invalid known program id",
+      "kind": "timers",
+      "bytesHex": "5b7b224964223a22627974652d74696d6572222c2250726f6772616d4964223a22ff227d5d"
+    },
+    {
+      "name": "invalid unknown string",
+      "kind": "timers",
+      "bytesHex": "5b7b224964223a22627974652d74696d6572222c2250726f6772616d4964223a2270726f6265222c22467574757265223a22ff227d5d"
+    },
+    {
+      "name": "invalid ignored nested keys and strings",
+      "kind": "timers",
+      "bytesHex": "5b7b224964223a22627974652d74696d6572222c2250726f6772616d4964223a2270726f6265222c22467574757265223a7b22ff223a22fe227d7d5d"
+    },
+    {
+      "name": "invalid unknown property name",
+      "kind": "timers",
+      "bytesHex": "5b7b224964223a22627974652d74696d6572222c2250726f6772616d4964223a2270726f6265222c22ff223a2269676e6f726564227d5d"
+    },
+    {
+      "name": "invalid lower-case field value",
+      "kind": "timers",
+      "bytesHex": "5b7b224964223a22627974652d74696d6572222c2250726f6772616d4964223a2270726f6265222c226e616d65223a22ff227d5d"
+    },
+    {
+      "name": "invalid read-only field value",
+      "kind": "timers",
+      "bytesHex": "5b7b224964223a22627974652d74696d6572222c2250726f6772616d4964223a2270726f6265222c224973416374697665223a22ff227d5d"
+    },
+    {
+      "name": "invalid known dictionary value",
+      "kind": "timers",
+      "bytesHex": "5b7b224964223a22627974652d74696d6572222c2250726f6772616d4964223a2270726f6265222c2250726f7669646572496473223a7b22667574757265223a22ff227d7d5d"
+    },
+    {
+      "name": "invalid known array string",
+      "kind": "timers",
+      "bytesHex": "5b7b224964223a22627974652d74696d6572222c2250726f6772616d4964223a2270726f6265222c2247656e726573223a5b22ff225d7d5d"
+    },
+    {
+      "name": "duplicate invalid name first",
+      "kind": "timers",
+      "bytesHex": "5b7b224964223a22627974652d74696d6572222c2250726f6772616d4964223a2270726f6265222c224e616d65223a22ff222c224e616d65223a226c61746572227d5d"
+    },
+    {
+      "name": "UTF-8 BOM",
+      "kind": "timers",
+      "bytesHex": "efbbbf5b7b224964223a22627974652d74696d6572222c2250726f6772616d4964223a2270726f6265222c224e616d65223a22626f6d227d5d"
+    },
+    {
+      "name": "UTF-16 document",
+      "kind": "timers",
+      "bytesHex": "fffe5b007b0022004900640022003a00220062007900740065002d00740069006d006500720022002c002200500072006f006700720061006d004900640022003a002200700072006f006200650022007d005d00"
+    },
+    {
+      "name": "escaped invalid known string",
+      "kind": "timers",
+      "bytesHex": "5b7b224964223a22627974652d74696d6572222c2250726f6772616d4964223a2270726f6265222c224e616d65223a225c7564383030227d5d"
+    },
+    {
+      "name": "escaped invalid unknown string",
+      "kind": "timers",
+      "bytesHex": "5b7b224964223a22627974652d74696d6572222c2250726f6772616d4964223a2270726f6265222c22467574757265223a225c7564383030227d5d"
+    },
+    {
+      "name": "escaped property and value",
+      "kind": "timers",
+      "bytesHex": "5b7b225c753030343964223a22627974652d74696d6572222c2250726f6772616d4964223a2270726f6265222c224e616d65223a225c75383238325c7537366565227d5d"
+    },
+    {
+      "name": "invalid series name",
+      "kind": "seriesTimers",
+      "bytesHex": "5b7b224964223a22627974652d736572696573222c225365726965734964223a227365726965732d70726f6265222c224e616d65223a22ff227d5d"
+    },
+    {
+      "name": "invalid unknown series field",
+      "kind": "seriesTimers",
+      "bytesHex": "5b7b224964223a22627974652d736572696573222c225365726965734964223a227365726965732d70726f6265222c22467574757265223a22ff227d5d"
+    }
+  ],
+  "lookups": [
+    {
+      "name": "valid UTF-8",
+      "timersHex": "5b7b224964223a22627974652d74696d6572222c2250726f6772616d4964223a2270726f6265222c224e616d65223a22e88a82e79bae20f09f8eac227d5d",
+      "seriesTimersHex": "5b5d",
+      "programs": [
+        {
+          "id": "80400000-0000-0000-0000-000000000001",
+          "externalId": "probe",
+          "externalSeriesId": "series-probe"
+        }
+      ]
+    },
+    {
+      "name": "valid replacement character",
+      "timersHex": "5b7b224964223a22627974652d74696d6572222c2250726f6772616d4964223a2270726f6265222c224e616d65223a22efbfbd227d5d",
+      "seriesTimersHex": "5b5d",
+      "programs": [
+        {
+          "id": "80400000-0000-0000-0000-000000000001",
+          "externalId": "probe",
+          "externalSeriesId": "series-probe"
+        }
+      ]
+    },
+    {
+      "name": "invalid known name",
+      "timersHex": "5b7b224964223a22627974652d74696d6572222c2250726f6772616d4964223a2270726f6265222c224e616d65223a22ff227d5d",
+      "seriesTimersHex": "5b5d",
+      "programs": [
+        {
+          "id": "80400000-0000-0000-0000-000000000001",
+          "externalId": "probe",
+          "externalSeriesId": "series-probe"
+        }
+      ]
+    },
+    {
+      "name": "invalid known id",
+      "timersHex": "5b7b224964223a22ff222c2250726f6772616d4964223a2270726f6265227d5d",
+      "seriesTimersHex": "5b5d",
+      "programs": [
+        {
+          "id": "80400000-0000-0000-0000-000000000001",
+          "externalId": "probe",
+          "externalSeriesId": "series-probe"
+        }
+      ]
+    },
+    {
+      "name": "invalid known program id",
+      "timersHex": "5b7b224964223a22627974652d74696d6572222c2250726f6772616d4964223a22ff227d5d",
+      "seriesTimersHex": "5b5d",
+      "programs": [
+        {
+          "id": "80400000-0000-0000-0000-000000000001",
+          "externalId": "probe",
+          "externalSeriesId": "series-probe"
+        }
+      ]
+    },
+    {
+      "name": "invalid unknown string",
+      "timersHex": "5b7b224964223a22627974652d74696d6572222c2250726f6772616d4964223a2270726f6265222c22467574757265223a22ff227d5d",
+      "seriesTimersHex": "5b5d",
+      "programs": [
+        {
+          "id": "80400000-0000-0000-0000-000000000001",
+          "externalId": "probe",
+          "externalSeriesId": "series-probe"
+        }
+      ]
+    },
+    {
+      "name": "invalid ignored nested keys and strings",
+      "timersHex": "5b7b224964223a22627974652d74696d6572222c2250726f6772616d4964223a2270726f6265222c22467574757265223a7b22ff223a22fe227d7d5d",
+      "seriesTimersHex": "5b5d",
+      "programs": [
+        {
+          "id": "80400000-0000-0000-0000-000000000001",
+          "externalId": "probe",
+          "externalSeriesId": "series-probe"
+        }
+      ]
+    },
+    {
+      "name": "invalid unknown property name",
+      "timersHex": "5b7b224964223a22627974652d74696d6572222c2250726f6772616d4964223a2270726f6265222c22ff223a2269676e6f726564227d5d",
+      "seriesTimersHex": "5b5d",
+      "programs": [
+        {
+          "id": "80400000-0000-0000-0000-000000000001",
+          "externalId": "probe",
+          "externalSeriesId": "series-probe"
+        }
+      ]
+    },
+    {
+      "name": "invalid lower-case field value",
+      "timersHex": "5b7b224964223a22627974652d74696d6572222c2250726f6772616d4964223a2270726f6265222c226e616d65223a22ff227d5d",
+      "seriesTimersHex": "5b5d",
+      "programs": [
+        {
+          "id": "80400000-0000-0000-0000-000000000001",
+          "externalId": "probe",
+          "externalSeriesId": "series-probe"
+        }
+      ]
+    },
+    {
+      "name": "invalid read-only field value",
+      "timersHex": "5b7b224964223a22627974652d74696d6572222c2250726f6772616d4964223a2270726f6265222c224973416374697665223a22ff227d5d",
+      "seriesTimersHex": "5b5d",
+      "programs": [
+        {
+          "id": "80400000-0000-0000-0000-000000000001",
+          "externalId": "probe",
+          "externalSeriesId": "series-probe"
+        }
+      ]
+    },
+    {
+      "name": "invalid known dictionary value",
+      "timersHex": "5b7b224964223a22627974652d74696d6572222c2250726f6772616d4964223a2270726f6265222c2250726f7669646572496473223a7b22667574757265223a22ff227d7d5d",
+      "seriesTimersHex": "5b5d",
+      "programs": [
+        {
+          "id": "80400000-0000-0000-0000-000000000001",
+          "externalId": "probe",
+          "externalSeriesId": "series-probe"
+        }
+      ]
+    },
+    {
+      "name": "invalid known array string",
+      "timersHex": "5b7b224964223a22627974652d74696d6572222c2250726f6772616d4964223a2270726f6265222c2247656e726573223a5b22ff225d7d5d",
+      "seriesTimersHex": "5b5d",
+      "programs": [
+        {
+          "id": "80400000-0000-0000-0000-000000000001",
+          "externalId": "probe",
+          "externalSeriesId": "series-probe"
+        }
+      ]
+    },
+    {
+      "name": "duplicate invalid name first",
+      "timersHex": "5b7b224964223a22627974652d74696d6572222c2250726f6772616d4964223a2270726f6265222c224e616d65223a22ff222c224e616d65223a226c61746572227d5d",
+      "seriesTimersHex": "5b5d",
+      "programs": [
+        {
+          "id": "80400000-0000-0000-0000-000000000001",
+          "externalId": "probe",
+          "externalSeriesId": "series-probe"
+        }
+      ]
+    },
+    {
+      "name": "UTF-8 BOM",
+      "timersHex": "efbbbf5b7b224964223a22627974652d74696d6572222c2250726f6772616d4964223a2270726f6265222c224e616d65223a22626f6d227d5d",
+      "seriesTimersHex": "5b5d",
+      "programs": [
+        {
+          "id": "80400000-0000-0000-0000-000000000001",
+          "externalId": "probe",
+          "externalSeriesId": "series-probe"
+        }
+      ]
+    },
+    {
+      "name": "UTF-16 document",
+      "timersHex": "fffe5b007b0022004900640022003a00220062007900740065002d00740069006d006500720022002c002200500072006f006700720061006d004900640022003a002200700072006f006200650022007d005d00",
+      "seriesTimersHex": "5b5d",
+      "programs": [
+        {
+          "id": "80400000-0000-0000-0000-000000000001",
+          "externalId": "probe",
+          "externalSeriesId": "series-probe"
+        }
+      ]
+    },
+    {
+      "name": "escaped invalid known string",
+      "timersHex": "5b7b224964223a22627974652d74696d6572222c2250726f6772616d4964223a2270726f6265222c224e616d65223a225c7564383030227d5d",
+      "seriesTimersHex": "5b5d",
+      "programs": [
+        {
+          "id": "80400000-0000-0000-0000-000000000001",
+          "externalId": "probe",
+          "externalSeriesId": "series-probe"
+        }
+      ]
+    },
+    {
+      "name": "escaped invalid unknown string",
+      "timersHex": "5b7b224964223a22627974652d74696d6572222c2250726f6772616d4964223a2270726f6265222c22467574757265223a225c7564383030227d5d",
+      "seriesTimersHex": "5b5d",
+      "programs": [
+        {
+          "id": "80400000-0000-0000-0000-000000000001",
+          "externalId": "probe",
+          "externalSeriesId": "series-probe"
+        }
+      ]
+    },
+    {
+      "name": "escaped property and value",
+      "timersHex": "5b7b225c753030343964223a22627974652d74696d6572222c2250726f6772616d4964223a2270726f6265222c224e616d65223a225c75383238325c7537366565227d5d",
+      "seriesTimersHex": "5b5d",
+      "programs": [
+        {
+          "id": "80400000-0000-0000-0000-000000000001",
+          "externalId": "probe",
+          "externalSeriesId": "series-probe"
+        }
+      ]
+    },
+    {
+      "name": "invalid series name",
+      "timersHex": "5b5d",
+      "seriesTimersHex": "5b7b224964223a22627974652d736572696573222c225365726965734964223a227365726965732d70726f6265222c224e616d65223a22ff227d5d",
+      "programs": [
+        {
+          "id": "80400000-0000-0000-0000-000000000001",
+          "externalId": "probe",
+          "externalSeriesId": "series-probe"
+        }
+      ]
+    },
+    {
+      "name": "invalid unknown series field",
+      "timersHex": "5b5d",
+      "seriesTimersHex": "5b7b224964223a22627974652d736572696573222c225365726965734964223a227365726965732d70726f6265222c22467574757265223a22ff227d5d",
+      "programs": [
+        {
+          "id": "80400000-0000-0000-0000-000000000001",
+          "externalId": "probe",
+          "externalSeriesId": "series-probe"
+        }
+      ]
+    }
+  ]
+}

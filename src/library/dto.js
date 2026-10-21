@@ -443,6 +443,7 @@ export async function projectItem(item, state, user, selected, options) {
   if (item.Type !== 'LiveTvProgram') dto.LocationType = item.LocationType;
   if (item.Type === 'LiveTvProgram') {
     dto.StartDate = dateText(item.StartDate);
+    Object.assign(dto, state.dtoProgramRecordingInfo?.get(idKey(item.Id)));
     dto.EpisodeTitle = item.EpisodeTitle;
     for (const field of ['IsRepeat', 'IsMovie', 'IsSeries', 'IsSports', 'IsLive', 'IsNews', 'IsKids', 'IsPremiere']) {
       if (item[field]) dto[field] = true;

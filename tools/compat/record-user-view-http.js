@@ -109,6 +109,15 @@ const scenarios = {
     liveTvView: true,
     menuLifecycle: false,
   },
+  'live-tv-recording-links-http': {
+    fixture: 'tests/library/fixtures/live-tv-recording-links-http/input.json',
+    expectedCases: 16,
+    includeAggregateSnapshot: true,
+    libraryTypeMarkers: true,
+    liveTvView: true,
+    liveTvState: true,
+    menuLifecycle: false,
+  },
 };
 
 export async function recordUserViewHttp(scenarioName, outputArgument, portArgument) {
@@ -255,6 +264,7 @@ async function filesystemSnapshot() {
     metadata: path.join(referenceRoot, 'data/metadata'),
     libraries: path.join(referenceRoot, 'library-content'),
     collections: collectionsPath,
+    ...(scenario.liveTvState ? { liveTvState: path.join(dataRoot, 'livetv') } : {}),
   };
   const result = {};
   for (const [name, directory] of Object.entries(domains)) {
@@ -270,6 +280,7 @@ async function filesystemSnapshot() {
         entries.push({ path: path.relative(directory, target).replaceAll('\\', '/'),
           type: entry.isDirectory() ? 'directory' : 'file',
           ...(times ? { birthtimeNs: String(times.birthtimeNs), mtimeNs: String(times.mtimeNs) } : {}) });
+        if (name === 'liveTvState' && entry.isFile()) entries.at(-1).sha256 = sha256(await readFile(target));
         if (entry.isDirectory()) await visit(target);
       }
     }
@@ -621,6 +632,23 @@ async function prepareReference() {
     await mkdir(itemPath(item), { recursive: true });
   }
   seedDatabase();
+  const liveTvDocuments = [];
+  if (scenario.liveTvState) {
+    const resolveDates = value => {
+      if (Array.isArray(value)) return value.map(resolveDates);
+      if (value && typeof value === 'object') return Object.fromEntries(Object.entries(value).map(([key, entry]) => [key, resolveDates(entry)]));
+      if (typeof value !== 'string' || !value.startsWith('$future-')) return value;
+      const days = Number(value.slice('$future-'.length));
+      assert.ok(Number.isInteger(days) && days > 0 && days <= 14);
+      return new Date(Date.parse(seedClock.replace(' ', 'T') + 'Z') + days * 86400000).toISOString();
+    };
+    await mkdir(path.join(dataRoot, 'livetv'), { recursive: true });
+    for (const [kind, filename] of [['timers', 'timers.json'], ['seriesTimers', 'seriestimers.json']]) {
+      const text = json(resolveDates(fixture.timerDocuments[kind]));
+      await writeFile(path.join(dataRoot, 'livetv', filename), text);
+      liveTvDocuments.push({ kind, filename, text, sha256: sha256(Buffer.from(text)) });
+    }
+  }
   const seededDatabase = new DatabaseSync(databasePath, { readOnly: true });
   let seededUserRoot;
   try {
@@ -643,6 +671,7 @@ async function prepareReference() {
   assert.equal(copyBindings.recorderSha256, inputHashes.recorderSha256);
   assert.equal(copyBindings.fixtureSha256, inputHashes.fixtureSha256);
   const result = { ...current.preparation, copyBindings, bindings, ...(seedClock ? { seedClock } : {}),
+    ...(scenario.liveTvState ? { liveTvDocuments } : {}),
     ...(liveTvView ? { liveTvViewDiscovery: liveTvView } : {}),
     userRootDiscovery: { route: '/Items/Root', response: rootResponse, process: discoveryOutcome } };
   await writeFile(path.join(runRoot, 'reference-preparation.json'), json(result), { flag: 'wx' });
@@ -723,7 +752,7 @@ const databaseSnapshotTables = [
   'mediaStreamInfos', 'peoples', 'peopleBaseItemMap', 'baseItemImageInfos', 'baseItemProviders',
   'baseItemMetadataFields', 'foreignKeyCheck',
 ];
-const filesystemSnapshotDomains = ['userViews', 'metadata', 'libraries', 'collections'];
+const filesystemSnapshotDomains = ['userViews', 'metadata', 'libraries', 'collections', ...(scenario.liveTvState ? ['liveTvState'] : [])];
 
 function snapshotShapeValid(snapshot) {
   if (!snapshot || typeof snapshot !== 'object' || !snapshot.database || !snapshot.filesystem) return false;

@@ -8,7 +8,7 @@ import ordinalIgnoreCaseMapping from '../storage/resources/ordinal-ignore-case.j
 import diacriticsMapping from '../sessions/resources/diacritics.json' with { type: 'json' };
 import { postgresVersionFamilyKey } from './postgres-query-expressions.js';
 import { nativeItemJsonValidationManifest } from '../library/native-item-data.js';
-import { clrWhitespaceCharacters, ecmaWhitespaceCharacters } from '../metadata/whitespace.js';
+import { clrWhitespaceCharacters } from '../metadata/whitespace.js';
 import { loadLocalizationData } from '../core/localization-data.js';
 
 const ASCII_UPPER = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -89,7 +89,7 @@ function safeNativeItemDataBody() {
 DECLARE
   native_type text := mm_bytes_text_projection(native_type_bytes);
   manifest CONSTANT jsonb := ${sqlLiteral(JSON.stringify(itemDataValidationManifest()))}::jsonb;
-  trim_characters CONSTANT text := ${sqlLiteral(ecmaWhitespaceCharacters)};
+  trim_characters CONSTANT text := ${sqlLiteral(clrWhitespaceCharacters)};
   guid_trim_characters CONSTANT text := ${sqlLiteral(clrWhitespaceCharacters)};
   document json;
   validation_document json;
@@ -214,7 +214,7 @@ BEGIN
       CONTINUE;
     ELSIF kind IN ('int', 'long', 'double') THEN
       IF value_type NOT IN ('string', 'number') OR scalar !~ (CASE WHEN value_type = 'string'
-        THEN '^[+-]?(?:0|[1-9][0-9]*)(?:[.][0-9]+)?(?:[eE][+-]?[0-9]+)?$'
+        THEN '^[+-]?[0-9]+(?:[.][0-9]+)?(?:[eE][+-]?[0-9]+)?$'
         ELSE '^-?(?:0|[1-9][0-9]*)(?:[.][0-9]+)?(?:[eE][+-]?[0-9]+)?$' END) THEN
         RETURN '{}'::json;
       END IF;
@@ -311,8 +311,8 @@ BEGIN
       FOR enum_part IN SELECT part FROM pg_catalog.regexp_split_to_table(normalized, ',') AS part LOOP
         enum_part := pg_catalog.btrim(enum_part, trim_characters);
         IF EXISTS (SELECT 1 FROM pg_catalog.jsonb_array_elements_text(enum_values) AS allowed(name)
-            WHERE pg_catalog.translate(allowed.name, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')
-              = pg_catalog.translate(enum_part, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')) THEN
+            WHERE mm_ordinal_ignore_case_key(mm_text_utf8_key(allowed.name))
+              = mm_ordinal_ignore_case_key(mm_text_utf8_key(enum_part))) THEN
           CONTINUE;
         END IF;
         IF enum_part !~ '^[+-]?[0-9]+$' THEN
@@ -352,7 +352,7 @@ function nativeJsonEnumBody() {
   return nativeJsonEnumBodyValue ??= `
 DECLARE
   enum_contracts CONSTANT jsonb := ${sqlLiteral(JSON.stringify(itemDataValidationManifest().enums))}::jsonb;
-  trim_characters CONSTANT text := ${sqlLiteral(ecmaWhitespaceCharacters)};
+  trim_characters CONSTANT text := ${sqlLiteral(clrWhitespaceCharacters)};
   enum_values jsonb := enum_contracts -> enum_kind;
   value_type text := pg_catalog.json_typeof(source);
   scalar text;
@@ -377,8 +377,8 @@ BEGIN
       SELECT (allowed.ordinality - 1)::integer INTO component
       FROM pg_catalog.jsonb_array_elements_text(enum_values) WITH ORDINALITY AS allowed(name, ordinality)
       WHERE allowed.name IS NOT NULL
-        AND pg_catalog.translate(allowed.name, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')
-          = pg_catalog.translate(part, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')
+        AND mm_ordinal_ignore_case_key(mm_text_utf8_key(allowed.name))
+          = mm_ordinal_ignore_case_key(mm_text_utf8_key(part))
       LIMIT 1;
       IF component IS NULL THEN
         IF part !~ '^[+-]?[0-9]+$' THEN RETURN NULL; END IF;

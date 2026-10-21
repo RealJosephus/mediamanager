@@ -12,7 +12,7 @@ function table(database, name) {
   return `${quote(database.schemaName)}.${quote(name)}`;
 }
 
-export async function resolvePostgresSearchCollation(database, culture, { signal } = {}) {
+export async function resolvePostgresSearchCollation(database, culture, { signal, numeric = false } = {}) {
   if (database?.dialect !== 'postgres' || database.connectionSession !== true || database.connectionActive !== true) {
     throw new TypeError('PostgreSQL search collations require an active owned operation session.');
   }
@@ -50,8 +50,9 @@ export async function resolvePostgresSearchCollation(database, culture, { signal
   const name = 'mm_search_' + randomUUID().replaceAll('-', '');
   const quote = value => "'" + String(value).replaceAll("'", "''") + "'";
   const schema = 'pg_temp', createdInTransaction = database.inTransaction === true;
+  const locale = numeric ? Intl.getCanonicalLocales(`${row.Locale}-u-kn-true`)[0] : row.Locale;
   const ddl = 'CREATE COLLATION ' + quoteIdentifier(schema) + '.' + quoteIdentifier(name)
-    + ' (provider = icu, locale = ' + quote(row.Locale) + ', deterministic = false'
+    + ' (provider = icu, locale = ' + quote(locale) + ', deterministic = false'
     + (row.Rules ? ', rules = ' + quote(row.Rules) : '') + ')';
   let creationAttempted = false, releasing;
   const scope = Object.freeze({ schema, name, release: primaryError => releasing ??= (async () => {
@@ -80,10 +81,11 @@ export async function resolvePostgresSearchCollation(database, culture, { signal
       FROM pg_catalog.pg_collation c WHERE c.collnamespace = pg_catalog.pg_my_temp_schema()
         AND c.collname = $1`, values: [name], signal })).rows[0];
     const expected = { Provider: 'i', Deterministic: false, Encoding: -1, Collate: null, Ctype: null,
-      Locale: row.Locale, Rules: row.Rules || null, Version: row.ActualVersion, Owner: row.Owner,
+      Locale: locale, Rules: row.Rules || null, Version: row.ActualVersion, Owner: row.Owner,
       ActualVersion: row.ActualVersion };
     if (!actual || Object.entries(expected).some(([key, value]) => actual[key] !== value)) {
-      throw new Error('PostgreSQL temporary search collation differs from its controlled definition.');
+      throw Object.assign(new Error('PostgreSQL temporary search collation differs from its controlled definition.'),
+        { collationDefinition: { actual, expected } });
     }
     return scope;
   } catch (error) {

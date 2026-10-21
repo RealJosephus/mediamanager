@@ -4,6 +4,8 @@ import { nativeItemDescriptor, nativeItemJsonDateState, nativeItemTypes, newNati
 import { nativeGuid } from '../users/native.js';
 import { tokenizeJson } from '../core/json-tokens.js';
 import { quoteNativeJsonString as quoteNativeString } from '../core/json.js';
+import { clrTrim } from '../metadata/whitespace.js';
+import { ordinalIgnoreCaseKey } from '../storage/ordinal-comparer.js';
 
 // This contract follows JsonDefaults' actual type metadata. Repository-only
 // fields and ignored runtime properties never enter a serialized entity.
@@ -117,9 +119,10 @@ function parseTypedJson(text) {
     if (node.properties) {
       const value = {}, entries = [];
       occurrences.set(value, entries);
-      for (const [name, childNode] of node.properties) {
+      for (const [name, childNode, nameSpan] of node.properties) {
         const child = materialize(childNode);
-        entries.push({ name, value: child, source: text.slice(childNode.start, childNode.end) });
+        entries.push({ name, value: child, source: text.slice(childNode.start, childNode.end),
+          nameSource: text.slice(nameSpan.start, nameSpan.end - 1) });
         // Define rather than assign so a JSON "__proto__" key remains data.
         Object.defineProperty(value, name, { value: child, enumerable: true, configurable: true, writable: true });
       }
@@ -142,6 +145,63 @@ function parseTypedJson(text) {
 
 const propertyOccurrences = (value, occurrences) => occurrences.get(value)
   ?? Object.entries(value).map(([name, entry]) => ({ name, value: entry, source: undefined }));
+
+/** JsonDefaults array import. Query callers must use the persisted SQL frame. */
+export function decodeNativeJsonArray(text, fields, create) {
+  // A byte-preserving syntax view lets JsonDefaults skip unknown strings even
+  // when their UTF-8 is invalid. Decode only names and consumed field values.
+  const byteSource = text instanceof Uint8Array;
+  const utf8 = new TextDecoder('utf-8', { fatal: true, ignoreBOM: true });
+  const decode = source => {
+    if (!byteSource) return source;
+    try { return utf8.decode(Buffer.from(source, 'latin1')); }
+    catch (error) { throw new NativeItemJsonError('syntax', '$', 'Invalid native JSON UTF-8.', error); }
+  };
+  if (byteSource) text = Buffer.from(text).toString('latin1');
+  let parsed;
+  try { parsed = parseTypedJson(text); }
+  catch (error) {
+    if (!(error instanceof SyntaxError)) throw error;
+    throw new NativeItemJsonError('syntax', '$', 'Invalid native JSON array.', error);
+  }
+  if (parsed.value === null) return null;
+  if (!Array.isArray(parsed.value)) invalid('root-type', '$', 'A native document requires a JSON array.');
+  const byName = new Map(fields.map(property => [property.name, property]));
+  return parsed.value.map((value, index) => {
+    if (value === null) return null;
+    if (!isObject(value)) invalid('property-type', `$[${index}]`, 'A native array entry requires a JSON object.');
+    const result = create();
+    for (const occurrence of propertyOccurrences(value, parsed.occurrences)) {
+      let name;
+      try { name = byteSource ? JSON.parse(decode(occurrence.nameSource)) : occurrence.name; }
+      catch (error) {
+        // An invalid UTF-8 name cannot match a known property. JsonDefaults
+        // skips it with its value instead of invalidating the other entries.
+        if (byteSource && error instanceof NativeItemJsonError) continue;
+        throw error;
+      }
+      if (!name.isWellFormed()) invalid('syntax', `$[${index}]`, 'Invalid native JSON property name.');
+      const property = byName.get(name);
+      if (!property || property.readOnly) continue;
+      const fieldSource = decode(occurrence.source);
+      const fieldValue = byteSource ? parseTypedJson(fieldSource) : { value: occurrence.value, occurrences: parsed.occurrences };
+      const converted = readValue(fieldValue.value, property, `$[${index}].${property.name}`, fieldValue.occurrences, fieldSource);
+      const validateStrings = entry => {
+        if (typeof entry === 'string' && !entry.isWellFormed()) invalid('syntax', `$[${index}].${property.name}`, 'Invalid native JSON string.');
+        if (Array.isArray(entry)) for (const child of entry) validateStrings(child);
+        else if (isObject(entry)) for (const [key, child] of Object.entries(entry)) {
+          validateStrings(key); validateStrings(child);
+        }
+      };
+      validateStrings(converted);
+      Object.defineProperty(result, property.name, {
+        value: converted,
+        enumerable: true, configurable: true, writable: true,
+      });
+    }
+    return result;
+  });
+}
 
 function nativeDateParts(value, path) {
   const match = /^(\d{4})-(\d\d)-(\d\d)T(\d\d):(\d\d):(\d\d)(?:\.(\d{1,16}))?(?:(Z)|([+-])(\d\d):(\d\d))?$/u.exec(value);
@@ -204,12 +264,21 @@ function readValue(value, spec, path, occurrences, source, onDateState) {
   }
   // NullableStructConverter consumes an empty string, but nullable GUIDs have
   // their own converter whose Guid.Parse failure is not a JsonException.
-  if (spec.nullable && value === '' && kind !== 'string' && kind !== 'guid' && !kind.endsWith('[]')) return null;
+  if (spec.nullable && value === '' && !['string', 'guid', 'string-map'].includes(kind) && !kind.endsWith('[]')) return null;
   if (kind.endsWith('[]')) {
     if (!Array.isArray(value)) invalid('property-type', path, `Expected an array for ${path}.`);
     const entries = occurrences.get(value);
     return value.map((entry, index) => readValue(entry, arrayElement(kind.slice(0, -2)), `${path}[${index}]`, occurrences,
       entries?.[index]?.source));
+  }
+  if (kind === 'string-map') {
+    if (!isObject(value)) invalid('property-type', path, `Expected a string dictionary for ${path}.`);
+    const result = {};
+    for (const entry of propertyOccurrences(value, occurrences)) Object.defineProperty(result, entry.name, {
+      value: readValue(entry.value, { kind: 'string', nullable: true }, `${path}.${entry.name}`, occurrences, entry.source),
+      enumerable: true, configurable: true, writable: true,
+    });
+    return result;
   }
   if (kind === 'string') {
     if (typeof value === 'string') return value;
@@ -220,14 +289,16 @@ function readValue(value, spec, path, occurrences, source, onDateState) {
     if (typeof value !== 'boolean') invalid('property-type', path, `Expected a Boolean for ${path}.`);
     return value;
   }
-  if (['int', 'long', 'double'].includes(kind)) {
+  if (['int', 'long', 'double', 'single'].includes(kind)) {
     const text = typeof value === 'string' ? value : source ?? String(value);
+    if (kind === 'single' && typeof value === 'string' && ['NaN', 'Infinity', '-Infinity'].includes(value)) return Number(value);
     const numberPattern = typeof value === 'string'
-      ? /^[+-]?(?:0|[1-9]\d*)(?:\.\d+)?(?:[eE][+-]?\d+)?$/u
+      ? /^[+-]?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?$/u
       : /^-?(?:0|[1-9]\d*)(?:\.\d+)?(?:[eE][+-]?\d+)?$/u;
     if (!['string', 'number', 'bigint'].includes(typeof value) || !numberPattern.test(text)) {
       invalid('property-type', path, `Expected a JSON number for ${path}.`);
     }
+    if (kind === 'single') return Math.fround(Number(text));
     if (kind === 'double') {
       const number = Number(text);
       if (!Number.isFinite(number)) invalid('property-type', path, `Out-of-range Double at ${path}.`);
@@ -253,19 +324,19 @@ function readValue(value, spec, path, occurrences, source, onDateState) {
     onDateState?.(result.state);
     return result.value;
   }
-  if (enumValues[kind]) {
-    const values = enumValues[kind];
+  if (spec.enumValues ?? enumValues[kind]) {
+    const values = spec.enumValues ?? enumValues[kind];
     if (typeof value === 'number' && Number.isInteger(value) && value >= -2147483648 && value <= 2147483647
       && (source == null || /^-?(?:0|[1-9]\d*)$/u.test(source))) return values[value] ?? value;
     if (typeof value !== 'string') invalid('property-type', path, `Expected an enum string or integer for ${path}.`);
-    const name = value.trim();
-    const matching = values.find(entry => entry != null && entry.toLowerCase() === name.toLowerCase());
+    const name = clrTrim(value);
+    const matching = values.find(entry => entry != null && ordinalIgnoreCaseKey(entry) === ordinalIgnoreCaseKey(name));
     if (matching != null) return matching;
     if (name.includes(',')) {
       let combined = 0;
       for (const part of name.split(',')) {
-        const component = part.trim();
-        const entry = values.findIndex(candidate => candidate != null && candidate.toLowerCase() === component.toLowerCase());
+        const component = clrTrim(part);
+        const entry = values.findIndex(candidate => candidate != null && ordinalIgnoreCaseKey(candidate) === ordinalIgnoreCaseKey(component));
         if (entry >= 0) combined |= entry;
         else if (/^[+-]?\d+$/u.test(component) && Number(component) >= -2147483648 && Number(component) <= 2147483647) {
           combined |= Number(component);

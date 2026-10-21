@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
 import { once } from 'node:events';
-import { randomUUID } from 'node:crypto';
+import { createHash, randomUUID } from 'node:crypto';
 import { createServer } from 'node:net';
-import { mkdtemp, readdir, rm, stat } from 'node:fs/promises';
+import { mkdtemp, readFile, readdir, rm, stat } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import pg from 'pg';
@@ -541,7 +541,7 @@ async function targetSnapshot(database) {
   };
 }
 
-async function metadataSnapshot(root) {
+async function metadataSnapshot(root, hashFiles = false) {
   const entries = [];
   async function visit(directory) {
     let children;
@@ -550,6 +550,7 @@ async function metadataSnapshot(root) {
     for (const child of children) {
       const target = path.join(directory, child.name);
       entries.push({ path: path.relative(root, target).replaceAll('\\', '/'), type: child.isDirectory() ? 'directory' : 'file' });
+      if (hashFiles && child.isFile()) entries.at(-1).sha256 = createHash('sha256').update(await readFile(target)).digest('hex');
       if (child.isDirectory()) await visit(target);
     }
   }
@@ -557,15 +558,17 @@ async function metadataSnapshot(root) {
   return entries.sort((left, right) => left.path.localeCompare(right.path, 'en'));
 }
 
-async function instanceFilesystemSnapshot(root) {
-  const paths = { userViews: 'root/default', metadata: 'metadata', libraries: 'library-content', collections: 'data/collections' };
+async function instanceFilesystemSnapshot(root, extra = {}) {
+  const paths = { userViews: 'root/default', metadata: 'metadata', libraries: 'library-content', collections: 'data/collections', ...extra };
   return Object.fromEntries(await Promise.all(Object.entries(paths).map(async ([name, relative]) => {
     const directory = path.join(root, relative);
+    const resolved = path.relative(path.resolve(root), path.resolve(directory));
+    if (resolved === '..' || resolved.startsWith('..' + path.sep) || path.isAbsolute(resolved)) throw new Error('Snapshot escaped its private instance.');
     const exists = await stat(directory).then(() => true, error => {
       if (error.code === 'ENOENT') return false;
       throw error;
     });
-    return [name, { exists, entries: await metadataSnapshot(directory) }];
+    return [name, { exists, entries: await metadataSnapshot(directory, Object.hasOwn(extra, name)) }];
   })));
 }
 
@@ -716,10 +719,13 @@ export async function recordItemFilterCandidate({ dialect, fixture, connectionSt
   captureStartIndex = false, captureTags = false, captureOfficialRatings = false, captureSortNames = false,
   captureErrorText = false, captureResponseBodies = false, captureCaseRuntimeErrors = false, trackUserData = false,
   trackFilesystem = false, trackSideEffectCase = null,
-  prepareScenario = null, prepareCase = null, afterEndpoint = null, captureCaseStages = false, captureEndpointStages = false,
+  prepareInstance = null, prepareScenario = null, prepareCase = null, afterEndpoint = null, captureCaseStages = false, captureEndpointStages = false,
   captureShutdownState = false, captureFilesystemDomains = false,
+  extraFilesystemDomains = {}, captureStateKeys = [],
   requestTimeoutMs = 15000 }) {
   if (!['postgres'].includes(dialect)) throw new Error(`Unknown database dialect: ${dialect}.`);
+  if (!Array.isArray(captureStateKeys) || captureStateKeys.some(key => typeof key !== 'string' || !key)) throw new TypeError('State snapshot keys must be nonempty strings.');
+  const snapshotState = async db => Object.fromEntries(await Promise.all(captureStateKeys.map(async key => [key, await db.getState(key)])));
   if (typeof fields !== 'string') throw new TypeError('fields must be a string.');
   if (typeof captureOrder !== 'boolean') throw new TypeError('captureOrder must be a boolean.');
   if (typeof captureItems !== 'boolean') throw new TypeError('captureItems must be a boolean.');
@@ -734,6 +740,7 @@ export async function recordItemFilterCandidate({ dialect, fixture, connectionSt
     throw new TypeError('Response and user-data capture flags must be boolean.');
   }
   if (prepareScenario !== null && typeof prepareScenario !== 'function') throw new TypeError('prepareScenario must be a function.');
+  if (prepareInstance !== null && typeof prepareInstance !== 'function') throw new TypeError('prepareInstance must be a function.');
   if (prepareCase !== null && typeof prepareCase !== 'function') throw new TypeError('prepareCase must be a function.');
   if (afterEndpoint !== null && typeof afterEndpoint !== 'function') throw new TypeError('afterEndpoint must be a function.');
   if (typeof captureEndpointStages !== 'boolean' || (captureEndpointStages && !trackFilesystem)) {
@@ -770,6 +777,7 @@ export async function recordItemFilterCandidate({ dialect, fixture, connectionSt
   database.close = async () => { await closeDatabase(); databaseClosed = true; };
   try {
     programDataDirectory = await mkdtemp(path.join(tmpdir(), 'mm-item-filter-'));
+    if (prepareInstance) await prepareInstance({ programDataPath: programDataDirectory, database });
     runtime = await createRuntime({
       database,
       configuration: { IsStartupWizardCompleted: true, UICulture: 'en-US', ...configuration },
@@ -786,6 +794,7 @@ export async function recordItemFilterCandidate({ dialect, fixture, connectionSt
         if (result) await runtime.store.run(async connection => {
           result.afterShutdown = await targetSnapshot(connection);
           if (trackUserData) result.userDataAfterShutdown = stableRows(await connection.rows('UserData'));
+          if (captureStateKeys.length) result.stateAfterShutdown = await snapshotState(connection);
         });
         return closeStore();
       };
@@ -854,10 +863,11 @@ export async function recordItemFilterCandidate({ dialect, fixture, connectionSt
       warmUserViews = { route, response, refreshQueueDrained: true };
     }
     const beforeReads = await targetSnapshot(database);
+    const stateBeforeReads = captureStateKeys.length ? await snapshotState(database) : null;
     const userDataBeforeReads = trackUserData ? stableRows(await database.rows('UserData')) : null;
     const filesystemBeforeReads = trackFilesystem
       ? await metadataSnapshot(path.join(programDataDirectory, 'metadata')) : null;
-    const filesystemDomainsBeforeReads = captureFilesystemDomains ? await instanceFilesystemSnapshot(programDataDirectory) : null;
+    const filesystemDomainsBeforeReads = captureFilesystemDomains ? await instanceFilesystemSnapshot(programDataDirectory, extraFilesystemDomains) : null;
     const keyById = new Map(fixture.items.map(item => [idKey(item.id), item.key]));
     const cases = [];
     const caseStages = [];
@@ -896,7 +906,7 @@ export async function recordItemFilterCandidate({ dialect, fixture, connectionSt
         const before = captureEndpointStages ? { database: await targetSnapshot(database),
           filesystem: await metadataSnapshot(path.join(programDataDirectory, 'metadata')),
           ...(trackUserData ? { userData: stableRows(await database.rows('UserData')) } : {}),
-          ...(captureFilesystemDomains ? { filesystemDomains: await instanceFilesystemSnapshot(programDataDirectory) } : {}) } : null;
+          ...(captureFilesystemDomains ? { filesystemDomains: await instanceFilesystemSnapshot(programDataDirectory, extraFilesystemDomains) } : {}) } : null;
         const token = testCase.auth === 'apiKey' ? apiKey : userToken;
         const runtimeErrorStart = runtimeErrors.length;
         const routes = testCase.parallelQueries
@@ -949,7 +959,7 @@ export async function recordItemFilterCandidate({ dialect, fixture, connectionSt
           after: { database: await targetSnapshot(database),
             filesystem: await metadataSnapshot(path.join(programDataDirectory, 'metadata')),
             ...(trackUserData ? { userData: stableRows(await database.rows('UserData')) } : {}),
-            ...(captureFilesystemDomains ? { filesystemDomains: await instanceFilesystemSnapshot(programDataDirectory) } : {}) } });
+            ...(captureFilesystemDomains ? { filesystemDomains: await instanceFilesystemSnapshot(programDataDirectory, extraFilesystemDomains) } : {}) } });
       }
       cases.push({ name: testCase.name, query: testCase.query, scope: testCase.scope,
         ...(policyReadback ? { policyReadback } : {}),
@@ -974,13 +984,15 @@ export async function recordItemFilterCandidate({ dialect, fixture, connectionSt
         filesystem: await metadataSnapshot(path.join(programDataDirectory, 'metadata')) });
     }
     const afterReads = await targetSnapshot(database);
+    const stateAfterReads = captureStateKeys.length ? await snapshotState(database) : null;
     const userDataAfterReads = trackUserData ? stableRows(await database.rows('UserData')) : null;
     const filesystemAfterReads = trackFilesystem
       ? await metadataSnapshot(path.join(programDataDirectory, 'metadata')) : null;
-    const filesystemDomainsAfterReads = captureFilesystemDomains ? await instanceFilesystemSnapshot(programDataDirectory) : null;
+    const filesystemDomainsAfterReads = captureFilesystemDomains ? await instanceFilesystemSnapshot(programDataDirectory, extraFilesystemDomains) : null;
     if (sideEffect && !sideEffect.afterFirst) throw new Error(`Side-effect case not run: ${trackSideEffectCase}.`);
     result = { dialect, schema: dialect === 'postgres' ? schema : null, programDataDirectory, userId: user.Id, cases, httpCases,
       beforeReads, afterReads, filesystemBeforeReads, filesystemAfterReads,
+      ...(captureStateKeys.length ? { stateBeforeReads, stateAfterReads } : {}),
       ...(warmUserViews ? { warmUserViews } : {}),
       ...(trackUserData ? { userDataBeforeReads, userDataAfterReads } : {}),
       ...(captureFilesystemDomains ? { filesystemDomainsBeforeReads, filesystemDomainsAfterReads } : {}),
@@ -1005,7 +1017,7 @@ export async function recordItemFilterCandidate({ dialect, fixture, connectionSt
     if (programDataDirectory) {
       try {
         result && (result.filesystemAfterShutdown = await metadataSnapshot(path.join(programDataDirectory, 'metadata')));
-        if (result && captureFilesystemDomains) result.filesystemDomainsAfterShutdown = await instanceFilesystemSnapshot(programDataDirectory);
+        if (result && captureFilesystemDomains) result.filesystemDomainsAfterShutdown = await instanceFilesystemSnapshot(programDataDirectory, extraFilesystemDomains);
         const parent = path.resolve(tmpdir());
         const target = path.resolve(programDataDirectory);
         if (!target.startsWith(parent + path.sep) || !path.basename(target).startsWith('mm-item-filter-')) {
