@@ -22,6 +22,7 @@ export async function recordOracle({ project, output, args = [], environment = p
   await mkdir(isolatedProject);
   for (const source of sourceFiles) await copyFile(source, path.join(isolatedProject, path.basename(source)));
   const buildArgs = ['build', path.join(isolatedProject, path.basename(project)), '-c', 'Release', '--nologo', '-v', 'minimal',
+    '-p:UseSharedCompilation=false',
     `-p:BaseOutputPath=${path.join(output, 'bin')}${path.sep}`,
     `-p:BaseIntermediateOutputPath=${path.join(output, 'obj')}${path.sep}`];
   const build = spawnSync(dotnet, buildArgs, { cwd: repositoryRoot, env: environment, windowsHide: true,

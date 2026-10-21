@@ -110,16 +110,24 @@ test('version resume ordering preserves queried streams and excludes inaccessibl
   } finally { await library?.close(); }
 });
 
-test('channel media sources remain explicitly unsupported',
+test('retained channel content without a saved cache preserves the static shortcut source',
   { skip: !process.env.MEDIAMANAGER_TEST_POSTGRES }, async t => {
-  const db = await createPostgresTestDatabase(t, 'media_version_unsupported');
+  const db = await createPostgresTestDatabase(t, 'media_version_channel');
+  const metadataPath = await mkdtemp(path.join(os.tmpdir(), 'media-version-channel-'));
+  t.after(async () => {
+    assert.equal(path.dirname(path.resolve(metadataPath)), path.resolve(os.tmpdir()));
+    assert.ok(path.basename(metadataPath).startsWith('media-version-channel-'));
+    await rm(metadataPath, { recursive: true, force: true });
+  });
   const entry = structuredClone(shortcutInput.cases[0]);
   entry.items[0].ChannelId = '97840000-0000-0000-0000-000000000099';
   await seed(db, entry);
   const state = await loadLibrary(db, {}, { baseRows: await db.rows('BaseItems') });
   try {
     const item = state.byId.get(idKey(entry.query));
-    await assert.rejects(mediaSources(item, state, null, {}), error => error.status === 501 && error.message === 'Channel media source projection is not implemented.');
+    const expected = shortcutNative.results.find(result => result.name === entry.name).sources;
+    assert.ok(expected.length > 0);
+    assert.deepEqual(JSON.parse(stringifyNativeJson(await mediaSources(item, state, null, { metadataPath, fileSystem: testFileSystem }))), expected);
   } finally { await state.dispose(); }
 });
 

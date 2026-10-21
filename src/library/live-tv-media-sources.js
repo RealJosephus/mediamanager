@@ -1,6 +1,7 @@
 import { md5Guid } from '../core/identity.js';
 import { idKey, libraryError } from './records.js';
 import { ordinalIgnoreCaseEquals } from '../storage/ordinal-comparer.js';
+import { projectLiveStream } from './media-streams.js';
 
 const prefix = md5Guid('Jellyfin.LiveTv.LiveTvMediaSourceProvider') + '_';
 const stream = (Type, IsInterlaced = false) => ({ Type, Index: -1, IsInterlaced, IsDefault: false,
@@ -14,6 +15,7 @@ export function inferLiveTvBitrate(source) {
 
 export function normalizeLiveTvMediaSource(source, isVideo) {
   source.IsInfiniteStream = true;
+  source.TranscodingSubProtocol ??= 'http';
   if (!source.MediaStreams.length) source.MediaStreams = isVideo ? [stream('Video', true), stream('Audio')] : [stream('Audio')];
   for (const stream of source.MediaStreams) for (const name of ['BitRate', 'Channels', 'AverageFrameRate', 'RealFrameRate', 'Width', 'Height', 'SampleRate', 'Level']) {
     if (stream[name] != null && stream[name] <= 0) stream[name] = null;
@@ -21,6 +23,7 @@ export function normalizeLiveTvMediaSource(source, isVideo) {
   if (new Set(source.MediaStreams.map(stream => stream.Index)).size !== source.MediaStreams.length) {
     for (const stream of source.MediaStreams) stream.Index = -1;
   }
+  source.MediaStreams = source.MediaStreams.map(projectLiveStream);
   inferLiveTvBitrate(source);
   return source;
 }

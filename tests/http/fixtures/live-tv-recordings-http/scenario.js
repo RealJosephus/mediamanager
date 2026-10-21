@@ -23,6 +23,7 @@ export async function stateFiles(root, graph) {
   const taskFiles = (await readdir(path.join(root, 'config/ScheduledTasks'))).filter(name => name.endsWith('.js')).sort();
   files.push(...taskFiles.map(name => 'config/ScheduledTasks/' + name));
   const entries = files.map(name => [name, path.join(root, name)]);
+  for (const [name, filename] of Object.entries(graph.savedMediaSourceCaches ?? {})) entries.push(['channel-cache/' + name, filename]);
   for (const name of ['main', 'movies']) entries.push(['library/' + name + '/options.xml', path.join(graph.folders[name].collectionPath, 'options.xml')]);
   return Object.fromEntries(await Promise.all(entries.map(async ([name, filename]) => {
     const bytes = await readFile(filename);
@@ -127,6 +128,22 @@ export async function seedRecordings(root, mediaRoot, input, userRootId, folderD
     });
     graph.created = created;
   } finally { source.close(); }
+  graph.savedMediaSourceCaches = {};
+  for (const key of ['live', 'completeChannel']) {
+    const itemId = idKey(graph.ids[key]), channelId = idKey(graph.ids.channel);
+    const directory = path.join(root, 'data/metadata/channels', channelId, itemId);
+    const filename = path.join(directory, 'channelmediasourceinfos.json');
+    const sources = key === 'live' ? [
+      { Id: 'saved-opaque', Protocol: 'Http', Path: 'http://saved.invalid/original.WeBm', Container: 'mkv,WEBM',
+        MediaStreams: [{ Type: 'Audio', Index: 2, Codec: 'aac', Channels: 2, Language: 'eng', IsDefault: true }] },
+      { Id: itemId, Protocol: 'Http', Path: 'http://saved.invalid/second.mkv', Container: 'mkv',
+        MediaStreams: [{ Type: 'Audio', Index: 6, Codec: 'ac3', Channels: 6, Language: 'zho' }] },
+    ] : [{ Id: itemId, Protocol: 'File', Path: graph.files[key], Container: 'mkv',
+      MediaStreams: [{ Type: 'Video', Index: 0, Codec: 'h264', Width: 1920, Height: 1080 },
+        { Type: 'Audio', Index: 1, Codec: 'aac', Channels: 2, Language: 'eng', IsDefault: true }] }];
+    await mkdir(directory, { recursive: true }); await writeFile(filename, JSON.stringify(sources) + '\n', { flag: 'wx' });
+    graph.savedMediaSourceCaches[key] = filename;
+  }
   return graph;
 }
 

@@ -1,7 +1,6 @@
-import test from 'node:test';
+import test, { before, after } from 'node:test';
 import assert from 'node:assert/strict';
-import { createHash, randomUUID } from 'node:crypto';
-import { execFileSync } from 'node:child_process';
+import { randomUUID } from 'node:crypto';
 import { EventEmitter } from 'node:events';
 import { mkdtemp, readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
@@ -12,13 +11,18 @@ import { createRuntime } from '../../src/runtime.js';
 import { idKey } from '../../src/library/records.js';
 import { similarCachePath } from '../../src/library/similar-items.js';
 import { registerDomainRoutes } from '../../src/http/routes.js';
-import { validationExecutable } from '../../tools/validation/paths.js';
+import { captureShows } from './fixtures/shows-current/capture.js';
 
-const oracleRoot = new URL('./fixtures/shows-api/', import.meta.url);
-const [oracleInput, native, provenance] = await Promise.all(['input.json', 'native.json', 'provenance.json']
-  .map(name => readFile(new URL(name, oracleRoot), 'utf8').then(JSON.parse)));
+export const requiredValidationServices = ['postgres', 'dotnet', 'jellyfinDll', 'nativeInstance'];
+const oracleInputBytes = await readFile(new URL('./fixtures/shows-current/input.json', import.meta.url));
+const oracleInput = JSON.parse(oracleInputBytes);
+let capture, native, upcomingNative;
 const nativeResult = name => native.results.find(result => result.name === name);
-const upcomingNative = nativeResult('upcoming builds the native episode query and counts the paged list');
+before(async () => {
+  capture = await captureShows(oracleInputBytes); native = capture.native;
+  upcomingNative = nativeResult('upcoming builds the native episode query and counts the paged list');
+}, { timeout: 600000 });
+after(async () => { await capture?.finish(); });
 
 const ids = Object.fromEntries(['aggregate', 'userRoot', 'physical', 'physicalOther', 'collection', 'collectionOther',
   'view', 'series', 'season0', 'season1', 'season2', 'old', 'special', 'one', 'two', 'missing', 'three', 'alternate',
@@ -468,24 +472,17 @@ test('Movie, Trailer and Live TV Similar run configured providers through Postgr
 });
 
 test('Shows API oracle binds designated sources, real DLL execution, inputs and independent repeat', async () => {
-  const verify=async entry=>{const bytes=await readFile(entry.filename??entry.path);assert.equal(bytes.length,entry.bytes);assert.equal(createHash('sha256').update(bytes).digest('hex'),entry.sha256);};
-  for(const entry of [provenance.input,provenance.native,provenance.fixture,provenance.record,provenance.repeat])await verify(entry);
-  assert.equal(provenance.jellyfin.repository,'D:/jellyfin');
-  for(const entry of provenance.jellyfin.sources) {
-    await verify({...entry,path:provenance.jellyfin.repository+'/'+entry.path});
-    await verify({...entry,path:'D:/mediamanager-validation/20261005/jellyfin-baseline/source/'+entry.path});
-  }
-  assert.equal(provenance.recordings.length,2);
-  assert.notEqual(provenance.recordings[0].process.args[0],provenance.recordings[1].process.args[0]);
-  for(const recording of provenance.recordings){
+  assert.equal(capture.sourceBindings.length, 48);
+  assert.equal(capture.receipts.length, 2);
+  assert.notEqual(capture.receipts[0].process.args[0], capture.receipts[1].process.args[0]);
+  for(const recording of capture.receipts){
     assert.equal(recording.passed,true);assert.equal(recording.build.status,0);assert.equal(recording.process.status,0);
-    for(const entry of [...recording.sourceFiles,recording.dotnet,recording.jellyfinDll,recording.oracleAssembly,...recording.outputs])await verify(entry);
   }
-  const second=JSON.parse(await readFile(provenance.repeat.filename));
+  const second = capture.repeat;
   for(const result of [native,second]) {
-    assert.equal(result.inputSha256,provenance.input.sha256);
+    assert.equal(result.inputSha256,capture.inputSha256);
     assert.match(result.runtimeAssemblyScope,/not a complete build-input dependency closure/);
-    for(const entry of result.runtimeAssemblies)await verify(entry);
+    assert.equal(result.candidateVerified, false);
   }
   const projection=value=>{
     const result=structuredClone(value);
@@ -498,7 +495,7 @@ test('Shows API oracle binds designated sources, real DLL execution, inputs and 
   };
   assert.deepEqual(projection(native),projection(second));
   assert.equal(native.results.length,oracleInput.length);
-  assert.equal(native.boundary,provenance.boundary);
+  assert.match(native.boundary, /^Actual designated TvShowsController/u);
   assert.deepEqual(upcomingNative.queries[0].includeItemTypes, ['Episode']);
   assert.deepEqual(upcomingNative.queries[0].orderBy, [
     { OrderBy: 'PremiereDate', SortOrder: 'Ascending' }, { OrderBy: 'SortName', SortOrder: 'Ascending' },
@@ -854,6 +851,21 @@ test('PostgreSQL: Shows Upcoming, NextUp, Episodes, Seasons and Similar preserve
   skip: !process.env.MEDIAMANAGER_TEST_POSTGRES,
 }, async t => {
   const fixture = await setup(t);
+  const ordinaryChannelInfo = async route => {
+    const plainResponse = await fixture.request(route); assert.equal(plainResponse.status, 200);
+    const expected = await plainResponse.json();
+    const selectedResponse = await fixture.request(route + (route.includes('?') ? '&' : '?') + 'Fields=ChannelInfo');
+    assert.equal(selectedResponse.status, 200); const selected = await selectedResponse.json();
+    // The native controller capture still binds the field and selector. Its
+    // controlled DtoProxy does not represent concrete DtoService internals.
+    // For these ordinary episodes/series/artists ChannelInfo adds no fields:
+    // the concrete native DTO branch is specific to LiveTvProgram.
+    assert.deepEqual(selected, expected, route + ': selecting ChannelInfo must preserve the full ordinary-item response.');
+    for (const item of selected.Items) for (const field of ['ChannelName', 'ChannelNumber', 'ChannelPrimaryImageTag']) {
+      assert.equal(Object.hasOwn(item, field), false, route + ': ordinary item ' + item.Id + ' must omit ' + field);
+    }
+    return selected;
+  };
   assert.equal((await fixture.request('/Shows/Upcoming', null)).status, 401);
   assert.equal((await fixture.request('/Shows/NextUp', null)).status, 401);
   assert.equal((await fixture.request(`/Shows/${ids.series}/Episodes`, null)).status, 401);
@@ -883,9 +895,8 @@ test('PostgreSQL: Shows Upcoming, NextUp, Episodes, Seasons and Similar preserve
   assert.deepEqual(body.Items.map(entry => entry.Id), [ids.two, ids.missing, ids.three].map(idKey));
   assert.ok(body.Items.every(entry => entry.SortName && entry.ParentId && !Object.hasOwn(entry, 'UserData')));
 
-  response = await fixture.request('/Shows/Upcoming?Fields=ChannelInfo');
-  assert.equal(response.status, 501); await response.text();
-  assert.deepEqual(fixture.errors.map(error => error.status), [403, 403, 403, 403, 403, 403, 501]);
+  body = await ordinaryChannelInfo('/Shows/Upcoming'); assert.ok(body.Items.length > 0);
+  assert.deepEqual(fixture.errors.map(error => error.status), [403, 403, 403, 403, 403, 403]);
   fixture.errors.length = 0;
   response = await fixture.request('/Shows/Upcoming?Fields=SortName,not-a-native-field&EnableImages=false');
   assert.equal(response.status, 200); body = await response.json();
@@ -965,7 +976,8 @@ test('PostgreSQL: Shows Upcoming, NextUp, Episodes, Seasons and Similar preserve
   } finally {
     await fixture.database.delete('BaseItems', { Id: ids.liveTvProgram });
   }
-  assert.equal((await fixture.request(`/Shows/${ids.musicArtist}/Similar?Limit=0&Fields=ChannelInfo`)).status, 501);
+  response = await fixture.request(`/Shows/${ids.musicArtist}/Similar?Limit=0&Fields=ChannelInfo`);
+  assert.equal(response.status, 200); assert.deepEqual(await response.json(), { Items: [], TotalRecordCount: 0, StartIndex: 0 });
 
   response = await fixture.request(`/Shows/${ids.series}/Similar?EnableImages=false`, fixture.apiKey);
   assert.equal(response.status, 200); body = await response.json();
@@ -989,8 +1001,8 @@ test('PostgreSQL: Shows Upcoming, NextUp, Episodes, Seasons and Similar preserve
     assert.equal(response.status, 200); body = await response.json();
     assert.deepEqual(body, { Items: [], TotalRecordCount: 0, StartIndex: 0 });
   }
-  assert.equal((await fixture.request(`/Artists/${ids.musicArtist}/Similar?Fields=ChannelInfo`)).status, 501);
-  assert.equal((await fixture.request(`/Shows/${ids.series}/Similar?Fields=ChannelInfo`)).status, 501);
+  body = await ordinaryChannelInfo(`/Artists/${ids.musicArtist}/Similar`); assert.ok(body.Items.length > 0);
+  body = await ordinaryChannelInfo(`/Shows/${ids.series}/Similar`); assert.deepEqual(itemIds(body), expectedSimilarUser);
   assert.equal((await fixture.request(`/Shows/${ids.series}/Similar?UserId=${fixture.otherUserId}&Fields=ChannelInfo`)).status, 403);
   assert.equal((await fixture.request(`/Shows/${ids.series}/Similar?UserId=${fixture.otherUserId}&Fields=ChannelInfo&Limit=x`)).status, 400);
   assert.equal((await fixture.request('/Shows/not-a-guid/Similar')).status, 400);
@@ -1245,9 +1257,8 @@ test('PostgreSQL: Shows Upcoming, NextUp, Episodes, Seasons and Similar preserve
   body = await response.json(); assert.deepEqual(body.Items.map(entry => entry.Id), [idKey(ids.two)]);
   response = await fixture.request('/Shows/NextUp?NextUpDateCutoff=2027-01-01&StartIndex=-2&EnableImages=false');
   body = await response.json(); assert.deepEqual(body.Items, []); assert.equal(body.TotalRecordCount, 0); assert.equal(body.StartIndex, -2);
-  response = await fixture.request('/Shows/NextUp?Fields=ChannelInfo');
-  assert.equal(response.status, 501); await response.text();
-  assert.deepEqual(fixture.errors.map(error => error.status), [501]); fixture.errors.length = 0;
+  await ordinaryChannelInfo('/Shows/NextUp');
+  assert.deepEqual(fixture.errors, []);
 
   response = await fixture.request(`/Shows/${ids.series}/Seasons?Fields=SortName,ParentId&EnableImages=false&EnableUserData=false`);
   assert.equal(response.status, 200); body = await response.json();

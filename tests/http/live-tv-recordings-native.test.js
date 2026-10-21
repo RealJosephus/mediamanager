@@ -91,8 +91,10 @@ test('existing recordings list, folders, detail and retained-file deletion match
       'isInProgress=false', 'startIndex=1&limit=2', 'startIndex=-2&limit=2', 'limit=0', 'limit=-1',
       'startIndex=999', 'enableTotalRecordCount=false&limit=2', 'enableTotalRecordCount=false&limit=0',
       'fields=CanDelete,CanDownload,DisplayPreferencesId,Etag,Overview,Path,Tags,Genres,MediaStreams',
+      'isInProgress=true&fields=MediaSources,MediaSourceCount,MediaStreams', 'isInProgress=false&fields=MediaSources,MediaSourceCount,MediaStreams',
       'enableImages=false&enableUserData=false', 'imageTypeLimit=0&enableImageTypes=Primary,Thumb,unknown',
-      'fields=Path,unknown&fields=Overview', 'isMovie=invalid', 'limit=invalid', 'userId=invalid', 'enableTotalRecordCount=invalid']) {
+      'fields=Path,unknown&fields=Overview', 'isMovie=invalid', 'limit=invalid', 'userId=invalid', 'enableTotalRecordCount=invalid',
+      'userId=invalid&startIndex=invalid&limit=2147483648&enableUserData=no&enableTotalRecordCount=invalid&isMovie=invalid']) {
       add('list ' + query, '/LiveTv/Recordings?' + query);
     }
     for (const route of ['/LiveTv/Recordings', '/LiveTv/Recordings/Folders', '/LiveTv/Recordings/' + idKey(graph.ids.restricted)]) {
@@ -104,11 +106,14 @@ test('existing recordings list, folders, detail and retained-file deletion match
     for (const [key, id] of Object.entries(graph.ids)) {
       add('detail arbitrary persisted type ' + key, '/LiveTv/Recordings/' + idKey(id), ['allowed', 'restricted', 'apiKey']);
     }
+    for (const key of ['live', 'completeChannel']) add('detail saved sources ' + key,
+      '/LiveTv/Recordings/' + idKey(graph.ids[key]) + '?fields=MediaSources,MediaStreams,MediaSourceCount,EnableMediaSourceDisplay,Path&enableImages=false', ['allowed', 'apiKey']);
     add('detail Guid D format', '/LiveTv/Recordings/' + guid(graph.ids.movie), ['allowed']);
     add('detail empty identity is user root', '/LiveTv/Recordings/' + '0'.repeat(32));
     add('detail missing', '/LiveTv/Recordings/' + 'f'.repeat(32));
     add('detail invalid', '/LiveTv/Recordings/not-a-guid');
     add('obsolete series binds unused bool', '/LiveTv/Recordings/Series?isInProgress=invalid&userId=invalid');
+    add('obsolete series aggregates all bound failures', '/LiveTv/Recordings/Series?userId=invalid&startIndex=invalid&limit=2147483648&isInProgress=no&enableImages=no&imageTypeLimit=invalid&enableUserData=no&enableTotalRecordCount=invalid');
     add('obsolete series ignores unbound flags and requested user', '/LiveTv/Recordings/Series?isMovie=invalid&userId=' + idKey(users.restricted.Id), ['allowed']);
     add('obsolete groups binds user', '/LiveTv/Recordings/Groups?userId=invalid');
     add('obsolete groups does not select requested user', '/LiveTv/Recordings/Groups?userId=' + idKey(users.restricted.Id), ['allowed']);
@@ -303,6 +308,22 @@ test('existing recordings list, folders, detail and retained-file deletion match
     }
     report.nativeBeforeReads = await captureNative();
     report.nativeReads = await observe('native', origin, readCases());
+    for (const key of ['live', 'completeChannel']) for (const mode of ['allowed', 'apiKey']) {
+      const response = report.nativeReads.find(sample => sample.name === 'detail saved sources ' + key && sample.mode === mode).response;
+      assert.equal(response.status, 200); const dto = response.bodyJson;
+      assert.equal(dto.ChannelName, 'External source'); assert.equal(Object.hasOwn(dto, 'MediaSourceCount'), false);
+      assert.deepEqual(dto.MediaSources.map(source => source.Id), key === 'live' ? ['saved-opaque', idKey(graph.ids[key])] : [idKey(graph.ids[key])]);
+      assert.deepEqual(dto.MediaStreams.map(stream => stream.Index), key === 'live' ? [2] : [0, 1]);
+      assert.equal(dto.MediaSources[0].Path, key === 'live' ? 'http://saved.invalid/original.WeBm' : graph.files[key]);
+      const list = report.nativeReads.find(sample => sample.name === 'list isInProgress=' + (key === 'live') + '&fields=MediaSources,MediaSourceCount,MediaStreams'
+        && sample.mode === mode).response;
+      assert.equal(list.status, 200);
+      if (mode === 'apiKey') assert.deepEqual(list.bodyJson.Items, []);
+      else {
+        const listed = list.bodyJson.Items.find(item => item.Id === idKey(graph.ids[key])); assert.ok(listed);
+        assert.equal(Object.hasOwn(listed, 'MediaSourceCount'), false, 'Native omits a single-version count even when explicitly selected.');
+      }
+    }
     report.nativeAfterReads = await captureNative(); assert.deepEqual(report.nativeAfterReads, report.nativeBeforeReads);
     await stopNative('native-reads'); report.nativeAfterReadShutdown = await captureNative();
     assert.deepEqual(report.nativeAfterReadShutdown, report.nativeAfterReads);

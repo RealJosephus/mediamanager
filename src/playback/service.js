@@ -165,8 +165,9 @@ export class PlaybackService {
     return service.closeLiveStream(id);
   }
   liveStreamFile(id, container) {
-    const service = this.getLiveStreams?.(); if (!service) throw httpError(404, 'Live stream not found.');
-    return service.streamFile(id, getMimeType('file.' + container));
+    const service = this.getLiveStreams?.(); if (!service) return notFound();
+    try { return service.streamFile(id, getMimeType('file.' + container)); }
+    catch (error) { if (error.status === 404) return notFound(); throw error; }
   }
 
   async file(itemId, { user, mediaSourceId, filename = false, playback = false } = {}) {

@@ -101,9 +101,12 @@ export function compareMediaSourceWidth(a, b) {
 }
 
 export function sortMediaSources(sources, preferredId, playback = false) {
-  return sortNative(sources, (a, b) => Number(sameId(b.Id, preferredId)) - Number(sameId(a.Id, preferredId))
+  // LINQ evaluates every playback width key before ordering/filtering, even
+  // for a single source or a Placeholder later excluded from the result.
+  const widths = playback ? new Map(sources.map(source => [source, width(source)])) : null;
+  return sortNative(sources, (a, b) => Number(preferredId != null && ordinalIgnoreCaseEquals(b.Id ?? '', preferredId)) - Number(preferredId != null && ordinalIgnoreCaseEquals(a.Id ?? '', preferredId))
     || Number(a.VideoType !== 'VideoFile') - Number(b.VideoType !== 'VideoFile')
     || Number(a.Video3DFormat != null) - Number(b.Video3DFormat != null)
-    || (playback ? width(b) - width(a) : -Math.sign(compareMediaSourceWidth(a, b))))
+    || (playback ? widths.get(b) - widths.get(a) : -Math.sign(compareMediaSourceWidth(a, b))))
     .filter(source => !playback || source.Type !== 'Placeholder');
 }

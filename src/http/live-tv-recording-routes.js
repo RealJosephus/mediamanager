@@ -24,21 +24,27 @@ function commaEnums(query, name, names) {
 
 function bindQuery(context, { series = false } = {}) {
   const query = name => queryValue(context.query, name);
+  const errors = {};
+  const bind = (reader, name, defaultValue) => {
+    try { return reader(query(name), name, defaultValue); }
+    catch (error) { if (!(error instanceof BindingError)) throw error; Object.assign(errors, error.errors); }
+  };
   let status;
   try { if (query('status')) status = enumName(query('status'), statuses); }
   catch { /* Nullable enum binding discards an unrecognized value. */ }
   const fields = commaEnums(context.query, 'fields', itemFields).filter(value => typeof value === 'string');
   const imageTypes = commaEnums(context.query, 'enableImageTypes', itemImageTypes).map(String);
-  const result = { channelid: query('channelId'), userid: guidValue(query('userId'), 'userId'),
-    startindex: integerValue(query('startIndex'), 'startIndex'), limit: integerValue(query('limit'), 'limit'), status,
-    isinprogress: booleanValue(query('isInProgress'), 'isInProgress'), seriestimerid: query('seriesTimerId'),
-    enableimages: booleanValue(query('enableImages'), 'enableImages'), imagetypelimit: integerValue(query('imageTypeLimit'), 'imageTypeLimit'),
+  const result = { channelid: query('channelId'), userid: bind(guidValue, 'userId'),
+    startindex: bind(integerValue, 'startIndex'), limit: bind(integerValue, 'limit'), status,
+    isinprogress: bind(booleanValue, 'isInProgress'), seriestimerid: query('seriesTimerId'),
+    enableimages: bind(booleanValue, 'enableImages'), imagetypelimit: bind(integerValue, 'imageTypeLimit'),
     enableimagetypes: imageTypes.length ? imageTypes : undefined, fields,
-    enableuserdata: booleanValue(query('enableUserData'), 'enableUserData'),
-    enabletotalrecordcount: booleanValue(query('enableTotalRecordCount'), 'enableTotalRecordCount', true) };
+    enableuserdata: bind(booleanValue, 'enableUserData'),
+    enabletotalrecordcount: bind(booleanValue, 'enableTotalRecordCount', true) };
   if (!series) for (const name of ['isMovie', 'isSeries', 'isKids', 'isSports', 'isNews', 'isLibraryItem']) {
-    result[name.toLowerCase()] = booleanValue(query(name), name);
+    result[name.toLowerCase()] = bind(booleanValue, name);
   }
+  if (Object.keys(errors).length) { const error = new BindingError('', ''); error.errors = errors; throw error; }
   return result;
 }
 

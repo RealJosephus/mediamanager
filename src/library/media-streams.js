@@ -71,6 +71,14 @@ export function mediaStreamDisplayTitle(stream, { fallbackLabels = false } = {})
   return stream.Title ? [stream.Title, ...attributes.filter(tag => !contains(stream.Title, tag))].join(' - ') : attributes.join(stream.Type === 'Video' ? ' ' : ' - ');
 }
 
+export function localizeMediaStream(stream, options = {}) {
+  if (['Audio', 'Subtitle'].includes(stream.Type)) {
+    for (const name of ['Default', 'External', ...(stream.Type === 'Audio' ? ['Original'] : ['Undefined', 'Forced', 'HearingImpaired'])]) stream[`Localized${name}`] = localized(name, options);
+    if (stream.Language) stream.LocalizedLanguage = culture(stream.Language)?.display.split(/[;,]/)[0].trim();
+  }
+  return stream;
+}
+
 export function projectStream(row, options = {}) {
   const stream = { Index: row.StreamIndex, Type: types[row.StreamType] ?? row.StreamType, IsAVC: row.IsAvc };
   const columns = ['Codec', 'Language', 'ChannelLayout', 'Profile', 'AspectRatio', 'Path', 'BitRate', 'Channels', 'SampleRate', 'Height', 'Width', 'AverageFrameRate', 'RealFrameRate', 'Level', 'PixelFormat', 'BitDepth', 'IsAnamorphic', 'RefFrames', 'CodecTag', 'Comment', 'NalLengthSize', 'Title', 'TimeBase', 'CodecTimeBase', 'ColorPrimaries', 'ColorSpace', 'ColorTransfer', 'DvVersionMajor', 'DvVersionMinor', 'DvProfile', 'DvLevel', 'RpuPresentFlag', 'ElPresentFlag', 'BlPresentFlag', 'DvBlSignalCompatibilityId', 'Rotation', 'Hdr10PlusPresentFlag'];
@@ -79,10 +87,7 @@ export function projectStream(row, options = {}) {
   if (stream.Path && options.expandPath) stream.Path = options.expandPath(stream.Path);
   const translated = cultures.find(entry => entry.bibliographic && equal(entry.bibliographic, stream.Language));
   if (translated) stream.Language = translated.term;
-  if (['Audio', 'Subtitle'].includes(stream.Type)) {
-    for (const name of ['Default', 'External', ...(stream.Type === 'Audio' ? ['Original'] : ['Undefined', 'Forced', 'HearingImpaired'])]) stream[`Localized${name}`] = localized(name, options);
-    if (stream.Language) stream.LocalizedLanguage = culture(stream.Language)?.display.split(/[;,]/)[0].trim();
-  }
+  localizeMediaStream(stream, options);
   [stream.VideoRange, stream.VideoRangeType] = videoColorRange(stream);
   if (stream.RpuPresentFlag === 1 && stream.BlPresentFlag === 1 && [4, 5, 7, 8, 9, 10].includes(stream.DvProfile)) {
     const compatibility = stream.DvBlSignalCompatibilityId;
@@ -94,6 +99,18 @@ export function projectStream(row, options = {}) {
   stream.IsTextSubtitleStream = stream.Type === 'Subtitle' && (Boolean(codec) || stream.IsExternal) && (codec.includes('microdvd') || (!['pgs', 'dvdsub', 'vobsub', 'dvbsub'].some(value => codec.includes(value)) && !['sup', 'sub'].includes(codec)));
   stream.SupportsExternalStream = stream.IsExternal || stream.IsTextSubtitleStream || (stream.Type === 'Subtitle' && (['pgs', 'dvdsub', 'vobsub'].some(value => codec.includes(value)) || codec === 'sup'));
   stream.DisplayTitle = mediaStreamDisplayTitle(stream);
+  return withNativeFloats(stream, ['AverageFrameRate', 'RealFrameRate', 'ReferenceFrameRate']);
+}
+
+// Live sources retain MediaStream's raw localizations. Their public properties
+// still evaluate the same native getters as stored media streams.
+export function projectLiveStream(values) {
+  const Type = values.Type ?? 'Audio', Index = values.Index ?? 0;
+  const stream = { IsInterlaced: false, IsDefault: false, IsForced: false, IsHearingImpaired: false,
+    IsOriginal: false, IsExternal: false, SupportsExternalStream: false, ...values, Type, Index };
+  const calculated = projectStream({ ...stream, StreamType: types.indexOf(Type), StreamIndex: Index, IsAvc: stream.IsAVC });
+  for (const name of ['VideoRange', 'VideoRangeType', 'VideoDoViTitle', 'AudioSpatialFormat', 'ReferenceFrameRate', 'IsTextSubtitleStream']) stream[name] = calculated[name];
+  stream.DisplayTitle = mediaStreamDisplayTitle(stream, { fallbackLabels: true }) ?? null;
   return withNativeFloats(stream, ['AverageFrameRate', 'RealFrameRate', 'ReferenceFrameRate']);
 }
 
@@ -118,23 +135,30 @@ const defaultAudio = (streams, preferred, preferDefault) => {
 
 export function selectDefaultTracks(source, item, user, data = {}, originalLanguage = item.OriginalLanguage) {
   const streams = source.MediaStreams;
+  const linqStreams = () => {
+    if (streams == null) throw Object.assign(new TypeError("Value cannot be null. (Parameter 'source')"),
+      { nativeException: 'ArgumentNullException', parameterName: 'source', status: 400, statusCode: 400 });
+    return streams;
+  };
   Object.defineProperty(source, 'DefaultAudioIndexSource', { value: source.DefaultAudioIndexSource ?? 0, writable: true, configurable: true, enumerable: false });
-  if (item.MediaType === 'Audio') { source.DefaultAudioStreamIndex = streams.find(stream => stream.Type === 'Audio')?.Index; return; }
+  if (item.MediaType === 'Audio') { source.DefaultAudioStreamIndex = linqStreams().find(stream => stream.Type === 'Audio')?.Index; return; }
   if (item.MediaType !== 'Video') return;
   const config = { ...user.Configuration, ...user };
   const allowRemembering = item.EnableRememberingTrackSelections !== false;
   const original = equal(config.AudioLanguagePreference, 'OriginalLanguage');
   const audioPreferred = normalizeLanguage(original && originalLanguage?.trim() ? originalLanguage : config.AudioLanguagePreference);
-  if (allowRemembering && config.RememberAudioSelections && data.AudioStreamIndex != null && streams.some(stream => stream.Type === 'Audio' && stream.Index === data.AudioStreamIndex)) {
+  if (allowRemembering && config.RememberAudioSelections && data.AudioStreamIndex != null && linqStreams().some(stream => stream.Type === 'Audio' && stream.Index === data.AudioStreamIndex)) {
     source.DefaultAudioStreamIndex = data.AudioStreamIndex;
     source.DefaultAudioIndexSource = 4;
   }
   else {
-    const originalIndex = streams.findIndex(stream => stream.Type === 'Audio' && stream.IsOriginal);
-    if (original && config.PlayDefaultAudioTrack) source.DefaultAudioStreamIndex = defaultAudio(streams, normalizeLanguage(originalLanguage), true);
+    // The native OriginalLanguage branch calls IReadOnlyList.FindIndex directly;
+    // unlike LINQ's Where/Any, its null list fails with NullReferenceException.
+    const originalIndex = original && !config.PlayDefaultAudioTrack ? streams.findIndex(stream => stream.Type === 'Audio' && stream.IsOriginal) : -1;
+    if (original && config.PlayDefaultAudioTrack) source.DefaultAudioStreamIndex = defaultAudio(linqStreams(), normalizeLanguage(originalLanguage), true);
     else if (original && originalIndex >= 0 && (!originalLanguage?.trim() || normalizeLanguage(streams[originalIndex].Language).includes(normalizeLanguage(originalLanguage)[0]))) source.DefaultAudioStreamIndex = originalIndex;
     else {
-      source.DefaultAudioStreamIndex = defaultAudio(streams, audioPreferred, config.PlayDefaultAudioTrack);
+      source.DefaultAudioStreamIndex = defaultAudio(linqStreams(), audioPreferred, config.PlayDefaultAudioTrack);
       if (config.PlayDefaultAudioTrack) source.DefaultAudioIndexSource |= 1;
       if (audioPreferred.length) source.DefaultAudioIndexSource |= 2;
     }

@@ -19,6 +19,8 @@ import { canDeleteItem, hasFileProtocol } from './delete-permission.js';
 import { substitutePath } from './path-substitution.js';
 import { loadPostgresRowsByIds } from './postgres-library-query.js';
 import { addInheritedImages } from './dto-inherited-images.js';
+import { readChannelStaticMediaSources } from './channel-static-media-sources.js';
+import { nativeGuid } from '../users/native.js';
 
 export const itemFields = ['CanDelete', 'CanDownload', 'Chapters', 'Trickplay', 'ChildCount', 'CumulativeRunTimeTicks',
   'CustomRating', 'DateCreated', 'DateLastMediaAdded', 'DisplayPreferencesId', 'Etag', 'ExternalUrls', 'Genres', 'ItemCounts',
@@ -34,6 +36,16 @@ export const itemImageTypes = ['Primary', 'Art', 'Backdrop', 'Banner', 'Logo', '
 const extraTypes = ['Unknown', 'Clip', 'Trailer', 'BehindTheScenes', 'DeletedScene', 'Interview', 'Scene', 'Sample', 'ThemeSong', 'ThemeVideo', 'Featurette', 'Short'];
 const extraType = item => extraTypes[item.ExtraType] ?? item.ExtraType;
 const personKinds = ['Unknown', 'Actor', 'Director', 'Composer', 'Writer', 'GuestStar', 'Producer', 'Conductor', 'Lyricist', 'Arranger', 'Engineer', 'Mixer', 'Remixer', 'Creator', 'Artist', 'AlbumArtist', 'Author', 'Illustrator', 'Penciller', 'Inker', 'Colorist', 'Letterer', 'CoverArtist', 'Editor', 'Translator', 'Narrator'];
+
+// CLR Path.GetExtension also recognizes an extension-only name such as '.mkv'.
+// DtoService deliberately applies it twice before choosing a comma container.
+function containerExtension(value) {
+  for (let index = value.length - 1; index >= 0; index--) {
+    if (value[index] === '.') return index < value.length - 1 ? value.slice(index) : '';
+    if (value[index] === '/' || process.platform === 'win32' && value[index] === '\\') break;
+  }
+  return '';
+}
 
 function personKind(raw) {
   const text = clrTrim(raw ?? '');
@@ -190,10 +202,25 @@ async function prefetchImageRows(state, items) {
   }
 }
 
+async function prefetchChannelNames(items, state) {
+  const names = state.dtoChannelNames ??= new Map();
+  const ids = [...new Map(items.filter(item => item.SourceType === 'Channel' && nonemptyId(item.ChannelId))
+    .map(item => [idKey(item.ChannelId), item.ChannelId]))].filter(([key]) => !names.has(key));
+  const missing = [];
+  for (const [key, id] of ids) {
+    if (state.byId.has(key)) names.set(key, state.byId.get(key).Name);
+    else { names.set(key, undefined); missing.push(id); }
+  }
+  for (let offset = 0; offset < missing.length; offset += 128) for (const row of await loadPostgresRowsByIds(state.db, missing.slice(offset, offset + 128))) {
+    const channel = mapRecord(row); if (channel) names.set(idKey(channel.Id), channel.Name);
+  }
+}
+
 /** Load every DTO relation for a PostgreSQL result page in bounded batches. */
 export async function prefetchPostgresDtoRelations(items, state, user, selected, options) {
   if (!items.length) return;
   const projected = uniqueItems(items), fields = selected.fields;
+  await prefetchChannelNames(projected, state);
   const mediaOwners = projected.filter(item => VIDEO_TYPES.has(item.Type) || ['Audio', 'AudioBook'].includes(item.Type));
   const sourceItems = uniqueItems(mediaOwners.flatMap(item => mediaVersions(item, state).map(entry => entry.item)));
 
@@ -324,10 +351,6 @@ async function projectPeople(item, state, user, options) {
 }
 
 async function mediaSource(item, queriedItem, type, prefix, state, user, options, enablePathSubstitution) {
-  // BaseItem.GetMediaSources uses the ordinary version projection when the
-  // ChannelManager saved-source cache is empty. SourceType alone does not
-  // prohibit a retained local/HTTP source. Saved channel-cache consumption is
-  // a separate producer path; it must precede this fallback when installed.
   const protocol = isFileSource(item) ? 'File' : /^https?:/i.test(item.Path ?? '') ? 'Http' : null;
   if (!protocol) unsupported('This media source protocol is not implemented.');
   let shortcutProtocol;
@@ -388,6 +411,36 @@ export async function mediaSources(item, state, user, options, enablePathSubstit
       ?? await readUserData(state.db, user.Id, item), item.OriginalLanguage);
     return [source];
   }
+  if (item.SourceType === 'Channel') {
+    let sources = await readChannelStaticMediaSources(item, options);
+    if (sources.length) {
+      if (user) {
+        const identities = new Map();
+        for (const source of sources) {
+          let id; try { id = nativeGuid(source.Id); } catch { continue; }
+          if (!sameId(id, item.Id)) identities.set(source, id);
+        }
+        if (identities.size && typeof options.filterSourceIds !== 'function') throw new TypeError('Saved media-source user visibility requires the admitted SQL source selector.');
+        const visible = identities.size ? await options.filterSourceIds(state.db, user, [...identities.values()]) : new Set();
+        sources = sources.filter(source => !identities.has(source) || visible.has(idKey(identities.get(source))));
+        if (sources.length) {
+          const data = state.userData?.get(idKey(item.Id)) ?? await readUserData(state.db, user.Id, item);
+          const originalLanguage = item.OriginalLanguage || (item.Type === 'Episode' ? state.ancestors(item).find(parent => parent.OriginalLanguage)?.OriginalLanguage : undefined);
+          for (const source of sources) {
+            selectDefaultTracks(source, item, user, data, originalLanguage);
+            if (item.MediaType === 'Audio') source.SupportsTranscoding = user.Policy.EnableAudioPlaybackTranscoding === true;
+            else if (item.MediaType === 'Video') {
+              source.SupportsTranscoding = user.Policy.EnableVideoPlaybackTranscoding === true;
+              source.SupportsDirectStream = user.Policy.EnablePlaybackRemuxing === true;
+            }
+          }
+        }
+        sources = await orderResumableMediaSource(item, sources, state, user);
+      }
+      // Channel's nonempty cache returns before BaseItem's version-source sort.
+      return sources;
+    }
+  }
   const versions = mediaVersions(item, state);
   const names = versions.map(entry => entry.item).filter(entry => isFileSource(entry) && entry.Path).map(sourceFileName);
   const prefix = names.length > 1 ? commonVersionPrefix(names) : null;
@@ -396,15 +449,22 @@ export async function mediaSources(item, state, user, options, enablePathSubstit
     if (user && !sameId(version.item.Id, item.Id) && !visibleItem(version.item, user, state, { ...options, query: false })) continue;
     sources.push(await mediaSource(version.item, item, version.type, prefix, state, user, options, enablePathSubstitution));
   }
-  sortMediaSources(sources, item.Id);
-  if (user && VIDEO_TYPES.has(item.Type) && !nonemptyId(item.PrimaryVersionId) && sources.length > 1) {
+  sortMediaSources(sources, dtoId(item.Id));
+  return user ? orderResumableMediaSource(item, sources, state, user) : sources;
+}
+
+async function orderResumableMediaSource(item, sources, state, user) {
+  if (VIDEO_TYPES.has(item.Type) && sources.length > 1) {
+    const versions = new Map(mediaVersions(item, state).map(entry => [idKey(entry.item.Id), entry.item]));
+    if (versions.size < 2) return sources;
     let resume;
     for (const source of sources) {
-      const version = state.byId.get(idKey(source.Id));
-      const data = state.userData?.get(idKey(source.Id)) ?? await readUserData(state.db, user.Id, version);
+      const version = versions.get(String(source.Id ?? '').toLowerCase());
+      if (!version) continue;
+      const data = state.userData?.get(idKey(version.Id)) ?? await readUserData(state.db, user.Id, version);
       if (data.PlaybackPositionTicks > 0n && (!resume || dateTicks(data.LastPlayedDate) > dateTicks(resume.data.LastPlayedDate))) resume = { source, data };
     }
-    if (resume && sources[0] !== resume.source) sources = [resume.source, ...sources.filter(source => source !== resume.source)];
+    if (resume && !nonemptyId(item.PrimaryVersionId) && sources[0] !== resume.source) sources = [resume.source, ...sources.filter(source => source !== resume.source)];
   }
   return sources;
 }
@@ -557,9 +617,24 @@ export async function projectItem(item, state, user, selected, options) {
   });
   if (has('CanDownload')) dto.CanDownload = (VIDEO_TYPES.has(item.Type) || ['Audio', 'AudioBook', 'Book', 'Photo'].includes(item.Type)) && item.LocationType === 'FileSystem' && !['Dvd', 'BluRay'].includes(item.VideoType) && (!user || user.Policy.EnableContentDownloading === true);
   if (has('EnableMediaSourceDisplay')) dto.EnableMediaSourceDisplay = item.EnableMediaSourceDisplay ?? true;
-  if (has('MediaSources') && (VIDEO_TYPES.has(item.Type) || ['Audio', 'AudioBook', 'LiveTvChannel'].includes(item.Type))) dto.MediaSources = await mediaSources(item, state, user, options, true);
+  if (has('MediaSources') && (VIDEO_TYPES.has(item.Type) || ['Audio', 'AudioBook', 'LiveTvChannel'].includes(item.Type))) {
+    dto.MediaSources = await mediaSources(item, state, user, options, true);
+    for (const source of dto.MediaSources) {
+      if (!source.Container?.includes(',')) continue;
+      const containers = source.Container.split(',');
+      const extension = source.Path ? containerExtension(containerExtension(source.Path)).replace(/^\.+/u, '') : '';
+      source.Container = extension && containers.some(container => ordinalIgnoreCaseKey(container) === ordinalIgnoreCaseKey(extension)) ? extension : containers[0];
+    }
+  }
   if (has('MediaStreams') && item.Type === 'LiveTvChannel') dto.MediaStreams = [];
-  else if (has('MediaStreams') && (VIDEO_TYPES.has(item.Type) || ['Audio', 'AudioBook'].includes(item.Type))) dto.MediaStreams = dto.MediaSources?.find(source => sameId(source.Id, item.Id))?.MediaStreams ?? await projectedStreams(state, item, options);
+  else if (has('MediaStreams') && (VIDEO_TYPES.has(item.Type) || ['Audio', 'AudioBook'].includes(item.Type))) {
+    if (item.SourceType === 'Channel') {
+      const sources = dto.MediaSources?.length ? dto.MediaSources : await mediaSources(item, state, null, options, true);
+      const streams = sources[0].MediaStreams;
+      if (streams == null) throw Object.assign(new TypeError("Value cannot be null. (Parameter 'source')"), { nativeException: 'ArgumentNullException', status: 400, statusCode: 400 });
+      dto.MediaStreams = [...streams];
+    } else dto.MediaStreams = dto.MediaSources?.find(source => sameId(source.Id, item.Id))?.MediaStreams ?? await projectedStreams(state, item, options);
+  }
   if (VIDEO_TYPES.has(item.Type)) {
     Object.assign(dto, { VideoType: item.VideoType ?? 'VideoFile', Video3DFormat: item.Video3DFormat, IsoType: item.IsoType, ExtraType: extraType(item), AspectRatio: item.AspectRatio });
     if (item.AdditionalParts?.length) dto.PartCount = item.AdditionalParts.length + 1;
@@ -684,6 +759,11 @@ export async function projectItem(item, state, user, selected, options) {
   if (has('ItemCounts')) {
     const counts = state.dtoItemCounts?.get(idKey(item.Id)) ?? await state.getItemCounts?.(item);
     if (counts) Object.assign(dto, counts);
+  }
+  if (item.SourceType === 'Channel') {
+    if (!nonemptyId(item.ChannelId)) throw Object.assign(new TypeError("Guid can't be empty (Parameter 'id')"), { nativeException: 'ArgumentException', status: 400, statusCode: 400 });
+    await prefetchChannelNames([item], state);
+    dto.ChannelName = state.dtoChannelNames.get(idKey(item.ChannelId));
   }
   withNativeFloats(dto, ['CriticRating', 'CommunityRating', 'NormalizationGain', 'AlbumNormalizationGain']);
   return withNativeNulls(dto, ['ChannelId', ...(has('ParentId') ? ['ParentId'] : []),

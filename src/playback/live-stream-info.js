@@ -1,6 +1,6 @@
 import { bindJsonModel } from '../http/json-model-binding.js';
-import { projectStream, mediaStreamDisplayTitle } from '../library/media-streams.js';
-import { withNativeFloats, withNativeNulls } from '../core/json.js';
+import { projectLiveStream } from '../library/media-streams.js';
+import { withNativeNulls } from '../core/json.js';
 
 const primitive = (type, nullable = true) => ({ type, nullable, clrType: ({ string: 'System.String', integer: 'System.Int32',
   long: 'System.Int64', boolean: 'System.Boolean', double: 'System.Double', float: 'System.Single', datetime: 'System.DateTime' })[type] });
@@ -31,15 +31,19 @@ const streamFields = {
   DeliveryMethod: enumeration(['Encode', 'Embed', 'External', 'Hls', 'Drop'], true),
 };
 
-export function liveMediaInfoDefaults() {
+function mediaSourceDefaults() {
   return { Protocol: 'File', Type: 'Default', IsRemote: false, ReadAtNativeFramerate: false, IgnoreDts: false, IgnoreIndex: false,
     GenPtsInput: false, SupportsTranscoding: true, SupportsDirectStream: true, SupportsDirectPlay: true, IsInfiniteStream: false,
     UseMostCompatibleTranscodingProfile: false, RequiresOpening: false, RequiresClosing: false, RequiresLooping: false, SupportsProbing: true,
-    MediaStreams: [], MediaAttachments: [], Formats: [], RequiredHttpHeaders: {}, TranscodingSubProtocol: 'http', HasSegments: false,
-    Chapters: [], Artists: [], AlbumArtists: [], Studios: [], Genres: [], People: [], ProviderIds: {} };
+    MediaStreams: [], MediaAttachments: [], Formats: [], RequiredHttpHeaders: {}, TranscodingSubProtocol: 'http', HasSegments: false };
+}
+
+export function liveMediaInfoDefaults() {
+  return { ...mediaSourceDefaults(), Chapters: [], Artists: [], AlbumArtists: [], Studios: [], Genres: [], People: [], ProviderIds: {} };
 }
 
 const schema = { definitions: {
+  MediaSourceInfo: { fields: sourceFields, defaults: mediaSourceDefaults() },
   MediaInfo: { fields: { ...sourceFields,
     ...fields('string', 'Album ShowName ForcedSortName OfficialRating OfficialRatingDescription Overview'),
     ...fields('integer', 'IndexNumber ParentIndexNumber ProductionYear'), PremiereDate: primitive('datetime'),
@@ -59,11 +63,25 @@ const schema = { definitions: {
 
 /** JsonDefaults.Options is case-sensitive, ignores unknown/read-only members,
  * permits quoted numbers, and constructs collection/scalar defaults. */
-export function readLiveMediaInfoCache(bytes) {
+function readNativeModel(bytes, root) {
   const source = bytes.toString('utf8');
-  const value = bindJsonModel(null, { schema, root: object('MediaInfo'), source, caseInsensitiveProperties: false });
+  try { return bindJsonModel(null, { schema, root, source, caseInsensitiveProperties: false }); }
+  catch (error) { if (error instanceof SyntaxError) error.nativeException = 'JsonException'; throw error; }
+}
+
+export function readLiveMediaInfoCache(bytes) {
+  const value = readNativeModel(bytes, object('MediaInfo'));
   if (value?.MediaStreams) value.MediaStreams = value.MediaStreams.map(stream => stream && liveMediaStream(stream));
   if (value?.People) value.People = value.People.map(person => person?.Id === '00000000000000000000000000000000' ? withNativeNulls({ ...person, Id: null }, ['Id']) : person);
+  return value;
+}
+
+/** ChannelManager's saved MediaSourceInfo[] retains null roots and members. */
+export function readNativeMediaSourceInfoList(bytes) {
+  const value = readNativeModel(bytes, array(object('MediaSourceInfo')));
+  if (value) for (const source of value) {
+    if (source?.MediaStreams) source.MediaStreams = source.MediaStreams.map(stream => stream && liveMediaStream(stream));
+  }
   return value;
 }
 
@@ -73,8 +91,5 @@ export function liveMediaStream(values) {
   const Type = values.Type ?? 'Audio', Index = values.Index ?? 0;
   const constructor = schema.definitions.MediaStream.defaults;
   const source = { ...constructor, ...Object.fromEntries(Object.keys(streamFields).filter(name => Object.hasOwn(values, name)).map(name => [name, values[name]])), Type, Index };
-  const calculated = projectStream({ ...source, StreamType: ['Audio', 'Video', 'Subtitle', 'EmbeddedImage', 'Data', 'Lyric'].indexOf(Type), StreamIndex: Index, IsAvc: source.IsAVC });
-  for (const name of ['VideoRange', 'VideoRangeType', 'VideoDoViTitle', 'AudioSpatialFormat', 'ReferenceFrameRate', 'IsTextSubtitleStream']) source[name] = calculated[name];
-  source.DisplayTitle = mediaStreamDisplayTitle(source, { fallbackLabels: true }) ?? null;
-  return withNativeFloats(source, ['AverageFrameRate', 'RealFrameRate', 'ReferenceFrameRate']);
+  return projectLiveStream(source);
 }

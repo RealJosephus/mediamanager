@@ -110,7 +110,10 @@ test('an admitted probe cancellation falls back while retaining its public input
     const pending = value.streams.open({ OpenToken: token('probe-cancel') }, { signal: request.signal });
     await entered.promise; request.abort(); const result = await pending;
     assert.equal(value.errors.length, 1); assert.equal(value.streams.snapshot()[0].ConsumerCount, 1);
-    assert.equal(value.inputs[0].records[0].closed, false); assert.equal(result.MediaSource.Bitrate, 20128000);
+    assert.equal(value.inputs[0].records[0].closed, false);
+    // Native provider normalization already inferred the audio-only total;
+    // AddMediaInfo estimates the video without overriding a known total.
+    assert.equal(result.MediaSource.Bitrate, 128000); assert.equal(result.MediaSource.MediaStreams[0].BitRate, 20000000);
     await value.streams.closeLiveStream(result.MediaSource.LiveStreamId); assert.equal(value.inputs[0].records[0].closed, true);
   } finally { await value.close(); }
 });
@@ -140,4 +143,22 @@ test('shutdown closes a provider result arriving after cancellation and awaits i
     release.resolve(); await rejected; await closing; assert.deepEqual(value.streams.snapshot(), []);
     assert.equal(value.inputs[0].records[0].closes, 1); await assert.rejects(value.streams.open({ OpenToken: token('closed') }), { status: 503 });
   } finally { finish(); await Promise.allSettled([pending, closing]); await value.close(); }
+});
+
+test('a late session close joins the held shutdown drain without admitting another owner', { timeout: 20000 }, async t => {
+  const value = fixture(), release = Promise.withResolvers(); let closing, detached;
+  t.signal.addEventListener('abort', () => release.resolve(), { once: true });
+  try {
+    const opened = await value.streams.open({ OpenToken: token('shutdown-session') });
+    const owner = value.inputs[0].records[0]; owner.gate = release;
+    closing = value.streams.close(); await owner.closing.promise;
+    let detachFinished = false;
+    detached = value.streams.closeLiveStream(opened.MediaSource.LiveStreamId.toUpperCase()).then(() => { detachFinished = true; });
+    await turn(); assert.equal(detachFinished, false, 'Controller cleanup must await the actual input release.');
+    await assert.rejects(value.streams.open({ OpenToken: token('after-shutdown') }), { status: 503 });
+    await assert.rejects(value.streams.closeLiveStream(''), { status: 400 });
+    release.resolve(); await Promise.all([closing, detached]);
+    await value.streams.closeLiveStream(opened.MediaSource.LiveStreamId);
+    assert.equal(owner.closes, 1); assert.deepEqual(value.streams.snapshot(), []); assert.deepEqual(value.errors, []);
+  } finally { release.resolve(); await Promise.allSettled([closing, detached]); await value.close(); }
 });

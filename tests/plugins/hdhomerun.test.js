@@ -203,15 +203,52 @@ function definitions(origin) {
 }
 
 async function udpFixture(t, port = 0) {
-  const socket = dgram.createSocket({ type: 'udp4', reuseAddr: true }), receipts = [];
+  const socket = dgram.createSocket({ type: 'udp4', reuseAddr: true }), receipts = [], pending = new Set(), errors = [], transitions = [];
+  let phase = 'default', closing, closed = false, closedAt;
+  socket.once('close', () => { closed = true; closedAt = new Date().toISOString(); }); socket.on('error', cause => errors.push({ name: cause.name, code: cause.code, message: cause.message }));
   socket.on('message', (bytes, remote) => {
-    receipts.push({ bytesBase64: bytes.toString('base64'), address: remote.address, port: remote.port });
+    const receipt = { phase, receivedAt: new Date().toISOString(), bytesBase64: bytes.toString('base64'), address: remote.address, port: remote.port, replies: [] }; receipts.push(receipt);
     const valid = Buffer.alloc(14); valid[1] = 3;
-    for (const reply of [Buffer.from([0, 3]), Buffer.alloc(14), valid, valid]) socket.send(reply, remote.port, remote.address);
+    for (const [index, reply] of [Buffer.from([0, 3]), Buffer.alloc(14), valid, valid].entries()) {
+      const observation = { index, queuedAt: new Date().toISOString(), acceptedByNativePrefix: index >= 2, bytesBase64: reply.toString('base64'), address: remote.address, port: remote.port };
+      receipt.replies.push(observation);
+      const work = new Promise(resolve => {
+        const done = cause => { observation.callbackAt = new Date().toISOString(); observation.callback = cause ? { code: cause.code, name: cause.name, message: cause.message } : { code: 0 }; resolve(); };
+        try { socket.send(reply, remote.port, remote.address, done); } catch (cause) { done(cause); }
+      });
+      pending.add(work); work.then(() => pending.delete(work));
+    }
   });
   await new Promise((resolve, reject) => { socket.once('error', reject); socket.bind(port, '0.0.0.0', resolve); });
-  t.after(() => new Promise(resolve => socket.close(resolve)));
-  return { receipts, port: socket.address().port };
+  const settle = async () => { while (pending.size) await Promise.all([...pending]); };
+  const close = () => closing ??= (async () => { await settle(); await new Promise(resolve => socket.close(resolve)); assert.equal(closed, true); })();
+  t.after(close);
+  return { receipts, errors, transitions, port: socket.address().port, settle, close,
+    setPhase(value) { transitions.push({ phase: value, at: new Date().toISOString(), pendingReplySends: pending.size }); phase = value; },
+    get closed() { return closed; }, get closedAt() { return closedAt; } };
+}
+
+function discoveryRequests(receipts, phase, localPort) {
+  const selected = receipts.filter(value => value.phase === phase); assert.ok(selected.length > 0, phase + ' must send a real discovery packet.');
+  for (const receipt of selected) {
+    assert.equal(receipt.port, localPort, phase + ' packets must belong to the actual observed discovery socket.');
+    assert.deepEqual(Buffer.from(receipt.bytesBase64, 'base64'), discoveryPacket);
+    assert.equal(receipt.replies.length, 4);
+    for (const [index, reply] of receipt.replies.entries()) {
+      assert.equal(reply.port, localPort); assert.equal(reply.address, receipt.address); assert.equal(reply.index, index); assert.equal(reply.callback?.code, 0);
+      const expected = index === 0 ? Buffer.from([0, 3]) : Buffer.alloc(14); if (index >= 2) expected[1] = 3;
+      assert.deepEqual(Buffer.from(reply.bytesBase64, 'base64'), expected);
+    }
+  }
+  return selected;
+}
+
+function observedDiscoverySocket(records, options) {
+  const socket = dgram.createSocket(options), record = { bound: null, messages: [], errors: [], closed: false }; records.push(record);
+  socket.once('listening', () => { record.bound = socket.address(); record.listeningAt = new Date().toISOString(); });
+  socket.once('close', () => { record.closed = true; record.closedAt = new Date().toISOString(); });
+  socket.on('message', (bytes, remote) => record.messages.push({ receivedAt: new Date().toISOString(), bytesBase64: bytes.toString('base64'), address: remote.address, port: remote.port }));
+  socket.on('error', cause => record.errors.push({ code: cause.code, name: cause.name, message: cause.message })); return socket;
 }
 
 test('HDHomeRun discovery owns an actual UDP socket, validates only native reply prefix, keeps duplicates and cancels pending receive', { timeout: 15000 }, async t => {
@@ -245,7 +282,7 @@ test('HDHomeRun designated model/lineup/cache/validation/source construction and
   });
   input = definitions(origin); const udp = await udpFixture(t, 65001);
   const root = path.join(validationOutputRoot(), 'hdhomerun-' + randomUUID()); await fs.mkdir(root);
-  const report = { comparisons: [], cleanup: {} }; let failure;
+  const report = { comparisons: [], cleanup: {}, httpRequests: requests, udp: { receipts: udp.receipts, phaseTransitions: udp.transitions } }; let failure;
   try {
     const producer = await fixture(t, { options: { fetch: (url, options) => fetch(url, { ...options,
       headers: { ...options.headers, 'X-Fixture-Sample': 'cache-retention-and-short-write', 'X-Fixture-Step': '0' } }) } });
@@ -262,26 +299,32 @@ test('HDHomeRun designated model/lineup/cache/validation/source construction and
       'src/Jellyfin.Networking/Udp/SocketFactory.cs', 'src/Jellyfin.Extensions/Json/Converters/JsonBoolNumberConverter.cs',
       'src/Jellyfin.Extensions/Json/JsonDefaults.cs', 'MediaBrowser.Controller/LiveTv/ChannelInfo.cs', 'MediaBrowser.Model/Dto/MediaSourceInfo.cs']);
     const inputBytes = Buffer.from(JSON.stringify(input)), filename = path.join(root, 'input.json'); await fs.writeFile(filename, inputBytes);
+    udp.setPhase('native');
     const worker = new Worker(new URL('./fixtures/hdhomerun/oracle-worker.js', import.meta.url), { workerData: { project: 'tests/plugins/fixtures/hdhomerun/Oracle.csproj', output: path.join(root, 'native'), args: [filename, '{output}/native.json'] }, trackUnmanagedFds: true });
     t.after(async () => { if (worker.threadId !== -1) await worker.terminate(); });
     await new Promise((resolve, reject) => { let result, messages = 0, failed;
       worker.on('message', value => { result = value; messages++; }); worker.once('error', cause => { failed = cause; });
       worker.once('exit', code => { if (failed || code !== 0 || messages !== 1 || result?.record?.passed !== true) reject(failed ?? new Error(result?.error?.message ?? 'HDHomeRun oracle did not finish.')); else resolve(); });
     });
-    assert.equal(worker.threadId, -1); report.cleanup.workerExited = true;
+    assert.equal(worker.threadId, -1); report.cleanup.workerExited = true; report.cleanup.nativeProcessExitedAt = new Date().toISOString(); await udp.settle(); udp.setPhase('between');
     const nativeBytes = await fs.readFile(path.join(root, 'native/native.json')), native = JSON.parse(nativeBytes);
     assert.ok(native.actualHdHomerunHost && native.actualBaseTunerHost && native.actualUdpSocketFactory && native.actualHttpClient && native.privateInputsRemoved);
     assert.equal(native.streamOpenInvoked, false); assert.equal(native.recordingOrTranscodingStarted, false); assert.equal(native.inputSha256, sha(inputBytes));
     for (const assembly of native.assemblies) assert.equal(sha(await fs.readFile(assembly.path)), assembly.sha256);
     report.nativeSha256 = sha(nativeBytes); report.inputSha256 = sha(inputBytes);
     report.nativeDiscovery = native.discovery; report.nativeDiagnostics = native.diagnostics; report.nodeInterfaces = os.networkInterfaces();
+    report.udp.native = native.discovery;
     assert.equal(native.discovery.allSocketsDisposed, true);
-    assert.ok(udp.receipts.length >= 1, 'Native discovery must send a real broadcast; an empty environment is not evidence.');
-    assert.deepEqual(Buffer.from(udp.receipts[0].bytesBase64, 'base64'), discoveryPacket);
-    assert.equal(native.discovery.devices.length, 2); assert.equal(native.discovery.requests.length, 2);
-    assert.deepEqual(native.discovery.devices[0], native.discovery.devices[1]);
+    assert.equal(native.discovery.sockets.length, 1); assert.equal(native.discovery.sockets[0].EnableBroadcast, true);
+    assert.match(native.discovery.sockets[0].endpoint, /^0\.0\.0\.0:\d+$/u);
+    const nativePort = Number(native.discovery.sockets[0].endpoint.split(':').at(-1)); assert.ok(Number.isInteger(nativePort) && nativePort > 0 && nativePort <= 65535);
+    const nativePackets = discoveryRequests(udp.receipts, 'native', nativePort);
+    report.udp.nativeSocketPort = nativePort; report.udp.nativePacketCount = nativePackets.length;
+    const nativeDeviceOrigins = nativePackets.flatMap(receipt => ['http://' + receipt.address, 'http://' + receipt.address]);
+    assert.equal(native.discovery.devices.length, nativePackets.length * 2); assert.equal(native.discovery.requests.length, nativePackets.length * 2);
+    assert.deepEqual(native.discovery.devices.map(value => value.Url), nativeDeviceOrigins);
+    for (let index = 0; index < native.discovery.devices.length; index += 2) assert.deepEqual(native.discovery.devices[index], native.discovery.devices[index + 1]);
     for (const [index, value] of native.discovery.devices.entries()) {
-      assert.equal(value.Url, 'http://' + udp.receipts[0].address);
       assert.equal(native.discovery.requests[index].uri, value.Url + '/discover.json');
     }
     for (const sample of input.models) {
@@ -298,8 +341,9 @@ test('HDHomeRun designated model/lineup/cache/validation/source construction and
       const actual = wire({ name: sample.name, value, error }), expected = native.lineups.find(value => value.name === sample.name);
       report.comparisons.push({ actual, expected }); assert.deepEqual(actual, expected, sample.name);
     }
-    let activeName, step, opened = [];
-    const controlled = await fixture(t, { root: path.join(root, 'private-inputs'), options: { discoveryAddress: '127.0.0.1', discoveryPort: udp.port,
+    let activeName, step, opened = []; const nodeDiscoverySockets = []; report.nodeHttpRequests = opened; report.udp.nodeSockets = nodeDiscoverySockets;
+    const controlled = await fixture(t, { root: path.join(root, 'private-inputs'), options: { discoveryPort: udp.port,
+      createSocket: options => observedDiscoverySocket(nodeDiscoverySockets, options),
       fetch: async (url, options) => {
         opened.push({ uri: url, clientName: 'Default' });
         const destination = activeName === 'discovery' ? origin + '/discover.json' : url;
@@ -348,17 +392,32 @@ test('HDHomeRun designated model/lineup/cache/validation/source construction and
       assert.equal(observation.value.MediaSource.Protocol, name.startsWith('legacy') ? 'Udp' : 'Http');
     }
     report.nativeConstruction = constructions;
-    activeName = 'discovery'; step = 0; const before = opened.length;
-    const found = wire(await controlled.tuner.discoverDevices(input.discoveryDurationMs, {})); assert.equal(found.length, 2);
-    for (const device of found) assert.equal(device.Url, 'http://127.0.0.1');
-    const bindAddress = value => ({ ...value, Url: '<actual-udp-sender-address>' });
-    assert.deepEqual(found.map(bindAddress), native.discovery.devices.map(bindAddress));
-    assert.equal(opened.length - before, 2); report.udp = { receipts: udp.receipts, native: native.discovery, node: found };
+    activeName = 'discovery'; step = 0; const before = opened.length; udp.setPhase('node');
+    const found = wire(await controlled.tuner.discoverDevices(input.discoveryDurationMs, {})); await udp.settle(); udp.setPhase('after');
+    report.udp.node = found; report.udp.nodeSockets = nodeDiscoverySockets; report.udp.nodeHttpRequests = opened.slice(before);
+    assert.equal(nodeDiscoverySockets.length, 1); const nodeSocket = nodeDiscoverySockets[0];
+    assert.equal(nodeSocket.bound?.address, '0.0.0.0'); assert.ok(nodeSocket.bound.port > 0);
+    assert.notEqual(nodeSocket.bound.port, nativePort, 'Independent phases must not reuse the native socket port.');
+    assert.equal(nodeSocket.closed, true); assert.deepEqual(nodeSocket.errors, []);
+    const nodePackets = discoveryRequests(udp.receipts, 'node', nodeSocket.bound.port); report.udp.nodePacketCount = nodePackets.length;
+    assert.equal(nodePackets.length, nativePackets.length, 'The same real broadcast topology must deliver the same request multiplicity to each phase.');
+    assert.deepEqual(nodeSocket.messages.map(value => value.bytesBase64).sort(), nodePackets.flatMap(receipt => receipt.replies.map(reply => reply.bytesBase64)).sort());
+    assert.ok(nodeSocket.messages.every(value => value.port === udp.port));
+    assert.deepEqual(found.map(value => value.Url), nodePackets.flatMap(receipt => ['http://' + receipt.address, 'http://' + receipt.address]));
+    assert.equal(found.length, nodePackets.length * 2); assert.equal(opened.length - before, nodePackets.length * 2);
+    assert.deepEqual(opened.slice(before).map(value => value.uri), found.map(value => value.Url + '/discover.json'));
+    assert.deepEqual(found, native.discovery.devices);
     await controlled.host.close(); await controlled.storage.close(); report.cleanup.pluginAndStorageClosed = true;
     assert.equal(controlled.counters().admitted, controlled.counters().released);
     assert.ok(requests.every(value => value.method === 'GET')); assert.ok(report.excludedEncodedProfiles.some(value => value.profiles.length === 6));
   } catch (cause) { failure = cause; }
-  finally { await fs.writeFile(path.join(root, 'comparison.json'), JSON.stringify({ ...report, passed: !failure, phaseAcceptance: false, releaseAcceptance: false,
-    nativeRawCopyExecuted: false, publicPlaybackValidated: false, error: failure?.stack }, null, 2) + '\n'); }
+  finally {
+    try {
+      await udp.close(); report.cleanup.udpFixtureClosed = udp.closed; report.cleanup.udpFixtureClosedAt = udp.closedAt; report.udp.fixtureErrors = udp.errors;
+      assert.deepEqual(udp.errors, []); assert.ok(udp.receipts.every(value => ['native', 'node'].includes(value.phase)), 'A late discovery packet crossed its owned execution phase.');
+    } catch (cause) { failure ??= cause; report.cleanup.udpFailure = { name: cause.name, message: cause.message }; }
+    await fs.writeFile(path.join(root, 'comparison.json'), JSON.stringify({ ...report, passed: !failure, phaseAcceptance: false, releaseAcceptance: false,
+      nativeRawCopyExecuted: false, publicPlaybackValidated: false, error: failure?.stack }, null, 2) + '\n');
+  }
   if (failure) throw failure;
 });

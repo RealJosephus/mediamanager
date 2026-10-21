@@ -27,6 +27,7 @@ import { LiveStreamsService } from './playback/live-streams.js';
 import { LiveStreamProbe } from './playback/live-stream-probe.js';
 import { probeRaw } from './storage/ffprobe.js';
 import { normalizeProbe } from './storage/probe-normalizer.js';
+import { localizeMediaStream } from './library/media-streams.js';
 import { ProbeService } from './library/probe-service.js';
 import { detectUdfDiscType } from './storage/udf-disc-type.js';
 import { ExternalDataManager } from './library/external-data.js';
@@ -428,7 +429,9 @@ export async function createRuntime({ database, configuration, serverId, serverN
         if (!probe) throw libraryError(503, 'Mapped live media probing is unavailable.');
         const location = playback.accessPath({ Id: source.Id, Path: source.Path }, source.Path, false);
         const result = await probeRaw(probe.bridge, location, options);
-        return normalizeProbe(result.raw, { path: source.Path, protocol: source.Protocol, videoType: source.VideoType ?? null, isAudio: false });
+        const information = normalizeProbe(result.raw, { path: source.Path, protocol: source.Protocol, videoType: source.VideoType ?? null, isAudio: false });
+        for (const stream of information.MediaStreams) localizeMediaStream(stream, { culture: 'en-US' });
+        return information;
       } });
     rollback.push(() => liveStreamProbe.close());
     liveStreams = new LiveStreamsService({ tuners: liveTvTuners, library, probe: liveStreamProbe, onError,

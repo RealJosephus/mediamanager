@@ -74,8 +74,7 @@ test('public live Open Close and PlaybackInfo match actual native HTTP and real 
           : name === 'unknown user fails after open' ? [{ name: 'Error', message: 'Object reference not set to an instance of an object.', status: 500 }]
           : name === 'profile failure after registration' ? [{ name: 'Error', message: "Guid can't be empty. (Parameter 'id')", status: 400 }]
           : result.status === 500 && ['existing opened PlaybackInfo', 'fresh replacement removed'].includes(name)
-            ? [{ name: 'Error', message: 'The requested live stream is unavailable.', status: 500 }]
-            : name === 'public unknown byte stream' ? [{ name: 'Error', message: 'Live stream not found.', status: 404 }] : [];
+            ? [{ name: 'Error', message: 'The requested live stream is unavailable.', status: 500 }] : [];
         const diagnostics = report.diagnostics.slice(diagnosticStart);
         assert.deepEqual(diagnostics.map(({ name, message, status }) => ({ name, message, status })), expected,
           name + ': only the exact observed request diagnostic is expected.');
@@ -204,6 +203,7 @@ test('public live Open Close and PlaybackInfo match actual native HTTP and real 
     const closeStore = application.store.close.bind(application.store);
     application.store.close = async () => { report.rows.node.afterShutdown = await application.store.run(snapshot); return closeStore(); };
     const actual = await scenario({ name: 'node', origin: 'http://127.0.0.1:' + application.server.address().port, cachePath: path.join(referenceRoot, 'data/cache') });
+    report.observations = { native: expected, node: actual };
     assert.deepEqual(canonicalRows(report.rows.node.before), canonicalRows(report.rows.native.before), 'Both public sequences use the same stopped transferred rows.');
     assert.equal(actual.length, expected.length);
     const canonical = (response, candidate = false) => {

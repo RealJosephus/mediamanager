@@ -29,7 +29,6 @@ const sealedExecutionManifests = new Map([
   ['tests/plugins/native-repeat.test.js', ['nfo-repeats', 'tests/metadata/fixtures/nfo-partial-reader/repeat.json']],
   ['tests/core/parental-rating-unicode.test.js', ['sealed-rating', 'tests/core/fixtures/parental-rating-unicode/provenance.json']],
   ['tests/http/password-reset-consumer.test.js', ['password-reader', 'tests/http/fixtures/password-reset/consumer.json']],
-  ['tests/http/shows-api.test.js', ['sealed-shows', 'tests/http/fixtures/shows-api/provenance.json']],
   ['tests/http/startup.test.js', ['sealed-startup', 'tests/http/fixtures/startup/provenance.json']],
   ['tests/images/splashscreen.test.js', ['splashscreen-sources', 'tests/images/fixtures/splashscreen/files.json']],
   ['tests/library/collection-playlist-resolution.test.js', ['sealed-collection-playlist', 'tests/library/fixtures/collection-playlist-resolution/provenance.json']],
@@ -104,16 +103,6 @@ export function executionManifestReferences(contract, content, filename) {
     for (const descriptor of content.assemblies) add(descriptor);
   } else if (contract.kind === 'password-manifest') {
     for (const row of content) add(row.source);
-  } else if (contract.kind === 'sealed-shows') {
-    for (const descriptor of [content.input, content.native, content.fixture, content.record, content.repeat]) {
-      add({ ...descriptor, filename: descriptor.filename ?? descriptor.path });
-    }
-    for (const source of content.jellyfin.sources) for (const root of [content.jellyfin.repository,
-      'D:/mediamanager-validation/20261005/jellyfin-baseline/source']) {
-      add({ filename: path.join(root, source.path), sha256: source.sha256 });
-    }
-    for (const record of content.recordings) for (const descriptor of [...record.sourceFiles, record.dotnet,
-      record.jellyfinDll, record.oracleAssembly, ...record.outputs]) add(descriptor);
   } else if (contract.kind === 'sealed-startup') {
     add({ filename: content.rawRecording, sha256: content.nativeSha256 });
     add(content.repeat);

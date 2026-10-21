@@ -10,7 +10,7 @@ import { readLiveMediaInfoCache } from '../../src/playback/live-stream-info.js';
 import { probeLiveRaw } from '../../src/storage/ffprobe.js';
 import { NativeHttpInput } from '../../packages/plugin-sdk/live-tv/raw-input.js';
 import { md5Guid } from '../../src/core/identity.js';
-import { stringifyNativeJson } from '../../src/core/json.js';
+import { parseLosslessJson, stringifyNativeJson } from '../../src/core/json.js';
 import { validationExecutable, validationOutputRoot } from '../../tools/validation/paths.js';
 
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -61,9 +61,13 @@ test('real ffprobe consumes retained original HTTP bytes through the private bri
     assert.equal(item.MediaStreams[0].Language, null); assert.equal(item.RunTimeTicks, null); assert.equal(item.AnalyzeDurationMs, 3000);
     const filename = path.join(root, 'mediainfo', md5Guid(cacheKey) + '.json'), before = await readFile(filename), typed = readLiveMediaInfoCache(before);
     assert.equal(typed.MediaStreams[0].Index, 0); assert.equal(typed.MediaStreams[0].Codec, 'pcm_s16le');
+    assert.deepEqual([typed.MediaStreams[0].LocalizedDefault, typed.MediaStreams[0].LocalizedExternal, typed.MediaStreams[0].LocalizedOriginal], ['Default', 'External', 'Original']);
     assert.equal(typed.VideoType, undefined, 'An unspecified nullable native VideoType cannot become VideoFile.');
     const hit = source(url); await probe.addMediaInfo(hit, { cacheKey, openRead: () => { throw new Error('A typed cache hit cannot open a byte reader.'); } });
-    assert.equal(calls.length, 1); assert.deepEqual(await readFile(filename), before); assert.deepEqual(hit, item);
+    assert.equal(calls.length, 1); assert.deepEqual(await readFile(filename), before);
+    // Native DTO serialization omits nullable properties. Compare every model
+    // value at that consumer boundary, retaining the separate exact cache bytes.
+    assert.deepEqual(parseLosslessJson(stringifyNativeJson(hit)), parseLosslessJson(stringifyNativeJson(item)));
     assert.deepEqual(await readdir(root), ['mediainfo']); assert.deepEqual(requests, [{ method: 'GET', route: '/original.wav', inputHeader: 'controlled' }]);
     await owner.close(); await input.close(); assert.equal(upstreamClosed, 1); assert.deepEqual(errors, []);
     await writeFile(path.join(root, 'receipt.json'), stringifyNativeJson({ passed: true, input: { length: original.length, sha256: sha(original), preparation: 'handwritten PCM WAV, no encoder process' },

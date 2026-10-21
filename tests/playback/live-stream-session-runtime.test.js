@@ -9,7 +9,8 @@ import { PostgresDatabase } from '../../src/database/postgres.js';
 import { createPostgresTestDatabase, dropPostgresTestDatabase } from '../database/postgres-fixture.js';
 import { md5Guid } from '../../src/core/identity.js';
 import { parseLosslessJson, stringifyNativeJson } from '../../src/core/json.js';
-import { guidD, guidN } from '../../src/sessions/user-data.js';
+import { guidN } from '../../src/sessions/user-data.js';
+import { loadPostgresUserDataRows } from '../../src/sessions/postgres-user-data-mutation.js';
 import { readLiveMediaInfoCache } from '../../src/playback/live-stream-info.js';
 import { refreshGuideTaskId } from '../../src/tasks/refresh-guide-task.js';
 import { validationExecutable, validationOutputRoot } from '../../tools/validation/paths.js';
@@ -50,7 +51,7 @@ test('production PG official M3U raw HTTP readers compose with Session HTTP, Web
   const observe = label => {
     const snapshot = runtime.liveStreams.snapshot(); report.observations.push({ label, streams: snapshot }); return snapshot;
   };
-  const userRows = db => db.rows('UserData', { where: { ItemId: guidD(channel.Id) } });
+  const userRows = db => loadPostgresUserDataRows(db, null, [channel.Id]);
   try {
     source = await originalServer(bytes);
     const programDataPath = path.join(root, 'data'), cachePath = path.join(programDataPath, 'cache');
@@ -132,6 +133,11 @@ test('production PG official M3U raw HTTP readers compose with Session HTTP, Web
     assert.equal(runtime.liveStreams.snapshot()[0].ReaderCount, 0, 'A real typed-cache hit must not open a probe reader.');
     assert.deepEqual(await readFile(cacheFile), cacheBytes);
     report.filesBeforePlayback = await fileSnapshot(root);
+    const hostLockPath = path.join(programDataPath, 'plugins', 'node', 'host.lock');
+    const hostLock = await readFile(hostLockPath), hostLockRelative = path.relative(root, hostLockPath).replaceAll('\\', '/');
+    assert.equal(JSON.parse(hostLock.toString()).pid, process.pid, 'The diagnostic lock must belong to this actual plugin host.');
+    assert.equal(report.filesBeforePlayback.find(file => file.path === hostLockRelative)?.sha256, sha256(hostLock));
+    report.pluginHostLease = { path: hostLockRelative, pid: process.pid, sha256: sha256(hostLock) };
     const adminSocket = await socketClient(origin, administrator.token, 'administrator'); sockets.push(adminSocket);
     adminSocket.socket.send('{"MessageType":"SessionsStart","Data":"0,0"}'); await adminSocket.barrier();
     const firstSocket = await socketClient(origin, first.token, 'first playback'); sockets.push(firstSocket);
@@ -155,6 +161,11 @@ test('production PG official M3U raw HTTP readers compose with Session HTTP, Web
     const assertLiveData = (data, count) => { assert.equal(data.PlayCount, count); assert.equal(data.PlaybackPositionTicks, 0); assert.equal(data.Played, false); assert.ok(data.LastPlayedDate); };
     assertLiveData(await readData(first), 1); assertLiveData(await readData(second), 1);
     report.userData.afterStarts = await database.withConnection(userRows);
+    report.userData.sqlItemKey = guidN(channel.Id);
+    report.userData.rawItemIds = [...new Set(report.userData.afterStarts.map(row => row.ItemId))];
+    assert.deepEqual([...new Set(report.userData.afterStarts.map(row => guidN(row.UserId)))].sort(),
+      [guidN(firstUser.Id), guidN(secondUser.Id)].sort(), 'SQL readback must contain both committed playback users before testing shutdown preservation.');
+    assert.ok(report.userData.afterStarts.every(row => guidN(row.ItemId) === report.userData.sqlItemKey && row.PlayCount === 1));
     assert.equal((await request(first, '/Sessions/Playing/Progress', { method: 'POST', body: playing(firstSource, firstPlay, exactPosition) })).status, 204);
     const progressSnapshot = await adminSocket.message('Sessions', message => message.Data.some(value => value.Id === first.sessionId && value.PlayState.PositionTicks === exactPosition));
     report.userData.progressSession = progressSnapshot.Data.find(value => value.Id === first.sessionId);
@@ -231,7 +242,9 @@ test('production PG official M3U raw HTTP readers compose with Session HTTP, Web
       for (const row of rows) { assert.equal(row.PlayCount, user === firstUser ? 2 : 1); assert.equal(row.PlaybackPositionTicks, 0n); assert.equal(row.Played, false); }
     }
     report.filesAfterShutdown = await fileSnapshot(root);
-    assert.deepEqual(report.filesAfterShutdown, report.filesBeforePlayback, 'Original byte/session work writes SQL UserData, not a media spool or extra cache files.');
+    await assert.rejects(readFile(hostLockPath), { code: 'ENOENT' }); report.pluginHostLease.removedAfterShutdown = true;
+    assert.deepEqual(report.filesAfterShutdown, report.filesBeforePlayback.filter(file => file.path !== hostLockRelative),
+      'Shutdown removes its owned plugin-host lock; all persistent bytes remain identical and no media spool is added.');
     assert.equal(source.records.every(value => value.closed), true); assert.deepEqual(errors, []);
     for (const client of sockets) assert.deepEqual(client.record.errors, []);
     assert.deepEqual(saved.map(value => value.reason), ['PlaybackStart', 'PlaybackStart', 'PlaybackProgress', 'PlaybackFinished', 'PlaybackStart']);

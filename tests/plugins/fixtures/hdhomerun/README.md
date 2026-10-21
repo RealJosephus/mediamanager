@@ -15,8 +15,24 @@ HTTP server. The native handler routes only the discovered sender's port-less
 HTTP endpoint into that same isolated server; the original URI is retained.
 The native SocketFactory sends the actual 20-byte broadcast to UDP 65001. A real
 UDP fixture answers with too-short, wrong-kind and duplicate accepted packets.
-The test requires actual native packets, two device HTTP requests and two
-devices; no empty environmental discovery result is counted as coverage.
+Both native and Node discovery use the actual default limited broadcast and
+port 65001. Each execution phase binds its captured 20-byte requests to that
+discovery socket's actual local port. Every request must receive four successful
+real UDP sends: short, wrong-kind, accepted and accepted again. The native
+consumer must produce exactly two ordered device/HTTP observations per actual
+request, proving the accepted replies reached its unmodified receive loop.
+Node records the real socket's message and close events and must receive the
+complete four-reply multiset per request. The two phases must receive equal
+request multiplicity and return the full same ordered device list, including
+duplicates; no ID deduplication or arbitrary nonempty result is accepted.
+This accommodates real duplicate limited-broadcast deliveries from the owned
+macOS feth topology while retaining every packet and every duplicate device.
+The first phase's native process and all reply callbacks finish before the next
+phase; local ports must differ and late packets outside either phase fail.
+The report keeps packet/reply prefixes even when an assertion fails, and the
+fixture socket closes before its final report. No empty environmental discovery
+result is counted as coverage. The oracle disables shared compilation so its
+build does not leave an unowned VBCSCompiler process.
 
 Model/lineup cases include exact property casing, defaults, duplicate known
 properties, an invalid earlier duplicate, numeric boolean conversion, quoted

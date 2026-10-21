@@ -137,7 +137,7 @@ test('existing recordings match actual native manager and EF queries through Pos
       'MediaBrowser.Controller/Entities/BaseItem.cs', 'MediaBrowser.Controller/Entities/UserRootFolder.cs',
       'MediaBrowser.Controller/Entities/UserView.cs', 'MediaBrowser.Controller/Entities/CollectionFolder.cs',
       'MediaBrowser.Controller/Entities/Movies/BoxSet.cs', 'MediaBrowser.Controller/Playlists/Playlist.cs',
-      'src/Jellyfin.LiveTv/Channels/ChannelManager.cs', 'Jellyfin.Api/Middleware/ExceptionMiddleware.cs',
+      'src/Jellyfin.LiveTv/Channels/ChannelManager.cs', 'Emby.Server.Implementations/Dto/DtoService.cs', 'Jellyfin.Api/Middleware/ExceptionMiddleware.cs',
       'Jellyfin.Server.Implementations/Item/BaseItemMapper.cs']);
     const receipt = await recordOracle({ project: 'tests/library/fixtures/live-tv-recordings/Oracle.csproj',
       output: path.join(output, 'native'), args: [inputFile, '{output}/native.json', privateRoot, current.sourceDatabase] });
@@ -306,8 +306,15 @@ test('existing recordings match actual native manager and EF queries through Pos
         const state = await store.run(db => library.load(db, null, { baseRows: [] }));
         try {
           state.items.push(candidate); state.byId.set(idKey(candidate.Id), candidate);
-          const unselected = await projectItem(candidate, state, null, dtoOptions({ enableimages: false, enableuserdata: false }), library.options);
-          assert.equal(Object.hasOwn(unselected, 'EnableMediaSourceDisplay'), false);
+          const unselectedOptions = dtoOptions({ enableimages: false, enableuserdata: false });
+          if (candidate.SourceType === 'Channel' && idKey(candidate.ChannelId) === '0'.repeat(32)) {
+            // DtoService's separate final ChannelName lookup still resolves
+            // ChannelId, even when the display getter is not selected.
+            await assert.rejects(projectItem(candidate, state, null, unselectedOptions, library.options), { nativeException: 'ArgumentException', status: 400 });
+          } else {
+            const unselected = await projectItem(candidate, state, null, unselectedOptions, library.options);
+            assert.equal(Object.hasOwn(unselected, 'EnableMediaSourceDisplay'), false);
+          }
           const selectedOptions = dtoOptions({ fields: ['EnableMediaSourceDisplay'], enableimages: false, enableuserdata: false });
           if (expected.failure) await assert.rejects(projectItem(candidate, state, null, selectedOptions, library.options),
             { status: expected.failure.status, nativeException: expected.failure.type });
@@ -317,9 +324,10 @@ test('existing recordings match actual native manager and EF queries through Pos
       report.displayCases.push(observed);
     }
     report.deleteCases = [];
+    assert.equal(native.actualDeleteDtoService, true);
     assert.equal(native.deleteCases.length, 5);
     for (const expected of native.deleteCases) {
-      const prepared = { Id: id(991), ChannelId: guid(expected.channelId), Path: expected.path };
+      const prepared = { Id: guid(expected.id), ChannelId: guid(expected.channelId), Path: expected.path };
       const candidate = Object.assign(newNativeItemEntity(expected.nativeType), prepared);
       assert.equal(candidate.Id, prepared.Id); assert.equal(idKey(candidate.ChannelId), expected.channelId);
       assert.equal(candidate.Path, expected.path);
@@ -329,10 +337,27 @@ test('existing recordings match actual native manager and EF queries through Pos
       try {
         state.items.push(candidate); state.byId.set(idKey(candidate.Id), candidate);
         const selected = dtoOptions({ fields: ['CanDelete'], enableimages: false, enableuserdata: false });
-        for (const viewer of [null, user]) assert.equal((await projectItem(candidate, state, viewer, selected, library.options)).CanDelete,
-          expected.value, expected.name + ': actual DTO must retain the empty provider inventory result');
+        assert.equal(expected.dto.length, 2);
+        const dto = [];
+        for (const observation of expected.dto) {
+          const observed = observation.result;
+          if (expected.name === 'channel overrides provider deletion') {
+            assert.equal(observed.failure?.type, 'ArgumentException'); assert.equal(observed.failure.status, 400);
+            assert.equal(observed.failure.Message, "Guid can't be empty (Parameter 'id')");
+            assert.ok(observed.failure.StackTrace.includes('AttachBasicFields'));
+          } else {
+            assert.equal(observed.failure, undefined, expected.name + ': every actual native readonly DTO dependency must be supplied');
+            assert.equal(observed.value.CanDelete, expected.value);
+          }
+          let actual;
+          try { actual = { value: { CanDelete: (await projectItem(candidate, state, observation.userless ? null : user, selected, library.options)).CanDelete } }; }
+          catch (error) { actual = { failure: { type: error.nativeException ?? error.name, status: error.status ?? 500, Message: error.message, StackTrace: error.stack } }; }
+          const comparable = result => result.failure ? { failure: { type: result.failure.type, status: result.failure.status, Message: result.failure.Message } } : result;
+          assert.deepEqual(comparable(actual), comparable(observed), expected.name + ': userless=' + observation.userless + ' actual DTO result/error');
+          dto.push({ userless: observation.userless, actual, native: observed });
+        }
+        report.deleteCases.push({ ...expected, actualInput: prepared, actualSourceType: candidate.SourceType, actualValue: canDeleteItem(candidate), dto });
       } finally { await state.dispose(); }
-      report.deleteCases.push({ ...expected, actualInput: prepared, actualSourceType: candidate.SourceType, actualValue: canDeleteItem(candidate) });
     }
     await store.run(async db => {
       const owner = await createPostgresRecordingQuery(db, {}, { folderIds: folders.folderIds, userId: user.Id });

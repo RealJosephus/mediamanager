@@ -147,8 +147,11 @@ export class LiveStreamsService {
     if (errors.length) throw new AggregateError(errors, 'Live stream ownership failed to close.');
   }
   closeLiveStream(id) {
+    if (typeof id !== 'string' || !id) return Promise.reject(libraryError(400, 'Live stream id cannot be empty.'));
+    // Session controllers can detach after runtime shutdown has revoked the
+    // public owners. Their cleanup joins the same drain, without admitting work.
+    if (this.#closing) return this.#closing;
     return this.#admit(() => this.#serial(async () => {
-      if (typeof id !== 'string' || !id) throw libraryError(400, 'Live stream id cannot be empty.');
       const entry = this.#entries.get(key(id)); if (entry) await this.#release(entry, entry.owners.at(-1));
     }));
   }

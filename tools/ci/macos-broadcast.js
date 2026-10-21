@@ -1,9 +1,10 @@
 import assert from 'node:assert/strict';
-import { execFileSync } from 'node:child_process';
+import { execFileSync, spawn } from 'node:child_process';
 import { createHash, randomBytes } from 'node:crypto';
 import dgram from 'node:dgram';
-import { mkdir, readFile, rename, writeFile } from 'node:fs/promises';
+import { link, lstat, mkdir, open, readFile, readdir, realpath, rename, unlink, writeFile } from 'node:fs/promises';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 assert.equal(process.platform, 'darwin');
 const mode = process.argv[2]; assert.ok(['setup', 'cleanup'].includes(mode));
@@ -52,6 +53,7 @@ const routeSource = String.raw`
 #include <err.h>
 #include <errno.h>
 #include <fcntl.h>
+#include <limits.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -126,6 +128,91 @@ static int same_identity(Message *left, Message *right) {
   }
   return 1;
 }
+static void owned_path(char *output, size_t size, const char *base, const char *suffix) {
+  int length = snprintf(output, size, "%s%s", base, suffix);
+  if (length < 0 || (size_t)length >= size) errx(1, "Owned receipt path exceeds storage");
+}
+static void sync_directory(const char *filename) {
+  char directory[PATH_MAX]; strlcpy(directory, filename, sizeof(directory)); char *slash = strrchr(directory, '/');
+  if (!slash || slash == directory) errx(1, "Receipt must remain inside its owned provisioning directory"); *slash = 0;
+  int file = open(directory, O_RDONLY | O_DIRECTORY); if (file < 0) err(1, "Open receipt directory");
+  if (fsync(file)) err(1, "Sync receipt directory"); if (close(file)) err(1, "Close receipt directory");
+}
+static FILE *pending_receipt(const char *filename, char *temporary, size_t size) {
+  char suffix[64]; snprintf(suffix, sizeof(suffix), ".pending-%d", getpid()); owned_path(temporary, size, filename, suffix);
+  int file = open(temporary, O_WRONLY | O_CREAT | O_EXCL | O_NOFOLLOW, 0644); if (file < 0) err(1, "Create exclusive receipt");
+  FILE *output = fdopen(file, "w"); if (!output) err(1, "Open receipt stream"); return output;
+}
+static void publish_receipt(FILE *output, const char *temporary, const char *filename, int replace) {
+  if (fflush(output) || fsync(fileno(output)) || fclose(output)) err(1, "Sync complete receipt");
+  if (replace) { if (rename(temporary, filename)) err(1, "Publish mutation state"); }
+  else { if (link(temporary, filename)) err(1, "Publish exclusive observation"); if (unlink(temporary)) err(1, "Remove observation temporary link"); }
+  sync_directory(filename);
+}
+static void describe(FILE *output, Message *message) {
+  if (!message->header.rtm_msglen) { fputs("null", output); return; }
+  struct rt_metrics value = message->header.rtm_rmx;
+  fprintf(output, "{\"exact\":%s,\"interfaceIndex\":%u,\"flags\":%d,\"flagsWithoutDone\":%d,\"addressMask\":%d,\"metrics\":{"
+    "\"locks\":%llu,\"mtu\":%llu,\"hopcount\":%llu,\"expiryEpochSeconds\":%lld,\"recvpipe\":%llu,\"sendpipe\":%llu,\"ssthresh\":%llu,\"rtt\":%llu,\"rttvar\":%llu},\"addresses\":{",
+    exact(message) ? "true" : "false", message->header.rtm_index, message->header.rtm_flags, message->header.rtm_flags & ~RTF_DONE, message->header.rtm_addrs,
+    (unsigned long long)value.rmx_locks, (unsigned long long)value.rmx_mtu, (unsigned long long)value.rmx_hopcount, (long long)value.rmx_expire,
+    (unsigned long long)value.rmx_recvpipe, (unsigned long long)value.rmx_sendpipe, (unsigned long long)value.rmx_ssthresh,
+    (unsigned long long)value.rmx_rtt, (unsigned long long)value.rmx_rttvar);
+  int comma = 0;
+  for (unsigned index = 0; index < RTAX_MAX; index++) {
+    struct sockaddr *value = address(message, 1u << index); if (!value) continue;
+    fprintf(output, "%s\"%u\":{\"length\":%u,\"family\":%u,\"hex\":\"", comma ? "," : "", index, value->sa_len, value->sa_family);
+    const unsigned char *bytes = (const unsigned char *)value; for (unsigned byte = 0; byte < value->sa_len; byte++) fprintf(output, "%02x", bytes[byte]);
+    fputs("\"}", output); comma = 1;
+  }
+  fputs("}}", output);
+}
+static void difference(FILE *output, int *comma, const char *field) { fprintf(output, "%s\"%s\"", *comma ? "," : "", field); *comma = 1; }
+static void observe(const char *base, const char *operation, Message *baseline, Message *current) {
+  char suffix[96], binary[PATH_MAX], json[PATH_MAX], temporary[PATH_MAX];
+  snprintf(suffix, sizeof(suffix), ".before-%s-%d.bin", operation, getpid()); owned_path(binary, sizeof(binary), base, suffix);
+  FILE *output = pending_receipt(binary, temporary, sizeof(temporary));
+  if (current->header.rtm_msglen && fwrite(current->bytes, 1, current->header.rtm_msglen, output) != current->header.rtm_msglen) err(1, "Write complete route observation");
+  publish_receipt(output, temporary, binary, 0);
+  snprintf(suffix, sizeof(suffix), ".before-%s-%d.json", operation, getpid()); owned_path(json, sizeof(json), base, suffix);
+  output = pending_receipt(json, temporary, sizeof(temporary)); fputs("{\"baseline\":", output); describe(output, baseline); fputs(",\"current\":", output); describe(output, current);
+  fprintf(output, ",\"sameIdentity\":%s,\"differentPaths\":[", same_identity(baseline, current) ? "true" : "false"); int comma = 0;
+  if (exact(baseline) != exact(current)) difference(output, &comma, "exact");
+  if (baseline->header.rtm_index != current->header.rtm_index) difference(output, &comma, "interfaceIndex");
+  if ((baseline->header.rtm_flags & ~RTF_DONE) != (current->header.rtm_flags & ~RTF_DONE)) difference(output, &comma, "flagsWithoutDone");
+  #define METRIC_DIFFERENT(member, field) if (baseline->header.rtm_rmx.member != current->header.rtm_rmx.member) difference(output, &comma, "metrics." field)
+  METRIC_DIFFERENT(rmx_locks, "locks"); METRIC_DIFFERENT(rmx_mtu, "mtu"); METRIC_DIFFERENT(rmx_hopcount, "hopcount"); METRIC_DIFFERENT(rmx_expire, "expiryEpochSeconds");
+  METRIC_DIFFERENT(rmx_recvpipe, "recvpipe"); METRIC_DIFFERENT(rmx_sendpipe, "sendpipe"); METRIC_DIFFERENT(rmx_ssthresh, "ssthresh"); METRIC_DIFFERENT(rmx_rtt, "rtt"); METRIC_DIFFERENT(rmx_rttvar, "rttvar");
+  #undef METRIC_DIFFERENT
+  for (unsigned index = 0; index < RTAX_MAX; index++) {
+    struct sockaddr *one = address(baseline, 1u << index), *two = address(current, 1u << index);
+    if ((!one) != (!two) || (one && (one->sa_len != two->sa_len || memcmp(one, two, one->sa_len)))) {
+      char field[64]; snprintf(field, sizeof(field), "addresses.%u", index); difference(output, &comma, field);
+    }
+  }
+  fputs("]}\n", output); publish_receipt(output, temporary, json, 0);
+}
+static int hex_identity(const char *value, size_t length) {
+  if (strlen(value) != length) return 0; for (size_t index = 0; index < length; index++) if (!strchr("0123456789abcdef", value[index])) return 0; return 1;
+}
+static int owned_interface(const char *value) {
+  if (strncmp(value, "feth", 4) || !value[4]) return 0;
+  for (const char *digit = value + 4; *digit; digit++) if (*digit < '0' || *digit > '9') return 0;
+  return strlen(value) < IFNAMSIZ;
+}
+static unsigned expected_index(const char *value) {
+  char *end = NULL; errno = 0; unsigned long parsed = strtoul(value, &end, 10);
+  if (errno || !*value || *end || parsed == 0 || parsed > UINT16_MAX) errx(1, "Invalid bound interface index");
+  return (unsigned)parsed;
+}
+static void mutation_state(char **argv, unsigned owned_index, const char *stage, int started) {
+  char filename[PATH_MAX], temporary[PATH_MAX]; owned_path(filename, sizeof(filename), argv[2], ".install-state.json");
+  FILE *output = pending_receipt(filename, temporary, sizeof(temporary));
+  fprintf(output, "{\"schemaVersion\":1,\"candidateHead\":\"%s\",\"savedRouteSha256\":\"%s\",\"nonce\":\"%s\","
+    "\"ownedInterfaceName\":\"%s\",\"ownedInterfaceIndex\":%u,\"mutationMayHaveStarted\":%s,\"stage\":\"%s\"}\n",
+    argv[5], argv[6], argv[7], argv[3], owned_index, started ? "true" : "false", stage);
+  publish_receipt(output, temporary, filename, 1);
+}
 static Message load(const char *filename) {
   Message value = {0}; int file = open(filename, O_RDONLY | O_NOFOLLOW); if (file < 0) err(1, "Read saved route");
   ssize_t length = read(file, value.bytes, sizeof(value)); if (length < 0) err(1, "Read route bytes"); close(file);
@@ -140,22 +227,37 @@ static void apply(int socket_fd, Message *value, int type) {
   if (error) { errno = error; err(1, type == RTM_ADD ? "RTM_ADD limited broadcast" : "RTM_DELETE limited broadcast"); }
 }
 int main(int argc, char **argv) {
-  if (argc != 5 || (strcmp(argv[1], "snapshot") && strcmp(argv[1], "install") && strcmp(argv[1], "restore"))) errx(1, "Invalid owned route operation");
   if (geteuid() != 0) errx(1, "Owned route operations require root");
+  if (argc == 3 && !strcmp(argv[1], "interface-index")) {
+    if (!owned_interface(argv[2])) errx(1, "Only an owned feth interface may be inspected");
+    unsigned index = if_nametoindex(argv[2]);
+    printf("{\"ownedInterfaceIndex\":%u}\n", index); return 0;
+  }
+  int snapshot = argc == 5 && !strcmp(argv[1], "snapshot");
+  int install = argc == 9 && !strcmp(argv[1], "install"), restore = argc == 9 && !strcmp(argv[1], "restore");
+  if (!snapshot && !install && !restore) errx(1, "Invalid owned route operation");
+  if (!owned_interface(argv[3])) errx(1, "The route operation must bind an owned feth interface");
+  unsigned bound_index = 0;
+  if (!snapshot) {
+    if ((!hex_identity(argv[5], 40) && !hex_identity(argv[5], 64)) || !hex_identity(argv[6], 64) || !hex_identity(argv[7], 32)) errx(1, "Invalid immutable mutation identity");
+    bound_index = expected_index(argv[8]);
+  }
   int socket_fd = socket(PF_ROUTE, SOCK_RAW, 0); if (socket_fd < 0) err(1, "PF_ROUTE socket");
   struct timeval timeout = { .tv_sec = 5 }; if (setsockopt(socket_fd, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout))) err(1, "PF_ROUTE timeout");
   Message current = {0}; int has_current = query(socket_fd, &current);
-  if (!strcmp(argv[1], "snapshot")) {
+  if (snapshot) {
     int file = open(argv[2], O_WRONLY | O_CREAT | O_EXCL | O_NOFOLLOW, 0644); if (file < 0) err(1, "Create original route receipt");
     if (has_current && write(file, current.bytes, current.header.rtm_msglen) != current.header.rtm_msglen) err(1, "Save original route bytes");
-    if (close(file)) err(1, "Close original route receipt");
+    if (fsync(file)) err(1, "Sync original route receipt"); if (close(file)) err(1, "Close original route receipt"); sync_directory(argv[2]);
     printf("{\"exactRouteExisted\":%s,\"interfaceIndex\":%u,\"flags\":%d,\"expiryEpochSeconds\":%lld}\n", has_current ? "true" : "false", current.header.rtm_index, current.header.rtm_flags, (long long)current.header.rtm_rmx.rmx_expire);
     close(socket_fd); return 0;
   }
   Message original = load(argv[2]); int has_original = exact(&original);
   unsigned owned_index = if_nametoindex(argv[3]);
-  if (!strcmp(argv[1], "install")) {
-    if (!owned_index || strncmp(argv[3], "feth", 4)) errx(1, "The replacement must use the created feth interface");
+  observe(argv[2], install ? "install" : "restore", &original, &current);
+  if (install) {
+    if (owned_index != bound_index) errx(1, "The created feth interface identity changed before install");
+    mutation_state(argv, bound_index, "preparing", 0);
     if (has_current != has_original || (has_original && !same_identity(&current, &original))) errx(1, "Limited broadcast route changed after capture");
     Message replacement = {0}; replacement.header.rtm_msglen = sizeof(struct rt_msghdr);
     replacement.header.rtm_flags = RTF_UP | RTF_HOST | RTF_STATIC | RTF_BROADCAST; replacement.header.rtm_index = owned_index;
@@ -172,17 +274,21 @@ int main(int argc, char **argv) {
     if (inet_pton(AF_INET, argv[4], &source.sin_addr) != 1) errx(1, "Invalid owned interface address");
     append(&replacement, RTA_DST, &destination, sizeof(destination)); append(&replacement, RTA_GATEWAY, &gateway, sizeof(gateway));
     append(&replacement, RTA_IFP, &interface, sizeof(interface)); append(&replacement, RTA_IFA, &source, sizeof(source));
+    // This durable marker precedes the first possible route mutation. An
+    // interrupted helper must never leave its parent guessing from intent.
+    mutation_state(argv, bound_index, "mutation-requested", 1);
     if (has_original) apply(socket_fd, &original, RTM_DELETE);
     apply(socket_fd, &replacement, RTM_ADD);
     if (!query(socket_fd, &current) || current.header.rtm_index != owned_index || !(current.header.rtm_flags & RTF_BROADCAST)) errx(1, "Installed route did not retain the owned broadcast interface");
     if (current.header.rtm_rmx.rmx_mtu != (unsigned)link.ifr_mtu) errx(1, "Installed route changed the owned interface MTU");
+    mutation_state(argv, bound_index, "installed", 1);
     printf("{\"installed\":true,\"interfaceIndex\":%u,\"flags\":%d,\"mtu\":%u}\n", current.header.rtm_index, current.header.rtm_flags, current.header.rtm_rmx.rmx_mtu);
   } else {
     if (has_current && has_original && same_identity(&current, &original)) {
       printf("{\"restored\":true,\"alreadyOriginal\":true}\n"); close(socket_fd); return 0;
     }
     if (has_current) {
-      if (!owned_index || current.header.rtm_index != owned_index) errx(1, "Refusing to delete a limited broadcast route owned by another interface");
+      if (owned_index != bound_index || current.header.rtm_index != bound_index) errx(1, "Refusing to delete a limited broadcast route owned by another interface");
       apply(socket_fd, &current, RTM_DELETE);
     }
     if (has_original) {
@@ -200,7 +306,9 @@ int main(int argc, char **argv) {
 `;
 
 const helper = path.join(directory, 'broadcast-route-owner'), savedRoute = path.join(directory, 'broadcast-route-original.bin');
-let record = { schemaVersion: 2, mode, at: new Date().toISOString(), createdInterfaces: [], operations: [],
+const installationState = savedRoute + '.install-state.json';
+let record = { schemaVersion: 3, mode, at: new Date().toISOString(), createdInterfaces: [], interfaceIdentities: {}, operations: [],
+  routeRestorationRequired: false, routeRestored: null,
   nativeDiscoveryExecutedByThisPrecheck: false, nativeDiscoveryStillRequired: true };
 let interrupted, interrupt, restoring;
 for (const signal of ['SIGINT', 'SIGTERM']) process.once(signal, () => {
@@ -218,22 +326,212 @@ async function mutate(executable, args, { cleanup = false, onSuccess } = {}) {
     if (interrupted && !cleanup) throw interrupted; return result;
   } catch (error) { entry.error = errorRecord(error); await publish(); throw error; }
 }
+function interfaceIndex(name) {
+  assert.match(name, /^feth\d+$/u);
+  const value = JSON.parse(command('/usr/bin/sudo', ['-n', helper, 'interface-index', name])).ownedInterfaceIndex;
+  assert.ok(Number.isInteger(value) && value >= 0 && value <= 65535);
+  return value;
+}
+async function syncDirectory() {
+  const owner = await open(directory, 'r'); try { await owner.sync(); } finally { await owner.close(); }
+}
+async function createInstallationState(identity) {
+  const pending = installationState + '.initial-' + process.pid + '-' + identity.nonce;
+  const owner = await open(pending, 'wx', 0o600);
+  try { await owner.writeFile(JSON.stringify({ ...identity, mutationMayHaveStarted: false, stage: 'not-started' }) + '\n'); await owner.sync(); }
+  finally { await owner.close(); }
+  // A hard link publishes a complete initial state without replacing any old
+  // receipt. Both names are inside this run's owned provisioning directory.
+  await link(pending, installationState); await unlink(pending); await syncDirectory();
+}
+function validateInstallationIdentity(identity) {
+  assert.equal(identity.schemaVersion, 1);
+  assert.match(identity.candidateHead, /^(?:[0-9a-f]{40}|[0-9a-f]{64})$/u);
+  assert.equal(identity.candidateHead, record.candidateHead);
+  assert.match(identity.savedRouteSha256, /^[0-9a-f]{64}$/u);
+  assert.equal(identity.savedRouteSha256, record.originalRouteSha256);
+  assert.match(identity.nonce, /^[0-9a-f]{32}$/u);
+  assert.equal(identity.ownedInterfaceName, record.interface);
+  assert.match(identity.ownedInterfaceName, /^feth\d+$/u);
+  assert.ok(Number.isInteger(identity.ownedInterfaceIndex) && identity.ownedInterfaceIndex > 0 && identity.ownedInterfaceIndex <= 65535);
+  assert.equal(identity.ownedInterfaceIndex, record.interfaceIdentities[record.interface]);
+}
+async function readInstallationState() {
+  const identity = record.installationIdentity; validateInstallationIdentity(identity);
+  const stat = await lstat(installationState); assert.ok(stat.isFile() && !stat.isSymbolicLink(), 'The installation state must be its original regular file.');
+  const bytes = await readFile(installationState), state = JSON.parse(bytes);
+  for (const [key, value] of Object.entries(identity)) assert.equal(state[key], value, 'The installation state changed immutable field ' + key + '.');
+  assert.equal(typeof state.mutationMayHaveStarted, 'boolean');
+  assert.ok((state.mutationMayHaveStarted ? ['mutation-requested', 'installed'] : ['not-started', 'preparing']).includes(state.stage));
+  record.installationState = { path: installationState, sha256: sha(bytes), observedAt: new Date().toISOString(), value: state };
+  return state;
+}
+function routeArguments(operation) {
+  const identity = record.installationIdentity; validateInstallationIdentity(identity);
+  return [helper, operation, savedRoute, identity.ownedInterfaceName, record.address, identity.candidateHead,
+    identity.savedRouteSha256, identity.nonce, String(identity.ownedInterfaceIndex)];
+}
+async function captureRouteObservations() {
+  const prefix = path.basename(savedRoute) + '.before-';
+  const previous = new Map((record.routeObservations ?? []).map(entry => [entry.path, entry.sha256]));
+  const observations = record.routeObservations = [], failures = [];
+  for (const name of (await readdir(directory)).filter(value => value.startsWith(prefix)).sort()) {
+    const match = /^broadcast-route-original\.bin\.before-(install|restore)-(\d+)\.(bin|json)(\.pending-\d+)?$/u.exec(name);
+    assert.ok(match, 'Unexpected route observation filename.');
+    const absolute = path.join(directory, name), stat = await lstat(absolute);
+    assert.ok(stat.isFile() && !stat.isSymbolicLink(), 'A route observation must be an exclusive regular file.');
+    const bytes = await readFile(absolute), entry = { path: absolute, size: bytes.length, sha256: sha(bytes),
+      operation: match[1], helperPid: Number(match[2]), format: match[3], complete: !match[4],
+      candidateHead: record.candidateHead, savedRouteSha256: record.originalRouteSha256 };
+    observations.push(entry);
+    if (previous.has(absolute) && previous.get(absolute) !== entry.sha256)
+      failures.push(new Error('A previously captured route observation changed: ' + absolute));
+    if (!entry.complete) { failures.push(new Error('An incomplete route observation remains: ' + absolute)); continue; }
+    if (entry.format === 'json') entry.value = JSON.parse(bytes);
+  }
+  if (failures.length) throw new AggregateError(failures, 'The route observation receipts were not immutable and complete.');
+}
+const udpLogKeys = ['net.inet.udp.log.enable', 'net.inet.udp.log.remote_port_included'];
+function readUdpLog(key) {
+  assert.ok(udpLogKeys.includes(key));
+  const stdout = command('/usr/sbin/sysctl', ['-n', key]); assert.match(stdout.trim(), /^\d+$/u);
+  const value = Number(stdout.trim()); assert.ok(Number.isSafeInteger(value) && value >= 0 && value <= 0xffffffff);
+  return { key, stdout, value, at: new Date().toISOString() };
+}
+async function restoreUdpLogging() {
+  if (!record.udpLogging?.restoreRequested) return;
+  assert.deepEqual(record.udpLogging.original.map(entry => entry.key), udpLogKeys);
+  const failures = [];
+  for (const key of udpLogKeys) {
+    const entry = record.udpLogging.original.find(value => value.key === key);
+    try {
+      assert.ok(Number.isSafeInteger(entry.value) && entry.value >= 0 && entry.value <= (key.endsWith('.enable') ? 0xffffffff : 65535));
+      // Even a partial enable restores BOTH originals. Failure of one key must
+      // not prevent attempting the other. No policy/third key is writable.
+      if (!record.udpLogging.restored || readUdpLog(key).value !== entry.value)
+        await mutate('/usr/bin/sudo', ['-n', '/usr/sbin/sysctl', key + '=' + entry.value], { cleanup: true });
+      const observed = readUdpLog(key); (record.udpLogging.restoreReadback ??= []).push(observed);
+      assert.equal(observed.value, entry.value, 'The UDP diagnostic logging value was not restored.'); await publish();
+    } catch (error) { failures.push(error); (record.udpLogging.restoreErrors ??= []).push({ key, error: errorRecord(error) }); }
+  }
+  if (failures.length) { record.udpLogging.restored = false; await publish(); throw new AggregateError(failures, 'The original UDP logging values could not both be restored.'); }
+  record.udpLogging.restored = true; record.udpLogging.restoredAt = new Date().toISOString(); await publish();
+}
+async function withUdpLogging() {
+  const original = udpLogKeys.map(readUdpLog);
+  const usage = command('/usr/sbin/sysctl', ['-n', 'net.inet.udp.log.enable_usage']);
+  // Use the actual kernel's declared flag meanings, rather than assuming the
+  // fetched XNU revision has the same bits as the running Actions kernel.
+  assert.match(usage, /\blog:0x0*8\b/u); assert.match(usage, /\bdropnecp:0x0*1000\b/u);
+  record.udpLogging = { original, enableUsage: usage, restoreRequested: true, requestedAt: new Date().toISOString(),
+    purpose: 'Temporary UDP_LOG and DROP_NECP diagnostics only; network policy is unchanged.',
+    sourceBindings: ['https://github.com/apple-oss-distributions/xnu/blob/main/bsd/netinet/udp_log.h',
+      'https://github.com/apple-oss-distributions/xnu/blob/main/bsd/netinet/udp_log.c'] };
+  await publish(); // The complete restoration intent precedes either mutation.
+  const enabled = Number(BigInt(original[0].value) | 0x1008n);
+  await mutate('/usr/bin/sudo', ['-n', '/usr/sbin/sysctl', udpLogKeys[1] + '=65001']);
+  await mutate('/usr/bin/sudo', ['-n', '/usr/sbin/sysctl', udpLogKeys[0] + '=' + enabled]);
+  record.udpLogging.enabledReadback = udpLogKeys.map(readUdpLog);
+  assert.equal(record.udpLogging.enabledReadback[0].value, enabled); assert.equal(record.udpLogging.enabledReadback[1].value, 65001); await publish();
+  let primary;
+  try { await diagnoseUdp(); } catch (error) { primary = error; }
+  try { await restoreUdpLogging(); }
+  catch (error) { throw new AggregateError([...(primary ? [primary] : []), error], 'UDP diagnosis and exact logging restoration failed.'); }
+  if (primary) throw primary;
+}
+async function diagnoseUdp() {
+  const diagnostic = path.join(path.dirname(fileURLToPath(import.meta.url)), 'macos-udp-diagnostic.js');
+  const provisioningDirectory = await realpath(directory), nodeExecutable = await realpath(process.execPath);
+  const scopeFile = path.join(provisioningDirectory, 'udp-diagnostic-scope.json');
+  const userOutput = path.join(provisioningDirectory, 'udp-diagnostic-user.json'), rootOutput = path.join(provisioningDirectory, 'udp-diagnostic-root.json');
+  const scope = { schemaVersion: 1, runId: process.env.GITHUB_RUN_ID, head: command('git', ['rev-parse', 'HEAD']).trim(),
+    userId: process.getuid(), nodeExecutable, nodeSha256: sha(await readFile(nodeExecutable)), scriptSha256: sha(await readFile(diagnostic)), provisioningDirectory,
+    interface: record.interface, peer: record.peer, address: record.address, peerAddress: record.peerAddress,
+    directedBroadcast: record.address.replace(/\.1$/u, '.3'), userOutput, rootOutput };
+  assert.ok(scope.userId > 0, 'The official broadcast gate must run as the ordinary runner.');
+  await writeFile(scopeFile, JSON.stringify(scope, null, 2) + '\n', { flag: 'wx', mode: 0o600 });
+  for (const output of [userOutput, rootOutput]) await writeFile(output, '', { flag: 'wx', mode: 0o600 });
+  record.udpDiagnostics = { scopeFile, scopeSha256: sha(await readFile(scopeFile)), scriptSha256: scope.scriptSha256,
+    diagnosticOnly: true, officialOrdinaryUidGateStillRequired: true, operations: [] }; await publish();
+  for (const [role, executable, args, output] of [
+    ['ordinary', nodeExecutable, [diagnostic, '--worker', scopeFile, userOutput], userOutput],
+    ['root', '/usr/bin/sudo', ['-n', nodeExecutable, diagnostic, '--worker', scopeFile, rootOutput], rootOutput],
+  ]) {
+    if (interrupted) throw interrupted;
+    const operation = { role, executable, args, requestedAt: new Date().toISOString() }; record.udpDiagnostics.operations.push(operation); await publish();
+    if (interrupted) throw interrupted;
+    // No credential/tool environment is sent to sudo. The worker needs only
+    // its fixed, owned topology scope and absolute executable/command paths.
+    const child = spawn(executable, args, { env: { PATH: '/usr/bin:/bin:/usr/sbin:/sbin', LANG: 'C', LC_ALL: 'C' }, stdio: ['ignore', 'pipe', 'pipe'] });
+    operation.pid = child.pid; let stdout = '', stderr = '', timedOut = false, forced = false, forceTimer;
+    child.stdout.on('data', bytes => { stdout += bytes.toString(); }); child.stderr.on('data', bytes => { stderr += bytes.toString(); });
+    const stop = () => { child.kill('SIGTERM'); forceTimer ??= setTimeout(() => { forced = true; child.kill('SIGKILL'); }, 10000); };
+    interrupt = stop;
+    const timeout = setTimeout(() => { timedOut = true; stop(); }, 45000);
+    let result, spawnError;
+    try {
+      result = await new Promise(resolve => {
+        child.once('error', error => { spawnError = errorRecord(error); });
+        child.once('close', (code, signal) => resolve({ code, signal, error: spawnError }));
+      });
+    } finally { clearTimeout(timeout); clearTimeout(forceTimer); interrupt = undefined; }
+    operation.result = result; operation.stdout = stdout; operation.stderr = stderr; operation.timedOut = timedOut; operation.forced = forced;
+    operation.completedAt = new Date().toISOString(); await publish();
+    assert.equal(result.code, 0, 'The ' + role + ' UDP diagnostic failed its infrastructure/cleanup contract.');
+    assert.equal(result.signal, null); assert.equal(timedOut, false); assert.equal(forced, false);
+    const bytes = await readFile(output), observed = JSON.parse(bytes); operation.outputFile = output; operation.outputSha256 = sha(bytes);
+    assert.equal(observed.uid, role === 'root' ? 0 : scope.userId); assert.equal(observed.allSocketsClosed, true);
+    assert.equal(observed.phaseAcceptance, false); assert.equal(observed.releaseAcceptance, false);
+    await publish(); if (interrupted) throw interrupted;
+  }
+}
 function restore() {
   return restoring ??= (async () => {
     const failures = [];
-    if (record.replacementRequested && !record.routeRestored) {
+    try { await restoreUdpLogging(); } catch (error) { failures.push(error); }
+    let helperTrusted = false;
+    try {
+      if (record.createdInterfaces.length || record.installationStateCreated)
+        assert.equal(sha(await readFile(helper)), record.helperSha256, 'The owned routing helper changed before cleanup.');
+      helperTrusted = true;
+    } catch (error) { failures.push(error); }
+    let noMutationProved = false;
+    if (record.installationStateCreated && !record.routeRestored) {
+      record.routeRestorationRequired = null;
       try {
         assert.equal(sha(await readFile(helper)), record.helperSha256, 'The owned routing helper changed before cleanup.');
         assert.equal(sha(await readFile(savedRoute)), record.originalRouteSha256, 'The captured route changed before cleanup.');
-        record.restoration = JSON.parse(await mutate('/usr/bin/sudo', [helper, 'restore', savedRoute, record.interface, record.address], { cleanup: true }));
-        record.routeRestored = true; record.routeAfterRestore = route(); await publish();
+        const state = await readInstallationState();
+        record.routeRestorationRequired = state.mutationMayHaveStarted;
+        if (!state.mutationMayHaveStarted) {
+          // Intent is not route ownership. This durable false state proves the
+          // helper never reached RTM_DELETE/ADD, so leave the current route alone.
+          record.restoration = { notInstalled: true, notOwned: true, mutationMayHaveStarted: false,
+            reason: 'The owned helper did not reach any route mutation.' };
+          noMutationProved = true;
+          record.routeRestored = null; record.routeAfterNoMutation = route();
+        } else {
+          record.restoration = JSON.parse(await mutate('/usr/bin/sudo', routeArguments('restore'), { cleanup: true }));
+          assert.equal(record.restoration.restored, true);
+          record.routeRestored = true; record.routeAfterRestore = route();
+        }
+        await publish();
       } catch (error) { failures.push(error); }
     }
+    try { await captureRouteObservations(); } catch (error) { failures.push(error); }
     // Preserve interfaces if restoring the old route failed: a still-live owned
     // route must not lose the interface needed for an explicit cleanup retry.
-    if (!record.replacementRequested || record.routeRestored) for (const name of [...record.createdInterfaces].reverse()) {
+    const routeSafelyReleased = record.routeRestored === true || !record.installationStateCreated || noMutationProved;
+    if (routeSafelyReleased && helperTrusted) for (const name of [...record.createdInterfaces].reverse()) {
       if ((record.destroyedInterfaces ?? []).includes(name)) continue;
       try {
+        assert.ok(Number.isInteger(record.interfaceIdentities[name]) && record.interfaceIdentities[name] > 0,
+          'An interface cannot be destroyed without its captured kernel index.');
+        const currentIndex = interfaceIndex(name);
+        if (!currentIndex) {
+          (record.alreadyAbsentInterfaces ??= []).push(name); continue;
+        }
+        assert.equal(currentIndex, record.interfaceIdentities[name], 'The feth name no longer identifies the interface created by this run.');
         await mutate('/usr/bin/sudo', ['/sbin/ifconfig', name, 'destroy'], { cleanup: true, onSuccess: () => (record.destroyedInterfaces ??= []).push(name) });
       } catch (error) { failures.push(error); }
     }
@@ -241,7 +539,8 @@ function restore() {
     if (record.defaultRoute) {
       assert.deepEqual(defaultIdentity(record.defaultRouteAfter), defaultIdentity(record.defaultRoute), 'The IPv4 default route changed.');
     }
-    for (const name of record.destroyedInterfaces ?? []) assert.ok(!record.cleanupInterfaces.split('\n').some(line => line.startsWith(name + ':')), 'An owned feth interface remained after destroy.');
+    for (const name of [...(record.destroyedInterfaces ?? []), ...(record.alreadyAbsentInterfaces ?? [])])
+      assert.ok(!record.cleanupInterfaces.split('\n').some(line => line.startsWith(name + ':')), 'An owned feth interface remained after cleanup.');
     record.cleanupCompleted = !failures.length; record.cleanedAt = new Date().toISOString(); await publish();
     if (failures.length) throw new AggregateError(failures, 'The owned broadcast topology could not be fully restored.');
   })();
@@ -249,7 +548,7 @@ function restore() {
 if (mode === 'cleanup') {
   try { record = JSON.parse(await readFile(filename, 'utf8')); }
   catch (error) { if (error.code === 'ENOENT') process.exit(0); throw error; }
-  assert.equal(record.schemaVersion, 2, 'Cleanup requires the corresponding owned-topology receipt.');
+  assert.equal(record.schemaVersion, 3, 'Cleanup requires the corresponding owned-topology receipt.');
   try { await restore(); }
   catch (error) { record.cleanupError = errorRecord(error); await publish(); throw error; }
   process.exit(0);
@@ -291,6 +590,8 @@ async function verifyPackets() {
 
 let failure;
 try {
+  record.candidateHead = command('git', ['rev-parse', 'HEAD']).trim();
+  assert.match(record.candidateHead, /^(?:[0-9a-f]{40}|[0-9a-f]{64})$/u);
   record.interfacesBefore = interfaces(); record.routesBefore = routes(); record.defaultRoute = defaultRoute(); record.routeBefore = route();
   const existingNames = new Set([...record.interfacesBefore.matchAll(/^(\S+): /gmu)].map(match => match[1]));
   const pair = Array.from({ length: 128 }, (_, index) => ['feth' + (200 + index * 2), 'feth' + (201 + index * 2)])
@@ -311,7 +612,11 @@ try {
   record.original = JSON.parse(await mutate('/usr/bin/sudo', [helper, 'snapshot', savedRoute, record.interface, record.address]));
   record.originalRouteSha256 = sha(await readFile(savedRoute));
   for (const name of pair) {
-    await mutate('/usr/bin/sudo', ['/sbin/ifconfig', name, 'create'], { onSuccess: () => record.createdInterfaces.push(name) });
+    await mutate('/usr/bin/sudo', ['/sbin/ifconfig', name, 'create'], { onSuccess: () => {
+      record.createdInterfaces.push(name);
+      record.interfaceIdentities[name] = interfaceIndex(name);
+      assert.ok(record.interfaceIdentities[name] > 0, 'The created interface must have a real kernel index.');
+    } });
   }
   await mutate('/usr/bin/sudo', ['/sbin/ifconfig', pair[0], 'peer', pair[1]]);
   await mutate('/usr/bin/sudo', ['/sbin/ifconfig', pair[0], 'inet', record.address, 'netmask', '255.255.255.252', 'up']);
@@ -320,19 +625,37 @@ try {
   for (const description of record.topology) {
     assert.match(description, /<[^>]*\bBROADCAST\b[^>]*>/u); assert.match(description, /\bstatus: active\b/u);
   }
-  record.replacementRequested = true; await publish();
-  record.installation = JSON.parse(await mutate('/usr/bin/sudo', [helper, 'install', savedRoute, record.interface, record.address]));
+  record.installationIdentity = { schemaVersion: 1, candidateHead: record.candidateHead, savedRouteSha256: record.originalRouteSha256,
+    nonce: randomBytes(16).toString('hex'), ownedInterfaceName: record.interface, ownedInterfaceIndex: record.interfaceIdentities[record.interface] };
+  validateInstallationIdentity(record.installationIdentity);
+  await createInstallationState(record.installationIdentity); record.installationStateCreated = true;
+  await readInstallationState(); await publish();
+  record.replacementRequested = true; record.routeRestorationRequired = null; await publish();
+  assert.equal(sha(await readFile(helper)), record.helperSha256, 'The owned routing helper changed before install.');
+  assert.equal(sha(await readFile(savedRoute)), record.originalRouteSha256, 'The captured route changed before install.');
+  record.installation = JSON.parse(await mutate('/usr/bin/sudo', routeArguments('install')));
+  const installedState = await readInstallationState();
+  assert.equal(installedState.mutationMayHaveStarted, true); assert.equal(installedState.stage, 'installed');
+  record.routeRestorationRequired = true;
+  await captureRouteObservations(); await publish();
   record.routeAfter = route(); record.routesAfter = routes();
   record.defaultRouteAfterSetup = defaultRoute();
   assert.deepEqual(defaultIdentity(record.defaultRouteAfterSetup), defaultIdentity(record.defaultRoute), 'Broadcast setup changed the default route.');
   assert.match(record.routeAfter, /^\s*destination: 255\.255\.255\.255\s*$/mu);
   assert.equal(/^\s*interface: (\S+)\s*$/mu.exec(record.routeAfter)?.[1], record.interface);
   assert.match(record.routeAfter, /flags: <[^>]*\bBROADCAST\b[^>]*>/u);
+  await withUdpLogging();
   await verifyPackets(); if (interrupted) throw interrupted; record.verified = true;
 } catch (error) { failure = error; record.error = errorRecord(error); }
 finally {
   if (failure || interrupted) {
     try { await restore(); } catch (cleanupError) { record.cleanupError = errorRecord(cleanupError); failure = new AggregateError([failure ?? interrupted, cleanupError], 'Broadcast setup and restoration failed.'); }
+  }
+  try { await captureRouteObservations(); }
+  catch (error) {
+    record.routeObservationError = errorRecord(error);
+    failure = failure ? new AggregateError([failure, error], 'Broadcast setup and route observation failed.') : error;
+    try { await restore(); } catch (cleanupError) { record.cleanupError = errorRecord(cleanupError); failure = new AggregateError([failure, cleanupError], 'Route observation and restoration failed.'); }
   }
   await publish();
 }

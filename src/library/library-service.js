@@ -192,6 +192,7 @@ export class LibraryService extends EventEmitter {
     if (!store || !serverId) throw new TypeError('LibraryService requires store and serverId.');
     expandPath ??= programDataPath ? createVirtualPathExpander({ programDataPath, dataPath, metadataPath }) : undefined;
     Object.assign(this, { store, options: { fileSystem, linkedChildren, serverId, libraryOptions, programDataPath, dataPath, metadataPath, configuration, expandPath, userRoot, userRootPath, localization, liveTv, externalUrlRegistry, musicBrainzServer, logger }, clock, onError });
+    this.options.filterSourceIds = (db, user, ids) => this.#filterMediaSourceIds(db, user, ids);
     this.#records = new BoundedItemCache(configuration.CacheSize ?? availableParallelism() * 100,
       { onRemove: item => { this.#recordOwners.get(item)?.release(); this.#recordOwners.delete(item); } });
   }
@@ -585,6 +586,23 @@ export class LibraryService extends EventEmitter {
     return state;
   }
 
+  async #filterMediaSourceIds(db, user, ids) {
+    const visible = new Set();
+    // The source list is an explicit saved input. Database work remains in
+    // bounded batches on the caller's already-admitted SQL session.
+    for (let offset = 0; offset < ids.length;) {
+      if (!nonemptyId(ids[offset])) throw Object.assign(libraryError(400, "Guid can't be empty (Parameter 'id')"), { nativeException: 'ArgumentException' });
+      const batch = [];
+      while (offset < ids.length && batch.length < 128 && nonemptyId(ids[offset])) batch.push(ids[offset++]);
+      const state = await this.#loadPostgresItemState(db, [...new Set(batch)], user, { includeUserData: false });
+      try {
+        const candidates = batch.map(id => state.byId.get(idKey(id))).filter(Boolean);
+        for (const item of await this.#filterPostgresStandalonePage(db, candidates, user, state, { checkStandaloneParents: true })) visible.add(idKey(item.Id));
+      } finally { await state.dispose({ session: db }); }
+    }
+    return visible;
+  }
+
   #postgresPhysicalIds(folders, state) {
     return [...new Map(folders.flatMap(folder => folder.Type === 'CollectionFolder'
       ? resolvedPhysicalFolderIds(folder, state) : [repositoryTopParentId(folder) ?? folder.Id])
@@ -740,6 +758,7 @@ export class LibraryService extends EventEmitter {
 
   async #filterPostgresStandalonePage(db, items, user, state, {
     skipRelatedNameCheck = false,
+    checkStandaloneParents = false,
   } = {}) {
     if (!user || !items.length) return items;
     const boxSetIds = items.filter(item => item.Type === 'BoxSet').map(item => item.Id);
@@ -778,7 +797,7 @@ export class LibraryService extends EventEmitter {
     // direct-item reader invokes IsVisibleStandalone, including parent/channel
     // access. Neither check changes the repository's count or page window.
     for (const item of entityAccess) if (visibleItem(item, user, state, {
-      ...this.options, query: false, checkStandaloneParents: false, skipRelatedNameCheck,
+      ...this.options, query: false, checkStandaloneParents, skipRelatedNameCheck,
     })) visible.add(idKey(item.Id));
     const modern = items.filter(item => modernBoxSets.has(idKey(item.Id)));
     for (const key of await queryVisibleIds(modern, {
@@ -2829,7 +2848,9 @@ export class LibraryService extends EventEmitter {
         }
         sources.push(source);
       }
-      return sortMediaSources(sources, sources[0]?.Id ?? item.Id, true);
+      let preferredId;
+      try { preferredId = nativeGuid(sources[0]?.Id); } catch { preferredId = item.Id; }
+      return sortMediaSources(sources, nonemptyId(preferredId) ? idKey(preferredId) : null, true);
     });
   }
 
@@ -2842,7 +2863,6 @@ export class LibraryService extends EventEmitter {
 
   async getLiveMediaSources(item) {
     if (!isNativeItemEntity(item)) throw new TypeError('Live media sources require a native entity.');
-    if (item.SourceType === 'Channel') unsupported('Static channel media sources require a channel manager.');
     if (!VIDEO_TYPES.has(item.Type) && !['Audio', 'AudioBook', 'LiveTvChannel'].includes(item.Type)) return [];
     return this.#runWithStates(async db => {
       const state = await this.#loadPostgresItemState(db, [item.Id], null, { includeUserData: false });

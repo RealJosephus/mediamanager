@@ -8,7 +8,9 @@ import { nativeGuid } from '../../src/users/native.js';
 import { md5Guid } from '../../src/core/identity.js';
 import { validationOutputRoot } from '../../tools/validation/paths.js';
 import { createPostgresTestDatabase, dropPostgresTestDatabase, postgresTestConnectionString, postgresTestRow } from '../database/postgres-fixture.js';
+import { captureDisplayPreferenceSnapshot, currentPreferenceInputsAvailable } from './fixtures/display-preferences-current/capture.js';
 
+export const requiredValidationServices = ['dotnet', 'jellyfinDll', 'nativeInstance', 'postgres'];
 const enabled = { skip: !postgresTestConnectionString }, password = 'Display preferences password';
 async function setup(t) {
   const output = path.resolve(validationOutputRoot()); await fs.mkdir(output, { recursive: true });
@@ -92,9 +94,23 @@ test('postgres: runtime closure drains admitted display preference commits and r
     return original(...args);
   };
   state.releases.push(() => { release.resolve(); interceptedDatabase.client.query = original; });
+  const closingService = state.runtime.displayPreferences, originalClose = closingService.close.bind(closingService);
+  const serviceCloseEntered = Promise.withResolvers();
+  closingService.close = (...args) => {
+    const draining = originalClose(...args); serviceCloseEntered.resolve(); return draining;
+  };
+  state.releases.push(() => { closingService.close = originalClose; });
   const pending = state.request('/DisplayPreferences/usersettings?client=emby', { token, method: 'POST', body: { SortBy: 'Name', CustomPrefs: { foo: 'saved' } } });
+  // Observe rejection immediately while the write is held, then still await
+  // the original request below so transport failures cannot become success.
+  void pending.catch(() => {});
   await entered.promise;
   let closed = false; const closing = state.runtime.close().then(() => { closed = true; });
+  assert.equal((await state.request('/DisplayPreferences/usersettings?client=emby', { token })).status, 503);
+  // Runtime first drains previously admitted configuration dependencies. A
+  // direct service call is rejected only once that service's actual close has
+  // synchronously closed admission; an earlier call would be admitted work.
+  await serviceCloseEntered.promise;
   await assert.rejects(state.runtime.displayPreferences.get('usersettings', nativeGuid('00000000000000000000000000000001'), 'emby'), { status: 503 });
   assert.equal(closed, false); release.resolve(); assert.equal((await pending).status, 204); await closing;
   assert.equal(state.runtime.server.listening, false); assert.equal(state.database.closed, true);
@@ -124,8 +140,10 @@ test('postgres: display preference queries scope unrelated data and page large f
   assert.equal(queries.length, 8); assert.ok(queries.every(query => query.count <= 128 && query.text.includes(' WHERE ') && query.text.includes(' LIMIT ')));
 });
 
-test('postgres: display preferences retain the native display and home snapshot across later item lookup', enabled, async t => {
-  const native = JSON.parse(await fs.readFile(new URL('./fixtures/display-preferences/snapshot-native.json', import.meta.url)));
+test('postgres: display preferences retain the native display and home snapshot across later item lookup', {
+  ...enabled, skip: !postgresTestConnectionString || !currentPreferenceInputsAvailable, timeout: 300000,
+}, async t => {
+  const { native } = await captureDisplayPreferenceSnapshot();
   const state = await setup(t); await state.user('Snapshot'); const token = await state.login('Snapshot');
   const url = '/DisplayPreferences/usersettings?client=emby';
   assert.equal((await state.request(url, { token, method: 'POST', body: { ShowBackdrop: true, CustomPrefs: { homesection0: 'Resume' } } })).status, 204);
@@ -144,7 +162,7 @@ test('postgres: display preferences retain the native display and home snapshot 
     await database.updateWhere('HomeSection', { DisplayPreferencesId: display.Id }, { Type: 6 });
   });
   release.resolve(); const result = await pending; assert.equal(result.status, 200);
-  assert.deepEqual({ ShowBackdrop: result.body.ShowBackdrop, home: result.body.CustomPrefs.homesection0 }, native.actual);
+  assert.deepEqual({ ShowBackdrop: result.body.ShowBackdrop, home: result.body.CustomPrefs.homesection0 }, native.observation.actual);
   const current = await state.request(url, { token }); assert.equal(current.body.ShowBackdrop, false); assert.equal(current.body.CustomPrefs.homesection0, 'latestmedia');
 });
 

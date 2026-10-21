@@ -69,14 +69,26 @@ missing/wrong-type IDs retain the empty-inventory short circuit; nonempty channe
 provider inventory and `IDisableMediaSourceDisplay` consumption remain an
 unimplemented producer boundary rather than a supplied compatibility result.
 
-The retained external livestream is an ordinary file-backed Video with a
-nonempty ChannelId. Actual BaseItem.GetMediaSources falls back to its ordinary
-version source when ChannelManager's saved-source cache is empty, and this HTTP
-case compares its complete successful DTO rather than accepting a Channel-only
-501 diagnostic. This fixture does not install a saved
-`channelmediasourceinfos.json`. Nonempty saved channel caches and their native
-normalization are a remaining retained-input risk; this fix does not claim
-that reader or an external Channel provider has been implemented.
+The retained external livestream and complete external programme are ordinary
+file-backed Videos with nonempty ChannelId. While the private native instance
+is stopped, the fixture installs two exact `channelmediasourceinfos.json` files
+in the native BaseItem metadata paths. One contains ordered opaque/self HTTP
+sources and distinct audio tracks; the other contains the original retained
+file and video/audio streams. Actual authenticated and userless HTTP DTOs must
+successfully consume these sources, preserve their IDs/order/paths, and expose
+the first cached stream list and associated ChannelName. The detail action does
+not bind the requested fields and must omit MediaSourceCount. Separate actual
+list requests select that field: native DtoService deliberately omits a
+single-version count even when a cache contains two sources, and a userless
+API-key recording list is empty. Both exact wire behaviors remain asserted.
+Their complete wire responses are then compared against the migrated production
+PG runtime. Every cache byte joins the state snapshots before/after reads,
+deletion and shutdown. No saved URL or retained media is opened or probed by
+these static consumers. The separate
+`tests/library/channel-static-media-sources-native.test.js` additionally covers
+empty-cache fallback, normalization/errors, user filtering, playback ordering
+and held-reader shutdown. External Channel provider execution remains outside
+both fixtures.
 
 Native and Node DELETE runs start from the same pre-delete graph and compare
 authorization/binding/status, complete changed rows, remaining source bytes and

@@ -6,6 +6,7 @@ using System.Security.Cryptography;
 using System.Text.Json;
 using BitFaster.Caching.Lru;
 using Emby.Server.Implementations.Data;
+using Emby.Server.Implementations.Dto;
 using Emby.Server.Implementations.IO;
 using Emby.Server.Implementations.Library;
 using Jellyfin.Database.Implementations;
@@ -337,6 +338,18 @@ foreach (var (name, item) in new (string, BaseItem)[] {
     displayCases.Add(new { name, nativeType = item.GetType().FullName, channelId = item.ChannelId.ToString("N"), sourceType = item.SourceType.ToString(), value, failure });
 }
 var deleteCases = new List<object>();
+var deleteDtoService = new DtoService(NullLogger<DtoService>.Instance, library, null!, null!, null!, Video.RecordingsManager,
+    appHost, null!, null!, null!, null!);
+object ObserveDeleteDto(BaseItem item, User? viewer) {
+    try {
+        var projected = deleteDtoService.GetBaseItemDto(item, new DtoOptions(false) {
+            Fields = [ItemFields.CanDelete], EnableImages = false, EnableUserData = false
+        }, viewer);
+        return new { value = new { projected.CanDelete } };
+    } catch (Exception error) {
+        return new { failure = new { type = error.GetType().Name, status = Status(error), error.Message, error.StackTrace } };
+    }
+}
 foreach (var (name, item) in new (string, BaseItem)[] {
     ("missing channel file item", new Video { ChannelId = Guid.NewGuid(), Path = Map("{root}/channel-file.mkv") }),
     ("missing channel remote item", new Video { ChannelId = Guid.NewGuid(), Path = "http://controlled.invalid/channel" }),
@@ -344,8 +357,9 @@ foreach (var (name, item) in new (string, BaseItem)[] {
     ("wrong-type channel referent", new Folder { ChannelId = targetId, Path = Map("{root}/channel-folder") }),
     ("channel overrides provider deletion", new Channel { Path = Map("{root}/channel") })
 }) {
-    deleteCases.Add(new { name, nativeType = item.GetType().FullName, channelId = item.ChannelId.ToString("N"),
-        sourceType = item.SourceType.ToString(), path = item.Path, value = item.CanDelete() });
+    deleteCases.Add(new { name, id = item.Id.ToString("N"), nativeType = item.GetType().FullName, channelId = item.ChannelId.ToString("N"),
+        sourceType = item.SourceType.ToString(), path = item.Path, value = item.CanDelete(),
+        dto = new[] { new { userless = true, result = ObserveDeleteDto(item, null) }, new { userless = false, result = ObserveDeleteDto(item, user) } } });
 }
 var assemblies = new[] { typeof(LiveTvManager).Assembly, typeof(LibraryManager).Assembly, typeof(BaseItemRepository).Assembly,
     typeof(BaseItem).Assembly, typeof(ExceptionMiddleware).Assembly }
@@ -355,7 +369,7 @@ if (Convert.ToHexStringLower(SHA256.HashData(File.ReadAllBytes(sourceDatabaseFil
     throw new InvalidOperationException("The supplied stopped database changed.");
 File.WriteAllText(args[1], JsonSerializer.Serialize(new { actualLiveTvManager = true, actualRecordingDirectoryEnumeration = true,
     actualLibraryManagerAndEfRepository = true, controlledDtoProjection = true, emptyChannelProviderControl = true,
-    recordingExecutorsStarted = false, inputSha256 = Convert.ToHexStringLower(SHA256.HashData(bytes)), databaseFilename = factory.Filename,
+    recordingExecutorsStarted = false, actualDeleteDtoService = true, inputSha256 = Convert.ToHexStringLower(SHA256.HashData(bytes)), databaseFilename = factory.Filename,
     configuration = liveOptions, warmFolderIds = warmFolders.Select(item => item.Id.ToString("N")), warmFolderSortNames,
     coldFolderIds = coldFolders.Select(item => item.Id.ToString("N")), coldFolderSortNames,
     actualColdUserRootChildRepositoryHydration = true, coldChildIds = coldChildren.Select(item => item.Id.ToString("N")), providerCalls,

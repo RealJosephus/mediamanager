@@ -41,8 +41,10 @@ A final real Open/Start keeps a byte read and WebSocket active during
 `runtime.close()`. The test waits for HTTP/WS/upstream closure, an empty public
 registry and a closed listener/database. It then reopens the real PG schema
 and checks that the committed UserData rows survive unchanged. The playlist,
-typed media cache and complete private file inventory retain their bytes;
-original media are never spooled. Every fixture transport is released in
+typed media cache and complete persistent private file inventory retain their
+bytes. The diagnostic plugin-host lock is bound to this actual PID and its
+original hash, then must disappear on shutdown; it is the only permitted file
+removal. Original media are never spooled. Every fixture transport is released in
 finally and the owned temporary tree/schema are removed.
 
 The source HTTP response controls when finite or held chunks are delivered;

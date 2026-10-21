@@ -4,6 +4,7 @@ import { setTimeout as delay } from 'node:timers/promises';
 import { md5Guid } from '../core/identity.js';
 import { stringifyNativeJson } from '../core/json.js';
 import { normalizeProbe } from '../storage/probe-normalizer.js';
+import { localizeMediaStream } from '../library/media-streams.js';
 import { probeLiveRaw } from '../storage/ffprobe.js';
 import { LiveStreamReadBridge } from './live-stream-bridge.js';
 import { liveMediaInfoDefaults, liveMediaStream, readLiveMediaInfoCache } from './live-stream-info.js';
@@ -96,11 +97,11 @@ export class LiveStreamProbe {
         const options = { ...this.probeOptions, signal, analyzeDurationMs: 3000, extractChapters: false, requiredHttpHeaders: source.RequiredHttpHeaders };
         if (openRead) {
           lease = await this.#bridge.lease(openRead, { signal });
-          information = normalizeProbe((await this.probe(lease.url, options)).raw, { path: source.Path, protocol: source.Protocol, videoType: source.VideoType ?? null, isAudio: false });
+          information = this.#normalize((await this.probe(lease.url, options)).raw, source);
         } else if (source.Protocol === 'File') {
           if (!this.probeFile) throw new TypeError('A file tuner source requires mapped probe access.');
           information = await this.probeFile(source, options);
-        } else information = normalizeProbe((await this.probe(source.Path, options)).raw, { path: source.Path, protocol: source.Protocol, videoType: source.VideoType ?? null, isAudio: false });
+        } else information = this.#normalize((await this.probe(source.Path, options)).raw, source);
       } finally { await lease?.release(); }
       // MediaInfo inherits the complete MediaSourceInfo constructor. Keep those
       // values in the actual JSON cache, before reducing it to the first AV pair.
@@ -126,6 +127,11 @@ export class LiveStreamProbe {
       }
     }
     signal.throwIfAborted(); return applyLiveProbeInfo(source, information, { cacheKey });
+  }
+  #normalize(raw, source) {
+    const information = normalizeProbe(raw, { path: source.Path, protocol: source.Protocol, videoType: source.VideoType ?? null, isAudio: false });
+    for (const stream of information.MediaStreams) localizeMediaStream(stream, { culture: 'en-US' });
+    return information;
   }
   #report(error) { try { void Promise.resolve(this.onError(error)).catch(() => {}); } catch { /* Probe diagnostics preserve native fallback. */ } }
   close() {
