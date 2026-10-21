@@ -153,7 +153,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
   }
   const expandPath = programDataPath ? createVirtualPathExpander({ programDataPath, dataPath, metadataPath }) : undefined;
   const externalUrlConfiguration = await loadExternalUrlConfiguration({ programDataPath, onError });
-  const library = new LibraryService({ fileSystem, store, linkedChildren, serverId, programDataPath, dataPath, metadataPath, configuration, libraryOptions, localization, expandPath, logger, onError, ...externalUrlConfiguration });
+  const library = new LibraryService({ fileSystem, store, linkedChildren, serverId, programDataPath, dataPath, metadataPath, configuration, libraryOptions, localization, liveTv, expandPath, logger, onError, ...externalUrlConfiguration });
   rollback.push(() => library.close());
   const playlists = programDataPath && dataPath
     ? new PlaylistService({ fileSystem, store, library, linkedChildren, spoolRoot, programDataPath, dataPath, configuration, vfs, identityMap, onError,

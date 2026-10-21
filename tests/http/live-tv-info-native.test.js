@@ -42,15 +42,22 @@ test('Live TV info and guide windows match current native HTTP, permissions and 
   let current, native, fixture, failure, referenceRoot, baseline, stateAtClose;
   const request = async (server, route, { token, body, method = 'GET' } = {}) => {
     const startedAt = Date.now();
+    // Independent runtimes can sample a quantized wall clock at different
+    // edges. Bracket the HTTP observation with actual adjacent samples while
+    // retaining the narrower HTTP interval for diagnosis.
+    await new Promise(resolve => setTimeout(resolve, 3));
+    const httpStartedAt = Date.now();
     const response = await fetch(server + route, { method, signal: AbortSignal.timeout(20000),
       headers: { Authorization: authorization(token), Accept: 'application/json',
         ...(body === undefined ? {} : { 'Content-Type': 'application/json' }) },
       ...(body === undefined ? {} : { body: JSON.stringify(body) }) });
-    const bodyText = await response.text(), finishedAt = Date.now();
+    const bodyText = await response.text(), httpFinishedAt = Date.now();
+    await new Promise(resolve => setTimeout(resolve, 3));
+    const finishedAt = Date.now();
     let bodyJson;
     try { if (bodyText !== '') bodyJson = JSON.parse(bodyText); } catch { /* Keep non-JSON wire responses. */ }
     return { status: response.status, contentType: response.headers.get('content-type'), bodyText,
-      ...(bodyJson === undefined ? {} : { bodyJson }), startedAt, finishedAt };
+      ...(bodyJson === undefined ? {} : { bodyJson }), startedAt, httpStartedAt, httpFinishedAt, finishedAt };
   };
   const nativeSnapshot = () => {
     const database = new DatabaseSync(path.join(referenceRoot, 'data/data/jellyfin.db'), { readOnly: true });
@@ -154,6 +161,8 @@ test('Live TV info and guide windows match current native HTTP, permissions and 
       }
       if (response.status === 200 && kind === 'guide') {
         assert.deepEqual(Object.keys(body).sort(), ['EndDate', 'StartDate']);
+        assert.ok(response.startedAt <= response.httpStartedAt && response.httpStartedAt <= response.httpFinishedAt
+          && response.httpFinishedAt <= response.finishedAt);
         const start = dateTicks(body.StartDate), end = dateTicks(body.EndDate), epoch = 621355968000000000n;
         assert.ok(start >= epoch + BigInt(response.startedAt) * 10000n && start < epoch + BigInt(response.finishedAt + 1) * 10000n);
         assert.equal(end - start, BigInt(days) * 864000000000n);

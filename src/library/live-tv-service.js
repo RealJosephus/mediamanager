@@ -31,6 +31,11 @@ export class LiveTvService {
     };
   }
 
+  async isEnabledForUser(user) {
+    if (!user) throw new TypeError('A user is required.');
+    return user.Policy.EnableLiveTvAccess === true && (await this.getConfiguration()).TunerHosts.length > 0;
+  }
+
   async getGuideInfo() {
     const configuration = await this.getConfiguration();
     const days = Math.max(1, Math.min(14, configuration.GuideDays ?? 7));

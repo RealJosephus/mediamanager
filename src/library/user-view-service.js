@@ -228,7 +228,7 @@ export class UserViewService {
     }
   }
 
-  async views(state, user, { includeHidden = false, presetViews = [] } = {}) {
+  async views(state, user, { includeHidden = false, includeExternalContent = true, presetViews = [] } = {}) {
     this.#assertOpen();
     const list = []; const grouped = [];
     const shadow = folder => this.#named(nativeShadowViewIdentity(folder, collectionType(folder), this.library.options),
@@ -251,6 +251,9 @@ export class UserViewService {
     }
     if (this.library.options.configuration.EnableFolderView) list.push(await this.#named(nativeRootUserViewIdentity('folders', this.library.options),
       { name: userViewLabel('Folders', this.library.options), parentId: EMPTY_ID, viewType: 'folders', forcedSortName: '', mode: 'root' }, state.db, state));
+    if (includeExternalContent && await this.library.options.liveTv?.isEnabledForUser(user)) {
+      list.push(await this.global('livetv', this.library.options.localization?.text('HeaderLiveTV') ?? 'Live TV', state.db, state));
+    }
     const visible = includeHidden ? list : list.filter(item => !user.Configuration?.MyMediaExcludes?.some(id => sameId(id, item.Id)));
     const sorted = sortItems(visible, { sortby: ['SortName'] }, state.userData, state.isPlayed,
       { memory: true, sortNameFor: item => sortName(item, this.library.options) });

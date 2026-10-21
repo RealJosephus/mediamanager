@@ -184,11 +184,11 @@ export class LibraryService extends EventEmitter {
   #recordOwners = new WeakMap();
   #closing = false;
   #closePromise;
-  constructor({ fileSystem, store, linkedChildren, serverId, libraryOptions = {}, programDataPath, dataPath, metadataPath, configuration = {}, expandPath, userRoot, userRootPath, localization, externalUrlRegistry, musicBrainzServer, logger = {}, clock = () => new Date(), onError = () => {} }) {
+  constructor({ fileSystem, store, linkedChildren, serverId, libraryOptions = {}, programDataPath, dataPath, metadataPath, configuration = {}, expandPath, userRoot, userRootPath, localization, liveTv, externalUrlRegistry, musicBrainzServer, logger = {}, clock = () => new Date(), onError = () => {} }) {
     super();
     if (!store || !serverId) throw new TypeError('LibraryService requires store and serverId.');
     expandPath ??= programDataPath ? createVirtualPathExpander({ programDataPath, dataPath, metadataPath }) : undefined;
-    Object.assign(this, { store, options: { fileSystem, linkedChildren, serverId, libraryOptions, programDataPath, dataPath, metadataPath, configuration, expandPath, userRoot, userRootPath, localization, externalUrlRegistry, musicBrainzServer, logger }, clock, onError });
+    Object.assign(this, { store, options: { fileSystem, linkedChildren, serverId, libraryOptions, programDataPath, dataPath, metadataPath, configuration, expandPath, userRoot, userRootPath, localization, liveTv, externalUrlRegistry, musicBrainzServer, logger }, clock, onError });
     this.#records = new BoundedItemCache(configuration.CacheSize ?? availableParallelism() * 100,
       { onRemove: item => { this.#recordOwners.get(item)?.release(); this.#recordOwners.delete(item); } });
   }
@@ -2729,7 +2729,8 @@ export class LibraryService extends EventEmitter {
       const state = await this.load(db, user, { baseRows: await loadPostgresNavigationRows(db) });
       const hasExternal = await queryPostgresExternalViewPresence(db);
       if (hasExternal && query.includeexternalcontent !== false) unsupported('External user views are not implemented.');
-      const items = await this.userViews.views(state, user, { includeHidden: query.includehidden === true, presetViews: query.presetviews ?? [] });
+      const items = await this.userViews.views(state, user, { includeHidden: query.includehidden === true,
+        includeExternalContent: query.includeexternalcontent !== false, presetViews: query.presetviews ?? [] });
       const options = dtoOptions({}, true);
       await this.#prefetchPostgresDtos(items, state, user, options);
       const dtos = [];
