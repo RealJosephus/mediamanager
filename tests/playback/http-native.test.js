@@ -3,19 +3,29 @@ import assert from 'node:assert/strict';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { setTimeout as delay } from 'node:timers/promises';
 import path from 'node:path';
-import { assertValidationOutputChild } from '../../tools/validation/paths.js';
+import { createHash, randomUUID } from 'node:crypto';
+import { fileURLToPath } from 'node:url';
+import { assertValidationOutputChild, validationOutputRoot } from '../../tools/validation/paths.js';
+import { recordOracle } from '../../tools/validation/oracle.js';
+import { createPlaybackState } from './runtime-state.js';
 import { PostgresDatabase } from '../../src/database/postgres.js';
 import { tableDefinition } from '../../src/database/model.js';
 import { createRuntime } from '../../src/runtime.js';
 import { parseLosslessJson } from '../../src/core/json.js';
-import { createMediaFixture, recordPlayback, movieId } from './http-scenario.js';
+import { createMediaFixture, recordPlayback, movieId, originalBytes } from './http-scenario.js';
 import libraryFixture from '../library/fixtures/reference-media.json' with { type: 'json' };
 import streamsFixture from '../library/fixtures/reference-streams.json' with { type: 'json' };
 import { subtitleLayoutProjection } from './layout-projection.js';
 import { observeComparison } from '../comparison-observations.js';
-import { consumerFixture } from '../consumer-contracts/fixture.js';
 const expected = parseLosslessJson(await readFile(new URL('./fixtures/http-reference.json', import.meta.url), 'utf8'));
-const readers = await consumerFixture('readers');
+export const requiredValidationServices = ['dotnet', 'jellyfinDll'];
+const readerFixture = new URL('../consumer-contracts/fixtures/readers/input.json', import.meta.url);
+const readerInput = await readFile(readerFixture);
+const readerOutput = path.join(validationOutputRoot(), 'playback-consumer-readers-' + randomUUID());
+const readerRecord = await recordOracle({ project: 'tests/consumer-contracts/fixtures/readers/Oracle.csproj', output: readerOutput,
+  args: [fileURLToPath(readerFixture), '{output}/native.json'] });
+const readers = { input: JSON.parse(readerInput), native: JSON.parse(await readFile(path.join(readerOutput, 'native.json'), 'utf8')) };
+assert.equal(readers.native.inputSha256, createHash('sha256').update(readerInput).digest('hex'));
 const subtitleRoot = 'Z:\\PlaybackSidecars';
 
 async function seed(database) {
@@ -37,11 +47,14 @@ async function seed(database) {
 test('native HTTP original bytes, complete negotiation and generated subtitle semantics on PostgreSQL',{skip:!process.env.MEDIAMANAGER_TEST_POSTGRES},async t=>{
   const schema = `playback_http_${Date.now()}`;
   let database, runtime, recorded, runtimePort, fixturePort;
-  const delivered = [], layouts = [];
+  const delivered = [], layouts = [], substitutions = [];
+  const state = await createPlaybackState();
+  t.after(() => state.close());
   const fixture = await createMediaFixture({subtitleRoot});
   try {
     database=await PostgresDatabase.open({connectionString:process.env.MEDIAMANAGER_TEST_POSTGRES,schema,create:true});await seed(database);
-    runtime=await createRuntime({database,configuration:{UICulture:'en-US',IsStartupWizardCompleted:true},serverId:libraryFixture.serverId,programDataPath:libraryFixture.programDataPath,vfs:fixture.vfs,identityMap:fixture.identityMap});
+    runtime=await createRuntime({database,configuration:{UICulture:'en-US',IsStartupWizardCompleted:true},serverId:libraryFixture.serverId,
+      programDataPath:state.root,configurationDirectoryPath:path.join(state.root,'config'),vfs:fixture.vfs,identityMap:fixture.identityMap});
     const user=await runtime.users.createUser({Name:'CoreFlowAdmin',Password:'isolated-core-flow-password'});
     await runtime.users.updatePolicy(user.Id,{...libraryFixture.user.Policy});
     await runtime.users.updateConfiguration(user.Id,{...streamsFixture.user});
@@ -113,6 +126,40 @@ test('native HTTP original bytes, complete negotiation and generated subtitle se
           contentLength: response.headers.get('content-length'), body: bytes.toString('base64'), reader: readers.native.subtitles.find(sample => sample.name === proof.name) });
       }
     }
+    const identityRoot = 'Z:\\CoreFlow\\Movies';
+    const identityPath = libraryFixture.tables.BaseItems.find(item => item.Id.replaceAll('-', '').toLowerCase() === movieId).Path;
+    runtime.configuration.PathSubstitutions = [{ From: identityRoot, To: 'smb://client/Movies' }];
+    const mappedPath = 'smb://client/Movies' + identityPath.slice(identityRoot.length);
+    for (const [name, method, body] of [['info-get', 'GET'], ['info-profile', 'POST', {
+      DeviceProfile: { MaxStreamingBitrate: 50000000,
+        DirectPlayProfiles: [{ Type: 'Video', Container: 'mkv', VideoCodec: 'hevc', AudioCodec: 'aac,eac3' }],
+        SubtitleProfiles: [{ Format: 'subrip', Method: 'Embed' }, { Format: 'srt', Method: 'External' }] },
+      MediaSourceId: movieId, SubtitleStreamIndex: -1,
+    }]]) {
+      const response = await fetch(`http://127.0.0.1:${runtimePort}/Items/${movieId}/PlaybackInfo`, {
+        method, headers: { Authorization: `MediaBrowser Token="${actual.accessToken}"`, ...(body ? { 'Content-Type': 'application/json' } : {}) },
+        body: body ? JSON.stringify(body) : undefined,
+      });
+      assert.equal(response.status, 200);
+      const mapped = parseLosslessJson(await response.text());
+      assert.match(mapped.PlaySessionId, /^[a-f0-9]{32}$/u);
+      assert.ok(!candidateSessions.has(mapped.PlaySessionId));
+      const baseline = structuredClone(actual.records.find(record => record.name === name).body);
+      delete baseline.PlaySessionId;
+      const { PlaySessionId, ...visible } = mapped;
+      for (const source of baseline.MediaSources) source.Path = mappedPath;
+      assert.deepEqual(normalize(visible), normalize(baseline));
+      assert.equal((await runtime.library.getMediaSources(movieId))[0].Path, identityPath);
+      substitutions.push({ name, status: response.status, body: mapped });
+    }
+    const mappedRead = await fetch(`http://127.0.0.1:${runtimePort}/Items/${movieId}/File`, {
+      headers: { Authorization: `MediaBrowser Token="${actual.accessToken}"`, Range: 'bytes=121-239' },
+    });
+    const mappedBytes = Buffer.from(await mappedRead.arrayBuffer());
+    assert.equal(mappedRead.status, 206);
+    assert.deepEqual(mappedBytes, originalBytes.subarray(121, 240));
+    substitutions.push({ name: 'identity range after client substitution', status: mappedRead.status,
+      contentRange: mappedRead.headers.get('content-range'), bytes: mappedBytes.toString('base64') });
     for (const result of delivered) if (result.method !== 'HEAD' && result.status !== 304 && result.contentLength != null)
       assert.equal(Number(result.contentLength), result.length, result.route + ' actual Content-Length');
     assert.equal(candidateSessions.size, 6); assert.equal(nativeSessions.size, 6);
@@ -131,11 +178,13 @@ test('native HTTP original bytes, complete negotiation and generated subtitle se
     if(database) {await database.client.query(`DROP SCHEMA "${schema}" CASCADE`);await database.client.query(`DROP SCHEMA "${schema}__mm" CASCADE`);}
     if(runtime) await runtime.close();else await database?.close();
   }
-  if (process.env.MEDIAMANAGER_PLAYBACK_HTTP_EVIDENCE) {
-    const output = assertValidationOutputChild(path.resolve(process.env.MEDIAMANAGER_PLAYBACK_HTTP_EVIDENCE));
+  {
+    const output = assertValidationOutputChild(process.env.MEDIAMANAGER_PLAYBACK_HTTP_EVIDENCE
+      ? path.resolve(process.env.MEDIAMANAGER_PLAYBACK_HTTP_EVIDENCE) : path.join(validationOutputRoot(), 'playback-http-' + schema));
     await mkdir(output, { recursive: false });
     await writeFile(path.join(output, 'postgres.json'), JSON.stringify({ actual: recorded, schema, subtitleRoot,
-      runtimePort, fixturePort, delivered, layouts, upstreamRequests: fixture.requests, cancelledReads: fixture.cancelledReads,
+      runtimePort, fixturePort, delivered, layouts, substitutions, readerOutput, readerRecord,
+      upstreamRequests: fixture.requests, cancelledReads: fixture.cancelledReads,
       runtimeStopped: runtime.server.listening === false, fixtureStopped: fixture.server.listening === false },
       (_key, value) => typeof value === 'bigint' ? JSON.rawJSON(value.toString()) : value, 2) + '\n', { flag: 'wx' });
   }

@@ -15,7 +15,8 @@ import { mediaVersions, mediaSourceCount, versionChildren, commonVersionPrefix, 
 import { dtoId, extraTypeCode, idKey, mapRecord, sameId, nonemptyId, NAME_TYPES, VIDEO_TYPES, dateText, dateTicks, MIN_DATE, cleanValue, repositoryCleanName, repositoryValue, unsupported } from './records.js';
 import { collectionType } from './user-view-query.js';
 import { collectionFoldersForItem } from './collection-membership.js';
-import { canDeleteItem } from './delete-permission.js';
+import { canDeleteItem, hasFileProtocol } from './delete-permission.js';
+import { substitutePath } from './path-substitution.js';
 import { loadPostgresRowsByIds } from './postgres-library-query.js';
 import { addInheritedImages } from './dto-inherited-images.js';
 
@@ -308,7 +309,7 @@ async function projectPeople(item, state, user, options) {
   return result;
 }
 
-async function mediaSource(item, queriedItem, type, prefix, state, user, options) {
+async function mediaSource(item, queriedItem, type, prefix, state, user, options, enablePathSubstitution) {
   if (item.SourceType === 'Channel') unsupported('Channel media source projection is not implemented.');
   const protocol = isFileSource(item) ? 'File' : /^https?:/i.test(item.Path ?? '') ? 'Http' : null;
   if (!protocol) unsupported('This media source protocol is not implemented.');
@@ -321,7 +322,8 @@ async function mediaSource(item, queriedItem, type, prefix, state, user, options
   }
   const remoteShortcut = shortcutProtocol != null;
   const sourceProtocol = shortcutProtocol ?? protocol;
-  const sourcePath = remoteShortcut ? item.ShortcutPath : item.Path;
+  const sourcePath = remoteShortcut ? item.ShortcutPath : enablePathSubstitution && protocol === 'File'
+    ? substitutePath(item.Path, options.configuration?.PathSubstitutions) : item.Path;
   const attachments = (await relationRows(state, item, 'attachmentRowsByItem', 'AttachmentStreamInfos'))
     .map(({ ItemId, ...entry }) => entry);
   const container = item.Container || (protocol === 'File' && item.Path ? path.win32.extname(item.Path).slice(1) : undefined);
@@ -350,14 +352,14 @@ async function mediaSource(item, queriedItem, type, prefix, state, user, options
   return source;
 }
 
-export async function mediaSources(item, state, user, options) {
+export async function mediaSources(item, state, user, options, enablePathSubstitution = false) {
   const versions = mediaVersions(item, state);
   const names = versions.map(entry => entry.item).filter(entry => isFileSource(entry) && entry.Path).map(sourceFileName);
   const prefix = names.length > 1 ? commonVersionPrefix(names) : null;
   let sources = [];
   for (const version of versions) {
     if (user && !sameId(version.item.Id, item.Id) && !visibleItem(version.item, user, state, { ...options, query: false })) continue;
-    sources.push(await mediaSource(version.item, item, version.type, prefix, state, user, options));
+    sources.push(await mediaSource(version.item, item, version.type, prefix, state, user, options, enablePathSubstitution));
   }
   sortMediaSources(sources, item.Id);
   if (user && VIDEO_TYPES.has(item.Type) && !nonemptyId(item.PrimaryVersionId) && sources.length > 1) {
@@ -463,7 +465,8 @@ export async function projectItem(item, state, user, selected, options) {
   if (item.IsPlaceHolder) dto.IsPlaceHolder = true;
   if (item.LUFS != null) dto.NormalizationGain = Math.fround(-18 - Math.fround(item.LUFS));
   else if (item.NormalizationGain != null) dto.NormalizationGain = item.NormalizationGain;
-  for (const field of ['Overview', 'OriginalTitle', 'CustomRating', 'Path', 'ForcedSortName']) if (has(field)) dto[field] = item[field];
+  for (const field of ['Overview', 'OriginalTitle', 'CustomRating', 'ForcedSortName']) if (has(field)) dto[field] = item[field];
+  if (has('Path')) dto.Path = hasFileProtocol(item) ? substitutePath(item.Path, options.configuration?.PathSubstitutions) : item.Path;
   if (has('SortName')) dto.SortName = sortName(item, options);
   if (has('DateCreated')) dto.DateCreated = dateText(item.DateCreated ?? MIN_DATE);
   if (has('Tags')) dto.Tags = item.Tags;
@@ -495,7 +498,7 @@ export async function projectItem(item, state, user, selected, options) {
   });
   if (has('CanDownload')) dto.CanDownload = (VIDEO_TYPES.has(item.Type) || ['Audio', 'AudioBook', 'Book', 'Photo'].includes(item.Type)) && item.LocationType === 'FileSystem' && !['Dvd', 'BluRay'].includes(item.VideoType) && (!user || user.Policy.EnableContentDownloading === true);
   if (has('EnableMediaSourceDisplay')) dto.EnableMediaSourceDisplay = item.EnableMediaSourceDisplay ?? true;
-  if (has('MediaSources') && (VIDEO_TYPES.has(item.Type) || ['Audio', 'AudioBook'].includes(item.Type))) dto.MediaSources = await mediaSources(item, state, user, options);
+  if (has('MediaSources') && (VIDEO_TYPES.has(item.Type) || ['Audio', 'AudioBook'].includes(item.Type))) dto.MediaSources = await mediaSources(item, state, user, options, true);
   if (has('MediaStreams') && (VIDEO_TYPES.has(item.Type) || ['Audio', 'AudioBook'].includes(item.Type))) dto.MediaStreams = dto.MediaSources?.find(source => sameId(source.Id, item.Id))?.MediaStreams ?? await projectedStreams(state, item, options);
   if (VIDEO_TYPES.has(item.Type)) {
     Object.assign(dto, { VideoType: item.VideoType ?? 'VideoFile', Video3DFormat: item.Video3DFormat, IsoType: item.IsoType, ExtraType: extraType(item), AspectRatio: item.AspectRatio });

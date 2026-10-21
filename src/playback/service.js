@@ -9,6 +9,7 @@ import { StorageError, checkAbort } from '../storage/errors.js';
 import { hlsPlan, masterPlaylist, mainPlaylist, storedKeyframeData, subtitlePlaylist } from './hls.js';
 import { MatroskaKeyframeService } from './matroska-keyframes.js';
 import { guid } from '../library/records.js';
+import { substitutePath } from '../library/path-substitution.js';
 
 const mimeTypes = { mkv: 'video/x-matroska', mks: 'video/x-matroska', mp4: 'video/mp4', mov: 'video/quicktime', webm: 'video/webm', avi: 'video/x-msvideo',
   ts: 'video/mp2t', mpegts: 'video/mp2t', mp3: 'audio/mpeg', m4a: 'audio/mp4', m4b: 'audio/mp4', flac: 'audio/flac', wav: 'audio/wav',
@@ -82,6 +83,8 @@ export class PlaybackService {
         if (source.IsRemote && user.Policy.ForceRemoteSourceTranscoding) { source.SupportsDirectPlay = false; source.SupportsDirectStream = false; }
       }
     }
+    // Storage checks and negotiation above use the persistent identity path.
+    for (const source of sources) if (source.Protocol === 'File') source.Path = substitutePath(source.Path, this.configuration.PathSubstitutions);
     return result;
   }
 

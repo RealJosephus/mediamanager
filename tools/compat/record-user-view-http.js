@@ -4,7 +4,7 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { existsSync } from 'node:fs';
-import { cp, mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
+import { cp, mkdir, readFile, readdir, stat, writeFile } from 'node:fs/promises';
 import { createServer } from 'node:net';
 import path from 'node:path';
 import { DatabaseSync } from 'node:sqlite';
@@ -77,6 +77,27 @@ const scenarios = {
   'intros-http': {
     fixture: 'tests/library/fixtures/intros-http/input.json',
     expectedCases: 26,
+    libraryTypeMarkers: true,
+    menuLifecycle: false,
+  },
+  'named-item-lifecycle-http': {
+    fixture: 'tests/library/fixtures/named-item-lifecycle-http/input.json',
+    expectedCases: 26,
+    namedLifecycle: true,
+    libraryTypeMarkers: true,
+    menuLifecycle: false,
+  },
+  'dto-path-substitution-http': {
+    fixture: 'tests/library/fixtures/dto-path-substitution-http/input.json',
+    expectedCases: 48,
+    includeAggregateSnapshot: true,
+    libraryTypeMarkers: true,
+    menuLifecycle: false,
+  },
+  'playback-path-substitution-http': {
+    fixture: 'tests/playback/fixtures/path-substitution-http/input.json',
+    expectedCases: 12,
+    includeAggregateSnapshot: true,
     libraryTypeMarkers: true,
     menuLifecycle: false,
   },
@@ -177,6 +198,7 @@ const quote = name => `"${String(name).replaceAll('"', '""')}"`;
 let seedClock;
 
 function itemPath(item) {
+  if (Object.hasOwn(item, 'path')) return item.path;
   if (item.pathKind === 'owned') return path.join(path.dirname(itemPath(itemById.get(idKey(item.ownerId)))),
     'theme-media', item.key + (item.type === 'Audio' ? '.mp3' : '.mkv'));
   if (item.pathKind === 'named') return path.join(referenceRoot, 'data/metadata',
@@ -232,8 +254,11 @@ async function filesystemSnapshot() {
       catch (error) { if (error.code === 'ENOENT') return; throw error; }
       for (const entry of children) {
         const target = path.join(current, entry.name);
+        const times = scenario.namedLifecycle && name === 'metadata' && entry.isDirectory()
+          ? await stat(target, { bigint: true }) : null;
         entries.push({ path: path.relative(directory, target).replaceAll('\\', '/'),
-          type: entry.isDirectory() ? 'directory' : 'file' });
+          type: entry.isDirectory() ? 'directory' : 'file',
+          ...(times ? { birthtimeNs: String(times.birthtimeNs), mtimeNs: String(times.mtimeNs) } : {}) });
         if (entry.isDirectory()) await visit(target);
       }
     }
@@ -258,7 +283,7 @@ function databaseSnapshot() {
   database.exec('PRAGMA busy_timeout=5000');
   try {
     const allBaseItems = database.prepare('SELECT * FROM "BaseItems"').all();
-    const baseItems = scenario.menuLifecycle
+    const baseItems = scenario.menuLifecycle || scenario.namedLifecycle
       ? allBaseItems
       : allBaseItems.filter(row => visibleFixtureItemIds.has(idKey(row.Id)) || dynamicUserView(row)
         || scenario.includeAggregateSnapshot && row.Type === nativeTypes.AggregateFolder);
@@ -636,6 +661,7 @@ async function stopReference(instance, token) {
     pidGone: result.pidGone, portAvailable: result.portAvailable };
 }
 function routeFor(endpoint, testCase, userId) {
+  if (testCase.action === 'playback-info') return `/Items/${itemByKey.get(testCase.detailKey).id}/PlaybackInfo?${testCase.query.replaceAll(fixture.userId, userId)}`;
   if (testCase.action === 'intros') return `${endpoint === 'legacy' ? '/Users/' + (testCase.introUserId ?? userId) : ''}/Items/${testCase.introItemId ?? itemByKey.get(testCase.detailKey).id}/Intros?${testCase.query.replaceAll(fixture.userId, userId)}`;
   if (testCase.action === 'theme') return `/Items/${testCase.themeItemId ?? itemByKey.get(testCase.detailKey).id}/${testCase.themeRoute}?${testCase.query.replaceAll(fixture.userId, userId)}`;
   if (testCase.action === 'dto-detail') return `${endpoint === 'legacy' ? '/Users/' + userId : ''}/Items/${itemByKey.get(testCase.detailKey).id}?${testCase.query.replaceAll(fixture.userId, userId)}`;
@@ -744,6 +770,11 @@ function responseContractFailures(records) {
           || typeof theme.OwnerId !== 'string' || theme.Items.some(item => typeof item.Id !== 'string' || typeof item.Type !== 'string'))) {
           failures.push(`${label} successful theme JSON shape is invalid`);
         }
+      } else if (testCase.action === 'playback-info') {
+        if (response.contentType !== 'application/json; charset=utf-8' || !body || !Array.isArray(body.MediaSources)
+          || body.MediaSources.some(source => typeof source.Id !== 'string' || typeof source.Protocol !== 'string')
+          || (body.MediaSources.length > 0 ? !/^[a-f0-9]{32}$/u.test(body.PlaySessionId ?? '')
+            : body.ErrorCode !== 'NoCompatibleStream' || body.PlaySessionId != null)) failures.push(`${label} playback info JSON shape is invalid`);
       } else if (testCase.action === 'named-detail' || testCase.action === 'dto-detail') {
         if (response.contentType !== 'application/json; charset=utf-8' || !body
           || typeof body.Id !== 'string' || body.Type !== testCase.itemType) failures.push(`${label} named detail JSON shape is invalid`);
@@ -803,14 +834,15 @@ function captureContract(records, setupRecords, caseStages, stages) {
   const caseStagesComplete = caseStages.length === expectedStages.length
     && caseStages.every((stage, index) => stable([stage.name, stage.endpoint]) === stable(expectedStages[index]));
   const topStages = [stages.before, stages.afterReads, stages.afterShutdown];
-  const caseSnapshotStates = scenario.menuLifecycle
+  const mutableScenario = scenario.menuLifecycle || scenario.namedLifecycle;
+  const caseSnapshotStates = mutableScenario
     ? caseStages.flatMap(stage => [stage.before, stage.after]) : [];
   const allSnapshotStates = [...topStages, ...caseSnapshotStates];
   const stageStructureValid = topStages.every(snapshotShapeValid)
-    && (!scenario.menuLifecycle || caseSnapshotStates.every(snapshotShapeValid));
+    && (!mutableScenario || caseSnapshotStates.every(snapshotShapeValid));
   const foreignKeysValid = stageStructureValid
     && allSnapshotStates.every(stage => stage.database.foreignKeyCheck.length === 0);
-  const immutableScenario = !scenario.menuLifecycle;
+  const immutableScenario = !mutableScenario;
   const stateContractValid = stageStructureValid && (immutableScenario
     ? stable(stages.before) === stable(stages.afterReads) && stable(stages.before) === stable(stages.afterShutdown)
     : stable(stages.afterReads) === stable(stages.afterShutdown));
@@ -847,6 +879,25 @@ function captureContract(records, setupRecords, caseStages, stages) {
     menuLifecycleValid = endpointsBounded && finalNewRows.length === scenario.expectedDynamicMenuViews
       && allSnapshotStates.every(statePreservesContract);
   }
+  let namedLifecycleValid = !scenario.namedLifecycle;
+  if (scenario.namedLifecycle && stageStructureValid && caseStagesComplete && caseStages.length > 0) {
+    const original = stages.before.database.baseItems;
+    const originalIds = new Set(original.map(row => idKey(row.Id)));
+    const names = new Set(fixture.cases.filter(value => !value.bindingError).map(value => value.itemName));
+    const types = new Set(['MediaBrowser.Controller.Entities.Genre', 'MediaBrowser.Controller.Entities.Studio',
+      'MediaBrowser.Controller.Entities.Audio.MusicGenre', 'MediaBrowser.Controller.Entities.Audio.MusicArtist']);
+    const returned = new Set(records.filter(record => record.response.status === 200)
+      .map(record => idKey(record.response.bodyJson?.Id)).filter(id => id && !/^0{32}$/u.test(id)));
+    namedLifecycleValid = stable(caseStages[0].before) === stable(stages.before)
+      && stable(caseStages.at(-1).after) === stable(stages.afterReads)
+      && allSnapshotStates.every(state => {
+        const rows = state.database.baseItems;
+        return stable(rows.filter(row => originalIds.has(idKey(row.Id)))) === stable(original)
+          && rows.filter(row => !originalIds.has(idKey(row.Id)))
+            .every(row => types.has(row.Type) && names.has(row.Name) && returned.has(idKey(row.Id)));
+      })
+      && stages.afterReads.database.baseItems.some(row => !originalIds.has(idKey(row.Id)));
+  }
   return {
     endpointsComplete,
     responseContractValid: responseFailures.length === 0,
@@ -856,6 +907,7 @@ function captureContract(records, setupRecords, caseStages, stages) {
     foreignKeysValid,
     stateContractValid,
     menuLifecycleValid,
+    namedLifecycleValid,
     responseFailures: responseFailures.slice(0, 20),
   };
 }
@@ -945,11 +997,11 @@ try {
       setupRecords.push({ kind, name: testCase.name, values: testCase[field], status: update.status });
     }
     for (const endpoint of testCase.endpoints ?? ['items', 'legacy']) {
-      const before = scenario.menuLifecycle ? { database: databaseSnapshot(), filesystem: await filesystemSnapshot() } : null;
+      const before = scenario.menuLifecycle || scenario.namedLifecycle ? { database: databaseSnapshot(), filesystem: await filesystemSnapshot() } : null;
       const route = routeFor(endpoint, testCase, userId);
       const response = await request(route, { token: testCase.auth === 'apiKey' ? apiKey : userToken });
       records.push({ name: testCase.name, query: testCase.query, scope: testCase.scope, endpoint, route, response });
-      caseStages.push(scenario.menuLifecycle ? { name: testCase.name, endpoint, before,
+      caseStages.push(scenario.menuLifecycle || scenario.namedLifecycle ? { name: testCase.name, endpoint, before,
         after: { database: databaseSnapshot(), filesystem: await filesystemSnapshot() } } : { name: testCase.name, endpoint });
       if (records.length % 50 === 0) console.log(JSON.stringify({ scenario: scenarioName, recorded: records.length, total: expectedMatrixCount }));
     }

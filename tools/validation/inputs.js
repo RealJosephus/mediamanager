@@ -19,7 +19,6 @@ const isDigest = value => typeof value === 'string' && /^[a-f0-9]{64}$/iu.test(v
 // caller/kind boundary: another kind imported by the shared loader is optional.
 const executionManifests = new Map([
   ['tests/consumer-contracts/consumer-readers.test.js', ['consumer', 'readers']],
-  ['tests/playback/http-native.test.js', ['consumer', 'readers']],
   ['tests/consumer-contracts/date-roundtrip.test.js', ['consumer', 'date-roundtrip']],
   ['tests/metadata/playlist-items.test.js', ['consumer', 'playlist-layouts']],
   ...['local-xml-provider', 'nfo-episode-blocks', 'nfo-scalar-provider']

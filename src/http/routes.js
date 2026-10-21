@@ -10,6 +10,7 @@ import { bindUserViewPresets } from './user-view-binding.js';
 import { refreshItemDetail } from './item-detail-refresh.js';
 import { enumName, generalCommands, mediaTypes, itemKinds } from '../sessions/binding.js';
 import { AUTHENTICATION_PROVIDER, PASSWORD_RESET_PROVIDER } from '../users/native.js';
+import { clrTrim } from '../metadata/whitespace.js';
 import { itemFields, itemImageTypes } from '../library/dto.js';
 import { parseQuery } from '../library/query.js';
 import { embyTextResponse } from './client-protocol.js';
@@ -48,6 +49,11 @@ export function registerDomainRoutes(add, { configuration, authentication, users
       try { return [guidValue(value.trim(), name)]; }
       catch { return []; }
     });
+  };
+  const namedDetailName = (context, parameterName) => {
+    const name = context.params.name;
+    if (name == null || !clrTrim(name)) throw new BindingError(parameterName, `The ${parameterName} field is required.`);
+    return name;
   };
   const privateItemQueryNames = new Set([
     'hasnoaudiotrackwithlanguage', 'hasnosubtitletrackwithlanguage',
@@ -377,7 +383,7 @@ export function registerDomainRoutes(add, { configuration, authentication, users
     requireSupportedDtoFields(input, 'Studios', ['ItemCounts']);
     return library.queryNamedItems('Studio', input, { user });
   });
-  add('GET', '/Studios/{name}', async context => library.getStudioDto(context.params.name,
+  add('GET', '/Studios/{name}', async context => library.getStudioDto(namedDetailName(context, 'name'),
     { user: await optionalRequestUser(context) }));
   const namedList = async (context, kind, { artist = false, albumArtists = false, autoMusicGenre = false } = {}) => {
     const input = {
@@ -426,7 +432,7 @@ export function registerDomainRoutes(add, { configuration, authentication, users
   add('GET', '/Artists', context => namedList(context, 'MusicArtist', { artist: true }));
   add('GET', '/Artists/AlbumArtists', context => namedList(context, 'MusicArtist', { artist: true, albumArtists: true }));
   for (const [route, kind] of [['Genres', 'Genre'], ['MusicGenres', 'MusicGenre'], ['Artists', 'MusicArtist']]) {
-    add('GET', `/${route}/{name}`, async context => await library.getNamedItemDto(kind, context.params.name,
+    add('GET', `/${route}/{name}`, async context => await library.getNamedItemDto(kind, namedDetailName(context, ['Genre', 'MusicGenre'].includes(kind) ? 'genreName' : 'name'),
       { user: await optionalRequestUser(context) }) ?? notFound());
   }
   add('GET', ['/Items/Latest', '/Users/{userId}/Items/Latest'], async context => {

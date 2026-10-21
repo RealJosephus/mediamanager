@@ -36,7 +36,7 @@ test('CI full forwards the strict full profile and refuses every form of selecti
 test('reviewed consumer records bind original source bytes and native runtime inputs without promoting ordinary DTO paths', () => {
   const consumer = executionManifestContract('tests/consumer-contracts/consumer-readers.test.js');
   assert.equal(consumer.argument, 'readers');
-  assert.equal(executionManifestContract('tests/playback/http-native.test.js').manifest, consumer.manifest);
+  assert.equal(executionManifestContract('tests/playback/http-native.test.js'), null, 'playback records its current reader oracle instead of executing the historical recording');
   assert.equal(executionManifestContract('tests/metadata/playlist-items.test.js').argument, 'playlist-layouts');
   assert.equal(executionManifestContract('tests/consumer-contracts/date-roundtrip.test.js').argument, 'date-roundtrip');
   assert.equal(executionManifestContract(ownPath), null, 'ordinary fixtures do not acquire an execution contract');

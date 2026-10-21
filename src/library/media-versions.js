@@ -104,5 +104,6 @@ export function sortMediaSources(sources, preferredId, playback = false) {
   return sortNative(sources, (a, b) => Number(sameId(b.Id, preferredId)) - Number(sameId(a.Id, preferredId))
     || Number(a.VideoType !== 'VideoFile') - Number(b.VideoType !== 'VideoFile')
     || Number(a.Video3DFormat != null) - Number(b.Video3DFormat != null)
-    || (playback ? width(b) - width(a) : -Math.sign(compareMediaSourceWidth(a, b))));
+    || (playback ? width(b) - width(a) : -Math.sign(compareMediaSourceWidth(a, b))))
+    .filter(source => !playback || source.Type !== 'Placeholder');
 }

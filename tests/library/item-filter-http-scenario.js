@@ -370,7 +370,7 @@ function baseItemRow(item, rootId, scenarioName) {
     MediaType: mediaType,
     UnratedType: isMovie ? 'Movie'
       : ['MusicAlbum', 'MusicArtist'].includes(item.type) ? 'Music' : 'Other',
-    Path: isFolder || ['Person', 'MusicArtist'].includes(item.type)
+    Path: Object.hasOwn(item, 'path') ? item.path : isFolder || ['Person', 'MusicArtist'].includes(item.type)
       ? `Z:\\ItemFilterHttp\\${item.key}`
       : `Z:\\ItemFilterHttp\\${item.key}.${item.type === 'Audio' ? 'flac' : 'mkv'}`,
     DateCreated: '2026-09-27 12:00:00',
@@ -581,6 +581,7 @@ function authorization(token) {
 }
 
 function routeFor(endpoint, testCase, fixture, userId, fields) {
+  if (testCase.action === 'playback-info') return `/Items/${fixture.items.find(item => item.key === testCase.detailKey).id}/PlaybackInfo?${testCase.query.replaceAll(fixture.userId, userId)}`;
   if (testCase.action === 'intros') return `${endpoint === 'legacy' ? '/Users/' + (testCase.introUserId ?? userId) : ''}/Items/${testCase.introItemId ?? fixture.items.find(item => item.key === testCase.detailKey).id}/Intros?${testCase.query.replaceAll(fixture.userId, userId)}`;
   if (testCase.action === 'theme') return `/Items/${testCase.themeItemId ?? fixture.items.find(item => item.key === testCase.detailKey).id}/${testCase.themeRoute}?${testCase.query.replaceAll(fixture.userId, userId)}`;
   if (testCase.action === 'dto-detail') return `${endpoint === 'legacy' ? '/Users/' + userId : ''}/Items/${fixture.items.find(item => item.key === testCase.detailKey).id}?${testCase.query.replaceAll(fixture.userId, userId)}`;
