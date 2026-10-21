@@ -2,6 +2,9 @@ import { PluginHost } from './plugins/host.js';
 import { IntroProviderManager } from './library/intro-providers.js';
 import { initializeLiveTvState } from './database/live-tv-state-import.js';
 import { LiveTvService } from './library/live-tv-service.js';
+import { LiveTvTimersService } from './library/live-tv-timers-service.js';
+import { LiveTvRecordingsService } from './library/live-tv-recordings-service.js';
+import { LiveTvRecordingFolders } from './library/live-tv-recording-folders.js';
 import { createIntroPathResolver } from './library/intro-path-resolver.js';
 import { guid, nonemptyId, libraryError } from './library/records.js';
 import { LibraryTaskScheduler } from './library/library-task-scheduler.js';
@@ -74,7 +77,7 @@ function absoluteApplicationPath(value, name) {
 }
 
 export async function createRuntime({ database, configuration, serverId, serverName = configuration?.ServerName || 'MediaManager', serverVersion = '13.0.0',
-  programDataPath, configurationDirectoryPath, dataPath, metadataPath, libraryOptions, directoryItemResolvers,
+  programDataPath, configurationDirectoryPath, dataPath, metadataPath, cachePath, libraryOptions, directoryItemResolvers,
   pluginOptions = {}, storageConfiguration, environment, portableMountContract,
   vfs, identityMap, ignoreIdentityMap = identityMap, probeOptions, extractionOptions, remuxOptions, hlsOptions, imageOptions = {}, metadataOptions = {}, onError,
   autoDiscoveryOptions, onDatabaseOwnershipTransferred } = {}) {
@@ -82,6 +85,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
   configurationDirectoryPath = absoluteApplicationPath(configurationDirectoryPath, 'configurationDirectoryPath');
   dataPath = absoluteApplicationPath(dataPath, 'dataPath');
   metadataPath = absoluteApplicationPath(metadataPath, 'metadataPath');
+  cachePath = absoluteApplicationPath(cachePath, 'cachePath');
   const rollback = [];
   let splashscreen;
   let cancelMetadata = () => {};
@@ -97,8 +101,10 @@ export async function createRuntime({ database, configuration, serverId, serverN
   configurationDirectoryPath ??= programDataPath && path.resolve(programDataPath, '..', 'config');
   dataPath ??= programDataPath && path.join(programDataPath, 'data');
   metadataPath ??= programDataPath && path.join(programDataPath, 'metadata');
+  cachePath ??= programDataPath && path.join(programDataPath, 'cache');
   await store.transaction(database => initializeLiveTvState(database, { dataPath, logger }));
-  plugins = await PluginHost.open({ programDataPath, configurationDirectoryPath, dataPath, metadataPath, cachePath: imageOptions.cachePath, onError, ...pluginOptions });
+  plugins = await PluginHost.open({ programDataPath, configurationDirectoryPath, dataPath, metadataPath, cachePath,
+    imageCachePath: imageOptions.cachePath, onError, ...pluginOptions });
   rollback.push(() => plugins.close());
   configuredStorage = await createConfiguredStorage(storageConfiguration, { plugins, environment, portableMountContract });
   fileSystem = configuredStorage.fileSystem;
@@ -114,6 +120,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
   const isLocalNetwork = createNetworkClassifier(configuration.NetworkConfiguration ?? {});
   const users = new UserService({ store, serverId, isLocalNetwork, castReceiverApplications: configuration.CastReceiverApplications ?? [] });
   const liveTv = new LiveTvService({ users, configurationDirectoryPath, onError });
+  rollback.push(() => liveTv.close());
   const startup = new StartupService({ users, configuration, configurationStore });
   rollback.push(() => startup.close());
   const displayPreferences = new DisplayPreferencesService({ store, onError });
@@ -154,6 +161,9 @@ export async function createRuntime({ database, configuration, serverId, serverN
   const expandPath = programDataPath ? createVirtualPathExpander({ programDataPath, dataPath, metadataPath }) : undefined;
   const externalUrlConfiguration = await loadExternalUrlConfiguration({ programDataPath, onError });
   const library = new LibraryService({ fileSystem, store, linkedChildren, serverId, programDataPath, dataPath, metadataPath, configuration, libraryOptions, localization, liveTv, expandPath, logger, onError, ...externalUrlConfiguration });
+  const liveTvTimers = new LiveTvTimersService({ store, serverId, liveTv, onError,
+    loadProgramDtos: (_database, ids) => library.loadLiveTvTimerProgramDtos(ids),
+    loadProgram: id => library.loadLiveTvTimerProgram(id) });
   rollback.push(() => library.close());
   const playlists = programDataPath && dataPath
     ? new PlaylistService({ fileSystem, store, library, linkedChildren, spoolRoot, programDataPath, dataPath, configuration, vfs, identityMap, onError,
@@ -225,7 +235,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
   if (hls) rollback.push(() => hls.close());
   sessions.hls = hls;
   const playback = new PlaybackService({ library, vfs, identityMap, sessions, configuration, serverVersion, isLocalNetwork, probe, extraction, remux, hls });
-  const imageProcessor = new ImageProcessor({ fileSystem, cachePath: programDataPath && path.join(programDataPath, 'cache', 'images'), logger, ...imageOptions });
+  const imageProcessor = new ImageProcessor({ fileSystem, cachePath: cachePath && path.join(cachePath, 'images'), logger, ...imageOptions });
   rollback.push(() => imageProcessor.close());
   splashscreen = dataPath ? new SplashscreenImageGenerator({ dataPath, logger,
     assets: new MetadataImageAssets({ fileSystem, vfs, identityMap:metadataIdentityMap, metadataPath,
@@ -234,7 +244,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
   const metadataImages = new MetadataImages({ processor: imageProcessor, logger });
   const metadataSettings = await loadMetadataConfiguration({ programDataPath, configurationDirectoryPath: componentConfigurationPath, onError });
   const similarItems = new SimilarItemsManager({ fileSystem, extensions: () => plugins.entries('similar'),
-    cachePath: metadataOptions.similarCachePath ?? (programDataPath && path.join(programDataPath, 'cache')),
+    cachePath: metadataOptions.similarCachePath ?? cachePath,
     logger, now: metadataOptions.similarNow });
   library.similarItems = similarItems;
   const ignoreRule = vfs && identityMap ? new DotIgnoreRule({ vfs, identityMap: ignoreIdentityMap }) : undefined;
@@ -373,6 +383,16 @@ export async function createRuntime({ database, configuration, serverId, serverN
   }) : undefined;
   if (libraryConfiguration) { rollback.push(() => libraryConfiguration.close()); await deferUnavailable(()=>libraryConfiguration.initialize()); }
   library.configuration = libraryConfiguration;
+  const liveTvRecordingFolders = libraryConfiguration && dataPath ? new LiveTvRecordingFolders({ liveTv, libraryConfiguration,
+    mediaAssets: libraryConfiguration.mediaAssets, dataPath,
+    runBackground: operation => store.runDetached(() => loadContext.withDetachedScope(operation)),
+    queueLibraryScan: () => { void tasks.queueScheduled(refreshLibraryTaskId).catch(onError); }, onError
+  }) : undefined;
+  const liveTvRecordings = dataPath ? new LiveTvRecordingsService({ liveTv, library, dataPath,
+    mediaAssets: libraryConfiguration?.mediaAssets
+      ?? new MetadataImageAssets({ fileSystem, vfs, identityMap, metadataPath, stateRoots: [dataPath] }) }) : undefined;
+  liveTvRecordingFolders?.start();
+  if (liveTvRecordingFolders) rollback.push(() => liveTvRecordingFolders.close());
   const collectionServices = libraryConfiguration && itemCreation && metadataUpdates ? createCollectionRuntimeServices({ fileSystem,
     store, library, itemCreation, loadContext, updates: metadataUpdates, metadata, host: libraryScanHost,
     libraryConfiguration, monitor: libraryMonitor, programDataPath, dataPath, localization, linkedChildren, logger, onError
@@ -415,6 +435,9 @@ export async function createRuntime({ database, configuration, serverId, serverN
   const services = { storage: configuredStorage, storageReadiness, fileSystem, configuration, store, users, devices, library, itemCreation, itemDeletion, unsafeItemDeletion, folderValidation, linkedChildReferences, playlists, topLevelValidation, libraryScanHost, libraryScanLifecycle, libraryScanner, metadataScanner, artistsPostScanTask, genresPostScanTask, musicGenresPostScanTask, studiosPostScanTask, tasks, userData, sessions, syncPlay, refreshes, authentication, localization, playback, probe, externalData, extraction, remux, hls, images, imageProcessor, metadata, metadataUpdates, resolvedItemLifecycle, metadataEditor, itemUpdates, plugins, similarItems, ignoreRule, serverId, serverName, serverVersion };
   services.collectionPosterVerifyPostScanTask = collectionPosterVerifyPostScanTask;
   services.liveTv = liveTv;
+  services.liveTvTimers = liveTvTimers;
+  services.liveTvRecordings = liveTvRecordings;
+  services.liveTvRecordingFolders = liveTvRecordingFolders;
   services.cleanDatabasePostScanTask = cleanDatabasePostScanTask;
   services.splashscreen = splashscreen;
   services.branding = branding;
@@ -436,7 +459,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
   await plugins.connect({ ...services, vfs, identityMap, metadataVfs, metadataIdentityMap, loadContext, seriesLifecycle, metadataImages, spoolRoot, fileSystem });
   const application = await createApplication({ ...services, onError,
     applicationPaths: { programDataPath, metadataPath,
-      cachePath: programDataPath && path.join(programDataPath, 'cache') } });
+      cachePath } });
   rollback.push(async () => { application.beginClose(); await application.drainRequests();
     if (application.server.listening) await new Promise((resolve, reject) => application.server.close(error => error ? reject(error) : resolve())); });
   if (application.webSockets) rollback.push(() => application.webSockets.close());
@@ -478,12 +501,19 @@ export async function createRuntime({ database, configuration, serverId, serverN
       const errors = [];
       const attempt = async operation => { try { await operation(); } catch (error) { errors.push(error); } };
       application.beginClose();
+      // Freeze save admission before cancelling metadata. Each already queued
+      // save synchronously reserved its recording-folder dependencies; those
+      // reservations can finish their own reads and follow-up saves.
+      const liveTvClosing = liveTv.close();
       introProviders.close();
       stopStorageObserver();
       // A scheduler worker can be awaiting a metadata provider's cancellation.
       // Signal it before waiting for any scan owner; savers and SQL ownership
       // remain available until those operations have completed their cleanup.
       cancelMetadata();
+      // Each admitted recording-folder update retains its configuration and
+      // metadata permit. Drain it before closing the owners it still uses.
+      await attempt(() => liveTvRecordingFolders?.close());
       // Signal every scan owner before awaiting any of them. A scheduled task
       // may wait behind a library generation which itself waits behind an
       // older folder scan; each owner must receive cancellation to release the
@@ -493,6 +523,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
         attempt(() => passwordResets.close()),
         attempt(() => displayPreferences.close()),
         attempt(() => startup.close()),
+        attempt(() => liveTvClosing),
         attempt(() => apiKeys.close()),
         attempt(() => splashscreen?.close()),
         attempt(() => branding.close()),
@@ -540,6 +571,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
   // constructor failure and keep using a database the caller never received.
   if (storageReadiness.ready) await libraryMonitor?.start();
   await tasks.initialize();
+  if (storageReadiness.ready) await liveTvRecordingFolders?.reconcile();
   rollback.length = 0;
   return { ...application, ...services, get implementedRoutes() { return application.implementedRoutes; }, startAutoDiscovery, close };
   } catch (error) {

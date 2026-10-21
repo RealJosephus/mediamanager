@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "timers": [
+    { "Id": "new-one", "Name": "Show 2", "Overview": "Timer 中文 & overview", "ChannelId": "channel-one", "ProgramId": "program-one", "SeriesTimerId": "series-two", "SeriesId": "guide-series", "Status": "New", "Priority": 7, "PrePaddingSeconds": 5, "PostPaddingSeconds": 11, "IsPrePaddingRequired": true, "IsPostPaddingRequired": true, "KeepUntil": "UntilWatched", "day": 1 },
+    { "Id": "active-two", "Name": "Show 10", "ChannelId": "channel-two", "ProgramId": "program-two", "SeriesTimerId": "series-ten", "SeriesId": "guide-series-two", "Status": "InProgress", "Priority": -3, "day": 2 },
+    { "Id": "conflicted", "Name": "Show 02", "ChannelId": "channel-one", "ProgramId": "program-one", "Status": "ConflictedOk", "day": 2 },
+    { "Id": "cancelled", "Name": "Show 2", "ChannelId": "channel-one", "ProgramId": "program-one", "SeriesTimerId": "series-two", "Status": "Cancelled", "day": 3 },
+    { "Id": "error", "Name": "Show 10", "ChannelId": "channel-two", "ProgramId": "program-two", "SeriesTimerId": "series-ten", "Status": "Error", "day": 4 },
+    { "Id": "completed", "Name": "Completed retained input", "ChannelId": "channel-one", "ProgramId": "program-one", "Status": "Completed", "day": 5 },
+    { "Id": "unlinked", "Name": "Unlinked timer", "Overview": "", "Priority": 0, "Status": "New", "day": 6 }
+  ],
+  "seriesTimers": [
+    { "Id": "series-ten", "Name": "Show 10", "Overview": "Series & 中文", "ChannelId": "channel-two", "SeriesId": "guide-series-two", "Priority": 10, "Days": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], "RecordAnyTime": false, "RecordAnyChannel": false, "RecordNewOnly": true, "SkipEpisodesInLibrary": false, "KeepUpTo": 4, "PrePaddingSeconds": 2, "PostPaddingSeconds": 3, "KeepUntil": "UntilSpaceNeeded", "day": 2 },
+    { "Id": "series-two", "Name": "Show 2", "ChannelId": "channel-one", "SeriesId": "guide-series", "Priority": 1, "Days": ["Saturday", "Sunday"], "RecordAnyTime": true, "RecordAnyChannel": true, "RecordNewOnly": false, "day": 1 },
+    { "Id": "series-zero-two", "Name": "Show 02", "ChannelId": "channel-one", "Priority": 1, "Days": ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"], "day": 3 },
+    { "Id": "series-empty-days", "Name": "Zéro 📻", "Priority": -1, "Days": [], "RecordAnyChannel": true, "ServiceName": "Preserved source value", "day": 4 }
+  ]
+}

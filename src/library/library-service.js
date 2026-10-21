@@ -24,7 +24,7 @@ import { prepareItemsController, itemsDispatch } from './items-dispatch.js';
 import { boxSetDisplayOrder, isLegacyBoxSet } from './boxset-state.js';
 import { collectionType, groupedMediaFolders, eligibleForGrouping } from './user-view-query.js';
 import { UserViewService } from './user-view-service.js';
-import { createVirtualPathExpander } from './options.js';
+import { createVirtualPathExpander, createVirtualPathReverser } from './options.js';
 import { nextUpTopParentIds } from './next-up.js';
 import { childCountSourceIds } from './child-counts.js';
 import { postgresParentalRatingContext, preferredMetadataCountry } from './parental-rating.js';
@@ -46,6 +46,7 @@ import { queryPostgresNextUpPage } from './postgres-next-up-query.js';
 import { queryPostgresLatestItems } from './postgres-latest-items-query.js';
 import { queryPostgresRecommendedPrograms, queryPostgresPrograms, queryPostgresChannels, queryPostgresCurrentPrograms } from './postgres-live-tv-query.js';
 import { queryPostgresProgramRecordingInfo, queryPostgresSeriesTimerProgramFilter } from './postgres-live-tv-state-query.js';
+import { queryPostgresRecordingFolderSources, orderPostgresRecordingFolders, createPostgresRecordingQuery } from './postgres-live-tv-recordings-query.js';
 import { queryPostgresNamedItemPage, queryPostgresNamedItemCounts, queryPostgresNamedSlug } from './postgres-named-items-query.js';
 import { dtoItemCountKinds, queryPostgresDtoItemCounts } from './postgres-dto-item-counts-query.js';
 import { queryPostgresItemFilters } from './postgres-item-filters-query.js';
@@ -862,6 +863,13 @@ export class LibraryService extends EventEmitter {
     return this.#queryLiveTvPrograms(input, { user, recommended: true });
   }
 
+  async getInternalLiveTvFolder() {
+    return this.#runWithStates(async db => {
+      const navigation = await this.load(db, null, { includeUserData: false, baseRows: await loadPostgresNavigationRows(db) });
+      return this.userViews.global('livetv', this.options.localization?.text('HeaderLiveTV') ?? 'Live TV', db, navigation);
+    });
+  }
+
   async #prefetchCurrentProgramDtos(channels, state, user, selected) {
     const db = state.db, navigationRows = await loadPostgresNavigationRows(db);
     const navigation = await this.load(db, user, { includeUserData: false, baseRows: navigationRows });
@@ -966,6 +974,115 @@ export class LibraryService extends EventEmitter {
       const result = await projectItem(item, state, user, options, this.options);
       const recordings = await queryPostgresProgramRecordingInfo(db, [item.Id]);
       return Object.assign(result, recordings.get(idKey(item.Id)));
+    });
+  }
+
+  async loadLiveTvTimerProgramDtos(ids) {
+    if (!Array.isArray(ids) || ids.length > 128) throw new TypeError('Timer program DTOs require a batch of at most 128 identities.');
+    if (!ids.length) return new Map();
+    return this.#runWithStates(async db => {
+      const rows = await loadPostgresRowsByIds(db, ids);
+      const programIds = rows.filter(row => row.Type === 'MediaBrowser.Controller.LiveTv.LiveTvProgram').map(row => row.Id);
+      if (!programIds.length) return new Map();
+      const state = await this.#loadPostgresItemState(db, programIds, null, { includeUserData: false });
+      const items = programIds.map(id => state.byId.get(idKey(id))).filter(Boolean);
+      const options = dtoOptions({}, true);
+      // Native program projection adds recording associations before the
+      // outer timer DTO applies the selected timer's own values.
+      await this.#prefetchPostgresDtos(items, state, null, options);
+      const result = new Map();
+      for (const item of items) result.set(idKey(item.Id), await projectItem(item, state, null, options, this.options));
+      return result;
+    });
+  }
+
+  async loadLiveTvTimerProgram(id) {
+    let normalized;
+    try { normalized = nativeGuid(id); }
+    catch { throw libraryError(500, 'Invalid program id.'); }
+    if (!nonemptyId(normalized)) throw libraryError(400, "Guid can't be empty. (Parameter 'id')");
+    return this.#runWithStates(async db => {
+      const state = await this.#loadPostgresItemState(db, [normalized], null, { includeUserData: false });
+      const item = state.byId.get(idKey(normalized));
+      if (item?.Type !== 'LiveTvProgram') throw libraryError(500, 'The timer default program was not found.');
+      const channel = state.byId.get(idKey(item.ChannelId));
+      if (channel?.Type !== 'LiveTvChannel' || !channel.ServiceName || channel.ServiceName.toLowerCase() !== 'emby') {
+        throw libraryError(500, 'The timer default program has no registered channel service.');
+      }
+      const dto = await this.getLiveTvProgram(normalized);
+      return { item: Object.fromEntries(['Id', 'Name', 'Overview', 'StartDate', 'EndDate', 'ExternalId', 'IsRepeat']
+        .map(name => [name, item[name]])), dto, channel: { Id: channel.Id, Name: channel.Name, ServiceName: channel.ServiceName } };
+    });
+  }
+
+  async resolveLiveTvRecordingFolders(paths, { user = null, includeDtos = false } = {}) {
+    if (!Array.isArray(paths)) throw new TypeError('Recording folder paths must be an array.');
+    return this.#runWithStates(async db => {
+      const reverse = this.options.programDataPath ? createVirtualPathReverser(this.options) : value => value;
+      const navigationRows = await loadPostgresNavigationRows(db);
+      const folders = new Map();
+      // FindByPath and standalone access apply to each physical source before
+      // collection membership. Collection-folder DTO visibility is later.
+      for (let offset = 0; offset < paths.length; offset += 128) {
+        const sources = await queryPostgresRecordingFolderSources(db, paths.slice(offset, offset + 128).map(reverse));
+        const state = await this.#loadPostgresItemState(db, sources.map(row => row.Id), user,
+          { includeUserData: false, navigationRows });
+        try {
+          const candidates = sources.map(row => state.byId.get(idKey(row.Id))).filter(Boolean);
+          const visible = await this.#filterPostgresStandaloneBatch(db, candidates, user, state);
+          for (const source of visible) for (const folder of collectionFoldersForItem(source, state)) {
+            if (!folders.has(idKey(folder.Id))) folders.set(idKey(folder.Id), folder);
+          }
+        } finally { await state.dispose({ session: db }); }
+      }
+      const ordered = await orderPostgresRecordingFolders(db, [...folders.values()],
+        { culture: this.options.localization?.context?.culture ?? 'en-US' });
+      const folderIds = ordered.map(folder => folder.Id);
+      if (!includeDtos || !folderIds.length) return { folderIds, Items: [] };
+      const Items = [];
+      for (let offset = 0; offset < folderIds.length; offset += 128) {
+        const ids = folderIds.slice(offset, offset + 128);
+        const state = await this.#loadPostgresItemState(db, ids, user, { navigationRows });
+        try {
+          const selected = ids.map(id => state.byId.get(idKey(id))).filter(item => item
+            && visibleItem(item, user, state, { ...this.options, query: false, checkStandaloneParents: false }));
+          const options = dtoOptions({}, true);
+          await this.#prefetchPostgresDtos(selected, state, user, options);
+          for (const item of selected) Items.push(await projectItem(item, state, user, options, this.options));
+        } finally { await state.dispose({ session: db }); }
+      }
+      return { folderIds, Items };
+    });
+  }
+
+  async queryLiveTvRecordings(input = {}, { user = null, folderIds = [] } = {}) {
+    if (!user || !folderIds.length) return { Items: [], TotalRecordCount: 0, StartIndex: input.startindex ?? 0 };
+    return this.#runWithStates(async db => {
+      const navigationRows = await loadPostgresNavigationRows(db);
+      const navigation = await this.load(db, user, { includeUserData: false, baseRows: navigationRows });
+      const { topParentIds: _topParents, libraryTopParentIds: _libraries,
+        ...visibility } = this.#postgresVisibility(navigation, user) ?? {};
+      const options = dtoOptions(input);
+      for (const field of ['candelete', 'candownload', 'displaypreferencesid', 'etag']) options.fields.delete(field);
+      if (input.isinprogress === true) options.fields.add('tags');
+      const Items = [];
+      const query = await createPostgresRecordingQuery(db, input, { folderIds, userId: user.Id, visibility });
+      let failure;
+      try {
+        for (let offset = 0; ; offset += 128) {
+          const page = await query.page({ offset, limit: 128 });
+          const state = await this.load(db, user, { baseRows: await loadPostgresPageGraph(db, page.rows, navigationRows) });
+          try {
+            const selected = page.rows.map(row => state.byId.get(idKey(row.Id))).filter(item => item
+              && visibleItem(item, user, state, { ...this.options, query: false, checkStandaloneParents: false }));
+            await this.#prefetchPostgresDtos(selected, state, user, options);
+            for (const item of selected) Items.push(await projectItem(item, state, user, options, this.options));
+          } finally { await state.dispose({ session: db }); }
+          if (page.rows.length < 128) break;
+        }
+        return { Items, TotalRecordCount: query.total, StartIndex: input.startindex ?? 0 };
+      } catch (error) { failure = error; throw error; }
+      finally { await query.close(failure); }
     });
   }
 

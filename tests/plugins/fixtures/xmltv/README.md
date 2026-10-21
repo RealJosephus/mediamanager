@@ -1,0 +1,9 @@
+# XMLTV native oracle
+
+`Oracle.csproj` references the designated built workspace assemblies. It invokes the real internal `XmlTvProgramEtag.TryCreate` by reflection, the real `XmlTvReader.ParseDate`/channel reader and the real `XmlTvListingsProvider` channels, programmes, lineups, validation and cache paths. Stubbed interfaces provide only application paths, server language and the HTTP client factory; parser/provider/hash behavior comes from those actual assemblies.
+
+The invoking tests expand `input.json` with their controlled reader, encoding or HTTP/cache scenarios and hash the resulting input. The oracle writes isolated source/cache files beneath its own output directory, deletes those private inputs in `finally`, and reports source/cache SHA-256, observations and actual assembly metadata. Input and result hashes are also checked against the validation runner's receipt.
+
+HTTP/cache cases use a Node-owned loopback server sequentially for the native and candidate providers. The server records actual feed requests. A separate control endpoint selects each response; `/wait-body` confirms a response prefix was sent before caller cancellation. The timeout case injects a `TaskCanceledException` with an inner `TimeoutException` at the native HTTP handler boundary and an abort at the candidate fetch boundary. It verifies timeout classification and backoff without claiming a real fifteen-minute elapsed timeout.
+
+No real instance, network feed or reference-workspace file is modified. The fixture tests a listings provider boundary; it does not establish Guide refresh, production HTTP routing or release acceptance. Safety rejection of unsafe cache identities and concurrent temporary-file ownership are covered by the separate Node resource tests and are explicitly documented in the package README.

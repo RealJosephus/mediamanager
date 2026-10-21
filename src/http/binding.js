@@ -78,6 +78,26 @@ export function requireMember(object, name) {
   return value;
 }
 
+function unclosedJsonContainer(text) {
+  const closings = [];
+  let quoted = false, escaped = false;
+  for (const character of text) {
+    if (quoted) {
+      if (escaped) escaped = false;
+      else if (character === '\\') escaped = true;
+      else if (character === '"') quoted = false;
+    } else if (character === '"') quoted = true;
+    else if (character === '{' || character === '[') closings.push(character === '{' ? '}' : ']');
+    else if (character === '}' || character === ']') { if (closings.pop() !== character) return false; }
+  }
+  if (quoted || !closings.length) return false;
+  // Completing only a missing value and the open containers distinguishes an
+  // otherwise valid JSON prefix from malformed tokens earlier in the body.
+  const completion = text + (text.trimEnd().endsWith(':') ? 'null' : '') + closings.reverse().join('');
+  try { JSON.parse(completion); return true; }
+  catch { return false; }
+}
+
 export async function readBody(request, { allowForm = false, allowTextJson = false, optional = false, bind, objectType } = {}) {
   if (optional && !request.headers['transfer-encoding'] && !(Number(request.headers['content-length']) > 0)) return {};
   const type = (request.headers['content-type'] ?? '').split(';')[0].trim().toLowerCase();
@@ -102,7 +122,7 @@ export async function readBody(request, { allowForm = false, allowTextJson = fal
   else {
     try { body = parseLosslessJson(text); }
     catch {
-      if (/^[ \t\r\n]*\{[ \t\r\n]*$/.test(text)) {
+      if (unclosedJsonContainer(text)) {
         const line = text.split('\n').length - 1, position = Buffer.byteLength(text.slice(text.lastIndexOf('\n') + 1));
         throw new BindingError('$', `Expected depth to be zero at the end of the JSON payload. There is an open JSON object or array that should be closed. Path: $ | LineNumber: ${line} | BytePositionInLine: ${position}.`);
       }

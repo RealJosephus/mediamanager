@@ -147,7 +147,7 @@ const propertyOccurrences = (value, occurrences) => occurrences.get(value)
   ?? Object.entries(value).map(([name, entry]) => ({ name, value: entry, source: undefined }));
 
 /** JsonDefaults array import. Query callers must use the persisted SQL frame. */
-export function decodeNativeJsonArray(text, fields, create) {
+export function decodeNativeJsonArray(text, fields, create, { onDateState } = {}) {
   // A byte-preserving syntax view lets JsonDefaults skip unknown strings even
   // when their UTF-8 is invalid. Decode only names and consumed field values.
   const byteSource = text instanceof Uint8Array;
@@ -185,7 +185,9 @@ export function decodeNativeJsonArray(text, fields, create) {
       if (!property || property.readOnly) continue;
       const fieldSource = decode(occurrence.source);
       const fieldValue = byteSource ? parseTypedJson(fieldSource) : { value: occurrence.value, occurrences: parsed.occurrences };
-      const converted = readValue(fieldValue.value, property, `$[${index}].${property.name}`, fieldValue.occurrences, fieldSource);
+      let dateState;
+      const converted = readValue(fieldValue.value, property, `$[${index}].${property.name}`, fieldValue.occurrences, fieldSource,
+        state => { dateState = state; });
       const validateStrings = entry => {
         if (typeof entry === 'string' && !entry.isWellFormed()) invalid('syntax', `$[${index}].${property.name}`, 'Invalid native JSON string.');
         if (Array.isArray(entry)) for (const child of entry) validateStrings(child);
@@ -198,6 +200,7 @@ export function decodeNativeJsonArray(text, fields, create) {
         value: converted,
         enumerable: true, configurable: true, writable: true,
       });
+      if (property.kind === 'date') onDateState?.(result, property.name, dateState);
     }
     return result;
   });
@@ -416,7 +419,7 @@ function dateOffsetText(minutes) {
   return `${sign}${padDatePart(Math.floor(absolute / 60))}:${padDatePart(absolute % 60)}`;
 }
 
-function writeNativeDate(value, state) {
+export function writeNativeDate(value, state) {
   const canonical = dateText(value ?? MIN_DATE);
   const fraction = canonical.slice(20, 27);
   // JsonDateTimeConverter uses a literal Z whenever the millisecond component

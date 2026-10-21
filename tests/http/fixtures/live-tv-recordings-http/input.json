@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "registration": { "filename": "recording-root-ready.txt", "text": "Private controlled recording-directory registration.\n" },
+  "items": [
+    { "key": "movie", "type": "Movies.Movie", "name": "Recorded movie 中文", "folder": "movies", "genres": "Drama", "tags": "Recorded", "day": 11 },
+    { "key": "sports", "type": "Movies.Movie", "name": "Sports film", "folder": "main", "genres": "Sports", "day": 10 },
+    { "key": "episode", "type": "TV.Episode", "name": "Recorded episode", "folder": "main", "genres": "Kids", "day": 9 },
+    { "key": "family", "type": "Video", "name": "Family programme", "folder": "main", "genres": "Family", "day": 8 },
+    { "key": "children", "type": "Video", "name": "Children programme", "folder": "main", "genres": "Children", "day": 7 },
+    { "key": "live", "type": "Video", "name": "Existing external livestream", "folder": "main", "genres": "Sports", "tags": "LiVeStReAm", "channel": true, "day": 6 },
+    { "key": "completeChannel", "type": "Video", "name": "Complete external programme", "folder": "main", "tags": "recorded", "channel": true, "day": 5 },
+    { "key": "restricted", "type": "Movies.Movie", "name": "Blocked recording", "folder": "main", "tags": "restricted", "day": 4 },
+    { "key": "virtual", "type": "Movies.Movie", "name": "Virtual recording excluded", "folder": "main", "virtual": true, "day": 3 },
+    { "key": "outside", "type": "Movies.Movie", "name": "Outside configured recording roots", "folder": "outside", "day": 2 },
+    { "key": "delete", "type": "Movies.Movie", "name": "Retained media deletion", "folder": "main", "tags": "delete-fixture", "day": 1 }
+  ]
+}

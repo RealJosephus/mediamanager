@@ -14,6 +14,11 @@ on:
         options:
           - available
           - full
+      release_pair:
+        description: Run strict full twice per platform against one supplied candidate and input set; product release acceptance remains separate
+        type: boolean
+        required: false
+        default: false
       test_files:
         description: Exact test paths separated by commas or newlines; leave empty for all available tests
         type: string
@@ -73,19 +78,21 @@ jobs:
   validate:
     name: ${{ matrix.os }} / shard ${{ matrix.shard }} / Node 24 / PostgreSQL 17
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 120
+    timeout-minutes: ${{ inputs.release_pair && 360 || 120 }}
     strategy:
       fail-fast: false
       matrix:
-        os: ${{ fromJSON(inputs.platform == 'windows' && '["windows-2025"]' || inputs.platform == 'linux' && '["ubuntu-24.04"]' || inputs.platform == 'macos' && '["macos-15"]' || '["ubuntu-24.04","windows-2025","macos-15"]') }}
-        shard: ${{ fromJSON((inputs.validation_profile == 'full' || inputs.test_files) && '[1]' || '[1,2,3,4]') }}
+        os: ${{ fromJSON(inputs.release_pair && '["ubuntu-24.04","windows-2025","macos-15"]' || inputs.platform == 'windows' && '["windows-2025"]' || inputs.platform == 'linux' && '["ubuntu-24.04"]' || inputs.platform == 'macos' && '["macos-15"]' || '["ubuntu-24.04","windows-2025","macos-15"]') }}
+        shard: ${{ fromJSON((inputs.release_pair || inputs.validation_profile == 'full' || inputs.test_files) && '[1]' || '[1,2,3,4]') }}
     env:
       TZ: Asia/Taipei
       MEDIAMANAGER_TEST_POSTGRES: postgresql://validation@127.0.0.1:5432/postgres
       MEDIAMANAGER_CI_TEST_FILES: ${{ inputs.test_files || '' }}
-      MEDIAMANAGER_CI_PROFILE: ${{ inputs.validation_profile || 'available' }}
+      MEDIAMANAGER_CI_PROFILE: ${{ inputs.release_pair && 'full' || inputs.validation_profile || 'available' }}
+      MEDIAMANAGER_CI_RELEASE_PAIR: ${{ inputs.release_pair && 'true' || 'false' }}
+      MEDIAMANAGER_CI_PLATFORM: ${{ inputs.platform || 'all' }}
       MEDIAMANAGER_CI_SHARD: ${{ matrix.shard }}
-      MEDIAMANAGER_CI_SHARDS: ${{ (inputs.validation_profile == 'full' || inputs.test_files) && '1' || '4' }}
+      MEDIAMANAGER_CI_SHARDS: ${{ (inputs.release_pair || inputs.validation_profile == 'full' || inputs.test_files) && '1' || '4' }}
       MEDIAMANAGER_CI_NATIVE_REFERENCE: ${{ inputs.native_reference && 'true' || 'false' }}
       MEDIAMANAGER_CI_NATIVE_INSTANCE: ${{ inputs.native_instance && 'true' || 'false' }}
       MEDIAMANAGER_CI_NATIVE_SQLITE: ${{ inputs.native_sqlite && 'true' || 'false' }}
@@ -120,6 +127,9 @@ jobs:
         shell: pwsh
         run: |
           $ErrorActionPreference = 'Stop'
+          if ($env:MEDIAMANAGER_CI_RELEASE_PAIR -eq 'true' -and ($env:GITHUB_EVENT_NAME -ne 'workflow_dispatch' -or $env:MEDIAMANAGER_CI_PLATFORM -ne 'all')) {
+            throw 'Release pairs require an explicit dispatch with platform=all.'
+          }
           if ($env:MEDIAMANAGER_CI_PROFILE -eq 'full' -and ($env:MEDIAMANAGER_CI_TEST_FILES -split '[,\r\n]+' | Where-Object { $_.Trim() })) {
             throw 'The full profile cannot be combined with an explicit test subset.'
           }
@@ -302,7 +312,7 @@ jobs:
       # GITHUB_EVENT_NAME/PATH supply the push base or PR merge parents. Manual
       # dispatch with an empty test_files input still requests all available tests.
       - name: Run affected or explicitly requested strict validation
-        timeout-minutes: 110
+        timeout-minutes: ${{ inputs.release_pair && 290 || 110 }}
         run: node tools/ci/run.js
       - name: Audit database resources
         if: always() && steps.environment.outcome == 'success'
@@ -385,5 +395,44 @@ jobs:
         with:
           name: emby-web-input-${{ matrix.os }}-shard-${{ matrix.shard }}-${{ github.run_attempt }}
           path: ${{ runner.temp }}/mediamanager-emby-web/receipts
+          if-no-files-found: error
+          retention-days: 14
+
+  strict-pair-receipt:
+    name: Verify all three strict full pairs
+    if: ${{ always() && inputs.release_pair }}
+    needs: validate
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      actions: read
+    env:
+      MEDIAMANAGER_CI_VALIDATION_RESULT: ${{ needs.validate.result }}
+    steps:
+      - name: Check out exact candidate
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Set up Node
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24.16.0
+      - name: Download every current-attempt pair with its original evidence
+        id: evidence
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
+        with:
+          pattern: validation-*-shard-1-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/strict-pair-artifacts
+      - name: Recheck candidate, inputs, full scope, TAP, registration and database cleanup
+        if: always()
+        shell: pwsh
+        run: node tools/ci/release-pair-aggregate.js "$env:RUNNER_TEMP/strict-pair-artifacts" "$env:RUNNER_TEMP/strict-pair-receipt"
+      - name: Preserve the bounded strict-pair conclusion
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: strict-pair-receipt-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/strict-pair-receipt
           if-no-files-found: error
           retention-days: 14

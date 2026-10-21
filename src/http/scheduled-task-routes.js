@@ -25,13 +25,13 @@ export function registerScheduledTaskRoutes(add, { tasks, onError = () => {} }) 
     isEnabled: filter(context, 'isEnabled')
   }), { policy: 'RequiresElevation' });
 
-  add('GET', '/ScheduledTasks/{taskId}', context => required().get(context.params.taskId) ?? notFound(), {
+  add('GET', '/ScheduledTasks/{taskId}', async context => await required().get(context.params.taskId) ?? notFound(), {
     policy: 'RequiresElevation'
   });
 
   add('POST', '/ScheduledTasks/Running/{taskId}', context => {
     const manager = required();
-    if (!manager.get(context.params.taskId)) return notFound();
+    if (!manager.has(context.params.taskId)) return notFound();
     let execution;
     try { execution = manager.execute(context.params.taskId); }
     catch (error) {
@@ -46,7 +46,7 @@ export function registerScheduledTaskRoutes(add, { tasks, onError = () => {} }) 
 
   add('DELETE', '/ScheduledTasks/Running/{taskId}', context => {
     const manager = required();
-    if (!manager.get(context.params.taskId)) return notFound();
+    if (!manager.has(context.params.taskId)) return notFound();
     let cancellation;
     try { cancellation = manager.cancel(context.params.taskId); }
     catch (error) {
@@ -61,7 +61,7 @@ export function registerScheduledTaskRoutes(add, { tasks, onError = () => {} }) 
 
   add('POST', '/ScheduledTasks/{taskId}/Triggers', async context => {
     const manager = required();
-    if (!manager.get(context.params.taskId)) return notFound();
+    if (!manager.has(context.params.taskId)) return notFound();
     await manager.updateTriggers(context.params.taskId, context.body);
     return noContent();
   }, { policy: 'RequiresElevation', body: true, bindBody: triggerBody, bodyParameter: 'triggerInfos' });

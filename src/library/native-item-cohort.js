@@ -2,6 +2,8 @@ import { randomUUID } from 'node:crypto';
 import { serialize, deserialize } from 'node:v8';
 import { quoteIdentifier as q } from '../database/model.js';
 import { nativeTextBytes } from '../database/native-text.js';
+import { dateTicks } from './records.js';
+import { ordinalIgnoreCaseKey } from '../storage/ordinal-comparer.js';
 import { captureNativeItemState, restoreNativeItemState, observeNativeItemState,
   acquireNativeItemLinkOwner, isNativeItemEntity } from './native-item-entity.js';
 import { EMPTY_NATIVE_LINKS, isLinkedChildrenHandle } from './postgres-linked-children.js';
@@ -23,10 +25,21 @@ function enqueue(entry, operation) {
 }
 async function flush(entry) { await entry.tail;if(entry.error)throw entry.error; }
 async function writeState(entry,session,slot,state) {
-  await session.client.query(`INSERT INTO ${entry.states}(scope_id,slot_id,state,"OfficialRating","CustomRating","Name")
-    VALUES ($1,$2,$3,$4,$5,$6) ON CONFLICT(scope_id,slot_id) DO UPDATE SET state=EXCLUDED.state,
-    "OfficialRating"=EXCLUDED."OfficialRating","CustomRating"=EXCLUDED."CustomRating","Name"=EXCLUDED."Name"`,
-    [entry.id,slot,serialize(plain(state)),encode(state.values.OfficialRating),encode(state.values.CustomRating),encode(state.sorting.name)]);
+  // Null means the native All predicate would throw when it is evaluated.
+  // Capture itself must not run a later Guide consumer's failure early.
+  let allLocalOrSd = true;
+  if (!Array.isArray(state.values.ImageInfos)) allLocalOrSd = null;
+  else for (const image of state.values.ImageInfos) {
+    if (typeof image?.Path !== 'string') { allLocalOrSd = null; break; }
+    const path = ordinalIgnoreCaseKey(image.Path);
+    if (path.startsWith('HTTP') && !path.includes('SCHEDULESDIRECT')) { allLocalOrSd = false; break; }
+  }
+  await session.client.query(`INSERT INTO ${entry.states}(scope_id,slot_id,state,"Id","OfficialRating","CustomRating","Name","EndDateTicks","AllImagesLocalOrSd")
+    VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) ON CONFLICT(scope_id,slot_id) DO UPDATE SET state=EXCLUDED.state,"Id"=EXCLUDED."Id",
+    "OfficialRating"=EXCLUDED."OfficialRating","CustomRating"=EXCLUDED."CustomRating","Name"=EXCLUDED."Name",
+    "EndDateTicks"=EXCLUDED."EndDateTicks","AllImagesLocalOrSd"=EXCLUDED."AllImagesLocalOrSd"`,
+    [entry.id,slot,serialize(plain(state)),encode(state.values.Id),encode(state.values.OfficialRating),encode(state.values.CustomRating),encode(state.sorting.name),
+      state.values.EndDate == null ? null : dateTicks(state.values.EndDate), allLocalOrSd]);
 }
 function observe(entry,item,slot) {
   const reference=new WeakRef(entry);
@@ -60,6 +73,16 @@ class NativeItemCohort {
   async flush(){active(this);await flush(this.entry);}
   /** One SQL row per exact captured entity slot, regardless of request repeats. */
   plan(){active(this);return Object.freeze({text:`SELECT slot_id AS "SlotKey","OfficialRating","CustomRating","Name" FROM ${this.entry.states} WHERE scope_id=$1`,values:Object.freeze([this.entry.id])});}
+  /** Ordered occurrences and their current identity remain a SQL relation.
+   * Consumers can select final per-ID winners without hydrating every item. */
+  orderedPlan(){active(this);return Object.freeze({text:`SELECT cohort."Ordinal",cohort.slot_id AS "SlotKey",state."Id"
+    FROM ${this.entry.rows} cohort JOIN ${this.entry.states} state ON state.scope_id=cohort.scope_id AND state.slot_id=cohort.slot_id
+    WHERE cohort.view_id=$1`,values:Object.freeze([this.id])});}
+  /** Guide filtering inspects these live scalar projections in SQL. Invalid
+   * image paths stay candidates so the native predicate fails at consumption. */
+  guideImagePlan(){active(this);return Object.freeze({text:`SELECT cohort."Ordinal",cohort.slot_id AS "SlotKey",state."Id",state."EndDateTicks",state."AllImagesLocalOrSd"
+    FROM ${this.entry.rows} cohort JOIN ${this.entry.states} state ON state.scope_id=cohort.scope_id AND state.slot_id=cohort.slot_id
+    WHERE cohort.view_id=$1`,values:Object.freeze([this.id])});}
   async captureSlot(item) {
     active(this);if(!isNativeItemEntity(item))throw new TypeError('An exact native item is required.');
     const entry=this.entry;let slot=entry.slots.get(item);
@@ -143,7 +166,7 @@ class NativeItemCohort {
       for(const row of rows){
         let item=items.get(row.slot_id);
         if(!item){item=await restoreNativeItemState(deserialize(row.state),{}, {linkedChildren:entry.links,session});
-          owners.push(acquireNativeItemLinkOwner(item));items.set(row.slot_id,item);observe(entry,item,row.slot_id);}
+          owners.push(acquireNativeItemLinkOwner(item));items.set(row.slot_id,item);entry.slots.set(item,row.slot_id);observe(entry,item,row.slot_id);}
         entries.push({Ordinal:BigInt(row.Ordinal),item});
       }
       });

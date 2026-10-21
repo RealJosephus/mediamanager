@@ -148,7 +148,7 @@ async function runSample(t, sample, directory, { dataPath, blockCreate } = {}) {
   host: { getAggregateFolder: async () => root, getCachedChildrenPage: async (_root, { startIndex, limit }) => ({
     items: children.slice(startIndex, startIndex + limit), hasMore: startIndex + limit <= children.length
   }), invalidateChildren: () => trace('root-invalidate') },
-  libraryConfiguration: { admitCollectionOperation: () => ({ addVirtualFolder: async (name, type, options, refresh) => {
+  libraryConfiguration: { admitOperation: () => ({ addVirtualFolder: async (name, type, options, refresh) => {
     trace('library-add', { name, type, options: { PathInfos: options.PathInfos, EnableRealtimeMonitor: options.EnableRealtimeMonitor,
       SaveLocalMetadata: options.SaveLocalMetadata }, refresh });
     if (sample.resolveCreatedFolder !== false) children = [parent];
@@ -239,7 +239,7 @@ test('collection folder lookup pages roots and keeps the first matching folder',
   const requests = [], runtime = await boundary(t);
   const service = new CollectionService({fileSystem: testFileSystem,  store: runtime.store, linkedChildren: runtime.linkedChildren, library: {}, itemCreation: { ...runtime.itemCreation, getItemById: async id => descendants.find(item => guid(item.Id) === guid(id)) },
     loadContext: runtime.loadContext, updates: {}, metadata: {},
-    libraryConfiguration: { admitCollectionOperation() { throw new Error('Read-only lookup must not acquire configuration admission.'); } },
+    libraryConfiguration: { admitOperation() { throw new Error('Read-only lookup must not acquire configuration admission.'); } },
     programDataPath: program, dataPath: data,
     host: { getAggregateFolder: async () => ({ Id: Id(1) }), getCachedChildrenPage: async (_parent, page) => {
       requests.push(page); return { items: descendants.slice(page.startIndex, page.startIndex + page.limit),
@@ -314,7 +314,7 @@ test('collection and configuration closure reject late requests while admitted q
   let configurationClosed = false;
   const observedClose = configurationClosing.then(() => { configurationClosed = true; });
   assert.equal(configuration.close(), configurationClosing);
-  assert.throws(() => configuration.admitCollectionOperation(), { status: 503 });
+  assert.throws(() => configuration.admitOperation(), { status: 503 });
   await assert.rejects(configuration.addVirtualFolder('Late', 'boxsets', { PathInfos: [] }), { status: 503 });
   await assert.rejects(configuration.getVirtualFolders(), { status: 503 });
   await assert.rejects(configuration.addMediaPath('Earlier', { Path: views }), { status: 503 });
@@ -370,7 +370,7 @@ test('collection creation releases configuration admission after a gated depende
 
 test('released configuration admission rejects further writes and close waits for its queued write', { ...pg, timeout: 30000 }, async t => {
   const { configuration, views, saveEntered, saveResume } = await controlledOwners(t, { gatedLibrary: 'Admitted' });
-  const admission = configuration.admitCollectionOperation();
+  const admission = configuration.admitOperation();
   assert.equal(Object.isFrozen(admission), true);
   const pending = admission.addVirtualFolder('Admitted', 'boxsets', { PathInfos: [] });
   await saveEntered.promise;

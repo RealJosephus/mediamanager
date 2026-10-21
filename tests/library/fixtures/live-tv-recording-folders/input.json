@@ -1,0 +1,16 @@
+[
+  {"name":"missing-directories","directories":[],"configuration":{},"folders":[]},
+  {"name":"default-directory","directories":["{data}/livetv/recordings"],"configuration":{},"folders":[]},
+  {"name":"all-directories","directories":["{data}/recordings","{data}/movies","{data}/shows"],"configuration":{"RecordingPath":"{data}/recordings","MovieRecordingPath":"{data}/movies","SeriesRecordingPath":"{data}/shows"},"folders":[]},
+  {"name":"already-registered","directories":["{data}/movies"],"configuration":{"MovieRecordingPath":"{data}/movies"},"folders":[{"Name":"Existing","Locations":["{data}/movies/"]}]},
+  {"name":"movie-and-series-same","directories":["{data}/shared"],"configuration":{"MovieRecordingPath":"{data}/shared","SeriesRecordingPath":"{data}/shared"},"folders":[]},
+  {"name":"custom-equals-default","directories":["{data}/shared"],"configuration":{"RecordingPath":"{data}/shared","MovieRecordingPath":"{data}/shared","SeriesRecordingPath":"{data}/shared"},"folders":[]},
+  {"name":"remove-library-and-path","directories":["{data}/other"],"configuration":{"MediaLocationsCreated":["{data}/old","{data}/old","{data}/gone"]},"folders":[{"Name":"Single","Locations":["{data}/old"]},{"Name":"Mixed","Locations":["{data}/gone","{data}/other"]}]},
+  {"name":"preserve-location-order","directories":["{data}/recordings","{data}/movies"],"configuration":{"RecordingPath":"{data}/recordings","MovieRecordingPath":"{data}/movies","MediaLocationsCreated":["{data}/movies","{data}/old","{data}/movies"]},"folders":[]},
+  {"name":"null-created-locations","directories":[],"configuration":{"MediaLocationsCreated":null},"folders":[]},
+  {"name":"add-failure","directories":["{data}/movies"],"configuration":{"MovieRecordingPath":"{data}/movies"},"folders":[],"failure":"add"},
+  {"name":"save-failure","directories":[],"configuration":{"MediaLocationsCreated":["{data}/old"]},"folders":[{"Name":"Single","Locations":["{data}/old"]}],"failure":"save"},
+  {"name":"listing-failure","directories":[],"configuration":{},"folders":[],"failure":"get-folders"},
+  {"name":"remove-folder-failure","directories":[],"configuration":{"MediaLocationsCreated":["{data}/old","{data}/gone"]},"folders":[{"Name":"Single","Locations":["{data}/old"]},{"Name":"Mixed","Locations":["{data}/gone","{data}/other"]}],"failure":"remove-folder"},
+  {"name":"remove-path-failure","directories":[],"configuration":{"MediaLocationsCreated":["{data}/gone"]},"folders":[{"Name":"Mixed","Locations":["{data}/gone","{data}/other"]}],"failure":"remove-path"}
+]

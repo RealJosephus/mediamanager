@@ -27,7 +27,7 @@ export class LibraryConfigurationService {
   #tail = Promise.resolve();
   #closed = false;
   #background = new Set();
-  #collectionOperations = new Map();
+  #operations = new Map();
   #closing;
   constructor({ programDataPath, optionsStore, configuration = {}, configurationStore, mediaAssets,
     lifecycle, monitor, host, refreshes, refreshQueue = () => new Set(), queueLibraryScan,
@@ -50,27 +50,30 @@ export class LibraryConfigurationService {
   #append(operation) {
     const result = this.#tail.then(operation); this.#tail = result.catch(() => {}); return result;
   }
-  admitCollectionOperation() {
+  admitOperation() {
     if (this.#closed) throw libraryError(503, 'Library configuration is closing.');
     const metadataAdmission = this.admitMetadataDrain();
     const completion = Promise.withResolvers();
     const entry = { pending: 0, released: false, completion: completion.promise };
     const finish = () => {
       if (!entry.released || entry.pending) return;
-      this.#collectionOperations.delete(admission); metadataAdmission.release(); completion.resolve();
+      this.#operations.delete(admission); metadataAdmission.release(); completion.resolve();
+    };
+    const run = operation => {
+      if (entry.released) return Promise.reject(libraryError(503, 'Library configuration admission is released.'));
+      entry.pending++;
+      return metadataAdmission.run(() => this.#append(operation)).finally(() => { entry.pending--; finish(); });
     };
     const admission = Object.freeze({
-      addVirtualFolder: (name, collectionType, options, refreshLibrary = false) => {
-        if (entry.released) return Promise.reject(libraryError(503, 'Collection configuration admission is released.'));
-        entry.pending++;
-        return metadataAdmission.run(() => this.#append(() => this.#addVirtualFolder(name, collectionType, options, refreshLibrary)))
-          .finally(() => { entry.pending--; finish(); });
-      },
+      addVirtualFolder: (name, collectionType, options, refreshLibrary = false) => run(() => this.#addVirtualFolder(name, collectionType, options, refreshLibrary)),
+      removeVirtualFolder: (name, refreshLibrary = false) => run(() => this.#removeVirtualFolder(name, refreshLibrary)),
+      removeMediaPath: (name, mediaPath) => run(() => this.#removeMediaPath(name, mediaPath)),
+      getVirtualFolders: (includeRefreshState = false) => run(() => this.#getVirtualFolders(includeRefreshState)),
       release: () => {
         entry.released = true; finish();
       }
     });
-    this.#collectionOperations.set(admission, entry);
+    this.#operations.set(admission, entry);
     return admission;
   }
   async #statePath(filename) {
@@ -361,61 +364,63 @@ export class LibraryConfigurationService {
     }));
   }
   removeVirtualFolder(name, refreshLibrary = false) {
-    return this.#enqueue(async () => {
-      if (typeof name !== 'string' || clrTrim(name) === '') throw libraryError(400, 'The library name is required.');
-      const directory = await this.#virtualDirectory(name);
-      if (!await this.#directoryExists(directory)) throw libraryError(404, 'The media folder does not exist.');
-      await this.monitor.stop();
-      try {
-        await this.fileSystem.rm(await this.#statePath(directory), { recursive: true });
-        await this.invalidateDirectory(directory);
-      } finally {
-        await this.optionsStore.clear();
-        if (refreshLibrary) {
-          await this.lifecycle.validateTopLibraryFolders({ removeRoot: true });
-          this.#startScanInBackground();
-        } else { await this.sleep(1000); await this.monitor.start(); }
-      }
-    });
+    return this.#enqueue(() => this.#removeVirtualFolder(name, refreshLibrary));
+  }
+  async #removeVirtualFolder(name, refreshLibrary) {
+    if (typeof name !== 'string' || clrTrim(name) === '') throw libraryError(400, 'The library name is required.');
+    const directory = await this.#virtualDirectory(name);
+    if (!await this.#directoryExists(directory)) throw libraryError(404, 'The media folder does not exist.');
+    await this.monitor.stop();
+    try {
+      await this.fileSystem.rm(await this.#statePath(directory), { recursive: true });
+      await this.invalidateDirectory(directory);
+    } finally {
+      await this.optionsStore.clear();
+      if (refreshLibrary) {
+        await this.lifecycle.validateTopLibraryFolders({ removeRoot: true });
+        this.#startScanInBackground();
+      } else { await this.sleep(1000); await this.monitor.start(); }
+    }
   }
   getVirtualFolders(includeRefreshState = false) {
-    return this.#enqueue(async () => {
-      const root = await this.host.getUserRootFolder();
-      return this.host.withCachedChildren(root, async children => {
-      const refreshQueue = includeRefreshState ? this.refreshQueue() : null;
-      const directories = await this.fileSystem.readdir(await this.#statePath(this.root), { withFileTypes: true });
-      const result = [];
-      for (const entry of directories) {
-        const directory = path.join(this.root, entry.name);
-        if (!await this.#directoryExists(directory)) continue;
-        await this.#statePath(directory);
-        const files = await this.fileSystem.readdir(directory, { withFileTypes: true });
-        const locations = []; let collectionType = null;
-        for (const file of files) if (!file.isDirectory()) {
-          const filename = path.join(directory, file.name);
-          if (/\.mblink$/iu.test(file.name)) {
-            try {
-              locations.push(await this.#resolveShortcut(filename));
-            } catch (error) { try { this.onError(error); } catch { /* Reporting cannot change the folder listing. */ } }
-          }
-          if (collectionType == null && /\.collection$/iu.test(file.name)) collectionType = parseCollectionTypeOption(nativeFileNameWithoutExtension(file.name));
+    return this.#enqueue(() => this.#getVirtualFolders(includeRefreshState));
+  }
+  async #getVirtualFolders(includeRefreshState) {
+    const root = await this.host.getUserRootFolder();
+    return this.host.withCachedChildren(root, async children => {
+    const refreshQueue = includeRefreshState ? this.refreshQueue() : null;
+    const directories = await this.fileSystem.readdir(await this.#statePath(this.root), { withFileTypes: true });
+    const result = [];
+    for (const entry of directories) {
+      const directory = path.join(this.root, entry.name);
+      if (!await this.#directoryExists(directory)) continue;
+      await this.#statePath(directory);
+      const files = await this.fileSystem.readdir(directory, { withFileTypes: true });
+      const locations = []; let collectionType = null;
+      for (const file of files) if (!file.isDirectory()) {
+        const filename = path.join(directory, file.name);
+        if (/\.mblink$/iu.test(file.name)) {
+          try {
+            locations.push(await this.#resolveShortcut(filename));
+          } catch (error) { try { this.onError(error); } catch { /* Reporting cannot change the folder listing. */ } }
         }
-        locations.sort(this.locationComparer.compare);
-        const item = await children.firstByPath(directory);
-        let options = null, itemId = null, primaryImageItemId = null, progress = null, status = null;
-        if (item) {
-          itemId = idKey(item.Id); options = await this.optionsStore.bind(item.Id, directory);
-          if ((item.ImageInfos ?? []).some(image => image.Type === 'Primary' || image.Type === 0)) primaryImageItemId = itemId;
-          if (refreshQueue) {
-            progress = this.refreshes?.getRefreshProgress(item.Id) ?? null;
-            status = progress != null ? 'Active' : refreshQueue.has(itemId) ? 'Queued' : 'Idle';
-          }
-        }
-        result.push({ Name: entry.name, Locations: locations, CollectionType: collectionType, LibraryOptions: options,
-          ItemId: itemId, PrimaryImageItemId: primaryImageItemId, RefreshProgress: progress, RefreshStatus: status });
+        if (collectionType == null && /\.collection$/iu.test(file.name)) collectionType = parseCollectionTypeOption(nativeFileNameWithoutExtension(file.name));
       }
-      return result;
-      });
+      locations.sort(this.locationComparer.compare);
+      const item = await children.firstByPath(directory);
+      let options = null, itemId = null, primaryImageItemId = null, progress = null, status = null;
+      if (item) {
+        itemId = idKey(item.Id); options = await this.optionsStore.bind(item.Id, directory);
+        if ((item.ImageInfos ?? []).some(image => image.Type === 'Primary' || image.Type === 0)) primaryImageItemId = itemId;
+        if (refreshQueue) {
+          progress = this.refreshes?.getRefreshProgress(item.Id) ?? null;
+          status = progress != null ? 'Active' : refreshQueue.has(itemId) ? 'Queued' : 'Idle';
+        }
+      }
+      result.push({ Name: entry.name, Locations: locations, CollectionType: collectionType, LibraryOptions: options,
+        ItemId: itemId, PrimaryImageItemId: primaryImageItemId, RefreshProgress: progress, RefreshStatus: status });
+    }
+    return result;
     });
   }
   close() {
@@ -423,9 +428,9 @@ export class LibraryConfigurationService {
     return this.#closing ??= this.#drain();
   }
   async #drain() {
-    // Admitted collections may enqueue their first configuration write after
+    // Admitted operations may enqueue their first configuration write after
     // closure starts, so capture the tail only after their admissions release.
-    while (this.#collectionOperations.size) await Promise.all([...this.#collectionOperations.values()].map(entry => entry.completion));
+    while (this.#operations.size) await Promise.all([...this.#operations.values()].map(entry => entry.completion));
     await this.#tail;
     while (this.#background.size) await Promise.all(this.#background);
   }

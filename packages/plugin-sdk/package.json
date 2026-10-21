@@ -45,6 +45,7 @@
     "./core/configuration-xml": "./core/configuration-xml.js",
     "./core/configuration-file": "./core/configuration-file.js",
     "./library/metadata-context": "./library/metadata-context.js",
-    "./configuration": "./configuration.js"
+    "./configuration": "./configuration.js",
+    "./live-tv/contract": "./live-tv/contract.js"
   }
 }

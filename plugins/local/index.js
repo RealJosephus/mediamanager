@@ -9,7 +9,7 @@ export function validateConfiguration(configuration) {
 export async function activate(context) {
   validateConfiguration(context.configuration);
   const roots = [...new Set([context.paths.programDataPath, context.paths.dataPath, context.paths.metadataPath,
-    context.paths.cachePath, context.paths.pluginStoragePath, context.paths.configurationDirectoryPath].filter(Boolean).map(value => path.resolve(value)))];
+    context.paths.cachePath, context.paths.imageCachePath, context.paths.pluginStoragePath, context.paths.configurationDirectoryPath].filter(Boolean).map(value => path.resolve(value)))];
   await context.register('storage', {
     type: 'local',
     create: (configuration, options) => LocalAdapter.open(configuration, options),

@@ -269,6 +269,13 @@ export function mapNativeItemRow(item, { reversePath = value => value, configura
     ...(descriptor.hasAlbumArtist ? ['AlbumArtists'] : [])]) row[key] = itemListColumn(item, key);
   if (descriptor.hasSeries) for (const key of ['SeriesId', 'SeriesName', 'SeriesPresentationUniqueKey']) row[key] = item[key] ?? (key === 'SeriesId' ? EMPTY_ID : null);
   if (descriptor.type === 'Episode') { row.SeasonId = item.SeasonId ?? EMPTY_ID; row.SeasonName = item.SeasonName ?? null; }
+  if (['LiveTvProgram', 'LiveTvChannel'].includes(descriptor.type)) {
+    for (const field of ['IsMovie', 'IsSeries', 'EpisodeTitle', 'IsRepeat']) row[field] = item[field] ?? empty[field];
+    if (descriptor.type === 'LiveTvProgram') {
+      row.ShowId = item.ShowId ?? null;
+      row.StartDate = nativeDate(item.StartDate);
+    } else row.ExternalServiceId = item.ServiceName ?? null;
+  }
   for (const [key, names] of [['Audio', programAudioTypes], ['ExtraType', extraTypes]]) {
     const value = item[key]; row[key] = value == null ? null : typeof value === 'number' ? value : names.indexOf(value);
     if (row[key] === -1) throw new TypeError(`Unknown native ${key}: ${value}`);

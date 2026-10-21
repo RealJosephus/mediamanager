@@ -106,7 +106,7 @@ test('Library Refresh queues and replaces the real task while scheduled refresh 
     });
     assert.equal((await refresh(adminLogin.AccessToken)).status, 204);
     await Promise.race([listingEntered, delay(2000).then(() => { throw new Error('The configured aggregate scan did not start.'); })]);
-    assert.equal(runtime.tasks.get(refreshLibraryTaskId).State, 'Running');
+    assert.equal((await runtime.tasks.get(refreshLibraryTaskId)).State, 'Running');
 
     await adapter.mkdir('/Latest');
     assert.equal((await refresh(adminLogin.AccessToken)).status, 204);
@@ -125,7 +125,7 @@ test('Library Refresh queues and replaces the real task while scheduled refresh 
     })).status, 204);
     const [{ Result }] = await scheduled;
     assert.equal(Result.Status, 'Completed', Result.ErrorMessage);
-    assert.equal(runtime.tasks.get(refreshLibraryTaskId).LastExecutionResult.Status, 'Completed');
+    assert.equal((await runtime.tasks.get(refreshLibraryTaskId)).LastExecutionResult.Status, 'Completed');
     assert.deepEqual(errors, []);
   } finally {
     releaseListing();

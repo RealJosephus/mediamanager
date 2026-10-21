@@ -98,8 +98,8 @@ export class ScheduledTaskTriggerScheduler {
   #closed = false;
   #runtimes = [];
 
-  constructor({ clock = () => new Date(), timers, getLastResult = () => null, onTrigger = () => {}, onError = () => {} } = {}) {
-    Object.assign(this, { clock, timers: timerApi(timers), getLastResult, onTrigger, onError });
+  constructor({ clock = () => new Date(), timers, getLastResult = () => null, canTrigger = () => true, onTrigger = () => {}, onError = () => {} } = {}) {
+    Object.assign(this, { clock, timers: timerApi(timers), getLastResult, canTrigger, onTrigger, onError });
   }
 
   replace(triggers, { isApplicationStartup = false } = {}) {
@@ -176,6 +176,9 @@ export class ScheduledTaskTriggerScheduler {
       try { runtime.lastStart = this.#now(); }
       catch (error) { this.#report(error); }
     }
+    if (this.#closed || !runtime.active) return;
+    try { if (!this.canTrigger()) return; }
+    catch (error) { this.#report(error); return; }
     if (this.#closed || !runtime.active) return;
     try { void Promise.resolve(this.onTrigger({ ...runtime.info })).catch(error => this.#report(error)); }
     catch (error) { this.#report(error); }

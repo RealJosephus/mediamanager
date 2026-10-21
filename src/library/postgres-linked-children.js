@@ -131,7 +131,8 @@ export class PostgresLinkedChildrenStore {
           set_id uuid NOT NULL REFERENCES ${this.sets}(id), revision bigint NOT NULL,
           PRIMARY KEY(scope_id,slot_id));
         CREATE TABLE ${q(this.schemaName)}.item_states (scope_id uuid NOT NULL,slot_id uuid NOT NULL,
-          state bytea NOT NULL,"OfficialRating" bytea,"CustomRating" bytea,"Name" bytea,PRIMARY KEY(scope_id,slot_id));
+          state bytea NOT NULL,"Id" bytea NOT NULL,"OfficialRating" bytea,"CustomRating" bytea,"Name" bytea,
+          "EndDateTicks" bigint,"AllImagesLocalOrSd" boolean,PRIMARY KEY(scope_id,slot_id));
         CREATE TABLE ${q(this.schemaName)}.item_cohorts (view_id uuid NOT NULL,"Ordinal" bigint NOT NULL,
           scope_id uuid NOT NULL,slot_id uuid NOT NULL,PRIMARY KEY(view_id,"Ordinal"));`);
     });

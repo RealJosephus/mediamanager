@@ -339,9 +339,11 @@ function taskCompletion(t, tasks, taskId, details) {
   const completed = event => {
     if (event.Task.Id === taskId) completion.resolve(event);
   };
-  const timeout = setTimeout(() => completion.reject(new Error(
-    `Timed out waiting for scheduled task completion: ${JSON.stringify(details())}`
-  )), 30_000);
+  const timeout = setTimeout(() => {
+    void Promise.resolve().then(details).then(value => completion.reject(new Error(
+      `Timed out waiting for scheduled task completion: ${JSON.stringify(value)}`
+    )), error => completion.reject(error));
+  }, 30_000);
   const close = () => {
     clearTimeout(timeout);
     tasks.off('completed', completed);
@@ -408,8 +410,8 @@ for (const dialect of ['postgres']) for (const delayed of [false, true]) test(`$
     Triggers: [{ Type: 'IntervalTrigger', IntervalTicks: 2_592_000_000_000 }],
   });
 
-  const completion = taskCompletion(t, runtime.tasks, tmdbUpcomingEpisodesTaskId, () => ({
-    Task: runtime.tasks.get(tmdbUpcomingEpisodesTaskId), progress,
+  const completion = taskCompletion(t, runtime.tasks, tmdbUpcomingEpisodesTaskId, async () => ({
+    Task: (await runtime.tasks.get(tmdbUpcomingEpisodesTaskId)), progress,
     errors: errors.map(error => ({ name: error.name, message: error.message }))
   }));
   const queryEntered = Promise.withResolvers(), releaseQuery = Promise.withResolvers();
@@ -443,7 +445,7 @@ for (const dialect of ['postgres']) for (const delayed of [false, true]) test(`$
       const began = performance.now();
       let attempts = 0, observed;
       for (; attempts < 200; attempts++) {
-        observed = runtime.tasks.get(tmdbUpcomingEpisodesTaskId);
+        observed = (await runtime.tasks.get(tmdbUpcomingEpisodesTaskId));
         if (observed?.State === 'Idle' && observed.LastExecutionResult) break;
         await new Promise(resolve => setTimeout(resolve, 5));
       }
@@ -459,7 +461,7 @@ for (const dialect of ['postgres']) for (const delayed of [false, true]) test(`$
     assert.equal(completed.Task.State, 'Idle');
     assert.equal(completed.Result.Status, 'Completed', JSON.stringify(completed.Result));
   } finally { closeObservation(); }
-  const info = runtime.tasks.get(tmdbUpcomingEpisodesTaskId);
+  const info = (await runtime.tasks.get(tmdbUpcomingEpisodesTaskId));
   assert.equal(info?.LastExecutionResult?.Status, 'Completed', JSON.stringify(info?.LastExecutionResult));
   assert.equal((await database.rows('BaseItems', { where: { Id: ids.episode } })).length, 0);
   assert.equal((await database.rows('BaseItems', { where: { Id: ids.episode2 } })).length, 0);

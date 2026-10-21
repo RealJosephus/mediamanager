@@ -5,12 +5,14 @@ import { randomUUID } from 'node:crypto';
 import { pathToFileURL } from 'node:url';
 import { validateMetadataExtension } from '../metadata/registry.js';
 import { acquireOperationLease } from '../migration/operation-lease.js';
+import { liveTvSignalPositions, validateLiveTvExtension, validateLiveTvResult, validateLiveTvStreamRequest,
+  validateOwnedLiveTvStream } from './live-tv-contract.js';
 import { inspectPackage, stagePackage, verifyRelease, physicalDirectory, officialPackagesPath, validPluginId } from './package.js';
 
 const error = (status,message) => Object.assign(new Error(message),{status,statusCode:status});
 const object = value => value !== null && typeof value==='object' && !Array.isArray(value);
 const clone = value => JSON.parse(JSON.stringify(value));
-const kinds = new Set(['metadata','similar','intro','storage','task','route','context','imagePaths']);
+const kinds = new Set(['metadata','similar','intro','storage','task','route','context','imagePaths','tuner','listings','channel']);
 const signals = { getMetadata:1, search:1, fetch:1, hasChanged:1, save:1, prepareSave:1, validateSave:1, preflight:1,
   getImages:1, getImage:1, getImageResponse:1, getIntros:1, getReferences:2, run:0, enrich:1, handle:0, create:1 };
 const storageSignals = {stat:1,listPage:1,openRead:1,write:2,mkdir:1,delete:1,rename:2,health:0,fileStat:1,openFile:2};
@@ -30,6 +32,7 @@ class PluginScope {
   disposers = [];
   closeFailures = [];
   resources = new Set();
+  liveSharing = new WeakMap();
   active = true;
   admitted = false;
   own(dispose) {
@@ -41,7 +44,7 @@ class PluginScope {
     const promise=Promise.resolve(value); this.pending.add(promise);
     void promise.then(()=>this.pending.delete(promise),()=>this.pending.delete(promise)); return promise;
   }
-  call(target,key,args,signalPositions=signals) {
+  call(target,key,args,signalPositions=signals,iterate=true) {
     if(!this.active || !this.admitted && key !== 'create')throw error(503,'The plugin is unavailable.');
     args=[...args]; const position=signalPositions[key];
     if(position!==undefined) {
@@ -49,7 +52,7 @@ class PluginScope {
       else { const options=args[position]??{}; args[position]={...options,signal:options.signal?AbortSignal.any([options.signal,this.controller.signal]):this.controller.signal}; }
     }
     const result=target[key](...args);
-    if(result?.[Symbol.asyncIterator]) {
+    if(iterate&&result?.[Symbol.asyncIterator]) {
       const scope=this,iterator=result[Symbol.asyncIterator]();let closing,done=false;
       const close=value=>closing??=(async()=>{done=true;scope.resources.delete(close);return await iterator.return?.(value)??{done:true,value};})();
       scope.resources.add(close);
@@ -65,16 +68,94 @@ class PluginScope {
     }
     return this.track(result);
   }
+  sharingCapability(resource,sourceId) {
+    const existing=this.liveSharing.get(resource);
+    if(existing){if(existing.sourceId!==sourceId)throw new TypeError('A shared input cannot change source identity.');return existing.facade;}
+    const scope=this,facade=Object.freeze({
+      get enabled(){return scope.active&&scope.admitted&&resource.enabled===true;},
+      retain(options={}) {
+        if(!scope.active||!scope.admitted)throw error(503,'The plugin is unavailable.');
+        const signal=options.signal?AbortSignal.any([options.signal,scope.controller.signal]):scope.controller.signal;
+        signal.throwIfAborted();
+        return scope.track(Promise.resolve().then(()=>{
+          if(!scope.active||!scope.admitted||resource.enabled!==true)throw error(503,'The shared live input is unavailable.');
+          signal.throwIfAborted();return resource.retain({...options,signal});
+        }).then(child=>scope.liveStream(child,signal,sourceId,resource)));
+      },
+    });
+    this.liveSharing.set(resource,{sourceId,facade});return facade;
+  }
+  async liveStream(resource,signal,sourceId,sharing) {
+    const scope=this;let closing,iterator;
+    const aborted=()=>{void close().catch(()=>{});};
+    const close=()=>{
+      if(closing)return closing;
+      scope.resources.delete(close);signal.removeEventListener('abort',aborted);
+      closing=scope.track((async()=>{
+        const results=await Promise.allSettled([
+          Promise.resolve().then(()=>resource?.close?.()),
+          Promise.resolve().then(()=>iterator?.return?.()),
+        ]);
+        const failures=results.filter(value=>value.status==='rejected').map(value=>value.reason);
+        if(failures.length)throw new AggregateError(failures,'The live stream lease failed to close.');
+      })().catch(cause=>{scope.closeFailures.push(cause);throw cause;}));
+      return closing;
+    };
+    // Own even an invalid response before validation. Already admitted work
+    // can acquire its upstream after plugin cancellation has begun.
+    scope.resources.add(close);
+    try {
+      iterator=typeof resource?.stream?.[Symbol.asyncIterator]==='function'?resource.stream[Symbol.asyncIterator]():undefined;
+      validateOwnedLiveTvStream(resource);
+      if(resource.mediaSource.Id!==sourceId)throw new TypeError('The opened live stream has a different source identity.');
+      if(sharing&&resource.sharing!==sharing)throw new TypeError('A retained live stream must belong to the same shared input.');
+      if(!scope.active||!scope.admitted)throw error(503,'The plugin is unavailable.');
+      signal.throwIfAborted();
+      const available=()=>{if(closing||!scope.active||!scope.admitted)throw error(503,'The live stream lease is closed.');signal.throwIfAborted();};
+      const stream=iterator&&{[Symbol.asyncIterator](){return this;},
+        next(...args){return scope.track(Promise.resolve().then(()=>{available();return iterator.next(...args);}).then(async value=>{
+          available();if(value.done)await close();else if(!(value.value instanceof Uint8Array))throw new TypeError('A live stream body must yield bytes.');return value;
+        }).catch(async cause=>{await close();throw cause;}));},
+        return(value){return scope.track(close().then(()=>({done:true,value})));},
+      };
+      const lease=Object.freeze({mode:'native',...(resource.profile===undefined?{}:{profile:resource.profile}),
+        mediaSource:structuredClone(resource.mediaSource),...(stream?{stream}:{}),
+        ...(resource.sharing?{sharing:scope.sharingCapability(resource.sharing,sourceId)}:{}),close});
+      signal.addEventListener('abort',aborted,{once:true});signal.throwIfAborted();
+      return lease;
+    } catch(cause) {
+      try{await close();}catch(cleanup){throw new AggregateError([cause,cleanup],'A live stream response was rejected and cleanup failed.');}
+      throw cause;
+    }
+  }
   wrap(value,kind) {
-    const scope=this, wrappers=new Map();
-    return new Proxy(Object.create(Object.getPrototypeOf(value)),{get(_target,key){
+    const scope=this, wrappers=new Map(), liveTv=liveTvSignalPositions[kind];let proxy;
+    return proxy=new Proxy(Object.create(liveTv?null:Object.getPrototypeOf(value)),{get(_target,key){
       const target=value;
       const property=Reflect.get(target,key,target);
-      if(key==='providers')return property.map(provider=>scope.wrap(provider));
+      if(key==='providers'&&!liveTv)return property.map(provider=>scope.wrap(provider));
       if(typeof property!=='function')return property;
+      if(liveTvSignalPositions[kind]&&!Object.hasOwn(liveTvSignalPositions[kind],key))return undefined;
       if((kind==='adapter'||kind==='resource')&&key==='close')return property.bind(target);
       if(!wrappers.has(key))wrappers.set(key,(...args)=>{
-        const result=scope.call(target,key,args,kind==='adapter'?storageSignals:signals);
+        const positions=liveTvSignalPositions[kind];
+        if(positions&&(!scope.active||!scope.admitted))throw error(503,'The plugin is unavailable.');
+        const signal=positions&&(args[positions[key]]?.signal?AbortSignal.any([args[positions[key]].signal,scope.controller.signal]):scope.controller.signal);
+        signal?.throwIfAborted();
+        if(positions&&key==='getChannelStream')validateLiveTvStreamRequest(...args);
+        const result=scope.call(target,key,args,positions??(kind==='adapter'?storageSignals:signals),!positions);
+        if(positions)return scope.track(Promise.resolve(result).then(async result=>{
+          if(kind==='tuner'&&key==='getChannelStream')return scope.liveStream(result,signal,args[1]);
+          if(!scope.active||!scope.admitted)throw error(503,'The plugin is unavailable.');
+          signal.throwIfAborted();
+          validateLiveTvResult(kind,key,result);
+          if(key==='getChannelStreamMediaSources'||key==='getChannelItemMediaInfo') {
+            return result.map(source=>Object.freeze({mode:'native',
+              ...(source.profile===undefined?{}:{profile:source.profile}),mediaSource:structuredClone(source.mediaSource)}));
+          }
+          if(kind==='channel'&&(key==='getChannelItems'||key==='getChannelImage'))return structuredClone(result);
+          return result;
+        }));
         if(kind==='storage'&&key==='create')return Promise.resolve(result).then(adapter=>scope.wrap(adapter,'adapter'));
         if(key==='prepareSave')return scope.track(Promise.resolve(result).then(prepared=>{
           let closed=false;
@@ -85,8 +166,14 @@ class PluginScope {
         return result;
       });
       return wrappers.get(key);
-    },has(_target,key){return key in value;},ownKeys(){return Reflect.ownKeys(value);},
-      getOwnPropertyDescriptor(_target,key){const descriptor=Reflect.getOwnPropertyDescriptor(value,key);return descriptor&&{...descriptor,configurable:true};}});
+    },has(_target,key){return key in value&&(!liveTv||typeof value[key]!=='function'||Object.hasOwn(liveTv,key));},
+      ownKeys(){return Reflect.ownKeys(value).filter(key=>!liveTv||typeof value[key]!=='function'||Object.hasOwn(liveTv,key));},
+      getOwnPropertyDescriptor(_target,key){
+        const descriptor=Reflect.getOwnPropertyDescriptor(value,key);if(!descriptor)return;
+        if(liveTv){const wrapped=proxy[key];if(typeof descriptor.value==='function'&&wrapped===undefined)return;
+          return {value:wrapped,writable:false,enumerable:descriptor.enumerable,configurable:true};}
+        return {...descriptor,configurable:true};
+      }});
   }
   async close() {
     this.active=false;this.controller.abort();
@@ -112,9 +199,9 @@ export class PluginHost {
   #listeners=new Set();
   #lease;
   static async open(options={}) {const host=new PluginHost(options);try{await host.#open();return host;}catch(e){await host.close().catch(()=>{});throw e;}}
-  constructor({directory,programDataPath,configurationDirectoryPath,dataPath,metadataPath,cachePath,preinstalled=officialPackagesPath,options={},onError=()=>{}}={}) {
+  constructor({directory,programDataPath,configurationDirectoryPath,dataPath,metadataPath,cachePath,imageCachePath,preinstalled=officialPackagesPath,options={},onError=()=>{}}={}) {
     this.directory=directory??(programDataPath&&path.join(programDataPath,'plugins','node'));
-    this.paths={programDataPath,configurationDirectoryPath,dataPath,metadataPath,cachePath};this.preinstalled=preinstalled;this.options=options;this.onError=onError;
+    this.paths={programDataPath,configurationDirectoryPath,dataPath,metadataPath,cachePath,imageCachePath};this.preinstalled=preinstalled;this.options=options;this.onError=onError;
   }
   async #open() {
     this.temporary=!this.directory;
@@ -188,6 +275,7 @@ export class PluginHost {
         if(!kinds.has(kind)||!object(value)||!scope.active)throw new TypeError('Invalid plugin extension registration.');
         if(kind==='metadata')validateMetadataExtension(value);
         if(kind==='intro'&&typeof value.getIntros!=='function')throw new TypeError('An intro provider requires getIntros.');
+        if(liveTvSignalPositions[kind])validateLiveTvExtension(kind,value);
         const wrapped=scope.wrap(value,kind),entry={kind,value:wrapped};
         active.entries.push(entry);
         const install=this.#sinks.get(kind);if(install)entry.dispose=await install(wrapped,id);

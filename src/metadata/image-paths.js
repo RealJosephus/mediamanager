@@ -8,6 +8,8 @@ export const multipleImages = type => ['Backdrop', 'Screenshot'].includes(type);
 export function internalImagePath(item, metadataPath) {
   if (!metadataPath) throw Object.assign(new Error('Image storage requires the instance metadata path.'), { code: 'metadata-context-required' });
   const api = imagePathApi(metadataPath), id = item.Id.replaceAll('-', '').toLowerCase();
+  if (item.Type === 'LiveTvChannel') return api.join(metadataPath, 'livetv', id, 'metadata');
+  if (item.Type === 'LiveTvProgram') return api.join(metadataPath, 'livetv', id);
   return item.SourceType === 'Channel' ? api.join(metadataPath, 'channels', item.ChannelId.replaceAll('-', '').toLowerCase(), id) : api.join(metadataPath, 'library', id.slice(0, 2), id);
 }
 export const containingImageFolder = item => item.Type === 'Playlist' ? nativeContainingFolderPath(item)

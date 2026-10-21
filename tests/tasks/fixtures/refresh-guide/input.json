@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "states": [
+    { "name": "one-service-empty", "serviceCount": 1, "tunerHosts": [] },
+    { "name": "one-service-tuner", "serviceCount": 1, "tunerHosts": [{}] },
+    { "name": "zero-services-short-circuit", "serviceCount": 0, "tunerHosts": null },
+    { "name": "two-services-short-circuit", "serviceCount": 2, "tunerHosts": null },
+    { "name": "one-service-null-hosts", "serviceCount": 1, "tunerHosts": null },
+    { "name": "one-service-configuration-failure", "serviceCount": 1, "tunerHosts": [], "configurationFailure": true }
+  ],
+  "filters": [{}, { "isHidden": false }, { "isHidden": true }, { "isEnabled": true }, { "isEnabled": false },
+    { "isHidden": false, "isEnabled": false }, { "isHidden": true, "isEnabled": true }],
+  "executionModes": ["completed", "failed", "canceled"]
+}

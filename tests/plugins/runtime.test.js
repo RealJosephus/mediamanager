@@ -38,11 +38,11 @@ test('real PostgreSQL runtime manages official and third-party packages with ind
  assert.equal((await request('GET','/Plugins',undefined,false)).status,401);
  const listed=await request('GET','/Plugins');const listedBody=await listed.text();
  assert.equal(listed.status,200,listedBody);assert.ok(listedBody,JSON.stringify(errors.map(error=>error.message)));
- assert.deepEqual(JSON.parse(listedBody).map(value=>value.id).sort(),['alist','local','nfo','tmdb','webdav']);
+ assert.deepEqual(JSON.parse(listedBody).map(value=>value.id).sort(),['alist','local','m3u','nfo','tmdb','webdav','xmltv']);
  const command=await new Promise((resolve,reject)=>execFile(process.execPath,['tools/plugins.js','list'],{windowsHide:true,
    env:{...process.env,MEDIAMANAGER_URL:`http://127.0.0.1:${runtime.server.address().port}`,MEDIAMANAGER_ADMIN_TOKEN:apiKey}},
    (error,stdout,stderr)=>error?reject(error):resolve({stdout,stderr})));
- assert.deepEqual(JSON.parse(command.stdout).map(value=>value.id).sort(),['alist','local','nfo','tmdb','webdav']);
+ assert.deepEqual(JSON.parse(command.stdout).map(value=>value.id).sort(),['alist','local','m3u','nfo','tmdb','webdav','xmltv']);
  const ordinary=await runtime.users.createUser({Name:'Plugin reader'});
  const login=await runtime.authentication.login({Username:'Plugin reader',Pw:''},{Client:'test',Device:'test',DeviceId:'reader',Version:'1'});
  assert.equal((await fetch(`http://127.0.0.1:${runtime.server.address().port}/Plugins`,{headers:{Authorization:`MediaBrowser Token="${login.AccessToken}"`}})).status,403);
@@ -92,11 +92,11 @@ test('real PostgreSQL runtime manages official and third-party packages with ind
  await database.insert('BaseItemProviders',{ItemId:id,ProviderId:'FutureProvider',ProviderValue:'retain-value'});
  const rows=await database.rows('BaseItems',{where:{Id:id}}),providers=await database.rows('BaseItemProviders',{where:{ItemId:id}});
  for(const plugin of ['tmdb','nfo','alist','webdav','local']){
-  if(plugin==='tmdb')assert.equal(runtime.tasks.list().some(task=>task.Key==='TmdbRefreshUpcomingEpisodes'),true);
+  if(plugin==='tmdb')assert.equal((await runtime.tasks.list()).some(task=>task.Key==='TmdbRefreshUpcomingEpisodes'),true);
   assert.equal((await request('POST',`/Plugins/${plugin}/Configuration`,plugin==='tmdb'?{MaxCastMembers:6}:plugin==='nfo'?{SaveImagePathsInNfo:false}:{})).status,200);
   assert.equal((await request('POST',`/Plugins/${plugin}/Enabled`,{enabled:false})).status,200);
   assert.equal(runtime.plugins.get(plugin).status,'disabled');
-  if(plugin==='tmdb'){assert.equal((await request('GET','/Tmdb/ClientConfiguration')).status,404);assert.equal(runtime.tasks.list().some(task=>task.Key==='TmdbRefreshUpcomingEpisodes'),false);}
+  if(plugin==='tmdb'){assert.equal((await request('GET','/Tmdb/ClientConfiguration')).status,404);assert.equal((await runtime.tasks.list()).some(task=>task.Key==='TmdbRefreshUpcomingEpisodes'),false);}
   if(plugin==='alist'){
    await assert.rejects(runtime.storage.vfs.stat(access('Z:\\Library\\Family\\movie.mkv')),{code:'not-supported'});
    await assert.rejects(runtime.library.unsafeItemDeletion.deleteQueryItems({ids:[id]},{deleteSourceFiles:true}),error=>['not-supported','ENOTSUP'].includes(error.code));

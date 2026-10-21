@@ -127,6 +127,9 @@ export class ScheduledTaskWorker extends EventEmitter {
   #triggers;
   #triggerScheduler;
   #triggerUpdateTail = Promise.resolve();
+  #publicationTail = Promise.resolve();
+  #infoReads = new Set();
+  #infoOwners = new Set();
 
   constructor({ definition, run, ensureAvailable = () => {}, localization, clock = () => new Date(), onError = () => {}, store,
     programDataPath, configurationDirectoryPath, dataPath, timers } = {}) {
@@ -153,6 +156,7 @@ export class ScheduledTaskWorker extends EventEmitter {
       clock,
       timers: this.timers,
       getLastResult: () => this.#lastExecutionResult,
+      canTrigger: () => !this.configurable || this.isEnabled(),
       onTrigger: trigger => this.#enqueue({ maxRuntimeTicks: trigger.MaxRuntimeTicks }, false),
       onError: error => this.#report(error)
     });
@@ -161,8 +165,10 @@ export class ScheduledTaskWorker extends EventEmitter {
 
   get id() { return this.definition.id; }
   get key() { return this.definition.key; }
-  get enabled() { return true; }
-  get hidden() { return false; }
+  get name() { return this.#text(this.definition.nameKey, this.definition.name); }
+  get configurable() { return this.definition.configurable === true; }
+  isEnabled() { return true; }
+  isHidden() { return false; }
   get state() { return this.#state; }
   get completion() {
     if (reentrant(this)) return Promise.reject(reentrantError('Scheduled task completion waiting'));
@@ -243,9 +249,9 @@ export class ScheduledTaskWorker extends EventEmitter {
     }
   }
 
-  info() {
+  #info() {
     return {
-      Name: this.#text(this.definition.nameKey, this.definition.name),
+      Name: this.name,
       State: this.#state,
       ...(this.#progress == null ? {} : { CurrentProgressPercentage: this.#progress }),
       Id: this.id,
@@ -253,9 +259,30 @@ export class ScheduledTaskWorker extends EventEmitter {
       Triggers: cloneTaskTriggers(this.#triggers),
       Description: this.#text(this.definition.descriptionKey, this.definition.description),
       Category: this.#text(this.definition.categoryKey, this.definition.category),
-      IsHidden: this.hidden,
+      IsHidden: false,
       Key: this.key,
     };
+  }
+
+  async #readInfo() {
+    const result = this.#info();
+    const read = Promise.resolve(this.configurable ? this.isHidden() : false).then(hidden => { result.IsHidden = hidden; return result; });
+    this.#infoReads.add(read);
+    const release = () => this.#infoReads.delete(read); read.then(release, release);
+    return await read;
+  }
+
+  admitInfo() {
+    if (this.#closed) throw taskError(503, 'closed', 'Scheduled task information is closed.');
+    const owner = Promise.withResolvers(); this.#infoOwners.add(owner.promise);
+    let released = false;
+    return { info: () => released ? Promise.reject(taskError(503, 'closed', 'Scheduled task information ownership is released.')) : this.#readInfo(),
+      release: () => { if (released) return; released = true; this.#infoOwners.delete(owner.promise); owner.resolve(); } };
+  }
+
+  async info() {
+    const owner = this.admitInfo();
+    try { return await owner.info(); } finally { owner.release(); }
   }
 
   #report(error) {
@@ -266,6 +293,19 @@ export class ScheduledTaskWorker extends EventEmitter {
   #notify(name, event) {
     try { this.emit(name, event); }
     catch (error) { this.#report(error); }
+  }
+
+  #notifyTask(name, values = {}) {
+    const snapshot = this.#info();
+    if (!this.configurable) { this.#notify(name, { Task: snapshot, ...values }); return; }
+    const visibility = Promise.resolve().then(() => this.isHidden());
+    visibility.catch(() => {});
+    const published = this.#publicationTail.then(async () => {
+      snapshot.IsHidden = await visibility;
+      this.#notify(name, { Task: snapshot, ...values });
+    }).catch(error => this.#report(error));
+    this.#publicationTail = published;
+    return published;
   }
 
   #ensureAvailable() {
@@ -335,10 +375,12 @@ export class ScheduledTaskWorker extends EventEmitter {
     const reportProgress = value => {
       if (this.#active !== active || !Number.isFinite(value)) return false;
       this.#progress = Math.min(value, 100);
-      this.#notify('progress', { Task: this.info(), Progress: this.#progress });
+      this.#notifyTask('progress', { Progress: this.#progress });
       return true;
     };
-    const operation = taskContext.run(context, () => Promise.resolve().then(() => {
+    let startedPublication;
+    const operation = taskContext.run(context, () => Promise.resolve().then(async () => {
+        if (startedPublication) await startedPublication;
         if (runtimeError) throw runtimeError;
         if (runtimeMilliseconds != null && runtimeMilliseconds >= 0n) this.#armMaximumRuntime(active, runtimeMilliseconds);
         controller.signal.throwIfAborted();
@@ -363,7 +405,7 @@ export class ScheduledTaskWorker extends EventEmitter {
         });
     // Publish only after the completion promise is registered so observers may
     // safely re-enter cancel() or close() from the started notification.
-    this.#notify('started', { Task: this.info() });
+    startedPublication = this.#notifyTask('started');
     return active.promise;
   }
 
@@ -453,7 +495,7 @@ export class ScheduledTaskWorker extends EventEmitter {
     this.#active = null;
     this.#state = 'Idle';
     this.#progress = null;
-    this.#notify('completed', { Task: this.info(), Result: cloneResult(result) });
+    await this.#notifyTask('completed', { Result: cloneResult(result) });
     this.#startQueued();
     if (error != null) this.#report(error);
     return cloneResult(result);
@@ -534,6 +576,9 @@ export class ScheduledTaskWorker extends EventEmitter {
     }
     await this.#triggerUpdateTail;
     if (active) await active.promise;
+    await this.#publicationTail;
+    while (this.#infoOwners.size) await Promise.allSettled([...this.#infoOwners]);
+    while (this.#infoReads.size) await Promise.allSettled([...this.#infoReads]);
     await this.#store?.close();
   }
 }

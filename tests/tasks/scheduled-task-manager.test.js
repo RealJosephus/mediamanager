@@ -16,7 +16,7 @@ function scanner(runCompleteScan, completeLibraryScan = true) {
   return { capabilities: { completeLibraryScan }, runCompleteScan };
 }
 
-test('RefreshLibrary exposes the stable native identity, complete DTO and nullable list filters', () => {
+test('RefreshLibrary exposes the stable native identity, complete DTO and nullable list filters', async () => {
   const localized = {
     TaskRefreshLibrary: 'Localized scan',
     TaskRefreshLibraryDescription: 'Localized description',
@@ -37,21 +37,22 @@ test('RefreshLibrary exposes the stable native identity, complete DTO and nullab
     IsHidden: false,
     Key: 'RefreshLibrary',
   };
-  assert.deepEqual(manager.list(), [expected]);
-  assert.deepEqual(manager.list({ isHidden: null, isEnabled: undefined }), [expected]);
-  assert.deepEqual(manager.list({ isHidden: false, isEnabled: true }), [expected]);
-  assert.deepEqual(manager.list({ isHidden: true }), [expected]);
-  assert.deepEqual(manager.list({ isEnabled: false }), [expected]);
-  assert.deepEqual(manager.get(refreshLibraryTaskId.toUpperCase()), expected);
-  assert.equal(manager.get('missing'), null);
-  assert.equal(manager.get(null), null);
+  assert.deepEqual((await manager.list()), [expected]);
+  assert.deepEqual((await manager.list({ isHidden: null, isEnabled: undefined })), [expected]);
+  assert.deepEqual((await manager.list({ isHidden: false, isEnabled: true })), [expected]);
+  assert.deepEqual((await manager.list({ isHidden: true })), [expected]);
+  assert.deepEqual((await manager.list({ isEnabled: false })), [expected]);
+  assert.deepEqual((await manager.get(refreshLibraryTaskId.toUpperCase())), expected);
+  assert.equal((await manager.get('missing')), null);
+  assert.equal((await manager.get(null)), null);
   assert.equal(manager.start, undefined);
   assert.equal(manager.queue, undefined);
-  assert.throws(() => manager.list({ isHidden: 'false' }), /isHidden must be a boolean/u);
+  await assert.rejects(manager.list({ isHidden: 'false' }), /isHidden must be a boolean/u);
 
-  const mutable = manager.get(refreshLibraryTaskId);
+  const mutable = (await manager.get(refreshLibraryTaskId));
   mutable.Triggers[0].IntervalTicks = 1n;
-  assert.equal(manager.get(refreshLibraryTaskId).Triggers[0].IntervalTicks, 432000000000n);
+  assert.equal((await manager.get(refreshLibraryTaskId)).Triggers[0].IntervalTicks, 432000000000n);
+  await manager.close();
 });
 
 test('start fails closed without an explicit complete scan operation and never creates a receipt', async () => {
@@ -65,8 +66,8 @@ test('start fails closed without an explicit complete scan operation and never c
     manager.on('started', event => events.push(event));
     assert.throws(() => manager.execute(refreshLibraryTaskId), error => error.status === 501 && error.code === 'task-unavailable');
     assert.throws(() => manager.cancelIfRunningAndQueue(refreshLibraryTaskId), error => error.status === 501 && error.code === 'task-unavailable');
-    assert.equal(manager.get(refreshLibraryTaskId).State, 'Idle');
-    assert.equal(Object.hasOwn(manager.get(refreshLibraryTaskId), 'LastExecutionResult'), false);
+    assert.equal((await manager.get(refreshLibraryTaskId)).State, 'Idle');
+    assert.equal(Object.hasOwn((await manager.get(refreshLibraryTaskId)), 'LastExecutionResult'), false);
     assert.deepEqual(events, []);
     await manager.close();
   }
@@ -80,7 +81,7 @@ test('queue starts an idle task and returns that execution completion', async ()
     clock: times('2026-10-04T00:10:00.000Z', '2026-10-04T00:10:01.000Z'),
   });
   const completion = manager.cancelIfRunningAndQueue(refreshLibraryTaskId.toUpperCase());
-  assert.equal(manager.get(refreshLibraryTaskId).State, 'Running');
+  assert.equal((await manager.get(refreshLibraryTaskId)).State, 'Running');
   const result = await completion;
   assert.equal(result.Status, 'Completed');
   assert.equal(calls, 1);
@@ -109,7 +110,7 @@ test('queue cancels a running task and coalesces repeated requests into exactly 
   const successor = manager.cancelIfRunningAndQueue(refreshLibraryTaskId);
   const coalesced = manager.cancelIfRunningAndQueue(refreshLibraryTaskId.toUpperCase());
   assert.equal(successor, coalesced);
-  assert.equal(manager.get(refreshLibraryTaskId).State, 'Cancelling');
+  assert.equal((await manager.get(refreshLibraryTaskId)).State, 'Cancelling');
   assert.equal(operations[0].signal.aborted, true);
   assert.throws(() => manager.execute(refreshLibraryTaskId), error => error.status === 409 && error.code === 'task-running');
 
@@ -117,8 +118,8 @@ test('queue cancels a running task and coalesces repeated requests into exactly 
   assert.equal(cancelled.Status, 'Cancelled');
   await Promise.resolve();
   assert.equal(operations.length, 2, 'all pending queue calls produce one successor generation');
-  assert.equal(manager.get(refreshLibraryTaskId).State, 'Running');
-  assert.equal(manager.get(refreshLibraryTaskId).LastExecutionResult.Status, 'Cancelled');
+  assert.equal((await manager.get(refreshLibraryTaskId)).State, 'Running');
+  assert.equal((await manager.get(refreshLibraryTaskId)).LastExecutionResult.Status, 'Cancelled');
   operations[1].resolve();
   const completed = await successor;
   assert.equal(completed.Status, 'Completed');
@@ -149,7 +150,7 @@ test('scheduled trigger queueing never cancels the active generation and the fir
   const coalesced = manager.queueScheduled(refreshLibraryTaskId, { maxRuntimeTicks: 0n });
   assert.equal(queued, coalesced);
   assert.equal(operations[0].signal.aborted, false);
-  assert.equal(manager.get(refreshLibraryTaskId).State, 'Running');
+  assert.equal((await manager.get(refreshLibraryTaskId)).State, 'Running');
 
   operations[0].resolve();
   assert.equal((await current).Status, 'Completed');
@@ -232,15 +233,15 @@ test('start is background, reports progress, preserves the old receipt while run
   for (const name of ['started', 'progress', 'completed']) manager.on(name, event => events.push([name, event]));
 
   const first = manager.execute(refreshLibraryTaskId.toUpperCase());
-  assert.equal(manager.get(refreshLibraryTaskId).State, 'Running');
-  assert.equal(Object.hasOwn(manager.get(refreshLibraryTaskId), 'LastExecutionResult'), false);
-  assert.equal(Object.hasOwn(manager.get(refreshLibraryTaskId), 'CurrentProgressPercentage'), false);
+  assert.equal((await manager.get(refreshLibraryTaskId)).State, 'Running');
+  assert.equal(Object.hasOwn((await manager.get(refreshLibraryTaskId)), 'LastExecutionResult'), false);
+  assert.equal(Object.hasOwn((await manager.get(refreshLibraryTaskId)), 'CurrentProgressPercentage'), false);
   await Promise.resolve();
   assert.equal(operations.length, 1);
   assert.equal(operations[0].reportProgress(25.5), true);
-  assert.equal(manager.get(refreshLibraryTaskId).CurrentProgressPercentage, 25.5);
+  assert.equal((await manager.get(refreshLibraryTaskId)).CurrentProgressPercentage, 25.5);
   assert.equal(operations[0].reportProgress(150), true);
-  assert.equal(manager.get(refreshLibraryTaskId).CurrentProgressPercentage, 100);
+  assert.equal((await manager.get(refreshLibraryTaskId)).CurrentProgressPercentage, 100);
   assert.equal(operations[0].reportProgress(Number.NaN), false);
   assert.throws(() => manager.execute(refreshLibraryTaskId), error => error.status === 409 && error.code === 'task-running');
   operations[0].resolve();
@@ -253,10 +254,10 @@ test('start is background, reports progress, preserves the old receipt while run
     Key: 'RefreshLibrary',
     Id: refreshLibraryTaskId,
   });
-  assert.equal(manager.get(refreshLibraryTaskId).State, 'Idle');
+  assert.equal((await manager.get(refreshLibraryTaskId)).State, 'Idle');
 
   const second = manager.execute(refreshLibraryTaskId);
-  assert.deepEqual(manager.get(refreshLibraryTaskId).LastExecutionResult, firstResult,
+  assert.deepEqual((await manager.get(refreshLibraryTaskId)).LastExecutionResult, firstResult,
     'the prior receipt remains visible throughout the next execution');
   await Promise.resolve();
   operations[1].resolve();
@@ -289,7 +290,7 @@ test('operation failures become Failed receipts without rejecting the background
   assert.match(result.LongErrorMessage, /Controlled complete scan failure/u);
   assert.deepEqual(reported, [failure]);
   assert.equal(completed.length, 1);
-  assert.deepEqual(manager.get(refreshLibraryTaskId).LastExecutionResult, result);
+  assert.deepEqual((await manager.get(refreshLibraryTaskId)).LastExecutionResult, result);
   await manager.close();
 });
 
@@ -395,7 +396,7 @@ test('user cancellation exposes Cancelling and completes once with Cancelled', a
 
   const cancelled = manager.cancel(refreshLibraryTaskId.toUpperCase());
   assert.equal(cancelled, running);
-  assert.equal(manager.get(refreshLibraryTaskId).State, 'Cancelling');
+  assert.equal((await manager.get(refreshLibraryTaskId)).State, 'Cancelling');
   assert.equal(operation.signal.aborted, true);
   assert.throws(() => manager.cancel(refreshLibraryTaskId), error => error.status === 409 && error.code === 'task-not-running');
   const result = await running;
@@ -403,7 +404,7 @@ test('user cancellation exposes Cancelling and completes once with Cancelled', a
   assert.equal(Object.hasOwn(result, 'ErrorMessage'), false);
   assert.equal(Object.hasOwn(result, 'LongErrorMessage'), false);
   assert.equal(completed.length, 1);
-  assert.equal(manager.get(refreshLibraryTaskId).State, 'Idle');
+  assert.equal((await manager.get(refreshLibraryTaskId)).State, 'Idle');
   await manager.close();
 });
 
@@ -586,7 +587,7 @@ test('close is idempotent, waits for the active operation, records Aborted and r
   const secondClose = manager.close();
   assert.equal(firstClose, secondClose);
   assert.equal(signal.aborted, true);
-  assert.equal(manager.get(refreshLibraryTaskId).State, 'Cancelling');
+  assert.equal((await manager.get(refreshLibraryTaskId)).State, 'Cancelling');
   await Promise.resolve();
   assert.equal(closed, false, 'shutdown drains the already-started complete scan operation');
   assert.throws(() => manager.execute(refreshLibraryTaskId), error => error.status === 503 && error.code === 'closed');
@@ -596,7 +597,7 @@ test('close is idempotent, waits for the active operation, records Aborted and r
   const result = await running;
   await observedClose;
   assert.equal(result.Status, 'Aborted');
-  assert.equal(manager.get(refreshLibraryTaskId).State, 'Idle');
+  assert.equal((await manager.get(refreshLibraryTaskId)).State, 'Idle');
   assert.equal(completions.length, 1);
   assert.equal(completions[0].Result.Status, 'Aborted');
 });
@@ -649,7 +650,7 @@ test('a scanner that rejects with the shutdown signal reason records Aborted rat
 
 test('unknown task ids fail mutations with 404 while get returns null', async () => {
   const manager = new ScheduledTaskManager({ scanner: scanner(async () => {}) });
-  assert.equal(manager.get('not-a-task'), null);
+  assert.equal((await manager.get('not-a-task')), null);
   assert.throws(() => manager.execute('not-a-task'), error => error.status === 404 && error.code === 'task-not-found');
   assert.throws(() => manager.queueScheduled('not-a-task'), error => error.status === 404 && error.code === 'task-not-found');
   assert.throws(() => manager.cancelIfRunningAndQueue('not-a-task'), error => error.status === 404 && error.code === 'task-not-found');
@@ -704,11 +705,11 @@ test('durable history publication retains execution ownership and event ordering
   await Promise.resolve();
   operations[0].resolve();
   await historyEntered.promise;
-  assert.equal(manager.get(refreshLibraryTaskId).State, 'Running');
-  assert.equal(Object.hasOwn(manager.get(refreshLibraryTaskId), 'LastExecutionResult'), false);
+  assert.equal((await manager.get(refreshLibraryTaskId)).State, 'Running');
+  assert.equal(Object.hasOwn((await manager.get(refreshLibraryTaskId)), 'LastExecutionResult'), false);
   assert.throws(() => manager.execute(refreshLibraryTaskId), error => error.code === 'task-running');
   const successor = manager.cancelIfRunningAndQueue(refreshLibraryTaskId);
-  assert.equal(manager.get(refreshLibraryTaskId).State, 'Cancelling');
+  assert.equal((await manager.get(refreshLibraryTaskId)).State, 'Cancelling');
 
   firstHistory.resolve();
   assert.equal((await first).Status, 'Completed');
@@ -737,8 +738,8 @@ test('history persistence failure becomes the published Failed receipt without s
   const result = await manager.execute(refreshLibraryTaskId);
   assert.equal(result.Status, 'Failed');
   assert.equal(result.ErrorMessage, persistenceFailure.message);
-  assert.equal(manager.get(refreshLibraryTaskId).State, 'Idle');
-  assert.deepEqual(manager.get(refreshLibraryTaskId).LastExecutionResult, result);
+  assert.equal((await manager.get(refreshLibraryTaskId)).State, 'Idle');
+  assert.deepEqual((await manager.get(refreshLibraryTaskId)).LastExecutionResult, result);
   assert.equal(completed.length, 1);
   assert.equal(completed[0].Task.State, 'Idle');
   assert.deepEqual(reported, [persistenceFailure]);
@@ -776,7 +777,7 @@ test('trigger activation is durable and rolls persistence back when timer instal
     [{ Type: 'DailyTrigger', TimeOfDayTicks: 0n }],
     [{ Type: 'IntervalTrigger', IntervalTicks: 432000000000n }]
   ]);
-  assert.deepEqual(manager.get(refreshLibraryTaskId).Triggers,
+  assert.deepEqual((await manager.get(refreshLibraryTaskId)).Triggers,
     [{ Type: 'IntervalTrigger', IntervalTicks: 432000000000n }]);
   assert.deepEqual(cleared, [], 'the previous timer remains live after the replacement fails');
   await manager.close();
@@ -811,7 +812,7 @@ test('concurrent trigger updates serialize persistence, activation and rollback 
     assert.equal(failedResult.status, 'rejected');
     assert.match(failedResult.reason.message, /first concurrent activation failed/u);
     assert.equal(succeededResult.status, 'fulfilled');
-    assert.deepEqual(first.get(refreshLibraryTaskId).Triggers, [
+    assert.deepEqual((await first.get(refreshLibraryTaskId)).Triggers, [
       { Type: 'WeeklyTrigger', TimeOfDayTicks: 3_600_000_000n, DayOfWeek: 'Monday' }
     ]);
     await first.close();
@@ -822,7 +823,7 @@ test('concurrent trigger updates serialize persistence, activation and rollback 
       timers: { set() { return {}; }, clear() {} }
     });
     await second.initialize();
-    assert.deepEqual(second.get(refreshLibraryTaskId).Triggers, [
+    assert.deepEqual((await second.get(refreshLibraryTaskId)).Triggers, [
       { Type: 'WeeklyTrigger', TimeOfDayTicks: 3_600_000_000n, DayOfWeek: 'Monday' }
     ]);
     await second.close();
@@ -901,7 +902,7 @@ test('native trigger and LastExecutionResult files survive a manager restart', a
 
     const second = new ScheduledTaskManager({ scanner: scanner(async () => {}), programDataPath, timers });
     await second.initialize();
-    const restored = second.get(refreshLibraryTaskId);
+    const restored = (await second.get(refreshLibraryTaskId));
     assert.deepEqual(restored.Triggers, [{
       Type: 'WeeklyTrigger', TimeOfDayTicks: 3_600_000_000n, DayOfWeek: 'Monday', MaxRuntimeTicks: -10_000n
     }]);
@@ -1182,7 +1183,7 @@ test('localization failures fall back without orphaning an execution or its queu
   const queued = manager.cancelIfRunningAndQueue(refreshLibraryTaskId);
   assert.equal((await first).Status, 'Cancelled');
   for (let count = 0; count < 10 && operations.length < 2; count++) await Promise.resolve();
-  assert.equal(manager.get(refreshLibraryTaskId).Name, 'Scan Media Library');
+  assert.equal((await manager.get(refreshLibraryTaskId)).Name, 'Scan Media Library');
   operations[1].resolve();
   assert.equal((await Promise.race([
     queued,
@@ -1205,7 +1206,7 @@ test('invalid persisted history is reported and ignored while invalid trigger co
     onError: error => historyFailureReports.push(error)
   });
   await historyManager.initialize();
-  assert.equal(Object.hasOwn(historyManager.get(refreshLibraryTaskId), 'LastExecutionResult'), false);
+  assert.equal(Object.hasOwn((await historyManager.get(refreshLibraryTaskId)), 'LastExecutionResult'), false);
   assert.match(historyFailureReports[0].message, /history is incomplete/u);
   await historyManager.close();
 
@@ -1225,7 +1226,7 @@ test('invalid persisted history is reported and ignored while invalid trigger co
     onError: error => invalidDateReports.push(error)
   });
   await invalidDateManager.initialize();
-  assert.equal(Object.hasOwn(invalidDateManager.get(refreshLibraryTaskId), 'LastExecutionResult'), false);
+  assert.equal(Object.hasOwn((await invalidDateManager.get(refreshLibraryTaskId)), 'LastExecutionResult'), false);
   assert.match(invalidDateReports[0].message, /does not describe this task/u);
   await invalidDateManager.close();
 

@@ -85,7 +85,7 @@ export async function verifyCollectionRatingConsumer(t, samples, nativePair) {
     const manager = new CollectionService({fileSystem: testFileSystem,  store, linkedChildren, itemCreation, loadContext, updates: {},
       library: { options: { configuration: { MetadataCountryCode: 'US' } } },
       metadata: { queue: (...args) => queues.push(args) }, host: { getCachedChildrenPage() {} },
-      libraryConfiguration: { admitCollectionOperation: () => ({ release() {} }) },
+      libraryConfiguration: { admitOperation: () => ({ release() {} }) },
       programDataPath: root, dataPath: root, updateRepository: async item => commits.push(item.OfficialRating) });
     manager.on('ItemsAddedToCollection', event => events.push({ OfficialRating: event.Collection.OfficialRating, Count: Number(event.Items.count) }));
     try { await manager.add(collection.Id, children.map(item => item.Id)); }

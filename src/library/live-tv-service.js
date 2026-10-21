@@ -1,25 +1,9 @@
-import path from 'node:path';
-import model from './resources/live-tv-configuration-model.json' with { type: 'json' };
-import { createConfigurationReader } from '../core/configuration-xml.js';
-import { createConfigurationWriter, loadConfigurationFile } from '../core/configuration-file.js';
+import { LiveTvConfigurationStore } from '../core/live-tv-configuration-store.js';
 
-export const liveTvConfigurationReader = createConfigurationReader(model);
-export const serializeLiveTvConfiguration = createConfigurationWriter(model);
-
-export class LiveTvService {
-  #configuration;
-  constructor({ users, configurationDirectoryPath, onError = () => {}, now = () => new Date() } = {}) {
-    Object.assign(this, { users, configurationDirectoryPath, onError, now });
-  }
-
-  getConfiguration() {
-    return this.#configuration ??= (this.configurationDirectoryPath
-      ? loadConfigurationFile(path.join(this.configurationDirectoryPath, 'livetv.xml'), 'livetv', {
-        reader: liveTvConfigurationReader, serialize: serializeLiveTvConfiguration, onError: this.onError,
-      }) : Promise.resolve(liveTvConfigurationReader.defaultConfiguration('livetv'))).catch(error => {
-      this.#configuration = undefined;
-      throw error;
-    });
+export class LiveTvService extends LiveTvConfigurationStore {
+  constructor({ users, now = () => new Date(), ...configuration } = {}) {
+    super(configuration);
+    Object.assign(this, { users, now });
   }
 
   async getInfo() {

@@ -37,8 +37,9 @@ async function fixture({ tasks, administrator = true, onError = () => {} } = {})
 test('scheduled task routes expose complete task DTOs and bind native filters', async () => {
   const filters = [];
   const manager = {
-    list(options) { filters.push(options); return [task]; },
-    get(id) { return id.toLowerCase() === taskId ? task : null; },
+    async list(options) { filters.push(options); return [task]; },
+    has(id) { return id.toLowerCase() === taskId; },
+    async get(id) { return id.toLowerCase() === taskId ? task : null; },
     execute() { throw new Error('Unexpected start'); },
     cancel() { throw new Error('Unexpected cancel'); }
   };
@@ -64,8 +65,9 @@ test('scheduled task start acknowledges registered background work and cancellat
   const completion = Promise.withResolvers();
   const cancellationFailure = new Error('Synthetic cancellation failure');
   const manager = {
-    list() { return [task]; },
-    get(id) { return id.toLowerCase() === taskId ? task : null; },
+    async list() { return [task]; },
+    has(id) { return id.toLowerCase() === taskId; },
+    async get(id) { return id.toLowerCase() === taskId ? task : null; },
     execute(id) { calls.push(['start', id]); return completion.promise; },
     cancel(id) { calls.push(['cancel', id]); return Promise.reject(cancellationFailure); }
   };
@@ -124,8 +126,9 @@ test('scheduled task routes require elevation and report missing task configurat
 test('scheduled trigger updates accept native arrays, bind casing and reject malformed transport input', async () => {
   const updates = [];
   const manager = {
-    list() { return [task]; },
-    get(id) { return id.toLowerCase() === taskId ? task : null; },
+    async list() { return [task]; },
+    has(id) { return id.toLowerCase() === taskId; },
+    async get(id) { return id.toLowerCase() === taskId ? task : null; },
     async updateTriggers(id, triggers) {
       if (!Array.isArray(triggers)) throw Object.assign(new TypeError('Triggers must be an array.'), { status: 400 });
       updates.push([id, triggers]);
@@ -184,8 +187,9 @@ test('scheduled trigger updates accept native arrays, bind casing and reject mal
 
 test('scheduled task mutation edge statuses match the native fire-and-forget controller', async () => {
   const manager = {
-    list() { return [task]; },
-    get(id) { return id.toLowerCase() === taskId ? task : null; },
+    async list() { return [task]; },
+    has(id) { return id.toLowerCase() === taskId; },
+    async get(id) { return id.toLowerCase() === taskId ? task : null; },
     execute() { throw Object.assign(new Error('Already running'), { status: 409, code: 'task-running' }); },
     cancel() { throw Object.assign(new Error('Not running'), { status: 409, code: 'task-not-running' }); }
   };

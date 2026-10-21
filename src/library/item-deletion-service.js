@@ -18,7 +18,7 @@ import { resolveVideoVersionLinks } from './video-version-relations.js';
 const conflict = () => Object.assign(new Error('The item changed before deletion.'), { code: 'metadata-conflict', status: 409 });
 const genericFileLeafTypes = new Set(['Audio', 'AudioBook', 'Book']);
 const generalMediaItemTypes = new Set([
-  'Series', 'Season', 'BoxSet', 'Playlist', 'LiveTvProgram', 'MusicAlbum', 'Photo', 'PhotoAlbum'
+  'Series', 'Season', 'BoxSet', 'Playlist', 'LiveTvProgram', 'LiveTvChannel', 'MusicAlbum', 'Photo', 'PhotoAlbum'
 ]);
 const exactFileSourceTypes = new Set([...genericFileLeafTypes, 'LiveTvProgram', 'Photo']);
 const internalByNameFolders = new Map([

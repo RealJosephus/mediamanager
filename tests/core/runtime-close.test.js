@@ -61,6 +61,7 @@ test('runtime closes every resource after an actual HLS cache initialization fai
 
   const closed = [];
   const resources = [
+    ['liveTv', runtime.liveTv, 'close'], ['recordingFolders', runtime.liveTvRecordingFolders, 'close'],
     ['splashscreen', runtime.splashscreen, 'close'],
     ['branding', runtime.branding, 'close'],
     ['libraryConfiguration', runtime.libraryConfiguration, 'close'],

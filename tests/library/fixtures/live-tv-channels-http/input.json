@@ -41,6 +41,7 @@
     },
     {
       "key": "userRoot",
+      "existingNative": true,
       "id": "e9d5075a-555c-1cbc-394e-ec4cef295274",
       "type": "UserRootFolder",
       "name": "Media Folders",

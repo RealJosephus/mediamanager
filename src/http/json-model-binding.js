@@ -6,7 +6,7 @@ import { parseJsonDateTime } from './json-date-time.js';
 import { clrTrim } from '../metadata/whitespace.js';
 import { ordinalIgnoreCaseEquals } from '../storage/ordinal-comparer.js';
 
-export function bindJsonModel(body, { schema, root, source = body?.[Symbol.for('mediamanager.jsonSource')] } = {}) {
+export function bindJsonModel(body, { schema, root, source = body?.[Symbol.for('mediamanager.jsonSource')], caseInsensitiveProperties = true } = {}) {
   source ??= JSON.stringify(body, (_key,value)=>typeof value==='bigint'?JSON.rawJSON(value.toString()):value);
   JSON.parse(source);
   function convert(node, rule, path, baseOffset = 0) {
@@ -128,7 +128,7 @@ export function bindJsonModel(body, { schema, root, source = body?.[Symbol.for('
       const present = new Set();
       for (const [key,nodeValue,keySpan] of node.properties) {
         if (!key.isWellFormed()) return failure(undefined, keySpan.end);
-        const name = Object.keys(definition.fields).find(name=>ordinalIgnoreCaseEquals(name, key));
+        const name = Object.keys(definition.fields).find(name => caseInsensitiveProperties ? ordinalIgnoreCaseEquals(name, key) : name === key);
         if (name) {
           present.add(name);
           result[name] = convert(nodeValue,definition.fields[name],`${path}.${key}`,baseOffset);

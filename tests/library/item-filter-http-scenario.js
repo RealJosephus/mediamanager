@@ -497,7 +497,7 @@ async function seed(database, fixture, scenarioName) {
           assert.equal(existing.length, 1);
           assert.equal(existing[0].Type, row.Type);
           assert.equal(fixture.items.find(item => idKey(item.id) === idKey(row.Id))?.existingNative, true,
-            'Only a declared existing native fixture identity may replace its controlled row.');
+            `Only a declared existing native fixture identity may replace its controlled row: ${row.Type} ${row.Id}.`);
           await transaction.upsert(table, row);
           continue;
         }

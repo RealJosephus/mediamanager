@@ -1,0 +1,54 @@
+# Existing recording HTTP differential
+
+`live-tv-recordings-native.test.js` starts the designated current native build
+from a private clone. Before native startup, a harmless text marker is placed in
+each existing recording directory. Native `DirectoryService.IsAccessible`
+requires at least one enumerated entry for a top-level library root; an empty
+directory is deliberately skipped. Marker bytes and SHA-256 join the later
+read/delete/shutdown snapshots and must remain unchanged.
+
+Real native startup registers the two recording directories. The fixture waits
+for their actual library definitions and scheduled workers, disables the private
+libraries' realtime monitors and scheduled triggers through native APIs, then
+explicitly starts the registered `RefreshLibrary` task through
+`POST /ScheduledTasks/Running/{id}`. It requires a new `Completed` execution and
+both actual recording-folder DTOs before stopping the process. This avoids
+assuming a startup queue request made before task registration performed a scan.
+The stopped seed then adds persistent Movie/Episode/Video data beneath those
+actual collection/physical folders. The controlled files are ordinary existing
+media; no timers or recording jobs are created. Before the first native startup,
+the original controlled seed's bound identities and source paths are checked,
+then relocated inside the private mapped media root with a real retained file.
+The before/after rows and file SHA are recorded. Doing this before startup lets
+the real native registration scan see existing files; it must not remove a
+nonexistent synthetic path before the fixture attempts to relocate it. Root
+validation may still legitimately remove an unregistered synthetic child; the
+stopped seed step records actual surviving rows and identities without restoring
+them and verifies the retained file's original SHA. The controlled recording
+rows are seeded only after this real native registration and scan phase completes.
+No collection or physical recording-root row is fabricated by the fixture, and
+missing roots remain a failing assertion.
+
+Actual native APIs create users, policies, sessions, an API key and favorite user
+data. The native reader is restarted to exclude stale entity caches. Complete
+raw HTTP responses cover LiveTvAccess, management permission, user selection,
+binding, defaults, ignored filters, type/genre selection, repository paging/count,
+incomplete external livestreams, obsolete Series/Groups, folders and arbitrary
+typed detail items. Dates compare exact ticks and UTC kind; raw responses remain
+in the evidence.
+
+After read-only before/after/shutdown snapshots, the actual stopped SQLite graph,
+accounts and related rows transfer to a new PostgreSQL schema with a portable
+mapped-local mount contract. `startProductionInstance` serves the candidate HTTP
+routes; this uses the real transfer implementation and production runtime, not a
+CLI invocation. The same credentials and persisted identities are retained.
+
+Native and Node DELETE runs start from the same pre-delete graph and compare
+authorization/binding/status, complete changed rows, remaining source bytes and
+timers/configuration bytes. A user with LiveTvManagement and disabled ordinary
+content deletion deletes only the record and relations; every controlled media
+file must remain. Every process, HTTP listener and PG schema is cleaned up and
+the protected input/build manifests are checked by `currentNativeReference`.
+
+This is targeted HTTP evidence. It does not demonstrate recording, tuner/listing
+execution, external channel providers, image delivery or final release acceptance.

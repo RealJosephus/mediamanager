@@ -56,14 +56,21 @@ export function postgresRelationOrderStatements(schema, controlSchema) {
  * relationships or the sequence high-water mark. Updates keep their position. */
 export async function orderNativeItemBatch(database, itemIds) {
   if (!itemIds.length) return;
+  return orderNativeItemSelection(database, { text: 'SELECT unnest($1::bytea[]) AS "Id"', values: [itemIds.map(nativeTextBytes)] });
+}
+
+/** The complete batch may live in SQL. Its selected identities are never
+ * collected in Node or reordered independently in bounded pages. */
+export async function orderNativeItemSelection(database, plan) {
+  if (typeof plan?.text !== 'string' || !Array.isArray(plan.values)) throw new TypeError('Native insertion order requires a SQL identity relation.');
   const items = `${q(database.schemaName)}.${q('BaseItems')}`;
   const sequence = `${q(database.controlSchema)}.${q('item_order')}`;
   const key = nativeTextSql(database.schemaName).guidKey;
   const result = await database.client.query({ text: `/* native-item-batch-order */
-    WITH RECURSIVE fresh AS MATERIALIZED (
+    WITH RECURSIVE selected AS MATERIALIZED (${plan.text}), fresh AS MATERIALIZED (
       SELECT item."Id", item."ParentId", item."OwnerId", sequence.position
       FROM ${items} item JOIN ${sequence} sequence ON sequence.item_id = item."Id"
-      WHERE ${key('item."Id"')} = ANY($1::text[])
+      WHERE EXISTS (SELECT 1 FROM selected WHERE ${key('selected."Id"')}=${key('item."Id"')})
     ), edges AS (
       SELECT child."Id" AS "Child", parent."Id" AS "Parent" FROM fresh child JOIN fresh parent
         ON parent."Id" IN (child."ParentId", child."OwnerId") AND parent."Id" <> child."Id"
@@ -72,7 +79,7 @@ export async function orderNativeItemBatch(database, itemIds) {
       UNION
       SELECT reach."Id", edges."Parent" FROM reach JOIN edges ON edges."Child" = reach."Ancestor"
     ), summary AS (
-      SELECT (SELECT count(*) FROM fresh) AS "Count", EXISTS (
+      SELECT (SELECT count(*) FROM fresh) AS "Count", (SELECT count(*) FROM selected) AS "Expected", EXISTS (
         SELECT 1 FROM reach WHERE "Id" = "Ancestor") AS "Cycle"
     ), walk("Id", "Ancestor", "Depth") AS (
       SELECT "Id", "Id", 0 FROM fresh CROSS JOIN summary WHERE NOT summary."Cycle"
@@ -88,9 +95,9 @@ export async function orderNativeItemBatch(database, itemIds) {
       FROM ranked JOIN positions USING ("Ordinal") CROSS JOIN summary
       WHERE sequence.item_id = ranked."Id" AND NOT summary."Cycle" RETURNING sequence.item_id
     ) SELECT summary.*, (SELECT count(*) FROM updated) AS "Updated" FROM summary`,
-    values: [itemIds.map(id => String(id).replaceAll('-', '').toLowerCase())] });
+    values: plan.values });
   const observed = result.rows[0];
-  if (observed.Cycle || Number(observed.Count) !== itemIds.length || Number(observed.Updated) !== itemIds.length) {
+  if (observed.Cycle || BigInt(observed.Count) !== BigInt(observed.Expected) || BigInt(observed.Updated) !== BigInt(observed.Expected)) {
     throw new Error('A native item batch requires complete, acyclic insertion dependencies.');
   }
 }

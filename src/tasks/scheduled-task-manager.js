@@ -14,6 +14,7 @@ function nullableBoolean(value, name) {
 export class ScheduledTaskManager extends EventEmitter {
   #closePromise;
   #workers = [];
+  #reads = new Set();
 
   constructor(options = {}) {
     super({ captureRejections: true });
@@ -39,19 +40,45 @@ export class ScheduledTaskManager extends EventEmitter {
     return async () => { this.#workers = this.#workers.filter(value => value !== worker); await worker.close(); };
   }
 
-  list({ isHidden, isEnabled } = {}) {
-    // RefreshMediaLibraryTask is not an IConfigurableScheduledTask. Native
-    // filtering validates these nullable query values but does not apply them
-    // to this worker.
-    nullableBoolean(isHidden, 'isHidden');
-    nullableBoolean(isEnabled, 'isEnabled');
-    return this.#workers.map(worker => worker.info()).sort((left, right) => left.Name.localeCompare(right.Name));
+  #read(operation) {
+    if (this.#closePromise) return Promise.reject(taskError(503, 'task-unavailable', 'Scheduled tasks are closing.'));
+    const pending = operation(); this.#reads.add(pending);
+    const release = () => this.#reads.delete(pending); pending.then(release, release);
+    return pending;
   }
 
-  get(id) {
-    if (typeof id !== 'string') return null;
-    return this.#workers.find(worker => worker.id === id.toLowerCase())?.info() ?? null;
+  list({ isHidden, isEnabled } = {}) { return this.#read(async () => {
+    nullableBoolean(isHidden, 'isHidden');
+    nullableBoolean(isEnabled, 'isEnabled');
+    const owners = [];
+    try {
+      for (const worker of this.#workers) owners.push({ worker, owner: worker.admitInfo() });
+      const ordered = owners.map(entry => ({ ...entry, name: entry.worker.name })).sort((left, right) => left.name.localeCompare(right.name));
+      const result = [];
+      for (const { worker, owner } of ordered) {
+        // Native filters only IConfigurableScheduledTask and evaluates hidden
+        // before enabled. The final DTO reads hidden again after those gates.
+        if (worker.configurable) {
+          if (isHidden != null && isHidden !== await worker.isHidden()) continue;
+          if (isEnabled != null && isEnabled !== await worker.isEnabled()) continue;
+        }
+        result.push(await owner.info());
+      }
+      return result;
+    } finally { for (const { owner } of owners) owner.release(); }
+  }); }
+
+  has(id) {
+    return typeof id === 'string' && this.#workers.some(worker => worker.id === id.toLowerCase());
   }
+
+  get(id) { return this.#read(async () => {
+    if (typeof id !== 'string') return null;
+    const worker = this.#workers.find(worker => worker.id === id.toLowerCase());
+    if (!worker) return null;
+    const owner = worker.admitInfo();
+    try { return await owner.info(); } finally { owner.release(); }
+  }); }
 
   #required(id) {
     const worker = typeof id === 'string'
@@ -80,6 +107,7 @@ export class ScheduledTaskManager extends EventEmitter {
 
   async #close() {
     const results = await Promise.allSettled(this.#workers.map(worker => worker.close()));
+    while (this.#reads.size) await Promise.allSettled([...this.#reads]);
     const failures = results.filter(result => result.status === 'rejected').map(result => result.reason);
     if (failures.length) throw new AggregateError(failures, 'Scheduled tasks could not all close.');
   }

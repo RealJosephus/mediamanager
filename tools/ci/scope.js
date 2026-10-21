@@ -3,13 +3,15 @@ import { readFile } from 'node:fs/promises';
 import { parse } from 'acorn';
 import { dependencyClosure } from '../validation/inventory.js';
 import { repositoryRoot, validationPath } from '../validation/paths.js';
+import { releasePairEnabled } from './release-pair.js';
 
 export const provisionedServices = ['postgres', 'dotnet'];
 export const provisionedTools = ['dotnet', 'ffmpeg', 'ffprobe', 'git'];
 
 export function ciProfile(environment) {
-  const profile = environment.MEDIAMANAGER_CI_PROFILE || 'available';
-  if (!['available', 'full'].includes(profile)) throw new Error('CI profile must be available or full.');
+  const configured = environment.MEDIAMANAGER_CI_PROFILE || 'available';
+  if (!['available', 'full'].includes(configured)) throw new Error('CI profile must be available or full.');
+  const profile = releasePairEnabled(environment) ? 'full' : configured;
   if (profile === 'full' && (environment.MEDIAMANAGER_CI_TEST_FILES ?? '').split(/[\r\n,]+/u).some(value => value.trim())) {
     throw new Error('The full profile cannot be combined with an explicit test subset.');
   }
@@ -18,6 +20,9 @@ export function ciProfile(environment) {
 
 export function ciExecutionArguments(scope, output) {
   if (scope.schemaVersion !== 1 || !Array.isArray(scope.selected) || !scope.selected.length) throw new Error('Invalid CI scope.');
+  if (scope.releasePair && (scope.profile !== 'full' || scope.sharding?.index !== 1 || scope.sharding?.total !== 1)) {
+    throw new Error('Release pairs require the complete unsharded full profile.');
+  }
   if (scope.profile === 'full') {
     if (scope.requested?.length || scope.excluded?.length || !Array.isArray(scope.discovered)
       || new Set(scope.selected).size !== scope.selected.length

@@ -45,7 +45,7 @@ export class CollectionService extends EventEmitter {
     super();
     if (!store || !library || !itemCreation || typeof loadContext !== 'function' || typeof loadContext.withContext !== 'function' || !updates || !metadata || !host
       || typeof host.getCachedChildrenPage !== 'function'
-      || typeof libraryConfiguration?.admitCollectionOperation !== 'function'
+      || typeof libraryConfiguration?.admitOperation !== 'function'
       || typeof itemCreation.retainItem !== 'function' || typeof itemCreation.withItem !== 'function'
       || ['createFromSession', 'plan', 'recordResolution', 'retain', 'page', 'release', 'flushReleases']
         .some(name => typeof linkedChildren?.[name] !== 'function')
@@ -83,7 +83,7 @@ export class CollectionService extends EventEmitter {
   #enqueueWithConfiguration(operation) {
     if (this.#closed) return Promise.reject(libraryError(503, 'Collection management is closing.'));
     let admission;
-    try { admission = this.libraryConfiguration.admitCollectionOperation(); }
+    try { admission = this.libraryConfiguration.admitOperation(); }
     catch (error) { return Promise.reject(error); }
     return this.#enqueue(async () => {
       try { return await operation(admission); }
@@ -229,7 +229,7 @@ export class CollectionService extends EventEmitter {
 
   admitPostScanOperation() {
     if (this.#closed) throw libraryError(503, 'Collection management is closing.');
-    const configurationAdmission = this.libraryConfiguration.admitCollectionOperation();
+    const configurationAdmission = this.libraryConfiguration.admitOperation();
     const completion = Promise.withResolvers();
     const entry = { released: false, pending: 0, completion: completion.promise };
     const finish = () => {

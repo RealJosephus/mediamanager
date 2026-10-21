@@ -44,11 +44,11 @@ export async function loadLiveItemContext(item, { loadContext, itemCreation }, {
   }
 }
 
-export async function updateLiveItemRepository(item, { loadContext, itemCreation, updates, updateReason, signal, includeChildren = true }) {
+export async function updateLiveItemRepository(item, { loadContext, itemCreation, updates, updateReason, signal, includeChildren = true, images = null }) {
   const loaded = await loadLiveItemContext(item, { loadContext, itemCreation }, { includeChildren });
   try {
     item.NativeTopParentId = itemTopParentId(item, loaded.parents);
-    await updates.update(loaded, { Item: item, Images: null }, updateReason, { signal });
+    await updates.update(loaded, { Item: item, Images: images }, updateReason, { signal });
     itemCreation.recordRepositorySnapshot(item, loaded.snapshot);
     itemCreation.registerItem(item);
   } finally { await loaded.dispose(); }

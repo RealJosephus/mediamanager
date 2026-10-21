@@ -9,6 +9,7 @@ import { applyInputIdentity, ciProfile, classify, provisionedServicesFor, provis
 import { affectedUnavailable, applyAffectedSelection, changedFilesForEvent, selectAffected } from './affected.js';
 import { partitionSelection } from './shards.js';
 import { ciSummary } from './summary.js';
+import { releasePairEnabled, runReleasePair, validateReleasePairEnvironment } from './release-pair.js';
 
 const log = message => console.log(`[ci ${new Date().toISOString()}] ${message}`);
 const save = (filename, value) => writeFile(filename, JSON.stringify(value, null, 2) + '\n', { flag: 'wx' });
@@ -20,10 +21,11 @@ async function preparing(label, operation) {
   finally { clearInterval(timer); }
 }
 
-async function execute(scopeFile, output, environment) {
+async function execute(scopeFile, output, environment, { preflightOnly = false } = {}) {
   const timeout = Number(environment.MEDIAMANAGER_CI_TIMEOUT_MS || 100 * 60 * 1000);
   if (!Number.isSafeInteger(timeout) || timeout <= 0) throw new Error('MEDIAMANAGER_CI_TIMEOUT_MS must be a positive integer.');
   const args = [fileURLToPath(new URL('./execute.js', import.meta.url)), scopeFile, output];
+  if (preflightOnly) args.push('--preflight-only');
   const child = spawn(process.execPath, args, { cwd: repositoryRoot, env: environment, windowsHide: true,
     detached: process.platform !== 'win32', stdio: 'inherit' });
   const started = Date.now();
@@ -55,6 +57,8 @@ export async function main(argv = process.argv.slice(2)) {
   const planOnly = argv.includes('--plan-only');
   if (!planOnly && process.env.GITHUB_ACTIONS !== 'true') throw new Error('Test execution is reserved for GitHub Actions; use --plan-only locally.');
   const environment = { ...process.env };
+  validateReleasePairEnvironment(environment);
+  const releasePair = releasePairEnabled(environment);
   const full = ciProfile(environment) === 'full';
   for (const name of provisionedTools) {
     const candidate = validationExecutable(name, environment);
@@ -100,7 +104,7 @@ export async function main(argv = process.argv.slice(2)) {
   }
   const sharding = partitionSelection(classification, environment, full ? 'full' : 'ci-available', request.requested);
   const scope = { schemaVersion: 1, profile: full ? 'full' : 'ci-available', phaseAcceptance: false, createdAt: new Date().toISOString(),
-    platform: process.platform, node: process.version, planOnly, requested: request.requested, impact, sharding,
+    platform: process.platform, node: process.version, planOnly, releasePair, requested: request.requested, impact, sharding,
     selectionPolicy: full ? 'Full retains every discovered test, regardless of input availability or change scope, and invokes the strict full profile without an explicit subset. Missing inputs, skipped tests and narrowing environments cannot pass.'
       : 'Manual empty input selects all available tests; an exact request retains its required files. Push/PR narrow only added/modified test sources with declared source/input owners or reviewed documentation with no consumers; production, resource, global and unresolved changes fall back to all available tests. Unavailable affected tests fail the attempt. Scope freezes before execution; test failures never narrow it. Release full-profile acceptance remains separate.',
     nativeReference: environment.MEDIAMANAGER_CI_NATIVE_REFERENCE === 'true',
@@ -117,17 +121,22 @@ export async function main(argv = process.argv.slice(2)) {
   let result = { schemaVersion: 1, phaseAcceptance: false, outcome: planOnly ? 'planned' : notApplicable ? 'not-applicable' : 'incomplete', executed: false,
     selectionSha256: scope.selectionSha256 };
   if (!planOnly && !infrastructureErrors.length && scope.selected.length) {
-    const strictOutput = path.join(output, 'strict');
-    log('Starting strict validation of the frozen selection.');
-    const execution = await execute(scopeFile, strictOutput, environment);
-    let strictResult;
-    try { strictResult = JSON.parse(await readFile(path.join(strictOutput, 'result.json'), 'utf8')); }
-    catch (error) { strictResult = { outcome: 'incomplete', error: error.message }; }
-    const unchangedSelection = JSON.stringify(strictResult.selected) === JSON.stringify(scope.selected)
-      && (!full || strictResult.profile === 'full' && strictResult.allDiscoveredSelected === true && strictResult.scopeComplete === true);
-    result = { ...result, ...execution, executed: strictResult.executed === true, strictOutput, unchangedSelection,
-      outcome: execution.exitCode === 0 && !execution.timedOut && !execution.cancelled && unchangedSelection && strictResult.outcome === 'passed' ? 'passed' : 'failed',
-      strictOutcome: strictResult.outcome, counts: strictResult.counts };
+    if (releasePair) {
+      result = { ...result, ...await runReleasePair({ scope, output, expectedHead: environment.GITHUB_SHA,
+        execute: (roundOutput, options) => execute(scopeFile, roundOutput, environment, options), log }) };
+    } else {
+      const strictOutput = path.join(output, 'strict');
+      log('Starting strict validation of the frozen selection.');
+      const execution = await execute(scopeFile, strictOutput, environment);
+      let strictResult;
+      try { strictResult = JSON.parse(await readFile(path.join(strictOutput, 'result.json'), 'utf8')); }
+      catch (error) { strictResult = { outcome: 'incomplete', error: error.message }; }
+      const unchangedSelection = JSON.stringify(strictResult.selected) === JSON.stringify(scope.selected)
+        && (!full || strictResult.profile === 'full' && strictResult.allDiscoveredSelected === true && strictResult.scopeComplete === true);
+      result = { ...result, ...execution, executed: strictResult.executed === true, strictOutput, unchangedSelection,
+        outcome: execution.exitCode === 0 && !execution.timedOut && !execution.cancelled && unchangedSelection && strictResult.outcome === 'passed' ? 'passed' : 'failed',
+        strictOutcome: strictResult.outcome, counts: strictResult.counts };
+    }
   }
   await save(path.join(output, 'result.json'), result);
   const summary = ciSummary(scope, result);
