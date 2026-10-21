@@ -6,7 +6,7 @@ import { validateNativeLiveTvSource } from '@mediamanager/plugin-sdk/live-tv/con
 import { ordinalIgnoreCaseEquals } from '@mediamanager/plugin-sdk/storage/ordinal-comparer';
 import { decodeM3u, parseM3uText } from './parser.js';
 import { createMediaSource } from './source.js';
-import { NativeHttpInput, NativeReservationInput } from './http-stream.js';
+import { NativeHttpInput, NativeReservationInput } from '@mediamanager/plugin-sdk/live-tv/raw-input';
 
 // Channel ordering/cache behavior follows the designated Jellyfin
 // BaseTunerHost.cs and M3UTunerHost.cs (GPL-2.0-only).
@@ -14,13 +14,14 @@ import { NativeHttpInput, NativeReservationInput } from './http-stream.js';
 const unavailable = () => Object.assign(new Error('The M3U tuner is unavailable.'), { status: 503 });
 const conflict = () => Object.assign(new Error('Unable to find host to play channel.'), { status: 409 });
 const ioError = error => ['ENOENT', 'ENOTDIR', 'EISDIR', 'EACCES', 'EPERM', 'EROFS', 'ENOSPC'].includes(error.code);
-const equals = ordinalIgnoreCaseEquals;
+const equals = (left, right) => left == null || right == null ? left == null && right == null : ordinalIgnoreCaseEquals(left, right);
 const channelPrefix = info => 'm3u_' + md5Guid(info.Url);
 
 export class M3uTuner {
   type = 'm3u'; name = 'M3U Tuner'; isSupported = true;
-  #memory = new Map(); #operations = new Set(); #hubs = new Set(); #sharing = new Map();
+  #memory = new Map(); #operations = new Set(); #hubs = new Set();
   #controller = new AbortController(); #closed = false; #closing;
+  #cacheWrites = new Set();
   constructor({ cachePath, fetch = globalThis.fetch, logger = { error() {}, warn() {} }, isLocalNetwork } = {}) {
     Object.assign(this, { cachePath, fetch, logger, networkOverride: isLocalNetwork });
   }
@@ -61,6 +62,20 @@ export class M3uTuner {
     if (info.Id && channels.length) this.#memory.set(info.Id, channels);
     return channels;
   }
+  async #writeCache(filename, channels, signal) {
+    if (this.#cacheWrites.has(filename)) throw Object.assign(new Error('The tuner cache is in use.'), { code: 'EBUSY' });
+    this.#cacheWrites.add(filename); let file;
+    try {
+      signal.throwIfAborted();
+      await this.fileSystem.mkdir(path.dirname(filename), { recursive: true });
+      try { file = await this.fileSystem.open(filename, 'r+'); }
+      catch (error) { if (error.code !== 'ENOENT') throw error; file = await this.fileSystem.open(filename, 'wx'); }
+      // Native AsyncFile.OpenWrite uses OpenOrCreate, preserving an old suffix
+      // when a shorter JSON list overwrites the beginning of an existing file.
+      signal.throwIfAborted();
+      await file.writeFile(JSON.stringify(channels.map(channel => ({ ...channel, ChannelType: 0 }))));
+    } finally { try { await file?.close(); } finally { this.#cacheWrites.delete(filename); } }
+  }
   getChannels(enableCache, options) {
     return this.#run(options, async (configuration, signal) => {
       const result = [];
@@ -71,9 +86,8 @@ export class M3uTuner {
           // Native deduplicates against earlier hosts, not inside this batch.
           const fresh = channels.filter(channel => !result.some(value => equals(value.Id, channel.Id))); result.push(...fresh);
           if (!enableCache) try {
-            await this.fileSystem.mkdir(path.dirname(filename), { recursive: true });
-            await this.fileSystem.writeFile(filename, JSON.stringify(channels.map(channel => ({ ...channel, ChannelType: 0 }))), { signal });
-          } catch (error) { if (!ioError(error)) throw error; }
+            await this.#writeCache(filename, channels, signal);
+          } catch (error) { if (!ioError(error) && !['EBUSY', 'EEXIST'].includes(error.code)) throw error; }
         } catch (error) {
           signal.throwIfAborted(); this.#report(error);
           if (enableCache) try {
@@ -118,7 +132,7 @@ export class M3uTuner {
         retain(options) { return tuner.#run(options, (_configuration, combined) => tuner.#ownedInput(input, source, combined), false); },
       });
     }
-    return { ...source, ...await input.acquire(signal), sharing: input.sharing };
+    return { ...source, tunerHostId: input.tunerHostId ?? null, ...await input.acquire(signal), sharing: input.sharing };
   }
   getChannelStream(channelId, streamId, currentLiveStreams, options) {
     return this.#run(options, async (configuration, signal) => {
@@ -129,44 +143,38 @@ export class M3uTuner {
         const source = validateNativeLiveTvSource({ mode: 'native', mediaSource });
         signal.throwIfAborted();
         validateNativeLiveTvSource(options?.source);
-        if (mediaSource.Id !== streamId || options.source.mediaSource.Id !== streamId) throw new TypeError('The M3U source selection changed.');
-        const key = (info.Id ?? '') + ':' + streamId;
-        let shared = this.#sharing.get(key);
-        if (shared?.closing || shared?.hub?.closing || shared?.hub?.done) shared = null;
+        if (options.source.mediaSource.Id !== mediaSource.Id) throw new TypeError('The M3U source selection changed.');
         const checkLimit = () => {
-          const ownCount = [...this.#hubs].filter(value => equals(value.tunerHostId, info.Id)).length;
           const suppliedCount = currentLiveStreams.filter(value => equals(value.tunerHostId ?? value.TunerHostId, info.Id)).length;
-          if (info.TunerCount > 0 && Math.max(ownCount, suppliedCount) >= info.TunerCount) throw conflict();
+          if (info.TunerCount > 0 && suppliedCount >= info.TunerCount) throw conflict();
         };
-        if (mediaSource.Protocol !== 'Http') {
-          checkLimit();
+        checkLimit();
+        let nativeSharedHttpStream = false;
+        if (mediaSource.Protocol === 'Http' && info.AllowStreamSharing && !info.EnableStreamLooping) {
+          const extension = path.extname(new URL(mediaSource.Path).pathname).toLowerCase();
+          nativeSharedHttpStream = ['.ts', '.tsv', '.m2t'].includes(extension);
+          if (!extension) try {
+            const head = await this.fetch(mediaSource.Path, { method: 'HEAD', signal });
+            nativeSharedHttpStream = head.ok && head.headers.get('content-type')?.split(';')[0].toLowerCase() === 'video/mp2t'; await head.body?.cancel();
+          } catch (error) { signal.throwIfAborted(); this.#report(error); }
+        }
+        if (!nativeSharedHttpStream) {
+          // Native LiveStream.Open reserves/describes its source. It does not
+          // open HTTP, manifest, looped, RTSP, RTP or UDP network bytes.
           const reservation = new NativeReservationInput(input => this.#hubs.delete(input));
           reservation.tunerHostId = info.Id; this.#hubs.add(reservation);
           return await this.#ownedInput(reservation, source, signal);
         }
-        if (!shared) {
-          let sharing = false;
-          if (info.AllowStreamSharing && !info.EnableStreamLooping) {
-            const extension = path.extname(new URL(mediaSource.Path).pathname).toLowerCase();
-            sharing = ['.ts', '.tsv', '.m2t'].includes(extension);
-            if (!extension) try {
-              const head = await this.fetch(mediaSource.Path, { method: 'HEAD', signal });
-              sharing = head.ok && head.headers.get('content-type')?.split(';')[0].toLowerCase() === 'video/mp2t'; await head.body?.cancel();
-            } catch (error) { signal.throwIfAborted(); this.#report(error); }
-          }
-          if (sharing) shared = this.#sharing.get(key);
-          if (!shared || shared.closing || shared.hub?.closing || shared.hub?.done) {
-            signal.throwIfAborted(); checkLimit();
-            const input = new NativeHttpInput(async upstreamSignal => {
-              const response = await this.fetch(mediaSource.Path, { signal: upstreamSignal, headers: mediaSource.RequiredHttpHeaders });
-              if (!response.ok) { await response.body?.cancel(); throw new Error('The original live source returned HTTP ' + response.status + '.'); }
-              return response;
-            }, input => { this.#hubs.delete(input); if (this.#sharing.get(key) === input) this.#sharing.delete(key); });
-            input.tunerHostId = info.Id; this.#hubs.add(input);
-            if (sharing) this.#sharing.set(key, input); shared = input;
-          }
-        }
-        return await this.#ownedInput(shared, source, signal);
+        signal.throwIfAborted();
+        // Fresh provider opens are independent. DefaultLiveTvService decides
+        // reuse by its ordered OriginalStreamId registry; retain owns a new
+        // consumer of precisely this input without reopening its upstream.
+        const input = new NativeHttpInput(async upstreamSignal => {
+          const response = await this.fetch(mediaSource.Path, { signal: upstreamSignal, headers: mediaSource.RequiredHttpHeaders });
+          return response;
+        }, input => this.#hubs.delete(input), { primeFirstBytes: true });
+        input.tunerHostId = info.Id; this.#hubs.add(input);
+        return await this.#ownedInput(input, source, signal);
       } catch (error) { signal.throwIfAborted(); this.#report(error); }
       throw conflict();
     });

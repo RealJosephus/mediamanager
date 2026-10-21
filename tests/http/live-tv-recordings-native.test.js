@@ -4,6 +4,7 @@ import { randomUUID } from 'node:crypto';
 import { createServer } from 'node:http';
 import { cp, mkdir, readFile, realpath, writeFile } from 'node:fs/promises';
 import path from 'node:path';
+import { inspect } from 'node:util';
 import { currentNativeReference } from '../../tools/compat/current-native-reference.js';
 import { createPrivateFilterOutput, filterEvidenceJson } from '../../tools/compat/filter-reference-output.js';
 import { validationOutputRoot } from '../../tools/validation/paths.js';
@@ -14,7 +15,8 @@ import { discoverInstanceState } from '../../src/migration/instance-state.js';
 import { startProductionInstance } from '../../src/main.js';
 import { createPostgresTestDatabase, dropPostgresTestDatabase } from '../database/postgres-fixture.js';
 import { databaseFilename, guid, idKey, mediaFiles, portableMountContract, seedRecordings, sha,
-  relocateOriginalSeed, snapshot, sqliteSnapshot, stateFiles, storageDocument } from './fixtures/live-tv-recordings-http/scenario.js';
+  snapshot, sqliteSnapshot, stateFiles, storageDocument } from './fixtures/live-tv-recordings-http/scenario.js';
+import { prepareNativeMediaSeed } from './native-media-seed.js';
 
 export const requiredValidationServices = ['dotnet', 'jellyfinDll', 'nativeInstance', 'postgres'];
 const inputBytes = await readFile(new URL('./fixtures/live-tv-recordings-http/input.json', import.meta.url));
@@ -127,10 +129,63 @@ test('existing recordings list, folders, detail and retained-file deletion match
     const values = [];
     for (const sample of samples) for (const mode of sample.modes ?? [sample.mode]) {
       const errorIndex = report.runtimeErrors.length, response = await request(server, sample.route, { mode, method });
-      const value = { name: sample.name, mode, request: { method, route: sample.route }, response };
-      if (label === 'node' && response.status < 500) assert.deepEqual(report.runtimeErrors.slice(errorIndex), [], sample.name + ': no hidden background error');
+      const diagnostics = label === 'node' ? report.runtimeErrors.slice(errorIndex) : [];
+      const value = { name: sample.name, mode, request: { method, route: sample.route }, response,
+        ...(label === 'node' ? { runtimeErrors: diagnostics } : {}) };
       values.push(value);
+      if (label === 'node') report.nodeLastObservation = value;
       await writeFile(path.join(root, label + '-' + method.toLowerCase() + '-progress.log'), filterEvidenceJson(value) + '\n', { flag: 'a' });
+      if (label === 'node') {
+        const route = new URL(sample.route, 'http://fixture.invalid');
+        const selectedOtherUser = method === 'GET' && mode === 'allowed' && sample.name === 'selected user ' + route.pathname
+          && new Set(['/LiveTv/Recordings', '/LiveTv/Recordings/Folders', '/LiveTv/Recordings/' + idKey(graph.ids.restricted)]).has(route.pathname)
+          && route.searchParams.get('userId') === idKey(users.restricted.Id);
+        const userlessFolders = method === 'GET' && [
+          ['authorization /LiveTv/Recordings/Folders', 'apiKey', '/LiveTv/Recordings/Folders'],
+          ['empty user /LiveTv/Recordings/Folders', 'apiKey', '/LiveTv/Recordings/Folders?userId=' + '0'.repeat(32)],
+          ['missing user /LiveTv/Recordings/Folders', 'admin', '/LiveTv/Recordings/Folders?userId=' + 'f'.repeat(32)],
+        ].some(([name, candidateMode, candidateRoute]) => sample.name === name && mode === candidateMode && sample.route === candidateRoute);
+        const emptySourceChannel = method === 'GET' && sample.name === 'detail arbitrary persisted type channel'
+          && ['allowed', 'restricted', 'apiKey'].includes(mode) && sample.route === '/LiveTv/Recordings/' + idKey(graph.ids.channel);
+        const emptyDeleteIdentity = method === 'DELETE' && sample.name === 'empty delete identity is not a root selector'
+          && mode === 'manager' && sample.route === '/LiveTv/Recordings/' + '0'.repeat(32);
+        if (selectedOtherUser || userlessFolders || emptySourceChannel || emptyDeleteIdentity) {
+          const expected = (method === 'DELETE' ? report.nativeDeletes : report.nativeReads).find(item => item.name === sample.name && item.mode === mode
+            && item.request.method === method && item.request.route === sample.route);
+          const status = selectedOtherUser ? 403 : 400;
+          assert.equal(expected?.response.status, status, 'Only this exact actual native request can authorize its matching diagnostic.');
+          assert.equal(response.status, status, 'A native 400 must never authorize a Node 500.');
+          assert.deepEqual(wire(response), wire(expected.response), 'The complete actual native and Node error wire must agree before classifying a diagnostic.');
+          if (selectedOtherUser) {
+            assert.deepEqual(diagnostics.map(({ type, name, message, status }) => ({ type, name, message, status })),
+              [{ type: 'object', name: 'Error', message: 'Forbidden', status: 403 }]);
+            assert.match(diagnostics[0].stack, /at requestUser \(file:[^\n]+\/src\/http\/live-tv-recording-routes\.js:\d+:\d+\)/u);
+          } else if (userlessFolders) {
+            assert.deepEqual(diagnostics.map(({ type, name, message, status, nativeException, parameterName }) => ({ type, name, message, status, nativeException, parameterName })),
+              [{ type: 'object', name: 'Error', message: "Value cannot be null. (Parameter 'user')", status: 400,
+                nativeException: 'ArgumentNullException', parameterName: 'user' }]);
+            assert.match(diagnostics[0].stack, /at recordingSourceVisibleWithoutUser \(file:[^\n]+\/src\/library\/live-tv-recording-folders-access\.js:\d+:\d+\)/u);
+            assert.match(diagnostics[0].stack, /\/src\/library\/library-service\.js:\d+:\d+/u);
+          } else if (emptyDeleteIdentity) {
+            assert.deepEqual(diagnostics.map(({ type, name, message, status }) => ({ type, name, message, status })),
+              [{ type: 'object', name: 'Error', message: "Guid can't be empty. (Parameter 'id')", status: 400 }]);
+            assert.match(diagnostics[0].stack, /at LibraryService\.getDeletionItem \(file:[^\n]+\/src\/library\/library-service\.js:\d+:\d+\)/u);
+          } else {
+            const displayGetter = mode === 'apiKey';
+            assert.deepEqual(diagnostics.map(({ type, name, message, status, nativeException }) => ({ type, name, message, status, nativeException })),
+              [{ type: 'object', name: 'Error', message: displayGetter ? "Guid can't be empty (Parameter 'id')" : 'Guid cannot be empty.',
+                status: 400, nativeException: displayGetter ? 'ArgumentException' : undefined }]);
+            assert.match(diagnostics[0].stack, displayGetter
+              ? /at [^\n]*nativeMediaSourceDisplay[^\n]*\(file:[^\n]+\/src\/library\/native-item-entity\.js:\d+:\d+\)/u
+              : /at visibleItem \(file:[^\n]+\/src\/library\/permissions\.js:\d+:\d+\)/u);
+          }
+          assert.match(diagnostics[0].observedAt, /\/src\/http\/application\.js:\d+:\d+/u);
+          diagnostics[0].expectedRequestDiagnostic = { name: sample.name, mode, method, route: sample.route, status,
+            completeNativeWireMatched: true, actualNodeStackMatched: true,
+            kind: selectedOtherUser ? 'other-user-selector' : userlessFolders ? 'physical-folder-null-user'
+              : emptyDeleteIdentity ? 'empty-delete-identity' : 'empty-source-channel' };
+        } else assert.deepEqual(diagnostics, [], sample.name + ': no hidden background error');
+      }
     }
     return values;
   };
@@ -150,11 +205,12 @@ test('existing recordings list, folders, detail and retained-file deletion match
       'src/Jellyfin.LiveTv/LiveTvManager.cs', 'src/Jellyfin.LiveTv/Recordings/RecordingsManager.cs',
       'MediaBrowser.Controller/Entities/BaseItem.cs', 'MediaBrowser.Controller/Entities/Video.cs',
       'MediaBrowser.Controller/Entities/CollectionFolder.cs', 'Emby.Server.Implementations/Library/LibraryManager.cs',
+      'MediaBrowser.Controller/Channels/Channel.cs', 'src/Jellyfin.LiveTv/Channels/ChannelManager.cs', 'Jellyfin.Api/Middleware/ExceptionMiddleware.cs',
       'Emby.Server.Implementations/Dto/DtoService.cs', 'MediaBrowser.Controller/Providers/DirectoryService.cs',
       'Emby.Server.Implementations/ScheduledTasks/Tasks/RefreshMediaLibraryTask.cs', 'Jellyfin.Api/Controllers/ScheduledTasksController.cs']);
     await cp(current.sourceRoot, referenceRoot, { recursive: true, filter: filename => !path.relative(current.sourceRoot, filename).replaceAll('\\', '/').startsWith('log/') });
     await mkdir(path.join(referenceRoot, 'log'), { recursive: true }); await current.prepareClone(referenceRoot, port);
-    report.originalSeedPreparation = await relocateOriginalSeed(referenceRoot, mediaRoot);
+    report.originalSeedPreparation = await prepareNativeMediaSeed(referenceRoot, mediaRoot);
     report.recordingDirectoryPreparation = { beforeFirstNativeStartup: true, files: {} };
     assert.equal(path.basename(input.registration.filename), input.registration.filename);
     for (const name of ['main', 'movies']) {
@@ -250,6 +306,18 @@ test('existing recordings list, folders, detail and retained-file deletion match
     report.nativeAfterReads = await captureNative(); assert.deepEqual(report.nativeAfterReads, report.nativeBeforeReads);
     await stopNative('native-reads'); report.nativeAfterReadShutdown = await captureNative();
     assert.deepEqual(report.nativeAfterReadShutdown, report.nativeAfterReads);
+    const nativeReadLog = await readFile(path.join(root, 'native-reads-stdout.log'), 'utf8');
+    const nativeErrorBlocks = nativeReadLog.split(/\r?\n(?=\[[^\]\r\n]+\] \[(?:ERR|WRN|INF|DBG)\])/u);
+    report.nativeRequestDiagnostics = {
+      physicalFolderNullUser: nativeErrorBlocks.filter(block => block.includes('URL GET /LiveTv/Recordings/Folders.')
+        && block.includes("System.ArgumentNullException: Value cannot be null. (Parameter 'user')")
+        && block.includes('LiveTvManager.GetRecordingFoldersAsync')),
+      emptySourceChannel: nativeErrorBlocks.filter(block => block.includes('URL GET /LiveTv/Recordings/' + idKey(graph.ids.channel) + '.')
+        && block.includes("System.ArgumentException: Guid can't be empty (Parameter 'id')")
+        && (block.includes('Channel.IsChannelVisible') || block.includes('ChannelManager.EnableMediaSourceDisplay'))),
+    };
+    assert.equal(report.nativeRequestDiagnostics.physicalFolderNullUser.length, 3);
+    assert.equal(report.nativeRequestDiagnostics.emptySourceChannel.length, 3);
     const source = new SqliteDatabase(databaseFilename(referenceRoot), { readOnly: true, requireMigrationHistory: true });
     try {
       database = await createPostgresTestDatabase(null, 'recording_http');
@@ -266,12 +334,21 @@ test('existing recordings list, folders, detail and retained-file deletion match
     assert.deepEqual(report.nativeAfterDelete.state, report.nativeBeforeDelete.state);
     await stopNative('native-deletion'); report.nativeAfterDeleteShutdown = await captureNative();
     assert.deepEqual(report.nativeAfterDeleteShutdown, report.nativeAfterDelete);
+    const nativeDeleteLog = await readFile(path.join(root, 'native-deletion-stdout.log'), 'utf8');
+    report.nativeRequestDiagnostics.emptyDeleteIdentity = nativeDeleteLog.split(/\r?\n(?=\[[^\]\r\n]+\] \[(?:ERR|WRN|INF|DBG)\])/u)
+      .filter(block => block.includes('URL DELETE /LiveTv/Recordings/' + '0'.repeat(32) + '.')
+        && block.includes("System.ArgumentException: Guid can't be empty (Parameter 'id')") && block.includes('LibraryManager.GetItemById'));
+    assert.equal(report.nativeRequestDiagnostics.emptyDeleteIdentity.length, 1);
     const storage = path.join(referenceRoot, 'recording-storage.json');
     await writeFile(storage, JSON.stringify(storageDocument(mediaRoot)));
     application = await startProductionInstance({ environment: { ...process.env, MEDIAMANAGER_INSTANCE: referenceRoot,
       MEDIAMANAGER_POSTGRES: process.env.MEDIAMANAGER_TEST_POSTGRES, MEDIAMANAGER_POSTGRES_SCHEMA: database.schemaName,
       MEDIAMANAGER_STORAGE: storage, MEDIAMANAGER_PORT: '0' },
-    onError: error => report.runtimeErrors.push({ name: error.name, message: error.message, stack: error.stack }) });
+    onError: error => report.runtimeErrors.push({ type: typeof error, name: error?.name,
+      message: typeof error === 'string' ? error : error?.message ?? String(error), status: error?.status ?? error?.statusCode,
+      nativeException: error?.nativeException, parameterName: error?.parameterName, stack: error?.stack,
+      value: inspect(error, { depth: 8, maxArrayLength: 128, getters: false }),
+      observedAt: new Error('Production runtime diagnostic observed.').stack }) });
     const closeStore = application.store.close.bind(application.store);
     application.store.close = async () => { report.nodeBeforeStoreClose = await captureNode(); return closeStore(); };
     const nodeOrigin = `http://127.0.0.1:${application.server.address().port}`; report.nodePort = application.server.address().port;
@@ -302,6 +379,7 @@ test('existing recordings list, folders, detail and retained-file deletion match
     assert.deepEqual(report.nodeBeforeStoreClose, report.nodeAfterDelete, 'Shutdown must preserve the final recorded database, permissions, preferences and source bytes.');
     assert.equal(await portAvailable(report.nodePort), true);
     report.cleanup.push({ name: 'production-runtime', closed: true, listenerReleased: true });
+    assert.deepEqual(report.runtimeErrors.filter(error => !error.expectedRequestDiagnostic), [], 'Readers, deletion and shutdown must not hide background failures.');
     assert.deepEqual(report.differences, []);
   } catch (error) { failure = error; report.failure = { name: error.name, message: error.message, stack: error.stack }; }
   finally {

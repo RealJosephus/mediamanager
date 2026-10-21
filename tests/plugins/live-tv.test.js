@@ -40,7 +40,7 @@ export async function activate(context) {
   }
 }`;
 
-function sharedOwners(chosen) {
+function sharedOwners(chosen, tunerHostId = 'controlled-host') {
   const records = [], signals = [];
   let retainer;
   const group = { get enabled() { return records.some(record => !record.closed); },
@@ -48,7 +48,7 @@ function sharedOwners(chosen) {
   const acquire = (changes = {}) => {
     const record = { closed: false, closes: 0, returns: 0, read: Promise.withResolvers() }; records.push(record);
     const iterator = { next: () => record.read.promise, return() { record.returns++; record.read.resolve({ done: true }); return { done: true }; } };
-    const resource = { ...chosen, sharing: group, stream: { [Symbol.asyncIterator]: () => iterator },
+    const resource = { ...chosen, tunerHostId, sharing: group, stream: { [Symbol.asyncIterator]: () => iterator },
       async close() { if (record.closed) return; record.closed = true; record.closes++; record.read.resolve({ done: true }); await record.closeGate?.promise; }, ...changes };
     record.resource = resource; return resource;
   };
@@ -127,7 +127,7 @@ test('caller abort and plugin disable cancel each Live TV kind at its own signal
   const started = [], finishing = [], gates = [];
   t.signal.addEventListener('abort', () => gates.forEach(gate => gate.resolve()), { once: true });
   const fixture = await pluginFixture(t, { options: { 'live-tv': { invoke: async (kind, method, args) => {
-    const gate = Promise.withResolvers(); gates.push(gate); started.push({ kind, method });
+    const gate = Promise.withResolvers(); gates.push(gate); started.push({ kind, method, signal: args[liveTvSignalPositions[kind][method]].signal });
     try { await aborting(args[liveTvSignalPositions[kind][method]].signal); }
     finally { await gate.promise; finishing.push(kind); }
   } } } });
@@ -141,6 +141,7 @@ test('caller abort and plugin disable cancel each Live TV kind at its own signal
     fixture.host.entries('channel')[0].getChannelItems({}, {})];
   const rejected = work.map(value => assert.rejects(value, { name: 'AbortError' }));
   let disabled = false; const disabling = fixture.host.setEnabled('live-tv', false).then(() => { disabled = true; });
+  await assert.rejects(aborting(started[1].signal), { name: 'AbortError' });
   await turn(); assert.equal(disabled, false); assert.equal(started.length, 4);
   assert.deepEqual(fixture.host.entries('tuner'), []); assert.deepEqual(fixture.host.entries('listings'), []); assert.deepEqual(fixture.host.entries('channel'), []);
   gates.slice(1).forEach(gate => gate.resolve()); await Promise.all(rejected); await disabling;
@@ -154,7 +155,7 @@ test('encoded profiles are rejected for source advertisement and before opening 
   const fixture = await pluginFixture(t, { options: { 'live-tv': { invoke: (_kind, method) => {
     if (method === 'getChannelStreamMediaSources' || method === 'getChannelItemMediaInfo') return [advertised];
     if (method === 'getChannelItems') return { Items: [{ Id: 'channel-item', MediaSources: [advertised] }] };
-    if (method === 'getChannelStream') openings++;
+    if (method === 'getChannelStream') { openings++; return { ...advertised, tunerHostId: null, close() {} }; }
   } } } });
   await fixture.host.install(await packageSource(fixture, providers));
   const tuner = fixture.host.entries('tuner')[0], channel = fixture.host.entries('channel')[0];
@@ -172,20 +173,67 @@ test('encoded profiles are rejected for source advertisement and before opening 
   }
   assert.equal(openings, 0, 'Rejected profiles must not reach a tuner or an external encoder.');
   advertised = source();
-  assert.throws(() => tuner.getChannelStream('channel', 'different', [], { source: advertised }), { code: 'not-supported' });
-  assert.equal(openings, 0);
+  const lease = await tuner.getChannelStream('channel', 'different', [], { source: advertised });
+  assert.equal(lease.mediaSource.Id, advertised.mediaSource.Id); assert.equal(openings, 1); await lease.close();
+});
+
+test('original stream keys pass unchanged independently of the selected native source identity', { timeout: 30000 }, async t => {
+  let delayed;
+  const chosen = source(), originals = [], fixture = await pluginFixture(t, { options: { 'live-tv': { invoke: (_kind, method, args) => {
+    assert.equal(method, 'getChannelStream'); originals.push(args[1]); return delayed?.promise ?? { ...chosen, tunerHostId: 'controlled-host', close() {} };
+  } } } });
+  await fixture.host.install(await packageSource(fixture, providers)); const tuner = fixture.host.entries('tuner')[0];
+  for (const original of [null, '', ' \t', 'different-original', 'heavy_opaque-key']) {
+    const lease = await tuner.getChannelStream('channel', original, [], { source: chosen });
+    assert.equal(originals.at(-1), original); assert.equal(lease.mediaSource.Id, chosen.mediaSource.Id); await lease.close();
+  }
+  assert.throws(() => tuner.getChannelStream('channel', 42, [], { source: chosen }), TypeError); assert.equal(originals.length, 5);
+  delayed = Promise.withResolvers(); const selection = source(); let closes = 0, returns = 0;
+  const pending = tuner.getChannelStream('channel', null, [], { source: selection });
+  const rejected = assert.rejects(pending, /different source identity/);
+  selection.mediaSource.Id = 'replacement-native';
+  delayed.resolve({ ...selection, tunerHostId: 'controlled-host', stream: { [Symbol.asyncIterator]() { return { next: async () => ({ done: true }),
+    return() { returns++; return { done: true }; } }; } }, close() { closes++; } });
+  await rejected; assert.equal(closes, 1); assert.equal(returns, 1, 'Mutating a pending selection cannot replace its admitted source identity.');
+});
+
+test('opened leases preserve nullable host identities and reject missing or invalid host types after owning cleanup', { timeout: 30000 }, async t => {
+  const chosen = source(); let identity = null, closes = 0, current, invoke;
+  const fixture = await pluginFixture(t, { options: { 'live-tv': { invoke: () => invoke ? invoke() : current = { ...chosen, tunerHostId: identity, close() { closes++; } } } } });
+  await fixture.host.install(await packageSource(fixture, providers)); const tuner = fixture.host.entries('tuner')[0];
+  for (identity of [null, '', 'Mixed-Host']) {
+    const lease = await tuner.getChannelStream('channel', null, [], { source: chosen });
+    assert.equal(lease.tunerHostId, identity); assert.equal(Object.isFrozen(lease), true);
+    current.tunerHostId = 'mutated-after-admission'; assert.equal(lease.tunerHostId, identity); await lease.close();
+  }
+  assert.equal(closes, 3);
+  for (identity of [undefined, 42, {}, false]) {
+    await assert.rejects(tuner.getChannelStream('channel', null, [], { source: chosen }), /nullable tuner host identity/);
+  }
+  assert.equal(closes, 7);
+  for (const identity of [null, '']) {
+    const owners = sharedOwners(chosen, identity);
+    invoke = () => owners.acquire();
+    const parent = await tuner.getChannelStream('channel', null, [], { source: chosen }), child = await parent.sharing.retain({});
+    assert.equal(parent.tunerHostId, identity); assert.equal(child.tunerHostId, identity);
+    invoke = () => owners.acquire({ tunerHostId: 'changed-host' });
+    await assert.rejects(tuner.getChannelStream('channel', null, [], { source: chosen }), /cannot change source or tuner host identity/);
+    assert.equal(owners.records.at(-1).closes, 1); assert.equal(owners.records[0].closed, false); assert.equal(owners.records[1].closed, false);
+    await parent.close(); await child.close();
+  }
 });
 
 test('idle and reading live leases close once, return iterators, reject future reads and drain pending bytes on disable', { timeout: 30000 }, async t => {
   const started = Promise.withResolvers(), read = Promise.withResolvers(), closeGate = Promise.withResolvers();
   const release = () => { read.resolve({ done: true }); closeGate.resolve(); };
   t.signal.addEventListener('abort', release, { once: true });
-  let closes = 0, returned = 0, moduleClosed = 0;
+  let closes = 0, returned = 0, moduleClosed = 0, capturedSignal;
   const chosen = source();
   const fixture = await pluginFixture(t, { options: { 'live-tv': { closed: () => { moduleClosed++; }, invoke: (_kind, method, args) => {
     assert.equal(method, 'getChannelStream'); assert.equal(args[0], 'channel'); assert.equal(args[1], chosen.mediaSource.Id); assert.deepEqual(args[2], []);
     assert.equal(args[3].source, chosen); assert.ok(args[3].signal instanceof AbortSignal);
-    return { ...chosen, stream: { [Symbol.asyncIterator]() { return { next() { started.resolve(); return read.promise; }, return() { returned++; return { done: true }; } }; } },
+    capturedSignal = args[3].signal;
+    return { ...chosen, tunerHostId: 'controlled-host', stream: { [Symbol.asyncIterator]() { return { next() { started.resolve(); return read.promise; }, return() { returned++; return { done: true }; } }; } },
       async close() { closes++; read.resolve({ done: false, value: Buffer.from('late byte') }); await closeGate.promise; } };
   } } } });
   await fixture.host.install(await packageSource(fixture, providers)); const tuner = fixture.host.entries('tuner')[0];
@@ -194,6 +242,7 @@ test('idle and reading live leases close once, return iterators, reject future r
   const reading = await tuner.getChannelStream('channel', chosen.mediaSource.Id, [], { source: chosen });
   const next = reading.stream.next(), rejected = assert.rejects(next, error => error.status === 503 || error.name === 'AbortError'); await started.promise;
   let disabled = false; const disabling = fixture.host.setEnabled('live-tv', false).then(() => { disabled = true; });
+  await assert.rejects(aborting(capturedSignal), { name: 'AbortError' });
   await turn(); assert.equal(disabled, false); assert.equal(closes, 2); assert.equal(returned, 2);
   closeGate.resolve(); await rejected; await disabling;
   await Promise.all([idle.close(), idle.close(), reading.close()]); assert.equal(closes, 2); assert.equal(moduleClosed, 1);
@@ -205,22 +254,24 @@ test('idle and reading live leases close once, return iterators, reject future r
 test('a live lease acquired after disable is closed and never delivered outside the host', { timeout: 30000 }, async t => {
   const acquired = Promise.withResolvers(), closing = Promise.withResolvers(), closed = Promise.withResolvers(); let closeCount = 0;
   const chosen = source();
-  const release = () => { acquired.resolve({ ...chosen, close() {} }); closed.resolve(); };
+  const release = () => { acquired.resolve({ ...chosen, tunerHostId: 'controlled-host', close() {} }); closed.resolve(); };
   t.signal.addEventListener('abort', release, { once: true });
-  const fixture = await pluginFixture(t, { options: { 'live-tv': { invoke: () => acquired.promise } } });
+  let capturedSignal;
+  const fixture = await pluginFixture(t, { options: { 'live-tv': { invoke: (_kind, _method, args) => { capturedSignal = args[3].signal; return acquired.promise; } } } });
   await fixture.host.install(await packageSource(fixture, providers)); const tuner = fixture.host.entries('tuner')[0];
   try {
   const work = tuner.getChannelStream('channel', chosen.mediaSource.Id, [], { source: chosen });
   const rejected = assert.rejects(work, { status: 503 }); let disabled = false;
-  const disabling = fixture.host.setEnabled('live-tv', false).then(() => { disabled = true; }); await turn(); assert.equal(disabled, false);
-  acquired.resolve({ ...chosen, async close() { closeCount++; closing.resolve(); await closed.promise; } });
+  const disabling = fixture.host.setEnabled('live-tv', false).then(() => { disabled = true; });
+  await assert.rejects(aborting(capturedSignal), { name: 'AbortError' }); await turn(); assert.equal(disabled, false);
+  acquired.resolve({ ...chosen, tunerHostId: 'controlled-host', async close() { closeCount++; closing.resolve(); await closed.promise; } });
   await closing.promise; assert.equal(disabled, false); closed.resolve(); await rejected; await disabling; assert.equal(closeCount, 1);
   } finally { release(); }
 });
 
 test('live byte completion, consumer break and invalid chunks release their upstream ownership', { timeout: 30000 }, async t => {
   const chosen = source(); let phase = 'complete', closes = 0, returns = 0;
-  const fixture = await pluginFixture(t, { options: { 'live-tv': { invoke: () => ({ ...chosen,
+  const fixture = await pluginFixture(t, { options: { 'live-tv': { invoke: () => ({ ...chosen, tunerHostId: 'controlled-host',
     stream: { [Symbol.asyncIterator]() { let offset = 0; return {
       next() { return Promise.resolve(++offset === 1 ? { done: false, value: phase === 'invalid' ? 'not bytes' : Buffer.from('original bytes') } : { done: true }); },
       return() { returns++; return { done: true }; },
@@ -241,10 +292,10 @@ test('live byte completion, consumer break and invalid chunks release their upst
 
 test('caller cancellation closes a late or already returned lease without disabling its plugin', { timeout: 30000 }, async t => {
   const late = Promise.withResolvers(), chosen = source(); let calls = 0, closed = 0;
-  const fixture = await pluginFixture(t, { options: { 'live-tv': { invoke: () => ++calls === 1 ? late.promise : { ...chosen, close() { closed++; } } } } });
+  const fixture = await pluginFixture(t, { options: { 'live-tv': { invoke: () => ++calls === 1 ? late.promise : { ...chosen, tunerHostId: 'controlled-host', close() { closed++; } } } } });
   await fixture.host.install(await packageSource(fixture, providers)); const tuner = fixture.host.entries('tuner')[0], request = new AbortController();
   const work = tuner.getChannelStream('channel', chosen.mediaSource.Id, [], { source: chosen, signal: request.signal });
-  const rejected = assert.rejects(work, { name: 'AbortError' }); request.abort(); late.resolve({ ...chosen, close() { closed++; } }); await rejected;
+  const rejected = assert.rejects(work, { name: 'AbortError' }); request.abort(); late.resolve({ ...chosen, tunerHostId: 'controlled-host', close() { closed++; } }); await rejected;
   assert.equal(closed, 1); assert.equal(fixture.host.get('live-tv').status, 'active');
   const activeRequest = new AbortController(), owner = await tuner.getChannelStream('channel', chosen.mediaSource.Id, [], { source: chosen, signal: activeRequest.signal });
   activeRequest.abort(); await owner.close(); assert.equal(closed, 2); assert.equal(fixture.host.get('live-tv').status, 'active');
@@ -253,7 +304,7 @@ test('caller cancellation closes a late or already returned lease without disabl
 test('invalid opened sources are closed before rejection and a close failure still drains other owners', { timeout: 30000 }, async t => {
   const chosen = source(); let invalid = true, closed = 0, moduleClosed = 0, first = true;
   const fixture = await pluginFixture(t, { options: { 'live-tv': { closed: () => { moduleClosed++; }, invoke: () => ({
-    ...chosen, ...(invalid ? { profile: 'heavy' } : {}), close() { closed++; if (!invalid && first) { first = false; throw new Error('Controlled close failure.'); } },
+    ...chosen, tunerHostId: 'controlled-host', ...(invalid ? { profile: 'heavy' } : {}), close() { closed++; if (!invalid && first) { first = false; throw new Error('Controlled close failure.'); } },
   }) } } });
   await fixture.host.install(await packageSource(fixture, providers)); const tuner = fixture.host.entries('tuner')[0];
   await assert.rejects(tuner.getChannelStream('channel', chosen.mediaSource.Id, [], { source: chosen }), { code: 'not-supported' }); assert.equal(closed, 1);
@@ -271,6 +322,7 @@ test('shared input capabilities retain distinct owned consumers independently of
   await fixture.host.install(await packageSource(fixture, providers));
   const tuner = fixture.host.entries('tuner')[0], first = await tuner.getChannelStream('channel', chosen.mediaSource.Id, [], { source: chosen, signal: firstRequest.signal });
   const child = await first.sharing.retain({}); assert.notEqual(first.stream, child.stream); assert.equal(first.sharing, child.sharing);
+  assert.equal(first.tunerHostId, 'controlled-host'); assert.equal(child.tunerHostId, first.tunerHostId); assert.equal(Object.isFrozen(child), true);
   assert.notEqual(first.sharing, owners.group); assert.deepEqual(Object.keys(first.sharing).sort(), ['enabled', 'retain']);
   const canceled = new AbortController(); canceled.abort();
   assert.throws(() => first.sharing.retain({ signal: canceled.signal }), { name: 'AbortError' }); assert.equal(owners.signals.length, 1);
@@ -295,6 +347,7 @@ test('invalid and canceled retained resources close their own iterator without h
   await fixture.host.install(await packageSource(fixture, providers));
   const parent = await fixture.host.entries('tuner')[0].getChannelStream('channel', chosen.mediaSource.Id, [], { source: chosen });
   for (const changes of [ { mediaSource: { ...chosen.mediaSource, Id: 'different' } }, { profile: 'heavy' },
+    { tunerHostId: 'different-host' }, { tunerHostId: 'CONTROLLED-HOST' }, { tunerHostId: null }, { tunerHostId: undefined },
     { sharing: { enabled: true, retain() {} } }, { sharing: { enabled: 'invalid', retain() {} } } ]) {
     owners.retainWith(() => owners.acquire(changes)); await assert.rejects(parent.sharing.retain({}));
     const record = owners.records.at(-1); assert.equal(record.closes, 1); assert.equal(record.returns, 1);
@@ -324,6 +377,7 @@ test('disable revokes a shared capability and drains a late retained consumer be
   try {
     const pending = parent.sharing.retain({}), rejected = assert.rejects(pending, error => error.status === 503 || error.name === 'AbortError'); await started.promise;
     let disabled = false; const disabling = fixture.host.setEnabled('live-tv', false).then(() => { disabled = true; });
+    await assert.rejects(aborting(owners.signals[0]), { name: 'AbortError' });
     await turn(); assert.equal(parent.sharing.enabled, false); assert.equal(disabled, false);
     returned = owners.acquire(); const record = owners.records.at(-1); record.closeGate = closeGate;
     const originalClose = returned.close; returned.close = async () => { closeEntered.resolve(); await originalClose(); };

@@ -1,0 +1,10 @@
+{
+  "guideDays": 3,
+  "countries": "{\"Controlled\":[{\"fullName\":\"Country byte control 中文\",\"shortName\":\"CC\"}]}\n",
+  "channels": [
+    { "number": "11", "name": "Antenna One", "guideId": "unmapped", "providerId": "c1", "providerName": "XML Guide One", "url": "http://127.0.0.1:1/original-one.ts", "title": "Controlled news 中文", "category": "news" },
+    { "number": "22", "name": "Antenna Two", "guideId": "c2", "providerId": "c2", "providerName": "XML Guide Two", "url": "http://127.0.0.1:1/original-two.ts", "title": "Controlled children", "category": "kids" }
+  ],
+  "userAgent": "LiveTvSourceHttp/1.0",
+  "sentinel": "Owned cache sentinel; not a source identity.\n"
+}

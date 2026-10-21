@@ -1,7 +1,7 @@
 import { EMPTY_NATIVE_LINKS, isLinkedChildrenHandle } from './postgres-linked-children.js';
 import { isDeepStrictEqual } from 'node:util';
 import { md5Guid } from '../core/identity.js';
-import { EMPTY_ID, MIN_DATE, guid, nonemptyId } from './records.js';
+import { EMPTY_ID, MIN_DATE, guid, nonemptyId, libraryError } from './records.js';
 import { sortName as deriveSortName } from './dto.js';
 import { hasFileProtocol } from './delete-permission.js';
 import { ordinalIgnoreCaseKey } from '../storage/ordinal-comparer.js';
@@ -26,6 +26,7 @@ const definitions = [
   ['MediaBrowser.Controller.Entities.UserRootFolder', 'UserRootFolder', 'folder', true, 'Unknown', 'Other', false],
   ['MediaBrowser.Controller.Entities.CollectionFolder', 'CollectionFolder', 'folder', true, 'Unknown', 'Other', false],
   ['MediaBrowser.Controller.Entities.UserView', 'UserView', 'folder', true, 'Unknown', 'Other', false],
+  ['MediaBrowser.Controller.Channels.Channel', 'Channel', 'folder', true, 'Unknown', 'Other', false],
   ['Emby.Server.Implementations.Playlists.PlaylistsFolder', 'PlaylistsFolder', 'folder', false, 'Unknown', 'Other', false],
   ['MediaBrowser.Controller.Playlists.Playlist', 'Playlist', 'folder', true, 'Unknown', 'Other', true],
   ['MediaBrowser.Controller.Entities.Movies.Movie', 'Movie', 'video', true, 'Video', 'Movie', true],
@@ -58,7 +59,7 @@ const artistTypes = new Set(['Audio', 'AudioBook', 'MusicVideo', 'MusicAlbum']);
 const albumArtistTypes = new Set(['Audio', 'AudioBook', 'MusicAlbum']);
 const seriesTypes = new Set(['Episode', 'Season', 'AudioBook', 'Book']);
 const displayedBaseTypes = new Set(['Genre', 'MusicGenre', 'Studio']);
-const playedStatusTypes = new Set(['Folder', 'PlaylistsFolder', 'Playlist', 'Movie', 'Video', 'Episode',
+const playedStatusTypes = new Set(['Folder', 'Channel', 'PlaylistsFolder', 'Playlist', 'Movie', 'Video', 'Episode',
   'Series', 'Season', 'BoxSet', 'Audio', 'AudioBook', 'MusicVideo', 'Trailer', 'Book']);
 const descriptors = new Map(definitions.map(([nativeType, type, family, requiresJson, mediaType, unratedType, resolverCreation]) => [nativeType,
   Object.freeze({ nativeType, type, family, requiresJson, mediaType, unratedType, resolverCreation,
@@ -76,10 +77,12 @@ const sortStates = new WeakMap();
 const nameObservers = new WeakMap();
 const stateObservers = new WeakMap();
 const observableValues = new WeakMap();
+const observableTargets = new WeakMap();
 const dateStates = new WeakMap();
 const readonlyFields = new WeakMap();
 const privateStateFields = new Set(['LinkedChildren', 'LinkedChildrenLoaded', 'VirtualChildren']);
 const sortStateFields = new Set(['Name', 'ForcedSortName', 'SortName']);
+const deferredNativeGetters = new Set(['EnableMediaSourceDisplay']);
 const repositoryColumnsField = 'NativeRepositoryColumns';
 function notifyState(item, key, value, deleted = false) {
   for (const listener of stateObservers.get(item) ?? []) listener(item, key, value, deleted);
@@ -89,6 +92,9 @@ function writeOwnField(target, key, value) {
   else Object.defineProperty(target, key, { value, enumerable: true, writable: true, configurable: true });
 }
 function observedValue(item, field, value) {
+  // A consumer can assign an observed child into another position of the same
+  // collection. Reuse the wrapper for that underlying child and field.
+  value = observableTargets.get(value) ?? value;
   if (!value || typeof value !== 'object' || Object.isFrozen(value) || isLinkedChildrenHandle(value)
     || isNativeItemEntity(value) || value instanceof Date || value instanceof Map || value instanceof Set || ArrayBuffer.isView(value)) return value;
   let fields = observableValues.get(value);
@@ -101,6 +107,7 @@ function observedValue(item, field, value) {
     deleteProperty(target,key) { const result = Reflect.deleteProperty(target,key); if(result)notifyState(item,field,item[field]);return result; },
     defineProperty(target,key,descriptor) { const result=Reflect.defineProperty(target,key,descriptor);if(result)notifyState(item,field,item[field]);return result; }
   });
+  observableTargets.set(proxy, value);
   byField.set(field,proxy); return proxy;
 }
 
@@ -126,8 +133,8 @@ function defineReadonly(item, name, value) {
   fields.add(name);
 }
 
-function defineGetter(item, name, get) {
-  Object.defineProperty(item, name, { get, enumerable: true, configurable: false });
+function defineGetter(item, name, get, enumerable = true) {
+  Object.defineProperty(item, name, { get, enumerable, configurable: false });
   let fields = readonlyFields.get(item);
   if (!fields) readonlyFields.set(item, fields = new Set());
   fields.add(name);
@@ -218,7 +225,7 @@ export function clearNativeItemSortCache(item) {
 function addDerivedGetters(item, descriptor) {
   defineGetter(item, 'IsHD', () => Number(item.Height ?? 0) >= 720);
   defineGetter(item, 'SourceType', () => ['LiveTvProgram', 'LiveTvChannel'].includes(descriptor.type)
-    ? 'LiveTV' : nonemptyId(item.ChannelId) ? 'Channel' : 'Library');
+    ? 'LiveTV' : descriptor.type === 'Channel' || nonemptyId(item.ChannelId) ? 'Channel' : 'Library');
   defineGetter(item, 'MediaType', () => descriptor.type === 'Playlist' ? item.PlaylistMediaType
     : descriptor.type === 'LiveTvChannel' ? item.ChannelType === 'Radio' ? 'Audio' : 'Video' : descriptor.mediaType);
   defineGetter(item, 'UnratedType', () => descriptor.sourceAwareUnrated && item.SourceType === 'Channel'
@@ -227,6 +234,16 @@ function addDerivedGetters(item, descriptor) {
   defineGetter(item, 'IsHidden', () => descriptor.isHidden);
   defineGetter(item, 'IsDisplayedAsFolder', () => descriptor.isDisplayedAsFolder);
   defineGetter(item, 'SupportsPlayedStatus', () => playedStatusTypes.has(descriptor.type));
+  defineGetter(item, 'EnableRememberingTrackSelections', () => descriptor.type !== 'LiveTvChannel');
+  defineGetter(item, 'EnableMediaSourceDisplay', function nativeMediaSourceDisplay() {
+    if (item.SourceType === 'Channel' && !nonemptyId(item.ChannelId)) {
+      throw Object.assign(libraryError(400, "Guid can't be empty (Parameter 'id')"), { nativeException: 'ArgumentException' });
+    }
+    // The retained core has no ChannelManager provider inventory. Native's
+    // empty inventory never evaluates its predicate, even for a missing ID.
+    // IDisableMediaSourceDisplay requires the separate channel producer.
+    return true;
+  }, false); // An unselected lazy virtual getter must not execute in object spreads.
   defineGetter(item, 'SupportsPositionTicksResume', () => descriptor.family === 'video'
     ? !['Sample', 'ThemeVideo', 'Trailer'].includes(item.ExtraType) : ['AudioBook', 'Book'].includes(descriptor.type));
   if (descriptor.dynamicFolder) defineGetter(item, 'IsAccessedByName', () => !nonemptyId(item.ParentId));
@@ -319,7 +336,7 @@ export function newNativeItemEntity(nativeType) {
     get(target,key) { const value=target[key];return stateObservers.has(item)&&typeof key==='string'?observedValue(item,key,value):value; },
     set(target,key,value) { writeOwnField(target,key,value);if(typeof key==='string')notifyState(item,key,value);return true; },
     deleteProperty(target,key) { const result=Reflect.deleteProperty(target,key);if(result&&typeof key==='string')notifyState(item,key,undefined,true);return result; },
-    defineProperty(target,key,descriptor) { const result=Reflect.defineProperty(target,key,descriptor);if(result&&typeof key==='string')notifyState(item,key,item[key]);return result; }
+    defineProperty(target,key,descriptor) { const result=Reflect.defineProperty(target,key,descriptor);if(result&&typeof key==='string'&&stateObservers.has(item))notifyState(item,key,item[key]);return result; }
   });
   defineReadonly(item, 'NativeType', nativeType);
   defineReadonly(item, 'Type', descriptor.type);
@@ -445,7 +462,7 @@ function copyInternal(target, source, seen) {
   const enumerableKeys = new Set(Object.keys(source));
   const expected = [];
   for (const key of Reflect.ownKeys(source)) {
-    if (typeof key !== 'string' || privateStateFields.has(key) || sortStateFields.has(key)) continue;
+    if (typeof key !== 'string' || privateStateFields.has(key) || sortStateFields.has(key) || deferredNativeGetters.has(key)) continue;
     const value = source[key];
     if (key === repositoryColumnsField) {
       defineRepositoryColumns(target, value);
@@ -515,7 +532,7 @@ export async function captureNativeItemState(item, { linkedChildren, session, sc
   const sorting = sortStates.get(item);
   const enumerableKeys = new Set(Object.keys(item));
   const hiddenValues = Object.fromEntries(Object.getOwnPropertyNames(item)
-    .filter(key => key !== repositoryColumnsField && !enumerableKeys.has(key))
+    .filter(key => key !== repositoryColumnsField && !enumerableKeys.has(key) && !deferredNativeGetters.has(key))
     .map(key => [key, item[key]]));
   return { values, hiddenValues, repositoryColumns: item.NativeRepositoryColumns,
     folder: folderStates.has(item) ? { loaded: item.LinkedChildrenLoaded,

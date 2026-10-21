@@ -42,6 +42,41 @@ accounts and related rows transfer to a new PostgreSQL schema with a portable
 mapped-local mount contract. `startProductionInstance` serves the candidate HTTP
 routes; this uses the real transfer implementation and production runtime, not a
 CLI invocation. The same credentials and persisted identities are retained.
+The candidate keeps actual external `Channel` rows in that graph. Startup and
+the entire read/delete/shutdown phase must report no hidden runtime diagnostic;
+both Error objects and string warnings retain their value and observation stack
+in the report so a warning cannot collapse to an empty JSON object. A diagnostic
+is labelled `expectedRequestDiagnostic` only after an exact method/route/sample/
+identity-mode match, identical actual native and Node error status and complete
+wire response, and the precise Node error message/status and originating stack
+all pass. Known request failures are other-user selectors (403), the three
+physical-folder requests with no selected user (400), this retained Channel's
+empty source `ChannelId` in standalone access or the selected media-source-display
+getter (400), and this exact empty DELETE identity (400). All other diagnostics,
+including any Node 500, remain failures. The native read/delete logger blocks
+for these argument failures are retained separately after actual process stop.
+
+The registered physical Folder reaches native `BaseItem.IsVisible(null)`, which
+throws `ArgumentNullException`; native `ExceptionMiddleware` maps it to HTTP 400.
+An empty physical-source sequence instead reaches the manager's `user.Id`
+dereference and yields 500. This HTTP fixture retains real physical roots and
+therefore cannot authorize that latter status. Actual nullable-source variants
+and their typed virtual-method short circuits are measured by the separate
+recordings component fixture. For a selected `EnableMediaSourceDisplay`, native
+first resolves `ChannelId` and rejects empty IDs even with an empty channel
+provider inventory. An unselected field must not evaluate that getter. Nonempty
+missing/wrong-type IDs retain the empty-inventory short circuit; nonempty channel
+provider inventory and `IDisableMediaSourceDisplay` consumption remain an
+unimplemented producer boundary rather than a supplied compatibility result.
+
+The retained external livestream is an ordinary file-backed Video with a
+nonempty ChannelId. Actual BaseItem.GetMediaSources falls back to its ordinary
+version source when ChannelManager's saved-source cache is empty, and this HTTP
+case compares its complete successful DTO rather than accepting a Channel-only
+501 diagnostic. This fixture does not install a saved
+`channelmediasourceinfos.json`. Nonempty saved channel caches and their native
+normalization are a remaining retained-input risk; this fix does not claim
+that reader or an external Channel provider has been implemented.
 
 Native and Node DELETE runs start from the same pre-delete graph and compare
 authorization/binding/status, complete changed rows, remaining source bytes and

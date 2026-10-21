@@ -5,6 +5,12 @@ import { LiveTvService } from './library/live-tv-service.js';
 import { LiveTvTimersService } from './library/live-tv-timers-service.js';
 import { LiveTvRecordingsService } from './library/live-tv-recordings-service.js';
 import { LiveTvRecordingFolders } from './library/live-tv-recording-folders.js';
+import { LiveTvSourcesService } from './library/live-tv-sources-service.js';
+import { LiveTvTunerService } from './library/live-tv-tuner-service.js';
+import { LiveTvGuideService } from './library/live-tv-guide-service.js';
+import { LiveTvGuideImages } from './library/live-tv-guide-images.js';
+import { LiveTvCountriesClient } from './core/live-tv-countries.js';
+import { LiveTvMediaSources } from './library/live-tv-media-sources.js';
 import { createIntroPathResolver } from './library/intro-path-resolver.js';
 import { guid, nonemptyId, libraryError } from './library/records.js';
 import { LibraryTaskScheduler } from './library/library-task-scheduler.js';
@@ -17,6 +23,10 @@ import { createApplication } from './http/application.js';
 import { createCoreLocalization } from './core/i18n.js';
 import { loadLibraryOptions, createVirtualPathExpander } from './library/options.js';
 import { PlaybackService } from './playback/service.js';
+import { LiveStreamsService } from './playback/live-streams.js';
+import { LiveStreamProbe } from './playback/live-stream-probe.js';
+import { probeRaw } from './storage/ffprobe.js';
+import { normalizeProbe } from './storage/probe-normalizer.js';
 import { ProbeService } from './library/probe-service.js';
 import { detectUdfDiscType } from './storage/udf-disc-type.js';
 import { ExternalDataManager } from './library/external-data.js';
@@ -65,6 +75,7 @@ import { BrandingService } from './branding/service.js';
 import { LibraryOptionsStore } from './library/library-options-store.js';
 import { LibraryConfigurationService } from './library/library-configuration-service.js';
 import { refreshLibraryTaskId } from './tasks/refresh-library-task.js';
+import { RefreshGuideTaskWorker, refreshGuideTaskId } from './tasks/refresh-guide-task.js';
 import { DisplayPreferencesService } from './users/display-preferences-service.js';
 import { StartupService } from './users/startup-service.js';
 
@@ -234,7 +245,9 @@ export async function createRuntime({ database, configuration, serverId, serverN
   const hls = probe ? new HlsService({ vfs, bridge: probe.bridge, remux, encodingOptions, onError, ...hlsOptions }) : undefined;
   if (hls) rollback.push(() => hls.close());
   sessions.hls = hls;
-  const playback = new PlaybackService({ library, vfs, identityMap, sessions, configuration, serverVersion, isLocalNetwork, probe, extraction, remux, hls });
+  let liveTvMediaSources, liveStreams, liveStreamProbe;
+  const playback = new PlaybackService({ library, vfs, identityMap, sessions, configuration, serverVersion, isLocalNetwork, probe, extraction, remux, hls,
+    getLiveTvMediaSources: () => liveTvMediaSources, getLiveStreams: () => liveStreams });
   const imageProcessor = new ImageProcessor({ fileSystem, cachePath: cachePath && path.join(cachePath, 'images'), logger, ...imageOptions });
   rollback.push(() => imageProcessor.close());
   splashscreen = dataPath ? new SplashscreenImageGenerator({ dataPath, logger,
@@ -393,6 +406,55 @@ export async function createRuntime({ database, configuration, serverId, serverN
       ?? new MetadataImageAssets({ fileSystem, vfs, identityMap, metadataPath, stateRoots: [dataPath] }) }) : undefined;
   liveTvRecordingFolders?.start();
   if (liveTvRecordingFolders) rollback.push(() => liveTvRecordingFolders.close());
+  let liveTvSources, liveTvTuners, liveTvGuideImages, liveTvGuide, liveTvCountries, guideTaskConfiguration;
+  if (liveTvRecordingFolders && cachePath && loadContext && itemCreation && itemDeletion && metadataScanner) {
+    liveTvCountries = new LiveTvCountriesClient({ cachePath, userAgent: `MediaManager/${serverVersion}` });
+    rollback.push(() => liveTvCountries.close());
+    await liveTvCountries.initialize();
+    liveTvSources = new LiveTvSourcesService({ liveTv, plugins, fileSystem, cachePath, onError,
+      getCulture: () => localization.context.culture,
+      getSchedulesDirectCountries: () => liveTvCountries.getCountries(),
+      refreshGuide: () => { void tasks.cancelIfRunningAndQueue(refreshGuideTaskId).catch(error => {
+        if (error.code !== 'cancelled') onError?.(error);
+      }); } });
+    rollback.push(() => liveTvSources.close());
+    liveTvTuners = new LiveTvTunerService({ plugins, sources: liveTvSources, onError });
+    rollback.push(() => liveTvTuners.close());
+    liveTvMediaSources = new LiveTvMediaSources({ tuners: liveTvTuners, library, onError,
+      getLocalApiUrl: () => `http://127.0.0.1:${application.server.address()?.port}` });
+    rollback.push(() => liveTvMediaSources.close());
+    liveStreamProbe = new LiveStreamProbe({ cachePath, probeOptions, onError,
+      probeFile: async (source, options) => {
+        if (!probe) throw libraryError(503, 'Mapped live media probing is unavailable.');
+        const location = playback.accessPath({ Id: source.Id, Path: source.Path }, source.Path, false);
+        const result = await probeRaw(probe.bridge, location, options);
+        return normalizeProbe(result.raw, { path: source.Path, protocol: source.Protocol, videoType: source.VideoType ?? null, isAudio: false });
+      } });
+    rollback.push(() => liveStreamProbe.close());
+    liveStreams = new LiveStreamsService({ tuners: liveTvTuners, library, probe: liveStreamProbe, onError,
+      getLocalApiUrl: () => `http://127.0.0.1:${application.server.address()?.port}${configuration.BaseUrl ?? ''}` });
+    rollback.push(() => liveStreams.close());
+    sessions.liveStreams = liveStreams;
+    liveTvGuideImages = new LiveTvGuideImages({ store, linkedChildren, loadContext, itemCreation, updates: metadataUpdates,
+      images: metadataImages, isImageDailyLimitActive: () => liveTvCountries.isImageDailyLimitActive(), onError,
+      runWorker: operation => store.runChild(() => loadContext.withDetachedScope(operation)) });
+    rollback.push(() => liveTvGuideImages.close());
+    const guideServices = () => [liveTvTuners];
+    liveTvGuide = new LiveTvGuideService({ liveTv, services: guideServices, recordingFolders: liveTvRecordingFolders,
+      sources: liveTvSources, library, store, itemCreation, itemDeletion, linkedChildren, loadContext,
+      updates: metadataUpdates, metadataScanner, images: liveTvGuideImages,
+      metadataAssets: new MetadataImageAssets({ fileSystem, vfs: metadataVfs, identityMap: metadataIdentityMap, metadataPath }), onError });
+    rollback.push(() => liveTvGuide.close());
+    // Task DTOs and ordered event publication may read configuration after
+    // shutdown freezes new configuration admission. The task owner retains a
+    // live read capability, with no second cache, until all task work drains.
+    guideTaskConfiguration = liveTv.admitRead();
+    rollback.push(async () => { try { await tasks.close(); } finally { guideTaskConfiguration.release(); } });
+    await tasks.register({ create: options => new RefreshGuideTaskWorker({ ...options,
+      getGuideServiceCount: () => guideServices().length,
+      getGuideConfiguration: () => guideTaskConfiguration.getConfiguration(),
+      refreshGuide: options => liveTvGuide.refresh(options) }) });
+  }
   const collectionServices = libraryConfiguration && itemCreation && metadataUpdates ? createCollectionRuntimeServices({ fileSystem,
     store, library, itemCreation, loadContext, updates: metadataUpdates, metadata, host: libraryScanHost,
     libraryConfiguration, monitor: libraryMonitor, programDataPath, dataPath, localization, linkedChildren, logger, onError
@@ -438,6 +500,14 @@ export async function createRuntime({ database, configuration, serverId, serverN
   services.liveTvTimers = liveTvTimers;
   services.liveTvRecordings = liveTvRecordings;
   services.liveTvRecordingFolders = liveTvRecordingFolders;
+  services.liveTvSources = liveTvSources;
+  services.liveTvTuners = liveTvTuners;
+  services.liveTvMediaSources = liveTvMediaSources;
+  services.liveStreams = liveStreams;
+  services.liveStreamProbe = liveStreamProbe;
+  services.liveTvGuide = liveTvGuide;
+  services.liveTvGuideImages = liveTvGuideImages;
+  services.liveTvCountries = liveTvCountries;
   services.cleanDatabasePostScanTask = cleanDatabasePostScanTask;
   services.splashscreen = splashscreen;
   services.branding = branding;
@@ -501,6 +571,16 @@ export async function createRuntime({ database, configuration, serverId, serverN
       const errors = [];
       const attempt = async operation => { try { await operation(); } catch (error) { errors.push(error); } };
       application.beginClose();
+      sessions.beginClose();
+      const guideClosing = liveTvGuide?.close();
+      // An admitted guide can still reach its token-independent image phase
+      // after a program COMMIT. Keep that dependency admitted until guide drain.
+      const guideImagesClosing = Promise.allSettled([guideClosing]).then(() => liveTvGuideImages?.close());
+      const publicStreamsClosing = liveStreams?.close();
+      const liveProbeClosing = Promise.allSettled([publicStreamsClosing]).then(() => liveStreamProbe?.close());
+      const mediaSourcesClosing = Promise.allSettled([publicStreamsClosing]).then(() => liveTvMediaSources?.close());
+      const tunerClosing = Promise.allSettled([mediaSourcesClosing]).then(() => liveTvTuners?.close());
+      const sourcesClosing = liveTvSources?.close();
       // Freeze save admission before cancelling metadata. Each already queued
       // save synchronously reserved its recording-folder dependencies; those
       // reservations can finish their own reads and follow-up saves.
@@ -530,7 +610,18 @@ export async function createRuntime({ database, configuration, serverId, serverN
         attempt(() => collections?.close()),
         attempt(() => libraryConfiguration?.close()),
         attempt(() => libraryMonitor?.close()),
-        attempt(() => tasks.close()),
+        attempt(async () => { try { await tasks.close(); } finally { guideTaskConfiguration?.release(); } }),
+        attempt(() => guideClosing),
+        attempt(() => guideImagesClosing),
+        attempt(() => tunerClosing),
+        attempt(() => mediaSourcesClosing),
+        attempt(() => publicStreamsClosing),
+        attempt(() => liveProbeClosing),
+        attempt(() => sourcesClosing),
+        attempt(async () => {
+          await Promise.allSettled([guideClosing, guideImagesClosing, sourcesClosing]);
+          await liveTvCountries?.close();
+        }),
         attempt(() => libraryScanner?.close()),
         attempt(() => playlists?.close()),
         attempt(() => metadataEditor.close()),

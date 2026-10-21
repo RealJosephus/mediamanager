@@ -6,6 +6,7 @@ import { emptyGuid, guidD, guidN, sameGuid, nativeDate, int64, isVideo } from '.
 import { equalsIgnoreCase, wireDate } from '../users/native.js';
 import { bindCapabilities, bindPlaybackReport, defaultCapabilities } from './binding.js';
 import { expandPostgresPlayItems } from '../library/playback-items.js';
+import { ordinalIgnoreCaseKey } from '../storage/ordinal-comparer.js';
 
 const emptyPlayerState = () => ({ PositionTicks: null, CanSeek: false, IsPaused: false, IsMuted: false, VolumeLevel: null, AudioStreamIndex: null, SubtitleStreamIndex: null, MediaSourceId: null, PlayMethod: null, RepeatMode: 'RepeatNone', PlaybackOrder: 'Default', LiveStreamId: null });
 const failure = (status, message) => Object.assign(new Error(message), { status });
@@ -28,7 +29,10 @@ export class SessionService extends EventEmitter {
   #timers = new Map();
   #reports = new Map();
   #users = new Map();
+  #liveStreamSessions = new Map();
   #idleTimer;
+  #inactiveTimer;
+  #timersClosing = false;
   constructor({ store, library, userData, users, serverId, configuration = {}, clock = () => new Date(), automaticProgress = true,
     onError = () => {} }) {
     super(); Object.assign(this, { store, library, userData, users, serverId, configuration, clock, automaticProgress, onError });
@@ -76,7 +80,11 @@ export class SessionService extends EventEmitter {
     this.emit('SessionControllerConnected', { SessionInfo: this.#dto(session) });
     return async () => {
       if (!this.#sessions.has(sessionId)) return;
-      if (!session.Controllers.some(entry => entry.isActive())) await this.endSession(sessionId);
+      if (!session.Controllers.some(entry => entry.isActive())) {
+        this.#sessions.delete(sessionId);
+        if (session.PlayState.LiveStreamId) await this.closeLiveStreamIfNeeded(session.PlayState.LiveStreamId, session.Id);
+        this.#sessionEnded(session);
+      }
     };
   }
   async sendCommand(sessionId, messageType, data, { controllingSessionId } = {}) {
@@ -257,10 +265,12 @@ export class SessionService extends EventEmitter {
       }
     });
   }
-  async endSession(sessionId) { const session = this.#session(sessionId, false); if (session) { this.#stopTimer(sessionId); this.#sessions.delete(sessionId); this.emit('SessionEnded', { SessionInfo: this.#dto(session) }); } }
+  #sessionEnded(session) { this.#stopTimer(session.Id); this.emit('SessionEnded', { SessionInfo: this.#dto(session) }); }
+  async endSession(sessionId) { const session = this.#session(sessionId, false); if (session) { this.#sessions.delete(sessionId); this.#sessionEnded(session); } }
   #stopTimer(id) { clearInterval(this.#timers.get(id)); this.#timers.delete(id); this.#reports.delete(id); }
   #startTimer(session, info) {
     this.#stopTimer(session.Id);
+    if (this.#timersClosing) return;
     this.#reports.set(session.Id, { ...info, LastReportedPositionTicks: info.PositionTicks });
     if (!this.automaticProgress) return;
     const timer = setInterval(() => this.advanceProgress(session.Id).catch((error) => this.emit('SessionError', error)), 1000);
@@ -269,12 +279,29 @@ export class SessionService extends EventEmitter {
       this.#idleTimer = setInterval(() => this.checkIdlePlayback().catch((error) => this.emit('SessionError', error)), 300000);
       this.#idleTimer.unref();
     }
+    if (this.configuration.InactiveSessionThreshold > 0) {
+      if (!this.#inactiveTimer) {
+        this.#inactiveTimer = setInterval(() => this.checkInactivePlayback().catch(error => this.emit('SessionError', error)), 60000);
+        this.#inactiveTimer.unref();
+      }
+    } else { clearInterval(this.#inactiveTimer); this.#inactiveTimer = null; }
   }
   async checkIdlePlayback() {
     for (const session of [...this.#sessions.values()]) if (session.NowPlayingItem && this.clock().valueOf() - new Date(session.LastPlaybackCheckIn).valueOf() > 300000) {
-      await this.playbackStopped(session.Id, { Item: session.NowPlayingItem, ItemId: session.NowPlayingItem.Id, MediaSourceId: session.PlayState.MediaSourceId, PositionTicks: this.#reports.get(session.Id)?.LastReportedPositionTicks });
+      await this.playbackStopped(session.Id, { Item: session.NowPlayingItem, ItemId: session.NowPlayingItem.Id, MediaSourceId: session.PlayState.MediaSourceId,
+        PositionTicks: this.#reports.get(session.Id)?.LastReportedPositionTicks });
     }
     if (![...this.#sessions.values()].some((session) => session.NowPlayingItem)) { clearInterval(this.#idleTimer); this.#idleTimer = null; }
+  }
+  checkInactivePlayback() {
+    return this.#run(async () => {
+      for (const session of [...this.#sessions.values()]) if (session.NowPlayingItem && session.PlayState.IsPaused && session.LastPausedDate != null
+        && (this.clock().valueOf() - new Date(session.LastPausedDate).valueOf()) / 60000 > this.configuration.InactiveSessionThreshold) {
+        try { await this.sendPlaystate(session.Id, { Command: 'Stop', ControllingUserId: guidD(session.UserId), SeekPositionTicks: session.PlayState.PositionTicks }, { controllingSessionId: session.Id }); }
+        catch (error) { try { this.onError(error); } catch { /* Native inactive checks log individual command failures. */ } }
+      }
+      if (![...this.#sessions.values()].some(session => session.NowPlayingItem)) { clearInterval(this.#inactiveTimer); this.#inactiveTimer = null; }
+    });
   }
   async advanceProgress(sessionId) {
     const info = this.#reports.get(sessionId);
@@ -295,7 +322,13 @@ export class SessionService extends EventEmitter {
     const info = bindPlaybackReport(report, { stopped: phase === 'stop' });
     info.SessionId = sessionId;
     if ((info.PlayMethod === 'Transcode' || info.PlayMethod === 0) && !this.hls?.hasJob(info.PlaySessionId)) info.PlayMethod = 'DirectPlay';
-    if (phase === 'stop') { this.#stopTimer(sessionId); if (info.PositionTicks < 0n) throw failure(400, "The PlaybackStopInfo's PositionTicks was negative."); }
+    if (phase === 'stop') {
+      this.#stopTimer(sessionId);
+      if (info.PositionTicks < 0n) {
+        if (info.LiveStreamId) await this.closeLiveStreamIfNeeded(info.LiveStreamId, session.Id);
+        throw Object.assign(failure(400, "The PlaybackStopInfo's PositionTicks was negative. (Parameter 'info')"), { nativeException: 'ArgumentOutOfRangeException', parameterName: 'info' });
+      }
+    }
     const users = [];
     for (const id of [session.UserId, ...session.AdditionalUsers.map((user) => user.UserId)]) if (id !== emptyGuid) {
       const user = await this.#user(id); if (user) users.push(user); else if (sameGuid(id, session.UserId)) throw failure(500, 'User not found');
@@ -307,7 +340,13 @@ export class SessionService extends EventEmitter {
     let progressItem = item;
     if (item && isVideo(item) && info.MediaSourceId && !sameGuid(info.MediaSourceId, item.Id)) progressItem = (await this.userData.versions(item)).find((version) => sameGuid(version.Id, info.MediaSourceId)) ?? item;
     info.MediaSourceId ||= guidN(info.ItemId);
-    info.Item ??= item ? await this.library.getItemDto(item, { fields: nowPlayingFields, enableUserData: false }) : null;
+    const cachedItem = info.Item == null && session.NowPlayingItem && sameGuid(session.NowPlayingItem.Id, info.ItemId) ? session.NowPlayingItem : null;
+    const populateItem = info.Item == null && !cachedItem;
+    info.Item ??= cachedItem ?? (item ? await this.library.getItemDto(item, { fields: nowPlayingFields, enableUserData: false }) : null);
+    if (populateItem && info.Item && info.LiveStreamId && this.liveStreams) {
+      const source = this.liveStreams.getLiveStream(info.LiveStreamId);
+      if (source) info.Item.MediaStreams = source.MediaStreams;
+    }
     if (phase === 'stop') { session.NowPlayingItem = null; session.FullNowPlayingItem = null; session.PlayState = emptyPlayerState(); if (info.NowPlayingQueue != null) session.NowPlayingQueue = info.NowPlayingQueue; }
     else {
       session.NowPlayingItem = info.Item; session.LastActivityDate = this.#now();
@@ -318,6 +357,10 @@ export class SessionService extends EventEmitter {
     session.PlaylistItemId = info.PlaylistItemId ?? null;
     let completed = false;
     if (progressItem && !automated) for (const user of users) completed = await this.userData.playback(user, progressItem, phase, info);
+    if (info.LiveStreamId) {
+      if (phase === 'stop') await this.closeLiveStreamIfNeeded(info.LiveStreamId, session.Id);
+      else this.#updateLiveStreamSession(info.LiveStreamId, session.Id, info.PlaySessionId);
+    }
     const event = { Item: item, Users: users, PlaybackPositionTicks: info.PositionTicks, MediaSourceId: info.MediaSourceId, MediaInfo: info.Item, DeviceName: session.DeviceName, ClientName: session.Client, DeviceId: session.DeviceId, Session: this.#dto(session), PlaySessionId: info.PlaySessionId };
     if (phase === 'progress') Object.assign(event, { IsPaused: info.IsPaused ?? false, IsAutomated: automated });
     if (phase === 'stop') event.PlayedToCompletion = completed;
@@ -325,13 +368,44 @@ export class SessionService extends EventEmitter {
     if (phase !== 'stop' && info.PlaySessionId?.trim()) this.hls?.ping(info.PlaySessionId, info.IsPaused ?? false);
     if (phase !== 'stop' && !automated) this.#startTimer(session, info);
   }
-  async close() {
+  #updateLiveStreamSession(id, sessionId, playSessionId) {
+    const identity = ordinalIgnoreCaseKey(id);
+    let mappings = this.#liveStreamSessions.get(identity);
+    if (!mappings) this.#liveStreamSessions.set(identity, mappings = new Map());
+    if (playSessionId) {
+      const previous = mappings.get(sessionId);
+      if (previous !== playSessionId) {
+        if (previous) mappings.delete(previous);
+        mappings.set(sessionId, playSessionId); mappings.set(playSessionId, sessionId);
+      }
+    } else if (!mappings.has(sessionId)) mappings.set(sessionId, '');
+  }
+  async closeLiveStreamIfNeeded(id, sessionOrPlaySessionId) {
+    const identity = ordinalIgnoreCaseKey(id), mappings = this.#liveStreamSessions.get(identity);
+    let close = !mappings;
+    if (mappings) {
+      if (mappings.has(sessionOrPlaySessionId)) {
+        const counterpart = mappings.get(sessionOrPlaySessionId); mappings.delete(sessionOrPlaySessionId);
+        if (counterpart) mappings.delete(counterpart); close = true;
+      }
+      if (!mappings.size) this.#liveStreamSessions.delete(identity);
+    }
+    if (close) try { await this.liveStreams?.closeLiveStream(id); }
+    catch (error) { try { this.onError(error); } catch { /* Native session cleanup logs close failures. */ } }
+  }
+  beginClose() {
+    this.#timersClosing = true;
     clearInterval(this.#idleTimer); this.#idleTimer = null;
+    clearInterval(this.#inactiveTimer); this.#inactiveTimer = null;
     for (const id of this.#reports.keys()) this.#stopTimer(id);
+  }
+  async close() {
+    this.beginClose();
     await this.#tail;
     this.users?.off?.('UserCreated', this.#cacheUser);
     this.users?.off?.('UserUpdated', this.#cacheUser);
     this.users?.off?.('UserDeleted', this.#forgetUser);
     this.#sessions.clear();
+    this.#liveStreamSessions.clear();
   }
 }

@@ -1,0 +1,9 @@
+{
+  "name": "@mediamanager/hdhomerun",
+  "version": "0.1.0",
+  "type": "module",
+  "license": "GPL-2.0-only",
+  "exports": { ".": "./index.js", "./*": "./*" },
+  "mediamanager": { "id": "hdhomerun", "name": "HD Homerun", "entry": "index.js" },
+  "dependencies": { "@mediamanager/plugin-sdk": "0.1.0" }
+}

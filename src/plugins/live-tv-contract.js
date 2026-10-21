@@ -66,11 +66,10 @@ export function validateNativeLiveTvSource(source) {
 }
 
 export function validateLiveTvStreamRequest(channelId, streamId, currentLiveStreams, options) {
-  if (!text(channelId) || !text(streamId) || !Array.isArray(currentLiveStreams)) {
-    throw new TypeError('A tuner stream requires channel and source identities and current live stream leases.');
+  if (!text(channelId) || streamId != null && typeof streamId !== 'string' || !Array.isArray(currentLiveStreams)) {
+    throw new TypeError('A tuner stream requires a channel, nullable original stream identity and current live stream leases.');
   }
   validateNativeLiveTvSource(options?.source);
-  if (options.source.mediaSource.Id !== streamId) throw unsupported('The selected native source identity does not match the stream request.');
 }
 
 export function validateLiveTvSources(sources) {
@@ -108,6 +107,9 @@ export function validateLiveTvResult(kind, method, result) {
 
 export function validateOwnedLiveTvStream(resource) {
   validateNativeLiveTvSource(resource);
+  if (resource.tunerHostId !== null && typeof resource.tunerHostId !== 'string') {
+    throw new TypeError('A live stream lease requires its nullable tuner host identity.');
+  }
   if (typeof resource.close !== 'function') throw new TypeError('A live stream lease requires close().');
   if (resource.stream !== undefined && typeof resource.stream?.[Symbol.asyncIterator] !== 'function') {
     throw new TypeError('A live stream body must be an asynchronous byte iterable.');

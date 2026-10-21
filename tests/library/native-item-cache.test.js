@@ -2,7 +2,6 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { BoundedItemCache } from '../../src/library/bounded-item-cache.js';
 import { ItemCreationService } from '../../src/library/item-creation-service.js';
-import { nativeItemTypes } from '../../src/library/native-item-entity.js';
 import { setupChildrenFixture } from '../metadata/children-fixture.js';
 import { readWarmFixture, assertWarmFixtureSeal } from './warm-fixture-seal.js';
 import { assertProjectedEqual } from '../comparison-observations.js';
@@ -48,15 +47,20 @@ test('bounded item cache capacity cannot be mutated after queue partitioning', (
   const cache = new BoundedItemCache(3);
   assert.throws(() => { cache.capacity = 100; }, TypeError); assert.equal(cache.capacity, 3);
 });
-test('postgres: actual live-item registration agrees with native cacheable constructors', {
+test('postgres: actual live-item registration agrees with the sealed native constructor cases', {
   skip: !process.env.MEDIAMANAGER_TEST_POSTGRES
 }, async t => {
   const value = await setupChildrenFixture(t);
-  await value.seed({ target: nativeItemTypes[0], items: nativeItemTypes.map((type, index) => ({ key: type, type: type.split('.').at(-1), Id: key(index + 1) })) });
-  for (const [index, type] of nativeItemTypes.entries()) await value.database.update('BaseItems', { Id: key(index + 1) }, { Type: type });
+  // This immutable capture predates retained Channel support. Its case set is
+  // authoritative for this comparison; current DLL Channel evidence lives in
+  // live-tv-recordings.test.js rather than being attributed to this old seal.
+  const capturedTypes = input.cases.filter(sample => sample.name.startsWith('registration-')).map(sample => sample.name.slice('registration-'.length));
+  assert.ok(capturedTypes.length > 0);
+  await value.seed({ target: capturedTypes[0], items: capturedTypes.map((type, index) => ({ key: type, type: type.split('.').at(-1), Id: key(index + 1) })) });
+  for (const [index, type] of capturedTypes.entries()) await value.database.update('BaseItems', { Id: key(index + 1) }, { Type: type });
   const creator = new ItemCreationService(value);
   value.library.itemCreation = creator;
-  for (const [index, type] of nativeItemTypes.entries()) {
+  for (const [index, type] of capturedTypes.entries()) {
     const id = key(index + 1), item = await creator.getItemById(id); assert.ok(item, type);
     await value.database.delete('BaseItems', { Id: id });
     const expected = native.results.find(result => result.name === 'registration-' + type).observations[0].count > 0;

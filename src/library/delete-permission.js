@@ -1,6 +1,6 @@
-import { VIDEO_TYPES, nonemptyId, sameId, unsupported } from './records.js';
+import { VIDEO_TYPES, nonemptyId, sameId, libraryError } from './records.js';
 
-const nondeletableTypes = new Set(['AggregateFolder', 'CollectionFolder', 'UserView', 'PlaylistsFolder',
+const nondeletableTypes = new Set(['AggregateFolder', 'CollectionFolder', 'UserView', 'Channel', 'PlaylistsFolder',
   'Person', 'Genre', 'MusicGenre', 'Studio', 'Year']);
 
 // BaseItem.PathProtocol uses MediaSourceManager.GetPathProtocol, not LocationType.
@@ -18,9 +18,16 @@ export function canDeleteItem(item, user, { collectionFolders = () => [], isActi
   if (item.Type === 'MusicArtist') {
     if (!nonemptyId(item.ParentId)) return false;
   } else {
-    if (item.IsFolder && item.IsRoot || !hasFileProtocol(item)) return false;
+    if (item.IsFolder && item.IsRoot) return false;
     if (VIDEO_TYPES.has(item.Type) && isActiveRecording(item)) return false;
-    if (item.SourceType === 'Channel') unsupported('Channel deletion permission requires its native channel manager.');
+    if (item.SourceType === 'Channel') {
+      if (!nonemptyId(item.ChannelId)) throw Object.assign(libraryError(400, "Guid can't be empty (Parameter 'id')"), { nativeException: 'ArgumentException' });
+      // The installed core has no external Channel providers. Native still
+      // resolves this identity, then its empty provider inventory cannot
+      // supply ISupportsDelete, even for a missing or wrong-type referent.
+      return false;
+    }
+    if (!hasFileProtocol(item)) return false;
   }
   // DtoService calls the non-virtual CanDelete(User,List<Folder>) overload.
   // Playlist.IsAuthorizedToDelete in that branch is always true, while the

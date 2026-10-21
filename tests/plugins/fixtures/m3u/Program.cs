@@ -24,6 +24,7 @@ var root = Path.Combine(Path.GetDirectoryName(Path.GetFullPath(args[1]))!, "priv
 Directory.CreateDirectory(root);
 var parsed = new List<object>(); var sources = new List<object>(); var validation = new List<object>();
 var cache = new List<object>();
+var cacheFiles = new List<object>();
 object? multipleHosts = null;
 var handler = new ControlledHandler();
 using var client = new HttpClient(handler);
@@ -78,19 +79,28 @@ try
     var options = new LiveTvOptions { TunerHosts = new[] { tuner } };
     var hostCache = Path.Combine(root, "native-cache"); Directory.CreateDirectory(hostCache);
     var current = Host(options, hostCache);
+    void Snapshot(string name) {
+        var contents = File.ReadAllBytes(Path.Combine(hostCache, tuner.Id + "_channels"));
+        cacheFiles.Add(new { name, bytesBase64 = Convert.ToBase64String(contents), length = contents.Length,
+            sha256 = Convert.ToHexStringLower(SHA256.HashData(contents)) });
+    }
     handler.Bytes = Convert.FromBase64String(input.GetProperty("cacheBytesBase64").GetString()!);
     async Task Observe(string name, M3UTunerHost host, bool enabled)
     {
         var requests = handler.Requests.Count;
-        cache.Add(new { name, channels = await host.GetChannels(enabled, CancellationToken.None), requests = handler.Requests.Count - requests });
+        List<ChannelInfo>? channels = null; string? error = null;
+        try { channels = await host.GetChannels(enabled, CancellationToken.None); } catch (Exception caught) { error = caught.GetType().Name; }
+        cache.Add(new { name, channels, error, requests = handler.Requests.Count - requests });
     }
     await Observe("first-force", current, false);
+    Snapshot("first-force");
     handler.Fail = true;
     await Observe("memory-after-source-failure", current, true);
     await Observe("force-failure", current, false);
     await Observe("cold-native-disk-fallback", Host(options, hostCache), true);
     handler.Fail = false; handler.Bytes = "#EXTM3U\n"u8.ToArray();
     await Observe("force-empty", current, false);
+    Snapshot("force-empty");
     await Observe("nonempty-memory-survives-empty", current, true);
     handler.Fail = true;
     await Observe("cold-empty-native-disk", Host(options, hostCache), true);
@@ -110,7 +120,7 @@ var assemblies = new[] { typeof(M3uParser).Assembly, typeof(M3UTunerHost).Assemb
 File.WriteAllText(args[1], JsonSerializer.Serialize(new { inputSha256 = Convert.ToHexString(SHA256.HashData(inputBytes)).ToLowerInvariant(),
     actualM3uParser = true, actualBaseTunerHost = true, actualM3uTunerHost = true, actualPathProtocol = true,
     networkClassificationControlled = true, transportControlled = true, recordingOrTranscodingStarted = false,
-    privateInputsRemoved = !Directory.Exists(root), parsed, sources, validation, cache, multipleHosts, assemblies }, json));
+    privateInputsRemoved = !Directory.Exists(root), parsed, sources, validation, cache, cacheFiles, multipleHosts, assemblies }, json));
 
 public class Stub : DispatchProxy
 {

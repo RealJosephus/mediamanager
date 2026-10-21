@@ -1,7 +1,8 @@
 import { HttpResult, BindingError, noContent, notFound, badRequest, httpError, member, requireMember,
   queryValue, booleanValue, integerValue, guidValue } from './binding.js';
 import { validateUserBody } from './user-binding.js';
-import { parseInvariantDate, parsePlayedDate } from './date-binding.js';
+import { parsePlayedDate } from './date-binding.js';
+import { parseInvariantDate } from '../core/invariant-date-parse.js';
 import { validateClientCapabilitiesDto } from './client-capabilities-binding.js';
 import { bindSessionsQuery } from './session-management-binding.js';
 import { bindDevicesUserId, requiredDeviceId, deviceIds, validateDeviceOptionsBody } from './device-binding.js';

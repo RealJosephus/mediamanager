@@ -1,7 +1,6 @@
 import path from 'node:path';
 import { clrTrim } from '../metadata/whitespace.js';
 import { ordinalIgnoreCaseEquals } from '../storage/ordinal-comparer.js';
-import { libraryError } from './records.js';
 
 const absent = new Set(['ENOENT', 'ENOTDIR', 'EACCES', 'EPERM', 'not-found', 'not-directory',
   'unmapped-path', 'invalid-path', 'permission-denied', 'authentication-required']);
@@ -49,8 +48,6 @@ export class LiveTvRecordingsService {
   }
 
   async getFolders({ user = null } = {}) {
-    // The native manager dereferences user.Id when requesting provider roots.
-    if (!user) throw libraryError(500, 'Recording folders require a user.');
     const { Items } = await this.library.resolveLiveTvRecordingFolders(await this.#paths(), { user, includeDtos: true });
     return { Items, TotalRecordCount: Items.length, StartIndex: 0 };
   }

@@ -61,6 +61,18 @@ const byName = Object.fromEntries(types.map(([nativeType, type]) => [type, nativ
 const fixedUnrated = new Set(['Movie', 'Episode', 'Series', 'Season', 'BoxSet', 'AudioBook',
   'MusicVideo', 'Trailer', 'LiveTvProgram', 'LiveTvChannel', 'MusicAlbum', 'MusicArtist', 'Book']);
 
+test('constructing a channel leaves its lazy media display getter unobserved until explicitly selected', () => {
+  const item = newNativeItemEntity('MediaBrowser.Controller.Channels.Channel');
+  assert.equal(item.SourceType, 'Channel'); assert.equal(item.ChannelId, EMPTY_ID);
+  assert.equal(Object.keys(item).includes('EnableMediaSourceDisplay'), false);
+  assert.doesNotThrow(() => ({ ...item }));
+  assert.throws(() => item.EnableMediaSourceDisplay, { status: 400, nativeException: 'ArgumentException' });
+  const clone = cloneNativeItemEntity(item);
+  assert.throws(() => clone.EnableMediaSourceDisplay, { status: 400, nativeException: 'ArgumentException' });
+  item.ChannelId = guid('a9b10000000000000000000000000001');
+  assert.equal(item.EnableMediaSourceDisplay, true);
+});
+
 test('native factory exposes the exact full-29 registry and rejects discriminator guesses', () => {
   assert.equal(types.length, 29);
   for (const [nativeType, type, family, requiresJson, mediaType, unratedType, resolverCreation,
@@ -165,6 +177,8 @@ test('type-specific constructor defaults match the pinned native constructors', 
   assert.deepEqual(newNativeItemEntity(byName.MusicVideo).Artists, []);
   assert.deepEqual(newNativeItemEntity(byName.Trailer).TrailerTypes, []);
   const liveTvProgram = newNativeItemEntity(byName.LiveTvProgram);
+  assert.equal(newNativeItemEntity(byName.LiveTvChannel).EnableRememberingTrackSelections, false);
+  assert.equal(liveTvProgram.EnableRememberingTrackSelections, true);
   assert.deepEqual({ Type: liveTvProgram.Type, SourceType: liveTvProgram.SourceType,
     IsVirtualItem: liveTvProgram.IsVirtualItem, IsFolder: liveTvProgram.IsFolder,
     MediaType: liveTvProgram.MediaType, UnratedType: liveTvProgram.UnratedType,

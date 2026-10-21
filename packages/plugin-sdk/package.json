@@ -16,6 +16,7 @@
     "./metadata/whitespace": "./metadata/whitespace.js",
     "./http/date-binding": "./http/date-binding.js",
     "./core/invariant-date-format": "./core/invariant-date-format.js",
+    "./core/invariant-date-parse": "./core/invariant-date-parse.js",
     "./metadata/clr-enum": "./metadata/clr-enum.js",
     "./core/native-text": "./core/native-text.js",
     "./metadata/save-manager": "./metadata/save-manager.js",
@@ -46,6 +47,9 @@
     "./core/configuration-file": "./core/configuration-file.js",
     "./library/metadata-context": "./library/metadata-context.js",
     "./configuration": "./configuration.js",
-    "./live-tv/contract": "./live-tv/contract.js"
+    "./live-tv/contract": "./live-tv/contract.js",
+    "./live-tv/raw-input": "./live-tv/raw-input.js",
+    "./core/json-tokens": "./core/json-tokens.js",
+    "./core/json": "./core/json.js"
   }
 }

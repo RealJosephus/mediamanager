@@ -22,6 +22,16 @@ for (const separateData of [false, true]) test(`postgres: initialized playlists 
       configuration: { UICulture: 'en-US' }, serverId: 'root-platform' });
     const aggregate = await runtime.libraryScanHost.getAggregateFolder();
     const userRoot = await runtime.libraryScanHost.getUserRootFolder();
+    assert.deepEqual(await database.rows('BaseItems', { where: { Id: userRoot.Id } }), [],
+      'Native GetUserRootFolder registers the singleton without saving it.');
+    await runtime.libraryConfiguration.getVirtualFolders();
+    assert.deepEqual(await database.rows('BaseItems', { where: { Id: userRoot.Id } }), [],
+      'Reading virtual folders must retain the absent repository baseline.');
+    const cancelled = new AbortController(); cancelled.abort();
+    await assert.rejects(runtime.libraryScanHost.refreshMetadata(userRoot, { signal: cancelled.signal }), { name: 'AbortError' });
+    assert.deepEqual(await database.rows('BaseItems', { where: { Id: userRoot.Id } }), [],
+      'A cancelled refresh must not save the transient root.');
+    await runtime.libraryScanHost.refreshMetadata(userRoot, { MetadataRefreshMode: 'None', ImageRefreshMode: 'None', ForceSave: true });
     const userRootBefore = await database.rows('BaseItems', { where: { Id: userRoot.Id } });
     assert.equal(userRootBefore.length, 1, 'Move a persisted UserRootFolder, rather than only its transient form.');
     const playlists = aggregate.VirtualChildren.find(item => item.Type === 'PlaylistsFolder');

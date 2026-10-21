@@ -1,0 +1,69 @@
+{
+  "cases": [
+    { "name": "outer live ID is insensitive while replacement play mappings are exact", "opens": 2, "sessions": ["a", "b"], "actions": [
+      { "kind": "start", "session": "a", "play": "Play-A" },
+      { "kind": "start", "session": "b", "play": "Play-C", "upperStream": true },
+      { "kind": "progress", "session": "a", "play": "Play-B" },
+      { "kind": "close", "identity": "Play-A" },
+      { "kind": "close", "identity": "play-b", "upperStream": true },
+      { "kind": "close", "session": "a", "identity": "$session", "upperIdentity": true },
+      { "kind": "close", "identity": "Play-B", "upperStream": true },
+      { "kind": "stop", "session": "b", "play": "Play-C" },
+      { "kind": "stop", "session": "a", "play": "Play-B" }
+    ] },
+    { "name": "empty play ID preserves an existing bidirectional mapping", "opens": 1, "sessions": ["a"], "actions": [
+      { "kind": "start", "session": "a" },
+      { "kind": "progress", "session": "a", "play": "Exact-Play" },
+      { "kind": "progress", "session": "a" },
+      { "kind": "close", "identity": "Exact-Play" },
+      { "kind": "close", "identity": "unknown" }
+    ] },
+    { "name": "negative stop closes before its argument error and retains now playing", "opens": 1, "sessions": ["a"], "actions": [
+      { "kind": "start", "session": "a", "play": "negative" },
+      { "kind": "stop", "session": "a", "play": "negative", "position": "-1" },
+      { "kind": "stop", "session": "a", "play": "negative" }
+    ] },
+    { "name": "idle stop keeps live mapping for a later explicit close", "opens": 1, "sessions": ["a"], "actions": [
+      { "kind": "start", "session": "a", "play": "idle" },
+      { "kind": "idle", "session": "a" },
+      { "kind": "close", "identity": "idle" }
+    ] },
+    { "name": "paused inactivity sends a Stop command without closing or clearing playback", "opens": 1, "sessions": ["a"], "actions": [
+      { "kind": "start", "session": "a", "play": "paused" },
+      { "kind": "inactive", "session": "a" },
+      { "kind": "stop", "session": "a", "play": "paused" }
+    ] },
+    { "name": "ReportSessionEnded disposes its timers but leaves stream mapping", "opens": 1, "sessions": ["a"], "actions": [
+      { "kind": "start", "session": "a", "play": "ended" },
+      { "kind": "end", "session": "a" },
+      { "kind": "progress", "session": "a", "play": "late" },
+      { "kind": "close", "identity": "ended" },
+      { "kind": "end", "session": "a" }
+    ] },
+    { "name": "inactive controller disconnect closes before SessionEnded", "opens": 1, "sessions": ["a"], "actions": [
+      { "kind": "start", "session": "a", "play": "disconnect" },
+      { "kind": "disconnect", "session": "a" },
+      { "kind": "close", "identity": "disconnect" }
+    ] },
+    { "name": "close failure is logged after mapping removal and does not suppress stopped", "opens": 1, "sessions": ["a"], "throwCloseOnce": true, "actions": [
+      { "kind": "start", "session": "a", "play": "failure" },
+      { "kind": "stop", "session": "a", "play": "failure" },
+      { "kind": "close", "identity": "failure" }
+    ] },
+    { "name": "an awaited close blocks negative-stop failure until released", "opens": 1, "sessions": ["a"], "actions": [
+      { "kind": "start", "session": "a", "play": "held" },
+      { "kind": "held-negative", "session": "a", "play": "held", "position": "-1" }
+    ] },
+    { "name": "current DTO retains its original live tracks across progress and stop", "opens": 1, "sessions": ["a"], "actions": [
+      { "kind": "start", "session": "a", "play": "warm", "noItem": true },
+      { "kind": "source-revision" },
+      { "kind": "progress", "session": "a", "play": "warm", "noItem": true },
+      { "kind": "stop", "session": "a", "play": "warm", "noItem": true }
+    ] },
+    { "name": "unknown progress does not register a stream and unknown mapping closes", "opens": 1, "sessions": [], "actions": [
+      { "kind": "close", "identity": "never", "unknownStream": true },
+      { "kind": "progress", "session": "missing", "play": "never" },
+      { "kind": "close", "identity": "never", "upperStream": true }
+    ] }
+  ]
+}

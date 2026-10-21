@@ -68,9 +68,9 @@ class PluginScope {
     }
     return this.track(result);
   }
-  sharingCapability(resource,sourceId) {
+  sharingCapability(resource,sourceId,tunerHostId) {
     const existing=this.liveSharing.get(resource);
-    if(existing){if(existing.sourceId!==sourceId)throw new TypeError('A shared input cannot change source identity.');return existing.facade;}
+    if(existing){if(existing.sourceId!==sourceId||existing.tunerHostId!==tunerHostId)throw new TypeError('A shared input cannot change source or tuner host identity.');return existing.facade;}
     const scope=this,facade=Object.freeze({
       get enabled(){return scope.active&&scope.admitted&&resource.enabled===true;},
       retain(options={}) {
@@ -80,12 +80,12 @@ class PluginScope {
         return scope.track(Promise.resolve().then(()=>{
           if(!scope.active||!scope.admitted||resource.enabled!==true)throw error(503,'The shared live input is unavailable.');
           signal.throwIfAborted();return resource.retain({...options,signal});
-        }).then(child=>scope.liveStream(child,signal,sourceId,resource)));
+        }).then(child=>scope.liveStream(child,signal,sourceId,resource,tunerHostId)));
       },
     });
-    this.liveSharing.set(resource,{sourceId,facade});return facade;
+    this.liveSharing.set(resource,{sourceId,tunerHostId,facade});return facade;
   }
-  async liveStream(resource,signal,sourceId,sharing) {
+  async liveStream(resource,signal,sourceId,sharing,tunerHostId) {
     const scope=this;let closing,iterator;
     const aborted=()=>{void close().catch(()=>{});};
     const close=()=>{
@@ -109,6 +109,7 @@ class PluginScope {
       validateOwnedLiveTvStream(resource);
       if(resource.mediaSource.Id!==sourceId)throw new TypeError('The opened live stream has a different source identity.');
       if(sharing&&resource.sharing!==sharing)throw new TypeError('A retained live stream must belong to the same shared input.');
+      if(sharing&&resource.tunerHostId!==tunerHostId)throw new TypeError('A retained live stream must belong to the same tuner host.');
       if(!scope.active||!scope.admitted)throw error(503,'The plugin is unavailable.');
       signal.throwIfAborted();
       const available=()=>{if(closing||!scope.active||!scope.admitted)throw error(503,'The live stream lease is closed.');signal.throwIfAborted();};
@@ -119,8 +120,8 @@ class PluginScope {
         return(value){return scope.track(close().then(()=>({done:true,value})));},
       };
       const lease=Object.freeze({mode:'native',...(resource.profile===undefined?{}:{profile:resource.profile}),
-        mediaSource:structuredClone(resource.mediaSource),...(stream?{stream}:{}),
-        ...(resource.sharing?{sharing:scope.sharingCapability(resource.sharing,sourceId)}:{}),close});
+        tunerHostId:resource.tunerHostId,mediaSource:structuredClone(resource.mediaSource),...(stream?{stream}:{}),
+        ...(resource.sharing?{sharing:scope.sharingCapability(resource.sharing,sourceId,resource.tunerHostId)}:{}),close});
       signal.addEventListener('abort',aborted,{once:true});signal.throwIfAborted();
       return lease;
     } catch(cause) {
@@ -143,9 +144,10 @@ class PluginScope {
         const signal=positions&&(args[positions[key]]?.signal?AbortSignal.any([args[positions[key]].signal,scope.controller.signal]):scope.controller.signal);
         signal?.throwIfAborted();
         if(positions&&key==='getChannelStream')validateLiveTvStreamRequest(...args);
+        const liveSourceId=positions&&key==='getChannelStream'?args[3].source.mediaSource.Id:undefined;
         const result=scope.call(target,key,args,positions??(kind==='adapter'?storageSignals:signals),!positions);
         if(positions)return scope.track(Promise.resolve(result).then(async result=>{
-          if(kind==='tuner'&&key==='getChannelStream')return scope.liveStream(result,signal,args[1]);
+          if(kind==='tuner'&&key==='getChannelStream')return scope.liveStream(result,signal,liveSourceId);
           if(!scope.active||!scope.admitted)throw error(503,'The plugin is unavailable.');
           signal.throwIfAborted();
           validateLiveTvResult(kind,key,result);

@@ -47,7 +47,7 @@ export class LiveTvGuideImages {
   preCache(view, maxCacheDate) {
     if (this.#closed) return Promise.reject(libraryError(503, 'Guide image caching has closed.'));
     if (typeof view?.guideImagePlan !== 'function' || typeof view?.withSlot !== 'function') return Promise.reject(new TypeError('An owned native program cohort is required.'));
-    const cutoff = dateTicks(maxCacheDate), retained = view.retain();
+    const cutoff = dateTicks(maxCacheDate instanceof Date ? maxCacheDate.toISOString() : maxCacheDate), retained = view.retain();
     // Publish admission before invoking a potentially reentrant limit callback.
     const pending = Promise.resolve().then(() => this.#preCache(retained, cutoff));
     this.#work.add(pending);
@@ -60,7 +60,7 @@ export class LiveTvGuideImages {
     const stopped = new AbortController(), active = new Set(); let workerFailure;
     const signal = AbortSignal.any([this.#lifetime.signal, stopped.signal]);
     try {
-      const limited = this.isImageDailyLimitActive();
+      const limited = await this.isImageDailyLimitActive();
       await view.flush();
       selected = await this.store.run(async session => {
         if (session.inTransaction) throw new TypeError('Guide image selection requires a nontransaction session.');
@@ -102,13 +102,16 @@ export class LiveTvGuideImages {
   }
 
   async #program(item, signal) {
-    if (this.isImageDailyLimitActive() && allLocalOrSd(item)) return;
+    if (await this.isImageDailyLimitActive() && allLocalOrSd(item)) return;
     if (!Array.isArray(item.ImageInfos)) throw nullReference();
     for (let index = 0; index < item.ImageInfos.length; index++) {
       if (signal.aborted) return;
       const image = item.ImageInfos[index];
-      if (local(image) || sd(image) && this.isImageDailyLimitActive()) continue;
-      try { item.ImageInfos[index] = await this.#convert(item, image); }
+      if (local(image) || sd(image) && await this.isImageDailyLimitActive()) continue;
+      try {
+        const converted = await this.#convert(item, image);
+        item.ImageInfos[index] = converted;
+      }
       catch (error) { try { void Promise.resolve(this.onError(error, image.Path, item)).catch(() => {}); } catch { /* Logging does not change per-image continuation. */ } }
     }
   }

@@ -107,6 +107,34 @@ test('detached work cannot observe or join its originating PostgreSQL transactio
   assert.deepEqual((await store.run(db => db.rows('ApiKeys'))).map(row => row.Name), ['detached-commit']);
 });
 
+test('an awaited PostgreSQL child uses an independent connection before background work waiting for its parent', {
+  skip: !postgresTestConnectionString,
+}, async t => {
+  const { store } = await postgresStoreFixture(t, 'domain_child');
+  const order = [];
+  let background;
+  await store.run(async parent => {
+    await parent.insert('ApiKeys', apiKey('parent-committed'));
+    background = store.enqueue(async db => {
+      order.push('background');
+      await db.insert('ApiKeys', apiKey('background'));
+    });
+    await bounded(store.runChild(async child => {
+      order.push('child');
+      assert.notEqual(child.client, parent.client);
+      assert.equal(await store.run(db => db.client), child.client);
+      assert.deepEqual((await child.rows('ApiKeys')).map(row => row.Name), ['parent-committed']);
+      await store.transaction(db => db.insert('ApiKeys', apiKey('child-committed')));
+      assert.deepEqual(order, ['child']);
+    }), 5000);
+    order.push('parent-finished');
+  });
+  await bounded(background, 5000);
+  assert.deepEqual(order, ['child', 'parent-finished', 'background']);
+  assert.deepEqual((await store.run(db => db.rows('ApiKeys'))).map(row => row.Name).sort(),
+    ['background', 'child-committed', 'parent-committed']);
+});
+
 test('an aborted enqueue never runs and a failed background operation leaves the connection queue usable', {
   skip: !postgresTestConnectionString,
 }, async t => {
@@ -202,6 +230,41 @@ class MockPostgresPool {
     this.ended = true;
   }
 }
+
+test('domain child admission rejects external callers and parents holding transactions or writer locks', async () => {
+  const pool = new MockPostgresPool();
+  const store = new DomainStore(new PostgresDatabase(pool, 'child_admission_fixture'));
+  let calls = 0;
+  const rejected = () => assert.rejects(store.runChild(() => { calls++; }), /active operation outside a transaction or writer lock/);
+  await rejected(); assert.equal(pool.clients.length, 0);
+  await store.transaction(rejected);
+  await store.serializeWrites(rejected);
+  assert.equal(pool.clients.length, 2); assert.equal(pool.active, 0); assert.equal(calls, 0);
+  await store.close(); await rejected();
+  assert.equal(pool.ended, true);
+});
+
+test('domain shutdown drains an admitted child after its parent returns and freezes external admission', async () => {
+  const pool = new MockPostgresPool();
+  const store = new DomainStore(new PostgresDatabase(pool, 'child_close_fixture'));
+  const entered = Promise.withResolvers(), release = Promise.withResolvers();
+  let child, closing, drained = false;
+  try {
+    await store.run(async () => {
+      child = store.runChild(async db => {
+        entered.resolve(); await release.promise;
+        assert.equal(await store.run(nested => nested.client), db.client);
+        await db.client.query('SELECT id');
+      });
+      await bounded(entered.promise);
+    });
+    closing = store.close().then(() => { drained = true; });
+    assert.equal(drained, false); assert.equal(pool.active, 1); assert.equal(pool.ended, false);
+    await assert.rejects(store.run(() => assert.fail('External admission after close.')), /Database store is closing/);
+    release.resolve(); await bounded(child); await bounded(closing);
+    assert.equal(drained, true); assert.equal(pool.active, 0); assert.equal(pool.ended, true);
+  } finally { release.resolve(); await Promise.allSettled([child, closing]); await store.close(); }
+});
 
 test('PostgreSQL domain operations overlap, pin one configured connection and reuse it when reentrant', async () => {
   const pool = new MockPostgresPool();

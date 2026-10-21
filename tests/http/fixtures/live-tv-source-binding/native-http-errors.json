@@ -1,0 +1,289 @@
+{
+  "schemaVersion": 1,
+  "provenance": {
+    "runId": "39647768077",
+    "artifact": "validation-ubuntu-24.04-shard-1-1",
+    "sourceReport": "live-tv-sources-http-6f4dacf0-a974-4b02-ad06-ff54d9dc63f6/report.json",
+    "sourceReportSha256": "ed813f0f18c7a73c9147bebde39a158591d2e7a0e00d628c3b859bb3d41e6ff9",
+    "nativeBuildIdentitySha256": "c71eb64fcbb0c7a290eba5620f14a7e55ba009def5d0573d64497207ac685e08",
+    "realNativeHttp": true
+  },
+  "cases": [
+    {
+      "name": "typed /LiveTv/TunerHosts:null body",
+      "request": {
+        "route": "/LiveTv/TunerHosts",
+        "method": "POST",
+        "mode": "apiKey",
+        "rawBody": "null"
+      },
+      "response": {
+        "status": 400,
+        "contentType": "application/json; charset=utf-8",
+        "bodyText": "{\"type\":\"https://tools.ietf.org/html/rfc9110#section-15.5.1\",\"title\":\"One or more validation errors occurred.\",\"status\":400,\"errors\":{\"\":[\"A non-empty request body is required.\"],\"tunerHostInfo\":[\"The tunerHostInfo field is required.\"]},\"traceId\":\"00-b29fc837d615bda3911591580a697749-29f368648844c4d1-00\"}",
+        "bodyJson": {
+          "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+          "title": "One or more validation errors occurred.",
+          "status": 400,
+          "errors": {
+            "": [
+              "A non-empty request body is required."
+            ],
+            "tunerHostInfo": [
+              "The tunerHostInfo field is required."
+            ]
+          },
+          "traceId": "00-b29fc837d615bda3911591580a697749-29f368648844c4d1-00"
+        },
+        "startedAt": 1792605408861,
+        "finishedAt": 1792605408869
+      }
+    },
+    {
+      "name": "typed /LiveTv/TunerHosts:malformed body",
+      "request": {
+        "route": "/LiveTv/TunerHosts",
+        "method": "POST",
+        "mode": "apiKey",
+        "rawBody": "{\"Id\":"
+      },
+      "response": {
+        "status": 400,
+        "contentType": "application/json; charset=utf-8",
+        "bodyText": "{\"type\":\"https://tools.ietf.org/html/rfc9110#section-15.5.1\",\"title\":\"One or more validation errors occurred.\",\"status\":400,\"errors\":{\"tunerHostInfo\":[\"The tunerHostInfo field is required.\"],\"$.Id\":[\"Expected depth to be zero at the end of the JSON payload. There is an open JSON object or array that should be closed. Path: $.Id | LineNumber: 0 | BytePositionInLine: 6.\"]},\"traceId\":\"00-02abf960cd854dfbb21196ebdcd6c875-ab37b14145382b21-00\"}",
+        "bodyJson": {
+          "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+          "title": "One or more validation errors occurred.",
+          "status": 400,
+          "errors": {
+            "tunerHostInfo": [
+              "The tunerHostInfo field is required."
+            ],
+            "$.Id": [
+              "Expected depth to be zero at the end of the JSON payload. There is an open JSON object or array that should be closed. Path: $.Id | LineNumber: 0 | BytePositionInLine: 6."
+            ]
+          },
+          "traceId": "00-02abf960cd854dfbb21196ebdcd6c875-ab37b14145382b21-00"
+        },
+        "startedAt": 1792605408928,
+        "finishedAt": 1792605408932
+      }
+    },
+    {
+      "name": "typed /LiveTv/ListingProviders:null body",
+      "request": {
+        "route": "/LiveTv/ListingProviders",
+        "method": "POST",
+        "mode": "apiKey",
+        "rawBody": "null"
+      },
+      "response": {
+        "status": 400,
+        "contentType": "application/json; charset=utf-8",
+        "bodyText": "{\"type\":\"https://tools.ietf.org/html/rfc9110#section-15.5.1\",\"title\":\"One or more validation errors occurred.\",\"status\":400,\"errors\":{\"\":[\"A non-empty request body is required.\"],\"listingsProviderInfo\":[\"The listingsProviderInfo field is required.\"]},\"traceId\":\"00-6d29c811d03740842a6687619b5c8d1d-468f6654ccb6bee1-00\"}",
+        "bodyJson": {
+          "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+          "title": "One or more validation errors occurred.",
+          "status": 400,
+          "errors": {
+            "": [
+              "A non-empty request body is required."
+            ],
+            "listingsProviderInfo": [
+              "The listingsProviderInfo field is required."
+            ]
+          },
+          "traceId": "00-6d29c811d03740842a6687619b5c8d1d-468f6654ccb6bee1-00"
+        },
+        "startedAt": 1792605409024,
+        "finishedAt": 1792605409028
+      }
+    },
+    {
+      "name": "typed /LiveTv/ListingProviders:malformed body",
+      "request": {
+        "route": "/LiveTv/ListingProviders",
+        "method": "POST",
+        "mode": "apiKey",
+        "rawBody": "{\"Id\":"
+      },
+      "response": {
+        "status": 400,
+        "contentType": "application/json; charset=utf-8",
+        "bodyText": "{\"type\":\"https://tools.ietf.org/html/rfc9110#section-15.5.1\",\"title\":\"One or more validation errors occurred.\",\"status\":400,\"errors\":{\"listingsProviderInfo\":[\"The listingsProviderInfo field is required.\"],\"$.Id\":[\"Expected depth to be zero at the end of the JSON payload. There is an open JSON object or array that should be closed. Path: $.Id | LineNumber: 0 | BytePositionInLine: 6.\"]},\"traceId\":\"00-9f9b36a7125e60406746425172862d1a-29142dc78fce1535-00\"}",
+        "bodyJson": {
+          "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+          "title": "One or more validation errors occurred.",
+          "status": 400,
+          "errors": {
+            "listingsProviderInfo": [
+              "The listingsProviderInfo field is required."
+            ],
+            "$.Id": [
+              "Expected depth to be zero at the end of the JSON payload. There is an open JSON object or array that should be closed. Path: $.Id | LineNumber: 0 | BytePositionInLine: 6."
+            ]
+          },
+          "traceId": "00-9f9b36a7125e60406746425172862d1a-29142dc78fce1535-00"
+        },
+        "startedAt": 1792605409083,
+        "finishedAt": 1792605409086
+      }
+    },
+    {
+      "name": "typed /LiveTv/ChannelMappings:null body",
+      "request": {
+        "route": "/LiveTv/ChannelMappings",
+        "method": "POST",
+        "mode": "apiKey",
+        "rawBody": "null"
+      },
+      "response": {
+        "status": 400,
+        "contentType": "application/json; charset=utf-8",
+        "bodyText": "{\"type\":\"https://tools.ietf.org/html/rfc9110#section-15.5.1\",\"title\":\"One or more validation errors occurred.\",\"status\":400,\"errors\":{\"\":[\"A non-empty request body is required.\"],\"dto\":[\"The dto field is required.\"]},\"traceId\":\"00-0bab69c67969503c6e5778e334ba099f-30c73d3871ac2667-00\"}",
+        "bodyJson": {
+          "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+          "title": "One or more validation errors occurred.",
+          "status": 400,
+          "errors": {
+            "": [
+              "A non-empty request body is required."
+            ],
+            "dto": [
+              "The dto field is required."
+            ]
+          },
+          "traceId": "00-0bab69c67969503c6e5778e334ba099f-30c73d3871ac2667-00"
+        },
+        "startedAt": 1792605409176,
+        "finishedAt": 1792605409179
+      }
+    },
+    {
+      "name": "typed /LiveTv/ChannelMappings:malformed body",
+      "request": {
+        "route": "/LiveTv/ChannelMappings",
+        "method": "POST",
+        "mode": "apiKey",
+        "rawBody": "{\"Id\":"
+      },
+      "response": {
+        "status": 400,
+        "contentType": "application/json; charset=utf-8",
+        "bodyText": "{\"type\":\"https://tools.ietf.org/html/rfc9110#section-15.5.1\",\"title\":\"One or more validation errors occurred.\",\"status\":400,\"errors\":{\"dto\":[\"The dto field is required.\"],\"$.Id\":[\"Expected depth to be zero at the end of the JSON payload. There is an open JSON object or array that should be closed. Path: $.Id | LineNumber: 0 | BytePositionInLine: 6.\"]},\"traceId\":\"00-91772da268a91a5ebc5731e2d1f3ef05-2863762ff33cc541-00\"}",
+        "bodyJson": {
+          "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+          "title": "One or more validation errors occurred.",
+          "status": 400,
+          "errors": {
+            "dto": [
+              "The dto field is required."
+            ],
+            "$.Id": [
+              "Expected depth to be zero at the end of the JSON payload. There is an open JSON object or array that should be closed. Path: $.Id | LineNumber: 0 | BytePositionInLine: 6."
+            ]
+          },
+          "traceId": "00-91772da268a91a5ebc5731e2d1f3ef05-2863762ff33cc541-00"
+        },
+        "startedAt": 1792605409234,
+        "finishedAt": 1792605409237
+      }
+    },
+    {
+      "name": "typed listings categories type",
+      "request": {
+        "route": "/LiveTv/ListingProviders",
+        "method": "POST",
+        "mode": "apiKey",
+        "rawBody": "{\"Type\":\"xmltv\",\"KidsCategories\":{}}"
+      },
+      "response": {
+        "status": 400,
+        "contentType": "application/json; charset=utf-8",
+        "bodyText": "{\"type\":\"https://tools.ietf.org/html/rfc9110#section-15.5.1\",\"title\":\"One or more validation errors occurred.\",\"status\":400,\"errors\":{\"listingsProviderInfo\":[\"The listingsProviderInfo field is required.\"],\"$.KidsCategories\":[\"The JSON value could not be converted to System.String[]. Path: $.KidsCategories | LineNumber: 0 | BytePositionInLine: 34.\"]},\"traceId\":\"00-7f33b43c5adf11efddccfa6bfc87ae4b-0a720bb749e42a71-00\"}",
+        "bodyJson": {
+          "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+          "title": "One or more validation errors occurred.",
+          "status": 400,
+          "errors": {
+            "listingsProviderInfo": [
+              "The listingsProviderInfo field is required."
+            ],
+            "$.KidsCategories": [
+              "The JSON value could not be converted to System.String[]. Path: $.KidsCategories | LineNumber: 0 | BytePositionInLine: 34."
+            ]
+          },
+          "traceId": "00-7f33b43c5adf11efddccfa6bfc87ae4b-0a720bb749e42a71-00"
+        },
+        "startedAt": 1792605409379,
+        "finishedAt": 1792605409382
+      }
+    },
+    {
+      "name": "typed mapping required fields",
+      "request": {
+        "route": "/LiveTv/ChannelMappings",
+        "method": "POST",
+        "mode": "apiKey",
+        "rawBody": "{}"
+      },
+      "response": {
+        "status": 400,
+        "contentType": "application/json; charset=utf-8",
+        "bodyText": "{\"type\":\"https://tools.ietf.org/html/rfc9110#section-15.5.1\",\"title\":\"One or more validation errors occurred.\",\"status\":400,\"errors\":{\"ProviderId\":[\"The ProviderId field is required.\"],\"TunerChannelId\":[\"The TunerChannelId field is required.\"],\"ProviderChannelId\":[\"The ProviderChannelId field is required.\"]},\"traceId\":\"00-29d11a8da23458b87e11c17add36441f-3b62ea5d59d96677-00\"}",
+        "bodyJson": {
+          "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+          "title": "One or more validation errors occurred.",
+          "status": 400,
+          "errors": {
+            "ProviderId": [
+              "The ProviderId field is required."
+            ],
+            "TunerChannelId": [
+              "The TunerChannelId field is required."
+            ],
+            "ProviderChannelId": [
+              "The ProviderChannelId field is required."
+            ]
+          },
+          "traceId": "00-29d11a8da23458b87e11c17add36441f-3b62ea5d59d96677-00"
+        },
+        "startedAt": 1792605409406,
+        "finishedAt": 1792605409411
+      }
+    },
+    {
+      "name": "typed mapping null required fields",
+      "request": {
+        "route": "/LiveTv/ChannelMappings",
+        "method": "POST",
+        "mode": "apiKey",
+        "rawBody": "{\"ProviderId\":null,\"TunerChannelId\":\"\",\"ProviderChannelId\":\" \"}"
+      },
+      "response": {
+        "status": 400,
+        "contentType": "application/json; charset=utf-8",
+        "bodyText": "{\"type\":\"https://tools.ietf.org/html/rfc9110#section-15.5.1\",\"title\":\"One or more validation errors occurred.\",\"status\":400,\"errors\":{\"ProviderId\":[\"The ProviderId field is required.\"],\"TunerChannelId\":[\"The TunerChannelId field is required.\"],\"ProviderChannelId\":[\"The ProviderChannelId field is required.\"]},\"traceId\":\"00-f0809ee0a5c03abceb73537fc264dbb8-24c2b72a22423367-00\"}",
+        "bodyJson": {
+          "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+          "title": "One or more validation errors occurred.",
+          "status": 400,
+          "errors": {
+            "ProviderId": [
+              "The ProviderId field is required."
+            ],
+            "TunerChannelId": [
+              "The TunerChannelId field is required."
+            ],
+            "ProviderChannelId": [
+              "The ProviderChannelId field is required."
+            ]
+          },
+          "traceId": "00-f0809ee0a5c03abceb73537fc264dbb8-24c2b72a22423367-00"
+        },
+        "startedAt": 1792605409439,
+        "finishedAt": 1792605409442
+      }
+    }
+  ]
+}

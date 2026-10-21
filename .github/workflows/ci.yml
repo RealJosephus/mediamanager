@@ -206,6 +206,9 @@ jobs:
             await Promise.all(servers.filter(server => server.listening).map(server => new Promise((resolve, reject) => server.close(error => error ? reject(error) : resolve()))));
           }
           NODE
+      - name: Prepare and verify macOS limited broadcast routing
+        if: runner.os == 'macOS'
+        run: node tools/ci/macos-network-context.js setup
       - name: Set up .NET oracle runtime
         uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
         with:
@@ -313,10 +316,19 @@ jobs:
       # dispatch with an empty test_files input still requests all available tests.
       - name: Run affected or explicitly requested strict validation
         timeout-minutes: ${{ inputs.release_pair && 290 || 110 }}
-        run: node tools/ci/run.js
+        shell: bash
+        run: |
+          if [[ "$RUNNER_OS" == 'macOS' ]]; then
+            node tools/ci/macos-network-context.js strict
+          else
+            node tools/ci/run.js
+          fi
       - name: Audit database resources
         if: always() && steps.environment.outcome == 'success'
         run: node tools/ci/environment.js audit
+      - name: Remove owned macOS limited broadcast route
+        if: always() && runner.os == 'macOS'
+        run: node tools/ci/macos-broadcast.js cleanup
       - name: Remove created macOS loopback alias
         if: always() && runner.os == 'macOS' && steps.loopback.outputs.created == 'true'
         shell: bash

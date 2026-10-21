@@ -324,7 +324,10 @@ async function projectPeople(item, state, user, options) {
 }
 
 async function mediaSource(item, queriedItem, type, prefix, state, user, options, enablePathSubstitution) {
-  if (item.SourceType === 'Channel') unsupported('Channel media source projection is not implemented.');
+  // BaseItem.GetMediaSources uses the ordinary version projection when the
+  // ChannelManager saved-source cache is empty. SourceType alone does not
+  // prohibit a retained local/HTTP source. Saved channel-cache consumption is
+  // a separate producer path; it must precede this fallback when installed.
   const protocol = isFileSource(item) ? 'File' : /^https?:/i.test(item.Path ?? '') ? 'Http' : null;
   if (!protocol) unsupported('This media source protocol is not implemented.');
   let shortcutProtocol;

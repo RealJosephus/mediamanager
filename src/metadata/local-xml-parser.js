@@ -1,7 +1,7 @@
 import { newNativeItemEntity } from '../library/native-item-entity.js';
 import { nativeGuid } from '../users/native.js';
 import { ordinalIgnoreCaseEquals, ordinalIgnoreCaseKey } from '../storage/ordinal-comparer.js';
-import { parseInvariantDate } from '../http/date-binding.js';
+import { parseInvariantDate } from '../core/invariant-date-parse.js';
 import { parseInvariantDateExact } from '../core/invariant-date-format.js';
 import { readLocalXmlStepsStreaming } from './local-xml-stream.js';
 import { tryParseClrInt32Enum } from './clr-enum.js';

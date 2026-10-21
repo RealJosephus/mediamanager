@@ -486,6 +486,12 @@ export function createMetadataContextLoader({ store, library, fileSystem = libra
       getVideoVersionCollectionType: () => parents[0]?.Path ? buildScanCollectionContext({ root: parents[0], state,
         collectionFolders, libraryOptions: library.options.libraryOptions, configuration }).collectionType : null,
       snapshot: (await db.rows('BaseItems', { where: { Id: item.Id } }))[0] };
+    // GetUserRootFolder registers a transient singleton without saving it.
+    // Its first actual metadata save can insert the canonical root; merely
+    // reading virtual folders or cancelling a refresh must not create a row.
+    if (!loaded.snapshot && item.Type === 'UserRootFolder' && library.options.userRoot
+      && sameId(item.Id, library.options.userRoot.Id)
+      && nativeFileSystemPathsEqual(item.Path, library.options.userRoot.Path)) loaded.creationIntent = 'library-save';
     const previewContexts = async values => {
       const results = await Promise.allSettled(values.map(value=>loaded.loadDraftContext(value)));
       const failures = results.filter(result=>result.status==='rejected');

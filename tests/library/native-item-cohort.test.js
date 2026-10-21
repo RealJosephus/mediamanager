@@ -27,3 +27,30 @@ test('postgres: typed slots preserve repeated captured values, observer mutation
   if(page)await page.release();if(retained)await retained.release();if(event)await event.release();if(cohort)await cohort.release();await links.flushReleases();await links.close();await database.client.query(`DROP SCHEMA "${schema}" CASCADE;DROP SCHEMA "${schema}__mm" CASCADE`);await database.close();
  }
 });
+
+test('postgres: observed image aliases survive reassignment, typed slot serialization and later shared mutation', {skip:!process.env.MEDIAMANAGER_TEST_POSTGRES}, async()=>{
+ const schema='native_image_alias_'+randomUUID().replaceAll('-','').slice(0,16),database=await PostgresDatabase.open({connectionString:process.env.MEDIAMANAGER_TEST_POSTGRES,schema,create:true,max:1}),links=new PostgresLinkedChildrenStore({database});
+ let cohort,page,clone;
+ try{
+  await links.initialize();
+  const item=newNativeItemEntity('MediaBrowser.Controller.LiveTv.LiveTvProgram');item.Id='10000000000000000000000000000002';
+  item.ImageInfos=[{Type:'Backdrop',Path:'http://example.invalid/first',Width:9},{Type:'Backdrop',Path:'http://example.invalid/second',Width:7}];
+  cohort=await createNativeItemCohort({linkedChildren:links});const slot=await cohort.capture(item,{ordinal:1n});
+  const first=item.ImageInfos[0];item.ImageInfos[1]=first;
+  assert.equal(item.ImageInfos[0],item.ImageInfos[1],'Assigning an observed image must not wrap its existing reference again.');
+  item.ImageInfos[1].Path='/converted-local';assert.equal(first.Path,'/converted-local');await cohort.flush();
+  await cohort.withSlot(slot,restored=>{
+   assert.equal(restored.ImageInfos[0],restored.ImageInfos[1]);assert.equal(restored.ImageInfos[0].Path,'/converted-local');
+   restored.ImageInfos[0].Width=42;assert.equal(restored.ImageInfos[1].Width,42);
+  });
+  page=await cohort.page();const restored=page.entries[0].item;
+  assert.equal(restored.ImageInfos[0],restored.ImageInfos[1]);assert.equal(restored.ImageInfos[1].Width,42);
+  clone=cloneNativeItemEntity(restored);assert.equal(clone.ImageInfos[0],clone.ImageInfos[1]);assert.notEqual(clone.ImageInfos[0],restored.ImageInfos[0]);
+  clone.ImageInfos[1].Path='/clone-only';assert.equal(clone.ImageInfos[0].Path,'/clone-only');assert.equal(restored.ImageInfos[0].Path,'/converted-local');
+  await page.release();page=null;await cohort.release();cohort=null;
+  const stateCount=await database.client.query(`SELECT count(*) AS count FROM "${links.schemaName}".item_states`);assert.equal(BigInt(stateCount.rows[0].count),0n);
+ }finally{
+  if(clone)releaseNativeItemLinks(clone);if(page)await page.release();if(cohort)await cohort.release();await links.flushReleases();await links.close();
+  await database.client.query(`DROP SCHEMA "${schema}" CASCADE;DROP SCHEMA "${schema}__mm" CASCADE`);await database.close();
+ }
+});

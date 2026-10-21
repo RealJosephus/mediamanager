@@ -57,14 +57,21 @@ test('official M3U parser, source-owned fields and native channel cache readers 
     const liveTv = { admitRead() { return { async getConfiguration() { return { TunerHosts: [cacheInfo] }; }, release() {} }; } };
     const connect = value => value.connect({ liveTv, fileSystem: storage.fileSystem, users: { isLocalNetwork: () => false } });
     tuner = new M3uTuner({ cachePath, fetch, logger: { error: error => errors.push(error.message) } }); connect(tuner);
-    const capture = async (name, enabled, value = tuner) => { const before = requests; observed.cache.push({ name, channels: wire(await value.getChannels(enabled)), requests: requests - before }); };
+    const capture = async (name, enabled, value = tuner) => {
+      const before = requests; let channels = null, error = null;
+      try { channels = wire(await value.getChannels(enabled)); } catch (caught) { error = caught instanceof SyntaxError ? 'JsonException' : caught.name; }
+      observed.cache.push({ name, channels, error, requests: requests - before });
+    };
     await capture('first-force', false);
     const nodeCacheFile = path.join(root, 'node-produced-cache.json');
-    await writeFile(nodeCacheFile, await readFile(path.join(cachePath, cacheInfo.Id + '_channels')));
+    const firstCache = await readFile(path.join(cachePath, cacheInfo.Id + '_channels')); await writeFile(nodeCacheFile, firstCache);
+    observed.cacheFiles = [{ name: 'first-force', bytesBase64: firstCache.toString('base64'), length: firstCache.length, sha256: hash(firstCache) }];
     fail = true; await capture('memory-after-source-failure', true); await capture('force-failure', false);
     const cold = new M3uTuner({ cachePath, fetch, logger: { error() {} } }); connect(cold);
     try { await capture('cold-native-disk-fallback', true, cold); } finally { await cold.close(); }
     fail = false; payload = Buffer.from('#EXTM3U\n'); await capture('force-empty', false); await capture('nonempty-memory-survives-empty', true);
+    const shortCache = await readFile(path.join(cachePath, cacheInfo.Id + '_channels'));
+    observed.cacheFiles.push({ name: 'force-empty', bytesBase64: shortCache.toString('base64'), length: shortCache.length, sha256: hash(shortCache) });
     fail = true;
     const empty = new M3uTuner({ cachePath, fetch, logger: { error() {} } }); connect(empty);
     try { await capture('cold-empty-native-disk', true, empty); } finally { await empty.close(); }
@@ -106,7 +113,13 @@ test('official M3U parser, source-owned fields and native channel cache readers 
     for (const value of native.parsed) { assert.equal(value.streamsDisposed, 1); assert.equal(value.requests.length, 1); assert.equal(value.requests[0].userAgent, 'ControlledM3U/1.2'); }
     assert.deepEqual(observed.sources.map(({ name, mediaSource }) => ({ name, mediaSource: producerSource(mediaSource) })),
       native.sources.map(({ name, mediaSource }) => ({ name, mediaSource: producerSource(mediaSource) })));
-    assert.deepEqual(observed.cache, native.cache.filter(value => value.name !== 'actual-native-reads-node-cache'));
+    assert.deepEqual(wire(observed.cache), native.cache.filter(value => value.name !== 'actual-native-reads-node-cache'));
+    assert.equal(observed.cache.find(value => value.name === 'cold-empty-native-disk').error, 'JsonException');
+    for (const snapshots of [native.cacheFiles, observed.cacheFiles]) {
+      const before = Buffer.from(snapshots[0].bytesBase64, 'base64'), after = Buffer.from(snapshots[1].bytesBase64, 'base64');
+      for (const entry of snapshots) { const bytes = Buffer.from(entry.bytesBase64, 'base64'); assert.equal(hash(bytes), entry.sha256); assert.equal(bytes.length, entry.length); }
+      assert.equal(after.length, before.length); assert.equal(after.subarray(0, 2).toString(), '[]'); assert.deepEqual(after.subarray(2), before.subarray(2));
+    }
     assert.deepEqual(native.cache.find(value => value.name === 'actual-native-reads-node-cache').channels, observed.cache[0].channels);
     assert.deepEqual(observed.multipleHosts, native.multipleHosts);
     for (const value of observed.validation) assert.equal(Boolean(value.error), Boolean(native.validation.find(native => native.status === value.status).error));

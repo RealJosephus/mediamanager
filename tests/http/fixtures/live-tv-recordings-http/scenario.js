@@ -36,30 +36,6 @@ export async function mediaFiles(graph) {
   })));
 }
 
-/** Give the bound synthetic inputs real private paths before native startup can
- * legitimately remove their nonexistent source paths during library validation. */
-export async function relocateOriginalSeed(root, mediaRoot) {
-  const source = new SqliteDatabase(databaseFilename(root), { requireMigrationHistory: true });
-  try {
-    const retained = path.join(mediaRoot, 'retained');
-    const relocation = [
-      { Id: guid('11111111-1111-1111-1111-111111111111'), previous: 'Z:\\SyntheticMedia', replacement: retained },
-      { Id: guid('22222222-2222-2222-2222-222222222222'), previous: 'Z:\\SyntheticMedia\\feature.mkv', replacement: path.join(retained, 'feature.mkv') },
-    ].map(entry => ({ ...entry, before: source.rows('BaseItems', { where: { Id: entry.Id } })[0] }));
-    for (const entry of relocation) assert.equal(entry.before?.Path, entry.previous, 'The bound original seed must match before the first native startup.');
-    await mkdir(retained, { recursive: true });
-    const bytes = Buffer.from('Private retained original seed.\n');
-    await writeFile(path.join(retained, 'feature.mkv'), bytes, { flag: 'wx' });
-    source.transaction(() => { for (const entry of relocation) source.update('BaseItems', { Id: entry.Id }, { Path: entry.replacement }); });
-    for (const entry of relocation) {
-      entry.after = source.rows('BaseItems', { where: { Id: entry.Id } })[0];
-      assert.equal(entry.after.Path, entry.replacement);
-    }
-    return { beforeFirstNativeStartup: true, files: { retainedSeed: path.join(retained, 'feature.mkv') }, relocation,
-      file: { bytes: bytes.length, sha256: sha(bytes) } };
-  } finally { source.close(); }
-}
-
 /** Seed only a stopped private reference, after its real virtual-folder registration. */
 export async function seedRecordings(root, mediaRoot, input, userRootId, folderDtos, originalSeed, directoryPreparation) {
   assert.equal(originalSeed?.beforeFirstNativeStartup, true, 'The original media paths must be prepared before native registration starts.');

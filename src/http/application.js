@@ -17,6 +17,7 @@ import { registerEmbyHomeSectionRoutes } from './emby-home-section-routes.js';
 import { registerConfigurationRoutes } from './configuration-routes.js';
 import { registerLiveTvTimerRoutes } from './live-tv-timer-routes.js';
 import { registerLiveTvRecordingRoutes } from './live-tv-recording-routes.js';
+import { registerLiveTvSourceRoutes } from './live-tv-source-routes.js';
 import { registerSessionControlRoutes } from './session-control-routes.js';
 import { registerMetadataRoutes } from './metadata-routes.js';
 import { registerImageRoutes } from './image-routes.js';
@@ -120,6 +121,7 @@ export async function createApplication(services = {}) {
   registerConfigurationRoutes(add, services);
   registerLiveTvTimerRoutes(add, services);
   registerLiveTvRecordingRoutes(add, services);
+  registerLiveTvSourceRoutes(add, services);
   registerPasswordResetRoutes(add, services);
   registerDisplayPreferencesRoutes(add, services);
   registerStartupRoutes(add, services);

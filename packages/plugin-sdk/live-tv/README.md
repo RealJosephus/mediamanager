@@ -95,12 +95,16 @@ and omit unavailable URLs; this extension registration does not perform that
 projection or advertise a playback endpoint. There are no recording or
 transcoding executor registrations or open methods in this contract.
 
-To open a source, pass its chosen envelope as `options.source`; `streamId` must
-equal its `mediaSource.Id`. The provider returns an already opened lease:
+To open a source, pass its chosen envelope as `options.source`. The method's
+`streamId` argument is the native OriginalStreamId: a nullable string, including
+an empty or whitespace string, passed unchanged to the provider. It is distinct
+from the selected `mediaSource.Id` used to validate the actual opened source.
+An OriginalStreamId does not authorize an encoded source or weaken native-source
+validation. The provider returns an already opened lease:
 
 ```js
 {
-  mode: 'native', profile: 'native', mediaSource,
+  mode: 'native', profile: 'native', mediaSource, tunerHostId: 'configured-tuner-id',
   stream, // optional AsyncIterable<Uint8Array> over original upstream bytes
   async close() { /* release this consumer and unblock its pending read */ },
   sharing: { // optional stable capability for this original input
@@ -110,7 +114,15 @@ equal its `mediaSource.Id`. The provider returns an already opened lease:
 }
 ```
 
-The returned source identity must match the selection. A URL-backed lease may
+The returned source identity must match the selection captured before invoking
+the provider; mutating a pending selection cannot authorize a different source.
+Every opened lease includes `tunerHostId`, a string or explicit `null`. Empty
+strings retain their value; a missing field or another type is rejected. This is
+the actual configured tuner identity, independently of its provider type and
+the selected media-source identity. Consumers preserve it as native
+`TunerHostId` when supplying current live streams for tuner capacity checks.
+The host freezes this primitive in the returned lease.
+A URL-backed lease may
 omit `stream`; it still owns and releases its tuner/session reservation. Every
 open call returns a separate ownership lease. A provider sharing an upstream
 with `currentLiveStreams` manages its own reference counts and must not transfer
@@ -122,7 +134,8 @@ the caller that acquired its first lease. All leases from that input return
 the same object. `enabled` is a live boolean: it becomes false at original HTTP
 EOF/failure, final consumer close and plugin shutdown. `retain({signal})`
 acquires a new consumer, with its own iterator, cancellation and idempotent
-close. It returns the same native source identity and the same sharing object.
+close. It returns the same native source identity, exact nullable tuner host
+identity and the same sharing object.
 A second call to an existing iterator is not a new consumer. The capability
 itself holds no extra reference: retaining a closed input must fail and cannot
 restart or replace its upstream. After one consumer closes or cancels, its
@@ -143,16 +156,35 @@ the tuner option `AllowStreamSharing` that selects native SharedHttpStream
 transport. Native URL-only LiveStream descriptors can also be retained. For
 example, an RTSP/RTP/UDP producer can retain a tuner reservation and source
 description without opening a network byte stream. The official M3U producer
-retains independent HTTP byte consumers in bounded memory and independent
-references to URL-only reservations; it does not run a loop, encode media or
-record temporary media. OriginalStreamId matching, ordered first-match choice,
-consumer registry/counts and public open/close APIs belong to a later consumer.
+retains independent HTTP byte consumers in bounded memory for the native
+SharedHttpStream branch. Other native LiveStream branches, including HTTP
+manifests, looping and disabled sharing, retain source reservations without
+opening network bytes. Each fresh provider open creates a separate input;
+only retain shares that precise input. The producer does not run a loop,
+encode media or record temporary media. OriginalStreamId matching, ordered
+first-match choice, consumer registry/counts and public open/close APIs belong
+to the owning consumer rather than the plugin host.
+
+The shared bounded HTTP input is exported directly as
+`@mediamanager/plugin-sdk/live-tv/raw-input`. `NativeHttpInput.acquire(signal)`
+reserves an owner and returns `{stream, close}` after opening; SharedHttpStream
+producers use `{primeFirstBytes: true}` to wait for a nonempty first chunk and
+reject zero-byte EOF. Its iterator becomes a byte consumer only on its first
+`next()`. An owner which has never read does not apply backpressure. Once a
+reader starts, its one queued chunk blocks subsequent reads until consumed or
+closed. Closing a reader releases its owner without closing another owner's
+upstream. The final owner closes and drains the input; no background drain or
+media spool is used. One read already in flight may finish after its reader
+closes; at most that chunk is retained for the next reader. New readers join
+the current byte position; this owner primitive does not replay prior stream
+history. EOF/failure disables sharing and is observed by remaining owners.
 
 The host exposes a detached media-source snapshot, an owned byte iterator and
 an idempotent asynchronous `close()` and the declared optional sharing facade.
 It does not expose other methods on the provider's lease. Explicit close,
 request abort, natural end, iteration failure
-and plugin shutdown all close the upstream and return the iterator. Close must
+and plugin shutdown all close that lease and return its iterator. The last
+upstream owner closes the underlying input. Close must
 unblock pending reads. A resource arriving after request cancellation or plugin
 shutdown is closed before its open operation rejects; it is never delivered to
 the caller. An invalid opened response is also closed before rejection. Close

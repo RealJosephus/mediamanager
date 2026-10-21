@@ -1,4 +1,4 @@
-import { postgresUserDataKeyMap, readUserDataRows } from '../sessions/user-data.js';
+import { postgresUserDataKeyMap, readUserDataRows, readUserData } from '../sessions/user-data.js';
 import path from 'node:path';
 import { AsyncLocalStorage } from 'node:async_hooks';
 import { availableParallelism } from 'node:os';
@@ -11,6 +11,7 @@ import { canDeleteItem } from './delete-permission.js';
 import { parseQuery, resolveOfficialRatingRanges, binaryCompare } from './query.js';
 import { dtoOptions, prefetchPostgresDtoRelations, projectItem, projectUserData, mediaSources } from './dto.js';
 import { sortMediaSources } from './media-versions.js';
+import { selectDefaultTracks } from './media-streams.js';
 import { nativeContainsSubPath, nativePathWithin, sameNativePath } from './native-path.js';
 import { nativeArtistIdentity, nativeGenreIdentity, nativeMusicGenreIdentity, nativeStudioIdentity, nativeUserSubviewIdentity } from './identity.js';
 import { nativeDateFromUnixNanoseconds, nativeGuid } from '../users/native.js';
@@ -47,6 +48,7 @@ import { queryPostgresLatestItems } from './postgres-latest-items-query.js';
 import { queryPostgresRecommendedPrograms, queryPostgresPrograms, queryPostgresChannels, queryPostgresCurrentPrograms } from './postgres-live-tv-query.js';
 import { queryPostgresProgramRecordingInfo, queryPostgresSeriesTimerProgramFilter } from './postgres-live-tv-state-query.js';
 import { queryPostgresRecordingFolderSources, orderPostgresRecordingFolders, createPostgresRecordingQuery } from './postgres-live-tv-recordings-query.js';
+import { recordingSourceVisibleWithoutUser, recordingFoldersMissingUser } from './live-tv-recording-folders-access.js';
 import { queryPostgresNamedItemPage, queryPostgresNamedItemCounts, queryPostgresNamedSlug } from './postgres-named-items-query.js';
 import { dtoItemCountKinds, queryPostgresDtoItemCounts } from './postgres-dto-item-counts-query.js';
 import { queryPostgresItemFilters } from './postgres-item-filters-query.js';
@@ -572,10 +574,6 @@ export class LibraryService extends EventEmitter {
 
   async #loadPostgresItemState(db, ids, user, { includeUserData = true, navigationRows = [] } = {}) {
     const loaded = await loadPostgresItemGraph(db, ids);
-    const existing = new Set(loaded.map(row => idKey(row.Id)));
-    const channels = [...new Set(loaded.filter(row => row.Type === 'MediaBrowser.Controller.LiveTv.LiveTvProgram'
-      && nonemptyId(row.ChannelId) && !existing.has(idKey(row.ChannelId))).map(row => row.ChannelId))];
-    if (channels.length) loaded.push(...await loadPostgresItemGraph(db, channels));
     const graphRows = [...new Map([...navigationRows, ...loaded].map(row => [idKey(row.Id), row])).values()];
     const requestedIds = new Set(ids.map(idKey));
     const itemRows = graphRows.filter(row => requestedIds.has(idKey(row.Id)));
@@ -619,9 +617,6 @@ export class LibraryService extends EventEmitter {
   async #postgresStandaloneVisible(db, item, user, state, { checkStandaloneParents = true } = {}) {
     if (!item) return false;
     if (!user) return true;
-    if (['LiveTvChannel', 'LiveTvProgram'].includes(item.Type)) {
-      return (await this.#filterPostgresStandalonePage(db, [item], user, state)).length === 1;
-    }
     if (item.Type === 'Playlist') {
       const dataPath = this.options.dataPath
         ?? (this.options.programDataPath && path.join(this.options.programDataPath, 'data'));
@@ -752,7 +747,10 @@ export class LibraryService extends EventEmitter {
     const modernBoxSets = new Set(items.filter(item => item.Type === 'BoxSet'
       && !isLegacyBoxSet(item, linkTypes.has(idKey(item.Id)), this.options.programDataPath))
       .map(item => idKey(item.Id)));
-    const ordinary = items.filter(item => !modernBoxSets.has(idKey(item.Id)));
+    const entityAccess = items.filter(item => !modernBoxSets.has(idKey(item.Id)) && (item.SourceType === 'Channel'
+      || ['LiveTvChannel', 'LiveTvProgram'].includes(item.Type)));
+    const entityKeys = new Set(entityAccess.map(item => idKey(item.Id)));
+    const ordinary = items.filter(item => !modernBoxSets.has(idKey(item.Id)) && !entityKeys.has(idKey(item.Id)));
     const baseVisibility = this.#postgresVisibility(state, user) ?? {};
     const queryVisibleIds = async (candidates, visibility, nameAccessTypes = []) => {
       if (!candidates.length) return [];
@@ -776,6 +774,12 @@ export class LibraryService extends EventEmitter {
       itemMode: 'standalone',
       scopeTopParentAccess: false,
     }, relatedNameTypes));
+    // DTO batches invoke IsVisible after repository paging. The separate
+    // direct-item reader invokes IsVisibleStandalone, including parent/channel
+    // access. Neither check changes the repository's count or page window.
+    for (const item of entityAccess) if (visibleItem(item, user, state, {
+      ...this.options, query: false, checkStandaloneParents: false, skipRelatedNameCheck,
+    })) visible.add(idKey(item.Id));
     const modern = items.filter(item => modernBoxSets.has(idKey(item.Id)));
     for (const key of await queryVisibleIds(modern, {
       ...baseVisibility,
@@ -1029,12 +1033,17 @@ export class LibraryService extends EventEmitter {
           { includeUserData: false, navigationRows });
         try {
           const candidates = sources.map(row => state.byId.get(idKey(row.Id))).filter(Boolean);
-          const visible = await this.#filterPostgresStandaloneBatch(db, candidates, user, state);
+          const visible = user ? await this.#filterPostgresStandaloneBatch(db, candidates, user, state)
+            : candidates.filter(item => recordingSourceVisibleWithoutUser(item, this.options));
           for (const source of visible) for (const folder of collectionFoldersForItem(source, state)) {
             if (!folders.has(idKey(folder.Id))) folders.set(idKey(folder.Id), folder);
           }
         } finally { await state.dispose({ session: db }); }
       }
+      // Native requests provider roots with user.Id after physical sources.
+      // An empty source sequence (or a disabled CollectionFolder) reaches this
+      // dereference; an ordinary physical source already failed with 400.
+      if (!user) recordingFoldersMissingUser();
       const ordered = await orderPostgresRecordingFolders(db, [...folders.values()],
         { culture: this.options.localization?.context?.culture ?? 'en-US' });
       const folderIds = ordered.map(folder => folder.Id);
@@ -2798,15 +2807,28 @@ export class LibraryService extends EventEmitter {
     });
   }
 
-  async getMediaSources(id, { user = null } = {}) {
+  async getMediaSources(id, { user = null, dynamicSources = [] } = {}) {
     return this.#runWithStates(async db => {
       const normalized = guid(id);
       const state = await this.#loadPostgresItemState(db, [normalized], user);
       const item = state.byId.get(idKey(normalized));
       const visible = item && (!user || await this.#postgresStandaloneVisible(db, item, user, state));
       if (!visible) throw libraryError(404, 'Item not found.');
-      if (!VIDEO_TYPES.has(item.Type) && !['Audio', 'AudioBook'].includes(item.Type)) return [];
+      if (!VIDEO_TYPES.has(item.Type) && !['Audio', 'AudioBook', 'LiveTvChannel'].includes(item.Type)) return [];
       const sources = await mediaSources(item, state, user, this.options);
+      for (const source of dynamicSources) {
+        if (source.SupportsDirectStream) source.SupportsDirectStream = source.Protocol === 'File'
+          || source.Protocol === 'Http' && source.Path != null && !source.Path.toLowerCase().includes('.m3u');
+        if (user) {
+          selectDefaultTracks(source, item, user, state.userData?.get(idKey(item.Id)) ?? await readUserData(db, user.Id, item));
+          if (item.MediaType === 'Audio') source.SupportsTranscoding = user.Policy.EnableAudioPlaybackTranscoding;
+          else if (item.MediaType === 'Video') {
+            source.SupportsTranscoding = user.Policy.EnableVideoPlaybackTranscoding;
+            source.SupportsDirectStream = user.Policy.EnablePlaybackRemuxing;
+          }
+        }
+        sources.push(source);
+      }
       return sortMediaSources(sources, sources[0]?.Id ?? item.Id, true);
     });
   }
@@ -2821,7 +2843,7 @@ export class LibraryService extends EventEmitter {
   async getLiveMediaSources(item) {
     if (!isNativeItemEntity(item)) throw new TypeError('Live media sources require a native entity.');
     if (item.SourceType === 'Channel') unsupported('Static channel media sources require a channel manager.');
-    if (!VIDEO_TYPES.has(item.Type) && !['Audio', 'AudioBook'].includes(item.Type)) return [];
+    if (!VIDEO_TYPES.has(item.Type) && !['Audio', 'AudioBook', 'LiveTvChannel'].includes(item.Type)) return [];
     return this.#runWithStates(async db => {
       const state = await this.#loadPostgresItemState(db, [item.Id], null, { includeUserData: false });
       state.byId.set(idKey(item.Id), item);

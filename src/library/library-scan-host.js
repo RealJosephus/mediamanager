@@ -74,17 +74,10 @@ export class LibraryScanHost {
       // already parented playlists child does not suppress that live reset.
       if (canonicalPath && itemType(item) === type) item.Path = canonicalPath;
       const owner = this.itemCreation.retainItem(item);
-      try { return { item, owner, persisted: (await db.rows('BaseItems', { where: { Id: item.Id } })).length > 0 }; }
-      catch (error) { owner.release(); throw error; }
+      return { item, owner };
       } finally { await state.dispose({ session: db }); }
     }, { readOnly: true, lockTimeoutMs: 250 });
-    // UserRootFolder is a registered singleton before its first repository
-    // row exists. Establish that native-save baseline so ordinary metadata
-    // persistence can perform the following refresh update safely.
     try {
-      if (type === 'UserRootFolder' && !resolved.persisted) {
-        await this.itemCreation.saveItems([resolved.item], { creationIntent: 'library-save' });
-      }
       if (type === 'AggregateFolder') {
         const dataPath = this.library.options.dataPath ?? path.join(this.library.options.programDataPath, 'data');
         const playlistPath = path.join(dataPath, 'playlists');

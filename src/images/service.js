@@ -3,7 +3,7 @@ import { isDeepStrictEqual } from 'node:util';
 import { once } from 'node:events';
 import { BinaryResult } from '../http/binary-result.js';
 import { HttpResult } from '../http/binding.js';
-import { parseInvariantDate } from '../http/date-binding.js';
+import { parseInvariantDate } from '../core/invariant-date-parse.js';
 import { dateTicks, dateText, MIN_DATE, nonemptyId, mapRecord } from '../library/records.js';
 import { MetadataImageAssets } from '../metadata/image-assets.js';
 import { MetadataImages } from '../metadata/images.js';

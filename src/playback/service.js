@@ -10,6 +10,9 @@ import { hlsPlan, masterPlaylist, mainPlaylist, storedKeyframeData, subtitlePlay
 import { MatroskaKeyframeService } from './matroska-keyframes.js';
 import { guid } from '../library/records.js';
 import { substitutePath } from '../library/path-substitution.js';
+import { selectDefaultTracks } from '../library/media-streams.js';
+import { readUserData } from '../sessions/user-data.js';
+import { getMimeType } from '../http/mime-types.js';
 
 const mimeTypes = { mkv: 'video/x-matroska', mks: 'video/x-matroska', mp4: 'video/mp4', mov: 'video/quicktime', webm: 'video/webm', avi: 'video/x-msvideo',
   ts: 'video/mp2t', mpegts: 'video/mp2t', mp3: 'audio/mpeg', m4a: 'audio/mp4', m4b: 'audio/mp4', flac: 'audio/flac', wav: 'audio/wav',
@@ -18,8 +21,8 @@ const mimeTypes = { mkv: 'video/x-matroska', mks: 'video/x-matroska', mp4: 'vide
 export const mimeType = filename => mimeTypes[path.win32.extname(filename ?? '').slice(1).toLowerCase()] ?? 'application/octet-stream';
 
 export class PlaybackService {
-  constructor({ library, vfs, identityMap, sessions, configuration = {}, serverVersion = '13.0.0', isLocalNetwork, probe, extraction, remux, hls, keyframes }) {
-    Object.assign(this, { library, vfs, identityMap, sessions, configuration, serverVersion, isLocalNetwork, probe, extraction, remux, hls });
+  constructor({ library, vfs, identityMap, sessions, configuration = {}, serverVersion = '13.0.0', isLocalNetwork, probe, extraction, remux, hls, keyframes, getLiveTvMediaSources, getLiveStreams }) {
+    Object.assign(this, { library, vfs, identityMap, sessions, configuration, serverVersion, isLocalNetwork, probe, extraction, remux, hls, getLiveTvMediaSources, getLiveStreams });
     this.keyframes = keyframes ?? (library?.store && vfs ? new MatroskaKeyframeService({ store: library.store, vfs, onError: error => hls?.onError?.(error) }) : undefined);
   }
 
@@ -41,7 +44,8 @@ export class PlaybackService {
   }
 
   async sources(item, user, { signal } = {}) {
-    let sources = await this.library.getMediaSources(item.Id, { user });
+    const dynamicSources = await this.getLiveTvMediaSources?.()?.getMediaSources(item, { signal }) ?? [];
+    let sources = await this.library.getMediaSources(item.Id, { user, dynamicSources });
     const primary = sources[0];
     const shortcut = /\.strm$/iu.test(item.Path ?? '');
     if (primary && primary.Type !== 'Placeholder' && (shortcut || !primary.MediaStreams.some(stream => stream.Type === item.MediaType))) {
@@ -52,11 +56,17 @@ export class PlaybackService {
     return sources;
   }
 
-  async info(itemId, { user, auth, posted = false, remoteEndPoint, ...options }) {
+  async info(itemId, { user, auth, posted = false, remoteEndPoint, request, signal, ...options }) {
     const item = await this.library.getItemRecord(itemId, { user });
-    if (options.LiveStreamId?.trim()) throw httpError(501, 'Live media sources are not implemented.');
-    let sources = await this.sources(item, user);
-    if (options.MediaSourceId?.trim()) sources = sources.filter(source => source.Id.toLowerCase() === options.MediaSourceId.toLowerCase());
+    let sources;
+    if (options.LiveStreamId?.trim()) {
+      const source = this.getLiveStreams?.()?.getLiveStream(options.LiveStreamId);
+      if (!source) throw httpError(500, 'The requested live stream is unavailable.');
+      sources = [source];
+    } else {
+      sources = await this.sources(item, user, { signal });
+      if (options.MediaSourceId?.trim()) sources = sources.filter(source => source.Id.toLowerCase() === options.MediaSourceId.toLowerCase());
+    }
     if (!sources.length) return { MediaSources: [], ErrorCode: 'NoCompatibleStream' };
     const result = { MediaSources: sources, PlaySessionId: randomUUID().replaceAll('-', '') };
     const profile = posted ? options.DeviceProfile ?? this.sessions.getDeviceCapabilities(auth.DeviceId)?.DeviceProfile : null;
@@ -71,8 +81,8 @@ export class PlaybackService {
         const specific = options.MediaSourceId?.toLowerCase() === source.Id.toLowerCase();
         negotiateSource(source, item, profile, { ...options, AccessToken: auth.Token, DeviceId: auth.DeviceId, PlaySessionId: result.PlaySessionId,
           EnableRemuxing: user.Policy.EnablePlaybackRemuxing && user.Policy.EnableMediaPlayback,
-          CanRemux: (source, requested) => this.remux?.supports(source, requested) === true && this.#canResolveSource(source),
-          CanHls: (source, requested) => this.hls?.supports(source, { ...requested,
+          CanRemux: (source, requested) => !source.RequiresOpening && !source.LiveStreamId && this.remux?.supports(source, requested) === true && this.#canResolveSource(source),
+          CanHls: (source, requested) => !source.RequiresOpening && !source.LiveStreamId && this.hls?.supports(source, { ...requested,
             CanDeliverHlsSubtitle: stream => this.canDeliverHlsSubtitle(source, stream) }) === true && this.#canResolveSource(source),
           CanExtractSubtitle: (stream, format) => this.extraction?.supportsSubtitle(source, stream, format) === true, AudioStreamIndex: specific ? options.AudioStreamIndex : undefined,
           SubtitleStreamIndex: specific ? options.SubtitleStreamIndex : undefined });
@@ -83,9 +93,80 @@ export class PlaybackService {
         if (source.IsRemote && user.Policy.ForceRemoteSourceTranscoding) { source.SupportsDirectPlay = false; source.SupportsDirectStream = false; }
       }
     }
+    if (item.Type === 'LiveTvChannel' && item.SourceType === 'LiveTV') for (const source of sources) {
+      source.SupportsTranscoding = false; delete source.TranscodingUrl; delete source.TranscodingContainer;
+    }
     // Storage checks and negotiation above use the persistent identity path.
     for (const source of sources) if (source.Protocol === 'File') source.Path = substitutePath(source.Path, this.configuration.PathSubstitutions);
+    for (const source of sources) this.#publishedLivePath(source, request);
+    if (posted && options.AutoOpenLiveStream === true) {
+      const source = options.MediaSourceId?.trim() ? sources.find(value => value.Id === options.MediaSourceId) : sources[0];
+      if (source?.RequiresOpening && !source.LiveStreamId?.trim()) {
+        const opened = await this.openLiveStream({ ...options, OpenToken: source.OpenToken, ItemId: itemId, PlaySessionId: result.PlaySessionId },
+          { user, auth, remoteEndPoint, request, signal });
+        result.MediaSources = [opened.MediaSource];
+      }
+    }
     return result;
+  }
+
+  #publishedLivePath(source, request) {
+    if (!source.LiveStreamId || source.Protocol !== 'Http' || !request) return;
+    let parsed; try { parsed = new URL(source.Path); } catch { return; }
+    const base = this.configuration.BaseUrl ?? '';
+    let relative = parsed.pathname + parsed.search;
+    if (base) {
+      if (!relative.toLowerCase().startsWith((base + '/').toLowerCase())) return;
+      relative = relative.slice(base.length);
+    }
+    if (!relative.toLowerCase().startsWith('/livetv/livestreamfiles/')) return;
+    let published = (this.configuration.PublicAddress || `${request.socket?.encrypted ? 'https' : 'http'}://${request.headers.host}`).replace(/\/+$/u, '');
+    if (base) {
+      let includes = false;
+      try { includes = decodeURIComponent(new URL(published).pathname).replace(/\/+$/u, '').toLowerCase().endsWith(base.toLowerCase()); } catch { /* The configured address is validated separately. */ }
+      if (!includes) published += base;
+    }
+    source.Path = published + relative;
+  }
+
+  async openLiveStream(options, { user, auth, remoteEndPoint, request, signal } = {}) {
+    const liveStreams = this.getLiveStreams?.();
+    if (!liveStreams) throw httpError(503, 'Live streams have not been configured.');
+    const result = await liveStreams.open(options, { signal });
+    {
+      if (options.UserId && !/^0{32}$/u.test(options.UserId.replaceAll('-', '')) && !user) throw Object.assign(
+        httpError(500, 'Object reference not set to an instance of an object.'), { nativeException: 'NullReferenceException' });
+      const itemId = options.ItemId && !/^0{32}$/u.test(options.ItemId.replaceAll('-', '')) ? options.ItemId : null;
+      const profile = options.DeviceProfile ?? this.sessions.getDeviceCapabilities(auth.DeviceId)?.DeviceProfile;
+      const item = itemId ? await this.library.getItemRecord(itemId) : null;
+      if (user) {
+        const data = item ? await this.library.store.run(db => readUserData(db, user.Id, item)) : {};
+        selectDefaultTracks(result.MediaSource, item ?? { MediaType: 'Video' }, user, data);
+      }
+      this.#publishedLivePath(result.MediaSource, request);
+      if (profile) {
+        if (!itemId) throw httpError(400, "Guid can't be empty. (Parameter 'id')");
+        if (!item) throw httpError(404, 'Item not found.');
+        if (!user) throw httpError(404, 'User not found.');
+        const limit = user.RemoteClientBitrateLimit > 0 ? user.RemoteClientBitrateLimit : this.configuration.RemoteClientBitrateLimit;
+        const max = limit > 0 && this.isLocalNetwork && !this.isLocalNetwork(remoteEndPoint)
+          ? Math.min(options.MaxStreamingBitrate ?? limit, limit) : options.MaxStreamingBitrate;
+        negotiateSource(result.MediaSource, item, profile, { ...options, MaxStreamingBitrate: max, AccessToken: auth.Token,
+          DeviceId: auth.DeviceId, EnableRemuxing: false, CanRemux: () => false, CanHls: () => false, CanExtractSubtitle: () => false });
+      }
+      if (result.MediaSource.Container) result.MediaSource.Container = result.MediaSource.Container.split(',')[0];
+      result.MediaSource.SupportsTranscoding = false; delete result.MediaSource.TranscodingUrl; delete result.MediaSource.TranscodingContainer;
+      return result;
+    }
+  }
+
+  closeLiveStream(id) {
+    const service = this.getLiveStreams?.(); if (!service) throw httpError(503, 'Live streams have not been configured.');
+    return service.closeLiveStream(id);
+  }
+  liveStreamFile(id, container) {
+    const service = this.getLiveStreams?.(); if (!service) throw httpError(404, 'Live stream not found.');
+    return service.streamFile(id, getMimeType('file.' + container));
   }
 
   async file(itemId, { user, mediaSourceId, filename = false, playback = false } = {}) {

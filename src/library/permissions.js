@@ -1,4 +1,4 @@
-import { cleanValue, idKey, sameId, repositoryTopParentId, repositoryValue, NAME_TYPES, unsupported } from './records.js';
+import { cleanValue, idKey, sameId, nonemptyId, libraryError, repositoryTopParentId, repositoryValue, NAME_TYPES, unsupported } from './records.js';
 import { itemParentalRating, ratingWithinLimit } from './parental-rating.js';
 import { boxSetLibraryFolderIds, collectionFoldersForItem, parentChainForItem, userRootFolders } from './collection-membership.js';
 import { isLegacyBoxSet } from './boxset-state.js';
@@ -98,7 +98,13 @@ export function visibleItem(item, user, state, { libraryOptions, configuration, 
     && !isLegacyBoxSet(item, state.links.some(link => sameId(link.ParentId, item.Id)), programDataPath)) {
     return visibleBoxSet(item, user, state, { libraryOptions, configuration, programDataPath, skipAllowedTags });
   }
-  if (item.SourceType === 'Channel' || item.Type === 'LiveTvChannel' || item.Type === 'LiveTvProgram') unsupported('Channel and live TV access policies are not implemented.');
+  // Only Channel overrides IsVisible. Live TV entities inherit BaseItem's
+  // parental checks, and the repository does not invoke this virtual method.
+  if (!query && item.Type === 'Channel') {
+    const blocked = policy.BlockedChannels ?? [];
+    if (blocked.length ? hasId(blocked, item.Id)
+      : policy.EnableAllChannels !== true && !hasId(policy.EnabledChannels, item.Id)) return false;
+  }
   const ancestors = query ? state.ancestors(item) : parentChainForItem(item, state);
   const libraries = [item, ...ancestors].filter(parent => parent.Type === 'CollectionFolder');
   const playlistsDomain = [item, ...ancestors].some(parent => parent.Type === 'PlaylistsFolder');
@@ -149,7 +155,18 @@ export function visibleItem(item, user, state, { libraryOptions, configuration, 
   if (!query && checkStandaloneParents && ancestors.some(parent => !visibleItem(parent, user, state, {
     libraryOptions, configuration, programDataPath, dataPath, skipAllowedTags: true, query: false, checkStandaloneParents: false,
   }))) return false;
-  if (!query && checkStandaloneParents) {
+  if (!query && checkStandaloneParents && item.SourceType === 'Channel') {
+    // BaseItem checks a channel source's own parents but bypasses library
+    // membership. ChannelManager then resolves exactly one ChannelId and calls
+    // IsVisible, not IsVisibleStandalone, on that root.
+    if (!nonemptyId(item.ChannelId)) throw libraryError(400, 'Guid cannot be empty.');
+    const channel = state.byId.get(idKey(item.ChannelId));
+    if (channel?.Type !== 'Channel') throw libraryError(500, 'The source channel is unavailable.');
+    if (!visibleItem(channel, user, state, {
+      libraryOptions, configuration, programDataPath, dataPath, query: false, checkStandaloneParents: false,
+    })) return false;
+  }
+  if (!query && checkStandaloneParents && item.SourceType !== 'Channel') {
     const topParent = ancestors.at(-1) ?? item;
     if (topParent.Path != null && topParent.Path !== '') {
       const collectionFolders = collectionFoldersForItem(item, state);

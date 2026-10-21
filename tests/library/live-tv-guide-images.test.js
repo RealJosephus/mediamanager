@@ -162,6 +162,9 @@ test('guide precache matches actual native private predicates and ConvertImageTo
     }
     for (const sample of input.cases) await t.test(sample.name, async t => {
       const expected = structuredClone(native.results.find(value => value.name === sample.name));
+      const initialized = [...sample.items]; if (sample.repeatSlot != null) initialized.push(sample.items[sample.repeatSlot]);
+      assert.deepEqual(expected.initialized, initialized.map(item => ({ Id: idKey(item.Id), EndDateTicks: item.EndDate == null ? null : String(dateTicks(item.EndDate)), ImageCount: item.ImageInfos?.length ?? null })), 'The actual native items must retain every supplied typed repository field before PreCache runs.');
+      report.nativeInitialized ??= []; report.nativeInitialized.push({ name: sample.name, items: expected.initialized }); delete expected.initialized;
       for (const item of expected.items) delete item.originals;
       const errors = [], updates = []; http.requests.length = 0;
       const fixture = await setup(t, sample, { onError: error => errors.push(error.nativeException ?? (error.code === 'http-error' ? 'HttpRequestException' : error.name)),

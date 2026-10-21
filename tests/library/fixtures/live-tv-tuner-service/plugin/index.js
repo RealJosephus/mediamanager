@@ -5,7 +5,7 @@ export async function activate(context) {
     getChannels: (...args) => invoke('tuner', 'channels', definition, args),
     getChannelStreamMediaSources: (...args) => invoke('tuner', 'sources', definition, args),
     discoverDevices: async () => [],
-    getChannelStream() { throw new Error('Core stream sharing is outside this reader fixture.'); },
+    getChannelStream: (...args) => invoke('tuner', 'stream', definition, args),
   });
   await context.register('listings', { type: 'controlled', name: 'Controlled listings',
     validate: async () => {}, getLineups: async () => [],

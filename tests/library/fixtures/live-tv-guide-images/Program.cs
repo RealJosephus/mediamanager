@@ -27,8 +27,18 @@ var nativeParallelism = parallel.MaxDegreeOfParallelism; parallel.MaxDegreeOfPar
 var precache = typeof(GuideManager).GetMethod("PreCacheImages", BindingFlags.Instance | BindingFlags.NonPublic)!;
 var results = new List<object>(); using var client = new HttpClient();
 foreach (var sample in input.GetProperty("cases").EnumerateArray()) {
-    var programs = sample.GetProperty("items").EnumerateArray().Select(value => value.Deserialize<LiveTvProgram>(JsonDefaults.Options)!).ToArray();
+    // BaseItem's public serializer intentionally ignores repository fields.
+    // Populate declared CLR properties, as a real repository materializer does.
+    var programs = sample.GetProperty("items").EnumerateArray().Select(value => {
+        var item = new LiveTvProgram();
+        foreach (var pair in value.EnumerateObject()) {
+            var property = typeof(LiveTvProgram).GetProperty(pair.Name)!;
+            property.SetValue(item, pair.Value.Deserialize(property.PropertyType, JsonDefaults.Options));
+        }
+        return item;
+    }).ToArray();
     if (sample.TryGetProperty("repeatSlot", out var repeat)) programs = [.. programs, programs[repeat.GetInt32()]];
+    var initialized = programs.Select(item => new { Id = item.Id.ToString("N"), EndDateTicks = item.EndDate?.Ticks.ToString(CultureInfo.InvariantCulture), ImageCount = item.ImageInfos?.Length }).ToArray();
     var original = programs.Select(p => p.ImageInfos?.ToArray()).ToArray();
     var requests = new List<string>(); var updates = new List<object>(); var calls = 0; var errors = new List<string>();
     var limits = sample.GetProperty("limits").EnumerateArray().Select(value => value.GetBoolean()).ToArray();
@@ -69,7 +79,7 @@ foreach (var sample in input.GetProperty("cases").EnumerateArray()) {
     try { await (Task)precache.Invoke(manager, [programs, DateTime.Parse(input.GetProperty("maxCacheDate").GetString()!, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind)])!; }
     catch (TargetInvocationException caught) { error = caught.InnerException!.GetType().Name; }
     catch (Exception caught) { error = caught.GetType().Name; }
-    results.Add(new { name = sample.GetProperty("name").GetString(), error, requests, updates, limits = calls, errors,
+    results.Add(new { name = sample.GetProperty("name").GetString(), initialized, error, requests, updates, limits = calls, errors,
         items = programs.Select((item, index) => new { Id = item.Id.ToString("N"), Images = item.ImageInfos is null ? null : Images(item),
             aliases = item.ImageInfos?.Select(image => Array.IndexOf(item.ImageInfos, image)).ToArray(),
             originals = original[index]?.Select(image => Array.IndexOf(item.ImageInfos!, image)).ToArray() }).ToArray() });

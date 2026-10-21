@@ -580,26 +580,32 @@ test('close is idempotent, waits for the active operation, records Aborted and r
   manager.on('completed', event => completions.push(event));
   const running = manager.execute(refreshLibraryTaskId);
   await entered.promise;
+  try {
+    const admittedSnapshot = await manager.get(refreshLibraryTaskId);
+    assert.equal(admittedSnapshot.State, 'Running');
+    let closed = false;
+    const firstClose = manager.close();
+    const observedClose = firstClose.finally(() => { closed = true; });
+    const secondClose = manager.close();
+    assert.equal(firstClose, secondClose);
+    assert.equal(signal.aborted, true);
+    await assert.rejects(manager.get(refreshLibraryTaskId), { status: 503, code: 'task-unavailable' });
+    await Promise.resolve();
+    assert.equal(closed, false, 'shutdown drains the already-started complete scan operation');
+    assert.throws(() => manager.execute(refreshLibraryTaskId), error => error.status === 503 && error.code === 'closed');
+    assert.throws(() => manager.cancel(refreshLibraryTaskId), error => error.status === 503 && error.code === 'closed');
 
-  let closed = false;
-  const firstClose = manager.close();
-  const observedClose = firstClose.finally(() => { closed = true; });
-  const secondClose = manager.close();
-  assert.equal(firstClose, secondClose);
-  assert.equal(signal.aborted, true);
-  assert.equal((await manager.get(refreshLibraryTaskId)).State, 'Cancelling');
-  await Promise.resolve();
-  assert.equal(closed, false, 'shutdown drains the already-started complete scan operation');
-  assert.throws(() => manager.execute(refreshLibraryTaskId), error => error.status === 503 && error.code === 'closed');
-  assert.throws(() => manager.cancel(refreshLibraryTaskId), error => error.status === 503 && error.code === 'closed');
-
-  release.resolve();
-  const result = await running;
-  await observedClose;
-  assert.equal(result.Status, 'Aborted');
-  assert.equal((await manager.get(refreshLibraryTaskId)).State, 'Idle');
-  assert.equal(completions.length, 1);
-  assert.equal(completions[0].Result.Status, 'Aborted');
+    release.resolve();
+    const result = await running;
+    await observedClose;
+    assert.equal(result.Status, 'Aborted');
+    await assert.rejects(manager.get(refreshLibraryTaskId), { status: 503, code: 'task-unavailable' });
+    assert.equal(completions.length, 1);
+    assert.equal(completions[0].Result.Status, 'Aborted');
+    assert.equal(completions[0].Task.State, 'Idle', 'The admitted completion event retains the final state after reads close.');
+    assert.deepEqual(completions[0].Task.LastExecutionResult, result, 'Completion retains the complete final history.');
+    assert.equal(admittedSnapshot.State, 'Running', 'An earlier information snapshot remains immutable.');
+  } finally { release.resolve(); await Promise.allSettled([running, manager.close()]); }
 });
 
 test('trigger cleanup reporting cannot re-enter close before its promise is reserved', async () => {

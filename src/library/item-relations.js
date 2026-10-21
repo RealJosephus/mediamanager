@@ -9,7 +9,7 @@ import {
 
 const inheritedTagsType = 6;
 const itemType = item => String(item?.Type ?? item?.NativeType ?? '').split('.').at(-1);
-const noAncestors = new Set(['Person', 'Genre', 'MusicGenre', 'Studio', 'Year']);
+const noAncestors = new Set(['Person', 'Genre', 'MusicGenre', 'Studio', 'Year', 'LiveTvProgram']);
 const artists = new Set(['Audio', 'AudioBook', 'MusicAlbum', 'MusicVideo']);
 const albumArtists = new Set(['Audio', 'AudioBook', 'MusicAlbum']);
 export const itemSupportsAncestors = item => !noAncestors.has(itemType(item));

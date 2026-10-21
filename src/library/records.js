@@ -164,7 +164,7 @@ export async function loadLibrary(db, { expandPath = value => value, userRoot, p
   // types; it is not the mapper's explicit skip option for arbitrary entities.
   const mapItem = row => mapRecord(row, { ...mappingOptions,
     skipDeserialization: configuration.SkipDeserializationForBasicTypes === true
-      && ['MediaBrowser.Controller.Entities.Channel', 'MediaBrowser.Controller.Entities.UserRootFolder'].includes(row.Type) });
+      && ['MediaBrowser.Controller.Channels.Channel', 'MediaBrowser.Controller.Entities.UserRootFolder'].includes(row.Type) });
   if (!Array.isArray(baseRows)) throw new TypeError('PostgreSQL library loading requires SQL-scoped baseRows.');
   const persistedRows = baseRows;
   const items = persistedRows.filter(row => row.Type !== 'PLACEHOLDER').map(mapItem).filter(Boolean);

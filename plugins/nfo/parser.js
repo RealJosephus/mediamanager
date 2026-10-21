@@ -7,7 +7,7 @@ import { addPerson } from '@mediamanager/plugin-sdk/metadata/people';
 import { trySetProviderId } from '@mediamanager/plugin-sdk/metadata/provider-ids';
 import { parseSeriesStatus, parseAirDays } from '@mediamanager/plugin-sdk/metadata/television';
 import { clrTrim } from '@mediamanager/plugin-sdk/metadata/whitespace';
-import { parseInvariantDate } from '@mediamanager/plugin-sdk/http/date-binding';
+import { parseInvariantDate } from '@mediamanager/plugin-sdk/core/invariant-date-parse';
 import { parseInvariantDateExact } from '@mediamanager/plugin-sdk/core/invariant-date-format';
 import { tryParseClrInt32Enum } from '@mediamanager/plugin-sdk/metadata/clr-enum';
 

@@ -40,32 +40,33 @@ export function videoColorRange(stream) {
   return pq ? ['HDR', stream.Hdr10PlusPresentFlag ? 'HDR10Plus' : 'HDR10'] : hlg ? ['HDR', 'HLG'] : ['SDR', 'SDR'];
 }
 
-function resolution(stream) {
+export function mediaStreamResolution(stream) {
   if (stream.Width == null || stream.Height == null) return null;
   const dimensions = [[256, 144, '144'], [426, 240, '240'], [640, 360, '360'], [682, 384, '384'], [720, 404, '404'], [854, 480, '480'], [960, 544, '540'], [1024, 576, '576'], [1280, 962, '720'], [2560, 1440, '1080'], [4096, 3072, '4K'], [8192, 6144, '8K']];
   const label = dimensions.find(([width, height]) => stream.Width <= width && stream.Height <= height)?.[2];
   return label ? label.endsWith('K') ? label : label + (stream.IsInterlaced ? 'i' : 'p') : null;
 }
 
-function displayTitle(stream) {
+export function mediaStreamDisplayTitle(stream, { fallbackLabels = false } = {}) {
   const attributes = [];
+  const label = (name, fallback = name) => fallbackLabels ? stream[`Localized${name}`] || fallback : stream[`Localized${name}`];
   if (stream.Type === 'Audio') {
     if (stream.Language && !['mis', 'mul', 'und', 'zxx'].some(code => equal(code, stream.Language))) attributes.push(firstUpper(stream.LocalizedLanguage ?? stream.Language));
     if (stream.Profile && !equal(stream.Profile, 'lc')) attributes.push(stream.Profile);
     else if (stream.Codec) attributes.push(({ ac3: 'Dolby Digital', eac3: 'Dolby Digital+', dca: 'DTS' })[stream.Codec.toLowerCase()] ?? stream.Codec.toUpperCase());
     if (stream.ChannelLayout) attributes.push(firstUpper(stream.ChannelLayout));
     else if (stream.Channels != null) attributes.push(`${stream.Channels} ch`);
-    for (const name of ['Default', 'External', 'Original']) if (stream[`Is${name}`]) attributes.push(stream[`Localized${name}`]);
+    for (const name of ['Default', 'External', 'Original']) if (stream[`Is${name}`]) attributes.push(label(name));
   } else if (stream.Type === 'Video') {
-    const size = resolution(stream); if (size) attributes.push(size);
+    const size = mediaStreamResolution(stream); if (size) attributes.push(size);
     if (stream.Codec) attributes.push(stream.Codec.toUpperCase());
     if (stream.VideoDoViTitle) attributes.push(stream.VideoDoViTitle);
     else if (stream.VideoRange !== 'Unknown') attributes.push(stream.VideoRange);
   } else if (stream.Type === 'Subtitle') {
-    attributes.push(stream.Language ? firstUpper(stream.LocalizedLanguage ?? stream.Language) : stream.LocalizedUndefined);
-    for (const name of ['HearingImpaired', 'Default', 'Forced']) if (stream[`Is${name}`]) attributes.push(stream[`Localized${name}`]);
+    attributes.push(stream.Language ? firstUpper(stream.LocalizedLanguage ?? stream.Language) : label('Undefined', 'Und'));
+    for (const name of ['HearingImpaired', 'Default', 'Forced']) if (stream[`Is${name}`]) attributes.push(label(name, name === 'HearingImpaired' ? 'Hearing Impaired' : name));
     if (stream.Codec) attributes.push(stream.Codec.toUpperCase());
-    if (stream.IsExternal) attributes.push(stream.LocalizedExternal);
+    if (stream.IsExternal) attributes.push(label('External'));
   } else return undefined;
   return stream.Title ? [stream.Title, ...attributes.filter(tag => !contains(stream.Title, tag))].join(' - ') : attributes.join(stream.Type === 'Video' ? ' ' : ' - ');
 }
@@ -92,7 +93,7 @@ export function projectStream(row, options = {}) {
   const codec = (stream.Codec ?? '').toLowerCase();
   stream.IsTextSubtitleStream = stream.Type === 'Subtitle' && (Boolean(codec) || stream.IsExternal) && (codec.includes('microdvd') || (!['pgs', 'dvdsub', 'vobsub', 'dvbsub'].some(value => codec.includes(value)) && !['sup', 'sub'].includes(codec)));
   stream.SupportsExternalStream = stream.IsExternal || stream.IsTextSubtitleStream || (stream.Type === 'Subtitle' && (['pgs', 'dvdsub', 'vobsub'].some(value => codec.includes(value)) || codec === 'sup'));
-  stream.DisplayTitle = displayTitle(stream);
+  stream.DisplayTitle = mediaStreamDisplayTitle(stream);
   return withNativeFloats(stream, ['AverageFrameRate', 'RealFrameRate', 'ReferenceFrameRate']);
 }
 

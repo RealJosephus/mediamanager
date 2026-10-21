@@ -38,11 +38,11 @@ test('real PostgreSQL runtime manages official and third-party packages with ind
  assert.equal((await request('GET','/Plugins',undefined,false)).status,401);
  const listed=await request('GET','/Plugins');const listedBody=await listed.text();
  assert.equal(listed.status,200,listedBody);assert.ok(listedBody,JSON.stringify(errors.map(error=>error.message)));
- assert.deepEqual(JSON.parse(listedBody).map(value=>value.id).sort(),['alist','local','m3u','nfo','tmdb','webdav','xmltv']);
+ assert.deepEqual(JSON.parse(listedBody).map(value=>value.id).sort(),['alist','hdhomerun','local','m3u','nfo','tmdb','webdav','xmltv']);
  const command=await new Promise((resolve,reject)=>execFile(process.execPath,['tools/plugins.js','list'],{windowsHide:true,
    env:{...process.env,MEDIAMANAGER_URL:`http://127.0.0.1:${runtime.server.address().port}`,MEDIAMANAGER_ADMIN_TOKEN:apiKey}},
    (error,stdout,stderr)=>error?reject(error):resolve({stdout,stderr})));
- assert.deepEqual(JSON.parse(command.stdout).map(value=>value.id).sort(),['alist','local','m3u','nfo','tmdb','webdav','xmltv']);
+ assert.deepEqual(JSON.parse(command.stdout).map(value=>value.id).sort(),['alist','hdhomerun','local','m3u','nfo','tmdb','webdav','xmltv']);
  const ordinary=await runtime.users.createUser({Name:'Plugin reader'});
  const login=await runtime.authentication.login({Username:'Plugin reader',Pw:''},{Client:'test',Device:'test',DeviceId:'reader',Version:'1'});
  assert.equal((await fetch(`http://127.0.0.1:${runtime.server.address().port}/Plugins`,{headers:{Authorization:`MediaBrowser Token="${login.AccessToken}"`}})).status,403);
@@ -56,8 +56,9 @@ test('real PostgreSQL runtime manages official and third-party packages with ind
  for(const [identityRoot,instanceId,storageRoot,purpose]of [['Z:\\Library','disk','/','library'],
    ['Z:\\Library\\Family','remote-a','/Synthetic','library'],['Z:\\Library\\Series','remote-d','/Series','library'],['Z:\\Library','remote-d','/','metadata'],
    [path.join(root,'state','metadata'),'remote-a','/Synthetic/metadata','metadata']]){
-  const response=await request('POST','/Storage/Bindings',{identityRoot,instanceId,root:storageRoot,purpose,style:'windows',caseSensitive:false,returnAccess:'Retain original identity paths.',capabilities});
-  assert.equal(response.status,200,await response.clone().text());
+  const style=/^[A-Za-z]:[\\/]|^\\\\/u.test(identityRoot)?'windows':'posix';
+  const response=await request('POST','/Storage/Bindings',{identityRoot,instanceId,root:storageRoot,purpose,style,caseSensitive:style==='posix',returnAccess:'Retain original identity paths.',capabilities});
+  assert.equal(response.status,200,JSON.stringify({body:await response.clone().text(),errors:errors.map(error=>({message:error.message,stack:error.stack}))}));
  }
  const access=identityPath=>runtime.storage.identityMap.resolve({identityPath,style:'windows'});
  await runtime.fileSystem.mkdir('Z:\\Library\\Series',{recursive:true});

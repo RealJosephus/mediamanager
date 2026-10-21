@@ -96,6 +96,11 @@ test('guide new programs stay in SQL until seal and commit once across 128-row p
   fixture.database.queryHook = null;
   const saved = await rows(fixture), duplicate = saved.find(row => idKey(row.Id) === guideProgramId(program(0).Id));
   assert.equal(duplicate.Name, 'Final new occurrence'); assert.equal(duplicate.Genres, 'Drama');
+  const ancestors = await fixture.database.client.query(`SELECT count(*)::integer AS count
+    FROM ${q(fixture.database.schemaName)}."AncestorIds" ancestor
+    JOIN ${q(fixture.database.schemaName)}."BaseItems" item ON item."Id"=ancestor."ItemId"
+    WHERE item."Type"=$1`, [nativeTextBytes('MediaBrowser.Controller.LiveTv.LiveTvProgram')]);
+  assert.equal(ancestors.rows[0].count, 0, 'LiveTvProgram.SupportsAncestors is false even with a persisted channel and view parent.');
   const cold = await fixture.library.itemCreation.getItemById(duplicate.Id);
   assert.equal(dateTicks(cold.StartDate), dateTicks(program(0).StartDate)); assert.equal(cold.ShowId, 'persisted-show');
   assert.equal(cold.EpisodeTitle, 'Persisted episode'); assert.equal(cold.IsMovie, true); assert.equal(cold.IsRepeat, true); assert.equal(cold.IsSeries, true);

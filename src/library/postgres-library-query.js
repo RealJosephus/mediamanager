@@ -426,6 +426,9 @@ export async function loadPostgresPageGraph(database, pageRows, navigationRows =
   const ancestors = qualified(database, 'AncestorIds');
   const links = qualified(database, 'LinkedChildren');
   // Resolve the complete upward/version/link frame in one recursive statement.
+  // Selected/member rows also load their ChannelId root and its parents. That
+  // root does not expand another ChannelId: Channel.IsChannelVisible performs
+  // one lookup followed by IsVisible, without recursively opening that root.
   // The recursive relation appears once and every expansion is correlated to
   // its current frontier row, so query count remains constant as depth grows.
   const result = await database.client.query({
@@ -443,7 +446,8 @@ export async function loadPostgresPageGraph(database, pageRows, navigationRows =
           CROSS JOIN LATERAL (VALUES
             (current."ParentId", FALSE), (current."TopParentId", FALSE),
             (current."SeasonId", FALSE), (current."SeriesId", FALSE),
-            (current."OwnerId", FALSE), (current."PrimaryVersionId", TRUE)
+            (current."OwnerId", FALSE), (current."PrimaryVersionId", TRUE),
+            (CASE WHEN parent."ExpandMembers" THEN current."ChannelId" END, FALSE)
           ) reference("Id", "Version")
           JOIN ${baseItems} referenced
             ON replace(${nativeTextSql(database.schemaName).guidLower("referenced.\"Id\"")}, '-', '') = replace(${nativeTextSql(database.schemaName).guidLower("reference.\"Id\"")}, '-', '')

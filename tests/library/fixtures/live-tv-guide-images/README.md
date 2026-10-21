@@ -7,6 +7,10 @@ actual private `GuideManager.PreCacheImages` and calls the actual
 `UpdateToRepositoryAsync`, and the native LiveTvProgram/LiveTvChannel internal
 metadata path overrides. It sets the actual private parallel options to one
 worker for deterministic traces and records the unchanged native CPU/10 default.
+Native program properties are assigned through their declared CLR types, rather
+than the public BaseItem JSON contract which ignores repository fields. The test
+checks every initialized Id, exact EndDate tick and nullable image count before
+comparison, so a default-valued oracle cannot pass without executing its inputs.
 The synchronous native build/run recorder executes in the owned fixture worker,
 so the test thread continues serving HttpClient requests. The receipt requires
 exactly one worker message, a zero exit code, and completed thread shutdown.

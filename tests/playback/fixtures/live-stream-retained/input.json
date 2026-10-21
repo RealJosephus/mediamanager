@@ -1,0 +1,22 @@
+{
+  "payload": { "length": 513, "seed": 71 },
+  "controllerCases": [
+    { "name": "transport stream bytes", "method": "GET", "container": "ts" },
+    { "name": "MP3 MIME casing", "method": "GET", "container": "MP3", "upperUnique": true },
+    { "name": "M4V MIME", "method": "GET", "container": "m4v" },
+    { "name": "MPEG MIME", "method": "GET", "container": "mpg" },
+    { "name": "WMA MIME", "method": "GET", "container": "wma" },
+    { "name": "WAV MIME", "method": "GET", "container": "wav" },
+    { "name": "unknown legal container MIME", "method": "GET", "container": "unused" },
+    { "name": "HEAD acquires then disposes without reading", "method": "HEAD", "container": "ts" },
+    { "name": "Range remains disabled for progressive input", "method": "GET", "container": "ts", "range": "bytes=2-4" },
+    { "name": "explicit cancellation retains its original prefix", "method": "GET", "container": "ts", "cancelAfter": 3 },
+    { "name": "missing unique identity", "method": "GET", "container": "ts", "missing": true }
+  ],
+  "fileCases": [
+    { "name": "fresh retained file starts at zero", "length": 25037, "seed": 19, "ageSeconds": 0 },
+    { "name": "old retained file starts at last 20000 bytes", "length": 25037, "seed": 19, "ageSeconds": 20 },
+    { "name": "short old file failed backward seek retains zero", "length": 173, "seed": 23, "ageSeconds": 20 },
+    { "name": "missing retained file is native 404", "length": 0, "seed": 0, "ageSeconds": 0, "missing": true }
+  ]
+}

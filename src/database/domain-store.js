@@ -1,7 +1,7 @@
 import { AsyncLocalStorage } from 'node:async_hooks';
 import { acquirePostgresWriteLock, releasePostgresWriteLock } from './postgres-write-lock.js';
 
-const postgresBackgroundAdmission = Symbol('postgres-background-admission');
+const postgresOperationAdmission = Symbol('postgres-operation-admission');
 
 async function withPostgresWriteLock(database, scope, operation, options) {
   if (scope.writeLockDepth > 0) return operation();
@@ -41,7 +41,7 @@ export class DomainStore {
     signal,
     readOnly = false,
     lockTimeoutMs,
-    [postgresBackgroundAdmission]: backgroundAdmitted = false
+    [postgresOperationAdmission]: admitted = false
   } = {}) {
     const inherited = this.#context.getStore();
     if (inherited?.active) {
@@ -50,7 +50,7 @@ export class DomainStore {
         return operation(inherited.database);
       });
     }
-    if (this.#closing && !backgroundAdmitted) return Promise.reject(new Error('Database store is closing'));
+    if (this.#closing && !admitted) return Promise.reject(new Error('Database store is closing'));
     const start = () => this.database.withConnection(database => {
       signal?.throwIfAborted();
       let finishScope;
@@ -76,7 +76,7 @@ export class DomainStore {
         }
       });
     });
-    const task = backgroundAdmitted ? Promise.resolve().then(start)
+    const task = admitted ? Promise.resolve().then(start)
       : this.#postgresBackgroundTail.then(start);
     this.#activePostgres.add(task);
     void task.finally(() => this.#activePostgres.delete(task)).catch(() => {});
@@ -129,7 +129,7 @@ export class DomainStore {
       const task = predecessor.then(() => originFinished)
         .then(() => this.run(operation, {
           ...options,
-          [postgresBackgroundAdmission]: true
+          [postgresOperationAdmission]: true
         }));
       this.#postgresBackgroundTail = task.catch(() => {});
       this.#activePostgres.add(task);
@@ -143,6 +143,19 @@ export class DomainStore {
   // Its individual SQL operations acquire their own ordinary store scopes.
   runDetached(operation) {
     return this.#context.exit(() => this.database.runDetached(operation));
+  }
+
+  // An awaited child must not join a background queue that can itself be
+  // waiting for this parent. Give it a separate tracked connection; inheriting
+  // the parent's transaction or writer lock would create another wait cycle.
+  runChild(operation) {
+    const parent = this.#context.getStore();
+    if (!parent?.active || parent.transaction || parent.writeLockDepth > 0) {
+      return Promise.reject(new Error('A domain child requires an active operation outside a transaction or writer lock.'));
+    }
+    return this.#context.exit(() => this.database.runDetached(() => this.run(operation, {
+      [postgresOperationAdmission]: true
+    })));
   }
 
   currentOperationCompletion() {

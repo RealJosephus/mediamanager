@@ -6,7 +6,9 @@ function rule(type) {
   const nullable = ['string', 'object', 'array'].includes(type.kind) || type.nullable === true;
   if (type.kind === 'object') return { type: 'object', reference: type.reference, nullable,
     clrType: (type.reference === 'NameValuePair' ? 'MediaBrowser.Model.Dto.' : 'MediaBrowser.Model.LiveTv.') + type.reference };
-  if (type.kind === 'array') return { type: 'array', clrType: 'System.Array', nullable, item: rule(type.item) };
+  if (type.kind === 'array') {
+    const item = rule(type.item); return { type: 'array', clrType: item.clrType + '[]', nullable, item };
+  }
   return { type: type.kind, nullable, clrType: { string: 'System.String', integer: 'System.Int32', boolean: 'System.Boolean' }[type.kind] };
 }
 const schema = { definitions: Object.fromEntries(Object.entries(model.definitions).map(([name, definition]) => [name, {
@@ -17,15 +19,15 @@ schema.definitions.SetChannelMappingDto = { defaults: Object.fromEntries(mapping
   fields: Object.fromEntries(mappingFields.map(name => [name, { type: 'string', clrType: 'System.String', nullable: true }])),
   required: mappingFields, nonEmpty: mappingFields };
 
-function bind(name, parameter, clrType) {
+function bind(name, clrType) {
   const root = { type: 'object', reference: name, nullable: true, clrType };
   return (body, source) => {
     const value = bindJsonModel(body, { schema, root, source });
-    if (value === null) throw new BindingError(parameter, `The ${parameter} field is required.`);
+    if (value === null) throw new BindingError('', 'A non-empty request body is required.');
     return validateJsonModel(value, { schema, root });
   };
 }
 
-export const bindTunerHostInfo = bind('TunerHostInfo', 'tunerHostInfo', 'MediaBrowser.Model.LiveTv.TunerHostInfo');
-export const bindListingsProviderInfo = bind('ListingsProviderInfo', 'listingsProviderInfo', 'MediaBrowser.Model.LiveTv.ListingsProviderInfo');
-export const bindSetChannelMapping = bind('SetChannelMappingDto', 'dto', 'Jellyfin.Api.Models.LiveTvDtos.SetChannelMappingDto');
+export const bindTunerHostInfo = bind('TunerHostInfo', 'MediaBrowser.Model.LiveTv.TunerHostInfo');
+export const bindListingsProviderInfo = bind('ListingsProviderInfo', 'MediaBrowser.Model.LiveTv.ListingsProviderInfo');
+export const bindSetChannelMapping = bind('SetChannelMappingDto', 'Jellyfin.Api.Models.LiveTvDtos.SetChannelMappingDto');

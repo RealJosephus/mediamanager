@@ -166,7 +166,7 @@ export function validateJsonModel(value, { schema, root, path = '' }) {
   visit(value,root,path);
   if (Object.keys(errors).length) {
     const error = new BindingError('', 'One or more validation errors occurred.');
-    error.errors = errors;
+    error.errors = errors; error.modelValidated = true;
     throw error;
   }
   return value;

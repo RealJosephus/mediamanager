@@ -1,7 +1,7 @@
 import { XMLParser, XMLValidator } from 'fast-xml-parser';
 import { newNativeItemEntity } from '../library/native-item-entity.js';
 import { ordinalIgnoreCaseKey } from '../storage/ordinal-comparer.js';
-import { parseInvariantDate } from '../http/date-binding.js';
+import { parseInvariantDate } from '../core/invariant-date-parse.js';
 import { mimeToExtension } from '../http/mime-types.js';
 import { addPerson } from './people.js';
 import { clrTrim, clrWhitespace } from './whitespace.js';

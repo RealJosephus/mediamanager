@@ -1,5 +1,7 @@
 import { HttpResult, BindingError, member, queryValue, booleanValue, integerValue, guidValue, httpError } from './binding.js';
 import { validatePlaybackBody } from './playback-binding.js';
+import { bindOpenLiveStreamBody, bindOpenLiveStreamQuery, openLiveStreamOptions, bindCloseLiveStreamQuery,
+  bindLiveStreamFileContainer } from './live-stream-binding.js';
 
 export function longValue(value, name, fallback) {
   if (value == null || value === '') return fallback;
@@ -60,15 +62,27 @@ export function registerPlaybackRoutes(add, { playback, users }) {
   const itemId = context => guidValue(context.params.itemId, 'itemId');
   async function user(context, requested) {
     let id = requested ?? guidValue(query(context, 'userId'), 'userId', context.auth.UserId);
+    if (/^0{32}$/.test(id ?? '')) id = context.auth.UserId;
     if (/^0{32}$/.test(id ?? '')) id = null;
-    if (id && id !== context.auth.UserId && !context.auth.IsAdministrator) throw new HttpResult(403);
+    if (id && id !== context.auth.UserId && !context.auth.IsAdministrator) throw httpError(403, 'Forbidden');
     return id ? users.getUser(id) : null;
   }
   for (const method of ['GET', 'POST']) add(method, '/Items/{itemId}/PlaybackInfo', async context => {
     const options = method === 'POST' ? bindPlayback(context) : {};
     return playback.info(itemId(context), { ...options, auth: context.auth, user: await user(context, options.UserId),
-      posted: method === 'POST', remoteEndPoint: context.remoteEndPoint });
+      posted: method === 'POST', remoteEndPoint: context.remoteEndPoint, request: context.request, signal: context.signal });
   }, { body: method === 'POST', optionalBody: true, bindBody: validatePlaybackBody });
+  add('POST', '/LiveStreams/Open', async context => {
+    const options = openLiveStreamOptions(context);
+    return playback.openLiveStream(options, { user: await user(context, options.UserId), auth: context.auth,
+      remoteEndPoint: context.remoteEndPoint, request: context.request, signal: context.signal });
+  }, { body: true, optionalBody: true, bindBody: bindOpenLiveStreamBody, bindQuery: bindOpenLiveStreamQuery,
+    bodyType: 'Jellyfin.Api.Models.MediaInfoDtos.OpenLiveStreamDto' });
+  add('POST', '/LiveStreams/Close', async context => {
+    await playback.closeLiveStream(context.queryInput); return new HttpResult(204);
+  }, { bindQuery: bindCloseLiveStreamQuery });
+  add('GET', '/LiveTv/LiveStreamFiles/{streamId}/stream.{container}', context => playback.liveStreamFile(context.params.streamId,
+    bindLiveStreamFileContainer(context.params.container)), { public: true });
   add('GET', '/Videos/{videoId}/{mediaSourceId}/Attachments/{index}', context => playback.attachment(guidValue(context.params.videoId,'videoId'),
     context.params.mediaSourceId, integerValue(context.params.index,'index'), { user: context.auth.User }), { public:true });
   add('GET', '/Items/{itemId}/File', context => playback.file(itemId(context), { user: context.auth.User }));

@@ -1,0 +1,79 @@
+{
+  "parentId": "a9a00000000000000000000000000001",
+  "cases": [
+    {
+      "name": "multiple services finish every channel before programs and clean stale descendants",
+      "guideDays": 99,
+      "seedChannels": [{ "service": "Alpha", "id": "stale" }],
+      "seedPrograms": [{ "channel": "stale", "service": "Alpha", "id": "stale-program" }],
+      "services": [
+        { "name": "Alpha", "channels": [{ "Id": "one", "ImagePath": "Z:\\ChildSelection\\channel.png" }, { "Id": "two" }], "programs": {
+          "one": { "items": [{ "Id": "one-program", "IsMovie": true, "IsKids": true, "Genres": ["Family"] }] }, "two": { "items": [] }
+        } },
+        { "name": "Beta", "channels": [{ "Id": "three", "ChannelType": "Radio" }], "programs": {
+          "three": { "items": [{ "Id": "three-program", "IsSports": true }] }
+        } }
+      ],
+      "progressCounts": [21]
+    },
+    {
+      "name": "late null genres keeps old rows and saves no earlier 130 program prefix",
+      "guideDays": 0,
+      "seedChannels": [{ "service": "Alpha", "id": "stale" }],
+      "seedPrograms": [{ "channel": "stale", "service": "Alpha", "id": "stale-program" }],
+      "services": [{ "name": "Alpha", "channels": [{ "Id": "broken" }, { "Id": "good" }], "programs": {
+        "broken": { "prefixCount": 130, "items": [{ "Id": "bad-final", "Genres": null }] },
+        "good": { "items": [{ "Id": "good-program", "IsNews": true }] }
+      } }],
+      "progressCounts": [9]
+    },
+    {
+      "name": "a channel creation failure changes program progress denominator and disables global clean",
+      "seedChannels": [{ "service": "Alpha", "id": "stale" }],
+      "failChannel": "broken-channel",
+      "services": [{ "name": "Alpha", "channels": [{ "Id": "good" }, { "Id": "broken-channel" }, { "Id": "other" }], "programs": {
+        "good": { "items": [{ "Id": "good-program" }] }, "other": { "items": [] }
+      } }],
+      "progressCounts": [10]
+    },
+    {
+      "name": "a failed service still permits the next service but prevents cleanup",
+      "seedChannels": [{ "service": "Alpha", "id": "stale" }],
+      "services": [{ "name": "Alpha", "failChannels": true, "channels": [] },
+        { "name": "Beta", "channels": [{ "Id": "good" }], "programs": { "good": { "items": [{ "Id": "good-program" }] } } }],
+      "progressCounts": [9]
+    },
+    {
+      "name": "existing duplicate program occurrences save new before updated and share final old identity",
+      "seedChannels": [{ "service": "Alpha", "id": "one", "Tags": ["Kids"] }],
+      "seedPrograms": [{ "service": "Alpha", "channel": "one", "id": "old", "Name": "old-name" },
+        { "service": "Alpha", "channel": "one", "id": "obsolete" }],
+      "services": [{ "name": "Alpha", "channels": [{ "Id": "one" }], "programs": {
+        "one": { "items": [{ "Id": "old", "Name": "first old occurrence", "Etag": "changed-one", "IsMovie": true },
+          { "Id": "fresh", "Name": "new occurrence" }, { "Id": "old", "Name": "last old occurrence", "Etag": "changed-two", "IsSeries": true, "EpisodeTitle": "Final" }] }
+      } }],
+      "progressCounts": [11]
+    },
+    {
+      "name": "duplicate existing GUID spellings fail dictionary construction before program saves",
+      "seedChannels": [{ "service": "Alpha", "id": "one" }],
+      "seedPrograms": [{ "service": "Alpha", "channel": "one", "id": "old", "duplicateGuid": true }],
+      "services": [{ "name": "Alpha", "channels": [{ "Id": "one" }], "programs": { "one": { "items": [{ "Id": "fresh" }] } } }],
+      "progressCounts": [7]
+    },
+    {
+      "name": "repeated empty channel selections clean once then retain valid empty SQL queries",
+      "seedChannels": [{ "service": "Alpha", "id": "stale" }],
+      "seedPrograms": [{ "service": "Alpha", "channel": "stale", "id": "stale-program" }],
+      "services": [{ "name": "Alpha", "channels": [] }],
+      "progressCounts": [6, 5]
+    },
+    { "name": "zero services and no rows still execute both empty cleanup selections", "services": [], "progressCounts": [1] },
+    {
+      "name": "pre-cancel still creates recording folders before scanner cancellation",
+      "preCancelled": true,
+      "services": [{ "name": "Alpha", "channels": [{ "Id": "unreachable" }] }],
+      "progressCounts": [0]
+    }
+  ]
+}

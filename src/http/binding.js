@@ -2,6 +2,7 @@ import { randomBytes } from 'node:crypto';
 import { parseLosslessJson } from '../core/json.js';
 import { wireGuid } from '../users/native.js';
 import { clrTrim, clrWhitespace } from '../metadata/whitespace.js';
+import { tokenizeJson } from '../core/json-tokens.js';
 
 const booleanWhitespace = new RegExp(`^[${clrWhitespace}\\u0000]+|[${clrWhitespace}\\u0000]+$`, 'gu');
 
@@ -94,7 +95,19 @@ function unclosedJsonContainer(text) {
   // Completing only a missing value and the open containers distinguishes an
   // otherwise valid JSON prefix from malformed tokens earlier in the body.
   const completion = text + (text.trimEnd().endsWith(':') ? 'null' : '') + closings.reverse().join('');
-  try { JSON.parse(completion); return true; }
+  try {
+    JSON.parse(completion);
+    let pendingPath = '$';
+    if (text.trimEnd().endsWith(':')) {
+      function visit(node, path) {
+        if (node.start === text.length) pendingPath = path;
+        for (const [name, value] of node.properties ?? []) visit(value, `${path}.${name}`);
+        for (const [index, value] of (node.items ?? []).entries()) visit(value, `${path}[${index}]`);
+      }
+      visit(tokenizeJson(completion), '$');
+    }
+    return pendingPath;
+  }
   catch { return false; }
 }
 
@@ -122,9 +135,10 @@ export async function readBody(request, { allowForm = false, allowTextJson = fal
   else {
     try { body = parseLosslessJson(text); }
     catch {
-      if (unclosedJsonContainer(text)) {
+      const incompletePath = unclosedJsonContainer(text);
+      if (incompletePath) {
         const line = text.split('\n').length - 1, position = Buffer.byteLength(text.slice(text.lastIndexOf('\n') + 1));
-        throw new BindingError('$', `Expected depth to be zero at the end of the JSON payload. There is an open JSON object or array that should be closed. Path: $ | LineNumber: ${line} | BytePositionInLine: ${position}.`);
+        throw new BindingError(incompletePath, `Expected depth to be zero at the end of the JSON payload. There is an open JSON object or array that should be closed. Path: ${incompletePath} | LineNumber: ${line} | BytePositionInLine: ${position}.`);
       }
       throw new BindingError('$', 'The request body is not valid JSON.');
     }
