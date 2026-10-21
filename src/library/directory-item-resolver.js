@@ -589,8 +589,13 @@ export class DirectoryItemResolverPipeline {
     return result;
   }
 
+  async resolvePath({ candidate, ...options } = {}) {
+    const resolved = await this.resolve({ ...options, candidates: [candidate], singleItem: true });
+    return resolved.claims.find(claim => claim.primary === candidate) ?? null;
+  }
+
   async resolve({ parent, root, collectionContext = null, candidates, peekDirectory, getExtraCandidates, resolveExtra,
-    onEnumerationReady, deletionSafe = true, signal } = {}) {
+    onEnumerationReady, deletionSafe = true, singleItem = false, signal } = {}) {
     if (!Array.isArray(candidates)) throw new TypeError('Directory resolution requires a sibling candidate array.');
     if (peekDirectory != null && typeof peekDirectory !== 'function') throw new TypeError('peekDirectory must be a function.');
     if (getExtraCandidates != null && typeof getExtraCandidates !== 'function') throw new TypeError('getExtraCandidates must be a function.');
@@ -666,7 +671,7 @@ export class DirectoryItemResolverPipeline {
       peekDirectory: resolverPeekDirectory, getExtraCandidates: resolverExtraCandidates, resolveExtra, signal };
     let singleCandidates = ordered, multiItemWinner = false;
 
-    for (const resolver of this.#resolvers.filter(value => typeof value.resolveMultiple === 'function')) {
+    for (const resolver of this.#resolvers.filter(value => !singleItem && typeof value.resolveMultiple === 'function')) {
       const result = await this.#call(resolver, 'resolveMultiple', { ...base, available: available() }, signal);
       if (result == null) continue;
       if (typeof result !== 'object' || Array.isArray(result)

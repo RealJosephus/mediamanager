@@ -484,6 +484,29 @@ export function registerDomainRoutes(add, { configuration, authentication, users
         }
     } catch (error) { if (error.status === 404) return notFound(); throw error; }
   });
+  add('GET', ['/Items/{itemId}/Intros', '/Users/{userId}/Items/{itemId}/Intros'], async context => {
+    try {
+      const itemId = guid(context, 'itemId');
+      const user = await requestUser(context, { required: false });
+      if (!user) throw httpError(400, 'Error processing request.');
+      return await library.getIntros(itemId, { user });
+    }
+    catch (error) { if (error.status === 404) return notFound(); throw error; }
+  });
+  for (const [endpoint, kind] of [['ThemeSongs', 'songs'], ['ThemeVideos', 'videos'], ['ThemeMedia', 'all']]) {
+    add('GET', `/Items/{itemId}/${endpoint}`, async context => {
+      const itemId = guid(context, 'itemId');
+      let userId = guid(context, 'userId', context.auth.UserId);
+      if (/^0{32}$/.test(userId ?? '')) userId = context.auth.UserId;
+      const user = await optionalRequestUser(context);
+      try {
+        return await library.getThemeMedia(itemId, { kind, user, userRoot: Boolean(userId && !/^0{32}$/.test(userId)),
+          inheritFromParent: boolean(context, 'inheritFromParent', false),
+          sortBy: commaEnums(context, 'sortBy', itemSortNames).map(String),
+          sortOrder: commaEnums(context, 'sortOrder', ['Ascending', 'Descending']).map(String) });
+      } catch (error) { if (error.status === 404) return notFound(); throw error; }
+    });
+  }
   for (const method of ['GET', 'POST']) add(method, ['/UserItems/{itemId}/UserData', '/Users/{userId}/Items/{itemId}/UserData'], async context => {
     try {
       const user = await requestUser(context);

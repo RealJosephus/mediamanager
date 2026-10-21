@@ -1,0 +1,255 @@
+{
+  "programDataPath": "Z:\\IntroProgram",
+  "items": [
+    {
+      "id": "982f0000-0000-0000-0000-000000000001",
+      "type": "Video",
+      "name": "Saved video"
+    },
+    {
+      "id": "982f0000-0000-0000-0000-000000000002",
+      "type": "Movie",
+      "name": "Saved movie"
+    },
+    {
+      "id": "982f0000-0000-0000-0000-000000000003",
+      "type": "Audio",
+      "name": "Saved audio"
+    }
+  ],
+  "paths": [
+    {
+      "path": "Z:\\IntroContracts\\saved.mkv",
+      "type": "Video",
+      "saved": true
+    },
+    {
+      "path": "Z:\\IntroContracts\\unsaved.mkv",
+      "type": "Video",
+      "saved": false
+    },
+    {
+      "path": "Z:\\IntroContracts\\sound.mp3",
+      "type": "Audio",
+      "saved": true
+    },
+    {
+      "path": "Z:\\IntroContracts\\unknown.bin",
+      "type": null,
+      "saved": false
+    },
+    {
+      "path": "Z:\\IntroContracts\\failure.mkv",
+      "type": "Video",
+      "saved": true,
+      "throw": true
+    }
+  ],
+  "cases": [
+    {
+      "name": "no providers",
+      "providers": []
+    },
+    {
+      "name": "video types and duplicate order",
+      "providers": [
+        {
+          "name": "single",
+          "intros": [
+            {
+              "ItemId": "982f0000-0000-0000-0000-000000000002"
+            },
+            {
+              "ItemId": "982f0000-0000-0000-0000-000000000001"
+            },
+            {
+              "ItemId": "982f0000-0000-0000-0000-000000000001"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "missing and nonvideo ids",
+      "providers": [
+        {
+          "name": "single",
+          "intros": [
+            {
+              "ItemId": "982f0000-0000-0000-0000-000000000003"
+            },
+            {
+              "ItemId": "982f0000-0000-0000-0000-000000000004"
+            },
+            {
+              "ItemId": "982f0000-0000-0000-0000-000000000001"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "id takes precedence over path",
+      "providers": [
+        {
+          "name": "single",
+          "intros": [
+            {
+              "ItemId": "982f0000-0000-0000-0000-000000000001",
+              "Path": "Z:\\IntroContracts\\failure.mkv"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "provider failures are isolated",
+      "providers": [
+        {
+          "name": "failure",
+          "intros": [],
+          "throw": true
+        },
+        {
+          "name": "success",
+          "intros": [
+            {
+              "ItemId": "982f0000-0000-0000-0000-000000000002"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "provider completion does not reorder results",
+      "providers": [
+        {
+          "name": "slow",
+          "intros": [
+            {
+              "ItemId": "982f0000-0000-0000-0000-000000000002"
+            },
+            {
+              "ItemId": "982f0000-0000-0000-0000-000000000001"
+            }
+          ],
+          "delayMs": 30
+        },
+        {
+          "name": "fast",
+          "intros": [
+            {
+              "ItemId": "982f0000-0000-0000-0000-000000000001"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "saved path returns persisted metadata",
+      "providers": [
+        {
+          "name": "path",
+          "intros": [
+            {
+              "Path": "Z:\\IntroContracts\\saved.mkv"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "path must resolve and have saved video",
+      "providers": [
+        {
+          "name": "paths",
+          "intros": [
+            {
+              "Path": "Z:\\IntroContracts\\saved.mkv"
+            },
+            {
+              "Path": "Z:\\IntroContracts\\unsaved.mkv"
+            },
+            {
+              "Path": "Z:\\IntroContracts\\sound.mp3"
+            },
+            {
+              "Path": "Z:\\IntroContracts\\unknown.bin"
+            },
+            {
+              "Path": "Z:\\IntroContracts\\failure.mkv"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "empty intro descriptions",
+      "providers": [
+        {
+          "name": "empty",
+          "intros": [
+            {},
+            {
+              "Path": ""
+            },
+            {
+              "Path": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "path duplicates retained",
+      "providers": [
+        {
+          "name": "paths",
+          "intros": [
+            {
+              "Path": "Z:\\IntroContracts\\saved.mkv"
+            },
+            {
+              "Path": "Z:\\IntroContracts\\saved.mkv"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "empty item id fails outside provider recovery",
+      "providers": [
+        {
+          "name": "single",
+          "intros": [
+            {
+              "ItemId": "00000000-0000-0000-0000-000000000000"
+            },
+            {
+              "ItemId": "982f0000-0000-0000-0000-000000000001"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "case insensitive path identity",
+      "configuration": {
+        "EnableCaseSensitiveItemIds": false
+      },
+      "providers": [
+        {
+          "name": "path",
+          "intros": [
+            {
+              "Path": "Z:\\IntroContracts\\saved.mkv"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "configuration": {
+    "EnableCaseSensitiveItemIds": true
+  }
+}

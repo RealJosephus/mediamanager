@@ -86,12 +86,7 @@ export function serializeLibraryOptions(options) {
   return { bytes: Buffer.from(xml + '\n'), failure };
 }
 
-const within = (root, candidate) => {
-  const relative = path.relative(path.toNamespacedPath(root), path.toNamespacedPath(candidate));
-  return relative === '' || relative !== '..' && !relative.startsWith(`..${path.sep}`) && !path.isAbsolute(relative);
-};
-const unsafe = filename => Object.assign(libraryError(501, 'Native library options outside the isolated instance root are not supported.'),
-  { code: 'UNSAFE_LIBRARY_OPTIONS_PATH', path: filename });
+const identityPathApi = value => /^(?:[A-Za-z]:[\\/]|[\\/]{2})/u.test(value) ? path.win32 : path.posix;
 
 export class LibraryOptionsStore extends EventEmitter {
   #closed = false;
@@ -101,7 +96,7 @@ export class LibraryOptionsStore extends EventEmitter {
   constructor({ fileSystem, programDataPath, dataPath, metadataPath, optionsById = new Map(), onError = () => {} } = {}) {
     super(); this.fileSystem = fileSystem;
     if (!programDataPath || !path.isAbsolute(programDataPath)) throw new TypeError('Library options require an absolute native program-data path.');
-    this.root = path.resolve(programDataPath); this.libraryRoot = path.join(this.root, 'root');
+    this.root = path.resolve(programDataPath);
     this.expandPath = createVirtualPathExpander({ programDataPath, dataPath, metadataPath });
     this.reversePath = createVirtualPathReverser({ programDataPath, dataPath, metadataPath });
     Object.assign(this, { optionsById, onError });
@@ -124,35 +119,18 @@ export class LibraryOptionsStore extends EventEmitter {
     catch { /* Cache invalidation reporting cannot change its result. */ }
   }
   async #filename(directory) {
-    const filename = path.join(directory, 'options.xml');
-    if (!path.isAbsolute(directory) || !within(this.libraryRoot, filename)) throw unsafe(filename);
-    const realpath = value => this.fileSystem.realpath(value).catch(error => {
-      if (error.cause?.details?.reason === 'link') throw unsafe(filename);
-      throw error;
-    });
-    const stateRoot = await realpath(this.root);
-    const libraryRoot = await realpath(this.libraryRoot).catch(error => { if (error.code === 'ENOENT') return null; throw error; });
-    if (libraryRoot && !within(stateRoot, libraryRoot)) throw unsafe(filename);
-    let ancestor = filename;
-    while (true) {
-      try {
-        const actual = await realpath(ancestor);
-        if (!within(stateRoot, actual) || libraryRoot && within(this.libraryRoot, ancestor) && !within(libraryRoot, actual)) throw unsafe(filename);
-        return filename;
-      } catch (error) {
-        if (!['ENOENT', 'ENOTDIR'].includes(error.code) || ancestor === this.root) throw error;
-        try {
-          await this.fileSystem.lstat(ancestor);
-          // A path entry that exists but cannot be resolved is a dangling
-          // symlink or reparse point. Treat it as unsafe before its target can
-          // appear outside the isolated instance root.
-          throw unsafe(filename);
-        } catch (entryError) {
-          if (!['ENOENT', 'ENOTDIR'].includes(entryError.code)) throw entryError;
-        }
-        ancestor = path.dirname(ancestor);
-      }
+    const api = identityPathApi(directory);
+    if (typeof directory !== 'string' || !api.isAbsolute(directory)) throw libraryError(400, 'An absolute library identity path is required.');
+    const filename = api.join(directory, 'options.xml');
+    // Identity paths may belong to another operating system or instance root.
+    // Only an explicit storage mapping authorizes their backend; adapters and
+    // mount capabilities enforce link rejection and write permissions.
+    try { this.fileSystem.resolve(filename); }
+    catch (error) {
+      if (error.code !== 'not-found') throw error;
+      throw Object.assign(libraryError(501, 'Library options require an explicit storage mapping.'), { code: 'unmapped-path', cause: error });
     }
+    return filename;
   }
   async #get(directory) {
     if (this.#cache.has(directory)) return this.#cache.get(directory);

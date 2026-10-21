@@ -17,6 +17,7 @@ import { collectionType } from './user-view-query.js';
 import { collectionFoldersForItem } from './collection-membership.js';
 import { canDeleteItem } from './delete-permission.js';
 import { loadPostgresRowsByIds } from './postgres-library-query.js';
+import { addInheritedImages } from './dto-inherited-images.js';
 
 export const itemFields = ['CanDelete', 'CanDownload', 'Chapters', 'Trickplay', 'ChildCount', 'CumulativeRunTimeTicks',
   'CustomRating', 'DateCreated', 'DateLastMediaAdded', 'DisplayPreferencesId', 'Etag', 'ExternalUrls', 'Genres', 'ItemCounts',
@@ -445,8 +446,12 @@ export async function projectItem(item, state, user, selected, options) {
   }
   if (['Audio', 'AudioBook', 'MusicAlbum', 'MusicVideo'].includes(item.Type)) {
     dto.Artists = item.Artists;
-    const names = values => [...new Set(values.filter(value => clrTrim(value)))].flatMap(Name => {
-      const artist = state.items.find(candidate => candidate.Type === 'MusicArtist' && repositoryCleanName(candidate) === cleanValue(Name));
+    const albumArtists = item.Type === 'MusicVideo' ? [] : item.AlbumArtists;
+    const requestedArtists = [...new Set([...item.Artists, ...albumArtists].filter(value => value != null && clrTrim(value)))];
+    const artistsByName = state.getDtoArtists ? await state.getDtoArtists(requestedArtists) : null;
+    const names = values => [...new Set(values.filter(value => value != null && clrTrim(value)))].flatMap(Name => {
+      const artist = artistsByName ? artistsByName.get(Name)?.[0]
+        : state.items.find(candidate => candidate.Type === 'MusicArtist' && repositoryCleanName(candidate) === cleanValue(Name));
       return artist ? [{ Name, Id: dtoId(artist.Id) }] : [];
     });
     dto.ArtistItems = names(item.Artists);
@@ -544,10 +549,13 @@ export async function projectItem(item, state, user, selected, options) {
   if (selected.enableImages) dto.ImageTags = new Map();
   if (imageEnabled('Backdrop')) dto.BackdropImageTags = [];
   for (const row of images) {
-    const type = itemImageTypes[row.ImageType]; if (!type || !imageEnabled(type)) continue;
+    const type = itemImageTypes[row.ImageType];
+    if (!type || !imageEnabled(type) || type === 'Chapter') continue;
     const tag = imageTag(row);
-    if (type === 'Backdrop') { if (dto.BackdropImageTags.length < selected.imageTypeLimit) dto.BackdropImageTags.push(tag); }
-    else if (!['Screenshot', 'Chapter'].includes(type)) dto.ImageTags.set(type, tag);
+    if (type === 'Backdrop') {
+      if (dto.BackdropImageTags.length >= selected.imageTypeLimit) continue;
+      dto.BackdropImageTags.push(tag);
+    } else dto.ImageTags.set(type, tag);
     if (row.Blurhash?.length) {
       if (!dto.ImageBlurHashes.has(type)) dto.ImageBlurHashes.set(type, new Map());
       dto.ImageBlurHashes.get(type).set(tag, Buffer.from(row.Blurhash).toString('utf8'));
@@ -568,6 +576,7 @@ export async function projectItem(item, state, user, selected, options) {
       }
     } else if (primary?.Width > 0 && primary.Height > 0) dto.PrimaryImageAspectRatio = primary.Width / primary.Height;
   }
+  await addInheritedImages(dto, item, state, selected, options, parent => itemImageRows(state, parent));
   if (['Audio', 'AudioBook'].includes(item.Type)) {
     dto.Album = item.Album;
     dto.ExtraType = extraType(item);

@@ -149,7 +149,7 @@ test('native library options preserve text, defaults and virtual media paths', (
   assert.throws(() => parseLibraryOptions('<LibraryOptions><AutomaticRefreshIntervalDays>2147483648</AutomaticRefreshIntervalDays></LibraryOptions>'));
 });
 
-test('library options loader uses native invalid-file defaults and rejects junction escapes',
+test('library options loader uses native defaults and mapped external paths without following junctions',
   { skip: !process.env.MEDIAMANAGER_TEST_POSTGRES }, async t => {
   const testRoot = await temporaryOptionsDirectory();
   const database = await createPostgresTestDatabase(t, 'library_options_loader');
@@ -167,9 +167,9 @@ test('library options loader uses native invalid-file defaults and rejects junct
     await writeFile(path.join(outside, 'options.xml'), '<LibraryOptions><Enabled>false</Enabled></LibraryOptions>');
     const link = path.join(state, 'root', 'escaped'); await symlink(outside, link, 'junction');
     await database.update('BaseItems', { Id: id }, { Path: link });
-    await assert.rejects(loadLibraryOptions(database, {fileSystem: testFileSystem,  programDataPath: state }), error => error.code === 'UNSAFE_LIBRARY_OPTIONS_PATH');
+    assert.equal((await loadLibraryOptions(database, {fileSystem: testFileSystem, programDataPath: state })).get(id.replaceAll('-', '')).Enabled, true);
     await database.update('BaseItems', { Id: id }, { Path: outside });
-    await assert.rejects(loadLibraryOptions(database, {fileSystem: testFileSystem,  programDataPath: state }), error => error.code === 'UNSAFE_LIBRARY_OPTIONS_PATH');
+    assert.equal((await loadLibraryOptions(database, {fileSystem: testFileSystem, programDataPath: state })).get(id.replaceAll('-', '')).Enabled, false);
   } finally {
     assert.ok(path.resolve(testRoot).startsWith(path.join(validationOutputRoot(), 'library-options-test-')));
     await rm(testRoot, { recursive: true });

@@ -126,8 +126,6 @@ export async function loadLibraryOptions(database, { fileSystem, programDataPath
   try {
     for (const collection of collections) {
       const collectionPath = optionsStore.expandPath(collection.Path);
-      if (!collectionPath || !path.isAbsolute(collectionPath)) throw Object.assign(libraryError(501,
-        'Native library options outside the isolated instance root are not supported.'), { code: 'UNSAFE_LIBRARY_OPTIONS_PATH', path: collectionPath });
       await optionsStore.bind(collection.Id, collectionPath);
     }
     return optionsStore.optionsById;

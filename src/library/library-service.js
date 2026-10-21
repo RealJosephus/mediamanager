@@ -4,7 +4,7 @@ import { AsyncLocalStorage } from 'node:async_hooks';
 import { availableParallelism } from 'node:os';
 import { EventEmitter } from 'node:events';
 import { getNewItemId } from '../core/identity.js';
-import { loadLibrary, mapRecord, idKey, sameId, nonemptyId, guid, cleanValue, dateText, dateTicks, libraryError, unsupported, repositoryCleanName, repositoryTopParentId, repositoryValue, repositoryIdPresent, NAME_TYPES, VIDEO_TYPES, MIN_DATE, EMPTY_ID } from './records.js';
+import { loadLibrary, mapRecord, dtoId, idKey, sameId, nonemptyId, guid, cleanValue, dateText, dateTicks, libraryError, unsupported, repositoryCleanName, repositoryTopParentId, repositoryValue, repositoryIdPresent, NAME_TYPES, VIDEO_TYPES, MIN_DATE, EMPTY_ID } from './records.js';
 import { visibleItem, visibleLibrary } from './permissions.js';
 import { collectionFoldersForItem, userRootFolders } from './collection-membership.js';
 import { canDeleteItem } from './delete-permission.js';
@@ -33,10 +33,11 @@ import { clrTrim } from '../metadata/whitespace.js';
 import { ordinalIgnoreCaseKey } from '../storage/ordinal-comparer.js';
 import { createPresentationUniqueKey } from './presentation-key.js';
 import { SimilarItemsManager } from './similar-items.js';
+import { readNativeImageRows } from '../database/native-relation-order.js';
 import { buildPostgresItemPageQuery, queryPostgresDtoChildCounts, queryPostgresItemPage } from '../database/postgres-item-query.js';
 import { loadPostgresItemGraph, loadPostgresNavigationRows, loadPostgresPageGraph, loadPostgresRowsByIds, queryPostgresFolderStats,
   countPostgresNullVideoTypeRows, queryPostgresAlbumSelectorIds, queryPostgresArtistSelectorId,
-  queryPostgresArtistSelectorIds,
+  queryPostgresArtistSelectorIds, queryPostgresDtoArtistIds,
   queryPostgresAncestorIds,
   queryPostgresLinkTypes, queryPostgresLinkedChildCounts } from './postgres-library-query.js';
 import { NativeItemJsonError } from './native-item-data.js';
@@ -46,6 +47,7 @@ import { queryPostgresLatestItems } from './postgres-latest-items-query.js';
 import { queryPostgresNamedItemPage, queryPostgresNamedItemCounts, queryPostgresNamedSlug } from './postgres-named-items-query.js';
 import { dtoItemCountKinds, queryPostgresDtoItemCounts } from './postgres-dto-item-counts-query.js';
 import { queryPostgresItemFilters } from './postgres-item-filters-query.js';
+import { queryPostgresThemeItems } from './postgres-theme-items-query.js';
 import { loadLocalizationData } from '../core/localization-data.js';
 import { queryPostgresExternalViewPresence, queryPostgresUserViewChildPresence } from './postgres-user-views-query.js';
 import { queryPostgresBuiltInSearch, resolvePostgresSearchCollation, releasePostgresSearchCollation } from './postgres-search-provider.js';
@@ -320,6 +322,31 @@ export class LibraryService extends EventEmitter {
     state.now = dateText(this.clock().toISOString());
     state.visible = item => visibleItem(item, user, state, this.options);
     state.getChildCount = item => this.getDtoChildCount(item, state, user);
+    const imageArtists = new Map();
+    state.getImageArtist = name => {
+      if (!imageArtists.has(name)) imageArtists.set(name, this.#getArtistPostgres(db, name));
+      return imageArtists.get(name);
+    };
+    const dtoArtists = new Map();
+    state.getDtoArtists = async names => {
+      const missing = [...new Set(names)].filter(name => !dtoArtists.has(name));
+      if (missing.length) {
+        const idsByName = await queryPostgresDtoArtistIds(db, missing);
+        const rows = await loadPostgresRowsByIds(db, [...new Set([...idsByName.values()].flat())]);
+        const artistsById = new Map(rows.map(row => {
+          const artist = mapRecord(row);
+          artist.Path = this.options.expandPath?.(artist.Path) ?? artist.Path;
+          return [idKey(artist.Id), artist];
+        }));
+        for (const [name, ids] of idsByName) dtoArtists.set(name, ids.map(id => artistsById.get(idKey(id))).filter(Boolean));
+        const missingImages = [...artistsById.values()].filter(artist => !state.dtoRelations.imageRowsByItem.has(idKey(artist.Id)));
+        for (const artist of missingImages) state.dtoRelations.imageRowsByItem.set(idKey(artist.Id), []);
+        if (missingImages.length) for (const image of await readNativeImageRows(db, missingImages.map(artist => artist.Id))) {
+          state.dtoRelations.imageRowsByItem.get(idKey(image.ItemId)).push(image);
+        }
+      }
+      return new Map(names.map(name => [name, dtoArtists.get(name)]));
+    };
     state.getItemCounts = async item => {
       if (!Object.hasOwn(dtoItemCountKinds, item.Type)) return undefined;
       await this.#prefetchItemCounts([item], state, user);
@@ -661,10 +688,15 @@ export class LibraryService extends EventEmitter {
     for (const [id, value] of counts) state.dtoItemCounts.set(id, value);
   }
 
-  async #prefetchPostgresDtos(items, state, user, selected) {
+  async #prefetchPostgresDtos(items, state, user, selected, { artistBatch = true } = {}) {
     // A latest-media page may project the same item more than once. Prefetch
     // caches by identity; repeated requests must not multiply its child counts.
     items = [...new Map(items.map(item => [idKey(item.Id), item])).values()];
+    if (artistBatch) {
+      const names = [...new Set(items.flatMap(item => ['Audio', 'AudioBook', 'MusicAlbum', 'MusicVideo'].includes(item.Type)
+        ? [...(item.Artists ?? []), ...(item.AlbumArtists ?? [])].filter(name => name != null && clrTrim(name)) : []))];
+      state.dtoImageArtistsBatch = await state.getDtoArtists(names);
+    }
     await prefetchPostgresDtoRelations(items, state, user, selected, this.options);
     if (selected.fields.has('itemcounts')) await this.#prefetchItemCounts(items, state, user);
     if (!user) return;
@@ -1025,7 +1057,7 @@ export class LibraryService extends EventEmitter {
       const item = state.byId.get(idKey(named.Id)) ?? named;
       if (!state.byId.has(idKey(item.Id))) { state.adoptItem(item); state.byId.set(idKey(item.Id), item); state.items.push(item); }
       const options = dtoOptions({}, true);
-      await this.#prefetchPostgresDtos([item], state, user, options);
+      await this.#prefetchPostgresDtos([item], state, user, options, { artistBatch: false });
       return projectItem(item, state, user, options, this.options);
     });
   }
@@ -2401,6 +2433,60 @@ export class LibraryService extends EventEmitter {
 
   async getItemDto(item, { user = null, ...query } = {}) {
     return this.getItem(item.Id, { user, ...query });
+  }
+
+  async getIntros(id, { user } = {}) {
+    const normalized = guid(id);
+    const item = await this.getItemRecord(normalized, { user: nonemptyId(normalized) ? user : null });
+    const intros = await this.introProviders?.getIntros(item, user) ?? [];
+    if (!intros.length) return { Items: [], TotalRecordCount: 0, StartIndex: 0 };
+    return this.#runWithStates(async db => {
+      const state = await this.#loadPostgresItemState(db, intros.map(intro => intro.Id), user);
+      const items = intros.map(intro => state.byId.get(idKey(intro.Id)) ?? intro);
+      const options = dtoOptions({}, true);
+      await this.#prefetchPostgresDtos(items, state, user, options, { artistBatch: false });
+      const projected = [];
+      for (const intro of items) projected.push(await projectItem(intro, state, user, options, this.options));
+      return { Items: projected, TotalRecordCount: projected.length, StartIndex: 0 };
+    });
+  }
+
+  async getThemeMedia(id, { kind = 'all', user = null, userRoot = Boolean(user),
+    inheritFromParent = false, sortBy = [], sortOrder = [] } = {}) {
+    if (!['all', 'songs', 'videos'].includes(kind)) throw new TypeError('A theme media kind is required.');
+    if (kind === 'all') {
+      const options = { user, userRoot, inheritFromParent, sortBy, sortOrder };
+      return {
+        ThemeSongsResult: await this.getThemeMedia(id, { ...options, kind: 'songs' }),
+        ThemeVideosResult: await this.getThemeMedia(id, { ...options, kind: 'videos' }),
+        SoundtrackSongsResult: { Items: [], TotalRecordCount: 0, StartIndex: 0, OwnerId: dtoId(EMPTY_ID) },
+      };
+    }
+    const normalized = guid(id);
+    return this.#runWithStates(async db => {
+      const initial = await this.#loadPostgresItemState(db, nonemptyId(normalized) ? [normalized] : [], user);
+      const item = nonemptyId(normalized) ? initial.byId.get(idKey(normalized))
+        : initial.items.find(item => item.Type === (userRoot ? 'UserRootFolder' : 'AggregateFolder'));
+      if (!item || nonemptyId(normalized) && user && !await this.#postgresStandaloneVisible(db, item, user, initial)) {
+        throw libraryError(404, 'Item not found.');
+      }
+      if (!user) {
+        const required = sortBy.find(value => ['dateplayed', 'playcount', 'isunplayed', 'isfavoriteorliked'].includes(String(value).toLowerCase()));
+        if (required !== undefined) throw libraryError(400, `Sort key '${required}' requires a user, but none was provided.`);
+      }
+      const page = await queryPostgresThemeItems(db, item, { extraType: kind === 'songs' ? 8 : 9,
+        inheritFromParent, sortBy, sortOrder, userId: user?.Id,
+        visibility: this.#postgresVisibility(initial, user), configuration: this.options.configuration,
+        ratingContext: postgresParentalRatingContext(initial, this.options) });
+      const state = await this.#loadPostgresItemState(db, [page.ownerId, ...page.ids], user);
+      const owner = state.byId.get(idKey(page.ownerId)) ?? item;
+      const items = page.ids.map(id => state.byId.get(idKey(id))).filter(Boolean);
+      const options = dtoOptions({}, true);
+      await this.#prefetchPostgresDtos(items, state, user, options, { artistBatch: false });
+      const projected = [];
+      for (const extra of items) projected.push(await projectItem(extra, state, user, options, { ...this.options, owner }));
+      return { Items: projected, TotalRecordCount: projected.length, StartIndex: 0, OwnerId: dtoId(page.ownerId) };
+    });
   }
 
   async getAncestors(id, { user = null } = {}) {

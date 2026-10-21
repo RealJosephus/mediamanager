@@ -1,4 +1,7 @@
 import { PluginHost } from './plugins/host.js';
+import { IntroProviderManager } from './library/intro-providers.js';
+import { createIntroPathResolver } from './library/intro-path-resolver.js';
+import { guid, nonemptyId, libraryError } from './library/records.js';
 import { LibraryTaskScheduler } from './library/library-task-scheduler.js';
 import { createConfiguredStorage } from './storage-bootstrap.js';
 import { DomainStore } from './database/domain-store.js';
@@ -280,6 +283,19 @@ export async function createRuntime({ database, configuration, serverId, serverN
     Object.assign(metadata, { saver });
   }
   library.itemCreation = itemCreation;
+  const introProviders = new IntroProviderManager({ extensions: () => plugins.entries('intro'), logger,
+    getItem: async id => {
+      const normalized = guid(id);
+      if (!nonemptyId(normalized)) throw libraryError(400, "Guid can't be empty (Parameter 'id')");
+      if (itemCreation) return itemCreation.getItemById(normalized);
+      try { return await library.getItemRecord(normalized); }
+      catch (error) { if (error.status === 404) return null; throw error; }
+    },
+    resolvePath: resolverPipeline ? createIntroPathResolver({ vfs, identityMap, ignoreRule, resolverPipeline,
+      applicationRootPath: path.join(programDataPath, 'root') }) : async () => null,
+  });
+  library.introProviders = introProviders;
+  rollback.push(() => introProviders.close());
   const linkedChildReferences = itemCreation && metadataUpdates
     ? new LinkedChildReferenceService({ store, linkedChildren, itemCreation, loadContext, updates: metadataUpdates })
     : undefined;
@@ -457,6 +473,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
       const errors = [];
       const attempt = async operation => { try { await operation(); } catch (error) { errors.push(error); } };
       application.beginClose();
+      introProviders.close();
       stopStorageObserver();
       // A scheduler worker can be awaiting a metadata provider's cancellation.
       // Signal it before waiting for any scan owner; savers and SQL ownership

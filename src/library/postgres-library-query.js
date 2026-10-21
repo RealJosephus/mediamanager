@@ -300,6 +300,28 @@ export async function queryPostgresArtistSelectorId(database, name) {
   return (await queryPostgresArtistSelectorIds(database, [name]))[0] ?? undefined;
 }
 
+/** Select the first FindArtists result consumed by DTO references and images. */
+export async function queryPostgresDtoArtistIds(database, names) {
+  const result = new Map(names.map(name => [name, []]));
+  if (!names.length) return result;
+  const rows = await database.client.query({
+    text: `/* dto-artists-by-name */
+      SELECT requested."Name", selected."Id"
+      FROM unnest($1::bytea[], $2::bytea[]) WITH ORDINALITY requested("Name", "CleanName", "Ordinal")
+      JOIN LATERAL (
+        SELECT artist."Id" FROM ${qualified(database, 'BaseItems')} artist
+        JOIN ${q(database.controlSchema)}.${q('item_order')} ordering ON ordering.item_id = artist."Id"
+        WHERE artist."CleanName" = requested."CleanName" AND artist."Type" = $3::bytea
+        ORDER BY ordering.position LIMIT 1
+      ) selected ON TRUE
+      ORDER BY requested."Ordinal"`,
+    values: [names.map(nativeTextBytes), names.map(name => nativeTextBytes(cleanValue(name))),
+      nativeTextBytes('MediaBrowser.Controller.Entities.Audio.MusicArtist')],
+  });
+  for (const row of rows.rows) result.get(decodeNativeTextBytes(row.Name)).push(decodeNativeTextBytes(row.Id));
+  return result;
+}
+
 /** Resolve deterministic by-name identities in request order in one lookup. */
 export async function queryPostgresIdentitySelectorIds(database, ids) {
   if (!ids.length) return [];

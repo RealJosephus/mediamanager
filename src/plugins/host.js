@@ -10,9 +10,9 @@ import { inspectPackage, stagePackage, verifyRelease, physicalDirectory, officia
 const error = (status,message) => Object.assign(new Error(message),{status,statusCode:status});
 const object = value => value !== null && typeof value==='object' && !Array.isArray(value);
 const clone = value => JSON.parse(JSON.stringify(value));
-const kinds = new Set(['metadata','similar','storage','task','route','context','imagePaths']);
+const kinds = new Set(['metadata','similar','intro','storage','task','route','context','imagePaths']);
 const signals = { getMetadata:1, search:1, fetch:1, hasChanged:1, save:1, prepareSave:1, validateSave:1, preflight:1,
-  getImages:1, getImage:1, getImageResponse:1, getReferences:2, run:0, enrich:1, handle:0, create:1 };
+  getImages:1, getImage:1, getImageResponse:1, getIntros:1, getReferences:2, run:0, enrich:1, handle:0, create:1 };
 const storageSignals = {stat:1,listPage:1,openRead:1,write:2,mkdir:1,delete:1,rename:2,health:0,fileStat:1,openFile:2};
 
 async function atomicJson(filename,value) {
@@ -187,6 +187,7 @@ export class PluginHost {
       register:async(kind,value)=>{
         if(!kinds.has(kind)||!object(value)||!scope.active)throw new TypeError('Invalid plugin extension registration.');
         if(kind==='metadata')validateMetadataExtension(value);
+        if(kind==='intro'&&typeof value.getIntros!=='function')throw new TypeError('An intro provider requires getIntros.');
         const wrapped=scope.wrap(value,kind),entry={kind,value:wrapped};
         active.entries.push(entry);
         const install=this.#sinks.get(kind);if(install)entry.dispose=await install(wrapped,id);

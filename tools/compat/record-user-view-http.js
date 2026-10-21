@@ -67,6 +67,19 @@ const scenarios = {
     libraryTypeMarkers: true,
     menuLifecycle: false,
   },
+  'theme-media-http': {
+    fixture: 'tests/library/fixtures/theme-media-http/input.json',
+    expectedCases: 138,
+    includeAggregateSnapshot: true,
+    libraryTypeMarkers: true,
+    menuLifecycle: false,
+  },
+  'intros-http': {
+    fixture: 'tests/library/fixtures/intros-http/input.json',
+    expectedCases: 26,
+    libraryTypeMarkers: true,
+    menuLifecycle: false,
+  },
 };
 
 export async function recordUserViewHttp(scenarioName, outputArgument, portArgument) {
@@ -143,6 +156,7 @@ const nativeTypes = {
   Folder: 'MediaBrowser.Controller.Entities.Folder',
   Genre: 'MediaBrowser.Controller.Entities.Genre',
   Movie: 'MediaBrowser.Controller.Entities.Movies.Movie',
+  Video: 'MediaBrowser.Controller.Entities.Video',
   MusicAlbum: 'MediaBrowser.Controller.Entities.Audio.MusicAlbum',
   MusicArtist: 'MediaBrowser.Controller.Entities.Audio.MusicArtist',
   MusicGenre: 'MediaBrowser.Controller.Entities.Audio.MusicGenre',
@@ -163,6 +177,8 @@ const quote = name => `"${String(name).replaceAll('"', '""')}"`;
 let seedClock;
 
 function itemPath(item) {
+  if (item.pathKind === 'owned') return path.join(path.dirname(itemPath(itemById.get(idKey(item.ownerId)))),
+    'theme-media', item.key + (item.type === 'Audio' ? '.mp3' : '.mkv'));
   if (item.pathKind === 'named') return path.join(referenceRoot, 'data/metadata',
     item.type === 'MusicArtist' ? 'artists' : item.type, item.metadataFolder ?? item.name);
   if (item.pathKind === 'studio') return path.join(referenceRoot, 'data/metadata/Studio', item.name);
@@ -244,7 +260,8 @@ function databaseSnapshot() {
     const allBaseItems = database.prepare('SELECT * FROM "BaseItems"').all();
     const baseItems = scenario.menuLifecycle
       ? allBaseItems
-      : allBaseItems.filter(row => visibleFixtureItemIds.has(idKey(row.Id)) || dynamicUserView(row));
+      : allBaseItems.filter(row => visibleFixtureItemIds.has(idKey(row.Id)) || dynamicUserView(row)
+        || scenario.includeAggregateSnapshot && row.Type === nativeTypes.AggregateFolder);
     const dynamicIds = new Set(baseItems.filter(dynamicUserView).map(row => idKey(row.Id)));
     const targetIds = new Set([...fixtureItemIds, ...dynamicIds]);
     const targetRows = table => sortedRows(database.prepare(`SELECT * FROM ${quote(table)}`).all().filter(row => {
@@ -281,7 +298,7 @@ function databaseSnapshot() {
 
 function upsertBaseItem(database, template, item) {
   const existing = database.prepare('SELECT * FROM "BaseItems" WHERE "Id" = ?').get(upperId(item.id));
-  const isFolder = !['Movie', 'Audio', 'AudioBook', 'Book', 'Episode', 'Studio', 'Genre', 'MusicGenre', 'Person', 'Year'].includes(item.type);
+  const isFolder = item.isFolder ?? !['Movie', 'Video', 'Audio', 'AudioBook', 'Book', 'Episode', 'Studio', 'Genre', 'MusicGenre', 'Person', 'Year'].includes(item.type);
   const row = {
     ...(existing ?? template),
     Id: upperId(item.id),
@@ -296,6 +313,7 @@ function upsertBaseItem(database, template, item) {
     IsMovie: item.type === 'Movie' ? 1 : 0,
     IsSeries: item.type === 'Series' ? 1 : 0,
     Overview: item.overview ?? null,
+    ...(Object.hasOwn(item, 'communityRating') ? { CommunityRating: item.communityRating } : {}),
     Genres: item.genresText ?? null,
     PrimaryVersionId: item.primaryVersionId == null ? null : upperId(item.primaryVersionId),
     IsVirtualItem: item.isVirtualItem ? 1 : 0,
@@ -443,6 +461,17 @@ function seedDatabase() {
         const columns = Object.keys(row);
         database.prepare(`INSERT INTO "MediaStreamInfos" (${columns.map(quote).join(', ')}) VALUES (${columns.map(() => '?').join(', ')})`)
           .run(...columns.map(name => row[name]));
+      }
+      for (const image of fixture.images ?? []) {
+        const row = {
+          Id: upperId(image.id), ItemId: upperId(itemByKey.get(image.itemKey).id), ImageType: image.imageType,
+          Path: path.join(referenceRoot, 'data/metadata/theme-images', image.id + '.png'),
+          DateModified: image.dateModified ?? '2026-09-27 12:00:00', Width: image.width ?? 100, Height: image.height ?? 100,
+          Blurhash: image.blurHash == null ? null : Buffer.from(image.blurHash),
+        };
+        const columns = Object.keys(row);
+        database.prepare(`INSERT INTO "BaseItemImageInfos" (${columns.map(quote).join(', ')}) VALUES (${columns.map(() => '?').join(', ')})`)
+          .run(...columns.map(column => row[column]));
       }
       for (const data of fixture.userData) {
         const item = itemByKey.get(data.itemKey);
@@ -607,6 +636,8 @@ async function stopReference(instance, token) {
     pidGone: result.pidGone, portAvailable: result.portAvailable };
 }
 function routeFor(endpoint, testCase, userId) {
+  if (testCase.action === 'intros') return `${endpoint === 'legacy' ? '/Users/' + (testCase.introUserId ?? userId) : ''}/Items/${testCase.introItemId ?? itemByKey.get(testCase.detailKey).id}/Intros?${testCase.query.replaceAll(fixture.userId, userId)}`;
+  if (testCase.action === 'theme') return `/Items/${testCase.themeItemId ?? itemByKey.get(testCase.detailKey).id}/${testCase.themeRoute}?${testCase.query.replaceAll(fixture.userId, userId)}`;
   if (testCase.action === 'dto-detail') return `${endpoint === 'legacy' ? '/Users/' + userId : ''}/Items/${itemByKey.get(testCase.detailKey).id}?${testCase.query.replaceAll(fixture.userId, userId)}`;
   if (testCase.action === 'named-list' || testCase.action === 'named-detail') return `/${testCase.namedRoute}${testCase.action === 'named-detail' ? '/' + encodeURIComponent(testCase.itemName) : ''}?${testCase.query.replaceAll(fixture.userId, userId)}`;
   if (['filters', 'filters2'].includes(testCase.action)) return `/Items/${testCase.action === 'filters' ? 'Filters' : 'Filters2'}?${testCase.query.replaceAll(fixture.userId, userId)}`;
@@ -705,6 +736,14 @@ function responseContractFailures(records) {
         if (response.contentType !== 'application/json; charset=utf-8' || !body
           || stable(Object.keys(body).sort()) !== stable(fields.sort())
           || fields.some(field => !Array.isArray(body[field]))) failures.push(`${label} facet JSON shape is invalid`);
+      } else if (testCase.action === 'theme') {
+        const themes = testCase.themeRoute === 'ThemeMedia'
+          ? [body?.ThemeSongsResult, body?.ThemeVideosResult, body?.SoundtrackSongsResult] : [body];
+        if (response.contentType !== 'application/json; charset=utf-8' || themes.some(theme => !theme
+          || !Array.isArray(theme.Items) || theme.TotalRecordCount !== theme.Items.length || theme.StartIndex !== 0
+          || typeof theme.OwnerId !== 'string' || theme.Items.some(item => typeof item.Id !== 'string' || typeof item.Type !== 'string'))) {
+          failures.push(`${label} successful theme JSON shape is invalid`);
+        }
       } else if (testCase.action === 'named-detail' || testCase.action === 'dto-detail') {
         if (response.contentType !== 'application/json; charset=utf-8' || !body
           || typeof body.Id !== 'string' || body.Type !== testCase.itemType) failures.push(`${label} named detail JSON shape is invalid`);

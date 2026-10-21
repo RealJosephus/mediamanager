@@ -1,0 +1,598 @@
+{
+  "schemaVersion": 1,
+  "userId": "5c6b5f77-bea9-4a9a-98aa-fae5909892b7",
+  "rootId": "80200000-0000-0000-0000-000000000004",
+  "warmUserViews": {
+    "configuration": {
+      "GroupedFolders": [
+        "80200000-0000-0000-0000-000000000004",
+        "80200000-0000-0000-0000-000000000006",
+        "80200000-0000-0000-0000-000000000008",
+        "80200000-0000-0000-0000-000000000010",
+        "80200000-0000-0000-0000-000000000012"
+      ],
+      "LatestItemsExcludes": [],
+      "HidePlayedInLatest": false
+    },
+    "policy": {
+      "EnableAllFolders": true,
+      "EnabledFolders": [],
+      "BlockedMediaFolders": [],
+      "AllowedTags": [],
+      "BlockedTags": [],
+      "MaxParentalRating": null,
+      "MaxParentalSubRating": null,
+      "BlockUnratedItems": [],
+      "EnableContentDeletion": false,
+      "EnableContentDeletionFromFolders": []
+    }
+  },
+  "items": [
+    {
+      "key": "aggregate",
+      "id": "f27caa37-e514-2225-cced-ed48f6553502",
+      "type": "AggregateFolder",
+      "name": "root",
+      "sortName": "root",
+      "parentId": null,
+      "topParentId": null,
+      "ancestorIds": [],
+      "pathKind": "aggregate",
+      "primaryVersionId": null
+    },
+    {
+      "key": "userRoot",
+      "id": "e9d5075a-555c-1cbc-394e-ec4cef295274",
+      "type": "UserRootFolder",
+      "name": "Media Folders",
+      "sortName": "media folders",
+      "parentId": null,
+      "topParentId": null,
+      "ancestorIds": [],
+      "pathKind": "userRoot",
+      "data": {
+        "IsRoot": true,
+        "PhysicalLocationsList": []
+      },
+      "primaryVersionId": null
+    },
+    {
+      "key": "physicalA",
+      "id": "80200000-0000-0000-0000-000000000003",
+      "type": "Folder",
+      "name": "Physical A",
+      "sortName": "physical a",
+      "parentId": "f27caa37-e514-2225-cced-ed48f6553502",
+      "pathKind": "physicalA",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "primaryVersionId": null
+    },
+    {
+      "key": "libraryA",
+      "id": "80200000-0000-0000-0000-000000000004",
+      "type": "CollectionFolder",
+      "name": "Library A",
+      "sortName": "library a",
+      "parentId": "e9d5075a-555c-1cbc-394e-ec4cef295274",
+      "pathKind": "libraryA",
+      "data": {
+        "CollectionType": "movies",
+        "PhysicalFolderIds": [
+          "80200000-0000-0000-0000-000000000003"
+        ],
+        "PhysicalLocationsList": [],
+        "LibraryOptions": {
+          "Enabled": true
+        }
+      },
+      "topParentId": "80200000-0000-0000-0000-000000000004",
+      "ancestorIds": [
+        "e9d5075a-555c-1cbc-394e-ec4cef295274"
+      ],
+      "primaryVersionId": null
+    },
+    {
+      "key": "physicalB",
+      "id": "80200000-0000-0000-0000-000000000005",
+      "type": "Folder",
+      "name": "Physical B",
+      "sortName": "physical b",
+      "parentId": "f27caa37-e514-2225-cced-ed48f6553502",
+      "pathKind": "physicalB",
+      "topParentId": "80200000-0000-0000-0000-000000000005",
+      "ancestorIds": [
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "primaryVersionId": null
+    },
+    {
+      "key": "libraryB",
+      "id": "80200000-0000-0000-0000-000000000006",
+      "type": "CollectionFolder",
+      "name": "Library B",
+      "sortName": "library b",
+      "parentId": "e9d5075a-555c-1cbc-394e-ec4cef295274",
+      "pathKind": "libraryB",
+      "data": {
+        "CollectionType": "movies",
+        "PhysicalFolderIds": [
+          "80200000-0000-0000-0000-000000000005"
+        ],
+        "PhysicalLocationsList": [],
+        "LibraryOptions": {
+          "Enabled": true
+        }
+      },
+      "topParentId": "80200000-0000-0000-0000-000000000006",
+      "ancestorIds": [
+        "e9d5075a-555c-1cbc-394e-ec4cef295274"
+      ],
+      "primaryVersionId": null
+    },
+    {
+      "key": "physicalT",
+      "id": "80200000-0000-0000-0000-000000000007",
+      "type": "Folder",
+      "name": "Physical T",
+      "sortName": "physical t",
+      "parentId": "f27caa37-e514-2225-cced-ed48f6553502",
+      "pathKind": "physicalT",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "primaryVersionId": null
+    },
+    {
+      "key": "libraryT",
+      "id": "80200000-0000-0000-0000-000000000008",
+      "type": "CollectionFolder",
+      "name": "Library T",
+      "sortName": "library t",
+      "parentId": "e9d5075a-555c-1cbc-394e-ec4cef295274",
+      "pathKind": "libraryT",
+      "data": {
+        "CollectionType": "tvshows",
+        "PhysicalFolderIds": [
+          "80200000-0000-0000-0000-000000000007"
+        ],
+        "PhysicalLocationsList": [],
+        "LibraryOptions": {
+          "Enabled": true
+        }
+      },
+      "topParentId": "80200000-0000-0000-0000-000000000008",
+      "ancestorIds": [
+        "e9d5075a-555c-1cbc-394e-ec4cef295274"
+      ],
+      "primaryVersionId": null
+    },
+    {
+      "key": "physicalK",
+      "id": "80200000-0000-0000-0000-000000000009",
+      "type": "Folder",
+      "name": "Physical K",
+      "sortName": "physical k",
+      "parentId": "f27caa37-e514-2225-cced-ed48f6553502",
+      "pathKind": "physicalK",
+      "topParentId": "80200000-0000-0000-0000-000000000009",
+      "ancestorIds": [
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "primaryVersionId": null
+    },
+    {
+      "key": "libraryK",
+      "id": "80200000-0000-0000-0000-000000000010",
+      "type": "CollectionFolder",
+      "name": "Library K",
+      "sortName": "library k",
+      "parentId": "e9d5075a-555c-1cbc-394e-ec4cef295274",
+      "pathKind": "libraryK",
+      "data": {
+        "CollectionType": "books",
+        "PhysicalFolderIds": [
+          "80200000-0000-0000-0000-000000000009"
+        ],
+        "PhysicalLocationsList": [],
+        "LibraryOptions": {
+          "Enabled": true
+        }
+      },
+      "topParentId": "80200000-0000-0000-0000-000000000010",
+      "ancestorIds": [
+        "e9d5075a-555c-1cbc-394e-ec4cef295274"
+      ],
+      "primaryVersionId": null
+    },
+    {
+      "key": "physicalM",
+      "id": "80200000-0000-0000-0000-000000000011",
+      "type": "Folder",
+      "name": "Physical M",
+      "sortName": "physical m",
+      "parentId": "f27caa37-e514-2225-cced-ed48f6553502",
+      "pathKind": "physicalM",
+      "topParentId": "80200000-0000-0000-0000-000000000011",
+      "ancestorIds": [
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "primaryVersionId": null
+    },
+    {
+      "key": "libraryM",
+      "id": "80200000-0000-0000-0000-000000000012",
+      "type": "CollectionFolder",
+      "name": "Library M",
+      "sortName": "library m",
+      "parentId": "e9d5075a-555c-1cbc-394e-ec4cef295274",
+      "pathKind": "libraryM",
+      "data": {
+        "CollectionType": "music",
+        "PhysicalFolderIds": [
+          "80200000-0000-0000-0000-000000000011"
+        ],
+        "PhysicalLocationsList": [],
+        "LibraryOptions": {
+          "Enabled": true
+        }
+      },
+      "topParentId": "80200000-0000-0000-0000-000000000012",
+      "ancestorIds": [
+        "e9d5075a-555c-1cbc-394e-ec4cef295274"
+      ],
+      "primaryVersionId": null
+    },
+    {
+      "key": "main",
+      "id": "984f0000-0000-0000-0000-000000000002",
+      "type": "Movie",
+      "name": "main",
+      "sortName": "main",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003"
+      ],
+      "pathKind": "child",
+      "isFolder": false,
+      "mediaType": "Video",
+      "dateCreated": "2026-09-28 10:00:00",
+      "dateLastSaved": "2026-09-29 12:00:00",
+      "runTimeTicks": "100000000",
+      "data": {
+        "Container": "mkv",
+        "IsShortcut": false,
+        "RemoteTrailers": [],
+        "VideoType": "VideoFile",
+        "IsHD": false,
+        "Width": 0,
+        "Height": 0
+      },
+      "primaryVersionId": null
+    },
+    {
+      "key": "audioLocal",
+      "id": "984f0000-0000-0000-0000-000000000012",
+      "type": "Audio",
+      "name": "audioLocal",
+      "sortName": "audiolocal",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003"
+      ],
+      "pathKind": "child",
+      "isFolder": false,
+      "mediaType": "Audio",
+      "dateCreated": "2026-09-28 10:00:00",
+      "dateLastSaved": "2026-09-29 12:00:00",
+      "runTimeTicks": "100000000",
+      "primaryVersionId": null
+    },
+    {
+      "key": "introVideo",
+      "id": "982f0000-0000-0000-0000-000000000005",
+      "type": "Video",
+      "name": "Intro video",
+      "sortName": "intro video",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003"
+      ],
+      "pathKind": "child",
+      "isFolder": false,
+      "mediaType": "Video",
+      "dateCreated": "2026-09-28 10:00:00",
+      "dateLastSaved": "2026-09-29 12:00:00",
+      "runTimeTicks": "100000000",
+      "data": {
+        "Container": "mkv",
+        "IsShortcut": false,
+        "RemoteTrailers": [],
+        "VideoType": "VideoFile",
+        "IsHD": false,
+        "Width": 0,
+        "Height": 0
+      },
+      "primaryVersionId": null
+    }
+  ],
+  "cases": [
+    {
+      "name": "default intro response",
+      "action": "intros",
+      "detailKey": "main",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "expectedStatus": 200,
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "nonvideo main item",
+      "action": "intros",
+      "detailKey": "audioLocal",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "expectedStatus": 200,
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "empty item selects user root",
+      "action": "intros",
+      "detailKey": "main",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "expectedStatus": 200,
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "introItemId": "00000000-0000-0000-0000-000000000000"
+    },
+    {
+      "name": "missing main item",
+      "action": "intros",
+      "detailKey": "main",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "expectedStatus": 404,
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "introItemId": "984f0000-0000-0000-0000-000000009999"
+    },
+    {
+      "name": "invalid item",
+      "action": "intros",
+      "detailKey": "main",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "expectedStatus": 400,
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "introItemId": "invalid",
+      "bindingError": true
+    },
+    {
+      "name": "api key without user",
+      "action": "intros",
+      "detailKey": "main",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "expectedStatus": 400,
+      "endpoints": [
+        "items"
+      ],
+      "auth": "apiKey",
+      "expectedRuntimeError": "Error processing request."
+    },
+    {
+      "name": "api key route user",
+      "action": "intros",
+      "detailKey": "main",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "expectedStatus": 200,
+      "endpoints": [
+        "legacy"
+      ],
+      "auth": "apiKey"
+    },
+    {
+      "name": "api key query user",
+      "action": "intros",
+      "detailKey": "main",
+      "query": "userId=5c6b5f77-bea9-4a9a-98aa-fae5909892b7",
+      "scope": [],
+      "omitScope": true,
+      "expectedStatus": 200,
+      "endpoints": [
+        "items"
+      ],
+      "auth": "apiKey"
+    },
+    {
+      "name": "empty query user falls back",
+      "action": "intros",
+      "detailKey": "main",
+      "query": "userId=00000000-0000-0000-0000-000000000000",
+      "scope": [],
+      "omitScope": true,
+      "expectedStatus": 200,
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "api key empty user has no fallback",
+      "action": "intros",
+      "detailKey": "main",
+      "query": "userId=00000000-0000-0000-0000-000000000000",
+      "scope": [],
+      "omitScope": true,
+      "expectedStatus": 400,
+      "endpoints": [
+        "items"
+      ],
+      "auth": "apiKey",
+      "expectedRuntimeError": "Error processing request."
+    },
+    {
+      "name": "unknown query user",
+      "action": "intros",
+      "detailKey": "main",
+      "query": "userId=982f0000-0000-0000-0000-000000009999",
+      "scope": [],
+      "omitScope": true,
+      "expectedStatus": 404,
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "unknown route user",
+      "action": "intros",
+      "detailKey": "main",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "expectedStatus": 404,
+      "endpoints": [
+        "legacy"
+      ],
+      "introUserId": "982f0000-0000-0000-0000-000000009999"
+    },
+    {
+      "name": "invalid query user",
+      "action": "intros",
+      "detailKey": "main",
+      "query": "userId=invalid",
+      "scope": [],
+      "omitScope": true,
+      "expectedStatus": 400,
+      "endpoints": [
+        "items"
+      ],
+      "bindingError": true
+    },
+    {
+      "name": "invalid route user",
+      "action": "intros",
+      "detailKey": "main",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "expectedStatus": 400,
+      "endpoints": [
+        "legacy"
+      ],
+      "introUserId": "invalid",
+      "bindingError": true
+    },
+    {
+      "name": "legacy route user wins query",
+      "action": "intros",
+      "detailKey": "main",
+      "query": "userId=invalid",
+      "scope": [],
+      "omitScope": true,
+      "expectedStatus": 200,
+      "endpoints": [
+        "legacy"
+      ]
+    },
+    {
+      "name": "unbound options are ignored",
+      "action": "intros",
+      "detailKey": "main",
+      "query": "fields=Unknown&enableImages=invalid&enableUserData=invalid&sortOrder=Unknown&startIndex=invalid&limit=invalid",
+      "scope": [],
+      "omitScope": true,
+      "expectedStatus": 200,
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "main item outside permitted libraries",
+      "action": "intros",
+      "detailKey": "main",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "expectedStatus": 404,
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "policy": {
+        "EnableAllFolders": false,
+        "EnabledFolders": [
+          "80200000-0000-0000-0000-000000000006"
+        ],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "EnableContentDeletion": false,
+        "EnableContentDeletionFromFolders": []
+      }
+    },
+    {
+      "name": "empty root bypasses main item visibility",
+      "action": "intros",
+      "detailKey": "main",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "expectedStatus": 200,
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "policy": {
+        "EnableAllFolders": false,
+        "EnabledFolders": [
+          "80200000-0000-0000-0000-000000000006"
+        ],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "EnableContentDeletion": false,
+        "EnableContentDeletionFromFolders": []
+      },
+      "introItemId": "00000000-0000-0000-0000-000000000000"
+    }
+  ],
+  "itemValues": [],
+  "itemValueLinks": [],
+  "links": [],
+  "userData": []
+}

@@ -12,6 +12,7 @@ import { cleanValue, EMPTY_ID, idKey } from '../../src/library/records.js';
 import { createRuntime } from '../../src/runtime.js';
 
 const typeNames = {
+  Video: 'MediaBrowser.Controller.Entities.Video',
   AggregateFolder: 'MediaBrowser.Controller.Entities.AggregateFolder',
   Audio: 'MediaBrowser.Controller.Entities.Audio.Audio',
   AudioBook: 'MediaBrowser.Controller.Entities.AudioBook',
@@ -467,7 +468,7 @@ function seedOperations(fixture, scenarioName) {
       DateModified: image.dateModified ?? '2026-09-27 12:00:00',
       Width: image.width ?? 100,
       Height: image.height ?? 100,
-      Blurhash: null,
+      Blurhash: image.blurHash == null ? null : Buffer.from(image.blurHash),
     }]);
   }
   return operations;
@@ -580,6 +581,8 @@ function authorization(token) {
 }
 
 function routeFor(endpoint, testCase, fixture, userId, fields) {
+  if (testCase.action === 'intros') return `${endpoint === 'legacy' ? '/Users/' + (testCase.introUserId ?? userId) : ''}/Items/${testCase.introItemId ?? fixture.items.find(item => item.key === testCase.detailKey).id}/Intros?${testCase.query.replaceAll(fixture.userId, userId)}`;
+  if (testCase.action === 'theme') return `/Items/${testCase.themeItemId ?? fixture.items.find(item => item.key === testCase.detailKey).id}/${testCase.themeRoute}?${testCase.query.replaceAll(fixture.userId, userId)}`;
   if (testCase.action === 'dto-detail') return `${endpoint === 'legacy' ? '/Users/' + userId : ''}/Items/${fixture.items.find(item => item.key === testCase.detailKey).id}?${testCase.query.replaceAll(fixture.userId, userId)}`;
   if (testCase.action === 'named-list' || testCase.action === 'named-detail') return `/${testCase.namedRoute}${testCase.action === 'named-detail' ? '/' + encodeURIComponent(testCase.itemName) : ''}?${testCase.query.replaceAll(fixture.userId, userId)}`;
   if (['filters', 'filters2'].includes(testCase.action)) return `/Items/${testCase.action === 'filters' ? 'Filters' : 'Filters2'}?${testCase.query.replaceAll(fixture.userId, userId)}`;
@@ -788,7 +791,8 @@ export async function recordItemFilterCandidate({ dialect, fixture, connectionSt
     await runtime.users.updatePolicy(created.Id, { ...current.Policy, IsAdministrator: true, EnableAllFolders: true });
     const user = await runtime.users.getUser(created.Id);
     await seed(database, fixture, slug);
-    if (prepareScenario) await prepareScenario({ database, programDataPath: programDataDirectory, fixture, user, users: runtime.users });
+    if (prepareScenario) await prepareScenario({ database, programDataPath: programDataDirectory, fixture, user, users: runtime.users,
+      storage: runtime.storage, plugins: runtime.plugins });
 
     runtime.server.listen(0, '127.0.0.1');
     await once(runtime.server, 'listening');

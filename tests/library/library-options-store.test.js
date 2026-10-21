@@ -8,6 +8,9 @@ import { defaultLibraryOptions, deserializeLibraryOptions, createVirtualPathExpa
 import { LibraryOptionsStore } from '../../src/library/library-options-store.js';
 import { decodeNativeText } from '../../src/core/native-text.js';
 import { validationOutputRoot } from '../../tools/validation/paths.js';
+import { StorageRegistry, VirtualFileSystem, IdentityAccessMap } from '../../src/storage/index.js';
+import { StorageFileSystem } from '../../src/storage/files.js';
+import { LocalAdapter } from '../../plugins/local/adapter.js';
 
 const fixture = new URL('./fixtures/library-options/', import.meta.url);
 const [inputBytes, nativeBytes, proofBytes] = await Promise.all(['input.json', 'native.json', 'provenance.json'].map(name => readFile(new URL(name, fixture))));
@@ -104,7 +107,7 @@ test('registered library options retain live edits on write failure and reject n
   await store.close(); await assert.rejects(store.save(directory, options), { status: 503 }); await assert.rejects(store.get(directory), { status: 503 });
 });
 
-test('clearing registered options reloads unique directories and safely defaults unsafe bindings', async t => {
+test('clearing registered options reloads unique directories and defaults unreadable files', async t => {
   const state = await temporary(t), libraryRoot = path.join(state, 'root', 'default');
   const first = path.join(libraryRoot, 'First'), missing = path.join(libraryRoot, 'Missing'),
     invalid = path.join(libraryRoot, 'Invalid'), unsafe = path.join(libraryRoot, 'Unsafe'), external = path.join(state, 'external'),
@@ -145,22 +148,50 @@ test('clearing registered options reloads unique directories and safely defaults
     const current = optionsById.get(ids[name].replaceAll('-', ''));
     assert.notEqual(current, before[name]); assert.equal(current.Enabled, true); assert.equal(current.SeasonZeroDisplayName, 'Specials');
   }
-  assert.equal(errors.length, 2); assert.equal(errors.some(error => error.code === 'UNSAFE_LIBRARY_OPTIONS_PATH'), true);
+  assert.equal(errors.length, 1);
   assert.equal(errors.some(error => /Boolean/u.test(error.message)), true);
-  await assert.rejects(store.get(unsafe), { code: 'UNSAFE_LIBRARY_OPTIONS_PATH' });
+  assert.equal((await store.get(unsafe)).Enabled, true);
   await assert.rejects(readFile(danglingTarget), { code: 'ENOENT' });
 });
 
-test('library options refuse outside paths and junctions before reading or overwriting host files', async t => {
+test('library options read explicitly mapped external paths while storage refuses junction access', async t => {
   const state = await temporary(t), directory = path.join(state, 'root', 'default', 'Library'), external = path.join(state, 'external');
   await mkdir(path.dirname(directory), { recursive: true }); await mkdir(external);
   const bytes = Buffer.from('<LibraryOptions><Enabled>false</Enabled></LibraryOptions>'); await writeFile(path.join(external, 'options.xml'), bytes);
   const store = new LibraryOptionsStore({fileSystem: testFileSystem,  programDataPath: state }); t.after(() => store.close());
-  await assert.rejects(store.get(external), { code: 'UNSAFE_LIBRARY_OPTIONS_PATH' });
+  assert.equal((await store.get(external)).Enabled, false);
   await symlink(external, directory, process.platform === 'win32' ? 'junction' : 'dir');
-  await assert.rejects(store.get(directory), { code: 'UNSAFE_LIBRARY_OPTIONS_PATH' });
-  await assert.rejects(store.save(directory, defaultLibraryOptions()), { code: 'UNSAFE_LIBRARY_OPTIONS_PATH' });
+  assert.equal((await store.get(directory)).Enabled, true);
+  await assert.rejects(store.save(directory, defaultLibraryOptions()), error => ['EACCES', 'EPERM'].includes(error.code));
   assert.deepEqual(await readFile(path.join(external, 'options.xml')), bytes);
+});
+
+test('foreign library identities require storage mappings and honor read-only mounts', async t => {
+  const state = await temporary(t), backend = path.join(state, 'mapped-backend'); await mkdir(backend);
+  const registry = new StorageRegistry(), vfs = new VirtualFileSystem(registry), identityMap = new IdentityAccessMap();
+  t.after(() => registry.close());
+  registry.registerType('mapped-options', configuration => LocalAdapter.open(configuration));
+  await registry.createInstance('options', 'mapped-options', { root: backend, writable: true });
+  const capabilities = { create: true, replace: true, mkdir: true, delete: true, rename: true, atomicReplace: true };
+  vfs.mount({ path: '/windows', instanceId: 'options', root: '/', capabilities });
+  vfs.mount({ path: '/posix', instanceId: 'options', root: '/', capabilities });
+  vfs.mount({ path: '/readonly', instanceId: 'options', root: '/', capabilities: {} });
+  const windows = 'R:\\ForeignLibraries\\Movies', posix = '/foreign-libraries/Movies', readonly = 'S:\\ReadonlyLibrary';
+  for (const [identityRoot, accessRoot, style] of [[windows, '/windows', 'windows'], [posix, '/posix', 'posix'], [readonly, '/readonly', 'windows']]) {
+    identityMap.addPrefix({ identityRoot, accessRoot, style, caseSensitive: style === 'posix', returnAccess: 'Isolated library options mount.' });
+  }
+  const fileSystem = new StorageFileSystem({ vfs, identityMap });
+  const store = new LibraryOptionsStore({ fileSystem, programDataPath: state }); t.after(() => store.close());
+  await writeFile(path.join(backend, 'options.xml'), '<LibraryOptions><Enabled>false</Enabled></LibraryOptions>');
+  assert.equal((await store.get(windows)).Enabled, false); assert.equal((await store.get(posix)).Enabled, false);
+  await assert.rejects(store.get('T:\\UnmappedLibrary'), { code: 'unmapped-path' });
+  const changed = { ...defaultLibraryOptions(), SeasonZeroDisplayName: 'Mapped specials' };
+  await store.save(windows, changed); await store.clear();
+  assert.equal((await store.get(posix)).SeasonZeroDisplayName, changed.SeasonZeroDisplayName);
+  assert.equal((await store.get(readonly)).SeasonZeroDisplayName, changed.SeasonZeroDisplayName);
+  const before = await readFile(path.join(backend, 'options.xml'));
+  await assert.rejects(store.save(readonly, defaultLibraryOptions()), { code: 'ENOTSUP' });
+  assert.deepEqual(await readFile(path.join(backend, 'options.xml')), before);
 });
 
 test('native library options decode UTF-16 and UTF-8 configuration bytes before typed XML parsing', async t => {
