@@ -1,4 +1,5 @@
 import { testFileSystem } from '../storage/plugin-files.js';
+import { attachLibraryNavigation, closeLibraryNavigation } from './navigation-fixture.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { DomainStore } from '../../src/database/domain-store.js';
@@ -124,6 +125,7 @@ test('LibraryService dispatches root genre filters to repository and nonrecursiv
   try {
     const { physical } = await seedService(database);
     library = new LibraryService({fileSystem: testFileSystem,  store: new DomainStore(database), serverId: 'genre-query-test' });
+    await attachLibraryNavigation(library);
     const names = page => page.Items.map(value => value.Name);
 
     assert.deepEqual(names(await library.queryItems({ Genres: 'Sci-Fi', IncludeItemTypes: 'Audio' }, { user })),
@@ -138,5 +140,5 @@ test('LibraryService dispatches root genre filters to repository and nonrecursiv
       GenreIds: id(202), IncludeItemTypes: 'Audio' }, { user })), ['Both', 'Memory drama']);
     await assert.rejects(library.queryItems({ ParentId: physical, Recursive: false,
       GenreIds: EMPTY_ID }, { user }), error => error.status === 400 && error.message === 'Error processing request.');
-  } finally { await library?.close(); }
+  } finally { await closeLibraryNavigation(library); }
 });

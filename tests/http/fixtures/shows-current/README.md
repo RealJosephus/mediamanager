@@ -9,6 +9,13 @@ are rehashed for both independent executions. Historical recordings and seals
 are unchanged; missing historical Oracle builds, logs or repeat captures are
 not reconstructed or impersonated.
 
+The supplied RID SQLite module is explicitly loaded and bound to the actual
+SQLitePCL imports before database execution. Import resolution is a hard gate;
+module bytes are rehashed even on macOS where Process.Modules omits that library.
+The optional ChannelInfo assertion compares complete ordinary DTOs by identity
+for local Similar requests, whose native contract uses a fresh Random order.
+It preserves every DTO field and the complete count/paging envelope.
+
 The same four tests retain all original controller, binder, repository, provider,
 cache, cancellation and PostgreSQL HTTP assertions. Only execution-clock cache
 expiry and per-build assembly locations/Oracle identity are projected when

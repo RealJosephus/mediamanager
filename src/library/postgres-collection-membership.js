@@ -1,21 +1,15 @@
 import { randomUUID } from 'node:crypto';
-import { quoteIdentifier as q, tableDefinition } from '../database/model.js';
-import { decodeValue } from '../database/values.js';
+import { quoteIdentifier as q } from '../database/model.js';
 import { nativeTextBytes, decodeNativeTextBytes, nativeRatingCountryContext } from '../database/native-text.js';
 import { nativeTextSql } from '../database/native-text-sql.js';
 import { nativeGuid } from '../users/native.js';
-import { idKey, libraryError, EMPTY_ID } from './records.js';
+import { idKey, libraryError } from './records.js';
+import { assertPostgresLinkedResolutionInput, createPostgresLinkedResolutionWorkspace } from './postgres-linked-resolution-workspace.js';
 
 const pageSize = 128;
 const table = (db, name) => `${q(db.schemaName)}.${q(name)}`;
 const plan = text => Object.freeze({ text, values: Object.freeze([]) });
 const decode = value => value == null ? null : decodeNativeTextBytes(value);
-const encode = value => value == null ? null : nativeTextBytes(value);
-function checkedSession(db) {
-  if (db?.dialect !== 'postgres' || !db.connectionSession || typeof db.client?.query !== 'function') {
-    throw new TypeError('Collection membership requires a checked-out PostgreSQL session.');
-  }
-}
 function checkedPlan(source) {
   if (!source || typeof source.text !== 'string' || !Array.isArray(source.values)) {
     throw new TypeError('Collection membership requires a SQL relation with bound values.');
@@ -37,30 +31,34 @@ function count(value) {
  * links and events must be published into the shared relation before disposal.
  * All native TEXT cells, including GUIDs and paths, are bytea at SQL boundaries. */
 export async function createPostgresCollectionMembership(db, { collectionId, linksPlan }) {
-  checkedSession(db); checkedPlan(linksPlan);
+  assertPostgresLinkedResolutionInput(db, linksPlan);
   const key = nativeTextSql(db.schemaName), suffix = randomUUID().replaceAll('-', '');
-  const raw = q('mm_collection_raw_' + suffix), requests = q('mm_collection_requests_' + suffix);
-  const batch = q('mm_collection_batch_' + suffix);
+  const requests = q('mm_collection_requests_' + suffix);
   const items = table(db, 'BaseItems');
   const parent = (await db.client.query({ text: `SELECT "Id" FROM ${items}
     WHERE ${key.guidKey('"Id"')} = $1 LIMIT 1`, values: [idKey(nativeGuid(collectionId))] })).rows[0];
   if (!parent) throw libraryError(400, 'No collection exists with the supplied collectionId ' + collectionId);
-  let disposed = false, prepared = false, requestTable = false, appended = false, batched = false;
-  const active = () => { if (disposed) throw new Error('Collection membership has been disposed.'); };
-  const dispose = async () => {
-    if (disposed) return;
-    disposed = true;
-    await db.client.query(`DROP TABLE IF EXISTS ${requests}, ${batch}, ${raw}`);
-  };
+  const resolution = await createPostgresLinkedResolutionWorkspace(db, { linksPlan });
+  const raw = resolution.sqlRelation();
+  let closing, prepared = false, requestTable = false, appended = false;
+  const active = () => { if (closing) throw new Error('Collection membership has been disposed.'); };
+  const dispose = primary => closing ??= (async () => {
+    const errors = [];
+    try { await db.client.query(`DROP TABLE IF EXISTS ${requests}`); }
+    catch (error) {
+      if (!(primary && db.inTransaction && error.code === '25P02')) {
+        db.discardConnection(error); errors.push(error);
+      }
+    }
+    try { await resolution.dispose(primary); } catch (error) { errors.push(error); }
+    if (errors.length) throw new AggregateError(errors, 'Collection membership cleanup failed.');
+  })();
   const page = async (source, options) => {
     active(); const { after, limit } = cursor(options), index = source.values.length;
     return (await db.client.query({ text: `SELECT * FROM (${source.text}) source
       WHERE "Ordinal" > $${index + 1} ORDER BY "Ordinal" LIMIT $${index + 2}`,
     values: [...source.values, after, limit] })).rows;
   };
-  const rawPlan = () => { active(); return plan(`SELECT "Ordinal", "ItemId", "Type", "Path", "LibraryItemId" FROM ${raw}`); };
-  const decodeBaseRow = row => Object.fromEntries(tableDefinition('BaseItems').columns
-    .map(column => [column.name, decodeValue(column, row[column.name], 'postgres')]));
   const createRequests = async () => {
     active(); if (requestTable) throw new Error('A collection operation can prepare requests only once.');
     await db.client.query(`CREATE TEMP TABLE ${requests} (
@@ -74,7 +72,7 @@ export async function createPostgresCollectionMembership(db, { collectionId, lin
     await db.client.query(`UPDATE ${requests} request SET "Addition" = NOT EXISTS (
       SELECT 1 FROM ${raw} initial WHERE initial."ResolvedId" IS NOT NULL
         AND ${key.guidKey('initial."ResolvedId"')} = ${key.guidKey('request."Id"')})`);
-    prepared = true; return addCount();
+    prepared = true; resolution.sealResolution(); return addCount();
   };
   const resolve = async (requested, ordinal, resolveMember) => {
     const id = nativeGuid(requested), resolved = await resolveMember(id, { ordinal });
@@ -86,77 +84,8 @@ export async function createPostgresCollectionMembership(db, { collectionId, lin
     return plan(`SELECT "Ordinal", "SlotKey" FROM ${requests}
       WHERE "Addition" ORDER BY "Ordinal"`);
   };
-  try {
-    await db.client.query(`CREATE TEMP TABLE ${raw} (
-      "Ordinal" bigint PRIMARY KEY CHECK ("Ordinal" > 0), "ItemId" bytea, "Type" integer NOT NULL,
-      "Path" bytea, "LibraryItemId" bytea, "ResolvedId" bytea, "SlotKey" uuid)`);
-    await db.client.query({ text: `INSERT INTO ${raw} ("Ordinal", "ItemId", "Type", "Path", "LibraryItemId")
-      SELECT "Ordinal", "ItemId", "Type", "Path", "LibraryItemId"
-      FROM (${linksPlan.text}) source ORDER BY "Ordinal"`, values: linksPlan.values });
-    await db.client.query(`CREATE INDEX ON ${raw} ((${key.guidKey('"ResolvedId"')}))`);
-  } catch (error) {
-    try { await dispose(); } catch (cleanup) { throw new AggregateError([error, cleanup], error.message, { cause: error }); }
-    throw error;
-  }
-
   return Object.freeze({
-    dispose, linksPlan: rawPlan, eventPlan,
-    resolvedItemsPlan() {
-      active();
-      return plan(`SELECT "Ordinal", "SlotKey", "ResolvedId" AS "Id" FROM ${raw}
-        WHERE "ResolvedId" IS NOT NULL ORDER BY "Ordinal"`);
-    },
-    initialIdsPlan() {
-      active();
-      return plan(`SELECT DISTINCT "ItemId" AS "Id" FROM ${raw} WHERE "ItemId" IS NOT NULL
-        AND ${key.guidKey('"ItemId"')} <> '${idKey(EMPTY_ID)}'`);
-    },
-    async captureInitialBatch(selection, { capturePage } = {}) {
-      active(); checkedPlan(selection);
-      if (typeof capturePage !== 'function') throw new TypeError('Initial repository hydration requires a typed page capture.');
-      if (batched || prepared) throw new Error('Initial collection lookup is captured only once, before request validation.');
-      await db.client.query({ text: `CREATE TEMP TABLE ${batch} AS
-        SELECT selected."__ordinal" AS "BatchOrdinal", NULL::uuid AS "SlotKey", item.* FROM (${selection.text}) selected
-        JOIN ${items} item ON item."Id" = selected."Id"`, values: selection.values });
-      await db.client.query(`CREATE INDEX ON ${batch} ((${key.guidKey('"Id"')}));
-        CREATE INDEX ON ${batch} ("BatchOrdinal")`);
-      // Native ResolveLinkedChildren deserializes the entire positive-ID
-      // repository batch before its first fallback. A malformed late item
-      // must therefore fail before any earlier fallback cache publication.
-      for (let after = 0n; ; ) {
-        const rows = (await db.client.query({ text: `SELECT * FROM ${batch}
-          WHERE "BatchOrdinal" > $1 ORDER BY "BatchOrdinal" LIMIT ${pageSize}`, values: [after] })).rows;
-        if (!rows.length) break;
-        await capturePage(rows.map(row => ({ ordinal: BigInt(row.BatchOrdinal), baseRow: decodeBaseRow(row) })),
-          async (ordinal, slotKey) => {
-            if (typeof slotKey !== 'string') throw new TypeError('A captured native repository slot is required.');
-            const result = await db.client.query(`UPDATE ${batch} SET "SlotKey"=$2 WHERE "BatchOrdinal"=$1`, [ordinal, slotKey]);
-            if (result.rowCount !== 1) throw new Error('The initial repository row is absent.');
-          });
-        after = BigInt(rows.at(-1).BatchOrdinal);
-      }
-      batched = true;
-    },
-    async initialSlot(id) {
-      active(); if (!batched) throw new Error('Initial positive-ID collection lookup must be fully captured first.');
-      const row = (await db.client.query({ text: `SELECT "Id", "SlotKey" FROM ${batch}
-        WHERE ${key.guidKey('"Id"')} = $1 ORDER BY "BatchOrdinal" DESC LIMIT 1`, values: [idKey(id)] })).rows[0];
-      return row?.SlotKey ? { id: decode(row.Id), slotKey: row.SlotKey } : null;
-    },
-    async readLinksPage(options) {
-      return (await page(rawPlan(), options)).map(row => ({ ...row, Ordinal: BigInt(row.Ordinal),
-        ItemId: decode(row.ItemId), Path: decode(row.Path), LibraryItemId: decode(row.LibraryItemId) }));
-    },
-    async count() { active(); return count((await db.client.query(`SELECT count(*) AS "Count" FROM ${raw}`)).rows[0].Count); },
-    async recordResolution(ordinal, { itemId, resolvedId = null, slotKey = null }) {
-      active(); if (prepared) throw new Error('Initial resolution must precede requests.');
-      cursor({ after: ordinal });
-      const result = await db.client.query({ text: `UPDATE ${raw} SET "ItemId" = $2,
-        "ResolvedId" = $3, "SlotKey" = $4 WHERE "Ordinal" = $1`,
-      values: [ordinal, encode(itemId),
-        resolvedId == null ? null : nativeTextBytes(nativeGuid(resolvedId)), slotKey] });
-      if (result.rowCount !== 1) throw new Error('Collection resolution refers to an absent raw link.');
-    },
+    dispose, resolution, eventPlan,
     async prepareAddFromQuery(source, { resolveMember }) {
       active(); checkedPlan(source); await createRequests();
       await db.client.query({ text: `INSERT INTO ${requests} ("Ordinal", "Id")
@@ -219,7 +148,7 @@ export async function createPostgresCollectionMembership(db, { collectionId, lin
         });
       }
       const result = await db.client.query(`DELETE FROM ${raw} WHERE "Ordinal" IN (SELECT "RemoveOrdinal" FROM ${requests})`);
-      prepared = true;
+      prepared = true; resolution.sealResolution();
       return { removed: result.rowCount, eventCount: await addCount() };
     },
     async selectOfficialRating({ ratingsPlan, metadataCountryCode, defaultCountryCode = 'US' } = {}) {
@@ -247,7 +176,7 @@ export async function withPostgresCollectionMembership(db, options, operation) {
   try { return await operation(membership); }
   catch (error) { failure = error; throw error; }
   finally {
-    try { await membership.dispose(); }
+    try { await membership.dispose(failure); }
     catch (cleanup) { if (failure) throw new AggregateError([failure, cleanup], failure.message, { cause: failure }); throw cleanup; }
   }
 }

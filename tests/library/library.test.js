@@ -1,4 +1,5 @@
 import { testFileSystem } from '../storage/plugin-files.js';
+import { attachLibraryNavigation, closeLibraryNavigation } from './navigation-fixture.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { DomainStore } from '../../src/database/domain-store.js';
@@ -35,7 +36,11 @@ async function seed(db) {
   await db.insert('UserData', { ...emptyRow('UserData'), UserId: ids.user, ItemId: ids.movie, CustomDataKey: ids.movie.toLowerCase(), PlaybackPositionTicks: 9007199254740991n, IsFavorite: true, PlayCount: 2 });
   await db.insert('UserData', { ...emptyRow('UserData'), UserId: ids.user, ItemId: ids.other, CustomDataKey: ids.other.toLowerCase(), Played: true, PlayCount: 1 });
 }
-function service(db) { return new LibraryService({fileSystem: testFileSystem,  store: new DomainStore(db), serverId: 'library-test', programDataPath: 'D:\\native-state' }); }
+async function service(db) {
+  const library = new LibraryService({fileSystem: testFileSystem, store: new DomainStore(db), serverId: 'library-test', programDataPath: 'D:\\native-state',
+    userRoot: item(ids.root, 'UserRootFolder', 'Media Folders') });
+  await attachLibraryNavigation(library); return library;
+}
 
 async function assertions(library) {
   const page = await library.queryItems({ IncludeItemTypes: 'Movie', SortBy: 'ProductionYear', SortOrder: 'Descending', StartIndex: '1', Limit: '2' }, { user });
@@ -74,9 +79,9 @@ async function assertions(library) {
 test('library queries enforce visibility before counting and preserve native precision',
   { skip: !process.env.MEDIAMANAGER_TEST_POSTGRES }, async t => {
   const db = await createPostgresTestDatabase(t, 'library_queries');
-  const library = service(db);
+  const library = await service(db);
   try { await seed(db); await assertions(library); }
-  finally { await library.close(); }
+  finally { await closeLibraryNavigation(library); }
 });
 
 test('item request rejects missing entities and projects real populated media streams',
@@ -84,7 +89,7 @@ test('item request rejects missing entities and projects real populated media st
   const db = await createPostgresTestDatabase(t, 'library_item');
   let library;
   try {
-    await seed(db); library = service(db);
+    await seed(db); library = await service(db);
     await assert.rejects(library.getItemRecord('00000000000000000000000000000099', { user }), error => error.status === 404);
     assert.equal((await library.getItem(ids.movie, { user })).MediaSources.length, 1);
     await db.insert('MediaStreamInfos', { ...emptyRow('MediaStreamInfos'), ItemId: ids.other, StreamIndex: 0, StreamType: 1 });
@@ -92,7 +97,7 @@ test('item request rejects missing entities and projects real populated media st
     assert.equal(dto.MediaStreams[0].Type, 'Video');
     assert.equal(dto.MediaStreams[0].VideoRange, 'SDR');
     assert.deepEqual(dto.MediaStreams, dto.MediaSources[0].MediaStreams);
-  } finally { await library?.close(); }
+  } finally { await closeLibraryNavigation(library); }
 });
 
 test('direct visibility recomputes inherited country ratings while repository queries use persisted scores',
@@ -101,7 +106,7 @@ test('direct visibility recomputes inherited country ratings while repository qu
   let library;
   try {
     await seed(db);
-    library = service(db);
+    library = await service(db);
     const limited = { ...user, MaxParentalRatingScore: 13, MaxParentalRatingSubScore: 0,
       Policy: { ...user.Policy, BlockUnratedItems: ['Movie'] } };
     await db.update('BaseItems', { Id: ids.physical }, { CustomRating: 'TV-MA' });
@@ -125,7 +130,7 @@ test('direct visibility recomputes inherited country ratings while repository qu
     assert.equal((await library.queryItems({ IncludeItemTypes: 'Movie' }, { user: limited })).Items.some(entry => entry.Name === 'Restricted'), false);
     assert.equal((await library.getItemRecord(ids.restricted, { user: limited })).Name, 'Restricted',
       'direct access does not trust a stale inherited score');
-  } finally { await library?.close(); }
+  } finally { await closeLibraryNavigation(library); }
 });
 
 test('query parsing is explicit about unsupported filters and validates values', () => {
@@ -151,12 +156,12 @@ test('native presentation grouping includes null keys and runs before pagination
     await seed(db);
     await db.update('BaseItems', { Id: ids.movie }, { PresentationUniqueKey: null });
     await db.update('BaseItems', { Id: ids.other }, { PresentationUniqueKey: null });
-    library = service(db);
+    library = await service(db);
     const grouped = await library.queryItems({ IncludeItemTypes: 'Movie', SortBy: 'ProductionYear', SortOrder: 'Descending', Limit: 1 }, { user });
     assert.equal(grouped.TotalRecordCount, 3);
     const noUser = await library.queryItems({ ParentId: ids.physical, Recursive: true, IncludeItemTypes: 'Movie' });
     assert.equal(noUser.TotalRecordCount, 4);
     const limitedCount = await library.queryItems({ IncludeItemTypes: 'Movie', EnableTotalRecordCount: false, Limit: 1 }, { user });
     assert.equal(limitedCount.TotalRecordCount, 1);
-  } finally { await library?.close(); }
+  } finally { await closeLibraryNavigation(library); }
 });

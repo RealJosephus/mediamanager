@@ -32,9 +32,9 @@ for (const matrix of native.permissionMatrix) test(`native CanDelete overloads a
     .map(name => [name, new Map(items.map(item => [item.Id.replaceAll('-', '').toLowerCase(), []]))]));
   for (const expected of matrix.items) {
     const item = state.byId.get(expected.id), options = permissionOptions(item, state);
-    assert.equal(canDeleteItem(item, null, options), expected.noUser, item.Name + ' no user');
-    assert.equal(canDeleteItem(item, user, options), expected.user, item.Name + ' action');
-    assert.equal(canDeleteItem(item, user, { ...options, precomputedFolders: true }), expected.precomputed, item.Name + ' DTO overload');
+    assert.equal(await canDeleteItem(item, null, options), expected.noUser, item.Name + ' no user');
+    assert.equal(await canDeleteItem(item, user, options), expected.user, item.Name + ' action');
+    assert.equal(await canDeleteItem(item, user, { ...options, precomputedFolders: true }), expected.precomputed, item.Name + ' DTO overload');
     const selected = dtoOptions({ fields: ['CanDelete'], enableuserdata: false, enableimages: false }, false);
     const dto = await projectItem(item, state, user, selected, { ...options, configuration: {} });
     assert.equal(dto.CanDelete, expected.precomputed, item.Name + ' DTO projection');

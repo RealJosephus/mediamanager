@@ -165,7 +165,7 @@ for (const failOperation of [false, true]) test('postgres: linked selection rele
       let primary;
       session.client.query = async (...args) => {
         const text = typeof args[0] === 'string' ? args[0] : args[0].text;
-        if (failOperation && !primary && /^CREATE TEMP TABLE "mm_collection_batch_/u.test(text)) {
+        if (failOperation && !primary && /^CREATE TEMP TABLE "mm_link_resolution_batch_/u.test(text)) {
           try { await bound("SELECT 'invalid-integer'::integer"); } catch (error) { primary = error; throw error; }
         }
         return bound(...args);

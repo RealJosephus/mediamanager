@@ -1,16 +1,33 @@
 import { makeNativeAbsolutePath } from '../metadata/playlist-items.js';
 import { nativeGuid } from '../users/native.js';
 import { nonemptyId, EMPTY_ID, idKey } from './records.js';
-import { buildPostgresItemPageQuery } from '../database/postgres-item-query.js';
+import { buildPostgresItemPageQuery, queryPostgresItemPage } from '../database/postgres-item-query.js';
 import { hydrateNativeItemEntity, acquireNativeItemLinkOwner } from './native-item-entity.js';
+import { quoteIdentifier as q } from '../database/model.js';
+import { nativeTextBytes } from '../database/native-text.js';
+
+/** LibraryManager.FindByPath's default repository query and live final lookup
+ * are shared by metadata and UserRoot resolution, independently of the parent. */
+export function findPostgresLinkedChildByPath({ library, store, itemCreation }, identity) {
+  return store.run(async session => {
+    const stored = library.options?.reversePath?.(identity) ?? identity;
+    const result = await queryPostgresItemPage(session,
+      { sortby: ['DateCreated'], sortorder: ['Descending'], limit: 1, enabletotalrecordcount: false },
+      { groupByPresentationKey: false, itemIdsPlan: {
+        text: `SELECT "Id" FROM ${q(session.schemaName)}."BaseItems" WHERE "Path"=$1`,
+        values: [nativeTextBytes(stored)],
+      } });
+    return result.rows.length ? itemCreation.getItemById(result.rows[0].Id) : null;
+  }, { readOnly: true });
+}
 
 /** Resolve one raw Folder relation in native order. The complete positive-ID
  * repository batch is hydrated before any live fallback. The caller owns the
- * item, membership workspace, raw handle and typed cohort until completion. */
+ * item, resolution workspace, raw handle and typed cohort until completion. */
 export async function resolvePostgresLinkedChildren({ session, item, links, linkedChildren,
-  library, itemCreation, findByPath, membership, cohort }) {
-  await membership.captureInitialBatch(buildPostgresItemPageQuery(session,
-    { enabletotalrecordcount: false }, { itemIdsPlan: membership.initialIdsPlan(), includeOrdinal: true }), {
+  library, itemCreation, findByPath, resolution, cohort }) {
+  await resolution.captureInitialBatch(buildPostgresItemPageQuery(session,
+    { enabletotalrecordcount: false }, { itemIdsPlan: resolution.initialIdsPlan(), includeOrdinal: true }), {
     capturePage: async (rows, publishSlot) => {
       const state = await library.load(session, null, { baseRows: rows.map(row => row.baseRow),
         includeUserData: true, includeFolderLinks: true, includeManualLinks: false, includeLinkGraph: true });
@@ -29,14 +46,14 @@ export async function resolvePostgresLinkedChildren({ session, item, links, link
     }
   });
   for (let after = 0n; ; ) {
-    const page = await membership.readLinksPage({ after });
+    const page = await resolution.readLinksPage({ after });
     if (!page.length) return;
     for (const link of page) {
       if (link.ItemId != null && !nonemptyId(link.ItemId)) continue;
-      const batched = link.ItemId != null ? await membership.initialSlot(link.ItemId) : null;
+      const batched = link.ItemId != null ? await resolution.initialSlot(link.ItemId) : null;
       if (batched) {
         await cohort.appendSlot(batched.slotKey, { ordinal: link.Ordinal });
-        await membership.recordResolution(link.Ordinal, { itemId: link.ItemId,
+        await resolution.recordResolution(link.Ordinal, { itemId: link.ItemId,
           resolvedId: batched.id, slotKey: batched.slotKey });
         continue;
       }
@@ -49,7 +66,7 @@ export async function resolvePostgresLinkedChildren({ session, item, links, link
           if (nextId !== link.ItemId) await linkedChildren.recordResolution(links,
             link.Ordinal, nextId, { session });
           const slotKey = child ? await cohort.capture(child, { ordinal: link.Ordinal, session }) : null;
-          await membership.recordResolution(link.Ordinal, { itemId: nextId,
+          await resolution.recordResolution(link.Ordinal, { itemId: nextId,
             resolvedId: child?.Id ?? null, slotKey });
         } finally { owner?.release(); await linkedChildren.flushReleases({ session }); }
       };

@@ -45,6 +45,10 @@ code cannot be forcibly terminated.
 | channel | `getChannelImage(imageType, {signal})` | yes |
 | channel | `getSupportedChannelImages({signal})` | yes |
 | channel | `getChannelItemMediaInfo(itemId, {signal})` | optional media-info callback |
+| channel | `getLatestMedia(query, {signal})` | optional latest-media capability |
+| channel | `getCacheKey(userId, {signal})` | optional per-user cache-key capability |
+| channel | `canDelete(item, {signal})` | optional, together with `deleteItem` |
+| channel | `deleteItem(externalId, {signal})` | optional, together with `canDelete` |
 
 The signal positions are kind-specific. In particular, tuner `validate` and
 listings `validate` have different argument counts; none uses the metadata
@@ -53,6 +57,49 @@ channel description, data version, home page and parental rating may be retained
 as provider data; they do not add execution capabilities. UTC range values are
 passed unchanged, including full fractional precision; a provider must not
 truncate them through a JavaScript `Date` merely to forward them.
+
+Channel metadata uses `description`, `dataVersion`, `homePageUrl` and
+`parentalRating` (the native `ChannelParentalRating` name or numeric value).
+The optional `attributes` string array corresponds to `IHasFolderAttributes`;
+`Recordings` is matched without case. `disableMediaSourceDisplay: true`
+corresponds to the native marker interface. It is a synchronous declaration,
+so a typed item's display getter never waits for a plugin operation.
+`getLatestMedia` and the paired deletion methods expose their native interface
+capabilities to catalog filters and Features. Catalog discovery does not invoke
+latest-item refresh or deletion. They remain subject to the same admission,
+cancellation, validation and resource ownership as other channel methods.
+
+The Channel Items consumer calls `getChannelItems` with native
+`{UserId, FolderId, SortBy, SortDescending, StartIndex, Limit}`. `UserId` is a
+Guid in N format (the empty Guid for a userless request); `FolderId` is the
+original nullable external folder identifier. The retained consumer fetches
+the complete provider result with `SortBy: null`, `SortDescending: false` and
+null paging, then applies request filtering, sorting, count and paging in SQL.
+`getCacheKey` receives a nullable user Guid in N format and returns a nullable
+string. Its output and `dataVersion` select the native three-hour application
+cache. A fresh typed nonnull cache entry skips provider execution and all item
+creation and stale-item deletion. The cache result is written before any item
+is materialized; a later item failure retains the earlier persisted prefix.
+
+Latest refresh uses `getLatestMedia` as the native `ISupportsLatestMedia`
+marker. It calls ordinary `getChannelItems` for the provider root and for each
+root Folder one level deep; it never calls `getLatestMedia` itself. The
+implementation name is `type`'s final dot-separated segment. The native special
+sort for one implementation whose name contains case-sensitive `Trailer`
+therefore uses that segment. `supportsMediaProbe: true` is the native marker:
+it preserves existing runtime and invalidates saved sources for a non-live
+item with a path. The declaration does not execute a probe or encoder.
+
+The retained item deletion consumer calls `canDelete(item, {signal})` before
+the native user authorization rules, and calls `deleteItem` with the original
+nullable `ExternalId`. Permission and execution share the request's admitted
+channel operation. Client disconnect does not cancel an admitted deletion;
+plugin deactivation still owns its scope signal and drain. External deletion
+runs before local metadata and database cleanup and leaves the local source
+media untouched. The Live TV management deletion action performs its visible
+item lookup without consulting `canDelete`, matching its separate native
+controller. Ordinary Channel roots retain their own nondeletable permission
+override; a userless API-key deletion can still reach the library action.
 
 `getChannels`, `discoverDevices`, `getPrograms` and `getLineups` return finite
 arrays of the corresponding native-shaped data records. `getChannelFeatures`
@@ -64,6 +111,12 @@ callback returns the same source envelope array. No returned data record owns
 an open upstream. `getChannelImage` returns `null` or finite owned
 `{bytes: Uint8Array, mimeType}`; the provider closes image readers before
 returning bytes, as with a dynamic metadata image provider.
+Channel item constructor defaults and explicit null collections remain
+distinct. A nullable or missing item media-source identity/path is valid saved
+metadata and is normalized by the later native source consumer; the source
+envelope still declares native mode and forbids encoded source descriptors.
+Item materialization and empty/null collection failures retain the actual
+native sequential evaluation order.
 
 ## Original sources and owned live streams
 

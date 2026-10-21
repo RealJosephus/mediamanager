@@ -15,6 +15,8 @@ const EMPTY_MEDIA_URLS = Object.freeze([]);
 const EMPTY_PLAYLIST_SHARES = Object.freeze([]);
 const EMPTY_TRAILER_TYPES = Object.freeze([]);
 const EMPTY_AIR_DAYS = Object.freeze([]);
+const channelAccess = new WeakMap();
+const recordingAccess = new WeakMap();
 const sharedNativeArrays = new Set([
   EMPTY_STRINGS, EMPTY_GUIDS, EMPTY_LINKED_CHILDREN, EMPTY_METADATA_FIELDS, EMPTY_IMAGES,
   EMPTY_MEDIA_URLS, EMPTY_PLAYLIST_SHARES, EMPTY_TRAILER_TYPES, EMPTY_AIR_DAYS
@@ -222,9 +224,26 @@ export function clearNativeItemSortCache(item) {
   state.sortName = null;
 }
 
+/** The caller supplies the already-loaded Channel referent. Inventory remains
+ * live and synchronous; no getter starts an asynchronous repository read. */
+export function bindNativeItemChannelAccess(item, resolve) {
+  if (!isNativeItemEntity(item) || typeof resolve !== 'function') throw new TypeError('Channel access requires a typed item and a synchronous resolver.');
+  channelAccess.set(item, resolve);
+  return item;
+}
+
+/** Video.SourceType reads the current recording association synchronously.
+ * Keep the resolver, rather than a snapshot of its result, across live clones. */
+export function bindNativeItemRecordingAccess(item, resolve) {
+  if (!isNativeItemEntity(item) || typeof resolve !== 'function') throw new TypeError('Recording access requires a typed item and a synchronous resolver.');
+  recordingAccess.set(item, resolve);
+  return item;
+}
+
 function addDerivedGetters(item, descriptor) {
   defineGetter(item, 'IsHD', () => Number(item.Height ?? 0) >= 720);
   defineGetter(item, 'SourceType', () => ['LiveTvProgram', 'LiveTvChannel'].includes(descriptor.type)
+    || descriptor.family === 'video' && recordingAccess.get(item)?.(item)
     ? 'LiveTV' : descriptor.type === 'Channel' || nonemptyId(item.ChannelId) ? 'Channel' : 'Library');
   defineGetter(item, 'MediaType', () => descriptor.type === 'Playlist' ? item.PlaylistMediaType
     : descriptor.type === 'LiveTvChannel' ? item.ChannelType === 'Radio' ? 'Audio' : 'Video' : descriptor.mediaType);
@@ -239,10 +258,7 @@ function addDerivedGetters(item, descriptor) {
     if (item.SourceType === 'Channel' && !nonemptyId(item.ChannelId)) {
       throw Object.assign(libraryError(400, "Guid can't be empty (Parameter 'id')"), { nativeException: 'ArgumentException' });
     }
-    // The retained core has no ChannelManager provider inventory. Native's
-    // empty inventory never evaluates its predicate, even for a missing ID.
-    // IDisableMediaSourceDisplay requires the separate channel producer.
-    return true;
+    return item.SourceType === 'Channel' ? channelAccess.get(item)?.(item) ?? true : true;
   }, false); // An unselected lazy virtual getter must not execute in object spreads.
   defineGetter(item, 'SupportsPositionTicksResume', () => descriptor.family === 'video'
     ? !['Sample', 'ThemeVideo', 'Trailer'].includes(item.ExtraType) : ['AudioBook', 'Book'].includes(descriptor.type));
@@ -453,6 +469,8 @@ function copyInternal(target, source, seen) {
   }
   if (target.NativeType !== source.NativeType) throw new TypeError('Native item state requires matching exact native types.');
   seen.set(source, target);
+  if (channelAccess.has(source)) channelAccess.set(target, channelAccess.get(source));
+  if (recordingAccess.has(source)) recordingAccess.set(target, recordingAccess.get(source));
   const sourceKeys = new Set(Reflect.ownKeys(source));
   for (const key of Reflect.ownKeys(target)) {
     if (sourceKeys.has(key) || typeof key === 'string' && key !== repositoryColumnsField
@@ -460,9 +478,14 @@ function copyInternal(target, source, seen) {
     delete target[key];
   }
   const enumerableKeys = new Set(Object.keys(source));
+  const recordingDerived = recordingAccess.has(source) && nativeItemDescriptor(source.NativeType).family === 'video';
   const expected = [];
   for (const key of Reflect.ownKeys(source)) {
     if (typeof key !== 'string' || privateStateFields.has(key) || sortStateFields.has(key) || deferredNativeGetters.has(key)) continue;
+    // Recording association belongs to the candidate object, not its copied
+    // fields. Both constructor getters must evaluate the copied resolver with
+    // their own entity; they are not source/target equality invariants.
+    if (recordingDerived && (key === 'SourceType' || key === 'UnratedType')) continue;
     const value = source[key];
     if (key === repositoryColumnsField) {
       defineRepositoryColumns(target, value);

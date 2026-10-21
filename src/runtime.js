@@ -58,12 +58,14 @@ import { createBuiltinExternalUrlPlugin } from './metadata/external-url-provider
 import { createPhotoMetadataPlugin } from './metadata/photo-provider.js';
 import { createPhotoAlbumImagePlugin } from './metadata/photo-album-provider.js';
 import { createCollectionFolderImagePlugin } from './metadata/collection-folder-image-provider.js';
+import { createChannelDynamicImagePlugin } from './metadata/channel-dynamic-image-provider.js';
 import { createBookOpfPlugin } from './metadata/book-opf-provider.js';
 import { createBookEpubPlugin } from './metadata/book-epub-provider.js';
 import { createBookComicPlugin } from './metadata/book-comic-provider.js';
 import { BookArchiveService } from './storage/archive-reader.js';
 import { SyncPlayService } from './syncplay/service.js';
 import { UserViewService } from './library/user-view-service.js';
+import { ChannelService } from './library/channel-service.js';
 import { initializeLibraryRoot } from './library/root-initialization.js';
 import { ScheduledTaskManager } from './tasks/index.js';
 import { AutoDiscoveryService, createDiscoveryAddressResolver } from './network/auto-discovery.js';
@@ -177,6 +179,9 @@ export async function createRuntime({ database, configuration, serverId, serverN
     loadProgramDtos: (_database, ids) => library.loadLiveTvTimerProgramDtos(ids),
     loadProgram: id => library.loadLiveTvTimerProgram(id) });
   rollback.push(() => library.close());
+  const channels = new ChannelService({ plugins, library, users, getMetadata: () => metadata, cachePath, onError });
+  library.channels = channels;
+  rollback.push(() => channels.close());
   const playlists = programDataPath && dataPath
     ? new PlaylistService({ fileSystem, store, library, linkedChildren, spoolRoot, programDataPath, dataPath, configuration, vfs, identityMap, onError,
       preflightExternalSave: async playlist => {
@@ -283,6 +288,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
       metadataPath, tempPath: programDataPath && path.join(programDataPath, 'cache', 'temp'), images: metadataImages,
       configuration, expandPath: library.options.expandPath, logger }));
     registry.register(createCollectionFolderImagePlugin({ library, images: metadataImages }));
+    registry.register(createChannelDynamicImagePlugin({ channels }));
     registry.register(createBookComicPlugin({ fileSystem, openArchive: bookArchives.openArchive, logger,
       culture: () => configuration.UICulture || 'en-US' }));
     registry.register(createBookEpubPlugin({ openArchive: bookArchives.openArchive, logger }));
@@ -338,7 +344,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
     linkedChildReferences, metadataScanner, scheduler: libraryTaskScheduler, onError }) : undefined;
   library.folderValidation = folderValidation;
   const itemDeletion = itemCreation ? new ItemDeletionService({ store, library, loadContext, itemCreation,
-    updates: metadataUpdates, externalData, linkedChildReferences, vfs, metadataVfs, logger }) : undefined;
+    updates: metadataUpdates, externalData, linkedChildReferences, vfs, metadataVfs, channelManager: channels, logger }) : undefined;
   library.itemDeletion = itemDeletion;
   const unsafeItemDeletion = itemCreation ? new UnsafeItemDeletionService({ store, library, itemCreation,
     externalData, vfs, identityMap, metadataIdentityMap, logger }) : undefined;
@@ -499,6 +505,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
   rollback.push(stopStorageObserver);
   const services = { storage: configuredStorage, storageReadiness, fileSystem, configuration, store, users, devices, library, itemCreation, itemDeletion, unsafeItemDeletion, folderValidation, linkedChildReferences, playlists, topLevelValidation, libraryScanHost, libraryScanLifecycle, libraryScanner, metadataScanner, artistsPostScanTask, genresPostScanTask, musicGenresPostScanTask, studiosPostScanTask, tasks, userData, sessions, syncPlay, refreshes, authentication, localization, playback, probe, externalData, extraction, remux, hls, images, imageProcessor, metadata, metadataUpdates, resolvedItemLifecycle, metadataEditor, itemUpdates, plugins, similarItems, ignoreRule, serverId, serverName, serverVersion };
   services.collectionPosterVerifyPostScanTask = collectionPosterVerifyPostScanTask;
+  services.channels = channels;
   services.liveTv = liveTv;
   services.liveTvTimers = liveTvTimers;
   services.liveTvRecordings = liveTvRecordings;
@@ -575,6 +582,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
       const attempt = async operation => { try { await operation(); } catch (error) { errors.push(error); } };
       application.beginClose();
       sessions.beginClose();
+      const channelsClosing = channels.close();
       const guideClosing = liveTvGuide?.close();
       // An admitted guide can still reach its token-independent image phase
       // after a program COMMIT. Keep that dependency admitted until guide drain.
@@ -621,6 +629,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
         attempt(() => publicStreamsClosing),
         attempt(() => liveProbeClosing),
         attempt(() => sourcesClosing),
+        attempt(() => channelsClosing),
         attempt(async () => {
           await Promise.allSettled([guideClosing, guideImagesClosing, sourcesClosing]);
           await liveTvCountries?.close();

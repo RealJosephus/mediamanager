@@ -16,22 +16,15 @@ import { clrTrim } from '../metadata/whitespace.js';
 import { itemFields, itemImageTypes } from '../library/dto.js';
 import { parseQuery } from '../library/query.js';
 import { embyTextResponse } from './client-protocol.js';
+import { controllerItemFields } from './item-fields.js';
+import { registerChannelItemRoutes } from './channel-item-routes.js';
 
 const itemSortNames = ['Default', 'AiredEpisodeOrder', 'Album', 'AlbumArtist', 'Artist', 'DateCreated',
   'OfficialRating', 'DatePlayed', 'PremiereDate', 'StartDate', 'SortName', 'Name', 'Random', 'Runtime',
   'CommunityRating', 'ProductionYear', 'PlayCount', 'CriticRating', 'IsFolder', 'IsUnplayed', 'IsPlayed',
   'SeriesSortName', 'VideoBitRate', 'AirTime', 'Studio', 'IsFavoriteOrLiked', 'DateLastContentAdded',
   'SeriesDatePlayed', 'ParentIndexNumber', 'IndexNumber'];
-const controllerItemFields = ['AirTime', 'CanDelete', 'CanDownload', 'ChannelInfo', 'Chapters', 'Trickplay', 'ChildCount',
-  'CumulativeRunTimeTicks', 'CustomRating', 'DateCreated', 'DateLastMediaAdded', 'DisplayPreferencesId', 'Etag',
-  'ExternalUrls', 'Genres', 'ItemCounts', 'MediaSourceCount', 'MediaSources', 'OriginalTitle', 'Overview', 'ParentId',
-  'Path', 'People', 'PlayAccess', 'ProductionLocations', 'ProviderIds', 'PrimaryImageAspectRatio',
-  'RecursiveItemCount', 'Settings', 'SeriesStudio', 'SortName', 'SpecialEpisodeNumbers', 'Studios', 'Taglines',
-  'Tags', 'RemoteTrailers', 'MediaStreams', 'SeasonUserData', 'DateLastRefreshed', 'DateLastSaved', 'RefreshState',
-  'ChannelImage', 'EnableMediaSourceDisplay', 'Width', 'Height', 'ExtraIds', 'LocalTrailerCount', 'IsHD',
-  'SpecialFeatureCount'];
-
-export function registerDomainRoutes(add, { configuration, authentication, users, devices, library, liveTv, playlists, sessions, userData, hls, metadata, onError }) {
+export function registerDomainRoutes(add, { configuration, authentication, users, devices, library, channels, liveTv, playlists, sessions, userData, hls, metadata, onError }) {
   const query = (context, name) => queryValue(context.query, name);
   const boolean = (context, name, fallback) => booleanValue(query(context, name), name, fallback);
   const integer = (context, name, fallback) => integerValue(query(context, name), name, fallback);
@@ -254,6 +247,25 @@ export function registerDomainRoutes(add, { configuration, authentication, users
     requireSupportedDtoFields(input, 'Live TV');
     return library.queryRecommendedPrograms(input, { user });
   }, { policy: 'LiveTvAccess' });
+  add('GET', '/Channels', async context => {
+    const input = {}, errors = {}; let failure;
+    for (const [name, read] of [['UserId', () => guid(context, 'userId', context.auth.UserId)],
+      ['StartIndex', () => integer(context, 'startIndex')], ['Limit', () => integer(context, 'limit')],
+      ['SupportsLatestItems', () => boolean(context, 'supportsLatestItems')], ['SupportsMediaDeletion', () => boolean(context, 'supportsMediaDeletion')],
+      ['IsFavorite', () => boolean(context, 'isFavorite')]]) {
+      try { input[name] = read(); }
+      catch (error) { if (!(error instanceof BindingError)) throw error; failure ??= error; Object.assign(errors, error.errors); }
+    }
+    if (failure) { failure.errors = errors; throw failure; }
+    let userId = input.UserId;
+    if (/^0{32}$/u.test(userId ?? '')) userId = context.auth.UserId;
+    if (userId && userId !== context.auth.UserId && !context.auth.IsAdministrator) throw httpError(403, 'Forbidden');
+    return channels.getChannels({ ...input, UserId: userId ?? '0'.repeat(32) });
+  });
+  add('GET', '/Channels/Features', () => channels.getAllChannelFeatures());
+  add('GET', '/Channels/{channelId}/Features', context => channels.getChannelFeatures(guid(context, 'channelId')));
+  registerChannelItemRoutes(add, { channels, users }, { sortNames: itemSortNames });
+
   add('GET', '/LiveTv/Channels', async context => {
     // These two values are bound by the controller but not forwarded by the native manager.
     nullableEnum(context, 'type', ['TV', 'Radio']); boolean(context, 'isDisliked');

@@ -115,11 +115,12 @@ async function setup(t, dialect, sample) {
     if (sample.externalFailure) throw Object.assign(new Error('Controlled external cleanup failure.'), { code: 'io' });
     return deleteItemFiles(...args);
   };
-  const channelManager = { deleteItem: async current => {
+  const channelDelete = async current => {
     calls.push({ action: 'channel', id: guid(current.Id), state: await state() });
     if (sample.channel === 'argument') throw Object.assign(new Error('Missing channel'), { nativeException: 'ArgumentException' });
     if (sample.channel === 'failure') throw new Error('Controlled channel failure');
-  } };
+  };
+  const channelManager = { admitOperation: () => ({ deleteItem: channelDelete, release() {} }) };
   const loadDeletionContext = async (...args) => {
     const context = await fixture.loadContext(...args);
     if (sample.channel && VIDEO_TYPES.has(context.item.Type)) {

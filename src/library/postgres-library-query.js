@@ -355,11 +355,13 @@ export async function loadPostgresNavigationRows(database, parentId, {
   const ids = await itemIds(database,
     `SELECT "Id" FROM ${baseItems} item
      WHERE substring(${nativeTextSql(database.schemaName).projection("item.\"Type\"")} from '[^.]+$') = ANY($1::text[])
-       OR (substring(${nativeTextSql(database.schemaName).projection("item.\"Type\"")} from '[^.]+$') = 'Folder' AND EXISTS (
+       OR EXISTS (
          SELECT 1 FROM ${baseItems} root
-         WHERE substring(${nativeTextSql(database.schemaName).projection("root.\"Type\"")} from '[^.]+$') IN ('AggregateFolder', 'UserRootFolder')
+         WHERE (substring(${nativeTextSql(database.schemaName).projection("root.\"Type\"")} from '[^.]+$') = 'UserRootFolder'
+           OR substring(${nativeTextSql(database.schemaName).projection("root.\"Type\"")} from '[^.]+$') = 'AggregateFolder'
+             AND substring(${nativeTextSql(database.schemaName).projection("item.\"Type\"")} from '[^.]+$') = 'Folder')
            AND replace(${nativeTextSql(database.schemaName).guidLower("root.\"Id\"")}, '-', '') = replace(${nativeTextSql(database.schemaName).guidLower("item.\"ParentId\"")}, '-', '')
-       ))`,
+       )`,
     [NAVIGATION_TYPES]);
   if (nonemptyId(parentId)) ids.push(parentId);
 

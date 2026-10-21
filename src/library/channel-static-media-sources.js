@@ -7,10 +7,7 @@ import { dtoId } from './records.js';
 
 export function channelMediaSourceCachePath(item, metadataPath) {
   const api = imagePathApi(metadataPath);
-  // Channel overrides BaseItem.GetInternalMetadataPath. Its folder identity
-  // does not use the external content's ChannelId branch.
-  const directory = item.Type === 'Channel' ? api.join(metadataPath, 'channels', dtoId(item.Id), 'metadata')
-    : internalImagePath(item, metadataPath);
+  const directory = internalImagePath(item, metadataPath);
   return api.join(directory, 'channelmediasourceinfos.json');
 }
 

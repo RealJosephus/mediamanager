@@ -42,7 +42,7 @@ export function liveMediaInfoDefaults() {
   return { ...mediaSourceDefaults(), Chapters: [], Artists: [], AlbumArtists: [], Studios: [], Genres: [], People: [], ProviderIds: {} };
 }
 
-const schema = { definitions: {
+export const nativeMediaSourceInfoDefinitions = {
   MediaSourceInfo: { fields: sourceFields, defaults: mediaSourceDefaults() },
   MediaInfo: { fields: { ...sourceFields,
     ...fields('string', 'Album ShowName ForcedSortName OfficialRating OfficialRatingDescription Overview'),
@@ -59,7 +59,8 @@ const schema = { definitions: {
     Type: enumeration(['Unknown', 'Actor', 'Director', 'Composer', 'Writer', 'GuestStar', 'Producer', 'Conductor', 'Lyricist', 'Arranger', 'Engineer', 'Mixer', 'Remixer', 'Creator', 'Artist', 'AlbumArtist', 'Author', 'Illustrator', 'Penciller', 'Inker', 'Colorist', 'Letterer', 'CoverArtist', 'Editor', 'Translator', 'Narrator']),
     ImageBlurHashes: { type: 'dictionary', nullable: true, key: enumeration(['Primary', 'Art', 'Backdrop', 'Banner', 'Logo', 'Thumb', 'Disc', 'Box', 'Screenshot', 'Menu', 'Chapter', 'BoxRear', 'Profile']), item: dictionary } },
     defaults: { Id: '00000000000000000000000000000000', Type: 'Unknown' } },
-} };
+};
+const schema = { definitions: nativeMediaSourceInfoDefinitions };
 
 /** JsonDefaults.Options is case-sensitive, ignores unknown/read-only members,
  * permits quoted numbers, and constructs collection/scalar defaults. */

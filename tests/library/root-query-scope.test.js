@@ -1,4 +1,5 @@
 import { testFileSystem } from '../storage/plugin-files.js';
+import { attachLibraryNavigation, closeLibraryNavigation } from './navigation-fixture.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createHash, randomBytes } from 'node:crypto';
@@ -67,6 +68,8 @@ for (const dialect of ['postgres']) test(`${dialect}: 40 complete root and folde
       for (const table of ['BaseItems', 'AncestorIds', 'ItemValues', 'ItemValuesMap', 'Peoples', 'PeopleBaseItemMap']) seedReadback[table] = await db.rows(table);
       const library = new LibraryService({fileSystem: testFileSystem,  store: new DomainStore(db), serverId: 'candidate-search-audit',
         configuration: { EnableGroupingMoviesIntoCollections: false, EnableGroupingShowsIntoCollections: false } });
+      await attachLibraryNavigation(library);
+      try {
       for (const expected of run.native) {
         const readback = run.actualUserAndViews.find(row => row.name === expected.name).user.bodyJson;
         const user = { ...readback, MaxParentalRatingScore: readback.Policy.MaxParentalRating, MaxParentalRatingSubScore: readback.Policy.MaxParentalSubRating };
@@ -79,6 +82,7 @@ for (const dialect of ['postgres']) test(`${dialect}: 40 complete root and folde
         cases.push(row);
         if (stable(actual) !== stable(wanted)) differences.push(row);
       }
+      } finally { await closeLibraryNavigation(library); }
     }
   } finally {
     await db.client.query('DROP SCHEMA ' + quoteIdentifier(db.schemaName) + ' CASCADE');

@@ -36,7 +36,7 @@ import { validateCollectionLocations } from './internal-folder-refresh.js';
 import { isNativeItemEntity } from '../library/native-item-entity.js';
 
 const modes = { None: 0, ValidationOnly: 1, Default: 2, FullRefresh: 3 };
-const supported = ['AggregateFolder', 'UserRootFolder', 'CollectionFolder', 'PlaylistsFolder', 'Folder', 'Movie', 'Video', 'MusicVideo', 'Trailer', 'Series', 'Season', 'Episode', 'BoxSet', 'Playlist', 'Person', 'MusicAlbum', 'MusicArtist', 'UserView', 'Genre', 'MusicGenre', 'Studio', 'Year', 'Book', 'Photo', 'PhotoAlbum', 'LiveTvChannel'];
+const supported = ['AggregateFolder', 'UserRootFolder', 'CollectionFolder', 'PlaylistsFolder', 'Folder', 'Channel', 'Movie', 'Video', 'MusicVideo', 'Trailer', 'Series', 'Season', 'Episode', 'BoxSet', 'Playlist', 'Person', 'MusicAlbum', 'MusicArtist', 'UserView', 'Genre', 'MusicGenre', 'Studio', 'Year', 'Book', 'Photo', 'PhotoAlbum', 'LiveTvChannel'];
 const validId = isValidProviderId;
 const languageMatches = (actual, preferred) => !actual || !preferred || actual.split('-')[0].toLowerCase() === preferred.split('-')[0].toLowerCase();
 const ownerMetadataRefresh = Symbol('owner metadata refresh');

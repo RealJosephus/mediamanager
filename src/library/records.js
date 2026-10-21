@@ -243,7 +243,7 @@ export async function loadLibrary(db, { expandPath = value => value, userRoot, p
       FROM unnest($1::bytea[]) source(id)`,[scopedIds.map(nativeTextBytes)])).rows;
     for(const row of rows)hasStoredLinks.set(idKey(decodeNativeTextBytes(row.id,'runtime')),row.present);
   }
-  const state = { items, byId, parents, links, hasStoredLinks, db, transientUserRoot, repositoryUserDataRows: userData,
+  const state = { items, byId, parents, links, hasStoredLinks, db, transientUserRoot, userRootId: userRoot?.Id, repositoryUserDataRows: userData,
     adoptItem(item) {
       if (disposed) throw new Error('The library state has been disposed.');
       linkOwners.push(acquireNativeItemLinkOwner(item));

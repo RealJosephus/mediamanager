@@ -1,4 +1,5 @@
 import { testFileSystem } from '../storage/plugin-files.js';
+import { attachLibraryNavigation, closeLibraryNavigation } from './navigation-fixture.js';
 import assert from 'node:assert/strict';
 import { createHash, randomUUID } from 'node:crypto';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
@@ -47,6 +48,7 @@ async function compare(db, library, result) {
     includeUserData: false,
     baseRows: await db.rows('BaseItems'),
   });
+  try {
   for (const source of native.raw.output[0].sources) {
     const actual = state.byId.get(idKey(source.Id));
     assert.equal(idKey(actual.ParentId ?? EMPTY_ID), idKey(source.ParentId));
@@ -57,19 +59,20 @@ async function compare(db, library, result) {
   for (const entry of native.raw.output) {
     const item = state.byId.get(idKey(entry.Id));
     assert.deepEqual(state.children(item).map(child => child.Id), entry.cachedChildren, 'cache contains no linked children');
-    const count = await library.getDtoChildCount(item, state, user);
-    assert.equal(count, entry.childCount, `${entry.Id}: native child count`);
+    // This sealed oracle invokes Folder.GetChildCount and GetItems, not
+    // DtoService's persisted-source batch, which counts raw relation rows.
+    const children = await library.queryItems({ ParentId: item.Id, EnableUserData: false,
+      EnableImages: false, Fields: [] }, { user, fromUserViewChildren: true });
+    const count = children.TotalRecordCount;
+    assert.equal(count, entry.childCount, `${entry.Id}: native entity child count`);
+    assert.deepEqual(children.Items.map(child => child.Id), entry.itemIds.map(idKey));
+    assert.equal(children.TotalRecordCount, entry.TotalRecordCount);
     const observation = { Id: entry.Id, childCount: count, cachedChildren: state.children(item).map(child => child.Id) };
     if (item.Type === 'CollectionFolder') {
-      const children = await library.queryItems({ ParentId: item.Id, EnableUserData: false,
-        EnableImages: false }, { user, fromUserViewChildren: true });
-      assert.deepEqual(children.Items.map(child => child.Id), entry.itemIds.map(idKey));
-      assert.equal(children.TotalRecordCount, entry.TotalRecordCount);
       const anonymous = await library.queryItems({ ParentId: item.Id, EnableUserData: false,
-        EnableImages: false }, { fromUserViewChildren: true });
+        EnableImages: false, Fields: [] }, { fromUserViewChildren: true });
       assert.deepEqual(anonymous.Items.map(child => child.Id), entry.anonymousItemIds.map(idKey));
       assert.equal(anonymous.TotalRecordCount, entry.anonymousTotalRecordCount);
-      assert.equal(await library.getDtoChildCount(item, state, null), entry.anonymousTotalRecordCount);
       observation.internalItemIds = children.Items.map(child => child.Id);
       observation.TotalRecordCount = children.TotalRecordCount;
       observation.anonymousItemIds = anonymous.Items.map(child => child.Id);
@@ -80,6 +83,7 @@ async function compare(db, library, result) {
   result.after = await snapshot(db);
   assert.deepEqual(result.after, result.before, 'count/children projection does not mutate persisted rows');
   result.passed = true;
+  } finally { await state.dispose(); }
 }
 
 for (const driver of ['postgres']) test(`real native CollectionFolder linked fallback and ID-distinct controls match ${driver}`,
@@ -87,12 +91,16 @@ for (const driver of ['postgres']) test(`real native CollectionFolder linked fal
     const schema = `cc_${randomUUID().replaceAll('-', '')}`;
     const db = await PostgresDatabase.open({ connectionString: process.env.MEDIAMANAGER_TEST_POSTGRES, schema, create: true });
     const store = new DomainStore(db), library = new LibraryService({fileSystem: testFileSystem,  store, serverId: 'collection-count-regression', configuration: {} });
+    await attachLibraryNavigation(library);
     const result = { driver, nativeFixtureSha256: hash(bytes), phaseAcceptance: false, passed: false,
-      publicControllerLinkedItemsVerified: false, cleanup: {} };
+      consumer: 'Frozen entity Folder.GetChildCount/GetItems; no DTO batch equivalence claim.',
+      coldPersistedRelationsOnly: true,
+      unmetPrerequisites: ['Unsaved link handles, legacy Path fallback, owned/alternate fallback and exact live alias ordering require a separate actual native generic-Folder capture.'],
+      dtoBatchVerified: false, publicControllerLinkedItemsVerified: false, cleanup: {} };
     try { await compare(db, library, result); }
     catch (error) { result.error = { name: error.name, message: error.message }; throw error; }
     finally {
-      await library.close();
+      await closeLibraryNavigation(library);
       if (driver === 'postgres') {
         await db.client.query(`DROP SCHEMA ${quoteIdentifier(schema)} CASCADE`);
         await db.client.query(`DROP SCHEMA ${quoteIdentifier(schema + '__mm')} CASCADE`);

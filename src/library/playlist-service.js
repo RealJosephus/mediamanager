@@ -613,8 +613,9 @@ export class PlaylistService {
   }
 
   async getItems(id, { user, startIndex, limit, dtoOptions = {}, signal } = {}) {
-    return this.store.run(async db => {
-      const selected = selectDtoOptions(parseQuery(dtoOptions), true);
+    const selected = selectDtoOptions(parseQuery(dtoOptions), true);
+    const channelAccess = selected.fields.has('candelete') ? this.library.channels?.admitOperation() : undefined;
+    try { return await this.store.run(async db => {
       const playlistId = nativeGuid(id);
       const { playlist, navigationRows, visibility } = await this.#postgresPlaylistRead(db, playlistId, user);
       if (!(playlist.OpenAccess === true || sameId(playlist.OwnerUserId, user.Id)
@@ -623,7 +624,7 @@ export class PlaylistService {
       for(;;){const page=await queryPostgresPlaylistPage(db,playlist.Id,{visibility,startIndex:offset,limit:Math.min(128,remaining)});total=page.total;
       const pageRows = await loadPostgresRowsByIds(db, page.links.map(link => link.ChildId));
       const graphRows = await loadPostgresPageGraph(db, pageRows, navigationRows,{includeManualLinks:false});
-      const state = await this.library.load(db, user, { includeUserData: true, baseRows: graphRows,includeLinkGraph:false });
+      const state = await this.library.load(db, user, { includeUserData: true, baseRows: graphRows,includeLinkGraph:false, channelAccess });
       try{for (const link of page.links) {
         const item = state.byId.get(idKey(link.ChildId));
         if (!item) continue;
@@ -634,6 +635,7 @@ export class PlaylistService {
       remaining-=page.links.length;if(page.links.length<128||remaining<=0)break;offset+=page.links.length;}
       return { Items, TotalRecordCount: total, StartIndex:Math.max(0,startIndex??0) };
     }, { signal, readOnly: true, lockTimeoutMs: 250 });
+    } finally { await channelAccess?.release(); }
   }
 
   async add(id, itemIds, { user, position, signal } = {}) {
@@ -725,12 +727,12 @@ export class PlaylistService {
     });
   }
 
-  async delete(id, { user, isApiKey = false, signal } = {}) {
-    return this.#enqueue(() => this.#delete(id, { user, isApiKey, signal }));
+  async delete(id, { user, isApiKey = false, signal, channelAccess } = {}) {
+    return this.#enqueue(() => this.#delete(id, { user, isApiKey, signal, channelAccess }));
   }
 
   async #delete(id, { user, isApiKey = false, deleteFileLocation = true, deleteFromExternalProvider = true,
-    physicalParent = false, notifyParentItem = true } = {}) {
+    physicalParent = false, notifyParentItem = true, channelAccess } = {}) {
     await this.#refreshTail;
     if (!user && !isApiKey) throw libraryError(404, 'User not found.');
     const playlistId = nativeGuid(id);
@@ -751,7 +753,7 @@ export class PlaylistService {
     const parent = physicalParent ? nonemptyId(item.ParentId)
       ? await this.library.itemCreation.getItemById(item.ParentId) : null : undefined;
     return this.library.deleteItem(item, { DeleteFileLocation: deleteFileLocation,
-      DeleteFromExternalProvider: deleteFromExternalProvider }, parent, notifyParentItem);
+      DeleteFromExternalProvider: deleteFromExternalProvider }, parent, notifyParentItem, channelAccess);
   }
 
   async removeForDeletedUser(user, { signal } = {}) {

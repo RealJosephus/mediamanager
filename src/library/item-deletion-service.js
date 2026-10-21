@@ -18,7 +18,7 @@ import { resolveVideoVersionLinks } from './video-version-relations.js';
 const conflict = () => Object.assign(new Error('The item changed before deletion.'), { code: 'metadata-conflict', status: 409 });
 const genericFileLeafTypes = new Set(['Audio', 'AudioBook', 'Book']);
 const generalMediaItemTypes = new Set([
-  'Series', 'Season', 'BoxSet', 'Playlist', 'LiveTvProgram', 'LiveTvChannel', 'MusicAlbum', 'Photo', 'PhotoAlbum'
+  'Series', 'Season', 'BoxSet', 'Playlist', 'LiveTvProgram', 'LiveTvChannel', 'Channel', 'MusicAlbum', 'Photo', 'PhotoAlbum'
 ]);
 const exactFileSourceTypes = new Set([...genericFileLeafTypes, 'LiveTvProgram', 'Photo']);
 const internalByNameFolders = new Map([
@@ -261,17 +261,37 @@ export class ItemDeletionService {
       : () => loaded.imageAssets.delete(sourcePath);
   }
 
-  deleteItem(item, options = {}, parent, notifyParentItem = true) {
-    return this.#deleteItem(item, options, parent, notifyParentItem, true);
+  deleteItem(item, options = {}, parent, notifyParentItem = true, channelAccess) {
+    // A primary Video reads its alternate identities from SQL. Its live arrays
+    // may already be empty, and a missing external alternate is recursively
+    // deleted with fresh native options whose provider flag defaults to true.
+    const consumesVersions = VIDEO_TYPES.has(item?.Type) && !nonemptyId(item.PrimaryVersionId) && !nonemptyId(item.OwnerId);
+    const ownChannels = !channelAccess && (item?.SourceType === 'Channel' && options.DeleteFromExternalProvider !== false || consumesVersions)
+      ? this.channelManager?.admitOperation() : undefined;
+    let task;
+    try { task = this.#deleteItem(item, options, parent, notifyParentItem, true, undefined, channelAccess ?? ownChannels); }
+    catch (error) { task = Promise.reject(error); }
+    return Promise.resolve(task).finally(() => ownChannels?.release());
   }
 
-  async #deleteItem(item, options, parent, notifyParentItem, allowDirectoryDisc = false, validatedVersionContext) {
+  async #deleteItem(item, options, parent, notifyParentItem, allowDirectoryDisc = false, validatedVersionContext, channelAccess) {
     if (item == null) throw new TypeError('DeleteItem requires a native item.');
     return this.store.serializeWrites(async database => {
       const contexts=new Set(),owners=[],keep=value=>{contexts.add(value);return value;};
       let children,cohort,scope,failure; const logical=q('mm_delete_logical_'+randomUUID().replaceAll('-',''));
       owners.push(acquireNativeItemLinkOwner(item));
       try{
+      if (item.SourceType === 'Channel') {
+        if (options.DeleteFromExternalProvider !== false) {
+          if (!channelAccess?.deleteItem) throw libraryError(501, 'Channel provider deletion requires an admitted channel operation.');
+          try { await channelAccess.deleteItem(item); }
+          catch (error) {
+            if (!['ArgumentException', 'ArgumentNullException', 'ArgumentOutOfRangeException', 'CultureNotFoundException',
+              'DecoderFallbackException', 'EncoderFallbackException', 'InvalidEnumArgumentException', 'DuplicateWaitObjectException'].includes(error.nativeException)) throw error;
+          }
+        }
+        options.DeleteFileLocation = false;
+      }
       const loaded = validatedVersionContext ?? keep(await this.#context(item, {
         allowDirectoryDisc, parent, deleteFileLocation: options.DeleteFileLocation
       }));
@@ -324,15 +344,6 @@ export class ItemDeletionService {
         const deleteSource = loaded.internalSourcePath ? await this.#stateSourceDeletion(loaded, loaded.internalSourcePath)
           : options.DeleteFileLocation && item.IsFileProtocol && !nonemptyId(item.ChannelId)
             ? await this.#sourceDeletion(item, loaded) : null;
-        if (nonemptyId(item.ChannelId)) {
-          if (options.DeleteFromExternalProvider !== false) {
-            if (!this.channelManager?.deleteItem) throw libraryError(501, 'Channel provider deletion requires a channel manager.');
-            try { await this.channelManager.deleteItem(item); }
-            catch (error) { if (error.nativeException !== 'ArgumentException') throw error; }
-          }
-          options.DeleteFileLocation = false;
-        }
-
         if (VIDEO_TYPES.has(item.Type) && !nonemptyId(item.PrimaryVersionId) && !nonemptyId(item.OwnerId)) {
           const surviving = [], missing = [];
           for (const alternate of alternates) {
@@ -352,7 +363,7 @@ export class ItemDeletionService {
             // granting source deletion or rejecting deliberate version changes.
             const discContext = !alternate.IsPlaceHolder && ['Dvd', 'BluRay'].includes(alternate.VideoType)
               ? alternateContext : undefined;
-            await this.#deleteItem(alternate, { DeleteFileLocation: false }, undefined, false, false, discContext);
+            await this.#deleteItem(alternate, { DeleteFileLocation: false }, undefined, false, false, discContext, channelAccess);
           }
           if (surviving.length) {
             const primary = surviving[0]; setPrimary(primary, null); primary.OwnerId = EMPTY_ID;

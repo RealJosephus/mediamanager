@@ -1,4 +1,5 @@
 import { testFileSystem } from '../storage/plugin-files.js';
+import { attachLibraryNavigation, closeLibraryNavigation } from './navigation-fixture.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
@@ -159,8 +160,10 @@ test('real PostgreSQL item DTO pages batch every requested relation independentl
   const db = await PostgresDatabase.open({
     connectionString: process.env.MEDIAMANAGER_TEST_POSTGRES, schema, create: true,
   });
+  let library;
   t.after(async () => {
     db.queryHook = null;
+    await closeLibraryNavigation(library);
     await db.client.query(`DROP SCHEMA ${quoteIdentifier(schema)} CASCADE`);
     await db.client.query(`DROP SCHEMA ${quoteIdentifier(schema + '__mm')} CASCADE`);
     await db.close();
@@ -216,10 +219,11 @@ test('real PostgreSQL item DTO pages batch every requested relation independentl
     if (text.includes('/* dto-child-counts */')) childCountQueries.push(text);
     return result;
   };
-  const library = new LibraryService({fileSystem: testFileSystem,
+  library = new LibraryService({fileSystem: testFileSystem,
     store: new DomainStore(db), serverId: 'dto-page-bounds', programDataPath: options.programDataPath,
     configuration: { UICulture: 'en-US', IsStartupWizardCompleted: true },
   });
+  await attachLibraryNavigation(library);
   const result = await library.queryItems({
     Ids: movieIds.join(','), Limit: String(movieIds.length), EnableImages: 'true',
     Fields: 'People,MediaSources,MediaStreams,Chapters,Trickplay,Settings,PrimaryImageAspectRatio',

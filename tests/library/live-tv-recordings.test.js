@@ -32,11 +32,11 @@ const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const id = index => `a9300000-0000-0000-0000-${String(index).padStart(12, '0')}`;
 const tables = ['BaseItems', 'AncestorIds', 'ItemValues', 'ItemValuesMap'];
 const channelType = 'MediaBrowser.Controller.Channels.Channel';
-const channelProjection = item => Object.fromEntries(Object.entries({
+const channelProjection = async item => Object.fromEntries(Object.entries({
   type: item.NativeType, sourceType: item.SourceType, mediaType: item.MediaType, unratedType: item.UnratedType,
   IsFolder: item.IsFolder, IsHidden: item.IsHidden, IsDisplayedAsFolder: item.IsDisplayedAsFolder,
   SupportsPlayedStatus: item.SupportsPlayedStatus, SupportsPositionTicksResume: item.SupportsPositionTicksResume,
-  canDelete: canDeleteItem(item), IsRoot: item.IsRoot, Container: item.Container, Width: item.Width, Height: item.Height,
+  canDelete: await canDeleteItem(item), IsRoot: item.IsRoot, Container: item.Container, Width: item.Width, Height: item.Height,
   Size: item.Size == null ? null : Number(item.Size), id: idKey(item.Id), channelId: idKey(item.ChannelId), Name: item.Name, Path: item.Path,
   serialized: serializeNativeItemData(item),
 }).filter(([_name, value]) => value != null));
@@ -173,22 +173,22 @@ test('existing recordings match actual native manager and EF queries through Pos
     assert.equal(native.channelContract.requiresJson, true);
     assert.deepEqual(nativeItemJsonContract(channelType).map(field => ({ name: field.name, getterOnly: field.readOnly })),
       native.channelContract.properties.map(field => ({ name: field.name, getterOnly: field.getterOnly })));
-    assert.deepEqual(channelProjection(newNativeItemEntity(channelType)), native.channelContract.constructor);
+    assert.deepEqual(await channelProjection(newNativeItemEntity(channelType)), native.channelContract.constructor);
     report.channelComparisons = [];
     for (const sample of input.channelCases) {
       const expected = native.channelContract.cases.find(value => value.name === sample.name), errors = [];
       const row = { ...expected.row, Size: expected.row.Size == null ? null : BigInt(expected.row.Size) };
       const actual = mapRecord(row, { onJsonError: error => errors.push(error) });
-      assert.deepEqual(channelProjection(actual), expected.value, sample.name);
+      assert.deepEqual(await channelProjection(actual), expected.value, sample.name);
       assert.equal(errors.length, expected.jsonErrors, sample.name);
       const state = await loadLibrary(database, { configuration: { SkipDeserializationForBasicTypes: sample.skipBasic } },
         { baseRows: [row], includeLinkGraph: false });
-      try { assert.deepEqual(channelProjection(state.items[0]), expected.repositoryValue, sample.name + ' repository basic-type configuration'); }
+      try { assert.deepEqual(await channelProjection(state.items[0]), expected.repositoryValue, sample.name + ' repository basic-type configuration'); }
       finally { await state.dispose(); }
       const safe = (await database.client.query(`SELECT ${nativeTextSql(database.schemaName).safeItemData('$1::bytea', '$2::bytea')} AS value`,
         [nativeTextBytes(channelType), sample.data == null ? null : nativeTextBytes(sample.data)])).rows[0].value;
       assert.deepEqual(safe, sample.data == null ? null : sample.validData ? JSON.parse(sample.data) : {}, sample.name + ' PostgreSQL Data gate');
-      report.channelComparisons.push({ name: sample.name, jsonErrors: errors.length, actual: channelProjection(actual),
+      report.channelComparisons.push({ name: sample.name, jsonErrors: errors.length, actual: await channelProjection(actual),
         repositoryValue: expected.repositoryValue, safeData: safe });
     }
     const baseline = Object.fromEntries(await Promise.all(tables.map(async table => [table, stable(await database.rows(table))])));
@@ -332,7 +332,7 @@ test('existing recordings match actual native manager and EF queries through Pos
       assert.equal(candidate.Id, prepared.Id); assert.equal(idKey(candidate.ChannelId), expected.channelId);
       assert.equal(candidate.Path, expected.path);
       assert.equal(candidate.SourceType, expected.sourceType);
-      assert.equal(canDeleteItem(candidate), expected.value, expected.name);
+      assert.equal(await canDeleteItem(candidate), expected.value, expected.name);
       const state = await store.run(db => library.load(db, null, { baseRows: [] }));
       try {
         state.items.push(candidate); state.byId.set(idKey(candidate.Id), candidate);
@@ -356,7 +356,7 @@ test('existing recordings match actual native manager and EF queries through Pos
           assert.deepEqual(comparable(actual), comparable(observed), expected.name + ': userless=' + observation.userless + ' actual DTO result/error');
           dto.push({ userless: observation.userless, actual, native: observed });
         }
-        report.deleteCases.push({ ...expected, actualInput: prepared, actualSourceType: candidate.SourceType, actualValue: canDeleteItem(candidate), dto });
+        report.deleteCases.push({ ...expected, actualInput: prepared, actualSourceType: candidate.SourceType, actualValue: await canDeleteItem(candidate), dto });
       } finally { await state.dispose(); }
     }
     await store.run(async db => {

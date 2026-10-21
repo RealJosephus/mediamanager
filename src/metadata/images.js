@@ -210,7 +210,8 @@ export class MetadataImages {
     for (const provider of providers) {
       try {
         if (provider.imageSource === 'dynamic') {
-          for (const type of provider.imageTypes) {
+          const types = provider.imageTypesFor ? await provider.imageTypesFor(item, { ...loaded.context, signal }) : provider.imageTypes;
+          for (const type of types) {
             if (imageOption(loaded, type).limit <= 0 || images.some(image => image.Type === type) && (!replacing(type) || downloaded.has(type))) continue;
             const source = await provider.getImage(item, { ...loaded.context, type, signal });
             if (source == null) continue;

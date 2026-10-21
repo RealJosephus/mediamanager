@@ -38,7 +38,9 @@ export async function captureShows(inputBytes) {
       assert.equal(receipt.passed, true); assert.equal(observation.inputSha256, report.inputSha256);
       assert.equal(receipt.outputs.find(entry => path.basename(entry.filename) === 'native.json').sha256, sha256(bytes));
       assert.ok(observation.runtimeAssemblies.some(entry => !entry.managed && entry.name === 'e_sqlite3'),
-        'The actual platform SQLite module must be observed in the native process.');
+        'The supplied platform SQLite module must be loaded in the native process.');
+      assert.equal(observation.nativeSqliteImportResolved, true,
+        'Actual SQLitePCL imports must resolve through the supplied platform module.');
       for (const entry of observation.runtimeAssemblies) {
         const assembly = await readFile(entry.path); assert.equal(assembly.length, entry.bytes); assert.equal(sha256(assembly), entry.sha256);
       }

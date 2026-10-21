@@ -1,32 +1,5 @@
-import { nativeTextSql } from '../database/native-text-sql.js';
-import { decodeNativeTextBytes } from '../database/native-text.js';
 import { buildPostgresItemPageQuery } from '../database/postgres-item-query.js';
-import { quoteIdentifier as q } from '../database/model.js';
 import { idKey, nonemptyId } from './records.js';
-
-function qualified(database, name) {
-  if (database?.dialect !== 'postgres') throw new TypeError('A PostgreSQL database is required.');
-  return `${q(database.schemaName)}.${q(name)}`;
-}
-
-export function buildPostgresExternalViewPresenceQuery(database) {
-  return Object.freeze({
-    text: `SELECT EXISTS (
-      SELECT 1
-      FROM ${qualified(database, 'BaseItems')} item
-      WHERE substring(${nativeTextSql(database.schemaName).projection("item.\"Type\"")} from '[^.]+$') = ANY($1::text[])
-    ) AS "Present"`,
-    // Cached guide rows do not enable Live TV. Native menu availability uses
-    // live services and configured tuners, independently of these records.
-    values: Object.freeze([Object.freeze(['Channel'])]),
-  });
-}
-
-export async function queryPostgresExternalViewPresence(database) {
-  const plan = buildPostgresExternalViewPresenceQuery(database);
-  const result = await database.client.query({ text: plan.text, values: plan.values });
-  return result.rows[0]?.Present === true;
-}
 
 export function buildPostgresUserViewChildPresenceQuery(database, { parentIds, userId, visibility } = {}) {
   const ids = [...new Set((parentIds ?? []).filter(nonemptyId).map(idKey))];

@@ -1,4 +1,5 @@
 import { testFileSystem } from '../storage/plugin-files.js';
+import { attachLibraryNavigation, closeLibraryNavigation } from './navigation-fixture.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createHash, randomBytes } from 'node:crypto';
@@ -75,6 +76,7 @@ for (const dialect of ['postgres']) test(`${dialect}: 48 complete cached-root an
       const runtime = await mkdtemp(path.join(tmpdir(), 'mm-root-cached-')); runtimes.push(runtime);
       const library = new LibraryService({fileSystem: testFileSystem,  store: new DomainStore(db), serverId: 'candidate-search-audit', programDataPath: runtime,
         configuration: { EnableGroupingMoviesIntoCollections: false, EnableGroupingShowsIntoCollections: false } });
+      await attachLibraryNavigation(library);
       try {
       for (const expected of run.native) {
         const readback = run.actualUserAndViews.find(row => row.name === expected.name).user.bodyJson;
@@ -88,7 +90,7 @@ for (const dialect of ['postgres']) test(`${dialect}: 48 complete cached-root an
         cases.push(row);
         if (stable(actual) !== stable(wanted)) differences.push(row);
       }
-      } finally { await library.close(); }
+      } finally { await closeLibraryNavigation(library); }
       const after = {}; for (const table of Object.keys(before)) after[table] = await db.rows(table);
       assert.deepEqual(after, before, 'Candidate reads preserve the raw recorded seed');
       seedReadback.push({ nativeInputSha256: run.provenance.fixtureSha256, before, after, unchanged: true, libraryClosed: true });

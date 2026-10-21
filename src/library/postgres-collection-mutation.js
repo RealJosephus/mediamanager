@@ -24,7 +24,7 @@ export async function attachEmptyCollectionLinks(parent, collection, session) {
 
 async function publish(parent, session, collection, membership) {
   publishNativeItemLinks(collection, await parent.linkedChildren.createFromSession({ session,
-    parentId: collection.Id, loaded: true, plan: membership.linksPlan() }));
+    parentId: collection.Id, loaded: true, plan: membership.resolution.linksPlan() }));
   await parent.linkedChildren.flushReleases({ session });
 }
 
@@ -71,7 +71,7 @@ async function addOwnedCollectionMembers(parent, collection, { query, ids, fireE
         linksPlan: parent.linkedChildren.plan(collection.LinkedChildren, { session }) });
       await resolvePostgresLinkedChildren({ session, item: collection, links: collection.LinkedChildren,
         linkedChildren: parent.linkedChildren, library: parent.library, itemCreation: parent.itemCreation,
-        findByPath: parent.findByPath, membership, cohort });
+        findByPath: parent.findByPath, resolution: membership.resolution, cohort });
       const resolveMember = (id, options) => parent.itemCreation.withItem(id, async item => item ? {
         resolvedId: item.Id, slotKey: await cohort.capture(item, options),
       } : null);
@@ -91,7 +91,7 @@ async function addOwnedCollectionMembers(parent, collection, { query, ids, fireE
     } catch (error) { failure = error; throw error; }
     finally {
       const errors = [];
-      for (const cleanup of [() => membership?.dispose(), () => cohort?.release()]) {
+      for (const cleanup of [() => membership?.dispose(failure), () => cohort?.release()]) {
         try { await cleanup(); } catch (error) { errors.push(error); }
       }
       if (errors.length) throw new AggregateError(failure ? [failure, ...errors] : errors,
@@ -140,7 +140,7 @@ async function removeOwnedCollectionMembers(parent, collection, ids, refreshOpti
     } catch (error) { failure = error; throw error; }
     finally {
       const errors = [];
-      for (const cleanup of [() => membership?.dispose(), () => cohort?.release()]) {
+      for (const cleanup of [() => membership?.dispose(failure), () => cohort?.release()]) {
         try { await cleanup(); } catch (error) { errors.push(error); }
       }
       if (errors.length) throw new AggregateError(failure ? [failure, ...errors] : errors,

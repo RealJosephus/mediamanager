@@ -860,7 +860,11 @@ test('PostgreSQL: Shows Upcoming, NextUp, Episodes, Seasons and Similar preserve
     // controlled DtoProxy does not represent concrete DtoService internals.
     // For these ordinary episodes/series/artists ChannelInfo adds no fields:
     // the concrete native DTO branch is specific to LiveTvProgram.
-    assert.deepEqual(selected, expected, route + ': selecting ChannelInfo must preserve the full ordinary-item response.');
+    // Local Similar uses a new Random ordering on each request. Compare every
+    // complete DTO by identity while retaining the count and paging envelope.
+    const comparable = body => route.endsWith('/Similar')
+      ? { ...body, Items: [...body.Items].sort((left, right) => left.Id.localeCompare(right.Id)) } : body;
+    assert.deepEqual(comparable(selected), comparable(expected), route + ': selecting ChannelInfo must preserve the full ordinary-item response.');
     for (const item of selected.Items) for (const field of ['ChannelName', 'ChannelNumber', 'ChannelPrimaryImageTag']) {
       assert.equal(Object.hasOwn(item, field), false, route + ': ordinary item ' + item.Id + ' must omit ' + field);
     }

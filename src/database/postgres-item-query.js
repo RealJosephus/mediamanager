@@ -2,6 +2,7 @@ import { decodeNativeTextBytes, nativeTextBytes, nativeTextProjection, nativeTex
 import { nativeTextSql } from './native-text-sql.js';
 import { quoteIdentifier as q } from './model.js';
 import { postgresAliasedVersionFamilyKey, postgresSignedPaddedInteger } from './postgres-query-expressions.js';
+import { withPostgresNativeVisibilityJitOff } from './postgres-native-visibility-jit.js';
 import {
   postgresCleanValueFunctionName,
   postgresRemoveDiacriticsFunctionName,
@@ -11,10 +12,14 @@ import {
   postgresParentalRatingScoreFunctionName,
   postgresSafeInt32FunctionName,
   postgresSafeNativeItemDataFunctionName,
+  postgresNativeJsonGuidKeyFunctionName,
+  postgresCollectionFolderMatchFunctionName,
+  postgresExpandedPathKeyFunctionName,
 } from './postgres-runtime-schema.js';
 import { lowerInvariant } from '../core/identity.js';
 import { cleanValue, idKey } from '../library/records.js';
 import { ordinalIgnoreCaseKey } from '../storage/ordinal-comparer.js';
+import { wireGuid } from '../users/native.js';
 import { searchHistoryClient, searchHistoryKey } from '../sessions/search-history.js';
 import { postgresPlaylistSharingPredicate } from '../library/postgres-playlist-query.js';
 import {
@@ -189,6 +194,7 @@ export function buildPostgresItemPageQuery(database, query, {
   genreIdsPlan = null,
   playedFolderScope = null,
   playlistSharing = null,
+  nativeVisibilityProjections = null,
   visibility,
 } = {}) {
   if (database?.dialect !== 'postgres') throw new TypeError('PostgreSQL item queries require a PostgreSQL database.');
@@ -216,6 +222,31 @@ export function buildPostgresItemPageQuery(database, query, {
   if (typeof memoryFolderPlayback !== 'boolean') throw new TypeError('memoryFolderPlayback must be boolean.');
   if (typeof memoryUserViewFilter !== 'boolean') throw new TypeError('memoryUserViewFilter must be boolean.');
   if (typeof requireRelatedNameAccess !== 'boolean') throw new TypeError('requireRelatedNameAccess must be boolean.');
+  if (nativeVisibilityProjections !== null) {
+    if (!Array.isArray(nativeVisibilityProjections) || nativeVisibilityProjections.length > 128) {
+      throw new TypeError('Native visibility projections require at most 128 items.');
+    }
+    const ids = new Set(), normalized = [], fields = ['Id', 'OfficialRating', 'CustomRating', 'LibraryFolderIds'];
+    const canonicalGuid = value => {
+      if (typeof value !== 'string') throw new TypeError('Native visibility identities must be typed Guid strings.');
+      try { return wireGuid(value); }
+      catch { throw new TypeError('Native visibility identities must be typed Guid strings.'); }
+    };
+    for (const item of nativeVisibilityProjections) {
+      if (!item || typeof item !== 'object' || Array.isArray(item)
+        || Object.keys(item).length !== fields.length || !fields.every(name => Object.hasOwn(item, name))
+        || ![item.OfficialRating, item.CustomRating].every(value => value === null || typeof value === 'string')
+        || item.LibraryFolderIds !== null && !Array.isArray(item.LibraryFolderIds)) {
+        throw new TypeError('Native visibility projections require unique Guid identities and complete nullable typed fields.');
+      }
+      const Id = canonicalGuid(item.Id);
+      if (ids.has(Id)) throw new TypeError('Native visibility projections require unique Guid identities.');
+      ids.add(Id); normalized.push({ Id, OfficialRating: item.OfficialRating, CustomRating: item.CustomRating,
+        LibraryFolderIds: item.LibraryFolderIds === null ? null : item.LibraryFolderIds.map(canonicalGuid) });
+    }
+    nativeVisibilityProjections = normalized;
+    if (visibility?.itemMode !== 'standalone') throw new TypeError('Native visibility projections require standalone visibility.');
+  }
   if (itemIdsPlan !== null && (!itemIdsPlan || typeof itemIdsPlan !== 'object'
     || typeof itemIdsPlan.text !== 'string' || !itemIdsPlan.text.trim()
     || !Array.isArray(itemIdsPlan.values))) {
@@ -281,6 +312,26 @@ export function buildPostgresItemPageQuery(database, query, {
   const postCollapsePredicates = [];
   const relationalCtes = [];
   const baseItems = table(database, 'BaseItems');
+  if (nativeVisibilityProjections?.length) {
+    // Only the caller's bounded typed objects cross this boundary. The complete
+    // library remains in its real relation; this is not a BaseItems mirror.
+    relationalCtes.push(`native_visibility_input("Id","OfficialRating","CustomRating","LibraryFolderIds") AS (
+      SELECT source."Id",source."OfficialRating",source."CustomRating",NULLIF(source."LibraryFolderIds"::jsonb,'null'::jsonb)
+      FROM unnest(${bind(nativeVisibilityProjections.map(item => idKey(item.Id)))}::text[],
+        ${bind(nativeVisibilityProjections.map(item => item.OfficialRating === null ? null : nativeTextBytes(item.OfficialRating)))}::bytea[],
+        ${bind(nativeVisibilityProjections.map(item => item.CustomRating === null ? null : nativeTextBytes(item.CustomRating)))}::bytea[],
+        ${bind(nativeVisibilityProjections.map(item => JSON.stringify(item.LibraryFolderIds?.map(idKey) ?? null)))}::text[])
+        source("Id","OfficialRating","CustomRating","LibraryFolderIds"))`);
+  }
+  // Resolve the outer Guid once before scanning the bounded projection.
+  // Presence stays separate from the nullable projected value.
+  const visibilityColumn = (alias, name, stored = `${alias}.${q(name)}`) => !nativeVisibilityProjections?.length ? stored
+    : `(SELECT CASE WHEN visibility_value."Present" IS TRUE THEN visibility_value."Value" ELSE ${stored} END
+      FROM (SELECT ${normalizedId(`${alias}."Id"`)} AS "Id" OFFSET 0) visibility_key
+      LEFT JOIN LATERAL (
+        SELECT projected.${q(name)} AS "Value", TRUE AS "Present" FROM native_visibility_input projected
+        WHERE projected."Id" = visibility_key."Id" OFFSET 0
+      ) visibility_value ON TRUE)`;
   let sourceExpansion = '';
   if (scope.sourceChildren != null) {
     if (!Array.isArray(scope.sourceChildren) || scope.sourceChildren.some(source => !source
@@ -1217,10 +1268,19 @@ export function buildPostgresItemPageQuery(database, query, {
     if (!visibility || typeof visibility !== 'object' || Array.isArray(visibility)) throw new TypeError('visibility must be an object.');
     const allowedVisibilityKeys = new Set(['topParentIds', 'libraryTopParentIds', 'ratingContext',
       'blockedTags', 'allowedTags', 'maxRating', 'maxSubRating', 'blockUnratedTypes', 'boxSetStandalone',
-      'boxSetTopParentExempt', 'boxSetChildRatingMode', 'boxSetUnknownMembershipBypass', 'itemMode',
+      'boxSetTopParentExempt', 'boxSetChildRatingMode', 'boxSetRootLookupOnly', 'boxSetUserRootIds', 'boxSetRootFolders', 'boxSetPathExpansion', 'itemMode',
       'scopeTopParentAccess']);
     const unknown = Object.keys(visibility).filter(key => !allowedVisibilityKeys.has(key));
     if (unknown.length) throw new TypeError(`Unknown visibility option: ${unknown.join(', ')}`);
+    const visibilityPredicateStart = predicates.length, ownParentalPredicates = [];
+    const parentalPredicate = expression => { ownParentalPredicates.push(expression); predicates.push(expression); };
+    if (visibility.boxSetRootLookupOnly !== undefined && typeof visibility.boxSetRootLookupOnly !== 'boolean') {
+      throw new TypeError('visibility.boxSetRootLookupOnly must be boolean.');
+    }
+    const boxSetRootLookupOnly = visibility.boxSetRootLookupOnly === true;
+    if (boxSetRootLookupOnly && visibility.boxSetStandalone !== true) {
+      throw new TypeError('BoxSet root lookup preflight requires standalone BoxSet visibility.');
+    }
     if (visibility.boxSetChildRatingMode != null
       && !['repository', 'memory', 'both'].includes(visibility.boxSetChildRatingMode)) {
       throw new TypeError('visibility.boxSetChildRatingMode must be repository, memory or both.');
@@ -1233,12 +1293,33 @@ export function buildPostgresItemPageQuery(database, query, {
     }
     validateRatingContext(visibility.ratingContext, 'visibility.ratingContext');
     const standaloneItemVisibility = visibility.itemMode === 'standalone';
-    let standaloneBoxSetMedia = null;
-    let standaloneAllMembership = null;
+    let standaloneMembershipIsEmpty = null;
+    if (visibility.boxSetUserRootIds !== undefined) validateStringArray(visibility.boxSetUserRootIds, 'visibility.boxSetUserRootIds');
+    if (visibility.boxSetStandalone && !boxSetRootLookupOnly && visibility.boxSetUserRootIds === undefined) {
+      throw new TypeError('Standalone BoxSet visibility requires the actual visible user-root child identities.');
+    }
+    if (visibility.boxSetRootFolders !== undefined && (!Array.isArray(visibility.boxSetRootFolders)
+      || visibility.boxSetRootFolders.some(folder => !folder || typeof folder !== 'object' || Array.isArray(folder)
+        || Object.keys(folder).length !== 3 || !['Id', 'Path', 'PhysicalLocations'].every(name => Object.hasOwn(folder, name))
+        || typeof folder.Id !== 'string' || folder.Path !== null && typeof folder.Path !== 'string'
+        || folder.PhysicalLocations !== null && (!Array.isArray(folder.PhysicalLocations)
+          || !folder.PhysicalLocations.every(location => location === null || typeof location === 'string'))))) {
+      throw new TypeError('BoxSet root folders require complete typed Id, nullable Path and nullable PhysicalLocations.');
+    }
+    if (visibility.boxSetStandalone && visibility.boxSetRootFolders === undefined) {
+      throw new TypeError('Standalone BoxSet visibility requires the actual raw user-root folders.');
+    }
+    if (visibility.boxSetPathExpansion !== undefined && (!visibility.boxSetPathExpansion
+      || typeof visibility.boxSetPathExpansion !== 'object' || Array.isArray(visibility.boxSetPathExpansion)
+      || Object.keys(visibility.boxSetPathExpansion).length !== 2
+      || !['appDataPath', 'metadataPath'].every(name => typeof visibility.boxSetPathExpansion[name] === 'string'))) {
+      throw new TypeError('BoxSet path expansion requires complete typed appDataPath and metadataPath strings.');
+    }
     if (visibility.topParentIds) validateStringArray(visibility.topParentIds, 'visibility.topParentIds');
-    if (visibility.topParentIds
-      && (visibility.scopeTopParentAccess !== false || nameAccessTypes.length || visibility.boxSetStandalone)) {
-      const topParents = bindIdArray(visibility.topParentIds, 'visibility.topParentIds');
+    if (visibility.boxSetStandalone || visibility.topParentIds
+      && (visibility.scopeTopParentAccess !== false || nameAccessTypes.length)) {
+      const topParents = (visibility.topParentIds && visibility.scopeTopParentAccess !== false || nameAccessTypes.length)
+        ? bindIdArray(visibility.topParentIds ?? [], 'visibility.topParentIds') : 'NULL::text[]';
       const relatedTopParent = alias => `(${normalizedId(`${alias}."TopParentId"`)} = ANY(${topParents}) OR ${normalizedId(`${alias}."Id"`)} = ANY(${topParents}))`;
       const relatedTagExists = (alias, names) => {
         const valuesParameter = bindNativeArray(names.map(cleanValue), 'visibility related tags');
@@ -1266,15 +1347,78 @@ export function buildPostgresItemPageQuery(database, query, {
       if (valueNameTypes.length) relatedNames.push(`(${leafType('i')} = ANY(${bindTextArray(valueNameTypes, 'visibility value name types')}) AND ${valueRelated})`);
       let boxSetAccess = '';
       if (visibility.boxSetStandalone) {
-        const allTopParents = bindIdArray(visibility.libraryTopParentIds ?? [], 'visibility.libraryTopParentIds');
-        standaloneBoxSetMedia = `WITH RECURSIVE box_node("Id") AS (SELECT i."Id" UNION SELECT nested."Id" FROM box_node node JOIN ${links} nested_link ON ${nativeTextSql(database.schemaName).guidLower("nested_link.\"ParentId\"")} = ${nativeTextSql(database.schemaName).guidLower("node.\"Id\"")} JOIN ${baseItems} nested ON ${nativeTextSql(database.schemaName).guidLower("nested.\"Id\"")} = ${nativeTextSql(database.schemaName).guidLower("nested_link.\"ChildId\"")} WHERE ${leafType('nested')} = 'BoxSet') SELECT linked_item.* FROM box_node node JOIN ${links} media_link ON ${nativeTextSql(database.schemaName).guidLower("media_link.\"ParentId\"")} = ${nativeTextSql(database.schemaName).guidLower("node.\"Id\"")} JOIN ${baseItems} linked_item ON ${nativeTextSql(database.schemaName).guidLower("linked_item.\"Id\"")} = ${nativeTextSql(database.schemaName).guidLower("media_link.\"ChildId\"")} WHERE ${leafType('linked_item')} <> 'BoxSet'`;
-        standaloneAllMembership = `${normalizedId('box_media."TopParentId"')} = ANY(${allTopParents})`;
-        const allowedMembership = `${normalizedId('box_media."TopParentId"')} = ANY(${topParents})`;
-        boxSetAccess = ` OR (${leafType('i')} = 'BoxSet' AND (NOT EXISTS (SELECT 1 FROM ${links} direct_link WHERE ${nativeTextSql(database.schemaName).guidLower("direct_link.\"ParentId\"")} = ${nativeTextSql(database.schemaName).guidLower("i.\"Id\"")}) OR NOT EXISTS (SELECT 1 FROM (${standaloneBoxSetMedia}) box_media WHERE ${standaloneAllMembership}) OR EXISTS (SELECT 1 FROM (${standaloneBoxSetMedia}) box_media WHERE ${allowedMembership})))`;
+        const userRootIds = boxSetRootLookupOnly ? null
+          : bindTextArray(visibility.boxSetUserRootIds.map(wireGuid), 'visibility.boxSetUserRootIds');
+        const libraryFolderIds = `NULLIF(${visibilityColumn('i', 'LibraryFolderIds', `NULLIF((${safeNativeItemData('i')} -> 'LibraryFolderIds')::jsonb,'null'::jsonb)`)}, 'null'::jsonb)`;
+        const pathKeyHex = value => value === null ? null : Buffer.from(ordinalIgnoreCaseKey(value), 'utf16le').swap16().toString('hex');
+        const rootFolders = bind(JSON.stringify(visibility.boxSetRootFolders.map(folder => ({ Id: wireGuid(folder.Id),
+          Path: pathKeyHex(folder.Path),
+          PhysicalLocations: folder.PhysicalLocations?.map(pathKeyHex) ?? null }))));
+        const expansion = visibility.boxSetPathExpansion ?? { appDataPath: '%AppDataPath%', metadataPath: '%MetadataPath%' };
+        const pathExpansion = bind(JSON.stringify([pathKeyHex(expansion.appDataPath), pathKeyHex(expansion.metadataPath)]));
+        const terminalPathKey = runtimeTextKey(postgresExpandedPathKeyFunctionName, `terminal."Path",${pathExpansion}::jsonb`);
+        // Keep each recursive edge lookup parameterized by its current node;
+        // flattening it scans the complete link relation for every candidate.
+        const derivedMembership = `(WITH RECURSIVE box_node("Id") AS (
+          SELECT i."Id" UNION
+          SELECT nested."Id" FROM box_node node CROSS JOIN LATERAL (
+            SELECT edge."ChildId" FROM ${links} edge
+            WHERE ${normalizedId('edge."ParentId"')}=${normalizedId('node."Id"')} OFFSET 0
+          ) nested_link
+          JOIN ${baseItems} nested ON ${normalizedId('nested."Id"')}=${normalizedId('nested_link."ChildId"')}
+          WHERE ${leafType('nested')}='BoxSet'
+        ), box_media AS (
+          SELECT linked_item.* FROM box_node node CROSS JOIN LATERAL (
+            SELECT edge."ChildId" FROM ${links} edge
+            WHERE ${normalizedId('edge."ParentId"')}=${normalizedId('node."Id"')} OFFSET 0
+          ) media_link
+          JOIN ${baseItems} linked_item ON ${normalizedId('linked_item."Id"')}=${normalizedId('media_link."ChildId"')}
+          WHERE ${leafType('linked_item')} NOT IN ('BoxSet','PLACEHOLDER')
+        ), box_root_walk("StartId","Id","ParentId","OwnerId","Path","Depth","Seen") AS (
+          SELECT media."Id",media."Id",media."ParentId",media."OwnerId",media."Path",0,ARRAY[${normalizedId('media."Id"')}]
+          FROM box_media media UNION ALL
+          SELECT walk."StartId",next_root."Id",next_root."ParentId",next_root."OwnerId",next_root."Path",walk."Depth"+1,
+            walk."Seen" || ${normalizedId('next_root."Id"')}
+          FROM box_root_walk walk JOIN LATERAL (
+            SELECT parent.* FROM ${baseItems} parent WHERE ${normalizedId('parent."Id"')}=${normalizedId('walk."ParentId"')}
+              AND ${leafType('parent')} NOT IN ('AggregateFolder','PLACEHOLDER')
+            UNION ALL
+            SELECT owner.* FROM ${baseItems} owner WHERE NOT EXISTS (
+              SELECT 1 FROM ${baseItems} parent WHERE ${normalizedId('parent."Id"')}=${normalizedId('walk."ParentId"')}
+                AND ${leafType('parent')}<>'PLACEHOLDER')
+              AND ${normalizedId('owner."Id"')}=${normalizedId('walk."OwnerId"')}
+              AND ${leafType('owner')}<>'PLACEHOLDER'
+            LIMIT 1
+          ) next_root ON TRUE WHERE NOT (${normalizedId('next_root."Id"')}=ANY(walk."Seen"))
+        ), box_roots AS (
+          SELECT DISTINCT ON ("StartId") "StartId","Path" FROM box_root_walk ORDER BY "StartId","Depth" DESC
+        ) SELECT array_remove(array_agg(CASE WHEN ${runtimeTextKey(postgresCollectionFolderMatchFunctionName,
+          `jsonb_build_array(encode(${terminalPathKey},'hex'),folder."Document"->'Path',folder."Document"->'PhysicalLocations')`)}
+          THEN folder."Document"->>'Id' END),NULL)
+          FROM box_roots terminal CROSS JOIN jsonb_array_elements(${rootFolders}::jsonb) folder("Document"))`;
+        // Aggregating every raw-folder comparison before intersecting user IDs
+        // preserves source-null failures even for an inaccessible raw folder.
+        standaloneMembershipIsEmpty = `CASE WHEN ${libraryFolderIds} IS NULL
+          THEN COALESCE(cardinality(${derivedMembership}),0)=0
+          ELSE jsonb_array_length(${libraryFolderIds})=0 END`;
+        if (boxSetRootLookupOnly) {
+          // Native calls GetChildren(user,true) only after own parental access,
+          // nonempty raw links and complete nonempty folder membership. Root
+          // identities and the later child parental checks are not consumed.
+          boxSetAccess = ` OR (${leafType('i')} = 'BoxSet' AND CASE WHEN NOT EXISTS (SELECT 1 FROM ${links} direct_link WHERE ${nativeTextSql(database.schemaName).guidLower("direct_link.\"ParentId\"")} = ${nativeTextSql(database.schemaName).guidLower("i.\"Id\"")}) THEN FALSE ELSE NOT (${standaloneMembershipIsEmpty}) END)`;
+        } else {
+          const membershipAllowed = `CASE WHEN ${libraryFolderIds} IS NULL
+            THEN (SELECT COALESCE(cardinality(membership."Ids"),0)=0 OR membership."Ids" && ${userRootIds}
+              FROM (SELECT ${derivedMembership} AS "Ids" OFFSET 0) membership)
+            ELSE (jsonb_array_length(${libraryFolderIds})=0 OR EXISTS (
+              SELECT 1 FROM jsonb_array_elements(${libraryFolderIds}) folder_id("Id")
+              WHERE ${runtimeTextKey(postgresNativeJsonGuidKeyFunctionName, 'folder_id."Id"::json')}=ANY(${userRootIds}))) END`;
+          boxSetAccess = ` OR (${leafType('i')} = 'BoxSet' AND CASE WHEN NOT EXISTS (SELECT 1 FROM ${links} direct_link WHERE ${nativeTextSql(database.schemaName).guidLower("direct_link.\"ParentId\"")} = ${nativeTextSql(database.schemaName).guidLower("i.\"Id\"")}) THEN TRUE ELSE ${membershipAllowed} END)`;
+        }
       } else if (visibility.boxSetTopParentExempt) {
         boxSetAccess = ` OR ${leafType('i')} = 'BoxSet'`;
       }
-      const directTopParentAccess = visibility.scopeTopParentAccess === false ? 'TRUE'
+      const directTopParentAccess = !visibility.topParentIds || visibility.scopeTopParentAccess === false ? 'TRUE'
         : `(${normalizedId('i."TopParentId"')} = ANY(${topParents}) OR ${normalizedId('i."Id"')} = ANY(${topParents}))`;
       const ordinaryAccess = requireRelatedNameAccess && relatedNames.length
         ? `((NOT (${leafType('i')} = ANY(${bindTextArray(nameAccessTypes, 'visibility name access types')})) AND ${directTopParentAccess}) OR ${relatedNames.join(' OR ')})`
@@ -1306,12 +1450,12 @@ export function buildPostgresItemPageQuery(database, query, {
     const standaloneRating = () => {
       const rawRating = `(WITH RECURSIVE direct_rating_chain("Id", "ParentId", "SeasonId", "SeriesId", "Type", "CustomRating", "OfficialRating", "Depth", "Seen") AS (
         SELECT i."Id", i."ParentId", i."SeasonId", i."SeriesId", i."Type",
-          i."CustomRating", i."OfficialRating", 0,
+          ${visibilityColumn('i', 'CustomRating')}, ${visibilityColumn('i', 'OfficialRating')}, 0,
           ARRAY[replace(${nativeTextSql(database.schemaName).guidLower("i.\"Id\"")}, '-', '')]
         UNION ALL
         SELECT direct_parent."Id", direct_parent."ParentId", direct_parent."SeasonId",
-          direct_parent."SeriesId", direct_parent."Type", direct_parent."CustomRating",
-          direct_parent."OfficialRating", direct_chain."Depth" + 1,
+          direct_parent."SeriesId", direct_parent."Type", ${visibilityColumn('direct_parent', 'CustomRating')},
+          ${visibilityColumn('direct_parent', 'OfficialRating')}, direct_chain."Depth" + 1,
           direct_chain."Seen" || replace(${nativeTextSql(database.schemaName).guidLower("direct_parent.\"Id\"")}, '-', '')
         FROM direct_rating_chain direct_chain
         JOIN ${baseItems} direct_parent ON replace(${nativeTextSql(database.schemaName).guidLower("direct_parent.\"Id\"")}, '-', '')
@@ -1329,28 +1473,28 @@ export function buildPostgresItemPageQuery(database, query, {
     };
     if (visibility.blockedTags?.length) {
       if (standaloneItemVisibility) {
-        predicates.push(`NOT ${standaloneTagExists(visibility.blockedTags)}`);
+        parentalPredicate(`NOT ${standaloneTagExists(visibility.blockedTags)}`);
       } else if (resumableMode === 'memory') {
-        predicates.push(`NOT ${memoryTagExists(visibility.blockedTags)}`);
+        parentalPredicate(`NOT ${memoryTagExists(visibility.blockedTags)}`);
       } else {
         const standaloneBlocked = visibility.boxSetStandalone
           ? ` AND (${leafType('i')} <> 'BoxSet' OR NOT ${memoryTagExists(visibility.blockedTags)})`
           : '';
-        predicates.push(`(NOT ${inheritedTagExists(visibility.blockedTags)}${standaloneBlocked})`);
+        parentalPredicate(`(NOT ${inheritedTagExists(visibility.blockedTags)}${standaloneBlocked})`);
       }
     }
     if (visibility.allowedTags?.length) {
       const person = `${leafType('i')} = ANY(${bindTextArray(['Person'], 'allowed tag exemptions')})`;
       const parentExempt = `EXISTS (SELECT 1 FROM ${baseItems} allowed_parent WHERE ${nativeTextSql(database.schemaName).guidLower("allowed_parent.\"Id\"")} = ${nativeTextSql(database.schemaName).guidLower("i.\"ParentId\"")} AND ${leafType('allowed_parent')} IN ('UserRootFolder', 'AggregateFolder', 'UserView'))`;
       if (standaloneItemVisibility) {
-        predicates.push(`(${person} OR ${parentExempt} OR ${standaloneTagExists(visibility.allowedTags)})`);
+        parentalPredicate(`(${person} OR ${parentExempt} OR ${standaloneTagExists(visibility.allowedTags)})`);
       } else if (resumableMode === 'memory') {
-        predicates.push(`(${person} OR ${parentExempt} OR ${memoryTagExists(visibility.allowedTags)})`);
+        parentalPredicate(`(${person} OR ${parentExempt} OR ${memoryTagExists(visibility.allowedTags)})`);
       } else {
         const standaloneAllowed = visibility.boxSetStandalone
           ? ` AND (${leafType('i')} <> 'BoxSet' OR (${person} OR ${parentExempt} OR ${memoryTagExists(visibility.allowedTags)}))`
           : '';
-        predicates.push(`((${person} OR ${inheritedTagExists(visibility.allowedTags)})${standaloneAllowed})`);
+        parentalPredicate(`((${person} OR ${inheritedTagExists(visibility.allowedTags)})${standaloneAllowed})`);
       }
     }
     if (visibility.maxRating != null) {
@@ -1361,28 +1505,27 @@ export function buildPostgresItemPageQuery(database, query, {
           ? `(direct_score."Score")[1] <= ${maximum}`
           : `((direct_score."Score")[1] < ${maximum} OR ((direct_score."Score")[1] = ${maximum}
             AND COALESCE((direct_score."Score")[2], 0) <= ${bind(visibility.maxSubRating)}))`;
-        predicates.push(`EXISTS (SELECT 1
-          FROM LATERAL (SELECT ${direct.rawRating} AS "Rating") direct_rating
-          CROSS JOIN LATERAL (SELECT ${direct.score} AS "Score") direct_score
+        parentalPredicate(`EXISTS (SELECT 1
+          FROM LATERAL (SELECT ${direct.rawRating} AS "Rating" OFFSET 0) direct_rating
+          CROSS JOIN LATERAL (SELECT ${direct.score} AS "Score" OFFSET 0) direct_score
           WHERE direct_score."Score" IS NULL OR ${withinScore})`);
       } else {
-        predicates.push(`(i."InheritedParentalRatingValue" IS NULL OR i."InheritedParentalRatingValue" < ${bind(visibility.maxRating)} OR (i."InheritedParentalRatingValue" = ${bind(visibility.maxRating)} AND COALESCE(i."InheritedParentalRatingSubValue", 0) <= ${bind(visibility.maxSubRating ?? 0)}))`);
+        parentalPredicate(`(i."InheritedParentalRatingValue" IS NULL OR i."InheritedParentalRatingValue" < ${bind(visibility.maxRating)} OR (i."InheritedParentalRatingValue" = ${bind(visibility.maxRating)} AND COALESCE(i."InheritedParentalRatingSubValue", 0) <= ${bind(visibility.maxSubRating ?? 0)}))`);
       }
-      if (['repository', 'both'].includes(visibility.boxSetChildRatingMode)) {
+      if (!boxSetRootLookupOnly && ['repository', 'both'].includes(visibility.boxSetChildRatingMode)) {
         const childMax = bind(visibility.maxRating), childSub = bind(visibility.maxSubRating ?? 0);
-        const bypassStandaloneRating = visibility.boxSetUnknownMembershipBypass
-          && standaloneBoxSetMedia && standaloneAllMembership
-          ? ` OR NOT EXISTS (SELECT 1 FROM (${standaloneBoxSetMedia}) box_media WHERE ${standaloneAllMembership})` : '';
+        const bypassStandaloneRating = visibility.boxSetStandalone && standaloneMembershipIsEmpty
+          ? ` OR (${standaloneMembershipIsEmpty})` : '';
         predicates.push(`(${leafType('i')} <> 'BoxSet' OR NOT EXISTS (SELECT 1 FROM ${links} rating_link WHERE ${nativeTextSql(database.schemaName).guidLower("rating_link.\"ParentId\"")} = ${nativeTextSql(database.schemaName).guidLower("i.\"Id\"")} AND rating_link."ChildType" = 0)${bypassStandaloneRating} OR EXISTS (SELECT 1 FROM ${links} rating_link JOIN ${baseItems} rating_child ON ${nativeTextSql(database.schemaName).guidLower("rating_child.\"Id\"")} = ${nativeTextSql(database.schemaName).guidLower("rating_link.\"ChildId\"")} WHERE ${nativeTextSql(database.schemaName).guidLower("rating_link.\"ParentId\"")} = ${nativeTextSql(database.schemaName).guidLower("i.\"Id\"")} AND rating_link."ChildType" = 0 AND (rating_child."InheritedParentalRatingValue" IS NULL OR rating_child."InheritedParentalRatingValue" < ${childMax} OR (rating_child."InheritedParentalRatingValue" = ${childMax} AND COALESCE(rating_child."InheritedParentalRatingSubValue", 0) <= ${childSub}))))`);
       }
-      if (['memory', 'both'].includes(visibility.boxSetChildRatingMode)) {
+      if (!boxSetRootLookupOnly && ['memory', 'both'].includes(visibility.boxSetChildRatingMode)) {
         const rawRating = `(WITH RECURSIVE rating_display_chain("Id", "ParentId", "SeasonId", "SeriesId", "Type", "CustomRating", "OfficialRating", "Depth", "Seen") AS (
           SELECT rating_child."Id", rating_child."ParentId", rating_child."SeasonId", rating_child."SeriesId",
-            rating_child."Type", rating_child."CustomRating", rating_child."OfficialRating", 0,
+            rating_child."Type", ${visibilityColumn('rating_child', 'CustomRating')}, ${visibilityColumn('rating_child', 'OfficialRating')}, 0,
             ARRAY[replace(${nativeTextSql(database.schemaName).guidLower("rating_child.\"Id\"")}, '-', '')]
           UNION ALL
           SELECT rating_parent."Id", rating_parent."ParentId", rating_parent."SeasonId", rating_parent."SeriesId",
-            rating_parent."Type", rating_parent."CustomRating", rating_parent."OfficialRating",
+            rating_parent."Type", ${visibilityColumn('rating_parent', 'CustomRating')}, ${visibilityColumn('rating_parent', 'OfficialRating')},
             rating_chain."Depth" + 1, rating_chain."Seen" || replace(${nativeTextSql(database.schemaName).guidLower("rating_parent.\"Id\"")}, '-', '')
           FROM rating_display_chain rating_chain
           JOIN ${baseItems} rating_parent ON replace(${nativeTextSql(database.schemaName).guidLower("rating_parent.\"Id\"")}, '-', '')
@@ -1413,17 +1556,18 @@ export function buildPostgresItemPageQuery(database, query, {
               'visibility child blockUnratedTypes')}))`
           : 'TRUE';
         const ratingAllowed = `EXISTS (SELECT 1
-          FROM LATERAL (SELECT ${rawRating} AS "Rating") rating_value
-          CROSS JOIN LATERAL (SELECT ${score} AS "Score") rating_score
+          FROM LATERAL (SELECT ${rawRating} AS "Rating" OFFSET 0) rating_value
+          CROSS JOIN LATERAL (SELECT ${score} AS "Score" OFFSET 0) rating_score
           WHERE (rating_score."Score" IS NULL OR ${withinScore}) AND ${unratedAllowed})`;
         const blockedTag = memoryBlockedTagExists('rating_child', childRatingContext,
           visibility.blockedTags ?? [], 'visibility.ratingContext');
         const childAllowed = `(NOT ${blockedTag} AND ${ratingAllowed})`;
-        const bypassStandaloneRating = visibility.boxSetStandalone && standaloneBoxSetMedia && standaloneAllMembership
-          ? ` OR NOT EXISTS (SELECT 1 FROM (${standaloneBoxSetMedia}) box_media WHERE ${standaloneAllMembership})` : '';
+        const bypassStandaloneRating = visibility.boxSetStandalone && standaloneMembershipIsEmpty
+          ? ` OR (${standaloneMembershipIsEmpty})` : '';
         const resolvedChildren = `SELECT 1 FROM ${links} rating_link JOIN ${baseItems} rating_child
           ON replace(${nativeTextSql(database.schemaName).guidLower("rating_child.\"Id\"")}, '-', '') = replace(${nativeTextSql(database.schemaName).guidLower("rating_link.\"ChildId\"")}, '-', '')
-          WHERE replace(${nativeTextSql(database.schemaName).guidLower("rating_link.\"ParentId\"")}, '-', '') = replace(${nativeTextSql(database.schemaName).guidLower("i.\"Id\"")}, '-', '')`;
+          WHERE replace(${nativeTextSql(database.schemaName).guidLower("rating_link.\"ParentId\"")}, '-', '') = replace(${nativeTextSql(database.schemaName).guidLower("i.\"Id\"")}, '-', '')
+            AND ${leafType('rating_child')}<>'PLACEHOLDER'`;
         predicates.push(`(${leafType('i')} <> 'BoxSet' OR NOT EXISTS (${resolvedChildren})${bypassStandaloneRating} OR EXISTS (${resolvedChildren} AND ${childAllowed}))`);
       }
     }
@@ -1439,15 +1583,25 @@ export function buildPostgresItemPageQuery(database, query, {
         const blocksUnrated = `(i."IsFolder" IS NOT TRUE
           AND ${leafType('i')} NOT IN ('Person', 'Genre', 'MusicGenre', 'MusicArtist', 'Studio')
           OR ${leafType('i')} IN ('BoxSet', 'Series', 'MusicAlbum'))`;
-        predicates.push(`EXISTS (SELECT 1
+        parentalPredicate(`EXISTS (SELECT 1
           FROM LATERAL (SELECT ${direct.rawRating} AS "Rating") direct_rating
           CROSS JOIN LATERAL (SELECT ${direct.score} AS "Score") direct_score
           WHERE direct_score."Score" IS NOT NULL OR NOT (${blocksUnrated}
             AND ${unratedType} = ANY(${bindNativeArray(visibility.blockUnratedTypes,
               'visibility.blockUnratedTypes')})))`);
       } else {
-        predicates.push(`(i."InheritedParentalRatingValue" IS NULL AND ${unratedType} = ANY(${bindNativeArray(visibility.blockUnratedTypes, 'visibility.blockUnratedTypes')})) IS NOT TRUE`);
+        parentalPredicate(`(i."InheritedParentalRatingValue" IS NULL AND ${unratedType} = ANY(${bindNativeArray(visibility.blockUnratedTypes, 'visibility.blockUnratedTypes')})) IS NOT TRUE`);
       }
+    }
+    if (visibility.boxSetStandalone) {
+      const completeVisibility = predicates.splice(visibilityPredicateStart);
+      // PostgreSQL may reorder AND terms. Native BoxSet checks its own
+      // parental access before touching LibraryFolderIds or raw root folders.
+      const parentalGate = boxSetRootLookupOnly
+        ? `${leafType('i')}='BoxSet' AND (${ownParentalPredicates.join(' AND ') || 'TRUE'})`
+        : `${leafType('i')}<>'BoxSet' OR (${ownParentalPredicates.join(' AND ') || 'TRUE'})`;
+      predicates.push(`CASE WHEN ${parentalGate}
+        THEN (${completeVisibility.join(' AND ')}) ELSE FALSE END`);
     }
   }
 
@@ -1864,18 +2018,30 @@ export function buildPostgresItemPageQuery(database, query, {
 /** Execute a bounded, relational PostgreSQL item query and decode only its page. */
 export async function queryPostgresItemPage(database, query, options = {}) {
   const plan = buildPostgresItemPageQuery(database, query, options);
-  const result = await database.client.query({ text: plan.text, values: plan.values, signal: options.signal });
-  const ids = result.rows.map(row => row.Id == null ? null : decodeNativeTextBytes(row.Id)).filter(id => id != null);
-  const total = result.rows.length ? Number(result.rows[0].TotalRecordCount) : 0;
-  if (!Number.isSafeInteger(total) || total < 0) throw new Error('PostgreSQL returned an invalid item count.');
-  const rows = ids.length ? await database.rows('BaseItems', { whereIn: { Id: ids } }) : [];
-  const byId = new Map(rows.map(row => [String(row.Id).toLowerCase(), row]));
-  return {
-    rows: ids.map(id => byId.get(String(id).toLowerCase())).filter(Boolean),
-    total,
-    startIndex: plan.startIndex,
-    plan,
+  const execute = async session => {
+    let result;
+    try { result = await session.client.query({ text: plan.text, values: plan.values, signal: options.signal }); }
+    catch (error) {
+      if (error.code === 'MM002') throw Object.assign(new TypeError("Value cannot be null. (Parameter 'source')", { cause: error }),
+        { status: 400, statusCode: 400, nativeException: 'ArgumentNullException', parameterName: 'source' });
+      throw error;
+    }
+    const ids = result.rows.map(row => row.Id == null ? null : decodeNativeTextBytes(row.Id)).filter(id => id != null);
+    const total = result.rows.length ? Number(result.rows[0].TotalRecordCount) : 0;
+    if (!Number.isSafeInteger(total) || total < 0) throw new Error('PostgreSQL returned an invalid item count.');
+    const rows = ids.length ? await session.rows('BaseItems', { whereIn: { Id: ids } }) : [];
+    const byId = new Map(rows.map(row => [String(row.Id).toLowerCase(), row]));
+    return {
+      rows: ids.map(id => byId.get(String(id).toLowerCase())).filter(Boolean),
+      total,
+      startIndex: plan.startIndex,
+      plan,
+    };
   };
+  const projectionCount = options.nativeVisibilityProjections?.length ?? 0;
+  return projectionCount > 0 && projectionCount <= 128
+    ? withPostgresNativeVisibilityJitOff(database, projectionCount, execute)
+    : execute(database);
 }
 
 function rebasePostgresParameters(text, offset) {
@@ -1886,11 +2052,13 @@ function rebasePostgresParameters(text, offset) {
 /**
  * Count direct children for every projected folder in one relational query.
  *
- * Folder.GetChildren prefers resolved LinkedChildren for each source parent
- * and falls back to the hierarchical SeasonId/ParentId relation only when the
- * linked result is empty. Requests may contain several source parents and the
- * native result sums each source independently, so the request relation keeps
- * both the DTO key and source-parent key instead of collapsing them in Node.
+ * DtoService asks ItemCountService for persisted source-parent counts, rather
+ * than invoking a Folder's virtual GetChildCount. Accessible linked relation
+ * rows take precedence over hierarchy, retain duplicates and ignore the
+ * hierarchy-only missing-item filter. Each requested source occurrence is
+ * then summed independently, including repeated physical source identifiers.
+ * Persisted folders sharing an ordinal presentation key instead count distinct
+ * hierarchical child keys across every member, even when that total is zero.
  */
 export async function queryPostgresDtoChildCounts(database, requests, query = {}, options = {}) {
   if (database?.dialect !== 'postgres') throw new TypeError('PostgreSQL child counts require PostgreSQL.');
@@ -1908,58 +2076,104 @@ export async function queryPostgresDtoChildCounts(database, requests, query = {}
   if (!flattened.length) return new Map(requests.map(request => [request.key, 0]));
 
   const parentIds = [...new Map(flattened.map(entry => [entry.parentKey, entry.parentKey])).values()];
+  const baseItems = table(database, 'BaseItems');
+  const links = table(database, 'LinkedChildren');
+  const nativeSql = nativeTextSql(database.schemaName);
+  const normalized = expression => nativeSql.guidKey(expression);
+  const nonemptyKey = expression => `${expression} IS NOT NULL AND octet_length(${expression}) > 0`;
+  // Keep membership entirely relational. Even a request for one folder can
+  // include many same-key members, whose child IDs must not cross into Node.
+  const hierarchyIds = {
+    text: `WITH requested_parent AS (
+      SELECT source."Id",source."PresentationUniqueKey" FROM ${baseItems} source
+      WHERE ${normalized('source."Id"')} = ANY($1::text[])
+    ), member_ids AS (
+      SELECT unnest($1::text[]) AS "MemberKey"
+      UNION
+      SELECT ${normalized('member."Id"')} FROM ${baseItems} member JOIN requested_parent source
+        ON member."IsFolder" IS TRUE AND ${nonemptyKey('source."PresentationUniqueKey"')}
+          AND member."PresentationUniqueKey" = source."PresentationUniqueKey"
+    ) SELECT child."Id" FROM ${baseItems} child JOIN member_ids member
+      ON ${normalized('COALESCE(child."SeasonId",child."ParentId")')} = member."MemberKey"`,
+    values: [parentIds],
+  };
+  // InternalItemsQuery(user) is passed directly to ApplyAccessFiltering: it
+  // contains parental/tag restrictions but no prepared library/root scope.
+  const { topParentIds: _topParents, libraryTopParentIds: _libraries,
+    ...accessVisibility } = options.visibility ?? {};
   const planOptions = {
     userId: options.userId,
-    visibility: options.visibility,
+    visibility: options.userId == null ? undefined : accessVisibility,
   };
-  const linkedPlan = buildPostgresItemPageQuery(database, query, {
+  const { ismissing: _hierarchicalMissing, ...linkedQuery } = query;
+  const linkedPlan = buildPostgresItemPageQuery(database, linkedQuery, {
     ...planOptions,
     scope: { linkedParentIds: parentIds },
   });
-  const hierarchicalPlan = buildPostgresItemPageQuery(database, query, {
+  const hierarchicalPlan = buildPostgresItemPageQuery(database, options.userId == null ? linkedQuery : query, {
     ...planOptions,
-    scope: { childParentIds: parentIds },
+    itemIdsPlan: hierarchyIds,
   });
   const values = [...linkedPlan.values, ...hierarchicalPlan.values];
   const bind = value => { values.push(value); return `$${values.length}`; };
   const requestedItems = `${bind(flattened.map(entry => entry.itemKey))}::text[]`;
   const requestedParents = `${bind(flattened.map(entry => entry.parentKey))}::text[]`;
   const requestedLinkEligibility = `${bind(flattened.map(entry => entry.linkEligible))}::boolean[]`;
-  const baseItems = table(database, 'BaseItems');
-  const links = table(database, 'LinkedChildren');
-  const normalized = expression => `replace(${nativeTextSql(database.schemaName).guidLower(expression)}, '-', '')`;
   const result = await database.client.query({
     text: `/* dto-child-counts */
       WITH requested AS (
         SELECT * FROM unnest(${requestedItems}, ${requestedParents}, ${requestedLinkEligibility})
           WITH ORDINALITY AS source("ItemKey", "ParentKey", "LinkEligible", "Ordinal")
+      ), parents AS (
+        SELECT DISTINCT "ParentKey" FROM requested
+      ), merged_members AS (
+        SELECT parents."ParentKey",member."Id" AS "MemberId"
+        FROM parents JOIN ${baseItems} source ON ${normalized('source."Id"')}=parents."ParentKey"
+        JOIN ${baseItems} member ON member."IsFolder" IS TRUE
+          AND ${nonemptyKey('source."PresentationUniqueKey"')}
+          AND member."PresentationUniqueKey"=source."PresentationUniqueKey"
+      ), merged_parents AS (
+        SELECT "ParentKey" FROM merged_members GROUP BY "ParentKey" HAVING count(*) > 1
       ), linked_eligible AS (
         ${linkedPlan.text}
       ), hierarchical_eligible AS (
         ${rebasePostgresParameters(hierarchicalPlan.text, linkedPlan.values.length)}
       ), linked_counts AS (
-        SELECT requested."ItemKey", requested."ParentKey",
-          count(DISTINCT ${normalized('linked_eligible."Id"')})::bigint AS "Count"
-        FROM requested
-        JOIN ${links} link ON ${normalized('link."ParentId"')} = requested."ParentKey"
+        SELECT parents."ParentKey", count(*)::bigint AS "Count"
+        FROM parents
+        JOIN ${links} link ON ${normalized('link."ParentId"')} = parents."ParentKey"
         JOIN linked_eligible ON ${nativeTextSql(database.schemaName).guidLower("linked_eligible.\"Id\"")} = ${nativeTextSql(database.schemaName).guidLower("link.\"ChildId\"")}
-        WHERE requested."LinkEligible"
-        GROUP BY requested."ItemKey", requested."ParentKey"
+        JOIN ${baseItems} child ON ${nativeTextSql(database.schemaName).guidLower("child.\"Id\"")} = ${nativeTextSql(database.schemaName).guidLower("link.\"ChildId\"")}
+        ${options.userId == null ? 'WHERE child."PrimaryVersionId" IS NULL' : ''}
+        GROUP BY parents."ParentKey"
       ), hierarchical_counts AS (
-        SELECT requested."ItemKey", requested."ParentKey",
-          count(DISTINCT ${normalized('hierarchical_eligible."Id"')})::bigint AS "Count"
-        FROM requested
+        SELECT parents."ParentKey", count(*)::bigint AS "Count"
+        FROM parents
         JOIN ${baseItems} child
-          ON ${normalized('COALESCE(child."SeasonId", child."ParentId")')} = requested."ParentKey"
+          ON ${normalized('COALESCE(child."SeasonId", child."ParentId")')} = parents."ParentKey"
         JOIN hierarchical_eligible ON ${nativeTextSql(database.schemaName).guidLower("hierarchical_eligible.\"Id\"")} = ${nativeTextSql(database.schemaName).guidLower("child.\"Id\"")}
-        GROUP BY requested."ItemKey", requested."ParentKey"
+        ${options.userId == null ? 'WHERE child."PrimaryVersionId" IS NULL' : ''}
+        GROUP BY parents."ParentKey"
+      ), merged_counts AS (
+        SELECT merged."ParentKey", count(DISTINCT CASE WHEN eligible."Id" IS NULL THEN NULL
+          WHEN ${nonemptyKey('child."PresentationUniqueKey"')} THEN child."PresentationUniqueKey"
+          ELSE ${nativeSql.fromProjection(normalized('child."Id"'))} END)::bigint AS "Count"
+        FROM merged_parents merged JOIN merged_members member USING ("ParentKey")
+        LEFT JOIN ${baseItems} child
+          ON ${normalized('COALESCE(child."SeasonId",child."ParentId")')}=${normalized('member."MemberId"')}
+        LEFT JOIN hierarchical_eligible eligible
+          ON ${nativeSql.guidLower('eligible."Id"')}=${nativeSql.guidLower('child."Id"')}
+          ${options.userId == null ? 'AND child."PrimaryVersionId" IS NULL' : ''}
+        GROUP BY merged."ParentKey"
       )
       SELECT requested."ItemKey",
-        sum(CASE WHEN requested."LinkEligible" AND COALESCE(linked_counts."Count", 0) > 0
+        sum(CASE WHEN merged_counts."Count" IS NOT NULL THEN merged_counts."Count"
+          WHEN requested."LinkEligible" AND COALESCE(linked_counts."Count", 0) > 0
           THEN linked_counts."Count" ELSE COALESCE(hierarchical_counts."Count", 0) END)::bigint AS "Count"
       FROM requested
-      LEFT JOIN linked_counts USING ("ItemKey", "ParentKey")
-      LEFT JOIN hierarchical_counts USING ("ItemKey", "ParentKey")
+      LEFT JOIN linked_counts USING ("ParentKey")
+      LEFT JOIN hierarchical_counts USING ("ParentKey")
+      LEFT JOIN merged_counts USING ("ParentKey")
       GROUP BY requested."ItemKey"
       ORDER BY min(requested."Ordinal")`,
     values,

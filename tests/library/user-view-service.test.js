@@ -1,4 +1,5 @@
 import { testFileSystem } from '../storage/plugin-files.js';
+import { attachLibraryNavigation, closeLibraryNavigation } from './navigation-fixture.js';
 import { loadPostgresNavigationRows } from '../../src/library/postgres-library-query.js';
 import assert from 'node:assert/strict';
 import { getNewItemId } from '../../src/core/identity.js';
@@ -43,6 +44,7 @@ async function fixture(t, dialect = 'postgres') {
   const added = [], updated = [], errors = [];
   let now = new Date(Date.now() + 60000);
   const library = new LibraryService({fileSystem: testFileSystem,  store, linkedChildren, serverId: 'user-view-test', programDataPath: directory,
+    userRoot: record(ids.root, 'UserRootFolder', 'Root'),
     configuration: { UICulture: 'en-US' }, clock: () => now, onError: error => errors.push(error) });
   const states=new Set(),load=library.load.bind(library);library.load=async(...args)=>{const state=await load(...args),dispose=state.dispose.bind(state);states.add(state);state.dispose=async options=>{try{await dispose(options);}finally{states.delete(state);}};return state;};
   const loadContext=createMetadataContextLoader({fileSystem: testFileSystem, store,library,linkedChildren,configuration:library.options.configuration});
@@ -127,11 +129,12 @@ postgresTest('global folders reads retain one identity and refresh only after cr
   assert.equal((await db.rows('BaseItems', { where: { Id: identity.Id } })).length, 1);
   await library.close();
   const reloaded = new LibraryService({fileSystem: testFileSystem,  ...library.options, store: library.store, clock: library.clock });
-  t.after(() => reloaded.close());
-  const restored = await reloaded.getViews({}, { user });
-  assert.equal(restored.Items.find(item => item.Id === idKey(identity.Id)).DateLastMediaAdded, MIN_DATE,
-    'BaseItemMapper populates the directory date only when reading a persisted folder into a new instance');
-  await reloaded.close();
+  await attachLibraryNavigation(reloaded);
+  try {
+    const restored = await reloaded.getViews({}, { user });
+    assert.equal(restored.Items.find(item => item.Id === idKey(identity.Id)).DateLastMediaAdded, MIN_DATE,
+      'BaseItemMapper populates the directory date only when reading a persisted folder into a new instance');
+  } finally { await closeLibraryNavigation(reloaded); }
 });
 
 test('postgres: folders view pages authorized root folders through the native in-memory query contract', {

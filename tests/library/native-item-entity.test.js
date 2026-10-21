@@ -7,6 +7,7 @@ import assert from 'node:assert/strict';
 import { serialize, deserialize } from 'node:v8';
 import {
   applyNativeItemValues,
+  bindNativeItemRecordingAccess,
   clearNativeItemSortCache,
   cloneNativeItemEntity,
   captureNativeItemState,
@@ -412,6 +413,35 @@ test('ephemeral Artist state preserves mutable values, cold getters and date kin
   restored.ParentId = '95500000-0000-0000-0005-000000000002';
   assert.deepEqual([restored.IsAccessedByName, restored.IsFolder], [false, true]);
   restored.Name = 'New name'; assert.equal(restored.SortName, 'new name');
+});
+
+test('Video source type reads the current recording association for this exact entity and clone', () => {
+  const source = newNativeItemEntity(byName.Video), channel = '95500000-0000-0000-0005-000000000009';
+  source.ChannelId = channel; source.Path = 'Z:\\Recording\\source.mkv';
+  const active = new WeakSet(); let observed;
+  bindNativeItemRecordingAccess(source, candidate => { observed = candidate; return active.has(candidate); });
+  assert.equal(source.SourceType, 'Channel'); assert.equal(observed, source);
+  active.add(source); assert.equal(source.SourceType, 'LiveTV');
+  const clone = cloneNativeItemEntity(source);
+  assert.equal(clone.SourceType, 'Channel'); assert.equal(observed, clone);
+  assert.equal(clone.UnratedType, 'ChannelContent'); assert.equal(source.UnratedType, 'Other');
+  assert.throws(() => { clone.SourceType = 'Library'; }, TypeError);
+  assert.throws(() => { clone.UnratedType = 'Movie'; }, TypeError);
+  const target = newNativeItemEntity(byName.Video);
+  copyNativeItemState(target, source);
+  assert.equal(target.SourceType, 'Channel'); assert.equal(observed, target);
+  assert.equal(target.UnratedType, 'ChannelContent');
+  active.add(target); copyNativeItemState(target, clone);
+  assert.equal(target.SourceType, 'LiveTV'); assert.equal(observed, target);
+  assert.equal(target.UnratedType, 'Other'); assert.equal(clone.UnratedType, 'ChannelContent');
+  active.add(clone); assert.equal(clone.SourceType, 'LiveTV');
+  active.delete(source); assert.equal(source.SourceType, 'Channel');
+  source.ChannelId = EMPTY_ID; assert.equal(source.SourceType, 'Library');
+  active.add(source); assert.equal(source.SourceType, 'LiveTV');
+  assert.equal(source.EnableMediaSourceDisplay, true, 'An active Video never performs the empty ChannelId getter lookup.');
+  const audio = newNativeItemEntity(byName.Audio); audio.ChannelId = channel;
+  bindNativeItemRecordingAccess(audio, () => { throw new Error('BaseItem does not query Video recording association.'); });
+  assert.equal(audio.SourceType, 'Channel');
 });
 
 test('hydration accepts branded map results, ignores raw search columns and applies complete relations', () => {

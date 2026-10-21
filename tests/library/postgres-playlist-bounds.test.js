@@ -1,4 +1,5 @@
 import { testFileSystem } from '../storage/plugin-files.js';
+import { attachLibraryNavigation, closeLibraryNavigation } from './navigation-fixture.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { randomBytes } from 'node:crypto';
@@ -83,10 +84,17 @@ test('playlist folder queries apply private access before counting and paging', 
   const linkedChildren = await createStateRelations(database, spoolRoot);
   let library;
   t.after(async () => {
-    try { await closeStateDeletion({ library, linkedChildren }); }
+    try {
+      const errors = [];
+      for (const close of [() => closeLibraryNavigation(library), () => closeStateDeletion({ library, linkedChildren })]) {
+        try { await close(); } catch (error) { errors.push(error); }
+      }
+      if (errors.length) throw new AggregateError(errors, 'Playlist navigation owners failed to close.');
+    }
     finally { await rm(directory, { recursive: true, force: true }); }
   });
   library = new LibraryService({fileSystem: testFileSystem,  store: new DomainStore(database), linkedChildren, spoolRoot, serverId: 'playlist-gate', programDataPath });
+  await attachLibraryNavigation(library);
   const folderId = id(500), privateId = id(501), publicId = id(502), sharedId = id(503);
   const owner = account(590), reader = account(591), sharedReader = account(592);
   await database.insert('BaseItems', {

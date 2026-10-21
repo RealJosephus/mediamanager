@@ -1,14 +1,21 @@
 import { idKey, nonemptyId, repositoryTopParentId, repositoryIdPresent, repositoryValue } from './records.js';
 import { ordinalIgnoreCaseKey } from '../storage/ordinal-comparer.js';
 import { readCachedFolderChildren } from './folder-cache.js';
+import { nativeItemDescriptor } from './native-item-entity.js';
 
 
 export function userRootFolders(state) {
-  const root = state.items.find(item => item.Type === 'UserRootFolder');
+  const root = userRootItem(state);
   if (!root) return [];
   // UserRootFolder.Children loads the ParentId-scoped cached children, not the
   // UserViews menu or GetChildren(user,true)'s virtual-folder expansion.
-  return cachedFolderChildren(root, state).filter(item => item.IsFolder);
+  return cachedFolderChildren(root, state).filter(item => nativeItemDescriptor(item.NativeType).family === 'folder');
+}
+
+export function userRootItem(state) {
+  if (state.liveUserRoot) return state.liveUserRoot;
+  return state.items.find(item => item.Type === 'UserRootFolder'
+    && (!state.userRootId || idKey(item.Id) === idKey(state.userRootId)));
 }
 
 export function cachedFolderChildren(parent, state) {

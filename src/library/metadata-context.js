@@ -150,9 +150,9 @@ export function createMetadataContextLoader({ store, library, fileSystem = libra
       && nativeFileSystemPathsEqual(imagePathApiForRoot(item.Path).dirname(item.Path), collectionParent.Path);
     const localStateAssets = managedCollectionRoot || managedCollectionItem ? managedCollectionAssets : stateLocalXmlAssets;
     const stateLocalItem = stateLocalXmlTypes.has(item.Type) || managedCollectionRoot;
-    const byNameStateItem = ['Person', 'Genre', 'MusicGenre', 'Studio', 'Year'].includes(item.Type)
+    const byNameStateItem = ['Person', 'Genre', 'MusicGenre', 'Studio', 'Year', 'Channel'].includes(item.Type)
       || item.Type === 'MusicArtist' && item.IsAccessedByName;
-    if (draft) { state.items.push(item); state.byId.set(idKey(item.Id), item); }
+    if (draft) { state.items.push(item); state.byId.set(idKey(item.Id), item); library.bindChannelAccess(item, state); }
     const versionLinks = VIDEO_TYPES.has(item.Type) ? await db.rows('LinkedChildren', { where: { ParentId: item.Id },
       orderBy: [{ column: 'SortOrder', direction: 'ASC' }] }) : undefined;
     if (VIDEO_TYPES.has(item.Type)) {

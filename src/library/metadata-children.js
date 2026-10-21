@@ -8,10 +8,9 @@ import { nativeItemTypes, nativeItemDescriptor, acquireNativeItemLinkOwner } fro
 import { cachedFolderChildrenSnapshot } from './folder-cache.js';
 import { createNativeItemCohort } from './native-item-cohort.js';
 import { metadataChildSequence } from './metadata-child-sequence.js';
-import { createPostgresCollectionMembership } from './postgres-collection-membership.js';
-import { resolvePostgresLinkedChildren } from './postgres-linked-child-resolution.js';
+import { createPostgresLinkedResolutionWorkspace } from './postgres-linked-resolution-workspace.js';
+import { resolvePostgresLinkedChildren, findPostgresLinkedChildByPath } from './postgres-linked-child-resolution.js';
 import { buildPostgresSeriesEpisodePageQuery } from './postgres-series-episodes-query.js';
-import { queryPostgresItemPage } from '../database/postgres-item-query.js';
 import { createPresentationUniqueKey } from './presentation-key.js';
 import { resolveSeriesAsync } from './series-reference.js';
 import { nativeContainsSubPath } from './native-path.js';
@@ -75,12 +74,7 @@ export function createMetadataChildren({ store, library, linkedChildren, configu
     return library.itemCreation;
   };
   const keyFor = item => item.PresentationUniqueKey ?? createPresentationUniqueKey(item, { libraryOptions });
-  const findByPath = async identity => store.run(async db => {
-    const stored = library.options?.reversePath?.(identity) ?? identity;
-    const result = await queryPostgresItemPage(db, { sortby: ['DateCreated'], sortorder: ['Descending'], limit: 1, enabletotalrecordcount: false },
-      { groupByPresentationKey: false, itemIdsPlan: plan(`SELECT "Id" FROM ${q(db.schemaName)}."BaseItems" WHERE "Path"=$1`, [encoded(stored)]) });
-    return result.rows.length ? itemCreation().getItemById(result.rows[0].Id) : null;
-  }, { readOnly: true });
+  const findByPath = identity => findPostgresLinkedChildByPath({ library, store, itemCreation: itemCreation() }, identity);
 
   async function capturePlan(session, source, cohort, target, { offset = 0n, predicate = () => true } = {}) {
     const selected = q('mm_metadata_children_' + randomUUID().replaceAll('-', ''));
@@ -165,12 +159,14 @@ export function createMetadataChildren({ store, library, linkedChildren, configu
 
   async function captureLinks(session, item, cohort, target, offset = 0n, predicate = () => true) {
     if (nativeItemDescriptor(item.NativeType).family !== 'folder') return;
-    const membership = await createPostgresCollectionMembership(session, { collectionId: item.Id, linksPlan: linkedChildren.plan(item.LinkedChildren) });
-    let captured, failure;
+    const operation = linkedChildren.admitHandleOperation(item.LinkedChildren);
+    const links = operation.handle;
+    let resolution, captured, failure;
     try {
+      resolution = await createPostgresLinkedResolutionWorkspace(session, { linksPlan: linkedChildren.plan(links) });
       captured = await createNativeItemCohort({ linkedChildren });
-      await resolvePostgresLinkedChildren({ session, item, library, links: item.LinkedChildren, linkedChildren,
-        itemCreation: itemCreation(), findByPath, membership, cohort: captured });
+      await resolvePostgresLinkedChildren({ session, item, library, links, linkedChildren,
+        itemCreation: itemCreation(), findByPath, resolution, cohort: captured });
       for (let after = 0n; ;) {
         const page = await captured.page({ after });
         let pageFailure;
@@ -188,7 +184,8 @@ export function createMetadataChildren({ store, library, linkedChildren, configu
     } catch (error) { failure = error; throw error; }
     finally {
       const errors = [];
-      for (const cleanup of [() => captured?.release(), () => membership.dispose()]) {
+      for (const cleanup of [() => captured?.release(), () => resolution?.dispose(failure),
+        () => operation.release(), () => linkedChildren.flushReleases({ session })]) {
         try { await cleanup(); } catch (error) { errors.push(error); }
       }
       if (errors.length) throw new AggregateError(failure ? [failure, ...errors] : errors,

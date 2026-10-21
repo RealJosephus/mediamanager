@@ -1,6 +1,7 @@
 // Executes the designated Jellyfin TV and Library controllers plus their real Shows selectors.
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Security.Claims;
 using System.Security;
 using System.Security.Cryptography;
@@ -63,6 +64,16 @@ using TmdbPlugin = MediaBrowser.Providers.Plugins.Tmdb.Plugin;
 using TmdbPluginConfiguration = MediaBrowser.Providers.Plugins.Tmdb.PluginConfiguration;
 using TMDbClient = TMDbLib.Client.TMDbClient;
 
+var nativeSqliteName = OperatingSystem.IsWindows() ? "e_sqlite3.dll" : OperatingSystem.IsMacOS() ? "libe_sqlite3.dylib" : "libe_sqlite3.so";
+var nativeSqliteFilename = Path.Combine(AppContext.BaseDirectory, nativeSqliteName);
+var nativeSqliteHandle = NativeLibrary.Load(nativeSqliteFilename);
+var nativeSqliteResolutions = 0;
+NativeLibrary.SetDllImportResolver(typeof(SQLitePCL.SQLite3Provider_e_sqlite3).Assembly, (name, _, _) =>
+{
+    if (name != "e_sqlite3") return IntPtr.Zero;
+    Interlocked.Increment(ref nativeSqliteResolutions);
+    return nativeSqliteHandle;
+});
 SQLitePCL.Batteries_V2.Init();
 var json = new JsonSerializerOptions { WriteIndented = true };
 json.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
@@ -251,8 +262,8 @@ var similarBinding = await RecordSimilarBinding();
 var similarContract = RecordSimilarContract();
 var guidEmptyHttp = await RecordGuidEmptyHttp();
 var similarHttp = await RecordSimilarHttp();
-var runtimeAssemblies = RecordRuntimeAssemblies();
-const string runtimeAssemblyScope = "Managed assemblies loaded in the oracle AppDomain at capture time plus e_sqlite3 modules observed in Process.Modules; not a complete build-input dependency closure.";
+var runtimeAssemblies = RecordRuntimeAssemblies(nativeSqliteFilename);
+const string runtimeAssemblyScope = "Managed assemblies loaded in the oracle AppDomain at capture time plus the supplied RID e_sqlite3 loaded by NativeLibrary and resolved for actual SQLitePCL imports, together with Process.Modules observations where available; not a complete build-input dependency closure.";
 const string oracleBoundary = "Actual designated TvShowsController and shared LibraryController Similar route/action methods, RequestHelpers claim/user selection, native Series/Season selectors, Episode.IsMissingEpisode, UserViewBuilder adjacency, controller paging/error results, actual TVSeriesManager next-up selection, Series/MusicArtist/MusicAlbum/Audio local similar providers, TmdbSeriesSimilarProvider over controlled TMDbLib transport, and SimilarItemsManager provider configuration/order/scoring, remaining-limit queries, exception/cancellation boundaries, remote 20/500 batching, provider-ID resolution and real file cache behavior including exact numeric-string decimal-to-Single midpoint ordering, invalid-string and quoted Single-overflow fallback, and bit-exact Single scoring, with native comparers, actual ASP.NET comma collection and DateTime model binders, actual ExceptionMiddleware, and concrete LibraryManager empty-parent/UserView-parent/Guid.Empty, BaseItemRepository, SimilarItemsManager access filtering, and NextUpService probes over EF Core SQLite. Controlled controller-side repository/manager result arrays, user lookup, DTO projection, local provider results and remote local-library lookup entities are explicit seams. ASP.NET authorization filters, concrete DtoService internals, live external services and deterministic Random shuffle order remain outside this oracle; no public-network call is made. Named or non-finite cache-score rejection is a stricter candidate fail-closed policy and is not asserted as native parity.";
 File.WriteAllText(args[1], JsonSerializer.Serialize(new
 {
@@ -270,12 +281,13 @@ File.WriteAllText(args[1], JsonSerializer.Serialize(new
     similarHttp,
     runtimeAssemblyScope,
     runtimeAssemblies,
+    nativeSqliteImportResolved = nativeSqliteResolutions > 0,
     candidateVerified = false,
     inputSha256 = Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(args[0]))).ToLowerInvariant(),
     boundary = oracleBoundary
 }, json));
 
-static object[] RecordRuntimeAssemblies()
+static object[] RecordRuntimeAssemblies(string resolvedSqliteFilename)
 {
     using var process = Process.GetCurrentProcess();
     var nativeSqlitePaths = process.Modules.Cast<ProcessModule>()
@@ -286,6 +298,7 @@ static object[] RecordRuntimeAssemblies()
             StringComparison.OrdinalIgnoreCase)
             || string.Equals(Path.GetFileName(filename), "libe_sqlite3.so", StringComparison.Ordinal)
             || string.Equals(Path.GetFileName(filename), "libe_sqlite3.dylib", StringComparison.Ordinal))
+        .Append(resolvedSqliteFilename)
         .Distinct(StringComparer.OrdinalIgnoreCase)
         .ToArray();
     var files = AppDomain.CurrentDomain.GetAssemblies()

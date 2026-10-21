@@ -5,6 +5,7 @@ import { loadStreams, selectDefaultTracks } from './media-streams.js';
 import { withNativeNulls, withNativeFloats } from '../core/json.js';
 import { ordinalIgnoreCaseKey } from '../storage/ordinal-comparer.js';
 import { clrTrim, clrTrimStart } from '../metadata/whitespace.js';
+import { metadataSortName } from '../metadata/sort-cache.js';
 import { nativePersonIdentity, nativeItemByNameFolderName } from './identity.js';
 import { projectExternalUrls } from './external-urls.js';
 import { readItemImageRows } from './image-order.js';
@@ -530,7 +531,8 @@ export async function projectItem(item, state, user, selected, options) {
   const dto = { Name: item.Name, ServerId: options.serverId, Id: dtoId(item.Id), Container: item.Container, EndDate: dateText(item.EndDate), IndexNumber: item.IndexNumber, ParentIndexNumber: item.ParentIndexNumber,
     MediaType: item.MediaType, CriticRating: item.CriticRating, OfficialRating: item.OfficialRating, OriginalLanguage: item.OriginalLanguage,
     PremiereDate: dateText(item.PremiereDate), ProductionYear: item.ProductionYear, RunTimeTicks: item.RunTimeTicks,
-    Type: item.Type === 'PlaylistsFolder' ? 'ManualPlaylistsFolder'
+    Type: item.IsFolder && item.SourceType === 'Channel' && !['Channel', 'Season', 'Series'].includes(item.Type) ? 'ChannelFolderItem'
+      : item.Type === 'PlaylistsFolder' ? 'ManualPlaylistsFolder'
       : item.Type === 'LiveTvProgram' ? 'Program' : item.Type === 'LiveTvChannel' ? 'TvChannel' : item.Type,
     ImageBlurHashes: new Map(), ChannelId: nonemptyId(item.ChannelId) ? dtoId(item.ChannelId) : null };
   if (item.Type !== 'LiveTvProgram') dto.LocationType = item.LocationType;
@@ -586,7 +588,7 @@ export async function projectItem(item, state, user, selected, options) {
   else if (item.NormalizationGain != null) dto.NormalizationGain = item.NormalizationGain;
   for (const field of ['Overview', 'OriginalTitle', 'CustomRating', 'ForcedSortName']) if (has(field)) dto[field] = item[field];
   if (has('Path')) dto.Path = hasFileProtocol(item) ? substitutePath(item.Path, options.configuration?.PathSubstitutions) : item.Path;
-  if (has('SortName')) dto.SortName = sortName(item, options);
+  if (has('SortName')) dto.SortName = metadataSortName(item, options);
   if (has('DateCreated')) dto.DateCreated = dateText(item.DateCreated ?? MIN_DATE);
   if (has('Tags')) dto.Tags = item.Tags;
   if (has('Taglines')) dto.Taglines = item.Tagline ? [item.Tagline] : [];
@@ -612,9 +614,6 @@ export async function projectItem(item, state, user, selected, options) {
   if (has('DisplayPreferencesId')) dto.DisplayPreferencesId = ['Folder', 'CollectionFolder'].includes(item.Type) ? dtoId(item.Id) : md5Guid(item.NativeType);
   if (has('Etag')) dto.Etag = md5Guid(String(dateTicks(item.DateLastSaved)));
   if (has('ExternalUrls')) dto.ExternalUrls = projectExternalUrls(item, state, options);
-  if (has('CanDelete')) dto.CanDelete = canDeleteItem(item, user, {
-    collectionFolders: () => collectionFoldersForItem(item, state), isActiveRecording: options.isActiveRecording, precomputedFolders: true,
-  });
   if (has('CanDownload')) dto.CanDownload = (VIDEO_TYPES.has(item.Type) || ['Audio', 'AudioBook', 'Book', 'Photo'].includes(item.Type)) && item.LocationType === 'FileSystem' && !['Dvd', 'BluRay'].includes(item.VideoType) && (!user || user.Policy.EnableContentDownloading === true);
   if (has('EnableMediaSourceDisplay')) dto.EnableMediaSourceDisplay = item.EnableMediaSourceDisplay ?? true;
   if (has('MediaSources') && (VIDEO_TYPES.has(item.Type) || ['Audio', 'AudioBook', 'LiveTvChannel'].includes(item.Type))) {
@@ -746,7 +745,8 @@ export async function projectItem(item, state, user, selected, options) {
         const linkedCount = state.dtoLinkedChildCounts?.get(idKey(item.Id)) ?? item.LinkedChildren?.length ?? 0;
         if (linkedCount > 0) dto.ChildCount ??= linkedCount;
       }
-      if (has('ChildCount') && dto.ChildCount === undefined) dto.ChildCount = state.getChildCount
+      if ((item.SourceType == null || item.SourceType === 'Library' || item.SourceType === 0)
+        && has('ChildCount') && dto.ChildCount === undefined) dto.ChildCount = state.getChildCount
         ? await state.getChildCount(item) : state.children(item).filter(state.visible).length;
       if (has('CumulativeRunTimeTicks')) dto.CumulativeRunTimeTicks = item.RunTimeTicks;
       if (has('DateLastMediaAdded')) {
@@ -765,6 +765,12 @@ export async function projectItem(item, state, user, selected, options) {
     await prefetchChannelNames([item], state);
     dto.ChannelName = state.dtoChannelNames.get(idKey(item.ChannelId));
   }
+  // Native evaluates AttachBasicFields (including ChannelName) before its
+  // virtual CanDelete and user authorization callbacks.
+  if (has('CanDelete')) dto.CanDelete = await canDeleteItem(item, user, {
+    collectionFolders: () => collectionFoldersForItem(item, state), isActiveRecording: options.isActiveRecording, precomputedFolders: selected.precomputedDeleteFolders !== false,
+    channelCanDelete: state.channelCanDelete,
+  });
   withNativeFloats(dto, ['CriticRating', 'CommunityRating', 'NormalizationGain', 'AlbumNormalizationGain']);
   return withNativeNulls(dto, ['ChannelId', ...(has('ParentId') ? ['ParentId'] : []),
     ...(item.Type === 'Episode' ? ['SeasonId', 'SeriesId'] : item.Type === 'Season' ? ['SeriesId'] : [])]);

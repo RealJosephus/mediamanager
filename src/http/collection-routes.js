@@ -1,5 +1,7 @@
-import { BindingError, booleanValue, commaGuidValues, guidValue, httpError, noContent, queryValue } from './binding.js';
+import { BindingError, booleanValue, commaGuidValues, guidValue, httpError, integerValue, noContent, notFound, queryValue, unauthorized } from './binding.js';
 import { clrTrim } from '../metadata/whitespace.js';
+import { enumName } from '../sessions/binding.js';
+import { controllerItemFields } from './item-fields.js';
 
 const emptyGuid = '00000000000000000000000000000000';
 
@@ -20,11 +22,36 @@ function bindValues(bindings) {
   return input;
 }
 
-export function registerCollectionRoutes(add, { collections, library }) {
+function nullableQueryValue(query, name) {
+  const value = queryValue(query, name);
+  return value == null || clrTrim(value) === '' ? undefined : value;
+}
+
+export function registerCollectionRoutes(add, { collections, library, users }) {
   const service = () => {
     if (!collections) throw httpError(501, 'Collection management requires persistent application paths.');
     return collections;
   };
+  add('GET', '/Items/{itemId}/Collections', async context => {
+    const input = bindValues({
+      itemId: () => guidValue(context.params.itemId, 'itemId'),
+      userId: () => guidValue(nullableQueryValue(context.query, 'userId'), 'userId', context.auth.UserId),
+      startIndex: () => integerValue(nullableQueryValue(context.query, 'startIndex'), 'startIndex', null),
+      limit: () => integerValue(nullableQueryValue(context.query, 'limit'), 'limit', null),
+    });
+    let userId = input.userId;
+    if (userId === emptyGuid) userId = context.auth.UserId;
+    if (userId && userId !== context.auth.UserId && !context.auth.IsAdministrator) throw httpError(403, 'Forbidden');
+    const user = userId && userId !== emptyGuid ? await users.getUser(userId) : null;
+    if (!user) return unauthorized();
+    const values = [...context.query].filter(([name]) => name.toLowerCase() === 'fields').map(([, value]) => value);
+    const entries = values.length > 1 ? values : values[0]?.split(',').filter(Boolean) ?? [];
+    const fields = entries.flatMap(value => {
+      try { const field = enumName(clrTrim(value), controllerItemFields); return typeof field === 'string' ? [field] : []; }
+      catch { return []; }
+    });
+    return await library.getItemCollections(input.itemId, { user, startIndex: input.startIndex, limit: input.limit, fields }) ?? notFound();
+  });
   add('POST', '/Collections', async context => {
     const input = bindValues({
       ParentId: () => {

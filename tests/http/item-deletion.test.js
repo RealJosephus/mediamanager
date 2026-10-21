@@ -29,13 +29,13 @@ test('Item DELETE native recording seals request inputs, driver and two independ
     assert.equal(sha(await readFile(path.join(provenance.jellyfin.assemblyDirectory, assembly.name + '.dll'))), assembly.sha256, assembly.name);
 });
 for (const matrix of native.permissionMatrix) {
-  test('typed deletion permission matches native with and without user: ' + matrix.policy, () => {
+  test('typed deletion permission matches native with and without user: ' + matrix.policy, async () => {
     const items = entities(), state = stateFor(items), user = userFor({ policy: matrix.policy });
     for (const expected of matrix.items) {
       const item = state.byId.get(expected.id);
       assert.ok(item);
-      assert.equal(canDeleteItem(item, null, permissionOptions(item, state)), expected.noUser, item.Name + ' no user');
-      assert.equal(canDeleteItem(item, user, permissionOptions(item, state)), expected.user, item.Name + ' user');
+      assert.equal(await canDeleteItem(item, null, permissionOptions(item, state)), expected.noUser, item.Name + ' no user');
+      assert.equal(await canDeleteItem(item, user, permissionOptions(item, state)), expected.user, item.Name + ' user');
     }
   });
 }
@@ -69,7 +69,7 @@ for (const sample of input.cases) {
           if (!nonemptyId(reference)) throw Object.assign(new Error('Empty GUID'), { status: 400 });
           const item = items.get(idKey(reference)), state = getState();
           if (!item || user && item.Type !== 'UserRootFolder' && !visibleItem(item, user, state, visibilityOptions)) return null;
-          return { item, canDelete: !user || canDeleteItem(item, user, permissionOptions(item, state)) };
+          return { item, canDelete: !user || await canDeleteItem(item, user, permissionOptions(item, state)) };
         },
         deleteItem: async (item, options, parent, notify) => {
           assert.deepEqual(options, { DeleteFileLocation: true, DeleteFromExternalProvider: true });

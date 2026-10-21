@@ -65,6 +65,8 @@ export const postgresSafeInt32FunctionName = 'mm_safe_int32';
 export const postgresNativeJsonEnumFunctionName = 'mm_native_json_enum';
 export const postgresNativeJsonGuidKeyFunctionName = 'mm_native_json_guid_key';
 export const postgresParentalRatingScoreFunctionName = 'mm_parental_rating_score';
+export const postgresCollectionFolderMatchFunctionName = 'mm_native_collection_folder_match';
+export const postgresExpandedPathKeyFunctionName = 'mm_native_expanded_path_key';
 
 const invariantLowerBody = `SELECT mm_text_utf8_key(pg_catalog.translate(mm_bytes_text_projection(source),
   ${sqlLiteral(invariantLowerTranslate.from)},
@@ -738,6 +740,65 @@ BEGIN
   RETURN mm_projected_utf16_key('posix' || chr(1) || '0' || normalized);
 END`;
 
+// Compare UTF-16 OrdinalIgnoreCase keys, not PostgreSQL text: typed navigation
+// strings can contain NUL or isolated surrogates. The outer JSON holds hex only.
+// Its nonnull value preserves nullable arguments through the common STRICT gate.
+const collectionFolderMatchBody = `
+DECLARE
+  item_path bytea := decode(source ->> 0, 'hex');
+  folder_path bytea := decode(source ->> 1, 'hex');
+  locations jsonb := source -> 2;
+  location jsonb;
+BEGIN
+  IF item_path IS NULL AND folder_path IS NULL OR
+    item_path = folder_path THEN
+    RETURN TRUE;
+  END IF;
+  IF locations IS NULL OR locations = 'null'::jsonb THEN
+    RAISE EXCEPTION 'Value cannot be null. (Parameter ''source'')' USING ERRCODE = 'MM002';
+  END IF;
+  FOR location IN SELECT value FROM pg_catalog.jsonb_array_elements(locations) LOOP
+    IF COALESCE(item_path, ''::bytea) = COALESCE(decode(location #>> '{}', 'hex'), ''::bytea) THEN
+      RETURN TRUE;
+    END IF;
+  END LOOP;
+  RETURN FALSE;
+END`;
+
+// ExpandVirtualPath replaces Data first, then Metadata, before consumers compare
+// paths. Work on canonical UTF-16 keys, with matches aligned to code units, so
+// neither literal NUL nor a byte sequence spanning adjacent units can be lost.
+const expandedPathKeyBody = `
+DECLARE
+  expanded bytea := mm_ordinal_ignore_case_key(source_bytes);
+  tokens CONSTANT bytea[] := ARRAY[
+    decode('${Buffer.from('%APPDATAPATH%', 'utf16le').swap16().toString('hex')}', 'hex'),
+    decode('${Buffer.from('%METADATAPATH%', 'utf16le').swap16().toString('hex')}', 'hex')];
+  token bytea;
+  replacement bytea;
+  result bytea;
+  token_index integer;
+  native_position integer;
+BEGIN
+  FOR token_index IN 1..2 LOOP
+    token := tokens[token_index];
+    replacement := decode(path_expansion ->> (token_index - 1), 'hex');
+    result := ''::bytea;
+    native_position := 1;
+    WHILE native_position <= octet_length(expanded) LOOP
+      IF substring(expanded FROM native_position FOR octet_length(token)) = token THEN
+        result := result || replacement;
+        native_position := native_position + octet_length(token);
+      ELSE
+        result := result || substring(expanded FROM native_position FOR 2);
+        native_position := native_position + 2;
+      END IF;
+    END LOOP;
+    expanded := result;
+  END LOOP;
+  RETURN expanded;
+END`;
+
 export const postgresRuntimeFunctions = Object.freeze([
   Object.freeze({ name: postgresRemoveDiacriticsFunctionName, inputTypes: 'bytea', resultType: 'bytea', language: 'sql',
     body: `SELECT mm_text_utf8_key(COALESCE(string_agg(COALESCE(${sqlLiteral(JSON.stringify(diacriticsMapping))}::jsonb ->> part, part), '' ORDER BY ordinal), ''))
@@ -752,6 +813,8 @@ export const postgresRuntimeFunctions = Object.freeze([
   Object.freeze({ name: postgresNativeJsonEnumFunctionName, inputTypes: 'json, text', parameters: 'source json, enum_kind text', resultType: 'bytea', language: 'plpgsql', get body() { return nativeJsonEnumBody(); } }),
   Object.freeze({ name: postgresNativeJsonGuidKeyFunctionName, inputTypes: 'json', resultType: 'text', language: 'plpgsql', body: nativeJsonGuidKeyBody }),
   Object.freeze({ name: postgresParentalRatingScoreFunctionName, inputTypes: 'bytea, jsonb', parameters: 'source_bytes bytea, context jsonb', resultType: 'integer[]', language: 'plpgsql', body: parentalRatingScoreBody }),
+  Object.freeze({ name: postgresCollectionFolderMatchFunctionName, inputTypes: 'jsonb', resultType: 'boolean', language: 'plpgsql', body: collectionFolderMatchBody }),
+  Object.freeze({ name: postgresExpandedPathKeyFunctionName, inputTypes: 'bytea, jsonb', parameters: 'source_bytes bytea, path_expansion jsonb', resultType: 'bytea', language: 'plpgsql', body: expandedPathKeyBody }),
   Object.freeze({ name: postgresOrdinalIgnoreCaseKeyFunctionName, inputTypes: 'text', resultType: 'bytea', language: 'sql', body: 'SELECT mm_ordinal_ignore_case_key(mm_text_utf8_key(source))' }),
   Object.freeze({ name: postgresNativePathKeyFunctionName, inputTypes: 'text', resultType: 'bytea', language: 'sql', body: 'SELECT mm_native_path_key(mm_text_utf8_key(source))' }),
   Object.freeze({ name: postgresSafeInt32FunctionName, inputTypes: 'text', resultType: 'integer', language: 'sql', body: 'SELECT mm_safe_int32(mm_text_utf8_key(source))' }),

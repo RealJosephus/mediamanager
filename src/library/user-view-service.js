@@ -17,7 +17,7 @@ import { removeDiacritics } from '../sessions/user-data.js';
 import { MetadataImageAssets } from '../metadata/image-assets.js';
 import { createUserViewDynamicImagePlugin } from '../metadata/user-view-dynamic-image-provider.js';
 import { persistItemRelations } from './item-relations.js';
-import { cloneNativeItemEntity, copyNativeItemState, releaseNativeItemLinks } from './native-item-entity.js';
+import { cloneNativeItemEntity, copyNativeItemState, releaseNativeItemLinks, nativeItemDescriptor } from './native-item-entity.js';
 import { loadPostgresRowsByIds } from './postgres-library-query.js';
 
 const refreshIntervalTicks = 24n * 60n * 60n * 10000000n;
@@ -228,12 +228,14 @@ export class UserViewService {
     }
   }
 
-  async views(state, user, { includeHidden = false, includeExternalContent = true, presetViews = [] } = {}) {
+  async views(state, user, { includeHidden = false, includeExternalContent = true, presetViews = [], channelAccess } = {}) {
     this.#assertOpen();
+    channelAccess ??= this.library.channelViewsAccess;
     const list = []; const grouped = [];
     const shadow = folder => this.#named(nativeShadowViewIdentity(folder, collectionType(folder), this.library.options),
       { name: folder.Name, parentId: folder.Id, viewType: collectionType(folder) || null, forcedSortName: '', mode: 'shadow' }, state.db, state);
-    for (const folder of this.library.rootChildren(state, user)) {
+    for (const folder of await this.library.navigationChildren(state, user)) {
+      if (nativeItemDescriptor(folder.NativeType).family !== 'folder') continue;
       const type = collectionType(folder);
       if (['playlists', 'boxsets'].includes(type) && !await this.library.hasVisibleUserViewChild(folder, state, user)) continue;
       if (type === 'playlists') {
@@ -251,8 +253,13 @@ export class UserViewService {
     }
     if (this.library.options.configuration.EnableFolderView) list.push(await this.#named(nativeRootUserViewIdentity('folders', this.library.options),
       { name: userViewLabel('Folders', this.library.options), parentId: EMPTY_ID, viewType: 'folders', forcedSortName: '', mode: 'root' }, state.db, state));
-    if (includeExternalContent && await this.library.options.liveTv?.isEnabledForUser(user)) {
-      list.push(await this.global('livetv', this.library.options.localization?.text('HeaderLiveTV') ?? 'Live TV', state.db, state));
+    if (includeExternalContent) {
+      if (channelAccess) for (const item of (await channelAccess.getChannelsInternal({ UserId: user.Id })).Items) {
+        list.push(this.library.adoptLiveItem(state, item));
+      }
+      if (await this.library.options.liveTv?.isEnabledForUser(user)) {
+        list.push(await this.global('livetv', this.library.options.localization?.text('HeaderLiveTV') ?? 'Live TV', state.db, state));
+      }
     }
     const visible = includeHidden ? list : list.filter(item => !user.Configuration?.MyMediaExcludes?.some(id => sameId(id, item.Id)));
     const sorted = sortItems(visible, { sortby: ['SortName'] }, state.userData, state.isPlayed,

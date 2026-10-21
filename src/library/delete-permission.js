@@ -11,7 +11,8 @@ export function hasFileProtocol(item) {
     && (!value.includes('://') || /^file:\/\//i.test(value));
 }
 
-export function canDeleteItem(item, user, { collectionFolders = () => [], isActiveRecording = () => false, precomputedFolders = false } = {}) {
+export async function canDeleteItem(item, user, { collectionFolders = () => [], isActiveRecording = () => false, precomputedFolders = false,
+  channelCanDelete = async () => false } = {}) {
   // Playlist overrides the complete CanDelete(User), including the file gate.
   if (item.Type === 'Playlist' && user && !precomputedFolders) return user.Policy.IsAdministrator === true || sameId(user.Id, item.OwnerUserId);
   if (nondeletableTypes.has(item.Type)) return false;
@@ -22,14 +23,10 @@ export function canDeleteItem(item, user, { collectionFolders = () => [], isActi
     if (VIDEO_TYPES.has(item.Type) && isActiveRecording(item)) return false;
     if (item.SourceType === 'Channel') {
       if (!nonemptyId(item.ChannelId)) throw Object.assign(libraryError(400, "Guid can't be empty (Parameter 'id')"), { nativeException: 'ArgumentException' });
-      // The installed core has no external Channel providers. Native still
-      // resolves this identity, then its empty provider inventory cannot
-      // supply ISupportsDelete, even for a missing or wrong-type referent.
-      return false;
-    }
-    if (!hasFileProtocol(item)) return false;
+      if (!await channelCanDelete(item)) return false;
+    } else if (!hasFileProtocol(item)) return false;
   }
-  // DtoService calls the non-virtual CanDelete(User,List<Folder>) overload.
+  // DtoService's list consumer calls CanDelete(User,List<Folder>).
   // Playlist.IsAuthorizedToDelete in that branch is always true, while the
   // action's virtual CanDelete(User) above requires owner/admin. Never use
   // the DTO result to authorize a DELETE request.

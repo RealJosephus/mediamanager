@@ -1,4 +1,5 @@
 import { testFileSystem } from '../storage/plugin-files.js';
+import { attachLibraryNavigation, closeLibraryNavigation } from './navigation-fixture.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createHash, randomBytes } from 'node:crypto';
@@ -84,6 +85,7 @@ for (const dialect of ['postgres']) test(`${dialect}: complete Resume and generi
     snapshots.before = await snapshot();
     library = new LibraryService({fileSystem: testFileSystem,  store: new DomainStore(db), serverId: 'resume-scope-fixture',
       configuration: { EnableGroupingMoviesIntoCollections: false, EnableGroupingShowsIntoCollections: false } });
+    await attachLibraryNavigation(library);
     for (const expected of fixture.native) {
       const readback = fixture.actualUserAndViews.find(row => row.name === expected.name).user.bodyJson;
       const user = { ...readback, Id: userId, MaxParentalRatingScore: readback.Policy.MaxParentalRating, MaxParentalRatingSubScore: readback.Policy.MaxParentalSubRating };
@@ -100,7 +102,7 @@ for (const dialect of ['postgres']) test(`${dialect}: complete Resume and generi
     }
     snapshots.after = await snapshot();
   } finally {
-    await library?.close();
+    await closeLibraryNavigation(library);
     await db.client.query('DROP SCHEMA ' + quoteIdentifier(db.schemaName) + ' CASCADE');
     await db.client.query('DROP SCHEMA ' + quoteIdentifier(db.controlSchema) + ' CASCADE');
     cleanup.schemasRemoved = (await db.client.query('SELECT nspname FROM pg_namespace WHERE nspname=ANY($1::text[])', [[db.schemaName, db.controlSchema]])).rows.length === 0;

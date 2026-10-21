@@ -1,4 +1,5 @@
 import { testFileSystem } from '../storage/plugin-files.js';
+import { attachLibraryNavigation, closeLibraryNavigation } from './navigation-fixture.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
@@ -34,6 +35,7 @@ async function seedFixture(db, streams = false) {
 
 async function compareNative(db, streams) {
   const library = new LibraryService({fileSystem: testFileSystem,  store: new DomainStore(db), serverId: fixture.serverId, programDataPath: fixture.programDataPath });
+  await attachLibraryNavigation(library);
   try {
     if (!streams) {
       for (const response of fixture.responses.filter(response => response.name !== 'item')) {
@@ -52,7 +54,7 @@ async function compareNative(db, streams) {
     }
     return dto;
   } finally {
-    await library.close();
+    await closeLibraryNavigation(library);
   }
 }
 
@@ -76,8 +78,9 @@ test('derived user root matches real native DTO with aligned initialization time
   try {
     await seedFixture(db);
     library = new LibraryService({fileSystem: testFileSystem,  store: new DomainStore(db), serverId: fixture.serverId, programDataPath: path.win32.dirname(path.win32.dirname(expected.Path)), clock: () => ({ toISOString: () => expected.DateCreated }) });
+    await attachLibraryNavigation(library);
     assert.deepEqual(wire(await library.getRoot({ user })), expected);
-  } finally { await library?.close(); }
+  } finally { await closeLibraryNavigation(library); }
 });
 
 test('actual native Smart, OnlyForced, Always and None selection and subtitle scores match', () => {

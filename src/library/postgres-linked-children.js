@@ -48,6 +48,7 @@ class LinkedChildrenHandle {
 export class PostgresLinkedChildrenStore {
   #entries = new Map();
   #pendingReleases = new Set();
+  #handleOperations = new WeakMap();
   #mutationTails = new WeakMap();
   #closed = false;
   #initialized = false;
@@ -148,6 +149,34 @@ export class PostgresLinkedChildrenStore {
     return new LinkedChildrenHandle(this, entry, revision);
   }
   retain(handle) { this.check(handle); return this.#handle(handle.entry.id, handle.revision); }
+  /** Keep the exact mutable branch alive across awaits. Retain is deliberately
+   * different: it creates an immutable revision which may later fork. */
+  admitHandleOperation(handle) {
+    this.#active();
+    if (handle !== EMPTY_NATIVE_LINKS && handle !== null) this.check(handle);
+    const releaseOwner = this.#lease();
+    let state;
+    const token = {};
+    if (isLinkedChildrenHandle(handle)) {
+      state = this.#handleOperations.get(handle);
+      if (!state) this.#handleOperations.set(handle, state = { baseReleased: false, tokens: new Set() });
+      state.tokens.add(token);
+    }
+    let releasing;
+    return Object.freeze({ handle, release: () => releasing ??= this.#operationContext.run(this, async () => {
+      try {
+        if (!state) return;
+        state.tokens.delete(token);
+        if (state.baseReleased && state.tokens.size === 0 && !handle.released) {
+          const entry = this.#releaseReference(handle);
+          // The original caller's session may already be returned or aborted.
+          // Final operation release always collects on the relation owner.
+          try { await this.#collect(entry); }
+          catch (error) { this.#pendingReleases.add(entry); throw error; }
+        }
+      } finally { releaseOwner(); }
+    }) });
+  }
   plan(handle) {
     if (handle === EMPTY_NATIVE_LINKS) { this.#active(true); return emptyLinkedChildrenPlan(); }
     if (handle === null) throw Object.assign(new TypeError('A native folder link sequence cannot be null.'), { nativeException: 'NullReferenceException', status: 500 });
@@ -372,20 +401,35 @@ export class PostgresLinkedChildrenStore {
       if (entry.references === 0&&this.#entries.get(entry.id)===entry) this.#entries.delete(entry.id);
     });
   }
+  #releaseReference(handle) {
+    handle.released = true; handle.entry.references -= 1;
+    this.#changed();
+    return handle.entry;
+  }
+  #requestRelease(handle) {
+    const state = this.#handleOperations.get(handle);
+    if (state) {
+      if (state.baseReleased) return false;
+      state.baseReleased = true;
+      if (state.tokens.size) return false;
+    }
+    this.#releaseReference(handle);
+    return true;
+  }
   queueRelease(handle) {
     if (!isLinkedChildrenHandle(handle) || handle.released) return;
     this.#operationContext.run(this, () => {
-      this.check(handle); handle.released = true; handle.entry.references -= 1;
-      this.#pendingReleases.add(handle.entry);
-      this.#changed();
+      this.check(handle);
+      if (this.#requestRelease(handle)) this.#pendingReleases.add(handle.entry);
     });
   }
   async release(handle, { session } = {}) {
     if (handle === EMPTY_NATIVE_LINKS || handle === null || handle?.released) return;
     return this.#operationContext.run(this, async () => {
-      this.check(handle); handle.released = true; handle.entry.references -= 1;
-      this.#changed();
-      await this.#collect(handle.entry, session);
+      this.check(handle);
+      if (!this.#requestRelease(handle)) return;
+      try { await this.#collect(handle.entry, session); }
+      catch (error) { this.#pendingReleases.add(handle.entry); throw error; }
     });
   }
   async flushReleases({ session } = {}) {

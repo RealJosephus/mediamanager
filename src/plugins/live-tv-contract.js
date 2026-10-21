@@ -5,7 +5,8 @@ export const liveTvSignalPositions = Object.freeze({
   tuner: Object.freeze({ getChannels: 1, getChannelStream: 3, getChannelStreamMediaSources: 1, discoverDevices: 1, validate: 1 }),
   listings: Object.freeze({ getPrograms: 4, validate: 3, getLineups: 3, getChannels: 1 }),
   channel: Object.freeze({ getChannelFeatures: 0, isEnabledFor: 1, getChannelItems: 1,
-    getChannelImage: 1, getSupportedChannelImages: 0, getChannelItemMediaInfo: 1 }),
+    getChannelImage: 1, getSupportedChannelImages: 0, getChannelItemMediaInfo: 1,
+    getLatestMedia: 1, getCacheKey: 1, canDelete: 1, deleteItem: 1 }),
 });
 const required = {
   tuner: ['getChannels', 'getChannelStream', 'getChannelStreamMediaSources', 'discoverDevices'],
@@ -35,6 +36,20 @@ export function validateLiveTvExtension(kind, extension) {
   if (kind === 'tuner' && extension.isSupported !== undefined && typeof extension.isSupported !== 'boolean') {
     throw new TypeError('A tuner support declaration must be boolean.');
   }
+  if (kind === 'channel') {
+    if (extension.supportsMediaProbe !== undefined && typeof extension.supportsMediaProbe !== 'boolean') {
+      throw new TypeError('A channel media-probe marker must be boolean.');
+    }
+    if (extension.disableMediaSourceDisplay !== undefined && typeof extension.disableMediaSourceDisplay !== 'boolean') {
+      throw new TypeError('A channel media-source display declaration must be boolean.');
+    }
+    if (extension.attributes !== undefined && (!Array.isArray(extension.attributes) || extension.attributes.some(value => typeof value !== 'string'))) {
+      throw new TypeError('Channel folder attributes must be strings.');
+    }
+    if ((extension.canDelete === undefined) !== (extension.deleteItem === undefined)) {
+      throw new TypeError('Channel deletion requires both canDelete and deleteItem.');
+    }
+  }
   for (const member of executableMembers) if (member in extension) {
     throw unsupported('Live TV extensions cannot register recording or transcoding executors.');
   }
@@ -42,9 +57,9 @@ export function validateLiveTvExtension(kind, extension) {
 }
 
 /** A source declaration is separate from its untouched native MediaSourceInfo. */
-export function validateNativeLiveTvSource(source) {
+export function validateNativeLiveTvSource(source, { requireIdentity = true } = {}) {
   if (!object(source) || source.mode !== 'native' || !object(source.mediaSource)
-    || !text(source.mediaSource.Id) || !text(source.mediaSource.Path)) {
+    || requireIdentity && (!text(source.mediaSource.Id) || !text(source.mediaSource.Path))) {
     throw unsupported('A Live TV source requires native mode and an identified original media source.');
   }
   if (source.profile !== undefined && (typeof source.profile !== 'string' || source.profile.toLowerCase() !== 'native')) {
@@ -79,10 +94,15 @@ export function validateLiveTvSources(sources) {
 }
 
 export function validateLiveTvChannelItems(result) {
-  if (!object(result) || !Array.isArray(result.Items)) throw new TypeError('A channel item operation must return Items.');
-  for (const item of result.Items) {
+  if (result == null) return result;
+  if (!object(result) || result.Items != null && !Array.isArray(result.Items)) throw new TypeError('A channel item operation must return an object with a nullable Items array.');
+  for (const item of result.Items ?? []) {
+    if (item == null) continue;
     if (!object(item)) throw new TypeError('A channel item must be an object.');
-    if (item.MediaSources !== undefined) validateLiveTvSources(item.MediaSources);
+    if (item.MediaSources != null) {
+      if (!Array.isArray(item.MediaSources)) throw new TypeError('Channel media sources must be a nullable finite array.');
+      for (const source of item.MediaSources) if (source != null) validateNativeLiveTvSource(source, { requireIdentity: false });
+    }
   }
   return result;
 }
@@ -101,6 +121,9 @@ export function validateLiveTvResult(kind, method, result) {
   if (['getChannels', 'discoverDevices', 'getPrograms', 'getLineups', 'getSupportedChannelImages'].includes(method)
     && !Array.isArray(result)) throw new TypeError('A Live TV list operation must return a finite array.');
   if (method === 'isEnabledFor' && typeof result !== 'boolean') throw new TypeError('Channel enablement must return boolean.');
+  if (kind === 'channel' && method === 'canDelete' && typeof result !== 'boolean') throw new TypeError('Channel deletion permission must return boolean.');
+  if (kind === 'channel' && method === 'getCacheKey' && result != null && typeof result !== 'string') throw new TypeError('A channel cache key must be a nullable string.');
+  if (kind === 'channel' && method === 'getLatestMedia' && !Array.isArray(result)) throw new TypeError('Latest channel media must be a finite array.');
   if (method === 'getChannelFeatures' && !object(result)) throw new TypeError('Channel features must be an object.');
   return result;
 }

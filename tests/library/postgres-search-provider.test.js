@@ -1,4 +1,5 @@
 import { testFileSystem } from '../storage/plugin-files.js';
+import { attachLibraryNavigation, closeLibraryNavigation } from './navigation-fixture.js';
 import { nativeTextBytes, nativeTextOrdinalIgnoreCaseKey } from '../../src/database/native-text.js';
 import { nativeTextSql } from '../../src/database/native-text-sql.js';
 import test from 'node:test';
@@ -119,7 +120,10 @@ test('real PostgreSQL applies the request culture before provider-result paging'
     schema,
     create: true,
   });
+  let library;
   t.after(async () => {
+    database.queryHook = null;
+    await closeLibraryNavigation(library);
     await database.client.query(`DROP SCHEMA "${schema}" CASCADE`);
     await database.client.query(`DROP SCHEMA "${schema}__mm" CASCADE`);
     await database.close();
@@ -131,12 +135,13 @@ test('real PostgreSQL applies the request culture before provider-result paging'
   await database.insert('BaseItems', person(strokeId, '\u00f8 hit'));
 
   const observedErrors = [];
-  const library = new LibraryService({fileSystem: testFileSystem,
+  library = new LibraryService({fileSystem: testFileSystem,
     store: new DomainStore(database),
     serverId: 'postgres-search-culture',
     configuration: { UICulture: 'da-DK', IsStartupWizardCompleted: true },
     onError: error => observedErrors.push(error),
   });
+  await attachLibraryNavigation(library);
   const query = {
     SearchTerm: 'hit',
     IncludeItemTypes: 'Person',

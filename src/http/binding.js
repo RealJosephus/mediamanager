@@ -15,6 +15,10 @@ export const badRequest = () => new HttpResult(400, {
   type: 'https://tools.ietf.org/html/rfc9110#section-15.5.1', title: 'Bad Request', status: 400,
   traceId: `00-${randomBytes(16).toString('hex')}-${randomBytes(8).toString('hex')}-00`,
 });
+export const unauthorized = () => new HttpResult(401, {
+  type: 'https://tools.ietf.org/html/rfc9110#section-15.5.2', title: 'Unauthorized', status: 401,
+  traceId: `00-${randomBytes(16).toString('hex')}-${randomBytes(8).toString('hex')}-00`,
+});
 const unsupportedMediaType = () => new HttpResult(415, {
   type: 'https://tools.ietf.org/html/rfc9110#section-15.5.16', title: 'Unsupported Media Type', status: 415,
   traceId: `00-${randomBytes(16).toString('hex')}-${randomBytes(8).toString('hex')}-00`

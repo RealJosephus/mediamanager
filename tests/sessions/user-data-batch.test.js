@@ -1,4 +1,5 @@
 import { testFileSystem } from '../storage/plugin-files.js';
+import { attachLibraryNavigation, closeLibraryNavigation } from '../library/navigation-fixture.js';
 import { mkdtemp } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
@@ -110,6 +111,7 @@ test('getMany projects a large user-data batch from one fixed-size library load'
       return query(...args);
     };
     library = new LibraryService({fileSystem: testFileSystem,  store, linkedChildren, serverId: 'user-data-batch-test' });
+    await attachLibraryNavigation(library);
     const userData = new UserDataService({ store, library, users });
     const itemIds = Array.from({ length: itemCount }, (_, index) => itemId(index));
     const result = await userData.getMany(USER, itemIds.map(id => ({ id })));
@@ -193,7 +195,7 @@ test('getMany projects a large user-data batch from one fixed-size library load'
     assert.equal(linkedFolder.PlayedPercentage, 100,
       'a linked folder does not merge user data from presentation-key siblings');
   } finally {
-    await closeMetadataFixture({ library, linkedChildren, after: [() => store.close(),
+    await closeMetadataFixture({ before: [() => closeLibraryNavigation(library)], library, linkedChildren, after: [() => store.close(),
       () => spoolRoot && removeMetadataTestRoot(spoolRoot, 'mediamanager-user-data-batch-')] });
   }
 });

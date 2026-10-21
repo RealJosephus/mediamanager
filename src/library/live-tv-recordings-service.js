@@ -55,11 +55,14 @@ export class LiveTvRecordingsService {
   getRecording(id, { user = null } = {}) { return this.library.getItem(id, { user }); }
 
   async deleteRecording(id, { user = null } = {}) {
-    const target = await this.library.getDeletionItem(id, { user });
-    if (!target) return false;
-    // LiveTvManagement authorizes this action. Its native controller does not
-    // consult CanDelete and always retains the source media file.
-    await this.library.deleteItem(target.item, { DeleteFileLocation: false });
-    return true;
+    const channelAccess = this.library.channels?.admitOperation();
+    try {
+      const target = await this.library.getDeletionItem(id, { user, channelAccess, checkCanDelete: false });
+      if (!target) return false;
+      // LiveTvManagement authorizes this action. Its native controller does not
+      // consult CanDelete and always retains the source media file.
+      await this.library.deleteItem(target.item, { DeleteFileLocation: false }, undefined, undefined, channelAccess);
+      return true;
+    } finally { await channelAccess?.release(); }
   }
 }

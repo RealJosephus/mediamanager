@@ -39,6 +39,16 @@ function ipv4Range(value) {
 // https://github.com/apple-oss-distributions/network_cmds/blob/main/route.tproj/route.c
 // https://github.com/apple-oss-distributions/xnu/blob/main/bsd/netinet/ip_output.c
 // https://github.com/apple-oss-distributions/xnu/blob/main/tests/net_test_lib.c
+// XNU rt_getmetrics projects expiry from uptime to wall-clock seconds through
+// NET_CALCULATE_CLOCKSKEW. Re-observe the SAME saved identity with RTM_GET only;
+// every field must still match exactly. This never rebases or retries mutation.
+// https://github.com/apple-oss-distributions/xnu/blob/main/bsd/net/rtsock.c
+// https://github.com/apple-oss-distributions/xnu/blob/main/bsd/net/route_private.h
+// Before the first seal, inspect the original owner before creating the feth
+// pair, then acquire a stable full identity after its real network setup. XNU's
+// net_uptime is a cached coarse clock; two early reads alone cannot establish
+// stability across the subsequent interface activity. Preflight is not a seal.
+// https://github.com/apple-oss-distributions/xnu/blob/xnu-11215.81.4/bsd/kern/uipc_domain.c
 const routeSource = String.raw`
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -58,10 +68,13 @@ const routeSource = String.raw`
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #include <unistd.h>
 
 typedef union { struct rt_msghdr header; unsigned char bytes[8192]; } Message;
 static int sequence;
+static uint64_t observation_deadline;
+static uint64_t monotonic_milliseconds(void);
 static size_t padded(size_t size) { return size ? ((size + 3u) & ~3u) : 4u; }
 static struct sockaddr *address(Message *message, unsigned bit) {
   size_t offset = sizeof(struct rt_msghdr);
@@ -93,6 +106,14 @@ static int exchange(int socket_fd, Message *request, Message *reply, int type) {
   if (written < 0) return errno;
   if (written != request->header.rtm_msglen) return EIO;
   for (;;) {
+    // Unrelated PF_ROUTE notifications cannot restart the observation budget.
+    if (observation_deadline) {
+      uint64_t now = monotonic_milliseconds();
+      if (now >= observation_deadline) return ETIMEDOUT;
+      uint64_t remaining = observation_deadline - now;
+      struct timeval timeout = { .tv_sec = (time_t)(remaining / 1000u), .tv_usec = (suseconds_t)((remaining % 1000u) * 1000u) };
+      if (setsockopt(socket_fd, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout))) return errno;
+    }
     ssize_t length = read(socket_fd, reply->bytes, sizeof(*reply));
     if (length < 0) return errno;
     if ((size_t)length < sizeof(struct rt_msghdr)) return EIO;
@@ -118,6 +139,30 @@ static int same_identity(Message *left, Message *right) {
   struct rt_metrics one_metric = left->header.rtm_rmx, two_metric = right->header.rtm_rmx;
   if (one_metric.rmx_locks != two_metric.rmx_locks || one_metric.rmx_mtu != two_metric.rmx_mtu
     || one_metric.rmx_hopcount != two_metric.rmx_hopcount || one_metric.rmx_expire != two_metric.rmx_expire
+    || one_metric.rmx_recvpipe != two_metric.rmx_recvpipe || one_metric.rmx_sendpipe != two_metric.rmx_sendpipe
+    || one_metric.rmx_ssthresh != two_metric.rmx_ssthresh || one_metric.rmx_rtt != two_metric.rmx_rtt
+    || one_metric.rmx_rttvar != two_metric.rmx_rttvar) return 0;
+  for (unsigned index = 0; index < RTAX_MAX; index++) {
+    struct sockaddr *one = address(left, 1u << index), *two = address(right, 1u << index);
+    if ((!one) != (!two)) return 0;
+    if (one && (one->sa_len != two->sa_len || memcmp(one, two, one->sa_len))) return 0;
+  }
+  return 1;
+}
+// Only the unsealed precapture phase uses this narrower admission predicate.
+// It preserves presence, owner, all addresses/flags, every non-expiry metric,
+// and the zero/nonzero expiry class. The final stable pair, install and restore
+// all continue to use the complete same_identity above, including expiry.
+static int precapture_identity(Message *left, Message *right) {
+  const int has_left = exact(left), has_right = exact(right);
+  if (has_left != has_right) return 0;
+  if (!has_left) return !left->header.rtm_msglen && !right->header.rtm_msglen;
+  if (left->header.rtm_index != right->header.rtm_index
+    || (left->header.rtm_flags & ~RTF_DONE) != (right->header.rtm_flags & ~RTF_DONE)) return 0;
+  struct rt_metrics one_metric = left->header.rtm_rmx, two_metric = right->header.rtm_rmx;
+  if ((one_metric.rmx_expire == 0) != (two_metric.rmx_expire == 0)
+    || one_metric.rmx_locks != two_metric.rmx_locks || one_metric.rmx_mtu != two_metric.rmx_mtu
+    || one_metric.rmx_hopcount != two_metric.rmx_hopcount
     || one_metric.rmx_recvpipe != two_metric.rmx_recvpipe || one_metric.rmx_sendpipe != two_metric.rmx_sendpipe
     || one_metric.rmx_ssthresh != two_metric.rmx_ssthresh || one_metric.rmx_rtt != two_metric.rmx_rtt
     || one_metric.rmx_rttvar != two_metric.rmx_rttvar) return 0;
@@ -168,14 +213,22 @@ static void describe(FILE *output, Message *message) {
   fputs("}}", output);
 }
 static void difference(FILE *output, int *comma, const char *field) { fprintf(output, "%s\"%s\"", *comma ? "," : "", field); *comma = 1; }
-static void observe(const char *base, const char *operation, Message *baseline, Message *current) {
+static uint64_t observe(const char *base, const char *operation, unsigned attempt, Message *baseline, Message *current) {
   char suffix[96], binary[PATH_MAX], json[PATH_MAX], temporary[PATH_MAX];
-  snprintf(suffix, sizeof(suffix), ".before-%s-%d.bin", operation, getpid()); owned_path(binary, sizeof(binary), base, suffix);
+  snprintf(suffix, sizeof(suffix), ".before-%s-%d-attempt-%u.bin", operation, getpid(), attempt); owned_path(binary, sizeof(binary), base, suffix);
   FILE *output = pending_receipt(binary, temporary, sizeof(temporary));
   if (current->header.rtm_msglen && fwrite(current->bytes, 1, current->header.rtm_msglen, output) != current->header.rtm_msglen) err(1, "Write complete route observation");
   publish_receipt(output, temporary, binary, 0);
-  snprintf(suffix, sizeof(suffix), ".before-%s-%d.json", operation, getpid()); owned_path(json, sizeof(json), base, suffix);
-  output = pending_receipt(json, temporary, sizeof(temporary)); fputs("{\"baseline\":", output); describe(output, baseline); fputs(",\"current\":", output); describe(output, current);
+  snprintf(suffix, sizeof(suffix), ".before-%s-%d-attempt-%u.json", operation, getpid(), attempt); owned_path(json, sizeof(json), base, suffix);
+  output = pending_receipt(json, temporary, sizeof(temporary));
+  uint64_t observed_at = monotonic_milliseconds();
+  const int unsealed = !strcmp(operation, "preflight") || !strcmp(operation, "precapture");
+  fprintf(output, "{\"operation\":\"%s\",\"attempt\":%u,\"readOnlyObservation\":true,"
+    "\"baselineSealed\":%s,\"comparisonReference\":\"%s\","
+    "\"monotonicMilliseconds\":%llu,\"deadlineMonotonicMilliseconds\":%llu,\"baseline\":", operation, attempt,
+    unsealed ? "false" : "true", unsealed ? "unsealed-preflight" : "sealed-original",
+    (unsigned long long)observed_at, (unsigned long long)observation_deadline);
+  describe(output, baseline); fputs(",\"current\":", output); describe(output, current);
   fprintf(output, ",\"sameIdentity\":%s,\"differentPaths\":[", same_identity(baseline, current) ? "true" : "false"); int comma = 0;
   if (exact(baseline) != exact(current)) difference(output, &comma, "exact");
   if (baseline->header.rtm_index != current->header.rtm_index) difference(output, &comma, "interfaceIndex");
@@ -191,6 +244,32 @@ static void observe(const char *base, const char *operation, Message *baseline, 
     }
   }
   fputs("]}\n", output); publish_receipt(output, temporary, json, 0);
+  return observed_at;
+}
+static uint64_t monotonic_milliseconds(void) {
+  struct timespec current;
+  if (clock_gettime(CLOCK_MONOTONIC, &current)) err(1, "Read monotonic observation clock");
+  return (uint64_t)current.tv_sec * 1000u + (uint64_t)current.tv_nsec / 1000000u;
+}
+static int observe_original(int socket_fd, const char *base, const char *operation, Message *original, Message *current, int *has_current) {
+  const uint64_t deadline = monotonic_milliseconds() + 2000u;
+  const int has_original = exact(original);
+  int matched = 0;
+  observation_deadline = deadline;
+  for (unsigned attempt = 1; attempt <= 16; attempt++) {
+    uint64_t now = monotonic_milliseconds();
+    if (now >= deadline) break;
+    memset(current, 0, sizeof(*current)); *has_current = query(socket_fd, current);
+    observe(base, operation, attempt, original, current);
+    now = monotonic_milliseconds();
+    if (now <= deadline && *has_current == has_original && (!has_original || same_identity(current, original))) { matched = 1; break; }
+    if (attempt == 16 || now >= deadline || deadline - now <= 100u) break;
+    if (usleep(100000)) err(1, "Wait for exact route re-observation");
+  }
+  observation_deadline = 0;
+  struct timeval timeout = { .tv_sec = 5 };
+  if (setsockopt(socket_fd, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout))) err(1, "Restore route socket timeout");
+  return matched;
 }
 static int hex_identity(const char *value, size_t length) {
   if (strlen(value) != length) return 0; for (size_t index = 0; index < length; index++) if (!strchr("0123456789abcdef", value[index])) return 0; return 1;
@@ -220,6 +299,13 @@ static Message load(const char *filename) {
   if ((size_t)length < sizeof(struct rt_msghdr) || value.header.rtm_msglen != length) errx(1, "Invalid saved route");
   require_exact(&value); return value;
 }
+static void save_route(const char *filename, Message *value) {
+  char temporary[PATH_MAX]; FILE *output = pending_receipt(filename, temporary, sizeof(temporary));
+  if (value->header.rtm_msglen && fwrite(value->bytes, 1, value->header.rtm_msglen, output) != value->header.rtm_msglen) err(1, "Save complete route bytes");
+  // A complete/fsynced message is published once through an exclusive link.
+  // Existing original or preflight names are never replaced.
+  publish_receipt(output, temporary, filename, 0);
+}
 static void apply(int socket_fd, Message *value, int type) {
   Message request = *value, reply = {0}; require_exact(&request); request.header.rtm_flags &= ~RTF_DONE;
   if (type != RTM_ADD) request.header.rtm_inits = 0;
@@ -233,32 +319,60 @@ int main(int argc, char **argv) {
     unsigned index = if_nametoindex(argv[2]);
     printf("{\"ownedInterfaceIndex\":%u}\n", index); return 0;
   }
+  int preflight = argc == 5 && !strcmp(argv[1], "preflight");
   int snapshot = argc == 5 && !strcmp(argv[1], "snapshot");
   int install = argc == 9 && !strcmp(argv[1], "install"), restore = argc == 9 && !strcmp(argv[1], "restore");
-  if (!snapshot && !install && !restore) errx(1, "Invalid owned route operation");
+  if (!preflight && !snapshot && !install && !restore) errx(1, "Invalid owned route operation");
   if (!owned_interface(argv[3])) errx(1, "The route operation must bind an owned feth interface");
   unsigned bound_index = 0;
-  if (!snapshot) {
+  if (!preflight && !snapshot) {
     if ((!hex_identity(argv[5], 40) && !hex_identity(argv[5], 64)) || !hex_identity(argv[6], 64) || !hex_identity(argv[7], 32)) errx(1, "Invalid immutable mutation identity");
     bound_index = expected_index(argv[8]);
   }
   int socket_fd = socket(PF_ROUTE, SOCK_RAW, 0); if (socket_fd < 0) err(1, "PF_ROUTE socket");
   struct timeval timeout = { .tv_sec = 5 }; if (setsockopt(socket_fd, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout))) err(1, "PF_ROUTE timeout");
-  Message current = {0}; int has_current = query(socket_fd, &current);
-  if (snapshot) {
-    int file = open(argv[2], O_WRONLY | O_CREAT | O_EXCL | O_NOFOLLOW, 0644); if (file < 0) err(1, "Create original route receipt");
-    if (has_current && write(file, current.bytes, current.header.rtm_msglen) != current.header.rtm_msglen) err(1, "Save original route bytes");
-    if (fsync(file)) err(1, "Sync original route receipt"); if (close(file)) err(1, "Close original route receipt"); sync_directory(argv[2]);
-    printf("{\"exactRouteExisted\":%s,\"interfaceIndex\":%u,\"flags\":%d,\"expiryEpochSeconds\":%lld}\n", has_current ? "true" : "false", current.header.rtm_index, current.header.rtm_flags, (long long)current.header.rtm_rmx.rmx_expire);
+  Message current = {0}; int has_current = 0;
+  if (preflight) {
+    has_current = query(socket_fd, &current);
+    char filename[PATH_MAX]; owned_path(filename, sizeof(filename), argv[2], ".preflight.bin"); save_route(filename, &current);
+    observe(argv[2], "preflight", 1, &current, &current);
+    printf("{\"baselineSealed\":false,\"exactRouteExisted\":%s,\"interfaceIndex\":%u,\"flags\":%d,\"expiryEpochSeconds\":%lld}\n", has_current ? "true" : "false", current.header.rtm_index, current.header.rtm_flags, (long long)current.header.rtm_rmx.rmx_expire);
     close(socket_fd); return 0;
+  }
+  if (snapshot) {
+    char filename[PATH_MAX]; owned_path(filename, sizeof(filename), argv[2], ".preflight.bin");
+    Message before = load(filename), previous = {0};
+    const uint64_t deadline = monotonic_milliseconds() + 2000u;
+    uint64_t previous_at = 0; unsigned previous_attempt = 0; int previous_exists = 0;
+    observation_deadline = deadline;
+    for (unsigned attempt = 1; attempt <= 16; attempt++) {
+      if (monotonic_milliseconds() >= deadline) break;
+      memset(&current, 0, sizeof(current)); has_current = query(socket_fd, &current);
+      uint64_t observed_at = observe(argv[2], "precapture", attempt, &before, &current);
+      if (!precapture_identity(&before, &current)) errx(1, "Original route presence, owner or non-expiry identity changed before its first seal");
+      uint64_t now = monotonic_milliseconds();
+      if (previous_attempt && observed_at >= previous_at + 100u && now <= deadline
+        && has_current == previous_exists && (!has_current || same_identity(&previous, &current))) {
+        save_route(argv[2], &current);
+        printf("{\"baselineSealed\":true,\"baselineAcquiredAfterTopology\":true,\"exactRouteExisted\":%s,\"interfaceIndex\":%u,\"flags\":%d,\"expiryEpochSeconds\":%lld,"
+          "\"stablePair\":{\"firstAttempt\":%u,\"secondAttempt\":%u,\"firstMonotonicMilliseconds\":%llu,\"secondMonotonicMilliseconds\":%llu,"
+          "\"deadlineMonotonicMilliseconds\":%llu,\"completeIdentityEqual\":%s,\"bothAbsent\":%s}}\n",
+          has_current ? "true" : "false", current.header.rtm_index, current.header.rtm_flags, (long long)current.header.rtm_rmx.rmx_expire,
+          previous_attempt, attempt, (unsigned long long)previous_at, (unsigned long long)observed_at, (unsigned long long)deadline,
+          has_current ? "true" : "false", has_current ? "false" : "true");
+        close(socket_fd); return 0;
+      }
+      previous = current; previous_exists = has_current; previous_at = observed_at; previous_attempt = attempt;
+      if (attempt == 16 || now >= deadline || deadline - now <= 100u) break;
+      if (usleep(100000)) err(1, "Wait for first-seal full identity stability");
+    }
+    errx(1, "Original route did not produce a stable full identity before its first seal");
   }
   Message original = load(argv[2]); int has_original = exact(&original);
   unsigned owned_index = if_nametoindex(argv[3]);
-  observe(argv[2], install ? "install" : "restore", &original, &current);
   if (install) {
     if (owned_index != bound_index) errx(1, "The created feth interface identity changed before install");
     mutation_state(argv, bound_index, "preparing", 0);
-    if (has_current != has_original || (has_original && !same_identity(&current, &original))) errx(1, "Limited broadcast route changed after capture");
     Message replacement = {0}; replacement.header.rtm_msglen = sizeof(struct rt_msghdr);
     replacement.header.rtm_flags = RTF_UP | RTF_HOST | RTF_STATIC | RTF_BROADCAST; replacement.header.rtm_index = owned_index;
     int control = socket(AF_INET, SOCK_DGRAM, 0); if (control < 0) err(1, "Interface MTU socket");
@@ -274,6 +388,9 @@ int main(int argc, char **argv) {
     if (inet_pton(AF_INET, argv[4], &source.sin_addr) != 1) errx(1, "Invalid owned interface address");
     append(&replacement, RTA_DST, &destination, sizeof(destination)); append(&replacement, RTA_GATEWAY, &gateway, sizeof(gateway));
     append(&replacement, RTA_IFP, &interface, sizeof(interface)); append(&replacement, RTA_IFA, &source, sizeof(source));
+    // Only exact observations of the fixed saved baseline can admit mutation.
+    // No tolerance, alternate baseline, or second ADD/DELETE attempt exists.
+    if (!observe_original(socket_fd, argv[2], "install", &original, &current, &has_current)) errx(1, "Limited broadcast route changed after capture");
     // This durable marker precedes the first possible route mutation. An
     // interrupted helper must never leave its parent guessing from intent.
     mutation_state(argv, bound_index, "mutation-requested", 1);
@@ -284,6 +401,8 @@ int main(int argc, char **argv) {
     mutation_state(argv, bound_index, "installed", 1);
     printf("{\"installed\":true,\"interfaceIndex\":%u,\"flags\":%d,\"mtu\":%u}\n", current.header.rtm_index, current.header.rtm_flags, current.header.rtm_rmx.rmx_mtu);
   } else {
+    has_current = query(socket_fd, &current);
+    observe(argv[2], "restore", 1, &original, &current);
     if (has_current && has_original && same_identity(&current, &original)) {
       printf("{\"restored\":true,\"alreadyOriginal\":true}\n"); close(socket_fd); return 0;
     }
@@ -297,8 +416,7 @@ int main(int argc, char **argv) {
       original.header.rtm_inits = RTV_MTU | RTV_HOPCOUNT | RTV_EXPIRE | RTV_RPIPE | RTV_SPIPE | RTV_SSTHRESH | RTV_RTT | RTV_RTTVAR;
       apply(socket_fd, &original, RTM_ADD);
     }
-    has_current = query(socket_fd, &current);
-    if (has_current != has_original || (has_original && !same_identity(&current, &original))) errx(1, "Original route identity was not restored");
+    if (!observe_original(socket_fd, argv[2], "restore-final", &original, &current, &has_current)) errx(1, "Original route identity was not restored");
     printf("{\"restored\":true,\"exactRouteExisted\":%s,\"interfaceIndex\":%u}\n", has_current ? "true" : "false", current.header.rtm_index);
   }
   close(socket_fd); return 0;
@@ -306,6 +424,7 @@ int main(int argc, char **argv) {
 `;
 
 const helper = path.join(directory, 'broadcast-route-owner'), savedRoute = path.join(directory, 'broadcast-route-original.bin');
+const preflightRoute = savedRoute + '.preflight.bin';
 const installationState = savedRoute + '.install-state.json';
 let record = { schemaVersion: 3, mode, at: new Date().toISOString(), createdInterfaces: [], interfaceIdentities: {}, operations: [],
   routeRestorationRequired: false, routeRestored: null,
@@ -372,22 +491,35 @@ function routeArguments(operation) {
     identity.savedRouteSha256, identity.nonce, String(identity.ownedInterfaceIndex)];
 }
 async function captureRouteObservations() {
+  if (record.preflightRouteSha256) assert.equal(sha(await readFile(preflightRoute)), record.preflightRouteSha256,
+    'The independent preflight bytes changed.');
+  if (record.originalRouteSha256) assert.equal(sha(await readFile(savedRoute)), record.originalRouteSha256,
+    'The once-sealed route bytes changed.');
   const prefix = path.basename(savedRoute) + '.before-';
   const previous = new Map((record.routeObservations ?? []).map(entry => [entry.path, entry.sha256]));
   const observations = record.routeObservations = [], failures = [];
   for (const name of (await readdir(directory)).filter(value => value.startsWith(prefix)).sort()) {
-    const match = /^broadcast-route-original\.bin\.before-(install|restore)-(\d+)\.(bin|json)(\.pending-\d+)?$/u.exec(name);
+    const match = /^broadcast-route-original\.bin\.before-(preflight|precapture|install|restore|restore-final)-(\d+)-attempt-([1-9]|1[0-6])\.(bin|json)(\.pending-\d+)?$/u.exec(name);
     assert.ok(match, 'Unexpected route observation filename.');
     const absolute = path.join(directory, name), stat = await lstat(absolute);
     assert.ok(stat.isFile() && !stat.isSymbolicLink(), 'A route observation must be an exclusive regular file.');
     const bytes = await readFile(absolute), entry = { path: absolute, size: bytes.length, sha256: sha(bytes),
-      operation: match[1], helperPid: Number(match[2]), format: match[3], complete: !match[4],
-      candidateHead: record.candidateHead, savedRouteSha256: record.originalRouteSha256 };
+      operation: match[1], helperPid: Number(match[2]), attempt: Number(match[3]), format: match[4], complete: !match[5],
+      candidateHead: record.candidateHead, preflightRouteSha256: record.preflightRouteSha256, savedRouteSha256: record.originalRouteSha256 };
     observations.push(entry);
     if (previous.has(absolute) && previous.get(absolute) !== entry.sha256)
       failures.push(new Error('A previously captured route observation changed: ' + absolute));
     if (!entry.complete) { failures.push(new Error('An incomplete route observation remains: ' + absolute)); continue; }
-    if (entry.format === 'json') entry.value = JSON.parse(bytes);
+    if (entry.format === 'json') {
+      entry.value = JSON.parse(bytes);
+      assert.equal(entry.value.operation, entry.operation); assert.equal(entry.value.attempt, entry.attempt);
+      assert.equal(entry.value.readOnlyObservation, true);
+      const unsealed = ['preflight', 'precapture'].includes(entry.operation);
+      assert.equal(entry.value.baselineSealed, !unsealed);
+      assert.equal(entry.value.comparisonReference, unsealed ? 'unsealed-preflight' : 'sealed-original');
+      for (const name of ['monotonicMilliseconds', 'deadlineMonotonicMilliseconds'])
+        assert.ok(Number.isSafeInteger(entry.value[name]) && entry.value[name] >= 0);
+    }
   }
   if (failures.length) throw new AggregateError(failures, 'The route observation receipts were not immutable and complete.');
 }
@@ -609,8 +741,10 @@ try {
   const sourcePath = path.join(directory, 'broadcast-route-owner.c'); await writeFile(sourcePath, routeSource, { flag: 'wx' });
   record.helperSourceSha256 = sha(Buffer.from(routeSource)); record.compiler = command('/usr/bin/clang', ['--version']);
   await mutate('/usr/bin/clang', ['-std=c11', '-Wall', '-Wextra', '-O2', sourcePath, '-o', helper]); record.helperSha256 = sha(await readFile(helper)); await publish();
-  record.original = JSON.parse(await mutate('/usr/bin/sudo', [helper, 'snapshot', savedRoute, record.interface, record.address]));
-  record.originalRouteSha256 = sha(await readFile(savedRoute));
+  record.preflight = JSON.parse(await mutate('/usr/bin/sudo', [helper, 'preflight', savedRoute, record.interface, record.address]));
+  assert.equal(record.preflight.baselineSealed, false);
+  record.preflightRouteSha256 = sha(await readFile(preflightRoute));
+  await captureRouteObservations(); await publish();
   for (const name of pair) {
     await mutate('/usr/bin/sudo', ['/sbin/ifconfig', name, 'create'], { onSuccess: () => {
       record.createdInterfaces.push(name);
@@ -625,6 +759,35 @@ try {
   for (const description of record.topology) {
     assert.match(description, /<[^>]*\bBROADCAST\b[^>]*>/u); assert.match(description, /\bstatus: active\b/u);
   }
+  assert.deepEqual(defaultIdentity(defaultRoute()), defaultIdentity(record.defaultRoute), 'Creating the owned topology changed the default route.');
+  assert.equal(sha(await readFile(helper)), record.helperSha256, 'The owned routing helper changed before the first seal.');
+  assert.equal(sha(await readFile(preflightRoute)), record.preflightRouteSha256, 'The independent preflight changed before the first seal.');
+  record.original = JSON.parse(await mutate('/usr/bin/sudo', [helper, 'snapshot', savedRoute, record.interface, record.address]));
+  assert.equal(record.original.baselineSealed, true); assert.equal(record.original.baselineAcquiredAfterTopology, true);
+  record.originalRouteSha256 = sha(await readFile(savedRoute));
+  await captureRouteObservations();
+  const pairEvidence = record.original.stablePair;
+  assert.ok(Number.isInteger(pairEvidence.firstAttempt) && pairEvidence.firstAttempt >= 1);
+  assert.equal(pairEvidence.secondAttempt, pairEvidence.firstAttempt + 1); assert.ok(pairEvidence.secondAttempt <= 16);
+  assert.ok(pairEvidence.secondMonotonicMilliseconds - pairEvidence.firstMonotonicMilliseconds >= 100);
+  assert.ok(pairEvidence.secondMonotonicMilliseconds <= pairEvidence.deadlineMonotonicMilliseconds);
+  const samples = [pairEvidence.firstAttempt, pairEvidence.secondAttempt].map(attempt => {
+    const sample = record.routeObservations.find(entry => entry.operation === 'precapture' && entry.format === 'json' && entry.attempt === attempt);
+    assert.ok(sample?.complete, 'A stable pair must bind two real complete precapture observations.'); return sample;
+  });
+  assert.equal(samples[0].value.monotonicMilliseconds, pairEvidence.firstMonotonicMilliseconds);
+  assert.equal(samples[1].value.monotonicMilliseconds, pairEvidence.secondMonotonicMilliseconds);
+  assert.equal(samples[0].helperPid, samples[1].helperPid, 'Both stable observations must belong to the same actual snapshot process.');
+  for (const sample of samples) assert.equal(sample.value.deadlineMonotonicMilliseconds, pairEvidence.deadlineMonotonicMilliseconds);
+  const completeIdentity = value => value === null ? null : { exact: value.exact, interfaceIndex: value.interfaceIndex,
+    flagsWithoutDone: value.flagsWithoutDone, metrics: value.metrics, addresses: value.addresses };
+  assert.deepEqual(completeIdentity(samples[0].value.current), completeIdentity(samples[1].value.current));
+  assert.equal(pairEvidence.bothAbsent, samples[1].value.current === null);
+  assert.equal(pairEvidence.completeIdentityEqual, samples[1].value.current !== null);
+  const selectedBytes = record.routeObservations.find(entry => entry.operation === 'precapture' && entry.format === 'bin'
+    && entry.helperPid === samples[1].helperPid && entry.attempt === pairEvidence.secondAttempt);
+  assert.ok(selectedBytes?.complete); assert.equal(selectedBytes.sha256, record.originalRouteSha256);
+  assert.ok((await readFile(selectedBytes.path)).equals(await readFile(savedRoute)), 'The first seal must contain the actual selected raw message.');
   record.installationIdentity = { schemaVersion: 1, candidateHead: record.candidateHead, savedRouteSha256: record.originalRouteSha256,
     nonce: randomBytes(16).toString('hex'), ownedInterfaceName: record.interface, ownedInterfaceIndex: record.interfaceIdentities[record.interface] };
   validateInstallationIdentity(record.installationIdentity);
