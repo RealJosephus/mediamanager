@@ -587,6 +587,8 @@ function authorization(token) {
 
 function routeFor(endpoint, testCase, fixture, userId, fields) {
   if (testCase.action === 'live-tv-recommended') return `/LiveTv/Programs/Recommended?${testCase.query.replaceAll(fixture.userId, userId)}`;
+  if (testCase.action === 'live-tv-programs') return `/LiveTv/Programs?${testCase.query.replaceAll(fixture.userId, userId)}`;
+  if (testCase.action === 'live-tv-program') return `/LiveTv/Programs/${encodeURIComponent(testCase.programId)}?${testCase.query.replaceAll(fixture.userId, userId)}`;
   if (testCase.action === 'playback-info') return `/Items/${fixture.items.find(item => item.key === testCase.detailKey).id}/PlaybackInfo?${testCase.query.replaceAll(fixture.userId, userId)}`;
   if (testCase.action === 'intros') return `${endpoint === 'legacy' ? '/Users/' + (testCase.introUserId ?? userId) : ''}/Items/${testCase.introItemId ?? fixture.items.find(item => item.key === testCase.detailKey).id}/Intros?${testCase.query.replaceAll(fixture.userId, userId)}`;
   if (testCase.action === 'theme') return `/Items/${testCase.themeItemId ?? fixture.items.find(item => item.key === testCase.detailKey).id}/${testCase.themeRoute}?${testCase.query.replaceAll(fixture.userId, userId)}`;
@@ -913,7 +915,9 @@ export async function recordItemFilterCandidate({ dialect, fixture, connectionSt
           ? testCase.parallelQueries.map(query => routeFor(endpoint, { ...testCase, query }, fixture, user.Id, fields))
           : Array.from({ length: testCase.parallelRequests ?? 1 },
             () => routeFor(endpoint, testCase, fixture, user.Id, fields));
-        const responses = await Promise.all(routes.map(route => request(route, { token })));
+        const requestDescription = { method: testCase.method ?? 'GET', ...(Object.hasOwn(testCase, 'body')
+          ? { body: JSON.parse(JSON.stringify(testCase.body).replaceAll(fixture.userId, user.Id)) } : {}) };
+        const responses = await Promise.all(routes.map(route => request(route, { token, ...requestDescription })));
         if (afterEndpoint) await afterEndpoint({ testCase, endpoint, responses, runtime, database, user });
         for (const response of responses) {
           if (endpoint === 'detail' && testCase.detailExpectedStatus !== undefined
@@ -932,6 +936,7 @@ export async function recordItemFilterCandidate({ dialect, fixture, connectionSt
           }
           endpointContracts.push({
             endpoint,
+            ...(testCase.action?.startsWith('live-tv-program') ? { request: requestDescription } : {}),
             ...(captureResponseBodies ? { response } : {}),
             ...(captureCaseRuntimeErrors ? { runtimeErrors: runtimeErrors.splice(runtimeErrorStart) } : {}),
             contract: responseContract(response, keyById, {

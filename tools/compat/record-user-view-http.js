@@ -118,6 +118,15 @@ const scenarios = {
     liveTvState: true,
     menuLifecycle: false,
   },
+  'live-tv-programs-http': {
+    fixture: 'tests/library/fixtures/live-tv-programs-http/input.json',
+    expectedCases: 70,
+    includeAggregateSnapshot: true,
+    libraryTypeMarkers: true,
+    liveTvView: true,
+    liveTvState: true,
+    menuLifecycle: false,
+  },
 };
 
 export async function recordUserViewHttp(scenarioName, outputArgument, portArgument) {
@@ -719,6 +728,8 @@ async function stopReference(instance, token) {
 }
 function routeFor(endpoint, testCase, userId) {
   if (testCase.action === 'live-tv-recommended') return '/LiveTv/Programs/Recommended?' + testCase.query.replaceAll(fixture.userId, userId);
+  if (testCase.action === 'live-tv-programs') return '/LiveTv/Programs?' + testCase.query.replaceAll(fixture.userId, userId);
+  if (testCase.action === 'live-tv-program') return `/LiveTv/Programs/${encodeURIComponent(testCase.programId)}?${testCase.query.replaceAll(fixture.userId, userId)}`;
   if (testCase.action === 'playback-info') return `/Items/${itemByKey.get(testCase.detailKey).id}/PlaybackInfo?${testCase.query.replaceAll(fixture.userId, userId)}`;
   if (testCase.action === 'intros') return `${endpoint === 'legacy' ? '/Users/' + (testCase.introUserId ?? userId) : ''}/Items/${testCase.introItemId ?? itemByKey.get(testCase.detailKey).id}/Intros?${testCase.query.replaceAll(fixture.userId, userId)}`;
   if (testCase.action === 'theme') return `/Items/${testCase.themeItemId ?? itemByKey.get(testCase.detailKey).id}/${testCase.themeRoute}?${testCase.query.replaceAll(fixture.userId, userId)}`;
@@ -833,7 +844,7 @@ function responseContractFailures(records) {
           || body.MediaSources.some(source => typeof source.Id !== 'string' || typeof source.Protocol !== 'string')
           || (body.MediaSources.length > 0 ? !/^[a-f0-9]{32}$/u.test(body.PlaySessionId ?? '')
             : body.ErrorCode !== 'NoCompatibleStream' || body.PlaySessionId != null)) failures.push(`${label} playback info JSON shape is invalid`);
-      } else if (testCase.action === 'named-detail' || testCase.action === 'dto-detail') {
+      } else if (testCase.action === 'named-detail' || testCase.action === 'dto-detail' || testCase.action === 'live-tv-program') {
         if (response.contentType !== 'application/json; charset=utf-8' || !body
           || typeof body.Id !== 'string' || body.Type !== testCase.itemType) failures.push(`${label} named detail JSON shape is invalid`);
       } else if (testCase.action === 'studio-name') {
@@ -848,7 +859,7 @@ function responseContractFailures(records) {
         || !body || typeof body !== 'object' || Array.isArray(body)
         || stable(Object.keys(body).sort()) !== stable(['Items', 'StartIndex', 'TotalRecordCount'].sort())
         || !Array.isArray(body.Items) || !Number.isInteger(body.StartIndex)
-        || body.StartIndex < 0 && !['studios-http', 'named-items-http'].includes(scenarioName)
+        || body.StartIndex < 0 && !['studios-http', 'named-items-http', 'live-tv-programs-http'].includes(scenarioName)
         || !Number.isInteger(body.TotalRecordCount) || body.TotalRecordCount < 0) {
         failures.push(`${label} successful list JSON shape is invalid`);
       }
@@ -856,7 +867,7 @@ function responseContractFailures(records) {
       if (response.contentType !== 'application/json; charset=utf-8' || response.bodyJson?.status !== 404) {
         failures.push(`${label} not-found JSON shape is invalid`);
       }
-    } else if (expectedStatus === 403 && testCase.action === 'live-tv-recommended') {
+    } else if (expectedStatus === 403 && testCase.action.startsWith('live-tv-')) {
       if (response.bodyText !== '' || response.contentType != null) failures.push(`${label} forbidden response is not empty`);
     } else if (expectedStatus === 401) {
       if (response.contentType !== 'application/json; charset=utf-8'
@@ -1059,8 +1070,11 @@ try {
     for (const endpoint of testCase.endpoints ?? ['items', 'legacy']) {
       const before = scenario.menuLifecycle || scenario.namedLifecycle ? { database: databaseSnapshot(), filesystem: await filesystemSnapshot() } : null;
       const route = routeFor(endpoint, testCase, userId);
-      const response = await request(route, { token: testCase.auth === 'apiKey' ? apiKey : userToken });
-      records.push({ name: testCase.name, query: testCase.query, scope: testCase.scope, endpoint, route, response });
+      const requestDescription = { method: testCase.method ?? 'GET', ...(Object.hasOwn(testCase, 'body')
+        ? { body: JSON.parse(JSON.stringify(testCase.body).replaceAll(fixture.userId, userId)) } : {}) };
+      const response = await request(route, { token: testCase.auth === 'apiKey' ? apiKey : userToken, ...requestDescription });
+      records.push({ name: testCase.name, query: testCase.query, scope: testCase.scope, endpoint, route, response,
+        ...(testCase.action?.startsWith('live-tv-program') ? { request: requestDescription } : {}) });
       caseStages.push(scenario.menuLifecycle || scenario.namedLifecycle ? { name: testCase.name, endpoint, before,
         after: { database: databaseSnapshot(), filesystem: await filesystemSnapshot() } } : { name: testCase.name, endpoint });
       if (records.length % 50 === 0) console.log(JSON.stringify({ scenario: scenarioName, recorded: records.length, total: expectedMatrixCount }));

@@ -32,6 +32,7 @@ const nativeDateTextKey = expression => `CASE WHEN ${expression} IS NULL THEN NU
 const SUPPORTED_FILTERS = new Set([
   'ids', 'excludeitemids', 'includeitemtypes', 'excludeitemtypes', 'mediatypes', 'years',
   'indexnumber', 'parentindexnumber', 'islocked', 'isseries', 'isfolder', 'ismovie', 'isairing', 'hasaired',
+  'channelids', 'minstartdate', 'maxstartdate', 'minenddate', 'maxenddate', 'externalseriesid', 'name',
   'hasdeadparentid', 'isdeadgenre', 'isdeadstudio',
   'mincommunityrating', 'mincriticrating', 'minpremieredate', 'maxpremieredate',
   'mindatelastsaved', 'mindatelastsavedforuser', 'hasoverview', 'hasimdbid', 'hastmdbid',
@@ -679,6 +680,14 @@ export function buildPostgresItemPageQuery(database, query, {
   }
 
   if (query.ids?.length) predicates.push(`${normalizedId('i."Id"')} = ANY(${bindIdArray(query.ids, 'ids')})`);
+  if (query.channelids?.length) predicates.push(`${normalizedId('i."ChannelId"')} = ANY(${bindIdArray(query.channelids, 'channelids')})`);
+  if (query.externalseriesid && clrTrimValue(query.externalseriesid)) predicates.push(`i."ExternalSeriesId" = ${bind(nativeTextBytes(query.externalseriesid))}`);
+  if (query.name && clrTrimValue(query.name)) predicates.push(`i."CleanName" = ${bind(nativeTextBytes(cleanValue(query.name)))}`);
+  for (const [key, column, operator] of [['minstartdate', 'StartDate', '>='], ['maxstartdate', 'StartDate', '<='],
+    ['minenddate', 'EndDate', '>='], ['maxenddate', 'EndDate', '<=']]) {
+    if (query[key] == null || key === 'minenddate' && query.hasaired === false || key === 'maxenddate' && query.hasaired === true) continue;
+    predicates.push(`${nativeDateKey(`i.${q(column)}`)} ${operator} ${bind(query[key])}`);
+  }
   if (query.excludeitemids?.length) predicates.push(`NOT (${normalizedId('i."Id"')} = ANY(${bindIdArray(query.excludeitemids, 'excludeitemids')}))`);
   if (query.includeitemtypes?.length) predicates.push(`${leafType('i')} = ANY(${bindTextArray(query.includeitemtypes, 'includeitemtypes')})`);
   else if (query.excludeitemtypes?.length) predicates.push(`NOT (${leafType('i')} = ANY(${bindTextArray(query.excludeitemtypes, 'excludeitemtypes')}))`);

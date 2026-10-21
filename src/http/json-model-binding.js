@@ -92,14 +92,22 @@ export function bindJsonModel(body, { schema, root, source = body?.[Symbol.for('
       if (rule.delimiter && typeof value === 'string' && rule.item.type === 'enum') {
         const result = [];
         for (const part of value.split(rule.delimiter).filter(Boolean)) {
-          const text = part.trim();
+          const text = clrTrim(part);
           let numeric;
           if (/^[+-]?\d+$/.test(text)) numeric = Number(text);
-          else numeric = Object.entries(rule.item.values).find(([name]) => name.toLowerCase() === text.toLowerCase())?.[1];
+          else numeric = Object.entries(rule.item.values).find(([name]) => ordinalIgnoreCaseEquals(name, text))?.[1];
           if (!Number.isInteger(numeric) || numeric < -2147483648 || numeric > 2147483647) continue;
           result.push(Object.entries(rule.item.values).find(([,entry]) => entry === numeric)?.[0] ?? numeric);
         }
         return result;
+      }
+      if (rule.delimiter && typeof value === 'string' && ['guid', 'string'].includes(rule.item.type)) {
+        return value.split(rule.delimiter).filter(Boolean).flatMap(part => {
+          const text = clrTrim(part);
+          if (rule.item.type === 'string') return [text];
+          try { return [nativeGuid(text).replaceAll('-', '').toLowerCase()]; }
+          catch { return []; }
+        });
       }
       return failure();
     }

@@ -5,9 +5,35 @@ import { md5Guid, lowerInvariant } from '../core/identity.js';
 import { idKey, libraryError } from './records.js';
 import { liveTvStateKey } from './live-tv-state.js';
 import { resolvePostgresSearchCollation, releasePostgresSearchCollation } from './postgres-search-provider.js';
+import { clrTrim } from '../metadata/whitespace.js';
 
 const internalId = value => md5Guid(lowerInvariant('Emby' + (value ?? '') + '4'));
 const string = value => value == null ? null : decodeNativeTextBytes(Buffer.from(value, 'hex'));
+
+/** Select a series filter by its public id without loading the saved collection. */
+export async function queryPostgresSeriesTimerProgramFilter(database, id) {
+  const state = `${q(database.controlSchema)}.state`;
+  const metadata = (await database.client.query({ text: `SELECT
+    jsonb_array_length(value::jsonb->'seriesTimers'->'rows') AS count,
+    EXISTS (SELECT 1 FROM jsonb_array_elements(value::jsonb->'seriesTimers'->'rows') entry WHERE entry = 'null'::jsonb) AS fault
+    FROM ${state} WHERE key = $1`, values: [liveTvStateKey] })).rows[0];
+  if (metadata?.fault) throw libraryError(500, 'Invalid null Live TV state entry.');
+  if (!Number(metadata?.count) || !/^[a-f0-9]{32}$/iu.test(id)) return null;
+  let collation, primaryError;
+  try {
+    collation = await resolvePostgresSearchCollation(database, 'und', { numeric: true });
+    const sql = nativeTextSql(database.schemaName);
+    const name = `replace(replace(${sql.projection("decode(entry.value->>'name', 'hex')")}, chr(1) || '0', ''), chr(1) || '1', '')`;
+    const result = await database.client.query({ text: `SELECT entry.value->>'seriesId' AS series_id
+      FROM ${state} saved, jsonb_array_elements(saved.value::jsonb->'seriesTimers'->'rows') WITH ORDINALITY entry(value, ordinal)
+      WHERE key = $1 AND entry.value->>'internalId' = $2
+      ORDER BY ${name} COLLATE ${q(collation.schema)}.${q(collation.name)} ASC NULLS FIRST, entry.ordinal LIMIT 1`,
+    values: [liveTvStateKey, id.toLowerCase()] });
+    const value = result.rows[0] && string(result.rows[0].series_id);
+    return value != null && clrTrim(value) ? value : null;
+  } catch (error) { primaryError = error; throw error; }
+  finally { await releasePostgresSearchCollation(collation, primaryError); }
+}
 
 /** Resolve only the DTO page. Timer matching and stable winners stay in SQL. */
 export async function queryPostgresProgramRecordingInfo(database, ids) {

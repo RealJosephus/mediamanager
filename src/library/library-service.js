@@ -13,7 +13,7 @@ import { dtoOptions, prefetchPostgresDtoRelations, projectItem, projectUserData,
 import { sortMediaSources } from './media-versions.js';
 import { nativeContainsSubPath, nativePathWithin, sameNativePath } from './native-path.js';
 import { nativeArtistIdentity, nativeGenreIdentity, nativeMusicGenreIdentity, nativeStudioIdentity, nativeUserSubviewIdentity } from './identity.js';
-import { nativeDateFromUnixNanoseconds } from '../users/native.js';
+import { nativeDateFromUnixNanoseconds, nativeGuid } from '../users/native.js';
 import { newNativeItemEntity, isNativeItemEntity, acquireNativeItemLinkOwner } from './native-item-entity.js';
 import { BoundedItemCache } from './bounded-item-cache.js';
 import { MetadataImageAssets } from '../metadata/image-assets.js';
@@ -44,8 +44,8 @@ import { NativeItemJsonError } from './native-item-data.js';
 import { postgresUpcomingScope, queryPostgresSeriesSeasonPage, queryPostgresUpcomingEpisodePage } from './postgres-shows-query.js';
 import { queryPostgresNextUpPage } from './postgres-next-up-query.js';
 import { queryPostgresLatestItems } from './postgres-latest-items-query.js';
-import { queryPostgresRecommendedPrograms } from './postgres-live-tv-query.js';
-import { queryPostgresProgramRecordingInfo } from './postgres-live-tv-state-query.js';
+import { queryPostgresRecommendedPrograms, queryPostgresPrograms } from './postgres-live-tv-query.js';
+import { queryPostgresProgramRecordingInfo, queryPostgresSeriesTimerProgramFilter } from './postgres-live-tv-state-query.js';
 import { queryPostgresNamedItemPage, queryPostgresNamedItemCounts, queryPostgresNamedSlug } from './postgres-named-items-query.js';
 import { dtoItemCountKinds, queryPostgresDtoItemCounts } from './postgres-dto-item-counts-query.js';
 import { queryPostgresItemFilters } from './postgres-item-filters-query.js';
@@ -848,13 +848,36 @@ export class LibraryService extends EventEmitter {
   }
 
   async queryRecommendedPrograms(input = {}, { user = null } = {}) {
+    return this.#queryLiveTvPrograms(input, { user, recommended: true });
+  }
+
+  async queryLiveTvPrograms(input = {}, { user = null } = {}) {
+    return this.#queryLiveTvPrograms(input, { user });
+  }
+
+  async #queryLiveTvPrograms(input, { user, recommended = false }) {
     return this.#runWithStates(async db => {
       const navigationRows = await loadPostgresNavigationRows(db);
       const navigation = await this.load(db, user, { includeUserData: false, baseRows: navigationRows });
       const root = await this.userViews.global('livetv', this.options.localization?.text('HeaderLiveTV') ?? 'Live TV', db, navigation);
       const { topParentIds: _topParentIds, libraryTopParentIds: _libraryTopParentIds,
         ...visibility } = this.#postgresVisibility(navigation, user) ?? {};
-      const page = await queryPostgresRecommendedPrograms(db, input, {
+      let query = input;
+      if (!recommended) {
+        const { libraryseriesid, seriestimerid, ...filters } = input;
+        query = filters;
+        if (nonemptyId(libraryseriesid)) {
+          query.isseries = true;
+          const [series] = await loadPostgresRowsByIds(db, [libraryseriesid]);
+          if (series?.Type === 'MediaBrowser.Controller.Entities.TV.Series') query.name = series.Name;
+        }
+        if (seriestimerid && clrTrim(seriestimerid)) {
+          const external = await queryPostgresSeriesTimerProgramFilter(db, seriestimerid);
+          if (external === null) return { Items: [], TotalRecordCount: 0, StartIndex: 0 };
+          query.externalseriesid = external;
+        }
+      }
+      const page = await (recommended ? queryPostgresRecommendedPrograms : queryPostgresPrograms)(db, query, {
         rootId: root.Id, userId: user?.Id, visibility, configuration: this.options.configuration,
       });
       const rows = page.rows ?? await loadPostgresRowsByIds(db, page.ids);
@@ -874,8 +897,27 @@ export class LibraryService extends EventEmitter {
       await this.#prefetchPostgresDtos(visible, state, user, options);
       const items = [];
       for (const item of visible) items.push(await projectItem(item, state, user, options, this.options));
-      return { Items: items, TotalRecordCount: input.isairing !== true && input.enabletotalrecordcount === false
+      return { Items: items, TotalRecordCount: (!recommended || input.isairing !== true) && input.enabletotalrecordcount === false
         ? orderedRows.length : page.total, StartIndex: input.startindex ?? 0 };
+    });
+  }
+
+  async getLiveTvProgram(id, { user = null } = {}) {
+    let normalized;
+    try { normalized = nativeGuid(id); }
+    catch { throw libraryError(500, 'Invalid program id.'); }
+    return this.#runWithStates(async db => {
+      const [row] = await loadPostgresRowsByIds(db, [normalized]);
+      if (!row) return null;
+      const related = nonemptyId(row.ChannelId) ? [row.ChannelId] : [];
+      const state = await this.#loadPostgresItemState(db, [normalized, ...related], user);
+      const item = state.byId.get(idKey(normalized));
+      if (!item) return null;
+      const options = dtoOptions({}, true);
+      await this.#prefetchPostgresDtos([item], state, user, options);
+      const result = await projectItem(item, state, user, options, this.options);
+      const recordings = await queryPostgresProgramRecordingInfo(db, [item.Id]);
+      return Object.assign(result, recordings.get(idKey(item.Id)));
     });
   }
 

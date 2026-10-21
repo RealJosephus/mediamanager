@@ -7,6 +7,7 @@ import { bindSessionsQuery } from './session-management-binding.js';
 import { bindDevicesUserId, requiredDeviceId, deviceIds, validateDeviceOptionsBody } from './device-binding.js';
 import { bindUserDataBody } from './user-data-binding.js';
 import { bindUserViewPresets } from './user-view-binding.js';
+import { programsBodyBinding } from './live-tv-binding.js';
 import { refreshItemDetail } from './item-detail-refresh.js';
 import { enumName, generalCommands, mediaTypes, itemKinds } from '../sessions/binding.js';
 import { AUTHENTICATION_PROVIDER, PASSWORD_RESET_PROVIDER } from '../users/native.js';
@@ -114,13 +115,12 @@ export function registerDomainRoutes(add, { configuration, authentication, users
     try { return enumName(value, names); }
     catch { throw new BindingError(name, `The value '${value}' is not valid.`); }
   };
-  const dateTime = (context, name) => {
+  const dateTime = (context, name, { repositoryUtc = false } = {}) => {
     const value = query(context, name);
     if (value === undefined || value.trim() === '') return undefined;
-    // MVC's default DateTime binder uses invariant culture and leaves values
-    // without an explicit zone as wall-clock (Kind.Unspecified). Repository
-    // comparisons use those ticks directly, so do not apply the host offset.
-    const parsed = parseInvariantDate(value, { offsetMinutes: () => 0 });
+    // Preserve wall ticks for controller consumers that use them directly.
+    // Programs additionally applies the repository's UTC value conversion.
+    const parsed = parseInvariantDate(value, repositoryUtc ? {} : { offsetMinutes: () => 0 });
     if (parsed == null) throw new BindingError(name, `The value '${value}' is not valid.`);
     return parsed;
   };
@@ -250,6 +250,28 @@ export function registerDomainRoutes(add, { configuration, authentication, users
     const user = await optionalRequestUser(context);
     requireSupportedDtoFields(input, 'Live TV');
     return library.queryRecommendedPrograms(input, { user });
+  }, { policy: 'LiveTvAccess' });
+  add('GET', '/LiveTv/Programs', async context => {
+    const input = { ...controllerDtoOptions(context), channelids: commaGuids(context, 'channelIds'),
+      genreids: commaGuids(context, 'genreIds'), genres: (query(context, 'genres') ?? '').split('|').filter(Boolean),
+      startindex: integer(context, 'startIndex'), limit: integer(context, 'limit'),
+      sortby: commaEnums(context, 'sortBy', itemSortNames).map(String),
+      sortorder: commaEnums(context, 'sortOrder', ['Ascending', 'Descending']).map(String),
+      seriestimerid: query(context, 'seriesTimerId'), libraryseriesid: guid(context, 'librarySeriesId'),
+      enabletotalrecordcount: boolean(context, 'enableTotalRecordCount', true) };
+    for (const name of ['isAiring', 'hasAired', 'isSeries', 'isMovie', 'isNews', 'isKids', 'isSports']) input[name.toLowerCase()] = boolean(context, name);
+    for (const name of ['minStartDate', 'maxStartDate', 'minEndDate', 'maxEndDate']) input[name.toLowerCase()] = dateTime(context, name, { repositoryUtc: true });
+    requireSupportedDtoFields(input, 'Live TV');
+    return library.queryLiveTvPrograms(input, { user: await optionalRequestUser(context) });
+  }, { policy: 'LiveTvAccess' });
+  add('POST', '/LiveTv/Programs', async context => {
+    const input = context.body;
+    requireSupportedDtoFields({ fields: input.fields ?? [] }, 'Live TV');
+    return library.queryLiveTvPrograms(input, { user: input.userid ? await users.getUser(input.userid) : null });
+  }, { policy: 'LiveTvAccess', ...programsBodyBinding({ sortNames: itemSortNames, fields: controllerItemFields, imageTypes: itemImageTypes }) });
+  add('GET', '/LiveTv/Programs/{programId}', async context => {
+    if (!clrTrim(context.params.programId)) throw new BindingError('programId', 'The programId field is required.');
+    return await library.getLiveTvProgram(context.params.programId, { user: await optionalRequestUser(context) }) ?? notFound();
   }, { policy: 'LiveTvAccess' });
   add('GET', '/Shows/Upcoming', async context => {
     const input = {

@@ -1,6 +1,7 @@
 import { nativeTextBytes } from '../database/native-text.js';
 import { decodeNativeJsonArray, NativeItemJsonError } from './native-item-data.js';
 import { MIN_DATE } from './records.js';
+import { md5Guid, lowerInvariant } from '../core/identity.js';
 
 export const liveTvStateKey = 'liveTvNativeState';
 const statuses = ['New', 'InProgress', 'Completed', 'Cancelled', 'ConflictedOk', 'ConflictedNotOk', 'Error'];
@@ -42,6 +43,7 @@ const bytes = value => value == null ? null : Buffer.from(nativeTextBytes(value)
 export function indexLiveTvDocument(kind, text) {
   const decoded = decodeLiveTvDocument(kind, text);
   return { issue: decoded.issue, rows: decoded.entries.map(entry => entry == null ? null : {
+    internalId: md5Guid(lowerInvariant('Emby' + (entry.Id ?? '') + '4')),
     id: bytes(entry.Id), name: bytes(entry.Name), programId: bytes(entry.ProgramId), seriesId: bytes(entry.SeriesId),
     seriesTimerId: bytes(entry.SeriesTimerId), startDate: entry.StartDate, status: String(entry.Status),
   }) };

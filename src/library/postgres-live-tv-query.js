@@ -4,6 +4,15 @@ import { decodeNativeTextBytes, nativeTextBytes } from '../database/native-text.
 import { buildPostgresItemPageQuery, queryPostgresItemPage } from '../database/postgres-item-query.js';
 import { libraryError } from './records.js';
 
+export async function queryPostgresPrograms(database, query, { rootId, userId, visibility } = {}) {
+  return queryPostgresItemPage(database, { ...query, includeitemtypes: ['LiveTvProgram'],
+    startindex: Math.max(0, query.startindex ?? 0),
+    sortby: query.sortby?.length ? query.sortby : ['StartDate'],
+    sortorder: query.sortby?.length ? query.sortorder : ['Ascending'] }, {
+    scope: { topParentIds: [rootId] }, userId, visibility, includeOwnedItems: true, includeAlternateVersions: true,
+  });
+}
+
 /** The repository window and recommendation manager's stable scoring stay in SQL. */
 export async function queryPostgresRecommendedPrograms(database, query, {
   rootId, userId, visibility, configuration = {},
