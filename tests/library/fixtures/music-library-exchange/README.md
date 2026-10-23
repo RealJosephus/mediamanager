@@ -9,8 +9,14 @@ The initial Native scan resolves one artist folder, one album folder and two
 real WAV tracks. PostgreSQL imports the complete stopped database; the production
 Node entry point scans a third track, saves album and track metadata through HTTP,
 writes the album NFO, favorites a retained track and deletes another track through
-HTTP. A subsequent actual scan updates the remaining music hierarchy and
-aggregates. A newly opened PostgreSQL connection and newly started production runtime
+HTTP. A subsequent actual scan updates the remaining music hierarchy. Each scan
+is followed by the real HTTP FullRefresh of its physical Artist on that runtime;
+the test waits for the public runtime and genre aggregates to reflect all current
+tracks. A physical Artist can be refreshed before the first track probe, and the
+Native post-scan Artist validator skips an Artist that was already refreshed.
+The explicit user refresh is therefore part of this scenario's preparation, not
+an assumption that every scan reruns Artist aggregation. A newly opened PostgreSQL
+connection and newly started production runtime
 must read those changes. The complete exported SQLite database is then installed
 in the stopped private Native clone. Native reads all Node changes, scans a fourth
 track, saves further metadata and NFO changes, and stops. A fresh PostgreSQL schema
@@ -37,7 +43,8 @@ album asset must retain their exact bytes. Album NFO checks use its real title a
 review fields and preserve its complete raw bytes in the report.
 
 The output retains original input JSON and WAV bytes as base64, HTTP requests and
-responses, actual scan task results, Native source/build bindings and process
+responses, actual scan task results and Artist aggregate refresh observations,
+Native source/build bindings and process
 logs, full exchange digests, music row snapshots, NFO bytes, proxy observations
 and cleanup outcomes. Only filtered reports are published; private instance
 databases and credentials are removed after all owners stop. This test does not

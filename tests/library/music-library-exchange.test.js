@@ -33,7 +33,7 @@ test('Actual music scan, PostgreSQL edits and deletion survive cold restart, Nat
   await mkdir(output.root);
   const root = await realpath(output.root), instanceRoot = path.join(root, 'instance');
   const nativePort = await unusedPort(), nativeOrigin = `http://127.0.0.1:${nativePort}`;
-  const report = { schemaVersion: 1, inputSha256: sha(inputBytes), requests: [], scans: [], snapshots: {}, cleanup: [], errors: [],
+  const report = { schemaVersion: 1, inputSha256: sha(inputBytes), requests: [], scans: [], aggregateRefreshes: [], snapshots: {}, cleanup: [], errors: [],
     phaseAcceptance: false, releaseAcceptance: false, completeLibraryVerified: false, fullInstanceVerified: false,
     scope: 'Actual Artist, Album and tagged PCM WAV scans; Node audio creation, HTTP metadata/NFO saves, favorite and deletion; production cold restart; complete SQLite export; actual Native scan and edit continuation; fresh PostgreSQL import. No other music formats, playback, arbitrary library shapes, state-package or production-scale claim.' };
   let current, native, runtime, database, returnedDatabase, sqlite, proxy, media, token, nodeOrigin, failure, safeToRemove = true;
@@ -107,6 +107,34 @@ test('Actual music scan, PostgreSQL edits and deletion survive cold restart, Nat
       return full;
     } finally { sqlite.close(); sqlite = undefined; }
   };
+  const refreshArtistAggregate = async (origin, present, label) => {
+    const scanned = await request(origin, '/Items?Recursive=true&IncludeItemTypes=MusicArtist,MusicAlbum,Audio'
+      + '&Fields=Path,Overview,Tags,ProviderIds,Genres,MediaStreams,MediaSources,ParentId');
+    assert.equal(scanned.status, 200);
+    const matches = scanned.bodyJson.Items.filter(item => item.Path === media.artistRoot);
+    assert.equal(matches.length, 1, 'The real scan must resolve the physical Artist before its aggregate refresh.');
+    const before = matches[0];
+    if (identities.artist) assert.equal(idKey(before.Id), identities.artist);
+    const totalTicks = present.reduce((total, index) => total + input.tracks[index].seconds * 10000000, 0);
+    assert.ok(Number.isSafeInteger(totalTicks) && totalTicks > 0, 'The aggregate refresh needs a nonzero exact media duration.');
+    const observation = { label, present, before, targetRunTimeTicks: totalTicks, aggregateObserved: false };
+    report.aggregateRefreshes.push(observation);
+    // A physical Artist can be refreshed before its tracks are probed. The
+    // Native post-scan validator skips an already-refreshed Artist, so a scan
+    // alone does not promise an updated cumulative runtime or inherited genres.
+    // Use the actual user refresh on both runtimes, after all tracks exist.
+    assert.equal((await request(origin, '/Items/' + before.Id
+      + '/Refresh?metadataRefreshMode=FullRefresh&imageRefreshMode=None', { method: 'POST' })).status, 204);
+    const deadline = Date.now() + 120000;
+    while (true) {
+      const after = await request(origin, '/Items/' + before.Id); assert.equal(after.status, 200);
+      if (after.bodyJson.RunTimeTicks === totalTicks && after.bodyJson.Genres?.length === 1 && after.bodyJson.Genres[0] === input.genre) {
+        Object.assign(observation, { after: after.bodyJson, aggregateObserved: true }); return;
+      }
+      assert.ok(Date.now() < deadline, 'The actual Artist refresh must publish the complete current track runtime and genres.');
+      await delay(100);
+    }
+  };
   const readLibrary = async (origin, present, { albumOverview, trackOverview, favorite = false } = {}) => {
     const listed = await request(origin, '/Items?Recursive=true&IncludeItemTypes=MusicArtist,MusicAlbum,Audio'
       + '&Fields=Path,Overview,Tags,ProviderIds,Genres,MediaStreams,MediaSources,ParentId');
@@ -125,7 +153,7 @@ test('Actual music scan, PostgreSQL edits and deletion survive cold restart, Nat
     }
     assert.equal(idKey(album.ParentId), identities.artist);
     const totalTicks = present.reduce((total, index) => total + input.tracks[index].seconds * 10000000, 0);
-    assert.equal(artist.RunTimeTicks, totalTicks, 'The actual Artist task must aggregate the scanned audio children.');
+    assert.equal(artist.RunTimeTicks, totalTicks, 'The actual Artist refresh must aggregate the scanned audio children.');
     assert.deepEqual(artist.Genres, [input.genre]);
     const albumRead = await request(origin, '/Items/' + identities.album); assert.equal(albumRead.status, 200);
     assert.equal(albumRead.bodyJson.RunTimeTicks, totalTicks); assert.deepEqual(albumRead.bodyJson.Genres, [input.genre]);
@@ -186,6 +214,9 @@ test('Actual music scan, PostgreSQL edits and deletion survive cold restart, Nat
       'Emby.Server.Implementations/Library/Resolvers/Audio/MusicArtistResolver.cs',
       'Emby.Server.Implementations/Library/Resolvers/Audio/MusicAlbumResolver.cs',
       'MediaBrowser.Providers/MediaInfo/AudioFileProber.cs', 'MediaBrowser.Providers/Music/AlbumMetadataService.cs',
+      'Emby.Server.Implementations/Library/Validators/ArtistsValidator.cs', 'Jellyfin.Api/Controllers/ItemRefreshController.cs',
+      'MediaBrowser.Providers/Manager/ProviderManager.cs', 'MediaBrowser.Providers/Manager/MetadataService.cs',
+      'MediaBrowser.Providers/Music/ArtistMetadataService.cs', 'MediaBrowser.Controller/Entities/Audio/MusicArtist.cs',
       'MediaBrowser.XbmcMetadata/Providers/AlbumNfoProvider.cs', 'MediaBrowser.XbmcMetadata/Savers/AlbumNfoSaver.cs']);
     await cp(current.sourceRoot, instanceRoot, { recursive: true, force: false, errorOnExist: true });
     await current.prepareClone(instanceRoot, nativePort); report.syntheticPreparation = removeSyntheticPreparation(instanceRoot);
@@ -210,6 +241,7 @@ test('Actual music scan, PostgreSQL edits and deletion survive cold restart, Nat
     assert.equal((await request(nativeOrigin, '/Library/VirtualFolders?name=' + encodeURIComponent(input.libraryName)
       + '&collectionType=music&refreshLibrary=false', { method: 'POST', body: { LibraryOptions: libraryOptions } })).status, 204);
     await scan(nativeOrigin, 'native-initial-two-tracks');
+    await refreshArtistAggregate(nativeOrigin, [0, 1], 'native-initial-two-tracks');
     report.nativeInitialReads = await readLibrary(nativeOrigin, [0, 1]);
     for (const index of [0, 1]) assert.ok(proxy.report.requests.some(entry => entry.filename === media.files[index]
       && [200, 206].includes(entry.status) && entry.bodyBytes > 0), 'Native must probe each real initial WAV through its designated media path.');
@@ -244,6 +276,7 @@ test('Actual music scan, PostgreSQL edits and deletion survive cold restart, Nat
     assert.deepEqual(report.snapshots.postgresImported, initialFull);
     await startNode(database); report.nodeInitialReads = await readLibrary(nodeOrigin, [0, 1]);
     await addTrack(media, 2); await scan(nodeOrigin, 'node-add-third-track');
+    await refreshArtistAggregate(nodeOrigin, [0, 1, 2], 'node-add-third-track');
     report.nodeAddedReads = await readLibrary(nodeOrigin, [0, 1, 2]);
     report.nodeAddedProbeRows = await assertProbeRows(database, [0, 1, 2]);
     await saveMetadata(nodeOrigin, identities.album, { Overview: input.nodeAlbumOverview });
@@ -251,6 +284,7 @@ test('Actual music scan, PostgreSQL edits and deletion survive cold restart, Nat
     assert.equal((await request(nodeOrigin, '/UserFavoriteItems/' + identities.tracks[0], { method: 'POST' })).status, 200);
     assert.equal((await request(nodeOrigin, '/Items/' + identities.tracks[1], { method: 'DELETE' })).status, 204);
     await scan(nodeOrigin, 'node-after-track-deletion');
+    await refreshArtistAggregate(nodeOrigin, [0, 2], 'node-after-track-deletion');
     const nodeExpected = { albumOverview: input.nodeAlbumOverview, trackOverview: input.nodeTrackOverview, favorite: true };
     report.nodeChangedReads = await readLibrary(nodeOrigin, [0, 2], nodeExpected);
     report.nodeAlbumNfo = await albumNfoSnapshot(media, input.nodeAlbumOverview);
@@ -277,6 +311,7 @@ test('Actual music scan, PostgreSQL edits and deletion survive cold restart, Nat
     report.nativeImportedAssets = await assetSnapshot(media, [0, 2]);
     report.nativeImportedAlbumNfo = await albumNfoSnapshot(media, input.nodeAlbumOverview);
     await addTrack(media, 3); await scan(nativeOrigin, 'native-add-fourth-track');
+    await refreshArtistAggregate(nativeOrigin, [0, 2, 3], 'native-add-fourth-track');
     report.nativeAddedReads = await readLibrary(nativeOrigin, [0, 2, 3], nodeExpected);
     assert.ok(proxy.report.requests.some(entry => entry.filename === media.files[3]
       && [200, 206].includes(entry.status) && entry.bodyBytes > 0), 'Native continuation must probe its newly added real WAV.');
