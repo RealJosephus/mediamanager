@@ -173,11 +173,18 @@ export function analyzeJavaScriptDependencies(source) {
   const childProcessNamespaces = new Set();
   const unsupportedExecutionNames = new Set();
   const unsafeRuntimeLoads = [];
+  const processNamespaces = new Set(['process']);
+  const runtimeModuleMembers = new Set(['getBuiltinModule', 'binding', '_linkedBinding', 'dlopen']);
   const workerNames = new Set();
   const validationExecutableNames = new Set(['validationExecutable']);
   for (const { node } of nodes) {
     if (node.type !== 'ImportDeclaration') continue;
     const moduleName = String(node.source.value).replace(/^node:/u, '');
+    if (moduleName === 'process') for (const specifier of node.specifiers) {
+      if (specifier.type !== 'ImportSpecifier' || specifier.imported.name === 'default') {
+        processNamespaces.add(specifier.local.name);
+      } else if (runtimeModuleMembers.has(specifier.imported.name)) unsafeRuntimeLoads.push(specifier);
+    }
     if (['cluster', 'vm', 'inspector', 'repl'].includes(moduleName)) unsafeRuntimeLoads.push(node);
     if (moduleName === 'worker_threads') {
       if (node.specifiers.some(specifier => specifier.type !== 'ImportSpecifier'
@@ -341,6 +348,35 @@ export function analyzeJavaScriptDependencies(source) {
     const value = { kind, reason, start: node.start, end: node.end };
     unresolved.set(`${kind}:${node.start}:${node.end}:${reason}`, value);
   };
+  const isProcessNamespace = node => node?.type === 'Identifier' && processNamespaces.has(node.name)
+    || node?.type === 'MemberExpression' && node.object?.type === 'Identifier'
+      && node.object.name === 'globalThis' && memberName(node) === 'process'
+    || node?.type === 'MemberExpression' && memberName(node) === 'default' && isProcessNamespace(node.object)
+    || node?.type === 'CallExpression' && node.callee?.type === 'Identifier' && requireNames.has(node.callee.name)
+      && ['process', 'node:process'].includes(staticSpecifier(node.arguments[0]))
+    || node?.type === 'ImportExpression' && ['process', 'node:process'].includes(staticSpecifier(node.source))
+    || node?.type === 'AwaitExpression' && isProcessNamespace(node.argument);
+  // Follow process receivers so ordinary data fields such as report.binding
+  // do not become unresolved executable dependencies.
+  for (let changed = true; changed;) {
+    changed = false;
+    for (const { node } of nodes) {
+      const target = node.type === 'VariableDeclarator' ? node.id : node.type === 'AssignmentExpression' ? node.left : null;
+      const value = node.type === 'VariableDeclarator' ? node.init : node.type === 'AssignmentExpression' ? node.right : null;
+      const names = target?.type === 'Identifier' && isProcessNamespace(value) ? [target.name]
+        : target?.type === 'ObjectPattern' && value?.type === 'Identifier' && value.name === 'globalThis'
+          ? target.properties.filter(property => propertyKeyName(property) === 'process' && property.value?.type === 'Identifier')
+            .map(property => property.value.name) : [];
+      for (const name of names) if (!processNamespaces.has(name)) { processNamespaces.add(name); changed = true; }
+    }
+  }
+  for (const { node } of nodes) {
+    const target = node.type === 'VariableDeclarator' ? node.id : node.type === 'AssignmentExpression' ? node.left : null;
+    const value = node.type === 'VariableDeclarator' ? node.init : node.type === 'AssignmentExpression' ? node.right : null;
+    if (target?.type === 'ObjectPattern' && isProcessNamespace(value)) for (const property of target.properties) {
+      if (runtimeModuleMembers.has(propertyKeyName(property))) unresolvedCapability('runtime-module', property, 'runtime-module-capability');
+    }
+  }
   for (const node of unsafeRuntimeLoads) unresolvedCapability('runtime-module', node, 'unsupported-execution-runtime');
   for (const [name, declarations] of declarationLists) {
     if (declarations.length < 2) continue;
@@ -381,7 +417,7 @@ export function analyzeJavaScriptDependencies(source) {
       if (!propertyKey) unresolvedCapability('dynamic-code', node, 'dynamic-code-evaluation');
     }
     if (node.type === 'MemberExpression'
-      && ['getBuiltinModule', 'binding', '_linkedBinding', 'dlopen'].includes(memberName(node))) {
+      && isProcessNamespace(node.object) && runtimeModuleMembers.has(memberName(node))) {
       unresolvedCapability('runtime-module', node, 'runtime-module-capability');
     }
     if (node.type === 'MemberExpression' && node.object?.type === 'Identifier' && node.object.name === 'process'

@@ -157,6 +157,34 @@ test('dependency parser covers compact modules, static dynamic imports, CommonJS
     .unresolvedImports[0].reason, 'unsupported-url-specifier');
 });
 
+test('dependency analysis distinguishes ordinary binding data from process module capabilities', () => {
+  const ordinary = analyzeJavaScriptDependencies(`
+    const report = {};
+    report.binding = { serverId: 'isolated', originIdentityDigest: 'recorded' };
+    await transferDatabase(source, destination, { instanceBinding: report.binding });
+    const { binding } = report;
+    report.getBuiltinModule = 'diagnostic';
+    observe(binding, report.getBuiltinModule);
+  `);
+  assert.deepEqual(ordinary.unresolvedImports, []);
+  assert.deepEqual(ordinary.unresolvedExecutables, []);
+  for (const source of [
+    "process.binding('fs')",
+    "process['getBuiltinModule']('node:fs')",
+    "globalThis.process.dlopen(module, filename)",
+    "const p = process; const alias = p; alias._linkedBinding('hidden')",
+    "let p; p = process; p.binding('fs')",
+    "const { process: p } = globalThis; p.binding('fs')",
+    "import p from 'node:process'; p.binding('fs')",
+    "import * as p from 'process'; p.default.binding('fs')",
+    "import { getBuiltinModule as load } from 'node:process'; load('fs')",
+    "const p = require('node:process'); p.binding('fs')",
+    "const p = await import('node:process'); p.getBuiltinModule('fs')",
+    "const { binding: load } = process; load('fs')",
+    "let load; ({ binding: load } = globalThis.process); load('fs')",
+  ]) assert.ok(analyzeJavaScriptDependencies(source).unresolvedImports.some(entry => entry.kind === 'runtime-module'), source);
+});
+
 test('local dependency resolution binds query imports and rejects missing, outside and linked targets', async t => {
   const temporary = await mkdtemp(path.join(os.tmpdir(), 'mediamanager-import-resolution-'));
   t.after(async () => { await rm(temporary, { recursive: true, force: true }); });
