@@ -8,7 +8,8 @@ import { idKey, nonemptyId } from './records.js';
 
 function request(query) {
   const names = { IsFolder: 'isfolder', IsPlayed: 'isplayed', IsFavorite: 'isfavorite', IsResumable: 'isresumable',
-    IsLiked: 'likes', IsFavoriteOrLiked: 'favoriteorlikes', ChannelIds: 'channelids', EnableTotalRecordCount: 'enabletotalrecordcount' };
+    IsLiked: 'likes', IsFavoriteOrLiked: 'favoriteorlikes', ChannelIds: 'channelids', IncludeItemTypes: 'includeitemtypes',
+    EnableTotalRecordCount: 'enabletotalrecordcount' };
   const input = Object.fromEntries(Object.entries(names).filter(([name]) => query[name] != null).map(([name, key]) => [key, query[name]]));
   input.startindex = Math.max(0, query.StartIndex ?? 0);
   input.limit = query.Limit ?? undefined;
@@ -16,6 +17,12 @@ function request(query) {
     input.sortby = query.OrderBy.map(order => order[0]); input.sortorder = query.OrderBy.map(order => order[1]);
   }
   return input;
+}
+
+export function buildPostgresChannelItemsQuery(database, query, { userId, visibility, scope = {} } = {}) {
+  return buildPostgresItemPageQuery(database, request(query), { userId, visibility,
+    scope: { ...scope, ...(nonemptyId(query.ParentId) ? { parentId: query.ParentId } : {}) },
+    groupByPresentationKey: Boolean(userId) && query.IsResumable !== true && query.GroupByPresentationUniqueKey !== false, includeOrdinal: true });
 }
 
 /** Capture the repository selection before the first DTO or deletion effect.
@@ -27,9 +34,7 @@ async function capture(database, query, liveIds, { userId, visibility, scope = {
   if (liveIds !== undefined && (!Array.isArray(liveIds) || liveIds.some(id => typeof id !== 'string'))) {
     throw new TypeError('Stale channel selection requires finite native identities.');
   }
-  const source = buildPostgresItemPageQuery(database, request(query), { userId, visibility,
-    scope: { ...scope, ...(nonemptyId(query.ParentId) ? { parentId: query.ParentId } : {}) },
-    groupByPresentationKey: Boolean(userId) && query.IsResumable !== true && query.GroupByPresentationUniqueKey !== false, includeOrdinal: true });
+  const source = buildPostgresChannelItemsQuery(database, query, { userId, visibility, scope });
   const name = 'mm_channel_items_' + randomUUID().replaceAll('-', ''), captured = `${q('pg_temp')}.${q(name)}`;
   const table = `${q(database.schemaName)}.${q('BaseItems')}`, values = [...source.values];
   let closing, attempted = false;

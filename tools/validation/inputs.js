@@ -56,6 +56,7 @@ const executionManifests = new Map([
   ['tests/metadata/nfo-scalar-provider.test.js', ['current-oracle', 'tests/metadata/fixtures/nfo-scalar-provider/current-profile.json']],
   ['tests/consumer-contracts/consumer-readers.test.js', ['current-oracle', 'tests/consumer-contracts/fixtures/readers/current-profile.json']],
   ['tests/metadata/local-xml-stream.test.js', ['current-oracle', 'tests/metadata/fixtures/local-xml-save-current/current-profile.json']],
+  ['tests/library/channel-parent-latest-native.test.js', ['current-oracle', 'tests/library/fixtures/channel-parent-latest/current-profile.json']],
   ['tests/consumer-contracts/date-roundtrip.test.js', ['consumer', 'date-roundtrip']],
   ['tests/metadata/playlist-items.test.js', ['consumer', 'playlist-layouts']],
   ...['local-xml-provider', 'nfo-episode-blocks']

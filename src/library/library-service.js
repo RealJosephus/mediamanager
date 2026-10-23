@@ -1680,64 +1680,79 @@ export class LibraryService extends EventEmitter {
       const navigationGraph = await loadPostgresPageGraph(db, requestedRows, navigationRows);
       const navigation = await this.load(db, user, { includeUserData: false, baseRows: navigationGraph });
       const parent = navigation.byId.get(idKey(input.parentId));
-      if (parent?.Type === 'Channel') throw unsupported('Channel latest media');
-      let parents = parent?.IsFolder ? [parent] : [];
-      let isPlayed = input.isPlayed ?? (user.Configuration.HidePlayedInLatest ? false : undefined);
-      // The source clears the played filter only for an explicit music collection,
-      // before it falls back to the user root's authorized folders.
-      if (parents.some(item => item.Type === 'CollectionFolder' && collectionType(item) === 'music')) isPlayed = undefined;
-      const rootFolders = await this.navigationChildren(navigation, user);
-      const isCollection = item => ['CollectionFolder', 'PlaylistsFolder', 'BasePluginFolder'].includes(item.Type);
-      if (!parents.length) parents = rootFolders.filter(item => item.IsFolder
-        && !user.Configuration.LatestItemsExcludes.some(id => sameId(id, item.Id)));
-      if (!parents.length) return [];
+      const selectPage = async () => {
+        if (parent?.Type === 'Channel') {
+          const access = this.channelViewsAccess;
+          if (!access) return { rows: [], childCounts: [] };
+          return access.withLatestChannelItems({ User: user, ChannelIds: [parent.Id],
+            IsPlayed: input.isPlayed ?? (user.Configuration.HidePlayedInLatest ? false : undefined),
+            Limit: input.limit ?? 20, IncludeItemTypes: input.includeItemTypes ?? [], EnableTotalRecordCount: false },
+            async channelQuery => channelQuery ? queryPostgresLatestItems(db, {
+              ...await this.#channelQueryContext(db, channelQuery, user), channelQuery,
+              groupItems: input.groupItems !== false, limit: input.limit ?? 20,
+            }) : { rows: [], childCounts: [] });
+        }
+        let parents = parent?.IsFolder ? [parent] : [];
+        let isPlayed = input.isPlayed ?? (user.Configuration.HidePlayedInLatest ? false : undefined);
+        // The source clears the played filter only for an explicit music collection,
+        // before it falls back to the user root's authorized folders.
+        if (parents.some(item => item.Type === 'CollectionFolder' && collectionType(item) === 'music')) isPlayed = undefined;
+        const rootFolders = await this.navigationChildren(navigation, user);
+        const isCollection = item => ['CollectionFolder', 'PlaylistsFolder', 'BasePluginFolder'].includes(item.Type);
+        if (!parents.length) parents = rootFolders.filter(item => item.IsFolder
+          && !user.Configuration.LatestItemsExcludes.some(id => sameId(id, item.Id)));
+        if (!parents.length) return { rows: [], childCounts: [] };
 
-      let includeItemTypes = input.includeItemTypes ?? [];
-      if (!includeItemTypes.length) {
-        const views = parents.filter(item => item.Type === 'UserView');
-        if (views.length && views.every(item => collectionType(item) === 'movies')) includeItemTypes = ['Movie'];
-        else if (views.length && views.every(item => collectionType(item) === 'tvshows')) includeItemTypes = ['Episode'];
-      }
-      const mediaTypes = includeItemTypes.length ? [] : [...new Set(parents
-        .filter(isCollection).flatMap(item => {
-          switch (collectionType(item)) {
-            case 'books': return ['Book', 'Audio'];
-            case 'music': return ['Audio'];
-            case 'photos': case 'homevideos': return ['Photo', 'Video'];
-            default: return ['Video'];
-          }
-        }))];
-      const query = {
-        includeitemtypes: includeItemTypes,
-        mediatypes: mediaTypes,
-        ...(includeItemTypes.length ? {} : { isfolder: false }),
-        ...(!includeItemTypes.length && !mediaTypes.length
-          ? { excludeitemtypes: ['Person', 'Studio', 'Year', 'MusicGenre', 'Genre'] } : {}),
-        ismissing: false,
-        ...(isPlayed === undefined ? {} : { isplayed: isPlayed }),
-        sortby: ['DateCreated', 'SortName', 'ProductionYear'],
-        sortorder: ['Descending', 'Descending', 'Descending'],
+        let includeItemTypes = input.includeItemTypes ?? [];
+        if (!includeItemTypes.length) {
+          const views = parents.filter(item => item.Type === 'UserView');
+          if (views.length && views.every(item => collectionType(item) === 'movies')) includeItemTypes = ['Movie'];
+          else if (views.length && views.every(item => collectionType(item) === 'tvshows')) includeItemTypes = ['Episode'];
+        }
+        const mediaTypes = includeItemTypes.length ? [] : [...new Set(parents
+          .filter(isCollection).flatMap(item => {
+            switch (collectionType(item)) {
+              case 'books': return ['Book', 'Audio'];
+              case 'music': return ['Audio'];
+              case 'photos': case 'homevideos': return ['Photo', 'Video'];
+              default: return ['Video'];
+            }
+          }))];
+        const query = {
+          includeitemtypes: includeItemTypes,
+          mediatypes: mediaTypes,
+          ...(includeItemTypes.length ? {} : { isfolder: false }),
+          ...(!includeItemTypes.length && !mediaTypes.length
+            ? { excludeitemtypes: ['Person', 'Studio', 'Year', 'MusicGenre', 'Genre'] } : {}),
+          ismissing: false,
+          ...(isPlayed === undefined ? {} : { isplayed: isPlayed }),
+          sortby: ['DateCreated', 'SortName', 'ProductionYear'],
+          sortorder: ['Descending', 'Descending', 'Descending'],
+        };
+        const ancestorIds = () => parents.map(item => item.Type === 'UserView'
+          ? nonemptyId(item.DisplayParentId) ? item.DisplayParentId : nonemptyId(item.ParentId) ? item.ParentId : item.Id
+          : item.Id);
+        let scope;
+        if (parents.every(item => isCollection(item) || item.Type === 'UserView')) {
+          const topParentIds = [...new Map(parents.flatMap(item => item.Type === 'PlaylistsFolder'
+            ? [item.Id] : queryTopParentIds(item, navigation, user, rootFolders))
+            .map(id => [idKey(id), id])).values()];
+          scope = topParentIds.length ? { topParentIds } : { ancestorIds: ancestorIds() };
+        } else if (parents.length === 1 && ['BoxSet', 'Playlist'].includes(parents[0].Type)
+          && (await db.rows('LinkedChildren', { where: { ParentId: parents[0].Id }, columns: ['ParentId'], limit: 1 })).length) {
+          scope = { boxSetRepositoryId: parents[0].Id };
+        } else scope = { ancestorIds: ancestorIds() };
+        const parentType = parents.filter(item => isCollection(item) || item.Type === 'UserView')
+          .map(item => collectionType(item) || null).find(type => type != null) ?? null;
+        const { topParentIds: _topParentIds, libraryTopParentIds: _libraryTopParentIds,
+          ...visibility } = await this.#postgresVisibility(navigation, user);
+        return queryPostgresLatestItems(db, { query, scope, userId: user.Id, visibility,
+          collectionType: parentType, groupItems: input.groupItems !== false, limit: input.limit ?? 20 });
       };
-      const ancestorIds = () => parents.map(item => item.Type === 'UserView'
-        ? nonemptyId(item.DisplayParentId) ? item.DisplayParentId : nonemptyId(item.ParentId) ? item.ParentId : item.Id
-        : item.Id);
-      let scope;
-      if (parents.every(item => isCollection(item) || item.Type === 'UserView')) {
-        const topParentIds = [...new Map(parents.flatMap(item => item.Type === 'PlaylistsFolder'
-          ? [item.Id] : queryTopParentIds(item, navigation, user, rootFolders))
-          .map(id => [idKey(id), id])).values()];
-        scope = topParentIds.length ? { topParentIds } : { ancestorIds: ancestorIds() };
-      } else if (parents.length === 1 && ['BoxSet', 'Playlist'].includes(parents[0].Type)
-        && (await db.rows('LinkedChildren', { where: { ParentId: parents[0].Id }, columns: ['ParentId'], limit: 1 })).length) {
-        scope = { boxSetRepositoryId: parents[0].Id };
-      } else scope = { ancestorIds: ancestorIds() };
-      const parentType = parents.filter(item => isCollection(item) || item.Type === 'UserView')
-        .map(item => collectionType(item) || null).find(type => type != null) ?? null;
-      const { topParentIds: _topParentIds, libraryTopParentIds: _libraryTopParentIds,
-        ...visibility } = await this.#postgresVisibility(navigation, user);
-      const page = await queryPostgresLatestItems(db, { query, scope, userId: user.Id, visibility,
-        collectionType: parentType, groupItems: input.groupItems !== false, limit: input.limit ?? 20 });
-      const graphRows = await loadPostgresPageGraph(db, page.rows, navigationGraph);
+      const page = await selectPage();
+      if (!page.rows.length) return [];
+      const graphRows = await loadPostgresPageGraph(db, page.rows, parent?.Type === 'Channel'
+        ? await loadPostgresNavigationRows(db, input.parentId) : navigationGraph);
       const state = await this.load(db, user, { baseRows: graphRows });
       state.folderStats = await queryPostgresFolderStats(db,
         page.rows.filter(row => row.IsFolder).map(row => row.Id), user.Id);
@@ -1754,7 +1769,7 @@ export class LibraryService extends EventEmitter {
         dtos.push(dto);
       }
       return dtos;
-    }, { channelViews: Boolean(user && requestsItemField(input, 'ItemCounts')), channelItems: requestsItemField(input, 'CanDelete') });
+    }, { channelViews: Boolean(user && requestsItemField(input, 'ItemCounts')), channelItems: true });
   }
 
   async queryNextUpEpisodes(input = {}, { user } = {}) {

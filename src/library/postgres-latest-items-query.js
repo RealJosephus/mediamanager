@@ -2,6 +2,7 @@ import { quoteIdentifier as q } from '../database/model.js';
 import { nativeTextSql } from '../database/native-text-sql.js';
 import { decodeNativeTextBytes } from '../database/native-text.js';
 import { buildPostgresItemPageQuery } from '../database/postgres-item-query.js';
+import { buildPostgresChannelItemsQuery } from './postgres-channel-items-query.js';
 
 /**
  * The specified UserViewManager and BaseItemRepository.Querying latest queries.
@@ -9,7 +10,7 @@ import { buildPostgresItemPageQuery } from '../database/postgres-item-query.js';
  * grouping stop all stay relational; only the final bounded page is decoded.
  */
 export async function queryPostgresLatestItems(database, {
-  query, scope, userId, visibility, collectionType, groupItems = true, limit = 20,
+  query = {}, scope, userId, visibility, collectionType, groupItems = true, limit = 20, channelQuery,
 } = {}) {
   const sql = nativeTextSql(database.schemaName);
   const items = `${q(database.schemaName)}.${q('BaseItems')}`;
@@ -21,10 +22,10 @@ export async function queryPostgresLatestItems(database, {
     return `(split_part(${text}, '.', 1) || '.' || rpad(CASE WHEN strpos(${text}, '.') = 0 THEN '' ELSE split_part(${text}, '.', 2) END, 7, '0')) COLLATE "C"`;
   };
   const order = alias => `${date(`${alias}."DateCreated"`)} DESC NULLS LAST, ${sql.guidKey(`${alias}."Id"`)} COLLATE "C" DESC`;
-  const repository = groupItems && ['music', 'movies', 'tvshows', null].includes(collectionType);
+  const repository = !channelQuery && groupItems && ['music', 'movies', 'tvshows', null].includes(collectionType);
   const presentationGrouping = !query.includeitemtypes?.length || query.includeitemtypes.some(type =>
     ['Episode', 'Video', 'Movie', 'MusicVideo', 'Series', 'Season'].includes(type));
-  const base = buildPostgresItemPageQuery(database, query, {
+  const base = channelQuery ? buildPostgresChannelItemsQuery(database, channelQuery, { userId, visibility, scope }) : buildPostgresItemPageQuery(database, query, {
     scope, userId, visibility,
     groupByPresentationKey: !repository && presentationGrouping, includeOrdinal: true,
   });
@@ -35,7 +36,7 @@ export async function queryPostgresLatestItems(database, {
   // group for a negative requested limit. Enumerable.Take in movie/TV latest
   // returns no rows instead. Keep that observable distinction in bounded SQL.
   const emptyNegative = repository && collectionType !== 'music' || !repository && doubledLimit === 0;
-  const outputLimit = limit < 0 ? emptyNegative ? 0 : 1 : limit;
+  const outputLimit = limit < 0 ? (!channelQuery && emptyNegative ? 0 : 1) : limit;
   const cap = bind(outputLimit);
   const ctes = [`source_page AS (${base.text})`, `source AS (
     SELECT item.*, source_page."__ordinal" AS __source_order
@@ -131,6 +132,10 @@ export async function queryPostgresLatestItems(database, {
           ${sql.guidKey('result."Id"')} COLLATE "C" DESC LIMIT ${cap}
       )`);
     }
+  } else if (channelQuery) {
+    // ChannelManager already applies the caller's exact repository Limit and
+    // ordering. UserViewManager groups that selection without a doubled window.
+    ctes.push('latest AS (SELECT "Id", __source_order AS __latest_order FROM source)');
   } else {
     const candidateLimit = limit < 0 ? outputLimit : doubledLimit;
     ctes.push(`latest AS (SELECT "Id", __source_order AS __latest_order FROM source

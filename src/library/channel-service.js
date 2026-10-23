@@ -53,6 +53,10 @@ export class ChannelService {
       deleteItem: item => call(() => this.#deleteItem(item)),
       getChannelItems: query => itemCall(() => this.#getChannelItems(query, metadata, access)),
       getLatestChannelItems: query => itemCall(() => this.#getLatestChannelItems(query, metadata, access)),
+      withLatestChannelItems: (query, consume) => itemCall(async () => {
+        const prepared = await this.#prepareLatestChannelItems(query, metadata, access);
+        return consume(prepared?.query ?? null, prepared?.user ?? null);
+      }),
       release: () => closing ??= (async () => {
         active = false;
         try { while (pending.size) await Promise.allSettled([...pending]); }
@@ -200,10 +204,15 @@ export class ChannelService {
     });
   }
   async #getLatestChannelItems(input = {}, metadata, channelAccess) {
+    const prepared = await this.#prepareLatestChannelItems(input, metadata, channelAccess);
+    if (!prepared) return { Items: [], TotalRecordCount: 0, StartIndex: input.StartIndex ?? 0 };
+    return this.library.queryChannelItems(prepared.query, { user: prepared.user, channelAccess });
+  }
+  async #prepareLatestChannelItems(input = {}, metadata, channelAccess) {
     const query = { ...input, ChannelIds: [...(input.ChannelIds ?? [])] }, user = await this.#user(query);
     let providers = (await this.library.orderChannelProviders(this.#providers())).filter(provider => typeof provider.getLatestMedia === 'function');
     if (query.ChannelIds.length) providers = providers.filter(provider => query.ChannelIds.some(id => sameId(id, this.#identity(provider))));
-    if (!providers.length) return { Items: [], TotalRecordCount: 0, StartIndex: query.StartIndex ?? 0 };
+    if (!providers.length) return null;
     for (const provider of providers) {
       const channel = await this.library.ensureChannel(provider, this.#identity(provider), { metadata });
       const selected = await this.#items({ ParentId: channel.Id, ChannelIds: [channel.Id], EnableTotalRecordCount: false }, null, metadata, channelAccess, { project: false });
@@ -227,7 +236,7 @@ export class ChannelService {
     query.OrderBy = providers.length === 1 && providers[0].type.split('.').at(-1).includes('Trailer')
       ? [['PremiereDate', 'Descending'], ['ProductionYear', 'Descending'], ['DateCreated', 'Descending']]
       : [['DateCreated', 'Descending']];
-    return this.library.queryChannelItems(query, { user, channelAccess });
+    return { query, user };
   }
   close() {
     this.#closing = true;
