@@ -45,7 +45,7 @@ export async function materializeChannelItem(info, { provider, channel, parent, 
   catch (error) { try { void Promise.resolve(onError(error)).catch(() => {}); } catch { /* Native logs a lookup failure and constructs anew. */ } }
   const isNew = item?.NativeType !== type;
   if (isNew) item = newNativeItemEntity(type);
-  item.Id = id;
+  if (isNew) item.Id = id;
   const owner = library.itemCreation.retainItem(item);
   try {
   const descriptor = nativeItemDescriptor(type), probe = provider.supportsMediaProbe === true;

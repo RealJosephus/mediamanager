@@ -5,7 +5,8 @@ original provider inputs, 24 layout inputs and 15 merge inputs as neutral data.
 Their historical source files, responses and provenance remain unchanged. The
 literal historical absolute-path input remains present; an additional declared
 `$MEDIA` input exercises a real current absolute path and a file absent from the
-controlled item lookup.
+controlled item lookup. Its declared path template expands using the host's
+directory separators before either provider reads the same file bytes.
 
 The actual `PlaylistItemsProvider`, `PlaylistMetadataService.MergeData` and
 `BaseItemMapper` run over current files. Node compares success or failure,

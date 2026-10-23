@@ -20,9 +20,12 @@ function request(query) {
 }
 
 export function buildPostgresChannelItemsQuery(database, query, { userId, visibility, scope = {} } = {}) {
+  const presentationGrouping = !query.IncludeItemTypes?.length || query.IncludeItemTypes.some(type =>
+    ['Episode', 'Video', 'Movie', 'MusicVideo', 'Series', 'Season'].includes(type));
   return buildPostgresItemPageQuery(database, request(query), { userId, visibility,
     scope: { ...scope, ...(nonemptyId(query.ParentId) ? { parentId: query.ParentId } : {}) },
-    groupByPresentationKey: Boolean(userId) && query.IsResumable !== true && query.GroupByPresentationUniqueKey !== false, includeOrdinal: true });
+    groupByPresentationKey: Boolean(userId) && presentationGrouping && query.IsResumable !== true
+      && query.GroupByPresentationUniqueKey !== false, includeOrdinal: true });
 }
 
 /** Capture the repository selection before the first DTO or deletion effect.

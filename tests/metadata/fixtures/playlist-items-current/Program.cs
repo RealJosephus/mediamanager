@@ -129,7 +129,11 @@ foreach (var sample in input.GetProperty("providerCases").EnumerateArray()
                 "utf-8" => new UTF8Encoding(false), "utf-8-bom" => new UTF8Encoding(true),
                 _ => Encoding.GetEncoding(encodingName)
             };
-            var content = sample.GetProperty("content").GetString()!.Replace("$MEDIA", media, StringComparison.Ordinal);
+            var content = sample.GetProperty("content").GetString()!;
+            if (content.Contains("$MEDIA", StringComparison.Ordinal))
+            {
+                content = content.Replace('/', Path.DirectorySeparatorChar).Replace("$MEDIA", media, StringComparison.Ordinal);
+            }
             bytes = encoding.GetPreamble().Concat(encoding.GetBytes(content)).ToArray();
         }
         File.WriteAllBytes(target, bytes);
